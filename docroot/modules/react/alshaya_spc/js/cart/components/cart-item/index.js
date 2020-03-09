@@ -6,46 +6,60 @@ import CartItemOOS from '../cart-item-oos';
 import ItemLowQuantity from '../item-low-quantity';
 import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CartQuantitySelect from '../cart-quantity-select';
-import {updateCartItemData} from '../../../utilities/update_cart';
+import { updateCartItemData } from '../../../utilities/update_cart';
 import SpecialPrice from '../../../utilities/special-price';
 
 export default class CartItem extends React.Component {
-
   /**
    * Remove item from the cart.
    */
   removeCartItem = (sku, action, id) => {
+    const cartData = updateCartItemData(action, sku, 0);
     // Adding class on remove button for showing progress when click.
-    document.getElementById('remove-item-' + id).classList.add('loading');
-    var cart_data = updateCartItemData(action, sku, 0);
-    if (cart_data instanceof Promise) {
-      cart_data.then((result) => {
+    const removeItem = 'remove=item-';
+    document.getElementById(removeItem + id).classList.add('loading');
+    if (cartData instanceof Promise) {
+      cartData.then((result) => {
         // Refreshing mini-cart.
-        var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => result }});
-        document.dispatchEvent(event);
+        const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => result } });
+        document.dispatchEvent(eventMiniCart);
 
         if (result.error !== undefined) {
           result.message = {
             'type': 'error',
-            'message': result.error_message
-          }
+            'message': result.error_message,
+          };
         } else {
           result.message = {
             'type': 'success',
-            'message': Drupal.t('The product has been removed from your cart.')
-          }
+            'message': Drupal.t('The product has been removed from your cart.'),
+          };
         }
 
         // Refreshing cart components.
-        var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
-        document.dispatchEvent(event);
+        const eventCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
+        document.dispatchEvent(eventCart);
       });
     }
   };
 
   render() {
-    const { currency_code } = drupalSettings.alshaya_spc.currency_config;
-    const {title, link, relative_link, stock, qty, in_stock, original_price, configurable_values, promotions, extra_data, sku, id, final_price, free_item } = this.props.item;
+    const {
+      title,
+      link,
+      relative_link,
+      stock,
+      qty,
+      in_stock,
+      original_price,
+      configurable_values,
+      promotions,
+      extra_data,
+      sku,
+      id,
+      final_price,
+      free_item,
+    } = this.props.item;
 
     return (
       <div className="spc-cart-item">
