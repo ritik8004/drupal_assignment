@@ -368,8 +368,15 @@ header {
   }
 }
 
-.block-cart-mini-block {
+.block-cart-mini-block,
+.block-alshaya-react-mini-cart {
   @include breakpoint($upto-desktop) {
     border-bottom: 2px solid $header_mobile_border;
+  }
+}
+
+.block-alshaya-react-mini-cart {
+  @include breakpoint($upto-desktop) {
+    z-index: 2;
   }
 }
