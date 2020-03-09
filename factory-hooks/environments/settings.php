@@ -76,11 +76,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
               "name" => "H&M",
               "short_name" => "H&M",
             ],
-          ],
-        ],
-        'live' => [
-          'dynamic_yield.settings' => [
-            'section_id' => '9876644',
+            'dynamic_yield.settings' => [
+              'section_id' => '9876644',
+            ],
           ],
         ],
       ],
@@ -156,11 +154,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
               "name" => "Bath and Body Works",
               "short_name" => "BBW",
             ],
-          ],
-        ],
-        'live' => [
-          'dynamic_yield.settings' => [
-            'section_id' => '9876648',
+            'dynamic_yield.settings' => [
+              'section_id' => '9876648',
+            ],
           ],
         ],
       ],
@@ -290,11 +286,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
               "name" => "Victoria's Secret",
               "short_name" => "VS",
             ],
-          ],
-        ],
-        'live' => [
-          'dynamic_yield.settings' => [
-            'section_id' => '9876645',
+            'dynamic_yield.settings' => [
+              'section_id' => '9876645',
+            ],
           ],
         ],
       ],
