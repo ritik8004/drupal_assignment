@@ -219,7 +219,7 @@ class AlshayaFeedSkuInfoHelper {
 
       $priceRange = $this->getRange($prices['final_price']);
       $parentProduct = [
-        'group_info' => $sku->getSku(),
+        'group_id' => $sku->getSku(),
         'name' => $node->label(),
         'product_type' => $sku->bundle(),
         'status' => (bool) $node->isPublished(),
@@ -242,8 +242,8 @@ class AlshayaFeedSkuInfoHelper {
       }
 
       if ($sku->bundle() == 'simple') {
-        $parentProduct['sku'] = $parentProduct['group_info'];
-        unset($parentProduct['group_info']);
+        $parentProduct['sku'] = $parentProduct['group_id'];
+        unset($parentProduct['group_id']);
         $stockInfo = $this->skuInfoHelper->stockInfo($sku);
         $parentProduct['stock'] = [
           'status' => $stockInfo['in_stock'],
