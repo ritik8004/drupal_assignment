@@ -31,7 +31,19 @@ export default class HDBillingAddress extends React.Component {
       this.setState({
         open: false
       });
+      this.setStateAndChecked(true);
     }
+  };
+
+  setStateAndChecked = (shippingAsBilling) => {
+    this.setState({
+      shippingAsBilling: shippingAsBilling
+    });
+
+    let yesNO = shippingAsBilling ? 'yes' : 'no';
+    document.getElementById('billing-address-' + yesNO).checked = true;
+
+    return;
   };
 
   /**
@@ -43,12 +55,7 @@ export default class HDBillingAddress extends React.Component {
       return;
     }
 
-    this.setState({
-      shippingAsBilling: shippingAsBilling
-    });
-
-    let yesNO = shippingAsBilling ? 'yes' : 'no';
-    document.getElementById('billing-address-' + yesNO).checked = true;
+    this.setStateAndChecked(shippingAsBilling);
 
     if (shippingAsBilling === true) {
       // If shipping and billing same, we remove
@@ -81,6 +88,13 @@ export default class HDBillingAddress extends React.Component {
         && data.cart.delivery_type === 'hd') {
         localStorage.setItem(localStorageKey, false);
       }
+    }
+
+    // CLose modal.
+    if (this._isMounted) {
+      this.setState({
+        open: false
+      });
     }
 
     // Refresh cart.

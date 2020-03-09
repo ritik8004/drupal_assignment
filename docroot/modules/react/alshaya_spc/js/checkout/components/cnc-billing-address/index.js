@@ -42,6 +42,9 @@ export default class CnCBillingAddress extends React.Component {
    */
   processBillingUpdate = (e) => {
     let data = e.detail.data();
+
+    // Close modal.
+    this.closePopup();
     // Refresh cart.
     this.props.refreshCart(data);
   }
