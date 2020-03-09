@@ -5,6 +5,8 @@ import EmptyResult from '../../../utilities/empty-result';
 import { fetchCartData } from '../../../utilities/get_cart';
 import Loading from '../../../utilities/loading';
 import OrderSummaryBlock from '../../../utilities/order-summary-block';
+import HDBillingAddress from '../hd-billing-address';
+import CnCBillingAddress from '../cnc-billing-address';
 import { stickySidebar } from '../../../utilities/stickyElements/stickyElements';
 import {
   addInfoInStorage,
@@ -199,6 +201,23 @@ export default class Checkout extends React.Component {
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
             <PaymentMethods refreshCart={this.refreshCart} cart={this.state.cart} />
+            {(this.state.cart.cart.delivery_type === 'hd') ? (
+              <HDBillingAddress
+                refreshCart={this.refreshCart}
+                billingAddress={this.state.cart.cart.billing_address}
+                shippingAddress={this.state.cart.cart.shipping_address}
+                carrierInfo={this.state.cart.cart.carrier_info}
+                paymentMethod={this.state.cart.selected_payment_method}
+              />
+            ) : (
+              <CnCBillingAddress
+                refreshCart={this.refreshCart}
+                billingAddress={this.state.cart.cart.billing_address}
+                shippingAddress={this.state.cart.cart.shipping_address}
+                carrierInfo={this.state.cart.cart.carrier_info}
+                paymentMethod={this.state.cart.selected_payment_method}
+              />
+            )}
             <ConditionalView condition={window.innerWidth > 768}>
               {termConditions}
             </ConditionalView>

@@ -16,3 +16,11 @@
     text-transform: capitalize;
   }
 }
+
+.spc-section-billing-address {
+  .popup-overlay .popup-content {
+    .spc-deliver-button {
+      text-transform: uppercase;
+    }
+  }
+}
