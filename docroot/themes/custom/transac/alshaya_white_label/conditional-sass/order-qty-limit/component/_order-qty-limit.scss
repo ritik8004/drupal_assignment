@@ -39,6 +39,8 @@
       padding-right: 0.3125rem;
       position: absolute;
       #{$left}: 0.25rem;
+      top: 50%;
+      transform: translateY(-50%);
       padding-#{$right}: 0.3125rem;
     }
 
