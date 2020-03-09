@@ -20,12 +20,12 @@ export default class Cart extends React.Component {
       wait: true,
       items: [],
       totals: [],
-      recommended_products: [],
-      total_items: null,
+      recommendedProducts: [],
+      totalItems: null,
       amount: null,
-      coupon_code: null,
-      cart_promo: null,
-      in_stock: true,
+      couponCode: null,
+      cartPromo: null,
+      inStock: true,
     };
   }
 
@@ -39,16 +39,16 @@ export default class Cart extends React.Component {
         const prevState = this.state;
         this.setState({ ...prevState, wait: false });
       } else {
-        this.setState((state) => ({
+        this.setState(() => ({
           items: data.items,
           totals: data.totals,
-          recommended_products: data.recommended_products,
-          total_items: data.items_qty,
+          recommendedProducts: data.recommended_products,
+          totalItems: data.items_qty,
           amount: data.cart_total,
-          cart_promo: data.cart_promo,
+          cartPromo: data.cart_promo,
           wait: false,
-          coupon_code: data.coupon_code,
-          in_stock: data.in_stock,
+          couponCode: data.coupon_code,
+          inStock: data.in_stock,
         }));
 
         // The cart is empty.
@@ -68,12 +68,12 @@ export default class Cart extends React.Component {
       // To show the success/error message on cart top.
       if (data.message !== undefined) {
         this.setState({
-          message_type: data.message.type,
+          messageType: data.message.type,
           message: data.message.message,
         });
       } else if (data.in_stock === false) {
         this.setState({
-          message_type: 'error',
+          messageType: 'error',
           message: Drupal.t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.'),
         });
       }
@@ -81,16 +81,29 @@ export default class Cart extends React.Component {
   }
 
   render() {
-    if (this.state.wait) {
+    const {
+      wait,
+      items,
+      recommendedProducts,
+      messageType,
+      totalItems,
+      totals,
+      couponCode,
+      inStock,
+      cartPromo,
+      message,
+    } = this.state;
+
+    if (wait) {
       return <Loading />;
     }
 
-    if (!this.state.wait && this.state.items.length === 0) {
+    if (!wait && items.length === 0) {
       return (
         <>
           <EmptyResult Message={Drupal.t('your shopping bag is empty.')} />
-          <CartRecommendedProducts sectionTitle={Drupal.t('new arrivals')} recommended_products={this.state.recommended_products} />
-          <CartRecommendedProducts sectionTitle={Drupal.t('trending now')} recommended_products={this.state.recommended_products} />
+          <CartRecommendedProducts sectionTitle={Drupal.t('new arrivals')} recommended_products={recommendedProducts} />
+          <CartRecommendedProducts sectionTitle={Drupal.t('trending now')} recommended_products={recommendedProducts} />
         </>
       );
     }
@@ -98,26 +111,31 @@ export default class Cart extends React.Component {
     return (
       <>
         <div className="spc-pre-content">
-          <CheckoutMessage type={this.state.message_type}>
-            {this.state.message}
+          <CheckoutMessage type={messageType}>
+            {message}
           </CheckoutMessage>
-          <MobileCartPreview total_items={this.state.total_items} totals={this.state.totals} />
+          <MobileCartPreview total_items={totalItems} totals={totals} />
         </div>
         <div className="spc-main">
           <div className="spc-content">
             <SectionTitle>
-              {Drupal.t('my shopping bag (@qty items)', { '@qty': this.state.total_items })}
+              {Drupal.t('my shopping bag (@qty items)', { '@qty': totalItems })}
             </SectionTitle>
-            <CartItems items={this.state.items} />
+            <CartItems items={items} />
             <VatFooterText />
           </div>
           <div className="spc-sidebar">
-            <CartPromoBlock coupon_code={this.state.coupon_code} />
-            <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock} cart_promo={this.state.cart_promo} show_checkout_button />
+            <CartPromoBlock coupon_code={couponCode} />
+            <OrderSummaryBlock
+              totals={totals}
+              in_stock={inStock}
+              cart_promo={cartPromo}
+              show_checkout_button
+            />
           </div>
         </div>
         <div className="spc-post-content">
-          <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} recommended_products={this.state.recommended_products} />
+          <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} recommended_products={recommendedProducts} />
         </div>
       </>
     );
