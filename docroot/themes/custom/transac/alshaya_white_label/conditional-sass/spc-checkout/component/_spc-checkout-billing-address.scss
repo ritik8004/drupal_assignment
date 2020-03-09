@@ -99,5 +99,22 @@
     .spc-billing-bottom-panel {
       border-top: none;
     }
+
+    .spc-billing-cc-panel {
+      cursor: pointer;
+      color: $spc-checkout-billing-empty-cnc;
+      position: relative;
+      padding-#{$left}: 1.25rem;
+      font-size: 0.875rem;
+
+      @include icon('chevron#{$right}', before) {
+        position: absolute;
+        #{$right}: 0.875rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2rem;
+        color: $spc-checkout-delivery-info-txt;
+      }
+    }
   }
 }

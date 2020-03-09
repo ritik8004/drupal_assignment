@@ -15,7 +15,7 @@ export default class CnCBillingAddress extends React.Component {
     };
   }
 
-  showPopup = () => {
+  showPopup = (e) => {
     this.setState({
       open: true
     });
@@ -65,7 +65,7 @@ export default class CnCBillingAddress extends React.Component {
         <div className='spc-section-billing-address cnc-flow'>
           <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
           <div className='spc-billing-address-wrapper'>
-            <div className='spc-billing-top-panel spc-billing-cc-panel' onClick={this.showPopup()}>
+            <div className='spc-billing-top-panel spc-billing-cc-panel' onClick={(e) => this.showPopup(e)}>
               {Drupal.t('please add your billing address.')}
             </div>
             {this.state.open &&

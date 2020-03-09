@@ -201,9 +201,6 @@ export default class Checkout extends React.Component {
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
             <PaymentMethods refreshCart={this.refreshCart} cart={this.state.cart} />
-            <ConditionalView condition={window.innerWidth > 768}>
-              {termConditions}
-            </ConditionalView>
             {(this.state.cart.cart.delivery_type === 'hd') ? (
               <HDBillingAddress
                 refreshCart={this.refreshCart}
@@ -221,9 +218,9 @@ export default class Checkout extends React.Component {
                 paymentMethod={this.state.cart.selected_payment_method}
               />
             )}
-            {window.innerWidth > 768 &&
-              <TermsConditions />
-            }
+            <ConditionalView condition={window.innerWidth > 768}>
+              {termConditions}
+            </ConditionalView>
             <CompletePurchase cart={this.state.cart} />
           </div>
           <div className="spc-sidebar">
