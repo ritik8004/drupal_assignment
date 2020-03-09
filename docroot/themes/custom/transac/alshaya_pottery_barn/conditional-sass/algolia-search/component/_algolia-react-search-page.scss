@@ -20,6 +20,8 @@
 
           @include breakpoint($only-mobile) {
             line-height: normal;
+            display: flex;
+            align-items: center;
           }
         }
       }

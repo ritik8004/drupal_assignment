@@ -23,13 +23,13 @@ const Swatches = (props) => {
 
   // Display the colors count for mobile only if different variants images
   // being shown in gallery on PLP.
-  const show_variants_thumbnail_plp_gallery = drupalSettings.reactTeaserView.showVariantsThumbnail;
+  const show_variants_thumbnail_plp_gallery = drupalSettings.reactTeaserView.swatches.showVariantsThumbnail;
   // Display the configured number of swatches.
   const limit = drupalSettings.reactTeaserView.swatches.swatchPlpLimit;
   const total_no_of_swatches = props.swatches.length;
   const diff = total_no_of_swatches - limit;
 
-  let swatch_more_text = '+';
+  let swatch_more_text = '+ ';
   if (diff > 0) {
     swatch_more_text = (diff === 1) ? swatch_more_text + Drupal.t('1 color') : swatch_more_text + Drupal.t('@swatch_count colors', {'@swatch_count' : diff});
   }
