@@ -83,7 +83,7 @@ class ClickCollect extends React.Component {
       el.classList.remove("selected");
     });
     this.cncListView.current.querySelector('[data-index="' + index +'"]').classList.add('selected');
-    if (window.innerWidth < 768 && this.cncMapView.current.style.display == "block") {
+    if (window.innerWidth < 768 && this.cncMapView.current !== null && this.cncMapView.current.style.display === 'block') {
       this.toggleFullScreen(true);
       this.mapStoreList.current.querySelector('[data-index="' + index +'"]').classList.add('selected');
     }
