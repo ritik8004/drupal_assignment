@@ -268,15 +268,9 @@ class AlshayaAlgoliaIndexHelper {
     }
 
     // Index color facets.
-    $color_code_key = NULL;
-    // For VS.
-    if (isset($object['attr_actual_color_label_code'])) {
-      $color_code_key = 'attr_actual_color_label_code';
-    }
-    // For HM, FL.
-    elseif (isset($object['attr_color_family'])) {
-      $color_code_key = 'attr_color_family';
-    }
+    $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
+    $color_code_key = $display_settings->get('swatches.plp');
+    $color_code_key = !empty($color_code_key) ? 'attr_' . $color_code_key[0] : NULL;
 
     if ($color_code_key && !empty($object[$color_code_key])) {
       foreach ($object[$color_code_key] as $key => $value) {
