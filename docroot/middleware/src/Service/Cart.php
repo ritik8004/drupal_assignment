@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Service\CheckoutCom\APIWrapper;
+use App\Service\Drupal\DrupalInfo;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
@@ -34,6 +35,13 @@ class Cart {
   protected $magentoApiWrapper;
 
   /**
+   * Service to get Drupal Info.
+   *
+   * @var \App\Service\Drupal\DrupalInfo
+   */
+  protected $drupalInfo;
+
+  /**
    * Utility.
    *
    * @var \App\Service\Utility
@@ -48,25 +56,40 @@ class Cart {
   protected $checkoutComApi;
 
   /**
+   * Payment Data provider.
+   *
+   * @var \App\Service\PaymentData
+   */
+  protected $paymentData;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
    *   Magento info service.
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
    *   Magento API Wrapper.
+   * @param \App\Service\Drupal\DrupalInfo $drupal_info
+   *   Service to get Drupal Info.
    * @param \App\Service\Utility $utility
    *   Utility Service.
    * @param \App\Service\CheckoutCom\APIWrapper $checkout_com_api
    *   Checkout.com API Wrapper.
+   * @param \App\Service\PaymentData $payment_data
+   *   Payment Data provider.
    */
   public function __construct(MagentoInfo $magento_info,
                               MagentoApiWrapper $magento_api_wrapper,
+                              DrupalInfo $drupal_info,
                               Utility $utility,
-                              APIWrapper $checkout_com_api) {
+                              APIWrapper $checkout_com_api,
+                              PaymentData $payment_data) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
+    $this->drupalInfo = $drupal_info;
     $this->utility = $utility;
     $this->checkoutComApi = $checkout_com_api;
+    $this->paymentData = $payment_data;
   }
 
   /**
@@ -462,7 +485,7 @@ class Cart {
    *
    * @param int $cart_id
    *   Cart id.
-   * @param array $payment_data
+   * @param array $data
    *   Payment info.
    * @param array $extension
    *   Cart extension.
@@ -472,17 +495,17 @@ class Cart {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function updatePayment(int $cart_id, array $payment_data, array $extension) {
-    $data = [
+  public function updatePayment(int $cart_id, array $data, array $extension) {
+    $update = [
       'extension' => (object) $extension,
     ];
 
-    $data['payment'] = [
-      'method' => $payment_data['payment']['method'],
-      'additional_data' => $payment_data['payment']['additional_data'],
+    $update['payment'] = [
+      'method' => $data['method'],
+      'additional_data' => $data['additional_data'],
     ];
 
-    return $this->updateCart($data, $cart_id);
+    return $this->updateCart($update, $cart_id);
   }
 
   /**
@@ -511,27 +534,29 @@ class Cart {
           'udf3' => NULL,
         ];
 
-        if ($this->checkoutComApi->isMadaEnabled()) {
+        // Validate bin if MADA enabled.
+        $additional_data['udf1'] = $this->checkoutComApi->validateMadaBin($additional_info['card']['bin'])
+          ? 'MADA'
+          : '';
 
-        }
-        elseif ($this->checkoutComApi->is3dForced()) {
-          $this->checkoutComApi->request3dSecurePayment(
+        // Process 3D if MADA or 3D Forced.
+        if ($additional_data['udf1'] || $this->checkoutComApi->is3dForced()) {
+          $response = $this->checkoutComApi->request3dSecurePayment(
             $this->getCart($cart_id),
             $additional_data,
             APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT
           );
-        }
 
-        $response = $this->checkoutComApi->request3dSecurePayment(
-          $this->getCart($cart_id),
-          $additional_data,
-          APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT
-        );
+          if (isset($response['responseCode'])
+            && $response['responseCode'] == APIWrapper::SUCCESS
+            && !empty($response[APIWrapper::REDIRECT_URL])) {
+            // We will use this again to redirect back to Drupal.
+            $response['langcode'] = $this->drupalInfo->getDrupalLangcode();
+            $this->paymentData->setPaymentData($cart_id, $response['id'], $response);
+            throw new \Exception($response[APIWrapper::REDIRECT_URL], 302);
+          }
 
-        if (isset($response['responseCode'])
-          && $response['responseCode'] == APIWrapper::SUCCESS
-          && !empty($response[APIWrapper::REDIRECT_URL])) {
-          throw new \Exception($response[APIWrapper::REDIRECT_URL], 302);
+          throw new \Exception('Failed to initiate 3D request.', 500);
         }
 
         break;
@@ -662,6 +687,20 @@ class Cart {
     ];
 
     return $this->magentoApiWrapper->doRequest('GET', $url, $query);
+  }
+
+  /**
+   * Wrapper function to get cleaned cart data to log.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return string
+   *   Cleaned cart data as JSON string.
+   */
+  public function getCartDataToLog(array $cart) {
+    // TODO: Remove sensitive info.
+    return json_encode($cart);
   }
 
 }

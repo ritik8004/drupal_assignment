@@ -34,12 +34,6 @@ class APIWrapper {
   // API response success code.
   const SUCCESS = '10000';
 
-  // Mada bins file name.
-  const MADA_BINS_FILE = 'mada_bins.csv';
-
-  // Mada bins test file name.
-  const MADA_BINS_FILE_TEST = 'mada_bins_test.csv';
-
   // The option that determines whether the payment method associated with
   // the successful transaction should be stored in the Vault.
   const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
@@ -88,16 +82,28 @@ class APIWrapper {
   protected $drupalInfo;
 
   /**
+   * Mada Validator.
+   *
+   * @var \App\Service\CheckoutCom\MadaValidator
+   */
+  protected $madaValidator;
+
+  /**
    * APIWrapper constructor.
    *
    * @param \App\Service\CheckoutCom\Helper $helper
    *   Checkout.com Helper.
    * @param \App\Service\Drupal\DrupalInfo $drupal_info
    *   Service to get Drupal Info.
+   * @param \App\Service\CheckoutCom\MadaValidator $mada_validator
+   *   Mada Validator.
    */
-  public function __construct(Helper $helper, DrupalInfo $drupal_info) {
+  public function __construct(Helper $helper,
+                              DrupalInfo $drupal_info,
+                              MadaValidator $mada_validator) {
     $this->helper = $helper;
     $this->drupalInfo = $drupal_info;
+    $this->madaValidator = $mada_validator;
   }
 
   /**
@@ -161,66 +167,6 @@ class APIWrapper {
    */
   public function is3dForced() {
     return $this->helper->getConfig('verify3dsecure');
-  }
-
-  /**
-   * Is mada bin check enabled.
-   *
-   * @return bool
-   *   Return TRUE for enabled, FALSE otherwise.
-   */
-  public function isMadaEnabled() {
-    return $this->helper->getConfig('mada_enabled');
-  }
-
-  /**
-   * Return the MADA BINS file path.
-   *
-   * @return string
-   *   Return the mada bin file path.
-   */
-  public function getMadaBinsPath() {
-    return (string) '/files/' . (($this->isLive())
-      ? self::MADA_BINS_FILE
-      : self::MADA_BINS_FILE_TEST);
-  }
-
-  /**
-   * Checks if the given bin is belong to mada bin.
-   *
-   * @param string $bin
-   *   The card bin to verify.
-   *
-   * @return bool
-   *   Return true if one of the mada bin, false otherwise.
-   */
-  public function isMadaBin($bin) {
-    // Set mada bin file path.
-    $mada_bin_csv_path = drupal_get_path('module', 'acq_checkoutcom') . $this->getMadaBinsPath();
-
-    // Read CSV rows.
-    $mada_bin_csv_file = fopen($mada_bin_csv_path, 'r');
-
-    $mada_bin_csv_data = [];
-    while ($mada_bin_csv_row = fgetcsv($mada_bin_csv_file)) {
-      $mada_bin_csv_data[] = $mada_bin_csv_row;
-    }
-    fclose($mada_bin_csv_file);
-
-    // Remove the first row of csv columns.
-    unset($mada_bin_csv_data[0]);
-
-    // Build the mada bin array.
-    $mada_bin_array = array_map(function ($row) {
-      return $row[1];
-    }, $mada_bin_csv_data);
-
-    $this->logInfo('checkout.com: validated for bin: @bin against @mada_bin_array', [
-      '@bin' => $bin,
-      '@mada_bin_array' => $mada_bin_array,
-    ]);
-
-    return in_array($bin, $mada_bin_array);
   }
 
   /**
@@ -444,24 +390,17 @@ class APIWrapper {
    */
   public function getChargesInfo($payment_token) {
     $endpoint = strtr(self::ENDPOINT_CHARGES_INFO, ['{payment_token}' => $payment_token]);
-    $doReq = function ($client, $req_param) use ($endpoint) {
+    $doReq = function ($client) use ($endpoint) {
       return ($client->get($endpoint, []));
     };
 
-    $cart = $this->cartStorage->getCart(FALSE);
-    $this->logInfo('checkout.com: for cart: @cart_id, received payment token: @payment_token', [
-      '@cart_id' => $cart->id(),
-      '@payment_token' => $payment_token,
-    ]);
     try {
       $response = $this->tryCheckoutRequest($doReq, __METHOD__);
     }
     catch (\UnexpectedValueException $e) {
       $this->logger->error(
-        'Error occurred while getting info on payment failure, for cart: @cart_id, payment token: @payment_token with message: @message.',
+        'Error occurred while getting payment info for payment token: @payment_token with message: @message.',
         [
-          '@cart_id' => $cart->id(),
-          '@mail' => $cart->customerEmail(),
           '@payment_token' => $payment_token,
           '@message' => $e->getMessage(),
         ]
@@ -469,6 +408,23 @@ class APIWrapper {
     }
 
     return $response ?? NULL;
+  }
+
+  /**
+   * Validate MADA bin if enabled.
+   *
+   * @param string $bin
+   *   Card bin.
+   *
+   * @return bool
+   *   TRUE if mada is enabled and card bin verified.
+   */
+  public function validateMadaBin(string $bin) {
+    if (!($this->helper->getConfig('mada_enabled'))) {
+      return FALSE;
+    }
+
+    return $this->madaValidator->isMadaBin($this->isLive(), $bin);
   }
 
 }

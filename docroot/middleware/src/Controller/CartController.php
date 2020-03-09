@@ -608,7 +608,7 @@ class CartController {
           }
         }
 
-        $cart = $this->cart->updatePayment($cart_id, $request_content['payment_info'], $extension);
+        $cart = $this->cart->updatePayment($cart_id, $request_content['payment_info']['payment'], $extension);
         break;
 
       case CartActions::CART_PAYMENT_UPDATE:
@@ -616,7 +616,7 @@ class CartController {
         $extension = [
           'action' => 'update payment',
         ];
-        $cart = $this->cart->updatePayment($cart_id, $request_content['payment_info'], $extension);
+        $cart = $this->cart->updatePayment($cart_id, $request_content['payment_info']['payment'], $extension);
         break;
     }
 
