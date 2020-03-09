@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
@@ -10,6 +11,13 @@ use App\Service\Magento\CartActions;
  * Class Cart.
  */
 class Cart {
+
+  /**
+   * Static cache for cart.
+   *
+   * @var array
+   */
+  protected static $cart = [];
 
   /**
    * Magento service.
@@ -33,6 +41,13 @@ class Cart {
   protected $utility;
 
   /**
+   * Checkout.com API Wrapper.
+   *
+   * @var \App\Service\CheckoutCom\APIWrapper
+   */
+  protected $checkoutComApi;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -41,13 +56,17 @@ class Cart {
    *   Magento API Wrapper.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\CheckoutCom\APIWrapper $checkout_com_api
+   *   Checkout.com API Wrapper.
    */
   public function __construct(MagentoInfo $magento_info,
                               MagentoApiWrapper $magento_api_wrapper,
-                              Utility $utility) {
+                              Utility $utility,
+                              APIWrapper $checkout_com_api) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->utility = $utility;
+    $this->checkoutComApi = $checkout_com_api;
   }
 
   /**
@@ -62,6 +81,10 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart(int $cart_id) {
+    if (isset(static::$cart[$cart_id])) {
+      return static::$cart[$cart_id];
+    }
+
     $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
@@ -454,28 +477,67 @@ class Cart {
       'extension' => (object) $extension,
     ];
 
+    $data['payment'] = [
+      'method' => $payment_data['payment']['method'],
+      'additional_data' => $payment_data['payment']['additional_data'],
+    ];
+
+    return $this->updateCart($data, $cart_id);
+  }
+
+  /**
+   * Process payment data before placing order.
+   *
+   * @param int $cart_id
+   *   Cart ID.
+   * @param string $method
+   *   Payment method.
+   * @param array $additional_info
+   *   Additional info.
+   *
+   * @return array
+   *   Processed payment data.
+   *
+   * @throws \Exception
+   */
+  public function processPaymentData(int $cart_id, string $method, array $additional_info) {
+    $additional_data = [];
+
     // Method specific code. @TODO: Find better way to handle this.
-    $additional_info = $payment_data['payment']['additional_data'] ?? [];
-    switch ($payment_data['payment']['method']) {
+    switch ($method) {
       case 'checkout_com':
-        // @TODO: Handle 3D, Handle Tokenisation, Handle MADA.
         $additional_data = [
           'card_token_id' => $additional_info['id'],
           'udf3' => NULL,
         ];
-        break;
 
-      default:
-        $additional_data = $additional_info;
+        if ($this->checkoutComApi->isMadaEnabled()) {
+
+        }
+        elseif ($this->checkoutComApi->is3dForced()) {
+          $this->checkoutComApi->request3dSecurePayment(
+            $this->getCart($cart_id),
+            $additional_data,
+            APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT
+          );
+        }
+
+        $response = $this->checkoutComApi->request3dSecurePayment(
+          $this->getCart($cart_id),
+          $additional_data,
+          APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT
+        );
+
+        if (isset($response['responseCode'])
+          && $response['responseCode'] == APIWrapper::SUCCESS
+          && !empty($response[APIWrapper::REDIRECT_URL])) {
+          throw new \Exception($response[APIWrapper::REDIRECT_URL], 302);
+        }
+
         break;
     }
 
-    $data['payment'] = [
-      'method' => $payment_data['payment']['method'],
-      'additional_data' => $additional_data,
-    ];
-
-    return $this->updateCart($data, $cart_id);
+    return $additional_data;
   }
 
   /**
@@ -495,9 +557,12 @@ class Cart {
     $url = sprintf('carts/%d/updateCart', $cart_id);
 
     try {
-      return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      static::$cart[$cart_id] = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      return static::$cart[$cart_id];
     }
     catch (\Exception $e) {
+      static::$cart[$cart_id] = NULL;
+
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }

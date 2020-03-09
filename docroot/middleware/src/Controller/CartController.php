@@ -586,6 +586,28 @@ class CartController {
           'attempted_payment' => 1,
         ];
 
+        try {
+          $request_content['payment_info']['payment']['additional_data'] = $this->cart->processPaymentData(
+            $cart_id,
+            $request_content['payment_info']['payment']['method'],
+            $request_content['payment_info']['payment']['additional_data']
+          );
+        }
+        catch (\Exception $e) {
+          if ($e->getCode() === 302) {
+            return new JsonResponse([
+              'success' => TRUE,
+              'redirectUrl' => $e->getMessage(),
+            ]);
+          }
+          elseif ($e->getCode() === 400) {
+            return new JsonResponse([
+              'error' => TRUE,
+              'message' => $e->getMessage(),
+            ]);
+          }
+        }
+
         $cart = $this->cart->updatePayment($cart_id, $request_content['payment_info'], $extension);
         break;
 

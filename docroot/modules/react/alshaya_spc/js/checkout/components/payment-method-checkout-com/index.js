@@ -4,7 +4,7 @@ import luhn from "../../../utilities/luhn";
 import {addPaymentMethodInCart} from "../../../utilities/update_cart";
 import {
   placeOrder,
-  removeFullScreenLoader
+  removeFullScreenLoader, showFullScreenLoader
 } from "../../../utilities/checkout_util";
 
 class PaymentMethodCheckoutCom extends React.Component {
@@ -124,11 +124,15 @@ class PaymentMethodCheckoutCom extends React.Component {
 
   validateBeforePlaceOrder = () => {
     if (!(this.state.numberValid && this.state.expiryValid && this.state.cvvValid)) {
-      console.error('Client side validation failed for credit card info')
+      console.error('Client side validation failed for credit card info');
       throw 'UnexpectedValueException';
     }
+    else if (window.CheckoutKit === undefined) {
+      console.error('Checkout kit not loaded');
+      throw 500;
+    }
 
-    console.log('calling Drupal');
+    showFullScreenLoader();
 
     var ccInfo = {
       'number': this.state.number,
@@ -163,6 +167,17 @@ class PaymentMethodCheckoutCom extends React.Component {
     };
 
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
+      if (result.error !== undefined && result.error) {
+        removeFullScreenLoader();
+        console.error(result.error);
+        return;
+      }
+
+      if (result.success && result.redirectUrl !== undefined) {
+        window.location = result.redirectUrl;
+        return;
+      }
+
       // @TODO: Handle exception.
       const { cart } = this.props;
       placeOrder(cart.cart.cart_id, cart.selected_payment_method);
