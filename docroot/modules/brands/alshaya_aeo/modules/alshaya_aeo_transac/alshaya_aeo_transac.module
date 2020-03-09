@@ -1,0 +1,137 @@
+<?php
+
+/**
+ * @file
+ * Alshaya AEO transac module file.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\acq_sku\Entity\SKU;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_aeo_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product') {
+
+    if ($view_mode == 'full') {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $sku = $skuManager->getSkuForNode($entity);
+      $sku_entity = SKU::loadFromSku($sku);
+      if ($sku_entity instanceof SKU) {
+        $return = _alshaya_aeo_transac_get_product_description($sku_entity);
+        $build['short_desc'] = $return['short_desc'];
+        $build['description'] = $return['description'];
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_aeo_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($view_mode == 'modal') {
+    $return = _alshaya_aeo_transac_get_product_description($sku_entity);
+    $build['short_desc'] = $return['short_desc'];
+    $build['description'] = $return['description'];
+  }
+}
+
+/**
+ * Get product description from SKU.
+ */
+function _alshaya_aeo_transac_get_product_description($sku_entity) {
+  $return = [];
+
+  if ($body = $sku_entity->get('attr_description')->getString()) {
+    $return['short_desc']['value'] = [
+      '#markup' => $body,
+    ];
+  }
+
+  $details['label'] = [
+    '#markup' => t('Details'),
+  ];
+  $details['value'] = [
+    "#theme" => 'item_list',
+    '#items' => [],
+  ];
+
+  if ($details1 = $sku_entity->get('attr_details1')->getString()) {
+    $details['value']['#items'][] = $details1;
+  }
+  if ($details2 = $sku_entity->get('attr_details2')->getString()) {
+    $details['value']['#items'][] = $details2;
+  }
+  if ($details3 = $sku_entity->get('attr_details3')->getString()) {
+    $details['value']['#items'][] = $details3;
+  }
+  if ($details4 = $sku_entity->get('attr_details4')->getString()) {
+    $details['value']['#items'][] = $details4;
+  }
+  if ($details5 = $sku_entity->get('attr_details5')->getString()) {
+    $details['value']['#items'][] = $details5;
+  }
+  if ($details6 = $sku_entity->get('attr_details6')->getString()) {
+    $details['value']['#items'][] = $details6;
+  }
+
+  if (!empty($details['value']['#items'])) {
+    $return['description'][] = $details;
+  }
+
+  $materials_care['label'] = [
+    '#markup' => t('Materials & Care'),
+  ];
+  $materials_care['value'] = [
+    "#theme" => 'item_list',
+    '#items' => [],
+  ];
+
+  if ($materials_care1 = $sku_entity->get('attr_materials_care1')->getString()) {
+    $materials_care['value']['#items'][] = $materials_care1;
+  }
+  if ($materials_care2 = $sku_entity->get('attr_materials_care2')->getString()) {
+    $materials_care['value']['#items'][] = $materials_care2;
+  }
+  if ($materials_care3 = $sku_entity->get('attr_materials_care3')->getString()) {
+    $materials_care['value']['#items'][] = $materials_care3;
+  }
+  if ($materials_care4 = $sku_entity->get('attr_materials_care4')->getString()) {
+    $materials_care['value']['#items'][] = $materials_care4;
+  }
+
+  if (!empty($materials_care['value']['#items'])) {
+    $return['description'][] = $materials_care;
+  }
+
+  $size_fit['label'] = [
+    '#markup' => t('Size & fit'),
+  ];
+  $size_fit['value'] = [
+    "#theme" => 'item_list',
+    '#items' => [],
+  ];
+
+  if ($size_fit1 = $sku_entity->get('attr_size_fit1')->getString()) {
+    $size_fit['value']['#items'][] = $size_fit1;
+  }
+  if ($size_fit2 = $sku_entity->get('attr_size_fit2')->getString()) {
+    $size_fit['value']['#items'][] = $size_fit2;
+  }
+  if ($size_fit3 = $sku_entity->get('attr_size_fit3')->getString()) {
+    $size_fit['value']['#items'][] = $size_fit3;
+  }
+  if ($size_fit4 = $sku_entity->get('attr_size_fit4')->getString()) {
+    $size_fit['value']['#items'][] = $size_fit4;
+  }
+
+  if (!empty($size_fit['value']['#items'])) {
+    $return['description'][] = $size_fit;
+  }
+
+  return $return;
+}
