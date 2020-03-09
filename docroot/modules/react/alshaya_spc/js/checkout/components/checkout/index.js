@@ -201,12 +201,13 @@ export default class Checkout extends React.Component {
             {window.innerWidth > 768 &&
               <TermsConditions />
             }
-            {this.state.cart.cart.delivery_type === 'hd' ? (
+            {(this.state.cart.cart.delivery_type === 'hd') ? (
               <HDBillingAddress
                 refreshCart={this.refreshCart}
                 billingAddress={this.state.cart.cart.billing_address}
                 shippingAddress={this.state.cart.cart.shipping_address}
                 carrierInfo={this.state.cart.cart.carrier_info}
+                paymentMethod={this.state.cart.selected_payment_method}
               />
             ) : (
               <CnCBillingAddress
@@ -214,6 +215,7 @@ export default class Checkout extends React.Component {
                 billingAddress={this.state.cart.cart.billing_address}
                 shippingAddress={this.state.cart.cart.shipping_address}
                 carrierInfo={this.state.cart.cart.carrier_info}
+                paymentMethod={this.state.cart.selected_payment_method}
               />
             )}
             <CompletePurchase cart={this.state.cart} />
