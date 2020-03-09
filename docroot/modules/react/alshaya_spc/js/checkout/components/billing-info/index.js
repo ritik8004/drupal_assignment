@@ -55,18 +55,16 @@ export default class BillingInfo extends React.Component {
     })
 
     return (
-      <React.Fragment>
-        <div>
-          <div>
-            <div>{billing.firstname} {billing.lastname}</div>
-            <div>{addressData.join(', ')}</div>
-          </div>
-          <div onClick={() => this.showPopup()}>{Drupal.t('change')}</div>
-          {this.state.open &&
-            <BillingPopUp closePopup={this.closePopup} billing={billing} shipping={shipping}/>
-          }
+      <div className='spc-billing-information'>
+        <div className='spc-billing-meta'>
+          <div className='spc-billing-name'>{billing.firstname} {billing.lastname}</div>
+          <div className='spc-billing-address'>{addressData.join(', ')}</div>
         </div>
-      </React.Fragment>
+        <div className='spc-billing-change' onClick={() => this.showPopup()}>{Drupal.t('change')}</div>
+        {this.state.open &&
+          <BillingPopUp closePopup={this.closePopup} billing={billing} shipping={shipping}/>
+        }
+      </div>
     );
 
   }
