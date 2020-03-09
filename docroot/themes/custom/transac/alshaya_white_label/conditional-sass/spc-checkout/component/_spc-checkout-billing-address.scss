@@ -1,0 +1,120 @@
+.spc-section-billing-address {
+  margin-bottom: 2.5rem;
+
+  .spc-billing-address-wrapper {
+    font-size: 0.875rem;
+
+    .spc-billing-top-panel {
+      background: $spc-checkout-delivery-method-bg;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      min-height: 3.25rem;
+
+      @include breakpoint($only-mobile) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .spc-billing-address-btns {
+        width: 133px;
+        display: inline-flex;
+        align-items: center;
+
+        @include breakpoint($only-mobile) {
+          margin-top: 1rem;
+        }
+
+        .spc-billing-radio {
+          position: relative;
+          padding-#{$left}: 2.75rem;
+          cursor: pointer;
+
+          @include breakpoint($only-mobile) {
+            padding-#{$left}: 1.75rem;
+            margin-#{$right}: 1.75rem;
+
+            label::before {
+              #{$left}: -1rem;
+            }
+          }
+
+          label {
+            color: $spc-checkout-billing-title;
+          }
+        }
+      }
+
+      .spc-billing-address-title {
+        flex-grow: 1;
+        color: $spc-checkout-billing-title;
+      }
+    }
+
+    .spc-billing-bottom-panel {
+      background: $spc-checkout-delivery-method-bg;
+      padding: 1rem 1.25rem;
+      display: flex;
+      border-top: 1px solid $spc-delivery-info-separator;
+      position: relative;
+
+      .spc-billing-meta {
+        max-width: 17.125rem;
+
+        @include breakpoint($only-mobile) {
+          max-width: 11.9375rem;
+        }
+
+        .spc-billing-name {
+          font-family: $alshaya-bold;
+          color: $spc-delivery-customer-info-highlight;
+          margin-bottom: 0.3125rem;
+        }
+
+        .spc-billing-address {
+          color: $spc-delivery-info-text;
+        }
+      }
+
+      .spc-billing-change {
+        position: absolute;
+        #{$right}: 1.25rem;
+        top: 1.25rem;
+        cursor: pointer;
+        height: 2.25rem;
+        min-width: 6.1875rem;
+        padding: 0 0.625rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid $spc-deliver-button;
+        color: $spc-deliver-button;
+        font-size: 0.8125rem;
+        border-radius: 0.25rem;
+      }
+    }
+  }
+
+  &.cnc-flow {
+    .spc-billing-bottom-panel {
+      border-top: none;
+    }
+
+    .spc-billing-cc-panel {
+      cursor: pointer;
+      color: $spc-checkout-billing-empty-cnc;
+      position: relative;
+      padding-#{$left}: 1.25rem;
+      font-size: 0.875rem;
+
+      @include icon('chevron#{$right}', before) {
+        position: absolute;
+        #{$right}: 0.875rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2rem;
+        color: $spc-checkout-delivery-info-txt;
+      }
+    }
+  }
+}

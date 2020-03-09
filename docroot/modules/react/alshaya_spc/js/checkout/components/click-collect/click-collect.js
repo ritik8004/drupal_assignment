@@ -325,7 +325,11 @@ class ClickCollect extends React.Component {
       return <Loading />;
     }
 
-    let mapView = <ClicknCollectMap coords={coords} markers={storeList} />;
+    let mapView = <ClicknCollectMap
+    coords={coords}
+    markers={storeList}
+    openSelectedStore={openSelectedStore}
+    />;
 
     return (
       <div className="spc-address-form">

@@ -312,6 +312,18 @@ class CartController {
         $data['shipping_address'] += $custom_shipping_attributes;
       }
 
+      $data['billing_address'] = NULL;
+      // Assuming if billing address has first name set,
+      // means billing address available.
+      if (!empty($cart_data['cart']['billing_address'])
+        && !empty($cart_data['cart']['billing_address']['firstname'])) {
+        $data['billing_address'] = $cart_data['cart']['billing_address'];
+        foreach ($data['billing_address']['custom_attributes'] as $key => $attribute) {
+          $data['billing_address'][$attribute['attribute_code']] = $attribute['value'];
+        }
+        unset($data['billing_address']['custom_attributes']);
+      }
+
       $data['delivery_type'] = 'hd';
       if (!empty($shipping_info['extension_attributes']['click_and_collect_type'])) {
         $data['delivery_type'] = $shipping_info['extension_attributes']['click_and_collect_type'] == 'home_delivery' ? 'hd' : 'cnc';
@@ -578,6 +590,15 @@ class CartController {
           $cart = $this->cart->addShippingInfo($cart_id, $shipping_info, $action);
         }
         break;
+
+      case CartActions::CART_BILLING_UPDATE:
+        $cart_id = $request_content['cart_id'];
+        $billing_info = $request_content['billing_info'];
+        $billing_data = $this->cart->formatAddressForShippingBilling($billing_info);
+        $cart = $this->cart->updateBilling($cart_id, $billing_data);
+        if (!empty($cart['error'])) {
+          return new JsonResponse($cart);
+        }
 
       case CartActions::CART_PAYMENT_FINALISE:
         $cart_id = $request_content['cart_id'];

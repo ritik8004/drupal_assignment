@@ -5,6 +5,8 @@ import EmptyResult from '../../../utilities/empty-result';
 import { fetchCartData } from '../../../utilities/get_cart';
 import Loading from '../../../utilities/loading';
 import OrderSummaryBlock from '../../../utilities/order-summary-block';
+import HDBillingAddress from '../hd-billing-address';
+import CnCBillingAddress from '../cnc-billing-address';
 import { stickySidebar } from '../../../utilities/stickyElements/stickyElements';
 import {
   addInfoInStorage,
@@ -22,6 +24,7 @@ import { fetchClicknCollectStores } from "../../../utilities/api/requests";
 import { createFetcher } from '../../../utilities/api/fetcher';
 import {removeFullScreenLoader} from "../../../utilities/checkout_util";
 import _isEmpty from 'lodash/isEmpty';
+import ConditionalView from '../../../common/components/conditional-view';
 
 window.fetchStore = 'idle';
 
@@ -187,6 +190,8 @@ export default class Checkout extends React.Component {
       );
     }
 
+    const termConditions = <TermsConditions />
+
     return (
       <React.Fragment>
         <div className="spc-pre-content" />
@@ -201,10 +206,27 @@ export default class Checkout extends React.Component {
             <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
-            <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={this.state.cart} />
-            {window.innerWidth > 768 &&
-              <TermsConditions />
-            }
+            <PaymentMethods refreshCart={this.refreshCart} cart={this.state.cart} />
+            {(this.state.cart.cart.delivery_type === 'hd') ? (
+              <HDBillingAddress
+                refreshCart={this.refreshCart}
+                billingAddress={this.state.cart.cart.billing_address}
+                shippingAddress={this.state.cart.cart.shipping_address}
+                carrierInfo={this.state.cart.cart.carrier_info}
+                paymentMethod={this.state.cart.selected_payment_method}
+              />
+            ) : (
+              <CnCBillingAddress
+                refreshCart={this.refreshCart}
+                billingAddress={this.state.cart.cart.billing_address}
+                shippingAddress={this.state.cart.cart.shipping_address}
+                carrierInfo={this.state.cart.cart.carrier_info}
+                paymentMethod={this.state.cart.selected_payment_method}
+              />
+            )}
+            <ConditionalView condition={window.innerWidth > 768}>
+              {termConditions}
+            </ConditionalView>
             <CompletePurchase cart={this.state.cart} validateBeforePlaceOrder={this.validateBeforePlaceOrder} />
           </div>
           <div className="spc-sidebar">
@@ -212,9 +234,9 @@ export default class Checkout extends React.Component {
           </div>
         </div>
         <div className="spc-post-content">
-          {window.innerWidth < 768 &&
-            <TermsConditions />
-          }
+          <ConditionalView condition={window.innerWidth < 768}>
+            {termConditions}
+          </ConditionalView>
         </div>
       </React.Fragment>
     );

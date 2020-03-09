@@ -152,7 +152,7 @@ class PaymentController {
         ['@cart_id' => $cart['cart']['id'], '@message' => $e->getMessage()]
       );
 
-      return new RedirectResponse($this->dr'/' . $data['langcode'] . '/checkout', 302);
+      return new RedirectResponse('/' . $data['langcode'] . '/checkout', 302);
     }
 
     return new RedirectResponse('/' . $data['data']['langcode'] . '/checkout/confirmation', 302);
