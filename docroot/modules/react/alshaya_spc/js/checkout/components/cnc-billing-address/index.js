@@ -64,7 +64,7 @@ export default class CnCBillingAddress extends React.Component {
       || billingAddress === null) {
       return (
         <React.Fragment>
-          <div onClick={this.showPopup()}>
+          <div onClick={() => this.showPopup()}>
             {Drupal.t('please add your billing address.')}
           </div>
           {this.state.open &&
