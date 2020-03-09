@@ -134,7 +134,7 @@ export default class Gmap {
     this.map.mapMarkers = this.map.mapMarkers || [];
     const currentMarkerSettings = { ...markerSettings };
 
-    const { icon: markerIconPath, labelPosition } = this.map.settings.map_marker;
+    const { icon: markerIconPath, label_position: labelPosition } = this.map.settings.map_marker;
 
     if (typeof markerIconPath === 'string') {
       // Add the marker icon.
