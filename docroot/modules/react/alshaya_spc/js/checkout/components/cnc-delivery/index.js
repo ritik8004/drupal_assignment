@@ -1,4 +1,5 @@
 import React from "react";
+import parse from 'html-react-parser';
 import Popup from "reactjs-popup";
 import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
 import Loading from "../../../utilities/loading";
@@ -35,7 +36,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
     document.addEventListener(
       "refreshCartOnCnCSelect",
       this.eventListener,
-      false
+      false,
     );
   }
 
@@ -44,12 +45,12 @@ class ClicknCollectDeiveryInfo extends React.Component {
     document.removeEventListener(
       "refreshCartOnCnCSelect",
       this.eventListener,
-      false
+      false,
     );
   }
 
-  eventListener = e => {
-    var data = e.detail.data();
+  eventListener = (e) => {
+    const data = e.detail.data();
     this.props.refreshCart(data);
     if (this._isMounted) {
       this.closeModal();
@@ -59,48 +60,50 @@ class ClicknCollectDeiveryInfo extends React.Component {
   render() {
     const {
       cart: {
-        store_info: { name, cart_address: address },
-        shipping_address
-      }
-    } = this.props.cart;
+        cart: {
+          store_info: { name, address },
+          shipping_address: shippingAddress,
+        },
+      },
+    } = this.props;
+
+    const { open, showSelectedStore } = this.state;
 
     return (
       <div className="delivery-information-preview">
         <div className="spc-delivery-store-info">
           <div className="store-name">{name}</div>
           <div className="store-address">
-            {address.extension.address_block_segment},{" "}
-            {address.extension.address_building_segment},{" "}
-            {address.extension.address_apartment_segment}, {address.street}
+            {parse(address)}
           </div>
           <div
             className="spc-change-address-link"
             onClick={() => this.openModal(false)}
           >
-            {Drupal.t("Change")}
+            {Drupal.t('Change')}
           </div>
         </div>
         <div className="spc-delivery-contact-info">
-          <div className="contact-info-label">{Drupal.t("Collection by")}</div>
+          <div className="contact-info-label">{Drupal.t('Collection by')}</div>
           <div className="contact-name">
-            {shipping_address.firstname} {shipping_address.lastname}
+            {`${shippingAddress.firstname} ${shippingAddress.lastname}`}
           </div>
-          <div className="contact-telephone">+{drupalSettings.country_mobile_code} {shipping_address.telephone}</div>
+          <div className="contact-telephone">{`+${drupalSettings.country_mobile_code} ${shippingAddress.telephone}`}</div>
           <div
             className="spc-change-address-link"
             onClick={() => this.openModal(true)}
           >
-            {Drupal.t("Edit")}
+            {Drupal.t('Edit')}
           </div>
         </div>
         <Popup
-          open={this.state.open}
+          open={open}
           onClose={this.closeModal}
           closeOnDocumentClick={false}
         >
           <React.Suspense fallback={<Loading />}>
             <ClickCollectContainer
-              openSelectedStore={this.state.showSelectedStore}
+              openSelectedStore={showSelectedStore}
               closeModal={this.closeModal}
             />
           </React.Suspense>
