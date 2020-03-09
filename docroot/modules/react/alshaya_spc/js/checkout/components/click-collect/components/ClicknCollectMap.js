@@ -4,7 +4,6 @@ import Gmap from '../../../../utilities/map/Gmap';
 import StoreItemInfoWindow from './StoreItemInfowindow';
 
 class ClicknCollectMap extends React.Component {
-
   constructor(props) {
     super(props);
     this.googleMapRef = React.createRef();
@@ -28,9 +27,11 @@ class ClicknCollectMap extends React.Component {
     // can be provided from the caller in props.
     window.spcMap.googleMap = this.createGoogleMap();
     this.googleMap.setCurrentMap(window.spcMap.googleMap);
-    this.googleMap.setCenter();
     if (this.props.markers) {
       this.placeMarkers();
+    }
+    else {
+      this.googleMap.setCenter();
     }
   }
 
@@ -77,10 +78,12 @@ class ClicknCollectMap extends React.Component {
       // Add new marker position to bounds.
       window.spcMap.googleMap.bounds.extend(position);
     });
-    // Auto zoom.
-    window.spcMap.googleMap.fitBounds(window.spcMap.googleMap.bounds);
-    // Auto center.
-    window.spcMap.googleMap.panToBounds(window.spcMap.googleMap.bounds);
+    if (this.props.openSelectedStore === false) {
+      // Auto zoom.
+      window.spcMap.googleMap.fitBounds(window.spcMap.googleMap.bounds);
+      // Auto center.
+      window.spcMap.googleMap.panToBounds(window.spcMap.googleMap.bounds);
+    }
   }
 
   /**
