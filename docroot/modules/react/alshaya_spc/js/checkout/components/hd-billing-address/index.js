@@ -87,12 +87,24 @@ export default class HDBillingAddress extends React.Component {
   };
 
   render() {
-    const { billingAddress, shippingAddress, carrierInfo } = this.props;
+    const {
+      billingAddress,
+      shippingAddress,
+      carrierInfo,
+      paymentMethod
+    } = this.props;
     // If carrier info not set on cart, means shipping is not
     // set. Thus billing is also not set and thus no need to
     // show biiling info.
     if (carrierInfo === undefined
       || carrierInfo === null) {
+      return (null);
+    }
+
+    // No need to show the billing address change for the
+    // COD payment method.
+    if (paymentMethod === undefined
+      || paymentMethod === 'cashondelivery') {
       return (null);
     }
 
