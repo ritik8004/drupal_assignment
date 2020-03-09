@@ -212,7 +212,7 @@ class CategoryProductListResource extends ResourceBase {
    *   Parent term id.
    *
    * @return array
-   *   Data array..
+   *   Data array.
    */
   protected function getSubCategoryData(int $parent_tid) {
     // Calling view to get the sub category list.
