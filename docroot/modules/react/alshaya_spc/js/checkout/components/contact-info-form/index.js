@@ -69,12 +69,12 @@ class ContactInfoForm extends React.Component {
         && this.context.contactInfo.email !== form_data.static.email)
     ) {
       customerValidationReuest = Axios.get(
-        i18nMiddleWareUrl("customer/" + form_data.static.email)
+        i18nMiddleWareUrl(`customer/${form_data.static.email}`)
       );
     }
 
     const mobileValidationRequest = Axios.get(
-      Drupal.url("verify-mobile/" + form_data.static.telephone)
+      Drupal.url(`verify-mobile/${form_data.static.telephone}`)
     );
 
     // API call to validate mobile number and email address.
@@ -84,8 +84,9 @@ class ContactInfoForm extends React.Component {
           // Show errors if any, else call update cart api to update shipping address.
           let hasError = this.showMobileAndEmailErrors(
             mobileValidate,
-            customerEmailValidate
+            customerEmailValidate,
           );
+
           if (!hasError) {
             this.updateShipping(form_data);
           } else {
@@ -153,6 +154,10 @@ class ContactInfoForm extends React.Component {
       // Remove error class and any error message.
       document.getElementById("mobile-error").innerHTML = "";
       document.getElementById("mobile-error").classList.remove("error");
+    }
+
+    if (!document.getElementById("email-error")) {
+      return isError;
     }
 
     if (customerEmailValidate.data.exists === "wrong") {
