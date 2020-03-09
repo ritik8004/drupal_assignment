@@ -10,12 +10,12 @@ use Drupal\Component\Plugin\PluginBase;
 abstract class AlshayaSpcPaymentMethodPluginBase extends PluginBase {
 
   /**
-   * Add additional JS / CSS libraries for the plugin.
+   * Add additional JS / CSS / drupalSettings for the plugin.
    *
    * @param array $build
    *   Build array from controller.
    */
-  public function addAdditionalLibraries(array &$build) {
+  public function processBuild(array &$build) {
     // Add required libraries.
   }
 

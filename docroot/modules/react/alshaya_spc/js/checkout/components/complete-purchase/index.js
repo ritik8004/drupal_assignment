@@ -12,7 +12,7 @@ export default class CompletePurchase extends React.Component {
     e.preventDefault();
 
     try {
-      this.validateBeforePlaceOrder();
+      this.props.validateBeforePlaceOrder();
     }
     catch (error) {
       console.error(error);

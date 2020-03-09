@@ -98,6 +98,11 @@ class PaymentMethodCheckoutCom extends React.Component {
   }
 
   handleCardCvvChange (event) {
+    if (window.CheckoutKit === undefined) {
+      console.error('CheckoutKit not available');
+      throw 500;
+    }
+
     let valid = false;
     let cvv = parseInt(event.target.value);
     if (cvv >= 100 && cvv <= 9999) {
@@ -113,7 +118,44 @@ class PaymentMethodCheckoutCom extends React.Component {
   }
 
   validateBeforePlaceOrder = () => {
+    if (!(this.state.numberValid && this.state.expiryValid && this.state.cvvValid)) {
+      console.error('Client side validation failed for credit card info')
+      throw 'UnexpectedValueException';
+    }
 
+    console.log('calling Drupal');
+
+    var ccInfo = {
+      'number': this.state.number,
+      'expiryMonth': this.state.expiry.split('/')[0],
+      'expiryYear': this.state.expiry.split('/')[1],
+      'cvv': this.state.cvv,
+      'udf3': '',
+    };
+
+    window.CheckoutKit.configure({
+      debugMode: drupalSettings.checkoutCom.debugMode,
+      publicKey: drupalSettings.checkoutCom.publicKey,
+    });
+
+    window.CheckoutKit.createCardToken(ccInfo, this.handleCheckoutResponse);
+
+    console.log(ccInfo);
+    throw 'Fail for now';
+  };
+
+  handleCheckoutResponse = (data) => {
+
+    console.log(data);
+    // if (typeof data.card === 'undefined') {
+    //   Drupal.checkoutComTokenised = false;
+    // }
+    // else {
+    //   Drupal.checkoutComTokenised = true;
+    //   $('#cardToken').val(data.id);
+    //   $('#cardBin').val(data.card.bin);
+    // }
+    // Drupal.checkoutComTokenisationProcessed = true;
   };
 
   render() {

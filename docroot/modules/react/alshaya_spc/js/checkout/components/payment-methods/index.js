@@ -74,7 +74,7 @@ export default class PaymentMethods extends React.Component {
     return this.state.paymentMethods;
   };
 
-  changePaymentMethod = (method) => {
+  changePaymentMethod = (method, additionalData) => {
     if (this.state.selectedOption === method) {
       return;
     }
@@ -84,9 +84,10 @@ export default class PaymentMethods extends React.Component {
     let data = {
       'payment' : {
         'method': method,
-        'additional_data': {}
+        'additional_data': additionalData,
       }
     };
+
     let cart = addPaymentMethodInCart('update payment', data);
     if (cart instanceof Promise) {
       cart.then((result) => {
@@ -106,17 +107,17 @@ export default class PaymentMethods extends React.Component {
 
   validateBeforePlaceOrder = () => {
     // Trigger validate of selected component.
-    this.paymentMethodRefs[this.state.selectedOption].validateBeforePlaceOrder();
+    this.paymentMethodRefs[this.state.selectedOption].current.validateBeforePlaceOrder();
   };
 
   render() {
     const methods = [];
 
     Object.entries(this.getPaymentMethods()).forEach(([key, method]) => {
-      this.paymentMethodRefs[method] = React.createRef();
+      this.paymentMethodRefs[method.code] = React.createRef();
       let isSelected = (this.state.selectedOption === key) ? key : '';
       methods.push(<PaymentMethod cart={this.props.cart}
-                                  ref={this.paymentMethodRefs[method]}
+                                  ref={this.paymentMethodRefs[method.code]}
                                   refreshCart={this.props.refreshCart}
                                   changePaymentMethod={this.changePaymentMethod}
                                   isSelected={isSelected} key={key}

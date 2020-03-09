@@ -59,12 +59,3 @@ checkout_live_kit:
     gpl-compatible: FALSE
   js:
     https://cdn.checkout.com/js/checkoutkit.js: { type: external }
-
-checkout_com:
-  version: 1.x
-  js:
-    assets/js/checkout.js: { }
-  dependencies:
-    - core/jquery
-    - core/drupal
-    - core/drupalSettings

@@ -24,8 +24,7 @@ export default class PaymentMethod extends React.Component {
   validateBeforePlaceOrder () {
     // Do additional process for some payment methods.
     if (this.props.method.code === 'checkout_com') {
-      console.log(this.paymentMethodCheckoutCom.current.state);
-      throw 'Stop processing for now';
+      this.paymentMethodCheckoutCom.current.validateBeforePlaceOrder();
     }
   }
 
@@ -52,7 +51,7 @@ export default class PaymentMethod extends React.Component {
 
         <ConditionalView condition={(this.state.selectedOption === 'checkout_com')}>
           <div className={['payment-method-form', 'payment-method-form-' + method]}>
-            <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} />
+            <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} customer={this.props.cart.cart.customer} />
           </div>
         </ConditionalView>
       </>

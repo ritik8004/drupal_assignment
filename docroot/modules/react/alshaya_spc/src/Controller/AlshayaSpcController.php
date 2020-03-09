@@ -170,28 +170,6 @@ class AlshayaSpcController extends ControllerBase {
 
     $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
 
-    // Get payment methods.
-    $payment_methods = [];
-    $exclude_payment_methods = array_filter($checkout_settings->get('exclude_payment_methods'));
-    foreach ($this->paymentMethodManager->getDefinitions() ?? [] as $payment_method) {
-      // Avoid displaying the excluded methods.
-      if (isset($exclude_payment_methods[$payment_method['id']])) {
-        continue;
-      }
-
-      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod(
-        $payment_method['id'],
-        $payment_method['label']->render()
-      );
-
-      $payment_methods[$payment_method['id']] = [
-        'name' => $payment_method_term->getName(),
-        'description' => $payment_method_term->getDescription(),
-        'code' => $payment_method_term->get('field_payment_code')->getString(),
-        'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
-      ];
-    }
-
     $cncTerm = $this->checkoutOptionManager->getClickandColectShippingMethodTerm();
     $cache_tags = Cache::mergeTags($cache_tags, $cncTerm->getCacheTags());
 
@@ -231,7 +209,7 @@ class AlshayaSpcController extends ControllerBase {
     $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $store_finder_config->getCacheTags());
 
-    return [
+    $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
       '#strings' => $strings,
@@ -245,7 +223,6 @@ class AlshayaSpcController extends ControllerBase {
           'cnc_subtitle_available' => $cc_config->get('checkout_click_collect_available'),
           'cnc_subtitle_unavailable' => $cc_config->get('checkout_click_collect_unavailable'),
           'terms_condition' => $checkout_settings->get('checkout_terms_condition.value'),
-          'payment_methods' => $payment_methods,
           'address_fields' => _alshaya_spc_get_address_fields(),
           'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
@@ -274,6 +251,36 @@ class AlshayaSpcController extends ControllerBase {
         'tags' => $cache_tags,
       ],
     ];
+
+    // Get payment methods.
+    $payment_methods = [];
+    $exclude_payment_methods = array_filter($checkout_settings->get('exclude_payment_methods'));
+    foreach ($this->paymentMethodManager->getDefinitions() ?? [] as $payment_method) {
+      // Avoid displaying the excluded methods.
+      if (isset($exclude_payment_methods[$payment_method['id']])) {
+        continue;
+      }
+
+      /** @var \Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase $plugin */
+      $plugin = $this->paymentMethodManager->createInstance($payment_method['id']);
+      $plugin->processBuild($build);
+
+      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod(
+        $payment_method['id'],
+        $payment_method['label']->render()
+      );
+
+      $payment_methods[$payment_method['id']] = [
+        'name' => $payment_method_term->getName(),
+        'description' => $payment_method_term->getDescription(),
+        'code' => $payment_method_term->get('field_payment_code')->getString(),
+        'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
+      ];
+    }
+
+    $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
+
+    return $build;
   }
 
   /**
