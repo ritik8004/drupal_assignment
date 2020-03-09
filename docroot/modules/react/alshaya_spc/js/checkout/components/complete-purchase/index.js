@@ -15,7 +15,12 @@ export default class CompletePurchase extends React.Component {
       this.props.validateBeforePlaceOrder();
     }
     catch (error) {
-      console.error(error);
+      // Error 200 means everything is fine.
+      // Place order will be done after payment validation is completed.
+      if (error !== 200) {
+        console.error(error);
+      }
+
       return;
     }
 

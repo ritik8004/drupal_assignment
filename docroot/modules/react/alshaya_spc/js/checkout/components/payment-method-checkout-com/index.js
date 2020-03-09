@@ -141,21 +141,15 @@ class PaymentMethodCheckoutCom extends React.Component {
     window.CheckoutKit.createCardToken(ccInfo, this.handleCheckoutResponse);
 
     console.log(ccInfo);
-    throw 'Fail for now';
+
+    // Throwing 200 error, we want to handle place order in custom way.
+    throw 200;
   };
 
   handleCheckoutResponse = (data) => {
 
     console.log(data);
-    // if (typeof data.card === 'undefined') {
-    //   Drupal.checkoutComTokenised = false;
-    // }
-    // else {
-    //   Drupal.checkoutComTokenised = true;
-    //   $('#cardToken').val(data.id);
-    //   $('#cardBin').val(data.card.bin);
-    // }
-    // Drupal.checkoutComTokenisationProcessed = true;
+
   };
 
   render() {

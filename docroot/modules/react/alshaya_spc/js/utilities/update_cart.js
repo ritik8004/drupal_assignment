@@ -83,7 +83,7 @@ export const updateCartItemData = function (action, sku, quantity) {
     });
 };
 
-export const addPaymentMethodInCart = function (action, data) {
+export const addPaymentMethodInCart = (action, data) => {
   let cart = cartAvailableInStorage();
   if (cart === false) {
     return null;

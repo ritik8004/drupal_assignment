@@ -74,7 +74,7 @@ export default class PaymentMethods extends React.Component {
     return this.state.paymentMethods;
   };
 
-  changePaymentMethod = (method, additionalData) => {
+  changePaymentMethod = (method) => {
     if (this.state.selectedOption === method) {
       return;
     }
@@ -84,7 +84,7 @@ export default class PaymentMethods extends React.Component {
     let data = {
       'payment' : {
         'method': method,
-        'additional_data': additionalData,
+        'additional_data': {},
       }
     };
 
