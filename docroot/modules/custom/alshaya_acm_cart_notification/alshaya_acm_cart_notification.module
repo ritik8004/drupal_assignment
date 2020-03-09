@@ -13,6 +13,7 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Ajax\SettingsCommand;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -25,6 +26,7 @@ function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStat
   $form['#attached']['drupalSettings']['currency_code'] = \Drupal::config('acq_commerce.currency')->getRawData()['currency_code'];
   $form['#attached']['drupalSettings']['ajaxSpinnerMessageInterval'] = (int) \Drupal::config('alshaya_master.settings')->get('ajax_spinner_message_interval');
   $form['#attached']['drupalSettings']['addToCartNotificationTime'] = \Drupal::config('alshaya_acm_cart_notification.settings')->get('notification_time');
+  $form['#attached']['drupalSettings']['show_crosssell_as_matchback'] = \Drupal::config('alshaya_acm.settings')->get('show_crosssell_as_matchback');
 }
 
 /**
@@ -74,11 +76,14 @@ function alshaya_acm_cart_notification_alshaya_acm_product_add_to_cart_submit_aj
   }
 
   $sku_css_id = strtolower(HTML::cleanCssIdentifier($sku->getSku()));
+  // Get cart items by sku.
+  $cart_items['cart_items'] = alshaya_acm_get_cart_items_by_sku();
 
   $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));
   $response->addCommand(new HtmlCommand('#block-cartminiblock', $mini_cart_html));
   $response->addCommand(new HtmlCommand('#cart_notification', render($output)));
   $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
+  $response->addCommand(new SettingsCommand($cart_items, TRUE));
 }
 
 /**

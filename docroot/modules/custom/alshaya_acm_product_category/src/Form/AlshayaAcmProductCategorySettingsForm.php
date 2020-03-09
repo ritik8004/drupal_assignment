@@ -68,6 +68,8 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       ->set('old_categorization_enabled', $form_state->getValue('old_categorization_enabled'))
       ->set('enable_lhn_tree', $form_state->getValue('enable_lhn_tree'))
       ->set('grouping_page_header_style', $form_state->getValue('grouping_page_header_style'))
+      ->set('enable_auto_sale_categorisation', $form_state->getValue('enable_auto_sale_categorisation'))
+      ->set('enable_lhn_tree_search', $form_state->getValue('enable_lhn_tree_search'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -80,7 +82,6 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_acm_product_category.settings');
 
     $options = $this->getChildTermIds();
-
     $form['sale_category_ids'] = [
       '#type' => 'select',
       '#title' => $this->t('SALE Categories'),
@@ -90,6 +91,20 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#options' => $options,
       '#size' => count($options) + 1,
       '#default_value' => $config->get('sale_category_ids'),
+    ];
+
+    $form['enable_auto_sale_categorisation'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Auto Sale Categorization.'),
+      '#description' => $this->t('Enable auto sale categorization if sale category is not selected.'),
+      '#states' => [
+        'unchecked' => [
+          ':input[name="sale_category_ids[]"]' => ['!value' => []],
+        ],
+        'checked' => [
+          ':input[name="sale_category_ids[]"]' => ['value' => $config->get('sale_category_ids')],
+        ],
+      ],
     ];
 
     $new_arrivals = [];
@@ -123,6 +138,13 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#title' => $this->t('Enable LHN'),
       '#description' => $this->t('LHN is a left sidebar tree of categories which will be available on PLP pages for Desktop.'),
       '#default_value' => $config->get('enable_lhn_tree'),
+    ];
+
+    $form['enable_lhn_tree_search'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable LHN For Search Page'),
+      '#description' => $this->t('LHN is a left sidebar tree of categories which will be available on search pages for Desktop.'),
+      '#default_value' => $config->get('enable_lhn_tree_search'),
     ];
 
     $form['grouping_page_header_style'] = [

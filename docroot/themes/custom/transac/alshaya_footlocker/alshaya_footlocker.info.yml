@@ -34,3 +34,13 @@ libraries-override:
     css:
       theme:
         css/ltr-print.css: css/rtl-print.css
+
+  alshaya_white_label/order-qty-limit:
+    css:
+      theme:
+        css/conditional-sass/order-qty-limit/order-qty-limit.ltr.css: css/conditional-sass/order-qty-limit/order-qty-limit.ltr.css
+
+  alshaya_white_label/algolia_search:
+    css:
+      theme:
+        css/conditional-sass/algolia-search/algolia-search.ltr.css: css/conditional-sass/algolia-search/algolia-search.ltr.css

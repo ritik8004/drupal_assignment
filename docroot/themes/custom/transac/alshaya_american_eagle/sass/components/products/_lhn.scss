@@ -1,0 +1,27 @@
+.block-alshaya-category-lhn-block {
+  ul {
+    li {
+      a,
+      span {
+        text-transform: capitalize;
+
+        &.lhn-3,
+        &.lhn-4 {
+          &.active {
+            background: $lhn_l3_active_bg;
+            color: $lhn_l3_active_text;
+            padding: 0.375rem 0;
+            padding-#{$right}: 10.625rem;
+            padding-#{$left}: 0.1875rem;
+          }
+        }
+      }
+    }
+  }
+
+  > ul > li {
+    > .lhn-2 {
+      text-transform: capitalize;
+    }
+  }
+}

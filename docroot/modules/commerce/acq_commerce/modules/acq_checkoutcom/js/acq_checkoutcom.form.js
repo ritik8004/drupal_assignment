@@ -34,7 +34,6 @@
           }
           else {
             month.find('option').prop('disabled', false);
-            month.val(month.find('option:first').val());
           }
 
           month.trigger('change');

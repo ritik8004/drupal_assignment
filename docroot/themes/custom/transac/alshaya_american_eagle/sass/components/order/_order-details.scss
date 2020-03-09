@@ -1,0 +1,7 @@
+#block-userrecentorders {
+  h2.subtitle {
+    .path--user & {
+      text-transform: capitalize;
+    }
+  }
+}

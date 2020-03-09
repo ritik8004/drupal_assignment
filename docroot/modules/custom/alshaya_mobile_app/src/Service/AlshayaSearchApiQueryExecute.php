@@ -216,6 +216,13 @@ class AlshayaSearchApiQueryExecute {
   protected $configFactory;
 
   /**
+   * Default Sort.
+   *
+   * @var string
+   */
+  protected $defaultSort = 'created DESC';
+
+  /**
    * AlshayaSearchApiQueryExecute constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -325,6 +332,8 @@ class AlshayaSearchApiQueryExecute {
 
     // Adding sort to the query.
     if (!empty($query_string_parameters[self::SORT_KEY])) {
+      // Setting the default sort value.
+      $this->defaultSort = $query_string_parameters[self::SORT_KEY];
       $sort_option = explode(self::SORT_SEPARATOR, $query_string_parameters[self::SORT_KEY]);
       // If both key and value available for sorting.
       if (!empty($sort_option[0]) && !empty($sort_option[1])) {
@@ -430,7 +439,6 @@ class AlshayaSearchApiQueryExecute {
       foreach ($facets as $facet) {
         // New category facets ids.
         $new_category_facets = [
-          'category_facet_search',
           'category_facet_promo',
           'category_facet_plp',
         ];
@@ -568,6 +576,7 @@ class AlshayaSearchApiQueryExecute {
     return [
       'filters' => $facet_result,
       'sort' => $sort_data,
+      'default_sort' => $this->defaultSort,
       'products' => $product_data,
       'total' => $this->getResultTotalCount(),
     ];

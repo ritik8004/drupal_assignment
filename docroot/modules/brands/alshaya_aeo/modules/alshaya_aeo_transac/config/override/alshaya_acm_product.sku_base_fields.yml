@@ -1,0 +1,278 @@
+fields:
+  class_id:
+    label: 'Class Id'
+  style_id:
+    label: 'Style Id'
+  color_id:
+    label: 'Color Id'
+  color_name:
+    label: 'Color name'
+    type: 'string'
+  equity_name:
+    label: 'Equity name'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  long_description:
+    label: 'Description'
+    type: 'text_long'
+  details1:
+    label: 'Details 1'
+    type: 'string'
+  details2:
+    label: 'Details 2'
+    type: 'string'
+  details3:
+    label: 'Details 3'
+    type: 'string'
+  details4:
+    label: 'Details 4'
+    type: 'string'
+  details5:
+    label: 'Details 5'
+    type: 'string'
+  details6:
+    label: 'Details 6'
+    type: 'string'
+  materials_care1:
+    label: 'Materials care 1'
+    type: 'string'
+  materials_care2:
+    label: 'Materials care 2'
+    type: 'string'
+  materials_care3:
+    label: 'Materials care 3'
+    type: 'string'
+  materials_care4:
+    label: 'Materials care 4'
+    type: 'string'
+  size_fit1:
+    label: 'Size fit 1'
+    type: 'string'
+  size_fit2:
+    label: 'Size fit 2'
+    type: 'string'
+  size_fit3:
+    label: 'Size fit 3'
+    type: 'string'
+  size_fit4:
+    label: 'Size fit 4'
+    type: 'string'
+  color_family:
+    label: 'Colour'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+    swatch: 1
+  color_type:
+    label: 'Colour Type'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  fit:
+    label: 'Fit'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  destruction:
+    label: 'Destruction'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  fabric:
+    label: 'Fabric'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  push_lining_level:
+    label: 'Push Lining Level'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  wash:
+    label: 'Wash'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  rise:
+    label: 'Rise'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  mix_match_fit:
+    label: 'Mix Match Fit'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  inseams_offered:
+    label: 'Inseams Offered'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  inseam_length:
+    label: 'Inseam Length'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  activity:
+    label: 'Activity'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  body:
+    label: 'Body'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  category:
+    label: 'Category'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  fit_type:
+    label: 'Fit Type'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  fly_function:
+    label: 'Fly Function'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  length:
+    label: 'Length'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  lining:
+    label: 'Lining'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  neckline:
+    label: 'Neckline'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  pack_size:
+    label: 'Pack Size'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  padding:
+    label: 'Padding'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  shape:
+    label: 'Shape'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  shape_material_type:
+    label: 'Shape Material Type'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  silhouette:
+    label: 'Silhouette'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  sleeve_length:
+    label: 'Sleeve Length'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  waistband:
+    label: 'Waistband'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  waistband_detail:
+    label: 'Waistband Detail'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  fabric_content:
+    label: 'Fabric Content'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  graphic_pattern:
+    label: 'Graphic Pattern'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  embellishment_trim:
+    label: 'Embellishment Trim'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  collection:
+    label: 'Collection'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  coverage:
+    label: 'Coverage'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  straps:
+    label: 'Straps'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  benefit:
+    label: 'Benefit'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  stretch:
+    label: 'Stretch'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  stretch_level:
+    label: 'Stretch Level'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1

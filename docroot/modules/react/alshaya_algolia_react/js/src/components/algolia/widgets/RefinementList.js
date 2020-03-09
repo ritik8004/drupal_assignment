@@ -14,6 +14,7 @@ function CommonRefinement(props) {
       {items.map(item => (
         <li key={item.label}
             className={"facet-item " + (item.isRefined ? 'is-active' : '')}
+            datadrupalfacetlabel={props.name}
             onClick={event => {
               refine(item.value);
 

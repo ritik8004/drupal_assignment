@@ -37,28 +37,21 @@
             }
           });
         }
+        Drupal.getRelatedProductPosition();
       });
 
-      // Adding class to identify that matchback product color is manually updated.
-      $('.acq-content-product-matchback .select2Option a').on('click', function (event) {
-        // This can be triggered from two places:
-        //   1. User click on matchback product.
-        //   2. User click on main product and triggered from code to update matchback.
-        // We want following to be executed only in #1 case, so the condition below.
-        if (event.originalEvent !== undefined) {
-          if (!$(this).closest('.select2Option').hasClass('matchback-color-processed')) {
-            $(this).closest('.select2Option').addClass('matchback-color-processed');
-          }
-        }
-      });
       // Trigger matchback color change on main product color change.
       $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
-        if (!$('.acq-content-product-matchback .select2Option').hasClass('matchback-color-processed')) {
-          var selected = $(this).val();
-          var selectedList = $('article[data-vmode="matchback"] .form-item-configurable-swatch option[value="' + selected + '"]');
-          var selectedIndex = selectedList.index();
-          selectedList.parent().siblings('.select2Option').find('a[data-select-index="' + selectedIndex + '"]').click();
-        }
+        var selected = $(this).val();
+
+        $('article[data-vmode="matchback"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
+          var swatchSelector = $(this).parent().siblings('.select2Option');
+
+          if (typeof swatchSelector !== 'undefined') {
+            var selectedIndex = $(this).index();
+            swatchSelector.find('a[data-select-index="' + selectedIndex + '"]').trigger('click');
+          }
+        });
       });
 
       $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
@@ -92,11 +85,20 @@
 
       $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
-        var productKey = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        var viewMode = $(this).parents('article.entity--type-node').attr('data-vmode');
+        var productKey = (viewMode === 'matchback')
+          ? 'matchback'
+          : 'productInfo';
+
+        // Fill the view mode form field.
+        $(this).parents('article.entity--type-node[data-vmode="' + viewMode + '"]').find('.product-view-mode').val(viewMode);
 
         if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
+
+        // On form load set order qty limit message.
+        Drupal.disableLimitExceededProducts(sku, sku);
 
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
@@ -118,10 +120,15 @@
           else {
             Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, variantInfo.gallery);
           }
+          // On variant change, disable/enable Add to bag, quantity dropdown
+          // and show message based on value in drupalSettings.
+          Drupal.disableLimitExceededProducts(sku, selected);
 
           // Update quantity dropdown based on stock available for the variant.
           $('select[name="quantity"] option', this).each(function () {
-            if ($(this).val() > variantInfo.stock.qty) {
+            if ((parseInt($(this).val()) > parseInt(variantInfo.stock.qty))
+              || (parseInt(variantInfo.stock.maxSaleQty) !== 0
+              && (parseInt($(this).val()) > parseInt(variantInfo.stock.maxSaleQty)))) {
               if ($(this).is(':selected')) {
                 $('select[name="quantity"] option:first').attr('selected', 'selected').prop('selected', true);
               }
@@ -144,8 +151,17 @@
 
         if (drupalSettings[productKey][sku]['variants']) {
           var variants = drupalSettings[productKey][sku]['variants'];
-          var selectedSku = Object.keys(variants)[0];
-          var selected = parseInt(Drupal.getQueryVariable('selected'));
+
+          // Use first child provided in settings if available.
+          // Use the first variant otherwise.
+          var selectedSku = (typeof drupalSettings.configurableCombinations[sku]['firstChild'] === 'undefined')
+            ? Object.keys(variants)[0]
+            : drupalSettings.configurableCombinations[sku]['firstChild'];
+
+          // Use selected from query parameter only for main product.
+          var selected = ($(node).attr('data-vmode') === 'full')
+            ? parseInt(Drupal.getQueryVariable('selected'))
+            : 0;
 
           if (selected > 0) {
             for (var i in variants) {
@@ -344,7 +360,8 @@
     var related = $('.horizontal-related' + selector);
     var scrollPoint = window.innerHeight + window.pageYOffset;
 
-    if ((matchback.length > 0) && !matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold)) {
+    if ((drupalSettings.show_crosssell_as_matchback && !matchback.hasClass('matchback-processed') && device === 'mobile')
+      || ((matchback.length > 0) && !matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold))) {
       matchback.addClass('matchback-processed');
       Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
     }
@@ -357,6 +374,90 @@
       Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
     }
   };
+
+  // Disable Add to bag and quantity dropdown when order limit exceed.
+  Drupal.disableLimitExceededProducts = function (sku, selected) {
+    if ($('.order-quantity-limit-message').length > 0) {
+      var selectedInput = $('input[value="' + selected + '"]');
+      var orderLimitMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
+      var orderLimitMobileMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
+      var viewMode = selectedInput.parents('article.entity--type-node').attr('data-vmode');
+      var productKey = (viewMode === 'matchback') ? 'matchback' : 'productInfo';
+      var parentInfo = typeof drupalSettings[productKey][sku] !== "undefined" ? drupalSettings[productKey][sku] : '';
+      // At parent level, sku and selected will be same.
+      var variantInfo = (typeof drupalSettings[productKey][sku] !== "undefined"
+        && typeof drupalSettings[productKey][sku]['variants'] !== "undefined"
+        && sku !== selected)
+        ? drupalSettings[productKey][sku]['variants'][selected] : '';
+      var variantToDisableSelector = selectedInput.closest('.sku-base-form');
+      var orderLimitExceeded =  false;
+      var orderLimitExceededMsg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' +
+        Drupal.t('Purchase limit has been reached') +
+        '</span>';
+      var cart_items = drupalSettings['cart_items'];
+
+      // If limit exists at parent level.
+      if ((parentInfo !== '') && (typeof parentInfo.maxSaleQty !== "undefined")) {
+        var variantToDisableSelector = $('input[value="' + sku + '"]').closest('.sku-base-form');
+        var allVariants = parentInfo.variants ? Object.keys(parentInfo.variants) : [];
+
+        // If cart is not empty.
+        if (typeof cart_items !== "undefined") {
+          var itemQtyInCart = 0;
+          var orderLimitMsg = typeof parentInfo.orderLimitMsg !== "undefined"
+            ? parentInfo.orderLimitMsg : '';
+
+          if (allVariants.length !== 0) {
+            $.each( cart_items, function( item, value ) {
+              if ($.inArray( item, allVariants ) >= 0) {
+                itemQtyInCart += value.qty;
+              }
+            });
+          }
+          else {
+            itemQtyInCart = ($.inArray(selected, Object.keys(cart_items)) >= 0) ?
+            cart_items[selected]['qty'] : 0;
+          }
+
+          if (itemQtyInCart >= parseInt(parentInfo.maxSaleQty)) {
+            var orderLimitExceeded = true;
+            var orderLimitMsg = orderLimitExceededMsg;
+          }
+        }
+      }
+      else if (variantInfo !== '') {
+        var orderLimitMsg = typeof variantInfo.orderLimitMsg !== "undefined"
+          ? variantInfo.orderLimitMsg : '';
+
+        // If cart is not empty.
+        if (typeof cart_items !== "undefined") {
+          var selectedItemInCart = $.inArray(selected, Object.keys(cart_items));
+          // If selected item is in cart.
+          if (selectedItemInCart >= 0) {
+            var itemQtyInCart = cart_items[selected]['qty'];
+
+            if (itemQtyInCart >= parseInt(variantInfo.stock.maxSaleQty)) {
+              var orderLimitExceeded = true;
+              var orderLimitMsg = orderLimitExceededMsg;
+            }
+          }
+        }
+      }
+
+      // Disable/Enable Add to Bag and quantity dropdown.
+      variantToDisableSelector.find('.edit-add-to-cart.button').prop('disabled', orderLimitExceeded);
+      variantToDisableSelector.find('.edit-quantity').prop('disabled', orderLimitExceeded);
+
+      // Add order quantity limit message.
+      orderLimitMsgSelector.html(orderLimitMsg);
+      orderLimitMobileMsgSelector.html(orderLimitMsg);
+    }
+  };
+
+  // Cart limit exceeded for a variant.
+  $.fn.LimitExceededInCart = function (sku, selected) {
+    Drupal.disableLimitExceededProducts(sku, selected);
+  }
 
   // This event is triggered on page load itself in attach (Drupal.behaviors.configurableAttributeBoxes)
   // once size boxes are shown properly

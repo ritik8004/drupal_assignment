@@ -159,6 +159,27 @@ $magentos = [
       'store_id' => ['en' => 8, 'ar' => 7],
     ],
   ],
+  'hm_upgrade' => [
+    'url' => 'https://mdc-upgrade-mwu37tq-zbrr3sobrsb3o.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '5ud3vh5cqkc2k3uxyfpkuehi2eik11xg',
+      'consumer_secret' => '7krmuncsf3c1rabxqhy5rfnpdvubocmi',
+      'access_token' => 'wuxd59ghyt7qwprhd86gs6cd3t1y6cyn',
+      'access_token_secret' => 'agpwx3guekmh6843nh5oaxonfjxy00ls',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 2],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 6, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+  ],
   // Pottery Barn.
   'pb_qa' => [
     'url' => 'https://integration-5ojmyuq-rfuu4sicyisyw.eu.magentosite.cloud',
@@ -396,6 +417,64 @@ $magentos = [
     ],
     'eg' => [
       'store_id' => ['en' => 21, 'ar' => 18],
+    ],
+  ],
+  'we_prod' => [
+    'url' => 'https://wes.store.alshaya.com',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 14],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 5],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 8, 'ar' => 11],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 20, 'ar' => 17],
+    ],
+  ],
+  'aeo_qa' => [
+    'url' => 'https://integration-5ojmyuq-tw5uijob6hir2.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'yyt9xtlfaaxw55c1h9xbw0mlff8j8ovt',
+      'consumer_secret' => 'k63ke42x62x1hssrtxy1e33c5vmyqgwy',
+      'access_token' => 'o0kvxvg1hge9j51twpyztl9uxvvq78y2',
+      'access_token_secret' => '05m2gsyg0sxrs87aehwghc2ct0ttmtuo',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+  ],
+  'aeo_uat' => [
+    'url' => 'https://aeo-uat.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'ydzr7xpvfjlzbwvce9tza471n7juuwhe',
+      'consumer_secret' => 'tqseptjwftwhrua330kjem7jnurclhbx',
+      'access_token' => 'ofsq77eipss5gshgvj931q603ij7eiqw',
+      'access_token_secret' => '24phqz567kp2fkt86tocb6exkwcittmq',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
     ],
   ],
   'default' => [

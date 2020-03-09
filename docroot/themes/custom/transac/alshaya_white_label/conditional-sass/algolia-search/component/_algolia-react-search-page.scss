@@ -18,47 +18,37 @@
     }
   }
 
-  .block-alshaya-category-lhn-block {
+  .block-facet-blockcategory-facet-search {
+    @include breakpoint($desktop) {
+      margin-top: 0.96875rem !important;
+      border: none;
+    }
+
     a {
+      font-family: $alshaya-thin;
+      font-weight: normal;
+      position: relative;
+      cursor: pointer;
+      text-transform: capitalize;
+      color: $plp_facet_count_number;
       display: flex;
-      justify-content: space-between;
-      padding: 0.375rem 0;
-      text-decoration: none;
+      align-items: center;
+      margin-top: 0;
 
-      .ais-HierarchicalMenu-label {
-        font-size: 0.75rem;
-        color: $algolia-react-sidebar-label-color;
-        font-family: $alshaya-thin;
-        font-weight: 600;
-        text-transform: capitalize;
-      }
-
-      .ais-HierarchicalMenu-count {
-        font-size: 0.6875rem;
-        color: $algolia_react-search_page_sidebar_count;
+      &.is-active:not(.sale-item) {
+        font-family: $alshaya-bold;
       }
     }
 
-    > ul {
-      > li {
-        > ul {
-          > li {
-            &:first-child {
-              a {
-                padding-top: 0;
-              }
-            }
-
-            ul {
-              margin-#{$left}: 0.625rem;
-            }
-          }
-        }
-      }
+    li {
+      margin-bottom: 0;
+      min-height: auto;
     }
 
-    > ul {
-      margin-top: 0.75rem;
+    .facet-item__count {
+      @include breakpoint($desktop) {
+        margin-top: 0 !important;
+      }
     }
   }
 
@@ -84,7 +74,7 @@
           background: #fff;
           display: inline-block;
           border-radius: 100%;
-          border: 1px solid $primary_radiobtn_empty;
+          border: 0.0625rem solid $primary_radiobtn_empty;
           margin-#{$right}: 1rem;
           vertical-align: middle;
         }
@@ -170,13 +160,18 @@
 
   .show-all-filters-algolia {
     @include breakpoint($only-mobile) {
-      height: 2.9375rem;
+      height: 3rem;
       display: flex;
       align-items: center;
     }
   }
 
   .c-content__region {
+    @include breakpoint($desktop) {
+      width: 80%;
+      float: $right;
+    }
+
     .sticky-filter-wrapper {
       .c-collapse-item {
         .c-collapse__title {
@@ -226,6 +221,7 @@
     .block-alshaya-promo-facets-block-all,
     .block-alshaya-search-facets-block-all {
       height: 0;
+      z-index: 12;
     }
   }
 }

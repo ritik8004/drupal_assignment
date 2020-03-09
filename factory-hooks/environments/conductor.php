@@ -76,9 +76,9 @@ $conductors = [
   ],
   // H&M KW.
   'hmkw_dev' => [
-    'hmac_id' => '03551dee94ad4f91a20bf41459c02bdd',
-    'hmac_secret' => 'MWI3NDdjYWQtNGUwMS00',
-    'site_id' => 135,
+    'hmac_id' => '875cffda19304dfe88ae6aaadb065909',
+    'hmac_secret' => 'NTNiZTAwYTQtYzNkNi00',
+    'site_id' => 199,
   ],
   'hmkw_qa' => [
     'hmac_id' => 'deb9efe4753344059090b12fc10d387e',
@@ -96,6 +96,11 @@ $conductors = [
     'site_id' => 98,
   ],
   // H&M SA.
+  'hmsa_dev' => [
+    'hmac_id' => '1b6702ad12f244388b39c788794a88bb',
+    'hmac_secret' => 'ZmMzZWFlZTItM2ViZi00',
+    'site_id' => 200,
+  ],
   'hmsa_qa' => [
     'hmac_id' => 'd6e8ad54d1b74a9d8153028b42da4e38',
     'hmac_secret' => 'NDNkNDYzOGQtZjEyZC00',
@@ -112,6 +117,11 @@ $conductors = [
     'site_id' => 99,
   ],
   // H&M AE.
+  'hmae_dev' => [
+    'hmac_id' => '206ce89993554896924cdeefd32135c3',
+    'hmac_secret' => 'MWFjOTYzNjctNzYzOS00',
+    'site_id' => 201,
+  ],
   'hmae_qa' => [
     'hmac_id' => '48f2b6197df649f6bf5437312319ab5b',
     'hmac_secret' => 'ZDI1OTgyNDEtNzlkMS00',
@@ -405,6 +415,64 @@ $conductors = [
     'hmac_id' => 'cb7192b7d39840f8b72aa5393c6034fe',
     'hmac_secret' => 'NzI5M2M1MjYtMTE5ZS00',
     'site_id' => 173,
+  ],
+  'wekw_prod' => [
+    'site_id' => 183,
+  ],
+  'wesa_prod' => [
+    'site_id' => 184,
+  ],
+  'weae_prod' => [
+    'site_id' => 185,
+  ],
+  'weeg_prod' => [
+    'site_id' => 186,
+  ],
+  // American Eagle Outfitters.
+  'aeokw_dev' => [
+    'hmac_id' => '9c9e527db24446d98cde69829ffde832',
+    'hmac_secret' => 'N2QzZGUxMzEtZTNjYy00',
+    'site_id' => 178,
+  ],
+  'aeokw_qa' => [
+    'hmac_id' => 'e6c4af7406bb4694a0caa108409617d9',
+    'hmac_secret' => 'OGU4Yjg1ZDMtNWI5NS00',
+    'site_id' => 174,
+  ],
+  'aeosa_qa' => [
+    'hmac_id' => 'e6b1671eda3b442f9119045676199d93',
+    'hmac_secret' => 'NTg3N2Q3NWItMjJhOC00',
+    'site_id' => 175,
+  ],
+  'aeoae_qa' => [
+    'hmac_id' => '89e42750b2764506b5533ed781d49e87',
+    'hmac_secret' => 'MmYxZGQ0NDYtYTQ5MC00',
+    'site_id' => 176,
+  ],
+  'aeoeg_qa' => [
+    'hmac_id' => '5e49e396d2ec416f9216a3a287f738fc',
+    'hmac_secret' => 'YzdkOTIyYjItNzc3ZS00',
+    'site_id' => 177,
+  ],
+  'aeokw_uat' => [
+    'hmac_id' => 'afb8c24dfb574debaebfe6b680a9fc43',
+    'hmac_secret' => 'MjU1NmIzMjYtNDc1My00',
+    'site_id' => 191,
+  ],
+  'aeosa_uat' => [
+    'hmac_id' => '8d9331c4d4aa4a529ed05055b3ca5e67',
+    'hmac_secret' => 'ZGJmMWFiYTktY2JiNS00',
+    'site_id' => 192,
+  ],
+  'aeoae_uat' => [
+    'hmac_id' => '05168cbe2e664f4c9d9b676a96d185a4',
+    'hmac_secret' => 'YmJmZTAxNzgtMTdhNy00',
+    'site_id' => 193,
+  ],
+  'aeoeg_uat' => [
+    'hmac_id' => 'a37e371caae3434ea9372ea053607857',
+    'hmac_secret' => 'ZDFmOGM0NDEtNjlmNy00',
+    'site_id' => 194,
   ],
 ];
 

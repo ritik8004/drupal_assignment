@@ -35,34 +35,34 @@ class AlshayaFacetAllOption extends ProcessorPluginBase implements BuildProcesso
       // Prepare `All` result facet item.
       $all_result_item = new Result(0, $this->t('All'), $max_items);
 
-      // Get active items for this facet.
-      $active_item = $facet->getActiveItems();
-      // If any active item in this facet.
-      if ($active_item) {
-        // Get any one result item from current facet, get its url and then use
-        // this url for `all` result with some changes.
-        $one_result = end($results);
-        if ($one_result instanceof Result) {
+      // Get any one result item from current facet, get its url and then use
+      // this url for `all` result with some changes.
+      foreach ($results as $result) {
+        if ($result instanceof Result) {
           // Get the query parameters from url.
-          $url = clone $one_result->getUrl();
+          $url = clone $result->getUrl();
           $query = $url->getOption('query');
 
-          if ($query) {
-            $options = $query['f'];
-            foreach ($options as $key => $option) {
-              // Unset all active items of this facet to prepare url for the
-              // `All` facet item.
-              unset($options[$key]);
-            }
-
-            $query['f'] = $options;
-            $url->setOption('query', $query);
-            $all_result_item->setUrl($url);
+          if (empty($query['f']) || !is_iterable($query['f'])) {
+            continue;
           }
+
+          // Remove the facet selections for current facet.
+          foreach ($query['f'] as $key => $value) {
+            if (strpos($value, $facet->getUrlAlias()) === 0) {
+              unset($query['f'][$key]);
+            }
+          }
+
+          $url->setOption('query', $query);
+          $all_result_item->setUrl($url);
+
+          // We need to process only for first real result.
+          break;
         }
       }
 
-      $results = [0 => $all_result_item] + $results;
+      $results = array_merge([$all_result_item], $results);
     }
 
     // Return the results.

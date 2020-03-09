@@ -121,7 +121,6 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       // If the value is active, remove the filter string from the parameters.
       if (!empty($active_results[$result_key])) {
         $active_facet = [];
-
         foreach ($filters_current_result_array[$filter_key] as $value) {
           $active_facet[] = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $value);
         }
@@ -190,6 +189,13 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $url->setOption('attributes', ['rel' => 'follow index']);
       }
 
+      // Getting the filter item value in English.
+      // Setting attribute for the facet items.
+      $filter_value_en = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $raw_value);
+      $url->setOption('attributes', [
+        'data-drupal-facet-label' => $facet->label(),
+        'data-drupal-facet-item-label' => $filter_value_en,
+      ]);
       $url->setOption('query', $this->getQueryParams());
       $result->setUrl($url);
     }

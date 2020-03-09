@@ -183,8 +183,8 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
 
           $products = [];
-          $data_layer['privilegeCustomer'] = $cart_item_attributes['privilegeCustomer'];
-          $data_layer['privilegesCardNumber'] = $cart_item_attributes['privilegesCardNumber'];
+          $data_layer['privilegeCustomer'] = $cart_item_attributes['privilegeCustomer'] ?? '';
+          $data_layer['privilegesCardNumber'] = $cart_item_attributes['privilegesCardNumber'] ?? '';
           $step = isset($cart_item_attributes['step']) ? $cart_item_attributes['step'] : NULL;
           unset($cart_item_attributes['privilegeCustomer'], $cart_item_attributes['privilegesCardNumber'], $cart_item_attributes['step']);
 

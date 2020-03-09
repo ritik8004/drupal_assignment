@@ -11,3 +11,47 @@
     color: $matchback_hover_text;
   }
 }
+
+.acq-content-product-matchback {
+  .size-guide-form-and-link-wrapper {
+    @include breakpoint($tablet) {
+      position: relative;
+    }
+
+    .size-guide-link {
+      @include breakpoint($tablet) {
+        position: absolute;
+        top: 0.875rem;
+        padding-top: 0;
+        #{$left}: 6.25rem;
+        width: auto;
+        text-align: #{$left};
+        text-decoration: none;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+          color: inherit;
+        }
+
+        &::before {
+          display: inline-block;
+          background: transparent url(../imgs/assets/vs-sizeguide.svg) no-repeat;
+          background-position: center;
+          text-indent: -9999px;
+          width: 1.0625rem;
+          height: 0.5rem;
+          content: '';
+          margin-#{$right}: 0.2875rem;
+        }
+
+        @include icon('chevron#{$right}', after) {
+          font-size: 1rem;
+          font-weight: bold;
+          margin-#{$left}: 0;
+        }
+      }
+    }
+  }
+}

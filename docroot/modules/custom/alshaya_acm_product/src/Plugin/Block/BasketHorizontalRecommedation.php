@@ -145,8 +145,8 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    // Vary based on cart id.
-    return Cache::mergeContexts(parent::getCacheContexts(), ['cookies:Drupal_visitor_acq_cart_id']);
+    // Vary based on session as each session will have different cart.
+    return Cache::mergeContexts(parent::getCacheContexts(), ['session']);
   }
 
   /**

@@ -102,85 +102,89 @@
 #machbackSlider {
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex-flow: wrap;
+  justify-content: center;
+
+  .slick-list {
+    order: 1;
+    width: 100%;
+  }
 
   ul.slick-dots {
-    position: absolute;
+    position: relative;
+    order: 3;
     #{$left}: 0;
-    text-align: center;
-    bottom: 0;
+    line-height: 0.3125rem;
+    bottom: -0.6rem;
     transform: none;
+    margin: 0 0.9375rem;
+    max-width: calc(100% - 3.875rem);
 
-    &.i-dots {
-      bottom: -0.125rem !important;
+    li {
+      width: 0.3125rem;
+      height: 0.3125rem;
+      margin: 0.3125rem;
+      border: none;
+      border-radius: 50%;
+      background-color: $instagram_dots_default !important;
 
-      .slick-dots-container {
-        li {
-          color: $mothercare-black;
-          background: currentColor !important;
-
-          @include breakpoint($desktop) {
-            .ie & {
-              min-width: 0.6875rem;
-            }
-          }
-
-          &.slick-active {
-            @include breakpoint($desktop) {
-              .ie & {
-                min-width: 0.75rem;
-              }
-            }
-          }
-
-          &.n-small-1 {
-            @include breakpoint($desktop) {
-              .ie & {
-                min-width: 0.4375rem;
-              }
-            }
-          }
-        }
+      &.slick-active {
+        background-color: $hp_slider_dots !important;
       }
     }
   }
 
   .slick-prev,
   .slick-next {
+    position: relative;
+    bottom: -0.5625rem;
+
     &::before {
       height: 1rem;
-      width: 0.625rem;
+      width: 1rem;
       line-height: 1rem;
-      flex-direction: column;
+      font-size: 1rem;
+      background: none;
+      border-radius: unset;
+      display: block;
 
       @include breakpoint($tablet) {
         padding: 0;
+      }
+
+      html[lang=ar] & {
+        transform: rotate(180deg);
       }
     }
   }
 
   .slick-prev {
+    order: 2;
+
     @include breakpoint($tablet) {
-      #{$left}: 1rem;
+      #{$left}: 0;
+      #{$right}: auto;
     }
 
     @include breakpoint($desktop) {
-      #{$left}: 2.65rem;
+      #{$right}: auto;
+      #{$left}: 0;
     }
   }
 
   .slick-next {
+    order: 4;
+
     @include breakpoint($tablet) {
-      #{$right}: 1rem;
+      #{$right}: 0;
+      #{$left}: auto;
     }
 
     @include breakpoint($desktop) {
-      #{$right}: 2.65rem;
-    }
-  }
-
-  button.slick-arrow {
-    @include breakpoint($tablet) {
-      bottom: -0.25rem;
+      #{$right}: 0;
+      #{$left}: auto;
     }
   }
 

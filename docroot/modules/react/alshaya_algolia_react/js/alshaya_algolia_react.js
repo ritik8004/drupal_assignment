@@ -5,8 +5,14 @@
 (function ($, Drupal) {
   'use strict';
 
+  // Variable for sale item index in category search filter
+  var sale_index = null;
+
   Drupal.behaviors.alshayaAlgoliaReact = {
     attach: function (context, settings) {
+      // Variable to determine facet-item level in category block facet.
+      var facet_item_level;
+
       $(window).on('blazySuccess', function(event, element) {
         Drupal.plpListingProductTileHeight('row', element);
       });
@@ -14,15 +20,67 @@
       // Close the facets on click anywherer outside.
       $(window).on('click', function(event) {
         var facet_block = $('.container-without-product .c-collapse-item');
-        if ($(facet_block).find(event.target).length == 0) {
+        if ($(facet_block).find(event.target).length === 0) {
           $(facet_block).find('.c-facet__title').removeClass('active');
           $(facet_block).find('ul').slideUp();
         }
       });
       $(window).on('load', function(event) {
         $('body').once('bind-facet-item-click').on('click','.sticky-filter-wrapper .c-collapse-item .facet-item', function(event) {
-          $(this).parents('.c-facet.c-collapse-item').find('.c-facet__title.c-collapse__title.active').trigger('click');
+          // All facets except category search block.
+          if($(this).parents('.block-facet-blockcategory-facet-search').length === 0) {
+            $(this).parents('.c-facet.c-collapse-item').find('.c-facet__title.c-collapse__title.active').trigger('click');
+          }
+          else {
+            facet_item_level = $(this).data('level');
+            var curr_index = $(this).parent().index();
+            // To check if not deselecting the sale item and not selecting any sale child.
+            if (sale_index !== null && curr_index !== sale_index && facet_item_level === 1) {
+              sale_index = null;
+            }
+          }
         });
+      });
+
+      // After Algolia search results have been updated from category search filter, check if L1 has child-items.
+      // Close accordion if it doesn't has children.
+      $(document).once('updatedAlgoliaResults').on('search-results-updated', '#alshaya-algolia-search', function () {
+        var category_facet_search_block = $('.block-facet-blockcategory-facet-search');
+        var active_facet = category_facet_search_block.find("[data-level='" + facet_item_level + "'].facet-item.is-active");
+        var category_dropdown_height_scroll = category_facet_search_block.find('ul').first().scrollTop();
+        var facet_item_height = category_facet_search_block.find('ul').first().find('li:first-child a').outerHeight();
+        if ($(window).width() < 1025) {
+          if (active_facet.siblings('ul').length === 0) {
+            // Close category accordion if not deselecting sale item or selection any sale child.
+            if (sale_index === null || facet_item_level > 1) {
+              category_facet_search_block.find('.c-facet__title.c-collapse__title.active').trigger('click');
+            }
+            // Scroll category dropdown to previous value.
+            else {
+              category_facet_search_block.find('ul').first().scrollTop(category_dropdown_height_scroll);
+            }
+          }
+          else {
+            var child = active_facet.siblings('ul');
+            sale_index = child.parent().index();
+            var category_height = category_facet_search_block.outerHeight();
+            var category_height_offset = category_facet_search_block.offset().top;
+            var category_dropdown_height = category_facet_search_block.find('ul').first().outerHeight();
+            var calc_offset = category_height + category_height_offset + category_dropdown_height;
+
+            // If sale item children is not in view, scroll to show children.
+            if (child.offset().top > (calc_offset - (facet_item_height * 1.5))) {
+              // For mobile portrait, scroll to show 3.5 items so that user will know there are more items to scroll if any.
+              if ($(window).height() > 480) {
+                category_facet_search_block.find('ul').first().scrollTop(category_dropdown_height_scroll + (facet_item_height * 3.5));
+              }
+              // For mobile landscape, scroll to show 1.5 items so that user will know there are more items to scroll if any.
+              else {
+                category_facet_search_block.find('ul').first().scrollTop(category_dropdown_height_scroll + (facet_item_height * 1.5));
+              }
+            }
+          }
+        }
       });
 
       if ($('#alshaya-algolia-search').length > 0) {
@@ -66,8 +124,8 @@
     // On clicking on back button, reset the block title and add class so
     // that facet blocks can be closed.
     $('.all-filters-algolia .back-facet-list').once('algolia-search').on('click', function() {
-      $('.c-collapse-item', all_filters).find('ul').hide();
       var all_filters = $(this).parents('.all-filters-algolia');
+      $('.c-collapse-item', all_filters).find('ul').hide();
       $(this).hide();
       $('.filter-sort-title', all_filters).html(Drupal.t('filter & sort'));
       $('.c-collapse-item', all_filters).removeClass('show-facet');
@@ -92,34 +150,36 @@
       var algolia_wrapper = $(this).parents('#alshaya-algolia-search');
       $('.small-col-grid', algolia_wrapper).removeClass('active');
       $(this).addClass('active');
-      $('body').addClass('large-grid')
+      $('body').addClass('large-grid');
       $('.c-products-list', algolia_wrapper).removeClass('product-small').addClass('product-large');
       // Adjust height of PLP tiles.
       Drupal.plpListingProductTileHeight('full_page', null);
     });
 
-
     // Add dropdown effect for facets filters.
-    $('.c-facet__title.c-collapse__title').once('algolia-search').on('click', function () {
-      if ($(this).hasClass('active')) {
-        $(this).removeClass('active');
-        // We want to run this only on main page facets.
-        if (!$(this).parent().parent().hasClass('filter__inner')) {
-          $(this).siblings('ul').slideUp();
+    // Condition to attach this on pages except promotion and plps as on those pages we get facets-panel.js with same code.
+    if (!$('body').hasClass('nodetype--acq_promotion') && !$('body').hasClass('plp-page-only')) {
+      $('.c-facet__title.c-collapse__title').once('algolia-search').on('click', function () {
+        if ($(this).hasClass('active')) {
+          $(this).removeClass('active');
+          // We want to run this only on main page facets.
+          if (!$(this).parent().parent().hasClass('filter__inner')) {
+            $(this).siblings('ul').slideUp();
+          }
         }
-      }
-      else {
-        if (!$(this).parent().parent().hasClass('filter__inner')) {
-          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
-        }
-        $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
+        else {
+          if (!$(this).parent().parent().hasClass('filter__inner')) {
+            $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
+          }
+          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
 
-        $(this).addClass('active');
-        if (!$(this).parent().parent().hasClass('filter__inner')) {
-          $(this).siblings('ul').slideDown();
+          $(this).addClass('active');
+          if (!$(this).parent().parent().hasClass('filter__inner')) {
+            $(this).siblings('ul').slideDown();
+          }
         }
-      }
-    });
+      });
+    }
 
     $('.sticky-filter-wrapper .show-all-filters-algolia').once('algolia-search').on('click', function() {
       $('.all-filters-algolia').addClass('filters-active');

@@ -10,7 +10,7 @@ dependencies:
     - alshaya_white_label
 id: categoryfacetsearch
 theme: alshaya_white_label
-region: content
+region: sidebar_first
 weight: -32
 provider: null
 plugin: 'facet_block:category_facet_search'

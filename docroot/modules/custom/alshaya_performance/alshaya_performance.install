@@ -10,6 +10,21 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Truncate table cache_pretty_paths to manage memcache config changes.
+ */
+function alshaya_performance_update_8003() {
+  $connection = \Drupal::database();
+  $table_name = 'cache_pretty_paths';
+
+  // Checks for cache_pretty_paths table and truncate it.
+  if ($connection->schema()->tableExists($table_name)) {
+    $connection->truncate($table_name)->execute();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new setting routes_allowed_in_maintenance_mode.
  */
 function alshaya_performance_update_8002() {

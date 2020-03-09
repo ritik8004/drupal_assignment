@@ -159,7 +159,6 @@
         e.stopPropagation();
       })
 
-      stickyfacetwrapper();
       showOnlyFewFacets();
       updateSortTitle();
       updateFacetTitlesWithSelected();
@@ -256,7 +255,7 @@
        */
       function addSlideEventhandlers() {
         // Add active classes on facet dropdown content.
-        $('.c-facet__title.c-accordion__title').once('facet-title').on('click', function () {
+        $(document).once('facet-title').on('click', '.c-facet__title.c-accordion__title, .c-facet__title.c-collapse__title', function () {
           if ($(this).hasClass('active')) {
             $(this).removeClass('active');
             // We want to run this only on main page facets.
@@ -340,26 +339,6 @@
         document.title = meta_title;
         $("meta[name='description']").attr('content', meta_description);
       };
-
-      /**
-       * Wrapping all the filters inside a div to make it sticky.
-       */
-      function stickyfacetwrapper() {
-        if ($('.show-all-filters').length > 0) {
-          if ($(window).width() > 767) {
-            if ($('.c-content .container-without-product').length < 1) {
-              var site_brand = $('.site-brand-home').clone();
-              $('#block-subcategoryblock, .region__content > .block-facets-ajax, .region__content > .views-exposed-form, .show-all-filters').once('bind-events').wrapAll("<div class='sticky-filter-wrapper'><div class='container-without-product'></div></div>");
-              $(site_brand).insertBefore('.container-without-product');
-            }
-          }
-          else {
-            if ($('.region__content > .all-filters').length < 1) {
-              $('.all-filters').insertAfter('#block-page-title');
-            }
-          }
-        }
-      }
 
       /**
        * Make Header sticky on scroll.
@@ -576,7 +555,7 @@
       var total_selected = 0;
       var facets_to_show_in_label = 2;
       // If any facet item active.
-      var active_facets = $(facet_block).find('ul li.is-active a span.facet-item__value');
+      var active_facets = $(facet_block).find('ul li.is-active:not(.facet-item--expanded) a span.facet-item__value');
       $.each(active_facets, function(index, element) {
         total_selected = total_selected + 1;
         // Show only two facets in title.
@@ -612,7 +591,7 @@
    * Update the category facet title on selection.
    */
   function updateCategoryTitle() {
-    $('.category-facet').each(function() {
+    $('.category-facet:not(.block-facet-blockcategory-facet-search)').each(function() {
       var active_cat_facet = $(this).find('ul li.is-active');
       if ($(active_cat_facet).length > 0) {
         var facet = $(active_cat_facet).find('label span.facet-item__value');
@@ -633,6 +612,46 @@
     var sort_label = '<span class="sort-for-label">' + for_label + '</span>';
     $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend span.sort-for-label').remove();
     $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend').append(sort_label);
+  }
+
+  /**
+   * Wrapping all the filters inside a div to make it sticky.
+   */
+  function stickyfacetwrapper() {
+    if ($('.show-all-filters').length > 0) {
+      if ($(window).width() > 767) {
+        if ($('.c-content .container-without-product').length < 1) {
+          var site_brand = $('.site-brand-home').clone();
+          $('#block-subcategoryblock, .region__content > .block-facets-ajax, .region__content > .views-exposed-form, .show-all-filters').once('bind-events').wrapAll("<div class='sticky-filter-wrapper'><div class='container-without-product'></div></div>");
+          if ($(window).width() < 1025) {
+            var category_search_facet = $('.region__sidebar-first [data-block-plugin-id="facet_block:category_facet_search"]').clone();
+            $('.container-without-product .show-all-filters').before(category_search_facet);
+          }
+          $(site_brand).insertBefore('.container-without-product');
+        }
+      }
+      else {
+        if ($('.region__content > .all-filters').length < 1) {
+          $('.all-filters').insertAfter('#block-page-title');
+        }
+      }
+    }
+  }
+
+  stickyfacetwrapper();
+
+  // On search page, clone the category search facet in content region before filter-all block for mobile.
+  if ($('body').hasClass('path--search')) {
+    // If no category search facet after ajax selection, add class to identify it.
+    if ($('.region__sidebar-first [data-block-plugin-id="facet_block:category_facet_search"]:not(:empty)').length === 0) {
+      $('#block-alshaya-search-facets-block-all').addClass('empty-category');
+    }
+    else {
+      if ($(window).width() < 768) {
+        var element = $('#block-categoryfacetsearch').clone();
+        $('#block-alshaya-search-facets-block-all').before(element);
+      }
+    }
   }
 
 })(jQuery, Drupal);

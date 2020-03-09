@@ -247,11 +247,13 @@ class AlshayaSearchApiFacetsManager {
    *
    * @param string $facet_source
    *   Facet source.
+   * @param string $region_filter
+   *   (Optional) Filter facets by region.
    *
    * @return array
    *   Block arrays.
    */
-  public function getBlocksForFacets(string $facet_source) {
+  public function getBlocksForFacets(string $facet_source, string $region_filter = '') {
     // Get all facets of the given source.
     $facets = $this->facetManager->getFacetsByFacetSourceId($facet_source);
     $blocks = $block_ids = [];
@@ -268,7 +270,14 @@ class AlshayaSearchApiFacetsManager {
         foreach ($blocks_list as $block) {
           // If block is enabled.
           if ($block instanceof BlockInterface && $block->status() && $block->access('view')) {
-            $blocks[] = $this->entityTypeManager->getViewBuilder('block')->view($block);
+            // Filter by region to support cases like search page where
+            // we show the category facet in different region and don't want
+            // to show in All Filters.
+            if ($region_filter && $block->getRegion() !== $region_filter) {
+              continue;
+            }
+
+            $blocks[$block->id()] = $this->entityTypeManager->getViewBuilder('block')->view($block);
           }
         }
       }
