@@ -20,9 +20,11 @@ function alshaya_aeo_transac_node_view(array &$build, EntityInterface $entity, E
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $sku = $skuManager->getSkuForNode($entity);
       $sku_entity = SKU::loadFromSku($sku);
-      $return = _alshaya_aeo_transac_get_product_description($sku_entity);
-      $build['short_desc'] = $return['short_desc'];
-      $build['description'] = $return['description'];
+      if ($sku_entity instanceof SKU) {
+        $return = _alshaya_aeo_transac_get_product_description($sku_entity);
+        $build['short_desc'] = $return['short_desc'];
+        $build['description'] = $return['description'];
+      }
     }
   }
 }
