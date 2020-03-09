@@ -1,0 +1,11 @@
+image_thumb_gallery: true
+color_swatches_show_product_image: true
+show_parent_images_in_child: true
+media_roles_to_hide_in_gallery: 'thumbnail'
+swatches:
+  pdp:
+    - color
+  plp:
+    - color_family
+plp_slider:
+  item: 3
