@@ -15,7 +15,7 @@ export default class HDBillingAddress extends React.Component {
     super(props);
     this.state = {
       open: false,
-      shippingAsBilling: true
+      shippingAsBilling: this.isBillingSameAsShippingInStorage()
     };
 
   }
@@ -31,16 +31,31 @@ export default class HDBillingAddress extends React.Component {
       this.setState({
         open: false
       });
+      this.setStateAndChecked(true);
     }
+  };
+
+  setStateAndChecked = (shippingAsBilling) => {
+    this.setState({
+      shippingAsBilling: shippingAsBilling
+    });
+
+    let yesNO = shippingAsBilling ? 'yes' : 'no';
+    document.getElementById('billing-address-' + yesNO).checked = true;
+
+    return;
   };
 
   /**
    * On billing address change.
    */
   changeBillingAddress = (shippingAsBilling) => {
-    this.setState({
-      shippingAsBilling: shippingAsBilling
-    });
+    // Do nothing if user tries to select already selected option.
+    if (this.state.shippingAsBilling === shippingAsBilling) {
+      return;
+    }
+
+    this.setStateAndChecked(shippingAsBilling);
 
     if (shippingAsBilling === true) {
       // If shipping and billing same, we remove
@@ -71,8 +86,15 @@ export default class HDBillingAddress extends React.Component {
     if (data.error === undefined) {
       if (data.cart !== undefined
         && data.cart.delivery_type === 'hd') {
-        localStorage.setItem(localStorageKey, true);
+        localStorage.setItem(localStorageKey, false);
       }
+    }
+
+    // CLose modal.
+    if (this._isMounted) {
+      this.setState({
+        open: false
+      });
     }
 
     // Refresh cart.
@@ -109,7 +131,7 @@ export default class HDBillingAddress extends React.Component {
       return (null);
     }
 
-    const isShippingBillingSame = this.state.shippingAsBilling;
+    const isShippingBillingSame = this.isBillingSameAsShippingInStorage();
 
     return (
       <div className='spc-section-billing-address'>

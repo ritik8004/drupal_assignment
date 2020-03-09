@@ -59,7 +59,18 @@ export default class BillingPopUp extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
-    document.addEventListener('onBillingAddressUpdate', this.closeModal, false);
+    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+  }
+
+  /**
+   * Event handler for billing update.
+   */
+  processBillingUpdate = (e) => {
+    if (this._isMounted) {
+      this.setState({
+        open: false
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -78,6 +89,7 @@ export default class BillingPopUp extends React.Component {
             closeModal={this.closeModal}
             processAddress={this.processAddress}
             showEmail={false}
+            headingText={Drupal.t('billing information')}
             default_val={this.formatAddressData(this.props.billing)}
           />
         </Popup>

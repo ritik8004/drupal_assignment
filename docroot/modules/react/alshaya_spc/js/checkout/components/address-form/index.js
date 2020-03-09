@@ -133,6 +133,10 @@ export default class AddressForm extends React.Component {
       }
     );
 
+    let headingText = (this.props.headingText !== undefined)
+      ? this.props.headingText
+      : Drupal.t('delivery information');
+
     return (
       <div className="spc-address-form">
         {window.innerWidth > 768 && (
@@ -141,7 +145,7 @@ export default class AddressForm extends React.Component {
           </div>
         )}
         <div className="spc-address-form-sidebar">
-          <SectionTitle>{Drupal.t("delivery information")}</SectionTitle>
+          <SectionTitle>{headingText}</SectionTitle>
           <a className='close' onClick={this.props.closeModal}>
               &times;
           </a>
