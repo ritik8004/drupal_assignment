@@ -15,7 +15,7 @@ export default class HDBillingAddress extends React.Component {
     super(props);
     this.state = {
       open: false,
-      shippingAsBilling: true
+      shippingAsBilling: this.isBillingSameAsShippingInStorage()
     };
 
   }
@@ -38,9 +38,17 @@ export default class HDBillingAddress extends React.Component {
    * On billing address change.
    */
   changeBillingAddress = (shippingAsBilling) => {
+    // Do nothing if user tries to select already selected option.
+    if (this.state.shippingAsBilling === shippingAsBilling) {
+      return;
+    }
+
     this.setState({
       shippingAsBilling: shippingAsBilling
     });
+
+    let yesNO = shippingAsBilling ? 'yes' : 'no';
+    document.getElementById('billing-address-' + yesNO).checked = true;
 
     if (shippingAsBilling === true) {
       // If shipping and billing same, we remove
@@ -71,7 +79,7 @@ export default class HDBillingAddress extends React.Component {
     if (data.error === undefined) {
       if (data.cart !== undefined
         && data.cart.delivery_type === 'hd') {
-        localStorage.setItem(localStorageKey, true);
+        localStorage.setItem(localStorageKey, false);
       }
     }
 
@@ -109,7 +117,7 @@ export default class HDBillingAddress extends React.Component {
       return (null);
     }
 
-    const isShippingBillingSame = this.state.shippingAsBilling;
+    const isShippingBillingSame = this.isBillingSameAsShippingInStorage();
 
     return (
       <div className='spc-section-billing-address'>
