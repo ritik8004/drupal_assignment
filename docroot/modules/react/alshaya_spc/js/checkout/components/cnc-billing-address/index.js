@@ -2,6 +2,7 @@ import React from 'react';
 
 import BillingPopUp from '../billing-popup';
 import BillingInfo from '../billing-info';
+import SectionTitle from "../../../utilities/section-title";
 
 export default class CnCBillingAddress extends React.Component {
 
@@ -14,7 +15,7 @@ export default class CnCBillingAddress extends React.Component {
     };
   }
 
-  showPopup = () => {
+  showPopup = (e) => {
     this.setState({
       open: true
     });
@@ -47,35 +48,43 @@ export default class CnCBillingAddress extends React.Component {
     this.closePopup();
     // Refresh cart.
     this.props.refreshCart(data);
-  }
+  };
 
   render() {
     const { billingAddress, shippingAddress, carrierInfo } = this.props;
 
     // If carrier info not set, means shipping info not set.
     // So we don't need to show bulling.
-    if (carrierInfo === undefined
-      || carrierInfo === null) {
+    if (carrierInfo === undefined || carrierInfo === null) {
         return (null);
     }
 
     // If billing address is not set already.
-    if (billingAddress === undefined
-      || billingAddress === null) {
+    if (billingAddress === undefined || billingAddress === null) {
       return (
-        <React.Fragment>
-          <div onClick={() => this.showPopup()}>
-            {Drupal.t('please add your billing address.')}
+        <div className='spc-section-billing-address cnc-flow'>
+          <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
+          <div className='spc-billing-address-wrapper'>
+            <div className='spc-billing-top-panel spc-billing-cc-panel' onClick={(e) => this.showPopup(e)}>
+              {Drupal.t('please add your billing address.')}
+            </div>
+            {this.state.open &&
+              <BillingPopUp closePopup={this.closePopup} billing={billingAddress} shipping={shippingAddress}/>
+            }
           </div>
-          {this.state.open &&
-          <BillingPopUp closePopup={this.closePopup} billing={billingAddress} shipping={shippingAddress}/>
-        }
-        </React.Fragment>
+        </div>
       );
     }
 
     return (
-      <BillingInfo shipping={shippingAddress} billing={billingAddress}/>
+      <div className='spc-section-billing-address cnc-flow'>
+        <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
+        <div className='spc-billing-address-wrapper'>
+          <div className='spc-billing-bottom-panel'>
+            <BillingInfo shipping={shippingAddress} billing={billingAddress}/>
+          </div>
+        </div>
+      </div>
     );
   }
 
