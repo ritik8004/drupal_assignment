@@ -15,7 +15,7 @@ use Drupal\Core\Site\Settings;
 function alshaya_we_transac_update_8001() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
-    ['alshaya_acm_product.sku_base_fields'],
+    ['alshaya_acm_product.sku_base_fields', 'acq_sku.configurable_form_settings'],
     'alshaya_acm_product'
   );
 
