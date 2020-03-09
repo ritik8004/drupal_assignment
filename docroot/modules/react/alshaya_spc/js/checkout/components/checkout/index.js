@@ -22,6 +22,7 @@ import { fetchClicknCollectStores } from "../../../utilities/api/requests";
 import { createFetcher } from '../../../utilities/api/fetcher';
 import {removeFullScreenLoader} from "../../../utilities/checkout_util";
 import _isEmpty from 'lodash/isEmpty';
+import ConditionalView from '../../../common/components/conditional-view';
 
 window.fetchStore = 'idle';
 
@@ -181,6 +182,8 @@ export default class Checkout extends React.Component {
       );
     }
 
+    const termConditions = <TermsConditions />
+
     return (
       <React.Fragment>
         <div className="spc-pre-content" />
@@ -196,9 +199,9 @@ export default class Checkout extends React.Component {
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
             <PaymentMethods refreshCart={this.refreshCart} cart={this.state.cart} />
-            {window.innerWidth > 768 &&
-              <TermsConditions />
-            }
+            <ConditionalView condition={window.innerWidth > 768}>
+              {termConditions}
+            </ConditionalView>
             <CompletePurchase cart={this.state.cart} />
           </div>
           <div className="spc-sidebar">
@@ -206,9 +209,9 @@ export default class Checkout extends React.Component {
           </div>
         </div>
         <div className="spc-post-content">
-          {window.innerWidth < 768 &&
-            <TermsConditions />
-          }
+          <ConditionalView condition={window.innerWidth < 768}>
+            {termConditions}
+          </ConditionalView>
         </div>
       </React.Fragment>
     );
