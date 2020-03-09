@@ -51,7 +51,7 @@ export default class PaymentMethod extends React.Component {
 
         <ConditionalView condition={(this.state.selectedOption === 'checkout_com')}>
           <div className={['payment-method-form', 'payment-method-form-' + method]}>
-            <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} customer={this.props.cart.cart.customer} />
+            <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} cart={this.props.cart} />
           </div>
         </ConditionalView>
       </>

@@ -98,8 +98,8 @@ export const addPaymentMethodInCart = (action, data) => {
     action,
     payment_info: data,
     cart_id: cart,
-  })
-    .then((response) => response.data, (error) => {
+  }).then((response) => response.data, (error) => {
     // Processing of error here.
-    });
+    console.error(error);
+  });
 };

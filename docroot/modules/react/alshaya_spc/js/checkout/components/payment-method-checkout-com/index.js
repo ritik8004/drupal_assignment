@@ -1,6 +1,11 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
 import luhn from "../../../utilities/luhn";
+import {addPaymentMethodInCart} from "../../../utilities/update_cart";
+import {
+  placeOrder,
+  removeFullScreenLoader
+} from "../../../utilities/checkout_util";
 
 class PaymentMethodCheckoutCom extends React.Component {
 
@@ -147,9 +152,24 @@ class PaymentMethodCheckoutCom extends React.Component {
   };
 
   handleCheckoutResponse = (data) => {
-
+    // @TODO: Handle errors.
     console.log(data);
 
+    let paymentData = {
+      'payment': {
+        'method': 'checkout_com',
+        'additional_data': data,
+      },
+    };
+
+    addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
+      // @TODO: Handle exception.
+      const { cart } = this.props;
+      placeOrder(cart.cart.cart_id, cart.selected_payment_method);
+    }).catch((error) => {
+      removeFullScreenLoader();
+      console.error(error);
+    });
   };
 
   render() {

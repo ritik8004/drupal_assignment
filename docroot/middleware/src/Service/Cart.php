@@ -441,25 +441,40 @@ class Cart {
    *   Cart id.
    * @param array $payment_data
    *   Payment info.
-   * @param string $action
-   *   Action to perform.
+   * @param array $extension
+   *   Cart extension.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function updatePayment(int $cart_id, array $payment_data, string $action) {
+  public function updatePayment(int $cart_id, array $payment_data, array $extension) {
     $data = [
-      'extension' => (object) [
-        'action' => $action,
-      ],
+      'extension' => (object) $extension,
     ];
+
+    // Method specific code. @TODO: Find better way to handle this.
+    $additional_info = $payment_data['payment']['additional_data'] ?? [];
+    switch ($payment_data['payment']['method']) {
+      case 'checkout_com':
+        // @TODO: Handle 3D, Handle Tokenisation, Handle MADA.
+        $additional_data = [
+          'card_token_id' => $additional_info['id'],
+          'udf3' => NULL,
+        ];
+        break;
+
+      default:
+        $additional_data = $additional_info;
+        break;
+    }
 
     $data['payment'] = [
       'method' => $payment_data['payment']['method'],
-      'additional_data' => $payment_data['payment']['additional_data'],
+      'additional_data' => $additional_data,
     ];
+
     return $this->updateCart($data, $cart_id);
   }
 
