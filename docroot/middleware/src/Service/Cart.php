@@ -506,7 +506,7 @@ class Cart {
       return [];
     }
 
-    $url = 'carts/' . $cart_id . '/estimate-shipping-methods';
+    $url = sprintf('carts/%d/estimate-shipping-methods', $cart_id);
 
     try {
       return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);

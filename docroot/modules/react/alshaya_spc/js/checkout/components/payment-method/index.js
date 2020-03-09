@@ -1,6 +1,4 @@
 import React from 'react';
-import { addPaymentMethodInCart } from '../../../utilities/update_cart';
-import {showFullScreenLoader} from "../../../utilities/checkout_util";
 import ConditionalView from "../../../common/components/conditional-view";
 import CodSurchargePaymentMethodDescription
   from "../payment-description-cod-surchage";
@@ -19,40 +17,10 @@ export default class PaymentMethod extends React.Component {
     });
   }
 
-  getHtmlMarkup(content) {
-    return { __html: content };
-  };
-
-  changePaymentMethod = (method) => {
-    showFullScreenLoader();
-
-    this.setState({
-      selectedOption: method
-    });
-
-    document.getElementById('payment-method-' + method).checked = true;
-
-    let data = {
-      'payment' : {
-        'method': method,
-        'additional_data': {}
-      }
-    };
-    let cart = addPaymentMethodInCart('update payment', data);
-    if (cart instanceof Promise) {
-      cart.then((result) => {
-        let cart_data = this.props.cart;
-        cart_data['selected_payment_method'] = method;
-        cart_data['cart'] = result;
-        this.props.refreshCart(cart_data);
-      });
-    }
-  };
-
   render() {
     let method = this.props.method.code;
     return(
-      <div className={`payment-method payment-method-${method}`} onClick={() => this.changePaymentMethod(method)}>
+      <div className={`payment-method payment-method-${method}`} onClick={() => this.props.changePaymentMethod(method)}>
       	<input
       	  id={'payment-method-' + method}
       	  className={method}
@@ -63,7 +31,7 @@ export default class PaymentMethod extends React.Component {
 
         <label className='radio-sim radio-label'>
           {this.props.method.name}
-          <ConditionalView condition={method === 'cashondelivery'}>
+          <ConditionalView condition={method === 'cashondelivery' && this.props.cart.cart.surcharge.amount > 0}>
             <CodSurchargePaymentMethodDescription surcharge={this.props.cart.cart.surcharge}/>
           </ConditionalView>
         </label>

@@ -5,12 +5,9 @@ import PriceElement from "../../../utilities/special-price/PriceElement";
 
 const CodSurchargePaymentMethodDescription = ({surcharge}) => {
   const getSurchargeShortDescription = () => {
-    if (!surcharge || surcharge <= 0) {
-      return false;
-    }
     let {amount} = surcharge;
-    let description = getStringMessage('cod_surcharge_short_description');
 
+    let description = getStringMessage('cod_surcharge_short_description');
     if (description.length == 0) {
       return '';
     }

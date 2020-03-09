@@ -323,12 +323,18 @@ class CartController {
 
       if ($data['delivery_type'] == 'hd') {
         $data['shipping_methods'] = $this->cart->shippingMethods(['address' => $shipping_info['address']], $data['cart_id']);
+
+        // Remove CnC from the methods.
+        // @TODO: Get CnC method name from Drupal or from some config.
+        $data['shipping_methods'] = array_filter($data['shipping_methods'], function ($method) {
+          return ($method['carrier_code'] !== 'click_and_collect');
+        });
       }
     }
 
-    if (!empty($data['shipping_methods'])) {
-      // If only one, just select it and go to payment.
-    }
+    $data['payment_methods'] = !empty($shipping_info['method'])
+      ? $this->cart->getPaymentMethods($cart_data['cart']['id'])
+      : [];
 
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
 
@@ -663,20 +669,6 @@ class CartController {
     }
 
     return new JsonResponse($result);
-  }
-
-  /**
-   * Gets list of payment methods.
-   *
-   * @param int $cart_id
-   *   Cart id.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Payment method response.
-   */
-  public function getPaymentMethods(int $cart_id) {
-    $data = $this->cart->getPaymentMethods($cart_id);
-    return new JsonResponse($data);
   }
 
   /**

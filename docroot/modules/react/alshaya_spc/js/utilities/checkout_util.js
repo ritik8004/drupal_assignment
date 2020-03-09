@@ -35,25 +35,6 @@ export const getShippingMethods = function (cart_id, data) {
 };
 
 /**
- * Get payment methods.
- *
- * @param cart_id
- * @returns {boolean}
- */
-export const getPaymentMethods = function (cart_id) {
-  const { middleware_url } = window.drupalSettings.alshaya_spc;
-
-  return axios
-    .get(`${middleware_url}/cart/${cart_id}/payment-methods`)
-    .then(
-      (response) => response.data,
-      (error) => {
-        // Processing of error here.
-      },
-    );
-};
-
-/**
  * Place order.
  *
  * @param cart_id
