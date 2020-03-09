@@ -32,3 +32,23 @@
     text-transform: capitalize;
   }
 }
+
+.spc-section-billing-address {
+  .popup-overlay .popup-content {
+    .spc-deliver-button {
+      text-transform: uppercase;
+    }
+  }
+
+  .spc-billing-address-wrapper {
+    .spc-billing-bottom-panel {
+      .spc-billing-name {
+        font-family: $hnm-demibold !important;
+      }
+    }
+
+    .spc-billing-change {
+      text-transform: capitalize;
+    }
+  }
+}
