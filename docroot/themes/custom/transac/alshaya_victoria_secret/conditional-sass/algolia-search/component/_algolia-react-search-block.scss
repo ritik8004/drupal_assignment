@@ -68,16 +68,16 @@
       background: $white-smoke-light;
       text-transform: none;
       padding: 0.4375rem;
-      padding-left: 2rem !important;
+      padding-#{$left}: 2rem !important;
 
       @include breakpoint($only-tablet) {
-        padding-left: 0.4375rem !important;
-        padding-right: 2rem !important;
+        padding-#{$left}: 0.4375rem !important;
+        padding-#{$right}: 2rem !important;
       }
 
       @include breakpoint($only-mobile) {
-        padding-left: 0.4375rem !important;
-        padding-right: 0.4375rem !important;
+        padding-#{$left}: 0.4375rem !important;
+        padding-#{$right}: 0.4375rem !important;
         margin: 0;
         width: 100%;
       }
@@ -136,27 +136,23 @@
 
       @include icon(search, before) {
         height: auto;
-        width: 25px;
+        width: 1.5625rem;
         top: 50%;
         transform: translateY(-50%);
         color: $warm-grey;
         background: none;
-        left: 0.5rem;
+        #{$left}: 0.5rem;
         font-size: 1.25rem;
         border-radius: 0;
 
         @include breakpoint($only-tablet) {
-          right: 0.35rem;
-          left: auto;
+          #{$right}: 0.35rem;
+          #{$left}: auto;
           font-size: 1.75rem;
         }
 
         @include breakpoint($only-mobile) {
           content: none;
-        }
-
-        html[lang='ar'] & {
-          transform: translateY(-50%) rotate(90deg);
         }
       }
 
