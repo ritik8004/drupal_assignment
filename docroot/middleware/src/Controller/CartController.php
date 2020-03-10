@@ -582,11 +582,25 @@ class CartController {
    */
   public function placeOrder(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
-    if (!isset($request_content['cart_id'], $request_content['data'])) {
+    if (!isset($request_content["cart"]["cart_id"], $request_content['data'])) {
       return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
     $result = $this->cart->placeOrder($request_content['data']);
+    if (is_string($result)) {
+      $this->session->remove(self::STORAGE_KEY);
+      $last_order = str_replace('"', '', $result);
+      $this->session->set(OrdersController::SESSION_STORAGE_KEY, (int) $last_order);
+      // Post order id and cart data to Drupal.
+      $data = [
+        'action' => 'place order success',
+        'order_id' => (int) $last_order,
+        'cart' => $request_content['cart'],
+        'payment_method' => $request_content["data"]["paymentMethod"]["method"],
+      ];
+      $this->drupal->postOrderData($data);
+    }
+
     return new JsonResponse($result);
   }
 

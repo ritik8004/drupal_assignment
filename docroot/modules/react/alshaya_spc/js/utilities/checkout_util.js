@@ -39,7 +39,7 @@ export const getShippingMethods = function (cart_id, data) {
  * @param payment_method
  * @returns {boolean}
  */
-export const placeOrder = function (cart_id, payment_method) {
+export const placeOrder = function (cart, payment_method) {
   const { middleware_url } = window.drupalSettings.alshaya_spc;
 
   const data = {
@@ -50,7 +50,7 @@ export const placeOrder = function (cart_id, payment_method) {
   return axios
     .post(`${middleware_url}/cart/place-order`, {
       data,
-      cart_id,
+      cart,
     })
     .then(
       (response) => {
