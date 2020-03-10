@@ -17,7 +17,6 @@ import StoreList from "./components/StoreList";
 import ClicknCollectMap from "./components/ClicknCollectMap";
 import ToggleButton from "./components/ToggleButton";
 import LocationSearchForm from "./components/LocationSearchForm";
-import ConditionalView from "../../../common/components/conditional-view";
 import DeviceView from "../../../common/components/device-view";
 import FullScreenSVG from "../full-screen-svg";
 
@@ -207,7 +206,7 @@ class ClickCollect extends React.Component {
 
   _openMarkerOfStore = (storeCode, storeList = this.context.storeList, showInfoWindow = true) => {
     let index = _findIndex(storeList, {
-      code: storeCode
+      code: storeCode,
     });
 
     const self = this;
@@ -325,11 +324,13 @@ class ClickCollect extends React.Component {
       return <Loading />;
     }
 
-    let mapView = <ClicknCollectMap
-    coords={coords}
-    markers={storeList}
-    openSelectedStore={openSelectedStore}
-    />;
+    const mapView = (
+      <ClicknCollectMap
+        coords={coords}
+        markers={storeList}
+        openSelectedStore={openSelectedStore}
+      />
+    );
 
     return (
       <div className="spc-address-form">
