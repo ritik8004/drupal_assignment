@@ -1565,6 +1565,11 @@
           margin-top: 1.45rem;
         }
       }
+
+      button[disabled] {
+        cursor: default;
+        background-color: $primary_button_disabled !important;
+      }
     }
   }
 }
