@@ -1251,6 +1251,10 @@ body.path--cart .c-content__region {
   #edit-billing-address {
     .address-container-inline {
       > .form-item {
+        @include breakpoint($tablet) {
+          width: calc((98% - 0.875rem) / 2);
+        }
+
         width: calc((100% - 0.875rem) / 2);
         max-width: none;
       }
