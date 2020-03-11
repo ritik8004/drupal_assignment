@@ -276,6 +276,7 @@ class AlshayaFeedSkuInfoHelper {
               'status' => $stockInfo['in_stock'],
               'qty' => $stockInfo['stock'],
             ],
+            'attributes' => $this->skuInfoHelper->getAttributes($child, ['description', 'short_description']),
           ];
           $product[$lang][] = array_merge($parentProduct, $variant);
         }
