@@ -6,6 +6,7 @@ import {
   placeOrder,
   removeFullScreenLoader, showFullScreenLoader
 } from "../../../utilities/checkout_util";
+import ConditionalView from "../../../common/components/conditional-view";
 
 class PaymentMethodCheckoutCom extends React.Component {
 
@@ -131,12 +132,16 @@ class PaymentMethodCheckoutCom extends React.Component {
 
     showFullScreenLoader();
 
+    let udf3 = (window.drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
+      ? 'storeInVaultOnSuccess'
+      : '';
+
     var ccInfo = {
       'number': this.state.number,
       'expiryMonth': this.state.expiry.split('/')[0],
       'expiryYear': this.state.expiry.split('/')[1],
       'cvv': this.state.cvv,
-      'udf3': '',
+      'udf3': udf3,
     };
 
     window.CheckoutKit.configure({
@@ -146,13 +151,15 @@ class PaymentMethodCheckoutCom extends React.Component {
 
     window.CheckoutKit.createCardToken(ccInfo, this.handleCheckoutResponse);
 
-    console.log(ccInfo);
-
     // Throwing 200 error, we want to handle place order in custom way.
     throw 200;
   };
 
   handleCheckoutResponse = (data) => {
+    data['udf3'] = (window.drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
+      ? 'storeInVaultOnSuccess'
+      : '';
+
     // @TODO: Handle errors.
     console.log(data);
 
@@ -169,8 +176,11 @@ class PaymentMethodCheckoutCom extends React.Component {
         console.error(result.error);
         return;
       }
-
-      if (result.success && result.redirectUrl !== undefined) {
+      else if (result.success === undefined || !(result.success)) {
+        console.error(result);
+        return;
+      }
+      else if (result.redirectUrl !== undefined) {
         window.location = result.redirectUrl;
         return;
       }
@@ -223,9 +233,15 @@ class PaymentMethodCheckoutCom extends React.Component {
             onChange={this.handleCardCvvChange.bind(this)}
           />
         </div>
+
         <div className="card-types-wrapper">
           {cartTypes}
         </div>
+
+        <ConditionalView condition={window.drupalSettings.user.uid > 0}>
+          <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
+          <label htmlFor="save_card">{Drupal.t('Save this card for faster payment next time you shop. (CVV number will not be saved)')}</label>
+        </ConditionalView>
       </>
     );
   };
