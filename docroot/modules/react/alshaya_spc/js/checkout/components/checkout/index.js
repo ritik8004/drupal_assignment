@@ -157,8 +157,7 @@ export default class Checkout extends React.Component {
     }
 
     window.fetchStore = 'pending';
-    const storeFetcher = createFetcher(fetchClicknCollectStores);
-    let list = storeFetcher.read(coords);
+    const list = createFetcher(fetchClicknCollectStores).read(coords);
 
     list.then(
       response => {
