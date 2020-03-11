@@ -1,3 +1,10 @@
+const cardTypeLengths = {
+  'amex': [15],
+  'visa': [16],
+  'mastercard': [16],
+  'discover': [16],
+};
+
 const toDigits = numString =>
   numString
     .replace(/[^0-9]/g, "")
@@ -20,9 +27,20 @@ const reduceMultiDigitVals = current =>
 
 const luhn = {};
 
-luhn.validate = numString => {
+luhn.validate = (numString, cardType) => {
   const digits = toDigits(numString);
   const len = digits.length;
+
+  // Type not supported.
+  if (cardTypeLengths[cardType] === undefined) {
+    return false;
+  }
+
+  // Invalid length.
+  if (cardTypeLengths[cardType].indexOf(len) === -1) {
+    return false;
+  }
+
   const luhnDigit = digits[len - 1];
 
   const total = digits
