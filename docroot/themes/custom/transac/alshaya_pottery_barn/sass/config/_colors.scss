@@ -1,6 +1,7 @@
 /* Color palette from PB */
 
 $PB_black_one: #000;
+$PB_black_two: #757575;
 $PB_grey_one: #666;
 $PB_grey_two: #adadad;
 $PB_grey_five: #ebebeb;
@@ -98,9 +99,8 @@ $default_msg_text: $PB_white;
 
 // Dropdown.
 $primary_dropdown_bg: $white-two;
-$primary_dropdown_arrow_bg: $white-two;
+$primary_dropdown_arrow_bg: transparent;
 $primary_dropdown_arrow_icon: $_black_two;
-$primary_dropdown_arrow_left_border: $white-two;
 $primary_dropdown_text: $_black_two;
 $primary_dropdown_border: $_black_two;
 $primary_dropdown_option_hover: $PB_grey_four;
@@ -599,6 +599,19 @@ $free-gifts-modal-product-description-label: $_black_two;
 $cart-free-gifts-message: $PB_grey_one;
 $cart-free-gifts-title: $PB_grey_one;
 $cart-free-gifts-label-background: $_black_two;
+
+// Algolia Autocomplete
+$algolia-auto-complete-border: $white;
+$algolia-input-text: $PB_grey_one;
+$algolia-input-placeholder-text: $PB_black_two;
+$algolia-input-border-mobile: $_black_two;
+$algolia-react-search-page-title: $_black_two;
+$algolia-suggestion-text: $PB_grey_one;
+$algolia-suggestion-border: $white;
+$algolia-search-suggestion-hover-bg: $_gray_five;
+$algolia-react-highlighted-bg: $PB_blue;
+$algolia-react-highlighted-text: $primary_btn_text;
+$algolia-trending-title-text: $_black_two;
 
 // SPC Cart.
 $spc-cart-item-trash-icon-hover: $_black_two;

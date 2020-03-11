@@ -63,13 +63,20 @@ class ProductCategoryHelper {
   public function filterEnabled(array $terms = []) {
     // Remove disabled terms.
     foreach ($terms as $index => $row) {
+
+      if (empty($row['target_id'])) {
+        // If term not found, we unset it.
+        unset($terms[$index]);
+        continue;
+      }
+
       $term = $this->termStorage->load($row['target_id']);
 
       if ($term instanceof TermInterface && $term->get('field_commerce_status')->getString()) {
         continue;
       }
 
-      // If term not found or not enabled, we unset it.
+      // If term not enabled, we unset it.
       unset($terms[$index]);
     }
 

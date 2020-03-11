@@ -35,7 +35,7 @@
       align-items: center;
       margin-top: 0;
 
-      &.is-active {
+      &.is-active:not(.sale-item) {
         font-family: $alshaya-bold;
       }
     }
@@ -221,7 +221,7 @@
     .block-alshaya-promo-facets-block-all,
     .block-alshaya-search-facets-block-all {
       height: 0;
-      z-index: 2;
+      z-index: 12;
     }
   }
 }

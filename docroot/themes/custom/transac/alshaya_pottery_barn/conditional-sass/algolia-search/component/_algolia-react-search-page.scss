@@ -1,0 +1,30 @@
+#alshaya-algolia-search {
+  .c-page-title {
+    font-family: $alshaya-thin;
+    font-weight: normal;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    padding: 0.75rem 0 1.875rem;
+    height: auto;
+
+    @include breakpoint($only-mobile) {
+      padding: 0.75rem 0;
+    }
+  }
+
+  .c-content__region {
+    .sticky-filter-wrapper {
+      .c-collapse-item {
+        .c-collapse__title {
+          text-transform: capitalize;
+
+          @include breakpoint($only-mobile) {
+            line-height: normal;
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+    }
+  }
+}

@@ -769,6 +769,7 @@
 
             @include breakpoint($only-mobile) {
               width: 5.25rem;
+              height: 7.785rem;
               margin-bottom: 0.625rem;
             }
 
@@ -1109,6 +1110,16 @@ html[lang=ar] {
             right: 1rem;
           }
         }
+      }
+    }
+  }
+}
+
+.content {
+  &__main {
+    @include breakpoint($only-mobile) {
+      .order-quantity-limit-message.mobile-only {
+        bottom: 4.1875rem;
       }
     }
   }
