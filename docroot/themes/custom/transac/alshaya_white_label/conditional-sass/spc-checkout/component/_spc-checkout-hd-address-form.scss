@@ -26,14 +26,16 @@
       }
 
       @include breakpoint($desktop) {
-        height: 37.5rem;
+        max-height: 37.5rem;
+        height: auto;
         width: calc(100% - 19.75rem);
         max-width: 60.5rem;
       }
 
       @include breakpoint($only-tablet) {
         max-width: calc(100% - 1rem);
-        height: 31.25rem;
+        max-height: 31.25rem;
+        height: auto;
       }
 
       .spc-address-form {

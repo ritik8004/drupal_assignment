@@ -1,5 +1,6 @@
 .spc-address-list-member-content {
   overflow-y: auto !important;
+  background: $spc-checkout-sidebar-bg !important;
 
   .close {
     z-index: 1;
@@ -12,13 +13,17 @@
     justify-content: center;
     box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
     font-size: 1.25rem;
-    color: $checkout_section_titles;
+    background: $spc-change-address-header;
+    color: $spc-checkout_section_title;
     font-family: $alshaya-bold;
   }
 
   .address-list-content {
-    background: $spc-checkout-sidebar-bg;
     padding-top: 1.25rem;
+
+    @include breakpoint($tablet) {
+      padding-bottom: 1.25rem;
+    }
 
     .spc-add-new-address-btn {
       width: 100%;
@@ -67,7 +72,7 @@
       }
 
       .spc-address-tile {
-        padding: 0.875rem 1.25rem 0;
+        padding: 0 0.875rem 1.25rem;
         background: $spc-checkout-address-tile-bg;
         font-size: 0.875rem;
         display: flex;
@@ -75,8 +80,10 @@
         align-items: flex-start;
         justify-content: space-between;
         cursor: pointer;
+        position: relative;
 
-        &:hover {
+        &:hover,
+        &.selected {
           box-shadow: 0 0 7px 2px rgba(0, 0, 0, 0.24);
         }
 
@@ -86,7 +93,7 @@
         }
 
         .spc-address-name {
-          height: 2.875rem;
+          padding: 0.875rem 0;
           display: flex;
           align-items: center;
           justify-content: flex-start;
@@ -103,11 +110,10 @@
         }
 
         .spc-address-tile-actions {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding-bottom: 0.5rem;
-          padding-top: 1rem;
+          display: block;
+          position: absolute;
+          #{$right}: 0;
+          width: auto;
 
           .spc-address-btns {
             display: flex;

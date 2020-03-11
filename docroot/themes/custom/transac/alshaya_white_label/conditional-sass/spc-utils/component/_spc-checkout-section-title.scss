@@ -2,7 +2,7 @@
   font-size: 1.125rem;
   font-family: $alshaya-bold;
   margin-bottom: 1.25rem;
-  color: $checkout_section_titles;
+  color: $spc-checkout_section_title;
 
   @include breakpoint($only-mobile) {
     text-align: center;
