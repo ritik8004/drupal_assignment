@@ -2,11 +2,14 @@
 
 namespace App\Service;
 
+use App\Controller\CartController;
+use App\Controller\OrdersController;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Drupal\DrupalInfo;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class Cart.
@@ -63,6 +66,13 @@ class Cart {
   protected $paymentData;
 
   /**
+   * Service for session.
+   *
+   * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+   */
+  protected $session;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -77,19 +87,23 @@ class Cart {
    *   Checkout.com API Wrapper.
    * @param \App\Service\PaymentData $payment_data
    *   Payment Data provider.
+   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+   *   Service for session.
    */
   public function __construct(MagentoInfo $magento_info,
                               MagentoApiWrapper $magento_api_wrapper,
                               DrupalInfo $drupal_info,
                               Utility $utility,
                               APIWrapper $checkout_com_api,
-                              PaymentData $payment_data) {
+                              PaymentData $payment_data,
+                              SessionInterface $session) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->drupalInfo = $drupal_info;
     $this->utility = $utility;
     $this->checkoutComApi = $checkout_com_api;
     $this->paymentData = $payment_data;
+    $this->session = $session;
   }
 
   /**
@@ -612,6 +626,13 @@ class Cart {
     catch (\Exception $e) {
       static::$cart[$cart_id] = NULL;
 
+      // Re-set cart id in session if exception is for cart not found.
+      if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
+        $session_data = $this->session->get(CartController::STORAGE_KEY, []);
+        unset($session_data['cart_id']);
+        $this->session->set(CartController::STORAGE_KEY, $session_data);
+      }
+
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
@@ -675,14 +696,25 @@ class Cart {
    * @param array $data
    *   Post data.
    *
-   * @return mixed
+   * @return array
    *   Status.
    */
   public function placeOrder(int $cart_id, array $data) {
     $url = sprintf('carts/%d/order', $cart_id);
 
     try {
-      return $this->magentoApiWrapper->doRequest('PUT', $url, ['json' => $data]);
+      $result = $this->magentoApiWrapper->doRequest('PUT', $url, ['json' => $data]);
+      $order_id = (int) str_replace('"', '', $result);
+
+      // Remove cart id from session.
+      $session_data = $this->session->get(CartController::STORAGE_KEY, []);
+      unset($session_data['cart_id']);
+      $this->session->set(CartController::STORAGE_KEY, $session_data);
+
+      // Set order in session for later use.
+      $this->session->set(OrdersController::SESSION_STORAGE_KEY, $order_id);
+
+      return ['success' => TRUE, 'order_id' => $order_id];
     }
     catch (\Exception $e) {
       // Exception handling here.
