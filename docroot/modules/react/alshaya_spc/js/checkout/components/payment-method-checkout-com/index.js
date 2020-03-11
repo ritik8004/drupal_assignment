@@ -27,7 +27,7 @@ class PaymentMethodCheckoutCom extends React.Component {
       numberValid: false,
       expiryValid: false,
       cvvValid: false,
-      acceptedCards: ['visa', 'mastercard'],
+      acceptedCards: ['visa', 'mastercard', 'diners'],
     };
   };
 
