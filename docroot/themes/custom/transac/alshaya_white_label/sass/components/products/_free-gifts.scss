@@ -700,6 +700,7 @@
           #{$left}: 1.5rem;
           top: 1.5rem;
           text-transform: capitalize;
+          line-height: normal;
 
           @include breakpoint($only-mobile) {
             #{$left}: 0.5rem;
