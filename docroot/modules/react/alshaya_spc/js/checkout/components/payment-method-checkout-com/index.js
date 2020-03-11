@@ -156,12 +156,10 @@ class PaymentMethodCheckoutCom extends React.Component {
   };
 
   handleCheckoutResponse = (data) => {
+    // @TODO: Handle errors.
     data['udf3'] = (window.drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
       ? 'storeInVaultOnSuccess'
       : '';
-
-    // @TODO: Handle errors.
-    console.log(data);
 
     let paymentData = {
       'payment': {
@@ -176,18 +174,23 @@ class PaymentMethodCheckoutCom extends React.Component {
         console.error(result.error);
         return;
       }
+      // 2D flow success.
+      else if (result.cart_id !== undefined && result.cart_id) {
+        const { cart } = this.props;
+        placeOrder(cart.cart.cart_id, cart.selected_payment_method);
+      }
+      // 3D flow error.
       else if (result.success === undefined || !(result.success)) {
         console.error(result);
-        return;
       }
+      // 3D flow success.
       else if (result.redirectUrl !== undefined) {
         window.location = result.redirectUrl;
-        return;
       }
-
-      // @TODO: Handle exception.
-      const { cart } = this.props;
-      placeOrder(cart.cart.cart_id, cart.selected_payment_method);
+      else {
+        console.error(response);
+        removeFullScreenLoader();
+      }
     }).catch((error) => {
       removeFullScreenLoader();
       console.error(error);
