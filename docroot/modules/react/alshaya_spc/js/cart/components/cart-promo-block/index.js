@@ -1,17 +1,16 @@
 import React from 'react';
 
-import {applyRemovePromo} from '../../../utilities/update_cart';
-import SectionTitle from "../../../utilities/section-title";
+import { applyRemovePromo } from '../../../utilities/update_cart';
+import SectionTitle from '../../../utilities/section-title';
 
 export default class CartPromoBlock extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      'promo_applied': false,
-      'promo_code': '',
-      'button_text': Drupal.t('apply'),
-      'disabled': false
+      promo_applied: false,
+      promo_code: '',
+      button_text: Drupal.t('apply'),
+      disabled: false,
     };
   }
 
@@ -21,7 +20,7 @@ export default class CartPromoBlock extends React.Component {
         promo_applied: true,
         promo_code: this.props.coupon_code,
         button_text: Drupal.t('applied'),
-        disabled: true
+        disabled: true,
       });
 
       document.getElementById('promo-code').value = this.props.coupon_code;
@@ -29,7 +28,7 @@ export default class CartPromoBlock extends React.Component {
   }
 
   promoAction = (promo_applied) => {
-    var promo_value = document.getElementById('promo-code').value.trim();
+    const promo_value = document.getElementById('promo-code').value.trim();
     // If empty promo text.
     if (this.state.promo_applied === false && promo_value.length === 0) {
       document.getElementById('promo-message').innerHTML = Drupal.t('please enter promo code.');
@@ -38,17 +37,16 @@ export default class CartPromoBlock extends React.Component {
       return;
     }
 
-    var action = (promo_applied === true) ? 'remove coupon' : 'apply coupon';
+    const action = (promo_applied === true) ? 'remove coupon' : 'apply coupon';
 
     // Adding class on promo button for showing progress when click and applying promo.
     if (promo_applied !== true) {
       document.getElementById('promo-action-button').classList.add('loading');
-    }
-    else {
+    } else {
       document.getElementById('promo-remove-button').classList.add('loading');
     }
 
-    var cart_data = applyRemovePromo(action, promo_value);
+    const cart_data = applyRemovePromo(action, promo_value);
     if (cart_data instanceof Promise) {
       cart_data.then((result) => {
         // Removing button clicked class.
@@ -56,11 +54,11 @@ export default class CartPromoBlock extends React.Component {
         document.getElementById('promo-remove-button').classList.remove('loading');
         // If coupon is not valid.
         if (result.response_message.status === 'error_coupon') {
+          const event = new CustomEvent('promoCodeFailed', { bubbles: true, detail: { data: promo_value } });
           document.getElementById('promo-message').innerHTML = result.response_message.msg;
           document.getElementById('promo-message').classList.add('error');
           document.getElementById('promo-code').classList.add('error');
           // Dispatch event promoCodeFailed for GTM.
-          var event = new CustomEvent('promoCodeFailed', {bubbles: true, detail: { data: promo_value }});
           document.dispatchEvent(event);
         }
         else if(result.response_message.status === 'success') {

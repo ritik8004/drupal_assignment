@@ -16,8 +16,7 @@ export default class CartItem extends React.Component {
   removeCartItem = (sku, action, id) => {
     const cartData = updateCartItemData(action, sku, 0);
     // Adding class on remove button for showing progress when click.
-    const removeItem = 'remove-item-';
-    document.getElementById(removeItem + id).classList.add('loading');
+    document.getElementById(`remove-item-${id}`).classList.add('loading');
     if (cartData instanceof Promise) {
       cartData.then((result) => {
         // Refreshing mini-cart.
@@ -45,22 +44,22 @@ export default class CartItem extends React.Component {
 
   render() {
     const {
-      title,
-      relativeLink,
-      stock,
-      qty,
-      inStock,
-      originalPrice,
-      configurable_values,
-      promotions,
-      extra_data,
-      sku,
-      id,
-      finalPrice,
-      freeItem,
-    } = this.props.item;
-
-    const removeItem = 'remove-item-';
+      item: {
+        title,
+        relative_link: relativeLink,
+        stock,
+        qty,
+        in_stock: inStock,
+        original_price: originalPrice,
+        configurable_values,
+        promotions,
+        extra_data,
+        sku,
+        id,
+        final_price: finalPrice,
+        free_item: freeItem,
+      },
+    } = this.props;
 
     return (
       <div className="spc-cart-item">
@@ -85,7 +84,7 @@ export default class CartItem extends React.Component {
             </div>
           </div>
           <div className="spc-product-tile-actions">
-            <button title={Drupal.t('remove this item')} id={removeItem + id} className="spc-remove-btn" onClick={() => { this.removeCartItem(sku, 'remove item', id); }}>{Drupal.t('remove')}</button>
+            <button title={Drupal.t('remove this item')} id={`remove-item-${id}`} className="spc-remove-btn" onClick={() => { this.removeCartItem(sku, 'remove item', id); }}>{Drupal.t('remove')}</button>
             <div className="qty">
               <div className="qty-loader-placeholder" />
               <CartQuantitySelect
@@ -101,7 +100,7 @@ export default class CartItem extends React.Component {
           {promotions.map((key, val) =>
             <CartPromotion key={val} promo={key} link={true} />)}
         </div>
-        <CartItemOOS in_stock={inStock} />
+        <CartItemOOS inStock={inStock} />
         <ItemLowQuantity stock={stock} qty={qty} in_stock={inStock} />
       </div>
     );
