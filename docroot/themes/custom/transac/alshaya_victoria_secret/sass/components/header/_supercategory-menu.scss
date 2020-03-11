@@ -54,6 +54,19 @@
           background-size: contain;
         }
       }
+
+      &.brand-swimwear,
+      &.brand-swim {
+        &::after {
+          background: url("../imgs/logos/super-category/vs-swim-logo.svg?h1yOhx") no-repeat center;
+          background-size: 1.8125rem;
+        }
+
+        &:hover::after {
+          background: url("../imgs/logos/super-category/vs-swim-logo-active.svg?h1yOhx") no-repeat center;
+          background-size: 1.8125rem;
+        }
+      }
     }
 
     .active {
@@ -66,6 +79,12 @@
       .brand-beauty::after {
         background: url("../imgs/logos/super-category/beauty-active.svg?4nGDK4") no-repeat center;
         background-size: contain;
+      }
+
+      &.brand-swimwear::after,
+      &.brand-swim::after {
+        background: url("../imgs/logos/super-category/vs-swim-logo-active.svg?h1yOhx") no-repeat center;
+        background-size: 1.8125rem;
       }
     }
   }
@@ -136,6 +155,29 @@
         a {
           width: 5rem;
           margin-top: 0.3125rem;
+        }
+      }
+    }
+  }
+}
+
+.super-category-swim,
+.super-category-swimwear {
+  .branding__menu {
+    .c-header__region {
+      .block-system-branding-block {
+        .site-brand-home img {
+          max-height: 2.5rem;
+        }
+      }
+    }
+  }
+
+  .filter-fixed-top {
+    .sticky-filter-wrapper {
+      .site-brand-home a {
+        img {
+          height: calc(100% - 1.75rem);
         }
       }
     }

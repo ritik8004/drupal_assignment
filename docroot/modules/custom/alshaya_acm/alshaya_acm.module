@@ -210,25 +210,29 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $item['quantity']['#suffix'] = '</div>';
       $item['quantity']['#suffix'] .= alshaya_acm_get_remove_from_basket_link($cart, $sku_entity);
 
-      $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
-      $plugin = $sku_entity->getPluginInstance();
+      // Process quantity limit only if enabled.
+      $max_sale_qty = 0;
+      if (\Drupal::config('alshaya_acm.settings')->get('quantity_limit_enabled')) {
+        $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
+        $plugin = $sku_entity->getPluginInstance();
 
-      // Check if max sale qty limit is set for parent.
-      $parent_sku = $skuManager->getParentSkuBySku($id);
-      // Get max sale qty for the variant in cart if not present for parent.
-      $parent_max_sale_qty = $parent_sku ? $plugin->getMaxSaleQty($parent_sku) : 0;
-      $max_sale_qty = !empty($parent_max_sale_qty) ? $parent_max_sale_qty : $plugin->getMaxSaleQty($id);
+        // Check if max sale qty limit is set for parent.
+        $parent_sku = $skuManager->getParentSkuBySku($id);
+        // Get max sale qty for the variant in cart if not present for parent.
+        $parent_max_sale_qty = $parent_sku ? $plugin->getMaxSaleQty($parent_sku) : 0;
+        $max_sale_qty = !empty($parent_max_sale_qty) ? $parent_max_sale_qty : $plugin->getMaxSaleQty($id);
 
-      if (!empty($max_sale_qty)) {
-        // Get product qty in cart for variant.
-        $current_variant_in_cart_qty = $productOrderLimit->getCartItemQtyLimit($id);
+        if (!empty($max_sale_qty)) {
+          // Get product qty in cart for variant.
+          $current_variant_in_cart_qty = $productOrderLimit->getCartItemQtyLimit($id);
 
-        if ($current_variant_in_cart_qty && ($current_variant_in_cart_qty >= $max_sale_qty)) {
-          // Show msg if order limit is reached.
-          $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty, TRUE) . '</div>';
-        }
-        else {
-          $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty) . '</div>';
+          if ($current_variant_in_cart_qty && ($current_variant_in_cart_qty >= $max_sale_qty)) {
+            // Show msg if order limit is reached.
+            $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty, TRUE) . '</div>';
+          }
+          else {
+            $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty) . '</div>';
+          }
         }
       }
 

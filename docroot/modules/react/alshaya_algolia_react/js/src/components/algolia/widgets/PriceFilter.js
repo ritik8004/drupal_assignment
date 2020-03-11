@@ -15,6 +15,7 @@ const PriceFilter = (props) => {
         <li
           key={item.label}
           className={"facet-item " + (item.isRefined ? 'is-active' : '')}
+          datadrupalfacetlabel={props.name}
           onClick={event => {
             event.preventDefault();
             refine(item.value);

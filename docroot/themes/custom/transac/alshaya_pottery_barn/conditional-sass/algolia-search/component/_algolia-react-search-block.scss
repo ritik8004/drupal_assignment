@@ -1,0 +1,217 @@
+.block-alshaya-algolia-react-autocomplete {
+  @include breakpoint($only-mobile) {
+    visibility: hidden;
+    top: 3.125rem;
+    padding: 0;
+
+    &.show-algolia-search-bar {
+      top: 3.225rem !important;
+    }
+  }
+
+  .algolia-search-cleartext-icon {
+    display: none;
+  }
+
+  .react-autosuggest__container .algolia-search-back-icon {
+    color: $algolia-search-clear-text-icon;
+
+    @include breakpoint($only-mobile) {
+      top: 0.1125rem;
+    }
+
+    &::before {
+      font-size: 2rem;
+    }
+  }
+
+  #alshaya-algolia-autocomplete {
+    width: 100%;
+    padding: 0;
+
+    @include breakpoint($only-tablet) {
+      width: 13.25rem;
+
+      html[lang=ar] & {
+        margin-bottom: 1.5625rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      width: 17rem;
+    }
+
+    .react-autosuggest__input {
+      @include breakpoint($only-mobile) {
+        margin: 0;
+        width: 100%;
+      }
+
+      color: $algolia-input-text;
+      font-family: $alshaya-bold;
+      font-size: 0.75rem;
+      border-radius: 0;
+      border: 0.0625rem solid $algolia-auto-complete-border;
+      height: 2.1875rem;
+      text-transform: none;
+      padding: 0.4775rem 0.4375rem 0.4375rem;
+      padding-#{$left}: 0.4375rem !important;
+
+      &::placeholder {
+        font-family: $alshaya-bold;
+        font-size: 0.875rem;
+        line-height: 1.4375rem;
+        color: $algolia-input-placeholder-text;
+        text-transform: none;
+
+        @include breakpoint($tablet) {
+          font-size: 0.75rem;
+        }
+      }
+
+      &--open {
+        border: 0.0625rem solid $algolia-auto-complete-border;
+      }
+    }
+
+    .ais-InstantSearch__root form {
+      border: 0.5rem solid $algolia-input-border-mobile;
+
+      @include breakpoint($only-tablet) {
+        box-shadow: none;
+        border: none;
+      }
+
+      @include breakpoint($desktop) {
+        box-shadow: none;
+        border: none;
+      }
+    }
+
+    .react-autosuggest__container {
+      position: relative;
+
+      @include breakpoint($only-mobile) {
+        height: auto;
+        overflow: inherit;
+      }
+
+      &::before {
+        background-color: transparent;
+        height: auto;
+        width: auto;
+      }
+
+      &::after {
+        display: none;
+
+        @include breakpoint($tablet) {
+          display: block;
+          background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 0.625rem 0.4375rem no-repeat;
+          background-position: center;
+          border: none;
+          text-indent: -9999px;
+          top: 50%;
+          transform: translateY(-50%);
+          #{$right}: 0;
+          height: 2.1875rem;
+          width: 2.625rem;
+
+          html[lang=ar] & {
+            transform: translateY(-52%);
+          }
+        }
+
+        @include breakpoint($desktop) {
+          background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 0.625rem 0.4375rem no-repeat;
+          #{$right}: 0;
+          height: 2.1875rem;
+          width: 2.625rem;
+
+          html[lang=ar] & {
+            transform: translateY(-50%);
+          }
+        }
+      }
+
+      &--open {
+        .react-autosuggest__input {
+          @include breakpoint($only-mobile) {
+            padding-#{$left}: 0;
+          }
+        }
+      }
+
+      .trending-title {
+        color: $algolia-trending-title-text;
+        font-family: $alshaya-bold;
+        text-transform: uppercase;
+        padding: 0.625rem !important;
+        font-weight: 600;
+
+        @include breakpoint ($desktop) {
+          font-size: 0.75rem;
+        }
+      }
+
+      .react-autosuggest__suggestions-list .react-autosuggest__suggestion {
+        .aa-suggestion {
+          &:hover {
+            background-color: $algolia-search-suggestion-hover-bg;
+          }
+
+          .suggested-text {
+            padding: 0.625rem !important;
+
+            @include breakpoint($desktop) {
+              font-size: 0.75rem;
+            }
+          }
+        }
+      }
+    }
+
+    .react-autosuggest__suggestions-container {
+      @include breakpoint($only-mobile) {
+        position: absolute;
+      }
+
+      &--open {
+        margin-top: 0;
+        border: 1px solid $algolia-auto-complete-border;
+        min-width: 15.25rem;
+        box-shadow: none;
+        border-radius: 0;
+
+        @include breakpoint($only-mobile) {
+          border-top: none;
+          position: absolute;
+        }
+
+        @include breakpoint($only-tablet) {
+          min-width: auto;
+          width: 10.625rem;
+        }
+
+        @include breakpoint($desktop) {
+          min-width: auto;
+          width: 14.375rem;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  body {
+    &:not(.no-sticky-algolia-search-bar) {
+      .mobile--search {
+        display: block;
+      }
+
+      .block-alshaya-algolia-react-autocomplete {
+        padding: 0.5rem 0 0;
+      }
+    }
+  }
+}

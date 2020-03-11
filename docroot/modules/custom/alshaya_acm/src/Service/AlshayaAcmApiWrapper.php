@@ -242,8 +242,7 @@ class AlshayaAcmApiWrapper extends APIWrapper {
    * {@inheritdoc}
    */
   public function skuStockCheck($sku) {
-    $sku = urlencode($sku);
-    $endpoint = 'stockItems/' . $sku;
+    $endpoint = 'stockItems/' . urlencode($sku);
     $response = $this->alshayaApi->invokeApi($endpoint, [], 'GET');
 
     if (empty($response)) {

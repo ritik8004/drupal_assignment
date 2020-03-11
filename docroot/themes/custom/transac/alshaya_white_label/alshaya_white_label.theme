@@ -546,6 +546,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['pdp_layout'] = $settings->get('pdp_layout');
     $variables['display_crosssell'] = $acm_settings->get('display_crosssell');
     $variables['show_crosssell_as_matchback'] = $acm_settings->get('show_crosssell_as_matchback');
+    $variables['quantity_limit_enabled'] = $acm_settings->get('quantity_limit_enabled');
 
     // Cross sell/ Up sell items count on carousel on pdp page.
     $variables['#attached']['drupalSettings']['pdp_items_mob'] = $settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');

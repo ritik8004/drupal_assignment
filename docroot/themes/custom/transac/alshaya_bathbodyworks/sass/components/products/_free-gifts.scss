@@ -1,0 +1,17 @@
+.free-gift-listing-modal {
+  .free-gift-view {
+    .select-free-gift-link {
+      a {
+        padding: 0.6rem 1.3701rem 0.3rem;
+      }
+    }
+  }
+}
+
+.free-gift-detail-modal.ui-dialog-content {
+  button {
+    &.select-free-gift {
+      padding: 0.9rem 1.0625rem 0.6rem;
+    }
+  }
+}

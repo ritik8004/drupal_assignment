@@ -2,7 +2,7 @@ import React from 'react';
 import { connectHierarchicalMenu } from 'react-instantsearch-dom';
 
 const HierarchicalMenu = (props) => {
-  const { items, refine, createURL } = props;
+  const { items, refine, createURL, facetLevel } = props;
 
   // Setting flag to set 'All' filter to active
   // when no other filters are selected.
@@ -21,9 +21,10 @@ const HierarchicalMenu = (props) => {
         <li key={item.label}>
           <a
             href={`#${createURL(item.value)}`}
+            data-level={facetLevel}
             className={
               (item.value === window.Drupal.t('All')? "facet-item " + (noActiveFilters(items) ?
-              'is-active category-all' : '') : "facet-item " + (item.isRefined ? 'is-active' : ''))
+              'is-active category-all' : '') : "facet-item " + (item.isRefined ? 'is-active ' : '') + (item.items && item.items.length > 0 ? 'sale-item' : ''))
             }
             onClick={event => {
               event.preventDefault();
@@ -46,6 +47,7 @@ const HierarchicalMenu = (props) => {
               items={item.items}
               refine={refine}
               createURL={createURL}
+              facetLevel={facetLevel + 1}
             />
           )}
         </li>

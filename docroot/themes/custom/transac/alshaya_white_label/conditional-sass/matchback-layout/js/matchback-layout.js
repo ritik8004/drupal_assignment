@@ -75,19 +75,6 @@
   function matchbackSlider(ocObject) {
     applyMatchbackRtl(ocObject, optionMatchback);
     applyMatchbackHorizontalLazyLoad(ocObject);
-    ocObject.on('init', function (event, slick) {
-      Drupal.behaviors.pdpInstagranDots.initialSetup(ocObject);
-    });
-    Drupal.behaviors.pdpInstagranDots.attachBeforeChange(ocObject);
-    if ($(window).width() > 767) {
-      // Create Instagram Dots.
-      if (!ocObject.find('ul.slick-dots').hasClass('i-dots')) {
-        // Do initial setup again for slick dots.
-        Drupal.behaviors.pdpInstagranDots.initialSetup(ocObject);
-        // Attach the change event explicitly.
-        Drupal.behaviors.pdpInstagranDots.attachBeforeChange(ocObject);
-      }
-    }
   }
 
   // Call matchbackZoomModal() to open matchback zoom image in modal.
