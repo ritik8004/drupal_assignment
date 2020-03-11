@@ -193,37 +193,52 @@ class PaymentMethodCheckoutCom extends React.Component {
 
     return (
       <>
-        <div className="payment-form-wrapper">
-          <input type="hidden" id="payment-card-type" value={this.state.cardType} />
-          <Cleave placeholder="Enter your credit card number"
-                  options={{
-                    creditCard: true,
-                    onCreditCardTypeChanged: this.handleCardTypeChanged.bind(this),
-                  }}
-                  onChange={this.handleCardNumberChange.bind(this)}
-          />
-
-          <Cleave placeholder="mm/yy"
-                  htmlRef={(ref) => this.ccExpiry = ref }
-                  options={{
-                    date: true,
-                    dateMin: this.dateMin,
-                    datePattern: ['m', 'y'],
-                    delimiter: '/',
-                  }}
-                  onChange={this.handleCardExpiryChange.bind(this)}
-          />
-
-          <input
-            type="tel"
-            ref={this.ccCvv}
-            placeholder="CVV"
-            pattern="\d{3,4}"
-            required
-            onChange={this.handleCardCvvChange.bind(this)}
-          />
+        <div className='payment-form-wrapper'>
+          <input type='hidden' id='payment-card-type' value={this.state.cardType} />
+          <div className='spc-type-textfield'>
+            <Cleave
+              className='spc-cc-number'
+              options={{
+                creditCard: true,
+                onCreditCardTypeChanged: this.handleCardTypeChanged.bind(this),
+              }}
+              onChange={this.handleCardNumberChange.bind(this)}
+            />
+            <div className='c-input__bar'/>
+            <label>{Drupal.t('card number')}</label>
+            <div id='spc-cc-number-error' className="error" />
+          </div>
+          <div className='spc-type-textfield'>
+            <Cleave
+              className='spc-cc-expiry'
+              htmlRef={(ref) => this.ccExpiry = ref }
+              options={{
+                date: true,
+                dateMin: this.dateMin,
+                datePattern: ['m', 'y'],
+                delimiter: '/',
+              }}
+              onChange={this.handleCardExpiryChange.bind(this)}
+            />
+            <div className='c-input__bar'/>
+            <label>{Drupal.t('expiry')}</label>
+            <div id='spc-cc-expiry-error' className="error" />
+          </div>
+          <div className='spc-type-textfield'>
+            <input
+              type='tel'
+              className='spc-cc-cvv'
+              ref={this.ccCvv}
+              pattern="\d{3,4}"
+              required
+              onChange={this.handleCardCvvChange.bind(this)}
+            />
+            <div className='c-input__bar'/>
+            <label>{Drupal.t('cvv')}</label>
+            <div id='spc-cc-cvv-error' className="error" />
+          </div>
         </div>
-        <div className="card-types-wrapper">
+        <div className='card-types-wrapper'>
           {cartTypes}
         </div>
       </>

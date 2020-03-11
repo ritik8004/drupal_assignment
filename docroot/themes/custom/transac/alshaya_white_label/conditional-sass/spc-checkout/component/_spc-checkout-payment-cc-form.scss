@@ -1,0 +1,28 @@
+.payment-method.payment-method-checkout_com {
+  .payment-method-bottom-panel {
+    padding-#{$left}: 3rem;
+    padding-bottom: 1.25rem;
+    padding-#{$right}: 1.25rem;
+  }
+
+  input {
+    padding: 0;
+    border: none;
+  }
+
+  .spc-cc-number {
+    max-width: 320px;
+    width: 100%;
+    margin-bottom: 2.5rem;
+  }
+
+  .spc-cc-expiry,
+  .spc-cc-cvv {
+    max-width: 150px;
+    width: 100%;
+  }
+
+  .spc-cc-expiry {
+    margin-#{$left}: 1.25rem;
+  }
+}
