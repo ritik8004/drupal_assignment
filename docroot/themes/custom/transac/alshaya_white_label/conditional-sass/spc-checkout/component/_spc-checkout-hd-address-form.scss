@@ -25,17 +25,27 @@
         width: 100%;
       }
 
+      &.spc-address-list-member-content {
+        @include breakpoint($desktop) {
+          max-height: 37.5rem;
+          height: auto;
+        }
+
+        @include breakpoint($only-tablet) {
+          max-height: 31.25rem;
+          height: auto;
+        }
+      }
+
       @include breakpoint($desktop) {
-        max-height: 37.5rem;
-        height: auto;
+        height: 37.5rem;
         width: calc(100% - 19.75rem);
         max-width: 60.5rem;
       }
 
       @include breakpoint($only-tablet) {
         max-width: calc(100% - 1rem);
-        max-height: 31.25rem;
-        height: auto;
+        height: 31.25rem;
       }
 
       .spc-address-form {
