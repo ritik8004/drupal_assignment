@@ -596,7 +596,7 @@ class CartController {
         'action' => 'place order success',
         'order_id' => (int) $last_order,
         'cart' => $request_content['cart'],
-        'payment_method' => $request_content["data"]["paymentMethod"]["method"],
+        'payment_method' => $request_content['data']['paymentMethod']['method'],
       ];
       $this->drupal->postOrderData($data);
     }
