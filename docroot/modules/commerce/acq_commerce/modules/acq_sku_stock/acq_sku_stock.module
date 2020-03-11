@@ -24,7 +24,9 @@ function acq_sku_stock_acq_sku_product_sku_alter(SKU $sku, $product) {
     // Ensure it is a number and not null. For configurable we can get null
     // from API.
     $quantity = (float) $quantity;
-    $changed = $manager->updateStock($product['sku'], $quantity, $stock_status, $stock['max_sale_qty']);
+    $max_sale_qty = (isset($stock['use_config_max_sale_qty']) && $stock['use_config_max_sale_qty'])
+      ? 0 : (isset($stock['max_sale_qty']) ? $stock['max_sale_qty'] : 0);
+    $changed = $manager->updateStock($product['sku'], $quantity, $stock_status, $max_sale_qty);
 
     \Drupal::logger('acq_sku_stock')->info('@operation stock for sku @sku. Message: @message', [
       '@operation' => $changed ? 'Updated' : 'Processed',
