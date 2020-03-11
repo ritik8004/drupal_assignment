@@ -16,6 +16,7 @@ use Drupal\search_api\ParseMode\ParseModePluginManager;
 use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\views\Views;
 
 /**
  * Class CategoryProductListResource.
@@ -197,7 +198,7 @@ class CategoryProductListResource extends ResourceBase {
     $response_data['products'] = array_filter($response_data['products']);
 
     // Get sub categories for the current term.
-    $response_data['sub_categories'] = $this->getSubcategoryData($id);
+    $response_data['sub_categories'] = $this->getSubCategoryData($id);
 
     $response_data['total'] = $this->alshayaSearchApiQueryExecute->getResultTotalCount();
 
@@ -205,25 +206,30 @@ class CategoryProductListResource extends ResourceBase {
   }
 
   /**
-   * Get sub category data for response.
+   * Get all child terms of a given parent term if plp Mobile Value is checked.
    *
-   * @param int $id
-   *   Term id.
+   * @param int $parent_tid
+   *   Parent term id.
    *
    * @return array
    *   Data array.
    */
-  protected function getSubCategoryData(int $id) {
-    $terms = $this->productCategoryTree->allChildTerms($this->languageManager->getCurrentLanguage()->getId(), $id, FALSE, TRUE);
+  protected function getSubCategoryData(int $parent_tid) {
+    // Calling view to get the sub category list.
+    $subcategory_list_view = Views::getView('product_category_level_3');
+    $subcategory_list_view->setDisplay('block_2');
+    $subcategory_list_view->setArguments([$parent_tid]);
+    $subcategory_list_view->execute();
     $data = [];
-    foreach ($terms as $term) {
+    foreach ($subcategory_list_view->result as $subcategory_list_view_value) {
+      $sub_category_entity_list = $subcategory_list_view_value->_entity;
+      $sub_category_entity = $this->entityRepository->getTranslationFromContext($sub_category_entity_list);
       $data[] = [
-        'id' => $term->tid,
-        'label' => $term->name,
-        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
+        'id' => $sub_category_entity->get('tid')->getValue()[0]['value'],
+        'label' => $sub_category_entity->get('name')->getValue()[0]['value'],
+        'deeplink' => $this->mobileAppUtility->getDeepLink($sub_category_entity),
       ];
     }
-
     return $data;
   }
 
