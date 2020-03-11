@@ -269,40 +269,10 @@ class AlshayaAlgoliaIndexHelper {
 
     // Index color facets.
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
-    $color_code_key = $display_settings->get('swatches.plp');
-    $color_code_key = !empty($color_code_key) ? 'attr_' . $color_code_key[0] : NULL;
+    $swatch_plp_attributes = $display_settings->get('swatches.plp');
 
-    if ($color_code_key && !empty($object[$color_code_key])) {
-      foreach ($object[$color_code_key] as $key => $value) {
-        $swatch = $this->swatchesHelper->getSwatch(substr($color_code_key, 5), $value, $object['search_api_language']);
-        $swatch_data = [
-          'value' => $swatch['name'],
-          'label' => $swatch['name'],
-        ];
-
-        if ($swatch) {
-          switch ($swatch['type']) {
-            case SwatchesHelper::SWATCH_TYPE_TEXTUAL:
-              $swatch_data['swatch_text'] = $swatch['swatch'];
-              $swatch_data['label'] .= ', swatch_text:' . $swatch['swatch'];
-              break;
-
-            case SwatchesHelper::SWATCH_TYPE_VISUAL_COLOR:
-              $swatch_data['swatch_color'] = $swatch['swatch'];
-              $swatch_data['label'] .= ', swatch_color:' . $swatch['swatch'];
-              break;
-
-            case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
-              $swatch_data['swatch_image'] = $swatch['swatch'];
-              $swatch_data['label'] .= ', swatch_image:' . $swatch['swatch'];
-              break;
-
-            default:
-              continue;
-          }
-          $object[$color_code_key][$key] = $swatch_data;
-        }
-      }
+    if (!empty($swatch_plp_attributes)) {
+      $this->getSwatchFacets($object, $swatch_plp_attributes);
     }
 
     if ($product_collection = $sku->get('attr_product_collection')->getString()) {
@@ -595,6 +565,53 @@ class AlshayaAlgoliaIndexHelper {
     }
 
     return $swatches;
+  }
+
+  /**
+   * Helper function to get Swatch facets.
+   *
+   * @param array $object
+   *   The array of object being indexed.
+   * @param array $swatch_plp_attributes
+   *   The swatch plp attributes.
+   */
+  public function getSwatchFacets(array &$object, array $swatch_plp_attributes) {
+    foreach ($swatch_plp_attributes as $attr) {
+      $attr = 'attr_' . $attr;
+      if (!empty($object[$attr])) {
+        foreach ($object[$attr] as $key => $value) {
+          $swatch = $this->swatchesHelper->getSwatch(substr($attr, 5), $value, $object['search_api_language']);
+          $swatch_data = [
+            'value' => $swatch['name'],
+            'label' => $swatch['name'],
+          ];
+
+          if ($swatch) {
+            switch ($swatch['type']) {
+              case SwatchesHelper::SWATCH_TYPE_TEXTUAL:
+                $swatch_data['swatch_text'] = $swatch['swatch'];
+                $swatch_data['label'] .= ', swatch_text:' . $swatch['swatch'];
+                break;
+
+              case SwatchesHelper::SWATCH_TYPE_VISUAL_COLOR:
+                $swatch_data['swatch_color'] = $swatch['swatch'];
+                $swatch_data['label'] .= ', swatch_color:' . $swatch['swatch'];
+                break;
+
+              case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
+                $swatch_data['swatch_image'] = $swatch['swatch'];
+                $swatch_data['label'] .= ', swatch_image:' . $swatch['swatch'];
+                break;
+
+              default:
+                continue;
+            }
+            $object[$attr][$key] = $swatch_data;
+          }
+        }
+      }
+    }
+
   }
 
 }
