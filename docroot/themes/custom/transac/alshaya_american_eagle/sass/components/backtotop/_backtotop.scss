@@ -1,0 +1,19 @@
+#backtotop {
+  @include icon(chevronup, after) {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.375rem;
+    position: absolute;
+    top: 0.5625rem;
+    #{$right}: 0.5rem;
+    border-radius: 0;
+    background: transparent;
+    font-weight: bold;
+  }
+
+  #{$right}: 0;
+  height: 2.6875rem;
+  width: 3.375rem;
+  border: 1px solid $btt_border;
+  background: $btt_bg;
+}
