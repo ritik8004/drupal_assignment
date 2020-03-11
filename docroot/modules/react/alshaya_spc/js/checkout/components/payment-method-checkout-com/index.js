@@ -35,13 +35,10 @@ class PaymentMethodCheckoutCom extends React.Component {
     let valid = true;
     const type = document.getElementById('payment-card-type').value;
 
-    if (event.target.rawValue.length < 15) {
+    if (this.state.acceptedCards.indexOf(type) === -1) {
       valid = false;
     }
-    else if (luhn.validate(event.target.rawValue) === false) {
-      valid = false;
-    }
-    else if (this.state.acceptedCards.indexOf(type) === -1) {
+    else if (luhn.validate(event.target.rawValue, type) === false) {
       valid = false;
     }
 
