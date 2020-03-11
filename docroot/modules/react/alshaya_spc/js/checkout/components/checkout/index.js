@@ -206,7 +206,7 @@ export default class Checkout extends React.Component {
             <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
-            <PaymentMethods refreshCart={this.refreshCart} cart={this.state.cart} />
+            <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={this.state.cart} />
             {(this.state.cart.cart.delivery_type === 'hd') ? (
               <HDBillingAddress
                 refreshCart={this.refreshCart}
