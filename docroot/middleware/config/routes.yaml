@@ -47,3 +47,8 @@ checkoutcom_payment_error:
     path: /payment/checkout-com-error
     controller: App\Controller\PaymentController::handleCheckoutComError
     methods: GET
+
+checkoutcom_cards:
+    path: /checkout-com/cards
+    controller: App\Controller\CardController::getCards
+    methods: GET
