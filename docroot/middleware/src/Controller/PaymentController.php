@@ -95,7 +95,7 @@ class PaymentController {
     }
 
     $cart = $this->cart->getCart($data['cart_id']);
-    if (empty($cart)) {
+    if (empty($cart) || !empty($cart['error'])) {
       throw new NotFoundHttpException();
     }
 
@@ -132,13 +132,20 @@ class PaymentController {
       ];
 
       // Push the additional data to cart.
-      $this->cart->updatePayment(
+      $response = $this->cart->updatePayment(
         $cart['cart']['id'],
         $payment_data,
         ['action' => 'update payment']
       );
+      if (empty($response) || !empty($response['error'])) {
+        throw new \Exception($response['error_message'], $response['error_code']);
+      }
 
-      $this->cart->placeOrder($cart['cart']['id'], ['paymentMethod' => $payment_data]);
+      // Place order.
+      $response = $this->cart->placeOrder($cart['cart']['id'], ['paymentMethod' => $payment_data]);
+      if (empty($response) || !empty($response['error'])) {
+        throw new \Exception($response['error_message'], $response['error_code']);
+      }
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart: @cart. Payment method @method.', [
@@ -177,8 +184,8 @@ class PaymentController {
     }
 
     $cart = $this->cart->getCart($data['cart_id']);
-    if (empty($cart)) {
-      throw new NotFoundHttpException();
+    if (empty($cart) || !empty($cart['error'])) {
+      return new RedirectResponse('/' . $data['data']['langcode'] . '/cart', 302);
     }
 
     return new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
