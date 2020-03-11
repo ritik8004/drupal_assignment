@@ -54,4 +54,9 @@ final class CartActions {
    */
   const CART_PAYMENT_UPDATE = 'update payment';
 
+  /**
+   * Action used for final payment push before place order.
+   */
+  const CART_PAYMENT_FINALISE = 'finalise payment';
+
 }

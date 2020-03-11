@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Service\CheckoutCom\APIWrapper;
+use App\Service\Drupal\DrupalInfo;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
@@ -10,6 +12,13 @@ use App\Service\Magento\CartActions;
  * Class Cart.
  */
 class Cart {
+
+  /**
+   * Static cache for cart.
+   *
+   * @var array
+   */
+  protected static $cart = [];
 
   /**
    * Magento service.
@@ -26,11 +35,32 @@ class Cart {
   protected $magentoApiWrapper;
 
   /**
+   * Service to get Drupal Info.
+   *
+   * @var \App\Service\Drupal\DrupalInfo
+   */
+  protected $drupalInfo;
+
+  /**
    * Utility.
    *
    * @var \App\Service\Utility
    */
   protected $utility;
+
+  /**
+   * Checkout.com API Wrapper.
+   *
+   * @var \App\Service\CheckoutCom\APIWrapper
+   */
+  protected $checkoutComApi;
+
+  /**
+   * Payment Data provider.
+   *
+   * @var \App\Service\PaymentData
+   */
+  protected $paymentData;
 
   /**
    * Cart constructor.
@@ -39,15 +69,27 @@ class Cart {
    *   Magento info service.
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
    *   Magento API Wrapper.
+   * @param \App\Service\Drupal\DrupalInfo $drupal_info
+   *   Service to get Drupal Info.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\CheckoutCom\APIWrapper $checkout_com_api
+   *   Checkout.com API Wrapper.
+   * @param \App\Service\PaymentData $payment_data
+   *   Payment Data provider.
    */
   public function __construct(MagentoInfo $magento_info,
                               MagentoApiWrapper $magento_api_wrapper,
-                              Utility $utility) {
+                              DrupalInfo $drupal_info,
+                              Utility $utility,
+                              APIWrapper $checkout_com_api,
+                              PaymentData $payment_data) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
+    $this->drupalInfo = $drupal_info;
     $this->utility = $utility;
+    $this->checkoutComApi = $checkout_com_api;
+    $this->paymentData = $payment_data;
   }
 
   /**
@@ -62,6 +104,10 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart(int $cart_id) {
+    if (isset(static::$cart[$cart_id])) {
+      return static::$cart[$cart_id];
+    }
+
     $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
@@ -463,28 +509,84 @@ class Cart {
    *
    * @param int $cart_id
    *   Cart id.
-   * @param array $payment_data
+   * @param array $data
    *   Payment info.
-   * @param string $action
-   *   Action to perform.
+   * @param array $extension
+   *   Cart extension.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function updatePayment(int $cart_id, array $payment_data, string $action) {
-    $data = [
-      'extension' => (object) [
-        'action' => $action,
-      ],
+  public function updatePayment(int $cart_id, array $data, array $extension) {
+    $update = [
+      'extension' => (object) $extension,
     ];
 
-    $data['payment'] = [
-      'method' => $payment_data['payment']['method'],
-      'additional_data' => $payment_data['payment']['additional_data'],
+    $update['payment'] = [
+      'method' => $data['method'],
+      'additional_data' => $data['additional_data'],
     ];
-    return $this->updateCart($data, $cart_id);
+
+    return $this->updateCart($update, $cart_id);
+  }
+
+  /**
+   * Process payment data before placing order.
+   *
+   * @param int $cart_id
+   *   Cart ID.
+   * @param string $method
+   *   Payment method.
+   * @param array $additional_info
+   *   Additional info.
+   *
+   * @return array
+   *   Processed payment data.
+   *
+   * @throws \Exception
+   */
+  public function processPaymentData(int $cart_id, string $method, array $additional_info) {
+    $additional_data = [];
+
+    // Method specific code. @TODO: Find better way to handle this.
+    switch ($method) {
+      case 'checkout_com':
+        $additional_data = [
+          'card_token_id' => $additional_info['id'],
+          'udf3' => NULL,
+        ];
+
+        // Validate bin if MADA enabled.
+        $additional_data['udf1'] = $this->checkoutComApi->validateMadaBin($additional_info['card']['bin'])
+          ? 'MADA'
+          : '';
+
+        // Process 3D if MADA or 3D Forced.
+        if ($additional_data['udf1'] || $this->checkoutComApi->is3dForced()) {
+          $response = $this->checkoutComApi->request3dSecurePayment(
+            $this->getCart($cart_id),
+            $additional_data,
+            APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT
+          );
+
+          if (isset($response['responseCode'])
+            && $response['responseCode'] == APIWrapper::SUCCESS
+            && !empty($response[APIWrapper::REDIRECT_URL])) {
+            // We will use this again to redirect back to Drupal.
+            $response['langcode'] = $this->drupalInfo->getDrupalLangcode();
+            $this->paymentData->setPaymentData($cart_id, $response['id'], $response);
+            throw new \Exception($response[APIWrapper::REDIRECT_URL], 302);
+          }
+
+          throw new \Exception('Failed to initiate 3D request.', 500);
+        }
+
+        break;
+    }
+
+    return $additional_data;
   }
 
   /**
@@ -504,9 +606,12 @@ class Cart {
     $url = sprintf('carts/%d/updateCart', $cart_id);
 
     try {
-      return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      static::$cart[$cart_id] = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      return static::$cart[$cart_id];
     }
     catch (\Exception $e) {
+      static::$cart[$cart_id] = NULL;
+
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
@@ -606,6 +711,20 @@ class Cart {
     ];
 
     return $this->magentoApiWrapper->doRequest('GET', $url, $query);
+  }
+
+  /**
+   * Wrapper function to get cleaned cart data to log.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return string
+   *   Cleaned cart data as JSON string.
+   */
+  public function getCartDataToLog(array $cart) {
+    // TODO: Remove sensitive info.
+    return json_encode($cart);
   }
 
 }

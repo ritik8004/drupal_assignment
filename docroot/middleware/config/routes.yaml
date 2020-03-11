@@ -37,3 +37,13 @@ get_order:
     path: /order/{order_id}
     controller: App\Controller\OrdersController::getOrder
     methods: GET
+
+checkoutcom_payment_success:
+    path: /payment/checkout-com-success
+    controller: App\Controller\PaymentController::handleCheckoutComSuccess
+    methods: GET
+
+checkoutcom_payment_error:
+    path: /payment/checkout-com-error
+    controller: App\Controller\PaymentController::handleCheckoutComError
+    methods: GET

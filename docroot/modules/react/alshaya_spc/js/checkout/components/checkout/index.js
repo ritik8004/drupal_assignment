@@ -32,6 +32,8 @@ export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
 
+    this.paymentMethods = React.createRef();
+
     this.state = {
       wait: true,
       cart: null,
@@ -168,6 +170,10 @@ export default class Checkout extends React.Component {
     );
   };
 
+  validateBeforePlaceOrder = () => {
+    this.paymentMethods.current.validateBeforePlaceOrder();
+  };
+
   render() {
     // While page loads and all info available.
 
@@ -200,7 +206,7 @@ export default class Checkout extends React.Component {
             <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
-            <PaymentMethods refreshCart={this.refreshCart} cart={this.state.cart} />
+            <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={this.state.cart} />
             {(this.state.cart.cart.delivery_type === 'hd') ? (
               <HDBillingAddress
                 refreshCart={this.refreshCart}
@@ -221,7 +227,7 @@ export default class Checkout extends React.Component {
             <ConditionalView condition={window.innerWidth > 768}>
               {termConditions}
             </ConditionalView>
-            <CompletePurchase cart={this.state.cart} />
+            <CompletePurchase cart={this.state.cart} validateBeforePlaceOrder={this.validateBeforePlaceOrder} />
           </div>
           <div className="spc-sidebar">
             <OrderSummaryBlock item_qty={this.state.cart.cart.items_qty} items={this.state.cart.cart.items} totals={this.state.cart.cart.totals} in_stock={this.state.cart.cart.in_stock} cart_promo={this.state.cart.cart.cart_promo} show_checkout_button={false} />

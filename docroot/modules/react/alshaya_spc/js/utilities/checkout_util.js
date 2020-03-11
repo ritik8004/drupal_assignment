@@ -56,10 +56,16 @@ export const placeOrder = function (cart_id, payment_method) {
     })
     .then(
       (response) => {
-        // Remove cart info from storage.
-        removeCartFromStorage();
+        if (response.error === undefined) {
+          // Remove cart info from storage.
+          removeCartFromStorage();
 
-        window.location = Drupal.url('checkout/confirmation');
+          window.location = Drupal.url('checkout/confirmation');
+          return;
+        }
+
+        // @TODO: Show exception to user.
+        console.error(response.error);
       },
       (error) => {
         // Processing of error here.

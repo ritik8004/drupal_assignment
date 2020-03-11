@@ -83,7 +83,7 @@ export const updateCartItemData = function (action, sku, quantity) {
     });
 };
 
-export const addPaymentMethodInCart = function (action, data) {
+export const addPaymentMethodInCart = (action, data) => {
   let cart = cartAvailableInStorage();
   if (cart === false) {
     return null;
@@ -98,8 +98,8 @@ export const addPaymentMethodInCart = function (action, data) {
     action,
     payment_info: data,
     cart_id: cart,
-  })
-    .then((response) => response.data, (error) => {
+  }).then((response) => response.data, (error) => {
     // Processing of error here.
-    });
+    console.error(error);
+  });
 };

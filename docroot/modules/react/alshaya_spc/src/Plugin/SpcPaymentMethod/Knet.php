@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
-use Drupal\Component\Plugin\PluginBase;
+use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
 
 /**
  * KNET payment method for SPC.
@@ -13,4 +13,6 @@ use Drupal\Component\Plugin\PluginBase;
  *   hasForm = false
  * )
  */
-class Knet extends PluginBase {}
+class Knet extends AlshayaSpcPaymentMethodPluginBase {
+
+}

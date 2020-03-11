@@ -504,14 +504,7 @@ class CartController {
 
         // Then add item to the cart.
         $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], CartActions::CART_ADD_ITEM, $request_content['options']);
-
-        if (!empty($cart['error'])) {
-          return new JsonResponse($cart);
-        }
-
-        // Here we will do the processing of cart to make it in required format.
-        $cart = $this->getProcessedCartData($cart);
-        return new JsonResponse($cart);
+        break;
 
       case CartActions::CART_ADD_ITEM:
       case CartActions::CART_UPDATE_ITEM:
@@ -522,27 +515,13 @@ class CartController {
           $options = $request_content['options'];
         }
         $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], $action, $options);
-
-        if (!empty($cart['error'])) {
-          return new JsonResponse($cart);
-        }
-
-        // Here we will do the processing of cart to make it in required format.
-        $cart = $this->getProcessedCartData($cart);
-        return new JsonResponse($cart);
+        break;
 
       case CartActions::CART_APPLY_COUPON:
       case CartActions::CART_REMOVE_COUPON:
         $cart_id = $request_content['cart_id'];
         $cart = $this->cart->applyRemovePromo($cart_id, $request_content['promo'], $action);
-
-        if (!empty($cart['error'])) {
-          return new JsonResponse($cart);
-        }
-
-        // Here we will do the processing of cart to make it in required format.
-        $cart = $this->getProcessedCartData($cart);
-        return new JsonResponse($cart);
+        break;
 
       case CartActions::CART_SHIPPING_UPDATE:
         $cart_id = $request_content['cart_id'];
@@ -610,26 +589,7 @@ class CartController {
 
           $cart = $this->cart->addShippingInfo($cart_id, $shipping_info, $action);
         }
-
-        if (!empty($cart['error'])) {
-          return new JsonResponse($cart);
-        }
-
-        // Here we will do the processing of cart to make it in required format.
-        $cart = $this->getProcessedCartData($cart);
-        return new JsonResponse($cart);
-
-      case CartActions::CART_PAYMENT_UPDATE:
-        $cart_id = $request_content['cart_id'];
-        $cart = $this->cart->updatePayment($cart_id, $request_content['payment_info'], $action);
-
-        if (!empty($cart['error'])) {
-          return new JsonResponse($cart);
-        }
-
-        // Here we will do the processing of cart to make it in required format.
-        $cart = $this->getProcessedCartData($cart);
-        return new JsonResponse($cart);
+        break;
 
       case CartActions::CART_BILLING_UPDATE:
         $cart_id = $request_content['cart_id'];
@@ -640,10 +600,54 @@ class CartController {
           return new JsonResponse($cart);
         }
 
-        // Here we will do the processing of cart to make it in required format.
-        $cart = $this->getProcessedCartData($cart);
-        return new JsonResponse($cart);
+      case CartActions::CART_PAYMENT_FINALISE:
+        $cart_id = $request_content['cart_id'];
+        $extension = [
+          'action' => 'update payment',
+          'attempted_payment' => 1,
+        ];
+
+        try {
+          $request_content['payment_info']['payment']['additional_data'] = $this->cart->processPaymentData(
+            $cart_id,
+            $request_content['payment_info']['payment']['method'],
+            $request_content['payment_info']['payment']['additional_data']
+          );
+        }
+        catch (\Exception $e) {
+          if ($e->getCode() === 302) {
+            return new JsonResponse([
+              'success' => TRUE,
+              'redirectUrl' => $e->getMessage(),
+            ]);
+          }
+          elseif ($e->getCode() === 400) {
+            return new JsonResponse([
+              'error' => TRUE,
+              'message' => $e->getMessage(),
+            ]);
+          }
+        }
+
+        $cart = $this->cart->updatePayment($cart_id, $request_content['payment_info']['payment'], $extension);
+        break;
+
+      case CartActions::CART_PAYMENT_UPDATE:
+        $cart_id = $request_content['cart_id'];
+        $extension = [
+          'action' => 'update payment',
+        ];
+        $cart = $this->cart->updatePayment($cart_id, $request_content['payment_info']['payment'], $extension);
+        break;
     }
+
+    if (empty($cart) || !empty($cart['error'])) {
+      return new JsonResponse($cart ?? []);
+    }
+
+    // Here we will do the processing of cart to make it in required format.
+    $cart = $this->getProcessedCartData($cart);
+    return new JsonResponse($cart);
   }
 
   /**

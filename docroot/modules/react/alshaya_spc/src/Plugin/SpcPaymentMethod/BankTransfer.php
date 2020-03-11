@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
-use Drupal\Component\Plugin\PluginBase;
+use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
 
 /**
  * Bank transfer payment method for SPC.
@@ -13,4 +13,6 @@ use Drupal\Component\Plugin\PluginBase;
  *   hasForm = false
  * )
  */
-class BankTransfer extends PluginBase {}
+class BankTransfer extends AlshayaSpcPaymentMethodPluginBase {
+
+}

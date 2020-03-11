@@ -30,11 +30,4 @@ class AlshayaSpcPaymentMethod extends Plugin {
    */
   public $label;
 
-  /**
-   * If plugin has form.
-   *
-   * @var bool
-   */
-  public $hasForm;
-
 }

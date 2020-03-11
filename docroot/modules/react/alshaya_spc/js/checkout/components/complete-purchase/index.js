@@ -10,6 +10,20 @@ export default class CompletePurchase extends React.Component {
    */
   placeOrder = (e) => {
     e.preventDefault();
+
+    try {
+      this.props.validateBeforePlaceOrder();
+    }
+    catch (error) {
+      // Error 200 means everything is fine.
+      // Place order will be done after payment validation is completed.
+      if (error !== 200) {
+        console.error(error);
+      }
+
+      return;
+    }
+
     const { cart } = this.props;
     placeOrder(cart.cart.cart_id, cart.selected_payment_method);
   };
