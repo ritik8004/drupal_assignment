@@ -13,14 +13,20 @@ use Drupal\Core\Site\Settings;
  * Add new field as quantity set.
  */
 function alshaya_we_transac_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
+
   $manager->updateConfigs(
-    ['alshaya_acm_product.sku_base_fields', 'acq_sku.configurable_form_settings'],
+    ['alshaya_acm_product.sku_base_fields'],
     'alshaya_acm_product'
   );
 
-  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
-  $sku_fields_manager->addFields();
+  $manager->updateConfigs(
+    ['acq_sku.configurable_form_settings'],
+    'acq_sku'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
 }
 
 /**
