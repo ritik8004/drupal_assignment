@@ -137,7 +137,7 @@
       &--open {
         .react-autosuggest__input {
           @include breakpoint($only-mobile) {
-            padding-#{$left}: 3rem !important;
+            padding-#{$left}: 0;
           }
         }
       }
@@ -145,17 +145,28 @@
       .trending-title {
         color: $algolia-trending-title-text;
         font-family: $alshaya-bold;
-        text-transform: capitalize;
+        text-transform: uppercase;
         padding: 0.625rem !important;
+        font-weight: 600;
+
+        @include breakpoint ($desktop) {
+          font-size: 0.75rem;
+        }
       }
 
-      .react-autosuggest__suggestion .aa-suggestion {
-        &:hover {
-          background-color: $algolia-search-suggestion-hover-bg;
-        }
+      .react-autosuggest__suggestions-list .react-autosuggest__suggestion {
+        .aa-suggestion {
+          &:hover {
+            background-color: $algolia-search-suggestion-hover-bg;
+          }
 
-        .suggested-text {
-          padding: 0.625rem !important;
+          .suggested-text {
+            padding: 0.625rem !important;
+
+            @include breakpoint($desktop) {
+              font-size: 0.75rem;
+            }
+          }
         }
       }
     }
@@ -177,8 +188,14 @@
           position: absolute;
         }
 
+        @include breakpoint($only-tablet) {
+          min-width: auto;
+          width: 10.625rem;
+        }
+
         @include breakpoint($desktop) {
-          margin-top: 0.4375rem;
+          min-width: auto;
+          width: 14.375rem;
         }
       }
     }

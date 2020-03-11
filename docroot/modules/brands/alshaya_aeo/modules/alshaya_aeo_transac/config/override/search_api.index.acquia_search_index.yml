@@ -1,0 +1,341 @@
+field_settings:
+  attr_color_family:
+    label: 'Color'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_family
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_fit:
+    label: 'Fit'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_fit
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_destruction:
+    label: 'Destruction'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_destruction
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_fabric:
+    label: 'Fabric'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_fabric
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_push_lining_level:
+    label: 'Push Lining Level'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_push_lining_level
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_wash:
+    label: 'Wash'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_wash
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_rise:
+    label: 'Rise'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_rise
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_mix_match_fit:
+    label: 'Mix Match Fit'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_mix_match_fit
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_inseams_offered:
+    label: 'Inseams Offered'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_inseams_offered
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_inseam_length:
+    label: 'Inseam Length'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_inseam_length
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_activity:
+    label: 'Activity'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_activity
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_body:
+    label: 'Body'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_body
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_fit_type:
+    label: 'Fit Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_fit_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_fly_function:
+    label: 'Fly Function'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_fly_function
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_length:
+    label: 'Length'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_length
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_lining:
+    label: 'Lining'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_lining
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_neckline:
+    label: 'Neckline'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_neckline
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_pack_size:
+    label: 'Pack Size'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_pack_size
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_straps:
+    label: 'Straps'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_straps
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_benefit:
+    label: 'Benefit'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_benefit
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_stretch:
+    label: 'Stretch'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_stretch
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_stretch_level:
+    label: 'Stretch Level'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_stretch_level
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_padding:
+    label: 'Padding'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_padding
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_shape:
+    label: 'Shape'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_shape
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_shape_material_type:
+    label: 'Shape Material Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_shape_material_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_silhouette:
+    label: 'Silhouette'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_silhouette
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_sleeve_length:
+    label: 'Sleeve Length'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_sleeve_length
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_waistband:
+    label: 'Waistband'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_waistband
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_waistband_detail:
+    label: 'Waistband Detail'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_waistband_detail
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_fabric_content:
+    label: 'Fabric Content'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_fabric_content
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_graphic_pattern:
+    label: 'Graphic pattern'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_graphic_pattern
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_embellishment_trim:
+    label: 'Embellishment trim'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_embellishment_trim
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_collection:
+    label: 'Collection'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_collection
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_coverage:
+    label: 'Coverage'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_coverage
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku

@@ -85,6 +85,7 @@ class Analytics extends CheckoutPaneBase implements CheckoutPaneInterface {
     $request = \Drupal::request();
 
     $cart->setExtension('user_id', $cart->customerId());
+    $cart->setExtension('user_type', \Drupal::currentUser()->id() ? 'Logged in User' : 'Guest User');
 
     // GA / Tracking id added into form via javascript.
     $cart->setExtension('ga_client_id', $client_id);

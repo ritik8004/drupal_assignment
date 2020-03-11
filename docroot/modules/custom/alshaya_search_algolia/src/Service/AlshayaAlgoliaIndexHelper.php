@@ -18,6 +18,8 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
+use Drupal\Core\Config\ConfigFactory;
+use Drupal\file\FileInterface;
 
 /**
  * Class AlshayaAlgoliaIndexHelper.
@@ -99,6 +101,13 @@ class AlshayaAlgoliaIndexHelper {
   protected $productCategoryManager;
 
   /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
+  protected $configFactory;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -121,6 +130,8 @@ class AlshayaAlgoliaIndexHelper {
    *   The SKU price helper service.
    * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryManager $product_category_manager
    *   The product category manager service.
+   * @param \Drupal\Core\Config\ConfigFactory $config_factory
+   *   The config factory service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -135,7 +146,8 @@ class AlshayaAlgoliaIndexHelper {
     EntityRepositoryInterface $entity_repository,
     TimeInterface $date_time,
     SkuPriceHelper $sku_price_helper,
-    ProductCategoryManager $product_category_manager
+    ProductCategoryManager $product_category_manager,
+    ConfigFactory $config_factory
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -147,6 +159,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->dateTime = $date_time;
     $this->skuPriceHelper = $sku_price_helper;
     $this->productCategoryManager = $product_category_manager;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -236,7 +249,7 @@ class AlshayaAlgoliaIndexHelper {
     $object['media'] = $this->getMediaItems($sku, $product_color);
 
     // Product Swatches.
-    $swatches = $this->skuImagesManager->getSwatchData($sku);
+    $swatches = $this->getAlgoliaSwatchData($sku);
     if (isset($swatches['swatches'])) {
       $object['swatches'] = array_values($swatches['swatches']);
     }
@@ -365,7 +378,7 @@ class AlshayaAlgoliaIndexHelper {
     $list = [];
     foreach ($categories as $category) {
       // Skip the term which is disabled.
-      if ($category->get('field_commerce_status')->getString() !== '1' || $category->get('field_category_include_menu')->getString() !== '1') {
+      if ($category->get('field_commerce_status')->getString() !== '1') {
         continue;
       }
       $parents = array_reverse($this->termStorage->loadAllParents($category->id()));
@@ -492,6 +505,45 @@ class AlshayaAlgoliaIndexHelper {
       }
     }
     return array_values($list);
+  }
+
+  /**
+   * Get Swatches Data for particular configurable sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Swatches data.
+   */
+  public function getAlgoliaSwatchData(SKUInterface $sku): array {
+    $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
+    $swatches = $this->skuImagesManager->getSwatchData($sku);
+
+    if (empty($swatches) || empty($swatches['swatches'])) {
+      return [];
+    }
+
+    $index_product_image_url = TRUE;
+    if (!$display_settings->get('color_swatches_show_product_image')) {
+      $index_product_image_url = FALSE;
+    }
+
+    foreach ($swatches['swatches'] as $key => $swatch) {
+      if ($index_product_image_url) {
+        $child = SKU::loadFromSku($swatch['child_sku_code']);
+        $swatch_product_image = $child->getThumbnail();
+        // If we have image for the product.
+        if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
+          $url = file_create_url($swatch_product_image['file']->getFileUri());
+          $swatch['product_image_url'] = $url;
+        }
+      }
+
+      $swatches['swatches'][$key] = $swatch;
+    }
+
+    return $swatches;
   }
 
 }

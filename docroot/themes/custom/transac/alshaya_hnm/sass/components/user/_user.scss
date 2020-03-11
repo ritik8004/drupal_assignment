@@ -283,7 +283,7 @@
         width: 33.5%;
       }
 
-      @include icon(info, before) {
+      @include icon(infomation, before) {
         font-size: 1.8rem;
         margin-#{$right}: 0.8rem;
         vertical-align: bottom;

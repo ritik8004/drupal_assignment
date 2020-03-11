@@ -57,7 +57,6 @@
       text-align: center;
       display: inline-block;
       background: $primary_dropdown_arrow_bg;
-      border-#{$left}: 1px solid $primary_dropdown_arrow_left_border;
       color: $primary_dropdown_arrow_icon;
     }
   }
@@ -78,9 +77,7 @@
     text-align: center;
     background-color: $primary_dropdown_arrow_bg;
     width: 2.1875rem;
-    height: 32px;
     height: 2rem;
-    border-#{$left}: 1px solid $primary_dropdown_arrow_left_border;
     color: $primary_dropdown_arrow_icon;
 
     @include breakpoint($tablet) {
