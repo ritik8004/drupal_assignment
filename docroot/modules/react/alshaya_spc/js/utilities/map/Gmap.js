@@ -7,7 +7,7 @@ export default class Gmap {
   constructor() {
     this.map = {
       settings: {
-        zoom: (drupalSettings.map.center.length > 0 && ({}).hasOwnProperty.call(drupalSettings.map.center, 'zoom')) ? drupalSettings.map.center.zoom : 7,
+        zoom: (typeof drupalSettings.map.center !== 'undefined' && ({}).hasOwnProperty.call(drupalSettings.map.center, 'zoom')) ? drupalSettings.map.center.zoom : 7,
         maxZoom: 18,
         zoomControl: true,
         fullscreenControl: false,
