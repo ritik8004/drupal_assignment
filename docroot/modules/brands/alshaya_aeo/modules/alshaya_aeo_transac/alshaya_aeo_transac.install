@@ -5,14 +5,14 @@
  * Install, uninstall, update function for alshaya_aeo_transac.
  */
 
-use Drupal\Core\Site\Settings;
+use Drupal\block\Entity\Block;
 
 /**
  * Implements hook_install().
  */
 function alshaya_aeo_transac_install() {
-  // Enable and set alshaya_american_eagle as default theme and set the site logo,
-  // favicon icon and email logo path.
+  // Enable and set alshaya_american_eagle as default theme and set,
+  // the site logo favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_american_eagle');
 
   /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
@@ -50,4 +50,24 @@ function alshaya_aeo_transac_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
+
+  // Disable color block as color family is being used as color facet.
+  $blocks = [
+    'plpcolor' => 'plpcolorfamily',
+    'promocolor' => 'promocolorfamily',
+    'color' => 'colorfamily',
+  ];
+
+  foreach ($blocks as $old_id => $new_id) {
+    $old_block = Block::load($old_id);
+    $new_block = Block::load($new_id);
+
+    // Set weight of new block same as old block.
+    $new_block->setWeight($old_block->getWeight());
+    $new_block->save();
+
+    // Keep the old block disabled.
+    $old_block->disable();
+    $old_block->save();
+  }
 }
