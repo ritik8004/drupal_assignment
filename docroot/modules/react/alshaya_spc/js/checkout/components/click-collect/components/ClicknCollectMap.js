@@ -27,7 +27,7 @@ class ClicknCollectMap extends React.Component {
     // can be provided from the caller in props.
     window.spcMap.map.googleMap = this.createGoogleMap();
     this.googleMap.setCurrentMap(window.spcMap.map.googleMap);
-    if (this.props.markers) {
+    if (this.props.markers !== null && this.props.markers.length > 0) {
       this.placeMarkers();
     }
     else {
@@ -37,7 +37,7 @@ class ClicknCollectMap extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.coords !== this.props.coords || prevProps.markers !== this.props.markers) {
-      if (this.props.markers) {
+      if (this.props.markers !== null && this.props.markers.length > 0) {
         this.placeMarkers();
       }
       else {
