@@ -1,3 +1,11 @@
 .ie.alias--free-design-services #edit-banner img {
   width: 100%;
 }
+
+.ie .site-brand-home a img {
+  width: 12.5rem;
+
+  html[lang=ar] & {
+    width: 10rem;
+  }
+}
