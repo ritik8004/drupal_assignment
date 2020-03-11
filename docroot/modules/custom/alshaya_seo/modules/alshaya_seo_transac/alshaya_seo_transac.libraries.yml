@@ -15,6 +15,7 @@ gtm_algolia:
     js/alshaya_seo.gtm.algolia.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
+    - core/drupal.debounce
 
 checkout_login:
   version: 1.x
@@ -26,3 +27,28 @@ checkout_login:
 gtm_spc_cart:
   js:
     js/alshaya_seo.gtm.spc_cart.js: {}
+
+product_list:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.product_list.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - alshaya_seo_master/jquery_is_in_viewport
+    - core/drupal.debounce
+search_list:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.search_list.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - alshaya_seo_master/jquery_is_in_viewport
+    - core/drupal.debounce
+product_slider:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.product_slider.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - alshaya_seo_master/jquery_is_in_viewport
+    - core/drupal.debounce
