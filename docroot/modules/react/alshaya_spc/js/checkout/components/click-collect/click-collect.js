@@ -249,7 +249,7 @@ class ClickCollect extends React.Component {
   finalizeStore = (e, store_code) => {
     e.preventDefault();
     if (window.innerWidth < 768) {
-      this.toggleFullScreen();
+      this.toggleFullScreen(false);
     }
 
     // Find the store object with the given store-code from the store list.
@@ -270,7 +270,10 @@ class ClickCollect extends React.Component {
       return;
     }
 
-    if (document.fullscreenElement) {
+    if (document.fullscreenElement || fullscreen === false) {
+      if (!document.fullscreenElement) {
+        return;
+      }
       let self = this;
       this.setState({
         mapFullScreen: false
