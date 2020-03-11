@@ -152,7 +152,7 @@ class PaymentController {
         ['@cart_id' => $cart['cart']['id'], '@message' => $e->getMessage()]
       );
 
-      return new RedirectResponse('/' . $data['langcode'] . '/checkout', 302);
+      return new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
     }
 
     return new RedirectResponse('/' . $data['data']['langcode'] . '/checkout/confirmation', 302);
@@ -164,16 +164,24 @@ class PaymentController {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to cart or checkout page.
    */
-  public function handleCheckoutComFailure() {
+  public function handleCheckoutComError() {
     $payment_token = $this->request->query->get('cko-payment-token') ?? '';
 
     if (empty($payment_token)) {
       throw new NotFoundHttpException('Payment token missing.');
     }
 
-    // @TODO: Check and handle failure.
-    $data = [];
-    return new RedirectResponse('/' . $data['langcode'] . '/checkout', 302);
+    $data = $this->paymentData->getPaymentDataByUniqueId($payment_token);
+    if (empty($data)) {
+      throw new NotFoundHttpException();
+    }
+
+    $cart = $this->cart->getCart($data['cart_id']);
+    if (empty($cart)) {
+      throw new NotFoundHttpException();
+    }
+
+    return new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
   }
 
 }
