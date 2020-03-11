@@ -72,7 +72,7 @@ class AlshayaGtmManager {
     'alshaya_spc.checkout' => 'checkout click and collect page',
     'alshaya_spc.checkout' => 'checkout delivery page',
     'acq_checkout.form:payment' => 'checkout payment page',
-    'acq_checkout.form:confirmation' => 'purchase confirmation page',
+    'alshaya_spc.checkout.confirmation' => 'purchase confirmation page',
     'view.stores_finder.page_2' => 'store finder',
     'view.stores_finder.page_1' => 'store finder',
     'entity.webform.canonical:alshaya_contact' => 'contact us',
