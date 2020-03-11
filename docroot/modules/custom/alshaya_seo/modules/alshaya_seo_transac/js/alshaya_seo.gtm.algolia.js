@@ -3,7 +3,7 @@
  * JS code to integrate with GTM for Algolia.
  */
 
-(function ($, Drupal, dataLayer) {
+(function ($, Drupal, dataLayer, debounce) {
   'use strict';
 
   var searchQuery = [];
@@ -12,6 +12,10 @@
   // Bind for Algolia Search page. No impact if Algolia search not enabled
   // as selector won't be available.
   $(document).once('seoGoogleTagManager').on('search-results-updated', '#alshaya-algolia-search', function (event, noOfResult) {
+    // Allow for aloglia search result.
+    if (!$('#alshaya-algolia-search').hasClass('show-algolia-result') && !$('#alshaya-algolia-search').is(':visible')) {
+      return;
+    }
     // Avoid triggering again for each page.
     var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val().trim();
     if (_.indexOf(searchQuery, currentsearch) < 0 && initNoOfResults !== noOfResult) {
@@ -30,10 +34,22 @@
       });
     }
 
+    Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
+    $(window).once('alshaya-seo-gtm-product-search-algolia').on('scroll', debounce(function (event) {
+      Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
+    }, 500));
+  });
+
+  /**
+   * Helper function to push productImpression to GTM.
+   *
+   * @param customerType
+   */
+  Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression = function () {
     // Send impression for each product added on page (page 1 or X).
     var searchImpressions = [];
-    $('[gtm-type="gtm-product-link"]', $(this)).each(function () {
-      if (!$(this).hasClass('impression-processed')) {
+    $('#alshaya-algolia-search [gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible').each(function () {
+      if ($(this).isElementInViewPort(0)) {
         $(this).addClass('impression-processed');
         var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
         impression.list = 'Search Results Page';
@@ -53,7 +69,8 @@
     if (searchImpressions.length > 0) {
       Drupal.alshaya_seo_gtm_push_impressions(drupalSettings.reactTeaserView.price.currency, searchImpressions);
     }
-  });
+  };
+
   // Push Filter event to GTM.
   $('body').once('bind-facet-item-click').on('click','.facet-item', function(event) {
     if (!$(this).hasClass('is-active')) {
@@ -74,4 +91,4 @@
     }
   });
 
-})(jQuery, Drupal, dataLayer);
+})(jQuery, Drupal, dataLayer, Drupal.debounce);
