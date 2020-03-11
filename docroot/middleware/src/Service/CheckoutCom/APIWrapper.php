@@ -356,8 +356,12 @@ class APIWrapper {
     $params['attemptN3D'] = FALSE;
     // Use the IP address from Acquia Cloud ENV variable.
     $params['customerIp'] = $_ENV['AH_CLIENT_IP'] ?? '';
-    $params['successUrl'] = $this->drupalInfo->getDrupalHostUrl() . '/middleware/public/payment/checkout-com-success';
-    $params['failUrl'] = $this->drupalInfo->getDrupalHostUrl() . '/middleware/public/payment/checkout-com-error';;
+
+    // Remove the hack for cloud dns resolution failure for non-prod urls.
+    $host = str_replace('.cdn.cloudflare.net', '', $this->drupalInfo->getDrupalHostUrl());
+    $params['successUrl'] = $host . '/middleware/public/payment/checkout-com-success';
+    $params['failUrl'] = $host . '/middleware/public/payment/checkout-com-error';
+
     $params['trackId'] = $cart['cart']['extension']['real_reserved_order_id'];
 
     $params['products'] = $this->getCartItems($cart['cart']['items']);

@@ -4,6 +4,8 @@ import OrderSummary from './OrderSummary';
 import { fetchOrderData } from '../../utilities/get_order';
 import { stickySidebar } from '../../utilities/stickyElements/stickyElements';
 import { redirectToCart } from '../../utilities/get_cart';
+import Cookies from 'js-cookie';
+import {removeCartFromStorage} from "../../utilities/storage";
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
@@ -16,6 +18,11 @@ class CheckoutConfirmation extends React.Component {
 
   componentDidMount() {
     try {
+      if (Cookies.get('middleware_order_placed')) {
+        removeCartFromStorage();
+        Cookies.remove('middleware_order_placed');
+      }
+
       // Fetch order data.
       const orderData = fetchOrderData('last');
 

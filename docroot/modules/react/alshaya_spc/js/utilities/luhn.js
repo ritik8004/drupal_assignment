@@ -3,6 +3,7 @@ const cardTypeLengths = {
   'visa': [16],
   'mastercard': [16],
   'discover': [16],
+  'diners': [14],
 };
 
 const toDigits = numString =>
