@@ -96,11 +96,6 @@ class AlshayaSpcLoginForm extends FormBase {
       ];
     }
 
-    $form['messages'] = [
-      '#type' => 'status_messages',
-      '#weight' => -49,
-    ];
-
     // Display login form:
     $form['name'] = [
       '#type' => 'email',
