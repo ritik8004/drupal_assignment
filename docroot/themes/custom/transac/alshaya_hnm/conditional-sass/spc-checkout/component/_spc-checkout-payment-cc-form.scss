@@ -1,0 +1,7 @@
+.payment-method.payment-method-checkout_com {
+  input {
+    ~ label {
+      text-transform: capitalize;
+    }
+  }
+}

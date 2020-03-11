@@ -1,0 +1,49 @@
+.payment-method.payment-method-checkout_com {
+  .payment-method-bottom-panel {
+    padding: 1.25rem;
+    padding-#{$left}: 3rem;
+  }
+
+  input {
+    padding: 0;
+    border: none;
+    border-bottom: 1px solid $spc-cc-border;
+    color: $spc-cc-input;
+    width: 100%;
+
+    ~ label {
+      color: $spc-cc-placeholder;
+    }
+  }
+
+  .spc-type-cc-number {
+    max-width: 20rem;
+    width: 100%;
+    margin-bottom: 2.5rem;
+
+    @include breakpoint($only-mobile) {
+      max-width: 14.875rem;
+      width: 100%;
+    }
+  }
+
+  .spc-type-expiry,
+  .spc-type-cvv {
+    width: 9.375rem;
+    display: inline-block;
+    vertical-align: bottom;
+
+    @include breakpoint($only-mobile) {
+      width: 6.8125rem;
+    }
+  }
+
+  .spc-type-expiry {
+    margin-#{$right}: 1.25rem;
+  }
+
+  .spc-card-types-wrapper {
+    clear: both;
+    width: 100%;
+  }
+}

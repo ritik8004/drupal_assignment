@@ -33,27 +33,29 @@ export default class PaymentMethod extends React.Component {
     return(
       <>
         <div className={`payment-method payment-method-${method}`} onClick={() => this.props.changePaymentMethod(method)}>
-          <input
-            id={'payment-method-' + method}
-            className={method}
-            type='radio'
-            defaultChecked={this.state.selectedOption === method}
-            value={method}
-            name='payment-method' />
+          <div className='payment-method-top-panel'>
+            <input
+              id={'payment-method-' + method}
+              className={method}
+              type='radio'
+              defaultChecked={this.state.selectedOption === method}
+              value={method}
+              name='payment-method' />
 
-          <label className='radio-sim radio-label'>
-            {this.props.method.name}
-            <ConditionalView condition={method === 'cashondelivery' && this.props.cart.cart.surcharge.amount > 0}>
-              <CodSurchargePaymentMethodDescription surcharge={this.props.cart.cart.surcharge}/>
-            </ConditionalView>
-          </label>
-        </div>
-
-        <ConditionalView condition={(this.state.selectedOption === 'checkout_com')}>
-          <div className={['payment-method-form', 'payment-method-form-' + method]}>
-            <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} cart={this.props.cart} />
+            <label className='radio-sim radio-label'>
+              {this.props.method.name}
+              <ConditionalView condition={method === 'cashondelivery' && this.props.cart.cart.surcharge.amount > 0}>
+                <CodSurchargePaymentMethodDescription surcharge={this.props.cart.cart.surcharge}/>
+              </ConditionalView>
+            </label>
           </div>
-        </ConditionalView>
+
+          <ConditionalView condition={(this.state.selectedOption === 'checkout_com')}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method}`}>
+              <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} cart={this.props.cart} />
+            </div>
+          </ConditionalView>
+        </div>
       </>
     );
   }
