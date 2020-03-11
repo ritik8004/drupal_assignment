@@ -17,11 +17,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class OrdersController {
 
   /**
-   * The last order id storage key.
-   */
-  const SESSION_STORAGE_KEY = 'last_order';
-
-  /**
    * RequestStack Object.
    *
    * @var \Symfony\Component\HttpFoundation\Request
@@ -108,7 +103,7 @@ class OrdersController {
    */
   public function getOrder($order_id) {
     if ($order_id === 'last') {
-      $order_id = (int) $this->session->get(self::SESSION_STORAGE_KEY);
+      $order_id = (int) $this->session->get(Orders::SESSION_STORAGE_KEY);
     }
 
     if (!is_int($order_id)) {

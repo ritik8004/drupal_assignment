@@ -2,14 +2,11 @@
 
 namespace App\Service;
 
-use App\Controller\CartController;
-use App\Controller\OrdersController;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Drupal\DrupalInfo;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class Cart.
@@ -22,6 +19,11 @@ class Cart {
    * @var array
    */
   protected static $cart = [];
+
+  /**
+   * The cart storage key.
+   */
+  const SESSION_STORAGE_KEY = 'middleware_cart_id';
 
   /**
    * Magento service.
@@ -68,7 +70,7 @@ class Cart {
   /**
    * Service for session.
    *
-   * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+   * @var \App\Service\SessionStorage
    */
   protected $session;
 
@@ -87,7 +89,7 @@ class Cart {
    *   Checkout.com API Wrapper.
    * @param \App\Service\PaymentData $payment_data
    *   Payment Data provider.
-   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+   * @param \App\Service\SessionStorage $session
    *   Service for session.
    */
   public function __construct(MagentoInfo $magento_info,
@@ -96,7 +98,7 @@ class Cart {
                               Utility $utility,
                               APIWrapper $checkout_com_api,
                               PaymentData $payment_data,
-                              SessionInterface $session) {
+                              SessionStorage $session) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->drupalInfo = $drupal_info;
@@ -107,27 +109,46 @@ class Cart {
   }
 
   /**
-   * Get cart by cart id.
+   * Wrapper function to get cart id from session.
    *
-   * @param int $cart_id
+   * @return int|null
    *   Cart id.
+   */
+  public function getCartId() {
+    return $this->session->getDataFromSession(self::SESSION_STORAGE_KEY);
+  }
+
+  /**
+   * Get cart by cart id.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function getCart(int $cart_id) {
-    if (isset(static::$cart[$cart_id])) {
-      return static::$cart[$cart_id];
+  public function getCart() {
+    if (!empty(self::$cart)) {
+      return self::$cart;
+    }
+
+    $cart_id = $this->getCartId();
+    if (empty($cart_id)) {
+      return NULL;
     }
 
     $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
-      return $this->magentoApiWrapper->doRequest('GET', $url);
+      self::$cart = $this->magentoApiWrapper->doRequest('GET', $url);
+      return self::$cart;
     }
     catch (\Exception $e) {
+      self::$cart = NULL;
+
+      if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
+        $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+      }
+
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
@@ -141,10 +162,23 @@ class Cart {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function createCart() {
-    $url = 'carts';
+  public function createCart(int $customer_id = 0) {
+    if (!empty($this->getCartId())) {
+      // Validate the cart again to ensure session data is not corrupt.
+      $data = $this->getCart();
+      if (empty($data['error'])) {
+        return $this->getCartId();
+      }
+    }
+
+    $url = $customer_id > 0
+      ? str_replace('{customerId}', $customer_id, 'customers/{customerId}/carts')
+      : 'carts';
+
     try {
-      return $this->magentoApiWrapper->doRequest('POST', $url);
+      $cart_id = (int) $this->magentoApiWrapper->doRequest('POST', $url);
+      $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, $cart_id);
+      return $cart_id;
     }
     catch (\Exception $e) {
       // Exception handling here.
@@ -155,8 +189,6 @@ class Cart {
   /**
    * Add/Update/Remove item in cart.
    *
-   * @param int $cart_id
-   *   Cart id.
    * @param string $sku
    *   Sku.
    * @param int|null $quantity
@@ -171,7 +203,7 @@ class Cart {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function addUpdateRemoveItem(int $cart_id, string $sku, ?int $quantity, string $action, array $options = []) {
+  public function addUpdateRemoveItem(string $sku, ?int $quantity, string $action, array $options = []) {
     $option_data = [];
     // If options data available.
     if (!empty($options)) {
@@ -187,21 +219,19 @@ class Cart {
     $data['items'][] = (object) [
       'sku' => $sku,
       'qty' => $quantity ?? 1,
-      'quote_id' => (string) $cart_id,
+      'quote_id' => (string) $this->getCartId(),
       'product_option' => (object) $option_data,
     ];
     $data['extension'] = (object) [
       'action' => $action,
     ];
 
-    return $this->updateCart($data, $cart_id);
+    return $this->updateCart($data);
   }
 
   /**
    * Apply promo on the cart.
    *
-   * @param int $cart_id
-   *   Cart id.
    * @param string|null $promo
    *   Promo to apply.
    * @param string $action
@@ -212,7 +242,7 @@ class Cart {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function applyRemovePromo(int $cart_id, ?string $promo, string $action) {
+  public function applyRemovePromo(?string $promo, string $action) {
     $data = [
       'extension' => (object) [
         'action' => $action,
@@ -223,7 +253,7 @@ class Cart {
       $data['coupon'] = $promo;
     }
 
-    return $this->updateCart($data, $cart_id);
+    return $this->updateCart($data);
   }
 
   /**
@@ -268,8 +298,6 @@ class Cart {
   /**
    * Adding shipping on the cart.
    *
-   * @param int $cart_id
-   *   Cart id.
    * @param array $shipping_data
    *   Shipping address info.
    * @param string $action
@@ -280,7 +308,7 @@ class Cart {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function addShippingInfo(int $cart_id, array $shipping_data, string $action) {
+  public function addShippingInfo(array $shipping_data, string $action) {
     $data = [
       'extension' => (object) [
         'action' => $action,
@@ -301,7 +329,7 @@ class Cart {
     $data['shipping']['shipping_carrier_code'] = $carrier_info['code'];
     $data['shipping']['shipping_method_code'] = $carrier_info['method'];
 
-    $cart = $this->updateCart($data, $cart_id);
+    $cart = $this->updateCart($data);
 
     // If cart update has error.
     if ($cart['error']) {
@@ -318,14 +346,14 @@ class Cart {
         return $customer;
       }
 
-      $associated_customer = $this->associateCartToCustomer($cart_id, $customer['id']);
+      $associated_customer = $this->associateCartToCustomer($customer['id']);
       // If any error.
       if ($associated_customer['error']) {
         return $associated_customer;
       }
     }
 
-    return $this->updateBilling($cart_id, $data['shipping']['shipping_address']);
+    return $this->updateBilling($data['shipping']['shipping_address']);
   }
 
   /**
@@ -374,8 +402,6 @@ class Cart {
   /**
    * Add click n collect shipping on the cart.
    *
-   * @param int $cart_id
-   *   Cart id.
    * @param array $shipping_data
    *   Shipping address info.
    * @param string $action
@@ -388,7 +414,7 @@ class Cart {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function addCncShippingInfo(int $cart_id, array $shipping_data, string $action, $create_customer = TRUE) {
+  public function addCncShippingInfo(array $shipping_data, string $action, $create_customer = TRUE) {
     $data = [
       'extension' => (object) [
         'action' => $action,
@@ -425,28 +451,27 @@ class Cart {
       'click_and_collect_type' => !empty($store['rnc_available']) ? 'reserve_and_collect' : 'ship_to_store',
       'store_code' => $store['code'],
     ];
+
     if ($create_customer) {
       $customer = $this->createCustomer($data['shipping']['shipping_address']);
       if (!empty($customer['message'])) {
         return $this->getErrorResponse($customer['message'], 422);
       }
-      $this->associateCartToCustomer($cart_id, $customer['id']);
+      $this->associateCartToCustomer($customer['id']);
     }
-    return $this->updateCart($data, $cart_id);
+    return $this->updateCart($data);
   }
 
   /**
    * Update billing info on cart.
    *
-   * @param int $cart_id
-   *   Cart id.
    * @param array $billing_data
    *   Billing data.
    *
    * @return array
    *   Response data.
    */
-  public function updateBilling(int $cart_id, array $billing_data) {
+  public function updateBilling(array $billing_data) {
     $data = [
       'extension' => (object) [
         'action' => CartActions::CART_BILLING_UPDATE,
@@ -455,7 +480,7 @@ class Cart {
 
     $data['billing'] = $billing_data;
 
-    return $this->updateCart($data, $cart_id);
+    return $this->updateCart($data);
   }
 
   /**
@@ -492,15 +517,14 @@ class Cart {
   /**
    * Adds a customer to cart.
    *
-   * @param int $cart_id
-   *   Cart id.
    * @param int $customer_id
    *   Customer id.
    *
    * @return mixed
    *   Response.
    */
-  public function associateCartToCustomer(int $cart_id, int $customer_id) {
+  public function associateCartToCustomer(int $customer_id) {
+    $cart_id = $this->getCartId();
     $url = sprintf('carts/%d/associate-cart', $cart_id);
 
     try {
@@ -521,8 +545,6 @@ class Cart {
   /**
    * Adding payment on the cart.
    *
-   * @param int $cart_id
-   *   Cart id.
    * @param array $data
    *   Payment info.
    * @param array $extension
@@ -533,7 +555,7 @@ class Cart {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function updatePayment(int $cart_id, array $data, array $extension) {
+  public function updatePayment(array $data, array $extension) {
     $update = [
       'extension' => (object) $extension,
     ];
@@ -543,14 +565,12 @@ class Cart {
       'additional_data' => $data['additional_data'],
     ];
 
-    return $this->updateCart($update, $cart_id);
+    return $this->updateCart($update);
   }
 
   /**
    * Process payment data before placing order.
    *
-   * @param int $cart_id
-   *   Cart ID.
    * @param string $method
    *   Payment method.
    * @param array $additional_info
@@ -561,7 +581,7 @@ class Cart {
    *
    * @throws \Exception
    */
-  public function processPaymentData(int $cart_id, string $method, array $additional_info) {
+  public function processPaymentData(string $method, array $additional_info) {
     $additional_data = [];
 
     // Method specific code. @TODO: Find better way to handle this.
@@ -580,7 +600,7 @@ class Cart {
         // Process 3D if MADA or 3D Forced.
         if ($additional_data['udf1'] || $this->checkoutComApi->is3dForced()) {
           $response = $this->checkoutComApi->request3dSecurePayment(
-            $this->getCart($cart_id),
+            $this->getCart(),
             $additional_data,
             APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT
           );
@@ -590,7 +610,7 @@ class Cart {
             && !empty($response[APIWrapper::REDIRECT_URL])) {
             // We will use this again to redirect back to Drupal.
             $response['langcode'] = $this->drupalInfo->getDrupalLangcode();
-            $this->paymentData->setPaymentData($cart_id, $response['id'], $response);
+            $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response);
             throw new \Exception($response[APIWrapper::REDIRECT_URL], 302);
           }
 
@@ -608,15 +628,14 @@ class Cart {
    *
    * @param array $data
    *   Data to update for cart.
-   * @param int $cart_id
-   *   Cart id.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function updateCart(array $data, int $cart_id) {
+  public function updateCart(array $data) {
+    $cart_id = $this->getCartId();
     $url = sprintf('carts/%d/updateCart', $cart_id);
 
     try {
@@ -624,13 +643,11 @@ class Cart {
       return static::$cart[$cart_id];
     }
     catch (\Exception $e) {
-      static::$cart[$cart_id] = NULL;
+      static::$cart = NULL;
 
       // Re-set cart id in session if exception is for cart not found.
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
-        $session_data = $this->session->get(CartController::STORAGE_KEY, []);
-        unset($session_data['cart_id']);
-        $this->session->set(CartController::STORAGE_KEY, $session_data);
+        $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
       }
 
       // Exception handling here.
@@ -643,20 +660,18 @@ class Cart {
    *
    * @param array $data
    *   Data for getting shipping method.
-   * @param int $cart_id
-   *   Cart id.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function shippingMethods(array $data, int $cart_id) {
+  public function shippingMethods(array $data) {
     if (empty($data['address']['country_id'])) {
       return [];
     }
 
-    $url = sprintf('carts/%d/estimate-shipping-methods', $cart_id);
+    $url = sprintf('carts/%d/estimate-shipping-methods', $this->getCartId());
 
     try {
       return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
@@ -670,14 +685,11 @@ class Cart {
   /**
    * Gets payment methods.
    *
-   * @param int $cart_id
-   *   Cart ID.
-   *
    * @return array
    *   Payment method list.
    */
-  public function getPaymentMethods(int $cart_id) {
-    $url = sprintf('carts/%d/payment-methods', $cart_id);
+  public function getPaymentMethods() {
+    $url = sprintf('carts/%d/payment-methods', $this->getCartId());
 
     try {
       return $this->magentoApiWrapper->doRequest('GET', $url);
@@ -691,28 +703,24 @@ class Cart {
   /**
    * Place order.
    *
-   * @param int $cart_id
-   *   Cart ID.
    * @param array $data
    *   Post data.
    *
    * @return array
    *   Status.
    */
-  public function placeOrder(int $cart_id, array $data) {
-    $url = sprintf('carts/%d/order', $cart_id);
+  public function placeOrder(array $data) {
+    $url = sprintf('carts/%d/order', $this->getCartId());
 
     try {
       $result = $this->magentoApiWrapper->doRequest('PUT', $url, ['json' => $data]);
       $order_id = (int) str_replace('"', '', $result);
 
       // Remove cart id from session.
-      $session_data = $this->session->get(CartController::STORAGE_KEY, []);
-      unset($session_data['cart_id']);
-      $this->session->set(CartController::STORAGE_KEY, $session_data);
+      $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
 
       // Set order in session for later use.
-      $this->session->set(OrdersController::SESSION_STORAGE_KEY, $order_id);
+      $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
 
       return ['success' => TRUE, 'order_id' => $order_id];
     }
@@ -757,6 +765,22 @@ class Cart {
   public function getCartDataToLog(array $cart) {
     // TODO: Remove sensitive info.
     return json_encode($cart);
+  }
+
+  /**
+   * Return customer id from current session.
+   *
+   * @return int|null
+   *   Return customer id or null.
+   */
+  public function getCartCustomerId() {
+    $cart = $this->getCart();
+
+    if (isset($cart, $cart['cart']['customer'], $cart['cart']['customer']['id'])) {
+      return $cart['cart']['customer']['id'];
+    }
+
+    return NULL;
   }
 
 }

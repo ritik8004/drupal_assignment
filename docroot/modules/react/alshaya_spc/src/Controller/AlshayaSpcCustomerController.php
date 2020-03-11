@@ -163,16 +163,4 @@ class AlshayaSpcCustomerController extends ControllerBase {
     return new JsonResponse($response);
   }
 
-  /**
-   * Get customer cart for logged in user.
-   */
-  public function getUserCustomerCart() {
-    $currentUser = $this->currentUser()->getAccount();
-    return new JsonResponse([
-      'cart_id' => $this->session->get('customer_cart_id'),
-      'customer_id' => $currentUser->acq_customer_id,
-      'uid' => $currentUser->id(),
-    ]);
-  }
-
 }

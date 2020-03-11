@@ -1,5 +1,5 @@
 get_cart:
-    path: /cart/{cart_id}
+    path: /cart
     controller: App\Controller\CartController::getCart
     methods: GET
 

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\Cart;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\PaymentData;
+use App\Service\SessionStorage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -52,6 +53,13 @@ class PaymentController {
   protected $paymentData;
 
   /**
+   * Session Storage service.
+   *
+   * @var \App\Service\SessionStorage
+   */
+  protected $session;
+
+  /**
    * PaymentController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
@@ -64,17 +72,21 @@ class PaymentController {
    *   Payment Data provider.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
+   * @param \App\Service\SessionStorage $session
+   *   Session Storage service.
    */
   public function __construct(RequestStack $request,
                               Cart $cart,
                               APIWrapper $checkout_com_api,
                               PaymentData $payment_data,
-                              LoggerInterface $logger) {
+                              LoggerInterface $logger,
+                              SessionStorage $session) {
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->checkoutComApi = $checkout_com_api;
     $this->paymentData = $payment_data;
     $this->logger = $logger;
+    $this->session = $session;
   }
 
   /**
@@ -84,33 +96,20 @@ class PaymentController {
    *   Redirect to cart or checkout or confirmation page.
    */
   public function handleCheckoutComSuccess() {
+    try {
+      $data = $this->validateCheckoutComRequest('success');
+    }
+    catch (\Exception $e) {
+      if ($e->getCode() === 302) {
+        return new RedirectResponse($e->getMessage(), 302);
+      }
+
+      throw $e;
+    }
+
+    $cart = $this->cart->getCart();
+
     $payment_token = $this->request->query->get('cko-payment-token') ?? '';
-
-    if (empty($payment_token)) {
-      $this->logger->warning('3D secure success callback requested with empty token.');
-      throw new NotFoundHttpException('Payment token missing.');
-    }
-
-    $data = $this->paymentData->getPaymentDataByUniqueId($payment_token);
-    if (empty($data)) {
-      $this->logger->error('3D secure payment came into success but not able to load payment data. Payment token: @token', [
-        '@token' => $payment_token,
-      ]);
-
-      throw new NotFoundHttpException();
-    }
-
-    $cart = $this->cart->getCart($data['cart_id']);
-    if (empty($cart) || !empty($cart['error'])) {
-      $this->logger->error('3D secure payment came into success but not able to load cart for the payment data. Cart id: @id, responseCode: @code, Payment token: @token', [
-        '@id' => $data['cart_id'],
-        '@code' => $data['responseCode'],
-        '@token' => $payment_token,
-      ]);
-
-      throw new NotFoundHttpException();
-    }
-
     $charges = $this->checkoutComApi->getChargesInfo($payment_token);
 
     // Validate again.
@@ -147,7 +146,6 @@ class PaymentController {
 
       // Push the additional data to cart.
       $payment_updated = $this->cart->updatePayment(
-        $cart['cart']['id'],
         $payment_data,
         ['action' => 'update payment']
       );
@@ -156,7 +154,7 @@ class PaymentController {
       }
 
       // Place order.
-      $order = $this->cart->placeOrder($cart['cart']['id'], ['paymentMethod' => $payment_data]);
+      $order = $this->cart->placeOrder(['paymentMethod' => $payment_data]);
       if (empty($order) || !empty($order['error'])) {
         throw new \Exception($order['error_message'] ?? 'Place order failed', $order['error_code'] ?? 500);
       }
@@ -189,36 +187,82 @@ class PaymentController {
    *   Redirect to cart or checkout page.
    */
   public function handleCheckoutComError() {
-    $payment_token = $this->request->query->get('cko-payment-token') ?? '';
-
-    if (empty($payment_token)) {
-      $this->logger->warning('3D secure error callback requested with empty token.');
-      throw new NotFoundHttpException('Payment token missing.');
+    try {
+      $data = $this->validateCheckoutComRequest('error');
     }
+    catch (\Exception $e) {
+      if ($e->getCode() === 302) {
+        return new RedirectResponse($e->getMessage(), 302);
+      }
 
-    $data = $this->paymentData->getPaymentDataByUniqueId($payment_token);
-    if (empty($data)) {
-      $this->logger->error('3D secure payment came into error but not able to load payment data. Payment token: @token', [
-        '@token' => $payment_token,
-      ]);
-
-      throw new NotFoundHttpException();
-    }
-
-    $cart = $this->cart->getCart($data['cart_id']);
-    if (empty($cart) || !empty($cart['error'])) {
-      $this->logger->warning('3D secure payment came into error but not able to load cart for the payment data. Cart id: @id, responseCode: @code, Payment token: @token', [
-        '@id' => $data['cart_id'],
-        '@code' => $data['responseCode'],
-        '@token' => $payment_token,
-      ]);
-
-      return new RedirectResponse('/' . $data['data']['langcode'] . '/cart', 302);
+      throw $e;
     }
 
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
     $response->headers->setCookie(Cookie::create('middleware_payment_error', 'declined', strtotime('+1 year'), '/', NULL, TRUE, FALSE));
     return $response;
+  }
+
+  /**
+   * Basic validations for checkout.com callbacks.
+   *
+   * @param string $callback
+   *   Callback type success/error.
+   *
+   * @return array
+   *   Payment data if available.
+   *
+   * @throws \Doctrine\DBAL\DBALException
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  protected function validateCheckoutComRequest(string $callback) {
+    $payment_token = $this->request->query->get('cko-payment-token') ?? '';
+
+    if (empty($payment_token)) {
+      $this->logger->warning('3D secure @callback callback requested with empty token.', [
+        '@callback' => $callback,
+      ]);
+
+      throw new NotFoundHttpException('Payment token missing.');
+    }
+
+    $data = $this->paymentData->getPaymentDataByUniqueId($payment_token);
+    if (empty($data)) {
+      $this->logger->error('3D secure payment came into @callback but not able to load payment data. Payment token: @token', [
+        '@token' => $payment_token,
+        '@callback' => $callback,
+      ]);
+
+      throw new NotFoundHttpException();
+    }
+
+    $cart_id = $this->cart->getCartId();
+    if (empty($cart_id)) {
+      // We get cases where cookies are not forwarded on redirects in mobile.
+      $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, (int) $data['cart_id']);
+    }
+    elseif ($data['cart_id'] != $cart_id) {
+      $this->logger->error('3D secure payment came into @callback with cart not matching in session. Payment token: @token', [
+        '@token' => $payment_token,
+        '@callback' => $callback,
+      ]);
+
+      throw new \Exception('/' . $data['data']['langcode'] . '/checkout', 302);
+    }
+
+    $cart = $this->cart->getCart();
+    if (empty($cart) || !empty($cart['error'])) {
+      $this->logger->error('3D secure payment came into @callback but not able to load cart for the payment data. Cart id: @id, responseCode: @code, Payment token: @token', [
+        '@id' => $data['cart_id'],
+        '@code' => $data['responseCode'],
+        '@token' => $payment_token,
+        '@callback' => $callback,
+      ]);
+
+      throw new \Exception('/' . $data['data']['langcode'] . '/checkout', 302);
+    }
+
+    return $data;
   }
 
 }
