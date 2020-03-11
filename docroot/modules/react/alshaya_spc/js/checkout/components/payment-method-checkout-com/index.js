@@ -6,6 +6,7 @@ import {
   placeOrder,
   removeFullScreenLoader, showFullScreenLoader
 } from "../../../utilities/checkout_util";
+import ConditionalView from "../../../common/components/conditional-view";
 import CardTypeSVG from "../card-type-svg";
 
 class PaymentMethodCheckoutCom extends React.Component {
@@ -27,7 +28,7 @@ class PaymentMethodCheckoutCom extends React.Component {
       numberValid: false,
       expiryValid: false,
       cvvValid: false,
-      acceptedCards: ['visa', 'mastercard'],
+      acceptedCards: ['visa', 'mastercard', 'diners'],
     };
   };
 
@@ -143,12 +144,16 @@ class PaymentMethodCheckoutCom extends React.Component {
 
     showFullScreenLoader();
 
+    let udf3 = (window.drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
+      ? 'storeInVaultOnSuccess'
+      : '';
+
     var ccInfo = {
       'number': this.state.number,
       'expiryMonth': this.state.expiry.split('/')[0],
       'expiryYear': this.state.expiry.split('/')[1],
       'cvv': this.state.cvv,
-      'udf3': '',
+      'udf3': udf3,
     };
 
     window.CheckoutKit.configure({
@@ -158,15 +163,15 @@ class PaymentMethodCheckoutCom extends React.Component {
 
     window.CheckoutKit.createCardToken(ccInfo, this.handleCheckoutResponse);
 
-    console.log(ccInfo);
-
     // Throwing 200 error, we want to handle place order in custom way.
     throw 200;
   };
 
   handleCheckoutResponse = (data) => {
     // @TODO: Handle errors.
-    console.log(data);
+    data['udf3'] = (window.drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
+      ? 'storeInVaultOnSuccess'
+      : '';
 
     let paymentData = {
       'payment': {
@@ -181,15 +186,23 @@ class PaymentMethodCheckoutCom extends React.Component {
         console.error(result.error);
         return;
       }
-
-      if (result.success && result.redirectUrl !== undefined) {
-        window.location = result.redirectUrl;
-        return;
+      // 2D flow success.
+      else if (result.cart_id !== undefined && result.cart_id) {
+        const { cart } = this.props;
+        placeOrder(cart.cart.cart_id, cart.selected_payment_method);
       }
-
-      // @TODO: Handle exception.
-      const { cart } = this.props;
-      placeOrder(cart.cart.cart_id, cart.selected_payment_method);
+      // 3D flow error.
+      else if (result.success === undefined || !(result.success)) {
+        console.error(result);
+      }
+      // 3D flow success.
+      else if (result.redirectUrl !== undefined) {
+        window.location = result.redirectUrl;
+      }
+      else {
+        console.error(response);
+        removeFullScreenLoader();
+      }
     }).catch((error) => {
       removeFullScreenLoader();
       console.error(error);
@@ -255,9 +268,15 @@ class PaymentMethodCheckoutCom extends React.Component {
             <div id='spc-cc-cvv-error' className="error" />
           </div>
         </div>
+
         <div className='spc-card-types-wrapper'>
           {cartTypes}
         </div>
+
+        <ConditionalView condition={window.drupalSettings.user.uid > 0}>
+          <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
+          <label htmlFor="save_card">{Drupal.t('Save this card for faster payment next time you shop. (CVV number will not be saved)')}</label>
+        </ConditionalView>
       </>
     );
   };

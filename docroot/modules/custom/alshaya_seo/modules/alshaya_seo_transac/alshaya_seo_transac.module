@@ -219,38 +219,39 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           $data_layer = array_merge($data_layer, $data_layer_cart);
 
         }
-        elseif (in_array($current_route['route_params']['step'], ['confirmation'], TRUE)) {
-          $order = _alshaya_acm_checkout_get_last_order_from_session();
+        break;
 
-          // We check if we have valid order id.
-          if (empty($order)) {
-            return;
-          }
+      case 'alshaya_spc.checkout.confirmation':
+        $order = _alshaya_acm_checkout_get_last_order_from_session();
 
-          $cookie_key = 'alshaya_gtm_confirmation_visited_' . $order['order_id'];
+        // We check if we have valid order id.
+        if (empty($order)) {
+          return;
+        }
 
-          $session = \Drupal::request()->getSession();
+        $cookie_key = 'alshaya_gtm_confirmation_visited_' . $order['order_id'];
 
-          $already_visited = (int) $session->get($cookie_key);
+        $session = \Drupal::request()->getSession();
 
-          // Send order complete confirmation to GTM only once.
-          if ($already_visited !== 1) {
-            $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
-            $data_layer = array_merge($data_layer, $attributes['general']);
+        $already_visited = (int) $session->get($cookie_key);
 
-            $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
+        // Send order complete confirmation to GTM only once.
+        if ($already_visited !== 1) {
+          $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
+          $data_layer = array_merge($data_layer, $attributes['general']);
 
-            $data_layer['event'] = 'purchaseSuccess';
-            $data_layer['ecommerce'] = [
-              'currencyCode' => $gtm_manager->getGtmCurrency(),
-              'purchase' => [
-                'actionField' => $attributes['actionField'],
-                'products' => $attributes['products'],
-              ],
-            ];
+          $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
 
-            $session->set($cookie_key, 1);
-          }
+          $data_layer['event'] = 'purchaseSuccess';
+          $data_layer['ecommerce'] = [
+            'currencyCode' => $gtm_manager->getGtmCurrency(),
+            'purchase' => [
+              'actionField' => $attributes['actionField'],
+              'products' => $attributes['products'],
+            ],
+          ];
+
+          $session->set($cookie_key, 1);
         }
         break;
     }

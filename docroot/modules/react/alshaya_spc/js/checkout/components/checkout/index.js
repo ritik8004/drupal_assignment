@@ -25,6 +25,7 @@ import { createFetcher } from '../../../utilities/api/fetcher';
 import {removeFullScreenLoader} from "../../../utilities/checkout_util";
 import _isEmpty from 'lodash/isEmpty';
 import ConditionalView from '../../../common/components/conditional-view';
+import Cookies from 'js-cookie';
 
 window.fetchStore = 'idle';
 
@@ -45,6 +46,11 @@ export default class Checkout extends React.Component {
 
   componentDidMount() {
     try {
+      if (Cookies.get('middleware_payment_error')) {
+        // @TODO: Show error message in error component.
+        alert(Cookies.get('middleware_payment_error'));
+        Cookies.remove('middleware_payment_error');
+      }
       // If logged in user.
       if (window.drupalSettings.user.uid > 0) {
         let temp_cart = getInfoFromStorage();
@@ -157,8 +163,7 @@ export default class Checkout extends React.Component {
     }
 
     window.fetchStore = 'pending';
-    const storeFetcher = createFetcher(fetchClicknCollectStores);
-    let list = storeFetcher.read(coords);
+    const list = createFetcher(fetchClicknCollectStores).read(coords);
 
     list.then(
       response => {

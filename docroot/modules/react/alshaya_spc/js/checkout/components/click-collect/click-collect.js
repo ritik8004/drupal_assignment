@@ -248,11 +248,15 @@ class ClickCollect extends React.Component {
 
   finalizeStore = (e, store_code) => {
     e.preventDefault();
+    if (window.innerWidth < 768) {
+      this.toggleFullScreen(false);
+    }
+
     // Find the store object with the given store-code from the store list.
     let store = _find(this.context.storeList, { code: store_code });
     this.context.updateSelectStore(store);
     this.setState({
-      openSelectedStore: true
+      openSelectedStore: true,
     });
     this.selectStoreButtonVisibility(false);
     this.closeAllInfoWindow();
@@ -266,7 +270,10 @@ class ClickCollect extends React.Component {
       return;
     }
 
-    if (document.fullscreenElement) {
+    if (document.fullscreenElement || fullscreen === false) {
+      if (!document.fullscreenElement) {
+        return;
+      }
       let self = this;
       this.setState({
         mapFullScreen: false
