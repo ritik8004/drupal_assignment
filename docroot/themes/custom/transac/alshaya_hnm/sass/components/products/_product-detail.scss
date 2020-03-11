@@ -1113,3 +1113,13 @@ html[lang=ar] {
     }
   }
 }
+
+.content {
+  &__main {
+    @include breakpoint($only-mobile) {
+      .order-quantity-limit-message.mobile-only {
+        bottom: 4.1875rem;
+      }
+    }
+  }
+}
