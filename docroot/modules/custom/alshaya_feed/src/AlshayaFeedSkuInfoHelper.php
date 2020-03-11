@@ -255,6 +255,10 @@ class AlshayaFeedSkuInfoHelper {
       elseif ($sku->bundle() === 'configurable') {
         $combinations = $this->skuManager->getConfigurableCombinations($sku);
         $swatches = $this->skuImagesManager->getSwatchData($sku);
+        // Keep configurable product as well in feed.
+        $product[$lang][0] = $parentProduct;
+        unset($product[$lang][0]['group_id']);
+        $product[$lang][0]['sku'] = $parentProduct['group_id'];
         foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
           $child = SKU::loadFromSku($child_sku, $lang);
           if (!$child instanceof SKUInterface) {
@@ -264,6 +268,7 @@ class AlshayaFeedSkuInfoHelper {
 
           $variant = [
             'sku' => $child->getSku(),
+            'product_type' => $child->bundle(),
             'configurable_attributes' => $this->getConfigurableValues($child, $combination),
             'swatch_image' => $this->getSwatchImages($child, $combination, $swatches),
             'images' => $this->getGalleryMedia($child),
@@ -274,6 +279,7 @@ class AlshayaFeedSkuInfoHelper {
           ];
           $product[$lang][] = array_merge($parentProduct, $variant);
         }
+
       }
     }
 
