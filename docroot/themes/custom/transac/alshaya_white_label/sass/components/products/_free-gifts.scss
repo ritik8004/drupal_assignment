@@ -26,17 +26,25 @@
     }
   }
 
+  .acq-content-product {
+    .free-gift-image {
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0.75rem;
+      }
+    }
+  }
+
   .free-gift-image {
     width: 4.6875rem;
-    margin-#{$right}: 1rem;
+
+    @include breakpoint($tablet) {
+      margin-#{$right}: 0.5rem;
+      margin-#{$left}: 0.5rem;
+    }
 
     a {
       display: block;
       line-height: 0;
-    }
-
-    @include breakpoint($only-mobile) {
-      margin-#{$right}: 0.75rem;
     }
   }
 
@@ -260,7 +268,7 @@
         flex-wrap: wrap;
         margin-bottom: 1.875rem;
         margin-top: 0;
-        justify-content: space-between;
+        justify-content: space-around;
         overflow-y: scroll;
         padding-bottom: 4.5rem;
       }
@@ -302,6 +310,10 @@
       color: $free-gifts-title-text;
       font-size: 0.875rem;
       text-align: center;
+
+      html[lang=ar] & {
+        line-height: normal;
+      }
     }
   }
 }
@@ -597,6 +609,10 @@
       width: 100%;
 
       img {
+        @include breakpoint($tablet) {
+          width: 100%;
+        }
+
         @include breakpoint($desktop) {
           width: 18.1875rem;
           margin: auto;
@@ -712,6 +728,7 @@
 body.ie {
   #drupal-modal.free-gift-listing-modal {
     height: 100% !important;
+    overflow-y: auto;
 
     .b-lazy {
       transition-duration: 0s !important;
@@ -742,7 +759,7 @@ body:not(.ie) {
       }
 
       @include breakpoint($desktop) {
-        padding: calc((100vh - 38.2rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+        padding: calc((100vh - 38.2rem) / 2) calc((100vw - 60.31rem) / 2) !important;
       }
     }
 
@@ -760,7 +777,7 @@ body:not(.ie) {
       }
 
       @include breakpoint($desktop) {
-        padding: calc((100vh - 33rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+        padding: calc((100vh - 33rem) / 2) calc((100vw - 60.31rem) / 2) !important;
       }
 
       .slick-slider {
