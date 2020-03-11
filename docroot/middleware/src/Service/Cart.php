@@ -555,7 +555,7 @@ class Cart {
       case 'checkout_com':
         $additional_data = [
           'card_token_id' => $additional_info['id'],
-          'udf3' => NULL,
+          'udf3' => $additional_info['udf3'],
         ];
 
         // Validate bin if MADA enabled.
