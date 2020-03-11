@@ -134,8 +134,10 @@ export default class AddressItem extends React.Component {
     editAddressData['static']['telephone'] = mob_default_val;
     editAddressData['static']['address_id'] = address['address_id'];
 
+    let selectedClass = this.props.isSelected === true ? ' selected' : '';
+
     return (
-      <div className='spc-address-tile' onClick={() => this.updateShippingAddress(address)}>
+      <div className={'spc-address-tile' + selectedClass} onClick={() => this.updateShippingAddress(address)}>
       <div className='spc-address-metadata'>
         <div className='spc-address-name'>{address.given_name} {address.family_name}</div>
         <div className='spc-address-fields'>{addressData.join(', ')}</div>
