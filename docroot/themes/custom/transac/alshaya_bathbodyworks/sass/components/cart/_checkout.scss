@@ -122,10 +122,10 @@
             }
 
             div.items {
-              width: 56%;
+              width: calc(100% - 10rem);
 
               html[lang=ar] & {
-                width: 56%;
+                width: calc(100% - 10rem);
               }
 
               & > .dark {
