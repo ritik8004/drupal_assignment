@@ -7,7 +7,11 @@ export default class OrderSummary extends React.Component {
     const customEmail = window.drupalSettings.customer_email;
     const orderNumber = window.drupalSettings.order_number;
     const transactionId = window.drupalSettings.transaction_id;
-    const customerAddress = Drupal.t('Salmiya, Block 10, Al-Adsane St, Building 33, Floor 3, Apartment 306');
+    const addressLine1 = window.drupalSettings.order_details.shipping_address.address_line1;
+    const addressLine2 = window.drupalSettings.order_details.shipping_address.address_line2;
+    const locality = window.drupalSettings.order_details.shipping_address.locality;
+    const dependentLocality = window.drupalSettings.order_details.shipping_address.dependent_locality;
+    const customerAddress = addressLine1 + ',' + addressLine2 + ',' + locality + ',' + dependentLocality;
     const mobileNumber = window.drupalSettings.order_details.mobile_number;
     const paymentMethod = window.drupalSettings.order_details.payment_method;
     const deliveryType = window.drupalSettings.order_details.delivery_type;
