@@ -109,4 +109,4 @@ alshaya_spc.customer:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::getUserCustomerId'
   methods: [GET]
   requirements:
-    _role: 'authenticated'
+    _permission: 'access content'
