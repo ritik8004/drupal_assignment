@@ -21,7 +21,6 @@ class PaymentMethodCheckoutCom extends React.Component {
 
     this.state = {
       openStoreListModal: false,
-      openNewCardModal: false,
     };
   }
 
@@ -34,19 +33,6 @@ class PaymentMethodCheckoutCom extends React.Component {
   closeStoreListModal = () => {
     this.setState({
       openStoreListModal: false,
-    });
-  }
-
-  openNewCardModal = () => {
-    this.setState({
-      openStoreListModal: false,
-      openNewCardModal: true,
-    });
-  }
-
-  closeNewCardModal = () => {
-    this.setState({
-      openNewCardModal: false,
     });
   }
 
@@ -184,8 +170,16 @@ class PaymentMethodCheckoutCom extends React.Component {
     });
   }
 
+  openNewCard = () => {
+    this.closeStoreListModal();
+    this.changeCurrentCard('new');
+    if (window.innerWidth < 768) {
+      // Code here to navigate to nwe card form.
+    }
+  }
+
   render() {
-    const { openStoreListModal, openNewCardModal } = this.state;
+    const { openStoreListModal } = this.state;
     const { selectedCard, tokenizedCard } = this.context;
 
     let activeCard = [];
@@ -229,12 +223,9 @@ class PaymentMethodCheckoutCom extends React.Component {
               selected={tokenizedCard}
               closeStoreListModal={this.closeStoreListModal}
               onExistingCardSelect={this.onExistingCardSelect}
-              onNewCardClick={this.openNewCardModal}
+              onNewCardClick={this.openNewCard}
             />
           </>
-        </Popup>
-        <Popup open={openNewCardModal} onClose={this.closeNewCardModal} closeOnDocumentClick={false}>
-          {addNewCard}
         </Popup>
       </>
     );
