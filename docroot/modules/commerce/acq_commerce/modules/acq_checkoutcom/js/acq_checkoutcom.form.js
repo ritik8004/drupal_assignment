@@ -180,10 +180,34 @@
     // Handle api error which triggered on card tokenisation fail.
     CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
       if (event.data.errorCode === '70000') {
+        // Adding datalayer for the payment error.
+        var label = 'Payment failed';
+        var errorMessage = 'Payment failed with error code 70000';
+        var checkoutComErrorData = {
+          event: 'eventTracker',
+          eventCategory: 'Checkoutcom payment error',
+          eventAction: errorMessage,
+          eventLabel: label,
+          eventValue: 0,
+          nonInteraction: 0,
+        };
+        dataLayer.push(checkoutComErrorData);
         Drupal.checkoutComTokenisesd = false;
         Drupal.checkoutComShowGlobalError(Drupal.t('Transaction has been declined. Please try again later.'));
       }
       else {
+        // Adding datalayer for the payment error.
+        var label = 'Payment failed';
+        var errorMessage = 'Payment failed with error code other than 70000';
+        var checkoutComErrorData = {
+          event: 'eventTracker',
+          eventCategory: 'Checkoutcom payment error',
+          eventAction: errorMessage,
+          eventLabel: label,
+          eventValue: 0,
+          nonInteraction: 0,
+        };
+        dataLayer.push(checkoutComErrorData);
         Drupal.checkoutComShowGlobalError(Drupal.t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
       }
     });
@@ -194,6 +218,18 @@
     // Handle case when not able to load JS plugin.
     if (typeof CheckoutKit === 'undefined') {
       Drupal.checkoutComTokenised = false;
+      // Adding datalayer for the load plugin error.
+      var label = 'Unable to load JS Plugin';
+      var errorMessage = 'Checkoutcom js plugin could not be loaded';
+      var checkoutComErrorData = {
+        event: 'eventTracker',
+        eventCategory: 'Checkoutcom payment error',
+        eventAction: errorMessage,
+        eventLabel: label,
+        eventValue: 0,
+        nonInteraction: 0,
+      };
+      dataLayer.push(checkoutComErrorData);
       Drupal.checkoutComShowGlobalError(Drupal.t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
       $(document).trigger('checkoutcom_form_error');
       return;
