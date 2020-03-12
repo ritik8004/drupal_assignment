@@ -32,12 +32,6 @@
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
 
-    .path--cart & {
-      @include breakpoint($tablet) {
-        position: absolute;
-      }
-    }
-
     @include icon(infomation, before) {
       font-size: 1.25rem;
       font-weight: bold;
