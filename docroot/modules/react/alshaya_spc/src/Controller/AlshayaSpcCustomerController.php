@@ -165,7 +165,10 @@ class AlshayaSpcCustomerController extends ControllerBase {
 
       if ($customer_id) {
         $response['customer_id'] = (int) $customer_id;
-        $response['uid'] = (int) $user->id();
+
+        // Drupal CORE uses numeric 0 for anonymous but string for logged in.
+        // We follow the same.
+        $response['uid'] = $user->id();
       }
     }
 
