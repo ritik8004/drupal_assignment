@@ -715,7 +715,7 @@ body.alias--cart {
 
         div.items {
           @include breakpoint($only-mobile) {
-            width: 48%;
+            width: calc(100% - 10rem);
             padding-#{$left}: 0;
             margin-bottom: 2.8rem;
 
