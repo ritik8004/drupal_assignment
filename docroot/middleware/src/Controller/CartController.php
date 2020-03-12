@@ -68,13 +68,6 @@ class CartController {
   protected $utility;
 
   /**
-   * Current cart session info.
-   *
-   * @var array
-   */
-  protected $sessionCartInfo = [];
-
-  /**
    * CartController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
@@ -481,7 +474,7 @@ class CartController {
               'address' => [
                 'customer_address_id' => $shipping_info['address_id'],
                 'country_id' => $shipping_info['country_id'],
-                'customer_id' => $this->getCustomerId(),
+                'customer_id' => $this->cart->getCartCustomerId(),
               ],
               'carrier_info' => [
                 'code' => $shipping_methods[0]['carrier_code'],
