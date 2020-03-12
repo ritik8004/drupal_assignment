@@ -1,0 +1,11 @@
+.frontpage {
+  .c-content__region {
+    .block-facet-blockcategory-facet-search {
+      & > ul {
+        @include breakpoint($upto-desktop) {
+          max-height: calc(100vh - 20rem);
+        }
+      }
+    }
+  }
+}
