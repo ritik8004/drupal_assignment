@@ -16,6 +16,7 @@ use Drupal\metatag\MetatagManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Class SkuInfoHelper.
@@ -346,8 +347,10 @@ class SkuInfoHelper {
     if (!empty($categories)) {
       foreach ($categories as $term) {
         $term = $this->getEntityTranslation($term, $lang);
+
         $terms[] = [
           'name' => $term->label(),
+          'category_hierarchy' => $this->getProductCategoryHierarchy($term, $lang),
           'google_product_category' => $term->get('field_category_google')->getString(),
           'id' => $term->id(),
           'url' => $this->getEntityUrl($term),
@@ -355,6 +358,29 @@ class SkuInfoHelper {
       }
     }
     return $terms;
+  }
+
+  /**
+   * Get category hierarchy.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   The term object.
+   * @param string|null $lang
+   *   The lang code.
+   *
+   * @return array
+   *   The string of terms hierarchy.
+   */
+  protected function getProductCategoryHierarchy(TermInterface $term, $lang = NULL) {
+    $sourceTerm[] = ['target_id' => $term->id()];
+    $termHierarchy = [];
+    if ($parents = \Drupal::service('alshaya_acm_product.category_helper')->getBreadcrumbTermList($sourceTerm)) {
+      foreach (array_reverse($parents) as $parent) {
+        $parent = $this->getEntityTranslation($parent, $lang);
+        $termHierarchy[] = $parent->getName();
+      }
+    }
+    return ($termHierarchy) ? implode('|', $termHierarchy) : $term->getName();
   }
 
   /**
