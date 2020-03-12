@@ -6,7 +6,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 
 const FixedFields = ({ default_val, showEmail, showFullName = true, subTitle }) => {
   let defaultVal = '';
-  if (!default_val) {
+  if (default_val.length !== 0 && default_val.length !== 'undefined') {
     defaultVal = default_val.static;
   }
 
