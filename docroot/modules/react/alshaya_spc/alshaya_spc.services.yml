@@ -23,3 +23,15 @@ services:
       - '@alshaya_spc.cookies'
       - '@session'
       - '@alshaya_addressbook.manager'
+
+  alshaya_spc.order_helper:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper
+    arguments:
+      - '@entity_type.manager'
+      - '@alshaya_api.api'
+      - '@module_handler'
+      - '@alshaya_spc.cookies'
+      - '@session'
+      - '@alshaya_addressbook.manager'
+      - '@alshaya_acm_customer.orders_manager'
+      - '@current_user'
