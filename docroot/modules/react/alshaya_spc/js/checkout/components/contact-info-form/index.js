@@ -194,6 +194,7 @@ class ContactInfoForm extends React.Component {
       >
         <FixedFields
           showEmail={drupalSettings.user.uid === 0}
+          showFullName={drupalSettings.user.uid === 0}
           default_val={contactInfo ? { static: contactInfo } : []}
           subTitle={this.props.subTitle}
         />
