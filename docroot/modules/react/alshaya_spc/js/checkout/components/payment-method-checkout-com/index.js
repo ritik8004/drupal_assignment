@@ -8,6 +8,7 @@ import {
 } from "../../../utilities/checkout_util";
 import ConditionalView from "../../../common/components/conditional-view";
 import CardTypeSVG from "../card-type-svg";
+import ToolTip from "../../../utilities/tooltip";
 
 class PaymentMethodCheckoutCom extends React.Component {
 
@@ -213,8 +214,10 @@ class PaymentMethodCheckoutCom extends React.Component {
     let cartTypes = [];
     Object.entries(this.state.acceptedCards).forEach(([key, type]) => {
       let activeClass = (this.state.cardType === type) ? 'is-active' : '';
-      cartTypes.push(<CardTypeSVG type={type} class={`${type} ${activeClass}`} />);
+      cartTypes.push(<CardTypeSVG key={type} type={type} class={`${type} ${activeClass}`} />);
     });
+
+    let CVVText = Drupal.t('This code is a three or four digit number printed on the front or back of the credit card');
 
     return (
       <>
@@ -266,6 +269,7 @@ class PaymentMethodCheckoutCom extends React.Component {
             <div className='c-input__bar'/>
             <label>{Drupal.t('CVV')}</label>
             <div id='spc-cc-cvv-error' className="error" />
+            <ToolTip content={CVVText} enable question/>
           </div>
         </div>
 
