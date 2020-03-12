@@ -272,7 +272,7 @@ class AlshayaAlgoliaIndexHelper {
     $swatch_plp_attributes = $display_settings->get('swatches.plp');
 
     if (!empty($swatch_plp_attributes)) {
-      $this->getSwatchFacets($object, $swatch_plp_attributes);
+      $this->processSwatchColorFacets($object, $swatch_plp_attributes);
     }
 
     if ($product_collection = $sku->get('attr_product_collection')->getString()) {
@@ -575,7 +575,7 @@ class AlshayaAlgoliaIndexHelper {
    * @param array $swatch_plp_attributes
    *   The swatch plp attributes.
    */
-  public function getSwatchFacets(array &$object, array $swatch_plp_attributes) {
+  public function processSwatchColorFacets(array &$object, array $swatch_plp_attributes) {
     foreach ($swatch_plp_attributes as $attr) {
       $attr = 'attr_' . $attr;
       if (!empty($object[$attr])) {
