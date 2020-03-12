@@ -1,140 +1,91 @@
 import React from 'react';
-import Cleave from 'cleave.js/react';
-import luhn from "../../../utilities/luhn";
-import {addPaymentMethodInCart} from "../../../utilities/update_cart";
+import Popup from 'reactjs-popup';
+import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
   placeOrder,
-  removeFullScreenLoader, showFullScreenLoader
-} from "../../../utilities/checkout_util";
-import ConditionalView from "../../../common/components/conditional-view";
-import CardTypeSVG from "../card-type-svg";
-import ToolTip from "../../../utilities/tooltip";
+  removeFullScreenLoader,
+  showFullScreenLoader,
+} from '../../../utilities/checkout_util';
+import ConditionalView from '../../../common/components/conditional-view';
+import SavedCardsList from './components/SavedCardsList';
+import AddNewCard from './components/AddNewCard';
+import { CheckoutComContext } from '../../../context/CheckoutCom';
+import SelectedCard from './components/SelectedCard';
 
 class PaymentMethodCheckoutCom extends React.Component {
+  static contextType = CheckoutComContext;
 
   constructor(props) {
     super(props);
-
-    this.ccExpiry = React.createRef();
     this.ccCvv = React.createRef();
 
-    let date = new Date();
-    this.dateMin = date.getMonth() + 1 + '-' + date.getFullYear().toString().substr(-2);
-
     this.state = {
-      cvc: '',
-      expiry: '',
-      number: '',
-      cardType: '',
-      numberValid: false,
-      expiryValid: false,
-      cvvValid: false,
-      acceptedCards: ['visa', 'mastercard', 'diners'],
+      openStoreListModal: false,
+      openNewCardModal: false,
     };
-  };
+  }
+
+  openStoreListModal = () => {
+    this.setState({
+      openStoreListModal: true,
+    });
+  }
+
+  closeStoreListModal = () => {
+    this.setState({
+      openStoreListModal: false,
+    });
+  }
+
+  openNewCardModal = () => {
+    this.setState({
+      openStoreListModal: false,
+      openNewCardModal: true,
+    });
+  }
+
+  closeNewCardModal = () => {
+    this.setState({
+      openNewCardModal: false,
+    });
+  }
 
   labelEffect = (e, handler) => {
     if (handler === 'blur') {
       if (e.currentTarget.value.length > 0) {
         e.currentTarget.classList.add('focus');
-      }
-      else {
+      } else {
         e.currentTarget.classList.remove('focus');
       }
     }
-  };
-
-  handleCardNumberChange(event) {
-    const prevState = this.state;
-    let valid = true;
-    const type = document.getElementById('payment-card-type').value;
-
-    if (this.state.acceptedCards.indexOf(type) === -1) {
-      valid = false;
-    }
-    else if (luhn.validate(event.target.rawValue, type) === false) {
-      valid = false;
-    }
-
-    if (valid) {
-      event.target.classList.remove('invalid');
-    }
-    else {
-      event.target.classList.add('invalid');
-    }
-
-    this.setState({
-      ...prevState,
-      numberValid: valid,
-      number: event.target.rawValue,
-      cardType: type
-    });
-
-    if (prevState.numberValid !== valid && valid) {
-      this.ccExpiry.focus();
-    }
   }
 
-  handleCardTypeChanged (type) {
-    document.getElementById('payment-card-type').value = type;
-  }
-
-  handleCardExpiryChange (event) {
-    let valid = true;
-    let dateParts = event.target.value.split('/').map(x => {
-      if (!(x) || isNaN(x)) {
-        return 0;
-      }
-      return parseInt(x);
-    });
-
-    if (dateParts.length < 2 || dateParts[0] <= 0 || dateParts[1] <= 0) {
-      valid = false;
-    }
-    else {
-      let date = new Date();
-      let century = parseInt(date.getFullYear().toString().substr(2) + '00');
-      date.setFullYear(century + dateParts[1], dateParts[0], 1);
-      let today = new Date();
-      if (date < today) {
-        valid = false;
-      }
-    }
-
-    const prevState = this.state;
-    this.setState({
-      ...prevState,
-      expiryValid: valid,
-      expiry: event.target.value,
-    });
-
-    if (prevState.expiryValid !== valid && valid) {
-      this.ccCvv.current.focus();
-    }
-  }
-
-  handleCardCvvChange (event) {
+  handleCardCvvChange = (event) => {
     if (window.CheckoutKit === undefined) {
       console.error('CheckoutKit not available');
       throw 500;
     }
 
-    let valid = false;
-    let cvv = parseInt(event.target.value);
-    if (cvv >= 100 && cvv <= 9999) {
-      valid = true;
-    }
+    const cvv = parseInt(event.target.value);
+    const valid = (cvv >= 100 && cvv <= 9999);
 
-    const prevState = this.state;
-    this.setState({
-      ...prevState,
+    this.updateCurrentContext({
       cvvValid: valid,
-      cvv: event.target.value,
+      cvv,
     });
   }
 
   validateBeforePlaceOrder = () => {
-    if (!(this.state.numberValid && this.state.expiryValid && this.state.cvvValid)) {
+    const {
+      number,
+      expiry,
+      cvv,
+      numberValid,
+      expiryValid,
+      cvvValid,
+    } = this.context;
+
+    if (!(numberValid && expiryValid && cvvValid)) {
       console.error('Client side validation failed for credit card info');
       throw 'UnexpectedValueException';
     }
@@ -145,16 +96,16 @@ class PaymentMethodCheckoutCom extends React.Component {
 
     showFullScreenLoader();
 
-    let udf3 = (window.drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
+    const udf3 = (drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
       ? 'storeInVaultOnSuccess'
       : '';
 
-    var ccInfo = {
-      'number': this.state.number,
-      'expiryMonth': this.state.expiry.split('/')[0],
-      'expiryYear': this.state.expiry.split('/')[1],
-      'cvv': this.state.cvv,
-      'udf3': udf3,
+    const ccInfo = {
+      number,
+      expiryMonth: expiry.split('/')[0],
+      expiryYear: expiry.split('/')[1],
+      cvv,
+      udf3,
     };
 
     window.CheckoutKit.configure({
@@ -166,20 +117,26 @@ class PaymentMethodCheckoutCom extends React.Component {
 
     // Throwing 200 error, we want to handle place order in custom way.
     throw 200;
-  };
+  }
 
   handleCheckoutResponse = (data) => {
     // @TODO: Handle errors.
-    data['udf3'] = (window.drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
+    const udf3 = (drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
       ? 'storeInVaultOnSuccess'
       : '';
 
-    let paymentData = {
-      'payment': {
-        'method': 'checkout_com',
-        'additional_data': data,
+    const paymentData = {
+      payment: {
+        method: 'checkout_com',
+        additional_data: {
+          ...data,
+          udf3,
+        },
       },
     };
+
+    console.log(paymentData);
+    return;
 
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
       if (result.error !== undefined && result.error) {
@@ -187,103 +144,101 @@ class PaymentMethodCheckoutCom extends React.Component {
         console.error(result.error);
         return;
       }
+
       // 2D flow success.
-      else if (result.cart_id !== undefined && result.cart_id) {
+      if (result.cart_id !== undefined && result.cart_id) {
         const { cart } = this.props;
         placeOrder(cart.cart.cart_id, cart.selected_payment_method);
-      }
-      // 3D flow error.
-      else if (result.success === undefined || !(result.success)) {
+      } else if (result.success === undefined || !(result.success)) {
+        // 3D flow error.
         console.error(result);
-      }
-      // 3D flow success.
-      else if (result.redirectUrl !== undefined) {
+      } else if (result.redirectUrl !== undefined) {
+        // 3D flow success.
         window.location = result.redirectUrl;
-      }
-      else {
-        console.error(response);
+      } else {
+        console.error(result);
         removeFullScreenLoader();
       }
     }).catch((error) => {
       removeFullScreenLoader();
       console.error(error);
     });
-  };
+  }
+
+  onExistingCardSelect = (cardHash) => {
+    this.closeStoreListModal();
+    this.updateCurrentContext({
+      selectedCard: 'existing',
+      tokenizedCard: cardHash,
+    });
+  }
+
+  updateCurrentContext = (obj) => {
+    const { updateState } = this.context;
+    updateState(obj);
+  }
+
+  changeCurrentCard = (type) => {
+    this.updateCurrentContext({
+      selectedCard: type,
+    });
+  }
 
   render() {
-    let cartTypes = [];
-    Object.entries(this.state.acceptedCards).forEach(([key, type]) => {
-      let activeClass = (this.state.cardType === type) ? 'is-active' : '';
-      cartTypes.push(<CardTypeSVG key={type} type={type} class={`${type} ${activeClass}`} />);
-    });
+    const { openStoreListModal, openNewCardModal } = this.state;
+    const { selectedCard, tokenizedCard } = this.context;
 
-    let CVVText = Drupal.t('This code is a three or four digit number printed on the front or back of the credit card');
+    let activeCard = [];
+    if (tokenizedCard !== '') {
+      activeCard = { ...drupalSettings.checkoutCom.tokenizedCards }[tokenizedCard];
+    }
+
+    const addNewCard = (
+      <AddNewCard
+        labelEffect={this.labelEffect}
+        handleCardCvvChange={this.handleCardCvvChange}
+      />
+    );
 
     return (
       <>
-        <div className='payment-form-wrapper'>
-          <input type='hidden' id='payment-card-type' value={this.state.cardType} />
-          <div className='spc-type-textfield spc-type-cc-number'>
-            <Cleave
-              id='spc-cc-number'
-              options={{
-                creditCard: true,
-                onCreditCardTypeChanged: this.handleCardTypeChanged.bind(this),
-              }}
-              required
-              onChange={this.handleCardNumberChange.bind(this)}
-              onBlur={(e) => this.labelEffect(e, 'blur')}
-            />
-            <div className='c-input__bar'/>
-            <label>{Drupal.t('card number')}</label>
-            <div id='spc-cc-number-error' className="error" />
-          </div>
-          <div className='spc-type-textfield spc-type-expiry'>
-            <Cleave
-              id='spc-cc-expiry'
-              htmlRef={(ref) => this.ccExpiry = ref }
-              options={{
-                date: true,
-                dateMin: this.dateMin,
-                datePattern: ['m', 'y'],
-                delimiter: '/',
-              }}
-              required
-              onChange={this.handleCardExpiryChange.bind(this)}
-              onBlur={(e) => this.labelEffect(e, 'blur')}
-            />
-            <div className='c-input__bar'/>
-            <label>{Drupal.t('expiry')}</label>
-            <div id='spc-cc-expiry-error' className="error" />
-          </div>
-          <div className='spc-type-textfield spc-type-cvv'>
-            <input
-              type='tel'
-              id='spc-cc-cvv'
-              ref={this.ccCvv}
-              pattern="\d{3,4}"
-              required
-              onChange={this.handleCardCvvChange.bind(this)}
-              onBlur={(e) => this.labelEffect(e, 'blur')}
-            />
-            <div className='c-input__bar'/>
-            <label>{Drupal.t('CVV')}</label>
-            <div id='spc-cc-cvv-error' className="error" />
-            <ToolTip content={CVVText} enable question/>
-          </div>
-        </div>
-
-        <div className='spc-card-types-wrapper'>
-          {cartTypes}
-        </div>
-
-        <ConditionalView condition={window.drupalSettings.user.uid > 0}>
-          <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
-          <label htmlFor="save_card">{Drupal.t('Save this card for faster payment next time you shop. (CVV number will not be saved)')}</label>
+        <ConditionalView condition={selectedCard === 'new' && tokenizedCard === ''}>
+          {addNewCard}
         </ConditionalView>
+        <ConditionalView condition={tokenizedCard !== ''}>
+          <li>
+            <SelectedCard
+              cardInfo={activeCard}
+              openStoreListModal={this.openStoreListModal}
+              labelEffect={this.labelEffect}
+              handleCardCvvChange={this.handleCardCvvChange}
+              onExistingCardSelect={this.onExistingCardSelect}
+              selected={selectedCard === 'existing'}
+            />
+          </li>
+          <li>
+            <span onClick={() => this.changeCurrentCard('new')}>{Drupal.t('new card')}</span>
+            <ConditionalView condition={selectedCard === 'new'}>
+              {addNewCard}
+            </ConditionalView>
+          </li>
+        </ConditionalView>
+        <Popup open={openStoreListModal} onClose={this.closeStoreListModal} closeOnDocumentClick={false}>
+          <>
+            <SavedCardsList
+              selected={tokenizedCard}
+              closeStoreListModal={this.closeStoreListModal}
+              onExistingCardSelect={this.onExistingCardSelect}
+              onNewCardClick={this.openNewCardModal}
+            />
+          </>
+        </Popup>
+        <Popup open={openNewCardModal} onClose={this.closeNewCardModal} closeOnDocumentClick={false}>
+          {addNewCard}
+        </Popup>
       </>
     );
-  };
+  }
 }
 
 export default PaymentMethodCheckoutCom;

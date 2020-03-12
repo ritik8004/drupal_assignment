@@ -4,6 +4,7 @@ import CodSurchargePaymentMethodDescription
   from "../payment-description-cod-surchage";
 import PaymentMethodCheckoutCom from "../payment-method-checkout-com";
 import PaymentMethodIcon from "../payment-method-svg";
+import CheckoutComContextProvider from '../../../context/CheckoutCom';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -55,7 +56,9 @@ export default class PaymentMethod extends React.Component {
 
           <ConditionalView condition={(this.state.selectedOption === 'checkout_com')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method}`}>
-              <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} cart={this.props.cart} />
+              <CheckoutComContextProvider>
+                <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} cart={this.props.cart} />
+              </CheckoutComContextProvider>
             </div>
           </ConditionalView>
         </div>
