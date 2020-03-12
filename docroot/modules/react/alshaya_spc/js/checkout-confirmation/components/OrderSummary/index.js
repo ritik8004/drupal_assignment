@@ -16,7 +16,7 @@ export default class OrderSummary extends React.Component {
     const paymentMethod = window.drupalSettings.order_details.payment_method;
     const deliveryType = window.drupalSettings.order_details.delivery_type;
     const expectedDelivery = window.drupalSettings.order_details.expected_delivery;
-    const itemsCount = window.drupalSettings.order_details.number_of_items
+    const itemsCount = window.drupalSettings.order_details.number_of_items;
     return (
       <div className="spc-order-summary">
         <div className="spc-order-summary-order-preview">
