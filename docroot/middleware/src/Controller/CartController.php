@@ -128,7 +128,8 @@ class CartController {
   public function getCart() {
     $cart_id = $this->session->getDataFromSession(Cart::SESSION_STORAGE_KEY);
     if (empty($cart_id)) {
-      return new JsonResponse([]);
+      // In JS we will consider this as empty cart.
+      return new JsonResponse(['error' => TRUE]);
     }
 
     $data = $this->cart->getCart();

@@ -30,6 +30,12 @@ export const cartAvailableInStorage = function () {
   if ((current_time - cart_data.cart.last_update) > expire_time
     || cart_data.cart.langcode === undefined
     || window.drupalSettings.path.currentLanguage !== cart_data.cart.langcode) {
+
+    // Do nothing if empty cart is there.
+    if (cart_data.cart.cart_id === null) {
+      return true;
+    }
+
     return cart_data.cart.cart_id;
   }
 
