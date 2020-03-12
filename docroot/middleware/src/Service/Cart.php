@@ -3,7 +3,8 @@
 namespace App\Service;
 
 use App\Service\CheckoutCom\APIWrapper;
-use App\Service\Drupal\DrupalInfo;
+use App\Service\Config\SystemSettings;
+use App\Service\Knet\KnetHelper;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
@@ -40,13 +41,6 @@ class Cart {
   protected $magentoApiWrapper;
 
   /**
-   * Service to get Drupal Info.
-   *
-   * @var \App\Service\Drupal\DrupalInfo
-   */
-  protected $drupalInfo;
-
-  /**
    * Utility.
    *
    * @var \App\Service\Utility
@@ -61,11 +55,25 @@ class Cart {
   protected $checkoutComApi;
 
   /**
+   * K-Net Helper.
+   *
+   * @var \App\Service\Knet\KnetHelper
+   */
+  protected $knetHelper;
+
+  /**
    * Payment Data provider.
    *
    * @var \App\Service\PaymentData
    */
   protected $paymentData;
+
+  /**
+   * System Settings service.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  protected $settings;
 
   /**
    * Service for session.
@@ -81,30 +89,34 @@ class Cart {
    *   Magento info service.
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
    *   Magento API Wrapper.
-   * @param \App\Service\Drupal\DrupalInfo $drupal_info
-   *   Service to get Drupal Info.
    * @param \App\Service\Utility $utility
    *   Utility Service.
    * @param \App\Service\CheckoutCom\APIWrapper $checkout_com_api
    *   Checkout.com API Wrapper.
+   * @param \App\Service\Knet\KnetHelper $knet_helper
+   *   K-Net Helper.
    * @param \App\Service\PaymentData $payment_data
    *   Payment Data provider.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    * @param \App\Service\SessionStorage $session
    *   Service for session.
    */
   public function __construct(MagentoInfo $magento_info,
                               MagentoApiWrapper $magento_api_wrapper,
-                              DrupalInfo $drupal_info,
                               Utility $utility,
                               APIWrapper $checkout_com_api,
+                              KnetHelper $knet_helper,
                               PaymentData $payment_data,
+                              SystemSettings $settings,
                               SessionStorage $session) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
-    $this->drupalInfo = $drupal_info;
     $this->utility = $utility;
     $this->checkoutComApi = $checkout_com_api;
+    $this->knetHelper = $knet_helper;
     $this->paymentData = $payment_data;
+    $this->settings = $settings;
     $this->session = $session;
   }
 
@@ -548,14 +560,15 @@ class Cart {
    * @param array $data
    *   Payment info.
    * @param array $extension
-   *   Cart extension.
+   *   (Optional) Cart extension.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function updatePayment(array $data, array $extension) {
+  public function updatePayment(array $data, array $extension = []) {
+    $extension['action'] = 'update payment';
     $update = [
       'extension' => (object) $extension,
     ];
@@ -584,8 +597,25 @@ class Cart {
   public function processPaymentData(string $method, array $additional_info) {
     $additional_data = [];
 
-    // Method specific code. @TODO: Find better way to handle this.
+    // Method specific code.
     switch ($method) {
+      case 'knet':
+        $cart = $this->getCart();
+
+        $response = $this->knetHelper->initKnetRequest(
+          $cart['totals']['grand_total'],
+          $this->getCartId(),
+          $cart['cart']['extension_attributes']['real_reserved_order_id'],
+          $this->getCartCustomerId()
+        );
+
+        if (isset($response['redirectUrl']) && !empty($response['redirectUrl'])) {
+          $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response['data']);
+          throw new \Exception($response['redirectUrl'], 302);
+        }
+
+        throw new \Exception('Failed to initiate K-Net request.', 500);
+
       case 'checkout_com':
         $additional_data = [
           'card_token_id' => $additional_info['id'],
@@ -609,7 +639,7 @@ class Cart {
             && $response['responseCode'] == APIWrapper::SUCCESS
             && !empty($response[APIWrapper::REDIRECT_URL])) {
             // We will use this again to redirect back to Drupal.
-            $response['langcode'] = $this->drupalInfo->getDrupalLangcode();
+            $response['langcode'] = $this->settings->getRequestLanguage();
             $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response);
             throw new \Exception($response[APIWrapper::REDIRECT_URL], 302);
           }

@@ -4,6 +4,11 @@ import CodSurchargePaymentMethodDescription
   from "../payment-description-cod-surchage";
 import PaymentMethodCheckoutCom from "../payment-method-checkout-com";
 import PaymentMethodIcon from "../payment-method-svg";
+import {addPaymentMethodInCart} from "../../../utilities/update_cart";
+import {
+  placeOrder,
+  removeFullScreenLoader, showFullScreenLoader
+} from "../../../utilities/checkout_util";
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -22,12 +27,58 @@ export default class PaymentMethod extends React.Component {
     });
   }
 
-  validateBeforePlaceOrder () {
+  validateBeforePlaceOrder = () => {
     // Do additional process for some payment methods.
     if (this.props.method.code === 'checkout_com') {
       this.paymentMethodCheckoutCom.current.validateBeforePlaceOrder();
     }
-  }
+    else if (this.props.method.code === 'knet') {
+      showFullScreenLoader();
+
+      let paymentData = {
+        'payment': {
+          'method': 'knet',
+          'additional_data': {},
+        },
+      };
+
+      this.finalisePayment(paymentData);
+
+      // Throwing 200 error, we want to handle place order in custom way.
+      throw 200;
+    };
+  };
+
+  finalisePayment = (paymentData) => {
+    addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
+      if (result.error !== undefined && result.error) {
+        removeFullScreenLoader();
+        console.error(result.error);
+        return;
+      }
+      // 2D flow success.
+      else if (result.cart_id !== undefined && result.cart_id) {
+        const { cart } = this.props;
+        placeOrder(cart.cart.cart_id, cart.selected_payment_method);
+      }
+      // 3D flow error.
+      else if (result.success === undefined || !(result.success)) {
+        console.error(result);
+      }
+      // 3D flow success.
+      else if (result.redirectUrl !== undefined) {
+        window.location = result.redirectUrl;
+      }
+      else {
+        console.error(response);
+        removeFullScreenLoader();
+      }
+    }).catch((error) => {
+      removeFullScreenLoader();
+      console.error(error);
+    });
+  };
+
 
   render() {
     let method = this.props.method.code;
@@ -55,7 +106,7 @@ export default class PaymentMethod extends React.Component {
 
           <ConditionalView condition={(this.state.selectedOption === 'checkout_com')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method}`}>
-              <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} cart={this.props.cart} />
+              <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} cart={this.props.cart} finalisePayment={this.finalisePayment} />
             </div>
           </ConditionalView>
         </div>

@@ -1,11 +1,7 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
 import luhn from "../../../utilities/luhn";
-import {addPaymentMethodInCart} from "../../../utilities/update_cart";
-import {
-  placeOrder,
-  removeFullScreenLoader, showFullScreenLoader
-} from "../../../utilities/checkout_util";
+import {showFullScreenLoader} from "../../../utilities/checkout_util";
 import ConditionalView from "../../../common/components/conditional-view";
 import CardTypeSVG from "../card-type-svg";
 import ToolTip from "../../../utilities/tooltip";
@@ -181,33 +177,7 @@ class PaymentMethodCheckoutCom extends React.Component {
       },
     };
 
-    addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
-      if (result.error !== undefined && result.error) {
-        removeFullScreenLoader();
-        console.error(result.error);
-        return;
-      }
-      // 2D flow success.
-      else if (result.cart_id !== undefined && result.cart_id) {
-        const { cart } = this.props;
-        placeOrder(cart.cart.cart_id, cart.selected_payment_method);
-      }
-      // 3D flow error.
-      else if (result.success === undefined || !(result.success)) {
-        console.error(result);
-      }
-      // 3D flow success.
-      else if (result.redirectUrl !== undefined) {
-        window.location = result.redirectUrl;
-      }
-      else {
-        console.error(response);
-        removeFullScreenLoader();
-      }
-    }).catch((error) => {
-      removeFullScreenLoader();
-      console.error(error);
-    });
+    this.props.finalisePayment(paymentData);
   };
 
   render() {
