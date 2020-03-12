@@ -357,6 +357,7 @@
             @include breakpoint($only-mobile) {
               display: block;
               margin-top: 0.25rem;
+              word-break: break-all;
             }
 
             &:hover {
