@@ -72,6 +72,26 @@ export default class AddressForm extends React.Component {
           if (results[0]) {
             // Use this address info.
             const address = results[0].address_components;
+
+            // Flag to determine if user country same as site.
+            let userCountrySame = false;
+            // Checking if user current location belongs to same
+            // country or not by location coords geocode.
+            for (let i = 0; i < address.length; i++) {
+              if (address[i].types.indexOf('country') !== -1
+                && address[i].short_name === drupalSettings.country_code) {
+                userCountrySame = true;
+                break;
+              }
+            }
+
+            // If user and site country not same, don;t process.
+            if (!userCountrySame) {
+              // @Todo: Add some indication to user.
+              console.log('Not available in the user country');
+              return;
+            }
+
             // Fill the info in address form.
             fillValueInAddressFromGeocode(address);
             // Remove all markers from the map.
