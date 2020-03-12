@@ -7,8 +7,8 @@ import { i18nMiddleWareUrl } from './i18n_url';
  *
  * @returns {string}
  */
-export function getCartApiUrl(cart_id) {
-  return i18nMiddleWareUrl(`cart/${cart_id}`);
+export function getCartApiUrl() {
+  return i18nMiddleWareUrl('cart');
 }
 
 export const cartAvailableInStorage = function () {
@@ -84,7 +84,7 @@ export const fetchCartData = function () {
   }
 
   // Prepare api url.
-  var api_url = getCartApiUrl(cart);
+  var api_url = getCartApiUrl();
 
   return axios.get(api_url)
     .then((response) => response.data)

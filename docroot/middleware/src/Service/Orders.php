@@ -11,6 +11,11 @@ use App\Service\Magento\MagentoInfo;
 class Orders {
 
   /**
+   * The last order id storage key.
+   */
+  const SESSION_STORAGE_KEY = 'last_order';
+
+  /**
    * Magento service.
    *
    * @var \App\Service\Magento\MagentoInfo
