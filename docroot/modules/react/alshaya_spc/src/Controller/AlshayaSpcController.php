@@ -2,6 +2,9 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
+use Drupal\address\Repository\CountryRepository;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
+use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -72,6 +75,27 @@ class AlshayaSpcController extends ControllerBase {
   protected $areaTermsHelper;
 
   /**
+   * Helper class for order processing.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper
+   */
+  protected $orderHelper;
+
+  /**
+   * Address book manager.
+   *
+   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   */
+  protected $addressBookManager;
+
+  /**
+   * Country repository.
+   *
+   * @var \Drupal\address\Repository\CountryRepository
+   */
+  protected $countryRepository;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -88,6 +112,12 @@ class AlshayaSpcController extends ControllerBase {
    *   Entity type manager.
    * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_term_helper
    *   Address terms helper.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper $orderHelper
+   *   Order details helper.
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $addressBookManager
+   *   Address book manager.
+   * @param \Drupal\address\Repository\CountryRepository $countryRepository
+   *   Country Repository.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -96,7 +126,10 @@ class AlshayaSpcController extends ControllerBase {
     MobileNumberUtilInterface $mobile_util,
     AccountProxyInterface $current_user,
     EntityTypeManagerInterface $entity_type_manager,
-    AddressBookAreasTermsHelper $areas_term_helper
+    AddressBookAreasTermsHelper $areas_term_helper,
+    AlshayaSpcOrderHelper $orderHelper,
+    AlshayaAddressBookManager $addressBookManager,
+    CountryRepository $countryRepository
   ) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
@@ -105,6 +138,9 @@ class AlshayaSpcController extends ControllerBase {
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
     $this->areaTermsHelper = $areas_term_helper;
+    $this->orderHelper = $orderHelper;
+    $this->addressBookManager = $addressBookManager;
+    $this->countryRepository = $countryRepository;
   }
 
   /**
@@ -118,7 +154,10 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('mobile_number.util'),
       $container->get('current_user'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_addressbook.area_terms_helper')
+      $container->get('alshaya_addressbook.area_terms_helper'),
+      $container->get('alshaya_spc.order_helper'),
+      $container->get('alshaya_addressbook.manager'),
+      $container->get('address.country_repository')
     );
   }
 
@@ -293,6 +332,42 @@ class AlshayaSpcController extends ControllerBase {
    */
   public function checkoutConfirmation() {
     // @todo: Pull order details from MDC for the recent order.
+    $order = $this->orderHelper->getLastOrderFromSession(TRUE);
+    $shipping_address = $order['shipping']['address'];
+    // Loading address from address book if customer_address_id is available.
+    if (!empty($shipping_address['customer_address_id'])) {
+      if ($entity = $this->addressBookManager->getUserAddressByCommerceId($order['shipping']['address']['customer_address_id'])) {
+        $shipping_address = $this->addressBookManager->getAddressFromEntity($entity);
+      }
+    }
+    $country_list = $this->countryRepository->getList();
+    $shipping_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
+    $shipping_address_array['country'] = $country_list[$shipping_address_array['country_code']];
+    $phone_number = $this->mobileUtil->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    $settings = [
+      'customer_email' => $order['email'],
+      'order_number' => $order['increment_id'],
+      'transaction_id' => $order['order_id'],
+      'order_details' => [
+        'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
+        'shipping_address' => $shipping_address_array,
+        'mobile_number' => $phone_number,
+        'payment_method' => $order['payment']['method_title'],
+        'delivery_type' => 'Home delivery',
+        'expected_delivery' => '1-2 days',
+        'number_of_items' => count($order['items']),
+      ],
+    ];
+    $cache_tags = [];
+    // If logged in user.
+    if ($this->currentUser->isAuthenticated()) {
+      $user = $this->entityTypeManager->getStorage('user')
+        ->load($this->currentUser->id());
+      $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
+    }
+    $cache_tag = ['order:' . $order['order_id']];
+    $cache_tags = Cache::mergeTags($cache_tags, $cache_tag);
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="spc-checkout-confirmation"></div>',
@@ -301,6 +376,14 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/checkout-confirmation',
           'alshaya_white_label/spc-checkout-confirmation',
         ],
+        'drupalSettings' => $settings,
+      ],
+      '#cache' => [
+        'contexts' => [
+          'languages:' . LanguageInterface::TYPE_INTERFACE,
+          'session',
+        ],
+        'tags' => $cache_tags,
       ],
     ];
   }
