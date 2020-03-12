@@ -154,11 +154,19 @@ class AlshayaSpcCustomerController extends ControllerBase {
    *   Json response.
    */
   public function getUserCustomerId() {
-    $currentUser = $this->currentUser()->getAccount();
     $response = [
-      'customer_id' => $currentUser->acq_customer_id,
-      'uid' => $currentUser->id(),
+      'customer_id' => 0,
+      'uid' => 0,
     ];
+
+    if ($this->currentUser()->isAuthenticated()) {
+      $customer_id = $this->currentUser()->getAccount()->get('acq_customer_id')->getString();
+
+      if ($customer_id) {
+        $response['customer_id'] = (int) $customer_id;
+        $response['uid'] = (int) $this->currentUser()->id();
+      }
+    }
 
     return new JsonResponse($response);
   }
