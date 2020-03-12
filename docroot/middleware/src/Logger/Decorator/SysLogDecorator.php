@@ -17,7 +17,8 @@ class SysLogDecorator extends SyslogHandler {
     $identity = isset($_SERVER['AH_SITE_NAME']) ? $_SERVER['AH_SITE_NAME'] : 'drupal';
     $logger = Logger::DEBUG;
     // For production, we don;t use debug level.
-    if (preg_match('/\d{2}(live|update)/', $_ENV['AH_SITE_ENVIRONMENT'])) {
+    if (isset($_ENV['AH_SITE_ENVIRONMENT'])
+      && preg_match('/\d{2}(live|update)/', $_ENV['AH_SITE_ENVIRONMENT'])) {
       $logger = Logger::INFO;
     }
     parent::__construct($identity, LOG_LOCAL0, $logger);
