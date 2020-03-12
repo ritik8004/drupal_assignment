@@ -12,6 +12,9 @@ import {
 import {
   gerAreaLabelById
 } from './address_util';
+import {
+  getInfoFromStorage
+} from './storage';
 
 /**
  * Process the data got from address form submission.
@@ -319,6 +322,11 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                 cart_info = {
                   'error_message': cart_result.error_message
                 }
+              }
+              else {
+                // Merging with existing local.
+                cart_info = getInfoFromStorage();
+                cart_info.cart = cart_result;
               }
 
               // Trigger the event for updte.
