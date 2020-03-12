@@ -69,6 +69,7 @@ class PaymentMethodCheckoutCom extends React.Component {
       numberValid,
       expiryValid,
       cvvValid,
+      selectedCard,
     } = this.context;
 
     if (!(numberValid && expiryValid && cvvValid)) {
@@ -82,24 +83,28 @@ class PaymentMethodCheckoutCom extends React.Component {
 
     showFullScreenLoader();
 
-    const udf3 = (drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
-      ? 'storeInVaultOnSuccess'
-      : '';
+    if (selectedCard === 'existing') {
 
-    const ccInfo = {
-      number,
-      expiryMonth: expiry.split('/')[0],
-      expiryYear: expiry.split('/')[1],
-      cvv,
-      udf3,
-    };
+    } else {
+      const udf3 = (drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
+        ? 'storeInVaultOnSuccess'
+        : '';
 
-    window.CheckoutKit.configure({
-      debugMode: drupalSettings.checkoutCom.debugMode,
-      publicKey: drupalSettings.checkoutCom.publicKey,
-    });
+      const ccInfo = {
+        number,
+        expiryMonth: expiry.split('/')[0],
+        expiryYear: expiry.split('/')[1],
+        cvv,
+        udf3,
+      };
 
-    window.CheckoutKit.createCardToken(ccInfo, this.handleCheckoutResponse);
+      window.CheckoutKit.configure({
+        debugMode: drupalSettings.checkoutCom.debugMode,
+        publicKey: drupalSettings.checkoutCom.publicKey,
+      });
+
+      window.CheckoutKit.createCardToken(ccInfo, this.handleCheckoutResponse);
+    }
 
     // Throwing 200 error, we want to handle place order in custom way.
     throw 200;
@@ -107,17 +112,11 @@ class PaymentMethodCheckoutCom extends React.Component {
 
   handleCheckoutResponse = (data) => {
     // @TODO: Handle errors.
-    const udf3 = (drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
-      ? 'storeInVaultOnSuccess'
-      : '';
 
     const paymentData = {
       payment: {
         method: 'checkout_com',
-        additional_data: {
-          ...data,
-          udf3,
-        },
+        additional_data: { ...data },
       },
     };
 

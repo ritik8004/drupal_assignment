@@ -15,7 +15,7 @@ const SelectedCard = ({
     <div className="spc-add-new-address-btn" onClick={openStoreListModal}>
       {Drupal.t('change')}
     </div>
-    <ConditionalView condition={selected}>
+    <ConditionalView condition={selected && cardInfo.mada === true}>
       <div className="spc-type-textfield spc-type-cvv">
         <input
           type="tel"
