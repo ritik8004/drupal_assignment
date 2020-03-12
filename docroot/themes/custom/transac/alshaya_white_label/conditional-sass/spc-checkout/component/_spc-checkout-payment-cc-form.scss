@@ -11,6 +11,15 @@
     color: $spc-cc-input;
     width: 100%;
 
+    &:focus {
+      outline: 0 !important;
+    }
+
+    &:not(.error):focus ~ .c-input__bar::before,
+    &:not(.error):focus ~ .c-input__bar::after {
+      width: 50%;
+    }
+
     ~ label {
       color: $spc-cc-placeholder;
     }
@@ -45,5 +54,13 @@
   .spc-card-types-wrapper {
     clear: both;
     width: 100%;
+  }
+
+  .spc-type-cvv {
+    .tooltip-anchor {
+      position: absolute;
+      top: -0.3125rem;
+      #{$right}: 0;
+    }
   }
 }

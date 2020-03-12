@@ -3,6 +3,7 @@ import ConditionalView from "../../../common/components/conditional-view";
 import CodSurchargePaymentMethodDescription
   from "../payment-description-cod-surchage";
 import PaymentMethodCheckoutCom from "../payment-method-checkout-com";
+import PaymentMethodIcon from "../payment-method-svg";
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -48,6 +49,8 @@ export default class PaymentMethod extends React.Component {
                 <CodSurchargePaymentMethodDescription surcharge={this.props.cart.cart.surcharge}/>
               </ConditionalView>
             </label>
+
+            <PaymentMethodIcon methodName={method} />
           </div>
 
           <ConditionalView condition={(this.state.selectedOption === 'checkout_com')}>
