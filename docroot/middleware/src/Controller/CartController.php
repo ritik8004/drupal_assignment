@@ -500,6 +500,7 @@ class CartController {
         if (!empty($cart['error'])) {
           return new JsonResponse($cart);
         }
+        break;
 
       case CartActions::CART_PAYMENT_FINALISE:
         $extension = [
