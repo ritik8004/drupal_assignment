@@ -33,7 +33,7 @@ export const cartAvailableInStorage = function () {
 
     // Do nothing if empty cart is there.
     if (cart_data.cart.cart_id === null) {
-      return true;
+      return 'empty';
     }
 
     return cart_data.cart.cart_id;
@@ -45,6 +45,11 @@ export const cartAvailableInStorage = function () {
 export const fetchCartData = function () {
   // Check if cart available in storage.
   let cart = cartAvailableInStorage();
+
+  if (cart === 'empty') {
+    return;
+  }
+
   if (!cart) {
     // Prepare api url.
     var api_url = restoreCartApiUrl();
@@ -62,6 +67,7 @@ export const fetchCartData = function () {
       })
       .catch((error) => {
         // Processing of error here.
+        console.error(error);
       });
   }
   if (!Number.isInteger(cart)) {
@@ -96,6 +102,7 @@ export const fetchCartData = function () {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
+      console.error(error);
     });
 };
 
