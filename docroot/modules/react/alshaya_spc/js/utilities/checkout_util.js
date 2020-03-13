@@ -225,3 +225,21 @@ export const triggerCheckoutEvent = (eventName, data) => {
   });
   document.dispatchEvent(ee);
 };
+
+/**
+ * Determines if delivery method set in cart is same as user
+ * selected or not.
+ */
+export const isDeliveryTypeSameAsInCart = (cart) => {
+  // If not set, means user didn;t change.
+  if (cart.delivery_type === undefined) {
+    return true;
+  }
+
+  if (cart.delivery_type !== undefined &&
+    cart.delivery_type === cart.cart.delivery_type) {
+    return true;
+  }
+
+  return false;
+}

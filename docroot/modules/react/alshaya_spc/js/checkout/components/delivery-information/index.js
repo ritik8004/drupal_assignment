@@ -4,6 +4,9 @@ import SectionTitle from '../../../utilities/section-title';
 import EmptyDeliveryText from '../empty-delivery';
 import HomeDeliveryInfo from '../home-delivery';
 import ClicknCollectDeiveryInfo from '../cnc-delivery';
+import {
+  isDeliveryTypeSameAsInCart,
+} from '../../../utilities/checkout_util';
 
 export default class DeliveryInformation extends React.Component {
   constructor(props) {
@@ -19,7 +22,13 @@ export default class DeliveryInformation extends React.Component {
     });
   }
 
-  showEmpty = (deliveryType, cart) => {
+  showEmpty = (cart) => {
+    // Delivery method selected is not same as what set in cart.
+    if (!isDeliveryTypeSameAsInCart(cart)) {
+      return true;
+    }
+
+    const deliveryType = this.getDeliveryMethodToShow(cart);
     if (deliveryType === 'hd' && cart.cart.shipping_address !== null) {
       return false;
     } if (deliveryType === 'cnc' && typeof cart.cart.store_info !== 'undefined') {
@@ -49,7 +58,7 @@ export default class DeliveryInformation extends React.Component {
     const deliveryType = this.getDeliveryMethodToShow(cart);
 
     let deliveryComponent = null;
-    if (this.showEmpty(deliveryType, cart)) {
+    if (this.showEmpty(cart)) {
       deliveryComponent = <EmptyDeliveryText cart={cart} refreshCart={refreshCart} />;
     } else if (deliveryType === 'hd') {
       deliveryComponent = <HomeDeliveryInfo cart={cart} refreshCart={refreshCart} />;
