@@ -82,18 +82,17 @@ export default class PaymentMethods extends React.Component {
   getPaymentMethods = (active) => {
     const { availablePaymentMethods } = this.state;
 
-    let paymentMethods = [];
+    const paymentMethods = [];
 
     if (active) {
-       Object.entries(availablePaymentMethods).forEach(([, method]) => {
+      Object.entries(availablePaymentMethods).forEach(([, method]) => {
         // If payment method from api response not exists in
         // available payment methods in drupal, ignore it.
         if (method.code in drupalSettings.payment_methods) {
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
         }
       });
-    }
-    else {
+    } else {
       const { cart } = this.props;
 
       Object.entries(drupalSettings.payment_methods).forEach(([, method]) => {

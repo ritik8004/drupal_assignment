@@ -7,9 +7,7 @@ import { cartAvailableInStorage, getGlobalCart } from './get_cart';
 /**
  * Default error message on checkout screen.
  */
-export const getDefaultCheckoutErrorMessage = () => {
-  return Drupal.t('Sorry, something went wrong. Please try again later.');
-}
+export const getDefaultCheckoutErrorMessage = () => Drupal.t('Sorry, something went wrong. Please try again later.');
 
 /**
  * Get shipping methods.
@@ -98,13 +96,13 @@ export const addShippingInCart = function (action, data) {
         }
         return response.data;
       },
-      (error) => {
+      (error) =>
         // Processing of error here.
-        return {
+        ({
           error: true,
-          error_message: getDefaultCheckoutErrorMessage()
-        }
-      },
+          error_message: getDefaultCheckoutErrorMessage(),
+        })
+      ,
     )
     .catch((error) => {
       console.error(error);
@@ -135,16 +133,14 @@ export const addBillingInCart = function (action, data) {
       cart_id: cart,
     })
     .then(
-      (response) => {
-        return response.data;
-      },
-      (error) => {
+      (response) => response.data,
+      (error) =>
         // Processing of error here.
-        return {
+        ({
           error: true,
-          error_message: getDefaultCheckoutErrorMessage()
-        }
-      },
+          error_message: getDefaultCheckoutErrorMessage(),
+        })
+      ,
     )
     .catch((error) => {
       console.error(error);
@@ -240,10 +236,10 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
     return true;
   }
 
-  if (cart.delivery_type !== undefined &&
-    cart.delivery_type === cart.cart.delivery_type) {
+  if (cart.delivery_type !== undefined
+    && cart.delivery_type === cart.cart.delivery_type) {
     return true;
   }
 
   return false;
-}
+};

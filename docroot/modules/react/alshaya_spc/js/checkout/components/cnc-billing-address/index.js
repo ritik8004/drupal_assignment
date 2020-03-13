@@ -2,29 +2,28 @@ import React from 'react';
 
 import BillingPopUp from '../billing-popup';
 import BillingInfo from '../billing-info';
-import SectionTitle from "../../../utilities/section-title";
+import SectionTitle from '../../../utilities/section-title';
 
 export default class CnCBillingAddress extends React.Component {
-
   _isMounted = false;
 
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
     };
   }
 
   showPopup = (e) => {
     this.setState({
-      open: true
+      open: true,
     });
   };
 
   closePopup = () => {
     if (this._isMounted) {
       this.setState({
-        open: false
+        open: false,
       });
     }
   };
@@ -42,7 +41,7 @@ export default class CnCBillingAddress extends React.Component {
    * Event handler for billing update.
    */
   processBillingUpdate = (e) => {
-    let data = e.detail.data();
+    const data = e.detail.data();
 
     // Close modal.
     this.closePopup();
@@ -56,36 +55,34 @@ export default class CnCBillingAddress extends React.Component {
     // If carrier info not set, means shipping info not set.
     // So we don't need to show bulling.
     if (carrierInfo === undefined || carrierInfo === null) {
-        return (null);
+      return (null);
     }
 
     // If billing address is not set already.
     if (billingAddress === undefined || billingAddress === null) {
       return (
-        <div className='spc-section-billing-address cnc-flow'>
+        <div className="spc-section-billing-address cnc-flow">
           <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
-          <div className='spc-billing-address-wrapper'>
-            <div className='spc-billing-top-panel spc-billing-cc-panel' onClick={(e) => this.showPopup(e)}>
+          <div className="spc-billing-address-wrapper">
+            <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={(e) => this.showPopup(e)}>
               {Drupal.t('please add your billing address.')}
             </div>
-            {this.state.open &&
-              <BillingPopUp closePopup={this.closePopup} billing={billingAddress} shipping={shippingAddress}/>
-            }
+            {this.state.open
+              && <BillingPopUp closePopup={this.closePopup} billing={billingAddress} shipping={shippingAddress} />}
           </div>
         </div>
       );
     }
 
     return (
-      <div className='spc-section-billing-address cnc-flow'>
+      <div className="spc-section-billing-address cnc-flow">
         <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
-        <div className='spc-billing-address-wrapper'>
-          <div className='spc-billing-bottom-panel'>
-            <BillingInfo shipping={shippingAddress} billing={billingAddress}/>
+        <div className="spc-billing-address-wrapper">
+          <div className="spc-billing-bottom-panel">
+            <BillingInfo shipping={shippingAddress} billing={billingAddress} />
           </div>
         </div>
       </div>
     );
   }
-
 }

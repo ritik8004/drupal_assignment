@@ -48,14 +48,14 @@ function stickyMobileCartPreview() {
   // Check for super category menu.
   const superCategoryMenu = document.getElementById('block-supercategorymenu');
   let superCatFlag = false;
-  let superCatHeight, brandingMenuHeight;
+  let superCatHeight; let
+    brandingMenuHeight;
   [superCatHeight, brandingMenuHeight] = [0, 0];
   if (superCategoryMenu) {
     superCatHeight = superCategoryMenu.offsetHeight + document.getElementById('block-mobilenavigation').offsetHeight;
     cartPreview[0].style.top = `${superCatHeight}px`;
     superCatFlag = true;
-  }
-  else {
+  } else {
     brandingMenuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
     cartPreview[0].style.top = `${brandingMenuHeight}px`;
   }
