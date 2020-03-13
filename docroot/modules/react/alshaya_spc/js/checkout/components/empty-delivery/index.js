@@ -122,10 +122,10 @@ export default class EmptyDeliveryText extends React.Component {
       const shippingAddress = cart.shipping_address;
       default_val = {
         static: {
-          fullname: shippingAddress.firstname + ' ' + shippingAddress.lastname,
+          fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,
           email: shippingAddress.email,
-          telephone: shippingAddress.telephone
-        }
+          telephone: shippingAddress.telephone,
+        },
       };
     }
 
