@@ -13,13 +13,13 @@ const SavedCardsList = ({ closeStoreListModal, selected, onExistingCardSelect, o
 
   return (
     <>
-      <header className="spc-change-address">{Drupal.t('change payment card')}</header>
+      <header className="spc-payment-saved-cards-header">{Drupal.t('change payment card')}</header>
       <a className="close" onClick={() => closeStoreListModal()}>&times;</a>
-      <div className="address-list-content">
-        <div className="spc-add-new-address-btn" onClick={onNewCardClick}>
+      <div className="spc-saved-card-list-content">
+        <div className="spc-modal-add-new-card-btn" onClick={onNewCardClick}>
           {Drupal.t('add new card')}
         </div>
-        <div className="spc-checkout-address-list">{cardITems}</div>
+        <div className="spc-checkout-saved-card-list">{cardITems}</div>
       </div>
     </>
   );

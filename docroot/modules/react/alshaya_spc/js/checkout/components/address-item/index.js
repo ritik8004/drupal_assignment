@@ -135,9 +135,10 @@ export default class AddressItem extends React.Component {
     editAddressData['static']['address_id'] = address['address_id'];
 
     let selectedClass = this.props.isSelected === true ? ' selected' : '';
+    let buttonText = this.props.isSelected === true ? Drupal.t('selected') : Drupal.t('select');
 
     return (
-      <div className={'spc-address-tile' + selectedClass} onClick={() => this.updateShippingAddress(address)}>
+      <div className={'spc-address-tile' + selectedClass}>
       <div className='spc-address-metadata'>
         <div className='spc-address-name'>{address.given_name} {address.family_name}</div>
         <div className='spc-address-fields'>{addressData.join(', ')}</div>
@@ -145,6 +146,7 @@ export default class AddressItem extends React.Component {
       </div>
       <div className='spc-address-tile-actions'>
         <div className='spc-address-btns'>
+          <button className='spc-address-select-address' onClick={() => this.updateShippingAddress(address)}>{buttonText}</button>
           <div title={Drupal.t('Edit Address')} className='spc-address-tile-edit' onClick={(e) => this.openModal(e)}>
             <EditAddressSVG/>
             <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
