@@ -47,3 +47,13 @@ checkoutcom_payment_error:
     path: /payment/checkout-com-error
     controller: App\Controller\PaymentController::handleCheckoutComError
     methods: GET
+
+knet_payment_response:
+    path: /payment/knet-response
+    controller: App\Controller\PaymentController::handleKnetResponse
+    methods: POST
+
+knet_payment_error:
+    path: /payment/knet-error/{state_key}
+    controller: App\Controller\PaymentController::handleKnetError
+    methods: GET

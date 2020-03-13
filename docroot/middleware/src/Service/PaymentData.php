@@ -47,7 +47,11 @@ class PaymentData {
     $result = $this->connection->executeQuery($query, [$cart_id], [ParameterType::INTEGER]);
 
     $row = $result->fetch();
-    return $row ? unserialize($row->data) : NULL;
+    if (!empty($row['data'])) {
+      $row['data'] = unserialize($row['data']);
+    }
+
+    return $row ?? [];
   }
 
   /**
