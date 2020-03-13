@@ -1,11 +1,11 @@
 import React from 'react';
 import ConditionalView from '../../../../common/components/conditional-view';
 import ToolTip from '../../../../utilities/tooltip';
+import CVVToolTipText from "../../cvv-text";
 
 const SelectedCard = ({
   cardInfo, openSavedCardListModal, labelEffect, handleCardCvvChange, onExistingCardSelect, selected = true,
 }) => {
-  const cvvText = Drupal.t('This code is a three or four digit number printed on the front or back of the credit card');
   return (
     <div className='spc-checkout-payment-saved-card-preview'>
       <div className='spc-checkout-payment-data' onClick={() => onExistingCardSelect(cardInfo.public_hash, cardInfo.mada)}>
@@ -28,7 +28,7 @@ const SelectedCard = ({
           <div className="c-input__bar" />
           <label htmlFor="spc-cc-cvv">{Drupal.t('CVV')}</label>
           <div id="spc-cc-cvv-error" className="error" />
-          <ToolTip content={cvvText} enable question />
+          <ToolTip enable question><CVVToolTipText/></ToolTip>
         </div>
       </ConditionalView>
     </div>
