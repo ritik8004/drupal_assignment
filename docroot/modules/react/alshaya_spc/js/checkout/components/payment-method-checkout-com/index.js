@@ -190,7 +190,7 @@ class PaymentMethodCheckoutCom extends React.Component {
             </ConditionalView>
           </div>
         </ConditionalView>
-        <Popup className="spc-saved-payment-card-list" open={openStoreListModal} onClose={this.closeStoreListModal} closeOnDocumentClick={false}>
+        <Popup className="spc-saved-payment-card-list" open={openSavedCardListModal} onClose={this.closeSavedCardListModal} closeOnDocumentClick={false}>
           <>
             <SavedCardsList
               selected={tokenizedCard}
