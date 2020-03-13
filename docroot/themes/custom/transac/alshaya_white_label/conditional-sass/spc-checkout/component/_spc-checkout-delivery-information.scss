@@ -59,24 +59,6 @@
       .delivery-address {
         width: calc(100% - 7.1875rem);
       }
-
-      .spc-address-form-edit-link,
-      .spc-change-address-link {
-        position: absolute;
-        #{$right}: 0;
-        top: 0;
-        cursor: pointer;
-        height: 2.25rem;
-        min-width: 6.1875rem;
-        padding: 0 0.625rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid $spc-deliver-button;
-        color: $spc-deliver-button;
-        font-size: 0.8125rem;
-        border-radius: 0.25rem;
-      }
     }
   }
 }

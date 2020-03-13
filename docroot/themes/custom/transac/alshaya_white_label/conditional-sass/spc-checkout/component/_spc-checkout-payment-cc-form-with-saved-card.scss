@@ -1,0 +1,50 @@
+.payment-method.payment-method-checkout_com {
+  .payment-method-bottom-panel {
+    .spc-checkout-payment-saved-card-preview {
+      position: relative;
+      font-size: 0.875rem;
+
+      .spc-checkout-payment-saved-card-number {
+        margin-bottom: 0.625rem;
+      }
+    }
+
+    .spc-checkout-card-option {
+      position: relative;
+      padding-#{$left}: 2rem;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid $spc-delivery-info-separator;
+      cursor: pointer;
+
+      &:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-bottom: none;
+      }
+
+      @include icon(radio-empty, before) {
+        position: absolute;
+        top: -1rem;
+        #{$left}: -1rem;
+        font-size: 1.125rem;
+        width: 3rem;
+        text-align: center;
+        color: $spc-checkout-radio-empty;
+        pointer-events: none;
+      }
+
+      &.selected {
+        @include icon(radio-filled, before) {
+          color: $spc-checkout-radio-filled;
+        }
+      }
+
+      &.spc-checkout-card-option-new-card {
+        .payment-form-wrapper {
+          padding-top: 1.75rem;
+        }
+      }
+    }
+  }
+}

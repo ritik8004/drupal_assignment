@@ -7,12 +7,12 @@ const SelectedCard = ({
 }) => {
   const cvvText = Drupal.t('This code is a three or four digit number printed on the front or back of the credit card');
   return (
-    <div>
-      <span onClick={() => onExistingCardSelect(cardInfo.public_hash)}>
-        {Drupal.t('card no.') + ' ' + cardInfo.maskedCC}
-        {Drupal.t('expires') +  ' ' + cardInfo.expirationDate}
-      </span>
-      <div className="spc-add-new-address-btn" onClick={openStoreListModal}>
+    <div className='spc-checkout-payment-saved-card-preview'>
+      <div className='spc-checkout-payment-data' onClick={() => onExistingCardSelect(cardInfo.public_hash)}>
+        <div className='spc-checkout-payment-saved-card-number'>{Drupal.t('card no.') + ' **** **** **** ' + cardInfo.maskedCC}</div>
+        <div className='spc-checkout-payment-saved-card-expiry'>{Drupal.t('expires') +  ' ' + cardInfo.expirationDate}</div>
+      </div>
+      <div className="spc-add-new-card-btn" onClick={openStoreListModal}>
         {Drupal.t('change')}
       </div>
       <ConditionalView condition={selected && cardInfo.mada === true}>
