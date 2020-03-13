@@ -35,6 +35,10 @@
     margin-bottom: 0.625rem;
     font-size: 1rem;
 
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+    }
+
     .price-currency {
       padding-#{$right}: 0.3125rem;
     }

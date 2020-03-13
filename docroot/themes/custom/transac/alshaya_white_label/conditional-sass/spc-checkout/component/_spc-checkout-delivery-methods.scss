@@ -2,7 +2,7 @@
   margin-bottom: 2.5rem;
 
   .delivery-method {
-    height: 4.75rem;
+    min-height: 3.875rem;
     background: $spc-checkout-delivery-method-bg;
     margin-bottom: 0.3125rem;
     display: flex;
@@ -57,10 +57,6 @@
 
     svg g {
       fill: $spc-checkout-delivery-method-impress;
-    }
-
-    @include breakpoint($tablet) {
-      height: 3.875rem;
     }
 
     .sub-title {
