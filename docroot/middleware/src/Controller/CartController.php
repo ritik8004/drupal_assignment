@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use App\Service\CartSession;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class CartController.
@@ -59,11 +59,11 @@ class CartController {
   protected $logger;
 
   /**
-   * Cart session.
+   * Service for session.
    *
-   * @var \App\Service\CartSession
+   * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
    */
-  protected $cartSession;
+  protected $session;
 
   /**
    * Utility.
@@ -92,27 +92,108 @@ class CartController {
    *   Magento info service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
-   * @param \App\Service\CartSession $cart_session
-   *   The cart session service..
+   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+   *   Service for session.
    * @param \App\Service\Utility $utility
    *   Utility Service.
    */
-  public function __construct(
-    RequestStack $request,
-    Cart $cart,
-    Drupal $drupal,
-    MagentoInfo $magento_info,
-    LoggerInterface $logger,
-    CartSession $cart_session,
-    Utility $utility
-  ) {
+  public function __construct(RequestStack $request,
+                              Cart $cart,
+                              Drupal $drupal,
+                              MagentoInfo $magento_info,
+                              LoggerInterface $logger,
+                              SessionInterface $session,
+                              Utility $utility) {
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->magentoInfo = $magento_info;
     $this->logger = $logger;
-    $this->cartSession = $cart_session;
+    $this->session = $session;
     $this->utility = $utility;
+  }
+
+  /**
+   * Start session and set cart data.
+   *
+   * @param bool $force
+   *   TRUE to load cart info from session forcefully, false otherwise.
+   */
+  protected function loadCartFromSession($force = FALSE) {
+    if (!$this->session->isStarted()) {
+      $this->session->start();
+    }
+
+    if (empty($this->sessionCartInfo) || $force) {
+      $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
+    }
+  }
+
+  /**
+   * Update cart id to middleware session.
+   *
+   * @param int $cart_id
+   *   The cart id.
+   * @param int|null $customer_id
+   *   (Optional) the customer id.
+   * @param string|null $email
+   *   (Optional) the customer email.
+   */
+  protected function updateCartSession(int $cart_id, int $customer_id = NULL, $email = NULL) {
+    $this->loadCartFromSession();
+    $update = FALSE;
+    if (empty($this->sessionCartInfo['cart_id'])) {
+      $update = TRUE;
+      $this->sessionCartInfo['cart_id'] = $cart_id;
+    }
+
+    if (!empty($customer_id)) {
+      $update = TRUE;
+      $this->sessionCartInfo['customer_id'] = (int) $customer_id;
+    }
+
+    if (!empty($email)) {
+      $update = TRUE;
+      $this->sessionCartInfo['customer_email'] = $email;
+    }
+
+    if ($update) {
+      $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
+    }
+  }
+
+  /**
+   * Return user id from current session.
+   *
+   * @return int|null
+   *   Return user id or null.
+   */
+  protected function getSessionUid() {
+    if (!empty($this->sessionCartInfo['uid'])) {
+      return $this->sessionCartInfo['uid'];
+    }
+
+    $this->loadCartFromSession();
+    return !empty($this->sessionCartInfo['uid'])
+      ? $this->sessionCartInfo['uid']
+      : NULL;
+  }
+
+  /**
+   * Return customer id from current session.
+   *
+   * @return int|null
+   *   Return customer id or null.
+   */
+  protected function getSessionCustomerId() {
+    if (!empty($this->sessionCartInfo['customer_id'])) {
+      return $this->sessionCartInfo['customer_id'];
+    }
+
+    $this->loadCartFromSession();
+    return !empty($this->sessionCartInfo['customer_id'])
+      ? $this->sessionCartInfo['customer_id']
+      : NULL;
   }
 
   /**
@@ -140,7 +221,7 @@ class CartController {
     }
 
     // If logged in user.
-    if (!empty($this->cartSession->getSessionUid())) {
+    if (!empty($this->getSessionUid())) {
       $shipping = $data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'];
       // If shipping method is set and only HD.
       if ((empty($shipping['extension_attributes'])
@@ -164,12 +245,12 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function restoreCart() {
-    $this->sessionCartInfo = $this->cartSession->loadCartFromSession();
+    $this->loadCartFromSession();
 
     if (empty($this->sessionCartInfo['cart_id'])) {
       $this->sessionCartInfo = $this->drupal->getCustomerCart();
       if (!empty($this->sessionCartInfo)) {
-        $this->cartSession->setSession($this->sessionCartInfo);
+        $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
       }
     }
 
@@ -359,8 +440,8 @@ class CartController {
         $data['recommended_products'] = $recommended_products_data;
       }
 
-      $this->cartSession->updateCartSession($data['cart_id'], $data['customer']['id'], $data['customer']['email']);
-      $data['uid'] = $this->cartSession->getSessionUid() ?: 0;
+      $this->updateCartSession($data['cart_id'], $data['customer']['id'], $data['customer']['email']);
+      $data['uid'] = $this->getSessionUid() ?: 0;
     }
     catch (\Exception $e) {
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
@@ -378,7 +459,7 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   protected function createCart() {
-    $this->cartSession->loadCartFromSession();
+    $this->loadCartFromSession();
     if (!empty($this->sessionCartInfo['cart_id'])) {
       // Validate the cart again to ensure session data is not corrupt.
       $data = $this->cart->getCart($this->sessionCartInfo['cart_id']);
@@ -387,7 +468,8 @@ class CartController {
       }
     }
 
-    $this->sessionCartInfo = $this->cartSession->clearSession();
+    $this->session->remove(self::STORAGE_KEY);
+    $this->sessionCartInfo = [];
     return $this->cart->createCart();
   }
 
@@ -405,7 +487,7 @@ class CartController {
   public function updateCart(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
 
-    $this->sessionCartInfo = $this->cartSession->loadCartFromSession();
+    $this->loadCartFromSession();
 
     // Validate request.
     if (!$this->validateRequestData($request_content)) {
@@ -490,7 +572,7 @@ class CartController {
               'address' => [
                 'customer_address_id' => $shipping_info['address_id'],
                 'country_id' => $shipping_info['country_id'],
-                'customer_id' => $this->cartSession->getSessionCustomerId(),
+                'customer_id' => $this->getSessionCustomerId(),
               ],
               'carrier_info' => [
                 'code' => $shipping_methods[0]['carrier_code'],
@@ -669,7 +751,7 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function associateCart() {
-    $this->sessionCartInfo = $this->cartSession->loadCartFromSession(TRUE);
+    $this->loadCartFromSession(TRUE);
 
     try {
       if (empty($this->sessionCartInfo['cart_id'])) {
@@ -688,11 +770,13 @@ class CartController {
       }
 
       $this->cart->associateCartToCustomer($this->sessionCartInfo['cart_id'], $customer['customer_id']);
-      $this->sessionCartInfo = $this->cartSession->setSession([
+      $this->session->set(self::STORAGE_KEY, [
         'cart_id' => $this->sessionCartInfo['cart_id'],
         'customer_id' => $customer['customer_id'],
         'uid' => $customer['uid'],
       ]);
+
+      $this->loadCartFromSession(TRUE);
     }
     catch (\Exception $e) {
       // Exception handling here.
