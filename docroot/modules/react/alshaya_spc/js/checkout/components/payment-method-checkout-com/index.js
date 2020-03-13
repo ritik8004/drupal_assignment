@@ -248,8 +248,10 @@ class PaymentMethodCheckoutCom extends React.Component {
         </div>
 
         <ConditionalView condition={window.drupalSettings.user.uid > 0}>
-          <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
-          <label htmlFor="save_card">{Drupal.t('Save this card for faster payment next time you shop. (CVV number will not be saved)')}</label>
+          <div className='spc-payment-save-card'>
+            <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
+            <label htmlFor="payment-card-save">{Drupal.t('save this card for faster payment next time you shop. (CVV number will not be saved)')}</label>
+          </div>
         </ConditionalView>
       </>
     );
