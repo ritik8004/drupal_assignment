@@ -7,11 +7,12 @@ export default class OrderSummary extends React.Component {
     const customEmail = window.drupalSettings.customer_email;
     const orderNumber = window.drupalSettings.order_number;
     const transactionId = window.drupalSettings.transaction_id;
-    const addressLine1 = window.drupalSettings.order_details.shipping_address.address_line1;
-    const addressLine2 = window.drupalSettings.order_details.shipping_address.address_line2;
-    const locality = window.drupalSettings.order_details.shipping_address.locality;
-    const dependentLocality = window.drupalSettings.order_details.shipping_address.dependent_locality;
-    const customerAddress = addressLine1 + ',' + addressLine2 + ',' + locality + ',' + dependentLocality;
+    const addressLine1 = window.drupalSettings.order_details.delivery_type_info.delivery_address.address_line1;
+    const addressLine2 = window.drupalSettings.order_details.delivery_type_info.delivery_address.address_line2;
+    const locality = window.drupalSettings.order_details.delivery_type_info.delivery_address.locality;
+    const country = window.drupalSettings.order_details.delivery_type_info.delivery_address.country;
+    const dependentLocality = window.drupalSettings.order_details.delivery_type_info.delivery_address.dependent_locality;
+    const customerAddress = ' ' + country + ', ' + addressLine1 + ', ' + addressLine2 + ', ' + locality + ', ' + dependentLocality;
     const mobileNumber = window.drupalSettings.order_details.mobile_number;
     const paymentMethod = window.drupalSettings.order_details.payment_method;
     const deliveryType = window.drupalSettings.order_details.delivery_type;

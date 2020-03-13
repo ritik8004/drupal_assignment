@@ -42,3 +42,6 @@ services:
       - '@alshaya_acm_product.sku_info'
       - '@language_manager'
       - '@request_stack'
+      - '@mobile_number.util'
+      - '@alshaya_acm_checkout.options_manager'
+      - '@address.country_repository'

@@ -331,16 +331,11 @@ class AlshayaSpcController extends ControllerBase {
   public function checkoutConfirmation() {
     // @todo: Pull order details from MDC for the recent order.
     $order = $this->orderHelper->getLastOrderFromSession(TRUE);
-    $shipping_address = $order['shipping']['address'];
-    // Loading address from address book if customer_address_id is available.
-    if (!empty($shipping_address['customer_address_id'])) {
-      if ($entity = $this->addressBookManager->getUserAddressByCommerceId($order['shipping']['address']['customer_address_id'])) {
-        $shipping_address = $this->addressBookManager->getAddressFromEntity($entity);
-      }
-    }
-    $country_list = $this->countryRepository->getList();
-    $shipping_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
-    $shipping_address_array['country'] = $country_list[$shipping_address_array['country_code']];
+
+    // Get order type hd/cnc and other details.
+    $orderDetails = $this->orderHelper->getOrderTypeDetails($order);
+
+    // Get formatted customer phone number.
     $phone_number = $this->mobileUtil->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
     // Order Totals.
@@ -365,12 +360,12 @@ class AlshayaSpcController extends ControllerBase {
       'transaction_id' => $order['order_id'],
       'order_details' => [
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
-        'shipping_address' => $shipping_address_array,
         'mobile_number' => $phone_number,
         'payment_method' => $order['payment']['method_title'],
-        'delivery_type' => 'Home delivery',
+        // @todo Get exepected delivery term.
         'expected_delivery' => '1-2 days',
         'number_of_items' => count($order['items']),
+        'delivery_type_info' => $orderDetails,
       ],
       'totals' => $totals,
       'items' => $productList,
@@ -396,13 +391,7 @@ class AlshayaSpcController extends ControllerBase {
         ],
         'drupalSettings' => $settings,
       ],
-      '#cache' => [
-        'contexts' => [
-          'languages:' . LanguageInterface::TYPE_INTERFACE,
-          'session',
-        ],
-        'tags' => $cache_tags,
-      ],
+
     ];
   }
 
