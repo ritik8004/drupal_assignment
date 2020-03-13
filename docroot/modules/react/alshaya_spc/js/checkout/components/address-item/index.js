@@ -26,6 +26,11 @@ export default class AddressItem extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // Close the modal
+    document.addEventListener('closeAddressListPopup', this.closeModal, false);
+  }
+
   openModal = (e) => {
     this.setState({
       open: true,
@@ -44,9 +49,10 @@ export default class AddressItem extends React.Component {
    * Prepare address data to update shipping when
    */
   prepareAddressToUpdate = (address) => {
-    address.city = gerAreaLabelById(false, address.administrative_area);
-    address.mobile = cleanMobileNumber(address.mobile);
-    const data = prepareAddressDataForShipping(address);
+    const addressUpdate = address;
+    addressUpdate.city = gerAreaLabelById(false, address.administrative_area);
+    addressUpdate.mobile = cleanMobileNumber(address.mobile);
+    const data = prepareAddressDataForShipping(addressUpdate);
     data.static.customer_address_id = address.address_mdc_id;
     data.static.customer_id = address.customer_id;
     return data;
@@ -56,9 +62,10 @@ export default class AddressItem extends React.Component {
    * When user changes address.
    */
   updateShippingAddress = (address) => {
+    const { isSelected } = this.props;
     // If address we selecting is already shipping address,
     // don't do anything.
-    if (this.props.isSelected) {
+    if (isSelected) {
       return;
     }
 
@@ -69,33 +76,28 @@ export default class AddressItem extends React.Component {
     const data = this.prepareAddressToUpdate(address);
 
     // Update shipping on cart.
-    const cart_info = addShippingInCart('update shipping', data);
-    if (cart_info instanceof Promise) {
-      cart_info.then((cart_result) => {
+    const cartInfo = addShippingInCart('update shipping', data);
+    if (cartInfo instanceof Promise) {
+      cartInfo.then((cartResult) => {
         // Remove loader.
         removeFullScreenLoader();
 
         // Prepare cart data.
-        let cart_data = {
-          cart: cart_result,
+        let cartData = {
+          cart: cartResult,
         };
         // If there is any error.
-        if (cart_result.error !== undefined) {
-          cart_data = {
-            error_message: cart_result.error_message,
+        if (cartResult.error !== undefined) {
+          cartData = {
+            error_message: cartResult.error_message,
           };
         }
 
         // Trigger event to close all popups.
-        triggerCheckoutEvent('refreshCartOnAddress', cart_data);
+        triggerCheckoutEvent('refreshCartOnAddress', cartData);
       });
     }
   };
-
-  componentDidMount() {
-    // Close the modal
-    document.addEventListener('closeAddressListPopup', this.closeModal, false);
-  }
 
   /**
    * Process the address form data on sumbit.
@@ -107,10 +109,11 @@ export default class AddressItem extends React.Component {
   };
 
   render() {
-    const { address } = this.props;
-    const mob_default_val = cleanMobileNumber(address.mobile);
+    const { address, isSelected } = this.props;
+    const mobDefaultVal = cleanMobileNumber(address.mobile);
     const addressData = [];
     const editAddressData = {};
+    const { open } = this.state;
     Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
       if (address[key] !== undefined) {
         let fillVal = address[key];
@@ -130,10 +133,10 @@ export default class AddressItem extends React.Component {
 
     editAddressData.static = {};
     editAddressData.static.fullname = `${address.given_name} ${address.family_name}`;
-    editAddressData.static.telephone = mob_default_val;
+    editAddressData.static.telephone = mobDefaultVal;
     editAddressData.static.address_id = address.address_id;
 
-    const selectedClass = this.props.isSelected === true ? ' selected' : '';
+    const selectedClass = isSelected === true ? ' selected' : '';
 
     return (
       <div className={`spc-address-tile${selectedClass}`} onClick={() => this.updateShippingAddress(address)}>
@@ -148,16 +151,22 @@ export default class AddressItem extends React.Component {
             +
             {drupalSettings.country_mobile_code}
             {' '}
-            {mob_default_val}
+            {mobDefaultVal}
           </div>
         </div>
         <div className="spc-address-tile-actions">
           <div className="spc-address-btns">
             <div title={Drupal.t('Edit Address')} className="spc-address-tile-edit" onClick={(e) => this.openModal(e)}>
               <EditAddressSVG />
-              <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
+              <Popup open={open} onClose={this.closeModal} closeOnDocumentClick={false}>
                 <>
-                  <AddressForm closeModal={this.closeModal} showEmail={false} show_prefered default_val={editAddressData} processAddress={this.processAddress} />
+                  <AddressForm
+                    closeModal={this.closeModal}
+                    showEmail={false}
+                    show_prefered
+                    default_val={editAddressData}
+                    processAddress={this.processAddress}
+                  />
                 </>
               </Popup>
             </div>
