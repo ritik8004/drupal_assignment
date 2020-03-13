@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\Magento\CartActions;
 use App\Service\Cart;
 use App\Service\Drupal\Drupal;
+use App\Service\Magento\MagentoCustomer;
 use App\Service\Magento\MagentoInfo;
 use App\Service\SessionStorage;
 use App\Service\Utility;
@@ -31,6 +32,13 @@ class CartController {
    * @var \App\Service\Magento\MagentoInfo
    */
   protected $magentoInfo;
+
+  /**
+   * Magento Customer service.
+   *
+   * @var \App\Service\Magento\MagentoCustomer
+   */
+  protected $magentoCustomer;
 
   /**
    * Drupal service.
@@ -78,6 +86,8 @@ class CartController {
    *   Drupal service.
    * @param \App\Service\Magento\MagentoInfo $magento_info
    *   Magento info service.
+   * @param \App\Service\Magento\MagentoCustomer $magento_customer
+   *   Magento Customer service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
    * @param \App\Service\SessionStorage $session
@@ -89,6 +99,7 @@ class CartController {
                               Cart $cart,
                               Drupal $drupal,
                               MagentoInfo $magento_info,
+                              MagentoCustomer $magento_customer,
                               LoggerInterface $logger,
                               SessionStorage $session,
                               Utility $utility) {
@@ -96,6 +107,7 @@ class CartController {
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->magentoInfo = $magento_info;
+    $this->magentoCustomer = $magento_customer;
     $this->logger = $logger;
     $this->session = $session;
     $this->utility = $utility;
@@ -430,16 +442,33 @@ class CartController {
       case CartActions::CART_SHIPPING_UPDATE:
         $shipping_info = $request_content['shipping_info'];
 
+        $email = $shipping_info['static']['email'];
+
+        // Cart customer validations.
+        $uid = (int) $this->getDrupalInfo('uid');
+        $cart_customer_id = $this->cart->getCartCustomerId();
+        if (empty($uid) && (empty($cart_customer_id) || ($this->cart->getCartCustomerEmail() !== $email))) {
+          $customer = $this->magentoCustomer->getCustomerByMail($email);
+          if (empty($customer)) {
+            $customer = $this->magentoCustomer->createCustomer(
+              $email,
+              $shipping_info['static']['firstname'],
+              $shipping_info['static']['lastname']
+            );
+          }
+
+          if ($customer && $customer['id']) {
+            $result = $this->cart->associateCartToCustomer($customer['id']);
+            if (is_array($result) && !empty($result['error'])) {
+              return new JsonResponse($result);
+            }
+          }
+        }
+
         if ($shipping_info['shipping_type'] == 'cnc') {
           // Unset as not needed in further processing.
           unset($shipping_info['shipping_type']);
-
-          // Create customer if the condition resolves to true.
-          // @TODO: This needs to be fixed to allow re-using
-          // existing Magento Customer.
-          // @TODO: We should do customer association before this.
-          $create_customer = (empty($this->cart->getCartCustomerId()) && !empty($shipping_info['static']['email']));
-          $cart = $this->cart->addCncShippingInfo($shipping_info, $action, $create_customer);
+          $cart = $this->cart->addCncShippingInfo($shipping_info, $action);
         }
         else {
           $shipping_methods = [];
@@ -498,9 +527,6 @@ class CartController {
         $billing_info = $request_content['billing_info'];
         $billing_data = $this->cart->formatAddressForShippingBilling($billing_info);
         $cart = $this->cart->updateBilling($billing_data);
-        if (!empty($cart['error'])) {
-          return new JsonResponse($cart);
-        }
         break;
 
       case CartActions::CART_PAYMENT_FINALISE:
@@ -591,30 +617,6 @@ class CartController {
   }
 
   /**
-   * Check if a customer by given email exists or not.
-   *
-   * @param string $email
-   *   Email address.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Payment method response.
-   */
-  public function customerCheckByMail(string $email) {
-    $domain = explode('@', $email)[1];
-    $dns_records = dns_get_record($domain);
-    if (empty($dns_records)) {
-      return new JsonResponse([
-        'exists' => 'wrong',
-        'email' => $email,
-      ]);
-    }
-
-    $customer = $this->cart->customerCheckByMail($email);
-    $customer_exists = ($customer['total_count'] > 0);
-    return new JsonResponse(['exists' => $customer_exists]);
-  }
-
-  /**
    * Validate incoming request.
    *
    * @param array $request_content
@@ -624,17 +626,33 @@ class CartController {
    *   Valid request or not.
    */
   private function validateRequestData(array $request_content) {
-    $valid = TRUE;
-
     // If action info or cart id not available.
     if (empty($request_content['action'])) {
-      $valid = FALSE;
-    }
-    elseif ($request_content['action'] !== CartActions::CART_CREATE_NEW && empty($this->cart->getCartId())) {
-      $valid = FALSE;
+      return FALSE;
     }
 
-    return $valid;
+    // For new cart request, we don't need any further validations.
+    if ($request_content['action'] === CartActions::CART_CREATE_NEW) {
+      return TRUE;
+    }
+
+    // Backend validation.
+    $uid = (int) $this->getDrupalInfo('uid');
+    $session_customer_id = $this->getDrupalInfo('customer_id');
+    $cart_customer_id = $this->cart->getCartCustomerId();
+    if ($uid > 0) {
+      if (empty($cart_customer_id)) {
+        // @TODO: Check if we should associate cart and proceed.
+        return FALSE;
+      }
+
+      // This is serious.
+      if ($cart_customer_id !== $session_customer_id) {
+        return FALSE;
+      }
+    }
+
+    return TRUE;
   }
 
   /**

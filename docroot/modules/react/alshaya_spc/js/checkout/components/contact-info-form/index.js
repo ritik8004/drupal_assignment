@@ -4,7 +4,7 @@ import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import {
   addShippingInCart,
   removeFullScreenLoader,
-  showFullScreenLoader,
+  showFullScreenLoader, validateInfo,
 } from '../../../utilities/checkout_util';
 import FixedFields from '../fixed-fields';
 import { i18nMiddleWareUrl } from '../../../utilities/i18n_url';
@@ -64,40 +64,62 @@ class ContactInfoForm extends React.Component {
       });
     });
 
+    const validationData = {
+      'mobile': form_data.static.telephone,
+    };
+
     if (this.context.contactInfo === null
       || (this.context.contactInfo.hasOwnProperty('email')
         && this.context.contactInfo.email !== form_data.static.email)
     ) {
-      customerValidationReuest = Axios.get(
-        i18nMiddleWareUrl(`customer/${form_data.static.email}`),
-      );
+      validationData['email'] = form_data.static.email;
     }
 
-    const mobileValidationRequest = Axios.get(
-      Drupal.url(`verify-mobile/${form_data.static.telephone}`),
-    );
-
+    const validationRequest = validateInfo(validationData);
     // API call to validate mobile number and email address.
-    return Axios.all([mobileValidationRequest, customerValidationReuest])
-      .then(
-        Axios.spread((mobileValidate, customerEmailValidate) => {
-          // Show errors if any, else call update cart api to update shipping address.
-          const hasError = this.showMobileAndEmailErrors(
-            mobileValidate,
-            customerEmailValidate,
-          );
+    return validationRequest.then((result) => {
+      if (result.status === 200 && result.data.status) {
+        // Show errors if any, else call update cart api to update shipping address.
+        // Flag to determine if there any error.
+        let isError = false;
 
-          if (!hasError) {
-            this.updateShipping(form_data);
+        // If invalid mobile number.
+        if (result.data.mobile === false) {
+          document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+          document.getElementById('mobile-error').classList.add('error');
+          isError = true;
+        } else {
+          // Remove error class and any error message.
+          document.getElementById('mobile-error').innerHTML = '';
+          document.getElementById('mobile-error').classList.remove('error');
+        }
+
+
+        if (result.data.email !== undefined) {
+          if (result.data.email === 'invalid') {
+            document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', {'%mail': validationData['email']});
+            document.getElementById('email-error').classList.add('error');
+            isError = true;
+          } else if (result.data.email === 'exists') {
+            document.getElementById('email-error').innerHTML = Drupal.t('Customer already exists.');
+            document.getElementById('email-error').classList.add('error');
+            isError = true;
           } else {
-            removeFullScreenLoader();
+            document.getElementById('email-error').innerHTML = '';
+            document.getElementById('email-error').classList.remove('error');
           }
-        }),
-      )
-      .catch((errors) => {
-        removeFullScreenLoader();
-        // React on errors.
-      });
+        }
+
+        if (isError) {
+          removeFullScreenLoader();
+        } else {
+          this.updateShipping(form_data);
+        }
+      }
+    }).catch((error) => {
+      removeFullScreenLoader();
+      console.error(error);
+    });
   };
 
   /**
@@ -134,53 +156,6 @@ class ContactInfoForm extends React.Component {
           console.error(error);
         });
     }
-  };
-
-  /**
-   * Show errors if mobile number and customer email is not vaild.
-   */
-  showMobileAndEmailErrors = (mobileValidate, customerEmailValidate) => {
-    // Flag to determine if there any error.
-    let isError = false;
-
-    // If invalid mobile number.
-    if (mobileValidate.data.status === false) {
-      document.getElementById('mobile-error').innerHTML = Drupal.t(
-        'Please enter valid mobile number.',
-      );
-      document.getElementById('mobile-error').classList.add('error');
-      isError = true;
-    } else {
-      // Remove error class and any error message.
-      document.getElementById('mobile-error').innerHTML = '';
-      document.getElementById('mobile-error').classList.remove('error');
-    }
-
-    if (!document.getElementById('email-error')) {
-      return isError;
-    }
-
-    if (customerEmailValidate.data.exists === 'wrong') {
-      document.getElementById('email-error').innerHTML = Drupal.t(
-        'The email address %mail is not valid.',
-        {
-          '%mail': customerEmailValidate.data.email,
-        },
-      );
-      document.getElementById('email-error').classList.add('error');
-      isError = true;
-    } else if (customerEmailValidate.data.exists === true) {
-      document.getElementById('email-error').innerHTML = Drupal.t(
-        'Customer already exists.',
-      );
-      document.getElementById('email-error').classList.add('error');
-      isError = true;
-    } else {
-      document.getElementById('email-error').innerHTML = '';
-      document.getElementById('email-error').classList.remove('error');
-    }
-
-    return isError;
   };
 
   render() {
