@@ -9,7 +9,7 @@ class TotalLineItem extends React.Component {
         <div className="total-line-item">
           <span className={this.props.name}>
             {this.props.title}
-            <ToolTip content={this.props.tooltipContent} enable={this.props.tooltip} />
+            <ToolTip enable={this.props.tooltip}>{this.props.tooltipContent}</ToolTip>
           </span>
           <span className="value"><span>{this.props.value}</span></span>
         </div>
@@ -23,7 +23,7 @@ class TotalLineItem extends React.Component {
       <div className="total-line-item">
         <span className={this.props.name}>
           {this.props.title}
-          <ToolTip content={this.props.tooltipContent} enable={this.props.tooltip} />
+          <ToolTip enable={this.props.tooltip}>{this.props.tooltipContent}</ToolTip>
         </span>
         <span className="value"><PriceElement amount={this.props.value} /></span>
       </div>

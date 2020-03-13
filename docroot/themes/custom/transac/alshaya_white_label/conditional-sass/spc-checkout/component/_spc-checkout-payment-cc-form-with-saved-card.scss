@@ -43,6 +43,20 @@
       &.spc-checkout-card-option-new-card {
         .payment-form-wrapper {
           padding-top: 1.75rem;
+
+          .tooltip-box {
+            @include breakpoint($only-mobile) {
+              #{$left}: -6.9rem;
+
+              &::before {
+                margin-#{$left}: 0.9375rem;
+              }
+
+              &::after {
+                margin-#{$left}: 1.3125rem;
+              }
+            }
+          }
         }
       }
     }

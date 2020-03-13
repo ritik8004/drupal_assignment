@@ -5,6 +5,7 @@ import luhn from '../../../../utilities/luhn';
 import CardTypeSVG from '../../card-type-svg';
 import { CheckoutComContext } from '../../../../context/CheckoutCom';
 import ToolTip from '../../../../utilities/tooltip';
+import CVVToolTipText from '../../cvv-text';
 
 class AddNewCard extends React.Component {
   static contextType = CheckoutComContext;
@@ -97,8 +98,6 @@ class AddNewCard extends React.Component {
       <CardTypeSVG key={type} type={type} class={`${type} ${cardType === type ? 'is-active' : ''}`} />
     ));
 
-    const cvvText = Drupal.t('This code is a three or four digit number printed on the front or back of the credit card');
-
     return (
       <>
         <div className="payment-form-wrapper">
@@ -149,7 +148,7 @@ class AddNewCard extends React.Component {
             <div className="c-input__bar" />
             <label>{Drupal.t('CVV')}</label>
             <div id="spc-cc-cvv-error" className="error" />
-            <ToolTip content={cvvText} enable question/>
+            <ToolTip enable question><CVVToolTipText/></ToolTip>
           </div>
         </div>
         <div className="spc-card-types-wrapper">

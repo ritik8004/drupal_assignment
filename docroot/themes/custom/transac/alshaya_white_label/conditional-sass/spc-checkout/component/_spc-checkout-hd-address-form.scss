@@ -2,52 +2,6 @@
 .spc-section-billing-address {
   .popup-overlay {
     .popup-content {
-      width: 100% !important;
-      max-width: 100%;
-      height: 100%;
-      overflow: hidden;
-      border: none !important;
-      padding: 0 !important;
-
-      @include breakpoint($only-mobile) {
-        overflow-y: auto !important;
-      }
-
-      &.overlay::before {
-        content: '';
-        background: $header_mobile_menu_overlay;
-        position: absolute;
-        z-index: 3;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-      }
-
-      &.spc-address-list-member-content {
-        @include breakpoint($desktop) {
-          max-height: 37.5rem;
-          height: auto;
-        }
-
-        @include breakpoint($only-tablet) {
-          max-height: 31.25rem;
-          height: auto;
-        }
-      }
-
-      @include breakpoint($desktop) {
-        height: 37.5rem;
-        width: calc(100% - 19.75rem);
-        max-width: 60.5rem;
-      }
-
-      @include breakpoint($only-tablet) {
-        max-width: calc(100% - 1rem);
-        height: 31.25rem;
-      }
-
       .spc-address-form {
         width: 100%;
         height: 100%;
@@ -55,25 +9,6 @@
         @include breakpoint($tablet) {
           display: grid;
           grid-template-columns: 1fr 22.5rem;
-        }
-      }
-
-      .close {
-        cursor: pointer;
-        position: absolute;
-        #{$right}: 0;
-        color: transparent;
-        top: 0.7rem;
-
-        @include icon('close') {
-          font-size: 2rem;
-          width: 2rem;
-          height: 2rem;
-          color: $spc-checkout-close-icon;
-        }
-
-        @include breakpoint($only-mobile) {
-          z-index: 3;
         }
       }
 

@@ -1,5 +1,6 @@
 .spc-checkout-section-title,
-.spc-change-address {
-  font-family: $fl-thin;
+.spc-change-address,
+.spc-payment-saved-cards-header {
+  font-family: $fl-thin !important;
   text-transform: capitalize;
 }
