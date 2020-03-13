@@ -22,7 +22,10 @@ import TermsConditions from '../terms-conditions';
 import { getLocationAccess, getDefaultMapCenter } from '../../../utilities/checkout_util';
 import { fetchClicknCollectStores } from "../../../utilities/api/requests";
 import { createFetcher } from '../../../utilities/api/fetcher';
-import {removeFullScreenLoader} from "../../../utilities/checkout_util";
+import {
+  removeFullScreenLoader,
+  isDeliveryTypeSameAsInCart
+} from "../../../utilities/checkout_util";
 import _isEmpty from 'lodash/isEmpty';
 import ConditionalView from '../../../common/components/conditional-view';
 import Cookies from 'js-cookie';
@@ -179,6 +182,30 @@ export default class Checkout extends React.Component {
     this.paymentMethods.current.validateBeforePlaceOrder();
   };
 
+  getBillingComponent = () => {
+    if (!isDeliveryTypeSameAsInCart(this.state.cart)) {
+      return (null);
+    }
+
+    if (this.state.cart.cart.delivery_type === 'hd') {
+      return <HDBillingAddress
+        refreshCart={this.refreshCart}
+        billingAddress={this.state.cart.cart.billing_address}
+        shippingAddress={this.state.cart.cart.shipping_address}
+        carrierInfo={this.state.cart.cart.carrier_info}
+        paymentMethod={this.state.cart.selected_payment_method}
+      />
+    }
+
+    return <CnCBillingAddress
+      refreshCart={this.refreshCart}
+      billingAddress={this.state.cart.cart.billing_address}
+      shippingAddress={this.state.cart.cart.shipping_address}
+      carrierInfo={this.state.cart.cart.carrier_info}
+      paymentMethod={this.state.cart.selected_payment_method}
+    />
+  }
+
   render() {
     // While page loads and all info available.
 
@@ -196,6 +223,7 @@ export default class Checkout extends React.Component {
     }
 
     const termConditions = <TermsConditions />
+    const billingComponent = this.getBillingComponent();
 
     return (
       <React.Fragment>
@@ -211,24 +239,11 @@ export default class Checkout extends React.Component {
             <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
-            <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={this.state.cart} />
-            {(this.state.cart.cart.delivery_type === 'hd') ? (
-              <HDBillingAddress
-                refreshCart={this.refreshCart}
-                billingAddress={this.state.cart.cart.billing_address}
-                shippingAddress={this.state.cart.cart.shipping_address}
-                carrierInfo={this.state.cart.cart.carrier_info}
-                paymentMethod={this.state.cart.selected_payment_method}
-              />
-            ) : (
-              <CnCBillingAddress
-                refreshCart={this.refreshCart}
-                billingAddress={this.state.cart.cart.billing_address}
-                shippingAddress={this.state.cart.cart.shipping_address}
-                carrierInfo={this.state.cart.cart.carrier_info}
-                paymentMethod={this.state.cart.selected_payment_method}
-              />
-            )}
+            {/* @Todo: This will need rework for CORE-16421 for payment.*/}
+            {isDeliveryTypeSameAsInCart(this.state.cart) &&
+              <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={this.state.cart} />
+            }
+            {billingComponent}
             <ConditionalView condition={window.innerWidth > 768}>
               {termConditions}
             </ConditionalView>

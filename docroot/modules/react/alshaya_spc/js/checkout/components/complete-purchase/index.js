@@ -1,6 +1,9 @@
 import React from 'react';
 
-import {placeOrder} from '../../../utilities/checkout_util';
+import {
+  placeOrder,
+  isDeliveryTypeSameAsInCart
+} from '../../../utilities/checkout_util';
 import PriceElement from "../../../utilities/special-price/PriceElement";
 
 export default class CompletePurchase extends React.Component {
@@ -10,6 +13,11 @@ export default class CompletePurchase extends React.Component {
    */
   placeOrder = (e) => {
     e.preventDefault();
+
+    // If purchase button is not clickable.
+    if (!isDeliveryTypeSameAsInCart(this.props.cart)) {
+      return false;
+    }
 
     try {
       this.props.validateBeforePlaceOrder();
@@ -30,7 +38,7 @@ export default class CompletePurchase extends React.Component {
 
   render() {
     const { cart } = this.props;
-    let class_name = cart.selected_payment_method !== undefined
+    let class_name = isDeliveryTypeSameAsInCart(cart)
       ? 'active'
       : 'in-active';
 
