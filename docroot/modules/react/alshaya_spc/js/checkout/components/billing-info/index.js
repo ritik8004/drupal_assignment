@@ -2,29 +2,28 @@ import React from 'react';
 
 import BillingPopUp from '../billing-popup';
 import {
-  gerAreaLabelById
+  gerAreaLabelById,
 } from '../../../utilities/address_util';
 
 export default class BillingInfo extends React.Component {
-
   _isMounted = false;
 
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
     };
   }
 
   showPopup = () => {
     this.setState({
-      open: true
+      open: true,
     });
   };
 
   closePopup = () => {
     this.setState({
-      open: false
+      open: false,
     });
   };
 
@@ -38,7 +37,7 @@ export default class BillingInfo extends React.Component {
       return (null);
     }
 
-    let addressData = [];
+    const addressData = [];
     Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
       if (billing[val.key] !== undefined) {
         let fillVal = billing[val.key];
@@ -52,21 +51,22 @@ export default class BillingInfo extends React.Component {
         }
         addressData.push(fillVal);
       }
-    })
+    });
 
     return (
-      <div className='spc-billing-information'>
-        <div className='spc-billing-meta'>
-          <div className='spc-billing-name'>{billing.firstname} {billing.lastname}</div>
-          <div className='spc-billing-address'>{addressData.join(', ')}</div>
+      <div className="spc-billing-information">
+        <div className="spc-billing-meta">
+          <div className="spc-billing-name">
+            {billing.firstname}
+            {' '}
+            {billing.lastname}
+          </div>
+          <div className="spc-billing-address">{addressData.join(', ')}</div>
         </div>
-        <div className='spc-billing-change' onClick={() => this.showPopup()}>{Drupal.t('change')}</div>
-        {this.state.open &&
-          <BillingPopUp closePopup={this.closePopup} billing={billing} shipping={shipping}/>
-        }
+        <div className="spc-billing-change" onClick={() => this.showPopup()}>{Drupal.t('change')}</div>
+        {this.state.open
+          && <BillingPopUp closePopup={this.closePopup} billing={billing} shipping={shipping} />}
       </div>
     );
-
   }
-
 }

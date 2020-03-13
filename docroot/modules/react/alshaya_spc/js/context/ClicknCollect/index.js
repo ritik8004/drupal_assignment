@@ -1,6 +1,6 @@
-import React from 'react'
-import { fetchClicknCollectStores } from "../../utilities/api/requests";
+import React from 'react';
 import _isEqual from 'lodash/isEqual';
+import { fetchClicknCollectStores } from '../../utilities/api/requests';
 import { makeFullName } from '../../utilities/cart_customer_util';
 import { cleanMobileNumber } from '../../utilities/checkout_util';
 
@@ -13,45 +13,44 @@ export class ClicknCollectContextProvider extends React.Component {
     super(props);
     let coords = null;
     let selectedStore = null;
-    let storeList = props.storeList;
+    const { storeList } = props;
     let contactInfo = null;
 
-    let { cart: { customer, store_info, shipping_address } } = props.cart;
+    const { cart: { customer, store_info, shipping_address } } = props.cart;
 
     if (!shipping_address && customer !== undefined) {
       contactInfo = {
         fullname: makeFullName(customer.firstname || '', customer.lastname || ''),
         email: customer.email || '',
         telephone: cleanMobileNumber(customer.telephone) || '',
-      }
-    }
-    else if (shipping_address) {
+      };
+    } else if (shipping_address) {
       contactInfo = {
         fullname: makeFullName(shipping_address.firstname || '', shipping_address.lastname || ''),
         email: shipping_address.email || '',
         telephone: cleanMobileNumber(shipping_address.telephone) || '',
-      }
+      };
     }
 
     if (store_info) {
       coords = {
         lat: parseFloat(store_info.lat),
-        lng: parseFloat(store_info.lng)
+        lng: parseFloat(store_info.lng),
       };
       selectedStore = store_info;
     }
 
     this.state = {
-      coords: coords,
-      storeList: storeList,
-      selectedStore: selectedStore,
-      contactInfo: contactInfo,
-    }
+      coords,
+      storeList,
+      selectedStore,
+      contactInfo,
+    };
   }
 
   componentDidMount() {
     this._isMounted = true;
-    this.setState({storeList: this.props.storeList});
+    this.setState({ storeList: this.props.storeList });
   }
 
   componentWillUnmount() {
@@ -70,20 +69,20 @@ export class ClicknCollectContextProvider extends React.Component {
 
   updateSelectedStore = (store) => {
     this.setState({
-      selectedStore: store
+      selectedStore: store,
     });
   }
 
   updateCoordsAndStoreList = (coords, storeList) => {
     this.setState({
-      coords: coords,
-      storeList: storeList
+      coords,
+      storeList,
     });
   }
 
   updateCoords = (coords) => {
     this.setState({
-      coords: coords
+      coords,
     });
   }
 
@@ -93,7 +92,7 @@ export class ClicknCollectContextProvider extends React.Component {
         fullname: makeFullName(contactInfo.firstname || '', contactInfo.lastname || ''),
         email: contactInfo.email || '',
         telephone: cleanMobileNumber(contactInfo.telephone) || '',
-      }
+      },
     });
   }
 
@@ -106,12 +105,13 @@ export class ClicknCollectContextProvider extends React.Component {
             updateSelectStore: this.updateSelectedStore,
             updateCoordsAndStoreList: this.updateCoordsAndStoreList,
             updateCoords: this.updateCoords,
-            updateContactInfo: this.updateContactInfo
+            updateContactInfo: this.updateContactInfo,
           }
-        }>
+        }
+      >
         {this.props.children}
       </ClicknCollectContext.Provider>
-    )
+    );
   }
 }
 

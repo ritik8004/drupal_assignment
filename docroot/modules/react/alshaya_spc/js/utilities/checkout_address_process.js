@@ -4,16 +4,16 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
   triggerCheckoutEvent,
-  addBillingInCart
+  addBillingInCart,
 } from './checkout_util';
 import {
-  extractFirstAndLastName
+  extractFirstAndLastName,
 } from './cart_customer_util';
 import {
-  gerAreaLabelById
+  gerAreaLabelById,
 } from './address_util';
 import {
-  getInfoFromStorage
+  getInfoFromStorage,
 } from './storage';
 
 /**
@@ -96,7 +96,7 @@ export const checkoutAddressProcess = function (e, cart) {
         // If any error, don't process further.
         if (cart_result.error !== undefined) {
           cart_data = {
-            'error_message': cart_result.error_message
+            error_message: cart_result.error_message,
           };
         }
 
@@ -186,22 +186,22 @@ export const validateAddressFields = (e, validateEmail) => {
  * @param {*} address
  */
 export const formatAddressDataForEditForm = (address) => {
-  let formatted_address = {
-    'static': {
-      'fullname': address.firstname + ' ' + address.lastname,
-      'email': address.email,
-      'telephone': address.telephone
-    }
+  const formatted_address = {
+    static: {
+      fullname: `${address.firstname} ${address.lastname}`,
+      email: address.email,
+      telephone: address.telephone,
+    },
   };
 
   Object.entries(drupalSettings.address_fields).forEach(
     ([key, field]) => {
-      formatted_address[field['key']] = address[field['key']];
-    }
+      formatted_address[field.key] = address[field.key];
+    },
   );
 
   return formatted_address;
-}
+};
 
 /**
  * Prepare address data from form value.
@@ -209,16 +209,16 @@ export const formatAddressDataForEditForm = (address) => {
  * @param {*} elements
  */
 export const prepareAddressDataFromForm = (elements) => {
-  let {
+  const {
     firstname,
-    lastname
+    lastname,
   } = extractFirstAndLastName(elements.fullname.value.trim());
 
-  let address = {
-    firstname: firstname,
-    lastname: lastname,
+  const address = {
+    firstname,
+    lastname,
     email: elements.email.value,
-    city: gerAreaLabelById(false, elements['administrative_area'].value),
+    city: gerAreaLabelById(false, elements.administrative_area.value),
     mobile: elements.mobile.value,
   };
 
@@ -228,7 +228,7 @@ export const prepareAddressDataFromForm = (elements) => {
   });
 
   return prepareAddressDataForShipping(address);
-}
+};
 
 /**
  * Prepare address data for updating shipping.
@@ -236,7 +236,7 @@ export const prepareAddressDataFromForm = (elements) => {
  * @param {*} address
  */
 export const prepareAddressDataForShipping = (address) => {
-  let data = {};
+  const data = {};
   data.static = {
     firstname: address.firstname,
     lastname: address.lastname,
@@ -252,7 +252,7 @@ export const prepareAddressDataForShipping = (address) => {
   });
 
   return data;
-}
+};
 
 /**
  * Get the address popup class.
@@ -272,14 +272,14 @@ export const processBillingUpdateFromForm = (e, shipping) => {
   // Start the loader.
   showFullScreenLoader();
 
-  let isValid = validateAddressFields(e, false);
+  const isValid = validateAddressFields(e, false);
   // If not valid.
   if (isValid) {
     removeFullScreenLoader();
     return;
   }
 
-  let target = e.target.elements;
+  const target = e.target.elements;
 
   const mobile = target.mobile.value.trim();
   const mobile_valid = axios.get(`verify-mobile/${mobile}`);
@@ -298,21 +298,21 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           document.getElementById('mobile-error').classList.remove('error');
 
           target.email = {
-            value: shipping.email
+            value: shipping.email,
           };
-          let form_data = prepareAddressDataFromForm(target);
+          const form_data = prepareAddressDataFromForm(target);
 
           // For logged in user add customer id from shipping.
           if (drupalSettings.user.uid > 0) {
-            form_data['static']['customer_id'] = shipping.customer_id;
+            form_data.static.customer_id = shipping.customer_id;
           }
 
           // Update billing address.
-          let cart_data = addBillingInCart('update billing', form_data);
+          const cart_data = addBillingInCart('update billing', form_data);
           if (cart_data instanceof Promise) {
             cart_data.then((cart_result) => {
               let cart_info = {
-                cart: cart_result
+                cart: cart_result,
               };
 
               // If error.
@@ -320,10 +320,9 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                 // In case of error, prepare error info
                 // and call refresh cart so that message is shown.
                 cart_info = {
-                  'error_message': cart_result.error_message
-                }
-              }
-              else {
+                  error_message: cart_result.error_message,
+                };
+              } else {
                 // Merging with existing local.
                 cart_info = getInfoFromStorage();
                 cart_info.cart = cart_result;
@@ -340,4 +339,4 @@ export const processBillingUpdateFromForm = (e, shipping) => {
       }
     });
   }
-}
+};

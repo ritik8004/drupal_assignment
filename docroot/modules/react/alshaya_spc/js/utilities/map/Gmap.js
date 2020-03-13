@@ -228,5 +228,4 @@ export default class Gmap {
       marker.infoWindow.close(map, marker);
     });
   }
-
 }

@@ -30,18 +30,16 @@ export default class CartRecommendedProducts extends React.Component {
     // If recommended products available.
     if (Object.keys(recommended_products).length > 0) {
       return (
-        <React.Fragment>
+        <>
           <SectionTitle>{sectionTitle}</SectionTitle>
           <div className="spc-recommended-products">
-            <button className="nav-prev" type="button" onClick={() => { this.listHorizontalScroll('prev'); }}/>
+            <button className="nav-prev" type="button" onClick={() => { this.listHorizontalScroll('prev'); }} />
             <div className="block-content">
-              { Object.keys(recommended_products).map(function(key) {
-                return <RecommendedProduct key={key} item={recommended_products[key]} />
-              })}
+              { Object.keys(recommended_products).map((key) => <RecommendedProduct key={key} item={recommended_products[key]} />)}
             </div>
             <button className="nav-next" type="button" onClick={() => { this.listHorizontalScroll('next'); }} />
           </div>
-        </React.Fragment>
+        </>
       );
     }
     return (null);

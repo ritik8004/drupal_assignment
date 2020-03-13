@@ -1,24 +1,24 @@
-import React from "react";
-import _find from "lodash/find";
-import _findIndex from "lodash/findIndex";
-import { ClicknCollectContext } from "../../../context/ClicknCollect";
-import { createFetcher } from "../../../utilities/api/fetcher";
-import { fetchClicknCollectStores } from "../../../utilities/api/requests";
+import React from 'react';
+import _find from 'lodash/find';
+import _findIndex from 'lodash/findIndex';
+import { ClicknCollectContext } from '../../../context/ClicknCollect';
+import { createFetcher } from '../../../utilities/api/fetcher';
+import { fetchClicknCollectStores } from '../../../utilities/api/requests';
 import {
   getDefaultMapCenter,
   getLocationAccess,
   removeFullScreenLoader,
   showFullScreenLoader,
-} from "../../../utilities/checkout_util";
-import Loading from "../../../utilities/loading";
-import SectionTitle from "../../../utilities/section-title";
-import SelectedStore from "./components/SelectedStore";
-import StoreList from "./components/StoreList";
-import ClicknCollectMap from "./components/ClicknCollectMap";
-import ToggleButton from "./components/ToggleButton";
-import LocationSearchForm from "./components/LocationSearchForm";
-import DeviceView from "../../../common/components/device-view";
-import FullScreenSVG from "../full-screen-svg";
+} from '../../../utilities/checkout_util';
+import Loading from '../../../utilities/loading';
+import SectionTitle from '../../../utilities/section-title';
+import SelectedStore from './components/SelectedStore';
+import StoreList from './components/StoreList';
+import ClicknCollectMap from './components/ClicknCollectMap';
+import ToggleButton from './components/ToggleButton';
+import LocationSearchForm from './components/LocationSearchForm';
+import DeviceView from '../../../common/components/device-view';
+import FullScreenSVG from '../full-screen-svg';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -35,7 +35,7 @@ class ClickCollect extends React.Component {
     this.nearMeBtn = null;
     this.state = {
       openSelectedStore: this.props.openSelectedStore || false,
-      mapFullScreen: false
+      mapFullScreen: false,
     };
   }
 
@@ -47,13 +47,13 @@ class ClickCollect extends React.Component {
         this.searchplaceInput,
         {
           types: [],
-          componentRestrictions: { country: window.drupalSettings.country_code }
-        }
+          componentRestrictions: { country: window.drupalSettings.country_code },
+        },
       );
 
       this.autocomplete.addListener(
-        "place_changed",
-        this.placesAutocompleteHandler
+        'place_changed',
+        this.placesAutocompleteHandler,
       );
     }
     this.nearMeBtn = this.searchRef.current.getElementsByTagName('button')[0];
@@ -76,16 +76,16 @@ class ClickCollect extends React.Component {
     document.removeEventListener('markerClick', this.mapMarkerClick);
   }
 
-  mapMarkerClick = e => {
-    let index = e.detail.markerSettings.zIndex - 1;
-    let allStores = this.cncListView.current.querySelectorAll('.select-store');
-    [].forEach.call(allStores, function(el) {
-      el.classList.remove("selected");
+  mapMarkerClick = (e) => {
+    const index = e.detail.markerSettings.zIndex - 1;
+    const allStores = this.cncListView.current.querySelectorAll('.select-store');
+    [].forEach.call(allStores, (el) => {
+      el.classList.remove('selected');
     });
-    this.cncListView.current.querySelector('[data-index="' + index +'"]').classList.add('selected');
+    this.cncListView.current.querySelector(`[data-index="${index}"]`).classList.add('selected');
     if (window.innerWidth < 768 && this.cncMapView.current !== null && this.cncMapView.current.style.display === 'block') {
       this.toggleFullScreen(true);
-      this.mapStoreList.current.querySelector('[data-index="' + index +'"]').classList.add('selected');
+      this.mapStoreList.current.querySelector(`[data-index="${index}"]`).classList.add('selected');
     }
   }
 
@@ -94,11 +94,11 @@ class ClickCollect extends React.Component {
    */
   placesAutocompleteHandler = () => {
     const place = this.autocomplete.getPlace();
-    this.nearMeBtn.classList.remove("active");
-    if (typeof place !== "undefined" && typeof place.geometry !== "undefined") {
+    this.nearMeBtn.classList.remove('active');
+    if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
       this.fetchAvailableStores({
         lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
+        lng: place.geometry.location.lng(),
       });
     }
   };
@@ -106,27 +106,27 @@ class ClickCollect extends React.Component {
   /**
    * Get current location coordinates.
    */
-  getCurrentPosition = e => {
+  getCurrentPosition = (e) => {
     if (e) {
       e.preventDefault();
     }
 
-    this.searchplaceInput.value = "";
-    this.nearMeBtn.classList.add("active");
+    this.searchplaceInput.value = '';
+    this.nearMeBtn.classList.add('active');
     getLocationAccess()
       .then(
-        pos => {
+        (pos) => {
           this.fetchAvailableStores({
             lat: pos.coords.latitude,
-            lng: pos.coords.longitude
+            lng: pos.coords.longitude,
           });
         },
         () => {
-          this.nearMeBtn.classList.remove("active");
+          this.nearMeBtn.classList.remove('active');
           this.fetchAvailableStores(getDefaultMapCenter());
-        }
+        },
       )
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
     return false;
@@ -135,14 +135,14 @@ class ClickCollect extends React.Component {
   /**
    * Fetch available stores for given lat and lng.
    */
-  fetchAvailableStores = coords => {
+  fetchAvailableStores = (coords) => {
     showFullScreenLoader();
     // Create fetcher object to fetch stores.
     const storeFetcher = createFetcher(fetchClicknCollectStores);
     // Make api request.
-    let list = storeFetcher.read(coords);
-    list.then(response => {
-      if (typeof response.error === "undefined") {
+    const list = storeFetcher.read(coords);
+    list.then((response) => {
+      if (typeof response.error === 'undefined') {
         this.context.updateCoordsAndStoreList(coords, response);
         if (this.state.openSelectedStore) {
           this.showOpenMarker(response);
@@ -154,36 +154,33 @@ class ClickCollect extends React.Component {
 
   toggleStoreView = (e, activeView) => {
     e.preventDefault();
-    e.target.parentNode.childNodes.forEach(btn =>
-      btn.classList.remove("active")
-    );
-    e.target.classList.add("active");
-    if (activeView === "map") {
-      this.cncMapView.current.style.display = "block";
-      this.cncListView.current.style.display = "none";
+    e.target.parentNode.childNodes.forEach((btn) => btn.classList.remove('active'));
+    e.target.classList.add('active');
+    if (activeView === 'map') {
+      this.cncMapView.current.style.display = 'block';
+      this.cncListView.current.style.display = 'none';
       this.refreshMap();
-      let selectedStore = this.mapStoreList.current.querySelector('.selected');
+      const selectedStore = this.mapStoreList.current.querySelector('.selected');
       if (!selectedStore) {
         this.selectStoreButtonVisibility(false);
-      }
-      else {
+      } else {
         this.toggleFullScreen(true);
         this._openMarkerOfStore(selectedStore.dataset.storeCode);
       }
     } else {
-      this.cncMapView.current.style.display = "none";
-      this.cncListView.current.style.display = "block";
-      let selectedStore = this.cncListView.current.querySelector('.selected');
-      this.selectStoreButtonVisibility(!selectedStore ? false : true);
+      this.cncMapView.current.style.display = 'none';
+      this.cncListView.current.style.display = 'block';
+      const selectedStore = this.cncListView.current.querySelector('.selected');
+      this.selectStoreButtonVisibility(!!selectedStore);
     }
     return false;
   };
 
   // View selected store on map.
-  hightlightMapMarker = makerIndex => {
-    let map = window.spcMap;
+  hightlightMapMarker = (makerIndex) => {
+    const map = window.spcMap;
     // Make the marker by default open.
-    google.maps.event.trigger(map.map.mapMarkers[makerIndex], "click");
+    google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
   };
 
   showOpenMarker = (storeList = this.context.storeList) => {
@@ -205,7 +202,7 @@ class ClickCollect extends React.Component {
   };
 
   _openMarkerOfStore = (storeCode, storeList = this.context.storeList, showInfoWindow = true) => {
-    let index = _findIndex(storeList, {
+    const index = _findIndex(storeList, {
       code: storeCode,
     });
 
@@ -242,7 +239,7 @@ class ClickCollect extends React.Component {
   };
 
   finalizeCurrentStore = (e) => {
-    let selectedStore = this.cncListView.current.querySelector('.selected');
+    const selectedStore = this.cncListView.current.querySelector('.selected');
     this.finalizeStore(e, selectedStore.dataset.storeCode);
   };
 
@@ -253,7 +250,7 @@ class ClickCollect extends React.Component {
     }
 
     // Find the store object with the given store-code from the store list.
-    let store = _find(this.context.storeList, { code: store_code });
+    const store = _find(this.context.storeList, { code: store_code });
     this.context.updateSelectStore(store);
     this.setState({
       openSelectedStore: true,
@@ -274,11 +271,11 @@ class ClickCollect extends React.Component {
       if (!document.fullscreenElement) {
         return;
       }
-      let self = this;
+      const self = this;
       this.setState({
-        mapFullScreen: false
+        mapFullScreen: false,
       });
-      let selectedStore = this.mapStoreList.current.querySelector('.selected');
+      const selectedStore = this.mapStoreList.current.querySelector('.selected');
       if (selectedStore) {
         selectedStore.querySelector('.spc-map-list-close').click();
       }
@@ -291,11 +288,10 @@ class ClickCollect extends React.Component {
       if (!selectedStore) {
         this.selectStoreButtonVisibility(false);
       }
-    }
-    else {
+    } else {
       this.cncMapView.current.requestFullscreen();
       this.setState({
-        mapFullScreen: true
+        mapFullScreen: true,
       });
     }
   };
@@ -311,8 +307,7 @@ class ClickCollect extends React.Component {
     const selectStoreBtn = document.getElementsByClassName('spc-cnc-store-actions')[0];
     if (action === true) {
       selectStoreBtn.classList.add('show');
-    }
-    else {
+    } else {
       selectStoreBtn.classList.remove('show');
     }
   }
@@ -325,9 +320,9 @@ class ClickCollect extends React.Component {
   }
 
   render() {
-    let { coords, storeList, selectedStore } = this.context;
-    let { openSelectedStore } = this.state;
-    let { closeModal } = this.props;
+    const { coords, storeList, selectedStore } = this.context;
+    const { openSelectedStore } = this.state;
+    const { closeModal } = this.props;
 
     if (window.fetchStore !== 'finished') {
       return <Loading />;
@@ -349,20 +344,20 @@ class ClickCollect extends React.Component {
         <div className="spc-cnc-address-form-sidebar">
           <div
             className="spc-cnc-stores-list-map"
-            style={{ display: openSelectedStore ? "none" : "block" }}
+            style={{ display: openSelectedStore ? 'none' : 'block' }}
           >
-            <SectionTitle>{Drupal.t("collection Store")}</SectionTitle>
+            <SectionTitle>{Drupal.t('collection Store')}</SectionTitle>
             <a className="close" onClick={closeModal}>
               &times;
             </a>
             <div className="spc-cnc-address-form-wrapper">
               <div className="spc-cnc-address-form-content">
                 <SectionTitle>
-                  {Drupal.t("find your nearest store")}
+                  {Drupal.t('find your nearest store')}
                 </SectionTitle>
-                <LocationSearchForm ref={this.searchRef} getCurrentPosition={this.getCurrentPosition}/>
+                <LocationSearchForm ref={this.searchRef} getCurrentPosition={this.getCurrentPosition} />
                 <DeviceView device="mobile">
-                  <ToggleButton toggleStoreView={this.toggleStoreView}/>
+                  <ToggleButton toggleStoreView={this.toggleStoreView} />
                 </DeviceView>
                 <div id="click-and-collect-list-view" ref={this.cncListView}>
                   <StoreList
@@ -376,12 +371,12 @@ class ClickCollect extends React.Component {
                 <DeviceView device="mobile">
                   <div
                     className="click-and-collect-map-view"
-                    style={{ display: "none" }}
+                    style={{ display: 'none' }}
                     ref={this.cncMapView}
                   >
                     {mapView}
-                    <button className='spc-cnc-full-screen' onClick={() => this.toggleFullScreen()}>
-                      <FullScreenSVG mapFullScreen={this.state.mapFullScreen}/>
+                    <button className="spc-cnc-full-screen" onClick={() => this.toggleFullScreen()}>
+                      <FullScreenSVG mapFullScreen={this.state.mapFullScreen} />
                     </button>
                     <div className="map-store-list" ref={this.mapStoreList}>
                       <StoreList
