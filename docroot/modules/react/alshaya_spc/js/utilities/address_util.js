@@ -4,11 +4,11 @@ import {
   addShippingInCart,
   removeFullScreenLoader,
   getDefaultCheckoutErrorMessage,
-  triggerCheckoutEvent
+  triggerCheckoutEvent,
 } from './checkout_util';
 import {
   validateAddressFields,
-  prepareAddressDataFromForm
+  prepareAddressDataFromForm,
 } from './checkout_address_process';
 
 /**
@@ -47,15 +47,11 @@ export const addEditUserAddress = function (address) {
     address,
   })
     .then(
-      (response) => {
-        return response.data;
-      },
-      (error) => {
-        return {
-          error: true,
-          error_message: getDefaultCheckoutErrorMessage()
-        }
-      }
+      (response) => response.data,
+      (error) => ({
+        error: true,
+        error_message: getDefaultCheckoutErrorMessage(),
+      }),
     )
     .catch((error) => {
       // Processing of error here.
@@ -100,7 +96,7 @@ export const addEditAddressToCustomer = (e) => {
           form_data.address = {
             given_name: name.split(' ')[0],
             family_name: name.substring(name.indexOf(' ') + 1),
-            city: gerAreaLabelById(false, target['administrative_area'].value),
+            city: gerAreaLabelById(false, target.administrative_area.value),
             address_id: target.address_id.value,
           };
 
@@ -119,22 +115,22 @@ export const addEditAddressToCustomer = (e) => {
               if (list.error === true) {
                 // Remove loader.
                 removeFullScreenLoader();
-                let eventData = {
-                  'error_message': list.error_message
+                const eventData = {
+                  error_message: list.error_message,
                 };
                 triggerCheckoutEvent('refreshCartOnAddress', eventData);
                 return;
               }
 
               const firstKey = Object.keys(list.data)[0];
-              target['email'] = {
-                'value': list.data[firstKey]['email']
+              target.email = {
+                value: list.data[firstKey].email,
               };
 
               // Prepare address data for shipping update.
-              let data = prepareAddressDataFromForm(target);
-              data['static']['customer_address_id'] = list.data[firstKey].address_mdc_id;
-              data['static']['customer_id'] = list.data[firstKey].customer_id;
+              const data = prepareAddressDataFromForm(target);
+              data.static.customer_address_id = list.data[firstKey].address_mdc_id;
+              data.static.customer_id = list.data[firstKey].customer_id;
 
               // Add shipping info in cart.
               const cart_info = addShippingInCart('update shipping', data);
@@ -150,8 +146,8 @@ export const addEditAddressToCustomer = (e) => {
                   // If error, no need to process.
                   if (cart_result.error !== undefined) {
                     cart_data = {
-                      'error_message': cart_result.error_message
-                    }
+                      error_message: cart_result.error_message,
+                    };
                   }
 
                   // Refresh cart.
@@ -176,16 +172,16 @@ export const addEditAddressToCustomer = (e) => {
  * @param {*} parent_id
  */
 export const getAreasList = (is_parent, parent_id) => {
-  let areasList = new Array();
-  let areas = document.querySelectorAll('[data-list=areas-list]');
+  const areasList = new Array();
+  const areas = document.querySelectorAll('[data-list=areas-list]');
   if (areas.length > 0) {
-    let idAttribute = is_parent ? 'data-parent-id' : 'data-id';
-    let labelAttribute = is_parent ? 'data-parent-label' : 'data-label';
+    const idAttribute = is_parent ? 'data-parent-id' : 'data-id';
+    const labelAttribute = is_parent ? 'data-parent-label' : 'data-label';
     for (let i = 0; i < areas.length; i++) {
-      let id = areas[i].getAttribute(idAttribute);
+      const id = areas[i].getAttribute(idAttribute);
       // If we need to fetch areas of a given parent.
       if (parent_id !== null) {
-        let parentId = areas[i].getAttribute('data-parent-id');
+        const parentId = areas[i].getAttribute('data-parent-id');
         // If item's parent id not matches.
         if (parent_id != parentId) {
           continue;
@@ -210,9 +206,9 @@ export const getAreasList = (is_parent, parent_id) => {
  */
 export const gerAreaLabelById = (is_parent, id) => {
   let label = '';
-  let idAttibute = is_parent ? 'data-parent-id' : 'data-id';
-  let labelAttribute = is_parent ? 'data-parent-label' : 'data-label';
-  const area = document.querySelectorAll('[' + idAttibute + '="' + id + '"]');
+  const idAttibute = is_parent ? 'data-parent-id' : 'data-id';
+  const labelAttribute = is_parent ? 'data-parent-label' : 'data-label';
+  const area = document.querySelectorAll(`[${idAttibute}="${id}"]`);
   if (area.length > 0) {
     label = area[0].getAttribute(labelAttribute);
   }
@@ -231,14 +227,14 @@ export const gerAreaLabelById = (is_parent, id) => {
 export const getAreaParentId = (isLabel, areaId) => {
   let parentArea = null;
   const idAttibute = isLabel ? 'data-label' : 'data-id';
-  const area = document.querySelectorAll('[' + idAttibute + '="' + areaId + '"]');
+  const area = document.querySelectorAll(`[${idAttibute}="${areaId}"]`);
   // If there are parents available.
   if (area.length > 0) {
     parentArea = [];
     for (let i = 0; i < area.length; i++) {
-      let city = {
+      const city = {
         label: area[i].getAttribute('data-parent-label'),
-        id: area[i].getAttribute('data-parent-id')
+        id: area[i].getAttribute('data-parent-id'),
       };
       parentArea.push(city);
     }

@@ -1,23 +1,22 @@
 import React from 'react';
 
 import Select from 'react-select';
-import {updateCartItemData} from '../../../utilities/update_cart';
+import { updateCartItemData } from '../../../utilities/update_cart';
 
 export default class CartQuantitySelect extends React.Component {
-
   constructor(props) {
     super(props);
     this.selectRef = React.createRef();
   }
 
-  prepareOptions = (stock, qty) => {
-    const cart_max_qty = window.drupalSettings.alshaya_spc.max_cart_qty;
-    var data = new Array();
-    for (var i = 1; i <= cart_max_qty; i++) {
+  prepareOptions = (stock) => {
+    const cartMaxQty = window.drupalSettings.alshaya_spc.max_cart_qty;
+    const data = [];
+    for (let i = 1; i <= cartMaxQty; i++) {
       data[i] = {
         value: i,
         label: i,
-        isDisabled: (i > stock)
+        isDisabled: (i > stock),
       };
     }
 
@@ -33,30 +32,30 @@ export default class CartQuantitySelect extends React.Component {
   };
 
   handleChange = (selectedOption) => {
-    const sku = this.props.sku;
+    const { sku } = this.props;
     this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.add('loading');
-    var cart_data = updateCartItemData('update item', sku, selectedOption.value);
-    if (cart_data instanceof Promise) {
-      cart_data.then((result) => {
+    const cartData = updateCartItemData('update item', sku, selectedOption.value);
+    if (cartData instanceof Promise) {
+      cartData.then((result) => {
         this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.remove('loading');
-        var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => result }});
-        document.dispatchEvent(event);
+        const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => result } });
+        document.dispatchEvent(miniCartEvent);
 
-        var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
-        document.dispatchEvent(event);
+        const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
+        document.dispatchEvent(refreshCartEvent);
       });
     }
   };
 
   render() {
-    const {qty, stock, is_disabled} = this.props;
+    const { qty, stock, is_disabled } = this.props;
     const options = this.prepareOptions(stock, qty);
-    const qty_class = stock < qty ? 'invalid' : 'valid';
+    const qtyClass = stock < qty ? 'invalid' : 'valid';
     return (
       <Select
         ref={this.selectRef}
         classNamePrefix="spcSelect"
-        className={"spc-select " + qty_class}
+        className={`spc-select ${qtyClass}`}
         onMenuOpen={this.onMenuOpen}
         onMenuClose={this.onMenuClose}
         onChange={this.handleChange}
@@ -66,6 +65,6 @@ export default class CartQuantitySelect extends React.Component {
         isSearchable={false}
         isDisabled={is_disabled}
       />
-    )
+    );
   }
 }

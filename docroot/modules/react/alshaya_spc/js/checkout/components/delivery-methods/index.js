@@ -1,24 +1,22 @@
 import React from 'react';
 
 import SectionTitle from '../../../utilities/section-title';
-import HomeDeliverySVG from "../hd-svg";
-import ClickCollectSVG from "../cc-svg";
+import HomeDeliverySVG from '../hd-svg';
+import ClickCollectSVG from '../cc-svg';
 
 export default class DeliveryMethods extends React.Component {
-
   constructor(props) {
     super(props);
     let delivery_type = 'hd';
 
     if (this.props.cart.delivery_type) {
       delivery_type = this.props.cart.delivery_type;
-    }
-    else if (this.props.cart.cart.delivery_type) {
+    } else if (this.props.cart.cart.delivery_type) {
       delivery_type = this.props.cart.cart.delivery_type;
     }
 
     this.state = {
-      'selectedOption': delivery_type
+      selectedOption: delivery_type,
     };
   }
 
@@ -32,20 +30,20 @@ export default class DeliveryMethods extends React.Component {
   // On delivery method change.
   changeDeliveryMethod = (method) => {
     this.setState({
-      selectedOption: method
+      selectedOption: method,
     });
 
-    document.getElementById('delivery-method-' + method).checked = true;
-    var event = new CustomEvent("deliveryMethodChange", {
+    document.getElementById(`delivery-method-${method}`).checked = true;
+    const event = new CustomEvent('deliveryMethodChange', {
       bubbles: true,
       detail: {
-        data: method
-      }
+        data: method,
+      },
     });
     document.dispatchEvent(event);
     // Add delivery method in cart storage.
-    let cart = this.props.cart;
-    cart['delivery_type'] = method;
+    const { cart } = this.props;
+    cart.delivery_type = method;
     this.props.refreshCart(cart);
     // Trigger cnc event to fetch stores.
     if (method === 'cnc') {
@@ -55,7 +53,7 @@ export default class DeliveryMethods extends React.Component {
 
   render() {
     const { cnc_disabled } = this.props.cart;
-    let hd_subtitle = Drupal.t('Standard delivery for purchases over KD 250');
+    const hd_subtitle = Drupal.t('Standard delivery for purchases over KD 250');
     let cnc_subtitle = window.drupalSettings.cnc_subtitle_available || '';
 
     // If CNC is disabled.
@@ -64,29 +62,29 @@ export default class DeliveryMethods extends React.Component {
     }
 
     return (
-      <div className='spc-checkout-delivery-methods'>
+      <div className="spc-checkout-delivery-methods">
         <SectionTitle>{Drupal.t('delivery method')}</SectionTitle>
-        <div className='delivery-method' onClick={() => this.changeDeliveryMethod('hd')}>
-          <input id='delivery-method-hd' defaultChecked={this.state.selectedOption === 'hd'} value='hd' name='delivery-method' type='radio' />
-          <label className='radio-sim radio-label'>
-            <span className='icon'><HomeDeliverySVG/></span>
-            <div className='delivery-method-name'>
-              <span className='impress'>{Drupal.t('home delivery')}</span>
-              <span className='sub-title'>{hd_subtitle}</span>
+        <div className="delivery-method" onClick={() => this.changeDeliveryMethod('hd')}>
+          <input id="delivery-method-hd" defaultChecked={this.state.selectedOption === 'hd'} value="hd" name="delivery-method" type="radio" />
+          <label className="radio-sim radio-label">
+            <span className="icon"><HomeDeliverySVG /></span>
+            <div className="delivery-method-name">
+              <span className="impress">{Drupal.t('home delivery')}</span>
+              <span className="sub-title">{hd_subtitle}</span>
             </div>
           </label>
         </div>
-        <div className='delivery-method' onClick={() => this.changeDeliveryMethod('cnc')}>
-          <input id='delivery-method-cnc' defaultChecked={this.state.selectedOption === 'cnc'} disabled={cnc_disabled} value='cnc' name='delivery-method' type='radio' />
-          <label className='radio-sim radio-label'>
-            <span className='icon'><ClickCollectSVG/></span>
-            <div className='delivery-method-name'>
-              <span className='impress'>{Drupal.t('click & collect')}</span>
-              <span className='sub-title'>{cnc_subtitle}</span>
+        <div className="delivery-method" onClick={() => this.changeDeliveryMethod('cnc')}>
+          <input id="delivery-method-cnc" defaultChecked={this.state.selectedOption === 'cnc'} disabled={cnc_disabled} value="cnc" name="delivery-method" type="radio" />
+          <label className="radio-sim radio-label">
+            <span className="icon"><ClickCollectSVG /></span>
+            <div className="delivery-method-name">
+              <span className="impress">{Drupal.t('click & collect')}</span>
+              <span className="sub-title">{cnc_subtitle}</span>
             </div>
           </label>
         </div>
       </div>
-    )
+    );
   }
 }

@@ -1,13 +1,12 @@
 import React from 'react';
-import SectionTitle from "../section-title";
+import SectionTitle from '../section-title';
 
 export default class FilterList extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      'items': [],
-      'selected': null
+      items: [],
+      selected: null,
     };
   }
 
@@ -15,30 +14,27 @@ export default class FilterList extends React.Component {
    * Filter the list on search.
    */
   filterList = () => {
-    var updatedList = this.getInitialItems();
-    updatedList = updatedList.filter(function (item) {
-      return item['label'].toLowerCase().search(
-        event.target.value.toLowerCase()) !== -1;
-    });
+    let updatedList = this.getInitialItems();
+    updatedList = updatedList.filter((item) => item.label.toLowerCase().search(
+      event.target.value.toLowerCase(),
+    ) !== -1);
 
     this.setState({
-      items: updatedList
+      items: updatedList,
     });
   }
 
   /**
    * Prepare initial list.
    */
-  getInitialItems = () => {
-    return this.props.options;
-  };
+  getInitialItems = () => this.props.options;
 
   /**
    * Handle click on <li>.
    */
   handleLiClick = (e) => {
     this.setState({
-      selected: e.target.parentElement.value
+      selected: e.target.parentElement.value,
     });
 
     this.props.toggleFilterList();
@@ -54,43 +50,44 @@ export default class FilterList extends React.Component {
   componentDidMount() {
     this.setState({
       items: this.getInitialItems(),
-      selected: this.props.selected
+      selected: this.props.selected,
     });
   }
 
-  render () {
-    let items = this.state.items;
+  render() {
+    const { items } = this.state;
     if (items === 0) {
       return (null);
     }
 
     return (
-      <div className='filter-list'>
-        <div className='spc-filter-panel-header'>
-          <span className='spc-filter-panel-back' onClick={() => this.backButtonClick()}/>
+      <div className="filter-list">
+        <div className="spc-filter-panel-header">
+          <span className="spc-filter-panel-back" onClick={() => this.backButtonClick()} />
           <SectionTitle>{this.props.panelTitle}</SectionTitle>
         </div>
-        <div className='spc-filter-panel-search-form-item'>
-          <input className='spc-filter-panel-search-field' type='text' placeholder={this.props.placeHolderText} onChange={this.filterList}/>
+        <div className="spc-filter-panel-search-form-item">
+          <input className="spc-filter-panel-search-field" type="text" placeholder={this.props.placeHolderText} onChange={this.filterList} />
         </div>
-        <div className='spc-filter-area-panel-list-wrapper'>
-          <ul>{
-            items.map((item) => {
-              return(
-                <li
-                  key={item.value}
-                  value={item.value}
-                  className={
+        <div className="spc-filter-area-panel-list-wrapper">
+          <ul>
+            {
+            items.map((item) => (
+              <li
+                key={item.value}
+                value={item.value}
+                className={
                     ((this.state.selected !== undefined && this.state.selected.value == item.value))
-                    ? 'active' : 'in-active'}
-                >
-                  <span onClick={(e) => this.handleLiClick(e)} className='spc-area-panel-item'>{item.label}</span>
-              </li>)})
+                      ? 'active' : 'in-active'
+}
+              >
+                <span onClick={(e) => this.handleLiClick(e)} className="spc-area-panel-item">{item.label}</span>
+              </li>
+            ))
             }
           </ul>
         </div>
       </div>
     );
   }
-
 }

@@ -93,7 +93,8 @@ class KnetHelper {
     $pipe->setTerminalResourceKey($knet_creds['terminal_resource_key']);
     $pipe->setKnetUrl($knet_settings['knet_url']);
 
-    $host = $this->request->getSchemeAndHttpHost() . '/middleware/public/payment/';
+    // We hard code HTTPS here as varnish request to middleware is always http.
+    $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
     $response_url = $host . 'knet-response';
     $pipe->setResponseUrl($response_url);
 

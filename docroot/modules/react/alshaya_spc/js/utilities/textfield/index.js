@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  geocodeAddressToLatLng
+  geocodeAddressToLatLng,
 } from '../map/map_utils';
 
 class TextField extends React.Component {
@@ -9,8 +9,7 @@ class TextField extends React.Component {
     if (handler === 'blur') {
       if (e.currentTarget.value.length > 0) {
         e.currentTarget.classList.add('focus');
-      }
-      else {
+      } else {
         e.currentTarget.classList.remove('focus');
       }
     }
@@ -27,21 +26,21 @@ class TextField extends React.Component {
     const countryMobileCode = window.drupalSettings.country_mobile_code;
     const countryMobileCodeMaxLength = window.drupalSettings.mobile_maxlength;
     let focusClass = '';
-    if (this.props.defaultValue !== undefined || this.props.defaultValue !== "") {
+    if (this.props.defaultValue !== undefined || this.props.defaultValue !== '') {
       focusClass = 'focus';
     }
 
     if (this.props.type === 'email') {
       return (
-        <div className='spc-type-textfield'>
+        <div className="spc-type-textfield">
           <input
-            type='email'
+            type="email"
             name={this.props.name}
             defaultValue={this.props.defaultValue}
             onBlur={(e) => this.handleEvent(e, 'blur')}
             className={focusClass}
           />
-          <div className='c-input__bar'/>
+          <div className="c-input__bar" />
           <label>{this.props.label}</label>
           <div id={`${this.props.name}-error`} className="error" />
         </div>
@@ -51,33 +50,35 @@ class TextField extends React.Component {
       return (
         <div className="spc-type-tel">
           <label>{this.props.label}</label>
-          <span className='country-code'>{'+' + countryMobileCode}</span>
-          <input maxLength={countryMobileCodeMaxLength}
-                 type='text' name={this.props.name}
-                 defaultValue={this.props.defaultValue}/>
-          <div className='c-input__bar'/>
-          <div id={this.props.name + '-error'} className='error'/>
-        </div>
-      );
-    }
-    else {
-      return (
-        <div className='spc-type-textfield'>
+          <span className="country-code">{`+${countryMobileCode}`}</span>
           <input
-            type='text'
-            id={this.props.name}
+            maxLength={countryMobileCodeMaxLength}
+            type="text"
             name={this.props.name}
             defaultValue={this.props.defaultValue}
-            onChange={this.handleChange}
-            onBlur={(e) => this.handleEvent(e, 'blur')}
-            className={focusClass}
           />
-          <div className='c-input__bar'/>
-          <label>{this.props.label}</label>
-          <div id={this.props.name + '-error'} className='error'/>
+          <div className="c-input__bar" />
+          <div id={`${this.props.name}-error`} className="error" />
         </div>
       );
     }
+
+    return (
+      <div className="spc-type-textfield">
+        <input
+          type="text"
+          id={this.props.name}
+          name={this.props.name}
+          defaultValue={this.props.defaultValue}
+          onChange={this.handleChange}
+          onBlur={(e) => this.handleEvent(e, 'blur')}
+          className={focusClass}
+        />
+        <div className="c-input__bar" />
+        <label>{this.props.label}</label>
+        <div id={`${this.props.name}-error`} className="error" />
+      </div>
+    );
   }
 }
 

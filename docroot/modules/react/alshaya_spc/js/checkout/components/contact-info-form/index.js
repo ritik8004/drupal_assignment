@@ -1,16 +1,16 @@
-import React from "react";
-import Axios from "axios";
-import { ClicknCollectContext } from "../../../context/ClicknCollect";
+import React from 'react';
+import Axios from 'axios';
+import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import {
   addShippingInCart,
   removeFullScreenLoader,
-  showFullScreenLoader
-} from "../../../utilities/checkout_util";
-import FixedFields from "../fixed-fields";
-import { i18nMiddleWareUrl } from "../../../utilities/i18n_url";
-import { validateContactInfo } from "../../../utilities/checkout_address_process";
-import { extractFirstAndLastName } from "../../../utilities/cart_customer_util";
-import { dispatchCustomEvent } from "../../../utilities/events";
+  showFullScreenLoader,
+} from '../../../utilities/checkout_util';
+import FixedFields from '../fixed-fields';
+import { i18nMiddleWareUrl } from '../../../utilities/i18n_url';
+import { validateContactInfo } from '../../../utilities/checkout_address_process';
+import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
+import { dispatchCustomEvent } from '../../../utilities/events';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
@@ -19,7 +19,7 @@ class ContactInfoForm extends React.Component {
     e.preventDefault();
 
     if (drupalSettings.user.uid === 0) {
-      let notValidAddress = validateContactInfo(e, false);
+      const notValidAddress = validateContactInfo(e, false);
       if (notValidAddress) {
         return;
       }
@@ -27,24 +27,24 @@ class ContactInfoForm extends React.Component {
 
     showFullScreenLoader();
     const { fullname, email } = this.context.contactInfo;
-    let name = drupalSettings.user.uid > 0 ? fullname: e.target.elements.fullname.value.trim();
-    let { firstname, lastname } = extractFirstAndLastName(name);
-    let form_data = {
+    const name = drupalSettings.user.uid > 0 ? fullname : e.target.elements.fullname.value.trim();
+    const { firstname, lastname } = extractFirstAndLastName(name);
+    const form_data = {
       static: {
-        firstname: firstname,
-        lastname: lastname,
-        email: drupalSettings.user.uid > 0 ?  email : e.target.elements.email.value,
+        firstname,
+        lastname,
+        email: drupalSettings.user.uid > 0 ? email : e.target.elements.email.value,
         telephone: e.target.elements.mobile.value,
-        country_id: drupalSettings.country_code
+        country_id: drupalSettings.country_code,
       },
-      shipping_type: "cnc",
+      shipping_type: 'cnc',
       store: {
         name: store.name,
         code: store.code,
         rnc_available: store.rnc_available,
-        cart_address: store.cart_address
+        cart_address: store.cart_address,
       },
-      carrier_info: { ...drupalSettings.map.cnc_shipping }
+      carrier_info: { ...drupalSettings.map.cnc_shipping },
     };
 
     this.processShippingUpdate(form_data);
@@ -53,14 +53,14 @@ class ContactInfoForm extends React.Component {
   /**
    * Validate mobile number and email address and on success process shipping address update.
    */
-  processShippingUpdate = form_data => {
+  processShippingUpdate = (form_data) => {
     // Mimic axio request when we don't want to validate email address for existing
     // or recently created customer.
     let customerValidationReuest = new Promise((resolve, reject) => {
       resolve({
         data: {
-          exists: false
-        }
+          exists: false,
+        },
       });
     });
 
@@ -69,12 +69,12 @@ class ContactInfoForm extends React.Component {
         && this.context.contactInfo.email !== form_data.static.email)
     ) {
       customerValidationReuest = Axios.get(
-        i18nMiddleWareUrl(`customer/${form_data.static.email}`)
+        i18nMiddleWareUrl(`customer/${form_data.static.email}`),
       );
     }
 
     const mobileValidationRequest = Axios.get(
-      Drupal.url(`verify-mobile/${form_data.static.telephone}`)
+      Drupal.url(`verify-mobile/${form_data.static.telephone}`),
     );
 
     // API call to validate mobile number and email address.
@@ -82,7 +82,7 @@ class ContactInfoForm extends React.Component {
       .then(
         Axios.spread((mobileValidate, customerEmailValidate) => {
           // Show errors if any, else call update cart api to update shipping address.
-          let hasError = this.showMobileAndEmailErrors(
+          const hasError = this.showMobileAndEmailErrors(
             mobileValidate,
             customerEmailValidate,
           );
@@ -92,9 +92,9 @@ class ContactInfoForm extends React.Component {
           } else {
             removeFullScreenLoader();
           }
-        })
+        }),
       )
-      .catch(errors => {
+      .catch((errors) => {
         removeFullScreenLoader();
         // React on errors.
       });
@@ -103,12 +103,12 @@ class ContactInfoForm extends React.Component {
   /**
    * Update cart with shipping address.
    */
-  updateShipping = form_data => {
-    let cart_info = addShippingInCart("update shipping", form_data);
+  updateShipping = (form_data) => {
+    const cart_info = addShippingInCart('update shipping', form_data);
     if (cart_info instanceof Promise) {
-      let { updateContactInfo } = this.context;
+      const { updateContactInfo } = this.context;
       cart_info
-        .then(cart_result => {
+        .then((cart_result) => {
           removeFullScreenLoader();
 
           if (!cart_result) {
@@ -127,10 +127,10 @@ class ContactInfoForm extends React.Component {
             address: form_data.store.address,
           };
           dispatchCustomEvent('refreshCartOnCnCSelect', {
-            data: () => cartData
+            data: () => cartData,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
     }
@@ -145,52 +145,52 @@ class ContactInfoForm extends React.Component {
 
     // If invalid mobile number.
     if (mobileValidate.data.status === false) {
-      document.getElementById("mobile-error").innerHTML = Drupal.t(
-        "Please enter valid mobile number."
+      document.getElementById('mobile-error').innerHTML = Drupal.t(
+        'Please enter valid mobile number.',
       );
-      document.getElementById("mobile-error").classList.add("error");
+      document.getElementById('mobile-error').classList.add('error');
       isError = true;
     } else {
       // Remove error class and any error message.
-      document.getElementById("mobile-error").innerHTML = "";
-      document.getElementById("mobile-error").classList.remove("error");
+      document.getElementById('mobile-error').innerHTML = '';
+      document.getElementById('mobile-error').classList.remove('error');
     }
 
-    if (!document.getElementById("email-error")) {
+    if (!document.getElementById('email-error')) {
       return isError;
     }
 
-    if (customerEmailValidate.data.exists === "wrong") {
-      document.getElementById("email-error").innerHTML = Drupal.t(
-        "The email address %mail is not valid.",
+    if (customerEmailValidate.data.exists === 'wrong') {
+      document.getElementById('email-error').innerHTML = Drupal.t(
+        'The email address %mail is not valid.',
         {
-          "%mail": customerEmailValidate.data.email
-        }
+          '%mail': customerEmailValidate.data.email,
+        },
       );
-      document.getElementById("email-error").classList.add("error");
+      document.getElementById('email-error').classList.add('error');
       isError = true;
     } else if (customerEmailValidate.data.exists === true) {
-      document.getElementById("email-error").innerHTML = Drupal.t(
-        "Customer already exists."
+      document.getElementById('email-error').innerHTML = Drupal.t(
+        'Customer already exists.',
       );
-      document.getElementById("email-error").classList.add("error");
+      document.getElementById('email-error').classList.add('error');
       isError = true;
     } else {
-      document.getElementById("email-error").innerHTML = "";
-      document.getElementById("email-error").classList.remove("error");
+      document.getElementById('email-error').innerHTML = '';
+      document.getElementById('email-error').classList.remove('error');
     }
 
     return isError;
   };
 
   render() {
-    let { store } = this.props;
-    let { contactInfo } = this.context;
+    const { store } = this.props;
+    const { contactInfo } = this.context;
 
     return (
       <form
         className="spc-contact-form"
-        onSubmit={e => this.handleSubmit(e, store)}
+        onSubmit={(e) => this.handleSubmit(e, store)}
       >
         <FixedFields
           showEmail={drupalSettings.user.uid === 0}
@@ -204,7 +204,7 @@ class ContactInfoForm extends React.Component {
             className="spc-address-form-submit"
             type="submit"
           >
-            {Drupal.t("Save")}
+            {Drupal.t('Save')}
           </button>
         </div>
       </form>
