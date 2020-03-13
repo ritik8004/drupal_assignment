@@ -6,6 +6,7 @@ import SavedCardsList from './components/SavedCardsList';
 import AddNewCard from './components/AddNewCard';
 import { CheckoutComContext } from '../../../context/CheckoutCom';
 import SelectedCard from './components/SelectedCard';
+import Cookies from 'js-cookie';
 
 class PaymentMethodCheckoutCom extends React.Component {
   static contextType = CheckoutComContext;
@@ -132,6 +133,9 @@ class PaymentMethodCheckoutCom extends React.Component {
   updateCurrentContext = (obj) => {
     const { updateState } = this.context;
     updateState(obj);
+    if (({}).hasOwnProperty.call(obj, 'selectedCard')) {
+      Cookies.set('spc_selected_card', obj.selectedCard === 'new' ? 'new' : obj.tokenizedCard);
+    }
   }
 
   changeCurrentCard = (type) => {
@@ -152,7 +156,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     const { openStoreListModal } = this.state;
     const { selectedCard, tokenizedCard } = this.context;
 
-    let activeCard = [];
+    let activeCard = {};
     if (tokenizedCard !== '') {
       activeCard = { ...drupalSettings.checkoutCom.tokenizedCards }[tokenizedCard];
     }
