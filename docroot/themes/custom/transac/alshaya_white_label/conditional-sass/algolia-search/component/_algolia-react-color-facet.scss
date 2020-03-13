@@ -1,0 +1,41 @@
+#alshaya-algolia-search {
+  .sticky-filter-wrapper {
+    .block-facet--swatch-list {
+      li {
+        &.facet-item {
+          > a {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  .filter__inner {
+    .c-collapse-item:not(#sort_by) {
+      &.block-facet--swatch-list {
+        li {
+          &.facet-item {
+            padding: 0 !important;
+            line-height: 0;
+
+            > a {
+              padding: 0.25rem 1.5rem !important;
+              line-height: 2.9375rem;
+              display: block;
+
+              @include breakpoint($only-mobile) {
+                padding: 2px 1.5rem !important;
+              }
+            }
+
+            .facet-item__value {
+              display: inline-block;
+              margin-left: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
