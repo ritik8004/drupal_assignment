@@ -108,6 +108,11 @@
                 font-size: 2rem;
                 color: $spc-checkout-radio-filled;
               }
+
+              &:hover {
+                background: $spc-deliver-button;
+                color: $primary_btn_text;
+              }
             }
           }
         }
