@@ -46,7 +46,7 @@ class SystemSettings {
     // Get site environment.
     require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
 
-    $env = alshaya_get_site_environment();
+    $env = $this->getEnvironment();
 
     // Get host_site_code or acsf_site_name based on environment.
     if ($env === 'local') {
