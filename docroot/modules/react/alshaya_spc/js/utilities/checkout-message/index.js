@@ -12,10 +12,9 @@ export default class CheckoutMessage extends React.Component {
         </div>
       );
     }
-    else {
-      return (
-        <div className={`spc-messages-container spc-checkout-${type}-message-container`}/>
-      );
-    }
+
+    return (
+      <div className={`spc-messages-container spc-checkout-${type}-message-container`} />
+    );
   }
 }

@@ -2,34 +2,32 @@ import React from 'react';
 
 import BillingInfo from '../billing-info';
 import BillingPopUp from '../billing-popup';
-import SectionTitle from "../../../utilities/section-title";
+import SectionTitle from '../../../utilities/section-title';
 
 // Storage key for billing shipping info same or not.
 const localStorageKey = 'billing_shipping_different';
 
 export default class HDBillingAddress extends React.Component {
-
   _isMounted = false;
 
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      shippingAsBilling: this.isBillingSameAsShippingInStorage()
+      shippingAsBilling: this.isBillingSameAsShippingInStorage(),
     };
-
   }
 
   showPopup = (showHide) => {
     this.setState({
-      open: showHide
+      open: showHide,
     });
   }
 
   closePopup = () => {
     if (this._isMounted) {
       this.setState({
-        open: false
+        open: false,
       });
       this.setStateAndChecked(true);
     }
@@ -37,13 +35,11 @@ export default class HDBillingAddress extends React.Component {
 
   setStateAndChecked = (shippingAsBilling) => {
     this.setState({
-      shippingAsBilling: shippingAsBilling
+      shippingAsBilling,
     });
 
-    let yesNO = shippingAsBilling ? 'yes' : 'no';
-    document.getElementById('billing-address-' + yesNO).checked = true;
-
-    return;
+    const yesNO = shippingAsBilling ? 'yes' : 'no';
+    document.getElementById(`billing-address-${yesNO}`).checked = true;
   };
 
   /**
@@ -79,7 +75,7 @@ export default class HDBillingAddress extends React.Component {
    * Event handler for billing update.
    */
   processBillingUpdate = (e) => {
-    let data = e.detail.data();
+    const data = e.detail.data();
 
     // If there is no error and update was fine, means user
     // has changed the billing address. We set in localstorage.
@@ -93,7 +89,7 @@ export default class HDBillingAddress extends React.Component {
     // CLose modal.
     if (this._isMounted) {
       this.setState({
-        open: false
+        open: false,
       });
     }
 
@@ -105,7 +101,7 @@ export default class HDBillingAddress extends React.Component {
    * If local storage has biliing shipping set.
    */
   isBillingSameAsShippingInStorage = () => {
-    let same = localStorage.getItem(localStorageKey);
+    const same = localStorage.getItem(localStorageKey);
     return (same === null || same === undefined);
   };
 
@@ -114,7 +110,7 @@ export default class HDBillingAddress extends React.Component {
       billingAddress,
       shippingAddress,
       carrierInfo,
-      paymentMethod
+      paymentMethod,
     } = this.props;
     // If carrier info not set on cart, means shipping is not
     // set. Thus billing is also not set and thus no need to
@@ -134,33 +130,32 @@ export default class HDBillingAddress extends React.Component {
     const isShippingBillingSame = this.isBillingSameAsShippingInStorage();
 
     return (
-      <div className='spc-section-billing-address'>
+      <div className="spc-section-billing-address">
         <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
-        <div className='spc-billing-address-wrapper'>
-          <div className='spc-billing-top-panel'>
-            <div className='spc-billing-address-title'>{Drupal.t('billing address same as delivery address?')}</div>
-            <div className='spc-billing-address-btns'>
-              <div className='spc-billing-radio' onClick={() => this.changeBillingAddress(true)}>
-                <input id='billing-address-yes' defaultChecked={isShippingBillingSame} value={true} name='billing-address' type='radio'/>
-                <label className='radio-sim radio-label'>{Drupal.t('yes')}</label>
+        <div className="spc-billing-address-wrapper">
+          <div className="spc-billing-top-panel">
+            <div className="spc-billing-address-title">{Drupal.t('billing address same as delivery address?')}</div>
+            <div className="spc-billing-address-btns">
+              <div className="spc-billing-radio" onClick={() => this.changeBillingAddress(true)}>
+                <input id="billing-address-yes" defaultChecked={isShippingBillingSame} value name="billing-address" type="radio" />
+                <label className="radio-sim radio-label">{Drupal.t('yes')}</label>
               </div>
-              <div className='spc-billing-radio' onClick={() => this.changeBillingAddress(false)}>
-                <input id='billing-address-no' defaultChecked={!isShippingBillingSame} value={false} name='billing-address' type='radio'/>
-                <label className='radio-sim radio-label'>{Drupal.t('no')}</label>
+              <div className="spc-billing-radio" onClick={() => this.changeBillingAddress(false)}>
+                <input id="billing-address-no" defaultChecked={!isShippingBillingSame} value={false} name="billing-address" type="radio" />
+                <label className="radio-sim radio-label">{Drupal.t('no')}</label>
               </div>
             </div>
           </div>
-          {this.state.open &&
-            <BillingPopUp closePopup={this.closePopup} billing={billingAddress} shipping={shippingAddress}/>
-          }
-          {!this.isBillingSameAsShippingInStorage() &&
-            <div className='spc-billing-bottom-panel'>
-              <BillingInfo shipping={shippingAddress} billing={billingAddress}/>
+          {this.state.open
+            && <BillingPopUp closePopup={this.closePopup} billing={billingAddress} shipping={shippingAddress} />}
+          {!this.isBillingSameAsShippingInStorage()
+            && (
+            <div className="spc-billing-bottom-panel">
+              <BillingInfo shipping={shippingAddress} billing={billingAddress} />
             </div>
-          }
+            )}
         </div>
       </div>
     );
   }
-
 }

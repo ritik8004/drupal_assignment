@@ -1,24 +1,25 @@
-import React from "react";
+import React from 'react';
 import parse from 'html-react-parser';
-import Popup from "reactjs-popup";
-import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
-import Loading from "../../../utilities/loading";
-import ClickCollectContainer from "../click-collect";
+import Popup from 'reactjs-popup';
+import { checkoutAddressProcess } from '../../../utilities/checkout_address_process';
+import Loading from '../../../utilities/loading';
+import ClickCollectContainer from '../click-collect';
 
 class ClicknCollectDeiveryInfo extends React.Component {
   _isMounted = true;
+
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      showSelectedStore: false
+      showSelectedStore: false,
     };
   }
 
-  openModal = showSelectedStore => {
+  openModal = (showSelectedStore) => {
     this.setState({
       open: true,
-      showSelectedStore: showSelectedStore || false
+      showSelectedStore: showSelectedStore || false,
     });
   };
 
@@ -26,7 +27,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
     this.setState({ open: false });
   };
 
-  processAddress = e => {
+  processAddress = (e) => {
     const { cart } = this.props.cart;
     checkoutAddressProcess(e, cart);
   };
@@ -34,7 +35,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
   componentDidMount() {
     this._isMounted = true;
     document.addEventListener(
-      "refreshCartOnCnCSelect",
+      'refreshCartOnCnCSelect',
       this.eventListener,
       false,
     );
@@ -43,7 +44,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
   componentWillUnmount() {
     this._isMounted = false;
     document.removeEventListener(
-      "refreshCartOnCnCSelect",
+      'refreshCartOnCnCSelect',
       this.eventListener,
       false,
     );

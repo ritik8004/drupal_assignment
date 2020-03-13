@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderToString } from 'react-dom/server'
+import { renderToString } from 'react-dom/server';
 import Gmap from '../../../../utilities/map/Gmap';
 import StoreItemInfoWindow from './StoreItemInfowindow';
 
@@ -29,8 +29,7 @@ class ClicknCollectMap extends React.Component {
     this.googleMap.setCurrentMap(window.spcMap.map.googleMap);
     if (this.props.markers !== null && this.props.markers.length > 0) {
       this.placeMarkers();
-    }
-    else {
+    } else {
       this.googleMap.setCenter();
     }
   }
@@ -39,8 +38,7 @@ class ClicknCollectMap extends React.Component {
     if (prevProps.coords !== this.props.coords || prevProps.markers !== this.props.markers) {
       if (this.props.markers !== null && this.props.markers.length > 0) {
         this.placeMarkers();
-      }
-      else {
+      } else {
         this.googleMap.setCenter();
       }
     }
@@ -51,7 +49,7 @@ class ClicknCollectMap extends React.Component {
    */
   placeMarkers = async () => {
     this.googleMap.removeMapMarker();
-    let { markers, openSelectedStore } = this.props;
+    const { markers, openSelectedStore } = this.props;
     if (!markers || !markers.length) {
       return;
     }
@@ -61,11 +59,11 @@ class ClicknCollectMap extends React.Component {
     window.spcMap.map.googleMap.bounds = new google.maps.LatLngBounds();
     const self = this;
     await markers.forEach((store, index) => {
-      let position = new google.maps.LatLng(parseFloat(store.lat), parseFloat(store.lng));
+      const position = new google.maps.LatLng(parseFloat(store.lat), parseFloat(store.lng));
       const markerConfig = {
-        position: position,
+        position,
         title: store.name,
-        infoWindowContent: renderToString(<StoreItemInfoWindow display="default" store={store}/>),
+        infoWindowContent: renderToString(<StoreItemInfoWindow display="default" store={store} />),
         infoWindowSolitary: true,
         label: (index + 1).toString(),
         // Require When markers overlap on each other, show the latest one on top,
