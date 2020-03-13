@@ -16,19 +16,19 @@ class PaymentMethodCheckoutCom extends React.Component {
     this.ccCvv = React.createRef();
 
     this.state = {
-      openStoreListModal: false,
+      openSavedCardListModal: false,
     };
   }
 
-  openStoreListModal = () => {
+  openSavedCardListModal = () => {
     this.setState({
-      openStoreListModal: true,
+      openSavedCardListModal: true,
     });
   }
 
-  closeStoreListModal = () => {
+  closeSavedCardListModal = () => {
     this.setState({
-      openStoreListModal: false,
+      openSavedCardListModal: false,
     });
   }
 
@@ -122,7 +122,7 @@ class PaymentMethodCheckoutCom extends React.Component {
   };
 
   onExistingCardSelect = (cardHash) => {
-    this.closeStoreListModal();
+    this.closeSavedCardListModal();
     this.updateCurrentContext({
       selectedCard: 'existing',
       tokenizedCard: cardHash,
@@ -144,7 +144,7 @@ class PaymentMethodCheckoutCom extends React.Component {
   }
 
   openNewCard = () => {
-    this.closeStoreListModal();
+    this.closeSavedCardListModal();
     this.changeCurrentCard('new');
     if (window.innerWidth < 768) {
       // Code here to navigate to nwe card form.
@@ -152,7 +152,7 @@ class PaymentMethodCheckoutCom extends React.Component {
   }
 
   render() {
-    const { openStoreListModal } = this.state;
+    const { openSavedCardListModal } = this.state;
     const { selectedCard, tokenizedCard } = this.context;
 
     let activeCard = {};
@@ -176,7 +176,7 @@ class PaymentMethodCheckoutCom extends React.Component {
           <div className='spc-checkout-card-option'>
             <SelectedCard
               cardInfo={activeCard}
-              openStoreListModal={this.openStoreListModal}
+              openSavedCardListModal={this.openSavedCardListModal}
               labelEffect={this.labelEffect}
               handleCardCvvChange={this.handleCardCvvChange}
               onExistingCardSelect={this.onExistingCardSelect}
@@ -190,11 +190,11 @@ class PaymentMethodCheckoutCom extends React.Component {
             </ConditionalView>
           </div>
         </ConditionalView>
-        <Popup open={openStoreListModal} onClose={this.closeStoreListModal} closeOnDocumentClick={false}>
+        <Popup open={openSavedCardListModal} onClose={this.closeSavedCardListModal} closeOnDocumentClick={false}>
           <>
             <SavedCardsList
               selected={tokenizedCard}
-              closeStoreListModal={this.closeStoreListModal}
+              closeSavedCardListModal={this.closeSavedCardListModal}
               onExistingCardSelect={this.onExistingCardSelect}
               onNewCardClick={this.openNewCard}
             />

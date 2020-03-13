@@ -3,7 +3,7 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import ToolTip from '../../../../utilities/tooltip';
 
 const SelectedCard = ({
-  cardInfo, openStoreListModal, labelEffect, handleCardCvvChange, onExistingCardSelect, selected = true,
+  cardInfo, openSavedCardListModal, labelEffect, handleCardCvvChange, onExistingCardSelect, selected = true,
 }) => {
   const cvvText = Drupal.t('This code is a three or four digit number printed on the front or back of the credit card');
   return (
@@ -12,7 +12,7 @@ const SelectedCard = ({
         <div className='spc-checkout-payment-saved-card-number'>{Drupal.t('card no.') + ' **** **** **** ' + cardInfo.maskedCC}</div>
         <div className='spc-checkout-payment-saved-card-expiry'>{Drupal.t('expires') +  ' ' + cardInfo.expirationDate}</div>
       </div>
-      <div className="spc-add-new-card-btn" onClick={openStoreListModal}>
+      <div className="spc-add-new-card-btn" onClick={openSavedCardListModal}>
         {Drupal.t('change')}
       </div>
       <ConditionalView condition={selected && cardInfo.mada === true}>
