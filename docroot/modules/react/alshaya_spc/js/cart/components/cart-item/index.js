@@ -19,24 +19,25 @@ export default class CartItem extends React.Component {
     document.getElementById(`remove-item-${id}`).classList.add('loading');
     if (cartData instanceof Promise) {
       cartData.then((result) => {
+        const cartResult = result;
         // Refreshing mini-cart.
-        const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => result } });
+        const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartResult } });
         document.dispatchEvent(eventMiniCart);
 
-        if (result.error !== undefined) {
-          result.message = {
-            'type': 'error',
-            'message': result.error_message,
+        if (cartResult.error !== undefined) {
+          cartResult.message = {
+            type: 'error',
+            message: cartResult.error_message,
           };
         } else {
-          result.message = {
-            'type': 'success',
-            'message': Drupal.t('The product has been removed from your cart.'),
+          cartResult.message = {
+            type: 'success',
+            message: Drupal.t('The product has been removed from your cart.'),
           };
         }
 
         // Refreshing cart components.
-        const eventCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
+        const eventCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => cartResult } });
         document.dispatchEvent(eventCart);
       });
     }
@@ -79,12 +80,12 @@ export default class CartItem extends React.Component {
               && <div>{Drupal.t('FREE')}</div>}
             </div>
             <div className="spc-product-attributes-wrapper">
-              {configurable_values.map((key, val) =>
-                <CheckoutConfigurableOption key={val} label={key} />)}
+              {configurable_values.map((key) =>
+                <CheckoutConfigurableOption key={`${key}-${Math.floor(Math.random()*99)}`} label={key} />)}
             </div>
           </div>
           <div className="spc-product-tile-actions">
-            <button title={Drupal.t('remove this item')} id={`remove-item-${id}`} className="spc-remove-btn" onClick={() => { this.removeCartItem(sku, 'remove item', id); }}>{Drupal.t('remove')}</button>
+            <button title={Drupal.t('remove this item')} type="button" id={`remove-item-${id}`} className="spc-remove-btn" onClick={() => { this.removeCartItem(sku, 'remove item', id); }}>{Drupal.t('remove')}</button>
             <div className="qty">
               <div className="qty-loader-placeholder" />
               <CartQuantitySelect
@@ -97,8 +98,8 @@ export default class CartItem extends React.Component {
           </div>
         </div>
         <div className="spc-promotions">
-          {promotions.map((key, val) =>
-            <CartPromotion key={val} promo={key} link={true} />)}
+          {promotions.map((key) =>
+            <CartPromotion key={`${key}-${Math.floor(Math.random()*99)}`} promo={key} link />)}
         </div>
         <CartItemOOS inStock={inStock} />
         <ItemLowQuantity stock={stock} qty={qty} in_stock={inStock} />
