@@ -342,6 +342,23 @@ class AlshayaSpcController extends ControllerBase {
     $shipping_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
     $shipping_address_array['country'] = $country_list[$shipping_address_array['country_code']];
     $phone_number = $this->mobileUtil->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+
+    // Order Totals.
+    $totals = [
+      'subtotal_incl_tax' => $order['totals']['sub'],
+      'shipping_incl_tax' => $order['totals']['shipping'],
+      'base_grand_total' => $order['totals']['grand'],
+      'discount_amount' => $order['totals']['discount'],
+      'free_delivery' => FALSE,
+      'surcharge' => $order['extension']['surcharge_incl_tax'],
+    ];
+
+    // Get Products.
+    $productList = [];
+    foreach ($order['items'] as $sku => $item) {
+      $productList[$sku] = $this->orderHelper->getSkuDetails($sku);
+    }
+
     $settings = [
       'customer_email' => $order['email'],
       'order_number' => $order['increment_id'],
@@ -355,7 +372,10 @@ class AlshayaSpcController extends ControllerBase {
         'expected_delivery' => '1-2 days',
         'number_of_items' => count($order['items']),
       ],
+      'totals' => $totals,
+      'items' => $productList,
     ];
+
     $cache_tags = [];
     // If logged in user.
     if ($this->currentUser->isAuthenticated()) {
