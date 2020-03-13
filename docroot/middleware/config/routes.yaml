@@ -48,11 +48,6 @@ checkoutcom_payment_error:
     controller: App\Controller\PaymentController::handleCheckoutComError
     methods: GET
 
-checkoutcom_cards:
-    path: /checkout-com/cards
-    controller: App\Controller\CardController::getCards
-    methods: GET
-
 knet_payment_response:
     path: /payment/knet-response
     controller: App\Controller\PaymentController::handleKnetResponse
