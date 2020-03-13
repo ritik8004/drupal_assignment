@@ -1,11 +1,6 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import { addPaymentMethodInCart } from '../../../utilities/update_cart';
-import {
-  placeOrder,
-  removeFullScreenLoader,
-  showFullScreenLoader,
-} from '../../../utilities/checkout_util';
+import { showFullScreenLoader } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import SavedCardsList from './components/SavedCardsList';
 import AddNewCard from './components/AddNewCard';
@@ -123,59 +118,8 @@ class PaymentMethodCheckoutCom extends React.Component {
     console.log(paymentData);
     return;
 
-    addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
-      if (result.error !== undefined && result.error) {
-        removeFullScreenLoader();
-        console.error(result.error);
-        return;
-      }
-
-      // 2D flow success.
-      if (result.cart_id !== undefined && result.cart_id) {
-        const { cart } = this.props;
-        placeOrder(cart.cart.cart_id, cart.selected_payment_method);
-      } else if (result.success === undefined || !(result.success)) {
-        // 3D flow error.
-        console.error(result);
-      } else if (result.redirectUrl !== undefined) {
-        // 3D flow success.
-        window.location = result.redirectUrl;
-      } else {
-        console.error(result);
-        removeFullScreenLoader();
-      }
-    }).catch((error) => {
-      removeFullScreenLoader();
-      console.error(error);
-    });
-  }
-
-  onExistingCardSelect = (cardHash) => {
-    this.closeStoreListModal();
-    this.updateCurrentContext({
-      selectedCard: 'existing',
-      tokenizedCard: cardHash,
-    });
-  }
-
-  updateCurrentContext = (obj) => {
-    const { updateState } = this.context;
-    updateState(obj);
-  }
-
-  changeCurrentCard = (type) => {
-    this.updateCurrentContext({
-      selectedCard: type,
-    });
-  }
-
-  openNewCard = () => {
-    this.closeStoreListModal();
-    this.changeCurrentCard('new');
-    if (window.innerWidth < 768) {
-      // Code here to navigate to nwe card form.
-    }
-  }
+    this.props.finalisePayment(paymentData);
+  };
 
   render() {
     const { openStoreListModal } = this.state;

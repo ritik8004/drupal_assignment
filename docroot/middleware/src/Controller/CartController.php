@@ -505,7 +505,6 @@ class CartController {
 
       case CartActions::CART_PAYMENT_FINALISE:
         $extension = [
-          'action' => 'update payment',
           'attempted_payment' => 1,
         ];
 
@@ -534,10 +533,7 @@ class CartController {
         break;
 
       case CartActions::CART_PAYMENT_UPDATE:
-        $extension = [
-          'action' => 'update payment',
-        ];
-        $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
+        $cart = $this->cart->updatePayment($request_content['payment_info']['payment']);
         break;
     }
 
