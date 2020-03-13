@@ -346,7 +346,7 @@ class AlshayaSpcController extends ControllerBase {
       'shipping_incl_tax' => $order['totals']['shipping'],
       'base_grand_total' => $order['totals']['grand'],
       'discount_amount' => $order['totals']['discount'],
-      'free_delivery' => FALSE,
+      'free_delivery' => 'false',
       'surcharge' => $order['extension']['surcharge_incl_tax'],
     ];
 

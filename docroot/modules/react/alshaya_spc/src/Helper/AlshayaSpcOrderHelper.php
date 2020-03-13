@@ -720,7 +720,7 @@ class AlshayaSpcOrderHelper {
       // @todo Get clickncollect store details
     }
     else {
-      $orderDetails['type'] = 'hd';
+      $orderDetails['type'] = $this->t('Home delivery');
 
       // Check if we have cart description available, display in parenthesis.
       if ($cart_desc = $shippingTerm->get('field_shipping_method_cart_desc')->getString()) {
