@@ -358,7 +358,8 @@ class APIWrapper {
     // Use the IP address from Acquia Cloud ENV variable.
     $params['customerIp'] = $_ENV['AH_CLIENT_IP'] ?? $this->request->getClientIp();
 
-    $host = $this->request->getSchemeAndHttpHost() . '/middleware/public/payment/';
+    // We hard code HTTPS here as varnish request to middleware is always http.
+    $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
     $params['successUrl'] = $host . 'checkout-com-success';
     $params['failUrl'] = $host . 'checkout-com-error';
 

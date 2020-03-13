@@ -71,8 +71,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     if (!(numberValid && expiryValid && cvvValid)) {
       console.error('Client side validation failed for credit card info');
       throw 'UnexpectedValueException';
-    }
-    else if (window.CheckoutKit === undefined) {
+    } else if (window.CheckoutKit === undefined) {
       console.error('Checkout kit not loaded');
       throw 500;
     }
