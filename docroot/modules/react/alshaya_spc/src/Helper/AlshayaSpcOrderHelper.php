@@ -21,6 +21,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\mobile_number\MobileNumberUtilInterface;
@@ -35,6 +36,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Class AlshayaSpcOrderHelper.
  */
 class AlshayaSpcOrderHelper {
+  use StringTranslationTrait;
 
   /**
    * Entity type manager.
