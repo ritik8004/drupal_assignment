@@ -1,11 +1,11 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import Loading from '../../utilities/loading';
 import OrderSummary from './OrderSummary';
 import { fetchOrderData } from '../../utilities/get_order';
 import { stickySidebar } from '../../utilities/stickyElements/stickyElements';
 import { redirectToCart } from '../../utilities/get_cart';
-import Cookies from 'js-cookie';
-import {removeCartFromStorage} from "../../utilities/storage";
+import { removeCartFromStorage } from '../../utilities/storage';
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class CheckoutConfirmation extends React.Component {
           const prevState = this.state;
           this.setState({ ...prevState, wait: false, order: result });
           // Dispatch event for GTM.
-          var event = new CustomEvent('orderPaymentMethod', { bubbles: true, detail: { data: result } });
+          const event = new CustomEvent('orderPaymentMethod', { bubbles: true, detail: { data: result } });
           document.dispatchEvent(event);
         });
       }

@@ -4,17 +4,16 @@ import Popup from 'reactjs-popup';
 import AddressForm from '../address-form';
 import {
   processBillingUpdateFromForm,
-  formatAddressDataForEditForm
+  formatAddressDataForEditForm,
 } from '../../../utilities/checkout_address_process';
 
 export default class BillingPopUp extends React.Component {
-
   _isMounted = false;
 
   constructor(props) {
     super(props);
     this.state = {
-      open: true
+      open: true,
     };
   }
 
@@ -23,7 +22,7 @@ export default class BillingPopUp extends React.Component {
    */
   openModal = () => {
     this.setState({
-      open: true
+      open: true,
     });
   };
 
@@ -33,7 +32,7 @@ export default class BillingPopUp extends React.Component {
   closeModal = () => {
     if (this._isMounted) {
       this.setState({
-        open: false
+        open: false,
       });
 
       this.props.closePopup();
@@ -44,18 +43,16 @@ export default class BillingPopUp extends React.Component {
    * Process the address.
    */
   processAddress = (e) => {
-    const shipping = this.props.shipping;
+    const { shipping } = this.props;
     return processBillingUpdateFromForm(e, shipping);
   }
 
   /**
    * Format address for edit address.
    */
-  formatAddressData = (address) => {
-    return address === null
-      ? address
-      : formatAddressDataForEditForm(address);
-  }
+  formatAddressData = (address) => (address === null
+    ? address
+    : formatAddressDataForEditForm(address))
 
   componentDidMount() {
     this._isMounted = true;
@@ -68,7 +65,7 @@ export default class BillingPopUp extends React.Component {
   processBillingUpdate = (e) => {
     if (this._isMounted) {
       this.setState({
-        open: false
+        open: false,
       });
     }
   }
@@ -79,11 +76,11 @@ export default class BillingPopUp extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <Popup
-            open={this.state.open}
-            onClose={this.closeModal}
-            closeOnDocumentClick={false}
+          open={this.state.open}
+          onClose={this.closeModal}
+          closeOnDocumentClick={false}
         >
           <AddressForm
             closeModal={this.closeModal}
@@ -93,8 +90,7 @@ export default class BillingPopUp extends React.Component {
             default_val={this.formatAddressData(this.props.billing)}
           />
         </Popup>
-      </React.Fragment>
+      </>
     );
   }
-
 }

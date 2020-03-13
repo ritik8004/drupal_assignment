@@ -1,4 +1,6 @@
 import React from 'react';
+import _isEmpty from 'lodash/isEmpty';
+import Cookies from 'js-cookie';
 import ClicknCollectContextProvider from '../../../context/ClicknCollect';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import EmptyResult from '../../../utilities/empty-result';
@@ -19,13 +21,11 @@ import DeliveryMethods from '../delivery-methods';
 import PaymentMethods from '../payment-methods';
 import CheckoutMessage from '../../../utilities/checkout-message';
 import TermsConditions from '../terms-conditions';
-import { getLocationAccess, getDefaultMapCenter } from '../../../utilities/checkout_util';
-import { fetchClicknCollectStores } from "../../../utilities/api/requests";
+import { getLocationAccess, getDefaultMapCenter, removeFullScreenLoader } from '../../../utilities/checkout_util';
+import { fetchClicknCollectStores } from '../../../utilities/api/requests';
 import { createFetcher } from '../../../utilities/api/fetcher';
-import {removeFullScreenLoader} from "../../../utilities/checkout_util";
-import _isEmpty from 'lodash/isEmpty';
+
 import ConditionalView from '../../../common/components/conditional-view';
-import Cookies from 'js-cookie';
 
 window.fetchStore = 'idle';
 
@@ -53,7 +53,7 @@ export default class Checkout extends React.Component {
       }
       // If logged in user.
       if (window.drupalSettings.user.uid > 0) {
-        let temp_cart = getInfoFromStorage();
+        const temp_cart = getInfoFromStorage();
         // If cart available in storage and shipping address
         // already not set in cart and user has address
         // available, remove cart from local storage so
@@ -68,7 +68,7 @@ export default class Checkout extends React.Component {
       }
 
       // Fetch cart data.
-      var cart_data = fetchCartData();
+      const cart_data = fetchCartData();
       if (cart_data instanceof Promise) {
         cart_data.then((result) => {
           let cart_obj = getInfoFromStorage();
@@ -76,21 +76,19 @@ export default class Checkout extends React.Component {
             cart_obj = { cart: result };
           }
           addInfoInStorage(cart_obj);
-          checkCartCustomer(cart_obj).then(updated => {
+          checkCartCustomer(cart_obj).then((updated) => {
             if (updated) {
               cart_obj = getInfoFromStorage();
             }
             window.cart_data = cart_obj;
             this.setState({
               wait: false,
-              cart: cart_obj
+              cart: cart_obj,
             });
           });
-
         });
       }
-    }
-    catch (error) {
+    } catch (error) {
       // In case of error, do nothing.
       console.error(error);
     }
@@ -107,16 +105,15 @@ export default class Checkout extends React.Component {
     if (cart.error_message !== undefined) {
       this.setState({
         message_type: 'error',
-        error_success_message: cart.error_message
+        error_success_message: cart.error_message,
       });
-    }
-    else {
+    } else {
       addInfoInStorage(cart);
 
       this.setState({
-        cart: cart,
+        cart,
         message_type: 'success',
-        error_success_message: null
+        error_success_message: null,
       });
     }
 
@@ -128,29 +125,27 @@ export default class Checkout extends React.Component {
    * Trigger cnc event to get location details and fetch stores.
    */
   cncEvent = () => {
-    let { cart: { store_info } } = this.state.cart;
+    const { cart: { store_info } } = this.state.cart;
     if (store_info) {
       this.fetchStoresHelper({
         lat: parseFloat(store_info.lat),
         lng: parseFloat(store_info.lng),
       });
-    }
-    else {
+    } else {
       getLocationAccess()
-        .then(pos => {
+        .then((pos) => {
           this.fetchStoresHelper({
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
           });
         },
-        reject => {
+        (reject) => {
           this.fetchStoresHelper(getDefaultMapCenter());
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     }
-
   };
 
   /**
@@ -166,12 +161,12 @@ export default class Checkout extends React.Component {
     const list = createFetcher(fetchClicknCollectStores).read(coords);
 
     list.then(
-      response => {
+      (response) => {
         if (typeof response.error === 'undefined') {
-          this.setState({storeList: response});
+          this.setState({ storeList: response });
           window.fetchStore = 'finished';
         }
-      }
+      },
     );
   };
 
@@ -183,31 +178,32 @@ export default class Checkout extends React.Component {
     // While page loads and all info available.
 
     if (this.state.wait) {
-      return <Loading />
+      return <Loading />;
     }
 
     // If cart not available.
     if (this.state.cart === null) {
       return (
-        <React.Fragment>
+        <>
           <EmptyResult Message={Drupal.t('your shopping basket is empty.')} />
-        </React.Fragment>
+        </>
       );
     }
 
-    const termConditions = <TermsConditions />
+    const termConditions = <TermsConditions />;
 
     return (
-      <React.Fragment>
+      <>
         <div className="spc-pre-content" />
         <div className="spc-main">
           <div className="spc-content">
-            {this.state.error_success_message !== null &&
+            {this.state.error_success_message !== null
+              && (
               <CheckoutMessage type={this.state.message_type}>
                 {this.state.error_success_message}
               </CheckoutMessage>
-            }
-            <DeliveryMethods cart={this.state.cart} refreshCart={this.refreshCart} cncEvent={this.cncEvent}/>
+              )}
+            <DeliveryMethods cart={this.state.cart} refreshCart={this.refreshCart} cncEvent={this.cncEvent} />
             <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
@@ -243,8 +239,7 @@ export default class Checkout extends React.Component {
             {termConditions}
           </ConditionalView>
         </div>
-      </React.Fragment>
+      </>
     );
   }
-
 }

@@ -6,11 +6,11 @@ class ToolTip extends React.Component {
   }
 
   render() {
-    let iconClass = this.props.question === true ? ' question' : ' info';
+    const iconClass = this.props.question === true ? ' question' : ' info';
     if (this.props.enable) {
       return (
-        <div className={'tooltip-anchor' + iconClass}>
-          <div className='tooltip-box' dangerouslySetInnerHTML={this.getHtmlMarkup()} />
+        <div className={`tooltip-anchor${iconClass}`}>
+          <div className="tooltip-box" dangerouslySetInnerHTML={this.getHtmlMarkup()} />
         </div>
       );
     }

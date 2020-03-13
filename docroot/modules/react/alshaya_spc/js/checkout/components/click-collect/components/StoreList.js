@@ -1,9 +1,11 @@
 import React from 'react';
 import StoreItem from './StoreItem';
 
-const StoreList = ({ store_list, display, onStoreRadio, onStoreFinalize, selected: selectedStore, onStoreClose }) => {
+const StoreList = ({
+  store_list, display, onStoreRadio, onStoreFinalize, selected: selectedStore, onStoreClose,
+}) => {
   if (!store_list || store_list.length === 0) {
-    return <div className='spc-cnc-empty-store-list'>{Drupal.t('Sorry, No store found for your location.')}</div>;
+    return <div className="spc-cnc-empty-store-list">{Drupal.t('Sorry, No store found for your location.')}</div>;
   }
 
   const chooseStoreItem = (e, index) => {
@@ -15,7 +17,7 @@ const StoreList = ({ store_list, display, onStoreRadio, onStoreFinalize, selecte
   const expandStoreItem = (e, index) => {
     chooseStoreItem(e, index);
     addClassToStoreItem(e.target.parentElement.parentElement, 'expand');
-  }
+  };
 
   const addClassToStoreItem = (element, className) => {
     // Close already opened item.
@@ -26,39 +28,37 @@ const StoreList = ({ store_list, display, onStoreRadio, onStoreFinalize, selecte
       return;
     }
     // Add Class expand to the currently opened li.
-    let storeList = document.querySelectorAll('#click-and-collect-list-view li.select-store');
+    const storeList = document.querySelectorAll('#click-and-collect-list-view li.select-store');
     // Remove class expand from all.
-    storeList.forEach(function (storeElement) {
+    storeList.forEach((storeElement) => {
       storeElement.classList.remove(className);
     });
     element.classList.add(className);
-  }
+  };
 
   return (
     <ul>
-      {store_list.map((store, index) => {
-        return (
-          <li
-            className={`select-store ${(selectedStore && store.code === selectedStore.code) ? 'selected' : ''}`}
-            data-store-code={store.code}
-            data-node={store.nid}
-            data-index={index}
-            key={store.code}
-          >
-            <StoreItem
-              display={display || 'default'}
-              index={parseInt(index)}
-              store={store}
-              onStoreChoose={chooseStoreItem}
-              onStoreExpand={expandStoreItem}
-              onStoreFinalize={onStoreFinalize}
-              onStoreClose={onStoreClose}
-            />
-          </li>
-        );
-      })}
+      {store_list.map((store, index) => (
+        <li
+          className={`select-store ${(selectedStore && store.code === selectedStore.code) ? 'selected' : ''}`}
+          data-store-code={store.code}
+          data-node={store.nid}
+          data-index={index}
+          key={store.code}
+        >
+          <StoreItem
+            display={display || 'default'}
+            index={parseInt(index)}
+            store={store}
+            onStoreChoose={chooseStoreItem}
+            onStoreExpand={expandStoreItem}
+            onStoreFinalize={onStoreFinalize}
+            onStoreClose={onStoreClose}
+          />
+        </li>
+      ))}
     </ul>
   );
-}
+};
 
 export default StoreList;
