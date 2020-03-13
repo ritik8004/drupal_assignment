@@ -58,27 +58,24 @@ export default class PaymentMethod extends React.Component {
         return;
       }
       // 2D flow success.
-      else if (result.cart_id !== undefined && result.cart_id) {
+      if (result.cart_id !== undefined && result.cart_id) {
         const { cart } = this.props;
         placeOrder(cart.cart.cart_id, cart.selected_payment_method);
-      }
-      // 3D flow error.
-      else if (result.success === undefined || !(result.success)) {
+      } else if (result.success === undefined || !(result.success)) {
+        // 3D flow error.
         console.error(result);
-      }
-      // 3D flow success.
-      else if (result.redirectUrl !== undefined) {
+      } else if (result.redirectUrl !== undefined) {
+        // 3D flow success.
         window.location = result.redirectUrl;
       } else {
-        console.error(response);
+        console.error(result);
         removeFullScreenLoader();
       }
     }).catch((error) => {
       removeFullScreenLoader();
       console.error(error);
     });
-  };
-
+  }
 
   render() {
     const { code: method } = this.props.method;
