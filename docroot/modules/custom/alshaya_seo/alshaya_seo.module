@@ -87,6 +87,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
   }
 
   if (!_alshaya_seo_process_gtm()) {
+    $attachments['#attached']['drupalSettings']['user']['isCustomer'] = FALSE;
     return;
   }
 
