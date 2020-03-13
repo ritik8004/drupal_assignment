@@ -13,6 +13,17 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add config for static page mappings.
+ */
+function alshaya_mobile_app_update_8012() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['alshaya_mobile_app.settings'], 'alshaya_mobile_app');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new rest resources to return the linked and unliked product details
  * of the given sku.
  */
