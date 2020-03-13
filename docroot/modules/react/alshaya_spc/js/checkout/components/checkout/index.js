@@ -25,7 +25,7 @@ import { createFetcher } from '../../../utilities/api/fetcher';
 import {
   removeFullScreenLoader,
   isDeliveryTypeSameAsInCart
-} from "../../../utilities/checkout_util";
+} from '../../../utilities/checkout_util';
 import _isEmpty from 'lodash/isEmpty';
 import ConditionalView from '../../../common/components/conditional-view';
 import Cookies from 'js-cookie';
@@ -182,6 +182,9 @@ export default class Checkout extends React.Component {
     this.paymentMethods.current.validateBeforePlaceOrder();
   };
 
+  /**
+   * Get the billing address component for rendering.
+   */
   getBillingComponent = () => {
     if (!isDeliveryTypeSameAsInCart(this.state.cart)) {
       return (null);
