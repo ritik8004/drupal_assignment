@@ -174,7 +174,7 @@ class PaymentMethodCheckoutCom extends React.Component {
           {addNewCard}
         </ConditionalView>
         <ConditionalView condition={tokenizedCard !== ''}>
-          <li>
+          <div className='spc-checkout-card-option'>
             <SelectedCard
               cardInfo={activeCard}
               openStoreListModal={this.openStoreListModal}
@@ -183,13 +183,13 @@ class PaymentMethodCheckoutCom extends React.Component {
               onExistingCardSelect={this.onExistingCardSelect}
               selected={selectedCard === 'existing'}
             />
-          </li>
-          <li>
-            <span onClick={() => this.changeCurrentCard('new')}>{Drupal.t('new card')}</span>
+          </div>
+          <div className='spc-checkout-card-option spc-checkout-card-option-new-card'>
+            <span className='spc-checkout-card-new-card-label' onClick={() => this.changeCurrentCard('new')}>{Drupal.t('new card')}</span>
             <ConditionalView condition={selectedCard === 'new'}>
               {addNewCard}
             </ConditionalView>
-          </li>
+          </div>
         </ConditionalView>
         <Popup open={openStoreListModal} onClose={this.closeStoreListModal} closeOnDocumentClick={false}>
           <>
