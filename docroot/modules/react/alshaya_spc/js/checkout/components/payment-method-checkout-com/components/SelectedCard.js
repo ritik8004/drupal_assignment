@@ -15,7 +15,7 @@ const SelectedCard = ({
       <div className="spc-add-new-card-btn" onClick={openSavedCardListModal}>
         {Drupal.t('change')}
       </div>
-      <ConditionalView condition={selected && (cardInfo.mada === true || drupalSettings.checkoutCom.always_3d)}>
+      <ConditionalView condition={selected && (cardInfo.mada === true || drupalSettings.checkoutCom.Enforce3d)}>
         <div className="spc-type-textfield spc-type-cvv">
           <input
             type="tel"

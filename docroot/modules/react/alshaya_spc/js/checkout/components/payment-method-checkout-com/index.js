@@ -28,7 +28,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     }
 
     this.updateCurrentContext({
-      cvvValid: !(activeCard.mada === true || drupalSettings.checkoutCom.always_3d === true),
+      cvvValid: !(activeCard.mada === true || drupalSettings.checkoutCom.Enforce3d === true),
     });
   }
 
@@ -143,7 +143,7 @@ class PaymentMethodCheckoutCom extends React.Component {
   };
 
   onExistingCardSelect = (cardHash, madaCard) => {
-    const cvvValid = !(madaCard === true || drupalSettings.checkoutCom.always_3d === true);
+    const cvvValid = !(madaCard === true || drupalSettings.checkoutCom.Enforce3d === true);
 
     this.closeSavedCardListModal();
     this.updateCurrentContext({
