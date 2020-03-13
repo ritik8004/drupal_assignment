@@ -46,7 +46,7 @@ export default class PaymentMethods extends React.Component {
     const { cart } = this.props;
 
     // Select first payment method by default.
-    if (cart.selected_payment_method === 'undefined' || !(cart.selected_payment_method in Object.keys(paymentMethods))) {
+    if (cart.selected_payment_method === 'undefined' || paymentMethods[cart.selected_payment_method] === undefined) {
       this.changePaymentMethod(Object.keys(paymentMethods)[0]);
     }
   };
