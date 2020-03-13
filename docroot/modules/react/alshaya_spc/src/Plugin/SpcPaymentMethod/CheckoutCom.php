@@ -78,7 +78,8 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
   public function processBuild(array &$build) {
     // @TODO: Add configuration for this and use live for live.
     $build['#attached']['library'][] = 'alshaya_spc/checkout_sandbox_kit';
-
+    $build['#cache']['contexts'] = ['user'];
+    $build['#cache']['tags'] = ['user:' . $this->currentUser->id()];
     $build['#attached']['drupalSettings']['checkoutCom'] = [
       'always_3d' => TRUE,
       'process_mada' => TRUE,
