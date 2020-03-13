@@ -239,17 +239,20 @@ export default class Checkout extends React.Component {
                 {this.state.error_success_message}
               </CheckoutMessage>
               )}
+
             <DeliveryMethods cart={this.state.cart} refreshCart={this.refreshCart} cncEvent={this.cncEvent} />
             <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
-            {/* @Todo: This will need rework for CORE-16421 for payment. */}
-            {isDeliveryTypeSameAsInCart(this.state.cart)
-              && <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={this.state.cart} />}
+
+            <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={this.state.cart} />
+
             {billingComponent}
+
             <ConditionalView condition={window.innerWidth > 768}>
               {termConditions}
             </ConditionalView>
+
             <CompletePurchase cart={this.state.cart} validateBeforePlaceOrder={this.validateBeforePlaceOrder} />
           </div>
           <div className="spc-sidebar">

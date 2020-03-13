@@ -8,6 +8,7 @@ use App\Service\Knet\KnetHelper;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
+use App\Service\CheckoutCom\CustomerCards;
 
 /**
  * Class Cart.
@@ -83,6 +84,13 @@ class Cart {
   protected $session;
 
   /**
+   * Checkout.com API Wrapper.
+   *
+   * @var \App\Service\CheckoutCom\CustomerCards
+   */
+  protected $customerCards;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -101,15 +109,20 @@ class Cart {
    *   System Settings service.
    * @param \App\Service\SessionStorage $session
    *   Service for session.
+   * @param \App\Service\CheckoutCom\CustomerCards $customer_cards
+   *   Checkout.com API Wrapper.
    */
-  public function __construct(MagentoInfo $magento_info,
-                              MagentoApiWrapper $magento_api_wrapper,
-                              Utility $utility,
-                              APIWrapper $checkout_com_api,
-                              KnetHelper $knet_helper,
-                              PaymentData $payment_data,
-                              SystemSettings $settings,
-                              SessionStorage $session) {
+  public function __construct(
+    MagentoInfo $magento_info,
+    MagentoApiWrapper $magento_api_wrapper,
+    Utility $utility,
+    APIWrapper $checkout_com_api,
+    KnetHelper $knet_helper,
+    PaymentData $payment_data,
+    SystemSettings $settings,
+    SessionStorage $session,
+    CustomerCards $customer_cards
+  ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->utility = $utility;
@@ -118,6 +131,7 @@ class Cart {
     $this->paymentData = $payment_data;
     $this->settings = $settings;
     $this->session = $session;
+    $this->customerCards = $customer_cards;
   }
 
   /**
@@ -617,27 +631,49 @@ class Cart {
         throw new \Exception('Failed to initiate K-Net request.', 500);
 
       case 'checkout_com':
-        $additional_data = [
-          'card_token_id' => $additional_info['id'],
-          'udf3' => $additional_info['udf3'],
-        ];
+        $process_3d = FALSE;
+        $payment_data = [];
+        $end_point = '';
+        // Process for new 3D card.
+        if ($additional_info['card_type'] == 'new') {
+          $additional_data = [
+            'card_token_id' => $additional_info['id'],
+            'udf3' => $additional_info['udf3'],
+          ];
 
-        // Validate bin if MADA enabled.
-        $additional_data['udf1'] = $this->checkoutComApi->validateMadaBin($additional_info['card']['bin'])
-          ? 'MADA'
-          : '';
+          // Validate bin if MADA enabled.
+          $additional_data['udf1'] = $this->checkoutComApi->validateMadaBin($additional_info['card']['bin'])
+            ? 'MADA'
+            : '';
+
+          $process_3d = $additional_data['udf1'] || $this->checkoutComApi->is3dForced();
+          $payment_data = $additional_data;
+          $end_point = APIWrapper::ENDPOINT_CARD_PAYMENT;
+        }
+        elseif ($additional_info['card_type'] == 'existing' && !empty($additional_info['cvv'])) {
+          $card = $this->customerCards->getGiveCardInfo($this->getCartCustomerId(), $additional_info['id']);
+          if ($card) {
+            $process_3d = TRUE;
+            $payment_data = [
+              'cardId' => $card['gateway_token'],
+              'cvv' => $additional_info['cvv'],
+              'udf2' => APIWrapper::CARD_ID_CHARGE,
+            ];
+            $end_point = APIWrapper::ENDPOINT_CARD_PAYMENT;
+          }
+        }
 
         // Process 3D if MADA or 3D Forced.
-        if ($additional_data['udf1'] || $this->checkoutComApi->is3dForced()) {
+        if ($process_3d && !empty($payment_data) && !empty($end_point)) {
           $response = $this->checkoutComApi->request3dSecurePayment(
             $this->getCart(),
-            $additional_data,
-            APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT
+            $payment_data,
+            $end_point
           );
 
           if (isset($response['responseCode'])
-            && $response['responseCode'] == APIWrapper::SUCCESS
-            && !empty($response[APIWrapper::REDIRECT_URL])) {
+              && $response['responseCode'] == APIWrapper::SUCCESS
+              && !empty($response[APIWrapper::REDIRECT_URL])) {
             // We will use this again to redirect back to Drupal.
             $response['langcode'] = $this->settings->getRequestLanguage();
             $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response);

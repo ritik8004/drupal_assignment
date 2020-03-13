@@ -108,6 +108,7 @@ export default class AddressList extends React.Component {
             <>
               <AddressForm
                 closeModal={this.closeModal}
+                showEmail={false}
                 show_prefered
                 default_val={defaultVal}
                 processAddress={this.processAddress}

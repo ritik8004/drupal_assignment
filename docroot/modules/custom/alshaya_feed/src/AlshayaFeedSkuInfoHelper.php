@@ -14,7 +14,11 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
+use Drupal\metatag\MetatagToken;
+use Drupal\metatag\MetatagManager;
+use Drupal\Core\Render\BubbleableMetadata;
 
 /**
  * Class SkuInfoHelper.
@@ -22,6 +26,11 @@ use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
  * @package Drupal\alshaya_feed
  */
 class AlshayaFeedSkuInfoHelper {
+
+  /**
+   * Granularity for price range.
+   */
+  const PRICE_RANGE_GRANULARITY = 5;
 
   /**
    * Entity Type Manager service object.
@@ -80,6 +89,27 @@ class AlshayaFeedSkuInfoHelper {
   protected $renderer;
 
   /**
+   * Language specific currency code.
+   *
+   * @var array
+   */
+  private $currencyCode = [];
+
+  /**
+   * The Metatag token.
+   *
+   * @var \Drupal\metatag\MetatagToken
+   */
+  protected $tokenService;
+
+  /**
+   * The Metatag manager.
+   *
+   * @var \Drupal\metatag\MetatagManager
+   */
+  protected $metaTagManager;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -98,6 +128,12 @@ class AlshayaFeedSkuInfoHelper {
    *   SKU Fields Manager.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
+   * @param \Drupal\metatag\MetatagManager $metaTagManager
+   *   Matatag manager.
+   * @param \Drupal\metatag\MetatagToken $token
+   *   The MetatagToken object.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -107,7 +143,10 @@ class AlshayaFeedSkuInfoHelper {
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
     SKUFieldsManager $sku_fields_manager,
-    RendererInterface $renderer
+    RendererInterface $renderer,
+    ConfigFactoryInterface $config_factory,
+    MetatagManager $metaTagManager,
+    MetatagToken $token
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -117,6 +156,12 @@ class AlshayaFeedSkuInfoHelper {
     $this->skuInfoHelper = $sku_info_helper;
     $this->skuFieldsManager = $sku_fields_manager;
     $this->renderer = $renderer;
+    $currency_config_ar = $this->languageManager->getLanguageConfigOverride('ar', 'acq_commerce.currency');
+    $this->currencyCode['ar'] = $currency_config_ar->get('currency_code');
+    $currency_config = $config_factory->get('acq_commerce.currency');
+    $this->currencyCode['en'] = $currency_config->get('currency_code');
+    $this->metaTagManager = $metaTagManager;
+    $this->tokenService = $token;
   }
 
   /**
@@ -158,6 +203,7 @@ class AlshayaFeedSkuInfoHelper {
       if ($node->language()->getId() !== $lang) {
         continue;
       }
+
       $sku = $this->skuInfoHelper->getEntityTranslation($sku, $lang);
 
       // Get the prices.
@@ -167,8 +213,13 @@ class AlshayaFeedSkuInfoHelper {
       $short_desc = $this->skuManager->getShortDescription($sku, 'full');
       $description = $this->skuManager->getDescription($sku, 'full');
 
-      $product[$lang] = [
-        'sku' => $sku->getSku(),
+      $nodeMetatags = $this->metaTagManager->tagsFromEntityWithDefaults($node);
+      // Replace the token for keywords.
+      $keywords = $this->tokenService->replace($nodeMetatags['keywords'], ['node' => $node], ['langcode' => $lang], new BubbleableMetadata());
+
+      $priceRange = $this->getRange($prices['final_price']);
+      $parentProduct = [
+        'group_id' => $sku->getSku(),
         'name' => $node->label(),
         'product_type' => $sku->bundle(),
         'status' => (bool) $node->isPublished(),
@@ -177,21 +228,37 @@ class AlshayaFeedSkuInfoHelper {
         'description' => !empty($description) ? $this->renderer->renderPlain($description) : '',
         'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
         'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
+        'price_range' => $this->currencyCode[$lang] . ' ' . $this->skuInfoHelper->formatPriceDisplay((float) $priceRange['start']) . ' - ' . $this->currencyCode[$lang] . ' ' . $this->skuInfoHelper->formatPriceDisplay((float) $priceRange['stop']),
+        'currency' => $this->currencyCode[$lang],
+        'keywords' => $keywords,
         'categoryCollection' => $this->skuInfoHelper->getProductCategories($node, $lang),
         'attributes' => $this->skuInfoHelper->getAttributes($sku, ['description', 'short_description']),
       ];
 
+      $parentProduct['linked_skus'] = [];
+      foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
+        $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
+        $parentProduct['linked_skus'][$linked_type] = array_keys($linked_skus);
+      }
+
       if ($sku->bundle() == 'simple') {
+        $parentProduct['sku'] = $parentProduct['group_id'];
+        unset($parentProduct['group_id']);
         $stockInfo = $this->skuInfoHelper->stockInfo($sku);
-        $product[$lang]['stock'] = [
+        $parentProduct['stock'] = [
           'status' => $stockInfo['in_stock'],
           'qty' => $stockInfo['stock'],
         ];
-        $product[$lang]['images'] = $this->getGalleryMedia($sku);
+        $parentProduct['images'] = $this->getGalleryMedia($sku);
+        $product[$lang][] = $parentProduct;
       }
       elseif ($sku->bundle() === 'configurable') {
         $combinations = $this->skuManager->getConfigurableCombinations($sku);
         $swatches = $this->skuImagesManager->getSwatchData($sku);
+        // Keep configurable product as well in feed.
+        $product[$lang][0] = $parentProduct;
+        unset($product[$lang][0]['group_id']);
+        $product[$lang][0]['sku'] = $parentProduct['group_id'];
         foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
           $child = SKU::loadFromSku($child_sku, $lang);
           if (!$child instanceof SKUInterface) {
@@ -201,6 +268,7 @@ class AlshayaFeedSkuInfoHelper {
 
           $variant = [
             'sku' => $child->getSku(),
+            'product_type' => $child->bundle(),
             'configurable_attributes' => $this->getConfigurableValues($child, $combination),
             'swatch_image' => $this->getSwatchImages($child, $combination, $swatches),
             'images' => $this->getGalleryMedia($child),
@@ -208,19 +276,44 @@ class AlshayaFeedSkuInfoHelper {
               'status' => $stockInfo['in_stock'],
               'qty' => $stockInfo['stock'],
             ],
+            'attributes' => $this->skuInfoHelper->getAttributes($child, ['description', 'short_description']),
           ];
-          $product[$lang]['variants'][] = $variant;
+          $product[$lang][] = array_merge($parentProduct, $variant);
         }
-      }
 
-      $product[$lang]['linked_skus'] = [];
-      foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
-        $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
-        $product[$lang]['linked_skus'][$linked_type] = array_keys($linked_skus);
       }
     }
 
     return $product;
+  }
+
+  /**
+   * Provide a consistent way to create a start / stop range from a value.
+   *
+   * Ex: For a granularity of 10 and value of 7, range = 0-10.
+   * Ex: For a granularity of 10 and value of 13, range = 11-20.
+   * Ex: For a granularity of 10 and value of 30, range = 21-30.
+   */
+  protected function getRange($value) {
+    $granularity = self::PRICE_RANGE_GRANULARITY;
+
+    // Initial values.
+    $start = 0;
+    $stop = $granularity;
+
+    if ($value % $granularity) {
+      $start = $value - ($value % $granularity);
+    }
+    else {
+      $start = $value;
+    }
+
+    $stop = $start + $granularity;
+
+    return [
+      'start' => $start,
+      'stop' => $stop,
+    ];
   }
 
   /**

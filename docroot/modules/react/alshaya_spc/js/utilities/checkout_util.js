@@ -236,10 +236,10 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
     return true;
   }
 
-  if (cart.delivery_type !== undefined &&
-    cart.delivery_type === cart.cart.delivery_type) {
+  if (cart.delivery_type !== undefined
+    && cart.delivery_type === cart.cart.delivery_type) {
     return true;
   }
 
   return false;
-}
+};
