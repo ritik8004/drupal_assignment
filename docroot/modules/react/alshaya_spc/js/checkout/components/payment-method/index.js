@@ -17,16 +17,6 @@ export default class PaymentMethod extends React.Component {
     super(props);
 
     this.paymentMethodCheckoutCom = React.createRef();
-
-    this.state = {
-      'selectedOption': this.props.isSelected
-    };
-  };
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      selectedOption: nextProps.isSelected
-    });
   }
 
   validateBeforePlaceOrder = () => {
@@ -48,17 +38,15 @@ export default class PaymentMethod extends React.Component {
       // Throwing 200 error, we want to handle place order in custom way.
       throw 200;
     }
-  };
+  }
 
   finalisePayment = (paymentData) => {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
       if (result.error !== undefined && result.error) {
         removeFullScreenLoader();
         console.error(result.error);
-        return;
-      }
-      // 2D flow success.
-      if (result.cart_id !== undefined && result.cart_id) {
+      } else if (result.cart_id !== undefined && result.cart_id) {
+        // 2D flow success.
         const { cart } = this.props;
         placeOrder(cart.cart.cart_id, cart.selected_payment_method);
       } else if (result.success === undefined || !(result.success)) {
