@@ -219,7 +219,7 @@ class PaymentMethodCheckoutCom extends React.Component {
         <Popup className="spc-saved-payment-card-list" open={openSavedCardListModal} onClose={this.closeSavedCardListModal} closeOnDocumentClick={false}>
           <>
             <SavedCardsList
-              selected={tokenizedCard}
+              selected={selectedCard === 'new' ? '' : tokenizedCard}
               closeSavedCardListModal={this.closeSavedCardListModal}
               onExistingCardSelect={this.onExistingCardSelect}
               onNewCardClick={this.openNewCard}
