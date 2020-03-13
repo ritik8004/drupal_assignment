@@ -51,9 +51,21 @@ export default class DeliveryInformation extends React.Component {
   render() {
     const { cart, refreshCart } = this.props;
 
-    const title = cart.cart.delivery_type === 'cnc'
-      ? Drupal.t('collection store')
-      : Drupal.t('delivery information');
+    let title = '';
+    if (cart.delivery_type !== undefined) {
+      if (cart.delivery_type === 'cnc') {
+        title = Drupal.t('collection store');
+      }
+      else {
+        title = Drupal.t('delivery information');
+      }
+    }
+
+    if (title.length === 0) {
+      title = cart.cart.delivery_type === 'cnc' ?
+        Drupal.t('collection store') :
+        Drupal.t('delivery information');
+    }
 
     const deliveryType = this.getDeliveryMethodToShow(cart);
 
