@@ -2,6 +2,10 @@
   .payment-method-bottom-panel {
     padding: 1.25rem;
     padding-#{$left}: 3rem;
+
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 2.25rem;
+    }
   }
 
   input {

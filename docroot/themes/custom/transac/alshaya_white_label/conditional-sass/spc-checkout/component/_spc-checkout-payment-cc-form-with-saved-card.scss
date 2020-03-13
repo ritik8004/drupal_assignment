@@ -7,15 +7,46 @@
       .spc-checkout-payment-saved-card-number {
         margin-bottom: 0.625rem;
       }
+
+      .spc-type-cvv {
+        margin-top: 1.25rem;
+
+        .tooltip-anchor {
+          z-index: 1;
+        }
+      }
+
+      .spc-add-new-card-btn {
+        @include breakpoint($only-mobile) {
+          font-size: 0.75rem;
+          min-width: 4rem;
+        }
+      }
     }
 
     .spc-checkout-card-option {
       position: relative;
-      padding-#{$left}: 2rem;
       padding-bottom: 1rem;
       margin-bottom: 1rem;
       border-bottom: 1px solid $spc-delivery-info-separator;
       cursor: pointer;
+      font-size: 0.875rem;
+
+      .spc-checkout-payment-saved-card-preview {
+        .spc-checkout-payment-data,
+        .spc-type-cvv {
+          padding-#{$left}: 2rem;
+        }
+      }
+
+      &.spc-checkout-card-option-new-card {
+        .spc-checkout-card-new-card-label,
+        .payment-form-wrapper,
+        .spc-card-types-wrapper,
+        .spc-payment-save-card {
+          padding-#{$left}: 2rem;
+        }
+      }
 
       &:last-child {
         padding-bottom: 0;
