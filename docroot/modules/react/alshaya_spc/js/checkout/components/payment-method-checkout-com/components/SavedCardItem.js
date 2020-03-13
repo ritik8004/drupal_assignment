@@ -2,10 +2,10 @@ import React from 'react';
 import CardTypeSVG from '../../card-type-svg';
 
 const SavedCardItem = ({ cardInfo, selected, onSelect }) => (
-  <div className={`payment-card ${!selected ? '' : 'active'}`}>
-    <div className='payment-card--data'>
-      <div className='payment-card--info'>
-          <div className='payment-card--number'>
+  <div className={`payment-card ${!selected ? "" : "active"}`}>
+    <div className="payment-card--data">
+      <div className="payment-card--info">
+          <div className="payment-card--number">
             &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;
             {cardInfo.maskedCC}
           </div>
@@ -13,7 +13,7 @@ const SavedCardItem = ({ cardInfo, selected, onSelect }) => (
             <CardTypeSVG type={cardInfo.paymentMethod.toLowerCase()} class={`${cardInfo.paymentMethod.toLowerCase()} is-active`} />
           </div>
         </div>
-      <div className='payment-card--expiry'>
+      <div className="payment-card--expiry">
         <span className="label">{Drupal.t('expires')}</span>
         <span className="payment-card--expiry">{ cardInfo.expirationDate }</span>
       </div>
