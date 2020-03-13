@@ -20,7 +20,6 @@ export default class PaymentMethods extends React.Component {
     this.state = {
       selectedOption: cart.selected_payment_method,
       availablePaymentMethods: cart.cart.payment_methods,
-      paymentMethods: [],
     };
   }
 
@@ -43,11 +42,11 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
-    const { paymentMethods } = this.state;
+    const paymentMethods = this.getPaymentMethods(true);
     const { cart } = this.props;
 
     // Select first payment method by default.
-    if (cart.selected_payment_method === 'undefined' || !(cart.selected_payment_method)) {
+    if (cart.selected_payment_method === 'undefined' || !(cart.selected_payment_method in Object.keys(paymentMethods))) {
       this.changePaymentMethod(Object.keys(paymentMethods)[0]);
     }
   };
@@ -73,7 +72,6 @@ export default class PaymentMethods extends React.Component {
     this.setState({
       selectedOption: cart.selected_payment_method,
       availablePaymentMethods: cart.cart.payment_methods,
-      paymentMethods: [],
     });
 
     this.selectDefault();
