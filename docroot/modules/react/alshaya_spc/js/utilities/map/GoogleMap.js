@@ -2,7 +2,10 @@ import React from 'react';
 
 import {
   createMarker,
-  geocodeAddressToLatLng
+  geocodeAddressToLatLng,
+  getDefaultMapCoords,
+  removeAllMarkersFromMap,
+  getMap
 } from './map_utils';
 import {isRTL} from '../rtl';
 
@@ -70,8 +73,46 @@ export default class GoogleMap extends React.Component {
           'lng': pos.coords.longitude,
         };
 
-        this.panMapToGivenCoords(currentCoords);
-        return;
+        let geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode({
+            location: currentCoords
+          },
+          function (results, status) {
+            if (status === "OK") {
+              if (results[0]) {
+                // Use this address info.
+                const address = results[0].address_components;
+
+                // Flag to determine if user country same as site.
+                let userCountrySame = false;
+                // Checking if user current location belongs to same
+                // country or not by location coords geocode.
+                for (let i = 0; i < address.length; i++) {
+                  if (address[i].types.indexOf('country') !== -1 &&
+                    address[i].short_name === drupalSettings.country_code) {
+                    userCountrySame = true;
+                    break;
+                  }
+                }
+
+                // If user and site country not same, don;t process.
+                if (!userCountrySame) {
+                  // @Todo: Add some indication to user.
+                  console.log('Not available in the user country.');
+                  currentCoords = getDefaultMapCoords()
+                }
+
+                // Remove all markers from the map.
+                removeAllMarkersFromMap();
+                // Pan the map to location.
+                let marker = createMarker(currentCoords, getMap());
+                getMap().panTo(marker.getPosition());
+                window.spcMarkers.push(marker);
+                return;
+              }
+            }
+          }
+        );
       });
     }
 
@@ -267,10 +308,7 @@ export default class GoogleMap extends React.Component {
       // map object and if user has not allowed location
       // share, we first center the map to middle-east region
       // and then re-center map on the country center.
-      centerPosition = {
-        'lat': 29.2985,
-        'lng': 42.5510
-      }
+      centerPosition = getDefaultMapCoords();
     }
 
     return new window.google.maps.Map(this.googleMapDiv(), {
