@@ -96,7 +96,7 @@ export default class AddressList extends React.Component {
           </div>
           <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
             <>
-              <AddressForm closeModal={this.closeModal} show_prefered default_val={default_val} processAddress={this.processAddress} />
+              <AddressForm closeModal={this.closeModal} showEmail={false} show_prefered default_val={default_val} processAddress={this.processAddress} />
             </>
           </Popup>
           <div className="spc-checkout-address-list">{addressItem}</div>
