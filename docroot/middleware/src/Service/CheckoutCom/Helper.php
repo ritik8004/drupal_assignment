@@ -62,10 +62,9 @@ class Helper {
    *   Return array of cards.
    */
   public function getCustomerCards(int $customer_id) {
+    $url = sprintf('checkoutcom/getTokenList/?customer_id=%d', $customer_id);
     try {
-      $card_list = $this->magentoApi->doRequest('GET',
-        "checkoutcom/getTokenList/?customer_id=$customer_id"
-      );
+      $card_list = $this->magentoApi->doRequest('GET', $url);
     }
     catch (\Exception $e) {
       return NULL;

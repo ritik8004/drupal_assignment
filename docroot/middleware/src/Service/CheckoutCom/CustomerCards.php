@@ -95,10 +95,7 @@ class CustomerCards {
     $card_list = [];
     foreach ($cards as $card) {
       $token_details = json_decode($card['token_details'], TRUE);
-      // @todo: Remove if we are already receiving mada:true/false.
       $token_details['mada'] = isset($token_details['mada']) && $token_details['mada'] == 'Y';
-      // Encode public hash.
-      // https://github.com/acquia-pso/alshaya/pull/13267#discussion_r311886591.
       $card_list[$card['public_hash']] = array_merge($card, $token_details);
     }
     return $card_list;
