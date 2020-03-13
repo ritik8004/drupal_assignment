@@ -1,13 +1,10 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
 import luhn from "../../../utilities/luhn";
-import {addPaymentMethodInCart} from "../../../utilities/update_cart";
-import {
-  placeOrder,
-  removeFullScreenLoader, showFullScreenLoader
-} from "../../../utilities/checkout_util";
+import {showFullScreenLoader} from "../../../utilities/checkout_util";
 import ConditionalView from "../../../common/components/conditional-view";
 import CardTypeSVG from "../card-type-svg";
+import ToolTip from "../../../utilities/tooltip";
 
 class PaymentMethodCheckoutCom extends React.Component {
 
@@ -180,41 +177,17 @@ class PaymentMethodCheckoutCom extends React.Component {
       },
     };
 
-    addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
-      if (result.error !== undefined && result.error) {
-        removeFullScreenLoader();
-        console.error(result.error);
-        return;
-      }
-      // 2D flow success.
-      else if (result.cart_id !== undefined && result.cart_id) {
-        const { cart } = this.props;
-        placeOrder(cart.cart.cart_id, cart.selected_payment_method);
-      }
-      // 3D flow error.
-      else if (result.success === undefined || !(result.success)) {
-        console.error(result);
-      }
-      // 3D flow success.
-      else if (result.redirectUrl !== undefined) {
-        window.location = result.redirectUrl;
-      }
-      else {
-        console.error(response);
-        removeFullScreenLoader();
-      }
-    }).catch((error) => {
-      removeFullScreenLoader();
-      console.error(error);
-    });
+    this.props.finalisePayment(paymentData);
   };
 
   render() {
     let cartTypes = [];
     Object.entries(this.state.acceptedCards).forEach(([key, type]) => {
       let activeClass = (this.state.cardType === type) ? 'is-active' : '';
-      cartTypes.push(<CardTypeSVG type={type} class={`${type} ${activeClass}`} />);
+      cartTypes.push(<CardTypeSVG key={type} type={type} class={`${type} ${activeClass}`} />);
     });
+
+    let CVVText = Drupal.t('This code is a three or four digit number printed on the front or back of the credit card');
 
     return (
       <>
@@ -266,6 +239,7 @@ class PaymentMethodCheckoutCom extends React.Component {
             <div className='c-input__bar'/>
             <label>{Drupal.t('CVV')}</label>
             <div id='spc-cc-cvv-error' className="error" />
+            <ToolTip content={CVVText} enable question/>
           </div>
         </div>
 
@@ -274,8 +248,10 @@ class PaymentMethodCheckoutCom extends React.Component {
         </div>
 
         <ConditionalView condition={window.drupalSettings.user.uid > 0}>
-          <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
-          <label htmlFor="save_card">{Drupal.t('Save this card for faster payment next time you shop. (CVV number will not be saved)')}</label>
+          <div className='spc-payment-save-card'>
+            <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
+            <label htmlFor="payment-card-save">{Drupal.t('save this card for faster payment next time you shop. (CVV number will not be saved)')}</label>
+          </div>
         </ConditionalView>
       </>
     );

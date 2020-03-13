@@ -94,8 +94,8 @@ export default class Gmap {
 
     const defaultLocation = getDefaultMapCenter();
     if (!_isEmpty(defaultLocation)) {
-      const { latitude, longitude } = defaultLocation();
-      const position = new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+      const { lat, lng } = defaultLocation;
+      const position = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
       this.map.googleMap.setCenter(position);
       this.map.googleMap.setZoom(this.map.settings.zoom);
       return;

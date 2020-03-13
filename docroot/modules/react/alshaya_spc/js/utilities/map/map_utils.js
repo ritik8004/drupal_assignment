@@ -1,6 +1,9 @@
 import {
   getAreaParentId
 } from '../address_util';
+import {
+  getDefaultMapCenter
+} from '../checkout_util';
 
 /**
  * Prepare mapping of the google geocode.
@@ -34,6 +37,13 @@ export const mapAddressMap = () => {
 export const getMap = () => {
   return window.spcMap;
 };
+
+/**
+ * Wrapper to get default map coords.
+ */
+export const getDefaultMapCoords = () => {
+  return getDefaultMapCenter();
+}
 
 /**
  * Get the markers available on the map.

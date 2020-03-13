@@ -2,8 +2,8 @@
 
 namespace App\Service\CheckoutCom;
 
-use App\Service\Drupal\DrupalInfo;
 use GuzzleHttp\Client;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * APIWrapper class.
@@ -75,11 +75,11 @@ class APIWrapper {
   protected $helper;
 
   /**
-   * Service to get Drupal Info.
+   * RequestStack Object.
    *
-   * @var \App\Service\Drupal\DrupalInfo
+   * @var \Symfony\Component\HttpFoundation\Request
    */
-  protected $drupalInfo;
+  protected $request;
 
   /**
    * Mada Validator.
@@ -91,18 +91,18 @@ class APIWrapper {
   /**
    * APIWrapper constructor.
    *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   RequestStack Object.
    * @param \App\Service\CheckoutCom\Helper $helper
    *   Checkout.com Helper.
-   * @param \App\Service\Drupal\DrupalInfo $drupal_info
-   *   Service to get Drupal Info.
    * @param \App\Service\CheckoutCom\MadaValidator $mada_validator
    *   Mada Validator.
    */
-  public function __construct(Helper $helper,
-                              DrupalInfo $drupal_info,
+  public function __construct(RequestStack $request,
+                              Helper $helper,
                               MadaValidator $mada_validator) {
+    $this->request = $request->getCurrentRequest();
     $this->helper = $helper;
-    $this->drupalInfo = $drupal_info;
     $this->madaValidator = $mada_validator;
   }
 
@@ -354,13 +354,13 @@ class APIWrapper {
       : self::AUTOCAPTURE_NO;
 
     $params['attemptN3D'] = FALSE;
-    // Use the IP address from Acquia Cloud ENV variable.
-    $params['customerIp'] = $_ENV['AH_CLIENT_IP'] ?? '';
 
-    // Remove the hack for cloud dns resolution failure for non-prod urls.
-    $host = str_replace('.cdn.cloudflare.net', '', $this->drupalInfo->getDrupalHostUrl());
-    $params['successUrl'] = $host . '/middleware/public/payment/checkout-com-success';
-    $params['failUrl'] = $host . '/middleware/public/payment/checkout-com-error';
+    // Use the IP address from Acquia Cloud ENV variable.
+    $params['customerIp'] = $_ENV['AH_CLIENT_IP'] ?? $this->request->getClientIp();
+
+    $host = $this->request->getSchemeAndHttpHost() . '/middleware/public/payment/';
+    $params['successUrl'] = $host . 'checkout-com-success';
+    $params['failUrl'] = $host . 'checkout-com-error';
 
     $params['trackId'] = $cart['cart']['extension']['real_reserved_order_id'];
 

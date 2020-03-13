@@ -121,28 +121,6 @@ class Drupal {
   }
 
   /**
-   * Get customer cart for customer.
-   *
-   * @return array
-   *   Return array of data.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  public function getCustomerCart() {
-    $client = $this->drupalInfo->getDrupalApiClient();
-    $url = sprintf('/%s/spc/customer/cart', $this->drupalInfo->getDrupalLangcode());
-    $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
-    $response = $client->request('GET', $url, [
-      'headers' => [
-        'Host' => $this->drupalInfo->getDrupalBaseUrl(),
-        'Cookie' => $cookies->__toString(),
-      ],
-    ]);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
-  }
-
-  /**
    * Get store info for given store code.
    *
    * @param string $store_code

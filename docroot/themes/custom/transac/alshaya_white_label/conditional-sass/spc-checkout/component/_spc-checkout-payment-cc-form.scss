@@ -11,6 +11,15 @@
     color: $spc-cc-input;
     width: 100%;
 
+    &:focus {
+      outline: 0 !important;
+    }
+
+    &:not(.error):focus ~ .c-input__bar::before,
+    &:not(.error):focus ~ .c-input__bar::after {
+      width: 50%;
+    }
+
     ~ label {
       color: $spc-cc-placeholder;
     }
@@ -45,5 +54,41 @@
   .spc-card-types-wrapper {
     clear: both;
     width: 100%;
+  }
+
+  .spc-type-cvv {
+    .tooltip-anchor {
+      position: absolute;
+      top: -0.3125rem;
+      #{$right}: 0;
+    }
+  }
+
+  .spc-payment-save-card {
+    font-size: 0.875rem;
+    color: $spc-checkout-payment-saved-card-text;
+    margin-top: 1.25rem;
+
+    label {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      max-width: 19.875rem;
+      line-height: 1.5;
+
+      @include breakpoint($only-mobile) {
+        max-width: 13.0625rem;
+      }
+
+      &::before {
+        margin-#{$right}: 0.625rem;
+        font-size: 1.5rem;
+        color: $spc-checkout-radio-empty;
+      }
+    }
+
+    input[type=checkbox]:checked ~ label::before {
+      color: $spc-checkout-radio-filled;
+    }
   }
 }

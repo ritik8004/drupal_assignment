@@ -2,9 +2,9 @@ import React from 'react';
 
 import SectionTitle from '../../../utilities/section-title';
 import TextField from '../../../utilities/textfield';
-import ConditionalView from "../../../common/components/conditional-view";
+import ConditionalView from '../../../common/components/conditional-view';
 
-const FixedFields = ({ default_val, showEmail, subTitle }) => {
+const FixedFields = ({ default_val, showEmail, showFullName = true, subTitle }) => {
   let defaultVal = '';
   if (default_val.length !== 0 && default_val.length !== 'undefined') {
     defaultVal = default_val.static;
@@ -20,7 +20,7 @@ const FixedFields = ({ default_val, showEmail, subTitle }) => {
         <span className="spc-contact-info-desc">{subTitle}</span>
       </div>
       <div className="spc-checkout-contact-information-fields">
-        <ConditionalView condition={showEmail}>
+        <ConditionalView condition={showFullName}>
           <TextField
             type="text"
             required={false}
@@ -29,6 +29,8 @@ const FixedFields = ({ default_val, showEmail, subTitle }) => {
             className={defaultVal !== '' && defaultVal.fullname !== '' ? 'focus' : ''}
             label={Drupal.t('Full Name')}
           />
+        </ConditionalView>
+        <ConditionalView condition={showEmail}>
           <TextField
             type="email"
             name="email"

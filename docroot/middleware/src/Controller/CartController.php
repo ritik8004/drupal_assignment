@@ -6,22 +6,17 @@ use App\Service\Magento\CartActions;
 use App\Service\Cart;
 use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoInfo;
+use App\Service\SessionStorage;
 use App\Service\Utility;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class CartController.
  */
 class CartController {
-
-  /**
-   * The cart storage key.
-   */
-  const STORAGE_KEY = 'acq_cart_middleware';
 
   /**
    * RequestStack Object.
@@ -61,7 +56,7 @@ class CartController {
   /**
    * Service for session.
    *
-   * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+   * @var \App\Service\SessionStorage
    */
   protected $session;
 
@@ -71,13 +66,6 @@ class CartController {
    * @var \App\Service\Utility
    */
   protected $utility;
-
-  /**
-   * Current cart session info.
-   *
-   * @var array
-   */
-  protected $sessionCartInfo = [];
 
   /**
    * CartController constructor.
@@ -92,7 +80,7 @@ class CartController {
    *   Magento info service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
-   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+   * @param \App\Service\SessionStorage $session
    *   Service for session.
    * @param \App\Service\Utility $utility
    *   Utility Service.
@@ -102,7 +90,7 @@ class CartController {
                               Drupal $drupal,
                               MagentoInfo $magento_info,
                               LoggerInterface $logger,
-                              SessionInterface $session,
+                              SessionStorage $session,
                               Utility $utility) {
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
@@ -114,101 +102,37 @@ class CartController {
   }
 
   /**
-   * Start session and set cart data.
-   *
-   * @param bool $force
-   *   TRUE to load cart info from session forcefully, false otherwise.
-   */
-  protected function loadCartFromSession($force = FALSE) {
-    if (!$this->session->isStarted()) {
-      $this->session->start();
-    }
-
-    if (empty($this->sessionCartInfo) || $force) {
-      $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
-    }
-  }
-
-  /**
-   * Update cart id to middleware session.
-   *
-   * @param int $cart_id
-   *   The cart id.
-   * @param int|null $customer_id
-   *   (Optional) the customer id.
-   * @param string|null $email
-   *   (Optional) the customer email.
-   */
-  protected function updateCartSession(int $cart_id, int $customer_id = NULL, $email = NULL) {
-    $this->loadCartFromSession();
-    $update = FALSE;
-    if (empty($this->sessionCartInfo['cart_id'])) {
-      $update = TRUE;
-      $this->sessionCartInfo['cart_id'] = $cart_id;
-    }
-
-    if (!empty($customer_id)) {
-      $update = TRUE;
-      $this->sessionCartInfo['customer_id'] = (int) $customer_id;
-    }
-
-    if (!empty($email)) {
-      $update = TRUE;
-      $this->sessionCartInfo['customer_email'] = $email;
-    }
-
-    if ($update) {
-      $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
-    }
-  }
-
-  /**
    * Return user id from current session.
    *
    * @return int|null
    *   Return user id or null.
    */
-  protected function getSessionUid() {
-    if (!empty($this->sessionCartInfo['uid'])) {
-      return $this->sessionCartInfo['uid'];
+  protected function getDrupalInfo(string $key) {
+    static $info = NULL;
+
+    if (empty($info)) {
+      $info = $this->drupal->getSessionCustomerInfo();
     }
 
-    $this->loadCartFromSession();
-    return !empty($this->sessionCartInfo['uid'])
-      ? $this->sessionCartInfo['uid']
-      : NULL;
-  }
-
-  /**
-   * Return customer id from current session.
-   *
-   * @return int|null
-   *   Return customer id or null.
-   */
-  protected function getSessionCustomerId() {
-    if (!empty($this->sessionCartInfo['customer_id'])) {
-      return $this->sessionCartInfo['customer_id'];
-    }
-
-    $this->loadCartFromSession();
-    return !empty($this->sessionCartInfo['customer_id'])
-      ? $this->sessionCartInfo['customer_id']
-      : NULL;
+    return $info[$key] ?? NULL;
   }
 
   /**
    * Get cart data.
-   *
-   * @param int $cart_id
-   *   Cart id.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Cart response.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function getCart(int $cart_id) {
-    $data = $this->cart->getCart($cart_id);
+  public function getCart() {
+    $cart_id = $this->session->getDataFromSession(Cart::SESSION_STORAGE_KEY);
+    if (empty($cart_id)) {
+      // In JS we will consider this as empty cart.
+      return new JsonResponse(['error' => TRUE]);
+    }
+
+    $data = $this->cart->getCart();
 
     // If there is any exception/error, return as is with exception message
     // without processing further.
@@ -217,11 +141,14 @@ class CartController {
         'cart_id' => $cart_id,
         'error' => json_encode($data),
       ]);
-      return new JsonResponse($data);
+
+      $response = new JsonResponse($data);
+      $response->setMaxAge(0);
+      return $response;
     }
 
     // If logged in user.
-    if (!empty($this->getSessionUid())) {
+    if (!empty($data['cart']['items']) && !empty($this->getDrupalInfo('uid'))) {
       $shipping = $data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'];
       // If shipping method is set and only HD.
       if ((empty($shipping['extension_attributes'])
@@ -233,7 +160,9 @@ class CartController {
 
     // Here we will do the processing of cart to make it in required format.
     $data = $this->getProcessedCartData($data);
-    return new JsonResponse($data);
+    $response = new JsonResponse($data);
+    $response->setMaxAge(0);
+    return $response;
   }
 
   /**
@@ -245,22 +174,15 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function restoreCart() {
-    $this->loadCartFromSession();
-
-    if (empty($this->sessionCartInfo['cart_id'])) {
-      $this->sessionCartInfo = $this->drupal->getCustomerCart();
-      if (!empty($this->sessionCartInfo)) {
-        $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
+    if (empty($this->cart->getCartId())) {
+      $info = $this->drupal->getSessionCustomerInfo();
+      if (!empty($info['customer_id'])) {
+        $cart_id = $this->cart->createCart($info['customer_id']);
+        $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, $cart_id);
       }
     }
 
-    if (!empty($this->sessionCartInfo['cart_id'])) {
-      return $this->getCart($this->sessionCartInfo['cart_id']);
-    }
-
-    // If there are not cart available.
-    $data = $this->utility->getErrorResponse('could not find any cart', 404);
-    return new JsonResponse($data);
+    return $this->getCart();
   }
 
   /**
@@ -440,37 +362,13 @@ class CartController {
         $data['recommended_products'] = $recommended_products_data;
       }
 
-      $this->updateCartSession($data['cart_id'], $data['customer']['id'], $data['customer']['email']);
-      $data['uid'] = $this->getSessionUid() ?: 0;
+      $data['uid'] = $this->getDrupalInfo('uid') ?: 0;
     }
     catch (\Exception $e) {
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
     return $data;
-  }
-
-  /**
-   * Retrieve cart from session on trying to create a new cart.
-   *
-   * @return int
-   *   Return cart id from session if cart data exists else create new cart id.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  protected function createCart() {
-    $this->loadCartFromSession();
-    if (!empty($this->sessionCartInfo['cart_id'])) {
-      // Validate the cart again to ensure session data is not corrupt.
-      $data = $this->cart->getCart($this->sessionCartInfo['cart_id']);
-      if (empty($data['error'])) {
-        return $this->sessionCartInfo['cart_id'];
-      }
-    }
-
-    $this->session->remove(self::STORAGE_KEY);
-    $this->sessionCartInfo = [];
-    return $this->cart->createCart();
   }
 
   /**
@@ -487,8 +385,6 @@ class CartController {
   public function updateCart(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
 
-    $this->loadCartFromSession();
-
     // Validate request.
     if (!$this->validateRequestData($request_content)) {
       // Return error response if not valid data.
@@ -500,31 +396,38 @@ class CartController {
     switch ($action) {
       case CartActions::CART_CREATE_NEW:
         // Get cart id from session or create a new cart id.
-        $cart_id = $this->createCart();
+        $cart_id = $this->cart->createCart();
+
+        // Pass exception to response.
+        if (is_array($cart_id)) {
+          return new JsonResponse($cart_id);
+        }
+
+        $customer_id = $this->getDrupalInfo('customer_id');
+        if ($customer_id > 0) {
+          $this->cart->associateCartToCustomer($customer_id);
+        }
 
         // Then add item to the cart.
-        $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], CartActions::CART_ADD_ITEM, $request_content['options']);
+        $cart = $this->cart->addUpdateRemoveItem($request_content['sku'], $request_content['quantity'], CartActions::CART_ADD_ITEM, $request_content['options']);
         break;
 
       case CartActions::CART_ADD_ITEM:
       case CartActions::CART_UPDATE_ITEM:
       case CartActions::CART_REMOVE_ITEM:
-        $cart_id = $request_content['cart_id'];
         $options = [];
         if ($action == CartActions::CART_ADD_ITEM) {
           $options = $request_content['options'];
         }
-        $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], $action, $options);
+        $cart = $this->cart->addUpdateRemoveItem($request_content['sku'], $request_content['quantity'], $action, $options);
         break;
 
       case CartActions::CART_APPLY_COUPON:
       case CartActions::CART_REMOVE_COUPON:
-        $cart_id = $request_content['cart_id'];
-        $cart = $this->cart->applyRemovePromo($cart_id, $request_content['promo'], $action);
+        $cart = $this->cart->applyRemovePromo($request_content['promo'], $action);
         break;
 
       case CartActions::CART_SHIPPING_UPDATE:
-        $cart_id = $request_content['cart_id'];
         $shipping_info = $request_content['shipping_info'];
 
         if ($shipping_info['shipping_type'] == 'cnc') {
@@ -532,11 +435,11 @@ class CartController {
           unset($shipping_info['shipping_type']);
 
           // Create customer if the condition resolves to true.
-          $create_customer = !(
-            $this->sessionCartInfo['cart_id'] == $cart_id
-            && !empty($this->sessionCartInfo['customer_id'])
-          ) || ($this->sessionCartInfo['customer_email'] != $shipping_info['static']['email']);
-          $cart = $this->cart->addCncShippingInfo($cart_id, $shipping_info, $action, $create_customer);
+          // @TODO: This needs to be fixed to allow re-using
+          // existing Magento Customer.
+          // @TODO: We should do customer association before this.
+          $create_customer = (empty($this->cart->getCartCustomerId()) && !empty($shipping_info['static']['email']));
+          $cart = $this->cart->addCncShippingInfo($shipping_info, $action, $create_customer);
         }
         else {
           $shipping_methods = [];
@@ -557,7 +460,7 @@ class CartController {
             ];
           }
           else {
-            $shipping_methods = $this->cart->shippingMethods($shipping_data, $cart_id);
+            $shipping_methods = $this->cart->shippingMethods($shipping_data);
 
             // If no shipping method.
             if (empty($shipping_methods)) {
@@ -572,7 +475,7 @@ class CartController {
               'address' => [
                 'customer_address_id' => $shipping_info['address_id'],
                 'country_id' => $shipping_info['country_id'],
-                'customer_id' => $this->getSessionCustomerId(),
+                'customer_id' => $this->cart->getCartCustomerId(),
               ],
               'carrier_info' => [
                 'code' => $shipping_methods[0]['carrier_code'],
@@ -587,29 +490,26 @@ class CartController {
             ];
           }
 
-          $cart = $this->cart->addShippingInfo($cart_id, $shipping_info, $action);
+          $cart = $this->cart->addShippingInfo($shipping_info, $action);
         }
         break;
 
       case CartActions::CART_BILLING_UPDATE:
-        $cart_id = $request_content['cart_id'];
         $billing_info = $request_content['billing_info'];
         $billing_data = $this->cart->formatAddressForShippingBilling($billing_info);
-        $cart = $this->cart->updateBilling($cart_id, $billing_data);
+        $cart = $this->cart->updateBilling($billing_data);
         if (!empty($cart['error'])) {
           return new JsonResponse($cart);
         }
+        break;
 
       case CartActions::CART_PAYMENT_FINALISE:
-        $cart_id = $request_content['cart_id'];
         $extension = [
-          'action' => 'update payment',
           'attempted_payment' => 1,
         ];
 
         try {
           $request_content['payment_info']['payment']['additional_data'] = $this->cart->processPaymentData(
-            $cart_id,
             $request_content['payment_info']['payment']['method'],
             $request_content['payment_info']['payment']['additional_data']
           );
@@ -629,15 +529,11 @@ class CartController {
           }
         }
 
-        $cart = $this->cart->updatePayment($cart_id, $request_content['payment_info']['payment'], $extension);
+        $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;
 
       case CartActions::CART_PAYMENT_UPDATE:
-        $cart_id = $request_content['cart_id'];
-        $extension = [
-          'action' => 'update payment',
-        ];
-        $cart = $this->cart->updatePayment($cart_id, $request_content['payment_info']['payment'], $extension);
+        $cart = $this->cart->updatePayment($request_content['payment_info']['payment']);
         break;
     }
 
@@ -690,7 +586,7 @@ class CartController {
       return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
-    $result = $this->cart->placeOrder($request_content['cart_id'], $request_content['data']);
+    $result = $this->cart->placeOrder($request_content['data']);
     return new JsonResponse($result);
   }
 
@@ -734,8 +630,7 @@ class CartController {
     if (empty($request_content['action'])) {
       $valid = FALSE;
     }
-    elseif ($request_content['action'] != CartActions::CART_CREATE_NEW
-            && empty($request_content['cart_id'])) {
+    elseif ($request_content['action'] !== CartActions::CART_CREATE_NEW && empty($this->cart->getCartId())) {
       $valid = FALSE;
     }
 
@@ -751,39 +646,30 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function associateCart() {
-    $this->loadCartFromSession(TRUE);
-
     try {
-      if (empty($this->sessionCartInfo['cart_id'])) {
-        return $this->utility->getErrorResponse('No cart in session', 404);
+      if (empty($this->cart->getCartId())) {
+        return new JsonResponse($this->utility->getErrorResponse('No cart in session', 404));
       }
 
       $customer = $this->drupal->getSessionCustomerInfo();
 
       if (empty($customer)) {
-        return $this->utility->getErrorResponse('No user in session', 404);
+        return new JsonResponse($this->utility->getErrorResponse('No user in session', 404));
       }
 
       // Check if association is not required.
-      if ($customer['customer_id'] === $this->sessionCartInfo['customer_id']) {
-        return $this->getCart($this->sessionCartInfo['cart_id']);
+      if ($customer['customer_id'] === $this->cart->getCartCustomerId()) {
+        return $this->getCart();
       }
 
-      $this->cart->associateCartToCustomer($this->sessionCartInfo['cart_id'], $customer['customer_id']);
-      $this->session->set(self::STORAGE_KEY, [
-        'cart_id' => $this->sessionCartInfo['cart_id'],
-        'customer_id' => $customer['customer_id'],
-        'uid' => $customer['uid'],
-      ]);
-
-      $this->loadCartFromSession(TRUE);
+      $this->cart->associateCartToCustomer($customer['customer_id']);
     }
     catch (\Exception $e) {
       // Exception handling here.
-      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
     }
 
-    return $this->getCart($this->sessionCartInfo['cart_id']);
+    return $this->getCart();
   }
 
   /**
@@ -806,6 +692,10 @@ class CartController {
             unset($address['region']);
           }
           $shipping_methods = $this->cart->shippingMethods(['address' => $address], $data['cart']['id']);
+          if (empty($shipping_methods) || !empty($shipping_methods['error'])) {
+            return $data;
+          }
+
           $shipping_data = [
             'customer_address_id' => $address['id'],
             'address' => [
@@ -818,7 +708,7 @@ class CartController {
               'method' => $shipping_methods[0]['method_code'],
             ],
           ];
-          $data = $this->cart->addShippingInfo($data['cart']['id'], $shipping_data, CartActions::CART_SHIPPING_UPDATE);
+          $data = $this->cart->addShippingInfo($shipping_data, CartActions::CART_SHIPPING_UPDATE);
           break;
         }
       }

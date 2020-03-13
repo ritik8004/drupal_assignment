@@ -1,5 +1,5 @@
 get_cart:
-    path: /cart/{cart_id}
+    path: /cart
     controller: App\Controller\CartController::getCart
     methods: GET
 
@@ -51,4 +51,14 @@ checkoutcom_payment_error:
 checkoutcom_cards:
     path: /checkout-com/cards
     controller: App\Controller\CardController::getCards
+    methods: GET
+
+knet_payment_response:
+    path: /payment/knet-response
+    controller: App\Controller\PaymentController::handleKnetResponse
+    methods: POST
+
+knet_payment_error:
+    path: /payment/knet-error/{state_key}
+    controller: App\Controller\PaymentController::handleKnetError
     methods: GET

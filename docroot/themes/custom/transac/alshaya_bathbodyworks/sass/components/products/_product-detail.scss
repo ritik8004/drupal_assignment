@@ -203,45 +203,52 @@
   }
 }
 
-.basic-details-wrapper .field--name-field-skus {
+.basic-details-wrapper {
   @include breakpoint($only-mobile) {
-    min-height: 5.5rem;
+    height: auto !important;
+    margin-bottom: 0.625rem;
   }
 
-  .form-item-quantity {
-    label {
-      color: $pdp_product_qty_text;
-      font-size: 0.875rem;
+  .field--name-field-skus {
+    @include breakpoint($only-mobile) {
+      min-height: 5.5rem;
     }
 
-    select {
-      &.form-select {
-        height: 2.5rem;
-        padding: 0.875rem 0.875rem 0.75rem;
+    .form-item-quantity {
+      label {
+        color: $pdp_product_qty_text;
+        font-size: 0.875rem;
+      }
+
+      select {
+        &.form-select {
+          height: 2.5rem;
+          padding: 0.875rem 0.875rem 0.75rem;
+        }
+      }
+
+      &::after {
+        top: 0.1875rem;
+        font-size: 2rem;
       }
     }
 
-    &::after {
-      top: 0.1875rem;
-      font-size: 2rem;
+    .sku-base-form {
+      button[type="submit"] {
+        @include breakpoint($only-mobile) {
+          padding: 0.5rem 0 0.125rem;
+        }
+      }
     }
-  }
 
-  .sku-base-form {
     button[type="submit"] {
       @include breakpoint($only-mobile) {
-        padding: 0.5rem 0 0.125rem;
-      }
-    }
-  }
-
-  button[type="submit"] {
-    @include breakpoint($only-mobile) {
-      &.hide-button {
-        height: 2.5rem;
-        width: 70%;
-        float: $right;
-        margin-top: 1.0625rem;
+        &.hide-button {
+          height: 2.5rem;
+          width: 70%;
+          float: $right;
+          margin-top: 1.0625rem;
+        }
       }
     }
   }
@@ -289,6 +296,16 @@
   &.thumbnail-count-1 {
     #cloud-zoom-big {
       #{$left}: 145.8% !important;
+    }
+  }
+}
+
+.content {
+  &__main {
+    @include breakpoint($only-mobile) {
+      .order-quantity-limit-message.mobile-only {
+        bottom: 3rem;
+      }
     }
   }
 }

@@ -154,25 +154,25 @@ class AlshayaSpcCustomerController extends ControllerBase {
    *   Json response.
    */
   public function getUserCustomerId() {
-    $currentUser = $this->currentUser()->getAccount();
     $response = [
-      'customer_id' => $currentUser->acq_customer_id,
-      'uid' => $currentUser->id(),
+      'customer_id' => 0,
+      'uid' => 0,
     ];
 
-    return new JsonResponse($response);
-  }
+    if ($this->currentUser()->isAuthenticated()) {
+      $user = $this->entityTypeManager()->getStorage('user')->load($this->currentUser()->id());
+      $customer_id = $user->get('acq_customer_id')->getString();
 
-  /**
-   * Get customer cart for logged in user.
-   */
-  public function getUserCustomerCart() {
-    $currentUser = $this->currentUser()->getAccount();
-    return new JsonResponse([
-      'cart_id' => $this->session->get('customer_cart_id'),
-      'customer_id' => $currentUser->acq_customer_id,
-      'uid' => $currentUser->id(),
-    ]);
+      if ($customer_id) {
+        $response['customer_id'] = (int) $customer_id;
+
+        // Drupal CORE uses numeric 0 for anonymous but string for logged in.
+        // We follow the same.
+        $response['uid'] = $user->id();
+      }
+    }
+
+    return new JsonResponse($response);
   }
 
 }
