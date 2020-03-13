@@ -42,7 +42,7 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
-    const paymentMethods= this.getPaymentMethods(true);
+    const paymentMethods = this.getPaymentMethods(true);
     const { cart } = this.props;
 
     // Select first payment method by default.
