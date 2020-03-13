@@ -7,6 +7,8 @@ use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\address\Repository\CountryRepository;
+use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
@@ -21,6 +23,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -29,7 +32,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class AlshayaSpcCustomerHelper.
+ * Class AlshayaSpcOrderHelper.
  */
 class AlshayaSpcOrderHelper {
 
@@ -160,6 +163,27 @@ class AlshayaSpcOrderHelper {
   private $requestStack;
 
   /**
+   * Mobile utility.
+   *
+   * @var \Drupal\mobile_number\MobileNumberUtilInterface
+   */
+  protected $mobileUtil;
+
+  /**
+   * Chekcout option manager.
+   *
+   * @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager
+   */
+  protected $checkoutOptionManager;
+
+  /**
+   * Country repository.
+   *
+   * @var \Drupal\address\Repository\CountryRepository
+   */
+  protected $countryRepository;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -192,6 +216,12 @@ class AlshayaSpcOrderHelper {
    *   Language manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
+   * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
+   *   Mobile utility.
+   * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager
+   *   Checkout option manager.
+   * @param \Drupal\address\Repository\CountryRepository $countryRepository
+   *   Country Repository.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -208,7 +238,10 @@ class AlshayaSpcOrderHelper {
     ProductOptionsManager $product_options_manager,
     SkuInfoHelper $sku_info_helper,
     LanguageManagerInterface $language_manager,
-    RequestStack $request_stack
+    RequestStack $request_stack,
+    MobileNumberUtilInterface $mobile_util,
+    CheckoutOptionsManager $checkout_options_manager,
+    CountryRepository $countryRepository
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->apiWrapper = $api_wrapper;
@@ -232,6 +265,9 @@ class AlshayaSpcOrderHelper {
     $this->skuInfoHelper = $sku_info_helper;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack;
+    $this->mobileUtil = $mobile_util;
+    $this->checkoutOptionManager = $checkout_options_manager;
+    $this->countryRepository = $countryRepository;
   }
 
   /**
@@ -648,6 +684,79 @@ class AlshayaSpcOrderHelper {
       }
     }
     return $return;
+  }
+
+  /**
+   * Gets HD / cnc order details.
+   *
+   * @param array $order
+   *   Order array.
+   *
+   * @return array
+   *   Order details array.
+   */
+  public function getOrderTypeDetails(array $order) {
+    $orderDetails = [];
+
+    $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']['carrier_code']);
+    $shipping_method_name = isset($order['shipping']['method']['description']) ? $order['shipping']['method']['description'] : '';
+
+    $shippingTerm = $this->checkoutOptionManager->loadShippingMethod($shipping_method_code, $shipping_method_name);
+
+    $shipping_amount = $order['shipping']['method']['amount_with_tax'] ?? $order['shipping']['method']['amount'];
+    $orderDetails['delivery_charge'] = $shipping_amount;
+
+    $orderDetails['delivery_method'] = $shippingTerm->getName();
+
+    // Check if taxonomy term doesn't have proper name and we have description
+    // available in API response.
+    if (!empty($shipping_method_name) && $shippingTerm->getName() == $shipping_method_code) {
+      $orderDetails['delivery_method'] = $shipping_method_name;
+    }
+
+    $orderDetails['contact_no'] = $this->mobileUtil->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+
+    if ($shipping_method_code == $this->checkoutOptionManager->getClickandColectShippingMethod()) {
+      // @todo Get clickncollect store details
+    }
+    else {
+      $orderDetails['type'] = 'hd';
+
+      // Check if we have cart description available, display in parenthesis.
+      if ($cart_desc = $shippingTerm->get('field_shipping_method_cart_desc')->getString()) {
+        $orderDetails['delivery_method'] = $this->t('@shipping_method_name (@shipping_method_description)', [
+          '@shipping_method_name' => $orderDetails['delivery_method'],
+          '@shipping_method_description' => $cart_desc,
+        ]);
+      }
+
+      $shipping_address = $order['shipping']['address'];
+
+      // Loading address from address book if customer_address_id is available.
+      if (!empty($shipping_address['customer_address_id'])) {
+        if ($entity = $this->addressBookManager->getUserAddressByCommerceId($order['shipping']['address']['customer_address_id'])) {
+          $shipping_address = $this->addressBookManager->getAddressFromEntity($entity);
+        }
+      }
+
+      $shipping_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
+      $shipping_address_array['telephone'] = $this->mobileUtil->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
+      $country_list = $this->countryRepository->getList();
+      $shipping_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
+      $shipping_address_array['country'] = $country_list[$shipping_address_array['country_code']];
+      $orderDetails['delivery_address'] = $shipping_address_array;
+    }
+
+    // Don't show Billing Address for CoD payment method.
+    if ($order['payment']['method_code'] !== 'cashondelivery') {
+      $billing_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
+      $billing_address_array['telephone'] = $this->mobileUtil->getFormattedMobileNumber($billing_address_array['mobile_number']['value']);
+
+      $orderDetails['billing_address'] = $billing_address_array;
+    }
+
+    return $orderDetails;
+
   }
 
 }
