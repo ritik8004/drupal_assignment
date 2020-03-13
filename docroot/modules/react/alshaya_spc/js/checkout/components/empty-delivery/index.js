@@ -82,7 +82,7 @@ export default class EmptyDeliveryText extends React.Component {
   };
 
   render() {
-    const { delivery_type } = this.props.cart;
+    const { delivery_type, cart } = this.props.cart;
 
     if (delivery_type === "cnc") {
       return (
@@ -111,6 +111,19 @@ export default class EmptyDeliveryText extends React.Component {
       default_val = {
         static: {
           fullname: `${fname} ${lname}`
+        }
+      };
+    }
+    // If carrier info set, means shipping is set.
+    // Get name info from there.
+    else if (cart.carrier_info !== null
+      && cart.shipping_address !== null) {
+      const shippingAddress = cart.shipping_address;
+      default_val = {
+        static: {
+          fullname: shippingAddress.firstname + ' ' + shippingAddress.lastname,
+          email: shippingAddress.email,
+          telephone: shippingAddress.telephone
         }
       };
     }
