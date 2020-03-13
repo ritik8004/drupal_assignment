@@ -1575,6 +1575,10 @@
 }
 
 .basic-details-wrapper {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1rem;
+  }
+
   .field--name {
     &-field-skus {
       @include breakpoint($only-mobile) {
