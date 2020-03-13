@@ -121,6 +121,33 @@ class PaymentMethodCheckoutCom extends React.Component {
     this.props.finalisePayment(paymentData);
   };
 
+  onExistingCardSelect = (cardHash) => {
+    this.closeStoreListModal();
+    this.updateCurrentContext({
+      selectedCard: 'existing',
+      tokenizedCard: cardHash,
+    });
+  }
+
+  updateCurrentContext = (obj) => {
+    const { updateState } = this.context;
+    updateState(obj);
+  }
+
+  changeCurrentCard = (type) => {
+    this.updateCurrentContext({
+      selectedCard: type,
+    });
+  }
+
+  openNewCard = () => {
+    this.closeStoreListModal();
+    this.changeCurrentCard('new');
+    if (window.innerWidth < 768) {
+      // Code here to navigate to nwe card form.
+    }
+  }
+
   render() {
     const { openStoreListModal } = this.state;
     const { selectedCard, tokenizedCard } = this.context;
