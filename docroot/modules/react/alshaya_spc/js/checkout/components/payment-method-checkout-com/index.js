@@ -3,7 +3,7 @@ import Popup from 'reactjs-popup';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import SavedCardsList from './components/SavedCardsList';
-import AddNewCard from './components/AddNewCard';
+import NewCard from './components/NewCard';
 import { CheckoutComContext } from '../../../context/CheckoutCom';
 import SelectedCard from './components/SelectedCard';
 import Cookies from 'js-cookie';
@@ -18,6 +18,18 @@ class PaymentMethodCheckoutCom extends React.Component {
     this.state = {
       openSavedCardListModal: false,
     };
+  }
+
+  componentDidMount() {
+    const { tokenizedCard } = this.context;
+    let activeCard = {};
+    if (tokenizedCard !== '') {
+      activeCard = { ...drupalSettings.checkoutCom.tokenizedCards }[tokenizedCard];
+    }
+
+    this.updateCurrentContext({
+      cvvValid: !(activeCard.mada === true || drupalSettings.checkoutCom.always_3d === true),
+    });
   }
 
   openSavedCardListModal = () => {
@@ -66,9 +78,10 @@ class PaymentMethodCheckoutCom extends React.Component {
       expiryValid,
       cvvValid,
       selectedCard,
+      tokenizedCard,
     } = this.context;
 
-    if (!(numberValid && expiryValid && cvvValid)) {
+    if (selectedCard === 'new' && !(numberValid && expiryValid && cvvValid)) {
       console.error('Client side validation failed for credit card info');
       throw 'UnexpectedValueException';
     } else if (window.CheckoutKit === undefined) {
@@ -76,10 +89,15 @@ class PaymentMethodCheckoutCom extends React.Component {
       throw 500;
     }
 
+    if (selectedCard === 'existing' && !cvvValid) {
+      console.error('Client side validation failed for credit card info');
+      throw 'UnexpectedValueException';
+    }
+
     showFullScreenLoader();
 
     if (selectedCard === 'existing') {
-
+      this.handleCheckoutResponse({ cvv: cvv.length > 0 ? encodeURIComponent(window.btoa(cvv)) : '', id: tokenizedCard });
     } else {
       const udf3 = (drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
         ? 'storeInVaultOnSuccess'
@@ -107,25 +125,31 @@ class PaymentMethodCheckoutCom extends React.Component {
 
   handleCheckoutResponse = (data) => {
     // @TODO: Handle errors.
+    const { selectedCard } = this.context;
+
+    // Set udf3 again here to send it for api request.
+    const udf3 = (selectedCard === 'new' && drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
+      ? 'storeInVaultOnSuccess'
+      : '';
 
     const paymentData = {
       payment: {
         method: 'checkout_com',
-        additional_data: { ...data },
+        additional_data: { ...data, udf3, card_type: selectedCard },
       },
     };
-
-    console.log(paymentData);
-    return;
 
     this.props.finalisePayment(paymentData);
   };
 
-  onExistingCardSelect = (cardHash) => {
+  onExistingCardSelect = (cardHash, madaCard) => {
+    const cvvValid = !(madaCard === true || drupalSettings.checkoutCom.always_3d === true);
+
     this.closeSavedCardListModal();
     this.updateCurrentContext({
       selectedCard: 'existing',
       tokenizedCard: cardHash,
+      cvvValid,
     });
   }
 
@@ -160,8 +184,8 @@ class PaymentMethodCheckoutCom extends React.Component {
       activeCard = { ...drupalSettings.checkoutCom.tokenizedCards }[tokenizedCard];
     }
 
-    const addNewCard = (
-      <AddNewCard
+    const newCard = (
+      <NewCard
         labelEffect={this.labelEffect}
         handleCardCvvChange={this.handleCardCvvChange}
       />
@@ -170,7 +194,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     return (
       <>
         <ConditionalView condition={selectedCard === 'new' && tokenizedCard === ''}>
-          {addNewCard}
+          {newCard}
         </ConditionalView>
         <ConditionalView condition={tokenizedCard !== ''}>
           <div className={`spc-checkout-card-option ${selectedCard === 'existing' ? 'selected' : ''}`}>
@@ -188,7 +212,7 @@ class PaymentMethodCheckoutCom extends React.Component {
               {Drupal.t('new card')}
             </span>
             <ConditionalView condition={selectedCard === 'new'}>
-              {addNewCard}
+              {newCard}
             </ConditionalView>
           </div>
         </ConditionalView>

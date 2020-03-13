@@ -8,7 +8,7 @@ class CheckoutComContextProvider extends React.Component {
     super(props);
 
     this.state = {
-      cvc: '',
+      cvv: '',
       expiry: '',
       number: '',
       cardType: '',

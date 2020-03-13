@@ -19,7 +19,7 @@ const SavedCardItem = ({ cardInfo, selected, onSelect }) => (
       </div>
     </div>
     <div className="payment-card--options">
-      <button type="button" onClick={() => onSelect(cardInfo.public_hash)}>{Drupal.t('select')}</button>
+      <button type="button" onClick={() => onSelect(cardInfo.public_hash, cardInfo.mada)}>{Drupal.t('select')}</button>
     </div>
   </div>
 );

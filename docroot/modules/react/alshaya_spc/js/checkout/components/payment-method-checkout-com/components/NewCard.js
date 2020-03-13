@@ -7,7 +7,7 @@ import { CheckoutComContext } from '../../../../context/CheckoutCom';
 import ToolTip from '../../../../utilities/tooltip';
 import CVVToolTipText from '../../cvv-text';
 
-class AddNewCard extends React.Component {
+class NewCard extends React.Component {
   static contextType = CheckoutComContext;
 
   constructor(props) {
@@ -167,4 +167,4 @@ class AddNewCard extends React.Component {
   }
 };
 
-export default AddNewCard;
+export default NewCard;
