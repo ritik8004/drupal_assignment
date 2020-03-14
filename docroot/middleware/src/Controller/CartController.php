@@ -537,7 +537,7 @@ class CartController {
         }
 
         if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
-          $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_2D_METHOD;
+          $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_VAULT_METHOD;
         }
 
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);

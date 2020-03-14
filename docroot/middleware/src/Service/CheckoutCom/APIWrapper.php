@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class APIWrapper {
 
-  // Magento method to set for 2d payment.
-  const CHECKOUT_COM_2D_METHOD = 'checkout_com_cc_vault';
+  // Magento method, to set for 2d vault (tokenized card) transaction.
+  const CHECKOUT_COM_VAULT_METHOD = 'checkout_com_cc_vault';
 
   // Key that contains redirect url.
   const REDIRECT_URL = 'redirectUrl';
