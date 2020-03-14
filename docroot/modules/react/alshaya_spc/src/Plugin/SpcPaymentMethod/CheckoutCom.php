@@ -76,20 +76,23 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
    * {@inheritdoc}
    */
   public function processBuild(array &$build) {
-    // @TODO: Add configuration for this and use live for live.
-    $build['#attached']['library'][] = 'alshaya_spc/checkout_sandbox_kit';
+    $sandbox = ($this->checkoutComApiHelper->getCheckoutcomConfig('environment') === 'sandbox');
     $build['#cache']['contexts'] = ['user'];
     $build['#cache']['tags'] = ['user:' . $this->currentUser->id()];
     $build['#attached']['drupalSettings']['checkoutCom'] = [
-      'always_3d' => TRUE,
-      'process_mada' => TRUE,
-      'tokenize' => TRUE,
-      'debugMode' => TRUE,
+      'enforce3d' => $this->checkoutComApiHelper->getCheckoutcomConfig('verify3dsecure'),
+      'processMada' => $this->checkoutComApiHelper->getCheckoutcomConfig('mada_enabled'),
+      'tokenize' => $this->checkoutComApiHelper->getCheckoutcomConfig('vault_enabled'),
       'publicKey' => $this->checkoutComApiHelper->getCheckoutcomConfig('public_key'),
+      'debugMode' => $sandbox,
       'tokenizedCards' => alshaya_acm_customer_is_customer($this->currentUser)
       ? $this->checkoutComApiHelper->getCustomerCards($this->currentUser)
       : [],
     ];
+
+    $build['#attached']['library'][] = $sandbox
+      ? 'alshaya_spc/checkout_sandbox_kit'
+      : 'alshaya_spc/checkout_live_kit';
   }
 
 }
