@@ -86,13 +86,43 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
       'publicKey' => $this->checkoutComApiHelper->getCheckoutcomConfig('public_key'),
       'debugMode' => $sandbox,
       'tokenizedCards' => alshaya_acm_customer_is_customer($this->currentUser)
-      ? $this->checkoutComApiHelper->getCustomerCards($this->currentUser)
+      ? $this->customerCardWithFilteredFields()
       : [],
     ];
 
     $build['#attached']['library'][] = $sandbox
       ? 'alshaya_spc/checkout_sandbox_kit'
       : 'alshaya_spc/checkout_live_kit';
+  }
+
+  /**
+   * Expose only required keys in drupalSettings for tokenizedCards.
+   *
+   * @return array
+   *   Return array of tokenized cards.
+   */
+  protected function customerCardWithFilteredFields() {
+    $card_with_required_keys = [];
+    try {
+      $required_keys = [
+        'public_hash',
+        'paymentMethod',
+        'maskedCC',
+        'expirationDate',
+        'mada',
+      ];
+      $cards = $this->checkoutComApiHelper->getCustomerCards($this->currentUser);
+      foreach ($cards as $card_hash => $card) {
+        // Get only $required_keys from $card.
+        $card_with_required_keys[$card_hash] = array_intersect_key(
+          $card,
+          array_flip($required_keys)
+        );
+      }
+    }
+    catch (\Exception $e) {
+    }
+    return $card_with_required_keys;
   }
 
 }
