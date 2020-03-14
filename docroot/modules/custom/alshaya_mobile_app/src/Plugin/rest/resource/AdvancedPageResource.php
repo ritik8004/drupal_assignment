@@ -203,7 +203,7 @@ class AdvancedPageResource extends ResourceBase {
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
         'contexts' => [
-          'url.query_args:url',
+          'url.query_args:page',
         ],
         'tags' => array_merge([
           ProductCategoryTree::CACHE_TAG,
