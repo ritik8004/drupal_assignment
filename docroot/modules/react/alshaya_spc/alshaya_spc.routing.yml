@@ -87,14 +87,6 @@ alshaya_spc.customer:
   requirements:
     _role: 'authenticated'
 
-alshaya_spc.customer_cart:
-  path: '/spc/customer/cart'
-  defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::getUserCustomerCart'
-  methods: [GET]
-  requirements:
-    _role: 'authenticated'
-
 alshaya_spc.checkout_event:
   path: '/spc/checkout-event'
   defaults:
