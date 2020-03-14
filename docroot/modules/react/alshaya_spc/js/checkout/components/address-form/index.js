@@ -126,18 +126,23 @@ export default class AddressForm extends React.Component {
 
   render() {
     const dynamicFields = [];
-    const { default_val, headingText, closeModal, showEmail } = this.props;
+    const {
+      default_val,
+      headingText,
+      closeModal,
+      showEmail,
+    } = this.props;
     const { area_list, cityChanged } = this.state;
-    let defaultVal = [];
+    let defaultAddressVal = [];
     if (default_val) {
-      defaultVal = default_val;
+      defaultAddressVal = default_val;
     }
 
     let isEditAddress = false;
     // If address has area value set on load, means
     // we are editing address.
-    if (defaultVal !== null
-      && defaultVal.area !== undefined) {
+    if (defaultAddressVal !== null
+      && defaultAddressVal.area !== undefined) {
       isEditAddress = true;
     }
 
@@ -146,7 +151,7 @@ export default class AddressForm extends React.Component {
         dynamicFields.push(
           <DynamicFormField
             key={key}
-            default_val={defaultVal}
+            default_val={defaultAddressVal}
             areasUpdate={this.refreshAreas}
             area_list={area_list}
             cityChanged={cityChanged}
@@ -197,7 +202,7 @@ export default class AddressForm extends React.Component {
                 </div>
                 <FixedFields
                   showEmail={showEmail}
-                  default_val={defaultVal}
+                  default_val={defaultAddressVal}
                 />
                 <div className="spc-address-form-actions" id="address-form-action">
                   <button
