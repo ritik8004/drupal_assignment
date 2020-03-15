@@ -61,6 +61,16 @@
       }
     }
   }
+
+  &__sidebar {
+    .mobile-content-wrapper {
+      .basic-details-wrapper {
+        @include breakpoint($only-mobile) {
+          margin-bottom: -1rem;
+        }
+      }
+    }
+  }
 }
 
 .short-description-wrapper,
@@ -93,8 +103,8 @@
       .form-item-quantity {
         width: 5.5rem;
 
-        @include breakpoint($only-mobile) {
-          @include select-style(100%);
+        @include breakpoint($upto-desktop) {
+          @include select-style(27%);
 
           height: 3.5rem;
           border: 0;
@@ -130,7 +140,7 @@
         }
 
         select.form-select {
-          @include select-style(5.5rem);
+          @include select-style(100%);
 
           padding-#{$left}: 1rem;
           height: 3.1875rem;
@@ -147,19 +157,37 @@
       }
 
       .sku-base-form {
+        position: relative;
+
         button[type="submit"] {
           height: 3.1875rem;
           text-transform: uppercase;
+          width: 100%;
+          margin-#{$left}: 0;
 
-          @include breakpoint($only-tablet) {
-            padding: 0.5rem 1.75rem;
-            margin-#{$left}: 0.75rem;
-            margin-top: 1.4325rem;
+          &.fix-button {
+            @include breakpoint($only-mobile) {
+              position: fixed !important;
+              height: 3.75rem;
+            }
           }
 
+          @include breakpoint($upto-desktop) {
+            position: absolute;
+          }
+        }
+
+        span {
           @include breakpoint($desktop) {
-            width: 68%;
-            margin-#{$left}: 0.8125rem;
+            position: relative;
+          }
+
+          .form-item-quantity {
+            @include breakpoint($desktop) {
+              position: absolute;
+              bottom: -0.25rem;
+              #{$right}: 0;
+            }
           }
         }
       }
@@ -167,8 +195,8 @@
       .form-item {
         &.form-type-select {
           &.form-item-quantity {
-            @include breakpoint($only-tablet) {
-              float: $left;
+            @include breakpoint($upto-desktop) {
+              top: -6.3125rem;
             }
           }
         }
@@ -205,29 +233,38 @@
 
     .form-item-configurables-size {
       .basic-details-wrapper & {
-        @include breakpoint($only-mobile) {
+        @include breakpoint($upto-desktop) {
           @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.375rem) {
             #{$right}: 1rem;
             top: 1.875rem;
           }
         }
 
-        @include breakpoint($only-tablet) {
-          margin-top: 0.75rem;
+        @include breakpoint($upto-desktop) {
+          @include select-style(70%);
+
+          margin-top: 1.75rem;
+          height: 3.1875rem;
+          border: 0;
+          padding-#{$left}: 0;
+          padding-#{$right}: 0.5rem;
+          margin-bottom: 2.1875rem;
+
+          &::after {
+            #{$right}: 1.5rem;
+          }
         }
 
         select.form-select {
-          @include breakpoint($only-mobile) {
+          @include breakpoint($upto-desktop) {
             height: 3.1875rem;
             font-size: 1.125rem;
             color: $pdp_product_volume_value;
             padding-#{$left}: 1rem;
           }
-        }
 
-        &::after {
           @include breakpoint($only-tablet) {
-            display: none;
+            font-size: 0.75rem;
           }
         }
       }
@@ -263,25 +300,6 @@
       }
     }
   }
-
-  .configurable-select {
-    .select2Option {
-      display: block;
-      text-align: center;
-
-      .select-buttons {
-        li {
-          &.disabled {
-            a,
-            span {
-              color: $pdp_swatch_disabled;
-              border-color: $pdp_swatch_disabled_border;
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 .acq-content-product-modal {
@@ -291,6 +309,8 @@
         button[type="submit"] {
           @include breakpoint($only-tablet) {
             padding: 0.5rem 1.25rem;
+            #{$left}: 0;
+            bottom: 0.625rem;
           }
         }
       }
@@ -314,6 +334,13 @@
       }
     }
   }
+
+  .full-prod-link {
+    &::after {
+      font-weight: bold;
+      font-size: 1.75rem;
+    }
+  }
 }
 
 .description-wrapper,
@@ -323,6 +350,44 @@
 
     ul {
       padding-#{$left}: 1rem;
+    }
+  }
+}
+
+.ui-dialog,
+.acq-content-product {
+  .form-item-configurables-size {
+    margin-top: 1.25rem;
+
+    .select2-container {
+      width: 70% !important;
+
+      @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+        #{$right}: 1rem;
+        top: 1.375rem;
+      }
+
+      @include breakpoint($tablet) {
+        display: block;
+      }
+
+      .select2-selection {
+        height: 3.1875rem;
+
+        &__arrow {
+          display: none;
+        }
+
+        &__rendered {
+          line-height: 3.1875;
+        }
+      }
+    }
+
+    .select2Option {
+      @include breakpoint($tablet) {
+        display: none !important;
+      }
     }
   }
 }
