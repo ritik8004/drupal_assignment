@@ -3,21 +3,21 @@ import OrderSummaryItem from '../OrderSummaryItem';
 
 export default class OrderSummary extends React.Component {
   render() {
-    const customerName = window.drupalSettings.order_details.customer_name;
-    const customEmail = window.drupalSettings.customer_email;
-    const orderNumber = window.drupalSettings.order_number;
-    const transactionId = window.drupalSettings.transaction_id;
-    const addressLine1 = window.drupalSettings.order_details.delivery_type_info.delivery_address.address_line1;
-    const addressLine2 = window.drupalSettings.order_details.delivery_type_info.delivery_address.address_line2;
-    const locality = window.drupalSettings.order_details.delivery_type_info.delivery_address.locality;
-    const country = window.drupalSettings.order_details.delivery_type_info.delivery_address.country;
-    const dependentLocality = window.drupalSettings.order_details.delivery_type_info.delivery_address.dependent_locality;
+    const customerName = drupalSettings.order_details.customer_name;
+    const customEmail = drupalSettings.customer_email;
+    const orderNumber = drupalSettings.order_number;
+    const transactionId = drupalSettings.transaction_id;
+    const addressLine1 = drupalSettings.order_details.delivery_type_info.delivery_address.address_line1;
+    const addressLine2 = drupalSettings.order_details.delivery_type_info.delivery_address.address_line2;
+    const locality = drupalSettings.order_details.delivery_type_info.delivery_address.locality;
+    const country = drupalSettings.order_details.delivery_type_info.delivery_address.country;
+    const dependentLocality = drupalSettings.order_details.delivery_type_info.delivery_address.dependent_locality;
     const customerAddress = ' ' + country + ', ' + addressLine1 + ', ' + addressLine2 + ', ' + locality + ', ' + dependentLocality;
-    const mobileNumber = window.drupalSettings.order_details.mobile_number;
-    const paymentMethod = window.drupalSettings.order_details.payment_method;
-    const deliveryType = window.drupalSettings.order_details.delivery_type_info.type;
-    const expectedDelivery = window.drupalSettings.order_details.expected_delivery;
-    const itemsCount = window.drupalSettings.order_details.number_of_items;
+    const mobileNumber = drupalSettings.order_details.mobile_number;
+    const paymentMethod = drupalSettings.order_details.payment_method;
+    const deliveryType = drupalSettings.order_details.delivery_type_info.type;
+    const expectedDelivery = drupalSettings.order_details.expected_delivery;
+    const itemsCount = drupalSettings.order_details.number_of_items;
     return (
       <div className="spc-order-summary">
         <div className="spc-order-summary-order-preview">
