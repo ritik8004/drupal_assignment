@@ -2,8 +2,6 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
-use Drupal\address\Repository\CountryRepository;
-use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
@@ -80,20 +78,6 @@ class AlshayaSpcController extends ControllerBase {
   protected $orderHelper;
 
   /**
-   * Address book manager.
-   *
-   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
-   */
-  protected $addressBookManager;
-
-  /**
-   * Country repository.
-   *
-   * @var \Drupal\address\Repository\CountryRepository
-   */
-  protected $countryRepository;
-
-  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -112,10 +96,6 @@ class AlshayaSpcController extends ControllerBase {
    *   Address terms helper.
    * @param \Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper $orderHelper
    *   Order details helper.
-   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $addressBookManager
-   *   Address book manager.
-   * @param \Drupal\address\Repository\CountryRepository $countryRepository
-   *   Country Repository.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -125,9 +105,7 @@ class AlshayaSpcController extends ControllerBase {
     AccountProxyInterface $current_user,
     EntityTypeManagerInterface $entity_type_manager,
     AddressBookAreasTermsHelper $areas_term_helper,
-    AlshayaSpcOrderHelper $orderHelper,
-    AlshayaAddressBookManager $addressBookManager,
-    CountryRepository $countryRepository
+    AlshayaSpcOrderHelper $orderHelper
   ) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
@@ -137,8 +115,6 @@ class AlshayaSpcController extends ControllerBase {
     $this->entityTypeManager = $entity_type_manager;
     $this->areaTermsHelper = $areas_term_helper;
     $this->orderHelper = $orderHelper;
-    $this->addressBookManager = $addressBookManager;
-    $this->countryRepository = $countryRepository;
   }
 
   /**
@@ -153,9 +129,7 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('current_user'),
       $container->get('entity_type.manager'),
       $container->get('alshaya_addressbook.area_terms_helper'),
-      $container->get('alshaya_spc.order_helper'),
-      $container->get('alshaya_addressbook.manager'),
-      $container->get('address.country_repository')
+      $container->get('alshaya_spc.order_helper')
     );
   }
 

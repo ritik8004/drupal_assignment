@@ -13,10 +13,7 @@ use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -27,7 +24,6 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,32 +35,11 @@ class AlshayaSpcOrderHelper {
   use StringTranslationTrait;
 
   /**
-   * Entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The api wrapper.
-   *
-   * @var \Drupal\alshaya_api\AlshayaApiWrapper
-   */
-  protected $apiWrapper;
-
-  /**
    * The module handler.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
-
-  /**
-   * The spc cookies handler..
-   *
-   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcCookies
-   */
-  protected $spcCookies;
 
   /**
    * The session.
@@ -116,20 +91,6 @@ class AlshayaSpcOrderHelper {
   private $productInfoHelper;
 
   /**
-   * Node Storage.
-   *
-   * @var \Drupal\node\NodeStorageInterface
-   */
-  private $nodeStorage;
-
-  /**
-   * Term Storage.
-   *
-   * @var \Drupal\taxonomy\TermStorageInterface
-   */
-  private $termStorage;
-
-  /**
    * Production Options Manager service object.
    *
    * @var \Drupal\acq_sku\ProductOptionsManager
@@ -158,13 +119,6 @@ class AlshayaSpcOrderHelper {
   private $languageManager;
 
   /**
-   * Request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  private $requestStack;
-
-  /**
    * Mobile utility.
    *
    * @var \Drupal\mobile_number\MobileNumberUtilInterface
@@ -188,14 +142,8 @@ class AlshayaSpcOrderHelper {
   /**
    * AlshayaSpcCustomerHelper constructor.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity type manager.
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
-   *   The api wrapper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcCookies $spc_cookies
-   *   The spc cookies handler.
    * @param \Symfony\Component\HttpFoundation\Session\Session $session
    *   The session.
    * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
@@ -216,8 +164,6 @@ class AlshayaSpcOrderHelper {
    *   Sku info helper object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   Request stack.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager
@@ -226,10 +172,7 @@ class AlshayaSpcOrderHelper {
    *   Country Repository.
    */
   public function __construct(
-    EntityTypeManagerInterface $entity_type_manager,
-    AlshayaApiWrapper $api_wrapper,
     ModuleHandlerInterface $module_handler,
-    AlshayaSpcCookies $spc_cookies,
     Session $session,
     AlshayaAddressBookManager $address_book_manager,
     OrdersManager $orders_manager,
@@ -240,15 +183,11 @@ class AlshayaSpcOrderHelper {
     ProductOptionsManager $product_options_manager,
     SkuInfoHelper $sku_info_helper,
     LanguageManagerInterface $language_manager,
-    RequestStack $request_stack,
     MobileNumberUtilInterface $mobile_util,
     CheckoutOptionsManager $checkout_options_manager,
     CountryRepository $countryRepository
   ) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->apiWrapper = $api_wrapper;
     $this->moduleHandler = $module_handler;
-    $this->spcCookies = $spc_cookies;
     $this->session = $session;
     $this->addressBookManager = $address_book_manager;
     $this->ordersManager = $orders_manager;
@@ -256,17 +195,9 @@ class AlshayaSpcOrderHelper {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
     $this->productInfoHelper = $product_info_helper;
-    $this->nodeStorage = $entity_type_manager->getStorage('node');
-    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->productOptionsManager = $product_options_manager;
-    $this->cache = [
-      'tags' => [],
-      'contexts' => [],
-    ];
-    $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
     $this->languageManager = $language_manager;
-    $this->requestStack = $request_stack;
     $this->mobileUtil = $mobile_util;
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->countryRepository = $countryRepository;
@@ -288,6 +219,7 @@ class AlshayaSpcOrderHelper {
     $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     $order_id = $this->session->get('last_order_id');
+    $order_id = 1922;
     // Throw access denied if nothing in session.
     if (empty($order_id)) {
       throw new AccessDeniedHttpException();
@@ -372,9 +304,6 @@ class AlshayaSpcOrderHelper {
   private function getSkuData(SKUInterface $sku, string $link = ''): array {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
-
-    $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $sku->getCacheTags());
-    $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], $sku->getCacheContexts());
 
     $data['id'] = (int) $sku->id();
     $data['sku'] = $sku->getSku();
@@ -653,7 +582,6 @@ class AlshayaSpcOrderHelper {
     $promotions = [];
     $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
     foreach ($promotions_data as $nid => $promotion) {
-      $this->cache['tags'][] = 'node:' . $nid;
       $promotions[] = [
         'text' => $promotion['text'],
         'promo_web_url' => str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
