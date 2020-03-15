@@ -1,0 +1,21 @@
+.size-guide-link {
+  position: relative;
+  #{$left}: 0;
+  font-size: 0.75rem;
+  text-decoration: underline;
+  top: 1.75rem;
+
+  @include breakpoint($desktop) {
+    top: 1.375rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    top: 1.75rem;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $pdp_sizeguide_link;
+  }
+}
