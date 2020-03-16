@@ -5,7 +5,7 @@ import BillingInfo from '../billing-info';
 import SectionTitle from '../../../utilities/section-title';
 
 export default class CnCBillingAddress extends React.Component {
-  _isMounted = false;
+  isMounted = false;
 
   constructor(props) {
     super(props);
@@ -15,12 +15,12 @@ export default class CnCBillingAddress extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
+    this.isMounted = true;
     document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this.isMounted = false;
   }
 
   showPopup = () => {
@@ -30,7 +30,7 @@ export default class CnCBillingAddress extends React.Component {
   };
 
   closePopup = () => {
-    if (this._isMounted) {
+    if (this.isMounted) {
       this.setState({
         open: false,
       });
@@ -73,7 +73,7 @@ export default class CnCBillingAddress extends React.Component {
         <div className="spc-section-billing-address cnc-flow">
           <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
           <div className="spc-billing-address-wrapper">
-            <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={(e) => this.showPopup(e)} role="button" tabIndex="0" onKeyUp={() => {}} aria-label="Billing">
+            <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={(e) => this.showPopup(e)}>
               {Drupal.t('please add your billing address.')}
             </div>
             {open

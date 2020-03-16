@@ -21,6 +21,8 @@ import DeviceView from '../../../common/components/device-view';
 import FullScreenSVG from '../full-screen-svg';
 
 class ClickCollect extends React.Component {
+  static contextType = ClicknCollectContext;
+
   constructor(props) {
     super(props);
     this.searchRef = React.createRef();
@@ -150,6 +152,9 @@ class ClickCollect extends React.Component {
           this.showOpenMarker(response);
         }
       }
+      else {
+        updateCoordsAndStoreList(coords, response);
+      }
       removeFullScreenLoader();
     });
   };
@@ -167,7 +172,7 @@ class ClickCollect extends React.Component {
         this.selectStoreButtonVisibility(false);
       } else {
         this.toggleFullScreen(true);
-        this.openmArkeroFsTore(selectedStore.dataset.storeCode);
+        this.openMarkerOfStore(selectedStore.dataset.storeCode);
       }
     } else {
       this.cncMapView.current.style.display = 'none';
@@ -185,12 +190,14 @@ class ClickCollect extends React.Component {
     google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
   };
 
-  showOpenMarker = ({ storeList } = this.context) => {
-    const { selectedStore } = this.context;
+  showOpenMarker = (storeList = null) => {
+    const { selectedStore, storeList: contextStoreList } = this.context;
+    const storeListArg = (!storeList) ? contextStoreList : storeList;
+
     if (!selectedStore) {
       return;
     }
-    this.openmArkeroFsTore(selectedStore.code, storeList);
+    this.openMarkerOfStore(selectedStore.code, storeListArg);
     this.closeAllInfoWindow();
   };
 
@@ -199,11 +206,11 @@ class ClickCollect extends React.Component {
     if (!selectedStore) {
       return;
     }
-    this.openmArkeroFsTore(selectedStore.code, storeList, false);
+    this.openMarkerOfStore(selectedStore.code, storeList, false);
     this.closeAllInfoWindow();
   };
 
-  openmArkeroFsTore = (storeCode, { storeList } = this.context, showInfoWindow = true) => {
+  openMarkerOfStore = (storeCode, { storeList } = this.context, showInfoWindow = true) => {
     const index = _findIndex(storeList, {
       code: storeCode,
     });
@@ -237,7 +244,7 @@ class ClickCollect extends React.Component {
       openSelectedStore: false,
     });
     this.selectStoreButtonVisibility(true);
-    this.openmArkeroFsTore(selectedStore.code, storeList);
+    this.openMarkerOfStore(selectedStore.code, storeList);
   };
 
   finalizeCurrentStore = (e) => {
@@ -353,7 +360,7 @@ class ClickCollect extends React.Component {
             style={{ display: openSelectedStore ? 'none' : 'block' }}
           >
             <SectionTitle>{Drupal.t('collection Store')}</SectionTitle>
-            <a className="close" onClick={closeModal} onKeyDown={() => {}} role="link" tabIndex="0">
+            <a className="close" onClick={closeModal}>
               &times;
             </a>
             <div className="spc-cnc-address-form-wrapper">
