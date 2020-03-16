@@ -35,6 +35,10 @@ function alshaya_spc_install() {
   \Drupal::configFactory()->getEditable('block.block.sociallinks')->save();
   // Override located /config/override/block.block.copyright.
   \Drupal::configFactory()->getEditable('block.block.copyright')->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  _alshaya_spc_translations();
 }
 
 /**
