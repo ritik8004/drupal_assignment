@@ -24,12 +24,6 @@ export default class AddressForm extends React.Component {
     };
   }
 
-  // Submit handler for form.
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.processAddress(e);
-  };
-
   componentDidMount() {
     this._isMounted = true;
     // Listen to the map click event.
@@ -40,6 +34,13 @@ export default class AddressForm extends React.Component {
     this._isMounted = false;
     document.removeEventListener('mapClicked', this.eventListener, false);
   }
+
+  // Submit handler for form.
+  handleSubmit = (e) => {
+    const { processAddress } = this.props;
+    e.preventDefault();
+    processAddress(e);
+  };
 
   eventListener = (e) => {
     const coords = e.detail.coords();
@@ -52,10 +53,10 @@ export default class AddressForm extends React.Component {
    * Refresh the child areas list on selection / change
    * of the parent area.
    */
-  refreshAreas = (parent_id, city_changed) => {
+  refreshAreas = (parentId, cityChanged) => {
     this.setState({
-      area_list: getAreasList(false, parent_id),
-      cityChanged: city_changed,
+      area_list: getAreasList(false, parentId),
+      cityChanged,
     });
   };
 
@@ -125,16 +126,23 @@ export default class AddressForm extends React.Component {
 
   render() {
     const dynamicFields = [];
-    let default_val = [];
-    if (this.props.default_val) {
-      default_val = this.props.default_val;
+    const {
+      default_val,
+      headingText,
+      closeModal,
+      showEmail,
+    } = this.props;
+    const { area_list, cityChanged } = this.state;
+    let defaultAddressVal = [];
+    if (default_val) {
+      defaultAddressVal = default_val;
     }
 
     let isEditAddress = false;
     // If address has area value set on load, means
     // we are editing address.
-    if (default_val !== null
-      && default_val.area !== undefined) {
+    if (defaultAddressVal !== null
+      && defaultAddressVal.area !== undefined) {
       isEditAddress = true;
     }
 
@@ -143,10 +151,10 @@ export default class AddressForm extends React.Component {
         dynamicFields.push(
           <DynamicFormField
             key={key}
-            default_val={default_val}
+            default_val={defaultAddressVal}
             areasUpdate={this.refreshAreas}
-            area_list={this.state.area_list}
-            cityChanged={this.state.cityChanged}
+            area_list={area_list}
+            cityChanged={cityChanged}
             field_key={key}
             field={field}
           />,
@@ -154,8 +162,8 @@ export default class AddressForm extends React.Component {
       },
     );
 
-    const headingText = (this.props.headingText !== undefined)
-      ? this.props.headingText
+    const headingDeliveryText = (headingText !== undefined)
+      ? headingText
       : Drupal.t('delivery information');
 
     return (
@@ -166,8 +174,8 @@ export default class AddressForm extends React.Component {
           </div>
         )}
         <div className="spc-address-form-sidebar">
-          <SectionTitle>{headingText}</SectionTitle>
-          <a className="close" onClick={this.props.closeModal}>
+          <SectionTitle>{headingDeliveryText}</SectionTitle>
+          <a className="close" onClick={closeModal}>
             &times;
           </a>
           <div className="spc-address-form-wrapper">
@@ -193,8 +201,8 @@ export default class AddressForm extends React.Component {
                   {' '}
                 </div>
                 <FixedFields
-                  showEmail={this.props.showEmail}
-                  default_val={default_val}
+                  showEmail={showEmail}
+                  default_val={defaultAddressVal}
                 />
                 <div className="spc-address-form-actions" id="address-form-action">
                   <button

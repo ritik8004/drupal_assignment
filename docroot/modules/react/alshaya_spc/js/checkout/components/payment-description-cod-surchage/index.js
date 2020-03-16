@@ -28,7 +28,7 @@ const CodSurchargePaymentMethodDescription = ({ surcharge }) => {
     <>
       <span className="spc-payment-method-desc">
         {getSurchargeShortDescription()}
-        <ToolTip content={getStringMessage('cod_surcharge_description')} enable />
+        <ToolTip enable>{getStringMessage('cod_surcharge_description')}</ToolTip>
       </span>
     </>
   );

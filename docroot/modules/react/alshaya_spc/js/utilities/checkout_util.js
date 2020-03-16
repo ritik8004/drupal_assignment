@@ -94,6 +94,14 @@ export const addShippingInCart = function (action, data) {
           removeFullScreenLoader();
           return null;
         }
+
+        // If there is no error on shipping update.
+        if (response.data.error === undefined) {
+          // Trigger event on shipping update, so that
+          // other components take necessary action if required.
+          triggerCheckoutEvent('onShippingAddressUpdate', response.data);
+        }
+
         return response.data;
       },
       (error) =>
@@ -242,4 +250,8 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
   }
 
   return false;
+};
+
+export const validateInfo = (data) => {
+  return axios.post(Drupal.url('spc/validate-info'), data);
 };

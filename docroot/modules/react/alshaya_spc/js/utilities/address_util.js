@@ -4,7 +4,7 @@ import {
   addShippingInCart,
   removeFullScreenLoader,
   getDefaultCheckoutErrorMessage,
-  triggerCheckoutEvent,
+  triggerCheckoutEvent, validateInfo,
 } from './checkout_util';
 import {
   validateAddressFields,
@@ -75,12 +75,12 @@ export const addEditAddressToCustomer = (e) => {
   const target = e.target.elements;
   // Validate mobile number.
   const mobile = e.target.elements.mobile.value.trim();
-  const mobile_valid = axios.get(`verify-mobile/${mobile}`);
-  if (mobile_valid instanceof Promise) {
-    mobile_valid.then((result) => {
-      if (result.status === 200) {
+  const validationRequest = validateInfo({mobile: mobile});
+  if (validationRequest instanceof Promise) {
+    validationRequest.then((result) => {
+      if (result.status === 200 && result.data.status) {
         // If not valid mobile number.
-        if (result.data.status === false) {
+        if (result.data.mobile === false) {
           // Removing loader in case validation fail.
           removeFullScreenLoader();
           document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');

@@ -95,7 +95,6 @@ class CustomerCards {
     $card_list = [];
     foreach ($cards as $card) {
       $token_details = json_decode($card['token_details'], TRUE);
-      $token_details['mada'] = isset($token_details['mada']) && $token_details['mada'] == 'Y';
       $card_list[$card['public_hash']] = array_merge($card, $token_details);
     }
     return $card_list;

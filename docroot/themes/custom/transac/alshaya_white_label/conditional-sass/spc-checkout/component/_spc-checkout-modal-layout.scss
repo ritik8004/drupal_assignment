@@ -1,0 +1,146 @@
+.spc-checkout-delivery-information,
+.spc-section-billing-address,
+.payment-method-checkout_com {
+  .popup-overlay {
+    .popup-content {
+      width: 100% !important;
+      max-width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border: none !important;
+      padding: 0 !important;
+
+      @include breakpoint($only-mobile) {
+        overflow-y: auto !important;
+      }
+
+      &.overlay::before {
+        content: '';
+        background: $header_mobile_menu_overlay;
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+      }
+
+      &.spc-address-list-member-content,
+      &.spc-saved-payment-card-list-content {
+        @include breakpoint($desktop) {
+          max-height: 37.5rem;
+          height: auto;
+        }
+
+        @include breakpoint($only-tablet) {
+          max-height: 31.25rem;
+          height: auto;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        height: 37.5rem;
+        width: calc(100% - 19.75rem);
+        max-width: 60.5rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        max-width: calc(100% - 1rem);
+        height: 31.25rem;
+      }
+
+      .close {
+        cursor: pointer;
+        position: absolute;
+        #{$right}: 0;
+        color: transparent;
+        top: 0.7rem;
+
+        @include icon('close') {
+          font-size: 2rem;
+          width: 2rem;
+          height: 2rem;
+          color: $spc-checkout-close-icon;
+        }
+
+        @include breakpoint($only-mobile) {
+          z-index: 3;
+        }
+      }
+
+      header.spc-change-address,
+      header.spc-payment-saved-cards-header {
+        height: 3.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
+        font-size: 1.25rem;
+        background: $spc-change-address-header;
+        color: $spc-checkout_section_title;
+        font-family: $alshaya-bold;
+      }
+
+      .spc-checkout-address-list {
+        margin: 0 11.75%;
+
+        @include breakpoint($only-tablet) {
+          margin: 0 5.75%;
+        }
+      }
+
+      .spc-checkout-saved-card-list {
+        margin: 0 15.91%;
+
+        @include breakpoint($only-tablet) {
+          margin: 0 6%;
+        }
+      }
+
+      .spc-checkout-address-list,
+      .spc-checkout-saved-card-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 1.25rem;
+        padding-bottom: 1.25rem;
+
+        @include breakpoint($only-mobile) {
+          grid-template-columns: 1fr;
+          margin: 0 1.25rem;
+        }
+      }
+
+      .spc-add-new-address-btn,
+      .spc-modal-add-new-card-btn {
+        width: 100%;
+        margin: 0 1.25rem 1.25rem;
+        height: 2.875rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8125rem;
+        background: $spc-checkout-add-new-address-bg;
+        border: 1px solid $spc-deliver-button;
+        color: $spc-deliver-button;
+        transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+        cursor: pointer;
+        border-radius: 0.25rem;
+
+        &:hover {
+          background: $spc-deliver-button;
+          color: $primary_btn_text;
+        }
+
+        @include breakpoint($tablet) {
+          max-width: 20rem;
+          margin: 0 auto 1.25rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          width: calc(100% - 2.5rem);
+        }
+      }
+    }
+  }
+}

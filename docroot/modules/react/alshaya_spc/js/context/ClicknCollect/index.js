@@ -1,6 +1,4 @@
 import React from 'react';
-import _isEqual from 'lodash/isEqual';
-import { fetchClicknCollectStores } from '../../utilities/api/requests';
 import { makeFullName } from '../../utilities/cart_customer_util';
 import { cleanMobileNumber } from '../../utilities/checkout_util';
 

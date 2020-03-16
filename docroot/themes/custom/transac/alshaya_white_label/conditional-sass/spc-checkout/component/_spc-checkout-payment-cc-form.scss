@@ -2,6 +2,10 @@
   .payment-method-bottom-panel {
     padding: 1.25rem;
     padding-#{$left}: 3rem;
+
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 2.25rem;
+    }
   }
 
   input {
@@ -61,6 +65,17 @@
       position: absolute;
       top: -0.3125rem;
       #{$right}: 0;
+
+      .tooltip-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        p {
+          text-align: center;
+        }
+      }
     }
   }
 

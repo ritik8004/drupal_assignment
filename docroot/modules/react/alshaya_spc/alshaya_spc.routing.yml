@@ -25,35 +25,11 @@ alshaya_spc.login:
     # All user should able to access checkout pages, validation on frontend.
     _access: 'TRUE'
 
-alshaya_spc.mobile_number_verfication:
-  path: '/verify-mobile/{mobile}'
+alshaya_spc.validate-info:
+  path: '/spc/validate-info'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::verifyMobileNumber'
-  methods:  [GET]
-  requirements:
-    _permission: 'access content'
-
-alshaya_spc.area_list_by_parent:
-  path: '/area-list/{area}'
-  defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcAddressController::getAreaListByParent'
-  methods:  [GET]
-  requirements:
-    _permission: 'access content'
-
-alshaya_spc.area_list:
-  path: '/areas'
-  defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcAddressController::getAreaList'
-  methods:  [GET]
-  requirements:
-    _permission: 'access content'
-
-alshaya_spc.get_parent_area_list:
-  path: '/parent-areas'
-  defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcAddressController::getParentAreaList'
-  methods:  [GET]
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::validateInfo'
+  methods: [POST]
   requirements:
     _permission: 'access content'
 
@@ -114,7 +90,7 @@ alshaya_spc.customer:
 alshaya_spc.checkout_event:
   path: '/spc/checkout-event'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcOrderController::setOrderIdSession'
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCheckoutEventController::postCheckoutEvent'
   methods: [POST]
   requirements:
     _permission: 'access content'
