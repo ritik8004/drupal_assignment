@@ -17,6 +17,15 @@ export default class BillingPopUp extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this._isMounted = true;
+    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   /**
    * For modal open.
    */
@@ -30,12 +39,13 @@ export default class BillingPopUp extends React.Component {
    * For modal closing.
    */
   closeModal = () => {
+    const { closePopup } = this.props;
     if (this._isMounted) {
       this.setState({
         open: false,
       });
 
-      this.props.closePopup();
+      closePopup();
     }
   };
 
@@ -54,15 +64,10 @@ export default class BillingPopUp extends React.Component {
     ? address
     : formatAddressDataForEditForm(address))
 
-  componentDidMount() {
-    this._isMounted = true;
-    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
-  }
-
   /**
    * Event handler for billing update.
    */
-  processBillingUpdate = (e) => {
+  processBillingUpdate = () => {
     if (this._isMounted) {
       this.setState({
         open: false,
@@ -70,15 +75,13 @@ export default class BillingPopUp extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
   render() {
+    const { open } = this.state;
+    const { billing } = this.props;
     return (
       <>
         <Popup
-          open={this.state.open}
+          open={open}
           onClose={this.closeModal}
           closeOnDocumentClick={false}
         >
@@ -87,7 +90,7 @@ export default class BillingPopUp extends React.Component {
             processAddress={this.processAddress}
             showEmail={false}
             headingText={Drupal.t('billing information')}
-            default_val={this.formatAddressData(this.props.billing)}
+            default_val={this.formatAddressData(billing)}
           />
         </Popup>
       </>
