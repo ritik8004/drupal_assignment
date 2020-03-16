@@ -587,10 +587,8 @@ class CartController {
     }
 
     $result = $this->cart->placeOrder($request_content['data']);
-    if (is_string($result)) {
-      $this->session->remove(self::STORAGE_KEY);
-      $last_order = str_replace('"', '', $result);
-      $this->session->set(OrdersController::SESSION_STORAGE_KEY, (int) $last_order);
+    if ($result['success']) {
+      $last_order = $result['order_id'];
       // Post order id and cart data to Drupal.
       $data = [
         'action' => 'place order success',
