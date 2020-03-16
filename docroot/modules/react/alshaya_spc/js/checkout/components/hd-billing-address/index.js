@@ -141,7 +141,7 @@ export default class HDBillingAddress extends React.Component {
 
     return (
       <div className="spc-section-billing-address">
-        <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
+        <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-top-panel">
             <div className="spc-billing-address-title">{Drupal.t('billing address same as delivery address?')}</div>

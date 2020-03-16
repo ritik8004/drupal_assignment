@@ -41,6 +41,39 @@ function _alshaya_spc_translations() {
       'applied' => [
         'ar' => 'تم تفعيل',
       ],
+      'complete purchase' => [
+        'ar' => 'سجل الطلبية',
+      ],
+      'order summary (@qty items)' => [
+        'ar' => '(@qty قطعة) ملخص الطلبية',
+      ],
+      'Order total (@count items)' => [
+        'ar' => '(@count قطعة) المبلغ الإجمالي'
+      ],
+      'billing information' => [
+        'ar' => 'يرجى تزويدنا ببيانات الاتصال الخاصة بكم والعنوان',
+      ],
+      'change address' => [
+        'ar' => 'تغيير العنوان',
+      ],
+      'select' => [
+        'ar' => 'تحديد',
+      ],
+      'selected' => [
+        'ar' => 'المحدد',
+      ],
+      'Please add your contact details & address' => [
+        'ar' => 'يرجى تزويدنا ببيانات الاتصال الخاصة بكم والعنوان',
+      ],
+      'deliver to my location' => [
+        'ar' => 'التوصيل إلى موقعي',
+      ],
+      'contact information' => [
+        'ar' => 'معلومات الاتصال',
+      ],
+      'select your preferred collection store' => [
+        'ar' => 'حدد متجر المجموعة المفضل لديك',
+      ],
     ],
   ];
 }
