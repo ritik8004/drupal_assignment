@@ -126,7 +126,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
           $account = $this->entityTypeManager->getStorage('user')->load($current_user_id);
 
           if (empty($account->get('field_mobile_number')->getString())) {
-            $phone_number = $cart["shipping_address"]["telephone"];
+            $phone_number = $cart["customer"]["email"];
             $account->get('field_mobile_number')->setValue($phone_number);
             $account->save();
           }
@@ -139,6 +139,8 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
         // Set selected payment method in session.
         $session->set('selected_payment_method', $payment_method);
         $session->save();
+        // Refresh stock for products in cart.
+        $this->refreshStockForProductsInCart($cart);
 
         // Add success message in logs.
         $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [

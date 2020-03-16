@@ -85,7 +85,7 @@ class Drupal {
       'form_params' => [
         'action' => $data['action'],
         'order_id' => $data['order_id'],
-        'cart' => $data['cart'],
+        'cart' => $data['cart']['cart'],
         'payment_method' => $data['payment_method'],
       ],
     ];
