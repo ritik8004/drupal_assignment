@@ -97,8 +97,9 @@ export const addShippingInCart = function (action, data) {
 
         // If there is no error on shipping update.
         if (response.data.error === undefined) {
-          // Remove localstorage so that user fills billing again.
-          localStorage.removeItem('billing_shipping_different');
+          // Trigger event on shipping update, so that
+          // other components take necessary action if required.
+          triggerCheckoutEvent('onShippingAddressUpdate', response.data);
         }
 
         return response.data;
