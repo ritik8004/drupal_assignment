@@ -4,6 +4,10 @@
     top: 3.125rem;
     padding: 0;
 
+    html[lang=ar] & {
+      padding: 0;
+    }
+
     &.show-algolia-search-bar {
       top: 3.125rem !important;
     }
