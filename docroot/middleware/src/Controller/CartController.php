@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Magento\CartActions;
 use App\Service\Cart;
 use App\Service\Drupal\Drupal;
@@ -527,6 +528,16 @@ class CartController {
               'message' => $e->getMessage(),
             ]);
           }
+          else {
+            return new JsonResponse([
+              'error' => TRUE,
+              'message' => $e->getMessage(),
+            ]);
+          }
+        }
+
+        if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
+          $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_VAULT_METHOD;
         }
 
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);

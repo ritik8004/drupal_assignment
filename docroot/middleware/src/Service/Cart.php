@@ -644,7 +644,6 @@ class Cart {
 
       case 'checkout_com':
         $process_3d = FALSE;
-        $payment_data = [];
         $end_point = '';
         // Process for new 3D card.
         if ($additional_info['card_type'] == 'new') {
@@ -659,27 +658,34 @@ class Cart {
             : '';
 
           $process_3d = $additional_data['udf1'] || $this->checkoutComApi->is3dForced();
-          $payment_data = $additional_data;
-          $end_point = APIWrapper::ENDPOINT_CARD_PAYMENT;
+          $end_point = APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT;
         }
-        elseif ($additional_info['card_type'] == 'existing' && !empty($additional_info['cvv'])) {
-          $card = $this->customerCards->getGiveCardInfo($this->getCartCustomerId(), $additional_info['id']);
-          if ($card) {
+        elseif ($additional_info['card_type'] == 'existing') {
+          $card = $this->customerCards->getGivenCardInfo($this->getCartCustomerId(), $additional_info['id']);
+          if (($card['mada'] || $this->checkoutComApi->is3dForced()) && empty($additional_info['cvv'])) {
+            throw new \Exception('Cvv missing for credit/debit card.', 400);
+          }
+          elseif ($card['mada'] || $this->checkoutComApi->is3dForced()) {
             $process_3d = TRUE;
-            $payment_data = [
+            $additional_data = [
               'cardId' => $card['gateway_token'],
-              'cvv' => $additional_info['cvv'],
+              'cvv' => $this->customerCards->deocodePublicHash(urldecode($additional_info['cvv'])),
               'udf2' => APIWrapper::CARD_ID_CHARGE,
             ];
             $end_point = APIWrapper::ENDPOINT_CARD_PAYMENT;
           }
+          elseif (!$card['mada'] && !$this->checkoutComApi->is3dForced()) {
+            $additional_data = [
+              'public_hash' => $card['public_hash'],
+            ];
+          }
         }
 
         // Process 3D if MADA or 3D Forced.
-        if ($process_3d && !empty($payment_data) && !empty($end_point)) {
+        if ($process_3d && !empty($additional_data) && !empty($end_point)) {
           $response = $this->checkoutComApi->request3dSecurePayment(
             $this->getCart(),
-            $payment_data,
+            $additional_data,
             $end_point
           );
 
@@ -694,7 +700,6 @@ class Cart {
 
           throw new \Exception('Failed to initiate 3D request.', 500);
         }
-
         break;
     }
 
