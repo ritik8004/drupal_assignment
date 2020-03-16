@@ -345,6 +345,21 @@ class AlshayaSpcController extends ControllerBase {
       'items' => $productList,
     ];
 
+    $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+
+    $string_keys = [
+      'cod_surcharge_label',
+      'cod_surcharge_description',
+      'cod_surcharge_short_description',
+      'cod_surcharge_tooltip',
+    ];
+    foreach ($string_keys as $key) {
+      $strings[] = [
+        'key' => $key,
+        'value' => trim(preg_replace("/[\r\n]+/", '', $checkout_settings->get($key))),
+      ];
+    }
+
     $cache_tags = [];
     // If logged in user.
     if ($this->currentUser->isAuthenticated()) {
@@ -356,8 +371,8 @@ class AlshayaSpcController extends ControllerBase {
     $cache_tags = Cache::mergeTags($cache_tags, $cache_tag);
 
     return [
-      '#type' => 'markup',
-      '#markup' => '<div id="spc-checkout-confirmation"></div>',
+      '#theme' => 'spc_confirmation',
+      '#strings' => $strings,
       '#attached' => [
         'library' => [
           'alshaya_spc/checkout-confirmation',
@@ -365,7 +380,13 @@ class AlshayaSpcController extends ControllerBase {
         ],
         'drupalSettings' => $settings,
       ],
-
+      '#cache' => [
+        'contexts' => [
+          'languages:' . LanguageInterface::TYPE_INTERFACE,
+          'session',
+        ],
+        'tags' => $cache_tags,
+      ],
     ];
   }
 
