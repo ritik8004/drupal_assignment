@@ -12,14 +12,14 @@ export default class CompletePurchase extends React.Component {
    */
   placeOrder = (e) => {
     e.preventDefault();
-
+    const { cart, validateBeforePlaceOrder } = this.props;
     // If purchase button is not clickable.
-    if (!this.completePurchaseButtonActive(this.props.cart)) {
+    if (!this.completePurchaseButtonActive(cart)) {
       return false;
     }
 
     try {
-      this.props.validateBeforePlaceOrder();
+      validateBeforePlaceOrder();
     } catch (error) {
       // Error 200 means everything is fine.
       // Place order will be done after payment validation is completed.
@@ -27,11 +27,12 @@ export default class CompletePurchase extends React.Component {
         console.error(error);
       }
 
-      return;
+      return null;
     }
 
-    const { cart } = this.props;
     placeOrder(cart.selected_payment_method);
+
+    return null;
   };
 
   /**
@@ -48,10 +49,9 @@ export default class CompletePurchase extends React.Component {
     if (cart.cart.billing_address !== null) {
       if (cart.cart.delivery_type === 'hd') {
         isBillingSet = true;
-      }
-      // For CnC, user needs to actually fill the billing address.
-      else if (cart.cart.billing_address.city.length > 0
+      } else if (cart.cart.billing_address.city.length > 0
         && cart.cart.billing_address.city !== 'NONE') {
+        // For CnC, user needs to actually fill the billing address.
         isBillingSet = true;
       }
     }
@@ -70,12 +70,12 @@ export default class CompletePurchase extends React.Component {
 
   render() {
     const { cart } = this.props;
-    const class_name = this.completePurchaseButtonActive(cart)
+    const className = this.completePurchaseButtonActive(cart)
       ? 'active'
       : 'in-active';
 
     return (
-      <div className={`checkout-link submit ${class_name}`}>
+      <div className={`checkout-link submit ${className}`}>
         {window.innerWidth < 768
           && (
           <div className="order-preview">
