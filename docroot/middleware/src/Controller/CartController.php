@@ -147,6 +147,13 @@ class CartController {
 
     $data = $this->cart->getCart();
 
+    // Check customer email And check drupal session customer id to validate,
+    // if current cart is associated with logged in user or not.
+    if (empty($data['cart']['customer']['email']) && $customer_id = $this->getDrupalInfo('customer_id')) {
+      $this->cart->associateCartToCustomer($customer_id);
+      $data = $this->cart->getCart();
+    }
+
     // If there is any exception/error, return as is with exception message
     // without processing further.
     if (!empty($data['error'])) {
