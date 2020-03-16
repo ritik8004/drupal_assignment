@@ -109,7 +109,9 @@ class AlshayaSpcOrderController extends ControllerBase {
       case 'place order success':
         $session = $request->getSession();
         $previous_order_id = $session->get('last_order_id');
-        Cache::invalidateTags(['order:' . $previous_order_id]);
+        if ($previous_order_id) {
+          Cache::invalidateTags(['order:' . $previous_order_id]);
+        }
         $session->set('last_order_id', $order_id);
         if ($this->currentUser->isAnonymous() || !$this->alshayaCustomerIsCustomer($this->currentUser)) {
           // Store the email address of customer in session.
