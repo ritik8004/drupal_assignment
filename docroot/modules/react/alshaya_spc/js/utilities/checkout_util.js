@@ -94,6 +94,13 @@ export const addShippingInCart = function (action, data) {
           removeFullScreenLoader();
           return null;
         }
+
+        // If there is no error on shipping update.
+        if (response.data.error === undefined) {
+          // Remove localstorage so that user fills billing again.
+          localStorage.removeItem('billing_shipping_different');
+        }
+
         return response.data;
       },
       (error) =>
