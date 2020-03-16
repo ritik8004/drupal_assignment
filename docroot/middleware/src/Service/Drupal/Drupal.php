@@ -91,7 +91,7 @@ class Drupal {
     $data['action'] = $event;
 
     $client = $this->drupalInfo->getDrupalApiClient();
-    $url = sprintf('/%s/spc/checkout-event?XDEBUG_SESSION_START=PHPSTORM', $this->drupalInfo->getDrupalLangcode());
+    $url = sprintf('/%s/spc/checkout-event', $this->drupalInfo->getDrupalLangcode());
     $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
 
     $options = [
