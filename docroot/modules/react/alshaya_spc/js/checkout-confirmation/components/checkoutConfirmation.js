@@ -50,9 +50,9 @@ class CheckoutConfirmation extends React.Component {
     if (wait) {
       return <Loading loadingMessage={Drupal.t('loading order ...')} />;
     }
-    const items_qty = drupalSettings.number_of_items;
-    const items = drupalSettings.items;
-    const totals = drupalSettings.totals;
+    const items_qty = drupalSettings.order_details.number_of_items;
+    const items = drupalSettings.order_details.items;
+    const totals = drupalSettings.order_details.totals;
     const in_stock = [];
     const promo = [];
 

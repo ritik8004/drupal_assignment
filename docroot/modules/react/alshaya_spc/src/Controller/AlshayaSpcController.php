@@ -331,10 +331,10 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     $settings = [
-      'customer_email' => $order['email'],
-      'order_number' => $order['increment_id'],
-      'transaction_id' => $order['order_id'],
       'order_details' => [
+        'customer_email' => $order['email'],
+        'order_number' => $order['increment_id'],
+        'transaction_id' => $order['order_id'],
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
         'payment_method' => $order['payment']['method_title'],
@@ -342,9 +342,9 @@ class AlshayaSpcController extends ControllerBase {
         'expected_delivery' => '1-2 days',
         'number_of_items' => count($order['items']),
         'delivery_type_info' => $orderDetails,
+        'totals' => $totals,
+        'items' => $productList,
       ],
-      'totals' => $totals,
-      'items' => $productList,
     ];
 
     $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');

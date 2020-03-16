@@ -4,9 +4,9 @@ import OrderSummaryItem from '../OrderSummaryItem';
 export default class OrderSummary extends React.Component {
   render() {
     const customerName = drupalSettings.order_details.customer_name;
-    const customEmail = drupalSettings.customer_email;
-    const orderNumber = drupalSettings.order_number;
-    const transactionId = drupalSettings.transaction_id;
+    const customEmail = drupalSettings.order_details.customer_email;
+    const orderNumber = drupalSettings.order_details.order_number;
+    const transactionId = drupalSettings.order_details.transaction_id;
     const addressLine1 = drupalSettings.order_details.delivery_type_info.delivery_address.address_line1;
     const addressLine2 = drupalSettings.order_details.delivery_type_info.delivery_address.address_line2;
     const locality = drupalSettings.order_details.delivery_type_info.delivery_address.locality;
