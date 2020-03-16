@@ -339,6 +339,8 @@ class AlshayaSpcController extends ControllerBase {
 
     // @todo: Pull order details from MDC for the recent order.
     $order = $this->orderHelper->getOrder($data['order_id'], $data['email']);
+    global $_alshaya_acm_checkout_last_order;
+    $_alshaya_acm_checkout_last_order = $order;
 
     // Get order type hd/cnc and other details.
     $orderDetails = $this->orderHelper->getOrderTypeDetails($order);

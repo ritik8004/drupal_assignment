@@ -13,8 +13,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Implements hook_theme().
@@ -315,52 +313,8 @@ function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = '
  *   Order array if found.
  */
 function _alshaya_acm_checkout_get_last_order_from_session($reset = FALSE) {
-  static $order;
-
-  if (!empty($order)) {
-    return $order;
-  }
-
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
-
-  $session = \Drupal::request()->getSession();
-  $order_id = $session->get('last_order_id');
-
-  // Throw access denied if nothing in session.
-  if (empty($order_id)) {
-    throw new AccessDeniedHttpException();
-  }
-
-  if (\Drupal::currentUser()->isAnonymous() || !alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
-    $email = $session->get('email_order_' . $order_id);
-  }
-  else {
-    $email = \Drupal::currentUser()->getEmail();
-  }
-
-  // If flag is set to reset cache.
-  if ($reset) {
-    /** @var \Drupal\alshaya_acm_customer\OrdersManager $orders_manager */
-    $orders_manager = \Drupal::service('alshaya_acm_customer.orders_manager');
-    $orders_manager->clearOrderCache($email);
-  }
-
-  $orders = alshaya_acm_customer_get_user_orders($email);
-  $order_index = array_search($order_id, array_column($orders, 'order_id'));
-
-  if ($order_index === FALSE) {
-    // If we don't find the order in first go, we clear cache and search again.
-    if (!$reset) {
-      _alshaya_acm_checkout_get_last_order_from_session(TRUE);
-    }
-
-    // We didn't find even after clearing cache. Throw error now.
-    throw new NotFoundHttpException();
-  }
-
-  $order = $orders[$order_index];
-
-  return $order;
+  global $_alshaya_acm_checkout_last_order;
+  return $_alshaya_acm_checkout_last_order ?? [];
 }
 
 /**
