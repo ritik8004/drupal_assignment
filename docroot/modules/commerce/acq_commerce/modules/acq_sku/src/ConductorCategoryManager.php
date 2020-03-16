@@ -372,8 +372,8 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         }
 
         $this->results['updated'][] = $category['category_id'];
-        // Set a flag wheather category is new or updated.
-        $term->isNewCategory = 0;
+        // Set a flag whether category is new or updated.
+        $term->isNewCategory = FALSE;
       }
       else {
         // Create the term entity.
@@ -386,8 +386,8 @@ class ConductorCategoryManager implements CategoryManagerInterface {
           'langcode' => $langcode,
         ]);
 
-        // Set a flag wheather category is new or updated.
-        $term->isNewCategory = 1;
+        // Set a flag whether category is new or updated.
+        $term->isNewCategory = TRUE;
         $this->results['created'][] = $category['category_id'];
       }
 
