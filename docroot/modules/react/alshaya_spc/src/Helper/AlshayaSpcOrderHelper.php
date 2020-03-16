@@ -230,6 +230,7 @@ class AlshayaSpcOrderHelper {
     }
 
     // @TODO: Pull order details from MDC for the recent order.
+    $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
     $orders = alshaya_acm_customer_get_user_orders($data['email']);
     $order_index = array_search($data['order_id'], array_column($orders, 'order_id'));
 

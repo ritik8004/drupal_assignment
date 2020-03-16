@@ -11,6 +11,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Class AlshayaSpcCheckoutEventController.
@@ -111,7 +112,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
 
         // Add success message in logs.
         $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [
-          '@cart_id' => $cart['cart_id'],
+          '@cart_id' => $cart['id'],
           '@order_id' => $order_id,
           '@method' => $payment_method,
         ]);
