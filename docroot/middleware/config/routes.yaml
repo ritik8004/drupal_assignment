@@ -52,3 +52,13 @@ knet_payment_error:
     path: /payment/knet-error/{state_key}
     controller: App\Controller\PaymentController::handleKnetError
     methods: GET
+
+cybersource_payment_token:
+    path: /payment/cybersource/get-token
+    controller: App\Controller\PaymentController::getCybersourceToken
+    methods: POST
+
+cybersource_payment_finalise:
+    path: /payment/cybersource/finalise
+    controller: App\Controller\PaymentController::finaliseCybersource
+    methods: POST
