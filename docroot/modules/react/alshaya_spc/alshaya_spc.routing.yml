@@ -90,7 +90,7 @@ alshaya_spc.customer:
 alshaya_spc.checkout_event:
   path: '/spc/checkout-event'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcOrderController::setOrderIdSession'
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCheckoutEventController::postCheckoutEvent'
   methods: [POST]
   requirements:
     _permission: 'access content'

@@ -15,9 +15,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class AlshayaSpcCustomerController.
+ * Class AlshayaSpcCheckoutEventController.
  */
-class AlshayaSpcOrderController extends ControllerBase {
+class AlshayaSpcCheckoutEventController extends ControllerBase {
 
   /**
    * Orders manager.
@@ -96,7 +96,7 @@ class AlshayaSpcOrderController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function setOrderIdSession(Request $request) {
+  public function postCheckoutEvent(Request $request) {
     $action = $request->request->get('action');
     $order_id = $request->request->get('order_id');
     $cart = $request->request->get('cart');
