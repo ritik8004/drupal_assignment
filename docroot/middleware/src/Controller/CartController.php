@@ -626,11 +626,25 @@ class CartController {
    */
   public function placeOrder(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
-    if (!isset($request_content['cart_id'], $request_content['data'])) {
+    if (!isset($request_content['data'])) {
       return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
+    // Get Cart data before placeOrder otherwise cartData will be null.
+    $cartData = $this->cart->getCart();
     $result = $this->cart->placeOrder($request_content['data']);
+    if ($result['success']) {
+      $last_order = $result['order_id'];
+      // Post order id and cart data to Drupal.
+      $data = [
+        'action' => 'place order success',
+        'order_id' => (int) $last_order,
+        'cart' => $cartData,
+        'payment_method' => $request_content['data']['paymentMethod']['method'],
+      ];
+      $this->drupal->postOrderData($data);
+    }
+
     return new JsonResponse($result);
   }
 

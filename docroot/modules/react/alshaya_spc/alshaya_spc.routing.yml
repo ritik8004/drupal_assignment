@@ -85,4 +85,12 @@ alshaya_spc.customer:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::getUserCustomerId'
   methods: [GET]
   requirements:
+    _role: 'authenticated'
+
+alshaya_spc.checkout_event:
+  path: '/spc/checkout-event'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCheckoutEventController::postCheckoutEvent'
+  methods: [POST]
+  requirements:
     _permission: 'access content'

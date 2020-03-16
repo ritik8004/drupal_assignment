@@ -26,6 +26,11 @@ function alshaya_spc_theme($existing, $type, $theme, $path) {
         'strings' => [],
       ],
     ],
+    'spc_confirmation' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
   ];
 }
 
