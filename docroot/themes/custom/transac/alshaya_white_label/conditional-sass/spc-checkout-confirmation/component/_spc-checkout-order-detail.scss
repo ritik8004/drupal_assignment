@@ -20,6 +20,14 @@
         max-width: 15.125rem;
         display: inline-block;
         text-align: $right;
+
+        .spc-address-name {
+          display: block;
+          font-family: $alshaya-bold;
+          font-weight: normal;
+          margin-bottom: 0.3125rem;
+          color: $spc-checkout-order-detail-label;
+        }
       }
     }
   }

@@ -223,7 +223,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
         break;
 
       case 'alshaya_spc.checkout.confirmation':
-        $order = _alshaya_acm_checkout_get_last_order_from_session();
+        $order = _alshaya_acm_checkout_get_last_order_from_session(TRUE);
 
         // We check if we have valid order id.
         if (empty($order)) {

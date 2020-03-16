@@ -76,7 +76,7 @@ export default class AddressList extends React.Component {
     const addressItem = [];
     Object.entries(addressList).forEach(([key, address]) => {
       const isSelected = (
-        cart.cart.shipping_address.customer_address_id === address.address_mdc_id
+        cart.cart.shipping_address.customer_address_id.toString() === address.address_mdc_id
       );
       addressItem.push(
         <AddressItem

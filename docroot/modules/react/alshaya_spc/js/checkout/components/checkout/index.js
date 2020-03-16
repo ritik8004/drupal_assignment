@@ -80,6 +80,10 @@ export default class Checkout extends React.Component {
             cart_obj = { cart: result };
           }
           addInfoInStorage(cart_obj);
+          // Check cart is associated with customer or not, and make api call
+          // to associate it with logged in customer.
+          // For newly created and logged user, cart association does not
+          // happen with restore cart. hence, the api call.
           checkCartCustomer(cart_obj).then((updated) => {
             if (updated) {
               cart_obj = getInfoFromStorage();

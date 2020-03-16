@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
+use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -72,6 +73,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $areaTermsHelper;
 
   /**
+   * Helper class for order processing.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper
+   */
+  protected $orderHelper;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -88,6 +96,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Entity type manager.
    * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_term_helper
    *   Address terms helper.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper $orderHelper
+   *   Order details helper.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -96,7 +106,8 @@ class AlshayaSpcController extends ControllerBase {
     MobileNumberUtilInterface $mobile_util,
     AccountProxyInterface $current_user,
     EntityTypeManagerInterface $entity_type_manager,
-    AddressBookAreasTermsHelper $areas_term_helper
+    AddressBookAreasTermsHelper $areas_term_helper,
+    AlshayaSpcOrderHelper $orderHelper
   ) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
@@ -105,6 +116,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
     $this->areaTermsHelper = $areas_term_helper;
+    $this->orderHelper = $orderHelper;
   }
 
   /**
@@ -118,7 +130,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('mobile_number.util'),
       $container->get('current_user'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_addressbook.area_terms_helper')
+      $container->get('alshaya_addressbook.area_terms_helper'),
+      $container->get('alshaya_spc.order_helper')
     );
   }
 
@@ -293,14 +306,88 @@ class AlshayaSpcController extends ControllerBase {
    */
   public function checkoutConfirmation() {
     // @todo: Pull order details from MDC for the recent order.
+    $order = $this->orderHelper->getLastOrderFromSession(TRUE);
+
+    // Get order type hd/cnc and other details.
+    $orderDetails = $this->orderHelper->getOrderTypeDetails($order);
+
+    // Get formatted customer phone number.
+    $phone_number = $this->mobileUtil->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+
+    // Order Totals.
+    $totals = [
+      'subtotal_incl_tax' => $order['totals']['sub'],
+      'shipping_incl_tax' => $order['totals']['shipping'],
+      'base_grand_total' => $order['totals']['grand'],
+      'discount_amount' => $order['totals']['discount'],
+      'free_delivery' => 'false',
+      'surcharge' => $order['extension']['surcharge_incl_tax'],
+    ];
+
+    // Get Products.
+    $productList = [];
+    foreach ($order['items'] as $sku => $item) {
+      $productList[$sku] = $this->orderHelper->getSkuDetails($sku);
+    }
+
+    $settings = [
+      'order_details' => [
+        'customer_email' => $order['email'],
+        'order_number' => $order['increment_id'],
+        'transaction_id' => $order['order_id'],
+        'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
+        'mobile_number' => $phone_number,
+        'payment_method' => $order['payment']['method_title'],
+        // @todo Get exepected delivery term.
+        'expected_delivery' => '1-2 days',
+        'number_of_items' => count($order['items']),
+        'delivery_type_info' => $orderDetails,
+        'totals' => $totals,
+        'items' => $productList,
+      ],
+    ];
+
+    $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+
+    $string_keys = [
+      'cod_surcharge_label',
+      'cod_surcharge_description',
+      'cod_surcharge_short_description',
+      'cod_surcharge_tooltip',
+    ];
+    foreach ($string_keys as $key) {
+      $strings[] = [
+        'key' => $key,
+        'value' => trim(preg_replace("/[\r\n]+/", '', $checkout_settings->get($key))),
+      ];
+    }
+
+    $cache_tags = [];
+    // If logged in user.
+    if ($this->currentUser->isAuthenticated()) {
+      $user = $this->entityTypeManager->getStorage('user')
+        ->load($this->currentUser->id());
+      $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
+    }
+    $cache_tag = ['order:' . $order['order_id']];
+    $cache_tags = Cache::mergeTags($cache_tags, $cache_tag);
+
     return [
-      '#type' => 'markup',
-      '#markup' => '<div id="spc-checkout-confirmation"></div>',
+      '#theme' => 'spc_confirmation',
+      '#strings' => $strings,
       '#attached' => [
         'library' => [
           'alshaya_spc/checkout-confirmation',
           'alshaya_white_label/spc-checkout-confirmation',
         ],
+        'drupalSettings' => $settings,
+      ],
+      '#cache' => [
+        'contexts' => [
+          'languages:' . LanguageInterface::TYPE_INTERFACE,
+          'session',
+        ],
+        'tags' => $cache_tags,
       ],
     ];
   }

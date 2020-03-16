@@ -1,5 +1,6 @@
 import React from 'react';
 import Cookies from 'js-cookie';
+import OrderSummaryBlock from '../../utilities/order-summary-block';
 import Loading from '../../utilities/loading';
 import OrderSummary from './OrderSummary';
 import { fetchOrderData } from '../../utilities/get_order';
@@ -49,6 +50,11 @@ class CheckoutConfirmation extends React.Component {
     if (wait) {
       return <Loading loadingMessage={Drupal.t('loading order ...')} />;
     }
+    const items_qty = drupalSettings.order_details.number_of_items;
+    const items = drupalSettings.order_details.items;
+    const totals = drupalSettings.order_details.totals;
+    const in_stock = [];
+    const promo = [];
 
     return (
       <>
@@ -59,6 +65,9 @@ class CheckoutConfirmation extends React.Component {
         <div className="spc-main">
           <div className="spc-content">
             <OrderSummary />
+          </div>
+          <div className="spc-sidebar">
+            <OrderSummaryBlock item_qty={items_qty} items={items} totals={totals} in_stock={in_stock} cart_promo={promo} show_checkout_button={false} />
           </div>
         </div>
         <div className="spc-post-content" />
