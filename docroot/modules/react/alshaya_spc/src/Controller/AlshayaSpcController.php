@@ -12,8 +12,10 @@ use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_addressbook\AddressBookAreasTermsHelper;
+use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class AlshayaSpcController.
@@ -306,29 +308,61 @@ class AlshayaSpcController extends ControllerBase {
   /**
    * Verifies the mobile number.
    *
-   * @param string $mobile
-   *   Mobile number to verify.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
    */
-  public function verifyMobileNumber(string $mobile) {
-    if (empty($mobile)) {
+  public function validateInfo(Request $request) {
+    $data = $request->getContent();
+    if (!empty($data)) {
+      $data = json_decode($data, TRUE);
+    }
+
+    if (empty($data)) {
       return new JsonResponse(['status' => FALSE]);
     }
 
-    try {
-      $country_code = _alshaya_custom_get_site_level_country_code();
-      $country_mobile_code = $this->mobileUtil->getCountryCode($country_code);
-      if ($this->mobileUtil->testMobileNumber('+' . $country_mobile_code . $mobile)) {
-        return new JsonResponse(['status' => TRUE]);
+    $status = [];
+
+    foreach ($data as $key => $value) {
+      $status[$key] = FALSE;
+
+      switch ($key) {
+        case 'mobile':
+          $country_code = _alshaya_custom_get_site_level_country_code();
+          $country_mobile_code = $this->mobileUtil->getCountryCode($country_code);
+          try {
+            if ($this->mobileUtil->testMobileNumber('+' . $country_mobile_code . $value)) {
+              $status[$key] = TRUE;
+            }
+          }
+          catch (\Exception $e) {
+            $status[$key] = FALSE;
+          }
+
+          break;
+
+        case 'email':
+          // For email validation we do two checks:
+          // 1. email domain is valid
+          // 2. email is not of an existing customer.
+          $domain = explode('@', $value)[1];
+          $dns_records = dns_get_record($domain);
+          if (empty($dns_records)) {
+            $status[$key] = 'invalid';
+          }
+          else {
+            $user = user_load_by_mail($value);
+            $status[$key] = ($user instanceof UserInterface) ? 'exists' : '';
+          }
+
+          break;
       }
     }
-    catch (\Exception $e) {
-      return new JsonResponse(['status' => FALSE]);
-    }
 
-    return new JsonResponse(['status' => FALSE]);
+    return new JsonResponse(['status' => TRUE] + $status);
   }
 
 }

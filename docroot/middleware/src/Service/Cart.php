@@ -362,23 +362,6 @@ class Cart {
       return $cart;
     }
 
-    // If cart has no customer or email provided is different,
-    // then create and assign customer to the cart.
-    if (empty($shipping_data['customer_address_id']) && (empty($cart['cart']['customer']['id']) ||
-      $cart['cart']['customer']['email'] !== $data['shipping']['shipping_address']['email'])) {
-      $customer = $this->createCustomer($data['shipping']['shipping_address']);
-      // If any error.
-      if ($customer['error']) {
-        return $customer;
-      }
-
-      $associated_customer = $this->associateCartToCustomer($customer['id']);
-      // If any error.
-      if ($associated_customer['error']) {
-        return $associated_customer;
-      }
-    }
-
     return $this->updateBilling($data['shipping']['shipping_address']);
   }
 
@@ -432,15 +415,13 @@ class Cart {
    *   Shipping address info.
    * @param string $action
    *   Action to perform.
-   * @param bool $create_customer
-   *   True to create customer, false otherwise.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function addCncShippingInfo(array $shipping_data, string $action, $create_customer = TRUE) {
+  public function addCncShippingInfo(array $shipping_data, string $action) {
     $data = [
       'extension' => (object) [
         'action' => $action,
@@ -478,13 +459,6 @@ class Cart {
       'store_code' => $store['code'],
     ];
 
-    if ($create_customer) {
-      $customer = $this->createCustomer($data['shipping']['shipping_address']);
-      if (!empty($customer['message'])) {
-        return $this->getErrorResponse($customer['message'], 422);
-      }
-      $this->associateCartToCustomer($customer['id']);
-    }
     $cart = $this->updateCart($data);
 
     // If cart update has error.
@@ -522,37 +496,6 @@ class Cart {
   }
 
   /**
-   * Create customer in magento.
-   *
-   * @param array $customer_data
-   *   Customer data.
-   *
-   * @return array|mixed
-   *   Json decoded response.
-   */
-  public function createCustomer(array $customer_data) {
-    $url = 'customers';
-
-    try {
-      $data['customer'] = [
-        'email' => $customer_data['email'],
-        'firstname' => $customer_data['firstname'] ?? '',
-        'lastname' => $customer_data['lastname'] ?? '',
-        'prefix' => $customer_data['prefix'] ?? '',
-        'dob' => $customer_data['dob'] ?? '',
-        'groupId' => $customer_data['group_id'] ?? 1,
-        'store_id' => $this->magentoInfo->getMagentoStoreId(),
-      ];
-
-      return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
-    }
-    catch (\Exception $e) {
-      // Exception handling here.
-      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
-    }
-  }
-
-  /**
    * Adds a customer to cart.
    *
    * @param int $customer_id
@@ -572,7 +515,16 @@ class Cart {
         'store_id' => $this->magentoInfo->getMagentoStoreId(),
       ];
 
-      return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      $result = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+
+      // After association restore the cart.
+      if ($result) {
+        self::$cart = NULL;
+        $this->getCart();
+        return TRUE;
+      }
+
+      throw new \Exception('Unable to associate cart', 500);
     }
     catch (\Exception $e) {
       // Exception handling here.
@@ -814,29 +766,6 @@ class Cart {
   }
 
   /**
-   * Check if a customer by given email exists or not.
-   *
-   * @param string $email
-   *   Email address.
-   *
-   * @return mixed
-   *   Response.
-   */
-  public function customerCheckByMail(string $email) {
-    $url = 'customers/search';
-    $query['query'] = [
-      'searchCriteria[filterGroups][0][filters][0][field]' => 'email',
-      'searchCriteria[filterGroups][0][filters][0][value]' => $email,
-      'searchCriteria[filterGroups][0][filters][0][condition_type]' => 'eq',
-      'searchCriteria[filterGroups][1][filters][0][field]' => 'store_id',
-      'searchCriteria[filterGroups][1][filters][0][value]' => $this->magentoInfo->getMagentoStoreId(),
-      'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'in',
-    ];
-
-    return $this->magentoApiWrapper->doRequest('GET', $url, $query);
-  }
-
-  /**
    * Wrapper function to get cleaned cart data to log.
    *
    * @param array $cart
@@ -861,6 +790,22 @@ class Cart {
 
     if (isset($cart, $cart['cart']['customer'], $cart['cart']['customer']['id'])) {
       return $cart['cart']['customer']['id'];
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Return customer email from cart in session.
+   *
+   * @return string|null
+   *   Return customer email or null.
+   */
+  public function getCartCustomerEmail() {
+    $cart = $this->getCart();
+
+    if (isset($cart, $cart['cart']['customer'], $cart['cart']['customer']['email'])) {
+      return $cart['cart']['customer']['email'];
     }
 
     return NULL;

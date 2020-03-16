@@ -4,7 +4,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
   triggerCheckoutEvent,
-  addBillingInCart,
+  addBillingInCart, validateInfo,
 } from './checkout_util';
 import {
   extractFirstAndLastName,
@@ -34,19 +34,27 @@ export const checkoutAddressProcess = function (e, cart) {
   // Get Prepare address.
   const form_data = prepareAddressDataFromForm(e.target.elements);
 
-  const mobileValidationRequest = axios.get(`verify-mobile/${e.target.elements.mobile.value}`);
-  const customerValidationReuest = axios.get(`${drupalSettings.alshaya_spc.middleware_url}/customer/${e.target.elements.email.value}`);
+  const validationData = {
+    'mobile': e.target.elements.mobile.value,
+  };
 
-  // API call to validate mobile number and email address.
-  return axios.all([mobileValidationRequest, customerValidationReuest]).then(axios.spread((...responses) => {
-    const mobileResponse = responses[0].data;
-    const customerResponse = responses[1].data;
+  if (e.target.elements.email !== undefined && e.target.elements.email.value.toString().length > 0) {
+    validationData['email'] = e.target.elements.email.value;
+  }
+
+  const validationRequest = validateInfo(validationData);
+  validationRequest.then((response) => {
+    if (!response || response.data.status === undefined || !response.data.status) {
+      // API Call failed.
+      // @TODO: Handle error.
+      return false;
+    }
 
     // Flag to determine if there any error.
     let isError = false;
 
     // If invalid mobile number.
-    if (mobileResponse.status === false) {
+    if (response.data.mobile === false) {
       document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
       document.getElementById('mobile-error').classList.add('error');
       isError = true;
@@ -54,25 +62,23 @@ export const checkoutAddressProcess = function (e, cart) {
       // Remove error class and any error message.
       document.getElementById('mobile-error').innerHTML = '';
       document.getElementById('mobile-error').classList.remove('error');
-      isError = false;
     }
 
-    // If customer already exists.
-    if (cart.shipping_address === null
-      && customerResponse.exists === true) {
-      document.getElementById('email-error').innerHTML = Drupal.t('Customer already exists.');
-      document.getElementById('email-error').classList.add('error');
-      isError = true;
-    } else if ((cart.shipping_address !== undefined && cart.shipping_address !== null)
-      && cart.shipping_address.email !== form_data.static.email
-      && customerResponse.exists === true) {
-      document.getElementById('email-error').innerHTML = Drupal.t('Customer already exists.');
-      document.getElementById('email-error').classList.add('error');
-      isError = true;
-    } else {
-      // Remove error class and any error message.
-      document.getElementById('email-error').innerHTML = '';
-      document.getElementById('email-error').classList.remove('error');
+    // Do the processing only if we did email validation.
+    if (response.data.email !== undefined) {
+      if (response.data.email === 'invalid') {
+        document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', {'%mail': data['email']});
+        document.getElementById('email-error').classList.add('error');
+        isError = true;
+      } else if (response.data.email === 'exists') {
+        document.getElementById('email-error').innerHTML = Drupal.t('Customer already exists.');
+        document.getElementById('email-error').classList.add('error');
+        isError = true;
+      } else {
+        // Remove error class and any error message.
+        document.getElementById('email-error').innerHTML = '';
+        document.getElementById('email-error').classList.remove('error');
+      }
     }
 
     if (isError) {
@@ -104,8 +110,8 @@ export const checkoutAddressProcess = function (e, cart) {
         triggerCheckoutEvent('refreshCartOnAddress', cart_data);
       });
     }
-  })).catch((errors) => {
-    // react on errors.
+  }).catch((error) => {
+    console.error(error);
   });
 };
 
@@ -281,13 +287,12 @@ export const processBillingUpdateFromForm = (e, shipping) => {
 
   const target = e.target.elements;
 
-  const mobile = target.mobile.value.trim();
-  const mobile_valid = axios.get(`verify-mobile/${mobile}`);
-  if (mobile_valid instanceof Promise) {
-    mobile_valid.then((result) => {
-      if (result.status === 200) {
+  const validationRequest = validateInfo({mobile: target.mobile.value.trim()});
+  if (validationRequest instanceof Promise) {
+    validationRequest.then((result) => {
+      if (result.status === 200 && result.data.status) {
         // If not valid mobile number.
-        if (result.data.status === false) {
+        if (result.data.mobile === false) {
           // Removing loader in case validation fail.
           removeFullScreenLoader();
           document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
@@ -337,6 +342,9 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           }
         }
       }
+    }).catch((error) => {
+      console.error(error);
     });
   }
 };
+
