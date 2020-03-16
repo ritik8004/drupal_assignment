@@ -65,10 +65,20 @@ export default class HDBillingAddress extends React.Component {
   componentDidMount() {
     this._isMounted = true;
     document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+    document.addEventListener('onShippingAddressUpdate', this.processShippingUpdate, false);
   }
 
   componentWillUnmount() {
     this._isMounted = false;
+  }
+
+  /**
+   * Handle shipping update event.
+   */
+  processShippingUpdate = (e) => {
+    // Remove local storage so that user fills billing again.
+    localStorage.removeItem(localStorageKey);
+    this.setStateAndChecked(true);
   }
 
   /**
