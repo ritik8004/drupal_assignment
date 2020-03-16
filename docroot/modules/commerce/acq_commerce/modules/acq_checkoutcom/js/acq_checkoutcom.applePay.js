@@ -103,6 +103,18 @@
         applePaySessionObject = new ApplePaySession(1, paymentRequest);
       }
       catch(e) {
+        // Adding datalayer for the exception error.
+        var label = 'Apple pay session error';
+        var errorMessage = 'Apple pay session could not be started';
+        var checkoutComErrorData = {
+          event: 'eventTracker',
+          eventCategory: 'Checkoutcom payment error',
+          eventAction: e.message + '-' + errorMessage,
+          eventLabel: label,
+          eventValue: 0,
+          nonInteraction: 0,
+        };
+        dataLayer.push(checkoutComErrorData);
         Drupal.checkoutComShowGlobalError(Drupal.t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
         $(document).trigger('apple_pay_cancel');
         return false;
