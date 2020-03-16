@@ -97,7 +97,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     showFullScreenLoader();
 
     if (selectedCard === 'existing') {
-      this.handleCheckoutResponse({ cvv: cvv.length > 0 ? encodeURIComponent(window.btoa(cvv)) : '', id: tokenizedCard });
+      this.handleCheckoutResponse({ cvv: !cvv ? '' : encodeURIComponent(window.btoa(cvv)), id: tokenizedCard });
     } else {
       const udf3 = (drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
         ? 'storeInVaultOnSuccess'
@@ -138,7 +138,6 @@ class PaymentMethodCheckoutCom extends React.Component {
         additional_data: { ...data, udf3, card_type: selectedCard },
       },
     };
-
     this.props.finalisePayment(paymentData);
   };
 
