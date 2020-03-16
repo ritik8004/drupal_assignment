@@ -4,12 +4,18 @@ import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CheckoutConfigurableOption from '../../../utilities/checkout-configurable-option';
 import SpecialPrice from '../../../utilities/special-price';
 
-export default class CheckoutCartItem extends React.Component {
-  render() {
-  	const {
-      title, relative_link, configurable_values, extra_data, original_price, final_price,
-    } = this.props.item;
-  	return (
+const CheckoutCartItem = (props) => {
+  const {
+    item: {
+      title,
+      relative_link,
+      configurable_values,
+      extra_data,
+      original_price,
+      final_price,
+    },
+  } = props;
+  return (
     <div className="product-item">
       <div className="spc-product-image">
         <CheckoutItemImage img_data={extra_data.cart_image} />
@@ -24,10 +30,11 @@ export default class CheckoutCartItem extends React.Component {
           </div>
         </div>
         <div className="spc-product-attributes">
-          { configurable_values.map((key, val) => <CheckoutConfigurableOption key={val} label={key} />) }
+          { configurable_values.map((key) => <CheckoutConfigurableOption key={`${key}-${Math.floor(Math.random() * 99)}`} label={key} />) }
         </div>
       </div>
     </div>
-    );
-  }
-}
+  );
+};
+
+export default CheckoutCartItem;
