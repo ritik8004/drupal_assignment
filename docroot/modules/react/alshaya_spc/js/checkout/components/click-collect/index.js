@@ -4,7 +4,7 @@ import Loading from '../../../utilities/loading';
 const ClickCollect = React.lazy(async () => {
   // Wait for fetchstore request to finish, before
   // We show click n collect with map.
-  await new Promise((resolve, reject) => {
+  await new Promise((resolve) => {
     const interval = setInterval(() => {
       if (window.fetchStore === 'finished') {
         clearInterval(interval);

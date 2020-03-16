@@ -15,6 +15,7 @@ const LocationSearchForm = React.forwardRef((props, ref) => (
     <button
       className="cc-near-me"
       id="edit-near-me"
+      type="button"
       onClick={(e) => props.getCurrentPosition(e)}
     >
       {Drupal.t('Near me')}
