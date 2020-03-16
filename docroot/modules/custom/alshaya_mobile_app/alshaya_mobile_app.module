@@ -88,15 +88,3 @@ function alshaya_mobile_app_alshaya_acm_promo_resource_alter(array &$data, NodeI
   $deeplink = \Drupal::service('alshaya_mobile_app.utility')->getDeepLink($node);
   $data['deeplink'] = $deeplink;
 }
-
-/**
- * Implements hook_path_update().
- */
-function alshaya_mobile_app_path_update($path) {
-  $mobileAppSettings = \Drupal::configFactory()->getEditable('alshaya_mobile_app.settings');
-  $pageKey = array_search(ltrim($path['original']['alias'], '/'), $mobileAppSettings->get('static_page_mappings'));
-
-  if ($pageKey) {
-    $mobileAppSettings->set('static_page_mappings.' . $pageKey, ltrim($path['alias'], '/'))->save();
-  }
-}
