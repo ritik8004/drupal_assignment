@@ -38,7 +38,9 @@ function alshaya_spc_install() {
 
   // Add translations.
   module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
-  _alshaya_spc_translations();
+  if ($translations = _alshaya_spc_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
 
 /**
