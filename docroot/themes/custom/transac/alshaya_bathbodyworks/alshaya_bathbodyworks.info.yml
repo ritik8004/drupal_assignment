@@ -71,6 +71,11 @@ libraries-override:
       theme:
         css/conditional-sass/spc-checkout/spc-checkout.ltr.css: css/conditional-sass/spc-checkout/spc-checkout.ltr.css
 
+  alshaya_white_label/spc-checkout-confirmation:
+    css:
+      theme:
+        css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css: css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css
+
   alshaya_white_label/spc-utils:
     css:
       theme:

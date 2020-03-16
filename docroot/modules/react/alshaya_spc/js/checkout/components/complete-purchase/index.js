@@ -31,7 +31,7 @@ export default class CompletePurchase extends React.Component {
     }
 
     const { cart } = this.props;
-    placeOrder(cart.cart.cart_id, cart.selected_payment_method);
+    placeOrder(cart.selected_payment_method);
   };
 
   /**

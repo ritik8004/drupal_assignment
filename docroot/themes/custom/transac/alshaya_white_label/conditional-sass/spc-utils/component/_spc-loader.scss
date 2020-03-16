@@ -6,11 +6,13 @@
 
   .spc-loader {
     background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
-    padding-#{$left}: 1.5rem;
+    padding-#{$left}: 2.5rem;
     background-size: contain;
     color: $spc-loader-text;
     min-width: 2rem;
     min-height: 2rem;
     font-size: 1.125rem;
+    display: flex;
+    align-items: center;
   }
 }

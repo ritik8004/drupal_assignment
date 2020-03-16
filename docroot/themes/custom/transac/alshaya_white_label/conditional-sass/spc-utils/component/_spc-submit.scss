@@ -14,8 +14,13 @@
   }
 
   &.in-active {
+    pointer-events: none;
     position: relative;
     cursor: default;
+
+    a {
+      pointer-events: none;
+    }
 
     &::before {
       content: '';
@@ -25,6 +30,7 @@
       bottom: 0;
       background: $_white_five_alpha_80;
       z-index: 3;
+      pointer-events: none;
       position: absolute;
     }
   }

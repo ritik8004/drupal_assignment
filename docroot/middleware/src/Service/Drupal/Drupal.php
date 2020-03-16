@@ -63,6 +63,38 @@ class Drupal {
   }
 
   /**
+   * Trigger event to let Drupal know about the update.
+   *
+   * @param string $event
+   *   Event to trigger..
+   * @param array $data
+   *   Data form checkout event.
+   *
+   * @return mixed
+   *   Result from drupal.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function triggerCheckoutEvent(string $event, array $data) {
+    $data['event'] = $event;
+
+    $client = $this->drupalInfo->getDrupalApiClient();
+    $url = sprintf('/%s/spc/checkout-event', $this->drupalInfo->getDrupalLangcode());
+    $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
+    $options = [
+      'headers' => [
+        'Host' => $this->drupalInfo->getDrupalBaseUrl(),
+        'Cookie' => $cookies->__toString(),
+      ],
+      'form_params' => $data,
+    ];
+
+    $response = $client->request('POST', $url, $options);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
+  /**
    * Get linked skus info from Drupal.
    *
    * @param array $skus

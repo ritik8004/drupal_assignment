@@ -147,6 +147,13 @@ class CartController {
 
     $data = $this->cart->getCart();
 
+    // Check customer email And check drupal session customer id to validate,
+    // if current cart is associated with logged in user or not.
+    if (empty($data['cart']['customer']['email']) && $customer_id = $this->getDrupalInfo('customer_id')) {
+      $this->cart->associateCartToCustomer($customer_id);
+      $data = $this->cart->getCart();
+    }
+
     // If there is any exception/error, return as is with exception message
     // without processing further.
     if (!empty($data['error'])) {
@@ -630,7 +637,7 @@ class CartController {
    */
   public function placeOrder(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
-    if (!isset($request_content['cart_id'], $request_content['data'])) {
+    if (!isset($request_content['data'])) {
       return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
@@ -640,6 +647,7 @@ class CartController {
       'success' => TRUE,
       'redirectUrl' => 'checkout/confirmation?id=' . $result['secure_order_id'],
     ];
+
     return new JsonResponse($response);
   }
 
