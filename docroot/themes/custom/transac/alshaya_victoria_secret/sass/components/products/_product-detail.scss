@@ -305,6 +305,10 @@
 }
 
 .basic-details-wrapper {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 2rem;
+  }
+
   .field--name-field-skus {
     #configurable_ajax {
       .configurable-select,

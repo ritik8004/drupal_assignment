@@ -52,4 +52,25 @@ class Helper {
     return $type ? $config[$type] : $config;
   }
 
+  /**
+   * Get saved cards for of given customer.
+   *
+   * @param int $customer_id
+   *   The customer id.
+   *
+   * @return array|mixed
+   *   Return array of cards.
+   */
+  public function getCustomerCards(int $customer_id) {
+    $url = sprintf('checkoutcom/getTokenList/?customer_id=%d', $customer_id);
+    try {
+      $card_list = $this->magentoApi->doRequest('GET', $url);
+    }
+    catch (\Exception $e) {
+      return NULL;
+    }
+
+    return $card_list;
+  }
+
 }

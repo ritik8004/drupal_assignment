@@ -4,7 +4,9 @@ import SectionTitle from '../../../utilities/section-title';
 import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
 
-const FixedFields = ({ default_val, showEmail, showFullName = true, subTitle }) => {
+const FixedFields = ({
+  default_val, showEmail, showFullName = true, subTitle,
+}) => {
   let defaultVal = '';
   if (default_val.length !== 0 && default_val.length !== 'undefined') {
     defaultVal = default_val.static;

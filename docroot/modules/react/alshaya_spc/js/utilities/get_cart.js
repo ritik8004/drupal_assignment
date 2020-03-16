@@ -30,6 +30,11 @@ export const cartAvailableInStorage = function () {
   if ((current_time - cart_data.cart.last_update) > expire_time
     || cart_data.cart.langcode === undefined
     || window.drupalSettings.path.currentLanguage !== cart_data.cart.langcode) {
+    // Do nothing if empty cart is there.
+    if (cart_data.cart.cart_id === null) {
+      return 'empty';
+    }
+
     return cart_data.cart.cart_id;
   }
 
@@ -39,6 +44,11 @@ export const cartAvailableInStorage = function () {
 export const fetchCartData = function () {
   // Check if cart available in storage.
   let cart = cartAvailableInStorage();
+
+  if (cart === 'empty') {
+    return;
+  }
+
   if (!cart) {
     // Prepare api url.
     var api_url = restoreCartApiUrl();
@@ -56,6 +66,7 @@ export const fetchCartData = function () {
       })
       .catch((error) => {
         // Processing of error here.
+        console.error(error);
       });
   }
   if (!Number.isInteger(cart)) {
@@ -90,6 +101,7 @@ export const fetchCartData = function () {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
+      console.error(error);
     });
 };
 

@@ -2,9 +2,9 @@
 
 namespace App\Service\Magento;
 
+use App\Service\Config\SystemSettings;
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class MagentoInfo.
@@ -12,78 +12,20 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class MagentoInfo {
 
   /**
-   * Alshaya commerce_third_party settings.
+   * System Settings.
    *
-   * @var array
+   * @var \App\Service\Config\SystemSettings
    */
-  protected $settings;
-
-  /**
-   * RequestStack Object.
-   *
-   * @var \Symfony\Component\HttpFoundation\Request
-   */
-  protected $request;
+  protected $systemSettings;
 
   /**
    * MagentoInfo constructor.
    *
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request
-   *   RequestStack Object.
+   * @param \App\Service\Config\SystemSettings $system_settings
+   *   System Settings.
    */
-  public function __construct(RequestStack $request) {
-    $this->request = $request->getCurrentRequest();
-    $this->setMagentoCredentials();
-  }
-
-  /**
-   * Initialize magento credentials.
-   */
-  protected function setMagentoCredentials() {
-    // Get site environment.
-    require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
-    $env = alshaya_get_site_environment();
-
-    // Get host_site_code or acsf_site_name based on environment.
-    $site_name = NULL;
-    if ($env === 'local') {
-      // Require local_sites.php file for host site code.
-      require DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/local_sites.php';
-      // @codingStandardsIgnoreLine
-      global $host_site_code;
-      $site_name = $host_site_code;
-    }
-    else {
-      // Require sites.inc and post-sites-php/includes.php for ACSF site_name.
-      require DRUPAL_ROOT . '/sites/g/sites.inc';
-      $host = rtrim($_SERVER['HTTP_HOST'], '.');
-      $data = gardens_site_data_refresh_one($host);
-      $GLOBALS['gardens_site_settings'] = $data['gardens_site_settings'];
-      require DRUPAL_ROOT . '/../factory-hooks/post-sites-php/includes.php';
-      global $_acsf_site_name;
-      $site_name = $_acsf_site_name;
-    }
-
-    // Include overrides.
-    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';
-
-    // Get magento (commerce_third_party) settings.
-    if (!empty($site_name)) {
-      $site_country_code = alshaya_get_site_country_code($site_name);
-      require DRUPAL_ROOT . '/../factory-hooks/environments/mapping.php';
-
-      // This is to remove `01/02` etc from env name.
-      if (substr($env, 0, 1) == '0') {
-        $env = substr($env, 2);
-      }
-
-      $commerce_settings = alshaya_get_commerce_third_party_settings(
-        $site_country_code['site_code'],
-        $site_country_code['country_code'],
-        $env
-      );
-      $this->settings = $commerce_settings ?? NULL;
-    }
+  public function __construct(SystemSettings $system_settings) {
+    $this->systemSettings = $system_settings;
   }
 
   /**
@@ -106,7 +48,7 @@ class MagentoInfo {
    *   Magento base url.
    */
   public function getMagentoBaseUrl() {
-    return !empty($this->settings) ? $this->settings['alshaya_api.settings']['magento_host'] : NULL;
+    return $this->systemSettings->getSettings('alshaya_api.settings')['magento_host'] ?? NULL;
   }
 
   /**
@@ -116,8 +58,8 @@ class MagentoInfo {
    *   Magento store code.
    */
   public function getMagentoStore() {
-    $lang = $this->request->query->get('lang', 'en');
-    return !empty($this->settings) ? $this->settings['magento_lang_prefix'][$lang] : NULL;
+    $lang = $this->systemSettings->getRequestLanguage();
+    return $this->systemSettings->getSettings('magento_lang_prefix')[$lang] ?? NULL;
   }
 
   /**
@@ -127,8 +69,8 @@ class MagentoInfo {
    *   Magento store id.
    */
   public function getMagentoStoreId() {
-    $lang = $this->request->query->get('lang', 'en');
-    return !empty($this->settings) ? $this->settings['store_id'][$lang] : NULL;
+    $lang = $this->systemSettings->getRequestLanguage();
+    return $this->systemSettings->getSettings('store_id')[$lang] ?? NULL;
   }
 
   /**
@@ -138,7 +80,7 @@ class MagentoInfo {
    *   Magento secret info.
    */
   public function getMagentoSecretInfo() {
-    return !empty($this->settings) ? $this->settings['alshaya_api.settings'] : NULL;
+    return $this->systemSettings->getSettings('alshaya_api.settings') ?? NULL;
   }
 
   /**

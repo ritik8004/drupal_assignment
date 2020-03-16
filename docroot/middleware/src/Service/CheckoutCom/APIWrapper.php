@@ -2,13 +2,17 @@
 
 namespace App\Service\CheckoutCom;
 
-use App\Service\Drupal\DrupalInfo;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * APIWrapper class.
  */
 class APIWrapper {
+
+  // Magento method, to set for 2d vault (tokenized card) transaction.
+  const CHECKOUT_COM_VAULT_METHOD = 'checkout_com_cc_vault';
 
   // Key that contains redirect url.
   const REDIRECT_URL = 'redirectUrl';
@@ -75,11 +79,11 @@ class APIWrapper {
   protected $helper;
 
   /**
-   * Service to get Drupal Info.
+   * RequestStack Object.
    *
-   * @var \App\Service\Drupal\DrupalInfo
+   * @var \Symfony\Component\HttpFoundation\Request
    */
-  protected $drupalInfo;
+  protected $request;
 
   /**
    * Mada Validator.
@@ -91,18 +95,18 @@ class APIWrapper {
   /**
    * APIWrapper constructor.
    *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   RequestStack Object.
    * @param \App\Service\CheckoutCom\Helper $helper
    *   Checkout.com Helper.
-   * @param \App\Service\Drupal\DrupalInfo $drupal_info
-   *   Service to get Drupal Info.
    * @param \App\Service\CheckoutCom\MadaValidator $mada_validator
    *   Mada Validator.
    */
-  public function __construct(Helper $helper,
-                              DrupalInfo $drupal_info,
+  public function __construct(RequestStack $request,
+                              Helper $helper,
                               MadaValidator $mada_validator) {
+    $this->request = $request->getCurrentRequest();
     $this->helper = $helper;
-    $this->drupalInfo = $drupal_info;
     $this->madaValidator = $mada_validator;
   }
 
@@ -292,17 +296,10 @@ class APIWrapper {
       $response = json_decode($result->getBody(), TRUE);
     }
     catch (\Exception $e) {
-      $msg = new FormattableMarkup(
-        '@action: @class during request: (@code) - @message',
-        [
-          '@class' => get_class($e),
-          '@code' => $e->getCode(),
-          '@message' => $e->getMessage(),
-        ]
-      );
+      $msg = sprintf('%s during request: (%s) - %s', get_class($e), $e->getCode(), $e->getMessage());
 
       // $this->logger->error($msg);
-      if ($e->getCode() == 404 || $e instanceof MalformedResponseException) {
+      if ($e->getCode() == 404) {
         throw new \Exception($msg);
       }
       elseif ($e instanceof RequestException) {
@@ -340,10 +337,19 @@ class APIWrapper {
       'value' => $this->getCheckoutAmount($cart['totals']['grand_total'], $cart['totals']['quote_currency_code']),
       'currency' => $cart['totals']['quote_currency_code'],
       'email' => $cart['cart']['customer']['email'],
-      'udf1' => $payment_data['udf1'] ?? '',
-      'udf3' => $payment_data['udf3'] ?? '',
-      'cardToken' => $payment_data['card_token_id'],
     ];
+
+    if (!empty($payment_data['card_token_id'])) {
+      // If the current card is "MADA" then set the value else empty.
+      $params['udf1'] = $payment_data['udf1'] ?? '';
+      // Save card for future - STORE_IN_VAULT_ON_SUCCESS.
+      $params['udf3'] = $payment_data['udf3'] ?? '';
+      $params['cardToken'] = $payment_data['card_token_id'];
+    }
+    elseif (!empty($payment_data['cardId'])) {
+      // Set cardID, cvv and udf2 = 'cardIdCharge' values.
+      $params = array_merge($params, $payment_data);
+    }
 
     // Set parameters required for 3d secure payment.
     $params['chargeMode'] = self::VERIFY_3DSECURE;
@@ -354,15 +360,16 @@ class APIWrapper {
       : self::AUTOCAPTURE_NO;
 
     $params['attemptN3D'] = FALSE;
+
     // Use the IP address from Acquia Cloud ENV variable.
-    $params['customerIp'] = $_ENV['AH_CLIENT_IP'] ?? '';
+    $params['customerIp'] = $_ENV['AH_CLIENT_IP'] ?? $this->request->getClientIp();
 
-    // Remove the hack for cloud dns resolution failure for non-prod urls.
-    $host = str_replace('.cdn.cloudflare.net', '', $this->drupalInfo->getDrupalHostUrl());
-    $params['successUrl'] = $host . '/middleware/public/payment/checkout-com-success';
-    $params['failUrl'] = $host . '/middleware/public/payment/checkout-com-error';
+    // We hard code HTTPS here as varnish request to middleware is always http.
+    $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
+    $params['successUrl'] = $host . 'checkout-com-success';
+    $params['failUrl'] = $host . 'checkout-com-error';
 
-    $params['trackId'] = $cart['cart']['extension']['real_reserved_order_id'];
+    $params['trackId'] = $cart['cart']['extension_attributes']['real_reserved_order_id'];
 
     $params['products'] = $this->getCartItems($cart['cart']['items']);
     $params['billingDetails'] = $this->getAddressDetails($cart['cart'], 'billing');

@@ -4,14 +4,17 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
   triggerCheckoutEvent,
-  addBillingInCart
+  addBillingInCart, validateInfo,
 } from './checkout_util';
 import {
-  extractFirstAndLastName
+  extractFirstAndLastName,
 } from './cart_customer_util';
 import {
-  gerAreaLabelById
+  gerAreaLabelById,
 } from './address_util';
+import {
+  getInfoFromStorage,
+} from './storage';
 
 /**
  * Process the data got from address form submission.
@@ -31,19 +34,27 @@ export const checkoutAddressProcess = function (e, cart) {
   // Get Prepare address.
   const form_data = prepareAddressDataFromForm(e.target.elements);
 
-  const mobileValidationRequest = axios.get(`verify-mobile/${e.target.elements.mobile.value}`);
-  const customerValidationReuest = axios.get(`${drupalSettings.alshaya_spc.middleware_url}/customer/${e.target.elements.email.value}`);
+  const validationData = {
+    'mobile': e.target.elements.mobile.value,
+  };
 
-  // API call to validate mobile number and email address.
-  return axios.all([mobileValidationRequest, customerValidationReuest]).then(axios.spread((...responses) => {
-    const mobileResponse = responses[0].data;
-    const customerResponse = responses[1].data;
+  if (e.target.elements.email !== undefined && e.target.elements.email.value.toString().length > 0) {
+    validationData['email'] = e.target.elements.email.value;
+  }
+
+  const validationRequest = validateInfo(validationData);
+  validationRequest.then((response) => {
+    if (!response || response.data.status === undefined || !response.data.status) {
+      // API Call failed.
+      // @TODO: Handle error.
+      return false;
+    }
 
     // Flag to determine if there any error.
     let isError = false;
 
     // If invalid mobile number.
-    if (mobileResponse.status === false) {
+    if (response.data.mobile === false) {
       document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
       document.getElementById('mobile-error').classList.add('error');
       isError = true;
@@ -51,25 +62,23 @@ export const checkoutAddressProcess = function (e, cart) {
       // Remove error class and any error message.
       document.getElementById('mobile-error').innerHTML = '';
       document.getElementById('mobile-error').classList.remove('error');
-      isError = false;
     }
 
-    // If customer already exists.
-    if (cart.shipping_address === null
-      && customerResponse.exists === true) {
-      document.getElementById('email-error').innerHTML = Drupal.t('Customer already exists.');
-      document.getElementById('email-error').classList.add('error');
-      isError = true;
-    } else if ((cart.shipping_address !== undefined && cart.shipping_address !== null)
-      && cart.shipping_address.email !== form_data.static.email
-      && customerResponse.exists === true) {
-      document.getElementById('email-error').innerHTML = Drupal.t('Customer already exists.');
-      document.getElementById('email-error').classList.add('error');
-      isError = true;
-    } else {
-      // Remove error class and any error message.
-      document.getElementById('email-error').innerHTML = '';
-      document.getElementById('email-error').classList.remove('error');
+    // Do the processing only if we did email validation.
+    if (response.data.email !== undefined) {
+      if (response.data.email === 'invalid') {
+        document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', {'%mail': data['email']});
+        document.getElementById('email-error').classList.add('error');
+        isError = true;
+      } else if (response.data.email === 'exists') {
+        document.getElementById('email-error').innerHTML = Drupal.t('Customer already exists.');
+        document.getElementById('email-error').classList.add('error');
+        isError = true;
+      } else {
+        // Remove error class and any error message.
+        document.getElementById('email-error').innerHTML = '';
+        document.getElementById('email-error').classList.remove('error');
+      }
     }
 
     if (isError) {
@@ -93,7 +102,7 @@ export const checkoutAddressProcess = function (e, cart) {
         // If any error, don't process further.
         if (cart_result.error !== undefined) {
           cart_data = {
-            'error_message': cart_result.error_message
+            error_message: cart_result.error_message,
           };
         }
 
@@ -101,8 +110,8 @@ export const checkoutAddressProcess = function (e, cart) {
         triggerCheckoutEvent('refreshCartOnAddress', cart_data);
       });
     }
-  })).catch((errors) => {
-    // react on errors.
+  }).catch((error) => {
+    console.error(error);
   });
 };
 
@@ -183,22 +192,22 @@ export const validateAddressFields = (e, validateEmail) => {
  * @param {*} address
  */
 export const formatAddressDataForEditForm = (address) => {
-  let formatted_address = {
-    'static': {
-      'fullname': address.firstname + ' ' + address.lastname,
-      'email': address.email,
-      'telephone': address.telephone
-    }
+  const formatted_address = {
+    static: {
+      fullname: `${address.firstname} ${address.lastname}`,
+      email: address.email,
+      telephone: address.telephone,
+    },
   };
 
   Object.entries(drupalSettings.address_fields).forEach(
     ([key, field]) => {
-      formatted_address[field['key']] = address[field['key']];
-    }
+      formatted_address[field.key] = address[field.key];
+    },
   );
 
   return formatted_address;
-}
+};
 
 /**
  * Prepare address data from form value.
@@ -206,16 +215,16 @@ export const formatAddressDataForEditForm = (address) => {
  * @param {*} elements
  */
 export const prepareAddressDataFromForm = (elements) => {
-  let {
+  const {
     firstname,
-    lastname
+    lastname,
   } = extractFirstAndLastName(elements.fullname.value.trim());
 
-  let address = {
-    firstname: firstname,
-    lastname: lastname,
+  const address = {
+    firstname,
+    lastname,
     email: elements.email.value,
-    city: gerAreaLabelById(false, elements['administrative_area'].value),
+    city: gerAreaLabelById(false, elements.administrative_area.value),
     mobile: elements.mobile.value,
   };
 
@@ -225,7 +234,7 @@ export const prepareAddressDataFromForm = (elements) => {
   });
 
   return prepareAddressDataForShipping(address);
-}
+};
 
 /**
  * Prepare address data for updating shipping.
@@ -233,7 +242,7 @@ export const prepareAddressDataFromForm = (elements) => {
  * @param {*} address
  */
 export const prepareAddressDataForShipping = (address) => {
-  let data = {};
+  const data = {};
   data.static = {
     firstname: address.firstname,
     lastname: address.lastname,
@@ -249,7 +258,7 @@ export const prepareAddressDataForShipping = (address) => {
   });
 
   return data;
-}
+};
 
 /**
  * Get the address popup class.
@@ -269,22 +278,21 @@ export const processBillingUpdateFromForm = (e, shipping) => {
   // Start the loader.
   showFullScreenLoader();
 
-  let isValid = validateAddressFields(e, false);
+  const isValid = validateAddressFields(e, false);
   // If not valid.
   if (isValid) {
     removeFullScreenLoader();
     return;
   }
 
-  let target = e.target.elements;
+  const target = e.target.elements;
 
-  const mobile = target.mobile.value.trim();
-  const mobile_valid = axios.get(`verify-mobile/${mobile}`);
-  if (mobile_valid instanceof Promise) {
-    mobile_valid.then((result) => {
-      if (result.status === 200) {
+  const validationRequest = validateInfo({mobile: target.mobile.value.trim()});
+  if (validationRequest instanceof Promise) {
+    validationRequest.then((result) => {
+      if (result.status === 200 && result.data.status) {
         // If not valid mobile number.
-        if (result.data.status === false) {
+        if (result.data.mobile === false) {
           // Removing loader in case validation fail.
           removeFullScreenLoader();
           document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
@@ -295,21 +303,21 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           document.getElementById('mobile-error').classList.remove('error');
 
           target.email = {
-            value: shipping.email
+            value: shipping.email,
           };
-          let form_data = prepareAddressDataFromForm(target);
+          const form_data = prepareAddressDataFromForm(target);
 
           // For logged in user add customer id from shipping.
           if (drupalSettings.user.uid > 0) {
-            form_data['static']['customer_id'] = shipping.customer_id;
+            form_data.static.customer_id = shipping.customer_id;
           }
 
           // Update billing address.
-          let cart_data = addBillingInCart('update billing', form_data);
+          const cart_data = addBillingInCart('update billing', form_data);
           if (cart_data instanceof Promise) {
             cart_data.then((cart_result) => {
               let cart_info = {
-                cart: cart_result
+                cart: cart_result,
               };
 
               // If error.
@@ -317,8 +325,12 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                 // In case of error, prepare error info
                 // and call refresh cart so that message is shown.
                 cart_info = {
-                  'error_message': cart_result.error_message
-                }
+                  error_message: cart_result.error_message,
+                };
+              } else {
+                // Merging with existing local.
+                cart_info = getInfoFromStorage();
+                cart_info.cart = cart_result;
               }
 
               // Trigger the event for updte.
@@ -330,6 +342,9 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           }
         }
       }
+    }).catch((error) => {
+      console.error(error);
     });
   }
-}
+};
+

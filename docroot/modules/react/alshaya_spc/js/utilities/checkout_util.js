@@ -7,9 +7,7 @@ import { cartAvailableInStorage, getGlobalCart } from './get_cart';
 /**
  * Default error message on checkout screen.
  */
-export const getDefaultCheckoutErrorMessage = () => {
-  return Drupal.t('Sorry, something went wrong. Please try again later.');
-}
+export const getDefaultCheckoutErrorMessage = () => Drupal.t('Sorry, something went wrong. Please try again later.');
 
 /**
  * Get shipping methods.
@@ -96,15 +94,23 @@ export const addShippingInCart = function (action, data) {
           removeFullScreenLoader();
           return null;
         }
+
+        // If there is no error on shipping update.
+        if (response.data.error === undefined) {
+          // Trigger event on shipping update, so that
+          // other components take necessary action if required.
+          triggerCheckoutEvent('onShippingAddressUpdate', response.data);
+        }
+
         return response.data;
       },
-      (error) => {
+      (error) =>
         // Processing of error here.
-        return {
+        ({
           error: true,
-          error_message: getDefaultCheckoutErrorMessage()
-        }
-      },
+          error_message: getDefaultCheckoutErrorMessage(),
+        })
+      ,
     )
     .catch((error) => {
       console.error(error);
@@ -135,16 +141,14 @@ export const addBillingInCart = function (action, data) {
       cart_id: cart,
     })
     .then(
-      (response) => {
-        return response.data;
-      },
-      (error) => {
+      (response) => response.data,
+      (error) =>
         // Processing of error here.
-        return {
+        ({
           error: true,
-          error_message: getDefaultCheckoutErrorMessage()
-        }
-      },
+          error_message: getDefaultCheckoutErrorMessage(),
+        })
+      ,
     )
     .catch((error) => {
       console.error(error);
@@ -228,4 +232,26 @@ export const triggerCheckoutEvent = (eventName, data) => {
     },
   });
   document.dispatchEvent(ee);
+};
+
+/**
+ * Determines if delivery method set in cart is same as user
+ * selected or not.
+ */
+export const isDeliveryTypeSameAsInCart = (cart) => {
+  // If not set, means user didn;t change.
+  if (cart.delivery_type === undefined) {
+    return true;
+  }
+
+  if (cart.delivery_type !== undefined
+    && cart.delivery_type === cart.cart.delivery_type) {
+    return true;
+  }
+
+  return false;
+};
+
+export const validateInfo = (data) => {
+  return axios.post(Drupal.url('spc/validate-info'), data);
 };

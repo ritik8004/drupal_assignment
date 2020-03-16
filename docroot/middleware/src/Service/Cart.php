@@ -3,10 +3,12 @@
 namespace App\Service;
 
 use App\Service\CheckoutCom\APIWrapper;
-use App\Service\Drupal\DrupalInfo;
+use App\Service\Config\SystemSettings;
+use App\Service\Knet\KnetHelper;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
+use App\Service\CheckoutCom\CustomerCards;
 
 /**
  * Class Cart.
@@ -40,13 +42,6 @@ class Cart {
   protected $magentoApiWrapper;
 
   /**
-   * Service to get Drupal Info.
-   *
-   * @var \App\Service\Drupal\DrupalInfo
-   */
-  protected $drupalInfo;
-
-  /**
    * Utility.
    *
    * @var \App\Service\Utility
@@ -61,11 +56,25 @@ class Cart {
   protected $checkoutComApi;
 
   /**
+   * K-Net Helper.
+   *
+   * @var \App\Service\Knet\KnetHelper
+   */
+  protected $knetHelper;
+
+  /**
    * Payment Data provider.
    *
    * @var \App\Service\PaymentData
    */
   protected $paymentData;
+
+  /**
+   * System Settings service.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  protected $settings;
 
   /**
    * Service for session.
@@ -75,37 +84,54 @@ class Cart {
   protected $session;
 
   /**
+   * Checkout.com API Wrapper.
+   *
+   * @var \App\Service\CheckoutCom\CustomerCards
+   */
+  protected $customerCards;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
    *   Magento info service.
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
    *   Magento API Wrapper.
-   * @param \App\Service\Drupal\DrupalInfo $drupal_info
-   *   Service to get Drupal Info.
    * @param \App\Service\Utility $utility
    *   Utility Service.
    * @param \App\Service\CheckoutCom\APIWrapper $checkout_com_api
    *   Checkout.com API Wrapper.
+   * @param \App\Service\Knet\KnetHelper $knet_helper
+   *   K-Net Helper.
    * @param \App\Service\PaymentData $payment_data
    *   Payment Data provider.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    * @param \App\Service\SessionStorage $session
    *   Service for session.
+   * @param \App\Service\CheckoutCom\CustomerCards $customer_cards
+   *   Checkout.com API Wrapper.
    */
-  public function __construct(MagentoInfo $magento_info,
-                              MagentoApiWrapper $magento_api_wrapper,
-                              DrupalInfo $drupal_info,
-                              Utility $utility,
-                              APIWrapper $checkout_com_api,
-                              PaymentData $payment_data,
-                              SessionStorage $session) {
+  public function __construct(
+    MagentoInfo $magento_info,
+    MagentoApiWrapper $magento_api_wrapper,
+    Utility $utility,
+    APIWrapper $checkout_com_api,
+    KnetHelper $knet_helper,
+    PaymentData $payment_data,
+    SystemSettings $settings,
+    SessionStorage $session,
+    CustomerCards $customer_cards
+  ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
-    $this->drupalInfo = $drupal_info;
     $this->utility = $utility;
     $this->checkoutComApi = $checkout_com_api;
+    $this->knetHelper = $knet_helper;
     $this->paymentData = $payment_data;
+    $this->settings = $settings;
     $this->session = $session;
+    $this->customerCards = $customer_cards;
   }
 
   /**
@@ -336,23 +362,6 @@ class Cart {
       return $cart;
     }
 
-    // If cart has no customer or email provided is different,
-    // then create and assign customer to the cart.
-    if (empty($shipping_data['customer_address_id']) && (empty($cart['cart']['customer']['id']) ||
-      $cart['cart']['customer']['email'] !== $data['shipping']['shipping_address']['email'])) {
-      $customer = $this->createCustomer($data['shipping']['shipping_address']);
-      // If any error.
-      if ($customer['error']) {
-        return $customer;
-      }
-
-      $associated_customer = $this->associateCartToCustomer($customer['id']);
-      // If any error.
-      if ($associated_customer['error']) {
-        return $associated_customer;
-      }
-    }
-
     return $this->updateBilling($data['shipping']['shipping_address']);
   }
 
@@ -406,15 +415,13 @@ class Cart {
    *   Shipping address info.
    * @param string $action
    *   Action to perform.
-   * @param bool $create_customer
-   *   True to create customer, false otherwise.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function addCncShippingInfo(array $shipping_data, string $action, $create_customer = TRUE) {
+  public function addCncShippingInfo(array $shipping_data, string $action) {
     $data = [
       'extension' => (object) [
         'action' => $action,
@@ -452,14 +459,19 @@ class Cart {
       'store_code' => $store['code'],
     ];
 
-    if ($create_customer) {
-      $customer = $this->createCustomer($data['shipping']['shipping_address']);
-      if (!empty($customer['message'])) {
-        return $this->getErrorResponse($customer['message'], 422);
-      }
-      $this->associateCartToCustomer($customer['id']);
+    $cart = $this->updateCart($data);
+
+    // If cart update has error.
+    if ($cart['error']) {
+      return $cart;
     }
-    return $this->updateCart($data);
+
+    // Setting city value as 'NONE' so that, we can
+    // identify if billing address added is default one and
+    // not actually added by the customer on FE.
+    $data['shipping']['shipping_address']['city'] = 'NONE';
+    // Adding billing address.
+    return $this->updateBilling($data['shipping']['shipping_address']);
   }
 
   /**
@@ -484,37 +496,6 @@ class Cart {
   }
 
   /**
-   * Create customer in magento.
-   *
-   * @param array $customer_data
-   *   Customer data.
-   *
-   * @return array|mixed
-   *   Json decoded response.
-   */
-  public function createCustomer(array $customer_data) {
-    $url = 'customers';
-
-    try {
-      $data['customer'] = [
-        'email' => $customer_data['email'],
-        'firstname' => $customer_data['firstname'] ?? '',
-        'lastname' => $customer_data['lastname'] ?? '',
-        'prefix' => $customer_data['prefix'] ?? '',
-        'dob' => $customer_data['dob'] ?? '',
-        'groupId' => $customer_data['group_id'] ?? 1,
-        'store_id' => $this->magentoInfo->getMagentoStoreId(),
-      ];
-
-      return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
-    }
-    catch (\Exception $e) {
-      // Exception handling here.
-      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
-    }
-  }
-
-  /**
    * Adds a customer to cart.
    *
    * @param int $customer_id
@@ -534,7 +515,16 @@ class Cart {
         'store_id' => $this->magentoInfo->getMagentoStoreId(),
       ];
 
-      return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      $result = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+
+      // After association restore the cart.
+      if ($result) {
+        self::$cart = NULL;
+        $this->getCart();
+        return TRUE;
+      }
+
+      throw new \Exception('Unable to associate cart', 500);
     }
     catch (\Exception $e) {
       // Exception handling here.
@@ -548,14 +538,15 @@ class Cart {
    * @param array $data
    *   Payment info.
    * @param array $extension
-   *   Cart extension.
+   *   (Optional) Cart extension.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function updatePayment(array $data, array $extension) {
+  public function updatePayment(array $data, array $extension = []) {
+    $extension['action'] = 'update payment';
     $update = [
       'extension' => (object) $extension,
     ];
@@ -584,39 +575,83 @@ class Cart {
   public function processPaymentData(string $method, array $additional_info) {
     $additional_data = [];
 
-    // Method specific code. @TODO: Find better way to handle this.
+    // Method specific code.
     switch ($method) {
-      case 'checkout_com':
-        $additional_data = [
-          'card_token_id' => $additional_info['id'],
-          'udf3' => $additional_info['udf3'],
-        ];
+      case 'knet':
+        $cart = $this->getCart();
 
-        // Validate bin if MADA enabled.
-        $additional_data['udf1'] = $this->checkoutComApi->validateMadaBin($additional_info['card']['bin'])
-          ? 'MADA'
-          : '';
+        $response = $this->knetHelper->initKnetRequest(
+          $cart['totals']['grand_total'],
+          $this->getCartId(),
+          $cart['cart']['extension_attributes']['real_reserved_order_id'],
+          $this->getCartCustomerId()
+        );
+
+        if (isset($response['redirectUrl']) && !empty($response['redirectUrl'])) {
+          $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response['data']);
+          throw new \Exception($response['redirectUrl'], 302);
+        }
+
+        throw new \Exception('Failed to initiate K-Net request.', 500);
+
+      case 'checkout_com':
+        $process_3d = FALSE;
+        $end_point = '';
+        // Process for new 3D card.
+        if ($additional_info['card_type'] == 'new') {
+          $additional_data = [
+            'card_token_id' => $additional_info['id'],
+            'udf3' => $additional_info['udf3'],
+          ];
+
+          // Validate bin if MADA enabled.
+          $additional_data['udf1'] = $this->checkoutComApi->validateMadaBin($additional_info['card']['bin'])
+            ? 'MADA'
+            : '';
+
+          $process_3d = $additional_data['udf1'] || $this->checkoutComApi->is3dForced();
+          $end_point = APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT;
+        }
+        elseif ($additional_info['card_type'] == 'existing') {
+          $card = $this->customerCards->getGivenCardInfo($this->getCartCustomerId(), $additional_info['id']);
+          if (($card['mada'] || $this->checkoutComApi->is3dForced()) && empty($additional_info['cvv'])) {
+            throw new \Exception('Cvv missing for credit/debit card.', 400);
+          }
+          elseif ($card['mada'] || $this->checkoutComApi->is3dForced()) {
+            $process_3d = TRUE;
+            $additional_data = [
+              'cardId' => $card['gateway_token'],
+              'cvv' => $this->customerCards->deocodePublicHash(urldecode($additional_info['cvv'])),
+              'udf2' => APIWrapper::CARD_ID_CHARGE,
+            ];
+            $end_point = APIWrapper::ENDPOINT_CARD_PAYMENT;
+          }
+          elseif (!$card['mada'] && !$this->checkoutComApi->is3dForced()) {
+            $additional_data = [
+              'public_hash' => $card['public_hash'],
+            ];
+          }
+        }
 
         // Process 3D if MADA or 3D Forced.
-        if ($additional_data['udf1'] || $this->checkoutComApi->is3dForced()) {
+        if ($process_3d && !empty($additional_data) && !empty($end_point)) {
           $response = $this->checkoutComApi->request3dSecurePayment(
             $this->getCart(),
             $additional_data,
-            APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT
+            $end_point
           );
 
           if (isset($response['responseCode'])
-            && $response['responseCode'] == APIWrapper::SUCCESS
-            && !empty($response[APIWrapper::REDIRECT_URL])) {
+              && $response['responseCode'] == APIWrapper::SUCCESS
+              && !empty($response[APIWrapper::REDIRECT_URL])) {
             // We will use this again to redirect back to Drupal.
-            $response['langcode'] = $this->drupalInfo->getDrupalLangcode();
+            $response['langcode'] = $this->settings->getRequestLanguage();
             $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response);
             throw new \Exception($response[APIWrapper::REDIRECT_URL], 302);
           }
 
           throw new \Exception('Failed to initiate 3D request.', 500);
         }
-
         break;
     }
 
@@ -731,29 +766,6 @@ class Cart {
   }
 
   /**
-   * Check if a customer by given email exists or not.
-   *
-   * @param string $email
-   *   Email address.
-   *
-   * @return mixed
-   *   Response.
-   */
-  public function customerCheckByMail(string $email) {
-    $url = 'customers/search';
-    $query['query'] = [
-      'searchCriteria[filterGroups][0][filters][0][field]' => 'email',
-      'searchCriteria[filterGroups][0][filters][0][value]' => $email,
-      'searchCriteria[filterGroups][0][filters][0][condition_type]' => 'eq',
-      'searchCriteria[filterGroups][1][filters][0][field]' => 'store_id',
-      'searchCriteria[filterGroups][1][filters][0][value]' => $this->magentoInfo->getMagentoStoreId(),
-      'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'in',
-    ];
-
-    return $this->magentoApiWrapper->doRequest('GET', $url, $query);
-  }
-
-  /**
    * Wrapper function to get cleaned cart data to log.
    *
    * @param array $cart
@@ -778,6 +790,22 @@ class Cart {
 
     if (isset($cart, $cart['cart']['customer'], $cart['cart']['customer']['id'])) {
       return $cart['cart']['customer']['id'];
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Return customer email from cart in session.
+   *
+   * @return string|null
+   *   Return customer email or null.
+   */
+  public function getCartCustomerEmail() {
+    $cart = $this->getCart();
+
+    if (isset($cart, $cart['cart']['customer'], $cart['cart']['customer']['email'])) {
+      return $cart['cart']['customer']['email'];
     }
 
     return NULL;

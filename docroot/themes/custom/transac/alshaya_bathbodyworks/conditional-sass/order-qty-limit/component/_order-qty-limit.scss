@@ -2,5 +2,9 @@
   .order-qty-limit-msg-inner-wrapper {
     padding-top: 0.75rem;
     padding-bottom: 0.5rem;
+
+    &::before {
+      padding-bottom: 0.1875rem;
+    }
   }
 }

@@ -1,24 +1,25 @@
-import React from "react";
+import React from 'react';
 
-import Popup from "reactjs-popup";
-import ShippingMethods from "../shipping-methods";
-import Loading from "../../../utilities/loading";
+import Popup from 'reactjs-popup';
+import ShippingMethods from '../shipping-methods';
+import Loading from '../../../utilities/loading';
 import {
   checkoutAddressProcess,
   getAddressPopupClassName,
-  formatAddressDataForEditForm
-} from "../../../utilities/checkout_address_process";
+  formatAddressDataForEditForm,
+} from '../../../utilities/checkout_address_process';
 import {
-  showFullScreenLoader
-} from "../../../utilities/checkout_util";
+  showFullScreenLoader,
+} from '../../../utilities/checkout_util';
 import {
-  gerAreaLabelById
+  gerAreaLabelById,
 } from '../../../utilities/address_util';
 
-let AddressContent = React.lazy(() => import("../address-popup-content"));
+const AddressContent = React.lazy(() => import('../address-popup-content'));
 
 export default class HomeDeliveryInfo extends React.Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = { open: false };
@@ -32,7 +33,7 @@ export default class HomeDeliveryInfo extends React.Component {
     this.setState({ open: false });
   };
 
-  processAddress = e => {
+  processAddress = (e) => {
     const { cart } = this.props.cart;
     // Show the loader.
     showFullScreenLoader();
@@ -44,21 +45,21 @@ export default class HomeDeliveryInfo extends React.Component {
     document.addEventListener(
       'refreshCartOnAddress',
       this.eventListener,
-      false
+      false,
     );
   }
 
   componentWillUnmount() {
     this._isMounted = false;
     document.removeEventListener(
-      "refreshCartOnAddress",
+      'refreshCartOnAddress',
       this.eventListener,
-      false
+      false,
     );
   }
 
-  eventListener = e => {
-    var data = e.detail.data();
+  eventListener = (e) => {
+    const data = e.detail.data();
     this.props.refreshCart(data);
     if (this._isMounted) {
       this.closeModal();
@@ -68,9 +69,7 @@ export default class HomeDeliveryInfo extends React.Component {
   /**
    * Format address for edit address.
    */
-  formatAddressData = (address) => {
-    return formatAddressDataForEditForm(address);
-  }
+  formatAddressData = (address) => formatAddressDataForEditForm(address)
 
   render() {
     const address = this.props.cart.cart.shipping_address;
@@ -86,19 +85,21 @@ export default class HomeDeliveryInfo extends React.Component {
         }
         addressData.push(fillVal);
       }
-    })
+    });
 
     return (
       <div className="delivery-information-preview">
         <div className="spc-delivery-customer-info">
           <div className="delivery-name">
-            {address.firstname} {address.lastname}
+            {address.firstname}
+            {' '}
+            {address.lastname}
           </div>
           <div className="delivery-address">
             {addressData.join(', ')}
           </div>
           <div className="spc-address-form-edit-link" onClick={this.openModal}>
-            {Drupal.t("Change")}
+            {Drupal.t('Change')}
           </div>
         </div>
         <Popup
@@ -107,13 +108,13 @@ export default class HomeDeliveryInfo extends React.Component {
           closeOnDocumentClick={false}
           className={getAddressPopupClassName()}
         >
-          <React.Suspense fallback={<Loading/>}>
+          <React.Suspense fallback={<Loading />}>
             <AddressContent
               cart={this.props.cart}
               closeModal={this.closeModal}
               processAddress={this.processAddress}
               showEmail={window.drupalSettings.user.uid === 0}
-              default_val = {
+              default_val={
                 window.drupalSettings.user.uid === 0
                   ? this.formatAddressData(address)
                   : null

@@ -13,11 +13,6 @@ update_cart:
     controller: App\Controller\CartController::updateCart
     methods: POST
 
-validate_customer:
-    path: /customer/{email}
-    controller: App\Controller\CartController::customerCheckByMail
-    methods: GET
-
 get_shipping_methods:
     path: /cart/shipping-methods
     controller: App\Controller\CartController::shippingMethods
@@ -46,4 +41,14 @@ checkoutcom_payment_success:
 checkoutcom_payment_error:
     path: /payment/checkout-com-error
     controller: App\Controller\PaymentController::handleCheckoutComError
+    methods: GET
+
+knet_payment_response:
+    path: /payment/knet-response
+    controller: App\Controller\PaymentController::handleKnetResponse
+    methods: POST
+
+knet_payment_error:
+    path: /payment/knet-error/{state_key}
+    controller: App\Controller\PaymentController::handleKnetError
     methods: GET

@@ -2,12 +2,14 @@ import React from 'react';
 
 import {
   createMarker,
-  geocodeAddressToLatLng
+  geocodeAddressToLatLng,
+  getDefaultMapCoords,
+  removeAllMarkersFromMap,
+  getMap,
 } from './map_utils';
-import {isRTL} from '../rtl';
+import { isRTL } from '../rtl';
 
 export default class GoogleMap extends React.Component {
-
   constructor(props) {
     super(props);
     this.googleMapRef = React.createRef();
@@ -20,7 +22,7 @@ export default class GoogleMap extends React.Component {
   }
 
   componentDidMount() {
-    let control_position = isRTL() === true ? window.google.maps.ControlPosition.RIGHT_BOTTOM : window.google.maps.ControlPosition.LEFT_BOTTOM;
+    const control_position = isRTL() === true ? window.google.maps.ControlPosition.RIGHT_BOTTOM : window.google.maps.ControlPosition.LEFT_BOTTOM;
 
     let data = {};
     // If adress is being edited, means don't need to
@@ -41,7 +43,7 @@ export default class GoogleMap extends React.Component {
 
     // This can be passed from props if click on
     // map is allowed or not.
-    let mapClickable = true;
+    const mapClickable = true;
     if (mapClickable) {
       this.googleMap.addListener('click', this.onMapClick);
     }
@@ -52,7 +54,7 @@ export default class GoogleMap extends React.Component {
     // For autocomplete textfield.
     this.autocomplete = new window.google.maps.places.Autocomplete(this.autocompleteTextField(), {
       types: [],
-      componentRestrictions: {country: window.drupalSettings.country_code}
+      componentRestrictions: { country: window.drupalSettings.country_code },
     });
     this.autocomplete.addListener('place_changed', this.placesAutocompleteHandler);
     window.spcAutoComplete = this.autocomplete;
@@ -64,14 +66,50 @@ export default class GoogleMap extends React.Component {
   setCurrentLocationCoords = () => {
     // If location access is enabled by user.
     if (navigator && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(pos => {
+      navigator.geolocation.getCurrentPosition((pos) => {
         let currentCoords = {
-          'lat': pos.coords.latitude,
-          'lng': pos.coords.longitude,
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
         };
 
-        this.panMapToGivenCoords(currentCoords);
-        return;
+        const geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode({
+          location: currentCoords,
+        },
+        (results, status) => {
+          if (status === 'OK') {
+            if (results[0]) {
+              // Use this address info.
+              const address = results[0].address_components;
+
+              // Flag to determine if user country same as site.
+              let userCountrySame = false;
+              // Checking if user current location belongs to same
+              // country or not by location coords geocode.
+              for (let i = 0; i < address.length; i++) {
+                if (address[i].types.indexOf('country') !== -1
+                    && address[i].short_name === drupalSettings.country_code) {
+                  userCountrySame = true;
+                  break;
+                }
+              }
+
+              // If user and site country not same, don;t process.
+              if (!userCountrySame) {
+                // @Todo: Add some indication to user.
+                console.log('Not available in the user country.');
+                currentCoords = getDefaultMapCoords();
+              }
+
+              // Remove all markers from the map.
+              removeAllMarkersFromMap();
+              // Pan the map to location.
+              const marker = createMarker(currentCoords, getMap());
+              getMap().panTo(marker.getPosition());
+              window.spcMarkers.push(marker);
+            }
+          }
+        });
       });
     }
 
@@ -84,7 +122,7 @@ export default class GoogleMap extends React.Component {
   panMapToGivenCoords = (coords) => {
     this.removeAllMarkersFromMap();
     // Keep only currently selected marker.
-    var marker = createMarker(coords, this.googleMap);
+    const marker = createMarker(coords, this.googleMap);
     this.googleMap.panTo(marker.getPosition());
     this.markers.push(marker);
     window.spcMarkers = this.markers;
@@ -95,11 +133,11 @@ export default class GoogleMap extends React.Component {
    */
   placesAutocompleteHandler = () => {
     const place = window.spcAutoComplete.getPlace();
-    let event = new CustomEvent('mapClicked', {
+    const event = new CustomEvent('mapClicked', {
       bubbles: true,
       detail: {
-        coords: () => place.geometry.location
-      }
+        coords: () => place.geometry.location,
+      },
     });
     document.dispatchEvent(event);
   }
@@ -109,11 +147,11 @@ export default class GoogleMap extends React.Component {
    */
   onMapClick = (e) => {
     // Dispatch event so that other can use this.
-    let event = new CustomEvent('mapClicked', {
+    const event = new CustomEvent('mapClicked', {
       bubbles: true,
       detail: {
-        coords: () => e.latLng
-      }
+        coords: () => e.latLng,
+      },
     });
     document.dispatchEvent(event);
   }
@@ -123,7 +161,7 @@ export default class GoogleMap extends React.Component {
    */
   removeAllMarkersFromMap = () => {
     // First clear all existing marker on map.
-    for (var i = 0; i < this.markers.length; i++) {
+    for (let i = 0; i < this.markers.length; i++) {
       this.markers[i].setMap(null);
     }
     this.markers = [];
@@ -133,16 +171,12 @@ export default class GoogleMap extends React.Component {
   /**
    * Get google map div.
    */
-  googleMapDiv = () => {
-    return document.getElementById('google-map');
-  }
+  googleMapDiv = () => document.getElementById('google-map')
 
   /**
    * Get autocomplete text field.
    */
-  autocompleteTextField = () => {
-    return document.getElementById('searchTextField');
-  };
+  autocompleteTextField = () => document.getElementById('searchTextField');
 
   /**
    * Adds my location button on the map.
@@ -156,10 +190,10 @@ export default class GoogleMap extends React.Component {
   addMyLocationButton = (map, control_position) => {
     // We create a div > button > div markup for the custom button.
     // The wrapper div.
-    var controlDiv = document.createElement('div');
+    const controlDiv = document.createElement('div');
 
     // The button element.
-    var firstChild = document.createElement('button');
+    const firstChild = document.createElement('button');
     firstChild.style.backgroundColor = '#fff';
     firstChild.style.border = 'none';
     firstChild.style.outline = 'none';
@@ -172,15 +206,14 @@ export default class GoogleMap extends React.Component {
     firstChild.title = Drupal.t('Your Location');
     if (isRTL()) {
       firstChild.style.marginRight = '15px';
-    }
-    else {
+    } else {
       firstChild.style.marginLeft = '15px';
     }
 
     controlDiv.appendChild(firstChild);
 
     // The child div.
-    var secondChild = document.createElement('div');
+    const secondChild = document.createElement('div');
     secondChild.style.margin = '5px';
     secondChild.style.width = '18px';
     secondChild.style.height = '18px';
@@ -193,23 +226,23 @@ export default class GoogleMap extends React.Component {
 
     // Add dragend event listener on map to fade the button once map is not
     // showing the current location.
-    window.google.maps.event.addListener(map, 'dragend', function() {
+    window.google.maps.event.addListener(map, 'dragend', () => {
       $('#you_location_img').css('background-position', '0px 0px');
     });
 
     // Add click event listener on button to get user's location from
     // browser.
-    firstChild.addEventListener('click', function() {
-      let imgX = '0';
-      let animationInterval = setInterval( function () {
+    firstChild.addEventListener('click', () => {
+      const imgX = '0';
+      const animationInterval = setInterval(() => {
         let imgX = imgX === '-18' ? imgX = '0' : imgX = '-18';
-        $('#you_location_img').css('background-position', imgX + 'px 0px');
+        $('#you_location_img').css('background-position', `${imgX}px 0px`);
       }, 500);
 
       // Geolocation.
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          var latlng = new window.google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        navigator.geolocation.getCurrentPosition((position) => {
+          const latlng = new window.google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
           // Center map on user's location.
           map.setCenter(latlng);
@@ -218,8 +251,7 @@ export default class GoogleMap extends React.Component {
           // Change icon color.
           $('#you_location_img').css('background-position', '-144px 0px');
         });
-      }
-      else {
+      } else {
         // Stop animation.
         clearInterval(animationInterval);
         // Change icon color to disabled.
@@ -237,12 +269,12 @@ export default class GoogleMap extends React.Component {
    */
   setCountryCoords = () => {
     // Get the coords of the country.
-    let geocoder = new google.maps.Geocoder();
+    const geocoder = new google.maps.Geocoder();
     geocoder.geocode({
-      'address': drupalSettings.country_code
-    }, function (results, status) {
+      address: drupalSettings.country_code,
+    }, (results, status) => {
       if (status == google.maps.GeocoderStatus.OK) {
-        //this.googleMap.setCenter(results[0].geometry.location);
+        // this.googleMap.setCenter(results[0].geometry.location);
         window.spcMap.setCenter(results[0].geometry.location);
       }
     });
@@ -258,8 +290,7 @@ export default class GoogleMap extends React.Component {
       // address detail.
       if (this.props.isEditAddress) {
         geocodeAddressToLatLng();
-      }
-      else {
+      } else {
         this.setCountryCoords();
       }
 
@@ -267,10 +298,7 @@ export default class GoogleMap extends React.Component {
       // map object and if user has not allowed location
       // share, we first center the map to middle-east region
       // and then re-center map on the country center.
-      centerPosition = {
-        'lat': 29.2985,
-        'lng': 42.5510
-      }
+      centerPosition = getDefaultMapCoords();
     }
 
     return new window.google.maps.Map(this.googleMapDiv(), {
@@ -281,20 +309,19 @@ export default class GoogleMap extends React.Component {
       streetViewControl: false,
       fullscreenControl: false,
       zoomControlOptions: {
-        position: control_position
+        position: control_position,
       },
-    })
+    });
   }
 
-  render () {
+  render() {
     return (
-      <div className='spc-google-map'>
-        <div className='spc-location-g-map-search form-type-textfield'>
-          <input placeholder={Drupal.t('enter a location')} ref={ref => (this.autocomplete = ref)} id='searchTextField' type='text'/>
+      <div className="spc-google-map">
+        <div className="spc-location-g-map-search form-type-textfield">
+          <input placeholder={Drupal.t('enter a location')} ref={(ref) => (this.autocomplete = ref)} id="searchTextField" type="text" />
         </div>
-        <div id='google-map' ref={this.googleMapRef} style={{width: '100%', height: '100%'}}/>
+        <div id="google-map" ref={this.googleMapRef} style={{ width: '100%', height: '100%' }} />
       </div>
     );
   }
-
 }
