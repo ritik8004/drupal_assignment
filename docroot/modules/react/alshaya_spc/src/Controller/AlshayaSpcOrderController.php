@@ -139,8 +139,6 @@ class AlshayaSpcOrderController extends ControllerBase {
         // Set selected payment method in session.
         $session->set('selected_payment_method', $payment_method);
         $session->save();
-        // Refresh stock for products in cart.
-        $this->refreshStockForProductsInCart($cart);
 
         // Add success message in logs.
         $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [
