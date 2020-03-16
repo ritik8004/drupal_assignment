@@ -12,6 +12,10 @@
   }
 
   .filter__inner {
+    @include breakpoint($only-mobile) {
+      overflow-y: scroll;
+    }
+
     .c-collapse-item:not(#sort_by) {
       &.block-facet--swatch-list {
         li {
