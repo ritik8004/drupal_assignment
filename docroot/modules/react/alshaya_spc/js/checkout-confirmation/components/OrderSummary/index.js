@@ -21,20 +21,20 @@ export default class OrderSummary extends React.Component {
     return (
       <div className="spc-order-summary">
         <div className="spc-order-summary-order-preview">
-          <OrderSummaryItem label={Drupal.t('Corfimation email sent to')} value={customEmail} />
-          <OrderSummaryItem label={Drupal.t('Order number')} value={orderNumber} />
-          <OrderSummaryItem label={Drupal.t('Transaction ID')} value={transactionId} />
+          <OrderSummaryItem label={Drupal.t('confirmation email sent to')} value={customEmail} />
+          <OrderSummaryItem label={Drupal.t('order number')} value={orderNumber} />
+          <OrderSummaryItem label={Drupal.t('transaction ID')} value={transactionId} />
         </div>
         <div className="spc-order-summary-order-detail">
           <input type="checkbox" id="spc-detail-open" />
-          <label htmlFor="spc-detail-open">{Drupal.t('Order Detail')}</label>
+          <label htmlFor="spc-detail-open">{Drupal.t('order detail')}</label>
           <div className="spc-detail-content">
-            <OrderSummaryItem type="address" label={Drupal.t('Delivery to')} name={customerName} address={customerAddress} />
-            <OrderSummaryItem label={Drupal.t('Mobile Number')} value={mobileNumber} />
-            <OrderSummaryItem label={Drupal.t('Payment method')} value={paymentMethod} />
-            <OrderSummaryItem label={Drupal.t('Delivery type')} value={deliveryType} />
-            <OrderSummaryItem label={Drupal.t('Expected delivery within')} value={expectedDelivery} />
-            <OrderSummaryItem label={Drupal.t('Number of items')} value={itemsCount} />
+            <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={customerAddress} />
+            <OrderSummaryItem label={Drupal.t('mobile number')} value={mobileNumber} />
+            <OrderSummaryItem label={Drupal.t('payment method')} value={paymentMethod} />
+            <OrderSummaryItem label={Drupal.t('delivery type')} value={deliveryType} />
+            <OrderSummaryItem label={Drupal.t('expected delivery within')} value={expectedDelivery} />
+            <OrderSummaryItem label={Drupal.t('number of items')} value={itemsCount} />
           </div>
         </div>
       </div>
