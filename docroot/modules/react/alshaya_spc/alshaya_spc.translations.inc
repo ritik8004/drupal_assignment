@@ -38,6 +38,9 @@ function _alshaya_spc_translations() {
       'remove this item' => [
         'ar' => 'أزل هذا البند',
       ],
+      'applied' => [
+        'ar' => 'تم تفعيل',
+      ],
     ],
   ];
 }
