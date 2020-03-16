@@ -170,9 +170,6 @@ class PaymentMethodCheckoutCom extends React.Component {
   openNewCard = () => {
     this.closeSavedCardListModal();
     this.changeCurrentCard('new');
-    if (window.innerWidth < 768) {
-      // Code here to navigate to nwe card form.
-    }
   }
 
   render() {
