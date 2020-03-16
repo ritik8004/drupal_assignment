@@ -3,6 +3,7 @@
 namespace App\Service\Drupal;
 
 use GuzzleHttp\Cookie\SetCookie;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -25,19 +26,30 @@ class Drupal {
   private $request;
 
   /**
+   * Logger.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  private $logger;
+
+  /**
    * Drupal constructor.
    *
    * @param \AlshayaMiddleware\Drupal\DrupalInfo $drupal_info
    *   Drupal info service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger.
    */
   public function __construct(
     DrupalInfo $drupal_info,
-    RequestStack $request_stack
+    RequestStack $request_stack,
+    LoggerInterface $logger
   ) {
     $this->drupalInfo = $drupal_info;
     $this->request = $request_stack;
+    $this->logger = $logger;
   }
 
   /**
@@ -76,11 +88,12 @@ class Drupal {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function triggerCheckoutEvent(string $event, array $data) {
-    $data['event'] = $event;
+    $data['action'] = $event;
 
     $client = $this->drupalInfo->getDrupalApiClient();
-    $url = sprintf('/%s/spc/checkout-event', $this->drupalInfo->getDrupalLangcode());
+    $url = sprintf('/%s/spc/checkout-event?XDEBUG_SESSION_START=PHPSTORM', $this->drupalInfo->getDrupalLangcode());
     $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
+
     $options = [
       'headers' => [
         'Host' => $this->drupalInfo->getDrupalBaseUrl(),
@@ -89,9 +102,15 @@ class Drupal {
       'form_params' => $data,
     ];
 
-    $response = $client->request('POST', $url, $options);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
+    try {
+      $client->request('POST', $url, $options);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while triggering checkout event @event. Message: @message', [
+        '@event' => $event,
+        '@message' => $e->getMessage(),
+      ]);
+    }
   }
 
   /**

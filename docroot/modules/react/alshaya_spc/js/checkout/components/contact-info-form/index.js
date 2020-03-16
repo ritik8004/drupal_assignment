@@ -94,7 +94,6 @@ class ContactInfoForm extends React.Component {
           document.getElementById('mobile-error').classList.remove('error');
         }
 
-
         if (result.data.email !== undefined) {
           if (result.data.email === 'invalid') {
             document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', {'%mail': validationData['email']});

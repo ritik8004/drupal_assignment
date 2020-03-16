@@ -147,7 +147,7 @@ class PaymentController {
       return $this->handleCheckoutComFailure();
     }
 
-    $response = new RedirectResponse('', 302);
+    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
 
     try {
       $payment_data = [
@@ -307,7 +307,7 @@ class PaymentController {
       '@message' => json_encode($data),
     ]);
 
-    $redirect = new RedirectResponse('', 302);
+    $redirect = new RedirectResponse('/' . $state['data']['langcode'] . '/checkout', 302);
 
     try {
       $payment_data = [
