@@ -14,7 +14,6 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\node\NodeInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides a resource to get simple page node.
@@ -77,13 +76,6 @@ class SimplePageResource extends ResourceBase {
   protected $requestStack;
 
   /**
-   * The config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * SimplePageResource constructor.
    *
    * @param array $configuration
@@ -106,8 +98,6 @@ class SimplePageResource extends ResourceBase {
    *   The mobile app utility service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack service.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -118,8 +108,7 @@ class SimplePageResource extends ResourceBase {
                               EntityTypeManagerInterface $entity_type_manager,
                               Connection $connection,
                               MobileAppUtility $mobile_app_utility,
-                              RequestStack $request_stack,
-                              ConfigFactoryInterface $config_factory) {
+                              RequestStack $request_stack) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
@@ -127,7 +116,6 @@ class SimplePageResource extends ResourceBase {
     $this->connection = $connection;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->requestStack = $request_stack->getCurrentRequest();
-    $this->configFactory = $config_factory;
   }
 
   /**
@@ -144,8 +132,7 @@ class SimplePageResource extends ResourceBase {
       $container->get('entity_type.manager'),
       $container->get('database'),
       $container->get('alshaya_mobile_app.utility'),
-      $container->get('request_stack'),
-      $container->get('config.factory')
+      $container->get('request_stack')
     );
   }
 
@@ -156,9 +143,8 @@ class SimplePageResource extends ResourceBase {
    *   The response containing list of categories.
    */
   public function get() {
-    $page = $this->requestStack->query->get('page');
     // Path alias of simple page.
-    $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
+    $alias = $this->requestStack->query->get('url');
     $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
 
     if (!$node instanceof NodeInterface) {
@@ -187,7 +173,7 @@ class SimplePageResource extends ResourceBase {
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
         'contexts' => [
-          'url.query_args:page',
+          'url.query_args:url',
         ],
       ],
     ]));
