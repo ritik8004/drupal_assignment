@@ -1,0 +1,56 @@
+#alshaya-algolia-search {
+  .c-page-title {
+    font-weight: normal;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    padding: 0.75rem 0 1.875rem;
+    height: auto;
+    font-family: $vs-bentonsans-light;
+
+    @include breakpoint($only-tablet) {
+      padding: 1.875rem 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 0.75rem 0;
+      font-size: 1rem;
+    }
+  }
+
+  .c-content__region {
+    .sticky-filter-wrapper {
+      .c-collapse-item {
+        .c-collapse__title {
+          text-transform: capitalize;
+
+          &::after {
+            color: $algolia-react-facet-title;
+            top: 49%;
+          }
+        }
+      }
+    }
+
+    .filter__inner {
+      .c-collapse-item {
+        .facet-item__value {
+          text-transform: capitalize;
+          display: inline-block;
+          color: $plp_item_label;
+
+          &::before {
+            color: $primary_checkbox_empty;
+          }
+        }
+      }
+    }
+
+    .all-filters-algolia {
+      .filter__foot {
+        .button {
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+}
