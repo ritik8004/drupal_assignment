@@ -31,9 +31,7 @@ services:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper
     arguments:
       - '@module_handler'
-      - '@session'
       - '@alshaya_addressbook.manager'
-      - '@alshaya_acm_customer.orders_manager'
       - '@current_user'
       - '@alshaya_acm_product.skumanager'
       - '@alshaya_acm_product.sku_images_manager'
@@ -44,3 +42,5 @@ services:
       - '@mobile_number.util'
       - '@alshaya_acm_checkout.options_manager'
       - '@address.country_repository'
+      - '@alshaya_spc.secure_text_helper'
+      - '@request_stack'

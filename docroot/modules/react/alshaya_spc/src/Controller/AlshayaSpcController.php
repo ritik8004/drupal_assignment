@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
-use Drupal\alshaya_spc\Helper\SecureText;
 use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
@@ -10,7 +9,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Language\LanguageInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -19,7 +17,6 @@ use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class AlshayaSpcController.
@@ -53,13 +50,6 @@ class AlshayaSpcController extends ControllerBase {
    * @var \Drupal\mobile_number\MobileNumberUtilInterface
    */
   protected $mobileUtil;
-
-  /**
-   * Secure Text service provider.
-   *
-   * @var \Drupal\alshaya_spc\Helper\SecureText
-   */
-  protected $secureText;
 
   /**
    * Current user.
@@ -100,8 +90,6 @@ class AlshayaSpcController extends ControllerBase {
    *   Checkout option manager.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
-   * @param \Drupal\alshaya_spc\Helper\SecureText $secure_text
-   *   * Secure Text service provider.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   Current user.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -116,7 +104,6 @@ class AlshayaSpcController extends ControllerBase {
     AlshayaSpcPaymentMethodManager $payment_method_manager,
     CheckoutOptionsManager $checkout_options_manager,
     MobileNumberUtilInterface $mobile_util,
-    SecureText $secure_text,
     AccountProxyInterface $current_user,
     EntityTypeManagerInterface $entity_type_manager,
     AddressBookAreasTermsHelper $areas_term_helper,
@@ -126,7 +113,6 @@ class AlshayaSpcController extends ControllerBase {
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->mobileUtil = $mobile_util;
-    $this->secureText = $secure_text;
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
     $this->areaTermsHelper = $areas_term_helper;
@@ -142,7 +128,6 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('plugin.manager.alshaya_spc_payment_method'),
       $container->get('alshaya_acm_checkout.options_manager'),
       $container->get('mobile_number.util'),
-      $container->get('alshaya_spc.secure_text_helper'),
       $container->get('current_user'),
       $container->get('entity_type.manager'),
       $container->get('alshaya_addressbook.area_terms_helper'),
@@ -316,31 +301,11 @@ class AlshayaSpcController extends ControllerBase {
   /**
    * Checkout Confirmation page.
    *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request.
-   *
    * @return array
    *   Markup for checkout confirmation page.
    */
-  public function checkoutConfirmation(Request $request) {
-    $id = $request->query->get('id');
-    if (empty($id)) {
-      throw new NotFoundHttpException();
-    }
-
-    $data = json_decode($this->secureText->decrypt(
-      $request->query->get('id'),
-      Settings::get('alshaya_api.settings')['consumer_secret']
-    ), TRUE);
-
-    if (empty($data['order_id']) || !is_numeric($data['order_id']) || empty($data['email'])) {
-      throw new NotFoundHttpException();
-    }
-
-    // @todo: Pull order details from MDC for the recent order.
-    $order = $this->orderHelper->getOrder($data['order_id'], $data['email']);
-    global $_alshaya_acm_checkout_last_order;
-    $_alshaya_acm_checkout_last_order = $order;
+  public function checkoutConfirmation() {
+    $order = $this->orderHelper->getLastOrder();
 
     // Get order type hd/cnc and other details.
     $orderDetails = $this->orderHelper->getOrderTypeDetails($order);

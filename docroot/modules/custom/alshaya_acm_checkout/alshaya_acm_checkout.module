@@ -312,9 +312,8 @@ function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = '
  * @return array
  *   Order array if found.
  */
-function _alshaya_acm_checkout_get_last_order_from_session($reset = FALSE) {
-  global $_alshaya_acm_checkout_last_order;
-  return $_alshaya_acm_checkout_last_order ?? [];
+function _alshaya_acm_checkout_get_last_order_from_session() {
+  return \Drupal::service('alshaya_spc.order_helper')->getLastOrder();
 }
 
 /**
