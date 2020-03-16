@@ -127,6 +127,12 @@
                 padding: 1.35rem 0.7rem;
               }
             }
+
+            .delivery-options-mobile {
+              @include breakpoint($only-mobile) {
+                font-weight: bold;
+              }
+            }
           }
         }
 
