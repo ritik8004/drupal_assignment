@@ -219,7 +219,6 @@ class AlshayaSpcOrderHelper {
     $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     $order_id = $this->session->get('last_order_id');
-    $order_id = 1922;
     // Throw access denied if nothing in session.
     if (empty($order_id)) {
       throw new AccessDeniedHttpException();
