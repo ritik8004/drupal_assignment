@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Helper\SecureText;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Config\SystemSettings;
+use App\Service\Drupal\Drupal;
 use App\Service\Knet\KnetHelper;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
@@ -91,6 +93,20 @@ class Cart {
   protected $customerCards;
 
   /**
+   * Drupal service.
+   *
+   * @var \App\Service\Drupal\Drupal
+   */
+  protected $drupal;
+
+  /**
+   * Secure Text service provider.
+   *
+   * @var \App\Helper\SecureText
+   */
+  protected $secureText;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -111,6 +127,10 @@ class Cart {
    *   Service for session.
    * @param \App\Service\CheckoutCom\CustomerCards $customer_cards
    *   Checkout.com API Wrapper.
+   * @param \App\Service\Drupal\Drupal $drupal
+   *   Drupal service.
+   * @param \App\Helper\SecureText $secure_text
+   *   Secure Text service provider.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -121,7 +141,9 @@ class Cart {
     PaymentData $payment_data,
     SystemSettings $settings,
     SessionStorage $session,
-    CustomerCards $customer_cards
+    CustomerCards $customer_cards,
+    Drupal $drupal,
+    SecureText $secure_text
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -132,6 +154,8 @@ class Cart {
     $this->settings = $settings;
     $this->session = $session;
     $this->customerCards = $customer_cards;
+    $this->drupal = $drupal;
+    $this->secureText = $secure_text;
   }
 
   /**
@@ -547,6 +571,7 @@ class Cart {
    */
   public function updatePayment(array $data, array $extension = []) {
     $extension['action'] = 'update payment';
+
     $update = [
       'extension' => (object) $extension,
     ];
@@ -748,6 +773,9 @@ class Cart {
     $url = sprintf('carts/%d/order', $this->getCartId());
 
     try {
+      $cart = $this->getCart();
+      $email = $this->getCartCustomerEmail();
+
       $result = $this->magentoApiWrapper->doRequest('PUT', $url, ['json' => $data]);
       $order_id = (int) str_replace('"', '', $result);
 
@@ -757,7 +785,23 @@ class Cart {
       // Set order in session for later use.
       $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
 
-      return ['success' => TRUE, 'order_id' => $order_id];
+      // Post order id and cart data to Drupal.
+      $data = [
+        'order_id' => (int) $order_id,
+        'cart' => $cart['cart'],
+        'payment_method' => $data['paymentMethod']['method'],
+      ];
+
+      $this->drupal->triggerCheckoutEvent('place order success', $data);
+
+      return [
+        'success' => TRUE,
+        'order_id' => $order_id,
+        'secure_order_id' => $this->secureText->encrypt(
+          json_encode(['order_id' => $order_id, 'email' => $email]),
+          $this->magentoInfo->getMagentoSecretInfo()['consumer_secret']
+        ),
+      ];
     }
     catch (\Exception $e) {
       // Exception handling here.

@@ -9,7 +9,6 @@ use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\address\Repository\CountryRepository;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
-use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -18,14 +17,14 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -42,25 +41,11 @@ class AlshayaSpcOrderHelper {
   protected $moduleHandler;
 
   /**
-   * The session.
-   *
-   * @var \Symfony\Component\HttpFoundation\Session\Session
-   */
-  protected $session;
-
-  /**
    * Address book manager.
    *
    * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
    */
   protected $addressBookManager;
-
-  /**
-   * Orders manager service object.
-   *
-   * @var \Drupal\alshaya_acm_customer\OrdersManager
-   */
-  protected $ordersManager;
 
   /**
    * The current user making the request.
@@ -140,16 +125,26 @@ class AlshayaSpcOrderHelper {
   protected $countryRepository;
 
   /**
+   * Secure Text service provider.
+   *
+   * @var \Drupal\alshaya_spc\Helper\SecureText
+   */
+  protected $secureText;
+
+  /**
+   * Request Stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request|null
+   */
+  protected $request;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Symfony\Component\HttpFoundation\Session\Session $session
-   *   The session.
    * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
    *   Address book manager.
-   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
-   *   Orders manager.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   Current user object.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -170,12 +165,14 @@ class AlshayaSpcOrderHelper {
    *   Checkout option manager.
    * @param \Drupal\address\Repository\CountryRepository $countryRepository
    *   Country Repository.
+   * @param \Drupal\alshaya_spc\Helper\SecureText $secure_text
+   *   Secure Text service provider.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request Stack.
    */
   public function __construct(
     ModuleHandlerInterface $module_handler,
-    Session $session,
     AlshayaAddressBookManager $address_book_manager,
-    OrdersManager $orders_manager,
     AccountProxyInterface $current_user,
     SkuManager $sku_manager,
     SkuImagesManager $sku_images_manager,
@@ -185,12 +182,12 @@ class AlshayaSpcOrderHelper {
     LanguageManagerInterface $language_manager,
     MobileNumberUtilInterface $mobile_util,
     CheckoutOptionsManager $checkout_options_manager,
-    CountryRepository $countryRepository
+    CountryRepository $countryRepository,
+    SecureText $secure_text,
+    RequestStack $request_stack
   ) {
     $this->moduleHandler = $module_handler;
-    $this->session = $session;
     $this->addressBookManager = $address_book_manager;
-    $this->ordersManager = $orders_manager;
     $this->currentUser = $current_user;
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -201,6 +198,8 @@ class AlshayaSpcOrderHelper {
     $this->mobileUtil = $mobile_util;
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->countryRepository = $countryRepository;
+    $this->secureText = $secure_text;
+    $this->request = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -209,48 +208,36 @@ class AlshayaSpcOrderHelper {
    * @return array
    *   Order array if found.
    */
-  public function getLastOrderFromSession($reset = FALSE) {
+  public function getLastOrder() {
     static $order;
 
     if (!empty($order)) {
       return $order;
     }
 
-    $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
-
-    $order_id = $this->session->get('last_order_id');
-    // Throw access denied if nothing in session.
-    if (empty($order_id)) {
-      throw new AccessDeniedHttpException();
+    $id = $this->request->query->get('id');
+    if (empty($id)) {
+      throw new NotFoundHttpException();
     }
 
-    if ($this->currentUser->isAnonymous() || !alshaya_acm_customer_is_customer($this->currentUser)) {
-      $email = $this->session->get('email_order_' . $order_id);
-    }
-    else {
-      $email = $this->currentUser->getEmail();
+    $data = json_decode($this->secureText->decrypt(
+      $id,
+      Settings::get('alshaya_api.settings')['consumer_secret']
+    ), TRUE);
+
+    if (empty($data['order_id']) || !is_numeric($data['order_id']) || empty($data['email'])) {
+      throw new NotFoundHttpException();
     }
 
-    // If flag is set to reset cache.
-    if ($reset) {
-      $this->ordersManager->clearOrderCache($email);
-    }
-
-    $orders = alshaya_acm_customer_get_user_orders($email);
-    $order_index = array_search($order_id, array_column($orders, 'order_id'));
+    // @TODO: Pull order details from MDC for the recent order.
+    $orders = alshaya_acm_customer_get_user_orders($data['email']);
+    $order_index = array_search($data['order_id'], array_column($orders, 'order_id'));
 
     if ($order_index === FALSE) {
-      // If we don't find the order in first go, clear cache and search.
-      if (!$reset) {
-        $this->getLastOrderFromSession(TRUE);
-      }
-
-      // We didn't find even after clearing cache. Throw error now.
       throw new NotFoundHttpException();
     }
 
     $order = $orders[$order_index];
-
     return $order;
   }
 

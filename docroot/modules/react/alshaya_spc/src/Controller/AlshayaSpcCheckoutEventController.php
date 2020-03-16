@@ -4,12 +4,10 @@ namespace Drupal\alshaya_spc\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_customer\OrdersManager;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -98,71 +96,54 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
    */
   public function postCheckoutEvent(Request $request) {
     $action = $request->request->get('action');
-    $order_id = $request->request->get('order_id');
-    $cart = $request->request->get('cart');
-    $payment_method = $request->get('payment_method');
-    if (empty($order_id)) {
+    if (empty($action)) {
       throw new BadRequestHttpException($this->t('Missing required parameters'));
     }
 
     switch ($action) {
       case 'place order success':
-        $session = $request->getSession();
-        $previous_order_id = $session->get('last_order_id');
-        if ($previous_order_id) {
-          Cache::invalidateTags(['order:' . $previous_order_id]);
+        $order_id = $request->request->get('order_id');
+        $cart = $request->request->get('cart');
+        $payment_method = $request->get('payment_method');
+        if (empty($order_id)) {
+          throw new BadRequestHttpException($this->t('Missing required parameters'));
         }
-        $session->set('last_order_id', $order_id);
-        if ($this->currentUser->isAnonymous() || !$this->alshayaCustomerIsCustomer($this->currentUser)) {
-          // Store the email address of customer in session.
-          $email = $cart["customer"]["email"];
-          $session->set('email_order_' . $order_id, $email);
-        }
-        else {
-          $email = $this->currentUser->getEmail();
-          $current_user_id = $this->currentUser->id();
-
-          // Update user's mobile number if empty.
-          $account = $this->entityTypeManager->getStorage('user')->load($current_user_id);
-
-          if (empty($account->get('field_mobile_number')->getString())) {
-            $phone_number = $cart["customer"]["email"];
-            $account->get('field_mobile_number')->setValue($phone_number);
-            $account->save();
-          }
-          else {
-            // Clear user's cache.
-            Cache::invalidateTags(['user:' . $current_user_id]);
-          }
-
-        }
-        // Set selected payment method in session.
-        $session->set('selected_payment_method', $payment_method);
-        $session->save();
-        // Refresh stock for products in cart.
-        $this->refreshStockForProductsInCart($cart);
 
         // Add success message in logs.
         $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [
           '@cart_id' => $cart['cart_id'],
           '@order_id' => $order_id,
-          '@method' => $session->get('selected_payment_method'),
+          '@method' => $payment_method,
         ]);
+
+        // Refresh stock for products in cart.
+        $this->refreshStockForProductsInCart($cart);
+
+        $account = $this->alshayaGetCustomerFromSession();
+        if ($account) {
+          if (empty($account->get('field_mobile_number')->getString())) {
+            $account->get('field_mobile_number')->setValue($cart['billing_address']['telephone']);
+            $account->save();
+          }
+
+          $this->ordersManager->clearOrderCache($account->getEmail(), $account->id());
+        }
 
         // While debugging we log the whole cart object.
         $this->logger->debug('Placed order for cart: @cart', [
           '@cart' => json_encode($cart),
         ]);
+
         break;
     }
 
-    return new JsonResponse($order_id);
+    return new JsonResponse(['success' => TRUE]);
   }
 
   /**
    * Refresh stock cache and Drupal cache of products in cart.
    */
-  public function refreshStockForProductsInCart($cart = NULL) {
+  protected function refreshStockForProductsInCart($cart = NULL) {
     $processed_parents = [];
 
     // Still if empty, simply return.
@@ -190,28 +171,20 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
   /**
    * Helper function to check if user is valid customer.
    *
-   * @param \Drupal\Core\Session\AccountProxyInterface $user
-   *   User to check if it is valid customer.
-   *
-   * @return bool
-   *   True if user is customer, false otherwise.
+   * @return bool|\Drupal\user\UserInterface
+   *   User if user is customer, false otherwise.
    */
-  public function alshayaCustomerIsCustomer(AccountProxyInterface $user) {
-    if ($user instanceof UserInterface) {
-      // Do nothing, we need this to have else condition.
-    }
-    elseif ($user instanceof AccountProxyInterface) {
-      $user = $this->entityTypeManager->getStorage('user')->load($user->id());
-    }
-    else {
+  protected function alshayaGetCustomerFromSession() {
+    if ($this->currentUser->isAnonymous()) {
       return FALSE;
     }
 
+    $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
     if (empty($user->get('acq_customer_id')->getString())) {
       return FALSE;
     }
 
-    return TRUE;
+    return $user;
   }
 
 }

@@ -305,8 +305,7 @@ class AlshayaSpcController extends ControllerBase {
    *   Markup for checkout confirmation page.
    */
   public function checkoutConfirmation() {
-    // @todo: Pull order details from MDC for the recent order.
-    $order = $this->orderHelper->getLastOrderFromSession(TRUE);
+    $order = $this->orderHelper->getLastOrder();
 
     // Get order type hd/cnc and other details.
     $orderDetails = $this->orderHelper->getOrderTypeDetails($order);

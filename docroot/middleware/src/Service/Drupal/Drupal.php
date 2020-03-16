@@ -63,8 +63,10 @@ class Drupal {
   }
 
   /**
-   * Post order id and cart data to Drupal for checkout event.
+   * Trigger event to let Drupal know about the update.
    *
+   * @param string $event
+   *   Event to trigger..
    * @param array $data
    *   Data form checkout event.
    *
@@ -73,7 +75,9 @@ class Drupal {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function postOrderData(array $data) {
+  public function triggerCheckoutEvent(string $event, array $data) {
+    $data['event'] = $event;
+
     $client = $this->drupalInfo->getDrupalApiClient();
     $url = sprintf('/%s/spc/checkout-event', $this->drupalInfo->getDrupalLangcode());
     $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
@@ -82,13 +86,9 @@ class Drupal {
         'Host' => $this->drupalInfo->getDrupalBaseUrl(),
         'Cookie' => $cookies->__toString(),
       ],
-      'form_params' => [
-        'action' => $data['action'],
-        'order_id' => $data['order_id'],
-        'cart' => $data['cart']['cart'],
-        'payment_method' => $data['payment_method'],
-      ],
+      'form_params' => $data,
     ];
+
     $response = $client->request('POST', $url, $options);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);

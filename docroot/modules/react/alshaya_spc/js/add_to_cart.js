@@ -43,7 +43,7 @@
             var available_in_cart = false;
             if (cart_data) {
               cart_data = JSON.parse(cart_data);
-              if (cart_data.cart !== undefined) {
+              if (cart_data && cart_data.cart !== undefined) {
                 cart_data = cart_data.cart;
                 if (cart_data.cart_id !== null) {
                   cart_id = cart_data.cart_id;
@@ -97,6 +97,11 @@
               success: function (response) {
                 // If there any error we throw from middleware.
                 if (response.error === true) {
+                  if (response.error_message === 'Invalid data') {
+                    localStorage.clear();
+                    $(that).trigger('click');
+                    return;
+                  }
                   var cleaned_sku = $(form).attr('data-cleaned-sku');
                   // Showing the error message.
                   $('.error-container-' + cleaned_sku).html('<div class="error">' + response.error_message + '</div>');
