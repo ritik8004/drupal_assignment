@@ -485,7 +485,19 @@ class Cart {
       }
       $this->associateCartToCustomer($customer['id']);
     }
-    return $this->updateCart($data);
+    $cart = $this->updateCart($data);
+
+    // If cart update has error.
+    if ($cart['error']) {
+      return $cart;
+    }
+
+    // Setting city value as 'NONE' so that, we can
+    // identify if billing address added is default one and
+    // not actually added by the customer on FE.
+    $data['shipping']['shipping_address']['city'] = 'NONE';
+    // Adding billing address.
+    return $this->updateBilling($data['shipping']['shipping_address']);
   }
 
   /**
