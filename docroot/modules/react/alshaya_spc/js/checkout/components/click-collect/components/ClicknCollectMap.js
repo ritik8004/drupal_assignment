@@ -15,34 +15,36 @@ class ClicknCollectMap extends React.Component {
     this.geoCoder = null;
   }
 
-  /**
-   * Initiate geocoder.
-   */
-  initGeoCoder = () => {
-    this.geocoder = new google.maps.Geocoder();
-  };
-
   componentDidMount() {
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
     window.spcMap.map.googleMap = this.createGoogleMap();
     this.googleMap.setCurrentMap(window.spcMap.map.googleMap);
-    if (this.props.markers !== null && this.props.markers.length > 0) {
+    const { markers } = this.props;
+    if (markers !== null && markers.length > 0) {
       this.placeMarkers();
     } else {
       this.googleMap.setCenter();
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.coords !== this.props.coords || prevProps.markers !== this.props.markers) {
-      if (this.props.markers !== null && this.props.markers.length > 0) {
+  componentDidUpdate(prevProps) {
+    const { coords, markers } = this.props;
+    if (prevProps.coords !== coords || prevProps.markers !== markers) {
+      if (markers !== null && markers.length > 0) {
         this.placeMarkers();
       } else {
         this.googleMap.setCenter();
       }
     }
   }
+
+  /**
+   * Initiate geocoder.
+   */
+  initGeoCoder = () => {
+    this.geocoder = new google.maps.Geocoder();
+  };
 
   /**
    * Place markers on map.

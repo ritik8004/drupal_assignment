@@ -5,12 +5,14 @@ const ToggleButton = ({ toggleStoreView }) => (
     <div className="toggle-buttons-wrapper">
       <button
         className="stores-list-view active"
+        type="button"
         onClick={(e) => toggleStoreView(e, 'list')}
       >
         {Drupal.t('List view')}
       </button>
       <button
         className="stores-map-view"
+        type="button"
         onClick={(e) => toggleStoreView(e, 'map')}
       >
         {Drupal.t('Map view')}

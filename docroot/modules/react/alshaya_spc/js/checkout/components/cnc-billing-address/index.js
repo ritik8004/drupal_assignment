@@ -14,7 +14,16 @@ export default class CnCBillingAddress extends React.Component {
     };
   }
 
-  showPopup = (e) => {
+  componentDidMount() {
+    this._isMounted = true;
+    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  showPopup = () => {
     this.setState({
       open: true,
     });
@@ -28,29 +37,21 @@ export default class CnCBillingAddress extends React.Component {
     }
   };
 
-  componentDidMount() {
-    this._isMounted = true;
-    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
   /**
    * Event handler for billing update.
    */
   processBillingUpdate = (e) => {
     const data = e.detail.data();
-
+    const { refreshCart } = this.props;
     // Close modal.
     this.closePopup();
     // Refresh cart.
-    this.props.refreshCart(data);
+    refreshCart(data);
   };
 
   render() {
     const { billingAddress, shippingAddress, carrierInfo } = this.props;
+    const { open } = this.state;
 
     // If carrier info not set, means shipping info not set.
     // So we don't need to show bulling.
@@ -72,11 +73,17 @@ export default class CnCBillingAddress extends React.Component {
         <div className="spc-section-billing-address cnc-flow">
           <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
           <div className="spc-billing-address-wrapper">
-            <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={(e) => this.showPopup(e)}>
+            <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={(e) => this.showPopup(e)} role="button" tabIndex="0" onKeyUp={() => {}} aria-label="Billing">
               {Drupal.t('please add your billing address.')}
             </div>
-            {this.state.open
-              && <BillingPopUp closePopup={this.closePopup} billing={null} shipping={shippingAddress} />}
+            {open
+              && (
+                <BillingPopUp
+                  closePopup={this.closePopup}
+                  billing={null}
+                  shipping={shippingAddress}
+                />
+              )}
           </div>
         </div>
       );

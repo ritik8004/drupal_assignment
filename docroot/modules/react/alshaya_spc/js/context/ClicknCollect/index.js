@@ -4,7 +4,7 @@ import { cleanMobileNumber } from '../../utilities/checkout_util';
 
 export const ClicknCollectContext = React.createContext();
 
-export class ClicknCollectContextProvider extends React.Component {
+class ClicknCollectContextProvider extends React.Component {
   _isMounted = true;
 
   constructor(props) {

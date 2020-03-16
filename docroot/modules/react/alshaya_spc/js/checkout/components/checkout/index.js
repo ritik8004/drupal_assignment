@@ -43,8 +43,8 @@ export default class Checkout extends React.Component {
       wait: true,
       cart: null,
       storeList: null,
-      message_type: null,
-      error_success_message: null,
+      messageType: null,
+      errorSuccessMessage: null,
     };
   }
 
@@ -57,41 +57,37 @@ export default class Checkout extends React.Component {
       }
       // If logged in user.
       if (window.drupalSettings.user.uid > 0) {
-        const temp_cart = getInfoFromStorage();
+        const tempCart = getInfoFromStorage();
         // If cart available in storage and shipping address
         // already not set in cart and user has address
         // available, remove cart from local storage so
         // so that fresh cart is fetched and thus shipping
         // info can be set in cart.
-        if (temp_cart !== null
-          && (temp_cart.cart === undefined
-            || (temp_cart.cart.shipping_address === null
+        if (tempCart !== null
+          && (tempCart.cart === undefined
+            || (tempCart.cart.shipping_address === null
           && window.drupalSettings.user_name.address_available))) {
           removeCartFromStorage();
         }
       }
 
       // Fetch cart data.
-      const cart_data = fetchCartData();
-      if (cart_data instanceof Promise) {
-        cart_data.then((result) => {
-          let cart_obj = getInfoFromStorage();
-          if (!cart_obj) {
-            cart_obj = { cart: result };
+      const cartData = fetchCartData();
+      if (cartData instanceof Promise) {
+        cartData.then((result) => {
+          let cartObj = getInfoFromStorage();
+          if (!cartObj) {
+            cartObj = { cart: result };
           }
-          addInfoInStorage(cart_obj);
-          // Check cart is associated with customer or not, and make api call
-          // to associate it with logged in customer.
-          // For newly created and logged user, cart association does not
-          // happen with restore cart. hence, the api call.
-          checkCartCustomer(cart_obj).then((updated) => {
+          addInfoInStorage(cartObj);
+          checkCartCustomer(cartObj).then((updated) => {
             if (updated) {
-              cart_obj = getInfoFromStorage();
+              cartObj = getInfoFromStorage();
             }
-            window.cart_data = cart_obj;
+            window.cartData = cartObj;
             this.setState({
               wait: false,
-              cart: cart_obj,
+              cart: cartObj,
             });
           });
         });
@@ -115,16 +111,16 @@ export default class Checkout extends React.Component {
     // If there is error on cart update.
     if (cart.error_message !== undefined) {
       this.setState({
-        message_type: 'error',
-        error_success_message: cart.error_message,
+        messageType: 'error',
+        errorSuccessMessage: cart.error_message,
       });
     } else {
       addInfoInStorage(cart);
 
       this.setState({
         cart,
-        message_type: 'success',
-        error_success_message: null,
+        messageType: 'success',
+        errorSuccessMessage: null,
       });
     }
   };
@@ -133,11 +129,12 @@ export default class Checkout extends React.Component {
    * Trigger cnc event to get location details and fetch stores.
    */
   cncEvent = () => {
-    const { cart: { store_info } } = this.state.cart;
-    if (store_info) {
+    const { cart: mainCart } = this.state;
+    const { cart: { storeInfo } } = mainCart;
+    if (storeInfo) {
       this.fetchStoresHelper({
-        lat: parseFloat(store_info.lat),
-        lng: parseFloat(store_info.lng),
+        lat: parseFloat(storeInfo.lat),
+        lng: parseFloat(storeInfo.lng),
       });
     } else {
       getLocationAccess()
@@ -147,7 +144,7 @@ export default class Checkout extends React.Component {
             lng: pos.coords.longitude,
           });
         },
-        (reject) => {
+        () => {
           this.fetchStoresHelper(getDefaultMapCenter());
         })
         .catch((error) => {
@@ -186,18 +183,19 @@ export default class Checkout extends React.Component {
    * Get the billing address component for rendering.
    */
   getBillingComponent = () => {
-    if (!isDeliveryTypeSameAsInCart(this.state.cart)) {
+    const { cart } = this.state;
+    if (!isDeliveryTypeSameAsInCart(cart)) {
       return (null);
     }
 
-    if (this.state.cart.cart.delivery_type === 'hd') {
+    if (cart.cart.delivery_type === 'hd') {
       return (
         <HDBillingAddress
           refreshCart={this.refreshCart}
-          billingAddress={this.state.cart.cart.billing_address}
-          shippingAddress={this.state.cart.cart.shipping_address}
-          carrierInfo={this.state.cart.cart.carrier_info}
-          paymentMethod={this.state.cart.selected_payment_method}
+          billingAddress={cart.cart.billing_address}
+          shippingAddress={cart.cart.shipping_address}
+          carrierInfo={cart.cart.carrier_info}
+          paymentMethod={cart.selected_payment_method}
         />
       );
     }
@@ -205,23 +203,30 @@ export default class Checkout extends React.Component {
     return (
       <CnCBillingAddress
         refreshCart={this.refreshCart}
-        billingAddress={this.state.cart.cart.billing_address}
-        shippingAddress={this.state.cart.cart.shipping_address}
-        carrierInfo={this.state.cart.cart.carrier_info}
-        paymentMethod={this.state.cart.selected_payment_method}
+        billingAddress={cart.cart.billing_address}
+        shippingAddress={cart.cart.shipping_address}
+        carrierInfo={cart.cart.carrier_info}
+        paymentMethod={cart.selected_payment_method}
       />
     );
   }
 
   render() {
+    const {
+      wait,
+      cart,
+      errorSuccessMessage,
+      messageType,
+      storeList,
+    } = this.state;
     // While page loads and all info available.
 
-    if (this.state.wait) {
+    if (wait) {
       return <Loading />;
     }
 
     // If cart not available.
-    if (this.state.cart === null) {
+    if (cart === null) {
       return (
         <>
           <EmptyResult Message={Drupal.t('your shopping basket is empty.')} />
@@ -237,19 +242,19 @@ export default class Checkout extends React.Component {
         <div className="spc-pre-content" />
         <div className="spc-main">
           <div className="spc-content">
-            {this.state.error_success_message !== null
+            {errorSuccessMessage !== null
               && (
-              <CheckoutMessage type={this.state.message_type}>
-                {this.state.error_success_message}
+              <CheckoutMessage type={messageType}>
+                {errorSuccessMessage}
               </CheckoutMessage>
               )}
 
-            <DeliveryMethods cart={this.state.cart} refreshCart={this.refreshCart} cncEvent={this.cncEvent} />
-            <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
-              <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
+            <DeliveryMethods cart={cart} refreshCart={this.refreshCart} cncEvent={this.cncEvent} />
+            <ClicknCollectContextProvider cart={cart} storeList={storeList}>
+              <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
             </ClicknCollectContextProvider>
 
-            <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={this.state.cart} />
+            <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={cart} />
 
             {billingComponent}
 
@@ -257,10 +262,20 @@ export default class Checkout extends React.Component {
               {termConditions}
             </ConditionalView>
 
-            <CompletePurchase cart={this.state.cart} validateBeforePlaceOrder={this.validateBeforePlaceOrder} />
+            <CompletePurchase
+              cart={cart}
+              validateBeforePlaceOrder={this.validateBeforePlaceOrder}
+            />
           </div>
           <div className="spc-sidebar">
-            <OrderSummaryBlock item_qty={this.state.cart.cart.items_qty} items={this.state.cart.cart.items} totals={this.state.cart.cart.totals} in_stock={this.state.cart.cart.in_stock} cart_promo={this.state.cart.cart.cart_promo} show_checkout_button={false} />
+            <OrderSummaryBlock
+              item_qty={cart.cart.items_qty}
+              items={cart.cart.items}
+              totals={cart.cart.totals}
+              in_stock={cart.cart.in_stock}
+              cart_promo={cart.cart.cart_promo}
+              show_checkout_button={false}
+            />
           </div>
         </div>
         <div className="spc-post-content">
