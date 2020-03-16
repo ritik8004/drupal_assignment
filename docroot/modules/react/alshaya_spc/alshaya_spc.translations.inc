@@ -34,6 +34,9 @@ function _alshaya_spc_translations() {
     'Total (excluding delivery)' => [
       'ar' => '(المبلغ الإجمالي (قبل التوصيل',
     ],
+    'remove this item' => [
+      'ar' => 'أزل هذا البند',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
