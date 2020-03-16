@@ -14,25 +14,15 @@ export default class AreaSelect extends React.Component {
     super(props);
     this.state = {
       areas: [],
-      current_option: this.areaCurrentOption(),
+      currentOption: this.areaCurrentOption(),
       showFilterList: false,
       currentCity: props.cityChanged,
     };
   }
 
-  areaCurrentOption = () => {
-    let current_option = new Array();
-    if (this.props.default_val.length !== 0
-      && this.props.default_val.length !== 'undefined') {
-      current_option = this.props.default_val[this.props.field.key];
-    }
-
-    return current_option;
-  }
-
   static getDerivedStateFromProps(props, state) {
     if (props.cityChanged !== state.currentCity) {
-      return { current_option: new Array(), currentCity: props.cityChanged };
+      return { currentOption: [], currentCity: props.cityChanged };
     }
 
     return null;
@@ -44,13 +34,24 @@ export default class AreaSelect extends React.Component {
     document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
   }
 
+  areaCurrentOption = () => {
+    let currentOption = [];
+    const { default_val, field } = this.props;
+    if (default_val.length !== 0
+      && default_val.length !== 'undefined') {
+      currentOption = default_val[field.key];
+    }
+
+    return currentOption;
+  }
+
   /**
    * When we search in google, update address.
    */
   updateAreaFromGoogleMap = (e) => {
     const data = e.detail.data();
     this.setState({
-      current_option: data.id,
+      currentOption: data.id,
     });
   }
 
@@ -58,11 +59,12 @@ export default class AreaSelect extends React.Component {
    * Whether filter list component need to shown or not.
    */
   toggleFilterList = () => {
+    const { showFilterList } = this.state;
     this.setState({
-      showFilterList: !this.state.showFilterList,
+      showFilterList: !showFilterList,
     });
 
-    if (!this.state.showFilterList) {
+    if (!showFilterList) {
       // Hide contact info and save button on filter list show.
       document.getElementById('spc-checkout-contact-info').classList.add('visually-hidden');
       document.getElementById('address-form-action').classList.add('visually-hidden');
@@ -77,7 +79,7 @@ export default class AreaSelect extends React.Component {
    */
   processSelectedItem = (val) => {
     this.setState({
-      current_option: val.toString(),
+      currentOption: val.toString(),
     });
 
     // Geocoding so that map is updated.
@@ -99,13 +101,22 @@ export default class AreaSelect extends React.Component {
   };
 
   render() {
-    let options = this.state.areas;
-    if (this.props.area_list !== null) {
-      options = this.props.area_list;
+    const {
+      areas,
+      currentOption,
+      showFilterList,
+    } = this.state;
+    const {
+      area_list,
+      field,
+      field_key,
+    } = this.props;
+    let options = areas;
+    if (area_list !== null) {
+      options = area_list;
     }
 
-    const panelTitle = Drupal.t('select ') + this.props.field.label;
-    const currentOption = this.state.current_option;
+    const panelTitle = Drupal.t('select ') + field.label;
 
     const currentOptionAvailable = (currentOption !== undefined
       && currentOption !== null
@@ -120,7 +131,7 @@ export default class AreaSelect extends React.Component {
 
     return (
       <div className="spc-type-select">
-        <label>{this.props.field.label}</label>
+        <label>{field.label}</label>
         {
           (areaLabel.length > 0) ? (
             <div id="spc-area-select-selected" className="spc-area-select-selected" onClick={() => this.toggleFilterList()}>
@@ -132,7 +143,7 @@ export default class AreaSelect extends React.Component {
             </div>
           )
 }
-        {this.state.showFilterList
+        {showFilterList
           && (
           <FilterList
             selected={options[currentOption]}
@@ -143,8 +154,8 @@ export default class AreaSelect extends React.Component {
             panelTitle={panelTitle}
           />
           )}
-        <input type="hidden" id={this.props.field_key} name={this.props.field_key} value={hiddenFieldValue} />
-        <div id={`${this.props.field_key}-error`} />
+        <input type="hidden" id={field_key} name={field_key} value={hiddenFieldValue} />
+        <div id={`${field_key}-error`} />
       </div>
     );
   }
