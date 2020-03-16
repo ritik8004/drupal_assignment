@@ -1,7 +1,7 @@
 .block-alshaya-algolia-react-autocomplete {
   .algolia-search-cleartext-icon {
     @include breakpoint($tablet) {
-      #{$right}: 2.5rem;
+      #{$right}: 1.3rem;
     }
 
     @include breakpoint($only-mobile) {
@@ -16,6 +16,29 @@
         width: 1.25rem;
         height: 1.25rem;
       }
+    }
+
+    @include breakpoint($desktop) {
+      #{$right}: 1.7rem;
+    }
+  }
+
+  &.clear-icon {
+    #alshaya-algolia-autocomplete .react-autosuggest__input {
+      padding-#{$right}: 2.5rem !important;
+
+      @include breakpoint($only-tablet) {
+        padding-#{$right}: 2.6rem !important;
+      }
+
+      @include breakpoint($desktop) {
+        padding-#{$right}: 3rem !important;
+      }
+    }
+
+    .algolia-search-cleartext-icon {
+      opacity: 1;
+      visibility: visible;
     }
   }
 

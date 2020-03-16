@@ -27,10 +27,19 @@
       display: none !important;
     }
 
-    @include breakpoint($tablet) {
+    @include breakpoint($desktop) {
       .algolia-search-cleartext-icon {
         opacity: 1;
         visibility: visible;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      &.show-algolia-search-bar {
+        .algolia-search-cleartext-icon {
+          opacity: 1;
+          visibility: visible;
+        }
       }
     }
 
@@ -456,19 +465,51 @@
         visibility: hidden;
       }
 
-      &.show-algolia-search-bar {
-        &.focused {
-          .algolia-search-back-icon {
-            visibility: visible;
+      &.focused.show-algolia-search-bar {
+        .algolia-search-back-icon {
+          visibility: visible;
 
-            @include icon(arrow-#{$left}) {
-              font-size: 2.25rem;
-            }
+          @include icon(arrow-#{$left}) {
+            font-size: 2.25rem;
           }
+        }
 
-          .react-autosuggest__input {
-            padding-#{$left}: 2.3125rem !important;
+        .react-autosuggest__input {
+          padding-#{$left}: 2.3125rem;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  body {
+    .block-alshaya-algolia-react-autocomplete {
+      .algolia-search-back-icon {
+        position: absolute;
+        z-index: 4;
+        color: $algolia-search-clear-text-icon;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        #{$left}: 0.425rem;
+        width: 2rem;
+        height: 2rem;
+        top: 0.2125rem;
+        transform: none;
+        visibility: hidden;
+      }
+
+      &.focused.show-algolia-search-bar {
+        .algolia-search-back-icon {
+          visibility: visible;
+
+          @include icon(arrow-#{$left}) {
+            font-size: 2.25rem;
           }
+        }
+
+        .react-autosuggest__input {
+          padding-#{$left}: 2.3125rem;
         }
       }
     }

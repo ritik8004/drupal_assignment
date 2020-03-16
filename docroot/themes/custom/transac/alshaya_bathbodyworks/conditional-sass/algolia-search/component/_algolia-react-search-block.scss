@@ -22,8 +22,32 @@
     }
   }
 
+  &.show-algolia-search-bar.focused {
+    .ais-InstantSearch__root .react-autosuggest__container .react-autosuggest__input {
+      padding-#{$left}: 2.8125rem !important;
+    }
+  }
+
+  &.clear-icon {
+    #alshaya-algolia-autocomplete .react-autosuggest__input {
+      padding-#{$right}: 2.5rem;
+
+      @include breakpoint($desktop) {
+        padding-#{$right}: 4rem;
+      }
+    }
+  }
+
   .algolia-search-cleartext-icon {
-    display: none;
+    #{$right}: 0.3rem;
+
+    @include breakpoint($desktop) {
+      #{$right}: 2rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      top: 0.2125rem;
+    }
   }
 
   .react-autosuggest__container .algolia-search-back-icon {
