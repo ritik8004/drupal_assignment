@@ -126,9 +126,8 @@ class AdvancedPageResource extends ResourceBase {
    *   The response containing list of categories.
    */
   public function get() {
-    $page = $this->requestStack->query->get('page');
     // Path alias of advanced page.
-    $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
+    $alias = $this->requestStack->query->get('url');
     $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
 
     if (!$node instanceof NodeInterface) {
@@ -203,7 +202,7 @@ class AdvancedPageResource extends ResourceBase {
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
         'contexts' => [
-          'url.query_args:page',
+          'url.query_args:url',
         ],
         'tags' => array_merge([
           ProductCategoryTree::CACHE_TAG,
