@@ -3,12 +3,16 @@
 namespace App\Service\CheckoutCom;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * APIWrapper class.
  */
 class APIWrapper {
+
+  // Magento method, to set for 2d vault (tokenized card) transaction.
+  const CHECKOUT_COM_VAULT_METHOD = 'checkout_com_cc_vault';
 
   // Key that contains redirect url.
   const REDIRECT_URL = 'redirectUrl';
@@ -292,17 +296,10 @@ class APIWrapper {
       $response = json_decode($result->getBody(), TRUE);
     }
     catch (\Exception $e) {
-      $msg = new FormattableMarkup(
-        '@action: @class during request: (@code) - @message',
-        [
-          '@class' => get_class($e),
-          '@code' => $e->getCode(),
-          '@message' => $e->getMessage(),
-        ]
-      );
+      $msg = sprintf('%s during request: (%s) - %s', get_class($e), $e->getCode(), $e->getMessage());
 
       // $this->logger->error($msg);
-      if ($e->getCode() == 404 || $e instanceof MalformedResponseException) {
+      if ($e->getCode() == 404) {
         throw new \Exception($msg);
       }
       elseif ($e instanceof RequestException) {
@@ -340,10 +337,19 @@ class APIWrapper {
       'value' => $this->getCheckoutAmount($cart['totals']['grand_total'], $cart['totals']['quote_currency_code']),
       'currency' => $cart['totals']['quote_currency_code'],
       'email' => $cart['cart']['customer']['email'],
-      'udf1' => $payment_data['udf1'] ?? '',
-      'udf3' => $payment_data['udf3'] ?? '',
-      'cardToken' => $payment_data['card_token_id'],
     ];
+
+    if (!empty($payment_data['card_token_id'])) {
+      // If the current card is "MADA" then set the value else empty.
+      $params['udf1'] = $payment_data['udf1'] ?? '';
+      // Save card for future - STORE_IN_VAULT_ON_SUCCESS.
+      $params['udf3'] = $payment_data['udf3'] ?? '';
+      $params['cardToken'] = $payment_data['card_token_id'];
+    }
+    elseif (!empty($payment_data['cardId'])) {
+      // Set cardID, cvv and udf2 = 'cardIdCharge' values.
+      $params = array_merge($params, $payment_data);
+    }
 
     // Set parameters required for 3d secure payment.
     $params['chargeMode'] = self::VERIFY_3DSECURE;
@@ -363,7 +369,7 @@ class APIWrapper {
     $params['successUrl'] = $host . 'checkout-com-success';
     $params['failUrl'] = $host . 'checkout-com-error';
 
-    $params['trackId'] = $cart['cart']['extension']['real_reserved_order_id'];
+    $params['trackId'] = $cart['cart']['extension_attributes']['real_reserved_order_id'];
 
     $params['products'] = $this->getCartItems($cart['cart']['items']);
     $params['billingDetails'] = $this->getAddressDetails($cart['cart'], 'billing');

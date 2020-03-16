@@ -39,7 +39,7 @@ export const getShippingMethods = function (cart_id, data) {
  * @param payment_method
  * @returns {boolean}
  */
-export const placeOrder = function (cart_id, payment_method) {
+export const placeOrder = function (payment_method) {
   const { middleware_url } = window.drupalSettings.alshaya_spc;
 
   const data = {
@@ -50,7 +50,6 @@ export const placeOrder = function (cart_id, payment_method) {
   return axios
     .post(`${middleware_url}/cart/place-order`, {
       data,
-      cart_id,
     })
     .then(
       (response) => {
@@ -94,6 +93,14 @@ export const addShippingInCart = function (action, data) {
           removeFullScreenLoader();
           return null;
         }
+
+        // If there is no error on shipping update.
+        if (response.data.error === undefined) {
+          // Trigger event on shipping update, so that
+          // other components take necessary action if required.
+          triggerCheckoutEvent('onShippingAddressUpdate', response.data);
+        }
+
         return response.data;
       },
       (error) =>
@@ -242,4 +249,8 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
   }
 
   return false;
+};
+
+export const validateInfo = (data) => {
+  return axios.post(Drupal.url('spc/validate-info'), data);
 };

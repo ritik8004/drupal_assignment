@@ -308,6 +308,10 @@ header {
       margin-right: 2px;
       padding-#{$right}: 1rem;
 
+      .price-amount {
+        padding: 0 0.25rem;
+      }
+
       @include breakpoint($only-mobile) {
         display: none;
       }

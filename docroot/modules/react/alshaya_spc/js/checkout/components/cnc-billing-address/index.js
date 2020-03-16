@@ -58,8 +58,16 @@ export default class CnCBillingAddress extends React.Component {
       return (null);
     }
 
-    // If billing address is not set already.
-    if (billingAddress === undefined || billingAddress === null) {
+    // If billing address city value is 'NONE',
+    // means its default billing address (same as shipping)
+    // and not added by the user.
+    let billingAddressAddedByUser = true;
+    if (billingAddress.city === 'NONE') {
+      billingAddressAddedByUser = false;
+    }
+
+    // If user has not added billing address.
+    if (!billingAddressAddedByUser) {
       return (
         <div className="spc-section-billing-address cnc-flow">
           <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
@@ -68,7 +76,7 @@ export default class CnCBillingAddress extends React.Component {
               {Drupal.t('please add your billing address.')}
             </div>
             {this.state.open
-              && <BillingPopUp closePopup={this.closePopup} billing={billingAddress} shipping={shippingAddress} />}
+              && <BillingPopUp closePopup={this.closePopup} billing={null} shipping={shippingAddress} />}
           </div>
         </div>
       );

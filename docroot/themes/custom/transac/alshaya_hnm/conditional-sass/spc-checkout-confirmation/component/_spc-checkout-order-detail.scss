@@ -1,7 +1,31 @@
 .spc-order-summary-order-detail {
   label {
+    text-transform: capitalize;
+
     @include icon('dropdown-expand', 'after') {
       font-size: 2rem;
+    }
+  }
+}
+
+.spc-order-summary-order-preview,
+.spc-order-summary-order-detail {
+  > label {
+    text-transform: capitalize;
+  }
+
+  .spc-order-summary-item {
+    &.spc-order-summary-address-item {
+      .spc-value {
+        .spc-address-name {
+          font-family: $hnm-demibold;
+          text-transform: capitalize;
+        }
+      }
+    }
+
+    .spc-label {
+      text-transform: capitalize;
     }
   }
 }

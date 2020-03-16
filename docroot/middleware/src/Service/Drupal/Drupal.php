@@ -63,6 +63,38 @@ class Drupal {
   }
 
   /**
+   * Post order id and cart data to Drupal for checkout event.
+   *
+   * @param array $data
+   *   Data form checkout event.
+   *
+   * @return mixed
+   *   Result from drupal.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function postOrderData(array $data) {
+    $client = $this->drupalInfo->getDrupalApiClient();
+    $url = sprintf('/%s/spc/checkout-event', $this->drupalInfo->getDrupalLangcode());
+    $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
+    $options = [
+      'headers' => [
+        'Host' => $this->drupalInfo->getDrupalBaseUrl(),
+        'Cookie' => $cookies->__toString(),
+      ],
+      'form_params' => [
+        'action' => $data['action'],
+        'order_id' => $data['order_id'],
+        'cart' => $data['cart']['cart'],
+        'payment_method' => $data['payment_method'],
+      ],
+    ];
+    $response = $client->request('POST', $url, $options);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
+  /**
    * Get linked skus info from Drupal.
    *
    * @param array $skus

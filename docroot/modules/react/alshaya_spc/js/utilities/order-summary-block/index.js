@@ -6,7 +6,7 @@ import CheckoutCartItems from '../../checkout/components/checkout-cart-items';
 class OrderSummaryBlock extends React.Component {
   render() {
     const promo_data = this.props.cart_promo ? this.props.cart_promo : null;
-    let order_summary_title = Drupal.t('order summary');
+    let order_summary_title = Drupal.t('Order Summary');
     const continue_checkout_link = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
     // To be used on checkout page.
     if (this.props.item_qty !== undefined) {

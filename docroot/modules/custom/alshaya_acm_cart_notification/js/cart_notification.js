@@ -51,7 +51,7 @@
         // Scroll and show cart notification.
         var cart_notification_data = {
           image: image,
-          link: 'cart',
+          link: Drupal.url('cart'),
           link_text: Drupal.t('view cart'),
           name: product_name,
           quantity: quantity

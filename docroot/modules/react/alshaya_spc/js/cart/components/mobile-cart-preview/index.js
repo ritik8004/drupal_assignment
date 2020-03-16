@@ -10,7 +10,7 @@ const MobileCartPreview = (props) => {
   return (
     <>
       <div className="spc-mobile-cart-preview">
-        <span className="cart-quantity">{Drupal.t('@qty items', { '@qty': total_items })}</span>
+        <span className="cart-quantity">{Drupal.t('@total items', { '@total': total_items })}</span>
         <span className="cart-text">{`${totalText} :`}</span>
         <span className="cart-value"><PriceElement amount={base_grand_total} /></span>
       </div>

@@ -37,3 +37,15 @@ input[type=radio] {
     }
   }
 }
+
+.payment-method.payment-method-checkout_com .payment-method-bottom-panel .spc-checkout-card-option {
+  @include icon(radio-empty, before) {
+    font-size: 3rem !important;
+  }
+
+  &.selected {
+    @include icon(radio-filled, before) {
+      font-size: 3rem !important;
+    }
+  }
+}

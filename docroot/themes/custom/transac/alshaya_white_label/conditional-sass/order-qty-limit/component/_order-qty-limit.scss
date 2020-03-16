@@ -29,8 +29,8 @@
     font-family: $alshaya-bold;
     font-weight: normal;
     padding-#{$left}: 1.65rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
 
     @include icon(infomation, before) {
       font-size: 1.25rem;

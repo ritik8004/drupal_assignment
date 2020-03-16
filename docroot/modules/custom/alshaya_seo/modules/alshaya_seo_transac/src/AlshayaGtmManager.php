@@ -1138,7 +1138,7 @@ class AlshayaGtmManager {
         break;
 
       case 'purchase confirmation page':
-        $order = _alshaya_acm_checkout_get_last_order_from_session();
+        $order = _alshaya_acm_checkout_get_last_order_from_session(TRUE);
 
         // Validations will be handled in other code.
         if (empty($order)) {

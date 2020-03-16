@@ -23,3 +23,21 @@ services:
       - '@alshaya_spc.cookies'
       - '@session'
       - '@alshaya_addressbook.manager'
+
+  alshaya_spc.order_helper:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper
+    arguments:
+      - '@module_handler'
+      - '@session'
+      - '@alshaya_addressbook.manager'
+      - '@alshaya_acm_customer.orders_manager'
+      - '@current_user'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@acq_sku.product_info_helper'
+      - '@acq_sku.product_options_manager'
+      - '@alshaya_acm_product.sku_info'
+      - '@language_manager'
+      - '@mobile_number.util'
+      - '@alshaya_acm_checkout.options_manager'
+      - '@address.country_repository'

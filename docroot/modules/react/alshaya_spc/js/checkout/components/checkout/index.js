@@ -105,6 +105,9 @@ export default class Checkout extends React.Component {
    * Update the cart in storage.
    */
   refreshCart = (cart) => {
+    // Remove loader.
+    removeFullScreenLoader();
+
     // If there is error on cart update.
     if (cart.error_message !== undefined) {
       this.setState({
@@ -120,9 +123,6 @@ export default class Checkout extends React.Component {
         errorSuccessMessage: null,
       });
     }
-
-    // Remove loader.
-    removeFullScreenLoader();
   };
 
   /**

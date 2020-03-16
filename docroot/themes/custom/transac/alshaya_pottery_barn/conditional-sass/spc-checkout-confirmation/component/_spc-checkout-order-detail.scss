@@ -1,0 +1,21 @@
+.spc-order-summary-order-preview,
+.spc-order-summary-order-detail {
+  > label {
+    text-transform: capitalize;
+  }
+
+  .spc-order-summary-item {
+    &.spc-order-summary-address-item {
+      .spc-value {
+        .spc-address-name {
+          font-weight: 600;
+          text-transform: capitalize;
+        }
+      }
+    }
+
+    .spc-label {
+      text-transform: capitalize;
+    }
+  }
+}
