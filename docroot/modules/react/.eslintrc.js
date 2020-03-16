@@ -33,5 +33,19 @@ module.exports = {
     "import/no-extraneous-dependencies": "off",
     "react/prop-types": [0],
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "react/static-property-placement": ["warn", "property assignment", {
+      contextType: "static public field",
+    }],
+    "react/sort-comp": [1, {
+      order: [
+        'propTypes',
+        'instance-variables',
+        'static-variables',
+        'static-methods',
+        'lifecycle',
+        'everything-else',
+        'render'
+      ]
+    }],
   }
 };
