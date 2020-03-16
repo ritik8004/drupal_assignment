@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import ConditionalView from '../../../common/components/conditional-view';
 import CodSurchargePaymentMethodDescription
   from '../payment-description-cod-surchage';
@@ -49,11 +50,13 @@ export default class PaymentMethod extends React.Component {
         // 2D flow success.
         const { cart } = this.props;
         placeOrder(cart.cart.cart_id, cart.selected_payment_method);
+        Cookies.remove('spc_selected_card');
       } else if (result.success === undefined || !(result.success)) {
         // 3D flow error.
         console.error(result);
       } else if (result.redirectUrl !== undefined) {
         // 3D flow success.
+        Cookies.remove('spc_selected_card');
         window.location = result.redirectUrl;
       } else {
         console.error(result);
