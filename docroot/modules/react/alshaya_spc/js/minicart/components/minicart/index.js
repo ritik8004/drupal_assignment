@@ -1,7 +1,7 @@
 import React from 'react';
 
 import 'promise-polyfill/src/polyfill';
-import { fetchCartData } from '../../../utilities/get_cart';
+import { fetchCartData } from '../../../utilities/api/requests';
 import { addInfoInStorage } from '../../../utilities/storage';
 import EmptyMiniCartContent from '../empty-mini-cart-content';
 import MiniCartContent from '../mini-cart-content';
