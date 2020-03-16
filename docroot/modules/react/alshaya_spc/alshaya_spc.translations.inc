@@ -56,7 +56,7 @@ function _alshaya_spc_get_translations(string $version = '') {
   // If no version mentioned, return all version strings.
   if (empty($version)) {
     $trans_data = [];
-    foreach ($translations as $ver => $trans) {
+    foreach ($translations as $trans) {
       $trans_data = array_merge($trans_data, $trans);
     }
 
