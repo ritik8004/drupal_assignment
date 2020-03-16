@@ -147,7 +147,7 @@ class PaymentController {
       return $this->handleCheckoutComFailure();
     }
 
-    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout/confirmation', 302);
+    $response = new RedirectResponse('', 302);
 
     try {
       $payment_data = [
@@ -169,7 +169,8 @@ class PaymentController {
         throw new \Exception($order['error_message'] ?? 'Place order failed', $order['error_code'] ?? 500);
       }
 
-      $response->headers->setCookie(Cookie::create('middleware_order_placed', $order['order_id'], strtotime('+1 year'), '/', NULL, TRUE, FALSE));
+      $response->setTargetUrl('/' . $data['data']['langcode'] . '/checkout/confirmation?id=' . $order['secure_order_id']);
+      $response->headers->setCookie(Cookie::create('middleware_order_placed', 1, strtotime('+1 year'), '/', NULL, TRUE, FALSE));
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart: @cart. Payment method @method.', [
@@ -306,7 +307,7 @@ class PaymentController {
       '@message' => json_encode($data),
     ]);
 
-    $redirect = new RedirectResponse('/' . $state['data']['langcode'] . '/checkout/confirmation', 302);
+    $redirect = new RedirectResponse('', 302);
 
     try {
       $payment_data = [
@@ -326,7 +327,8 @@ class PaymentController {
         throw new \Exception($order['error_message'] ?? 'Place order failed', $order['error_code'] ?? 500);
       }
 
-      $redirect->headers->setCookie(Cookie::create('middleware_order_placed', $order['order_id'], strtotime('+1 year'), '/', NULL, TRUE, FALSE));
+      $redirect->setTargetUrl('/' . $state['data']['langcode'] . '/checkout/confirmation?id=' . $order['secure_order_id']);
+      $redirect->headers->setCookie(Cookie::create('middleware_order_placed', 1, strtotime('+1 year'), '/', NULL, TRUE, FALSE));
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart: @cart. Payment method @method.', [

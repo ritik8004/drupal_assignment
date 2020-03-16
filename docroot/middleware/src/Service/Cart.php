@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Helper\SecureText;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Config\SystemSettings;
 use App\Service\Knet\KnetHelper;
@@ -91,6 +92,13 @@ class Cart {
   protected $customerCards;
 
   /**
+   * Secure Text service provider.
+   *
+   * @var \App\Helper\SecureText
+   */
+  protected $secureText;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -111,6 +119,8 @@ class Cart {
    *   Service for session.
    * @param \App\Service\CheckoutCom\CustomerCards $customer_cards
    *   Checkout.com API Wrapper.
+   * @param \App\Helper\SecureText $secure_text
+   *   Secure Text service provider.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -121,7 +131,8 @@ class Cart {
     PaymentData $payment_data,
     SystemSettings $settings,
     SessionStorage $session,
-    CustomerCards $customer_cards
+    CustomerCards $customer_cards,
+    SecureText $secure_text
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -132,6 +143,7 @@ class Cart {
     $this->settings = $settings;
     $this->session = $session;
     $this->customerCards = $customer_cards;
+    $this->secureText = $secure_text;
   }
 
   /**
@@ -595,6 +607,7 @@ class Cart {
    */
   public function updatePayment(array $data, array $extension = []) {
     $extension['action'] = 'update payment';
+
     $update = [
       'extension' => (object) $extension,
     ];
@@ -800,7 +813,14 @@ class Cart {
       // Set order in session for later use.
       $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
 
-      return ['success' => TRUE, 'order_id' => $order_id];
+      return [
+        'success' => TRUE,
+        'order_id' => $order_id,
+        'secure_order_id' => $this->secureText->encrypt(
+          $order_id,
+          $this->magentoInfo->getMagentoSecretInfo()['consumer_secret']
+        ),
+      ];
     }
     catch (\Exception $e) {
       // Exception handling here.

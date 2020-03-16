@@ -2,18 +2,22 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
+use Drupal\alshaya_spc\Helper\SecureText;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_addressbook\AddressBookAreasTermsHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class AlshayaSpcController.
@@ -49,6 +53,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $mobileUtil;
 
   /**
+   * Secure Text service provider.
+   *
+   * @var \Drupal\alshaya_spc\Helper\SecureText
+   */
+  protected $secureText;
+
+  /**
    * Current user.
    *
    * @var \Drupal\Core\Session\AccountProxyInterface
@@ -80,6 +91,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Checkout option manager.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
+   * @param \Drupal\alshaya_spc\Helper\SecureText $secure_text
+   *   * Secure Text service provider.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   Current user.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -92,6 +105,7 @@ class AlshayaSpcController extends ControllerBase {
     AlshayaSpcPaymentMethodManager $payment_method_manager,
     CheckoutOptionsManager $checkout_options_manager,
     MobileNumberUtilInterface $mobile_util,
+    SecureText $secure_text,
     AccountProxyInterface $current_user,
     EntityTypeManagerInterface $entity_type_manager,
     AddressBookAreasTermsHelper $areas_term_helper
@@ -100,6 +114,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->mobileUtil = $mobile_util;
+    $this->secureText = $secure_text;
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
     $this->areaTermsHelper = $areas_term_helper;
@@ -114,6 +129,7 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('plugin.manager.alshaya_spc_payment_method'),
       $container->get('alshaya_acm_checkout.options_manager'),
       $container->get('mobile_number.util'),
+      $container->get('alshaya_spc.secure_text_helper'),
       $container->get('current_user'),
       $container->get('entity_type.manager'),
       $container->get('alshaya_addressbook.area_terms_helper')
@@ -286,10 +302,24 @@ class AlshayaSpcController extends ControllerBase {
   /**
    * Checkout Confirmation page.
    *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request.
+   *
    * @return array
    *   Markup for checkout confirmation page.
    */
-  public function checkoutConfirmation() {
+  public function checkoutConfirmation(Request $request) {
+    $id = $request->query->get('id');
+    if (empty($id)) {
+      throw new NotFoundHttpException();
+    }
+
+    $order_id = $this->secureText->decrypt($request->query->get('id'), Settings::get('alshaya_api.settings')['consumer_secret']);
+
+    if (empty($order_id) || !is_numeric($order_id)) {
+      throw new NotFoundHttpException();
+    }
+
     // @todo: Pull order details from MDC for the recent order.
     return [
       '#type' => 'markup',
@@ -298,6 +328,9 @@ class AlshayaSpcController extends ControllerBase {
         'library' => [
           'alshaya_spc/checkout-confirmation',
           'alshaya_white_label/spc-checkout-confirmation',
+        ],
+        'drupalSettings' => [
+          'order_id' => $order_id,
         ],
       ],
     ];

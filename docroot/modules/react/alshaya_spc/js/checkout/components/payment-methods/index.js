@@ -111,10 +111,17 @@ export default class PaymentMethods extends React.Component {
 
     showFullScreenLoader();
 
+    let analytics = {};
+    if (typeof window.ga === 'function' && window.ga.loaded) {
+      analytics.clientId = ga.getAll()[0].get('clientId');
+      analytics.trackingId = ga.getAll()[0].get('trackingId');
+    }
+
     const data = {
       payment: {
         method,
         additional_data: {},
+        analytics: analytics,
       },
     };
 

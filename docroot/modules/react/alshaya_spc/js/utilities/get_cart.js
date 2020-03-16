@@ -25,6 +25,11 @@ export const cartAvailableInStorage = function () {
   const current_time = new Date().getTime();
   var cart_data = JSON.parse(cart_data);
 
+  // If someone tried to modify and it is not JSON string now.
+  if (!cart_data) {
+    return null;
+  }
+
   // If data/cart is expired or cart has different language than
   // currently selected language.
   if ((current_time - cart_data.cart.last_update) > expire_time
