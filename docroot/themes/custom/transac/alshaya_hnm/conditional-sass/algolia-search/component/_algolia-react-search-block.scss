@@ -36,9 +36,20 @@
       }
     }
 
-    .algolia-search-cleartext-icon {
-      opacity: 1;
-      visibility: visible;
+    @include breakpoint($only-tablet) {
+      .algolia-search-cleartext-icon {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      &.show-algolia-search-bar {
+        .algolia-search-cleartext-icon {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
     }
   }
 
