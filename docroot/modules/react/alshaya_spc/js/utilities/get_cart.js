@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { restoreCartApiUrl } from './update_cart';
 import { i18nMiddleWareUrl } from './i18n_url';
+import { getInfoFromStorage } from './storage';
 
 /**
  * Get the middleware get cart endpoint.
@@ -13,40 +14,38 @@ export function getCartApiUrl() {
 
 export const cartAvailableInStorage = function () {
   // Get data from local storage.
-  var cart_data = localStorage.getItem('cart_data');
+  const cartData = getInfoFromStorage();
   // If data is not available in storage, we flag it to check/fetch from api.
-  if (!cart_data) {
+  if (!cartData) {
     return null;
   }
 
   // 1m time for expire.
   // @Todo: Make this 10m (configurable from BE).
-  const expire_time = 1 * 60 * 1000;
-  const current_time = new Date().getTime();
-  var cart_data = JSON.parse(cart_data);
-
+  const expireTime = 1 * 60 * 1000;
+  const currentTime = new Date().getTime();
   // If someone tried to modify and it is not JSON string now.
-  if (!cart_data) {
+  if (!cartData) {
     return null;
   }
 
   // If data/cart is expired or cart has different language than
   // currently selected language.
-  if ((current_time - cart_data.cart.last_update) > expire_time
-    || cart_data.cart.langcode === undefined
-    || window.drupalSettings.path.currentLanguage !== cart_data.cart.langcode) {
+  if ((currentTime - cartData.cart.last_update) > expireTime
+    || cartData.cart.langcode === undefined
+    || window.drupalSettings.path.currentLanguage !== cartData.cart.langcode) {
     // Do nothing if empty cart is there.
-    if (cart_data.cart.cart_id === null) {
+    if (cartData.cart.cart_id === null) {
       return 'empty';
     }
 
-    return cart_data.cart.cart_id;
+    return cartData.cart.cart_id;
   }
 
-  return cart_data.cart;
+  return cartData.cart;
 };
 
-export const fetchCartData = function () {
+export const fetchCartData = () => {
   // Check if cart available in storage.
   let cart = cartAvailableInStorage();
 
@@ -56,13 +55,12 @@ export const fetchCartData = function () {
 
   if (!cart) {
     // Prepare api url.
-    var api_url = restoreCartApiUrl();
+    const apiUrl = restoreCartApiUrl();
 
-    return axios.get(api_url)
+    return axios.get(apiUrl)
       .then((response) => {
         if (typeof response !== 'object') {
           redirectToCart();
-          return null;
         }
         if (response.data.error) {
           redirectToCart();
@@ -110,7 +108,10 @@ export const fetchCartData = function () {
     });
 };
 
-export const getGlobalCart = () => ((window.cart_data && window.cart_data.cart) ? window.cart_data.cart : null);
+export const getGlobalCart = () => ((window.cartData && window.cartData.cart)
+  ? window.cartData.cart
+  : null
+);
 
 export const redirectToCart = () => {
   if (window.location.pathname.search(/checkout/i) >= 0) {

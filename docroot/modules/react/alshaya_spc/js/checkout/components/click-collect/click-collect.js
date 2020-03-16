@@ -46,7 +46,7 @@ class ClickCollect extends React.Component {
     const { openSelectedStore } = this.state;
     const { coords, selectedStore } = this.context;
     if (!this.autocomplete && this.searchRef) {
-      this.searchplaceInput[0] = this.searchRef.current.getElementsByTagName('input');
+      this.searchplaceInput = this.searchRef.current.getElementsByTagName('input').item(0);
       this.autocomplete = new window.google.maps.places.Autocomplete(
         this.searchplaceInput,
         {
@@ -60,7 +60,7 @@ class ClickCollect extends React.Component {
         this.placesAutocompleteHandler,
       );
     }
-    this.nearMeBtn[0] = this.searchRef.current.getElementsByTagName('button');
+    this.nearMeBtn = this.searchRef.current.getElementsByTagName('button').item(0);
 
     // Ask for location access when we don't have any coords.
     if (coords !== null && openSelectedStore) {
@@ -145,18 +145,21 @@ class ClickCollect extends React.Component {
     const storeFetcher = createFetcher(fetchClicknCollectStores);
     // Make api request.
     const list = storeFetcher.read(coords);
-    list.then((response) => {
-      if (typeof response.error === 'undefined') {
-        updateCoordsAndStoreList(coords, response);
-        if (openSelectedStore) {
-          this.showOpenMarker(response);
+    list
+      .then((response) => {
+        if (typeof response.error === 'undefined') {
+          updateCoordsAndStoreList(coords, response);
+          if (openSelectedStore) {
+            this.showOpenMarker(response);
+          }
+        } else {
+          updateCoordsAndStoreList(coords, []);
         }
-      }
-      else {
-        updateCoordsAndStoreList(coords, response);
-      }
-      removeFullScreenLoader();
-    });
+        removeFullScreenLoader();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   toggleStoreView = (e, activeView) => {
@@ -328,9 +331,6 @@ class ClickCollect extends React.Component {
     }
     window.spcMap.closeAllInfoWindow();
   }
-
-  contextType = ClicknCollectContext;
-
 
   render() {
     const { coords, storeList, selectedStore } = this.context;

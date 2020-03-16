@@ -5,8 +5,6 @@ import { cleanMobileNumber } from '../../utilities/checkout_util';
 export const ClicknCollectContext = React.createContext();
 
 class ClicknCollectContextProvider extends React.Component {
-  isMounted = true;
-
   constructor(props) {
     super(props);
     let coords = null;
@@ -63,13 +61,8 @@ class ClicknCollectContextProvider extends React.Component {
   }
 
   componentDidMount() {
-    this.isMounted = true;
     const { storeList } = this.props;
     this.setState({ storeList });
-  }
-
-  componentWillUnmount() {
-    this.isMounted = false;
   }
 
   updateSelectedStore = (store) => {

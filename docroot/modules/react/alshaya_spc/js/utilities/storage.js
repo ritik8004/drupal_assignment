@@ -1,16 +1,20 @@
-export const addInfoInStorage = function (cart) {
+export const addInfoInStorage = (cart) => {
+  const cartObj = { ...cart };
   // Adding current time to storage to know the last time cart updated.
-  cart.last_update = new Date().getTime();
+  cartObj.last_update = new Date().getTime();
   const data = JSON.stringify(cart);
   localStorage.setItem('cart_data', data);
 };
 
-export const removeCartFromStorage = function () {
-  localStorage.removeItem('cart_data');
-};
+export const removeCartFromStorage = () => localStorage.removeItem('cart_data');
 
-export const getInfoFromStorage = function () {
-  let cart_data = localStorage.getItem('cart_data');
-  cart_data = JSON.parse(cart_data);
-  return cart_data;
+export const getInfoFromStorage = () => {
+  let cartData = localStorage.getItem('cart_data');
+  if (!cartData) {
+    window.cartData = null;
+    return null;
+  }
+  cartData = JSON.parse(cartData);
+  window.cartData = cartData;
+  return cartData;
 };

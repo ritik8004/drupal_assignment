@@ -21,6 +21,7 @@ export default class CnCBillingAddress extends React.Component {
 
   componentWillUnmount() {
     this.isMounted = false;
+    document.removeEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
   }
 
   showPopup = () => {
@@ -30,11 +31,9 @@ export default class CnCBillingAddress extends React.Component {
   };
 
   closePopup = () => {
-    if (this.isMounted) {
-      this.setState({
-        open: false,
-      });
-    }
+    this.setState({
+      open: false,
+    });
   };
 
   /**
@@ -43,10 +42,12 @@ export default class CnCBillingAddress extends React.Component {
   processBillingUpdate = (e) => {
     const data = e.detail.data();
     const { refreshCart } = this.props;
-    // Close modal.
-    this.closePopup();
-    // Refresh cart.
-    refreshCart(data);
+    if (this.isMounted) {
+      // Close modal.
+      this.closePopup();
+      // Refresh cart.
+      refreshCart(data);
+    }
   };
 
   render() {

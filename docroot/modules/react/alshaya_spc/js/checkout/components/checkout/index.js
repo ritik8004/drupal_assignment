@@ -84,7 +84,6 @@ export default class Checkout extends React.Component {
             if (updated) {
               cartObj = getInfoFromStorage();
             }
-            window.cartData = cartObj;
             this.setState({
               wait: false,
               cart: cartObj,
@@ -169,8 +168,8 @@ export default class Checkout extends React.Component {
       (response) => {
         if (typeof response.error === 'undefined') {
           this.setState({ storeList: response });
-          window.fetchStore = 'finished';
         }
+        window.fetchStore = 'finished';
       },
     );
   };
