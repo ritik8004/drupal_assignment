@@ -1,0 +1,98 @@
+.payment-method.payment-method-checkout_com {
+  .payment-method-bottom-panel {
+    .spc-checkout-payment-saved-card-preview {
+      position: relative;
+      font-size: 0.875rem;
+
+      .spc-checkout-payment-saved-card-number {
+        margin-bottom: 0.625rem;
+      }
+
+      .spc-type-cvv {
+        margin-top: 1.25rem;
+
+        .tooltip-anchor {
+          z-index: 1;
+        }
+      }
+
+      .spc-add-new-card-btn {
+        @include breakpoint($only-mobile) {
+          font-size: 0.75rem;
+          min-width: 4rem;
+        }
+      }
+    }
+
+    .spc-checkout-card-option {
+      position: relative;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid $spc-delivery-info-separator;
+      cursor: pointer;
+      font-size: 0.875rem;
+
+      .spc-checkout-payment-saved-card-preview {
+        .spc-checkout-payment-data {
+          padding-#{$left}: 2rem;
+        }
+
+        .spc-type-cvv {
+          margin-#{$left}: 2rem;
+        }
+      }
+
+      &.spc-checkout-card-option-new-card {
+        .spc-checkout-card-new-card-label,
+        .payment-form-wrapper,
+        .spc-card-types-wrapper,
+        .spc-payment-save-card {
+          padding-#{$left}: 2rem;
+        }
+      }
+
+      &:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-bottom: none;
+      }
+
+      @include icon(radio-empty, before) {
+        position: absolute;
+        top: -1rem;
+        #{$left}: -1rem;
+        font-size: 1.125rem;
+        width: 3rem;
+        text-align: center;
+        color: $spc-checkout-radio-empty;
+        pointer-events: none;
+      }
+
+      &.selected {
+        @include icon(radio-filled, before) {
+          color: $spc-checkout-radio-filled;
+        }
+      }
+
+      &.spc-checkout-card-option-new-card {
+        .payment-form-wrapper {
+          padding-top: 1.75rem;
+
+          .tooltip-box {
+            @include breakpoint($only-mobile) {
+              #{$left}: -6.9rem;
+
+              &::before {
+                margin-#{$left}: 0.9375rem;
+              }
+
+              &::after {
+                margin-#{$left}: 1.3125rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

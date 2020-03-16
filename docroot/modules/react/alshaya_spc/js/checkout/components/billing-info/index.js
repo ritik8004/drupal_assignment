@@ -15,6 +15,10 @@ export default class BillingInfo extends React.Component {
     };
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   showPopup = () => {
     this.setState({
       open: true,
@@ -27,12 +31,9 @@ export default class BillingInfo extends React.Component {
     });
   };
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
   render() {
     const { billing, shipping } = this.props;
+    const { open } = this.state;
     if (billing === undefined || billing == null) {
       return (null);
     }
@@ -44,9 +45,8 @@ export default class BillingInfo extends React.Component {
         // Handling for area field.
         if (key === 'administrative_area') {
           fillVal = gerAreaLabelById(false, fillVal);
-        }
-        // Handling for parent area.
-        else if (key === 'area_parent') {
+        } else if (key === 'area_parent') {
+          // Handling for parent area.
           fillVal = gerAreaLabelById(true, fillVal);
         }
         addressData.push(fillVal);
@@ -64,7 +64,7 @@ export default class BillingInfo extends React.Component {
           <div className="spc-billing-address">{addressData.join(', ')}</div>
         </div>
         <div className="spc-billing-change" onClick={() => this.showPopup()}>{Drupal.t('change')}</div>
-        {this.state.open
+        {open
           && <BillingPopUp closePopup={this.closePopup} billing={billing} shipping={shipping} />}
       </div>
     );

@@ -85,11 +85,11 @@ export default class ShippingMethod extends React.Component {
           };
         }
 
-        // Refresh cart.
-        this.props.refreshCart(cart_info);
-
         // Remove loader.
         removeFullScreenLoader();
+
+        // Refresh cart.
+        this.props.refreshCart(cart_info);
       });
     }
   };

@@ -12,15 +12,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 export default class PaymentMethods extends React.Component {
   constructor(props) {
     super(props);
-
-    const { cart } = props;
-
     this.paymentMethodRefs = [];
-
-    this.state = {
-      selectedOption: cart.selected_payment_method,
-      availablePaymentMethods: cart.cart.payment_methods,
-    };
   }
 
   isActive = () => {
@@ -52,8 +44,6 @@ export default class PaymentMethods extends React.Component {
   };
 
   componentDidMount = () => {
-    document.addEventListener('refreshCartOnAddress', this.eventListener, false);
-    document.addEventListener('refreshCartOnCnCSelect', this.eventListener, false);
     this.selectDefault();
   };
 
@@ -61,29 +51,12 @@ export default class PaymentMethods extends React.Component {
     this.selectDefault();
   }
 
-  componentWillUnmount = () => {
-    document.removeEventListener('refreshCartOnAddress', this.eventListener, false);
-    document.removeEventListener('refreshCartOnCnCSelect', this.eventListener, false);
-  };
-
-  eventListener = () => {
-    const { cart } = this.props;
-
-    this.setState({
-      selectedOption: cart.selected_payment_method,
-      availablePaymentMethods: cart.cart.payment_methods,
-    });
-
-    this.selectDefault();
-  };
-
   getPaymentMethods = (active) => {
-    const { availablePaymentMethods } = this.state;
-
+    const { cart } = this.props;
     const paymentMethods = [];
 
     if (active) {
-      Object.entries(availablePaymentMethods).forEach(([, method]) => {
+      Object.entries(cart.cart.payment_methods).forEach(([, method]) => {
         // If payment method from api response not exists in
         // available payment methods in drupal, ignore it.
         if (method.code in drupalSettings.payment_methods) {
@@ -104,8 +77,8 @@ export default class PaymentMethods extends React.Component {
   };
 
   changePaymentMethod = (method) => {
-    const { selectedOption } = this.state;
-    if (!this.isActive() || selectedOption === method) {
+    const { cart } = this.props;
+    if (!this.isActive() || cart.selected_payment_method === method) {
       return;
     }
 
@@ -125,14 +98,11 @@ export default class PaymentMethods extends React.Component {
       },
     };
 
-    const cart = addPaymentMethodInCart('update payment', data);
-    if (cart instanceof Promise) {
-      cart.then((result) => {
+    const cartUpdate = addPaymentMethodInCart('update payment', data);
+    if (cartUpdate instanceof Promise) {
+      cartUpdate.then((result) => {
         // @TODO: Handle exception.
         document.getElementById(`payment-method-${method}`).checked = true;
-
-        const prevState = this.state;
-        this.setState({ ...prevState, selectedOption: method });
 
         const { cart: cartData, refreshCart } = this.props;
         cartData.selected_payment_method = method;
@@ -145,17 +115,16 @@ export default class PaymentMethods extends React.Component {
   };
 
   validateBeforePlaceOrder = () => {
-    const { selectedOption } = this.state;
+    const { cart } = this.props;
 
     // Trigger validate of selected component.
-    this.paymentMethodRefs[selectedOption].current.validateBeforePlaceOrder();
+    this.paymentMethodRefs[cart.selected_payment_method].current.validateBeforePlaceOrder();
   };
 
   render = () => {
     const methods = [];
 
     const active = this.isActive();
-    const { selectedOption } = this.state;
     const { cart, refreshCart } = this.props;
 
     Object.entries(this.getPaymentMethods(active)).forEach(([key, method]) => {
@@ -166,7 +135,7 @@ export default class PaymentMethods extends React.Component {
         ref={this.paymentMethodRefs[method.code]}
         refreshCart={refreshCart}
         changePaymentMethod={this.changePaymentMethod}
-        isSelected={selectedOption === method.code}
+        isSelected={cart.selected_payment_method === method.code}
         key={key}
         method={method}
       />);
