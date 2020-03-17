@@ -26,10 +26,8 @@ class TextField extends React.Component {
     const countryMobileCode = window.drupalSettings.country_mobile_code;
     const countryMobileCodeMaxLength = window.drupalSettings.mobile_maxlength;
     let focusClass = '';
-    if (this.props.defaultValue !== undefined || this.props.defaultValue !== "") {
-      if (this.props.defaultValue.length > 0) {
-        focusClass = 'focus';
-      }
+    if (this.props.defaultValue !== undefined && this.props.defaultValue !== "") {
+      focusClass = 'focus';
     }
 
     if (this.props.type === 'email') {
