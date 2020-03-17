@@ -68,7 +68,7 @@ class AlshayaGtmManager {
     'system.404' => 'page not found',
     'alshaya_user.user_register_complete' => 'register complete page',
     'acq_cart.cart' => 'cart page',
-    'acq_checkout.form:login' => 'checkout login page',
+    'alshaya_spc.login' => 'checkout login page',
     'alshaya_spc.checkout' => 'checkout click and collect page',
     'alshaya_spc.checkout' => 'checkout delivery page',
     'acq_checkout.form:payment' => 'checkout payment page',
@@ -840,7 +840,7 @@ class AlshayaGtmManager {
     $dimension7 = '';
     $dimension8 = '';
 
-    $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
+    $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']);
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     $deliveryOption = 'Home Delivery';
@@ -900,16 +900,12 @@ class AlshayaGtmManager {
       $products[] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
     }
 
-    $shipping_value = (isset($order['shipping']['method']['amount_with_tax']))
-      ? $order['shipping']['method']['amount_with_tax']
-      : $order['shipping']['method']['amount'];
-
     $actionData = [
       'id' => $order['increment_id'],
       'affiliation' => 'Online Store',
       'revenue' => alshaya_master_convert_amount_to_float($order['totals']['grand']),
       'tax' => alshaya_master_convert_amount_to_float($order['totals']['tax']) ?: 0.00,
-      'shipping' => alshaya_master_convert_amount_to_float($shipping_value) ?: 0.00,
+      'shipping' => alshaya_master_convert_amount_to_float($order['totals']['shipping']) ?: 0.00,
       'coupon' => $order['coupon'],
     ];
 
@@ -925,7 +921,7 @@ class AlshayaGtmManager {
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
-      'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
+      'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
       'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
@@ -1151,7 +1147,7 @@ class AlshayaGtmManager {
         $store_code = '';
         $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
-        $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
+        $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']);
         $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
         if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);

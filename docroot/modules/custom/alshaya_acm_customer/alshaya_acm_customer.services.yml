@@ -7,7 +7,7 @@ services:
   alshaya_acm_customer.orders_manager:
     class: Drupal\alshaya_acm_customer\OrdersManager
     arguments:
-      - '@acq_commerce.api'
+      - '@alshaya_api.api'
       - '@config.factory'
       - '@cache.orders'
       - '@language_manager'

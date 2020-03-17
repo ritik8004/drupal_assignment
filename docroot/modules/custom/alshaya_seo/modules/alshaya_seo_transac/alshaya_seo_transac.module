@@ -313,7 +313,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
  * Implements hook_form_alter().
  */
 function alshaya_seo_transac_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form_id == 'multistep_checkout' && $form_state->getTemporaryValue('step_id') === 'login') {
+  if ($form_id == 'ashaya_spc_login_form') {
     $form['#attached']['library'][] = 'alshaya_seo_transac/checkout_login';
   }
 }

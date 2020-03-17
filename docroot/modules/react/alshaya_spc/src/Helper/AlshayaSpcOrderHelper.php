@@ -9,6 +9,7 @@ use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\address\Repository\CountryRepository;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -25,12 +26,14 @@ use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class AlshayaSpcOrderHelper.
  */
 class AlshayaSpcOrderHelper {
+
   use StringTranslationTrait;
 
   /**
@@ -139,6 +142,13 @@ class AlshayaSpcOrderHelper {
   protected $request;
 
   /**
+   * Orders Manager.
+   *
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
+   */
+  protected $ordersManager;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -169,23 +179,24 @@ class AlshayaSpcOrderHelper {
    *   Secure Text service provider.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request Stack.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   Orders Manager.
    */
-  public function __construct(
-    ModuleHandlerInterface $module_handler,
-    AlshayaAddressBookManager $address_book_manager,
-    AccountProxyInterface $current_user,
-    SkuManager $sku_manager,
-    SkuImagesManager $sku_images_manager,
-    ProductInfoHelper $product_info_helper,
-    ProductOptionsManager $product_options_manager,
-    SkuInfoHelper $sku_info_helper,
-    LanguageManagerInterface $language_manager,
-    MobileNumberUtilInterface $mobile_util,
-    CheckoutOptionsManager $checkout_options_manager,
-    CountryRepository $countryRepository,
-    SecureText $secure_text,
-    RequestStack $request_stack
-  ) {
+  public function __construct(ModuleHandlerInterface $module_handler,
+                              AlshayaAddressBookManager $address_book_manager,
+                              AccountProxyInterface $current_user,
+                              SkuManager $sku_manager,
+                              SkuImagesManager $sku_images_manager,
+                              ProductInfoHelper $product_info_helper,
+                              ProductOptionsManager $product_options_manager,
+                              SkuInfoHelper $sku_info_helper,
+                              LanguageManagerInterface $language_manager,
+                              MobileNumberUtilInterface $mobile_util,
+                              CheckoutOptionsManager $checkout_options_manager,
+                              CountryRepository $countryRepository,
+                              SecureText $secure_text,
+                              RequestStack $request_stack,
+                              OrdersManager $orders_manager) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -200,6 +211,7 @@ class AlshayaSpcOrderHelper {
     $this->countryRepository = $countryRepository;
     $this->secureText = $secure_text;
     $this->request = $request_stack->getCurrentRequest();
+    $this->ordersManager = $orders_manager;
   }
 
   /**
@@ -229,16 +241,20 @@ class AlshayaSpcOrderHelper {
       throw new NotFoundHttpException();
     }
 
-    // @TODO: Pull order details from MDC for the recent order.
-    $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
-    $orders = alshaya_acm_customer_get_user_orders($data['email']);
-    $order_index = array_search($data['order_id'], array_column($orders, 'order_id'));
-
-    if ($order_index === FALSE) {
-      throw new NotFoundHttpException();
+    // Security checks.
+    if ($this->currentUser->isAuthenticated() && $this->currentUser->getEmail() !== $data['email']) {
+      throw new AccessDeniedHttpException();
+    }
+    elseif ($this->currentUser->isAnonymous() && !empty(user_load_by_mail($data['email']))) {
+      throw new AccessDeniedHttpException();
     }
 
-    $order = $orders[$order_index];
+    $order = $this->ordersManager->getOrder($data['order_id']);
+
+    if (empty($order) || $order['email'] != $data['email']) {
+      throw new AccessDeniedHttpException();
+    }
+
     return $order;
   }
 
@@ -247,19 +263,19 @@ class AlshayaSpcOrderHelper {
    *
    * Returns available delivery method data.
    *
-   * @return \Drupal\rest\ResourceResponse
+   * @return array|null
    *   The response containing delivery methods data.
    */
   public function getSkuDetails(string $sku) {
     $skuEntity = SKU::loadFromSku($sku);
 
     if (!($skuEntity instanceof SKUInterface)) {
-      throw (new NotFoundHttpException());
+      return NULL;
     }
 
     $node = $this->skuManager->getDisplayNode($sku);
     if (!($node instanceof NodeInterface)) {
-      throw (new NotFoundHttpException());
+      return NULL;
     }
 
     $link = $node->toUrl('canonical', ['absolute' => TRUE])
@@ -615,23 +631,13 @@ class AlshayaSpcOrderHelper {
   public function getOrderTypeDetails(array $order) {
     $orderDetails = [];
 
-    $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']['carrier_code']);
-    $shipping_method_name = isset($order['shipping']['method']['description']) ? $order['shipping']['method']['description'] : '';
-
-    $shippingTerm = $this->checkoutOptionManager->loadShippingMethod($shipping_method_code, $shipping_method_name);
-
-    $shipping_amount = $order['shipping']['method']['amount_with_tax'] ?? $order['shipping']['method']['amount'];
-    $orderDetails['delivery_charge'] = $shipping_amount;
+    $orderDetails['contact_no'] = $this->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
+    $shippingTerm = $this->checkoutOptionManager->loadShippingMethod($shipping_method_code);
+    $orderDetails['delivery_charge'] = $order['totals']['shipping'];
 
     $orderDetails['delivery_method'] = $shippingTerm->getName();
-
-    // Check if taxonomy term doesn't have proper name and we have description
-    // available in API response.
-    if (!empty($shipping_method_name) && $shippingTerm->getName() == $shipping_method_code) {
-      $orderDetails['delivery_method'] = $shipping_method_name;
-    }
-
-    $orderDetails['contact_no'] = $this->mobileUtil->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    $orderDetails['delivery_method_description'] = $shippingTerm->get('field_shipping_method_desc')->getString();
 
     if ($shipping_method_code == $this->checkoutOptionManager->getClickandColectShippingMethod()) {
       // @todo Get clickncollect store details
@@ -649,31 +655,41 @@ class AlshayaSpcOrderHelper {
 
       $shipping_address = $order['shipping']['address'];
 
-      // Loading address from address book if customer_address_id is available.
-      if (!empty($shipping_address['customer_address_id'])) {
-        if ($entity = $this->addressBookManager->getUserAddressByCommerceId($order['shipping']['address']['customer_address_id'])) {
-          $shipping_address = $this->addressBookManager->getAddressFromEntity($entity);
-        }
-      }
-
       $shipping_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
-      $shipping_address_array['telephone'] = $this->mobileUtil->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
       $country_list = $this->countryRepository->getList();
-      $shipping_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
       $shipping_address_array['country'] = $country_list[$shipping_address_array['country_code']];
+      $shipping_address_array['telephone'] = $this->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
+
       $orderDetails['delivery_address'] = $shipping_address_array;
     }
 
     // Don't show Billing Address for CoD payment method.
-    if ($order['payment']['method_code'] !== 'cashondelivery') {
+    if ($order['payment']['method'] !== 'cashondelivery') {
       $billing_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
-      $billing_address_array['telephone'] = $this->mobileUtil->getFormattedMobileNumber($billing_address_array['mobile_number']['value']);
-
+      $billing_address_array['telephone'] = $this->getFormattedMobileNumber($billing_address_array['mobile_number']['value']);
       $orderDetails['billing_address'] = $billing_address_array;
     }
 
     return $orderDetails;
 
+  }
+
+  /**
+   * Wrapper function to get formatted mobile number.
+   *
+   * @param string $number
+   *   Number.
+   *
+   * @return string
+   *   Formatted number if possible, as is otherwise.
+   */
+  public function getFormattedMobileNumber(string $number) {
+    try {
+      return $this->mobileUtil->getFormattedMobileNumber($number);
+    }
+    catch (\Throwable $e) {
+      return $number;
+    }
   }
 
 }
