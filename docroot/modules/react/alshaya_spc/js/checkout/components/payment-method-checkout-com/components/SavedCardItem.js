@@ -1,5 +1,5 @@
 import React from 'react';
-import CardTypeSVG from '../../card-type-svg';
+import CardTypeSVG from '../../../../svg-component/card-type-svg';
 
 const SavedCardItem = ({ cardInfo, selected, onSelect }) => (
   <div className={`payment-card ${!selected ? '' : 'active'}`}>
