@@ -10,7 +10,28 @@
   }
 
   .algolia-search-cleartext-icon {
-    display: none;
+    @include breakpoint($only-mobile) {
+      #{$right}: 0.4rem;
+      top: 0.2125rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      #{$right}: 0.4rem;
+    }
+  }
+
+  &.clear-icon {
+    #alshaya-algolia-autocomplete .react-autosuggest__input {
+      padding-#{$right}: 2.5rem !important;
+
+      @include breakpoint($only-tablet) {
+        padding-#{$right}: 2.6rem !important;
+      }
+
+      @include breakpoint($desktop) {
+        padding-#{$right}: 3.3rem !important;
+      }
+    }
   }
 
   #alshaya-algolia-autocomplete {
