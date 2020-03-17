@@ -213,25 +213,7 @@ class OrdersManager {
     }
     else {
       try {
-        $query = [
-          'searchCriteria' => [
-            'filterGroups' => [
-              [
-                'filters' => [
-                  [
-                    'field' => 'customer_email',
-                    'value' => $email,
-                    'condition_type' => 'eq',
-                  ],
-                ],
-              ],
-            ],
-            'sortOrders' => [
-              ['field' => 'created_at', 'direction' => 'DESC'],
-            ],
-          ],
-        ];
-
+        $query = $this->getOrdersQuery($email);
         $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
         $result = json_decode($response ?? [], TRUE);
         $orders = $result['items'] ?? [];
@@ -288,26 +270,8 @@ class OrdersManager {
       $count = $cache->data;
     }
     else {
-      $query = [
-        'searchCriteria' => [
-          'filterGroups' => [
-            [
-              'filters' => [
-                [
-                  'field' => 'customer_email',
-                  'value' => $email,
-                  'condition_type' => 'eq',
-                ],
-              ],
-            ],
-          ],
-          'sortOrders' => [
-            ['field' => 'created_at', 'direction' => 'DESC'],
-          ],
-          'pageSize' => 1,
-        ],
-      ];
-
+      $query = $this->getOrdersQuery($email);
+      $query['searchCriteria']['pageSize'] = 1;
       $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
       $result = json_decode($response ?? [], TRUE);
       $count = $result['total_count'] ?? 0;
@@ -395,6 +359,36 @@ class OrdersManager {
     ];
 
     return $order;
+  }
+
+  /**
+   * Wrapper function to get orders query.
+   *
+   * @param string $email
+   *   E-Mail address.
+   *
+   * @return array
+   *   Orders query.
+   */
+  private function getOrdersQuery(string $email) {
+    return [
+      'searchCriteria' => [
+        'filterGroups' => [
+          [
+            'filters' => [
+              [
+                'field' => 'customer_email',
+                'value' => $email,
+                'condition_type' => 'eq',
+              ],
+            ],
+          ],
+        ],
+        'sortOrders' => [
+          ['field' => 'created_at', 'direction' => 'DESC'],
+        ],
+      ],
+    ];
   }
 
 }
