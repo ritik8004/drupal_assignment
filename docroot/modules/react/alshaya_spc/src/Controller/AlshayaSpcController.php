@@ -317,7 +317,7 @@ class AlshayaSpcController extends ControllerBase {
    */
   public function checkoutConfirmation() {
     $order = $this->orderHelper->getLastOrder();
-
+    $order_id = $this->orderHelper->getOrderId();
     // Get order type hd/cnc and other details.
     $orderDetails = $this->orderHelper->getOrderTypeDetails($order);
 
@@ -336,16 +336,14 @@ class AlshayaSpcController extends ControllerBase {
 
     // Get Products.
     $productList = [];
-    foreach ($order['items'] as $item) {
-      // @TODO: Populate price and other info from order response data.
-      $product_data = $this->orderHelper->getSkuDetails($item['sku']);
+    $items = array_unique(array_column($order['items'], 'sku'));
 
-      if (empty($product_data)) {
-        // @TODO: Populate from order response data.
-        $product_data = [];
-        $product_data['name'] = $item['name'];
-        $product_data['image'] = '';
+    foreach ($order['items'] as $item) {
+      if (in_array($item['sku'], array_keys($productList))) {
+        continue;
       }
+      // Populate price and other info from order response data.
+      $product_data = $this->orderHelper->getSkuDetails($item);
 
       $productList[$item['sku']] = $product_data;
     }
@@ -354,10 +352,10 @@ class AlshayaSpcController extends ControllerBase {
       'order_details' => [
         'customer_email' => $order['email'],
         'order_number' => $order['increment_id'],
-        'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
+        'customer_name' => $order['customer_firstname'] . ' ' . $order['customer_lastname'],
         'mobile_number' => $phone_number,
         'expected_delivery' => $orderDetails['delivery_method_description'],
-        'number_of_items' => count($order['items']),
+        'number_of_items' => count($items),
         'delivery_type_info' => $orderDetails,
         'totals' => $totals,
         'items' => $productList,
@@ -367,6 +365,13 @@ class AlshayaSpcController extends ControllerBase {
 
     $payment = $this->checkoutOptionManager->loadPaymentMethod($order['payment']['method']);
     $settings['order_details']['payment_method'] = $payment->label();
+    $settings['order_details']['payment_method_code'] = $order['payment']['method'];
+
+
+    if ($order['payment']['method'] !== 'cashondelivery') {
+      // Populate billing address array.
+      $settings['order_details']['billing_info'] = $this->orderHelper->getBillingAddress($order);
+    }
 
     if ($order['payment']['method'] === 'knet') {
       // @TODO: Get this information from Magento in a better way.
@@ -416,7 +421,7 @@ class AlshayaSpcController extends ControllerBase {
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
       $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
     }
-    $cache_tag = ['order:' . $order['order_id']];
+    $cache_tag = ['order:' . $order_id];
     $cache_tags = Cache::mergeTags($cache_tags, $cache_tag);
 
     return [
