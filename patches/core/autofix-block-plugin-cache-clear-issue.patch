@@ -1,0 +1,54 @@
+From e59151db3cbe17b5e5323e4178435d9f71f57052 Mon Sep 17 00:00:00 2001
+From: Sanket Jain <vagrant@local.alshaya.com>
+Date: Tue, 17 Mar 2020 11:51:19 +0000
+Subject: [PATCH] autofix block plugin cache clear issue
+
+---
+ BlockManager.php | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/BlockManager.php b/BlockManager.php
+index 026d810..75ec7ee 100644
+--- a/BlockManager.php
++++ b/BlockManager.php
+@@ -9,6 +9,8 @@ use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
+ use Drupal\Core\Plugin\DefaultPluginManager;
+ use Drupal\Core\Plugin\FilteredPluginManagerTrait;
+ use Psr\Log\LoggerInterface;
++use Symfony\Component\HttpFoundation\RedirectResponse;
++use Drupal\Core\Url;
+ 
+ /**
+  * Manages discovery and instantiation of block plugins.
+@@ -82,6 +84,28 @@ class BlockManager extends DefaultPluginManager implements BlockManagerInterface
+    * {@inheritdoc}
+    */
+   public function getFallbackPluginId($plugin_id, array $configuration = []) {
++    $discovery = \Drupal::cache("discovery"); 
++    $block_plugin_cache = $discovery->get("block_plugins")->data ?? [];
++
++    // Checks for empty cache for missing block plugins.
++    if (empty($block_plugin_cache['facets_summary_block:filter_bar']) || empty($block_plugin_cache['facets_summary_block:filter_bar_plp']) || empty($block_plugin_cache['facets_summary_block:filter_bar_promotions']) || empty($block_plugin_cache['views_exposed_filter_block:alshaya_product_list-block_1']) || empty($block_plugin_cache['views_exposed_filter_block:alshaya_product_list-block_2'])) {
++      \Drupal::logger('block_plugin_issue')
++            ->error('Auto-fixing discovery cache bin.');
++      \Drupal::service('cache.discovery')->invalidateAll();
++      // Essentially, refresh the page by redirect.
++      $currentURL = Url::fromRoute('<current>');
++      $response = new RedirectResponse($currentURL->toString());
++      $request = \Drupal::request();
++
++      // Save the session so things like messages get saved.
++      $request->getSession()->save();
++      $response->prepare($request);
++
++      // Make sure to trigger kernel events.
++      \Drupal::service('kernel')->terminate($request, $response);
++      $response->send();
++      return;
++    }
+     return 'broken';
+   }
+ 
+-- 
+2.7.4
+

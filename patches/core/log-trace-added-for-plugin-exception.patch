@@ -1,0 +1,84 @@
+diff --git a/core/lib/Drupal/Core/Block/BlockManager.php b/core/lib/Drupal/Core/Block/BlockManager.php
+index 026d810..c89275e 100644
+--- a/core/lib/Drupal/Core/Block/BlockManager.php
++++ b/core/lib/Drupal/Core/Block/BlockManager.php
+@@ -9,6 +9,7 @@ use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
+ use Drupal\Core\Plugin\DefaultPluginManager;
+ use Drupal\Core\Plugin\FilteredPluginManagerTrait;
+ use Psr\Log\LoggerInterface;
++use Drupal\Core\Site\Settings;
+ 
+ /**
+  * Manages discovery and instantiation of block plugins.
+@@ -82,6 +83,31 @@ class BlockManager extends DefaultPluginManager implements BlockManagerInterface
+    * {@inheritdoc}
+    */
+   public function getFallbackPluginId($plugin_id, array $configuration = []) {
++    // Adding logs for missing block plugin issue.
++    if (Settings::get('log_broken_plugin_data', 1)) {
++      $logger = \Drupal::logger('block_manager');
++      // Logging the cached block plugins data to trace broken plugins.
++      $discovery = \Drupal::cache('discovery');
++      $block_plugins = $discovery->get('block_plugins');
++      // Tracing the cached block plugins data to trace plugin not found error.
++      if (!empty($block_plugins->data)) {
++        $this->logTrace('Capturing trace for broken plugin ' . $plugin_id);
++        foreach($block_plugins->data as $block_plugins_id => $block_plugins->data){
++           $block_plugins_names[] = $block_plugins_id;
++        }
++        $logger->warning('List of cached block plugins on this environment' . var_export($block_plugins_names, true));
++      }
++      else {
++        $logger->warning('No data could be found in the cache for block plugins.');
++      }
++
++      // Logging list of enabled modules.
++      $modules = \Drupal::moduleHandler()->getModuleList();
++      foreach ($modules as $module_name => $module){
++        $enabled_modules[] = $module_name;
++      }
++      $logger->warning('List of enabled modules on this environment' . var_export($enabled_modules, true));
++    }
+     return 'broken';
+   }
+ 
+@@ -93,4 +119,35 @@ class BlockManager extends DefaultPluginManager implements BlockManagerInterface
+     return parent::handlePluginNotFound($plugin_id, $configuration);
+   }
+ 
++  /**
++   * Send the output from a backtrace to the error_log
++   * @param string $message Optional message that will be sent the the error_log before the backtrace
++   */
++  private function logTrace($message = '') {
++    $trace = debug_backtrace();
++    if ($message) {
++      error_log($message);
++    }
++
++    $caller = array_shift($trace);
++    $function_name = $caller['function'];
++    error_log(sprintf('%s: Called from %s:%s', $function_name, $caller['file'], $caller['line']));
++    $log_message = array();
++
++    foreach ($trace as $entry_id => $entry) {
++      $entry['file'] = !empty($entry['file']) ? $entry['file'] : '-';
++      $entry['line'] = !empty($entry['line']) ? $entry['line'] : '-';
++      
++      $actual_entry_id = $entry_id + 1;
++      if (empty($entry['class'])) { 
++        $log_text = 'logTraceMessage : ' . $function_name . '() ' . $actual_entry_id . '. ' . $entry['function'] . ' ' . $entry['file'] . ':' . $entry['line'] . '';
++      } else {
++        $log_text = 'logTraceMessage : ' . $function_name . '() ' . $actual_entry_id . '. ' . $entry['class'] . '->' . $entry['function'] . ' ' . $entry['file'] . ':' . $entry['line'] . '';
++      }
++      $log_message[$actual_entry_id] = $log_text;
++    }
++    error_log(print_r($log_message, TRUE));
++  }
++
+ }
++  
+\ No newline at end of file
+-- 
+2.7.4
+
