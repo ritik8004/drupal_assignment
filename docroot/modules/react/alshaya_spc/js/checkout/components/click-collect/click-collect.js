@@ -87,6 +87,7 @@ class ClickCollect extends React.Component {
       el.classList.remove('selected');
     });
     this.cncListView.current.querySelector(`[data-index="${index}"]`).classList.add('selected');
+    this.selectStoreButtonVisibility(true);
     if (window.innerWidth < 768 && this.cncMapView.current !== null && this.cncMapView.current.style.display === 'block') {
       this.toggleFullScreen(true);
       this.mapStoreList.current.querySelector(`[data-index="${index}"]`).classList.add('selected');
@@ -138,7 +139,6 @@ class ClickCollect extends React.Component {
    * Fetch available stores for given lat and lng.
    */
   fetchAvailableStores = (coords) => {
-    const { openSelectedStore } = this.state;
     const { updateCoordsAndStoreList } = this.context;
     showFullScreenLoader();
     // Create fetcher object to fetch stores.
@@ -147,11 +147,10 @@ class ClickCollect extends React.Component {
     const list = storeFetcher.read(coords);
     list
       .then((response) => {
+        this.selectStoreButtonVisibility(false);
         if (typeof response.error === 'undefined') {
           updateCoordsAndStoreList(coords, response);
-          if (openSelectedStore) {
-            this.showOpenMarker(response);
-          }
+          this.showOpenMarker(response);
         } else {
           updateCoordsAndStoreList(coords, []);
         }
@@ -198,8 +197,10 @@ class ClickCollect extends React.Component {
     const storeListArg = (!storeList) ? contextStoreList : storeList;
 
     if (!selectedStore) {
+      this.selectStoreButtonVisibility(false);
       return;
     }
+    this.selectStoreButtonVisibility(false);
     this.openMarkerOfStore(selectedStore.code, storeListArg);
     this.closeAllInfoWindow();
   };
@@ -378,7 +379,7 @@ class ClickCollect extends React.Component {
                 <div id="click-and-collect-list-view" ref={this.cncListView}>
                   <StoreList
                     display={(window.innerWidth < 768) ? 'accordion' : 'teaser'}
-                    store_list={storeList}
+                    storeList={storeList}
                     selected={selectedStore}
                     onStoreRadio={this.hightlightMapMarker}
                     onStoreFinalize={this.finalizeStore}
@@ -397,7 +398,7 @@ class ClickCollect extends React.Component {
                     <div className="map-store-list" ref={this.mapStoreList}>
                       <StoreList
                         display="default"
-                        store_list={storeList}
+                        storeList={storeList}
                         selected={selectedStore}
                         onStoreRadio={this.hightlightMapMarker}
                         onStoreFinalize={this.finalizeStore}

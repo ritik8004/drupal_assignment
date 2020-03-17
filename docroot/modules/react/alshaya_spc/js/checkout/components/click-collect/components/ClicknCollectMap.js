@@ -24,6 +24,7 @@ class ClicknCollectMap extends React.Component {
     if (markers !== null && markers.length > 0) {
       this.placeMarkers();
     } else {
+      this.googleMap.removeMapMarker();
       this.googleMap.setCenter();
     }
   }
@@ -34,6 +35,7 @@ class ClicknCollectMap extends React.Component {
       if (markers !== null && markers.length > 0) {
         this.placeMarkers();
       } else {
+        this.googleMap.removeMapMarker();
         this.googleMap.setCenter();
       }
     }
