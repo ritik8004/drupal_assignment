@@ -1,5 +1,6 @@
 import React from 'react';
 import OrderSummaryItem from '../OrderSummaryItem';
+import ConditionalView from "../../../common/components/conditional-view";
 
 export default class OrderSummary extends React.Component {
   render() {
@@ -7,6 +8,8 @@ export default class OrderSummary extends React.Component {
     const customEmail = drupalSettings.order_details.customer_email;
     const orderNumber = drupalSettings.order_details.order_number;
     const transactionId = drupalSettings.order_details.transaction_id;
+    const paymentId = drupalSettings.order_details.payment_id;
+    const resultCode = drupalSettings.order_details.result_code;
     const addressLine1 = drupalSettings.order_details.delivery_type_info.delivery_address.address_line1;
     const addressLine2 = drupalSettings.order_details.delivery_type_info.delivery_address.address_line2;
     const locality = drupalSettings.order_details.delivery_type_info.delivery_address.locality;
@@ -23,7 +26,16 @@ export default class OrderSummary extends React.Component {
         <div className="spc-order-summary-order-preview">
           <OrderSummaryItem label={Drupal.t('confirmation email sent to')} value={customEmail} />
           <OrderSummaryItem label={Drupal.t('order number')} value={orderNumber} />
-          <OrderSummaryItem label={Drupal.t('transaction ID')} value={transactionId} />
+
+          <ConditionalView condition={transactionId !== undefined && transactionId !== null}>
+            <OrderSummaryItem label={Drupal.t('Transaction ID')} value={transactionId} />
+          </ConditionalView>
+          <ConditionalView condition={paymentId !== undefined && paymentId !== null}>
+            <OrderSummaryItem label={Drupal.t('Payment ID')} value={paymentId} />
+          </ConditionalView>
+          <ConditionalView condition={resultCode !== undefined && resultCode !== null}>
+            <OrderSummaryItem label={Drupal.t('Result code')} value={resultCode} />
+          </ConditionalView>
         </div>
         <div className="spc-order-summary-order-detail">
           <input type="checkbox" id="spc-detail-open" />

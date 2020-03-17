@@ -311,14 +311,14 @@ class AlshayaSpcController extends ControllerBase {
     $orderDetails = $this->orderHelper->getOrderTypeDetails($order);
 
     // Get formatted customer phone number.
-    $phone_number = $this->mobileUtil->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
     // Order Totals.
     $totals = [
-      'subtotal_incl_tax' => $order['totals']['sub'],
-      'shipping_incl_tax' => $order['totals']['shipping'],
-      'base_grand_total' => $order['totals']['grand'],
-      'discount_amount' => $order['totals']['discount'],
+      'subtotal_incl_tax' => $order['subtotal_incl_tax'],
+      'shipping_incl_tax' => $order['shipping_invoiced'],
+      'base_grand_total' => $order['grand_total'],
+      'discount_amount' => $order['discount_amount'],
       'free_delivery' => 'false',
       'surcharge' => $order['extension']['surcharge_incl_tax'],
     ];
@@ -333,18 +333,28 @@ class AlshayaSpcController extends ControllerBase {
       'order_details' => [
         'customer_email' => $order['email'],
         'order_number' => $order['increment_id'],
-        'transaction_id' => $order['order_id'],
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
-        'payment_method' => $order['payment']['method_title'],
         // @todo Get exepected delivery term.
-        'expected_delivery' => '1-2 days',
+        'expected_delivery' => $orderDetails['delivery_method_description'],
         'number_of_items' => count($order['items']),
         'delivery_type_info' => $orderDetails,
         'totals' => $totals,
         'items' => $productList,
       ],
     ];
+
+    $payment = $this->checkoutOptionManager->loadPaymentMethod($order['payment']['method']);
+    $settings['order_details']['payment_method'] = $payment->label();
+
+    if ($order['payment']['method'] === 'knet') {
+      // @TODO: Get this information from Magento in a better way.
+      $settings['order_details']['transaction_id'] = $order['payment']['additional_information'][0];
+      $settings['order_details']['payment_id'] = $order['payment']['additional_information'][2];
+
+      // @TODO: Get this information from Magento.
+      $settings['order_details']['result_code'] = 'CAPTURED';
+    }
 
     $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
 
@@ -364,8 +374,7 @@ class AlshayaSpcController extends ControllerBase {
     $cache_tags = [];
     // If logged in user.
     if ($this->currentUser->isAuthenticated()) {
-      $user = $this->entityTypeManager->getStorage('user')
-        ->load($this->currentUser->id());
+      $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
       $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
     }
     $cache_tag = ['order:' . $order['order_id']];
