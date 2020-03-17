@@ -3,9 +3,11 @@ default:
     suites:
         default:
             paths:
-                - %paths.base%/build/features
+                - "%paths.base%/build/features"
             contexts:
-                - Alshaya\BehatContexts\FeatureContext
+                - Alshaya\BehatContexts\FeatureContext:
+                      parameters:
+                          ajax_waittime : 60
                 - Drupal\DrupalExtension\Context\MinkContext
                 - Drupal\DrupalExtension\Context\DrupalContext
                 - Drupal\DrupalExtension\Context\MessageContext
@@ -35,6 +37,11 @@ default:
             print_args: true
             print_outp: true
             loop_break: true
+        Bex\Behat\ScreenshotExtension:
+            screenshot_taking_mode: failed_steps
+            image_drivers:
+                local:
+                    clear_screenshot_directory: true
 
 imports:
     - build/profiles.yml
