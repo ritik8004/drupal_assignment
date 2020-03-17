@@ -313,7 +313,7 @@ class AlshayaSpcOrderHelper {
       $data['configurable_values'] = $item["extension_attributes"]["product_options"][0]["attributes_info"];
     }
     else {
-      $data['configurable_values'] = null;
+      $data['configurable_values'] = NULL;
     }
 
     $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
