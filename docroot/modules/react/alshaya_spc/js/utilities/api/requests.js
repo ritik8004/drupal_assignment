@@ -1,20 +1,20 @@
 import Axios from 'axios';
 import {
-  getGlobalCart,
   cartAvailableInStorage,
   getCartApiUrl,
   redirectToCart,
 } from '../get_cart';
 import { restoreCartApiUrl } from '../update_cart';
+import {getInfoFromStorage} from "../storage";
 
 export const fetchClicknCollectStores = (coords) => {
-  const { cart_id: cartId } = getGlobalCart();
-  if (!cartId) {
+  const { cart } = getInfoFromStorage();
+  if (!cart || !cart.cart_id) {
     return new Promise((resolve) => resolve(null));
   }
 
   const GET_STORE_URL = Drupal.url(
-    `cnc/stores/${cartId}/${coords.lat}/${coords.lng}`,
+    `cnc/stores/${cart.cart_id}/${coords.lat}/${coords.lng}`,
   );
   return Axios.get(GET_STORE_URL);
 };

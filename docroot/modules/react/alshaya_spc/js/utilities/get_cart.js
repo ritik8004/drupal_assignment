@@ -12,7 +12,7 @@ export const cartAvailableInStorage = () => {
   // Get data from local storage.
   const cartData = getInfoFromStorage();
   // If data is not available in storage, we flag it to check/fetch from api.
-  if (!cartData) {
+  if (!cartData || !cartData.cart) {
     return null;
   }
 
@@ -24,7 +24,7 @@ export const cartAvailableInStorage = () => {
   // If data/cart is expired or cart has different language than
   // currently selected language.
   if ((currentTime - cartData.last_update) > expireTime
-    || cartData.langcode === undefined
+    || cartData.cart.langcode === undefined
     || drupalSettings.path.currentLanguage !== cartData.cart.langcode) {
     // Do nothing if empty cart is there.
     if (cartData.cart.cart_id === null) {
@@ -36,11 +36,6 @@ export const cartAvailableInStorage = () => {
 
   return cartData.cart;
 };
-
-export const getGlobalCart = () => ((window.cartData && window.cartData.cart)
-  ? window.cartData.cart
-  : null
-);
 
 export const redirectToCart = () => {
   if (window.location.pathname.search(/checkout/i) >= 0) {
