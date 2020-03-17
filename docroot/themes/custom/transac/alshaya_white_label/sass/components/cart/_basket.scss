@@ -340,7 +340,11 @@
 
   .delivery-options-mobile {
     @include breakpoint($only-mobile) {
-      float: $left;
+      font-size: 0.875rem;
+      width: 100%;
+      color: $basket_td_pri_txt;
+      font-family: $alshaya-bold;
+      margin-bottom: 0.9375rem;
     }
   }
 

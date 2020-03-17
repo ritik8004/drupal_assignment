@@ -15,3 +15,11 @@
     }
   }
 }
+
+.path--cart {
+  .free-gift-container {
+    @include breakpoint($only-mobile) {
+      top: 10.25rem;
+    }
+  }
+}

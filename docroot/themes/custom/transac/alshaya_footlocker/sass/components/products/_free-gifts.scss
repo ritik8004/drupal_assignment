@@ -1,0 +1,8 @@
+.path--cart {
+  .free-gift-container {
+    @include breakpoint($only-mobile) {
+      top: 7.5rem;
+    }
+  }
+}
+
