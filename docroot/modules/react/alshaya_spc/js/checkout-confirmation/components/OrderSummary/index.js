@@ -34,11 +34,11 @@ class OrderSummary extends React.Component {
     const paymentMethodCode = drupalSettings.order_details.payment_method_code;
     var billingAddress = '';
     if (paymentMethodCode !== 'cashondelivery') {
-      const area_parent_display = drupalSettings.order_details.billing_info.billing_address.area_parent_display;
-      const admin_area_display = drupalSettings.order_details.billing_info.billing_address.administrative_area_display;
-      const billing_addressLine1 = drupalSettings.order_details.billing_info.billing_address.address_line1;
-      const billing_addressLine2 = drupalSettings.order_details.billing_info.billing_address.address_line2;
-      const billing_localty = drupalSettings.order_details.billing_info.billing_address.dependent_locality;
+      const area_parent_display = drupalSettings.order_details.billing_info.area_parent_display;
+      const admin_area_display = drupalSettings.order_details.billing_info.administrative_area_display;
+      const billing_addressLine1 = drupalSettings.order_details.billing_info.address_line1;
+      const billing_addressLine2 = drupalSettings.order_details.billing_info.address_line2;
+      const billing_localty = drupalSettings.order_details.billing_info.dependent_locality;
       billingAddress = ' ' + country + ', ' + area_parent_display + ', ' + admin_area_display + ', ' + billing_addressLine1 + ', ' + billing_addressLine2 + ', ' + billing_localty;
     }
 
@@ -66,7 +66,7 @@ class OrderSummary extends React.Component {
           <input type="checkbox" id="spc-detail-open" />
           <label htmlFor="spc-detail-open">{Drupal.t('order detail')}</label>
           <div className="spc-detail-content">
-            <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={deliveryAddress} />
+            <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={customerAddress} />
             <ConditionalView condition={paymentMethodCode !== 'cashondelivery'}>
               <OrderSummaryItem type="address" label={Drupal.t('billing address')} name={customerName} address={billingAddress} />
             </ConditionalView>

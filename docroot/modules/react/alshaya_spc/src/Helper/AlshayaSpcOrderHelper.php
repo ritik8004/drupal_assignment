@@ -281,6 +281,9 @@ class AlshayaSpcOrderHelper {
    *   The response containing delivery methods data.
    */
   public function getSkuDetails(array $item) {
+    if (!empty($item['parent_item'])) {
+      $item = $item['parent_item'];
+    }
     $skuEntity = SKU::loadFromSku($item['sku']);
 
     if (!($skuEntity instanceof SKUInterface)) {
@@ -310,7 +313,7 @@ class AlshayaSpcOrderHelper {
       $data['configurable_values'] = $item["extension_attributes"]["product_options"][0]["attributes_info"];
     }
     else {
-      $data['configurable_values'] = '';
+      $data['configurable_values'] = null;
     }
 
     $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
