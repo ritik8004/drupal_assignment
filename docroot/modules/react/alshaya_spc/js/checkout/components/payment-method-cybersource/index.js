@@ -1,16 +1,12 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import luhn from "../../../utilities/luhn";
-import {addPaymentMethodInCart} from "../../../utilities/update_cart";
-import {
-  placeOrder,
-  removeFullScreenLoader, showFullScreenLoader
-} from "../../../utilities/checkout_util";
-import ConditionalView from "../../../common/components/conditional-view";
-import CardTypeSVG from "../card-type-svg";
-import {i18nMiddleWareUrl} from "../../../utilities/i18n_url";
-import axios from "axios";
-import {removeCartFromStorage} from "../../../utilities/storage";
+import luhn from '../../../utilities/luhn';
+import CardTypeSVG from '../../../svg-component/card-type-svg';
+import { i18nMiddleWareUrl } from '../../../utilities/i18n_url';
+import axios from 'axios';
+import {removeCartFromStorage} from '../../../utilities/storage';
+import ToolTip from "../../../utilities/tooltip";
+import CVVToolTipText from "../cvv-text";
 
 class PaymentMethodCybersource extends React.Component {
 
@@ -59,7 +55,7 @@ class PaymentMethodCybersource extends React.Component {
   handleCardNumberChange(event) {
     const prevState = this.state;
     let valid = true;
-    const type = document.getElementById('payment-card-type').value;
+    const type = document.getElementById('spc-cy-payment-card-type').value;
 
     if (this.acceptedCards.indexOf(type) === -1) {
       valid = false;
@@ -88,7 +84,7 @@ class PaymentMethodCybersource extends React.Component {
   }
 
   handleCardTypeChanged (type) {
-    document.getElementById('payment-card-type').value = type;
+    document.getElementById('spc-cy-payment-card-type').value = type;
   }
 
   handleCardExpiryChange (event) {
@@ -142,7 +138,7 @@ class PaymentMethodCybersource extends React.Component {
 
   validateBeforePlaceOrder = () => {
     if (!(this.state.numberValid && this.state.expiryValid && this.state.cvvValid)) {
-      console.error('Client side validation failed for credit card info');
+      console.error('client side validation failed for credit card info');
       throw 'UnexpectedValueException';
     }
 
@@ -205,37 +201,50 @@ class PaymentMethodCybersource extends React.Component {
     return (
       <>
         <div className="payment-form-wrapper">
-          <input type="hidden" id="payment-card-type" value={this.state.cardType} />
-          <Cleave placeholder="Enter your credit card number"
-                  options={{
-                    creditCard: true,
-                    onCreditCardTypeChanged: this.handleCardTypeChanged.bind(this),
-                  }}
-                  onChange={this.handleCardNumberChange.bind(this)}
-          />
-
-          <Cleave placeholder="mm/yy"
-                  htmlRef={(ref) => this.ccExpiry = ref }
-                  options={{
-                    date: true,
-                    dateMin: this.dateMin,
-                    datePattern: ['m', 'y'],
-                    delimiter: '/',
-                  }}
-                  onChange={this.handleCardExpiryChange.bind(this)}
-          />
-
-          <input
-            type="tel"
-            ref={this.ccCvv}
-            placeholder="CVV"
-            pattern="\d{3,4}"
-            required
-            onChange={this.handleCardCvvChange.bind(this)}
-          />
+          <input type="hidden" id="spc-cy-payment-card-type" value={this.state.cardType} />
+          <div className="spc-type-textfield spc-type-cc-number spc-cy-cc-number">
+            <Cleave
+              options={{
+                creditCard: true,
+                onCreditCardTypeChanged: this.handleCardTypeChanged.bind(this),
+              }}
+              onChange={this.handleCardNumberChange.bind(this)}
+            />
+            <div className="c-input__bar" />
+            <label>{Drupal.t('card number')}</label>
+            <div id="cy-cc-number-error" className="error" />
+          </div>
+          <div className="spc-type-textfield spc-type-expiry spc-cy-cc-expiry">
+            <Cleave
+              htmlRef={(ref) => this.ccExpiry = ref }
+              options={{
+                date: true,
+                dateMin: this.dateMin,
+                datePattern: ['m', 'y'],
+                delimiter: '/',
+              }}
+              onChange={this.handleCardExpiryChange.bind(this)}
+            />
+            <div className="c-input__bar" />
+            <label>{Drupal.t('expiry')}</label>
+            <div id="spc-cy-cc-expiry-error" className="error" />
+          </div>
+          <div className="spc-type-textfield spc-type-cvv spc-cy-cc-cvv">
+            <input
+              type="tel"
+              ref={this.ccCvv}
+              pattern="\d{3,4}"
+              required
+              onChange={this.handleCardCvvChange.bind(this)}
+            />
+            <div className="c-input__bar" />
+            <label>{Drupal.t('CVV')}</label>
+            <div id="spc-cy-cc-cvv-error" className="error" />
+            <ToolTip enable question><CVVToolTipText/></ToolTip>
+          </div>
         </div>
 
-        <div className="card-types-wrapper">
+        <div className="spc-card-types-wrapper">
           {cardTypes}
         </div>
 

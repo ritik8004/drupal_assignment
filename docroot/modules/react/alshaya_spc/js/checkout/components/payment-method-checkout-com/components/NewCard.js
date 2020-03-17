@@ -2,7 +2,7 @@ import React from 'react';
 import Cleave from 'cleave.js/react';
 import ConditionalView from '../../../../common/components/conditional-view';
 import luhn from '../../../../utilities/luhn';
-import CardTypeSVG from '../../card-type-svg';
+import CardTypeSVG from '../../../../svg-component/card-type-svg';
 import { CheckoutComContext } from '../../../../context/CheckoutCom';
 import ToolTip from '../../../../utilities/tooltip';
 import CVVToolTipText from '../../cvv-text';

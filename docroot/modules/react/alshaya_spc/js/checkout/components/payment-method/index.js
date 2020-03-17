@@ -3,7 +3,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import CodSurchargePaymentMethodDescription
   from '../payment-description-cod-surchage';
 import PaymentMethodCheckoutCom from '../payment-method-checkout-com';
-import PaymentMethodIcon from '../payment-method-svg';
+import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
   placeOrder,
