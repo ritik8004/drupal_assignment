@@ -4,6 +4,9 @@ import SectionTitle from '../../../utilities/section-title';
 import PaymentMethod from '../payment-method';
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
+  addInfoInStorage
+} from '../../../utilities/storage';
+import {
   isDeliveryTypeSameAsInCart,
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
@@ -80,6 +83,20 @@ export default class PaymentMethods extends React.Component {
     const { cart } = this.props;
     if (!this.isActive() || cart.selected_payment_method === method) {
       return;
+    }
+
+    // If payment method we trying to set is same as
+    // what set in cart, we don;t do anything.
+    if (cart.cart.cart_payment_method !== undefined
+      && cart.cart.cart_payment_method !== null
+      && method === cart.cart.cart_payment_method) {
+        document.getElementById(`payment-method-${method}`).checked = true;
+        // Selected key is not set, we set.
+        if (cart.selected_payment_method === undefined) {
+          cart.selected_payment_method = method;
+          addInfoInStorage(cart);
+        }
+        return;
     }
 
     showFullScreenLoader();

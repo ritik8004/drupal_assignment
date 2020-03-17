@@ -10,6 +10,9 @@ import {
   validateAddressFields,
   prepareAddressDataFromForm,
 } from './checkout_address_process';
+import {
+  getInfoFromStorage
+} from './storage';
 
 /**
  * Get the address list of the current logged in user.
@@ -133,25 +136,27 @@ export const addEditAddressToCustomer = (e) => {
               data.static.customer_id = list.data[firstKey].customer_id;
 
               // Add shipping info in cart.
-              const cart_info = addShippingInCart('update shipping', data);
-              if (cart_info instanceof Promise) {
-                cart_info.then((cart_result) => {
+              const cartInfo = addShippingInCart('update shipping', data);
+              if (cartInfo instanceof Promise) {
+                cartInfo.then((cartResult) => {
                   // Remove loader.
                   removeFullScreenLoader();
 
-                  let cart_data = {
-                    cart: cart_result,
-                  };
+                  let cartData = {};
 
                   // If error, no need to process.
-                  if (cart_result.error !== undefined) {
-                    cart_data = {
-                      error_message: cart_result.error_message,
+                  if (cartResult.error !== undefined) {
+                    cartData = {
+                      error_message: cartResult.error_message,
                     };
+                  }
+                  else {
+                    cartData = getInfoFromStorage();
+                    cartData.cart = cartResult;
                   }
 
                   // Refresh cart.
-                  triggerCheckoutEvent('refreshCartOnAddress', cart_data);
+                  triggerCheckoutEvent('refreshCartOnAddress', cartData);
 
                   // Close the addresslist popup.
                   triggerCheckoutEvent('closeAddressListPopup', true);

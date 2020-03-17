@@ -290,6 +290,12 @@ class CartController {
       ? $this->cart->getPaymentMethods($cart_data['cart']['id'])
       : [];
 
+    // Payment method set on cart.
+    // @Todo: This should be done actually in magento.
+    $data['cart_payment_method'] = !empty($shipping_info['method'])
+      ? $this->cart->getPaymentMethodSetOnCart($cart_data['cart']['id'])
+      : NULL;
+
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
 
     // Set the status message if we get from magento.

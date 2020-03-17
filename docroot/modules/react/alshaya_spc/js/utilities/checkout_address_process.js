@@ -95,15 +95,20 @@ export const checkoutAddressProcess = function (e, cart) {
         // Remove the loader.
         removeFullScreenLoader();
 
-        let cart_data = {
-          cart: cart_result,
-        };
+        // let cart_data = {
+        //   cart: cart_result,
+        // };
 
+        let cart_data = {};
         // If any error, don't process further.
         if (cart_result.error !== undefined) {
           cart_data = {
             error_message: cart_result.error_message,
           };
+        }
+        else {
+          cart_data = getInfoFromStorage();
+          cart_data.cart = cart_result;
         }
 
         // Trigger event.
