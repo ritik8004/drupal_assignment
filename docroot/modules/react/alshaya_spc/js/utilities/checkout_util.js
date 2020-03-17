@@ -1,8 +1,7 @@
 import axios from 'axios';
-import _isEmpty from 'lodash/isEmpty';
 import { removeCartFromStorage } from './storage';
 import { updateCartApiUrl } from './update_cart';
-import { cartAvailableInStorage, getGlobalCart } from './get_cart';
+import { cartAvailableInStorage } from './get_cart';
 
 /**
  * Default error message on checkout screen.
