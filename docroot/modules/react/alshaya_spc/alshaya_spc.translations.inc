@@ -48,7 +48,7 @@ function _alshaya_spc_translations() {
         'ar' => '(@qty قطعة) ملخص الطلبية',
       ],
       'Order total (@count items)' => [
-        'ar' => '(@count قطعة) المبلغ الإجمالي'
+        'ar' => '(@count قطعة) المبلغ الإجمالي',
       ],
       'billing information' => [
         'ar' => 'يرجى تزويدنا ببيانات الاتصال الخاصة بكم والعنوان',
