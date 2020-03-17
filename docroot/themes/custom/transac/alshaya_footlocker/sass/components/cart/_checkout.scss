@@ -49,13 +49,9 @@
           &.quantity {
             @include breakpoint ($only-mobile) {
               float: $right;
-              margin-left: 0;
+              margin-#{$left}: 0;
               width: calc(100% - 8.3125rem);
               margin-top: -2.2rem;
-
-              html[lang=ar] & {
-                width: calc(100% - 7.9375rem);
-              }
             }
           }
 
@@ -143,10 +139,6 @@
               padding-#{$right}: 0;
               width: calc(100% - 8.3125rem);
               padding-bottom: 0;
-
-              html[lang=ar] & {
-                width: calc(100% - 7.9375rem);
-              }
 
               .delivery-options-mobile {
                 float: $right;
