@@ -1,6 +1,6 @@
 import React from 'react';
 import OrderSummaryItem from '../OrderSummaryItem';
-import ConditionalView from "../../../common/components/conditional-view";
+import ConditionalView from '../../../common/components/conditional-view';
 
 export default class OrderSummary extends React.Component {
   render() {
@@ -12,10 +12,10 @@ export default class OrderSummary extends React.Component {
     const resultCode = drupalSettings.order_details.result_code;
     const addressLine1 = drupalSettings.order_details.delivery_type_info.delivery_address.address_line1;
     const addressLine2 = drupalSettings.order_details.delivery_type_info.delivery_address.address_line2;
-    const locality = drupalSettings.order_details.delivery_type_info.delivery_address.locality;
-    const country = drupalSettings.order_details.delivery_type_info.delivery_address.country;
+    const { locality } = drupalSettings.order_details.delivery_type_info.delivery_address;
+    const { country } = drupalSettings.order_details.delivery_type_info.delivery_address;
     const dependentLocality = drupalSettings.order_details.delivery_type_info.delivery_address.dependent_locality;
-    const customerAddress = ' ' + country + ', ' + addressLine1 + ', ' + addressLine2 + ', ' + locality + ', ' + dependentLocality;
+    const customerAddress = ` ${country}, ${addressLine1}, ${addressLine2}, ${locality}, ${dependentLocality}`;
     const mobileNumber = drupalSettings.order_details.mobile_number;
     const paymentMethod = drupalSettings.order_details.payment_method;
     const deliveryType = drupalSettings.order_details.delivery_type_info.type;

@@ -9,10 +9,10 @@ use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\address\Repository\CountryRepository;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
@@ -33,6 +33,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Class AlshayaSpcOrderHelper.
  */
 class AlshayaSpcOrderHelper {
+
   use StringTranslationTrait;
 
   /**
@@ -141,11 +142,11 @@ class AlshayaSpcOrderHelper {
   protected $request;
 
   /**
-   * API Wrapper.
+   * Orders Manager.
    *
-   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
    */
-  protected $apiWrapper;
+  protected $ordersManager;
 
   /**
    * AlshayaSpcCustomerHelper constructor.
@@ -178,8 +179,8 @@ class AlshayaSpcOrderHelper {
    *   Secure Text service provider.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request Stack.
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
-   *   API Wrapper.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   Orders Manager.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               AlshayaAddressBookManager $address_book_manager,
@@ -195,7 +196,7 @@ class AlshayaSpcOrderHelper {
                               CountryRepository $countryRepository,
                               SecureText $secure_text,
                               RequestStack $request_stack,
-                              AlshayaApiWrapper $api_wrapper) {
+                              OrdersManager $orders_manager) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -210,7 +211,7 @@ class AlshayaSpcOrderHelper {
     $this->countryRepository = $countryRepository;
     $this->secureText = $secure_text;
     $this->request = $request_stack->getCurrentRequest();
-    $this->apiWrapper = $api_wrapper;
+    $this->ordersManager = $orders_manager;
   }
 
   /**
@@ -248,39 +249,11 @@ class AlshayaSpcOrderHelper {
       throw new AccessDeniedHttpException();
     }
 
-    $endpoint = str_replace('{id}', $data['order_id'], 'orders/{id}');
-    $order = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
-    $order = json_decode($order, TRUE);
+    $order = $this->ordersManager->getOrder($data['order_id']);
 
-    if (empty($order) || $order['customer_email'] != $data['email']) {
+    if (empty($order) || $order['email'] != $data['email']) {
       throw new AccessDeniedHttpException();
     }
-
-    return $this->cleanupOrder($order);
-  }
-
-  /**
-   * Cleanup order array as expected by Drupal.
-   *
-   * @param array $order
-   *   Order array.
-   *
-   * @return array
-   *   Cleaned up order array.
-   */
-  public function cleanupOrder(array $order) {
-    $order['extension'] = $order['extension_attributes'];
-    unset($order['extension_attributes']);
-
-    $order['shipping'] = $order['extension']['shipping_assignments'][0]['shipping'];
-    unset($order['extension']['shipping_assignments']);
-    $order['shipping']['address']['extension'] = $order['shipping']['address']['extension_attributes'];
-    unset($order['shipping']['address']['extension_attributes']);
-
-    $order['billing'] = $order['billing_address'];
-    unset($order['billing_address']);
-    $order['billing']['extension'] = $order['billing']['extension_attributes'];
-    unset($order['billing']['extension_attributes']);
 
     return $order;
   }
@@ -661,7 +634,7 @@ class AlshayaSpcOrderHelper {
     $orderDetails['contact_no'] = $this->getFormattedMobileNumber($order['shipping']['address']['telephone']);
     $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
     $shippingTerm = $this->checkoutOptionManager->loadShippingMethod($shipping_method_code);
-    $orderDetails['delivery_charge'] = $order['shipping']['total']['shipping_invoiced'];
+    $orderDetails['delivery_charge'] = $order['totals']['shipping'];
 
     $orderDetails['delivery_method'] = $shippingTerm->getName();
     $orderDetails['delivery_method_description'] = $shippingTerm->get('field_shipping_method_desc')->getString();
@@ -691,7 +664,7 @@ class AlshayaSpcOrderHelper {
     }
 
     // Don't show Billing Address for CoD payment method.
-    if ($order['payment']['method_code'] !== 'cashondelivery') {
+    if ($order['payment']['method'] !== 'cashondelivery') {
       $billing_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
       $billing_address_array['telephone'] = $this->getFormattedMobileNumber($billing_address_array['mobile_number']['value']);
       $orderDetails['billing_address'] = $billing_address_array;

@@ -315,12 +315,12 @@ class AlshayaSpcController extends ControllerBase {
 
     // Order Totals.
     $totals = [
-      'subtotal_incl_tax' => $order['subtotal_incl_tax'],
-      'shipping_incl_tax' => $order['shipping_incl_tax'],
-      'base_grand_total' => $order['grand_total'],
-      'discount_amount' => $order['discount_amount'],
+      'subtotal_incl_tax' => $order['totals']['sub'],
+      'shipping_incl_tax' => $order['totals']['shipping'],
+      'base_grand_total' => $order['totals']['grand'],
+      'discount_amount' => $order['totals']['discount'],
       'free_delivery' => 'false',
-      'surcharge' => $order['extension']['surcharge_incl_tax'],
+      'surcharge' => $order['totals']['surcharge'],
     ];
 
     // Get Products.
@@ -341,7 +341,7 @@ class AlshayaSpcController extends ControllerBase {
 
     $settings = [
       'order_details' => [
-        'customer_email' => $order['customer_email'],
+        'customer_email' => $order['email'],
         'order_number' => $order['increment_id'],
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
@@ -355,10 +355,6 @@ class AlshayaSpcController extends ControllerBase {
 
     $payment = $this->checkoutOptionManager->loadPaymentMethod($order['payment']['method']);
     $settings['order_details']['payment_method'] = $payment->label();
-
-    if ($order['payment']['method'] !== 'cashondelivery') {
-      // @TODO: Populate billing address array.
-    }
 
     if ($order['payment']['method'] === 'knet') {
       // @TODO: Get this information from Magento in a better way.

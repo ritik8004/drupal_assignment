@@ -44,4 +44,4 @@ services:
       - '@address.country_repository'
       - '@alshaya_spc.secure_text_helper'
       - '@request_stack'
-      - '@alshaya_api.api'
+      - '@alshaya_acm_customer.orders_manager'
