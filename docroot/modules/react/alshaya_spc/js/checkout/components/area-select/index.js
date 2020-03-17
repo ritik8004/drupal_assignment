@@ -116,7 +116,7 @@ export default class AreaSelect extends React.Component {
       options = area_list;
     }
 
-    const panelTitle = Drupal.t('select ') + field.label;
+    const panelTitle = Drupal.t('select @label', {'@label': field.label});
 
     const currentOptionAvailable = (currentOption !== undefined
       && currentOption !== null

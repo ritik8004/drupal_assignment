@@ -359,7 +359,7 @@ class ClickCollect extends React.Component {
             className="spc-cnc-stores-list-map"
             style={{ display: openSelectedStore ? 'none' : 'block' }}
           >
-            <SectionTitle>{Drupal.t('collection Store')}</SectionTitle>
+            <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
             <a className="close" onClick={closeModal}>
               &times;
             </a>
