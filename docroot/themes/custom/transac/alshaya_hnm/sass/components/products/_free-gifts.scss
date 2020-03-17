@@ -3,3 +3,11 @@ body.ie {
     overflow-y: auto;
   }
 }
+
+.path--cart {
+  .free-gift-container {
+    @include breakpoint($only-mobile) {
+      top: 13.5rem;
+    }
+  }
+}
