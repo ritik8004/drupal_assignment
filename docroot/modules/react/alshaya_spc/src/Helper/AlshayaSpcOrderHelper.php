@@ -632,26 +632,18 @@ class AlshayaSpcOrderHelper {
     $orderDetails = [];
 
     $orderDetails['contact_no'] = $this->getFormattedMobileNumber($order['shipping']['address']['telephone']);
-    $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
-    $shippingTerm = $this->checkoutOptionManager->loadShippingMethod($shipping_method_code);
     $orderDetails['delivery_charge'] = $order['totals']['shipping'];
 
-    $orderDetails['delivery_method'] = $shippingTerm->getName();
-    $orderDetails['delivery_method_description'] = $shippingTerm->get('field_shipping_method_desc')->getString();
+    $shipping_info = explode(' - ', $order['shipping_description']);
+    $orderDetails['delivery_method'] = $shipping_info[0];
+    $orderDetails['delivery_method_description'] = $shipping_info[1] ?? $shipping_info[0];
 
+    $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
     if ($shipping_method_code == $this->checkoutOptionManager->getClickandColectShippingMethod()) {
       // @todo Get clickncollect store details
     }
     else {
       $orderDetails['type'] = $this->t('Home delivery');
-
-      // Check if we have cart description available, display in parenthesis.
-      if ($cart_desc = $shippingTerm->get('field_shipping_method_cart_desc')->getString()) {
-        $orderDetails['delivery_method'] = $this->t('@shipping_method_name (@shipping_method_description)', [
-          '@shipping_method_name' => $orderDetails['delivery_method'],
-          '@shipping_method_description' => $cart_desc,
-        ]);
-      }
 
       $shipping_address = $order['shipping']['address'];
 
