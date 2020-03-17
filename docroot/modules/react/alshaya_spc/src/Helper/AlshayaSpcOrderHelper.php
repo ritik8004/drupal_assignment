@@ -288,10 +288,11 @@ class AlshayaSpcOrderHelper {
 
     if (!($skuEntity instanceof SKUInterface)) {
       $data['extra_data']['cart_image'] = [
-        'url' => NULL,
-        'title' => NULL,
-        'alt' => NULL,
+        'url' => '',
+        'title' => '',
+        'alt' => '',
       ];
+      $data['relative_link'] = '';
     }
     else {
       $node = $this->skuManager->getDisplayNode($item['sku']);
@@ -304,6 +305,9 @@ class AlshayaSpcOrderHelper {
         ->getGeneratedUrl();
 
       $data = $this->getSkuData($skuEntity, $link);
+      $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+        '',
+        $node->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
     }
 
     $data['original_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['original_price']);
@@ -313,12 +317,8 @@ class AlshayaSpcOrderHelper {
       $data['configurable_values'] = $item["extension_attributes"]["product_options"][0]["attributes_info"];
     }
     else {
-      $data['configurable_values'] = NULL;
+      $data['configurable_values'] = [];
     }
-
-    $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
-      '',
-      $node->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
 
     return $data;
   }
