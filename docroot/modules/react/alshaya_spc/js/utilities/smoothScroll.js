@@ -9,7 +9,6 @@ smoothscroll.polyfill();
  * @param selector
  */
 export const smoothScrollTo = (selector) => {
-  console.log('smoothScrollTo');
   document.querySelector(selector).scrollIntoView({
     behavior: 'smooth'
   });

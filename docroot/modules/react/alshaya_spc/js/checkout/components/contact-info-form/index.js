@@ -10,7 +10,7 @@ import FixedFields from '../fixed-fields';
 import { validateContactInfo } from '../../../utilities/checkout_address_process';
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import { dispatchCustomEvent } from '../../../utilities/events';
-import {smoothScrollTo} from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;

@@ -8,7 +8,7 @@ import {
 import { addEditAddressToCustomer } from '../../../utilities/address_util';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
 import ClickCollectContainer from '../click-collect';
-import {smoothScrollTo} from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 

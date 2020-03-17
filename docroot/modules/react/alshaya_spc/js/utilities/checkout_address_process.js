@@ -15,7 +15,7 @@ import {
 import {
   getInfoFromStorage,
 } from './storage';
-import {smoothScrollTo} from './smoothScroll';
+import { smoothScrollTo } from './smoothScroll';
 
 /**
  * Process the data got from address form submission.
