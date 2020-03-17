@@ -7,10 +7,10 @@ import {
   showFullScreenLoader, validateInfo,
 } from '../../../utilities/checkout_util';
 import FixedFields from '../fixed-fields';
-import { i18nMiddleWareUrl } from '../../../utilities/i18n_url';
 import { validateContactInfo } from '../../../utilities/checkout_address_process';
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import { dispatchCustomEvent } from '../../../utilities/events';
+import {smoothScrollTo} from '../../../utilities/smoothScroll';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
@@ -151,6 +151,7 @@ class ContactInfoForm extends React.Component {
           dispatchCustomEvent('refreshCartOnCnCSelect', {
             data: () => cartData,
           });
+          smoothScrollTo('.spc-checkout-payment-options');
         })
         .catch((error) => {
           console.error(error);

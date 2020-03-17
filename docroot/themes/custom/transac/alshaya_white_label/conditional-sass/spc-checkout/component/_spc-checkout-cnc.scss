@@ -7,15 +7,30 @@
     height: 100vh;
   }
 
-  .spc-cnc-stores-list-map > .spc-checkout-section-title {
-    height: 3.5rem;
-    box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-bottom: 0;
-    font-size: 1.25rem;
+  .spc-cnc-stores-list-map {
+    > .spc-checkout-section-title {
+      height: 3.5rem;
+      box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 0;
+      font-size: 1.25rem;
+
+      @include breakpoint($only-mobile) {
+        position: fixed;
+        top: 0;
+
+        + .close {
+          position: fixed;
+
+          + .spc-cnc-address-form-wrapper {
+            padding-top: 3.5625rem;
+          }
+        }
+      }
+    }
   }
 
   .spc-cnc-address-form-content {
