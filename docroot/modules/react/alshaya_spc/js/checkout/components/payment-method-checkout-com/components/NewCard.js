@@ -94,7 +94,7 @@ class NewCard extends React.Component {
   render() {
     const { cardType } = this.context;
 
-    const cartTypes = Object.entries(this.acceptedCards).map(([, type]) => (
+    const cardTypes = Object.entries(this.acceptedCards).map(([, type]) => (
       <CardTypeSVG key={type} type={type} class={`${type} ${cardType === type ? 'is-active' : ''}`} />
     ));
 
@@ -152,7 +152,7 @@ class NewCard extends React.Component {
           </div>
         </div>
         <div className="spc-card-types-wrapper">
-          {cartTypes}
+          {cardTypes}
         </div>
         <ConditionalView condition={window.drupalSettings.user.uid > 0 && drupalSettings.checkoutCom.tokenize === true}>
           <div className="spc-payment-save-card">

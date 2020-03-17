@@ -48,7 +48,7 @@ const StoreList = ({
         >
           <StoreItem
             display={display || 'default'}
-            index={parseInt(index, 10)}
+            index={parseInt(index)}
             store={store}
             onStoreChoose={chooseStoreItem}
             onStoreExpand={expandStoreItem}

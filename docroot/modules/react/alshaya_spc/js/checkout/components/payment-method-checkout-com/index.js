@@ -6,7 +6,7 @@ import SavedCardsList from './components/SavedCardsList';
 import NewCard from './components/NewCard';
 import { CheckoutComContext } from '../../../context/CheckoutCom';
 import SelectedCard from './components/SelectedCard';
-import Cookies from 'js-cookie';
+import { setStorageInfo } from '../../../utilities/storage';
 
 class PaymentMethodCheckoutCom extends React.Component {
   static contextType = CheckoutComContext;
@@ -156,7 +156,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     const { updateState } = this.context;
     updateState(obj);
     if (({}).hasOwnProperty.call(obj, 'selectedCard')) {
-      Cookies.set('spc_selected_card', obj.selectedCard === 'new' ? 'new' : obj.tokenizedCard);
+      setStorageInfo('spc_selected_card', obj.selectedCard === 'new' ? 'new' : obj.tokenizedCard);
     }
   }
 

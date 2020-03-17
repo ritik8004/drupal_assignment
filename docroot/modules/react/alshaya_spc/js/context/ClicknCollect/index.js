@@ -5,8 +5,6 @@ import { cleanMobileNumber } from '../../utilities/checkout_util';
 export const ClicknCollectContext = React.createContext();
 
 class ClicknCollectContextProvider extends React.Component {
-  _isMounted = true;
-
   constructor(props) {
     super(props);
     let coords = null;
@@ -14,28 +12,34 @@ class ClicknCollectContextProvider extends React.Component {
     const { storeList } = props;
     let contactInfo = null;
 
-    const { cart: { customer, store_info, shipping_address } } = props.cart;
+    const {
+      cart: {
+        customer,
+        store_info: storeInfo,
+        shipping_address: shippingAddress,
+      },
+    } = props.cart;
 
-    if (!shipping_address && customer !== undefined) {
+    if (!shippingAddress && customer !== undefined) {
       contactInfo = {
         fullname: makeFullName(customer.firstname || '', customer.lastname || ''),
         email: customer.email || '',
         telephone: cleanMobileNumber(customer.telephone) || '',
       };
-    } else if (shipping_address) {
+    } else if (shippingAddress) {
       contactInfo = {
-        fullname: makeFullName(shipping_address.firstname || '', shipping_address.lastname || ''),
-        email: shipping_address.email || '',
-        telephone: cleanMobileNumber(shipping_address.telephone) || '',
+        fullname: makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || ''),
+        email: shippingAddress.email || '',
+        telephone: cleanMobileNumber(shippingAddress.telephone) || '',
       };
     }
 
-    if (store_info) {
+    if (storeInfo) {
       coords = {
-        lat: parseFloat(store_info.lat),
-        lng: parseFloat(store_info.lng),
+        lat: parseFloat(storeInfo.lat),
+        lng: parseFloat(storeInfo.lng),
       };
-      selectedStore = store_info;
+      selectedStore = storeInfo;
     }
 
     this.state = {
@@ -46,15 +50,6 @@ class ClicknCollectContextProvider extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this._isMounted = true;
-    this.setState({ storeList: this.props.storeList });
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
   static getDerivedStateFromProps(props, state) {
     if (props.storeList !== state.storeList) {
       return {
@@ -63,6 +58,11 @@ class ClicknCollectContextProvider extends React.Component {
     }
     // Return null to indicate no change to state.
     return null;
+  }
+
+  componentDidMount() {
+    const { storeList } = this.props;
+    this.setState({ storeList });
   }
 
   updateSelectedStore = (store) => {
@@ -95,6 +95,8 @@ class ClicknCollectContextProvider extends React.Component {
   }
 
   render() {
+    const { children } = this.props;
+
     return (
       <ClicknCollectContext.Provider
         value={
@@ -107,7 +109,7 @@ class ClicknCollectContextProvider extends React.Component {
           }
         }
       >
-        {this.props.children}
+        {children}
       </ClicknCollectContext.Provider>
     );
   }

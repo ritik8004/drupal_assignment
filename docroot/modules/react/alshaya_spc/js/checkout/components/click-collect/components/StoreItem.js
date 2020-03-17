@@ -7,15 +7,15 @@ const StoreItem = ({
 }) => (
   <>
     <span className="spc-cnc-store-name">
-      <span className="spc-store-name-wrapper" onClick={(e) => onStoreChoose(e, index)} role="button" tabIndex="0" onKeyUp={() => {}} aria-label="Name">
+      <span className="spc-store-name-wrapper" onClick={(e) => onStoreChoose(e, index)}>
         <span className="store-name">{store.name}</span>
         <span className="store-distance">{store.formatted_distance}</span>
       </span>
       <ConditionalView condition={display === 'accordion'}>
-        <span className="expand-btn" onClick={(e) => onStoreExpand(e, index)} role="button" tabIndex="0" onKeyUp={() => {}} aria-label="Expand">Expand</span>
+        <span className="expand-btn" onClick={(e) => onStoreExpand(e, index)}>Expand</span>
       </ConditionalView>
       <ConditionalView condition={display === 'default'}>
-        <span className="spc-map-list-close" onClick={(e) => onStoreClose(e, index)} role="button" tabIndex="0" onKeyUp={() => {}} aria-label="Close" />
+        <span className="spc-map-list-close" onClick={(e) => onStoreClose(e, index)} />
       </ConditionalView>
     </span>
     <ConditionalView condition={display === 'accordion' || display === 'default'}>

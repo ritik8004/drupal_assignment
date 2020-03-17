@@ -102,7 +102,7 @@ export default class AddressList extends React.Component {
         </a>
         <div className="address-list-content">
           <div className="spc-add-new-address-btn" onClick={this.openModal}>
-            {Drupal.t('Add new address')}
+            {Drupal.t('add new address')}
           </div>
           <Popup open={open} onClose={this.closeModal} closeOnDocumentClick={false}>
             <>
