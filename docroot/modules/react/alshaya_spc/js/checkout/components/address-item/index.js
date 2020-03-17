@@ -17,6 +17,9 @@ import {
   prepareAddressDataForShipping,
 } from '../../../utilities/checkout_address_process';
 import EditAddressSVG from '../edit-address-svg';
+import {
+  getInfoFromStorage
+} from '../../../utilities/storage';
 
 export default class AddressItem extends React.Component {
   constructor(props) {
@@ -83,14 +86,16 @@ export default class AddressItem extends React.Component {
         removeFullScreenLoader();
 
         // Prepare cart data.
-        let cartData = {
-          cart: cartResult,
-        };
+        let cartData = {};
         // If there is any error.
         if (cartResult.error !== undefined) {
           cartData = {
             error_message: cartResult.error_message,
           };
+        }
+        else {
+          cartData = getInfoFromStorage();
+          cartData.cart = cartResult;
         }
 
         // Trigger event to close all popups.
