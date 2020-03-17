@@ -74,7 +74,7 @@ export const fetchCartData = () => {
   // Prepare api url.
   var api_url = getCartApiUrl();
 
-  return axios.get(api_url)
+  return Axios.get(api_url)
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
