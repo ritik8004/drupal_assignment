@@ -9,9 +9,10 @@ import {
   placeOrder,
   removeFullScreenLoader,
   showFullScreenLoader,
-} from "../../../utilities/checkout_util";
+} from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
 import PaymentMethodCybersource from "../payment-method-cybersource";
+import { removeStorageInfo } from '../../../utilities/storage';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -42,7 +43,7 @@ export default class PaymentMethod extends React.Component {
       // Throwing 200 error, we want to handle place order in custom way.
       throw 200;
     }
-  };
+  }
 
   finalisePayment = (paymentData) => {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
@@ -53,11 +54,13 @@ export default class PaymentMethod extends React.Component {
         // 2D flow success.
         const { cart } = this.props;
         placeOrder(cart.cart.cart_id, cart.selected_payment_method);
+        removeStorageInfo('spc_selected_card');
       } else if (result.success === undefined || !(result.success)) {
         // 3D flow error.
         console.error(result);
       } else if (result.redirectUrl !== undefined) {
         // 3D flow success.
+        removeStorageInfo('spc_selected_card');
         window.location = result.redirectUrl;
       } else {
         console.error(result);
