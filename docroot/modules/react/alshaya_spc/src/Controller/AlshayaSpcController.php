@@ -316,7 +316,7 @@ class AlshayaSpcController extends ControllerBase {
     // Order Totals.
     $totals = [
       'subtotal_incl_tax' => $order['subtotal_incl_tax'],
-      'shipping_incl_tax' => $order['shipping_invoiced'],
+      'shipping_incl_tax' => $order['shipping_incl_tax'],
       'base_grand_total' => $order['grand_total'],
       'discount_amount' => $order['discount_amount'],
       'free_delivery' => 'false',
@@ -325,17 +325,26 @@ class AlshayaSpcController extends ControllerBase {
 
     // Get Products.
     $productList = [];
-    foreach ($order['items'] as $sku => $item) {
-      $productList[$sku] = $this->orderHelper->getSkuDetails($sku);
+    foreach ($order['items'] as $item) {
+      // @TODO: Populate price and other info from order response data.
+      $product_data = $this->orderHelper->getSkuDetails($item['sku']);
+
+      if (empty($product_data)) {
+        // @TODO: Populate from order response data.
+        $product_data = [];
+        $product_data['name'] = $item['name'];
+        $product_data['image'] = '';
+      }
+
+      $productList[$item['sku']] = $product_data;
     }
 
     $settings = [
       'order_details' => [
-        'customer_email' => $order['email'],
+        'customer_email' => $order['customer_email'],
         'order_number' => $order['increment_id'],
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
-        // @todo Get exepected delivery term.
         'expected_delivery' => $orderDetails['delivery_method_description'],
         'number_of_items' => count($order['items']),
         'delivery_type_info' => $orderDetails,
@@ -346,6 +355,10 @@ class AlshayaSpcController extends ControllerBase {
 
     $payment = $this->checkoutOptionManager->loadPaymentMethod($order['payment']['method']);
     $settings['order_details']['payment_method'] = $payment->label();
+
+    if ($order['payment']['method'] !== 'cashondelivery') {
+      // @TODO: Populate billing address array.
+    }
 
     if ($order['payment']['method'] === 'knet') {
       // @TODO: Get this information from Magento in a better way.

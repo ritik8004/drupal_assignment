@@ -250,12 +250,13 @@ class AlshayaSpcOrderHelper {
 
     $endpoint = str_replace('{id}', $data['order_id'], 'orders/{id}');
     $order = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
+    $order = json_decode($order, TRUE);
 
-    if (empty($order) || $order['email'] != $data['email']) {
+    if (empty($order) || $order['customer_email'] != $data['email']) {
       throw new AccessDeniedHttpException();
     }
 
-    return $this->cleanupOrder(json_decode($order, TRUE));
+    return $this->cleanupOrder($order);
   }
 
   /**
@@ -289,19 +290,19 @@ class AlshayaSpcOrderHelper {
    *
    * Returns available delivery method data.
    *
-   * @return \Drupal\rest\ResourceResponse
+   * @return array|null
    *   The response containing delivery methods data.
    */
   public function getSkuDetails(string $sku) {
     $skuEntity = SKU::loadFromSku($sku);
 
     if (!($skuEntity instanceof SKUInterface)) {
-      throw (new NotFoundHttpException());
+      return NULL;
     }
 
     $node = $this->skuManager->getDisplayNode($sku);
     if (!($node instanceof NodeInterface)) {
-      throw (new NotFoundHttpException());
+      return NULL;
     }
 
     $link = $node->toUrl('canonical', ['absolute' => TRUE])

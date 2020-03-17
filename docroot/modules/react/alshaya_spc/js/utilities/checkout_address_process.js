@@ -4,7 +4,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
   triggerCheckoutEvent,
-  addBillingInCart, validateInfo,
+  addBillingInCart, validateInfo, cleanMobileNumber,
 } from './checkout_util';
 import {
   extractFirstAndLastName,
@@ -225,7 +225,7 @@ export const prepareAddressDataFromForm = (elements) => {
     lastname,
     email: elements.email.value,
     city: gerAreaLabelById(false, elements.administrative_area.value),
-    mobile: elements.mobile.value,
+    mobile: '+' + drupalSettings.country_mobile_code + cleanMobileNumber(elements.mobile.value),
   };
 
   // Getting dynamic fields data.
