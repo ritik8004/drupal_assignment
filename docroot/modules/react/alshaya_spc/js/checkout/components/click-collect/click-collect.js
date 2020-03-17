@@ -205,17 +205,20 @@ class ClickCollect extends React.Component {
     this.closeAllInfoWindow();
   };
 
-  showSelectedMarker = ({ storeList } = this.context) => {
-    const { selectedStore } = this.context;
+  showSelectedMarker = (storeList = null) => {
+    const { selectedStore, storeList: contextStoreList } = this.context;
+    const storeListArg = (!storeList) ? contextStoreList : storeList;
     if (!selectedStore) {
       return;
     }
-    this.openMarkerOfStore(selectedStore.code, storeList, false);
+    this.openMarkerOfStore(selectedStore.code, storeListArg, false);
     this.closeAllInfoWindow();
   };
 
-  openMarkerOfStore = (storeCode, { storeList } = this.context, showInfoWindow = true) => {
-    const index = _findIndex(storeList, {
+  openMarkerOfStore = (storeCode, storeList = null, showInfoWindow = true) => {
+    const { storeList: contextStoreList } = this.context;
+    const storeListArg = (!storeList) ? contextStoreList : storeList;
+    const index = _findIndex(storeListArg, {
       code: storeCode,
     });
 
