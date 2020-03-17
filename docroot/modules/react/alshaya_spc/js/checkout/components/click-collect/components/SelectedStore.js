@@ -11,7 +11,7 @@ const SelectedStore = ({ store, open, closePanel }) => {
   return (
     <div id="click-and-collect-selected-store" style={{ display: open ? 'block' : 'none', width: '100%' }}>
       <div className="spc-cnc-selected-store-header">
-        <span className="spc-cnc-selected-store-back" onClick={() => closePanel()} role="button" tabIndex="0" onKeyUp={() => {}} aria-label="Back" />
+        <span className="spc-cnc-selected-store-back" onClick={() => closePanel()} />
         <SectionTitle>{Drupal.t('collection details')}</SectionTitle>
       </div>
       <SectionTitle>{Drupal.t('selected store')}</SectionTitle>

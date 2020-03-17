@@ -4,7 +4,10 @@ import Cookies from 'js-cookie';
 import ClicknCollectContextProvider from '../../../context/ClicknCollect';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import EmptyResult from '../../../utilities/empty-result';
-import { fetchCartData } from '../../../utilities/get_cart';
+import {
+  fetchCartData,
+  fetchClicknCollectStores,
+} from '../../../utilities/api/requests';
 import Loading from '../../../utilities/loading';
 import OrderSummaryBlock from '../../../utilities/order-summary-block';
 import HDBillingAddress from '../hd-billing-address';
@@ -26,7 +29,6 @@ import {
   removeFullScreenLoader,
   isDeliveryTypeSameAsInCart,
 } from '../../../utilities/checkout_util';
-import { fetchClicknCollectStores } from '../../../utilities/api/requests';
 import { createFetcher } from '../../../utilities/api/fetcher';
 
 import ConditionalView from '../../../common/components/conditional-view';
@@ -84,7 +86,6 @@ export default class Checkout extends React.Component {
             if (updated) {
               cartObj = getInfoFromStorage();
             }
-            window.cartData = cartObj;
             this.setState({
               wait: false,
               cart: cartObj,
@@ -169,8 +170,8 @@ export default class Checkout extends React.Component {
       (response) => {
         if (typeof response.error === 'undefined') {
           this.setState({ storeList: response });
-          window.fetchStore = 'finished';
         }
+        window.fetchStore = 'finished';
       },
     );
   };

@@ -81,10 +81,6 @@ class ClicknCollectDeiveryInfo extends React.Component {
           <div
             className="spc-change-address-link"
             onClick={() => this.openModal(false)}
-            role="button"
-            tabIndex="0"
-            onKeyUp={() => {}}
-            aria-label="Change"
           >
             {Drupal.t('Change')}
           </div>
@@ -98,10 +94,6 @@ class ClicknCollectDeiveryInfo extends React.Component {
           <div
             className="spc-change-address-link"
             onClick={() => this.openModal(true)}
-            role="button"
-            tabIndex="0"
-            onKeyUp={() => {}}
-            aria-label="Edit"
           >
             {Drupal.t('Edit')}
           </div>
