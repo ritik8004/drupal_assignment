@@ -16,22 +16,6 @@ class ClicknCollectDeiveryInfo extends React.Component {
     };
   }
 
-  openModal = (showSelectedStore) => {
-    this.setState({
-      open: true,
-      showSelectedStore: showSelectedStore || false,
-    });
-  };
-
-  closeModal = () => {
-    this.setState({ open: false });
-  };
-
-  processAddress = (e) => {
-    const { cart } = this.props.cart;
-    checkoutAddressProcess(e, cart);
-  };
-
   componentDidMount() {
     this._isMounted = true;
     document.addEventListener(
@@ -50,9 +34,26 @@ class ClicknCollectDeiveryInfo extends React.Component {
     );
   }
 
+  openModal = (showSelectedStore) => {
+    this.setState({
+      open: true,
+      showSelectedStore: showSelectedStore || false,
+    });
+  };
+
+  closeModal = () => {
+    this.setState({ open: false });
+  };
+
+  processAddress = (e) => {
+    const { cart: { cart: newCart } } = this.props;
+    checkoutAddressProcess(e, newCart);
+  };
+
   eventListener = (e) => {
     const data = e.detail.data();
-    this.props.refreshCart(data);
+    const { refreshCart } = this.props;
+    refreshCart(data);
     if (this._isMounted) {
       this.closeModal();
     }

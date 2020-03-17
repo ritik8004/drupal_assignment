@@ -42,6 +42,8 @@ export const getShippingMethods = function (cart_id, data) {
 export const placeOrder = function (payment_method) {
   const { middleware_url } = window.drupalSettings.alshaya_spc;
 
+  showFullScreenLoader();
+
   const data = {
     paymentMethod: {
       method: payment_method,
@@ -53,19 +55,20 @@ export const placeOrder = function (payment_method) {
     })
     .then(
       (response) => {
-        if (response.error === undefined) {
+        if (response.data.error === undefined) {
           // Remove cart info from storage.
           removeCartFromStorage();
 
-          window.location = Drupal.url('checkout/confirmation');
+          window.location = Drupal.url(response.data.redirectUrl);
           return;
         }
 
         // @TODO: Show exception to user.
-        console.error(response.error);
+        console.error(response);
       },
       (error) => {
         // Processing of error here.
+        console.error(error);
       },
     );
 };

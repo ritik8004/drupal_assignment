@@ -154,8 +154,6 @@ class AlshayaAcmConfigCheck {
     $reset = [
       'acq_commerce.conductor',
       'alshaya_api.settings',
-      'acq_cybersource.settings',
-      'alshaya_knet.settings',
       'recaptcha.settings',
       'geolocation.settings',
       'google_tag.container.primary',

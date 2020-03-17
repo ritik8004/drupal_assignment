@@ -48,6 +48,7 @@ const StoreItem = ({
           >
             <button
               className="select-store"
+              type="button"
               onClick={(e) => onStoreFinalize(e, store.code)}
             >
               {Drupal.t('select this store')}

@@ -84,10 +84,17 @@ export default class PaymentMethods extends React.Component {
 
     showFullScreenLoader();
 
+    let analytics = {};
+    if (typeof window.ga === 'function' && window.ga.loaded) {
+      analytics.clientId = ga.getAll()[0].get('clientId');
+      analytics.trackingId = ga.getAll()[0].get('trackingId');
+    }
+
     const data = {
       payment: {
         method,
         additional_data: {},
+        analytics: analytics,
       },
     };
 
@@ -139,7 +146,7 @@ export default class PaymentMethods extends React.Component {
     return (
       <div className="spc-checkout-payment-options">
         <ConditionalView condition={Object.keys(methods).length > 0}>
-          <SectionTitle>{Drupal.t('payment methods')}</SectionTitle>
+          <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
           <div className={`payment-methods ${activeClass}`}>{methods}</div>
         </ConditionalView>
       </div>

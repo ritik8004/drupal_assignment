@@ -54,7 +54,7 @@ export default class DeliveryInformation extends React.Component {
     let title = '';
     if (cart.delivery_type !== undefined) {
       if (cart.delivery_type === 'cnc') {
-        title = Drupal.t('collection store');
+        title = Drupal.t('Collection Store');
       }
       else {
         title = Drupal.t('delivery information');
@@ -63,7 +63,7 @@ export default class DeliveryInformation extends React.Component {
 
     if (title.length === 0) {
       title = cart.cart.delivery_type === 'cnc' ?
-        Drupal.t('collection store') :
+        Drupal.t('Collection Store') :
         Drupal.t('delivery information');
     }
 

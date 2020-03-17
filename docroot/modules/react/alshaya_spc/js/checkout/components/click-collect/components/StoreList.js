@@ -8,17 +8,6 @@ const StoreList = ({
     return <div className="spc-cnc-empty-store-list">{Drupal.t('Sorry, No store found for your location.')}</div>;
   }
 
-  const chooseStoreItem = (e, index) => {
-    onStoreRadio(index);
-    addClassToStoreItem(e.target.parentElement.parentElement, 'selected');
-    document.getElementsByClassName('spc-cnc-store-actions')[0].classList.add('show');
-  };
-
-  const expandStoreItem = (e, index) => {
-    chooseStoreItem(e, index);
-    addClassToStoreItem(e.target.parentElement.parentElement, 'expand');
-  };
-
   const addClassToStoreItem = (element, className) => {
     // Close already opened item.
     if (element.classList.contains(className)) {
@@ -34,6 +23,17 @@ const StoreList = ({
       storeElement.classList.remove(className);
     });
     element.classList.add(className);
+  };
+
+  const chooseStoreItem = (e, index) => {
+    onStoreRadio(index);
+    addClassToStoreItem(e.target.parentElement.parentElement, 'selected');
+    document.getElementsByClassName('spc-cnc-store-actions')[0].classList.add('show');
+  };
+
+  const expandStoreItem = (e, index) => {
+    chooseStoreItem(e, index);
+    addClassToStoreItem(e.target.parentElement.parentElement, 'expand');
   };
 
   return (

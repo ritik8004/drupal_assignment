@@ -4,13 +4,16 @@ namespace App\Controller;
 
 use App\Service\Cart;
 use App\Service\CheckoutCom\APIWrapper;
+use App\Service\Cybersource\CybersourceHelper;
 use App\Service\Knet\KnetHelper;
 use App\Service\PaymentData;
 use App\Service\SessionStorage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -48,6 +51,13 @@ class PaymentController {
   protected $knetHelper;
 
   /**
+   * Cybersource Helper.
+   *
+   * @var \App\Service\Cybersource\CybersourceHelper
+   */
+  protected $cybersourceHelper;
+
+  /**
    * Logger service.
    *
    * @var \Psr\Log\LoggerInterface
@@ -79,6 +89,8 @@ class PaymentController {
    *   Checkout.com API Wrapper.
    * @param \App\Service\Knet\KnetHelper $knet_helper
    *   K-Net Helper.
+   * @param \App\Service\Cybersource\CybersourceHelper $cybersource_helper
+   *   Cybersource Helper.
    * @param \App\Service\PaymentData $payment_data
    *   Payment Data provider.
    * @param \Psr\Log\LoggerInterface $logger
@@ -90,6 +102,7 @@ class PaymentController {
                               Cart $cart,
                               APIWrapper $checkout_com_api,
                               KnetHelper $knet_helper,
+                              CybersourceHelper $cybersource_helper,
                               PaymentData $payment_data,
                               LoggerInterface $logger,
                               SessionStorage $session) {
@@ -97,6 +110,7 @@ class PaymentController {
     $this->cart = $cart;
     $this->checkoutComApi = $checkout_com_api;
     $this->knetHelper = $knet_helper;
+    $this->cybersourceHelper = $cybersource_helper;
     $this->paymentData = $payment_data;
     $this->logger = $logger;
     $this->session = $session;
@@ -147,7 +161,7 @@ class PaymentController {
       return $this->handleCheckoutComFailure();
     }
 
-    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout/confirmation', 302);
+    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
 
     try {
       $payment_data = [
@@ -169,7 +183,8 @@ class PaymentController {
         throw new \Exception($order['error_message'] ?? 'Place order failed', $order['error_code'] ?? 500);
       }
 
-      $response->headers->setCookie(Cookie::create('middleware_order_placed', $order['order_id'], strtotime('+1 year'), '/', NULL, TRUE, FALSE));
+      $response->setTargetUrl('/' . $data['data']['langcode'] . '/checkout/confirmation?id=' . $order['secure_order_id']);
+      $response->headers->setCookie(Cookie::create('middleware_order_placed', 1, strtotime('+1 year'), '/', NULL, TRUE, FALSE));
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart: @cart. Payment method @method.', [
@@ -306,7 +321,7 @@ class PaymentController {
       '@message' => json_encode($data),
     ]);
 
-    $redirect = new RedirectResponse('/' . $state['data']['langcode'] . '/checkout/confirmation', 302);
+    $redirect = new RedirectResponse('/' . $state['data']['langcode'] . '/checkout', 302);
 
     try {
       $payment_data = [
@@ -326,7 +341,8 @@ class PaymentController {
         throw new \Exception($order['error_message'] ?? 'Place order failed', $order['error_code'] ?? 500);
       }
 
-      $redirect->headers->setCookie(Cookie::create('middleware_order_placed', $order['order_id'], strtotime('+1 year'), '/', NULL, TRUE, FALSE));
+      $redirect->setTargetUrl('/' . $state['data']['langcode'] . '/checkout/confirmation?id=' . $order['secure_order_id']);
+      $redirect->headers->setCookie(Cookie::create('middleware_order_placed', 1, strtotime('+1 year'), '/', NULL, TRUE, FALSE));
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart: @cart. Payment method @method.', [
@@ -384,6 +400,36 @@ class PaymentController {
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
     $response->headers->setCookie(Cookie::create('middleware_payment_error', 'failed', strtotime('+1 year'), '/', NULL, TRUE, FALSE));
     return $response;
+  }
+
+  /**
+   * Page callback to get cybersource token.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Response data in JSON.
+   *
+   * @throws \Exception
+   */
+  public function getCybersourceToken() {
+    $response = $this->cybersourceHelper->getToken();
+    return new JsonResponse($response);
+  }
+
+  /**
+   * Response callback for cybersource.
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
+   *   Script to trigger event in parent window.
+   */
+  public function finaliseCybersource() {
+    $response = $this->cybersourceHelper->finalise();
+
+    $script = '<script type="text/javascript">';
+    $script .= 'var event = new CustomEvent(eventName, {bubbles: true, detail: ' . json_encode($response) . '});';
+    $script .= 'window.parent.document.dispatchEvent(event);';
+    $script .= '</script>';
+
+    return new Response($script);
   }
 
   /**

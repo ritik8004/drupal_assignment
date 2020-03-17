@@ -33,16 +33,20 @@ class ClickCollect extends React.Component {
     this.autocomplete = null;
     this.searchplaceInput = null;
     this.nearMeBtn = null;
+
+    const { openSelectedStore } = this.props;
     this.state = {
-      openSelectedStore: this.props.openSelectedStore || false,
+      openSelectedStore: openSelectedStore || false,
       mapFullScreen: false,
     };
   }
 
   componentDidMount() {
     // For autocomplete text field.
+    const { openSelectedStore } = this.state;
+    const { coords, selectedStore } = this.context;
     if (!this.autocomplete && this.searchRef) {
-      this.searchplaceInput = this.searchRef.current.getElementsByTagName('input')[0];
+      this.searchplaceInput = this.searchRef.current.getElementsByTagName('input').item(0);
       this.autocomplete = new window.google.maps.places.Autocomplete(
         this.searchplaceInput,
         {
@@ -56,15 +60,15 @@ class ClickCollect extends React.Component {
         this.placesAutocompleteHandler,
       );
     }
-    this.nearMeBtn = this.searchRef.current.getElementsByTagName('button')[0];
+    this.nearMeBtn = this.searchRef.current.getElementsByTagName('button').item(0);
 
     // Ask for location access when we don't have any coords.
-    if (this.context.coords !== null && this.state.openSelectedStore) {
+    if (coords !== null && openSelectedStore) {
       this.showSelectedMarker();
     }
 
     // Show "select this store" button, if a store is selected.
-    if (this.context.selectedStore && this.state.openSelectedStore === false) {
+    if (selectedStore && openSelectedStore === false) {
       this.showOpenMarker();
       this.selectStoreButtonVisibility(true);
     }
@@ -126,9 +130,7 @@ class ClickCollect extends React.Component {
           this.fetchAvailableStores(getDefaultMapCenter());
         },
       )
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => { console.log(error); });
     return false;
   };
 
@@ -136,20 +138,28 @@ class ClickCollect extends React.Component {
    * Fetch available stores for given lat and lng.
    */
   fetchAvailableStores = (coords) => {
+    const { openSelectedStore } = this.state;
+    const { updateCoordsAndStoreList } = this.context;
     showFullScreenLoader();
     // Create fetcher object to fetch stores.
     const storeFetcher = createFetcher(fetchClicknCollectStores);
     // Make api request.
     const list = storeFetcher.read(coords);
-    list.then((response) => {
-      if (typeof response.error === 'undefined') {
-        this.context.updateCoordsAndStoreList(coords, response);
-        if (this.state.openSelectedStore) {
-          this.showOpenMarker(response);
+    list
+      .then((response) => {
+        if (typeof response.error === 'undefined') {
+          updateCoordsAndStoreList(coords, response);
+          if (openSelectedStore) {
+            this.showOpenMarker(response);
+          }
+        } else {
+          updateCoordsAndStoreList(coords, []);
         }
-      }
-      removeFullScreenLoader();
-    });
+        removeFullScreenLoader();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   toggleStoreView = (e, activeView) => {
@@ -165,7 +175,7 @@ class ClickCollect extends React.Component {
         this.selectStoreButtonVisibility(false);
       } else {
         this.toggleFullScreen(true);
-        this._openMarkerOfStore(selectedStore.dataset.storeCode);
+        this.openMarkerOfStore(selectedStore.dataset.storeCode);
       }
     } else {
       this.cncMapView.current.style.display = 'none';
@@ -183,25 +193,27 @@ class ClickCollect extends React.Component {
     google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
   };
 
-  showOpenMarker = (storeList = this.context.storeList) => {
+  showOpenMarker = (storeList = null) => {
+    const { selectedStore, storeList: contextStoreList } = this.context;
+    const storeListArg = (!storeList) ? contextStoreList : storeList;
+
+    if (!selectedStore) {
+      return;
+    }
+    this.openMarkerOfStore(selectedStore.code, storeListArg);
+    this.closeAllInfoWindow();
+  };
+
+  showSelectedMarker = ({ storeList } = this.context) => {
     const { selectedStore } = this.context;
     if (!selectedStore) {
       return;
     }
-    this._openMarkerOfStore(selectedStore.code, storeList);
+    this.openMarkerOfStore(selectedStore.code, storeList, false);
     this.closeAllInfoWindow();
   };
 
-  showSelectedMarker = (storeList = this.context.storeList) => {
-    const { selectedStore } = this.context;
-    if (!selectedStore) {
-      return;
-    }
-    this._openMarkerOfStore(selectedStore.code, storeList, false);
-    this.closeAllInfoWindow();
-  };
-
-  _openMarkerOfStore = (storeCode, storeList = this.context.storeList, showInfoWindow = true) => {
+  openMarkerOfStore = (storeCode, { storeList } = this.context, showInfoWindow = true) => {
     const index = _findIndex(storeList, {
       code: storeCode,
     });
@@ -235,7 +247,7 @@ class ClickCollect extends React.Component {
       openSelectedStore: false,
     });
     this.selectStoreButtonVisibility(true);
-    this._openMarkerOfStore(selectedStore.code, storeList);
+    this.openMarkerOfStore(selectedStore.code, storeList);
   };
 
   finalizeCurrentStore = (e) => {
@@ -243,15 +255,16 @@ class ClickCollect extends React.Component {
     this.finalizeStore(e, selectedStore.dataset.storeCode);
   };
 
-  finalizeStore = (e, store_code) => {
+  finalizeStore = (e, storeCode) => {
+    const { storeList, updateSelectStore } = this.context;
     e.preventDefault();
     if (window.innerWidth < 768) {
       this.toggleFullScreen(false);
     }
 
     // Find the store object with the given store-code from the store list.
-    const store = _find(this.context.storeList, { code: store_code });
-    this.context.updateSelectStore(store);
+    const store = _find(storeList, { code: storeCode });
+    updateSelectStore(store);
     this.setState({
       openSelectedStore: true,
     });
@@ -321,7 +334,7 @@ class ClickCollect extends React.Component {
 
   render() {
     const { coords, storeList, selectedStore } = this.context;
-    const { openSelectedStore } = this.state;
+    const { openSelectedStore, mapFullScreen } = this.state;
     const { closeModal } = this.props;
 
     if (window.fetchStore !== 'finished') {
@@ -355,7 +368,10 @@ class ClickCollect extends React.Component {
                 <SectionTitle>
                   {Drupal.t('find your nearest store')}
                 </SectionTitle>
-                <LocationSearchForm ref={this.searchRef} getCurrentPosition={this.getCurrentPosition} />
+                <LocationSearchForm
+                  ref={this.searchRef}
+                  getCurrentPosition={this.getCurrentPosition}
+                />
                 <DeviceView device="mobile">
                   <ToggleButton toggleStoreView={this.toggleStoreView} />
                 </DeviceView>
@@ -363,7 +379,7 @@ class ClickCollect extends React.Component {
                   <StoreList
                     display={(window.innerWidth < 768) ? 'accordion' : 'teaser'}
                     store_list={storeList}
-                    selected={this.context.selectedStore}
+                    selected={selectedStore}
                     onStoreRadio={this.hightlightMapMarker}
                     onStoreFinalize={this.finalizeStore}
                   />
@@ -375,14 +391,14 @@ class ClickCollect extends React.Component {
                     ref={this.cncMapView}
                   >
                     {mapView}
-                    <button className="spc-cnc-full-screen" onClick={() => this.toggleFullScreen()}>
-                      <FullScreenSVG mapFullScreen={this.state.mapFullScreen} />
+                    <button className="spc-cnc-full-screen" type="button" onClick={() => this.toggleFullScreen()}>
+                      <FullScreenSVG mapFullScreen={mapFullScreen} />
                     </button>
                     <div className="map-store-list" ref={this.mapStoreList}>
                       <StoreList
                         display="default"
                         store_list={storeList}
-                        selected={this.context.selectedStore}
+                        selected={selectedStore}
                         onStoreRadio={this.hightlightMapMarker}
                         onStoreFinalize={this.finalizeStore}
                         onStoreClose={this.onMapStoreClose}
@@ -394,7 +410,7 @@ class ClickCollect extends React.Component {
             </div>
           </div>
           <div className="spc-cnc-store-actions" data-selected-stored={openSelectedStore}>
-            <button className="select-store" onClick={(e) => this.finalizeCurrentStore(e)}>
+            <button className="select-store" type="button" onClick={(e) => this.finalizeCurrentStore(e)}>
               {Drupal.t('select this store')}
             </button>
           </div>

@@ -577,7 +577,18 @@ class CartController {
         break;
 
       case CartActions::CART_PAYMENT_UPDATE:
-        $cart = $this->cart->updatePayment($request_content['payment_info']['payment']);
+        $extension = [];
+
+        if (isset($request_content['payment_info']['payment']['analytics'])) {
+          $extension['ga_client_id'] = $request_content['payment_info']['payment']['analytics']['clientId'];
+          $extension['tracking_id'] = $request_content['payment_info']['payment']['analytics']['trackingId'];
+          $extension['user_id'] = $this->cart->getCartCustomerId();
+          $extension['user_type'] = $this->getDrupalInfo('uid') > 0 ? 'Logged in User' : 'Guest User';
+          $extension['user_agent'] = $this->request->headers->get('User-Agent', '');
+          $extension['client_ip'] = $_ENV['AH_CLIENT_IP'] ?? $this->request->getClientIp();
+        }
+
+        $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;
     }
 
@@ -630,22 +641,14 @@ class CartController {
       return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
-    // Get Cart data before placeOrder otherwise cartData will be null.
-    $cartData = $this->cart->getCart();
     $result = $this->cart->placeOrder($request_content['data']);
-    if ($result['success']) {
-      $last_order = $result['order_id'];
-      // Post order id and cart data to Drupal.
-      $data = [
-        'action' => 'place order success',
-        'order_id' => (int) $last_order,
-        'cart' => $cartData,
-        'payment_method' => $request_content['data']['paymentMethod']['method'],
-      ];
-      $this->drupal->postOrderData($data);
-    }
 
-    return new JsonResponse($result);
+    $response = [
+      'success' => TRUE,
+      'redirectUrl' => 'checkout/confirmation?id=' . $result['secure_order_id'],
+    ];
+
+    return new JsonResponse($response);
   }
 
   /**
