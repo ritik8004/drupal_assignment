@@ -10,7 +10,48 @@
   }
 
   .algolia-search-cleartext-icon {
-    display: none;
+    @include breakpoint($tablet) {
+      #{$right}: 2.3rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      #{$right}: 0;
+      top: 0.1125rem;
+    }
+
+    @include breakpoint($desktop) {
+      #{$right}: 2.7rem;
+    }
+  }
+
+  &.clear-icon {
+    #alshaya-algolia-autocomplete .react-autosuggest__input {
+      padding-#{$right}: 2.5rem !important;
+
+      @include breakpoint($only-tablet) {
+        padding-#{$right}: 4.1rem !important;
+      }
+
+      @include breakpoint($desktop) {
+        padding-#{$right}: 4.7rem !important;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .algolia-search-cleartext-icon {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      &.show-algolia-search-bar {
+        .algolia-search-cleartext-icon {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    }
   }
 
   .react-autosuggest__container .algolia-search-back-icon {
