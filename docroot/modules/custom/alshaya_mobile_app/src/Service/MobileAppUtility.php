@@ -558,11 +558,6 @@ class MobileAppUtility {
     $url = $entity->get($field)->first()->getUrl();
     $url_string = $url->toString(TRUE);
 
-    // If check link field title is not empty.
-    if (!empty($title = $entity->$field->title)) {
-      $return['title'] = $title;
-    }
-
     $return = [
       $label => $url_string->getGeneratedUrl(),
     ];
@@ -570,6 +565,12 @@ class MobileAppUtility {
     if ($deeplink = $this->getDeepLinkFromUrl($url)) {
       $return['deeplink'] = $deeplink;
     }
+
+    // If check link field title is not empty.
+    if (!empty($title = $entity->$field->title)) {
+      $return['title'] = $title;
+    }
+
     return $return;
   }
 
