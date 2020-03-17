@@ -12,7 +12,6 @@ use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -253,6 +252,24 @@ class AlshayaSpcOrderHelper {
     }
 
     return $order;
+  }
+
+  /**
+   * Get Order Id.
+   *
+   * @return mixed
+   *   Order id.
+   */
+  public function getOrderId() {
+    $id = $this->request->query->get('id');
+    if (empty($id)) {
+      throw new NotFoundHttpException();
+    }
+    $data = json_decode($this->secureText->decrypt(
+      $id,
+      Settings::get('alshaya_api.settings')['consumer_secret']
+    ), TRUE);
+    return $data['order_id'];
   }
 
   /**
