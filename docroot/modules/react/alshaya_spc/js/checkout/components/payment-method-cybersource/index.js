@@ -54,6 +54,7 @@ class PaymentMethodCybersource extends React.Component {
     }
 
     console.log(e.detail);
+    removeFullScreenLoader();
   };
 
   handleCardNumberChange(event) {
@@ -105,7 +106,7 @@ class PaymentMethodCybersource extends React.Component {
     }
     else {
       let date = new Date();
-      let century = parseInt(date.getFullYear().toString().substr(2) + '00');
+      const century = parseInt(date.getFullYear().toString().substr(2) + '00');
       date.setFullYear(century + dateParts[1], dateParts[0], 1);
       let today = new Date();
       if (date < today) {
@@ -160,8 +161,11 @@ class PaymentMethodCybersource extends React.Component {
       const { number, expiry, cvv } = this.state;
 
       response.data.data.card_number = number;
-      response.data.data.card_expiry_date = expiry.replace('/', '-');
       response.data.data.card_cvn = parseInt(cvv.toString().trim());
+
+      const expiryInfo = expiry.split('/');
+      const century = parseInt(date.getFullYear().toString().substr(2) + '00');
+      response.data.data.card_expiry_date = expiryInfo[0].toString() + '-' + (century + parseInt(expiryInfo[1])).toString();
 
       let cybersourceForm = document.getElementById('cybersource_form_to_iframe');
       cybersourceForm.setAttribute('action', response.data.url);

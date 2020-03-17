@@ -230,7 +230,8 @@ class CybersourceHelper {
 
     $endpoint = 'cybersourceapi/processToken';
     try {
-      $this->magentoApiWrapper->doRequest('POST', $endpoint, ['response' => $post_data]);
+      $data = ['response' => $post_data];
+      $this->magentoApiWrapper->doRequest('POST', $endpoint, ['json' => $data]);
     }
     catch (\Exception $e) {
       $this->logger->warning('Invalid response from Magento API while processing token. Cart: @id, Transaction: @uuid, Message: @message', [
@@ -251,7 +252,7 @@ class CybersourceHelper {
 
       return [
         'success' => TRUE,
-        'redirectUrl' => '/checkout/confirmation?id=' . $order['secure_order_id'],
+        'redirectUrl' => 'checkout/confirmation?id=' . $order['secure_order_id'],
       ];
     }
     catch (\Exception $e) {
