@@ -68,7 +68,7 @@ class AlshayaGtmManager {
     'system.404' => 'page not found',
     'alshaya_user.user_register_complete' => 'register complete page',
     'acq_cart.cart' => 'cart page',
-    'acq_checkout.form:login' => 'checkout login page',
+    'alshaya_spc.login' => 'checkout login page',
     'alshaya_spc.checkout' => 'checkout click and collect page',
     'alshaya_spc.checkout' => 'checkout delivery page',
     'acq_checkout.form:payment' => 'checkout payment page',
