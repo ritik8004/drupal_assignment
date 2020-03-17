@@ -89,3 +89,125 @@ fields:
     type: 'string'
     description: 'Size group attribute for the product.'
     index: 1
+
+  title_name:
+    label: 'Title Name'
+    type: 'string'
+
+  function:
+    label: 'Function'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  age_group:
+    label: 'Age Group'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  presentation_product_type:
+    label: 'Presentation Product Type'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  context:
+    label: 'Context'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  style:
+    label: 'Style'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  clothing_style:
+    label: 'Clothing Style'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  collar_style:
+    label: 'Collar Style'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  neckline_style:
+    label: 'Neckline Style'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  accessories_style:
+    label: 'Accessories Style'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  footwear_style:
+    label: 'Footwear Style'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  fit:
+    label: 'Fit'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  descriptive_length:
+    label: 'Descriptive Length'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  garment_length:
+    label: 'Garment Length'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  sleeve_length:
+    label: 'Sleeve Length'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  waist_rise:
+    label: 'Waist Rise'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  heel_height:
+    label: 'Style'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  measurements_in_cm:
+    label: 'Style'
+    type: 'string'
+
+  article_description:
+    label: 'Style'
+    type: 'string'
+
+  fragrance_name:
+    label: 'Fragrance name'
+    type: 'string'
+
+  textual_print:
+    label: 'Textual Print'
+    type: 'string'
+
+  occasion:
+    label: 'Occasion'
+    cardinality: -1
+    index: 1
+    facet: 1
