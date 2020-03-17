@@ -2,18 +2,17 @@
 
 namespace Drupal\alshaya_api;
 
-use Drupal\acq_commerce\I18nHelper;
 use Drupal\alshaya_api\Helper\MagentoApiHelper;
 use Drupal\alshaya_api\Helper\MagentoApiRequestHelper;
 use Drupal\alshaya_api\Helper\MagentoApiResponseHelper;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use springimport\magento2\apiv1\ApiFactory;
@@ -25,13 +24,6 @@ use springimport\magento2\apiv1\Configuration;
 class AlshayaApiWrapper {
 
   use StringTranslationTrait;
-
-  /**
-   * Stores the alshaya_api settings config.
-   *
-   * @var \Drupal\Core\Config\ImmutableConfig
-   */
-  protected $config;
 
   /**
    * Token to access APIs.
@@ -76,13 +68,6 @@ class AlshayaApiWrapper {
   protected $logger;
 
   /**
-   * I18n Helper.
-   *
-   * @var \Drupal\acq_commerce\I18nHelper
-   */
-  private $i18nHelper;
-
-  /**
    * The state factory.
    *
    * @var \Drupal\Core\KeyValueStore\StateInterface
@@ -113,8 +98,6 @@ class AlshayaApiWrapper {
   /**
    * Constructs a new AlshayaApiWrapper object.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The factory for configuration objects.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Component\Datetime\TimeInterface $date_time
@@ -123,8 +106,6 @@ class AlshayaApiWrapper {
    *   Cache Backend object for "cache.data".
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
-   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
-   *   I18nHelper object.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state factory.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
@@ -135,24 +116,20 @@ class AlshayaApiWrapper {
    *   The module handler.
    */
   public function __construct(
-    ConfigFactoryInterface $config_factory,
     LanguageManagerInterface $language_manager,
     TimeInterface $date_time,
     CacheBackendInterface $cache,
     LoggerChannelFactoryInterface $logger_factory,
-    I18nHelper $i18n_helper,
     StateInterface $state,
     FileSystemInterface $fileSystem,
     MagentoApiHelper $mdc_helper,
     ModuleHandlerInterface $module_handler
   ) {
-    $this->config = $config_factory->get('alshaya_api.settings');
     $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
     $this->dateTime = $date_time;
     $this->cache = $cache;
     $this->logger = $logger_factory->get('alshaya_api');
-    $this->i18nHelper = $i18n_helper;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
     $this->mdcHelper = $mdc_helper;
@@ -184,62 +161,7 @@ class AlshayaApiWrapper {
    *   The Language prefix for current language.
    */
   private function getMagentoLangPrefix() {
-    // For current language, we access the config directly.
-    if ($this->langcode == $this->languageManager->getDefaultLanguage()->getId()) {
-      $config = $this->config;
-    }
-    // We get store id from translated config for other languages.
-    else {
-      $config = $this->languageManager->getLanguageConfigOverride($this->langcode, 'alshaya_api.settings');
-    }
-
-    return $config->get('magento_lang_prefix');
-  }
-
-  /**
-   * Function to get token to access Magento APIs.
-   *
-   * @return string
-   *   Token as string.
-   *
-   * @throws \Exception
-   */
-  private function getToken() {
-    if ($this->token) {
-      return $this->token;
-    }
-
-    $cid = 'alshaya_api_token';
-
-    if ($cache = $this->cache->get($cid)) {
-      $this->token = $cache->data;
-    }
-    else {
-      $endpoint = 'integration/admin/token';
-
-      $data = [];
-      $data['username'] = $this->config->get('username');
-      $data['password'] = $this->config->get('password');
-
-      $response = $this->invokeApiWithToken($endpoint, $data, 'POST', FALSE);
-      $token = trim($response, '"');
-
-      // We always get token wrapped in double quotes.
-      // For any other case we get either an array of full html.
-      if (strlen($token) !== strlen($response) - 2) {
-        $this->logger->critical('Unable to get token from magento');
-        throw new \Exception('Unable to get token from magento');
-      }
-
-      $this->token = $token;
-
-      // Calculate the timestamp when we want the cache to expire.
-      $expire = $this->dateTime->getRequestTime() + $this->config->get('token_cache_time');
-
-      $this->cache->set($cid, $this->token, $expire);
-    }
-
-    return $this->token;
+    return Settings::get('magento_lang_prefix')[$this->langcode];
   }
 
   /**
@@ -252,12 +174,14 @@ class AlshayaApiWrapper {
    *   Client object.
    */
   private function getClient($url) {
+    $settings = Settings::get('alshaya_api.settings');
+
     $configuration = new Configuration();
     $configuration->setBaseUri($url);
-    $configuration->setConsumerKey($this->config->get('consumer_key'));
-    $configuration->setConsumerSecret($this->config->get('consumer_secret'));
-    $configuration->setToken($this->config->get('access_token'));
-    $configuration->setTokenSecret($this->config->get('access_token_secret'));
+    $configuration->setConsumerKey($settings['consumer_key']);
+    $configuration->setConsumerSecret($settings['consumer_secret']);
+    $configuration->setToken($settings['access_token']);
+    $configuration->setTokenSecret($settings['access_token_secret']);
 
     return (new ApiFactory($configuration))->getApiClient();
   }
@@ -278,15 +202,12 @@ class AlshayaApiWrapper {
    *   Response from the API.
    */
   public function invokeApi($endpoint, array $data = [], $method = 'POST') {
-    $consumer_key = $this->config->get('consumer_key');
-    if (empty($consumer_key)) {
-      return $this->invokeApiWithToken($endpoint, $data, $method, TRUE);
-    }
+    $settings = Settings::get('alshaya_api.settings');
 
     try {
-      $url = $this->config->get('magento_host');
+      $url = $settings['magento_host'];
       $url .= '/' . $this->getMagentoLangPrefix();
-      $url .= '/' . $this->config->get('magento_api_base');
+      $url .= '/' . $settings['magento_api_base'];
 
       $client = $this->getClient($url);
       $url .= '/' . $endpoint;
@@ -335,73 +256,6 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Function to invoke the API using user/password based token.
-   *
-   * Note: GET parameters must be handled in invoking function itself.
-   *
-   * @param string $endpoint
-   *   Endpoint URL, specific for the API call.
-   * @param array $data
-   *   Post data to send to API.
-   * @param string $method
-   *   GET or POST.
-   * @param bool $requires_token
-   *   Flag to specify if this API requires token or not.
-   *
-   * @return mixed
-   *   Response from the API.
-   */
-  public function invokeApiWithToken($endpoint, array $data = [], $method = 'POST', $requires_token = TRUE) {
-    $url = $this->config->get('magento_host');
-    $url .= '/' . $this->getMagentoLangPrefix();
-    $url .= '/' . $this->config->get('magento_api_base');
-    $url .= '/' . $endpoint;
-
-    $header = [];
-
-    $curl = curl_init();
-
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-    if ($requires_token) {
-      try {
-        $token = $this->getToken();
-      }
-      catch (\Exception $e) {
-        return NULL;
-      }
-
-      $header[] = 'Authorization: Bearer ' . $token;
-    }
-
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->config->get('verify_ssl'));
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->config->get('verify_ssl'));
-
-    if ($method == 'POST') {
-      curl_setopt($curl, CURLOPT_POST, TRUE);
-      curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-    }
-    elseif ($method == 'JSON') {
-      $data_string = json_encode($data);
-
-      $header[] = 'Content-Type: application/json';
-      $header[] = 'Content-Length: ' . strlen($data_string);
-
-      curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
-      curl_setopt($curl, CURLOPT_POST, TRUE);
-      curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-    }
-
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-
-    $result = curl_exec($curl);
-    curl_close($curl);
-
-    return $result;
-  }
-
-  /**
    * Function to get all the stores from the API.
    *
    * @param string $langcode
@@ -424,7 +278,7 @@ class AlshayaApiWrapper {
 
     $filters[] = [
       'field' => 'store_id',
-      'value' => $this->i18nHelper->getStoreIdFromLangcode($langcode),
+      'value' => Settings::get('store_id')[$langcode],
       'condition_type' => 'eq',
     ];
 
@@ -452,18 +306,19 @@ class AlshayaApiWrapper {
    *   The file opened or FALSE if not accessible.
    */
   public function getMerchandisingReport($reset = TRUE) {
-    $lang_prefix = explode('_', $this->config->get('magento_lang_prefix'))[0];
+    $lang_prefix = explode('_', $this->getMagentoLangPrefix())[0];
 
     $path = file_create_url($this->fileSystem->realpath("temporary://"));
     $filename = 'merchandising-report-' . $lang_prefix . '.csv';
 
     $download_time = $this->state->get('alshaya_api.last_report_download');
-    $max_age = $this->config->get('merch_report_max_age') ?? 3600;
+    $max_age = Settings::get('merch_report_max_age', 3600);
 
     // We download a new merch report if asked, if too old or if file does not
     // exist yet in temporary directory.
     if ($reset || $download_time < (time() - $max_age) || !file_exists($path . '/' . $filename)) {
-      $url = $this->config->get('magento_host') . '/media/reports/merchandising/merchandising-report-' . $lang_prefix . '.csv';
+      $settings = Settings::get('alshaya_api.settings');
+      $url = $settings['magento_host'] . '/media/reports/merchandising/merchandising-report-' . $lang_prefix . '.csv';
 
       // We need this to avoid issue with invalid certificate.
       $context = [

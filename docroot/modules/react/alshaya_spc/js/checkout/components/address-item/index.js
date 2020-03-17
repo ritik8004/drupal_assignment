@@ -51,7 +51,7 @@ export default class AddressItem extends React.Component {
   prepareAddressToUpdate = (address) => {
     const addressUpdate = address;
     addressUpdate.city = gerAreaLabelById(false, address.administrative_area);
-    addressUpdate.mobile = cleanMobileNumber(address.mobile);
+    addressUpdate.mobile = '+' + drupalSettings.country_mobile_code + cleanMobileNumber(address.mobile);
     const data = prepareAddressDataForShipping(addressUpdate);
     data.static.customer_address_id = address.address_mdc_id;
     data.static.customer_id = address.customer_id;

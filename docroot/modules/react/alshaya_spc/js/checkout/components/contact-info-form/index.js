@@ -2,7 +2,7 @@ import React from 'react';
 import Axios from 'axios';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import {
-  addShippingInCart,
+  addShippingInCart, cleanMobileNumber,
   removeFullScreenLoader,
   showFullScreenLoader, validateInfo,
 } from '../../../utilities/checkout_util';
@@ -34,7 +34,7 @@ class ContactInfoForm extends React.Component {
         firstname,
         lastname,
         email: drupalSettings.user.uid > 0 ? email : e.target.elements.email.value,
-        telephone: e.target.elements.mobile.value,
+        telephone: '+' + drupalSettings.country_mobile_code + cleanMobileNumber(e.target.elements.mobile.value),
         country_id: drupalSettings.country_code,
       },
       shipping_type: 'cnc',

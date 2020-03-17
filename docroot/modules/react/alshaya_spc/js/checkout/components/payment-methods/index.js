@@ -84,7 +84,7 @@ export default class PaymentMethods extends React.Component {
 
     showFullScreenLoader();
 
-    let analytics = {};
+    const analytics = {};
     if (typeof window.ga === 'function' && window.ga.loaded) {
       analytics.clientId = ga.getAll()[0].get('clientId');
       analytics.trackingId = ga.getAll()[0].get('trackingId');
@@ -94,7 +94,7 @@ export default class PaymentMethods extends React.Component {
       payment: {
         method,
         additional_data: {},
-        analytics: analytics,
+        analytics,
       },
     };
 
