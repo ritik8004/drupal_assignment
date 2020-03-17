@@ -74,6 +74,7 @@ class SystemSettings {
     // Require more files as and when required.
     // Files should not have any Drupal specific code.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/knet.php';
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/cybersource.php';
 
     // Include overrides.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';

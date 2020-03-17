@@ -11,18 +11,22 @@ import {
   showFullScreenLoader,
 } from "../../../utilities/checkout_util";
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
+import PaymentMethodCybersource from "../payment-method-cybersource";
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
     super(props);
 
     this.paymentMethodCheckoutCom = React.createRef();
+    this.paymentMethodCybersource = React.createRef();
   }
 
   validateBeforePlaceOrder = () => {
     // Do additional process for some payment methods.
     if (this.props.method.code === 'checkout_com') {
       this.paymentMethodCheckoutCom.current.validateBeforePlaceOrder();
+    } else if (this.props.method.code === 'cybersource') {
+      this.paymentMethodCybersource.current.validateBeforePlaceOrder();
     } else if (this.props.method.code === 'knet') {
       showFullScreenLoader();
 
@@ -38,7 +42,7 @@ export default class PaymentMethod extends React.Component {
       // Throwing 200 error, we want to handle place order in custom way.
       throw 200;
     }
-  }
+  };
 
   finalisePayment = (paymentData) => {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
@@ -97,6 +101,12 @@ export default class PaymentMethod extends React.Component {
               <CheckoutComContextProvider>
                 <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} cart={cart} finalisePayment={this.finalisePayment} />
               </CheckoutComContextProvider>
+            </div>
+          </ConditionalView>
+
+          <ConditionalView condition={(isSelected && method === 'cybersource')}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method}`}>
+              <PaymentMethodCybersource ref={this.paymentMethodCybersource} cart={cart} finalisePayment={this.finalisePayment} />
             </div>
           </ConditionalView>
         </div>
