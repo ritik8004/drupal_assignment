@@ -74,9 +74,9 @@ export default class Checkout extends React.Component {
       }
 
       // Fetch cart data.
-      const cart_data = fetchCartData();
-      if (cart_data instanceof Promise) {
-        cart_data.then((result) => {
+      const cartData = fetchCartData();
+      if (cartData instanceof Promise) {
+        cartData.then((result) => {
           let cartObj = getInfoFromStorage();
           if (!cartObj) {
             cartObj = { cart: result };
