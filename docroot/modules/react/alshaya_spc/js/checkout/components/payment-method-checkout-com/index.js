@@ -1,12 +1,12 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
+import Cookies from 'js-cookie';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import SavedCardsList from './components/SavedCardsList';
 import NewCard from './components/NewCard';
 import { CheckoutComContext } from '../../../context/CheckoutCom';
 import SelectedCard from './components/SelectedCard';
-import Cookies from 'js-cookie';
 
 class PaymentMethodCheckoutCom extends React.Component {
   static contextType = CheckoutComContext;

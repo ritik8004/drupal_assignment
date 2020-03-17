@@ -1,27 +1,26 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import luhn from "../../../utilities/luhn";
-import {addPaymentMethodInCart} from "../../../utilities/update_cart";
+import axios from 'axios';
+import luhn from '../../../utilities/luhn';
+import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
   placeOrder,
-  removeFullScreenLoader, showFullScreenLoader
-} from "../../../utilities/checkout_util";
-import ConditionalView from "../../../common/components/conditional-view";
-import CardTypeSVG from "../card-type-svg";
-import {i18nMiddleWareUrl} from "../../../utilities/i18n_url";
-import axios from "axios";
-import {removeCartFromStorage} from "../../../utilities/storage";
+  removeFullScreenLoader, showFullScreenLoader,
+} from '../../../utilities/checkout_util';
+import ConditionalView from '../../../common/components/conditional-view';
+import CardTypeSVG from '../card-type-svg';
+import { i18nMiddleWareUrl } from '../../../utilities/i18n_url';
+import { removeCartFromStorage } from '../../../utilities/storage';
 
 class PaymentMethodCybersource extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.ccExpiry = React.createRef();
     this.ccCvv = React.createRef();
 
-    let date = new Date();
-    this.dateMin = date.getMonth() + 1 + '-' + date.getFullYear().toString().substr(-2);
+    const date = new Date();
+    this.dateMin = `${date.getMonth() + 1}-${date.getFullYear().toString().substr(-2)}`;
     this.acceptedCards = drupalSettings.cybersource.acceptedCards;
 
     this.state = {
@@ -34,7 +33,7 @@ class PaymentMethodCybersource extends React.Component {
       cvvValid: false,
       acceptedCards: ['visa', 'mastercard', 'diners'],
     };
-  };
+  }
 
   componentDidMount = () => {
     document.addEventListener('cybersourcePaymentUpdate', this.eventListener, false);
@@ -63,15 +62,13 @@ class PaymentMethodCybersource extends React.Component {
 
     if (this.acceptedCards.indexOf(type) === -1) {
       valid = false;
-    }
-    else if (luhn.validate(event.target.rawValue, type) === false) {
+    } else if (luhn.validate(event.target.rawValue, type) === false) {
       valid = false;
     }
 
     if (valid) {
       event.target.classList.remove('invalid');
-    }
-    else {
+    } else {
       event.target.classList.add('invalid');
     }
 
@@ -79,7 +76,7 @@ class PaymentMethodCybersource extends React.Component {
       ...prevState,
       numberValid: valid,
       number: event.target.rawValue,
-      cardType: type
+      cardType: type,
     });
 
     if (prevState.numberValid !== valid && valid) {
@@ -87,13 +84,13 @@ class PaymentMethodCybersource extends React.Component {
     }
   }
 
-  handleCardTypeChanged (type) {
+  handleCardTypeChanged(type) {
     document.getElementById('payment-card-type').value = type;
   }
 
-  handleCardExpiryChange (event) {
+  handleCardExpiryChange(event) {
     let valid = true;
-    let dateParts = event.target.value.split('/').map(x => {
+    const dateParts = event.target.value.split('/').map((x) => {
       if (!(x) || isNaN(x)) {
         return 0;
       }
@@ -102,12 +99,11 @@ class PaymentMethodCybersource extends React.Component {
 
     if (dateParts.length < 2 || dateParts[0] <= 0 || dateParts[1] <= 0) {
       valid = false;
-    }
-    else {
-      let date = new Date();
-      let century = parseInt(date.getFullYear().toString().substr(2) + '00');
+    } else {
+      const date = new Date();
+      const century = parseInt(`${date.getFullYear().toString().substr(2)}00`);
       date.setFullYear(century + dateParts[1], dateParts[0], 1);
-      let today = new Date();
+      const today = new Date();
       if (date < today) {
         valid = false;
       }
@@ -125,9 +121,9 @@ class PaymentMethodCybersource extends React.Component {
     }
   }
 
-  handleCardCvvChange (event) {
+  handleCardCvvChange(event) {
     let valid = false;
-    let cvv = parseInt(event.target.value);
+    const cvv = parseInt(event.target.value);
     if (cvv >= 100 && cvv <= 9999) {
       valid = true;
     }
@@ -150,7 +146,7 @@ class PaymentMethodCybersource extends React.Component {
 
     const { cardType } = this.state;
     const apiUrl = i18nMiddleWareUrl('payment/cybersource/get-token');
-    axios.post(apiUrl, {type: cardType}).then((response) => {
+    axios.post(apiUrl, { type: cardType }).then((response) => {
       // Handle exception.
       if (response.data.error !== undefined) {
         console.error(response.data);
@@ -163,12 +159,12 @@ class PaymentMethodCybersource extends React.Component {
       response.data.data.card_expiry_date = expiry.replace('/', '-');
       response.data.data.card_cvn = parseInt(cvv.toString().trim());
 
-      let cybersourceForm = document.getElementById('cybersource_form_to_iframe');
+      const cybersourceForm = document.getElementById('cybersource_form_to_iframe');
       cybersourceForm.setAttribute('action', response.data.url);
       cybersourceForm.innerHTML = '';
 
       Object.entries(response.data.data).forEach(([name, value]) => {
-        let input = document.createElement('input');
+        const input = document.createElement('input');
         input.setAttribute('type', 'hidden');
         input.setAttribute('name', name);
         input.setAttribute('value', value);
@@ -186,10 +182,10 @@ class PaymentMethodCybersource extends React.Component {
 
   handleCheckoutResponse = (data) => {
     // @TODO: Handle errors.
-    let paymentData = {
-      'payment': {
-        'method': 'cybersource',
-        'additional_data': data,
+    const paymentData = {
+      payment: {
+        method: 'cybersource',
+        additional_data: data,
       },
     };
 
@@ -206,23 +202,25 @@ class PaymentMethodCybersource extends React.Component {
       <>
         <div className="payment-form-wrapper">
           <input type="hidden" id="payment-card-type" value={this.state.cardType} />
-          <Cleave placeholder="Enter your credit card number"
-                  options={{
-                    creditCard: true,
-                    onCreditCardTypeChanged: this.handleCardTypeChanged.bind(this),
-                  }}
-                  onChange={this.handleCardNumberChange.bind(this)}
+          <Cleave
+            placeholder="Enter your credit card number"
+            options={{
+              creditCard: true,
+              onCreditCardTypeChanged: this.handleCardTypeChanged.bind(this),
+            }}
+            onChange={this.handleCardNumberChange.bind(this)}
           />
 
-          <Cleave placeholder="mm/yy"
-                  htmlRef={(ref) => this.ccExpiry = ref }
-                  options={{
-                    date: true,
-                    dateMin: this.dateMin,
-                    datePattern: ['m', 'y'],
-                    delimiter: '/',
-                  }}
-                  onChange={this.handleCardExpiryChange.bind(this)}
+          <Cleave
+            placeholder="mm/yy"
+            htmlRef={(ref) => this.ccExpiry = ref}
+            options={{
+              date: true,
+              dateMin: this.dateMin,
+              datePattern: ['m', 'y'],
+              delimiter: '/',
+            }}
+            onChange={this.handleCardExpiryChange.bind(this)}
           />
 
           <input
@@ -239,11 +237,11 @@ class PaymentMethodCybersource extends React.Component {
           {cardTypes}
         </div>
 
-        <form id="cybersource_form_to_iframe" target="cybersource_iframe" method="post" style={{display: 'none'}} className="hidden-important" />
-        <iframe id="cybersource_iframe" name="cybersource_iframe" style={{display: 'none'}} className="hidden-important" />
+        <form id="cybersource_form_to_iframe" target="cybersource_iframe" method="post" style={{ display: 'none' }} className="hidden-important" />
+        <iframe id="cybersource_iframe" name="cybersource_iframe" style={{ display: 'none' }} className="hidden-important" />
       </>
     );
-  };
+  }
 }
 
 export default PaymentMethodCybersource;

@@ -35,11 +35,11 @@ export const checkoutAddressProcess = function (e, cart) {
   const form_data = prepareAddressDataFromForm(e.target.elements);
 
   const validationData = {
-    'mobile': e.target.elements.mobile.value,
+    mobile: e.target.elements.mobile.value,
   };
 
   if (e.target.elements.email !== undefined && e.target.elements.email.value.toString().length > 0) {
-    validationData['email'] = e.target.elements.email.value;
+    validationData.email = e.target.elements.email.value;
   }
 
   const validationRequest = validateInfo(validationData);
@@ -67,7 +67,7 @@ export const checkoutAddressProcess = function (e, cart) {
     // Do the processing only if we did email validation.
     if (response.data.email !== undefined) {
       if (response.data.email === 'invalid') {
-        document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', {'%mail': validationData['email']});
+        document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', { '%mail': validationData.email });
         document.getElementById('email-error').classList.add('error');
         isError = true;
       } else if (response.data.email === 'exists') {
@@ -287,7 +287,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
 
   const target = e.target.elements;
 
-  const validationRequest = validateInfo({mobile: target.mobile.value.trim()});
+  const validationRequest = validateInfo({ mobile: target.mobile.value.trim() });
   if (validationRequest instanceof Promise) {
     validationRequest.then((result) => {
       if (result.status === 200 && result.data.status) {
@@ -347,4 +347,3 @@ export const processBillingUpdateFromForm = (e, shipping) => {
     });
   }
 };
-

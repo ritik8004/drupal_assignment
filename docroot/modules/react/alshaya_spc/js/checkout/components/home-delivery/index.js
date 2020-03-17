@@ -73,7 +73,7 @@ export default class HomeDeliveryInfo extends React.Component {
 
   render() {
     const address = this.props.cart.cart.shipping_address;
-    let addressData = [];
+    const addressData = [];
     Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
       if (address[val.key] !== undefined) {
         let fillVal = address[val.key];

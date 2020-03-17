@@ -9,9 +9,9 @@ import {
   placeOrder,
   removeFullScreenLoader,
   showFullScreenLoader,
-} from "../../../utilities/checkout_util";
+} from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
-import PaymentMethodCybersource from "../payment-method-cybersource";
+import PaymentMethodCybersource from '../payment-method-cybersource';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {

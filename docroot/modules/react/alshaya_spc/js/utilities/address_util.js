@@ -75,7 +75,7 @@ export const addEditAddressToCustomer = (e) => {
   const target = e.target.elements;
   // Validate mobile number.
   const mobile = e.target.elements.mobile.value.trim();
-  const validationRequest = validateInfo({mobile: mobile});
+  const validationRequest = validateInfo({ mobile });
   if (validationRequest instanceof Promise) {
     validationRequest.then((result) => {
       if (result.status === 200 && result.data.status) {

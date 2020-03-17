@@ -17,7 +17,7 @@ class NewCard extends React.Component {
     this.ccCvv = React.createRef();
 
     const date = new Date();
-    this.dateMin = date.getMonth() + 1 + '-' + date.getFullYear().toString().substr(-2);
+    this.dateMin = `${date.getMonth() + 1}-${date.getFullYear().toString().substr(-2)}`;
     this.acceptedCards = ['visa', 'mastercard', 'diners'];
   }
 
@@ -61,7 +61,7 @@ class NewCard extends React.Component {
 
   handleCardExpiryChange = (event) => {
     let valid = true;
-    let dateParts = event.target.value.split('/').map(x => {
+    const dateParts = event.target.value.split('/').map((x) => {
       if (!(x) || isNaN(x)) {
         return 0;
       }
@@ -71,10 +71,10 @@ class NewCard extends React.Component {
     if (dateParts.length < 2 || dateParts[0] <= 0 || dateParts[1] <= 0) {
       valid = false;
     } else {
-      let date = new Date();
-      let century = parseInt(date.getFullYear().toString().substr(2) + '00');
+      const date = new Date();
+      const century = parseInt(`${date.getFullYear().toString().substr(2)}00`);
       date.setFullYear(century + dateParts[1], dateParts[0], 1);
-      let today = new Date();
+      const today = new Date();
       if (date < today) {
         valid = false;
       }
@@ -148,7 +148,7 @@ class NewCard extends React.Component {
             <div className="c-input__bar" />
             <label>{Drupal.t('CVV')}</label>
             <div id="spc-cc-cvv-error" className="error" />
-            <ToolTip enable question><CVVToolTipText/></ToolTip>
+            <ToolTip enable question><CVVToolTipText /></ToolTip>
           </div>
         </div>
         <div className="spc-card-types-wrapper">
@@ -165,6 +165,6 @@ class NewCard extends React.Component {
       </>
     );
   }
-};
+}
 
 export default NewCard;
