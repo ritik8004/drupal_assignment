@@ -1,5 +1,10 @@
 import Axios from 'axios';
-import { getGlobalCart, cartAvailableInStorage, getCartApiUrl } from '../get_cart';
+import {
+  getGlobalCart,
+  cartAvailableInStorage,
+  getCartApiUrl,
+  redirectToCart,
+} from '../get_cart';
 import { restoreCartApiUrl } from '../update_cart';
 
 export const fetchClicknCollectStores = (coords) => {
