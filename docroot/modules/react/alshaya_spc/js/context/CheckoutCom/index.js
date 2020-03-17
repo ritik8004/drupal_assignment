@@ -1,5 +1,5 @@
 import React from 'react';
-import Cookies from 'js-cookie';
+import { getStorageInfo } from '../../utilities/storage';
 
 export const CheckoutComContext = React.createContext();
 
@@ -22,15 +22,15 @@ class CheckoutComContextProvider extends React.Component {
 
   componentDidMount() {
     const hasCards = this.hasTokenizedCards();
-
+    const storageSelectedCard = getStorageInfo('spc_selected_card');
     let selectedCard = (hasCards) ? 'existing' : 'new';
-    selectedCard = (hasCards && Cookies.get('spc_selected_card') && Cookies.get('spc_selected_card') === 'new')
+    selectedCard = (hasCards && storageSelectedCard && storageSelectedCard === 'new')
       ? 'new'
       : selectedCard;
 
     let tokenizedCard = (hasCards) ? Object.keys({ ...drupalSettings.checkoutCom.tokenizedCards })[0] : '';
-    tokenizedCard = (tokenizedCard !== '' && Cookies.get('spc_selected_card') && Cookies.get('spc_selected_card') !== 'new')
-      ? Cookies.get('spc_selected_card')
+    tokenizedCard = (tokenizedCard !== '' && storageSelectedCard && storageSelectedCard !== 'new')
+      ? storageSelectedCard
       : tokenizedCard;
 
     this.setState((prevState) => ({
