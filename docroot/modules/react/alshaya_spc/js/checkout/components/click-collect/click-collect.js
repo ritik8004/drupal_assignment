@@ -62,6 +62,10 @@ class ClickCollect extends React.Component {
     }
     this.nearMeBtn = this.searchRef.current.getElementsByTagName('button').item(0);
 
+    if (coords !== null) {
+      this.fetchAvailableStores(coords);
+    }
+
     // Ask for location access when we don't have any coords.
     if (coords !== null && openSelectedStore) {
       this.showSelectedMarker();

@@ -45,7 +45,6 @@ const StoreList = ({
     if (!selectedStore) {
       removeClassFromStoreList('selected');
     }
-    // console.log({ selectedStore, storeList });
   }, [storeList, selectedStore]);
 
   return (
