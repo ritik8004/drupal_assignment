@@ -719,12 +719,6 @@
           }
         }
       }
-
-      #drupal-modal.free-gift-detail-modal {
-        @include breakpoint($desktop) {
-          height: 40.31rem !important;
-        }
-      }
     }
   }
 }
