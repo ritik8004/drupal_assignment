@@ -7,3 +7,5 @@ static_page_mappings:
   website_terms_and_conditions: 'terms-and-conditions'
   privacy_policy: 'privacy-policy'
   returns_refunds: 'returns-refunds'
+  faqs: 'faqs'
+  size_guide: 'size-guide-content'
