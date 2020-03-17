@@ -8,9 +8,9 @@ export const algoliaSearchClient = {
   search(requests) {
 
     if (window.algoliaSearchActivityStarted || requests[0].params.query.length > 0) {
-      requests[0].params['analyticsTags'] = drupalSettings.user.isCustomer === false
-        ? ['notCustomer']
-        : ['customer'];
+      requests[0].params['analyticsTags'] = drupalSettings.user.isCustomer
+        ? ['customer']
+        : ['notCustomer'];
 
       return searchClient.search(requests);
     }

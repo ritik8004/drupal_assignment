@@ -90,6 +90,9 @@ function alshaya_seo_page_attachments(array &$attachments) {
     $attachments['#attached']['drupalSettings']['user']['isCustomer'] = FALSE;
     return;
   }
+  else {
+    $attachments['#attached']['drupalSettings']['user']['isCustomer'] = TRUE;
+  }
 
   $gkg_config = \Drupal::config('alshaya_seo.google_knowledge_graph');
 
