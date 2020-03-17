@@ -9,6 +9,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -80,6 +81,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $orderHelper;
 
   /**
+   * Renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -98,17 +106,18 @@ class AlshayaSpcController extends ControllerBase {
    *   Address terms helper.
    * @param \Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper $orderHelper
    *   Order details helper.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   Renderer.
    */
-  public function __construct(
-    ConfigFactoryInterface $config_factory,
-    AlshayaSpcPaymentMethodManager $payment_method_manager,
-    CheckoutOptionsManager $checkout_options_manager,
-    MobileNumberUtilInterface $mobile_util,
-    AccountProxyInterface $current_user,
-    EntityTypeManagerInterface $entity_type_manager,
-    AddressBookAreasTermsHelper $areas_term_helper,
-    AlshayaSpcOrderHelper $orderHelper
-  ) {
+  public function __construct(ConfigFactoryInterface $config_factory,
+                              AlshayaSpcPaymentMethodManager $payment_method_manager,
+                              CheckoutOptionsManager $checkout_options_manager,
+                              MobileNumberUtilInterface $mobile_util,
+                              AccountProxyInterface $current_user,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              AddressBookAreasTermsHelper $areas_term_helper,
+                              AlshayaSpcOrderHelper $orderHelper,
+                              RendererInterface $renderer) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
@@ -117,6 +126,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->entityTypeManager = $entity_type_manager;
     $this->areaTermsHelper = $areas_term_helper;
     $this->orderHelper = $orderHelper;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -131,7 +141,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('current_user'),
       $container->get('entity_type.manager'),
       $container->get('alshaya_addressbook.area_terms_helper'),
-      $container->get('alshaya_spc.order_helper')
+      $container->get('alshaya_spc.order_helper'),
+      $container->get('renderer')
     );
   }
 
@@ -358,11 +369,29 @@ class AlshayaSpcController extends ControllerBase {
 
     if ($order['payment']['method'] === 'knet') {
       // @TODO: Get this information from Magento in a better way.
-      $settings['order_details']['transaction_id'] = $order['payment']['additional_information'][0];
-      $settings['order_details']['payment_id'] = $order['payment']['additional_information'][2];
+      $settings['order_details']['payment']['transactionId'] = $order['payment']['additional_information'][0];
+      $settings['order_details']['payment']['paymentId'] = $order['payment']['additional_information'][2];
 
       // @TODO: Get this information from Magento.
-      $settings['order_details']['result_code'] = 'CAPTURED';
+      $settings['order_details']['payment']['resultCode'] = 'CAPTURED';
+    }
+    elseif ($order['payment']['method'] == 'banktransfer' && !empty(array_filter($order['extension']['bank_transfer_instructions']))) {
+      $instructions = $order['extension']['bank_transfer_instructions'];
+      $bank_transfer = [
+        '#theme' => 'banktransfer_payment_details',
+        '#account_number' => $instructions['account_number'],
+        '#address' => $instructions['address'],
+        '#bank_name' => $instructions['bank_name'],
+        '#beneficiary_name' => $instructions['beneficiary_name'],
+        '#branch' => $instructions['branch'],
+        '#iban' => $instructions['iban'],
+        '#swift_code' => $instructions['swift_code'],
+        '#purpose' => $this->t('Purchase of Goods - @order_id', [
+          '@order_id' => $order['increment_id'],
+        ]),
+      ];
+
+      $settings['order_details']['payment']['bankDetails'] = $this->renderer->renderPlain($bank_transfer);
     }
 
     $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
