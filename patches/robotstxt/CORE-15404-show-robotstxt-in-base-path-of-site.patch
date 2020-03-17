@@ -1,0 +1,12 @@
+diff --git a/robotstxt.routing.yml b/robotstxt.routing.yml
+index 166f265..e643cf8 100644
+--- a/robotstxt.routing.yml
++++ b/robotstxt.routing.yml
+@@ -10,6 +10,7 @@ robotstxt.content:
+   path: '/robots.txt'
+   defaults:
+     _controller: '\Drupal\robotstxt\Controller\RobotsTxtController::content'
++    _disable_route_normalizer: 'TRUE'
+   requirements:
+     # The robots.txt page should be opened for all.
+     _access: 'TRUE'

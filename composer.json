@@ -362,6 +362,9 @@
             },
             "drupal/google_tag": {
                 "Cache noscript content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2019-11-04/cache-noscript-3092193-3.patch"
+            },
+            "drupal/robotstxt": {
+                "CORE-15404: Robots.txt file appearing on sub-directory - Al Markets": "patches/robotstxt/CORE-15404-show-robotstxt-in-base-path-of-site.patch"
             }
         },
         "installer-paths": {
