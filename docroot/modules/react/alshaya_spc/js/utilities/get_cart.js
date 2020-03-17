@@ -25,16 +25,16 @@ export const cartAvailableInStorage = () => {
   // currently selected language.
   if ((currentTime - cartData.last_update) > expireTime
     || cartData.langcode === undefined
-    || drupalSettings.path.currentLanguage !== cartData.langcode) {
+    || drupalSettings.path.currentLanguage !== cartData.cart.langcode) {
     // Do nothing if empty cart is there.
-    if (cartData.cart_id === null) {
+    if (cartData.cart.cart_id === null) {
       return 'empty';
     }
 
-    return cartData.cart_id;
+    return cartData.cart.cart_id;
   }
 
-  return cartData;
+  return cartData.cart;
 };
 
 export const getGlobalCart = () => ((window.cartData && window.cartData.cart)
