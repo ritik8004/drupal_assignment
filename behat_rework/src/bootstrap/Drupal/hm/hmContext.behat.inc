@@ -236,5 +236,4 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
       throw new Exception('hnm logo is missing in the footer');
     }
   }
-
 }

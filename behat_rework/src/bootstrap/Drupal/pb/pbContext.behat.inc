@@ -191,5 +191,4 @@ class pbContext extends DrupalSubContextBase implements DrupalSubContextInterfac
       throw new \Exception('Link to find a store is missing in the footer');
     }
   }
-
 }

@@ -191,5 +191,4 @@ class mcContext extends DrupalSubContextBase implements DrupalSubContextInterfac
       throw new \Exception('Payment links are missing in the footer');
     }
   }
-
 }
