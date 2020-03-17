@@ -361,6 +361,7 @@ class AlshayaSpcController extends ControllerBase {
         'delivery_type_info' => $orderDetails,
         'totals' => $totals,
         'items' => $productList,
+        'payment' => [],
       ],
     ];
 

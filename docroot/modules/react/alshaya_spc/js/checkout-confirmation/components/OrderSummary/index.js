@@ -5,31 +5,30 @@ import ConditionalView from '../../../common/components/conditional-view';
 class OrderSummary extends React.Component {
   constructor(props) {
     super(props);
-    this.orderDetails = drupalSettings.order_details;
   }
 
-  render = () => {
-    const customerName = this.orderDetails.customer_name;
-    const customEmail = this.orderDetails.customer_email;
-    const orderNumber = this.orderDetails.order_number;
-    const mobileNumber = this.orderDetails.mobile_number;
-    const paymentMethod = this.orderDetails.payment_method;
-    const deliveryType = this.orderDetails.delivery_type_info.type;
-    const expectedDelivery = this.orderDetails.expected_delivery;
-    const itemsCount = this.orderDetails.number_of_items;
+  render() {
+    const customerName = drupalSettings.order_details.customer_name;
+    const customEmail = drupalSettings.order_details.customer_email;
+    const orderNumber = drupalSettings.order_details.order_number;
+    const mobileNumber = drupalSettings.order_details.mobile_number;
+    const paymentMethod = drupalSettings.order_details.payment_method;
+    const deliveryType = drupalSettings.order_details.delivery_type_info.type;
+    const expectedDelivery = drupalSettings.order_details.expected_delivery;
+    const itemsCount = drupalSettings.order_details.number_of_items;
 
-    const addressLine1 = this.orderDetails.delivery_type_info.delivery_address.address_line1;
-    const addressLine2 = this.orderDetails.delivery_type_info.delivery_address.address_line2;
     const {
       country,
-      locality,
+      administrative_area_display: locality,
       dependent_locality: dependentLocality,
-    } = this.orderDetails.delivery_type_info.delivery_address;
+      address_line1: addressLine1,
+      address_line2: addressLine2,
+    } = drupalSettings.order_details.delivery_type_info.delivery_address;
     const customerAddress = ` ${country}, ${addressLine1}, ${addressLine2}, ${locality}, ${dependentLocality}`;
 
     const {
       transactionId, paymentId, resultCode, bankDetails,
-    } = this.orderDetails.payment;
+    } = drupalSettings.order_details.payment;
 
     return (
       <div className="spc-order-summary">

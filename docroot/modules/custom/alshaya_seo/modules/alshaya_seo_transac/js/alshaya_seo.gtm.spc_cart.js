@@ -9,7 +9,7 @@
   Drupal.behaviors.spcCartGtm = {
     attach: function (context, settings) {
       var cart_data = JSON.parse(localStorage.getItem('cart_data'));
-      if (localStorage.hasOwnProperty('cart_data')) {
+      if (cart_data && cart_data.cart && cart_data.cart.cart_id) {
         var step = Drupal.alshayaSpcGetStepFromContainer();
         Drupal.alshayaSpcCartGtm(cart_data.cart, step);
       }
