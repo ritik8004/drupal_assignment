@@ -3,7 +3,7 @@
  * JS code to integrate with GTM for Algolia.
  */
 
-(function ($, Drupal, dataLayer, debounce) {
+(function ($, Drupal, dataLayer, debounce, drupalSettings) {
   'use strict';
 
   var searchQuery = [];
@@ -11,7 +11,7 @@
 
   // Bind for Algolia Search page. No impact if Algolia search not enabled
   // as selector won't be available.
-  $(document).once('seoGoogleTagManager').on('search-results-updated', '#alshaya-algolia-search', function (event, noOfResult) {
+  $(document).once('seoGoogleTagManager').on('search-results-updated', '#alshaya-algolia-search', debounce(function (event, noOfResult) {
     // Allow for aloglia search result.
     if (!$('#alshaya-algolia-search').hasClass('show-algolia-result') && !$('#alshaya-algolia-search').is(':visible')) {
       return;
@@ -38,7 +38,7 @@
     $(window).once('alshaya-seo-gtm-product-search-algolia').on('scroll', debounce(function (event) {
       Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
     }, 500));
-  });
+  }, drupalSettings.algoliaSearch.algolia_trigger_ga_after));
 
   /**
    * Helper function to push productImpression to GTM.
@@ -91,4 +91,4 @@
     }
   });
 
-})(jQuery, Drupal, dataLayer, Drupal.debounce);
+})(jQuery, Drupal, dataLayer, Drupal.debounce, drupalSettings);
