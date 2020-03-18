@@ -7,16 +7,16 @@ import ClickCollectSVG from '../cc-svg';
 export default class DeliveryMethods extends React.Component {
   constructor(props) {
     super(props);
-    let delivery_type = 'hd';
+    let deliveryType = 'hd';
 
     if (this.props.cart.delivery_type) {
-      delivery_type = this.props.cart.delivery_type;
+      deliveryType = this.props.cart.delivery_type;
     } else if (this.props.cart.cart.delivery_type) {
-      delivery_type = this.props.cart.cart.delivery_type;
+      deliveryType = this.props.cart.cart.delivery_type;
     }
 
     this.state = {
-      selectedOption: delivery_type,
+      selectedOption: deliveryType,
     };
   }
 
