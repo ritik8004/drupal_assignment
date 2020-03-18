@@ -50,11 +50,5 @@ function alshaya_algolia_react_block_access(Block $block, $operation, AccountInt
 function alshaya_algolia_react_page_attachments(array &$attachments) {
   // This is used in Algolia Analytics to filter data based on admin/non-admin
   // user.
-  if (!_alshaya_seo_process_gtm()) {
-    $attachments['#attached']['drupalSettings']['user']['isCustomer'] = FALSE;
-    return;
-  }
-  else {
-    $attachments['#attached']['drupalSettings']['user']['isCustomer'] = TRUE;
-  }
+  $attachments['#attached']['drupalSettings']['user']['isCustomer'] = _alshaya_seo_process_gtm();
 }

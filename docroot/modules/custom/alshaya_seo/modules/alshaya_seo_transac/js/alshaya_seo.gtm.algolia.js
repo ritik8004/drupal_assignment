@@ -3,7 +3,7 @@
  * JS code to integrate with GTM for Algolia.
  */
 
- (function ($, Drupal, dataLayer, debounce, drupalSettings) {
+(function ($, Drupal, dataLayer, debounce, drupalSettings) {
   'use strict';
 
   var searchQuery = [];
