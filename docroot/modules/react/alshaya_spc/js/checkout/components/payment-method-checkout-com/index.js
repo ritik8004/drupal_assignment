@@ -1,6 +1,5 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import Cookies from 'js-cookie';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import SavedCardsList from './components/SavedCardsList';

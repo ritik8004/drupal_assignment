@@ -35,7 +35,7 @@ export default class PaymentMethodIcon extends React.Component {
         </svg>
       );
     }
-    if (this.props.methodName === 'checkout_com') {
+    if (this.props.methodName === 'checkout_com' || this.props.methodName === 'cybersource') {
       return (
         <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
           <defs>

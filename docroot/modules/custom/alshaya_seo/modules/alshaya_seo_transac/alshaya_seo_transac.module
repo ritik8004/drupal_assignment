@@ -319,47 +319,6 @@ function alshaya_seo_transac_form_alter(&$form, FormStateInterface $form_state, 
 }
 
 /**
- * Implements hook_page_attachments().
- */
-function alshaya_seo_transac_page_attachments(array &$attachments) {
-  if (!_alshaya_seo_process_gtm()) {
-    return;
-  }
-
-  /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
-  $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
-
-  try {
-    $current_route = $gtm_manager->getGtmContainer();
-    if ($current_route['route_name'] == 'acq_checkout.form' && in_array($current_route['route_params']['step'], ['confirmation'], TRUE)) {
-      $order = _alshaya_acm_checkout_get_last_order_from_session();
-      // We check if we have valid order id.
-      if (empty($order)) {
-        return;
-      }
-
-      $already_visited = (int) \Drupal::request()->getSession()->get('alshaya_gtm_confirmation_visited_' . $order['order_id']);
-      // Send order complete confirmation data only once.
-      if ($already_visited !== 1) {
-        $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
-        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-        if ($attributes['general']['deliveryOption'] === $checkout_options_manager->getClickandColectShippingMethod()) {
-          $attachments['#attached']['drupalSettings']['gtmOrderConfirmation'] = [
-            'event' => 'VirtualPageView',
-            'virtualPageUrl' => '/virtualpv/click-and-collect/step4/order-success',
-            'virtualPageTitle' => 'C&C Step 4 – Order Success',
-          ];
-        }
-      }
-    }
-  }
-  catch (Exception $e) {
-    \Drupal::logger('alshaya_seo')->error('Error while fetching GTM attributes: @message', ['@message' => $e->getMessage()]);
-  }
-}
-
-/**
  * Implements template_preprocess_alshaya_cart_product_name().
  */
 function alshaya_seo_transac_preprocess_alshaya_cart_product_name(&$variables) {

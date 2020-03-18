@@ -290,6 +290,12 @@ class CartController {
       ? $this->cart->getPaymentMethods($cart_data['cart']['id'])
       : [];
 
+    // Payment method set on cart.
+    // @Todo: This should be done actually in magento.
+    $data['cart_payment_method'] = !empty($shipping_info['method'])
+      ? $this->cart->getPaymentMethodSetOnCart($cart_data['cart']['id'])
+      : NULL;
+
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
 
     // Set the status message if we get from magento.
@@ -643,12 +649,16 @@ class CartController {
 
     $result = $this->cart->placeOrder($request_content['data']);
 
-    $response = [
-      'success' => TRUE,
-      'redirectUrl' => 'checkout/confirmation?id=' . $result['secure_order_id'],
-    ];
+    if (!isset($result['error'])) {
+      $response = [
+        'success' => TRUE,
+        'redirectUrl' => 'checkout/confirmation?id=' . $result['secure_order_id'],
+      ];
 
-    return new JsonResponse($response);
+      return new JsonResponse($response);
+    }
+
+    return new JsonResponse($result);
   }
 
   /**

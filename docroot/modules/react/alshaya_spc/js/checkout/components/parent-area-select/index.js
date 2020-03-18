@@ -111,7 +111,7 @@ export default class ParentAreaSelect extends React.Component {
 
   render() {
     const options = this.state.areas;
-    const panelTitle = Drupal.t('select ') + this.props.field.label;
+    const panelTitle = Drupal.t('select @label', {'@label': this.props.field.label});
     const currentOption = this.state.current_option;
 
     const currentOptionAvailable = (currentOption !== undefined

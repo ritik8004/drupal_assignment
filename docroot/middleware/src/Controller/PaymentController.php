@@ -425,7 +425,7 @@ class PaymentController {
     $response = $this->cybersourceHelper->finalise();
 
     $script = '<script type="text/javascript">';
-    $script .= 'var event = new CustomEvent(eventName, {bubbles: true, detail: ' . json_encode($response) . '});';
+    $script .= 'var event = new CustomEvent("cybersourcePaymentUpdate", {bubbles: true, detail: ' . json_encode($response) . '});';
     $script .= 'window.parent.document.dispatchEvent(event);';
     $script .= '</script>';
 

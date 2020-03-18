@@ -10,7 +10,8 @@
 $settings['cybersource']['env'] = 'test';
 
 // We usually connect PPROD to PROD, so live mode on PPROD and PROD.
-if (preg_match('/\d{2}(live|update|pprod)/', $settings['env'])) {
+$env = alshaya_get_site_environment();
+if (preg_match('/\d{2}(live|update|pprod)/', $env)) {
   $settings['cybersource']['env'] = 'prod';
 }
 

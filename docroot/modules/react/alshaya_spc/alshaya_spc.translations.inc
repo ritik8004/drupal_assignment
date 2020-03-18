@@ -74,6 +74,12 @@ function _alshaya_spc_translations() {
       'select your preferred collection store' => [
         'ar' => 'حدد متجر المجموعة المفضل لديك',
       ],
+      'please add your contact details and address.' => [
+        'ar' => 'يرجى تزويدنا ببيانات الاتصال الخاصة بكم والعنوان',
+      ],
+      'select @label' => [
+        'ar' => 'label@ تحديد',
+      ],
     ],
   ];
 }

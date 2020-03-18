@@ -3,7 +3,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import CodSurchargePaymentMethodDescription
   from '../payment-description-cod-surchage';
 import PaymentMethodCheckoutCom from '../payment-method-checkout-com';
-import PaymentMethodIcon from '../payment-method-svg';
+import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
   placeOrder,
@@ -43,7 +43,7 @@ export default class PaymentMethod extends React.Component {
       // Throwing 200 error, we want to handle place order in custom way.
       throw 200;
     }
-  }
+  };
 
   finalisePayment = (paymentData) => {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
@@ -53,7 +53,7 @@ export default class PaymentMethod extends React.Component {
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
         const { cart } = this.props;
-        placeOrder(cart.cart.cart_id, cart.selected_payment_method);
+        placeOrder(cart.selected_payment_method);
         removeStorageInfo('spc_selected_card');
       } else if (result.success === undefined || !(result.success)) {
         // 3D flow error.
@@ -70,7 +70,7 @@ export default class PaymentMethod extends React.Component {
       removeFullScreenLoader();
       console.error(error);
     });
-  }
+  };
 
   render() {
     const { code: method } = this.props.method;

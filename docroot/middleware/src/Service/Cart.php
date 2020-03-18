@@ -761,6 +761,27 @@ class Cart {
   }
 
   /**
+   * Get the payment method set on cart.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   *
+   * @return string
+   *   Payment method set on cart.
+   */
+  public function getPaymentMethodSetOnCart(int $cart_id) {
+    $url = sprintf('carts/%d/selected-payment-method', $cart_id);
+    try {
+      $result = $this->magentoApiWrapper->doRequest('GET', $url);
+      return $result['method'] ?? NULL;
+    }
+    catch (\Exception $e) {
+      // Exception handling here.
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+  }
+
+  /**
    * Place order.
    *
    * @param array $data
