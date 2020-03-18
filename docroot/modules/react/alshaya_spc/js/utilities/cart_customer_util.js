@@ -57,11 +57,11 @@ const emptyCustomerCart = () => {
   };
 
   // Triggering event to notify react component.
-  const refreshCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => emptyCart } });
-  document.dispatchEvent(refreshCart);
+  const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => emptyCart } });
+  document.dispatchEvent(refreshCartEvent);
 
-  const refreshMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => emptyCart } });
-  document.dispatchEvent(refreshMiniCart);
+  const refreshMiniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => emptyCart } });
+  document.dispatchEvent(refreshMiniCartEvent);
 };
 
 export const extractFirstAndLastName = (name) => {
