@@ -30,6 +30,19 @@ class OrderSummary extends React.Component {
       transactionId, paymentId, resultCode, bankDetails,
     } = drupalSettings.order_details.payment;
 
+    // Get Billing info.
+    const paymentMethodCode = drupalSettings.order_details.payment_method_code;
+    var billingAddress = '';
+    if (paymentMethodCode !== 'cashondelivery') {
+      const area_parent_display = drupalSettings.order_details.billing_info.area_parent_display;
+      const admin_area_display = drupalSettings.order_details.billing_info.administrative_area_display;
+      const billing_addressLine1 = drupalSettings.order_details.billing_info.address_line1;
+      const billing_addressLine2 = drupalSettings.order_details.billing_info.address_line2;
+      const billing_localty = drupalSettings.order_details.billing_info.dependent_locality;
+      billingAddress = ' ' + country + ', ' + area_parent_display + ', ' + admin_area_display + ', ' + billing_addressLine1 + ', ' + billing_addressLine2 + ', ' + billing_localty;
+    }
+
+
     return (
       <div className="spc-order-summary">
         <div className="spc-order-summary-order-preview">
@@ -54,6 +67,9 @@ class OrderSummary extends React.Component {
           <label htmlFor="spc-detail-open">{Drupal.t('order detail')}</label>
           <div className="spc-detail-content">
             <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={customerAddress} />
+            <ConditionalView condition={paymentMethodCode !== 'cashondelivery'}>
+              <OrderSummaryItem type="address" label={Drupal.t('billing address')} name={customerName} address={billingAddress} />
+            </ConditionalView>
             <OrderSummaryItem label={Drupal.t('mobile number')} value={mobileNumber} />
             <OrderSummaryItem label={Drupal.t('payment method')} value={paymentMethod} />
             <OrderSummaryItem label={Drupal.t('delivery type')} value={deliveryType} />
