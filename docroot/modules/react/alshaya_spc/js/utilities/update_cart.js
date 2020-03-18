@@ -2,6 +2,8 @@ import axios from 'axios';
 
 import { cartAvailableInStorage } from './get_cart';
 import { i18nMiddleWareUrl } from './i18n_url';
+import { getInfoFromStorage } from './storage';
+import { dispatchCustomEvent } from './events';
 
 /**
  * Get the middleware update cart endpoint.
@@ -52,18 +54,11 @@ export const applyRemovePromo = function (action, promo_code) {
 
 export const updateCartItemData = function (action, sku, quantity) {
   let cart = cartAvailableInStorage();
-  if (cart === false) {
+  // If cart not available.
+  if (cart === false
+    || cart === null
+    || cart === 'empty') {
     return null;
-  }
-
-  // Dispatch event with sku details before localStorage update.
-  if (cart.items.hasOwnProperty(sku)) {
-    const data = {
-      qty: quantity,
-      item: cart.items[sku],
-    };
-    const event = new CustomEvent('updateCartItemData', { bubbles: true, detail: { data } });
-    document.dispatchEvent(event);
   }
 
   if (!Number.isInteger(cart)) {
@@ -78,7 +73,29 @@ export const updateCartItemData = function (action, sku, quantity) {
     cart_id: cart,
     quantity,
   })
-    .then((response) => response.data, (error) => {
+    .then((response) => {
+      // If no error, trigger event for GTM.
+      if (response.data.error === undefined) {
+        // We fetch from local storage and do some checkes.
+        // We are doing this because on delete operation,
+        // sku is removed from storage and thus we need
+        // data before storage update.
+        const localCart = getInfoFromStorage();
+        if (localCart.cart !== undefined
+          && localCart.cart.items !== undefined
+          && localCart.cart.items.hasOwnProperty(sku)) {
+          const data = {
+            qty: quantity,
+            item: localCart.cart.items[sku],
+          };
+          dispatchCustomEvent('updateCartItemData', {
+            data: data,
+          });
+        }
+      }
+
+      return response.data
+    }, (error) => {
     // Processing of error here.
     });
 };
