@@ -3,6 +3,7 @@ import axios from 'axios';
 import { cartAvailableInStorage } from './get_cart';
 import { i18nMiddleWareUrl } from './i18n_url';
 import { getInfoFromStorage } from './storage';
+import { dispatchCustomEvent } from './events';
 
 /**
  * Get the middleware update cart endpoint.
@@ -87,8 +88,9 @@ export const updateCartItemData = function (action, sku, quantity) {
             qty: quantity,
             item: localCart.cart.items[sku],
           };
-          const event = new CustomEvent('updateCartItemData', { bubbles: true, detail: { data } });
-          document.dispatchEvent(event);
+          dispatchCustomEvent('updateCartItemData', {
+            data: data,
+          });
         }
       }
 
