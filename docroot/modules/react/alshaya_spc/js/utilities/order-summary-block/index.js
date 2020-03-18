@@ -5,17 +5,17 @@ import CheckoutCartItems from '../../checkout/components/checkout-cart-items';
 
 class OrderSummaryBlock extends React.Component {
   render() {
-    const promo_data = this.props.cart_promo ? this.props.cart_promo : null;
-    let order_summary_title = Drupal.t('Order Summary');
-    const continue_checkout_link = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
+    const promoData = this.props.cart_promo ? this.props.cart_promo : null;
+    let orderSummaryTitle = Drupal.t('Order Summary');
+    const continueCheckoutLink = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
     // To be used on checkout page.
     if (this.props.item_qty !== undefined) {
-      order_summary_title = Drupal.t('order summary (@qty items)', { '@qty': this.props.item_qty });
+      orderSummaryTitle = Drupal.t('order summary (@qty items)', { '@qty': this.props.item_qty });
     }
 
     return (
       <div className="spc-order-summary-block">
-        <SectionTitle>{order_summary_title}</SectionTitle>
+        <SectionTitle>{orderSummaryTitle}</SectionTitle>
         {/* To Be used on Checkout Delivery pages. */}
         {!this.props.show_checkout_button
           && (
@@ -26,13 +26,13 @@ class OrderSummaryBlock extends React.Component {
         <div className="block-content">
           {/* To Be used later on Checkout Delivery pages. */}
           <div className="products" />
-          <TotalLineItems totals={this.props.totals} cart_promo={promo_data} />
+          <TotalLineItems totals={this.props.totals} cart_promo={promoData} />
           {/* To Be used on cart page only. */}
           {this.props.show_checkout_button
           && (
           <div className="actions">
             <div className="checkout-link submit">
-              <a href={Drupal.url(continue_checkout_link)} className="checkout-link">{Drupal.t('continue to checkout')}</a>
+              <a href={Drupal.url(continueCheckoutLink)} className="checkout-link">{Drupal.t('continue to checkout')}</a>
             </div>
           </div>
           )}
