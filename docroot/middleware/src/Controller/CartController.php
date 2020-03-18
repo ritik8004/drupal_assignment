@@ -649,12 +649,16 @@ class CartController {
 
     $result = $this->cart->placeOrder($request_content['data']);
 
-    $response = [
-      'success' => TRUE,
-      'redirectUrl' => 'checkout/confirmation?id=' . $result['secure_order_id'],
-    ];
+    if (!isset($result['error'])) {
+      $response = [
+        'success' => TRUE,
+        'redirectUrl' => 'checkout/confirmation?id=' . $result['secure_order_id'],
+      ];
 
-    return new JsonResponse($response);
+      return new JsonResponse($response);
+    }
+
+    return new JsonResponse($result);
   }
 
   /**
