@@ -1,16 +1,7 @@
-From c0d7ca47d02e62b46718fe2f42284d2803429780 Mon Sep 17 00:00:00 2001
-From: Sanket Jain <vagrant@local.alshaya.com>
-Date: Wed, 18 Mar 2020 06:17:38 +0000
-Subject: [PATCH] autofix plugin
-
----
- BlockManager.php | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/BlockManager.php b/BlockManager.php
+diff --git a/core/lib/Drupal/Core/Block/BlockManager.php b/core/lib/Drupal/Core/Block/BlockManager.php
 index 026d810..026e4bc 100644
---- a/BlockManager.php
-+++ b/BlockManager.php
+--- a/core/lib/Drupal/Core/Block/BlockManager.php
++++ b/core/lib/Drupal/Core/Block/BlockManager.php
 @@ -9,6 +9,9 @@ use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
  use Drupal\Core\Plugin\DefaultPluginManager;
  use Drupal\Core\Plugin\FilteredPluginManagerTrait;
