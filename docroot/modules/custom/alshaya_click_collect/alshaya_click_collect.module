@@ -181,7 +181,7 @@ function alshaya_click_collect_block_access(Block $block, $operation, AccountInt
     return AccessResult::neutral();
   }
 
-  $blocks_to_check = ['exposedformstores_finderpage_1'];
+  $blocks_to_check = ['exposedformstores_finderpage_1', 'page_title'];
   if ($operation === 'view' && in_array($block->id(), $blocks_to_check)) {
     $feature_status = \Drupal::config('alshaya_click_collect.settings')->get('feature_status');
     return AccessResult::forbiddenIf($feature_status === 'disabled');
