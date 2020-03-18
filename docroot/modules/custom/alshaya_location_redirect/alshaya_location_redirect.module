@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_page_attachments_alter().
+ *
+ * Attaches the redirect library to every page, which will decide if a user
+ * should be redirected to a more appropriate site based on their location.
+ */
+function alshaya_location_redirect_page_attachments_alter(array &$page) {
+  // Exclude admin routes if configured to do so.
+  if (Settings::get('alshaya_location_redirect_by_roles', 1)) {
+    // A set of roles that should be redirected.
+    $included = [
+      'alshaya_magento_consumer',
+      'mobile_app_consumer',
+      'anonymous'
+    ];
+
+    $current_user = \Drupal::currentUser();
+    $roles = $current_user->getRoles();
+
+    if (!count(array_intersect($roles, $included))) {
+      return;
+    }
+  }
+
+  if (Settings::get('alshaya_location_redirect', 1)) {
+    global $_acsf_site_name;
+
+    if (!empty($_acsf_site_name)) {
+      // Extract the site and market from the site name string.
+      $site = substr($_acsf_site_name, 0, -2);
+      $market = substr($_acsf_site_name, -2);
+
+      // Attach the redirect library to every page.
+      $page['#attached']['library'][] = 'alshaya_location_redirect/redirect';
+
+      // Add the current site and market to drupal settings.
+      $page['#attached']['drupalSettings']['alshaya_location_redirect']['site'] = $site;
+      $page['#attached']['drupalSettings']['alshaya_location_redirect']['market'] = $market;
+    }
+  }
+}
