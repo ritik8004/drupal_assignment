@@ -1,5 +1,5 @@
 diff --git a/core/lib/Drupal/Core/Block/BlockManager.php b/core/lib/Drupal/Core/Block/BlockManager.php
-index 026d810..ec7c796 100644
+index 026d810..b759ada 100644
 --- a/core/lib/Drupal/Core/Block/BlockManager.php
 +++ b/core/lib/Drupal/Core/Block/BlockManager.php
 @@ -9,6 +9,9 @@ use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
@@ -12,7 +12,7 @@ index 026d810..ec7c796 100644
  
  /**
   * Manages discovery and instantiation of block plugins.
-@@ -82,6 +85,38 @@ class BlockManager extends DefaultPluginManager implements BlockManagerInterface
+@@ -82,6 +85,41 @@ class BlockManager extends DefaultPluginManager implements BlockManagerInterface
     * {@inheritdoc}
     */
    public function getFallbackPluginId($plugin_id, array $configuration = []) {
@@ -32,20 +32,23 @@ index 026d810..ec7c796 100644
 +        // Deleting corrupted cache items.      
 +        \Drupal::service('cache.discovery')->invalidateAll();
 +
-+        // Essentially, refresh the page by redirect.
-+        // $parameters = \Drupal::request()->query->all();
-+        // $path = URL::fromRoute('<current>', array($parameters))->toString();
-+        // $response = new RedirectResponse($path);
-+        // $request = \Drupal::request();
++        // Don't run this code if it is CLI.
++        if (PHP_SAPI !== 'cli') {
++          // Essentially, refresh the page by redirect.
++          $parameters = \Drupal::request()->query->all() ?? [];
++          $path = URL::fromRoute('<current>', array($parameters))->toString();
++          $response = new RedirectResponse($path);
++          $request = \Drupal::request();
 +
-+        // Save the session so things like messages get saved.
-+        // $request->getSession()->save();
-+        // $response->prepare($request);
++          // Save the session so things like messages get saved.
++          $request->getSession()->save();
++          $response->prepare($request);
 +
-+        // Make sure to trigger kernel events.
-+        // \Drupal::service('kernel')->terminate($request, $response);
-+        // $response->send();
-+        //return;
++          // Make sure to trigger kernel events.
++          \Drupal::service('kernel')->terminate($request, $response);
++          $response->send();
++          return;
++        }    
 +      }
 +    }
      return 'broken';
