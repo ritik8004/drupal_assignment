@@ -1,5 +1,5 @@
 diff --git a/core/lib/Drupal/Core/Block/BlockManager.php b/core/lib/Drupal/Core/Block/BlockManager.php
-index 026d810..b759ada 100644
+index 026d810..301d66b 100644
 --- a/core/lib/Drupal/Core/Block/BlockManager.php
 +++ b/core/lib/Drupal/Core/Block/BlockManager.php
 @@ -9,6 +9,9 @@ use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
@@ -12,7 +12,7 @@ index 026d810..b759ada 100644
  
  /**
   * Manages discovery and instantiation of block plugins.
-@@ -82,6 +85,41 @@ class BlockManager extends DefaultPluginManager implements BlockManagerInterface
+@@ -82,6 +85,37 @@ class BlockManager extends DefaultPluginManager implements BlockManagerInterface
     * {@inheritdoc}
     */
    public function getFallbackPluginId($plugin_id, array $configuration = []) {
@@ -22,11 +22,7 @@ index 026d810..b759ada 100644
 +      $block_plugin_cache = $discovery->get("block_plugins")->data ?? [];
 +
 +      // Checks for empty cache for missing block plugins.
-+      if (empty($block_plugin_cache['facets_summary_block:filter_bar']) 
-+          || empty($block_plugin_cache['facets_summary_block:filter_bar_plp']) 
-+            || empty($block_plugin_cache['facets_summary_block:filter_bar_promotions']) 
-+              || empty($block_plugin_cache['views_exposed_filter_block:alshaya_product_list-block_1']) 
-+                || empty($block_plugin_cache['views_exposed_filter_block:alshaya_product_list-block_2'])) {
++      if (empty($block_plugin_cache['facets_summary_block:filter_bar']) || empty($block_plugin_cache['facets_summary_block:filter_bar_plp']) || empty($block_plugin_cache['facets_summary_block:filter_bar_promotions']) || empty($block_plugin_cache['views_exposed_filter_block:alshaya_product_list-block_1']) || empty($block_plugin_cache['views_exposed_filter_block:alshaya_product_list-block_2'])) {
 +        \Drupal::logger('block_plugin_issue')
 +              ->error('Auto-fixing discovery cache bin.');
 +        // Deleting corrupted cache items.      
@@ -55,5 +51,5 @@ index 026d810..b759ada 100644
    }
  
 -- 
-2.20.1 (Apple Git-117)
+2.7.4
 
