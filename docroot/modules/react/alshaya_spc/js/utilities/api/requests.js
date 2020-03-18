@@ -72,7 +72,7 @@ export const fetchCartData = () => {
   }
 
   // Prepare api url.
-  var api_url = getCartApiUrl();
+  const api_url = getCartApiUrl();
 
   return Axios.get(api_url)
     .then((response) => response.data)

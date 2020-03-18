@@ -55,16 +55,15 @@ export default class DeliveryInformation extends React.Component {
     if (cart.delivery_type !== undefined) {
       if (cart.delivery_type === 'cnc') {
         title = Drupal.t('Collection Store');
-      }
-      else {
+      } else {
         title = Drupal.t('delivery information');
       }
     }
 
     if (title.length === 0) {
-      title = cart.cart.delivery_type === 'cnc' ?
-        Drupal.t('Collection Store') :
-        Drupal.t('delivery information');
+      title = cart.cart.delivery_type === 'cnc'
+        ? Drupal.t('Collection Store')
+        : Drupal.t('delivery information');
     }
 
     const deliveryType = this.getDeliveryMethodToShow(cart);
