@@ -145,19 +145,21 @@ class AlshayaFeed {
         continue;
       }
 
-      foreach ($product as $lang => $item) {
-        $file_content = PHP_EOL;
-        if (!isset($context['results']['files'][$lang])) {
-          $file_content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<feed>\n<products>" . PHP_EOL;
-          $context['results']['files'][$lang] = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}_wip.xml"));
-        }
+      foreach ($product as $lang => $items) {
+        foreach ($items as $item) {
+          $file_content = PHP_EOL;
+          if (!isset($context['results']['files'][$lang])) {
+            $file_content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<feed>\n<products>" . PHP_EOL;
+            $context['results']['files'][$lang] = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}_wip.xml"));
+          }
 
-        $file_content .= $this->twig
-          ->loadTemplate($context['results']['feed_template'])
-          ->render(['product' => $item]);
+          $file_content .= $this->twig
+            ->loadTemplate($context['results']['feed_template'])
+            ->render(['product' => $item]) . PHP_EOL;
 
-        if (!file_put_contents($context['results']['files'][$lang], $file_content, FILE_APPEND)) {
-          $this->logger->error('could not create feed file: @file', ['@file' => $context['results']['files'][$lang]]);
+          if (!file_put_contents($context['results']['files'][$lang], $file_content, FILE_APPEND)) {
+            $this->logger->error('could not create feed file: @file', ['@file' => $context['results']['files'][$lang]]);
+          }
         }
       }
     }

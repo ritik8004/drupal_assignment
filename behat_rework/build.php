@@ -26,28 +26,33 @@ if (!empty($specific_site) && $rebuild == FALSE) {
 }
 $profiles = $behat->buildVarsForGivenSites($specific_site, $rebuild);
 
+$viewports = array('desktop', 'mobile');
+
 foreach ($profiles as $profile => $files) {
   $variables = $behat->mergeYamlFiles($files, $profile, $rebuild);
   if (isset($variables['variables']['url_base_uri'])) {
-    if (!is_dir(BUILD_DIR)) {
-      mkdir(BUILD_DIR);
-    }
+    foreach ($viewports as $key => $viewport) {
+      if (!is_dir(BUILD_DIR)) {
+        mkdir(BUILD_DIR);
+      }
 
-    if (is_dir(BUILD_DIR)) {
-      $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $profile);
+      if (is_dir(BUILD_DIR)) {
+        $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $profile, $viewport);
 
-      $output = new ConsoleOutput();
-      $output->write("Building features for: $profile", TRUE, Output::VERBOSITY_NORMAL);
+        $output = new ConsoleOutput();
+        $output->write("Building features for: $profile", TRUE, Output::VERBOSITY_NORMAL);
 
-      $behat_config[$profile] = $prepare_behat;
-      $feature = new AlshayaFeatureProcess([
-        'site' => $profile,
-        'variables' => $variables['variables'] ?? [],
-        'features' => $variables['tests'] ?? [],
-        'template_path' => TEMPLATE_DIR . '/features',
-        'build_path' => BUILD_DIR . '/features'
-      ]);
-      $feature->generateFeatureFiles();
+        $behat_config[$profile . '-' . $viewport] = $prepare_behat;
+        $feature = new AlshayaFeatureProcess([
+          'site' => $profile,
+          'variables' => $variables['variables'] ?? [],
+          'features' => $variables['tests'] ?? [],
+          'template_path' => TEMPLATE_DIR . '/features',
+          'build_path' => BUILD_DIR . '/features',
+          'viewport' => $viewport
+        ]);
+        $feature->generateFeatureFiles();
+      }
     }
   }
 }

@@ -1,0 +1,27 @@
+// for all browsers
+body {
+  //free gift detail.
+  &.nodetype--acq_product {
+    &.free-gift-promo-list-overlay.free-gift-detail-modal {
+      .ui-dialog {
+        .ui-dialog-content#drupal-modal {
+          @include breakpoint($desktop) {
+            height: 40rem !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+// specific to IE
+body.ie {
+  //free gift list.
+  &.nodetype--acq_product:not(.free-gift-detail-modal).free-gift-promo-list-overlay {
+    .ui-dialog {
+      @include breakpoint($desktop) {
+        padding: calc((100vh - 28rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+      }
+    }
+  }
+}

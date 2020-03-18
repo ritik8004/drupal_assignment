@@ -20,6 +20,7 @@ use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\file\FileInterface;
+use Drupal\alshaya_product_options\SwatchesHelper;
 
 /**
  * Class AlshayaAlgoliaIndexHelper.
@@ -108,6 +109,13 @@ class AlshayaAlgoliaIndexHelper {
   protected $configFactory;
 
   /**
+   * The Swatches Helper service.
+   *
+   * @var \Drupal\alshaya_product_options\SwatchesHelper
+   */
+  protected $swatchesHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -132,6 +140,8 @@ class AlshayaAlgoliaIndexHelper {
    *   The product category manager service.
    * @param \Drupal\Core\Config\ConfigFactory $config_factory
    *   The config factory service.
+   * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches_helper
+   *   The Swatches helper service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -147,7 +157,8 @@ class AlshayaAlgoliaIndexHelper {
     TimeInterface $date_time,
     SkuPriceHelper $sku_price_helper,
     ProductCategoryManager $product_category_manager,
-    ConfigFactory $config_factory
+    ConfigFactory $config_factory,
+    SwatchesHelper $swatches_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -160,6 +171,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->skuPriceHelper = $sku_price_helper;
     $this->productCategoryManager = $product_category_manager;
     $this->configFactory = $config_factory;
+    $this->swatchesHelper = $swatches_helper;
   }
 
   /**
@@ -197,7 +209,8 @@ class AlshayaAlgoliaIndexHelper {
     $object['body'] = $this->renderer->renderPlain($description);
 
     $object['field_category_name'] = $this->getCategoryHierarchy($node, $node->language()->getId());
-    $object['rendered_price'] = $this->renderer->renderPlain($this->skuPriceHelper->getPriceBlockForSku($sku));
+    $sku_price_block = $this->skuPriceHelper->getPriceBlockForSku($sku);
+    $object['rendered_price'] = $this->renderer->renderPlain($sku_price_block);
     $prices = $this->skuManager->getMinPrices($sku, $product_color);
     $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
@@ -252,6 +265,14 @@ class AlshayaAlgoliaIndexHelper {
     $swatches = $this->getAlgoliaSwatchData($sku);
     if (isset($swatches['swatches'])) {
       $object['swatches'] = array_values($swatches['swatches']);
+    }
+
+    // Index color facets.
+    $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
+    $swatch_plp_attributes = $display_settings->get('swatches.plp');
+
+    if (!empty($swatch_plp_attributes)) {
+      $this->processSwatchColorFacets($object, $swatch_plp_attributes);
     }
 
     if ($product_collection = $sku->get('attr_product_collection')->getString()) {
@@ -544,6 +565,53 @@ class AlshayaAlgoliaIndexHelper {
     }
 
     return $swatches;
+  }
+
+  /**
+   * Helper function to get Swatch facets.
+   *
+   * @param array $object
+   *   The array of object being indexed.
+   * @param array $swatch_plp_attributes
+   *   The swatch plp attributes.
+   */
+  public function processSwatchColorFacets(array &$object, array $swatch_plp_attributes) {
+    foreach ($swatch_plp_attributes as $attr) {
+      $attr = 'attr_' . $attr;
+      if (!empty($object[$attr])) {
+        foreach ($object[$attr] as $key => $value) {
+          $swatch = $this->swatchesHelper->getSwatch(substr($attr, 5), $value, $object['search_api_language']);
+          $swatch_data = [
+            'value' => $swatch['name'],
+            'label' => $swatch['name'],
+          ];
+
+          if ($swatch) {
+            switch ($swatch['type']) {
+              case SwatchesHelper::SWATCH_TYPE_TEXTUAL:
+                $swatch_data['swatch_text'] = $swatch['swatch'];
+                $swatch_data['label'] .= ', swatch_text:' . $swatch['swatch'];
+                break;
+
+              case SwatchesHelper::SWATCH_TYPE_VISUAL_COLOR:
+                $swatch_data['swatch_color'] = $swatch['swatch'];
+                $swatch_data['label'] .= ', swatch_color:' . $swatch['swatch'];
+                break;
+
+              case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
+                $swatch_data['swatch_image'] = $swatch['swatch'];
+                $swatch_data['label'] .= ', swatch_image:' . $swatch['swatch'];
+                break;
+
+              default:
+                continue;
+            }
+            $object[$attr][$key] = $swatch_data;
+          }
+        }
+      }
+    }
+
   }
 
 }

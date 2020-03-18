@@ -128,6 +128,11 @@ class AdvancedPageResource extends ResourceBase {
   public function get() {
     // Path alias of advanced page.
     $alias = $this->requestStack->query->get('url');
+    if (!$alias) {
+      $page = $this->requestStack->query->get('page');
+      $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
+    }
+
     $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
 
     if (!$node instanceof NodeInterface) {
@@ -202,6 +207,7 @@ class AdvancedPageResource extends ResourceBase {
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
         'contexts' => [
+          'url.query_args:page',
           'url.query_args:url',
         ],
         'tags' => array_merge([

@@ -16,11 +16,9 @@
   }
 
   .order-qty-limit-msg-inner-wrapper {
-    min-width: 12.625rem;
     min-height: 2.125rem;
     border-radius: 2px;
     background-color: $order_qty_limit_bg;
-    padding-#{$left}: 0.3125rem;
     padding-#{$right}: 0.625rem;
     display: inline-flex;
     align-items: center;
@@ -31,12 +29,13 @@
     font-family: $alshaya-bold;
     font-weight: normal;
     padding-#{$left}: 1.65rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
 
     @include icon(infomation, before) {
       font-size: 1.25rem;
       font-weight: bold;
       line-height: normal;
-      padding-right: 0.3125rem;
       position: absolute;
       #{$left}: 0.25rem;
       top: 50%;
