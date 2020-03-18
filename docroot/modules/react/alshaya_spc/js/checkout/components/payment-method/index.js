@@ -11,7 +11,7 @@ import {
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
-import PaymentMethodCybersource from "../payment-method-cybersource";
+import PaymentMethodCybersource from '../payment-method-cybersource';
 import { removeStorageInfo } from '../../../utilities/storage';
 
 export default class PaymentMethod extends React.Component {
@@ -106,14 +106,22 @@ export default class PaymentMethod extends React.Component {
           <ConditionalView condition={(isSelected && method === 'checkout_com')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method}`}>
               <CheckoutComContextProvider>
-                <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} cart={cart} finalisePayment={this.finalisePayment} />
+                <PaymentMethodCheckoutCom
+                  ref={this.paymentMethodCheckoutCom}
+                  cart={cart}
+                  finalisePayment={this.finalisePayment}
+                />
               </CheckoutComContextProvider>
             </div>
           </ConditionalView>
 
           <ConditionalView condition={(isSelected && method === 'cybersource')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method}`}>
-              <PaymentMethodCybersource ref={this.paymentMethodCybersource} cart={cart} finalisePayment={this.finalisePayment} />
+              <PaymentMethodCybersource
+                ref={this.paymentMethodCybersource}
+                cart={cart}
+                finalisePayment={this.finalisePayment}
+              />
             </div>
           </ConditionalView>
         </div>

@@ -1,7 +1,9 @@
 import React from 'react';
 import SavedCardItem from './SavedCardItem';
 
-const SavedCardsList = ({ closeSavedCardListModal, selected, onExistingCardSelect, onNewCardClick }) => {
+const SavedCardsList = ({
+  closeSavedCardListModal, selected, onExistingCardSelect, onNewCardClick,
+}) => {
   const cardITems = Object.entries(drupalSettings.checkoutCom.tokenizedCards).map(([key, card]) => (
     <SavedCardItem
       key={card.public_hash}

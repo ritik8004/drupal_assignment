@@ -249,6 +249,4 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
   return false;
 };
 
-export const validateInfo = (data) => {
-  return axios.post(Drupal.url('spc/validate-info'), data);
-};
+export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info'), data);
