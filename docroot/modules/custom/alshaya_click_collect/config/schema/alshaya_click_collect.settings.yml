@@ -4,6 +4,9 @@ alshaya_click_collect.settings:
   type: config_object
   label: 'Click and Collect configuration'
   mapping:
+    feature_status:
+      type: string
+      label: 'Feature status'
     click_collect_rnc:
       type: label
       label: 'Click and Collect Reserve and collect short description'
