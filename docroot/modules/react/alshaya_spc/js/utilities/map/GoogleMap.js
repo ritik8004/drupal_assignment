@@ -22,7 +22,9 @@ export default class GoogleMap extends React.Component {
   }
 
   componentDidMount() {
-    const control_position = isRTL() === true ? window.google.maps.ControlPosition.RIGHT_BOTTOM : window.google.maps.ControlPosition.LEFT_BOTTOM;
+    const controlPosition = isRTL() === true
+      ? window.google.maps.ControlPosition.RIGHT_BOTTOM
+      : window.google.maps.ControlPosition.LEFT_BOTTOM;
 
     let data = {};
     // If adress is being edited, means don't need to
@@ -33,13 +35,13 @@ export default class GoogleMap extends React.Component {
 
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
-    this.googleMap = this.createGoogleMap(data, control_position);
+    this.googleMap = this.createGoogleMap(data, controlPosition);
 
     // Storing in global so that can be accessed byt parent and others.
     window.spcMap = this.googleMap;
 
     // Add My location button.
-    this.addMyLocationButton(window.spcMap, control_position);
+    this.addMyLocationButton(window.spcMap, controlPosition);
 
     // This can be passed from props if click on
     // map is allowed or not.
@@ -184,10 +186,10 @@ export default class GoogleMap extends React.Component {
    * @param map
    * The google map object.
    *
-   * @param control_position
+   * @param controlPosition
    * The position of controls on Google Map.
    */
-  addMyLocationButton = (map, control_position) => {
+  addMyLocationButton = (map, controlPosition) => {
     // We create a div > button > div markup for the custom button.
     // The wrapper div.
     const controlDiv = document.createElement('div');
@@ -261,7 +263,7 @@ export default class GoogleMap extends React.Component {
 
     // Add to map.
     controlDiv.index = 1;
-    map.controls[control_position].push(controlDiv);
+    map.controls[controlPosition].push(controlDiv);
   };
 
   /**
@@ -273,7 +275,7 @@ export default class GoogleMap extends React.Component {
     geocoder.geocode({
       address: drupalSettings.country_code,
     }, (results, status) => {
-      if (status == google.maps.GeocoderStatus.OK) {
+      if (status === google.maps.GeocoderStatus.OK) {
         // this.googleMap.setCenter(results[0].geometry.location);
         window.spcMap.setCenter(results[0].geometry.location);
       }
@@ -283,7 +285,7 @@ export default class GoogleMap extends React.Component {
   /**
    * Create google map.
    */
-  createGoogleMap = (centerPosition, control_position) => {
+  createGoogleMap = (centerPosition, controlPosition) => {
     // If corrds not available, try country coords.
     if (centerPosition.lat === undefined) {
       // If address is being edited, get coords from
@@ -309,7 +311,7 @@ export default class GoogleMap extends React.Component {
       streetViewControl: false,
       fullscreenControl: false,
       zoomControlOptions: {
-        position: control_position,
+        position: controlPosition,
       },
     });
   }
