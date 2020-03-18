@@ -1,5 +1,4 @@
 import React from 'react';
-import Axios from 'axios';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import {
   addShippingInCart, cleanMobileNumber,
@@ -7,7 +6,6 @@ import {
   showFullScreenLoader, validateInfo,
 } from '../../../utilities/checkout_util';
 import FixedFields from '../fixed-fields';
-import { i18nMiddleWareUrl } from '../../../utilities/i18n_url';
 import { validateContactInfo } from '../../../utilities/checkout_address_process';
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import { dispatchCustomEvent } from '../../../utilities/events';
@@ -26,10 +24,10 @@ class ContactInfoForm extends React.Component {
     }
 
     showFullScreenLoader();
-    const { fullname, email } = this.context.contactInfo;
+    const { contactInfo: { fullname, email } } = this.context;
     const name = drupalSettings.user.uid > 0 ? fullname : e.target.elements.fullname.value.trim();
     const { firstname, lastname } = extractFirstAndLastName(name);
-    const form_data = {
+    const formData = {
       static: {
         firstname,
         lastname,
@@ -47,32 +45,23 @@ class ContactInfoForm extends React.Component {
       carrier_info: { ...drupalSettings.map.cnc_shipping },
     };
 
-    this.processShippingUpdate(form_data);
+    this.processShippingUpdate(formData);
   };
 
   /**
    * Validate mobile number and email address and on success process shipping address update.
    */
-  processShippingUpdate = (form_data) => {
-    // Mimic axio request when we don't want to validate email address for existing
-    // or recently created customer.
-    let customerValidationReuest = new Promise((resolve, reject) => {
-      resolve({
-        data: {
-          exists: false,
-        },
-      });
-    });
-
+  processShippingUpdate = (formData) => {
     const validationData = {
-      'mobile': form_data.static.telephone,
+      mobile: formData.static.telephone,
     };
+    const { contactInfo } = this.context;
 
-    if (this.context.contactInfo === null
-      || (this.context.contactInfo.hasOwnProperty('email')
-        && this.context.contactInfo.email !== form_data.static.email)
+    if (contactInfo === null
+      || (Object.prototype.hasOwnProperty.call(contactInfo, 'email')
+        && contactInfo.email !== formData.static.email)
     ) {
-      validationData['email'] = form_data.static.email;
+      validationData.email = formData.static.email;
     }
 
     const validationRequest = validateInfo(validationData);
@@ -96,7 +85,7 @@ class ContactInfoForm extends React.Component {
 
         if (result.data.email !== undefined) {
           if (result.data.email === 'invalid') {
-            document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', {'%mail': validationData['email']});
+            document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', { '%mail': validationData.email });
             document.getElementById('email-error').classList.add('error');
             isError = true;
           } else if (result.data.email === 'exists') {
@@ -112,7 +101,7 @@ class ContactInfoForm extends React.Component {
         if (isError) {
           removeFullScreenLoader();
         } else {
-          this.updateShipping(form_data);
+          this.updateShipping(formData);
         }
       }
     }).catch((error) => {
@@ -124,11 +113,11 @@ class ContactInfoForm extends React.Component {
   /**
    * Update cart with shipping address.
    */
-  updateShipping = (form_data) => {
-    const cart_info = addShippingInCart('update shipping', form_data);
-    if (cart_info instanceof Promise) {
+  updateShipping = (formData) => {
+    const cartInfo = addShippingInCart('update shipping', formData);
+    if (cartInfo instanceof Promise) {
       const { updateContactInfo } = this.context;
-      cart_info
+      cartInfo
         .then((cart_result) => {
           removeFullScreenLoader();
 
@@ -141,15 +130,16 @@ class ContactInfoForm extends React.Component {
             return null;
           }
 
-          updateContactInfo(form_data.static);
+          updateContactInfo(formData.static);
           const cartData = {
             cart: cart_result,
             delivery_type: cart_result.delivery_type,
-            address: form_data.store.address,
+            address: formData.store.address,
           };
           dispatchCustomEvent('refreshCartOnCnCSelect', {
             data: () => cartData,
           });
+          return null;
         })
         .catch((error) => {
           console.error(error);
@@ -158,7 +148,7 @@ class ContactInfoForm extends React.Component {
   };
 
   render() {
-    const { store } = this.props;
+    const { store, subTitle } = this.props;
     const { contactInfo } = this.context;
 
     return (
@@ -170,7 +160,7 @@ class ContactInfoForm extends React.Component {
           showEmail={drupalSettings.user.uid === 0}
           showFullName={drupalSettings.user.uid === 0}
           default_val={contactInfo ? { static: contactInfo } : []}
-          subTitle={this.props.subTitle}
+          subTitle={subTitle}
         />
         <div className="spc-address-form-actions">
           <button
