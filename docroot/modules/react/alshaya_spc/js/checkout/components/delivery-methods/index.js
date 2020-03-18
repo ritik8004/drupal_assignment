@@ -9,10 +9,10 @@ export default class DeliveryMethods extends React.Component {
     super(props);
     let deliveryType = 'hd';
 
-    if (this.props.cart.deliveryType) {
-      deliveryType = this.props.cart.deliveryType;
-    } else if (this.props.cart.cart.deliveryType) {
-      deliveryType = this.props.cart.cart.deliveryType;
+    if (this.props.cart.delivery_type) {
+      deliveryType = this.props.cart.delivery_type;
+    } else if (this.props.cart.cart.delivery_type) {
+      deliveryType = this.props.cart.cart.delivery_type;
     }
 
     this.state = {
@@ -43,7 +43,7 @@ export default class DeliveryMethods extends React.Component {
     document.dispatchEvent(event);
     // Add delivery method in cart storage.
     const { cart } = this.props;
-    cart.deliveryType = method;
+    cart.delivery_type = method;
     this.props.refreshCart(cart);
     // Trigger cnc event to fetch stores.
     if (method === 'cnc') {
@@ -53,12 +53,12 @@ export default class DeliveryMethods extends React.Component {
 
   render() {
     const { cnc_disabled } = this.props.cart;
-    const hdSubtitle = Drupal.t('Standard delivery for purchases over KD 250');
-    let cncSubtitle = window.drupalSettings.cnc_subtitle_available || '';
+    const hd_subtitle = Drupal.t('Standard delivery for purchases over KD 250');
+    let cnc_subtitle = window.drupalSettings.cnc_subtitle_available || '';
 
     // If CNC is disabled.
     if (cnc_disabled) {
-      cncSubtitle = window.drupalSettings.cnc_subtitle_unavailable || '';
+      cnc_subtitle = window.drupalSettings.cnc_subtitle_unavailable || '';
     }
 
     return (
@@ -70,7 +70,7 @@ export default class DeliveryMethods extends React.Component {
             <span className="icon"><HomeDeliverySVG /></span>
             <div className="delivery-method-name">
               <span className="impress">{Drupal.t('Home Delivery')}</span>
-              <span className="sub-title">{hdSubtitle}</span>
+              <span className="sub-title">{hd_subtitle}</span>
             </div>
           </label>
         </div>
@@ -80,7 +80,7 @@ export default class DeliveryMethods extends React.Component {
             <span className="icon"><ClickCollectSVG /></span>
             <div className="delivery-method-name">
               <span className="impress">{Drupal.t('Click & Collect')}</span>
-              <span className="sub-title">{cncSubtitle}</span>
+              <span className="sub-title">{cnc_subtitle}</span>
             </div>
           </label>
         </div>
