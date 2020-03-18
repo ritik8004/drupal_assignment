@@ -15,6 +15,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\image\Entity\ImageStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Provides a block to display 'autocomplete block' for mobile.
@@ -164,6 +165,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'filters' => $this->getFilters($index_name),
             'enable_lhn_tree_search' => $product_category_settings->get('enable_lhn_tree_search'),
             'category_facet_label' => $this->t('Category'),
+            'algolia_trigger_ga_after' => Settings::get('algolia_trigger_ga_after', 3000),
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'] ?? 4,
