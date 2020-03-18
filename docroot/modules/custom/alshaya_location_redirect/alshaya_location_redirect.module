@@ -14,24 +14,24 @@ use Drupal\Core\Site\Settings;
  * should be redirected to a more appropriate site based on their location.
  */
 function alshaya_location_redirect_page_attachments_alter(array &$page) {
-  // Exclude admin routes if configured to do so.
-  if (Settings::get('alshaya_location_redirect_by_roles', 1)) {
-    // A set of roles that should be redirected.
-    $included = [
-      'alshaya_magento_consumer',
-      'mobile_app_consumer',
-      'anonymous'
-    ];
-
-    $current_user = \Drupal::currentUser();
-    $roles = $current_user->getRoles();
-
-    if (!count(array_intersect($roles, $included))) {
-      return;
-    }
-  }
-
   if (Settings::get('alshaya_location_redirect', 1)) {
+    // Exclude admin routes if configured to do so.
+    if (Settings::get('alshaya_location_redirect_by_roles', 1)) {
+      // A set of roles that should be redirected.
+      $included = [
+        'alshaya_magento_consumer',
+        'mobile_app_consumer',
+        'anonymous',
+      ];
+
+      $current_user = \Drupal::currentUser();
+      $roles = $current_user->getRoles();
+
+      if (!count(array_intersect($roles, $included))) {
+        return;
+      }
+    }
+
     global $_acsf_site_name;
 
     if (!empty($_acsf_site_name)) {
