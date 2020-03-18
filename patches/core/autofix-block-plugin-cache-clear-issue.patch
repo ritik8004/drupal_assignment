@@ -1,5 +1,5 @@
 diff --git a/core/lib/Drupal/Core/Block/BlockManager.php b/core/lib/Drupal/Core/Block/BlockManager.php
-index 026d810..026e4bc 100644
+index 026d810..ec7c796 100644
 --- a/core/lib/Drupal/Core/Block/BlockManager.php
 +++ b/core/lib/Drupal/Core/Block/BlockManager.php
 @@ -9,6 +9,9 @@ use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
@@ -33,24 +33,24 @@ index 026d810..026e4bc 100644
 +        \Drupal::service('cache.discovery')->invalidateAll();
 +
 +        // Essentially, refresh the page by redirect.
-+        $parameters = \Drupal::request()->query->all();
-+        $path = URL::fromRoute('<current>', array($parameters))->toString();
-+        $response = new RedirectResponse($path);
-+        $request = \Drupal::request();
++        // $parameters = \Drupal::request()->query->all();
++        // $path = URL::fromRoute('<current>', array($parameters))->toString();
++        // $response = new RedirectResponse($path);
++        // $request = \Drupal::request();
 +
 +        // Save the session so things like messages get saved.
-+        $request->getSession()->save();
-+        $response->prepare($request);
++        // $request->getSession()->save();
++        // $response->prepare($request);
 +
 +        // Make sure to trigger kernel events.
-+        \Drupal::service('kernel')->terminate($request, $response);
-+        $response->send();
-+        return;
++        // \Drupal::service('kernel')->terminate($request, $response);
++        // $response->send();
++        //return;
 +      }
 +    }
      return 'broken';
    }
  
 -- 
-2.7.4
+2.20.1 (Apple Git-117)
 
