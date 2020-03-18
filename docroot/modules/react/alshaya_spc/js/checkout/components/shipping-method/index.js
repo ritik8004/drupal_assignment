@@ -6,9 +6,6 @@ import {
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import {
-  gerAreaLabelById,
-} from '../../../utilities/address_util';
-import {
   prepareAddressDataForShipping,
 } from '../../../utilities/checkout_address_process';
 
@@ -44,14 +41,14 @@ export default class ShippingMethod extends React.Component {
     document.dispatchEvent(event);
 
     // Prepare shipping data.
-    const temp_shipping_data = cart.shipping_address;
+    const tempShippingData = cart.shipping_address;
     Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
-      temp_shipping_data[key] = cart.shipping_address[field.key];
+      tempShippingData[key] = cart.shipping_address[field.key];
     });
-    temp_shipping_data.mobile = cart.shipping_address.telephone;
+    tempShippingData.mobile = cart.shipping_address.telephone;
 
     // Get prepared address data for shipping address update.
-    const data = prepareAddressDataForShipping(temp_shipping_data);
+    const data = prepareAddressDataForShipping(tempShippingData);
     data.carrier_info = {
       carrier: method.carrier_code,
       method: method.method_code,
@@ -64,14 +61,14 @@ export default class ShippingMethod extends React.Component {
     }
 
     // Update shipping address.
-    const cart_data = addShippingInCart('update shipping', data);
-    if (cart_data instanceof Promise) {
-      cart_data.then((cart_result) => {
-        let cart_info = {
-          cart: cart_result,
+    const cartData = addShippingInCart('update shipping', data);
+    if (cartData instanceof Promise) {
+      cartData.then((cartResult) => {
+        let cartInfo = {
+          cart: cartResult,
         };
         // If no error.
-        if (cart_result.error === undefined) {
+        if (cartResult.error === undefined) {
           // Update state and radio button.
           this.setState({
             selectedOption: method.method_code,
@@ -80,8 +77,8 @@ export default class ShippingMethod extends React.Component {
         } else {
           // In case of error, prepare error info
           // and call refresh cart so that message is shown.
-          cart_info = {
-            error_message: cart_result.error_message,
+          cartInfo = {
+            error_message: cartResult.error_message,
           };
         }
 
@@ -89,7 +86,7 @@ export default class ShippingMethod extends React.Component {
         removeFullScreenLoader();
 
         // Refresh cart.
-        this.props.refreshCart(cart_info);
+        this.props.refreshCart(cartInfo);
       });
     }
   };
@@ -100,23 +97,23 @@ export default class ShippingMethod extends React.Component {
     if (method.amount > 0) {
       price = <PriceElement amount={method.amount} />;
     }
-  	return (
-    <div className="shipping-method" onClick={() => this.changeShippingMethod(method)}>
-      <input
-        id={`shipping-method-${method.method_code}`}
-        className={method.method_code}
-        type="radio"
-        defaultChecked={this.state.selectedOption === method.method_code}
-        value={method.method_code}
-        name="shipping-method"
-      />
+    return (
+      <div className="shipping-method" onClick={() => this.changeShippingMethod(method)}>
+        <input
+          id={`shipping-method-${method.method_code}`}
+          className={method.method_code}
+          type="radio"
+          defaultChecked={this.state.selectedOption === method.method_code}
+          value={method.method_code}
+          name="shipping-method"
+        />
 
-      <label className="radio-sim radio-label">
-        <span className="carrier-title">{this.props.method.carrier_title}</span>
-        <span className="method-title">{this.props.method.method_title}</span>
-        <span className="spc-price">{price}</span>
-      </label>
-    </div>
+        <label className="radio-sim radio-label">
+          <span className="carrier-title">{this.props.method.carrier_title}</span>
+          <span className="method-title">{this.props.method.method_title}</span>
+          <span className="spc-price">{price}</span>
+        </label>
+      </div>
     );
   }
 }
