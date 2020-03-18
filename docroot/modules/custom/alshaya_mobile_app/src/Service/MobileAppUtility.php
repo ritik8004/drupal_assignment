@@ -319,6 +319,10 @@ class MobileAppUtility {
         case 'advanced_page':
           $return = $this->pageDeepLink($object->id(), 'advanced');
           break;
+
+        case 'magazine_article':
+          $return = $this->pageDeepLink($object->id(), 'magazine-detail');
+          break;
       }
     }
     elseif ($object instanceof SKUInterface) {
