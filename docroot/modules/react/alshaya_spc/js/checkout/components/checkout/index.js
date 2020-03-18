@@ -117,13 +117,7 @@ export default class Checkout extends React.Component {
   };
 
   updateCheckoutMessage = (type, message) => {
-    const prevState = this.state;
-    this.setState({
-      ...prevState,
-      messageType: type,
-      errorSuccessMessage: message,
-    });
-
+    this.setState({messageType: type, errorSuccessMessage: message});
     // @TODO: Add smooth scroll here after it is merged.
   };
 
