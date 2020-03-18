@@ -105,11 +105,11 @@ export default class EmptyDeliveryText extends React.Component {
       );
     }
 
-    let default_val = null;
+    let defaultVal = null;
     // If logged in user.
     if (window.drupalSettings.user.uid > 0) {
       const { fname, lname } = window.drupalSettings.user_name;
-      default_val = {
+      defaultVal = {
         static: {
           fullname: `${fname} ${lname}`,
         },
@@ -120,7 +120,7 @@ export default class EmptyDeliveryText extends React.Component {
     else if (cart.carrier_info !== null
       && cart.shipping_address !== null) {
       const shippingAddress = cart.shipping_address;
-      default_val = {
+      defaultVal = {
         static: {
           fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,
           email: shippingAddress.email,
@@ -150,7 +150,7 @@ export default class EmptyDeliveryText extends React.Component {
               processAddress={this.processAddress}
               show_prefered={window.drupalSettings.user.uid > 0}
               showEmail={window.drupalSettings.user.uid === 0}
-              default_val={default_val}
+              default_val={defaultVal}
             />
           </React.Suspense>
         </Popup>
