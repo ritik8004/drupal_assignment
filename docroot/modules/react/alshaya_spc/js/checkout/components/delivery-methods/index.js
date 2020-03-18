@@ -53,12 +53,12 @@ export default class DeliveryMethods extends React.Component {
 
   render() {
     const { cnc_disabled } = this.props.cart;
-    const hd_subtitle = Drupal.t('Standard delivery for purchases over KD 250');
-    let cnc_subtitle = window.drupalSettings.cnc_subtitle_available || '';
+    const hdSubtitle = Drupal.t('Standard delivery for purchases over KD 250');
+    let cncSubtitle = window.drupalSettings.cnc_subtitle_available || '';
 
     // If CNC is disabled.
     if (cnc_disabled) {
-      cnc_subtitle = window.drupalSettings.cnc_subtitle_unavailable || '';
+      cncSubtitle = window.drupalSettings.cnc_subtitle_unavailable || '';
     }
 
     return (
@@ -70,7 +70,7 @@ export default class DeliveryMethods extends React.Component {
             <span className="icon"><HomeDeliverySVG /></span>
             <div className="delivery-method-name">
               <span className="impress">{Drupal.t('Home Delivery')}</span>
-              <span className="sub-title">{hd_subtitle}</span>
+              <span className="sub-title">{hdSubtitle}</span>
             </div>
           </label>
         </div>
@@ -80,7 +80,7 @@ export default class DeliveryMethods extends React.Component {
             <span className="icon"><ClickCollectSVG /></span>
             <div className="delivery-method-name">
               <span className="impress">{Drupal.t('Click & Collect')}</span>
-              <span className="sub-title">{cnc_subtitle}</span>
+              <span className="sub-title">{cncSubtitle}</span>
             </div>
           </label>
         </div>
