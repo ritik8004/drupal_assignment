@@ -12,7 +12,6 @@ class OrderSummary extends React.Component {
     const customEmail = drupalSettings.order_details.customer_email;
     const orderNumber = drupalSettings.order_details.order_number;
     const mobileNumber = drupalSettings.order_details.mobile_number;
-    const paymentMethod = drupalSettings.order_details.payment_method;
     const deliveryType = drupalSettings.order_details.delivery_type_info.type;
     const expectedDelivery = drupalSettings.order_details.expected_delivery;
     const itemsCount = drupalSettings.order_details.number_of_items;
@@ -27,21 +26,19 @@ class OrderSummary extends React.Component {
     const customerAddress = ` ${country}, ${addressLine1}, ${addressLine2}, ${locality}, ${dependentLocality}`;
 
     const {
-      transactionId, paymentId, resultCode, bankDetails,
+      method, transactionId, paymentId, resultCode, bankDetails,
     } = drupalSettings.order_details.payment;
 
     // Get Billing info.
-    const paymentMethodCode = drupalSettings.order_details.payment_method_code;
     var billingAddress = '';
-    if (paymentMethodCode !== 'cashondelivery') {
-      const area_parent_display = drupalSettings.order_details.billing_info.area_parent_display;
-      const admin_area_display = drupalSettings.order_details.billing_info.administrative_area_display;
-      const billing_addressLine1 = drupalSettings.order_details.billing_info.address_line1;
-      const billing_addressLine2 = drupalSettings.order_details.billing_info.address_line2;
-      const billing_localty = drupalSettings.order_details.billing_info.dependent_locality;
-      billingAddress = ' ' + country + ', ' + area_parent_display + ', ' + admin_area_display + ', ' + billing_addressLine1 + ', ' + billing_addressLine2 + ', ' + billing_localty;
+    if (drupalSettings.order_details.billing !== null) {
+      const billingAreaParent = drupalSettings.order_details.billing.area_parent_display;
+      const billingArea = drupalSettings.order_details.billing.administrative_area_display;
+      const billingAddressLine1 = drupalSettings.order_details.billing.address_line1;
+      const billingAddressLine2 = drupalSettings.order_details.billing.address_line2;
+      const billingLocalty = drupalSettings.order_details.billing.dependent_locality;
+      billingAddress = ' ' + country + ', ' + billingAreaParent + ', ' + billingArea + ', ' + billingAddressLine1 + ', ' + billingAddressLine2 + ', ' + billingLocalty;
     }
-
 
     return (
       <div className="spc-order-summary">
@@ -67,11 +64,11 @@ class OrderSummary extends React.Component {
           <label htmlFor="spc-detail-open">{Drupal.t('order detail')}</label>
           <div className="spc-detail-content">
             <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={customerAddress} />
-            <ConditionalView condition={paymentMethodCode !== 'cashondelivery'}>
+            <ConditionalView condition={billingAddress !== ''}>
               <OrderSummaryItem type="address" label={Drupal.t('billing address')} name={customerName} address={billingAddress} />
             </ConditionalView>
             <OrderSummaryItem label={Drupal.t('mobile number')} value={mobileNumber} />
-            <OrderSummaryItem label={Drupal.t('payment method')} value={paymentMethod} />
+            <OrderSummaryItem label={Drupal.t('payment method')} value={method} />
             <OrderSummaryItem label={Drupal.t('delivery type')} value={deliveryType} />
             <OrderSummaryItem label={Drupal.t('expected delivery within')} value={expectedDelivery} />
             <OrderSummaryItem label={Drupal.t('number of items')} value={itemsCount} />

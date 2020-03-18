@@ -270,7 +270,6 @@ class AlshayaSpcOrderHelper {
     }
 
     $order = $this->ordersManager->getOrder($data['order_id']);
-
     if (empty($order) || $order['email'] != $data['email']) {
       throw new AccessDeniedHttpException();
     }
@@ -287,83 +286,20 @@ class AlshayaSpcOrderHelper {
    *   The response containing delivery methods data.
    */
   public function getSkuDetails(array $item) {
-    if (!empty($item['parent_item'])) {
-      $item = $item['parent_item'];
-    }
-    $skuEntity = SKU::loadFromSku($item['sku']);
-
-    if (!($skuEntity instanceof SKUInterface)) {
-      $data['extra_data']['cart_image'] = [
-        'url' => '',
-        'title' => '',
-        'alt' => '',
-      ];
-      $data['relative_link'] = '';
-    }
-    else {
-      $node = $this->skuManager->getDisplayNode($item['sku']);
-      if (!($node instanceof NodeInterface)) {
-        return NULL;
-      }
-
-      $link = $node->toUrl('canonical', ['absolute' => TRUE])
-        ->toString(TRUE)
-        ->getGeneratedUrl();
-
-      $data = $this->getSkuData($skuEntity, $link);
-      $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
-        '',
-        $node->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
-    }
-
-    $data['original_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['original_price']);
-    $data['final_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['base_price_incl_tax']);
     $data['title'] = $item['name'];
-    if ($item['product_type'] == 'configurable') {
-      $data['configurable_values'] = $item['extension_attributes']['product_options'][0]['attributes_info'];
-    }
-    else {
-      $data['configurable_values'] = [];
-    }
+    $data['final_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
+    $data['extra_data']['cart_image'] = NULL;
+    $data['relative_link'] = '';
+    $data['configurable_values'] = ($item['product_type'] === 'configurable')
+      ? $item['extension_attributes']['product_options'][0]['attributes_info']
+      : [];
 
-    return $data;
-  }
-
-  /**
-   * Wrapper function to get product data.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $link
-   *   Product link if main product.
-   *
-   * @return array
-   *   Product Data.
-   */
-  private function getSkuData(SKUInterface $sku, string $link = ''): array {
-    /** @var \Drupal\acq_sku\Entity\SKU $sku */
-
-    if ($link) {
-      $data['link'] = $link;
-    }
-
-    $data['extra_data'] = [];
-    $image = $this->getProductDisplayImage($sku, 'cart_thumbnail', 'cart');
-    if (!empty($image)) {
-      if ($image['#theme'] == 'image_style') {
-        $data['extra_data']['cart_image'] = [
-          'url' => ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']),
-          'title' => $image['#title'],
-          'alt' => $image['#alt'],
-        ];
-      }
-      elseif ($image['#theme'] == 'image') {
-        $data['extra_data']['cart_image'] = [
-          'url' => $image['#attributes']['src'],
-          'title' => $image['#attributes']['title'],
-          'alt' => $image['#attributes']['alt'],
-        ];
-      }
+    $node = $this->skuManager->getDisplayNode($item['sku']);
+    $skuEntity = SKU::loadFromSku($item['sku']);
+    if (($skuEntity instanceof SKUInterface) && ($node instanceof NodeInterface)) {
+      $data['title'] = $this->productInfoHelper->getTitle($skuEntity, 'basket');
+      $data['relative_link'] = $node->toUrl('canonical', ['absolute' => FALSE])->toString();
+      $data['extra_data']['cart_image'] = $this->getProductDisplayImage($skuEntity, 'cart_thumbnail', 'cart');
     }
 
     return $data;
@@ -383,44 +319,35 @@ class AlshayaSpcOrderHelper {
    *   Return string of uri or Null if not found.
    */
   public function getProductDisplayImage($sku, $image_style = '', $context = '') {
-    if (!($sku instanceof SKUInterface)) {
-      return [];
-    }
-
     // Load the first image.
     $media_image = $this->skuImagesManager->getFirstImage($sku, $context);
-    $image = [];
 
     // If we have image for the product.
     if (!empty($media_image)) {
-      $image = $this->skuManager->getSkuImage($media_image['drupal_uri'], $sku->label(), $image_style);
+      $image = [
+        'url' => ImageStyle::load($image_style)->buildUrl($media_image['drupal_uri']),
+        'title' => $sku->label(),
+        'alt' => $sku->label(),
+      ];
     }
-
-    // If still image is not available, set default one.
-    if (empty($image)) {
+    else {
+      // If still image is not available, set default one.
       $default_image_url = $this->skuImagesManager->getProductDefaultImageUrl();
 
       if ($default_image_url) {
         $image = [
-          '#theme' => 'image',
-          '#attributes' => [
-            'src' => $default_image_url,
-            'title' => $sku->label(),
-            'alt' => $sku->label(),
-            'class' => [
-              'product-default-image',
-            ],
-            '#skip_lazy_loading' => TRUE,
-          ],
+          'url' => $default_image_url,
+          'title' => $sku->label(),
+          'alt' => $sku->label(),
         ];
       }
     }
 
-    return $image;
+    return $image ?? [];
   }
 
   /**
-   * Gets HD / cnc order details.
+   * Get order details processed.
    *
    * @param array $order
    *   Order array.
@@ -428,7 +355,7 @@ class AlshayaSpcOrderHelper {
    * @return array
    *   Order details array.
    */
-  public function getOrderTypeDetails(array $order) {
+  public function getOrderDetails(array $order) {
     $orderDetails = [];
 
     $orderDetails['contact_no'] = $this->getFormattedMobileNumber($order['shipping']['address']['telephone']);
@@ -440,14 +367,10 @@ class AlshayaSpcOrderHelper {
 
     $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
     if ($shipping_method_code == $this->checkoutOptionManager->getClickandColectShippingMethod()) {
-      // Clickncollect store details.
-      $cc_config = $this->configFactory->get('alshaya_click_collect.settings');
-
       $orderDetails['type'] = 'cc';
 
-      $shipping_assignment = reset($order['extension']['shipping_assignments']);
-      $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
-      $cc_type = $shipping_assignment['shipping']['extension_attributes']['click_and_collect_type'];
+      $store_code = $order['shipping']['extension_attributes']['store_code'];
+      $cc_type = $order['shipping']['extension_attributes']['click_and_collect_type'];
       $orderDetails['view_on_map_link'] = '';
 
       // Getting store node object from store code.
@@ -460,10 +383,12 @@ class AlshayaSpcOrderHelper {
         if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
           $lat = $lat_lng[0]['lat'];
           $lng = $lat_lng[0]['lng'];
-          $orderDetails['view_on_map_link'] = 'http://maps.google.com/?q=' . $lat . ',' . $lng;
+          $orderDetails['view_on_map_link'] = 'https://maps.google.com/?q=' . $lat . ',' . $lng;
         }
 
-        $cc_text = ($cc_type == 'reserve_and_collect') ? $cc_config->get('click_collect_rnc') : $store_node->get('field_store_sts_label')->getString();
+        $cc_text = ($cc_type == 'reserve_and_collect')
+          ? $this->configFactory->get('alshaya_click_collect.settings')->get('click_collect_rnc')
+          : $store_node->get('field_store_sts_label')->getString();
 
         if (!empty($cc_text)) {
           $orderDetails['delivery_method'] = $this->t('@shipping_method_name (@shipping_method_description)', [
@@ -476,19 +401,45 @@ class AlshayaSpcOrderHelper {
     else {
       $orderDetails['type'] = $this->t('Home delivery');
       $orderDetails['delivery_type'] = 'HD';
+      $orderDetails['delivery_address'] = $this->getProcessedAddress($order['shipping']['address']);
+    }
 
-      $shipping_address = $order['shipping']['address'];
+    $payment = $this->checkoutOptionManager->loadPaymentMethod($order['payment']['method']);
+    $orderDetails['payment']['method'] = $payment->label();
+    $orderDetails['payment']['methodCode'] = $order['payment']['method'];
 
-      $shipping_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
-      $country_list = $this->countryRepository->getList();
-      $shipping_address_array['country'] = $country_list[$shipping_address_array['country_code']];
-      $shipping_address_array['telephone'] = $this->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
+    $orderDetails['billing'] = ($order['payment']['method'] === 'cashondelivery')
+      ? NULL
+      : $this->getProcessedAddress($order['billing']);
 
-      $orderDetails['delivery_address'] = $shipping_address_array;
+    if ($order['payment']['method'] === 'knet') {
+      // @TODO: Get this information from Magento in a better way.
+      $orderDetails['payment']['transactionId'] = $order['payment']['additional_information'][0];
+      $orderDetails['payment']['paymentId'] = $order['payment']['additional_information'][2];
+
+      // @TODO: Get this information from Magento.
+      $orderDetails['payment']['resultCode'] = 'CAPTURED';
+    }
+    elseif ($order['payment']['method'] == 'banktransfer' && !empty(array_filter($order['extension']['bank_transfer_instructions']))) {
+      $instructions = $order['extension']['bank_transfer_instructions'];
+      $bank_transfer = [
+        '#theme' => 'banktransfer_payment_details',
+        '#account_number' => $instructions['account_number'],
+        '#address' => $instructions['address'],
+        '#bank_name' => $instructions['bank_name'],
+        '#beneficiary_name' => $instructions['beneficiary_name'],
+        '#branch' => $instructions['branch'],
+        '#iban' => $instructions['iban'],
+        '#swift_code' => $instructions['swift_code'],
+        '#purpose' => $this->t('Purchase of Goods - @order_id', [
+          '@order_id' => $order['increment_id'],
+        ]),
+      ];
+
+      $orderDetails['payment']['bankDetails'] = $this->renderer->renderPlain($bank_transfer);
     }
 
     return $orderDetails;
-
   }
 
   /**
@@ -510,18 +461,23 @@ class AlshayaSpcOrderHelper {
   }
 
   /**
-   * Get Billing address.
+   * Get processed address.
    *
-   * @param array $order
-   *   Order details.
+   * @param array $address
+   *   Address details.
    *
    * @return array
-   *   Billing address array.
+   *   Processed address array.
    */
-  public function getBillingAddress(array $order) {
-    $billing_address_array = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
-    $billing_address_array['telephone'] = $this->getFormattedMobileNumber($billing_address_array['mobile_number']['value']);
-    return $billing_address_array;
+  protected function getProcessedAddress(array $address) {
+    $processed = $this->addressBookManager->getAddressArrayFromMagentoAddress($address);
+
+    $country_list = $this->countryRepository->getList();
+    $processed['country'] = $country_list[$processed['country_code']];
+
+    $processed['telephone'] = $this->getFormattedMobileNumber($processed['mobile_number']['value']);
+
+    return $processed;
   }
 
 }

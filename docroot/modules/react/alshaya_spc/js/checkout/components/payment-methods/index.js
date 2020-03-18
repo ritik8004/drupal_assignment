@@ -56,7 +56,7 @@ export default class PaymentMethods extends React.Component {
 
   getPaymentMethods = (active) => {
     const { cart } = this.props;
-    const paymentMethods = [];
+    let paymentMethods = [];
 
     if (active) {
       Object.entries(cart.cart.payment_methods).forEach(([, method]) => {
@@ -65,6 +65,10 @@ export default class PaymentMethods extends React.Component {
         if (method.code in drupalSettings.payment_methods) {
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
         }
+      });
+
+      paymentMethods = paymentMethods.sort(function(a, b) {
+        return a.weight - b.weight;
       });
     } else {
       const { cart } = this.props;

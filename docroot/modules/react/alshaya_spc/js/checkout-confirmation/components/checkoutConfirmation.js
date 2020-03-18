@@ -26,8 +26,6 @@ class CheckoutConfirmation extends React.Component {
 
   render() {
     const { items, totals, number_of_items: itemsTotal } = drupalSettings.order_details;
-    const inStock = [];
-    const promo = [];
 
     return (
       <>
@@ -44,8 +42,7 @@ class CheckoutConfirmation extends React.Component {
               item_qty={itemsTotal}
               items={items}
               totals={totals}
-              in_stock={inStock}
-              cart_promo={promo}
+              cart_promo={[]}
               show_checkout_button={false}
             />
           </div>
