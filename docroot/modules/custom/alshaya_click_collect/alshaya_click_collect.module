@@ -7,8 +7,11 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_theme().
@@ -167,4 +170,22 @@ function alshaya_click_collect_sku_variant_info_alter(array &$variant, SKUInterf
   // Adding shipping options.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   $variant['click_collect'] = alshaya_acm_product_available_click_collect($child);
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_click_collect_block_access(Block $block, $operation, AccountInterface $account) {
+  $route = \Drupal::routeMatch()->getRouteName();
+  if ($route !== 'view.stores_finder.page_2') {
+    return AccessResult::neutral();
+  }
+
+  $blocks_to_check = ['exposedformstores_finderpage_1'];
+  if ($operation === 'view' && in_array($block->id(), $blocks_to_check)) {
+    $feature_status = \Drupal::config('alshaya_click_collect.settings')->get('feature_status');
+    return AccessResult::forbiddenIf($feature_status === 'disabled');
+  }
+
+  return AccessResult::neutral();
 }
