@@ -320,7 +320,7 @@ class AlshayaSpcOrderHelper {
     $data['final_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['base_price_incl_tax']);
     $data['title'] = $item['name'];
     if ($item['product_type'] == 'configurable') {
-      $data['configurable_values'] = $item["extension_attributes"]["product_options"][0]["attributes_info"];
+      $data['configurable_values'] = $item['extension_attributes']['product_options'][0]['attributes_info'];
     }
     else {
       $data['configurable_values'] = [];
