@@ -18,3 +18,4 @@ permissions:
   - 'restful get stock'
   - 'restful get product_exclude_linked'
   - 'restful get magazine_detail_page'
+  - 'restful get magazine_block'
