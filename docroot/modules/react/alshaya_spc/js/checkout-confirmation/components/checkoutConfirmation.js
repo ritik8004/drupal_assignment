@@ -26,7 +26,7 @@ class CheckoutConfirmation extends React.Component {
 
   render() {
     const { items, totals, number_of_items: itemsTotal } = drupalSettings.order_details;
-    const in_stock = [];
+    const inStock = [];
     const promo = [];
 
     return (
@@ -40,7 +40,14 @@ class CheckoutConfirmation extends React.Component {
             <OrderSummary />
           </div>
           <div className="spc-sidebar">
-            <OrderSummaryBlock item_qty={itemsTotal} items={items} totals={totals} in_stock={in_stock} cart_promo={promo} show_checkout_button={false} />
+            <OrderSummaryBlock
+              item_qty={itemsTotal}
+              items={items}
+              totals={totals}
+              in_stock={inStock}
+              cart_promo={promo}
+              show_checkout_button={false}
+            />
           </div>
         </div>
         <div className="spc-post-content" />
