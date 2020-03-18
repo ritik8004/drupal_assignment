@@ -367,7 +367,6 @@ class AlshayaSpcController extends ControllerBase {
     $settings['order_details']['payment_method'] = $payment->label();
     $settings['order_details']['payment_method_code'] = $order['payment']['method'];
 
-
     if ($order['payment']['method'] !== 'cashondelivery') {
       // Populate billing address array.
       $settings['order_details']['billing_info'] = $this->orderHelper->getBillingAddress($order);
