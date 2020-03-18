@@ -27,9 +27,9 @@ export default class MiniCart extends React.Component {
 
   componentDidMount() {
     try {
-      const cart_data = fetchCartData();
-      if (cart_data instanceof Promise) {
-        cart_data.then((result) => {
+      const cartData = fetchCartData();
+      if (cartData instanceof Promise) {
+        cartData.then((result) => {
           if (typeof result === 'undefined') {
             result = this.emptyResult;
           } else if (typeof result.error !== 'undefined' && result.error) {
@@ -49,10 +49,10 @@ export default class MiniCart extends React.Component {
           }
 
           // Store info in storage.
-          const data_to_store = {
+          const dataToStore = {
             cart: result,
           };
-          addInfoInStorage(data_to_store);
+          addInfoInStorage(dataToStore);
 
           // Trigger event so that data can be passed to other components.
           this.dispatchRefereshCart(result);
@@ -75,10 +75,10 @@ export default class MiniCart extends React.Component {
           });
 
           // Store info in storage.
-          const data_to_store = {
+          const dataToStore = {
             cart: data,
           };
-          addInfoInStorage(data_to_store);
+          addInfoInStorage(dataToStore);
 
           if (data.items.length === 0) {
             this.setState({
