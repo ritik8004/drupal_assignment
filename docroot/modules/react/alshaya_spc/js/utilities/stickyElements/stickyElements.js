@@ -57,7 +57,9 @@ function stickyMobileCartPreview() {
     superCatFlag = true;
   } else {
     brandingMenuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
-    cartPreview[0].style.top = `${brandingMenuHeight}px`;
+    if (cartPreview[0] !== undefined) {
+      cartPreview[0].style.top = `${brandingMenuHeight}px`;
+    }
   }
   window.addEventListener('scroll', () => {
     // Mobile cart sticky header.
