@@ -32,7 +32,7 @@ export const checkoutAddressProcess = function (e, cart) {
   }
 
   // Get Prepare address.
-  const form_data = prepareAddressDataFromForm(e.target.elements);
+  const formData = prepareAddressDataFromForm(e.target.elements);
 
   const validationData = {
     mobile: e.target.elements.mobile.value,
@@ -89,26 +89,26 @@ export const checkoutAddressProcess = function (e, cart) {
     }
 
     // Get shipping methods based on address info.
-    const cart_info = addShippingInCart('update shipping', form_data);
-    if (cart_info instanceof Promise) {
-      cart_info.then((cart_result) => {
+    const cartInfo = addShippingInCart('update shipping', formData);
+    if (cartInfo instanceof Promise) {
+      cartInfo.then((cartResult) => {
         // Remove the loader.
         removeFullScreenLoader();
 
-        let cart_data = {};
+        let cartData = {};
         // If any error, don't process further.
-        if (cart_result.error !== undefined) {
-          cart_data = {
-            error_message: cart_result.error_message,
+        if (cartResult.error !== undefined) {
+          cartData = {
+            error_message: cartResult.error_message,
           };
         }
         else {
-          cart_data = getInfoFromStorage();
-          cart_data.cart = cart_result;
+          cartData = getInfoFromStorage();
+          cartData.cart = cartResult;
         }
 
         // Trigger event.
-        triggerCheckoutEvent('refreshCartOnAddress', cart_data);
+        triggerCheckoutEvent('refreshCartOnAddress', cartData);
       });
     }
   }).catch((error) => {
@@ -123,8 +123,8 @@ export const checkoutAddressProcess = function (e, cart) {
 export const validateContactInfo = (e, validateEmail) => {
   let isError = false;
   const name = e.target.elements.fullname.value.trim();
-  const splited_name = name.split(' ');
-  if (name.length === 0 || splited_name.length === 1) {
+  const splitedName = name.split(' ');
+  if (name.length === 0 || splitedName.length === 1) {
     document.getElementById('fullname-error').innerHTML = Drupal.t('Please enter your full name.');
     document.getElementById('fullname-error').classList.add('error');
     isError = true;
@@ -170,8 +170,8 @@ export const validateAddressFields = (e, validateEmail) => {
       if (field.required === true || (
         key === 'area_parent' || key === 'administrative_area'
       )) {
-        const add_field = e.target.elements[key].value.trim();
-        if (add_field.length === 0) {
+        const addField = e.target.elements[key].value.trim();
+        if (addField.length === 0) {
           document.getElementById(`${key}-error`).innerHTML = Drupal.t('Please enter @label.', { '@label': field.label });
           document.getElementById(`${key}-error`).classList.add('error');
           isError = true;
@@ -193,7 +193,7 @@ export const validateAddressFields = (e, validateEmail) => {
  * @param {*} address
  */
 export const formatAddressDataForEditForm = (address) => {
-  const formatted_address = {
+  const formattedAddress = {
     static: {
       fullname: `${address.firstname} ${address.lastname}`,
       email: address.email,
@@ -203,11 +203,11 @@ export const formatAddressDataForEditForm = (address) => {
 
   Object.entries(drupalSettings.address_fields).forEach(
     ([key, field]) => {
-      formatted_address[field.key] = address[field.key];
+      formattedAddress[field.key] = address[field.key];
     },
   );
 
-  return formatted_address;
+  return formattedAddress;
 };
 
 /**
@@ -306,36 +306,36 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           target.email = {
             value: shipping.email,
           };
-          const form_data = prepareAddressDataFromForm(target);
+          const formData = prepareAddressDataFromForm(target);
 
           // For logged in user add customer id from shipping.
           if (drupalSettings.user.uid > 0) {
-            form_data.static.customer_id = shipping.customer_id;
+            formData.static.customer_id = shipping.customer_id;
           }
 
           // Update billing address.
-          const cart_data = addBillingInCart('update billing', form_data);
-          if (cart_data instanceof Promise) {
-            cart_data.then((cart_result) => {
-              let cart_info = {
-                cart: cart_result,
+          const cartData = addBillingInCart('update billing', formData);
+          if (cartData instanceof Promise) {
+            cartData.then((cartResult) => {
+              let cartInfo = {
+                cart: cartResult,
               };
 
               // If error.
-              if (cart_result.error !== undefined) {
+              if (cartResult.error !== undefined) {
                 // In case of error, prepare error info
                 // and call refresh cart so that message is shown.
-                cart_info = {
-                  error_message: cart_result.error_message,
+                cartInfo = {
+                  error_message: cartResult.error_message,
                 };
               } else {
                 // Merging with existing local.
-                cart_info = getInfoFromStorage();
-                cart_info.cart = cart_result;
+                cartInfo = getInfoFromStorage();
+                cartInfo.cart = cartResult;
               }
 
               // Trigger the event for updte.
-              triggerCheckoutEvent('onBillingAddressUpdate', cart_info);
+              triggerCheckoutEvent('onBillingAddressUpdate', cartInfo);
 
               // Remove loader.
               removeFullScreenLoader();
