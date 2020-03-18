@@ -429,3 +429,13 @@
     }
   }
 }
+
+.content {
+  &__main {
+    @include breakpoint($only-mobile) {
+      .order-quantity-limit-message.mobile-only {
+        bottom: 3rem;
+      }
+    }
+  }
+}

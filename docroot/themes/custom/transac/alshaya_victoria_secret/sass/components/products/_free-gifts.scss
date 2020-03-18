@@ -1,0 +1,44 @@
+.path--cart {
+  .free-gift-container {
+    @include breakpoint($only-mobile) {
+      top: 9.625rem;
+    }
+  }
+}
+
+// for all browsers.
+body {
+  //free gift list.
+  &.nodetype--acq_product:not(.free-gift-detail-modal).free-gift-promo-list-overlay {
+    .ui-dialog {
+      @include breakpoint($desktop) {
+        padding: calc((100vh - 35rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+      }
+    }
+  }
+
+  //free gift detail.
+  &.nodetype--acq_product {
+    &.free-gift-promo-list-overlay.free-gift-detail-modal {
+      .ui-dialog {
+        .ui-dialog-content#drupal-modal {
+          @include breakpoint($desktop) {
+            height: 42rem !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+// specific to IE
+body.ie {
+  //free gift list.
+  &.nodetype--acq_product:not(.free-gift-detail-modal).free-gift-promo-list-overlay {
+    .item-list {
+      @include breakpoint($desktop) {
+        overflow-y: hidden;
+      }
+    }
+  }
+}

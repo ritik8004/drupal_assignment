@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 use Drupal\search_api\IndexInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -568,4 +569,25 @@ function alshaya_seo_transac_simple_sitemap_arbitrary_links_alter(&$arbitrary_li
  */
 function alshaya_seo_transac_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
   $reset[] = 'dynamic_yield.settings';
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function alshaya_seo_transac_views_pre_render(ViewExecutable $view) {
+  if (!_alshaya_seo_process_gtm()) {
+    return;
+  }
+  if ($view->id() == 'search') {
+    // Attach GTM product js on product search view.
+    $view->element['#attached']['library'][] = 'alshaya_seo_transac/search_list';
+  }
+  elseif ($view->id() == 'alshaya_product_list') {
+    // Attach GTM product js on product list view.
+    $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_list';
+  }
+  elseif ($view->id() == 'product_slider') {
+    // Attach GTM slider js on product slider.
+    $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
+  }
 }

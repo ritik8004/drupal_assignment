@@ -46,6 +46,10 @@
       text-align: $left;
       color: $plp_tile_product_title;
 
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0.4375rem;
+      }
+
       .field--name-name {
         text-transform: uppercase;
         padding-#{$left}: 0;
@@ -53,6 +57,32 @@
 
       .price-block {
         font-family: $alshaya-bold;
+      }
+    }
+  }
+
+  .c-sidebar-first {
+    @include breakpoint($desktop) {
+      width: 21.76%;
+      max-width: 16.8125rem;
+    }
+  }
+
+  main {
+    @include breakpoint($desktop) {
+      width: 74.51%;
+      max-width: 57.5625rem;
+    }
+  }
+
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 21.75rem;
+          }
+        }
       }
     }
   }

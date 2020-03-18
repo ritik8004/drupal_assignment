@@ -188,50 +188,56 @@
   }
 }
 
-.basic-details-wrapper .field--name-field-skus {
-  .form-item-configurables-article-castor-id {
-    label {
-      @include u-visibility(none);
-    }
+.basic-details-wrapper {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 2rem;
   }
 
-  .form-item-configurables-size {
-    @include breakpoint($only-mobile) {
-      padding: 0;
-
-      &::after {
-        top: 0.875rem;
-        z-index: 1;
-      }
-
-      label {
-        top: -0.625rem;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      @include select-wrapper(12.3125rem);
-
-      padding: 0;
-      margin-top: 0.5em;
-      position: relative;
-      width: 100%;
-      min-height: 2.188rem;
-
-      &::after {
-        top: 0.5rem;
-        z-index: 1;
-        display: none;
-      }
-
+  .field--name-field-skus {
+    .form-item-configurables-article-castor-id {
       label {
         @include u-visibility(none);
       }
+    }
 
-      select.form-select {
-        @include select-style(12.3125rem);
+    .form-item-configurables-size {
+      @include breakpoint($only-mobile) {
+        padding: 0;
 
+        &::after {
+          top: 0.875rem;
+          z-index: 1;
+        }
+
+        label {
+          top: -0.625rem;
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        @include select-wrapper(12.3125rem);
+
+        padding: 0;
+        margin-top: 0.5em;
+        position: relative;
         width: 100%;
+        min-height: 2.188rem;
+
+        &::after {
+          top: 0.5rem;
+          z-index: 1;
+          display: none;
+        }
+
+        label {
+          @include u-visibility(none);
+        }
+
+        select.form-select {
+          @include select-style(12.3125rem);
+
+          width: 100%;
+        }
       }
     }
   }
@@ -769,7 +775,6 @@
 
             @include breakpoint($only-mobile) {
               width: 5.25rem;
-              height: 7.785rem;
               margin-bottom: 0.625rem;
             }
 

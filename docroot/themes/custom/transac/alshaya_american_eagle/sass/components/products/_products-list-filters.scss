@@ -12,9 +12,9 @@
         .block-views-exposed-filter-blocksearch-page {
           fieldset.form-wrapper {
             .fieldset-legend {
-              &::after {
-                font-weight: bold;
-                top: 1.625rem;
+              @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+                #{$right}: 1.6875rem;
+                top: 1.5rem;
               }
             }
           }
@@ -22,10 +22,9 @@
 
         .c-facet.c-accordion {
           .c-accordion__title {
-            &::after {
-              background: none;
-              font-weight: bold;
-              top: 1.8125rem;
+            @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+              #{$right}: 1.6875rem;
+              top: 1.5rem;
             }
           }
         }

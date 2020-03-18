@@ -1,0 +1,7 @@
+.order-quantity-limit-message {
+  .order-qty-limit-msg-inner-wrapper {
+    &::before {
+      padding-bottom: 0.125rem;
+    }
+  }
+}
