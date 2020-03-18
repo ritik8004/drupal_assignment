@@ -7,6 +7,8 @@ import NewCard from './components/NewCard';
 import { CheckoutComContext } from '../../../context/CheckoutCom';
 import SelectedCard from './components/SelectedCard';
 import { setStorageInfo } from '../../../utilities/storage';
+import {dispatchCustomEvent} from "../../../utilities/events";
+import {getStringMessage} from "../../../utilities/strings";
 
 class PaymentMethodCheckoutCom extends React.Component {
   static contextType = CheckoutComContext;
@@ -42,7 +44,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     this.setState({
       openSavedCardListModal: false,
     });
-  }
+  };
 
   labelEffect = (e, handler) => {
     if (handler === 'blur') {
@@ -52,12 +54,12 @@ class PaymentMethodCheckoutCom extends React.Component {
         e.currentTarget.classList.remove('focus');
       }
     }
-  }
+  };
 
   handleCardCvvChange = (event) => {
     if (window.CheckoutKit === undefined) {
       console.error('CheckoutKit not available');
-      throw 500;
+      return;
     }
 
     const cvv = parseInt(event.target.value);
@@ -67,7 +69,7 @@ class PaymentMethodCheckoutCom extends React.Component {
       cvvValid: valid,
       cvv,
     });
-  }
+  };
 
   validateBeforePlaceOrder = () => {
     const {
@@ -83,15 +85,23 @@ class PaymentMethodCheckoutCom extends React.Component {
 
     if (selectedCard === 'new' && !(numberValid && expiryValid && cvvValid)) {
       console.error('Client side validation failed for credit card info');
-      throw 'UnexpectedValueException';
-    } else if (window.CheckoutKit === undefined) {
-      console.error('Checkout kit not loaded');
-      throw 500;
+      return false;
     }
 
     if (selectedCard === 'existing' && !cvvValid) {
       console.error('Client side validation failed for credit card info');
-      throw 'UnexpectedValueException';
+      return false;
+    }
+
+    if (window.CheckoutKit === undefined) {
+      console.error('Checkout kit not loaded');
+
+      dispatchCustomEvent('spcCheckoutMessageUpdate', {
+        type: 'error',
+        message: getStringMessage('payment_error'),
+      });
+
+      return false;
     }
 
     showFullScreenLoader();
@@ -119,9 +129,8 @@ class PaymentMethodCheckoutCom extends React.Component {
       window.CheckoutKit.createCardToken(ccInfo, this.handleCheckoutResponse);
     }
 
-    // Throwing 200 error, we want to handle place order in custom way.
-    throw 200;
-  }
+    return false;
+  };
 
   handleCheckoutResponse = (data) => {
     // @TODO: Handle errors.

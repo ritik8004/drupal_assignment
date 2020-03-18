@@ -32,6 +32,7 @@ import {
 import { createFetcher } from '../../../utilities/api/fetcher';
 
 import ConditionalView from '../../../common/components/conditional-view';
+import {getStringMessage} from "../../../utilities/strings";
 
 window.fetchStore = 'idle';
 
@@ -52,11 +53,6 @@ export default class Checkout extends React.Component {
 
   componentDidMount() {
     try {
-      if (Cookies.get('middleware_payment_error')) {
-        // @TODO: Show error message in error component.
-        alert(Cookies.get('middleware_payment_error'));
-        Cookies.remove('middleware_payment_error');
-      }
       // If logged in user.
       if (window.drupalSettings.user.uid > 0) {
         const tempCart = getInfoFromStorage();
@@ -97,7 +93,33 @@ export default class Checkout extends React.Component {
 
     // Make sidebar sticky.
     stickySidebar();
+
+    const paymentError = Cookies.get('middleware_payment_error');
+    if (paymentError !== undefined && paymentError !== null && paymentError.length > 0) {
+      Cookies.remove('middleware_payment_error');
+      const message = (paymentError === 'declined')
+        ? getStringMessage('transaction_failed')
+        : getStringMessage('payment_error');
+
+      this.updateCheckoutMessage('error', message);
+    }
+
+    document.addEventListener('spcCheckoutMessageUpdate', this.handleMessageUpdateEvent, false);
   }
+
+  componentWillUnmount() {
+    document.removeEventListener('spcCheckoutMessageUpdate', this.handleMessageUpdateEvent, false);
+  }
+
+  handleMessageUpdateEvent = (event) => {
+    const { type, message } = event.detail;
+    this.updateCheckoutMessage(type, message);
+  };
+
+  updateCheckoutMessage = (type, message) => {
+    this.setState({messageType: type, errorSuccessMessage: message});
+    // @TODO: Add smooth scroll here after it is merged.
+  };
 
   /**
    * Update the cart in storage.
@@ -108,18 +130,9 @@ export default class Checkout extends React.Component {
 
     // If there is error on cart update.
     if (cart.error_message !== undefined) {
-      this.setState({
-        messageType: 'error',
-        errorSuccessMessage: cart.error_message,
-      });
+      this.updateCheckoutMessage('error', cart.error_message);
     } else {
       addInfoInStorage(cart);
-
-      this.setState({
-        cart,
-        messageType: 'success',
-        errorSuccessMessage: null,
-      });
     }
   };
 
@@ -174,7 +187,7 @@ export default class Checkout extends React.Component {
   };
 
   validateBeforePlaceOrder = () => {
-    this.paymentMethods.current.validateBeforePlaceOrder();
+    return this.paymentMethods.current.validateBeforePlaceOrder();
   };
 
   /**

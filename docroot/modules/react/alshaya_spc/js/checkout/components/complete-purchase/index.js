@@ -15,24 +15,19 @@ export default class CompletePurchase extends React.Component {
     const { cart, validateBeforePlaceOrder } = this.props;
     // If purchase button is not clickable.
     if (!this.completePurchaseButtonActive(cart)) {
-      return false;
+      return;
     }
 
     try {
-      validateBeforePlaceOrder();
-    } catch (error) {
-      // Error 200 means everything is fine.
-      // Place order will be done after payment validation is completed.
-      if (error !== 200 || (typeof error === 'object' && error.message !== '200')) {
-        console.error(error);
+      const validated = validateBeforePlaceOrder();
+      if (validated === false) {
+        return;
       }
 
-      return null;
+      placeOrder(cart.selected_payment_method);
+    } catch (error) {
+      console.error(error);
     }
-
-    placeOrder(cart.selected_payment_method);
-
-    return null;
   };
 
   /**
@@ -42,7 +37,7 @@ export default class CompletePurchase extends React.Component {
   completePurchaseButtonActive = (cart) => {
     // If delivery method selected same as what in cart.
     const deliverSameAsInCart = isDeliveryTypeSameAsInCart(cart);
-    // If shiiping info set in cart or not.
+    // If shipping info set in cart or not.
     const isShippingSet = (cart.cart.carrier_info !== null);
     // If billing info set in cart or not.
     let isBillingSet = false;

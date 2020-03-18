@@ -2,11 +2,8 @@ import axios from 'axios';
 import { removeCartFromStorage } from './storage';
 import { updateCartApiUrl } from './update_cart';
 import { cartAvailableInStorage } from './get_cart';
-
-/**
- * Default error message on checkout screen.
- */
-export const getDefaultCheckoutErrorMessage = () => Drupal.t('Sorry, something went wrong. Please try again later.');
+import {getStringMessage} from "./strings";
+import {dispatchCustomEvent} from "./events";
 
 /**
  * Get shipping methods.
@@ -62,8 +59,12 @@ export const placeOrder = function (payment_method) {
           return;
         }
 
-        // @TODO: Show exception to user.
-        console.error(response);
+        dispatchCustomEvent('spcCheckoutMessageUpdate', {
+          type: 'error',
+          message: response.data.error_message,
+        });
+
+        removeFullScreenLoader();
       },
       (error) => {
         // Processing of error here.
@@ -109,7 +110,7 @@ export const addShippingInCart = function (action, data) {
         // Processing of error here.
         ({
           error: true,
-          error_message: getDefaultCheckoutErrorMessage(),
+          error_message: getStringMessage('global_error'),
         })
       ,
     )
@@ -147,7 +148,7 @@ export const addBillingInCart = function (action, data) {
         // Processing of error here.
         ({
           error: true,
-          error_message: getDefaultCheckoutErrorMessage(),
+          error_message: getStringMessage('global_error'),
         })
       ,
     )
@@ -160,6 +161,11 @@ export const addBillingInCart = function (action, data) {
  * Place ajax fulll screen loader.
  */
 export const showFullScreenLoader = () => {
+  const loaderDivExisting = document.getElementsByClassName('ajax-progress-fullscreen');
+  if (loaderDivExisting.length > 0) {
+    return;
+  }
+
   const loaderDiv = document.createElement('div');
   loaderDiv.className = 'ajax-progress ajax-progress-fullscreen';
   document.body.appendChild(loaderDiv);
@@ -170,8 +176,8 @@ export const showFullScreenLoader = () => {
  */
 export const removeFullScreenLoader = () => {
   const loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
-  if (loaderDiv.length > 0) {
-    document.body.removeChild(loaderDiv[0]);
+  while (loaderDiv.length > 0) {
+    loaderDiv[0].parentNode.removeChild(loaderDiv[0]);
   }
 };
 

@@ -4,9 +4,6 @@ import SectionTitle from '../../../utilities/section-title';
 import PaymentMethod from '../payment-method';
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
-  addInfoInStorage
-} from '../../../utilities/storage';
-import {
   isDeliveryTypeSameAsInCart,
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
@@ -80,7 +77,7 @@ export default class PaymentMethods extends React.Component {
   };
 
   changePaymentMethod = (method) => {
-    const { cart } = this.props;
+    const { cart, refreshCart } = this.props;
     if (!this.isActive() || cart.selected_payment_method === method) {
       return;
     }
@@ -94,7 +91,7 @@ export default class PaymentMethods extends React.Component {
         // Selected key is not set, we set.
         if (cart.selected_payment_method === undefined) {
           cart.selected_payment_method = method;
-          addInfoInStorage(cart);
+          refreshCart(cart);
         }
         return;
     }
@@ -121,7 +118,7 @@ export default class PaymentMethods extends React.Component {
         // @TODO: Handle exception.
         document.getElementById(`payment-method-${method}`).checked = true;
 
-        const { cart: cartData, refreshCart } = this.props;
+        const { cart: cartData } = this.props;
         cartData.selected_payment_method = method;
         cartData.cart = result;
         refreshCart(cartData);
@@ -135,7 +132,7 @@ export default class PaymentMethods extends React.Component {
     const { cart } = this.props;
 
     // Trigger validate of selected component.
-    this.paymentMethodRefs[cart.selected_payment_method].current.validateBeforePlaceOrder();
+    return this.paymentMethodRefs[cart.selected_payment_method].current.validateBeforePlaceOrder();
   };
 
   render = () => {

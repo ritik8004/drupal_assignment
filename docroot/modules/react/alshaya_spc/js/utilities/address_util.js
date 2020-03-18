@@ -3,7 +3,6 @@ import axios from 'axios';
 import {
   addShippingInCart,
   removeFullScreenLoader,
-  getDefaultCheckoutErrorMessage,
   triggerCheckoutEvent, validateInfo,
 } from './checkout_util';
 import {
@@ -13,6 +12,7 @@ import {
 import {
   getInfoFromStorage,
 } from './storage';
+import {getStringMessage} from "./strings";
 
 /**
  * Get the address list of the current logged in user.
@@ -53,7 +53,7 @@ export const addEditUserAddress = function (address) {
       (response) => response.data,
       (error) => ({
         error: true,
-        error_message: getDefaultCheckoutErrorMessage(),
+        error_message: getStringMessage('global_error'),
       }),
     )
     .catch((error) => {
