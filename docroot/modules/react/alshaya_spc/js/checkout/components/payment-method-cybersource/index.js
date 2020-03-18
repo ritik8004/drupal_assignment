@@ -159,8 +159,15 @@ class PaymentMethodCybersource extends React.Component {
     axios.post(apiUrl, { type: cardType }).then((response) => {
       // Handle exception.
       if (response.data.error !== undefined) {
-        removeFullScreenLoader();
         console.error(response.data);
+
+        dispatchCustomEvent('spcCheckoutMessageUpdate', {
+          type: 'error',
+          message: getStringMessage('payment_error'),
+        });
+
+        removeFullScreenLoader();
+
         return;
       }
 
