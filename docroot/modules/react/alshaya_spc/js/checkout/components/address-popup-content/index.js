@@ -13,7 +13,7 @@ const AddressContent = (props) => {
   } = props;
 
   if (window.drupalSettings.user.uid > 0
-    && cart.shipping_address !== null) {
+    && cart.cart.shipping_address !== null) {
     return <AddressList cart={cart} closeModal={closeModal} />;
   }
 

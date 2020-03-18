@@ -80,6 +80,12 @@ function _alshaya_spc_translations() {
       'select @label' => [
         'ar' => 'label@ تحديد',
       ],
+      'Full Name' => [
+        'ar' => 'الاسم الكامل',
+      ],
+      'find your nearest store' => [
+        'ar' => 'ابحث عن المحلات القريبة إليك لاستلام طلبيتك',
+      ],
     ],
   ];
 }

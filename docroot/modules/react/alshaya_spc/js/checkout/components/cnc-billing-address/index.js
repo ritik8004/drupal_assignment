@@ -5,7 +5,7 @@ import BillingInfo from '../billing-info';
 import SectionTitle from '../../../utilities/section-title';
 
 export default class CnCBillingAddress extends React.Component {
-  isMount = false;
+  isComponentMounted = false;
 
   constructor(props) {
     super(props);
@@ -15,12 +15,12 @@ export default class CnCBillingAddress extends React.Component {
   }
 
   componentDidMount() {
-    this.isMount = true;
+    this.isComponentMounted = true;
     document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
   }
 
   componentWillUnmount() {
-    this.isMount = false;
+    this.isComponentMounted = false;
     document.removeEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
   }
 
@@ -42,7 +42,7 @@ export default class CnCBillingAddress extends React.Component {
   processBillingUpdate = (e) => {
     const data = e.detail.data();
     const { refreshCart } = this.props;
-    if (this.isMount) {
+    if (this.isComponentMounted) {
       // Close modal.
       this.closePopup();
       // Refresh cart.
