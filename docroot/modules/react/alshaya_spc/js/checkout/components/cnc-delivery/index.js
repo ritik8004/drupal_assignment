@@ -4,6 +4,7 @@ import Popup from 'reactjs-popup';
 import { checkoutAddressProcess } from '../../../utilities/checkout_address_process';
 import Loading from '../../../utilities/loading';
 import ClickCollectContainer from '../click-collect';
+import {cleanMobileNumber} from "../../../utilities/checkout_util";
 
 class ClicknCollectDeiveryInfo extends React.Component {
   _isMounted = true;
@@ -90,7 +91,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
           <div className="contact-name">
             {`${shippingAddress.firstname} ${shippingAddress.lastname}`}
           </div>
-          <div className="contact-telephone">{`+${drupalSettings.country_mobile_code} ${shippingAddress.telephone}`}</div>
+          <div className="contact-telephone">{`+${drupalSettings.country_mobile_code} ${cleanMobileNumber(shippingAddress.telephone)}`}</div>
           <div
             className="spc-change-address-link"
             onClick={() => this.openModal(true)}

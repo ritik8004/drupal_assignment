@@ -466,9 +466,14 @@ class AlshayaSpcController extends ControllerBase {
       switch ($key) {
         case 'mobile':
           $country_code = _alshaya_custom_get_site_level_country_code();
-          $country_mobile_code = $this->mobileUtil->getCountryCode($country_code);
+          $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
+
+          if (strpos($value, $country_mobile_code) < 0) {
+            $value = $country_mobile_code . $value;
+          }
+
           try {
-            if ($this->mobileUtil->testMobileNumber('+' . $country_mobile_code . $value)) {
+            if ($this->mobileUtil->testMobileNumber($value)) {
               $status[$key] = TRUE;
             }
           }

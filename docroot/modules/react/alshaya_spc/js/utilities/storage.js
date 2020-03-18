@@ -32,6 +32,6 @@ export const removeCartFromStorage = () => {
 };
 
 export const getInfoFromStorage = () => {
-  window.cartData = getStorageInfo('cart_data');
-  return window.cartData;
+  let cartData = getStorageInfo('cart_data');
+  return cartData;
 };
