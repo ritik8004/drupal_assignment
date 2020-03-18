@@ -11,7 +11,7 @@ import {
   prepareAddressDataFromForm,
 } from './checkout_address_process';
 import {
-  getInfoFromStorage
+  getInfoFromStorage,
 } from './storage';
 
 /**
@@ -94,24 +94,24 @@ export const addEditAddressToCustomer = (e) => {
           document.getElementById('mobile-error').classList.remove('error');
 
           // Prepare form data.
-          const form_data = {};
+          const formData = {};
           const name = target.fullname.value.trim();
-          form_data.address = {
+          formData.address = {
             given_name: name.split(' ')[0],
             family_name: name.substring(name.indexOf(' ') + 1),
             city: gerAreaLabelById(false, target.administrative_area.value),
             address_id: target.address_id.value,
           };
 
-          form_data.mobile = mobile;
+          formData.mobile = mobile;
 
           // Getting dynamic fields data.
           Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
-            form_data.address[key] = target[key].value;
+            formData.address[key] = target[key].value;
           });
 
           // Add/update user address.
-          const addressList = addEditUserAddress(form_data);
+          const addressList = addEditUserAddress(formData);
           if (addressList instanceof Promise) {
             addressList.then((list) => {
               // If any error.
@@ -173,22 +173,22 @@ export const addEditAddressToCustomer = (e) => {
 /**
  * Get Areas list.
  *
- * @param {*} is_parent
- * @param {*} parent_id
+ * @param {*} isParent
+ * @param {*} parentId
  */
-export const getAreasList = (is_parent, parent_id) => {
+export const getAreasList = (isParent, parentId) => {
   const areasList = new Array();
   const areas = document.querySelectorAll('[data-list=areas-list]');
   if (areas.length > 0) {
-    const idAttribute = is_parent ? 'data-parent-id' : 'data-id';
-    const labelAttribute = is_parent ? 'data-parent-label' : 'data-label';
+    const idAttribute = isParent ? 'data-parent-id' : 'data-id';
+    const labelAttribute = isParent ? 'data-parent-label' : 'data-label';
     for (let i = 0; i < areas.length; i++) {
       const id = areas[i].getAttribute(idAttribute);
       // If we need to fetch areas of a given parent.
-      if (parent_id !== null) {
-        const parentId = areas[i].getAttribute('data-parent-id');
+      if (parentId !== null) {
+        const parentIdVal = areas[i].getAttribute('data-parent-id');
         // If item's parent id not matches.
-        if (parent_id != parentId) {
+        if (parentId !== parentIdVal) {
           continue;
         }
       }
@@ -206,13 +206,13 @@ export const getAreasList = (is_parent, parent_id) => {
 /**
  * Get label of area based on location id.
  *
- * @param {*} is_parent
+ * @param {*} isParent
  * @param {*} id
  */
-export const gerAreaLabelById = (is_parent, id) => {
+export const gerAreaLabelById = (isParent, id) => {
   let label = '';
-  const idAttibute = is_parent ? 'data-parent-id' : 'data-id';
-  const labelAttribute = is_parent ? 'data-parent-label' : 'data-label';
+  const idAttibute = isParent ? 'data-parent-id' : 'data-id';
+  const labelAttribute = isParent ? 'data-parent-label' : 'data-label';
   const area = document.querySelectorAll(`[${idAttibute}="${id}"]`);
   if (area.length > 0) {
     label = area[0].getAttribute(labelAttribute);
