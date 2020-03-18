@@ -14,6 +14,29 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Add new fields and index them.
+ */
+function alshaya_hm_update_8045() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Re-save index configs to ensure overrides are taken into consideration.
+  $manager->updateConfigs(
+    ['search_api.index.product'],
+    'alshaya_product'
+  );
+
+  _alshaya_search_api_reindex();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update config for enable_lhn_tree_search
  * for sidebar visibility in search page.
  * Queue items for alshaya_algolia_index.
