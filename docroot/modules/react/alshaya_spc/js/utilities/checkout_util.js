@@ -8,17 +8,17 @@ import {dispatchCustomEvent} from "./events";
 /**
  * Get shipping methods.
  *
- * @param cart_id
+ * @param cartId
  * @param data
  * @returns {boolean}
  */
-export const getShippingMethods = function (cart_id, data) {
-  const { middleware_url } = window.drupalSettings.alshaya_spc;
+export const getShippingMethods = function (cartId, data) {
+  const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
 
   return axios
-    .post(`${middleware_url}/cart/shipping-methods`, {
+    .post(`${middlewareUrl}/cart/shipping-methods`, {
       data,
-      cart_id,
+      cartId,
     })
     .then(
       (response) => response.data,
@@ -32,21 +32,21 @@ export const getShippingMethods = function (cart_id, data) {
  * Place order.
  *
  * @param cart_id
- * @param payment_method
+ * @param paymentMethod
  * @returns {boolean}
  */
-export const placeOrder = function (payment_method) {
-  const { middleware_url } = window.drupalSettings.alshaya_spc;
+export const placeOrder = function (paymentMethod) {
+  const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
 
   showFullScreenLoader();
 
   const data = {
     paymentMethod: {
-      method: payment_method,
+      method: paymentMethod,
     },
   };
   return axios
-    .post(`${middleware_url}/cart/place-order`, {
+    .post(`${middlewareUrl}/cart/place-order`, {
       data,
     })
     .then(
@@ -83,9 +83,9 @@ export const addShippingInCart = function (action, data) {
     cart = cart.cart_id;
   }
 
-  const api_url = updateCartApiUrl();
+  const apiUrl = updateCartApiUrl();
   return axios
-    .post(api_url, {
+    .post(apiUrl, {
       action,
       shipping_info: data,
       cart_id: cart,
@@ -135,9 +135,9 @@ export const addBillingInCart = function (action, data) {
     cart = cart.cart_id;
   }
 
-  const api_url = updateCartApiUrl();
+  const apiUrl = updateCartApiUrl();
   return axios
-    .post(api_url, {
+    .post(apiUrl, {
       action,
       billing_info: data,
       cart_id: cart,
@@ -215,7 +215,7 @@ export const cleanMobileNumber = (mobile) => {
 
   // If plain mobile number, return as is.
   if (typeof mobile === 'string') {
-    return mobile.replace(`+${drupalSettings.country_mobile_code}`, '')
+    return mobile.replace(`+${drupalSettings.country_mobile_code}`, '');
   }
 
   if (typeof mobile.value === 'string') {
