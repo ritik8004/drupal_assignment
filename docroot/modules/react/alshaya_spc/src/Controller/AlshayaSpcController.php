@@ -317,7 +317,6 @@ class AlshayaSpcController extends ControllerBase {
    */
   public function checkoutConfirmation() {
     $order = $this->orderHelper->getLastOrder();
-    $order_id = $this->orderHelper->getOrderId();
     // Get order type hd/cnc and other details.
     $orderDetails = $this->orderHelper->getOrderTypeDetails($order);
 
@@ -420,8 +419,6 @@ class AlshayaSpcController extends ControllerBase {
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
       $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
     }
-    $cache_tag = ['order:' . $order_id];
-    $cache_tags = Cache::mergeTags($cache_tags, $cache_tag);
 
     return [
       '#theme' => 'spc_confirmation',

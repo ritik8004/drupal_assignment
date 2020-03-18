@@ -12,6 +12,8 @@ use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
+use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -145,6 +147,20 @@ class AlshayaSpcOrderHelper {
   protected $ordersManager;
 
   /**
+   * Configuration Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
+  protected $configFactory;
+
+  /**
+   * Store Finder utility.
+   *
+   * @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility
+   */
+  protected $storeFinder;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -177,6 +193,10 @@ class AlshayaSpcOrderHelper {
    *   Request Stack.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
    *   Orders Manager.
+   * @param \Drupal\Core\Config\ConfigFactory $configFactory
+   *   Config factory manager.
+   * @param \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $store_finder
+   *   Store finder utility.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               AlshayaAddressBookManager $address_book_manager,
@@ -192,7 +212,9 @@ class AlshayaSpcOrderHelper {
                               CountryRepository $countryRepository,
                               SecureText $secure_text,
                               RequestStack $request_stack,
-                              OrdersManager $orders_manager) {
+                              OrdersManager $orders_manager,
+                              ConfigFactory $configFactory,
+                              StoresFinderUtility $store_finder) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -208,6 +230,8 @@ class AlshayaSpcOrderHelper {
     $this->secureText = $secure_text;
     $this->request = $request_stack->getCurrentRequest();
     $this->ordersManager = $orders_manager;
+    $this->configFactory = $configFactory;
+    $this->storeFinder = $store_finder;
   }
 
   /**
@@ -252,24 +276,6 @@ class AlshayaSpcOrderHelper {
     }
 
     return $order;
-  }
-
-  /**
-   * Get Order Id.
-   *
-   * @return mixed
-   *   Order id.
-   */
-  public function getOrderId() {
-    $id = $this->request->query->get('id');
-    if (empty($id)) {
-      throw new NotFoundHttpException();
-    }
-    $data = json_decode($this->secureText->decrypt(
-      $id,
-      Settings::get('alshaya_api.settings')['consumer_secret']
-    ), TRUE);
-    return $data['order_id'];
   }
 
   /**
@@ -341,10 +347,8 @@ class AlshayaSpcOrderHelper {
       $data['link'] = $link;
     }
 
-    // Adding extra data to the product resource.
-    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $data['extra_data'] = [];
-    $image = alshaya_acm_get_product_display_image($sku, 'cart_thumbnail', 'cart');
+    $image = $this->getProductDisplayImage($sku, 'cart_thumbnail', 'cart');
     if (!empty($image)) {
       if ($image['#theme'] == 'image_style') {
         $data['extra_data']['cart_image'] = [
@@ -363,6 +367,56 @@ class AlshayaSpcOrderHelper {
     }
 
     return $data;
+  }
+
+  /**
+   * Helper function to get the product display image.
+   *
+   * @param mixed $sku
+   *   SKU text or full entity object.
+   * @param string $image_style
+   *   Image style to apply to the image.
+   * @param string $context
+   *   (optional) Context for image.
+   *
+   * @return array
+   *   Return string of uri or Null if not found.
+   */
+  public function getProductDisplayImage($sku, $image_style = '', $context = '') {
+    if (!($sku instanceof SKUInterface)) {
+      return [];
+    }
+
+    // Load the first image.
+    $media_image = $this->skuImagesManager->getFirstImage($sku, $context);
+    $image = [];
+
+    // If we have image for the product.
+    if (!empty($media_image)) {
+      $image = $this->skuManager->getSkuImage($media_image['drupal_uri'], $sku->label(), $image_style);
+    }
+
+    // If still image is not available, set default one.
+    if (empty($image)) {
+      $default_image_url = $this->skuImagesManager->getProductDefaultImageUrl();
+
+      if ($default_image_url) {
+        $image = [
+          '#theme' => 'image',
+          '#attributes' => [
+            'src' => $default_image_url,
+            'title' => $sku->label(),
+            'alt' => $sku->label(),
+            'class' => [
+              'product-default-image',
+            ],
+            '#skip_lazy_loading' => TRUE,
+          ],
+        ];
+      }
+    }
+
+    return $image;
   }
 
   /**
@@ -386,7 +440,38 @@ class AlshayaSpcOrderHelper {
 
     $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
     if ($shipping_method_code == $this->checkoutOptionManager->getClickandColectShippingMethod()) {
-      // @todo Get clickncollect store details
+      // Clickncollect store details.
+      $cc_config = $this->configFactory->get('alshaya_click_collect.settings');
+
+      $orderDetails['type'] = 'cc';
+
+      $shipping_assignment = reset($order['extension']['shipping_assignments']);
+      $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
+      $cc_type = $shipping_assignment['shipping']['extension_attributes']['click_and_collect_type'];
+      $orderDetails['view_on_map_link'] = '';
+
+      // Getting store node object from store code.
+      if ($store_node = $this->storeFinder->getTranslatedStoreFromCode($store_code)) {
+        $orderDetails['store_name'] = $store_node->label();
+        $orderDetails['store_address'] = $this->storeFinder->getStoreAddress($store_node);
+        $orderDetails['store_phone'] = $store_node->get('field_store_phone')->getString();
+        $orderDetails['store_open_hours'] = $store_node->get('field_store_open_hours')->getValue();
+
+        if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
+          $lat = $lat_lng[0]['lat'];
+          $lng = $lat_lng[0]['lng'];
+          $orderDetails['view_on_map_link'] = 'http://maps.google.com/?q=' . $lat . ',' . $lng;
+        }
+
+        $cc_text = ($cc_type == 'reserve_and_collect') ? $cc_config->get('click_collect_rnc') : $store_node->get('field_store_sts_label')->getString();
+
+        if (!empty($cc_text)) {
+          $orderDetails['delivery_method'] = $this->t('@shipping_method_name (@shipping_method_description)', [
+            '@shipping_method_name' => $orderDetails['delivery_method'],
+            '@shipping_method_description' => $cc_text,
+          ]);
+        }
+      }
     }
     else {
       $orderDetails['type'] = $this->t('Home delivery');

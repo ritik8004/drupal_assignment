@@ -45,3 +45,5 @@ services:
       - '@alshaya_spc.secure_text_helper'
       - '@request_stack'
       - '@alshaya_acm_customer.orders_manager'
+      - '@config.factory'
+      - '@alshaya_stores_finder_transac.utility'
