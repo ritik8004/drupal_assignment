@@ -25,10 +25,14 @@ export default class PaymentMethod extends React.Component {
   validateBeforePlaceOrder = () => {
     // Do additional process for some payment methods.
     if (this.props.method.code === 'checkout_com') {
-      this.paymentMethodCheckoutCom.current.validateBeforePlaceOrder();
-    } else if (this.props.method.code === 'cybersource') {
-      this.paymentMethodCybersource.current.validateBeforePlaceOrder();
-    } else if (this.props.method.code === 'knet') {
+      return this.paymentMethodCheckoutCom.current.validateBeforePlaceOrder();
+    }
+
+    if (this.props.method.code === 'cybersource') {
+      return this.paymentMethodCybersource.current.validateBeforePlaceOrder();
+    }
+
+    if (this.props.method.code === 'knet') {
       showFullScreenLoader();
 
       const paymentData = {
@@ -39,10 +43,10 @@ export default class PaymentMethod extends React.Component {
       };
 
       this.finalisePayment(paymentData);
-
-      // Throwing 200 error, we want to handle place order in custom way.
-      throw 200;
+      return false;
     }
+
+    return true;
   };
 
   finalisePayment = (paymentData) => {

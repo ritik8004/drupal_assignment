@@ -218,7 +218,7 @@ class CybersourceHelper {
         '@info' => print_r($post_data, TRUE),
       ]);
 
-      return $this->utility->getErrorResponse('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.', 400);
+      return $this->utility->getErrorResponse('failed', 400);
     }
 
     // Get the cart object.
@@ -240,7 +240,7 @@ class CybersourceHelper {
         '@message' => $e->getMessage(),
       ]);
 
-      return $this->utility->getErrorResponse('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.', 400);
+      return $this->utility->getErrorResponse('error', 400);
     }
 
     try {
@@ -261,7 +261,7 @@ class CybersourceHelper {
         '@message' => $e->getMessage(),
       ]);
 
-      return $this->utility->getErrorResponse('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.', 500);
+      return $this->utility->getErrorResponse('error', 500);
     }
   }
 

@@ -7,6 +7,7 @@ import SpecialPrice from '../../../utilities/special-price';
 const CheckoutCartItem = (props) => {
   const {
     item: {
+      id,
       title,
       relative_link,
       configurable_values,
@@ -30,7 +31,7 @@ const CheckoutCartItem = (props) => {
           </div>
         </div>
         <div className="spc-product-attributes">
-          { configurable_values.map((key) => <CheckoutConfigurableOption key={`${key}-${Math.floor(Math.random() * 99)}`} label={key} />) }
+          { configurable_values.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
         </div>
       </div>
     </div>

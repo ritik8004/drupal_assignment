@@ -2,11 +2,7 @@ import axios from 'axios';
 import { removeCartFromStorage } from './storage';
 import { updateCartApiUrl } from './update_cart';
 import { cartAvailableInStorage } from './get_cart';
-
-/**
- * Default error message on checkout screen.
- */
-export const getDefaultCheckoutErrorMessage = () => Drupal.t('Sorry, something went wrong. Please try again later.');
+import {getStringMessage} from "./strings";
 
 /**
  * Get shipping methods.
@@ -109,7 +105,7 @@ export const addShippingInCart = function (action, data) {
         // Processing of error here.
         ({
           error: true,
-          error_message: getDefaultCheckoutErrorMessage(),
+          error_message: getStringMessage('global_error'),
         })
       ,
     )
@@ -147,7 +143,7 @@ export const addBillingInCart = function (action, data) {
         // Processing of error here.
         ({
           error: true,
-          error_message: getDefaultCheckoutErrorMessage(),
+          error_message: getStringMessage('global_error'),
         })
       ,
     )

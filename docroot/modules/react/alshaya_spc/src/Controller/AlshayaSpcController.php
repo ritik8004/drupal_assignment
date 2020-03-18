@@ -194,6 +194,21 @@ class AlshayaSpcController extends ControllerBase {
       ];
     }
 
+    $strings[] = [
+      'key' => 'transaction_failed',
+      'message' => $this->t('Transaction has been declined. Please try again later.'),
+    ];
+
+    $strings[] = [
+      'key' => 'payment_error',
+      'message' => $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'),
+    ];
+
+    $strings[] = [
+      'key' => 'global_error',
+      'message' => $this->t('Sorry, something went wrong. Please try again later.'),
+    ];
+
     $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
 
     $cncTerm = $this->checkoutOptionManager->getClickandColectShippingMethodTerm();

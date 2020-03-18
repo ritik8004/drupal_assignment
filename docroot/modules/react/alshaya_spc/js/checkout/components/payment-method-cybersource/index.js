@@ -11,6 +11,8 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
+import {dispatchCustomEvent} from "../../../utilities/events";
+import {getStringMessage} from "../../../utilities/strings";
 
 class PaymentMethodCybersource extends React.Component {
   constructor(props) {
@@ -51,6 +53,13 @@ class PaymentMethodCybersource extends React.Component {
       window.location = Drupal.url(e.detail.redirectUrl);
       return;
     }
+
+    dispatchCustomEvent('spcCheckoutMessageUpdate', {
+      type: 'error',
+      message: e.detail.error_message === 'failed'
+        ? getStringMessage('transaction_failed')
+        : getStringMessage('payment_error'),
+    });
 
     removeFullScreenLoader();
   };
@@ -140,7 +149,7 @@ class PaymentMethodCybersource extends React.Component {
     const { numberValid, expiryValid, cvvValid } = this.state;
     if (!(numberValid && expiryValid && cvvValid)) {
       console.error('client side validation failed for credit card info');
-      throw new Error('UnexpectedValueException');
+      return false;
     }
 
     showFullScreenLoader();
@@ -179,12 +188,17 @@ class PaymentMethodCybersource extends React.Component {
 
       cybersourceForm.submit();
     }).catch((error) => {
-      removeFullScreenLoader();
       console.error(error);
+
+      dispatchCustomEvent('spcCheckoutMessageUpdate', {
+        type: 'error',
+        message: getStringMessage('payment_error'),
+      });
+
+      removeFullScreenLoader();
     });
 
-    // Throwing 200 error, we want to handle place order in custom way.
-    throw new Error(200);
+    return false;
   };
 
   handleCheckoutResponse = (data) => {
