@@ -12,17 +12,16 @@ import {
 export default class ParentAreaSelect extends React.Component {
   constructor(props) {
     super(props);
-    let current_option = new Array();
+    let currentOption = [];
     // If default value is available, process that.
     if (this.props.default_val.length !== 0
       && this.props.default_val.length !== 'undefined') {
-      current_option = this.props.default_val[this.props.field.key];
+      currentOption = this.props.default_val[this.props.field.key];
     }
     this.state = {
       areas: {},
-      current_option,
+      currentOption,
       showFilterList: false,
-      cityChanged: false,
     };
   }
 
@@ -49,8 +48,7 @@ export default class ParentAreaSelect extends React.Component {
    */
   processSelectedItem = (val) => {
     this.setState({
-      current_option: val,
-      cityChanged: val,
+      currentOption: val,
     });
 
     this.handleChange(val);
@@ -70,7 +68,7 @@ export default class ParentAreaSelect extends React.Component {
       // Once we get parent areas list, get corresponding child areas.
       // this.handleChange(this.props.default_val[this.props.field.key]);
       this.setState({
-        current_option: this.props.default_val[this.props.field.key],
+        currentOption: this.props.default_val[this.props.field.key],
       });
 
       this.props.areasUpdate(this.props.default_val[this.props.field.key], false);
@@ -85,7 +83,7 @@ export default class ParentAreaSelect extends React.Component {
   updateAreaFromGoogleMap = (e) => {
     const data = e.detail.data();
     this.setState({
-      current_option: data.id,
+      currentOption: data.id,
     });
 
     this.props.areasUpdate(data.id, data.id);
@@ -103,7 +101,7 @@ export default class ParentAreaSelect extends React.Component {
   // Handle change of 'area_parent' list.
   handleChange = (selectedOption) => {
     this.setState({
-      current_option: selectedOption,
+      currentOption: selectedOption,
     });
 
     this.props.areasUpdate(selectedOption, selectedOption);
@@ -111,8 +109,8 @@ export default class ParentAreaSelect extends React.Component {
 
   render() {
     const options = this.state.areas;
-    const panelTitle = Drupal.t('select @label', {'@label': this.props.field.label});
-    const currentOption = this.state.current_option;
+    const panelTitle = Drupal.t('select @label', { '@label': this.props.field.label });
+    const currentOption = this.state.currentOption;
 
     const currentOptionAvailable = (currentOption !== undefined
       && currentOption !== null
