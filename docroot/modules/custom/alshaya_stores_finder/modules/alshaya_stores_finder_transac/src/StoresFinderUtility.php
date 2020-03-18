@@ -256,17 +256,25 @@ class StoresFinderUtility {
    *   Return array of stores.
    */
   public function getStoreNodes(array $store_codes, $langcode = NULL) {
-    if (empty($langcode)) {
-      $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+    $cid = 'store_codes:list';
+    // Fetch from cache if available.
+    if ($cache = $this->cache->get($cid)) {
+      $stores = array_filter($cache->data, function ($store) use ($store_codes) {
+        return in_array($store['field_store_locator_id_value'], $store_codes);
+      });
+
+      return $stores;
     }
+
     // Get the nids for given store code with custom query.
     $query = $this->database->select('node_field_data', 'n');
     $query->addField('n', 'nid');
     $query->addField('ns', 'field_store_locator_id_value');
     $query->innerJoin('node__field_store_locator_id', 'ns', 'n.nid = ns.entity_id and n.langcode = ns.langcode');
-    $query->condition('ns.field_store_locator_id_value', $store_codes, 'IN');
-    $query->condition('n.langcode', $langcode);
-    return $query->execute()->fetchAllAssoc('nid', \PDO::FETCH_ASSOC);
+    $query->condition('n.default_langcode', 1);
+    $stores = $query->execute()->fetchAllAssoc('nid', \PDO::FETCH_ASSOC);
+    $this->cache->set($cid, $stores, CACHE::PERMANENT, ['node_type:store']);
+    return $stores;
   }
 
   /**
@@ -289,8 +297,23 @@ class StoresFinderUtility {
     $store_nodes = $this->getStoreNodes($store_codes, $langcode);
     // Load multiple nodes all together.
     $nids = array_keys($store_nodes);
-    $nodes = $this->nodeStorage->loadMultiple($nids);
+
     $prepared_stores = [];
+    foreach ($nids as $key => $nid) {
+      // Get store data from cache.
+      $cid = 'store_node:' . $langcode . ':' . $nid;
+      if ($cache = $this->cache->get($cid)) {
+        $prepared_stores[$nid] = $cache->data;
+        unset($nids[$key]);
+      }
+    }
+
+    // If no stores need to prepare (all get from cache).
+    if (empty($nids)) {
+      return $prepared_stores;
+    }
+
+    $nodes = $this->nodeStorage->loadMultiple($nids);
     $config = $this->configFactory->get('alshaya_click_collect.settings');
     $address = $this->addressBookManager->getAddressStructureWithEmptyValues();
     // Loop through node and add store address/opening hours/delivery time etc.
@@ -324,6 +347,10 @@ class StoresFinderUtility {
       // Unset the store for which we found the node, so that we can log the
       // store codes for which nodes are missing.
       unset($stores[$store_nodes[$nid]['field_store_locator_id_value']]);
+
+      // Add in cache.
+      $cid = 'store_node:' . $langcode . ':' . $nid;
+      $this->cache->set($cid, $prepared_stores[$nid], Cache::PERMANENT, ['node_type:store']);
     }
 
     // Log into Drupal for admins to check missing nodes for the store codes.
