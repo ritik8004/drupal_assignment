@@ -7,7 +7,7 @@ import ClickCollectContainer from '../click-collect';
 import {cleanMobileNumber} from "../../../utilities/checkout_util";
 
 class ClicknCollectDeiveryInfo extends React.Component {
-  _isMounted = true;
+  isComponentMounted = true;
 
   constructor(props) {
     super(props);
@@ -18,7 +18,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
+    this.isComponentMounted = true;
     document.addEventListener(
       'refreshCartOnCnCSelect',
       this.eventListener,
@@ -27,7 +27,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this.isComponentMounted = false;
     document.removeEventListener(
       'refreshCartOnCnCSelect',
       this.eventListener,
@@ -51,11 +51,11 @@ class ClicknCollectDeiveryInfo extends React.Component {
     checkoutAddressProcess(e, newCart);
   };
 
-  eventListener = (e) => {
-    const data = e.detail.data();
+  eventListener = ({ detail }) => {
+    const data = detail.data();
     const { refreshCart } = this.props;
     refreshCart(data);
-    if (this._isMounted) {
+    if (this.isComponentMounted) {
       this.closeModal();
     }
   };

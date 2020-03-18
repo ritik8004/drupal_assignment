@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import StoreItem from './StoreItem';
 
 const StoreList = ({
-  store_list, display, onStoreRadio, onStoreFinalize, selected: selectedStore, onStoreClose,
+  storeList, display, onStoreRadio, onStoreFinalize, selected: selectedStore, onStoreClose,
 }) => {
-  if (!store_list || store_list.length === 0) {
+  if (!storeList || storeList.length === 0) {
     return <div className="spc-cnc-empty-store-list">{Drupal.t('Sorry, No store found for your location.')}</div>;
   }
+
+  const removeClassFromStoreList = (className) => {
+    // Add Class expand to the currently opened li.
+    const tempStoreList = document.querySelectorAll('#click-and-collect-list-view li.select-store');
+    // Remove class expand from all.
+    tempStoreList.forEach((storeElement) => {
+      storeElement.classList.remove(className);
+    });
+  };
 
   const addClassToStoreItem = (element, className) => {
     // Close already opened item.
@@ -17,11 +26,7 @@ const StoreList = ({
       return;
     }
     // Add Class expand to the currently opened li.
-    const storeList = document.querySelectorAll('#click-and-collect-list-view li.select-store');
-    // Remove class expand from all.
-    storeList.forEach((storeElement) => {
-      storeElement.classList.remove(className);
-    });
+    removeClassFromStoreList(className);
     element.classList.add(className);
   };
 
@@ -36,9 +41,15 @@ const StoreList = ({
     addClassToStoreItem(e.target.parentElement.parentElement, 'expand');
   };
 
+  useEffect(() => {
+    if (!selectedStore) {
+      removeClassFromStoreList('selected');
+    }
+  }, [storeList, selectedStore]);
+
   return (
     <ul>
-      {store_list.map((store, index) => (
+      {storeList.map((store, index) => (
         <li
           className={`select-store ${(selectedStore && store.code === selectedStore.code) ? 'selected' : ''}`}
           data-store-code={store.code}
@@ -48,7 +59,7 @@ const StoreList = ({
         >
           <StoreItem
             display={display || 'default'}
-            index={parseInt(index)}
+            index={parseInt(index, 10)}
             store={store}
             onStoreChoose={chooseStoreItem}
             onStoreExpand={expandStoreItem}
