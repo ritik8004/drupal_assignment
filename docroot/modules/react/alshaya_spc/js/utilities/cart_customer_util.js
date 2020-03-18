@@ -2,26 +2,26 @@ import Axios from 'axios';
 import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from './storage';
 import { i18nMiddleWareUrl } from './i18n_url';
 
-export async function checkCartCustomer(cart_data = null) {
-  if (!(cart_data) || cart_data.cart_id === undefined) {
-    const cart_json = getInfoFromStorage();
-    cart_data = cart_json.cart;
+export async function checkCartCustomer(cartData = null) {
+  if (!(cartData) || cartData.cart_id === undefined) {
+    const cartJson = getInfoFromStorage();
+    cartData = cartJson.cart;
   }
 
-  if (cart_data.cart_id === null) {
+  if (cartData.cart_id === null) {
     return false;
   }
 
   // If the cart user and drupal user does not match.
-  if (cart_data.uid !== window.drupalSettings.user.uid) {
-    if (!cart_data.uid) {
-      cart_data.uid = window.drupalSettings.user.uid;
+  if (cartData.uid !== window.drupalSettings.user.uid) {
+    if (!cartData.uid) {
+      cartData.uid = window.drupalSettings.user.uid;
       if (window.drupalSettings.user.uid === 0) {
-        addInfoInStorage({ cart: cart_data });
+        addInfoInStorage({ cart: cartData });
         return false;
       }
 
-      await associateCart(cart_data);
+      await associateCart(cartData);
       return true;
     }
     emptyCustomerCart();
@@ -30,7 +30,7 @@ export async function checkCartCustomer(cart_data = null) {
   return false;
 }
 
-const associateCart = (cart_data) => {
+const associateCart = (cartData) => {
   const url = i18nMiddleWareUrl('associate-cart');
   return Axios.get(url)
     .then((response) => {
@@ -49,7 +49,7 @@ const associateCart = (cart_data) => {
 const emptyCustomerCart = () => {
   removeCartFromStorage();
 
-  const empty_cart = {
+  const emptyCart = {
     cart_id: null,
     cart_total: null,
     items_qty: null,
@@ -57,11 +57,11 @@ const emptyCustomerCart = () => {
   };
 
   // Triggering event to notify react component.
-  var event = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => empty_cart } });
-  document.dispatchEvent(event);
+  const refreshCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => emptyCart } });
+  document.dispatchEvent(refreshCart);
 
-  var event = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => empty_cart } });
-  document.dispatchEvent(event);
+  const refreshMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => emptyCart } });
+  document.dispatchEvent(refreshMiniCart);
 };
 
 export const extractFirstAndLastName = (name) => {

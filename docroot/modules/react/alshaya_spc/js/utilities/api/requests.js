@@ -5,7 +5,7 @@ import {
   redirectToCart,
 } from '../get_cart';
 import { restoreCartApiUrl } from '../update_cart';
-import {getInfoFromStorage} from "../storage";
+import { getInfoFromStorage } from '../storage';
 
 export const fetchClicknCollectStores = (coords) => {
   const { cart } = getInfoFromStorage();
@@ -72,9 +72,9 @@ export const fetchCartData = () => {
   }
 
   // Prepare api url.
-  const api_url = getCartApiUrl();
+  const apiUrl = getCartApiUrl();
 
-  return Axios.get(api_url)
+  return Axios.get(apiUrl)
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
