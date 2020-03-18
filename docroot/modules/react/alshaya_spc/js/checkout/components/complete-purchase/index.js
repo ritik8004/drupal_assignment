@@ -23,7 +23,7 @@ export default class CompletePurchase extends React.Component {
     } catch (error) {
       // Error 200 means everything is fine.
       // Place order will be done after payment validation is completed.
-      if (error !== 200) {
+      if (error !== 200 || (typeof error === 'object' && error.message !== '200')) {
         console.error(error);
       }
 
