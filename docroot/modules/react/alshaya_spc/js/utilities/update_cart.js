@@ -89,7 +89,7 @@ export const updateCartItemData = function (action, sku, quantity) {
             item: localCart.cart.items[sku],
           };
           dispatchCustomEvent('updateCartItemData', {
-            data: data,
+            data,
           });
         }
       }

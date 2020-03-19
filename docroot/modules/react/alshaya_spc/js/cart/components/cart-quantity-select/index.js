@@ -39,15 +39,15 @@ export default class CartQuantitySelect extends React.Component {
       cartData.then((result) => {
         this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.remove('loading');
         // If error.
-        if (result.error !== undefined &&
-          result.error === true) {
+        if (result.error !== undefined
+          && result.error === true) {
           result = {
             error: true,
             message: {
               type: 'error',
-              message: result.error_message
-            }
-          }
+              message: result.error_message,
+            },
+          };
         }
         const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => result } });
         document.dispatchEvent(miniCartEvent);

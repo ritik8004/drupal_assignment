@@ -12,7 +12,7 @@ import {
 import {
   getInfoFromStorage,
 } from './storage';
-import {getStringMessage} from "./strings";
+import { getStringMessage } from './strings';
 
 /**
  * Get the address list of the current logged in user.
@@ -149,8 +149,7 @@ export const addEditAddressToCustomer = (e) => {
                     cartData = {
                       error_message: cartResult.error_message,
                     };
-                  }
-                  else {
+                  } else {
                     cartData = getInfoFromStorage();
                     cartData.cart = cartResult;
                   }

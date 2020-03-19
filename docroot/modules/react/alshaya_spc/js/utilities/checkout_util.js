@@ -2,8 +2,8 @@ import axios from 'axios';
 import { removeCartFromStorage } from './storage';
 import { updateCartApiUrl } from './update_cart';
 import { cartAvailableInStorage } from './get_cart';
-import {getStringMessage} from "./strings";
-import {dispatchCustomEvent} from "./events";
+import { getStringMessage } from './strings';
+import { dispatchCustomEvent } from './events';
 
 /**
  * Get shipping methods.

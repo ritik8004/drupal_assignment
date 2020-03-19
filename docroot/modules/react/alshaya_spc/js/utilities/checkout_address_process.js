@@ -101,8 +101,7 @@ export const checkoutAddressProcess = function (e, cart) {
           cartData = {
             error_message: cartResult.error_message,
           };
-        }
-        else {
+        } else {
           cartData = getInfoFromStorage();
           cartData.cart = cartResult;
         }

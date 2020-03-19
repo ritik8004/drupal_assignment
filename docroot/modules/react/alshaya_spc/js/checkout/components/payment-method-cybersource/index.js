@@ -11,8 +11,8 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
-import {dispatchCustomEvent} from "../../../utilities/events";
-import {getStringMessage} from "../../../utilities/strings";
+import { dispatchCustomEvent } from '../../../utilities/events';
+import { getStringMessage } from '../../../utilities/strings';
 
 class PaymentMethodCybersource extends React.Component {
   constructor(props) {

@@ -18,7 +18,7 @@ import {
 } from '../../../utilities/checkout_address_process';
 import EditAddressSVG from '../edit-address-svg';
 import {
-  getInfoFromStorage
+  getInfoFromStorage,
 } from '../../../utilities/storage';
 
 export default class AddressItem extends React.Component {
@@ -54,7 +54,7 @@ export default class AddressItem extends React.Component {
   prepareAddressToUpdate = (address) => {
     const addressUpdate = address;
     addressUpdate.city = gerAreaLabelById(false, address.administrative_area);
-    addressUpdate.mobile = '+' + drupalSettings.country_mobile_code + cleanMobileNumber(address.mobile);
+    addressUpdate.mobile = `+${drupalSettings.country_mobile_code}${cleanMobileNumber(address.mobile)}`;
     const data = prepareAddressDataForShipping(addressUpdate);
     data.static.customer_address_id = address.address_mdc_id;
     data.static.customer_id = address.customer_id;
@@ -92,8 +92,7 @@ export default class AddressItem extends React.Component {
           cartData = {
             error_message: cartResult.error_message,
           };
-        }
-        else {
+        } else {
           cartData = getInfoFromStorage();
           cartData.cart = cartResult;
         }
