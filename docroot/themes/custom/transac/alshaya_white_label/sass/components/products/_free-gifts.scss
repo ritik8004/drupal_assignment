@@ -311,6 +311,7 @@
       color: $free-gifts-title-text;
       font-size: 0.875rem;
       text-align: center;
+      padding: 0 1.5rem;
 
       html[lang=ar] & {
         line-height: normal;
@@ -700,8 +701,8 @@
           position: absolute;
           color: $free-gifts-modal-promo-list-title-color;
           z-index: 1;
-          #{$left}: 1.5rem;
-          top: 1.5rem;
+          #{$left}: 2.125rem;
+          top: 2.625rem;
           text-transform: capitalize;
           line-height: normal;
 
@@ -723,25 +724,21 @@
   }
 }
 
+body #drupal-modal.free-gift-listing-modal {
+  height: auto !important;
+  padding: 2.3125rem 2.2rem;
+}
+
 body.ie {
   #drupal-modal.free-gift-listing-modal {
-    height: 100% !important;
-
     .b-lazy {
       transition-duration: 0s !important;
     }
-  }
-
-  #drupal-modal.free-gift-detail-modal {
-    -ms-overflow-style: none;
   }
 }
 
 body:not(.ie) {
   #drupal-modal.free-gift-listing-modal {
-    height: auto !important;
-    padding: 1.5em 2.5rem;
-
     @include breakpoint($only-mobile) {
       height: 100% !important;
     }

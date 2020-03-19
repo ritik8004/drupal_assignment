@@ -24,37 +24,37 @@
   }
 }
 
-// specific to IE, for promo list.
-body.ie {
-  &.nodetype--acq_product {
-    &.free-gift-promo-list-overlay:not(.free-gift-detail-modal) {
-      .ui-dialog {
-        padding: calc((100vh - 36rem) / 2) calc((100vw - 60.31rem) / 2) !important;
-
-        .ui-dialog-content#drupal-modal {
-          @include breakpoint($desktop) {
-            padding: 1.5rem 2.5rem;
-          }
+// for all browsers, for promo content.
+body {
+  &.free-gift-promo-list-overlay.free-gift-detail-modal {
+    .ui-dialog {
+      .ui-dialog-content#drupal-modal {
+        @include breakpoint($desktop) {
+          height: 34.75rem !important;
         }
-      }
-
-      .slick-slider .slick-next {
-        right: -0.75rem;
       }
     }
   }
 }
 
-// speficif to IE, for promo content.
+// specific to IE, for free gift list. Specific to BBW.
 body.ie {
-  &.nodetype--acq_product {
-    &.free-gift-promo-list-overlay.free-gift-detail-modal {
-      .ui-dialog {
-        .ui-dialog-content#drupal-modal {
-          @include breakpoint($desktop) {
-            height: auto !important;
-          }
-        }
+  &.free-gift-promo-list-overlay:not(.free-gift-detail-modal) {
+    .slick-slider .slick-prev {
+      #{$left}: -2rem;
+      #{$right}: auto;
+
+      html[lang=ar] & {
+        #{$left}: -1rem;
+      }
+    }
+
+    .slick-slider .slick-next {
+      #{$right}: -1rem;
+      #{$left}: auto;
+
+      html[lang=ar] & {
+        #{$right}: -2rem;
       }
     }
   }
