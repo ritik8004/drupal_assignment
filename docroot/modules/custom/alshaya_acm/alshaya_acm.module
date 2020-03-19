@@ -179,7 +179,10 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
       // If current sku entity is one of the free gift sku items, mark it as
       // free.
-      if (in_array($sku_entity->getSku(), $free_gift_skus)) {
+      $parent = $skuManager->getParentSkuBySku($id);
+
+      if (in_array($id, $free_gift_skus)
+        || ($parent instanceof SKU && in_array($parent->getSku(), $free_gift_skus))) {
         $is_free_sku_item = TRUE;
       }
 
