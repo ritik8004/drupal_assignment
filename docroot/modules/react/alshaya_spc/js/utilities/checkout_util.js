@@ -29,6 +29,30 @@ export const getShippingMethods = function (cartId, data) {
 };
 
 /**
+ * Place ajax fulll screen loader.
+ */
+export const showFullScreenLoader = () => {
+  const loaderDivExisting = document.getElementsByClassName('ajax-progress-fullscreen');
+  if (loaderDivExisting.length > 0) {
+    return;
+  }
+
+  const loaderDiv = document.createElement('div');
+  loaderDiv.className = 'ajax-progress ajax-progress-fullscreen';
+  document.body.appendChild(loaderDiv);
+};
+
+/**
+ * Remove ajax loader.
+ */
+export const removeFullScreenLoader = () => {
+  const loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
+  while (loaderDiv.length > 0) {
+    loaderDiv[0].parentNode.removeChild(loaderDiv[0]);
+  }
+};
+
+/**
  * Place order.
  *
  * @param cart_id
@@ -71,6 +95,22 @@ export const placeOrder = function (paymentMethod) {
         console.error(error);
       },
     );
+};
+
+/**
+ * Trigger an event.
+ *
+ * @param {*} eventName
+ * @param {*} data
+ */
+export const triggerCheckoutEvent = (eventName, data) => {
+  const ee = new CustomEvent(eventName, {
+    bubbles: true,
+    detail: {
+      data: () => data,
+    },
+  });
+  document.dispatchEvent(ee);
 };
 
 export const addShippingInCart = function (action, data) {
@@ -158,30 +198,6 @@ export const addBillingInCart = function (action, data) {
 };
 
 /**
- * Place ajax fulll screen loader.
- */
-export const showFullScreenLoader = () => {
-  const loaderDivExisting = document.getElementsByClassName('ajax-progress-fullscreen');
-  if (loaderDivExisting.length > 0) {
-    return;
-  }
-
-  const loaderDiv = document.createElement('div');
-  loaderDiv.className = 'ajax-progress ajax-progress-fullscreen';
-  document.body.appendChild(loaderDiv);
-};
-
-/**
- * Remove ajax loader.
- */
-export const removeFullScreenLoader = () => {
-  const loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
-  while (loaderDiv.length > 0) {
-    loaderDiv[0].parentNode.removeChild(loaderDiv[0]);
-  }
-};
-
-/**
  * Get current location coordinates.
  */
 export const getLocationAccess = () => {
@@ -223,22 +239,6 @@ export const cleanMobileNumber = (mobile) => {
   }
 
   return '';
-};
-
-/**
- * Trigger an event.
- *
- * @param {*} eventName
- * @param {*} data
- */
-export const triggerCheckoutEvent = (eventName, data) => {
-  const ee = new CustomEvent(eventName, {
-    bubbles: true,
-    detail: {
-      data: () => data,
-    },
-  });
-  document.dispatchEvent(ee);
 };
 
 /**

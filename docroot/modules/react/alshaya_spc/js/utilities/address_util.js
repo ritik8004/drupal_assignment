@@ -65,6 +65,24 @@ export const addEditUserAddress = function (address) {
 };
 
 /**
+ * Get label of area based on location id.
+ *
+ * @param {*} isParent
+ * @param {*} id
+ */
+export const gerAreaLabelById = (isParent, id) => {
+  let label = '';
+  const idAttibute = isParent ? 'data-parent-id' : 'data-id';
+  const labelAttribute = isParent ? 'data-parent-label' : 'data-label';
+  const area = document.querySelectorAll(`[${idAttibute}="${id}"]`);
+  if (area.length > 0) {
+    label = area[0].getAttribute(labelAttribute);
+  }
+
+  return label;
+};
+
+/**
  * Prepare data for customer address add/edit and save.
  *
  * @param {*} val
@@ -203,24 +221,6 @@ export const getAreasList = (isParent, parentId) => {
   }
 
   return areasList;
-};
-
-/**
- * Get label of area based on location id.
- *
- * @param {*} isParent
- * @param {*} id
- */
-export const gerAreaLabelById = (isParent, id) => {
-  let label = '';
-  const idAttibute = isParent ? 'data-parent-id' : 'data-id';
-  const labelAttribute = isParent ? 'data-parent-label' : 'data-label';
-  const area = document.querySelectorAll(`[${idAttibute}="${id}"]`);
-  if (area.length > 0) {
-    label = area[0].getAttribute(labelAttribute);
-  }
-
-  return label;
 };
 
 /**
