@@ -21,7 +21,10 @@ async function handleRequest(request) {
     },
   }
 
-  return new Response(JSON.stringify(someJSON), init)
+  var response = new Response(JSON.stringify(someJSON), init)
+  response.headers.set('Access-Control-Allow-Origin', '*')
+
+  return response
 }
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
