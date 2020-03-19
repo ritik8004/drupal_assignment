@@ -77,7 +77,6 @@ export default class EmptyDeliveryText extends React.Component {
     if (window.drupalSettings.user.uid > 0) {
       addEditAddressToCustomer(e);
     } else {
-      const { cart } = this.props.cart;
       checkoutAddressProcess(e);
     }
   };
