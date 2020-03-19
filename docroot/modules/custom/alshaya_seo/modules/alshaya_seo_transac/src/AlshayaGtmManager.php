@@ -873,7 +873,12 @@ class AlshayaGtmManager {
 
     $privilege_order = isset($order['extension']['loyalty_card']) ? 'Privilege Customer' : 'Regular Customer';
 
+    $skus = [];
     foreach ($orderItems as $item) {
+      if (in_array($item['sku'], array_keys($skus))) {
+        continue;
+      }
+      $skus[] = $item['sku'];
       $product = $this->fetchSkuAtttributes($item['sku']);
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];
@@ -1158,7 +1163,12 @@ class AlshayaGtmManager {
         $address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['shipping']['address']);
         $deliveryCity = $this->addressBookManager->getAddressShippingAreaParentValue($address, $order['shipping']['address']);
 
+        $skus = [];
         foreach ($orderItems as $orderItem) {
+          if (in_array($orderItem['sku'], array_keys($skus))) {
+            continue;
+          }
+          $skus[] = $item['sku'];
           $productSKU[] = $orderItem['sku'];
           $product_node = $this->skuManager->getDisplayNode($orderItem['sku']);
 

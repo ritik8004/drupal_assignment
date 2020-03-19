@@ -13,6 +13,16 @@ export default class CompletePurchase extends React.Component {
   placeOrder = (e) => {
     e.preventDefault();
     const { cart, validateBeforePlaceOrder } = this.props;
+
+    // Dispatch event for GTM tracking.
+    const event = new CustomEvent('orderPaymentMethod', {
+      bubbles: true,
+      detail: {
+        data: cart.selected_payment_method,
+      },
+    });
+    document.dispatchEvent(event);
+
     // If purchase button is not clickable.
     if (!this.completePurchaseButtonActive(cart)) {
       return;
