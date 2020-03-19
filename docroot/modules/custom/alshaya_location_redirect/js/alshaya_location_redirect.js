@@ -16,37 +16,12 @@
   var user_location = localStorage.getItem(storage_key);
 
   // Mapping of brands to countries..
-  var mapping = {
-    'bbw' : {
-      'kw': 'https://www.bathandbodyworks.com.kw',
-      'sa' : 'https://www.bathandbodyworks.com.sa',
-      'ae' : 'https://www.bathandbodyworks.ae'
-    },
-    'fl' : {
-      'kw' : 'https://www.footlocker.com.kw',
-      'ae' : 'https://www.footlocker.ae',
-      'sa' : 'https://www.footlocker.com.sa',
-    },
-    'hm': {
-      'kw' : 'https://kw.hm.com',
-      'ae' : 'https://ae.hm.com',
-      'sa' : 'https://sa.hm.com',
-      'eg' : 'https://eg.hm.com'
-    },
-    'mc' : {
-      'kw' : 'https://www.mothercare.com.kw',
-      'sa' : 'https://www.mothercare.com.sa',
-      'ae' : 'https://www.mothercare.ae'
-    },
-    'pb' : {
-      'kw' : 'https://www.potterybarn.com.kw',
-      'sa' : 'https://www.potterybarn.com.sa',
-      'ae' : 'https://www.potterybarn.ae'
-    },
-    'vs' : {
-      'ae' : 'https://www.victoriassecret.ae',
-    },
-  };
+  if (drupalSettings.alshaya_location_redirect.mapping) {
+    var mapping = drupalSettings.alshaya_location_redirect.mapping;
+  }
+  else {
+    return;
+  }
 
   if (drupalSettings.alshaya_location_redirect.brand) {
     var brand = drupalSettings.alshaya_location_redirect.brand;
