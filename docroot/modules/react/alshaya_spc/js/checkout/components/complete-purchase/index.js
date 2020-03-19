@@ -5,6 +5,7 @@ import {
   isDeliveryTypeSameAsInCart,
 } from '../../../utilities/checkout_util';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import {dispatchCustomEvent} from "../../../utilities/events";
 
 export default class CompletePurchase extends React.Component {
   /**
@@ -13,6 +14,11 @@ export default class CompletePurchase extends React.Component {
   placeOrder = (e) => {
     e.preventDefault();
     const { cart, validateBeforePlaceOrder } = this.props;
+
+    dispatchCustomEvent('orderPaymentMethod', {
+      payment_method: cart.selected_payment_method,
+    });
+
     // If purchase button is not clickable.
     if (!this.completePurchaseButtonActive(cart)) {
       return;
