@@ -12,9 +12,9 @@ const PriceBlock = (props) => (
   </div>
 );
 
-const SpecialPrice = ({ price, final_price }) => {
-  if (price > 0 && final_price > 0 && final_price < price) {
-    const discount = calculateDiscount(price, final_price);
+const SpecialPrice = ({ price, finalPrice }) => {
+  if (price > 0 && finalPrice > 0 && finalPrice < price) {
+    const discount = calculateDiscount(price, finalPrice);
     const discountTxt = (discount > 0)
       ? (
         <div className="price--discount">
@@ -31,14 +31,14 @@ const SpecialPrice = ({ price, final_price }) => {
           <PriceElement amount={price} />
         </div>
         <div className="special--price">
-          <PriceElement amount={final_price} />
+          <PriceElement amount={finalPrice} />
         </div>
         {discountTxt}
       </PriceBlock>
     );
   }
-  if (final_price) {
-    return <PriceBlock amount={final_price} />;
+  if (finalPrice) {
+    return <PriceBlock amount={finalPrice} />;
   }
 
   return <PriceBlock amount={price} />;
