@@ -15,8 +15,7 @@ const AddressContent = (props) => {
   } = props;
 
   if (window.drupalSettings.user.uid > 0
-    && drupalSettings.user_name.address_available !== undefined
-    && drupalSettings.user_name.address_available === true) {
+    && cart.cart.customer.addresses.length > 0) {
     return (
       <AddressList
         cart={cart}

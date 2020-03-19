@@ -194,11 +194,9 @@ export default class Checkout extends React.Component {
    */
   getBillingComponent = () => {
     const { cart } = this.state;
-    if (!isDeliveryTypeSameAsInCart(cart)) {
-      return (null);
-    }
 
-    if (cart.cart.delivery_type === 'hd') {
+    if (cart.cart.delivery_type === 'hd'
+      || (cart.delivery_type !== undefined && cart.delivery_type === 'hd')) {
       return (
         <HDBillingAddress
           refreshCart={this.refreshCart}

@@ -69,7 +69,8 @@ export default class HDBillingAddress extends React.Component {
     // show biiling info.
     if (cart.cart.carrier_info === undefined
       || cart.cart.carrier_info === null
-      || cart.cart.billing_address === null) {
+      || cart.cart.billing_address === null
+      || cart.cart.billing_address.city === 'NONE') {
       return (null);
     }
 

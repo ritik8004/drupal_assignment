@@ -85,7 +85,8 @@ export default class AddressList extends React.Component {
         ? 'billing_address'
         : 'shipping_address';
       let isSelected = false;
-      if ((cart.cart.delivery_type === 'hd' || type === 'billing')
+      if (cart.cart[fieldToCheck].city !== 'NONE'
+        && (cart.cart.delivery_type === 'hd' || type === 'billing')
         && cart.cart[fieldToCheck].customer_address_id.toString() === address.address_mdc_id) {
         isSelected = true;
       }
