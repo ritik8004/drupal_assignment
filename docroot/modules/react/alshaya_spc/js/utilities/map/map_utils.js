@@ -140,7 +140,7 @@ export const fillValueInAddressFromGeocode = (address) => {
   let areaParentValue = null;
   // If area parent available.
   if (drupalSettings.address_fields.area_parent !== undefined) {
-    let areaVal = new Array();
+    let areaVal = [];
     const val = getAddressFieldVal(address, 'area_parent').trim();
     // If not empty.
     if (val.length > 0) {
@@ -235,7 +235,7 @@ export const deduceAreaVal = (area, field) => {
  * Geocode address on the map.
  */
 export const geocodeAddressToLatLng = () => {
-  let address = new Array();
+  let address = [];
   Object.entries(window.drupalSettings.address_fields).forEach(
     ([key, field]) => {
       const fieldVal = document.getElementById(key).value;
@@ -270,7 +270,7 @@ export const geocodeAddressToLatLng = () => {
         // Remove any existing markers on map and add new marker.
         removeAllMarkersFromMap();
         const marker = createMarker(results[0].geometry.location, map);
-        const markerArray = new Array();
+        const markerArray = [];
         markerArray.push(marker);
         window.spcMarkers = markerArray;
       } else {
