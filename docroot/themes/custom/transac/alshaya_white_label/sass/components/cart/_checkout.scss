@@ -1252,12 +1252,7 @@ body.path--cart .c-content__region {
   #edit-billing-address {
     .address-container-inline {
       > .form-item {
-        width: 100%;
-
-        @include breakpoint($only-mobile) {
-          width: calc(50% - 0.4375rem);
-          max-width: none;
-        }
+        width: calc(100% - 0.875rem);
       }
     }
   }
