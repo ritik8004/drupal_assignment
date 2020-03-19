@@ -1,12 +1,15 @@
 import React from 'react';
 
 import Popup from 'reactjs-popup';
-import AddressForm from '../address-form';
+import Loading from '../../../utilities/loading';
 import BillingInfo from '../billing-info';
 import SectionTitle from '../../../utilities/section-title';
 import {
   processBillingUpdateFromForm,
+  getAddressPopupClassName
 } from '../../../utilities/checkout_address_process';
+
+const AddressContent = React.lazy(() => import('../address-popup-content'));
 
 export default class CnCBillingAddress extends React.Component {
   isComponentMounted = false;
@@ -99,17 +102,23 @@ export default class CnCBillingAddress extends React.Component {
               {Drupal.t('please add your billing address.')}
             </div>
             <Popup
+              className={getAddressPopupClassName()}
               open={open}
               onClose={this.closePopup}
               closeOnDocumentClick={false}
             >
-              <AddressForm
-                closeModal={this.closePopup}
-                processAddress={this.processAddress}
-                showEmail={false}
-                headingText={Drupal.t('billing information')}
-                default_val={editAddressData}
-              />
+              <React.Suspense fallback={<Loading />}>
+                <AddressContent
+                  closeModal={this.closePopup}
+                  cart={this.props.cart}
+                  processAddress={this.processAddress}
+                  showEmail={false}
+                  showEditButton={false}
+                  type={'billing'}
+                  headingText={Drupal.t('billing information')}
+                  default_val={editAddressData}
+                />
+              </React.Suspense>
             </Popup>
           </div>
         </div>
