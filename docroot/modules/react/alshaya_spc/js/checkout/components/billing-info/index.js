@@ -56,7 +56,6 @@ export default class BillingInfo extends React.Component {
     this.closePopup();
   };
 
-
   /**
    * Process the billing address process.
    */

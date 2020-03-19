@@ -101,8 +101,12 @@ export default class AddressItem extends React.Component {
           cartData.cart = cartResult;
         }
 
-        // Trigger event to close all popups.
+        // Trigger event to close shipping popups.
         triggerCheckoutEvent('refreshCartOnAddress', cartData);
+        if (type === 'billing') {
+          // Trigger event to close billing popups.
+          triggerCheckoutEvent('onBillingAddressUpdate', cartData);
+        }
       });
     }
   };
@@ -114,7 +118,7 @@ export default class AddressItem extends React.Component {
     // Show loader.
     showFullScreenLoader();
     // If processing method is passed, we use that.
-    if (this.props.processAddress !== undefined) {
+    if (this.props.type === 'billing') {
       this.props.processAddress(e);
     } else {
       addEditAddressToCustomer(e);

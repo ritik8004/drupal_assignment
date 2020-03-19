@@ -10,6 +10,7 @@ import {
 } from './cart_customer_util';
 import {
   gerAreaLabelById,
+  addEditUserAddress
 } from './address_util';
 import {
   getInfoFromStorage,
@@ -303,36 +304,72 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           const formData = prepareAddressDataFromForm(target);
 
           // For logged in user add customer id from shipping.
+          let customerData = {};
           if (drupalSettings.user.uid > 0) {
             formData.static.customer_id = shipping.customer_id;
+            customerData = {
+              address: {
+                given_name: formData.static.firstname,
+                family_name: formData.static.firstname,
+                city: formData.static.city,
+                address_id: target.address_id.value
+              },
+              mobile: cleanMobileNumber(formData.static.telephone)
+            };
+
+            // Getting dynamic fields data.
+            Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+              customerData.address[key] = formData[field['key']];
+            });
           }
 
-          // Update billing address.
-          const cartData = addBillingInCart('update billing', formData);
-          if (cartData instanceof Promise) {
-            cartData.then((cartResult) => {
-              let cartInfo = {
-                cart: cartResult,
-              };
+          const address = saveCustomerAddressFromBilling(customerData);
+          if (address instanceof Promise) {
+            address.then((list) => {
+              if (list !== null) {
+                if(list.error === true) {
+                  removeFullScreenLoader();
+                  const eventData = {
+                    error: true,
+                    error_message: list.error_message,
+                  };
+                  triggerCheckoutEvent('onBillingAddressUpdate', eventData);
+                  return;
+                }
 
-              // If error.
-              if (cartResult.error !== undefined) {
-                // In case of error, prepare error info
-                // and call refresh cart so that message is shown.
-                cartInfo = {
-                  error_message: cartResult.error_message,
-                };
-              } else {
-                // Merging with existing local.
-                cartInfo = getInfoFromStorage();
-                cartInfo.cart = cartResult;
+                const firstKey = Object.keys(list.data)[0];
+                // Set the address id.
+                formData.static.customer_address_id = list.data[firstKey].address_mdc_id;
               }
 
-              // Trigger the event for updte.
-              triggerCheckoutEvent('onBillingAddressUpdate', cartInfo);
+              // Update billing address.
+              const cartData = addBillingInCart('update billing', formData);
+              if (cartData instanceof Promise) {
+                cartData.then((cartResult) => {
+                  let cartInfo = {
+                    cart: cartResult,
+                  };
 
-              // Remove loader.
-              removeFullScreenLoader();
+                  // If error.
+                  if (cartResult.error !== undefined) {
+                    // In case of error, prepare error info
+                    // and call refresh cart so that message is shown.
+                    cartInfo = {
+                      error_message: cartResult.error_message,
+                    };
+                  } else {
+                    // Merging with existing local.
+                    cartInfo = getInfoFromStorage();
+                    cartInfo.cart = cartResult;
+                  }
+
+                  // Trigger the event for updte.
+                  triggerCheckoutEvent('onBillingAddressUpdate', cartInfo);
+
+                  // Remove loader.
+                  removeFullScreenLoader();
+                });
+              }
             });
           }
         }
@@ -341,4 +378,17 @@ export const processBillingUpdateFromForm = (e, shipping) => {
       console.error(error);
     });
   }
+};
+
+/**
+ * Saves customer address added in billing in addressbook.
+ */
+export const saveCustomerAddressFromBilling = (data) => {
+  // If logged in user.
+  if (drupalSettings.user.uid > 0) {
+    // Add/update user address.
+    return addEditUserAddress(data);
+  }
+
+  return Promise.resolve(null);
 };
