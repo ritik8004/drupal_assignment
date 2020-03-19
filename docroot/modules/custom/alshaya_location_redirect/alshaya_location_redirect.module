@@ -39,12 +39,15 @@ function alshaya_location_redirect_page_attachments_alter(array &$page) {
       $site = substr($_acsf_site_name, 0, -2);
       $market = substr($_acsf_site_name, -2);
 
+      $worker_url = Settings::get('alshaya_location_redirect_worker_url', 'https://monitoring.factory.alshaya.com/alshaya-location-redirect');
+
       // Attach the redirect library to every page.
       $page['#attached']['library'][] = 'alshaya_location_redirect/redirect';
 
       // Add the current site and market to drupal settings.
       $page['#attached']['drupalSettings']['alshaya_location_redirect']['site'] = $site;
       $page['#attached']['drupalSettings']['alshaya_location_redirect']['market'] = $market;
+      $page['#attached']['drupalSettings']['alshaya_location_redirect']['worker_url'] = $worker_url;
     }
   }
 }

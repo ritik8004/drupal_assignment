@@ -71,12 +71,23 @@
     }
   }
   else {
-    // todo call cloudflare worker and get country code for user
-    user_location = 'kw';
-    // todo check response and bail out here if call failed to avoid redirect loop.
+    var worker_url = drupalSettings.alshaya_location_redirect.worker_url;
+    user_location = 'xx';
+
+    // Call cloudflare worker to get user country.
+    $.getJSON(worker_url, function (data){
+      $.each( data, function( key, val ) {
+        user_location = val;
+      });
+    });
 
     // if stored item does not exist, set it.
     localStorage.setItem(storage_key, user_location);
+
+    if (user_location === 'xx') {
+      // Did not receive a valid market to redirect to.
+      return;
+    }
 
     if (user_location !== current_market) {
       redirect = true;
