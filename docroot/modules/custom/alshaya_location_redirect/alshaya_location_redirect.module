@@ -19,8 +19,6 @@ function alshaya_location_redirect_page_attachments_alter(array &$page) {
     if (Settings::get('alshaya_location_redirect_by_roles', 0)) {
       // A set of roles that should be redirected.
       $included = [
-        'alshaya_magento_consumer',
-        'mobile_app_consumer',
         'anonymous',
       ];
 
@@ -35,18 +33,18 @@ function alshaya_location_redirect_page_attachments_alter(array &$page) {
     global $_acsf_site_name;
 
     if (!empty($_acsf_site_name)) {
-      // Extract the site and market from the site name string.
-      $site = substr($_acsf_site_name, 0, -2);
-      $market = substr($_acsf_site_name, -2);
+      // Extract the brand and market from the site name string.
+      $brand = substr($_acsf_site_name, 0, -2);
+      $country = substr($_acsf_site_name, -2);
 
       $worker_url = Settings::get('alshaya_location_redirect_worker_url', 'https://monitoring.factory.alshaya.com/alshaya-location-redirect');
 
       // Attach the redirect library to every page.
       $page['#attached']['library'][] = 'alshaya_location_redirect/redirect';
 
-      // Add the current site and market to drupal settings.
-      $page['#attached']['drupalSettings']['alshaya_location_redirect']['site'] = $site;
-      $page['#attached']['drupalSettings']['alshaya_location_redirect']['market'] = $market;
+      // Add the current brand, country and cloudflare worker url to drupal settings.
+      $page['#attached']['drupalSettings']['alshaya_location_redirect']['brand'] = $brand;
+      $page['#attached']['drupalSettings']['alshaya_location_redirect']['country'] = $country;
       $page['#attached']['drupalSettings']['alshaya_location_redirect']['worker_url'] = $worker_url;
     }
   }
