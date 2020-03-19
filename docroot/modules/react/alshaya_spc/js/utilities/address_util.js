@@ -22,6 +22,7 @@ export const getUserAddressList = function () {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
+      console.error(error);
     });
 };
 
@@ -37,6 +38,7 @@ export const updateUserDefaultAddress = function (address_id) {
     .then((response) => response)
     .catch((error) => {
       // Processing of error here.
+      console.error(error);
     });
 };
 
@@ -58,6 +60,7 @@ export const addEditUserAddress = function (address) {
     )
     .catch((error) => {
       // Processing of error here.
+      console.error(error);
     });
 };
 
@@ -106,7 +109,7 @@ export const addEditAddressToCustomer = (e) => {
           formData.mobile = mobile;
 
           // Getting dynamic fields data.
-          Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+          Object.entries(drupalSettings.address_fields).forEach(([key]) => {
             formData.address[key] = target[key].value;
           });
 
