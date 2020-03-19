@@ -44,7 +44,7 @@
       'ae' : 'https://www.potterybarn.ae'
     },
     'vs' : {
-      'ae' : 'www.victoriassecret.ae',
+      'ae' : 'https://www.victoriassecret.ae',
     },
   };
 
