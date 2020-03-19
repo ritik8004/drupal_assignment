@@ -120,6 +120,31 @@ export const getAddressFieldVal = (addressArray, key) => {
 };
 
 /**
+ * Deduce area name from available areas based from google.
+ *
+ * @param {*} area
+ */
+export const deduceAreaVal = (area, field) => {
+  const areas = document.querySelectorAll('[data-list=areas-list]');
+  if (areas.length > 0) {
+    for (let i = 0; i < areas.length; i++) {
+      const labelAttribute = field === 'area_parent' ? 'data-parent-label' : 'data-label';
+      const areaLable = areas[i].getAttribute(labelAttribute);
+      // If it matches with some value.
+      if (areaLable.toLowerCase().indexOf(area.toLowerCase()) !== -1
+        || area.toLowerCase().indexOf(areaLable.toLowerCase()) !== -1) {
+        const idAttribute = field === 'area_parent' ? 'data-parent-id' : 'data-id';
+        return {
+          id: areas[i].getAttribute(idAttribute),
+          label: areaLable,
+        };
+      }
+    }
+  }
+  return null;
+};
+
+/**
  * Fill the address form based on geocode info.
  *
  * @param {*} address
@@ -204,31 +229,6 @@ export const fillValueInAddressFromGeocode = (address) => {
       }
     }
   }
-};
-
-/**
- * Deduce area name from available areas based from google.
- *
- * @param {*} area
- */
-export const deduceAreaVal = (area, field) => {
-  const areas = document.querySelectorAll('[data-list=areas-list]');
-  if (areas.length > 0) {
-    for (let i = 0; i < areas.length; i++) {
-      const labelAttribute = field === 'area_parent' ? 'data-parent-label' : 'data-label';
-      const areaLable = areas[i].getAttribute(labelAttribute);
-      // If it matches with some value.
-      if (areaLable.toLowerCase().indexOf(area.toLowerCase()) !== -1
-        || area.toLowerCase().indexOf(areaLable.toLowerCase()) !== -1) {
-        const idAttribute = field === 'area_parent' ? 'data-parent-id' : 'data-id';
-        return {
-          id: areas[i].getAttribute(idAttribute),
-          label: areaLable,
-        };
-      }
-    }
-  }
-  return null;
 };
 
 /**
