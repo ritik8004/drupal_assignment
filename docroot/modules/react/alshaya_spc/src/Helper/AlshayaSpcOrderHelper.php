@@ -17,6 +17,7 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -161,6 +162,13 @@ class AlshayaSpcOrderHelper {
   protected $storeFinder;
 
   /**
+   * Renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -197,6 +205,8 @@ class AlshayaSpcOrderHelper {
    *   Config factory manager.
    * @param \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $store_finder
    *   Store finder utility.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   Renderer.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               AlshayaAddressBookManager $address_book_manager,
@@ -214,7 +224,8 @@ class AlshayaSpcOrderHelper {
                               RequestStack $request_stack,
                               OrdersManager $orders_manager,
                               ConfigFactory $configFactory,
-                              StoresFinderUtility $store_finder) {
+                              StoresFinderUtility $store_finder,
+                              RendererInterface $renderer) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -232,6 +243,7 @@ class AlshayaSpcOrderHelper {
     $this->ordersManager = $orders_manager;
     $this->configFactory = $configFactory;
     $this->storeFinder = $store_finder;
+    $this->renderer = $renderer;
   }
 
   /**
