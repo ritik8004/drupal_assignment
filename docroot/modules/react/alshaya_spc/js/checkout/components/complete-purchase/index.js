@@ -5,7 +5,7 @@ import {
   isDeliveryTypeSameAsInCart,
 } from '../../../utilities/checkout_util';
 import PriceElement from '../../../utilities/special-price/PriceElement';
-import {dispatchCustomEvent} from "../../../utilities/events";
+import { dispatchCustomEvent } from '../../../utilities/events';
 
 export default class CompletePurchase extends React.Component {
   /**
