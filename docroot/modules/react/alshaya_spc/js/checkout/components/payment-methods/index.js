@@ -64,9 +64,7 @@ export default class PaymentMethods extends React.Component {
         }
       });
 
-      paymentMethods = paymentMethods.sort(function(a, b) {
-        return a.weight - b.weight;
-      });
+      paymentMethods = paymentMethods.sort((a, b) => a.weight - b.weight);
     } else {
       const { cart } = this.props;
 
@@ -91,13 +89,13 @@ export default class PaymentMethods extends React.Component {
     if (cart.cart.cart_payment_method !== undefined
       && cart.cart.cart_payment_method !== null
       && method === cart.cart.cart_payment_method) {
-        document.getElementById(`payment-method-${method}`).checked = true;
-        // Selected key is not set, we set.
-        if (cart.selected_payment_method === undefined) {
-          cart.selected_payment_method = method;
-          refreshCart(cart);
-        }
-        return;
+      document.getElementById(`payment-method-${method}`).checked = true;
+      // Selected key is not set, we set.
+      if (cart.selected_payment_method === undefined) {
+        cart.selected_payment_method = method;
+        refreshCart(cart);
+      }
+      return;
     }
 
     showFullScreenLoader();

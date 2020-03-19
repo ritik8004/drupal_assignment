@@ -30,14 +30,14 @@ class OrderSummary extends React.Component {
     } = drupalSettings.order_details.payment;
 
     // Get Billing info.
-    var billingAddress = '';
+    let billingAddress = '';
     if (drupalSettings.order_details.billing !== null) {
       const billingAreaParent = drupalSettings.order_details.billing.area_parent_display;
       const billingArea = drupalSettings.order_details.billing.administrative_area_display;
       const billingAddressLine1 = drupalSettings.order_details.billing.address_line1;
       const billingAddressLine2 = drupalSettings.order_details.billing.address_line2;
       const billingLocalty = drupalSettings.order_details.billing.dependent_locality;
-      billingAddress = ' ' + country + ', ' + billingAreaParent + ', ' + billingArea + ', ' + billingAddressLine1 + ', ' + billingAddressLine2 + ', ' + billingLocalty;
+      billingAddress = ` ${country}, ${billingAreaParent}, ${billingArea}, ${billingAddressLine1}, ${billingAddressLine2}, ${billingLocalty}`;
     }
 
     return (
@@ -76,7 +76,7 @@ class OrderSummary extends React.Component {
         </div>
       </div>
     );
-  };
+  }
 }
 
 export default OrderSummary;

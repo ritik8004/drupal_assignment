@@ -7,8 +7,8 @@ import NewCard from './components/NewCard';
 import { CheckoutComContext } from '../../../context/CheckoutCom';
 import SelectedCard from './components/SelectedCard';
 import { setStorageInfo } from '../../../utilities/storage';
-import {dispatchCustomEvent} from "../../../utilities/events";
-import {getStringMessage} from "../../../utilities/strings";
+import { dispatchCustomEvent } from '../../../utilities/events';
+import { getStringMessage } from '../../../utilities/strings';
 
 class PaymentMethodCheckoutCom extends React.Component {
   static contextType = CheckoutComContext;

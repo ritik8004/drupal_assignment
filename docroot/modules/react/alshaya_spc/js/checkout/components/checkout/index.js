@@ -32,7 +32,7 @@ import {
 import { createFetcher } from '../../../utilities/api/fetcher';
 
 import ConditionalView from '../../../common/components/conditional-view';
-import {getStringMessage} from "../../../utilities/strings";
+import { getStringMessage } from '../../../utilities/strings';
 
 window.fetchStore = 'idle';
 
@@ -117,7 +117,7 @@ export default class Checkout extends React.Component {
   };
 
   updateCheckoutMessage = (type, message) => {
-    this.setState({messageType: type, errorSuccessMessage: message});
+    this.setState({ messageType: type, errorSuccessMessage: message });
     // @TODO: Add smooth scroll here after it is merged.
   };
 
@@ -187,9 +187,7 @@ export default class Checkout extends React.Component {
     );
   };
 
-  validateBeforePlaceOrder = () => {
-    return this.paymentMethods.current.validateBeforePlaceOrder();
-  };
+  validateBeforePlaceOrder = () => this.paymentMethods.current.validateBeforePlaceOrder();
 
   /**
    * Get the billing address component for rendering.

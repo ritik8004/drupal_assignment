@@ -3,7 +3,7 @@ import React from 'react';
 import SectionTitle from '../../../utilities/section-title';
 import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
-import {cleanMobileNumber} from "../../../utilities/checkout_util";
+import { cleanMobileNumber } from '../../../utilities/checkout_util';
 
 const FixedFields = ({
   default_val, showEmail, showFullName = true, subTitle,

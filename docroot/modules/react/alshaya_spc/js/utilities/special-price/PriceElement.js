@@ -6,7 +6,7 @@ export default class PriceElement extends React.Component {
       return (null);
     }
 
-    const { currency_config : currencyConfig } = window.drupalSettings.alshaya_spc;
+    const { currency_config: currencyConfig } = window.drupalSettings.alshaya_spc;
     const amount = parseFloat(this.props.amount);
     const priceParts = [
       (<span key="currency" className="price-currency suffix">{currencyConfig.currency_code}</span>),

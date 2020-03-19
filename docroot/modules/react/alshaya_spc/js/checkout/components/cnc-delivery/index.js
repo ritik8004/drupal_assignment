@@ -4,7 +4,7 @@ import Popup from 'reactjs-popup';
 import { checkoutAddressProcess } from '../../../utilities/checkout_address_process';
 import Loading from '../../../utilities/loading';
 import ClickCollectContainer from '../click-collect';
-import {cleanMobileNumber} from "../../../utilities/checkout_util";
+import { cleanMobileNumber } from '../../../utilities/checkout_util';
 
 class ClicknCollectDeiveryInfo extends React.Component {
   isComponentMounted = true;

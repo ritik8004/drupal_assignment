@@ -3,7 +3,7 @@ import React from 'react';
 import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CheckoutConfigurableOption from '../../../utilities/checkout-configurable-option';
 import SpecialPrice from '../../../utilities/special-price';
-import ConditionalView from "../../../common/components/conditional-view";
+import ConditionalView from '../../../common/components/conditional-view';
 
 const CheckoutCartItem = (props) => {
   const {
