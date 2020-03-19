@@ -244,7 +244,10 @@ export default class GoogleMap extends React.Component {
       // Geolocation.
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
-          const latlng = new window.google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          const latlng = new window.google.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude,
+          );
 
           // Center map on user's location.
           map.setCenter(latlng);

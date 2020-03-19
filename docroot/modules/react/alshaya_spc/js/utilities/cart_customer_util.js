@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from './storage';
 import { i18nMiddleWareUrl } from './i18n_url';
 
-const associateCart = (cartData) => {
+const associateCart = () => {
   const url = i18nMiddleWareUrl('associate-cart');
   return Axios.get(url)
     .then((response) => {
@@ -12,6 +12,7 @@ const associateCart = (cartData) => {
     })
     .catch((error) => {
       // Processing of error here.
+      console.error(error);
     });
 };
 
@@ -55,7 +56,7 @@ export async function checkCartCustomer(cartData = null) {
         return false;
       }
 
-      await associateCart(cartData);
+      await associateCart();
       return true;
     }
     emptyCustomerCart();
