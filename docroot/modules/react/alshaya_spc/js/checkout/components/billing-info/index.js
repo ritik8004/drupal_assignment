@@ -25,10 +25,6 @@ export default class BillingInfo extends React.Component {
     };
   }
 
-  componentWillUnmount() {
-    this.isComponentMounted = false;
-  }
-
   showPopup = () => {
     this.setState({
       open: true,
@@ -41,7 +37,13 @@ export default class BillingInfo extends React.Component {
     });
   };
 
+  componentWillUnmount() {
+    this.isComponentMounted = false;
+    document.removeEventListener('onBillingAddressUpdate', this.billingUpdate, false);
+  }
+
   componentDidMount() {
+    this.isComponentMounted = true;
     document.addEventListener('onBillingAddressUpdate', this.billingUpdate, false);
   }
 

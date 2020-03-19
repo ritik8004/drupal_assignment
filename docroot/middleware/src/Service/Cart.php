@@ -490,12 +490,17 @@ class Cart {
       return $cart;
     }
 
-    // Setting city value as 'NONE' so that, we can
-    // identify if billing address added is default one and
-    // not actually added by the customer on FE.
-    $data['shipping']['shipping_address']['city'] = 'NONE';
-    // Adding billing address.
-    return $this->updateBilling($data['shipping']['shipping_address']);
+    if (empty($cart['cart']['billing_address']['city'])
+      || $cart['cart']['billing_address']['city'] == 'NONE') {
+      // Setting city value as 'NONE' so that, we can
+      // identify if billing address added is default one and
+      // not actually added by the customer on FE.
+      $data['shipping']['shipping_address']['city'] = 'NONE';
+      // Adding billing address.
+      return $this->updateBilling($data['shipping']['shipping_address']);
+    }
+
+    return $cart;
   }
 
   /**

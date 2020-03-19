@@ -18,16 +18,6 @@ export default class CnCBillingAddress extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.isComponentMounted = true;
-    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
-  }
-
-  componentWillUnmount() {
-    this.isComponentMounted = false;
-    document.removeEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
-  }
-
   showPopup = () => {
     this.setState({
       open: true,
@@ -40,12 +30,14 @@ export default class CnCBillingAddress extends React.Component {
     });
   };
 
-  /**
-   * Process address form submission.
-   */
-  processAddress = (e) => {
-    const { cart } = this.props;
-    return processBillingUpdateFromForm(e, cart.cart.shipping_address);
+  componentDidMount() {
+    this.isComponentMounted = true;
+    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+  }
+
+  componentWillUnmount() {
+    this.isComponentMounted = false;
+    document.removeEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
   }
 
   /**
@@ -61,6 +53,14 @@ export default class CnCBillingAddress extends React.Component {
       this.closePopup();
     }
   };
+
+  /**
+   * Process address form submission.
+   */
+  processAddress = (e) => {
+    const { cart } = this.props;
+    return processBillingUpdateFromForm(e, cart.cart.shipping_address);
+  }
 
   render() {
     const { cart, refreshCart } = this.props;

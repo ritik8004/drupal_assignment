@@ -19,22 +19,11 @@ export default class HDBillingAddress extends React.Component {
   componentDidMount() {
     this.isComponentMounted = true;
     document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
-    document.addEventListener('onShippingAddressUpdate', this.processShippingUpdate, false);
   }
 
   componentWillUnmount() {
     this.isComponentMounted = false;
-  }
-
-  /**
-   * Handle shipping update event.
-   */
-  processShippingUpdate = (e) => {
-    // Remove local storage so that user fills billing again.
-    localStorage.removeItem(localStorageKey);
-    this.setState({
-      shippingAsBilling: true
-    });
+    document.removeEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
   }
 
   /**
@@ -51,9 +40,6 @@ export default class HDBillingAddress extends React.Component {
         localStorage.setItem(localStorageKey, false);
       }
     }
-
-    // Refresh cart.
-    this.props.refreshCart(data);
   };
 
   /**
