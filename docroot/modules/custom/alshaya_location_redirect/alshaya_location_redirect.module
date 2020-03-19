@@ -84,10 +84,9 @@ function alshaya_location_redirect_page_attachments_alter(array &$page) {
       ];
 
       // Add the current brand, country and CF worker url to drupal settings.
-      $page['#attached']['drupalSettings']['alshaya_location_redirect']['brand'] = $brand;
       $page['#attached']['drupalSettings']['alshaya_location_redirect']['country'] = $country;
       $page['#attached']['drupalSettings']['alshaya_location_redirect']['worker_url'] = $worker_url;
-      $page['#attached']['drupalSettings']['alshaya_location_redirect']['mapping'] = $mapping;
+      $page['#attached']['drupalSettings']['alshaya_location_redirect']['mapping'] = $mapping[$brand];
     }
   }
 }

@@ -15,16 +15,9 @@
   // Check if user location already exists in an existing local storage item.
   var user_location = localStorage.getItem(storage_key);
 
-  // Mapping of brands to countries..
+  // Mapping to countries.
   if (drupalSettings.alshaya_location_redirect.mapping) {
     var mapping = drupalSettings.alshaya_location_redirect.mapping;
-  }
-  else {
-    return;
-  }
-
-  if (drupalSettings.alshaya_location_redirect.brand) {
-    var brand = drupalSettings.alshaya_location_redirect.brand;
   }
   else {
     return;
@@ -75,8 +68,8 @@
     }
   }
 
-  if (redirect && mapping.hasOwnProperty(brand) && mapping[brand].hasOwnProperty(user_location)) {
-    var alternate_url = mapping[brand][user_location];
+  if (redirect && mapping.hasOwnProperty(user_location)) {
+    var alternate_url = mapping[user_location];
 
     // Perform the redirect.
     window.location = alternate_url;
