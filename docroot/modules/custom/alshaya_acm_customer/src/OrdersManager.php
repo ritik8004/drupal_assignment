@@ -328,7 +328,7 @@ class OrdersManager {
       ];
 
       // Add all other info.
-      $items[$item['sku']] = array_merge($processed_item, $item);
+      $items[] = array_merge($processed_item, $item);
     }
     $order['items'] = $items;
 

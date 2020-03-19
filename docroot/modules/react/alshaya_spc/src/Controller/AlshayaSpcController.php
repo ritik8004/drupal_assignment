@@ -306,19 +306,23 @@ class AlshayaSpcController extends ControllerBase {
       $plugin = $this->paymentMethodManager->createInstance($payment_method['id']);
       $plugin->processBuild($build);
 
-      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod(
-        $payment_method['id'],
-        $payment_method['label']->render()
-      );
+      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id']);
 
       $payment_methods[$payment_method['id']] = [
-        'name' => $payment_method_term->getName(),
+        'name' => $payment_method_term->label(),
         'description' => $payment_method_term->getDescription(),
         'code' => $payment_method_term->get('field_payment_code')->getString(),
         'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
+        'weight' => $payment_method_term->getWeight(),
       ];
+
+      // Show default on top.
+      $payment_methods[$payment_method['id']]['weight'] = $payment_methods[$payment_method['id']]['default']
+        ? -999
+        : (int) $payment_method_term->getWeight();
     }
 
+    array_multisort(array_column($payment_methods, 'weight'), SORT_ASC, $payment_methods);
     $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
 
     return $build;
@@ -332,9 +336,8 @@ class AlshayaSpcController extends ControllerBase {
    */
   public function checkoutConfirmation() {
     $order = $this->orderHelper->getLastOrder();
-
     // Get order type hd/cnc and other details.
-    $orderDetails = $this->orderHelper->getOrderTypeDetails($order);
+    $orderDetails = $this->orderHelper->getOrderDetails($order);
 
     // Get formatted customer phone number.
     $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
@@ -352,17 +355,11 @@ class AlshayaSpcController extends ControllerBase {
     // Get Products.
     $productList = [];
     foreach ($order['items'] as $item) {
-      // @TODO: Populate price and other info from order response data.
-      $product_data = $this->orderHelper->getSkuDetails($item['sku']);
-
-      if (empty($product_data)) {
-        // @TODO: Populate from order response data.
-        $product_data = [];
-        $product_data['name'] = $item['name'];
-        $product_data['image'] = '';
+      if (in_array($item['sku'], array_keys($productList))) {
+        continue;
       }
-
-      $productList[$item['sku']] = $product_data;
+      // Populate price and other info from order response data.
+      $productList[$item['sku']] = $this->orderHelper->getSkuDetails($item);
     }
 
     $settings = [
@@ -372,43 +369,14 @@ class AlshayaSpcController extends ControllerBase {
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
         'expected_delivery' => $orderDetails['delivery_method_description'],
-        'number_of_items' => count($order['items']),
+        'number_of_items' => count($productList),
         'delivery_type_info' => $orderDetails,
         'totals' => $totals,
         'items' => $productList,
-        'payment' => [],
+        'payment' => $orderDetails['payment'],
+        'billing' => $orderDetails['billing'],
       ],
     ];
-
-    $payment = $this->checkoutOptionManager->loadPaymentMethod($order['payment']['method']);
-    $settings['order_details']['payment_method'] = $payment->label();
-
-    if ($order['payment']['method'] === 'knet') {
-      // @TODO: Get this information from Magento in a better way.
-      $settings['order_details']['payment']['transactionId'] = $order['payment']['additional_information'][0];
-      $settings['order_details']['payment']['paymentId'] = $order['payment']['additional_information'][2];
-
-      // @TODO: Get this information from Magento.
-      $settings['order_details']['payment']['resultCode'] = 'CAPTURED';
-    }
-    elseif ($order['payment']['method'] == 'banktransfer' && !empty(array_filter($order['extension']['bank_transfer_instructions']))) {
-      $instructions = $order['extension']['bank_transfer_instructions'];
-      $bank_transfer = [
-        '#theme' => 'banktransfer_payment_details',
-        '#account_number' => $instructions['account_number'],
-        '#address' => $instructions['address'],
-        '#bank_name' => $instructions['bank_name'],
-        '#beneficiary_name' => $instructions['beneficiary_name'],
-        '#branch' => $instructions['branch'],
-        '#iban' => $instructions['iban'],
-        '#swift_code' => $instructions['swift_code'],
-        '#purpose' => $this->t('Purchase of Goods - @order_id', [
-          '@order_id' => $order['increment_id'],
-        ]),
-      ];
-
-      $settings['order_details']['payment']['bankDetails'] = $this->renderer->renderPlain($bank_transfer);
-    }
 
     $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
 
@@ -431,8 +399,6 @@ class AlshayaSpcController extends ControllerBase {
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
       $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
     }
-    $cache_tag = ['order:' . $order['order_id']];
-    $cache_tags = Cache::mergeTags($cache_tags, $cache_tag);
 
     return [
       '#theme' => 'spc_confirmation',
