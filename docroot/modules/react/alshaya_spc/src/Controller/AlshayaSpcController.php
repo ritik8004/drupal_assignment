@@ -449,7 +449,7 @@ class AlshayaSpcController extends ControllerBase {
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
 
-          if (strpos($value, $country_mobile_code) < 0) {
+          if (strpos($value, $country_mobile_code) === FALSE) {
             $value = $country_mobile_code . $value;
           }
 

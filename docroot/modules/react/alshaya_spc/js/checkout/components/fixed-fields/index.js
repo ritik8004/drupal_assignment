@@ -3,6 +3,7 @@ import React from 'react';
 import SectionTitle from '../../../utilities/section-title';
 import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
+import {cleanMobileNumber} from "../../../utilities/checkout_util";
 
 const FixedFields = ({
   default_val, showEmail, showFullName = true, subTitle,
@@ -44,7 +45,7 @@ const FixedFields = ({
         <TextField
           type="tel"
           name="mobile"
-          defaultValue={defaultVal !== '' ? defaultVal.telephone : ''}
+          defaultValue={defaultVal !== '' ? cleanMobileNumber(defaultVal.telephone) : ''}
           className={defaultVal !== '' && defaultVal.telephone !== '' ? 'focus' : ''}
           label={Drupal.t('Mobile Number')}
         />
