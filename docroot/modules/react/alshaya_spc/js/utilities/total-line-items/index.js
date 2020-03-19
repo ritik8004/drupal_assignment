@@ -12,7 +12,7 @@ class TotalLineItems extends React.Component {
   discountToolTipContent = (cartPromo) => {
     let promoData = `<div class="applied-discounts-title">${Drupal.t('Discount applied')}</div>`;
     if (cartPromo.length > 0) {
-      Object.entries(cartPromo).forEach(([key, promo]) => {
+      Object.entries(cartPromo).forEach(([promo]) => {
         if (promo.label.length > 0) {
           promoData += `<div class="promotion-label"><strong>${promo.label}</strong></div>`;
         }

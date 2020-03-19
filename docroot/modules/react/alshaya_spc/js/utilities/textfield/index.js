@@ -15,7 +15,7 @@ class TextField extends React.Component {
     }
   };
 
-  handleChange = (e) => {
+  handleChange = () => {
     // Only for the address fields.
     if (this.props.isAddressField !== undefined) {
       geocodeAddressToLatLng();
