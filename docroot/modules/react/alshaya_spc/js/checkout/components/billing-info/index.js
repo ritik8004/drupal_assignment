@@ -7,6 +7,7 @@ import {
 } from '../../../utilities/address_util';
 import {
   getAddressPopupClassName,
+  formatAddressDataForEditForm
 } from '../../../utilities/checkout_address_process';
 import {
   processBillingUpdateFromForm,
@@ -40,6 +41,20 @@ export default class BillingInfo extends React.Component {
     });
   };
 
+  componentDidMount() {
+    document.addEventListener('onBillingAddressUpdate', this.billingUpdate, false);
+  }
+
+  /**
+   * Handle billing address update event.
+   */
+  billingUpdate = (e) => {
+    const cart = e.detail.data();
+    this.props.refreshCart(cart);
+    this.closePopup();
+  };
+
+
   /**
    * Process the billing address process.
    */
@@ -47,6 +62,13 @@ export default class BillingInfo extends React.Component {
     const { cart } = this.props;
     return processBillingUpdateFromForm(e, cart.cart.shipping_address);
   }
+
+  /**
+   * Format address for edit address.
+   */
+  formatAddressData = (address) => (address === null ?
+    address :
+    formatAddressDataForEditForm(address))
 
   render() {
     const { cart } = this.props;
@@ -96,7 +118,7 @@ export default class BillingInfo extends React.Component {
               showEditButton={false}
               type={'billing'}
               headingText={Drupal.t('billing information')}
-              default_val={null}
+              default_val={this.formatAddressData(billing)}
             />
           </React.Suspense>
         </Popup>

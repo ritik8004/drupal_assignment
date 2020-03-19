@@ -73,7 +73,7 @@ export default class HDBillingAddress extends React.Component {
   };
 
   render() {
-    const { cart } = this.props;
+    const { cart, refreshCart } = this.props;
     // If carrier info not set on cart, means shipping is not
     // set. Thus billing is also not set and thus no need to
     // show biiling info.
@@ -96,7 +96,7 @@ export default class HDBillingAddress extends React.Component {
         <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
-            <BillingInfo cart={cart}/>
+            <BillingInfo cart={cart} refreshCart={refreshCart}/>
           </div>
           {isShippingBillingSame &&
             <div>{this.sameBillingAsShippingMessage()}</div>

@@ -1,8 +1,12 @@
 import React from 'react';
 
-import BillingPopUp from '../billing-popup';
+import Popup from 'reactjs-popup';
+import AddressForm from '../address-form';
 import BillingInfo from '../billing-info';
 import SectionTitle from '../../../utilities/section-title';
+import {
+  processBillingUpdateFromForm,
+} from '../../../utilities/checkout_address_process';
 
 export default class CnCBillingAddress extends React.Component {
   isComponentMounted = false;
@@ -37,21 +41,29 @@ export default class CnCBillingAddress extends React.Component {
   };
 
   /**
+   * Process address form submission.
+   */
+  processAddress = (e) => {
+    const { cart } = this.props;
+    return processBillingUpdateFromForm(e, cart.cart.shipping_address);
+  }
+
+  /**
    * Event handler for billing update.
    */
   processBillingUpdate = (e) => {
-    const data = e.detail.data();
-    const { refreshCart } = this.props;
     if (this.isComponentMounted) {
-      // Close modal.
-      this.closePopup();
+      const data = e.detail.data();
+      const { refreshCart } = this.props;
       // Refresh cart.
       refreshCart(data);
+      // Close modal.
+      this.closePopup();
     }
   };
 
   render() {
-    const { cart } = this.props;
+    const { cart, refreshCart } = this.props;
     const { open } = this.state;
 
     // If carrier info not set, means shipping info not set.
@@ -78,14 +90,19 @@ export default class CnCBillingAddress extends React.Component {
             <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={(e) => this.showPopup(e)}>
               {Drupal.t('please add your billing address.')}
             </div>
-            {open
-              && (
-                <BillingPopUp
-                  closePopup={this.closePopup}
-                  billing={null}
-                  shipping={shippingAddress}
-                />
-              )}
+            <Popup
+              open={open}
+              onClose={this.closeModal}
+              closeOnDocumentClick={false}
+            >
+              <AddressForm
+                closeModal={this.closeModal}
+                processAddress={this.processAddress}
+                showEmail={false}
+                headingText={Drupal.t('billing information')}
+                default_val={null}
+              />
+            </Popup>
           </div>
         </div>
       );
@@ -96,7 +113,7 @@ export default class CnCBillingAddress extends React.Component {
         <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
-            <BillingInfo cart={cart}/>
+            <BillingInfo cart={cart} refreshCart={refreshCart}/>
           </div>
         </div>
       </div>
