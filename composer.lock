@@ -11695,7 +11695,7 @@
                     }
                 },
                 "patches_applied": {
-                    "CORE-15404: Robots.txt file appearing on sub-directory - Al Markets": "patches/robotstxt/CORE-15404-show-robotstxt-in-base-path-of-site.patch"
+                    "Redirection when using a language prefix path": "https://www.drupal.org/files/issues/2018-04-11/robotstxt-avoid_redirection-2930799-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
