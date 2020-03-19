@@ -16,7 +16,7 @@ use Drupal\Core\Site\Settings;
 function alshaya_location_redirect_page_attachments_alter(array &$page) {
   if (Settings::get('alshaya_location_redirect', 1)) {
     // If configured to do so, only redirect for certain roles.
-    if (Settings::get('alshaya_location_redirect_by_roles', 0)) {
+    if (Settings::get('alshaya_location_redirect_by_roles', 1)) {
       // A set of roles that should be redirected.
       $included = [
         'anonymous',
@@ -26,6 +26,15 @@ function alshaya_location_redirect_page_attachments_alter(array &$page) {
       $roles = $current_user->getRoles();
 
       if (!count(array_intersect($roles, $included))) {
+        return;
+      }
+    }
+
+    // If configured to do so, exclude paths beginning with '/user'.
+    if (Settings::get('alshaya_location_redirect_exclude_login', 1)) {
+      $current_path = \Drupal::service('path.current')->getPath();
+
+      if (substr($current_path, 0, 5) === '/user') {
         return;
       }
     }
