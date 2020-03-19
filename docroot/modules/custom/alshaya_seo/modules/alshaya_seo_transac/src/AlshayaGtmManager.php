@@ -1168,7 +1168,7 @@ class AlshayaGtmManager {
           if (in_array($orderItem['sku'], array_keys($skus))) {
             continue;
           }
-          $skus[] = $item['sku'];
+          $skus[] = $orderItem['sku'];
           $productSKU[] = $orderItem['sku'];
           $product_node = $this->skuManager->getDisplayNode($orderItem['sku']);
 
