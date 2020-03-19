@@ -35,7 +35,7 @@
       align-items: center;
       margin-top: 0;
 
-      &.is-active {
+      &.is-active:not(.sale-item) {
         font-family: $alshaya-bold;
       }
     }

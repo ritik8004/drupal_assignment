@@ -86,6 +86,7 @@ install:
   - source $BLT_DIR/scripts/travis/setup_project
   - nvm install 8.12.0
   - nvm use 8.12.0
+  - npm install -g gulp-cli
   # Setup the themes here so the node_modules folders can be cached.
   - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
   # Frontend-setup.sh changed directory, hence we return to the original dir.

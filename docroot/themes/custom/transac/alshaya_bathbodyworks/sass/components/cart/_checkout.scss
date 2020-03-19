@@ -122,10 +122,10 @@
             }
 
             div.items {
-              width: 56%;
+              width: calc(100% - 10rem);
 
               html[lang=ar] & {
-                width: 56%;
+                width: calc(100% - 10rem);
               }
 
               & > .dark {
@@ -136,13 +136,9 @@
 
           &.quantity {
             float: $right;
-            margin-left: 0;
+            margin-#{$left}: 0;
             width: calc(100% - 7.3125rem);
             margin-top: -2.2rem;
-
-            html[lang=ar] & {
-              width: calc(100% - 6.8125rem);
-            }
 
             a {
               line-height: 3.4;
@@ -180,19 +176,6 @@
             padding-#{$right}: 0;
             width: calc(100% - 7.3125rem);
             padding-bottom: 0;
-
-            html[lang=ar] & {
-              width: calc(100% - 6.8125rem);
-            }
-
-            .delivery-options-mobile {
-              float: $right;
-              font-size: 0.875rem;
-              font-family: $alshaya-bold;
-              margin-bottom: 0.9375rem;
-              width: 100%;
-              color: $primary_text;
-            }
 
             .delivery-options-tooltip-wrapper {
               float: $right;

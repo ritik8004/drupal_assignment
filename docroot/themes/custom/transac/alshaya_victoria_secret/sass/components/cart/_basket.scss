@@ -1,3 +1,4 @@
+// Dummy File comment - to test fe validation in travis.
 .alias--cart {
   .edit-checkout,
   #edit-actions-top .checkout-top-button {
@@ -97,7 +98,6 @@
         @include breakpoint($only-mobile) {
           padding-#{$left}: 0 !important;
           margin-top: 0;
-          margin-#{$left}: 9.1875rem;
         }
       }
 
@@ -164,9 +164,7 @@
         }
 
         @include breakpoint($only-mobile) {
-          .delivery-options-tooltip-wrapper {
-            #{$left}: 9rem;
-          }
+          width: calc(100% - 8rem);
         }
       }
     }

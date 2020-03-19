@@ -565,6 +565,12 @@ class MobileAppUtility {
     if ($deeplink = $this->getDeepLinkFromUrl($url)) {
       $return['deeplink'] = $deeplink;
     }
+
+    // If check link field title is not empty.
+    if (!empty($title = $entity->$field->title)) {
+      $return['title'] = $title;
+    }
+
     return $return;
   }
 

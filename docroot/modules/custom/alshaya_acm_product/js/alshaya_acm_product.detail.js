@@ -107,7 +107,6 @@
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
-          var parentSku = variantInfo.parent_sku;
 
           if (typeof variantInfo === 'undefined') {
             return;
@@ -123,7 +122,7 @@
           }
           // On variant change, disable/enable Add to bag, quantity dropdown
           // and show message based on value in drupalSettings.
-          Drupal.disableLimitExceededProducts(parentSku, selected);
+          Drupal.disableLimitExceededProducts(sku, selected);
 
           // Update quantity dropdown based on stock available for the variant.
           $('select[name="quantity"] option', this).each(function () {
@@ -399,7 +398,7 @@
 
       // If limit exists at parent level.
       if ((parentInfo !== '') && (typeof parentInfo.maxSaleQty !== "undefined")) {
-        var variantToDisableSelector = $('input[value=' + sku + ']').closest('.sku-base-form');
+        var variantToDisableSelector = $('input[value="' + sku + '"]').closest('.sku-base-form');
         var allVariants = parentInfo.variants ? Object.keys(parentInfo.variants) : [];
 
         // If cart is not empty.

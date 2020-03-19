@@ -365,7 +365,7 @@ class AlshayaAlgoliaIndexHelper {
     $list = [];
     foreach ($categories as $category) {
       // Skip the term which is disabled.
-      if ($category->get('field_commerce_status')->getString() !== '1' || $category->get('field_category_include_menu')->getString() !== '1') {
+      if ($category->get('field_commerce_status')->getString() !== '1') {
         continue;
       }
       $parents = array_reverse($this->termStorage->loadAllParents($category->id()));

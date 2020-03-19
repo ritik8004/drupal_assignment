@@ -355,6 +355,7 @@
     width: 100%;
     transition: padding-#{$left} 0.2s;
     box-sizing: border-box;
+    -webkit-appearance: none;
 
     @include breakpoint($only-mobile) {
       margin-#{$left}: 0.5rem;
@@ -456,18 +457,16 @@
       }
 
       &.focused {
-        &.show-algolia-search-bar {
-          .algolia-search-back-icon {
-            visibility: visible;
+        .algolia-search-back-icon {
+          visibility: visible;
 
-            @include icon(arrow-#{$left}) {
-              font-size: 2.25rem;
-            }
+          @include icon(arrow-#{$left}) {
+            font-size: 2.25rem;
           }
+        }
 
-          .react-autosuggest__input {
-            padding-#{$left}: 2.3125rem !important;
-          }
+        .react-autosuggest__input {
+          padding-#{$left}: 2.3125rem !important;
         }
       }
     }

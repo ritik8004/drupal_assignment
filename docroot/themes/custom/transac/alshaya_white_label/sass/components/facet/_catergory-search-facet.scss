@@ -26,7 +26,7 @@
     }
 
     .facet-item {
-      &.is-active:not(.facet-item--expanded) {
+      &.is-active:not(.facet-item--expanded):not(.sale-item) {
         background: none;
 
         .facet-item__value {
@@ -85,7 +85,7 @@
     }
 
     .facet-item {
-      &.is-active:not(.facet-item--expanded) {
+      &.is-active:not(.facet-item--expanded):not(.sale-item) {
         background: $plp_filter_active_item;
 
         @include icon(check, after) {
@@ -103,7 +103,7 @@
       @include breakpoint($upto-desktop) {
         display: none;
         overflow-y: auto;
-        max-height: calc(100vh - 15rem);
+        max-height: calc(100vh - 18rem);
         position: absolute;
         background: $plp_facet_active_bg;
         z-index: 2;
