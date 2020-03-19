@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   addShippingInCart,
   removeFullScreenLoader,
@@ -20,9 +19,8 @@ import {
  * Process the data got from address form submission.
  *
  * @param {*} e
- * @param {*} cart
  */
-export const checkoutAddressProcess = function (e, cart) {
+export const checkoutAddressProcess = function (e) {
   const notValidAddress = validateAddressFields(e, true);
   // If address form is not valid.
   if (notValidAddress) {
