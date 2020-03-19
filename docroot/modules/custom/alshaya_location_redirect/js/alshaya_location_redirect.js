@@ -15,60 +15,37 @@
   // Check if user location already exists in an existing local storage item.
   var user_location = localStorage.getItem(storage_key);
 
-  // todo check this mapping
   // Mapping of sites to markets.
   var mapping = {
-    'aeo' : {
-      'kw': '',
-      'sa' : '',
-      'ae' : '',
-      'eg' : '',
-    },
-    'bb' : {
-      'me': ''
-    },
     'bbw' : {
-      'kw': '',
-      'sa' : '',
-      'ae' : ''
+      'kw': 'https://www.bathandbodyworks.com.kw',
+      'sa' : 'https://www.bathandbodyworks.com.sa',
+      'ae' : 'https://www.bathandbodyworks.ae'
     },
-    'd' : {},
-    'fl' : {},
+    'fl' : {
+      'kw' : 'https://www.footlocker.com.kw',
+      'ae' : 'https://www.footlocker.ae',
+      'sa' : 'https://www.footlocker.com.sa',
+    },
     'hm': {
       'kw' : 'https://kw.hm.com',
       'ae' : 'https://ae.hm.com',
       'sa' : 'https://sa.hm.com',
       'eg' : 'https://eg.hm.com'
     },
-    'jus': {
-      'kw': '',
-      'sa' : '',
-      'ae' : ''
-    },
-    'kz': {
-      'kw': '',
-      'sa' : '',
-      'ae' : ''
-    },
     'mc' : {
-      'kw' : '',
-      'sa' : '',
-      'ae' : ''
+      'kw' : 'https://www.mothercare.com.kw',
+      'sa' : 'https://www.mothercare.com.sa',
+      'ae' : 'https://www.mothercare.ae'
     },
     'pb' : {
-      'kw': '',
-      'sa' : '',
-      'ae' : ''
-    },
-    've' : {
-      'kw': ''
+      'kw' : 'https://www.potterybarn.com.kw',
+      'sa' : 'https://www.potterybarn.com.sa',
+      'ae' : 'https://www.potterybarn.ae'
     },
     'vs' : {
-      'kw': {},
-      'ae' : {},
-      'sa' : {}
+      'ae' : 'www.victoriassecret.ae',
     },
-    'we' : {}
   };
 
   if (drupalSettings.alshaya_location_redirect.site) {
