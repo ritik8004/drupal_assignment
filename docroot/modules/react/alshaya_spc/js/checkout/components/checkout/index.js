@@ -133,6 +133,7 @@ export default class Checkout extends React.Component {
       this.updateCheckoutMessage('error', cart.error_message);
     } else {
       addInfoInStorage(cart);
+      this.setState({ cart });
     }
   };
 
