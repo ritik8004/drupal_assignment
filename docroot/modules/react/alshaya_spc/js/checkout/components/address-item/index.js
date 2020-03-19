@@ -30,7 +30,7 @@ export default class AddressItem extends React.Component {
   }
 
   componentDidMount() {
-    // Close the modal
+    // Close the modal.
     document.addEventListener('closeAddressListPopup', this.closeModal, false);
   }
 
@@ -121,12 +121,12 @@ export default class AddressItem extends React.Component {
     Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
       if (address[key] !== undefined) {
         let fillVal = address[key];
-        // Handling for area field.
+
         if (key === 'administrative_area') {
+          // Handling for area field.
           fillVal = address.area_label;
-        }
-        // Handling for parent area.
-        else if (key === 'area_parent') {
+        } else if (key === 'area_parent') {
+          // Handling for parent area.
           fillVal = address.area_parent_label;
         }
 
@@ -161,7 +161,7 @@ export default class AddressItem extends React.Component {
         </div>
         <div className="spc-address-tile-actions">
           <div className="spc-address-btns">
-            <button disabled={isSelected} className="spc-address-select-address" onClick={() => this.updateShippingAddress(address)}>{buttonText}</button>
+            <button type="button" disabled={isSelected} className="spc-address-select-address" onClick={() => this.updateShippingAddress(address)}>{buttonText}</button>
             <div title={Drupal.t('Edit Address')} className="spc-address-tile-edit" onClick={(e) => this.openModal(e)}>
               <EditAddressSVG />
               <Popup open={open} onClose={this.closeModal} closeOnDocumentClick={false}>
