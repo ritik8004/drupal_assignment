@@ -77,20 +77,25 @@ export default class AddressList extends React.Component {
       return (null);
     }
 
-    const { cart, closeModal, headingText } = this.props;
+    const { cart, closeModal, headingText, showEditButton, type } = this.props;
 
     const addressItem = [];
     Object.entries(addressList).forEach(([key, address]) => {
+      let fieldToCheck = type === 'billing'
+        ? 'billing_address'
+        : 'shipping_address';
       const isSelected = (
-        cart.cart.shipping_address.customer_address_id.toString() === address.address_mdc_id
+        cart.cart[fieldToCheck].customer_address_id.toString() === address.address_mdc_id
       );
       addressItem.push(
         <AddressItem
           isSelected={isSelected}
           key={key}
+          type={type}
           address={address}
           headingText={headingText}
           processAddress={this.processAddress}
+          showEditButton={showEditButton}
           refreshAddressList={this.refreshAddressList}
         />,
       );

@@ -148,8 +148,10 @@ export default class EmptyDeliveryText extends React.Component {
             <AddressContent
               closeModal={this.closeModal}
               cart={this.props.cart}
+              showEditButton={true}
+              headingText={Drupal.t('delivery information')}
               processAddress={this.processAddress}
-              show_prefered={window.drupalSettings.user.uid > 0}
+              type={'shipping'}
               showEmail={window.drupalSettings.user.uid === 0}
               default_val={defaultVal}
             />

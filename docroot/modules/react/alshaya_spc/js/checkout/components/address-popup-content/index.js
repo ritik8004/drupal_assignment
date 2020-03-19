@@ -10,7 +10,9 @@ const AddressContent = (props) => {
     default_val,
     showEmail,
     processAddress,
-    headingText
+    headingText,
+    showEditButton,
+    type
   } = props;
 
   if (window.drupalSettings.user.uid > 0
@@ -20,14 +22,15 @@ const AddressContent = (props) => {
         cart={cart}
         closeModal={closeModal}
         headingText={headingText}
+        showEditButton={showEditButton}
         processAddress={processAddress}
+        type={type}
       />
     );
   }
 
   return (
     <AddressForm
-      show_prefered={show_prefered}
       closeModal={closeModal}
       default_val={default_val}
       showEmail={showEmail}

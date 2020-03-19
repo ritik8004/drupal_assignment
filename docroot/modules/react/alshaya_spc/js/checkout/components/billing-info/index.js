@@ -93,6 +93,8 @@ export default class BillingInfo extends React.Component {
               cart={this.props.cart}
               processAddress={this.processAddress}
               showEmail={false}
+              showEditButton={false}
+              type={'billing'}
               headingText={Drupal.t('billing information')}
               default_val={null}
             />
