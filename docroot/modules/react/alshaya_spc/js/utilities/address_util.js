@@ -176,7 +176,7 @@ export const addEditAddressToCustomer = (e) => {
  * @param {*} parentId
  */
 export const getAreasList = (isParent, parentId) => {
-  const areasList = new Array();
+  const areasList = [];
   const areas = document.querySelectorAll('[data-list=areas-list]');
   if (areas.length > 0) {
     const idAttribute = isParent ? 'data-parent-id' : 'data-id';
