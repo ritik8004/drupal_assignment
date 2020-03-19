@@ -126,7 +126,7 @@
   });
 
   document.addEventListener('orderPaymentMethod', function (e) {
-    Drupal.alshayaSeoGtmPushCheckoutOption(e.detail.data, 2);
+    Drupal.alshayaSeoGtmPushCheckoutOption(e.detail.payment_method, 2);
   });
 
   /**

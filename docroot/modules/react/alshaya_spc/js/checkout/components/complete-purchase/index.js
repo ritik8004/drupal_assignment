@@ -5,6 +5,7 @@ import {
   isDeliveryTypeSameAsInCart,
 } from '../../../utilities/checkout_util';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import {dispatchCustomEvent} from "../../../utilities/events";
 
 export default class CompletePurchase extends React.Component {
   /**
@@ -14,14 +15,9 @@ export default class CompletePurchase extends React.Component {
     e.preventDefault();
     const { cart, validateBeforePlaceOrder } = this.props;
 
-    // Dispatch event for GTM tracking.
-    const event = new CustomEvent('orderPaymentMethod', {
-      bubbles: true,
-      detail: {
-        data: cart.selected_payment_method,
-      },
+    dispatchCustomEvent('orderPaymentMethod', {
+      payment_method: cart.selected_payment_method,
     });
-    document.dispatchEvent(event);
 
     // If purchase button is not clickable.
     if (!this.completePurchaseButtonActive(cart)) {
