@@ -15,8 +15,8 @@ use Drupal\Core\Site\Settings;
  */
 function alshaya_location_redirect_page_attachments_alter(array &$page) {
   if (Settings::get('alshaya_location_redirect', 1)) {
-    // Exclude admin routes if configured to do so.
-    if (Settings::get('alshaya_location_redirect_by_roles', 1)) {
+    // If configured to do so, only redirect for certain roles.
+    if (Settings::get('alshaya_location_redirect_by_roles', 0)) {
       // A set of roles that should be redirected.
       $included = [
         'alshaya_magento_consumer',
