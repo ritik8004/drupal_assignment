@@ -166,9 +166,7 @@ export const validateAddressFields = (e, validateEmail) => {
   // Iterate over address fields.
   Object.entries(drupalSettings.address_fields).forEach(
     ([key, field]) => {
-      if (field.required === true || (
-        key === 'area_parent' || key === 'administrative_area'
-      )) {
+      if (field.required === true) {
         const addField = e.target.elements[key].value.trim();
         if (addField.length === 0) {
           document.getElementById(`${key}-error`).innerHTML = Drupal.t('Please enter @label.', { '@label': field.label });
