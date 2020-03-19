@@ -21,7 +21,7 @@ export async function checkCartCustomer(cartData = null) {
         return false;
       }
 
-      await associateCart(cartData);
+      await associateCart();
       return true;
     }
     emptyCustomerCart();
@@ -30,7 +30,7 @@ export async function checkCartCustomer(cartData = null) {
   return false;
 }
 
-const associateCart = (cartData) => {
+const associateCart = () => {
   const url = i18nMiddleWareUrl('associate-cart');
   return Axios.get(url)
     .then((response) => {
@@ -39,7 +39,7 @@ const associateCart = (cartData) => {
       }
     })
     .catch((error) => {
-      // Processing of error here.
+      console.error(error);
     });
 };
 

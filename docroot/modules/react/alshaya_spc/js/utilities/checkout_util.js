@@ -24,6 +24,7 @@ export const getShippingMethods = function (cartId, data) {
       (response) => response.data,
       (error) => {
         // Processing of error here.
+        console.error(error);
       },
     );
 };
