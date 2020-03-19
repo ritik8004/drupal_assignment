@@ -390,8 +390,11 @@ class Cart {
 
     // If billing needs to updated or billing is not available added at all
     // in the cart. Assuming if name is not set in billing means billing is
-    // not set.
-    if ($update_billing || empty($cart['cart']['billing_address']['firstname'])) {
+    // not set. City with value 'NONE' means, that this was added in CnC
+    // by default and not changed by user.
+    if ($update_billing
+      || empty($cart['cart']['billing_address']['firstname'])
+      || $cart['cart']['billing_address']['city'] == 'NONE') {
       $cart = $this->updateBilling($data['shipping']['shipping_address']);
     }
 
