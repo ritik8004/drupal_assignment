@@ -19,6 +19,11 @@ import ToggleButton from './components/ToggleButton';
 import LocationSearchForm from './components/LocationSearchForm';
 import DeviceView from '../../../common/components/device-view';
 import FullScreenSVG from '../full-screen-svg';
+import {
+  requestFullscreen,
+  isFullScreen,
+  exitFullscreen,
+} from '../../../utilities/map/fullScreen';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -87,15 +92,25 @@ class ClickCollect extends React.Component {
   mapMarkerClick = (e) => {
     const index = e.detail.markerSettings.zIndex - 1;
     const allStores = this.cncListView.current.querySelectorAll('.select-store');
-    [].forEach.call(allStores, (el) => {
-      el.classList.remove('selected');
-    });
+    this.removeClassForAll(allStores, 'selected');
+
     this.cncListView.current.querySelector(`[data-index="${index}"]`).classList.add('selected');
     this.selectStoreButtonVisibility(true);
     if (window.innerWidth < 768 && this.cncMapView.current !== null && this.cncMapView.current.style.display === 'block') {
       this.toggleFullScreen(true);
+      const allMapListStores = this.mapStoreList.current.querySelectorAll('.select-store');
+      this.removeClassForAll(allMapListStores, 'selected');
       this.mapStoreList.current.querySelector(`[data-index="${index}"]`).classList.add('selected');
     }
+  }
+
+  /**
+   * Remove class from all elements of given selector.
+   */
+  removeClassForAll = (selector, className) => {
+    [].forEach.call(selector, (el) => {
+      el.classList.remove(className);
+    });
   }
 
   /**
@@ -288,8 +303,8 @@ class ClickCollect extends React.Component {
       return;
     }
 
-    if (document.fullscreenElement || fullscreen === false) {
-      if (!document.fullscreenElement) {
+    if (isFullScreen() || fullscreen === false) {
+      if (!isFullScreen()) {
         return;
       }
       const self = this;
@@ -300,7 +315,7 @@ class ClickCollect extends React.Component {
       if (selectedStore) {
         selectedStore.querySelector('.spc-map-list-close').click();
       }
-      document.exitFullscreen()
+      exitFullscreen()
         .then(() => {
           self.refreshMap();
         })
@@ -310,7 +325,7 @@ class ClickCollect extends React.Component {
         this.selectStoreButtonVisibility(false);
       }
     } else {
-      this.cncMapView.current.requestFullscreen();
+      requestFullscreen(this.cncMapView.current);
       this.setState({
         mapFullScreen: true,
       });
