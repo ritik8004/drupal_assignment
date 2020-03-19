@@ -1252,7 +1252,7 @@ body.path--cart .c-content__region {
   #edit-billing-address {
     .address-container-inline {
       > .form-item {
-        width: calc(100% - 0.875rem);
+        width: calc((100% - 0.875rem) / 2);
       }
     }
   }
