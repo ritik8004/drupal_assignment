@@ -158,6 +158,10 @@ class PromotionController extends ControllerBase {
 
       $item = [];
 
+      if (!$this->skuManager->getStockQuantity($free_gift)) {
+        continue;
+      }
+
       $item['#title']['#markup'] = $free_gift->label();
       $item['#url'] = Url::fromRoute(
         'alshaya_acm_promotion.free_gift_modal',
