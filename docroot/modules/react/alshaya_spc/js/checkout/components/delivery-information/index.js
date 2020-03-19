@@ -9,20 +9,6 @@ import {
 } from '../../../utilities/checkout_util';
 
 export default class DeliveryInformation extends React.Component {
-  constructor(props) {
-    super(props);
-    const { cart } = this.props;
-    this.state = {
-      showEmpty: this.showEmpty(cart),
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      showEmpty: this.showEmpty(nextProps.cart),
-    });
-  }
-
   showEmpty = (cart) => {
     // Delivery method selected is not same as what set in cart.
     if (!isDeliveryTypeSameAsInCart(cart)) {
@@ -45,7 +31,6 @@ export default class DeliveryInformation extends React.Component {
     if (typeof cart.cart.delivery_type !== 'undefined') {
       return cart.cart.delivery_type;
     }
-
     return 'hd';
   }
 

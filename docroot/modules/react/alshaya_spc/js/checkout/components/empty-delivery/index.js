@@ -8,11 +8,12 @@ import {
 import { addEditAddressToCustomer } from '../../../utilities/address_util';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
 import ClickCollectContainer from '../click-collect';
+import Ifelse from '../../../common/components/if-else';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
 export default class EmptyDeliveryText extends React.Component {
-  _isMounted = false;
+  isComponentMounted = false;
 
   constructor(props) {
     super(props);
@@ -20,7 +21,7 @@ export default class EmptyDeliveryText extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
+    this.isComponentMounted = true;
     document.addEventListener(
       'refreshCartOnAddress',
       this.eventListener,
@@ -37,7 +38,7 @@ export default class EmptyDeliveryText extends React.Component {
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this.isComponentMounted = false;
     document.removeEventListener(
       'refreshCartOnAddress',
       this.eventListener,
@@ -50,22 +51,21 @@ export default class EmptyDeliveryText extends React.Component {
     );
   }
 
+  eventListener = (e) => {
+    const data = e.detail.data();
+    const { refreshCart } = this.props;
+    refreshCart(data);
+    if (this.isComponentMounted) {
+      this.closeModal();
+    }
+  };
+
   openModal = () => {
     this.setState({ open: true });
   };
 
   closeModal = () => {
     this.setState({ open: false });
-  };
-
-
-  eventListener = (e) => {
-    const data = e.detail.data();
-    const { refreshCart } = this.props;
-    refreshCart(data);
-    if (this._isMounted) {
-      this.closeModal();
-    }
   };
 
   /**
@@ -84,40 +84,21 @@ export default class EmptyDeliveryText extends React.Component {
   };
 
   render() {
-    const { delivery_type: deliveryType, cart } = this.props.cart;
     const { open } = this.state;
-
-    if (deliveryType === 'cnc') {
-      return (
-        <div className="spc-empty-delivery-information">
-          <div
-            onClick={this.openModal}
-            className="spc-checkout-empty-delivery-text"
-          >
-            {Drupal.t('select your preferred collection store')}
-          </div>
-          <Popup
-            open={open}
-            onClose={this.closeModal}
-            closeOnDocumentClick={false}
-          >
-            <ClickCollectContainer closeModal={this.closeModal} />
-          </Popup>
-        </div>
-      );
-    }
+    const { cart: cartProp } = this.props;
+    const { cart: { delivery_type: deliveryType, cart } } = this.props;
+    const { updateCoordsAndStoreList } = this.context;
 
     let defaultVal = null;
     // If logged in user.
-    if (window.drupalSettings.user.uid > 0) {
-      const { fname, lname } = window.drupalSettings.user_name;
+    if (drupalSettings.user.uid > 0) {
+      const { fname, lname } = drupalSettings.user_name;
       defaultVal = {
         static: {
           fullname: `${fname} ${lname}`,
         },
       };
-    } else if (cart.carrier_info !== null
-      && cart.shipping_address !== null) {
+    } else if (cart.carrier_info !== null && cart.shipping_address !== null) {
       // If carrier info set, means shipping is set.
       // Get name info from there.
       const shippingAddress = cart.shipping_address;
@@ -130,33 +111,43 @@ export default class EmptyDeliveryText extends React.Component {
       };
     }
 
-    return (
-      <div className="spc-empty-delivery-information">
-        <div
-          onClick={this.openModal}
-          className="spc-checkout-empty-delivery-text"
-        >
-          {Drupal.t('please add your contact details and address.')}
-        </div>
-        <Popup
-          className={getAddressPopupClassName()}
-          open={open}
-          onClose={this.closeModal}
-          closeOnDocumentClick={false}
-        >
+    const popup = (
+      <Popup
+        open={open}
+        className={deliveryType === 'cnc' ? '' : getAddressPopupClassName()}
+        onClose={this.closeModal}
+        closeOnDocumentClick={false}
+      >
+        <Ifelse condition={deliveryType === 'cnc'}>
+          <ClickCollectContainer
+            closeModal={this.closeModal}
+            onStoreFetch={updateCoordsAndStoreList}
+          />
           <React.Suspense fallback={<Loading />}>
             <AddressContent
               closeModal={this.closeModal}
-              cart={this.props.cart}
+              cart={cartProp}
               showEditButton={true}
               headingText={Drupal.t('delivery information')}
               processAddress={this.processAddress}
               type="shipping"
-              showEmail={window.drupalSettings.user.uid === 0}
+              showEmail={drupalSettings.user.uid === 0}
               default_val={defaultVal}
             />
           </React.Suspense>
-        </Popup>
+        </Ifelse>
+      </Popup>
+    );
+
+    return (
+      <div className="spc-empty-delivery-information">
+        <div onClick={this.openModal} className="spc-checkout-empty-delivery-text">
+          <Ifelse condition={deliveryType === 'cnc'}>
+            {Drupal.t('select your preferred collection store')}
+            {Drupal.t('please add your contact details and address.')}
+          </Ifelse>
+        </div>
+        {popup}
       </div>
     );
   }
