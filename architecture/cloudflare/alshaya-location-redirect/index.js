@@ -1,12 +1,38 @@
+/**
+ * Returns the user's market
+ * @param {Request} request
+ */
+async function handleRequest(request) {
+  // The `cf-ipcountry` header is not supported in the previewer
+  const country = request.headers.get('cf-ipcountry')
+  var market = countryMap[country]
+
+  if (undefined === market) {
+    market = 'xx';
+  }
+
+  const someJSON = {
+    result: [market],
+  }
+
+  const init = {
+    headers: {
+      'content-type': 'application/json;charset=UTF-8',
+    },
+  }
+
+  return new Response(JSON.stringify(someJSON), init)
+}
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
 /**
- * Respond with hello worker text
- * @param {Request} request
+ * A map of the country to market
+ * @param {Object} countryMap
  */
-async function handleRequest(request) {
-  return new Response('Hello worker!', {
-    headers: { 'content-type': 'text/plain' },
-  })
+const countryMap = {
+  "KW": 'kw',
+  "SA" : "sa",
+  "AE"  : "ae",
+  "EG" : "eg",
 }
