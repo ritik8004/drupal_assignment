@@ -9,30 +9,30 @@ class TotalLineItems extends React.Component {
   /**
    * Get the content of discount tooltip.
    */
-  discountToolTipContent = (cart_promo) => {
-    let promo_data = `<div class="applied-discounts-title">${Drupal.t('Discount applied')}</div>`;
-    if (cart_promo.length > 0) {
-      Object.entries(cart_promo).forEach(([key, promo]) => {
+  discountToolTipContent = (cartPromo) => {
+    let promoData = `<div class="applied-discounts-title">${Drupal.t('Discount applied')}</div>`;
+    if (cartPromo.length > 0) {
+      Object.entries(cartPromo).forEach(([key, promo]) => {
         if (promo.label.length > 0) {
-          promo_data += `<div class="promotion-label"><strong>${promo.label}</strong></div>`;
+          promoData += `<div class="promotion-label"><strong>${promo.label}</strong></div>`;
         }
 
         if (promo.description.length > 0) {
-          promo_data += `<div class="promotion-description">${promo.description}</div><br/>`;
+          promoData += `<div class="promotion-description">${promo.description}</div><br/>`;
         }
       });
     }
 
-    return promo_data;
+    return promoData;
   }
 
   render() {
-    const discount_tooltip = this.discountToolTipContent(this.props.cart_promo);
+    const discountTooltip = this.discountToolTipContent(this.props.cart_promo);
 
     return (
       <div className="totals">
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={this.props.totals.subtotal_incl_tax} />
-        <TotalLineItem tooltip tooltipContent={discount_tooltip} name="discount-total" title={Drupal.t('discount')} value={this.props.totals.discount_amount} />
+        <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('discount')} value={this.props.totals.discount_amount} />
 
         <ConditionalView condition={this.props.totals.shipping_incl_tax > 0}>
           <TotalLineItem
@@ -52,7 +52,7 @@ class TotalLineItems extends React.Component {
           />
         </ConditionalView>
 
-        <TotalLineItem tooltip tooltipContent={discount_tooltip} name="discount-total" title={Drupal.t('Discount')} value={this.props.totals.discount_amount} />
+        <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={this.props.totals.discount_amount} />
 
         <div className="hero-total">
           <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={this.props.totals.base_grand_total} />

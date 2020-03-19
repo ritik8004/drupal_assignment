@@ -27,10 +27,10 @@ export function restoreCartApiUrl() {
  * Apply/Remove the promo code.
  *
  * @param action
- * @param promo_code
+ * @param promoCode
  * @returns {boolean}
  */
-export const applyRemovePromo = function (action, promo_code) {
+export const applyRemovePromo = function (action, promoCode) {
   let cart = cartAvailableInStorage();
   if (cart === false) {
     return null;
@@ -40,11 +40,11 @@ export const applyRemovePromo = function (action, promo_code) {
     cart = cart.cart_id;
   }
 
-  const api_url = updateCartApiUrl();
+  const apiUrl = updateCartApiUrl();
 
-  return axios.post(api_url, {
+  return axios.post(apiUrl, {
     action,
-    promo: promo_code,
+    promo: promoCode,
     cart_id: cart,
   })
     .then((response) => response.data, (error) => {
@@ -65,9 +65,9 @@ export const updateCartItemData = function (action, sku, quantity) {
     cart = cart.cart_id;
   }
 
-  const api_url = updateCartApiUrl();
+  const apiUrl = updateCartApiUrl();
 
-  return axios.post(api_url, {
+  return axios.post(apiUrl, {
     action,
     sku,
     cart_id: cart,
@@ -94,7 +94,7 @@ export const updateCartItemData = function (action, sku, quantity) {
         }
       }
 
-      return response.data
+      return response.data;
     }, (error) => {
     // Processing of error here.
     });
@@ -110,8 +110,8 @@ export const addPaymentMethodInCart = (action, data) => {
     cart = cart.cart_id;
   }
 
-  const api_url = updateCartApiUrl();
-  return axios.post(api_url, {
+  const apiUrl = updateCartApiUrl();
+  return axios.post(apiUrl, {
     action,
     payment_info: data,
     cart_id: cart,
