@@ -48,7 +48,8 @@ export const applyRemovePromo = function (action, promoCode) {
     cart_id: cart,
   })
     .then((response) => response.data, (error) => {
-    // Processing of error here.
+      // Processing of error here.
+      console.error(error);
     });
 };
 
@@ -96,7 +97,8 @@ export const updateCartItemData = function (action, sku, quantity) {
 
       return response.data;
     }, (error) => {
-    // Processing of error here.
+      // Processing of error here.
+      console.error(error);
     });
 };
 

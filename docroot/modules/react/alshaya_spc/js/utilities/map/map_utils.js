@@ -126,7 +126,7 @@ export const getAddressFieldVal = (addressArray, key) => {
  */
 export const fillValueInAddressFromGeocode = (address) => {
   Object.entries(drupalSettings.address_fields).forEach(
-    ([key, field]) => {
+    ([key]) => {
       // Some handling for select list fields (areas/city).
       if ((key !== 'administrative_area' && key !== 'area_parent')) {
         // We will handle area/parent area separately.
@@ -237,7 +237,7 @@ export const deduceAreaVal = (area, field) => {
 export const geocodeAddressToLatLng = () => {
   let address = [];
   Object.entries(window.drupalSettings.address_fields).forEach(
-    ([key, field]) => {
+    ([key]) => {
       const fieldVal = document.getElementById(key).value;
       if (fieldVal.trim().length > 0) {
         if (key === 'area_parent') {
