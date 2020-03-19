@@ -6,7 +6,6 @@ const AddressContent = (props) => {
   const {
     cart,
     closeModal,
-    show_prefered,
     default_val,
     showEmail,
     processAddress,
@@ -16,7 +15,8 @@ const AddressContent = (props) => {
   } = props;
 
   if (window.drupalSettings.user.uid > 0
-    && cart.cart.shipping_address !== null) {
+    && cart.cart.shipping_address !== null
+    && cart.cart.delivery_type === 'hd') {
     return (
       <AddressList
         cart={cart}
