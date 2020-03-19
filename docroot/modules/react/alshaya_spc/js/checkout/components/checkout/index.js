@@ -202,10 +202,7 @@ export default class Checkout extends React.Component {
       return (
         <HDBillingAddress
           refreshCart={this.refreshCart}
-          billingAddress={cart.cart.billing_address}
-          shippingAddress={cart.cart.shipping_address}
-          carrierInfo={cart.cart.carrier_info}
-          paymentMethod={cart.selected_payment_method}
+          cart={cart}
         />
       );
     }
@@ -213,10 +210,7 @@ export default class Checkout extends React.Component {
     return (
       <CnCBillingAddress
         refreshCart={this.refreshCart}
-        billingAddress={cart.cart.billing_address}
-        shippingAddress={cart.cart.shipping_address}
-        carrierInfo={cart.cart.carrier_info}
-        paymentMethod={cart.selected_payment_method}
+        cart={cart}
       />
     );
   }

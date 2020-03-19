@@ -10,11 +10,19 @@ const AddressContent = (props) => {
     default_val,
     showEmail,
     processAddress,
+    headingText
   } = props;
 
   if (window.drupalSettings.user.uid > 0
     && cart.cart.shipping_address !== null) {
-    return <AddressList cart={cart} closeModal={closeModal} />;
+    return (
+      <AddressList
+        cart={cart}
+        closeModal={closeModal}
+        headingText={headingText}
+        processAddress={processAddress}
+      />
+    );
   }
 
   return (
@@ -23,6 +31,7 @@ const AddressContent = (props) => {
       closeModal={closeModal}
       default_val={default_val}
       showEmail={showEmail}
+      headingText={headingText}
       processAddress={processAddress}
     />
   );

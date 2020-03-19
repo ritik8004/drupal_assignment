@@ -51,12 +51,13 @@ export default class CnCBillingAddress extends React.Component {
   };
 
   render() {
-    const { billingAddress, shippingAddress, carrierInfo } = this.props;
+    const { cart } = this.props;
     const { open } = this.state;
 
     // If carrier info not set, means shipping info not set.
     // So we don't need to show bulling.
-    if (carrierInfo === undefined || carrierInfo === null) {
+    if (cart.cart.carrier_info === undefined ||
+      cart.cart.carrier_info === null) {
       return (null);
     }
 
@@ -64,7 +65,7 @@ export default class CnCBillingAddress extends React.Component {
     // means its default billing address (same as shipping)
     // and not added by the user.
     let billingAddressAddedByUser = true;
-    if (billingAddress.city === 'NONE') {
+    if (cart.cart.billing_address.city === 'NONE') {
       billingAddressAddedByUser = false;
     }
 
@@ -95,7 +96,7 @@ export default class CnCBillingAddress extends React.Component {
         <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
-            <BillingInfo shipping={shippingAddress} billing={billingAddress} />
+            <BillingInfo cart={cart}/>
           </div>
         </div>
       </div>

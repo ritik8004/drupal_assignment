@@ -109,11 +109,16 @@ export default class AddressItem extends React.Component {
   processAddress = (e) => {
     // Show loader.
     showFullScreenLoader();
-    addEditAddressToCustomer(e);
+    // If processing method is passed, we use that.
+    if (this.props.processAddress !== undefined) {
+      this.props.processAddress(e);
+    } else {
+      addEditAddressToCustomer(e);
+    }
   };
 
   render() {
-    const { address, isSelected } = this.props;
+    const { address, isSelected, headingText } = this.props;
     const mobDefaultVal = cleanMobileNumber(address.mobile);
     const addressData = [];
     const editAddressData = {};
@@ -169,6 +174,7 @@ export default class AddressItem extends React.Component {
                   <AddressForm
                     closeModal={this.closeModal}
                     showEmail={false}
+                    headingText={headingText}
                     show_prefered
                     default_val={editAddressData}
                     processAddress={this.processAddress}

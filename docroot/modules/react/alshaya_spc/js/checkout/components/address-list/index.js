@@ -60,7 +60,13 @@ export default class AddressList extends React.Component {
   processAddress = (e) => {
     // Show loader.
     showFullScreenLoader();
-    addEditAddressToCustomer(e);
+    // If processing method is passed, we use that.
+    if (this.props.processAddress !== undefined) {
+      this.props.processAddress(e);
+    }
+    else {
+      addEditAddressToCustomer(e);
+    }
   };
 
   render() {
@@ -71,7 +77,7 @@ export default class AddressList extends React.Component {
       return (null);
     }
 
-    const { cart, closeModal } = this.props;
+    const { cart, closeModal, headingText } = this.props;
 
     const addressItem = [];
     Object.entries(addressList).forEach(([key, address]) => {
@@ -83,6 +89,8 @@ export default class AddressList extends React.Component {
           isSelected={isSelected}
           key={key}
           address={address}
+          headingText={headingText}
+          processAddress={this.processAddress}
           refreshAddressList={this.refreshAddressList}
         />,
       );
@@ -111,6 +119,7 @@ export default class AddressList extends React.Component {
                 showEmail={false}
                 show_prefered
                 default_val={defaultVal}
+                headingText={headingText}
                 processAddress={this.processAddress}
               />
             </>
