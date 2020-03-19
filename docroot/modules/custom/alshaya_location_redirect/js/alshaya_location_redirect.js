@@ -81,7 +81,7 @@
       });
     });
 
-    // if stored item does not exist, set it.
+    // Add the user location to local storage.
     localStorage.setItem(storage_key, user_location);
 
     if (user_location === 'xx') {
