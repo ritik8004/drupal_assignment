@@ -455,6 +455,7 @@ class CartController {
 
       case CartActions::CART_SHIPPING_UPDATE:
         $shipping_info = $request_content['shipping_info'];
+        $update_billing = $request_content['update_billing'];
 
         $email = $shipping_info['static']['email'];
 
@@ -482,7 +483,7 @@ class CartController {
         if ($shipping_info['shipping_type'] == 'cnc') {
           // Unset as not needed in further processing.
           unset($shipping_info['shipping_type']);
-          $cart = $this->cart->addCncShippingInfo($shipping_info, $action);
+          $cart = $this->cart->addCncShippingInfo($shipping_info, $action, $update_billing);
         }
         else {
           $shipping_methods = [];
@@ -533,7 +534,6 @@ class CartController {
             ];
           }
 
-          $update_billing = $request_content['update_billing'];
           $cart = $this->cart->addShippingInfo($shipping_info, $action, $update_billing);
         }
         break;

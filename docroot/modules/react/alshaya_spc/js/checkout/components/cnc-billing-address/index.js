@@ -81,6 +81,14 @@ export default class CnCBillingAddress extends React.Component {
       billingAddressAddedByUser = false;
     }
 
+    const shippingAddress = cart.cart.shipping_address;
+    let editAddressData = {
+      static: {
+        fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,
+        telephone: shippingAddress.telephone
+      }
+    };
+
     // If user has not added billing address.
     if (!billingAddressAddedByUser) {
       return (
@@ -92,15 +100,15 @@ export default class CnCBillingAddress extends React.Component {
             </div>
             <Popup
               open={open}
-              onClose={this.closeModal}
+              onClose={this.closePopup}
               closeOnDocumentClick={false}
             >
               <AddressForm
-                closeModal={this.closeModal}
+                closeModal={this.closePopup}
                 processAddress={this.processAddress}
                 showEmail={false}
                 headingText={Drupal.t('billing information')}
-                default_val={null}
+                default_val={editAddressData}
               />
             </Popup>
           </div>

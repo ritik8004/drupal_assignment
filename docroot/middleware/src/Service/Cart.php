@@ -448,13 +448,15 @@ class Cart {
    *   Shipping address info.
    * @param string $action
    *   Action to perform.
+   * @param bool $update_billing
+   *  Whether billing needs to update or not.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function addCncShippingInfo(array $shipping_data, string $action) {
+  public function addCncShippingInfo(array $shipping_data, string $action, bool $update_billing = TRUE) {
     $data = [
       'extension' => (object) [
         'action' => $action,
@@ -499,7 +501,7 @@ class Cart {
       return $cart;
     }
 
-    if (empty($cart['cart']['billing_address']['city'])
+    if ($update_billing || empty($cart['cart']['billing_address']['city'])
       || $cart['cart']['billing_address']['city'] == 'NONE') {
       // Setting city value as 'NONE' so that, we can
       // identify if billing address added is default one and

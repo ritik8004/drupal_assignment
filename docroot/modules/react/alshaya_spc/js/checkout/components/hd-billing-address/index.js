@@ -81,7 +81,6 @@ export default class HDBillingAddress extends React.Component {
     }
 
     const isShippingBillingSame = this.isBillingSameAsShippingInStorage();
-    console.log(isShippingBillingSame);
 
     return (
       <div className="spc-section-billing-address">
