@@ -130,6 +130,7 @@ export const addShippingInCart = function (action, data) {
       action,
       shipping_info: data,
       cart_id: cart,
+      update_billing: isBillingSameAsShippingInStorage()
     })
     .then(
       (response) => {
@@ -158,6 +159,16 @@ export const addShippingInCart = function (action, data) {
     .catch((error) => {
       console.error(error);
     });
+};
+
+/**
+ * Local storage key which we set when user change
+ * billing address for HD. This key determines if
+ * user billing shipping same or not.
+ */
+export const isBillingSameAsShippingInStorage = () => {
+  const same = localStorage.getItem('billing_shipping_different');
+  return (same === null || same === undefined);
 };
 
 /**

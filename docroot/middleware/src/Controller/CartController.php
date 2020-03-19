@@ -533,7 +533,8 @@ class CartController {
             ];
           }
 
-          $cart = $this->cart->addShippingInfo($shipping_info, $action);
+          $update_billing = $request_content['update_billing'];
+          $cart = $this->cart->addShippingInfo($shipping_info, $action, $update_billing);
         }
         break;
 

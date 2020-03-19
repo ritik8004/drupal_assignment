@@ -2,6 +2,9 @@ import React from 'react';
 
 import BillingInfo from '../billing-info';
 import SectionTitle from '../../../utilities/section-title';
+import {
+  isBillingSameAsShippingInStorage
+} from '../../../utilities/checkout_util';
 
 // Storage key for billing shipping info same or not.
 const localStorageKey = 'billing_shipping_different';
@@ -31,13 +34,15 @@ export default class HDBillingAddress extends React.Component {
    */
   processBillingUpdate = (e) => {
     const data = e.detail.data();
-
     // If there is no error and update was fine, means user
     // has changed the billing address. We set in localstorage.
     if (data.error === undefined) {
       if (data.cart !== undefined
         && data.cart.delivery_type === 'hd') {
         localStorage.setItem(localStorageKey, false);
+        this.setState({
+          shippingAsBilling: false
+        });
       }
     }
   };
@@ -46,8 +51,7 @@ export default class HDBillingAddress extends React.Component {
    * If local storage has biliing shipping set.
    */
   isBillingSameAsShippingInStorage = () => {
-    const same = localStorage.getItem(localStorageKey);
-    return (same === null || same === undefined);
+    return isBillingSameAsShippingInStorage();
   };
 
   /**
@@ -64,7 +68,8 @@ export default class HDBillingAddress extends React.Component {
     // set. Thus billing is also not set and thus no need to
     // show biiling info.
     if (cart.cart.carrier_info === undefined
-      || cart.cart.carrier_info === null) {
+      || cart.cart.carrier_info === null
+      || cart.cart.billing_address === null) {
       return (null);
     }
 
@@ -76,6 +81,7 @@ export default class HDBillingAddress extends React.Component {
     }
 
     const isShippingBillingSame = this.isBillingSameAsShippingInStorage();
+    console.log(isShippingBillingSame);
 
     return (
       <div className="spc-section-billing-address">

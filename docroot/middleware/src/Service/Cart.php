@@ -352,13 +352,15 @@ class Cart {
    *   Shipping address info.
    * @param string $action
    *   Action to perform.
+   * @param bool $update_billing
+   *   Whether billing needs to be updated or not.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function addShippingInfo(array $shipping_data, string $action) {
+  public function addShippingInfo(array $shipping_data, string $action, bool $update_billing = TRUE) {
     $data = [
       'extension' => (object) [
         'action' => $action,
@@ -386,7 +388,14 @@ class Cart {
       return $cart;
     }
 
-    return $this->updateBilling($data['shipping']['shipping_address']);
+    // If billing needs to updated or billing is not available added at all
+    // in the cart. Assuming if name is not set in billing means billing is
+    // not set.
+    if ($update_billing || empty($cart['cart']['billing_address']['firstname'])) {
+      $cart = $this->updateBilling($data['shipping']['shipping_address']);
+    }
+
+    return $cart;
   }
 
   /**
