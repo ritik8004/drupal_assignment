@@ -21,7 +21,7 @@ export async function checkCartCustomer(cartData = null) {
         return false;
       }
 
-      await associateCart(cartData);
+      await associateCart();
       return true;
     }
     emptyCustomerCart();

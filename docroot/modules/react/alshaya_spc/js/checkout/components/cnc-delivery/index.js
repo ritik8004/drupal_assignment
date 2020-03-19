@@ -48,7 +48,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
 
   processAddress = (e) => {
     const { cart: { cart: newCart } } = this.props;
-    checkoutAddressProcess(e, newCart);
+    checkoutAddressProcess(e);
   };
 
   eventListener = ({ detail }) => {

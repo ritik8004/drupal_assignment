@@ -78,7 +78,7 @@ export default class EmptyDeliveryText extends React.Component {
       addEditAddressToCustomer(e);
     } else {
       const { cart } = this.props.cart;
-      checkoutAddressProcess(e, cart);
+      checkoutAddressProcess(e);
     }
   };
 

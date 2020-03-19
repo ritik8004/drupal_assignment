@@ -37,7 +37,7 @@ export default class HomeDeliveryInfo extends React.Component {
     const { cart } = this.props.cart;
     // Show the loader.
     showFullScreenLoader();
-    checkoutAddressProcess(e, cart);
+    checkoutAddressProcess(e);
   };
 
   componentDidMount() {
