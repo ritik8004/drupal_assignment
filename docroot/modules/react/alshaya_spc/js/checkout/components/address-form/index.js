@@ -3,6 +3,7 @@ import GoogleMap from '../../../utilities/map/GoogleMap';
 import {
   createMarker,
   getMap,
+  getHDMapZoom,
   removeAllMarkersFromMap,
   fillValueInAddressFromGeocode,
 } from '../../../utilities/map/map_utils';
@@ -101,6 +102,7 @@ export default class AddressForm extends React.Component {
             // Pan the map to location.
             const marker = createMarker(coords, getMap());
             getMap().panTo(marker.getPosition());
+            getMap().setZoom(getHDMapZoom())
             window.spcMarkers.push(marker);
           }
         }
