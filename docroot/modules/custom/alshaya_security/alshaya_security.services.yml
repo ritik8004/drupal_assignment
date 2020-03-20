@@ -1,4 +1,8 @@
 services:
+  alshaya_security.session_configuration:
+    class: Drupal\alshaya_security\Session\AlshayaSessionConfiguration
+    decorates: session_configuration
+    public: false
   alshaya_security.subscriber:
     class: Drupal\alshaya_security\AlshayaSecuritySubscriber
     tags:
