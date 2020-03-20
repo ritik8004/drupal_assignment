@@ -222,3 +222,56 @@
     }
   }
 }
+
+// frontpage mobile specific styles.
+body {
+  &.frontpage {
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($only-mobile) {
+        padding: 0;
+      }
+    }
+
+    &:not(.no-sticky-algolia-search-bar) .branding__menu {
+      @include breakpoint($only-mobile) {
+        position: fixed !important;
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete #alshaya-algolia-autocomplete .ais-InstantSearch__root {
+      @include breakpoint($only-mobile) {
+        top: -0.175rem;
+      }
+    }
+
+    &.Sticky-algolia-search {
+      .block-alshaya-algolia-react-autocomplete #alshaya-algolia-autocomplete .ais-InstantSearch__root {
+        @include breakpoint($only-mobile) {
+          top: 2.925rem;
+        }
+      }
+    }
+
+    &:not(.no-sticky-algolia-search-bar) {
+      @include breakpoint($only-mobile) {
+        margin-top: 6.4125rem;
+      }
+    }
+  }
+}
+
+#alshaya-algolia-search {
+  .filter-fixed-top {
+    .show-all-filters-algolia {
+      @include breakpoint($only-mobile) {
+        top: 3.025rem;
+      }
+    }
+
+    .block-facet-blockcategory-facet-search {
+      @include breakpoint($only-mobile) {
+        top: 3.025rem;
+      }
+    }
+  }
+}
