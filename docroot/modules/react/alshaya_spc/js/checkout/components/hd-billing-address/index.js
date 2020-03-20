@@ -98,7 +98,7 @@ export default class HDBillingAddress extends React.Component {
     // COD payment method.
     if (cart.selected_payment_methd === undefined
       || cart.selected_payment_methd === 'cashondelivery') {
-      //return (null);
+      return (null);
     }
 
     const isShippingBillingSame = this.isBillingSameAsShippingInStorage();
