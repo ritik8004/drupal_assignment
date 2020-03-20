@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76b5607ca00fc7c89076050c56df2473",
+    "content-hash": "f3a281e2c9030ce2dd3173ca97b39924",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11688,11 +11688,14 @@
                 },
                 "drupal": {
                     "version": "8.x-1.2",
-                    "datestamp": "1529154524",
+                    "datestamp": "1579404790",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Redirection when using a language prefix path": "https://www.drupal.org/files/issues/2018-04-11/robotstxt-avoid_redirection-2930799-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -11709,8 +11712,12 @@
                     "homepage": "https://www.drupal.org/node/53579/committers"
                 },
                 {
-                    "name": "hass",
-                    "homepage": "https://www.drupal.org/user/85918"
+                    "name": "ccjjmartin",
+                    "homepage": "https://www.drupal.org/user/3210801"
+                },
+                {
+                    "name": "mikeegoulding",
+                    "homepage": "https://www.drupal.org/user/2867877"
                 }
             ],
             "description": "Generates the robots.txt file dynamically and gives you the chance to edit it, on a per-site basis, from the web UI.",
