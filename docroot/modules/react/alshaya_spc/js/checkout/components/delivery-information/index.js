@@ -11,8 +11,9 @@ import {
 export default class DeliveryInformation extends React.Component {
   constructor(props) {
     super(props);
+    const { cart } = this.props;
     this.state = {
-      showEmpty: this.showEmpty(this.props.cart),
+      showEmpty: this.showEmpty(cart),
     };
   }
 
