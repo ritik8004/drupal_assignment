@@ -54,15 +54,19 @@ function stickyMobileCartPreview() {
   let superCatHeight; let
     brandingMenuHeight;
   [superCatHeight, brandingMenuHeight] = [0, 0];
-  if (superCategoryMenu) {
-    superCatHeight = superCategoryMenu.offsetHeight + document.getElementById('block-mobilenavigation').offsetHeight;
-    cartPreview[0].style.top = `${superCatHeight}px`;
-    superCatFlag = true;
-  } else {
-    brandingMenuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
-    if (cartPreview[0] !== undefined) {
-      cartPreview[0].style.top = `${brandingMenuHeight}px`;
+  if (cartPreview.length) {
+    if (superCategoryMenu) {
+      superCatHeight = superCategoryMenu.offsetHeight + document.getElementById('block-mobilenavigation').offsetHeight;
+      cartPreview[0].style.top = `${superCatHeight}px`;
+      superCatFlag = true;
+    } else {
+      brandingMenuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
+      if (cartPreview[0] !== undefined) {
+        cartPreview[0].style.top = `${brandingMenuHeight}px`;
+      }
     }
+  } else {
+    return;
   }
   window.addEventListener('scroll', () => {
     // Mobile cart sticky header.
