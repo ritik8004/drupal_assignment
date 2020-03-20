@@ -353,6 +353,15 @@
       }
     }
   }
+
+  #drupal-modal #lightSlider.pager-yes {
+    .slick-next,
+    .slick-prev {
+      html[lang='ar'] & {
+        transform: rotate(180deg);
+      }
+    }
+  }
 }
 
 .cloud-zoom-loading {
@@ -579,4 +588,3 @@
     }
   }
 }
-
