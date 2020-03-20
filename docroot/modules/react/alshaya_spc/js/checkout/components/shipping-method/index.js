@@ -12,8 +12,9 @@ import {
 export default class ShippingMethod extends React.Component {
   constructor(props) {
     super(props);
+    const { selected } = this.props;
     this.state = {
-      selectedOption: this.props.selected,
+      selectedOption: selected,
     };
   }
 
@@ -21,11 +22,11 @@ export default class ShippingMethod extends React.Component {
    * Handles shipping method change.
    */
   changeShippingMethod = (method) => {
-    const { cart } = this.props.cart;
+    const { cart, refreshCart } = this.props;
     const selectCarrierInfo = `${method.carrier_code}_${method.method_code}`;
 
     // If mathod is already selected in cart.
-    if (cart.carrier_info === selectCarrierInfo) {
+    if (cart.cart.carrier_info === selectCarrierInfo) {
       return;
     }
 
@@ -41,11 +42,11 @@ export default class ShippingMethod extends React.Component {
     document.dispatchEvent(event);
 
     // Prepare shipping data.
-    const tempShippingData = cart.shipping_address;
+    const tempShippingData = cart.cart.shipping_address;
     Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
-      tempShippingData[key] = cart.shipping_address[field.key];
+      tempShippingData[key] = cart.cart.shipping_address[field.key];
     });
-    tempShippingData.mobile = cart.shipping_address.telephone;
+    tempShippingData.mobile = cart.cart.shipping_address.telephone;
 
     // Get prepared address data for shipping address update.
     const data = prepareAddressDataForShipping(tempShippingData);
@@ -56,8 +57,8 @@ export default class ShippingMethod extends React.Component {
 
     // Extra info for logged in user.
     if (drupalSettings.user.uid > 0) {
-      data.static.customer_address_id = cart.shipping_address.customer_address_id;
-      data.static.customer_id = cart.shipping_address.customer_id;
+      data.static.customer_address_id = cart.cart.shipping_address.customer_address_id;
+      data.static.customer_id = cart.cart.shipping_address.customer_id;
     }
 
     // Update shipping address.
@@ -86,13 +87,14 @@ export default class ShippingMethod extends React.Component {
         removeFullScreenLoader();
 
         // Refresh cart.
-        this.props.refreshCart(cartInfo);
+        refreshCart(cartInfo);
       });
     }
   };
 
   render() {
     const { method } = this.props;
+    const { selectedOption } = this.state;
     let price = Drupal.t('FREE');
     if (method.amount > 0) {
       price = <PriceElement amount={method.amount} />;
@@ -103,14 +105,14 @@ export default class ShippingMethod extends React.Component {
           id={`shipping-method-${method.method_code}`}
           className={method.method_code}
           type="radio"
-          defaultChecked={this.state.selectedOption === method.method_code}
+          defaultChecked={selectedOption === method.method_code}
           value={method.method_code}
           name="shipping-method"
         />
 
         <label className="radio-sim radio-label">
-          <span className="carrier-title">{this.props.method.carrier_title}</span>
-          <span className="method-title">{this.props.method.method_title}</span>
+          <span className="carrier-title">{method.carrier_title}</span>
+          <span className="method-title">{method.method_title}</span>
           <span className="spc-price">{price}</span>
         </label>
       </div>
