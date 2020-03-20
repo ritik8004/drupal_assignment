@@ -6,30 +6,34 @@ import TextField from '../../../utilities/textfield';
 
 const DynamicFormField = (props) => {
   let defaultVal = '';
-  if (props.default_val.length !== 0
-    && props.default_val.length !== 'undefined') {
-    defaultVal = props.default_val;
+  const { default_val: defVal } = props;
+  if (defVal.length !== 0
+    && defVal.length !== 'undefined') {
+    defaultVal = defVal;
   }
 
   const {
-    field_key, field, area_list, areasUpdate,
+    field_key: fieldKey,
+    field,
+    area_list: areaList,
+    areasUpdate,
   } = props;
-  if (field_key === 'administrative_area') {
+  if (fieldKey === 'administrative_area') {
     return (
       <AreaSelect
         cityChanged={props.cityChanged}
         default_val={defaultVal}
-        area_list={area_list}
-        field_key={field_key}
+        area_list={areaList}
+        field_key={fieldKey}
         field={field}
       />
     );
   }
-  if (field_key === 'area_parent') {
+  if (fieldKey === 'area_parent') {
     return (
       <ParentAreaSelect
         default_val={defaultVal}
-        field_key={field_key}
+        field_key={fieldKey}
         field={field}
         areasUpdate={areasUpdate}
       />
@@ -37,7 +41,7 @@ const DynamicFormField = (props) => {
   }
 
   return (
-    <TextField isAddressField required={props.field.required} id={props.field_key} type="text" label={props.field.label} name={props.field_key} defaultValue={defaultVal !== '' ? defaultVal[props.field.key] : ''} />
+    <TextField isAddressField required={field.required} id={fieldKey} type="text" label={field.label} name={fieldKey} defaultValue={defaultVal !== '' ? defaultVal[field.key] : ''} />
   );
 };
 
