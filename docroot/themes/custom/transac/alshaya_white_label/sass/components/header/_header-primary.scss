@@ -310,6 +310,7 @@ header {
 
       .price-amount {
         padding: 0 0.25rem;
+        margin: 0;
       }
 
       @include breakpoint($only-mobile) {
