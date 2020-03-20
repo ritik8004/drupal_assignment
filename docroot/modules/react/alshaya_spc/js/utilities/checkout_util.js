@@ -167,8 +167,8 @@ export const addShippingInCart = function (action, data) {
  * user billing shipping same or not.
  */
 export const isBillingSameAsShippingInStorage = () => {
-  const same = localStorage.getItem('billing_shipping_different');
-  return (same === null || same === undefined);
+  const same = localStorage.getItem('billing_shipping_same');
+  return (same === null || same === 'true');
 };
 
 /**

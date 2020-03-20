@@ -7,7 +7,7 @@ import {
 } from '../../../utilities/checkout_util';
 
 // Storage key for billing shipping info same or not.
-const localStorageKey = 'billing_shipping_different';
+const localStorageKey = 'billing_shipping_same';
 
 export default class HDBillingAddress extends React.Component {
   isComponentMounted = false;
@@ -22,12 +22,33 @@ export default class HDBillingAddress extends React.Component {
   componentDidMount() {
     this.isComponentMounted = true;
     document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+    document.addEventListener('onShippingAddressUpdate', this.processShippingUpdate, false);
   }
 
   componentWillUnmount() {
     this.isComponentMounted = false;
     document.removeEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+    document.removeEventListener('onShippingAddressUpdate', this.processShippingUpdate, false);
   }
+
+  /**
+   * Event handler for shipping update.
+   */
+  processShippingUpdate = (e) => {
+    const data = e.detail.data();
+    // If there is no error and update was fine, means user
+    // has added billing address. We set in localstorage.
+    if (data.error === undefined) {
+      if (data.cart_id !== undefined
+        && data.delivery_type === 'hd'
+        && this.isBillingSameAsShippingInStorage()) {
+        localStorage.setItem(localStorageKey, true);
+        this.setState({
+          shippingAsBilling: true
+        });
+      }
+    }
+  };
 
   /**
    * Event handler for billing update.
