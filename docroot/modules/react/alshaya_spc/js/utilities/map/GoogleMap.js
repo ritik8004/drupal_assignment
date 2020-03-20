@@ -36,6 +36,11 @@ export default class GoogleMap extends React.Component {
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
     this.googleMap = this.createGoogleMap(data, controlPosition);
+    const mapCenter = this.googleMap.getCenter();
+    this.panMapToGivenCoords({
+      lat: mapCenter.lat(),
+      lng: mapCenter.lng()
+    });
 
     // Storing in global so that can be accessed byt parent and others.
     window.spcMap = this.googleMap;
@@ -295,8 +300,6 @@ export default class GoogleMap extends React.Component {
       // address detail.
       if (this.props.isEditAddress) {
         geocodeAddressToLatLng();
-      } else {
-        this.setCountryCoords();
       }
 
       // As coords are required for initialize google
@@ -307,7 +310,7 @@ export default class GoogleMap extends React.Component {
     }
 
     return new window.google.maps.Map(this.googleMapDiv(), {
-      zoom: 14,
+      zoom: 10,
       center: centerPosition,
       disableDefaultUI: false,
       mapTypeControl: false,
