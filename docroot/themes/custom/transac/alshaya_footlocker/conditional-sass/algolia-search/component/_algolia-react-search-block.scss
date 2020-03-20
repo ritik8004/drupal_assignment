@@ -127,9 +127,14 @@
         }
 
         @include breakpoint($only-mobile) {
-          display: none;
-          width: auto;
-          height: auto;
+          top: 50%;
+          transform: translateY(-50%);
+          #{$right}: unset;
+          #{$left}: 0;
+          opacity: 1;
+          transition: opacity 0.2s;
+          background: none;
+          color: $black;
         }
       }
 
@@ -172,11 +177,11 @@
     @include breakpoint($only-mobile) {
       border: none;
       border-radius: 0;
-      height: auto;
       height: 2.5rem;
       max-width: none;
       width: 100%;
       margin: 0;
+      padding-#{$left}: 2.3125rem;
     }
 
     &::placeholder {
@@ -203,6 +208,16 @@
     ul li {
       .aa-suggestion {
         padding: 0 0.75rem;
+      }
+    }
+  }
+
+  &.focused.show-algolia-search-bar {
+    #alshaya-algolia-autocomplete {
+      .react-autosuggest__container {
+        &::after {
+          opacity: 0;
+        }
       }
     }
   }
