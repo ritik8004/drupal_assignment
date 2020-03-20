@@ -25,20 +25,6 @@ export default class HomeDeliveryInfo extends React.Component {
     this.state = { open: false };
   }
 
-  openModal = () => {
-    this.setState({ open: true });
-  };
-
-  closeModal = () => {
-    this.setState({ open: false });
-  };
-
-  processAddress = (e) => {
-    // Show the loader.
-    showFullScreenLoader();
-    checkoutAddressProcess(e);
-  };
-
   componentDidMount() {
     this._isMounted = true;
     document.addEventListener(
@@ -57,9 +43,24 @@ export default class HomeDeliveryInfo extends React.Component {
     );
   }
 
+  openModal = () => {
+    this.setState({ open: true });
+  };
+
+  closeModal = () => {
+    this.setState({ open: false });
+  };
+
+  processAddress = (e) => {
+    // Show the loader.
+    showFullScreenLoader();
+    checkoutAddressProcess(e);
+  };
+
   eventListener = (e) => {
     const data = e.detail.data();
-    this.props.refreshCart(data);
+    const { refreshCart } = this.props;
+    refreshCart(data);
     if (this._isMounted) {
       this.closeModal();
     }
@@ -71,7 +72,12 @@ export default class HomeDeliveryInfo extends React.Component {
   formatAddressData = (address) => formatAddressDataForEditForm(address)
 
   render() {
-    const address = this.props.cart.cart.shipping_address;
+    const {
+      cart: { cart: { shipping_address: address } },
+      cart: cartVal,
+      refreshCart,
+    } = this.props;
+    const { open } = this.state;
     let addressData = [];
     Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
       if (address[val.key] !== undefined) {
@@ -102,14 +108,14 @@ export default class HomeDeliveryInfo extends React.Component {
           </div>
         </div>
         <Popup
-          open={this.state.open}
+          open={open}
           onClose={this.closeModal}
           closeOnDocumentClick={false}
           className={getAddressPopupClassName()}
         >
           <React.Suspense fallback={<Loading />}>
             <AddressContent
-              cart={this.props.cart}
+              cart={cartVal}
               closeModal={this.closeModal}
               processAddress={this.processAddress}
               showEmail={window.drupalSettings.user.uid === 0}
@@ -123,8 +129,8 @@ export default class HomeDeliveryInfo extends React.Component {
         </Popup>
         <div className="spc-delivery-shipping-methods">
           <ShippingMethods
-            cart={this.props.cart}
-            refreshCart={this.props.refreshCart}
+            cart={cartVal}
+            refreshCart={refreshCart}
           />
         </div>
       </div>
