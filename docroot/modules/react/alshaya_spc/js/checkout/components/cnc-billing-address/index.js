@@ -105,8 +105,8 @@ export default class CnCBillingAddress extends React.Component {
 
     // If carrier info not set, means shipping info not set.
     // So we don't need to show bulling.
-    if (cart.cart.carrier_info === undefined ||
-      cart.cart.carrier_info === null) {
+    if (cart.cart.carrier_info === undefined
+      || cart.cart.carrier_info === null) {
       return (null);
     }
 

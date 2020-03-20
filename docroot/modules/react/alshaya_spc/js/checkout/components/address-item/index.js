@@ -115,18 +115,24 @@ export default class AddressItem extends React.Component {
    * Process the address form data on sumbit.
    */
   processAddress = (e) => {
+    const { type, processAddress } = this.props;
     // Show loader.
     showFullScreenLoader();
     // If processing method is passed, we use that.
-    if (this.props.type === 'billing') {
-      this.props.processAddress(e);
+    if (type === 'billing') {
+      processAddress(e);
     } else {
       addEditAddressToCustomer(e);
     }
   };
 
   render() {
-    const { address, isSelected, headingText, showEditButton } = this.props;
+    const {
+      address,
+      isSelected,
+      headingText,
+      showEditButton,
+    } = this.props;
     const mobDefaultVal = cleanMobileNumber(address.mobile);
     const addressData = [];
     const editAddressData = {};
@@ -174,24 +180,23 @@ export default class AddressItem extends React.Component {
         </div>
         <div className="spc-address-tile-actions">
           <div className="spc-address-btns">
-            <button disabled={isSelected} className="spc-address-select-address" onClick={() => this.updateAddress(address)}>{buttonText}</button>
+            <button type="button" disabled={isSelected} className="spc-address-select-address" onClick={() => this.updateAddress(address)}>{buttonText}</button>
             {(showEditButton === undefined || showEditButton === true) &&
               <div title={Drupal.t('Edit Address')} className="spc-address-tile-edit" onClick={(e) => this.openModal(e)}>
-              <EditAddressSVG />
-              <Popup open={open} onClose={this.closeModal} closeOnDocumentClick={false}>
-                <>
-                  <AddressForm
-                    closeModal={this.closeModal}
-                    showEmail={false}
-                    headingText={headingText}
-                    show_prefered
-                    default_val={editAddressData}
-                    processAddress={this.processAddress}
-                  />
-                </>
-              </Popup>
-            </div>
-            }
+                <EditAddressSVG />
+                <Popup open={open} onClose={this.closeModal} closeOnDocumentClick={false}>
+                  <>
+                    <AddressForm
+                      closeModal={this.closeModal}
+                      showEmail={false}
+                      headingText={headingText}
+                      show_prefered
+                      default_val={editAddressData}
+                      processAddress={this.processAddress}
+                    />
+                  </>
+                </Popup>
+              </div>}
           </div>
         </div>
       </div>

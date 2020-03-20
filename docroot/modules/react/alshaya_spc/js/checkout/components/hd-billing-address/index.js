@@ -96,8 +96,8 @@ export default class HDBillingAddress extends React.Component {
 
     // No need to show the billing address change for the
     // COD payment method.
-    if (cart.selected_payment_methd === undefined
-      || cart.selected_payment_methd === 'cashondelivery') {
+    if (cart.selected_payment_method === undefined
+      || cart.selected_payment_method === 'cashondelivery') {
       return (null);
     }
 
