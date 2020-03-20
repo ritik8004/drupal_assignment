@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Helper\CookieHelper;
 use App\Service\Cart;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Cybersource\CybersourceHelper;
@@ -9,7 +10,6 @@ use App\Service\Knet\KnetHelper;
 use App\Service\PaymentData;
 use App\Service\SessionStorage;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -194,7 +194,7 @@ class PaymentController {
       }
 
       $response->setTargetUrl('/' . $data['data']['langcode'] . '/checkout/confirmation?id=' . $order['secure_order_id']);
-      $response->headers->setCookie(Cookie::create('middleware_order_placed', 1, strtotime('+1 year'), '/', NULL, TRUE, FALSE));
+      $response->headers->setCookie(CookieHelper::create('middleware_order_placed', '1', strtotime('+1 year')));
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart: @cart. Payment method @method.', [
@@ -208,7 +208,7 @@ class PaymentController {
         ['@cart_id' => $cart['cart']['id'], '@message' => $e->getMessage()]
       );
 
-      $response->headers->setCookie(Cookie::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year'), '/', NULL, TRUE, FALSE));
+      $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year')));
       $response->setTargetUrl('/' . $data['data']['langcode'] . '/checkout');
     }
 
@@ -234,7 +234,7 @@ class PaymentController {
     }
 
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
-    $response->headers->setCookie(Cookie::create('middleware_payment_error', self::PAYMENT_DECLINED_VALUE, strtotime('+1 year'), '/', NULL, TRUE, FALSE));
+    $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_DECLINED_VALUE, strtotime('+1 year')));
     return $response;
   }
 
@@ -324,7 +324,7 @@ class PaymentController {
         '@state' => json_encode($state),
       ]);
 
-      $redirect->headers->setCookie(Cookie::create('middleware_payment_error', self::PAYMENT_DECLINED_VALUE, strtotime('+1 year'), '/', NULL, TRUE, FALSE));
+      $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_DECLINED_VALUE, strtotime('+1 year')));
       return $this->handleKnetError($response['state_key']);
     }
 
@@ -352,7 +352,7 @@ class PaymentController {
       }
 
       $redirect->setTargetUrl('/' . $state['data']['langcode'] . '/checkout/confirmation?id=' . $order['secure_order_id']);
-      $redirect->headers->setCookie(Cookie::create('middleware_order_placed', 1, strtotime('+1 year'), '/', NULL, TRUE, FALSE));
+      $redirect->headers->setCookie(CookieHelper::create('middleware_order_placed', 1, strtotime('+1 year')));
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart: @cart. Payment method @method.', [
@@ -366,7 +366,7 @@ class PaymentController {
         '@message' => $e->getMessage(),
       ]);
 
-      $redirect->headers->setCookie(Cookie::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year'), '/', NULL, TRUE, FALSE));
+      $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year')));
       $redirect->setTargetUrl('/' . $state['data']['langcode'] . '/checkout');
     }
 
@@ -408,7 +408,7 @@ class PaymentController {
     ]);
 
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
-    $response->headers->setCookie(Cookie::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year'), '/', NULL, TRUE, FALSE));
+    $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year')));
     return $response;
   }
 
