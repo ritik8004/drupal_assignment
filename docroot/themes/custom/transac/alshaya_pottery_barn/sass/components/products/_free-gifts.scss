@@ -1,0 +1,13 @@
+// for all browsers
+body {
+  //free gift detail.
+  &.free-gift-promo-list-overlay.free-gift-detail-modal {
+    .ui-dialog {
+      .ui-dialog-content#drupal-modal {
+        @include breakpoint($desktop) {
+          height: 40rem !important;
+        }
+      }
+    }
+  }
+}

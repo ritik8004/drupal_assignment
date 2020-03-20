@@ -14,6 +14,7 @@ $warm-grey: #777;
 $black: #000;
 $dark-red: #e2193a;
 $info-blue: #4285f4;
+$cerulean-two: #0084cc;
 
 // Header color.
 $dark-brown: #504a4a;
@@ -534,6 +535,9 @@ $algolia-react-autocomplete: $black;
 $algolia-react-autocomplete-block-background: $black;
 $algolia-react-autocomplete-border: $white;
 $algolia-react-autocomplete-item-border: $white-three;
+
+// Algolia color facet.
+$color_facet_active_border: $cerulean-two;
 
 // SPC Cart.
 $spc-deliver-button: $black;

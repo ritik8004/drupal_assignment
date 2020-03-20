@@ -1,0 +1,5 @@
+name = "alshaya-location-redirect"
+type = "javascript"
+account_id = "712b5dd353dfc12aca7b342b28d5118f"
+route = "monitoring.factory.alshaya.com/alshaya-location-redirect"
+zone_id = "376c11738312fe6e3a8eedf679ea74c6"

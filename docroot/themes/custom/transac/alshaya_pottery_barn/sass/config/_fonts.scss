@@ -6,12 +6,12 @@ $cairo: 'Cairo';
 
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('../fonts/alshaya-icons.eot?SpH8Dp');
+  src: url('../fonts/alshaya-icons.eot?0ajdhm');
   src:
-    url('../fonts/alshaya-icons.eot?SpH8Dp#iefix') format('embedded-opentype'),
-    url('../fonts/alshaya-icons.ttf?SpH8Dp') format('truetype'),
-    url('../fonts/alshaya-icons.woff?SpH8Dp') format('woff'),
-    url('../fonts/alshaya-icons.svg?SpH8Dp#alshaya-icons') format('svg');
+    url('../fonts/alshaya-icons.eot?0ajdhm#iefix') format('embedded-opentype'),
+    url('../fonts/alshaya-icons.ttf?0ajdhm') format('truetype'),
+    url('../fonts/alshaya-icons.woff?0ajdhm') format('woff'),
+    url('../fonts/alshaya-icons.svg?0ajdhm#alshaya-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -104,6 +104,9 @@ $icons: (
   price-tag: "\e93a",
   check: "\e93b",
   filter: "\e93c",
+  edit-input: "\e93d",
+  arrow-left: "\e93e",
+  arrow-right: "\e93f",
   bin: "\e9ac"
 );
 

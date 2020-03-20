@@ -15,3 +15,47 @@
     }
   }
 }
+
+.path--cart {
+  .free-gift-container {
+    @include breakpoint($only-mobile) {
+      top: 10.25rem;
+    }
+  }
+}
+
+// for all browsers, for promo content.
+body {
+  &.free-gift-promo-list-overlay.free-gift-detail-modal {
+    .ui-dialog {
+      .ui-dialog-content#drupal-modal {
+        @include breakpoint($desktop) {
+          height: 34.75rem !important;
+        }
+      }
+    }
+  }
+}
+
+// specific to IE, for free gift list. Specific to BBW.
+body.ie {
+  &.free-gift-promo-list-overlay:not(.free-gift-detail-modal) {
+    .slick-slider .slick-prev {
+      #{$left}: -2rem;
+      #{$right}: auto;
+
+      html[lang=ar] & {
+        #{$left}: -1rem;
+      }
+    }
+
+    .slick-slider .slick-next {
+      #{$right}: -1rem;
+      #{$left}: auto;
+
+      html[lang=ar] & {
+        #{$right}: -2rem;
+      }
+    }
+  }
+}

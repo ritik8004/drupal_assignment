@@ -187,7 +187,7 @@ class SimplePageResource extends ResourceBase {
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
         'contexts' => [
-          'url.query_args:url',
+          'url.query_args:page',
         ],
       ],
     ]));

@@ -210,13 +210,18 @@ function alshaya_acm_product_available_home_delivery($sku) {
  *   Flag if the product is available for click and collect or not.
  */
 function alshaya_acm_product_available_click_collect($sku) {
+  $feature_status = \Drupal::config('alshaya_click_collect.settings')->get('feature_status');
+  if ($feature_status === 'disabled') {
+    return FALSE;
+  }
+
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
   // We always expect an entity when this function is called.
   // There may be cases were a product gets deleted so we add a check here
   // to avoid fatal errors.
   if (!($sku_entity instanceof SKU)) {
-    return 0;
+    return FALSE;
   }
 
   $sts = (int) $sku_entity->get('attr_ship_to_store')->getString();

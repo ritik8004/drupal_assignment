@@ -708,7 +708,6 @@ body.alias--cart {
         div.image {
           @include breakpoint($only-mobile) {
             width: 8rem;
-            height: 9rem;
             margin-#{$right}: 1rem;
           }
         }
@@ -728,10 +727,10 @@ body.alias--cart {
 
       td.quantity {
         @include breakpoint($only-mobile) {
-          float: none;
-          margin-#{$left}: 9rem;
-          margin-top: -2.8rem;
-          padding-#{$right}: 0;
+          float: $right;
+          margin-#{$left}: 0;
+          width: calc(100% - 9rem);
+          margin-top: -2.2rem;
 
           > div:first-child {
             display: inline-block;
@@ -761,10 +760,13 @@ body.alias--cart {
       }
 
       td.delivery-option {
-        clear: both;
         font-family: $arial;
 
         @include breakpoint($only-mobile) {
+          float: $right;
+          padding-#{$right}: 0;
+          width: calc(100% - 9rem);
+          padding-bottom: 0;
           position: relative;
           display: block;
           min-height: 4.5rem;
@@ -789,10 +791,9 @@ body.alias--cart {
 
         .delivery-options-tooltip-wrapper {
           @include breakpoint($only-mobile) {
-            width: 9rem;
-            display: inline-block;
-            position: absolute;
-            #{$left}: 10rem;
+            float: $right;
+            position: static;
+            width: 100%;
           }
 
           @include breakpoint($tablet) {
@@ -1252,7 +1253,6 @@ body.path--cart .c-content__region {
     .address-container-inline {
       > .form-item {
         width: calc((100% - 0.875rem) / 2);
-        max-width: none;
       }
     }
   }

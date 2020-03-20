@@ -19,3 +19,173 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  attr_function:
+    label: 'Function'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_function
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_age_group:
+    label: 'Age Group'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_age_group
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_presentation_product_type:
+    label: 'Presentation Product Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_presentation_product_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_context:
+    label: 'Context'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_context
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_style:
+    label: 'Style'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_style
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_clothing_style:
+    label: 'Clothing Style'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_clothing_style
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_collar_style:
+    label: 'Collar Style'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_collar_style
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_neckline_style:
+    label: 'Neckline Style'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_neckline_style
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_accessories_style:
+    label: 'Accessories Style'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_accessories_style
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_footwear_style:
+    label: 'Footwear Style'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_footwear_style
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_fit:
+    label: 'Fit'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_fit
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_descriptive_length:
+    label: 'Descriptive Length'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_descriptive_length
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_garment_length:
+    label: 'Garment Length'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_garment_length
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_sleeve_length:
+    label: 'Sleeve Length'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_sleeve_length
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_waist_rise:
+    label: 'Waist Rise'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_waist_rise
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_heel_height:
+    label: 'Heel Height'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_heel_height
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_occasion:
+    label: 'Occasion'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_occasion
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
