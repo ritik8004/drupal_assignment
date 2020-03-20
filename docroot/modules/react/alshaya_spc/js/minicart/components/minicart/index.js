@@ -18,13 +18,6 @@ export default class MiniCart extends React.Component {
     this.emptyResult = { cart_id: null };
   }
 
-  dispatchRefereshCart = (result) => {
-    // Trigger event so that data can be passed to other components.
-    const event = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
-    document.dispatchEvent(event);
-    checkCartCustomer(result);
-  }
-
   componentDidMount() {
     try {
       const cartData = fetchCartData();
@@ -93,8 +86,16 @@ export default class MiniCart extends React.Component {
     }
   }
 
+  dispatchRefereshCart = (result) => {
+    // Trigger event so that data can be passed to other components.
+    const event = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
+    document.dispatchEvent(event);
+    checkCartCustomer(result);
+  }
+
   render() {
-    if (this.state.wait || !this.state.qty) {
+    const { wait, qty, amount } = this.state;
+    if (wait || !qty) {
       return (
         <div className="acq-mini-cart">
           <EmptyMiniCartContent />
@@ -104,7 +105,7 @@ export default class MiniCart extends React.Component {
 
     return (
       <div className="acq-mini-cart">
-        <MiniCartContent amount={this.state.amount} qty={this.state.qty} />
+        <MiniCartContent amount={amount} qty={qty} />
       </div>
     );
   }
