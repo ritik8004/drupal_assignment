@@ -6,23 +6,34 @@ const AddressContent = (props) => {
   const {
     cart,
     closeModal,
-    show_prefered,
     default_val,
     showEmail,
     processAddress,
+    headingText,
+    showEditButton,
+    type
   } = props;
 
   if (window.drupalSettings.user.uid > 0
-    && cart.cart.shipping_address !== null) {
-    return <AddressList cart={cart} closeModal={closeModal} />;
+    && cart.cart.customer.addresses.length > 0) {
+    return (
+      <AddressList
+        cart={cart}
+        closeModal={closeModal}
+        headingText={headingText}
+        showEditButton={showEditButton}
+        processAddress={processAddress}
+        type={type}
+      />
+    );
   }
 
   return (
     <AddressForm
-      show_prefered={show_prefered}
       closeModal={closeModal}
       default_val={default_val}
       showEmail={showEmail}
+      headingText={headingText}
       processAddress={processAddress}
     />
   );

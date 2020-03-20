@@ -60,7 +60,13 @@ export default class AddressList extends React.Component {
   processAddress = (e) => {
     // Show loader.
     showFullScreenLoader();
-    addEditAddressToCustomer(e);
+    // If processing method is passed, we use that.
+    if (this.props.type === 'billing') {
+      this.props.processAddress(e);
+    }
+    else {
+      addEditAddressToCustomer(e);
+    }
   };
 
   render() {
@@ -71,18 +77,28 @@ export default class AddressList extends React.Component {
       return (null);
     }
 
-    const { cart, closeModal } = this.props;
+    const { cart, closeModal, headingText, showEditButton, type } = this.props;
 
     const addressItem = [];
     Object.entries(addressList).forEach(([key, address]) => {
-      const isSelected = (
-        cart.cart.shipping_address.customer_address_id.toString() === address.address_mdc_id
-      );
+      let fieldToCheck = type === 'billing'
+        ? 'billing_address'
+        : 'shipping_address';
+      let isSelected = false;
+      if (cart.cart[fieldToCheck].city !== 'NONE'
+        && (cart.cart.delivery_type === 'hd' || type === 'billing')
+        && cart.cart[fieldToCheck].customer_address_id.toString() === address.address_mdc_id) {
+        isSelected = true;
+      }
       addressItem.push(
         <AddressItem
           isSelected={isSelected}
           key={key}
+          type={type}
           address={address}
+          headingText={headingText}
+          processAddress={this.processAddress}
+          showEditButton={showEditButton}
           refreshAddressList={this.refreshAddressList}
         />,
       );
@@ -111,6 +127,7 @@ export default class AddressList extends React.Component {
                 showEmail={false}
                 show_prefered
                 default_val={defaultVal}
+                headingText={headingText}
                 processAddress={this.processAddress}
               />
             </>

@@ -118,6 +118,9 @@ export default class HomeDeliveryInfo extends React.Component {
               cart={cartVal}
               closeModal={this.closeModal}
               processAddress={this.processAddress}
+              showEditButton={true}
+              headingText={Drupal.t('delivery information')}
+              type={'shipping'}
               showEmail={window.drupalSettings.user.uid === 0}
               default_val={
                 window.drupalSettings.user.uid === 0
