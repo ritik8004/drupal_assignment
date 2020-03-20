@@ -33,6 +33,7 @@ import { createFetcher } from '../../../utilities/api/fetcher';
 
 import ConditionalView from '../../../common/components/conditional-view';
 import { getStringMessage } from '../../../utilities/strings';
+import {smoothScrollTo} from "../../../utilities/smoothScroll";
 
 window.fetchStore = 'idle';
 
@@ -118,7 +119,7 @@ export default class Checkout extends React.Component {
 
   updateCheckoutMessage = (type, message) => {
     this.setState({ messageType: type, errorSuccessMessage: message });
-    // @TODO: Add smooth scroll here after it is merged.
+    smoothScrollTo('.spc-messages-container');
   };
 
   /**
