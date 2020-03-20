@@ -36,7 +36,7 @@
             userToken: Drupal.getAlgoliaUserToken(),
             eventName: 'Add to cart',
             index: "...",
-            queryID: $('html').attr('data-algolia-query-id'),
+            queryID: queryId,
             objectIDs: [addedProduct.attr('data-insights-object-id')]
           });
         }
