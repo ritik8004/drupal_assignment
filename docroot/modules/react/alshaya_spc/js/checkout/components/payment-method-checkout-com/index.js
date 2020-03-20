@@ -135,6 +135,7 @@ class PaymentMethodCheckoutCom extends React.Component {
   handleCheckoutResponse = (data) => {
     // @TODO: Handle errors.
     const { selectedCard } = this.context;
+    const { finalisePayment } = this.props;
 
     // Set udf3 again here to send it for api request.
     const udf3 = (selectedCard === 'new' && drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
@@ -147,7 +148,7 @@ class PaymentMethodCheckoutCom extends React.Component {
         additional_data: { ...data, udf3, card_type: selectedCard },
       },
     };
-    this.props.finalisePayment(paymentData);
+    finalisePayment(paymentData);
   };
 
   onExistingCardSelect = (cardHash, madaCard) => {
