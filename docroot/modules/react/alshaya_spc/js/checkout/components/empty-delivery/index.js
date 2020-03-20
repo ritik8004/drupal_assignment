@@ -147,7 +147,7 @@ export default class EmptyDeliveryText extends React.Component {
           <React.Suspense fallback={<Loading />}>
             <AddressContent
               closeModal={this.closeModal}
-              cart={cart}
+              cart={this.props.cart}
               processAddress={this.processAddress}
               show_prefered={window.drupalSettings.user.uid > 0}
               showEmail={window.drupalSettings.user.uid === 0}
