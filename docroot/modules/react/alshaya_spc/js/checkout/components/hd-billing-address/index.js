@@ -18,6 +18,16 @@ export default class HDBillingAddress extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this._isMounted = true;
+    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+    document.addEventListener('onShippingAddressUpdate', this.processShippingUpdate, false);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   showPopup = (showHide) => {
     this.setState({
       open: showHide,
@@ -46,8 +56,9 @@ export default class HDBillingAddress extends React.Component {
    * On billing address change.
    */
   changeBillingAddress = (shippingAsBilling) => {
+    const { shippingAsBilling: shippingBilling } = this.state;
     // Do nothing if user tries to select already selected option.
-    if (this.state.shippingAsBilling === shippingAsBilling) {
+    if (shippingBilling === shippingAsBilling) {
       return;
     }
 
@@ -62,20 +73,10 @@ export default class HDBillingAddress extends React.Component {
     this.showPopup(!shippingAsBilling);
   };
 
-  componentDidMount() {
-    this._isMounted = true;
-    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
-    document.addEventListener('onShippingAddressUpdate', this.processShippingUpdate, false);
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
   /**
    * Handle shipping update event.
    */
-  processShippingUpdate = (e) => {
+  processShippingUpdate = () => {
     // Remove local storage so that user fills billing again.
     localStorage.removeItem(localStorageKey);
     this.setStateAndChecked(true);
@@ -86,7 +87,7 @@ export default class HDBillingAddress extends React.Component {
    */
   processBillingUpdate = (e) => {
     const data = e.detail.data();
-
+    const { refreshCart } = this.props;
     // If there is no error and update was fine, means user
     // has changed the billing address. We set in localstorage.
     if (data.error === undefined) {
@@ -104,7 +105,7 @@ export default class HDBillingAddress extends React.Component {
     }
 
     // Refresh cart.
-    this.props.refreshCart(data);
+    refreshCart(data);
   };
 
   /**
@@ -122,6 +123,7 @@ export default class HDBillingAddress extends React.Component {
       carrierInfo,
       paymentMethod,
     } = this.props;
+    const { open } = this.state;
     // If carrier info not set on cart, means shipping is not
     // set. Thus billing is also not set and thus no need to
     // show biiling info.
@@ -156,8 +158,14 @@ export default class HDBillingAddress extends React.Component {
               </div>
             </div>
           </div>
-          {this.state.open
-            && <BillingPopUp closePopup={this.closePopup} billing={billingAddress} shipping={shippingAddress} />}
+          {open
+            && (
+            <BillingPopUp
+              closePopup={this.closePopup}
+              billing={billingAddress}
+              shipping={shippingAddress}
+            />
+            )}
           {!this.isBillingSameAsShippingInStorage()
             && (
             <div className="spc-billing-bottom-panel">
