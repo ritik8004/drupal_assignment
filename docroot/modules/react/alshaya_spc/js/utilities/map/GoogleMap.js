@@ -106,7 +106,7 @@ export default class GoogleMap extends React.Component {
               if (!userCountrySame) {
                 // @Todo: Add some indication to user.
                 console.log('Not available in the user country.');
-                currentCoords = getDefaultMapCoords();
+                return;
               }
 
               // Remove all markers from the map.
