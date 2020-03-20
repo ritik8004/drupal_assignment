@@ -10,6 +10,14 @@
           display: grid;
           grid-template-columns: 1fr 22.5rem;
         }
+
+        @include breakpoint($desktop) {
+          grid-template-rows: 37.5rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          grid-template-rows: 31.25rem;
+        }
       }
 
       .spc-address-form-wrapper,

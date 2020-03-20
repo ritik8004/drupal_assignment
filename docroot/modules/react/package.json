@@ -59,6 +59,7 @@
     "react-select": "^3.0.8",
     "react-slick": "^0.25.2",
     "reactjs-popup": "^1.5.0",
-    "search-insights": "^1.3.0"
+    "search-insights": "^1.3.0",
+    "smoothscroll-polyfill": "^0.4.4"
   }
 }
