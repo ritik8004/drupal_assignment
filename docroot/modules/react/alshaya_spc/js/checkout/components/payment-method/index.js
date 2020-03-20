@@ -23,16 +23,17 @@ export default class PaymentMethod extends React.Component {
   }
 
   validateBeforePlaceOrder = () => {
+    const { method } = this.props;
     // Do additional process for some payment methods.
-    if (this.props.method.code === 'checkout_com') {
+    if (method.code === 'checkout_com') {
       return this.paymentMethodCheckoutCom.current.validateBeforePlaceOrder();
     }
 
-    if (this.props.method.code === 'cybersource') {
+    if (method.code === 'cybersource') {
       return this.paymentMethodCybersource.current.validateBeforePlaceOrder();
     }
 
-    if (this.props.method.code === 'knet') {
+    if (method.code === 'knet') {
       showFullScreenLoader();
 
       const paymentData = {
@@ -79,34 +80,34 @@ export default class PaymentMethod extends React.Component {
   };
 
   render() {
-    const { code: method } = this.props.method;
+    const { method } = this.props;
     const { isSelected, changePaymentMethod, cart } = this.props;
 
     return (
       <>
-        <div className={`payment-method payment-method-${method}`} onClick={() => changePaymentMethod(method)}>
+        <div className={`payment-method payment-method-${method.code}`} onClick={() => changePaymentMethod(method.code)}>
           <div className="payment-method-top-panel">
             <input
-              id={`payment-method-${method}`}
-              className={method}
+              id={`payment-method-${method.code}`}
+              className={method.code}
               type="radio"
               defaultChecked={isSelected}
-              value={method}
+              value={method.code}
               name="payment-method"
             />
 
             <label className="radio-sim radio-label">
-              {this.props.method.name}
-              <ConditionalView condition={method === 'cashondelivery' && cart.cart.surcharge.amount > 0}>
+              {method.name}
+              <ConditionalView condition={method.code === 'cashondelivery' && cart.cart.surcharge.amount > 0}>
                 <CodSurchargePaymentMethodDescription surcharge={cart.cart.surcharge} />
               </ConditionalView>
             </label>
 
-            <PaymentMethodIcon methodName={method} />
+            <PaymentMethodIcon methodName={method.code} />
           </div>
 
-          <ConditionalView condition={(isSelected && method === 'checkout_com')}>
-            <div className={`payment-method-bottom-panel payment-method-form ${method}`}>
+          <ConditionalView condition={(isSelected && method.code === 'checkout_com')}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
               <CheckoutComContextProvider>
                 <PaymentMethodCheckoutCom
                   ref={this.paymentMethodCheckoutCom}
@@ -117,8 +118,8 @@ export default class PaymentMethod extends React.Component {
             </div>
           </ConditionalView>
 
-          <ConditionalView condition={(isSelected && method === 'cybersource')}>
-            <div className={`payment-method-bottom-panel payment-method-form ${method}`}>
+          <ConditionalView condition={(isSelected && method.code === 'cybersource')}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
               <PaymentMethodCybersource
                 ref={this.paymentMethodCybersource}
                 cart={cart}
