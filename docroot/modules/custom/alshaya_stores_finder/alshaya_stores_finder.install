@@ -11,6 +11,16 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update().
  *
+ * Update the store finder config to set new markers.
+ */
+function alshaya_stores_finder_update_8110() {
+  $brand = \Drupal::config('alshaya.installed_brand')->get('module');
+  alshaya_stores_finder_set_markers($brand);
+}
+
+/**
+ * Implements hook_update().
+ *
  * Update the store finder config to install label position settings.
  */
 function alshaya_stores_finder_update_8109() {

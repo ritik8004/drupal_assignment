@@ -260,10 +260,7 @@ class AlshayaSpcController extends ControllerBase {
           'map' => [
             'center' => $store_finder_config->get('country_center'),
             'placeholder' => $store_finder_config->get('store_search_placeholder'),
-            'map_marker' => [
-              'icon' => $store_finder_config->get('marker.url'),
-              'label_position' => $store_finder_config->get('marker.label_position'),
-            ],
+            'map_marker' => $store_finder_config->get('map_marker'),
             'cnc_shipping' => [
               'code' => $cncTerm->get('field_shipping_carrier_code')->getString(),
               'method' => $cncTerm->get('field_shipping_method_code')->getString(),

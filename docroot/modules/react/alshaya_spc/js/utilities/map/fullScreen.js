@@ -23,7 +23,7 @@ export const exitFullscreen = () => {
     return document.mozCancelFullScreen();
   }
   if (document.webkitExitFullscreen) { // Chrome, Safari and Opera.
-    return document.webkitExitFullscreen();
+    return document.exitFullscreen();
   }
   if (document.msExitFullscreen) { // IE/Edge.
     return document.msExitFullscreen();
