@@ -1,16 +1,16 @@
 import React from 'react';
 
-export default class CheckoutConfigurableOption extends React.Component {
-  render() {
-    const { label, value } = this.props.label;
+const CheckoutConfigurableOption = (props) => {
+  const { label } = props;
 
-    return (
-      <>
-        <div className="spc-cart-product-attribute">
-          <span className="spc-cart-product-attribute-label">{`${label}: `}</span>
-          <span className="spc-cart-product-attribute-value">{value}</span>
-        </div>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <div className="spc-cart-product-attribute">
+        <span className="spc-cart-product-attribute-label">{`${label.label}: `}</span>
+        <span className="spc-cart-product-attribute-value">{label.value}</span>
+      </div>
+    </>
+  );
+};
+
+export default CheckoutConfigurableOption;
