@@ -7,8 +7,11 @@ framework:
     # Remove or comment this section to explicitly disable session support.
     session:
         handler_id: App\Session\SessionHandler
-        cookie_secure: auto
-        cookie_samesite: lax
+        # We get POST requests in iframe/main window from different payment
+        # methods like K-Net, Cybersource, Checkout.com (3D). For this to ensure
+        # session cookie is passed we have to use secure + same_site:none.
+        cookie_secure: true
+        cookie_samesite: 'none'
 
     #esi: true
     #fragments: true
