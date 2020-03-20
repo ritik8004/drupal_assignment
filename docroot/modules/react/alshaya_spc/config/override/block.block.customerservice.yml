@@ -1,3 +1,3 @@
 visibility:
   request_path:
-    pages: "/cart/checkout\r\n/cart/checkout/*\r\n/confirmation/print\r\n/user/*/order/*/print\r\n/checkout"
+    pages: "/cart/checkout\r\n/cart/checkout/*\r\n/confirmation/print\r\n/user/*/order/*/print\r\n/checkout\r\n/cart/login"
