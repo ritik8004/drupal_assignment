@@ -293,8 +293,15 @@
 
       // Cookie based events, only to be processed once on page load.
       $(document).once('gtm-onetime').each(function () {
-        // Fire sign-in success event on successful sign-in.
-        if (userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
+        // Check if social login window opened to avoid GTM push from
+        // social login window.
+        var socialWindow = false;
+        if(window.name == 'ConnectWithSocialAuth'){
+          var socialWindow = true;
+        }
+
+        // Fire sign-in success event on successful sign-in from parent window.
+        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
           localStorage.setItem('userID', userDetails.userID);
         }
