@@ -8,11 +8,12 @@ export default class DeliveryMethods extends React.Component {
   constructor(props) {
     super(props);
     let deliveryType = 'hd';
+    const { cart } = this.props;
 
-    if (this.props.cart.delivery_type) {
-      deliveryType = this.props.cart.delivery_type;
-    } else if (this.props.cart.cart.delivery_type) {
-      deliveryType = this.props.cart.cart.delivery_type;
+    if (cart.delivery_type) {
+      deliveryType = cart.delivery_type;
+    } else if (cart.cart.delivery_type) {
+      deliveryType = cart.cart.delivery_type;
     }
 
     this.state = {
@@ -21,9 +22,11 @@ export default class DeliveryMethods extends React.Component {
   }
 
   componentDidMount() {
+    const { selectedOption } = this.state;
+    const { cncEvent } = this.props;
     // Trigger cnc event to fetch stores.
-    if (this.state.selectedOption === 'cnc') {
-      this.props.cncEvent();
+    if (selectedOption === 'cnc') {
+      cncEvent();
     }
   }
 
@@ -42,22 +45,23 @@ export default class DeliveryMethods extends React.Component {
     });
     document.dispatchEvent(event);
     // Add delivery method in cart storage.
-    const { cart } = this.props;
+    const { cart, refreshCart, cncEvent } = this.props;
     cart.delivery_type = method;
-    this.props.refreshCart(cart);
+    refreshCart(cart);
     // Trigger cnc event to fetch stores.
     if (method === 'cnc') {
-      this.props.cncEvent();
+      cncEvent();
     }
   }
 
   render() {
-    const { cnc_disabled } = this.props.cart;
+    const { cart: {cnc_disabled: cncDisabled}, cart} = this.props;
     const hdSubtitle = Drupal.t('Standard delivery for purchases over KD 250');
+    const { selectedOption } = this.state;
     let cncSubtitle = window.drupalSettings.cnc_subtitle_available || '';
 
     // If CNC is disabled.
-    if (cnc_disabled) {
+    if (cncDisabled) {
       cncSubtitle = window.drupalSettings.cnc_subtitle_unavailable || '';
     }
 
@@ -65,7 +69,7 @@ export default class DeliveryMethods extends React.Component {
       <div className="spc-checkout-delivery-methods">
         <SectionTitle>{Drupal.t('Delivery method')}</SectionTitle>
         <div className="delivery-method" onClick={() => this.changeDeliveryMethod('hd')}>
-          <input id="delivery-method-hd" defaultChecked={this.state.selectedOption === 'hd'} value="hd" name="delivery-method" type="radio" />
+          <input id="delivery-method-hd" defaultChecked={selectedOption === 'hd'} value="hd" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
             <span className="icon"><HomeDeliverySVG /></span>
             <div className="delivery-method-name">
@@ -75,7 +79,7 @@ export default class DeliveryMethods extends React.Component {
           </label>
         </div>
         <div className="delivery-method" onClick={() => this.changeDeliveryMethod('cnc')}>
-          <input id="delivery-method-cnc" defaultChecked={this.state.selectedOption === 'cnc'} disabled={cnc_disabled} value="cnc" name="delivery-method" type="radio" />
+          <input id="delivery-method-cnc" defaultChecked={selectedOption === 'cnc'} disabled={cncDisabled} value="cnc" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
             <span className="icon"><ClickCollectSVG /></span>
             <div className="delivery-method-name">
