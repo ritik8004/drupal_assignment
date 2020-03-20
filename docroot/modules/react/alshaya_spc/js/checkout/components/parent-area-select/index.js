@@ -13,10 +13,11 @@ export default class ParentAreaSelect extends React.Component {
   constructor(props) {
     super(props);
     let currentOption = [];
+    const { default_val: defaultVal, field } = this.props;
     // If default value is available, process that.
-    if (this.props.default_val.length !== 0
-      && this.props.default_val.length !== 'undefined') {
-      currentOption = this.props.default_val[this.props.field.key];
+    if (defaultVal.length !== 0
+      && defaultVal.length !== 'undefined') {
+      currentOption = defaultVal[field.key];
     }
     this.state = {
       areas: {},
@@ -25,15 +26,33 @@ export default class ParentAreaSelect extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.getAreasList();
+    const { default_val: defaultVal, field, areasUpdate } = this.props;
+    if (defaultVal.length !== 0
+      && defaultVal.length !== 'undefined') {
+      // Once we get parent areas list, get corresponding child areas.
+      // this.handleChange(this.props.defaultVal[this.props.field.key]);
+      this.setState({
+        currentOption: defaultVal[field.key],
+      });
+
+      areasUpdate(defaultVal[field.key], false);
+    }
+
+    document.addEventListener('updateParentAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
+  }
+
   /**
    * Whether filter list component need to shown or not.
    */
   toggleFilterList = () => {
+    const { showFilterList } = this.state;
     this.setState({
-      showFilterList: !this.state.showFilterList,
+      showFilterList: !showFilterList,
     });
 
-    if (!this.state.showFilterList) {
+    if (!showFilterList) {
       // Hide contact info and save button on filter list show.
       document.getElementById('spc-checkout-contact-info').classList.add('visually-hidden');
       document.getElementById('address-form-action').classList.add('visually-hidden');
@@ -61,32 +80,17 @@ export default class ParentAreaSelect extends React.Component {
     }, 200);
   }
 
-  componentDidMount() {
-    this.getAreasList();
-    if (this.props.default_val.length !== 0
-      && this.props.default_val.length !== 'undefined') {
-      // Once we get parent areas list, get corresponding child areas.
-      // this.handleChange(this.props.default_val[this.props.field.key]);
-      this.setState({
-        currentOption: this.props.default_val[this.props.field.key],
-      });
-
-      this.props.areasUpdate(this.props.default_val[this.props.field.key], false);
-    }
-
-    document.addEventListener('updateParentAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
-  }
-
   /**
    * Update area field from value of google map.
    */
   updateAreaFromGoogleMap = (e) => {
     const data = e.detail.data();
+    const { areasUpdate } = this.props;
     this.setState({
       currentOption: data.id,
     });
 
-    this.props.areasUpdate(data.id, data.id);
+    areasUpdate(data.id, data.id);
   }
 
   /**
@@ -100,17 +104,18 @@ export default class ParentAreaSelect extends React.Component {
 
   // Handle change of 'area_parent' list.
   handleChange = (selectedOption) => {
+    const { areasUpdate } = this.props;
     this.setState({
       currentOption: selectedOption,
     });
 
-    this.props.areasUpdate(selectedOption, selectedOption);
+    areasUpdate(selectedOption, selectedOption);
   };
 
   render() {
-    const options = this.state.areas;
-    const panelTitle = Drupal.t('select @label', { '@label': this.props.field.label });
-    const { currentOption } = this.state;
+    const { areas: options, currentOption, showFilterList } = this.state;
+    const { field, field_key: fieldKey } = this.props;
+    const panelTitle = Drupal.t('select @label', { '@label': field.label });
 
     const currentOptionAvailable = (currentOption !== undefined
       && currentOption !== null
@@ -125,7 +130,7 @@ export default class ParentAreaSelect extends React.Component {
 
     return (
       <div className="spc-type-select">
-        <label>{this.props.field.label}</label>
+        <label>{field.label}</label>
         {areaLabel.length > 0 ? (
           <div id="spc-area-select-selected-city" className="spc-area-select-selected" onClick={() => this.toggleFilterList()}>
             {areaLabel}
@@ -135,7 +140,7 @@ export default class ParentAreaSelect extends React.Component {
             {Drupal.t('Select city')}
           </div>
         )}
-        {this.state.showFilterList
+        {showFilterList
             && (
             <FilterList
               selected={options[currentOption]}
@@ -146,8 +151,8 @@ export default class ParentAreaSelect extends React.Component {
               panelTitle={panelTitle}
             />
             )}
-        <input type="hidden" id={this.props.field_key} name={this.props.field_key} value={hiddenFieldValue} />
-        <div id={`${this.props.field_key}-error`} />
+        <input type="hidden" id={fieldKey} name={fieldKey} value={hiddenFieldValue} />
+        <div id={`${fieldKey}-error`} />
       </div>
     );
   }
