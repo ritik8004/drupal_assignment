@@ -6,6 +6,7 @@ import {
   getDefaultMapCoords,
   removeAllMarkersFromMap,
   getMap,
+  getHDMapZoom
 } from './map_utils';
 import { isRTL } from '../rtl';
 
@@ -113,6 +114,7 @@ export default class GoogleMap extends React.Component {
               // Pan the map to location.
               const marker = createMarker(currentCoords, getMap());
               getMap().panTo(marker.getPosition());
+              getMap().setZoom(getHDMapZoom());
               window.spcMarkers.push(marker);
             }
           }
@@ -310,7 +312,7 @@ export default class GoogleMap extends React.Component {
     }
 
     return new window.google.maps.Map(this.googleMapDiv(), {
-      zoom: 10,
+      zoom: 7,
       center: centerPosition,
       disableDefaultUI: false,
       mapTypeControl: false,

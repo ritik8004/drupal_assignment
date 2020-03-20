@@ -41,6 +41,13 @@ export const getMap = () => window.spcMap;
 export const getDefaultMapCoords = () => getDefaultMapCenter();
 
 /**
+ * Get zoom value for HD map.
+ */
+export const getHDMapZoom = () => {
+  return 18;
+};
+
+/**
  * Get the markers available on the map.
  *
  * See <GoogleMap> for more details.
@@ -267,6 +274,7 @@ export const geocodeAddressToLatLng = () => {
         // Get the map and re-center it.
         const map = getMap();
         map.setCenter(results[0].geometry.location);
+        map.setZoom(getHDMapZoom());
         // Remove any existing markers on map and add new marker.
         removeAllMarkersFromMap();
         const marker = createMarker(results[0].geometry.location, map);
