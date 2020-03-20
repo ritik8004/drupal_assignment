@@ -208,6 +208,16 @@ class PaymentMethodCybersource extends React.Component {
     return false;
   };
 
+  labelEffect = (e, handler) => {
+    if (handler === 'blur') {
+      if (e.currentTarget.value.length > 0) {
+        e.currentTarget.classList.add('focus');
+      } else {
+        e.currentTarget.classList.remove('focus');
+      }
+    }
+  };
+
   handleCheckoutResponse = (data) => {
     // @TODO: Handle errors.
     const paymentData = {
@@ -238,6 +248,7 @@ class PaymentMethodCybersource extends React.Component {
                 onCreditCardTypeChanged: this.handleCardTypeChanged,
               }}
               onChange={this.handleCardNumberChange}
+              onBlur={(e) => this.labelEffect(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('card number')}</label>
@@ -253,6 +264,7 @@ class PaymentMethodCybersource extends React.Component {
                 delimiter: '/',
               }}
               onChange={this.handleCardExpiryChange}
+              onBlur={(e) => this.labelEffect(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('expiry')}</label>
@@ -265,6 +277,7 @@ class PaymentMethodCybersource extends React.Component {
               pattern="\d{3,4}"
               required
               onChange={this.handleCardCvvChange.bind(this)}
+              onBlur={(e) => this.labelEffect(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('CVV')}</label>
