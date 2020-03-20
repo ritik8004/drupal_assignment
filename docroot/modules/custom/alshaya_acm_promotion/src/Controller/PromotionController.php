@@ -154,14 +154,13 @@ class PromotionController extends ControllerBase {
 
     /** @var \Drupal\acq_sku\Entity\SKU $free_gift */
     foreach ($free_gifts as $free_gift) {
-      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $free_gift->getCacheTags());
-
-      $item = [];
-
       if (!$this->skuManager->getStockQuantity($free_gift)) {
         continue;
       }
 
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $free_gift->getCacheTags());
+
+      $item = [];
       $item['#title']['#markup'] = $free_gift->label();
       $item['#url'] = Url::fromRoute(
         'alshaya_acm_promotion.free_gift_modal',
