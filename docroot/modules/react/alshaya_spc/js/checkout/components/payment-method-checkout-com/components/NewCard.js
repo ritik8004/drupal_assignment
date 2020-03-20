@@ -93,6 +93,7 @@ class NewCard extends React.Component {
 
   render() {
     const { cardType } = this.context;
+    const { labelEffect, handleCardCvvChange } = this.props;
 
     const cardTypes = Object.entries(this.acceptedCards).map(([, type]) => (
       <CardTypeSVG key={type} type={type} class={`${type} ${cardType === type ? 'is-active' : ''}`} />
@@ -111,7 +112,7 @@ class NewCard extends React.Component {
               }}
               required
               onChange={this.handleCardNumberChange}
-              onBlur={(e) => this.props.labelEffect(e, 'blur')}
+              onBlur={(e) => labelEffect(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('card number')}</label>
@@ -129,7 +130,7 @@ class NewCard extends React.Component {
               }}
               required
               onChange={this.handleCardExpiryChange}
-              onBlur={(e) => this.props.labelEffect(e, 'blur')}
+              onBlur={(e) => labelEffect(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('expiry')}</label>
@@ -142,8 +143,8 @@ class NewCard extends React.Component {
               ref={this.ccCvv}
               pattern="\d{3,4}"
               required
-              onChange={this.props.handleCardCvvChange}
-              onBlur={(e) => this.props.labelEffect(e, 'blur')}
+              onChange={handleCardCvvChange}
+              onBlur={(e) => labelEffect(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('CVV')}</label>
@@ -154,7 +155,11 @@ class NewCard extends React.Component {
         <div className="spc-card-types-wrapper">
           {cardTypes}
         </div>
-        <ConditionalView condition={window.drupalSettings.user.uid > 0 && drupalSettings.checkoutCom.tokenize === true}>
+        <ConditionalView
+          condition={
+            window.drupalSettings.user.uid > 0 && drupalSettings.checkoutCom.tokenize === true
+          }
+        >
           <div className="spc-payment-save-card">
             <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
             <label htmlFor="payment-card-save">
