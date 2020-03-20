@@ -127,9 +127,13 @@
         }
 
         @include breakpoint($only-mobile) {
-          display: none;
-          width: auto;
-          height: auto;
+          top: -0.166rem;
+          #{$right}: unset;
+          #{$left}: 0;
+          opacity: 1;
+          transition: opacity 0.2s;
+          background: none;
+          color: $black;
         }
       }
 
@@ -172,11 +176,11 @@
     @include breakpoint($only-mobile) {
       border: none;
       border-radius: 0;
-      height: auto;
       height: 2.5rem;
       max-width: none;
       width: 100%;
       margin: 0;
+      padding-#{$left}: 2.3125rem;
     }
 
     &::placeholder {
@@ -203,6 +207,69 @@
     ul li {
       .aa-suggestion {
         padding: 0 0.75rem;
+      }
+    }
+  }
+
+  &.focused.show-algolia-search-bar {
+    #alshaya-algolia-autocomplete {
+      .react-autosuggest__container {
+        &::after {
+          opacity: 0;
+        }
+      }
+    }
+  }
+}
+
+// frontpage mobile specific styles.
+body {
+  &.frontpage {
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($only-mobile) {
+        padding: 0;
+      }
+    }
+
+    &:not(.no-sticky-algolia-search-bar) .branding__menu {
+      @include breakpoint($only-mobile) {
+        position: fixed !important;
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete #alshaya-algolia-autocomplete .ais-InstantSearch__root {
+      @include breakpoint($only-mobile) {
+        top: -0.175rem;
+      }
+    }
+
+    &.Sticky-algolia-search {
+      .block-alshaya-algolia-react-autocomplete #alshaya-algolia-autocomplete .ais-InstantSearch__root {
+        @include breakpoint($only-mobile) {
+          top: 2.925rem;
+        }
+      }
+    }
+
+    &:not(.no-sticky-algolia-search-bar) {
+      @include breakpoint($only-mobile) {
+        margin-top: 6.4125rem;
+      }
+    }
+  }
+}
+
+#alshaya-algolia-search {
+  .filter-fixed-top {
+    .show-all-filters-algolia {
+      @include breakpoint($only-mobile) {
+        top: 3.025rem;
+      }
+    }
+
+    .block-facet-blockcategory-facet-search {
+      @include breakpoint($only-mobile) {
+        top: 3.025rem;
       }
     }
   }

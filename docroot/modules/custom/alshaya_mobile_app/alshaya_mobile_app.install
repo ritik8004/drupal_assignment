@@ -13,6 +13,23 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add rest end point for magazine block.
+ */
+function alshaya_mobile_app_update_8016() {
+  $configs = [
+    'rest.resource.magazine_block',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_mobile_app');
+
+  // Re-save config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add rest end point for magazine content  type.
  */
 function alshaya_mobile_app_update_8065() {

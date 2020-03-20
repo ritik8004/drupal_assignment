@@ -136,12 +136,12 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: 'vs-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?yiIMPF');
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?px1yb8');
   src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?yiIMPF#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?yiIMPF') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?yiIMPF') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?yiIMPF#alshaya-icons') format('svg');
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?px1yb8#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?px1yb8') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?px1yb8') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?px1yb8#alshaya-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -305,6 +305,9 @@ $icons: (
   youtube: "\1f4fa",
   price-tag: "\e93a",
   filter: "\e93c",
+  edit-input: "\e93d",
+  arrow-left: "\e93e",
+  arrow-right: "\e93f"
 );
 
 @mixin iconbase() {

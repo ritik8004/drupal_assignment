@@ -363,6 +363,9 @@
             },
             "drupal/google_tag": {
                 "Cache noscript content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2019-11-04/cache-noscript-3092193-3.patch"
+            },
+            "drupal/robotstxt": {
+                "Redirection when using a language prefix path": "https://www.drupal.org/files/issues/2018-04-11/robotstxt-avoid_redirection-2930799-5.patch"
             }
         },
         "installer-paths": {

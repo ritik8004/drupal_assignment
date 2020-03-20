@@ -33,6 +33,17 @@ class ClickCollectConfigForm extends ConfigFormBase {
 
     $config = $this->config('alshaya_click_collect.settings');
 
+    $form['feature_status'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Feature status'),
+      '#required' => TRUE,
+      '#options' => [
+        'enabled' => $this->t('enabled'),
+        'disabled' => $this->t('disabled'),
+      ],
+      '#default_value' => $config->get('feature_status') ?? 'enabled',
+    ];
+
     $form['checkout_click_collect_available'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Checkout: Click and Collect available'),
@@ -106,6 +117,7 @@ class ClickCollectConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_click_collect.settings');
+    $config->set('feature_status', $form_state->getValue('feature_status'));
     $config->set('checkout_click_collect_available', $form_state->getValue('checkout_click_collect_available'));
     $config->set('checkout_click_collect_unavailable', $form_state->getValue('checkout_click_collect_unavailable'));
     $config->set('click_collect_rnc', $form_state->getValue('click_collect_rnc'));
