@@ -165,11 +165,12 @@ function _alshaya_spc_get_address_fields() {
   $address_fields = $address_book_manager->getFieldSortOrder();
 
   foreach ($magento_form_fields as $field) {
-    if (!isset($field_mapping[$field['attribute_code']]) || !in_array($field_mapping[$field['attribute_code']], $address_fields)) {
+    $key = $field_mapping[$field['attribute_code']] ?? '';
+    if (empty($key) || !isset($address_fields[$key])) {
       continue;
     }
 
-    $fields[$field_mapping[$field['attribute_code']]] = [
+    $fields[$key] = [
       'key' => $field['attribute_code'],
       'label' => $field['store_label'],
       'required' => $field['used_for_shipping_rate'] || $field['required'],

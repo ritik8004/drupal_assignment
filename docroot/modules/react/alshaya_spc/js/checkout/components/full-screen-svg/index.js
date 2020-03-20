@@ -1,7 +1,8 @@
 import React from 'react';
 
 const FullScreenSVG = (props) => {
-  if (props.mapFullScreen) {
+  const { mapFullScreen } = props;
+  if (mapFullScreen) {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="74" height="74" viewBox="0 0 74 74">
         <defs>
