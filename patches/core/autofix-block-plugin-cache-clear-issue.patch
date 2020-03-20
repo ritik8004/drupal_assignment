@@ -1,0 +1,55 @@
+diff --git a/core/lib/Drupal/Core/Block/BlockManager.php b/core/lib/Drupal/Core/Block/BlockManager.php
+index 026d810..301d66b 100644
+--- a/core/lib/Drupal/Core/Block/BlockManager.php
++++ b/core/lib/Drupal/Core/Block/BlockManager.php
+@@ -9,6 +9,9 @@ use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
+ use Drupal\Core\Plugin\DefaultPluginManager;
+ use Drupal\Core\Plugin\FilteredPluginManagerTrait;
+ use Psr\Log\LoggerInterface;
++use Symfony\Component\HttpFoundation\RedirectResponse;
++use Drupal\Core\Url;
++use Drupal\Core\Site\Settings;
+ 
+ /**
+  * Manages discovery and instantiation of block plugins.
+@@ -82,6 +85,37 @@ class BlockManager extends DefaultPluginManager implements BlockManagerInterface
+    * {@inheritdoc}
+    */
+   public function getFallbackPluginId($plugin_id, array $configuration = []) {
++    // Checks if auto fix for block plugin is enabled.
++    if (Settings::get('auto_heal_discovery_cache', 1)) {
++      $discovery = \Drupal::cache("discovery"); 
++      $block_plugin_cache = $discovery->get("block_plugins")->data ?? [];
++
++      // Checks for empty cache for missing block plugins.
++      if (empty($block_plugin_cache['facets_summary_block:filter_bar']) || empty($block_plugin_cache['facets_summary_block:filter_bar_plp']) || empty($block_plugin_cache['facets_summary_block:filter_bar_promotions']) || empty($block_plugin_cache['views_exposed_filter_block:alshaya_product_list-block_1']) || empty($block_plugin_cache['views_exposed_filter_block:alshaya_product_list-block_2'])) {
++        \Drupal::logger('block_plugin_issue')
++              ->error('Auto-fixing discovery cache bin.');
++        // Deleting corrupted cache items.      
++        \Drupal::service('cache.discovery')->invalidateAll();
++
++        // Don't run this code if it is CLI.
++        if (PHP_SAPI !== 'cli') {
++          // Essentially, refresh the page by redirect.
++          $parameters = \Drupal::request()->query->all() ?? [];
++          $path = URL::fromRoute('<current>', array($parameters))->toString();
++          $response = new RedirectResponse($path);
++          $request = \Drupal::request();
++
++          // Save the session so things like messages get saved.
++          $request->getSession()->save();
++          $response->prepare($request);
++
++          // Make sure to trigger kernel events.
++          \Drupal::service('kernel')->terminate($request, $response);
++          $response->send();
++          return;
++        }    
++      }
++    }
+     return 'broken';
+   }
+ 
+-- 
+2.7.4
+

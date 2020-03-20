@@ -4,14 +4,16 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3a281e2c9030ce2dd3173ca97b39924",
+    "content-hash": "2b68c44114bda29aded55f99c47884a2",
     "packages": [
         {
             "name": "HubSpot/pace",
             "version": "1.0.0",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/HubSpot/pace/archive/master.zip"
+                "url": "https://github.com/HubSpot/pace/archive/master.zip",
+                "reference": null,
+                "shasum": null
             },
             "type": "drupal-library"
         },
@@ -996,7 +998,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/fengyuanchen/cropper/zipball/30c58b29ee21010e17e58ebab165fbd84285c685",
-                "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
+                "reference": "30c58b29ee21010e17e58ebab165fbd84285c685",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -1008,13 +1011,14 @@
             "version": "v5.5.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:enyo/dropzone.git",
+                "url": "https://github.com/enyo/dropzone.git",
                 "reference": "08b9e0a763b54a685404dea523a9c54242fbe1b9"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/enyo/dropzone/zipball/08b9e0a763b54a685404dea523a9c54242fbe1b9",
-                "reference": "08b9e0a763b54a685404dea523a9c54242fbe1b9"
+                "reference": "08b9e0a763b54a685404dea523a9c54242fbe1b9",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -1029,7 +1033,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/15bc73803f76bc53b654b9fdbbbc096f56d7c03d",
-                "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
+                "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -1047,7 +1052,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/kenwheeler/slick/zipball/0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee",
-                "reference": "0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee"
+                "reference": "0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.7"
@@ -1241,7 +1247,9 @@
             "version": "4.9.2",
             "dist": {
                 "type": "zip",
-                "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip"
+                "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip",
+                "reference": null,
+                "shasum": null
             },
             "type": "drupal-library"
         },
@@ -1250,7 +1258,9 @@
             "version": "2.2.6",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip"
+                "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip",
+                "reference": null,
+                "shasum": null
             },
             "type": "drupal-library"
         },
@@ -5568,6 +5578,7 @@
                     "Config set - drush config:set for other than default collections raises exception": "https://www.drupal.org/files/issues/2019-08-20/drush_cset_for_other_than_default_collections-3011276-6.patch",
                     "CORE-11129 - Form states on multivalued select list field": "https://www.drupal.org/files/issues/2019-05-26/states-multiselect-1149078-109.patch",
                     "CORE-6691 - Add traces to module handler code": "patches/core/traces_for_module_implements_cache.patch",
+                    "CORE-6525 - Add autofix for missing block plugin issue": "patches/core/autofix-block-plugin-cache-clear-issue.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-03-05/2815221-116.patch",
@@ -15331,7 +15342,9 @@
             "version": "1.4.2",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip"
+                "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
+                "reference": null,
+                "shasum": null
             },
             "type": "drupal-library"
         },
@@ -15537,7 +15550,9 @@
             "version": "1.17.0",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip"
+                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
+                "reference": null,
+                "shasum": null
             },
             "type": "drupal-library"
         },
@@ -23218,17 +23233,6 @@
         {
             "name": "webflo/drupal-core-require-dev",
             "version": "8.7.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webflo/drupal-core-require-dev.git",
-                "reference": "f2d22767efe8b6444676eafdd51a452088048747"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webflo/drupal-core-require-dev/zipball/f2d22767efe8b6444676eafdd51a452088048747",
-                "reference": "f2d22767efe8b6444676eafdd51a452088048747",
-                "shasum": ""
-            },
             "require": {
                 "behat/mink": "1.7.x-dev",
                 "behat/mink-goutte-driver": "^1.2",
