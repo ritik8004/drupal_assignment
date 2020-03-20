@@ -114,7 +114,7 @@ function alshaya_acm_cart_notification_theme_suggestions_input_alter(array &$sug
 /**
  * Implements hook_sku_variant_info_alter().
  */
-function alshaya_acm_cart_notification_sku_variant_info_alter(array &$variant, SKUInterface $child, SKUInterface $parent) {
+function alshaya_acm_cart_notification_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
   /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
   $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
   // Include the utility file to get product image.
