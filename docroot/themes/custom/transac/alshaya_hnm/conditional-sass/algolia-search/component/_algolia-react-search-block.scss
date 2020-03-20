@@ -225,8 +225,7 @@
           }
 
           &::after {
-            top: 50%;
-            transform: translateY(-50%);
+            top: 0.65625rem;
             #{$right}: unset;
             #{$left}: 0.25rem;
             opacity: 1;
