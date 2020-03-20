@@ -15,7 +15,6 @@ import {
 import {
   getInfoFromStorage,
 } from './storage';
-import { smoothScrollTo } from './smoothScroll';
 
 /**
  * Process the data got from address form submission.
@@ -109,7 +108,6 @@ export const checkoutAddressProcess = function (e, cart) {
 
         // Trigger event.
         triggerCheckoutEvent('refreshCartOnAddress', cart_data);
-        smoothScrollTo('.spc-checkout-payment-options');
       });
     }
   }).catch((error) => {

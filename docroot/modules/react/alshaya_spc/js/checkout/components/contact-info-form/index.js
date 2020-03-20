@@ -1,5 +1,4 @@
 import React from 'react';
-import Axios from 'axios';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import {
   addShippingInCart,
@@ -10,7 +9,6 @@ import FixedFields from '../fixed-fields';
 import { validateContactInfo } from '../../../utilities/checkout_address_process';
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import { dispatchCustomEvent } from '../../../utilities/events';
-import { smoothScrollTo } from '../../../utilities/smoothScroll';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
@@ -151,7 +149,6 @@ class ContactInfoForm extends React.Component {
           dispatchCustomEvent('refreshCartOnCnCSelect', {
             data: () => cartData,
           });
-          smoothScrollTo('.spc-checkout-payment-options');
         })
         .catch((error) => {
           console.error(error);

@@ -8,7 +8,6 @@ import {
 import { addEditAddressToCustomer } from '../../../utilities/address_util';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
 import ClickCollectContainer from '../click-collect';
-import { smoothScrollTo } from '../../../utilities/smoothScroll';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -81,7 +80,6 @@ export default class EmptyDeliveryText extends React.Component {
       const { cart } = this.props.cart;
       checkoutAddressProcess(e, cart);
     }
-    smoothScrollTo('.spc-checkout-payment-options');
   };
 
   render() {

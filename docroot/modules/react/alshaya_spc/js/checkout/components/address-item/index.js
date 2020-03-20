@@ -17,9 +17,6 @@ import {
   prepareAddressDataForShipping,
 } from '../../../utilities/checkout_address_process';
 import EditAddressSVG from '../edit-address-svg';
-import {
-  smoothScrollTo
-} from '../../../utilities/smoothScroll';
 
 export default class AddressItem extends React.Component {
   constructor(props) {
@@ -94,14 +91,9 @@ export default class AddressItem extends React.Component {
           cartData = {
             error_message: cartResult.error_message,
           };
+
           // Trigger event to close all popups.
           triggerCheckoutEvent('refreshCartOnAddress', cartData);
-          smoothScrollTo('.spc-messages-container');
-        }
-        else {
-          // Trigger event to close all popups.
-          triggerCheckoutEvent('refreshCartOnAddress', cartData);
-          smoothScrollTo('.spc-checkout-payment-options');
         }
       });
     }
