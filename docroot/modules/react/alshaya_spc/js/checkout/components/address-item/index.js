@@ -91,10 +91,10 @@ export default class AddressItem extends React.Component {
           cartData = {
             error_message: cartResult.error_message,
           };
-
-          // Trigger event to close all popups.
-          triggerCheckoutEvent('refreshCartOnAddress', cartData);
         }
+
+        // Trigger event to close all popups.
+        triggerCheckoutEvent('refreshCartOnAddress', cartData);
       });
     }
   };
