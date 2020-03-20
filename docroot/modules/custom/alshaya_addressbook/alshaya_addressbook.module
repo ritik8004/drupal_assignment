@@ -221,6 +221,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
   $mapping = $address_book_manager->getMagentoFieldMappings();
+  $sort_order = $address_book_manager->getFieldSortOrder();
   $mapping = array_flip($mapping);
 
   foreach ($magento_form as $form_item) {
@@ -228,7 +229,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       continue;
     }
 
-    if (isset($mapping[$form_item['attribute_code']])) {
+    if (isset($mapping[$form_item['attribute_code']]) && isset($sort_order[$form_item['attribute_code']])) {
       $field_code = $mapping[$form_item['attribute_code']];
 
       // Set access for all form items.

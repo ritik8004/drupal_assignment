@@ -13,6 +13,22 @@ use Drupal\user\RoleInterface;
 /**
  * Implements hook_update_N().
  *
+ * Add sort order in alshaya_addressbook.settings.
+ */
+function alshaya_addressbook_update_8307() {
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['alshaya_addressbook.settings'],
+    'alshaya_addressbook',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  \Drupal::cache('addressbook')->invalidateAll();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Make field_address required for Address Profile.
  */
 function alshaya_addressbook_update_8306() {

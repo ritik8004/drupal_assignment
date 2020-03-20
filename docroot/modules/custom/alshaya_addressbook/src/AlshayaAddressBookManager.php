@@ -626,6 +626,10 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       $custom_fields = $this->getMagentoCustomFields();
 
       foreach ($mapping as $field_code => $attribute_code) {
+        if (empty($address[$field_code])) {
+          continue;
+        }
+
         switch ($field_code) {
           case 'mobile_number':
             $magento_address[$attribute_code] = isset($address[$field_code])
@@ -958,12 +962,19 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         return (bool) $form_item['visible'] && $form_item['status'];
       });
 
+      $mapping = array_flip($this->getMagentoFieldMappings());
+      $sort_order = $this->getFieldSortOrder();
+
       foreach ($magento_form as $index => $form_item) {
         if (isset($form_item['attribute'])) {
           // Copy values from attribute to main array.
           $form_item = array_merge($form_item['attribute'], $form_item);
           unset($form_item['attribute']);
         }
+
+        $form_item['sort_order'] = isset($sort_order[$mapping[$form_item['attribute_code']]])
+          ? $sort_order[$mapping[$form_item['attribute_code']]]
+          : $form_item['sort_order'] + 1000;
 
         $magento_form[$form_item['attribute_code']] = $form_item;
         unset($magento_form[$index]);
@@ -1001,6 +1012,23 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     return $mapping;
+  }
+
+  /**
+   * Function to get sort order for address fields.
+   *
+   * @return array
+   *   Drupal form field <-> order.
+   */
+  public function getFieldSortOrder() {
+    static $order;
+
+    if (empty($order)) {
+      $order = $this->configFactory->get('alshaya_addressbook.settings')->get('sort_order');
+      $order = array_filter($order);
+    }
+
+    return $order;
   }
 
   /**
