@@ -60,6 +60,13 @@
     }
   }
 
+  .block-system-main-block {
+    @include breakpoint($desktop) {
+      max-width: 64.3125rem;
+      margin: 0 auto;
+    }
+  }
+
   .checkout-login-wrapper {
     max-width: 100%;
     font-size: 12px;
@@ -95,9 +102,6 @@
     }
 
     .checkout-login-actions-wrapper {
-      line-height: 2.8;
-      margin-top: 1.0625rem;
-
       @include breakpoint($only-mobile) {
         display: none;
       }
@@ -107,16 +111,24 @@
         clear: $left;
       }
 
+      clear: both;
+      background: none !important;
+      border: none;
+      padding: 0 !important;
+      margin-top: 1.0625rem !important;
+      text-decoration: underline;
+      width: auto !important;
+
       a {
-        color: $checkout_login_back_to_basket_text;
-        font-size: 0.875rem;
-        font-family: $arial;
-        text-decoration: underline;
-        font-weight: 700;
+        font-size: 0.875rem !important;
 
         &::first-letter {
           text-transform: uppercase;
         }
+      }
+
+      @include breakpoint($only-mobile) {
+        display: none !important;
       }
     }
 
@@ -502,6 +514,26 @@
       &::first-letter {
         text-transform: uppercase;
       }
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    margin: 0;
+  }
+
+  .site-brand-wrapper {
+    border-bottom: 1px solid $checkout_header_border-bottom;
+    height: 7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include breakpoint($only-mobile) {
+      height: 3.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      height: 4.5rem;
     }
   }
 }
