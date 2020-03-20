@@ -38,7 +38,7 @@
     $(window).once('alshaya-seo-gtm-product-search-algolia').on('scroll', debounce(function (event) {
       Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
     }, 500));
-  }, drupalSettings.algoliaSearch.algolia_trigger_ga_after));
+  }, drupalSettings.gtm.algolia_trigger_ga_after));
 
   /**
    * Helper function to push productImpression to GTM.

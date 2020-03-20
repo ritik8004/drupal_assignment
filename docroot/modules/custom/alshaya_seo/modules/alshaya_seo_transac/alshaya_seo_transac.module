@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 use Drupal\search_api\IndexInterface;
@@ -42,6 +43,7 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     $page['#attached']['drupalSettings']['gtm']['disabled_vars'] = \Drupal::config('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     if (\Drupal::moduleHandler()->moduleExists('alshaya_algolia_react')) {
+      $page['#attached']['drupalSettings']['gtm']['algolia_trigger_ga_after'] = Settings::get('algolia_trigger_ga_after', 3000);
       $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_algolia';
     }
   }
