@@ -6,35 +6,43 @@
 (function ($, Drupal) {
   'use strict';
 
-  // Copy queryID from local store to tag in html.
-  // This is to ensure we have queryID even after we update URL in cases
-  // where color split is enabled.
-  var sku = $('.sku-base-form').closest('article[gtm-type="gtm-product-link"]').attr('gtm-main-sku');
-  if (localStorage.getItem('algolia_search_clicks') !== null) {
-    var algolia_clicks = JSON.parse(localStorage.getItem('algolia_search_clicks'));
-    $('html').attr('data-algolia-query-id', algolia_clicks[sku]);
-  }
-  else {
-    $('html').attr('data-algolia-query-id', '');
-  }
-
   Drupal.behaviors.alshayaAlgoliaInsightsDetail = {
     attach: function (context) {
       $('.sku-base-form').once('alshayaAlgoliaInsightsDetail').on('product-add-to-cart-success', function () {
-        // Do nothing if no query id to send.
-        if ($('html').attr('data-algolia-query-id') === '') {
+        var sku = $(this).attr('data-sku');
+        var queryId = null;
+
+        try {
+          if (localStorage.getItem('algolia_search_clicks') !== null) {
+            var algolia_clicks = JSON.parse(localStorage.getItem('algolia_search_clicks'));
+            if (algolia_clicks && algolia_clicks[sku] !== undefined && algolia_clicks[sku] !== null) {
+              queryId = algolia_clicks[sku];
+            }
+          }
+        }
+        catch (e) {
+          console.error(e);
+          return;
+        }
+
+        if (!queryId) {
           return;
         }
 
         var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
 
-        window.aa('convertedObjectIDsAfterSearch', {
-          userToken: Drupal.getAlgoliaUserToken(),
-          eventName: 'Add to cart',
-          index: "...",
-          queryID: $('html').attr('data-algolia-query-id'),
-          objectIDs: [addedProduct.attr('data-insights-object-id')]
-        });
+        try {
+          window.aa('convertedObjectIDsAfterSearch', {
+            userToken: Drupal.getAlgoliaUserToken(),
+            eventName: 'Add to cart',
+            index: "...",
+            queryID: $('html').attr('data-algolia-query-id'),
+            objectIDs: [addedProduct.attr('data-insights-object-id')]
+          });
+        }
+        catch (e) {
+          console.error(e);
+        }
       });
     }
   };
