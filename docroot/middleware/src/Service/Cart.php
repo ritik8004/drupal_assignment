@@ -504,7 +504,7 @@ class Cart {
       return $cart;
     }
 
-    if ($update_billing || empty($cart['cart']['billing_address']['city'])
+    if (empty($cart['cart']['billing_address']['city'])
       || $cart['cart']['billing_address']['city'] == 'NONE') {
       // Setting city value as 'NONE' so that, we can
       // identify if billing address added is default one and

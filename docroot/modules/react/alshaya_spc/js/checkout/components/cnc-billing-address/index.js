@@ -8,8 +8,14 @@ import {
   processBillingUpdateFromForm,
   getAddressPopupClassName
 } from '../../../utilities/checkout_address_process';
+import {
+  isBillingSameAsShippingInStorage
+} from '../../../utilities/checkout_util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
+
+// Storage key for billing shipping info same or not.
+const localStorageKey = 'billing_shipping_same';
 
 export default class CnCBillingAddress extends React.Component {
   isComponentMounted = false;
@@ -18,6 +24,7 @@ export default class CnCBillingAddress extends React.Component {
     super(props);
     this.state = {
       open: false,
+      shippingAsBilling: true
     };
   }
 
@@ -50,6 +57,18 @@ export default class CnCBillingAddress extends React.Component {
     if (this.isComponentMounted) {
       const data = e.detail.data();
       const { refreshCart } = this.props;
+
+      // If there is no error and update was fine, means user
+      // has changed the billing address. We set in localstorage.
+      if (data.error === undefined) {
+        if (data.cart !== undefined) {
+          localStorage.setItem(localStorageKey, false);
+          this.setState({
+            shippingAsBilling: false
+          });
+        }
+      }
+
       // Refresh cart.
       refreshCart(data);
       // Close modal.
@@ -64,6 +83,21 @@ export default class CnCBillingAddress extends React.Component {
     const { cart } = this.props;
     return processBillingUpdateFromForm(e, cart.cart.shipping_address);
   }
+
+  /**
+   * If local storage has biliing shipping set.
+   */
+  isBillingSameAsShippingInStorage = () => {
+    return isBillingSameAsShippingInStorage();
+  };
+
+  /**
+   * Message to show when billing is
+   * same as shipping.
+   */
+  sameBillingAsShippingMessage = () => {
+    return Drupal.t('We have set your billing address same as delivery address. You can select a different one by clicking the change button above.');
+  };
 
   render() {
     const { cart, refreshCart } = this.props;
@@ -125,6 +159,8 @@ export default class CnCBillingAddress extends React.Component {
       );
     }
 
+    const isShippingBillingSame = this.isBillingSameAsShippingInStorage();
+
     return (
       <div className="spc-section-billing-address cnc-flow">
         <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
@@ -132,6 +168,9 @@ export default class CnCBillingAddress extends React.Component {
           <div className="spc-billing-bottom-panel">
             <BillingInfo cart={cart} refreshCart={refreshCart}/>
           </div>
+          {isShippingBillingSame &&
+            <div>{this.sameBillingAsShippingMessage()}</div>
+          }
         </div>
       </div>
     );

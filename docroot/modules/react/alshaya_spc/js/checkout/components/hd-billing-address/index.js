@@ -58,8 +58,7 @@ export default class HDBillingAddress extends React.Component {
     // If there is no error and update was fine, means user
     // has changed the billing address. We set in localstorage.
     if (data.error === undefined) {
-      if (data.cart !== undefined
-        && data.cart.delivery_type === 'hd') {
+      if (data.cart !== undefined) {
         localStorage.setItem(localStorageKey, false);
         this.setState({
           shippingAsBilling: false
