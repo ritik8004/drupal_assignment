@@ -127,8 +127,7 @@
         }
 
         @include breakpoint($only-mobile) {
-          top: 50%;
-          transform: translateY(-50%);
+          top: -0.166rem;
           #{$right}: unset;
           #{$left}: 0;
           opacity: 1;
