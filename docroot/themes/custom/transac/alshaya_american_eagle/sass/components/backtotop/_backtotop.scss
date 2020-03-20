@@ -17,3 +17,13 @@
   border: 1px solid $btt_border;
   background: $btt_bg;
 }
+
+.nodetype--acq_product {
+  #backtotop {
+    @include breakpoint($only-mobile) {
+      &::after {
+        margin-top: 0;
+      }
+    }
+  }
+}

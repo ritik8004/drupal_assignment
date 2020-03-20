@@ -1,0 +1,92 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_page_attachments_alter().
+ *
+ * Attaches the redirect library to every page, which will decide if a user
+ * should be redirected to a more appropriate site based on their location.
+ */
+function alshaya_location_redirect_page_attachments_alter(array &$page) {
+  if (Settings::get('alshaya_location_redirect', 1)) {
+    // If configured to do so, only redirect for certain roles.
+    if (Settings::get('alshaya_location_redirect_by_roles', 1)) {
+      // A set of roles that should be redirected.
+      $included = [
+        'anonymous',
+      ];
+
+      $current_user = \Drupal::currentUser();
+      $roles = $current_user->getRoles();
+
+      if (!count(array_intersect($roles, $included))) {
+        return;
+      }
+    }
+
+    // If configured to do so, exclude paths beginning with '/user'.
+    if (Settings::get('alshaya_location_redirect_exclude_login', 1)) {
+      $current_path = \Drupal::service('path.current')->getPath();
+
+      if (substr($current_path, 0, 5) === '/user') {
+        return;
+      }
+    }
+
+    global $_acsf_site_name;
+
+    if (!empty($_acsf_site_name)) {
+      // Extract the brand and market from the site name string.
+      $brand = substr($_acsf_site_name, 0, -2);
+      $country = substr($_acsf_site_name, -2);
+
+      $worker_url = Settings::get('alshaya_location_redirect_worker_url', 'https://monitoring.factory.alshaya.com/alshaya-location-redirect');
+
+      // Attach the redirect library to every page.
+      $page['#attached']['library'][] = 'alshaya_location_redirect/redirect';
+
+      $mapping = [
+        'bbw' => [
+          'kw' => 'https://www.bathandbodyworks.com.kw',
+          'sa' => 'https://www.bathandbodyworks.com.sa',
+          'ae' => 'https://www.bathandbodyworks.ae',
+        ],
+        'fl' => [
+          'kw' => 'https://www.footlocker.com.kw',
+          'ae' => 'https://www.footlocker.ae',
+          'sa' => 'https://www.footlocker.com.sa',
+        ],
+        'hm' => [
+          'kw' => 'https://kw.hm.com',
+          'ae' => 'https://ae.hm.com',
+          'sa' => 'https://sa.hm.com',
+          'eg' => 'https://eg.hm.com',
+        ],
+        'mc' => [
+          'kw' => 'https://www.mothercare.com.kw',
+          'sa' => 'https://www.mothercare.com.sa',
+          'ae' => 'https://www.mothercare.ae',
+        ],
+        'pb' => [
+          'kw' => 'https://www.potterybarn.com.kw',
+          'sa' => 'https://www.potterybarn.com.sa',
+          'ae' => 'https://www.potterybarn.ae',
+        ],
+        'vs' => [
+          'ae' => 'https://www.victoriassecret.ae',
+        ],
+      ];
+
+      // Add the current brand, country and CF worker url to drupal settings.
+      $page['#attached']['drupalSettings']['alshaya_location_redirect']['country'] = $country;
+      $page['#attached']['drupalSettings']['alshaya_location_redirect']['worker_url'] = $worker_url;
+      $page['#attached']['drupalSettings']['alshaya_location_redirect']['mapping'] = $mapping[$brand];
+    }
+  }
+}

@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - serialization
+    - alshaya_mobile_app
+id: magazine_block
+plugin_id: magazine_block
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

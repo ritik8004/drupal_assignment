@@ -1,0 +1,20 @@
+.path--cart {
+  .free-gift-container {
+    @include breakpoint($only-mobile) {
+      top: 7.5rem;
+    }
+  }
+}
+
+// for all browsers, promo content.
+body {
+  &.free-gift-promo-list-overlay.free-gift-detail-modal {
+    .ui-dialog {
+      .ui-dialog-content#drupal-modal {
+        @include breakpoint($desktop) {
+          height: 39.5rem !important;
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,4 @@
+feature_status: 'enabled'
 pdp_click_collect_title: 'Click and Collect'
 pdp_click_collect_subtitle: 'Collect the order from store in 99 days'
 pdp_click_collect_unavailable: 'Click & collect in-store is not available'

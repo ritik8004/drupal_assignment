@@ -1,0 +1,10 @@
+#alshaya-algolia-search {
+  .filter-fixed-top {
+    .show-all-filters-algolia,
+    .block-facet-blockcategory-facet-search {
+      @include breakpoint($only-mobile) {
+        top: 5.575rem;
+      }
+    }
+  }
+}
