@@ -47,3 +47,4 @@ services:
       - '@alshaya_acm_customer.orders_manager'
       - '@config.factory'
       - '@alshaya_stores_finder_transac.utility'
+      - '@renderer'

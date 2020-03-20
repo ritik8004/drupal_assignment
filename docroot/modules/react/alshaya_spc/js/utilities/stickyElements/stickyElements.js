@@ -24,7 +24,10 @@ function getPosition(element) {
 function getSiderBarOffsetTop() {
   let offSet = 0;
   let preContentOffset = 0;
-  preContentOffset = document.getElementsByClassName('spc-pre-content')[0].offsetHeight === 0 ? 0 : document.getElementsByClassName('spc-pre-content')[0].offsetHeight + 20;
+  if (document.getElementsByClassName('spc-pre-content').length > 0) {
+    preContentOffset = document.getElementsByClassName('spc-pre-content')[0].offsetHeight + 20;
+  }
+
   if (document.getElementsByClassName('page-standard')[0].classList.contains('spc-checkout-sticky-sidebar')) {
     offSet = document.getElementsByClassName('site-brand-wrapper')[0].offsetHeight
       + document.getElementById('block-page-title').offsetHeight
@@ -51,19 +54,27 @@ function stickyMobileCartPreview() {
   let superCatHeight; let
     brandingMenuHeight;
   [superCatHeight, brandingMenuHeight] = [0, 0];
-  if (superCategoryMenu) {
-    superCatHeight = superCategoryMenu.offsetHeight + document.getElementById('block-mobilenavigation').offsetHeight;
-    cartPreview[0].style.top = `${superCatHeight}px`;
-    superCatFlag = true;
-  } else {
-    brandingMenuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
-    if (cartPreview[0] !== undefined) {
-      cartPreview[0].style.top = `${brandingMenuHeight}px`;
+  if (cartPreview.length) {
+    if (superCategoryMenu) {
+      superCatHeight = superCategoryMenu.offsetHeight + document.getElementById('block-mobilenavigation').offsetHeight;
+      cartPreview[0].style.top = `${superCatHeight}px`;
+      superCatFlag = true;
+    } else {
+      brandingMenuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
+      if (cartPreview[0] !== undefined) {
+        cartPreview[0].style.top = `${brandingMenuHeight}px`;
+      }
     }
+  } else {
+    return;
   }
   window.addEventListener('scroll', () => {
     // Mobile cart sticky header.
     if (window.innerWidth < 768) {
+      if (cartPreview.length === 0) {
+        return;
+      }
+
       const cartPreviewOffset = getPosition(cartPreview[0]);
       const cartOffsetTop = superCatFlag === false
         ? cartPreviewOffset.top - brandingMenuHeight
@@ -106,6 +117,12 @@ function stickySidebar() {
       const offSet = getSiderBarOffsetTop();
       // Sidebar.
       const spcSidebar = document.getElementsByClassName('spc-sidebar');
+
+      // If sidebar not available.
+      if (spcSidebar.length === 0) {
+        return;
+      }
+
       const spcSidebarWidth = spcSidebar[0].offsetWidth;
       const spcSidebarOffset = getPosition(spcSidebar[0]);
       const spcSideBarBottom = spcSidebarOffset.top + spcSidebar[0].offsetHeight;

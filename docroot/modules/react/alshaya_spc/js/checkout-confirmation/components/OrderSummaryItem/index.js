@@ -1,8 +1,12 @@
 import React from 'react';
+import parse from 'html-react-parser';
 
 class OrderSummaryItem extends React.Component {
   render() {
-    if (this.props.type === 'address') {
+    const { type, label, value } = this.props;
+
+    if (type === 'address') {
+      const { name, address } = this.props;
       return (
         <div className="spc-order-summary-item spc-order-summary-address-item">
           <span className="spc-label">{`${this.props.label}:`}</span>
@@ -18,10 +22,19 @@ class OrderSummaryItem extends React.Component {
       );
     }
 
+    if (type === 'markup') {
+      return (
+        <div className="spc-order-summary-item">
+          <span className="spc-label">{`${label}:`}</span>
+          <span className="spc-value">{parse(value)}</span>
+        </div>
+      );
+    }
+
     return (
       <div className="spc-order-summary-item">
-        <span className="spc-label">{`${this.props.label}:`}</span>
-        <span className="spc-value">{this.props.value}</span>
+        <span className="spc-label">{`${label}:`}</span>
+        <span className="spc-value">{value}</span>
       </div>
     );
   }

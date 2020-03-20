@@ -11,6 +11,7 @@
 
     &.spc-checkout-error-message-container {
       background-color: $spc-checkout-error-message-background;
+      margin-bottom: 1rem;
 
       .spc-checkout-error-message {
         @include icon(warning) {
@@ -53,9 +54,11 @@
 
     .spc-message {
       font-size: 1rem;
-      font-weight: 600;
       margin-#{$left}: 1rem;
       padding-#{$right}: 1.3125rem;
+      min-height: 2.125rem;
+      display: flex;
+      align-items: center;
 
       &.spc-checkout-error-message {
         color: $spc-checkout-error-message-color;

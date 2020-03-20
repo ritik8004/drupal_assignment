@@ -66,6 +66,7 @@
 
         @include breakpoint($only-mobile) {
           z-index: 3;
+          position: fixed;
         }
       }
 

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   addShippingInCart,
   removeFullScreenLoader,
@@ -17,12 +16,129 @@ import {
 } from './storage';
 
 /**
+ * Validate contact information.
+ */
+export const validateContactInfo = (e, validateEmail) => {
+  let isError = false;
+  const name = e.target.elements.fullname.value.trim();
+  const splitedName = name.split(' ');
+  if (name.length === 0 || splitedName.length === 1) {
+    document.getElementById('fullname-error').innerHTML = Drupal.t('Please enter your full name.');
+    document.getElementById('fullname-error').classList.add('error');
+    isError = true;
+  } else {
+    document.getElementById('fullname-error').innerHTML = '';
+    document.getElementById('fullname-error').classList.remove('error');
+  }
+
+  const mobile = e.target.elements.mobile.value.trim();
+  if (mobile.length === 0) {
+    document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter mobile number.');
+    document.getElementById('mobile-error').classList.add('error');
+    isError = true;
+  } else {
+    document.getElementById('mobile-error').innerHTML = '';
+    document.getElementById('mobile-error').classList.remove('error');
+  }
+
+  // If email validation needs to be done.
+  if (validateEmail) {
+    const email = e.target.elements.email.value.trim();
+    if (email.length === 0) {
+      document.getElementById('email-error').innerHTML = Drupal.t('Please enter email.');
+      document.getElementById('email-error').classList.add('error');
+      isError = true;
+    } else {
+      document.getElementById('email-error').innerHTML = '';
+      document.getElementById('email-error').classList.remove('error');
+    }
+  }
+  return isError;
+};
+
+/**
+ * Validate address fields.
+ */
+export const validateAddressFields = (e, validateEmail) => {
+  let isError = validateContactInfo(e, validateEmail);
+
+  // Iterate over address fields.
+  Object.entries(drupalSettings.address_fields).forEach(
+    ([key, field]) => {
+      if (field.required === true) {
+        const addField = e.target.elements[key].value.trim();
+        if (addField.length === 0) {
+          document.getElementById(`${key}-error`).innerHTML = Drupal.t('Please enter @label.', { '@label': field.label });
+          document.getElementById(`${key}-error`).classList.add('error');
+          isError = true;
+        } else {
+          document.getElementById(`${key}-error`).innerHTML = '';
+          document.getElementById(`${key}-error`).classList.remove('error');
+        }
+      }
+    },
+  );
+
+  return isError;
+};
+
+/**
+ * Prepare address data for updating shipping.
+ *
+ * @param {*} address
+ */
+export const prepareAddressDataForShipping = (address) => {
+  const data = {};
+  data.static = {
+    firstname: address.firstname,
+    lastname: address.lastname,
+    email: address.email,
+    city: address.city,
+    telephone: address.mobile,
+    country_id: drupalSettings.country_code,
+  };
+
+  // Getting dynamic fields data.
+  Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+    data[field.key] = address[key];
+  });
+
+  return data;
+};
+
+/**
+ * Prepare address data from form value.
+ *
+ * @param {*} elements
+ */
+export const prepareAddressDataFromForm = (elements) => {
+  const {
+    firstname,
+    lastname,
+  } = extractFirstAndLastName(elements.fullname.value.trim());
+
+  const address = {
+    firstname,
+    lastname,
+    email: elements.email.value,
+    city: gerAreaLabelById(false, elements.administrative_area.value),
+    mobile: `+${drupalSettings.country_mobile_code}${cleanMobileNumber(elements.mobile.value)}`,
+  };
+
+  // Getting dynamic fields data.
+  Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+    address[key] = elements[key].value;
+  });
+
+  return prepareAddressDataForShipping(address);
+};
+
+/**
  * Process the data got from address form submission.
  *
  * @param {*} e
- * @param {*} cart
  */
-export const checkoutAddressProcess = function (e, cart) {
+export const checkoutAddressProcess = function (e) {
   const notValidAddress = validateAddressFields(e, true);
   // If address form is not valid.
   if (notValidAddress) {
@@ -115,74 +231,6 @@ export const checkoutAddressProcess = function (e, cart) {
   });
 };
 
-
-/**
- * Validate contact information.
- */
-export const validateContactInfo = (e, validateEmail) => {
-  let isError = false;
-  const name = e.target.elements.fullname.value.trim();
-  const splitedName = name.split(' ');
-  if (name.length === 0 || splitedName.length === 1) {
-    document.getElementById('fullname-error').innerHTML = Drupal.t('Please enter your full name.');
-    document.getElementById('fullname-error').classList.add('error');
-    isError = true;
-  } else {
-    document.getElementById('fullname-error').innerHTML = '';
-    document.getElementById('fullname-error').classList.remove('error');
-  }
-
-  const mobile = e.target.elements.mobile.value.trim();
-  if (mobile.length === 0) {
-    document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter mobile number.');
-    document.getElementById('mobile-error').classList.add('error');
-    isError = true;
-  } else {
-    document.getElementById('mobile-error').innerHTML = '';
-    document.getElementById('mobile-error').classList.remove('error');
-  }
-
-  // If email validation needs to be done.
-  if (validateEmail) {
-    const email = e.target.elements.email.value.trim();
-    if (email.length === 0) {
-      document.getElementById('email-error').innerHTML = Drupal.t('Please enter email.');
-      document.getElementById('email-error').classList.add('error');
-      isError = true;
-    } else {
-      document.getElementById('email-error').innerHTML = '';
-      document.getElementById('email-error').classList.remove('error');
-    }
-  }
-  return isError;
-};
-
-/**
- * Validate address fields.
- */
-export const validateAddressFields = (e, validateEmail) => {
-  let isError = validateContactInfo(e, validateEmail);
-
-  // Iterate over address fields.
-  Object.entries(drupalSettings.address_fields).forEach(
-    ([key, field]) => {
-      if (field.required === true) {
-        const addField = e.target.elements[key].value.trim();
-        if (addField.length === 0) {
-          document.getElementById(`${key}-error`).innerHTML = Drupal.t('Please enter @label.', { '@label': field.label });
-          document.getElementById(`${key}-error`).classList.add('error');
-          isError = true;
-        } else {
-          document.getElementById(`${key}-error`).innerHTML = '';
-          document.getElementById(`${key}-error`).classList.remove('error');
-        }
-      }
-    },
-  );
-
-  return isError;
-};
-
 /**
  * Format the address which can be used as default value
  * for the edit address form fill.
@@ -205,57 +253,6 @@ export const formatAddressDataForEditForm = (address) => {
   );
 
   return formattedAddress;
-};
-
-/**
- * Prepare address data from form value.
- *
- * @param {*} elements
- */
-export const prepareAddressDataFromForm = (elements) => {
-  const {
-    firstname,
-    lastname,
-  } = extractFirstAndLastName(elements.fullname.value.trim());
-
-  const address = {
-    firstname,
-    lastname,
-    email: elements.email.value,
-    city: gerAreaLabelById(false, elements.administrative_area.value),
-    mobile: `+${drupalSettings.country_mobile_code}${cleanMobileNumber(elements.mobile.value)}`,
-  };
-
-  // Getting dynamic fields data.
-  Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
-    address[key] = elements[key].value;
-  });
-
-  return prepareAddressDataForShipping(address);
-};
-
-/**
- * Prepare address data for updating shipping.
- *
- * @param {*} address
- */
-export const prepareAddressDataForShipping = (address) => {
-  const data = {};
-  data.static = {
-    firstname: address.firstname,
-    lastname: address.lastname,
-    email: address.email,
-    city: address.city,
-    telephone: address.mobile,
-    country_id: drupalSettings.country_code,
-  };
-
-  // Getting dynamic fields data.
-  Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
-    data[field.key] = address[key];
-  });
-
-  return data;
 };
 
 /**
