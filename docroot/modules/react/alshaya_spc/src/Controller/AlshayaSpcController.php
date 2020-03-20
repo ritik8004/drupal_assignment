@@ -9,7 +9,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Language\LanguageInterface;
-use Drupal\Core\Render\RendererInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -81,13 +80,6 @@ class AlshayaSpcController extends ControllerBase {
   protected $orderHelper;
 
   /**
-   * Renderer.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -104,10 +96,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Entity type manager.
    * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_term_helper
    *   Address terms helper.
-   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper $orderHelper
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper $order_helper
    *   Order details helper.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   Renderer.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               AlshayaSpcPaymentMethodManager $payment_method_manager,
@@ -116,8 +106,7 @@ class AlshayaSpcController extends ControllerBase {
                               AccountProxyInterface $current_user,
                               EntityTypeManagerInterface $entity_type_manager,
                               AddressBookAreasTermsHelper $areas_term_helper,
-                              AlshayaSpcOrderHelper $orderHelper,
-                              RendererInterface $renderer) {
+                              AlshayaSpcOrderHelper $order_helper) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
@@ -125,8 +114,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
     $this->areaTermsHelper = $areas_term_helper;
-    $this->orderHelper = $orderHelper;
-    $this->renderer = $renderer;
+    $this->orderHelper = $order_helper;
   }
 
   /**
@@ -141,8 +129,7 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('current_user'),
       $container->get('entity_type.manager'),
       $container->get('alshaya_addressbook.area_terms_helper'),
-      $container->get('alshaya_spc.order_helper'),
-      $container->get('renderer')
+      $container->get('alshaya_spc.order_helper')
     );
   }
 

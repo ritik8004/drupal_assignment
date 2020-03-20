@@ -56,7 +56,9 @@ class OrderSummary extends React.Component {
             <OrderSummaryItem label={Drupal.t('Result code')} value={resultCode} />
           </ConditionalView>
           <ConditionalView condition={bankDetails !== undefined && bankDetails !== null}>
-            <OrderSummaryItem label={Drupal.t('Bank details')} value={bankDetails} />
+            <OrderSummaryItem type="markup"
+                              label={Drupal.t('Bank details')}
+                              value={bankDetails} />
           </ConditionalView>
         </div>
         <div className="spc-order-summary-order-detail">
