@@ -19,14 +19,6 @@ export default class EmptyDeliveryText extends React.Component {
     this.state = { open: false };
   }
 
-  openModal = () => {
-    this.setState({ open: true });
-  };
-
-  closeModal = () => {
-    this.setState({ open: false });
-  };
-
   componentDidMount() {
     this._isMounted = true;
     document.addEventListener(
@@ -58,9 +50,19 @@ export default class EmptyDeliveryText extends React.Component {
     );
   }
 
+  openModal = () => {
+    this.setState({ open: true });
+  };
+
+  closeModal = () => {
+    this.setState({ open: false });
+  };
+
+
   eventListener = (e) => {
     const data = e.detail.data();
-    this.props.refreshCart(data);
+    const { refreshCart } = this.props;
+    refreshCart(data);
     if (this._isMounted) {
       this.closeModal();
     }
@@ -82,9 +84,10 @@ export default class EmptyDeliveryText extends React.Component {
   };
 
   render() {
-    const { delivery_type, cart } = this.props.cart;
+    const { delivery_type: deliveryType, cart } = this.props.cart;
+    const { open } = this.state;
 
-    if (delivery_type === 'cnc') {
+    if (deliveryType === 'cnc') {
       return (
         <div className="spc-empty-delivery-information">
           <div
@@ -94,7 +97,7 @@ export default class EmptyDeliveryText extends React.Component {
             {Drupal.t('select your preferred collection store')}
           </div>
           <Popup
-            open={this.state.open}
+            open={open}
             onClose={this.closeModal}
             closeOnDocumentClick={false}
           >
@@ -113,11 +116,10 @@ export default class EmptyDeliveryText extends React.Component {
           fullname: `${fname} ${lname}`,
         },
       };
-    }
-    // If carrier info set, means shipping is set.
-    // Get name info from there.
-    else if (cart.carrier_info !== null
+    } else if (cart.carrier_info !== null
       && cart.shipping_address !== null) {
+      // If carrier info set, means shipping is set.
+      // Get name info from there.
       const shippingAddress = cart.shipping_address;
       defaultVal = {
         static: {
@@ -138,14 +140,14 @@ export default class EmptyDeliveryText extends React.Component {
         </div>
         <Popup
           className={getAddressPopupClassName()}
-          open={this.state.open}
+          open={open}
           onClose={this.closeModal}
           closeOnDocumentClick={false}
         >
           <React.Suspense fallback={<Loading />}>
             <AddressContent
               closeModal={this.closeModal}
-              cart={this.props.cart}
+              cart={cart}
               processAddress={this.processAddress}
               show_prefered={window.drupalSettings.user.uid > 0}
               showEmail={window.drupalSettings.user.uid === 0}
