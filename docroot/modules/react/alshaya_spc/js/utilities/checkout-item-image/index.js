@@ -1,11 +1,12 @@
 import React from 'react';
 
-export default class CheckoutItemImage extends React.Component {
-  render() {
-    if (this.props.img_data !== undefined) {
-      return <img src={this.props.img_data.url} alt={this.props.img_data.alt} title={this.props.img_data.title} />;
-    }
-
-    return (null);
+const CheckoutItemImage = (props) => {
+  const { img_data: { url, alt, title }, img_data: ImgData } = props;
+  if (ImgData !== undefined) {
+    return <img src={url} alt={alt} title={title} />;
   }
-}
+
+  return (null);
+};
+
+export default CheckoutItemImage;
