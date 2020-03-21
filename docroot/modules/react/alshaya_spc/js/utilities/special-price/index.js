@@ -2,15 +2,18 @@ import React from 'react';
 import PriceElement from './PriceElement';
 import { calculateDiscount } from '../price-helper';
 
-const PriceBlock = (props) => (
-  <div className="price-block">
-    {
-        (typeof props.children !== 'undefined' && props.children.length > 0)
-          ? props.children
-          : <PriceElement {...props} />
-      }
-  </div>
-);
+const PriceBlock = (props) => {
+  const { children } = props;
+  return (
+    <div className="price-block">
+      {
+          (typeof children !== 'undefined' && children.length > 0)
+            ? children
+            : <PriceElement {...props} />
+        }
+    </div>
+  );
+};
 
 const SpecialPrice = ({ price, finalPrice }) => {
   if (price > 0 && finalPrice > 0 && finalPrice < price) {
