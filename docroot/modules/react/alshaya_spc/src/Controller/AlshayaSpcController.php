@@ -196,6 +196,26 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Sorry, something went wrong. Please try again later.'),
     ];
 
+    $strings[] = [
+      'key' => 'invalid_cybersource_card',
+      'value' => $this->t('Invalid Credit Card number'),
+    ];
+
+    $strings[] = [
+      'key' => 'invalid_card',
+      'value' => $this->t('Invalid Debit / Credit Card number'),
+    ];
+
+    $strings[] = [
+      'key' => 'invalid_expiry',
+      'value' => $this->t('Incorrect credit card expiration date'),
+    ];
+
+    $strings[] = [
+      'key' => 'invalid_cvv',
+      'value' => $this->t('Invalid security code (CVV)'),
+    ];
+
     $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
 
     $cncTerm = $this->checkoutOptionManager->getClickandColectShippingMethodTerm();

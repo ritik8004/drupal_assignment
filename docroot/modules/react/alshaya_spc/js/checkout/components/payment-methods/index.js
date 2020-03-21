@@ -160,7 +160,7 @@ export default class PaymentMethods extends React.Component {
     const activeClass = active ? 'active' : 'in-active';
 
     return (
-      <div className="spc-checkout-payment-options">
+      <div id="spc-payment-methods" className="spc-checkout-payment-options">
         <ConditionalView condition={Object.keys(methods).length > 0}>
           <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
           <div className={`payment-methods ${activeClass}`}>{methods}</div>

@@ -6,6 +6,8 @@ import CardTypeSVG from '../../../../svg-component/card-type-svg';
 import { CheckoutComContext } from '../../../../context/CheckoutCom';
 import ToolTip from '../../../../utilities/tooltip';
 import CVVToolTipText from '../../cvv-text';
+import { getStringMessage } from '../../../../utilities/strings';
+import { handleValidationMessage } from '../../../../utilities/form_item_helper';
 
 class NewCard extends React.Component {
   static contextType = CheckoutComContext;
@@ -24,7 +26,7 @@ class NewCard extends React.Component {
   updateCurrentContext = (obj) => {
     const { updateState } = this.context;
     updateState(obj);
-  }
+  };
 
   handleCardNumberChange = (event) => {
     const { numberValid } = this.context;
@@ -38,11 +40,12 @@ class NewCard extends React.Component {
       valid = false;
     }
 
-    if (valid) {
-      event.target.classList.remove('invalid');
-    } else {
-      event.target.classList.add('invalid');
-    }
+    handleValidationMessage(
+      'spc-cc-number-error',
+      event.target.rawValue,
+      valid,
+      getStringMessage('invalid_card'),
+    );
 
     this.updateCurrentContext({
       numberValid: valid,
@@ -53,32 +56,39 @@ class NewCard extends React.Component {
     if (numberValid !== valid && valid) {
       this.ccExpiry.focus();
     }
-  }
+  };
 
   handleCardTypeChanged = (type) => {
     document.getElementById('payment-card-type').value = type;
-  }
+  };
 
   handleCardExpiryChange = (event) => {
     let valid = true;
     const dateParts = event.target.value.split('/').map((x) => {
-      if (!(x) || isNaN(x)) {
+      if (!(x) || Number.isNaN(x)) {
         return 0;
       }
-      return parseInt(x);
+      return parseInt(x, 10);
     });
 
     if (dateParts.length < 2 || dateParts[0] <= 0 || dateParts[1] <= 0) {
       valid = false;
     } else {
       const date = new Date();
-      const century = parseInt(`${date.getFullYear().toString().substr(2)}00`);
+      const century = parseInt(`${date.getFullYear().toString().substr(2)}00`, 10);
       date.setFullYear(century + dateParts[1], dateParts[0], 1);
       const today = new Date();
       if (date < today) {
         valid = false;
       }
     }
+
+    handleValidationMessage(
+      'spc-cc-expiry-error',
+      event.target.value,
+      valid,
+      getStringMessage('invalid_expiry'),
+    );
 
     const { expiryValid } = this.context;
     this.updateCurrentContext({
@@ -89,7 +99,7 @@ class NewCard extends React.Component {
     if (expiryValid !== valid && valid) {
       this.ccCvv.current.focus();
     }
-  }
+  };
 
   render() {
     const { cardType } = this.context;
@@ -121,7 +131,7 @@ class NewCard extends React.Component {
           <div className="spc-type-textfield spc-type-expiry">
             <Cleave
               id="spc-cc-expiry"
-              htmlRef={(ref) => this.ccExpiry = ref}
+              htmlRef={(ref) => { this.ccExpiry = ref; }}
               options={{
                 date: true,
                 dateMin: this.dateMin,
@@ -139,6 +149,7 @@ class NewCard extends React.Component {
           <div className="spc-type-textfield spc-type-cvv">
             <input
               type="tel"
+              className="secure-input"
               id="spc-cc-cvv"
               ref={this.ccCvv}
               pattern="\d{3,4}"

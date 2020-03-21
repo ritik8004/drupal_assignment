@@ -13,6 +13,7 @@ import {
 } from '../../../utilities/checkout_util';
 import { dispatchCustomEvent } from '../../../utilities/events';
 import { getStringMessage } from '../../../utilities/strings';
+import { handleValidationMessage } from '../../../utilities/form_item_helper';
 
 class PaymentMethodCybersource extends React.Component {
   constructor(props) {
@@ -26,14 +27,13 @@ class PaymentMethodCybersource extends React.Component {
     this.acceptedCards = drupalSettings.cybersource.acceptedCards;
 
     this.state = {
-      cvc: '',
+      cvv: '',
       expiry: '',
       number: '',
       cardType: '',
       numberValid: false,
       expiryValid: false,
       cvvValid: false,
-      acceptedCards: ['visa', 'mastercard', 'diners'],
     };
   }
 
@@ -65,7 +65,7 @@ class PaymentMethodCybersource extends React.Component {
   };
 
   handleCardNumberChange = (event) => {
-    const prevState = this.state;
+    const { numberValid: prevNumberValid } = this.state;
     let valid = true;
     const type = document.getElementById('spc-cy-payment-card-type').value;
 
@@ -75,20 +75,20 @@ class PaymentMethodCybersource extends React.Component {
       valid = false;
     }
 
-    if (valid) {
-      event.target.classList.remove('invalid');
-    } else {
-      event.target.classList.add('invalid');
-    }
+    handleValidationMessage(
+      'cy-cc-number-error',
+      event.target.rawValue,
+      valid,
+      getStringMessage('invalid_cybersource_card'),
+    );
 
     this.setState({
-      ...prevState,
       numberValid: valid,
       number: event.target.rawValue,
       cardType: type,
     });
 
-    if (prevState.numberValid !== valid && valid) {
+    if (prevNumberValid !== valid && valid) {
       this.ccExpiry.focus();
     }
   };
@@ -98,6 +98,7 @@ class PaymentMethodCybersource extends React.Component {
   };
 
   handleCardExpiryChange = (event) => {
+    const { expiryValid: prevExpiryValid } = this.state;
     let valid = true;
     const dateParts = event.target.value.split('/').map((x) => {
       if (!(x) || Number.isNaN(Number(x))) {
@@ -118,28 +119,35 @@ class PaymentMethodCybersource extends React.Component {
       }
     }
 
-    const prevState = this.state;
+    handleValidationMessage(
+      'spc-cy-cc-expiry-error',
+      event.target.value,
+      valid,
+      getStringMessage('invalid_expiry'),
+    );
+
     this.setState({
-      ...prevState,
       expiryValid: valid,
       expiry: event.target.value,
     });
 
-    if (prevState.expiryValid !== valid && valid) {
+    if (prevExpiryValid !== valid && valid) {
       this.ccCvv.current.focus();
     }
   };
 
   handleCardCvvChange = (event) => {
-    let valid = false;
     const cvv = parseInt(event.target.value, 10);
-    if (cvv >= 100 && cvv <= 9999) {
-      valid = true;
-    }
+    const valid = (cvv >= 100 && cvv <= 9999);
 
-    const prevState = this.state;
+    handleValidationMessage(
+      'spc-cy-cc-cvv-error',
+      event.target.value,
+      valid,
+      getStringMessage('invalid_cvv'),
+    );
+
     this.setState({
-      ...prevState,
       cvvValid: valid,
       cvv: event.target.value,
     });
@@ -273,10 +281,11 @@ class PaymentMethodCybersource extends React.Component {
           <div className="spc-type-textfield spc-type-cvv spc-cy-cc-cvv">
             <input
               type="tel"
+              className="secure-input"
               ref={this.ccCvv}
               pattern="\d{3,4}"
               required
-              onChange={this.handleCardCvvChange.bind(this)}
+              onChange={this.handleCardCvvChange}
               onBlur={(e) => this.labelEffect(e, 'blur')}
             />
             <div className="c-input__bar" />

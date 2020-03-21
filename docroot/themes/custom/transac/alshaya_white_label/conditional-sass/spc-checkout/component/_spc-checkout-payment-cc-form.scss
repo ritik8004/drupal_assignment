@@ -1,5 +1,17 @@
 .payment-method.payment-method-checkout_com,
 .payment-method.payment-method-cybersource {
+  .error {
+    font-size: 0.75rem;
+    color: $primary_input_inline_error;
+    padding-top: 0.3125rem;
+    display: block;
+
+    strong {
+      font-weight: 400;
+      font-family: $arial;
+    }
+  }
+
   .payment-method-bottom-panel {
     padding: 1.25rem;
     padding-#{$left}: 3rem;

@@ -9,13 +9,13 @@ import SelectedCard from './components/SelectedCard';
 import { setStorageInfo } from '../../../utilities/storage';
 import { dispatchCustomEvent } from '../../../utilities/events';
 import { getStringMessage } from '../../../utilities/strings';
+import { handleValidationMessage } from '../../../utilities/form_item_helper';
 
 class PaymentMethodCheckoutCom extends React.Component {
   static contextType = CheckoutComContext;
 
   constructor(props) {
     super(props);
-    this.ccCvv = React.createRef();
 
     this.state = {
       openSavedCardListModal: false,
@@ -38,7 +38,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     this.setState({
       openSavedCardListModal: true,
     });
-  }
+  };
 
   closeSavedCardListModal = () => {
     this.setState({
@@ -62,8 +62,14 @@ class PaymentMethodCheckoutCom extends React.Component {
       return;
     }
 
-    const cvv = parseInt(event.target.value);
+    const cvv = parseInt(event.target.value, 10);
     const valid = (cvv >= 100 && cvv <= 9999);
+    handleValidationMessage(
+      'spc-cc-cvv-error',
+      event.target.value,
+      valid,
+      getStringMessage('invalid_cvv'),
+    );
 
     this.updateCurrentContext({
       cvvValid: valid,
@@ -160,7 +166,7 @@ class PaymentMethodCheckoutCom extends React.Component {
       tokenizedCard: cardHash,
       cvvValid,
     });
-  }
+  };
 
   updateCurrentContext = (obj) => {
     const { updateState } = this.context;
@@ -168,18 +174,18 @@ class PaymentMethodCheckoutCom extends React.Component {
     if (({}).hasOwnProperty.call(obj, 'selectedCard')) {
       setStorageInfo('spc_selected_card', obj.selectedCard === 'new' ? 'new' : obj.tokenizedCard);
     }
-  }
+  };
 
   changeCurrentCard = (type) => {
     this.updateCurrentContext({
       selectedCard: type,
     });
-  }
+  };
 
   openNewCard = () => {
     this.closeSavedCardListModal();
     this.changeCurrentCard('new');
-  }
+  };
 
   render() {
     const { openSavedCardListModal } = this.state;
