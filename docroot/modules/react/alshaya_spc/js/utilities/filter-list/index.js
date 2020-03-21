@@ -10,7 +10,6 @@ export default class FilterList extends React.Component {
     };
   }
 
-
   componentDidMount() {
     const { selected, options } = this.props;
     this.setState({
