@@ -22,6 +22,8 @@ class Cybersource extends AlshayaSpcPaymentMethodPluginBase {
     $build['#attached']['drupalSettings']['cybersource'] = [
       'acceptedCards' => Settings::get('cybersource')['accepted_cards'],
     ];
+
+    $build['#attached']['library'][] = 'alshaya_white_label/secure-text';
   }
 
 }

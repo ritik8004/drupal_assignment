@@ -93,6 +93,8 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
     $build['#attached']['library'][] = $sandbox
       ? 'alshaya_spc/checkout_sandbox_kit'
       : 'alshaya_spc/checkout_live_kit';
+
+    $build['#attached']['library'][] = 'alshaya_white_label/secure-text';
   }
 
   /**

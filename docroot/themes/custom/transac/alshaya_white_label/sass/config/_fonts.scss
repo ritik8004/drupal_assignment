@@ -46,19 +46,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'text-security-disc';
-  src: url('#{$base_theme_fonts_directory_path}/text-security-disc.eot?Q4veI');
-  src:
-    url('#{$base_theme_fonts_directory_path}/text-security-disc.eot?Q4veI#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/text-security-disc.ttf?Q4veI') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/text-security-disc.woff?Q4veI') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/text-security-disc.svg?Q4veI#text-security-disc') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 // Font Family
 $alshaya-bold: 'Mothercare', 'Arial';
 $alshaya-bold-nodir: 'Mothercare', 'Arial';
