@@ -115,7 +115,7 @@ export default class CnCBillingAddress extends React.Component {
     }
 
     const shippingAddress = cart.cart.shipping_address;
-    const editAddressData = {
+    let editAddressData = {
       static: {
         fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,
         telephone: shippingAddress.telephone,
