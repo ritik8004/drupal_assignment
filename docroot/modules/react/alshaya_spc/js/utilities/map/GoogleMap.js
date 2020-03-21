@@ -6,7 +6,7 @@ import {
   getDefaultMapCoords,
   removeAllMarkersFromMap,
   getMap,
-  getHDMapZoom
+  getHDMapZoom,
 } from './map_utils';
 import { isRTL } from '../rtl';
 
@@ -28,9 +28,10 @@ export default class GoogleMap extends React.Component {
       : window.google.maps.ControlPosition.LEFT_BOTTOM;
 
     let data = {};
+    const { isEditAddress } = this.props;
     // If adress is being edited, means don't need to
     // set current location.
-    if (this.props.isEditAddress === false) {
+    if (isEditAddress === false) {
       data = this.setCurrentLocationCoords();
     }
 
@@ -40,7 +41,7 @@ export default class GoogleMap extends React.Component {
     const mapCenter = this.googleMap.getCenter();
     this.panMapToGivenCoords({
       lat: mapCenter.lat(),
-      lng: mapCenter.lng()
+      lng: mapCenter.lng(),
     });
 
     // Storing in global so that can be accessed byt parent and others.
@@ -296,11 +297,12 @@ export default class GoogleMap extends React.Component {
    * Create google map.
    */
   createGoogleMap = (centerPosition, controlPosition) => {
+    const { isEditAddress } = this.props;
     // If corrds not available, try country coords.
     if (centerPosition.lat === undefined) {
       // If address is being edited, get coords from
       // address detail.
-      if (this.props.isEditAddress) {
+      if (isEditAddress) {
         geocodeAddressToLatLng();
       }
 
