@@ -1,9 +1,8 @@
 import React from 'react';
 
-class Loading extends React.Component {
-  render() {
-    return <div className="spc-loading-container"><div className="spc-loader">{this.props.loadingMessage}</div></div>;
-  }
-}
+const Loading = (props) => {
+  const { loadingMessage } = props;
+  return <div className="spc-loading-container"><div className="spc-loader">{loadingMessage}</div></div>;
+};
 
 export default Loading;
