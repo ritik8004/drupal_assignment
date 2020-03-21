@@ -12,7 +12,7 @@ import {
 import {
   getInfoFromStorage,
 } from './storage';
-import { getStringMessage } from './strings';
+import getStringMessage from './strings';
 
 /**
  * Get the address list of the current logged in user.

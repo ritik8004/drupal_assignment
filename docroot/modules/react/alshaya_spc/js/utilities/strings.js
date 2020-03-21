@@ -1,4 +1,4 @@
-export const getStringMessage = (key) => {
+const getStringMessage = (key) => {
   try {
     const element = document.querySelector(`[data-string-id="${key}"]`);
     if (element !== undefined && element !== null) {
@@ -10,3 +10,5 @@ export const getStringMessage = (key) => {
 
   return '';
 };
+
+export default getStringMessage;

@@ -12,7 +12,7 @@ import {
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import { dispatchCustomEvent } from '../../../utilities/events';
-import { getStringMessage } from '../../../utilities/strings';
+import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
 
 class PaymentMethodCybersource extends React.Component {

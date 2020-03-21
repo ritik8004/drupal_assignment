@@ -1,6 +1,6 @@
 import React from 'react';
 import ToolTip from '../../../utilities/tooltip';
-import { getStringMessage } from '../../../utilities/strings';
+import getStringMessage from '../../../utilities/strings';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 
 const CodSurchargePaymentMethodDescription = ({ surcharge }) => {

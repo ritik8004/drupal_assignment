@@ -6,7 +6,7 @@ import CardTypeSVG from '../../../../svg-component/card-type-svg';
 import { CheckoutComContext } from '../../../../context/CheckoutCom';
 import ToolTip from '../../../../utilities/tooltip';
 import CVVToolTipText from '../../cvv-text';
-import { getStringMessage } from '../../../../utilities/strings';
+import getStringMessage from '../../../../utilities/strings';
 import { handleValidationMessage } from '../../../../utilities/form_item_helper';
 
 class NewCard extends React.Component {
