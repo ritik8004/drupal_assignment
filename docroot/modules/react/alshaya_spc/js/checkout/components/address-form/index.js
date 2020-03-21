@@ -102,7 +102,7 @@ export default class AddressForm extends React.Component {
             // Pan the map to location.
             const marker = createMarker(coords, getMap());
             getMap().panTo(marker.getPosition());
-            getMap().setZoom(getHDMapZoom())
+            getMap().setZoom(getHDMapZoom());
             window.spcMarkers.push(marker);
           }
         }

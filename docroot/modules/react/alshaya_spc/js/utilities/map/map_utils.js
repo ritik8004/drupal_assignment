@@ -43,9 +43,7 @@ export const getDefaultMapCoords = () => getDefaultMapCenter();
 /**
  * Get zoom value for HD map.
  */
-export const getHDMapZoom = () => {
-  return 18;
-};
+export const getHDMapZoom = () => 18;
 
 /**
  * Get the markers available on the map.

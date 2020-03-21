@@ -55,7 +55,7 @@ export default class DeliveryMethods extends React.Component {
   }
 
   render() {
-    const { cart: {cnc_disabled: cncDisabled}, cart} = this.props;
+    const { cart: { cnc_disabled: cncDisabled }, cart } = this.props;
     const hdSubtitle = Drupal.t('Standard delivery for purchases over KD 250');
     const { selectedOption } = this.state;
     let cncSubtitle = window.drupalSettings.cnc_subtitle_available || '';

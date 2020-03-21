@@ -181,7 +181,8 @@ export default class AddressItem extends React.Component {
         <div className="spc-address-tile-actions">
           <div className="spc-address-btns">
             <button type="button" disabled={isSelected} className="spc-address-select-address" onClick={() => this.updateAddress(address)}>{buttonText}</button>
-            {(showEditButton === undefined || showEditButton === true) &&
+            {(showEditButton === undefined || showEditButton === true)
+              && (
               <div title={Drupal.t('Edit Address')} className="spc-address-tile-edit" onClick={(e) => this.openModal(e)}>
                 <EditAddressSVG />
                 <Popup open={open} onClose={this.closeModal} closeOnDocumentClick={false}>
@@ -196,7 +197,8 @@ export default class AddressItem extends React.Component {
                     />
                   </>
                 </Popup>
-              </div>}
+              </div>
+              )}
           </div>
         </div>
       </div>
