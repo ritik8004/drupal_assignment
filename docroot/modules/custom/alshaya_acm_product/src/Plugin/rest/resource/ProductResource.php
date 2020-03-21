@@ -284,6 +284,16 @@ class ProductResource extends ResourceBase {
     $stockInfo = $this->skuInfoHelper->stockInfo($sku);
     $data['stock'] = $stockInfo['stock'];
     $data['in_stock'] = $stockInfo['in_stock'];
+
+    // If parent's is marked as out of stock, even children are not available.
+    // We check paren't flag if child is in-stock.
+    if ($data['in_stock'] && $parent_sku instanceof SKUInterface) {
+      $parentStockInfo = $this->skuInfoHelper->stockInfo($parent_sku);
+      if (!($parentStockInfo['in_stock'])) {
+        $data['in_stock'] = FALSE;
+      }
+    }
+
     $data['max_sale_qty'] = $stockInfo['max_sale_qty'];
     $data['delivery_options'] = [
       'home_delivery' => [],
