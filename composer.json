@@ -361,7 +361,7 @@
                 "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2019-07-08/3066449-5.patch"
             },
             "drupal/google_tag": {
-                "Cache noscript content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2019-11-04/cache-noscript-3092193-3.patch"
+                "Cache content and avoid using file_get_contents for better performance": "patches/google_tag/3092193.patch"
             }
         },
         "installer-paths": {
