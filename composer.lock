@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76b5607ca00fc7c89076050c56df2473",
+    "content-hash": "6d0e68b31915865f2759df6f86aa8242",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -7520,7 +7520,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Cache noscript content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2019-11-04/cache-noscript-3092193-3.patch"
+                    "Cache content and avoid using file_get_contents for better performance": "patches/google_tag/3092193.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
