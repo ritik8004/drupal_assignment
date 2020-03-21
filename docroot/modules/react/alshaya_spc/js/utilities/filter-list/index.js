@@ -12,9 +12,9 @@ export default class FilterList extends React.Component {
 
 
   componentDidMount() {
-    const { selected } = this.props;
+    const { selected, options } = this.props;
     this.setState({
-      items: this.getInitialItems(),
+      items: options,
       selected,
     });
   }
@@ -23,7 +23,8 @@ export default class FilterList extends React.Component {
    * Filter the list on search.
    */
   filterList = () => {
-    let updatedList = this.getInitialItems();
+    const { options } = this.props;
+    let updatedList = options;
     updatedList = updatedList.filter((item) => item.label.toLowerCase().search(
       event.target.value.toLowerCase(),
     ) !== -1);
@@ -31,14 +32,6 @@ export default class FilterList extends React.Component {
     this.setState({
       items: updatedList,
     });
-  }
-
-  /**
-   * Prepare initial list.
-   */
-  getInitialItems = () => {
-    const { options } = this.props;
-    return options;
   }
 
   /**
