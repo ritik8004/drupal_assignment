@@ -7,11 +7,10 @@ import {
 } from '../../../utilities/address_util';
 import {
   getAddressPopupClassName,
-  formatAddressDataForEditForm
-} from '../../../utilities/checkout_address_process';
-import {
+  formatAddressDataForEditForm,
   processBillingUpdateFromForm,
 } from '../../../utilities/checkout_address_process';
+
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -67,9 +66,9 @@ export default class BillingInfo extends React.Component {
   /**
    * Format address for edit address.
    */
-  formatAddressData = (address) => (address === null ?
-    address :
-    formatAddressDataForEditForm(address))
+  formatAddressData = (address) => (address === null
+    ? address
+    : formatAddressDataForEditForm(address))
 
   render() {
     const { cart } = this.props;
@@ -117,7 +116,7 @@ export default class BillingInfo extends React.Component {
               processAddress={this.processAddress}
               showEmail={false}
               showEditButton={false}
-              type={'billing'}
+              type="billing"
               headingText={Drupal.t('billing information')}
               default_val={this.formatAddressData(billing)}
             />

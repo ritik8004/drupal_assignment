@@ -33,7 +33,7 @@ import { createFetcher } from '../../../utilities/api/fetcher';
 
 import ConditionalView from '../../../common/components/conditional-view';
 import { getStringMessage } from '../../../utilities/strings';
-import {smoothScrollTo} from "../../../utilities/smoothScroll";
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 
 window.fetchStore = 'idle';
 

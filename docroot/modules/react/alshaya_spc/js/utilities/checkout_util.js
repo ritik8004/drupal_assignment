@@ -130,7 +130,7 @@ export const addShippingInCart = function (action, data) {
       action,
       shipping_info: data,
       cart_id: cart,
-      update_billing: isBillingSameAsShippingInStorage()
+      update_billing: isBillingSameAsShippingInStorage(),
     })
     .then(
       (response) => {
