@@ -362,6 +362,19 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['product_article_description_markup'] = [
+    'variables' => [
+      'title' => NULL,
+      'article_description' => NULL,
+    ],
+  ];
+
+  $items['product_details_overlay_markup'] = [
+    'variables' => [
+      'properties' => [],
+    ],
+  ];
+
   $items['product_order_quantity_limit'] = [
     'variables' => [
       'message' => NULL,

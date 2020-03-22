@@ -79,6 +79,43 @@ function alshaya_hm_module_implements_alter(&$implementations, $hook) {
 }
 
 /**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_hm_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+  $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+  $title = $productInfoHelper->getTitle($sku, $context);
+
+  // Use title specific to beauty products only.
+  $build['title'] = [
+    '#markup' => $title,
+  ];
+}
+
+/**
+ * Implements template_preprocess_alshaya_cart_product_name().
+ */
+function alshaya_hm_preprocess_alshaya_cart_product_name(&$variables) {
+  if (empty($variables['item_code'])) {
+    return;
+  }
+
+  $sku = SKU::loadFromSku($variables['item_code']);
+
+  if (!($sku instanceof SKU)) {
+    return;
+  }
+
+  /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+  $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+  $title = $productInfoHelper->getTitle($sku, 'basket');
+  // Use title specific to beauty products only.
+  if ($title) {
+    isset($variables['name']['#title']) ? $variables['name']['#title'] = $title : $variables['name'] = $title;
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {

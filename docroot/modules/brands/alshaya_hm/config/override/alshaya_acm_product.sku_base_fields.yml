@@ -190,11 +190,11 @@ fields:
     facet: 1
 
   measurements_in_cm:
-    label: 'Style'
-    type: 'string'
+    label: 'Measurements In CM'
+    description: 'Measurements In CM attribute for the product.'
 
   article_description:
-    label: 'Style'
+    label: 'Article Description'
     type: 'string'
 
   fragrance_name:

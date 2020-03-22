@@ -1,0 +1,19 @@
+{% if properties is not empty %}
+<div class="popup-details text-align-center">{{ 'DETAILS'|t }}</div>
+  <div class="attribute-sliderbar">
+    <div class="attribute-sliderbar__head">
+      <div class="attribute-sliderbar__title">{{ 'DETAILS'|t }}</div>
+      <div class="attribute-sliderbar__close"></div>
+    </div>
+    <div class="attribute-sliderbar__content">
+      {% for property in properties %}
+        <h3>{{ property.label }}</h3>
+        <ul>
+          {% for details in property.data %}
+            <li>{{ details.value }}</li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
