@@ -10,11 +10,20 @@ export default class FilterList extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { selected, options } = this.props;
+    this.setState({
+      items: options,
+      selected,
+    });
+  }
+
   /**
    * Filter the list on search.
    */
   filterList = () => {
-    let updatedList = this.getInitialItems();
+    const { options } = this.props;
+    let updatedList = options;
     updatedList = updatedList.filter((item) => item.label.toLowerCase().search(
       event.target.value.toLowerCase(),
     ) !== -1);
@@ -25,37 +34,31 @@ export default class FilterList extends React.Component {
   }
 
   /**
-   * Prepare initial list.
-   */
-  getInitialItems = () => this.props.options;
-
-  /**
    * Handle click on <li>.
    */
   handleLiClick = (e) => {
+    const {
+      toggleFilterList,
+      processingCallback,
+    } = this.props;
     this.setState({
       selected: e.target.parentElement.value,
     });
 
-    this.props.toggleFilterList();
+    toggleFilterList();
 
     // Call the process.
-    this.props.processingCallback(e.target.parentElement.value);
+    processingCallback(e.target.parentElement.value);
   };
 
   backButtonClick = () => {
-    this.props.toggleFilterList();
+    const { toggleFilterList } = this.props;
+    toggleFilterList();
   };
 
-  componentDidMount() {
-    this.setState({
-      items: this.getInitialItems(),
-      selected: this.props.selected,
-    });
-  }
-
   render() {
-    const { items } = this.state;
+    const { items, selected } = this.state;
+    const { panelTitle, placeHolderText } = this.props;
     if (items === 0) {
       return (null);
     }
@@ -64,10 +67,10 @@ export default class FilterList extends React.Component {
       <div className="filter-list">
         <div className="spc-filter-panel-header">
           <span className="spc-filter-panel-back" onClick={() => this.backButtonClick()} />
-          <SectionTitle>{this.props.panelTitle}</SectionTitle>
+          <SectionTitle>{panelTitle}</SectionTitle>
         </div>
         <div className="spc-filter-panel-search-form-item">
-          <input className="spc-filter-panel-search-field" type="text" placeholder={this.props.placeHolderText} onChange={this.filterList} />
+          <input className="spc-filter-panel-search-field" type="text" placeholder={placeHolderText} onChange={this.filterList} />
         </div>
         <div className="spc-filter-area-panel-list-wrapper">
           <ul>
@@ -77,7 +80,7 @@ export default class FilterList extends React.Component {
                 key={item.value}
                 value={item.value}
                 className={
-                    ((this.state.selected !== undefined && this.state.selected.value == item.value))
+                    ((selected !== undefined && selected.value == item.value))
                       ? 'active' : 'in-active'
 }
               >

@@ -63,8 +63,7 @@ export default class AddressList extends React.Component {
     // If processing method is passed, we use that.
     if (this.props.type === 'billing') {
       this.props.processAddress(e);
-    }
-    else {
+    } else {
       addEditAddressToCustomer(e);
     }
   };
@@ -77,7 +76,9 @@ export default class AddressList extends React.Component {
       return (null);
     }
 
-    const { cart, closeModal, headingText, showEditButton, type } = this.props;
+    const {
+      cart, closeModal, headingText, showEditButton, type,
+    } = this.props;
 
     const addressItem = [];
     Object.entries(addressList).forEach(([key, address]) => {

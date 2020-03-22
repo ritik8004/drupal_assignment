@@ -11,7 +11,7 @@ const AddressContent = (props) => {
     processAddress,
     headingText,
     showEditButton,
-    type
+    type,
   } = props;
 
   if (window.drupalSettings.user.uid > 0

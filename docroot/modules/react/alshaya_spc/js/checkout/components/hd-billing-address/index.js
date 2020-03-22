@@ -3,7 +3,7 @@ import React from 'react';
 import BillingInfo from '../billing-info';
 import SectionTitle from '../../../utilities/section-title';
 import {
-  isBillingSameAsShippingInStorage
+  isBillingSameAsShippingInStorage,
 } from '../../../utilities/checkout_util';
 
 // Storage key for billing shipping info same or not.
@@ -44,7 +44,7 @@ export default class HDBillingAddress extends React.Component {
         && this.isBillingSameAsShippingInStorage()) {
         localStorage.setItem(localStorageKey, true);
         this.setState({
-          shippingAsBilling: true
+          shippingAsBilling: true,
         });
       }
     }
@@ -61,7 +61,7 @@ export default class HDBillingAddress extends React.Component {
       if (data.cart !== undefined) {
         localStorage.setItem(localStorageKey, false);
         this.setState({
-          shippingAsBilling: false
+          shippingAsBilling: false,
         });
       }
     }
@@ -70,17 +70,13 @@ export default class HDBillingAddress extends React.Component {
   /**
    * If local storage has biliing shipping set.
    */
-  isBillingSameAsShippingInStorage = () => {
-    return isBillingSameAsShippingInStorage();
-  };
+  isBillingSameAsShippingInStorage = () => isBillingSameAsShippingInStorage();
 
   /**
    * Message to show when billing is
    * same as shipping.
    */
-  sameBillingAsShippingMessage = () => {
-    return Drupal.t('We have set your billing address same as delivery address. You can select a different one by clicking the change button above.');
-  };
+  sameBillingAsShippingMessage = () => Drupal.t('We have set your billing address same as delivery address. You can select a different one by clicking the change button above.');
 
   render() {
     const { cart, refreshCart } = this.props;
@@ -108,11 +104,10 @@ export default class HDBillingAddress extends React.Component {
         <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
-            <BillingInfo cart={cart} refreshCart={refreshCart}/>
+            <BillingInfo cart={cart} refreshCart={refreshCart} />
           </div>
-          {isShippingBillingSame &&
-            <div>{this.sameBillingAsShippingMessage()}</div>
-          }
+          {isShippingBillingSame
+            && <div>{this.sameBillingAsShippingMessage()}</div>}
         </div>
       </div>
     );

@@ -10,7 +10,7 @@ import {
 } from './cart_customer_util';
 import {
   gerAreaLabelById,
-  addEditUserAddress
+  addEditUserAddress,
 } from './address_util';
 import {
   getInfoFromStorage,
@@ -312,14 +312,14 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                 given_name: formData.static.firstname,
                 family_name: formData.static.firstname,
                 city: formData.static.city,
-                address_id: target.address_id.value
+                address_id: target.address_id.value,
               },
-              mobile: cleanMobileNumber(formData.static.telephone)
+              mobile: cleanMobileNumber(formData.static.telephone),
             };
 
             // Getting dynamic fields data.
             Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
-              customerData.address[key] = formData[field['key']];
+              customerData.address[key] = formData[field.key];
             });
           }
 
@@ -327,7 +327,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           if (address instanceof Promise) {
             address.then((list) => {
               if (list !== null) {
-                if(list.error === true) {
+                if (list.error === true) {
                   removeFullScreenLoader();
                   const eventData = {
                     error: true,
