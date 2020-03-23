@@ -62,3 +62,13 @@ alshaya_stores_finder.settings:
             single_y:
               type: integer
               label: 'Label single position y'
+    map_marker:
+      type: mapping
+      label: 'Marker icon paths'
+      mapping:
+        active:
+          type: uri
+          label: 'active marker icon path'
+        in_active:
+          type: uri
+          label: 'in active marker icon path'

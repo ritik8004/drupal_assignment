@@ -13,3 +13,6 @@ marker:
 store_list_label: 'List of all Stores'
 store_search_placeholder: 'e.g. Salmiya'
 country_center: {}
+map_marker:
+  active: ''
+  in_active: ''

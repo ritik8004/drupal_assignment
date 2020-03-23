@@ -18,8 +18,8 @@ export default class Gmap {
         gestureHandling: 'auto',
         disableAutoPan: true,
         map_marker: {
-          icon: null,
-          label_position: null,
+          active: null,
+          inActive: null,
         },
         streetViewControl: false,
         info_auto_display: false,
@@ -30,8 +30,8 @@ export default class Gmap {
     };
 
     if (typeof drupalSettings.map !== 'undefined' && typeof drupalSettings.map.map_marker !== 'undefined') {
-      this.map.settings.map_marker.icon = drupalSettings.map.map_marker.icon;
-      this.map.settings.map_marker.label_position = drupalSettings.map.map_marker.label_position;
+      this.map.settings.map_marker.active = drupalSettings.map.map_marker.active;
+      this.map.settings.map_marker.inActive = drupalSettings.map.map_marker.in_active;
     }
   }
 
@@ -134,23 +134,13 @@ export default class Gmap {
     this.map.mapMarkers = this.map.mapMarkers || [];
     const currentMarkerSettings = { ...markerSettings };
 
-    const { icon: markerIconPath, label_position: labelPosition } = this.map.settings.map_marker;
+    const { active: markerActiveIcon, inActive: markerInActiveIcon } = this.map.settings.map_marker;
 
-    if (typeof markerIconPath === 'string') {
+    if (typeof markerInActiveIcon === 'string') {
       // Add the marker icon.
       currentMarkerSettings.icon = {
-        url: markerIconPath,
-        labelOrigin: new google.maps.Point(labelPosition.x, labelPosition.y),
-        scaledSize: new google.maps.Size(31, 48),
+        url: markerInActiveIcon,
       };
-
-      // If only single digit move them closer to the center.
-      if (drupalSettings.path.currentLanguage === 'ar' && currentMarkerSettings.label.length === 1) {
-        currentMarkerSettings.icon.labelOrigin = new google.maps.Point(
-          labelPosition.single_x,
-          labelPosition.single_y,
-        );
-      }
     }
 
     if (!currentMarkerSettings.map) {
@@ -172,7 +162,12 @@ export default class Gmap {
     }
 
     const { map } = this;
+    let clickedMarker = '';
     currentMarker.addListener('click', () => {
+      map.mapMarkers.forEach((tempMarker) => tempMarker.setIcon(currentMarkerSettings.icon));
+      currentMarker.setIcon(markerActiveIcon);
+      clickedMarker = currentMarker;
+
       if (currentMarkerSettings.infoWindowSolitary && showInfoWindow === true) {
         if (typeof map.infoWindow !== 'undefined') {
           map.infoWindow.close();
@@ -192,8 +187,25 @@ export default class Gmap {
       });
     });
 
+    google.maps.event.addListener(currentMarker, 'mouseover', () => {
+      if (clickedMarker === currentMarker) {
+        return;
+      }
+      currentMarker.setIcon(markerActiveIcon);
+    });
+
+    google.maps.event.addListener(currentMarker, 'mouseout', () => {
+      if (clickedMarker === currentMarker) {
+        return;
+      }
+      currentMarker.setIcon(currentMarkerSettings.icon);
+    });
+
+
     if (showInfoWindow === true) {
       google.maps.event.addListener(currentInfoWindow, 'closeclick', () => {
+        clickedMarker = '';
+        currentMarker.setIcon(currentMarkerSettings.icon);
         // Auto zoom.
         map.googleMap.fitBounds(map.googleMap.bounds);
         // Auto center.
@@ -212,20 +224,30 @@ export default class Gmap {
     return currentMarker;
   };
 
+  resetIcon = (currentMarker) => {
+    const { inActive } = this.map.settings.map_marker;
+    currentMarker.setIcon(inActive);
+  }
+
+  highlightIcon = (currentMarker) => {
+    const { active } = this.map.settings.map_marker;
+    currentMarker.setIcon(active);
+  }
+
   /**
    * Remove marker(s) from map.
    */
   removeMapMarker = (map = null) => {
-    map = map || this.map;
-    map.mapMarkers.forEach((marker) => {
+    const newMap = map ? { ...map } : this.map;
+    newMap.mapMarkers.forEach((marker) => {
       marker.setMap();
     });
   };
 
   closeAllInfoWindow = (map = null) => {
-    map = map || this.map;
-    map.mapMarkers.forEach((marker) => {
-      marker.infoWindow.close(map, marker);
+    const newMap = map ? { ...map } : this.map;
+    newMap.mapMarkers.forEach((marker) => {
+      marker.infoWindow.close(newMap, marker);
     });
   }
 }
