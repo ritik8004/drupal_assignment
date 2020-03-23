@@ -2,8 +2,11 @@ import React from 'react';
 import ContactInfoForm from '../../contact-info-form';
 import StoreItem from './StoreItem';
 import SectionTitle from '../../../../utilities/section-title';
+import CheckoutMessage from '../../../../utilities/checkout-message';
 
-const SelectedStore = ({ store, open, closePanel }) => {
+const SelectedStore = ({
+  store, open, closePanel, messageType, errorSuccessMessage,
+}) => {
   if (!store) {
     return (null);
   }
@@ -14,6 +17,12 @@ const SelectedStore = ({ store, open, closePanel }) => {
         <span className="spc-cnc-selected-store-back" onClick={() => closePanel()} />
         <SectionTitle>{Drupal.t('collection details')}</SectionTitle>
       </div>
+      {errorSuccessMessage !== null
+        && (
+        <CheckoutMessage type={messageType} context="cnc-form">
+          {errorSuccessMessage}
+        </CheckoutMessage>
+        )}
       <SectionTitle>{Drupal.t('selected store')}</SectionTitle>
       <div className="store-details-wrapper">
         <StoreItem display="default" store={store} />
