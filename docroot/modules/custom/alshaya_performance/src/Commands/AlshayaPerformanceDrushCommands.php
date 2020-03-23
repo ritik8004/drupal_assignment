@@ -37,9 +37,12 @@ class AlshayaPerformanceDrushCommands extends DrushCommands {
    * @command cr:frontend
    *
    * @aliases crf, cache-rebuild-frontend
+   * @option exclude_twig
+   *   Exclude twig template files from cache clear.
    */
-  public function cacheRebuildFrontend() {
-    alshaya_performance_flush_frontend_caches();
+  public function cacheRebuildFrontend($options = ['exclude_twig' => FALSE]) {
+    $exclude_twig = $options['exclude_twig'];
+    alshaya_performance_flush_frontend_caches($exclude_twig);
   }
 
   /**
