@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Helper\CookieHelper;
+use App\Response\AlshayaJsonResponse;
+use App\Response\AlshayaRedirectResponse;
 use App\Service\Cart;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Cybersource\CybersourceHelper;
@@ -10,8 +12,6 @@ use App\Service\Knet\KnetHelper;
 use App\Service\PaymentData;
 use App\Service\SessionStorage;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -129,7 +129,7 @@ class PaymentController {
   /**
    * Handle checkout.com payment success callback.
    *
-   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   * @return \App\Response\AlshayaRedirectResponse
    *   Redirect to cart or checkout or confirmation page.
    */
   public function handleCheckoutComSuccess() {
@@ -138,7 +138,7 @@ class PaymentController {
     }
     catch (\Exception $e) {
       if ($e->getCode() === 302) {
-        return new RedirectResponse($e->getMessage(), 302);
+        return new AlshayaRedirectResponse($e->getMessage(), 302);
       }
 
       throw $e;
@@ -171,7 +171,7 @@ class PaymentController {
       return $this->handleCheckoutComFailure();
     }
 
-    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
+    $response = new AlshayaRedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
 
     try {
       $payment_data = [
@@ -218,7 +218,7 @@ class PaymentController {
   /**
    * Handle checkout.com payment error callback.
    *
-   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   * @return \App\Response\AlshayaRedirectResponse
    *   Redirect to cart or checkout page.
    */
   public function handleCheckoutComError() {
@@ -227,13 +227,13 @@ class PaymentController {
     }
     catch (\Exception $e) {
       if ($e->getCode() === 302) {
-        return new RedirectResponse($e->getMessage(), 302);
+        return new AlshayaRedirectResponse($e->getMessage(), 302);
       }
 
       throw $e;
     }
 
-    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
+    $response = new AlshayaRedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
     $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_DECLINED_VALUE, strtotime('+1 year')));
     return $response;
   }
@@ -241,7 +241,7 @@ class PaymentController {
   /**
    * Handle K-Net response callback.
    *
-   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   * @return \App\Response\AlshayaRedirectResponse
    *   Redirect to success page.
    *
    * @throws \Doctrine\DBAL\DBALException
@@ -291,7 +291,7 @@ class PaymentController {
     }
     catch (\Exception $e) {
       if ($e->getCode() === 302) {
-        return new RedirectResponse($e->getMessage(), 302);
+        return new AlshayaRedirectResponse($e->getMessage(), 302);
       }
 
       throw $e;
@@ -317,7 +317,7 @@ class PaymentController {
       return $this->handleKnetError($response['state_key']);
     }
 
-    $redirect = new RedirectResponse('/' . $state['data']['langcode'] . '/checkout', 302);
+    $redirect = new AlshayaRedirectResponse('/' . $state['data']['langcode'] . '/checkout', 302);
     if ($response['result'] !== 'CAPTURED') {
       $this->logger->error('KNET result is not captured, transaction failed.<br>POST: @message<br>Cart: @cart<br>State: @state', [
         '@message' => json_encode($data),
@@ -379,7 +379,7 @@ class PaymentController {
    * @param string $state_key
    *   State key.
    *
-   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   * @return \App\Response\AlshayaRedirectResponse
    *   Redirect to checkout.
    *
    * @throws \Exception
@@ -390,7 +390,7 @@ class PaymentController {
     }
     catch (\Exception $e) {
       if ($e->getCode() === 302) {
-        return new RedirectResponse($e->getMessage(), 302);
+        return new AlshayaRedirectResponse($e->getMessage(), 302);
       }
 
       throw $e;
@@ -407,7 +407,7 @@ class PaymentController {
       '@message' => $message,
     ]);
 
-    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
+    $response = new AlshayaRedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
     $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year')));
     return $response;
   }
@@ -415,14 +415,14 @@ class PaymentController {
   /**
    * Page callback to get cybersource token.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   * @return \App\Response\AlshayaJsonResponse
    *   Response data in JSON.
    *
    * @throws \Exception
    */
   public function getCybersourceToken() {
     $response = $this->cybersourceHelper->getToken();
-    return new JsonResponse($response);
+    return new AlshayaJsonResponse($response);
   }
 
   /**
