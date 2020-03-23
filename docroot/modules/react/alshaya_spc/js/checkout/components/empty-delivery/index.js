@@ -86,9 +86,7 @@ export default class EmptyDeliveryText extends React.Component {
   render() {
     const {
       cart: {
-        cart: {
-          delivery_type: deliveryType,
-        },
+        delivery_type: deliveryType,
         cart: cartVal,
       },
       cart: mainCart,
