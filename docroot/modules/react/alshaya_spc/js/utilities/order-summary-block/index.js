@@ -26,16 +26,16 @@ const continueCheckout = (e) => {
       // If no error.
       if (cartResult.error === undefined
         || cartResult.response_message.status !== 'json_error') {
-        const continueCheckoutLink = (drupalSettings.user.uid === 0) ?
-          'cart/login' :
-          'checkout';
+        const continueCheckoutLink = (drupalSettings.user.uid === 0)
+          ? 'cart/login'
+          : 'checkout';
 
         // Redirect to next page.
         window.location.href = Drupal.url(continueCheckoutLink);
         return;
       }
 
-      let errorMessage = (cartResult.response_message.status === 'json_error')
+      const errorMessage = (cartResult.response_message.status === 'json_error')
         ? cartResult.response_message.msg
         : cartResult.error_message;
 
@@ -83,7 +83,13 @@ const OrderSummaryBlock = (props) => {
         && (
         <div className="actions">
           <div className="checkout-link submit">
-            <a onClick={(e) => continueCheckout(e)} href={Drupal.url(continueCheckoutLink)} className="checkout-link">{Drupal.t('continue to checkout')}</a>
+            <a
+              onClick={(e) => continueCheckout(e)}
+              href={Drupal.url(continueCheckoutLink)}
+              className="checkout-link"
+            >
+              {Drupal.t('continue to checkout')}
+            </a>
           </div>
         </div>
         )}
