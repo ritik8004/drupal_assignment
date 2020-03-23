@@ -222,10 +222,17 @@
   }
 }
 
-html[lang=ar] {
-  .block-alshaya-algolia-react-autocomplete {
-    @include breakpoint($only-mobile) {
+@include breakpoint($only-mobile) {
+  html[lang=ar] {
+    .block-alshaya-algolia-react-autocomplete {
       top: 3.125rem;
+      padding: 0;
+    }
+
+    body {
+      &:not(.no-sticky-algolia-search-bar) {
+        margin-top: 6.4125rem;
+      }
     }
   }
 }

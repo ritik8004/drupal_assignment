@@ -3,6 +3,11 @@
     .select-free-gift-link {
       a {
         padding: 0.6rem 1.3701rem 0.3rem;
+
+        html[lang=ar] & {
+          padding-top: 0.45rem;
+          padding-bottom: 0.45rem;
+        }
       }
     }
   }
@@ -33,6 +38,15 @@ body {
           height: 34.75rem !important;
         }
       }
+    }
+  }
+}
+
+// for all browsers, for promo list.
+body {
+  &.free-gift-promo-list-overlay:not(.free-gift-detail-modal) {
+    .ui-dialog #drupal-modal {
+      height: auto !important;
     }
   }
 }

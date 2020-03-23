@@ -535,7 +535,7 @@
       padding: 0.71875rem 1.0625rem;
       margin: 0.875rem 0;
       border: none;
-      background-color: $cart-free-gifts-label-background;
+      background: $free-gifts-select-button-bg;
       color: $cart-free-gifts-button-color;
       display: flex;
       align-items: center;
@@ -803,6 +803,15 @@ body:not(.ie) {
       html[lang=ar] & {
         transform: rotate(180deg);
       }
+    }
+  }
+}
+
+// for all browsers, for promo list. Required for MC
+body {
+  &.free-gift-promo-list-overlay:not(.free-gift-detail-modal) {
+    .ui-dialog #drupal-modal {
+      height: auto !important;
     }
   }
 }
