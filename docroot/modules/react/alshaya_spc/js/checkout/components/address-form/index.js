@@ -15,7 +15,7 @@ import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
 
 export default class AddressForm extends React.Component {
-  _isMounted = true;
+  isComponentMounted = true;
 
   constructor(props) {
     super(props);
@@ -26,13 +26,13 @@ export default class AddressForm extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
+    this.isComponentMounted = true;
     // Listen to the map click event.
     document.addEventListener('mapClicked', this.eventListener, false);
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this.isComponentMounted = false;
     document.removeEventListener('mapClicked', this.eventListener, false);
   }
 
@@ -45,7 +45,7 @@ export default class AddressForm extends React.Component {
 
   eventListener = (e) => {
     const coords = e.detail.coords();
-    if (this._isMounted) {
+    if (this.isComponentMounted) {
       this.positionMapAndUpdateAddress(coords);
     }
   };

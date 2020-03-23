@@ -8,7 +8,7 @@ import {
 } from '../../../utilities/checkout_address_process';
 
 export default class BillingPopUp extends React.Component {
-  _isMounted = false;
+  isComponentMounted = false;
 
   constructor(props) {
     super(props);
@@ -18,12 +18,12 @@ export default class BillingPopUp extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
+    this.isComponentMounted = true;
     document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this.isComponentMounted = false;
   }
 
   /**
@@ -40,7 +40,7 @@ export default class BillingPopUp extends React.Component {
    */
   closeModal = () => {
     const { closePopup } = this.props;
-    if (this._isMounted) {
+    if (this.isComponentMounted) {
       this.setState({
         open: false,
       });
@@ -68,7 +68,7 @@ export default class BillingPopUp extends React.Component {
    * Event handler for billing update.
    */
   processBillingUpdate = () => {
-    if (this._isMounted) {
+    if (this.isComponentMounted) {
       this.setState({
         open: false,
       });
