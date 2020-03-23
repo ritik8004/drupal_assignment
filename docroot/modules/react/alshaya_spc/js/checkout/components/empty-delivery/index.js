@@ -12,7 +12,7 @@ import ClickCollectContainer from '../click-collect';
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
 export default class EmptyDeliveryText extends React.Component {
-  _isMounted = false;
+  isComponentMounted = false;
 
   constructor(props) {
     super(props);
@@ -20,7 +20,7 @@ export default class EmptyDeliveryText extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
+    this.isComponentMounted = true;
     document.addEventListener(
       'refreshCartOnAddress',
       this.eventListener,
@@ -37,7 +37,7 @@ export default class EmptyDeliveryText extends React.Component {
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this.isComponentMounted = false;
     document.removeEventListener(
       'refreshCartOnAddress',
       this.eventListener,
@@ -63,7 +63,7 @@ export default class EmptyDeliveryText extends React.Component {
     const data = e.detail.data();
     const { refreshCart } = this.props;
     refreshCart(data);
-    if (this._isMounted) {
+    if (this.isComponentMounted) {
       this.closeModal();
     }
   };
