@@ -76,7 +76,7 @@ export default class GoogleMap extends React.Component {
     // If location access is enabled by user.
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
-        let currentCoords = {
+        const currentCoords = {
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
         };
@@ -234,19 +234,25 @@ export default class GoogleMap extends React.Component {
     secondChild.id = 'you_location_img';
     firstChild.appendChild(secondChild);
 
+    const locationImg = document.getElementById('you_location_img');
+
     // Add dragend event listener on map to fade the button once map is not
     // showing the current location.
     window.google.maps.event.addListener(map, 'dragend', () => {
-      $('#you_location_img').css('background-position', '0px 0px');
+      if(typeof (locationImg) !== 'undefined' && locationImg !== null) {
+        document.getElementById('you_location_img').style.backgroundPosition = '0px 0px';
+      }
     });
 
     // Add click event listener on button to get user's location from
     // browser.
     firstChild.addEventListener('click', () => {
-      const imgX = '0';
       const animationInterval = setInterval(() => {
-        let imgX = imgX === '-18' ? imgX = '0' : imgX = '-18';
-        $('#you_location_img').css('background-position', `${imgX}px 0px`);
+        let imgX = '0';
+        imgX = imgX === '-18' ? '0' : '-18';
+        if(typeof (locationImg) !== 'undefined' && locationImg !== null) {
+          document.getElementById('you_location_img').style.backgroundPosition = `${imgX}px 0px`;
+        }
       }, 500);
 
       // Geolocation.
@@ -262,13 +268,17 @@ export default class GoogleMap extends React.Component {
           // Stop animation.
           clearInterval(animationInterval);
           // Change icon color.
-          $('#you_location_img').css('background-position', '-144px 0px');
+          if(typeof (locationImg) !== 'undefined' && locationImg !== null) {
+            document.getElementById('you_location_img').style.backgroundPosition = '-144px 0px';
+          }
         });
       } else {
         // Stop animation.
         clearInterval(animationInterval);
         // Change icon color to disabled.
-        $('#you_location_img').css('background-position', '0px 0px');
+        if(typeof (locationImg) !== 'undefined' && locationImg !== null) {
+          document.getElementById('you_location_img').style.backgroundPosition = '0px 0px';
+        }
       }
     });
 
@@ -330,7 +340,7 @@ export default class GoogleMap extends React.Component {
     return (
       <div className="spc-google-map">
         <div className="spc-location-g-map-search form-type-textfield">
-          <input placeholder={Drupal.t('Enter a location')} ref={(ref) => (this.autocomplete = ref)} id="searchTextField" type="text" />
+          <input placeholder={Drupal.t('Enter a location')} ref={(ref) => (this.autocomplete === ref)} id="searchTextField" type="text" />
         </div>
         <div id="google-map" ref={this.googleMapRef} style={{ width: '100%', height: '100%' }} />
       </div>
