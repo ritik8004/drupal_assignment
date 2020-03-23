@@ -84,7 +84,7 @@ export const updateCartItemData = function (action, sku, quantity) {
         const localCart = getInfoFromStorage();
         if (localCart.cart !== undefined
           && localCart.cart.items !== undefined
-          && localCart.cart.items.hasOwnProperty(sku)) {
+          && Object.prototype.hasOwnProperty.call(localCart.cart.items, sku)) {
           const data = {
             qty: quantity,
             item: localCart.cart.items[sku],
