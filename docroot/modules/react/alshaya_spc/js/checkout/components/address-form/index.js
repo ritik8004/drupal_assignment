@@ -15,7 +15,7 @@ import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
 import CheckoutMessage from '../../../utilities/checkout-message';
 import {
-  smoothScrollTo
+  smoothScrollTo,
 } from '../../../utilities/smoothScroll';
 
 export default class AddressForm extends React.Component {
@@ -65,9 +65,8 @@ export default class AddressForm extends React.Component {
     const { type, message } = e.detail;
     this.setState({
       messageType: type,
-      errorSuccessMessage: message
+      errorSuccessMessage: message,
     });
-
     // Scroll to error.
     smoothScrollTo('.spc-address-form-sidebar .spc-checkout-section-title');
   };

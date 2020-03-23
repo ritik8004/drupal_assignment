@@ -175,10 +175,10 @@ export const addEditAddressToCustomer = (e) => {
                       message: cartResult.error_message,
                     });
                     return;
-                  } else {
-                    cartData = getInfoFromStorage();
-                    cartData.cart = cartResult;
                   }
+
+                  cartData = getInfoFromStorage();
+                  cartData.cart = cartResult;
 
                   // Refresh cart.
                   dispatchCustomEvent('refreshCartOnAddress', cartData);
