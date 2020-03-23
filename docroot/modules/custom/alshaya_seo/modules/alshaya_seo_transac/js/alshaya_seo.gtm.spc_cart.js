@@ -11,7 +11,6 @@
       var cart_data = JSON.parse(localStorage.getItem('cart_data'));
       if (cart_data && cart_data.cart && cart_data.cart.cart_id) {
         var step = Drupal.alshayaSpcGetStepFromContainer();
-        console.log(step);
         Drupal.alshayaSpcCartGtm(cart_data.cart, step);
       }
 
@@ -143,7 +142,7 @@
     if (window.location.href.indexOf('checkout') > -1) {
       step = 2;
     }
-    if (cart_data.cart.hasOwnProperty('selected_payment_method')) {
+    if (cart_data.hasOwnProperty('selected_payment_method')) {
       step = 3;
     }
     return step;
