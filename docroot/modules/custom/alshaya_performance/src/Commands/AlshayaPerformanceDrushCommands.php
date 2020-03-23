@@ -38,8 +38,8 @@ class AlshayaPerformanceDrushCommands extends DrushCommands {
    *
    * @aliases crf, cache-rebuild-frontend
    */
-  public function cacheRebuildFrontend() {
-    alshaya_performance_flush_frontend_caches();
+  public function cacheRebuildFrontend($options = ['twig' => FALSE]) {
+    alshaya_performance_flush_frontend_caches($options);
   }
 
   /**
