@@ -88,7 +88,6 @@ export default class Checkout extends React.Component {
       }
     } catch (error) {
       // In case of error, do nothing.
-      console.error(error);
     }
 
     // Make sidebar sticky.
@@ -159,8 +158,8 @@ export default class Checkout extends React.Component {
         () => {
           this.fetchStoresHelper(getDefaultMapCenter());
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          // In case of error, do nothing.
         });
     }
   };
