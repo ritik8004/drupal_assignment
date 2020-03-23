@@ -32,6 +32,8 @@ class PaymentMethodCheckoutCom extends React.Component {
     this.updateCurrentContext({
       cvvValid: !(activeCard.mada === true || drupalSettings.checkoutCom.Enforce3d === true),
     });
+
+    dispatchCustomEvent('refreshCompletePurchaseSection', {});
   }
 
   openSavedCardListModal = () => {
@@ -90,12 +92,10 @@ class PaymentMethodCheckoutCom extends React.Component {
     } = this.context;
 
     if (selectedCard === 'new' && !(numberValid && expiryValid && cvvValid)) {
-      console.error('Client side validation failed for credit card info');
       return false;
     }
 
     if (selectedCard === 'existing' && !cvvValid) {
-      console.error('Client side validation failed for credit card info');
       return false;
     }
 
@@ -180,11 +180,13 @@ class PaymentMethodCheckoutCom extends React.Component {
     this.updateCurrentContext({
       selectedCard: type,
     });
+    dispatchCustomEvent('refreshCompletePurchaseSection', {});
   };
 
   openNewCard = () => {
     this.closeSavedCardListModal();
     this.changeCurrentCard('new');
+    dispatchCustomEvent('refreshCompletePurchaseSection', {});
   };
 
   render() {

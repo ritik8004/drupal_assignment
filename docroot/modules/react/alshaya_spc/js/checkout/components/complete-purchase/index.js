@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   placeOrder,
   isDeliveryTypeSameAsInCart,
@@ -9,6 +8,26 @@ import { dispatchCustomEvent } from '../../../utilities/events';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 
 export default class CompletePurchase extends React.Component {
+  componentDidMount() {
+    document.addEventListener(
+      'refreshCompletePurchaseSection',
+      this.refreshCompletePurchaseSection,
+      false,
+    );
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener(
+      'refreshCompletePurchaseSection',
+      this.refreshCompletePurchaseSection,
+      false,
+    );
+  }
+
+  refreshCompletePurchaseSection = () => {
+    this.forceUpdate();
+  };
+
   /**
    * Place order.
    */
