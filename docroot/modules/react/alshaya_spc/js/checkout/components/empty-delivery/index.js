@@ -86,9 +86,12 @@ export default class EmptyDeliveryText extends React.Component {
   render() {
     const {
       cart: {
-        delivery_type: deliveryType,
+        cart: {
+          delivery_type: deliveryType,
+        },
         cart: cartVal,
       },
+      cart: mainCart,
     } = this.props;
     const { open } = this.state;
 
@@ -152,7 +155,7 @@ export default class EmptyDeliveryText extends React.Component {
           <React.Suspense fallback={<Loading />}>
             <AddressContent
               closeModal={this.closeModal}
-              cart={cartVal}
+              cart={mainCart}
               showEditButton
               headingText={Drupal.t('delivery information')}
               processAddress={this.processAddress}
