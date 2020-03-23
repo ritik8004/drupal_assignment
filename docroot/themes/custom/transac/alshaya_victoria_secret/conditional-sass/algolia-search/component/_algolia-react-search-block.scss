@@ -276,6 +276,14 @@
   }
 }
 
+html[lang=ar] {
+  .block-alshaya-algolia-react-autocomplete {
+    @include breakpoint($only-mobile) {
+      top: 3.125rem;
+    }
+  }
+}
+
 body {
   &:not(.no-sticky-algolia-search-bar) {
     .block-alshaya-algolia-react-autocomplete {
