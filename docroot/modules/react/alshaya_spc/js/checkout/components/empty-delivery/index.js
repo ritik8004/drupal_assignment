@@ -84,7 +84,12 @@ export default class EmptyDeliveryText extends React.Component {
   };
 
   render() {
-    const { delivery_type: deliveryType, cart } = this.props.cart;
+    const {
+      cart: {
+        delivery_type: deliveryType,
+        cart: cartVal,
+      },
+    } = this.props;
     const { open } = this.state;
 
     if (deliveryType === 'cnc') {
@@ -116,11 +121,11 @@ export default class EmptyDeliveryText extends React.Component {
           fullname: `${fname} ${lname}`,
         },
       };
-    } else if (cart.carrier_info !== null
-      && cart.shipping_address !== null) {
+    } else if (cartVal.carrier_info !== null
+      && cartVal.shipping_address !== null) {
       // If carrier info set, means shipping is set.
       // Get name info from there.
-      const shippingAddress = cart.shipping_address;
+      const shippingAddress = cartVal.shipping_address;
       defaultVal = {
         static: {
           fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,
@@ -147,8 +152,8 @@ export default class EmptyDeliveryText extends React.Component {
           <React.Suspense fallback={<Loading />}>
             <AddressContent
               closeModal={this.closeModal}
-              cart={this.props.cart}
-              showEditButton={true}
+              cart={cartVal}
+              showEditButton
               headingText={Drupal.t('delivery information')}
               processAddress={this.processAddress}
               type="shipping"
