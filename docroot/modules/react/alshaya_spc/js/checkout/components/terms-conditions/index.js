@@ -2,7 +2,7 @@ import React from 'react';
 
 export default class TermsConditions extends React.Component {
   getHtmlMarkup() {
-  	const termsCondition = window.drupalSettings.terms_condition || '';
+    const termsCondition = window.drupalSettings.terms_condition || '';
     return { __html: termsCondition };
   }
 
