@@ -122,7 +122,7 @@ function alshaya_performance_reset_log_mode() {
  *
  * @see drupal_flush_all_caches()
  */
-function alshaya_performance_flush_frontend_caches($options) {
+function alshaya_performance_flush_frontend_caches($exclude_twig) {
   // Frontend data can remain in the rendered bins, so we need to empty them
   // as well.
   Cache::invalidateTags(['rendered']);
@@ -138,11 +138,10 @@ function alshaya_performance_flush_frontend_caches($options) {
   _drupal_flush_css_js();
 
   // Making twig cache clear optional.
-  if ($options['twig']) {
+  if (!($exclude_twig)) {
     // Wipe the Twig PHP Storage cache.
     \Drupal::service('twig')->invalidate();
   }
-
 }
 
 /**

@@ -37,9 +37,11 @@ class AlshayaPerformanceDrushCommands extends DrushCommands {
    * @command cr:frontend
    *
    * @aliases crf, cache-rebuild-frontend
+   * @options arr An option that takes multiple values.
    */
-  public function cacheRebuildFrontend($options = ['twig' => FALSE]) {
-    alshaya_performance_flush_frontend_caches($options);
+  public function cacheRebuildFrontend($options = ['exclude_twig' => FALSE]) {
+    $exclude_twig = $options['exclude_twig'];
+    alshaya_performance_flush_frontend_caches($exclude_twig);
   }
 
   /**
