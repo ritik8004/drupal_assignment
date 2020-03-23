@@ -55,4 +55,7 @@ function alshaya_color_split_install() {
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product.display_settings');
   $config->set('color_swatches', FALSE);
   $config->save();
+
+  // Add Arabic config for alshaya_color_split.settings.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_color_split.settings')->set('color_label_cart_form', 'اللون')->save();
 }
