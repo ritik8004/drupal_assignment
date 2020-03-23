@@ -463,6 +463,12 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'cart');
       $product['image']['#skip_lazy_loading'] = TRUE;
 
+      // If 'ampromo_rule_id' is set and price is 0, set the free gift label.
+      if (isset($item['extension']['product_options'][0]['info_buyRequest']['options']['ampromo_rule_id'])
+        && $item['price'] == 0) {
+        $product['free_gift_label'] = t('Free Gift with Purchase');
+      }
+
       $products[] = $product;
     }
   }
