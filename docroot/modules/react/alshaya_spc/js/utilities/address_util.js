@@ -208,7 +208,7 @@ export const getAreasList = (isParent, parentId) => {
       if (parentId !== null) {
         const parentIdVal = areas[i].getAttribute('data-parent-id');
         // If item's parent id not matches.
-        if (parseInt(parentId) !== parseInt(parentIdVal)) {
+        if (parseInt(parentId, 10) !== parseInt(parentIdVal, 10)) {
           continue;
         }
       }
