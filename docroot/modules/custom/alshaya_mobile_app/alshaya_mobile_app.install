@@ -15,7 +15,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  *
  * Add rest end point for magazine block.
  */
-function alshaya_mobile_app_update_8016() {
+function alshaya_mobile_app_update_8066() {
   $configs = [
     'rest.resource.magazine_block',
   ];
