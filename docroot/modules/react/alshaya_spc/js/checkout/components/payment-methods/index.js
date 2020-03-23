@@ -79,6 +79,10 @@ export default class PaymentMethods extends React.Component {
 
   changePaymentMethod = (method) => {
     const { cart, refreshCart } = this.props;
+    // Dispatch event for GTM checkout step 3.
+    dispatchCustomEvent('refreshCartOnPaymentMethod', {
+      cart,
+    });
     if (!this.isActive() || cart.selected_payment_method === method) {
       return;
     }
@@ -94,10 +98,6 @@ export default class PaymentMethods extends React.Component {
         cart.selected_payment_method = method;
         refreshCart(cart);
       }
-      // Dispatch event for GTM checkout step 3.
-      dispatchCustomEvent('refreshCartOnPaymentMethod', {
-        cart,
-      });
       return;
     }
 
