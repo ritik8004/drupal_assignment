@@ -8,6 +8,18 @@
 (function ($, Drupal) {
   'use strict';
 
+  /* The solution has been encouraged from https://css-tricks.com/the-trick-to-viewport-units-on-mobile
+  *
+  * For some devices the css viewport height is not calculated correctly and does not match the window height
+  * and hence the layout breaks, especially for iOS devices.
+  * This JS approach passes the correct viewport height value to css through css variable
+  *
+  */
+  // First we get the viewport height and we multiple it by 1% to get a value for a vh unit 
+  var vh = window.innerHeight * 0.01; 
+  // Then we set the value in the --vh custom property to the root of the document 
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+
   Drupal.behaviors.algoliaSearchMenu = {
     attach: function (context, settings) {
       var algoliaAutocompleteBlock = $('.block-alshaya-algolia-react-autocomplete');
