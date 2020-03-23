@@ -4,7 +4,12 @@ import ToolTip from '../../../../utilities/tooltip';
 import CVVToolTipText from '../../cvv-text';
 
 const SelectedCard = ({
-  cardInfo, openSavedCardListModal, labelEffect, handleCardCvvChange, onExistingCardSelect, selected = true,
+  cardInfo,
+  openSavedCardListModal,
+  labelEffect,
+  handleCardCvvChange,
+  onExistingCardSelect,
+  selected = true,
 }) => (
   <div className="spc-checkout-payment-saved-card-preview">
     <div className="spc-checkout-payment-data" onClick={() => onExistingCardSelect(cardInfo.public_hash, cardInfo.mada)}>
@@ -14,11 +19,14 @@ const SelectedCard = ({
     <div className="spc-add-new-card-btn" onClick={openSavedCardListModal}>
       {Drupal.t('change')}
     </div>
-    <ConditionalView condition={selected && (cardInfo.mada === true || drupalSettings.checkoutCom.Enforce3d)}>
+    <ConditionalView
+      condition={selected && (cardInfo.mada === true || drupalSettings.checkoutCom.enforce3d)}
+    >
       <div className="spc-type-textfield spc-type-cvv">
         <input
           type="tel"
           id="spc-cc-cvv"
+          className="secure-input"
           pattern="\d{3,4}"
           required
           onChange={handleCardCvvChange}

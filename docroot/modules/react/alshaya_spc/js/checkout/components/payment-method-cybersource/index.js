@@ -39,6 +39,7 @@ class PaymentMethodCybersource extends React.Component {
 
   componentDidMount = () => {
     document.addEventListener('cybersourcePaymentUpdate', this.eventListener, false);
+    dispatchCustomEvent('refreshCompletePurchaseSection', {});
   };
 
   componentWillUnmount = () => {

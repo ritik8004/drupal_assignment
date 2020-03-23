@@ -1,3 +1,5 @@
+import { dispatchCustomEvent } from './events';
+
 export const markFieldAsValid = (id) => {
   try {
     document.getElementById(id).innerHTML = '';
@@ -37,4 +39,6 @@ export const handleValidationMessage = (id, value, isValid, invalidMessage) => {
   } else {
     displayErrorMessage(id, invalidMessage);
   }
+
+  dispatchCustomEvent('refreshCompletePurchaseSection', {});
 };
