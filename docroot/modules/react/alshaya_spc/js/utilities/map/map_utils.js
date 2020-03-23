@@ -69,11 +69,19 @@ export const removeAllMarkersFromMap = () => {
  * @param {*} position
  * @param {*} map
  */
-export const createMarker = (position, map) => new window.google.maps.Marker({
-  position,
-  map,
-  icon: '', // This can be later dynamic based on HD or CnC.
-});
+export const createMarker = (position, map) => {
+  let icon = '';
+  if (drupalSettings.map.map_marker !== undefined
+    && drupalSettings.map.map_marker.active !== undefined) {
+    icon = drupalSettings.map.map_marker.active;
+  }
+
+  return new window.google.maps.Marker({
+    position,
+    map,
+    icon,
+  });
+};
 
 /**
    * Create info window.
