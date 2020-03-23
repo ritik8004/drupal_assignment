@@ -110,4 +110,14 @@ class MagentoInfo {
     return (new ApiFactory($configuration))->getApiClient();
   }
 
+  /**
+   * Get cancel reservation setting.
+   *
+   * @return bool
+   *   Return TRUE if setting is enabled, FALSE otherwise.
+   */
+  public function isCancelReservationEnabled() {
+    return $this->systemSettings->getSettings('alshaya_acm_checkout.settings')['cancel_reservation_enabled'] ?? 0;
+  }
+
 }

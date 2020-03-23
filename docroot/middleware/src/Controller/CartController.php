@@ -556,6 +556,8 @@ class CartController {
           );
         }
         catch (\Exception $e) {
+          $this->cart->cancelCartReservation($e->getMessage());
+
           if ($e->getCode() === 302) {
             return new JsonResponse([
               'success' => TRUE,
@@ -659,6 +661,7 @@ class CartController {
       return new JsonResponse($response);
     }
 
+    $this->cart->cancelCartReservation($result['error_message']);
     return new JsonResponse($result);
   }
 

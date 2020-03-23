@@ -11,6 +11,7 @@ use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
 use App\Service\CheckoutCom\CustomerCards;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Cart.
@@ -100,6 +101,13 @@ class Cart {
   protected $drupal;
 
   /**
+   * Logger service.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * Secure Text service provider.
    *
    * @var \App\Helper\SecureText
@@ -131,6 +139,8 @@ class Cart {
    *   Drupal service.
    * @param \App\Helper\SecureText $secure_text
    *   Secure Text service provider.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger service.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -143,7 +153,8 @@ class Cart {
     SessionStorage $session,
     CustomerCards $customer_cards,
     Drupal $drupal,
-    SecureText $secure_text
+    SecureText $secure_text,
+    LoggerInterface $logger
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -156,6 +167,7 @@ class Cart {
     $this->customerCards = $customer_cards;
     $this->drupal = $drupal;
     $this->secureText = $secure_text;
+    $this->logger = $logger;
   }
 
   /**
@@ -171,13 +183,16 @@ class Cart {
   /**
    * Get cart by cart id.
    *
+   * @param bool $force
+   *   True to load data from api, false from cache.
+   *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function getCart() {
-    if (!empty(self::$cart)) {
+  public function getCart($force = FALSE) {
+    if (!empty(self::$cart) && !$force) {
       return self::$cart;
     }
 
@@ -452,7 +467,7 @@ class Cart {
    * @param string $action
    *   Action to perform.
    * @param bool $update_billing
-   *  Whether billing needs to update or not.
+   *   Whether billing needs to update or not.
    *
    * @return array
    *   Cart data.
@@ -728,6 +743,9 @@ class Cart {
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
         $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
       }
+      else {
+        $this->cancelCartReservation($e->getMessage());
+      }
 
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
@@ -893,6 +911,51 @@ class Cart {
     }
 
     return NULL;
+  }
+
+  /**
+   * Cancel cart reservation is required.
+   *
+   * @param string $message
+   *   Message to log for cancelling reservation.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function cancelCartReservation(string $message) {
+    $url = 'cancel/reserve/cart';
+    $cart = $this->getCart();
+
+    if (empty($cart)) {
+      return;
+    }
+
+    if ($this->magentoInfo->isCancelReservationEnabled() && $cart['cart']['extension_attributes']['attempted_payment'] == 0) {
+      $cart_id = $this->getCartId();
+      try {
+        $data = [
+          'quoteId' => $cart_id,
+          'message' => $message,
+        ];
+        $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
+        if (empty($response['status']) || $response['status'] !== 'SUCCESS') {
+          throw new \Exception($response['message'] ?? json_encode($response));
+        }
+      }
+      catch (\Exception $e) {
+        // Reset cart on exception.
+        $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+        // Exception handling here.
+        $this->logger->error('Error occurred while cancelling reservation for cart id @cart_id, Drupal message: @message, API Response: @response', [
+          '@cart_id' => $cart_id,
+          '@message' => $message,
+          '@response' => $e->getMessage(),
+        ]);
+        return;
+      }
+
+      // Restore cart to get more info about what is wrong in cart.
+      $this->getCart(TRUE);
+    }
   }
 
 }
