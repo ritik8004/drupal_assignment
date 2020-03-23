@@ -241,6 +241,7 @@ export const refreshCartData = () => {
     )
     .catch((error) => {
       // Error processing here.
+      console.error(error);
     });
 };
 
