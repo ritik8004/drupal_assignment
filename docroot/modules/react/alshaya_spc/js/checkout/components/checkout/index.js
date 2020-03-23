@@ -27,13 +27,11 @@ import TermsConditions from '../terms-conditions';
 import {
   getLocationAccess, getDefaultMapCenter,
   removeFullScreenLoader,
-  isDeliveryTypeSameAsInCart,
 } from '../../../utilities/checkout_util';
 import { createFetcher } from '../../../utilities/api/fetcher';
-
 import ConditionalView from '../../../common/components/conditional-view';
-import { getStringMessage } from '../../../utilities/strings';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import getStringMessage from '../../../utilities/strings';
 
 window.fetchStore = 'idle';
 

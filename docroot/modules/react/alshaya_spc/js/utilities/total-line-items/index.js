@@ -3,7 +3,7 @@ import TotalLineItem from '../total-line-item';
 import VatText from '../vat-text';
 import FreeDeliveryText from '../free-delivery-text';
 import ConditionalView from '../../common/components/conditional-view';
-import { getStringMessage } from '../strings';
+import getStringMessage from '../strings';
 
 class TotalLineItems extends React.Component {
   /**

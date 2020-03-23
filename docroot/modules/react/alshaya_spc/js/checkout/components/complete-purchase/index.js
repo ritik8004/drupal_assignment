@@ -6,6 +6,7 @@ import {
 } from '../../../utilities/checkout_util';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import { dispatchCustomEvent } from '../../../utilities/events';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 
 export default class CompletePurchase extends React.Component {
   /**
@@ -21,6 +22,12 @@ export default class CompletePurchase extends React.Component {
 
     // If purchase button is not clickable.
     if (!this.completePurchaseButtonActive(cart)) {
+      // Scroll to first payment section if error exists there.
+      if (document.getElementById('spc-payment-methods') === null
+      || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0) {
+        smoothScrollTo('#spc-payment-methods');
+      }
+
       return;
     }
 
@@ -57,17 +64,20 @@ export default class CompletePurchase extends React.Component {
       }
     }
 
+    // Disabled if there is still some error left in payment form.
+    if (document.getElementById('spc-payment-methods') === null
+      || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0) {
+      return false;
+    }
+
     // If all conditions are true only then purchase button is
     // active and clickable.
-    if (deliverSameAsInCart
-      && isShippingSet
-      && isBillingSet
-    ) {
+    if (deliverSameAsInCart && isShippingSet && isBillingSet) {
       return true;
     }
 
     return false;
-  }
+  };
 
   render() {
     const { cart } = this.props;
