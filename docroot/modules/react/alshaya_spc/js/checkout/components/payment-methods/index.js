@@ -8,6 +8,7 @@ import {
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
+import { dispatchCustomEvent } from '../../../utilities/events';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -47,7 +48,7 @@ export default class PaymentMethods extends React.Component {
     this.selectDefault();
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate() {
     this.selectDefault();
   }
 
@@ -66,8 +67,6 @@ export default class PaymentMethods extends React.Component {
 
       paymentMethods = paymentMethods.sort((a, b) => a.weight - b.weight);
     } else {
-      const { cart } = this.props;
-
       Object.entries(drupalSettings.payment_methods).forEach(([, method]) => {
         if (!(cart.delivery_type !== undefined && cart.delivery_type === 'cnc' && method.code === 'cashondelivery')) {
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
@@ -95,6 +94,10 @@ export default class PaymentMethods extends React.Component {
         cart.selected_payment_method = method;
         refreshCart(cart);
       }
+      // Dispatch event for GTM checkout step 3.
+      dispatchCustomEvent('refreshCartOnPaymentMethod', {
+        cart,
+      });
       return;
     }
 
@@ -102,8 +105,8 @@ export default class PaymentMethods extends React.Component {
 
     const analytics = {};
     if (typeof window.ga === 'function' && window.ga.loaded) {
-      analytics.clientId = ga.getAll()[0].get('clientId');
-      analytics.trackingId = ga.getAll()[0].get('trackingId');
+      analytics.clientId = window.ga.getAll()[0].get('clientId');
+      analytics.trackingId = window.ga.getAll()[0].get('trackingId');
     }
 
     const data = {

@@ -35,6 +35,10 @@
     Drupal.alshayaSpcCartGtm(e.detail.data(), step);
   });
 
+  document.addEventListener('refreshCartOnPaymentMethod', function (e) {
+    Drupal.alshayaSpcCartGtm(e.detail.cart, 3);
+  });
+
   document.addEventListener('updateCartItemData', function (e) {
     var gtmEvent = '';
     var item = e.detail.data.item;
@@ -126,7 +130,7 @@
   });
 
   document.addEventListener('orderPaymentMethod', function (e) {
-    Drupal.alshayaSeoGtmPushCheckoutOption(e.detail.payment_method, 2);
+    Drupal.alshayaSeoGtmPushCheckoutOption(e.detail.payment_method, 3);
   });
 
   /**
@@ -134,8 +138,12 @@
    */
   Drupal.alshayaSpcGetStepFromContainer = function () {
     var step = 1;
+    var cart_data = JSON.parse(localStorage.getItem('cart_data'));
     if (window.location.href.indexOf('checkout') > -1) {
       step = 2;
+    }
+    if (cart_data.hasOwnProperty('selected_payment_method') && cart_data.selected_payment_method !== null) {
+      step = 3;
     }
     return step;
   };
