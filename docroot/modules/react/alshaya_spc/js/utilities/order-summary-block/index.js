@@ -2,6 +2,46 @@ import React from 'react';
 import SectionTitle from '../section-title';
 import TotalLineItems from '../total-line-items';
 import CheckoutCartItems from '../../checkout/components/checkout-cart-items';
+import {
+  removeShippingFromCart,
+  showFullScreenLoader,
+  removeFullScreenLoader,
+} from '../checkout_util';
+import {
+  dispatchCustomEvent,
+} from '../events';
+
+/**
+ * Click handler for `continue checkout`.
+ */
+const continueCheckout = (e) => {
+  e.preventDefault();
+  // Show loader.
+  showFullScreenLoader();
+  const cartData = removeShippingFromCart();
+  if (cartData instanceof Promise) {
+    cartData.then((cartResult) => {
+      // Remove loader.
+      removeFullScreenLoader();
+      // If no error.
+      if (cartResult.error === undefined) {
+        const continueCheckoutLink = (drupalSettings.user.uid === 0) ?
+          'cart/login' :
+          'checkout';
+
+        // Redirect to next page.
+        window.location.href = Drupal.url(continueCheckoutLink);
+        return;
+      }
+
+      // Dispatch event for error show.
+      dispatchCustomEvent('spcCartMessageUpdate', {
+        type: 'error',
+        message: cartResult.error_message,
+      });
+    });
+  }
+};
 
 const OrderSummaryBlock = (props) => {
   const {
@@ -38,7 +78,7 @@ const OrderSummaryBlock = (props) => {
         && (
         <div className="actions">
           <div className="checkout-link submit">
-            <a href={Drupal.url(continueCheckoutLink)} className="checkout-link">{Drupal.t('continue to checkout')}</a>
+            <a onClick={(e) => continueCheckout(e)} href={Drupal.url(continueCheckoutLink)} className="checkout-link">{Drupal.t('continue to checkout')}</a>
           </div>
         </div>
         )}

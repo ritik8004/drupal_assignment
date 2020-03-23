@@ -452,7 +452,7 @@ class Cart {
    * @param string $action
    *   Action to perform.
    * @param bool $update_billing
-   *  Whether billing needs to update or not.
+   *   Whether billing needs to update or not.
    *
    * @return array
    *   Cart data.
@@ -601,6 +601,27 @@ class Cart {
     ];
 
     return $this->updateCart($update);
+  }
+
+  /**
+   * Remove shipping from cart.
+   *
+   * @param string $action
+   *   Shipping remove action.
+   *
+   * @return array
+   *   Cart data.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function removeShipping(string $action) {
+    $data = [
+      'extension' => (object) [
+        'action' => $action,
+      ],
+    ];
+
+    return $this->updateCart($data);
   }
 
   /**
