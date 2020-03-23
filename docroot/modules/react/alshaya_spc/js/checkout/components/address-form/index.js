@@ -13,6 +13,10 @@ import {
 import SectionTitle from '../../../utilities/section-title';
 import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
+import CheckoutMessage from '../../../utilities/checkout-message';
+import {
+  smoothScrollTo
+} from '../../../utilities/smoothScroll';
 
 export default class AddressForm extends React.Component {
   isComponentMounted = true;
@@ -22,6 +26,8 @@ export default class AddressForm extends React.Component {
     this.state = {
       area_list: null,
       cityChanged: false,
+      errorSuccessMessage: null,
+      messageType: null,
     };
   }
 
@@ -29,11 +35,13 @@ export default class AddressForm extends React.Component {
     this.isComponentMounted = true;
     // Listen to the map click event.
     document.addEventListener('mapClicked', this.eventListener, false);
+    document.addEventListener('addressPopUpError', this.handleAddressPopUpError, false);
   }
 
   componentWillUnmount() {
     this.isComponentMounted = false;
     document.removeEventListener('mapClicked', this.eventListener, false);
+    document.removeEventListener('addressPopUpError', this.handleAddressPopUpError, false);
   }
 
   // Submit handler for form.
@@ -48,6 +56,20 @@ export default class AddressForm extends React.Component {
     if (this.isComponentMounted) {
       this.positionMapAndUpdateAddress(coords);
     }
+  };
+
+  /**
+   * Show error on popup.
+   */
+  handleAddressPopUpError = (e) => {
+    const { type, message } = e.detail;
+    this.setState({
+      messageType: type,
+      errorSuccessMessage: message
+    });
+
+    // Scroll to error.
+    smoothScrollTo('.spc-checkout-section-title');
   };
 
   /**
@@ -134,7 +156,12 @@ export default class AddressForm extends React.Component {
       closeModal,
       showEmail,
     } = this.props;
-    const { area_list: areaList, cityChanged } = this.state;
+    const {
+      area_list: areaList,
+      cityChanged,
+      errorSuccessMessage,
+      messageType,
+    } = this.state;
     let defaultAddressVal = [];
     if (defaultVal) {
       defaultAddressVal = defaultVal;
@@ -181,6 +208,12 @@ export default class AddressForm extends React.Component {
             &times;
           </a>
           <div className="spc-address-form-wrapper">
+            {errorSuccessMessage !== null
+              && (
+              <CheckoutMessage type={messageType}>
+                {errorSuccessMessage}
+              </CheckoutMessage>
+              )}
             <div
               className="spc-deliver-button"
               onClick={() => this.deliverToCurrentLocation()}

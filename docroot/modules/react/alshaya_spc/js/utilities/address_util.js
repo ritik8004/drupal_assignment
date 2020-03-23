@@ -13,6 +13,9 @@ import {
   getInfoFromStorage,
 } from './storage';
 import getStringMessage from './strings';
+import {
+  dispatchCustomEvent,
+} from './events';
 
 /**
  * Get the address list of the current logged in user.
@@ -140,9 +143,10 @@ export const addEditAddressToCustomer = (e) => {
                 // Remove loader.
                 removeFullScreenLoader();
                 const eventData = {
-                  error_message: list.error_message,
+                  type: 'error',
+                  message: list.error_message,
                 };
-                triggerCheckoutEvent('refreshCartOnAddress', eventData);
+                dispatchCustomEvent('addressPopUpError', eventData);
                 return;
               }
 
@@ -167,9 +171,11 @@ export const addEditAddressToCustomer = (e) => {
 
                   // If error, no need to process.
                   if (cartResult.error !== undefined) {
-                    cartData = {
-                      error_message: cartResult.error_message,
-                    };
+                    dispatchCustomEvent('addressPopUpError', {
+                      type: 'error',
+                      message: cartResult.error_message,
+                    });
+                    return;
                   } else {
                     cartData = getInfoFromStorage();
                     cartData.cart = cartResult;
