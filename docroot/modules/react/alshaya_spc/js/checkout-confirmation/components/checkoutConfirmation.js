@@ -4,6 +4,7 @@ import OrderSummaryBlock from '../../utilities/order-summary-block';
 import OrderSummary from './OrderSummary';
 import { stickySidebar } from '../../utilities/stickyElements/stickyElements';
 import { removeCartFromStorage } from '../../utilities/storage';
+import VatFooterText from '../../utilities/vat-footer';
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
@@ -36,6 +37,7 @@ class CheckoutConfirmation extends React.Component {
         <div className="spc-main">
           <div className="spc-content">
             <OrderSummary />
+            <VatFooterText />
           </div>
           <div className="spc-sidebar">
             <OrderSummaryBlock
