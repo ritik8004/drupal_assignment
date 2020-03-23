@@ -129,15 +129,15 @@ export default class AddressForm extends React.Component {
   render() {
     const dynamicFields = [];
     const {
-      default_val,
+      default_val: defaultVal,
       headingText,
       closeModal,
       showEmail,
     } = this.props;
-    const { area_list, cityChanged } = this.state;
+    const { area_list: areaList, cityChanged } = this.state;
     let defaultAddressVal = [];
-    if (default_val) {
-      defaultAddressVal = default_val;
+    if (defaultVal) {
+      defaultAddressVal = defaultVal;
     }
 
     let isEditAddress = false;
@@ -155,7 +155,7 @@ export default class AddressForm extends React.Component {
             key={key}
             default_val={defaultAddressVal}
             areasUpdate={this.refreshAreas}
-            area_list={area_list}
+            area_list={areaList}
             cityChanged={cityChanged}
             field_key={key}
             field={field}
