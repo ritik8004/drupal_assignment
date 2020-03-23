@@ -36,10 +36,10 @@ export default class AreaSelect extends React.Component {
 
   areaCurrentOption = () => {
     let currentOption = [];
-    const { default_val, field } = this.props;
-    if (default_val.length !== 0
-      && default_val.length !== 'undefined') {
-      currentOption = default_val[field.key];
+    const { default_val: defaultVal, field } = this.props;
+    if (defaultVal.length !== 0
+      && defaultVal.length !== 'undefined') {
+      currentOption = defaultVal[field.key];
     }
 
     return currentOption;
@@ -107,13 +107,13 @@ export default class AreaSelect extends React.Component {
       showFilterList,
     } = this.state;
     const {
-      area_list,
+      area_list: areaList,
       field,
-      field_key,
+      field_key: fieldKey,
     } = this.props;
     let options = areas;
-    if (area_list !== null) {
-      options = area_list;
+    if (areaList !== null) {
+      options = areaList;
     }
 
     const panelTitle = Drupal.t('select @label', { '@label': field.label });
@@ -154,8 +154,8 @@ export default class AreaSelect extends React.Component {
             panelTitle={panelTitle}
           />
           )}
-        <input type="hidden" id={field_key} name={field_key} value={hiddenFieldValue} />
-        <div id={`${field_key}-error`} />
+        <input type="hidden" id={fieldKey} name={fieldKey} value={hiddenFieldValue} />
+        <div id={`${fieldKey}-error`} />
       </div>
     );
   }

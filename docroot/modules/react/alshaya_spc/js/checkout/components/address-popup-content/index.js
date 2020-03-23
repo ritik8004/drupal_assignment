@@ -6,7 +6,7 @@ const AddressContent = (props) => {
   const {
     cart,
     closeModal,
-    default_val,
+    default_val: defaultVal,
     showEmail,
     processAddress,
     headingText,
@@ -31,7 +31,7 @@ const AddressContent = (props) => {
   return (
     <AddressForm
       closeModal={closeModal}
-      default_val={default_val}
+      default_val={defaultVal}
       showEmail={showEmail}
       headingText={headingText}
       processAddress={processAddress}
