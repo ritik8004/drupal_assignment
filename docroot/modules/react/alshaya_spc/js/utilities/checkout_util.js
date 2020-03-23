@@ -210,9 +210,9 @@ export const addBillingInCart = function (action, data) {
 };
 
 /**
- * Remove shipping from the cart.
+ * Refresh cart from MDC.
  */
-export const removeShippingFromCart = () => {
+export const refreshCartData = () => {
   let cart = cartAvailableInStorage();
   // If cart not available at all.
   if (cart === null
@@ -227,7 +227,7 @@ export const removeShippingFromCart = () => {
   const apiUrl = updateCartApiUrl();
   return axios
     .post(apiUrl, {
-      action: 'remove shipping',
+      action: 'refresh',
       cart_id: cart,
     })
     .then(

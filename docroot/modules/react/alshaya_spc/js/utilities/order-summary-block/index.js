@@ -3,7 +3,7 @@ import SectionTitle from '../section-title';
 import TotalLineItems from '../total-line-items';
 import CheckoutCartItems from '../../checkout/components/checkout-cart-items';
 import {
-  removeShippingFromCart,
+  refreshCartData,
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../checkout_util';
@@ -18,13 +18,14 @@ const continueCheckout = (e) => {
   e.preventDefault();
   // Show loader.
   showFullScreenLoader();
-  const cartData = removeShippingFromCart();
+  const cartData = refreshCartData();
   if (cartData instanceof Promise) {
     cartData.then((cartResult) => {
       // Remove loader.
       removeFullScreenLoader();
       // If no error.
-      if (cartResult.error === undefined) {
+      if (cartResult.error === undefined
+        || cartResult.response_message.status !== 'json_error') {
         const continueCheckoutLink = (drupalSettings.user.uid === 0) ?
           'cart/login' :
           'checkout';
@@ -34,10 +35,14 @@ const continueCheckout = (e) => {
         return;
       }
 
+      let errorMessage = (cartResult.response_message.status === 'json_error')
+        ? cartResult.response_message.msg
+        : cartResult.error_message;
+
       // Dispatch event for error show.
       dispatchCustomEvent('spcCartMessageUpdate', {
         type: 'error',
-        message: cartResult.error_message,
+        message: errorMessage,
       });
     });
   }

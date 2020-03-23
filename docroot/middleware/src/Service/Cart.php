@@ -604,17 +604,17 @@ class Cart {
   }
 
   /**
-   * Remove shipping from cart.
+   * Refresh the cart.
    *
    * @param string $action
-   *   Shipping remove action.
+   *   Refresh cart action.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function removeShipping(string $action) {
+  public function refreshCart(string $action) {
     $data = [
       'extension' => (object) [
         'action' => $action,

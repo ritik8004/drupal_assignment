@@ -598,14 +598,14 @@ class CartController {
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;
 
-      case CartActions::CART_SHIPPING_REMOVE:
+      case CartActions::CART_REFRESH:
         // If cart id in request not matches with what in session.
         if ($request_content['cart_id'] !== $this->cart->getCartId()) {
           // Return error response if not valid data.
           return new JsonResponse($this->utility->getErrorResponse('Invalid cart', '500'));
         }
 
-        $cart = $this->cart->removeShipping(CartActions::CART_SHIPPING_REMOVE);
+        $cart = $this->cart->refreshCart(CartActions::CART_REFRESH);
         break;
     }
 
