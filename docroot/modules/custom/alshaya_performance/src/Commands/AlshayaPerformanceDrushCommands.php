@@ -37,7 +37,8 @@ class AlshayaPerformanceDrushCommands extends DrushCommands {
    * @command cr:frontend
    *
    * @aliases crf, cache-rebuild-frontend
-   * @options arr An option that takes multiple values.
+   * @options exclude_twig
+   *  Exclude twig template files from cache clear.
    */
   public function cacheRebuildFrontend($options = ['exclude_twig' => FALSE]) {
     $exclude_twig = $options['exclude_twig'];
