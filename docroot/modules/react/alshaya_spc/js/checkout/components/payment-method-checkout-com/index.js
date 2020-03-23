@@ -172,7 +172,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     const { updateState } = this.context;
     updateState(obj);
     if (({}).hasOwnProperty.call(obj, 'selectedCard')) {
-      setStorageInfo('spc_selected_card', obj.selectedCard === 'new' ? 'new' : obj.tokenizedCard);
+      setStorageInfo(obj.selectedCard === 'new' ? 'new' : obj.tokenizedCard, 'spc_selected_card');
     }
   };
 
