@@ -52,7 +52,7 @@ export default class CartItem extends React.Component {
         qty,
         in_stock: inStock,
         original_price: originalPrice,
-        configurable_values,
+        configurable_values: configurableValues,
         promotions,
         extra_data,
         sku,
@@ -80,7 +80,7 @@ export default class CartItem extends React.Component {
               && <div>{Drupal.t('FREE')}</div>}
             </div>
             <div className="spc-product-attributes-wrapper">
-              {configurable_values.map((key) => <CheckoutConfigurableOption key={`${key}-${Math.floor(Math.random() * 99)}`} label={key} />)}
+              {configurableValues.map((key) => <CheckoutConfigurableOption key={`${key}-${Math.floor(Math.random() * 99)}`} label={key} />)}
             </div>
           </div>
           <div className="spc-product-tile-actions">

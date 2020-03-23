@@ -8,24 +8,22 @@ export default class CartPromoBlock extends React.Component {
     super(props);
     this.state = {
       promoApplied: false,
-      promo_code: '',
       buttonText: Drupal.t('apply'),
       disabled: false,
     };
   }
 
   componentDidMount() {
-    const { coupon_code } = this.props;
+    const { coupon_code: couponCode } = this.props;
 
-    if (coupon_code.length > 0) {
+    if (couponCode.length > 0) {
       this.setState({
         promoApplied: true,
-        promo_code: coupon_code,
         buttonText: Drupal.t('applied'),
         disabled: true,
       });
 
-      document.getElementById('promo-code').value = coupon_code;
+      document.getElementById('promo-code').value = couponCode;
     }
   }
 
@@ -69,7 +67,6 @@ export default class CartPromoBlock extends React.Component {
           if (promoApplied === false) {
             this.setState({
               promoApplied: true,
-              promo_code: promoValue,
               buttonText: Drupal.t('applied'),
               disabled: true,
             });
@@ -80,7 +77,6 @@ export default class CartPromoBlock extends React.Component {
             // It means promo is removed.
             this.setState({
               promoApplied: false,
-              promo_code: '',
               buttonText: Drupal.t('apply'),
               disabled: false,
             });
