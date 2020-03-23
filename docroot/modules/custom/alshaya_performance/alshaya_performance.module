@@ -120,10 +120,10 @@ function alshaya_performance_reset_log_mode() {
  *
  * This function clears frontend caches (css, js and twig) only.
  *
- * @see drupal_flush_all_caches()
- *
- * @param boolean $exclude_twig
+ * @param bool $exclude_twig
  *   If TRUE, twig templates will not be invalidated.
+ *
+ * @see drupal_flush_all_caches()
  */
 function alshaya_performance_flush_frontend_caches($exclude_twig = FALSE) {
   // Frontend data can remain in the rendered bins, so we need to empty them
