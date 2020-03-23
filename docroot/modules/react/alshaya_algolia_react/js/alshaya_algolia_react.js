@@ -206,6 +206,11 @@
       $('.all-filters-algolia').show();
     });
 
+    $(window).once('reset-filter-class').on('hashchange', function() {
+      $('html').removeClass('all-filters-overlay');
+      $('body').removeClass('mobile--overlay');
+    });
+
     // Fake facet apply button to close the `all filter`.
     $('.all-filters-algolia .all-filters-close, .all-filters-algolia .facet-apply-all').once('algolia-search').on('click', function() {
       $('.all-filters-algolia').removeClass('filters-active');
