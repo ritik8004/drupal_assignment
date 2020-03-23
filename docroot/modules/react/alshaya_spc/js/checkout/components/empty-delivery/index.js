@@ -8,7 +8,6 @@ import {
 import { addEditAddressToCustomer } from '../../../utilities/address_util';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
 import ClickCollectContainer from '../click-collect';
-import Ifelse from '../../../common/components/if-else';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -118,34 +117,36 @@ export default class EmptyDeliveryText extends React.Component {
         onClose={this.closeModal}
         closeOnDocumentClick={false}
       >
-        <Ifelse condition={deliveryType === 'cnc'}>
-          <ClickCollectContainer
-            closeModal={this.closeModal}
-            onStoreFetch={updateCoordsAndStoreList}
-          />
-          <React.Suspense fallback={<Loading />}>
-            <AddressContent
+        {deliveryType === 'cnc'
+          ? (
+            <ClickCollectContainer
               closeModal={this.closeModal}
-              cart={cartProp}
-              showEditButton={true}
-              headingText={Drupal.t('delivery information')}
-              processAddress={this.processAddress}
-              type="shipping"
-              showEmail={drupalSettings.user.uid === 0}
-              default_val={defaultVal}
+              onStoreFetch={updateCoordsAndStoreList}
             />
-          </React.Suspense>
-        </Ifelse>
+          )
+          : (
+            <React.Suspense fallback={<Loading />}>
+              <AddressContent
+                closeModal={this.closeModal}
+                cart={cartProp}
+                showEditButton={true}
+                headingText={Drupal.t('delivery information')}
+                processAddress={this.processAddress}
+                type="shipping"
+                showEmail={drupalSettings.user.uid === 0}
+                default_val={defaultVal}
+              />
+            </React.Suspense>
+          )}
       </Popup>
     );
 
     return (
       <div className="spc-empty-delivery-information">
         <div onClick={this.openModal} className="spc-checkout-empty-delivery-text">
-          <Ifelse condition={deliveryType === 'cnc'}>
-            {Drupal.t('select your preferred collection store')}
-            {Drupal.t('please add your contact details and address.')}
-          </Ifelse>
+          {deliveryType === 'cnc'
+            ? Drupal.t('select your preferred collection store')
+            : Drupal.t('please add your contact details and address.')}
         </div>
         {popup}
       </div>
