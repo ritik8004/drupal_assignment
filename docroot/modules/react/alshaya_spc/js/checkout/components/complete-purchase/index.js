@@ -8,6 +8,15 @@ import { dispatchCustomEvent } from '../../../utilities/events';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 
 export default class CompletePurchase extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // We use the state the trigger render again.
+    this.state = {
+      status: false,
+    };
+  }
+
   componentDidMount() {
     document.addEventListener(
       'refreshCompletePurchaseSection',
@@ -25,7 +34,11 @@ export default class CompletePurchase extends React.Component {
   }
 
   refreshCompletePurchaseSection = () => {
-    this.forceUpdate();
+    const { status } = this.state;
+    const currentStatus = this.completePurchaseButtonActive();
+    if (currentStatus !== status) {
+      this.setState({ status: currentStatus });
+    }
   };
 
   /**
@@ -36,11 +49,11 @@ export default class CompletePurchase extends React.Component {
     const { cart, validateBeforePlaceOrder } = this.props;
 
     dispatchCustomEvent('orderPaymentMethod', {
-      payment_method: cart.selected_payment_method,
+      payment_method: cart.cart.cart_payment_method,
     });
 
     // If purchase button is not clickable.
-    if (!this.completePurchaseButtonActive(cart)) {
+    if (!this.completePurchaseButtonActive()) {
       // Scroll to first payment section if error exists there.
       if (document.getElementById('spc-payment-methods') === null
       || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0) {
@@ -56,7 +69,7 @@ export default class CompletePurchase extends React.Component {
         return;
       }
 
-      placeOrder(cart.selected_payment_method);
+      placeOrder(cart.cart.cart_payment_method);
     } catch (error) {
       console.error(error);
     }
@@ -66,7 +79,9 @@ export default class CompletePurchase extends React.Component {
    * To determone whether complete purchase button
    * should be active and clickable or not.
    */
-  completePurchaseButtonActive = (cart) => {
+  completePurchaseButtonActive = () => {
+    const { cart } = this.props;
+
     // If delivery method selected same as what in cart.
     const deliverSameAsInCart = isDeliveryTypeSameAsInCart(cart);
     // If shipping info set in cart or not.
@@ -100,7 +115,7 @@ export default class CompletePurchase extends React.Component {
 
   render() {
     const { cart } = this.props;
-    const className = this.completePurchaseButtonActive(cart)
+    const className = this.completePurchaseButtonActive()
       ? 'active'
       : 'in-active';
 
