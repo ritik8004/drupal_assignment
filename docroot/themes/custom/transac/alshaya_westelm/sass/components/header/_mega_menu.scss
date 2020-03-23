@@ -14,7 +14,8 @@
 
       a.menu--one__link,
       div.menu__link.menu--one__link {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
         height: 2.4rem;
         border-bottom: none;
         border-top: none;
@@ -122,7 +123,8 @@
       a,
       div.menu-two__link {
         @include breakpoint($desktop) {
-          font-size: 0.75rem;
+          font-size: 0.875rem;
+          letter-spacing: 1px;
         }
 
         @include breakpoint($upto-desktop) {
@@ -145,7 +147,8 @@
   .menu--three__list-item > .menu-two__link-wrapper a {
     @include breakpoint($desktop) {
       &.menu__link {
-        font-size: 0.9375rem !important;
+        font-size: 0.8125rem !important;
+        line-height: 1.75;
       }
 
       &:hover {
