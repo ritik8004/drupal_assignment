@@ -222,6 +222,14 @@
   }
 }
 
+html[lang=ar] {
+  .block-alshaya-algolia-react-autocomplete {
+    @include breakpoint($only-mobile) {
+      top: 3.125rem;
+    }
+  }
+}
+
 // frontpage mobile specific styles.
 body {
   &.frontpage {
