@@ -239,7 +239,7 @@ export default class GoogleMap extends React.Component {
     // Add dragend event listener on map to fade the button once map is not
     // showing the current location.
     window.google.maps.event.addListener(map, 'dragend', () => {
-      if(typeof (locationImg) !== 'undefined' && locationImg !== null) {
+      if (typeof (locationImg) !== 'undefined' && locationImg !== null) {
         document.getElementById('you_location_img').style.backgroundPosition = '0px 0px';
       }
     });
@@ -250,7 +250,7 @@ export default class GoogleMap extends React.Component {
       const animationInterval = setInterval(() => {
         let imgX = '0';
         imgX = imgX === '-18' ? '0' : '-18';
-        if(typeof (locationImg) !== 'undefined' && locationImg !== null) {
+        if (typeof (locationImg) !== 'undefined' && locationImg !== null) {
           document.getElementById('you_location_img').style.backgroundPosition = `${imgX}px 0px`;
         }
       }, 500);
@@ -268,7 +268,7 @@ export default class GoogleMap extends React.Component {
           // Stop animation.
           clearInterval(animationInterval);
           // Change icon color.
-          if(typeof (locationImg) !== 'undefined' && locationImg !== null) {
+          if (typeof (locationImg) !== 'undefined' && locationImg !== null) {
             document.getElementById('you_location_img').style.backgroundPosition = '-144px 0px';
           }
         });
@@ -276,7 +276,7 @@ export default class GoogleMap extends React.Component {
         // Stop animation.
         clearInterval(animationInterval);
         // Change icon color to disabled.
-        if(typeof (locationImg) !== 'undefined' && locationImg !== null) {
+        if (typeof (locationImg) !== 'undefined' && locationImg !== null) {
           document.getElementById('you_location_img').style.backgroundPosition = '0px 0px';
         }
       }
@@ -340,7 +340,7 @@ export default class GoogleMap extends React.Component {
     return (
       <div className="spc-google-map">
         <div className="spc-location-g-map-search form-type-textfield">
-          <input placeholder={Drupal.t('Enter a location')} ref={(ref) => (this.autocomplete === ref)} id="searchTextField" type="text" />
+          <input placeholder={Drupal.t('Enter a location')} ref={(ref) => (this.autocomplete = ref)} id="searchTextField" type="text" />
         </div>
         <div id="google-map" ref={this.googleMapRef} style={{ width: '100%', height: '100%' }} />
       </div>
