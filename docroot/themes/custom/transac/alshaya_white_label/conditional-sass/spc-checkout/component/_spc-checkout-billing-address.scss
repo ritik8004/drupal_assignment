@@ -1,4 +1,8 @@
 .spc-section-billing-address {
+  @include breakpoint($tablet) {
+    padding-bottom: 2.5rem;
+  }
+
   .spc-billing-address-wrapper {
     font-size: 0.875rem;
 
@@ -15,7 +19,7 @@
       }
 
       .spc-billing-address-btns {
-        width: 133px;
+        width: 8.3125rem;
         display: inline-flex;
         align-items: center;
 
