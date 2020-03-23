@@ -130,7 +130,7 @@
   });
 
   document.addEventListener('orderPaymentMethod', function (e) {
-    Drupal.alshayaSeoGtmPushCheckoutOption(e.detail.payment_method, 2);
+    Drupal.alshayaSeoGtmPushCheckoutOption(e.detail.payment_method, 3);
   });
 
   /**
@@ -142,7 +142,7 @@
     if (window.location.href.indexOf('checkout') > -1) {
       step = 2;
     }
-    if (cart_data.hasOwnProperty('selected_payment_method')) {
+    if (cart_data.hasOwnProperty('selected_payment_method') && cart_data.selected_payment_method !== null) {
       step = 3;
     }
     return step;
