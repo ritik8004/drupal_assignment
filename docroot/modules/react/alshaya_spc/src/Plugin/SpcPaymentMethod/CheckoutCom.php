@@ -6,6 +6,7 @@ use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -17,6 +18,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactoryPluginInterface {
+
+  use StringTranslationTrait;
 
   /**
    * Checkout.com API Helper.
@@ -95,6 +98,21 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
       : 'alshaya_spc/checkout_live_kit';
 
     $build['#attached']['library'][] = 'alshaya_white_label/secure-text';
+
+    $build['#strings']['invalid_card'] = [
+      'key' => 'invalid_card',
+      'value' => $this->t('Invalid Debit / Credit Card number'),
+    ];
+
+    $build['#strings']['invalid_expiry'] = [
+      'key' => 'invalid_expiry',
+      'value' => $this->t('Incorrect credit card expiration date'),
+    ];
+
+    $build['#strings']['invalid_cvv'] = [
+      'key' => 'invalid_cvv',
+      'value' => $this->t('Invalid security code (CVV)'),
+    ];
   }
 
   /**
