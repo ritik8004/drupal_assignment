@@ -1,0 +1,31 @@
+diff --git a/src/FacetManager/DefaultFacetManager.php b/src/FacetManager/DefaultFacetManager.php
+index 99b8c03..2633357 100644
+--- a/src/FacetManager/DefaultFacetManager.php
++++ b/src/FacetManager/DefaultFacetManager.php
+@@ -237,14 +237,16 @@ class DefaultFacetManager {
+       foreach ($this->facets as $facet) {
+         $processor_configs = $facet->getProcessorConfigs();
+         foreach ($facet->getProcessorsByStage(ProcessorInterface::STAGE_PRE_QUERY) as $processor) {
+-          $processor_config = $processor_configs[$processor->getPluginDefinition()['id']]['settings'];
+-          $processor_config['facet'] = $facet;
+-          /** @var PreQueryProcessorInterface $pre_query_processor */
+-          $pre_query_processor = $this->processorPluginManager->createInstance($processor->getPluginDefinition()['id'], $processor_config);
+-          if (!$pre_query_processor instanceof PreQueryProcessorInterface) {
+-            throw new InvalidProcessorException("The processor {$processor->getPluginDefinition()['id']} has a pre_query definition but doesn't implement the required PreQueryProcessorInterface interface");
++          if (isset($processor_configs[$processor->getPluginDefinition()['id']]['settings'])) {
++            $processor_config = $processor_configs[$processor->getPluginDefinition()['id']]['settings'];
++            $processor_config['facet'] = $facet;
++            /** @var PreQueryProcessorInterface $pre_query_processor */
++            $pre_query_processor = $this->processorPluginManager->createInstance($processor->getPluginDefinition()['id'], $processor_config);
++            if (!$pre_query_processor instanceof PreQueryProcessorInterface) {
++              throw new InvalidProcessorException("The processor {$processor->getPluginDefinition()['id']} has a pre_query definition but doesn't implement the required PreQueryProcessorInterface interface");
++            }
++            $pre_query_processor->preQuery($facet);
+           }
+-          $pre_query_processor->preQuery($facet);
+         }
+       }
+       $this->preparedFacets = TRUE;
+-- 
+2.21.0 (Apple Git-120)
+
