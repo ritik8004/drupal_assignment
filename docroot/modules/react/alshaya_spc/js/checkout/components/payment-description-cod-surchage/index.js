@@ -8,7 +8,7 @@ const CodSurchargePaymentMethodDescription = ({ surcharge }) => {
     const { amount } = surcharge;
 
     const description = getStringMessage('cod_surcharge_short_description');
-    if (description.length == 0) {
+    if (description.length === 0) {
       return '';
     }
 
