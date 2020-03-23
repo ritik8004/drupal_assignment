@@ -37,29 +37,30 @@ export default class CartQuantitySelect extends React.Component {
     const cartData = updateCartItemData('update item', sku, selectedOption.value);
     if (cartData instanceof Promise) {
       cartData.then((result) => {
+        let resultVal = result;
         this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.remove('loading');
         // If error.
-        if (result.error !== undefined
-          && result.error === true) {
-          result = {
+        if (resultVal.error !== undefined
+          && resultVal.error === true) {
+          resultVal = {
             error: true,
             message: {
               type: 'error',
-              message: result.error_message,
+              message: resultVal.error_message,
             },
           };
         }
-        const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => result } });
+        const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => resultVal } });
         document.dispatchEvent(miniCartEvent);
 
-        const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
+        const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => resultVal } });
         document.dispatchEvent(refreshCartEvent);
       });
     }
   };
 
   render() {
-    const { qty, stock, is_disabled } = this.props;
+    const { qty, stock, is_disabled: isDisabled } = this.props;
     const options = this.prepareOptions(stock, qty);
     const qtyClass = stock < qty ? 'invalid' : 'valid';
     return (
@@ -74,7 +75,7 @@ export default class CartQuantitySelect extends React.Component {
         value={options[qty]}
         defaultValue={options[qty]}
         isSearchable={false}
-        isDisabled={is_disabled}
+        isDisabled={isDisabled}
       />
     );
   }
