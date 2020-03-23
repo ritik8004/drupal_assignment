@@ -24,8 +24,18 @@ export default class CnCBillingAddress extends React.Component {
     super(props);
     this.state = {
       open: false,
-      shippingAsBilling: true,
+      shippingAsBilling: isBillingSameAsShippingInStorage(),
     };
+  }
+
+  componentDidMount() {
+    this.isComponentMounted = true;
+    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+  }
+
+  componentWillUnmount() {
+    this.isComponentMounted = false;
+    document.removeEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
   }
 
   showPopup = () => {
@@ -39,16 +49,6 @@ export default class CnCBillingAddress extends React.Component {
       open: false,
     });
   };
-
-  componentDidMount() {
-    this.isComponentMounted = true;
-    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
-  }
-
-  componentWillUnmount() {
-    this.isComponentMounted = false;
-    document.removeEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
-  }
 
   /**
    * Event handler for billing update.
@@ -85,11 +85,6 @@ export default class CnCBillingAddress extends React.Component {
   }
 
   /**
-   * If local storage has biliing shipping set.
-   */
-  isBillingSameAsShippingInStorage = () => isBillingSameAsShippingInStorage();
-
-  /**
    * Message to show when billing is
    * same as shipping.
    */
@@ -97,7 +92,7 @@ export default class CnCBillingAddress extends React.Component {
 
   render() {
     const { cart, refreshCart } = this.props;
-    const { open } = this.state;
+    const { open, shippingAsBilling } = this.state;
 
     // If carrier info not set, means shipping info not set.
     // So we don't need to show bulling.
@@ -115,7 +110,7 @@ export default class CnCBillingAddress extends React.Component {
     }
 
     const shippingAddress = cart.cart.shipping_address;
-    let editAddressData = {
+    const editAddressData = {
       static: {
         fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,
         telephone: shippingAddress.telephone,
@@ -126,7 +121,7 @@ export default class CnCBillingAddress extends React.Component {
     if (!billingAddressAddedByUser) {
       return (
         <div className="spc-section-billing-address cnc-flow">
-          <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
+          <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
           <div className="spc-billing-address-wrapper">
             <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={(e) => this.showPopup(e)}>
               {Drupal.t('please add your billing address.')}
@@ -140,7 +135,7 @@ export default class CnCBillingAddress extends React.Component {
               <React.Suspense fallback={<Loading />}>
                 <AddressContent
                   closeModal={this.closePopup}
-                  cart={this.props.cart}
+                  cart={cart}
                   processAddress={this.processAddress}
                   showEmail={false}
                   showEditButton={false}
@@ -155,17 +150,15 @@ export default class CnCBillingAddress extends React.Component {
       );
     }
 
-    const isShippingBillingSame = this.isBillingSameAsShippingInStorage();
-
     return (
       <div className="spc-section-billing-address cnc-flow">
         <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
             <BillingInfo cart={cart} refreshCart={refreshCart} />
+            {shippingAsBilling
+            && <div className="spc-billing-help-text">{this.sameBillingAsShippingMessage()}</div>}
           </div>
-          {isShippingBillingSame
-            && <div>{this.sameBillingAsShippingMessage()}</div>}
         </div>
       </div>
     );

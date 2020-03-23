@@ -15,7 +15,7 @@ export default class HDBillingAddress extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      shippingAsBilling: this.isBillingSameAsShippingInStorage(),
+      shippingAsBilling: isBillingSameAsShippingInStorage(),
     };
   }
 
@@ -68,11 +68,6 @@ export default class HDBillingAddress extends React.Component {
   };
 
   /**
-   * If local storage has biliing shipping set.
-   */
-  isBillingSameAsShippingInStorage = () => isBillingSameAsShippingInStorage();
-
-  /**
    * Message to show when billing is
    * same as shipping.
    */
@@ -80,6 +75,7 @@ export default class HDBillingAddress extends React.Component {
 
   render() {
     const { cart, refreshCart } = this.props;
+    const { shippingAsBilling } = this.state;
     // If carrier info not set on cart, means shipping is not
     // set. Thus billing is also not set and thus no need to
     // show biiling info.
@@ -97,17 +93,15 @@ export default class HDBillingAddress extends React.Component {
       return (null);
     }
 
-    const isShippingBillingSame = this.isBillingSameAsShippingInStorage();
-
     return (
       <div className="spc-section-billing-address">
-        <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
+        <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
             <BillingInfo cart={cart} refreshCart={refreshCart} />
+            {shippingAsBilling
+            && <div className="spc-billing-help-text">{this.sameBillingAsShippingMessage()}</div>}
           </div>
-          {isShippingBillingSame
-            && <div>{this.sameBillingAsShippingMessage()}</div>}
         </div>
       </div>
     );
