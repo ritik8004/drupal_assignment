@@ -69,7 +69,7 @@ export default class AddressForm extends React.Component {
     });
 
     // Scroll to error.
-    smoothScrollTo('.spc-checkout-section-title');
+    smoothScrollTo('.spc-address-form-sidebar .spc-checkout-section-title');
   };
 
   /**

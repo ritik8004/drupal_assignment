@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
   addShippingInCart,
   removeFullScreenLoader,
-  triggerCheckoutEvent, validateInfo,
+  validateInfo,
 } from './checkout_util';
 import {
   validateAddressFields,
@@ -142,11 +142,10 @@ export const addEditAddressToCustomer = (e) => {
               if (list.error === true) {
                 // Remove loader.
                 removeFullScreenLoader();
-                const eventData = {
+                dispatchCustomEvent('addressPopUpError', {
                   type: 'error',
                   message: list.error_message,
-                };
-                dispatchCustomEvent('addressPopUpError', eventData);
+                });
                 return;
               }
 
@@ -182,10 +181,10 @@ export const addEditAddressToCustomer = (e) => {
                   }
 
                   // Refresh cart.
-                  triggerCheckoutEvent('refreshCartOnAddress', cartData);
+                  dispatchCustomEvent('refreshCartOnAddress', cartData);
 
                   // Close the addresslist popup.
-                  triggerCheckoutEvent('closeAddressListPopup', true);
+                  dispatchCustomEvent('closeAddressListPopup', true);
                 });
               }
             });

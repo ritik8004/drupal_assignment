@@ -12,7 +12,6 @@ import {
   cleanMobileNumber,
   showFullScreenLoader,
   removeFullScreenLoader,
-  triggerCheckoutEvent,
 } from '../../../utilities/checkout_util';
 import {
   prepareAddressDataForShipping,
@@ -21,6 +20,9 @@ import EditAddressSVG from '../edit-address-svg';
 import {
   getInfoFromStorage,
 } from '../../../utilities/storage';
+import {
+  dispatchCustomEvent,
+} from '../../../utilities/events';
 
 export default class AddressItem extends React.Component {
   constructor(props) {
@@ -102,10 +104,10 @@ export default class AddressItem extends React.Component {
         }
 
         // Trigger event to close shipping popups.
-        triggerCheckoutEvent('refreshCartOnAddress', cartData);
+        dispatchCustomEvent('refreshCartOnAddress', cartData);
         if (type === 'billing') {
           // Trigger event to close billing popups.
-          triggerCheckoutEvent('onBillingAddressUpdate', cartData);
+          dispatchCustomEvent('onBillingAddressUpdate', cartData);
         }
       });
     }

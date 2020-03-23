@@ -35,13 +35,13 @@ export default class HDBillingAddress extends React.Component {
    * Event handler for shipping update.
    */
   processShippingUpdate = (e) => {
-    const data = e.detail.data();
+    const data = e.detail;
     // If there is no error and update was fine, means user
     // has added billing address. We set in localstorage.
     if (data.error === undefined) {
       if (data.cart_id !== undefined
         && data.delivery_type === 'hd'
-        && this.isBillingSameAsShippingInStorage()) {
+        && isBillingSameAsShippingInStorage()) {
         localStorage.setItem(localStorageKey, true);
         this.setState({
           shippingAsBilling: true,
@@ -54,7 +54,7 @@ export default class HDBillingAddress extends React.Component {
    * Event handler for billing update.
    */
   processBillingUpdate = (e) => {
-    const data = e.detail.data();
+    const data = e.detail;
     // If there is no error and update was fine, means user
     // has changed the billing address. We set in localstorage.
     if (data.error === undefined) {
