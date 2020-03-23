@@ -280,9 +280,19 @@ header.c-header {
       background: transparent;
       padding-top: 0.5rem;
 
+      @include breakpoint($only-tablet) {
+        html[lang=ar] & {
+          right: 0.4375rem;
+        }
+      }
+
       @include breakpoint($only-mobile) {
         bottom: 0.5625rem;
         #{$left}: 0.3125rem;
+
+        html[lang=ar] & {
+          right: 0.625rem;
+        }
       }
     }
 
