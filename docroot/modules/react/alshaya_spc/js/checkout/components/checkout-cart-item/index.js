@@ -10,11 +10,11 @@ const CheckoutCartItem = (props) => {
     item: {
       id,
       title,
-      relative_link,
-      configurable_values,
+      relative_link: relativeLink,
+      configurable_values: configurableValues,
       extra_data,
-      original_price,
-      final_price,
+      original_price: originalPrice,
+      final_price: finalPrice,
     },
   } = props;
   return (
@@ -27,19 +27,19 @@ const CheckoutCartItem = (props) => {
       <div className="spc-product-meta-data">
         <div className="spc-product-title-price">
           <div className="spc-product-title">
-            <ConditionalView condition={relative_link.length > 0}>
-              <a href={relative_link}>{title}</a>
+            <ConditionalView condition={relativeLink.length > 0}>
+              <a href={relativeLink}>{title}</a>
             </ConditionalView>
-            <ConditionalView condition={relative_link.length === 0}>
+            <ConditionalView condition={relativeLink.length === 0}>
               {title}
             </ConditionalView>
           </div>
           <div className="spc-product-price">
-            <SpecialPrice price={original_price} final_price={final_price} />
+            <SpecialPrice price={originalPrice} final_price={finalPrice} />
           </div>
         </div>
         <div className="spc-product-attributes">
-          { configurable_values.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
+          { configurableValues.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
         </div>
       </div>
     </div>
