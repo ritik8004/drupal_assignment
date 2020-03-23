@@ -186,13 +186,13 @@ export const fillValueInAddressFromGeocode = (address) => {
       if (areaVal !== null) {
         areaParentValue = areaVal;
         // Trigger event.
-        var event = new CustomEvent('updateParentAreaOnMapSelect', {
+        const updateEvent = new CustomEvent('updateParentAreaOnMapSelect', {
           bubbles: true,
           detail: {
             data: () => areaVal,
           },
         });
-        document.dispatchEvent(event);
+        document.dispatchEvent(updateEvent);
       }
     }
   }
@@ -210,10 +210,9 @@ export const fillValueInAddressFromGeocode = (address) => {
         // If area parent field not available, then trigger event.
         if (drupalSettings.address_fields.area_parent === undefined) {
           triggerAreaUpdateEvent = true;
-        }
-        // If parent area field is available and it has value.
-        else if (areaParentValue !== null
+        } else if (areaParentValue !== null
           && areaParentValue.id !== undefined) {
+          // If parent area field is available and it has value.
           // Checking here if the area value we get has same
           // parent as the parent we get for the area_parent.
           const parentValue = getAreaParentId(true, areaVal.label);
@@ -231,13 +230,13 @@ export const fillValueInAddressFromGeocode = (address) => {
 
         if (triggerAreaUpdateEvent) {
           // Trigger event.
-          var event = new CustomEvent('updateAreaOnMapSelect', {
+          const updateArea = new CustomEvent('updateAreaOnMapSelect', {
             bubbles: true,
             detail: {
               data: () => areaVal,
             },
           });
-          document.dispatchEvent(event);
+          document.dispatchEvent(updateArea);
         }
       }
     }

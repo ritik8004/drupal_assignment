@@ -127,7 +127,7 @@ export const prepareAddressDataFromForm = (elements) => {
   };
 
   // Getting dynamic fields data.
-  Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+  Object.entries(drupalSettings.address_fields).forEach(([key]) => {
     address[key] = elements[key].value;
   });
 
@@ -154,8 +154,8 @@ export const checkoutAddressProcess = function (e) {
   const validationData = {
     mobile: e.target.elements.mobile.value,
   };
-
-  if (e.target.elements.email !== undefined && e.target.elements.email.value.toString().length > 0) {
+  const targetElementEmail = e.target.elements.email;
+  if (targetElementEmail !== undefined && targetElementEmail.value.toString().length > 0) {
     validationData.email = e.target.elements.email.value;
   }
 
@@ -248,7 +248,7 @@ export const formatAddressDataForEditForm = (address) => {
   };
 
   Object.entries(drupalSettings.address_fields).forEach(
-    ([key, field]) => {
+    ([, field]) => {
       formattedAddress[field.key] = address[field.key];
     },
   );
@@ -262,6 +262,19 @@ export const formatAddressDataForEditForm = (address) => {
 export const getAddressPopupClassName = () => (drupalSettings.user.uid > 0
   ? 'spc-address-list-member'
   : 'spc-address-form-guest');
+
+/**
+ * Saves customer address added in billing in addressbook.
+ */
+export const saveCustomerAddressFromBilling = (data) => {
+  // If logged in user.
+  if (drupalSettings.user.uid > 0) {
+    // Add/update user address.
+    return addEditUserAddress(data);
+  }
+
+  return Promise.resolve(null);
+};
 
 /**
  * Updates the address info in cart to middleware
@@ -378,17 +391,4 @@ export const processBillingUpdateFromForm = (e, shipping) => {
       console.error(error);
     });
   }
-};
-
-/**
- * Saves customer address added in billing in addressbook.
- */
-export const saveCustomerAddressFromBilling = (data) => {
-  // If logged in user.
-  if (drupalSettings.user.uid > 0) {
-    // Add/update user address.
-    return addEditUserAddress(data);
-  }
-
-  return Promise.resolve(null);
 };
