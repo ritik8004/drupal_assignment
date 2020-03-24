@@ -5,7 +5,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "hubspot/pace": "^1.0",
+        "HubSpot/pace": "^1.0",
         "acquia/acsf-tools": "dev-9.x-dev",
         "acquia/blt": "^9.0.0",
         "acquia/http-hmac-php": "~3.2",
@@ -177,11 +177,11 @@
         "pace": {
             "type": "package",
             "package": {
-                "name": "hubspot/pace",
+                "name": "HubSpot/pace",
                 "version": "1.0.0",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/hubspot/pace/archive/master.zip",
+                    "url": "https://github.com/HubSpot/pace/archive/master.zip",
                     "type": "zip"
                 }
             }

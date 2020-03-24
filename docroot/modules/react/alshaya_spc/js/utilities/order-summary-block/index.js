@@ -2,6 +2,66 @@ import React from 'react';
 import SectionTitle from '../section-title';
 import TotalLineItems from '../total-line-items';
 import CheckoutCartItems from '../../checkout/components/checkout-cart-items';
+import {
+  refreshCartData,
+  showFullScreenLoader,
+  removeFullScreenLoader,
+} from '../checkout_util';
+import {
+  dispatchCustomEvent,
+} from '../events';
+
+/**
+ * Click handler for `continue checkout`.
+ */
+const continueCheckout = (e) => {
+  e.preventDefault();
+  // Show loader.
+  showFullScreenLoader();
+  const cartData = refreshCartData();
+  if (cartData instanceof Promise) {
+    cartData.then((cartResult) => {
+      // Remove loader.
+      removeFullScreenLoader();
+      // If no error.
+      if (cartResult.error === undefined
+        && cartResult.response_message.status !== 'json_error') {
+        const continueCheckoutLink = (drupalSettings.user.uid === 0)
+          ? 'cart/login'
+          : 'checkout';
+
+        // Redirect to next page.
+        window.location.href = Drupal.url(continueCheckoutLink);
+        return;
+      }
+
+      // If error from item validation.
+      if (cartResult.response_message.status === 'json_error') {
+        const errorMessage = JSON.parse(cartResult.response_message.msg);
+        // Calling `mini cart` event to refresh local storage.
+        dispatchCustomEvent('refreshMiniCart', {
+          data: () => cartResult,
+        });
+
+        // Calling refresh cart event so that cart components
+        // are refreshed.
+        dispatchCustomEvent('refreshCart', {
+          data: () => cartResult,
+        });
+
+        // Dispatch event for individual cart item error.
+        dispatchCustomEvent('spcCartItemError', errorMessage);
+        return;
+      }
+
+      // Dispatch event for error to show.
+      dispatchCustomEvent('spcCartMessageUpdate', {
+        type: 'error',
+        message: cartResult.error_message,
+      });
+    });
+  }
+};
 
 const OrderSummaryBlock = (props) => {
   const {
@@ -38,7 +98,13 @@ const OrderSummaryBlock = (props) => {
         && (
         <div className="actions">
           <div className="checkout-link submit">
-            <a href={Drupal.url(continueCheckoutLink)} className="checkout-link">{Drupal.t('continue to checkout')}</a>
+            <a
+              onClick={(e) => continueCheckout(e)}
+              href={Drupal.url(continueCheckoutLink)}
+              className="checkout-link"
+            >
+              {Drupal.t('continue to checkout')}
+            </a>
           </div>
         </div>
         )}

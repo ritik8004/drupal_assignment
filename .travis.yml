@@ -1,36 +1,35 @@
 # Note that the example .travis.yml file for child projects lives in /install.
 # Temporarily use legacy infrastructure until Travis resolves MySQL issues with their containerized infrastructure.
 # @see https://github.com/travis-ci/travis-ci/issues/6842
+sudo: required
 language: php
 dist: trusty
-os: linux
-version: ~> 1.0
 
-jobs:
+matrix:
   fast_finish: true
   include:
-    - php: 7.2
-      env:
-        - INSTALL_TYPE=install
-        - PROFILE=alshaya_transac
-      if: type IN (pull_request, cron)
-    - php: 7.2
-      env:
-        - INSTALL_TYPE=install
-        - PROFILE=alshaya_non_transac
-      if: type IN (pull_request, cron)
-    #- php: 7.2
-    #  env:
-    #  - INSTALL_TYPE=update
-    #  - PROFILE=alshaya_transac
-    #  if: type = pull_request
-    #- php: 7.2
-    #  env:
-    #  - INSTALL_TYPE=update
-    #  - PROFILE=alshaya_non_transac
-    #  if: type = pull_request
-    - php: 7.2
-      if: type = push
+  - php: 7.2
+    env:
+      - INSTALL_TYPE=install
+      - PROFILE=alshaya_transac
+    if: type IN (pull_request, cron)
+  - php: 7.2
+    env:
+      - INSTALL_TYPE=install
+      - PROFILE=alshaya_non_transac
+    if: type IN (pull_request, cron)
+  #- php: 7.2
+  #  env:
+  #  - INSTALL_TYPE=update
+  #  - PROFILE=alshaya_transac
+  #  if: type = pull_request
+  #- php: 7.2
+  #  env:
+  #  - INSTALL_TYPE=update
+  #  - PROFILE=alshaya_non_transac
+  #  if: type = pull_request
+  - php: 7.2
+    if: type = push
 
 env:
   global:
@@ -45,18 +44,25 @@ cache:
   bundler: true
   apt: true
   directories:
-    - "$HOME/.composer/cache"
-    - "$HOME/.drush/cache"
-    - "$HOME/.npm"
-    - "$HOME/.nvm"
-    - "docroot/themes/custom/amp/node_modules"
-    - "docroot/themes/custom/non_transac/node_modules"
-    - "docroot/themes/custom/transac/node_modules"
+  - "$HOME/.composer/cache"
+  - "$HOME/.drush/cache"
+  - "$HOME/.npm"
+  - "$HOME/.nvm"
+  - "vendor"
+  - "docroot/middleware/vendor"
+  - "docroot/modules/contrib"
+  - "docroot/themes/contrib"
+  - "docroot/profiles/contrib"
+  - "docroot/core"
+  - "docroot/libraries"
+  - "docroot/themes/custom/amp/node_modules"
+  - "docroot/themes/custom/non_transac/node_modules"
+  - "docroot/themes/custom/transac/node_modules"
 
 addons:
   ssh_known_hosts:
-    - svn-6182.devcloud.hosting.acquia.com
-    - svn-25.enterprise-g1.hosting.acquia.com
+  - svn-6182.devcloud.hosting.acquia.com
+  - svn-25.enterprise-g1.hosting.acquia.com
 
 # @see https://docs.travis-ci.com/user/notifications
 notifications:
@@ -69,7 +75,7 @@ before_install:
   - composer self-update
   - git config --global github.accesstoken "${GITHUB_OAUTH_TOKEN}"
   - composer validate --no-check-all --ansi
-  # - source ${BUILD_DIR}/blt/scripts/delete_composer_caches "${BUILD_DIR}"
+  - source ${BUILD_DIR}/blt/scripts/delete_composer_caches "${BUILD_DIR}"
   - composer install --no-interaction
   # Build middleware.
   - source ${BUILD_DIR}/blt/scripts/middleware-build.sh "${BUILD_DIR}/docroot/middleware"
