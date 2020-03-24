@@ -65,10 +65,11 @@ class PaymentMethodCybersource extends React.Component {
     removeFullScreenLoader();
   };
 
-  handleCardNumberChange = (event) => {
+  handleCardNumberChange = (event, handler) => {
     const { numberValid: prevNumberValid } = this.state;
     let valid = true;
     const type = document.getElementById('spc-cy-payment-card-type').value;
+    this.labelEffect(event, handler);
 
     if (this.acceptedCards.indexOf(type) === -1) {
       valid = false;
@@ -98,9 +99,10 @@ class PaymentMethodCybersource extends React.Component {
     document.getElementById('spc-cy-payment-card-type').value = type;
   };
 
-  handleCardExpiryChange = (event) => {
+  handleCardExpiryChange = (event, handler) => {
     const { expiryValid: prevExpiryValid } = this.state;
     let valid = true;
+    this.labelEffect(event, handler);
     const dateParts = event.target.value.split('/').map((x) => {
       if (!(x) || Number.isNaN(Number(x))) {
         return 0;
@@ -137,10 +139,10 @@ class PaymentMethodCybersource extends React.Component {
     }
   };
 
-  handleCardCvvChange = (event) => {
+  handleCardCvvChange = (event, handler) => {
     const cvv = parseInt(event.target.value, 10);
     const valid = (cvv >= 100 && cvv <= 9999);
-
+    this.labelEffect(event, handler);
     handleValidationMessage(
       'spc-cy-cc-cvv-error',
       event.target.value,
@@ -256,8 +258,7 @@ class PaymentMethodCybersource extends React.Component {
                 creditCard: true,
                 onCreditCardTypeChanged: this.handleCardTypeChanged,
               }}
-              onChange={this.handleCardNumberChange}
-              onBlur={(e) => this.labelEffect(e, 'blur')}
+              onBlur={(e) => this.handleCardNumberChange(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('card number')}</label>
@@ -272,8 +273,7 @@ class PaymentMethodCybersource extends React.Component {
                 datePattern: ['m', 'y'],
                 delimiter: '/',
               }}
-              onChange={this.handleCardExpiryChange}
-              onBlur={(e) => this.labelEffect(e, 'blur')}
+              onBlur={(e) => this.handleCardExpiryChange(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('expiry')}</label>
@@ -286,8 +286,7 @@ class PaymentMethodCybersource extends React.Component {
               ref={this.ccCvv}
               pattern="\d{3,4}"
               required
-              onChange={this.handleCardCvvChange}
-              onBlur={(e) => this.labelEffect(e, 'blur')}
+              onBlur={(e) => this.handleCardCvvChange(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('CVV')}</label>

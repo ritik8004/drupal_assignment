@@ -62,11 +62,13 @@ class PaymentMethodCheckoutCom extends React.Component {
     }
   };
 
-  handleCardCvvChange = (event) => {
+  handleCardCvvChange = (event, handler) => {
     if (window.CheckoutKit === undefined) {
       console.error('CheckoutKit not available');
       return;
     }
+
+    this.labelEffect(event, handler);
 
     const cvv = parseInt(event.target.value, 10);
     const valid = (cvv >= 100 && cvv <= 9999);

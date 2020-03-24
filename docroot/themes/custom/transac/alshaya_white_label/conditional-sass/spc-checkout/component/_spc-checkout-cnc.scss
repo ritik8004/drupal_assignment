@@ -21,6 +21,7 @@
       @include breakpoint($only-mobile) {
         position: fixed;
         top: 0;
+        z-index: 2;
 
         + .close {
           position: fixed;
