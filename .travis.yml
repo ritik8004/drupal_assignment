@@ -75,7 +75,7 @@ before_install:
   - git config --global github.accesstoken "${GITHUB_OAUTH_TOKEN}"
   - composer validate --no-check-all --ansi
   - source ${BUILD_DIR}/blt/scripts/delete_composer_caches "${BUILD_DIR}"
-  - composer install --no-interaction && composer install --no-interaction && composer install --no-interaction && composer install --no-interaction
+  - composer install --no-interaction || composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
   # Exit build early if only documentation was changed in a Pull Request.
   - source ${BLT_DIR}/scripts/travis/exit_early
 
