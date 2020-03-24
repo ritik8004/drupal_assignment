@@ -71,6 +71,10 @@
   if (redirect && mapping.hasOwnProperty(user_location)) {
     var alternate_url = mapping[user_location];
 
+    // Add path and any query params.
+    alternate_url += '/' + window.location.pathname;
+    alternate_url += window.location.search;
+
     // Perform the redirect.
     window.location = alternate_url;
   }
