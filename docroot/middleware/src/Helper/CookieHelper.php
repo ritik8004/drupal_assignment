@@ -32,7 +32,7 @@ class CookieHelper {
       '/',
       NULL,
       TRUE,
-      TRUE,
+      FALSE,
       FALSE,
       Cookie::SAMESITE_NONE
     );
