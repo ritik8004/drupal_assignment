@@ -58,7 +58,7 @@ export default class PaymentMethod extends React.Component {
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
         const { cart } = this.props;
-        placeOrder(cart.selected_payment_method);
+        placeOrder(cart.cart.cart_payment_method);
         removeStorageInfo('spc_selected_card');
         removeStorageInfo('billing_shipping_same');
       } else if (result.success === undefined || !(result.success)) {

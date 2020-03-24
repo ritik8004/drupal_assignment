@@ -1,6 +1,5 @@
 import React from 'react';
 import _isEmpty from 'lodash/isEmpty';
-import Cookies from 'js-cookie';
 import ClicknCollectContextProvider from '../../../context/ClicknCollect';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import EmptyResult from '../../../utilities/empty-result';
@@ -25,13 +24,13 @@ import PaymentMethods from '../payment-methods';
 import CheckoutMessage from '../../../utilities/checkout-message';
 import TermsConditions from '../terms-conditions';
 import {
-  getLocationAccess, getDefaultMapCenter,
+  getLocationAccess,
+  getDefaultMapCenter,
   removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import { createFetcher } from '../../../utilities/api/fetcher';
 import ConditionalView from '../../../common/components/conditional-view';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
-import getStringMessage from '../../../utilities/strings';
 import VatFooterText from '../../../utilities/vat-footer';
 
 window.fetchStore = 'idle';
@@ -93,16 +92,6 @@ export default class Checkout extends React.Component {
     // Make sidebar sticky.
     stickySidebar();
 
-    const paymentError = Cookies.get('middleware_payment_error');
-    if (paymentError !== undefined && paymentError !== null && paymentError.length > 0) {
-      Cookies.remove('middleware_payment_error');
-      const message = (paymentError === 'declined')
-        ? getStringMessage('transaction_failed')
-        : getStringMessage('payment_error');
-
-      this.updateCheckoutMessage('error', message);
-    }
-
     document.addEventListener('spcCheckoutMessageUpdate', this.handleMessageUpdateEvent, false);
   }
 
@@ -117,7 +106,7 @@ export default class Checkout extends React.Component {
 
   updateCheckoutMessage = (type, message) => {
     this.setState({ messageType: type, errorSuccessMessage: message });
-    smoothScrollTo('.spc-messages-container');
+    smoothScrollTo('.spc-content');
   };
 
   /**
@@ -130,10 +119,14 @@ export default class Checkout extends React.Component {
     // If there is error on cart update.
     if (cart.error_message !== undefined) {
       this.updateCheckoutMessage('error', cart.error_message);
-    } else {
-      addInfoInStorage(cart);
-      this.setState({ cart });
+      return;
     }
+
+    // Reset error message.
+    this.updateCheckoutMessage('', '');
+
+    addInfoInStorage(cart);
+    this.setState({ cart });
   };
 
   /**
@@ -245,7 +238,7 @@ export default class Checkout extends React.Component {
           <div className="spc-content">
             {errorSuccessMessage !== null
               && (
-              <CheckoutMessage type={messageType}>
+              <CheckoutMessage type={messageType} context="checkout">
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}

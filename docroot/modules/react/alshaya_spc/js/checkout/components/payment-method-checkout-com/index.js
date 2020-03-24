@@ -30,9 +30,13 @@ class PaymentMethodCheckoutCom extends React.Component {
     }
 
     this.updateCurrentContext({
-      cvvValid: !(activeCard.mada === true || drupalSettings.checkoutCom.Enforce3d === true),
+      cvvValid: !(activeCard.mada === true || drupalSettings.checkoutCom.enforce3d === true),
     });
 
+    dispatchCustomEvent('refreshCompletePurchaseSection', {});
+  }
+
+  componentDidUpdate() {
     dispatchCustomEvent('refreshCompletePurchaseSection', {});
   }
 
@@ -58,11 +62,13 @@ class PaymentMethodCheckoutCom extends React.Component {
     }
   };
 
-  handleCardCvvChange = (event) => {
+  handleCardCvvChange = (event, handler) => {
     if (window.CheckoutKit === undefined) {
       console.error('CheckoutKit not available');
       return;
     }
+
+    this.labelEffect(event, handler);
 
     const cvv = parseInt(event.target.value, 10);
     const valid = (cvv >= 100 && cvv <= 9999);
@@ -158,7 +164,7 @@ class PaymentMethodCheckoutCom extends React.Component {
   };
 
   onExistingCardSelect = (cardHash, madaCard) => {
-    const cvvValid = !(madaCard === true || drupalSettings.checkoutCom.Enforce3d === true);
+    const cvvValid = !(madaCard === true || drupalSettings.checkoutCom.enforce3d === true);
 
     this.closeSavedCardListModal();
     this.updateCurrentContext({
@@ -174,19 +180,19 @@ class PaymentMethodCheckoutCom extends React.Component {
     if (({}).hasOwnProperty.call(obj, 'selectedCard')) {
       setStorageInfo(obj.selectedCard === 'new' ? 'new' : obj.tokenizedCard, 'spc_selected_card');
     }
+
+    dispatchCustomEvent('refreshCompletePurchaseSection', {});
   };
 
   changeCurrentCard = (type) => {
     this.updateCurrentContext({
       selectedCard: type,
     });
-    dispatchCustomEvent('refreshCompletePurchaseSection', {});
   };
 
   openNewCard = () => {
     this.closeSavedCardListModal();
     this.changeCurrentCard('new');
-    dispatchCustomEvent('refreshCompletePurchaseSection', {});
   };
 
   render() {

@@ -57,13 +57,15 @@ class TextField extends React.Component {
       return (
         <div className="spc-type-tel">
           <label>{label}</label>
-          <span className="country-code">{`+${countryMobileCode}`}</span>
-          <input
-            maxLength={countryMobileCodeMaxLength}
-            type="text"
-            name={name}
-            defaultValue={defaultValue}
-          />
+          <div className="field-wrapper">
+            <span className="country-code">{`+${countryMobileCode}`}</span>
+            <input
+              maxLength={countryMobileCodeMaxLength}
+              type="text"
+              name={name}
+              defaultValue={defaultValue}
+            />
+          </div>
           <div className="c-input__bar" />
           <div id={`${name}-error`} className="error" />
         </div>

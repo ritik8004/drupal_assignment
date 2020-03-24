@@ -28,6 +28,12 @@
         padding-#{$left}: 2.9375rem;
         padding-#{$right}: 1.25rem;
         color: $spc-cnc-store-item-text;
+
+        .store-address {
+          div {
+            display: inline-block;
+          }
+        }
       }
 
       .store-delivery-time {

@@ -24,6 +24,9 @@ import {
   isFullScreen,
   exitFullscreen,
 } from '../../../utilities/map/fullScreen';
+import {
+  smoothScrollTo,
+} from '../../../utilities/smoothScroll';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -43,6 +46,8 @@ class ClickCollect extends React.Component {
     this.state = {
       openSelectedStore: openSelectedStore || false,
       mapFullScreen: false,
+      errorSuccessMessage: null,
+      messageType: null,
     };
   }
 
@@ -83,11 +88,28 @@ class ClickCollect extends React.Component {
     }
     // On marker click.
     document.addEventListener('markerClick', this.mapMarkerClick);
+
+    // Handle error on popup.
+    document.addEventListener('addressPopUpError', this.handleAddressPopUpError, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('markerClick', this.mapMarkerClick);
+    document.removeEventListener('addressPopUpError', this.handleAddressPopUpError, false);
   }
+
+  /**
+   * Show error on popup.
+   */
+  handleAddressPopUpError = (e) => {
+    const { type, message } = e.detail;
+    this.setState({
+      messageType: type,
+      errorSuccessMessage: message,
+    });
+    // Scroll to error.
+    smoothScrollTo('.spc-cnc-selected-store-header .spc-checkout-section-title');
+  };
 
   mapMarkerClick = (e) => {
     const index = e.detail.markerSettings.zIndex - 1;
@@ -269,6 +291,8 @@ class ClickCollect extends React.Component {
     const { selectedStore, storeList } = this.context;
     this.setState({
       openSelectedStore: false,
+      messageType: null,
+      errorSuccessMessage: null,
     });
     this.selectStoreButtonVisibility(true);
     this.openMarkerOfStore(selectedStore.code, storeList);
@@ -361,7 +385,12 @@ class ClickCollect extends React.Component {
 
   render() {
     const { coords, storeList, selectedStore } = this.context;
-    const { openSelectedStore, mapFullScreen } = this.state;
+    const {
+      openSelectedStore,
+      mapFullScreen,
+      messageType,
+      errorSuccessMessage,
+    } = this.state;
     const { closeModal } = this.props;
 
     if (window.fetchStore !== 'finished') {
@@ -445,6 +474,8 @@ class ClickCollect extends React.Component {
             store={selectedStore}
             open={openSelectedStore}
             closePanel={this.closeSelectedStorePanel}
+            messageType={messageType}
+            errorSuccessMessage={errorSuccessMessage}
           />
         </div>
       </div>

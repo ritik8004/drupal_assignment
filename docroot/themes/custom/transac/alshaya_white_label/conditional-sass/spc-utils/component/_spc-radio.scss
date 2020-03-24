@@ -38,3 +38,25 @@ input[type=radio] {
     }
   }
 }
+
+.payment-method.payment-method-checkout_com {
+  .payment-method-bottom-panel {
+    .spc-checkout-card-option {
+      @include icon(radio-empty, before) {
+        position: absolute;
+        #{$left}: -1rem;
+        font-size: 1.125rem;
+        width: 3rem;
+        text-align: center;
+        color: $spc-checkout-radio-empty;
+        pointer-events: none;
+      }
+
+      &.selected {
+        @include icon(radio-filled, before) {
+          color: $spc-checkout-radio-filled;
+        }
+      }
+    }
+  }
+}

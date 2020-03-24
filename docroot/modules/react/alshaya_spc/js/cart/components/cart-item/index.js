@@ -3,6 +3,7 @@ import React from 'react';
 import CheckoutConfigurableOption from '../../../utilities/checkout-configurable-option';
 import CartPromotion from '../cart-promotion';
 import CartItemOOS from '../cart-item-oos';
+import CartItemError from '../cart-item-error';
 import ItemLowQuantity from '../item-low-quantity';
 import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CartQuantitySelect from '../cart-quantity-select';
@@ -10,6 +11,38 @@ import { updateCartItemData } from '../../../utilities/update_cart';
 import SpecialPrice from '../../../utilities/special-price';
 
 export default class CartItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemError: false,
+      errorMessage: null,
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener('spcCartItemError', this.handleCartItemError, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('spcCartItemError', this.handleCartItemError, false);
+  }
+
+  /**
+   * Handle and show error on continue cart action.
+   */
+  handleCartItemError = (e) => {
+    const { item: { sku } } = this.props;
+    const errorMessage = e.detail;
+    if (errorMessage !== null
+      && errorMessage !== undefined
+      && errorMessage[sku] !== undefined) {
+      this.setState({
+        isItemError: true,
+        errorMessage: errorMessage[sku],
+      });
+    }
+  };
+
   /**
    * Remove item from the cart.
    */
@@ -54,7 +87,7 @@ export default class CartItem extends React.Component {
         original_price: originalPrice,
         configurable_values: configurableValues,
         promotions,
-        extra_data,
+        extra_data: extraData,
         sku,
         id,
         final_price: finalPrice,
@@ -62,11 +95,13 @@ export default class CartItem extends React.Component {
       },
     } = this.props;
 
+    const { isItemError, errorMessage } = this.state;
+
     return (
       <div className="spc-cart-item">
         <div className="spc-product-tile">
           <div className="spc-product-image">
-            <CheckoutItemImage img_data={extra_data.cart_image} />
+            <CheckoutItemImage img_data={extraData.cart_image} />
           </div>
           <div className="spc-product-container">
             <div className="spc-product-title-price">
@@ -101,6 +136,9 @@ export default class CartItem extends React.Component {
         </div>
         <CartItemOOS inStock={inStock} />
         <ItemLowQuantity stock={stock} qty={qty} in_stock={inStock} />
+        {/* @Todo: Show OOS only once. */}
+        {isItemError
+          && <CartItemError errorMessage={errorMessage} />}
       </div>
     );
   }

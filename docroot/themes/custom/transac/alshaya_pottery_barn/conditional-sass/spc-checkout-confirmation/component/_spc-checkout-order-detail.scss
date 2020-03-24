@@ -14,6 +14,21 @@
       }
     }
 
+    &.spc-order-summary-markup-item {
+      .spc-value {
+        .banktransfer__details {
+          > div {
+            > span {
+              &:first-child {
+                font-weight: 600;
+                text-transform: capitalize;
+              }
+            }
+          }
+        }
+      }
+    }
+
     .spc-label {
       text-transform: capitalize;
     }

@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
   addShippingInCart,
   removeFullScreenLoader,
-  triggerCheckoutEvent, validateInfo,
+  validateInfo,
 } from './checkout_util';
 import {
   validateAddressFields,
@@ -13,6 +13,9 @@ import {
   getInfoFromStorage,
 } from './storage';
 import getStringMessage from './strings';
+import {
+  dispatchCustomEvent,
+} from './events';
 
 /**
  * Get the address list of the current logged in user.
@@ -139,10 +142,10 @@ export const addEditAddressToCustomer = (e) => {
               if (list.error === true) {
                 // Remove loader.
                 removeFullScreenLoader();
-                const eventData = {
-                  error_message: list.error_message,
-                };
-                triggerCheckoutEvent('refreshCartOnAddress', eventData);
+                dispatchCustomEvent('addressPopUpError', {
+                  type: 'error',
+                  message: list.error_message,
+                });
                 return;
               }
 
@@ -167,19 +170,21 @@ export const addEditAddressToCustomer = (e) => {
 
                   // If error, no need to process.
                   if (cartResult.error !== undefined) {
-                    cartData = {
-                      error_message: cartResult.error_message,
-                    };
-                  } else {
-                    cartData = getInfoFromStorage();
-                    cartData.cart = cartResult;
+                    dispatchCustomEvent('addressPopUpError', {
+                      type: 'error',
+                      message: cartResult.error_message,
+                    });
+                    return;
                   }
 
+                  cartData = getInfoFromStorage();
+                  cartData.cart = cartResult;
+
                   // Refresh cart.
-                  triggerCheckoutEvent('refreshCartOnAddress', cartData);
+                  dispatchCustomEvent('refreshCartOnAddress', cartData);
 
                   // Close the addresslist popup.
-                  triggerCheckoutEvent('closeAddressListPopup', true);
+                  dispatchCustomEvent('closeAddressListPopup', true);
                 });
               }
             });

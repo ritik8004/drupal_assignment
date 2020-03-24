@@ -35,13 +35,13 @@ export default class HDBillingAddress extends React.Component {
    * Event handler for shipping update.
    */
   processShippingUpdate = (e) => {
-    const data = e.detail.data();
+    const data = e.detail;
     // If there is no error and update was fine, means user
     // has added billing address. We set in localstorage.
     if (data.error === undefined) {
       if (data.cart_id !== undefined
         && data.delivery_type === 'hd'
-        && this.isBillingSameAsShippingInStorage()) {
+        && isBillingSameAsShippingInStorage()) {
         localStorage.setItem(localStorageKey, true);
         this.setState({
           shippingAsBilling: true,
@@ -54,7 +54,7 @@ export default class HDBillingAddress extends React.Component {
    * Event handler for billing update.
    */
   processBillingUpdate = (e) => {
-    const data = e.detail.data();
+    const data = e.detail;
     // If there is no error and update was fine, means user
     // has changed the billing address. We set in localstorage.
     if (data.error === undefined) {
@@ -78,7 +78,7 @@ export default class HDBillingAddress extends React.Component {
     const { shippingAsBilling } = this.state;
     // If carrier info not set on cart, means shipping is not
     // set. Thus billing is also not set and thus no need to
-    // show biiling info.
+    // show billing info.
     if (cart.cart.carrier_info === undefined
       || cart.cart.carrier_info === null
       || cart.cart.billing_address === null
@@ -88,8 +88,8 @@ export default class HDBillingAddress extends React.Component {
 
     // No need to show the billing address change for the
     // COD payment method.
-    if (cart.selected_payment_method === undefined
-      || cart.selected_payment_method === 'cashondelivery') {
+    if (cart.cart.cart_payment_method === undefined
+      || cart.cart.cart_payment_method === 'cashondelivery') {
       return (null);
     }
 

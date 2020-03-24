@@ -120,6 +120,7 @@
         margin-bottom: 0;
         margin-#{$right}: 0.625rem;
         white-space: normal;
+        min-height: 9.625rem;
 
         &:last-child {
           margin-#{$right}: 0;
