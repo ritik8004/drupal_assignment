@@ -11,7 +11,8 @@ const MobileCartPreview = (props) => {
   } = props;
   const totalText = freeDelivery
     ? Drupal.t('Total')
-    : Drupal.t('Total (excluding delivery)');
+    : `${Drupal.t('Total')} (${Drupal.t('excluding delivery')}`;
+    // : Drupal.t('Total') + '(' + Drupal.t('excluding delivery') + ')';
 
   return (
     <>
