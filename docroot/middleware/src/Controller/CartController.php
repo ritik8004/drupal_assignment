@@ -661,7 +661,6 @@ class CartController {
       return new JsonResponse($response);
     }
 
-    $this->cart->cancelCartReservation($result['error_message']);
     return new JsonResponse($result);
   }
 
