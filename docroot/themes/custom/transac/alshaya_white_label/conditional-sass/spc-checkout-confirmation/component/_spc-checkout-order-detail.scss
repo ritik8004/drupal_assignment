@@ -30,6 +30,30 @@
         }
       }
     }
+
+    &.spc-order-summary-markup-item {
+      .spc-value {
+        .banktransfer__details {
+          max-width: 15.125rem;
+
+          > div {
+            text-align: $right;
+            margin-bottom: 0.625rem;
+
+            > span {
+              display: block;
+
+              &:first-child {
+                color: $spc-checkout-order-detail-label;
+                padding-right: 0.3125rem;
+                font-family: $alshaya-bold;
+                font-weight: normal;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   .spc-order-summary-item:last-child {

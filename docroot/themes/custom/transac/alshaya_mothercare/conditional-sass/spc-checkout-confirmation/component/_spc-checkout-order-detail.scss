@@ -1,27 +1,17 @@
 .spc-order-summary-order-preview,
 .spc-order-summary-order-detail {
   > label {
-    text-transform: capitalize;
+    text-transform: lowercase;
   }
 
   .spc-order-summary-item {
-    &.spc-order-summary-address-item {
-      .spc-value {
-        .spc-address-name {
-          font-weight: 600;
-          text-transform: capitalize;
-        }
-      }
-    }
-
     &.spc-order-summary-markup-item {
       .spc-value {
         .banktransfer__details {
           > div {
             > span {
               &:first-child {
-                font-weight: 600;
-                text-transform: capitalize;
+                text-transform: lowercase;
               }
             }
           }
@@ -30,7 +20,7 @@
     }
 
     .spc-label {
-      text-transform: capitalize;
+      text-transform: lowercase;
     }
   }
 }

@@ -23,7 +23,7 @@ const OrderSummaryItem = (props) => {
 
   if (type === 'markup') {
     return (
-      <div className="spc-order-summary-item">
+      <div className="spc-order-summary-item spc-order-summary-markup-item">
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value">{parse(value)}</span>
       </div>
