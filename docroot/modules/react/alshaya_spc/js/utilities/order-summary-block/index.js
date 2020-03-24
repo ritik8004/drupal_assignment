@@ -25,7 +25,7 @@ const continueCheckout = (e) => {
       removeFullScreenLoader();
       // If no error.
       if (cartResult.error === undefined
-        || cartResult.response_message.status !== 'json_error') {
+        && cartResult.response_message.status !== 'json_error') {
         const continueCheckoutLink = (drupalSettings.user.uid === 0)
           ? 'cart/login'
           : 'checkout';
@@ -35,14 +35,29 @@ const continueCheckout = (e) => {
         return;
       }
 
-      const errorMessage = (cartResult.response_message.status === 'json_error')
-        ? cartResult.response_message.msg
-        : cartResult.error_message;
+      // If error from item validation.
+      if (cartResult.response_message.status === 'json_error') {
+        const errorMessage = JSON.parse(cartResult.response_message.msg);
+        // Calling `mini cart` event to refresh local storage.
+        dispatchCustomEvent('refreshMiniCart', {
+          data: () => cartResult,
+        });
 
-      // Dispatch event for error show.
+        // Calling refresh cart event so that cart components
+        // are refreshed.
+        dispatchCustomEvent('refreshCart', {
+          data: () => cartResult,
+        });
+
+        // Dispatch event for individual cart item error.
+        dispatchCustomEvent('spcCartItemError', errorMessage);
+        return;
+      }
+
+      // Dispatch event for error to show.
       dispatchCustomEvent('spcCartMessageUpdate', {
         type: 'error',
-        message: errorMessage,
+        message: cartResult.error_message,
       });
     });
   }

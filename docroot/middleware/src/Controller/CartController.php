@@ -312,6 +312,14 @@ class CartController {
     // Whether CnC enabled or not.
     $data['cnc_enabled'] = TRUE;
 
+    // This is to maintain error message at item level when cart is refreshed.
+    $json_error_message_list = [];
+    if (!empty($cart_data['response_message'])
+      && !empty($cart_data['response_message'][0])
+      && $cart_data['response_message'][1] === 'json_error') {
+      $json_error_message_list = json_decode($cart_data['response_message'][0], TRUE);
+    }
+
     $sku_items = array_column($cart_data['cart']['items'], 'sku');
     $items_quantity = array_column($cart_data['cart']['items'], 'qty', 'sku');
     $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
@@ -320,6 +328,11 @@ class CartController {
       foreach ($data['items'] as $key => $value) {
         if (isset($items_quantity[$key])) {
           $data['items'][$key]['qty'] = $items_quantity[$key];
+        }
+
+        if (!empty($json_error_message_list)
+          && isset($json_error_message_list[$key])) {
+          $data['items'][$key]['errorMessage'] = $json_error_message_list[$key];
         }
 
         // If CnC is disabled for any item, we don't process and consider
