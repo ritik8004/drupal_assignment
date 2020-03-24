@@ -55,7 +55,7 @@ export default class CnCBillingAddress extends React.Component {
    */
   processBillingUpdate = (e) => {
     if (this.isComponentMounted) {
-      const data = e.detail.data();
+      const data = e.detail;
       const { refreshCart } = this.props;
 
       // If there is no error and update was fine, means user

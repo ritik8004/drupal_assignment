@@ -2,7 +2,6 @@ import {
   addShippingInCart,
   removeFullScreenLoader,
   showFullScreenLoader,
-  triggerCheckoutEvent,
   addBillingInCart, validateInfo, cleanMobileNumber,
 } from './checkout_util';
 import {
@@ -15,6 +14,9 @@ import {
 import {
   getInfoFromStorage,
 } from './storage';
+import {
+  dispatchCustomEvent,
+} from './events';
 
 /**
  * Validate contact information.
@@ -215,16 +217,18 @@ export const checkoutAddressProcess = function (e) {
         let cartData = {};
         // If any error, don't process further.
         if (cartResult.error !== undefined) {
-          cartData = {
-            error_message: cartResult.error_message,
-          };
-        } else {
-          cartData = getInfoFromStorage();
-          cartData.cart = cartResult;
+          dispatchCustomEvent('addressPopUpError', {
+            type: 'error',
+            message: cartResult.error_message,
+          });
+          return;
         }
 
+        cartData = getInfoFromStorage();
+        cartData.cart = cartResult;
+
         // Trigger event.
-        triggerCheckoutEvent('refreshCartOnAddress', cartData);
+        dispatchCustomEvent('refreshCartOnAddress', cartData);
       });
     }
   }).catch((error) => {
@@ -342,11 +346,10 @@ export const processBillingUpdateFromForm = (e, shipping) => {
               if (list !== null) {
                 if (list.error === true) {
                   removeFullScreenLoader();
-                  const eventData = {
-                    error: true,
-                    error_message: list.error_message,
-                  };
-                  triggerCheckoutEvent('onBillingAddressUpdate', eventData);
+                  dispatchCustomEvent('addressPopUpError', {
+                    type: 'error',
+                    message: list.error_message,
+                  });
                   return;
                 }
 
@@ -363,24 +366,24 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                     cart: cartResult,
                   };
 
-                  // If error.
-                  if (cartResult.error !== undefined) {
-                    // In case of error, prepare error info
-                    // and call refresh cart so that message is shown.
-                    cartInfo = {
-                      error_message: cartResult.error_message,
-                    };
-                  } else {
-                    // Merging with existing local.
-                    cartInfo = getInfoFromStorage();
-                    cartInfo.cart = cartResult;
-                  }
-
-                  // Trigger the event for updte.
-                  triggerCheckoutEvent('onBillingAddressUpdate', cartInfo);
-
                   // Remove loader.
                   removeFullScreenLoader();
+
+                  // If error.
+                  if (cartResult.error !== undefined) {
+                    dispatchCustomEvent('addressPopUpError', {
+                      type: 'error',
+                      message: cartResult.error_message,
+                    });
+                    return;
+                  }
+
+                  // Merging with existing local.
+                  cartInfo = getInfoFromStorage();
+                  cartInfo.cart = cartResult;
+
+                  // Trigger the event for update.
+                  dispatchCustomEvent('onBillingAddressUpdate', cartInfo);
                 });
               }
             });

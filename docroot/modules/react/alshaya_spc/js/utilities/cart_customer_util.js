@@ -38,21 +38,22 @@ const emptyCustomerCart = () => {
 };
 
 export async function checkCartCustomer(cartData = null) {
-  if (!(cartData) || cartData.cart_id === undefined) {
+  let cartDataVal = cartData;
+  if (!(cartDataVal) || cartDataVal.cart_id === undefined) {
     const cartJson = getInfoFromStorage();
-    cartData = cartJson.cart;
+    cartDataVal = cartJson.cart;
   }
 
-  if (cartData.cart_id === null) {
+  if (cartDataVal.cart_id === null) {
     return false;
   }
 
   // If the cart user and drupal user does not match.
-  if (cartData.uid !== window.drupalSettings.user.uid) {
-    if (!cartData.uid) {
-      cartData.uid = window.drupalSettings.user.uid;
+  if (cartDataVal.uid !== window.drupalSettings.user.uid) {
+    if (!cartDataVal.uid) {
+      cartDataVal.uid = window.drupalSettings.user.uid;
       if (window.drupalSettings.user.uid === 0) {
-        addInfoInStorage({ cart: cartData });
+        addInfoInStorage({ cart: cartDataVal });
         return false;
       }
 

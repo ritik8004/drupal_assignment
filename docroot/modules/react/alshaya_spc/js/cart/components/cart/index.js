@@ -113,7 +113,7 @@ export default class Cart extends React.Component {
     return (
       <>
         <div className="spc-pre-content">
-          <CheckoutMessage type={messageType}>
+          <CheckoutMessage type={messageType} context="cart">
             {message}
           </CheckoutMessage>
           <MobileCartPreview total_items={totalItems} totals={totals} />
