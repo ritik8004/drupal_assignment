@@ -306,3 +306,10 @@ function alshaya_vs_transac_alshaya_get_currency_code_alter(&$currency) {
   // Updated UAE currency code.
   $currency['ae']['en'] = 'DHS';
 }
+
+/**
+ * Implements hook_preprocess_acq_sku__free_gift().
+ */
+function alshaya_vs_transac_preprocess_acq_sku__free_gift(&$variables) {
+  $variables['sku']['subtitle'] = $variables['sku_entity']->get('attr_product_collection')->getString();
+}
