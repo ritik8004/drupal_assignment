@@ -725,7 +725,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $category_id = $entity->get('field_category_carousel')->getValue()[0]['target_id'] ?? NULL;
 
     // Generate view all link when text is not empty.
-    if (!empty($data['view_all'])) {
+    if (!empty($data['view_all']) && $category_id !== NULL) {
       $url = Url::fromRoute('entity.taxonomy_term.canonical', [
         'taxonomy_term' => $category_id,
       ]);
@@ -756,13 +756,15 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       // Invoke views display in executeInRenderContext to avoid cached
       // metadata leak issue.
       // @See https://www.drupal.org/project/drupal/issues/2450993
-      $nodes = $this->renderer->executeInRenderContext(
-        new RenderContext(),
-        function () use ($entity, $category_id) {
-          $carousel_product_limit = (int) $entity->get('field_category_carousel_limit')->getString();
-          return _alshaya_acm_product_get_unique_in_stock_products_for_category($category_id, $carousel_product_limit);
-        }
-      );
+      if ($category_id !== NULL) {
+        $nodes = $this->renderer->executeInRenderContext(
+          new RenderContext(),
+          function () use ($entity, $category_id) {
+            $carousel_product_limit = (int) $entity->get('field_category_carousel_limit')->getString();
+            return _alshaya_acm_product_get_unique_in_stock_products_for_category($category_id, $carousel_product_limit);
+          }
+        );
+      }
 
       if (!empty($nodes)) {
         $data['items'] = array_map(function ($node) {
