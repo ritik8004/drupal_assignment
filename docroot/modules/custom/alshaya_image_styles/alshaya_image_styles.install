@@ -10,6 +10,19 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add support for tiff files.
+ */
+function alshaya_image_styles_update_8110() {
+  $config = \Drupal::configFactory()->getEditable('imagemagick.settings');
+  $image_formats = $config->get('image_formats');
+  $image_formats['TIFF']['enabled'] = TRUE;
+  $config->set('image_formats', $image_formats);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Delete unused image styles.
  */
 function alshaya_image_styles_update_8109() {
@@ -219,8 +232,13 @@ function _alshaya_image_styles_configure_image_toolkit() {
     ->set('toolkit', 'imagemagick')
     ->save();
 
-  \Drupal::configFactory()
-    ->getEditable('imagemagick.settings')
-    ->set('quality', 100)
-    ->save();
+  $config = \Drupal::configFactory()->getEditable('imagemagick.settings');
+
+  $config->set('quality', 100);
+
+  $image_formats = $config->get('image_formats');
+  $image_formats['TIFF']['enabled'] = TRUE;
+  $config->set('image_formats', $image_formats);
+
+  $config->save();
 }
