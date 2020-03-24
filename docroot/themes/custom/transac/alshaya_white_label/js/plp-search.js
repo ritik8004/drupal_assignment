@@ -16,18 +16,14 @@
         var selector = null;
         if ($('body').hasClass('path--search')) {
           viewHeader = $('.c-plp .view-search .view-header');
-          selector = $('.c-content__region .total-result-count, .facet-all-count');
-        }
-        else if ($('body').hasClass('nodetype--acq_promotion')) {
-          viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
-          selector = $('.c-content__region .total-result-count, .facet-all-count');
         }
         else {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
-          selector = $('.c-content__region .total-result-count, .facet-all-count');
         }
+        selector = $('.c-content__region .block-alshaya-search-api .total-result-count, .plp-filter-count .facet-all-count');
+
         viewHeader.addClass('search-count');
-        var searchCount = $('.c-content__region .search-count');
+        var searchCount = $('.c-content__region .block-alshaya-search-api .search-count');
         // For mobile.
         if ($(window).width() < 768) {
           $('.block-page-title-block').addClass('mobile');
