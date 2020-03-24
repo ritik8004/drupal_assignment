@@ -7,6 +7,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Class ProductDyPageTypeEventSubscriber.
@@ -67,7 +68,17 @@ class ProductDyPageTypeEventSubscriber implements EventSubscriberInterface {
       if ($node->bundle() == 'acq_product') {
         $event->setDyContext('PRODUCT');
         $productSku = $this->skuManager->getSkuForNode($node);
-        $event->setDyContextData([$productSku]);
+        $productSku = SKU::loadFromSku($productSku);
+
+        if ($productSku->bundle() === 'configurable') {
+          $combinations = $this->skuManager->getConfigurableCombinations($productSku);
+          if (key($combinations['by_sku'])) {
+            $event->setDyContextData([key($combinations['by_sku'])]);
+          }
+        }
+        else {
+          $event->setDyContextData([$productSku->getSku()]);
+        }
       }
     }
   }
