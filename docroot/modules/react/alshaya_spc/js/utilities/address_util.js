@@ -25,7 +25,7 @@ export const getUserAddressList = function () {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      console.error(error);
+      Drupal.logJavascriptError('get-user-address-list', error);
     });
 };
 
@@ -41,7 +41,7 @@ export const updateUserDefaultAddress = function (addressId) {
     .then((response) => response)
     .catch((error) => {
       // Processing of error here.
-      console.error(error);
+      Drupal.logJavascriptError('update-user-default-address', error);
     });
 };
 
@@ -56,14 +56,14 @@ export const addEditUserAddress = function (address) {
   })
     .then(
       (response) => response.data,
-      (error) => ({
+      () => ({
         error: true,
         error_message: getStringMessage('global_error'),
       }),
     )
     .catch((error) => {
       // Processing of error here.
-      console.error(error);
+      Drupal.logJavascriptError('add-edit-user-address', error);
     });
 };
 

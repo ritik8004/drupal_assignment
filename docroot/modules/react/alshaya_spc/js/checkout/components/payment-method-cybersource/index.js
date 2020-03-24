@@ -159,7 +159,7 @@ class PaymentMethodCybersource extends React.Component {
   validateBeforePlaceOrder = () => {
     const { numberValid, expiryValid, cvvValid } = this.state;
     if (!(numberValid && expiryValid && cvvValid)) {
-      console.error('client side validation failed for credit card info');
+      Drupal.logJavascriptError('validate-before-place-order', 'client side validation failed for credit card info');
       return false;
     }
 
@@ -170,15 +170,12 @@ class PaymentMethodCybersource extends React.Component {
     axios.post(apiUrl, { type: cardType }).then((response) => {
       // Handle exception.
       if (response.data.error !== undefined) {
-        console.error(response.data);
-
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
           message: getStringMessage('payment_error'),
         });
-
         removeFullScreenLoader();
-
+        Drupal.logJavascriptError('validate-before-place-order', getStringMessage('payment_error'));
         return;
       }
 
@@ -206,14 +203,12 @@ class PaymentMethodCybersource extends React.Component {
 
       cybersourceForm.submit();
     }).catch((error) => {
-      console.error(error);
-
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
         message: getStringMessage('payment_error'),
       });
-
       removeFullScreenLoader();
+      Drupal.logJavascriptError('validate-before-place-order', error);
     });
 
     return false;

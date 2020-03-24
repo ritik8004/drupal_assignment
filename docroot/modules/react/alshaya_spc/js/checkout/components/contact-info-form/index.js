@@ -106,7 +106,7 @@ class ContactInfoForm extends React.Component {
       }
     }).catch((error) => {
       removeFullScreenLoader();
-      console.error(error);
+      Drupal.logJavascriptError('Process shipping update', error);
     });
   };
 
@@ -131,6 +131,7 @@ class ContactInfoForm extends React.Component {
               type: 'error',
               message: cartResult.error_message,
             });
+            Drupal.logJavascriptError('update-shipping', cartResult.error_message);
             return null;
           }
 
@@ -146,7 +147,7 @@ class ContactInfoForm extends React.Component {
           return null;
         })
         .catch((error) => {
-          console.error(error);
+          Drupal.logJavascriptError('update-shipping', error);
         });
     }
   };

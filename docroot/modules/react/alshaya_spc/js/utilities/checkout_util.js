@@ -24,7 +24,7 @@ export const getShippingMethods = function (cartId, data) {
       (response) => response.data,
       (error) => {
         // Processing of error here.
-        console.error(error);
+        Drupal.logJavascriptError('get-shipping-method', error);
       },
     );
 };
@@ -93,7 +93,7 @@ export const placeOrder = function (paymentMethod) {
       },
       (error) => {
         // Processing of error here.
-        console.error(error);
+        Drupal.logJavascriptError('place-order', error);
       },
     );
 };
@@ -142,16 +142,13 @@ export const addShippingInCart = function (action, data) {
 
         return response.data;
       },
-      (error) =>
-        // Processing of error here.
-        ({
-          error: true,
-          error_message: getStringMessage('global_error'),
-        })
-      ,
+      () => ({
+        error: true,
+        error_message: getStringMessage('global_error'),
+      }),
     )
     .catch((error) => {
-      console.error(error);
+      Drupal.logJavascriptError('add-shipping-in-cart', error);
     });
 };
 
@@ -180,16 +177,13 @@ export const addBillingInCart = function (action, data) {
     })
     .then(
       (response) => response.data,
-      (error) =>
-        // Processing of error here.
-        ({
-          error: true,
-          error_message: getStringMessage('global_error'),
-        })
-      ,
+      () => ({
+        error: true,
+        error_message: getStringMessage('global_error'),
+      }),
     )
     .catch((error) => {
-      console.error(error);
+      Drupal.logJavascriptError('add-billing-in-cart', error);
     });
 };
 
@@ -216,16 +210,14 @@ export const refreshCartData = () => {
     })
     .then(
       (response) => response.data,
-      (error) =>
-      // Processing of error here.
-        ({
-          error: true,
-          error_message: getStringMessage('global_error'),
-        }),
+      () => ({
+        error: true,
+        error_message: getStringMessage('global_error'),
+      }),
     )
     .catch((error) => {
       // Error processing here.
-      console.error(error);
+      Drupal.logJavascriptError('checkout-refresh-cart-data', error);
     });
 };
 

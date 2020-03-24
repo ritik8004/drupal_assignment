@@ -1218,4 +1218,50 @@
     dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
   };
 
+  /**
+   * Log errors and track on GA.
+   *
+   * @param context
+   * @param error
+   */
+  Drupal.logJavascriptError = function (context, error) {
+    var msg = '';
+    if (error.message !== undefined) {
+      msg = error.message;
+    }
+    else {
+      msg = error;
+    }
+    var errorData = {
+      event: 'eventTracker',
+      eventCategory: context,
+      eventLabel: 'Error occurred on ' + window.location.href,
+      eventAction: msg,
+      eventValue: 0,
+      nonInteraction: 0,
+    };
+
+    try {
+      // Track error on GA.
+      if (drupalSettings.gtm.logErrorsToGtm !== undefined &&
+        drupalSettings.gtm.logErrorsToGtm) {
+        dataLayer.push(errorData);
+      }
+
+      // Log error on console.
+      if (drupalSettings.gtm.logErrorsToConsole !== undefined &&
+        drupalSettings.gtm.logErrorsToConsole) {
+        console.error(error);
+      }
+
+    } catch (e) {
+      // Do nothing.
+    }
+  };
+
+  window.onerror = function (msg, url, lineNo, columnNo, error) {
+    Drupal.logJavascriptError('Uncaught errors', error);
+    return true;
+  };
+
 })(jQuery, Drupal, dataLayer);
