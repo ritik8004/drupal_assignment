@@ -49,6 +49,7 @@ cache:
   - "$HOME/.npm"
   - "$HOME/.nvm"
   - "vendor"
+  - "docroot/middleware/vendor"
   - "docroot/modules/contrib"
   - "docroot/themes/contrib"
   - "docroot/profiles/contrib"
