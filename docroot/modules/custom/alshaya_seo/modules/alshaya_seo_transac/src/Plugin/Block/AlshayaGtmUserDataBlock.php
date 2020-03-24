@@ -98,7 +98,12 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
       if ($this->currentUser->isAuthenticated()) {
         $current_user = $this->userStorage->load($current_user_id);
         $email = $current_user->get('mail')->getString();
-        $customer_type = $this->ordersManager->getOrdersCount($email) > 1 ? 'Repeat Customer' : $customer_type;
+
+        $customer_id = (int) $current_user->get('acq_customer_id')->getString();
+        $customer_type = $this->ordersManager->getOrdersCount($customer_id) > 1
+          ? 'Repeat Customer'
+          : $customer_type;
+
         $privilege_customer = !empty($current_user->get('field_privilege_card_number')->getString()) ? 'Privilege Customer' : $privilege_customer;
       }
 
