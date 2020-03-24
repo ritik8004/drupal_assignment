@@ -25,3 +25,6 @@ services:
       - '@alshaya_acm_product.sku_info'
       - '@acq_sku.fields_manager'
       - '@renderer'
+      - '@config.factory'
+      - '@metatag.manager'
+      - '@metatag.token'
