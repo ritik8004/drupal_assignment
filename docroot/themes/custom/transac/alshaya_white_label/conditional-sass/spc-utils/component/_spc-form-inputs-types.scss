@@ -30,6 +30,7 @@
 .spc-type-textfield {
   input[type=text],
   input[type=tel],
+  input[type=email],
   input[type=password] {
     height: 1.5rem;
     font-size: 0.875rem;
@@ -64,6 +65,7 @@
   .country-code {
     position: absolute;
     #{$left}: 0;
+    font-size: 0.875rem;
     top: 1.35rem;
     z-index: 2;
     color: $spc-mobile-code;
@@ -72,6 +74,7 @@
   input[type=text] {
     height: 1.5rem;
     padding-#{$left}: 2.75rem !important;
+    font-size: 0.875rem;
     background: transparent;
     color: $spc-form-input;
   }

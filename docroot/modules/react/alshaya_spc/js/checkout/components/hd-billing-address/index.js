@@ -41,7 +41,7 @@ export default class HDBillingAddress extends React.Component {
     if (data.error === undefined) {
       if (data.cart_id !== undefined
         && data.delivery_type === 'hd'
-        && this.isBillingSameAsShippingInStorage()) {
+        && isBillingSameAsShippingInStorage()) {
         localStorage.setItem(localStorageKey, true);
         this.setState({
           shippingAsBilling: true,
@@ -78,7 +78,7 @@ export default class HDBillingAddress extends React.Component {
     const { shippingAsBilling } = this.state;
     // If carrier info not set on cart, means shipping is not
     // set. Thus billing is also not set and thus no need to
-    // show biiling info.
+    // show billing info.
     if (cart.cart.carrier_info === undefined
       || cart.cart.carrier_info === null
       || cart.cart.billing_address === null

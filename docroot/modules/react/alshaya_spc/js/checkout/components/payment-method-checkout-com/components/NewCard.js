@@ -28,9 +28,13 @@ class NewCard extends React.Component {
     updateState(obj);
   };
 
-  handleCardNumberChange = (event) => {
+  handleCardNumberChange = (event, handler) => {
+    const { labelEffect } = this.props;
     const { numberValid } = this.context;
     const cardNumber = event.target.rawValue;
+
+    labelEffect(event, handler);
+
     let valid = true;
     const type = document.getElementById('payment-card-type').value;
 
@@ -62,8 +66,10 @@ class NewCard extends React.Component {
     document.getElementById('payment-card-type').value = type;
   };
 
-  handleCardExpiryChange = (event) => {
+  handleCardExpiryChange = (event, handler) => {
+    const { labelEffect } = this.props;
     let valid = true;
+    labelEffect(event, handler);
     const dateParts = event.target.value.split('/').map((x) => {
       if (!(x) || Number.isNaN(x)) {
         return 0;
@@ -103,7 +109,7 @@ class NewCard extends React.Component {
 
   render() {
     const { cardType } = this.context;
-    const { labelEffect, handleCardCvvChange } = this.props;
+    const { handleCardCvvChange } = this.props;
 
     const cardTypes = Object.entries(this.acceptedCards).map(([, type]) => (
       <CardTypeSVG key={type} type={type} class={`${type} ${cardType === type ? 'is-active' : ''}`} />
@@ -121,8 +127,7 @@ class NewCard extends React.Component {
                 onCreditCardTypeChanged: this.handleCardTypeChanged,
               }}
               required
-              onChange={this.handleCardNumberChange}
-              onBlur={(e) => labelEffect(e, 'blur')}
+              onBlur={(e) => this.handleCardNumberChange(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('card number')}</label>
@@ -139,8 +144,7 @@ class NewCard extends React.Component {
                 delimiter: '/',
               }}
               required
-              onChange={this.handleCardExpiryChange}
-              onBlur={(e) => labelEffect(e, 'blur')}
+              onBlur={(e) => this.handleCardExpiryChange(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('expiry')}</label>
@@ -154,8 +158,7 @@ class NewCard extends React.Component {
               ref={this.ccCvv}
               pattern="\d{3,4}"
               required
-              onChange={handleCardCvvChange}
-              onBlur={(e) => labelEffect(e, 'blur')}
+              onBlur={(e) => handleCardCvvChange(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('CVV')}</label>
