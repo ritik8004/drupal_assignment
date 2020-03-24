@@ -142,7 +142,6 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       return [];
     }
 
-    $email = $account->getEmail();
     $uid = $account->id();
 
     try {
@@ -157,7 +156,8 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       ];
 
       // Get the orders of the user.
-      $orders = alshaya_acm_customer_get_user_orders($email);
+      $customer_id = (int) $account->get('acq_customer_id')->getString();
+      $orders = alshaya_acm_customer_get_user_orders($customer_id);
 
       // Recent order text.
       $build['recent_order_title'] = [

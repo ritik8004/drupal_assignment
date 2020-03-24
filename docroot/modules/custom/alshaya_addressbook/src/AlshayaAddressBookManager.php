@@ -465,7 +465,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       }
 
       foreach ($magento_address as $attribute_code => $value) {
-        if (is_array($value)) {
+        if (is_array($value) && $attribute_code !== 'street') {
           continue;
         }
 
@@ -476,6 +476,12 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         switch ($mapping[$attribute_code]) {
           case 'mobile_number':
             $address[$mapping[$attribute_code]] = ['value' => $value];
+            break;
+
+          case 'address_line1':
+            $address[$mapping[$attribute_code]] = is_array($value)
+                ? reset($value)
+                : $value;
             break;
 
           default:

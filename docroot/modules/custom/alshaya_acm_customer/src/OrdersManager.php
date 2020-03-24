@@ -197,23 +197,23 @@ class OrdersManager {
    * Status of orders keep changing, we store it in cache for only sometime.
    * Time to store in cache is configurable.
    *
-   * @param string $email
-   *   E-Mail address.
+   * @param int $customer_id
+   *   Customer Commerce ID.
    *
    * @return array
    *   Orders.
    */
-  public function getOrders(string $email) {
+  public function getOrders(int $customer_id) {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
-    $cid = 'orders_list_' . $langcode . '_' . $email;
+    $cid = 'orders_list_' . $langcode . '_' . $customer_id;
 
     if ($cache = $this->cache->get($cid)) {
       return $cache->data;
     }
 
     try {
-      $query = $this->getOrdersQuery('customer_email', $email);
+      $query = $this->getOrdersQuery('customer_id', $customer_id);
       $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
       $result = json_decode($response ?? [], TRUE);
       $orders = $result['items'] ?? [];
@@ -242,10 +242,8 @@ class OrdersManager {
       $this->cache->set($cid, $orders, $expire);
     }
 
-    // Verify count again and reset if required.
-    if (count($orders) != $this->getOrdersCount($email)) {
-      $this->countCache->set('orders_count_' . $email, count($orders));
-    }
+    // Re-set count again.
+    $this->countCache->set('orders_count_' . $customer_id, count($orders));
 
     return $orders;
   }
@@ -256,20 +254,20 @@ class OrdersManager {
    * We need only count for some cases like GTM and count won't change like
    * orders so we store them permanently.
    *
-   * @param string $email
-   *   E-Mail address.
+   * @param int $customer_id
+   *   Customer Commerce ID.
    *
    * @return int
    *   Orders count.
    */
-  public function getOrdersCount(string $email) {
-    $cid = 'orders_count_' . $email;
+  public function getOrdersCount(int $customer_id) {
+    $cid = 'orders_count_' . $customer_id;
 
     if ($cache = $this->countCache->get($cid)) {
       return $cache->data;
     }
 
-    $query = $this->getOrdersQuery('customer_email', $email);
+    $query = $this->getOrdersQuery('customer_id', $customer_id);
     $query['searchCriteria']['pageSize'] = 1;
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
     $result = json_decode($response ?? [], TRUE);
@@ -280,12 +278,15 @@ class OrdersManager {
   }
 
   /**
-   * Helper function to return order from session.
+   * Helper function to get specific order.
+   *
+   * @param int $order_id
+   *   Order ID to get order for.
    *
    * @return array
    *   Order array if found.
    */
-  public function getOrder($order_id) {
+  public function getOrder(int $order_id) {
     $query = $this->getOrdersQuery('entity_id', $order_id);
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
     $result = json_decode($response ?? [], TRUE);
@@ -365,13 +366,13 @@ class OrdersManager {
    *
    * @param string $field
    *   Field to filter by.
-   * @param string $value
+   * @param mixed $value
    *   Value for the filter.
    *
    * @return array
    *   Orders query.
    */
-  private function getOrdersQuery(string $field, string $value) {
+  private function getOrdersQuery(string $field, $value) {
     return [
       'searchCriteria' => [
         'filterGroups' => [

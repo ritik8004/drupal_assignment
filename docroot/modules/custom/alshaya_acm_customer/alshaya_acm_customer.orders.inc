@@ -13,8 +13,8 @@ use Drupal\user\UserInterface;
 /**
  * Returns orders from cache if available.
  *
- * @param string $email
- *   Email address of the user.
+ * @param int $customer_id
+ *   Commerce customer id.
  * @param string $search_key
  *   Key to look for in $_GET for searching.
  * @param string $filter_key
@@ -23,10 +23,10 @@ use Drupal\user\UserInterface;
  * @return array
  *   Array of orders.
  */
-function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_key = '') {
+function alshaya_acm_customer_get_user_orders(int $customer_id, $search_key = '', $filter_key = '') {
   /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
   $manager = \Drupal::service('alshaya_acm_customer.orders_manager');
-  $orders = $manager->getOrders($email);
+  $orders = $manager->getOrders($customer_id);
 
   if (empty($orders)) {
     return [];
@@ -203,7 +203,6 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
-  $shipping_method_code = $checkoutOptionsManager->getCleanShippingMethodCode($order['shipping']['method']);
 
   $shipping_info = explode(' - ', $order['shipping_description']);
   $orderDetails['delivery_method'] = $shipping_info[0];
@@ -211,15 +210,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['totals']['shipping']);
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
-  if ($shipping_method_code == $checkoutOptionsManager->getClickandColectShippingMethod()) {
+  if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
     $cc_config = \Drupal::config('alshaya_click_collect.settings');
 
     $orderDetails['type'] = 'cc';
 
-    $shipping_assignment = reset($order['extension']['shipping_assignments']);
-    $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
-
-    $cc_type = $shipping_assignment['shipping']['extension_attributes']['click_and_collect_type'];
+    $store_code = $order['shipping']['extension_attributes']['store_code'];
+    $cc_type = $order['shipping']['extension_attributes']['click_and_collect_type'];
 
     /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $store_utility */
     $store_utility = \Drupal::service('alshaya_stores_finder_transac.utility');
@@ -360,7 +357,8 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
 
   try {
     // Get all the orders for the user.
-    $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
+    $customer_id = (int) $user->get('acq_customer_id')->getString();
+    $orders = alshaya_acm_customer_get_user_orders($customer_id);
   }
   catch (\Exception $e) {
     return [];
@@ -471,7 +469,13 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $build['#products_count'] = count($build['#products']);
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
-  $build['#delivery_detail_notice'] = t('Your order will be available for pickup at the following store');
+  $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
+    $build['#delivery_detail_notice'] = t('Your order will be available for pickup at the following store');
+  }
+  else {
+    $build['#delivery_detail_notice'] = t('Your order will be delivered at the following address');
+  }
 
   return $build;
 }
