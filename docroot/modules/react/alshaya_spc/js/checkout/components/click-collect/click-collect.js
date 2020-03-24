@@ -209,6 +209,7 @@ class ClickCollect extends React.Component {
     const map = window.spcMap;
     // Make the marker by default open.
     google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
+    map.highlightIcon(map.map.mapMarkers[makerIndex]);
   };
 
   showOpenMarker = (storeList = null) => {
@@ -332,11 +333,14 @@ class ClickCollect extends React.Component {
     }
   };
 
-  onMapStoreClose = (e) => {
+  onMapStoreClose = (e, makerIndex) => {
     e.target.parentElement.parentElement.classList.remove('selected');
     this.selectStoreButtonVisibility(false);
     this.refreshMap();
     this.toggleFullScreen();
+
+    const map = window.spcMap;
+    map.resetIcon(map.map.mapMarkers[makerIndex]);
   }
 
   selectStoreButtonVisibility = (action) => {

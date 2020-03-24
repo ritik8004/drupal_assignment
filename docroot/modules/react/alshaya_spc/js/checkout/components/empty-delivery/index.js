@@ -50,6 +50,14 @@ export default class EmptyDeliveryText extends React.Component {
     );
   }
 
+  openModal = () => {
+    this.setState({ open: true });
+  };
+
+  closeModal = () => {
+    this.setState({ open: false });
+  };
+
   eventListener = (e) => {
     const data = e.detail.data();
     const { refreshCart } = this.props;
@@ -57,14 +65,6 @@ export default class EmptyDeliveryText extends React.Component {
     if (this.isComponentMounted) {
       this.closeModal();
     }
-  };
-
-  openModal = () => {
-    this.setState({ open: true });
-  };
-
-  closeModal = () => {
-    this.setState({ open: false });
   };
 
   /**
@@ -83,9 +83,14 @@ export default class EmptyDeliveryText extends React.Component {
   };
 
   render() {
+    const {
+      cart: {
+        delivery_type: deliveryType,
+        cart: cartVal,
+      },
+      cart: mainCart,
+    } = this.props;
     const { open } = this.state;
-    const { cart: cartProp } = this.props;
-    const { cart: { delivery_type: deliveryType, cart } } = this.props;
     const { updateCoordsAndStoreList } = this.context;
 
     let defaultVal = null;
@@ -97,10 +102,10 @@ export default class EmptyDeliveryText extends React.Component {
           fullname: `${fname} ${lname}`,
         },
       };
-    } else if (cart.carrier_info !== null && cart.shipping_address !== null) {
+    } else if (cartVal.carrier_info !== null && cartVal.shipping_address !== null) {
       // If carrier info set, means shipping is set.
       // Get name info from there.
-      const shippingAddress = cart.shipping_address;
+      const shippingAddress = cartVal.shipping_address;
       defaultVal = {
         static: {
           fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,
@@ -128,7 +133,7 @@ export default class EmptyDeliveryText extends React.Component {
             <React.Suspense fallback={<Loading />}>
               <AddressContent
                 closeModal={this.closeModal}
-                cart={cartProp}
+                cart={mainCart}
                 showEditButton={true}
                 headingText={Drupal.t('delivery information')}
                 processAddress={this.processAddress}

@@ -28,7 +28,9 @@
 
 // Type = Text.
 .spc-type-textfield {
-  input[type=text] {
+  input[type=text],
+  input[type=tel],
+  input[type=password] {
     height: 1.5rem;
     font-size: 0.875rem;
     color: $spc-form-input;

@@ -37,9 +37,17 @@ class AlshayaPerformanceDrushCommands extends DrushCommands {
    * @command cr:frontend
    *
    * @aliases crf, cache-rebuild-frontend
+   * @option twig
+   *   Include twig template files in cache invalidation.
    */
-  public function cacheRebuildFrontend() {
-    alshaya_performance_flush_frontend_caches();
+  public function cacheRebuildFrontend($options = ['twig' => FALSE]) {
+    $clear_twig = $options['twig'];
+
+    if ($clear_twig) {
+      $this->output()->writeln("Including twig cache invalidation.");
+    }
+
+    alshaya_performance_flush_frontend_caches($clear_twig);
   }
 
   /**

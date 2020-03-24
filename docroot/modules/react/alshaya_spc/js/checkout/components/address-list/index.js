@@ -58,11 +58,12 @@ export default class AddressList extends React.Component {
    * Process add new address.
    */
   processAddress = (e) => {
+    const { type, processAddress } = this.props;
     // Show loader.
     showFullScreenLoader();
     // If processing method is passed, we use that.
-    if (this.props.type === 'billing') {
-      this.props.processAddress(e);
+    if (type === 'billing') {
+      processAddress(e);
     } else {
       addEditAddressToCustomer(e);
     }
@@ -82,7 +83,7 @@ export default class AddressList extends React.Component {
 
     const addressItem = [];
     Object.entries(addressList).forEach(([key, address]) => {
-      let fieldToCheck = type === 'billing'
+      const fieldToCheck = type === 'billing'
         ? 'billing_address'
         : 'shipping_address';
       let isSelected = false;

@@ -52,9 +52,9 @@ export default class CartItem extends React.Component {
         qty,
         in_stock: inStock,
         original_price: originalPrice,
-        configurable_values,
+        configurable_values: configurableValues,
         promotions,
-        extra_data,
+        extra_data: extraData,
         sku,
         id,
         final_price: finalPrice,
@@ -66,7 +66,7 @@ export default class CartItem extends React.Component {
       <div className="spc-cart-item">
         <div className="spc-product-tile">
           <div className="spc-product-image">
-            <CheckoutItemImage img_data={extra_data.cart_image} />
+            <CheckoutItemImage img_data={extraData.cart_image} />
           </div>
           <div className="spc-product-container">
             <div className="spc-product-title-price">
@@ -80,7 +80,7 @@ export default class CartItem extends React.Component {
               && <div>{Drupal.t('FREE')}</div>}
             </div>
             <div className="spc-product-attributes-wrapper">
-              {configurable_values.map((key) => <CheckoutConfigurableOption key={`${key}-${Math.floor(Math.random() * 99)}`} label={key} />)}
+              {configurableValues.map((key) => <CheckoutConfigurableOption key={`${key}-${Math.floor(Math.random() * 99)}`} label={key} />)}
             </div>
           </div>
           <div className="spc-product-tile-actions">

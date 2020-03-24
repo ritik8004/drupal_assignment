@@ -118,22 +118,22 @@ class ContactInfoForm extends React.Component {
     if (cartInfo instanceof Promise) {
       const { updateContactInfo } = this.context;
       cartInfo
-        .then((cart_result) => {
+        .then((cartResult) => {
           removeFullScreenLoader();
 
-          if (!cart_result) {
+          if (!cartResult) {
             return null;
           }
 
-          if (cart_result.error) {
-            console.error(cart_result.error_message);
+          if (cartResult.error) {
+            console.error(cartResult.error_message);
             return null;
           }
 
           updateContactInfo(formData.static);
           const cartData = {
-            cart: cart_result,
-            delivery_type: cart_result.delivery_type,
+            cart: cartResult,
+            delivery_type: cartResult.delivery_type,
             address: formData.store.address,
           };
           dispatchCustomEvent('refreshCartOnCnCSelect', {

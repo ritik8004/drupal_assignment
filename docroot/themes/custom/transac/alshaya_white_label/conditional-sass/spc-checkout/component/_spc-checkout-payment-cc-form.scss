@@ -52,7 +52,7 @@
   .spc-type-cvv {
     width: 9.375rem;
     display: inline-block;
-    vertical-align: bottom;
+    vertical-align: top;
 
     @include breakpoint($only-mobile) {
       width: 6.8125rem;

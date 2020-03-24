@@ -33,6 +33,7 @@ import { createFetcher } from '../../../utilities/api/fetcher';
 import ConditionalView from '../../../common/components/conditional-view';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import getStringMessage from '../../../utilities/strings';
+import VatFooterText from '../../../utilities/vat-footer';
 
 window.fetchStore = 'idle';
 
@@ -88,7 +89,6 @@ export default class Checkout extends React.Component {
       }
     } catch (error) {
       // In case of error, do nothing.
-      console.error(error);
     }
 
     // Make sidebar sticky.
@@ -159,8 +159,8 @@ export default class Checkout extends React.Component {
         () => {
           this.fetchStoresHelper(getDefaultMapCenter());
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          // In case of error, do nothing.
         });
     }
   };
@@ -261,6 +261,7 @@ export default class Checkout extends React.Component {
             {billingComponent}
 
             <ConditionalView condition={window.innerWidth > 768}>
+              <VatFooterText />
               {termConditions}
             </ConditionalView>
 
@@ -282,6 +283,7 @@ export default class Checkout extends React.Component {
         </div>
         <div className="spc-post-content">
           <ConditionalView condition={window.innerWidth < 768}>
+            <VatFooterText />
             {termConditions}
           </ConditionalView>
         </div>

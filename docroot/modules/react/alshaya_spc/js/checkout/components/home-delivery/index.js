@@ -18,7 +18,7 @@ import {
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
 export default class HomeDeliveryInfo extends React.Component {
-  _isMounted = false;
+  isComponentMounted = false;
 
   constructor(props) {
     super(props);
@@ -26,7 +26,7 @@ export default class HomeDeliveryInfo extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
+    this.isComponentMounted = true;
     document.addEventListener(
       'refreshCartOnAddress',
       this.eventListener,
@@ -35,7 +35,7 @@ export default class HomeDeliveryInfo extends React.Component {
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this.isComponentMounted = false;
     document.removeEventListener(
       'refreshCartOnAddress',
       this.eventListener,
@@ -61,7 +61,7 @@ export default class HomeDeliveryInfo extends React.Component {
     const data = e.detail.data();
     const { refreshCart } = this.props;
     refreshCart(data);
-    if (this._isMounted) {
+    if (this.isComponentMounted) {
       this.closeModal();
     }
   };
@@ -118,9 +118,9 @@ export default class HomeDeliveryInfo extends React.Component {
               cart={cartVal}
               closeModal={this.closeModal}
               processAddress={this.processAddress}
-              showEditButton={true}
+              showEditButton
               headingText={Drupal.t('delivery information')}
-              type={'shipping'}
+              type="shipping"
               showEmail={window.drupalSettings.user.uid === 0}
               default_val={
                 window.drupalSettings.user.uid === 0

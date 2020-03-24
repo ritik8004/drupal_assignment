@@ -226,6 +226,10 @@
               {% endtrans %}
             </div>
 
+            {% if product.free_gift_label %}
+              <div class="free-gift-label">{{ product.free_gift_label }}</div>
+            {% endif %}
+
             <div class="mobile-only">
               <div class="light">{{ "Total"|t }}</div>
               {{ product.total }}

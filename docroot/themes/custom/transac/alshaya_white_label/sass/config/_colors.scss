@@ -103,6 +103,7 @@ $_order_limit_error_red: #c00;
 $_spc-radio-filled: #1da545;
 $_spc-discount-text: #cd2026;
 $_spc-area-panel-placeholder: #b3b3b3;
+$_spc-billing-help: #007aff;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1168,7 +1169,7 @@ $spc-checkout-success-message-background: $tealish;
 $spc-checkout-success-message-color: $white-five;
 $spc-cart-promo-code-submit-enabled: $primary_btn_bg;
 $spc-cart-promo-code-text: $primary_btn_text;
-$spc_tooltip_icon: $windows-blue;
+$spc_tooltip_icon: $_spc-billing-help;
 $spc-tooltip-bg: $windows-blue;
 $spc-tooltip-text: $white-five;
 $spc-loader-text: $mothercare-black;
@@ -1249,6 +1250,7 @@ $spc-checkout-contact-info-desc: $grey-light;
 $spc-checkout-cnc-map-expand: $marine-blue-two;
 $spc-checkout-billing-title: $mothercare-black;
 $spc-checkout-billing-empty-cnc: $mothercare-black;
+$spc-checkout-billing-help-text: $_spc-billing-help;
 $spc-cc-border: $mothercare-black;
 $spc-cc-placeholder: $grey-light;
 $spc-cc-input: $mothercare-black;

@@ -11,7 +11,7 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update().
  *
- * Update the store finder config to install label position settings.
+ * Update the store finder config to store country center and zoom settings.
  */
 function alshaya_stores_finder_update_8109() {
   $manager = \Drupal::service('alshaya_config.manager');
@@ -21,6 +21,10 @@ function alshaya_stores_finder_update_8109() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
+
+  // Set new marker icons to be used for click & collect delivery.
+  $brand = \Drupal::config('alshaya.installed_brand')->get('module');
+  alshaya_stores_finder_set_markers($brand);
 }
 
 /**

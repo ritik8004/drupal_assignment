@@ -24,6 +24,16 @@ export default class BillingInfo extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.isComponentMounted = true;
+    document.addEventListener('onBillingAddressUpdate', this.billingUpdate, false);
+  }
+
+  componentWillUnmount() {
+    this.isComponentMounted = false;
+    document.removeEventListener('onBillingAddressUpdate', this.billingUpdate, false);
+  }
+
   showPopup = () => {
     this.setState({
       open: true,
@@ -36,22 +46,13 @@ export default class BillingInfo extends React.Component {
     });
   };
 
-  componentWillUnmount() {
-    this.isComponentMounted = false;
-    document.removeEventListener('onBillingAddressUpdate', this.billingUpdate, false);
-  }
-
-  componentDidMount() {
-    this.isComponentMounted = true;
-    document.addEventListener('onBillingAddressUpdate', this.billingUpdate, false);
-  }
-
   /**
    * Handle billing address update event.
    */
   billingUpdate = (e) => {
     const cart = e.detail.data();
-    this.props.refreshCart(cart);
+    const { refreshCart } = this.props;
+    refreshCart(cart);
     this.closePopup();
   };
 
@@ -72,6 +73,7 @@ export default class BillingInfo extends React.Component {
 
   render() {
     const { cart } = this.props;
+    const { open } = this.state;
     const billing = cart.cart.billing_address;
     if (billing === undefined || billing == null) {
       return (null);
@@ -105,14 +107,14 @@ export default class BillingInfo extends React.Component {
         <div className="spc-billing-change" onClick={() => this.showPopup()}>{Drupal.t('change')}</div>
         <Popup
           className={getAddressPopupClassName()}
-          open={this.state.open}
+          open={open}
           onClose={this.closePopup}
           closeOnDocumentClick={false}
         >
           <React.Suspense fallback={<Loading />}>
             <AddressContent
               closeModal={this.closePopup}
-              cart={this.props.cart}
+              cart={cart}
               processAddress={this.processAddress}
               showEmail={false}
               showEditButton={false}

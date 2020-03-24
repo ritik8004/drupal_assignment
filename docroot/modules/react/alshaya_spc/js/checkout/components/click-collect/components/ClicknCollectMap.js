@@ -69,7 +69,6 @@ class ClicknCollectMap extends React.Component {
         title: store.name,
         infoWindowContent: renderToString(<StoreItemInfoWindow display="default" store={store} />),
         infoWindowSolitary: true,
-        label: (index + 1).toString(),
         // Require When markers overlap on each other, show the latest one on top,
         zIndex: index + 1,
       };

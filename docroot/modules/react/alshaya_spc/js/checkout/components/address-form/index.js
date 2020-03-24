@@ -15,7 +15,7 @@ import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
 
 export default class AddressForm extends React.Component {
-  _isMounted = true;
+  isComponentMounted = true;
 
   constructor(props) {
     super(props);
@@ -26,13 +26,13 @@ export default class AddressForm extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
+    this.isComponentMounted = true;
     // Listen to the map click event.
     document.addEventListener('mapClicked', this.eventListener, false);
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this.isComponentMounted = false;
     document.removeEventListener('mapClicked', this.eventListener, false);
   }
 
@@ -45,7 +45,7 @@ export default class AddressForm extends React.Component {
 
   eventListener = (e) => {
     const coords = e.detail.coords();
-    if (this._isMounted) {
+    if (this.isComponentMounted) {
       this.positionMapAndUpdateAddress(coords);
     }
   };
@@ -129,15 +129,15 @@ export default class AddressForm extends React.Component {
   render() {
     const dynamicFields = [];
     const {
-      default_val,
+      default_val: defaultVal,
       headingText,
       closeModal,
       showEmail,
     } = this.props;
-    const { area_list, cityChanged } = this.state;
+    const { area_list: areaList, cityChanged } = this.state;
     let defaultAddressVal = [];
-    if (default_val) {
-      defaultAddressVal = default_val;
+    if (defaultVal) {
+      defaultAddressVal = defaultVal;
     }
 
     let isEditAddress = false;
@@ -155,7 +155,7 @@ export default class AddressForm extends React.Component {
             key={key}
             default_val={defaultAddressVal}
             areasUpdate={this.refreshAreas}
-            area_list={area_list}
+            area_list={areaList}
             cityChanged={cityChanged}
             field_key={key}
             field={field}

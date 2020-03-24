@@ -47,6 +47,12 @@ function alshaya_color_split_acq_sku_configurable_product_configurations_alter(a
     $langcode,
   ]);
 
+  // Get color label from language specific config.
+  $languageManager = \Drupal::languageManager();
+  if ($langcode != $languageManager->getDefaultLanguage()->getId()) {
+    $color_label_cart_form = $languageManager->getLanguageConfigOverride($langcode, 'alshaya_color_split.settings')->get('color_label_cart_form');
+  }
+
   $cache = \Drupal::cache('alshaya_product_configurations')->get($cid);
 
   if (isset($cache, $cache->data)) {
@@ -108,7 +114,7 @@ function alshaya_color_split_acq_sku_configurable_product_configurations_alter(a
     'color' => [
       'attribute_id' => AlshayaColorSplitManager::PSEUDO_COLOR_ATTRIBUTE_CODE,
       'code' => $attribute_code_color_id,
-      'label' => (string) t('@color_attribute_form_label', ['@color_attribute_form_label' => $color_label_cart_form]),
+      'label' => $color_label_cart_form,
       'position' => -1,
       'values' => $colors,
     ],
