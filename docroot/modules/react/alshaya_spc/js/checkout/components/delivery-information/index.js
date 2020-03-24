@@ -31,7 +31,6 @@ export default class DeliveryInformation extends React.Component {
     if (typeof cart.cart.delivery_type !== 'undefined') {
       return cart.cart.delivery_type;
     }
-
     return 'hd';
   }
 

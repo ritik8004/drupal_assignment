@@ -25,7 +25,8 @@ import PaymentMethods from '../payment-methods';
 import CheckoutMessage from '../../../utilities/checkout-message';
 import TermsConditions from '../terms-conditions';
 import {
-  getLocationAccess, getDefaultMapCenter,
+  getLocationAccess,
+  getDefaultMapCenter,
   removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import { createFetcher } from '../../../utilities/api/fetcher';
