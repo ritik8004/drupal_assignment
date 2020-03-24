@@ -307,9 +307,10 @@ export default class GoogleMap extends React.Component {
    * Create google map.
    */
   createGoogleMap = (centerPosition, controlPosition) => {
+    let centerPos = centerPosition;
     const { isEditAddress } = this.props;
     // If corrds not available, try country coords.
-    if (centerPosition.lat === undefined) {
+    if (centerPos.lat === undefined) {
       // If address is being edited, get coords from
       // address detail.
       if (isEditAddress) {
@@ -320,12 +321,12 @@ export default class GoogleMap extends React.Component {
       // map object and if user has not allowed location
       // share, we first center the map to middle-east region
       // and then re-center map on the country center.
-      centerPosition = getDefaultMapCoords();
+      centerPos = getDefaultMapCoords();
     }
 
     return new window.google.maps.Map(this.googleMapDiv(), {
       zoom: 7,
-      center: centerPosition,
+      center: centerPos,
       disableDefaultUI: false,
       mapTypeControl: false,
       streetViewControl: false,
@@ -336,11 +337,15 @@ export default class GoogleMap extends React.Component {
     });
   }
 
+  handleRef = (ref) => {
+    this.autocomplete = ref;
+  }
+
   render() {
     return (
       <div className="spc-google-map">
         <div className="spc-location-g-map-search form-type-textfield">
-          <input placeholder={Drupal.t('Enter a location')} ref={(ref) => (this.autocomplete = ref)} id="searchTextField" type="text" />
+          <input placeholder={Drupal.t('Enter a location')} ref={(ref) => (this.handleRef(ref))} id="searchTextField" type="text" />
         </div>
         <div id="google-map" ref={this.googleMapRef} style={{ width: '100%', height: '100%' }} />
       </div>
