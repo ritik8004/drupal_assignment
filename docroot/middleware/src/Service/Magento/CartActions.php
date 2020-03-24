@@ -45,6 +45,11 @@ final class CartActions {
   const CART_SHIPPING_UPDATE = 'update shipping';
 
   /**
+   * Action used for refreshing the cart.
+   */
+  const CART_REFRESH = 'refresh';
+
+  /**
    * Action used for adding/updating billing on cart.
    */
   const CART_BILLING_UPDATE = 'update billing';

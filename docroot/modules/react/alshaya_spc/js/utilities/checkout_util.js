@@ -194,6 +194,42 @@ export const addBillingInCart = function (action, data) {
 };
 
 /**
+ * Refresh cart from MDC.
+ */
+export const refreshCartData = () => {
+  let cart = cartAvailableInStorage();
+  // If cart not available at all.
+  if (cart === null
+    || cart === 'empty') {
+    return null;
+  }
+
+  if (!Number.isInteger(cart)) {
+    cart = cart.cart_id;
+  }
+
+  const apiUrl = updateCartApiUrl();
+  return axios
+    .post(apiUrl, {
+      action: 'refresh',
+      cart_id: cart,
+    })
+    .then(
+      (response) => response.data,
+      (error) =>
+      // Processing of error here.
+        ({
+          error: true,
+          error_message: getStringMessage('global_error'),
+        }),
+    )
+    .catch((error) => {
+      // Error processing here.
+      console.error(error);
+    });
+};
+
+/**
  * Get current location coordinates.
  */
 export const getLocationAccess = () => {
