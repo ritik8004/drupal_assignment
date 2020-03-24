@@ -929,7 +929,7 @@ class Cart {
       return;
     }
 
-    if ($this->magentoInfo->isCancelReservationEnabled() && $cart['cart']['extension_attributes']['attempted_payment'] == 0) {
+    if ($this->magentoInfo->isCancelReservationEnabled() && $cart['cart']['extension_attributes']['attempted_payment']) {
       $cart_id = $this->getCartId();
       try {
         $data = [
