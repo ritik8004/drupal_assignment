@@ -34,11 +34,9 @@ body {
           .short-description-wrapper {
             .content--short-description {
               .field__label {
-                html[lang='en'] & {
-                  font-family: $vs-bentonsans-light;
-                  font-size: 1.375rem;
-                  text-transform: capitalize;
-                }
+                font-family: $vs-bentonsans-light;
+                font-size: 1.375rem;
+                text-transform: capitalize;
               }
             }
           }
