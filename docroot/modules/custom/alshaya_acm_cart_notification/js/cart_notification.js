@@ -56,8 +56,8 @@
           name: product_name,
           quantity: quantity
         };
-        $.fn.cartNotificationScroll();
         $('#cart_notification').html(Drupal.theme('cartNotificationMarkup', cart_notification_data));
+        $.fn.cartNotificationScroll();
 
         if ($('.ui-dialog').length > 0) {
           $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
@@ -116,6 +116,7 @@
       });
 
       $.fn.cartNotificationScroll = function () {
+        $('#cart_notification').fadeIn();
         $('body').addClass('notification--on');
         $('#cart_notification').addClass('has--notification');
         if ($(window).width() < 768 && $('.matchback-cart-notification').length > 0) {
