@@ -157,7 +157,7 @@ class PaymentController {
         '@token' => $payment_token,
       ]);
 
-      return $this->handleCheckoutComFailure('3D secure payment came into success but responseCode was not success.');
+      return $this->handleCheckoutComError('3D secure payment came into success but responseCode was not success.');
     }
 
     $amount = $this->checkoutComApi->getCheckoutAmount($cart['totals']['grand_total'], $cart['totals']['quote_currency_code']);
@@ -168,7 +168,7 @@ class PaymentController {
         '@total' => $amount,
       ]);
 
-      return $this->handleCheckoutComFailure('3D secure payment came into success with proper responseCode but totals do not match.');
+      return $this->handleCheckoutComError('3D secure payment came into success with proper responseCode but totals do not match.');
     }
 
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
@@ -216,18 +216,6 @@ class PaymentController {
   }
 
   /**
-   * Handle checkout.com failure.
-   *
-   * @param string $message
-   *   The string message.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  protected function handleCheckoutComFailure(string $message) {
-    $this->cart->cancelCartReservation($message);
-  }
-
-  /**
    * Handle checkout.com payment error callback.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
@@ -235,9 +223,9 @@ class PaymentController {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function handleCheckoutComError() {
+  public function handleCheckoutComError(string $message = NULL) {
     try {
-      $this->cart->cancelCartReservation('3d checkout.com request failed.');
+      $this->cart->cancelCartReservation($message ? $message : '3d checkout.com request failed.');
       $data = $this->validateCheckoutComRequest('error');
     }
     catch (\Exception $e) {
