@@ -862,6 +862,7 @@ class Cart {
       ];
     }
     catch (\Exception $e) {
+      $this->cancelCartReservation($e->getMessage());
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
@@ -942,8 +943,6 @@ class Cart {
         }
       }
       catch (\Exception $e) {
-        // Reset cart on exception.
-        $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
         // Exception handling here.
         $this->logger->error('Error occurred while cancelling reservation for cart id @cart_id, Drupal message: @message, API Response: @response', [
           '@cart_id' => $cart_id,
