@@ -34,3 +34,13 @@ libraries-override:
     css:
       theme:
         css/ltr-print.css: css/rtl-print.css
+
+  alshaya_white_label/spc-utils:
+    css:
+      theme:
+        css/conditional-sass/spc-utils/spc-utils.ltr.css: css/conditional-sass/spc-utils/spc-utils.ltr.css
+
+  alshaya_white_label/spc-checkout:
+    css:
+      theme:
+        css/conditional-sass/spc-checkout/spc-checkout.ltr.css: css/conditional-sass/spc-checkout/spc-checkout.ltr.css
