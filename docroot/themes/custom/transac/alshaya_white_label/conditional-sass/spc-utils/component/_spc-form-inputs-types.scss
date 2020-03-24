@@ -62,20 +62,28 @@
     color: $spc-input-label;
   }
 
-  .country-code {
-    position: absolute;
-    #{$left}: 0;
-    font-size: 0.875rem;
-    top: 1.35rem;
-    z-index: 2;
-    color: $spc-mobile-code;
-  }
+  .field-wrapper {
+    position: relative;
 
-  input[type=text] {
-    height: 1.5rem;
-    padding-#{$left}: 2.75rem !important;
-    font-size: 0.875rem;
-    background: transparent;
-    color: $spc-form-input;
+    .country-code {
+      position: absolute;
+      #{$left}: 0;
+      font-size: 0.875rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: -1px;
+      z-index: 2;
+      color: $spc-mobile-code;
+    }
+
+    input[type=text] {
+      height: 1.5rem;
+      padding-#{$left}: 2.25rem !important;
+      font-size: 0.875rem;
+      background: transparent;
+      color: $spc-form-input;
+    }
   }
 }
