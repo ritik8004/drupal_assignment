@@ -125,8 +125,12 @@ class ContactInfoForm extends React.Component {
             return null;
           }
 
+          // If error.
           if (cartResult.error) {
-            console.error(cartResult.error_message);
+            dispatchCustomEvent('addressPopUpError', {
+              type: 'error',
+              message: cartResult.error_message,
+            });
             return null;
           }
 

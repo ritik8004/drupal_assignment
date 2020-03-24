@@ -50,7 +50,7 @@ export default class BillingInfo extends React.Component {
    * Handle billing address update event.
    */
   billingUpdate = (e) => {
-    const cart = e.detail.data();
+    const cart = e.detail;
     const { refreshCart } = this.props;
     refreshCart(cart);
     this.closePopup();
