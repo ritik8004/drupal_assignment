@@ -26,5 +26,24 @@ body {
         }
       }
     }
+
+    // specific to pink; short description font.
+    &.super-category-pink {
+      .ui-dialog {
+        .ui-dialog-content#drupal-modal {
+          .short-description-wrapper {
+            .content--short-description {
+              .field__label {
+                html[lang='en'] & {
+                  font-family: $vs-bentonsans-light;
+                  font-size: 1.375rem;
+                  text-transform: capitalize;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
