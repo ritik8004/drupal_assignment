@@ -39,7 +39,7 @@
         }
 
         var sku = $(this).attr('data-sku');
-        var productKey = (node.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        var productKey = (node.attr('data-vmode') === 'matchback') ? 'matchback' : 'productInfo';
         var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
         $('#pdp-stores-container', node).data('sku', variant);
 
@@ -62,7 +62,9 @@
         // are added in JS, this is handled in JS.
         if ($(this).data('state') === 'disabled') {
           $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
-          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
+          if ($('#pdp-stores-container.click-collect').accordion()) {
+            $(this).accordion('option', 'disabled', true);
+          }
         }
       });
 

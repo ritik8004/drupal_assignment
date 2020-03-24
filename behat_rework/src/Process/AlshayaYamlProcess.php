@@ -350,12 +350,30 @@ class AlshayaYamlProcess {
    * @return array|mixed
    *   Return the array generated from behat template file.
    */
-  public function prepareBehatYaml($behat_template_file, array $variables, $profile = NULL) {
+  public function prepareBehatYaml($behat_template_file, array $variables, $profile = NULL , $viewport) {
     $yaml = $this->getParsedContent($behat_template_file);
     $yaml['suites']['default']['paths'] = ["%paths.base%/build/features/$profile"];
+    $brand = explode('-', $profile);
+    $yaml['extensions']['Drupal\DrupalExtension']['subcontexts']['paths'] = ["%paths.base%/src/bootstrap/Drupal/$brand[0]/"];
+
     // Set the MinkExtension base_url to current site's base url.
     if (isset($variables['variables']['url_base_uri'])) {
       $yaml['extensions']['Behat\MinkExtension']['base_url'] = $variables['variables']['url_base_uri'];
+    }
+
+    $yaml['extensions']['Bex\Behat\ScreenshotExtension']['image_drivers'] = [
+      'local' =>  [
+        'screenshot_directory' => "%paths.base%/features/$profile/screenshots",
+      ],
+    ];
+
+    if ($viewport == 'mobile') {
+      $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = array("--window-size=375,667");
+      $yaml['suites']['default']['filters']['tags'] = "~@desktop";
+    }
+    else {
+      $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = array("--window-size=1440,960");
+      $yaml['suites']['default']['filters']['tags'] = "~@mobile";
     }
 
     // Set the folder for report.

@@ -78,3 +78,11 @@
     }
   }
 }
+
+.block-basket-horizontal-recommendation {
+  & > h3 {
+    @include breakpoint($tablet) {
+      margin-bottom: 0.875rem;
+    }
+  }
+}

@@ -10,6 +10,43 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Fix broken processor configs from alshaya_fl_transac_update_8004.
+ */
+function alshaya_fl_transac_update_8009() {
+  $processorConfigs = [
+    'term_weight_by_name_widget_order' => [
+      'processor_id' => 'term_weight_by_name_widget_order',
+      'weights' => [
+        'sort' => 60,
+      ],
+      'settings' => [
+        'sort' => ASC,
+        'attribute_id' => 'size_textile_eu',
+      ],
+    ],
+    'clean_active_facets_processor' => [
+      'processor_id' => 'clean_active_facets_processor',
+      'weights' => [
+        'sort' => 10,
+      ],
+    ],
+    'url_processor_handler' => [
+      'processor_id' => 'url_processor_handler',
+      'weights' => [
+        'pre_query' => 10,
+        'build' => -10,
+      ],
+    ],
+  ];
+
+  \Drupal::configFactory()->getEditable('facets.facet.plp_size_textile_eu')->set('processor_configs', $processorConfigs)->save();
+  \Drupal::configFactory()->getEditable('facets.facet.promo_size_textile_eu')->set('processor_configs', $processorConfigs)->save();
+  \Drupal::configFactory()->getEditable('facets.facet.size_textile_eu')->set('processor_configs', $processorConfigs)->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update config for enable_lhn_tree_search
  * for sidebar visibility in search page.
  * Queue items for acquia_search_index.

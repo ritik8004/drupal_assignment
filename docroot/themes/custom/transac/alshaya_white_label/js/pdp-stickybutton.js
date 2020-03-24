@@ -7,12 +7,12 @@
   'use strict';
 
   /**
-   * Helper function to compute height of add to cart button and make it sticky.
+   * Helper function to make add to cart button sticky.
    * @param {String} direction The scroll direction
    *
    * @param {string} state The moment when function is called, initial/after.
    */
-  function mobileStickyAddtobasketButton(direction, state) {
+  function stickyAddtobasketButton(direction, state) {
     // Add to cart button.
     var button = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart');
     // This is the wrapper that holds delivery options.
@@ -63,34 +63,15 @@
   }
 
   /**
-   * Helper function to compute height calculation of attributes wrapper.
+   * Helper function to make button sticky on load/scroll.
    */
-  function cartFormHeightCalculation() {
-    var buttonHeight = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart').outerHeight();
-    var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
-    var mobileDynamicWrapper = 0;
-
-    // Only if dynamic promotion is enabled on pdp.
-    if ($('.sku-dynamic-promotion-link').length > 0) {
-      mobileDynamicWrapper = $('.promotions-dynamic-label').height();
-    }
-    mobileContentWrapper.css('height', 'auto');
-    mobileContentWrapper.css('height', mobileContentWrapper.height() + buttonHeight + mobileDynamicWrapper - 8);
-  }
-
-  /**
-   * Helper function to compute height calculation of attributes wrapper on cart form load.
-   */
-  function mobileStickyAddtobasketButtonHeightCalculation() {
+  function mobileStickyAddtobasketButton() {
     // Only on mobile.
     if ($(window).width() < 768) {
-      // Calculate the height of attributes wrapper.
-      cartFormHeightCalculation();
 
-      // Once add to cart form loaded recalculate the height of attributes wrapper.
+      // Once add to cart form loaded, check to make button sticky.
       $('.sku-base-form').once('bind-form-visible').on('form-visible', function () {
-        cartFormHeightCalculation();
-        mobileStickyAddtobasketButton('bottom', 'initial');
+        stickyAddtobasketButton('bottom', 'initial');
       });
 
       var lastScrollTop = 0;
@@ -104,17 +85,17 @@
           direction = 'up';
         }
         lastScrollTop = windowScrollTop;
-        mobileStickyAddtobasketButton(direction, 'after');
+        stickyAddtobasketButton(direction, 'after');
       });
     }
   }
 
-  mobileStickyAddtobasketButtonHeightCalculation();
+  mobileStickyAddtobasketButton();
 
-  Drupal.behaviors.stickyAddtobasketButton = {
+  Drupal.behaviors.stickyAddtobasketButtonDynamicPromotion = {
     attach: function (context, settings) {
       $('.basic-details-wrapper').once('bind-pdp-dynamic-promotion-enabled').on('pdp-dynamic-promotion-enabled', function () {
-        mobileStickyAddtobasketButtonHeightCalculation();
+        mobileStickyAddtobasketButton();
       });
     }
   };

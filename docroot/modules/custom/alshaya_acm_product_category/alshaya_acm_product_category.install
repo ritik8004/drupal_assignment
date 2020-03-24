@@ -16,6 +16,23 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Update acq_product_category term to set the value for field_show_in_lhn
+ * with same value as field_category_include_menu in case
+ * if no entry in database.
+ */
+function alshaya_acm_product_category_update_8041() {
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree('acq_product_category', 0, NULL, TRUE);
+  foreach ($terms as $term) {
+    if ($term->get('field_show_in_lhn')->getString() == '') {
+      $term->get('field_show_in_lhn')->setValue($term->get('field_category_include_menu')->getString());
+      $term->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set config based on sale categorization ids.
  */
 function alshaya_acm_product_category_update_8040() {

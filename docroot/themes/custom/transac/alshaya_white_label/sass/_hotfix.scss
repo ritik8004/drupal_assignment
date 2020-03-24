@@ -225,8 +225,6 @@ html[lang=ar] {
     margin-top: 1rem;
 
     tr td.name div.items {
-      width: 42%;
-
       @include breakpoint($only-mobile) {
         margin-right: -0.1875rem;
       }

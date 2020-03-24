@@ -80,6 +80,9 @@
         // Accordion for delivery option section on PDP.
         $('.delivery-options-wrapper').find('.c-accordion-delivery-options').each(function () {
           Drupal.convertIntoAccordion($(this));
+          if ($(this).attr('data-state') === 'disabled') {
+            $(this).accordion('option', 'disabled', true);
+          }
         });
 
         // Accordion for dimensions and care section on PDP.

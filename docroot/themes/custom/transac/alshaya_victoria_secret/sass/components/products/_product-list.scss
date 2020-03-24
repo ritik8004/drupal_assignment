@@ -33,6 +33,15 @@
       margin-bottom: 2rem;
     }
 
+    @include breakpoint($only-tablet) {
+      min-height: 22.5rem;
+    }
+
+    // required for tablet landscape as well.
+    @include breakpoint($desktop - 1) {
+      min-height: 31rem;
+    }
+
     article:hover {
       .field--name-name a {
         text-decoration: none;
@@ -126,6 +135,12 @@
 
           .alshaya_search_mainimage {
             height: 24.5rem;
+
+            // in search page, the height is a bit big for most of the images.
+            img {
+              height: 100%;
+              object-fit: cover;
+            }
           }
         }
 

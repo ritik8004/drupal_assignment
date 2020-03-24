@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Update the access plugin for store finder view.
+ */
+function alshaya_click_collect_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['views.view.stores_finder'], 'alshaya_stores_finder');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for - location permission.
  */
 function alshaya_click_collect_update_8001() {

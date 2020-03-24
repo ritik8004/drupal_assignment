@@ -31,8 +31,8 @@ target_remote_user=`drush sa $target_alias | grep remote-user | cut -d"'" -f4`
 target_remote_host=`drush sa $target_alias | grep remote-host | cut -d"'" -f4`
 target="$target_remote_user@$target_remote_host"
 
-source_domain=alshaya.acsitefactory.com
-target_domain=${target_env:2}-$source_domain
+source_domain=factory.alshaya.com
+target_domain=${target_env:2}.$source_domain
 
 echo "Preparing list of sites to stage..."
 valid_sites=""
@@ -46,7 +46,7 @@ do
   fi
 
   cd ~
-  found=$(drush $target_alias ssh "drush -l $current_site.$target_domain status" | grep "DB driver")
+  found=$(drush $target_alias ssh "drush -l $current_site-$target_domain status" | grep "DB driver")
   if [ -z "$found" ]; then
     echo "Impossible to find site $current_site on $target_env."
     continue
@@ -87,7 +87,7 @@ echo "Importing the dumps on target env..."
 ssh $target 'gunzip /tmp/manual-stage/*.gz'
 for current_site in $(echo ${valid_sites:1} | tr "," "\n")
 do
-  uri=$current_site.$target_domain
+  uri="https://$current_site-$target_domain"
 
   echo
   echo "Droppping and importing database again for $current_site"
@@ -116,7 +116,7 @@ do
   echo
   echo "Syncing files with target env for $current_site"
   echo
-  uri=$current_site.$target_domain
+  uri="https://$current_site-$target_domain"
   siteUri=`drush acsf-tools-list --fields=domains | grep -A3 "^$current_site$" | tail -n 1 | cut -d' ' -f6`
   site_files=`drush acsf-tools-info | grep $current_site | cut -d"	" -f3`
   files_folder="sites/g/files/$site_files/files"

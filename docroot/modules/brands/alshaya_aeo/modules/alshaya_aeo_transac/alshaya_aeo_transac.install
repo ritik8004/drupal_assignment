@@ -8,6 +8,32 @@
 use Drupal\block\Entity\Block;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Disable color block, color family is being used as color facet.
+ */
+function alshaya_aeo_transac_update_8001() {
+  $blocks = [
+    'plpcolor' => 'plpcolorfamily',
+    'promocolor' => 'promocolorfamily',
+    'color' => 'colorfamily',
+  ];
+
+  foreach ($blocks as $old_id => $new_id) {
+    $old_block = Block::load($old_id);
+    $new_block = Block::load($new_id);
+
+    // Set weight of new block same as old block.
+    $new_block->setWeight($old_block->getWeight());
+    $new_block->save();
+
+    // Keep the old block disabled.
+    $old_block->disable();
+    $old_block->save();
+  }
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_aeo_transac_install() {
@@ -49,25 +75,6 @@ function alshaya_aeo_transac_install() {
       'ar' => 'النسر الاميركي اون لاين',
     ],
   ];
+
   alshaya_i18n_save_translations($strings);
-
-  // Disable color block as color family is being used as color facet.
-  $blocks = [
-    'plpcolor' => 'plpcolorfamily',
-    'promocolor' => 'promocolorfamily',
-    'color' => 'colorfamily',
-  ];
-
-  foreach ($blocks as $old_id => $new_id) {
-    $old_block = Block::load($old_id);
-    $new_block = Block::load($new_id);
-
-    // Set weight of new block same as old block.
-    $new_block->setWeight($old_block->getWeight());
-    $new_block->save();
-
-    // Keep the old block disabled.
-    $old_block->disable();
-    $old_block->save();
-  }
 }

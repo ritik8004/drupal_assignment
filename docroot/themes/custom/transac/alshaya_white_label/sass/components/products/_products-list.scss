@@ -779,7 +779,8 @@ html[lang=ar] {
 // Fix for products misalignment on PLP/Promo Pages & Search.
 .c-products-list {
   .view-alshaya-product-list,
-  &.view-search {
+  &.view-search,
+  &.block-views-blockalshaya-product-list-block-1 {
     width: 100%;
     clear: both;
   }

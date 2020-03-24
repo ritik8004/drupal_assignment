@@ -1,0 +1,19 @@
+#alshaya-algolia-search {
+  .filter__inner {
+    .c-collapse-item:not(#sort_by) {
+      &.block-facet--swatch-list {
+        li {
+          @include breakpoint($only-mobile) {
+            &.facet-item {
+              padding: 2px 0 !important;
+            }
+
+            > a {
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
