@@ -226,12 +226,7 @@ class CheckoutHelper {
     $current_user_id = 0;
 
     // Clear orders list cache if user is logged in.
-    if ($this->currentUser->isAnonymous() || !alshaya_acm_customer_is_customer($this->currentUser)) {
-      // Store the email address of customer in session.
-      $email = $cart->customerEmail();
-      $session->set('email_order_' . $order_id, $email);
-    }
-    else {
+    if (alshaya_acm_customer_is_customer($this->currentUser)) {
       $email = $this->currentUser->getEmail();
       $current_user_id = $this->currentUser->id();
 
