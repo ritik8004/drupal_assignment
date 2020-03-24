@@ -104,6 +104,8 @@
         &.selected {
           .spc-address-btns {
             button {
+              cursor: default;
+
               @include icon('check', before) {
                 font-size: 1.75rem;
                 color: $spc-checkout-radio-filled;
