@@ -228,7 +228,7 @@
 
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === 'not defined') {
-        if (document.location.pathname.startsWith('/' + drupalSettings.path.currentLanguage + '/user')) {
+        if (document.location.pathname.indexOf('/' + drupalSettings.path.currentLanguage + '/user') == 0) {
           var currPath = document.location.pathname;
           var pagePath = currPath.replace('/' + drupalSettings.path.currentLanguage + '/user/', '');
           var gtmPageTypeArray = pagePath.split('/');
@@ -775,9 +775,9 @@
        * Tracking clicks on fitler & sort options.
        */
       if (listName !== undefined) {
-        if (listName.includes('PLP') || listName === 'Search Results Page') {
+        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page') {
           var section = listName;
-          if (listName.includes('PLP')) {
+          if (listName.indexOf('PLP') > -1) {
             section = $('h1.c-page-title').text().toLowerCase();
           }
 
