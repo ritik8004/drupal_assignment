@@ -1243,14 +1243,14 @@
 
     try {
       // Track error on GA.
-      if (drupalSettings.gtm.logErrorsToGtm !== undefined &&
-        drupalSettings.gtm.logErrorsToGtm) {
+      if (drupalSettings.gtm.log_errors_to_ga !== undefined &&
+        drupalSettings.gtm.log_errors_to_ga) {
         dataLayer.push(errorData);
       }
 
       // Log error on console.
-      if (drupalSettings.gtm.logErrorsToConsole !== undefined &&
-        drupalSettings.gtm.logErrorsToConsole) {
+      if (drupalSettings.gtm.log_errors_to_console !== undefined &&
+        drupalSettings.gtm.log_errors_to_console) {
         console.error(error);
       }
 
