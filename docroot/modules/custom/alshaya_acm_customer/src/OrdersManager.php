@@ -318,6 +318,10 @@ class OrdersManager {
 
     $items = [];
     foreach ($order['items'] as $item) {
+      if (isset($items[$item['sku']])) {
+        continue;
+      }
+
       $processed_item = [
         'type' => (string) ($item['product_type'] ?? ''),
         'price' => ($item['price_incl_tax'] ?? 0),
@@ -328,7 +332,7 @@ class OrdersManager {
       ];
 
       // Add all other info.
-      $items[] = $processed_item + $item;
+      $items[$item['sku']] = $processed_item + $item;
     }
     $order['items'] = $items;
 
