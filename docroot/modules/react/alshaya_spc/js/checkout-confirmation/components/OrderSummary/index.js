@@ -13,18 +13,35 @@ const OrderSummary = () => {
 
   const customerAddress = [];
   const addressInfo = drupalSettings.order_details.delivery_type_info.delivery_address;
-  customerAddress.push(addressInfo.country);
-  if (addressInfo.address_line1 !== undefined) {
-    customerAddress.push(addressInfo.address_line1);
+  if (addressInfo !== undefined) {
+    customerAddress.push(addressInfo.country);
+    if (addressInfo.address_line1 !== undefined) {
+      customerAddress.push(addressInfo.address_line1);
+    }
+    if (addressInfo.address_line2 !== undefined) {
+      customerAddress.push(addressInfo.address_line2);
+    }
+    if (addressInfo.administrative_area_display !== undefined) {
+      customerAddress.push(addressInfo.administrative_area_display);
+    }
+    if (addressInfo.dependent_locality !== undefined) {
+      customerAddress.push(addressInfo.dependent_locality);
+    }
   }
-  if (addressInfo.address_line2 !== undefined) {
-    customerAddress.push(addressInfo.address_line2);
-  }
-  if (addressInfo.administrative_area_display !== undefined) {
-    customerAddress.push(addressInfo.administrative_area_display);
-  }
-  if (addressInfo.dependent_locality !== undefined) {
-    customerAddress.push(addressInfo.dependent_locality);
+
+  const storeAddress = [];
+  let storeHours = [];
+  const storeInfo = drupalSettings.order_details.delivery_type_info.store;
+  if (storeInfo !== undefined) {
+    storeAddress.push(storeInfo.store_name);
+    storeAddress.push(storeInfo.store_address.address_line1);
+    storeAddress.push(storeInfo.store_address.address_line2);
+    storeAddress.push(storeInfo.store_address.locality);
+    storeAddress.push(storeInfo.store_address.dependent_locality);
+    storeAddress.push(storeInfo.store_address.administrative_area_display);
+    storeAddress.push(storeInfo.store_address.country);
+    storeAddress.push(storeInfo.store_phone);
+    storeHours = drupalSettings.order_details.delivery_type_info.store.store_open_hours;
   }
 
   const {
@@ -80,7 +97,12 @@ const OrderSummary = () => {
         <input type="checkbox" id="spc-detail-open" />
         <label htmlFor="spc-detail-open">{Drupal.t('order detail')}</label>
         <div className="spc-detail-content">
-          <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={customerAddress.join(', ')} />
+          <ConditionalView condition={customerAddress.length > 0}>
+            <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={customerAddress.join(', ')} />
+          </ConditionalView>
+          <ConditionalView condition={storeAddress.length > 0}>
+            <OrderSummaryItem type="cnc" label={Drupal.t('delivery to')} name={customerName} address={storeAddress.join(', ')} timings={storeHours.join('\n')} />
+          </ConditionalView>
           <ConditionalView condition={billingAddress.length > 0}>
             <OrderSummaryItem type="address" label={Drupal.t('billing address')} name={customerName} address={billingAddress.join(', ')} />
           </ConditionalView>
