@@ -563,6 +563,8 @@ class CartController {
             ]);
           }
           elseif ($e->getCode() === 400) {
+            // Cancel reservation api when process failed for not enough data,
+            // or bad data. i.e. checkout.com cvv missing.
             $this->cart->cancelCartReservation($e->getMessage());
             return new JsonResponse([
               'error' => TRUE,

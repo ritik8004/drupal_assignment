@@ -218,6 +218,9 @@ class PaymentController {
   /**
    * Handle checkout.com payment error callback.
    *
+   * @param string|null $message
+   *   The message to send with cancel cart reservation.
+   *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to cart or checkout page.
    *
