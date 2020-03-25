@@ -16,3 +16,4 @@ permissions:
   - 'restful get payment_methods'
   - 'restful get product_exclude_linked'
   - 'restful get magazine_detail_page'  
+  - 'restful get magazine_block'
