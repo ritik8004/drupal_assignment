@@ -156,6 +156,7 @@ class NewCard extends React.Component {
               id="spc-cc-cvv"
               ref={this.ccCvv}
               pattern="\d{3,4}"
+              maxLength="4"
               required
               onBlur={(e) => handleCardCvvChange(e, 'blur')}
             />

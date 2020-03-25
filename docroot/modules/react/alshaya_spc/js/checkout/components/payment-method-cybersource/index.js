@@ -284,6 +284,7 @@ class PaymentMethodCybersource extends React.Component {
               type="password"
               ref={this.ccCvv}
               pattern="\d{3,4}"
+              maxLength="4"
               required
               onBlur={(e) => this.handleCardCvvChange(e, 'blur')}
             />
