@@ -134,8 +134,14 @@ export default class CartItem extends React.Component {
         <div className="spc-promotions">
           {promotions.map((key) => <CartPromotion key={`${key}-${Math.floor(Math.random() * 99)}`} promo={key} link />)}
         </div>
-        <CartItemOOS inStock={inStock} />
-        <ItemLowQuantity stock={stock} qty={qty} in_stock={inStock} />
+        <div className="spc-cart-item-warning">
+          <CartItemOOS inStock={inStock} />
+          <ItemLowQuantity stock={stock} qty={qty} in_stock={inStock} />
+        </div>
+        <div className="spc-cart-item-alerts">
+          {/* Dynamic promo labels buy 2 more items, free gifts labels,
+           qty limit labels go here */}
+        </div>
         {/* @Todo: Show OOS only once. */}
         {isItemError
           && <CartItemError errorMessage={errorMessage} />}
