@@ -157,7 +157,7 @@ class PaymentController {
         '@token' => $payment_token,
       ]);
 
-      return $this->handleCheckoutComFailure();
+      return $this->handleCheckoutComError('3D secure payment came into success but responseCode was not success.');
     }
 
     $amount = $this->checkoutComApi->getCheckoutAmount($cart['totals']['grand_total'], $cart['totals']['quote_currency_code']);
@@ -168,7 +168,7 @@ class PaymentController {
         '@total' => $amount,
       ]);
 
-      return $this->handleCheckoutComFailure();
+      return $this->handleCheckoutComError('3D secure payment came into success with proper responseCode but totals do not match.');
     }
 
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
@@ -207,7 +207,7 @@ class PaymentController {
         'Failed to place order for cart @cart_id with message: @message',
         ['@cart_id' => $cart['cart']['id'], '@message' => $e->getMessage()]
       );
-
+      $this->cart->cancelCartReservation($e->getMessage());
       $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year')));
       $response->setTargetUrl('/' . $data['data']['langcode'] . '/checkout');
     }
@@ -218,11 +218,17 @@ class PaymentController {
   /**
    * Handle checkout.com payment error callback.
    *
+   * @param string|null $message
+   *   The message to send with cancel cart reservation.
+   *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to cart or checkout page.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function handleCheckoutComError() {
+  public function handleCheckoutComError(string $message = NULL) {
     try {
+      $this->cart->cancelCartReservation($message ? $message : '3d checkout.com request failed.');
       $data = $this->validateCheckoutComRequest('error');
     }
     catch (\Exception $e) {
@@ -366,6 +372,8 @@ class PaymentController {
         '@message' => $e->getMessage(),
       ]);
 
+      $this->cart->cancelCartReservation($e->getMessage());
+
       $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year')));
       $redirect->setTargetUrl('/' . $state['data']['langcode'] . '/checkout');
     }
@@ -385,10 +393,13 @@ class PaymentController {
    * @throws \Exception
    */
   public function handleKnetError(string $state_key) {
+
     try {
       $data = $this->validateKnetRequest('error', $state_key);
     }
     catch (\Exception $e) {
+      $this->cart->cancelCartReservation($e->getMessage());
+
       if ($e->getCode() === 302) {
         return new RedirectResponse($e->getMessage(), 302);
       }
@@ -406,6 +417,8 @@ class PaymentController {
       '@quote_id' => $data['data']['cart_id'],
       '@message' => $message,
     ]);
+
+    $this->cart->cancelCartReservation($message);
 
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
     $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year')));
