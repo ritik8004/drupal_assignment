@@ -11,27 +11,20 @@ const OrderSummary = () => {
   const expectedDelivery = drupalSettings.order_details.expected_delivery;
   const itemsCount = drupalSettings.order_details.number_of_items;
 
-  const {
-    country,
-    administrative_area_display: locality,
-    dependent_locality: dependentLocality,
-    address_line1: addressLine1,
-    address_line2: addressLine2,
-  } = drupalSettings.order_details.delivery_type_info.delivery_address;
-
   const customerAddress = [];
-  customerAddress.push(country);
-  if (addressLine1 !== undefined) {
-    customerAddress.push(addressLine1);
+  const addressInfo = drupalSettings.order_details.delivery_type_info.delivery_address;
+  customerAddress.push(addressInfo.country);
+  if (addressInfo.address_line1 !== undefined) {
+    customerAddress.push(addressInfo.address_line1);
   }
-  if (addressLine2 !== undefined) {
-    customerAddress.push(addressLine2);
+  if (addressInfo.address_line2 !== undefined) {
+    customerAddress.push(addressInfo.address_line2);
   }
-  if (locality !== undefined) {
-    customerAddress.push(locality);
+  if (addressInfo.administrative_area_display !== undefined) {
+    customerAddress.push(addressInfo.administrative_area_display);
   }
-  if (dependentLocality !== undefined) {
-    customerAddress.push(dependentLocality);
+  if (addressInfo.dependent_locality !== undefined) {
+    customerAddress.push(addressInfo.dependent_locality);
   }
 
   const {
@@ -42,7 +35,7 @@ const OrderSummary = () => {
   const billingAddress = [];
   const billingInfo = drupalSettings.order_details.billing;
   if (billingInfo !== null) {
-    billingAddress.push(country);
+    billingAddress.push(billingInfo.country);
     if (billingInfo.area_parent_display !== undefined) {
       billingAddress.push(billingInfo.area_parent_display);
     }
