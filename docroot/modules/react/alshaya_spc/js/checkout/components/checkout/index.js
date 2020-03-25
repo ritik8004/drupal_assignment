@@ -238,7 +238,7 @@ export default class Checkout extends React.Component {
           <div className="spc-content">
             {errorSuccessMessage !== null
               && (
-              <CheckoutMessage type={messageType} context="checkout">
+              <CheckoutMessage type={messageType} context="page-level-checkout">
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}
