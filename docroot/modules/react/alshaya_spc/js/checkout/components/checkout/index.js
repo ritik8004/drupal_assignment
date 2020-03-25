@@ -87,6 +87,7 @@ export default class Checkout extends React.Component {
       }
     } catch (error) {
       // In case of error, do nothing.
+      Drupal.logJavascriptError('checkout', error);
     }
 
     // Make sidebar sticky.
@@ -151,8 +152,9 @@ export default class Checkout extends React.Component {
         () => {
           this.fetchStoresHelper(getDefaultMapCenter());
         })
-        .catch(() => {
+        .catch((error) => {
           // In case of error, do nothing.
+          Drupal.logJavascriptError('checkout-cnc-event', error);
         });
     }
   };
@@ -238,7 +240,7 @@ export default class Checkout extends React.Component {
           <div className="spc-content">
             {errorSuccessMessage !== null
               && (
-              <CheckoutMessage type={messageType} context="checkout">
+              <CheckoutMessage type={messageType} context="page-level-checkout">
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}

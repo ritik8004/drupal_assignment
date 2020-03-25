@@ -59,7 +59,7 @@ export default class EmptyDeliveryText extends React.Component {
   };
 
   eventListener = (e) => {
-    const data = e.detail;
+    const data = e.detail.data();
     const { refreshCart } = this.props;
     refreshCart(data);
     if (this.isComponentMounted) {

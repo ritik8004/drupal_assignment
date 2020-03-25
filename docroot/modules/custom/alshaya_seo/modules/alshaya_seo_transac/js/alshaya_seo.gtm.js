@@ -228,7 +228,7 @@
 
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === 'not defined') {
-        if (document.location.pathname.startsWith('/' + drupalSettings.path.currentLanguage + '/user')) {
+        if (document.location.pathname.indexOf('/' + drupalSettings.path.currentLanguage + '/user') == 0) {
           var currPath = document.location.pathname;
           var pagePath = currPath.replace('/' + drupalSettings.path.currentLanguage + '/user/', '');
           var gtmPageTypeArray = pagePath.split('/');
@@ -775,9 +775,9 @@
        * Tracking clicks on fitler & sort options.
        */
       if (listName !== undefined) {
-        if (listName.includes('PLP') || listName === 'Search Results Page') {
+        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page') {
           var section = listName;
-          if (listName.includes('PLP')) {
+          if (listName.indexOf('PLP') > -1) {
             section = $('h1.c-page-title').text().toLowerCase();
           }
 
@@ -1216,6 +1216,48 @@
   // Ajax command to push deliveryAddress Event.
   $.fn.triggerDeliveryAddress = function () {
     dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
+  };
+
+  /**
+   * Log errors and track on GA.
+   *
+   * @param context
+   * @param error
+   */
+  Drupal.logJavascriptError = function (context, error) {
+    var message = (error.message !== undefined)
+      ? error.message
+      : error;
+    var errorData = {
+      event: 'eventTracker',
+      eventCategory: context,
+      eventLabel: 'Error occurred on ' + window.location.href,
+      eventAction: message,
+      eventValue: 0,
+      nonInteraction: 0,
+    };
+
+    try {
+      // Log error on console.
+      if (drupalSettings.gtm.log_errors_to_console !== undefined
+        && drupalSettings.gtm.log_errors_to_console) {
+        console.error(error);
+      }
+
+      // Track error on GA.
+      if (drupalSettings.gtm.log_errors_to_ga !== undefined
+        && drupalSettings.gtm.log_errors_to_ga
+        && dataLayer !== undefined) {
+        dataLayer.push(errorData);
+      }
+    } catch (e) {
+      // Do nothing.
+    }
+  };
+
+  window.onerror = function (message, url, lineNo, columnNo, error) {
+    Drupal.logJavascriptError('Uncaught errors', error);
+    return true;
   };
 
 })(jQuery, Drupal, dataLayer);

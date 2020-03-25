@@ -2,22 +2,66 @@
   .c-products__item {
     .alshaya_search_gallery {
       .alshaya_search_slider {
-        width: 12.5rem !important;
+        width: 12.3125rem;
+        margin: 0 auto;
+        position: relative;
+        margin-top: 0.625rem;
 
-        .slick-slide {
-          width: 2.75rem !important;
+        .slick-slider {
+          padding-#{$left}: 0;
 
-          &:hover {
-            border: 1px solid $plp_tile_hover_slider_nav;
+          .slick-slide {
+            margin: 0.1875rem;
+            position: relative;
+            max-width: 3.75rem;
 
-            &::after {
-              content: unset;
+            img {
+              width: 3.75rem;
+              height: auto;
+              max-width: 4.75rem;
+              max-height: 6.3125rem;
+              margin: 0 auto;
+              display: block !important;
+            }
+
+            &:hover {
+              &::after {
+                content: '';
+                display: block;
+                border: 1px solid $plp_tile_hover_slider_nav;
+                position: absolute;
+                top: 0;
+                left: -1px;
+                right: -1px;
+                bottom: 0;
+              }
             }
           }
+        }
 
-          img {
-            max-width: none;
-            height: 2.5rem;
+        .slick-prev,
+        .slick-next {
+          z-index: 99;
+          top: calc(50% - 1rem);
+
+          &::before {
+            background-color: transparent;
+          }
+        }
+
+        .slick-prev {
+          left: -2rem;
+
+          .product-small & {
+            left: -1.8125rem;
+          }
+        }
+
+        .slick-next {
+          right: -2rem;
+
+          .product-small & {
+            right: -1.8125rem;
           }
         }
 
@@ -25,6 +69,10 @@
           .slick-track {
             margin: 0 auto;
           }
+        }
+
+        .search-lightSlider {
+          height: 6.6875rem !important;
         }
       }
     }

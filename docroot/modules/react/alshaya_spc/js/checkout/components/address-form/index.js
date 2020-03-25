@@ -209,7 +209,7 @@ export default class AddressForm extends React.Component {
           <div className="spc-address-form-wrapper">
             {errorSuccessMessage !== null
               && (
-              <CheckoutMessage type={messageType} context="address-form">
+              <CheckoutMessage type={messageType} context="new-address-form-modal modal">
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}

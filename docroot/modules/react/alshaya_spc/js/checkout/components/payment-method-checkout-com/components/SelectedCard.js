@@ -24,10 +24,10 @@ const SelectedCard = ({
     >
       <div className="spc-type-textfield spc-type-cvv">
         <input
-          type="tel"
+          type="password"
           id="spc-cc-cvv"
-          className="secure-input"
           pattern="\d{3,4}"
+          maxLength="4"
           required
           onChange={handleCardCvvChange}
           onBlur={(e) => labelEffect(e, 'blur')}

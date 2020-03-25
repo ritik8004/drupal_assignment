@@ -11,28 +11,63 @@ const OrderSummary = () => {
   const expectedDelivery = drupalSettings.order_details.expected_delivery;
   const itemsCount = drupalSettings.order_details.number_of_items;
 
-  const {
-    country,
-    administrative_area_display: locality,
-    dependent_locality: dependentLocality,
-    address_line1: addressLine1,
-    address_line2: addressLine2,
-  } = drupalSettings.order_details.delivery_type_info.delivery_address;
-  const customerAddress = ` ${country}, ${addressLine1}, ${addressLine2}, ${locality}, ${dependentLocality}`;
+  const customerAddress = [];
+  const addressInfo = drupalSettings.order_details.delivery_type_info.delivery_address;
+  if (addressInfo !== undefined) {
+    customerAddress.push(addressInfo.country);
+    if (addressInfo.address_line1 !== undefined) {
+      customerAddress.push(addressInfo.address_line1);
+    }
+    if (addressInfo.address_line2 !== undefined) {
+      customerAddress.push(addressInfo.address_line2);
+    }
+    if (addressInfo.administrative_area_display !== undefined) {
+      customerAddress.push(addressInfo.administrative_area_display);
+    }
+    if (addressInfo.dependent_locality !== undefined) {
+      customerAddress.push(addressInfo.dependent_locality);
+    }
+  }
+
+  const storeAddress = [];
+  let storeHours = [];
+  const storeInfo = drupalSettings.order_details.delivery_type_info.store;
+  if (storeInfo !== undefined) {
+    storeAddress.push(storeInfo.store_name);
+    storeAddress.push(storeInfo.store_address.address_line1);
+    storeAddress.push(storeInfo.store_address.address_line2);
+    storeAddress.push(storeInfo.store_address.locality);
+    storeAddress.push(storeInfo.store_address.dependent_locality);
+    storeAddress.push(storeInfo.store_address.administrative_area_display);
+    storeAddress.push(storeInfo.store_address.country);
+    storeAddress.push(storeInfo.store_phone);
+    storeHours = drupalSettings.order_details.delivery_type_info.store.store_open_hours;
+  }
 
   const {
     method, transactionId, paymentId, resultCode, bankDetails,
   } = drupalSettings.order_details.payment;
 
   // Get Billing info.
-  let billingAddress = '';
-  if (drupalSettings.order_details.billing !== null) {
-    const billingAreaParent = drupalSettings.order_details.billing.area_parent_display;
-    const billingArea = drupalSettings.order_details.billing.administrative_area_display;
-    const billingAddressLine1 = drupalSettings.order_details.billing.address_line1;
-    const billingAddressLine2 = drupalSettings.order_details.billing.address_line2;
-    const billingLocalty = drupalSettings.order_details.billing.dependent_locality;
-    billingAddress = ` ${country}, ${billingAreaParent}, ${billingArea}, ${billingAddressLine1}, ${billingAddressLine2}, ${billingLocalty}`;
+  const billingAddress = [];
+  const billingInfo = drupalSettings.order_details.billing;
+  if (billingInfo !== null) {
+    billingAddress.push(billingInfo.country);
+    if (billingInfo.area_parent_display !== undefined) {
+      billingAddress.push(billingInfo.area_parent_display);
+    }
+    if (billingInfo.administrative_area_display !== undefined) {
+      billingAddress.push(billingInfo.administrative_area_display);
+    }
+    if (billingInfo.address_line1 !== undefined) {
+      billingAddress.push(billingInfo.address_line1);
+    }
+    if (billingInfo.address_line2 !== undefined) {
+      billingAddress.push(billingInfo.address_line2);
+    }
+    if (billingInfo.dependent_locality !== undefined) {
+      billingAddress.push(billingInfo.dependent_locality);
+    }
   }
 
   return (
@@ -62,9 +97,14 @@ const OrderSummary = () => {
         <input type="checkbox" id="spc-detail-open" />
         <label htmlFor="spc-detail-open">{Drupal.t('order detail')}</label>
         <div className="spc-detail-content">
-          <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={customerAddress} />
-          <ConditionalView condition={billingAddress !== ''}>
-            <OrderSummaryItem type="address" label={Drupal.t('billing address')} name={customerName} address={billingAddress} />
+          <ConditionalView condition={customerAddress.length > 0}>
+            <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={customerAddress.join(', ')} />
+          </ConditionalView>
+          <ConditionalView condition={storeAddress.length > 0}>
+            <OrderSummaryItem type="cnc" label={Drupal.t('delivery to')} name={customerName} address={storeAddress.join(', ')} timings={storeHours.join('\n')} />
+          </ConditionalView>
+          <ConditionalView condition={billingAddress.length > 0}>
+            <OrderSummaryItem type="address" label={Drupal.t('billing address')} name={customerName} address={billingAddress.join(', ')} />
           </ConditionalView>
           <OrderSummaryItem label={Drupal.t('mobile number')} value={mobileNumber} />
           <OrderSummaryItem label={Drupal.t('payment method')} value={method} />

@@ -48,6 +48,17 @@
     }
   }
 
+  .spc-type-cc-number,
+  .spc-type-expiry,
+  .spc-type-cvv {
+    label {
+      white-space: nowrap;
+      width: 80%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
   .spc-type-expiry,
   .spc-type-cvv {
     width: 9.375rem;

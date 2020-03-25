@@ -152,11 +152,11 @@ class NewCard extends React.Component {
           </div>
           <div className="spc-type-textfield spc-type-cvv">
             <input
-              type="tel"
-              className="secure-input"
+              type="password"
               id="spc-cc-cvv"
               ref={this.ccCvv}
               pattern="\d{3,4}"
+              maxLength="4"
               required
               onBlur={(e) => handleCardCvvChange(e, 'blur')}
             />
