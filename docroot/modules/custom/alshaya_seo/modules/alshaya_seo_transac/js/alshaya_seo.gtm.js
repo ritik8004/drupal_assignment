@@ -1225,18 +1225,14 @@
    * @param error
    */
   Drupal.logJavascriptError = function (context, error) {
-    var msg = '';
-    if (error.message !== undefined) {
-      msg = error.message;
-    }
-    else {
-      msg = error;
-    }
+    var message = (error.message !== undefined)
+      ? error.message
+      : error;
     var errorData = {
       event: 'eventTracker',
       eventCategory: context,
       eventLabel: 'Error occurred on ' + window.location.href,
-      eventAction: msg,
+      eventAction: message,
       eventValue: 0,
       nonInteraction: 0,
     };
