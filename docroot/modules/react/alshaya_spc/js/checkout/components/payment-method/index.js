@@ -54,7 +54,7 @@ export default class PaymentMethod extends React.Component {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
       if (result.error !== undefined && result.error) {
         removeFullScreenLoader();
-        Drupal.logJavascriptError('finalise payment', result.error);
+        Drupal.logJavascriptError('finalise payment', result.message);
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
         const { cart } = this.props;
@@ -63,7 +63,7 @@ export default class PaymentMethod extends React.Component {
         removeStorageInfo('billing_shipping_same');
       } else if (result.success === undefined || !(result.success)) {
         // 3D flow error.
-        Drupal.logJavascriptError('3d flow finalise payment', result.error);
+        Drupal.logJavascriptError('3d flow finalise payment', result.message);
       } else if (result.redirectUrl !== undefined) {
         // 3D flow success.
         removeStorageInfo('spc_selected_card');
