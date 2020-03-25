@@ -19,7 +19,7 @@ const SelectedStore = ({
       </div>
       {errorSuccessMessage !== null
         && (
-        <CheckoutMessage type={messageType} context="cnc-form">
+        <CheckoutMessage type={messageType} context="selected-store-form-modal modal">
           {errorSuccessMessage}
         </CheckoutMessage>
         )}
