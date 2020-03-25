@@ -281,8 +281,7 @@ class PaymentMethodCybersource extends React.Component {
           </div>
           <div className="spc-type-textfield spc-type-cvv spc-cy-cc-cvv">
             <input
-              type="tel"
-              className="secure-input"
+              type="password"
               ref={this.ccCvv}
               pattern="\d{3,4}"
               required
