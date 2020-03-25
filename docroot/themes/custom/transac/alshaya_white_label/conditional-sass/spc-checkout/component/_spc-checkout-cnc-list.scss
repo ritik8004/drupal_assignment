@@ -100,7 +100,8 @@
           }
 
           .store-distance {
-            float: $right;
+            text-align: $right;
+            flex-grow: 1;
             display: inline-block;
             pointer-events: none;
             color: $spc-cnc-store-list-distance;
