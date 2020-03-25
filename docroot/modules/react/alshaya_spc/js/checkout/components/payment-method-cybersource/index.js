@@ -175,7 +175,7 @@ class PaymentMethodCybersource extends React.Component {
           message: getStringMessage('payment_error'),
         });
         removeFullScreenLoader();
-        Drupal.logJavascriptError('validate-before-place-order', getStringMessage('payment_error'));
+        Drupal.logJavascriptError('validate-before-place-order', response.data.error_message);
         return;
       }
 
