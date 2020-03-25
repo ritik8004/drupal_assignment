@@ -311,7 +311,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
   $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount']) : NULL;
 
-  if (isset($order['extension']['surcharge_incl_tax']) && $order['extension']['surcharge_incl_tax'] > 0) {
+  if ($order['totals']['surcharge'] > 0) {
     // If surcharge is enabled, only then show.
     if (\Drupal::service('alshaya_acm_checkout.checkout_helper')->isSurchargeEnabled()) {
       $acm_config = \Drupal::config('alshaya_acm_checkout.settings');
