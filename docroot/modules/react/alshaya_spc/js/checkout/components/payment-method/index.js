@@ -70,7 +70,7 @@ export default class PaymentMethod extends React.Component {
         removeStorageInfo('billing_shipping_same');
         window.location = result.redirectUrl;
       } else {
-        Drupal.logJavascriptError('finalise payment', result);
+        Drupal.logJavascriptError('finalise payment', result.message);
         removeFullScreenLoader();
       }
     }).catch((error) => {
