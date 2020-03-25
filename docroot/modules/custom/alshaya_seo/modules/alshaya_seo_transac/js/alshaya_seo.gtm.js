@@ -1218,4 +1218,46 @@
     dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
   };
 
+  /**
+   * Log errors and track on GA.
+   *
+   * @param context
+   * @param error
+   */
+  Drupal.logJavascriptError = function (context, error) {
+    var message = (error.message !== undefined)
+      ? error.message
+      : error;
+    var errorData = {
+      event: 'eventTracker',
+      eventCategory: context,
+      eventLabel: 'Error occurred on ' + window.location.href,
+      eventAction: message,
+      eventValue: 0,
+      nonInteraction: 0,
+    };
+
+    try {
+      // Log error on console.
+      if (drupalSettings.gtm.log_errors_to_console !== undefined
+        && drupalSettings.gtm.log_errors_to_console) {
+        console.error(error);
+      }
+
+      // Track error on GA.
+      if (drupalSettings.gtm.log_errors_to_ga !== undefined
+        && drupalSettings.gtm.log_errors_to_ga
+        && dataLayer !== undefined) {
+        dataLayer.push(errorData);
+      }
+    } catch (e) {
+      // Do nothing.
+    }
+  };
+
+  window.onerror = function (message, url, lineNo, columnNo, error) {
+    Drupal.logJavascriptError('Uncaught errors', error);
+    return true;
+  };
+
 })(jQuery, Drupal, dataLayer);

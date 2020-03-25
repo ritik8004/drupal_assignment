@@ -140,7 +140,7 @@ export default class PaymentMethods extends React.Component {
 
         dispatchCustomEvent('refreshCompletePurchaseSection', {});
       }).catch((error) => {
-        console.error(error);
+        Drupal.logJavascriptError('change payment method', error);
       });
     }
   };
