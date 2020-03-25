@@ -9,6 +9,7 @@ import {
  * Prepare mapping of the google geocode.
  */
 export const mapAddressMap = () => {
+  let a;
   let mapping = [];
   // If mapping is available in settings, use that.
   if (window.drupalSettings.google_field_mapping !== null) {
