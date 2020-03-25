@@ -111,6 +111,9 @@ class Simple extends SKUPluginBase {
         if ($this->getDisplayNodeId($parent)) {
           return $parent;
         }
+        elseif (\Drupal::service('alshaya_acm_product.skumanager')->isSkuFreeGift($sku)) {
+          return $parent;
+        }
       }
     }
 
