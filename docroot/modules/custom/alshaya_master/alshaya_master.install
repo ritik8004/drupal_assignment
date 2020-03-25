@@ -1517,9 +1517,6 @@ function alshaya_master_install() {
     'Credit Card Number' => [
       'ar' => 'رقم بطاقة الائتمان',
     ],
-    'CVV' => [
-      'ar' => 'الرقم السري للبطاقة CVV',
-    ],
     'This code is a three or four digit number printed on the front or back of the credit card' => [
       'ar' => 'هذا الرمز مكون من ثلاثة أو أربعة أرقام مطبوعة على ظهر أو وجه بطاقة الائتمان',
     ],

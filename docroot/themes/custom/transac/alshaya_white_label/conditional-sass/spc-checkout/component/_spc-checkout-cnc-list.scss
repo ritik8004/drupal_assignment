@@ -45,8 +45,6 @@
 
       .spc-cnc-store-name {
         cursor: pointer;
-        height: 3.25rem;
-        line-height: 3.25rem;
         padding-#{$right}: 1.25rem;
         display: block;
         font-size: 0.875rem;
@@ -82,16 +80,28 @@
         }
 
         .spc-store-name-wrapper {
-          display: inline-block;
-          width: calc(100% - 2.5rem);
+          width: 100%;
           padding-#{$left}: 3rem;
+          height: 3.25rem;
+          display: inline-flex;
+          align-items: center;
+
+          @include breakpoint($only-mobile) {
+            width: calc(100% - 2.5rem);
+          }
 
           .store-name {
             pointer-events: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: calc(100% - 5.25rem);
+            display: inline-block;
+            white-space: nowrap;
           }
 
           .store-distance {
-            float: $right;
+            text-align: $right;
+            flex-grow: 1;
             display: inline-block;
             pointer-events: none;
             color: $spc-cnc-store-list-distance;
