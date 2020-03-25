@@ -1,31 +1,3 @@
-// For all browsers
-body {
-  &.nodetype--acq_product {
-    &.free-gifts-modal-overlay {
-      .ui-dialog {
-        #drupal-modal.free-gift-detail-modal {
-          @include breakpoint($desktop) {
-            height: 36.31rem !important;
-          }
-        }
-      }
-    }
-  }
-}
-
-// specific to IE
-body.ie {
-  &.nodetype--acq_product {
-    &.free-gift-promo-list-overlay:not(.free-gift-detail-modal) {
-      .ui-dialog {
-        @include breakpoint($desktop) {
-          padding: calc((100vh - 38rem) / 2) calc((100vw - 60.13rem) / 2) !important;
-        }
-      }
-    }
-  }
-}
-
 .path--cart {
   .free-gift-container {
     @include breakpoint($only-mobile) {

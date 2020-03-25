@@ -1,0 +1,123 @@
+#alshaya-algolia-search {
+  .c-page-title {
+    font-family: $fl-thin;
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    font-weight: normal;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1.25rem;
+      text-align: center;
+      padding: 1.05rem 0;
+    }
+  }
+
+  .block-alshaya-category-lhn-block {
+    a {
+      letter-spacing: 0.0625rem;
+    }
+  }
+
+  .block-facet-blockcategory-facet-search {
+    a {
+      @include breakpoint($desktop) {
+        text-transform: uppercase;
+        letter-spacing: 0.0625rem;
+      }
+    }
+  }
+
+  #sort_by {
+    li {
+      a {
+        @include icon(radio-empty, before) {
+          margin-#{$right}: 1rem;
+          position: relative;
+          color: $primary_radiobtn_empty;
+          vertical-align: middle;
+          border: none;
+          font-size: 1.875rem;
+          top: -0.5625rem;
+        }
+      }
+
+      &.active-item a {
+        @include icon(radio-filled, before) {
+          border: none;
+        }
+      }
+    }
+  }
+
+  .filter__inner {
+    .c-collapse-item:not(#sort_by),
+    .c-collapse-item:not(.block-facet--swatch-list) {
+      li {
+        &.facet-item {
+          .facet-item__value {
+            @include icon(check-box-empty) {
+              font-size: 1.3125rem;
+              color: $primary_checkbox_empty;
+              margin-#{$right}: 0.5rem;
+              margin-top: 0;
+            }
+          }
+
+          &.is-active {
+            .facet-item__value {
+              @include icon(check-box-filled) {
+                color: $primary_checkbox_filled;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #sort_by {
+      li {
+        padding-#{$left}: 3rem !important;
+
+        a {
+          &::before {
+            position: absolute;
+            font-size: 3.75rem;
+            #{$left}: 0;
+            top: 0;
+            transform: translateY(0);
+
+            @include breakpoint($only-mobile) {
+              top: -0.125rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .c-content__region {
+    .sticky-filter-wrapper {
+      .c-collapse-item {
+        .c-collapse__title {
+          text-transform: uppercase;
+          font-size: 0.875rem;
+          line-height: 2.9375rem;
+          padding-#{$right}: 2.6875rem;
+          color: $algolia_react-facet-item-color;
+        }
+      }
+    }
+  }
+
+  .show-all-filters-algolia {
+    text-transform: uppercase;
+    height: 2.9375rem;
+    line-height: 2.9375rem;
+    font-size: 0.875rem;
+    padding-#{$left}: 1.875rem;
+
+    @include breakpoint($only-mobile) {
+      height: 2.9975rem;
+    }
+  }
+}

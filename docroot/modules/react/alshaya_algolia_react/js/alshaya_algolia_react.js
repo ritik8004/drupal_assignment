@@ -26,7 +26,7 @@
         }
       });
       $(window).on('load', function(event) {
-        $('body').once('bind-facet-item-click').on('click','.sticky-filter-wrapper .c-collapse-item .facet-item', function(event) {
+        $('body').once('algolia-search').on('click','.sticky-filter-wrapper .c-collapse-item .facet-item', function(event) {
           // All facets except category search block.
           if($(this).parents('.block-facet-blockcategory-facet-search').length === 0) {
             $(this).parents('.c-facet.c-collapse-item').find('.c-facet__title.c-collapse__title.active').trigger('click');
@@ -204,6 +204,11 @@
       }
 
       $('.all-filters-algolia').show();
+    });
+
+    $(window).once('reset-filter-class').on('hashchange', function() {
+      $('html').removeClass('all-filters-overlay');
+      $('body').removeClass('mobile--overlay');
     });
 
     // Fake facet apply button to close the `all filter`.

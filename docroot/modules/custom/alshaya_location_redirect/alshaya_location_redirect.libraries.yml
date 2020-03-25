@@ -1,0 +1,7 @@
+redirect:
+  js:
+    js/alshaya_location_redirect.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

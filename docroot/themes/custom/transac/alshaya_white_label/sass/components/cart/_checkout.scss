@@ -714,7 +714,7 @@ body.alias--cart {
 
         div.items {
           @include breakpoint($only-mobile) {
-            width: calc(100% - 10rem);
+            width: 48%;
             padding-#{$left}: 0;
             margin-bottom: 2.8rem;
 
@@ -1253,7 +1253,6 @@ body.path--cart .c-content__region {
     .address-container-inline {
       > .form-item {
         width: calc((100% - 0.875rem) / 2);
-        max-width: none;
       }
     }
   }

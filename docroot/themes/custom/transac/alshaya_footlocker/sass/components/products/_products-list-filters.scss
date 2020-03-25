@@ -24,6 +24,18 @@
       text-transform: capitalize;
     }
   }
+
+  .all-filters-algolia {
+    .filter__foot {
+      text-transform: uppercase;
+    }
+
+    .filter__head {
+      .filter-sort-title {
+        text-transform: capitalize;
+      }
+    }
+  }
 }
 
 .show-all-filters {

@@ -139,15 +139,20 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $configuration = $this->getConfiguration();
     $product_category_settings = $this->configFactory->get('alshaya_acm_product_category.settings');
 
+    $libraries = [
+      'alshaya_algolia_react/autocomplete',
+      'alshaya_white_label/algolia_search',
+      'alshaya_white_label/slick_css',
+    ];
+    if ($display_settings->get('color_swatches_show_product_image')) {
+      $libraries[] = 'alshaya_white_label/plp-swatch-hover';
+    }
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="alshaya-algolia-autocomplete"></div>',
       '#attached' => [
-        'library' => [
-          'alshaya_algolia_react/autocomplete',
-          'alshaya_white_label/algolia_search',
-          'alshaya_white_label/slick_css',
-        ],
+        'library' => $libraries,
         'drupalSettings' => [
           'algoliaSearch' => [
             'application_id' => $configuration['application_id'],
@@ -182,6 +187,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
               'showColorImages' => $display_settings->get('show_color_images_on_filter'),
               'showProductImage' => $display_settings->get('color_swatches_show_product_image'),
               'showVariantsThumbnail' => $display_settings->get('show_variants_thumbnail_plp_gallery'),
+              'showSwatches' => $display_settings->get('color_swatches'),
+              'swatchPlpLimit' => $display_settings->get('swatch_plp_limit'),
             ],
           ],
         ],

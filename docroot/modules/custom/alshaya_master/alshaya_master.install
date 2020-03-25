@@ -12,6 +12,27 @@ use Drupal\Core\Config\FileStorage;
  * Implements hook_update_N().
  *
  * Adding arabic translations for -
+ * '1 color' and
+ * '@count colors'.
+ */
+function alshaya_master_update_8037() {
+  // Both words are set to plural of "colors" as that is what is there on prod.
+  $strings = [
+    '1 color' => [
+      'ar' => '1 ألوان',
+    ],
+    '@swatch_count colors' => [
+      'ar' => '@swatch_count ألوان',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding arabic translations for -
  * 'Purchase limit has been reached' and
  * 'Limited to @max_sale_qty per customer'.
  */
