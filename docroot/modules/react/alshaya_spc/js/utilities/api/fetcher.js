@@ -12,7 +12,7 @@ import { createCacheObject } from '../cache/cache-objects';
  * @param {*} promiseFunc
  *   Promise function name.
  */
-export const createFetcher = (promiseFunc) => ({
+const createFetcher = (promiseFunc) => ({
   read: (arg) => {
     // Initiate cache and cache responses of stores to avoid
     // Duplicate api calls.
@@ -35,8 +35,8 @@ export const createFetcher = (promiseFunc) => ({
               return { error: 'error!' };
             }
 
-            cachedObj.cacheResult(response.data);
-            return response.data;
+            cachedObj.cacheResult(response);
+            return response;
           },
           (reject) => ({ error: reject }),
         );
@@ -49,3 +49,5 @@ export const createFetcher = (promiseFunc) => ({
     return new Promise((resolve) => resolve(cachedResults));
   },
 });
+
+export default createFetcher;
