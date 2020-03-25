@@ -1,0 +1,35 @@
+.labels-container {
+  .label {
+    &.top {
+      &-left {
+        @include breakpoint($desktop) {
+          top: 0.5rem;
+          left: 0.5rem;
+        }
+      }
+
+      &-right {
+        @include breakpoint($desktop) {
+          top: 0.5rem;
+          right: 0.5rem;
+        }
+      }
+    }
+
+    &.bottom {
+      &-left {
+        @include breakpoint($desktop) {
+          bottom: 6.5rem;
+          left: 0.5rem;
+        }
+      }
+
+      &-right {
+        @include breakpoint($desktop) {
+          bottom: 6.5rem;
+          right: 0.5rem;
+        }
+      }
+    }
+  }
+}

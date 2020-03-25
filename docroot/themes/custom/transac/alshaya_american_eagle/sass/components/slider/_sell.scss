@@ -36,4 +36,16 @@
       margin-#{$left}: 0.5rem;
     }
   }
+
+  .slick-slider {
+    .slick-slide img {
+      max-width: none;
+    }
+  }
+
+  .views-row {
+    .use-ajax {
+      margin: 0 0.5rem;
+    }
+  }
 }

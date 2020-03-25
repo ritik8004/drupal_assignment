@@ -98,6 +98,15 @@
       }
     }
   }
+
+  &.has--notification:not(.matchback-cart-notification) {
+    .matchback-notification-qty,
+    .matchback-prod-added-text {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
 }
 
 .edit-add-to-cart + .ajax-progress-throbber {

@@ -13,7 +13,7 @@
     @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/facebook.svg', 2.5rem, 2.5rem);
 
     &:hover {
-      opacity: 0.8;
+      opacity: 0.5;
     }
   }
 
@@ -21,7 +21,7 @@
     @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/twitter.svg', 2.5rem, 2.5rem);
 
     &:hover {
-      opacity: 0.8;
+      opacity: 0.5;
     }
   }
 
@@ -29,7 +29,7 @@
     @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/pinterest.svg', 2.5rem, 2.5rem);
 
     &:hover {
-      opacity: 0.8;
+      opacity: 0.5;
     }
   }
 
@@ -37,7 +37,7 @@
     @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/instagram.svg', 2.5rem, 2.5rem);
 
     &:hover {
-      opacity: 0.8;
+      opacity: 0.5;
     }
   }
 
@@ -45,7 +45,7 @@
     @include pdp_icon_img('#{$base_theme_img_directory_path}/icons/youtube.png', 2.5rem, 2.5rem);
 
     &:hover {
-      opacity: 0.8;
+      opacity: 0.5;
     }
   }
 }
