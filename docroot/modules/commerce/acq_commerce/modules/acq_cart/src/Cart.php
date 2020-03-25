@@ -3,8 +3,6 @@
 namespace Drupal\acq_cart;
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Messenger\MessengerTrait;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class Cart.
@@ -12,9 +10,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  * @package Drupal\acq_cart
  */
 class Cart implements CartInterface {
-
-  use MessengerTrait;
-  use StringTranslationTrait;
 
   /**
    * The cart object.
@@ -190,6 +185,7 @@ class Cart implements CartInterface {
 
         // Remove the item from cart in session.
         unset($items[$key]);
+        unset($this->cart->items[$key]);
 
         // Continue to next item, this item is removed in call above.
         continue;
@@ -202,7 +198,10 @@ class Cart implements CartInterface {
     }
 
     if ($removed_products) {
-      $this->messenger()->addError($this->t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'));
+      // Use traits in the class is resulting into "LogicException: The database
+      // connection is not serializable." So we don't use it here.
+      // @codingStandardsIgnoreLine
+      \Drupal::messenger()->addError((string) t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'));
     }
 
     return $items;
