@@ -25,3 +25,7 @@ rtl_styles:
   css:
     theme:
       css/rtl.css: {}
+
+pdp_overlay:
+  js:
+    js/pdp_overlay.js: {}
