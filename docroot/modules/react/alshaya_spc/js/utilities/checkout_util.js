@@ -3,7 +3,7 @@ import { removeCartFromStorage } from './storage';
 import { updateCartApiUrl } from './update_cart';
 import { cartAvailableInStorage } from './get_cart';
 import getStringMessage from './strings';
-import { dispatchCustomEvent } from './events';
+import dispatchCustomEvent from './events';
 
 /**
  * Get shipping methods.
@@ -12,7 +12,7 @@ import { dispatchCustomEvent } from './events';
  * @param data
  * @returns {boolean}
  */
-export const getShippingMethods = function (cartId, data) {
+export const getShippingMethods = (cartId, data) => {
   const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
 
   return axios
@@ -60,7 +60,7 @@ export const removeFullScreenLoader = () => {
  * @param paymentMethod
  * @returns {boolean}
  */
-export const placeOrder = function (paymentMethod) {
+export const placeOrder = (paymentMethod) => {
   const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
 
   showFullScreenLoader();
@@ -108,7 +108,7 @@ export const isBillingSameAsShippingInStorage = () => {
   return (same === null || same === 'true');
 };
 
-export const addShippingInCart = function (action, data) {
+export const addShippingInCart = (action, data) => {
   let cart = cartAvailableInStorage();
   if (cart === false) {
     return null;
@@ -158,7 +158,7 @@ export const addShippingInCart = function (action, data) {
  * @param {*} action
  * @param {*} data
  */
-export const addBillingInCart = function (action, data) {
+export const addBillingInCart = (action, data) => {
   let cart = cartAvailableInStorage();
   if (cart === false) {
     return null;

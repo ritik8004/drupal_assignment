@@ -8,7 +8,7 @@ import {
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
-import { dispatchCustomEvent } from '../../../utilities/events';
+import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 
 export default class PaymentMethods extends React.Component {

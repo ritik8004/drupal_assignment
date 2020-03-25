@@ -1,4 +1,4 @@
-export function calculateDiscount(price, finalPrice) {
+const calculateDiscount = (price, finalPrice) => {
   const floatPrice = parseFloat(price);
   const floatFinalPrice = parseFloat(finalPrice);
 
@@ -8,4 +8,6 @@ export function calculateDiscount(price, finalPrice) {
   }
 
   return parseFloat(Math.round((discount * 100) / floatPrice));
-}
+};
+
+export default calculateDiscount;

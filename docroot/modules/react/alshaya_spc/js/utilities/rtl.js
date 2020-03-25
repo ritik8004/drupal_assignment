@@ -13,6 +13,4 @@ function isRTL() {
   return true;
 }
 
-export {
-  isRTL,
-};
+export default isRTL;

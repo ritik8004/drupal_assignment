@@ -12,7 +12,7 @@ const CheckoutCartItem = (props) => {
       title,
       relative_link: relativeLink,
       configurable_values: configurableValues,
-      extra_data,
+      extra_data, // eslint-disable-line camelcase
       original_price: originalPrice,
       final_price: finalPrice,
     },

@@ -1,7 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import Popup from 'reactjs-popup';
-import { checkoutAddressProcess } from '../../../utilities/checkout_address_process';
+import { checkoutAddressProcess } from '../../../utilities/address_util';
 import Loading from '../../../utilities/loading';
 import ClickCollectContainer from '../click-collect';
 import { cleanMobileNumber } from '../../../utilities/checkout_util';
