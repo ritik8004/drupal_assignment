@@ -27,6 +27,7 @@ const SelectedCard = ({
           type="password"
           id="spc-cc-cvv"
           pattern="\d{3,4}"
+          maxLength="4"
           required
           onChange={handleCardCvvChange}
           onBlur={(e) => labelEffect(e, 'blur')}
