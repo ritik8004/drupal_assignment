@@ -47,16 +47,19 @@ function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
     'acq_sku_configurable_variants_alter',
   ];
 
+  if ($hook == 'search_api_query_alter') {
+    $group = $implementations['alshaya_acm_product'];
+    unset($implementations['alshaya_acm_product']);
+    $implementations['alshaya_acm_product'] = $group;
+    return;
+  }
+
   foreach ($hooks_to_invoke_last as $hook_to_invoke_last) {
     if ($hook == $hook_to_invoke_last) {
       $group = $implementations['alshaya_acm_product'];
       unset($implementations['alshaya_acm_product']);
       $implementations['alshaya_acm_product'] = $group;
-    }
-    elseif ($hook == 'search_api_query_alter') {
-      $group = $implementations['alshaya_acm_product'];
-      unset($implementations['alshaya_acm_product']);
-      $implementations['alshaya_acm_product'] = $group;
+      break;
     }
   }
 }
