@@ -2,7 +2,7 @@ import React from 'react';
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
-import { createFetcher } from '../../../utilities/api/fetcher';
+import createFetcher from '../../../utilities/api/fetcher';
 import { fetchClicknCollectStores } from '../../../utilities/api/requests';
 import {
   getDefaultMapCenter,
@@ -24,9 +24,7 @@ import {
   isFullScreen,
   exitFullscreen,
 } from '../../../utilities/map/fullScreen';
-import {
-  smoothScrollTo,
-} from '../../../utilities/smoothScroll';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;

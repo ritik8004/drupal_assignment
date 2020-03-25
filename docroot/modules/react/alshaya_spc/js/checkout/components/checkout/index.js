@@ -28,9 +28,9 @@ import {
   getDefaultMapCenter,
   removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
-import { createFetcher } from '../../../utilities/api/fetcher';
+import createFetcher from '../../../utilities/api/fetcher';
 import ConditionalView from '../../../common/components/conditional-view';
-import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 
 window.fetchStore = 'idle';

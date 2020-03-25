@@ -8,7 +8,7 @@ import {
   getMap,
   getHDMapZoom,
 } from './map_utils';
-import { isRTL } from '../rtl';
+import isRTL from '../rtl';
 
 export default class GoogleMap extends React.Component {
   constructor(props) {
@@ -105,8 +105,7 @@ export default class GoogleMap extends React.Component {
 
               // If user and site country not same, don;t process.
               if (!userCountrySame) {
-                // @Todo: Add some indication to user.
-                console.log('Not available in the user country.');
+                // @TODO: Add some indication to user.
                 return;
               }
 

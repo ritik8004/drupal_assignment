@@ -3,7 +3,7 @@ import Cleave from 'cleave.js/react';
 import axios from 'axios';
 import luhn from '../../../utilities/luhn';
 import CardTypeSVG from '../../../svg-component/card-type-svg';
-import { i18nMiddleWareUrl } from '../../../utilities/i18n_url';
+import i18nMiddleWareUrl from '../../../utilities/i18n_url';
 import { removeCartFromStorage } from '../../../utilities/storage';
 import ToolTip from '../../../utilities/tooltip';
 import CVVToolTipText from '../cvv-text';
@@ -11,7 +11,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
-import { dispatchCustomEvent } from '../../../utilities/events';
+import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
 

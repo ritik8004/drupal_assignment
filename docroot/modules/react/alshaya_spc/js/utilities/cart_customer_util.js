@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from './storage';
-import { i18nMiddleWareUrl } from './i18n_url';
+import i18nMiddleWareUrl from './i18n_url';
 
 const associateCart = () => {
   const url = i18nMiddleWareUrl('associate-cart');

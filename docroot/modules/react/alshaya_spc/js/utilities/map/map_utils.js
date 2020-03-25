@@ -287,8 +287,6 @@ export const geocodeAddressToLatLng = () => {
         const markerArray = [];
         markerArray.push(marker);
         window.spcMarkers = markerArray;
-      } else {
-        console.log(`Unable to get location:${status}`);
       }
     });
   }

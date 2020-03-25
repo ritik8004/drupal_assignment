@@ -1,4 +1,4 @@
-import { i18nMiddleWareUrl } from './i18n_url';
+import i18nMiddleWareUrl from './i18n_url';
 import { getInfoFromStorage } from './storage';
 
 /**

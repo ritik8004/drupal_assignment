@@ -5,7 +5,7 @@ const getStringMessage = (key) => {
       return element.value.toString();
     }
   } catch (e) {
-    console.error(e);
+    Drupal.logJavascriptError(e);
   }
 
   return '';

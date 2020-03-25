@@ -1,4 +1,4 @@
-import { createCacheObject } from '../cache/cache-objects';
+import createCacheObject from '../cache/cache-objects';
 
 /**
  * Helper function to handle api request for GET method for now.
@@ -12,7 +12,7 @@ import { createCacheObject } from '../cache/cache-objects';
  * @param {*} promiseFunc
  *   Promise function name.
  */
-export const createFetcher = (promiseFunc) => ({
+const createFetcher = (promiseFunc) => ({
   read: (arg) => {
     // Initiate cache and cache responses of stores to avoid
     // Duplicate api calls.
@@ -31,7 +31,7 @@ export const createFetcher = (promiseFunc) => ({
             }
 
             if (!response.data.error && response.data.error) {
-              console.error(response.error_message);
+              Drupal.logJavascriptError(response.error_message);
               return { error: 'error!' };
             }
 
@@ -49,3 +49,5 @@ export const createFetcher = (promiseFunc) => ({
     return new Promise((resolve) => resolve(cachedResults));
   },
 });
+
+export default createFetcher;

@@ -7,7 +7,7 @@ import NewCard from './components/NewCard';
 import { CheckoutComContext } from '../../../context/CheckoutCom';
 import SelectedCard from './components/SelectedCard';
 import { setStorageInfo } from '../../../utilities/storage';
-import { dispatchCustomEvent } from '../../../utilities/events';
+import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
 
@@ -64,7 +64,7 @@ class PaymentMethodCheckoutCom extends React.Component {
 
   handleCardCvvChange = (event, handler) => {
     if (window.CheckoutKit === undefined) {
-      console.error('CheckoutKit not available');
+      Drupal.logJavascriptError('CheckoutKit not available');
       return;
     }
 
@@ -106,7 +106,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     }
 
     if (window.CheckoutKit === undefined) {
-      console.error('Checkout kit not loaded');
+      Drupal.logJavascriptError('Checkout kit not loaded');
 
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',

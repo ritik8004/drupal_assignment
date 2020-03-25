@@ -26,7 +26,7 @@ class AlshayaCustomHook extends BltTasks {
     foreach ($files as $file) {
       if (strpos($file, 'react/alshaya_spc/js') !== FALSE) {
         $paths = explode('react/', $file);
-        $output = $this->_exec('cd ' . $paths[0] . '/react; npm run lint ' . $paths[1]);
+        $output = $this->_exec('cd ' . $paths[0] . 'react; npm run lint ' . $paths[1]);
         if ($output->getExitCode() !== 0) {
           $failed = TRUE;
         }

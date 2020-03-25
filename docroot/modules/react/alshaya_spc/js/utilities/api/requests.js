@@ -24,7 +24,7 @@ export const fetchCartData = () => {
   let cart = cartAvailableInStorage();
 
   if (cart === 'empty') {
-    return;
+    return null;
   }
 
   if (!cart) {
@@ -43,7 +43,7 @@ export const fetchCartData = () => {
       })
       .catch((error) => {
         // Processing of error here.
-        console.error(error);
+        Drupal.logJavascriptError(error);
       });
   }
   if (!Number.isInteger(cart)) {
@@ -78,6 +78,6 @@ export const fetchCartData = () => {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      console.error(error);
+      Drupal.logJavascriptError(error);
     });
 };

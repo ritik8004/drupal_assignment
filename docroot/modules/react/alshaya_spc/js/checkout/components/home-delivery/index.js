@@ -4,14 +4,12 @@ import Popup from 'reactjs-popup';
 import ShippingMethods from '../shipping-methods';
 import Loading from '../../../utilities/loading';
 import {
-  checkoutAddressProcess,
-  getAddressPopupClassName,
-  formatAddressDataForEditForm,
-} from '../../../utilities/checkout_address_process';
-import {
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import {
+  checkoutAddressProcess,
+  getAddressPopupClassName,
+  formatAddressDataForEditForm,
   gerAreaLabelById,
 } from '../../../utilities/address_util';
 
@@ -78,7 +76,7 @@ export default class HomeDeliveryInfo extends React.Component {
       refreshCart,
     } = this.props;
     const { open } = this.state;
-    let addressData = [];
+    const addressData = [];
     Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
       if (address[val.key] !== undefined) {
         let fillVal = address[val.key];
