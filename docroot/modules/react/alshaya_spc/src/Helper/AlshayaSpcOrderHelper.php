@@ -489,7 +489,8 @@ class AlshayaSpcOrderHelper {
 
     $processed['telephone'] = $this->getFormattedMobileNumber($processed['mobile_number']['value']);
 
-    return $processed;
+    // Remove empty items.
+    return array_filter($processed);
   }
 
 }
