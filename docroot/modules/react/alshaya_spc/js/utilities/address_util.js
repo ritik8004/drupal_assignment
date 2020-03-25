@@ -32,11 +32,11 @@ export const getUserAddressList = function () {
 /**
  * Update default address for the user.
  *
- * @param {*} address_id
+ * @param {*} addressId
  */
-export const updateUserDefaultAddress = function (address_id) {
+export const updateUserDefaultAddress = function (addressId) {
   return axios.post('set-default-address', {
-    address_id,
+    addressId,
   })
     .then((response) => response)
     .catch((error) => {

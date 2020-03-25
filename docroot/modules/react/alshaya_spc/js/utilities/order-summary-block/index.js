@@ -71,7 +71,7 @@ const OrderSummaryBlock = (props) => {
     items,
     totals,
   } = props;
-  const promoData = cartPromo ? cartPromo : null;
+  const promoData = cartPromo;
   let orderSummaryTitle = Drupal.t('Order Summary');
   const continueCheckoutLink = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
   // To be used on checkout page.
