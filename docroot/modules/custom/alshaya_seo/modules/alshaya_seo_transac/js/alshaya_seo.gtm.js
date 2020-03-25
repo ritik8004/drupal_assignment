@@ -1238,18 +1238,18 @@
     };
 
     try {
-      // Track error on GA.
-      if (drupalSettings.gtm.log_errors_to_ga !== undefined
-        && drupalSettings.gtm.log_errors_to_ga) {
-        dataLayer.push(errorData);
-      }
-
       // Log error on console.
       if (drupalSettings.gtm.log_errors_to_console !== undefined
         && drupalSettings.gtm.log_errors_to_console) {
         console.error(error);
       }
 
+      // Track error on GA.
+      if (drupalSettings.gtm.log_errors_to_ga !== undefined
+        && drupalSettings.gtm.log_errors_to_ga
+        && dataLayer !== undefined) {
+        dataLayer.push(errorData);
+      }
     } catch (e) {
       // Do nothing.
     }
