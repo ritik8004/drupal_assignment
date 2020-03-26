@@ -347,6 +347,10 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     $settings = [
+      'site_details' => [
+        'logo' => theme_get_setting('logo.url'),
+        'customer_service_text' => $this->configFactory->get('checkout_customer_service'),
+      ],
       'order_details' => [
         'customer_email' => $order['email'],
         'order_number' => $order['increment_id'],

@@ -1,4 +1,6 @@
 .spc-pre-content {
+  margin-bottom: 2.5rem;
+
   .impress-msg {
     font-size: 1.25rem;
     font-family: $alshaya-bold;
@@ -17,6 +19,7 @@
     font-size: 1.125rem;
     color: $spc-checkout-confirmation-success-txt;
     font-family: $alshaya-thin;
+    margin-top: 0.4375rem;
 
     @include breakpoint($only-mobile) {
       max-width: 17.125rem;
