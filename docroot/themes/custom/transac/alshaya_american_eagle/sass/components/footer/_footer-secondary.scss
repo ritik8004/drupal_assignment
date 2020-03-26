@@ -55,10 +55,10 @@
   border-top: 0.0625rem solid $checkout_footer_border-top;
 
   .l-container {
-    @include container(75.3125rem);
+    @include container(77rem);
 
     .path--cart & {
-      @include container(64.3125rem);
+      @include container(77rem);
     }
   }
 }
@@ -73,7 +73,7 @@
     order: 1;
 
     @include breakpoint($tablet) {
-      flex-basis: 78%;
+      flex-basis: 85%;
       margin-#{$right}: 0;
     }
 
@@ -85,7 +85,13 @@
 
     .path--cart & {
       @include breakpoint($tablet) {
-        flex-basis: 75%;
+        flex-basis: 69%;
+      }
+    }
+
+    .path--cart.alias--cart & {
+      @include breakpoint($tablet) {
+        flex-basis: 85%;
       }
     }
   }
