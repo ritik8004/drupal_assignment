@@ -16,13 +16,19 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
   public function getOptions(Request $request) {
     $options = parent::getOptions($request);
 
-    // Cybersource works with a page on their domain sending POST request to
-    // our domain but latest versions of browsers don't add our session cookie
-    // in this case.
-    // We need to use samesite=None in this case but PHP 7.2 functions and
-    // configurations don't support it. So we alter the domain configuration to
-    // pass the samesite param as well.
-    $options['cookie_domain'] .= '; samesite=None';
+    // Here we try to set the legacy cookies we set in AlshayaSessionManager
+    // in original expected keys if for some reason they are not available.
+    // We do this here as this is invoked before starting the session.
+    $cookies = $request->cookies->all();
+    foreach ($cookies as $name => $value) {
+      if (strpos($name, AlshayaSessionManager::LEGACY_SUFFIX) !== FALSE) {
+        $expected = str_replace(AlshayaSessionManager::LEGACY_SUFFIX, '', $name);
+        if (empty($cookies[$expected])) {
+          $_COOKIE[$expected] = $value;
+          $request->cookies->set($expected, $value);
+        }
+      }
+    }
 
     return $options;
   }
