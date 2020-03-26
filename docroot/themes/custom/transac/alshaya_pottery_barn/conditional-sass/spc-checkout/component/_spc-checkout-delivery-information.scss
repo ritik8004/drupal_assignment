@@ -21,7 +21,9 @@
 .spc-section-billing-address {
   .popup-overlay .popup-content {
     .spc-add-new-address-btn,
-    .spc-address-select-address {
+    .spc-address-select-address,
+    .spc-deliver-button {
+      font-weight: 600;
       text-transform: uppercase;
     }
   }
