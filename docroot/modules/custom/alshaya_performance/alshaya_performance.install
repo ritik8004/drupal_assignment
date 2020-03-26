@@ -10,6 +10,41 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Blacklist cart and list cache tags for acquia_purge.
+ */
+function alshaya_performance_update_8004() {
+  if (!(\Drupal::moduleHandler()->moduleExists('purge_queuer_coretags'))) {
+    \Drupal::logger('alshaya_performance')->notice('Skipping as the module is not enabled.');
+    return;
+  }
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['purge_queuer_coretags.settings'],
+    'purge_queuer_coretags'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Truncate table cache_pretty_paths to manage memcache config changes.
+ */
+function alshaya_performance_update_8003() {
+  $connection = \Drupal::database();
+  $table_name = 'cache_pretty_paths';
+
+  // Checks for cache_pretty_paths table and truncate it.
+  if ($connection->schema()->tableExists($table_name)) {
+    $connection->truncate($table_name)->execute();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new setting routes_allowed_in_maintenance_mode.
  */
 function alshaya_performance_update_8002() {
