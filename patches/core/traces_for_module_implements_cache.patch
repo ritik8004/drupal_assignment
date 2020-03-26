@@ -1,42 +1,42 @@
 diff --git a/core/lib/Drupal/Core/Extension/ModuleHandler.php b/core/lib/Drupal/Core/Extension/ModuleHandler.php
-index 3b60d52..01afa38 100644
+index 3b60d52..93b37f6 100644
 --- a/core/lib/Drupal/Core/Extension/ModuleHandler.php
 +++ b/core/lib/Drupal/Core/Extension/ModuleHandler.php
-@@ -334,6 +334,10 @@ public function getImplementations($hook) {
+@@ -334,6 +334,10 @@ class ModuleHandler implements ModuleHandlerInterface {
     */
    public function writeCache() {
      if ($this->cacheNeedsWriting) {
-+      if (empty($this->implementations['module_implements_alter'])) {
++      if (PHP_SAPI !== 'cli' && empty($this->implementations['module_implements_alter'])) {
 +        $this->logTrace('Writing cache, but the set of module_implements_alter hooks is empty');
 +      }
 +
        $this->cacheBackend->set('module_implements', $this->implementations);
        $this->cacheNeedsWriting = FALSE;
      }
-@@ -588,6 +592,11 @@ protected function getImplementationInfo($hook) {
+@@ -588,6 +592,11 @@ class ModuleHandler implements ModuleHandlerInterface {
        $this->cacheNeedsWriting = TRUE;
        // Discover implementations.
        $this->implementations[$hook] = $this->buildImplementationInfo($hook);
 +
-+      if (empty($this->implementations['module_implements_alter'])) {
++      if (PHP_SAPI !== 'cli' && empty($this->implementations['module_implements_alter'])) {
 +        $this->logTrace('The set of module_implements_alter hooks is empty');
 +      }
 +
        // Implementations are always "verified" as part of the discovery.
        $this->verified[$hook] = TRUE;
      }
-@@ -596,6 +605,10 @@ protected function getImplementationInfo($hook) {
+@@ -596,6 +605,10 @@ class ModuleHandler implements ModuleHandlerInterface {
          // One or more of the implementations did not exist and need to be
          // removed in the cache.
          $this->cacheNeedsWriting = TRUE;
 +
-+        if (empty($this->implementations['module_implements_alter'])) {
++        if (PHP_SAPI !== 'cli' && empty($this->implementations['module_implements_alter'])) {
 +          $this->logTrace('Unverified and the set of module_implements_alter hooks is empty');
 +        }
        }
        $this->verified[$hook] = TRUE;
      }
-@@ -756,4 +769,28 @@ public function getName($module) {
+@@ -756,4 +769,28 @@ class ModuleHandler implements ModuleHandlerInterface {
      }
    }
  
@@ -65,3 +65,4 @@ index 3b60d52..01afa38 100644
 +    }
 +  }
  }
+

@@ -27,6 +27,13 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         <h2{{ title_attributes.addClass("c-products__free__item__label") }}>
           {{ 'FREE GIFT'|t }}
         </h2>
+        {% if sku.subtitle %}
+          <h2>
+            <span class="title--sub">
+              {{ sku.subtitle }}
+            </span>
+          </h2>
+        {% endif %}
         <h2{{ title_attributes.addClass("c-products__item__label") }}>
           {{ sku.name }}
         </h2>

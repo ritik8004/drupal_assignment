@@ -17,7 +17,18 @@
       var viewportTop = $(window).scrollTop();
       var viewportBottom = viewportTop + $(window).height();
 
-      return elementTop >= viewportTop && elementBottom <= viewportBottom;
+      // Get element left and right.
+      var elementLeft = $(this).offset().left - offset;
+      var elementRight = elementLeft + $(this).outerWidth();
+
+      // Get window left and right.
+      var viewportLeft = $(window).scrollLeft();
+      var viewportRight = viewportLeft + $(window).width();
+
+      return elementTop >= viewportTop
+      && elementBottom <= viewportBottom
+      && elementLeft >= viewportLeft
+      && elementRight <= viewportRight;
     }
     catch (e) {
       return false;

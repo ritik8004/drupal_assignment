@@ -153,7 +153,7 @@ $primary_search_result_hover: $grey;
 $primary_search_text: $grey;
 
 // C-menu primary i:e Mobile and tablet header menu links.
-$header_c_menu_text: $grey;
+$header_c_menu_text: $black;
 $header_c_menu_icon_color: $black;
 $header_c_menu_icon_text: $black;
 $header_toggle_sign_default: $wild-sand;
@@ -259,7 +259,7 @@ $minicart_notification_qty_text: $grey;
 
 //3. Footer
 $footer_bg: $white;
-$footer_border_top: $light-greyish;
+$footer_border_top: $gallery;
 $footer_accordion_border: $gallery;
 $footer_title_h3: $black;
 $footer_link_mobile: $grey;
@@ -589,3 +589,7 @@ $lhn_l3_active_text: $white;
 
 // Megamenu inline layout.
 $megamenu-inline-layout-active-border-color: $black;
+
+// Autocomplete
+$autocomplete_hover: rgba(51, 51, 51, 0.06);
+$autocomplete_text: $grey;

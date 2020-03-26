@@ -26,7 +26,11 @@ const ColorFilter = ({ items, refine, searchForItems, isFromSearch, ...props }) 
       {items.map(item => {
         const [label, swatch_info] = item.label.split(',');
         return (
-          <li key={item.label} className={"facet-item " + (item.isRefined ? 'is-active' : '')}>
+          <li
+          key={item.label}
+          className={"facet-item " + (item.isRefined ? 'is-active' : '')}
+          datadrupalfacetlabel={props.name}
+          >
             <a
               href="#"
               onClick={(event) => {

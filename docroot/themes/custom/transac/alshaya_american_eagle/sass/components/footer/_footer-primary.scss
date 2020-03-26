@@ -7,8 +7,6 @@
 
   @include breakpoint($tablet) {
     padding-bottom: 3.125rem;
-    margin-bottom: 1.25rem;
-    border-bottom: 0.0625rem solid $footer_border_top;
     border-top-width: 0.0625rem;
   }
 

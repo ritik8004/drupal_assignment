@@ -237,3 +237,21 @@
     }
   }
 }
+
+body.ie {
+  #alshaya-algolia-search {
+    .c-facet {
+      &.c-accordion {
+        ul {
+          li {
+            .facet-item__value {
+              &::after {
+                bottom: 8px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

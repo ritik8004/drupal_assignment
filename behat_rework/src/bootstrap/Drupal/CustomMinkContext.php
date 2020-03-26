@@ -82,5 +82,4 @@ class CustomMinkContext extends RawDrupalContext implements SnippetAcceptingCont
 
     $this->minkContext->fillField($field, $value);
   }
-
 }

@@ -137,7 +137,8 @@ class CustomerController extends ControllerBase {
 
     try {
       // Get the orders to display for current user and filter applied.
-      $orders = alshaya_acm_customer_get_user_orders($user->getEmail(), 'search', 'filter');
+      $customer_id = (int) $user->get('acq_customer_id')->getString();
+      $orders = alshaya_acm_customer_get_user_orders($customer_id, 'search', 'filter');
 
       if (empty($orders)) {
         // @TODO: Check the empty result message.
@@ -264,7 +265,8 @@ class CustomerController extends ControllerBase {
     $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     // Get the orders to display for current user and filter applied.
-    $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
+    $customer_id = (int) $user->get('acq_customer_id')->getString();
+    $orders = alshaya_acm_customer_get_user_orders($customer_id);
 
     $order_index = array_search($order_id, array_column($orders, 'increment_id'));
 
@@ -420,8 +422,10 @@ class CustomerController extends ControllerBase {
     $download_invoice = FALSE;
 
     $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+
     // Get all orders of the current user.
-    $user_orders = alshaya_acm_customer_get_user_orders($account->getEmail());
+    $customer_id = (int) $user->get('acq_customer_id')->getString();
+    $user_orders = alshaya_acm_customer_get_user_orders($customer_id);
     foreach ($user_orders as $order) {
       // If order belongs to the current user and invoice is available for
       // download.

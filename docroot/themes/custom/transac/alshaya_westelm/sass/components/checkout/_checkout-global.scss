@@ -47,7 +47,7 @@
         }
 
         @include breakpoint($desktop) {
-          max-width: 29rem;
+          max-width: 12.5rem;
         }
 
         @include breakpoint($only-tablet) {
