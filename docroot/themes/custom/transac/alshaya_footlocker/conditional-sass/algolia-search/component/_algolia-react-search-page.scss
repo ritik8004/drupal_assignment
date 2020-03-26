@@ -30,20 +30,52 @@
   #sort_by {
     li {
       a {
-        @include icon(radio-empty, before) {
-          margin-#{$right}: 1rem;
-          position: relative;
-          color: $primary_radiobtn_empty;
-          vertical-align: middle;
-          border: none;
+        padding-#{$left}: 1.25rem;
+
+        &::before {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          #{$left}: 1.125rem;
           font-size: 1.875rem;
-          top: -0.5625rem;
+          content: '';
+          width: 0.875rem;
+          height: 0.875rem;
+          display: inline-block;
+          border-radius: 100%;
+          border: 0.0625rem solid $primary_radiobtn_empty;
+          margin-#{$right}: 1rem;
         }
       }
 
       &.active-item a {
-        @include icon(radio-filled, before) {
-          border: none;
+        &::before {
+          border: 0.1875rem solid $primary_radiobtn_filled;
+        }
+      }
+    }
+  }
+
+  .block-alshaya-search-facets-block-all {
+    .all-filters-algolia {
+      #sort_by {
+        li {
+          a {
+            padding-#{$left}: 1.5rem;
+
+            &::before {
+              #{$left}: 1.125rem;
+              font-size: 1.875rem;
+              width: 1.3125rem;
+              height: 1.3125rem;
+            }
+          }
+
+          &.active-item a {
+            &::before {
+              border: 0.1875rem solid $primary_radiobtn_filled;
+            }
+          }
         }
       }
     }
@@ -55,7 +87,7 @@
       li {
         &.facet-item {
           .facet-item__value {
-            @include icon(check-box-empty) {
+            @include icon(checkboxempty) {
               font-size: 1.3125rem;
               color: $primary_checkbox_empty;
               margin-#{$right}: 0.5rem;
@@ -65,29 +97,9 @@
 
           &.is-active {
             .facet-item__value {
-              @include icon(check-box-filled) {
+              @include icon(checkboxfull) {
                 color: $primary_checkbox_filled;
               }
-            }
-          }
-        }
-      }
-    }
-
-    #sort_by {
-      li {
-        padding-#{$left}: 3rem !important;
-
-        a {
-          &::before {
-            position: absolute;
-            font-size: 3.75rem;
-            #{$left}: 0;
-            top: 0;
-            transform: translateY(0);
-
-            @include breakpoint($only-mobile) {
-              top: -0.125rem;
             }
           }
         }
