@@ -176,12 +176,10 @@ export default class EmptyDeliveryText extends React.Component {
   closeModal = () => {
     this.setState({ open: false });
 
-    if (this.getDeliveryType() !== 'cnc') {
-      return;
+    if (this.getDeliveryType() === 'cnc') {
+      const { updateModal } = this.context;
+      updateModal(false);
     }
-
-    const { updateModal } = this.context;
-    updateModal(false);
   }
 
   eventListener = ({ detail }) => {

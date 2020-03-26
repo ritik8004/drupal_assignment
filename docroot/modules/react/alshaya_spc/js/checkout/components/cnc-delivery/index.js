@@ -54,7 +54,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
   };
 
   eventListener = ({ detail }) => {
-    const data = detail.data();
+    const data = detail;
     const { refreshCart } = this.props;
     refreshCart(data);
     if (this.isComponentMounted) {
