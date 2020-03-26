@@ -2,7 +2,6 @@ import React from 'react';
 import parse from 'html-react-parser';
 import Popup from 'reactjs-popup';
 import _findIndex from 'lodash/findIndex';
-import { checkoutAddressProcess } from '../../../utilities/checkout_address_process';
 import Loading from '../../../utilities/loading';
 import ClickCollectContainer from '../click-collect';
 import { cleanMobileNumber, removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
@@ -52,10 +51,6 @@ class ClicknCollectDeiveryInfo extends React.Component {
 
   closeModal = () => {
     this.setState({ open: false });
-  };
-
-  processAddress = (e) => {
-    checkoutAddressProcess(e);
   };
 
   eventListener = ({ detail }) => {
