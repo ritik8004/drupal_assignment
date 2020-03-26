@@ -4,3 +4,4 @@ pdp_slider_items_settings:
   pdp_slider_items_number_cs_us: 3
 acq_sku__attributes_skip:
   - article_castor_id
+enable_size_grouping_filter: 1

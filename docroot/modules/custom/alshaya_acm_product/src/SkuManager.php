@@ -3234,6 +3234,7 @@ class SkuManager {
 
     $configurable_attributes = $this->getConfigurableAttributes($sku);
 
+    $sizeGroupingEnabled = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
     // Gather data from children to set in parent.
     foreach ($children as $child) {
       $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
@@ -3260,8 +3261,16 @@ class SkuManager {
         $field_data = $child->get($field_key)->getValue();
 
         if (!empty($field_data)) {
+
+          $attrSizeGroupCode = $child->get('attr_size_group_code')->getValue();
+
           foreach ($field_data as $field_value) {
-            $data[$key][$field_value['value']] = $field_value['value'];
+            if ($sizeGroupingEnabled && $field_key == 'attr_size' && isset($attrSizeGroupCode[0]['value'])) {
+              $data[$key]['sizegroup|' . $attrSizeGroupCode[0]['value'] . '||size|' . $field_value['value']] = 'sizegroup|' . $attrSizeGroupCode[0]['value'] . '||size|' . $field_value['value'];
+            }
+            else {
+              $data[$key][$field_value['value']] = $field_value['value'];
+            }
           }
         }
       }
@@ -3274,8 +3283,14 @@ class SkuManager {
       $field_data = $sku->get($field_key)->getValue();
 
       if (!empty($field_data)) {
+        $attrSizeGroupCode = $sku->get('attr_size_group_code')->getValue();
         foreach ($field_data as $field_value) {
-          $data[$key][$field_value['value']] = $field_value['value'];
+          if ($sizeGroupingEnabled && $field_key == 'attr_size' && isset($attrSizeGroupCode[0]['value'])) {
+            $data[$key]['sizegroup|' . $attrSizeGroupCode[0]['value'] . '||size|' . $field_value['value']] = 'sizegroup|' . $attrSizeGroupCode[0]['value'] . '||size|' . $field_value['value'];
+          }
+          else {
+            $data[$key][$field_value['value']] = $field_value['value'];
+          }
         }
       }
     }
