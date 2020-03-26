@@ -202,15 +202,24 @@ header.c-header {
 
       @include breakpoint($desktop) {
         margin-top: -0.25rem;
+      }
 
-        input[type="text"],
-        input[type="search"] {
+      input[type="text"],
+      input[type="search"] {
+        padding-#{$left}: 1.25rem;
+
+        @include breakpoint($desktop) {
           width: 24rem;
           font-size: 0.875rem;
           padding-#{$right}: 2.875rem;
           max-width: 24.6875rem;
           text-transform: none;
           border-#{$right}: 0;
+        }
+
+        &::placeholder {
+          font-size: 0.875rem;
+          color: $primary_search_input_placeholder;
         }
       }
 
@@ -423,6 +432,14 @@ header {
       background: $mm_bg_desk;
     }
 
+    &:not(.megamenu-inline-layout) {
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          overflow-y: hidden;
+        }
+      }
+    }
+
     li.menu--one__list-item {
       display: inline-block;
       text-transform: capitalize;
@@ -630,6 +647,7 @@ header {
     li.menu--one__list-item {
       display: inline-block;
       vertical-align: middle;
+      height: 2.625rem;
 
       a.menu--one__link {
         display: block;
@@ -639,27 +657,19 @@ header {
         font-size: 0.875rem;
         text-transform: capitalize;
         font-family: $alshaya-thin;
-        height: 2.5rem;
-        margin-#{$left}: 1.5625rem;
-        margin-#{$right}: 1.5625rem;
-        padding-#{$left}: 1.125rem;
-        padding-#{$right}: 1.125rem;
+        height: 2.75rem;
+        margin-#{$left}: 1.5rem;
+        margin-#{$right}: 1.5rem;
+        padding-#{$left}: 0;
+        padding-#{$right}: 0;
 
         &::after {
           content: '';
-          height: 0.1875rem;
-          background-color: $mm_l1_link_bg;
-          width: 100%;
-          margin-top: 0.375rem;
-          position: absolute;
-          #{$left}: 0;
-          bottom: 0.125rem;
+          height: 0.125rem;
+          width: 1.5625rem;
           transition: all 0.3s ease-out;
-          visibility: hidden;
-
-          html[lang='ar'] & {
-            margin-top: 0.5625rem;
-          }
+          margin: 0.625rem auto 0;
+          display: block;
         }
       }
 
@@ -688,6 +698,7 @@ header {
         & > ul.menu--two__list {
           border-bottom: 2px solid $mm_l1_border;
           transform: none;
+          border-top: 1px solid $mm_l1_border;
 
           &::after {
             content: '';
@@ -831,8 +842,8 @@ header {
   }
 
   .menu__in {
-    margin-top: -2.5rem;
-    margin-#{$right}: 0.51rem;
+    margin-top: -2.25rem;
+    margin-#{$right}: 0.5rem;
 
     @include icon(chevron#{$right}, after) {
       font-size: 1.75rem;
@@ -997,6 +1008,7 @@ header {
 
               @include breakpoint($desktop) {
                 color: $header_c_menu_text;
+                font-weight: bold;
               }
             }
           }

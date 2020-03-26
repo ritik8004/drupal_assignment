@@ -511,7 +511,12 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
       $response->addCommand(new HtmlCommand('.form-level-error-wrapper', $message));
       return $response;
     }
-    \Drupal::service('messenger')->addError(reset($errors));
+
+    $error = reset($errors);
+    $exception = new \Exception($error);
+    if (!_alshaya_acm_is_out_of_stock_exception($exception)) {
+      \Drupal::service('messenger')->addError($error);
+    }
   }
 
   // Refresh the page.
