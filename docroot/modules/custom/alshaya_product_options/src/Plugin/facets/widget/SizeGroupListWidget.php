@@ -32,23 +32,56 @@ class SizeGroupListWidget extends LinksWidget {
     $build = parent::build($facet);
     $items = $build['#items'];
 
-    foreach ($items as $index => $item) {
+    $sizeGroups = [];
+    foreach ($items as $item) {
       if (isset($item['#title'], $item['#title']['#value'])) {
         if (strpos($item['#title']['#value'], '||') !== FALSE) {
           $sizeGroupArr = explode('||', $item['#title']['#value']);
           $group = explode('|', $sizeGroupArr[0]);
           $size = explode('|', $sizeGroupArr[1]);
-          $sizeGroups[$group[1]][$index] = $size[1];
           $item['#title']['#value'] = $size[1];
+          $sizeGroups[$group[1]][] = $item;
         }
-
-        $items[$index] = $item;
+        else {
+          $sizeGroups[] = $item;
+        }
       }
     }
-    $build['#items'] = $sizeGroups;
+
+    $items = [];
+    foreach ($sizeGroups ?? [] as $group => $sizes) {
+      // Check if no sizegroup.
+      if (isset($sizes['#type'])) {
+        $items[] = $sizes;
+        continue;
+      }
+      else {
+        // Create parent markup.
+        $items[] = [
+          '#value' => $group,
+          '#theme' => 'facets_result_item_with_size_group',
+          '#wrapper_attributes' => [
+            'class' => [
+              0 => 'sizegroup',
+            ],
+            'id' => [
+              0 => $group,
+            ],
+          ],
+        ];
+      }
+
+      foreach ($sizes as $size) {
+        $size['#wrapper_attributes']['class'][] = 'sizegroup-child';
+        $size['#wrapper_attributes']['class'][] = $group . '-child';
+        $items[] = $size;
+      }
+    }
+
     $build['#items'] = $items;
     $build['#attributes']['class'][] = 'js-facets-checkbox-links';
     $build['#attached']['library'][] = 'facets/drupal.facets.checkbox-widget';
+    $build['#attached']['library'][] = 'alshaya_product_options/sizegroup_filter';
 
     return $build;
   }
