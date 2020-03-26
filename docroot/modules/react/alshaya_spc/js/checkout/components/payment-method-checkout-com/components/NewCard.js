@@ -137,7 +137,7 @@ class NewCard extends React.Component {
               onBlur={(e) => this.handleCardNumberChange(e, 'blur')}
             />
             <div className="c-input__bar" />
-            <label>{Drupal.t('Card number')}</label>
+            <label>{Drupal.t('Card Number')}</label>
             <div id="spc-cc-number-error" className="error" />
           </div>
           <div className="spc-type-textfield spc-type-expiry">
