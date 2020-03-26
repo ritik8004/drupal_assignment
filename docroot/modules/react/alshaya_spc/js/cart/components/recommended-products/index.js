@@ -43,6 +43,7 @@ export default class CartRecommendedProducts extends React.Component {
                   <RecommendedProduct
                     key={key}
                     item={recommendedProducts[key]}
+                    itemKey={key}
                   />
                 ),
               )}

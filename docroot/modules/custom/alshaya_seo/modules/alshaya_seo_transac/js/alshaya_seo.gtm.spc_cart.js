@@ -21,9 +21,22 @@
       }
 
       // Track Product impressions.
-      if (step === 1) {
-        Drupal.alshayaSpcPrepareProductImpression(context, settings);
-      }
+      $('window, .spc-recommended-products .block-content').once('alshaya-seo-gtm-cart').on('scroll', debounce(function (event) {
+        var productSkus = [];
+        $('.recommended-product:not(".impression-processed"):visible').each(function () {
+          if ($(this).isElementInViewPort(0)) {
+            $(this).addClass('impression-processed');
+            productSkus.push($(this).attr('data-sku'));
+          }
+        });
+        if (step === 1 && productSkus.length > 0) {
+          Drupal.alshayaSpcPrepareProductImpression(context, settings, productSkus);
+        }
+      }, 500));
+
+
+
+
 
       /**
        * Fire checkoutOption on cart page.
@@ -321,7 +334,7 @@
    *
    * @param customerType
    */
-  Drupal.alshayaSpcPrepareProductImpression = function (context, settings) {
+  Drupal.alshayaSpcPrepareProductImpression = function (context, settings, skus) {
     var impressions = [];
     var currencyCode = settings.alshaya_spc.currency_config.currency_code;
     var listName = $('body').attr('gtm-list-name');
@@ -331,61 +344,52 @@
       var impression = {};
       var count = 0;
       Object.entries(items).forEach(([key, product]) => {
-        impression.name = product.title;
-        impression.id = product.id;
-        impression.price = product.final_price;
-        impression.category = product.gtm_attributes['gtm-category'];
-        impression.dimension1 = product.gtm_attributes.dimension1;
-        if (product.hasOwnProperty('configurable_values')) {
-          impression.dimension2 = 'configurable';
+        if (skus.includes(key)) {
+          impression.name = product.title;
+          impression.id = product.id;
+          impression.price = product.final_price;
+          impression.category = product.gtm_attributes['gtm-category'];
+          impression.dimension1 = product.gtm_attributes.dimension1;
+          if (product.hasOwnProperty('configurable_values')) {
+            impression.dimension2 = 'configurable';
+          }
+          if (product.final_price !== product.original_price) {
+            impression.dimension3 = 'discounted';
+          }
+          if (product.gtm_attributes.hasOwnProperty('dimension4') && product.gtm_attributes.dimension4) {
+            impression.dimension4 = product.gtm_attributes.dimension4;
+          }
+          if (product.gtm_attributes.hasOwnProperty('dimension5') && product.gtm_attributes.dimension5) {
+            impression.dimension5 = product.gtm_attributes.dimension5;
+          }
+          if (product.gtm_attributes.hasOwnProperty('dimension6') && product.gtm_attributes.dimension6) {
+            impression.dimension6 = product.gtm_attributes.dimension6;
+          }
+          if (product.gtm_attributes.hasOwnProperty('gtm-brand') && product.gtm_attributes['gtm-brand']) {
+            impression.brand = product.gtm_attributes['gtm-brand'];
+          }
+          impression.list = listName;
+          impression.position = count;
+          // Keep variant empty for impression pages. Populated only post add to cart action.
+          impression.variant = '';
+          count++;
+          impressions.push(impression);
         }
-        if (product.final_price !== product.original_price) {
-          impression.dimension3 = 'discounted';
-        }
-        if (product.gtm_attributes.hasOwnProperty('dimension4') && product.gtm_attributes.dimension4) {
-          impression.dimension4 = product.gtm_attributes.dimension4;
-        }
-        if (product.gtm_attributes.hasOwnProperty('dimension5') && product.gtm_attributes.dimension5) {
-          impression.dimension5 = product.gtm_attributes.dimension5;
-        }
-        if (product.gtm_attributes.hasOwnProperty('dimension6') && product.gtm_attributes.dimension6) {
-          impression.dimension6 = product.gtm_attributes.dimension6;
-        }
-        if (product.gtm_attributes.hasOwnProperty('gtm-brand') && product.gtm_attributes['gtm-brand']) {
-          impression.brand = product.gtm_attributes['gtm-brand'];
-        }
-        impression.list = listName;
-        impression.position = count;
-        // Keep variant empty for impression pages. Populated only post add to cart action.
-        impression.variant = '';
-        count++;
-        impressions.push(impression);
       });
       if (impressions.length > 0) {
-        Drupal.alshayaSpcGtmPushImpressions(currencyCode, impressions);
-      }
-    }
-  };
+        // To avoid max size in POST data issue we do it in batches of 10.
+        while (impressions.length > 0) {
+          var data = {
+            event: 'productImpression',
+            ecommerce: {
+              currencyCode: currencyCode,
+              impressions: impressions.splice(0, 10)
+            }
+          };
 
-  /**
-   * Helper function to push product impressions to GTM.
-   *
-   * @param currencyCode
-   * @param impressions
-   */
-  Drupal.alshayaSpcGtmPushImpressions = function (currencyCode, impressions) {
-    // To avoid max size in POST data issue we do it in batches of 10.
-    console.log(currencyCode);
-    while (impressions.length > 0) {
-      var data = {
-        event: 'productImpression',
-        ecommerce: {
-          currencyCode: currencyCode,
-          impressions: impressions.splice(0, 10)
+          dataLayer.push(data);
         }
-      };
-
-      dataLayer.push(data);
+      }
     }
   };
 
