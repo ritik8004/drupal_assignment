@@ -9,7 +9,7 @@ class ClicknCollectContextProvider extends React.Component {
     super(props);
     let coords = null;
     let selectedStore = null;
-    const { storeList } = props;
+    let cartSelectedStore = null;
     let contactInfo = null;
 
     const {
@@ -40,13 +40,16 @@ class ClicknCollectContextProvider extends React.Component {
         lng: parseFloat(storeInfo.lng),
       };
       selectedStore = storeInfo;
+      cartSelectedStore = storeInfo;
     }
 
     this.state = {
       coords,
-      storeList,
+      storeList: [],
       selectedStore,
       contactInfo,
+      cartSelectedStore,
+      clickCollectModal: false,
     };
   }
 
@@ -58,11 +61,6 @@ class ClicknCollectContextProvider extends React.Component {
     }
     // Return null to indicate no change to state.
     return null;
-  }
-
-  componentDidMount() {
-    const { storeList } = this.props;
-    this.setState({ storeList });
   }
 
   updateSelectedStore = (store) => {
@@ -94,6 +92,10 @@ class ClicknCollectContextProvider extends React.Component {
     });
   }
 
+  updateModal = (status) => {
+    this.setState({ clickCollectModal: status });
+  }
+
   render() {
     const { children } = this.props;
 
@@ -106,6 +108,7 @@ class ClicknCollectContextProvider extends React.Component {
             updateCoordsAndStoreList: this.updateCoordsAndStoreList,
             updateCoords: this.updateCoords,
             updateContactInfo: this.updateContactInfo,
+            updateModal: this.updateModal,
           }
         }
       >

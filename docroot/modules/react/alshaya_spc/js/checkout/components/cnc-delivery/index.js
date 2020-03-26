@@ -1,13 +1,18 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import Popup from 'reactjs-popup';
-import { checkoutAddressProcess } from '../../../utilities/address_util';
+import _findIndex from 'lodash/findIndex';
 import Loading from '../../../utilities/loading';
 import ClickCollectContainer from '../click-collect';
-import { cleanMobileNumber } from '../../../utilities/checkout_util';
+import { cleanMobileNumber, removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
+import createFetcher from '../../../utilities/api/fetcher';
+import { fetchClicknCollectStores } from '../../../utilities/api/requests';
+import { ClicknCollectContext } from '../../../context/ClicknCollect';
 
 class ClicknCollectDeiveryInfo extends React.Component {
   isComponentMounted = true;
+
+  static contextType = ClicknCollectContext;
 
   constructor(props) {
     super(props);
@@ -24,6 +29,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
       this.eventListener,
       false,
     );
+    this.fetchStoresHelper();
   }
 
   componentWillUnmount() {
@@ -40,14 +46,11 @@ class ClicknCollectDeiveryInfo extends React.Component {
       open: true,
       showSelectedStore: showSelectedStore || false,
     });
+    this.fetchStoresHelper();
   };
 
   closeModal = () => {
     this.setState({ open: false });
-  };
-
-  processAddress = (e) => {
-    checkoutAddressProcess(e);
   };
 
   eventListener = ({ detail }) => {
@@ -57,6 +60,65 @@ class ClicknCollectDeiveryInfo extends React.Component {
     if (this.isComponentMounted) {
       this.closeModal();
     }
+  };
+
+  /**
+   * Fetch click n collect stores and update store list.
+   */
+  fetchStoresHelper = () => {
+    const {
+      clickCollectModal,
+      coords,
+      storeList,
+      selectedStore,
+      updateCoordsAndStoreList,
+      cartSelectedStore,
+      updateSelectStore,
+    } = this.context;
+
+    const fetchAgain = cartSelectedStore !== null
+      && (cartSelectedStore.code !== selectedStore.code);
+
+    if (storeList.length > 0
+      && _findIndex(storeList, { code: selectedStore.code }) > -1
+      && !fetchAgain) {
+      return;
+    }
+
+    let fetchCoords = coords;
+    if (storeList.length > 0 || fetchAgain) {
+      if (fetchAgain) {
+        updateSelectStore(cartSelectedStore);
+      }
+      fetchCoords = { lat: cartSelectedStore.lat, lng: cartSelectedStore.lng };
+    }
+
+    window.fetchStore = 'pending';
+    // When click n collect modal is loaded, we will show full screen loader.
+    if (clickCollectModal) {
+      showFullScreenLoader();
+    }
+
+    const list = createFetcher(fetchClicknCollectStores).read(fetchCoords);
+    list.then(
+      (response) => {
+        if (typeof response.error !== 'undefined') {
+          window.fetchStore = 'finished';
+          // When click n collect modal is loaded, we will have to remove full screen loader.
+          if (clickCollectModal) {
+            removeFullScreenLoader();
+          }
+        }
+
+        updateCoordsAndStoreList(fetchCoords, response.data);
+        window.fetchStore = 'finished';
+
+        // When click n collect modal is loaded, we will have to remove full screen loader.
+        if (clickCollectModal) {
+          removeFullScreenLoader();
+        }
+      },
+    );
   };
 
   render() {
@@ -105,8 +167,8 @@ class ClicknCollectDeiveryInfo extends React.Component {
         >
           <React.Suspense fallback={<Loading />}>
             <ClickCollectContainer
-              openSelectedStore={showSelectedStore}
               closeModal={this.closeModal}
+              openSelectedStore={showSelectedStore}
             />
           </React.Suspense>
         </Popup>

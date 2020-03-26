@@ -35,8 +35,8 @@ const createFetcher = (promiseFunc) => ({
               return { error: 'error!' };
             }
 
-            cachedObj.cacheResult(response.data);
-            return response.data;
+            cachedObj.cacheResult(response);
+            return response;
           },
           (reject) => ({ error: reject }),
         );

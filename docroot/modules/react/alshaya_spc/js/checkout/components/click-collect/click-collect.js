@@ -10,7 +10,6 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
-import Loading from '../../../utilities/loading';
 import SectionTitle from '../../../utilities/section-title';
 import SelectedStore from './components/SelectedStore';
 import StoreList from './components/StoreList';
@@ -52,8 +51,15 @@ class ClickCollect extends React.Component {
   componentDidMount() {
     // For autocomplete text field.
     const { openSelectedStore } = this.state;
-    const { coords, selectedStore } = this.context;
-    if (!this.autocomplete && this.searchRef) {
+    const {
+      coords,
+      selectedStore,
+      updateModal,
+      storeList,
+    } = this.context;
+    updateModal(true);
+
+    if (!this.autocomplete && !!this.searchRef && !!this.searchRef.current) {
       this.searchplaceInput = this.searchRef.current.getElementsByTagName('input').item(0);
       this.autocomplete = new window.google.maps.places.Autocomplete(
         this.searchplaceInput,
@@ -67,10 +73,10 @@ class ClickCollect extends React.Component {
         'place_changed',
         this.placesAutocompleteHandler,
       );
+      this.nearMeBtn = this.searchRef.current.getElementsByTagName('button').item(0);
     }
-    this.nearMeBtn = this.searchRef.current.getElementsByTagName('button').item(0);
 
-    if (coords !== null) {
+    if (coords !== null && storeList.length === 0) {
       this.fetchAvailableStores(coords);
     }
 
@@ -190,7 +196,7 @@ class ClickCollect extends React.Component {
       .then((response) => {
         this.selectStoreButtonVisibility(false);
         if (typeof response.error === 'undefined') {
-          updateCoordsAndStoreList(coords, response);
+          updateCoordsAndStoreList(coords, response.data);
           this.showOpenMarker(response);
         } else {
           updateCoordsAndStoreList(coords, []);
@@ -384,18 +390,20 @@ class ClickCollect extends React.Component {
   }
 
   render() {
-    const { coords, storeList, selectedStore } = this.context;
+    const {
+      coords,
+      storeList,
+      selectedStore,
+    } = this.context;
+
     const {
       openSelectedStore,
       mapFullScreen,
       messageType,
       errorSuccessMessage,
     } = this.state;
-    const { closeModal } = this.props;
 
-    if (window.fetchStore !== 'finished') {
-      return <Loading />;
-    }
+    const { closeModal } = this.props;
 
     const mapView = (
       <ClicknCollectMap
@@ -430,17 +438,6 @@ class ClickCollect extends React.Component {
                 />
                 <DeviceView device="mobile">
                   <ToggleButton toggleStoreView={this.toggleStoreView} />
-                </DeviceView>
-                <div id="click-and-collect-list-view" ref={this.cncListView}>
-                  <StoreList
-                    display={(window.innerWidth < 768) ? 'accordion' : 'teaser'}
-                    storeList={storeList}
-                    selected={selectedStore}
-                    onStoreRadio={this.hightlightMapMarker}
-                    onStoreFinalize={this.finalizeStore}
-                  />
-                </div>
-                <DeviceView device="mobile">
                   <div
                     className="click-and-collect-map-view"
                     style={{ display: 'none' }}
@@ -462,6 +459,15 @@ class ClickCollect extends React.Component {
                     </div>
                   </div>
                 </DeviceView>
+                <div id="click-and-collect-list-view" ref={this.cncListView}>
+                  <StoreList
+                    display={(window.innerWidth < 768) ? 'accordion' : 'teaser'}
+                    storeList={storeList}
+                    selected={selectedStore}
+                    onStoreRadio={this.hightlightMapMarker}
+                    onStoreFinalize={this.finalizeStore}
+                  />
+                </div>
               </div>
             </div>
           </div>
