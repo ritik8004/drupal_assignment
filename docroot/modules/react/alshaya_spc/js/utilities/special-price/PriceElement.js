@@ -1,13 +1,16 @@
 import React from 'react';
 
 const PriceElement = (props) => {
-  const { amount: priceAmount } = props;
+  let { amount: priceAmount } = props;
   if (typeof priceAmount === 'undefined') {
     return (null);
   }
 
   const { currency_config: currencyConfig } = window.drupalSettings.alshaya_spc;
-  const amount = parseFloat(priceAmount);
+  priceAmount = priceAmount === null ? 0 : priceAmount;
+  const amount = !Number.isNaN(Number(priceAmount)) === true
+    ? parseFloat(priceAmount)
+    : 0;
   const priceParts = [
     (<span key="currency" className="price-currency suffix">{currencyConfig.currency_code}</span>),
     (<span key="amount" className="price-amount">{amount.toFixed(currencyConfig.decimal_points)}</span>),
