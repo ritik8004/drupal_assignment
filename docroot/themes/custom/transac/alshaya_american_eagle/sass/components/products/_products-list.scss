@@ -64,6 +64,8 @@
   }
 
   .c-products__item {
+    text-align: $left;
+
     .product-plp-detail-wrapper {
       text-align: $left;
       color: $plp_tile_product_title;
@@ -79,6 +81,22 @@
 
       .price-block {
         font-family: $alshaya-bold;
+      }
+    }
+
+    article {
+      &:hover {
+        &::after {
+          display: none;
+        }
+      }
+
+      .alshaya_search_slider {
+        display: none;
+
+        .slick-slider {
+          display: none;
+        }
       }
     }
   }
