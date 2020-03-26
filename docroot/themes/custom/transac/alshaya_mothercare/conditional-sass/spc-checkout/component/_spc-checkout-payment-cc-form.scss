@@ -2,7 +2,7 @@
 .payment-method.payment-method-cybersource {
   input {
     ~ label {
-      text-transform: capitalize;
+      text-transform: lowercase;
     }
   }
 }
