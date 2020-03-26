@@ -76,6 +76,8 @@ class ProductMetaImageEventSubscriber implements EventSubscriberInterface {
       $teaser_image = $this->skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
       if (!empty($teaser_image['#uri'])) {
         $event->setMetaImage(file_create_url($teaser_image['#uri']));
+        // Stop to execute other event subscribers if we are on PDP pages
+        // and if image available.
         $event->stopPropagation();
       }
     }
