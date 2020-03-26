@@ -5,8 +5,8 @@ dependencies:
     - serialization
     - alshaya_mobile_app
     - simple_oauth
-id: magazine_listing_page
-plugin_id: magazine_listing_page
+id: magazine_teasers
+plugin_id: magazine_teasers
 granularity: method
 configuration:
   GET:
