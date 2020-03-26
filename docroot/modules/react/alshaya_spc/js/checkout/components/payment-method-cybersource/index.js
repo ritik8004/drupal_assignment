@@ -65,6 +65,13 @@ class PaymentMethodCybersource extends React.Component {
     removeFullScreenLoader();
   };
 
+  showCardType = () => {
+    const type = document.getElementById('payment-card-type').value;
+    this.updateCurrentContext({
+      cardType: type,
+    });
+  };
+
   handleCardNumberChange = (event, handler) => {
     const { numberValid: prevNumberValid } = this.state;
     let valid = true;
@@ -87,7 +94,6 @@ class PaymentMethodCybersource extends React.Component {
     this.setState({
       numberValid: valid,
       number: event.target.rawValue,
-      cardType: type,
     });
 
     if (prevNumberValid !== valid && valid) {
@@ -253,6 +259,7 @@ class PaymentMethodCybersource extends React.Component {
                 creditCard: true,
                 onCreditCardTypeChanged: this.handleCardTypeChanged,
               }}
+              onChange={() => this.showCardType()}
               onBlur={(e) => this.handleCardNumberChange(e, 'blur')}
             />
             <div className="c-input__bar" />
