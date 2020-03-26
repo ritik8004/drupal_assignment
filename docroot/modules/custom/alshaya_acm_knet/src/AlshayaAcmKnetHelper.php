@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_knet;
 
-use Drupal\acq_cart\Cart;
 use Drupal\acq_commerce\Conductor\APIWrapperInterface;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_knet\Helper\KnetHelper;
@@ -263,18 +262,25 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if (empty($cart)) {
-      $this->logger->warning('Cart not found in session but since payment was completed for @quote_id we restored it from Magento.', [
-        '@quote_id' => $data['quote_id'],
-        '@message' => json_encode($data),
-      ]);
-
       try {
-        $cartObject = (object) $this->api->getCart($data['quote_id']);
-        $cart = new Cart($cartObject);
-        $restored_cart = TRUE;
+        if ($this->cartStorage->restoreCart($data['quote_id'])) {
+          $this->logger->warning('Cart not found in session but since payment was completed for @quote_id we restored it from Magento.', [
+            '@quote_id' => $data['quote_id'],
+            '@message' => json_encode($data),
+          ]);
+
+          $cart = $this->cartStorage->getCart(FALSE);
+
+          $restored_cart = TRUE;
+        }
       }
       catch (\Exception $e) {
         $cart = NULL;
+
+        $this->logger->warning('Cart not found in session but since payment was completed we tried to restore but that failed too for cart_id @quote_id, data: @message.', [
+          '@quote_id' => $data['quote_id'],
+          '@message' => json_encode($data),
+        ]);
       }
 
       if (empty($cart) || $cart->id() != $data['quote_id']) {
