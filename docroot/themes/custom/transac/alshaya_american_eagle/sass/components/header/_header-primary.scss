@@ -202,15 +202,24 @@ header.c-header {
 
       @include breakpoint($desktop) {
         margin-top: -0.25rem;
+      }
 
-        input[type="text"],
-        input[type="search"] {
+      input[type="text"],
+      input[type="search"] {
+        padding-#{$left}: 1.25rem;
+
+        @include breakpoint($desktop) {
           width: 24rem;
           font-size: 0.875rem;
           padding-#{$right}: 2.875rem;
           max-width: 24.6875rem;
           text-transform: none;
           border-#{$right}: 0;
+        }
+
+        &::placeholder {
+          font-size: 0.875rem;
+          color: $primary_search_input_placeholder;
         }
       }
 
@@ -833,8 +842,8 @@ header {
   }
 
   .menu__in {
-    margin-top: -2.5rem;
-    margin-#{$right}: 0.51rem;
+    margin-top: -2.25rem;
+    margin-#{$right}: 0.5rem;
 
     @include icon(chevron#{$right}, after) {
       font-size: 1.75rem;
