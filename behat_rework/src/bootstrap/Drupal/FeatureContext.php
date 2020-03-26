@@ -211,8 +211,7 @@ class FeatureContext extends CustomMinkContext
       throw new \Exception('No products are listed on PLP');
     }
     foreach ($all_products as $item) {
-      $item_status = count($item->find('css', 'div.out-of-stock span'));
-      if ($item_status) {
+      if ($item->find('css', 'div.out-of-stock span')) {
         $total_products--;
         if (!$total_products) {
           throw new \Exception('All products are out of stock on PLP');
@@ -239,8 +238,7 @@ class FeatureContext extends CustomMinkContext
       throw new \Exception('Search passed, but search results were empty');
     }
     foreach ($all_products as $item) {
-      $item_status = count($item->find('css', 'div.out-of-stock span'));
-      if ($item_status) {
+      if ($item->find('css', 'div.out-of-stock span')) {
         $total_products--;
         if (!$total_products) {
           throw new \Exception('All products are out of stock');
@@ -1528,8 +1526,7 @@ class FeatureContext extends CustomMinkContext
       throw new Exception('Search passed, but search results were empty');
     }
     foreach ($all_products as $item) {
-      $item_status = count($item->find('css', 'div.out-of-stock span'));
-      if ($item_status) {
+      if ($item->find('css', 'div.out-of-stock span')) {
         $total_products--;
         if (!$total_products) {
           throw new Exception('All products are out of stock');
@@ -1596,7 +1593,7 @@ class FeatureContext extends CustomMinkContext
   public function iClickOnElement($css_selector)
   {
     $element = $this->getSession()->getPage()->find("css", $css_selector);
-    if (count($element) > 0) {
+    if ($element) {
       $element->click();
     } else {
       throw new Exception("Element " . $css_selector . " not found on " . $this->getSession()->getCurrentUrl());
