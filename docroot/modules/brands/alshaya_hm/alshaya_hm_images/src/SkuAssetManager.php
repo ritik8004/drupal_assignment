@@ -655,7 +655,10 @@ class SkuAssetManager {
   private function getSkuAssetUrlLiquidPixel(array $asset) {
     $base_url = $this->hmImageSettings->get('base_url');
     $asset_attributes = $this->getAssetAttributes($asset, 'pdp_fullscreen');
-    $query_options = $this->getAssetQueryString(...$asset_attributes);
+    $query_options = $this->getAssetQueryString(
+      $asset_attributes['set'],
+      $asset_attributes['image_location_identifier']
+    );
     return Url::fromUri($base_url, ['query' => $query_options])->toString();
   }
 
@@ -702,7 +705,7 @@ class SkuAssetManager {
    * @return array
    *   Array of asset attributes.
    */
-  public function getAssetAttributes(array $asset, $location_image) {
+  protected function getAssetAttributes(array $asset, $location_image) {
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
     $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
@@ -720,7 +723,10 @@ class SkuAssetManager {
       $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] . "]";
     }
 
-    return [$set, $image_location_identifier];
+    return [
+      'set' => $set,
+      'image_location_identifier' => $image_location_identifier,
+    ];
   }
 
   /**
