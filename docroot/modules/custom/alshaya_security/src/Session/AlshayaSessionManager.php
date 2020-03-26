@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_security\Session;
 
 use Drupal\Core\Session\SessionManager;
+use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * Class AlshayaSessionManager.
@@ -18,6 +19,11 @@ use Drupal\Core\Session\SessionManager;
 class AlshayaSessionManager extends SessionManager {
 
   /**
+   * Suffix to use for legacy cookie name.
+   */
+  const LEGACY_SUFFIX = '-legacy';
+
+  /**
    * {@inheritdoc}
    */
   public function save() {
@@ -27,10 +33,19 @@ class AlshayaSessionManager extends SessionManager {
 
     foreach ($headers_list as $header) {
       // Check class comment to understand what we do here.
-      if (stripos($header, 'secure') !== FALSE && stripos($header, 'samesite') === FALSE) {
+      if (strpos($header, 'Set-Cookie: ') !== FALSE
+        && stripos($header, 'secure') !== FALSE
+        && stripos($header, 'samesite') === FALSE) {
+        // First remove as we will replace same with additional option.
         header_remove($header);
-        header($header . ';SameSite=None;', FALSE);
-        header($header);
+
+        // Add the cookie as per new browser expectations.
+        header($header . '; SameSite=None', FALSE);
+
+        // Add the legacy cookie.
+        $cookie = Cookie::fromString(str_replace('Set-Cookie: ', '', $header));
+        $header = str_replace($cookie->getName(), $cookie->getName() . self::LEGACY_SUFFIX, $header);
+        header($header, FALSE);
       }
     }
   }
