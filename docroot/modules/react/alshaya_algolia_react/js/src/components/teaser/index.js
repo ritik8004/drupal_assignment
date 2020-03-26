@@ -3,7 +3,6 @@ import Gallery from '../gallery';
 import Price from '../price';
 import Promotions from '../promotions';
 import Lables from '../labels';
-import CustomHighlight from '../algolia/CustomHighlight';
 import { getCurrentSearchQueryString, setClickedItem } from '../../utils';
 import Parser from 'html-react-parser';
 
@@ -50,7 +49,11 @@ const Teaser = ({hit}) => {
           <div className="product-plp-detail-wrapper">
             <h2 className="field--name-name">
               <a href={`${hit.url}`} className="product-selected-url">
-                <CustomHighlight attribute="title" hit={hit} />
+                <div className="aa-suggestion">
+                  <span className="suggested-text">
+                    {hit.title}
+                  </span>
+                </div>
               </a>
             </h2>
             {hit.rendered_price ?
