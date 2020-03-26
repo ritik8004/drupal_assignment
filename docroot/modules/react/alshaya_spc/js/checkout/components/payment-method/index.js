@@ -54,28 +54,28 @@ export default class PaymentMethod extends React.Component {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
       if (result.error !== undefined && result.error) {
         removeFullScreenLoader();
-        console.error(result.error);
+        Drupal.logJavascriptError('finalise payment', result.message);
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
         const { cart } = this.props;
-        placeOrder(cart.selected_payment_method);
+        placeOrder(cart.cart.cart_payment_method);
         removeStorageInfo('spc_selected_card');
         removeStorageInfo('billing_shipping_same');
       } else if (result.success === undefined || !(result.success)) {
         // 3D flow error.
-        console.error(result);
+        Drupal.logJavascriptError('3d flow finalise payment', result.message);
       } else if (result.redirectUrl !== undefined) {
         // 3D flow success.
         removeStorageInfo('spc_selected_card');
         removeStorageInfo('billing_shipping_same');
         window.location = result.redirectUrl;
       } else {
-        console.error(result);
+        Drupal.logJavascriptError('finalise payment', result.message);
         removeFullScreenLoader();
       }
     }).catch((error) => {
       removeFullScreenLoader();
-      console.error(error);
+      Drupal.logJavascriptError('add payment method in cart', error);
     });
   };
 

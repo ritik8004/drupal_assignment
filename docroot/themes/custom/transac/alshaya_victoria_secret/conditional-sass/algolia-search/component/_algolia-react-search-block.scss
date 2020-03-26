@@ -311,7 +311,9 @@ body {
 
   &.frontpage {
     .mobile--search {
-      visibility: hidden;
+      @include breakpoint($only-mobile) {
+        visibility: hidden;
+      }
     }
   }
 }

@@ -197,56 +197,53 @@ class OrdersManager {
    * Status of orders keep changing, we store it in cache for only sometime.
    * Time to store in cache is configurable.
    *
-   * @param string $email
-   *   E-Mail address.
+   * @param int $customer_id
+   *   Customer Commerce ID.
    *
    * @return array
    *   Orders.
    */
-  public function getOrders(string $email) {
+  public function getOrders(int $customer_id) {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
-    $cid = 'orders_list_' . $langcode . '_' . $email;
+    $cid = 'orders_list_' . $langcode . '_' . $customer_id;
 
     if ($cache = $this->cache->get($cid)) {
-      $orders = $cache->data;
+      return $cache->data;
     }
-    else {
-      try {
-        $query = $this->getOrdersQuery($email);
-        $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
-        $result = json_decode($response ?? [], TRUE);
-        $orders = $result['items'] ?? [];
-        foreach ($orders as $key => $order) {
-          $orders[$key] = $this->cleanupOrder($order);
-        }
-      }
-      catch (\Exception $e) {
-        // Exception message is already added to log in APIWrapper.
-        $orders = [];
-      }
 
-      // Sort them by default by date.
-      usort($orders, function ($a, $b) {
-        return $b['created_at'] > $a['created_at'];
-      });
-
-      // Get the cache expiration time based on config value.
-      $cacheTimeLimit = $this->config->get('cache_time_limit');
-
-      // We can disable caching via config by setting it to zero.
-      if ($cacheTimeLimit > 0) {
-        $expire = strtotime('+' . $cacheTimeLimit . ' seconds');
-
-        // Store in cache.
-        $this->cache->set($cid, $orders, $expire);
-      }
-
-      // Verify count again and reset if required.
-      if (count($orders) != $this->getOrdersCount($email)) {
-        $this->countCache->set('orders_count_' . $email, count($orders));
+    try {
+      $query = $this->getOrdersQuery('customer_id', $customer_id);
+      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
+      $result = json_decode($response ?? [], TRUE);
+      $orders = $result['items'] ?? [];
+      foreach ($orders as $key => $order) {
+        $orders[$key] = $this->cleanupOrder($order);
       }
     }
+    catch (\Exception $e) {
+      // Exception message is already added to log in APIWrapper.
+      $orders = [];
+    }
+
+    // Sort them by default by date.
+    usort($orders, function ($a, $b) {
+      return $b['created_at'] > $a['created_at'];
+    });
+
+    // Get the cache expiration time based on config value.
+    $cacheTimeLimit = $this->config->get('cache_time_limit');
+
+    // We can disable caching via config by setting it to zero.
+    if ($cacheTimeLimit > 0) {
+      $expire = strtotime('+' . $cacheTimeLimit . ' seconds');
+
+      // Store in cache.
+      $this->cache->set($cid, $orders, $expire);
+    }
+
+    // Re-set count again.
+    $this->countCache->set('orders_count_' . $customer_id, count($orders));
 
     return $orders;
   }
@@ -257,45 +254,48 @@ class OrdersManager {
    * We need only count for some cases like GTM and count won't change like
    * orders so we store them permanently.
    *
-   * @param string $email
-   *   E-Mail address.
+   * @param int $customer_id
+   *   Customer Commerce ID.
    *
    * @return int
    *   Orders count.
    */
-  public function getOrdersCount(string $email) {
-    $cid = 'orders_count_' . $email;
+  public function getOrdersCount(int $customer_id) {
+    $cid = 'orders_count_' . $customer_id;
 
     if ($cache = $this->countCache->get($cid)) {
-      $count = $cache->data;
+      return $cache->data;
     }
-    else {
-      $query = $this->getOrdersQuery($email);
-      $query['searchCriteria']['pageSize'] = 1;
-      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
-      $result = json_decode($response ?? [], TRUE);
-      $count = $result['total_count'] ?? 0;
-      $this->countCache->set($cid, $count);
-    }
+
+    $query = $this->getOrdersQuery('customer_id', $customer_id);
+    $query['searchCriteria']['pageSize'] = 1;
+    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
+    $result = json_decode($response ?? [], TRUE);
+    $count = $result['total_count'] ?? 0;
+    $this->countCache->set($cid, $count);
 
     return $count;
   }
 
   /**
-   * Helper function to return order from session.
+   * Helper function to get specific order.
+   *
+   * @param int $order_id
+   *   Order ID to get order for.
    *
    * @return array
    *   Order array if found.
    */
-  public function getOrder($order_id) {
-    $endpoint = str_replace('{id}', $order_id, 'orders/{id}');
-    $order = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
-    $order = json_decode($order, TRUE);
-
-    if (empty($order)) {
+  public function getOrder(int $order_id) {
+    $query = $this->getOrdersQuery('entity_id', $order_id);
+    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
+    $result = json_decode($response ?? [], TRUE);
+    $count = $result['total_count'] ?? 0;
+    if (empty($count)) {
       return NULL;
     }
 
+    $order = reset($result['items']);
     return $this->cleanupOrder($order);
   }
 
@@ -318,6 +318,10 @@ class OrdersManager {
 
     $items = [];
     foreach ($order['items'] as $item) {
+      if (isset($items[$item['sku']])) {
+        continue;
+      }
+
       $processed_item = [
         'type' => (string) ($item['product_type'] ?? ''),
         'price' => ($item['price_incl_tax'] ?? 0),
@@ -328,7 +332,7 @@ class OrdersManager {
       ];
 
       // Add all other info.
-      $items[] = array_merge($processed_item, $item);
+      $items[$item['sku']] = $processed_item + $item;
     }
     $order['items'] = $items;
 
@@ -364,21 +368,23 @@ class OrdersManager {
   /**
    * Wrapper function to get orders query.
    *
-   * @param string $email
-   *   E-Mail address.
+   * @param string $field
+   *   Field to filter by.
+   * @param mixed $value
+   *   Value for the filter.
    *
    * @return array
    *   Orders query.
    */
-  private function getOrdersQuery(string $email) {
+  private function getOrdersQuery(string $field, $value) {
     return [
       'searchCriteria' => [
         'filterGroups' => [
           [
             'filters' => [
               [
-                'field' => 'customer_email',
-                'value' => $email,
+                'field' => $field,
+                'value' => $value,
                 'condition_type' => 'eq',
               ],
             ],

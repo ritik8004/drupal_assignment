@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Cookies from 'js-cookie';
 import SectionTitle from '../../../utilities/section-title';
 import PaymentMethod from '../payment-method';
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
@@ -8,12 +8,42 @@ import {
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
-import { dispatchCustomEvent } from '../../../utilities/events';
+import dispatchCustomEvent from '../../../utilities/events';
+import getStringMessage from '../../../utilities/strings';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
     super(props);
     this.paymentMethodRefs = [];
+  }
+
+  componentDidMount = () => {
+    this.selectDefault();
+
+    // We want this to be executed once all other JS execution is finished.
+    // For this we use setTimeout with 1 ms.
+    setTimeout(() => {
+      dispatchCustomEvent('refreshCompletePurchaseSection', {});
+    }, 1);
+
+    const paymentError = Cookies.get('middleware_payment_error');
+    if (paymentError !== undefined && paymentError !== null && paymentError.length > 0) {
+      Cookies.remove('middleware_payment_error');
+
+      const message = (paymentError === 'declined')
+        ? getStringMessage('transaction_failed')
+        : getStringMessage('payment_error');
+
+      dispatchCustomEvent('spcCheckoutMessageUpdate', {
+        type: 'error',
+        message,
+      });
+    }
+  };
+
+  componentDidUpdate() {
+    this.selectDefault();
+    dispatchCustomEvent('refreshCompletePurchaseSection', {});
   }
 
   isActive = () => {
@@ -39,18 +69,11 @@ export default class PaymentMethods extends React.Component {
     const { cart } = this.props;
 
     // Select first payment method by default.
-    if (cart.selected_payment_method === 'undefined' || paymentMethods[cart.selected_payment_method] === undefined) {
+    if (cart.cart.cart_payment_method === undefined
+      || paymentMethods[cart.cart.cart_payment_method] === undefined) {
       this.changePaymentMethod(Object.keys(paymentMethods)[0]);
     }
   };
-
-  componentDidMount = () => {
-    this.selectDefault();
-  };
-
-  componentDidUpdate() {
-    this.selectDefault();
-  }
 
   getPaymentMethods = (active) => {
     const { cart } = this.props;
@@ -79,25 +102,13 @@ export default class PaymentMethods extends React.Component {
 
   changePaymentMethod = (method) => {
     const { cart, refreshCart } = this.props;
+
     // Dispatch event for GTM checkout step 3.
     dispatchCustomEvent('refreshCartOnPaymentMethod', {
       cart,
     });
-    if (!this.isActive() || cart.selected_payment_method === method) {
-      return;
-    }
 
-    // If payment method we trying to set is same as
-    // what set in cart, we don;t do anything.
-    if (cart.cart.cart_payment_method !== undefined
-      && cart.cart.cart_payment_method !== null
-      && method === cart.cart.cart_payment_method) {
-      document.getElementById(`payment-method-${method}`).checked = true;
-      // Selected key is not set, we set.
-      if (cart.selected_payment_method === undefined) {
-        cart.selected_payment_method = method;
-        refreshCart(cart);
-      }
+    if (!this.isActive() || cart.cart.cart_payment_method === method) {
       return;
     }
 
@@ -124,11 +135,12 @@ export default class PaymentMethods extends React.Component {
         document.getElementById(`payment-method-${method}`).checked = true;
 
         const { cart: cartData } = this.props;
-        cartData.selected_payment_method = method;
         cartData.cart = result;
         refreshCart(cartData);
+
+        dispatchCustomEvent('refreshCompletePurchaseSection', {});
       }).catch((error) => {
-        console.error(error);
+        Drupal.logJavascriptError('change payment method', error);
       });
     }
   };
@@ -137,7 +149,7 @@ export default class PaymentMethods extends React.Component {
     const { cart } = this.props;
 
     // Trigger validate of selected component.
-    return this.paymentMethodRefs[cart.selected_payment_method].current.validateBeforePlaceOrder();
+    return this.paymentMethodRefs[cart.cart.cart_payment_method].current.validateBeforePlaceOrder();
   };
 
   render = () => {
@@ -154,7 +166,7 @@ export default class PaymentMethods extends React.Component {
         ref={this.paymentMethodRefs[method.code]}
         refreshCart={refreshCart}
         changePaymentMethod={this.changePaymentMethod}
-        isSelected={cart.selected_payment_method === method.code}
+        isSelected={cart.cart.cart_payment_method === method.code}
         key={key}
         method={method}
       />);

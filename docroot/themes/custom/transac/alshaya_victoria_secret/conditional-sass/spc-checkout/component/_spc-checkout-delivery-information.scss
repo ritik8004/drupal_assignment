@@ -22,7 +22,9 @@
 
 .spc-section-billing-address {
   .popup-overlay .popup-content {
-    .spc-deliver-button {
+    .spc-add-new-address-btn,
+    .spc-deliver-button,
+    .spc-address-select-address {
       text-transform: capitalize;
     }
   }

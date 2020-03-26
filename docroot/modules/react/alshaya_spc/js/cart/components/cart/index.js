@@ -12,6 +12,7 @@ import Loading from '../../../utilities/loading';
 import VatFooterText from '../../../utilities/vat-footer';
 import { stickyMobileCartPreview, stickySidebar } from '../../../utilities/stickyElements/stickyElements';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -80,7 +81,24 @@ export default class Cart extends React.Component {
         });
       }
     }, false);
+
+    // Event handles cart message update.
+    document.addEventListener('spcCartMessageUpdate', this.handleCartMessageUpdateEvent, false);
   }
+
+  componentWillUnmount() {
+    document.removeEventListener('spcCartMessageUpdate', this.handleCartMessageUpdateEvent, false);
+  }
+
+  handleCartMessageUpdateEvent = (event) => {
+    const { type, message } = event.detail;
+    this.updateCartMessage(type, message);
+  };
+
+  updateCartMessage = (messageType, message) => {
+    this.setState({ messageType, message });
+    smoothScrollTo('.spc-messages-container');
+  };
 
   render() {
     const {
@@ -113,7 +131,7 @@ export default class Cart extends React.Component {
     return (
       <>
         <div className="spc-pre-content">
-          <CheckoutMessage type={messageType} context="cart">
+          <CheckoutMessage type={messageType} context="page-level-cart">
             {message}
           </CheckoutMessage>
           <MobileCartPreview total_items={totalItems} totals={totals} />

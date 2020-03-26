@@ -7,7 +7,7 @@ import SectionTitle from '../../../utilities/section-title';
 import {
   processBillingUpdateFromForm,
   getAddressPopupClassName,
-} from '../../../utilities/checkout_address_process';
+} from '../../../utilities/address_util';
 import {
   isBillingSameAsShippingInStorage,
 } from '../../../utilities/checkout_util';

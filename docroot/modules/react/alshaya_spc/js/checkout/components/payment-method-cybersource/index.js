@@ -3,7 +3,7 @@ import Cleave from 'cleave.js/react';
 import axios from 'axios';
 import luhn from '../../../utilities/luhn';
 import CardTypeSVG from '../../../svg-component/card-type-svg';
-import { i18nMiddleWareUrl } from '../../../utilities/i18n_url';
+import i18nMiddleWareUrl from '../../../utilities/i18n_url';
 import { removeCartFromStorage } from '../../../utilities/storage';
 import ToolTip from '../../../utilities/tooltip';
 import CVVToolTipText from '../cvv-text';
@@ -11,7 +11,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
-import { dispatchCustomEvent } from '../../../utilities/events';
+import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
 
@@ -65,10 +65,18 @@ class PaymentMethodCybersource extends React.Component {
     removeFullScreenLoader();
   };
 
-  handleCardNumberChange = (event) => {
+  showCardType = () => {
+    const type = document.getElementById('payment-card-type').value;
+    this.updateCurrentContext({
+      cardType: type,
+    });
+  };
+
+  handleCardNumberChange = (event, handler) => {
     const { numberValid: prevNumberValid } = this.state;
     let valid = true;
     const type = document.getElementById('spc-cy-payment-card-type').value;
+    this.labelEffect(event, handler);
 
     if (this.acceptedCards.indexOf(type) === -1) {
       valid = false;
@@ -86,7 +94,6 @@ class PaymentMethodCybersource extends React.Component {
     this.setState({
       numberValid: valid,
       number: event.target.rawValue,
-      cardType: type,
     });
 
     if (prevNumberValid !== valid && valid) {
@@ -98,9 +105,10 @@ class PaymentMethodCybersource extends React.Component {
     document.getElementById('spc-cy-payment-card-type').value = type;
   };
 
-  handleCardExpiryChange = (event) => {
+  handleCardExpiryChange = (event, handler) => {
     const { expiryValid: prevExpiryValid } = this.state;
     let valid = true;
+    this.labelEffect(event, handler);
     const dateParts = event.target.value.split('/').map((x) => {
       if (!(x) || Number.isNaN(Number(x))) {
         return 0;
@@ -137,10 +145,10 @@ class PaymentMethodCybersource extends React.Component {
     }
   };
 
-  handleCardCvvChange = (event) => {
+  handleCardCvvChange = (event, handler) => {
     const cvv = parseInt(event.target.value, 10);
     const valid = (cvv >= 100 && cvv <= 9999);
-
+    this.labelEffect(event, handler);
     handleValidationMessage(
       'spc-cy-cc-cvv-error',
       event.target.value,
@@ -157,7 +165,7 @@ class PaymentMethodCybersource extends React.Component {
   validateBeforePlaceOrder = () => {
     const { numberValid, expiryValid, cvvValid } = this.state;
     if (!(numberValid && expiryValid && cvvValid)) {
-      console.error('client side validation failed for credit card info');
+      Drupal.logJavascriptError('validate-before-place-order', 'client side validation failed for credit card info');
       return false;
     }
 
@@ -168,15 +176,12 @@ class PaymentMethodCybersource extends React.Component {
     axios.post(apiUrl, { type: cardType }).then((response) => {
       // Handle exception.
       if (response.data.error !== undefined) {
-        console.error(response.data);
-
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
           message: getStringMessage('payment_error'),
         });
-
         removeFullScreenLoader();
-
+        Drupal.logJavascriptError('validate-before-place-order', response.data.error_message);
         return;
       }
 
@@ -204,14 +209,12 @@ class PaymentMethodCybersource extends React.Component {
 
       cybersourceForm.submit();
     }).catch((error) => {
-      console.error(error);
-
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
         message: getStringMessage('payment_error'),
       });
-
       removeFullScreenLoader();
+      Drupal.logJavascriptError('validate-before-place-order', error);
     });
 
     return false;
@@ -256,8 +259,8 @@ class PaymentMethodCybersource extends React.Component {
                 creditCard: true,
                 onCreditCardTypeChanged: this.handleCardTypeChanged,
               }}
-              onChange={this.handleCardNumberChange}
-              onBlur={(e) => this.labelEffect(e, 'blur')}
+              onChange={() => this.showCardType()}
+              onBlur={(e) => this.handleCardNumberChange(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('card number')}</label>
@@ -272,8 +275,7 @@ class PaymentMethodCybersource extends React.Component {
                 datePattern: ['m', 'y'],
                 delimiter: '/',
               }}
-              onChange={this.handleCardExpiryChange}
-              onBlur={(e) => this.labelEffect(e, 'blur')}
+              onBlur={(e) => this.handleCardExpiryChange(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('expiry')}</label>
@@ -281,13 +283,12 @@ class PaymentMethodCybersource extends React.Component {
           </div>
           <div className="spc-type-textfield spc-type-cvv spc-cy-cc-cvv">
             <input
-              type="tel"
-              className="secure-input"
+              type="password"
               ref={this.ccCvv}
               pattern="\d{3,4}"
+              maxLength="4"
               required
-              onChange={this.handleCardCvvChange}
-              onBlur={(e) => this.labelEffect(e, 'blur')}
+              onBlur={(e) => this.handleCardCvvChange(e, 'blur')}
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('CVV')}</label>

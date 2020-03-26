@@ -21,17 +21,17 @@ export default class FilterList extends React.Component {
   /**
    * Filter the list on search.
    */
-  filterList = () => {
+  filterList = (e) => {
     const { options } = this.props;
     let updatedList = options;
     updatedList = updatedList.filter((item) => item.label.toLowerCase().search(
-      event.target.value.toLowerCase(),
+      e.target.value.toLowerCase(),
     ) !== -1);
 
     this.setState({
       items: updatedList,
     });
-  }
+  };
 
   /**
    * Handle click on <li>.
@@ -62,7 +62,6 @@ export default class FilterList extends React.Component {
     if (items === 0) {
       return (null);
     }
-
     return (
       <div className="filter-list">
         <div className="spc-filter-panel-header">
@@ -80,9 +79,9 @@ export default class FilterList extends React.Component {
                 key={item.value}
                 value={item.value}
                 className={
-                    ((selected !== undefined && selected.value == item.value))
+                    ((selected !== undefined && selected.value === item.value))
                       ? 'active' : 'in-active'
-}
+            }
               >
                 <span onClick={(e) => this.handleLiClick(e)} className="spc-area-panel-item">{item.label}</span>
               </li>

@@ -2,7 +2,7 @@ import React from 'react';
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
-import { createFetcher } from '../../../utilities/api/fetcher';
+import createFetcher from '../../../utilities/api/fetcher';
 import { fetchClicknCollectStores } from '../../../utilities/api/requests';
 import {
   getDefaultMapCenter,
@@ -24,9 +24,7 @@ import {
   isFullScreen,
   exitFullscreen,
 } from '../../../utilities/map/fullScreen';
-import {
-  smoothScrollTo,
-} from '../../../utilities/smoothScroll';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -172,7 +170,9 @@ class ClickCollect extends React.Component {
           this.fetchAvailableStores(getDefaultMapCenter());
         },
       )
-      .catch((error) => { console.log(error); });
+      .catch((error) => {
+        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error);
+      });
     return false;
   };
 
@@ -198,7 +198,7 @@ class ClickCollect extends React.Component {
         removeFullScreenLoader();
       })
       .catch((error) => {
-        console.log(error);
+        Drupal.logJavascriptError('clickncollect-fetchAvailableStores', error);
       });
   };
 
@@ -344,7 +344,7 @@ class ClickCollect extends React.Component {
         .then(() => {
           self.refreshMap();
         })
-        .catch((err) => console.error(err));
+        .catch((err) => Drupal.logJavascriptError('clickncollect-toggleFullScreen', err));
 
       if (!selectedStore) {
         this.selectStoreButtonVisibility(false);

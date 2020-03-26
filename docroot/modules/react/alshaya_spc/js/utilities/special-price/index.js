@@ -1,19 +1,16 @@
 import React from 'react';
 import PriceElement from './PriceElement';
-import { calculateDiscount } from '../price-helper';
+import calculateDiscount from '../price-helper';
 
-const PriceBlock = (props) => {
-  const { children } = props;
-  return (
-    <div className="price-block">
-      {
-          (typeof children !== 'undefined' && children.length > 0)
-            ? children
-            : <PriceElement {...props} />
-        }
-    </div>
-  );
-};
+const PriceBlock = ({ children, amount }) => (
+  <div className="price-block">
+    {
+        (typeof children !== 'undefined' && children.length > 0)
+          ? children
+          : <PriceElement amount={amount} />
+      }
+  </div>
+);
 
 const SpecialPrice = ({ price, finalPrice }) => {
   if (price > 0 && finalPrice > 0 && finalPrice < price) {

@@ -3,6 +3,8 @@
 namespace Drupal\acq_cart;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Messenger\MessengerTrait;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class Cart.
@@ -10,6 +12,9 @@ use Drupal\acq_sku\Entity\SKU;
  * @package Drupal\acq_cart
  */
 class Cart implements CartInterface {
+
+  use MessengerTrait;
+  use StringTranslationTrait;
 
   /**
    * The cart object.
@@ -162,6 +167,8 @@ class Cart implements CartInterface {
       return [];
     }
 
+    $removed_products = FALSE;
+
     $items = $this->cart->items;
 
     foreach ($items as $key => &$item) {
@@ -179,6 +186,8 @@ class Cart implements CartInterface {
           '@cart_id' => $this->id(),
         ]);
 
+        $removed_products = TRUE;
+
         // Remove the item from cart in session.
         unset($items[$key]);
 
@@ -190,6 +199,10 @@ class Cart implements CartInterface {
       $plugin = $sku->getPluginInstance();
 
       $item['name'] = $plugin->cartName($sku, $item);
+    }
+
+    if ($removed_products) {
+      $this->messenger()->addError($this->t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'));
     }
 
     return $items;

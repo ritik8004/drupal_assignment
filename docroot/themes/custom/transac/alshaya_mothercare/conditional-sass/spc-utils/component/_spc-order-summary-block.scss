@@ -1,0 +1,9 @@
+.spc-order-summary-block {
+  .total-line-item,
+  .hero-total .total-line-item,
+  .delivery-vat {
+    > span {
+      text-transform: lowercase;
+    }
+  }
+}

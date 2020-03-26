@@ -4,8 +4,8 @@ import Loading from '../../../utilities/loading';
 import {
   checkoutAddressProcess,
   getAddressPopupClassName,
-} from '../../../utilities/checkout_address_process';
-import { addEditAddressToCustomer } from '../../../utilities/address_util';
+  addEditAddressToCustomer,
+} from '../../../utilities/address_util';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
 import ClickCollectContainer from '../click-collect';
 
@@ -59,7 +59,7 @@ export default class EmptyDeliveryText extends React.Component {
   };
 
   eventListener = (e) => {
-    const data = e.detail;
+    const data = e.detail.data();
     const { refreshCart } = this.props;
     refreshCart(data);
     if (this.isComponentMounted) {
@@ -134,7 +134,7 @@ export default class EmptyDeliveryText extends React.Component {
               <AddressContent
                 closeModal={this.closeModal}
                 cart={mainCart}
-                showEditButton={true}
+                showEditButton
                 headingText={Drupal.t('delivery information')}
                 processAddress={this.processAddress}
                 type="shipping"

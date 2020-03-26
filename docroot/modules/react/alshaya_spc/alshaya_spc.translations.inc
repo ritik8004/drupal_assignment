@@ -86,6 +86,9 @@ function _alshaya_spc_translations() {
       'find your nearest store' => [
         'ar' => 'ابحث عن المحلات القريبة إليك لاستلام طلبيتك',
       ],
+      'CVV' => [
+        'ar' => 'CVV الرقم السري',
+      ],
     ],
   ];
 }

@@ -3,7 +3,7 @@ import { removeCartFromStorage } from './storage';
 import { updateCartApiUrl } from './update_cart';
 import { cartAvailableInStorage } from './get_cart';
 import getStringMessage from './strings';
-import { dispatchCustomEvent } from './events';
+import dispatchCustomEvent from './events';
 
 /**
  * Get shipping methods.
@@ -12,7 +12,7 @@ import { dispatchCustomEvent } from './events';
  * @param data
  * @returns {boolean}
  */
-export const getShippingMethods = function (cartId, data) {
+export const getShippingMethods = (cartId, data) => {
   const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
 
   return axios
@@ -24,7 +24,7 @@ export const getShippingMethods = function (cartId, data) {
       (response) => response.data,
       (error) => {
         // Processing of error here.
-        console.error(error);
+        Drupal.logJavascriptError('get-shipping-method', error);
       },
     );
 };
@@ -60,7 +60,7 @@ export const removeFullScreenLoader = () => {
  * @param paymentMethod
  * @returns {boolean}
  */
-export const placeOrder = function (paymentMethod) {
+export const placeOrder = (paymentMethod) => {
   const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
 
   showFullScreenLoader();
@@ -93,7 +93,7 @@ export const placeOrder = function (paymentMethod) {
       },
       (error) => {
         // Processing of error here.
-        console.error(error);
+        Drupal.logJavascriptError('place-order', error);
       },
     );
 };
@@ -108,7 +108,7 @@ export const isBillingSameAsShippingInStorage = () => {
   return (same === null || same === 'true');
 };
 
-export const addShippingInCart = function (action, data) {
+export const addShippingInCart = (action, data) => {
   let cart = cartAvailableInStorage();
   if (cart === false) {
     return null;
@@ -142,16 +142,13 @@ export const addShippingInCart = function (action, data) {
 
         return response.data;
       },
-      (error) =>
-        // Processing of error here.
-        ({
-          error: true,
-          error_message: getStringMessage('global_error'),
-        })
-      ,
+      () => ({
+        error: true,
+        error_message: getStringMessage('global_error'),
+      }),
     )
     .catch((error) => {
-      console.error(error);
+      Drupal.logJavascriptError('add-shipping-in-cart', error);
     });
 };
 
@@ -161,7 +158,7 @@ export const addShippingInCart = function (action, data) {
  * @param {*} action
  * @param {*} data
  */
-export const addBillingInCart = function (action, data) {
+export const addBillingInCart = (action, data) => {
   let cart = cartAvailableInStorage();
   if (cart === false) {
     return null;
@@ -180,16 +177,47 @@ export const addBillingInCart = function (action, data) {
     })
     .then(
       (response) => response.data,
-      (error) =>
-        // Processing of error here.
-        ({
-          error: true,
-          error_message: getStringMessage('global_error'),
-        })
-      ,
+      () => ({
+        error: true,
+        error_message: getStringMessage('global_error'),
+      }),
     )
     .catch((error) => {
-      console.error(error);
+      Drupal.logJavascriptError('add-billing-in-cart', error);
+    });
+};
+
+/**
+ * Refresh cart from MDC.
+ */
+export const refreshCartData = () => {
+  let cart = cartAvailableInStorage();
+  // If cart not available at all.
+  if (cart === null
+    || cart === 'empty') {
+    return null;
+  }
+
+  if (!Number.isInteger(cart)) {
+    cart = cart.cart_id;
+  }
+
+  const apiUrl = updateCartApiUrl();
+  return axios
+    .post(apiUrl, {
+      action: 'refresh',
+      cart_id: cart,
+    })
+    .then(
+      (response) => response.data,
+      () => ({
+        error: true,
+        error_message: getStringMessage('global_error'),
+      }),
+    )
+    .catch((error) => {
+      // Error processing here.
+      Drupal.logJavascriptError('checkout-refresh-cart-data', error);
     });
 };
 

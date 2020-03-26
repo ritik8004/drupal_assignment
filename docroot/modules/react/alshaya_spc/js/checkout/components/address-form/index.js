@@ -14,9 +14,7 @@ import SectionTitle from '../../../utilities/section-title';
 import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
 import CheckoutMessage from '../../../utilities/checkout-message';
-import {
-  smoothScrollTo,
-} from '../../../utilities/smoothScroll';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 export default class AddressForm extends React.Component {
   isComponentMounted = true;
@@ -111,8 +109,7 @@ export default class AddressForm extends React.Component {
 
             // If user and site country not same, don;t process.
             if (!userCountrySame) {
-              // @Todo: Add some indication to user.
-              console.log('Not available in the user country');
+              // @TODO: Add some indication to user.
               return;
             }
 
@@ -209,7 +206,7 @@ export default class AddressForm extends React.Component {
           <div className="spc-address-form-wrapper">
             {errorSuccessMessage !== null
               && (
-              <CheckoutMessage type={messageType} context="address-form">
+              <CheckoutMessage type={messageType} context="new-address-form-modal modal">
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}
@@ -236,7 +233,7 @@ export default class AddressForm extends React.Component {
                 </div>
                 <FixedFields
                   showEmail={showEmail}
-                  default_val={defaultAddressVal}
+                  defaultVal={defaultAddressVal}
                 />
                 <div className="spc-address-form-actions" id="address-form-action">
                   <button

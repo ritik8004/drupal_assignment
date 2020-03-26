@@ -511,7 +511,12 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
       $response->addCommand(new HtmlCommand('.form-level-error-wrapper', $message));
       return $response;
     }
-    \Drupal::service('messenger')->addError(reset($errors));
+
+    $error = reset($errors);
+    $exception = new \Exception($error);
+    if (!_alshaya_acm_is_out_of_stock_exception($exception)) {
+      \Drupal::service('messenger')->addError($error);
+    }
   }
 
   // Refresh the page.
@@ -840,8 +845,10 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
 
   if (empty($name)) {
     if ($is_free_sku_item) {
+      /* @var \Drupal\node\Entity\Node $product_node */
+      $product_node = alshaya_acm_product_get_display_node($sku_entity);
       $name = [
-        '#title' => $sku_entity->get('name')->getString(),
+        '#title' => $product_node ? $product_node->getTitle() : $sku_entity->get('name')->getString(),
         '#type' => 'link',
         '#url' => Url::fromRoute('alshaya_acm_promotion.free_gift_modal',
           [

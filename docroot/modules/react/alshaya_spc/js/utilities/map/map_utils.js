@@ -72,6 +72,7 @@ export const removeAllMarkersFromMap = () => {
 export const createMarker = (position, map) => {
   let icon = '';
   if (drupalSettings.map.map_marker !== undefined
+    && drupalSettings.map.map_marker !== null
     && drupalSettings.map.map_marker.active !== undefined) {
     icon = drupalSettings.map.map_marker.active;
   }
@@ -286,8 +287,6 @@ export const geocodeAddressToLatLng = () => {
         const markerArray = [];
         markerArray.push(marker);
         window.spcMarkers = markerArray;
-      } else {
-        console.log(`Unable to get location:${status}`);
       }
     });
   }

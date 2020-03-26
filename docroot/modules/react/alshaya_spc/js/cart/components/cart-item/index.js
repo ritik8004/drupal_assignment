@@ -3,6 +3,7 @@ import React from 'react';
 import CheckoutConfigurableOption from '../../../utilities/checkout-configurable-option';
 import CartPromotion from '../cart-promotion';
 import CartItemOOS from '../cart-item-oos';
+import CartItemError from '../cart-item-error';
 import ItemLowQuantity from '../item-low-quantity';
 import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CartQuantitySelect from '../cart-quantity-select';
@@ -10,6 +11,38 @@ import { updateCartItemData } from '../../../utilities/update_cart';
 import SpecialPrice from '../../../utilities/special-price';
 
 export default class CartItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemError: false,
+      errorMessage: null,
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener('spcCartItemError', this.handleCartItemError, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('spcCartItemError', this.handleCartItemError, false);
+  }
+
+  /**
+   * Handle and show error on continue cart action.
+   */
+  handleCartItemError = (e) => {
+    const { item: { sku } } = this.props;
+    const errorMessage = e.detail;
+    if (errorMessage !== null
+      && errorMessage !== undefined
+      && errorMessage[sku] !== undefined) {
+      this.setState({
+        isItemError: true,
+        errorMessage: errorMessage[sku],
+      });
+    }
+  };
+
   /**
    * Remove item from the cart.
    */
@@ -62,6 +95,8 @@ export default class CartItem extends React.Component {
       },
     } = this.props;
 
+    const { isItemError, errorMessage } = this.state;
+
     return (
       <div className="spc-cart-item">
         <div className="spc-product-tile">
@@ -99,8 +134,17 @@ export default class CartItem extends React.Component {
         <div className="spc-promotions">
           {promotions.map((key) => <CartPromotion key={`${key}-${Math.floor(Math.random() * 99)}`} promo={key} link />)}
         </div>
-        <CartItemOOS inStock={inStock} />
-        <ItemLowQuantity stock={stock} qty={qty} in_stock={inStock} />
+        <div className="spc-cart-item-warning">
+          <CartItemOOS inStock={inStock} />
+          <ItemLowQuantity stock={stock} qty={qty} in_stock={inStock} />
+        </div>
+        <div className="spc-cart-item-alerts">
+          {/* Dynamic promo labels buy 2 more items, free gifts labels,
+           qty limit labels go here */}
+        </div>
+        {/* @Todo: Show OOS only once. */}
+        {isItemError
+          && <CartItemError errorMessage={errorMessage} />}
       </div>
     );
   }
