@@ -551,7 +551,9 @@ function alshaya_seo_transac_alshaya_acm_product_light_product_data_alter(SKU $s
   $data['gtm_attributes']['dimension1'] = $sku->get('attribute_set')->getString();
   $data['gtm_attributes']['dimension4'] = count($skuImagesManager->getAllMediaItems($sku)) ?: 'image not available';
   $data['gtm_attributes']['dimension5'] = $sku->get('attr_product_collection')->getString();
-  $data['gtm_attributes']['dimension6'] = $sku->get('attr_product_collection')->getString();
+  $data['gtm_attributes']['dimension6'] = $sku->get('attr_size')->getString();
+  $gtm_brand = \Drupal::config('system.site')->get('name');
+  $data['gtm_attributes']['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: $gtm_brand;
 }
 
 /**
