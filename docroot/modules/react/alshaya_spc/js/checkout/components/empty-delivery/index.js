@@ -6,8 +6,8 @@ import Loading from '../../../utilities/loading';
 import {
   checkoutAddressProcess,
   getAddressPopupClassName,
-} from '../../../utilities/checkout_address_process';
-import { addEditAddressToCustomer } from '../../../utilities/address_util';
+  addEditAddressToCustomer,
+} from '../../../utilities/address_util';
 import {
   getDefaultMapCenter,
   getLocationAccess,

@@ -2,7 +2,7 @@ import React from 'react';
 
 import RecommendedProduct from '../../../utilities/recommended-product';
 import SectionTitle from '../../../utilities/section-title';
-import { isRTL } from '../../../utilities/rtl';
+import isRTL from '../../../utilities/rtl';
 
 export default class CartRecommendedProducts extends React.Component {
   listHorizontalScroll = (direction) => {

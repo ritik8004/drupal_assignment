@@ -3,13 +3,11 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import Loading from '../../../utilities/loading';
 import {
-  gerAreaLabelById,
-} from '../../../utilities/address_util';
-import {
   getAddressPopupClassName,
   formatAddressDataForEditForm,
   processBillingUpdateFromForm,
-} from '../../../utilities/checkout_address_process';
+  gerAreaLabelById,
+} from '../../../utilities/address_util';
 
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));

@@ -9,36 +9,14 @@
     padding-#{$left}: 3rem;
     position: relative;
 
-    .delivery-method-name {
-      @include breakpoint($only-mobile) {
-        max-width: 15rem;
-      }
-
-      @include breakpoint($only-tablet) {
-        max-width: 16rem;
-      }
-
-      @include breakpoint($desktop) {
-        max-width: 25rem;
-      }
+    .sub-title {
+      display: block;
     }
 
     .radio-sim {
-      @include breakpoint($upto-desktop) {
-        display: inline-flex;
-        align-items: center;
-      }
-    }
-
-    input[type=radio] ~ .radio-label {
-      @include breakpoint($tablet) {
-        display: inline-flex;
-        align-items: center;
-      }
-
-      @include breakpoint($only-mobile) {
-        width: 93%;
-      }
+      width: 98%;
+      display: inline-flex;
+      align-items: center;
     }
 
     &:last-child {
@@ -55,12 +33,6 @@
 
     svg g {
       fill: $spc-checkout-delivery-method-impress;
-    }
-
-    .sub-title {
-      @include breakpoint($upto-desktop) {
-        display: block;
-      }
     }
   }
 }

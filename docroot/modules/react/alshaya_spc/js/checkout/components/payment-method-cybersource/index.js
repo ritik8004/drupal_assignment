@@ -3,7 +3,7 @@ import Cleave from 'cleave.js/react';
 import axios from 'axios';
 import luhn from '../../../utilities/luhn';
 import CardTypeSVG from '../../../svg-component/card-type-svg';
-import { i18nMiddleWareUrl } from '../../../utilities/i18n_url';
+import i18nMiddleWareUrl from '../../../utilities/i18n_url';
 import { removeCartFromStorage } from '../../../utilities/storage';
 import ToolTip from '../../../utilities/tooltip';
 import CVVToolTipText from '../cvv-text';
@@ -11,7 +11,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
-import { dispatchCustomEvent } from '../../../utilities/events';
+import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
 
@@ -65,6 +65,13 @@ class PaymentMethodCybersource extends React.Component {
     removeFullScreenLoader();
   };
 
+  showCardType = () => {
+    const type = document.getElementById('payment-card-type').value;
+    this.updateCurrentContext({
+      cardType: type,
+    });
+  };
+
   handleCardNumberChange = (event, handler) => {
     const { numberValid: prevNumberValid } = this.state;
     let valid = true;
@@ -87,7 +94,6 @@ class PaymentMethodCybersource extends React.Component {
     this.setState({
       numberValid: valid,
       number: event.target.rawValue,
-      cardType: type,
     });
 
     if (prevNumberValid !== valid && valid) {
@@ -253,6 +259,7 @@ class PaymentMethodCybersource extends React.Component {
                 creditCard: true,
                 onCreditCardTypeChanged: this.handleCardTypeChanged,
               }}
+              onChange={() => this.showCardType()}
               onBlur={(e) => this.handleCardNumberChange(e, 'blur')}
             />
             <div className="c-input__bar" />

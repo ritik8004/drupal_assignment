@@ -21,17 +21,17 @@ export default class FilterList extends React.Component {
   /**
    * Filter the list on search.
    */
-  filterList = () => {
+  filterList = (e) => {
     const { options } = this.props;
     let updatedList = options;
     updatedList = updatedList.filter((item) => item.label.toLowerCase().search(
-      event.target.value.toLowerCase(),
+      e.target.value.toLowerCase(),
     ) !== -1);
 
     this.setState({
       items: updatedList,
     });
-  }
+  };
 
   /**
    * Handle click on <li>.

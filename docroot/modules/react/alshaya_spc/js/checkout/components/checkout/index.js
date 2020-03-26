@@ -21,7 +21,7 @@ import CheckoutMessage from '../../../utilities/checkout-message';
 import TermsConditions from '../terms-conditions';
 import { removeFullScreenLoader } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
-import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 
 window.fetchStore = 'idle';
@@ -97,7 +97,10 @@ export default class Checkout extends React.Component {
 
   updateCheckoutMessage = (type, message) => {
     this.setState({ messageType: type, errorSuccessMessage: message });
-    smoothScrollTo('.spc-content');
+    // Checking length as if no type, means no error.
+    if (type.length > 0) {
+      smoothScrollTo('.spc-content');
+    }
   };
 
   /**

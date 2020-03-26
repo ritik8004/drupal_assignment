@@ -23,9 +23,7 @@ import {
   isFullScreen,
   exitFullscreen,
 } from '../../../utilities/map/fullScreen';
-import {
-  smoothScrollTo,
-} from '../../../utilities/smoothScroll';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 class ClickCollect extends React.Component {
   isComponentMounted = false;

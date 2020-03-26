@@ -1,27 +1,23 @@
 import axios from 'axios';
 
 import { cartAvailableInStorage } from './get_cart';
-import { i18nMiddleWareUrl } from './i18n_url';
+import i18nMiddleWareUrl from './i18n_url';
 import { getInfoFromStorage } from './storage';
-import { dispatchCustomEvent } from './events';
+import dispatchCustomEvent from './events';
 
 /**
  * Get the middleware update cart endpoint.
  *
  * @returns {string}
  */
-export function updateCartApiUrl() {
-  return i18nMiddleWareUrl('update-cart');
-}
+export const updateCartApiUrl = () => i18nMiddleWareUrl('update-cart');
 
 /**
  * Get the middleware update cart endpoint.
  *
  * @returns {string}
  */
-export function restoreCartApiUrl() {
-  return i18nMiddleWareUrl('restore-cart');
-}
+export const restoreCartApiUrl = () => i18nMiddleWareUrl('restore-cart');
 
 /**
  * Apply/Remove the promo code.
@@ -30,7 +26,7 @@ export function restoreCartApiUrl() {
  * @param promoCode
  * @returns {boolean}
  */
-export const applyRemovePromo = function (action, promoCode) {
+export const applyRemovePromo = (action, promoCode) => {
   let cart = cartAvailableInStorage();
   if (cart === false) {
     return null;
@@ -53,7 +49,7 @@ export const applyRemovePromo = function (action, promoCode) {
     });
 };
 
-export const updateCartItemData = function (action, sku, quantity) {
+export const updateCartItemData = (action, sku, quantity) => {
   let cart = cartAvailableInStorage();
   // If cart not available.
   if (cart === false

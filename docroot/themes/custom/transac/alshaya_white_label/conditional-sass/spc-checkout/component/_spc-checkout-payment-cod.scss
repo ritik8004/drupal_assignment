@@ -1,8 +1,6 @@
 .spc-checkout-payment-options .payment-method {
   &.payment-method-cashondelivery {
     @include breakpoint($upto-desktop) {
-      padding: 0.625rem 0;
-
       .payment-method-top-panel {
         height: auto;
         min-height: 3.25rem;

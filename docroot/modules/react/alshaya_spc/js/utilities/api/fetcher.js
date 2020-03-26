@@ -1,4 +1,4 @@
-import { createCacheObject } from '../cache/cache-objects';
+import createCacheObject from '../cache/cache-objects';
 
 /**
  * Helper function to handle api request for GET method for now.
@@ -31,7 +31,7 @@ const createFetcher = (promiseFunc) => ({
             }
 
             if (!response.data.error && response.data.error) {
-              console.error(response.error_message);
+              Drupal.logJavascriptError(response.error_message);
               return { error: 'error!' };
             }
 

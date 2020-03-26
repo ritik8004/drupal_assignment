@@ -1,11 +1,11 @@
-import { dispatchCustomEvent } from './events';
+import dispatchCustomEvent from './events';
 
 export const markFieldAsValid = (id) => {
   try {
     document.getElementById(id).innerHTML = '';
     document.getElementById(id).classList.remove('error');
   } catch (e) {
-    console.error(e);
+    Drupal.logJavascriptError(e);
   }
 };
 
@@ -14,7 +14,7 @@ export const displayErrorMessage = (id, message) => {
     document.getElementById(id).innerHTML = message;
     document.getElementById(id).classList.add('error');
   } catch (e) {
-    console.error(e);
+    Drupal.logJavascriptError(e);
   }
 };
 
@@ -27,7 +27,7 @@ export const showRequiredMessage = (id) => {
     document.getElementById(id).innerHTML = message;
     document.getElementById(id).classList.add('error');
   } catch (e) {
-    console.error(e);
+    Drupal.logJavascriptError(e);
   }
 };
 

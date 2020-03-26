@@ -1,6 +1,6 @@
 import React from 'react';
 import PriceElement from './PriceElement';
-import { calculateDiscount } from '../price-helper';
+import calculateDiscount from '../price-helper';
 
 const PriceBlock = ({ children, amount }) => (
   <div className="price-block">
