@@ -17,3 +17,7 @@ permissions:
   - 'restful get product_exclude_linked'
   - 'restful get magazine_detail_page'  
   - 'restful get magazine_block'
+<<<<<<< HEAD
+=======
+  - 'restful get magazine_teasers'
+>>>>>>> e467432... Merge pull request #15472 from dipali-g/develop-changing-name-for-artcile-list
