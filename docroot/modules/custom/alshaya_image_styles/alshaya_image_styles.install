@@ -10,15 +10,6 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- * Add support for tiff files.
- */
-function alshaya_image_styles_update_8110() {
-  alshaya_config_install_configs(['imagemagick.settings'], 'imagemagick');
-}
-
-/**
- * Implements hook_update_N().
- *
  * Delete unused image styles.
  */
 function alshaya_image_styles_update_8109() {
