@@ -39,7 +39,7 @@ class CheckoutConfirmation extends React.Component {
           <div className="impress-subtitle">{Drupal.t('Here\'s a confirmation of your order and all the details you may need.')}</div>
           <ReactToPrint
             trigger={() => <div className="spc-checkout-confirmation-print-button">{Drupal.t('Print Confirmation')}</div>}
-            content={() => this.printComponentRef}
+            content={() => this.componentRef}
             copyStyles
           />
         </div>
@@ -73,7 +73,7 @@ class CheckoutConfirmation extends React.Component {
             </a>
           </div>
         </ConditionalView>
-        <div style={{ display: 'none' }} className="spc-checkout-confirmation-print"><CheckoutConfirmationPrint ref={this.printComponentRef} /></div>
+        <div style={{ display: 'none' }} className="spc-checkout-confirmation-print"><CheckoutConfirmationPrint ref={(el) => { this.componentRef = el; }} /></div>
       </>
     );
   }
