@@ -37,8 +37,9 @@
 .spc-section-billing-address {
   .popup-overlay .popup-content {
     .spc-add-new-address-btn,
-    .spc-address-select-address {
-      text-transform: uppercase;
+    .spc-address-select-address,
+    .spc-deliver-button {
+      text-transform: capitalize;
     }
   }
 
