@@ -26,8 +26,6 @@ import {
 import smoothScrollTo from '../../../utilities/smoothScroll';
 
 class ClickCollect extends React.Component {
-  isComponentMounted = false;
-
   static contextType = ClicknCollectContext;
 
   constructor(props) {
@@ -51,7 +49,6 @@ class ClickCollect extends React.Component {
   }
 
   componentDidMount() {
-    this.isComponentMounted = true;
     // For autocomplete text field.
     const { openSelectedStore } = this.state;
     const {
@@ -101,7 +98,6 @@ class ClickCollect extends React.Component {
   }
 
   componentWillUnmount() {
-    this.isComponentMounted = false;
     document.removeEventListener('markerClick', this.mapMarkerClick);
     document.removeEventListener('addressPopUpError', this.handleAddressPopUpError, false);
   }
