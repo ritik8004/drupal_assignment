@@ -14,17 +14,17 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
- * Provides a resource to get magazine listing page.
+ * Provides a resource to get magazine teasers.
  *
  * @RestResource(
- *   id = "magazine_listing_page",
- *   label = @Translation("Magazine Listing Page"),
+ *   id = "magazine_teasers",
+ *   label = @Translation("Magazine Teasers"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/page/magazine-listing"
+ *     "canonical" = "/rest/v1/page/magazine-teasers"
  *   }
  * )
  */
-class MagazineListingPage extends ResourceBase {
+class MagazineTeasers extends ResourceBase {
 
   /**
    * The mobile app utility service.
