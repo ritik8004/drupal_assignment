@@ -39,7 +39,6 @@ class CheckoutConfirmation extends React.Component {
           <ReactToPrint
             trigger={() => <div className="spc-checkout-confirmation-print-button">{Drupal.t('Print Confirmation')}</div>}
             content={() => this.componentRef}
-            copyStyles
           />
         </div>
         <div className="spc-main">
@@ -48,7 +47,7 @@ class CheckoutConfirmation extends React.Component {
             <VatFooterText />
             <ConditionalView condition={window.innerWidth > 768}>
               <div className="checkout-link submit">
-                <a href="/" className="checkout-link">
+                <a href={Drupal.url('<front>')} className="checkout-link">
                   {Drupal.t('continue shopping')}
                 </a>
               </div>
