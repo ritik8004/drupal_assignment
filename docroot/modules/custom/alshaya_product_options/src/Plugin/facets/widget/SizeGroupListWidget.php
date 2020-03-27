@@ -32,6 +32,7 @@ class SizeGroupListWidget extends LinksWidget {
     $build = parent::build($facet);
     $items = $build['#items'];
 
+    $othersLabel = (string) $this->t('Others');
     $sizeGroups = [];
     foreach ($items as $item) {
       if (isset($item['#title'], $item['#title']['#value'])) {
@@ -43,33 +44,30 @@ class SizeGroupListWidget extends LinksWidget {
           $sizeGroups[$group[1]][] = $item;
         }
         else {
-          $sizeGroups[] = $item;
+          $sizeGroups[$othersLabel][] = $item;
         }
       }
     }
 
     $items = [];
+    // Moving others at the bottom of the list.
+    $copyOtherlabels = $sizeGroups[$othersLabel];
+    unset($sizeGroups[$othersLabel]);
+    $sizeGroups[$othersLabel] = $copyOtherlabels;
+
     foreach ($sizeGroups ?? [] as $group => $sizes) {
-      // Check if no sizegroup.
-      if (isset($sizes['#type'])) {
-        $items[] = $sizes;
-        continue;
-      }
-      else {
-        // Create parent markup.
-        $items[] = [
-          '#value' => $group,
-          '#theme' => 'facets_result_item_with_size_group',
-          '#wrapper_attributes' => [
-            'class' => [
-              0 => 'sizegroup',
-            ],
-            'id' => [
-              0 => $group,
-            ],
+      $items[] = [
+        '#value' => $group,
+        '#theme' => 'facets_result_item_with_size_group',
+        '#wrapper_attributes' => [
+          'class' => [
+            0 => 'sizegroup',
           ],
-        ];
-      }
+          'id' => [
+            0 => $group,
+          ],
+        ],
+      ];
 
       foreach ($sizes as $size) {
         $size['#wrapper_attributes']['class'][] = 'sizegroup-child';
