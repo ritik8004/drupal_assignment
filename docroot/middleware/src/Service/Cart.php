@@ -340,6 +340,9 @@ class Cart {
       unset($shippig_info['static']);
       $custom_attributes = [];
       foreach ($shippig_info as $field_name => $val) {
+        $val = (!is_array($val) && is_null($val))
+          ? ''
+          : $val;
         $custom_attributes[] = [
           'attribute_code' => $field_name,
           'value' => $val,
@@ -438,6 +441,9 @@ class Cart {
 
     $custom_attributes = [];
     foreach ($address as $field_name => $val) {
+      $val = (!is_array($val) && is_null($val))
+        ? ''
+        : $val;
       $custom_attributes[] = [
         'attributeCode' => $field_name,
         'value' => $val,
@@ -500,6 +506,9 @@ class Cart {
 
     $fields_data = [];
     foreach ($static_fields as $key => $field) {
+      $field = (!is_array($field) && is_null($field))
+        ? ''
+        : $field;
       $fields_data[$key] = ($key == 'street') ? [$field] : $field;
     }
 

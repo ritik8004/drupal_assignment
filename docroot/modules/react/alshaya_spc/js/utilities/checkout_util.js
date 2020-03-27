@@ -118,8 +118,7 @@ export const removeBillingFlagFromStorage = (cart) => {
   // set or billing address city value is
   // 'NONE', we remove local storage.
   if (cart.cart !== undefined
-    && (cart.cart.carrier_info === null
-      || cart.cart.billing_address === null
+    && (cart.cart.billing_address === null
       || cart.cart.billing_address.city === 'NONE')) {
     localStorage.removeItem('billing_shipping_same');
   }
