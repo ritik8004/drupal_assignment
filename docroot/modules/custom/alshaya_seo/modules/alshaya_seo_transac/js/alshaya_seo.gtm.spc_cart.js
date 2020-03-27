@@ -21,7 +21,7 @@
       }
 
       // Track Product impressions.
-      $('window, .spc-recommended-products .block-content').once('alshaya-seo-gtm-cart').on('scroll', debounce(function (event) {
+      $(window).once('alshaya-seo-gtm-cart-pi').on('scroll', debounce(function (event) {
         var productSkus = [];
         $('.recommended-product:not(".impression-processed"):visible').each(function () {
           if ($(this).isElementInViewPort(0)) {
@@ -34,9 +34,18 @@
         }
       }, 500));
 
-
-
-
+      $('.spc-recommended-products .block-content').once('alshaya-seo-gtm-impressions').on('scroll', debounce(function (event) {
+        var productSkus = [];
+        $('.recommended-product:not(".impression-processed"):visible').each(function () {
+          if ($(this).isElementInViewPort(0)) {
+            $(this).addClass('impression-processed');
+            productSkus.push($(this).attr('data-sku'));
+          }
+        });
+        if (step === 1 && productSkus.length > 0) {
+          Drupal.alshayaSpcPrepareProductImpression(context, settings, productSkus);
+        }
+      }, 500));
 
       /**
        * Fire checkoutOption on cart page.
@@ -342,7 +351,8 @@
     if (cart_data.cart.recommended_products !== null) {
       var items = cart_data.cart.recommended_products;
       var impression = {};
-      var count = 0;
+      var productLinkProcessedSelector = $('.impression-processed');
+      var count = productLinkProcessedSelector.length + 1;
       Object.entries(items).forEach(([key, product]) => {
         if (skus.includes(key)) {
           impression.name = product.title;
