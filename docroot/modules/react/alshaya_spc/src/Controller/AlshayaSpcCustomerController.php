@@ -136,9 +136,24 @@ class AlshayaSpcCustomerController extends ControllerBase {
     $data = json_decode($request->getContent(), TRUE);
     $request->request->replace(is_array($data) ? $data : []);
     $uid = $this->currentUser()->getAccount()->id();
-    if ($this->spcCustomerHelper->addEditCustomerAddress($data['address'], $uid)) {
+    if ($this->spcCustomerHelper->addEditCustomerAddress($data['address'], $uid, $data['isDefault'])) {
       $response['error'] = FALSE;
-      $response['data'] = $this->spcCustomerHelper->getCustomerAllAddresses($uid, TRUE);
+      $response['data'] = $this->spcCustomerHelper->getCustomerAllAddresses($uid);
+      // If address id is set, means user is editing an address
+      // So we return only that address.
+      if (!empty($data['address']['address']['address_id'])) {
+        foreach ($response['data'] as $address) {
+          if ($address['address_id'] === $data['address']['address']['address_id']) {
+            $response['data'] = [$address];
+            break;
+          }
+        }
+      }
+      else {
+        // It means user is adding new address, so we return
+        // last added address.
+        $response['data'] = [end($response['data'])];
+      }
     }
     else {
       $response['error'] = TRUE;
