@@ -23,6 +23,8 @@
       // Track Product impressions.
       $(window).once('alshaya-seo-gtm-cart-pi').on('scroll', debounce(function (event) {
         var productSkus = [];
+        var productLinkProcessedSelector = $('.impression-processed');
+        var position = productLinkProcessedSelector.length;
         $('.recommended-product:not(".impression-processed"):visible').each(function () {
           if ($(this).isElementInViewPort(0)) {
             $(this).addClass('impression-processed');
@@ -30,12 +32,14 @@
           }
         });
         if (step === 1 && productSkus.length > 0) {
-          Drupal.alshayaSpcPrepareProductImpression(context, settings, productSkus);
+          Drupal.alshayaSpcPrepareProductImpression(context, settings, productSkus, position);
         }
       }, 500));
 
       $('.spc-recommended-products .block-content').once('alshaya-seo-gtm-impressions').on('scroll', debounce(function (event) {
         var productSkus = [];
+        var productLinkProcessedSelector = $('.impression-processed');
+        var position = productLinkProcessedSelector.length;
         $('.recommended-product:not(".impression-processed"):visible').each(function () {
           if ($(this).isElementInViewPort(0)) {
             $(this).addClass('impression-processed');
@@ -43,7 +47,7 @@
           }
         });
         if (step === 1 && productSkus.length > 0) {
-          Drupal.alshayaSpcPrepareProductImpression(context, settings, productSkus);
+          Drupal.alshayaSpcPrepareProductImpression(context, settings, productSkus, position);
         }
       }, 500));
 
@@ -343,18 +347,17 @@
    *
    * @param customerType
    */
-  Drupal.alshayaSpcPrepareProductImpression = function (context, settings, skus) {
+  Drupal.alshayaSpcPrepareProductImpression = function (context, settings, skus, position) {
     var impressions = [];
     var currencyCode = settings.alshaya_spc.currency_config.currency_code;
     var listName = $('body').attr('gtm-list-name');
     var cart_data = JSON.parse(localStorage.getItem('cart_data'));
     if (cart_data.cart.recommended_products !== null) {
       var items = cart_data.cart.recommended_products;
-      var impression = {};
-      var productLinkProcessedSelector = $('.impression-processed');
-      var count = productLinkProcessedSelector.length + 1;
+      var count = position + 1;
       Object.entries(items).forEach(([key, product]) => {
         if (skus.includes(key)) {
+          var impression = {};
           impression.name = product.title;
           impression.id = product.id;
           impression.price = product.final_price;
