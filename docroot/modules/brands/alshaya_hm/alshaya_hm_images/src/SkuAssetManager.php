@@ -275,16 +275,14 @@ class SkuAssetManager {
         watchdog_exception('SkuAssetManager', $e);
       }
 
-      // Skipped image download due to bad images.
-      if (isset($asset['blacklist_expiry'])) {
-        $save = TRUE;
-      }
-
       if ($file instanceof FileInterface) {
         $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
 
         $asset['drupal_uri'] = $file->getFileUri();
         $asset['fid'] = $file->id();
+        $save = TRUE;
+      }
+      elseif ($file === 'blacklisted') {
         $save = TRUE;
       }
 
@@ -315,13 +313,13 @@ class SkuAssetManager {
    * @param string $sku
    *   SKU of asset.
    *
-   * @return \Drupal\file\FileInterface|null
+   * @return \Drupal\file\FileInterface|null|string
    *   File entity if image download successful.
    */
   private function downloadPimsImage(array &$data, string $sku) {
     // If image is blacklisted, block download.
     if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
-      return FALSE;
+      return NULL;
     }
 
     $base_url = $this->hmImageSettings->get('pims_base_url');
@@ -384,7 +382,8 @@ class SkuAssetManager {
         '@remote_id' => $data['filename'],
         '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
       ]);
-      return FALSE;
+
+      return 'blacklisted';
     }
 
     // Check if image was blacklisted, remove it from blacklist.
@@ -409,7 +408,7 @@ class SkuAssetManager {
       ]);
     }
 
-    return $file ?? [];
+    return $file ?? NULL;
   }
 
   /**
@@ -420,13 +419,13 @@ class SkuAssetManager {
    * @param string $sku
    *   SKU of asset.
    *
-   * @return \Drupal\file\FileInterface|null
+   * @return \Drupal\file\FileInterface|null|string
    *   File entity download successful.
    */
   private function downloadLiquidPixelImage(array &$asset, string $sku) {
     // If image is blacklisted, block download.
     if (isset($asset['blacklist_expiry']) && time() < $asset['blacklist_expiry']) {
-      return FALSE;
+      return NULL;
     }
 
     $skipped_key = 'skipped_' . $asset['Data']['AssetId'];
@@ -483,7 +482,7 @@ class SkuAssetManager {
         '@remote_id' => $asset['Data']['AssetId'],
         '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
       ]);
-      return FALSE;
+      return 'blacklisted';
     }
 
     // Check if image was blacklisted, remove it from blacklist.
@@ -534,7 +533,7 @@ class SkuAssetManager {
    * @param string $sku
    *   SKU of asset.
    *
-   * @return \Drupal\file\FileInterface|null
+   * @return \Drupal\file\FileInterface|null|string
    *   File from asset if available.
    *
    * @throws \Exception
