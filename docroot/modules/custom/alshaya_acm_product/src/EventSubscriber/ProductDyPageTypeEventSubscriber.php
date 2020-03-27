@@ -82,13 +82,13 @@ class ProductDyPageTypeEventSubscriber implements EventSubscriberInterface {
 
         $productSku = $this->skuManager->getSkuForNode($node);
         if (empty($productSku)) {
-          $this->logger->notice('SKU not found for the Product ID: @nid.', ['@nid' => $node->id()]);
+          $this->logger->notice('ProductDyPageTypeEventSubscriber: SKU not found for the Product ID: @nid.', ['@nid' => $node->id()]);
           return;
         }
 
         $productSku = SKU::loadFromSku($productSku);
         if (empty($productSku)) {
-          $this->logger->notice('SKU could not be loaded for the Product ID: @nid.', ['@nid' => $node->id()]);
+          $this->logger->notice('ProductDyPageTypeEventSubscriber: SKU could not be loaded for the Product ID: @nid.', ['@nid' => $node->id()]);
           return;
         }
         if ($productSku->bundle() === 'configurable') {

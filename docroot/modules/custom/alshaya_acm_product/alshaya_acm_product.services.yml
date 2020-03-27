@@ -1,4 +1,7 @@
 services:
+  logger.channel.alshaya_acm_product:
+    parent: logger.channel_base
+    arguments: ['alshaya_acm_product']
   alshaya_acm_product.breadcrumb:
     class: Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
     tags:
@@ -139,7 +142,7 @@ services:
     arguments:
       - '@current_route_match'
       - '@alshaya_acm_product.skumanager'
-      - '@logger.channel.dynamic_yield'
+      - '@logger.channel.alshaya_acm_product'
     tags:
       - { name: event_subscriber }
   alshaya_acm_product.sku_info:
