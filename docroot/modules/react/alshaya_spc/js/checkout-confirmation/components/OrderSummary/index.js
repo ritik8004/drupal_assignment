@@ -40,7 +40,7 @@ const OrderSummary = () => {
     storeAddress.push(storeInfo.store_address.administrative_area_display);
     storeAddress.push(storeInfo.store_address.country);
     storeAddress.push(storeInfo.store_phone);
-    etaLabel = Drupal.t('available instore within:');
+    etaLabel = Drupal.t('available instore within');
   }
 
   const {
