@@ -169,6 +169,7 @@
             @include breakpoint($only-mobile) {
               position: fixed !important;
               height: 3.75rem;
+              z-index: 10;
             }
           }
 
@@ -265,6 +266,7 @@
 
           @include breakpoint($only-tablet) {
             font-size: 0.75rem;
+            position: relative !important;
           }
         }
       }
