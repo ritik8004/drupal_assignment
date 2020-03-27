@@ -199,7 +199,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
         unset($form['#validate'][$key]);
       }
 
-      array_unshift($form['#validate'], 'alshaya_acm_customer_register_validate');
+      array_unshift($form['#validate'], 'alshaya_acm_customer_first_last_name', 'alshaya_acm_customer_register_validate');
 
       // Final step in validate itself, register the user.
       $form['#validate'][] = 'alshaya_acm_customer_register_validate_final';
@@ -229,6 +229,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
         $form['account']['current_pass']['#access'] = FALSE;
       }
 
+      array_unshift($form['#validate'], 'alshaya_acm_customer_first_last_name');
       // Always hide customer_id field for none-admin users.
       $form['acq_customer_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
       $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
@@ -496,6 +497,14 @@ function alshaya_acm_customer_user_login(UserInterface $account) {
       '@email' => $account->getEmail(),
     ]);
   }
+}
+
+/**
+ * Set first name and last name field values from full name.
+ */
+function alshaya_acm_customer_first_last_name(array &$form, FormStateInterface &$form_state) {
+  $form_state->setValue('field_first_name', [['value' => $form_state->getTemporaryValue('first_name')]]);
+  $form_state->setValue('field_last_name', [['value' => $form_state->getTemporaryValue('last_name')]]);
 }
 
 /**
