@@ -17,6 +17,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\taxonomy\TermInterface;
+use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
  * Class SkuInfoHelper.
@@ -103,6 +104,13 @@ class SkuInfoHelper {
   private $configFactory;
 
   /**
+   * Product category helper service.
+   *
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
+   */
+  protected $productCategoryHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -127,6 +135,8 @@ class SkuInfoHelper {
    *   Product Order Limit.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   The Product Category helper service.
    */
   public function __construct(
     SkuManager $sku_manager,
@@ -139,7 +149,8 @@ class SkuInfoHelper {
     StockManager $acq_stock_manager,
     LanguageManagerInterface $language_manager,
     ProductOrderLimit $product_order_limit,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    ProductCategoryHelper $product_category_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -152,6 +163,7 @@ class SkuInfoHelper {
     $this->languageManager = $language_manager;
     $this->productOrderLimit = $product_order_limit;
     $this->configFactory = $config_factory;
+    $this->productCategoryHelper = $product_category_helper;
   }
 
   /**
@@ -372,15 +384,24 @@ class SkuInfoHelper {
    *   The string of terms hierarchy.
    */
   protected function getProductCategoryHierarchy(TermInterface $term, $lang = NULL) {
-    $sourceTerm[] = ['target_id' => $term->id()];
+
+    $static = &drupal_static('alshaya_acm_product_get_product_category_hierarchy', []);
+    $tid = $term->id();
+
+    if (isset($static[$tid][$lang])) {
+      return $static[$tid][$lang];
+    }
+    $sourceTerm[] = ['target_id' => $tid];
     $termHierarchy = [];
-    if ($parents = \Drupal::service('alshaya_acm_product.category_helper')->getBreadcrumbTermList($sourceTerm)) {
+    if ($parents = $this->productCategoryHelper->getBreadcrumbTermList($sourceTerm)) {
       foreach (array_reverse($parents) as $parent) {
         $parent = $this->getEntityTranslation($parent, $lang);
         $termHierarchy[] = $parent->getName();
       }
     }
-    return ($termHierarchy) ? implode('|', $termHierarchy) : $term->getName();
+
+    $static[$tid][$lang] = ($termHierarchy) ? implode('|', $termHierarchy) : $term->getName();
+    return $static[$tid][$lang];
   }
 
   /**
