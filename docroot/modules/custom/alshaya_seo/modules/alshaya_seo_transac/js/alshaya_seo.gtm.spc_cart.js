@@ -9,17 +9,47 @@
   Drupal.behaviors.spcCartGtm = {
     attach: function (context, settings) {
       var cart_data = JSON.parse(localStorage.getItem('cart_data'));
+      var step = Drupal.alshayaSpcGetStepFromContainer();
       if (cart_data && cart_data.cart && cart_data.cart.cart_id) {
-        var step = Drupal.alshayaSpcGetStepFromContainer();
         Drupal.alshayaSpcCartGtm(cart_data.cart, step);
       }
 
       if (localStorage.hasOwnProperty('userID')) {
-        var step = Drupal.alshayaSpcGetStepFromContainer();
         if (step === 2) {
           Drupal.alshayaSeoGtmPushCheckoutOption('Home Delivery', 2);
         }
       }
+
+      // Track Product impressions.
+      $(window).once('alshaya-seo-gtm-cart-pi').on('scroll', debounce(function (event) {
+        var productSkus = [];
+        var productLinkProcessedSelector = $('.impression-processed');
+        var position = productLinkProcessedSelector.length;
+        $('.recommended-product:not(".impression-processed"):visible').each(function () {
+          if ($(this).isElementInViewPort(0)) {
+            $(this).addClass('impression-processed');
+            productSkus.push($(this).attr('data-sku'));
+          }
+        });
+        if (step === 1 && productSkus.length > 0) {
+          Drupal.alshayaSpcPrepareProductImpression(context, settings, productSkus, position);
+        }
+      }, 500));
+
+      $('.spc-recommended-products .block-content').once('alshaya-seo-gtm-impressions').on('scroll', debounce(function (event) {
+        var productSkus = [];
+        var productLinkProcessedSelector = $('.impression-processed');
+        var position = productLinkProcessedSelector.length;
+        $('.recommended-product:not(".impression-processed"):visible').each(function () {
+          if ($(this).isElementInViewPort(0)) {
+            $(this).addClass('impression-processed');
+            productSkus.push($(this).attr('data-sku'));
+          }
+        });
+        if (step === 1 && productSkus.length > 0) {
+          Drupal.alshayaSpcPrepareProductImpression(context, settings, productSkus, position);
+        }
+      }, 500));
 
       /**
        * Fire checkoutOption on cart page.
@@ -142,7 +172,7 @@
     if (window.location.href.indexOf('checkout') > -1) {
       step = 2;
     }
-    if (cart_data.hasOwnProperty('selected_payment_method') && cart_data.selected_payment_method !== null) {
+    if (cart_data.cart.hasOwnProperty('cart_payment_method') && cart_data.cart.cart_payment_method !== null) {
       step = 3;
     }
     return step;
@@ -310,6 +340,70 @@
       eventLabel: method,
     };
     dataLayer.push(data);
+  };
+
+  /**
+   * Helper function to push productImpression to GTM.
+   *
+   * @param customerType
+   */
+  Drupal.alshayaSpcPrepareProductImpression = function (context, settings, skus, position) {
+    var impressions = [];
+    var currencyCode = settings.alshaya_spc.currency_config.currency_code;
+    var listName = $('body').attr('gtm-list-name');
+    var cart_data = JSON.parse(localStorage.getItem('cart_data'));
+    if (cart_data.cart.recommended_products !== null) {
+      var items = cart_data.cart.recommended_products;
+      var count = position + 1;
+      Object.entries(items).forEach(([key, product]) => {
+        if (skus.includes(key)) {
+          var impression = {};
+          impression.name = product.title;
+          impression.id = product.id;
+          impression.price = product.final_price;
+          impression.category = product.gtm_attributes['gtm-category'];
+          impression.dimension1 = product.gtm_attributes.dimension1;
+          if (product.hasOwnProperty('configurable_values')) {
+            impression.dimension2 = 'configurable';
+          }
+          if (product.final_price !== product.original_price) {
+            impression.dimension3 = 'discounted';
+          }
+          if (product.gtm_attributes.hasOwnProperty('dimension4') && product.gtm_attributes.dimension4) {
+            impression.dimension4 = product.gtm_attributes.dimension4;
+          }
+          if (product.gtm_attributes.hasOwnProperty('dimension5') && product.gtm_attributes.dimension5) {
+            impression.dimension5 = product.gtm_attributes.dimension5;
+          }
+          if (product.gtm_attributes.hasOwnProperty('dimension6') && product.gtm_attributes.dimension6) {
+            impression.dimension6 = product.gtm_attributes.dimension6;
+          }
+          if (product.gtm_attributes.hasOwnProperty('gtm-brand') && product.gtm_attributes['gtm-brand']) {
+            impression.brand = product.gtm_attributes['gtm-brand'];
+          }
+          impression.list = listName;
+          impression.position = count;
+          // Keep variant empty for impression pages. Populated only post add to cart action.
+          impression.variant = '';
+          count++;
+          impressions.push(impression);
+        }
+      });
+      if (impressions.length > 0) {
+        // To avoid max size in POST data issue we do it in batches of 10.
+        while (impressions.length > 0) {
+          var data = {
+            event: 'productImpression',
+            ecommerce: {
+              currencyCode: currencyCode,
+              impressions: impressions.splice(0, 10)
+            }
+          };
+
+          dataLayer.push(data);
+        }
+      }
+    }
   };
 
 })(jQuery, Drupal, dataLayer);

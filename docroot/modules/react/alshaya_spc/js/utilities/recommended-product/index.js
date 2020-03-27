@@ -3,11 +3,10 @@ import React from 'react';
 import CartPromotion from '../../cart/components/cart-promotion';
 import SpecialPrice from '../special-price';
 
-const RecommendedProduct = (props) => {
-  const { item } = props;
+const RecommendedProduct = ({ item, itemKey }) => {
   const itemUrl = `product-quick-view/${item.nid}/nojs`;
   return (
-    <a href={Drupal.url(itemUrl)} className="use-ajax above-mobile-block recommended-product" data-dialog-type="modal">
+    <a href={Drupal.url(itemUrl)} className="use-ajax above-mobile-block recommended-product" data-dialog-type="modal" data-sku={itemKey}>
       <div className="spc-product-recommended-image">
         {item.extra_data.cart_image !== undefined
           ? (
