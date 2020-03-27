@@ -39,7 +39,6 @@ class CheckoutConfirmation extends React.Component {
           <ReactToPrint
             trigger={() => <div className="spc-checkout-confirmation-print-button">{Drupal.t('Print Confirmation')}</div>}
             content={() => this.componentRef}
-            copyStyles
           />
         </div>
         <div className="spc-main">
