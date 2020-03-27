@@ -625,7 +625,7 @@ class CartController {
     }
 
     if (empty($cart) || !empty($cart['error'])) {
-      return AlshayaJsonResponse($cart ?? []);
+      return new AlshayaJsonResponse($cart ?? []);
     }
 
     // Here we will do the processing of cart to make it in required format.

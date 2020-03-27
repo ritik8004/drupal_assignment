@@ -108,6 +108,23 @@ export const isBillingSameAsShippingInStorage = () => {
   return (same === null || same === 'true');
 };
 
+/**
+ * Remove billing address flag from storage.
+ *
+ * @param {*} cart
+ */
+export const removeBillingFlagFromStorage = (cart) => {
+  // If cart doesn't have billing address
+  // set or billing address city value is
+  // 'NONE', we remove local storage.
+  if (cart.cart !== undefined
+    && (cart.cart.carrier_info === null
+      || cart.cart.billing_address === null
+      || cart.cart.billing_address.city === 'NONE')) {
+    localStorage.removeItem('billing_shipping_same');
+  }
+};
+
 export const addShippingInCart = (action, data) => {
   let cart = cartAvailableInStorage();
   if (cart === false) {

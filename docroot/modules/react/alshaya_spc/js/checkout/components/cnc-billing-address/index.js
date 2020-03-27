@@ -10,6 +10,7 @@ import {
 } from '../../../utilities/address_util';
 import {
   isBillingSameAsShippingInStorage,
+  removeBillingFlagFromStorage,
 } from '../../../utilities/checkout_util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
@@ -26,6 +27,9 @@ export default class CnCBillingAddress extends React.Component {
       open: false,
       shippingAsBilling: isBillingSameAsShippingInStorage(),
     };
+
+    // Check and remove flag on load.
+    removeBillingFlagFromStorage(props.cart);
   }
 
   componentDidMount() {
