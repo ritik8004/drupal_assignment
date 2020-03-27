@@ -423,7 +423,9 @@ class CartController {
     // Validate request.
     if (!$this->validateRequestData($request_content)) {
       // Return error response if not valid data.
-      return new AlshayaJsonResponse($this->utility->getErrorResponse('Invalid data', '500'));
+      // Setting custom error code for bad response so that
+      // we could distinguish this error.
+      return new AlshayaJsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), '400'));
     }
 
     $action = $request_content['action'];
