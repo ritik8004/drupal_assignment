@@ -38,6 +38,7 @@ export default class Gmap {
   initMap(container) {
     this.map.googleMap = new google.maps.Map(container, {
       zoom: this.map.settings.zoom,
+      clickableIcons: false,
       maxZoom: this.map.settings.maxZoom,
       minZoom: this.map.settings.minZoom,
       fullscreenControl: this.map.settings.fullscreenControl,

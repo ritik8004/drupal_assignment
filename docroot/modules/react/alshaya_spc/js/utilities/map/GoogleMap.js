@@ -330,6 +330,7 @@ export default class GoogleMap extends React.Component {
       mapTypeControl: false,
       streetViewControl: false,
       fullscreenControl: false,
+      clickableIcons: false,
       zoomControlOptions: {
         position: controlPosition,
       },
