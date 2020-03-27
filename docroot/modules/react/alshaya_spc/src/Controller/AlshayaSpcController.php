@@ -346,7 +346,13 @@ class AlshayaSpcController extends ControllerBase {
       $productList[$item['sku']] = $this->orderHelper->getSkuDetails($item);
     }
 
+    $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+
     $settings = [
+      'site_details' => [
+        'logo' => theme_get_setting('logo.url'),
+        'customer_service_text' => $checkout_settings->get('checkout_customer_service'),
+      ],
       'order_details' => [
         'customer_email' => $order['email'],
         'order_number' => $order['increment_id'],
@@ -361,8 +367,6 @@ class AlshayaSpcController extends ControllerBase {
         'billing' => $orderDetails['billing'],
       ],
     ];
-
-    $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
 
     $string_keys = [
       'cod_surcharge_label',
