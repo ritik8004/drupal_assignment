@@ -226,6 +226,8 @@ class CustomerController extends ControllerBase {
 
     $cache_time_limit = $this->config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
     $build['#cache'] = ['max-age' => $cache_time_limit];
+    $build['#cache']['tags'] = $user->getCacheTags();
+    $build['#cache']['contexts'] = $user->getCacheContexts();
 
     return $build;
   }
@@ -299,6 +301,8 @@ class CustomerController extends ControllerBase {
 
     $cache_time_limit = $this->config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
     $build['#cache'] = ['max-age' => $cache_time_limit];
+    $build['#cache']['tags'] = $user->getCacheTags();
+    $build['#cache']['contexts'] = $user->getCacheContexts();
 
     return $build;
   }
