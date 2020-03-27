@@ -101,17 +101,19 @@ class Simple extends SKUPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getParentSku(SKU $sku) {
+  public function getParentSku(SKU $sku, bool $with_node = TRUE) {
     $sku_string = $sku->getSku();
     $parents = $this->getAllParentIds($sku_string);
 
     foreach ($parents as $parent_sku) {
       $parent = SKU::loadFromSku($parent_sku, $sku->language()->getId());
       if ($parent instanceof SKU) {
-        if ($this->getDisplayNodeId($parent)) {
-          return $parent;
+        if ($with_node) {
+          if ($this->getDisplayNodeId($parent)) {
+            return $parent;
+          }
         }
-        elseif (\Drupal::service('alshaya_acm_product.skumanager')->isSkuFreeGift($sku)) {
+        else {
           return $parent;
         }
       }

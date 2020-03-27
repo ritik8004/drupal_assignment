@@ -1586,6 +1586,10 @@ class SkuManager {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
 
+    if ($this->isSkuFreeGift($sku_entity)) {
+      return $plugin->getParentSku($sku_entity, FALSE);
+    }
+
     return $plugin->getParentSku($sku_entity);
   }
 
