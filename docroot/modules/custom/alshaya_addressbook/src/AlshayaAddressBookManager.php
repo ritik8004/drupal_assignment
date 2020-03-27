@@ -253,10 +253,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Commerce Address ID or false.
    */
   public function pushUserAddressToApi(Profile $entity, bool $set_default = TRUE) {
-    // Last discussion in MMCPA-2042.
-    // We always set the address last added or edited as primary.
-    $entity->setDefault($set_default);
-
     $account = $this->userStorage->load($entity->getOwnerId());
 
     try {
@@ -268,6 +264,16 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     unset($customer['extension']);
+
+    if (count($customer['addresses']) == 0) {
+      // If user has no address, then we make this
+      // as primary one by default.
+      $set_default = TRUE;
+    }
+
+    // Last discussion in MMCPA-2042.
+    // We always set the address last added or edited as primary.
+    $entity->setDefault($set_default);
 
     foreach ($customer['addresses'] as $index => $address) {
       $customer['addresses'][$index] = $address;
