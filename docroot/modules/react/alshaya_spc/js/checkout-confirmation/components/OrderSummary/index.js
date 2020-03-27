@@ -29,11 +29,10 @@ const OrderSummary = () => {
     }
   }
 
+  let etaLabel = Drupal.t('expected delivery within');
   const storeAddress = [];
-  let storeHours = [];
   const storeInfo = drupalSettings.order_details.delivery_type_info.store;
   if (storeInfo !== undefined) {
-    storeAddress.push(storeInfo.store_name);
     storeAddress.push(storeInfo.store_address.address_line1);
     storeAddress.push(storeInfo.store_address.address_line2);
     storeAddress.push(storeInfo.store_address.locality);
@@ -41,7 +40,7 @@ const OrderSummary = () => {
     storeAddress.push(storeInfo.store_address.administrative_area_display);
     storeAddress.push(storeInfo.store_address.country);
     storeAddress.push(storeInfo.store_phone);
-    storeHours = drupalSettings.order_details.delivery_type_info.store.store_open_hours;
+    etaLabel = Drupal.t('available instore within:');
   }
 
   const {
@@ -51,6 +50,7 @@ const OrderSummary = () => {
   // Get Billing info.
   const billingAddress = [];
   const billingInfo = drupalSettings.order_details.billing;
+  const customerNameBilling = `${billingInfo.given_name} ${billingInfo.family_name}`;
   if (billingInfo !== null) {
     billingAddress.push(billingInfo.country);
     if (billingInfo.area_parent_display !== undefined) {
@@ -101,15 +101,16 @@ const OrderSummary = () => {
             <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={customerAddress.join(', ')} />
           </ConditionalView>
           <ConditionalView condition={storeAddress.length > 0}>
-            <OrderSummaryItem type="cnc" label={Drupal.t('delivery to')} name={customerName} address={storeAddress.join(', ')} timings={storeHours.join('\n')} />
+            <OrderSummaryItem type="cnc" label={Drupal.t('collection store')} name={storeInfo.store_name} address={storeAddress.join(', ')} />
+            <OrderSummaryItem label={Drupal.t('collection by')} value={customerName} />
           </ConditionalView>
           <ConditionalView condition={billingAddress.length > 0}>
-            <OrderSummaryItem type="address" label={Drupal.t('billing address')} name={customerName} address={billingAddress.join(', ')} />
+            <OrderSummaryItem type="address" label={Drupal.t('billing address')} name={customerNameBilling} address={billingAddress.join(', ')} />
           </ConditionalView>
           <OrderSummaryItem label={Drupal.t('mobile number')} value={mobileNumber} />
           <OrderSummaryItem label={Drupal.t('payment method')} value={method} />
           <OrderSummaryItem label={Drupal.t('delivery type')} value={deliveryType} />
-          <OrderSummaryItem label={Drupal.t('expected delivery within')} value={expectedDelivery} />
+          <OrderSummaryItem label={etaLabel} value={expectedDelivery} />
           <OrderSummaryItem label={Drupal.t('number of items')} value={itemsCount} />
         </div>
       </div>

@@ -66,8 +66,8 @@ class PaymentMethodCybersource extends React.Component {
   };
 
   showCardType = () => {
-    const type = document.getElementById('payment-card-type').value;
-    this.updateCurrentContext({
+    const type = document.getElementById('spc-cy-payment-card-type').value;
+    this.setState({
       cardType: type,
     });
   };

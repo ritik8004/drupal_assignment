@@ -15,6 +15,10 @@
       color: $spc-checkout-order-detail-label;
     }
 
+    .spc-value {
+      color: $spc-checkout-payment-method-desc;
+    }
+
     &.spc-order-summary-address-item {
       .spc-value {
         max-width: 15.125rem;
