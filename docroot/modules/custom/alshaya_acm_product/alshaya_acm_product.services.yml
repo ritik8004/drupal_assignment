@@ -139,6 +139,7 @@ services:
     arguments:
       - '@current_route_match'
       - '@alshaya_acm_product.skumanager'
+      - '@logger.channel.dynamic_yield'
     tags:
       - { name: event_subscriber }
   alshaya_acm_product.sku_info:

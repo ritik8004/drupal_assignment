@@ -1,4 +1,7 @@
 services:
+  logger.channel.dynamic_yield:
+    parent: logger.channel_base
+    arguments: ['dynamic_yield']
   dynamic_yield.dynamic_yield:
     class: Drupal\dynamic_yield\DynamicYieldService
     arguments: ['@config.factory']
