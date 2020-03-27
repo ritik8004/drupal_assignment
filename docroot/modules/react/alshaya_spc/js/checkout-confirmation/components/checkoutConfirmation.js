@@ -12,7 +12,6 @@ import CheckoutConfirmationPrint from './checkoutConfirmationPrint';
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
     super(props);
-    this.printComponentRef = React.createRef();
 
     try {
       if (Cookies.get('middleware_order_placed')) {
