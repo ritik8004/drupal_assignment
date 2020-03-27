@@ -2,3 +2,7 @@ services:
   plugin.manager.pdp_layouts:
     class: Drupal\alshaya_pdp_layouts\PdpLayoutManager
     parent: default_plugin_manager
+
+  plugin.manager.ice_cream:
+    class: Drupal\alshaya_pdp_layouts\IcecreamManager
+    parent: default_plugin_manager

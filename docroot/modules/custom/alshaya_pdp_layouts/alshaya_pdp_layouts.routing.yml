@@ -1,0 +1,7 @@
+alshaya_pdp_layouts.select_layout:
+  path: 'admin/config/alshaya/select-pdp-layout'
+  defaults:
+    _form: '\Drupal\alshaya_pdp_layouts\Form\AlshayaPdpLayoutForm'
+    _title: 'PDP Layout Settings'
+  requirements:
+    _permission: 'administer site configuration'
