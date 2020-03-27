@@ -40,6 +40,10 @@
   .slick-slider {
     .slick-slide img {
       max-width: none;
+
+      html[lang=ar] & {
+        width: auto;
+      }
     }
   }
 
