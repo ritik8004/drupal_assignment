@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_customer\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -67,6 +68,13 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
   protected $logger;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * UserRecentOrders constructor.
    *
    * @param array $configuration
@@ -87,6 +95,8 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    *   The current request.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The logger instance.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -96,7 +106,8 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
                               ModuleHandlerInterface $module_handler,
                               DateFormatterInterface $date_formatter,
                               Request $current_request,
-                              LoggerChannelInterface $logger) {
+                              LoggerChannelInterface $logger,
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $current_account;
     $this->routeMatch = $route_match;
@@ -104,6 +115,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
     $this->dateFormatter = $date_formatter;
     $this->currentRequest = $current_request;
     $this->logger = $logger;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -119,7 +131,8 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       $container->get('module_handler'),
       $container->get('date.formatter'),
       $container->get('request_stack')->getCurrentRequest(),
-      $container->get('logger.factory')->get('alshaya_acm_customer')
+      $container->get('logger.factory')->get('alshaya_acm_customer'),
+      $container->get('config.factory')
     );
   }
 
@@ -176,6 +189,12 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
         ];
       }
       else {
+        $cache_time_limit = $this->configFactory
+          ->get('alshaya_acm_customer.orders_config')
+          ->get('cache_time_limit');
+
+        $build['#cache'] = ['max-age' => $cache_time_limit];
+
         // Sort the order in the basis of order date and show recent 3.
         $orders = array_slice($orders, 0, 3);
 
