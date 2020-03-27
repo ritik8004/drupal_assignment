@@ -150,11 +150,6 @@ class AlshayaSpcCustomerHelper {
       $addressList[] = $address_data[$profile->id()];
     }
 
-    // Sort the address list so that primary address is always first.
-    usort($addressList, function ($a, $b) {
-      return ($a['is_default'] < $b['is_default']) ? 1 : -1;
-    });
-
     return $addressList;
   }
 
@@ -241,11 +236,13 @@ class AlshayaSpcCustomerHelper {
    *   Address array.
    * @param int $uid
    *   User id.
+   * @param bool $isDefault
+   *   Whether address needs to be default or not.
    *
    * @return bool|string
    *   Response.
    */
-  public function addEditCustomerAddress(array $address, int $uid) {
+  public function addEditCustomerAddress(array $address, int $uid, bool $isDefault = TRUE) {
     try {
       $address_data = $address['address'];
       // If address already exists.
@@ -278,7 +275,7 @@ class AlshayaSpcCustomerHelper {
       $profile->get('field_address')->setValue($address_data);
       $profile->get('field_mobile_number')->setValue($mobile_info);
 
-      return $this->addressBookManager->pushUserAddressToApi($profile);
+      return $this->addressBookManager->pushUserAddressToApi($profile, $isDefault);
     }
     catch (\Exception $e) {
       return FALSE;

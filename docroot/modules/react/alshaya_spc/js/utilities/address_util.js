@@ -41,9 +41,11 @@ export const updateUserDefaultAddress = (addressId) => axios.post('set-default-a
  * Add / Edit address for customer.
  *
  * @param {*} address
+ * @param {*} isDefault
  */
-export const addEditUserAddress = (address) => axios.post('add-edit-address', {
+export const addEditUserAddress = (address, isDefault) => axios.post('add-edit-address', {
   address,
+  isDefault,
 })
   .then(
     (response) => response.data,
@@ -243,7 +245,7 @@ export const addEditAddressToCustomer = (e) => {
           });
 
           // Add/update user address.
-          const addressList = addEditUserAddress(formData);
+          const addressList = addEditUserAddress(formData, true);
           if (addressList instanceof Promise) {
             addressList.then((list) => {
               // If any error.
@@ -498,7 +500,7 @@ export const saveCustomerAddressFromBilling = (data) => {
   // If logged in user.
   if (drupalSettings.user.uid > 0) {
     // Add/update user address.
-    return addEditUserAddress(data);
+    return addEditUserAddress(data, false);
   }
 
   return Promise.resolve(null);
