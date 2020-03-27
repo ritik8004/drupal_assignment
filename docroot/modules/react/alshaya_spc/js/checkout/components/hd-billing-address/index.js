@@ -4,6 +4,7 @@ import BillingInfo from '../billing-info';
 import SectionTitle from '../../../utilities/section-title';
 import {
   isBillingSameAsShippingInStorage,
+  removeBillingFlagFromStorage,
 } from '../../../utilities/checkout_util';
 
 // Storage key for billing shipping info same or not.
@@ -17,6 +18,9 @@ export default class HDBillingAddress extends React.Component {
     this.state = {
       shippingAsBilling: isBillingSameAsShippingInStorage(),
     };
+
+    // Check and remove flag on load.
+    removeBillingFlagFromStorage(props.cart);
   }
 
   componentDidMount() {
