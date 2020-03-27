@@ -136,6 +136,7 @@ class SkuInfoHelper {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   The Product Category helper service.
    */
   public function __construct(
     SkuManager $sku_manager,
