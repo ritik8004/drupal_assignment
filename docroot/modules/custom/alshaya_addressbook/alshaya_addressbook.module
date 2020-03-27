@@ -57,7 +57,6 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
 
   // For profile add.
   _alshaya_addressbook_form_alter($form, $form_state);
-
 }
 
 /**
@@ -119,10 +118,8 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   ];
 
   // Validation for first and last name.
-  $element['given_name']['#element_validate'][] = '_alshaya_addressbook_firstname_validate';
-  $element['given_name']['#maxlength'] = 50;
-  $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
-  $element['family_name']['#maxlength'] = 50;
+  $element['given_name']['#access'] = FALSE;
+  $element['family_name']['#access'] = FALSE;
 
   // This is required for guest checkout pages.
   if (isset($element['#require_email']) && $element['#require_email']) {
@@ -358,33 +355,6 @@ function _alshaya_addressbook_set_optional_field(array &$element, FormStateInter
 }
 
 /**
- * Validation for first name.
- */
-function _alshaya_addressbook_firstname_validate($element, FormStateInterface $form_state) {
-  return _alshaya_addressbook_name_validation($element, $form_state, 'given_name');
-}
-
-/**
- * Validation for the last name.
- */
-function _alshaya_addressbook_lastname_validate($element, FormStateInterface $form_state) {
-  return _alshaya_addressbook_name_validation($element, $form_state, 'family_name');
-}
-
-/**
- * Adding validation for the name.
- */
-function _alshaya_addressbook_name_validation($element, FormStateInterface $form_state, $field_name) {
-  $string = $element['#default_value'] ?? '';
-  if (preg_match('/[#$\_\!@%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]/', $string)) {
-    $field_name = $field_name == 'given_name' ? 'first name' : 'last name';
-    $form_state->setError($element, t('Invalid @name', ['@name' => $field_name]));
-  }
-
-  return $element;
-}
-
-/**
  * Implements hook_element_info_alter().
  */
 function alshaya_addressbook_element_info_alter(array &$info) {
@@ -453,6 +423,25 @@ function alshaya_addressbook_form_profile_address_book_form_alter(array &$form, 
  * Alter the address book form.
  */
 function _alshaya_addressbook_form_alter(array &$form, FormStateInterface $form_state) {
+
+  $profile = $form_state->getFormObject()->getEntity();
+  $full_name = '';
+  if ($profile->id()) {
+    $address = $profile->get('field_address')->getValue();
+    $full_name = $address[0]['given_name'] . ' ' . $address[0]['family_name'];
+  }
+
+  $form['full_name'] = [
+    '#type' => 'textfield',
+    '#title' => t('Full name'),
+    '#default_value' => $full_name,
+    '#size' => '120',
+    '#required' => TRUE,
+    '#attributes' => ['specialchar' => 'specialchar'],
+    '#element_validate' => ['alshaya_valid_full_name'],
+    '#weight' => -5,
+  ];
+
   // This is internal field to be used only for synchronisation with Magento.
   $form['field_address_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
 

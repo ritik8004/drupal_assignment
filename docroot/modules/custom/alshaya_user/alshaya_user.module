@@ -45,6 +45,18 @@ function alshaya_user_module_implements_alter(&$implementations, $hook) {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $user = $form_state->getFormObject()->getEntity();
+  $form['full_name'] = [
+    '#type' => 'textfield',
+    '#title' => t('Full name'),
+    '#default_value' => $user->get('field_first_name')->getString() . ' ' . $user->get('field_last_name')->getString(),
+    '#size' => '120',
+    '#required' => TRUE,
+    '#attributes' => ['specialchar' => 'specialchar'],
+    '#element_validate' => ['alshaya_valid_full_name'],
+    '#weight' => -5,
+  ];
+
   // Change email label.
   $form['account']['mail']['#title'] = t('Email address');
   $form['account']['mail']['#element_validate'] = [
@@ -57,10 +69,8 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   $form['account']['pass']['#description'] = '';
 
   // First name and last name will not accept some special characters.
-  $form['field_first_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
-  $form['field_last_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
-  $form['field_first_name']['widget'][0]['value']['#maxlength'] = 50;
-  $form['field_last_name']['widget'][0]['value']['#maxlength'] = 50;
+  $form['field_first_name']['#access'] = FALSE;
+  $form['field_last_name']['#access'] = FALSE;
 
   $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
   $form['#attached']['library'][] = 'alshaya_user/clear_autofill';
@@ -72,6 +82,19 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
 function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $form_state) {
   // Add our custom submit handler function for anonymous users.
   if (\Drupal::currentUser()->isAnonymous()) {
+    $form['full_name'] = [
+      '#type' => 'textfield',
+      '#title' => t('Full name'),
+      '#size' => '120',
+      '#required' => TRUE,
+      '#attributes' => ['specialchar' => 'specialchar'],
+      '#element_validate' => ['alshaya_valid_full_name'],
+      '#weight' => -5,
+    ];
+
+    $form['field_first_name']['#access'] = FALSE;
+    $form['field_last_name']['#access'] = FALSE;
+
     // Hide mobile number field from registration page.
     $form['field_mobile_number']['#access'] = FALSE;
 
@@ -95,6 +118,39 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
   }
 
   $form['#attached']['library'][] = 'alshaya_user/clear_autofill';
+}
+
+/**
+ * Validate full name value.
+ */
+function alshaya_valid_full_name(&$element, FormStateInterface $form_state, &$complete_form) {
+  $value = trim($element['#value']);
+
+  if (empty($value)) {
+    // We will let required field validation handled by Core.
+    return;
+  }
+
+  $full_name_error = TRUE;
+  if ($full_name = array_map('trim', explode(' ', $value))) {
+    if (count($full_name) > 1) {
+      list($first_name, $last_name) = alshaya_user_first_name_last_name($value);
+      $full_name_error = empty($first_name) || empty($last_name);
+    }
+  }
+
+  if ($full_name_error || empty($full_name)) {
+    // Only email address is something where our validations dont match.
+    $form_state->setError($element, t('Please enter your full name.'));
+    return;
+  }
+  else {
+    $form_state->setTemporaryValue('first_name', $first_name);
+    $form_state->setTemporaryValue('last_name', $last_name);
+  }
+
+  // Set trimmed value again into form state.
+  $form_state->setValueForElement($element, $value);
 }
 
 /**
@@ -496,4 +552,25 @@ function alshaya_user_link_alter(&$variables) {
     $path = \Drupal::service('path.current')->getPath();
     $variables['options']['query']['destination'] = '/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . \Drupal::service('path.alias_manager')->getAliasByPath($path);
   }
+}
+
+/**
+ * Return array of first name and last name from given full name.
+ *
+ * @param string $name
+ *   The full name string.
+ *
+ * @return array
+ *   Return array of first name & last name, empty array for empty argument.
+ */
+function alshaya_user_first_name_last_name(string $name): array {
+  if (empty($name)) {
+    return [];
+  }
+  return array_filter(
+    array_map(
+      'trim',
+      explode(' ', $name, 2)
+    )
+  );
 }
