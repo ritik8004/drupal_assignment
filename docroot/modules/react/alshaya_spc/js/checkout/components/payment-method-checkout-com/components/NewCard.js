@@ -137,7 +137,7 @@ class NewCard extends React.Component {
               onBlur={(e) => this.handleCardNumberChange(e, 'blur')}
             />
             <div className="c-input__bar" />
-            <label>{Drupal.t('card number')}</label>
+            <label>{Drupal.t('Card Number')}</label>
             <div id="spc-cc-number-error" className="error" />
           </div>
           <div className="spc-type-textfield spc-type-expiry">
@@ -154,7 +154,7 @@ class NewCard extends React.Component {
               onBlur={(e) => this.handleCardExpiryChange(e, 'blur')}
             />
             <div className="c-input__bar" />
-            <label>{Drupal.t('expiry')}</label>
+            <label>{Drupal.t('Expiry')}</label>
             <div id="spc-cc-expiry-error" className="error" />
           </div>
           <div className="spc-type-textfield spc-type-cvv">
@@ -184,7 +184,7 @@ class NewCard extends React.Component {
           <div className="spc-payment-save-card">
             <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
             <label htmlFor="payment-card-save">
-              {Drupal.t('save this card for faster payment next time you shop. (CVV number will not be saved)')}
+              {Drupal.t('Save this card for faster payment next time you shop. (CVV number will not be saved)')}
             </label>
           </div>
         </ConditionalView>

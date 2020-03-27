@@ -263,7 +263,7 @@ class PaymentMethodCybersource extends React.Component {
               onBlur={(e) => this.handleCardNumberChange(e, 'blur')}
             />
             <div className="c-input__bar" />
-            <label>{Drupal.t('card number')}</label>
+            <label>{Drupal.t('Card Number')}</label>
             <div id="cy-cc-number-error" className="error" />
           </div>
           <div className="spc-type-textfield spc-type-expiry spc-cy-cc-expiry">
@@ -278,7 +278,7 @@ class PaymentMethodCybersource extends React.Component {
               onBlur={(e) => this.handleCardExpiryChange(e, 'blur')}
             />
             <div className="c-input__bar" />
-            <label>{Drupal.t('expiry')}</label>
+            <label>{Drupal.t('Expiry')}</label>
             <div id="spc-cy-cc-expiry-error" className="error" />
           </div>
           <div className="spc-type-textfield spc-type-cvv spc-cy-cc-cvv">

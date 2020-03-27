@@ -229,7 +229,7 @@ class PaymentMethodCheckoutCom extends React.Component {
           </div>
           <div className={`spc-checkout-card-option spc-checkout-card-option-new-card ${selectedCard === 'new' ? 'selected' : ''}`}>
             <span className="spc-checkout-card-new-card-label" onClick={() => this.changeCurrentCard('new')}>
-              {Drupal.t('new card')}
+              {Drupal.t('New Card')}
             </span>
             <ConditionalView condition={selectedCard === 'new'}>
               {newCard}

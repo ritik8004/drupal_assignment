@@ -3,6 +3,7 @@ import React from 'react';
 import SectionTitle from '../../../utilities/section-title';
 import HomeDeliverySVG from '../hd-svg';
 import ClickCollectSVG from '../cc-svg';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 export default class DeliveryMethods extends React.Component {
   constructor(props) {
@@ -39,6 +40,7 @@ export default class DeliveryMethods extends React.Component {
     const { cart, refreshCart } = this.props;
     cart.delivery_type = method;
     refreshCart(cart);
+    smoothScrollTo('.spc-checkout-delivery-information');
   }
 
   render() {

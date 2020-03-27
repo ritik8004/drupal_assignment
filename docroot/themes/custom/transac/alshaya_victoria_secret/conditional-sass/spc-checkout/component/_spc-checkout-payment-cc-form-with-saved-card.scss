@@ -1,14 +1,5 @@
-.payment-method.payment-method-checkout_com,
-.payment-method.payment-method-cybersource {
-  .payment-method-bottom-panel {
-    .spc-checkout-card-option {
-      text-transform: capitalize;
-    }
-  }
-
-  input {
-    ~ label {
-      text-transform: capitalize;
-    }
+.payment-method.payment-method-checkout_com {
+  .spc-checkout-payment-saved-card-preview {
+    text-transform: capitalize;
   }
 }
