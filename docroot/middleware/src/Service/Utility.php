@@ -18,7 +18,7 @@ class Utility {
    */
   public function getDefaultErrorMessage() {
     // @TODO: t().
-    return 'Sorry, something went wrong. Please try again later.';
+    return 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.';
   }
 
   /**

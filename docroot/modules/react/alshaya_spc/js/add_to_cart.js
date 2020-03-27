@@ -97,7 +97,7 @@
               success: function (response) {
                 // If there any error we throw from middleware.
                 if (response.error === true) {
-                  if (response.error_message === 'Invalid data') {
+                  if (response.error_code === '400') {
                     localStorage.clear();
                     $(that).trigger('click');
                     return;
