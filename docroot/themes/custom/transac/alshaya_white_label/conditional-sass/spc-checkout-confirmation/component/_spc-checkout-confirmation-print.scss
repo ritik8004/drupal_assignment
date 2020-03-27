@@ -1,6 +1,5 @@
 .spc-order-confirmation-wrapper {
   padding: 1.875rem;
-  margin-top: -3rem;
   position: relative;
 
   .spc-pre-content {
@@ -136,5 +135,21 @@
         margin-#{$right}: 2rem;
       }
     }
+  }
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  .spc-checkout-confirmation .block-page-title-block,
+  table.sticky-header {
+    display: none;
+  }
+
+  .spc-order-confirmation-wrapper {
+    margin-top: -3.75rem;
   }
 }
