@@ -26,7 +26,29 @@ body {
           padding: 2.125rem;
         }
 
+        @include breakpoint($only-tablet) {
+          height: 28.3rem !important;
+          padding-top: 1.875rem;
+        }
+
+        .content__main {
+          @include breakpoint($tablet) {
+            height: 24.5rem;
+          }
+        }
+
         .content__title_wrapper {
+          @include breakpoint($only-mobile) {
+            padding: 0;
+            margin: 0 0.5rem;
+          }
+
+          .c-products__free__item__label {
+            @include breakpoint($only-tablet) {
+              margin-top: 0;
+            }
+          }
+
           .c-products__free__item__subtitle {
             margin-top: 0.75rem;
             margin-bottom: 0.375rem;
@@ -36,6 +58,16 @@ body {
               line-height: 1.29;
               text-transform: capitalize;
               color: $free-gift-modal-sub-title;
+
+              @include breakpoint($only-tablet) {
+                line-height: 1;
+                margin-top: 0.375rem;
+                font-size: 0.75rem !important;
+              }
+
+              @include breakpoint($only-mobile) {
+                font-weight: 400;
+              }
             }
           }
 
@@ -44,6 +76,12 @@ body {
             line-height: 1.25;
             color: $free-gift-modal-title;
             margin-bottom: 0.625rem;
+          }
+
+          .content--item-code {
+            @include breakpoint($only-tablet) {
+              margin: 0;
+            }
           }
         }
 
@@ -61,6 +99,19 @@ body {
           .read-more-description-link-gift {
             margin-top: 0.6875rem;
           }
+
+          .field__content-wrapper {
+            max-height: initial;
+
+            @include breakpoint($only-tablet) {
+              max-height: 8.75rem;
+            }
+
+            @include breakpoint($desktop) {
+              max-height: 22.6rem;
+              overflow: auto;
+            }
+          }
         }
       }
     }
@@ -71,6 +122,10 @@ body {
         .ui-dialog-content#drupal-modal {
           @include breakpoint($desktop) {
             height: 42rem !important;
+          }
+
+          @include breakpoint($only-tablet) {
+            height: 33rem !important;
           }
         }
       }
