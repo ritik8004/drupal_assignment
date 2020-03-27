@@ -130,7 +130,7 @@ export default class AreaSelect extends React.Component {
     }
 
     return (
-      <div className="spc-type-select">
+      <div className={`spc-type-select area-options-count-${options.length}`}>
         <label>{field.label}</label>
         {
           (areaLabel.length > 0) ? (
