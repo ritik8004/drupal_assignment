@@ -22,8 +22,7 @@ const OrderSummaryItem = (props) => {
   }
 
   if (type === 'cnc') {
-    const { name, address, timings } = props;
-    const storeTimings = timings.split('\n').map((item) => <p>{item}</p>);
+    const { name, address } = props;
     return (
       <div className="spc-order-summary-item spc-order-summary-address-item">
         <span className="spc-label">{`${label}:`}</span>
@@ -33,9 +32,6 @@ const OrderSummaryItem = (props) => {
           </span>
           <span className="spc-address">
             {address}
-          </span>
-          <span className="spc-address">
-            {storeTimings}
           </span>
         </span>
       </div>
