@@ -4,8 +4,8 @@ import {
   isDeliveryTypeSameAsInCart,
 } from '../../../utilities/checkout_util';
 import PriceElement from '../../../utilities/special-price/PriceElement';
-import { dispatchCustomEvent } from '../../../utilities/events';
-import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import dispatchCustomEvent from '../../../utilities/events';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 export default class CompletePurchase extends React.Component {
   constructor(props) {

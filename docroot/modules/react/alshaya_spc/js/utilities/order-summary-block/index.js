@@ -7,9 +7,7 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../checkout_util';
-import {
-  dispatchCustomEvent,
-} from '../events';
+import dispatchCustomEvent from '../events';
 
 /**
  * Click handler for `continue checkout`.

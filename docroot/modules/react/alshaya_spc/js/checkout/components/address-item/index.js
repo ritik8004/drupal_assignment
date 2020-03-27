@@ -5,6 +5,7 @@ import AddressForm from '../address-form';
 import {
   addEditAddressToCustomer,
   gerAreaLabelById,
+  prepareAddressDataForShipping,
 } from '../../../utilities/address_util';
 import {
   addShippingInCart,
@@ -13,16 +14,11 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
-import {
-  prepareAddressDataForShipping,
-} from '../../../utilities/checkout_address_process';
 import EditAddressSVG from '../edit-address-svg';
 import {
   getInfoFromStorage,
 } from '../../../utilities/storage';
-import {
-  dispatchCustomEvent,
-} from '../../../utilities/events';
+import dispatchCustomEvent from '../../../utilities/events';
 
 export default class AddressItem extends React.Component {
   constructor(props) {

@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
+use App\Response\AlshayaJsonResponse;
 use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Orders;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -96,7 +96,7 @@ class OrdersController {
    * @param int|string $order_id
    *   Use "last" for last order from session, order id for specific order.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   * @return \App\Response\AlshayaJsonResponse
    *   Order response.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
@@ -121,7 +121,7 @@ class OrdersController {
       ]);
     }
 
-    return new JsonResponse($data);
+    return new AlshayaJsonResponse($data);
   }
 
 }

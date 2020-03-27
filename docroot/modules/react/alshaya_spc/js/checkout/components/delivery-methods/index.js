@@ -22,15 +22,6 @@ export default class DeliveryMethods extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const { selectedOption } = this.state;
-    const { cncEvent } = this.props;
-    // Trigger cnc event to fetch stores.
-    if (selectedOption === 'cnc') {
-      cncEvent();
-    }
-  }
-
   // On delivery method change.
   changeDeliveryMethod = (method) => {
     this.setState({
@@ -46,13 +37,9 @@ export default class DeliveryMethods extends React.Component {
     });
     document.dispatchEvent(event);
     // Add delivery method in cart storage.
-    const { cart, refreshCart, cncEvent } = this.props;
+    const { cart, refreshCart } = this.props;
     cart.delivery_type = method;
     refreshCart(cart);
-    // Trigger cnc event to fetch stores.
-    if (method === 'cnc') {
-      cncEvent();
-    }
     smoothScrollTo('.spc-checkout-delivery-information');
   }
 

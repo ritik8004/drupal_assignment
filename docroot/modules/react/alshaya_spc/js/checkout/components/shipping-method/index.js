@@ -7,7 +7,7 @@ import {
 } from '../../../utilities/checkout_util';
 import {
   prepareAddressDataForShipping,
-} from '../../../utilities/checkout_address_process';
+} from '../../../utilities/address_util';
 
 export default class ShippingMethod extends React.Component {
   constructor(props) {

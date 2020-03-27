@@ -1,12 +1,8 @@
 import React from 'react';
-import _isEmpty from 'lodash/isEmpty';
 import ClicknCollectContextProvider from '../../../context/ClicknCollect';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import EmptyResult from '../../../utilities/empty-result';
-import {
-  fetchCartData,
-  fetchClicknCollectStores,
-} from '../../../utilities/api/requests';
+import { fetchCartData } from '../../../utilities/api/requests';
 import Loading from '../../../utilities/loading';
 import OrderSummaryBlock from '../../../utilities/order-summary-block';
 import HDBillingAddress from '../hd-billing-address';
@@ -23,14 +19,9 @@ import DeliveryMethods from '../delivery-methods';
 import PaymentMethods from '../payment-methods';
 import CheckoutMessage from '../../../utilities/checkout-message';
 import TermsConditions from '../terms-conditions';
-import {
-  getLocationAccess,
-  getDefaultMapCenter,
-  removeFullScreenLoader,
-} from '../../../utilities/checkout_util';
-import { createFetcher } from '../../../utilities/api/fetcher';
+import { removeFullScreenLoader } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
-import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 
 window.fetchStore = 'idle';
@@ -44,7 +35,6 @@ export default class Checkout extends React.Component {
     this.state = {
       wait: true,
       cart: null,
-      storeList: null,
       messageType: null,
       errorSuccessMessage: null,
     };
@@ -107,7 +97,10 @@ export default class Checkout extends React.Component {
 
   updateCheckoutMessage = (type, message) => {
     this.setState({ messageType: type, errorSuccessMessage: message });
-    smoothScrollTo('.spc-content');
+    // Checking length as if no type, means no error.
+    if (type.length > 0) {
+      smoothScrollTo('.spc-content');
+    }
   };
 
   /**
@@ -128,57 +121,6 @@ export default class Checkout extends React.Component {
 
     addInfoInStorage(cart);
     this.setState({ cart });
-  };
-
-  /**
-   * Trigger cnc event to get location details and fetch stores.
-   */
-  cncEvent = () => {
-    const { cart: mainCart } = this.state;
-    const { cart: { storeInfo } } = mainCart;
-    if (storeInfo) {
-      this.fetchStoresHelper({
-        lat: parseFloat(storeInfo.lat),
-        lng: parseFloat(storeInfo.lng),
-      });
-    } else {
-      getLocationAccess()
-        .then((pos) => {
-          this.fetchStoresHelper({
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-          });
-        },
-        () => {
-          this.fetchStoresHelper(getDefaultMapCenter());
-        })
-        .catch((error) => {
-          // In case of error, do nothing.
-          Drupal.logJavascriptError('checkout-cnc-event', error);
-        });
-    }
-  };
-
-  /**
-   * Fetch click n collect stores and update store list.
-   */
-  fetchStoresHelper = (coords) => {
-    if (_isEmpty(coords)) {
-      window.fetchStore = 'finished';
-      return;
-    }
-
-    window.fetchStore = 'pending';
-    const list = createFetcher(fetchClicknCollectStores).read(coords);
-
-    list.then(
-      (response) => {
-        if (typeof response.error === 'undefined') {
-          this.setState({ storeList: response });
-        }
-        window.fetchStore = 'finished';
-      },
-    );
   };
 
   validateBeforePlaceOrder = () => this.paymentMethods.current.validateBeforePlaceOrder();
@@ -213,7 +155,6 @@ export default class Checkout extends React.Component {
       cart,
       errorSuccessMessage,
       messageType,
-      storeList,
     } = this.state;
     // While page loads and all info available.
 
@@ -245,8 +186,8 @@ export default class Checkout extends React.Component {
               </CheckoutMessage>
               )}
 
-            <DeliveryMethods cart={cart} refreshCart={this.refreshCart} cncEvent={this.cncEvent} />
-            <ClicknCollectContextProvider cart={cart} storeList={storeList}>
+            <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
+            <ClicknCollectContextProvider cart={cart}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
             </ClicknCollectContextProvider>
 

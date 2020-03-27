@@ -42,13 +42,6 @@ class ClicknCollectMap extends React.Component {
   }
 
   /**
-   * Initiate geocoder.
-   */
-  initGeoCoder = () => {
-    this.geocoder = new google.maps.Geocoder();
-  };
-
-  /**
    * Place markers on map.
    */
   placeMarkers = async () => {

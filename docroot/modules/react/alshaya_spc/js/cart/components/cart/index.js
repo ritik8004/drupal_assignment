@@ -12,9 +12,7 @@ import Loading from '../../../utilities/loading';
 import VatFooterText from '../../../utilities/vat-footer';
 import { stickyMobileCartPreview, stickySidebar } from '../../../utilities/stickyElements/stickyElements';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
-import {
-  smoothScrollTo,
-} from '../../../utilities/smoothScroll';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 export default class Cart extends React.Component {
   constructor(props) {

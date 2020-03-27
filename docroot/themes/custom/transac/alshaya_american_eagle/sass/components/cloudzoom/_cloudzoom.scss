@@ -58,6 +58,13 @@
 }
 
 .cloudzoom {
+  .cloudzoom__herocontainer {
+    @include breakpoint($desktop) {
+      width: calc(100% - (5.75rem + 7.25rem));
+      margin-#{$right}: 6.125rem;
+    }
+  }
+
   .cloudzoom__thumbnails {
     @include breakpoint($desktop) {
       width: 4.875rem;
@@ -66,9 +73,12 @@
 
   &__image {
     .img-wrap {
+      @include breakpoint($tablet) {
+        height: 35rem;
+      }
+
       @include breakpoint($desktop) {
         height: 39.875rem;
-        top: 0.875rem;
       }
     }
   }

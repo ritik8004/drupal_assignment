@@ -5,7 +5,7 @@ import AddressForm from '../address-form';
 import {
   processBillingUpdateFromForm,
   formatAddressDataForEditForm,
-} from '../../../utilities/checkout_address_process';
+} from '../../../utilities/address_util';
 
 export default class BillingPopUp extends React.Component {
   isComponentMounted = false;

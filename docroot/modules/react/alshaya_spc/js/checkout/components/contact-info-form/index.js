@@ -6,9 +6,9 @@ import {
   showFullScreenLoader, validateInfo,
 } from '../../../utilities/checkout_util';
 import FixedFields from '../fixed-fields';
-import { validateContactInfo } from '../../../utilities/checkout_address_process';
+import { validateContactInfo } from '../../../utilities/address_util';
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
-import { dispatchCustomEvent } from '../../../utilities/events';
+import dispatchCustomEvent from '../../../utilities/events';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
@@ -141,9 +141,7 @@ class ContactInfoForm extends React.Component {
             delivery_type: cartResult.delivery_type,
             address: formData.store.address,
           };
-          dispatchCustomEvent('refreshCartOnCnCSelect', {
-            data: () => cartData,
-          });
+          dispatchCustomEvent('refreshCartOnCnCSelect', cartData);
           return null;
         })
         .catch((error) => {
@@ -164,7 +162,7 @@ class ContactInfoForm extends React.Component {
         <FixedFields
           showEmail={drupalSettings.user.uid === 0}
           showFullName={drupalSettings.user.uid === 0}
-          default_val={contactInfo ? { static: contactInfo } : []}
+          defaultVal={contactInfo ? { static: contactInfo } : []}
           subTitle={subTitle}
         />
         <div className="spc-address-form-actions">

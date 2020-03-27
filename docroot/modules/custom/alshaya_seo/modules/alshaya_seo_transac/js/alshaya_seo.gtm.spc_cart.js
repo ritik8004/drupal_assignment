@@ -86,7 +86,7 @@
   });
 
   document.addEventListener('refreshCartOnCnCSelect', function (e) {
-    var cart_data = e.detail.data();
+    var cart_data = e.detail;
     var data = {
       event: 'storeSelect',
       storeName: cart_data.cart.store_info.name,
