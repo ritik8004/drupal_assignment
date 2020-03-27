@@ -47,7 +47,7 @@ class CheckoutConfirmation extends React.Component {
             <VatFooterText />
             <ConditionalView condition={window.innerWidth > 768}>
               <div className="checkout-link submit">
-                <a href="/" className="checkout-link">
+                <a href={Drupal.url('<front>')} className="checkout-link">
                   {Drupal.t('continue shopping')}
                 </a>
               </div>
