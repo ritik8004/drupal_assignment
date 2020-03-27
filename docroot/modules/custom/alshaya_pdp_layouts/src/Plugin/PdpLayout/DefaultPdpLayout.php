@@ -54,7 +54,7 @@ class DefaultPdpLayout extends PdpLayoutBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('alshaya_acm_product.skumanager'),
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 

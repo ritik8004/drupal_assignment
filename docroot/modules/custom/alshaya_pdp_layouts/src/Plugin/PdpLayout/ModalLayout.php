@@ -52,7 +52,7 @@ class ModalLayout extends PdpLayoutBase implements ContainerFactoryPluginInterfa
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('alshaya_acm_product.skumanager'),
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 

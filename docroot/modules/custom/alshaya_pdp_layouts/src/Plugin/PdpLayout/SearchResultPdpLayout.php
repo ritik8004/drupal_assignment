@@ -52,7 +52,7 @@ class SearchResultPdpLayout extends PdpLayoutBase implements ContainerFactoryPlu
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('alshaya_acm_product.skumanager'),
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 

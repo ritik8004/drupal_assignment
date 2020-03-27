@@ -64,7 +64,7 @@ class TeaserLayout extends PdpLayoutBase implements ContainerFactoryPluginInterf
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('config.factory');
+      $container->get('config.factory')
     );
   }
 

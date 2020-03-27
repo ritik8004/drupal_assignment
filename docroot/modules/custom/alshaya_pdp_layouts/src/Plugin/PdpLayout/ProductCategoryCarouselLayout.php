@@ -64,7 +64,7 @@ class ProductCategoryCarouselLayout extends PdpLayoutBase implements ContainerFa
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('config.factory');
+      $container->get('config.factory')
     );
   }
 
