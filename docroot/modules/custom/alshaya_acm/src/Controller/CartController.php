@@ -27,13 +27,6 @@ class CartController extends ControllerBase {
   protected $cartStorage;
 
   /**
-   * Drupal\acq_cart\Cart definition.
-   *
-   * @var \Drupal\acq_cart\Cart
-   */
-  protected $cart;
-
-  /**
    * CSRF Token generator object.
    *
    * @var \Drupal\Core\Access\CsrfTokenGenerator
@@ -61,7 +54,6 @@ class CartController extends ControllerBase {
                               CsrfTokenGenerator $csrf_token,
                               CartHelper $cart_helper) {
     $this->cartStorage = $cart_storage;
-    $this->cart = $this->cartStorage->getCart();
     $this->csrfTokenGenerator = $csrf_token;
     $this->cartHelper = $cart_helper;
   }
@@ -81,8 +73,10 @@ class CartController extends ControllerBase {
    * Handler for cart/remove/{sku}.
    */
   public function cartRemoveSku($sku, $token, $js, $coupon) {
-    if (!empty($sku) && $this->cart instanceof CartInterface) {
-      $token_value = $this->cart->id() . '/' . $sku;
+    $cart = $this->cartStorage->getCart();
+
+    if (!empty($sku) && $cart instanceof CartInterface) {
+      $token_value = $cart->id() . '/' . $sku;
       if (!$this->csrfTokenGenerator->validate($token, $token_value)) {
         throw new AccessDeniedHttpException();
       }
@@ -91,14 +85,14 @@ class CartController extends ControllerBase {
       $sku = base64_decode($sku);
 
       // If there is a coupon applied on cart.
-      if (!empty($this->cart->getCoupon())) {
+      if (!empty($cart->getCoupon())) {
         // If only one item in cart.
-        if (count($this->cart->items()) == 1) {
+        if (count($cart->items()) == 1) {
           // Remove coupon.
-          $this->cart->setCoupon('');
+          $cart->setCoupon('');
         }
         elseif ($coupon === 'remove') {
-          $this->cart->setCoupon('');
+          $cart->setCoupon('');
         }
       }
 
