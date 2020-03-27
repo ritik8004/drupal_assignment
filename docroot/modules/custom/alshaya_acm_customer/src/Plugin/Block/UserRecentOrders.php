@@ -250,7 +250,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['user']);
   }
 
   /**
@@ -258,8 +258,11 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    */
   public function getCacheTags() {
     // Get uid of current user.
-    $uid = $this->currentUser->id();
-    return Cache::mergeTags(parent::getCacheTags(), ['user:' . $uid . ':orders']);
+    $account = $this->currentRequest->attributes->get('user');
+    if (empty($account)) {
+      $account = $this->currentUser;
+    }
+    return Cache::mergeTags(parent::getCacheTags(), ['user:' . $account->id()]);
   }
 
 }
