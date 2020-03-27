@@ -1,13 +1,14 @@
 diff --git a/core/lib/Drupal/Core/DrupalKernel.php b/core/lib/Drupal/Core/DrupalKernel.php
-index 7c9fb6c8..aaeb2939 100644
+index 7c9fb6c8..1711e278 100644
 --- a/core/lib/Drupal/Core/DrupalKernel.php
 +++ b/core/lib/Drupal/Core/DrupalKernel.php
-@@ -401,6 +401,16 @@ public static function findSitePath(Request $request, $require_settings = TRUE,
+@@ -401,6 +401,17 @@ public static function findSitePath(Request $request, $require_settings = TRUE,
      $sites = [];
      include $app_root . '/sites/sites.php';
  
 +    // Construct a key for storing the site path in apcu.
-+    $storage_key = implode(":", [$script_name, $http_host, $app_root]);
++    $prefix = 'sitepath_apcu';
++    $storage_key = implode(":", [$prefix, $script_name, $http_host, $app_root]);
 +
 +    // Check if we already have a cache entry containing site path in acpu.
 +    $site_path = static::fetchValue($storage_key);
@@ -19,7 +20,7 @@ index 7c9fb6c8..aaeb2939 100644
      $uri = explode('/', $script_name);
      $server = explode('.', implode('.', array_reverse(explode(':', rtrim($http_host, '.')))));
      for ($i = count($uri) - 1; $i > 0; $i--) {
-@@ -410,11 +420,46 @@ public static function findSitePath(Request $request, $require_settings = TRUE,
+@@ -410,11 +421,46 @@ public static function findSitePath(Request $request, $require_settings = TRUE,
            $dir = $sites[$dir];
          }
          if (file_exists($app_root . '/sites/' . $dir . '/settings.php') || (!$require_settings && file_exists($app_root . '/sites/' . $dir))) {
