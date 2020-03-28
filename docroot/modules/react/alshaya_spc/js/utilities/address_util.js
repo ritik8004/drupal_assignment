@@ -605,7 +605,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
             customerData = {
               address: {
                 given_name: formData.static.firstname,
-                family_name: formData.static.firstname,
+                family_name: formData.static.lastname,
                 city: formData.static.city,
                 address_id: target.address_id.value,
               },
