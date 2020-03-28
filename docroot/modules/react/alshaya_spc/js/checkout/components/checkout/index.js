@@ -19,7 +19,14 @@ import DeliveryMethods from '../delivery-methods';
 import PaymentMethods from '../payment-methods';
 import CheckoutMessage from '../../../utilities/checkout-message';
 import TermsConditions from '../terms-conditions';
-import { removeFullScreenLoader } from '../../../utilities/checkout_util';
+import {
+  removeFullScreenLoader,
+  addShippingInCart,
+} from '../../../utilities/checkout_util';
+import {
+  prepareAddressDataFromCartShipping,
+  prepareCnCAddressFromCartShipping,
+} from '../../../utilities/address_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import smoothScrollTo from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
@@ -68,10 +75,40 @@ export default class Checkout extends React.Component {
             if (updated) {
               cartObj = getInfoFromStorage();
             }
-            this.setState({
-              wait: false,
-              cart: cartObj,
-            });
+
+            // If shipping address is set but carrier is not
+            // available, we set it.
+            if (result.carrier_info !== undefined
+              && result.carrier_info === null
+              && result.shipping_address !== null) {
+              const shippinData = result.delivery_type === 'cnc'
+                ? prepareCnCAddressFromCartShipping(result.shipping_address, result.store_info)
+                : prepareAddressDataFromCartShipping(result.shipping_address);
+              const updateData = addShippingInCart('update shipping', shippinData);
+              if (updateData instanceof Promise) {
+                updateData.then((cartResult) => {
+                  let cartInfo = cartObj;
+                  // If no error.
+                  if (cartResult.error === undefined) {
+                    cartInfo = {
+                      cart: cartResult,
+                    };
+                    // Update cart object.
+                    addInfoInStorage(cartInfo);
+                  }
+
+                  this.setState({
+                    wait: false,
+                    cart: cartInfo,
+                  });
+                });
+              }
+            } else {
+              this.setState({
+                wait: false,
+                cart: cartObj,
+              });
+            }
           });
         });
       }

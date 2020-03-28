@@ -102,6 +102,58 @@ export const prepareAddressDataForShipping = (address) => {
 };
 
 /**
+ * Prepare address data from cart shipping.
+ *
+ * @param {*} address
+ */
+export const prepareAddressDataFromCartShipping = (address) => {
+  const tempShippingData = address;
+  Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+    tempShippingData[key] = address[field.key];
+  });
+  tempShippingData.mobile = address.telephone;
+
+  // Get prepared address data for shipping address update.
+  const data = prepareAddressDataForShipping(tempShippingData);
+
+  // Extra info for logged in user.
+  if (drupalSettings.user.uid > 0) {
+    data.static.customer_address_id = address.customer_address_id;
+    data.static.customer_id = address.customer_id;
+  }
+
+  return data;
+};
+
+/**
+ * Prepare address to post for cnc from cnc shipppings and store.
+ *
+ * @param {*} address
+ * @param {*} store
+ */
+export const prepareCnCAddressFromCartShipping = (address, store) => {
+  const data = {
+    static: {
+      firstname: address.firstname,
+      lastname: address.lastname,
+      email: address.email,
+      telephone: address.telephone,
+      country_id: drupalSettings.country_code,
+    },
+    shipping_type: 'cnc',
+    store: {
+      name: store.name,
+      code: store.code,
+      rnc_available: store.rnc_available,
+      cart_address: store.cart_address,
+    },
+    carrier_info: { ...drupalSettings.map.cnc_shipping },
+  };
+
+  return data;
+};
+
+/**
  * Prepare address data from form value.
  *
  * @param {*} elements

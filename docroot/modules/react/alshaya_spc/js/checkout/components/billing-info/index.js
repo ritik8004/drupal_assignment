@@ -88,7 +88,10 @@ export default class BillingInfo extends React.Component {
           // Handling for parent area.
           fillVal = gerAreaLabelById(true, fillVal);
         }
-        addressData.push(fillVal);
+
+        if (fillVal !== null) {
+          addressData.push(fillVal);
+        }
       }
     });
 
