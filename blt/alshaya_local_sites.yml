@@ -146,3 +146,7 @@ sites:
     module: alshaya_bp
     type: alshaya_transac
     country: ae
+  bpeg:
+    module: alshaya_bp
+    type: alshaya_transac
+    country: eg
