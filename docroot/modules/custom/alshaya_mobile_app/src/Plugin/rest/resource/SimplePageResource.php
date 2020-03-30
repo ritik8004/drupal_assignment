@@ -191,6 +191,7 @@ class SimplePageResource extends ResourceBase {
       '#cache' => [
         'contexts' => [
           'url.query_args:page',
+          'url.query_args:url',
         ],
       ],
     ]));
