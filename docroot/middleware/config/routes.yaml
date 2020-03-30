@@ -62,3 +62,8 @@ cybersource_payment_finalise:
     path: /payment/cybersource/finalise
     controller: App\Controller\PaymentController::finaliseCybersource
     methods: POST
+
+checkout_com_apple_pay_save:
+    path: /payment/checkout-com-apple-pay/save
+    controller: App\Controller\PaymentController::saveApplePayPayment
+    methods: POST

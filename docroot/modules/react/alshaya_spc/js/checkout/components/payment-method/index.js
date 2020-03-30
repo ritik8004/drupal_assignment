@@ -13,12 +13,15 @@ import {
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
 import PaymentMethodCybersource from '../payment-method-cybersource';
 import { removeStorageInfo } from '../../../utilities/storage';
+import PaymentMethodApplePay from '../payment-method-apple-pay';
+import ApplePay from '../../../utilities/apple_pay';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
     super(props);
 
     this.paymentMethodCheckoutCom = React.createRef();
+    this.paymentMethodApplePay = React.createRef();
     this.paymentMethodCybersource = React.createRef();
   }
 
@@ -27,6 +30,10 @@ export default class PaymentMethod extends React.Component {
     // Do additional process for some payment methods.
     if (method.code === 'checkout_com') {
       return this.paymentMethodCheckoutCom.current.validateBeforePlaceOrder();
+    }
+
+    if (method.code === 'checkout_com_applepay') {
+      return this.paymentMethodApplePay.current.validateBeforePlaceOrder();
     }
 
     if (method.code === 'cybersource') {
@@ -83,6 +90,12 @@ export default class PaymentMethod extends React.Component {
     const { method } = this.props;
     const { isSelected, changePaymentMethod, cart } = this.props;
 
+    if (method.code === 'checkout_com_applepay') {
+      if (!(ApplePay.isAvailable())) {
+        return (null);
+      }
+    }
+
     return (
       <>
         <div className={`payment-method payment-method-${method.code}`} onClick={() => changePaymentMethod(method.code)}>
@@ -126,6 +139,14 @@ export default class PaymentMethod extends React.Component {
                 finalisePayment={this.finalisePayment}
               />
             </div>
+          </ConditionalView>
+
+          <ConditionalView condition={isSelected && method.code === 'checkout_com_applepay'}>
+            <PaymentMethodApplePay
+              ref={this.paymentMethodApplePay}
+              cart={cart}
+              finalisePayment={this.finalisePayment}
+            />
           </ConditionalView>
         </div>
       </>
