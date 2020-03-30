@@ -6,6 +6,7 @@ import {
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import dispatchCustomEvent from '../../../utilities/events';
 import smoothScrollTo from '../../../utilities/smoothScroll';
+import ConditionalView from '../../../common/components/conditional-view';
 
 export default class CompletePurchase extends React.Component {
   constructor(props) {
@@ -76,7 +77,7 @@ export default class CompletePurchase extends React.Component {
   };
 
   /**
-   * To determone whether complete purchase button
+   * To determine whether complete purchase button
    * should be active and clickable or not.
    */
   completePurchaseButtonActive = () => {
@@ -118,6 +119,9 @@ export default class CompletePurchase extends React.Component {
     const className = this.completePurchaseButtonActive()
       ? 'active'
       : 'in-active';
+    const paymentMethod = cart.cart.cart_payment_method !== undefined
+      ? cart.cart.cart_payment_method
+      : '';
 
     return (
       <div className={`checkout-link submit ${className}`}>
@@ -136,9 +140,24 @@ export default class CompletePurchase extends React.Component {
             </span>
           </div>
           )}
-        <a href={Drupal.url('checkout')} className="checkout-link" onClick={(e) => this.placeOrder(e)}>
-          {Drupal.t('complete purchase')}
-        </a>
+
+        <ConditionalView condition={paymentMethod === 'checkout_com_applepay'}>
+          <button
+            id="ckoApplePayButton"
+            type="button"
+            onClick={(e) => this.placeOrder(e)}
+            lang={drupalSettings.path.currentLanguage}
+            className="apple-pay-button apple-pay-button-with-text apple-pay-button-black-with-text"
+          >
+            <span className="text">{Drupal.t('Buy with')}</span>
+            <span className="logo" />
+          </button>
+        </ConditionalView>
+        <ConditionalView condition={paymentMethod !== 'checkout_com_applepay'}>
+          <a href={Drupal.url('checkout')} className="checkout-link" onClick={(e) => this.placeOrder(e)}>
+            {Drupal.t('complete purchase')}
+          </a>
+        </ConditionalView>
       </div>
     );
   }

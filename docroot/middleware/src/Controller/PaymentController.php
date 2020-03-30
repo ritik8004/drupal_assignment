@@ -5,15 +5,17 @@ namespace App\Controller;
 use App\Helper\CookieHelper;
 use App\Response\AlshayaJsonResponse;
 use App\Response\AlshayaRedirectResponse;
+use App\Response\AlshayaResponse;
 use App\Service\Cart;
 use App\Service\CheckoutCom\APIWrapper;
+use App\Service\CheckoutCom\ApplePayHelper;
 use App\Service\Cybersource\CybersourceHelper;
 use App\Service\Knet\KnetHelper;
 use App\Service\PaymentData;
 use App\Service\SessionStorage;
+use App\Service\Utility;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -68,6 +70,13 @@ class PaymentController {
   protected $cybersourceHelper;
 
   /**
+   * Checkout.com Apple Pay Helper.
+   *
+   * @var \App\Service\CheckoutCom\ApplePayHelper
+   */
+  protected $applePayHelper;
+
+  /**
    * Logger service.
    *
    * @var \Psr\Log\LoggerInterface
@@ -89,6 +98,13 @@ class PaymentController {
   protected $session;
 
   /**
+   * Utility.
+   *
+   * @var \App\Service\Utility
+   */
+  protected $utility;
+
+  /**
    * PaymentController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
@@ -101,29 +117,37 @@ class PaymentController {
    *   K-Net Helper.
    * @param \App\Service\Cybersource\CybersourceHelper $cybersource_helper
    *   Cybersource Helper.
+   * @param \App\Service\CheckoutCom\ApplePayHelper $apple_pay_helper
+   *   Checkout.com Apple Pay helper.
    * @param \App\Service\PaymentData $payment_data
    *   Payment Data provider.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
    * @param \App\Service\SessionStorage $session
    *   Session Storage service.
+   * @param \App\Service\Utility $utility
+   *   Utility Service.
    */
   public function __construct(RequestStack $request,
                               Cart $cart,
                               APIWrapper $checkout_com_api,
                               KnetHelper $knet_helper,
                               CybersourceHelper $cybersource_helper,
+                              ApplePayHelper $apple_pay_helper,
                               PaymentData $payment_data,
                               LoggerInterface $logger,
-                              SessionStorage $session) {
+                              SessionStorage $session,
+                              Utility $utility) {
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->checkoutComApi = $checkout_com_api;
     $this->knetHelper = $knet_helper;
     $this->cybersourceHelper = $cybersource_helper;
+    $this->applePayHelper = $apple_pay_helper;
     $this->paymentData = $payment_data;
     $this->logger = $logger;
     $this->session = $session;
+    $this->utility = $utility;
   }
 
   /**
@@ -452,7 +476,27 @@ class PaymentController {
     $script .= 'window.parent.document.dispatchEvent(event);';
     $script .= '</script>';
 
-    return new Response($script);
+    return new AlshayaResponse($script);
+  }
+
+  /**
+   * Callback to save payment data for Apple Pay.
+   *
+   * @return \App\Response\AlshayaJsonResponse
+   *   Success or error.
+   */
+  public function saveApplePayPayment() {
+    try {
+      $response = $this->applePayHelper->updatePayment();
+    }
+    catch (\Exception $e) {
+      $this->logger->warning('Failed to save apple pay payment data, message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      $response = $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+
+    return new AlshayaJsonResponse($response);
   }
 
   /**
