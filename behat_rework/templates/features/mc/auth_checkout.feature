@@ -1,5 +1,5 @@
 @javascript @checkout @english @eng_checkout @mmcpa-1930 @manual
-Feature: Test Checkout feature
+Feature: Test Checkout feature - Sample Value
   Background:
     Given I am logged in as an authenticated user "bharat.ahuja@acquia.com" with password "tester@123"
     And I wait 5 seconds
@@ -13,10 +13,8 @@ Feature: Test Checkout feature
     And I press "checkout securely"
     And I wait for the page to load
 
-
   @hd @2d @creditnosave
-  Scenario: As a auth user,
-  I should be able to checkout using 2D credit- use new card (do not save)
+  Scenario: As a auth user, I should be able to checkout using 2D credit- use new card (do not save)
     And I wait 5 seconds
     When I follow "Home delivery"
     And I wait for AJAX to finish
@@ -59,8 +57,7 @@ Feature: Test Checkout feature
     And I should not see "9996"
 
   @hd @2d @creditsave
-  Scenario: As a auth user,
-  I should be able to checkout using 2D credit- use new card (save card for future)
+  Scenario: As a auth user, I should be able to checkout using 2D credit- use new card (save card for future)
     And I wait 5 seconds
     When I follow "Home delivery"
     And I wait for AJAX to finish
@@ -103,11 +100,8 @@ Feature: Test Checkout feature
     And I wait 5 seconds
     And I should see "6378"
 
-
-
   @hd @2d @creditsaved
-  Scenario: As a auth user,
-  I should be able to checkout using 2D  already SAVED credit card
+  Scenario: As a auth user, I should be able to checkout using 2D  already SAVED credit card
     And I wait 5 seconds
     When I follow "Home delivery"
     And I wait for AJAX to finish
@@ -133,10 +127,8 @@ Feature: Test Checkout feature
     And I should see "Item code:"
     And I should see "Quantity:"
 
-
   @cod @hd
-  Scenario: As a Guest,
-  I should be able to checkout using COD
+  Scenario: As a Guest, I should be able to checkout using COD
     When I follow "Home delivery"
     And I wait for AJAX to finish
     When I select address
@@ -160,11 +152,8 @@ Feature: Test Checkout feature
     And I should see "Item code:"
     And I should see "Quantity:"
 
-
-
   @hd @knet
-  Scenario: As a Guest,
-  I should be able to checkout using KNET
+  Scenario: As a Guest, I should be able to checkout using KNET
     When I follow "Home delivery"
     And I wait for AJAX to finish
     When I select address
@@ -200,11 +189,8 @@ Feature: Test Checkout feature
     And I should see "Item code:"
     And I should see "Quantity:"
 
-
   @cc @knet
-  Scenario: As a Guest
-  I should be able to use click and collect option
-  and pay by KNET
+  Scenario: As a Guest, I should be able to use click and collect option and pay by KNET
     When I follow "click & collect"
     And I wait for AJAX to finish
     And I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -251,8 +237,7 @@ Feature: Test Checkout feature
     And I should see "Quantity:"
 
   @hd @3d @visa
-  Scenario: As a Guest,
-  I should be able to checkout using 3D Credit Card
+  Scenario: As a Guest, I should be able to checkout using 3D Credit Card
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -286,8 +271,7 @@ Feature: Test Checkout feature
     And I should see "Item code:"
 
   @hd @3d @mastercard
-  Scenario: As a Guest,
-  I should be able to checkout using 2D Debit Card
+  Scenario: As a Guest, I should be able to checkout using 2D Debit Card
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -321,8 +305,7 @@ Feature: Test Checkout feature
     And I should see "Item code:"
 
   @hd @3d @wrongcvv
-  Scenario: As a Guest,
-  I should not be able to checkout using 2D Credit Card when wrong CVV is used
+  Scenario: As a Guest, I should not be able to checkout using 2D Credit Card when wrong CVV is used
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -351,8 +334,7 @@ Feature: Test Checkout feature
 
 
   @hd @2d @wrongcvv
-  Scenario: As a auth user,
-  I should be able to checkout using 2D credit- use new card (save card for future)
+  Scenario: As a auth user, I should be able to checkout using 2D credit- use new card (save card for future)
     When I follow "Home delivery"
     And I wait for AJAX to finish
     When I select address
@@ -378,10 +360,8 @@ Feature: Test Checkout feature
     And I wait 10 seconds
     Then I should not see text matching "Thank you for shopping online with us, Bharat Test"
 
-
   @hd @2d @deletecard
-  Scenario: As a auth user,
-  I should be able to delete cards from my account
+  Scenario: As a auth user, I should be able to delete cards from my account
     And I go to "{url_product_page}"
     And I wait 5 seconds
     And I should be able to click my Account
@@ -401,9 +381,7 @@ Feature: Test Checkout feature
     Then I should see "Your card has been deleted."
 
   @hd @cs
-  Scenario: As a Guest
-  I should be able to checkout on HD
-  using Cybersource payment method
+  Scenario: As a Guest, I should be able to checkout on HD using Cybersource payment method
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -436,11 +414,8 @@ Feature: Test Checkout feature
     And I should see "Item code:"
     And I should see "Quantity:"
 
-
   @cc @cs
-  Scenario:  As a Guest
-  I should be able to checkout on Click and Collect
-  using Cybersource payment method
+  Scenario: As a Guest, I should be able to checkout on Click and Collect using Cybersource payment method
     When I follow "click & collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -478,4 +453,3 @@ Feature: Test Checkout feature
     Then I should see "size:"
     And I should see "Item code:"
     And I should see "Quantity:"
-

@@ -211,7 +211,8 @@ class FeatureContext extends CustomMinkContext
       throw new \Exception('No products are listed on PLP');
     }
     foreach ($all_products as $item) {
-      if ($item->find('css', 'div.out-of-stock span')) {
+      $item_status = count($item->find('css', 'div.out-of-stock span'));
+      if ($item_status) {
         $total_products--;
         if (!$total_products) {
           throw new \Exception('All products are out of stock on PLP');
@@ -238,7 +239,8 @@ class FeatureContext extends CustomMinkContext
       throw new \Exception('Search passed, but search results were empty');
     }
     foreach ($all_products as $item) {
-      if ($item->find('css', 'div.out-of-stock span')) {
+      $item_status = count($item->find('css', 'div.out-of-stock span'));
+      if ($item_status) {
         $total_products--;
         if (!$total_products) {
           throw new \Exception('All products are out of stock');
@@ -1526,7 +1528,8 @@ class FeatureContext extends CustomMinkContext
       throw new Exception('Search passed, but search results were empty');
     }
     foreach ($all_products as $item) {
-      if ($item->find('css', 'div.out-of-stock span')) {
+      $item_status = count($item->find('css', 'div.out-of-stock span'));
+      if ($item_status) {
         $total_products--;
         if (!$total_products) {
           throw new Exception('All products are out of stock');
@@ -1593,7 +1596,7 @@ class FeatureContext extends CustomMinkContext
   public function iClickOnElement($css_selector)
   {
     $element = $this->getSession()->getPage()->find("css", $css_selector);
-    if ($element) {
+    if (count($element) > 0) {
       $element->click();
     } else {
       throw new Exception("Element " . $css_selector . " not found on " . $this->getSession()->getCurrentUrl());
@@ -1791,5 +1794,67 @@ class FeatureContext extends CustomMinkContext
    */
   public function iShouldSeeAElementOnPage($element) {
     $this->assertSession()->elementExists('css', $element);
+  }
+
+  /**
+   * @Then the price and currency matches the content of product
+   */
+  public function iPriceCurrencyMatches()
+  {
+    $page = $this->getSession()->getPage();
+    if ($this->assertSession()->elementExists('css', '#block-content .acq-content-product .has--special--price')) {
+      $product_price = $page->find('css', '#block-content .acq-content-product .special--price .price .price-amount')->getHtml();
+      $product_price = floatval($product_price);
+      $product_currency = $page->find('css', '#block-content .acq-content-product .special--price .price .price-currency')->getHtml();
+    }
+    else {
+      $product_price = $page->find('css', '#block-content .acq-content-product .price-block .price .price-amount')->getHtml();
+      $product_price = floatval($product_price);
+      $product_currency = $page->find('css', '#block-content .acq-content-product .price-block .price .price-currency')->getHtml();
+    }
+    $cart_price = $page->find('css', '#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount')->getHtml();
+    $cart_price = floatval($cart_price);
+    $cart_currency = $page->find('css', '#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-currency')->getHtml();
+
+    if ($product_price !== $cart_price) {
+      throw new \Exception('Correct price did not added get in minicart');
+    }
+    if ($product_currency !== $cart_currency) {
+      throw new \Exception('Correct currency did not added get in minicart');
+    }
+  }
+
+  /**
+   * Asserts that an element, specified by CSS selector, exists.
+   *
+   * @param string $selector
+   *   The CSS selector to search for.
+   *
+   * @Then the element :selector should exist
+   */
+  public function theElementShouldExist($selector) {
+    $this->assertSession()->elementExists('css', $selector);
+  }
+
+  /**
+   * Checks, that current page PATH is equal to specified
+   * Example: Then url should contain "/" page
+   * Example: And I should be on "/bats" page
+   * Example: And I should be on "http://google.com" page
+   *
+   * @Then /^(?:|I )should be on "(?P<page>[^"]+)" page$/
+   */
+  public function assertPageLocate($path)
+  {
+    $parts = parse_url($path);
+    $fragment = empty($parts['fragment']) ? '' : '#'.$parts['fragment'];
+    $path = empty($parts['path']) ? '/' : $parts['path'];
+
+    $expected = preg_replace('/^\/[^\.\/]+\.php\//', '/', $path).$fragment;
+    $actual = $this->getSession()->getCurrentUrl();
+
+    if (strpos($actual, $expected) === FALSE) {
+      throw new \Exception(sprintf('Current page is "%s", but "%s" expected.', $actual, $expected));
+    }
   }
 }
