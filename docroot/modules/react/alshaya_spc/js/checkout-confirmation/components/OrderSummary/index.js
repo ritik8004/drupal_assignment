@@ -49,8 +49,8 @@ const OrderSummary = () => {
 
   // Get Billing info.
   const billingAddress = [];
+  let customerNameBilling = '';
   const billingInfo = drupalSettings.order_details.billing;
-  const customerNameBilling = `${billingInfo.given_name} ${billingInfo.family_name}`;
   if (billingInfo !== null) {
     billingAddress.push(billingInfo.country);
     if (billingInfo.area_parent_display !== undefined) {
@@ -68,6 +68,8 @@ const OrderSummary = () => {
     if (billingInfo.dependent_locality !== undefined) {
       billingAddress.push(billingInfo.dependent_locality);
     }
+
+    customerNameBilling = `${billingInfo.given_name} ${billingInfo.family_name}`;
   }
 
   return (
