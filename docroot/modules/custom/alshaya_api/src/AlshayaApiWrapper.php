@@ -269,6 +269,11 @@ class AlshayaApiWrapper {
       $response = $client->request($method, $url, $options);
       $result = $response->getBody()->getContents();
 
+      // Magento actually down or fatal error.
+      if ($response->getStatusCode() >= 500) {
+        throw new \Exception('Back-end system is down', APIWrapper::API_DOWN_ERROR_CODE);
+      }
+
       try {
         $json = Json::decode($result);
         if (is_array($json) && !empty($json['message']) && count($json) === 1) {
