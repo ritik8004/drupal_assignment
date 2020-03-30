@@ -236,7 +236,7 @@
                 "CORE-9356 Dynamic landing pages": "patches/facets/CORE-9356-changes-for-facets-pretty-paths.patch",
                 "Improve performance for taxonomy hierarchical facets": "https://www.drupal.org/files/issues/2019-01-30/3005018-8.patch",
                 "Improve facets hierarchy processor performance": "https://www.drupal.org/files/issues/2020-02-12/3095601-8.patch",
-                "CORE-16705 Resolve undefined undex" : "patches/facets/CORE-16705-resolve_undefined_index_error.patch"
+                "CORE-16705 Resolve undefined index" : "patches/facets/CORE-16705-resolve_undefined_index_error.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
@@ -266,7 +266,8 @@
                 "Config set - drush config:set for other than default collections raises exception": "https://www.drupal.org/files/issues/2019-08-20/drush_cset_for_other_than_default_collections-3011276-6.patch",
                 "CORE-11129 - Form states on multivalued select list field": "https://www.drupal.org/files/issues/2019-05-26/states-multiselect-1149078-109.patch",
                 "CORE-6691 - Add traces to module handler code": "patches/core/traces_for_module_implements_cache.patch",
-                "CORE-6525 - Add autofix for missing block plugin issue" : "patches/core/autofix-block-plugin-cache-clear-issue.patch"
+                "CORE-6525 - Add autofix for missing block plugin issue" : "patches/core/autofix-block-plugin-cache-clear-issue.patch",
+                "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -363,7 +364,7 @@
                 "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2019-07-08/3066449-5.patch"
             },
             "drupal/google_tag": {
-                "Cache noscript content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2019-11-04/cache-noscript-3092193-3.patch"
+                "Cache content and avoid using file_get_contents for better performance": "patches/google_tag/3092193.patch"
             },
             "drupal/robotstxt": {
                 "Redirection when using a language prefix path": "https://www.drupal.org/files/issues/2018-04-11/robotstxt-avoid_redirection-2930799-5.patch"

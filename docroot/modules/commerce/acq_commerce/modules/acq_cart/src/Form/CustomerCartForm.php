@@ -4,9 +4,16 @@ namespace Drupal\acq_cart\Form;
 
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\UpdateCartErrorEvent;
+use Drupal\Core\Ajax\AjaxHelperTrait;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Form\FormAjaxException;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class CustomerCartForm.
@@ -14,6 +21,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package Drupal\acq_cart\Form
  */
 class CustomerCartForm extends FormBase {
+
+  use AjaxHelperTrait;
 
   /**
    * Drupal\acq_cart\CartStorageInterface definition.
@@ -41,9 +50,13 @@ class CustomerCartForm extends FormBase {
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   The cart storage.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+   *   Event Dispatcher.
    */
-  public function __construct(CartStorageInterface $cart_storage) {
+  public function __construct(CartStorageInterface $cart_storage,
+                              EventDispatcherInterface $dispatcher) {
     $this->cartStorage = $cart_storage;
+    $this->dispatcher = $dispatcher;
   }
 
   /**
@@ -51,7 +64,8 @@ class CustomerCartForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('acq_cart.cart_storage')
+      $container->get('acq_cart.cart_storage'),
+      $container->get('event_dispatcher')
     );
   }
 
@@ -87,18 +101,18 @@ class CustomerCartForm extends FormBase {
     $form['cart'] = [
       '#type' => 'table',
       '#header' => [
-        t('Product'),
-        t('Quantity'),
-        t('Price'),
+        $this->t('Product'),
+        $this->t('Quantity'),
+        $this->t('Price'),
       ],
-      '#empty' => t('There are no products in your cart yet.'),
+      '#empty' => $this->t('There are no products in your cart yet.'),
     ];
 
     if (empty($items)) {
       return $form;
     }
 
-    foreach ($items as $index => $line_item) {
+    foreach ($items as $line_item) {
       // Ensure object notation.
       $line_item = (object) $line_item;
 
@@ -125,43 +139,43 @@ class CustomerCartForm extends FormBase {
     $totals = $cart->totals();
 
     $form['totals']['sub'] = [
-      'label' => ['#plain_text' => t('Subtotal')],
+      'label' => ['#plain_text' => $this->t('Subtotal')],
       'value' => ['#plain_text' => $totals['sub']],
     ];
 
     if ((float) $totals['tax'] > 0) {
       $form['totals']['tax'] = [
-        'label' => ['#plain_text' => t('Tax')],
+        'label' => ['#plain_text' => $this->t('Tax')],
         'value' => ['#plain_text' => $totals['tax']],
       ];
     }
 
     if ((float) $totals['discount'] != 0) {
       $form['totals']['discount'] = [
-        'label' => ['#plain_text' => t('Discount')],
+        'label' => ['#plain_text' => $this->t('Discount')],
         'value' => ['#plain_text' => $totals['discount']],
       ];
     }
 
     $form['totals']['grand'] = [
-      'label' => ['#plain_text' => t('Grand Total')],
+      'label' => ['#plain_text' => $this->t('Grand Total')],
       'value' => ['#plain_text' => $totals['grand']],
     ];
 
     $form['coupon'] = [
-      '#title' => t('Coupon Code'),
+      '#title' => $this->t('Coupon Code'),
       '#type' => 'textfield',
     ];
 
     $form['actions']['#type'] = 'actions';
     $form['actions']['update'] = [
       '#type' => 'submit',
-      '#value' => t('Update'),
+      '#value' => $this->t('Update'),
     ];
 
     $form['actions']['checkout'] = [
       '#type' => 'submit',
-      '#value' => t('Checkout'),
+      '#value' => $this->t('Checkout'),
       '#button_type' => 'primary',
     ];
 
@@ -176,11 +190,21 @@ class CustomerCartForm extends FormBase {
 
     if (!($form_state->getErrors())) {
       $cartFormItems = $form_state->getValue('cart');
+      $cart = $this->cartStorage->getCart(FALSE);
+
+      if (empty($cart) || empty($cart->items())) {
+        return $this->reloadCartPage($form_state);
+      }
 
       if (!empty($cartFormItems)) {
+        $skus_in_cart = array_column($cart->items(), 'sku');
         $update_cart = [];
 
         foreach ($cartFormItems as $sku => $item) {
+          if (!in_array($sku, $skus_in_cart)) {
+            return $this->reloadCartPage($form_state);
+          }
+
           $update_cart[] = ['sku' => $sku, 'qty' => $item['quantity']];
         }
 
@@ -205,11 +229,37 @@ class CustomerCartForm extends FormBase {
     if ($form_state->getTriggeringElement()['#parents'][0] == 'checkout') {
       $form_state->setRedirect('acq_checkout.form');
     }
+    elseif ($this->isAjax() && $form_state->getTemporaryValue('reload_page')) {
+      $form_state->setTriggeringElement([
+        '#ajax' => [
+          'callback' => [$this, 'reloadCallback'],
+        ],
+      ]);
+
+      throw new FormAjaxException($form, $form_state);
+    }
     else {
       // If we have success message available.
       $msg = !empty($this->successMessage) ? $this->successMessage : $this->t('Your cart has been updated.');
       drupal_set_message($msg);
     }
+  }
+
+  /**
+   * Reload callback for ajax requests.
+   *
+   * @param array $form
+   *   Form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Response.
+   */
+  public function reloadCallback(array $form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
+    $response->addCommand(new RedirectCommand(Url::fromRoute('acq_cart.cart')->toString()));
+    return $response;
   }
 
   /**
@@ -254,9 +304,25 @@ class CustomerCartForm extends FormBase {
       }
 
       // Dispatch event so action can be taken.
-      $dispatcher = \Drupal::service('event_dispatcher');
       $event = new UpdateCartErrorEvent($e);
-      $dispatcher->dispatch(UpdateCartErrorEvent::SUBMIT, $event);
+      $this->dispatcher->dispatch(UpdateCartErrorEvent::SUBMIT, $event);
+    }
+  }
+
+  /**
+   * Reload the page based on current request type.
+   */
+  protected function reloadCartPage(FormStateInterface $form_state) {
+    if ($this->isAjax()) {
+      $form_state->setTemporaryValue('reload_page', TRUE);
+      $form_state->setRebuild(FALSE)
+        ->setProcessInput(FALSE)
+        ->setSubmitted();
+    }
+    else {
+      $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString(), 302);
+      $response->send();
+      exit;
     }
   }
 

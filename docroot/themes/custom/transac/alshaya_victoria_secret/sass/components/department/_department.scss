@@ -1,7 +1,9 @@
 @include breakpoint($only-mobile) {
   .nodetype--advanced_page {
-    .page-standard {
-      margin-top: 1.625rem;
+    &:not([class*="super-category-"]) {
+      .page-standard {
+        margin-top: 1.625rem;
+      }
     }
 
     .page-standard {

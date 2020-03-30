@@ -3,13 +3,11 @@
     visibility: hidden;
     top: 3.125rem;
     padding: 0;
+    box-shadow: none;
 
     html[lang=ar] & {
       padding: 0;
-    }
-
-    &.show-algolia-search-bar {
-      top: 3.125rem !important;
+      top: 3.6875rem;
     }
   }
 
@@ -58,14 +56,18 @@
   }
 
   .algolia-search-cleartext-icon {
-    #{$right}: 0.3rem;
+    #{$right}: 0.5rem;
+
+    @include breakpoint($only-mobile) {
+      top: 0.75rem;
+    }
+
+    @include breakpoint($tablet) {
+      #{$right}: 0.3rem;
+    }
 
     @include breakpoint($desktop) {
       #{$right}: 2rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      top: 0.2125rem;
     }
   }
 
@@ -73,8 +75,8 @@
     color: $algolia-search-clear-text-icon;
 
     @include breakpoint($only-mobile) {
-      top: 0.1125rem;
-      #{$left}: 0;
+      top: 0.75rem;
+      #{$left}: 0.5;
     }
 
     &::before {
@@ -93,19 +95,24 @@
     }
 
     .react-autosuggest__input {
+      padding-top: 0.65625rem;
+      border-radius: 0;
+
       @include breakpoint($only-mobile) {
         margin: 0;
         width: 100%;
         padding-#{$left}: 2.625rem;
       }
 
-      color: $algolia-input-text;
-      font-size: 0.875rem;
-      border-radius: 0;
-      border: 0.0625rem solid $algolia-auto-complete-border;
-      height: 2.5rem;
-      text-transform: none;
-      padding-top: 0.65625rem;
+      @include breakpoint($upto-desktop) {
+        height: 3.5rem;
+        border: 0.5rem solid $algolia-input-box-shadow;
+      }
+
+      @include breakpoint($desktop) {
+        height: 2.5rem;
+        border: 0.0625rem solid $algolia-auto-complete-border;
+      }
 
       &::placeholder {
         font-size: 0.875rem;
@@ -113,33 +120,19 @@
         color: $algolia-input-placeholder-text;
         text-transform: capitalize;
       }
-
-      &--open {
-        border: 0.0625rem solid $algolia-auto-complete-border;
-      }
     }
 
     .ais-InstantSearch__root form {
-      border: 0.5rem solid $algolia-input-box-shadow;
-
       @include breakpoint($tablet) {
         box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
       }
 
       @include breakpoint($desktop) {
         box-shadow: none;
-        border: none;
       }
     }
 
     .react-autosuggest__container {
-      position: relative;
-
-      @include breakpoint($only-mobile) {
-        height: auto;
-        overflow: inherit;
-      }
-
       &::before {
         background-color: transparent;
         height: auto;
@@ -147,33 +140,28 @@
       }
 
       &::after {
+        content: '';
+        background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 10px 7px no-repeat;
+        background-position: center;
+        display: block;
+        width: 2.625rem;
+        height: 2.375rem;
+
         @include breakpoint($only-mobile) {
-          content: '';
-          background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 10px 7px no-repeat;
-          background-position: center;
-          display: block;
-          width: 2.625rem;
-          height: 2.375rem;
-          top: 50%;
-          transform: translateY(-50%);
+          top: 0.5rem;
           #{$right}: unset;
           #{$left}: 0.25rem;
           opacity: 1;
           transition: opacity 0.2s;
         }
 
-        @include breakpoint($tablet) {
+        @include breakpoint($only-tablet) {
           content: none;
         }
 
         @include breakpoint($desktop) {
-          display: block;
-          background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 10px 7px no-repeat;
-          background-position: center;
           border: none;
           text-indent: -9999px;
-          width: 2.625rem;
-          height: 2.375rem;
           top: 50%;
           transform: translateY(-50%);
           #{$right}: 0;
@@ -212,10 +200,6 @@
     }
 
     .react-autosuggest__suggestions-container {
-      @include breakpoint($only-mobile) {
-        position: absolute;
-      }
-
       &--open {
         margin-top: 0;
         border: 1px solid $algolia-auto-complete-border;
@@ -224,7 +208,6 @@
 
         @include breakpoint($only-mobile) {
           border-top: none;
-          position: absolute;
         }
 
         @include breakpoint($desktop) {
@@ -248,8 +231,22 @@
 @include breakpoint($only-mobile) {
   body {
     &:not(.no-sticky-algolia-search-bar) {
+      margin-top: 6.875rem;
+
+      html[lang=ar] & {
+        margin-top: 6.875rem;
+      }
+
       .block-alshaya-algolia-react-autocomplete {
-        padding: 0.5rem 0 0;
+        padding: 0;
+      }
+    }
+
+    &.no-sticky-algolia-search-bar {
+      .block-alshaya-algolia-react-autocomplete {
+        &.show-algolia-search-bar {
+          top: -0.25rem;
+        }
       }
     }
   }

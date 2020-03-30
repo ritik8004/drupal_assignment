@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff6a1571f0aaedc139cda03f77b0ea9b",
+    "content-hash": "6e814911f20567442c3fed76b30686f4",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -992,7 +992,7 @@
             "version": "v2.3.4",
             "source": {
                 "type": "git",
-                "url": "git@github.com:fengyuanchen/cropper.git",
+                "url": "https://github.com/fengyuanchen/cropper.git",
                 "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "dist": {
@@ -5579,6 +5579,7 @@
                     "CORE-11129 - Form states on multivalued select list field": "https://www.drupal.org/files/issues/2019-05-26/states-multiselect-1149078-109.patch",
                     "CORE-6691 - Add traces to module handler code": "patches/core/traces_for_module_implements_cache.patch",
                     "CORE-6525 - Add autofix for missing block plugin issue": "patches/core/autofix-block-plugin-cache-clear-issue.patch",
+                    "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-03-05/2815221-116.patch",
@@ -7143,7 +7144,7 @@
                     "CORE-9356 Dynamic landing pages": "patches/facets/CORE-9356-changes-for-facets-pretty-paths.patch",
                     "Improve performance for taxonomy hierarchical facets": "https://www.drupal.org/files/issues/2019-01-30/3005018-8.patch",
                     "Improve facets hierarchy processor performance": "https://www.drupal.org/files/issues/2020-02-12/3095601-8.patch",
-                    "CORE-16705 Resolve undefined undex": "patches/facets/CORE-16705-resolve_undefined_index_error.patch"
+                    "CORE-16705 Resolve undefined index": "patches/facets/CORE-16705-resolve_undefined_index_error.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7532,7 +7533,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Cache noscript content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2019-11-04/cache-noscript-3092193-3.patch"
+                    "Cache content and avoid using file_get_contents for better performance": "patches/google_tag/3092193.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

@@ -720,9 +720,13 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   protected function paragraphProductCarouselCategory(ParagraphInterface $entity, array $fields) {
     unset($fields['field_category_carousel']);
-    $data = call_user_func_array([$this, 'paragraphPrepareData'], [$entity, $fields]);
+
     // Fetch values from the paragraph.
     $category_id = $entity->get('field_category_carousel')->getValue()[0]['target_id'] ?? NULL;
+    if ($category_id === NULL) {
+      return FALSE;
+    }
+    $data = call_user_func_array([$this, 'paragraphPrepareData'], [$entity, $fields]);
 
     // Generate view all link when text is not empty.
     if (!empty($data['view_all'])) {

@@ -1,9 +1,9 @@
 body {
   @include breakpoint($only-mobile) {
-    margin-top: 4rem;
+    margin-top: 3.5rem;
 
     html[lang=ar] & {
-      margin-top: 4rem;
+      margin-top: 3.5rem;
     }
   }
 
@@ -41,7 +41,7 @@ body {
   a {
     @include breakpoint($upto-desktop) {
       font-size: 0.875rem;
-      line-height: 1.2;
+      line-height: 1.35;
       text-transform: capitalize;
 
       html[lang=ar] & {
@@ -67,14 +67,17 @@ body {
 
     @include breakpoint($upto-desktop) {
       height: auto;
+      margin-#{$left}: 0;
+      margin-#{$right}: 0;
+      padding-#{$left}: 1rem;
     }
 
     &::after {
-      margin-top: -2.5rem;
-      font-size: 2rem;
+      margin-top: -2.3125rem;
+      font-size: 1.75rem;
       width: 1.875rem;
       font-weight: bold;
-      #{$right}: 0.5rem;
+      #{$right}: 0.4375rem;
     }
   }
 

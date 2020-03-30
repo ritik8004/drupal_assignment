@@ -207,6 +207,11 @@ class SelectFreeGiftForm extends FormBase {
           }
         }
 
+        // Do not build select list if it has no options.
+        if (empty($options)) {
+          continue;
+        }
+
         $form['configurations'][$attribute_code] = [
           '#type' => 'select',
           '#title' => $configurable['label'],

@@ -8,3 +8,12 @@ services:
     tags:
       - { name: event_subscriber }
     arguments: ['@config.factory']
+  alshaya_security.session_manager:
+    decorates: session_manager
+    public: false
+    class: Drupal\alshaya_security\Session\AlshayaSessionManager
+    arguments: ['@request_stack', '@database', '@session_manager.metadata_bag', '@session_configuration', '@session_handler']
+    tags:
+      - { name: backend_overridable }
+    calls:
+      - [setWriteSafeHandler, ['@session_handler.write_safe']]

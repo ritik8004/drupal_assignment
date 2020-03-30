@@ -7,10 +7,10 @@ const HierarchicalMenu = (props) => {
   // Setting flag to set 'All' filter to active
   // when no other filters are selected.
   function noActiveFilters(items) {
-    for (let elem of items) {
-        if (elem.isRefined) {
-          return false;
-        }
+    for (let i=0;i<items.length;i++) {
+      if (items[i].isRefined) {
+        return false;
+      }
     }
     return true
   }

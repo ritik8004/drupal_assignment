@@ -21,5 +21,12 @@
     border-radius: 0;
     top: 0;
     #{$right}: 0;
+    #{$left}: auto;
+  }
+
+  &:hover {
+    &::after {
+      background: url(../imgs/icons/back-to-top-hover.svg) no-repeat;
+    }
   }
 }

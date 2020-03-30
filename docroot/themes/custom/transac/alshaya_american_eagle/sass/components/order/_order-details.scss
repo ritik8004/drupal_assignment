@@ -5,3 +5,16 @@
     }
   }
 }
+
+.user__order--detail {
+  .dark {
+    line-height: normal;
+  }
+
+  td {
+    div {
+      margin-bottom: 0.625rem;
+      line-height: normal;
+    }
+  }
+}

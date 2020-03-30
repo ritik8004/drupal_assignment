@@ -43,6 +43,19 @@
       bottom: auto;
     }
   }
+
+  &.pager-yes {
+    .slick-next,
+    .slick-prev {
+      #drupal-modal & {
+        html[lang=ar] & {
+          @include breakpoint($desktop) {
+            transform: rotate(0deg);
+          }
+        }
+      }
+    }
+  }
 }
 
 .owl-prev,
@@ -58,6 +71,13 @@
 }
 
 .cloudzoom {
+  .cloudzoom__herocontainer {
+    @include breakpoint($desktop) {
+      width: calc(100% - (5.75rem + 7.25rem));
+      margin-#{$right}: 6.125rem;
+    }
+  }
+
   .cloudzoom__thumbnails {
     @include breakpoint($desktop) {
       width: 4.875rem;
@@ -66,9 +86,12 @@
 
   &__image {
     .img-wrap {
+      @include breakpoint($tablet) {
+        height: 35rem;
+      }
+
       @include breakpoint($desktop) {
         height: 39.875rem;
-        top: 0.875rem;
       }
     }
   }
@@ -76,9 +99,39 @@
 
 .acq-content-product-modal {
   #lightSlider {
+    @include breakpoint($desktop) {
+      height: 32.875rem;
+    }
+
+    .slick-next {
+      @include breakpoint($desktop) {
+        bottom: 0;
+      }
+    }
+
     &.pager-yes {
       @include breakpoint($only-tablet) {
         margin-top: 1.25rem;
+      }
+    }
+  }
+
+  .cloudzoom {
+    &__image {
+      .img-wrap {
+        @include breakpoint($tablet) {
+          height: 31rem;
+        }
+      }
+    }
+
+    .cloudzoom__thumbnails {
+      #lightSlider {
+        .slick-list {
+          @include breakpoint($desktop) {
+            height: 28.25rem !important;
+          }
+        }
       }
     }
   }

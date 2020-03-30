@@ -13,9 +13,41 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Updates arabic translation strings for Link More - Magazine.
+ */
+function alshaya_mobile_app_update_8069() {
+  $strings = [
+    'READ H&M MAGAZINE' => [
+      'ar' => 'اقرأ مجلة اتش آند ام',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add rest end point for magazine listing.
+ */
+function alshaya_mobile_app_update_8068() {
+  $configs = [
+    'rest.resource.magazine_teasers',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_mobile_app');
+
+  // Re-save config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add rest end point for magazine block.
  */
-function alshaya_mobile_app_update_8016() {
+function alshaya_mobile_app_update_8066() {
   $configs = [
     'rest.resource.magazine_block',
   ];

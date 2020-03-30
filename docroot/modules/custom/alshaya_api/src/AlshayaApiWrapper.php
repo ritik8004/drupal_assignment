@@ -265,9 +265,20 @@ class AlshayaApiWrapper {
         $options['json'] = $data;
         $method = 'POST';
       }
+      elseif ($method == 'GET' && !empty($data)) {
+        $options['query'] = $data;
+      }
+      elseif ($method == 'PUT') {
+        $options['json'] = $data;
+      }
 
       $response = $client->request($method, $url, $options);
       $result = $response->getBody()->getContents();
+
+      // Magento actually down or fatal error.
+      if ($response->getStatusCode() >= 500) {
+        throw new \Exception('Back-end system is down', APIWrapper::API_DOWN_ERROR_CODE);
+      }
 
       try {
         $json = Json::decode($result);
