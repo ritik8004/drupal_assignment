@@ -1,5 +1,5 @@
 diff --git a/src/FacetManager/DefaultFacetManager.php b/src/FacetManager/DefaultFacetManager.php
-index c1ab55b..81b2749 100644
+index c1ab55b..977cf8e 100644
 --- a/src/FacetManager/DefaultFacetManager.php
 +++ b/src/FacetManager/DefaultFacetManager.php
 @@ -237,7 +237,8 @@ class DefaultFacetManager {
@@ -8,7 +8,7 @@ index c1ab55b..81b2749 100644
          foreach ($facet->getProcessorsByStage(ProcessorInterface::STAGE_PRE_QUERY) as $processor) {
 -            $processor_config = $processor_configs[$processor->getPluginDefinition()['id']]['settings'];
 +            $id = $processor->getPluginDefinition()['id'];
-+            $processor_config = $processor_configs[$id]['settings'] ?? [];
++            $processor_config = empty($processor_configs[$id]['settings']) ? [] : $processor_configs[$id]['settings'];
              $processor_config['facet'] = $facet;
              /** @var PreQueryProcessorInterface $pre_query_processor */
              $pre_query_processor = $this->processorPluginManager->createInstance($processor->getPluginDefinition()['id'], $processor_config);
