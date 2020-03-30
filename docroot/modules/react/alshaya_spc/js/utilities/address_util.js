@@ -12,6 +12,7 @@ import {
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import { extractFirstAndLastName } from './cart_customer_util';
+import smoothScrollTo from './smoothScroll';
 
 /**
  * Get the address list of the current logged in user.
@@ -423,6 +424,12 @@ export const checkoutAddressProcess = (e) => {
   if (notValidAddress) {
     // Remove the loader.
     removeFullScreenLoader();
+    // Scroll to first error element.
+    const errorElement = document.querySelector('.delivery-address-fields > div > div.error:not(:empty)');
+    if (errorElement !== undefined && errorElement !== null) {
+      const errorElementParentClass = `.${errorElement.parentElement.className}`;
+      smoothScrollTo(errorElementParentClass);
+    }
     return;
   }
 
