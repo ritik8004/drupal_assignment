@@ -254,7 +254,7 @@ class MagazineDetailPage extends ResourceBase {
           }
         }
         if (!empty($res)) {
-          $response_data['Paragraphs'][] = $res;
+          $response_data['magazine_paragraphs'][] = $res;
           unset($res);
         }
       }
@@ -263,9 +263,10 @@ class MagazineDetailPage extends ResourceBase {
       foreach ($magazine_shop as $value) {
         $sku_data = [];
         $node = $this->sku_manager->getDisplayNode($value['value']);
-        $sku_data = $this->mobileAppUtility->getLightProductFromNid($node->get('nid')->getValue()[0]['value'], $this->mobileAppUtility->currentLanguage());
-        $response_data['shop_the_story']['items'][] = $sku_data;
-
+        if (is_object($node)) {
+          $sku_data = $this->mobileAppUtility->getLightProductFromNid($node->get('nid')->getValue()[0]['value'], $this->mobileAppUtility->currentLanguage());
+          $response_data['shop_the_story']['items'][] = $sku_data;
+        }
       }
       if (array_key_exists('sku_data', $response_data)) {
         $response_data['sku_data']['label'] = $node->field_magazine_shop_the_story->getFieldDefinition()->getLabel();
