@@ -35,13 +35,13 @@
       Drupal.alshayaSpc.maps_api_loading = true;
       // Google Maps isn't loaded so lazy load Google Maps.
 
-      if (typeof drupalSettings.map.google_map_url !== 'undefined') {
-        $.getScript(drupalSettings.map.google_map_url)
+      if (typeof drupalSettings.map.google_api_key !== 'undefined') {
+        $.getScript('https://maps.googleapis.com/maps/api/js?key=' + drupalSettings.map.google_api_key + '&libraries=places&language=' +  drupalSettings.path.currentLanguage)
           .done(function () {
             Drupal.alshayaSpc.maps_api_loading = false;
           });
       } else {
-        Drupal.logJavascriptError('Alshaya spc - Google map url not set.');
+        Drupal.logJavascriptError('Google map url not set.');
       }
     }
   };

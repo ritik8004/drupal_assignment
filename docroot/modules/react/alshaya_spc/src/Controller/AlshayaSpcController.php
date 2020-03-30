@@ -235,10 +235,8 @@ class AlshayaSpcController extends ControllerBase {
     $country_code = _alshaya_custom_get_site_level_country_code();
 
     $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
-    $cache_tags = Cache::mergeTags($cache_tags, $store_finder_config->getCacheTags());
-
-    $google_map_key = $this->configFactory->get('geolocation.settings')->get('google_map_api_key');
-    $langcode = $this->languageManager()->getCurrentLanguage(LanguageInterface::TYPE_INTERFACE)->getId();
+    $geolocation_config = $this->configFactory->get('geolocation.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, array_merge($store_finder_config->getCacheTags(), $geolocation_config->getCacheTags()));
 
     $build = [
       '#theme' => 'spc_checkout',
@@ -261,7 +259,7 @@ class AlshayaSpcController extends ControllerBase {
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           'google_field_mapping' => $this->configFactory->get('alshaya_spc.google_mapping')->get('mapping'),
           'map' => [
-            'google_map_url' => 'https://maps.googleapis.com/maps/api/js?key=' . $google_map_key . '&libraries=places&language=' . $langcode,
+            'google_api_key' => $geolocation_config->get('google_map_api_key'),
             'center' => $store_finder_config->get('country_center'),
             'placeholder' => $store_finder_config->get('store_search_placeholder'),
             'map_marker' => $store_finder_config->get('map_marker'),
