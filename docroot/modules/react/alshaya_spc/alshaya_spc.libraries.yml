@@ -59,3 +59,11 @@ checkout_live_kit:
     gpl-compatible: FALSE
   js:
     https://cdn.checkout.com/js/checkoutkit.js: { type: external }
+
+googlemapapi:
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/drupalSettings
+  js:
+    js/google-maps-api.js: {}

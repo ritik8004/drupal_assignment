@@ -6,7 +6,6 @@
  */
 
 use Drupal\block\Entity\Block;
-use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\acq_sku\Entity\SKU;
@@ -32,29 +31,6 @@ function alshaya_spc_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
-}
-
-/**
- * Implements hook_library_info_build().
- */
-function alshaya_spc_library_info_build() {
-  $libraries = [];
-  $google_map_key = \Drupal::config('geolocation.settings')->get('google_map_api_key');
-  $langcode = \Drupal::languageManager()->getCurrentLanguage(LanguageInterface::TYPE_INTERFACE)->getId();
-  $gmap_js_url = 'https://maps.googleapis.com/maps/api/js?key=' . $google_map_key . '&libraries=places&language=' . $langcode;
-  $libraries['spc.google_map'] = [
-    'js' => [
-      $gmap_js_url => [
-        'type' => 'external',
-        'attributes' => [
-          'defer' => TRUE,
-          'async' => TRUE,
-        ],
-      ],
-    ],
-  ];
-
-  return $libraries;
 }
 
 /**
