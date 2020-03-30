@@ -27,13 +27,13 @@ body {
         }
 
         @include breakpoint($only-tablet) {
-          height: 28.3rem !important;
+          height: auto !important;
           padding-top: 1.875rem;
         }
 
         .content__main {
-          @include breakpoint($tablet) {
-            height: 24.5rem;
+          @include breakpoint($only-tablet) {
+            height: auto;
           }
         }
 
@@ -122,10 +122,6 @@ body {
         .ui-dialog-content#drupal-modal {
           @include breakpoint($desktop) {
             height: 42rem !important;
-          }
-
-          @include breakpoint($only-tablet) {
-            height: 33rem !important;
           }
         }
       }
