@@ -105,8 +105,8 @@ alshaya_spc.exception_type:
 
 alshaya_spc.refresh_stock:
   path: '/spc/refresh-stock'
-    defaults:
-      _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcStockController::refreshStock'
-    methods: [POST]
-    requirements:
-      _permission: 'access content'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcStockController::refreshStock'
+  methods: [POST]
+  requirements:
+    _permission: 'access content'
