@@ -32,6 +32,10 @@
         overflow-y: auto;
         background: $spc-checkout-sidebar-bg;
 
+        &.block-overflow {
+          overflow-y: hidden;
+        }
+
         @include breakpoint($only-mobile) {
           float: none;
 
