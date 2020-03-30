@@ -477,6 +477,22 @@ $magentos = [
       'store_id' => ['en' => 22, 'ar' => 19],
     ],
   ],
+  'aeo_prod' => [
+    'url' => 'https://aeo.store.alshaya.com.c.tw5uijob6hir2.ent.magento.cloud',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
+    ],
+  ],
   'default' => [
     'kw' => [
       'magento_lang_prefix' => [
