@@ -7,6 +7,7 @@
 
     html[lang=ar] & {
       padding: 0;
+      top: 3.6875rem;
     }
   }
 
@@ -231,6 +232,10 @@
   body {
     &:not(.no-sticky-algolia-search-bar) {
       margin-top: 6.875rem;
+
+      html[lang=ar] & {
+        margin-top: 6.875rem;
+      }
 
       .block-alshaya-algolia-react-autocomplete {
         padding: 0;
