@@ -56,9 +56,11 @@ export default class ParentAreaSelect extends React.Component {
       // Hide contact info and save button on filter list show.
       document.getElementById('spc-checkout-contact-info').classList.add('visually-hidden');
       document.getElementById('address-form-action').classList.add('visually-hidden');
+      document.getElementsByClassName('spc-address-form-sidebar')[0].classList.add('block-overflow');
     } else {
       document.getElementById('spc-checkout-contact-info').classList.remove('visually-hidden');
       document.getElementById('address-form-action').classList.remove('visually-hidden');
+      document.getElementsByClassName('spc-address-form-sidebar')[0].classList.remove('block-overflow');
     }
   }
 

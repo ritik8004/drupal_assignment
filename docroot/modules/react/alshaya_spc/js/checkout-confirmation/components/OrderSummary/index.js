@@ -49,8 +49,8 @@ const OrderSummary = () => {
 
   // Get Billing info.
   const billingAddress = [];
+  let customerNameBilling = '';
   const billingInfo = drupalSettings.order_details.billing;
-  const customerNameBilling = `${billingInfo.given_name} ${billingInfo.family_name}`;
   if (billingInfo !== null) {
     billingAddress.push(billingInfo.country);
     if (billingInfo.area_parent_display !== undefined) {
@@ -68,6 +68,8 @@ const OrderSummary = () => {
     if (billingInfo.dependent_locality !== undefined) {
       billingAddress.push(billingInfo.dependent_locality);
     }
+
+    customerNameBilling = `${billingInfo.given_name} ${billingInfo.family_name}`;
   }
 
   return (
@@ -100,10 +102,13 @@ const OrderSummary = () => {
           <ConditionalView condition={customerAddress.length > 0}>
             <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={customerAddress.join(', ')} />
           </ConditionalView>
-          <ConditionalView condition={storeAddress.length > 0}>
-            <OrderSummaryItem type="cnc" label={Drupal.t('collection store')} name={storeInfo.store_name} address={storeAddress.join(', ')} />
-            <OrderSummaryItem label={Drupal.t('collection by')} value={customerName} />
-          </ConditionalView>
+          {(storeAddress.length > 0 && storeInfo !== undefined)
+            && (
+              <>
+                <OrderSummaryItem type="cnc" label={Drupal.t('collection store')} name={storeInfo.store_name} address={storeAddress.join(', ')} />
+                <OrderSummaryItem label={Drupal.t('collection by')} value={customerName} />
+              </>
+            )}
           <ConditionalView condition={billingAddress.length > 0}>
             <OrderSummaryItem type="address" label={Drupal.t('billing address')} name={customerNameBilling} address={billingAddress.join(', ')} />
           </ConditionalView>
