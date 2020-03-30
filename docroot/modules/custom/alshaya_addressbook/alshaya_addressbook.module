@@ -226,7 +226,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       continue;
     }
 
-    if (isset($mapping[$form_item['attribute_code']]) && isset($sort_order[$form_item['attribute_code']])) {
+    if (isset($mapping[$form_item['attribute_code']]) && isset($sort_order[$mapping[$form_item['attribute_code']]])) {
       $field_code = $mapping[$form_item['attribute_code']];
 
       // Set access for all form items.
