@@ -6,6 +6,8 @@
 
   @include breakpoint($only-tablet) {
     display: none !important;
+    top: 3.4375rem;
+    bottom: auto;
 
     &.show-algolia-search-bar {
       display: block !important;
@@ -18,7 +20,7 @@
 
   .algolia-search-cleartext-icon {
     @include breakpoint($only-mobile) {
-      top: 0.75rem;
+      top: 0.35rem;
       #{$right}: 0.5rem;
     }
 
@@ -105,7 +107,7 @@
         }
 
         @include breakpoint($only-mobile) {
-          top: 0.25rem;
+          top: 0.15rem;
           #{$right}: unset;
           #{$left}: 0.5rem;
           background: none;
@@ -172,7 +174,7 @@
 
     @include breakpoint($upto-desktop) {
       border: 0.5rem solid $algolia-input-border-mobile;
-      height: 3.5rem;
+      height: 3rem;
     }
 
     &::placeholder {
@@ -219,7 +221,7 @@
 @include breakpoint($only-mobile) {
   html[lang=ar] {
     .block-alshaya-algolia-react-autocomplete {
-      top: 3rem;
+      top: 2.9375rem;
       padding: 0;
     }
   }
@@ -235,15 +237,13 @@ body {
       }
     }
 
-    &:not(.no-sticky-algolia-search-bar) .branding__menu {
-      @include breakpoint($only-mobile) {
-        position: fixed !important;
-      }
-    }
-
     &:not(.no-sticky-algolia-search-bar) {
       @include breakpoint($only-mobile) {
-        margin-top: 6.4125rem;
+        margin-top: 5.9375rem;
+
+        html[lang=ar] & {
+          margin-top: 5.9375rem;
+        }
       }
     }
   }
@@ -258,7 +258,7 @@ body {
     .algolia-search-back-icon {
       @include breakpoint($only-mobile) {
         #{$left}: 0.5rem;
-        top: 0.75rem;
+        top: 0.35rem;
       }
     }
   }
@@ -269,7 +269,7 @@ body {
     .show-all-filters-algolia,
     .block-facet-blockcategory-facet-search {
       @include breakpoint($only-mobile) {
-        top: 3.5rem;
+        top: 3rem;
       }
     }
   }
