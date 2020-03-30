@@ -9,13 +9,17 @@
 }
 
 .c-facet.c-accordion .c-accordion__title {
-  @include breakpoint($desktop) {
-    @include facet-arrow(after, down);
+  @include facet-arrow(after, down) {
+    top: 1.25rem;
 
-    &.active {
-      &::after {
-        transform: translateY(0%) rotate(270deg);
-      }
+    @include breakpoint($upto-desktop) {
+      #{$right}: 1rem;
+    }
+  }
+
+  &.active {
+    &::after {
+      transform: rotate(270deg);
     }
   }
 }
