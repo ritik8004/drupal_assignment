@@ -41,7 +41,7 @@
             Drupal.alshayaSpc.maps_api_loading = false;
           });
       } else {
-        Drupal.logJavascriptError('Google map url not set.');
+        Drupal.logJavascriptError('checkout', 'Google map url could not be loaded.');
       }
     }
   };
