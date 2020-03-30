@@ -12,7 +12,7 @@
 
         &.active {
           &::after {
-            transform: translateY(0%) rotate(270deg);
+            transform: rotate(270deg);
           }
         }
       }
