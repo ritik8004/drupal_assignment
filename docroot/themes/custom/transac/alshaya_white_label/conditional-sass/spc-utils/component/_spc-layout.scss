@@ -105,3 +105,13 @@
     padding-top: 0;
   }
 }
+
+.alias--checkout,
+.alias--checkout-confirmation {
+  .c-post-content {
+    .l-container {
+      max-width: 80.25rem;
+      margin: auto;
+    }
+  }
+}
