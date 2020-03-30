@@ -249,7 +249,7 @@ $magentos = [
     ],
   ],
   'vs_uat' => [
-    'url' => 'https://vs-uat.store.alshaya.com',
+    'url' => 'https://vs-uat2.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'x7perq2khr9t52qeg2rv6ly5uakgv5lw',
       'consumer_secret' => 'l65u29tw675glfm3rmfps1gliqlwr6m1',
@@ -299,7 +299,7 @@ $magentos = [
     ],
   ],
   'bbw_uat' => [
-    'url' => 'https://staging-bbw.store.alshaya.com',
+    'url' => 'https://staging-bbw2.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'nilvx16kpllrdfevec15aer2u1ahusto',
       'consumer_secret' => '4rin9lodbf263w9sdc9hmei8i67p0mhc',
