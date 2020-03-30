@@ -726,23 +726,24 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Magento address array with empty values.
    */
   public function getAddressStructureWithEmptyValues($empty_value = NULL) {
-    $empty_value = isset($empty_value) ? $empty_value : self::INVISIBLE_CHARACTER;
-
-    $magento_address = [];
-
-    $magento_address['firstname'] = $empty_value;
-    $magento_address['lastname'] = $empty_value;
-    $magento_address['telephone'] = $empty_value;
-    $magento_address['street'] = $empty_value;
-    $magento_address['extension']['address_apartment_segment'] = $empty_value;
-    $magento_address['extension']['address_area_segment'] = $empty_value;
-    $magento_address['extension']['address_building_segment'] = $empty_value;
-    $magento_address['extension']['address_block_segment'] = $empty_value;
-    $magento_address['extension']['area'] = $empty_value;
-    $magento_address['extension']['governate'] = $empty_value;
-    $magento_address['extension']['address_city_segment'] = $empty_value;
-    $magento_address['country_id'] = _alshaya_custom_get_site_level_country_code();
-    $magento_address['city'] = $empty_value;
+    static $magento_address;
+    if (empty($magento_address)) {
+      $empty_value = isset($empty_value) ? $empty_value : self::INVISIBLE_CHARACTER;
+      $magento_address = [];
+      $magento_address['firstname'] = $empty_value;
+      $magento_address['lastname'] = $empty_value;
+      $magento_address['telephone'] = $empty_value;
+      $magento_address['street'] = $empty_value;
+      $magento_address['extension']['address_apartment_segment'] = $empty_value;
+      $magento_address['extension']['address_area_segment'] = $empty_value;
+      $magento_address['extension']['address_building_segment'] = $empty_value;
+      $magento_address['extension']['address_block_segment'] = $empty_value;
+      $magento_address['extension']['area'] = $empty_value;
+      $magento_address['extension']['governate'] = $empty_value;
+      $magento_address['extension']['address_city_segment'] = $empty_value;
+      $magento_address['country_id'] = _alshaya_custom_get_site_level_country_code();
+      $magento_address['city'] = $empty_value;
+    }
 
     return $magento_address;
   }
