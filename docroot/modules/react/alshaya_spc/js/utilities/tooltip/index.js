@@ -5,9 +5,11 @@ const ToolTip = ({ children, enable, question }) => {
   if (enable) {
     return (
       <div className={`tooltip-anchor${iconClass}`}>
-        <div className="tooltip-box">
-          {children}
-        </div>
+        <div
+          className="tooltip-box"
+          /* eslint-disable react/no-danger */
+          dangerouslySetInnerHTML={{ __html: children }}
+        />
       </div>
     );
   }
