@@ -262,14 +262,14 @@ class MagazineDetailPage extends ResourceBase {
     if ($node->hasField('field_magazine_shop_the_story') && !empty($magazine_shop = $node->get('field_magazine_shop_the_story')->getValue())) {
       foreach ($magazine_shop as $value) {
         $sku_data = [];
-        $node = $this->sku_manager->getDisplayNode($value['value']);
-        if (is_object($node)) {
-          $sku_data = $this->mobileAppUtility->getLightProductFromNid($node->get('nid')->getValue()[0]['value'], $this->mobileAppUtility->currentLanguage());
+        $node_data = $this->sku_manager->getDisplayNode($value['value']);
+        if (is_object($node_data)) {
+          $sku_data = $this->mobileAppUtility->getLightProductFromNid($node_data->get('nid')->getValue()[0]['value'], $this->mobileAppUtility->currentLanguage());
           $response_data['shop_the_story']['items'][] = $sku_data;
         }
       }
-      if (array_key_exists('sku_data', $response_data)) {
-        $response_data['sku_data']['label'] = $node->field_magazine_shop_the_story->getFieldDefinition()->getLabel();
+      if (array_key_exists('shop_the_story', $response_data)) {
+        $response_data['shop_the_story']['label'] = $node->field_magazine_shop_the_story->getFieldDefinition()->getLabel();
       }
     }
     $response = new ResourceResponse($response_data);
