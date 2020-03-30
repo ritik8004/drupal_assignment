@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 
 const ToolTip = ({ children, enable, question }) => {
   const iconClass = question === true ? ' question' : ' info';
@@ -6,7 +7,7 @@ const ToolTip = ({ children, enable, question }) => {
     return (
       <div className={`tooltip-anchor${iconClass}`}>
         <div className="tooltip-box">
-          {children}
+          {parse(children)}
         </div>
       </div>
     );
