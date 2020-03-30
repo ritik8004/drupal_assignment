@@ -209,7 +209,7 @@
   h3 {
     padding-#{$left}: 0;
     font-size: 1.125rem;
-    font-weight: 300;
+    text-transform: uppercase;
 
     @include breakpoint($tablet) {
       padding: 0 12%;
