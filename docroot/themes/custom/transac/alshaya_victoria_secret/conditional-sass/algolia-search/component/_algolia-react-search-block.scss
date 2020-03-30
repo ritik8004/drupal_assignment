@@ -106,6 +106,8 @@
 
       @include breakpoint($desktop) {
         padding-#{$left}: 2rem;
+        height: 2.375rem;
+        border: none;
       }
 
       &::placeholder {
@@ -211,6 +213,10 @@
     .react-autosuggest__suggestions-container {
       &--open {
         border-radius: 0;
+
+        @include breakpoint($desktop) {
+          border: 1px solid $algolia-auto-complete-border;
+        }
       }
     }
   }
