@@ -5,11 +5,19 @@
         @include breakpoint($desktop) {
           top: 0.5rem;
           #{$left}: 1.5rem;
+          #{$right}: inherit;
         }
 
         @include breakpoint($only-mobile) {
           top: 0.5rem;
           #{$left}: 0.5rem;
+          #{$right}: inherit;
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 0.5rem;
+          #{$left}: 0.9375rem;
+          #{$right}: inherit;
         }
       }
 
@@ -17,11 +25,19 @@
         @include breakpoint($desktop) {
           top: 0.5rem;
           #{$right}: 1.5rem;
+          #{$left}: inherit;
         }
 
         @include breakpoint($only-mobile) {
           top: 0.5rem;
           #{$right}: 0.5rem;
+          #{$left}: inherit;
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 0.5rem;
+          #{$right}: 0.9375rem;
+          #{$left}: inherit;
         }
       }
     }
@@ -59,6 +75,22 @@
           }
         }
       }
+    }
+
+    &.top {
+      &-right {
+        @include breakpoint($only-tablet) {
+          #{$left}: inherit;
+        }
+      }
+    }
+  }
+}
+
+.acq-content-product-modal {
+  .labels-container {
+    .label {
+      z-index: 5;
     }
   }
 }

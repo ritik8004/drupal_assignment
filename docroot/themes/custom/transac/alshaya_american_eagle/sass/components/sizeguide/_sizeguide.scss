@@ -19,3 +19,20 @@
     color: $pdp_sizeguide_link;
   }
 }
+
+.nodetype--acq_product .ui-dialog {
+  #drupal-modal {
+    @include breakpoint($tablet) {
+      overflow-y: auto;
+      padding-bottom: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      height: 42rem !important;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    padding: calc((100vh - 49rem) / 2) calc((100vw - 45rem) / 2);
+  }
+}
