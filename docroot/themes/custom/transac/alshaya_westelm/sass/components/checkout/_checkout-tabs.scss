@@ -51,10 +51,6 @@
     }
 
     .tab.active--tab--head {
-      h2 {
-        font-weight: 600;
-      }
-
       p {
         color: $checkout_tab_active_description !important;
       }
