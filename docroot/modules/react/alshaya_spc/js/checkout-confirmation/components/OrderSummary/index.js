@@ -31,7 +31,6 @@ const OrderSummary = () => {
 
   let etaLabel = Drupal.t('expected delivery within');
   const storeAddress = [];
-  let storeHours = [];
   const storeInfo = drupalSettings.order_details.delivery_type_info.store;
   if (storeInfo !== undefined) {
     storeAddress.push(storeInfo.store_name);
@@ -55,9 +54,6 @@ const OrderSummary = () => {
     }
     if (storeInfo.store_phone !== undefined) {
       storeAddress.push(storeInfo.store_phone);
-    }
-    if (drupalSettings.order_details.delivery_type_info.store.store_open_hours !== undefined) {
-      storeHours = drupalSettings.order_details.delivery_type_info.store.store_open_hours;
     }
     etaLabel = Drupal.t('available instore within');
   }
