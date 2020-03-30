@@ -777,6 +777,24 @@ class Cart {
         $this->cancelCartReservation($e->getMessage());
       }
 
+      // Check the exception type from drupal.
+      $exception_type = $this->drupal->getExceptionType($e->getMessage());
+      // If exception type is of stock limit or of quantity limit,
+      // refresh the stock for the sku items in cart from MDC to drupal.
+      if ($exception_type['status'] == TRUE
+        && in_array($exception_type['type'], ['OOS', 'quantity_limit'])) {
+        // Get cart object.
+        $cart = $this->getCart();
+        // If cart is available and cart has item.
+        if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
+          $status = $this->drupal->refreshStock($cart['cart']);
+          if ($status['status'] == TRUE) {
+            // Return cart object.
+            return $cart;
+          }
+        }
+      }
+
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }

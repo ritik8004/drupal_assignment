@@ -57,8 +57,20 @@ class AlshayaSpcStockController extends ControllerBase {
       throw new BadRequestHttpException($this->t('Missing required parameters'));
     }
 
+    $response = [
+      'status' => FALSE,
+    ];
+
+    try {
+      $this->spcStockHelper->refreshStockForProductsInCart($data);
+      $response['status'] = TRUE;
+    }
+    catch (\Exception $e) {
+      // Do nothing.
+    }
+
     // @TODO: Check cacheability.
-    $json_response = new JsonResponse(['status' => TRUE]);
+    $json_response = new JsonResponse($response);
     $json_response->setMaxAge(0);
     return $json_response;
   }

@@ -194,4 +194,58 @@ class Drupal {
     return json_decode($result, TRUE);
   }
 
+  /**
+   * Check the exception type by message from drupal.
+   *
+   * @param string $message
+   *   Exception message to check.
+   *
+   * @return mixed
+   *   Exception type.
+   */
+  public function getExceptionType(string $message) {
+    $client = $this->drupalInfo->getDrupalApiClient();
+    $url = sprintf('/%s/spc/exception-type', $this->drupalInfo->getDrupalLangcode());
+    $response = $client->request('GET', $url, [
+      'headers' => [
+        'Host' => $this->drupalInfo->getDrupalBaseUrl(),
+      ],
+      'query' => [
+        'message' => $message,
+      ],
+    ]);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
+  /**
+   * Trigger refresh stock for cart items.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return mixed
+   *   Response.
+   */
+  public function refreshStock(array $cart) {
+    $client = $this->drupalInfo->getDrupalApiClient();
+    $url = sprintf('/%s/spc/refresh-stock', $this->drupalInfo->getDrupalLangcode());
+
+    try {
+      $response = $client->request('POST', $url, [
+        'headers' => [
+          'Host' => $this->drupalInfo->getDrupalBaseUrl(),
+        ],
+        'form_params' => [
+          'data' => $cart,
+        ],
+      ]);
+      $result = $response->getBody()->getContents();
+      return json_decode($result, TRUE);
+    }
+    catch (\Exception $e) {
+      return ['status' => FALSE];
+    }
+  }
+
 }
