@@ -196,7 +196,7 @@ class AlshayaApiCommands extends DrushCommands {
       $this->ingestApiWrapper->productFullSync(
         $store_id,
         $langcode,
-        $chunk,
+        implode(',', $chunk),
         NULL,
         $page_size
       );
