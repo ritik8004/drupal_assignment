@@ -28,6 +28,10 @@
   &.area-options-count-0 {
     position: relative;
 
+    div.error {
+      display: none
+    }
+
     &::before {
       content: '';
       position: absolute;
