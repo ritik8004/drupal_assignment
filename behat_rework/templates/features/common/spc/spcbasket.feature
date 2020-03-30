@@ -58,13 +58,14 @@ Feature: Test basket page
   @desktop
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for the page to load
     And I wait 10 seconds
+    And I wait for the page to load
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     Then the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile" should exist
     And the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile .spc-product-image img" should exist

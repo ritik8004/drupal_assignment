@@ -47,3 +47,4 @@ variables:
   language_continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'ar'
   language_short: 'ar'
+  area_option: 'Alexandria'

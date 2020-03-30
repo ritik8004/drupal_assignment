@@ -211,8 +211,7 @@ class FeatureContext extends CustomMinkContext
       throw new \Exception('No products are listed on PLP');
     }
     foreach ($all_products as $item) {
-      $item_status = count($item->find('css', 'div.out-of-stock span'));
-      if ($item_status) {
+      if ($item->find('css', 'div.out-of-stock span')) {
         $total_products--;
         if (!$total_products) {
           throw new \Exception('All products are out of stock on PLP');
@@ -239,8 +238,7 @@ class FeatureContext extends CustomMinkContext
       throw new \Exception('Search passed, but search results were empty');
     }
     foreach ($all_products as $item) {
-      $item_status = count($item->find('css', 'div.out-of-stock span'));
-      if ($item_status) {
+      if ($item->find('css', 'div.out-of-stock span')) {
         $total_products--;
         if (!$total_products) {
           throw new \Exception('All products are out of stock');
@@ -1596,7 +1594,7 @@ class FeatureContext extends CustomMinkContext
   public function iClickOnElement($css_selector)
   {
     $element = $this->getSession()->getPage()->find("css", $css_selector);
-    if (count($element) > 0) {
+    if ($element) {
       $element->click();
     } else {
       throw new Exception("Element " . $css_selector . " not found on " . $this->getSession()->getCurrentUrl());
@@ -1781,6 +1779,13 @@ class FeatureContext extends CustomMinkContext
     $original_price = $page->find('css', '#spc-cart .spc-main .spc-content .spc-cart-item .spc-product-tile .spc-product-container .spc-product-price .price-amount')->getHtml();
     $original_price = floatval($original_price);
     $double_price = floatval($original_price) * 2;
+
+    if ($page->find('css', '.spc-sidebar .spc-order-summary-block .totals .discount-total')) {
+      $discount_parent = $page->find('css', '.spc-sidebar .spc-order-summary-block .totals .discount-total')->getParent();
+      $discount = abs($discount_parent->find('css', '.value .price .price-amount')->getHtml());
+      $double_price = $double_price - floatval($discount);
+    }
+
     $expected_price = $page->find('css', '.spc-sidebar .spc-order-summary-block .hero-total .value .price .price-amount')->getText();
     $expected_price = floatval($expected_price);
 
@@ -1855,6 +1860,53 @@ class FeatureContext extends CustomMinkContext
 
     if (strpos($actual, $expected) === FALSE) {
       throw new \Exception(sprintf('Current page is "%s", but "%s" expected.', $actual, $expected));
+    }
+  }
+
+  /**
+   * @When I select :option from the dropdown filter :css
+   */
+  public function iSelectOptionFromTheFilters($option, $filter)
+  {
+    $page = $this->getSession()->getPage();
+    $element = $page->find('css', "$filter");
+    if (!empty($element)) {
+      $element->click();
+      $this->getSession()->executeScript('var id = jQuery("label:contains(\''. $option . '\')").attr(\'for\'); document.getElementById(id).click();');
+      return;
+    }
+    throw new \Exception(sprintf('Element %s is not found on page.', $filter));
+  }
+
+  /**
+   * @Then I click jQuery :element element on page
+   */
+  public function iClickJqueryElementOnPage($element) {
+    $this->getSession()->executeScript("jQuery('$element').trigger('click');");
+  }
+
+  /**
+   * Fills in form fields with provided table
+   * Example: When fill in billing address with following:
+   *              | username | bruceWayne |
+   *              | password | iLoveBats123 |
+   *
+   * @When /^(?:|I )fill in billing address with following:$/
+   */
+  public function fillBillingFields(TableNode $fields)
+  {
+    foreach ($fields->getRowsHash() as $field => $value) {
+      if ($value) {
+        if ($field == "spc-area-select-selected-city" || $field == "spc-area-select-selected") {
+          $this->iClickJqueryElementOnPage(".spc-address-form-guest-overlay .spc-address-form-content .spc-address-add .delivery-address-fields #$field");
+          $this->iWaitSeconds(5);
+          $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
+          $this->iWaitSeconds(2);
+        }
+        else {
+          $this->getSession()->getPage()->fillField($field, $value);
+        }
+      }
     }
   }
 }
