@@ -136,7 +136,7 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
     // Log notice.
     $this->logger->notice($exception->getMessage());
 
-    if (_alshaya_acm_is_out_of_stock_exception($exception)) {
+    if (_alshaya_acm_is_out_of_stock_exception($exception->getMessage())) {
       $this->cartHelper->refreshStockForProductsInCart();
 
       // Try to remove again (only once) after removing OOS items.

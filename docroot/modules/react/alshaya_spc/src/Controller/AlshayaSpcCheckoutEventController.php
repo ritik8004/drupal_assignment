@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
-use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -47,6 +47,13 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
+   * SPC stock helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper
+   */
+  protected $spcStockHelper;
+
+  /**
    * AlshayaSpcOrderController constructor.
    *
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
@@ -57,17 +64,21 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
    *   Current User service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper $spc_stock_helper
+   *   SPC stock helper.
    */
   public function __construct(
     OrdersManager $orders_manager,
     LoggerChannelFactoryInterface $logger_factory,
     AccountProxyInterface $current_user,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    AlshayaSpcStockHelper $spc_stock_helper
   ) {
     $this->ordersManager = $orders_manager;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
+    $this->spcStockHelper = $spc_stock_helper;
   }
 
   /**
@@ -78,7 +89,8 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
       $container->get('alshaya_acm_customer.orders_manager'),
       $container->get('logger.factory'),
       $container->get('current_user'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('alshaya_spc.stock_helper')
     );
   }
 
@@ -118,7 +130,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
         ]);
 
         // Refresh stock for products in cart.
-        $this->refreshStockForProductsInCart($cart);
+        $this->spcStockHelper->refreshStockForProductsInCart($cart);
 
         $account = $this->alshayaGetCustomerFromSession();
         if ($account) {
@@ -139,34 +151,6 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
     }
 
     return new JsonResponse(['success' => TRUE]);
-  }
-
-  /**
-   * Refresh stock cache and Drupal cache of products in cart.
-   */
-  protected function refreshStockForProductsInCart($cart = NULL) {
-    $processed_parents = [];
-
-    // Still if empty, simply return.
-    if (empty($cart)) {
-      return;
-    }
-
-    foreach ($cart['items'] ?? [] as $item) {
-      if ($sku_entity = SKU::loadFromSku($item['sku'])) {
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-        $plugin = $sku_entity->getPluginInstance();
-        $parent = $plugin->getParentSku($sku_entity);
-
-        // Refresh Current Sku stock.
-        $sku_entity->refreshStock();
-        // Refresh parent stock once if exists for cart items.
-        if ($parent instanceof SKU && !in_array($parent->getSku(), $processed_parents)) {
-          $processed_parents[] = $parent->getSku();
-          $parent->refreshStock();
-        }
-      }
-    }
   }
 
   /**

@@ -48,3 +48,6 @@ services:
       - '@config.factory'
       - '@alshaya_stores_finder_transac.utility'
       - '@renderer'
+
+  alshaya_spc.stock_helper:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper

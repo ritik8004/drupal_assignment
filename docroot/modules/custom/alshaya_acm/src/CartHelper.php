@@ -291,7 +291,7 @@ class CartHelper {
         '@function' => $function,
       ]);
 
-      if (_alshaya_acm_is_out_of_stock_exception($e)) {
+      if (_alshaya_acm_is_out_of_stock_exception($e->getMessage())) {
         if ($cart = $this->cartStorage->getCart(FALSE)) {
           $this->refreshStockForProductsInCart($cart);
           $cart->setCheckoutStep('');
