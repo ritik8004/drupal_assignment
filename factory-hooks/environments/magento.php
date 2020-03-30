@@ -249,7 +249,7 @@ $magentos = [
     ],
   ],
   'vs_uat' => [
-    'url' => 'https://vs-uat.store.alshaya.com',
+    'url' => 'https://vs-uat2.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'x7perq2khr9t52qeg2rv6ly5uakgv5lw',
       'consumer_secret' => 'l65u29tw675glfm3rmfps1gliqlwr6m1',
@@ -299,7 +299,7 @@ $magentos = [
     ],
   ],
   'bbw_uat' => [
-    'url' => 'https://staging-bbw.store.alshaya.com',
+    'url' => 'https://staging-bbw2.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'nilvx16kpllrdfevec15aer2u1ahusto',
       'consumer_secret' => '4rin9lodbf263w9sdc9hmei8i67p0mhc',
@@ -464,6 +464,22 @@ $magentos = [
       'access_token' => 'ofsq77eipss5gshgvj931q603ij7eiqw',
       'access_token_secret' => '24phqz567kp2fkt86tocb6exkwcittmq',
     ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
+    ],
+  ],
+  'aeo_prod' => [
+    'url' => 'https://aeo.store.alshaya.com.c.tw5uijob6hir2.ent.magento.cloud',
+    'magento_secrets' => [],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 16],
     ],
