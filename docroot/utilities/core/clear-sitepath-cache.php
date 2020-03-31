@@ -14,5 +14,5 @@ foreach (new APCUIterator('/^sitepath:*/') as $key => $value) {
   $counter++;
 }
 
-echo "Flushed {$counter} entries.";
 header("Cache-Control: no-cache, must-revalidate");
+echo "Flushed {$counter} entries.";
