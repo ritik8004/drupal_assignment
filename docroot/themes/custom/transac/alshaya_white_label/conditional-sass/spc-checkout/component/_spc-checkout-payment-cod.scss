@@ -21,8 +21,7 @@
       }
 
       @include breakpoint($upto-desktop) {
-        display: block;
-        padding: 0.5rem 0;
+        display: inline-flex;
 
         .price-wrapper .price,
         .tooltip-anchor {

@@ -49,6 +49,12 @@
         }
       }
     }
+
+    &.spcSelect__control--is-disabled {
+      div:nth-child(2) .spcSelect__indicator {
+        background: $spc-cart-item-qty-disabled;
+      }
+    }
   }
 
   .spcSelect__menu {
