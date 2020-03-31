@@ -21,10 +21,10 @@ class ClicknCollectMap extends React.Component {
     window.spcMap.map.googleMap = this.createGoogleMap();
     this.googleMap.setCurrentMap(window.spcMap.map.googleMap);
     const { markers } = this.props;
+    this.googleMap.removeMapMarker();
     if (markers !== null && markers.length > 0) {
       this.placeMarkers();
     } else {
-      this.googleMap.removeMapMarker();
       this.googleMap.setCenter();
     }
   }
@@ -32,10 +32,10 @@ class ClicknCollectMap extends React.Component {
   componentDidUpdate(prevProps) {
     const { coords, markers } = this.props;
     if (prevProps.coords !== coords || prevProps.markers !== markers) {
+      this.googleMap.removeMapMarker();
       if (markers !== null && markers.length > 0) {
         this.placeMarkers();
       } else {
-        this.googleMap.removeMapMarker();
         this.googleMap.setCenter();
       }
     }

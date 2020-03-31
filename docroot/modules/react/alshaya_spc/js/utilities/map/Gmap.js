@@ -202,7 +202,6 @@ export default class Gmap {
       currentMarker.setIcon(currentMarkerSettings.icon);
     });
 
-
     if (showInfoWindow === true) {
       google.maps.event.addListener(currentInfoWindow, 'closeclick', () => {
         clickedMarker = '';
@@ -239,16 +238,19 @@ export default class Gmap {
    * Remove marker(s) from map.
    */
   removeMapMarker = (map = null) => {
-    const newMap = map ? { ...map } : this.map;
-    newMap.mapMarkers.forEach((marker) => {
-      marker.setMap();
-    });
-  };
+    this.map = map !== null ? map : this.map;
+    if (this.map.mapMarkers.length > 0) {
+      this.map.mapMarkers.forEach((marker) => {
+        marker.setMap();
+      });
+    }
+    this.map.mapMarkers = [];
+  }
 
   closeAllInfoWindow = (map = null) => {
-    const newMap = map ? { ...map } : this.map;
-    newMap.mapMarkers.forEach((marker) => {
-      marker.infoWindow.close(newMap, marker);
+    this.map = map !== null ? map : this.map;
+    this.map.mapMarkers.forEach((marker) => {
+      marker.infoWindow.close(this.map, marker);
     });
   }
 }
