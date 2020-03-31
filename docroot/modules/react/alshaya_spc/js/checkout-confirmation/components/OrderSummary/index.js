@@ -33,13 +33,28 @@ const OrderSummary = () => {
   const storeAddress = [];
   const storeInfo = drupalSettings.order_details.delivery_type_info.store;
   if (storeInfo !== undefined) {
-    storeAddress.push(storeInfo.store_address.address_line1);
-    storeAddress.push(storeInfo.store_address.address_line2);
-    storeAddress.push(storeInfo.store_address.locality);
-    storeAddress.push(storeInfo.store_address.dependent_locality);
-    storeAddress.push(storeInfo.store_address.administrative_area_display);
-    storeAddress.push(storeInfo.store_address.country);
-    storeAddress.push(storeInfo.store_phone);
+    storeAddress.push(storeInfo.store_name);
+    if (storeInfo.store_address.address_line1 !== undefined) {
+      storeAddress.push(storeInfo.store_address.address_line1);
+    }
+    if (storeInfo.store_address.address_line2 !== undefined) {
+      storeAddress.push(storeInfo.store_address.address_line2);
+    }
+    if (storeInfo.store_address.locality !== undefined) {
+      storeAddress.push(storeInfo.store_address.locality);
+    }
+    if (storeInfo.store_address.dependent_locality !== undefined) {
+      storeAddress.push(storeInfo.store_address.dependent_locality);
+    }
+    if (storeInfo.store_address.administrative_area_display !== undefined) {
+      storeAddress.push(storeInfo.store_address.administrative_area_display);
+    }
+    if (storeInfo.store_address.country !== undefined) {
+      storeAddress.push(storeInfo.store_address.country);
+    }
+    if (storeInfo.store_phone !== undefined) {
+      storeAddress.push(storeInfo.store_phone);
+    }
     etaLabel = Drupal.t('available instore within');
   }
 
