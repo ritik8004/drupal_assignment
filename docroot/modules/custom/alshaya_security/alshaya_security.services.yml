@@ -7,7 +7,6 @@ services:
     class: Drupal\alshaya_security\AlshayaSecuritySubscriber
     tags:
       - { name: event_subscriber }
-    arguments: ['@config.factory']
   alshaya_security.session_manager:
     decorates: session_manager
     public: false
