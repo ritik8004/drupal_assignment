@@ -11,7 +11,6 @@
 
       $('li.facet-item.sizegroup-child').hide();
       $('#block-plpsize ul li').once().on('click', function (context) {
-        // $('li.facet-item.sizegroup-child').hide();
         $('li.facet-item.' + $(this).attr('id') + '-child').toggle();
       });
 	  }

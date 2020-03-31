@@ -1,7 +1,7 @@
 services:
   alshaya_facets_pretty_paths.path_processor:
     class: Drupal\alshaya_facets_pretty_paths\PathProcessor\PathProcessorPrettyPaths
-    arguments: ['@current_route_match', '@path.alias_manager']
+    arguments: ['@current_route_match', '@path.alias_manager', '@config.factory']
     tags:
       - { name: path_processor_inbound, priority: 80 }
       - { name: path_processor_outbound, priority: 500 }
