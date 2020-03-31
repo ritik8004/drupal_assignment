@@ -219,14 +219,14 @@ export const validateCartData = () => {
     return null;
   }
 
-  let postData = {};
-  let items = [];
+  const postData = {};
+  const items = [];
   // Prepare data for cart update.
   Object.entries(cartData.cart.items).forEach(([key, value]) => {
-    let item = {
+    const item = {
       sku: key,
       qty: value.qty,
-      quote_id: cartData.cart.cart_id
+      quote_id: cartData.cart.cart_id,
     };
     items.push(item);
   });
@@ -244,7 +244,7 @@ export const validateCartData = () => {
     .post(apiUrl, {
       action: 'refresh',
       cart_id: cartData.cart.cart_id,
-      postData: postData
+      postData,
     })
     .then(
       (response) => response.data,
@@ -309,7 +309,6 @@ export const cleanMobileNumber = (mobile) => {
  * @param {*} newCart
  */
 export const cartLocalStorageHasSameItems = (newCart) => {
-  console.log(newCart);
   const currentCart = getStorageInfo();
   const currentTotalItems = Object.keys(currentCart.cart.items).length;
   const newCartItems = Object.keys(newCart.items).length;
@@ -318,6 +317,73 @@ export const cartLocalStorageHasSameItems = (newCart) => {
   }
 
   return true;
+};
+
+/**
+ * Validation on cart items.
+ *
+ * @param {*} cartResult
+ * @param {*} redirect
+ */
+export const cartValidationOnUpdate = (cartResult, redirect) => {
+  let sameNumberOfItems = true;
+  // If no error or OOS.
+  if (cartResult.error === undefined
+    && cartResult.in_stock !== false
+    && (cartResult.response_message === null
+      || cartResult.response_message.status !== 'error_coupon')) {
+    // If storage has same number of items as we get in cart.
+    sameNumberOfItems = cartLocalStorageHasSameItems(cartResult);
+    if (sameNumberOfItems === true
+      && redirect === true) {
+      const continueCheckoutLink = (drupalSettings.user.uid === 0)
+        ? 'cart/login'
+        : 'checkout';
+
+      // Redirect to next page.
+      window.location.href = Drupal.url(continueCheckoutLink);
+      return;
+    }
+  }
+
+  // If error/exception, show at cart top.
+  if (cartResult.error !== undefined) {
+    dispatchCustomEvent('spcCartMessageUpdate', {
+      type: 'error',
+      message: cartResult.error_message,
+    });
+    return;
+  }
+
+  // If error from invalid coupon.
+  if (cartResult.response_message !== null
+    && cartResult.response_message.status === 'error_coupon') {
+    // Calling 'promo' error event.
+    dispatchCustomEvent('spcCartPromoError', {
+      message: cartResult.response_message.msg,
+    });
+  }
+
+  // Calling refresh mini cart event so that storage is updated.
+  dispatchCustomEvent('refreshMiniCart', {
+    data: () => cartResult,
+  });
+
+  // Calling refresh cart event so that cart components
+  // are refreshed.
+  dispatchCustomEvent('refreshCart', {
+    data: () => cartResult,
+  });
+
+  // If items count we get from MDC update and what in
+  // local storage different, we show message on top.
+  if (sameNumberOfItems === false) {
+    // Dispatch event for error to show.
+    dispatchCustomEvent('spcCartMessageUpdate', {
+      type: 'error',
+      message: Drupal.t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'),
+    });
+  }
 };
 
 /**

@@ -4,17 +4,21 @@ import TotalLineItems from '../total-line-items';
 import CheckoutCartItems from '../../checkout/components/checkout-cart-items';
 import {
   validateCartData,
-  cartLocalStorageHasSameItems,
+  cartValidationOnUpdate,
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../checkout_util';
-import dispatchCustomEvent from '../events';
 
 /**
  * Click handler for `continue checkout`.
  */
-const continueCheckout = (e) => {
+const continueCheckout = (e, inStock) => {
   e.preventDefault();
+
+  if (inStock === false) {
+    return;
+  }
+
   // Show loader.
   showFullScreenLoader();
   const cartData = validateCartData();
@@ -22,64 +26,7 @@ const continueCheckout = (e) => {
     cartData.then((cartResult) => {
       // Remove loader.
       removeFullScreenLoader();
-
-      let sameNumberOfItems = true;
-      // If no error or OOS.
-      if (cartResult.error === undefined
-        && cartResult.in_stock !== false
-        && (cartResult.response_message === null
-        || cartResult.response_message.status !== 'error_coupon')) {
-
-        // If storage has same number of items as we get in cart.
-        sameNumberOfItems = cartLocalStorageHasSameItems(cartResult);
-        if (sameNumberOfItems === true) {
-          const continueCheckoutLink = (drupalSettings.user.uid === 0) ?
-            'cart/login' :
-            'checkout';
-
-          // Redirect to next page.
-          //window.location.href = Drupal.url(continueCheckoutLink);
-          return;
-        }
-      }
-
-      // If error/exception, show at cart top.
-      if (cartResult.error !== undefined) {
-        dispatchCustomEvent('spcCartMessageUpdate', {
-          type: 'error',
-          message: cartResult.error_message,
-        });
-        return;
-      }
-
-      // If error from invalid coupon.
-      if (cartResult.response_message !== null
-        && cartResult.response_message.status === 'error_coupon') {
-        // Calling 'promo' error event.
-        dispatchCustomEvent('spcCartPromoError', {
-          message: cartResult.response_message.msg
-        });
-      }
-
-      // Calling refresh mini cart event so that storage is updated.
-      dispatchCustomEvent('refreshMiniCart', {
-        data: () => cartResult,
-      });
-
-      // Calling refresh cart event so that cart components
-      // are refreshed.
-      dispatchCustomEvent('refreshCart', {
-        data: () => cartResult,
-      });
-
-      if (sameNumberOfItems === false) {
-        // Dispatch event for error to show.
-        dispatchCustomEvent('spcCartMessageUpdate', {
-          type: 'error',
-          message: Drupal.t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'),
-        });
-      }
-
+      cartValidationOnUpdate(cartResult, true);
     });
   }
 };
@@ -91,6 +38,7 @@ const OrderSummaryBlock = (props) => {
     show_checkout_button: showCheckoutButton,
     items,
     totals,
+    in_stock: inStock,
   } = props;
   const promoData = cartPromo;
   let orderSummaryTitle = Drupal.t('Order Summary');
@@ -98,6 +46,11 @@ const OrderSummaryBlock = (props) => {
   // To be used on checkout page.
   if (itemQty !== undefined) {
     orderSummaryTitle = Drupal.t('order summary (@qty items)', { '@qty': itemQty });
+  }
+
+  let activeClass = '';
+  if (inStock === false) {
+    activeClass = 'in-active';
   }
 
   return (
@@ -118,9 +71,9 @@ const OrderSummaryBlock = (props) => {
         {showCheckoutButton
         && (
         <div className="actions">
-          <div className="checkout-link submit">
+          <div className={`checkout-link submit ${activeClass}`}>
             <a
-              onClick={(e) => continueCheckout(e)}
+              onClick={(e) => continueCheckout(e, inStock)}
               href={Drupal.url(continueCheckoutLink)}
               className="checkout-link"
             >
