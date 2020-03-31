@@ -2,6 +2,8 @@ import React from 'react';
 
 import Select from 'react-select';
 import { updateCartItemData } from '../../../utilities/update_cart';
+import { cartLocalStorageHasSameItems } from '../../../utilities/checkout_util';
+import dispatchCustomEvent from '../../../utilities/events';
 
 export default class CartQuantitySelect extends React.Component {
   constructor(props) {
@@ -38,6 +40,7 @@ export default class CartQuantitySelect extends React.Component {
     if (cartData instanceof Promise) {
       cartData.then((result) => {
         let resultVal = result;
+        let itemCountSame = true;
         this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.remove('loading');
         // If error.
         if (resultVal.error !== undefined
@@ -49,12 +52,24 @@ export default class CartQuantitySelect extends React.Component {
               message: resultVal.error_message,
             },
           };
+        } else {
+          // If no error, check if item count is same.
+          itemCountSame = cartLocalStorageHasSameItems(result);
         }
         const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => resultVal } });
         document.dispatchEvent(miniCartEvent);
 
         const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => resultVal } });
         document.dispatchEvent(refreshCartEvent);
+
+        // If item count not same, show message to user.
+        if (itemCountSame === false) {
+          // Dispatch event for error to show.
+          dispatchCustomEvent('spcCartMessageUpdate', {
+            type: 'error',
+            message: Drupal.t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'),
+          });
+        }
       });
     }
   };

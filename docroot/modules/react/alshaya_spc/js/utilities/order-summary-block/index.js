@@ -3,7 +3,8 @@ import SectionTitle from '../section-title';
 import TotalLineItems from '../total-line-items';
 import CheckoutCartItems from '../../checkout/components/checkout-cart-items';
 import {
-  refreshCartData,
+  validateCartData,
+  cartLocalStorageHasSameItems,
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../checkout_util';
@@ -16,47 +17,69 @@ const continueCheckout = (e) => {
   e.preventDefault();
   // Show loader.
   showFullScreenLoader();
-  const cartData = refreshCartData();
+  const cartData = validateCartData();
   if (cartData instanceof Promise) {
     cartData.then((cartResult) => {
       // Remove loader.
       removeFullScreenLoader();
-      // If no error.
+
+      let sameNumberOfItems = true;
+      // If no error or OOS.
       if (cartResult.error === undefined
-        && cartResult.response_message.status !== 'json_error') {
-        const continueCheckoutLink = (drupalSettings.user.uid === 0)
-          ? 'cart/login'
-          : 'checkout';
+        && cartResult.in_stock !== false
+        && (cartResult.response_message === null
+        || cartResult.response_message.status !== 'error_coupon')) {
 
-        // Redirect to next page.
-        window.location.href = Drupal.url(continueCheckoutLink);
+        // If storage has same number of items as we get in cart.
+        sameNumberOfItems = cartLocalStorageHasSameItems(cartResult);
+        if (sameNumberOfItems === true) {
+          const continueCheckoutLink = (drupalSettings.user.uid === 0) ?
+            'cart/login' :
+            'checkout';
+
+          // Redirect to next page.
+          //window.location.href = Drupal.url(continueCheckoutLink);
+          return;
+        }
+      }
+
+      // If error/exception, show at cart top.
+      if (cartResult.error !== undefined) {
+        dispatchCustomEvent('spcCartMessageUpdate', {
+          type: 'error',
+          message: cartResult.error_message,
+        });
         return;
       }
 
-      // If error from item validation.
-      if (cartResult.response_message.status === 'json_error') {
-        const errorMessage = JSON.parse(cartResult.response_message.msg);
-        // Calling `mini cart` event to refresh local storage.
-        dispatchCustomEvent('refreshMiniCart', {
-          data: () => cartResult,
+      // If error from invalid coupon.
+      if (cartResult.response_message !== null
+        && cartResult.response_message.status === 'error_coupon') {
+        // Calling 'promo' error event.
+        dispatchCustomEvent('spcCartPromoError', {
+          message: cartResult.response_message.msg
         });
-
-        // Calling refresh cart event so that cart components
-        // are refreshed.
-        dispatchCustomEvent('refreshCart', {
-          data: () => cartResult,
-        });
-
-        // Dispatch event for individual cart item error.
-        dispatchCustomEvent('spcCartItemError', errorMessage);
-        return;
       }
 
-      // Dispatch event for error to show.
-      dispatchCustomEvent('spcCartMessageUpdate', {
-        type: 'error',
-        message: cartResult.error_message,
+      // Calling refresh mini cart event so that storage is updated.
+      dispatchCustomEvent('refreshMiniCart', {
+        data: () => cartResult,
       });
+
+      // Calling refresh cart event so that cart components
+      // are refreshed.
+      dispatchCustomEvent('refreshCart', {
+        data: () => cartResult,
+      });
+
+      if (sameNumberOfItems === false) {
+        // Dispatch event for error to show.
+        dispatchCustomEvent('spcCartMessageUpdate', {
+          type: 'error',
+          message: Drupal.t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'),
+        });
+      }
+
     });
   }
 };

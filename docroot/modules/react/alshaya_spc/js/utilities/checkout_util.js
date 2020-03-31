@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { removeCartFromStorage } from './storage';
+import {
+  removeCartFromStorage,
+  getStorageInfo,
+  getInfoFromStorage,
+} from './storage';
 import { updateCartApiUrl } from './update_cart';
 import { cartAvailableInStorage } from './get_cart';
 import getStringMessage from './strings';
@@ -206,23 +210,41 @@ export const addBillingInCart = (action, data) => {
 /**
  * Refresh cart from MDC.
  */
-export const refreshCartData = () => {
-  let cart = cartAvailableInStorage();
+export const validateCartData = () => {
+  const cartData = getInfoFromStorage();
   // If cart not available at all.
-  if (cart === null
-    || cart === 'empty') {
+  if (!cartData
+    || !cartData.cart
+    || cartData.cart.cart_id === null) {
     return null;
   }
 
-  if (!Number.isInteger(cart)) {
-    cart = cart.cart_id;
+  let postData = {};
+  let items = [];
+  // Prepare data for cart update.
+  Object.entries(cartData.cart.items).forEach(([key, value]) => {
+    let item = {
+      sku: key,
+      qty: value.qty,
+      quote_id: cartData.cart.cart_id
+    };
+    items.push(item);
+  });
+
+  postData.items = items;
+
+  // If coupon is applied on cart.
+  if (cartData.cart.coupon_code !== undefined
+    && cartData.cart.coupon_code.length > 0) {
+    postData.coupon = cartData.cart.coupon_code;
   }
 
   const apiUrl = updateCartApiUrl();
   return axios
     .post(apiUrl, {
       action: 'refresh',
-      cart_id: cart,
+      cart_id: cartData.cart.cart_id,
+      postData: postData
     })
     .then(
       (response) => response.data,
@@ -279,6 +301,23 @@ export const cleanMobileNumber = (mobile) => {
   }
 
   return '';
+};
+
+/**
+ * Check if new cart and existing storage has same number of items.
+ *
+ * @param {*} newCart
+ */
+export const cartLocalStorageHasSameItems = (newCart) => {
+  console.log(newCart);
+  const currentCart = getStorageInfo();
+  const currentTotalItems = Object.keys(currentCart.cart.items).length;
+  const newCartItems = Object.keys(newCart.items).length;
+  if (newCartItems !== currentTotalItems) {
+    return false;
+  }
+
+  return true;
 };
 
 /**

@@ -628,27 +628,6 @@ class Cart {
   }
 
   /**
-   * Refresh the cart.
-   *
-   * @param string $action
-   *   Refresh cart action.
-   *
-   * @return array
-   *   Cart data.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  public function refreshCart(string $action) {
-    $data = [
-      'extension' => (object) [
-        'action' => $action,
-      ],
-    ];
-
-    return $this->updateCart($data);
-  }
-
-  /**
    * Process payment data before placing order.
    *
    * @param string $method

@@ -25,6 +25,22 @@ export default class CartPromoBlock extends React.Component {
 
       document.getElementById('promo-code').value = couponCode;
     }
+
+    document.addEventListener('spcCartPromoError', this.cartPromoEventErrorHandler, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('spcCartPromoError', this.cartPromoEventErrorHandler, false);
+  }
+
+  /**
+   * Handle error of invalid promo.
+   */
+  cartPromoEventErrorHandler = (e) => {
+    const errorMessage = e.detail.message;
+    document.getElementById('promo-message').innerHTML = errorMessage;
+    document.getElementById('promo-message').classList.add('error');
+    document.getElementById('promo-code').classList.add('error');
   }
 
   promoAction = (promoApplied) => {
