@@ -226,13 +226,7 @@ class CheckoutHelper {
     $current_user_id = 0;
 
     // Clear orders list cache if user is logged in.
-    if ($this->currentUser->isAnonymous() || !alshaya_acm_customer_is_customer($this->currentUser)) {
-      // Store the email address of customer in session.
-      $email = $cart->customerEmail();
-      $session->set('email_order_' . $order_id, $email);
-    }
-    else {
-      $email = $this->currentUser->getEmail();
+    if (alshaya_acm_customer_is_customer($this->currentUser)) {
       $current_user_id = $this->currentUser->id();
 
       // Update user's mobile number if empty.
@@ -251,7 +245,7 @@ class CheckoutHelper {
 
     $session->save();
 
-    $this->ordersManager->clearOrderCache($email, $current_user_id);
+    $this->ordersManager->clearOrderCache((int) $cart->customerId(), $current_user_id);
     $this->ordersManager->clearLastOrderRelatedProductsCache();
     $this->clearCartHistory($cart->id());
 

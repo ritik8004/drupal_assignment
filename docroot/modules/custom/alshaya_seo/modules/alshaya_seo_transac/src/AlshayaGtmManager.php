@@ -840,20 +840,17 @@ class AlshayaGtmManager {
     $dimension7 = '';
     $dimension8 = '';
 
-    $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
+    $shipping_info = explode(' - ', $order['shipping_description']);
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     $deliveryOption = 'Home Delivery';
-    $deliveryType = $shipping_method->getName();
+    $deliveryType = $shipping_info[0];
 
-    $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
+    $shipping_method_name = $order['shipping']['method'];
     if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
-      $shipping_assignment = reset($order['extension']['shipping_assignments']);
-
       $deliveryOption = 'Click and Collect';
-      $deliveryType = $shipping_assignment['shipping']['extension_attributes']['click_and_collect_type'];
-
-      $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
+      $deliveryType = $order['shipping']['extension_attributes']['click_and_collect_type'];
+      $store_code = $order['shipping']['extension_attributes']['store_code'];
 
       // We should always have store but a sanity check. Additional check to
       // ensure the variable is not in list of disabled vars.
@@ -900,9 +897,7 @@ class AlshayaGtmManager {
       $products[] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
     }
 
-    $shipping_value = (isset($order['shipping']['method']['amount_with_tax']))
-      ? $order['shipping']['method']['amount_with_tax']
-      : $order['shipping']['method']['amount'];
+    $shipping_value = $order['totals']['shipping'];
 
     $actionData = [
       'id' => $order['increment_id'],
@@ -920,12 +915,12 @@ class AlshayaGtmManager {
     }
 
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
-    $orders_count = $this->ordersManager->getOrdersCount($order['email']);
+    $orders_count = $this->ordersManager->getOrdersCount((int) $order['customer_id']);
 
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
-      'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
+      'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
       'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
@@ -1151,9 +1146,7 @@ class AlshayaGtmManager {
         $store_code = '';
         $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
-        $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
-        $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
-        if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+        if ($order['shipping']['method'] === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
         }

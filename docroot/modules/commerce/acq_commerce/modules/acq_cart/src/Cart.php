@@ -162,6 +162,8 @@ class Cart implements CartInterface {
       return [];
     }
 
+    $removed_products = FALSE;
+
     $items = $this->cart->items;
 
     foreach ($items as $key => &$item) {
@@ -179,8 +181,11 @@ class Cart implements CartInterface {
           '@cart_id' => $this->id(),
         ]);
 
+        $removed_products = TRUE;
+
         // Remove the item from cart in session.
         unset($items[$key]);
+        unset($this->cart->items[$key]);
 
         // Continue to next item, this item is removed in call above.
         continue;
@@ -190,6 +195,13 @@ class Cart implements CartInterface {
       $plugin = $sku->getPluginInstance();
 
       $item['name'] = $plugin->cartName($sku, $item);
+    }
+
+    if ($removed_products) {
+      // Use traits in the class is resulting into "LogicException: The database
+      // connection is not serializable." So we don't use it here.
+      // @codingStandardsIgnoreLine
+      \Drupal::messenger()->addError((string) t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'));
     }
 
     return $items;

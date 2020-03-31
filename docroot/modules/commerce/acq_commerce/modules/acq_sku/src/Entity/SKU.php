@@ -238,7 +238,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         try {
           // Prepare the File object when we access it the first time.
           $file = $this->downloadMediaImage($data);
-          $update_sku = TRUE;
+          $update_sku = !empty($file);
         }
         catch (\Exception $e) {
           \Drupal::logger('acq_sku')->error($e->getMessage());
@@ -270,7 +270,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * @param array $data
    *   File data.
    *
-   * @return \Drupal\file\Entity\File
+   * @return \Drupal\file\Entity\File|string|null
    *   File id or FALSE if file cant be downloaded.
    *
    * @throws \Exception
@@ -280,7 +280,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // If image is blacklisted, block download.
     if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
-      return FALSE;
+      return NULL;
     }
 
     // Allow disabling this through settings.
@@ -349,7 +349,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         '@remote_id' => $data['value_id'],
         '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
       ]);
-      return FALSE;
+      return 'blacklisted';
     }
 
     // Check if image was blacklisted, remove it from blacklist.

@@ -260,7 +260,9 @@ class StockManager {
   public function refreshStock(string $sku) {
     try {
       $stock = $this->apiWrapper->skuStockCheck($sku);
-      $this->processStockMessage($stock);
+      if ($stock) {
+        $this->processStockMessage($stock);
+      }
     }
     catch (\Exception $e) {
       $this->logger->error('Exception occurred while resetting stock for sku: @sku, message: @message', [
