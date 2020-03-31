@@ -140,7 +140,8 @@ export default class CartItem extends React.Component {
         </div>
         <div className="spc-cart-item-alerts">
           {/* Dynamic promo labels buy 2 more items, free gifts labels,
-           qty limit labels go here */}
+           qty limit labels go here. Name the child component
+           .spc-cart-item-alerts-item */}
         </div>
         {/* @Todo: Show OOS only once. */}
         {isItemError
