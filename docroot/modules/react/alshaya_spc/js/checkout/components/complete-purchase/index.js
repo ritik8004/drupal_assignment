@@ -7,6 +7,7 @@ import PriceElement from '../../../utilities/special-price/PriceElement';
 import dispatchCustomEvent from '../../../utilities/events';
 import smoothScrollTo from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
+import ApplePayButton from '../payment-method-apple-pay/applePayButton';
 
 export default class CompletePurchase extends React.Component {
   constructor(props) {
@@ -124,7 +125,7 @@ export default class CompletePurchase extends React.Component {
       : '';
 
     return (
-      <div className={`checkout-link submit ${className}`}>
+      <div className={`checkout-link submit ${className} ${paymentMethod}`}>
         {window.innerWidth < 768
           && (
           <div className="order-preview">
@@ -142,16 +143,7 @@ export default class CompletePurchase extends React.Component {
           )}
 
         <ConditionalView condition={paymentMethod === 'checkout_com_applepay'}>
-          <button
-            id="ckoApplePayButton"
-            type="button"
-            onClick={(e) => this.placeOrder(e)}
-            lang={drupalSettings.path.currentLanguage}
-            className="apple-pay-button apple-pay-button-with-text apple-pay-button-black-with-text"
-          >
-            <span className="text">{Drupal.t('Buy with')}</span>
-            <span className="logo" />
-          </button>
+          <ApplePayButton isaActive={className} text={Drupal.t('Buy with')} lang={drupalSettings.path.currentLanguage} placeOrder={(e) => this.placeOrder(e)} />
         </ConditionalView>
         <ConditionalView condition={paymentMethod !== 'checkout_com_applepay'}>
           <a href={Drupal.url('checkout')} className="checkout-link" onClick={(e) => this.placeOrder(e)}>
