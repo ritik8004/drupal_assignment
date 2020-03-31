@@ -19,6 +19,10 @@
           listOrder.not($ub).hide();
           $ub.parent().toggleClass('open--accordion');
           listOrder.not($ub).parent().removeClass('open--accordion');
+
+          if (typeof Drupal.blazyRevalidate !== 'undefined') {
+            Drupal.blazyRevalidate();
+          }
         });
       }
     }
