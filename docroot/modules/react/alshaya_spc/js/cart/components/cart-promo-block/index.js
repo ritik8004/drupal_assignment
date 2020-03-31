@@ -43,7 +43,11 @@ export default class CartPromoBlock extends React.Component {
     document.getElementById('promo-code').classList.add('error');
   }
 
-  promoAction = (promoApplied) => {
+  promoAction = (promoApplied, inStock) => {
+    // If not in stock.
+    if (inStock === false) {
+      return;
+    }
     const promoValue = document.getElementById('promo-code').value.trim();
 
     // If empty promo text.
@@ -114,14 +118,19 @@ export default class CartPromoBlock extends React.Component {
 
   render() {
     const { promoApplied, disabled, buttonText } = this.state;
+    const { inStock } = this.props;
     const promoRemoveActive = promoApplied ? 'active' : '';
+    let activeClass = '';
+    if (inStock === false) {
+      activeClass = 'in-active';
+    }
     return (
-      <div className="spc-promo-code-block">
+      <div className={`spc-promo-code-block ${activeClass}`}>
         <SectionTitle>{Drupal.t('have a promo code?')}</SectionTitle>
         <div className="block-content">
           <input id="promo-code" disabled={disabled} type="text" placeholder={Drupal.t('Promo code')} />
-          <button id="promo-remove-button" type="button" className={`promo-remove ${promoRemoveActive}`} onClick={() => { this.promoAction(promoApplied); }}>{Drupal.t('Remove')}</button>
-          <button id="promo-action-button" type="button" disabled={disabled} className="promo-submit" onClick={() => { this.promoAction(promoApplied); }}>{buttonText}</button>
+          <button id="promo-remove-button" type="button" className={`promo-remove ${promoRemoveActive}`} onClick={() => { this.promoAction(promoApplied, inStock); }}>{Drupal.t('Remove')}</button>
+          <button id="promo-action-button" type="button" disabled={disabled} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock); }}>{buttonText}</button>
           <div id="promo-message" />
         </div>
       </div>
