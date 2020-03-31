@@ -48,7 +48,7 @@ class ApplePayHelper {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function updatePayment() {
-    $params = $this->request->request->all();
+    $params = json_decode($this->request->getContent(), TRUE);
 
     if (empty($params) || empty($params['paymentData'])) {
       throw new \Exception('paymentData missing');

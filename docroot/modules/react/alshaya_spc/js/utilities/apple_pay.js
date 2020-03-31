@@ -54,7 +54,7 @@ const ApplePay = {
     const controllerUrl = Drupal.url('checkoutcom/applepay/validate');
     const validationUrl = `${controllerUrl}?u=${event.validationURL}`;
     Axios.get(validationUrl).then((merchantSession) => {
-      applePaySessionObject.completeMerchantValidation(merchantSession);
+      applePaySessionObject.completeMerchantValidation(merchantSession.data);
     }).catch((error) => {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
