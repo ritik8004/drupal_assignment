@@ -104,6 +104,7 @@ $_spc-radio-filled: #1da545;
 $_spc-discount-text: #cd2026;
 $_spc-area-panel-placeholder: #b3b3b3;
 $_spc-billing-help: #007aff;
+$_spc-cart-alert: #238ae8;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1155,6 +1156,8 @@ $matchback_cart_notification_bg: #f6f6f6;
 // SPC
 $spc-cart-background: $white-smoke-light;
 $spc-cart-item-bg: $white-five;
+$spc-cart-item-alert: $_spc-cart-alert;
+$spc-cart-item-qty-disabled: $white-smoke-light;
 $spc-cart-text-color: $grey-light;
 $spc-mobile-cart-preview: $mothercare-black;
 $spc-product-title: $mothercare-black;

@@ -19,7 +19,8 @@
       var footerBottom;
       var difference;
       if ($('body').hasClass('alias--cart-checkout-login') || $('body').hasClass('alias--cart-checkout-delivery')
-       || $('body').hasClass('alias--cart-checkout-payment') || $('body').hasClass('alias--cart-checkout-confirmation')) {
+       || $('body').hasClass('alias--cart-checkout-payment') || $('body').hasClass('alias--cart-checkout-confirmation')
+       || $('body').hasClass('alias--cart-login')) {
         checkoutFooter = true;
       }
 

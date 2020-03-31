@@ -12,6 +12,21 @@ import {
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import { extractFirstAndLastName } from './cart_customer_util';
+import smoothScrollTo from './smoothScroll';
+
+/**
+ * Use this to auto scroll to the right field in address form upon
+ * inline validation failure.
+ *
+ * @param {*} selector
+ */
+export const addressFormInlineErrorScroll = (selector) => {
+  const errorElement = document.querySelector(selector);
+  if (errorElement !== undefined && errorElement !== null) {
+    const errorElementParentClass = `.${errorElement.parentElement.className}`;
+    smoothScrollTo(errorElementParentClass);
+  }
+};
 
 /**
  * Get the address list of the current logged in user.
@@ -236,6 +251,7 @@ export const validateAddressFields = (e, validateEmail) => {
           document.getElementById(`${key}-error`).innerHTML = Drupal.t('Please enter @label.', { '@label': field.label });
           document.getElementById(`${key}-error`).classList.add('error');
           isError = true;
+          addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
         } else {
           document.getElementById(`${key}-error`).innerHTML = '';
           document.getElementById(`${key}-error`).classList.remove('error');
