@@ -314,12 +314,14 @@ class SkusListWithAttributes extends ResourceBase {
     $promotions = [];
     $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
     foreach ($promotions_data as $nid => $promotion) {
-      $this->cache['tags'][] = 'node:' . $nid;
-      $promotion_node = $this->nodeStorage->load($nid);
-      $promotions[] = [
-        'text' => $promotion['text'],
-        'deeplink' => $this->mobileAppUtility->getDeepLink($promotion_node, 'promotion'),
-      ];
+      if (is_object($nid)) {
+        $this->cache['tags'][] = 'node:' . $nid;
+        $promotion_node = $this->nodeStorage->load($nid);
+        $promotions[] = [
+          'text' => $promotion['text'],
+          'deeplink' => $this->mobileAppUtility->getDeepLink($promotion_node, 'promotion'),
+        ];
+      }
     }
     return $promotions;
   }
