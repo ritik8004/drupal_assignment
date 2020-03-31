@@ -275,8 +275,30 @@
     }
 
     &.frontpage {
-      .mobile--search {
-        visibility: hidden;
+      @include breakpoint($only-mobile) {
+        .c-menu-primary {
+          .menu--mobile-navigation {
+            width: 66.66%;
+
+            ul {
+              li {
+                &:nth-child(2) {
+                  display: none;
+                }
+              }
+            }
+          }
+
+          .store {
+            width: 100%;
+          }
+        }
+
+        header {
+          .block-cart-mini-block {
+            width: 33.33%;
+          }
+        }
       }
     }
 
