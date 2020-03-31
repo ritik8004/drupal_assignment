@@ -770,7 +770,7 @@ class Cart {
         $cart = $this->getCart();
         // If cart is available and cart has item.
         if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
-          $status = $this->drupal->refreshStock($cart['cart']);
+          $status = $this->drupal->triggerCheckoutEvent('validate cart', ['cart' => $cart['cart']]);
           if ($status['status'] == TRUE) {
             // Return cart object.
             return $cart;

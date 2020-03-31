@@ -103,7 +103,9 @@ class Drupal {
     ];
 
     try {
-      $client->request('POST', $url, $options);
+      $response = $client->request('POST', $url, $options);
+      $result = $response->getBody()->getContents();
+      return json_decode($result, TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while triggering checkout event @event. Message: @message', [
@@ -111,6 +113,8 @@ class Drupal {
         '@message' => $e->getMessage(),
       ]);
     }
+
+    return ['status' => FALSE];
   }
 
   /**

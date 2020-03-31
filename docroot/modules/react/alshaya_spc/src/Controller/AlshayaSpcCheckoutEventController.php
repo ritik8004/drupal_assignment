@@ -109,9 +109,14 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
    */
   public function postCheckoutEvent(Request $request) {
     $action = $request->request->get('action');
-    if (empty($action)) {
+    $cart = $request->request->get('cart');
+    if (empty($action) || empty($cart)) {
       throw new BadRequestHttpException($this->t('Missing required parameters'));
     }
+
+    $response = [
+      'status' => FALSE,
+    ];
 
     switch ($action) {
       case 'place order success':
@@ -146,11 +151,22 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
         $this->logger->debug('Placed order for cart: @cart', [
           '@cart' => json_encode($cart),
         ]);
+        $response['status'] = TRUE;
 
+        break;
+
+      case 'validate cart':
+        try {
+          $this->spcStockHelper->refreshStockForProductsInCart($cart);
+          $response['status'] = TRUE;
+        }
+        catch (\Exception $e) {
+          // Do nothing.
+        }
         break;
     }
 
-    return new JsonResponse(['success' => TRUE]);
+    return new JsonResponse($response);
   }
 
   /**

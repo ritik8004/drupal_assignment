@@ -94,11 +94,3 @@ alshaya_spc.checkout_event:
   methods: [POST]
   requirements:
     _permission: 'access content'
-
-alshaya_spc.refresh_stock:
-  path: '/spc/refresh-stock'
-  defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcStockController::refreshStock'
-  methods: [POST]
-  requirements:
-    _permission: 'access content'
