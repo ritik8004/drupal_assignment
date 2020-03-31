@@ -95,14 +95,6 @@ alshaya_spc.checkout_event:
   requirements:
     _permission: 'access content'
 
-alshaya_spc.exception_type:
-  path: '/spc/exception-type'
-  defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcExceptionController::getExceptionType'
-  methods: [GET]
-  requirements:
-    _permission: 'access content'
-
 alshaya_spc.refresh_stock:
   path: '/spc/refresh-stock'
   defaults:

@@ -195,30 +195,6 @@ class Drupal {
   }
 
   /**
-   * Check the exception type by message from drupal.
-   *
-   * @param string $message
-   *   Exception message to check.
-   *
-   * @return mixed
-   *   Exception type.
-   */
-  public function getExceptionType(string $message) {
-    $client = $this->drupalInfo->getDrupalApiClient();
-    $url = sprintf('/%s/spc/exception-type', $this->drupalInfo->getDrupalLangcode());
-    $response = $client->request('GET', $url, [
-      'headers' => [
-        'Host' => $this->drupalInfo->getDrupalBaseUrl(),
-      ],
-      'query' => [
-        'message' => $message,
-      ],
-    ]);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
-  }
-
-  /**
    * Trigger refresh stock for cart items.
    *
    * @param array $cart
