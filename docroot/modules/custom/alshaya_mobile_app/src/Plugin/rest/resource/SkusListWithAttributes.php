@@ -12,7 +12,6 @@ use Drupal\rest\ResourceResponse;
 use Drupal\alshaya_acm_product\SkuManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\Cache\Cache;
-use Drupal\node\NodeInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
@@ -192,11 +191,8 @@ class SkusListWithAttributes extends ResourceBase {
     $data = [];
     foreach ($skus as $value) {
       $skuEntity = SKU::loadFromSku($value);
+
       if (!($skuEntity instanceof SKUInterface)) {
-        throw (new NotFoundHttpException());
-      }
-      $node = $this->skuManager->getDisplayNode($value);
-      if (!($node instanceof NodeInterface)) {
         throw (new NotFoundHttpException());
       }
       $data[] = $this->getSkuData($skuEntity);
