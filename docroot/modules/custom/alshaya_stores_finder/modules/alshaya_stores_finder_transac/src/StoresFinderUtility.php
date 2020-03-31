@@ -321,11 +321,6 @@ class StoresFinderUtility {
       $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
       $prepared_stores[$nid] = $this->getStoreExtraData($store_codes, $node);
       $store = is_array($stores[$store_nodes[$nid]['field_store_locator_id_value']]) ? $stores[$store_nodes[$nid]['field_store_locator_id_value']] : [];
-      $store['rnc_available'] = (int) $store['rnc_available'];
-      $store['sts_available'] = (int) $store['sts_available'];
-      $store['formatted_distance'] = $this->t('@distance miles', [
-        '@distance' => number_format((float) $store['distance'], 2, '.', ''),
-      ]);
       if (!empty($store['rnc_available'])) {
         $store['delivery_time'] = $config->get('click_collect_rnc');
       }
