@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_pdp_layouts\Plugin;
+namespace Drupal\alshaya_pdp_layouts\Plugin\PdpLayout;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;

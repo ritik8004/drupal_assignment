@@ -7,7 +7,6 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_pdp_layouts\Plugin\PdpLayoutBase;
 use Drupal\Component\Utility\Html;
 
 /**
@@ -70,7 +69,6 @@ class ModalLayout extends PdpLayoutBase implements ContainerFactoryPluginInterfa
     $build['item_code']['#markup'] = $sku;
     $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
 
-    return $build;
   }
 
 }

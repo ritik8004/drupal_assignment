@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Contains install hook for alshaya_pdp_layouts module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_pdp_layouts_install() {
+  $pdp_layout_form = \Drupal::service('config.factory')->getEditable('alshaya_pdp_layouts.settings');
+  $pdp_layout_form->set('pdp_layout', 'full')->save();
+}

@@ -8,8 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Utility\Html;
-use Drupal\alshaya_pdp_layouts\Plugin\PdpLayoutBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\alshaya_acm_product\SkuImagesManager;
 
 /**
  * Provides the default laypout for PDP.
@@ -29,6 +29,13 @@ class ProductCategoryCarouselLayout extends PdpLayoutBase implements ContainerFa
   protected $skuManager;
 
   /**
+   * The sku manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $skuImagesManager;
+
+  /**
    * Config Factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -46,12 +53,15 @@ class ProductCategoryCarouselLayout extends PdpLayoutBase implements ContainerFa
    *   Plugin defination.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   The sku manager object.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
+   *   The sku images manager object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, SkuManager $sku_manager, ConfigFactoryInterface $config_factory) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, SkuManager $sku_manager, SkuImagesManager $sku_images_manager, ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->skuManager = $sku_manager;
+    $this->skuImagesManager = $sku_images_manager;
     $this->configFactory = $config_factory;
   }
 
@@ -64,6 +74,7 @@ class ProductCategoryCarouselLayout extends PdpLayoutBase implements ContainerFa
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_product.skumanager'),
+      $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('config.factory')
     );
   }
@@ -76,7 +87,7 @@ class ProductCategoryCarouselLayout extends PdpLayoutBase implements ContainerFa
     $build['image'] = [];
     $sku = $this->skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
-    $sku_media = $this->skuManager->getFirstImage($sku_entity);
+    $sku_media = $this->skuImagesManager->getFirstImage($sku_entity);
     $priceHelper = _alshaya_acm_product_get_price_helper();
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku));
     $product_settings = $this->configFactory->get('alshaya_acm_product.settings');
@@ -108,8 +119,6 @@ class ProductCategoryCarouselLayout extends PdpLayoutBase implements ContainerFa
     ];
 
     $build['mobile_add_to_cart_form'] = [];
-
-    return $build;
   }
 
 }

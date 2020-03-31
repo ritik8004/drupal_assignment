@@ -10,7 +10,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\node\NodeInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Utility\Html;
-use Drupal\alshaya_pdp_layouts\Plugin\PdpLayoutBase;
 
 /**
  * Provides the default laypout for PDP.
@@ -125,8 +124,6 @@ class DefaultPdpLayout extends PdpLayoutBase implements ContainerFactoryPluginIn
         ];
       }
     }
-
-    return $build;
   }
 
 }

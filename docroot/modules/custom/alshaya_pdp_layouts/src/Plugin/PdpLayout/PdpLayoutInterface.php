@@ -4,12 +4,11 @@ namespace Drupal\alshaya_pdp_layouts\Plugin\PdpLayout;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Component\Plugin\DerivativeInspectionInterface;
-use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Defines an interface for PDP Layout plugins.
  */
-interface PdpLayoutInterface extends EntityInterface, PluginInspectionInterface, DerivativeInspectionInterface {
+interface PdpLayoutInterface extends PluginInspectionInterface, DerivativeInspectionInterface {
 
   /**
    * Return the id of the PDP Layout.
@@ -26,13 +25,5 @@ interface PdpLayoutInterface extends EntityInterface, PluginInspectionInterface,
    *   The name of the pdp layout.
    */
   public function getLayoutName();
-
-  /**
-   * Return the theme render array of the layout.
-   *
-   * @return array
-   *   The theme render array of the pdp layout.
-   */
-  public function getRenderArray();
 
 }

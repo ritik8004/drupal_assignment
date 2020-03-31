@@ -7,7 +7,6 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Component\Utility\Html;
-use Drupal\alshaya_pdp_layouts\Plugin\PdpLayoutBase;
 use Drupal\acq_sku\Entity\SKU;
 
 /**
@@ -70,7 +69,6 @@ class SearchResultPdpLayout extends PdpLayoutBase implements ContainerFactoryPlu
       '#mainsku' => $sku_identifier,
       '#type' => 'plp',
     ];
-    return $build;
   }
 
 }

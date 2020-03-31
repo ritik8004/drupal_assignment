@@ -6,7 +6,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\alshaya_pdp_layouts\Plugin\PdpLayoutBase;
 use Drupal\Component\Utility\Html;
 
 /**
@@ -17,7 +16,7 @@ use Drupal\Component\Utility\Html;
  *   label = @Translation("Matchback"),
  * )
  */
-class DefaultPdpLayout extends PdpLayoutBase implements ContainerFactoryPluginInterface {
+class MatchbackLayout extends PdpLayoutBase implements ContainerFactoryPluginInterface {
 
   /**
    * The sku manager.
@@ -65,7 +64,6 @@ class DefaultPdpLayout extends PdpLayoutBase implements ContainerFactoryPluginIn
     $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
     $build['item_code']['#markup'] = $sku;
 
-    return $build;
   }
 
 }
