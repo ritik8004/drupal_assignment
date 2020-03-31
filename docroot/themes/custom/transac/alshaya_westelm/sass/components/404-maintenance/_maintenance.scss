@@ -9,14 +9,7 @@
     svg,
     img {
       height: auto;
-
-      @include breakpoint($tablet) {
-        width: 28.5rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        width: 15.5rem;
-      }
+      width: 10rem;
     }
 
     @include breakpoint($desktop) {
@@ -47,7 +40,7 @@
     align-items: center;
     justify-content: center;
     background: $maintenance_container_bg;
-    height: 34.75rem;
+    height: 32rem;
 
     @include breakpoint($only-mobile) {
       height: 27.75rem;
@@ -58,14 +51,14 @@
       border: 1px solid $maintenance_container_border;
       position: absolute;
       top: -1.3125rem;
-      left: -1.3125rem;
-      right: -1.3125rem;
+      #{$left}: -1.3125rem;
+      #{$right}: -1.3125rem;
       bottom: -1.3125rem;
 
       @include breakpoint($only-mobile) {
         top: -0.5rem;
-        left: -0.4375rem;
-        right: -0.4375rem;
+        #{$left}: -0.4375rem;
+        #{$right}: -0.4375rem;
         bottom: -0.5rem;
       }
     }
