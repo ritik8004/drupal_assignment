@@ -1092,9 +1092,13 @@ function _alshaya_acm_is_message_type(string $message, string $type) {
   // and in Drupal.
   $exception_messages = Settings::get('alshaya_spc.exception_message');
   $request_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  if (isset($exception_messages[$request_langcode], $exception_messages[$request_langcode][$message])
-    && $exception_messages[$request_langcode][$message] == $type) {
-    return TRUE;
+  if (isset($exception_messages[$request_langcode])) {
+    foreach ($exception_messages[$request_langcode] as $msg => $message_type) {
+      // If message matches and having of specified type.
+      if (strpos($message, $msg) !== FALSE && $message_type == $type) {
+        return TRUE;
+      }
+    }
   }
 
   return FALSE;

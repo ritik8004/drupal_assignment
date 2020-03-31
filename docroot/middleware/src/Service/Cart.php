@@ -757,15 +757,11 @@ class Cart {
       }
 
       // Check the exception type from drupal.
-      $exception_messages = $this->settings->getSettings('alshaya_spc.exception_message');
-      $request_langcode = $this->settings->getRequestLanguage();
-      $exception_type = isset($exception_messages[$request_langcode], $exception_messages[$request_langcode][$e->getMessage()])
-        ? $exception_messages[$request_langcode][$e->getMessage()]
-        : NULL;
+      $exception_type = $this->exceptionType($e->getMessage());
 
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
-      if (!empty($exception_type) && in_array($exception_type, ['OOS', 'quantity_limit'])) {
+      if (!empty($exception_type)) {
         // Get cart object.
         $cart = $this->getCart();
         // If cart is available and cart has item.
@@ -781,6 +777,30 @@ class Cart {
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Get the exception message type.
+   *
+   * @param string $message
+   *   Exception message.
+   *
+   * @return null|string
+   *   Message type.
+   */
+  public function exceptionType(string $message) {
+    $exception_messages = $this->settings->getSettings('alshaya_spc.exception_message');
+    $request_langcode = $this->settings->getRequestLanguage();
+    if (isset($exception_messages[$request_langcode])) {
+      foreach ($exception_messages[$request_langcode] as $msg => $message_type) {
+        // If message matches.
+        if (strpos($message, $msg) !== FALSE) {
+          return $message_type;
+        }
+      }
+    }
+
+    return NULL;
   }
 
   /**
