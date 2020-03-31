@@ -247,7 +247,6 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/googlemapapi',
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
-          'acq_checkoutcom/applepaycss',
         ],
         'drupalSettings' => [
           'cnc_subtitle_available' => $cc_config->get('checkout_click_collect_available'),

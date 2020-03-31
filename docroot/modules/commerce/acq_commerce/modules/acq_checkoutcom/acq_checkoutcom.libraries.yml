@@ -35,14 +35,11 @@ live_kit:
     https://cdn.checkout.com/js/checkoutkit.js: { type: external }
 
 applepay:
+  css:
+    component:
+      css/applepay.css: {}
   js:
     js/acq_checkoutcom.applePay.js: {}
   dependencies:
     - core/drupalSettings
     - acq_checkoutcom/global
-    - acq_checkoutcom/applepaycss
-
-applepaycss:
-  css:
-    component:
-      css/applepay.css: {}
