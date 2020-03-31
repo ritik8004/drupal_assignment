@@ -251,6 +251,7 @@ export const validateAddressFields = (e, validateEmail) => {
           document.getElementById(`${key}-error`).innerHTML = Drupal.t('Please enter @label.', { '@label': field.label });
           document.getElementById(`${key}-error`).classList.add('error');
           isError = true;
+          addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
         } else {
           document.getElementById(`${key}-error`).innerHTML = '';
           document.getElementById(`${key}-error`).classList.remove('error');
@@ -273,7 +274,6 @@ export const addEditAddressToCustomer = (e) => {
   if (notValidAddress) {
     // Removing loader in case validation fail.
     removeFullScreenLoader();
-    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
     return;
   }
 
@@ -439,8 +439,6 @@ export const checkoutAddressProcess = (e) => {
   if (notValidAddress) {
     // Remove the loader.
     removeFullScreenLoader();
-    // Scroll to first error element.
-    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
     return;
   }
 
@@ -591,7 +589,6 @@ export const processBillingUpdateFromForm = (e, shipping) => {
   // If not valid.
   if (isValid) {
     removeFullScreenLoader();
-    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
     return;
   }
 
