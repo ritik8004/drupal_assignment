@@ -26,7 +26,31 @@
     markup += '</div>';
     markup += '</div>';
     return markup;
-  }
+  };
+
+  Drupal.theme.matchBackCartNotificationMarkup = function(data) {
+    // var markup = '<div id="cart_notification" class="matchback-cart-notification">';
+    var markup = '<div class="matchback-notification notification">';
+    markup += '<div class="matchback-cart-notification-close"></div>';
+    markup += '<div class="col-1">';
+    markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
+    // markup += '<div class="notification-qty">' + Drupal.t('Qty: ') + '<span class="qty">' +  data.quantity + '</span></div>';
+    markup += '</div>';
+    markup += '<div class="col-2">';
+    markup += '<div class="name">' + data.name + '</div>';
+    markup += '<div class="prod-added-text">' + Drupal.t('has been added to your cart') + '</div>';
+    markup += '<div classs="matchback-notification-qty">';
+    markup += Drupal.t('Quantity: ');
+    markup += '<span class="qty">' + data.quantity + '</span>';
+    markup += '</div>';
+    markup += '<div class="matchback-prod-added-text">' + Drupal.t('has been added to your cart') + '</div>';
+    markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
+    markup += '</div>';
+    markup += '</div>';
+    // markup += '<div class="horizontal-crossell mobile-only-block"></div>';
+    // markup += '</div>';
+    return markup;
+  };
 
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
@@ -56,7 +80,15 @@
           name: product_name,
           quantity: quantity
         };
-        $('#cart_notification').html(Drupal.theme('cartNotificationMarkup', cart_notification_data));
+
+        $('#cart_notification')
+          .addClass(settings.show_crosssell_as_matchback == true ? 'matchback-cart-notification' : '')
+          .html(
+          Drupal.theme(
+            settings.show_crosssell_as_matchback == true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup',
+            cart_notification_data
+          )
+        );
         $.fn.cartNotificationScroll();
 
         if ($('.ui-dialog').length > 0) {
@@ -135,7 +167,7 @@
         // If magazine layout is enabled.
         else if ($(window).width() < 768 && $('.magazine-layout').length > 0) {
           $('#cart_notification').addClass('cart-notification-animate');
-          $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
+          $('.promotions').find('.promotions-dynasmic-label').trigger('cart:notification:animation:complete');
         }
         else {
           $('html, body').animate({
