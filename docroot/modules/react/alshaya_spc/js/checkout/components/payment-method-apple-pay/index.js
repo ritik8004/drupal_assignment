@@ -12,7 +12,6 @@ class PaymentMethodApplePay extends React.Component {
     return false;
   };
 
-
   render() {
     return (
       <>
