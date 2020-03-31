@@ -210,13 +210,6 @@ class StoresFinderUtility {
       $store_node = $this->getTranslatedStoreFromCode($store_data['code']);
     }
 
-    // Get store data from cache.
-    $cid = 'store_node:' . $store_node->language()->getId() . ':' . $store_node->id();
-    if ($cache = $this->cache->get($cid)) {
-      return $cache->data;
-    }
-
-    $address = $this->addressBookManager->getAddressStructureWithEmptyValues();
     $store = [];
     if ($store_node) {
       $store['name'] = $store_node->label();
@@ -247,22 +240,7 @@ class StoresFinderUtility {
         $store['lat'] = $lat_lng[0]['lat'];
         $store['lng'] = $lat_lng[0]['lng'];
       }
-
-      $store['cart_address'] = $address;
-      // V1 - we update only area in address.
-      $store['cart_address']['extension']['address_area_segment'] = $store_node->get('field_store_area')->getString();
-
-      // V2 - copy address from Store.
-      if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-        $store_address = $store_node->get('field_address')->getValue();
-
-        if ($store_address) {
-          $store['cart_address'] = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
-        }
-      }
     }
-
-    $this->cache->set($cid, $store, Cache::PERMANENT, ['node_type:store']);
     return $store;
   }
 
@@ -320,28 +298,54 @@ class StoresFinderUtility {
     // Load multiple nodes all together.
     $nids = array_keys($store_nodes);
 
+    $prepared_stores = [];
+    foreach ($nids as $key => $nid) {
+      // Get store data from cache.
+      $cid = 'store_node:' . $langcode . ':' . $nid;
+      if ($cache = $this->cache->get($cid)) {
+        $prepared_stores[$nid] = $cache->data;
+        unset($nids[$key]);
+      }
+    }
+
+    // If no stores need to prepare (all get from cache).
+    if (empty($nids)) {
+      return $prepared_stores;
+    }
+
     $nodes = $this->nodeStorage->loadMultiple($nids);
     $config = $this->configFactory->get('alshaya_click_collect.settings');
-    $prepared_stores = [];
+    $address = $this->addressBookManager->getAddressStructureWithEmptyValues();
     // Loop through node and add store address/opening hours/delivery time etc.
     foreach ($nodes as $nid => $node) {
       $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
-      $current_store_code = $node->get('field_store_locator_id')->getString();
       $prepared_stores[$nid] = $this->getStoreExtraData($store_codes, $node);
-      $store = $stores[$current_store_code] ?? [];
-      $store['rnc_available'] = (int) $store['rnc_available'];
-      $store['sts_available'] = (int) $store['sts_available'];
-      $store['formatted_distance'] = $this->t('@distance miles', [
-        '@distance' => number_format((float) $store['distance'], 2, '.', ''),
-      ]);
+      $store = is_array($stores[$store_nodes[$nid]['field_store_locator_id_value']]) ? $stores[$store_nodes[$nid]['field_store_locator_id_value']] : [];
       if (!empty($store['rnc_available'])) {
         $store['delivery_time'] = $config->get('click_collect_rnc');
+      }
+
+      $store['cart_address'] = $address;
+      // V1 - we update only area in address.
+      $store['cart_address']['extension']['address_area_segment'] = $node->get('field_store_area')->getString();
+
+      // V2 - copy address from Store.
+      if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+        $store_address = $node->get('field_address')->getValue();
+
+        if ($store_address) {
+          $store['cart_address'] = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
+        }
       }
 
       $prepared_stores[$nid] += $store;
       // Unset the store for which we found the node, so that we can log the
       // store codes for which nodes are missing.
       unset($stores[$store_nodes[$nid]['field_store_locator_id_value']]);
+
+      // Add in cache.
+      $cid = 'store_node:' . $langcode . ':' . $nid;
+      $this->cache->set($cid, $prepared_stores[$nid], Cache::PERMANENT, ['node_type:store']);
     }
 
     // Log into Drupal for admins to check missing nodes for the store codes.
