@@ -3,6 +3,8 @@
 /**
  * @file
  * Looks for sitepath entries in the apcu cache and deletes them.
+ *
+ * @todo Add some protection around this, for example basic auth.
  */
 
 $counter = 0;
