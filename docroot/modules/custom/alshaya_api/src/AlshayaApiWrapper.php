@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_api;
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_api\Helper\MagentoApiHelper;
 use Drupal\alshaya_api\Helper\MagentoApiRequestHelper;
 use Drupal\alshaya_api\Helper\MagentoApiResponseHelper;
