@@ -1,32 +1,18 @@
 export const requestFullscreen = (elem) => {
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.mozRequestFullScreen) { // Firefox.
-    elem.mozRequestFullScreen();
-  } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera.
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { // IE/Edge.
-    elem.msRequestFullscreen();
-  }
+  elem.classList.add('fullscreen');
 };
 
 export const isFullScreen = () => (
-  document.fullscreenElement // Standard syntax.
-  || document.webkitFullscreenElement // Chrome, Safari and Opera syntax.
-  || document.mozFullScreenElement // Firefox syntax
-  || document.msFullscreenElement
+  document.getElementsByClassName('click-and-collect-map-view')[0].classList.contains('fullscreen')
 );
 
 /* Close fullscreen */
 export const exitFullscreen = () => {
-  if (document.mozCancelFullScreen) { // Firefox.
-    return document.mozCancelFullScreen();
+  try {
+    document.getElementsByClassName('click-and-collect-map-view')[0].classList.remove('fullscreen');
+  } catch (e) {
+    return false;
   }
-  if (document.webkitExitFullscreen) { // Chrome, Safari and Opera.
-    return document.exitFullscreen();
-  }
-  if (document.msExitFullscreen) { // IE/Edge.
-    return document.msExitFullscreen();
-  }
-  return document.exitFullscreen();
+
+  return true;
 };

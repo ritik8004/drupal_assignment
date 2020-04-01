@@ -332,7 +332,7 @@ class ClickCollect extends React.Component {
    * Toggle map full screen.
    */
   toggleFullScreen = (fullscreen = null) => {
-    if (fullscreen === true && document.fullscreenElement) {
+    if (fullscreen === true && isFullScreen()) {
       return;
     }
 
@@ -348,11 +348,11 @@ class ClickCollect extends React.Component {
       if (selectedStore) {
         selectedStore.querySelector('.spc-map-list-close').click();
       }
-      exitFullscreen()
-        .then(() => {
-          self.refreshMap();
-        })
-        .catch((err) => Drupal.logJavascriptError('clickncollect-toggleFullScreen', err));
+      if (exitFullscreen()) {
+        self.refreshMap();
+      } else {
+        Drupal.logJavascriptError('clickncollect-toggleFullScreen', 'Not able to exit full screen, click and collect map view.');
+      }
 
       if (!selectedStore) {
         this.selectStoreButtonVisibility(false);

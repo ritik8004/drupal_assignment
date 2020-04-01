@@ -134,3 +134,12 @@ button.spc-cnc-full-screen {
     fill: $spc-checkout-cnc-map-expand;
   }
 }
+
+.click-and-collect-map-view.fullscreen {
+  @include breakpoint($only-mobile) {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    z-index: 4;
+  }
+}
