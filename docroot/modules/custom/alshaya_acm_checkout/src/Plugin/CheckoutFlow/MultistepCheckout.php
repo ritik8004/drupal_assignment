@@ -386,7 +386,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           '@message' => $e->getMessage(),
         ]);
 
-        if (_alshaya_acm_is_out_of_stock_exception($e->getMessage())) {
+        if (_alshaya_acm_is_out_of_stock_exception($e)) {
           $this->handleException();
         }
 
@@ -400,7 +400,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
         // Refresh stock and redirect to basket page with message
         // if we get order limit exception.
-        if (_alshaya_acm_is_order_limit_exceeded_exception($e->getMessage())) {
+        if (_alshaya_acm_is_order_limit_exceeded_exception($e)) {
           $this->handleException();
         }
 

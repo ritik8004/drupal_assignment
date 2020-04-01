@@ -17,7 +17,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\Core\Site\Settings;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -515,7 +514,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
 
     $error = reset($errors);
     $exception = new \Exception($error);
-    if (!_alshaya_acm_is_out_of_stock_exception($exception->getMessage())) {
+    if (!_alshaya_acm_is_out_of_stock_exception($exception)) {
       \Drupal::service('messenger')->addError($error);
     }
   }
@@ -1000,16 +999,33 @@ function alshaya_acm_get_remove_from_basket_link(CartInterface $cart, SKU $sku) 
 }
 
 /**
- * Check if message if OOS message or not.
+ * Check if Exception from API response is for OOS products in cart.
  *
- * @param string $message
- *   Message to check.
+ * @param \Exception $e
+ *   Exception to check.
  *
  * @return bool
- *   TRUE if message matches OOS criteria.
+ *   TRUE if exception matches OOS criteria.
  */
-function _alshaya_acm_is_out_of_stock_exception(string $message) {
-  return _alshaya_acm_is_message_type($message, 'OOS');
+function _alshaya_acm_is_out_of_stock_exception(\Exception $e) {
+  // We are RELYING ON ERROR MESSAGE FROM MAGENTO.
+  // We use t() to match translated message.
+  // It is contributor's responsibility to add the translation in Magento
+  // and in Drupal.
+  $oos_messages = [
+    t('This product is out of stock.')->render(),
+    t('Some of the products are out of stock.')->render(),
+    t('Not all of your products are available in the requested quantity.')->render(),
+    t("We don't have as many")->render(),
+  ];
+
+  foreach ($oos_messages as $message) {
+    if (strpos($e->getMessage(), $message) !== FALSE) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
 }
 
 /**
@@ -1062,42 +1078,26 @@ function _alshaya_acm_exclude_sync_from_shield() {
 }
 
 /**
- * Check if message is for Order Limit Exceeded products in cart.
+ * Check if Exception is for Order Limit Exceeded products in cart.
  *
- * @param string $message
- *   Message to check.
- *
- * @return bool
- *   TRUE if message matches Order Limit Exceeded criteria.
- */
-function _alshaya_acm_is_order_limit_exceeded_exception(string $message) {
-  return _alshaya_acm_is_message_type($message, 'quantity_limit');
-}
-
-/**
- * Check if message is of type exception.
- *
- * @param string $message
- *   Exception message.
- * @param string $type
- *   Type of error to check.
+ * @param \Exception $e
+ *   Exception to check.
  *
  * @return bool
- *   If type of exception or not.
+ *   TRUE if exception matches Order Limit Exceeded criteria.
  */
-function _alshaya_acm_is_message_type(string $message, string $type) {
+function _alshaya_acm_is_order_limit_exceeded_exception(\Exception $e) {
   // We are RELYING ON ERROR MESSAGE FROM MAGENTO.
   // We use t() to match translated message.
   // It is contributor's responsibility to add the translation in Magento
   // and in Drupal.
-  $exception_messages = Settings::get('alshaya_spc.exception_message');
-  $request_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  if (isset($exception_messages[$request_langcode])) {
-    foreach ($exception_messages[$request_langcode] as $msg => $message_type) {
-      // If message matches and having of specified type.
-      if (strpos($message, $msg) !== FALSE && $message_type == $type) {
-        return TRUE;
-      }
+  $ole_messages = [
+    t('The maximum quantity per item has been exceeded')->render(),
+  ];
+
+  foreach ($ole_messages as $message) {
+    if (strpos($e->getMessage(), $message) !== FALSE) {
+      return TRUE;
     }
   }
 
