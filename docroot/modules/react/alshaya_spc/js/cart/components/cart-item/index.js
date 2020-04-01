@@ -111,7 +111,10 @@ export default class CartItem extends React.Component {
                 <a href={Drupal.url(relativeLink)}>{title}</a>
               </div>
               <div className="spc-product-price">
-                <SpecialPrice price={originalPrice} final_price={finalPrice} />
+                <SpecialPrice
+                  price={parseFloat(originalPrice)}
+                  finalPrice={parseFloat(finalPrice)}
+                />
               </div>
               {freeItem === true
               && <div>{Drupal.t('FREE')}</div>}
