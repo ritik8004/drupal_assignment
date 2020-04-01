@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\alshaya_acm_product\SkuManager;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\Cache\Cache;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
