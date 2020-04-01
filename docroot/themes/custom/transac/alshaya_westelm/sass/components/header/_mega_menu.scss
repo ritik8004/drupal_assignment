@@ -185,10 +185,6 @@
     }
 
     .menu--three__list {
-      @include breakpoint($desktop) {
-        margin-bottom: 2rem;
-      }
-
       li {
         @include breakpoint($desktop) {
           padding-bottom: 0.3125rem;
