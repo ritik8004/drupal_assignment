@@ -413,13 +413,19 @@ class CustomerController extends ControllerBase {
   /**
    * Checks if user can download the invoice.
    */
-  public function checkInvoiceAccess(AccountInterface $account, $user, $order_id) {
+  public function checkInvoiceAccess(AccountInterface $account, UserInterface $user, $order_id) {
     if (empty($user) || empty($order_id)) {
       return AccessResult::forbidden();
     }
 
     // Only logged in users will be able to download invoice.
     if ($account->isAnonymous()) {
+      return AccessResult::forbidden();
+    }
+
+    // If current user is the one for which invoice is requested
+    // or the user is administrator we allow access.
+    if (!($account->id() == $user->id() || $account->hasPermission('access all orders'))) {
       return AccessResult::forbidden();
     }
 
