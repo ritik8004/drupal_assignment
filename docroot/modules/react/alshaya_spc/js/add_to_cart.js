@@ -29,6 +29,9 @@
               currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
             }
 
+            var viewMode = $(form).closest('article[gtm-type="gtm-product-link"]').attr('data-vmode');
+            var productKey = (viewMode === 'matchback') ? 'matchback' : 'productInfo';
+
             var quantity = 1;
             // If quantity drop down available, use that value.
             if ($('[name="quantity"]', form).length > 0) {
@@ -62,8 +65,6 @@
             // We pass configurable options if product is not available in cart
             // and of configurable variant.
             if (is_configurable && !available_in_cart) {
-              currentSelectedVariant = $(form).find('.selected-parent-sku').val();
-
               Object.keys(settings.configurableCombinations[page_main_sku].configurables).forEach(function(key) {
                 var option = {
                   'option_id': settings.configurableCombinations[page_main_sku].configurables[key].attribute_id,
@@ -83,7 +84,12 @@
               'sku': currentSelectedVariant,
               'quantity': quantity,
               'cart_id': cart_id,
-              'options': options
+              'options': options,
+              'metaData': {
+                parentSku: page_main_sku,
+                product_name: is_configurable ? settings[productKey][page_main_sku].variants[currentSelectedVariant].cart_title : settings.productInfo[page_main_sku].cart_title,
+                image: is_configurable ? settings[productKey][page_main_sku].variants[currentSelectedVariant].cart_image : settings.productInfo[page_main_sku].cart_image,
+              }
             };
 
             // Post to ajax for cart update/create.
@@ -106,14 +112,14 @@
                   // Showing the error message.
                   $('.error-container-' + cleaned_sku).html('<div class="error">' + response.error_message + '</div>');
                   // Trigger the failed event for other listeners.
-                  $(form).trigger('product-add-to-cart-failed');
+                  $(form).trigger('product-add-to-cart-failed', post_data);
                 }
                 else if (response.cart_id) {
                   // Clean error message.
                   $('.error-container-' + cleaned_sku).html('');
 
                   // Trigger the success event for other listeners.
-                  $(form).trigger('product-add-to-cart-success');
+                  $(form).trigger('product-add-to-cart-success', post_data);
 
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => response }});
