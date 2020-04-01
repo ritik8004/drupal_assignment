@@ -3,7 +3,6 @@
   .edit-checkout,
   #edit-actions-top .checkout-top-button {
     text-transform: uppercase;
-    font-weight: 600;
     padding: 0;
 
     @include breakpoint($tablet) {
@@ -200,7 +199,6 @@
   .promo-continue-shopping-wrapper {
     #coupon-button.add {
       text-transform: uppercase;
-      font-weight: 600;
     }
   }
 }

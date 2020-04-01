@@ -64,12 +64,20 @@ class MagentoApiWrapper {
       ? json_decode($result, TRUE)
       : $result;
 
-    // Exception handling.
-    if (empty($result)) {
-      throw new \Exception($this->utility->getDefaultErrorMessage(), 500);
+    if ($response->getStatusCode() > 500) {
+      throw new \Exception('Back-end system is down', 600);
     }
-    elseif (is_array($result) && !empty($result['message'])) {
-      throw new \Exception($this->getProcessedErrorMessage($result), 400);
+    elseif ($response->getStatusCode() !== 200) {
+      if (empty($result)) {
+        throw new \Exception($this->utility->getDefaultErrorMessage(), 500);
+      }
+      elseif (!empty($result['message'])) {
+        throw new \Exception($this->getProcessedErrorMessage($result), 500);
+      }
+      elseif (!empty($result['messages']) && !empty($result['messages']['error'])) {
+        $error = reset($result['messages']['error']);
+        throw new \Exception($error['message'], $error['code']);
+      }
     }
 
     return $result;

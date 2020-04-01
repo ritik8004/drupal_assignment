@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Response\AlshayaJsonResponse;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Magento\CartActions;
 use App\Service\Cart;
@@ -12,6 +11,7 @@ use App\Service\Magento\MagentoInfo;
 use App\Service\SessionStorage;
 use App\Service\Utility;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -133,7 +133,7 @@ class CartController {
   /**
    * Get cart data.
    *
-   * @return \App\Response\AlshayaJsonResponse
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Cart response.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
@@ -142,7 +142,7 @@ class CartController {
     $cart_id = $this->session->getDataFromSession(Cart::SESSION_STORAGE_KEY);
     if (empty($cart_id)) {
       // In JS we will consider this as empty cart.
-      return new AlshayaJsonResponse(['error' => TRUE]);
+      return new JsonResponse(['error' => TRUE]);
     }
 
     $data = $this->cart->getCart();
@@ -162,7 +162,7 @@ class CartController {
         'error' => json_encode($data),
       ]);
 
-      return new AlshayaJsonResponse($data);
+      return new JsonResponse($data);
     }
 
     // If logged in user.
@@ -178,13 +178,13 @@ class CartController {
 
     // Here we will do the processing of cart to make it in required format.
     $data = $this->getProcessedCartData($data);
-    return new AlshayaJsonResponse($data);
+    return new JsonResponse($data);
   }
 
   /**
    * Restore cart.
    *
-   * @return \App\Response\AlshayaJsonResponse
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Cart response.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
@@ -412,7 +412,7 @@ class CartController {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Current request.
    *
-   * @return \App\Response\AlshayaJsonResponse
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
@@ -425,7 +425,7 @@ class CartController {
       // Return error response if not valid data.
       // Setting custom error code for bad response so that
       // we could distinguish this error.
-      return new AlshayaJsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), '400'));
+      return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), '400'));
     }
 
     $action = $request_content['action'];
@@ -437,7 +437,7 @@ class CartController {
 
         // Pass exception to response.
         if (is_array($cart_id)) {
-          return new AlshayaJsonResponse($cart_id);
+          return new JsonResponse($cart_id);
         }
 
         $customer_id = $this->getDrupalInfo('customer_id');
@@ -486,7 +486,7 @@ class CartController {
           if ($customer && $customer['id']) {
             $result = $this->cart->associateCartToCustomer($customer['id']);
             if (is_array($result) && !empty($result['error'])) {
-              return new AlshayaJsonResponse($result);
+              return new JsonResponse($result);
             }
           }
         }
@@ -519,7 +519,7 @@ class CartController {
 
             // If no shipping method.
             if (empty($shipping_methods)) {
-              return new AlshayaJsonResponse(['error' => TRUE]);
+              return new JsonResponse(['error' => TRUE]);
             }
           }
 
@@ -568,7 +568,7 @@ class CartController {
         }
         catch (\Exception $e) {
           if ($e->getCode() === 302) {
-            return new AlshayaJsonResponse([
+            return new JsonResponse([
               'success' => TRUE,
               'redirectUrl' => $e->getMessage(),
             ]);
@@ -577,14 +577,14 @@ class CartController {
             // Cancel reservation api when process failed for not enough data,
             // or bad data. i.e. checkout.com cvv missing.
             $this->cart->cancelCartReservation($e->getMessage());
-            return new AlshayaJsonResponse([
+            return new JsonResponse([
               'error' => TRUE,
               'message' => $e->getMessage(),
             ]);
           }
           else {
             $this->cart->cancelCartReservation($e->getMessage());
-            return new AlshayaJsonResponse([
+            return new JsonResponse([
               'error' => TRUE,
               'message' => $e->getMessage(),
             ]);
@@ -625,12 +625,12 @@ class CartController {
     }
 
     if (empty($cart) || !empty($cart['error'])) {
-      return new AlshayaJsonResponse($cart ?? []);
+      return new JsonResponse($cart ?? []);
     }
 
     // Here we will do the processing of cart to make it in required format.
     $cart = $this->getProcessedCartData($cart);
-    return new AlshayaJsonResponse($cart);
+    return new JsonResponse($cart);
   }
 
   /**
@@ -639,7 +639,7 @@ class CartController {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Current request.
    *
-   * @return \App\Response\AlshayaJsonResponse
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
@@ -647,13 +647,13 @@ class CartController {
   public function shippingMethods(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
     if (!isset($request_content['cart_id'], $request_content['data'])) {
-      return new AlshayaJsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
+      return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
     $data = $this->cart->prepareShippingData($request_content['data']);
 
     $methods = $this->cart->shippingMethods($data, $request_content['cart_id']);
-    return new AlshayaJsonResponse($methods);
+    return new JsonResponse($methods);
   }
 
   /**
@@ -662,7 +662,7 @@ class CartController {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Current request.
    *
-   * @return \App\Response\AlshayaJsonResponse
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
@@ -670,7 +670,7 @@ class CartController {
   public function placeOrder(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
     if (!isset($request_content['data'])) {
-      return new AlshayaJsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
+      return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
     $result = $this->cart->placeOrder($request_content['data']);
@@ -681,10 +681,10 @@ class CartController {
         'redirectUrl' => 'checkout/confirmation?id=' . $result['secure_order_id'],
       ];
 
-      return new AlshayaJsonResponse($response);
+      return new JsonResponse($response);
     }
 
-    return new AlshayaJsonResponse($result);
+    return new JsonResponse($result);
   }
 
   /**
@@ -729,7 +729,7 @@ class CartController {
   /**
    * Associate cart with active user.
    *
-   * @return \App\Response\AlshayaJsonResponse
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
@@ -737,13 +737,13 @@ class CartController {
   public function associateCart() {
     try {
       if (empty($this->cart->getCartId())) {
-        return new AlshayaJsonResponse($this->utility->getErrorResponse('No cart in session', 404));
+        return new JsonResponse($this->utility->getErrorResponse('No cart in session', 404));
       }
 
       $customer = $this->drupal->getSessionCustomerInfo();
 
       if (empty($customer)) {
-        return new AlshayaJsonResponse($this->utility->getErrorResponse('No user in session', 404));
+        return new JsonResponse($this->utility->getErrorResponse('No user in session', 404));
       }
 
       // Check if association is not required.
@@ -755,7 +755,7 @@ class CartController {
     }
     catch (\Exception $e) {
       // Exception handling here.
-      return new AlshayaJsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
     }
 
     return $this->getCart();
