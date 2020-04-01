@@ -256,7 +256,8 @@
 
       .block-alshaya-super-category-menu,
       .menu--mobile-navigation,
-      #block-cartminiblock {
+      #block-cartminiblock,
+      .block-alshaya-react-mini-cart {
         position: absolute !important;
       }
 
@@ -294,7 +295,8 @@
 
         .block-alshaya-super-category-menu,
         .menu--mobile-navigation,
-        #block-cartminiblock {
+        #block-cartminiblock,
+        .block-alshaya-react-mini-cart {
           display: none;
         }
       }
