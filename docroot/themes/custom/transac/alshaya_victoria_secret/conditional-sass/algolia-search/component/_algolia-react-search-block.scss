@@ -245,59 +245,57 @@
       }
     }
   }
-}
 
-body {
-  &:not(.no-sticky-algolia-search-bar) {
-    @include breakpoint($only-mobile) {
+  body {
+    &:not(.no-sticky-algolia-search-bar) {
       margin-top: 9rem;
-    }
 
-    .block-alshaya-algolia-react-autocomplete {
-      @include breakpoint($only-mobile) {
+      .block-alshaya-algolia-react-autocomplete {
         padding: 0;
       }
-    }
 
-    .block-alshaya-super-category-menu,
-    .menu--mobile-navigation,
-    #block-cartminiblock {
-      @include breakpoint($only-mobile) {
+      .block-alshaya-super-category-menu,
+      .menu--mobile-navigation,
+      #block-cartminiblock {
         position: absolute !important;
       }
-    }
 
-    header {
-      .c-header__region {
-        @include breakpoint($only-mobile) {
+      header {
+        .c-header__region {
           height: auto;
         }
       }
     }
-  }
 
-  .block-alshaya-algolia-react-autocomplete {
-    .algolia-search-back-icon {
-      @include breakpoint($only-mobile) {
+    .block-alshaya-algolia-react-autocomplete {
+      .algolia-search-back-icon {
         #{$left}: 0.5rem;
         top: 0.5rem;
       }
     }
-  }
 
-  &.frontpage {
-    .mobile--search {
-      @include breakpoint($only-mobile) {
+    &.frontpage {
+      .mobile--search {
         visibility: hidden;
       }
     }
-  }
 
-  &.no-sticky-algolia-search-bar {
-    .block-alshaya-algolia-react-autocomplete {
-      &.show-algolia-search-bar {
-        @include breakpoint($only-mobile) {
+    &.no-sticky-algolia-search-bar {
+      .block-alshaya-algolia-react-autocomplete {
+        &.show-algolia-search-bar {
           z-index: 13;
+        }
+      }
+    }
+
+    &:not(.frontpage) {
+      &.hide-header {
+        margin-top: 3.375rem;
+
+        .block-alshaya-super-category-menu,
+        .menu--mobile-navigation,
+        #block-cartminiblock {
+          display: none;
         }
       }
     }
