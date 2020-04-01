@@ -13,9 +13,7 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
   /**
    * {@inheritdoc}
    */
-  public function getOptions(Request $request) {
-    $options = parent::getOptions($request);
-
+  public function hasSession(Request $request) {
     // Here we try to set the legacy cookies we set in AlshayaSessionManager
     // in original expected keys if for some reason they are not available.
     // We do this here as this is invoked before starting the session.
@@ -26,11 +24,20 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
         if (empty($cookies[$expected])) {
           $_COOKIE[$expected] = $value;
           $request->cookies->set($expected, $value);
+
+          $options = $this->getOptions($request);
+
+          // Set the cookie back so we have the original cookie back again.
+          // @TODO: Change it when moving to PHP 7.3 version.
+          // Not doing now as we don't have a way to t\est it.
+          $params = session_get_cookie_params();
+          $expire = $params['lifetime'] ? REQUEST_TIME + $params['lifetime'] : 0;
+          setcookie($expected, $value, $expire, $params['path'], $options['cookie_domain'] . '; SameSite=None', TRUE, $params['httponly']);
         }
       }
     }
 
-    return $options;
+    return parent::hasSession($request);
   }
 
 }
