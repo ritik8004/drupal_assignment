@@ -167,7 +167,7 @@
         // If magazine layout is enabled.
         else if ($(window).width() < 768 && $('.magazine-layout').length > 0) {
           $('#cart_notification').addClass('cart-notification-animate');
-          $('.promotions').find('.promotions-dynasmic-label').trigger('cart:notification:animation:complete');
+          $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
         }
         else {
           $('html, body').animate({
