@@ -16,11 +16,12 @@ Feature: Test MiniCart page
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait for the page to load
     When I press "{add_to_cart_link}"
-    And I wait 2 seconds
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-1 img" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-1 .qty" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-2 .name" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-2 a" element
+    And I wait 5 seconds
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty-label" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .name" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification a" element
     And I wait 5 seconds
     Then I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     And I wait 5 seconds
@@ -49,11 +50,12 @@ Feature: Test MiniCart page
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
-    And I wait 2 seconds
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-1 img" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-1 .qty" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-2 .name" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-2 a" element
+    And I wait 5 seconds
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty-label" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .name" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification a" element
     And I wait 5 seconds
     Then I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     And I wait 5 seconds
@@ -83,10 +85,11 @@ Feature: Test MiniCart page
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-1 img" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-1 .qty" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-2 .name" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .col-2 a" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty-label" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .name" element
+    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification a" element
     And I wait 5 seconds
     Then I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     And I wait 5 seconds

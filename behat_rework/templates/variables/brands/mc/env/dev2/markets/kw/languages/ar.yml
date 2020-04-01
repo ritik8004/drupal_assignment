@@ -45,3 +45,13 @@ variables:
   continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'en'
   language_short: 'en'
+  area_option: 'Andalus'
+  street: 'Street S'
+  building: 'Building B'
+  locality: 'Block A'
+  floor: 'Floor C'
+  landmark: ''
+  postal_code: ''
+  mobile: '94700802'
+  anon_email: 'sampleUserName@mailinator.com'
+  anon_username: 'Sample User Name'
