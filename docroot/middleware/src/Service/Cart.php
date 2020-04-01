@@ -790,9 +790,8 @@ class Cart {
    */
   public function exceptionType(string $message) {
     $exception_messages = $this->settings->getSettings('alshaya_spc.exception_message');
-    $request_langcode = $this->settings->getRequestLanguage();
-    if (isset($exception_messages[$request_langcode])) {
-      foreach ($exception_messages[$request_langcode] as $msg => $message_type) {
+    if (!empty($exception_messages)) {
+      foreach ($exception_messages as $msg => $message_type) {
         // If message matches.
         if (strpos($message, $msg) !== FALSE) {
           return $message_type;
