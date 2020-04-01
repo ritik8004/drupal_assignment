@@ -24,15 +24,15 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
  * Provides a resource to get attributes for SKU's list.
  *
  * @RestResource(
- *   id = "skus_list_with_attributes",
- *   label = @Translation("Attributes for SKU's List"),
+ *   id = "skus_product_list",
+ *   label = @Translation("SKUs Product List"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/skus/attributes",
- *      "https://www.drupal.org/link-relations/create" = "/rest/v1/skus/attributes"
+ *     "canonical" = "/rest/v1/skus/product-list",
+ *      "https://www.drupal.org/link-relations/create" = "/rest/v1/skus/product-list"
  *   }
  * )
  */
-class SkusListWithAttributes extends ResourceBase {
+class SkusProductList extends ResourceBase {
 
   /**
    * The mobile app utility service.
@@ -191,11 +191,8 @@ class SkusListWithAttributes extends ResourceBase {
     $data = [];
     foreach ($skus as $value) {
       $skuEntity = SKU::loadFromSku($value);
+      $data[] = !($skuEntity instanceof SKUInterface) ? NULL : $this->getSkuData($skuEntity);
 
-      if (!($skuEntity instanceof SKUInterface)) {
-        throw (new NotFoundHttpException());
-      }
-      $data[] = $this->getSkuData($skuEntity);
     }
 
     $response = new ResourceResponse($data);
