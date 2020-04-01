@@ -76,16 +76,18 @@
 
       var lastScrollTop = 0;
       $(window).on('scroll', function () {
-        var windowScrollTop = $(this).scrollTop();
-        var direction = 'bottom';
-        if (windowScrollTop > lastScrollTop) {
-          direction = 'bottom';
+        if ($('main').is(':visible')) {
+          var windowScrollTop = $(this).scrollTop();
+          var direction = 'bottom';
+          if (windowScrollTop > lastScrollTop) {
+            direction = 'bottom';
+          }
+          else {
+            direction = 'up';
+          }
+          lastScrollTop = windowScrollTop;
+          stickyAddtobasketButton(direction, 'after');
         }
-        else {
-          direction = 'up';
-        }
-        lastScrollTop = windowScrollTop;
-        stickyAddtobasketButton(direction, 'after');
       });
     }
   }
