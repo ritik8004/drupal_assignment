@@ -2,13 +2,15 @@ import React from 'react';
 import OrderSummaryBlock from '../../utilities/order-summary-block';
 import OrderSummary from './OrderSummary';
 import VatFooterText from '../../utilities/vat-footer';
+import isRTL from '../../utilities/rtl';
 
 const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
   const { items, totals, number_of_items: itemsTotal } = drupalSettings.order_details;
   const { logo, customer_service_text: customerServiceText } = drupalSettings.site_details;
+  const direction = isRTL() === true ? 'rtl' : 'ltr';
 
   return (
-    <div ref={ref} className="spc-order-confirmation-wrapper">
+    <div ref={ref} className="spc-order-confirmation-wrapper" dir={direction}>
       <div className="spc-print-header">
         <img src={logo} />
         <span className="spc-checkout-confirmation-title">{Drupal.t('Order Confirmation')}</span>
