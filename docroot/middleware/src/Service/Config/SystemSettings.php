@@ -76,6 +76,7 @@ class SystemSettings {
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/knet.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/cybersource.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_security.php';
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/exception_message_type.php';
 
     // Include overrides.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';

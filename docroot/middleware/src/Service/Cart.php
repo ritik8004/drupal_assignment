@@ -628,27 +628,6 @@ class Cart {
   }
 
   /**
-   * Refresh the cart.
-   *
-   * @param string $action
-   *   Refresh cart action.
-   *
-   * @return array
-   *   Cart data.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  public function refreshCart(string $action) {
-    $data = [
-      'extension' => (object) [
-        'action' => $action,
-      ],
-    ];
-
-    return $this->updateCart($data);
-  }
-
-  /**
    * Process payment data before placing order.
    *
    * @param string $method
@@ -777,9 +756,50 @@ class Cart {
         $this->cancelCartReservation($e->getMessage());
       }
 
+      // Check the exception type from drupal.
+      $exception_type = $this->exceptionType($e->getMessage());
+
+      // If exception type is of stock limit or of quantity limit,
+      // refresh the stock for the sku items in cart from MDC to drupal.
+      if (!empty($exception_type)) {
+        // Get cart object.
+        $cart = $this->getCart();
+        // If cart is available and cart has item.
+        if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
+          $status = $this->drupal->triggerCheckoutEvent('validate cart', ['cart' => $cart['cart']]);
+          if ($status['status'] == TRUE) {
+            // Return cart object.
+            return $cart;
+          }
+        }
+      }
+
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Get the exception message type.
+   *
+   * @param string $message
+   *   Exception message.
+   *
+   * @return null|string
+   *   Message type.
+   */
+  public function exceptionType(string $message) {
+    $exception_messages = $this->settings->getSettings('alshaya_spc.exception_message');
+    if (!empty($exception_messages)) {
+      foreach ($exception_messages as $msg => $message_type) {
+        // If message matches.
+        if (strpos($message, $msg) !== FALSE) {
+          return $message_type;
+        }
+      }
+    }
+
+    return NULL;
   }
 
   /**

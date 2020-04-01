@@ -145,7 +145,7 @@ export default class Cart extends React.Component {
             <VatFooterText />
           </div>
           <div className="spc-sidebar">
-            <CartPromoBlock coupon_code={couponCode} />
+            <CartPromoBlock coupon_code={couponCode} inStock={inStock} />
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}

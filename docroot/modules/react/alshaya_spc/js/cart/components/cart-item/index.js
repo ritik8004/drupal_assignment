@@ -52,6 +52,8 @@ export default class CartItem extends React.Component {
     document.getElementById(`remove-item-${id}`).classList.add('loading');
     if (cartData instanceof Promise) {
       cartData.then((result) => {
+        // Remove loading class.
+        document.getElementById(`remove-item-${id}`).classList.remove('loading');
         const cartResult = result;
         // Refreshing mini-cart.
         const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartResult } });
