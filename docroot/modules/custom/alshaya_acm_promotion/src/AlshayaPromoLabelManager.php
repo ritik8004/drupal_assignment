@@ -614,8 +614,7 @@ class AlshayaPromoLabelManager {
     }
 
     // If promotions are eligible for dynamic promo label.
-    if (!isset($build['free_gift_promotions'])
-      && $this->isDynamicLabelsEnabled()
+    if ($this->isDynamicLabelsEnabled()
       && $this->checkPromoLabelType($promotion_nodes) === self::ALSHAYA_PROMOTIONS_DYNAMIC_PROMO) {
 
       switch ($view_mode) {
