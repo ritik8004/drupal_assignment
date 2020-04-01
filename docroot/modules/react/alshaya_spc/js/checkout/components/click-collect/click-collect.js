@@ -473,7 +473,7 @@ class ClickCollect extends React.Component {
           </div>
           <div className="spc-cnc-store-actions" data-selected-stored={openSelectedStore}>
             <button className="select-store" type="button" onClick={(e) => this.finalizeCurrentStore(e)}>
-              {Drupal.t('Select this store')}
+              {Drupal.t('select this store')}
             </button>
           </div>
           <SelectedStore

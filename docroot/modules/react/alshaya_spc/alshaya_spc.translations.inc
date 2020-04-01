@@ -92,9 +92,6 @@ function _alshaya_spc_translations() {
       'Expiry' => [
         'ar' => 'تاريخ انتهاء البطاقة',
       ],
-      'Select this store' => [
-        'ar' => 'اختر هذا المحل',
-      ],
       'Your shopping bag is empty' => [
         'ar' => 'حقيبة التسوق الخاصة بك فارغة',
       ],
