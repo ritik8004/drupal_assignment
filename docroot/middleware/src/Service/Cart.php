@@ -402,7 +402,8 @@ class Cart {
     $cart = $this->updateCart($data);
 
     // If cart update has error.
-    if ($cart['error']) {
+    if ($cart['error']
+    || $cart['response_message'][1] == 'json_error') {
       return $cart;
     }
 
@@ -524,7 +525,8 @@ class Cart {
     $cart = $this->updateCart($data);
 
     // If cart update has error.
-    if ($cart['error']) {
+    if ($cart['error']
+      || $cart['response_message'][1] == 'json_error') {
       return $cart;
     }
 
@@ -741,9 +743,27 @@ class Cart {
     $cart_id = $this->getCartId();
     $url = sprintf('carts/%d/updateCart', $cart_id);
 
+    $cart = NULL;
+
     try {
       static::$cart[$cart_id] = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
-      return static::$cart[$cart_id];
+      $cart = static::$cart[$cart_id];
+
+      // If exception at response message level.
+      if ($cart['response_message'][1] == 'json_error') {
+        $messages = json_decode($cart['response_message'][0], TRUE);
+        // Iterate over each message.
+        foreach ($messages as $msg) {
+          // If message is of OOS.
+          if (!empty($exception_type = $this->exceptionType($msg))) {
+            $cart['response_message'][0] = $exception_type;
+            // Throwing exception so that catch by subsequent catch block.
+            throw new \Exception($msg);
+          }
+        }
+      }
+
+      return $cart;
     }
     catch (\Exception $e) {
       static::$cart = NULL;
@@ -762,8 +782,8 @@ class Cart {
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
       if (!empty($exception_type)) {
-        // Get cart object.
-        $cart = $this->getCart();
+        // Get cart object if already not available.
+        $cart = !empty($cart) ? $cart : $this->getCart();
         // If cart is available and cart has item.
         if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
           $status = $this->drupal->triggerCheckoutEvent('validate cart', ['cart' => $cart['cart']]);
