@@ -29,12 +29,10 @@
   };
 
   Drupal.theme.matchBackCartNotificationMarkup = function(data) {
-    // var markup = '<div id="cart_notification" class="matchback-cart-notification">';
     var markup = '<div class="matchback-notification notification">';
     markup += '<div class="matchback-cart-notification-close"></div>';
     markup += '<div class="col-1">';
     markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
-    // markup += '<div class="notification-qty">' + Drupal.t('Qty: ') + '<span class="qty">' +  data.quantity + '</span></div>';
     markup += '</div>';
     markup += '<div class="col-2">';
     markup += '<div class="name">' + data.name + '</div>';
@@ -47,8 +45,6 @@
     markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
     markup += '</div>';
     markup += '</div>';
-    // markup += '<div class="horizontal-crossell mobile-only-block"></div>';
-    // markup += '</div>';
     return markup;
   };
 
