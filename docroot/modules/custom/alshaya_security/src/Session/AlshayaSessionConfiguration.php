@@ -13,10 +13,32 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
   /**
    * {@inheritdoc}
    */
-  public function hasSession(Request $request) {
-    // Here we try to set the legacy cookies we set in AlshayaSessionManager
-    // in original expected keys if for some reason they are not available.
-    // We do this here as this is invoked before starting the session.
+  public function getName(Request $request) {
+    $this->setCookieFromLegacy($request);
+    return parent::getName($request);
+  }
+
+  /**
+   * Wrapper function to set original cookies from legacy cookies.
+   *
+   * Here we try to set the legacy cookies we set in AlshayaSessionManager
+   * in original expected keys if for some reason they are not available.
+   * We do this here as this is invoked before starting the session.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request.
+   */
+  protected function setCookieFromLegacy(Request $request) {
+    static $processed = NULL;
+
+    if ($processed) {
+      return;
+    }
+
+    // Set the static variable first to ensure we don't call this function
+    // recursively.
+    $processed = TRUE;
+
     $cookies = $request->cookies->all();
     foreach ($cookies as $name => $value) {
       if (strpos($name, AlshayaSessionManager::LEGACY_SUFFIX) !== FALSE) {
@@ -28,16 +50,16 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
           $options = $this->getOptions($request);
 
           // Set the cookie back so we have the original cookie back again.
-          // @TODO: Change it when moving to PHP 7.3 version.
-          // Not doing now as we don't have a way to t\est it.
+          // If the user upgrades the browser and tries to checkout without
+          // original cookie, we will face the same 500.
+          // @TODO: Change it when moving to PHP 7.3 version.Not doing now as
+          // we don't have a way to test it.
           $params = session_get_cookie_params();
           $expire = $params['lifetime'] ? REQUEST_TIME + $params['lifetime'] : 0;
           setcookie($expected, $value, $expire, $params['path'], $options['cookie_domain'] . '; SameSite=None', TRUE, $params['httponly']);
         }
       }
     }
-
-    return parent::hasSession($request);
   }
 
 }
