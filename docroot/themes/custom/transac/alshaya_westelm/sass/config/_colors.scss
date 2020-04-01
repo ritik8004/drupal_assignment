@@ -520,17 +520,18 @@ $_sitemap_l3: $WE_grey_three;
 $webform_contact_legend: $WE_grey_three;
 
 // 404 & Maintenance Pages.
-$maintenance_body_bg: $WE_white;
-$maintenance_link: $WE_white;
-$maintenance_link_border: $WE_white;
+$maintenance_body_bg: $WE_gray_six;
+$maintenance_link: $WE_grey_two;
+$maintenance_link_hover: $WE_grey_three;
 $maintenance_titles: $WE_white;
 $maintenance_container_border_top: $WE_gray_six;
 $maintenance_container_bg: $WE_gray_six;
-$maintenance_container_border: $WE_grey_three;
+$maintenance_container_border: $WE_grey_two;
 $maintenance_body_text_strong: $WE_grey_three;
 $maintenance_body_text_regular: $WE_grey_three;
 $maintenance_body_text_arabic: $WE_black_one;
-$maintenance_text_shadow: rgba(0, 0, 0, 0.5);
+//$maintenance_text_shadow: rgba(0, 0, 0, 0.5);
+$content_pagetitle: $WE_grey_three;
 
 // Store finder.
 $store_finder_header: $WE_black_one;
