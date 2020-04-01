@@ -3261,12 +3261,12 @@ class SkuManager {
         $field_data = $child->get($field_key)->getValue();
 
         if (!empty($field_data)) {
-
-          $attrSizeGroupCode = $child->get('attr_size_group_code')->getValue();
-
+          if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
+            $size_group = $child->get('attr_size_group_code')->getString();
+          }
           foreach ($field_data as $field_value) {
-            if ($sizeGroupingEnabled && $field_key == 'attr_size' && isset($attrSizeGroupCode[0]['value'])) {
-              $data[$key]['sizegroup|' . $attrSizeGroupCode[0]['value'] . '||size|' . $field_value['value']] = 'sizegroup|' . $attrSizeGroupCode[0]['value'] . '||size|' . $field_value['value'];
+            if (!empty($size_group)) {
+              $data[$key][$size_group . ':' . $field_value['value']] = $size_group . ':' . $field_value['value'];
             }
             else {
               $data[$key][$field_value['value']] = $field_value['value'];
@@ -3283,10 +3283,12 @@ class SkuManager {
       $field_data = $sku->get($field_key)->getValue();
 
       if (!empty($field_data)) {
-        $attrSizeGroupCode = $sku->get('attr_size_group_code')->getValue();
+        if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
+          $size_group = $child->get('attr_size_group_code')->getString();
+        }
         foreach ($field_data as $field_value) {
-          if ($sizeGroupingEnabled && $field_key == 'attr_size' && isset($attrSizeGroupCode[0]['value'])) {
-            $data[$key]['sizegroup|' . $attrSizeGroupCode[0]['value'] . '||size|' . $field_value['value']] = 'sizegroup|' . $attrSizeGroupCode[0]['value'] . '||size|' . $field_value['value'];
+          if (!empty($size_group)) {
+            $data[$key][$size_group . ':' . $field_value['value']] = $size_group . ':' . $field_value['value'];
           }
           else {
             $data[$key][$field_value['value']] = $field_value['value'];

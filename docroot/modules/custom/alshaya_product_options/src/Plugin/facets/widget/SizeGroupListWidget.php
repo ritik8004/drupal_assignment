@@ -36,12 +36,10 @@ class SizeGroupListWidget extends LinksWidget {
     $sizeGroups = [];
     foreach ($items as $item) {
       if (isset($item['#title'], $item['#title']['#value'])) {
-        if (strpos($item['#title']['#value'], '||') !== FALSE) {
-          $sizeGroupArr = explode('||', $item['#title']['#value']);
-          $group = explode('|', $sizeGroupArr[0]);
-          $size = explode('|', $sizeGroupArr[1]);
-          $item['#title']['#value'] = $size[1];
-          $sizeGroups[$group[1]][] = $item;
+        if (strpos($item['#title']['#value'], ':') !== FALSE) {
+          $sizeGroupArr = explode(':', $item['#title']['#value']);
+          $item['#title']['#value'] = $sizeGroupArr[1];
+          $sizeGroups[$sizeGroupArr[0]][] = $item;
         }
         else {
           $sizeGroups[$othersLabel][] = $item;

@@ -155,10 +155,9 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
 
         // Change the size label if size grouping is enabled.
         $sizeGroupingEnabled = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
-        if ($sizeGroupingEnabled && $facet->getFieldIdentifier() == 'attr_size' && strpos($value, '||') !== FALSE) {
-          $sizeGroupArr = explode('||', $value);
-          $size = explode('|', $sizeGroupArr[1]);
-          $value = $size[1];
+        if ($sizeGroupingEnabled && $facet->getFieldIdentifier() == 'attr_size' && strpos($value, ':') !== FALSE) {
+          $sizeGroupArr = explode(':', $value);
+          $value = $sizeGroupArr[1];
         }
         $item = [
           '#theme' => 'facets_result_item__summary',
