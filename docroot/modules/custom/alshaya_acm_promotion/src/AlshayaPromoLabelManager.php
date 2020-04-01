@@ -33,6 +33,7 @@ class AlshayaPromoLabelManager {
     'groupn',
     'groupn_fixdisc',
     'groupn_disc',
+    'ampromo_cart',
   ];
   const ALSHAYA_PROMOTIONS_STATIC_PROMO = 0;
   const ALSHAYA_PROMOTIONS_DYNAMIC_PROMO = 1;
@@ -365,6 +366,13 @@ class AlshayaPromoLabelManager {
           if (!empty($coupon_code = $promotion->get('field_coupon_code')->getValue())) {
             $promoDisplay['coupon_code'] = $coupon_code;
           }
+
+          $data = unserialize($promotion->get('field_acq_promotion_data')->getString());
+          foreach ($data['condition']['conditions'][0]['conditions'] ?? [] as $condition) {
+            if ($condition['attribute'] === 'quote_item_qty') {
+              $promoDisplay['condition_value'] = $condition['value'];
+            }
+          }
       }
     }
 
@@ -494,6 +502,20 @@ class AlshayaPromoLabelManager {
                 '@amount' => $discount_amount,
               ]
             );
+          }
+          break;
+
+        case 'ampromo_cart':
+          foreach ($promotion_data['condition']['conditions'][0]['conditions'] ?? [] as $condition) {
+            if ($condition['attribute'] === 'quote_item_qty') {
+              $condition_value = $condition['value'];
+              $z = $condition_value - $eligible_cart_qty;
+
+              // Apply z-logic to generate label.
+              if ($z >= 1) {
+                $label['dynamic_label'] = $this->t('Add @z more to get FREE item', ['@z' => $z]);
+              }
+            }
           }
           break;
       }
@@ -683,6 +705,12 @@ class AlshayaPromoLabelManager {
         }
       }
 
+      if (!empty($free_gift_promotion['condition_value'])) {
+        $free_gift_box_title = $this->t('Buy @condition_value to get a free gift', [
+          '@condition_value' => $free_gift_promotion['condition_value'],
+        ]);
+      }
+
       $return = [
         '#theme' => 'free_gift_promotion_list',
         '#message' => [
@@ -691,7 +719,7 @@ class AlshayaPromoLabelManager {
         ],
         '#title' => [
           '#type' => 'markup',
-          '#markup' => $this->t('Free Gift'),
+          '#markup' => $free_gift_box_title ?? $this->t('Free Gift'),
         ],
         '#image' => $free_sku_image ?? NULL,
       ];
