@@ -2,6 +2,7 @@
 
 namespace App\Session;
 
+use App\Helper\CookieHelper;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
@@ -14,6 +15,13 @@ use Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
  * Default session handler.
  */
 class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInterface {
+
+  /**
+   * Flag to specify if we need to set the original session cookie again.
+   *
+   * @var bool
+   */
+  protected static $reSetOriginal = FALSE;
 
   /**
    * The request stack.
@@ -49,6 +57,7 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
     if (empty($_COOKIE[$name]) && !empty($_COOKIE[$name . '-legacy'])) {
       $_COOKIE[$name] = $_COOKIE[$name . '-legacy'];
       $request->cookies->set($name, $_COOKIE[$name . '-legacy']);
+      self::$reSetOriginal = TRUE;
     }
   }
 
@@ -127,6 +136,11 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
       $legacy = str_replace(session_name(), session_name() . '-legacy', $originalCookie);
       $legacy = str_replace('; SameSite=none', '', $legacy);
       header($legacy, FALSE);
+    }
+    elseif (self::$reSetOriginal) {
+      $params = session_get_cookie_params();
+      $original = (string) CookieHelper::create(session_name(), session_id(), time() + $params['lifetime']);
+      header('Set-Cookie: ' . $original, FALSE);
     }
 
     return TRUE;
