@@ -200,7 +200,7 @@ $magentos = [
     ],
   ],
   'pb_uat' => [
-    'url' => 'https://pb-uat.store.alshaya.com',
+    'url' => 'https://pb-uat2.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'u59m0076qalrjodhiwoekpt2qpens7c4',
       'consumer_secret' => '521nybox1a70rjpwf1yxyfoqhiyrv7x1',
