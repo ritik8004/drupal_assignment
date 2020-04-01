@@ -33,7 +33,6 @@ Feature: Test the PLP page
     And I wait for AJAX to finish
     Then I should see results sorted in ascending price order
 
-
   Scenario: As a Guest
     I should be able to select a product in stock and
     complete the checkout journey
@@ -133,6 +132,3 @@ Feature: Test the PLP page
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see "رقم طلبيتك هو"
-
-
-
