@@ -94,6 +94,12 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       return [];
     }
 
+    // Load original facet without any overrides so that values such as facet
+    // label can be loaded in English which can be sent to GTM.
+    $facet_id = $facet->id();
+    $storage = $this->entityTypeManager->getStorage($facet->getEntityTypeId());
+    $facet_override_free = $storage->loadOverrideFree($facet_id);
+
     $current_path = rtrim($this->request->getPathInfo(), '/');
     $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
 
@@ -193,7 +199,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       // Setting attribute for the facet items.
       $filter_value_en = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $raw_value);
       $url->setOption('attributes', [
-        'data-drupal-facet-label' => $facet->label(),
+        'data-drupal-facet-label' => $facet_override_free->label(),
         'data-drupal-facet-item-label' => $filter_value_en,
       ]);
       $url->setOption('query', $this->getQueryParams());
