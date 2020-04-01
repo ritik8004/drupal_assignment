@@ -129,10 +129,15 @@ class AlshayaAcmApiWrapper extends APIWrapper {
       return ($client->get($endpoint, $opt));
     };
 
-    $result = [];
-
     try {
       $result = $this->tryAgentRequest($doReq, 'getPromotions', 'promotions');
+
+      if (Settings::get('alshaya_acm_promotion_log_api_response', 0)) {
+        $this->logger->notice('Promotions API response for type @type: @data', [
+          '@type' => $type,
+          '@data' => json_encode($result),
+        ]);
+      }
     }
     catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
