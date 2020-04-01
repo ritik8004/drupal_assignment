@@ -11,8 +11,11 @@
  * Add iso_currency_code for sa sites.
  */
 function alshaya_sa_update_8005() {
-  if ($config = \Drupal::configFactory()->getEditable('acq_commerce.currency')) {
-    $config->set('iso_currency_code', 'SAR')->save();
+  $modulehandler = \Drupal::service("module_handler");
+  if ($modulehandler->moduleExists("acq_commerce")){
+    if ($config = \Drupal::configFactory()->getEditable('acq_commerce.currency')) {
+      $config->set('iso_currency_code', 'SAR')->save();
+    }
   }
 }
 
