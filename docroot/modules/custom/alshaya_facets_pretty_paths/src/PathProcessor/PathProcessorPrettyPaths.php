@@ -78,7 +78,6 @@ class PathProcessorPrettyPaths implements InboundPathProcessorInterface, Outboun
       if ($original_path) {
         $path_alias = $this->aliasManager->getAliasByPath($original_path);
         $query_param = substr($path, strpos($path, "/--") + 1);
-
         $path = $path_alias . '/' . $query_param;
         // Ensure the resulting path has at most one leading slash,to prevent it
         // becoming an external URL without a protocol like //example.com. This

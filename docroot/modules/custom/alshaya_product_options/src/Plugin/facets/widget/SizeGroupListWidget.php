@@ -19,15 +19,6 @@ class SizeGroupListWidget extends LinksWidget {
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
-    return [
-      'granularity' => 20,
-    ] + parent::defaultConfiguration();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function build(FacetInterface $facet) {
     $build = parent::build($facet);
     $items = $build['#items'];
@@ -60,12 +51,8 @@ class SizeGroupListWidget extends LinksWidget {
         '#value' => $group,
         '#theme' => 'facets_result_item_with_size_group',
         '#wrapper_attributes' => [
-          'class' => [
-            0 => 'sizegroup',
-          ],
-          'id' => [
-            0 => $group,
-          ],
+          'class' => ['sizegroup'],
+          'id' => [$group],
         ],
       ];
 
