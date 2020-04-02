@@ -107,6 +107,7 @@
       @include breakpoint($upto-desktop) {
         height: 3.5rem;
         border: 0.5rem solid $algolia-input-box-shadow;
+        line-height: 1.25rem;
       }
 
       @include breakpoint($desktop) {
