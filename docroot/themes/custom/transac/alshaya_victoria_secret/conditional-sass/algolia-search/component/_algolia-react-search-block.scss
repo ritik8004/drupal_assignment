@@ -102,6 +102,7 @@
       @include breakpoint($upto-desktop) {
         height: 3.375rem;
         border: 0.5rem solid $nero;
+        line-height: 1.25rem;
       }
 
       @include breakpoint($desktop) {
