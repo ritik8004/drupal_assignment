@@ -640,10 +640,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       $custom_fields = $this->getMagentoCustomFields();
 
       foreach ($mapping as $field_code => $attribute_code) {
-        if (empty($address[$field_code])) {
-          continue;
-        }
-
         switch ($field_code) {
           case 'mobile_number':
             $magento_address[$attribute_code] = isset($address[$field_code])
