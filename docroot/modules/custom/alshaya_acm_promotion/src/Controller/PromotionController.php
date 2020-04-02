@@ -187,21 +187,23 @@ class PromotionController extends ControllerBase {
             );
           }
 
-          $item['#select_link'] = Link::createFromRoute(
-            $this->t('select'),
-            'alshaya_acm_promotion.select_free_gift',
-            [],
-            [
-              'attributes' => [
-                'class' => ['use-ajax', 'select-free-gift'],
-              ],
-              'query' => [
-                'promotion_id' => $node->id(),
-                'coupon' => $request->query->get('coupon'),
-                'sku' => $free_gift->getSku(),
-              ],
-            ]
-          );
+          if (!empty($node->id() && !empty($request->query->get('coupon')) && !empty($free_gift->getSku()))) {
+            $item['#select_link'] = Link::createFromRoute(
+              $this->t('select'),
+              'alshaya_acm_promotion.select_free_gift',
+              [],
+              [
+                'attributes' => [
+                  'class' => ['use-ajax', 'select-free-gift'],
+                ],
+                'query' => [
+                  'promotion_id' => $node->id(),
+                  'coupon' => $request->query->get('coupon'),
+                  'sku' => $free_gift->getSku(),
+                ],
+              ]
+            );
+          }
 
           break;
 
