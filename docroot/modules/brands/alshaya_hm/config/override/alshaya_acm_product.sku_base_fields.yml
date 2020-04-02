@@ -192,7 +192,6 @@ fields:
   measurements_in_cm:
     label: 'Style'
     type: 'string'
-    description: 'Measurements In CM attribute for the product.'
 
   article_description:
     label: 'Style'

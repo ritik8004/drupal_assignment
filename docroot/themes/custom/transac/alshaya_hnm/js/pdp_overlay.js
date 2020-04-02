@@ -10,7 +10,6 @@
     attach: function (context, settings) {
       $('.popup-details').once('attribute-sliderbar').on('click', function () {
         $('.attribute-sliderbar').addClass('attribute-sliderbar-active');
-        $('.attribute-sliderbar').css('visibility', 'visible');
 
         if ($(window).width() > 1023) {
           $('html').addClass('all-filters-overlay');
