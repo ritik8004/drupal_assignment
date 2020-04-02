@@ -14,6 +14,7 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
@@ -398,6 +399,14 @@ class AcqPromotionsManager {
       // Extract list of sku text attached with the promotion passed.
       $products = $promotion['products'];
 
+      if (Settings::get('promotions_log_data_for_investigations', 0)) {
+        $this->logger->notice('products in promotion id @rule_id of @type: @data', [
+          '@type' => $promotion['promotion_type'],
+          '@rule_id' => $promotion['rule_id'],
+          '@data' => implode(',', array_column($promotion['products'], 'product_sku')),
+        ]);
+      }
+
       foreach ($products as $product) {
         if (!in_array($product['product_sku'], array_keys($fetched_promotion_skus))) {
           $fetched_promotion_skus[$product['product_sku']] = $product['product_sku'];
@@ -538,7 +547,7 @@ class AcqPromotionsManager {
 
     $first = reset($data);
     $flat_skus = is_array($first) ? array_column($data, 'sku') : $data;
-    $this->logger->notice('SKUs @skus queued up to @operation promotion rule: @rule_id', [
+    $this->logger->notice('SKUs queued up for @operation on promotion rule: @rule_id - @skus', [
       '@skus' => implode(',', $flat_skus),
       '@rule_id' => $rule_id,
       '@operation' => $op,
