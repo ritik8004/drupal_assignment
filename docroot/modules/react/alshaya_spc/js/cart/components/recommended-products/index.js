@@ -1,8 +1,13 @@
 import React from 'react';
-
+import smoothscroll from 'smoothscroll-polyfill';
 import RecommendedProduct from '../../../utilities/recommended-product';
 import SectionTitle from '../../../utilities/section-title';
 import isRTL from '../../../utilities/rtl';
+// Use smoothscroll to fill for Safari and IE,
+// Otherwise while scrollIntoView() is supported by all,
+// Smooth transition is not supported apart from Chrome & FF.
+smoothscroll.polyfill();
+
 
 export default class CartRecommendedProducts extends React.Component {
   listHorizontalScroll = (direction) => {

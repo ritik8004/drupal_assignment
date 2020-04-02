@@ -28,7 +28,7 @@ import {
   prepareCnCAddressFromCartShipping,
 } from '../../../utilities/address_util';
 import ConditionalView from '../../../common/components/conditional-view';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 
 window.fetchStore = 'idle';

@@ -14,7 +14,7 @@ import SectionTitle from '../../../utilities/section-title';
 import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
 import CheckoutMessage from '../../../utilities/checkout-message';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 
 export default class AddressForm extends React.Component {
   isComponentMounted = true;

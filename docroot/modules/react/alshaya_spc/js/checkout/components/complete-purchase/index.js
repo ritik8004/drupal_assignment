@@ -5,7 +5,7 @@ import {
 } from '../../../utilities/checkout_util';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import dispatchCustomEvent from '../../../utilities/events';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
 
