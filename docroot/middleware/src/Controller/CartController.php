@@ -556,6 +556,9 @@ class CartController {
         }
         catch (\Exception $e) {
           if ($e->getCode() === 302) {
+            // Set attempted payment 1 before redirecting.
+            $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
+
             return new JsonResponse([
               'success' => TRUE,
               'redirectUrl' => $e->getMessage(),
