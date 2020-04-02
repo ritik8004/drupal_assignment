@@ -1,5 +1,4 @@
 import React from 'react';
-import ToolTip from '../../../utilities/tooltip';
 import getStringMessage from '../../../utilities/strings';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 
@@ -25,12 +24,9 @@ const CodSurchargePaymentMethodDescription = ({ surcharge }) => {
   }
 
   return (
-    <>
-      <span className="spc-payment-method-desc">
-        <span className="desc-content">{getSurchargeShortDescription()}</span>
-        <ToolTip enable>{getStringMessage('cod_surcharge_description')}</ToolTip>
-      </span>
-    </>
+    <div className="spc-payment-method-desc">
+      <div className="desc-content">{getSurchargeShortDescription()}</div>
+    </div>
   );
 };
 

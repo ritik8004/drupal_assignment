@@ -77,8 +77,8 @@
       .spc-billing-meta {
         max-width: 17.125rem;
 
-        @include breakpoint($only-mobile) {
-          max-width: 11.9375rem;
+        @include breakpoint($upto-desktop) {
+          max-width: 13.9375rem;
         }
 
         .spc-billing-name {

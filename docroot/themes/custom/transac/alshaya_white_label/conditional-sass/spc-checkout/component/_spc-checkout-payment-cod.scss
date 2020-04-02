@@ -1,42 +1,51 @@
 .spc-checkout-payment-options .payment-method {
   &.payment-method-cashondelivery {
-    .payment-method-top-panel {
-      @include breakpoint($upto-desktop) {
-        height: auto;
-        min-height: 3.25rem;
-      }
+    .spc-payment-method-desc {
+      margin-top: 0.3125rem;
+    }
+
+    .payment-method-bottom-panel {
+      font-size: 0.875rem;
+      padding-#{$left}: 3rem;
+      padding-#{$right}: 1.25rem;
+      padding-bottom: 1.25rem;
 
       @include breakpoint($only-mobile) {
-        padding-top: 0.25rem;
-        padding-bottom: 0.25rem;
+        padding-bottom: 0.5rem;
+      }
+
+      .cod-surcharge-desc {
+        margin-top: 0.25rem;
+        color: $spc-checkout-billing-help-text;
+        position: relative;
+        padding-#{$left}: 1.875rem;
+
+        @include icon(infomation, before) {
+          font-size: 1.5rem;
+          color: $spc_tooltip_icon;
+          position: absolute;
+          top: -3px;
+          #{$left}: 0;
+        }
       }
     }
 
-    .payment-method-top-panel .radio-label .spc-payment-method-desc {
-      .price-wrapper {
-        .price-currency {
-          padding-#{$right}: 0.3125rem;
-        }
+    .payment-method-top-panel {
+      @include breakpoint($only-mobile) {
+        padding-top: 0.3125rem;
+        padding-bottom: 0.3125rem;
       }
 
-      .tooltip-anchor {
-        margin-#{$left}: 0.25rem;
-      }
+      .desc-content {
+        font-size: 0.875rem;
+        color: $spc-delivery-info-text;
 
-      @include breakpoint($upto-desktop) {
-        display: inline-flex;
-
-        .price-wrapper .price,
-        .tooltip-anchor {
+        div {
           display: inline;
         }
-      }
 
-      @include breakpoint($only-mobile) {
-        display: inline-block;
-
-        html[lang=ar] & {
-          margin-top: 0.3125rem;
+        .price-currency {
+          padding-#{$right}: 0.3125rem;
         }
       }
     }
