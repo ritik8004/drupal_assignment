@@ -444,7 +444,7 @@ class CartController {
         if ($action == CartActions::CART_ADD_ITEM) {
           // If we try to add item while we don't have anything or corrupt
           // session, we create cart object.
-          if (empty($cart_id = $this->cart->getCartId())) {
+          if (empty($this->cart->getCartId())) {
             $this->cart->createCart();
           }
           $options = $request_content['options'];
