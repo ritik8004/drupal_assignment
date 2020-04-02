@@ -423,11 +423,7 @@ class AlshayaApiCommands extends DrushCommands {
       if ($mdata['type_id'] == 'simple' && $data['quantity'] !== $mdata['qty']) {
         $message = $sku . ' | ';
         $message .= 'Drupal stock:' . $data['quantity'] . ' | ';
-        $message .= 'MDC stock:' . (int) $mdata['qty'] . ' | ';
-        $message .= 'Drupal stock status:' . $data['status'] . ' | ';
-        $message .= 'MDC stock status:' . $mdata['stock_status'] . ' | ';
-        $message .= 'Drupal max sale quantity:' . $data['max_sale_qty'] . ' | ';
-        $message .= 'MDC max sale quantity:' . $mdata['max_sale_qty'];
+        $message .= 'MDC stock:' . $mdata['qty'];
         $this->logMessage($message, $options['verbose'] ?? FALSE);
 
         $to_sync['stock_quantity'][] = $sku;
@@ -436,15 +432,17 @@ class AlshayaApiCommands extends DrushCommands {
 
       if ($data['quantity'] > 0 && $data['status'] != $mdata['stock_status']) {
         $message = $sku . ' | ';
-        $message .= 'Drupal stock:' . $data['quantity'] . ' | ';
-        $message .= 'MDC stock:' . (int) $mdata['qty'] . ' | ';
         $message .= 'Drupal stock status:' . $data['status'] . ' | ';
-        $message .= 'MDC stock status:' . $mdata['stock_status'] . ' | ';
-        $message .= 'Drupal max sale quantity:' . $data['max_sale_qty'] . ' | ';
-        $message .= 'MDC max sale quantity:' . $mdata['max_sale_qty'];
+        $message .= 'MDC stock status:' . $mdata['stock_status'];
         $this->logMessage($message, $options['verbose'] ?? FALSE);
 
         $to_sync['stock_status'][] = $sku;
+        continue;
+      }
+
+      // Ignore check for max_sale_qty if we don't get value for
+      // use_config_max_sale_qty from Sanity API.
+      if (!isset($mdata['use_config_max_sale_qty'])) {
         continue;
       }
 
@@ -455,10 +453,6 @@ class AlshayaApiCommands extends DrushCommands {
 
       if ($data['max_sale_qty'] != (int) $mdata['max_sale_qty']) {
         $message = $sku . ' | ';
-        $message .= 'Drupal stock:' . $data['quantity'] . ' | ';
-        $message .= 'MDC stock:' . (int) $mdata['qty'] . ' | ';
-        $message .= 'Drupal stock status:' . $data['status'] . ' | ';
-        $message .= 'MDC stock status:' . $mdata['stock_status'] . ' | ';
         $message .= 'Drupal max sale quantity:' . $data['max_sale_qty'] . ' | ';
         $message .= 'MDC max sale quantity:' . $mdata['max_sale_qty'];
         $this->logMessage($message, $options['verbose'] ?? FALSE);
