@@ -31,3 +31,4 @@ variables:
   excluding_delivery: 'excluding delivery'
   vat: 'Inclusive of VAT'
   language_short: 'en'
+  cart_promotional: ''

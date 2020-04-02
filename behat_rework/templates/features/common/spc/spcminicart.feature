@@ -27,7 +27,7 @@ Feature: Test MiniCart page
     And I wait 5 seconds
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-currency" element
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount" element
-    Then the price and currency matches the content of product
+    Then the price and currency matches the content of product having promotional code set as "{cart_promotional}"
     And I click on "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     And I wait 10 seconds
     Then I should be on "/cart"
@@ -50,10 +50,9 @@ Feature: Test MiniCart page
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty-label" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .name" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification a" element
     And I wait 5 seconds
@@ -61,7 +60,7 @@ Feature: Test MiniCart page
     And I wait 5 seconds
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-currency" element
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount" element
-    Then the price and currency matches the content of product
+    Then the price and currency matches the content of product having promotional code set as "{cart_promotional}"
     And I click on "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     And I wait 10 seconds
     Then I should be on "/{language_short}/cart" page
@@ -87,7 +86,6 @@ Feature: Test MiniCart page
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty-label" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .name" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification a" element
     And I wait 5 seconds
@@ -95,7 +93,7 @@ Feature: Test MiniCart page
     And I wait 5 seconds
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-currency" element
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount" element
-    Then the price and currency matches the content of product
+    Then the price and currency matches the content of product having promotional code set as "{cart_promotional}"
     And I click on "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     And I wait 10 seconds
     Then I should be on "/{language_short}/cart" page

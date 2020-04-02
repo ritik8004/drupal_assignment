@@ -1,2 +1,3 @@
 variables:
   url_base_uri: 'https://pbkw-dev2.factory.alshaya.com/en'
+  cart_promotional: ''

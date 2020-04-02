@@ -34,7 +34,7 @@ variables:
   language_sign_in: 'تسجيل الدخول'
   language_find_store: 'البحث عن محلاتنا'
   second_language_link: 'English'
-  language_add_to_cart_link: 'أضف إلى حقيبة التسوق'
+  language_add_to_cart_link: 'أضيفي إلى حقيبة التسوق'
   language_subtotal: 'المبلغ'
   language_order_total: 'المبلغ الإجمالي للطلبية'
   language_order_summary: 'ملخص الطلبية'
@@ -73,3 +73,4 @@ variables:
   language_payment_type_text: 'payment method:'
   language_area_option: 'دبي'
   language_city_option: 'البدر'
+  cart_promotional: '10'

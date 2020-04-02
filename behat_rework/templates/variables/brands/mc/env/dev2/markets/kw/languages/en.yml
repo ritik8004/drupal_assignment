@@ -74,3 +74,4 @@ variables:
   language_payment_type_text: 'payment method:'
   language_area_option: 'الأندلس'
   language_city_option: ''
+  cart_promotional: ''

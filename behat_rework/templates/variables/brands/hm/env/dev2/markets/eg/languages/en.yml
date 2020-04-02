@@ -74,3 +74,5 @@ variables:
   language_payment_type_text: 'payment method:'
   language_area_option: 'القاهرة'
   language_city_option: 'القاهرة'
+  cart_promotional: '10'
+

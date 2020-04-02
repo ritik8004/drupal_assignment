@@ -1810,12 +1810,12 @@ class FeatureContext extends CustomMinkContext
   }
 
   /**
-   * @Then the price and currency matches the content of product
+   * @Then the price and currency matches the content of product having promotional code set as :cart_promotional
    */
-  public function iPriceCurrencyMatches()
+  public function iPriceCurrencyMatches($cart_promotional)
   {
     $page = $this->getSession()->getPage();
-    if ($this->assertSession()->elementExists('css', '#block-content .acq-content-product .has--special--price')) {
+    if ($page->find('css', '#block-content .acq-content-product .has--special--price')) {
       $product_price = $page->find('css', '#block-content .acq-content-product .special--price .price .price-amount')->getHtml();
       $product_price = floatval($product_price);
       $product_currency = $page->find('css', '#block-content .acq-content-product .special--price .price .price-currency')->getHtml();
@@ -1829,11 +1829,19 @@ class FeatureContext extends CustomMinkContext
     $cart_price = floatval($cart_price);
     $cart_currency = $page->find('css', '#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-currency')->getHtml();
 
-    if ($product_price !== $cart_price) {
-      throw new \Exception('Correct price did not added get in minicart');
+    if ($cart_promotional) {
+      $message = ($product_price >= $cart_price) ? '' : 'Correct price did not added get in minicart, expected cart price %d';
+      if (!empty($message)) {
+        throw new \Exception(sprintf($message, $product_price));
+      }
+    }
+    else {
+      if ($product_price !== $cart_price) {
+        throw new \Exception(sprintf('Correct price did not added get in minicart, expected cart price %d', $product_price));
+      }
     }
     if ($product_currency !== $cart_currency) {
-      throw new \Exception('Correct currency did not added get in minicart');
+      throw new \Exception(sprintf('Correct currency did not added get in minicart, expected cart price %d', $product_price));
     }
   }
 
