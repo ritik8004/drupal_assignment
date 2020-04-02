@@ -13,4 +13,8 @@ do
   rm -rf /tmp/simple-oauth
   scp -r alshaya.01$suffix@alshaya01$suffix.ssh.enterprise-g1.acquia-sites.com:/home/alshaya/simple-oauth /tmp
   scp -r /tmp/simple-oauth $target_stack.$target_env_prefix$suffix@$target_stack$target_env_prefix$suffix.ssh.enterprise-g1.acquia-sites.com:/home/$target_stack
+
+  rm -rf /tmp/slack_settings
+  scp -r alshaya.01$suffix@alshaya01$suffix.ssh.enterprise-g1.acquia-sites.com:/home/alshaya/slack_settings /tmp
+  scp -r /tmp/slack_settings $target_stack.$target_env_prefix$suffix@$target_stack$target_env_prefix$suffix.ssh.enterprise-g1.acquia-sites.com:/home/$target_stack
 done
