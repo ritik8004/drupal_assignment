@@ -3261,8 +3261,11 @@ class SkuManager {
         $field_data = $child->get($field_key)->getValue();
 
         if (!empty($field_data)) {
+          $size_group = '';
           if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
             $size_group = $child->get('attr_size_group_code')->getString();
+            // Group all the sizes without group in a section in bottom.
+            $size_group = !empty($size_group) ? $size_group : 'other';
           }
           foreach ($field_data as $field_value) {
             if (!empty($size_group)) {
@@ -3272,6 +3275,7 @@ class SkuManager {
               $data[$key][$field_value['value']] = $field_value['value'];
             }
           }
+
         }
       }
     }
@@ -3283,8 +3287,11 @@ class SkuManager {
       $field_data = $sku->get($field_key)->getValue();
 
       if (!empty($field_data)) {
+        $size_group = '';
         if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
           $size_group = $child->get('attr_size_group_code')->getString();
+          // Group all the sizes without group in a section in bottom.
+          $size_group = !empty($size_group) ? $size_group : 'other';
         }
         foreach ($field_data as $field_value) {
           if (!empty($size_group)) {

@@ -37,6 +37,7 @@ function alshaya_product_options_theme() {
 
   $items['facets_result_item_with_size_group'] = [
     'variables' => [
+      'items' => [],
       'value' => '',
     ],
     'template' => 'facets-result-item-with-size-group',

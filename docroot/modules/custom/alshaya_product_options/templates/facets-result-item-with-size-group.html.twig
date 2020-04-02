@@ -4,11 +4,19 @@
  * Default theme implementation of a facet result item with sizegroup.
  *
  * Available variables:
- * - value: The item value.
+ * - items: The item value.
+ * - value: The group value.
  *
  * @ingroup themeable
  */
 #}
-
-<button class="sizegroup-filter">{{ value }}</button>
-
+<ul class="sizegroup" id="{{ value }}">
+  <button class="sizegroup-filter">{{ value }}</button>
+  {%- if items -%}
+    {%- for item in items -%}
+      <li>{{ item }}</li>
+    {%- endfor -%}
+  {%- else -%}
+    {{- empty -}}
+  {%- endif -%}
+</ul>
