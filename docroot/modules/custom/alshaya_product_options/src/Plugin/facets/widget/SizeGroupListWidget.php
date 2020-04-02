@@ -45,11 +45,17 @@ class SizeGroupListWidget extends LinksWidget {
 
     foreach ($sizeGroups ?? [] as $group => $sizes) {
       $groupItems = [];
-      foreach ($sizes as $size) {
+      foreach ($sizes as $index => $size) {
         $size['#wrapper_attributes']['class'][] = 'sizegroup-child';
         $size['#wrapper_attributes']['class'][] = $group . '-child';
-        $groupItems[] = $size;
+        $groupItems[$index]['element'] = $size;
+        // Set active classe at wrapper(li) for childs.
+        $groupItems[$index]['class'] = '';
+        if ($size['#title']['#is_active']) {
+          $groupItems[$index]['class'] = 'is-active';
+        }
       }
+
       $items[] = [
         '#items' => $groupItems,
         '#value' => $group,
