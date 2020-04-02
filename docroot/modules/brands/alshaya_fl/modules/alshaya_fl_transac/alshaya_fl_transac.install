@@ -10,31 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * For plp_gender and gender facets, make their translated config entity names
- * as "Gender" so that the English value can be sent in "filter" GTM event.
- */
-function alshaya_fl_transac_update_8010() {
-  $config_factory = \Drupal::service('config.factory');
-  $config_factory_override = \Drupal::service('language.config_factory_override');
-
-  $config_ar = $config_factory_override->getOverride('ar', 'facets.facet.plp_gender');
-  $config_en = $config_factory->get('facets.facet.plp_gender')->getOriginal('', FALSE);
-  if ($config_ar && $config_en) {
-    $config_ar->set('name', $config_en['name']);
-    $config_ar->save();
-  }
-
-  $config_ar = $config_factory_override->getOverride('ar', 'facets.facet.gender');
-  $config_en = $config_factory->get('facets.facet.gender')->getOriginal('', FALSE);
-  if ($config_ar && $config_en) {
-    $config_ar->set('name', $config_en['name']);
-    $config_ar->save();
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Fix broken processor configs from alshaya_fl_transac_update_8004.
  */
 function alshaya_fl_transac_update_8009() {
