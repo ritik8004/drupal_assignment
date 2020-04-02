@@ -39,7 +39,7 @@
               quantity = $('[name="quantity"]', form).val();
             }
 
-            var cart_action = 'create cart';
+            var cart_action = 'add item';
 
             var cart_id = null;
             var options = new Array();
@@ -51,14 +51,6 @@
                 cart_data = cart_data.cart;
                 if (cart_data.cart_id !== null) {
                   cart_id = cart_data.cart_id;
-                  cart_action = 'add item';
-
-                  // Adjust the quantity as available in cart already.
-                  if (cart_data.items.currentSelectedVariant !== undefined) {
-                    quantity = cart_data.items.currentSelectedVariant.qty + quantity;
-                    cart_action = 'update item';
-                    available_in_cart = true;
-                  }
                 }
               }
             }
