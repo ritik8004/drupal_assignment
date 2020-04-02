@@ -267,7 +267,7 @@ class CheckoutComAPIWrapper {
    *   Return TRUE for enabled, FALSE otherwise.
    */
   public function isCheckout3dEnabled() {
-    return $this->apiHelper->getCheckoutcomConfig('verify3dsecure');;
+    return $this->apiHelper->getCheckoutcomConfig('verify3dsecure');
   }
 
   /**
