@@ -442,6 +442,11 @@ class CartController {
       case CartActions::CART_REMOVE_ITEM:
         $options = [];
         if ($action == CartActions::CART_ADD_ITEM) {
+          // If we try to add item while we don't have anything or corrupt
+          // session, we create cart object.
+          if (empty($cart_id = $this->cart->getCartId())) {
+            $this->cart->createCart();
+          }
           $options = $request_content['options'];
         }
         $cart = $this->cart->addUpdateRemoveItem($request_content['sku'], $request_content['quantity'], $action, $options);
