@@ -191,7 +191,6 @@ class AlshayaAcmKnetHelper extends KnetHelper {
       }
     }
     catch (\Exception $e) {
-      $this->logger->error('');
       $this->logger->warning('Error occurred while getting cart id @cart_id: @message, k-net data: @data', [
         '@cart_id' => $response['quote_id'],
         '@message' => $e->getMessage(),
