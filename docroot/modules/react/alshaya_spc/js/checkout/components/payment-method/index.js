@@ -15,6 +15,7 @@ import PaymentMethodCybersource from '../payment-method-cybersource';
 import { removeStorageInfo } from '../../../utilities/storage';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
+import getStringMessage from '../../../utilities/strings';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -118,6 +119,12 @@ export default class PaymentMethod extends React.Component {
 
             <PaymentMethodIcon methodName={method.code} />
           </div>
+
+          <ConditionalView condition={isSelected && method.code === 'cashondelivery' && cart.cart.surcharge.amount > 0}>
+            <div className={`payment-method-bottom-panel ${method.code}`}>
+              <div className="cod-surcharge-desc">{getStringMessage('cod_surcharge_description')}</div>
+            </div>
+          </ConditionalView>
 
           <ConditionalView condition={(isSelected && method.code === 'checkout_com')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
