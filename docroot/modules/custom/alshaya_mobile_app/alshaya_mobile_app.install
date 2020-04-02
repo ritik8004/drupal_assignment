@@ -13,6 +13,29 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add new API to allow resetting user password.
+ */
+function alshaya_mobile_app_update_8071() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $configManager */
+  $configManager = \Drupal::service('alshaya_config.manager');
+
+  $configManager->updateConfigs(
+    ['rest.resource.user_reset_password'],
+    'alshaya_mobile_app'
+  );
+
+  $configManager->updateConfigs(
+    ['user.role.mobile_app_consumer'],
+    'alshaya_mobile_app',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE_KEY,
+    ['replace_keys' => ['permissions']]
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new rest resources to return the list of attributes for
  * list of SKU's passed.
  */
