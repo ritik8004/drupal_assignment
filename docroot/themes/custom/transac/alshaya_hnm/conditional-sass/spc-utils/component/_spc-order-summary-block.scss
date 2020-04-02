@@ -1,8 +1,11 @@
 .spc-order-summary-block {
   .total-line-item {
-    .sub-total,
-    .grand-total {
+    > span:first-child {
       text-transform: capitalize;
     }
+  }
+
+  .delivery-vat {
+    text-transform: capitalize;
   }
 }

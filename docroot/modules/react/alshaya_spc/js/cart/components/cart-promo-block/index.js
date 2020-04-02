@@ -14,7 +14,7 @@ export default class CartPromoBlock extends React.Component {
   }
 
   componentDidMount() {
-    const { coupon_code: couponCode } = this.props;
+    const { coupon_code: couponCode, inStock } = this.props;
 
     if (couponCode.length > 0) {
       this.setState({
@@ -24,6 +24,12 @@ export default class CartPromoBlock extends React.Component {
       });
 
       document.getElementById('promo-code').value = couponCode;
+    }
+
+    if (!inStock) {
+      this.setState({
+        disabled: true,
+      });
     }
 
     document.addEventListener('spcCartPromoError', this.cartPromoEventErrorHandler, false);
@@ -120,12 +126,8 @@ export default class CartPromoBlock extends React.Component {
     const { promoApplied, disabled, buttonText } = this.state;
     const { inStock } = this.props;
     const promoRemoveActive = promoApplied ? 'active' : '';
-    let activeClass = '';
-    if (inStock === false) {
-      activeClass = 'in-active';
-    }
     return (
-      <div className={`spc-promo-code-block ${activeClass}`}>
+      <div className="spc-promo-code-block">
         <SectionTitle>{Drupal.t('have a promo code?')}</SectionTitle>
         <div className="block-content">
           <input id="promo-code" disabled={disabled} type="text" placeholder={Drupal.t('Promo code')} />
