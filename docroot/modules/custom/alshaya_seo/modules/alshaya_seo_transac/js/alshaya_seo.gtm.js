@@ -97,8 +97,8 @@
       });
 
       // Push GTM event on add to cart failure.
-      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e, productData) {
-        var sku = productData.metaData.parentSku;
+      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e, productInfo) {
+        var sku = productInfo.parentSku;
         var errorMessage = $('.errors-container .error .message', $(this)).text();
         // Get selected attributes.
         var attributes = [];

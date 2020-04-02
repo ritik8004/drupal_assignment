@@ -85,11 +85,14 @@
               'quantity': quantity,
               'cart_id': cart_id,
               'options': options,
-              'metaData': {
-                parentSku: page_main_sku,
-                product_name: is_configurable ? settings[productKey][page_main_sku].variants[currentSelectedVariant].cart_title : settings.productInfo[page_main_sku].cart_title,
-                image: is_configurable ? settings[productKey][page_main_sku].variants[currentSelectedVariant].cart_image : settings.productInfo[page_main_sku].cart_image,
-              }
+            };
+
+            var productData = {
+              sku: currentSelectedVariant,
+              quantity: quantity,
+              parentSku: page_main_sku,
+              product_name: is_configurable ? settings[productKey][page_main_sku].variants[currentSelectedVariant].cart_title : settings.productInfo[page_main_sku].cart_title,
+              image: is_configurable ? settings[productKey][page_main_sku].variants[currentSelectedVariant].cart_image : settings.productInfo[page_main_sku].cart_image,
             };
 
             // Post to ajax for cart update/create.
@@ -112,14 +115,14 @@
                   // Showing the error message.
                   $('.error-container-' + cleaned_sku).html('<div class="error">' + response.error_message + '</div>');
                   // Trigger the failed event for other listeners.
-                  $(form).trigger('product-add-to-cart-failed', post_data);
+                  $(form).trigger('product-add-to-cart-failed', productData);
                 }
                 else if (response.cart_id) {
                   // Clean error message.
                   $('.error-container-' + cleaned_sku).html('');
 
                   // Trigger the success event for other listeners.
-                  $(form).trigger('product-add-to-cart-success', post_data);
+                  $(form).trigger('product-add-to-cart-success', productData);
 
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => response }});

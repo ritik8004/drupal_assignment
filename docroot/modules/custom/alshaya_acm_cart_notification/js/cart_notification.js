@@ -55,18 +55,18 @@
 
         // Scroll and show cart notification.
         var cart_notification_data = {
-          image: productData.metaData.image,
+          image: productData.image,
           link: Drupal.url('cart'),
           link_text: Drupal.t('view cart'),
-          name: productData.metaData.product_name,
+          name: productData.product_name,
           quantity: productData.quantity
         };
 
         $('#cart_notification')
-          .addClass(settings.show_crosssell_as_matchback == true ? 'matchback-cart-notification' : '')
+          .addClass(settings.show_crosssell_as_matchback === true ? 'matchback-cart-notification' : '')
           .html(
           Drupal.theme(
-            settings.show_crosssell_as_matchback == true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup',
+            settings.show_crosssell_as_matchback === true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup',
             cart_notification_data
           )
         );
