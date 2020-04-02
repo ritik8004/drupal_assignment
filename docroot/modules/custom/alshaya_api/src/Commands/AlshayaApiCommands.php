@@ -414,20 +414,51 @@ class AlshayaApiCommands extends DrushCommands {
       if (empty($mdata)) {
         continue;
       }
-      // If stock in Drupal does not match with stock in Magento.
-      if (($mdata['type_id'] == 'simple' && ($data['quantity'] != (int) $mdata['qty'] || $data['max_sale_qty'] != (int) $mdata['max_sale_qty']))
-         || ($data['quantity'] > 0 && $data['status'] != $mdata['stock_status'])) {
 
+      // Type cleanup.
+      $mdata['qty'] = (int) $mdata['qty'];
+      $data['quantity'] = (int) $data['quantity'];
+
+      // If stock in Drupal does not match with stock in Magento.
+      if ($mdata['type_id'] == 'simple' && $data['quantity'] !== $mdata['qty']) {
         $message = $sku . ' | ';
         $message .= 'Drupal stock:' . $data['quantity'] . ' | ';
-        $message .= 'MDC stock:' . (int) $mdata['qty'] . ' | ';
+        $message .= 'MDC stock:' . $mdata['qty'];
+        $this->logMessage($message, $options['verbose'] ?? FALSE);
+
+        $to_sync['stock_quantity'][] = $sku;
+        continue;
+      }
+
+      if ($data['quantity'] > 0 && $data['status'] != $mdata['stock_status']) {
+        $message = $sku . ' | ';
         $message .= 'Drupal stock status:' . $data['status'] . ' | ';
-        $message .= 'MDC stock status:' . $mdata['stock_status'] . ' | ';
+        $message .= 'MDC stock status:' . $mdata['stock_status'];
+        $this->logMessage($message, $options['verbose'] ?? FALSE);
+
+        $to_sync['stock_status'][] = $sku;
+        continue;
+      }
+
+      // Ignore check for max_sale_qty if we don't get value for
+      // use_config_max_sale_qty from Sanity API.
+      if (!isset($mdata['use_config_max_sale_qty'])) {
+        continue;
+      }
+
+      // Set max_sale_qty to 0 if it is coming from config.
+      $mdata['max_sale_qty'] = !empty($mdata['use_config_max_sale_qty'])
+        ? 0
+        : $mdata['max_sale_qty'];
+
+      if ($data['max_sale_qty'] != (int) $mdata['max_sale_qty']) {
+        $message = $sku . ' | ';
         $message .= 'Drupal max sale quantity:' . $data['max_sale_qty'] . ' | ';
         $message .= 'MDC max sale quantity:' . $mdata['max_sale_qty'];
         $this->logMessage($message, $options['verbose'] ?? FALSE);
 
-        $to_sync[] = $sku;
+        $to_sync['stock_max_sale_qty'][] = $sku;
+        continue;
       }
     }
 
@@ -437,17 +468,20 @@ class AlshayaApiCommands extends DrushCommands {
     }
 
     // Sync?
-    $confirmation = dt('Do you want to sync products with stock mismatch? Count: @count', [
-      '@count' => count($to_sync),
-    ]);
+    foreach ($to_sync as $type => $skus) {
+      $confirmation = dt('Do you want to sync products with @type mismatch? Count: @count', [
+        '@count' => count($skus),
+        '@type' => $type,
+      ]);
 
-    if ($this->io()->confirm($confirmation)) {
-      $this->requestSync(
-        $to_sync,
-        $this->configFactory->get('acq_commerce.store')->get('store_id'),
-        'en',
-        $options['page_size']
-      );
+      if ($this->io()->confirm($confirmation)) {
+        $this->requestSync(
+          $skus,
+          $this->configFactory->get('acq_commerce.store')->get('store_id'),
+          'en',
+          $options['page_size']
+        );
+      }
     }
   }
 
