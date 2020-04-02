@@ -18,6 +18,7 @@ require_once 'credentials.php';
 // @codingStandardsIgnoreLine
 function invokeApi($api, $type = 'GET', $options = []) {
   global $_clientId, $_clientSecret;
+
   $provider = new GenericProvider([
     'clientId' => $_clientId,
     'clientSecret' => $_clientSecret,
