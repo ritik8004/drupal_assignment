@@ -12,7 +12,7 @@ import {
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import { extractFirstAndLastName } from './cart_customer_util';
-import smoothScrollTo from './smoothScroll';
+import { smoothScrollToAddressField } from './smoothScroll';
 
 /**
  * Use this to auto scroll to the right field in address form upon
@@ -23,8 +23,7 @@ import smoothScrollTo from './smoothScroll';
 export const addressFormInlineErrorScroll = (selector) => {
   const errorElement = document.querySelector(selector);
   if (errorElement !== undefined && errorElement !== null) {
-    const errorElementParentClass = `.${errorElement.parentElement.className}`;
-    smoothScrollTo(errorElementParentClass);
+    smoothScrollToAddressField(errorElement);
   }
 };
 
@@ -251,7 +250,6 @@ export const validateAddressFields = (e, validateEmail) => {
           document.getElementById(`${key}-error`).innerHTML = Drupal.t('Please enter @label.', { '@label': field.label });
           document.getElementById(`${key}-error`).classList.add('error');
           isError = true;
-          addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
         } else {
           document.getElementById(`${key}-error`).innerHTML = '';
           document.getElementById(`${key}-error`).classList.remove('error');
@@ -274,6 +272,7 @@ export const addEditAddressToCustomer = (e) => {
   if (notValidAddress) {
     // Removing loader in case validation fail.
     removeFullScreenLoader();
+    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
     return;
   }
 
@@ -439,6 +438,7 @@ export const checkoutAddressProcess = (e) => {
   if (notValidAddress) {
     // Remove the loader.
     removeFullScreenLoader();
+    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
     return;
   }
 
@@ -589,6 +589,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
   // If not valid.
   if (isValid) {
     removeFullScreenLoader();
+    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
     return;
   }
 
