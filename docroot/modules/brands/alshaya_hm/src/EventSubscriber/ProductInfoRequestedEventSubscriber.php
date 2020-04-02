@@ -82,10 +82,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    */
   public function onProductInfoRequested(ProductInfoRequestedEvent $event) {
     switch ($event->getFieldCode()) {
-      case 'title':
-        $this->processTitle($event);
-        break;
-
       case 'description':
         $this->processDescription($event);
         break;
@@ -94,25 +90,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         $this->processShortDescription($event);
         break;
     }
-  }
-
-  /**
-   * Process title for SKU based on Beauty products.
-   *
-   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
-   *   Event object.
-   */
-  public function processTitle(ProductInfoRequestedEvent $event) {
-    $sku = $event->getSku();
-    $title = $event->getValue();
-
-    $sku_name = $sku->get('attr_title_name')->getString();
-
-    if (!empty($sku_name)) {
-      $title = $sku_name;
-    }
-
-    $event->setValue($title);
   }
 
   /**
@@ -200,6 +177,15 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         $description_value .= '<div class="care-instructions-value dry-cleaning-instructions">' . $dry_cleaning_instructions . '</div>';
       }
       $description_value .= '</div>';
+    }
+
+    if ($title_name = $sku_entity->get('attr_title_name')->getString()) {
+      $title_name_markup = [
+        '#theme' => 'product_title_name_markup',
+        '#title' => $this->t('TITLE NAME'),
+        '#title_name' => $title_name,
+      ];
+      $description_value .= $this->renderer->renderPlain($title_name_markup);
     }
 
     if ($article_description = $sku_entity->get('attr_article_description')->getString()) {
