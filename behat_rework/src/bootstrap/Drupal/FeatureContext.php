@@ -26,6 +26,7 @@ use Drupal\DrupalExtension\Context\DrupalContext;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
 use Drupal\node\Entity\Node;
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 
 
 define("ORDER_ASC", 1);
@@ -45,13 +46,20 @@ class FeatureContext extends CustomMinkContext
   }
 
   /**
+   * @AfterScenario
+   */
+  public function cleanBrowserSessions(AfterScenarioScope $scope)
+  {
+    $this->getSession()->stop();
+  }
+
+  /**
    * Wait for page to load for 15 seconds.
    *
    * @Given /^I wait for the page to load$/
    */
   public function iWaitForThePageToLoad()
   {
-//    print_r($this->parameters['ajax_waittime']);
     $this->getSession()->wait($this->parameters['ajax_waittime'] * 1000, "document.readyState === 'complete'");
   }
 
