@@ -13,7 +13,7 @@ use Drupal\Core\Site\Settings;
  * Remove configuration, we will use from settings only now.
  */
 function alshaya_security_update_8002() {
-  \Drupal::configFactory()->get('alshaya_security.settings')->delete();
+  \Drupal::configFactory()->getEditable('alshaya_security.settings')->delete();
 }
 
 /**
