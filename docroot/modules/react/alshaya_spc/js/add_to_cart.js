@@ -21,12 +21,13 @@
             var form = that.closest('form');
             var currentSelectedVariant = $(form).attr('data-sku');
             var page_main_sku = currentSelectedVariant;
-
+            var variant_sku = '';
             // If sku is variant type.
             var is_configurable = $(form).attr('data-sku-type') === 'configurable';
             // If `selected_variant_sku` available, means its configurable.
             if (is_configurable && $('[name="selected_variant_sku"]', form).length > 0) {
               currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
+              variant_sku = currentSelectedVariant;
             }
 
             var viewMode = $(form).closest('article[gtm-type="gtm-product-link"]').attr('data-vmode');
@@ -91,8 +92,8 @@
             var productData = {
               quantity: quantity,
               parentSku: page_main_sku,
-              product_name: is_configurable ? settings[productKey][page_main_sku].variants[currentSelectedVariant].cart_title : settings.productInfo[page_main_sku].cart_title,
-              image: is_configurable ? settings[productKey][page_main_sku].variants[currentSelectedVariant].cart_image : settings.productInfo[page_main_sku].cart_image,
+              product_name: is_configurable ? settings[productKey][page_main_sku].variants[variant_sku].cart_title : settings.productInfo[page_main_sku].cart_title,
+              image: is_configurable ? settings[productKey][page_main_sku].variants[variant_sku].cart_image : settings.productInfo[page_main_sku].cart_image,
             };
 
             // Post to ajax for cart update/create.
