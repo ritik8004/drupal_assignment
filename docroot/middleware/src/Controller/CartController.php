@@ -419,29 +419,27 @@ class CartController {
     $action = $request_content['action'];
 
     switch ($action) {
-      case CartActions::CART_CREATE_NEW:
-        // Get cart id from session or create a new cart id.
-        $cart_id = $this->cart->createCart();
-
-        // Pass exception to response.
-        if (is_array($cart_id)) {
-          return new JsonResponse($cart_id);
-        }
-
-        $customer_id = $this->getDrupalInfo('customer_id');
-        if ($customer_id > 0) {
-          $this->cart->associateCartToCustomer($customer_id);
-        }
-
-        // Then add item to the cart.
-        $cart = $this->cart->addUpdateRemoveItem($request_content['sku'], $request_content['quantity'], CartActions::CART_ADD_ITEM, $request_content['options']);
-        break;
-
       case CartActions::CART_ADD_ITEM:
       case CartActions::CART_UPDATE_ITEM:
       case CartActions::CART_REMOVE_ITEM:
         $options = [];
         if ($action == CartActions::CART_ADD_ITEM) {
+          // If we try to add item while we don't have anything or corrupt
+          // session, we create cart object.
+          if (empty($this->cart->getCartId())) {
+            $cart_id = $this->cart->createCart();
+            // Pass exception to response.
+            if (is_array($cart_id)) {
+              return new JsonResponse($cart_id);
+            }
+
+            // Associate cart to customer.
+            $customer_id = $this->getDrupalInfo('customer_id');
+            if ($customer_id > 0) {
+              $this->cart->associateCartToCustomer($customer_id);
+            }
+
+          }
           $options = $request_content['options'];
         }
         $cart = $this->cart->addUpdateRemoveItem($request_content['sku'], $request_content['quantity'], $action, $options);
@@ -695,7 +693,8 @@ class CartController {
     }
 
     // For new cart request, we don't need any further validations.
-    if ($request_content['action'] === CartActions::CART_CREATE_NEW) {
+    if ($request_content['action'] === CartActions::CART_ADD_ITEM
+      && empty($request_content['cart_id'])) {
       return TRUE;
     }
 
