@@ -402,8 +402,7 @@ class Cart {
     $cart = $this->updateCart($data);
 
     // If cart update has error.
-    if ($cart['error']
-    || $cart['response_message'][1] == 'json_error') {
+    if ($this->cartHasError($cart)) {
       return $cart;
     }
 
@@ -418,6 +417,23 @@ class Cart {
     }
 
     return $cart;
+  }
+
+  /**
+   * Check if cart has error or not.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return bool
+   *   If cart has error or not.
+   */
+  public function cartHasError(array $cart) {
+    if ($cart['error'] || $cart['response_message'][1] == 'json_error') {
+      return TRUE;
+    }
+
+    return FALSE;
   }
 
   /**
@@ -525,8 +541,7 @@ class Cart {
     $cart = $this->updateCart($data);
 
     // If cart update has error.
-    if ($cart['error']
-      || $cart['response_message'][1] == 'json_error') {
+    if ($this->cartHasError($cart)) {
       return $cart;
     }
 
