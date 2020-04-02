@@ -154,8 +154,7 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
         $value = $swatch ? $swatch['name'] : $result->getDisplayValue();
 
         // Change the size label if size grouping is enabled.
-        $sizeGroupingEnabled = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
-        if ($sizeGroupingEnabled && $facet->getFieldIdentifier() == 'attr_size' && strpos($value, ':') !== FALSE) {
+        if ($this->isSizeGroupEnabled() && $facet->getFieldIdentifier() == 'attr_size' && strpos($value, ':') !== FALSE) {
           $sizeGroupArr = explode(':', $value);
           $value = $sizeGroupArr[1];
         }
@@ -176,6 +175,22 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
       }
     }
     return $items;
+  }
+
+  /**
+   * Check if size grouping filter is enabled.
+   *
+   * @return int
+   *   0 if not available, 1 if size grouping available.
+   */
+  protected function isSizeGroupEnabled() {
+    static $status = NULL;
+
+    if (!isset($status)) {
+      $status = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
+    }
+
+    return $status;
   }
 
 }
