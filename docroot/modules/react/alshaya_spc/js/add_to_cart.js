@@ -65,6 +65,7 @@
             // We pass configurable options if product is not available in cart
             // and of configurable variant.
             if (is_configurable && !available_in_cart) {
+              currentSelectedVariant = $(form).find('.selected-parent-sku').val();
               Object.keys(settings.configurableCombinations[page_main_sku].configurables).forEach(function(key) {
                 var option = {
                   'option_id': settings.configurableCombinations[page_main_sku].configurables[key].attribute_id,
@@ -88,7 +89,6 @@
             };
 
             var productData = {
-              sku: currentSelectedVariant,
               quantity: quantity,
               parentSku: page_main_sku,
               product_name: is_configurable ? settings[productKey][page_main_sku].variants[currentSelectedVariant].cart_title : settings.productInfo[page_main_sku].cart_title,
