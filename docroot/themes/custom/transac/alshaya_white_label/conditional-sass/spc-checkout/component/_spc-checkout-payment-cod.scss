@@ -1,7 +1,9 @@
 .spc-checkout-payment-options .payment-method {
   &.payment-method-cashondelivery {
     .spc-payment-method-desc {
-      margin-top: 0.3125rem;
+      @include breakpoint($only-mobile) {
+        margin-top: 0.3125rem;
+      }
     }
 
     .payment-method-bottom-panel {
