@@ -21,6 +21,7 @@ function alshaya_hm_update_8046() {
   $size_facets = [
     'facets.facet.plp_size',
     'facets.facet.promo_size',
+    'facets.facet.size',
   ];
 
   foreach ($size_facets as $config) {

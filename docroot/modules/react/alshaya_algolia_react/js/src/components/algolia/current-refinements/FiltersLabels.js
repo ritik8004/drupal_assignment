@@ -28,6 +28,11 @@ function selectedFiltersLables(attribute, value, filter) {
       selctionText = getPriceRangeLabel(price);
       break;
 
+    case 'size_group_list':
+      var selctionSizeText = value.replace(attribute + ':', '');
+      selctionText = selctionSizeText.split(":").pop().trim();
+      break;
+
     case 'checkbox':
     default:
       selctionText = value.trim();

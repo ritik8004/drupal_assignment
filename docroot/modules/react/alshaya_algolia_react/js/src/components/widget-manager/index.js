@@ -2,6 +2,7 @@ import React from 'react';
 import FilterPanel from '../panels/FilterPanel';
 import SortByList from '../algolia/widgets/SortByList';
 import ColorFilter from '../algolia/widgets/ColorFilter';
+import SizeGroupFilter from '../algolia/widgets/SizeGroupFilter';
 import RefinementList from '../algolia/widgets/RefinementList';
 import PriceFilter from '../algolia/widgets/PriceFilter';
 import renderWidget from './RenderWidget';
@@ -23,6 +24,10 @@ const WidgetManager = React.memo((props) => {
 
     case 'range_checkbox':
       currentWidget = <PriceFilter name={name} attribute={filter.identifier} granularity={parseInt(filter.widget.config.granularity)} itemCount={itemCount} />;
+      break;
+
+    case 'size_group_list':
+      currentWidget = <SizeGroupFilter name={name} attribute={filter.identifier} granularity={parseInt(filter.widget.config.granularity)} itemCount={itemCount} />;
       break;
 
     case 'checkbox':
