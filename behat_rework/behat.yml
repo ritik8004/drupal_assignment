@@ -26,8 +26,8 @@ default:
 #                        switches:
 #                            - "--headless"
 #                            - "--disable-gpu"
-#                            - "--window-size=1920,1080"
 #                            - "--no-sandbox"
+#                            - "--window-size=1920,1080"
         Drupal\DrupalExtension:
             blackbox: ~
         emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
