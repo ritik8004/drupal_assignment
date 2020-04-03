@@ -271,6 +271,13 @@ class AlshayaSpcCustomerHelper {
         }
       }
 
+      // Get and use location term based on location id.
+      if (!empty($address_data['area_parent'])) {
+        if ($location_term = _alshaya_spc_get_location_term_by_location_id($address_data['area_parent'])) {
+          $address_data['area_parent'] = $location_term->id();
+        }
+      }
+
       $address_data['country_code'] = _alshaya_custom_get_site_level_country_code();
       $profile->get('field_address')->setValue($address_data);
       $profile->get('field_mobile_number')->setValue($mobile_info);
