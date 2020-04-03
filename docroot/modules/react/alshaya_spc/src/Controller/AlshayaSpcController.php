@@ -140,6 +140,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Markup for cart page.
    */
   public function cart() {
+    $acm_config = $this->configFactory->get('alshaya_acm.settings');
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="spc-cart"></div>',
@@ -149,6 +151,16 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
         ],
+        'drupalSettings' => [
+          'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+        ],
+      ],
+      '#cache' => [
+        'contexts' => [
+          'languages:' . LanguageInterface::TYPE_INTERFACE,
+          'user',
+        ],
+        'tags' => $acm_config->getCacheTags(),
       ],
     ];
   }

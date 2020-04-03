@@ -9,6 +9,8 @@ import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CartQuantitySelect from '../cart-quantity-select';
 import { updateCartItemData } from '../../../utilities/update_cart';
 import SpecialPrice from '../../../utilities/special-price';
+import Notifications from '../../../common/components/notifications';
+import QtyLimit from '../qty-limit';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -94,6 +96,7 @@ export default class CartItem extends React.Component {
         id,
         final_price: finalPrice,
         free_item: freeItem,
+        max_sale_qty: maxSaleQty,
       },
     } = this.props;
 
@@ -137,17 +140,26 @@ export default class CartItem extends React.Component {
           </div>
         </div>
         <div className="spc-promotions">
-          {promotions.map((key) => <CartPromotion key={`${key}-${Math.floor(Math.random() * 99)}`} promo={key} link />)}
+          {promotions.map((key) => <CartPromotion key={key.promo} promo={key} link />)}
         </div>
-        <div className="spc-cart-item-warning">
-          <CartItemOOS inStock={inStock} />
-          <ItemLowQuantity stock={stock} qty={qty} in_stock={inStock} />
-        </div>
-        <div className="spc-cart-item-alerts">
-          {/* Dynamic promo labels buy 2 more items, free gifts labels,
-           qty limit labels go here. Name the child component
-           .spc-cart-item-alerts-item */}
-        </div>
+        <Notifications>
+          <CartItemOOS type="warning" inStock={inStock} />
+          <ItemLowQuantity type="alert" stock={stock} qty={qty} in_stock={inStock} />
+          {drupalSettings.quantity_limit_enabled
+          && (
+            <QtyLimit
+              type="conditional"
+              showAlert={
+                parseInt(maxSaleQty, 10) !== 0 && parseInt(qty, 10) >= parseInt(maxSaleQty, 10)
+              }
+              showWarning={
+                parseInt(maxSaleQty, 10) !== 0 && parseInt(qty, 10) < parseInt(maxSaleQty, 10)
+              }
+              qty={qty}
+              maxSaleQty={maxSaleQty}
+            />
+          )}
+        </Notifications>
         {/* @Todo: Show OOS only once. */}
         {isItemError
           && <CartItemError errorMessage={errorMessage} />}
