@@ -2,7 +2,7 @@
 #
 # This script does rsync for files of a site between stacks.
 #
-# ./scripts/utilities/stack-migration-prepare.sh 01live vskw 02live vskw2
+# ./scripts/utilities/stack-migration-prepare.sh alshaya.01live vskw alshaya2.02live vskw2
 
 source_env="$1"
 source_site="$2"
@@ -11,25 +11,25 @@ target_site="$4"
 
 if [[ -z "$source_env" ]]; then
   echo "Usage: ./scripts/utilities/stack-migration-prepare.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration-prepare.sh 01live vskw 02live vskw2"
+  echo "Example: ./scripts/utilities/stack-migration-prepare.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
 if [[ -z "$source_site" ]]; then
   echo "Usage: ./scripts/utilities/stack-migration-prepare.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration-prepare.sh 01live vskw 02live vskw2"
+  echo "Example: ./scripts/utilities/stack-migration-prepare.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
 if [[ -z "$target_env" ]]; then
   echo "Usage: ./scripts/utilities/stack-migration-prepare.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration-prepare.sh 01live vskw 02live vskw2"
+  echo "Example: ./scripts/utilities/stack-migration-prepare.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
 if [[ -z "$target_site" ]]; then
   echo "Usage: ./scripts/utilities/stack-migration-prepare.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration-prepare.sh 01live vskw 02live vskw2"
+  echo "Example: ./scripts/utilities/stack-migration-prepare.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
@@ -45,12 +45,12 @@ if [[ -z "$target_alias" ]]; then
   exit
 fi
 
-source_root=`drush sa $source_alias | grep root | cut -d"'" -f4`
-
-target_root=`drush sa $target_alias | grep root | cut -d"'" -f4`
+source_root=`drush sa $source_alias | grep root | head -1 | cut -d"'" -f4`
+target_root=`drush sa $target_alias | grep root | head -1 | cut -d"'" -f4`
 target_remote_user=`drush sa $target_alias | grep remote-user | cut -d"'" -f4`
 target_remote_host=`drush sa $target_alias | grep remote-host | cut -d"'" -f4`
 target="$target_remote_user@$target_remote_host"
+target_stack=`drush sa $target_alias | grep ac-site | cut -d"'" -f4`
 
 cd $source_root
 
@@ -63,5 +63,9 @@ target_files_folder="$target_root/$target_files_folder"
 echo "Target folder $target_files_folder"
 
 rsync -auv $source_files_folder $target:$target_files_folder
+
+echo
+echo "Copying settings folder from source stack to target stack"
+scp -r ~/settings $target:/home/$target_stack/
 
 echo
