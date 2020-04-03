@@ -100,7 +100,7 @@ $magentos = [
     ],
   ],
   'hm_uat' => [
-    'url' => 'https://hm-uat.store.alshaya.com',
+    'url' => 'https://hm-uat2.store.alshaya.com',
     'pims_base_url' => 'http://34.249.182.88:3030',
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 5],
