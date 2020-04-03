@@ -93,10 +93,9 @@ class FreeGiftOrder extends AcqPromotionBase implements ContainerFactoryPluginIn
       $threshold_price = $this->alshayaPromotionsManager->getPromotionThresholdPrice($promotion_data);
       $link = $this->getFreeGiftLink($free_sku_entity, $promotion_id);
 
-      $label = $this->t('Shop for @threshold and get a @gift worth @price FREE', [
+      $label = $this->t('Shop for @threshold and get a @gift FREE', [
         '@threshold' => alshaya_acm_price_get_formatted_price($threshold_price),
         '@gift' => $link,
-        '@price' => alshaya_acm_price_get_formatted_price($free_sku_entity->get('price')->getString()),
       ]);
      }
 

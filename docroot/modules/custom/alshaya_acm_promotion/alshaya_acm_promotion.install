@@ -26,8 +26,8 @@ function alshaya_acm_promotion_update_8022() {
 
   // Add Translations.
   $strings = [
-    'Shop for @threshold and get a @gift worth @price FREE' => [
-      'ar' => 'تسوق مقابل @threshold واحصل على @gift بقيمة @price مجانًا',
+    'Shop for @threshold and get a @gift FREE' => [
+      'ar' => 'تسوق مقابل @threshold واحصل على @gift مجانًا',
     ],
     'Your Free Gift @gift has been added to the cart' => [
       'ar' => 'تمت إضافة هديتك المجانية @gift إلى سلة التسوق',
