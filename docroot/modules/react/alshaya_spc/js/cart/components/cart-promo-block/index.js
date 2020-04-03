@@ -120,17 +120,19 @@ export default class CartPromoBlock extends React.Component {
     const { promoApplied, disabled, buttonText } = this.state;
     const { inStock } = this.props;
     const promoRemoveActive = promoApplied ? 'active' : '';
-    let activeClass = '';
-    if (inStock === false) {
-      activeClass = 'in-active';
+    let disabledState = false;
+    // Disable the promo field if out of stock or disabled.
+    if (disabled === true || inStock === false) {
+      disabledState = true;
     }
+
     return (
-      <div className={`spc-promo-code-block ${activeClass}`}>
+      <div className="spc-promo-code-block">
         <SectionTitle>{Drupal.t('have a promo code?')}</SectionTitle>
         <div className="block-content">
-          <input id="promo-code" disabled={disabled} type="text" placeholder={Drupal.t('Promo code')} />
+          <input id="promo-code" disabled={disabledState} type="text" placeholder={Drupal.t('Promo code')} />
           <button id="promo-remove-button" type="button" className={`promo-remove ${promoRemoveActive}`} onClick={() => { this.promoAction(promoApplied, inStock); }}>{Drupal.t('Remove')}</button>
-          <button id="promo-action-button" type="button" disabled={disabled} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock); }}>{buttonText}</button>
+          <button id="promo-action-button" type="button" disabled={disabledState} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock); }}>{buttonText}</button>
           <div id="promo-message" />
         </div>
       </div>
