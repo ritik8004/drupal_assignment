@@ -44,7 +44,9 @@ class AlshayaFeatureProcess {
     if ($environment[2] == 'dev2') {
       $this->suiteLocators = [
         $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc',
-        $this->sourcePath . DIRECTORY_SEPARATOR];
+        $this->sourcePath . DIRECTORY_SEPARATOR . 'common',
+        $this->sourcePath . DIRECTORY_SEPARATOR . $environment[0] . DIRECTORY_SEPARATOR . 'spc'
+      ];
     }
     else {
       $this->suiteLocators = [$this->sourcePath . DIRECTORY_SEPARATOR . 'common', $this->sourcePath . DIRECTORY_SEPARATOR];

@@ -1915,9 +1915,9 @@ class FeatureContext extends CustomMinkContext
       if ($value) {
         if ($field == "spc-area-select-selected-city" || $field == "spc-area-select-selected") {
           $this->iClickJqueryElementOnPage(".spc-address-form-guest-overlay .spc-address-form-content .spc-address-add .delivery-address-fields #$field");
-          $this->iWaitSeconds(5);
+          $this->iWaitSeconds(10);
           $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
-          $this->iWaitSeconds(2);
+          $this->iWaitSeconds(5);
         }
         else {
           $this->getSession()->getPage()->fillField($field, $value);

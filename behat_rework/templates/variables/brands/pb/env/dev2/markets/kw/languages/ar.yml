@@ -19,7 +19,6 @@ variables:
   sign_in: 'Sign in'
   find_store: 'Find Store'
   language_link: 'العربية'
-
   collection_filter: 'العروض'
   sort_filter: 'رتب حسب'
   price_filter: 'السعر'
@@ -64,3 +63,15 @@ variables:
   second_language_link: 'العربية'
   continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'en'
+  area_option: 'Salmiya'
+  city_option: 'Salmiya'
+  street: 'Street A'
+  building: 'Building B'
+  locality: ''
+  floor: 'Floor C'
+  landmark: 'Near Landmark D'
+  postal_code: '23456'
+  mobile: '55667788'
+  anon_email: 'sampleUserName@mailinator.com'
+  anon_username: 'Sample User Name'
+  store_area: 'Salmiya'

@@ -1,6 +1,4 @@
 variables:
   var_username: 'mitesh@axelerant.com'
   var_password: 'Alshaya@2017'
-  spc_user_email: 'prachi.nagpal@acquia.com'
-  spc_user_password: 'Alshaya@12'
-
+  spc_cnc_page: '/shop-outdoor/'
