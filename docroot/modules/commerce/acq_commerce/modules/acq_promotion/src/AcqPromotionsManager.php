@@ -2,9 +2,9 @@
 
 namespace Drupal\acq_promotion;
 
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
+use Drupal\acq_promotion\Event\PromotionMappingUpdatedEvent;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -17,7 +17,7 @@ use Drupal\Core\Queue\QueueInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
-use Drupal\node\NodeInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class AcqPromotionsManager.
@@ -87,7 +87,14 @@ class AcqPromotionsManager {
    *
    * @var \Drupal\acq_commerce\I18nHelper
    */
-  private $i18nHelper;
+  protected $i18nHelper;
+
+  /**
+   * Event Dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $dispatcher;
 
   /**
    * Constructs a new AcqPromotionsManager object.
@@ -110,6 +117,8 @@ class AcqPromotionsManager {
    *   Database connection service.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+   *   Event Dispatcher.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               APIWrapper $api_wrapper,
@@ -119,7 +128,8 @@ class AcqPromotionsManager {
                               QueueFactory $queue,
                               ConfigFactory $configFactory,
                               Connection $connection,
-                              I18nHelper $i18n_helper) {
+                              I18nHelper $i18n_helper,
+                              EventDispatcherInterface $dispatcher) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->apiWrapper = $api_wrapper;
@@ -130,6 +140,7 @@ class AcqPromotionsManager {
     $this->configFactory = $configFactory;
     $this->connection = $connection;
     $this->i18nHelper = $i18n_helper;
+    $this->dispatcher = $dispatcher;
   }
 
   /**
@@ -180,23 +191,13 @@ class AcqPromotionsManager {
     }
 
     $nids = $query->execute();
-
     foreach ($nids as $nid) {
       /* @var $node \Drupal\node\Entity\Node */
       $node = $this->nodeStorage->load($nid);
 
       if ($node instanceof Node) {
         $rule_id = $node->get('field_acq_promotion_rule_id')->getString();
-        $attached_promotion_skus = $this->getSkusForPromotion($node->id());
-
-        $this->queueItemsInBatches(
-          $this->queue->get('acq_promotion_detach_queue'),
-          $node->id(),
-          $attached_promotion_skus,
-          $rule_id,
-          'detach'
-        );
-
+        $this->updateCartPromotionsMapping($rule_id, []);
         $node->delete();
         $this->logger->notice('Deleted orphan promotion node:@nid title:@promotion having rule_id:@rule_id.', [
           '@nid' => $node->id(),
@@ -249,24 +250,17 @@ class AcqPromotionsManager {
   /**
    * Helper function to get skus attached with a promotion.
    *
-   * @param mixed $promotion_id
-   *   Promotion node for which we need to find skus.
+   * @param int|string $rule_id
+   *   Promotion commerce id.
    *
    * @return array
-   *   Array of sku objects attached with the promotion.
+   *   Array of skus attached with the promotion.
    */
-  public function getSkusForPromotion($promotion_id) {
-    // Backwards compatibility, it was first expecting Node object.
-    $promotion_id = $promotion_id instanceof NodeInterface ? $promotion_id->id() : $promotion_id;
-
-    $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
-    $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
-    $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion_id);
-    $query->fields('asfd', ['id', 'sku']);
-    $query->distinct();
-    $skus = $query->execute()->fetchAllKeyed(0, 1);
-
-    return $skus;
+  public function getSkusForPromotion($rule_id) {
+    $query = $this->connection->select('acq_sku_promotion');
+    $query->fields('acq_sku_promotion', ['sku']);
+    $query->condition('rule_id', $rule_id);
+    return $query->execute()->fetchAllKeyed(0, 0);
   }
 
   /**
@@ -381,7 +375,6 @@ class AcqPromotionsManager {
    *   List of promotions to sync.
    */
   public function processPromotions(array $promotions = []) {
-    $promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
     $promotion_attach_queue = $this->queue->get('acq_promotion_attach_queue');
 
     // Clear any outstanding items in attach queue before starting promotion
@@ -393,30 +386,30 @@ class AcqPromotionsManager {
       // Alter hook to allow other moduled to pre-process promotion data.
       \Drupal::moduleHandler()->alter('acq_promotion_data', $promotion);
 
-      $fetched_promotion_skus = [];
-      $fetched_promotion_sku_attach_data = [];
-
       // Extract list of sku text attached with the promotion passed.
-      $products = $promotion['products'];
+      $products = $promotion['products'] ?? [];
+      $promotion_skus = array_unique(array_column($products, 'product_sku'));
 
       if (Settings::get('promotions_log_data_for_investigations', 0)) {
         $this->logger->notice('products in promotion id @rule_id of @type: @data', [
           '@type' => $promotion['promotion_type'],
           '@rule_id' => $promotion['rule_id'],
-          '@data' => implode(',', array_column($promotion['products'], 'product_sku')),
+          '@data' => implode(',', $promotion_skus),
         ]);
       }
 
-      foreach ($products as $product) {
-        if (!in_array($product['product_sku'], array_keys($fetched_promotion_skus))) {
-          $fetched_promotion_skus[$product['product_sku']] = $product['product_sku'];
+      $promotion_skus_existing = array_values($this->getSkusForPromotion($promotion['rule_id']));
+      $attached = array_diff($promotion_skus, $promotion_skus_existing);
+      $detached = array_diff($promotion_skus_existing, $promotion_skus);
 
-          $fetched_promotion_sku_attach_data[$product['product_sku']] = [
-            'sku' => $product['product_sku'],
-          ];
-
-          if (($promotion['promotion_type'] === 'category') && isset($product['final_price'])) {
-            $fetched_promotion_sku_attach_data[$product['product_sku']]['final_price'] = $product['final_price'];
+      $attach_data = [];
+      if ($promotion['promotion_type'] === 'category') {
+        foreach ($products as $product) {
+          if (in_array($product['product_sku'], $attached)) {
+            $attach_data[$product['product_sku']] = [
+              'sku' => $product['product_sku'],
+              'final_price' => $product['final_price'],
+            ];
           }
         }
       }
@@ -424,91 +417,43 @@ class AcqPromotionsManager {
       // Check if this promotion exists in Drupal.
       // Assuming rule_id is unique across a promotion type.
       $promotion_node = $this->getPromotionByRuleId($promotion['rule_id'], $promotion['promotion_type']);
-
-      // If promotion exists, we update the related skus & final price.
-      if ($promotion_node) {
-        // Update promotion metadata.
-        $this->syncPromotionWithMiddlewareResponse($promotion, $promotion_node);
-        $attached_promotion_skus = $this->getSkusForPromotion($promotion_node->id());
-        $detach_promotion_skus = [];
-
-        // Get list of skus for which promotions should be detached.
-        if (!empty($attached_promotion_skus)) {
-          $detach_promotion_skus = array_diff($attached_promotion_skus, $fetched_promotion_skus);
-        }
-
-        // Create a queue for removing promotions from skus.
-        $this->queueItemsInBatches(
-          $promotion_detach_queue,
-          $promotion_node->id(),
-          $detach_promotion_skus,
-          $promotion['rule_id'],
-          'detach'
-        );
-      }
-      else {
-        // Create promotions node using Metadata from Promotions Object.
-        $promotion_node = $this->syncPromotionWithMiddlewareResponse($promotion);
-      }
+      $promotion_node = $this->syncPromotionWithMiddlewareResponse($promotion, $promotion_node);
 
       // Attach promotions to skus.
-      if ($promotion_node && (!empty($fetched_promotion_sku_attach_data))) {
-        if ($promotion['promotion_type'] == 'cart' && !empty($attached_promotion_skus)) {
-          foreach ($attached_promotion_skus as $sku) {
-            unset($fetched_promotion_sku_attach_data[$sku]);
+      if ($promotion_node) {
+        // Final price may come updated next time, we don't store mapping
+        // for catalog rule for this reason. This means it will be queued
+        // for all the products all the time.
+        if ($promotion['promotion_type'] === 'cart') {
+          $this->updateCartPromotionsMapping($promotion['rule_id'], $attached);
+
+          if ($attached) {
+            $event = new PromotionMappingUpdatedEvent($attached);
+            $this->dispatcher->dispatch(PromotionMappingUpdatedEvent::EVENT_NAME, $event);
           }
         }
 
-        // Filter skus which not exists in system before attaching to queue.
-        if (!empty($fetched_promotion_sku_attach_data)) {
-          $query = $this->connection->select('acq_sku_field_data', 'sku');
-          $query->fields('sku', ['sku']);
-          $query->condition('sku.sku', array_keys($fetched_promotion_sku_attach_data), 'IN');
-          $query->condition('sku.default_langcode', 1);
-          $fetched_promotion_sku_attach_data = $query->execute()->fetchAllAssoc('sku', \PDO::FETCH_ASSOC);
+        if ($detached) {
+          $event = new PromotionMappingUpdatedEvent($detached);
+          $this->dispatcher->dispatch(PromotionMappingUpdatedEvent::EVENT_NAME, $event);
         }
 
-        $this->queueItemsInBatches(
-          $promotion_attach_queue,
-          $promotion_node->id(),
-          $fetched_promotion_sku_attach_data,
-          $promotion['rule_id'],
-          'attach'
-        );
+        if ($promotion['promotion_type'] === 'category' && !empty($attach_data)) {
+          $this->queueItemsInBatches(
+            $promotion_attach_queue,
+            $attach_data,
+            $promotion['rule_id'],
+            'attach'
+          );
+        }
       }
 
-      $this->logger->notice($this->t('Promotion `@node` having rule_id:@rule_id created or updated successfully with @attach items in attach queue and @detach items in detach queue.', [
+      $this->logger->notice('Promotion `@node` having rule_id:@rule_id created or updated successfully with @attach items in attach queue.', [
         '@node' => $promotion_node->getTitle(),
         '@rule_id' => $promotion['rule_id'],
-        '@attach' => !empty($fetched_promotion_sku_attach_data) ? count($fetched_promotion_sku_attach_data) : 0,
-        '@detach' => !empty($detach_promotion_skus) ? count($detach_promotion_skus) : 0,
-      ]));
+        '@attach' => !empty($attach_data) ? count($attach_data) : 0,
+      ]);
     }
-  }
-
-  /**
-   * Removes the given promotion from SKU entity.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity.
-   * @param int $nid
-   *   Promotion node id.
-   */
-  public function removeOrphanPromotionFromSku(SKU $sku, int $nid) {
-    $promotion_detach_item[] = ['target_id' => $nid];
-    $sku_promotions = $sku->get('field_acq_sku_promotions')->getValue();
-
-    $updated_sku_promotions = array_udiff($sku_promotions, $promotion_detach_item, function ($array1, $array2) {
-      return $array1['target_id'] - $array2['target_id'];
-    });
-
-    if (count($updated_sku_promotions) == count($sku_promotions)) {
-      // Nothing to remove.
-      return;
-    }
-
-    $sku->get('field_acq_sku_promotions')->setValue($updated_sku_promotions);
-    $sku->save();
   }
 
   /**
@@ -516,8 +461,6 @@ class AcqPromotionsManager {
    *
    * @param \Drupal\Core\Queue\QueueInterface $queue
    *   Queue to queue items to.
-   * @param int|string $promotion_nid
-   *   Promotion Node ID.
    * @param array $data
    *   Queue data.
    * @param int|string $rule_id
@@ -525,7 +468,7 @@ class AcqPromotionsManager {
    * @param string $op
    *   Operation attach / detach.
    */
-  private function queueItemsInBatches(QueueInterface $queue, $promotion_nid, array $data, $rule_id, string $op) {
+  private function queueItemsInBatches(QueueInterface $queue, array $data, $rule_id, string $op) {
     if (empty($data)) {
       return;
     }
@@ -540,8 +483,8 @@ class AcqPromotionsManager {
 
     foreach (array_chunk($data, $batch_size) as $chunk) {
       $item = [];
-      $item['promotion'] = $promotion_nid;
       $item['skus'] = $chunk;
+      $item['rule_id'] = $rule_id;
       $queue->createItem($item);
     }
 
@@ -552,6 +495,46 @@ class AcqPromotionsManager {
       '@rule_id' => $rule_id,
       '@operation' => $op,
     ]);
+  }
+
+  /**
+   * Wrapper function to update cart/promotions mapping.
+   *
+   * @param int|string $rule_id
+   *   Rule ID.
+   * @param array $skus
+   *   SKUs to attach.
+   */
+  protected function updateCartPromotionsMapping($rule_id, array $skus = []) {
+    $transaction = $this->connection->startTransaction();
+
+    try {
+      $this->connection->delete('acq_sku_promotion', [
+        'rule_id' => $rule_id,
+      ]);
+
+      foreach (array_chunk($skus, 10) as $chunk) {
+        $insert = $this->connection->insert('acq_sku_promotion');
+        $insert->fields(['rule_id', 'sku']);
+
+        foreach ($chunk as $sku) {
+          $insert->values([
+            'rule_id' => $rule_id,
+            'sku' => $sku,
+          ]);
+        }
+
+        $insert->execute();
+      }
+    }
+    catch (\Exception $e) {
+      $transaction->rollBack();
+
+      $this->logger->error('Error occurred while updating promotion mappings for rule_id @rule_id, message: @message', [
+        '@rule_id' => $rule_id,
+        '@message' => $e->getMessage(),
+      ]);
+    }
   }
 
 }

@@ -4,7 +4,6 @@ namespace Drupal\acq_promotion\Plugin\QueueWorker;
 
 use Drupal\acq_promotion\AcqPromotionQueueBase;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Cache\Cache;
 
 /**
  * Processes Skus to attach Promotions.
@@ -47,10 +46,8 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
 
     // Get attached promotions and final price.
     $query = $this->db->select('acq_sku_field_data', 'sku');
-    $query->leftJoin('acq_sku__field_acq_sku_promotions', 'sku_promotions', 'sku.id = sku_promotions.entity_id AND sku.langcode = sku_promotions.langcode');
     $query->addField('sku', 'sku');
     $query->addField('sku', 'final_price');
-    $query->addField('sku_promotions', 'field_acq_sku_promotions_target_id', 'promotion_id');
     $query->condition('sku.sku', $skus, 'IN');
     $query->condition('sku.default_langcode', 1);
     $result = $query->execute()->fetchAll();
@@ -58,13 +55,7 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
     $existing = [];
     foreach ($result as $record) {
       $existing[$record->sku]['final_price'] = $record->final_price;
-
-      // A product can have multiple promotions attached.
-      $existing[$record->sku]['promotion_ids'][$record->promotion_id] = $record->promotion_id;
     }
-
-    $promotion_nid = $data['promotion'];
-    $promotion_attach_item = ['target_id' => $promotion_nid];
 
     $skus_not_found = [];
     $attached_skus = [];
@@ -76,14 +67,11 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
         continue;
       }
 
-      $has_final_price = !empty($sku['final_price']);
-
       $row = $existing[$sku['sku']];
 
       // If promotion already available
       // AND if no final price OR final price is same.
-      if (in_array($promotion_nid, $row['promotion_ids'])
-        && (!$has_final_price || $row['final_price'] == $sku['final_price'])) {
+      if ($row['final_price'] == $sku['final_price']) {
         $skipped_skus[] = $sku['sku'];
         continue;
       }
@@ -97,19 +85,10 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
         continue;
       }
 
-      $sku_entity->get('field_acq_sku_promotions')->appendItem($promotion_attach_item);
-
-      // Check again for final price.
-      if (!empty($sku['final_price']) && ($sku_entity->get('final_price')->getString() != $sku['final_price'])) {
-        $sku_entity->get('final_price')->setValue($sku['final_price']);
-      }
-
+      $sku_entity->get('final_price')->setValue($sku['final_price']);
       $sku_entity->save();
       $attached_skus[] = $sku['sku'];
     }
-
-    // Invalidate promotion cache.
-    Cache::invalidateTags(['node:' . $promotion_nid]);
 
     $this->logger->notice('Processed acq_promotion_attach_queue queue. Attached: @attached; Skipped: @skipped; Not found: @notfound', [
       '@attached' => implode(',', $attached_skus),

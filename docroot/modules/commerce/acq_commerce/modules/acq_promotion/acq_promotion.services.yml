@@ -11,6 +11,14 @@ services:
       - '@config.factory'
       - '@database'
       - '@acq_commerce.i18n_helper'
+      - '@event_dispatcher'
   plugin.manager.acq_promotion:
     class: Drupal\acq_promotion\AcqPromotionPluginManager
     parent: default_plugin_manager
+  acq_promotion.promotion_mapping_updated_event:
+    class: Drupal\alshaya_acm_product\EventSubscriber\ProductInfoRequestedEventSubscriber
+    arguments:
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@alshaya_acm_product.skumanager'
+    tags:
+      - { name: 'event_subscriber' }
