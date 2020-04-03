@@ -25,7 +25,7 @@ class AlshayaYamlProcess {
 
   protected $collectedFilesList;
 
-  protected $alshayaMarkets = ['kw', 'sa', 'ae'];
+  protected $alshayaMarkets = ['kw', 'sa', 'ae', 'eg'];
 
   protected $alshayaLanguages = ['en', 'ar'];
 

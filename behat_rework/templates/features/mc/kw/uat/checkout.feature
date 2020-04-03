@@ -3,19 +3,19 @@ Feature: Test Checkout feature
   Background:
     Given I am on "{url_product_page}"
     And I wait for the page to load
-    When I press "Add to basket"
+    When I press "add to basket"
     And I wait for AJAX to finish
     And I go to "/cart"
     And I wait 5 seconds
     And I press "checkout securely"
-    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
-
+    When I click the element with id "edit-checkout-guest-checkout-as-guest" on page
+    And I wait for the page to load
+    And I wait 5 seconds
 
   @hd @2d @credit
-  Scenario: As a Guest,
-  I should be able to checkout using 2D Credit Card
-    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
+  Scenario: As a Guest, I should be able to checkout using 2D Credit Card
+    Then I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
@@ -47,8 +47,7 @@ Feature: Test Checkout feature
     And I should see "Item code:"
 
   @hd @2d @debit
-  Scenario: As a Guest,
-  I should be able to checkout using 2D Debit Card
+  Scenario: As a Guest, I should be able to checkout using 2D Debit Card
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -81,8 +80,7 @@ Feature: Test Checkout feature
     And I should see "Item code:"
 
   @hd @2d @wrongcvv
-  Scenario: As a Guest,
-  I should not be able to checkout using 2D Credit Card when wrong CVV is used
+  Scenario: As a Guest, I should not be able to checkout using 2D Credit Card when wrong CVV is used
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -108,10 +106,8 @@ Feature: Test Checkout feature
     And I wait 10 seconds
     Then I should see text matching "Transaction has been declined. Please try again later."
 
-
   @cod @hd
-  Scenario: As a Guest,
-  I should be able to checkout using COD
+  Scenario: As a Guest, I should be able to checkout using COD
     And I should not see the link "create an account"
     And I should not see the link "Sign in"
     And I should not see the link "Find Store"
@@ -146,11 +142,8 @@ Feature: Test Checkout feature
     And I should see "Item code:"
     And I should see "Quantity:"
 
-
-
   @hd @knet
-  Scenario: As a Guest,
-  I should be able to checkout using KNET
+  Scenario: As a Guest, I should be able to checkout using KNET
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -191,11 +184,8 @@ Feature: Test Checkout feature
     And I should see "Item code:"
     And I should see "Quantity:"
 
-
   @cc @knet
-  Scenario: As a Guest
-  I should be able to use click and collect option
-  and pay by KNET
+  Scenario: As a Guest, I should be able to use click and collect option and pay by KNET
     When I follow "click & collect"
     And I wait for AJAX to finish
     And I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -241,11 +231,8 @@ Feature: Test Checkout feature
     And I should see "Item code:"
     And I should see "Quantity:"
 
-
   @hd @cs
-  Scenario: As a Guest
-  I should be able to checkout on HD
-  using Cybersource payment method
+  Scenario: As a Guest, I should be able to checkout on HD using Cybersource payment method
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -278,11 +265,8 @@ Feature: Test Checkout feature
     And I should see "Item code:"
     And I should see "Quantity:"
 
-
   @cc @cs
-  Scenario:  As a Guest
-  I should be able to checkout on Click and Collect
-  using Cybersource payment method
+  Scenario:  As a Guest, I should be able to checkout on Click and Collect using Cybersource payment method
     When I follow "click & collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -321,11 +305,8 @@ Feature: Test Checkout feature
     And I should see "Item code:"
     And I should see "Quantity:"
 
-
   @cc @cs @newtest
-  Scenario: As a Guest user
-  I should be able to search for a store on Map view
-  select it and complete the checkout journey
+  Scenario: As a Guest user I should be able to search for a store on Map view select it and complete the checkout journey
     When I follow "click & collect"
     And I wait for the page to load
     When I follow "Map view"
@@ -366,5 +347,3 @@ Feature: Test Checkout feature
     Then I should see "size:"
     And I should see "Item code:"
     And I should see "Quantity:"
-
-
