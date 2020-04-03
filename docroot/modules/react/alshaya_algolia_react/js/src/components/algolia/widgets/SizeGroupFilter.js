@@ -20,7 +20,8 @@ const SizeGroupFilter = ({ items, refine, searchForItems, isFromSearch, ...props
     props.itemCount(props.attribute, items.length);
   }
 
-  var groupedItems = {};
+  // Preparing sizes according to their groups.
+  var groupedItems = [];
   for (var i in items) {
     var item = items[i].label.split(':');
     if (groupedItems[item[0]] === undefined) {
@@ -48,7 +49,7 @@ const SizeGroupFilter = ({ items, refine, searchForItems, isFromSearch, ...props
                       refine(clild.label);
                     }}
                   >
-                    <span className="facet-item__value">{clild.label}
+                    <span className="facet-item__value">{clild.label.split(":").pop()}
                       <span className="facet-item__count">({clild.count})</span>
                     </span>
                   </li>
