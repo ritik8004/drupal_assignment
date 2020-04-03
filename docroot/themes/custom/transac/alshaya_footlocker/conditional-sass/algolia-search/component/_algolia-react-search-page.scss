@@ -119,6 +119,26 @@
         }
       }
     }
+
+    .filter-fixed-top {
+      @include breakpoint($tablet) {
+        .sticky-filter-wrapper {
+          .c-collapse-item {
+            .c-collapse__title {
+              color: $lhn_sticky-filter-title;
+            }
+          }
+        }
+
+        .show-all-filters-algolia {
+          color: $lhn_sticky-filter-title;
+
+          &::before {
+            color: $lhn_sticky-filter-title;
+          }
+        }
+      }
+    }
   }
 
   .show-all-filters-algolia {

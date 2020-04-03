@@ -261,6 +261,16 @@ class CheckoutComAPIWrapper {
   }
 
   /**
+   * Is checkout 3d rule enabled.
+   *
+   * @return bool
+   *   Return TRUE for enabled, FALSE otherwise.
+   */
+  public function isCheckout3dEnabled() {
+    return $this->apiHelper->getCheckoutcomConfig('verify3dsecure');
+  }
+
+  /**
    * Return the MADA BINS file path.
    *
    * @return string

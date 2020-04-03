@@ -2,6 +2,7 @@ import { hasCategoryFilter } from './FilterUtils';
 import { getSearchQuery, getLangRedirect } from './localStorage';
 
 const contentDiv = document.querySelector('.page-standard main');
+const body = document.querySelector('body');
 // Create Search result div wrapper to render results.
 const searchResultDiv = document.createElement('div');
 searchResultDiv.id = 'alshaya-algolia-search';
@@ -17,6 +18,7 @@ function showSearchResultContainer() {
   Array.prototype.forEach.call(contentDiv.parentNode.children, element => {
     element.style.display = 'none';
   });
+  body.classList.add("hide-header") ;
   searchResultDiv.style.display = 'block';
   searchResultDiv.className = 'show-algolia-result';
   searchResultDiv.style.minHeight = '26.5rem';
@@ -30,6 +32,7 @@ function hideSearchResultContainer() {
   Array.prototype.forEach.call(contentDiv.parentNode.children, element => {
     element.style.display = null;
   });
+  body.classList.remove('hide-header');
   searchResultDiv.style.display = 'none';
   searchResultDiv.classList.remove('show-algolia-result');
   pageStandard.className = defaultClasses;
