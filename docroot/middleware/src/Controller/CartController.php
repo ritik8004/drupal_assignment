@@ -314,9 +314,18 @@ class CartController {
     $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
     try {
       $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
-      foreach ($data['items'] as $key => $value) {
+      foreach ($data['items'] as $key => &$value) {
         if (isset($items_quantity[$key])) {
           $data['items'][$key]['qty'] = $items_quantity[$key];
+        }
+
+        // If info is available in static array, means this we get from
+        // the cart update operation. We use that.
+        if (!empty(Cart::$stockInfo)
+          && isset(Cart::$stockInfo[$key])
+          && !Cart::$stockInfo[$key]) {
+          $data['items'][$key]['in_stock'] = FALSE;
+          $data['items'][$key]['stock'] = 0;
         }
 
         // If CnC is disabled for any item, we don't process and consider

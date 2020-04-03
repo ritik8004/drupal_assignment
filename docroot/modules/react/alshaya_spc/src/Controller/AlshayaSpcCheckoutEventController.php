@@ -157,8 +157,11 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
 
       case 'validate cart':
         try {
-          $this->spcStockHelper->refreshStockForProductsInCart($cart);
-          $response['status'] = TRUE;
+          $data = $this->spcStockHelper->refreshStockForProductsInCart($cart);
+          $response = [
+            'status' => TRUE,
+            'data' => $data,
+          ];
         }
         catch (\Exception $e) {
           // Do nothing.
