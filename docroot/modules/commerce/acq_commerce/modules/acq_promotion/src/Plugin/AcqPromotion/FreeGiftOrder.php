@@ -107,12 +107,11 @@ class FreeGiftOrder extends AcqPromotionBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function getActiveLabel() {
-    $promotion_id = $this->promotionNode->id();
-    $free_skus = $this->alshayaPromotionsManager->getFreeGiftSkuEntitiesByPromotionId($promotion_id);
+    $free_skus = $this->alshayaPromotionsManager->getFreeGiftSkuEntitiesByPromotionId($this->promotionNode->id());
     $free_sku_entity = reset($free_skus);
 
     $label = $this->t('Your Free Gift @gift has been added to the cart', [
-      '@gift' => $this->getFreeGiftLink($free_sku_entity, $promotion_id),
+      '@gift' => $this->getFreeGiftLink($free_sku_entity),
     ]);
 
     return $label;
@@ -123,18 +122,16 @@ class FreeGiftOrder extends AcqPromotionBase implements ContainerFactoryPluginIn
    *
    * @param object $free_sku_entity
    *   Free gift sku entity.
-   * @param string $promotion_id
-   *   Promotion Id.
    *
    * @return object
    *   Link object for free gift.
    */
-  public function getFreeGiftLink($free_sku_entity, $promotion_id) {
+  public function getFreeGiftLink($free_sku_entity) {
     $link = Link::createFromRoute(
       $free_sku_entity->name->getString(),
-      'alshaya_acm_promotion.free_gifts_list',
+      'alshaya_acm_promotion.free_gift_modal',
       [
-        'node' => $promotion_id,
+        'acq_sku' => $free_sku_entity->id(),
         'js' => 'nojs',
       ],
       [
