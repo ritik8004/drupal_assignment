@@ -9,3 +9,7 @@ variables:
   spc_checkout_card: "4242424242424242"
   spc_checkout_expiry: "03/22"
   spc_checkout_cvv: "100"
+  spc_Knet_card: "0000000001"
+  spc_Knet_month: "9"
+  spc_Knet_year: "2021"
+  spc_Knet_pin: "1234"
