@@ -1256,7 +1256,12 @@
   };
 
   window.onerror = function (message, url, lineNo, columnNo, error) {
-    Drupal.logJavascriptError('Uncaught errors', error);
+    if (error !== null) {
+      Drupal.logJavascriptError('Uncaught errors', error);
+    }
+    else if (message !== null) {
+      Drupal.logJavascriptError('Uncaught errors', message);
+    }
     return true;
   };
 
