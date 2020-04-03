@@ -16,7 +16,6 @@ use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Html;
 
 /**
@@ -372,17 +371,5 @@ function alshaya_acm_promotion_form_customer_cart_form_alter(&$form, FormStateIn
     ];
 
     $form['#attached']['library'][] = 'alshaya_acm_promotion/cart_promotions';
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function alshaya_acm_promotion_acq_sku_update(SKUInterface $entity) {
-  if (Settings::get('alshaya_acm_promotion_log_on_sku_update', 0)) {
-    \Drupal::logger('alshaya_acm_promotion')->notice('Promotion data for sku @sku is @value', [
-      '@sku' => $entity->getSku(),
-      '@value' => $entity->get('field_acq_sku_promotions')->getString(),
-    ]);
   }
 }
