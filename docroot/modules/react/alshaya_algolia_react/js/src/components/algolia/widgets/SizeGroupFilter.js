@@ -61,31 +61,6 @@ const SizeGroupFilter = ({ items, refine, searchForItems, isFromSearch, ...props
       })}
     </ul>
   );
-
-  // return (
-  //   <ul>
-  //     {searchForm}
-  //     {items.map(item => {
-  //       const [label, swatch_info] = item.label.split(',');
-  //       return (
-  //         <li
-  //         key={item.label}
-  //         className={"facet-item " + (item.isRefined ? 'is-active' : '')}
-  //         datadrupalfacetlabel={props.name}
-  //         onClick={event => {
-  //           event.preventDefault();
-  //           refine(item.value);
-  //         }}
-  //       >
-  //         <span className="facet-item__value">
-  //           {getPriceRangeLabel(item.label)}
-  //           <span className="facet-item__count">({item.count})</span>
-  //         </span>
-  //       </li>
-  //       );
-  //     })}
-  //   </ul>
-  // );
 }
 
 export default connectRefinementList(SizeGroupFilter);
