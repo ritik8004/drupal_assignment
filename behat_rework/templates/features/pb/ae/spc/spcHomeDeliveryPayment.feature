@@ -43,11 +43,11 @@ Feature: SPC Checkout Home Delivery CC
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
+    And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cybersource" element on page
-    And I wait 2 seconds
+    And I wait 10 seconds
     And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
     And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
     And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
@@ -60,8 +60,8 @@ Feature: SPC Checkout Home Delivery CC
   @cc @hd @language @desktop @cybersource
   Scenario: As a Guest, I should be able to checkout using COD in second language
     When I follow "{language_link}"
+    And I wait 10 seconds
     And I wait for the page to load
-    And I wait for AJAX to finish
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -97,11 +97,11 @@ Feature: SPC Checkout Home Delivery CC
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
+    And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cybersource" element on page
-    And I wait 2 seconds
+    And I wait 5 seconds
     And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
     And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
     And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
@@ -151,11 +151,11 @@ Feature: SPC Checkout Home Delivery CC
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
+    And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cybersource" element on page
-    And I wait 2 seconds
+    And I wait 5 seconds
     And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
     And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
     And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
