@@ -802,7 +802,7 @@ class Cart {
         // If cart is available and cart has item.
         if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
           $status = $this->drupal->triggerCheckoutEvent('validate cart', ['cart' => $cart['cart']]);
-          if ($status['status'] == TRUE) {
+          if ($status['status'] == TRUE && $exception_type === 'OOS') {
             // Return cart object.
             return $cart;
           }

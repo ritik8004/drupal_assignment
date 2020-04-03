@@ -6,6 +6,7 @@ import { addInfoInStorage } from '../../../utilities/storage';
 import EmptyMiniCartContent from '../empty-mini-cart-content';
 import MiniCartContent from '../mini-cart-content';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
+import dispatchCustomEvent from '../../../utilities/events';
 
 export default class MiniCart extends React.Component {
   constructor(props) {
@@ -41,7 +42,7 @@ export default class MiniCart extends React.Component {
               amount: resultVal.cart_total,
             });
           }
-
+          dispatchCustomEvent('cartRefresh', resultVal);
           // Store info in storage.
           const dataToStore = {
             cart: resultVal,
@@ -60,6 +61,12 @@ export default class MiniCart extends React.Component {
       // PDP item add or from the update from cart page.
       document.addEventListener('refreshMiniCart', (e) => {
         const data = e.detail.data();
+
+        dispatchCustomEvent('cartRefresh', {
+          data,
+          productData: e.detail.productData !== undefined ? e.detail.productData : '',
+        });
+
         // If no error from MDC.
         if (data && data.error === undefined) {
           this.setState({

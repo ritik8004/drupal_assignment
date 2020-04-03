@@ -190,7 +190,6 @@
         }
       });
 
-
       // Show images for oos product on PDP.
       $('.out-of-stock').once('load').each(function () {
         var sku = $(this).parents('article.entity--type-node:first').attr('data-sku');
@@ -223,8 +222,34 @@
           }
         });
       }
+
     }
   };
+
+  // Subscribe to refreshMiniCart to handle the qty limit related js functionality.
+  // to handle the cases like: When user has deleted local storage and page load
+  // triggers refresh-cart call or user log in after coming to pdp page. pdp
+  // page should get updated to disable add to cart or show any qty related msg.
+  document.addEventListener('cartRefresh',function (e) {
+    if (e.detail.productData !== undefined) {
+      Drupal.disableLimitExceededProducts(
+        e.detail.productData.parentSku,
+        e.detail.productData.variant,
+        e.detail.productData.quantity,
+        e.detail.data()
+      );
+    }
+    else {
+      $.each( e.detail.items, function(sku_key, cart_item) {
+        Drupal.disableLimitExceededProducts(
+          cart_item.parent_sku,
+          cart_item.sku,
+          cart_item.qty,
+          e.detail.items,
+        );
+      });
+    }
+  });
 
   Drupal.updateGallery = function (product, layout, gallery) {
     if (gallery === '' || gallery === null) {
@@ -376,7 +401,7 @@
   };
 
   // Disable Add to bag and quantity dropdown when order limit exceed.
-  Drupal.disableLimitExceededProducts = function (sku, selected) {
+  Drupal.disableLimitExceededProducts = function (sku, selected, cartProductQtyArg, cartItemsArg) {
     if ($('.order-quantity-limit-message').length > 0) {
       var selectedInput = $('input[value="' + selected + '"]');
       var orderLimitMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
@@ -389,12 +414,23 @@
         && typeof drupalSettings[productKey][sku]['variants'] !== "undefined"
         && sku !== selected)
         ? drupalSettings[productKey][sku]['variants'][selected] : '';
+
       var variantToDisableSelector = selectedInput.closest('.sku-base-form');
       var orderLimitExceeded =  false;
       var orderLimitExceededMsg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' +
         Drupal.t('Purchase limit has been reached') +
         '</span>';
-      var cart_items = drupalSettings['cart_items'];
+
+      var cart_items = {};
+      if (cartItemsArg !== undefined) {
+        cart_items = cartItemsArg
+      }
+      else {
+        var cart = JSON.parse(localStorage.getItem('cart_data'));
+        if (cart !== null && cart.cart !== null) {
+          cart_items = cart.cart.items
+        }
+      }
 
       // If limit exists at parent level.
       if ((parentInfo !== '') && (typeof parentInfo.maxSaleQty !== "undefined")) {
@@ -407,7 +443,10 @@
           var orderLimitMsg = typeof parentInfo.orderLimitMsg !== "undefined"
             ? parentInfo.orderLimitMsg : '';
 
-          if (allVariants.length !== 0) {
+          if (cartProductQtyArg !== undefined) {
+            itemQtyInCart = cartProductQtyArg;
+          }
+          else if (allVariants.length !== 0) {
             $.each( cart_items, function( item, value ) {
               if ($.inArray( item, allVariants ) >= 0) {
                 itemQtyInCart += value.qty;
