@@ -8,13 +8,12 @@ Feature: Test Checkout feature
     And I go to "/cart"
     And I wait 5 seconds
     And I press "checkout securely"
-    When I follow "edit-checkout-guest-checkout-as-guest"
+    When I click the element with id "edit-checkout-guest-checkout-as-guest" on page
     And I wait for the page to load
-
+    And I wait 5 seconds
 
   @hd @2d @credit
-  Scenario: As a Guest,
-  I should be able to checkout using 2D Credit Card
+  Scenario: As a Guest, I should be able to checkout using 2D Credit Card
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -47,8 +46,7 @@ Feature: Test Checkout feature
     And I should see "Item code:"
 
   @hd @2d @debit
-  Scenario: As a Guest,
-  I should be able to checkout using 2D Debit Card
+  Scenario: As a Guest, I should be able to checkout using 2D Debit Card
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -81,8 +79,7 @@ Feature: Test Checkout feature
     And I should see "Item code:"
 
   @hd @2d @wrongcvv
-  Scenario: As a Guest,
-  I should not be able to checkout using 2D Credit Card when wrong CVV is used
+  Scenario: As a Guest, I should not be able to checkout using 2D Credit Card when wrong CVV is used
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -107,7 +104,6 @@ Feature: Test Checkout feature
     And I press "place order"
     And I wait 10 seconds
     Then I should see text matching "Transaction has been declined. Please try again later."
-
 
   @cod @hd
   Scenario: As a Guest,
@@ -145,8 +141,6 @@ Feature: Test Checkout feature
     Then I should see "size:"
     And I should see "Item code:"
     And I should see "Quantity:"
-
-
 
   @hd @knet
   Scenario: As a Guest,
@@ -191,11 +185,8 @@ Feature: Test Checkout feature
     And I should see "Item code:"
     And I should see "Quantity:"
 
-
   @cc @knet
-  Scenario: As a Guest
-  I should be able to use click and collect option
-  and pay by KNET
+  Scenario: As a Guest, I should be able to use click and collect option and pay by KNET
     When I follow "click & collect"
     And I wait for AJAX to finish
     And I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -242,8 +233,7 @@ Feature: Test Checkout feature
     And I should see "Quantity:"
 
   @hd @3d @visa
-  Scenario: As a Guest,
-  I should be able to checkout using 3D Credit Card
+  Scenario: As a Guest, I should be able to checkout using 3D Credit Card
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -276,8 +266,7 @@ Feature: Test Checkout feature
     And I should see "Item code:"
 
   @hd @3d @mastercard
-  Scenario: As a Guest,
-  I should be able to checkout using 2D Debit Card
+  Scenario: As a Guest, I should be able to checkout using 2D Debit Card
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -310,8 +299,7 @@ Feature: Test Checkout feature
     And I should see "Item code:"
 
   @hd @3d @wrongcvv
-  Scenario: As a Guest,
-  I should not be able to checkout using 2D Credit Card when wrong CVV is used
+  Scenario: As a Guest, I should not be able to checkout using 2D Credit Card when wrong CVV is used
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Bharat"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -336,10 +324,3 @@ Feature: Test Checkout feature
     And I press "place order"
     And I wait 10 seconds
     Then I should see text matching "Transaction has been declined. Please try again later."
-
-
-
-
-
-
-
