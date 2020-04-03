@@ -139,7 +139,7 @@ export default class ParentAreaSelect extends React.Component {
           </div>
         ) : (
           <div id="spc-area-select-selected-city" className="spc-area-select-selected" onClick={() => this.toggleFilterList()}>
-            {Drupal.t('Select city')}
+            {panelTitle}
           </div>
         )}
         {showFilterList
@@ -147,7 +147,7 @@ export default class ParentAreaSelect extends React.Component {
             <FilterList
               selected={options[currentOption]}
               options={options}
-              placeHolderText={Drupal.t('search for a city')}
+              placeHolderText={Drupal.t('search for @label', { '@label': field.label })}
               processingCallback={this.processSelectedItem}
               toggleFilterList={this.toggleFilterList}
               panelTitle={panelTitle}
