@@ -244,6 +244,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       }
       else {
         $element[$field_code]['#title'] = $form_item['store_label'];
+        $element[$field_code]['#required'] = $form_item['required'];
       }
     }
   }
