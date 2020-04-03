@@ -18,6 +18,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -816,6 +817,39 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
     $total_price['#final_price'] = _alshaya_acm_format_price_with_decimal($item_cart_price['final_price'] * $item['quantity']['#default_value']);
   }
 
+  // If free gift rule is based on order total threshold then we want
+  // to show coupon details only when threshold is reached.
+  $show_coupon = TRUE;
+  foreach ($promotions as $id => $promotion) {
+    // 'condition_value' is set in promotions only for
+    // rule with 'base_subtotal' in conditions.
+    $condition_value = isset($promotion['condition_value']) ? $promotion['condition_value'] : '';
+    if (!empty($condition_value)) {
+      // Calculate cart quantity.
+      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+      $cart_items = $cart_storage->getCart(FALSE)->items();
+
+      // If cart is not empty and has matching products.
+      if (!empty($cart_items)) {
+        $eligible_cart_qty = 0;
+        $cart_skus = array_column($cart_items, 'sku');
+        $promotion_node = Node::load($id);
+
+        /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promotionLabelManager */
+        $promotionLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
+        $eligibleSKUs = $promotionLabelManager->getPromoEligibleSkus($promotion_node, $cart_skus);
+
+        foreach ($cart_items as $item) {
+          if (in_array($item['sku'], $eligibleSKUs)) {
+            $eligible_cart_qty += $item['qty'];
+          }
+        }
+        $show_coupon = (($condition_value - $eligible_cart_qty) >= 1) ? FALSE : $show_coupon;
+      }
+    }
+  }
+
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $promotions_manager */
   $promotions_manager = \Drupal::service('alshaya_acm_promotion.manager');
 
@@ -829,7 +863,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
   // If we have free gift promotions linked with the current item, generate
   // the label for them.
   $free_gift_cart_promotions = [];
-  if (!empty($free_gift_promos)) {
+  if (!empty($free_gift_promos) && $show_coupon) {
     $free_gift_cart_promotions = [
       '#theme' => 'free_gift_cart_label',
       '#promos' => $free_gift_promos,
