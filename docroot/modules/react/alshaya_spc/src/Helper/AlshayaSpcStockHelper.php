@@ -45,7 +45,11 @@ class AlshayaSpcStockHelper {
           $processed_parents[] = $parent->getSku();
           $parent->refreshStock();
           $plugin = $parent->getPluginInstance();
-          $response['stock'][$sku_entity->getSku()] = $plugin->isProductInStock($parent);
+          $parent_in_stock = $plugin->isProductInStock($parent);
+          if ($response['stock'][$sku_entity->getSku()]
+            && !$parent_in_stock) {
+            $response['stock'][$sku_entity->getSku()] = FALSE;
+          }
         }
       }
     }
