@@ -401,15 +401,7 @@ class AlshayaPromoLabelManager {
 
       // If cart is not empty and has matching products.
       if (!empty($cartSKUs)) {
-        $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion);
-
-        // Get children of eligible parents in cart.
-        $parents = $this->skuManager->getParentSkus($cartSKUs);
-        $eligible_parents = array_intersect($parents, $eligibleSKUs);
-        if (!empty($eligible_parents)) {
-          $eligible_children = $this->skuManager->fetchChildSkuTexts($eligible_parents);
-          $eligibleSKUs = array_merge($eligibleSKUs, $eligible_children);
-        }
+        $eligibleSKUs = $this->getPromoEligibleSkus($promotion, $cartSKUs);
 
         if (in_array($currentSKU->getSku(), $eligibleSKUs) && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
           $this->overridePromotionLabel($label, $promotion, $eligibleSKUs);
@@ -418,6 +410,31 @@ class AlshayaPromoLabelManager {
     }
 
     return $label;
+  }
+
+  /**
+   * Get Promo Eligible SKUs.
+   *
+   * @param \Drupal\node\NodeInterface $promotion
+   *   Promotion Node.
+   * @param array $cartSKUs
+   *   SKUs.
+   *
+   * @return array
+   *   List of eligible SKUs.
+   */
+  public function getPromoEligibleSkus(NodeInterface $promotion, array $cartSKUs) {
+    $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion);
+
+    // Get children of eligible parents in cart.
+    $parents = $this->skuManager->getParentSkus($cartSKUs);
+    $eligible_parents = array_intersect($parents, $eligibleSKUs);
+    if (!empty($eligible_parents)) {
+      $eligible_children = $this->skuManager->fetchChildSkuTexts($eligible_parents);
+      $eligibleSKUs = array_merge($eligibleSKUs, $eligible_children);
+    }
+
+    return $eligibleSKUs;
   }
 
   /**
