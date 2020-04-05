@@ -46,14 +46,14 @@ const Notifications = ({ children }) => {
     <div>
       <div className="spc-cart-item-warning">
         {notificationTypes.warning.map((warningItem) => (
-          <div className="spc-cart-item-warning-item">
+          <div className="spc-cart-item-warning-item" key={warningItem.type.name}>
             { warningItem }
           </div>
         ))}
       </div>
       <div className="spc-cart-item-alerts">
         {notificationTypes.alert.map((alertItem) => (
-          <div className="spc-cart-item-warning-item">
+          <div className="spc-cart-item-warning-item" key={alertItem.type.name}>
             { alertItem }
           </div>
         ))}
