@@ -9,8 +9,10 @@ export default class CartQuantitySelect extends React.Component {
     this.selectRef = React.createRef();
   }
 
-  prepareOptions = (stock) => {
-    const cartMaxQty = window.drupalSettings.alshaya_spc.max_cart_qty;
+  prepareOptions = (stock, qty, maxLimit) => {
+    const cartMaxQty = maxLimit !== null
+      ? maxLimit
+      : window.drupalSettings.alshaya_spc.max_cart_qty;
     const data = [];
     for (let i = 1; i <= cartMaxQty; i++) {
       data[i] = {
@@ -60,8 +62,10 @@ export default class CartQuantitySelect extends React.Component {
   };
 
   render() {
-    const { qty, stock, is_disabled: isDisabled } = this.props;
-    const options = this.prepareOptions(stock, qty);
+    const {
+      qty, stock, is_disabled: isDisabled, maxLimit,
+    } = this.props;
+    const options = this.prepareOptions(stock, qty, maxLimit);
     const qtyClass = stock < qty ? 'invalid' : 'valid';
     return (
       <Select

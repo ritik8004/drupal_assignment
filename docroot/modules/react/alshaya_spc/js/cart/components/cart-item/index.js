@@ -135,6 +135,7 @@ export default class CartItem extends React.Component {
                 stock={stock}
                 sku={sku}
                 is_disabled={!inStock || freeItem}
+                maxLimit={drupalSettings.quantity_limit_enabled ? maxSaleQty : null}
               />
             </div>
           </div>
