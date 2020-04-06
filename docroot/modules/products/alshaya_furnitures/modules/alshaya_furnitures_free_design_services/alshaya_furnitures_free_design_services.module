@@ -35,7 +35,7 @@ function alshaya_furnitures_free_design_services_webform_submission_form_alter(a
     $mobile_number = !empty($entity->getData()) ? $entity->getData()['mobile_number'] : '';
 
     $form['elements']['contact_information']['mobile_number'] = [
-      '#title' => 'Mobile number',
+      '#title' => t('Mobile number'),
       '#type' => 'mobile_number',
       '#verify' => MobileNumberUtilInterface::MOBILE_NUMBER_VERIFY_NONE,
       '#tfa' => NULL,

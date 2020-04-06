@@ -108,7 +108,7 @@
         background: $plp_facet_active_bg;
         z-index: 2;
         min-width: 15.5rem;
-        border: 0.0625rem solid $plp_facet_border;
+        border: 0.0625rem solid $plp_mobile_separator;
 
         & > li:not(:last-child) {
           border-bottom: 0.0625rem solid $plp_all_filter_item_border;
