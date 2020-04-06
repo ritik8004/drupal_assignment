@@ -891,7 +891,8 @@
 .cart-promotions-wrapper {
   &.inactive-promotions {
     .promotion {
-      &.fixed_percentage_discount_order {
+      &.fixed_percentage_discount_order,
+      &.free_gift_order {
         background: $basket_fixed_percentage_inactive_header_promo_bg;
         color: $basket_fixed_percentage_inactive_header_promo_txt;
 
@@ -944,7 +945,8 @@
 
   &.active-promotions {
     .promotion {
-      &.fixed_percentage_discount_order {
+      &.fixed_percentage_discount_order,
+      &.free_gift_order {
         background: $basket_fixed_percentage_active_header_promo_bg;
         color: $basket_fixed_percentage_active_header_promo_txt;
         border: 2px solid $basket_fixed_percentage_active_header_promo_txt;
