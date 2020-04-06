@@ -46,7 +46,7 @@ $magentos = [
     ],
   ],
   'mc_uat' => [
-    'url' => 'https://mc-uat.store.alshaya.com',
+    'url' => 'https://mcmena-uat2.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => '3ewl8lsult7l5mpp1ckv0hw1ftk0u2bc',
       'consumer_secret' => '84avnwtrinkpt2jmda6f61l8vy5cabb1',
@@ -100,7 +100,7 @@ $magentos = [
     ],
   ],
   'hm_uat' => [
-    'url' => 'https://hm-uat.store.alshaya.com',
+    'url' => 'https://hm-uat2.store.alshaya.com',
     'pims_base_url' => 'http://34.249.182.88:3030',
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 5],
@@ -349,7 +349,7 @@ $magentos = [
     ],
   ],
   'fl_uat' => [
-    'url' => 'https://fl-uat.store.alshaya.com',
+    'url' => 'https://fl-uat2.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'bs3iqr7l0o0nu1m65gqj0i9g6khwrwlg',
       'consumer_secret' => 'd5y2b1wvvuwja4xjeaa08qgjpbr603ji',

@@ -26,6 +26,7 @@ use Drupal\DrupalExtension\Context\DrupalContext;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
 use Drupal\node\Entity\Node;
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 
 
 define("ORDER_ASC", 1);
@@ -45,13 +46,20 @@ class FeatureContext extends CustomMinkContext
   }
 
   /**
+   * @AfterScenario
+   */
+  public function cleanBrowserSessions(AfterScenarioScope $scope)
+  {
+    $this->getSession()->stop();
+  }
+
+  /**
    * Wait for page to load for 15 seconds.
    *
    * @Given /^I wait for the page to load$/
    */
   public function iWaitForThePageToLoad()
   {
-//    print_r($this->parameters['ajax_waittime']);
     $this->getSession()->wait($this->parameters['ajax_waittime'] * 1000, "document.readyState === 'complete'");
   }
 
@@ -1526,7 +1534,8 @@ class FeatureContext extends CustomMinkContext
       throw new Exception('Search passed, but search results were empty');
     }
     foreach ($all_products as $item) {
-      if ($item->find('css', 'div.out-of-stock span')) {
+      $item_status = count($item->find('css', 'div.out-of-stock span'));
+      if ($item_status) {
         $total_products--;
         if (!$total_products) {
           throw new Exception('All products are out of stock');
@@ -1778,6 +1787,13 @@ class FeatureContext extends CustomMinkContext
     $original_price = $page->find('css', '#spc-cart .spc-main .spc-content .spc-cart-item .spc-product-tile .spc-product-container .spc-product-price .price-amount')->getHtml();
     $original_price = floatval($original_price);
     $double_price = floatval($original_price) * 2;
+
+    if ($page->find('css', '.spc-sidebar .spc-order-summary-block .totals .discount-total')) {
+      $discount_parent = $page->find('css', '.spc-sidebar .spc-order-summary-block .totals .discount-total')->getParent();
+      $discount = abs($discount_parent->find('css', '.value .price .price-amount')->getHtml());
+      $double_price = $double_price - floatval($discount);
+    }
+
     $expected_price = $page->find('css', '.spc-sidebar .spc-order-summary-block .hero-total .value .price .price-amount')->getText();
     $expected_price = floatval($expected_price);
 
@@ -1791,5 +1807,122 @@ class FeatureContext extends CustomMinkContext
    */
   public function iShouldSeeAElementOnPage($element) {
     $this->assertSession()->elementExists('css', $element);
+  }
+
+  /**
+   * @Then the price and currency matches the content of product having promotional code set as :cart_promotional
+   */
+  public function iPriceCurrencyMatches($cart_promotional)
+  {
+    $page = $this->getSession()->getPage();
+    if ($page->find('css', '#block-content .acq-content-product .has--special--price')) {
+      $product_price = $page->find('css', '#block-content .acq-content-product .special--price .price .price-amount')->getHtml();
+      $product_price = floatval($product_price);
+      $product_currency = $page->find('css', '#block-content .acq-content-product .special--price .price .price-currency')->getHtml();
+    }
+    else {
+      $product_price = $page->find('css', '#block-content .acq-content-product .price-block .price .price-amount')->getHtml();
+      $product_price = floatval($product_price);
+      $product_currency = $page->find('css', '#block-content .acq-content-product .price-block .price .price-currency')->getHtml();
+    }
+    $cart_price = $page->find('css', '#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount')->getHtml();
+    $cart_price = floatval($cart_price);
+    $cart_currency = $page->find('css', '#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-currency')->getHtml();
+
+    if ($cart_promotional) {
+      $message = ($product_price >= $cart_price) ? '' : 'Correct price did not added get in minicart, expected cart price %d';
+      if (!empty($message)) {
+        throw new \Exception(sprintf($message, $product_price));
+      }
+    }
+    else {
+      if ($product_price !== $cart_price) {
+        throw new \Exception(sprintf('Correct price did not added get in minicart, expected cart price %d', $product_price));
+      }
+    }
+    if ($product_currency !== $cart_currency) {
+      throw new \Exception(sprintf('Correct currency did not added get in minicart, expected cart price %d', $product_price));
+    }
+  }
+
+  /**
+   * Asserts that an element, specified by CSS selector, exists.
+   *
+   * @param string $selector
+   *   The CSS selector to search for.
+   *
+   * @Then the element :selector should exist
+   */
+  public function theElementShouldExist($selector) {
+    $this->assertSession()->elementExists('css', $selector);
+  }
+
+  /**
+   * Checks, that current page PATH is equal to specified
+   * Example: Then url should contain "/" page
+   * Example: And I should be on "/bats" page
+   * Example: And I should be on "http://google.com" page
+   *
+   * @Then /^(?:|I )should be on "(?P<page>[^"]+)" page$/
+   */
+  public function assertPageLocate($path)
+  {
+    $parts = parse_url($path);
+    $fragment = empty($parts['fragment']) ? '' : '#'.$parts['fragment'];
+    $path = empty($parts['path']) ? '/' : $parts['path'];
+
+    $expected = preg_replace('/^\/[^\.\/]+\.php\//', '/', $path).$fragment;
+    $actual = $this->getSession()->getCurrentUrl();
+
+    if (strpos($actual, $expected) === FALSE) {
+      throw new \Exception(sprintf('Current page is "%s", but "%s" expected.', $actual, $expected));
+    }
+  }
+
+  /**
+   * @When I select :option from the dropdown filter :css
+   */
+  public function iSelectOptionFromTheFilters($option, $filter)
+  {
+    $page = $this->getSession()->getPage();
+    $element = $page->find('css', "$filter");
+    if (!empty($element)) {
+      $element->click();
+      $this->getSession()->executeScript('var id = jQuery("label:contains(\''. $option . '\')").attr(\'for\'); document.getElementById(id).click();');
+      return;
+    }
+    throw new \Exception(sprintf('Element %s is not found on page.', $filter));
+  }
+
+  /**
+   * @Then I click jQuery :element element on page
+   */
+  public function iClickJqueryElementOnPage($element) {
+    $this->getSession()->executeScript("jQuery('$element').trigger('click');");
+  }
+
+  /**
+   * Fills in form fields with provided table
+   * Example: When fill in billing address with following:
+   *              | username | bruceWayne |
+   *              | password | iLoveBats123 |
+   *
+   * @When /^(?:|I )fill in billing address with following:$/
+   */
+  public function fillBillingFields(TableNode $fields)
+  {
+    foreach ($fields->getRowsHash() as $field => $value) {
+      if ($value) {
+        if ($field == "spc-area-select-selected-city" || $field == "spc-area-select-selected") {
+          $this->iClickJqueryElementOnPage(".spc-address-form-guest-overlay .spc-address-form-content .spc-address-add .delivery-address-fields #$field");
+          $this->iWaitSeconds(5);
+          $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
+          $this->iWaitSeconds(3);
+        }
+        else {
+          $this->getSession()->getPage()->fillField($field, $value);
+        }
+      }
+    }
   }
 }
