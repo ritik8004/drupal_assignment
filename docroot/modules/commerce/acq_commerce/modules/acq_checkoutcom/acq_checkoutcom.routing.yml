@@ -24,7 +24,7 @@ acq_checkoutcom.payment_cards:
     _controller: '\Drupal\acq_checkoutcom\Controller\PaymentCardsController::listCards'
     _title: 'Payment Cards'
   requirements:
-    _custom_access: '\Drupal\acq_checkoutcom\Controller\PaymentCardsController::checkAccess'
+    _payment_cards_access: 'TRUE'
     user: \d+
   options:
     parameters:

@@ -3,7 +3,6 @@
 namespace Drupal\acq_checkoutcom\Controller;
 
 use Drupal\acq_checkoutcom\ApiHelper;
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -92,23 +91,6 @@ class PaymentCardsController extends ControllerBase {
       $container->get('acq_checkoutcom.agent_api'),
       $container->get('current_user'),
       $container->get('messenger')
-    );
-  }
-
-  /**
-   * Helper method to check access.
-   *
-   * @param \Drupal\user\UserInterface $user
-   *   The user object.
-   *
-   * @return \Drupal\Core\Access\AccessResult
-   *   Return access result object.
-   */
-  public function checkAccess(UserInterface $user) {
-    return AccessResult::allowedIf(
-      !empty($user->get('acq_customer_id')->getString())
-      && $this->currentUser->id() == $user->id()
-      && $this->apiHelper->getCheckoutcomConfig('vault_enabled')
     );
   }
 
