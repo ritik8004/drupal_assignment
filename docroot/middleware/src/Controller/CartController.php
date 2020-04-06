@@ -314,7 +314,7 @@ class CartController {
     $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
     try {
       $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
-      foreach ($data['items'] as $key => &$value) {
+      foreach ($data['items'] as $key => $value) {
         if (isset($items_quantity[$key])) {
           $data['items'][$key]['qty'] = $items_quantity[$key];
         }
@@ -335,7 +335,8 @@ class CartController {
         }
 
         // For the OOS.
-        if ($data['in_stock'] && (isset($value['in_stock']) && !$value['in_stock'])) {
+        if ($data['in_stock']
+          && (isset($data['items'][$key]['in_stock']) && !$data['items'][$key]['in_stock'])) {
           $data['in_stock'] = FALSE;
         }
 
