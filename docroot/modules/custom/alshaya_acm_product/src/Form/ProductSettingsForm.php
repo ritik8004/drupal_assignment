@@ -10,6 +10,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_pdp_layouts\PdpLayoutManager;
 
 /**
  * Class ProductSettingsForm.
@@ -38,6 +39,13 @@ class ProductSettingsForm extends ConfigFormBase {
   protected $skuManager;
 
   /**
+   * The PDP Layout Manager.
+   *
+   * @var \Drupal\alshaya_pdp_layouts\PdpLayoutManager
+   */
+  protected $pluginManager;
+
+  /**
    * ProductSettingsForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -48,16 +56,20 @@ class ProductSettingsForm extends ConfigFormBase {
    *   Cache Backend service.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   SkuManager service.
+   * @param \Drupal\alshaya_pdp_layouts\PdpLayoutManager $pdp_layout_manager
+   *   The PDP Layout Manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
                               CacheBackendInterface $cache,
-                              SkuManager $skuManager
+                              SkuManager $skuManager,
+                              PdpLayoutManager $pdp_layout_manager
   ) {
     parent::__construct($config_factory);
     $this->entityTypeManager = $entity_type_manager;
     $this->cache = $cache;
     $this->skuManager = $skuManager;
+    $this->pdpLayoutManager = $pdp_layout_manager;
   }
 
   /**
@@ -68,7 +80,8 @@ class ProductSettingsForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
       $container->get('cache.default'),
-      $container->get('alshaya_acm_product.skumanager')
+      $container->get('alshaya_acm_product.skumanager'),
+      $container->get('plugin.manager.pdp_layouts')
     );
   }
 
@@ -283,8 +296,12 @@ class ProductSettingsForm extends ConfigFormBase {
     ];
 
     // Prepare PDP layout select options.
-    $pdp_layout_options = alshaya_acm_product_pdp_layout_values();
-    unset($pdp_layout_options['inherit']);
+    $alshaya_pdp_layouts = $this->pdpLayoutManager;
+    $layouts = $alshaya_pdp_layouts->getDefinitions();
+    $pdp_layout_options = [];
+    foreach ($layouts as $key => $value) {
+      $pdp_layout_options[$key] = $value['label']->__toString();
+    }
     $form['pdp_layout'] = [
       '#type' => 'select',
       '#title' => $this->t('PDP layout'),

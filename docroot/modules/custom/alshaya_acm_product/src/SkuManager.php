@@ -2762,7 +2762,8 @@ class SkuManager {
 
     // Load default from config.
     if (!isset($static['default'])) {
-      $static['default'] = $this->getConfig('alshaya_acm_product.settings')->get('pdp_layout');
+      $node_layout = $entity->get('field_select_pdp_layout')->value;
+      $static['default'] = $node_layout ? $node_layout : $this->getConfig('alshaya_acm_product.settings')->get('pdp_layout');
     }
 
     // If we don't have product node, let's just return default.

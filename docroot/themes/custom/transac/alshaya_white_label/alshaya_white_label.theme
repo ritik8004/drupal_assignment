@@ -575,9 +575,9 @@ function alshaya_white_label_preprocess_node(&$variables) {
         $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
         $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
         if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-          $variables['#attached']['library'][] = 'alshaya_white_label/magazine_attribute';
-          $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
-          $variables['#attached']['drupalSettings']['color_swatches_hover'] = TRUE;
+          $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.pdp_layouts');
+          $pdp_plugin = $pdp_layout_plugin_manager->createInstance('magazine', []);
+          $pdp_plugin->getRenderArray($variables);
         }
         else {
           $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
@@ -830,7 +830,9 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
       if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-        $suggestions[] = 'node__acq_product__full_magazine';
+        $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.pdp_layouts');
+        $pdp_plugin = $pdp_layout_plugin_manager->createInstance('magazine', []);
+        $pdp_plugin->getTemplateName($suggestions);
       }
     }
   }
