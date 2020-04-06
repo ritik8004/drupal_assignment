@@ -305,6 +305,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   $element['administrative_area']['#empty_option'] = reset($area_empty_option);
   $element['administrative_area']['#options'] = $area_empty_option + $area_options;
+  $element['administrative_area']['#required'] = $is_element_required;
 
   // Adding country.
   $country_list = \Drupal::service('address.country_repository')->getList();
