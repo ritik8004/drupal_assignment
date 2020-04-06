@@ -170,7 +170,6 @@ function alshaya_color_split_acq_sku_configurable_variants_alter(array &$childre
         continue;
       }
 
-      $children[$child->getSku()] = $child;
       $parent_sku = $skuManager->getParentSkuBySku($child->getSku());
       // Loading only those variants whose parents are not null.
       if ($parent_sku != NULL) {
