@@ -89,6 +89,27 @@ function _alshaya_spc_translations() {
       'CVV' => [
         'ar' => 'CVV الرقم السري',
       ],
+      'Here\'s a confirmation of your order and all the details you may need.' => [
+        'ar' => '.فيما يلي تأكيد لطلبك وكل التفاصيل التي قد تحتاجها',
+      ],
+      'Card Number' => [
+        'ar' => 'رقم البطاقة',
+      ],
+      'discount' => [
+        'ar' => 'الخصم',
+      ],
+      'card no.' => [
+        'ar' => 'رقم البطاقة',
+      ],
+      'Order Confirmation' => [
+        'ar' => 'تأكيد الطلبية',
+      ],
+      'Thanks for shopping with us.' => [
+        'ar' => '.شكراً لتسوقكم معنا عبر الموقع',
+      ],
+      'Print Confirmation' => [
+        'ar' => 'اطبع التأكيد',
+      ],
     ],
   ];
 }
