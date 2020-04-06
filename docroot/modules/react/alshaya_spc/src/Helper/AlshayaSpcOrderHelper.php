@@ -302,16 +302,19 @@ class AlshayaSpcOrderHelper {
     $data['final_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
     $data['extra_data']['cart_image'] = NULL;
     $data['relative_link'] = '';
-    $data['configurable_values'] = ($item['product_type'] === 'configurable')
-      ? $item['extension_attributes']['product_options'][0]['attributes_info']
-      : [];
 
+    $data['configurable_values'] = [];
     $node = $this->skuManager->getDisplayNode($item['sku']);
     $skuEntity = SKU::loadFromSku($item['sku']);
     if (($skuEntity instanceof SKUInterface) && ($node instanceof NodeInterface)) {
       $data['title'] = $this->productInfoHelper->getTitle($skuEntity, 'basket');
       $data['relative_link'] = $node->toUrl('canonical', ['absolute' => FALSE])->toString();
       $data['extra_data']['cart_image'] = $this->getProductDisplayImage($skuEntity, 'cart_thumbnail', 'cart');
+      // Check if we can find a parent SKU for this to get proper name.
+      if ($this->skuManager->getParentSkuBySku($skuEntity)) {
+        // Get configurable values.
+        $data['configurable_values'] = array_values($this->skuManager->getConfigurableValues($skuEntity));
+      }
     }
 
     return $data;
