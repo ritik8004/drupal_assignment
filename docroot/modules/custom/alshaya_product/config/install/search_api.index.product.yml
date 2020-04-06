@@ -115,31 +115,20 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: stock_quantity
     type: integer
+  # Used to display promotions listing page.
+  # Value set in SKUManager::processIndexItem().
   promotion_nid:
     label: 'Promotions NID'
     datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:field_acq_sku_promotions:entity:nid'
+    property_path: nid
     type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-        - field.storage.acq_sku.field_acq_sku_promotions
-      module:
-        - acq_sku
-        - node
+  # Used for promotions facet on PLP.
+  # Value set in SKUManager::processIndexItem().
   field_acq_promotion_label:
-      label: 'Promotions'
-      datasource_id: 'entity:node'
-      property_path: 'field_skus:entity:field_acq_sku_promotions:entity:field_acq_promotion_label'
-      type: string
-      dependencies:
-        config:
-          - field.storage.node.field_skus
-          - field.storage.acq_sku.field_acq_sku_promotions
-          - field.storage.node.field_acq_promotion_label
-        module:
-          - acq_sku
-          - node
+    label: 'Promotions'
+    datasource_id: 'entity:node'
+    property_path: title
+    type: string
   field_category:
     label: Category
     datasource_id: 'entity:node'

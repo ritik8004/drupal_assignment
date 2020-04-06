@@ -3117,6 +3117,16 @@ class SkuManager {
       }
     }
 
+    // Process and store promotion fields.
+    $fields = $item->getFields();
+    $promotions = $this->getPromotionsForSearchViewFromSkuId($sku);
+    if (isset($fields['promotion_nid'])) {
+      $item->getField('promotion_nid')->setValues(array_keys($promotions));
+    }
+    if (isset($fields['field_acq_promotion_label'])) {
+      $item->getField('field_acq_promotion_label')->setValues(array_column($promotions, 'text'));
+    }
+
     if ($sku->bundle() === 'configurable') {
       $this->processIndexItemConfigurable($sku, $item, $product_color);
     }
