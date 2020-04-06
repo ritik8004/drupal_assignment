@@ -14,7 +14,7 @@ use Drupal\field\Entity\FieldConfig;
  *
  * Add new value for promotion sub type and add translations.
  */
-function alshaya_acm_promotion_update_8022() {
+function alshaya_acm_promotion_update_8023() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
