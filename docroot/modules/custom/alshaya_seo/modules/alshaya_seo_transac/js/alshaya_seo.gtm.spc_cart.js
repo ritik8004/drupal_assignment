@@ -10,7 +10,7 @@
     attach: function (context, settings) {
       var cart_data = JSON.parse(localStorage.getItem('cart_data'));
       var step = Drupal.alshayaSpcGetStepFromContainer();
-      if (cart_data && cart_data.cart && cart_data.cart.cart_id) {
+      if (cart_data !== null && cart_data && cart_data.cart && cart_data.cart.cart_id) {
         Drupal.alshayaSpcCartGtm(cart_data.cart, step);
       }
 
@@ -172,7 +172,7 @@
     if (window.location.href.indexOf('checkout') > -1) {
       step = 2;
     }
-    if (cart_data.cart.hasOwnProperty('cart_payment_method') && cart_data.cart.cart_payment_method !== null) {
+    if (cart_data !== null && cart_data.cart.hasOwnProperty('cart_payment_method') && cart_data.cart.cart_payment_method !== null) {
       step = 3;
     }
     return step;
