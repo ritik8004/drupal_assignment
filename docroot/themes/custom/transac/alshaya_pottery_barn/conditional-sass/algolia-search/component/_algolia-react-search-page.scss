@@ -28,3 +28,17 @@
     }
   }
 }
+
+.c-plp {
+  #alshaya-algolia-search {
+    .c-products-list {
+      .view-content {
+        & > div {
+          @include breakpoint($desktop) {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
