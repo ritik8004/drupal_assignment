@@ -140,6 +140,12 @@
           @include breakpoint($desktop) {
             max-height: 21.75rem;
           }
+
+          &:hover {
+            @include breakpoint($desktop) {
+              max-height: 21.75rem !important;
+            }
+          }
         }
       }
     }
