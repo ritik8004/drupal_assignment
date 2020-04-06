@@ -197,7 +197,7 @@ class AcqPromotionsManager {
 
       if ($node instanceof Node) {
         $rule_id = $node->get('field_acq_promotion_rule_id')->getString();
-        $this->updateCartPromotionsMapping($rule_id, []);
+        $this->deleteCartPromotionMappings($rule_id, []);
         $node->delete();
         $this->logger->notice('Deleted orphan promotion node:@nid title:@promotion having rule_id:@rule_id.', [
           '@nid' => $node->id(),
@@ -378,8 +378,7 @@ class AcqPromotionsManager {
     $promotion_attach_queue = $this->queue->get('acq_promotion_attach_queue');
 
     // Clear any outstanding items in attach queue before starting promotion
-    // import to avoid duplicate processing. For delete queue we want it to
-    // be processed for deleted promotions.
+    // import to avoid duplicate processing.
     $promotion_attach_queue->deleteQueue();
 
     foreach ($promotions as $promotion) {
@@ -402,18 +401,6 @@ class AcqPromotionsManager {
       $attached = array_diff($promotion_skus, $promotion_skus_existing);
       $detached = array_diff($promotion_skus_existing, $promotion_skus);
 
-      $attach_data = [];
-      if ($promotion['promotion_type'] === 'category') {
-        foreach ($products as $product) {
-          if (in_array($product['product_sku'], $attached)) {
-            $attach_data[$product['product_sku']] = [
-              'sku' => $product['product_sku'],
-              'final_price' => $product['final_price'],
-            ];
-          }
-        }
-      }
-
       // Check if this promotion exists in Drupal.
       // Assuming rule_id is unique across a promotion type.
       $promotion_node = $this->getPromotionByRuleId($promotion['rule_id'], $promotion['promotion_type']);
@@ -421,34 +408,45 @@ class AcqPromotionsManager {
 
       // Attach promotions to skus.
       if ($promotion_node) {
-        // Final price may come updated next time, we don't store mapping
-        // for catalog rule for this reason. This means it will be queued
-        // for all the products all the time.
-        if ($promotion['promotion_type'] === 'cart') {
-          $this->updateCartPromotionsMapping($promotion['rule_id'], $attached);
+        if ($promotion['promotion_type'] === 'cart' && $attached) {
+          $this->addCartPromotionMapping($promotion['rule_id'], $attached);
 
-          if ($attached) {
-            $event = new PromotionMappingUpdatedEvent($attached);
-            $this->dispatcher->dispatch(PromotionMappingUpdatedEvent::EVENT_NAME, $event);
+          $event = new PromotionMappingUpdatedEvent($attached);
+          $this->dispatcher->dispatch(PromotionMappingUpdatedEvent::EVENT_NAME, $event);
+        }
+        elseif ($promotion['promotion_type'] === 'category' && $attached) {
+          // Final price may come updated next time, we don't store mapping
+          // for catalog rule for this reason. This means it will be queued
+          // for all the products all the time.
+          $attach_data = [];
+          foreach ($products as $product) {
+            if (in_array($product['product_sku'], $attached)) {
+              $attach_data[$product['product_sku']] = [
+                'sku' => $product['product_sku'],
+                'final_price' => $product['final_price'],
+              ];
+            }
+          }
+
+          if ($attach_data) {
+            $this->queueItemsInBatches(
+              $promotion_attach_queue,
+              $attach_data,
+              $promotion['rule_id'],
+              'attach'
+            );
           }
         }
 
         if ($detached) {
+          $this->deleteCartPromotionMappings($promotion['rule_id'], $detached);
+
           $event = new PromotionMappingUpdatedEvent($detached);
           $this->dispatcher->dispatch(PromotionMappingUpdatedEvent::EVENT_NAME, $event);
         }
-
-        if ($promotion['promotion_type'] === 'category' && !empty($attach_data)) {
-          $this->queueItemsInBatches(
-            $promotion_attach_queue,
-            $attach_data,
-            $promotion['rule_id'],
-            'attach'
-          );
-        }
       }
 
-      $this->logger->notice('Promotion `@node` having rule_id:@rule_id created or updated successfully with @attach items in attach queue.', [
+      $this->logger->notice('Promotion @node having rule_id: @rule_id created or updated successfully with @attach items in attach queue.', [
         '@node' => $promotion_node->getTitle(),
         '@rule_id' => $promotion['rule_id'],
         '@attach' => !empty($attach_data) ? count($attach_data) : 0,
@@ -498,43 +496,63 @@ class AcqPromotionsManager {
   }
 
   /**
-   * Wrapper function to update cart/promotions mapping.
+   * Wrapper function to create cart/promotions mapping.
    *
    * @param int|string $rule_id
    *   Rule ID.
    * @param array $skus
    *   SKUs to attach.
    */
-  protected function updateCartPromotionsMapping($rule_id, array $skus = []) {
-    $transaction = $this->connection->startTransaction();
+  protected function addCartPromotionMapping($rule_id, array $skus) {
+    // Log before inserting to ensure we have message even if query fails.
+    $this->logger->notice('Creating promotion mapping for rule @rule_id and skus: @skus', [
+      '@rule_id' => $rule_id,
+      '@skus' => implode(',', $skus),
+    ]);
 
-    try {
-      $this->connection->delete('acq_sku_promotion', [
-        'rule_id' => $rule_id,
-      ]);
-
-      foreach (array_chunk($skus, 10) as $chunk) {
+    foreach ($skus as $sku) {
+      try {
         $insert = $this->connection->insert('acq_sku_promotion');
         $insert->fields(['rule_id', 'sku']);
-
-        foreach ($chunk as $sku) {
-          $insert->values([
-            'rule_id' => $rule_id,
-            'sku' => $sku,
-          ]);
-        }
-
+        $insert->values([
+          'rule_id' => $rule_id,
+          'sku' => $sku,
+        ]);
         $insert->execute();
       }
+      catch (\Exception $e) {
+        $this->logger->error('Error occurred while creating promotion mappings for rule_id @rule_id and sku @sku, message: @message', [
+          '@rule_id' => $rule_id,
+          '@sku' => $sku,
+          '@message' => $e->getMessage(),
+        ]);
+      }
     }
-    catch (\Exception $e) {
-      $transaction->rollBack();
+  }
 
-      $this->logger->error('Error occurred while updating promotion mappings for rule_id @rule_id, message: @message', [
-        '@rule_id' => $rule_id,
-        '@message' => $e->getMessage(),
-      ]);
+  /**
+   * Wrapper function to delete cart/promotions mapping.
+   *
+   * @param int|string $rule_id
+   *   Rule ID.
+   * @param array $skus
+   *   SKUs to attach.
+   */
+  protected function deleteCartPromotionMappings($rule_id, array $skus) {
+    // Log before deleting to ensure we have message even if query fails.
+    $this->logger->notice('Deleting promotion mapping for rule @rule_id and skus: @skus', [
+      '@rule_id' => $rule_id,
+      '@skus' => implode(',', $skus),
+    ]);
+
+    $delete = $this->connection->delete('acq_sku_promotion');
+    $delete->condition('rule_id', $rule_id);
+
+    if ($skus) {
+      $delete->condition('sku', $skus, 'IN');
     }
+
+    $delete->execute();
   }
 
 }

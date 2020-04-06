@@ -3118,6 +3118,11 @@ class SkuManager {
     }
 
     // Process and store promotion fields.
+    // We use placeholders for creating the fields in search_api indexes
+    // (solr/db). For instance to store promotion_nid we configure it with "nid"
+    // of product itself in search_api.index.product and process + store actual
+    // values here. We do this for original_nid, promotion_nid and
+    // field_acq_promotion_label as of today.
     $fields = $item->getFields();
     $promotions = $this->getPromotionsForSearchViewFromSkuId($sku);
     if (isset($fields['promotion_nid'])) {
