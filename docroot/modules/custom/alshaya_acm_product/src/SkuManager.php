@@ -810,23 +810,22 @@ class SkuManager {
    *   List of Promotion Nodes.
    */
   public function getSkuPromotions(SKU $sku, array $types = ['cart', 'category']) {
-    $promotion_nids = [];
-    $promotion = $sku->get('field_acq_sku_promotions')->getValue();
-    foreach ($promotion ?? [] as $promo) {
-      $promotion_nids[] = $promo['target_id'];
-    }
+    $skus = [$sku->getSku()];
 
     if ($sku->bundle() == 'simple') {
       /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
       $plugin = $sku->getPluginInstance();
       $parent = $plugin->getParentSku($sku);
       if ($parent instanceof SKUInterface) {
-        $promotion = $parent->get('field_acq_sku_promotions')->getValue();
-        foreach ($promotion ?? [] as $promo) {
-          $promotion_nids[] = $promo['target_id'];
-        }
+        $skus[] = $parent->getSku();
       }
     }
+
+    $query = $this->connection->select('node__field_acq_promotion_rule_id', 'node_field');
+    $query->fields('node_field', ['entity_id']);
+    $query->join('acq_sku_promotion', 'mapping', 'mapping.rule_id = node_field.field_acq_promotion_rule_id_value');
+    $query->condition('mapping.sku', $skus, 'IN');
+    $promotion_nids = $query->execute()->fetchAllKeyed(0, 0);
 
     if (!empty($promotion_nids)) {
       $promotion_nids = array_unique($promotion_nids);
@@ -1401,9 +1400,9 @@ class SkuManager {
    */
   public function fetchSkuTextsForPromotion(NodeInterface $promotion) {
     // Get configurable and SKUs.
-    $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
-    $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
-    $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
+    $query = $this->connection->select('acq_sku_promotion', 'mapping');
+    $query->join('acq_sku_field_data', 'asfd', 'asfd.sku = mapping.sku');
+    $query->condition('mapping.rule_id', $promotion->get('field_acq_promotion_rule_id')->getString());
     $query->condition('asfd.type', ['simple', 'configurable'], 'IN');
     $query->fields('asfd', ['id', 'sku', 'type']);
     $query->distinct();
@@ -3117,6 +3116,21 @@ class SkuManager {
       if ($this->isPriceModeFromTo()) {
         $item->getField('final_price')->setValues([min($selling_prices)]);
       }
+    }
+
+    // Process and store promotion fields.
+    // We use placeholders for creating the fields in search_api indexes
+    // (solr/db). For instance to store promotion_nid we configure it with "nid"
+    // of product itself in search_api.index.product and process + store actual
+    // values here. We do this for original_nid, promotion_nid and
+    // field_acq_promotion_label as of today.
+    $fields = $item->getFields();
+    $promotions = $this->getPromotionsForSearchViewFromSkuId($sku);
+    if (isset($fields['promotion_nid'])) {
+      $item->getField('promotion_nid')->setValues(array_keys($promotions));
+    }
+    if (isset($fields['field_acq_promotion_label'])) {
+      $item->getField('field_acq_promotion_label')->setValues(array_column($promotions, 'text'));
     }
 
     if ($sku->bundle() === 'configurable') {
