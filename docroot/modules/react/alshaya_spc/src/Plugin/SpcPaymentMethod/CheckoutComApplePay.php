@@ -24,6 +24,13 @@ class CheckoutComApplePay extends AlshayaSpcPaymentMethodPluginBase implements C
   use StringTranslationTrait;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Checkout.com API Helper.
    *
    * @var \Drupal\acq_checkoutcom\ApiHelper
