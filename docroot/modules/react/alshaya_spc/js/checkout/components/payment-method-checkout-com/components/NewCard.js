@@ -115,7 +115,7 @@ class NewCard extends React.Component {
 
   render() {
     const { cardType } = this.context;
-    const { handleCardCvvChange } = this.props;
+    const { handleCardCvvChange, enableCheckoutLink } = this.props;
 
     const cardTypes = Object.entries(this.acceptedCards).map(([, type]) => (
       <CardTypeSVG key={type} type={type} class={`${type} ${cardType === type ? 'is-active' : ''}`} />
@@ -165,6 +165,7 @@ class NewCard extends React.Component {
               pattern="\d{3,4}"
               maxLength="4"
               required
+              onChange={(e) => enableCheckoutLink(e)}
               onBlur={(e) => handleCardCvvChange(e, 'blur')}
             />
             <div className="c-input__bar" />
