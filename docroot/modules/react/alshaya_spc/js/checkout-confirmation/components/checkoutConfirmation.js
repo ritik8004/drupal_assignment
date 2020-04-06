@@ -37,7 +37,7 @@ class CheckoutConfirmation extends React.Component {
           <div className="impress-msg">{Drupal.t('Thanks for shopping with us.')}</div>
           <div className="impress-subtitle">{Drupal.t('Here\'s a confirmation of your order and all the details you may need.')}</div>
           <ReactToPrint
-            trigger={() => <div className="spc-checkout-confirmation-print-button">{Drupal.t('Print Confirmation')}</div>}
+            trigger={() => <div className="spc-checkout-confirmation-print-button">{Drupal.t('print confirmation')}</div>}
             content={() => this.componentRef}
           />
         </div>
