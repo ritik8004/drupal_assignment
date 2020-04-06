@@ -254,35 +254,22 @@ class MagazineDetailPage extends ResourceBase {
           }
         }
         if (!empty($res)) {
-          $response_data['Paragraphs'][] = $res;
+          $response_data['magazine_paragraphs'][] = $res;
           unset($res);
         }
       }
     }
     if ($node->hasField('field_magazine_shop_the_story') && !empty($magazine_shop = $node->get('field_magazine_shop_the_story')->getValue())) {
       foreach ($magazine_shop as $value) {
-        $parent_sku = $this->sku_manager->getParentSkuBySku($value['value']);
-        if (is_object($parent_sku)) {
-          if ($parent_sku->get('name')->getValue()) {
-            $res1['sku_name'] = $parent_sku->get('name')->getValue()[0]['value'];
-          }
-          $sku_media = $this->sku_info->getMedia($parent_sku, 'teaser');
-          if (!empty($sku_media['images']) && is_array($sku_media['images'])) {
-            $res1['image_url'] = $sku_media['images'][0]['url'];
-          }
-          $sku_price = $this->renderer->renderPlain($this->sku_price->getPriceBlockForSku($parent_sku));
-          $price = strip_tags($sku_price->__toString());
-          $res1['sku_final_price'] = trim(preg_replace('/\s\s+/', ' ', $price));
-          $sku_node_id = $this->sku_manager->getDisplayNode($parent_sku, FALSE);
-          $sku_node_url_obj = Url::fromRoute('entity.node.canonical', ['node' => $sku_node_id->id()]);
-          $sku_node_url = $sku_node_url_obj->toString(TRUE);
-          $res1['path'] = $sku_node_url->getGeneratedUrl();
-          $response_data['sku_data']['items'][] = $res1;
+        $sku_data = [];
+        $node_data = $this->sku_manager->getDisplayNode($value['value']);
+        if (is_object($node_data)) {
+          $sku_data = $this->mobileAppUtility->getLightProductFromNid($node_data->get('nid')->getValue()[0]['value'], $this->mobileAppUtility->currentLanguage());
+          $response_data['shop_the_story']['items'][] = $sku_data;
         }
-        unset($res1);
       }
-      if (array_key_exists('sku_data', $response_data)) {
-        $response_data['sku_data']['label'] = $node->field_magazine_shop_the_story->getFieldDefinition()->getLabel();
+      if (array_key_exists('shop_the_story', $response_data)) {
+        $response_data['shop_the_story']['label'] = $node->field_magazine_shop_the_story->getFieldDefinition()->getLabel();
       }
     }
     $response = new ResourceResponse($response_data);

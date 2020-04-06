@@ -8,10 +8,10 @@ body {
   }
 
   @include breakpoint($only-tablet) {
-    margin-top: 4.5rem;
+    margin-top: 4.375rem;
 
     html[lang=ar] & {
-      margin-top: 4.5rem;
+      margin-top: 4.375rem;
     }
   }
 }

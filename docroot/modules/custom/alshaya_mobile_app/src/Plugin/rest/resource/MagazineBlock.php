@@ -138,10 +138,12 @@ class MagazineBlock extends ResourceBase {
     $magazine_array_render = [
       'type' => 'magazine_block',
       'title' => $magazine_view_title,
-      'view_more_link_text' => $this->t('@title', ['@title' => $magazine_view_more_text]),
       'url' => $magazine_listing_page_url,
       'deeplink' => self::ENDPOINT_PREFIX . 'page/magazine-teasers?offset=' . $magazi_view_offset . '&limit=' . $magazi_view_limit,
     ];
+
+    // @codingStandardsIgnoreLine
+    $magazine_array_render['view_more_link_text'] = $this->t($magazine_view_more_text);
     foreach ($magazine_view->result as $magazine_result_value) {
       $magazine_entity = $this->entityRepository->getTranslationFromContext($magazine_result_value->_entity);
       $magazine_block['title'] = $magazine_entity->getTitle();

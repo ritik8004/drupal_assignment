@@ -343,6 +343,12 @@
       font-size: 1.75rem;
     }
   }
+
+  .content__main {
+    @include breakpoint($tablet) {
+      min-height: 28.25rem;
+    }
+  }
 }
 
 .description-wrapper,

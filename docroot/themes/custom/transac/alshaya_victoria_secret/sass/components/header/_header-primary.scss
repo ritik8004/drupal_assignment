@@ -353,7 +353,7 @@ header {
       @include breakpoint($upto-desktop) {
         border-bottom: 2px solid $header_mobile_border;
         position: absolute;
-        z-index: 12;
+        z-index: 10;
       }
 
       @include breakpoint($only-mobile) {
@@ -401,7 +401,7 @@ header {
       padding: 0.54rem 1rem;
       position: static;
       font-size: 0;
-      margin: 0;
+      margin: 0 auto;
       float: none;
       height: 2.5rem;
     }

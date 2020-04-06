@@ -925,6 +925,11 @@ class SkuManager {
           }
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
+          foreach ($data['condition']['conditions'][0]['conditions'] ?? [] as $condition) {
+            if ($condition['attribute'] === 'quote_item_qty') {
+              $promos[$promotion_node->id()]['condition_value'] = $condition['value'];
+            }
+          }
           break;
 
         default:
@@ -1585,6 +1590,10 @@ class SkuManager {
 
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
+
+    if ($this->isSkuFreeGift($sku_entity)) {
+      return $plugin->getParentSku($sku_entity, FALSE);
+    }
 
     return $plugin->getParentSku($sku_entity);
   }

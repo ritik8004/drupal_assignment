@@ -5,3 +5,4 @@ package: 'Alshaya'
 core: 8.x
 dependencies:
   - alshaya_acm_product_category:alshaya_acm_product_category
+  - alshaya_seo:alshaya_seo

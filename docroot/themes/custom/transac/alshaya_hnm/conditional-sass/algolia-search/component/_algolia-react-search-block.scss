@@ -184,10 +184,10 @@
       }
 
       @include breakpoint($only-mobile) {
-        margin-top: 7.3125rem !important;
+        margin-top: 7.25rem !important;
 
         html[lang=ar] & {
-          margin-top: 7.3125rem !important;
+          margin-top: 7.25rem !important;
         }
       }
     }
