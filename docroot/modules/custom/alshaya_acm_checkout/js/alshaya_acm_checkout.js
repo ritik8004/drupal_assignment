@@ -5,6 +5,8 @@
 (function ($, Drupal) {
   'use strict';
 
+  var checkIfPaymentButtonShouldBeVisibleInterval = null;
+
   /**
    * All custom js for checkout flow.
    *
@@ -323,26 +325,22 @@
     $(this).showCheckoutLoader();
   });
 
-   // For Payment, we check for payment method before we add a loader.
-   // Handle the "Cybersrouce" usecase as the acq_cybersource module adds it own
-   // loader.
-   var paymentPageTarget = '.checkout-payment .multistep-checkout .form-actions button.form-submit';
-   $(paymentPageTarget).on('click', function () {
-     // Check if we are using Cybersource.
-     if (!$('#payment_method_cybersource .payment-plugin-wrapper-div').hasClass('plugin-selected')
-       && !$('#payment_method_checkout_com .payment-plugin-wrapper-div').hasClass('plugin-selected')
-     ) {
-       // Doing this to prevent race condition in check the `error` class and
-       // showing the throbber on click.
-       setTimeout(function() {
-         var form = $('form#multistep-checkout');
-         // Show loader only when there is no inline error.
-         if (form.valid()) {
-           $(this).showCheckoutLoader();
-         }
-       }, 1);
-     }
-   });
+  // For Payment, we check for errors before we add a loader.
+  $('.checkout-payment .multistep-checkout [data-drupal-selector="edit-actions-next"]').on('click', function () {
+    var form = $('form#multistep-checkout');
+
+    // First hide and show loader.
+    $(this).addClass('hidden-important');
+    $(this).showCheckoutLoader();
+
+    if (form.valid()) {
+      form.find('label.error').remove();
+      form.find('.form-item--error-message, .messages--error').remove();
+      form.find('.checkoutcom-global-error, .cybersource-global-error').remove();
+    }
+
+    checkIfPaymentButtonShouldBeVisibleInterval = setInterval(checkIfPaymentButtonShouldBeVisible, 250);
+  });
 
   // As a precaution stop loader when the page is fully loaded.
   $(window).on('load', function () {
@@ -350,7 +348,29 @@
   });
 
   $(window).on('beforeunload unload', function (event) {
+    if (checkIfPaymentButtonShouldBeVisibleInterval !== null) {
+      clearInterval(checkIfPaymentButtonShouldBeVisibleInterval);
+      checkIfPaymentButtonShouldBeVisibleInterval = null;
+    }
+    $('.checkout-payment .multistep-checkout [data-drupal-selector="edit-actions-next"]').addClass('hidden-important');
     $(window).showCheckoutLoader();
   });
+
+  function checkIfPaymentButtonShouldBeVisible() {
+    var form = $('form#multistep-checkout');
+    // Show loader only when there is no inline error.
+    if (form.find('label.error').length > 0
+      || form.find('.form-item--error-message, .messages--error').length > 0
+      || form.find('.checkoutcom-global-error, .cybersource-global-error').length > 0
+      || !form.valid()) {
+      $('.checkout-ajax-progress-throbber').remove();
+      $('.checkout-payment .multistep-checkout [data-drupal-selector="edit-actions-next"]').removeClass('hidden-important');
+
+      if (checkIfPaymentButtonShouldBeVisibleInterval !== null) {
+        clearInterval(checkIfPaymentButtonShouldBeVisibleInterval);
+        checkIfPaymentButtonShouldBeVisibleInterval = null;
+      }
+    }
+  }
 
 })(jQuery, Drupal);
