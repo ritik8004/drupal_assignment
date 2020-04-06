@@ -236,6 +236,21 @@
       }
     }
   }
+
+  .path--store-finder,
+  .nodetype--store {
+    #alshaya-algolia-search {
+      .c-content__region,
+      .view-stores-finder {
+        max-width: none;
+        padding: 0;
+
+        .region__content {
+          margin-top: 0;
+        }
+      }
+    }
+  }
 }
 
 body.ie {
