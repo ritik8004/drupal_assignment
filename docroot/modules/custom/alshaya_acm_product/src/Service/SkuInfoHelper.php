@@ -526,7 +526,7 @@ class SkuInfoHelper {
     }
     else {
       \Drupal::logger('alshaya_acm_product')->warning('Parent SKU of child @sku does not have a display node.', [
-        '@sku' => $child_sku,
+        '@sku' => $child->getSku(),
       ]);
     }
 
