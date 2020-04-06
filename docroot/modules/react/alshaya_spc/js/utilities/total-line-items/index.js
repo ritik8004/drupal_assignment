@@ -33,7 +33,7 @@ class TotalLineItems extends React.Component {
     return (
       <div className="totals">
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
-        <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('discount')} value={totals.discount_amount} />
+        <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={totals.discount_amount} />
 
         <ConditionalView condition={totals.shipping_incl_tax > 0}>
           <TotalLineItem

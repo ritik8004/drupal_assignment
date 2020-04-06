@@ -95,20 +95,11 @@ function _alshaya_spc_translations() {
       'Card Number' => [
         'ar' => 'رقم البطاقة',
       ],
-      'discount' => [
-        'ar' => 'الخصم',
-      ],
       'card no.' => [
         'ar' => 'رقم البطاقة',
       ],
-      'Order Confirmation' => [
-        'ar' => 'تأكيد الطلبية',
-      ],
       'Thanks for shopping with us.' => [
         'ar' => '.شكراً لتسوقكم معنا عبر الموقع',
-      ],
-      'Print Confirmation' => [
-        'ar' => 'اطبع التأكيد',
       ],
     ],
   ];
