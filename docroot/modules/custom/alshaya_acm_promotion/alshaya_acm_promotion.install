@@ -12,7 +12,7 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
- * Add new value for promotion sub type.
+ * Add new value for promotion sub type and add translations.
  */
 function alshaya_acm_promotion_update_8022() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
