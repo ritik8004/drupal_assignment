@@ -182,6 +182,11 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     return [
       '#theme' => 'alshaya_super_category_top_level',
       '#term_tree' => $term_data,
+      '#attached' => [
+        'library' => [
+          'alshaya_super_category/minimalistic_header',
+        ],
+      ],
     ];
   }
 
