@@ -8,6 +8,7 @@
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\alshaya_acm_checkout\Plugin\CheckoutPane\BillingAddress;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -67,9 +68,7 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
  * Implements hook_alshaya_my_account_links_alter().
  */
 function alshaya_acm_checkoutcom_alshaya_my_account_links_alter(array &$links) {
-  if ((alshaya_acm_customer_is_customer(\Drupal::currentUser()) || \Drupal::currentUser()->hasPermission('administer users'))
-      && \Drupal::service('acq_checkoutcom.agent_api')->getCheckoutcomConfig('vault_enabled')) {
-
+  if (\Drupal::service('alshaya_acm_checkout.payment_cards_access_check')->access()->isAllowed()) {
     // Saved cards list.
     $links['payment_cards'] = [
       'text' => t('Payment Cards'),
