@@ -2,6 +2,8 @@
 
 namespace Drupal\alshaya_acm_product\EventSubscriber;
 
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_promotion\Event\PromotionMappingUpdatedEvent;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku_stock\Event\StockUpdatedEvent;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
@@ -39,6 +41,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     $events = [];
     $events[ProductUpdatedEvent::EVENT_NAME][] = ['onProductUpdated', 900];
     $events[StockUpdatedEvent::EVENT_NAME][] = ['onStockUpdated', -101];
+    $events[PromotionMappingUpdatedEvent::EVENT_NAME][] = ['onPromotionMappingUpdated', 100];
     return $events;
   }
 
@@ -66,6 +69,25 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
 
     $this->queueProductForProcessing($event->getSku());
     $event->stopPropagation();
+  }
+
+  /**
+   * Subscriber callback for the event.
+   *
+   * @param \Drupal\acq_promotion\Event\PromotionMappingUpdatedEvent $event
+   *   Event.
+   */
+  public function onPromotionMappingUpdated(PromotionMappingUpdatedEvent $event) {
+    // We don't want default ACQ code to run.
+    $event->stopPropagation();
+
+    // Queues all the products for processing.
+    foreach ($event->getSkus() as $sku) {
+      $entity = SKU::loadFromSku($sku);
+      if ($entity instanceof SKUInterface) {
+        $this->queueProductForProcessing($entity);
+      }
+    }
   }
 
   /**
