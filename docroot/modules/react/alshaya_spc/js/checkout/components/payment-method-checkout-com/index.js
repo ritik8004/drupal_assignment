@@ -62,19 +62,12 @@ class PaymentMethodCheckoutCom extends React.Component {
     }
   };
 
-  handleCardCvvChange = (event, handler) => {
-    if (window.CheckoutKit === undefined) {
-      Drupal.logJavascriptError('CheckoutKit not available');
-      return;
-    }
-
-    this.labelEffect(event, handler);
-
-    const cvv = parseInt(event.target.value, 10);
+  cvvValidations = (e) => {
+    const cvv = parseInt(e.target.value, 10);
     const valid = (cvv >= 100 && cvv <= 9999);
     handleValidationMessage(
       'spc-cc-cvv-error',
-      event.target.value,
+      e.target.value,
       valid,
       getStringMessage('invalid_cvv'),
     );
@@ -83,6 +76,21 @@ class PaymentMethodCheckoutCom extends React.Component {
       cvvValid: valid,
       cvv,
     });
+  };
+
+  enableCheckoutLink = (e) => {
+    // Dont wait for focusOut/Blur of CVV field for validations,
+    // We need to enable checkout link as soon as user has 3 characters in CVV.
+    this.cvvValidations(e);
+  };
+
+  handleCardCvvChange = (event, handler) => {
+    if (window.CheckoutKit === undefined) {
+      Drupal.logJavascriptError('CheckoutKit not available');
+      return;
+    }
+    this.labelEffect(event, handler);
+    this.cvvValidations(event);
   };
 
   validateBeforePlaceOrder = () => {
@@ -207,6 +215,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     const newCard = (
       <NewCard
         labelEffect={this.labelEffect}
+        enableCheckoutLink={this.enableCheckoutLink}
         handleCardCvvChange={this.handleCardCvvChange}
       />
     );
