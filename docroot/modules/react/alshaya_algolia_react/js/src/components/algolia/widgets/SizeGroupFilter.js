@@ -25,7 +25,7 @@ const SizeGroupFilter = ({ items, refine, searchForItems, isFromSearch, ...props
   for (var i in items) {
     var item = items[i].label.split(':');
     if (groupedItems[item[0]] === undefined) {
-        groupedItems[item[0]] = [];
+      groupedItems[item[0]] = [];
     }
     groupedItems[item[0]].push(items[i]);
   }
@@ -35,13 +35,13 @@ const SizeGroupFilter = ({ items, refine, searchForItems, isFromSearch, ...props
       {searchForm}
       {groupedItems.map((item, group) => {
         return (
-          <li>
-            <ul class="sizegroup">
+          <li key={group}>
+            <ul className="sizegroup">
               <span className="sizegroup-filter">{ group }</span>
               {item.map(clild => {
                 return (
                   <li
-                    key={clild.label}
+                    key={group + '-' + clild.label.split(":").pop()}
                     className={"facet-item " + (clild.isRefined ? 'is-active' : '')}
                     datadrupalfacetlabel={props.name}
                     onClick={event => {
@@ -49,7 +49,7 @@ const SizeGroupFilter = ({ items, refine, searchForItems, isFromSearch, ...props
                       refine(clild.label);
                     }}
                   >
-                    <span className="facet-item__value">{clild.label.split(":").pop()}
+                    <span className="facet-item__value">{Drupal.t(clild.label.split(":").pop())}
                       <span className="facet-item__count">({clild.count})</span>
                     </span>
                   </li>
