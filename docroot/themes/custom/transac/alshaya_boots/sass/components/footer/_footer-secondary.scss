@@ -1,0 +1,33 @@
+.c-footer__logo--verisign,
+.c-footer__logo--visa,
+.c-footer__logo--mastercard {
+  background-position: center;
+}
+
+.c-footer-secondary {
+  padding: 0;
+
+  .c-footer__copy {
+    @include breakpoint($tablet) {
+      margin-#{$right}: 0;
+      text-align: $left;
+      max-width: 55%;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 1.4375rem 0.875rem;
+    }
+
+    .field--name-body {
+      p {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  &__region {
+    @include breakpoint($only-tablet) {
+      padding: 0.625rem 1.25rem;
+    }
+  }
+}

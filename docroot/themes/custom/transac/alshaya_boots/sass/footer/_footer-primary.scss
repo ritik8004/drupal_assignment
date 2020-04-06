@@ -1,0 +1,316 @@
+.c-footer-primary {
+  color: $footer_text;
+
+  @include breakpoint($only-mobile) {
+    padding-top: 0;
+    padding-bottom: 2rem;
+    border-top: none;
+  }
+
+  @include breakpoint($only-tablet) {
+    padding-bottom: 0.875rem;
+  }
+
+  .footer--menu {
+    @include breakpoint($tablet) {
+      display: flex;
+      float: none;
+      width: 100%;
+    }
+  }
+
+  .primary__footer--menu {
+    @include breakpoint($tablet) {
+      flex-grow: 1;
+      flex-basis: 24%;
+    }
+  }
+
+  .footer_primary-right-block {
+    @include breakpoint($tablet) {
+      flex-basis: 28%;
+      flex-grow: 1;
+    }
+  }
+
+  .footer__categories {
+    @include breakpoint($only-tablet) {
+      flex-basis: 17%;
+    }
+
+    @include breakpoint($desktop) {
+      flex-basis: 23%;
+    }
+  }
+
+  .footer__help {
+    @include breakpoint($only-tablet) {
+      flex-basis: 22%;
+    }
+
+    @include breakpoint($desktop) {
+      flex-basis: 24%;
+
+      .c-footer-menu--help {
+        html[lang=ar] & {
+          width: auto;
+        }
+      }
+    }
+  }
+
+  .footer__about {
+    @include breakpoint($desktop) {
+      flex-basis: 26%;
+    }
+  }
+
+  .footer_primary-right-block {
+    @include breakpoint($desktop) {
+      flex-basis: 27%;
+    }
+  }
+
+  .footer__about,
+  .footer_primary-right-block {
+    @include breakpoint($only-tablet) {
+      flex-basis: 27%;
+    }
+  }
+
+  .c-footer-menu--about,
+  .c-footer-menu--help {
+    float: none;
+    margin-top: 0;
+
+    @include breakpoint($only-tablet) {
+      padding-left: 0.75rem;
+    }
+
+    html[lang=en] &,
+    html[lang=ar] {
+      width: auto;
+      margin-#{$left}: 0;
+
+      @include breakpoint($desktop) {
+        margin-#{$right}: 0.625rem;
+      }
+    }
+  }
+
+  .language-switcher-language-url {
+    padding-bottom: 0.65rem;
+
+    @include breakpoint($only-tablet) {
+      padding-top: 3.3rem;
+      padding-bottom: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 0.875rem 0;
+
+      li {
+        line-height: 1;
+      }
+    }
+  }
+}
+
+.c-footer-menu {
+  @include breakpoint($desktop) {
+    float: none;
+    width: auto;
+  }
+
+  a {
+    text-transform: none;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.c-footer-menu--about,
+.c-footer-menu--help,
+.c-footer-menu--category {
+  h3 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+
+    @include breakpoint($tablet) {
+      font-size: 0.75rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      &::after {
+        #{$right}: 0;
+      }
+    }
+  }
+}
+
+.c-footer-menu--help {
+  @include breakpoint ($only-mobile) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.c-footer-menu--category {
+  text-transform: none;
+}
+
+.cols-6 .c-footer-menu:last-child {
+  @include breakpoint($desktop) {
+    padding-#{$left}: 0;
+  }
+}
+
+.alshaya-newsletter-subscribe {
+  @include breakpoint($only-mobile) {
+    margin: 0 0 2rem;
+
+    #edit-email {
+      margin-top: 0;
+    }
+  }
+
+  #edit-email {
+    font-size: 0.75rem;
+  }
+
+  h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .newsletter-block-label {
+    text-transform: none;
+    text-align: $left;
+    padding: 0;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.375rem;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    min-width: 14.5rem;
+  }
+
+  input {
+    background-color: $newsletter_input_bg;
+  }
+
+  .form-email {
+    margin-top: 1rem;
+  }
+
+  .form-submit {
+    color: $newsletter_submit_btn_text;
+    text-transform: uppercase;
+    font-family: $vs-bold;
+    padding: 0.6875rem 1.125rem;
+
+    @include breakpoint($only-tablet) {
+      #{$right}: 0;
+    }
+  }
+
+  form:not(.alshaya-acm-customer-order-list-search, .alshaya-stores-available-stores, .store-finder-exposed-form) {
+    input[type="email"] {
+      color: $footer_input_text;
+    }
+  }
+
+  .c-input__bar::before,
+  .c-input__bar::after {
+    background-color: $footer_input_border_active;
+  }
+
+  .ladda-label {
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.29;
+  }
+}
+
+.c-footer-primary,
+.only-first-time {
+  .language-switcher-language-url {
+    ul li {
+      &:first-child::after {
+        content: none;
+      }
+
+      &.en a {
+        margin-left: 0;
+        margin-right: 0;
+        font-family: $vs-regular;
+      }
+
+      a {
+        text-decoration: none;
+        text-transform: none;
+      }
+    }
+  }
+}
+
+.nodetype--acq_product {
+  .c-footer-primary {
+    margin-top: 0;
+  }
+}
+
+.c-footer {
+  padding-top: 0;
+}
+
+.page-standard {
+  &:not('.checkout') {
+    padding-bottom: 3.5rem;
+  }
+
+  @include breakpoint($tablet) {
+    padding-bottom: 2.75rem;
+  }
+
+  @include breakpoint($desktop) {
+    padding-bottom: 3.75rem;
+  }
+}
+
+.language--switcher {
+  &.only-first-time {
+    .language-switcher-close {
+      &::after {
+        top: 0.25rem;
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  .c-footer-menu--about {
+    @include breakpoint($tablet) {
+      width: auto;
+      margin-right: 5%;
+    }
+  }
+}
+
+.c-footer-primary,
+.only-first-time {
+  .language-switcher-language-url {
+    ul {
+      li {
+        &.ar {
+          a {
+            font-family: $vs-arabic-regular;
+          }
+        }
+      }
+    }
+  }
+}
