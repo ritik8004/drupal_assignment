@@ -302,8 +302,16 @@ class AlshayaSpcOrderHelper {
     $data['final_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
     $data['extra_data']['cart_image'] = NULL;
     $data['relative_link'] = '';
+    if ($item['product_type'] === 'configurable') {
+      if (is_string($item['extension_attributes']['product_options'][0])) {
+        $product_attributes = (array) json_decode($item['extension_attributes']['product_options'][0]);
+      }
+      elseif (is_array($item['extension_attributes']['product_options'][0])) {
+        $product_attributes = $item['extension_attributes']['product_options'][0];
+      }
+    }
     $data['configurable_values'] = ($item['product_type'] === 'configurable')
-      ? $item['extension_attributes']['product_options'][0]['attributes_info']
+      ? $product_attributes['attributes_info']
       : [];
 
     $node = $this->skuManager->getDisplayNode($item['sku']);
