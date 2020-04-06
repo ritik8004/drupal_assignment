@@ -26,6 +26,13 @@ class Cart {
   protected static $cart = [];
 
   /**
+   * Stock info that we get from the refresh stock response.
+   *
+   * @var array
+   */
+  public static $stockInfo = [];
+
+  /**
    * The cart storage key.
    */
   const SESSION_STORAGE_KEY = 'middleware_cart_id';
@@ -801,8 +808,11 @@ class Cart {
         $cart = !empty($cart) ? $cart : $this->getCart();
         // If cart is available and cart has item.
         if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
-          $status = $this->drupal->triggerCheckoutEvent('validate cart', ['cart' => $cart['cart']]);
-          if ($status['status'] == TRUE && $exception_type === 'OOS') {
+          $response = $this->drupal->triggerCheckoutEvent('validate cart', ['cart' => $cart['cart']]);
+          if ($response['status'] == TRUE && $exception_type === 'OOS') {
+            if (!empty($response['data']['stock'])) {
+              self::$stockInfo = $response['data']['stock'];
+            }
             // Return cart object.
             return $cart;
           }

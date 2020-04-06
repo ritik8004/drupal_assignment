@@ -16,14 +16,19 @@ class AlshayaSpcStockHelper {
    *
    * @param mixed $cart
    *   Cart data.
+   *
+   * @return array
+   *   Response data.
    */
   public function refreshStockForProductsInCart($cart = NULL) {
     $processed_parents = [];
 
     // If empty, simply return.
     if (empty($cart)) {
-      return;
+      return [];
     }
+
+    $response = [];
 
     foreach ($cart['items'] ?? [] as $item) {
       if ($sku_entity = SKU::loadFromSku($item['sku'])) {
@@ -33,13 +38,23 @@ class AlshayaSpcStockHelper {
 
         // Refresh Current Sku stock.
         $sku_entity->refreshStock();
+        $plugin = $sku_entity->getPluginInstance();
+        $response['stock'][$sku_entity->getSku()] = $plugin->isProductInStock($sku_entity);
         // Refresh parent stock once if exists for cart items.
         if ($parent instanceof SKU && !in_array($parent->getSku(), $processed_parents)) {
           $processed_parents[] = $parent->getSku();
           $parent->refreshStock();
+          $plugin = $parent->getPluginInstance();
+          $parent_in_stock = $plugin->isProductInStock($parent);
+          if ($response['stock'][$sku_entity->getSku()]
+            && !$parent_in_stock) {
+            $response['stock'][$sku_entity->getSku()] = FALSE;
+          }
         }
       }
     }
+
+    return $response;
   }
 
 }
