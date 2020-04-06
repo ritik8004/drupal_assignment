@@ -349,6 +349,12 @@ function _alshaya_acm_promotion_add_promotions_translations() {
     'Use and get @percent% off' => [
       'ar' => 'استخدم واحصل على خصم %@percent',
     ],
+    'Shop for @threshold and get a @gift FREE' => [
+      'ar' => 'تسوق مقابل @threshold واحصل على @gift مجانًا',
+    ],
+    'Your Free Gift @gift has been added to the cart' => [
+      'ar' => 'تمت إضافة هديتك المجانية @gift إلى سلة التسوق',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
