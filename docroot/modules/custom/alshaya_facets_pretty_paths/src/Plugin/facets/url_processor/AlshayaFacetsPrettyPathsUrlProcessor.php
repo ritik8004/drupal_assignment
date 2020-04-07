@@ -10,6 +10,7 @@ use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\facets\UrlProcessor\UrlProcessorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Pretty paths URL processor.
@@ -53,6 +54,13 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
   protected $entityTypeManager;
 
   /**
+   * The Language Manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(array $configuration,
@@ -61,12 +69,14 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
                               Request $request,
                               AlshayaFacetsPrettyPathsHelper $pretty_path_helper,
                               DefaultFacetManager $facets_manager,
-                              EntityTypeManagerInterface $entityTypeManager) {
+                              EntityTypeManagerInterface $entityTypeManager,
+                              LanguageManagerInterface $language_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $request);
     $this->alshayaPrettyPathHelper = $pretty_path_helper;
     $this->facetsManager = $facets_manager;
     $this->initializeActiveFilters($configuration);
     $this->entityTypeManager = $entityTypeManager;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -80,7 +90,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       $container->get('request_stack')->getMasterRequest(),
       $container->get('alshaya_facets_pretty_paths.pretty_paths_helper'),
       $container->get('facets.manager'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('language_manager')
     );
   }
 
@@ -94,11 +105,20 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       return [];
     }
 
-    // Load original facet without any overrides so that values such as facet
-    // label can be loaded in English which can be sent to GTM.
-    $facet_id = $facet->id();
-    $storage = $this->entityTypeManager->getStorage($facet->getEntityTypeId());
-    $facet_override_free = $storage->loadOverrideFree($facet_id);
+    static $langcode = NULL;
+    if (!$langcode) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
+    // Load original facet without any overrides on non-English pages so that
+    // values such as facet label can be loaded in English which can then be
+    // sent to GTM.
+    $facet_override_free = NULL;
+    if ($langcode !== 'en') {
+      $facet_id = $facet->id();
+      $storage = $this->entityTypeManager->getStorage($facet->getEntityTypeId());
+      $facet_override_free = $storage->loadOverrideFree($facet_id);
+    }
 
     $current_path = rtrim($this->request->getPathInfo(), '/');
     $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
@@ -199,7 +219,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       // Setting attribute for the facet items.
       $filter_value_en = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $raw_value);
       $url->setOption('attributes', [
-        'data-drupal-facet-label' => $facet_override_free->label(),
+        'data-drupal-facet-label' => $facet_override_free ? $facet_override_free->label() : $facet->label(),
         'data-drupal-facet-item-label' => $filter_value_en,
       ]);
       $url->setOption('query', $this->getQueryParams());
