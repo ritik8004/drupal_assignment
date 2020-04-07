@@ -42,7 +42,9 @@ export default class MiniCart extends React.Component {
               amount: resultVal.cart_total,
             });
           }
-          dispatchCustomEvent('cartRefresh', resultVal);
+          // Dispatch a custom event to let other modules do miscellaneous
+          // check. i.e. qty limit
+          dispatchCustomEvent('cartMiscCheck', resultVal);
           // Store info in storage.
           const dataToStore = {
             cart: resultVal,
@@ -62,7 +64,7 @@ export default class MiniCart extends React.Component {
       document.addEventListener('refreshMiniCart', (e) => {
         const data = e.detail.data();
 
-        dispatchCustomEvent('cartRefresh', {
+        dispatchCustomEvent('cartMiscCheck', {
           data,
           productData: e.detail.productData !== undefined ? e.detail.productData : '',
         });

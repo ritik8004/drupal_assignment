@@ -226,11 +226,11 @@
     }
   };
 
-  // Subscribe to refreshMiniCart to handle the qty limit related js functionality.
+  // Subscribe to cartMiscCheck to handle the qty limit related js functionality.
   // to handle the cases like: When user has deleted local storage and page load
-  // triggers refresh-cart call or user log in after coming to pdp page. pdp
+  // triggers restore-cart call or user log in after coming to pdp page. pdp
   // page should get updated to disable add to cart or show any qty related msg.
-  document.addEventListener('cartRefresh',function (e) {
+  document.addEventListener('cartMiscCheck',function (e) {
     if (e.detail.productData !== undefined) {
       Drupal.disableLimitExceededProducts(
         e.detail.productData.parentSku,
