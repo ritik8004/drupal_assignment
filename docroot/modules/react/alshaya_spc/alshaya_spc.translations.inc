@@ -104,9 +104,6 @@ function _alshaya_spc_translations() {
       '@distance miles' => [
         'ar' => '@distance ميل',
       ],
-      'Thanks for shopping with us.' => [
-        'ar' => '.شكراً لتسوقكم معنا',
-      ],
       'Here\'s a confirmation of your order and all the details you may need.' => [
         'ar' => '.فيما يلي تأكيد لطلبك وكل التفاصيل التي قد تحتاجها',
       ],
