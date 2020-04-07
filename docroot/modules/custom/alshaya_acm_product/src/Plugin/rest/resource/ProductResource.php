@@ -285,8 +285,8 @@ class ProductResource extends ResourceBase {
     $data['stock'] = $stockInfo['stock'];
     $data['in_stock'] = $stockInfo['in_stock'];
 
-    // If parent's is marked as out of stock, even children are not available.
-    // We check paren't flag if child is in-stock.
+    // If parent is marked as out of stock, even children are not available.
+    // We check parent flag if child is in-stock.
     if ($data['in_stock'] && $parent_sku instanceof SKUInterface) {
       $parentStockInfo = $this->skuInfoHelper->stockInfo($parent_sku);
       if (!($parentStockInfo['in_stock'])) {
