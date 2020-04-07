@@ -395,8 +395,46 @@ class PromotionController extends ControllerBase {
     ];
     Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
 
-    // @TODO: Get cart level as well product level promotion messages.
-    $response = new CacheableJsonResponse(['cart' => [], 'products' => []]);
+    $productLabels = [];
+    foreach ($cart->getItems() as $item) {
+      $productLabels['sku'] = $this->promoLabelManager->getSkuPromoDynamicLabel($cart, $item['entity']);
+    }
+
+    $cartLabels = [
+      'qualified' => [],
+      'next_eligible' => [],
+    ];
+
+    foreach ($this->promotionsManager->getCartPromotions($cart->getAppliedRules()) ?? [] as $rule_id => $promotion) {
+      $promotion_data = $this->promotionsManager->getPromotionData($promotion);
+      if (!empty($promotion_data)) {
+        $cartLabels['qualified'][$rule_id] = [
+          'rule_id' => $rule_id,
+          'type' => $promotion_data['type'],
+          'label' => $promotion_data['label'],
+        ];
+      }
+    }
+
+    $applicableInactivePromotion = $this->promotionsManager->getInactiveCartPromotion($cart->getAppliedRules());
+    if ($applicableInactivePromotion instanceof NodeInterface) {
+      $rule_id = $applicableInactivePromotion->get('field_acq_promotion_rule_id')->getString();
+      $promotion_data = $this->promotionsManager->getPromotionData($applicableInactivePromotion, FALSE);
+
+      if (!empty($promotion_data)) {
+        $cartLabels['next_eligible'] = [
+          'rule_id' => $rule_id,
+          'type' => $promotion_data['type'],
+          'label' => $promotion_data['label'],
+          'threshold_reached' => !empty($promotion_data['threshold_reached']),
+        ];
+      }
+    }
+
+    $response = new CacheableJsonResponse([
+      'cart_labels' => $cartLabels,
+      'products_labels' => $productLabels,
+    ]);
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
     return $response;
   }

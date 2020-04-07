@@ -674,7 +674,7 @@ class AlshayaPromotionsManager {
    * @return array
    *   List of promotions sorted by price and priority.
    */
-  public function getSortedCartPromotions() {
+  protected function getSortedCartPromotions() {
     $cid = 'alshaya_acm_promotions:cart:sorted';
     $cache = $this->alshayaAcmPromotionCache->get($cid);
 
