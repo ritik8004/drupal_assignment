@@ -43,7 +43,7 @@ class ProductSettingsForm extends ConfigFormBase {
    *
    * @var \Drupal\alshaya_pdp_layouts\PdpLayoutManager
    */
-  protected $pluginManager;
+  protected $pdpLayoutManager;
 
   /**
    * ProductSettingsForm constructor.
@@ -81,7 +81,7 @@ class ProductSettingsForm extends ConfigFormBase {
       $container->get('entity_type.manager'),
       $container->get('cache.default'),
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('plugin.manager.pdp_layouts')
+      $container->get('plugin.manager.alshaya_pdp_layouts')
     );
   }
 

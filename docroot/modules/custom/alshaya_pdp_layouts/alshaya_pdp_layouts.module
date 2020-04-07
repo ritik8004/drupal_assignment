@@ -24,7 +24,7 @@ use Drupal\field\Entity\FieldStorageConfig;
  * @see options_allowed_values()
  */
 function alshaya_pdp_layouts_allowed_values_function(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  $alshaya_pdp_layouts = \Drupal::service('plugin.manager.pdp_layouts');
+  $alshaya_pdp_layouts = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
   $layouts = $alshaya_pdp_layouts->getDefinitions();
   $pdp_layout_options = [];
   foreach ($layouts as $key => $value) {

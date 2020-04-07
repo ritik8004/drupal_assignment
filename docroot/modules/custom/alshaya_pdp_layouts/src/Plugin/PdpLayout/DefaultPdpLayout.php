@@ -17,7 +17,7 @@ class DefaultPdpLayout extends PdpLayoutBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
-  public function getTemplateName() {
+  public function getTemplateName(array &$suggestions) {
     return 'node__acq_product__full';
   }
 

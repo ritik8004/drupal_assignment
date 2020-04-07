@@ -26,4 +26,20 @@ interface PdpLayoutInterface extends PluginInspectionInterface, DerivativeInspec
    */
   public function getLayoutName();
 
+  /**
+   * Return the name of the PDP Layout template.
+   *
+   * @return string
+   *   The name of the pdp layout template.
+   */
+  public function getTemplateName(array &$suggestions);
+
+  /**
+   * Return the render array of the PDP Layout.
+   *
+   * @return array
+   *   The render array of the pdp layout.
+   */
+  public function getRenderArray(array &$variables);
+
 }
