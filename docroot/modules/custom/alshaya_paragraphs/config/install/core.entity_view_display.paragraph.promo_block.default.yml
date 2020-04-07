@@ -9,6 +9,7 @@ dependencies:
     - field.field.paragraph.promo_block.field_promo_block_button
     - field.field.paragraph.promo_block.field_promo_block_seo_text
     - field.field.paragraph.promo_block.field_promo_block_seo_title
+    - field.field.paragraph.promo_block.field_promo_block_visible_on
     - field.field.paragraph.promo_block.field_promotion_image_mobile
     - paragraphs.paragraphs_type.promo_block
   module:
@@ -90,4 +91,5 @@ content:
     third_party_settings: {  }
     type: image
     region: content
-hidden: {  }
+hidden:
+  field_promo_block_visible_on: true
