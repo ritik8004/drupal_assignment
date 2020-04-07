@@ -364,9 +364,8 @@ header {
 
           @include breakpoint($only-mobile) {
             #{$left}: 0.4375rem;
-            margin-right: 0;
+            margin-#{$right}: 0;
             top: -0.75rem;
-            left: 0.4375rem;
           }
         }
       }
