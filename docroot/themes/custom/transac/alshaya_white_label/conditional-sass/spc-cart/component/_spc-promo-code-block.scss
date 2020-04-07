@@ -1,0 +1,99 @@
+.spc-promo-code-block {
+  position: relative;
+  margin-bottom: 2.5rem;
+
+  .block-content {
+    position: relative;
+
+    @include breakpoint($only-mobile) {
+      padding: 1.25rem;
+      background: $spc-promo-code-bg;
+
+      #promo-code {
+        border: 1px solid $spc-promo-code-border !important;
+        border-#{$right}: 0;
+        float: $left;
+      }
+    }
+  }
+
+  #promo-code {
+    border: none;
+    height: 3.25rem;
+    width: calc(100% - 8.6875rem);
+    padding-#{$left}: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+      padding-#{$left}: 0.625rem;
+    }
+
+    &:disabled {
+      background: $spc-promo-code-bg;
+      opacity: 0.7;
+    }
+  }
+
+  .promo-submit {
+    border: none;
+    width: 8.6875rem;
+    height: 3.25rem;
+    background: $primary_btn_bg;
+    color: $primary_btn_text;
+    padding: 0;
+    font-family: $alshaya-bold;
+    font-size: 1rem;
+
+    @include componentLoader($primary_btn_bg, 'after');
+
+    &:disabled {
+      opacity: 0.3;
+    }
+  }
+
+  .promo-remove {
+    padding: 0;
+    height: 3.25rem;
+    position: absolute;
+    #{$right}: 9rem;
+    border: none;
+    background: none;
+    font-size: 0;
+    display: none;
+    color: $spc-cart-promo-code-submit-enabled;
+    top: 0;
+
+    @include breakpoint($only-mobile) {
+      #{$right}: 10rem;
+    }
+
+    &.active {
+      display: block;
+
+      @include icon('close', after) {
+        font-size: 2rem;
+      }
+    }
+
+    &.loading {
+      @include componentLoader(transparent, 'after') {
+        width: 2.5rem;
+      }
+    }
+  }
+
+  #promo-message {
+    font-size: 0.875rem;
+    padding-#{$left}: 1.25rem;
+    margin-top: 0.25rem;
+    color: $spc-promo-code-success;
+
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 0.625rem;
+    }
+
+    &.error {
+      color: $spc-promo-code-error;
+    }
+  }
+}

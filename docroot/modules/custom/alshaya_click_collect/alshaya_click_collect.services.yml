@@ -1,0 +1,7 @@
+services:
+  alshaya_click_collect.helper:
+    class: Drupal\alshaya_click_collect\Service\AlshayaClickCollect
+    arguments:
+      - '@alshaya_api.api'
+      - '@config.factory'
+      - '@alshaya_stores_finder_transac.utility'

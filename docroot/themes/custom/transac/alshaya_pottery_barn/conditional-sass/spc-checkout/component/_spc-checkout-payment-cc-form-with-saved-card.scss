@@ -1,0 +1,13 @@
+.payment-method.payment-method-checkout_com,
+.payment-method.payment-method-cybersource {
+  .payment-method-bottom-panel {
+    .spc-checkout-payment-saved-card-preview {
+      text-transform: capitalize;
+
+      .spc-checkout-card-new-card-label {
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+    }
+  }
+}

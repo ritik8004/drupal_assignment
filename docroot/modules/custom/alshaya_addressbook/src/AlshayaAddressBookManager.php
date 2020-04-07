@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_addressbook;
 
 use Drupal\acq_cart\CartInterface;
-use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -121,8 +120,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   EntityTypeManager object.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity Repository object.
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
-   *   ApiWrapper object.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   The MobileNumber util service object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
@@ -144,7 +141,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
-                              APIWrapper $api_wrapper,
                               MobileNumberUtilInterface $mobile_util,
                               LoggerChannelFactoryInterface $logger_factory,
                               AlshayaApiWrapper $alshayaApiWrapper,
@@ -158,7 +154,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     $this->profileStorage = $entity_type_manager->getStorage('profile');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->userStorage = $entity_type_manager->getStorage('user');
-    $this->apiWrapper = $api_wrapper;
     $this->mobileUtil = $mobile_util;
     $this->alshayaApiWrapper = $alshayaApiWrapper;
     $this->languageManager = $languageManager;
@@ -251,20 +246,17 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *
    * @param \Drupal\profile\Entity\Profile $entity
    *   Address Entity.
+   * @param bool $set_default
+   *   Whether address needs to be set as default or not.
    *
    * @return bool|string
    *   Commerce Address ID or false.
    */
-  public function pushUserAddressToApi(Profile $entity) {
-    // Last discussion in MMCPA-2042.
-    // We always set the address last added or edited as primary.
-    $entity->setDefault(TRUE);
-
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
+  public function pushUserAddressToApi(Profile $entity, bool $set_default = TRUE) {
     $account = $this->userStorage->load($entity->getOwnerId());
 
     try {
-      $customer = $this->apiWrapper->getCustomer($account->getEmail());
+      $customer = $this->alshayaApiWrapper->getCustomer($account->getEmail());
     }
     catch (\Exception $e) {
       drupal_set_message($e->getMessage(), 'error');
@@ -272,6 +264,16 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     unset($customer['extension']);
+
+    if (count($customer['addresses']) == 0) {
+      // If user has no address, then we make this
+      // as primary one by default.
+      $set_default = TRUE;
+    }
+
+    // Last discussion in MMCPA-2042.
+    // We always set the address last added or edited as primary.
+    $entity->setDefault($set_default);
 
     foreach ($customer['addresses'] as $index => $address) {
       $customer['addresses'][$index] = $address;
@@ -306,7 +308,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     try {
-      $updated_customer = $this->apiWrapper->updateCustomer($customer);
+      $updated_customer = $this->alshayaApiWrapper->updateCustomer($customer);
 
       $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
@@ -339,10 +341,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Address Entity.
    */
   public function deleteUserAddressFromApi(Profile $entity) {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
     $account = $this->userStorage->load($entity->getOwnerId());
 
-    $customer = $this->apiWrapper->getCustomer($account->getEmail());
+    $customer = $this->alshayaApiWrapper->getCustomer($account->getEmail());
     unset($customer['extension']);
 
     $address_id = $entity->get('field_address_id')->getString();
@@ -364,7 +365,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     try {
-      $updated_customer = $this->apiWrapper->updateCustomer($customer);
+      $updated_customer = $this->alshayaApiWrapper->updateCustomer($customer);
 
       $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
@@ -971,12 +972,19 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         return (bool) $form_item['visible'] && $form_item['status'];
       });
 
+      $mapping = array_flip($this->getMagentoFieldMappings());
+      $sort_order = $this->getFieldSortOrder();
+
       foreach ($magento_form as $index => $form_item) {
         if (isset($form_item['attribute'])) {
           // Copy values from attribute to main array.
           $form_item = array_merge($form_item['attribute'], $form_item);
           unset($form_item['attribute']);
         }
+
+        $form_item['sort_order'] = isset($sort_order[$mapping[$form_item['attribute_code']]])
+          ? $sort_order[$mapping[$form_item['attribute_code']]]
+          : $form_item['sort_order'] + 1000;
 
         $magento_form[$form_item['attribute_code']] = $form_item;
         unset($magento_form[$index]);
@@ -1014,6 +1022,23 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     return $mapping;
+  }
+
+  /**
+   * Function to get sort order for address fields.
+   *
+   * @return array
+   *   Drupal form field <-> order.
+   */
+  public function getFieldSortOrder() {
+    static $order;
+
+    if (empty($order)) {
+      $order = $this->configFactory->get('alshaya_addressbook.settings')->get('sort_order');
+      $order = array_filter($order);
+    }
+
+    return $order;
   }
 
   /**
@@ -1264,6 +1289,18 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     // Rearrange address fields based on mapping array.
     $address = array_merge(array_flip($mapping), $address);
     return $address;
+  }
+
+  /**
+   * Determines if area_parent is being used or not.
+   *
+   * @return bool
+   *   If area_parent is being used.
+   */
+  public function isAreaParentUsed() {
+    $mapping = $this->getMagentoFieldMappings();
+    $form_fields = $this->getMagentoFormFields();
+    return ($mapping['area_parent'] && isset($form_fields[$mapping['area_parent']]));
   }
 
 }

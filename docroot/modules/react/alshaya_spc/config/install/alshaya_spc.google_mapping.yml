@@ -1,0 +1,18 @@
+# This mapping will be used when google search result
+# is mapped on the address field parts.
+mapping:
+  address_line1:
+    - route
+    - street_number
+  address_line2:
+    - park
+    - point_of_interest
+    - establishment
+    - premise
+  administrative_area:
+    - sublocality_level_1
+    - administrative_area_level_1
+  area_parent:
+   - administrative_area_level_1
+  locality:
+    - locality

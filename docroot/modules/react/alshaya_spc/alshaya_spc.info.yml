@@ -1,0 +1,7 @@
+name: Alshaya Single Page Checkout
+type: module
+description: 'Implements single page checkout.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_react:alshaya_react

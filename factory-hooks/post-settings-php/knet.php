@@ -7,13 +7,15 @@
  *
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
+
+// Get site environment.
+require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
+$env = alshaya_get_site_environment();
+
 global $_acsf_site_name;
 
 // Set the knet resource path which should be outside GIT root.
-$knet_resource_dir = $settings['server_home_dir'] . '/knet-resource/';
-if ($settings['env'] !== 'local') {
-  $knet_resource_dir .= $settings['env'] . DIRECTORY_SEPARATOR . $_acsf_site_name . DIRECTORY_SEPARATOR;
-}
+$knet_resource_dir = $env == 'local' ? '/home/vagrant/knet-resource/' : '/home/alshaya/knet-resource/' . $env . '/' . $_acsf_site_name . '/';
 $settings['alshaya_knet.settings']['resource_path'] = $knet_resource_dir;
 
 // We have valid SSL now, by default we will use secure response url.
@@ -26,7 +28,6 @@ $settings['alshaya_knet.settings']['knet_currency_code'] = '414';
 $settings['alshaya_knet.settings']['knet_udf5_prefix'] = 'ptlf';
 
 $settings['alshaya_knet.settings']['knet_url'] = 'https://kpaytest.com.kw/kpg/PaymentHTTP.htm';
-
-if (preg_match('/\d{2}(live|update)/', $settings['env'])) {
+if (preg_match('/\d{2}(live|update)/', $env)) {
   $settings['alshaya_knet.settings']['knet_url'] = 'https://kpay.com.kw/kpg/PaymentHTTP.htm';
 }

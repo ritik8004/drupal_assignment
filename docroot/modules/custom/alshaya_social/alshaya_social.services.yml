@@ -13,7 +13,7 @@ services:
     class: Drupal\alshaya_social\AlshayaSocialHelper
     arguments:
       - '@config.factory'
-      - '@acq_commerce.api'
+      - '@alshaya_api.api'
       - '@social_auth.data_handler'
       - '@plugin.network.manager'
       - '@logger.factory'
