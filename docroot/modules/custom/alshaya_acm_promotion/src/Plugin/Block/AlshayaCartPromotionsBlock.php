@@ -5,7 +5,6 @@ namespace Drupal\alshaya_acm_promotion\Plugin\Block;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -296,35 +295,6 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     catch (Exception $e) {
       return AccessResult::forbidden();
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheContexts() {
-    // Cart will be different for every session, even guests will have session
-    // as soon as they add something to cart.
-    return Cache::mergeContexts(
-      parent::getCacheContexts(),
-      ['session', 'cookies:Drupal_visitor_acq_cart_id']
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheTags() {
-    $cacheTags = [];
-
-    // It depends on cart id of the user.
-    if ($cart = $this->cartStorage->getCart(FALSE)) {
-      $cacheTags[] = 'cart:' . $cart->id();
-    }
-
-    // It depends on promotions content.
-    $cacheTags[] = 'node_type:acq_promotion';
-
-    return Cache::mergeTags(parent::getCacheTags(), $cacheTags);
   }
 
 }

@@ -7,16 +7,16 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_commerce\UpdateCartErrorEvent;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_acm\CartData;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Cache\CacheableAjaxResponse;
+use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -344,34 +344,59 @@ class PromotionController extends ControllerBase {
   }
 
   /**
-   * Get Promotion Label.
+   * Get Promotions dynamic label for specific product.
    *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   Product SKU to get promo label for.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request.
+   * @param string $sku
+   *   SKU.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   Ajax command to update promo label.
    */
-  public function getPromotionDynamicLabel(SKUInterface $sku) {
-    $response = new CacheableAjaxResponse();
+  public function getPromotionDynamicLabelForProduct(Request $request, string $sku) {
+    $sku = SKU::loadFromSku($sku);
+
+    if (!($sku instanceof SKUInterface)) {
+      throw new InvalidArgumentException();
+    }
+
+    $get = $request->query->all();
+    $cart = CartData::createFromArray($get);
 
     // Add cache metadata.
     $cache_array = [
       'tags' => ['node_type:acq_promotion'],
-      'contexts' => ['session', 'cookies:Drupal_visitor_acq_cart_id'],
+      'context' => ['url.query_args'],
     ];
+    Cache::mergeTags($cache_array['tags'], $sku->getCacheTags());
+    Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
 
-    $cart_id = $this->cartStorage->getCartId(FALSE);
-    if (!empty($cart_id)) {
-      $cache_array['tags'][] = 'cart:' . $cart_id;
-    }
+    $label = $this->promoLabelManager->getSkuPromoDynamicLabel($cart, $sku);
+    $response = new CacheableJsonResponse(['label' => $label]);
+    $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
+    return $response;
+  }
 
-    $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku);
-    if (!empty($label)) {
-      $response = $this->promoLabelManager->prepareResponse($label, $sku->id(), $response);
-      $response->addCommand(new InvokeCommand('.promotions-dynamic-label', 'trigger', ['dynamic:promotion:label:ajax:complete']));
-    }
+  /**
+   * Get Promotions dynamic labels for both product and cart level.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request.
+   */
+  public function getPromotionDynamicLabelForCart(Request $request) {
+    $get = $request->query->all();
+    $cart = CartData::createFromArray($get);
 
+    // Add cache metadata.
+    $cache_array = [
+      'tags' => ['node_type:acq_promotion'],
+      'context' => ['url.query_args'],
+    ];
+    Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
+
+    // @TODO: Get cart level as well product level promotion messages.
+    $response = new CacheableJsonResponse(['cart' => [], 'products' => []]);
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
     return $response;
   }

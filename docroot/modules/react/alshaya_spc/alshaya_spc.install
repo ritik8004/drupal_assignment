@@ -36,6 +36,8 @@ function alshaya_spc_install() {
   // Override located /config/override/block.block.copyright.
   \Drupal::configFactory()->getEditable('block.block.copyright')->save();
 
+  \Drupal::configFactory()->getEditable('block.block.alshayacartpromotionsblock')->delete();
+
   // Add translations.
   module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
   if ($translations = _alshaya_spc_get_translations()) {
