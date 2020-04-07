@@ -85,7 +85,48 @@ header {
         #{$left}: 2rem;
       }
 
+      @include breakpoint($only-tablet) {
+        top: 4.625rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        top: 3.5rem;
+      }
+
       form {
+        .form-text {
+          @include breakpoint($only-mobile) {
+            &::placeholder {
+              font-size: 0.875rem;
+            }
+          }
+
+          @include breakpoint($only-tablet) {
+            width: 100%;
+            max-width: 100%;
+          }
+
+          @include breakpoint($desktop) {
+            height: 2.5rem;
+          }
+        }
+
+        @include breakpoint($upto-desktop) {
+          border: 0.5rem solid $header_search_border_mobile;
+
+          .form-actions {
+            display: none;
+          }
+
+          .form-item-keywords {
+            width: 100%;
+          }
+        }
+
+        @include breakpoint($desktop) {
+          margin-top: -0.25rem;
+        }
+
         input[type="text"],
         input[type="search"] {
           @include breakpoint($desktop) {
@@ -96,7 +137,6 @@ header {
             border-#{$right}: 0;
             border-bottom-#{$left}-radius: 0.125rem;
             border-top-#{$left}-radius: 0.125rem;
-            //font-family: $bp-light;
           }
 
           &::placeholder {
@@ -318,11 +358,15 @@ header {
     .search-active {
       .mobile--search {
         &::before {
+          @include breakpoint($only-tablet) {
+            color: $header_c_menu_search_active_icon;
+          }
+
           @include breakpoint($only-mobile) {
-            top: -0.1875rem;
-            height: 1.75rem;
-            width: 1.625rem;
-            #{$left}: -0.4375rem;
+            #{$left}: 0.4375rem;
+            margin-right: 0;
+            top: -0.75rem;
+            left: 0.4375rem;
           }
         }
       }

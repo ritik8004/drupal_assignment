@@ -86,7 +86,7 @@
     margin-top: 0;
 
     @include breakpoint($only-tablet) {
-      padding-left: 0.75rem;
+      padding-#{$left}: 0.75rem;
     }
 
     html[lang=en] &,
