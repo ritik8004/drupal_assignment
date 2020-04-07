@@ -184,9 +184,20 @@ class AlshayaAcmKnetHelper extends KnetHelper {
    */
   public function processKnetResponse(array $response = []) {
     // Get the cart using API to validate.
-    $cart = (array) $this->api->getCart($response['quote_id']);
-    if (empty($cart)) {
-      throw new \Exception();
+    try {
+      $cart = (array) $this->api->getCart($response['quote_id']);
+      if (empty($cart)) {
+        throw new \Exception('Cart empty');
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->warning('Error occurred while getting cart id @cart_id: @message, k-net data: @data', [
+        '@cart_id' => $response['quote_id'],
+        '@message' => $e->getMessage(),
+        '@data' => json_encode($response),
+      ]);
+
+      throw new AccessDeniedHttpException();
     }
 
     $state_key = $response['state_key'];
