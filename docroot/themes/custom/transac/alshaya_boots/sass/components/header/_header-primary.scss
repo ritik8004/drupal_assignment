@@ -9,7 +9,7 @@ header {
         background-size: 100%;
         width: 2.375rem;
         height: 2.375rem;
-        right: -0.3125rem;
+        #{$right}: -0.3125rem;
         top: 0;
       }
 
