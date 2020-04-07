@@ -12,6 +12,17 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Making 'only_visible_when_facet_source_is_visible' setting false
+ * for PLP category facet.
+ */
+function alshaya_product_update_8029() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['facets.facet.category_facet_plp'], 'alshaya_product', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update promotion field type.
  */
 function alshaya_product_update_8028() {
