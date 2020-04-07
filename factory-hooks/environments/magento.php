@@ -478,7 +478,7 @@ $magentos = [
     ],
   ],
   'aeo_prod' => [
-    'url' => 'https://aeo.store.alshaya.com.c.tw5uijob6hir2.ent.magento.cloud',
+    'url' => 'https://aeo.store.alshaya.com',
     'magento_secrets' => [],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 16],
