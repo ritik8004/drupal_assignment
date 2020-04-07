@@ -5,6 +5,7 @@ namespace Drupal\alshaya_click_collect\Service;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AlshayaClickCollect.
@@ -12,6 +13,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  * @package Drupal\alshaya_click_collect\Service
  */
 class AlshayaClickCollect {
+
+  use StringTranslationTrait;
 
   /**
    * AlshayaApiWrapper service object.
@@ -69,12 +72,20 @@ class AlshayaClickCollect {
    */
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
     // Get the stores from Magento.
-    if ($stores = $this->apiWrapper->getCartStores($cart_id, $lat, $lon)) {
+    if ($cart_stores = $this->apiWrapper->getCartStores($cart_id, $lat, $lon)) {
       $stores_by_code = [];
-      foreach ($stores as $store) {
-        $stores_by_code[$store['code']] = $store;
+      foreach ($cart_stores as $cart_store) {
+        $stores_by_code[$cart_store['code']] = $cart_store;
       }
       $stores = $this->storesFinderUtility->getMultipleStoresExtraData($stores_by_code);
+      foreach ($stores as &$store) {
+        $store_cart_data = $stores_by_code[$store['code']];
+        $store['rnc_available'] = (int) $store_cart_data['rnc_available'];
+        $store['sts_available'] = (int) $store_cart_data['sts_available'];
+        $store['formatted_distance'] = $this->t('@distance miles', [
+          '@distance' => number_format((float) $store_cart_data['distance'], 2, '.', ''),
+        ]);
+      }
 
       // Sort the stores first by distance and then by name.
       alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');

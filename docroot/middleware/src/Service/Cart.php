@@ -26,6 +26,13 @@ class Cart {
   protected static $cart = [];
 
   /**
+   * Stock info that we get from the refresh stock response.
+   *
+   * @var array
+   */
+  public static $stockInfo = [];
+
+  /**
    * The cart storage key.
    */
   const SESSION_STORAGE_KEY = 'middleware_cart_id';
@@ -402,7 +409,7 @@ class Cart {
     $cart = $this->updateCart($data);
 
     // If cart update has error.
-    if ($cart['error']) {
+    if ($this->cartHasError($cart)) {
       return $cart;
     }
 
@@ -417,6 +424,23 @@ class Cart {
     }
 
     return $cart;
+  }
+
+  /**
+   * Check if cart has error or not.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return bool
+   *   If cart has error or not.
+   */
+  public function cartHasError(array $cart) {
+    if ($cart['error'] || $cart['response_message'][1] == 'json_error') {
+      return TRUE;
+    }
+
+    return FALSE;
   }
 
   /**
@@ -524,7 +548,7 @@ class Cart {
     $cart = $this->updateCart($data);
 
     // If cart update has error.
-    if ($cart['error']) {
+    if ($this->cartHasError($cart)) {
       return $cart;
     }
 
@@ -625,27 +649,6 @@ class Cart {
     ];
 
     return $this->updateCart($update);
-  }
-
-  /**
-   * Refresh the cart.
-   *
-   * @param string $action
-   *   Refresh cart action.
-   *
-   * @return array
-   *   Cart data.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  public function refreshCart(string $action) {
-    $data = [
-      'extension' => (object) [
-        'action' => $action,
-      ],
-    ];
-
-    return $this->updateCart($data);
   }
 
   /**
@@ -762,9 +765,27 @@ class Cart {
     $cart_id = $this->getCartId();
     $url = sprintf('carts/%d/updateCart', $cart_id);
 
+    $cart = NULL;
+
     try {
       static::$cart[$cart_id] = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
-      return static::$cart[$cart_id];
+      $cart = static::$cart[$cart_id];
+
+      // If exception at response message level.
+      if ($cart['response_message'][1] == 'json_error') {
+        $messages = json_decode($cart['response_message'][0], TRUE);
+        // Iterate over each message.
+        foreach ($messages as $msg) {
+          // If message is of OOS.
+          if (!empty($exception_type = $this->exceptionType($msg))) {
+            $cart['response_message'][0] = $exception_type;
+            // Throwing exception so that catch by subsequent catch block.
+            throw new \Exception($msg);
+          }
+        }
+      }
+
+      return $cart;
     }
     catch (\Exception $e) {
       static::$cart = NULL;
@@ -777,9 +798,53 @@ class Cart {
         $this->cancelCartReservation($e->getMessage());
       }
 
+      // Check the exception type from drupal.
+      $exception_type = $this->exceptionType($e->getMessage());
+
+      // If exception type is of stock limit or of quantity limit,
+      // refresh the stock for the sku items in cart from MDC to drupal.
+      if (!empty($exception_type)) {
+        // Get cart object if already not available.
+        $cart = !empty($cart) ? $cart : $this->getCart();
+        // If cart is available and cart has item.
+        if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
+          $response = $this->drupal->triggerCheckoutEvent('validate cart', ['cart' => $cart['cart']]);
+          if ($response['status'] == TRUE) {
+            if (!empty($response['data']['stock'])) {
+              self::$stockInfo = $response['data']['stock'];
+            }
+            // Return cart object.
+            return $cart;
+          }
+        }
+      }
+
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Get the exception message type.
+   *
+   * @param string $message
+   *   Exception message.
+   *
+   * @return null|string
+   *   Message type.
+   */
+  public function exceptionType(string $message) {
+    $exception_messages = $this->settings->getSettings('alshaya_spc.exception_message');
+    if (!empty($exception_messages)) {
+      foreach ($exception_messages as $msg => $message_type) {
+        // If message matches.
+        if (strpos($message, $msg) !== FALSE) {
+          return $message_type;
+        }
+      }
+    }
+
+    return NULL;
   }
 
   /**

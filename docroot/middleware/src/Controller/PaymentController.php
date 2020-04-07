@@ -3,9 +3,6 @@
 namespace App\Controller;
 
 use App\Helper\CookieHelper;
-use App\Response\AlshayaJsonResponse;
-use App\Response\AlshayaRedirectResponse;
-use App\Response\AlshayaResponse;
 use App\Service\Cart;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\CheckoutCom\ApplePayHelper;
@@ -15,7 +12,10 @@ use App\Service\PaymentData;
 use App\Service\SessionStorage;
 use App\Service\Utility;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -153,7 +153,7 @@ class PaymentController {
   /**
    * Handle checkout.com payment success callback.
    *
-   * @return \App\Response\AlshayaRedirectResponse
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to cart or checkout or confirmation page.
    */
   public function handleCheckoutComSuccess() {
@@ -162,7 +162,7 @@ class PaymentController {
     }
     catch (\Exception $e) {
       if ($e->getCode() === 302) {
-        return new AlshayaRedirectResponse($e->getMessage(), 302);
+        return new RedirectResponse($e->getMessage(), 302);
       }
 
       throw $e;
@@ -195,7 +195,7 @@ class PaymentController {
       return $this->handleCheckoutComError('3D secure payment came into success with proper responseCode but totals do not match.');
     }
 
-    $response = new AlshayaRedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
+    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
 
     try {
       $payment_data = [
@@ -245,7 +245,7 @@ class PaymentController {
    * @param string|null $message
    *   The message to send with cancel cart reservation.
    *
-   * @return \App\Response\AlshayaRedirectResponse
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to cart or checkout page.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
@@ -257,13 +257,13 @@ class PaymentController {
     }
     catch (\Exception $e) {
       if ($e->getCode() === 302) {
-        return new AlshayaRedirectResponse($e->getMessage(), 302);
+        return new RedirectResponse($e->getMessage(), 302);
       }
 
       throw $e;
     }
 
-    $response = new AlshayaRedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
+    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
     $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_DECLINED_VALUE, strtotime('+1 year')));
     return $response;
   }
@@ -271,7 +271,7 @@ class PaymentController {
   /**
    * Handle K-Net response callback.
    *
-   * @return \App\Response\AlshayaRedirectResponse
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to success page.
    *
    * @throws \Doctrine\DBAL\DBALException
@@ -321,7 +321,7 @@ class PaymentController {
     }
     catch (\Exception $e) {
       if ($e->getCode() === 302) {
-        return new AlshayaRedirectResponse($e->getMessage(), 302);
+        return new RedirectResponse($e->getMessage(), 302);
       }
 
       throw $e;
@@ -347,7 +347,7 @@ class PaymentController {
       return $this->handleKnetError($response['state_key']);
     }
 
-    $redirect = new AlshayaRedirectResponse('/' . $state['data']['langcode'] . '/checkout', 302);
+    $redirect = new RedirectResponse('/' . $state['data']['langcode'] . '/checkout', 302);
     if ($response['result'] !== 'CAPTURED') {
       $this->logger->error('KNET result is not captured, transaction failed.<br>POST: @message<br>Cart: @cart<br>State: @state', [
         '@message' => json_encode($data),
@@ -411,7 +411,7 @@ class PaymentController {
    * @param string $state_key
    *   State key.
    *
-   * @return \App\Response\AlshayaRedirectResponse
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to checkout.
    *
    * @throws \Exception
@@ -425,7 +425,7 @@ class PaymentController {
       $this->cart->cancelCartReservation($e->getMessage());
 
       if ($e->getCode() === 302) {
-        return new AlshayaRedirectResponse($e->getMessage(), 302);
+        return new RedirectResponse($e->getMessage(), 302);
       }
 
       throw $e;
@@ -444,7 +444,7 @@ class PaymentController {
 
     $this->cart->cancelCartReservation($message);
 
-    $response = new AlshayaRedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
+    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
     $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year')));
     return $response;
   }
@@ -452,14 +452,14 @@ class PaymentController {
   /**
    * Page callback to get cybersource token.
    *
-   * @return \App\Response\AlshayaJsonResponse
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Response data in JSON.
    *
    * @throws \Exception
    */
   public function getCybersourceToken() {
     $response = $this->cybersourceHelper->getToken();
-    return new AlshayaJsonResponse($response);
+    return new JsonResponse($response);
   }
 
   /**
@@ -476,13 +476,13 @@ class PaymentController {
     $script .= 'window.parent.document.dispatchEvent(event);';
     $script .= '</script>';
 
-    return new AlshayaResponse($script);
+    return new Response($script);
   }
 
   /**
    * Callback to save payment data for Apple Pay.
    *
-   * @return \App\Response\AlshayaJsonResponse
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Success or error.
    */
   public function saveApplePayPayment() {
@@ -496,7 +496,7 @@ class PaymentController {
       $response = $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
-    return new AlshayaJsonResponse($response);
+    return new JsonResponse($response);
   }
 
   /**

@@ -25,9 +25,15 @@
 
     .spc-sidebar {
       margin-top: 0;
-      width: 42%;
+      width: 44%;
 
       .spc-order-summary-block {
+        .total-line-item {
+          .price .price-amount {
+            display: inline-block;
+          }
+        }
+
         .spc-checkout-section-title {
           display: none;
         }
@@ -150,11 +156,26 @@
   }
 
   .spc-checkout-confirmation .block-page-title-block,
-  table.sticky-header {
-    display: none;
+  table.sticky-header,
+  .tooltip-anchor {
+    display: none !important;
   }
 
   .spc-order-confirmation-wrapper {
     margin-top: -3.75rem;
+
+    .spc-order-summary-block {
+      .product-content {
+        white-space: normal;
+        display: block;
+        overflow: visible;
+        max-height: none;
+
+        .product-item {
+          width: 100%;
+          min-width: auto;
+        }
+      }
+    }
   }
 }

@@ -54,7 +54,7 @@ const ApplePay = {
     const controllerUrl = Drupal.url('checkoutcom/applepay/validate');
     const validationUrl = `${controllerUrl}?u=${event.validationURL}`;
     Axios.get(validationUrl).then((merchantSession) => {
-      applePaySessionObject.completeMerchantValidation(merchantSession);
+      applePaySessionObject.completeMerchantValidation(merchantSession.data);
     }).catch((error) => {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
@@ -68,30 +68,26 @@ const ApplePay = {
   onPaymentAuthorized: (event) => {
     const url = i18nMiddleWareUrl('payment/checkout-com-apple-pay/save');
     Axios.post(url, event.payment.token).then((response) => {
-      const status = response.data.status === true
-        ? window.ApplePaySession.STATUS_SUCCESS
-        : window.ApplePaySession.STATUS_FAILURE;
+      if (response.data.success !== undefined && response.data.success === true) {
+        // Update apple pay popup.
+        applePaySessionObject.completePayment(window.ApplePaySession.STATUS_SUCCESS);
 
-      applePaySessionObject.completePayment(status);
-
-      if (status) {
-        // place order now.
+        // Place order now.
         placeOrder('checkout_com_applepay');
-      } else {
-        dispatchCustomEvent('spcCheckoutMessageUpdate', {
-          type: 'error',
-          message: getStringMessage('payment_error'),
-        });
-        removeFullScreenLoader();
-        Drupal.logJavascriptError('apple-pay-payment-authorise', response.error_message);
+        return;
       }
+
+      // Something wrong, throw error.
+      throw (new Error(response.data.error_message));
     }).catch((error) => {
+      // Update apple pay popup.
+      applePaySessionObject.completePayment(window.ApplePaySession.STATUS_FAILURE);
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
         message: getStringMessage('payment_error'),
       });
       removeFullScreenLoader();
-      Drupal.logJavascriptError('apple-pay-merchant-validation', error.message);
+      Drupal.logJavascriptError('apple-pay-merchant-authorise', error.message);
     });
   },
 

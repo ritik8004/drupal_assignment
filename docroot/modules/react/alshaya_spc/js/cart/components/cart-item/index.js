@@ -52,6 +52,8 @@ export default class CartItem extends React.Component {
     document.getElementById(`remove-item-${id}`).classList.add('loading');
     if (cartData instanceof Promise) {
       cartData.then((result) => {
+        // Remove loading class.
+        document.getElementById(`remove-item-${id}`).classList.remove('loading');
         const cartResult = result;
         // Refreshing mini-cart.
         const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartResult } });
@@ -109,13 +111,16 @@ export default class CartItem extends React.Component {
                 <a href={Drupal.url(relativeLink)}>{title}</a>
               </div>
               <div className="spc-product-price">
-                <SpecialPrice price={originalPrice} final_price={finalPrice} />
+                <SpecialPrice
+                  price={parseFloat(originalPrice)}
+                  finalPrice={parseFloat(finalPrice)}
+                />
               </div>
               {freeItem === true
               && <div>{Drupal.t('FREE')}</div>}
             </div>
             <div className="spc-product-attributes-wrapper">
-              {configurableValues.map((key) => <CheckoutConfigurableOption key={`${key}-${Math.floor(Math.random() * 99)}`} label={key} />)}
+              {configurableValues.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.attribute_code}-${key.value}`} label={key} />)}
             </div>
           </div>
           <div className="spc-product-tile-actions">
@@ -140,7 +145,8 @@ export default class CartItem extends React.Component {
         </div>
         <div className="spc-cart-item-alerts">
           {/* Dynamic promo labels buy 2 more items, free gifts labels,
-           qty limit labels go here */}
+           qty limit labels go here. Name the child component
+           .spc-cart-item-alerts-item */}
         </div>
         {/* @Todo: Show OOS only once. */}
         {isItemError

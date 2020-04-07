@@ -28,7 +28,7 @@ import {
   prepareCnCAddressFromCartShipping,
 } from '../../../utilities/address_util';
 import ConditionalView from '../../../common/components/conditional-view';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 
 window.fetchStore = 'idle';
@@ -153,10 +153,25 @@ export default class Checkout extends React.Component {
       return;
     }
 
+    let redirectToBasketOnError = false;
+    // If OOS error, redirect to basket page.
+    if (cart.cart.response_message !== null
+      && cart.cart.response_message.status === 'json_error'
+      && cart.cart.response_message.msg === 'OOS') {
+      redirectToBasketOnError = true;
+    }
+
+    // Update info in storage.
+    addInfoInStorage(cart);
+
+    // If need to redirect to basket page.
+    if (redirectToBasketOnError === true) {
+      window.location.href = Drupal.url('cart');
+      return;
+    }
+
     // Reset error message.
     this.updateCheckoutMessage('', '');
-
-    addInfoInStorage(cart);
     this.setState({ cart });
   };
 

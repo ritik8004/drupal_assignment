@@ -118,7 +118,7 @@ export default class AreaSelect extends React.Component {
       options = areaList;
     }
 
-    const panelTitle = Drupal.t('select @label', { '@label': field.label });
+    const panelTitle = Drupal.t('Select @label', { '@label': field.label });
 
     const currentOptionAvailable = (currentOption !== undefined
       && currentOption !== null
@@ -141,7 +141,7 @@ export default class AreaSelect extends React.Component {
             </div>
           ) : (
             <div id="spc-area-select-selected" className="spc-area-select-selected" onClick={() => this.toggleFilterList()}>
-              {Drupal.t('Select area')}
+              {panelTitle}
             </div>
           )
 }
@@ -150,7 +150,7 @@ export default class AreaSelect extends React.Component {
           <FilterList
             selected={options[currentOption]}
             options={options}
-            placeHolderText={Drupal.t('search for an area')}
+            placeHolderText={Drupal.t('Search for @label', { '@label': field.label })}
             processingCallback={this.processSelectedItem}
             toggleFilterList={this.toggleFilterList}
             panelTitle={panelTitle}

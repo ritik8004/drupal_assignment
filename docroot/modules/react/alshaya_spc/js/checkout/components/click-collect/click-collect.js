@@ -23,7 +23,7 @@ import {
   isFullScreen,
   exitFullscreen,
 } from '../../../utilities/map/fullScreen';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -237,8 +237,10 @@ class ClickCollect extends React.Component {
     const map = window.spcMap;
     // Make the marker by default open.
     google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
-    map.highlightIcon(map.map.mapMarkers[makerIndex]);
-  };
+    if (map.map.mapMarkers[makerIndex] !== undefined) {
+      map.highlightIcon(map.map.mapMarkers[makerIndex]);
+    }
+  }
 
   showOpenMarker = (storeList = null) => {
     const { selectedStore, storeList: contextStoreList } = this.context;
@@ -330,7 +332,7 @@ class ClickCollect extends React.Component {
    * Toggle map full screen.
    */
   toggleFullScreen = (fullscreen = null) => {
-    if (fullscreen === true && document.fullscreenElement) {
+    if (fullscreen === true && isFullScreen()) {
       return;
     }
 
@@ -346,11 +348,11 @@ class ClickCollect extends React.Component {
       if (selectedStore) {
         selectedStore.querySelector('.spc-map-list-close').click();
       }
-      exitFullscreen()
-        .then(() => {
-          self.refreshMap();
-        })
-        .catch((err) => Drupal.logJavascriptError('clickncollect-toggleFullScreen', err));
+      if (exitFullscreen()) {
+        self.refreshMap();
+      } else {
+        Drupal.logJavascriptError('clickncollect-toggleFullScreen', 'Not able to exit full screen, click and collect map view.');
+      }
 
       if (!selectedStore) {
         this.selectStoreButtonVisibility(false);
@@ -370,7 +372,9 @@ class ClickCollect extends React.Component {
     this.toggleFullScreen();
 
     const map = window.spcMap;
-    map.resetIcon(map.map.mapMarkers[makerIndex]);
+    if (map.map.mapMarkers[makerIndex] !== undefined) {
+      map.resetIcon(map.map.mapMarkers[makerIndex]);
+    }
   }
 
   selectStoreButtonVisibility = (action) => {

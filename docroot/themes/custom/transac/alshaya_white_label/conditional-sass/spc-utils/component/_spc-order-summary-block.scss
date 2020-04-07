@@ -40,7 +40,7 @@
     }
 
     .price-currency {
-      padding-#{$right}: 0.3125rem;
+      padding-right: 0.3125rem;
     }
 
     .surcharge-total {
@@ -82,6 +82,10 @@
       justify-content: space-between;
       align-items: center;
 
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
+
       span {
         font-size: 0.75rem;
         color: $spc-order-total-suffix-text;
@@ -99,10 +103,12 @@
       overflow-x: auto;
       overflow-y: visible;
       white-space: nowrap;
+      display: flex;
 
       &.product-count-1 {
         .product-item {
           width: 100%;
+          min-width: auto;
         }
       }
     }
@@ -114,13 +120,13 @@
       display: grid;
       grid-template-columns: 4.8125rem 1fr;
       grid-gap: 0.625rem;
+      min-width: 19.25rem;
 
       @include breakpoint($only-mobile) {
         display: inline-grid;
         margin-bottom: 0;
         margin-#{$right}: 0.625rem;
         white-space: normal;
-        min-height: 9.625rem;
 
         &:last-child {
           margin-#{$right}: 0;

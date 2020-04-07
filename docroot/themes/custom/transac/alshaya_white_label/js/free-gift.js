@@ -57,7 +57,7 @@
         $('body').addClass('free-gift-promo-list-overlay');
       });
 
-      $('.free-gift-title a, .free-gift-message a, .free-gift-image a, .gift-message a, .path--cart #table-cart-items table tr td.name a').on('click', function () {
+      $('.free-gift-title a, .free-gift-message a, .free-gift-image a, .gift-message a, .path--cart #table-cart-items table tr td.name a, .path--cart .cart-promotion-label-gift').on('click', function () {
         $('body').addClass('free-gifts-modal-overlay');
       });
 

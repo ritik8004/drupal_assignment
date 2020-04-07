@@ -13,6 +13,12 @@
       display: block;
     }
 
+    html[lang=ar] & {
+      .delivery-method-name {
+        line-height: 1.5;
+      }
+    }
+
     .radio-sim {
       width: 98%;
       display: inline-flex;

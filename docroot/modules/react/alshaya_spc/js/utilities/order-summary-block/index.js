@@ -3,60 +3,30 @@ import SectionTitle from '../section-title';
 import TotalLineItems from '../total-line-items';
 import CheckoutCartItems from '../../checkout/components/checkout-cart-items';
 import {
-  refreshCartData,
+  validateCartData,
+  cartValidationOnUpdate,
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../checkout_util';
-import dispatchCustomEvent from '../events';
 
 /**
  * Click handler for `continue checkout`.
  */
-const continueCheckout = (e) => {
+const continueCheckout = (e, inStock) => {
   e.preventDefault();
+
+  if (inStock === false) {
+    return;
+  }
+
   // Show loader.
   showFullScreenLoader();
-  const cartData = refreshCartData();
+  const cartData = validateCartData();
   if (cartData instanceof Promise) {
     cartData.then((cartResult) => {
       // Remove loader.
       removeFullScreenLoader();
-      // If no error.
-      if (cartResult.error === undefined
-        && cartResult.response_message.status !== 'json_error') {
-        const continueCheckoutLink = (drupalSettings.user.uid === 0)
-          ? 'cart/login'
-          : 'checkout';
-
-        // Redirect to next page.
-        window.location.href = Drupal.url(continueCheckoutLink);
-        return;
-      }
-
-      // If error from item validation.
-      if (cartResult.response_message.status === 'json_error') {
-        const errorMessage = JSON.parse(cartResult.response_message.msg);
-        // Calling `mini cart` event to refresh local storage.
-        dispatchCustomEvent('refreshMiniCart', {
-          data: () => cartResult,
-        });
-
-        // Calling refresh cart event so that cart components
-        // are refreshed.
-        dispatchCustomEvent('refreshCart', {
-          data: () => cartResult,
-        });
-
-        // Dispatch event for individual cart item error.
-        dispatchCustomEvent('spcCartItemError', errorMessage);
-        return;
-      }
-
-      // Dispatch event for error to show.
-      dispatchCustomEvent('spcCartMessageUpdate', {
-        type: 'error',
-        message: cartResult.error_message,
-      });
+      cartValidationOnUpdate(cartResult, true);
     });
   }
 };
@@ -68,6 +38,7 @@ const OrderSummaryBlock = (props) => {
     show_checkout_button: showCheckoutButton,
     items,
     totals,
+    in_stock: inStock,
   } = props;
   const promoData = cartPromo;
   let orderSummaryTitle = Drupal.t('Order Summary');
@@ -75,6 +46,11 @@ const OrderSummaryBlock = (props) => {
   // To be used on checkout page.
   if (itemQty !== undefined) {
     orderSummaryTitle = Drupal.t('order summary (@qty items)', { '@qty': itemQty });
+  }
+
+  let activeClass = '';
+  if (inStock === false) {
+    activeClass = 'in-active';
   }
 
   return (
@@ -95,9 +71,9 @@ const OrderSummaryBlock = (props) => {
         {showCheckoutButton
         && (
         <div className="actions">
-          <div className="checkout-link submit">
+          <div className={`checkout-link submit ${activeClass}`}>
             <a
-              onClick={(e) => continueCheckout(e)}
+              onClick={(e) => continueCheckout(e, inStock)}
               href={Drupal.url(continueCheckoutLink)}
               className="checkout-link"
             >

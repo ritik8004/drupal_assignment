@@ -172,19 +172,18 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  # Used for promotions facet on Search.
+  # Value set in SKUManager::processIndexItem().
   field_acq_promotion_label:
-      label: 'Promotions'
-      datasource_id: 'entity:node'
-      property_path: 'field_skus:entity:field_acq_sku_promotions:entity:field_acq_promotion_label'
-      type: string
-      dependencies:
-        config:
-          - field.storage.node.field_skus
-          - field.storage.acq_sku.field_acq_sku_promotions
-          - field.storage.node.field_acq_promotion_label
-        module:
-          - acq_sku
-          - node
+    label: 'Promotions'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:sku'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
   field_configured_skus:
     label: 'SKUs » SKU Reference » Configured SKUs'
     datasource_id: 'entity:node'

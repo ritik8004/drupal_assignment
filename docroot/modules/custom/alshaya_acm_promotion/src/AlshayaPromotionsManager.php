@@ -40,6 +40,11 @@ class AlshayaPromotionsManager {
   const SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER = 'fixed_amount_discount_order';
 
   /**
+   * Denotes the free_gift_order promotion subtype.
+   */
+  const SUBTYPE_FREE_GIFT = 'free_gift_order';
+
+  /**
    * Denotes the free_shipping_order promotion subtype.
    */
   const SUBTYPE_FREE_SHIPPING_ORDER = 'free_shipping_order';
@@ -260,6 +265,9 @@ class AlshayaPromotionsManager {
         elseif ($promotion['action'] == 'cart_fixed') {
           return self::SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER;
         }
+        elseif ($promotion['action'] == 'ampromo_cart') {
+          return self::SUBTYPE_FREE_GIFT;
+        }
       }
       elseif (isset($promotion['free_shipping']) && $promotion['free_shipping'] == 2) {
         return self::SUBTYPE_FREE_SHIPPING_ORDER;
@@ -359,6 +367,7 @@ class AlshayaPromotionsManager {
         'value' => [
           self::SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER,
           self::SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER,
+          self::SUBTYPE_FREE_GIFT,
           self::SUBTYPE_FREE_SHIPPING_ORDER,
         ],
         'operator' => 'IN',

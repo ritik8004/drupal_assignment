@@ -72,8 +72,8 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected static $paymentTypes = [
     'new' => 'initiate2dPayment',
     'existing' => 'initiate2dPayment',
-    'new_mada' => 'initiate3dSecurePayment',
-    'existing_mada' => 'initiateStoredCardPayment',
+    'new_3d' => 'initiate3dSecurePayment',
+    'existing_3d' => 'initiateStoredCardPayment',
   ];
 
   /**
@@ -218,7 +218,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#title' => $this->t('Security code (CVV)'),
         '#default_value' => '',
         '#required' => TRUE,
-        '#access' => $customer_stored_cards[$payment_card]['mada'] ?? FALSE,
+        '#access' => ($customer_stored_cards[$payment_card]['mada'] || $this->checkoutComApi->isCheckout3dEnabled()) ?? FALSE,
       ];
     }
     else {
@@ -365,7 +365,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    *   Card info.
    */
   protected function selectCheckoutComPayment(array $card) {
-    $current_type = ($card['mada']) ? $card['type'] . '_mada' : $card['type'];
+    $current_type = ($card['mada'] || $this->checkoutComApi->isCheckout3dEnabled()) ? $card['type'] . '_3d' : $card['type'];
 
     call_user_func_array(
       [$this, static::$paymentTypes[$current_type]],

@@ -12,6 +12,20 @@ import {
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import { extractFirstAndLastName } from './cart_customer_util';
+import { smoothScrollToAddressField } from './smoothScroll';
+
+/**
+ * Use this to auto scroll to the right field in address form upon
+ * inline validation failure.
+ *
+ * @param {*} selector
+ */
+export const addressFormInlineErrorScroll = (selector) => {
+  const errorElement = document.querySelector(selector);
+  if (errorElement !== undefined && errorElement !== null) {
+    smoothScrollToAddressField(errorElement);
+  }
+};
 
 /**
  * Get the address list of the current logged in user.
@@ -258,6 +272,7 @@ export const addEditAddressToCustomer = (e) => {
   if (notValidAddress) {
     // Removing loader in case validation fail.
     removeFullScreenLoader();
+    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
     return;
   }
 
@@ -423,6 +438,7 @@ export const checkoutAddressProcess = (e) => {
   if (notValidAddress) {
     // Remove the loader.
     removeFullScreenLoader();
+    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
     return;
   }
 
@@ -573,6 +589,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
   // If not valid.
   if (isValid) {
     removeFullScreenLoader();
+    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
     return;
   }
 

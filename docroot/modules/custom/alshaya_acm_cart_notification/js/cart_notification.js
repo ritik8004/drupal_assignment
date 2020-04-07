@@ -26,37 +26,50 @@
     markup += '</div>';
     markup += '</div>';
     return markup;
-  }
+  };
+
+  Drupal.theme.matchBackCartNotificationMarkup = function(data) {
+    var markup = '<div class="matchback-notification notification">';
+    markup += '<div class="matchback-cart-notification-close"></div>';
+    markup += '<div class="col-1">';
+    markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
+    markup += '</div>';
+    markup += '<div class="col-2">';
+    markup += '<div class="name">' + data.name + '</div>';
+    markup += '<div class="prod-added-text">' + Drupal.t('has been added to your cart') + '</div>';
+    markup += '<div classs="matchback-notification-qty">';
+    markup += Drupal.t('Quantity: ');
+    markup += '<span class="qty">' + data.quantity + '</span>';
+    markup += '</div>';
+    markup += '<div class="matchback-prod-added-text">' + Drupal.t('has been added to your cart') + '</div>';
+    markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
+    markup += '</div>';
+    markup += '</div>';
+    return markup;
+  };
 
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-      $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function () {
+      $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e, productData) {
         spinner_stop();
-
-        var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
-        var quantity = parseInt($('.form-item-quantity select', $(this)).val());
-        quantity = !isNaN(quantity) ? quantity : 1;
-        var selected_sku = $(addedProduct).attr('data-sku');
-
-        var product_name = settings.productInfo[selected_sku].cart_title;
-        var image = settings.productInfo[selected_sku].cart_image;
-
-        // If configurable product, need info of the selected variant.
-        if ($(addedProduct).attr('gtm-sku-type') === 'configurable') {
-          var selected_variant = $('.selected-variant-sku', addedProduct).val();
-          product_name = settings.productInfo[selected_sku].variants[selected_variant].cart_title;
-          image = settings.productInfo[selected_sku].variants[selected_variant].cart_image;
-        }
 
         // Scroll and show cart notification.
         var cart_notification_data = {
-          image: image,
+          image: productData.image,
           link: Drupal.url('cart'),
           link_text: Drupal.t('view cart'),
-          name: product_name,
-          quantity: quantity
+          name: productData.product_name,
+          quantity: productData.quantity
         };
-        $('#cart_notification').html(Drupal.theme('cartNotificationMarkup', cart_notification_data));
+
+        $('#cart_notification')
+          .addClass(settings.show_crosssell_as_matchback === true ? 'matchback-cart-notification' : '')
+          .html(
+          Drupal.theme(
+            settings.show_crosssell_as_matchback === true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup',
+            cart_notification_data
+          )
+        );
         $.fn.cartNotificationScroll();
 
         if ($('.ui-dialog').length > 0) {

@@ -1668,8 +1668,8 @@ function alshaya_acm_product_acq_sku_configurable_variants_alter(array &$childre
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
   foreach ($children as $child_sku_code => $child) {
-    // Dot not display free gifts or OOS variants.
-    if ($skuManager->isSkuFreeGift($child) || !$skuManager->isProductInStock($child)) {
+    // Do not display OOS variants.
+    if (!$skuManager->isProductInStock($child)) {
       unset($children[$child_sku_code]);
     }
   }

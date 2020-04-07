@@ -2,17 +2,26 @@
 
 namespace App\Session;
 
+use App\Helper\CookieHelper;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Drupal\Component\Utility\Crypt;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionUtils;
 use Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
 
 /**
  * Default session handler.
  */
 class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInterface {
+
+  /**
+   * Flag to specify if we need to set the original session cookie again.
+   *
+   * @var bool
+   */
+  protected static $reSetOriginal = FALSE;
 
   /**
    * The request stack.
@@ -39,6 +48,17 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
   public function __construct(RequestStack $request_stack, Connection $connection) {
     $this->requestStack = $request_stack;
     $this->connection = $connection;
+
+    // Here we try to set the legacy cookies we set in close()
+    // in original expected keys if for some reason they are not available.
+    // We do this here as this is invoked before starting the session.
+    $request = $this->requestStack->getCurrentRequest();
+    $name = session_name();
+    if (empty($_COOKIE[$name]) && !empty($_COOKIE[$name . '-legacy'])) {
+      $_COOKIE[$name] = $_COOKIE[$name . '-legacy'];
+      $request->cookies->set($name, $_COOKIE[$name . '-legacy']);
+      self::$reSetOriginal = TRUE;
+    }
   }
 
   /**
@@ -103,6 +123,26 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
    * {@inheritdoc}
    */
   public function close() {
+    // Changes around how the browsers handle cookies when redirecting back
+    // from another sites (like cybersource or k-net for us) has forced us to
+    // add hacks like below. We set the cookie without SameSite=None for to
+    // support both new and old browsers.
+    //
+    // @see web.dev/samesite-cookie-recipes/#handling-incompatible-clients
+    $originalCookie = SessionUtils::popSessionCookie(session_name(), session_id());
+    if ($originalCookie) {
+      header($originalCookie, FALSE);
+
+      $legacy = str_replace(session_name(), session_name() . '-legacy', $originalCookie);
+      $legacy = str_replace('; SameSite=none', '', $legacy);
+      header($legacy, FALSE);
+    }
+    elseif (self::$reSetOriginal) {
+      $params = session_get_cookie_params();
+      $original = (string) CookieHelper::create(session_name(), session_id(), time() + $params['lifetime']);
+      header('Set-Cookie: ' . $original, FALSE);
+    }
+
     return TRUE;
   }
 

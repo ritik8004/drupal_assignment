@@ -21,13 +21,17 @@
             var form = that.closest('form');
             var currentSelectedVariant = $(form).attr('data-sku');
             var page_main_sku = currentSelectedVariant;
-
+            var variant_sku = '';
             // If sku is variant type.
             var is_configurable = $(form).attr('data-sku-type') === 'configurable';
             // If `selected_variant_sku` available, means its configurable.
             if (is_configurable && $('[name="selected_variant_sku"]', form).length > 0) {
               currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
+              variant_sku = currentSelectedVariant;
             }
+
+            var viewMode = $(form).closest('article[gtm-type="gtm-product-link"]').attr('data-vmode');
+            var productKey = (viewMode === 'matchback') ? 'matchback' : 'productInfo';
 
             var quantity = 1;
             // If quantity drop down available, use that value.
@@ -35,7 +39,7 @@
               quantity = $('[name="quantity"]', form).val();
             }
 
-            var cart_action = 'create cart';
+            var cart_action = 'add item';
 
             var cart_id = null;
             var options = new Array();
@@ -47,14 +51,6 @@
                 cart_data = cart_data.cart;
                 if (cart_data.cart_id !== null) {
                   cart_id = cart_data.cart_id;
-                  cart_action = 'add item';
-
-                  // Adjust the quantity as available in cart already.
-                  if (cart_data.items.currentSelectedVariant !== undefined) {
-                    quantity = cart_data.items.currentSelectedVariant.qty + quantity;
-                    cart_action = 'update item';
-                    available_in_cart = true;
-                  }
                 }
               }
             }
@@ -63,7 +59,6 @@
             // and of configurable variant.
             if (is_configurable && !available_in_cart) {
               currentSelectedVariant = $(form).find('.selected-parent-sku').val();
-
               Object.keys(settings.configurableCombinations[page_main_sku].configurables).forEach(function(key) {
                 var option = {
                   'option_id': settings.configurableCombinations[page_main_sku].configurables[key].attribute_id,
@@ -83,7 +78,14 @@
               'sku': currentSelectedVariant,
               'quantity': quantity,
               'cart_id': cart_id,
-              'options': options
+              'options': options,
+            };
+
+            var productData = {
+              quantity: quantity,
+              parentSku: page_main_sku,
+              product_name: is_configurable ? settings[productKey][page_main_sku].variants[variant_sku].cart_title : settings.productInfo[page_main_sku].cart_title,
+              image: is_configurable ? settings[productKey][page_main_sku].variants[variant_sku].cart_image : settings.productInfo[page_main_sku].cart_image,
             };
 
             // Post to ajax for cart update/create.
@@ -106,14 +108,14 @@
                   // Showing the error message.
                   $('.error-container-' + cleaned_sku).html('<div class="error">' + response.error_message + '</div>');
                   // Trigger the failed event for other listeners.
-                  $(form).trigger('product-add-to-cart-failed');
+                  $(form).trigger('product-add-to-cart-failed', productData);
                 }
                 else if (response.cart_id) {
                   // Clean error message.
                   $('.error-container-' + cleaned_sku).html('');
 
                   // Trigger the success event for other listeners.
-                  $(form).trigger('product-add-to-cart-success');
+                  $(form).trigger('product-add-to-cart-success', productData);
 
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => response }});

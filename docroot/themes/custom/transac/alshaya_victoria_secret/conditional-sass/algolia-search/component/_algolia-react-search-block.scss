@@ -102,6 +102,7 @@
       @include breakpoint($upto-desktop) {
         height: 3.375rem;
         border: 0.5rem solid $nero;
+        line-height: 1.25rem;
       }
 
       @include breakpoint($desktop) {
@@ -245,59 +246,81 @@
       }
     }
   }
-}
 
-body {
-  &:not(.no-sticky-algolia-search-bar) {
-    @include breakpoint($only-mobile) {
+  body {
+    &:not(.no-sticky-algolia-search-bar) {
       margin-top: 9rem;
-    }
 
-    .block-alshaya-algolia-react-autocomplete {
-      @include breakpoint($only-mobile) {
+      .block-alshaya-algolia-react-autocomplete {
         padding: 0;
       }
-    }
 
-    .block-alshaya-super-category-menu,
-    .menu--mobile-navigation,
-    #block-cartminiblock {
-      @include breakpoint($only-mobile) {
+      .block-alshaya-super-category-menu,
+      .menu--mobile-navigation,
+      #block-cartminiblock,
+      .block-alshaya-react-mini-cart {
         position: absolute !important;
       }
-    }
 
-    header {
-      .c-header__region {
-        @include breakpoint($only-mobile) {
+      header {
+        .c-header__region {
           height: auto;
         }
       }
     }
-  }
 
-  .block-alshaya-algolia-react-autocomplete {
-    .algolia-search-back-icon {
-      @include breakpoint($only-mobile) {
+    .block-alshaya-algolia-react-autocomplete {
+      .algolia-search-back-icon {
         #{$left}: 0.5rem;
         top: 0.5rem;
       }
     }
-  }
 
-  &.frontpage {
-    .mobile--search {
+    &.frontpage {
       @include breakpoint($only-mobile) {
-        visibility: hidden;
+        .c-menu-primary {
+          .menu--mobile-navigation {
+            width: 66.66%;
+
+            ul {
+              li {
+                &:nth-child(2) {
+                  display: none;
+                }
+              }
+            }
+          }
+
+          .store {
+            width: 100%;
+          }
+        }
+
+        header {
+          .block-cart-mini-block {
+            width: 33.33%;
+          }
+        }
       }
     }
-  }
 
-  &.no-sticky-algolia-search-bar {
-    .block-alshaya-algolia-react-autocomplete {
-      &.show-algolia-search-bar {
-        @include breakpoint($only-mobile) {
+    &.no-sticky-algolia-search-bar {
+      .block-alshaya-algolia-react-autocomplete {
+        &.show-algolia-search-bar {
           z-index: 13;
+        }
+      }
+    }
+
+    &:not(.frontpage) {
+      &.hide-header {
+        margin-top: 3.375rem;
+
+        .block-alshaya-super-category-menu,
+        .menu--mobile-navigation,
+        #block-cartminiblock,
+        .block-alshaya-react-mini-cart {
+          display: none;
         }
       }
     }

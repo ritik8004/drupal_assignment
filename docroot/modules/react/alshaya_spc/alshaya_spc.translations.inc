@@ -107,6 +107,18 @@ function _alshaya_spc_translations() {
       'Thanks for shopping with us.' => [
         'ar' => '.شكراً لتسوقكم معنا',
       ],
+      'Here\'s a confirmation of your order and all the details you may need.' => [
+        'ar' => '.فيما يلي تأكيد لطلبك وكل التفاصيل التي قد تحتاجها',
+      ],
+      'Card Number' => [
+        'ar' => 'رقم البطاقة',
+      ],
+      'card no.' => [
+        'ar' => 'رقم البطاقة',
+      ],
+      'Thanks for shopping with us.' => [
+        'ar' => '.شكراً لتسوقكم معنا عبر الموقع',
+      ],
     ],
   ];
 }
