@@ -505,14 +505,6 @@ class AlshayaSearchApiQueryExecute {
         $facet->setActiveItems($filter_data[$facet->getFieldIdentifier()]);
       }
 
-      // If PLP category facet.
-      if ($facet->id() == 'category_facet_plp') {
-        // Somehow $facet_source->isRenderedInCurrentRequest()
-        // in DefaultFacetManager::build() is returning false and thus
-        // processing of facets is not happening.
-        $facet->setOnlyVisibleWhenFacetSourceIsVisible(FALSE);
-      }
-
       // Execute facet build so that facet processor gets executed.
       $facet_build[$facet->id()] = $this->facetManager->build($facet);
     }
