@@ -1,0 +1,47 @@
+#spc-checkout-confirmation {
+  .spc-order-summary-block {
+    .spc-checkout-section-title {
+      display: none;
+    }
+  }
+
+  .checkout-link {
+    @include breakpoint($only-mobile) {
+      margin: 0 1.25rem;
+    }
+  }
+
+  .spc-pre-content {
+    position: relative;
+
+    .spc-checkout-confirmation-print-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 2.25rem;
+      padding: 0 0.625rem;
+      background: $spc-change-address-header;
+      border: 1px solid $spc-deliver-button;
+      color: $spc-deliver-button;
+      font-size: 0.8125rem;
+      border-radius: 0.25rem;
+      position: absolute;
+      top: 0;
+      min-width: 11.5rem;
+      cursor: pointer;
+      #{$right}: 0;
+      transition: all 0.3s ease-in-out;
+
+      &:hover {
+        background: $spc-deliver-button;
+        color: $spc-change-address-header;
+      }
+
+      @include breakpoint($only-mobile) {
+        width: calc(100% - 2.5rem);
+        margin: 0 1.25rem;
+        position: relative;
+      }
+    }
+  }
+}

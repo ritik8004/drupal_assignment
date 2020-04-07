@@ -3,14 +3,17 @@
 namespace Drupal\alshaya_api;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
-use Drupal\acq_commerce\I18nHelper;
+use Drupal\alshaya_api\Helper\MagentoApiHelper;
+use Drupal\alshaya_api\Helper\MagentoApiRequestHelper;
+use Drupal\alshaya_api\Helper\MagentoApiResponseHelper;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use springimport\magento2\apiv1\ApiFactory;
@@ -22,13 +25,6 @@ use springimport\magento2\apiv1\Configuration;
 class AlshayaApiWrapper {
 
   use StringTranslationTrait;
-
-  /**
-   * Stores the alshaya_api settings config.
-   *
-   * @var \Drupal\Core\Config\ImmutableConfig
-   */
-  protected $config;
 
   /**
    * Token to access APIs.
@@ -66,11 +62,11 @@ class AlshayaApiWrapper {
   protected $cache;
 
   /**
-   * I18n Helper.
+   * The LoggerFactory object.
    *
-   * @var \Drupal\acq_commerce\I18nHelper
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  private $i18nHelper;
+  protected $logger;
 
   /**
    * The state factory.
@@ -87,10 +83,22 @@ class AlshayaApiWrapper {
   protected $fileSystem;
 
   /**
+   * The mdc helper.
+   *
+   * @var \Drupal\alshaya_api\Helper\MagentoApiHelper
+   */
+  protected $mdcHelper;
+
+  /**
+   * Th module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a new AlshayaApiWrapper object.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The factory for configuration objects.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Component\Datetime\TimeInterface $date_time
@@ -99,30 +107,34 @@ class AlshayaApiWrapper {
    *   Cache Backend object for "cache.data".
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
-   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
-   *   I18nHelper object.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state factory.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   The filesystem service.
+   * @param \Drupal\alshaya_api\Helper\MagentoApiHelper $mdc_helper
+   *   The magento api helper.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,
-                              LanguageManagerInterface $language_manager,
-                              TimeInterface $date_time,
-                              CacheBackendInterface $cache,
-                              LoggerChannelFactoryInterface $logger_factory,
-                              I18nHelper $i18n_helper,
-                              StateInterface $state,
-                              FileSystemInterface $fileSystem) {
-    $this->config = $config_factory->get('alshaya_api.settings');
-    $this->logger = $logger_factory->get('alshaya_api');
+  public function __construct(
+    LanguageManagerInterface $language_manager,
+    TimeInterface $date_time,
+    CacheBackendInterface $cache,
+    LoggerChannelFactoryInterface $logger_factory,
+    StateInterface $state,
+    FileSystemInterface $fileSystem,
+    MagentoApiHelper $mdc_helper,
+    ModuleHandlerInterface $module_handler
+  ) {
     $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
     $this->dateTime = $date_time;
     $this->cache = $cache;
-    $this->i18nHelper = $i18n_helper;
+    $this->logger = $logger_factory->get('alshaya_api');
     $this->state = $state;
     $this->fileSystem = $fileSystem;
+    $this->mdcHelper = $mdc_helper;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -150,62 +162,7 @@ class AlshayaApiWrapper {
    *   The Language prefix for current language.
    */
   private function getMagentoLangPrefix() {
-    // For current language, we access the config directly.
-    if ($this->langcode == $this->languageManager->getDefaultLanguage()->getId()) {
-      $config = $this->config;
-    }
-    // We get store id from translated config for other languages.
-    else {
-      $config = $this->languageManager->getLanguageConfigOverride($this->langcode, 'alshaya_api.settings');
-    }
-
-    return $config->get('magento_lang_prefix');
-  }
-
-  /**
-   * Function to get token to access Magento APIs.
-   *
-   * @return string
-   *   Token as string.
-   *
-   * @throws \Exception
-   */
-  private function getToken() {
-    if ($this->token) {
-      return $this->token;
-    }
-
-    $cid = 'alshaya_api_token';
-
-    if ($cache = $this->cache->get($cid)) {
-      $this->token = $cache->data;
-    }
-    else {
-      $endpoint = 'integration/admin/token';
-
-      $data = [];
-      $data['username'] = $this->config->get('username');
-      $data['password'] = $this->config->get('password');
-
-      $response = $this->invokeApiWithToken($endpoint, $data, 'POST', FALSE);
-      $token = trim($response, '"');
-
-      // We always get token wrapped in double quotes.
-      // For any other case we get either an array of full html.
-      if (strlen($token) !== strlen($response) - 2) {
-        $this->logger->critical('Unable to get token from magento');
-        throw new \Exception('Unable to get token from magento');
-      }
-
-      $this->token = $token;
-
-      // Calculate the timestamp when we want the cache to expire.
-      $expire = $this->dateTime->getRequestTime() + $this->config->get('token_cache_time');
-
-      $this->cache->set($cid, $this->token, $expire);
-    }
-
-    return $this->token;
+    return Settings::get('magento_lang_prefix')[$this->langcode];
   }
 
   /**
@@ -218,12 +175,14 @@ class AlshayaApiWrapper {
    *   Client object.
    */
   private function getClient($url) {
+    $settings = Settings::get('alshaya_api.settings');
+
     $configuration = new Configuration();
     $configuration->setBaseUri($url);
-    $configuration->setConsumerKey($this->config->get('consumer_key'));
-    $configuration->setConsumerSecret($this->config->get('consumer_secret'));
-    $configuration->setToken($this->config->get('access_token'));
-    $configuration->setTokenSecret($this->config->get('access_token_secret'));
+    $configuration->setConsumerKey($settings['consumer_key']);
+    $configuration->setConsumerSecret($settings['consumer_secret']);
+    $configuration->setToken($settings['access_token']);
+    $configuration->setTokenSecret($settings['access_token_secret']);
 
     return (new ApiFactory($configuration))->getApiClient();
   }
@@ -244,15 +203,12 @@ class AlshayaApiWrapper {
    *   Response from the API.
    */
   public function invokeApi($endpoint, array $data = [], $method = 'POST') {
-    $consumer_key = $this->config->get('consumer_key');
-    if (empty($consumer_key)) {
-      return $this->invokeApiWithToken($endpoint, $data, $method, TRUE);
-    }
+    $settings = Settings::get('alshaya_api.settings');
 
     try {
-      $url = $this->config->get('magento_host');
+      $url = $settings['magento_host'];
       $url .= '/' . $this->getMagentoLangPrefix();
-      $url .= '/' . $this->config->get('magento_api_base');
+      $url .= '/' . $settings['magento_api_base'];
 
       $client = $this->getClient($url);
       $url .= '/' . $endpoint;
@@ -283,13 +239,13 @@ class AlshayaApiWrapper {
       try {
         $json = Json::decode($result);
         if (is_array($json) && !empty($json['message']) && count($json) === 1) {
-          throw new \Exception($json['message'], APIWrapper::API_DOWN_ERROR_CODE);
+          throw new \Exception($json['message'], 600);
         }
       }
       catch (\Exception $e) {
         // Let the outer catch handle logging of error and handling response.
         // We avoid other exceptions related to JSON parsing here.
-        if ($e->getCode() === APIWrapper::API_DOWN_ERROR_CODE) {
+        if ($e->getCode() === 600) {
           throw $e;
         }
       }
@@ -301,73 +257,6 @@ class AlshayaApiWrapper {
         '@message' => $e->getMessage(),
       ]);
     }
-
-    return $result;
-  }
-
-  /**
-   * Function to invoke the API using user/password based token.
-   *
-   * Note: GET parameters must be handled in invoking function itself.
-   *
-   * @param string $endpoint
-   *   Endpoint URL, specific for the API call.
-   * @param array $data
-   *   Post data to send to API.
-   * @param string $method
-   *   GET or POST.
-   * @param bool $requires_token
-   *   Flag to specify if this API requires token or not.
-   *
-   * @return mixed
-   *   Response from the API.
-   */
-  public function invokeApiWithToken($endpoint, array $data = [], $method = 'POST', $requires_token = TRUE) {
-    $url = $this->config->get('magento_host');
-    $url .= '/' . $this->getMagentoLangPrefix();
-    $url .= '/' . $this->config->get('magento_api_base');
-    $url .= '/' . $endpoint;
-
-    $header = [];
-
-    $curl = curl_init();
-
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-    if ($requires_token) {
-      try {
-        $token = $this->getToken();
-      }
-      catch (\Exception $e) {
-        return NULL;
-      }
-
-      $header[] = 'Authorization: Bearer ' . $token;
-    }
-
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->config->get('verify_ssl'));
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->config->get('verify_ssl'));
-
-    if ($method == 'POST') {
-      curl_setopt($curl, CURLOPT_POST, TRUE);
-      curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-    }
-    elseif ($method == 'JSON') {
-      $data_string = json_encode($data);
-
-      $header[] = 'Content-Type: application/json';
-      $header[] = 'Content-Length: ' . strlen($data_string);
-
-      curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
-      curl_setopt($curl, CURLOPT_POST, TRUE);
-      curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-    }
-
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-
-    $result = curl_exec($curl);
-    curl_close($curl);
 
     return $result;
   }
@@ -395,7 +284,7 @@ class AlshayaApiWrapper {
 
     $filters[] = [
       'field' => 'store_id',
-      'value' => $this->i18nHelper->getStoreIdFromLangcode($langcode),
+      'value' => Settings::get('store_id')[$langcode],
       'condition_type' => 'eq',
     ];
 
@@ -423,18 +312,19 @@ class AlshayaApiWrapper {
    *   The file opened or FALSE if not accessible.
    */
   public function getMerchandisingReport($reset = TRUE) {
-    $lang_prefix = explode('_', $this->config->get('magento_lang_prefix'))[0];
+    $lang_prefix = explode('_', $this->getMagentoLangPrefix())[0];
 
     $path = file_create_url($this->fileSystem->realpath("temporary://"));
     $filename = 'merchandising-report-' . $lang_prefix . '.csv';
 
     $download_time = $this->state->get('alshaya_api.last_report_download');
-    $max_age = $this->config->get('merch_report_max_age') ?? 3600;
+    $max_age = Settings::get('merch_report_max_age', 3600);
 
     // We download a new merch report if asked, if too old or if file does not
     // exist yet in temporary directory.
     if ($reset || $download_time < (time() - $max_age) || !file_exists($path . '/' . $filename)) {
-      $url = $this->config->get('magento_host') . '/media/reports/merchandising/merchandising-report-' . $lang_prefix . '.csv';
+      $settings = Settings::get('alshaya_api.settings');
+      $url = $settings['magento_host'] . '/media/reports/merchandising/merchandising-report-' . $lang_prefix . '.csv';
 
       // We need this to avoid issue with invalid certificate.
       $context = [
@@ -930,7 +820,7 @@ class AlshayaApiWrapper {
    */
   public function updateCart(string $cart_id, array $cart) {
     $endpoint = 'carts/' . $cart_id . '/updateCart';
-    return $this->invokeApi($endpoint, $cart, 'JSON', FALSE);
+    return $this->invokeApi($endpoint, $cart, 'JSON');
   }
 
   /**
@@ -954,6 +844,213 @@ class AlshayaApiWrapper {
     $response = $this->invokeApi($endpoint, $data, 'JSON');
 
     return Json::decode($response);
+  }
+
+  /**
+   * Authenticate customer through magento api.
+   *
+   * @param string $mail
+   *   The mail address.
+   * @param string $pass
+   *   The customer password.
+   *
+   * @return array
+   *   The array customer data OR empty array.
+   */
+  public function authenticateCustomerOnMagento(string $mail, string $pass) {
+    $endpoint = 'customers/by-login-and-password';
+
+    try {
+      $response = $this->invokeApi(
+        $endpoint,
+        [
+          'username' => $mail,
+          'password' => $pass,
+        ],
+        'JSON'
+      );
+    }
+    catch (\Exception $e) {
+      return [];
+    }
+
+    if ($response && is_string($response)) {
+      $response = Json::decode($response);
+      // Move the cart_id into the customer object.
+      if (isset($response['cart_id'])) {
+        $response['customer']['custom_attributes'][] = [
+          'attribute_code' => 'cart_id',
+          'value' => $response['cart_id'],
+        ];
+      }
+      return MagentoApiResponseHelper::customerFromSearchResult($response['customer']);
+    }
+    return [];
+  }
+
+  /**
+   * Get customer by email, helpful for logged in user.
+   *
+   * @param string $email
+   *   The email id.
+   *
+   * @return array
+   *   Return array of customer data or empty array.
+   *
+   * @throws \Exception
+   */
+  public function getCustomer($email) {
+    $query_string_values = [
+      'condition_type' => 'eq',
+      'field' => 'email',
+      'value' => $email,
+    ];
+    $query_string_array = [];
+    foreach ($query_string_values as $key => $value) {
+      $query_string_array["searchCriteria[filterGroups][0][filters][0][{$key}]"] = $value;
+    }
+
+    $customer = [];
+    try {
+      $response = $this->invokeApi("customers/search", $query_string_array, 'GET');
+      $result = Json::decode($response);
+      if (!empty($result['items'])) {
+        $customer = MagentoApiResponseHelper::customerFromSearchResult(reset($result['items']));
+        $customer = $this->mdcHelper->cleanCustomerData($customer);
+      }
+    }
+    catch (\Exception $e) {
+      throw new \Exception($e->getMessage(), $e->getCode(), $e);
+    }
+
+    return $customer;
+  }
+
+  /**
+   * Update customer with details.
+   *
+   * @param array $customer
+   *   The array of customer details.
+   * @param array $options
+   *   The options.
+   *
+   * @return array|mixed
+   *   Return array of customer details or null.
+   *
+   * @throws \Exception
+   */
+  public function updateCustomer(array $customer, array $options = []) {
+    $endpoint = 'customers';
+
+    $opt['json']['customer'] = $customer;
+
+    if (isset($options['password']) && !empty($options['password'])) {
+      $opt['json']['password'] = $options['password'];
+    }
+
+    // Invoke the alter hook to allow all modules to update the customer data.
+    $this->moduleHandler->alter('alshaya_api_update_customer_api_request', $opt);
+
+    // Do some cleanup.
+    $opt['json']['customer'] = $this->mdcHelper->cleanCustomerData($opt['json']['customer']);
+    $opt['json']['customer'] = MagentoApiRequestHelper::prepareCustomerDataForApi($opt['json']['customer']);
+
+    $method = 'JSON';
+    if (!empty($opt['json']['customer']['id'])) {
+      $endpoint .= '/' . $opt['json']['customer']['id'];
+      $method = 'PUT';
+    }
+
+    try {
+      $response = $this->invokeApi($endpoint, $opt['json'], $method);
+      $response = Json::decode($response);
+      if (!empty($response)) {
+        // Move the cart_id into the customer object.
+        if (isset($response['cart_id'])) {
+          $response['custom_attributes'][] = [
+            'attribute_code' => 'cart_id',
+            'value' => $response['cart_id'],
+          ];
+        }
+        $response = MagentoApiResponseHelper::customerFromSearchResult($response);
+      }
+
+      // Update password api.
+      if (!empty($response) && !empty($options['password'])) {
+        try {
+          $this->updateCustomerPass($response, $options['password']);
+        }
+        catch (\Exception $e) {
+          throw $e;
+        }
+      }
+    }
+    catch (\Exception $e) {
+      $response = NULL;
+      $this->logger->error('Exception while invoking method @method for API @api. Message: @message.', [
+        '@method' => __METHOD__,
+        '@api' => $endpoint,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    return $response;
+  }
+
+  /**
+   * Update customer password.
+   *
+   * @param array $customer
+   *   The customer array.
+   * @param string $password
+   *   The password to update for customer.
+   *
+   * @return array|null
+   *   Return array response.
+   *
+   * @throws \Exception
+   */
+  protected function updateCustomerPass(array $customer, $password) {
+    $endpoint = 'customers/%d/set-password?';
+
+    $cid = (int) $customer['customer_id'];
+    $password = (string) $password;
+
+    if ($cid < 1) {
+      throw new \Exception(
+        'updateCustomerPass: Missing customer id.'
+      );
+    }
+    if (!strlen($password)) {
+      throw new \Exception(
+        'updateCustomerPass: Missing customer password.'
+      );
+    }
+
+    $endpoint = sprintf($endpoint, $cid);
+    $endpoint .= 'password=' . urlencode($password);
+
+    try {
+      $response = $this->invokeApi(
+        $endpoint,
+        [
+          'customer_id' => $cid,
+          'password' => $password,
+        ],
+        'JSON'
+      );
+      $response = Json::decode($response);
+    }
+    catch (\Exception $e) {
+      $response = NULL;
+      $this->logger->error('Exception while invoking method @method for API @api. Message: @message.', [
+        '@method' => __METHOD__,
+        '@api' => $endpoint,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    return $response;
   }
 
 }

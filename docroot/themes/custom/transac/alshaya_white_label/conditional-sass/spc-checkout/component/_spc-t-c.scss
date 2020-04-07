@@ -1,0 +1,21 @@
+.spc-checkout-terms-conditions {
+  color: $spc-checkout-terms-conditions;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+
+  @include breakpoint($only-mobile) {
+    margin: 0 2.625rem;
+    text-align: center;
+  }
+
+  p {
+    color: $spc-checkout-terms-conditions;
+    margin: 0;
+  }
+
+  a {
+    color: $spc-checkout-terms-conditions-link;
+    font-family: $alshaya-bold;
+    text-transform: lowercase;
+  }
+}

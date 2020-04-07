@@ -1,0 +1,90 @@
+.spc-cart-items {
+  .spc-cart-item {
+    background-color: $spc-cart-item-bg;
+    padding: 1.25rem;
+    margin-bottom: 0.9375rem;
+    min-height: 10.625rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .spc-product-tile {
+      display: grid;
+      grid-template-columns: 5.4375rem 1fr 4.8125rem;
+      grid-gap: 0.8125rem;
+
+      .spc-product-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .spc-product-title {
+        margin-bottom: 0.625rem;
+      }
+
+      .spc-product-image {
+        max-height: 8.125rem;
+      }
+
+      .spc-product-tile-actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .spc-remove-btn {
+          align-self: flex-end;
+        }
+
+        .qty {
+          align-self: normal;
+        }
+      }
+
+      .spc-remove-btn {
+        border: none;
+        font-size: 0;
+        width: 1.5rem;
+        height: 1.5rem;
+        position: relative;
+        color: $spc-cart-item-trash-icon;
+        transition: color 0.3s ease-in-out;
+        background: none;
+
+        &:hover {
+          color: $spc-cart-item-trash-icon-hover;
+        }
+
+        @include icon('bin', after) {
+          width: 100%;
+          height: 100%;
+          font-size: 1.4375rem;
+          position: absolute;
+          #{$left}: 0;
+          top: 0;
+        }
+
+        @include componentLoader(transparent, 'after');
+      }
+    }
+
+    .spc-product-title {
+      a {
+        line-height: 1.29;
+        font-size: 0.875rem;
+        color: $spc-product-title;
+      }
+    }
+
+    .spc-product-attributes-wrapper {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: $spc-product-attributes;
+
+      html[lang=ar] & {
+        line-height: normal;
+      }
+    }
+  }
+}

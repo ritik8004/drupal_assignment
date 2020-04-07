@@ -1,0 +1,110 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+use Drupal\block\Entity\Block;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_spc_install() {
+  // Move react mini cart block to proper theme.
+  alshaya_block_move_blocks_theme_to_theme(
+    \Drupal::service('theme_handler')->getDefault(),
+    'alshaya_white_label'
+  );
+
+  // Disable the `acq_commerce` mini cart block.
+  $mini_cart_block = Block::load('cartminiblock');
+  $mini_cart_block->disable();
+  $mini_cart_block->save();
+
+  // Disable the `basket_horizontal_recommendation` block from cart page.
+  $horizontal_recommendation = Block::load('baskethorizontalproductrecommendation');
+  $horizontal_recommendation->disable();
+  $horizontal_recommendation->save();
+
+  // Override located /config/override/block.block.footerlogos.
+  \Drupal::configFactory()->getEditable('block.block.footerlogos')->save();
+  // Override located /config/override/block.block.customerservice.
+  \Drupal::configFactory()->getEditable('block.block.customerservice')->save();
+  // Override located /config/override/block.block.sociallinks.
+  \Drupal::configFactory()->getEditable('block.block.sociallinks')->save();
+  // Override located /config/override/block.block.copyright.
+  \Drupal::configFactory()->getEditable('block.block.copyright')->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  if ($translations = _alshaya_spc_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_spc_uninstall() {
+  // Enable the `acq_commerce` mini cart block.
+  $mini_cart_block = Block::load('cartminiblock');
+  $mini_cart_block->enable();
+  $mini_cart_block->save();
+
+  // Enable the `basket_horizontal_recommendation` block from cart page.
+  $horizontal_recommendation = Block::load('baskethorizontalproductrecommendation');
+  $horizontal_recommendation->enable();
+  $horizontal_recommendation->save();
+
+  // Drop the custom table created for SPC.
+  try {
+    \Drupal::database()->schema()->dropTable('middleware_payment_data');
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('alshaya_spc')->error('Failed to drop table for spc. @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_schema().
+ */
+function alshaya_spc_schema() {
+  $schema = [];
+
+  $schema['middleware_payment_data'] = [
+    'description' => 'Stores payment data info from middleware.',
+    'fields' => [
+      'cart_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Cart or Quote id.',
+      ],
+      'unique_id' => [
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Payment token id.',
+      ],
+      'data' => [
+        'type' => 'blob',
+        'not null' => TRUE,
+        'size' => 'big',
+        'description' => 'Serialized array containing payment data.',
+      ],
+      'timestamp' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Unix timestamp of when the data was saved.',
+      ],
+    ],
+    'primary key' => ['cart_id'],
+    'unique keys' => ['middleware_payment_data__unique_id' => ['unique_id']],
+  ];
+
+  return $schema;
+}

@@ -221,7 +221,7 @@ class CheckoutHelper {
     }
 
     $session = $this->currentRequest->getSession();
-    $session->set('last_order_id', $order_id);
+    $session->set('last_order_id', (int) $order_id);
 
     $current_user_id = 0;
 

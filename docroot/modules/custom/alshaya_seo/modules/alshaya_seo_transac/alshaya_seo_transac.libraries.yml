@@ -23,6 +23,14 @@ checkout_login:
     js/alshaya_seo.gtm.checkout_login.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
+
+gtm_spc_cart:
+  js:
+    js/alshaya_seo.gtm.spc_cart.js: {}
+  dependencies:
+    - alshaya_master/jquery_is_in_viewport
+    - core/drupal.debounce
+
 product_list:
   version: 1.x
   js:

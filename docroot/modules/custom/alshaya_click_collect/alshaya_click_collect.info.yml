@@ -8,3 +8,4 @@ dependencies:
   - alshaya_acm_product:alshaya_acm_product
   - alshaya_geolocation:alshaya_geolocation
   - mobile_number:mobile_number
+  - alshaya_stores_finder:alshaya_stores_finder_transac

@@ -23,7 +23,8 @@
 }
 
 header {
-  .block-cart-mini-block {
+  .block-cart-mini-block,
+  .block-alshaya-react-mini-cart {
     .cart-link {
       background-size: contain;
       width: 2.125rem;
@@ -426,7 +427,8 @@ header {
   }
 }
 
-#block-cartminiblock {
+#block-cartminiblock,
+.block-alshaya-react-mini-cart {
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
     padding-#{$right}: 0.5rem;
