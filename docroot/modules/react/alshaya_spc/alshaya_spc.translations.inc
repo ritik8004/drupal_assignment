@@ -89,6 +89,21 @@ function _alshaya_spc_translations() {
       'CVV' => [
         'ar' => 'CVV الرقم السري',
       ],
+      'Expiry' => [
+        'ar' => 'تاريخ انتهاء البطاقة',
+      ],
+      'Your shopping bag is empty' => [
+        'ar' => 'حقيبة التسوق الخاصة بك فارغة',
+      ],
+      'We will send you a text message once your order is ready for collection.' => [
+        'ar' => 'سنقوم بإرسال رسالة قصيرة عندما تكون الطلبية جاهزة للاستلام',
+      ],
+      'We have set your billing address same as delivery address. You can select a different one by clicking the change button above.' => [
+        'ar' => 'لقد قمنا بتعيين عنوان الفاتورة الخاص بك مثل عنوان التسليم. يمكنك تحديد واحد مختلف عن طريق النقر فوق زر التغيير أعلاه.',
+      ],
+      '@distance miles' => [
+        'ar' => '@distance ميل',
+      ],
       'Here\'s a confirmation of your order and all the details you may need.' => [
         'ar' => '.فيما يلي تأكيد لطلبك وكل التفاصيل التي قد تحتاجها',
       ],
