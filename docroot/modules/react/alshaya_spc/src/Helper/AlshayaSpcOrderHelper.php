@@ -333,7 +333,7 @@ class AlshayaSpcOrderHelper {
    * @return array
    *   Return string of uri or Null if not found.
    */
-  public function getProductDisplayImage($sku, $image_style = '', $context = '') {
+  protected function getProductDisplayImage($sku, $image_style = '', $context = '') {
     // Load the first image.
     $media_image = $this->skuImagesManager->getFirstImage($sku, $context);
 
