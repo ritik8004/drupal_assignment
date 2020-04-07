@@ -258,23 +258,24 @@ class StoresFinderUtility {
   public function getStoreNodes(array $store_codes, $langcode = NULL) {
     $cid = 'store_codes:list';
     // Fetch from cache if available.
-    if ($cache = $this->cache->get($cid)) {
-      $stores = array_filter($cache->data, function ($store) use ($store_codes) {
-        return in_array($store['field_store_locator_id_value'], $store_codes);
-      });
-
-      return $stores;
+    $cache = $this->cache->get($cid);
+    if (!empty($cache) && !empty($cache->data)) {
+      $db_stores = $cache->data;
+    }
+    else {
+      // Get the nids for given store code with custom query.
+      $query = $this->database->select('node_field_data', 'n');
+      $query->addField('n', 'nid');
+      $query->addField('ns', 'field_store_locator_id_value');
+      $query->innerJoin('node__field_store_locator_id', 'ns', 'n.nid = ns.entity_id and n.langcode = ns.langcode');
+      $query->condition('n.default_langcode', 1);
+      $db_stores = $query->execute()->fetchAllAssoc('nid', \PDO::FETCH_ASSOC);
+      $this->cache->set($cid, $db_stores, CACHE::PERMANENT, ['node_type:store']);
     }
 
-    // Get the nids for given store code with custom query.
-    $query = $this->database->select('node_field_data', 'n');
-    $query->addField('n', 'nid');
-    $query->addField('ns', 'field_store_locator_id_value');
-    $query->innerJoin('node__field_store_locator_id', 'ns', 'n.nid = ns.entity_id and n.langcode = ns.langcode');
-    $query->condition('n.default_langcode', 1);
-    $stores = $query->execute()->fetchAllAssoc('nid', \PDO::FETCH_ASSOC);
-    $this->cache->set($cid, $stores, CACHE::PERMANENT, ['node_type:store']);
-    return $stores;
+    return array_filter($db_stores, function ($store) use ($store_codes) {
+      return in_array($store['field_store_locator_id_value'], $store_codes);
+    });
   }
 
   /**
