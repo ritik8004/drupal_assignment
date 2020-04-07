@@ -256,7 +256,7 @@
 body.ie {
   #alshaya-algolia-search {
     .c-facet {
-      &.c-accordion {
+      &.c-accordion:not(.block-facet-blockcategory-facet-search) {
         ul {
           li {
             .facet-item__value {
