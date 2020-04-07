@@ -39,6 +39,12 @@ function _alshaya_seo_process_gtm() {
     'alshaya_acm_product.product_modal',
   ];
 
+  // Add related products url for matchback. so, when when GTM event triggers
+  // "addToCart", the js can fetch all required attributes.
+  if (\Drupal::config('alshaya_acm.settings')->get('show_crosssell_as_matchback')) {
+    $whitelisted_routes[] = 'alshaya_acm_product.get_related_products';
+  }
+
   // Disable SEO modifications for non-customer users (admins).
   if ($currentUser->isAuthenticated() && function_exists('alshaya_acm_customer_is_customer') && !alshaya_acm_customer_is_customer($currentUser)) {
     $process = FALSE;

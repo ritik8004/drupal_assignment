@@ -1322,9 +1322,14 @@ html[lang=ar] .alias--cart #table-cart-items tr th {
 }
 
 html[lang=ar] {
-  header .block-cart-mini-block .price-amount,
-  header .block-cart-mini-block .quantity {
-    font-family: $arial-nodir;
+  header {
+    .block-cart-mini-block,
+    .block-alshaya-react-mini-cart {
+      .price-amount,
+      .quantity {
+        font-family: $arial-nodir;
+      }
+    }
   }
 
   .alias--cart {

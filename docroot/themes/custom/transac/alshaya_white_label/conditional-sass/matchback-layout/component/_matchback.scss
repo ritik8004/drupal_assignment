@@ -270,3 +270,10 @@
     padding-bottom: 0;
   }
 }
+
+.matchback-notification-overlay {
+  #block-alshayareactcartminicartblock {
+    display: block !important;
+    z-index: 10 !important;
+  }
+}

@@ -1,0 +1,53 @@
+#click-and-collect-list-view {
+  ul {
+    li {
+      .select-store {
+        font-family: $hnm-bold;
+        letter-spacing: 1.14px;
+        text-transform: uppercase;
+      }
+
+      .spc-cnc-store-name {
+        @include icon(radio-empty, before) {
+          font-size: 3.125rem;
+        }
+
+        .expand-btn {
+          @include icon('dropdown-expand', after) {
+            font-size: 2.5rem;
+          }
+        }
+      }
+
+      &.expand {
+        .spc-cnc-store-name {
+          .expand-btn {
+            @include icon('dropdown-collapse', after) {
+              font-size: 2.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.spc-cnc-store-actions,
+.map-store-list .store-actions {
+  .select-store {
+    letter-spacing: 1.14px;
+    text-transform: uppercase;
+  }
+}
+
+.payment-method.payment-method-checkout_com .payment-method-bottom-panel .spc-checkout-card-option {
+  @include icon(radio-empty, before) {
+    font-size: 3.125rem;
+  }
+
+  &.selected {
+    @include icon(radio-filled, before) {
+      font-size: 3.125rem;
+    }
+  }
+}

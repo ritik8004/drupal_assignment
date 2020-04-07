@@ -1,0 +1,96 @@
+alshaya_spc.checkout:
+  path: '/checkout'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::checkout'
+    _title: 'Secure Checkout'
+  requirements:
+    # All user should able to access checkout pages, validation on frontend.
+    _access: 'TRUE'
+
+alshaya_spc.checkout.confirmation:
+  path: '/checkout/confirmation'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::checkoutConfirmation'
+    _title: 'Order confirmation'
+  requirements:
+    # All user should able to access checkout pages, validation on frontend.
+    _access: 'TRUE'
+
+alshaya_spc.login:
+  path: '/cart/login'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcLoginController::login'
+    _title: 'Secure Checkout'
+  requirements:
+    # All user should able to access checkout pages, validation on frontend.
+    _access: 'TRUE'
+
+alshaya_spc.validate-info:
+  path: '/spc/validate-info'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::validateInfo'
+  methods: [POST]
+  requirements:
+    _permission: 'access content'
+
+alshaya_spc.get_user_address_list:
+  path: '/user-address-list'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::getCustomerAddressList'
+  methods:  [GET]
+  requirements:
+    _role: 'authenticated'
+
+alshaya_spc.set_default_address:
+  path: '/set-default-address'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::setCustomerDefaultAddress'
+  methods:  [POST]
+  requirements:
+    _role: 'authenticated'
+
+alshaya_spc.add_edit_address:
+  path: '/add-edit-address'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::addEditCustomerAddress'
+  methods:  [POST]
+  requirements:
+    _role: 'authenticated'
+
+alshaya_spc.delete_address:
+  path: '/delete-address'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::deleteCustomerAddress'
+  methods:  [POST]
+  requirements:
+    _role: 'authenticated'
+
+alshaya_spc.cnc_json:
+  path: '/cnc/stores/{cart_id}/{lat}/{lon}'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCnCController::getCncStoresJson'
+  requirements:
+    _permission: 'access content'
+
+alshaya_spc.cnc_store_info:
+  path: '/cnc/store/{store_code}'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCnCController::getStoreInfoJson'
+  requirements:
+    _permission: 'access content'
+
+alshaya_spc.customer:
+  path: '/spc/customer'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::getUserCustomerId'
+  methods: [GET]
+  requirements:
+    _permission: 'access content'
+
+alshaya_spc.checkout_event:
+  path: '/spc/checkout-event'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCheckoutEventController::postCheckoutEvent'
+  methods: [POST]
+  requirements:
+    _permission: 'access content'

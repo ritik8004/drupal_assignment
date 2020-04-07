@@ -1,0 +1,62 @@
+input[type=radio] {
+  display: none;
+
+  ~ .radio-sim::before {
+    content: '';
+    position: absolute;
+    #{$left}: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.125rem;
+    width: 3rem;
+    text-align: center;
+  }
+
+  ~ .radio-sim {
+    @include icon(radio-empty, before) {
+      color: $spc-checkout-radio-empty;
+    }
+  }
+
+  &:checked {
+    ~ .radio-sim {
+      @include icon(radio-filled, before) {
+        color: $spc-checkout-radio-filled;
+      }
+    }
+  }
+
+  ~ .radio-label {
+    font-size: 0.875rem;
+    font-family: $alshaya-thin;
+    color: $spc-checkout-delivery-method-txt;
+
+    .impress {
+      font-family: $alshaya-bold;
+      margin-#{$right}: 0.3125rem;
+      color: $spc-checkout-delivery-method-impress;
+    }
+  }
+}
+
+.payment-method.payment-method-checkout_com {
+  .payment-method-bottom-panel {
+    .spc-checkout-card-option {
+      @include icon(radio-empty, before) {
+        position: absolute;
+        #{$left}: -1rem;
+        font-size: 1.125rem;
+        width: 3rem;
+        text-align: center;
+        color: $spc-checkout-radio-empty;
+        pointer-events: none;
+      }
+
+      &.selected {
+        @include icon(radio-filled, before) {
+          color: $spc-checkout-radio-filled;
+        }
+      }
+    }
+  }
+}

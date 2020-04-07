@@ -1,0 +1,101 @@
+.spc-saved-payment-card-list-content {
+  overflow-y: auto !important;
+  background: $spc-checkout-sidebar-bg !important;
+
+  .close {
+    z-index: 1;
+  }
+
+  .spc-saved-card-list-content {
+    padding-top: 1.25rem;
+
+    @include breakpoint($tablet) {
+      padding-bottom: 1.25rem;
+    }
+
+    .spc-modal-add-new-card-btn {
+      font-family: $alshaya-bold;
+    }
+
+    .spc-checkout-saved-card-list {
+      .payment-card {
+        padding: 0 0.875rem 1.25rem;
+        background: $spc-checkout-address-tile-bg;
+        font-size: 0.875rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        position: relative;
+
+        &.active {
+          .payment-card--number {
+            position: relative;
+
+            @include icon('checkshape', after) {
+              position: absolute;
+              font-size: 1.75rem;
+              #{$right}: -2.5rem;
+              top: -0.375rem;
+              color: $spc-checkout-radio-filled;
+            }
+          }
+        }
+
+        .payment-card--data {
+          width: 100%;
+
+          .payment-card--info {
+            height: 2.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: $spc-saved-card-color;
+
+            .payment-card--type {
+              width: 2.5rem;
+
+              svg {
+                border-radius: 3px;
+              }
+            }
+          }
+
+          .payment-card--expiry {
+            color: $spc-saved-card-expiry;
+
+            .label {
+              padding-#{$right}: 0.25rem;
+            }
+          }
+        }
+
+        .payment-card--options {
+          width: 100%;
+          margin-top: 1rem;
+
+          button {
+            display: flex;
+            width: 100%;
+            height: 2.25rem;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8125rem;
+            background: $spc-checkout-add-new-address-bg;
+            border: 1px solid $spc-deliver-button;
+            color: $spc-deliver-button;
+            transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+            cursor: pointer;
+            border-radius: 0.25rem;
+            font-family: $alshaya-thin;
+
+            &:hover {
+              background: $spc-deliver-button;
+              color: $primary_btn_text;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -16,6 +16,7 @@ $countries = [
   'kw' => 'Kuwait',
   'sa' => 'Saudi Arabia',
   'ae' => 'United Arab Emirates',
+  'eg' => 'Egypt',
 ];
 
 $languages = [

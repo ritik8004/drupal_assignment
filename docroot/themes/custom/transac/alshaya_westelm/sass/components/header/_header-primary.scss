@@ -56,7 +56,8 @@ header {
       }
     }
 
-    .block-cart-mini-block {
+    .block-cart-mini-block,
+    .block-alshaya-react-mini-cart {
       .cart-link {
         background-size: 2rem;
         margin-bottom: 0.5rem;
@@ -90,7 +91,8 @@ header {
         #mini-cart-wrapper {
           margin-top: 0;
 
-          .block-cart-mini-block .cart-link {
+          .block-cart-mini-block .cart-link,
+          .block-alshaya-react-mini-cart .cart-link {
             margin-top: 0;
             margin-bottom: 0;
           }

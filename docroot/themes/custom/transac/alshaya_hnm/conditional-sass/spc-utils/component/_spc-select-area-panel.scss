@@ -1,0 +1,17 @@
+.spc-area-select-selected {
+  text-transform: capitalize;
+
+  @include icon('dropdown-expand', after) {
+    font-size: 2.25rem;
+  }
+}
+
+.filter-list {
+  .spc-filter-panel-search-form-item {
+    input {
+      &::placeholder {
+        text-transform: capitalize;
+      }
+    }
+  }
+}
