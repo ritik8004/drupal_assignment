@@ -3,12 +3,11 @@
 namespace Drupal\alshaya_pdp_layouts\Plugin\PdpLayout;
 
 use Drupal\Component\Plugin\PluginBase;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
 /**
  * Base class for Pdp Layout plugins.
  */
-abstract class PdpLayoutBase extends PluginBase implements PdpLayoutInterface, ContainerFactoryPluginInterface {
+abstract class PdpLayoutBase extends PluginBase implements PdpLayoutInterface {
 
   /**
    * {@inheritdoc}

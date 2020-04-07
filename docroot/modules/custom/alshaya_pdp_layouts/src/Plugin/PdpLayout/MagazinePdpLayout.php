@@ -2,8 +2,6 @@
 
 namespace Drupal\alshaya_pdp_layouts\Plugin\PdpLayout;
 
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-
 /**
  * Provides the default laypout for PDP.
  *
@@ -12,7 +10,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
  *   label = @Translation("Magazine"),
  * )
  */
-class MagazinePdpLayout extends PdpLayoutBase implements ContainerFactoryPluginInterface {
+class MagazinePdpLayout extends PdpLayoutBase {
 
   /**
    * {@inheritdoc}
