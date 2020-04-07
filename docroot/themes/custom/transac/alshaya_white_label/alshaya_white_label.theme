@@ -842,7 +842,7 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
       if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-        $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.pdp_layouts');
+        $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
         $pdp_plugin = $pdp_layout_plugin_manager->createInstance('magazine', []);
         $pdp_plugin->getTemplateName($suggestions);
       }
