@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class AlshayaSpcCookies {
 
   // Middleware session key to get from db.
-  const MIDDLEWARE_SESSION_KEY = 'acq_cart_middleware';
+  const MIDDLEWARE_SESSION_KEY = 'middleware_cart_id';
 
   // Session cookie key to check.
   const MIDDLEWARE_COOKIE_KEY = 'PHPSESSID';

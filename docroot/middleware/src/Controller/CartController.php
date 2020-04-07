@@ -319,6 +319,15 @@ class CartController {
           $data['items'][$key]['qty'] = $items_quantity[$key];
         }
 
+        // If info is available in static array, means this we get from
+        // the cart update operation. We use that.
+        if (!empty(Cart::$stockInfo)
+          && isset(Cart::$stockInfo[$key])
+          && !Cart::$stockInfo[$key]) {
+          $data['items'][$key]['in_stock'] = FALSE;
+          $data['items'][$key]['stock'] = 0;
+        }
+
         // If CnC is disabled for any item, we don't process and consider
         // CnC disabled.
         if ($data['cnc_enabled'] && isset($data['items'][$key]['delivery_options']['click_and_collect'])) {
@@ -326,7 +335,8 @@ class CartController {
         }
 
         // For the OOS.
-        if ($data['in_stock'] && (isset($value['in_stock']) && !$value['in_stock'])) {
+        if ($data['in_stock']
+          && (isset($data['items'][$key]['in_stock']) && !$data['items'][$key]['in_stock'])) {
           $data['in_stock'] = FALSE;
         }
 

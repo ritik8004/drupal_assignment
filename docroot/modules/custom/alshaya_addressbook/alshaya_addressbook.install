@@ -13,7 +13,7 @@ use Drupal\user\RoleInterface;
 /**
  * Implements hook_update_N().
  *
- * Make firstname, middlenam, lastname optional field in favour of full name.
+ * Make address fields optional.
  */
 function alshaya_addressbook_update_8308() {
   \Drupal::service('alshaya_config.manager')->updateConfigs(

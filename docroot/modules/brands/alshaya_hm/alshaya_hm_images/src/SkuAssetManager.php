@@ -1082,17 +1082,13 @@ class SkuAssetManager {
    *   TRUE if supported.
    */
   private function validateFileExtension(string $sku, string $url) {
-    $allowed_extensions = Settings::get('allowed_product_extensions', [
-      'jpg',
-      'jpeg',
-      'png',
-      'gif',
-    ]);
-
     // Using multiple function to get extension to avoid cases with query
     // string and hash in URLs.
     $extension = strtolower(pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
-    if (!in_array($extension, $allowed_extensions)) {
+
+    // Filter by extension only if value set for the setting.
+    $allowed_extensions = Settings::get('allowed_product_extensions', NULL);
+    if ($allowed_extensions && !in_array($extension, $allowed_extensions)) {
       $this->logger->warning('Skipping product media file because of unsupported extension. SKU: @sku, File: @file', [
         '@file' => $url,
         '@sku' => $sku,

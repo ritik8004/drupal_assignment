@@ -14,6 +14,9 @@ settings:
       value: free_shipping_order
       label: 'Free shipping with an order over X KD'
     -
+      value: free_gift_order
+      label: 'Free gift with an order over X KD'
+    -
       value: fixed_percentage_discount_order
       label: 'Fixed percentage discount with an order over X KD'
     -

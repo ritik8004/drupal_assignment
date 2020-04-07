@@ -129,8 +129,6 @@ class AlshayaAcmApiWrapper extends APIWrapper {
       return ($client->get($endpoint, $opt));
     };
 
-    $result = [];
-
     try {
       $result = $this->tryAgentRequest($doReq, 'getPromotions', 'promotions');
     }
