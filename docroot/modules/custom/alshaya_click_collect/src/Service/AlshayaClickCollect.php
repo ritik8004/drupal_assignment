@@ -82,6 +82,7 @@ class AlshayaClickCollect {
         $store_cart_data = $stores_by_code[$store['code']];
         $store['rnc_available'] = (int) $store_cart_data['rnc_available'];
         $store['sts_available'] = (int) $store_cart_data['sts_available'];
+        $store['distance'] = (float) $store_cart_data['distance'];
         $store['formatted_distance'] = $this->t('@distance miles', [
           '@distance' => number_format((float) $store_cart_data['distance'], 2, '.', ''),
         ]);
