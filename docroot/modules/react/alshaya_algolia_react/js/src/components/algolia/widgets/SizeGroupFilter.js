@@ -36,8 +36,8 @@ const SizeGroupFilter = ({ items, refine, searchForItems, isFromSearch, ...props
       {groupedItems.map((item, group) => {
         return (
           <li key={group}>
-            <ul className="sizegroup">
-              <span className="sizegroup-filter">{ group }</span>
+            <span className="sizegroup-filter">{ group }</span>
+            <ul className="sizegroup" id={ group }>
               {item.map(clild => {
                 return (
                   <li
