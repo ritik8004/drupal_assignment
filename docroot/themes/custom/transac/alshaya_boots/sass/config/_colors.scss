@@ -168,7 +168,7 @@ $header_search_border_mobile: $warm-grey-two;
 $header_search_active_bg: transparent;
 
 // Header - Search.
-$primary_search_btn_icon: $drakish-blue;
+$primary_search_btn_icon: $white;
 $primary_search_input: $black-two;
 $primary_search_input_placeholder: $grey-light;
 $primary_search_border: $warm-grey-two;
@@ -176,7 +176,7 @@ $primary_search_autocomplete_text: $grey-light;
 
 // C-menu primary i:e Mobile and tablet header menu links.
 $header_c_menu_text: $drakish-blue;
-$header_c_menu_icon_color: $warm-grey-two;
+$header_c_menu_icon_color: $drakish-blue;
 $header_c_menu_search_active_icon: $tomato;
 $header_toggle_sign_default: $white-smoke-light;
 $header_toggle_sign_active_tab: $black-two;
@@ -231,6 +231,7 @@ $copyright_footer_paragraph: $black-two;
 // Newsletter-signup
 $newsletter_submit_btn: $drakish-blue;
 $newsletter_success: $black-two;
+$newsletter_input_border: $warm-grey-two;
 
 // Checkout Progress.
 $checkout_seperator: $grey-light;
@@ -329,7 +330,7 @@ $promo_text: $black-two;
 // Store finder page.
 // Store finder header form.
 $store_finder_header_desktop: $black-two;
-$store_finder_subheader: $black-two;
+$store_finder_subheader: $drakish-blue;
 $store_finder_backbtn: $drakish-blue;
 $store_finder_icon: $drakish-blue;
 $store_finder_text: $drakish-blue;
