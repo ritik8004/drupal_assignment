@@ -1185,6 +1185,7 @@ class SkuManager {
 
         $row['image'] = $this->renderer->renderPlain($image);
         $row['position'] = $data[$position_key];
+        $row['label_name'] = $data['label_name'];
 
         $static_labels_cache[$sku][$type][] = $row;
 
