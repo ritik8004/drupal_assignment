@@ -11,6 +11,36 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update context for Search placeholder string.
+ */
+function alshaya_master_update_8039() {
+  $strings = [
+    'Search' => [
+      'existing_context' => 'algolia_search_block_placeholder',
+      'new_context' => 'alshaya_static_text|algolia_search_block_placeholder',
+    ],
+  ];
+  alshaya_i18n_update_context($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add more translations.
+ */
+function alshaya_master_update_8038() {
+  $strings = [
+    'Sorry, one or more products in your basket are no longer available and were removed from your basket.' => [
+      'ar' => 'عفواً، لقد نفدت الكمية من بعض القطع في سلة تسوقك. تم إزالة القطع من سلة التسوق لإكمال عملية الشراء بأمان.',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding arabic translations for -
  * '1 color' and
  * '@count colors'.
@@ -1673,6 +1703,9 @@ function alshaya_master_install() {
     ],
     'Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.' => [
       'ar' => 'عفواً، لقد نفدت الكمية من بعض القطع في سلة تسوقك. يرجى إزالة القطع من سلة التسوق لإكمال عملية الشراء بأمان.',
+    ],
+    'Sorry, one or more products in your basket are no longer available and were removed from your basket.' => [
+      'ar' => 'عفواً، لقد نفدت الكمية من بعض القطع في سلة تسوقك. تم إزالة القطع من سلة التسوق لإكمال عملية الشراء بأمان.',
     ],
     'No area found' => [
       'ar' => 'لا يوجد نتائج لبحثك',

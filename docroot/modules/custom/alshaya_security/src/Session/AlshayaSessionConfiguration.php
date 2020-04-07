@@ -13,18 +13,53 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
   /**
    * {@inheritdoc}
    */
-  public function getOptions(Request $request) {
-    $options = parent::getOptions($request);
+  public function getName(Request $request) {
+    $this->setCookieFromLegacy($request);
+    return parent::getName($request);
+  }
 
-    // Cybersource works with a page on their domain sending POST request to
-    // our domain but latest versions of browsers don't add our session cookie
-    // in this case.
-    // We need to use samesite=None in this case but PHP 7.2 functions and
-    // configurations don't support it. So we alter the domain configuration to
-    // pass the samesite param as well.
-    $options['cookie_domain'] .= '; samesite=None';
+  /**
+   * Wrapper function to set original cookies from legacy cookies.
+   *
+   * Here we try to set the legacy cookies we set in AlshayaSessionManager
+   * in original expected keys if for some reason they are not available.
+   * We do this here as this is invoked before starting the session.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request.
+   */
+  protected function setCookieFromLegacy(Request $request) {
+    static $processed = NULL;
 
-    return $options;
+    if ($processed) {
+      return;
+    }
+
+    // Set the static variable first to ensure we don't call this function
+    // recursively.
+    $processed = TRUE;
+
+    $cookies = $request->cookies->all();
+    foreach ($cookies as $name => $value) {
+      if (strpos($name, AlshayaSessionManager::LEGACY_SUFFIX) !== FALSE) {
+        $expected = str_replace(AlshayaSessionManager::LEGACY_SUFFIX, '', $name);
+        if (empty($cookies[$expected])) {
+          $_COOKIE[$expected] = $value;
+          $request->cookies->set($expected, $value);
+
+          $options = $this->getOptions($request);
+
+          // Set the cookie back so we have the original cookie back again.
+          // If the user upgrades the browser and tries to checkout without
+          // original cookie, we will face the same 500.
+          // @TODO: Change it when moving to PHP 7.3 version.Not doing now as
+          // we don't have a way to test it.
+          $params = session_get_cookie_params();
+          $expire = $params['lifetime'] ? REQUEST_TIME + $params['lifetime'] : 0;
+          setcookie($expected, $value, $expire, $params['path'], $options['cookie_domain'] . '; SameSite=None', TRUE, $params['httponly']);
+        }
+      }
+    }
   }
 
 }

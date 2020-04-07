@@ -17,3 +17,5 @@ permissions:
   - 'restful get product_exclude_linked'
   - 'restful get magazine_detail_page'  
   - 'restful get magazine_block'
+  - 'restful get magazine_teasers'
+  - 'restful get skus_product_list'

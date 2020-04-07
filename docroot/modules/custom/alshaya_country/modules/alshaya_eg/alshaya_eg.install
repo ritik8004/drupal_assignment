@@ -11,8 +11,11 @@
  * Add iso_currency_code for eg sites.
  */
 function alshaya_eg_update_8001() {
-  if ($config = \Drupal::configFactory()->getEditable('acq_commerce.currency')) {
-    $config->set('iso_currency_code', 'EGP')->save();
+  $modulehandler = \Drupal::service("module_handler");
+  if ($modulehandler->moduleExists("acq_commerce")) {
+    if ($config = \Drupal::configFactory()->getEditable('acq_commerce.currency')) {
+      $config->set('iso_currency_code', 'EGP')->save();
+    }
   }
 }
 

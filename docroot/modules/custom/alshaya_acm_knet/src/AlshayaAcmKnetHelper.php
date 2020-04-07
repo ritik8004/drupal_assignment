@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_knet;
 
-use Drupal\acq_cart\Cart;
 use Drupal\acq_commerce\Conductor\APIWrapperInterface;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_knet\Helper\KnetHelper;
@@ -185,9 +184,20 @@ class AlshayaAcmKnetHelper extends KnetHelper {
    */
   public function processKnetResponse(array $response = []) {
     // Get the cart using API to validate.
-    $cart = (array) $this->api->getCart($response['quote_id']);
-    if (empty($cart)) {
-      throw new \Exception();
+    try {
+      $cart = (array) $this->api->getCart($response['quote_id']);
+      if (empty($cart)) {
+        throw new \Exception('Cart empty');
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->warning('Error occurred while getting cart id @cart_id: @message, k-net data: @data', [
+        '@cart_id' => $response['quote_id'],
+        '@message' => $e->getMessage(),
+        '@data' => json_encode($response),
+      ]);
+
+      throw new AccessDeniedHttpException();
     }
 
     $state_key = $response['state_key'];
@@ -263,18 +273,25 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if (empty($cart)) {
-      $this->logger->warning('Cart not found in session but since payment was completed for @quote_id we restored it from Magento.', [
-        '@quote_id' => $data['quote_id'],
-        '@message' => json_encode($data),
-      ]);
-
       try {
-        $cartObject = (object) $this->api->getCart($data['quote_id']);
-        $cart = new Cart($cartObject);
-        $restored_cart = TRUE;
+        if ($this->cartStorage->restoreCart($data['quote_id'])) {
+          $this->logger->warning('Cart not found in session but since payment was completed for @quote_id we restored it from Magento.', [
+            '@quote_id' => $data['quote_id'],
+            '@message' => json_encode($data),
+          ]);
+
+          $cart = $this->cartStorage->getCart(FALSE);
+
+          $restored_cart = TRUE;
+        }
       }
       catch (\Exception $e) {
         $cart = NULL;
+
+        $this->logger->warning('Cart not found in session but since payment was completed we tried to restore but that failed too for cart_id @quote_id, data: @message.', [
+          '@quote_id' => $data['quote_id'],
+          '@message' => json_encode($data),
+        ]);
       }
 
       if (empty($cart) || $cart->id() != $data['quote_id']) {

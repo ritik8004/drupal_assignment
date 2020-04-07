@@ -8,6 +8,7 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ProductDyPageTypeEventSubscriber.
@@ -31,19 +32,30 @@ class ProductDyPageTypeEventSubscriber implements EventSubscriberInterface {
   protected $skuManager;
 
   /**
+   * Logger service.
+   *
+   * @var Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * ProductDyPageTypeEventSubscriber constructor.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   Route Match Object.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku Manager.
+   * @param Psr\Log\LoggerInterface $logger
+   *   The logger service.
    */
   public function __construct(
     RouteMatchInterface $route_match,
-    SkuManager $skuManager
+    SkuManager $skuManager,
+    LoggerInterface $logger
   ) {
     $this->routeMatch = $route_match;
     $this->skuManager = $skuManager;
+    $this->logger = $logger;
   }
 
   /**
@@ -67,9 +79,18 @@ class ProductDyPageTypeEventSubscriber implements EventSubscriberInterface {
     if (($node = $this->routeMatch->getParameter('node')) && $node instanceof NodeInterface) {
       if ($node->bundle() == 'acq_product') {
         $event->setDyContext('PRODUCT');
-        $productSku = $this->skuManager->getSkuForNode($node);
-        $productSku = SKU::loadFromSku($productSku);
 
+        $productSku = $this->skuManager->getSkuForNode($node);
+        if (empty($productSku)) {
+          $this->logger->notice('ProductDyPageTypeEventSubscriber: SKU not found for the Product ID: @nid.', ['@nid' => $node->id()]);
+          return;
+        }
+
+        $productSku = SKU::loadFromSku($productSku);
+        if (empty($productSku)) {
+          $this->logger->notice('ProductDyPageTypeEventSubscriber: SKU could not be loaded for the Product ID: @nid.', ['@nid' => $node->id()]);
+          return;
+        }
         if ($productSku->bundle() === 'configurable') {
           $combinations = $this->skuManager->getConfigurableCombinations($productSku);
           if (key($combinations['by_sku'])) {

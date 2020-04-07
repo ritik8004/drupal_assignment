@@ -1,16 +1,10 @@
 .block-alshaya-algolia-react-autocomplete {
   @include breakpoint($only-mobile) {
-    visibility: hidden;
-    top: 3.125rem;
     padding: 0;
-
-    &.show-algolia-search-bar {
-      top: 3.125rem !important;
-    }
   }
 
   @include breakpoint($only-tablet) {
-    bottom: 0;
+    bottom: auto;
     visibility: hidden;
 
     &.show-algolia-search-bar {
@@ -18,9 +12,13 @@
     }
   }
 
+  @include breakpoint($upto-desktop) {
+    top: 5.625rem;
+  }
+
   .algolia-search-cleartext-icon {
-    top: 0.1rem !important;
-    #{$right}: 0.3rem !important;
+    top: 0.5rem;
+    #{$right}: 0.5rem;
 
     @include breakpoint($only-tablet) {
       top: 1.2rem !important;
@@ -64,8 +62,6 @@
   }
 
   .react-autosuggest__container .algolia-search-back-icon {
-    color: $algolia-search-clear-text-icon;
-
     &::before {
       content: none;
     }
@@ -73,29 +69,15 @@
 
   #alshaya-algolia-autocomplete {
     width: 100%;
-    height: 2.375rem;
     padding: 0;
-    background: $white-smoke-light;
 
     @include breakpoint($desktop) {
       width: 12.5rem;
       height: 2.375rem;
     }
 
-    @include breakpoint($only-tablet) {
-      top: 8.84rem;
-      bottom: auto;
-      border: 0.5rem solid $nero;
-      z-index: 100;
-      height: 3.375rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      top: 2.4375rem;
-      bottom: auto;
-      border: 0.5rem solid $nero;
+    @include breakpoint($upto-desktop) {
       z-index: 14;
-      height: 3.375rem;
     }
 
     & > div {
@@ -103,13 +85,8 @@
     }
 
     .react-autosuggest__input {
-      color: $algolia-input-text;
-      font-size: 0.875rem;
       border-radius: 0;
-      border: 0.0625rem solid transparent;
-      height: 100%;
       background: $white-smoke-light;
-      text-transform: none;
       padding: 0.4375rem;
 
       @include breakpoint($only-mobile) {
@@ -122,8 +99,16 @@
         padding-#{$right}: 2rem;
       }
 
+      @include breakpoint($upto-desktop) {
+        height: 3.375rem;
+        border: 0.5rem solid $nero;
+        line-height: 1.25rem;
+      }
+
       @include breakpoint($desktop) {
         padding-#{$left}: 2rem;
+        height: 2.375rem;
+        border: none;
       }
 
       &::placeholder {
@@ -139,10 +124,6 @@
         @include breakpoint($only-mobile) {
           font-size: 0.875rem;
         }
-      }
-
-      &--open {
-        border: 0.0625rem solid $algolia-auto-complete-border;
       }
     }
 
@@ -165,21 +146,11 @@
     }
 
     .react-autosuggest__container {
-      position: relative;
-      height: 100%;
-
-      @include breakpoint($only-mobile) {
-        height: 100%;
-        width: 100%;
-        overflow: inherit;
-      }
-
       &::after {
         @include breakpoint($only-mobile) {
-          top: 50%;
-          transform: translateY(-50%);
+          top: 0.25rem;
           #{$right}: unset;
-          #{$left}: 0.25rem;
+          #{$left}: 0.5rem;
           opacity: 1;
           transition: opacity 0.2s;
         }
@@ -201,22 +172,13 @@
         border-radius: 0;
 
         @include breakpoint($only-tablet) {
-          #{$right}: 0.35rem;
+          #{$right}: 0.85rem;
           #{$left}: auto;
           font-size: 1.75rem;
         }
 
         @include breakpoint($only-mobile) {
           content: none;
-        }
-      }
-
-      &--open {
-        .react-autosuggest__input {
-          @include breakpoint($tablet) {
-            border: 1px solid $algolia-auto-complete-border;
-            border-radius: 0;
-          }
         }
       }
 
@@ -239,27 +201,22 @@
           }
         }
       }
+
+      &--open {
+        .react-autosuggest__input {
+          @include breakpoint($only-tablet) {
+            border: 0.5rem solid $nero;
+          }
+        }
+      }
     }
 
     .react-autosuggest__suggestions-container {
-      @include breakpoint($only-mobile) {
-        position: absolute;
-      }
-
       &--open {
-        margin-top: 0;
-        border: 1px solid $algolia-auto-complete-border;
-        box-shadow: none;
         border-radius: 0;
-        border-top: none;
-
-        @include breakpoint($only-mobile) {
-          border-top: none;
-          position: absolute;
-        }
 
         @include breakpoint($desktop) {
-          border-top: none;
+          border: 1px solid $algolia-auto-complete-border;
         }
       }
     }
@@ -279,39 +236,91 @@
 @include breakpoint($only-mobile) {
   html[lang=ar] {
     .block-alshaya-algolia-react-autocomplete {
-      top: 3.125rem;
+      top: 5.625rem;
       padding: 0;
     }
 
     body {
       &:not(.no-sticky-algolia-search-bar) {
-        margin-top: 7.3125rem;
+        margin-top: 9rem;
       }
     }
   }
-}
 
-body {
-  &:not(.no-sticky-algolia-search-bar) {
-    .block-alshaya-algolia-react-autocomplete {
-      @include breakpoint($only-mobile) {
+  body {
+    &:not(.no-sticky-algolia-search-bar) {
+      margin-top: 9rem;
+
+      .block-alshaya-algolia-react-autocomplete {
         padding: 0;
       }
-    }
-  }
 
-  .block-alshaya-algolia-react-autocomplete {
-    .algolia-search-back-icon {
-      @include breakpoint($upto-desktop) {
-        #{$left}: 0;
-        top: 0;
+      .block-alshaya-super-category-menu,
+      .menu--mobile-navigation,
+      #block-cartminiblock {
+        position: absolute !important;
+      }
+
+      header {
+        .c-header__region {
+          height: auto;
+        }
       }
     }
-  }
 
-  &.frontpage {
-    .mobile--search {
-      visibility: hidden;
+    .block-alshaya-algolia-react-autocomplete {
+      .algolia-search-back-icon {
+        #{$left}: 0.5rem;
+        top: 0.5rem;
+      }
+    }
+
+    &.frontpage {
+      @include breakpoint($only-mobile) {
+        .c-menu-primary {
+          .menu--mobile-navigation {
+            width: 66.66%;
+
+            ul {
+              li {
+                &:nth-child(2) {
+                  display: none;
+                }
+              }
+            }
+          }
+
+          .store {
+            width: 100%;
+          }
+        }
+
+        header {
+          .block-cart-mini-block {
+            width: 33.33%;
+          }
+        }
+      }
+    }
+
+    &.no-sticky-algolia-search-bar {
+      .block-alshaya-algolia-react-autocomplete {
+        &.show-algolia-search-bar {
+          z-index: 13;
+        }
+      }
+    }
+
+    &:not(.frontpage) {
+      &.hide-header {
+        margin-top: 3.375rem;
+
+        .block-alshaya-super-category-menu,
+        .menu--mobile-navigation,
+        #block-cartminiblock {
+          display: none;
+        }
+      }
     }
   }
 }

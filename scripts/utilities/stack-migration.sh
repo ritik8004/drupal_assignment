@@ -2,7 +2,7 @@
 #
 # This script migrates given site between stacks.
 #
-# ./scripts/utilities/stack-migration.sh 01live vskw 02live vskw2
+# ./scripts/utilities/stack-migration.sh alshaya.01live vskw alshaya2.02live vskw2
 
 source_env="$1"
 source_site="$2"
@@ -11,25 +11,25 @@ target_site="$4"
 
 if [[ -z "$source_env" ]]; then
   echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration.sh 01live vskw 02live vskw2"
+  echo "Example: ./scripts/utilities/stack-migration.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
 if [[ -z "$source_site" ]]; then
   echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration.sh 01live vskw 02live vskw2"
+  echo "Example: ./scripts/utilities/stack-migration.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
 if [[ -z "$target_env" ]]; then
   echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration.sh 01live vskw 02live vskw2"
+  echo "Example: ./scripts/utilities/stack-migration.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
 if [[ -z "$target_site" ]]; then
   echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration.sh 01live vskw 02live vskw2"
+  echo "Example: ./scripts/utilities/stack-migration.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
@@ -46,12 +46,13 @@ if [[ -z "$target_alias" ]]; then
   exit
 fi
 
-source_root=`drush sa $source_alias | grep root | cut -d"'" -f4`
-
-target_root=`drush sa $target_alias | grep root | cut -d"'" -f4`
+source_root=`drush sa $source_alias | grep root | head -1 | cut -d"'" -f4`
+target_root=`drush sa $target_alias | grep root | head -1 | cut -d"'" -f4`
 target_remote_user=`drush sa $target_alias | grep remote-user | cut -d"'" -f4`
 target_remote_host=`drush sa $target_alias | grep remote-host | cut -d"'" -f4`
 target="$target_remote_user@$target_remote_host"
+target_stack=`drush sa $target_alias | grep ac-site | cut -d"'" -f4`
+target_env=`drush sa $target_alias | grep ac-env | cut -d"'" -f4`
 
 cd $source_root
 
@@ -101,6 +102,7 @@ echo
 echo "Clearing caches for $target_site"
 ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com cr"
 
+target_simple_oauth="/home/$target_stack/simple-oauth/$target_env/"
 echo
 echo "Update simple_oauth settings: $target_simple_oauth"
 ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com cset simple_oauth.settings public_key '${target_simple_oauth}alshaya_acm.pub' -y"

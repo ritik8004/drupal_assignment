@@ -95,19 +95,19 @@ class OrdersManager {
   /**
    * Helper function to clear orders related cache for a user/email.
    *
-   * @param string $email
+   * @param int $customer_id
    *   Email for which cache needs to be cleared.
    * @param int $uid
    *   User id for which cache needs to be cleared.
    */
-  public function clearOrderCache($email, $uid = 0) {
+  public function clearOrderCache(int $customer_id, $uid = 0) {
     // Clear user's order cache.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
-      $this->cache->delete('orders_list_' . $langcode . '_' . $email);
+      $this->cache->delete('orders_list_' . $langcode . '_' . $customer_id);
     }
 
     // Clear user's order count cache.
-    $this->countCache->delete('orders_count_' . $email);
+    $this->countCache->delete('orders_count_' . $customer_id);
 
     if ($uid) {
       // Invalidate the cache tag when order is placed to reflect on the
@@ -318,6 +318,10 @@ class OrdersManager {
 
     $items = [];
     foreach ($order['items'] as $item) {
+      if (isset($items[$item['sku']])) {
+        continue;
+      }
+
       $processed_item = [
         'type' => (string) ($item['product_type'] ?? ''),
         'price' => ($item['price_incl_tax'] ?? 0),
@@ -328,7 +332,7 @@ class OrdersManager {
       ];
 
       // Add all other info.
-      $items[] = $processed_item + $item;
+      $items[$item['sku']] = $processed_item + $item;
     }
     $order['items'] = $items;
 

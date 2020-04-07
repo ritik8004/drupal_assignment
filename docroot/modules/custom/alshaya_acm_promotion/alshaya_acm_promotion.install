@@ -12,6 +12,48 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Add new value for promotion sub type and add translations.
+ */
+function alshaya_acm_promotion_update_8023() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['field.storage.node.field_alshaya_promotion_subtype'],
+    'alshaya_acm_promotion',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+
+  // Add Translations.
+  $strings = [
+    'Shop for @threshold and get a @gift FREE' => [
+      'ar' => 'تسوق مقابل @threshold واحصل على @gift مجانًا',
+    ],
+    'Your Free Gift @gift has been added to the cart' => [
+      'ar' => 'تمت إضافة هديتك المجانية @gift إلى سلة التسوق',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add translations for cart level promotions.
+ */
+function alshaya_acm_promotion_update_8022() {
+  // Add Translations.
+  $strings = [
+    'Buy @condition_value to get a free gift' => [
+      'ar' => 'تسوق @condition_value واحصل على هدية مجانية',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translations for cart level promotions.
  */
 function alshaya_acm_promotion_update_8021() {
@@ -321,6 +363,12 @@ function _alshaya_acm_promotion_add_promotions_translations() {
     ],
     'Use and get @percent% off' => [
       'ar' => 'استخدم واحصل على خصم %@percent',
+    ],
+    'Shop for @threshold and get a @gift FREE' => [
+      'ar' => 'تسوق مقابل @threshold واحصل على @gift مجانًا',
+    ],
+    'Your Free Gift @gift has been added to the cart' => [
+      'ar' => 'تمت إضافة هديتك المجانية @gift إلى سلة التسوق',
     ],
   ];
   alshaya_i18n_save_translations($strings);

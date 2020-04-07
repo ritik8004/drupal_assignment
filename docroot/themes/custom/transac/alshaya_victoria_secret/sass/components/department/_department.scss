@@ -17,6 +17,12 @@
     .node--type-advanced-page {
       margin-top: 0;
     }
+
+    &.frontpage {
+      .page-standard {
+        margin-top: 0;
+      }
+    }
   }
 }
 

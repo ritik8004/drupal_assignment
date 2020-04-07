@@ -226,6 +226,31 @@ function create_system($name, $description, $site_id, $type, $url, $uuid, $auth_
 }
 
 /**
+ * Wrapper function to get ACM System (Magento or Drupal).
+ *
+ * @param int $system_id
+ *
+ * @return \stdClass
+ *   System.
+ */
+function get_system(int $system_id) {
+  $endpoint = str_replace(':system_id', $system_id, 'config/system/:system_id');
+  return invoke_api($endpoint, 'GET');
+}
+
+/**
+ * Update ACM System (Magento or Drupal).
+ *
+ * @param array $data
+ *
+ * @return \stdClass
+ *   Response.
+ */
+function update_system(array $data) {
+  return invoke_api('config/system/update', 'POST', $data);
+}
+
+/**
  * Function to create a new mapping on ACM.
  *
  * @param string $name

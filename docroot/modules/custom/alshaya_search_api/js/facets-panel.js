@@ -364,7 +364,14 @@
               supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
             }
             filterposition = $('.show-all-filters').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
-            fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
+
+            // To check if algolia is enabled, calculate height as per minimalistic header implementation.
+            if ($('body').hasClass('no-sticky-algolia-search-bar')) {
+              fixedNavHeight = nav.outerHeight() + supercategorymenuHeight - $('.block-alshaya-super-category').outerHeight();
+            }
+            else {
+              fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
+            }
           }
         }
 
