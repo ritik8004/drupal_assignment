@@ -504,7 +504,6 @@ class AlshayaSearchApiQueryExecute {
       if (!empty($filter_data[$facet->getFieldIdentifier()])) {
         $facet->setActiveItems($filter_data[$facet->getFieldIdentifier()]);
       }
-
       // Execute facet build so that facet processor gets executed.
       $facet_build[$facet->id()] = $this->facetManager->build($facet);
     }
