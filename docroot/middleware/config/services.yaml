@@ -1,0 +1,91 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    session.storage.options:
+        # Default ini options for sessions.
+        #
+        # Some distributions of Linux (most notably Debian) ship their PHP
+        # installations with garbage collection (gc) disabled. Since Drupal depends
+        # on PHP's garbage collection for clearing sessions, ensure that garbage
+        # collection occurs by using the most common settings.
+        # @default 1
+        gc_probability: 1
+        # @default 100
+        gc_divisor: 100
+        #
+        # Set session lifetime (in seconds), i.e. the time from the user's last
+        # visit to the active session may be deleted by the session garbage
+        # collector. When a session is deleted, authenticated users are logged out,
+        # and the contents of the user's $_SESSION variable is discarded.
+        # @default 200000
+        gc_maxlifetime: 200000
+        #
+        # Set session cookie lifetime (in seconds), i.e. the time from the session
+        # is created to the cookie expires, i.e. when the browser is expected to
+        # discard the cookie. The value 0 means "until the browser is closed".
+        # @default 2000000
+        cookie_lifetime: 2000000
+        # We get POST requests in iframe/main window from different payment
+        # methods like K-Net, Cybersource, Checkout.com (3D). For this to ensure
+        # session cookie is passed we have to use secure + same_site:none.
+        cookie_secure: true
+        cookie_samesite: 'none'
+        #
+        # Drupal automatically generates a unique session cookie name based on the
+        # full domain name used to access the site. This mechanism is sufficient
+        # for most use-cases, including multi-site deployments. However, if it is
+        # desired that a session can be reused across different subdomains, the
+        # cookie domain needs to be set to the shared base domain. Doing so assures
+        # that users remain logged in as they cross between various subdomains.
+        # To maximize compatibility and normalize the behavior across user agents,
+        # the cookie domain should start with a dot.
+        #
+        # @default none
+        # cookie_domain: '.example.com'
+        #
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+        arguments:
+            $logger: '@monolog.logger.middleware'
+
+    # This formats the log messages as per drupal like.
+    alshaya_middleware.log_fromatter:
+        class: App\Logger\Formatter\MiddlewareLogFormatter
+
+    # This process and add extra info like ip, uri etc to logs.
+    # No class for this as this is built in monolog processor.
+    Monolog\Processor\WebProcessor:
+        tags: ['monolog.processor']
+
+    Monolog\Processor\PsrLogMessageProcessor:
+        tags: ['monolog.processor']
+
+    # Decorates the syslog handler.
+    App\Logger\Decorator\SysLogDecorator:
+        decorates: monolog.handler.syslog
+
+    App\EventListener\KernelEventsListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response }
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones

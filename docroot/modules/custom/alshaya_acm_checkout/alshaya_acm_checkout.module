@@ -13,7 +13,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Implements hook_theme().
@@ -314,27 +313,7 @@ function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = '
  *   Order array if found.
  */
 function _alshaya_acm_checkout_get_last_order_from_session() {
-  static $order;
-
-  if (!empty($order)) {
-    return $order;
-  }
-
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
-
-  $session = \Drupal::request()->getSession();
-  $order_id = (int) $session->get('last_order_id');
-
-  // Throw access denied if nothing in session.
-  if (empty($order_id)) {
-    throw new AccessDeniedHttpException();
-  }
-
-  /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
-  $manager = \Drupal::service('alshaya_acm_customer.orders_manager');
-  $order = $manager->getOrder($order_id);
-
-  return $order;
+  return \Drupal::service('alshaya_spc.order_helper')->getLastOrder();
 }
 
 /**

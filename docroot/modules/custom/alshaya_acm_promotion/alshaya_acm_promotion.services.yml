@@ -22,12 +22,6 @@ services:
       - '@config.factory'
       - '@alshaya_acm_promotion.manager'
       - '@renderer'
-  alshaya_acm_promotion.update_promotion:
-    class: Drupal\alshaya_acm_promotion\EventSubscriber\UpdatePromotionLabel
-    arguments:
-      - '@alshaya_acm_promotion.label_manager'
-    tags:
-      - { name: 'event_subscriber' }
   cache.alshaya_acm_promotion:
     class: Drupal\Core\Cache\CacheInterface
     tags:

@@ -1185,6 +1185,7 @@ class SkuManager {
 
         $row['image'] = $this->renderer->renderPlain($image);
         $row['position'] = $data[$position_key];
+        $row['label_name'] = $data['label_name'];
 
         $static_labels_cache[$sku][$type][] = $row;
 
@@ -3531,7 +3532,9 @@ class SkuManager {
       $promotions[] = [
         'text' => $promotion['text'],
         'promo_node' => $nid,
-        'promo_web_url' => Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl(),
+        'promo_web_url' => str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+          '',
+          Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl()),
       ];
     }
     return $promotions;

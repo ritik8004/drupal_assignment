@@ -1,0 +1,215 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Breadcrumb\Breadcrumb;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_spc_theme($existing, $type, $theme, $path) {
+  return [
+    'spc_checkout' => [
+      'variables' => [
+        'areas' => [],
+        'strings' => [],
+      ],
+    ],
+    'spc_confirmation' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_spc_preprocess_html(&$variables) {
+  $currency_config = [
+    'currency_code' => \Drupal::config('acq_commerce.currency')->get('currency_code'),
+    'currency_code_position' => \Drupal::config('acq_commerce.currency')->get('currency_code_position'),
+    'decimal_points' => \Drupal::config('acq_commerce.currency')->get('decimal_points'),
+  ];
+
+  $variables['#attached']['drupalSettings']['alshaya_spc']['currency_config'] = $currency_config;
+
+  $product_config = \Drupal::config('alshaya_acm_product.settings');
+  $variables['#attached']['drupalSettings']['alshaya_spc']['vat_text'] = $product_config->get('vat_text');
+  $variables['#attached']['drupalSettings']['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
+  $variables['#attached']['drupalSettings']['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
+  $variables['#attached']['drupalSettings']['alshaya_spc']['max_cart_qty'] = \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty');
+
+  /* @var \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager */
+  $sku_images_manager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+  $variables['#attached']['drupalSettings']['alshaya_spc']['default_image'] = $sku_images_manager->getProductDefaultImageUrl();
+}
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ */
+function alshaya_spc_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+  // Changing text for cart page breadcrumb.
+  if ($route_match->getRouteName() == 'acq_cart.cart') {
+    $breadcrumb_links = $breadcrumb->getLinks();
+    $breadcrumb_links[1]->setText(t('Shopping Bag'));
+  }
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_spc_block_access(Block $block, $operation, AccountInterface $account) {
+  // Page title block should not be accessible on cart page.
+  if ($operation == 'view' && $block->getPluginId() == 'page_title_block') {
+    return AccessResult::forbiddenIf(\Drupal::routeMatch()->getRouteName() == 'acq_cart.cart');
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_spc_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  unset($form['add_to_cart']['#ajax']);
+  $form['#attached']['library'][] = 'alshaya_spc/add_to_cart';
+  $form['#attached']['drupalSettings']['alshaya_spc']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/update-cart';
+}
+
+/**
+ * Get middleware url.
+ *
+ * @return string
+ *   Middleware url.
+ */
+function _alshaya_spc_get_middleware_url() {
+  $host_url = \Drupal::request()->getHost();
+  return 'https://' . $host_url . '/middleware/public';
+}
+
+/**
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
+ */
+function alshaya_spc_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
+  if (!empty($data) && $type == 'light' && !empty(\Drupal::requestStack()->getCurrentRequest()->query->get('context'))) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $data['extra_data'] = [];
+    $image = alshaya_acm_get_product_display_image($sku, 'product_teaser', 'cart');
+    if (!empty($image)) {
+      if ($image['#theme'] == 'image_style') {
+        $data['extra_data']['cart_image'] = [
+          'url' => ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']),
+          'title' => $image['#title'],
+          'alt' => $image['#alt'],
+        ];
+      }
+      elseif ($image['#theme'] == 'image') {
+        $data['extra_data']['cart_image'] = [
+          'url' => $image['#attributes']['src'],
+          'title' => $image['#attributes']['title'],
+          'alt' => $image['#attributes']['alt'],
+        ];
+      }
+    }
+  }
+}
+
+/**
+ * Get the address form fields with the render order.
+ *
+ * @return array
+ *   Address form fields.
+ */
+function _alshaya_spc_get_address_fields() {
+  $fields = [];
+
+  /* @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+  $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
+  $magento_form_fields = $address_book_manager->getMagentoFormFields();
+  $field_mapping = array_flip($address_book_manager->getMagentoFieldMappings());
+  $address_fields = $address_book_manager->getFieldSortOrder();
+
+  foreach ($magento_form_fields as $field) {
+    $key = $field_mapping[$field['attribute_code']] ?? '';
+    if (empty($key)
+      || !isset($address_fields[$key])
+      || $key === 'country_code') {
+      continue;
+    }
+
+    $fields[$key] = [
+      'key' => $field['attribute_code'],
+      'label' => $field['store_label'],
+      'required' => $field['used_for_shipping_rate'] || $field['required'],
+      'order' => (int) $field['sort_order'],
+    ];
+  }
+
+  return $fields;
+}
+
+/**
+ * Get mobile country code.
+ *
+ * @return mixed
+ *   Mobile country code.
+ */
+function _alshaya_spc_get_country_mobile_code() {
+  $country_code = _alshaya_custom_get_site_level_country_code();
+  return \Drupal::service('mobile_number.util')->getCountryCode($country_code);
+}
+
+/**
+ * Get location term.
+ *
+ * @param mixed $location_id
+ *   Location id.
+ *
+ * @return mixed
+ *   Location term.
+ */
+function _alshaya_spc_get_location_term_by_location_id($location_id) {
+  $areas_term_helper = \Drupal::service('alshaya_addressbook.area_terms_helper');
+  return $areas_term_helper->getLocationTermFromLocationId($location_id);
+}
+
+/**
+ * Implements hook_alshaya_social_SOICAL_NETWORK_alter().
+ */
+function alshaya_spc_alshaya_social_social_auth_facebook_alter(&$network, $route_name) {
+  $network['text_link'] = in_array($route_name, ['alshaya_spc.login'])
+    ? t('sign in with Facebook')
+    : t('sign up with Facebook');
+}
+
+/**
+ * Implements hook_alshaya_social_SOICAL_NETWORK_alter().
+ */
+function alshaya_spc_alshaya_social_social_auth_google_alter(&$network, $route_name) {
+  $network['text_link'] = in_array($route_name, ['alshaya_spc.login'])
+    ? t('sign in with Google')
+    : t('sign up with Google');
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function alshaya_spc_user_logout(AccountInterface $account) {
+  $cookies = \Drupal::request()->cookies->all();
+  // Expire the cookie set by middleware on logout, So spc can not fetch
+  // existing cart related info.
+  if (isset($cookies['PHPSESSID'])) {
+    setrawcookie('PHPSESSID', '', REQUEST_TIME - 3600, '/');
+  }
+}

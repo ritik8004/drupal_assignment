@@ -99,6 +99,10 @@ For
 #### React module development.
 Go through the [README file](./docroot/modules/react/README.md) to start with react module development.
 
+### Alshaya SPC Middleware development.
+We have a sub-application symfony based to handle all the API calls.
+Go through the [README file](./docroot/middleware/README.md) to start with SPC middleware development.
+
 ### Running behat tests with headless Chrome locally on MacOS
 This reproduces the travis behavior closely (travis is running selected tests from alshaya_behat folder on daily basis), so use this way if your tests behave differently from travis.
 You **do not** need Java/Selenium/BLT/drupalvm installed for this.

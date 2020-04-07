@@ -68,11 +68,11 @@ class AlshayaGtmManager {
     'system.404' => 'page not found',
     'alshaya_user.user_register_complete' => 'register complete page',
     'acq_cart.cart' => 'cart page',
-    'acq_checkout.form:login' => 'checkout login page',
-    'acq_checkout.form:click_collect' => 'checkout click and collect page',
-    'acq_checkout.form:delivery' => 'checkout delivery page',
+    'alshaya_spc.login' => 'checkout login page',
+    'alshaya_spc.checkout' => 'checkout click and collect page',
+    'alshaya_spc.checkout' => 'checkout delivery page',
     'acq_checkout.form:payment' => 'checkout payment page',
-    'acq_checkout.form:confirmation' => 'purchase confirmation page',
+    'alshaya_spc.checkout.confirmation' => 'purchase confirmation page',
     'view.stores_finder.page_2' => 'store finder',
     'view.stores_finder.page_1' => 'store finder',
     'entity.webform.canonical:alshaya_contact' => 'contact us',
@@ -870,7 +870,12 @@ class AlshayaGtmManager {
 
     $privilege_order = isset($order['extension']['loyalty_card']) ? 'Privilege Customer' : 'Regular Customer';
 
+    $skus = [];
     foreach ($orderItems as $item) {
+      if (in_array($item['sku'], array_keys($skus))) {
+        continue;
+      }
+      $skus[] = $item['sku'];
       $product = $this->fetchSkuAtttributes($item['sku']);
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];
@@ -897,14 +902,12 @@ class AlshayaGtmManager {
       $products[] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
     }
 
-    $shipping_value = $order['totals']['shipping'];
-
     $actionData = [
       'id' => $order['increment_id'],
       'affiliation' => 'Online Store',
       'revenue' => alshaya_master_convert_amount_to_float($order['totals']['grand']),
       'tax' => alshaya_master_convert_amount_to_float($order['totals']['tax']) ?: 0.00,
-      'shipping' => alshaya_master_convert_amount_to_float($shipping_value) ?: 0.00,
+      'shipping' => alshaya_master_convert_amount_to_float($order['totals']['shipping']) ?: 0.00,
       'coupon' => $order['coupon'],
     ];
 
@@ -1155,7 +1158,12 @@ class AlshayaGtmManager {
         $address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['shipping']['address']);
         $deliveryCity = $this->addressBookManager->getAddressShippingAreaParentValue($address, $order['shipping']['address']);
 
+        $skus = [];
         foreach ($orderItems as $orderItem) {
+          if (in_array($orderItem['sku'], array_keys($skus))) {
+            continue;
+          }
+          $skus[] = $orderItem['sku'];
           $productSKU[] = $orderItem['sku'];
           $product_node = $this->skuManager->getDisplayNode($orderItem['sku']);
 

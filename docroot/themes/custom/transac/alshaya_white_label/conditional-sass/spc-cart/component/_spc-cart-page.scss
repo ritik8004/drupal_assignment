@@ -1,0 +1,55 @@
+#spc-cart {
+  @include breakpoint($tablet) {
+    padding-top: 2.5rem;
+  }
+
+  .spc-content {
+    .spc-checkout-section-title {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
+}
+
+.spc-mobile-cart-preview {
+  background-color: $spc-order-summary-totals-bg;
+  padding: 1.25rem 0;
+
+  .cart-text {
+    font-size: 0.875rem;
+    color: $spc-cart-text-color;
+    margin: 0 0.3125rem;
+  }
+
+  .cart-quantity,
+  .cart-value {
+    color: $spc-mobile-cart-preview;
+    font-size: 0.875rem;
+  }
+
+  .cart-value {
+    .price-currency {
+      &.suffix {
+        margin-right: 0.1875rem;
+      }
+    }
+  }
+
+  @include breakpoint($tablet) {
+    display: none;
+  }
+
+  @include breakpoint($only-mobile) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.sticky {
+      position: fixed;
+      width: 100%;
+      z-index: 1;
+      box-shadow: 0 -1px 20px 9px $sticky-btn;
+    }
+  }
+}

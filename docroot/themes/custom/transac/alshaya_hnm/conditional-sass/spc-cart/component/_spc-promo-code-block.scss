@@ -1,0 +1,11 @@
+.spc-promo-code-block {
+  .promo-submit {
+    text-transform: uppercase;
+    font-family: $alshaya-bold;
+    letter-spacing: 1.14px;
+  }
+
+  #promo-code::placeholder {
+    text-transform: capitalize;
+  }
+}

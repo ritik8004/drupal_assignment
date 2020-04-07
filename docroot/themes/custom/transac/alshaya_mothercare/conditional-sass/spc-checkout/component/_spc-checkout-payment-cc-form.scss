@@ -1,0 +1,12 @@
+.payment-method.payment-method-checkout_com,
+.payment-method.payment-method-cybersource {
+  .spc-checkout-card-option {
+    text-transform: lowercase;
+  }
+
+  input {
+    ~ label {
+      text-transform: lowercase;
+    }
+  }
+}

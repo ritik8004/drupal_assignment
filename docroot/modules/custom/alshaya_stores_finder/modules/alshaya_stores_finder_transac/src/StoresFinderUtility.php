@@ -6,19 +6,25 @@ use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class StoresFinderUtility.
  */
 class StoresFinderUtility {
+
+  use StringTranslationTrait;
 
   /**
    * Node storage.
@@ -70,6 +76,20 @@ class StoresFinderUtility {
   protected $cache;
 
   /**
+   * Config Factory service object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Entity Repository service.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * Constructs a new StoresFinderUtility object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -86,14 +106,25 @@ class StoresFinderUtility {
    *   The module handler service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend for cache.data.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
+   *   Entity Repository service.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager,
-                              AlshayaAddressBookManager $address_book_manager,
-                              LanguageManagerInterface $language_manager,
-                              Connection $database,
-                              LoggerChannelFactoryInterface $logger_factory,
-                              ModuleHandlerInterface $module_handler,
-                              CacheBackendInterface $cache) {
+  public function __construct(
+    EntityTypeManagerInterface $entity_type_manager,
+    AlshayaAddressBookManager $address_book_manager,
+    LanguageManagerInterface $language_manager,
+    Connection $database,
+    LoggerChannelFactoryInterface $logger_factory,
+    ModuleHandlerInterface $module_handler,
+    CacheBackendInterface $cache,
+    ConfigFactoryInterface $config_factory,
+    EntityRepositoryInterface $entityRepository
+  ) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->addressBookManager = $address_book_manager;
     $this->languageManager = $language_manager;
@@ -101,6 +132,8 @@ class StoresFinderUtility {
     $this->logger = $logger_factory->get('alshaya_stores_finder');
     $this->moduleHandler = $module_handler;
     $this->cache = $cache;
+    $this->configFactory = $config_factory;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -184,6 +217,21 @@ class StoresFinderUtility {
       $store['address'] = $this->getStoreAddress($store_node);
       $store['phone_number'] = $store_node->get('field_store_phone')->getString();
       $store['open_hours'] = $store_node->get('field_store_open_hours')->getValue();
+      $store['open_hours_group'] = $hours = [];
+      $init_day = '';
+      foreach ($store['open_hours'] as $open_hours) {
+        // Check the hours are present or not. ['value'] contains timings.
+        // ['Key'] contains week day.
+        if (empty($hours[$open_hours['value']])) {
+          $hours[$open_hours['value']] = $open_hours['key'];
+          $init_day = $open_hours['key'];
+        }
+        else {
+          // Prepare text like "Monday - Friday".
+          $hours[$open_hours['value']] = $init_day . ' - ' . $open_hours['key'];
+        }
+      }
+      $store['open_hours_group'] = array_flip($hours);
       $store['delivery_time'] = $store_node->get('field_store_sts_label')->getString();
       $store['nid'] = $store_node->id();
       $store['view_on_map_link'] = Url::fromRoute('alshaya_click_collect.cc_store_map_view', ['node' => $store_node->id()])->toString();
@@ -197,12 +245,130 @@ class StoresFinderUtility {
   }
 
   /**
+   * Get store nodes.
+   *
+   * @param array $store_codes
+   *   The array of store codes.
+   * @param string $langcode
+   *   (Optional) The language code.
+   *
+   * @return array
+   *   Return array of stores.
+   */
+  public function getStoreNodes(array $store_codes, $langcode = NULL) {
+    $cid = 'store_codes:list';
+    // Fetch from cache if available.
+    $cache = $this->cache->get($cid);
+    if (!empty($cache) && !empty($cache->data)) {
+      $db_stores = $cache->data;
+    }
+    else {
+      // Get the nids for given store code with custom query.
+      $query = $this->database->select('node_field_data', 'n');
+      $query->addField('n', 'nid');
+      $query->addField('ns', 'field_store_locator_id_value');
+      $query->innerJoin('node__field_store_locator_id', 'ns', 'n.nid = ns.entity_id and n.langcode = ns.langcode');
+      $query->condition('n.default_langcode', 1);
+      $db_stores = $query->execute()->fetchAllAssoc('nid', \PDO::FETCH_ASSOC);
+      $this->cache->set($cid, $db_stores, CACHE::PERMANENT, ['node_type:store']);
+    }
+
+    return array_filter($db_stores, function ($store) use ($store_codes) {
+      return in_array($store['field_store_locator_id_value'], $store_codes);
+    });
+  }
+
+  /**
+   * Return store extra data info for given store codes.
+   *
+   * @param array $stores
+   *   The array of store from magento api.
+   * @param string $langcode
+   *   (Optional) The language code.
+   *
+   * @return array
+   *   Return array of stores.
+   */
+  public function getMultipleStoresExtraData(array $stores, $langcode = NULL) {
+    $store_codes = array_keys($stores);
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+    }
+
+    $store_nodes = $this->getStoreNodes($store_codes, $langcode);
+    // Load multiple nodes all together.
+    $nids = array_keys($store_nodes);
+
+    $prepared_stores = [];
+    foreach ($nids as $key => $nid) {
+      // Get store data from cache.
+      $cid = 'store_node:' . $langcode . ':' . $nid;
+      if ($cache = $this->cache->get($cid)) {
+        $prepared_stores[$nid] = $cache->data;
+        unset($nids[$key]);
+      }
+    }
+
+    // If no stores need to prepare (all get from cache).
+    if (empty($nids)) {
+      return $prepared_stores;
+    }
+
+    $nodes = $this->nodeStorage->loadMultiple($nids);
+    $config = $this->configFactory->get('alshaya_click_collect.settings');
+    $address = $this->addressBookManager->getAddressStructureWithEmptyValues();
+    // Loop through node and add store address/opening hours/delivery time etc.
+    foreach ($nodes as $nid => $node) {
+      $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+      $prepared_stores[$nid] = $this->getStoreExtraData($store_codes, $node);
+      $store = is_array($stores[$store_nodes[$nid]['field_store_locator_id_value']]) ? $stores[$store_nodes[$nid]['field_store_locator_id_value']] : [];
+      if (!empty($store['rnc_available'])) {
+        $store['delivery_time'] = $config->get('click_collect_rnc');
+      }
+
+      $store['cart_address'] = $address;
+      // V1 - we update only area in address.
+      $store['cart_address']['extension']['address_area_segment'] = $node->get('field_store_area')->getString();
+
+      // V2 - copy address from Store.
+      if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+        $store_address = $node->get('field_address')->getValue();
+
+        if ($store_address) {
+          $store['cart_address'] = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
+        }
+      }
+
+      $prepared_stores[$nid] += $store;
+      // Unset the store for which we found the node, so that we can log the
+      // store codes for which nodes are missing.
+      unset($stores[$store_nodes[$nid]['field_store_locator_id_value']]);
+
+      // Add in cache.
+      $cid = 'store_node:' . $langcode . ':' . $nid;
+      $this->cache->set($cid, $prepared_stores[$nid], Cache::PERMANENT, ['node_type:store']);
+    }
+
+    // Log into Drupal for admins to check missing nodes for the store codes.
+    if (!empty($stores)) {
+      $this->logger->warning('Received a store in Cart Stores API response which is not yet available in Drupal. Store code: %store_code', [
+        '%store_code' => implode(',', array_keys($stores)),
+      ]);
+    }
+
+    return $prepared_stores;
+  }
+
+  /**
    * Function to create/update single store.
    *
    * @param array $store
    *   Store array.
    * @param string $langcode
    *   Language code.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\Core\TypedData\Exception\ReadOnlyException
    */
   public function updateStore(array $store, $langcode) {
     static $user;
