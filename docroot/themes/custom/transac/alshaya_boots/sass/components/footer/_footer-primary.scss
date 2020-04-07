@@ -203,7 +203,7 @@
     border-bottom-#{$right}-radius: 0.125rem;
 
     html[lang=ar] & {
-      padding: 0.8125rem 1.125rem;
+      padding: 0.875rem 1.125rem;
     }
 
     @include breakpoint($only-tablet) {
