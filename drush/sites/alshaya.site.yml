@@ -25,7 +25,6 @@ vm:
   paths:
     drush-script: drush9
 
-
 # Application 'alshaya', environment '01dev2'.
 01dev2:
   root: /var/www/html/alshaya.01dev2/docroot
@@ -40,7 +39,6 @@ vm:
   user: alshaya.01dev2
   paths:
     drush-script: drush9
-
 
 # Application 'alshaya', environment '01dev2up'.
 01dev2up:
@@ -57,7 +55,6 @@ vm:
   paths:
     drush-script: drush9
 
-
 # Application 'alshaya', environment '01dev3'.
 01dev3:
   root: /var/www/html/alshaya.01dev3/docroot
@@ -72,7 +69,6 @@ vm:
   user: alshaya.01dev3
   paths:
     drush-script: drush9
-
 
 # Application 'alshaya', environment '01dev3up'.
 01dev3up:
@@ -89,7 +85,6 @@ vm:
   paths:
     drush-script: drush9
 
-
 # Application 'alshaya', environment '01devup'.
 01devup:
   root: /var/www/html/alshaya.01devup/docroot
@@ -104,7 +99,6 @@ vm:
   user: alshaya.01devup
   paths:
     drush-script: drush9
-
 
 # Application 'alshaya', environment '01live'.
 01live:
@@ -121,7 +115,6 @@ vm:
   paths:
     drush-script: drush9
 
-
 # Application 'alshaya', environment '01pprod'.
 01pprod:
   root: /var/www/html/alshaya.01pprod/docroot
@@ -136,7 +129,6 @@ vm:
   user: alshaya.01pprod
   paths:
     drush-script: drush9
-
 
 # Application 'alshaya', environment '01pprodup'.
 01pprodup:
@@ -153,7 +145,6 @@ vm:
   paths:
     drush-script: drush9
 
-
 # Application 'alshaya', environment '01qa2'.
 01qa2:
   root: /var/www/html/alshaya.01qa2/docroot
@@ -168,7 +159,6 @@ vm:
   user: alshaya.01qa2
   paths:
     drush-script: drush9
-
 
 # Application 'alshaya', environment '01qa2up'.
 01qa2up:
@@ -185,7 +175,6 @@ vm:
   paths:
     drush-script: drush9
 
-
 # Application 'alshaya', environment '01qaup'.
 01qaup:
   root: /var/www/html/alshaya.01qaup/docroot
@@ -201,7 +190,6 @@ vm:
   paths:
     drush-script: drush9
 
-
 # Application 'alshaya', environment '01test'.
 01test:
   root: /var/www/html/alshaya.01test/docroot
@@ -216,7 +204,6 @@ vm:
   user: alshaya.01test
   paths:
     drush-script: drush9
-
 
 # Application 'alshaya', environment '01testup'.
 01testup:
@@ -515,5 +502,245 @@ vm:
     root: /mnt/gfs/alshaya2.02update/livedev/docroot
   host: alshaya202update.ssh.enterprise-g1.acquia-sites.com
   user: alshaya2.02update
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01dev'.
+03dev:
+  root: /var/www/html/alshaya3bis.01dev/docroot
+  ac-site: alshaya3bis
+  ac-env: 01dev
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01dev.enterprise-g1.acquia-sites.com
+  03dev.livedev:
+    parent: '@alshaya.03dev'
+    root: /mnt/gfs/alshaya3bis.01dev/livedev/docroot
+  host: alshaya3bis01dev.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01dev
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01dev2'.
+03dev2:
+  root: /var/www/html/alshaya3bis.01dev2/docroot
+  ac-site: alshaya3bis
+  ac-env: 01dev2
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01dev2.enterprise-g1.acquia-sites.com
+  03dev2.livedev:
+    parent: '@alshaya.03dev2'
+    root: /mnt/gfs/alshaya3bis.01dev2/livedev/docroot
+  host: alshaya3bis01dev2.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01dev2
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01dev2up'.
+03dev2up:
+  root: /var/www/html/alshaya3bis.01dev2up/docroot
+  ac-site: alshaya3bis
+  ac-env: 01dev2up
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01dev2up.enterprise-g1.acquia-sites.com
+  03dev2up.livedev:
+    parent: '@alshaya.03dev2up'
+    root: /mnt/gfs/alshaya3bis.01dev2up/livedev/docroot
+  host: alshaya3bis01dev2up.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01dev2up
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01dev3'.
+03dev3:
+  root: /var/www/html/alshaya3bis.01dev3/docroot
+  ac-site: alshaya3bis
+  ac-env: 01dev3
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01dev3.enterprise-g1.acquia-sites.com
+  03dev3.livedev:
+    parent: '@alshaya.03dev3'
+    root: /mnt/gfs/alshaya3bis.01dev3/livedev/docroot
+  host: alshaya3bis01dev3.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01dev3
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01dev3up'.
+03dev3up:
+  root: /var/www/html/alshaya3bis.01dev3up/docroot
+  ac-site: alshaya3bis
+  ac-env: 01dev3up
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01dev3up.enterprise-g1.acquia-sites.com
+  03dev3up.livedev:
+    parent: '@alshaya.03dev3up'
+    root: /mnt/gfs/alshaya3bis.01dev3up/livedev/docroot
+  host: alshaya3bis01dev3up.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01dev3up
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01devup'.
+03devup:
+  root: /var/www/html/alshaya3bis.01devup/docroot
+  ac-site: alshaya3bis
+  ac-env: 01devup
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01devup.enterprise-g1.acquia-sites.com
+  03devup.livedev:
+    parent: '@alshaya.03devup'
+    root: /mnt/gfs/alshaya3bis.01devup/livedev/docroot
+  host: alshaya3bis01devup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01devup
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01live'.
+03live:
+  root: /var/www/html/alshaya3bis.01live/docroot
+  ac-site: alshaya3bis
+  ac-env: 01live
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01live.enterprise-g1.acquia-sites.com
+  03live.livedev:
+    parent: '@alshaya.03live'
+    root: /mnt/gfs/alshaya3bis.01live/livedev/docroot
+  host: alshaya3bis01live.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01live
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01pprod'.
+03pprod:
+  root: /var/www/html/alshaya3bis.01pprod/docroot
+  ac-site: alshaya3bis
+  ac-env: 01pprod
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01pprod.enterprise-g1.acquia-sites.com
+  03pprod.livedev:
+    parent: '@alshaya.03pprod'
+    root: /mnt/gfs/alshaya3bis.01pprod/livedev/docroot
+  host: alshaya3bis01pprod.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01pprod
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01pprodup'.
+03pprodup:
+  root: /var/www/html/alshaya3bis.01pprodup/docroot
+  ac-site: alshaya3bis
+  ac-env: 01pprodup
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01pprodup.enterprise-g1.acquia-sites.com
+  03pprodup.livedev:
+    parent: '@alshaya.03pprodup'
+    root: /mnt/gfs/alshaya3bis.01pprodup/livedev/docroot
+  host: alshaya3bis01pprodup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01pprodup
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01qa2'.
+03qa2:
+  root: /var/www/html/alshaya3bis.01qa2/docroot
+  ac-site: alshaya3bis
+  ac-env: 01qa2
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01qa2.enterprise-g1.acquia-sites.com
+  03qa2.livedev:
+    parent: '@alshaya.03qa2'
+    root: /mnt/gfs/alshaya3bis.01qa2/livedev/docroot
+  host: alshaya3bis01qa2.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01qa2
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01qa2up'.
+03qa2up:
+  root: /var/www/html/alshaya3bis.01qa2up/docroot
+  ac-site: alshaya3bis
+  ac-env: 01qa2up
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01qa2up.enterprise-g1.acquia-sites.com
+  03qa2up.livedev:
+    parent: '@alshaya.03qa2up'
+    root: /mnt/gfs/alshaya3bis.01qa2up/livedev/docroot
+  host: alshaya3bis01qa2up.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01qa2up
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01test'.
+03test:
+  root: /var/www/html/alshaya3bis.01test/docroot
+  ac-site: alshaya3bis
+  ac-env: 01test
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01test.enterprise-g1.acquia-sites.com
+  03test.livedev:
+    parent: '@alshaya.03test'
+    root: /mnt/gfs/alshaya3bis.01test/livedev/docroot
+  host: alshaya3bis01test.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01test
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01testup'.
+03testup:
+  root: /var/www/html/alshaya3bis.01testup/docroot
+  ac-site: alshaya3bis
+  ac-env: 01testup
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01testup.enterprise-g1.acquia-sites.com
+  03testup.livedev:
+    parent: '@alshaya.03testup'
+    root: /mnt/gfs/alshaya3bis.01testup/livedev/docroot
+  host: alshaya3bis01testup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01testup
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01uat'.
+03uat:
+  root: /var/www/html/alshaya3bis.01uat/docroot
+  ac-site: alshaya3bis
+  ac-env: 01uat
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01uat.enterprise-g1.acquia-sites.com
+  03uat.livedev:
+    parent: '@alshaya.03uat'
+    root: /mnt/gfs/alshaya3bis.01uat/livedev/docroot
+  host: alshaya3bis01uat.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01uat
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01uatup'.
+03uatup:
+  root: /var/www/html/alshaya3bis.01uatup/docroot
+  ac-site: alshaya3bis
+  ac-env: 01uatup
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01uatup.enterprise-g1.acquia-sites.com
+  03uatup.livedev:
+    parent: '@alshaya.03uatup'
+    root: /mnt/gfs/alshaya3bis.01uatup/livedev/docroot
+  host: alshaya3bis01uatup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01uatup
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya3bis', environment '01update'.
+03update:
+  root: /var/www/html/alshaya3bis.01update/docroot
+  ac-site: alshaya3bis
+  ac-env: 01update
+  ac-realm: enterprise-g1
+  uri: alshaya3bis01update.enterprise-g1.acquia-sites.com
+  03update.livedev:
+    parent: '@alshaya.03update'
+    root: /mnt/gfs/alshaya3bis.01update/livedev/docroot
+  host: alshaya3bis01update.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya3bis.01update
   paths:
     drush-script: drush9
