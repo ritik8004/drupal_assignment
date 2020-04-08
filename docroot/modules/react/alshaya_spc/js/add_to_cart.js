@@ -84,6 +84,7 @@
             var productData = {
               quantity: quantity,
               parentSku: page_main_sku,
+              variant: variant_sku,
               product_name: is_configurable ? settings[productKey][page_main_sku].variants[variant_sku].cart_title : settings.productInfo[page_main_sku].cart_title,
               image: is_configurable ? settings[productKey][page_main_sku].variants[variant_sku].cart_image : settings.productInfo[page_main_sku].cart_image,
             };
@@ -111,6 +112,9 @@
                   $(form).trigger('product-add-to-cart-failed', productData);
                 }
                 else if (response.cart_id) {
+                  var cartItem = typeof response.items[productData.variant] !== 'undefined' ? response.items[productData.variant] : response.cart.items[productData.parentSku];
+                  productData.quantity = cartItem.qty;
+
                   // Clean error message.
                   $('.error-container-' + cleaned_sku).html('');
 
@@ -118,7 +122,7 @@
                   $(form).trigger('product-add-to-cart-success', productData);
 
                   // Triggering event to notify react component.
-                  var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => response }});
+                  var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => response, productData }});
                   document.dispatchEvent(event);
 
                   var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => response }});
