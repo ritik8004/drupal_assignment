@@ -103,8 +103,12 @@
                   $(form).trigger('product-add-to-cart-failed', [productData, response]);
                 }
                 else if (response.cart_id) {
-                  var cartItem = typeof response.items[productData.variant] !== 'undefined' ? response.items[productData.variant] : response.cart.items[productData.parentSku];
-                  productData.quantity = cartItem.qty;
+                  if (response.response_message.status === 'success'
+                    && (typeof response.items[productData.variant] !== 'undefined'
+                      || typeof response.items[productData.parentSku] !== 'undefined')) {
+                    var cartItem = typeof response.items[productData.variant] !== 'undefined' ? response.items[productData.variant] : response.items[productData.parentSku];
+                    productData.totalQty = cartItem.qty;
+                  }
 
                   // Clean error message.
                   $('.error-container-' + cleaned_sku).html('');

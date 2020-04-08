@@ -231,16 +231,20 @@
   // triggers restore-cart call or user log in after coming to pdp page. pdp
   // page should get updated to disable add to cart or show any qty related msg.
   document.addEventListener('cartMiscCheck',function (e) {
+    if (drupalSettings.quantity_limit_enabled === false) {
+      return;
+    }
+
     if (e.detail.productData !== undefined) {
       Drupal.disableLimitExceededProducts(
         e.detail.productData.parentSku,
         e.detail.productData.variant,
-        e.detail.productData.quantity,
-        e.detail.data()
+        e.detail.productData.totalQty,
+        e.detail.data,
       );
     }
     else {
-      $.each( e.detail.items, function(sku_key, cart_item) {
+      $.each(e.detail.items, function(sku_key, cart_item) {
         Drupal.disableLimitExceededProducts(
           cart_item.parent_sku,
           cart_item.sku,
