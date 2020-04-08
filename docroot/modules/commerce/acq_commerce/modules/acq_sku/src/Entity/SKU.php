@@ -131,6 +131,31 @@ class SKU extends ContentEntityBase implements SKUInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function label() {
+    $label = parent::label();
+    if (!empty($label)) {
+      return $label;
+    }
+    else {
+      if ($this->bundle() == 'simple') {
+        // Get label from parent if child does not have label.
+        $plugin = $this->getPluginInstance();
+        $parent_sku = $plugin->getParentSku($this);  
+        if (!empty($parent_sku)) {
+          $label = $parent_sku->label();
+          return $label;
+        }
+      }
+      else {
+        return '';
+      }
+    }
+    return '';
+  }
+
+  /**
    * Function to return media files for a SKU.
    *
    * @param bool $download_media

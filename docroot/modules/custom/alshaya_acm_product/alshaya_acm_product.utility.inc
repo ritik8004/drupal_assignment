@@ -159,14 +159,6 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
   $image = [];
 
   $sku_label = $sku->label();
-  // Check if sku label is empty.
-  if (empty($sku_label)) {
-    $parent_sku = $skuManager->getParentSkuBySku($sku);
-    if (!empty($parent_sku)) {
-      // Get sku label from parent in case child label is blank.
-      $sku_label = $parent_sku->label();
-    }
-  }
 
   // If we have image for the product.
   if (!empty($media_image)) {
