@@ -10,9 +10,13 @@ export default class CartQuantitySelect extends React.Component {
   }
 
   prepareOptions = (stock, qty, maxLimit) => {
-    const cartMaxQty = maxLimit !== null
-      ? maxLimit
-      : window.drupalSettings.alshaya_spc.max_cart_qty;
+    let cartMaxQty = window.drupalSettings.alshaya_spc.max_cart_qty;
+    if (maxLimit != null) {
+      cartMaxQty = (maxLimit < stock) ? maxLimit : stock;
+    }
+    // We display dropdown with selected quantity to avoid confusions.
+    cartMaxQty = (qty > cartMaxQty) ? qty : cartMaxQty;
+
     const data = [];
     for (let i = 1; i <= cartMaxQty; i++) {
       data[i] = {
