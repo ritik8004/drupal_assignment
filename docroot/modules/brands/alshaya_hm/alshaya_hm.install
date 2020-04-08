@@ -80,7 +80,7 @@ function alshaya_hm_update_8046() {
     ],
     'Measurments in cm' => [
       'en' => 'Measurments in cm',
-      'ar' => 'القياسات بالسنتيمتر',
+      'ar' => 'المقاسات في سم',
     ],
     'Textual Print' => [
       'en' => 'Textual Print',
@@ -93,6 +93,10 @@ function alshaya_hm_update_8046() {
     'Lisence Item' => [
       'en' => 'Lisence Item',
       'ar' => 'ترخيص المنتج',
+    ],
+    'DETAILS' => [
+      'en' => 'DETAILS',
+      'ar' => 'تفاصيل',
     ],
   ];
 
@@ -1012,7 +1016,7 @@ function alshaya_hm_install() {
     ],
     'Measurments in cm' => [
       'en' => 'Measurments in cm',
-      'ar' => 'القياسات بالسنتيمتر',
+      'ar' => 'المقاسات في سم',
     ],
     'Textual Print' => [
       'en' => 'Textual Print',
@@ -1025,6 +1029,10 @@ function alshaya_hm_install() {
     'Lisence Item' => [
       'en' => 'Lisence Item',
       'ar' => 'ترخيص المنتج',
+    ],
+    'DETAILS' => [
+      'en' => 'DETAILS',
+      'ar' => 'تفاصيل',
     ],
   ];
 
