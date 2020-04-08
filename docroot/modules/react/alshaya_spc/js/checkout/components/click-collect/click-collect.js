@@ -170,11 +170,11 @@ class ClickCollect extends React.Component {
           this.fetchAvailableStores({
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
-          });
+          }, true);
         },
         () => {
           this.nearMeBtn.classList.remove('active');
-          this.fetchAvailableStores(getDefaultMapCenter());
+          this.fetchAvailableStores(getDefaultMapCenter(), false);
         },
       )
       .catch((error) => {
@@ -186,7 +186,7 @@ class ClickCollect extends React.Component {
   /**
    * Fetch available stores for given lat and lng.
    */
-  fetchAvailableStores = (coords) => {
+  fetchAvailableStores = (coords, locationAccess = null) => {
     const { updateCoordsAndStoreList } = this.context;
     showFullScreenLoader();
     // Create fetcher object to fetch stores.
@@ -197,7 +197,7 @@ class ClickCollect extends React.Component {
       .then((response) => {
         this.selectStoreButtonVisibility(false);
         if (typeof response.error === 'undefined') {
-          updateCoordsAndStoreList(coords, response.data);
+          updateCoordsAndStoreList(coords, response.data, locationAccess);
           this.showOpenMarker(response);
         } else {
           updateCoordsAndStoreList(coords, []);
@@ -399,6 +399,8 @@ class ClickCollect extends React.Component {
       coords,
       storeList,
       selectedStore,
+      locationAccess,
+      updateLocationAccess,
     } = this.context;
 
     const {
@@ -432,9 +434,13 @@ class ClickCollect extends React.Component {
             <a className="close" onClick={closeModal}>
               &times;
             </a>
-            <CheckoutMessage type="warning" context="click-n-collect-store-modal modal">
-              {Drupal.t('Access to your location acces has been denied by your browser. You can reenable location services in your browser settings.')}
-            </CheckoutMessage>
+            {locationAccess === false
+              && (
+                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal">
+                  {Drupal.t('Access to your location acces has been denied by your browser. You can reenable location services in your browser settings.')}
+                  <a href="#" onClick={() => updateLocationAccess(true)}>Dismiss</a>
+                </CheckoutMessage>
+              )}
             <div className="spc-cnc-address-form-wrapper">
               <div className="spc-cnc-address-form-content">
                 <SectionTitle>
