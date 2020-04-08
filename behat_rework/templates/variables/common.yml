@@ -13,3 +13,4 @@ variables:
   spc_Knet_month: "9"
   spc_Knet_year: "2021"
   spc_Knet_pin: "1234"
+  spc_full_name: 'Prachi Nagpal'
