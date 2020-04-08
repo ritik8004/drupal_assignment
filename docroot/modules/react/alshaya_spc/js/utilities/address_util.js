@@ -398,11 +398,6 @@ export const getAreasList = (isParent, parentId) => {
 
     // Sort list by label.
     areasList.sort((a, b) => ((a.label > b.label) ? 1 : -1));
-    const tmpList = [];
-    for (let j = 0; j < Object.keys(areasList).length; j++) {
-      tmpList[areasList[j].value] = areasList[j];
-    }
-    return tmpList;
   }
 
   return areasList;

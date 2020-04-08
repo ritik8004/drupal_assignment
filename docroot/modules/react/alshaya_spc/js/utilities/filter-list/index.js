@@ -79,7 +79,7 @@ export default class FilterList extends React.Component {
                 key={item.value}
                 value={item.value}
                 className={
-                    ((selected !== undefined && selected.value === item.value))
+                    ((selected !== undefined && String(selected) === String(item.value)))
                       ? 'active' : 'in-active'
             }
               >
