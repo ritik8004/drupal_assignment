@@ -2,6 +2,7 @@ import React from 'react';
 
 import Select from 'react-select';
 import { updateCartItemData } from '../../../utilities/update_cart';
+import dispatchCustomEvent from '../../../utilities/events';
 
 export default class CartQuantitySelect extends React.Component {
   constructor(props) {
@@ -43,17 +44,20 @@ export default class CartQuantitySelect extends React.Component {
     const cartData = updateCartItemData('update item', sku, selectedOption.value);
     if (cartData instanceof Promise) {
       cartData.then((result) => {
-        let resultVal = result;
+        const resultVal = result;
         this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.remove('loading');
+        let messageInfo = null;
         // If error.
         if (resultVal.error !== undefined
           && resultVal.error === true) {
-          resultVal = {
-            error: true,
-            message: {
-              type: 'error',
-              message: resultVal.error_message,
-            },
+          messageInfo = {
+            type: 'error',
+            message: resultVal.error_message,
+          };
+        } else {
+          messageInfo = {
+            type: 'success',
+            message: Drupal.t('Your bag has been updated successfully.'),
           };
         }
         const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => resultVal } });
@@ -61,6 +65,11 @@ export default class CartQuantitySelect extends React.Component {
 
         const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => resultVal } });
         document.dispatchEvent(refreshCartEvent);
+
+        // Trigger message.
+        if (messageInfo !== null) {
+          dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
+        }
       });
     }
   };

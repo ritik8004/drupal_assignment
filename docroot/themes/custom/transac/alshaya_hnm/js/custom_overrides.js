@@ -17,8 +17,8 @@
         markup += '</div>';
         markup += '<div class="col-2">';
         markup += '<span class="name">' + data.name + '</span>';
-        markup += '<span class="qty-label">' + data.quantity + '</span>';
-        markup += '<span class="qty">' + Drupal.t('quantity') + '</span>';
+        markup += '<span class="qty-label">' + Drupal.t('Qty:') + '</span>';
+        markup += '<span class="qty">' + data.quantity + '</span>';
         markup += '<span class="sub-text">' + Drupal.t('has been added to your cart.') + '</span>';
         markup += '<a href="' + data.link + '">' + data.link_text + '</a>';
         markup += '</div>';

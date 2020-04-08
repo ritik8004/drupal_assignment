@@ -1784,9 +1784,17 @@ class FeatureContext extends CustomMinkContext
   public function iShouldSeeThePriceDoubled()
   {
     $page = $this->getSession()->getPage();
-    $original_price = $page->find('css', '#spc-cart .spc-main .spc-content .spc-cart-item .spc-product-tile .spc-product-container .spc-product-price .price-amount')->getHtml();
-    $original_price = floatval($original_price);
-    $double_price = floatval($original_price) * 2;
+
+    if ($page->find('css', '#block-content #spc-cart .spc-cart-item .spc-product-price .has--special--price')) {
+      $product_price = $page->find('css', '#block-content #spc-cart .spc-cart-item .spc-product-price .special--price .price .price-amount')->getHtml();
+      $double_price = floatval($product_price) * 2;
+    }
+    else {
+      $original_price = $page->find('css', '#spc-cart .spc-main .spc-content .spc-cart-item .spc-product-tile .spc-product-container .spc-product-price .price-amount')
+        ->getHtml();
+      $original_price = floatval($original_price);
+      $double_price = floatval($original_price) * 2;
+    }
 
     if ($page->find('css', '.spc-sidebar .spc-order-summary-block .totals .discount-total')) {
       $discount_parent = $page->find('css', '.spc-sidebar .spc-order-summary-block .totals .discount-total')->getParent();
@@ -1914,7 +1922,7 @@ class FeatureContext extends CustomMinkContext
     foreach ($fields->getRowsHash() as $field => $value) {
       if ($value) {
         if ($field == "spc-area-select-selected-city" || $field == "spc-area-select-selected") {
-          $this->iClickJqueryElementOnPage(".spc-address-form-guest-overlay .spc-address-form-content .spc-address-add .delivery-address-fields #$field");
+          $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
           $this->iWaitSeconds(5);
           $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
           $this->iWaitSeconds(3);
@@ -1924,5 +1932,95 @@ class FeatureContext extends CustomMinkContext
         }
       }
     }
+  }
+
+
+  /**
+   * @When /^I select "([^"]*)" from the dropdown "([^"]*)"$/
+   */
+  public function iSelectTheValueFromTheDropdown($value, $dropdown)
+  {
+    if (!empty($value)) {
+      $driver = $this->getSession()->getDriver();
+      $page = $this->getSession()->getPage();
+
+      $highlightedClass    = '.select2-results__option--highlighted';
+      $highlightedSelector = '.select2-results__options ' . $highlightedClass;
+      $selectableSelector  = '.select2-results__options .select2-results__option';
+      $searchSelector      = '.select2-container.select2-container--open .select2-search__field';
+      $page->find('css', '.select2-selection__arrow')->click();
+
+      $element = $page->find('css', $searchSelector);
+      if ($element) {
+        $element->setValue($value);
+        $this->iWaitSeconds(2);
+        $xpath = $element->getXpath();
+      } else {
+        echo 'Element not found';
+      }
+      $prefix = str_replace('\\"', '"', $value);
+      $chars = str_split($prefix);
+      $last_char = array_pop($chars);
+      // autocomplete.js uses key down/up events directly.
+      $driver->keyDown($xpath, 8);
+      $driver->keyUp($xpath, 8);
+      $driver->keyDown($xpath, $last_char);
+      $driver->keyUp($xpath, $last_char);
+      // Wait for AJAX to finish.
+      $this->getSession()
+        ->wait(10000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+      // Press the down arrow to select the first option.
+      $driver->keyDown($xpath, 40);
+      $driver->keyUp($xpath, 40);
+      // Press the Enter key to confirm selection, copying the value into the field.
+      $driver->keyDown($xpath, 13);
+      $driver->keyUp($xpath, 13);
+      // Wait for AJAX to finish.
+      $this->getSession()
+        ->wait(10000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    }
+  }
+
+  /**
+   * Fills in Select2 field with specified and wait for results
+   *
+   * @When I fill in select2 input :field with the :value and wait :time seconds until results are loaded
+   * @When I fill in select2 :field with :value and wait :time seconds until results are loaded
+   * @When I fill in select2 :value for :field and wait :time seconds until results are loaded
+   */
+  public function fillInSelectInputWithAndSelect1($field, $value, $time)
+  {
+    $page = $this->getSession()->getPage();
+
+    $inputField = $page->findField($field);
+
+    if (!$inputField) {
+      throw new \Exception('No field found');
+    }
+
+    $choice = $inputField->getParent()->find('css', '.select2-selection');
+    if (!$choice) {
+      throw new \Exception('No select2 choice found');
+    }
+
+    $choice->press();
+
+    $select2Input = $choice->find('css', '.select2-search__field');
+    if (!$select2Input) {
+      throw new \Exception('No input found');
+    }
+
+    $select2Input->setValue($value);
+
+    $this->getSession()->wait($time * 1000);
+
+    $chosenResults = $page->findAll('css', '.select2-results li');
+    foreach ($chosenResults as $result) {
+      if ($result->getText() == $value) {
+        $result->click();
+        break;
+      }
+    }
+    $this->getSession()->wait(1000);
   }
 }

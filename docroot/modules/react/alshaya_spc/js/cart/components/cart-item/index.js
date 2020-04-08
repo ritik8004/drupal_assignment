@@ -9,6 +9,7 @@ import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CartQuantitySelect from '../cart-quantity-select';
 import { updateCartItemData } from '../../../utilities/update_cart';
 import SpecialPrice from '../../../utilities/special-price';
+import dispatchCustomEvent from '../../../utilities/events';
 import Notifications from './components/Notifications';
 import QtyLimit from '../qty-limit';
 
@@ -61,13 +62,14 @@ export default class CartItem extends React.Component {
         const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartResult } });
         document.dispatchEvent(eventMiniCart);
 
+        let messageInfo = null;
         if (cartResult.error !== undefined) {
-          cartResult.message = {
+          messageInfo = {
             type: 'error',
             message: cartResult.error_message,
           };
         } else {
-          cartResult.message = {
+          messageInfo = {
             type: 'success',
             message: Drupal.t('The product has been removed from your cart.'),
           };
@@ -76,6 +78,11 @@ export default class CartItem extends React.Component {
         // Refreshing cart components.
         const eventCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => cartResult } });
         document.dispatchEvent(eventCart);
+
+        // Trigger message.
+        if (messageInfo !== null) {
+          dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
+        }
       });
     }
   };
@@ -101,6 +108,10 @@ export default class CartItem extends React.Component {
     } = this.props;
 
     const { isItemError, errorMessage } = this.state;
+    let OOSClass = '';
+    if (inStock !== true) {
+      OOSClass = 'error';
+    }
 
     return (
       <div className="spc-cart-item">
@@ -127,7 +138,7 @@ export default class CartItem extends React.Component {
             </div>
           </div>
           <div className="spc-product-tile-actions">
-            <button title={Drupal.t('remove this item')} type="button" id={`remove-item-${id}`} className="spc-remove-btn" onClick={() => { this.removeCartItem(sku, 'remove item', id); }}>{Drupal.t('remove')}</button>
+            <button title={Drupal.t('remove this item')} type="button" id={`remove-item-${id}`} className={`spc-remove-btn ${OOSClass}`} onClick={() => { this.removeCartItem(sku, 'remove item', id); }}>{Drupal.t('remove')}</button>
             <div className="qty">
               <div className="qty-loader-placeholder" />
               <CartQuantitySelect
