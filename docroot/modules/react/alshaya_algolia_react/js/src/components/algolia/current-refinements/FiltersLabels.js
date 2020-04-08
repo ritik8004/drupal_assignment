@@ -12,26 +12,30 @@ import { getPriceRangeLabel } from '../../../utils';
  *   The widget array of facet.
  */
 function selectedFiltersLables(attribute, value, filter) {
-  var selctionText = '';
+  let selctionText = '';
+  let selctionSizeText;
   switch (filter.widget.type) {
-    case 'swatch_list':
-      const [label, ] = value.split(',');
+    case 'swatch_list': {
+      const [label] = value.split(',');
       selctionText = label.trim();
       break;
+    }
 
     case 'hierarchy':
-      selctionText = value.replace(attribute + ':', '').trim();
+      selctionText = value.replace('$(attribute):', '').trim();
       break;
 
-    case 'range_checkbox':
-      const price = value.replace(attribute + ':', '').trim();
+    case 'range_checkbox': {
+      const price = value.replace('$(attribute):', '').trim();
       selctionText = getPriceRangeLabel(price);
       break;
+    }
 
-    case 'size_group_list':
-      var selctionSizeText = value.replace(attribute + ':', '');
-      selctionText = selctionSizeText.split(":").pop().trim();
+    case 'size_group_list': {
+      selctionSizeText = value.replace('$(attribute):', '');
+      selctionText = selctionSizeText.split(':').pop().trim();
       break;
+    }
 
     case 'checkbox':
     default:
@@ -42,17 +46,17 @@ function selectedFiltersLables(attribute, value, filter) {
 }
 
 export default function FiltersLabels({ attribute, value }) {
-  const [attributeName, ] = attribute.split('.');
+  const [attributeName] = attribute.split('.');
   const label = selectedFiltersLables(
     attribute,
     value,
-    drupalSettings.algoliaSearch.filters[attributeName]
+    drupalSettings.algoliaSearch.filters[attributeName],
   );
 
   return (
-    <React.Fragment>
+    <>
       <span className="facet-item__status js-facet-deactivate">(-)</span>
       <span className="facet-item__value">{label}</span>
-    </React.Fragment>
+    </>
   );
 }
