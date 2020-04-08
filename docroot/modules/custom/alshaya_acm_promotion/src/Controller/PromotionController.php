@@ -424,7 +424,7 @@ class PromotionController extends ControllerBase {
 
       if (!empty($promotion_data)) {
         $cartLabels['next_eligible'] = [
-          'rule_id' => $rule_id,
+          'rule_id' => (int) $rule_id,
           'type' => $promotion_data['type'],
           'label' => $promotion_data['label'],
           'threshold_reached' => !empty($promotion_data['threshold_reached']),
