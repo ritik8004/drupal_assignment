@@ -9,6 +9,7 @@ import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CartQuantitySelect from '../cart-quantity-select';
 import { updateCartItemData } from '../../../utilities/update_cart';
 import SpecialPrice from '../../../utilities/special-price';
+import dispatchCustomEvent from '../../../utilities/events';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -59,13 +60,14 @@ export default class CartItem extends React.Component {
         const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartResult } });
         document.dispatchEvent(eventMiniCart);
 
+        let messageInfo = null;
         if (cartResult.error !== undefined) {
-          cartResult.message = {
+          messageInfo = {
             type: 'error',
             message: cartResult.error_message,
           };
         } else {
-          cartResult.message = {
+          messageInfo = {
             type: 'success',
             message: Drupal.t('The product has been removed from your cart.'),
           };
@@ -74,6 +76,11 @@ export default class CartItem extends React.Component {
         // Refreshing cart components.
         const eventCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => cartResult } });
         document.dispatchEvent(eventCart);
+
+        // Trigger message.
+        if (messageInfo !== null) {
+          dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
+        }
       });
     }
   };

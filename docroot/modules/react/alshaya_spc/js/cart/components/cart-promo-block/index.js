@@ -2,6 +2,7 @@ import React from 'react';
 
 import { applyRemovePromo } from '../../../utilities/update_cart';
 import SectionTitle from '../../../utilities/section-title';
+import dispatchCustomEvent from '../../../utilities/events';
 
 export default class CartPromoBlock extends React.Component {
   constructor(props) {
@@ -41,6 +42,8 @@ export default class CartPromoBlock extends React.Component {
     document.getElementById('promo-message').innerHTML = errorMessage;
     document.getElementById('promo-message').classList.add('error');
     document.getElementById('promo-code').classList.add('error');
+    // Trigger cart update to remove any message on cart.
+    dispatchCustomEvent('spcCartMessageUpdate', {});
   }
 
   promoAction = (promoApplied, inStock) => {
@@ -112,6 +115,9 @@ export default class CartPromoBlock extends React.Component {
           const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
           document.dispatchEvent(refreshCartEvent);
         }
+
+        // Trigger cart update to remove any message on cart.
+        dispatchCustomEvent('spcCartMessageUpdate', {});
       });
     }
   };

@@ -95,9 +95,11 @@ export default class Cart extends React.Component {
     this.updateCartMessage(type, message);
   };
 
-  updateCartMessage = (messageType, message) => {
-    this.setState({ messageType, message });
-    smoothScrollTo('.spc-messages-container');
+  updateCartMessage = (actionMessageType, actionMessage) => {
+    this.setState({ actionMessageType, actionMessage });
+    if (document.getElementsByClassName('spc-messages-container').length > 0) {
+      smoothScrollTo('.spc-messages-container');
+    }
   };
 
   render() {
@@ -106,12 +108,14 @@ export default class Cart extends React.Component {
       items,
       recommendedProducts,
       messageType,
+      message,
       totalItems,
       totals,
       couponCode,
       inStock,
       cartPromo,
-      message,
+      actionMessageType,
+      actionMessage,
     } = this.state;
 
     if (wait) {
@@ -131,8 +135,13 @@ export default class Cart extends React.Component {
     return (
       <>
         <div className="spc-pre-content">
+          {/* This will be used for global error message. */}
           <CheckoutMessage type={messageType} context="page-level-cart">
             {message}
+          </CheckoutMessage>
+          {/* This will be used for any action/event on basket page. */}
+          <CheckoutMessage type={actionMessageType} context="page-level-cart-action">
+            {actionMessage}
           </CheckoutMessage>
           <MobileCartPreview total_items={totalItems} totals={totals} />
         </div>
