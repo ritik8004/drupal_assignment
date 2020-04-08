@@ -139,6 +139,12 @@ class CartSessionStorage implements CartStorageInterface {
         $cart = $this->updateCart($create_new);
       }
       catch (\Exception $e) {
+        if ($create_new) {
+          $this->logger->warning('Failed to create new cart, message: @message', [
+            '@message' => $e->getMessage(),
+          ]);
+        }
+
         // Intentionally suppressing the error here. This will happen when there
         // is no cart and still updateCart is called.
       }
@@ -177,6 +183,8 @@ class CartSessionStorage implements CartStorageInterface {
         // Simply return null if request was to update existing cart only.
         return NULL;
       }
+
+      $this->logger->warning('Failed to create new cart, returning API down exception to user.');
 
       // Throw exception if request was to create if not exists.
       throw new \Exception(acq_commerce_api_down_global_error_message());
