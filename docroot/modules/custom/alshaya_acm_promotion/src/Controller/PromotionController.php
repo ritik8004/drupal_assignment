@@ -397,7 +397,8 @@ class PromotionController extends ControllerBase {
 
     $productLabels = [];
     foreach ($cart->getItems() as $item) {
-      $productLabels['sku'] = $this->promoLabelManager->getSkuPromoDynamicLabel($cart, $item['entity']);
+      $productLabels[$item['sku']]['sku'] = $item['sku'];
+      $productLabels[$item['sku']]['labels'] = $this->promoLabelManager->getCurrentSkuPromos($cart, $item['entity'], 'api');
     }
 
     $cartLabels = [

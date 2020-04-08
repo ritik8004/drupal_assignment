@@ -288,6 +288,13 @@ class AlshayaPromoLabelManager {
 
     if (!empty($promotionLabel)) {
       switch ($view_mode) {
+        case 'api':
+          $promoDisplay = [];
+          $promoDisplay['link'] = $promotion->toUrl()->setAbsolute(TRUE)->toString(TRUE)->getGeneratedUrl();
+          $promoDisplay['promotion_nid'] = $promotion->id();
+          $promoDisplay['label'] = $promotionLabel['dynamic_label'];
+          break;
+
         case 'links':
           // In case of links just send dynamic label.
           try {
