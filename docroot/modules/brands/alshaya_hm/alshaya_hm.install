@@ -14,6 +14,94 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Translations for additional attributes.
+ */
+function alshaya_hm_update_8046() {
+  $strings = [
+    'TITLE NAME' => [
+      'en' => 'TITLE NAME',
+      'ar' => 'اسم المنتج',
+    ],
+    'ARTICLE DESCRIPTION' => [
+      'en' => 'ARTICLE DESCRIPTION',
+      'ar' => 'وصف المقال',
+    ],
+    'Function' => [
+      'en' => 'Function',
+      'ar' => 'الوظيفة',
+    ],
+    'Age Group' => [
+      'en' => 'Age Group',
+      'ar' => 'الفئة العمرية',
+    ],
+    'Style' => [
+      'en' => 'Style',
+      'ar' => 'التصميم',
+    ],
+    'Clothing Style' => [
+      'en' => 'Clothing Style',
+      'ar' => 'تصميم الملابس',
+    ],
+    'Collar Style' => [
+      'en' => 'Collar Style',
+      'ar' => 'تصميم الياقة',
+    ],
+    'Neckline Style' => [
+      'en' => 'Neckline Style',
+      'ar' => 'تصميم القبة',
+    ],
+    'Accessories Style' => [
+      'en' => 'Accessories Style',
+      'ar' => 'تصميم الإكسسوارات',
+    ],
+    'Footwear Style' => [
+      'en' => 'Footwear Style',
+      'ar' => 'تصميم الحذاء',
+    ],
+    'Descriptive Length' => [
+      'en' => 'Descriptive Length',
+      'ar' => 'الطول الوصفي',
+    ],
+    'Garment Length' => [
+      'en' => 'Garment Length',
+      'ar' => 'طول الملابس',
+    ],
+    'Sleeve Length' => [
+      'en' => 'Sleeve Length',
+      'ar' => 'طول الأكمام',
+    ],
+    'Waist Rise' => [
+      'en' => 'Waist Rise',
+      'ar' => 'ارتفاع الخصر',
+    ],
+    'Heel Height' => [
+      'en' => 'Heel Height',
+      'ar' => 'ارتفاع الكعب',
+    ],
+    'Measurments in cm' => [
+      'en' => 'Measurments in cm',
+      'ar' => 'القياسات بالسنتيمتر',
+    ],
+    'Textual Print' => [
+      'en' => 'Textual Print',
+      'ar' => 'الطبعات',
+    ],
+    'License Company' => [
+      'en' => 'License Company',
+      'ar' => 'ترخيص الشركة',
+    ],
+    'Lisence Item' => [
+      'en' => 'Lisence Item',
+      'ar' => 'ترخيص المنتج',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new fields and index them.
  */
 function alshaya_hm_update_8045() {
@@ -861,6 +949,82 @@ function alshaya_hm_install() {
     'ART NO' => [
       'en' => 'Art. no.',
       'ar' => 'فن. لا.',
+    ],
+    'TITLE NAME' => [
+      'en' => 'TITLE NAME',
+      'ar' => 'اسم المنتج',
+    ],
+    'ARTICLE DESCRIPTION' => [
+      'en' => 'ARTICLE DESCRIPTION',
+      'ar' => 'وصف المقال',
+    ],
+    'Function' => [
+      'en' => 'Function',
+      'ar' => 'الوظيفة',
+    ],
+    'Age Group' => [
+      'en' => 'Age Group',
+      'ar' => 'الفئة العمرية',
+    ],
+    'Style' => [
+      'en' => 'Style',
+      'ar' => 'التصميم',
+    ],
+    'Clothing Style' => [
+      'en' => 'Clothing Style',
+      'ar' => 'تصميم الملابس',
+    ],
+    'Collar Style' => [
+      'en' => 'Collar Style',
+      'ar' => 'تصميم الياقة',
+    ],
+    'Neckline Style' => [
+      'en' => 'Neckline Style',
+      'ar' => 'تصميم القبة',
+    ],
+    'Accessories Style' => [
+      'en' => 'Accessories Style',
+      'ar' => 'تصميم الإكسسوارات',
+    ],
+    'Footwear Style' => [
+      'en' => 'Footwear Style',
+      'ar' => 'تصميم الحذاء',
+    ],
+    'Descriptive Length' => [
+      'en' => 'Descriptive Length',
+      'ar' => 'الطول الوصفي',
+    ],
+    'Garment Length' => [
+      'en' => 'Garment Length',
+      'ar' => 'طول الملابس',
+    ],
+    'Sleeve Length' => [
+      'en' => 'Sleeve Length',
+      'ar' => 'طول الأكمام',
+    ],
+    'Waist Rise' => [
+      'en' => 'Waist Rise',
+      'ar' => 'ارتفاع الخصر',
+    ],
+    'Heel Height' => [
+      'en' => 'Heel Height',
+      'ar' => 'ارتفاع الكعب',
+    ],
+    'Measurments in cm' => [
+      'en' => 'Measurments in cm',
+      'ar' => 'القياسات بالسنتيمتر',
+    ],
+    'Textual Print' => [
+      'en' => 'Textual Print',
+      'ar' => 'الطبعات',
+    ],
+    'License Company' => [
+      'en' => 'License Company',
+      'ar' => 'ترخيص الشركة',
+    ],
+    'Lisence Item' => [
+      'en' => 'Lisence Item',
+      'ar' => 'ترخيص المنتج',
     ],
   ];
 
