@@ -2,42 +2,43 @@ import React from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
 
 // Creating size grouping filter.
-const SizeGroupFilter = ({ items, refine, ...props }) => {
-
-  if (typeof props.itemCount != 'undefined') {
-    props.itemCount(props.attribute, items.length);
+const SizeGroupFilter = ({items, refine, itemCount, attribute, ...props}) => {
+  if (typeof itemCount != 'undefined') {
+    itemCount(attribute, items.length);
   }
 
   // Preparing sizes according to their groups.
-  var groupedItems = [];
-  for (var i in items) {
-    var item = items[i].label.split(':');
-    if (groupedItems[item[0]] === undefined) {
-      groupedItems[item[0]] = [];
+  const groupedItems = [];
+  Object.values(items).forEach((item) => {
+    const data = item.label.split(':');
+    if (groupedItems[data[0]] === undefined) {
+      groupedItems[data[0]] = [];
     }
-    groupedItems[item[0]].push(items[i]);
-  }
+
+    groupedItems[data[0]].push(item);
+  });
 
   return (
     <ul>
-      {Object.entries(groupedItems).map((item, group) => {
+      {Object.keys(groupedItems).map((group) => {
         return (
           <li key={group}>
             <span className="sizegroup-filter">{group}</span>
             <ul className="sizegroup" id={group}>
-              {Object.entries(item).map((clild, key) => {
+              {Object.values(groupedItems[group]).map((item) => {
                 return (
                   <li
-                    key={group + "-" + clild.label.split(":").pop()}
-                    className={"facet-item " + (clild.isRefined ? 'is-active' : '')}
+                    key={group + "-" + item.label.split(":").pop()}
+                    className={"facet-item " + (item.isRefined ? 'is-active' : '')}
                     datadrupalfacetlabel={props.name}
                     onClick={event => {
                       event.preventDefault();
-                      refine(clild.label);
+                      refine(item.label);
                     }}
                   >
-                    <span className="facet-item__value">{clild.label.split(":").pop().trim()}
-                      <span className="facet-item__count">({clild.count})</span>
+                    <span
+                      className="facet-item__value">{item.label.split(":").pop().trim()}
+                      <span className="facet-item__count">({item.count})</span>
                     </span>
                   </li>
                 );
@@ -48,6 +49,6 @@ const SizeGroupFilter = ({ items, refine, ...props }) => {
       })}
     </ul>
   );
-}
+};
 
 export default connectRefinementList(SizeGroupFilter);
