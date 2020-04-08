@@ -13,6 +13,8 @@ import VatFooterText from '../../../utilities/vat-footer';
 import { stickyMobileCartPreview, stickySidebar } from '../../../utilities/stickyElements/stickyElements';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import { fetchCartData } from '../../../utilities/api/requests';
+import PromotionsDynamicLabels from '../../../utilities/promotions-dynamic-labels';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -66,6 +68,15 @@ export default class Cart extends React.Component {
 
         // Make side bar sticky.
         stickySidebar();
+
+        const cartData = fetchCartData();
+        if (cartData instanceof Promise) {
+          cartData.then((result) => {
+            if (typeof result.error === 'undefined') {
+              PromotionsDynamicLabels.apply(result);
+            }
+          });
+        }
       }
 
       // To show the success/error message on cart top.
@@ -139,10 +150,15 @@ export default class Cart extends React.Component {
           <CheckoutMessage type={messageType} context="page-level-cart">
             {message}
           </CheckoutMessage>
+
+          <div id="spc-cart-promotion-dynamic-message-qualified" />
+          <div id="spc-cart-promotion-dynamic-message-next-eligible" />
+
           {/* This will be used for any action/event on basket page. */}
           <CheckoutMessage type={actionMessageType} context="page-level-cart-action">
             {actionMessage}
           </CheckoutMessage>
+
           <MobileCartPreview total_items={totalItems} totals={totals} />
         </div>
         <div className="spc-main">
