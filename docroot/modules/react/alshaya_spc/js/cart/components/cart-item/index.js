@@ -98,6 +98,10 @@ export default class CartItem extends React.Component {
     } = this.props;
 
     const { isItemError, errorMessage } = this.state;
+    let OOSClass = '';
+    if (inStock !== true) {
+      OOSClass = 'error';
+    }
 
     return (
       <div className="spc-cart-item">
@@ -124,7 +128,7 @@ export default class CartItem extends React.Component {
             </div>
           </div>
           <div className="spc-product-tile-actions">
-            <button title={Drupal.t('remove this item')} type="button" id={`remove-item-${id}`} className="spc-remove-btn" onClick={() => { this.removeCartItem(sku, 'remove item', id); }}>{Drupal.t('remove')}</button>
+            <button title={Drupal.t('remove this item')} type="button" id={`remove-item-${id}`} className={`spc-remove-btn ${OOSClass}`} onClick={() => { this.removeCartItem(sku, 'remove item', id); }}>{Drupal.t('remove')}</button>
             <div className="qty">
               <div className="qty-loader-placeholder" />
               <CartQuantitySelect
