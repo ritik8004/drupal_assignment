@@ -41,23 +41,13 @@
 
             var cart_action = 'add item';
 
-            var cart_id = null;
-            var options = new Array();
-            var cart_data = localStorage.getItem('cart_data');
-            var available_in_cart = false;
-            if (cart_data) {
-              cart_data = JSON.parse(cart_data);
-              if (cart_data && cart_data.cart !== undefined) {
-                cart_data = cart_data.cart;
-                if (cart_data.cart_id !== null) {
-                  cart_id = cart_data.cart_id;
-                }
-              }
-            }
+            var cart_data = Drupal.alshayaSpc.getCartData();
+            var cart_id = (cart_data) ? cart_data.cart_id : null;
 
             // We pass configurable options if product is not available in cart
             // and of configurable variant.
-            if (is_configurable && !available_in_cart) {
+            var options = new Array();
+            if (is_configurable) {
               currentSelectedVariant = $(form).find('.selected-parent-sku').val();
               Object.keys(settings.configurableCombinations[page_main_sku].configurables).forEach(function(key) {
                 var option = {
@@ -84,6 +74,7 @@
             var productData = {
               quantity: quantity,
               parentSku: page_main_sku,
+              sku: currentSelectedVariant,
               variant: variant_sku,
               product_name: is_configurable ? settings[productKey][page_main_sku].variants[variant_sku].cart_title : settings.productInfo[page_main_sku].cart_title,
               image: is_configurable ? settings[productKey][page_main_sku].variants[variant_sku].cart_image : settings.productInfo[page_main_sku].cart_image,
@@ -109,7 +100,7 @@
                   // Showing the error message.
                   $('.error-container-' + cleaned_sku).html('<div class="error">' + response.error_message + '</div>');
                   // Trigger the failed event for other listeners.
-                  $(form).trigger('product-add-to-cart-failed', productData);
+                  $(form).trigger('product-add-to-cart-failed', [productData, response]);
                 }
                 else if (response.cart_id) {
                   if (response.response_message.status === 'success'
@@ -123,7 +114,7 @@
                   $('.error-container-' + cleaned_sku).html('');
 
                   // Trigger the success event for other listeners.
-                  $(form).trigger('product-add-to-cart-success', productData);
+                  $(form).trigger('product-add-to-cart-success', [productData, response]);
 
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => response, productData }});

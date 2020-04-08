@@ -24,14 +24,18 @@ alshaya_acm_promotion.free_gift_modal:
   requirements:
     _permission: 'access content'
 
-alshaya_acm_promotion.get_promotion_label:
-  path: '/get-promotion-dynamic-label/{sku}'
+alshaya_acm_promotion.promotions_dynamic_labels_product:
+  path: '/promotions/dynamic-label-product/{sku}'
   defaults:
       _title: ''
-      _controller: '\Drupal\alshaya_acm_promotion\Controller\PromotionController::getPromotionDynamicLabel'
-  options:
-    parameters:
-      sku:
-        type: entity:acq_sku
+      _controller: '\Drupal\alshaya_acm_promotion\Controller\PromotionController::getPromotionDynamicLabelForProduct'
+  requirements:
+    _permission: 'access content'
+
+alshaya_acm_promotion.promotions_dynamic_labels_cart:
+  path: '/promotions/dynamic-label-cart'
+  defaults:
+      _title: ''
+      _controller: '\Drupal\alshaya_acm_promotion\Controller\PromotionController::getPromotionDynamicLabelForCart'
   requirements:
     _permission: 'access content'

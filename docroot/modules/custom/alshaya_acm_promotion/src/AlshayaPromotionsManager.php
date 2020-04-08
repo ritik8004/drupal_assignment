@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_promotion;
 
-use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_promotion\AcqPromotionInterface;
 use Drupal\acq_promotion\AcqPromotionPluginManager;
@@ -104,13 +103,6 @@ class AlshayaPromotionsManager {
   protected $alshayaAcmPromotionCache;
 
   /**
-   * The cart storage service.
-   *
-   * @var \Drupal\acq_cart\CartStorageInterface
-   */
-  protected $cartStorage;
-
-  /**
    * AlshayaPromotionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -129,8 +121,6 @@ class AlshayaPromotionsManager {
    *   Promotion Plugin Manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $alshayaAcmPromotionCache
    *   Alshaya Acm Promotion Cache Bin.
-   * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
-   *   The cart storage service.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager,
                               LanguageManager $languageManager,
@@ -139,8 +129,7 @@ class AlshayaPromotionsManager {
                               SkuImagesManager $images_manager,
                               AcqPromotionsManager $acq_promotions_manager,
                               AcqPromotionPluginManager $acqPromotionPluginManager,
-                              CacheBackendInterface $alshayaAcmPromotionCache,
-                              CartStorageInterface $cartStorage) {
+                              CacheBackendInterface $alshayaAcmPromotionCache) {
     $this->nodeStorage = $entityTypeManager->getStorage('node');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
@@ -149,7 +138,6 @@ class AlshayaPromotionsManager {
     $this->acqPromotionsManager = $acq_promotions_manager;
     $this->acqPromotionPluginManager = $acqPromotionPluginManager;
     $this->alshayaAcmPromotionCache = $alshayaAcmPromotionCache;
-    $this->cartStorage = $cartStorage;
   }
 
   /**
@@ -663,15 +651,12 @@ class AlshayaPromotionsManager {
    * @return array
    *   List of promotions.
    */
-  public function getCartPromotions() {
+  public function getCartPromotions(array $applied_rules) {
     $cartPromotionsApplied = &drupal_static(__FUNCTION__);
 
-    if (!isset($cartPromotionsApplied)
-      && $cart = $this->cartStorage->getCart(FALSE)) {
-      $cartRulesApplied = $cart->getCart()->cart_rules;
-
-      if (!empty($cartRulesApplied)) {
-        foreach ($cartRulesApplied as $rule_id) {
+    if (!isset($cartPromotionsApplied)) {
+      if (!empty($applied_rules)) {
+        foreach ($applied_rules as $rule_id) {
           $promotion_node = $this->getPromotionByRuleId($rule_id);
           if ($promotion_node instanceof NodeInterface) {
             $cartPromotionsApplied[$rule_id] = $promotion_node;
@@ -689,7 +674,7 @@ class AlshayaPromotionsManager {
    * @return array
    *   List of promotions sorted by price and priority.
    */
-  public function getSortedCartPromotions() {
+  protected function getSortedCartPromotions() {
     $cid = 'alshaya_acm_promotions:cart:sorted';
     $cache = $this->alshayaAcmPromotionCache->get($cid);
 
@@ -839,7 +824,7 @@ class AlshayaPromotionsManager {
    * @return mixed|null
    *   Inactive promotion node.
    */
-  public function getInactiveCartPromotion() {
+  public function getInactiveCartPromotion(array $applied_rules) {
     $inactiveCartPromotion = &drupal_static(__FUNCTION__);
 
     if (isset($inactiveCartPromotion)) {
@@ -848,7 +833,7 @@ class AlshayaPromotionsManager {
 
     $allCartPromotions = $this->getSortedCartPromotions();
     $appliedPromotionIds = [];
-    $cartPromotionsApplied = $this->getCartPromotions() ?? [];
+    $cartPromotionsApplied = $this->getCartPromotions($applied_rules) ?? [];
     foreach ($cartPromotionsApplied as $promotion) {
       $appliedPromotionIds[] = $promotion->id();
     }
@@ -899,11 +884,11 @@ class AlshayaPromotionsManager {
    * @return string
    *   Promotion code label.
    */
-  public function getAvailableCartCode() {
+  public function getAvailableCartCode(array $applied_rules) {
     $label = '';
 
     // Generate label for the applicable promotion.
-    $applicablePromotion = $this->getInactiveCartPromotion();
+    $applicablePromotion = $this->getInactiveCartPromotion($applied_rules);
     if ($applicablePromotion instanceof NodeInterface) {
       $label = $this->getPromotionCodeLabel($applicablePromotion);
     }

@@ -114,7 +114,7 @@ export default class CartItem extends React.Component {
     }
 
     return (
-      <div className="spc-cart-item">
+      <div className="spc-cart-item" data-sku={sku}>
         <div className="spc-product-tile">
           <div className="spc-product-image">
             <CheckoutItemImage img_data={extraData.cart_image} />
@@ -152,7 +152,7 @@ export default class CartItem extends React.Component {
           </div>
         </div>
         <div className="spc-promotions">
-          {promotions.map((key) => <CartPromotion key={key.promo} promo={key} link />)}
+          {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
         </div>
         <Notifications>
           <CartItemOOS type="warning" inStock={inStock} />
