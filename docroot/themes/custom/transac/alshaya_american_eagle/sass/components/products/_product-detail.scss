@@ -185,9 +185,9 @@
 
           .form-item-quantity {
             @include breakpoint($desktop) {
-              position: absolute;
-              bottom: -0.25rem;
-              #{$right}: 0;
+              top: -5.125rem;
+              margin-bottom: -5.125rem;
+              float: $right;
             }
           }
         }
