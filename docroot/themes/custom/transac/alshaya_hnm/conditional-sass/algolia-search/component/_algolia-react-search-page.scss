@@ -197,6 +197,7 @@
             position: initial;
             border: none;
             margin: 0;
+            overflow-y: unset;
 
             .facet-item {
               font-family: $hnm-regular;
