@@ -24,6 +24,7 @@ import {
   exitFullscreen,
 } from '../../../utilities/map/fullScreen';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import CheckoutMessage from '../../../utilities/checkout-message';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -431,6 +432,9 @@ class ClickCollect extends React.Component {
             <a className="close" onClick={closeModal}>
               &times;
             </a>
+            <CheckoutMessage type="warning" context="click-n-collect-store-modal modal">
+              {Drupal.t('Access to your location acces has been denied by your browser. You can reenable location services in your browser settings.')}
+            </CheckoutMessage>
             <div className="spc-cnc-address-form-wrapper">
               <div className="spc-cnc-address-form-content">
                 <SectionTitle>
