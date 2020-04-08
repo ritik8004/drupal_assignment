@@ -12,6 +12,7 @@ mapping:
   administrative_area:
     - sublocality_level_1
     - administrative_area_level_1
+    - locality
   area_parent:
    - administrative_area_level_1
   locality:

@@ -6,19 +6,19 @@
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;
-use Drupal\block\Entity\Block;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Site\Settings;
 use Drupal\block\BlockInterface;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\facets\Entity\Facet;
 
 /**
  * Implements hook_update_N().
  *
  * Installs alshaya_spc module.
  */
-function alshaya_transac_update_8128() {
+function alshaya_transac_update_8129() {
   \Drupal::service('module_installer')->install(['alshaya_spc']);
 
   // Move react mini cart block to proper theme.
@@ -27,13 +27,9 @@ function alshaya_transac_update_8128() {
     'alshaya_white_label'
   );
 
-  // Delete the `acq_commerce` mini cart block.
-  $mini_cart_block = Block::load('cartminiblock');
-  $mini_cart_block->delete();
-
-  // Disable the `basket_horizontal_recommendation` block from cart page.
-  $horizontal_recommendation = Block::load('baskethorizontalproductrecommendation');
-  $horizontal_recommendation->delete();
+  \Drupal::configFactory()->getEditable('block.block.cartminiblock')->delete();
+  \Drupal::configFactory()->getEditable('block.block.baskethorizontalproductrecommendation')->delete();
+  \Drupal::configFactory()->getEditable('block.block.alshayacartpromotionsblock')->delete();
 
   // Override located /config/override/block.block.footerlogos.
   \Drupal::configFactory()->getEditable('block.block.footerlogos')->save();
@@ -46,7 +42,27 @@ function alshaya_transac_update_8128() {
 
   // Override located /config/override/block.block.copyright.
   \Drupal::configFactory()->getEditable('block.block.copyright')->save();
+}
 
+/**
+ * Implements hook_update_N().
+ *
+ * To remove old category facets.
+ */
+function alshaya_transac_update_8128() {
+  // Facets to remove.
+  $old_category_facets = [
+    'category',
+    'plp_category_facet',
+    'promotion_category_facet',
+  ];
+
+  foreach ($old_category_facets as $facets) {
+    $facet = Facet::load($facets);
+    if (isset($facet)) {
+      $facet->delete();
+    }
+  }
 }
 
 /**
