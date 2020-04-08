@@ -143,7 +143,7 @@ function alshaya_acm_product_get_display_node($sku) {
  */
 function alshaya_acm_get_product_display_image($sku, $image_style = '', $context = '') {
   $sku = $sku instanceof SKUInterface ? $sku : SKU::loadFromSku($sku);
-  $sku_label = '';
+
   if (!($sku instanceof SKUInterface)) {
     return [];
   }
@@ -158,11 +158,9 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
   $media_image = $skuImagesManager->getFirstImage($sku, $context);
   $image = [];
 
-  $sku_label = $sku->label();
-
   // If we have image for the product.
   if (!empty($media_image)) {
-    $image = $skuManager->getSkuImage($media_image['drupal_uri'], $sku_label, $image_style);
+    $image = $skuManager->getSkuImage($media_image['drupal_uri'], $sku->label(), $image_style);
   }
 
   // If still image is not available, set default one.
@@ -174,8 +172,8 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
         '#theme' => 'image',
         '#attributes' => [
           'src' => $default_image_url,
-          'title' => $sku_label,
-          'alt' => $sku_label,
+          'title' => $sku->label(),
+          'alt' => $sku->label(),
           'class' => [
             'product-default-image',
           ],
