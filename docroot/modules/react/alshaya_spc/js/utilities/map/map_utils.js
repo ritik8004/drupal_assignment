@@ -18,7 +18,7 @@ export const mapAddressMap = () => {
     mapping.address_line1 = ['route', 'street_number'];
     mapping.address_line2 = ['park', 'point_of_interest', 'establishment', 'premise'];
     // For area.
-    mapping.administrative_area = ['sublocality_level_1', 'administrative_area_level_1'];
+    mapping.administrative_area = ['sublocality_level_1', 'administrative_area_level_1', 'locality'];
     // For area parent.
     mapping.area_parent = ['administrative_area_level_1'];
     // For locality.
@@ -120,13 +120,24 @@ export const getAddressFieldVal = (addressArray, key) => {
     }
   }
 
+  const listData = [];
   if (fieldData.length > 0) {
     for (let i = 0; i < addressMap[key].length; i++) {
       for (let j = 0; j < fieldData.length; j++) {
         if (fieldData[j].type === addressMap[key][i]) {
-          return fieldData[j].val;
+          // If any list field (are/city), we return array of all values.
+          if (key === 'area_parent' || key === 'administrative_area') {
+            listData.push(fieldData[j].val);
+          } else {
+            // For other plain fields.
+            return fieldData[j].val;
+          }
         }
       }
+    }
+
+    if (listData.length > 0) {
+      return listData;
     }
   }
 
@@ -141,17 +152,20 @@ export const getAddressFieldVal = (addressArray, key) => {
 export const deduceAreaVal = (area, field) => {
   const areas = document.querySelectorAll('[data-list=areas-list]');
   if (areas.length > 0) {
-    for (let i = 0; i < areas.length; i++) {
-      const labelAttribute = field === 'area_parent' ? 'data-parent-label' : 'data-label';
-      const areaLable = areas[i].getAttribute(labelAttribute);
-      // If it matches with some value.
-      if (areaLable.toLowerCase().indexOf(area.toLowerCase()) !== -1
-        || area.toLowerCase().indexOf(areaLable.toLowerCase()) !== -1) {
-        const idAttribute = field === 'area_parent' ? 'data-parent-id' : 'data-id';
-        return {
-          id: areas[i].getAttribute(idAttribute),
-          label: areaLable,
-        };
+    for (let j = 0; j < area.length; j++) {
+      for (let i = 0; i < areas.length; i++) {
+        const labelAttribute = field === 'area_parent' ? 'data-parent-label' : 'data-label';
+        const areaLable = areas[i].getAttribute(labelAttribute);
+        // If it matches with some value.
+        const areaVal = area[j].trim().toLowerCase();
+        if (areaLable.toLowerCase().indexOf(areaVal) !== -1
+          || areaVal.indexOf(areaLable.toLowerCase()) !== -1) {
+          const idAttribute = field === 'area_parent' ? 'data-parent-id' : 'data-id';
+          return {
+            id: areas[i].getAttribute(idAttribute),
+            label: areaLable,
+          };
+        }
       }
     }
   }
@@ -180,7 +194,7 @@ export const fillValueInAddressFromGeocode = (address) => {
   // If area parent available.
   if (drupalSettings.address_fields.area_parent !== undefined) {
     let areaVal = [];
-    const val = getAddressFieldVal(address, 'area_parent').trim();
+    const val = getAddressFieldVal(address, 'area_parent');
     // If not empty.
     if (val.length > 0) {
       areaVal = deduceAreaVal(val, 'area_parent');
@@ -200,7 +214,7 @@ export const fillValueInAddressFromGeocode = (address) => {
 
   // If area field available.
   if (drupalSettings.address_fields.administrative_area !== undefined) {
-    const val = getAddressFieldVal(address, 'administrative_area').trim();
+    const val = getAddressFieldVal(address, 'administrative_area');
     // If not empty.
     if (val.length > 0) {
       // Deduce value from the available area in drupal.
