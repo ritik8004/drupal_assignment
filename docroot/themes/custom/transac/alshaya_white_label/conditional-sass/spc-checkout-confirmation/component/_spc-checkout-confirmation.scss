@@ -7,7 +7,24 @@
 
   .checkout-link {
     @include breakpoint($only-mobile) {
-      margin: 0 1.25rem;
+      background: $spc-checkout-delivery-method-bg;
+      padding: 1.25rem;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 4;
+      box-shadow: 0 -1px 20px 9px $sticky-btn;
+      display: block;
+      height: auto;
+
+      a {
+        position: relative;
+        background: $primary_btn_bg;
+        height: 3.25rem;
+        width: 100%;
+        box-shadow: none;
+        display: inline-flex;
+      }
     }
   }
 
