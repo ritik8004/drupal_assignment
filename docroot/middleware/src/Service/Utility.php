@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * Class Utility.
  *
@@ -11,13 +13,29 @@ namespace App\Service;
 class Utility {
 
   /**
+   * Logger.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
+   * Utility constructor.
+   *
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger.
+   */
+  public function __construct(LoggerInterface $logger) {
+    $this->logger = $logger;
+  }
+
+  /**
    * Get default error message.
    *
    * @return string
    *   Default error message.
    */
   public function getDefaultErrorMessage() {
-    // @TODO: t().
     return 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.';
   }
 
@@ -31,8 +49,9 @@ class Utility {
    *   If message contains MDC server error message.
    */
   public function isBackendServerError(string $message) {
-    // @Todo: Log the original magento error message.
-    if (strpos($message, 'Report ID') !== FALSE) {
+    if (stripos($message, 'report id') !== FALSE) {
+      $this->logger->error($message);
+
       return TRUE;
     }
 

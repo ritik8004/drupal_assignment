@@ -12,6 +12,31 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Create the new table for storing promotion mapping and remove the field.
+ */
+function acq_promotion_update_8003() {
+  $schema = acq_sku_promotion_schema();
+  \Drupal::database()->schema()->createTable('acq_sku_promotion', $schema['acq_sku_promotion']);
+
+  $field_simple = FieldConfig::loadByName('acq_sku', 'simple', 'field_acq_sku_promotions');
+  if ($field_simple) {
+    $field_simple->delete();
+  }
+
+  $field_configurable = FieldConfig::loadByName('acq_sku', 'configurable', 'field_acq_sku_promotions');
+  if ($field_configurable) {
+    $field_configurable->delete();
+  }
+
+  $field_storage = FieldStorageConfig::loadByName('acq_sku', 'field_acq_sku_promotions');
+  if ($field_storage) {
+    $field_storage->delete();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove products key and its values from field_acq_promotion_data.
  */
 function acq_promotion_update_8002() {
@@ -21,24 +46,24 @@ function acq_promotion_update_8002() {
   // Get table names for "field_acq_promotion_data".
   $tables = [
     $table_mapping->getDedicatedDataTableName($storage_definitions['field_acq_promotion_data']),
-    $table_mapping->getDedicatedRevisionTableName($storage_definitions['field_acq_promotion_data'])
+    $table_mapping->getDedicatedRevisionTableName($storage_definitions['field_acq_promotion_data']),
   ];
 
   // Update field tables to remove products key, as we are not using it
   // anywhere, and that is creating unnecessary load on promotion node load.
   $connection = \Drupal::database();
-  foreach($tables as $promotion_table) {
+  foreach ($tables as $promotion_table) {
     $records = $connection->select($promotion_table)->fields($promotion_table)->execute()->fetchAll(PDO::FETCH_ASSOC);
-    foreach($records as $record) {
+    foreach ($records as $record) {
       $data = unserialize($record['field_acq_promotion_data_value']);
       unset($data['products']);
       $connection->update($promotion_table)
-      ->fields([
-        'field_acq_promotion_data_value' => serialize($data),
-      ])
-      ->condition('entity_id', $record['entity_id'])
-      ->condition('revision_id', $record['revision_id'])
-      ->execute();
+        ->fields([
+          'field_acq_promotion_data_value' => serialize($data),
+        ])
+        ->condition('entity_id', $record['entity_id'])
+        ->condition('revision_id', $record['revision_id'])
+        ->execute();
     }
   }
 }
@@ -70,4 +95,34 @@ function acq_promotion_update_8001() {
   $content['field_acq_promotion_sort_order'] = $yml['content']['field_acq_promotion_sort_order'];
   $config->set('content', $content);
   $config->save();
+}
+
+/**
+ * Implements hook_schema().
+ */
+function acq_sku_promotion_schema() {
+
+  $schema['acq_sku_promotion'] = [
+    'description' => 'Stores products and promotion mapping.',
+    'fields' => [
+      'sku' => [
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Product SKU.',
+      ],
+      'rule_id' => [
+        'type' => 'int',
+        'description' => 'Back-end rule id.',
+        'not null' => TRUE,
+      ],
+    ],
+    'indexes' => [
+      'acq_sku_promotion_sku' => [['sku', 64]],
+      'acq_sku_promotion_rule_id' => ['rule_id'],
+    ],
+    'primary key' => ['sku', 'rule_id'],
+  ];
+
+  return $schema;
 }

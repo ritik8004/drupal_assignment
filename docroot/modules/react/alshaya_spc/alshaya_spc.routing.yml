@@ -11,7 +11,7 @@ alshaya_spc.checkout.confirmation:
   path: '/checkout/confirmation'
   defaults:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::checkoutConfirmation'
-    _title: 'Order Confirmation'
+    _title: 'Order confirmation'
   requirements:
     # All user should able to access checkout pages, validation on frontend.
     _access: 'TRUE'

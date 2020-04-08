@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_spc\Controller;
 
 use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
+use Drupal\alshaya_spc\Plugin\SpcPaymentMethod\CashOnDelivery;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -179,35 +180,6 @@ class AlshayaSpcController extends ControllerBase {
     $cache_tags = Cache::mergeTags($cache_tags, $cc_config->getCacheTags());
 
     $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
-
-    $string_keys = [
-      'cod_surcharge_label',
-      'cod_surcharge_description',
-      'cod_surcharge_short_description',
-      'cod_surcharge_tooltip',
-    ];
-    foreach ($string_keys as $key) {
-      $strings[] = [
-        'key' => $key,
-        'value' => trim(preg_replace("/[\r\n]+/", '', $checkout_settings->get($key))),
-      ];
-    }
-
-    $strings[] = [
-      'key' => 'transaction_failed',
-      'value' => $this->t('Transaction has been declined. Please try again later.'),
-    ];
-
-    $strings[] = [
-      'key' => 'payment_error',
-      'value' => $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'),
-    ];
-
-    $strings[] = [
-      'key' => 'global_error',
-      'value' => $this->t('Sorry, something went wrong. Please try again later.'),
-    ];
-
     $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
 
     $cncTerm = $this->checkoutOptionManager->getClickandColectShippingMethodTerm();
@@ -333,6 +305,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Markup for checkout confirmation page.
    */
   public function checkoutConfirmation() {
+    $strings = [];
+
     $order = $this->orderHelper->getLastOrder();
     // Get order type hd/cnc and other details.
     $orderDetails = $this->orderHelper->getOrderDetails($order);
@@ -382,20 +356,13 @@ class AlshayaSpcController extends ControllerBase {
       ],
     ];
 
-    $string_keys = [
-      'cod_surcharge_label',
-      'cod_surcharge_description',
-      'cod_surcharge_short_description',
-      'cod_surcharge_tooltip',
-    ];
-    foreach ($string_keys as $key) {
-      $strings[] = [
-        'key' => $key,
-        'value' => trim(preg_replace("/[\r\n]+/", '', $checkout_settings->get($key))),
-      ];
+    if ($orderDetails['payment']['methodCode'] === 'cashondelivery') {
+      $strings = array_merge($strings, CashOnDelivery::getCodSurchargeStrings());
     }
 
     $cache_tags = [];
+    $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
+
     // If logged in user.
     if ($this->currentUser->isAuthenticated()) {
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());

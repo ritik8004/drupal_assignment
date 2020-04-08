@@ -121,7 +121,7 @@ export default class Cart extends React.Component {
     if (!wait && items.length === 0) {
       return (
         <>
-          <EmptyResult Message={Drupal.t('your shopping bag is empty.')} />
+          <EmptyResult Message={Drupal.t('Your shopping bag is empty.')} />
           <CartRecommendedProducts sectionTitle={Drupal.t('new arrivals')} recommended_products={recommendedProducts} />
           <CartRecommendedProducts sectionTitle={Drupal.t('trending now')} recommended_products={recommendedProducts} />
         </>

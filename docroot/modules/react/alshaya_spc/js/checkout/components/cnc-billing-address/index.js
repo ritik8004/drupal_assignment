@@ -125,7 +125,7 @@ export default class CnCBillingAddress extends React.Component {
     if (!billingAddressAddedByUser) {
       return (
         <div className="spc-section-billing-address cnc-flow">
-          <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
+          <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
           <div className="spc-billing-address-wrapper">
             <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={(e) => this.showPopup(e)}>
               {Drupal.t('please add your billing address.')}
@@ -156,7 +156,7 @@ export default class CnCBillingAddress extends React.Component {
 
     return (
       <div className="spc-section-billing-address cnc-flow">
-        <SectionTitle>{Drupal.t('billing address')}</SectionTitle>
+        <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
             <BillingInfo cart={cart} refreshCart={refreshCart} />
