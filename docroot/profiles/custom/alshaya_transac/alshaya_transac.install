@@ -6,6 +6,7 @@
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\block\Entity\Block;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Site\Settings;
@@ -19,6 +20,33 @@ use Drupal\taxonomy\Entity\Term;
  */
 function alshaya_transac_update_8128() {
   \Drupal::service('module_installer')->install(['alshaya_spc']);
+
+  // Move react mini cart block to proper theme.
+  alshaya_block_move_blocks_theme_to_theme(
+    \Drupal::service('theme_handler')->getDefault(),
+    'alshaya_white_label'
+  );
+
+  // Delete the `acq_commerce` mini cart block.
+  $mini_cart_block = Block::load('cartminiblock');
+  $mini_cart_block->delete();
+
+  // Disable the `basket_horizontal_recommendation` block from cart page.
+  $horizontal_recommendation = Block::load('baskethorizontalproductrecommendation');
+  $horizontal_recommendation->delete();
+
+  // Override located /config/override/block.block.footerlogos.
+  \Drupal::configFactory()->getEditable('block.block.footerlogos')->save();
+
+  // Override located /config/override/block.block.customerservice.
+  \Drupal::configFactory()->getEditable('block.block.customerservice')->save();
+
+  // Override located /config/override/block.block.sociallinks.
+  \Drupal::configFactory()->getEditable('block.block.sociallinks')->save();
+
+  // Override located /config/override/block.block.copyright.
+  \Drupal::configFactory()->getEditable('block.block.copyright')->save();
+
 }
 
 /**
