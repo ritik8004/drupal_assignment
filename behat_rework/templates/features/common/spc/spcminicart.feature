@@ -19,7 +19,6 @@ Feature: Test MiniCart page
     And I wait 5 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
-    Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty-label" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .name" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification a" element
     And I wait 5 seconds

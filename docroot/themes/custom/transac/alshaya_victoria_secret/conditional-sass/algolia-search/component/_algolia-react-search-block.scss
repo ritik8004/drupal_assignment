@@ -92,7 +92,9 @@
       @include breakpoint($only-mobile) {
         margin: 0;
         width: 100%;
-        padding-#{$left}: 2.3125rem;
+        padding-#{$left}: 3rem !important;
+        border-width: 0 0 0.0625rem !important;
+        border-color: $algolia-auto-complete-border !important;
       }
 
       @include breakpoint($only-tablet) {
@@ -150,7 +152,7 @@
         @include breakpoint($only-mobile) {
           top: 0.25rem;
           #{$right}: unset;
-          #{$left}: 0.5rem;
+          #{$left}: 0.25rem;
           opacity: 1;
           transition: opacity 0.2s;
         }
@@ -271,7 +273,7 @@
 
     .block-alshaya-algolia-react-autocomplete {
       .algolia-search-back-icon {
-        #{$left}: 0.5rem;
+        #{$left}: 0;
         top: 0.5rem;
       }
     }

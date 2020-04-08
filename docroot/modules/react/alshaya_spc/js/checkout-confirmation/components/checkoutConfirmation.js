@@ -44,8 +44,8 @@ class CheckoutConfirmation extends React.Component {
         <div className="spc-main">
           <div className="spc-content">
             <OrderSummary />
-            <VatFooterText />
             <ConditionalView condition={window.innerWidth > 768}>
+              <VatFooterText />
               <div className="checkout-link submit">
                 <a href={Drupal.url('')} className="checkout-link">
                   {Drupal.t('continue shopping')}
@@ -65,6 +65,7 @@ class CheckoutConfirmation extends React.Component {
         </div>
         <div className="spc-post-content" />
         <ConditionalView condition={window.innerWidth < 768}>
+          <VatFooterText />
           <div className="checkout-link submit">
             <a href={Drupal.url('')} className="checkout-link">
               {Drupal.t('continue shopping')}

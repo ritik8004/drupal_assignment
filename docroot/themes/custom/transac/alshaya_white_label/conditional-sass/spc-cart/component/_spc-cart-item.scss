@@ -52,6 +52,10 @@
         transition: color 0.3s ease-in-out;
         background: none;
 
+        &.error {
+          color: $spc-checkout-error-message-background;
+        }
+
         &:hover {
           color: $spc-cart-item-trash-icon-hover;
         }
