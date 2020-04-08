@@ -11,7 +11,7 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Site\Settings;
 use Drupal\block\BlockInterface;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\block\Entity\Block;
+use Drupal\facets\Entity\Facet;
 
 /**
  * Implements hook_update_N().
@@ -19,34 +19,17 @@ use Drupal\block\Entity\Block;
  * To remove old category facets.
  */
 function alshaya_transac_update_8128() {
-  // Enable old category blocks.
-  $old_category_facet_blocks = [
+  // Facets to remove.
+  $old_category_facets = [
     'category',
-    'plpcategoryfacet',
-    'promotioncategoryfacet',
+    'plp_category_facet',
+    'promotion_category_facet',
   ];
 
-  foreach ($old_category_facet_blocks as $blocks) {
-    $old_block = Block::load($blocks);
-    if (isset($old_block)) {
-      $old_block->setStatus(TRUE);
-      $old_block->save();
-    }
-  }
-  // Fetch enabled facets.
-  $facets = \Drupal::service('facets.manager')->getEnabledFacets();
-  if (!empty($facets)) {
-    $old_category_facets = [
-      'category',
-      'plp_category_facet',
-      'promotion_category_facet',
-    ];
-
-    foreach ($facets as $facet) {
-      if (in_array($facet->id(), $old_category_facets)) {
-        $facet->delete();
-        \Drupal::logger('alshaya_product')->warning('Facet id: @facet', ['@facet' => $facet->id()]);
-      }
+  foreach ($old_category_facets as $facets) {
+    $facet = Facet::load($facets);
+    if (isset($facet)) {
+      $facet->delete();
     }
   }
 }
