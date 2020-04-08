@@ -55,6 +55,9 @@ function alshaya_magazine_install() {
     'Load More Content' => [
       'ar' => 'حمل مزيد من المحتوى',
     ],
+    'READ H&M MAGAZINE' => [
+      'ar' => 'اقرأ مجلة اتش آند ام',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);

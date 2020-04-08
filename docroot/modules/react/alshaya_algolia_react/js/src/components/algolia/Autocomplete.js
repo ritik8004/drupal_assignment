@@ -191,6 +191,11 @@ class Autocomplete extends React.Component {
     if (mobileSearchInNav.length !== 0) {
       mobileSearchInNav[0].classList.remove('search-active');
     }
+    // Clear sate value and suggestions.
+    this.setState({value: ''});
+    this.onSuggestionsClearRequested();
+    // Set query to empty to hide the search results and update the browser hash.
+    this.props.onChange('');
     this.reactSearchBlock[0].classList.remove('focused');
   };
 
@@ -206,7 +211,7 @@ class Autocomplete extends React.Component {
     const { value } = this.state;
 
     const inputProps = {
-      placeholder: Drupal.t('Search', {}, {'context': "algolia_search_block_placeholder"}),
+      placeholder: Drupal.t('Search', {}, {'context': "alshaya_static_text|algolia_search_block_placeholder"}),
       onChange: this.onChange,
       onFocus: () => this.addFocus(),
       onKeyUp: this.onKeyUp,

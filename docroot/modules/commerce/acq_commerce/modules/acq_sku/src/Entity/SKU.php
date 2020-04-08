@@ -131,6 +131,28 @@ class SKU extends ContentEntityBase implements SKUInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function label() {
+    $label = parent::label();
+    if (!empty($label)) {
+      return $label;
+    }
+    elseif ($this->bundle() == 'simple') {
+      // Get label from parent if child does not have label.
+      $plugin = $this->getPluginInstance();
+      $parent_sku = $plugin->getParentSku($this);
+      if (!empty($parent_sku)) {
+        $label = $parent_sku->label();
+        if (!empty($label)) {
+          return $label;
+        }
+      }
+    }
+    return '';
+  }
+
+  /**
    * Function to return media files for a SKU.
    *
    * @param bool $download_media
@@ -238,7 +260,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         try {
           // Prepare the File object when we access it the first time.
           $file = $this->downloadMediaImage($data);
-          $update_sku = TRUE;
+          $update_sku = !empty($file);
         }
         catch (\Exception $e) {
           \Drupal::logger('acq_sku')->error($e->getMessage());
@@ -270,7 +292,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * @param array $data
    *   File data.
    *
-   * @return \Drupal\file\Entity\File
+   * @return \Drupal\file\Entity\File|string|null
    *   File id or FALSE if file cant be downloaded.
    *
    * @throws \Exception
@@ -280,6 +302,21 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // If image is blacklisted, block download.
     if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
+      return NULL;
+    }
+
+    // Using multiple function to get extension to avoid cases with query
+    // string and hash in URLs.
+    $extension = strtolower(pathinfo(parse_url($data['file'], PHP_URL_PATH), PATHINFO_EXTENSION));
+
+    // Filter by extension only if value set for the setting.
+    $allowed_extensions = Settings::get('allowed_product_extensions', NULL);
+    if ($allowed_extensions && !in_array($extension, $allowed_extensions)) {
+      \Drupal::logger('acq_sku')->warning('Skipping product media file because of unsupported extension. SKU: @sku, File: @file', [
+        '@file' => $data['file'],
+        '@sku' => $this->getSku(),
+      ]);
+
       return FALSE;
     }
 
@@ -349,7 +386,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         '@remote_id' => $data['value_id'],
         '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
       ]);
-      return FALSE;
+      return 'blacklisted';
     }
 
     // Check if image was blacklisted, remove it from blacklist.

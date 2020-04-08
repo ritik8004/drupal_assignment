@@ -38,9 +38,9 @@
   }
 
   .crossell-title.subtitle {
-    text-align: center;
-    font-size: 1.625rem;
-    text-transform: uppercase;
+    text-align: #{$left};
+    font-size: 1.125rem;
+    text-transform: lowercase;
 
     a {
       color: $_category_carosel_title_color;

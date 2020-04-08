@@ -1,0 +1,5 @@
+minimalistic_header:
+  js:
+    js/minimalistic_header.js: {}
+  dependencies:
+  - core/jquery

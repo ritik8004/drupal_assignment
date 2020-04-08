@@ -131,12 +131,6 @@
           width: 0.125rem;
           height: 0.125rem;
         }
-
-        &:last-child {
-          &::after {
-            display: none;
-          }
-        }
       }
     }
 

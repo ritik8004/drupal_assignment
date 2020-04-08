@@ -13,8 +13,8 @@ use Drupal\user\UserInterface;
 /**
  * Returns orders from cache if available.
  *
- * @param string $email
- *   Email address of the user.
+ * @param int $customer_id
+ *   Commerce customer id.
  * @param string $search_key
  *   Key to look for in $_GET for searching.
  * @param string $filter_key
@@ -23,10 +23,10 @@ use Drupal\user\UserInterface;
  * @return array
  *   Array of orders.
  */
-function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_key = '') {
+function alshaya_acm_customer_get_user_orders(int $customer_id, $search_key = '', $filter_key = '') {
   /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
   $manager = \Drupal::service('alshaya_acm_customer.orders_manager');
-  $orders = $manager->getOrders($email);
+  $orders = $manager->getOrders($customer_id);
 
   if (empty($orders)) {
     return [];
@@ -203,33 +203,20 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
-  $shipping_method_code = $checkoutOptionsManager->getCleanShippingMethodCode($order['shipping']['method']['carrier_code']);
-  $shipping_method_name = isset($order['shipping']['method']['description']) ? $order['shipping']['method']['description'] : '';
 
-  $shippingTerm = $checkoutOptionsManager->loadShippingMethod($shipping_method_code, $shipping_method_name);
+  $shipping_info = explode(' - ', $order['shipping_description']);
+  $orderDetails['delivery_method'] = $shipping_info[0];
 
-  $shipping_amount = $order['shipping']['method']['amount_with_tax'] ?? $order['shipping']['method']['amount'];
-  $orderDetails['delivery_charge'] = alshaya_acm_price_format($shipping_amount);
-
-  $orderDetails['delivery_method'] = $shippingTerm->getName();
-
-  // Check if taxonomy term doesn't have proper name and we have description
-  // available in API response.
-  if (!empty($shipping_method_name) && $shippingTerm->getName() == $shipping_method_code) {
-    $orderDetails['delivery_method'] = $shipping_method_name;
-  }
-
+  $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['totals']['shipping']);
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
-  if ($shipping_method_code == $checkoutOptionsManager->getClickandColectShippingMethod()) {
+  if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
     $cc_config = \Drupal::config('alshaya_click_collect.settings');
 
     $orderDetails['type'] = 'cc';
 
-    $shipping_assignment = reset($order['extension']['shipping_assignments']);
-    $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
-
-    $cc_type = $shipping_assignment['shipping']['extension_attributes']['click_and_collect_type'];
+    $store_code = $order['shipping']['extension_attributes']['store_code'];
+    $cc_type = $order['shipping']['extension_attributes']['click_and_collect_type'];
 
     /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $store_utility */
     $store_utility = \Drupal::service('alshaya_stores_finder_transac.utility');
@@ -263,10 +250,10 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $orderDetails['type'] = 'hd';
 
     // Check if we have cart description available, display that in parenthesis.
-    if ($cart_desc = $shippingTerm->get('field_shipping_method_cart_desc')->getString()) {
+    if (!empty($shipping_info[1])) {
       $orderDetails['delivery_method'] = t('@shipping_method_name (@shipping_method_description)', [
-        '@shipping_method_name' => $orderDetails['delivery_method'],
-        '@shipping_method_description' => $cart_desc,
+        '@shipping_method_name' => $shipping_info[0],
+        '@shipping_method_description' => $shipping_info[1],
       ]);
     }
 
@@ -291,7 +278,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   }
 
   // Don't show Billing Address for CoD payment method.
-  if ($order['payment']['method_code'] !== 'cashondelivery') {
+  if ($order['payment']['method'] !== 'cashondelivery') {
     $billing_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($order['billing']);
     $billing_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($billing_address_array['mobile_number']['value']);
 
@@ -303,7 +290,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $orderDetails['billing_address'] = render($billing_address);
   }
 
-  if ($order['payment']['method_code'] == 'banktransfer'
+  if ($order['payment']['method'] == 'banktransfer'
     && !empty(array_filter($order['extension']['bank_transfer_instructions']))) {
     $orderDetails['banktransfer_payment_details'] = [
       '#theme' => 'banktransfer_payment_details',
@@ -318,13 +305,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     ];
   }
 
-  $payment_method_term = $checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code']);
+  $payment_method_term = $checkoutOptionsManager->loadPaymentMethod($order['payment']['method']);
   $orderDetails['payment_method'] = $payment_method_term->getName();
-  $orderDetails['payment_method_code'] = $order['payment']['method_code'];
+  $orderDetails['payment_method_code'] = $order['payment']['method'];
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
   $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount']) : NULL;
 
-  if (isset($order['extension']['surcharge_incl_tax']) && $order['extension']['surcharge_incl_tax'] > 0) {
+  if ($order['totals']['surcharge'] > 0) {
     // If surcharge is enabled, only then show.
     if (\Drupal::service('alshaya_acm_checkout.checkout_helper')->isSurchargeEnabled()) {
       $acm_config = \Drupal::config('alshaya_acm_checkout.settings');
@@ -344,13 +331,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   // Add transaction & payment details to confirmation data in case of KNET.
-  if (!empty($order['payment']) &&
-    ($order['payment']['method_code'] === 'knet')) {
-    $state = \Drupal::service('tempstore.shared');
-    $knet_transac_data = $state->get('knet')->get('knet:' . md5($order['increment_id']));
-    $orderDetails['transaction_id'] = $knet_transac_data['transaction_id'];
-    $orderDetails['payment_id'] = $knet_transac_data['payment_id'];
-    $orderDetails['result_code'] = $knet_transac_data['result_code'];
+  if (!empty($order['payment'])
+    && ($order['payment']['method'] === 'knet')) {
+    $orderDetails['payment']['transactionId'] = $order['payment']['additional_information'][0];
+    $orderDetails['payment']['paymentId'] = $order['payment']['additional_information'][2];
+
+    // @TODO: Get this information from Magento.
+    $orderDetails['payment']['resultCode'] = 'CAPTURED';
   }
 
   return $orderDetails;
@@ -370,7 +357,8 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
 
   try {
     // Get all the orders for the user.
-    $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
+    $customer_id = (int) $user->get('acq_customer_id')->getString();
+    $orders = alshaya_acm_customer_get_user_orders($customer_id);
   }
   catch (\Exception $e) {
     return [];
@@ -463,6 +451,11 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'cart');
       $product['image']['#skip_lazy_loading'] = TRUE;
 
+      // If 'applied_rule_ids' is set and price is 0, set the free gift label.
+      if (isset($item['applied_rule_ids']) && (int) $item['price'] == 0) {
+        $product['free_gift_label'] = t('Free Gift with Purchase');
+      }
+
       $products[] = $product;
     }
   }
@@ -476,8 +469,12 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
-  $shippingTerm = $checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
-  $build['#delivery_detail_notice'] = $shippingTerm->get('field_shipping_method_desc')->getString();
+  if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
+    $build['#delivery_detail_notice'] = t('Your order will be available for pickup at the following store');
+  }
+  else {
+    $build['#delivery_detail_notice'] = t('Your order will be delivered at the following address');
+  }
 
   return $build;
 }

@@ -228,7 +228,7 @@
 
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === 'not defined') {
-        if (document.location.pathname.startsWith('/' + drupalSettings.path.currentLanguage + '/user')) {
+        if (document.location.pathname.indexOf('/' + drupalSettings.path.currentLanguage + '/user') == 0) {
           var currPath = document.location.pathname;
           var pagePath = currPath.replace('/' + drupalSettings.path.currentLanguage + '/user/', '');
           var gtmPageTypeArray = pagePath.split('/');
@@ -293,8 +293,15 @@
 
       // Cookie based events, only to be processed once on page load.
       $(document).once('gtm-onetime').each(function () {
-        // Fire sign-in success event on successful sign-in.
-        if (userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
+        // Check if social login window opened to avoid GTM push from
+        // social login window.
+        var socialWindow = false;
+        if(window.name == 'ConnectWithSocialAuth'){
+          var socialWindow = true;
+        }
+
+        // Fire sign-in success event on successful sign-in from parent window.
+        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
           localStorage.setItem('userID', userDetails.userID);
         }
@@ -775,9 +782,9 @@
        * Tracking clicks on fitler & sort options.
        */
       if (listName !== undefined) {
-        if (listName.includes('PLP') || listName === 'Search Results Page') {
+        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page') {
           var section = listName;
-          if (listName.includes('PLP')) {
+          if (listName.indexOf('PLP') > -1) {
             section = $('h1.c-page-title').text().toLowerCase();
           }
 

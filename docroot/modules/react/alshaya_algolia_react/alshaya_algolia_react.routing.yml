@@ -6,3 +6,11 @@ alshaya_algolia_react.search:
   requirements:
     # All user should able to access search page.
     _access: 'TRUE'
+
+alshaya_algolia_react.get_settings:
+  path: '/search-settings'
+  defaults:
+    _controller: '\Drupal\alshaya_algolia_react\Controller\AlgoliaController::getSettings'
+    _title: ''
+  requirements:
+    _permission: 'access content'
