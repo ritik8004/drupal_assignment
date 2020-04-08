@@ -100,7 +100,7 @@ export default class CartItem extends React.Component {
     const { isItemError, errorMessage } = this.state;
 
     return (
-      <div className="spc-cart-item">
+      <div className="spc-cart-item" data-sku={sku}>
         <div className="spc-product-tile">
           <div className="spc-product-image">
             <CheckoutItemImage img_data={extraData.cart_image} />
@@ -137,13 +137,14 @@ export default class CartItem extends React.Component {
           </div>
         </div>
         <div className="spc-promotions">
-          {promotions.map((key) => <CartPromotion key={`${key}-${Math.floor(Math.random() * 99)}`} promo={key} link />)}
+          {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
         </div>
         <div className="spc-cart-item-warning">
           <CartItemOOS inStock={inStock} />
           <ItemLowQuantity stock={stock} qty={qty} in_stock={inStock} />
         </div>
         <div className="spc-cart-item-alerts">
+          <div className="spc-cart-promotion-dynamic-message-product" />
           {/* Dynamic promo labels buy 2 more items, free gifts labels,
            qty limit labels go here. Name the child component
            .spc-cart-item-alerts-item */}

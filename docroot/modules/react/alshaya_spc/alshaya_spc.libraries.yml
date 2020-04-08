@@ -1,3 +1,10 @@
+cart_utilities:
+  js:
+    js/cart_utilities.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupal
+
 mini_cart:
   version: 1.x
   footer: true
@@ -13,6 +20,7 @@ cart:
     dist/cart.bundle.js: { }
   dependencies:
     - alshaya_react/react
+    - alshaya_spc/cart_utilities
 
 checkout:
   version: 1.x
@@ -28,8 +36,7 @@ add_to_cart:
   js:
     js/add_to_cart.js: { }
   dependencies:
-    - core/jquery
-    - core/drupal
+    - alshaya_spc/cart_utilities
     - core/drupalSettings
 
 checkout-confirmation:
