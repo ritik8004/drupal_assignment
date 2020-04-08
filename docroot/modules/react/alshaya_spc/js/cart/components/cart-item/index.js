@@ -9,7 +9,7 @@ import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CartQuantitySelect from '../cart-quantity-select';
 import { updateCartItemData } from '../../../utilities/update_cart';
 import SpecialPrice from '../../../utilities/special-price';
-import Notifications from '../../../common/components/notifications';
+import Notifications from './components/Notifications';
 import QtyLimit from '../qty-limit';
 
 export default class CartItem extends React.Component {

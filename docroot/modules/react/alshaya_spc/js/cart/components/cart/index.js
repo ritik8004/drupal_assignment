@@ -31,7 +31,7 @@ export default class Cart extends React.Component {
   }
 
   componentDidMount() {
-    // Listen to `refreshCart` event triggered from `mini-cart/index.js`.
+    // Listen to `refreshCart` event triggered from `mini-cart/Notifications.js`.
     document.addEventListener('refreshCart', (e) => {
       const data = e.detail.data();
       checkCartCustomer(data);
