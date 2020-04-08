@@ -18,28 +18,25 @@ const SizeGroupFilter = ({ items, refine, ...props }) => {
     groupedItems[item[0]].push(items[i]);
   }
 
-  console.log(items);
-  console.log(groupedItems);
-
   return (
     <ul>
-      {groupedItems.map((item, group) => {
+      {Object.entries(groupedItems).map((item, group) => {
         return (
           <li key={group}>
             <span className="sizegroup-filter">{group}</span>
             <ul className="sizegroup" id={group}>
-              {item.map(clild => {
+              {Object.entries(item).map((clild, key) => {
                 return (
                   <li
-                    key={`$(group)-$(clild.label.split(":").pop())`}
-                    className={`facet-item $((clild.isRefined ? 'is-active' : ''))`}
+                    key={group + "-" + clild.label.split(":").pop()}
+                    className={"facet-item " + (clild.isRefined ? 'is-active' : '')}
                     datadrupalfacetlabel={props.name}
                     onClick={event => {
                       event.preventDefault();
                       refine(clild.label);
                     }}
                   >
-                    <span className="facet-item__value">{`$(clild.label.split(":").pop().trim())`}
+                    <span className="facet-item__value">{clild.label.split(":").pop().trim()}
                       <span className="facet-item__count">({clild.count})</span>
                     </span>
                   </li>
