@@ -67,7 +67,6 @@ if [ $profile = "alshaya_transac" ]; then
       ## Synchronize promotions.
       drush -l $site acspm &>> $HOME/site-install.log
       drush -l $site queue-run acq_promotion_attach_queue &>> $HOME/site-install.log
-      drush -l $site queue-run acq_promotion_detach_queue &>> $HOME/site-install.log
     else
       echo "Commerce data sync have been by-passed given the conductor settings are not set." &>> $HOME/site-install.log
       slack="$slack \n*Commerce data sync have been by-passed given the conductor settings are not set.*"
