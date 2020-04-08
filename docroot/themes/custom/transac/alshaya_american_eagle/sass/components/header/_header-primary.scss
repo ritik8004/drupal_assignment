@@ -48,7 +48,7 @@
       }
 
       @include breakpoint($upto-desktop) {
-        margin: 0.75rem auto 0;
+        margin: 0.5rem auto 0;
 
         html[lang=ar] & {
           margin: 0.125rem auto 0;
@@ -56,7 +56,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        max-width: 11.5rem;
+        max-width: 11rem;
 
         html[lang=ar] & {
           max-width: 7.5rem;
@@ -251,57 +251,58 @@ header.c-header {
       }
 
       @include breakpoint($desktop) {
-        top: -0.125rem;
+        top: 0.125rem;
         height: 1.875rem;
         width: 1.6875rem;
         #{$left}: 0.1875rem;
 
         html[lang=ar] & {
-          right: -0.5rem;
-          top: 0;
+          right: -0.25rem;
+          top: 0.1875rem;
         }
       }
 
       @include breakpoint($only-tablet) {
         margin-#{$left}: 16%;
-        margin-top: -1.25rem;
+        margin-top: -0.875rem;
         background-position: 0 0.125rem;
 
         html[lang=ar] & {
-          margin-top: 0.25rem;
+          margin-top: 0.5625rem;
         }
       }
 
       @include breakpoint($only-mobile) {
         height: 2rem;
         width: 2rem;
-        margin-#{$right}: -0.125rem;
-        margin-top: 0.4375rem;
+        margin-#{$right}: -0.3125rem;
+        margin-top: 0.9375rem;
 
         html[lang=ar] & {
-          margin-top: 0.6875rem;
+          margin-top: 0.9375rem;
+          margin-left: 0.25rem;
         }
       }
     }
 
     .quantity {
       font-size: 0.625rem;
-      #{$left}: 0.125rem;
+      #{$left}: -0.0625rem;
       background: transparent;
-      padding-top: 0.5rem;
+      padding-top: 0;
 
       @include breakpoint($only-tablet) {
         html[lang=ar] & {
-          right: 0.4375rem;
+          right: 0.625rem;
         }
       }
 
       @include breakpoint($only-mobile) {
         bottom: 0.5625rem;
-        #{$left}: 0.3125rem;
+        #{$left}: 0.1825rem;
 
         html[lang=ar] & {
-          right: 0.625rem;
+          right: 0.8125rem;
         }
       }
     }
@@ -404,6 +405,10 @@ header {
       height: 1rem;
       #{$left}: 1.125rem;
       font-size: 0.625rem;
+
+      html[lang=ar] & {
+        right: 0.25rem;
+      }
 
       @include breakpoint($tablet) {
         width: 1.4375rem;
@@ -559,8 +564,8 @@ header {
     .store {
       font-size: 0;
       position: absolute;
-      #{$right}: 7%;
-      top: 0.875rem;
+      #{$right}: 5%;
+      top: 0.9375rem;
       padding: 0.625rem;
       margin: 0;
     }
@@ -568,7 +573,7 @@ header {
 
   @include breakpoint($only-mobile) {
     .mobile--menu {
-      margin-#{$left}: 0;
+      margin-#{$left}: 0.25rem;
       top: 0.9375rem;
     }
 
@@ -579,9 +584,10 @@ header {
   }
 
   .store {
+    @include icon_img('#{$aeo_theme_img_directory_path}/icons/store-finder.svg', 2rem, 2rem);
+
     &::before {
-      font-size: 1.625rem;
-      top: -0.0625rem;
+      content: '';
       #{$left}: -0.1875rem;
 
       html[lang=ar] & {
@@ -616,8 +622,8 @@ header {
         width: 1.75rem;
         height: 1.75rem;
         margin-#{$right}: 0;
-        top: -0.1875rem;
-        #{$left}: -0.4375rem;
+        top: -0.25rem;
+        #{$left}: -0.0625rem;
       }
     }
   }
@@ -656,15 +662,11 @@ header {
         display: block;
         border-top: 2px solid transparent !important;
         border-bottom: none !important;
-        margin-top: 0.3125rem;
         font-size: 0.875rem;
         text-transform: capitalize;
         font-family: $alshaya-thin;
         height: 2.75rem;
-        margin-#{$left}: 1.5rem;
-        margin-#{$right}: 1.5rem;
-        padding-#{$left}: 0;
-        padding-#{$right}: 0;
+        padding: 0.8125rem 1.5rem 0;
 
         &::after {
           content: '';
@@ -777,7 +779,7 @@ header {
     text-align: center;
 
     .main--menu {
-      display: inline-block !important;
+      display: block !important;
     }
   }
 }
@@ -1011,7 +1013,7 @@ header {
 
               @include breakpoint($desktop) {
                 color: $header_c_menu_text;
-                font-weight: bold;
+                text-shadow: 0 0 1px $black;
               }
             }
           }
