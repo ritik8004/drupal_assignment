@@ -142,7 +142,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       if ($this->bundle() == 'simple') {
         // Get label from parent if child does not have label.
         $plugin = $this->getPluginInstance();
-        $parent_sku = $plugin->getParentSku($this);  
+        $parent_sku = $plugin->getParentSku($this);
         if (!empty($parent_sku)) {
           $label = $parent_sku->label();
           return $label;
