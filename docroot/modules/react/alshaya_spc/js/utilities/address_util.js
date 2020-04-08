@@ -395,6 +395,9 @@ export const getAreasList = (isParent, parentId) => {
         label: areas[i].getAttribute(labelAttribute),
       };
     }
+
+    // Sort list by label.
+    areasList.sort((a, b) => ((a.label > b.label) ? 1 : -1));
   }
 
   return areasList;
