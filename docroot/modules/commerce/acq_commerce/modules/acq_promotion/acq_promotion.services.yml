@@ -11,6 +11,11 @@ services:
       - '@config.factory'
       - '@database'
       - '@acq_commerce.i18n_helper'
+      - '@event_dispatcher'
   plugin.manager.acq_promotion:
     class: Drupal\acq_promotion\AcqPromotionPluginManager
     parent: default_plugin_manager
+  acq_promotion.promotion_mapping_updated_event:
+    class: Drupal\acq_promotion\EventSubscriber\PromotionMappingUpdatedEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
