@@ -73,17 +73,19 @@ class ProductMetaImageEventSubscriber implements EventSubscriberInterface {
       $sku = $this->skuManager->getSkuForNode($node);
       $sku_entity = SKU::loadFromSku($sku);
       $sku_media = $this->skuImagesManager->getFirstImage($sku_entity);
-      $teaser_image = $this->skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
-      if (!empty($teaser_image['#uri'])) {
-        $event->setMetaImage(file_create_url($teaser_image['#uri']));
-        // We have three event subscriber to handle meta images.
-        // Execution order for them are -
-        // 1-ProductMetaImageEventSubscriber
-        // 2-SuperCategoryMetaImageEventSubscriber
-        // 3-DefaultMetaImageEventSubscriber
-        // So we if we are on product detail page and if get image
-        // then we are avoiding to execute other event subcribers.
-        $event->stopPropagation();
+      if (!empty($sku_media['drupal_uri'])) {
+        $teaser_image = $this->skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
+        if (!empty($teaser_image['#uri'])) {
+          $event->setMetaImage(file_create_url($teaser_image['#uri']));
+          // We have three event subscriber to handle meta images.
+          // Execution order for them are -
+          // 1-ProductMetaImageEventSubscriber
+          // 2-SuperCategoryMetaImageEventSubscriber
+          // 3-DefaultMetaImageEventSubscriber
+          // So we if we are on product detail page and if get image
+          // then we are avoiding to execute other event subcribers.
+          $event->stopPropagation();
+        }
       }
     }
   }
