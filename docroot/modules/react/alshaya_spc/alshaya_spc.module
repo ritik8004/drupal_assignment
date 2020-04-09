@@ -211,5 +211,6 @@ function alshaya_spc_user_logout(AccountInterface $account) {
   // existing cart related info.
   if (isset($cookies['PHPSESSID'])) {
     setrawcookie('PHPSESSID', '', REQUEST_TIME - 3600, '/');
+    setrawcookie('PHPSESSID-legacy', '', REQUEST_TIME - 3600, '/');
   }
 }
