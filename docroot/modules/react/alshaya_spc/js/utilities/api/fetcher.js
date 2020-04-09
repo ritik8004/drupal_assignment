@@ -31,7 +31,7 @@ const createFetcher = (promiseFunc) => ({
             }
 
             if (!response.data.error && response.data.error) {
-              Drupal.logJavascriptError(response.error_message);
+              Drupal.logJavascriptError(`${promiseFunc.name} fail`, response.error_message);
               return { error: 'error!' };
             }
 
