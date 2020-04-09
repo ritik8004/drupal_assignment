@@ -33,7 +33,7 @@ const SizeGroupFilter = ({items, refine, itemCount, attribute, ...props}) => {
                     datadrupalfacetlabel={props.name}
                     onClick={event => {
                       event.preventDefault();
-                      refine(item.label);
+                      refine(item.value);
                     }}
                   >
                     <span
