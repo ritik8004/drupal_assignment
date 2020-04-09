@@ -193,6 +193,9 @@ class AlshayaFacetsPrettyPathsHelper {
       return $cache->data;
     }
 
+    // Get sizegroup filter settings.
+    $sizeGroupingEnabled = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
+
     $tags = [];
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
     $encoded = $value;
@@ -210,6 +213,15 @@ class AlshayaFacetsPrettyPathsHelper {
     elseif ($is_swatch) {
       $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
       $query->condition('field_sku_option_id', $value);
+      $query->condition('field_sku_attribute_code', $attribute_code);
+      $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+    }
+    // We have a different case for sizegroup.
+    // Values coming for this filter is sigegroup:sizevalue.
+    elseif ($sizeGroupingEnabled && $attribute_code == 'size') {
+      $sizeBreak = explode(':', $value);
+      $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
+      $query->condition('name', $sizeBreak[1]);
       $query->condition('field_sku_attribute_code', $attribute_code);
       $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
     }
@@ -255,6 +267,12 @@ class AlshayaFacetsPrettyPathsHelper {
       $encoded = str_replace($original, $replacement, $encoded);
     }
 
+    // Prepand sigegroup if sizegroup is enabled.
+    if ($sizeGroupingEnabled && $attribute_code == 'size') {
+      $sizeBreak = explode(':', $value);
+      $encoded = $sizeBreak[0] . ':' . $encoded;
+    }
+
     $this->cache->set($cid, $encoded, Cache::PERMANENT, $tags);
     return $encoded;
   }
@@ -280,6 +298,13 @@ class AlshayaFacetsPrettyPathsHelper {
 
     $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
+
+    // Remove sizegroup from recieving value if sizegroup is enabled.
+    $sizeGroupingEnabled = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
+    if ($sizeGroupingEnabled && $attribute_code == 'size') {
+      $sizeBreak = explode(':', $value);
+      $value = $sizeBreak[1];
+    }
 
     // We use ids only for category.
     if ($attribute_code === 'field_category') {
@@ -320,7 +345,12 @@ class AlshayaFacetsPrettyPathsHelper {
       }
     }
 
+    // Prepending sizegroup if sizegroup is enabled.
+    if ($sizeGroupingEnabled && $attribute_code == 'size') {
+      $decoded = $sizeBreak[0] . ':' . $decoded;
+    }
     $static[$value] = $decoded;
+
     return $decoded;
   }
 
