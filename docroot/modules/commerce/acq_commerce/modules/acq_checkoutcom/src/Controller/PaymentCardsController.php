@@ -108,8 +108,8 @@ class PaymentCardsController extends ControllerBase {
     $route_user_obj = $this->currentRequest->get('user');
     $user = $route_user_obj instanceof UserInterface ? $route_user_obj : NULL;
     return AccessResult::allowedIf(
-      alshaya_acm_customer_is_customer($this->currentUser())
-      && $this->currentUser->id() === $user->id()
+      !empty($user->get('acq_customer_id')->getString())
+      && $this->currentUser->id() == $user->id()
       && $this->apiHelper->getCheckoutcomConfig('vault_enabled')
     );
   }
