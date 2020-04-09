@@ -271,6 +271,8 @@ class PaymentMethodCybersource extends React.Component {
               }}
               onChange={() => this.showCardType()}
               onBlur={(e) => this.handleCardNumberChange(e, 'blur')}
+              name="spc-no-autocomplete-cy-number"
+              autoComplete="off"
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('Card Number')}</label>
@@ -285,6 +287,8 @@ class PaymentMethodCybersource extends React.Component {
                 datePattern: ['m', 'y'],
                 delimiter: '/',
               }}
+              name="spc-no-autocomplete-cy-exp"
+              autoComplete="off"
               onBlur={(e) => this.handleCardExpiryChange(e, 'blur')}
             />
             <div className="c-input__bar" />
@@ -300,6 +304,8 @@ class PaymentMethodCybersource extends React.Component {
               required
               onChange={(e) => this.enableCheckoutLink(e)}
               onBlur={(e) => this.handleCardCvvChange(e, 'blur')}
+              name="spc-no-autocomplete-cy-cvv"
+              autoComplete="off"
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('CVV')}</label>

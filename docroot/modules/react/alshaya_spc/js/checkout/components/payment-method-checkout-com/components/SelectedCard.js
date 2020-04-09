@@ -29,6 +29,8 @@ const SelectedCard = ({
           pattern="\d{3,4}"
           maxLength="4"
           required
+          name="spc-no-autocomplete-saved-cvv"
+          autoComplete="off"
           onChange={handleCardCvvChange}
           onBlur={(e) => labelEffect(e, 'blur')}
         />
