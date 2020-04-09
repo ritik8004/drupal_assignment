@@ -24,8 +24,8 @@ class ContactInfoForm extends React.Component {
     }
 
     showFullScreenLoader();
-    const { contactInfo: { fullname, email } } = this.context;
-    const name = drupalSettings.user.uid > 0 ? fullname : e.target.elements.fullname.value.trim();
+    const { contactInfo: { email } } = this.context;
+    const name = e.target.elements.fullname.value.trim();
     const { firstname, lastname } = extractFirstAndLastName(name);
     const formData = {
       static: {
@@ -161,7 +161,6 @@ class ContactInfoForm extends React.Component {
       >
         <FixedFields
           showEmail={drupalSettings.user.uid === 0}
-          showFullName={drupalSettings.user.uid === 0}
           defaultVal={contactInfo ? { static: contactInfo } : []}
           subTitle={subTitle}
         />
