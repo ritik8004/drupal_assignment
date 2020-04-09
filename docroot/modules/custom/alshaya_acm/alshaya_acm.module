@@ -757,7 +757,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
   }
   else {
     // Get SKU attributes.
-    $sku_attributes = alshaya_acm_product_get_sku_configurable_values($sku_entity);
+    $sku_attributes = alshaya_acm_product_get_sku_configurable_values_for_cart($sku_entity);
     $sku_image = alshaya_acm_get_product_display_image($sku_entity, 'cart_thumbnail', 'cart');
     $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity);
 

@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
@@ -418,4 +419,62 @@ function alshaya_acm_product_generate_video_embed_url($url, $provider) {
     $embed_url .= ($provider == 'youtube') ? '?enablejsapi=1' : '';
   }
   return $embed_url;
+}
+
+/**
+ * Returns the configurable SKU attributes.
+ *
+ *   This is a lightweighted function to be used to fetch the SKU attributes
+ * to be displayed in the cart.
+ *
+ * @param mixed $sku
+ *   SKU text or full entity object.
+ *
+ * @return array
+ *   Array of configurable field values.
+ */
+function alshaya_acm_product_get_sku_configurable_values_for_cart($sku) {
+  $configurableFieldValues = [];
+  $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  if ($sku instanceof SKUInterface) {
+    // Get the parent SKU so that its configurable attributes can be fetched.
+    if ($sku->bundle() !== 'configurable') {
+      $parent_sku = $skuManager->getParentSkuBySku($sku);
+
+      if ($parent_sku instanceof SKUInterface && $parent_sku->bundle() !== 'configurable') {
+        return $configurableFieldValues;
+      }
+    }
+    else {
+      $parent_sku = $sku;
+    }
+    $configurable_codes = Configurable::getSortedConfigurableAttributes($parent_sku);
+
+    // Get the actual SKU attributes like size, color etc.
+    $attributes = $sku->get('attributes')->getValue();
+    $attributes = array_column($attributes, 'value', 'key');
+
+    $remove_not_required_option = $skuManager->isNotRequiredOptionsToBeRemoved();
+    foreach ($configurable_codes as $code) {
+      $fieldKey = 'attr_' . $code['code'];
+
+      if ($sku->hasField($fieldKey)) {
+        $value = $sku->get($fieldKey)->getString();
+
+        if ($remove_not_required_option && $skuManager->isAttributeOptionToExclude($value)) {
+          continue;
+        }
+
+        $configurableFieldValues[$fieldKey] = [
+          'label' => $skuManager->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
+            ->getFieldDefinition()
+            ->getLabel(),
+          'value' => $sku->get($fieldKey)->getString(),
+        ];
+      }
+    }
+  }
+  return $configurableFieldValues;
 }
