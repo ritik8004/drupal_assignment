@@ -183,6 +183,7 @@
       > li {
         margin-bottom: 0;
         position: relative;
+        text-transform: capitalize;
 
         &.is-open {
           font-family: $hnm-demibold;

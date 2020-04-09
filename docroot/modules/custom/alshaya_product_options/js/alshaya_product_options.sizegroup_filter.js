@@ -68,7 +68,7 @@
         // This is separate by , so that other JS logic bypasses it
         // and this will be handled by this behaviour specifically
         // See openSelectedSizeGroupFilter function.
-        $('#all-filter-active-facet-sort').val($(this).children('ul').attr('id') + ',' + $(this).closest('.c-facet').attr('id'));
+        $('#all-filter-active-facet-sort', $(this).closest('.filter__inner').closest('.block')).val($(this).children('ul').attr('id') + ',' + $(this).closest('.c-facet').attr('id'));
 
         // Stop event bubbling and normal execution.
         event.stopPropagation();

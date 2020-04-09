@@ -181,6 +181,7 @@
     > li {
       margin-bottom: 0;
       position: relative;
+      text-transform: capitalize;
 
       &.is-open {
         font-family: $hnm-demibold;
@@ -258,7 +259,6 @@
         line-height: 1.2;
         border-bottom: 1px solid $plp_all_filter_item_border;
         letter-spacing: normal;
-        text-transform: capitalize;
       }
     }
 
