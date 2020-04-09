@@ -39,6 +39,11 @@ export const fetchCartData = () => {
         if (response.data.error) {
           redirectToCart();
         }
+
+        if (Object.values(response.data.items).length === 0) {
+          redirectToCart();
+        }
+
         return response.data;
       })
       .catch((error) => {
@@ -52,6 +57,10 @@ export const fetchCartData = () => {
     // just use and return that.
     if (cart.cart_id === null) {
       return null;
+    }
+
+    if (Object.values(cart.items).length === 0) {
+      redirectToCart();
     }
 
     // On logout cart object will have a user id and drupalSettings uid will be
