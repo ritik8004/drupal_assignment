@@ -37,6 +37,7 @@ const WidgetManager = React.memo((props) => {
       break;
 
     case 'size_group_list':
+      className = 'size_group_list';
       currentWidget = (
         <SizeGroupFilter
           name={name}
