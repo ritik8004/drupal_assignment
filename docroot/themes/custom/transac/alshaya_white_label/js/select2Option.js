@@ -23,21 +23,22 @@ jQuery.fn.select2Option = function (options) {
       var ulHtml = $('<ul class="select-buttons">');
       optGroup.children('option').each(function () {
         var liHtml = $('<li></li>');
+        var textValue = $(this).text().replace(/"/g, '&quot;');
 
         liHtml.attr('class', $(this).attr('class'));
 
         if ($(this).attr('swatch-image')) {
           liHtml.addClass('li-swatch-image');
-          var swatchImage = '<img src="' + $(this).attr('swatch-image') + '" alt="' + $(this).text() + '" />';
+          var swatchImage = '<img src="' + $(this).attr('swatch-image') + '" alt="' + textValue + '" />';
           if (selectIndex === 0) {
             liHtml.hide();
           }
           else if ($(this).attr('disabled') || select.attr('disabled')) {
             liHtml.addClass('disabled');
-            liHtml.append('<span class="' + $(this).text() + '">' + swatchImage + '</span>');
+            liHtml.append('<span class="' + textValue + '">' + swatchImage + '</span>');
           }
           else {
-            liHtml.append('<a href="#" data-value="' + $(this).text() + '" class="' + $(this).text().replace(/\s+/g, '-') + '" data-select-index="' + selectIndex + '">' + swatchImage + '</a>');
+            liHtml.append('<a href="#" data-value="' + textValue + '" class="' + textValue.replace(/\s+/g, '-') + '" data-select-index="' + selectIndex + '">' + swatchImage + '</a>');
           }
         }
         else {
@@ -48,7 +49,7 @@ jQuery.fn.select2Option = function (options) {
               labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
             }
             else {
-              labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
+              labeltext = '<h4 class="list-title"><span>' + textValue + ' : <span></h4>';
             }
           }
           else if ($(this).attr('disabled') || select.attr('disabled')) {
@@ -59,7 +60,7 @@ jQuery.fn.select2Option = function (options) {
               liHtml.append(swatch_markup);
             }
             else {
-              liHtml.append('<span class="' + $(this).text() + '">' + $(this).text() + '</span>');
+              liHtml.append('<span class="' + textValue + '">' + textValue + '</span>');
             }
           }
           else {
@@ -69,7 +70,7 @@ jQuery.fn.select2Option = function (options) {
               liHtml.append(swatch_markup);
             }
             else {
-              liHtml.append('<a href="#" data-value="' + $(this).text() + '" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).text() + '</a>');
+              liHtml.append('<a href="#" data-value="' + textValue + '" class="' + textValue + '" data-select-index="' + selectIndex + '">' + textValue + '</a>');
             }
           }
         }
@@ -121,6 +122,8 @@ jQuery.fn.select2Option = function (options) {
       if ($(this).attr('data-color-label')) {
         selectedText = $(this).attr('data-color-label');
       }
+
+      selectedText = selectedText.replace(/"/g, '&quot;');
 
       $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + selectedText + '</span>');
       if ($(this).hasClass('picked')) {
