@@ -22,7 +22,7 @@ const OrderSummaryItem = (props) => {
   }
 
   if (type === 'cnc') {
-    const { name, address } = props;
+    const { name, address, phone } = props;
     return (
       <div className="spc-order-summary-item spc-order-summary-address-item">
         <span className="spc-label">{`${label}:`}</span>
@@ -32,6 +32,7 @@ const OrderSummaryItem = (props) => {
           </span>
           <span className="spc-address">
             {address}
+            <span className="spc-cnc-address-phone">{phone}</span>
           </span>
         </span>
       </div>
