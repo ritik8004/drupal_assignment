@@ -102,6 +102,7 @@ class AddToCartFormHelper {
       $configurable['#options_attributes']['']['disabled'] = 'disabled';
       $configurable['#empty_option'] = $overridden_label ?? $this->t('Select @title', ['@title' => $configurable['#title']]);
       $configurable['#attributes']['data-default-title'] = $overridden_label ?? $configurable['#title'];
+      $configurable['#title'] = $overridden_label ?? $configurable['#title'];
 
       $overridden_selected_label = $this->fieldsHelper->getOverriddenAttributeSelectedLabel($key);
       $configurable['#attributes']['data-selected-title'] = $overridden_selected_label ?? $configurable['#attributes']['data-default-title'];
