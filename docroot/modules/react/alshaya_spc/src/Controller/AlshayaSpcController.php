@@ -260,9 +260,15 @@ class AlshayaSpcController extends ControllerBase {
         continue;
       }
 
-      /** @var \Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase $plugin */
-      $plugin = $this->paymentMethodManager->createInstance($payment_method['id']);
-      $plugin->processBuild($build);
+      try {
+        /** @var \Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase $plugin */
+        $plugin = $this->paymentMethodManager->createInstance($payment_method['id']);
+        $plugin->processBuild($build);
+      }
+      catch (\Exception $e) {
+        // Ignore the payment method if it throws exception.
+        continue;
+      }
 
       $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id']);
 
