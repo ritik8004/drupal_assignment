@@ -27,6 +27,13 @@ const Teaser = ({hit}) => {
   }
 
   const showSwatches = drupalSettings.reactTeaserView.swatches.showSwatches;
+  const collectionLabel = {};
+  if (hit.attr_product_environment !== undefined) {
+    collectionLabel.env_label = hit.attr_product_environment;
+  }
+  if (hit.attr_concept !== undefined) {
+    collectionLabel.concept = hit.attr_concept;
+  }
 
   return (
     <div className="c-products__item views-row" >
@@ -49,6 +56,18 @@ const Teaser = ({hit}) => {
             <Gallery media={hit.media} title={hit.title} />
           </a>
           <div className="product-plp-detail-wrapper">
+            { (collectionLabel.env_label !== undefined || collectionLabel.concept !== undefined) &&
+              <div className="product-labels">
+                <ul className="collection-labels">
+                  { collectionLabel.env_label !== undefined &&
+                    <li className="collection-label-primary">{collectionLabel.env_label}</li>
+                  }
+                  { collectionLabel.concept !== undefined &&
+                    <li className="collection-label-default">{collectionLabel.concept}</li>
+                  }
+                </ul>
+              </div>
+            }
             <h2 className="field--name-name">
               <a href={`${hit.url}`} className="product-selected-url">
                 <div className="aa-suggestion">

@@ -323,3 +323,69 @@ function alshaya_hm_sku_variant_info_alter(array &$variant, SKUInterface $child,
     'markup' => $warning_markup,
   ];
 }
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_hm_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  if ($context == 'search') {
+    // Product attribute labels for teaser view.
+    $labels = _alshaya_hm_get_collection_labels($sku);
+    $build['#product_attribute_labels'] = [
+      '#markup' => $labels,
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_template().
+ */
+function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
+  if ($vars['sku'] instanceof SKUInterface) {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    // Get parent sku.
+    $parent_sku = $skuManager->getParentSkuBySku($vars['sku']);
+    $labels = _alshaya_hm_get_collection_labels($parent_sku);
+    $vars['product_attribute_labels'] = [
+      '#markup' => $labels,
+    ];
+  }
+}
+
+/**
+ * Get collection labels from sku.
+ *
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   Sku object.
+ *
+ * @return string
+ *   Labels with markup.
+ */
+function _alshaya_hm_get_collection_labels(SKUInterface $sku) {
+  $product_attribute_labels = [];
+  $label_product_environment = '';
+  if ($sku->hasField('attr_product_environment') && $sku->get('attr_product_environment')->getString()) {
+    // This gives primary label eg: conscious.
+    $label_product_environment = $sku->get('attr_product_environment')->getString();
+  }
+  if ($sku->hasField('attr_concept') && $sku->get('attr_concept')->getString()) {
+    if (strstr($sku->get('attr_concept')->getString(), ',')) {
+      $product_attribute_labels = array_merge(
+        $product_attribute_labels, explode(', ', $sku->get('attr_concept')->getString())
+      );
+    }
+    else {
+      $product_attribute_labels[] = $sku->get('attr_concept')->getString();
+    }
+  }
+  $labels = '';
+  if ($label_product_environment) {
+    $labels .= '<li class="collection-label-primary">' . $label_product_environment . '</li>';
+  }
+  foreach ($product_attribute_labels as $attribute_label) {
+    $labels .= '<li class="collection-label-default">' . $attribute_label . '</li>';
+  }
+
+  return $labels;
+}

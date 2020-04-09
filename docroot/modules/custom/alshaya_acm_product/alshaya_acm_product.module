@@ -275,6 +275,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
       'swatches' => NULL,
       'swatch_more_text' => NULL,
       'swatch_color_count' => NULL,
+      'product_attribute_labels' => NULL,
     ],
   ];
 
@@ -521,7 +522,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     if ($sku_entity instanceof SKU) {
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
       $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $entity->getCacheTags());
-
       if ($view_mode == 'search_result') {
         $build['labels'] = [
           '#theme' => 'product_labels',
