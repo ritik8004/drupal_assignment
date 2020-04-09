@@ -446,6 +446,11 @@ function alshaya_acm_product_get_sku_configurable_values_for_cart($sku) {
       if ($parent_sku instanceof SKUInterface && $parent_sku->bundle() !== 'configurable') {
         return $configurableFieldValues;
       }
+      elseif (!$parent_sku) {
+        // In case for some reason no parent is available then error is not
+        // thrown.
+        return $configurableFieldValues;
+      }
     }
     else {
       $parent_sku = $sku;
