@@ -268,7 +268,8 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     // Prepand sigegroup if sizegroup is enabled.
-    if ($sizeGroupingEnabled && $attribute_code == 'size') {
+    // Do not execute it for selected filter.
+    if ($sizeGroupingEnabled && $attribute_code == 'size' && strpos($encoded, ':') == FALSE) {
       $sizeBreak = explode(':', $value);
       $encoded = $sizeBreak[0] . ':' . $encoded;
     }
