@@ -32,6 +32,7 @@ const OrderSummary = () => {
   let etaLabel = Drupal.t('expected delivery within');
   const storeAddress = [];
   const storeInfo = drupalSettings.order_details.delivery_type_info.store;
+  let storePhone = '';
   if (storeInfo !== undefined) {
     storeAddress.push(storeInfo.store_name);
     if (storeInfo.store_address.address_line1 !== undefined
@@ -60,7 +61,7 @@ const OrderSummary = () => {
     }
     if (storeInfo.store_phone !== undefined
       && storeInfo.store_phone !== null) {
-      storeAddress.push(storeInfo.store_phone);
+      storePhone = storeInfo.store_phone;
     }
     etaLabel = Drupal.t('available instore within');
   }
@@ -127,7 +128,7 @@ const OrderSummary = () => {
           {(storeAddress.length > 0 && storeInfo !== undefined)
             && (
               <>
-                <OrderSummaryItem type="cnc" label={Drupal.t('collection store')} name={storeInfo.store_name} address={storeAddress.join(', ')} />
+                <OrderSummaryItem type="cnc" label={Drupal.t('collection store')} name={storeInfo.store_name} phone={storePhone} address={storeAddress.join(', ')} />
                 <OrderSummaryItem label={Drupal.t('collection by')} value={customerName} />
               </>
             )}
