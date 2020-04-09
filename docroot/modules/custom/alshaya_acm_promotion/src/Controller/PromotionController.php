@@ -367,7 +367,7 @@ class PromotionController extends ControllerBase {
     // Add cache metadata.
     $cache_array = [
       'tags' => ['node_type:acq_promotion'],
-      'context' => ['url.query_args'],
+      'contexts' => ['url.query_args'],
     ];
     Cache::mergeTags($cache_array['tags'], $sku->getCacheTags());
     Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
@@ -391,7 +391,7 @@ class PromotionController extends ControllerBase {
     // Add cache metadata.
     $cache_array = [
       'tags' => ['node_type:acq_promotion'],
-      'context' => ['url.query_args'],
+      'contexts' => ['url.query_args'],
     ];
     Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
 
