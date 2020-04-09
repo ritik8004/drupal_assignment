@@ -78,10 +78,7 @@ class CheckoutComApplePay extends AlshayaSpcPaymentMethodPluginBase implements C
   }
 
   /**
-   * Allow checking if a particular payment method is available or not.
-   *
-   * @return bool
-   *   TRUE (default) if available.
+   * {@inheritdoc}
    */
   public function isAvailable() {
     $status = $this->checkoutComApiHelper->getCheckoutcomConfig('applepay_enabled');
