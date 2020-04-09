@@ -13,6 +13,10 @@
     @include breakpoint($desktop) {
       max-height: 35rem;
       overflow-y: auto;
+
+      ul {
+        max-height: unset;
+      }
     }
   }
 
