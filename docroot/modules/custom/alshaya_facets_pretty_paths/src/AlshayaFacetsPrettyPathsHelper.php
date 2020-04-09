@@ -302,7 +302,7 @@ class AlshayaFacetsPrettyPathsHelper {
 
     // Remove sizegroup from recieving value if sizegroup is enabled.
     $sizeGroupingEnabled = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
-    if ($sizeGroupingEnabled && $attribute_code == 'size') {
+    if ($sizeGroupingEnabled && $attribute_code == 'size' && strpos($value, ':') !== FALSE) {
       $sizeBreak = explode(':', $value);
       $value = $sizeBreak[1];
     }
@@ -347,7 +347,7 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     // Prepending sizegroup if sizegroup is enabled.
-    if ($sizeGroupingEnabled && $attribute_code == 'size') {
+    if ($sizeGroupingEnabled && $attribute_code == 'size' && isset($sizeBreak[0])) {
       $decoded = $sizeBreak[0] . ':' . $decoded;
     }
     $static[$value] = $decoded;
