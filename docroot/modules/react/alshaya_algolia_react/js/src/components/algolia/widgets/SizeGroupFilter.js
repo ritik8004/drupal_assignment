@@ -2,8 +2,12 @@ import React from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
 
 // Creating size grouping filter.
-const SizeGroupFilter = ({items, refine, itemCount, attribute, ...props}) => {
-  if (typeof itemCount != 'undefined') {
+const SizeGroupFilter = (
+  {
+    items, refine, itemCount, attribute, ...props
+  },
+) => {
+  if (typeof itemCount !== 'undefined') {
     itemCount(attribute, items.length);
   }
 
@@ -20,33 +24,35 @@ const SizeGroupFilter = ({items, refine, itemCount, attribute, ...props}) => {
 
   return (
     <ul>
-      {Object.keys(groupedItems).map((group) => {
-        return (
-          <li key={group}>
-            <span className="sizegroup-filter">{group}</span>
-            <ul className="sizegroup" id={group}>
-              {Object.values(groupedItems[group]).map((item) => {
-                return (
-                  <li
-                    key={group + "-" + item.label.split(":").pop()}
-                    className={"facet-item " + (item.isRefined ? 'is-active' : '')}
-                    datadrupalfacetlabel={props.name}
-                    onClick={event => {
-                      event.preventDefault();
-                      refine(item.value);
-                    }}
-                  >
-                    <span
-                      className="facet-item__value">{item.label.split(":").pop().trim()}
-                      <span className="facet-item__count">({item.count})</span>
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-          </li>
-        )
-      })}
+      {Object.keys(groupedItems).map((group) => (
+        <li key={group}>
+          <span className="sizegroup-filter">{group}</span>
+          <ul className="sizegroup" id={group}>
+            {Object.values(groupedItems[group]).map((item) => (
+              <li
+                key={`${group}-${item.label.split(':').pop()}`}
+                className={`facet-item  ${(item.isRefined ? 'is-active' : '')}`}
+                datadrupalfacetlabel={props.name}
+                onClick={(event) => {
+                  event.preventDefault();
+                  refine(item.value);
+                }}
+              >
+                <span
+                  className="facet-item__value"
+                >
+                  {item.label.split(':').pop().trim()}
+                  <span className="facet-item__count">
+                    (
+                    {item.count}
+                    )
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))}
     </ul>
   );
 };
