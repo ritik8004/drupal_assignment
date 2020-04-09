@@ -16,12 +16,11 @@
       if(active_facet_sort_elements.length > 1) {
         for(var i = 0; i < active_facet_sort_elements.length ; i++) {
           // Normal execution in case of the facet block selector.
-          if($('.all-filters #' + active_facet_sort_elements[i]).hasClass('block-facets')
-            || $('.all-filters-algolia #' + active_facet_sort_elements[i]).hasClass('c-facet')) {
-            $('.all-filters #'  + active_facet_sort_elements[i] + ', .all-filters-algolia #' + active_facet_sort_elements[i]).addClass('show-facet');
+          if($('.all-filters #' + active_facet_sort_elements[i]).hasClass('block-facets')) {
+            $('.all-filters #'  + active_facet_sort_elements[i]).addClass('show-facet');
           } else { // Add class to the parent of selected children if the selector is not block facet.
-            $('.all-filters #block-plpsize >ul >li, .all-filters-algolia #attr_size >ul >li').hide();
-            $('.all-filters [id=' + active_facet_sort_elements[i] + '], .all-filters-algolia [id=' + active_facet_sort_elements[i] + ']').parent().addClass('show-facet');
+            $('.all-filters #block-plpsize >ul >li').hide();
+            $('.all-filters [id=' + active_facet_sort_elements[i] + ']').parent().addClass('show-facet');
           }
         }
       }
@@ -32,11 +31,11 @@
       Drupal.behaviors.sizegroupFilter.openSelectedSizeGroupFilter();
 
       // Override reopen facet logic.
-      $('.sticky-filter-wrapper').once('facet-show-all-for-sizegroup-processed').on('click', '.show-all-filters, .show-all-filters-algolia', function() {
+      $('.sticky-filter-wrapper').once('facet-show-all-for-sizegroup-processed').on('click', '.show-all-filters', function() {
         Drupal.behaviors.sizegroupFilter.openSelectedSizeGroupFilter();
       });
 
-      $('.sticky-filter-wrapper').once('product-option-show-size-filter').on('click tap', '#block-plpsize ul li, #attr_size ul li', function (context) {
+      $('.sticky-filter-wrapper').once('product-option-show-size-filter').on('click tap', '#block-plpsize ul li', function (context) {
         var $oldOpenedEl = $('.is-open', $(this).parent());
         if($(this).hasClass('is-open')) {
           $oldOpenedEl.removeClass('is-open');
@@ -47,7 +46,7 @@
         $(this).addClass('is-open');
       });
 
-      $('.all-filters, .all-filters-algolia').on('click', '#block-plpsize >ul >li, #attr_size >ul >li', function (event) {
+      $('.all-filters').on('click', '#block-plpsize >ul >li', function (event) {
         // Update the title on click of facet.
         var facet_title = $(event.target).text();
 
@@ -62,7 +61,7 @@
         $('.filter-sort-title').html(facet_title);
         // Only show current facet and hide all others.
         $(this).removeClass('show-facet');
-        $('.all-filters #block-plpsize >ul >li, .all-filters-algolia #attr_size >ul >li').hide();
+        $('.all-filters #block-plpsize >ul >li').hide();
         $(this).addClass('show-facet');
         // Pass comma separated ids for the elements to make visible.
         // This is separate by , so that other JS logic bypasses it
@@ -75,18 +74,18 @@
         event.preventDefault();
       });
 
-      $('.all-filters, .all-filters-algolia').once('facet-all-back-for-sizegroup-processed').on('click', '.facet-all-back, .back-facet-list', function() {
-        var $selectedGrandChild = $('.all-filters #block-plpsize >ul >li.show-facet, .all-filters-algolia #attr_size >ul >li.show-facet');
+      $('.all-filters').once('facet-all-back-for-sizegroup-processed').on('click', '.facet-all-back', function() {
+        var $selectedGrandChild = $('.all-filters #block-plpsize >ul >li.show-facet');
 
         // If any grand child is open go to this custom logic.
         if($selectedGrandChild.length) {
           // Reset what is done in the above click handler to reset the state.
-          $('.all-filters #block-plpsize >ul >li, .all-filters-algolia #attr_size >ul >li').show();
+          $('.all-filters #block-plpsize >ul >li').show();
           // Select it's parent (child of main grand parent) and trigger click on it.
           // This is done in order to mimmick the back state.
           $selectedGrandChild.closest('.c-facet').find('.c-facet__title').trigger('click');
           // Reset the show facet class to reset to original state.
-          $('.all-filters #block-plpsize >ul >li.show-facet, .all-filters-algolia #attr_size >ul >li.show-facet').removeClass('show-facet');
+          $('.all-filters #block-plpsize >ul >li.show-facet').removeClass('show-facet');
         }
 
         // Stop event bubbling and normal execution.
