@@ -148,7 +148,7 @@ export default class AreaSelect extends React.Component {
         {showFilterList
           && (
           <FilterList
-            selected={options[currentOption]}
+            selected={currentOption}
             options={options}
             placeHolderText={Drupal.t('Search for @label', { '@label': field.label })}
             processingCallback={this.processSelectedItem}
