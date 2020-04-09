@@ -48,11 +48,3 @@ services:
       - '@acq_cart.cart_storage'
     tags:
       - { name: 'event_subscriber' }
-  alshaya_acm_checkout.payment_cards_access_check:
-    class: Drupal\alshaya_acm_checkout\Access\PaymentCardsAccessCheck
-    arguments:
-      - '@current_route_match'
-      - '@current_user'
-      - '@acq_checkoutcom.agent_api'
-    tags:
-      - { name: access_check, applies_to: _payment_cards_access }
