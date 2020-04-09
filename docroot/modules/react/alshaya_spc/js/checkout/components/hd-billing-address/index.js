@@ -97,13 +97,19 @@ export default class HDBillingAddress extends React.Component {
       return (null);
     }
 
+    let showMessage = shippingAsBilling;
+    // If CnC is used for delivery method, we dont show message on address.
+    if (cart.cart.delivery_type === 'cnc') {
+      showMessage = false;
+    }
+
     return (
       <div className="spc-section-billing-address">
         <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
             <BillingInfo cart={cart} refreshCart={refreshCart} />
-            {shippingAsBilling
+            {showMessage
             && <div className="spc-billing-help-text">{this.sameBillingAsShippingMessage()}</div>}
           </div>
         </div>
