@@ -78,25 +78,36 @@ class CheckoutComApplePay extends AlshayaSpcPaymentMethodPluginBase implements C
   }
 
   /**
-   * {@inheritdoc}
+   * Allow checking if a particular payment method is available or not.
+   *
+   * @return bool
+   *   TRUE (default) if available.
    */
-  public function processBuild(array &$build) {
+  public function isAvailable() {
     $status = $this->checkoutComApiHelper->getCheckoutcomConfig('applepay_enabled');
     if (!$status) {
-      throw new \Exception('Apple pay not enabled');
+      return FALSE;
     }
 
     $settings = $this->getApplePayConfig();
     if (empty($settings['merchantIdentifier'])) {
       $this->getLogger('checkout_com_applepay')->warning('Apple pay status enabled but no merchant identifier set, ignoring.');
-      throw new \Exception('Apple pay merchant identifier not set');
+      return FALSE;
     }
 
     if (!in_array($settings['allowedIn'], ['all', 'mobile'])) {
       $this->getLogger('checkout_com_applepay')->warning('Apple pay configuration for allowed in not valid, ignoring.');
-      throw new \Exception('Apple pay allowed in none or invalid');
+      return FALSE;
     }
 
+    return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function processBuild(array &$build) {
+    $settings = $this->getApplePayConfig();
     $build['#attached']['drupalSettings']['checkoutComApplePay'] = $settings;
   }
 
@@ -107,6 +118,12 @@ class CheckoutComApplePay extends AlshayaSpcPaymentMethodPluginBase implements C
    *   Apple pay config.
    */
   protected function getApplePayConfig() {
+    static $settings = NULL;
+
+    if (isset($settings)) {
+      return $settings;
+    }
+
     // Data from API.
     $settings = [
       'merchantIdentifier' => $this->checkoutComApiHelper->getCheckoutcomConfig('applepay_merchant_id'),

@@ -10,6 +10,16 @@ use Drupal\Component\Plugin\PluginBase;
 abstract class AlshayaSpcPaymentMethodPluginBase extends PluginBase {
 
   /**
+   * Allow checking if a particular payment method is available or not.
+   *
+   * @return bool
+   *   TRUE (default) if available.
+   */
+  public function isAvailable() {
+    return TRUE;
+  }
+
+  /**
    * Add additional JS / CSS / drupalSettings for the plugin.
    *
    * @param array $build
