@@ -2,6 +2,7 @@
 
 namespace App\Logger\Decorator;
 
+use App\Logger\Formatter\MiddlewareLogFormatter;
 use Monolog\Handler\SyslogHandler;
 use Monolog\Logger;
 
@@ -11,9 +12,20 @@ use Monolog\Logger;
 class SysLogDecorator extends SyslogHandler {
 
   /**
-   * SysLogDecorator constructor.
+   * Log formatter.
+   *
+   * @var \App\Logger\Formatter\MiddlewareLogFormatter
    */
-  public function __construct() {
+  protected $middleWareLogFormatter;
+
+  /**
+   * SysLogDecorator constructor.
+   *
+   * @param \App\Logger\Formatter\MiddlewareLogFormatter $middleware_log_formatter
+   *   Log formatter.
+   */
+  public function __construct(MiddlewareLogFormatter $middleware_log_formatter) {
+    $this->middleWareLogFormatter = $middleware_log_formatter;
     $identity = isset($_SERVER['AH_SITE_NAME']) ? $_SERVER['AH_SITE_NAME'] : 'drupal';
     $logger = Logger::DEBUG;
     // For production, we don;t use debug level.
@@ -22,6 +34,13 @@ class SysLogDecorator extends SyslogHandler {
       $logger = Logger::INFO;
     }
     parent::__construct($identity, LOG_LOCAL0, $logger);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getDefaultFormatter() {
+    return $this->middleWareLogFormatter;
   }
 
 }
