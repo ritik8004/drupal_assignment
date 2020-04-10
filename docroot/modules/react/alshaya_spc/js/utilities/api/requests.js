@@ -48,7 +48,7 @@ export const fetchCartData = () => {
       })
       .catch((error) => {
         // Processing of error here.
-        Drupal.logJavascriptError(error);
+        Drupal.logJavascriptError('Restore cart fail', error);
       });
   }
   if (!Number.isInteger(cart)) {
@@ -87,6 +87,6 @@ export const fetchCartData = () => {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError(error);
+      Drupal.logJavascriptError('Get cart api fail', error);
     });
 };
