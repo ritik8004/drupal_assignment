@@ -441,14 +441,14 @@ class ClickCollect extends React.Component {
             <a className="close" onClick={closeModal}>
               &times;
             </a>
-            {locationAccess === false
+            <div className="spc-cnc-address-form-wrapper">
+              {locationAccess === false
               && (
-                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal">
+                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
                   {LOCATION_ACCESS_DEINED}
                   <a href="#" onClick={() => updateLocationAccess(true)}>{DISMISS}</a>
                 </CheckoutMessage>
               )}
-            <div className="spc-cnc-address-form-wrapper">
               <div className="spc-cnc-address-form-content">
                 <SectionTitle>
                   {FIND_YOUR_NEAREST_STORE}
