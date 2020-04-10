@@ -167,7 +167,6 @@ export default class Cart extends React.Component {
               {Drupal.t('my shopping bag (@qty items)', { '@qty': totalItems })}
             </SectionTitle>
             <CartItems items={items} />
-            <VatFooterText />
           </div>
           <div className="spc-sidebar">
             <CartPromoBlock coupon_code={couponCode} inStock={inStock} />
@@ -181,6 +180,9 @@ export default class Cart extends React.Component {
         </div>
         <div className="spc-post-content">
           <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} recommended_products={recommendedProducts} />
+        </div>
+        <div className="spc-footer">
+          <VatFooterText />
         </div>
       </>
     );
