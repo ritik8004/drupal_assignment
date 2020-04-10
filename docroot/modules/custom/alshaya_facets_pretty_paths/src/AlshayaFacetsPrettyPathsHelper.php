@@ -271,7 +271,59 @@ class AlshayaFacetsPrettyPathsHelper {
     // Do not execute it for selected filter.
     if ($sizeGroupingEnabled && $attribute_code == 'size' && strpos($encoded, ':') == FALSE) {
       $sizeBreak = explode(':', $value);
-      $encoded = $sizeBreak[0] . ':' . $encoded;
+      $encoded = $this->getSizegroupAttributeAliasFromValue($sizeBreak[0]) . ':' . $encoded;
+    }
+
+    $this->cache->set($cid, $encoded, Cache::PERMANENT, $tags);
+    return $encoded;
+  }
+
+  /**
+   * Get the sizegroup attribute alias from value.
+   *
+   * @return string
+   *   Alias.
+   */
+  public function getSizegroupAttributeAliasFromValue($value) {
+    // In case of other we don't have any attribute so return it as well.
+    if ($value == 'other') {
+      return 'other';
+    }
+
+    $cid = implode(':', [
+      'sizegroup-encode',
+      $value,
+    ]);
+
+    $cache = $this->cache->get($cid);
+    if (!empty($cache)) {
+      return $cache->data;
+    }
+
+    $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
+    $query->condition('name', $value);
+    $query->condition('field_sku_attribute_code', 'size_group_code');
+    $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+
+    $ids = $query->execute();
+
+    $tags = [];
+    foreach ($ids ?? [] as $id) {
+      $alias = $this->aliasManager->getAliasByPath('/taxonomy/term/' . $id, 'en');
+      $alias = trim($alias, '/');
+
+      if (strpos($alias, 'taxonomy/term') === FALSE) {
+        $tags[] = 'taxonomy_term:' . $id;
+        $encoded = str_replace($this->getProductOptionAliasPrefix() . '/', '', $alias);
+
+        // Decode it once, it will be encoded again later.
+        $encoded = urldecode($encoded);
+        break;
+      }
+    }
+
+    foreach (self::REPLACEMENTS as $original => $replacement) {
+      $encoded = str_replace($original, $replacement, $encoded);
     }
 
     $this->cache->set($cid, $encoded, Cache::PERMANENT, $tags);
@@ -348,10 +400,62 @@ class AlshayaFacetsPrettyPathsHelper {
 
     // Prepending sizegroup if sizegroup is enabled.
     if ($sizeGroupingEnabled && $attribute_code == 'size' && isset($sizeBreak[0])) {
-      $decoded = $sizeBreak[0] . ':' . $decoded;
+      $decoded = $this->getSizegroupAttributeValueFromAlias($sizeBreak[0]) . ':' . $decoded;
     }
     $static[$value] = $decoded;
 
+    return $decoded;
+  }
+
+  /**
+   * Get the size attribute value from alias.
+   *
+   * @return string
+   *   Alias.
+   */
+  public function getSizegroupAttributeValueFromAlias($alias) {
+    if ($alias == 'other') {
+      return 'other';
+    }
+
+    $cid = implode(':', [
+      'sizegroup-decode',
+      $alias,
+    ]);
+
+    $cache = $this->cache->get($cid);
+    if (!empty($cache)) {
+      return $cache->data;
+    }
+
+    $decoded = $alias;
+    foreach (self::REPLACEMENTS as $original => $replacement) {
+      $decoded = str_replace($replacement, $original, $decoded);
+    }
+
+    $current_langcode = 'en';
+
+    $type = 'taxonomy_term';
+    $storage = $this->entityTypeManager->getStorage($type);
+
+    $id = str_replace(
+      '/taxonomy/term/',
+      '',
+      $this->aliasManager->getPathByAlias('/' . $this->getProductOptionAliasPrefix() . '/' . $decoded, $current_langcode)
+    );
+
+    if ($id) {
+      $entity = $storage->load($id);
+
+      if ($entity instanceof EntityInterface) {
+        if ($entity->language()->getId() != $current_langcode && $entity->hasTranslation($current_langcode)) {
+          $entity = $entity->getTranslation($current_langcode);
+        }
+        $decoded = $entity->label();
+
+        $this->cache->set($cid, $decoded, Cache::PERMANENT, ['taxonomy_term:' . $id]);
+      }
+    }
     return $decoded;
   }
 
