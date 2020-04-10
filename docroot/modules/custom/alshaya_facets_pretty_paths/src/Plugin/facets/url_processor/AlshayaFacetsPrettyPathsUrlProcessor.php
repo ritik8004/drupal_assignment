@@ -170,7 +170,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
             // If user tries to load a page with only one value in URL
             // for sizegroup filter (for instance/--size-XL/)
             // we will ignore/remove that filter.
-            if ($this->isSizeGroupEnabled() && $key == 'size' && strpos($value, ':') == FALSE) {
+            if ($this->alshayaPrettyPathHelper->isSizeGroupEnabled() && $key == 'size' && strpos($value, ':') == FALSE) {
               continue;
             }
             $encoded[] = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $key, $value);
@@ -266,22 +266,6 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     }
 
     return $query;
-  }
-
-  /**
-   * Check if size grouping filter is enabled.
-   *
-   * @return int
-   *   0 if not available, 1 if size grouping available.
-   */
-  protected function isSizeGroupEnabled() {
-    static $status = NULL;
-
-    if (!isset($status)) {
-      $status = \Drupal::config('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
-    }
-
-    return $status;
   }
 
 }

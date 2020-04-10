@@ -193,9 +193,6 @@ class AlshayaFacetsPrettyPathsHelper {
       return $cache->data;
     }
 
-    // Get sizegroup filter settings.
-    $sizeGroupingEnabled = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
-
     $tags = [];
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
     $encoded = $value;
@@ -218,7 +215,7 @@ class AlshayaFacetsPrettyPathsHelper {
     }
     // We have a different case for sizegroup.
     // Values coming for this filter is sigegroup:sizevalue.
-    elseif ($sizeGroupingEnabled && $attribute_code == 'size') {
+    elseif ($this->isSizeGroupEnabled() && $attribute_code == 'size') {
       $sizeBreak = explode(':', $value);
       $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
       $query->condition('name', $sizeBreak[1]);
@@ -269,7 +266,7 @@ class AlshayaFacetsPrettyPathsHelper {
 
     // Prepand sigegroup if sizegroup is enabled.
     // Do not execute it for selected filter.
-    if ($sizeGroupingEnabled && $attribute_code == 'size' && strpos($encoded, ':') == FALSE) {
+    if ($this->isSizeGroupEnabled() && $attribute_code == 'size' && strpos($encoded, ':') == FALSE) {
       $sizeBreak = explode(':', $value);
       $encoded = $this->getSizegroupAttributeAliasFromValue($sizeBreak[0]) . ':' . $encoded;
     }
@@ -284,7 +281,7 @@ class AlshayaFacetsPrettyPathsHelper {
    * @return string
    *   Alias.
    */
-  public function getSizegroupAttributeAliasFromValue($value) {
+  protected function getSizegroupAttributeAliasFromValue($value) {
     // In case of other we don't have any attribute so return it as well.
     if ($value == 'other') {
       return 'other';
@@ -353,8 +350,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
 
     // Remove sizegroup from recieving value if sizegroup is enabled.
-    $sizeGroupingEnabled = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
-    if ($sizeGroupingEnabled && $attribute_code == 'size' && strpos($value, ':') !== FALSE) {
+    if ($this->isSizeGroupEnabled() && $attribute_code == 'size' && strpos($value, ':') !== FALSE) {
       $sizeBreak = explode(':', $value);
       $value = $sizeBreak[1];
     }
@@ -399,7 +395,7 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     // Prepending sizegroup if sizegroup is enabled.
-    if ($sizeGroupingEnabled && $attribute_code == 'size' && isset($sizeBreak[0])) {
+    if ($this->isSizeGroupEnabled() && $attribute_code == 'size' && isset($sizeBreak[0])) {
       $decoded = $this->getSizegroupAttributeValueFromAlias($sizeBreak[0]) . ':' . $decoded;
     }
     $static[$value] = $decoded;
@@ -413,7 +409,7 @@ class AlshayaFacetsPrettyPathsHelper {
    * @return string
    *   Alias.
    */
-  public function getSizegroupAttributeValueFromAlias($alias) {
+  protected function getSizegroupAttributeValueFromAlias($alias) {
     if ($alias == 'other') {
       return 'other';
     }
@@ -685,6 +681,22 @@ class AlshayaFacetsPrettyPathsHelper {
     $source = $this->configFactory->getEditable('facets.facet_source.search_api__' . $mapping['id']);
     $static[$type] = ($source->get('url_processor') === 'alshaya_facets_pretty_paths');
     return $static[$type];
+  }
+
+  /**
+   * Check if size grouping filter is enabled.
+   *
+   * @return int
+   *   0 if not available, 1 if size grouping available.
+   */
+  public function isSizeGroupEnabled() {
+    static $status = NULL;
+
+    if (!isset($status)) {
+      $status = \Drupal::config('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
+    }
+
+    return $status;
   }
 
 }
