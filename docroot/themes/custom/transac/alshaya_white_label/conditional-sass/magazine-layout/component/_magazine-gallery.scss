@@ -372,6 +372,40 @@
   position: relative;
 }
 
+.magazine__gallery--container {
+  .collection-labels {
+    display: flex;
+    justify-content: center;
+    font-size: 0.6875rem;;
+    color: $collection_label_default;
+    text-transform: uppercase;
+    line-height: 1rem;
+    flex-wrap: wrap;
+
+    @include breakpoint($tablet) {
+      line-height: 1.273;
+    }
+
+    li {
+      &.collection-label-primary {
+        color: $collection_label_primary;
+      }
+
+      &.collection-label-default {
+        margin-left: 5px;
+      }
+
+      &.collection-label-default:first-of-type {
+        margin-left: 0;
+      }
+
+      &:last-of-type::after {
+        content: '';
+      }
+    }
+  }
+}
+
 @include breakpoint($mobile) {
   .description-details {
     div,

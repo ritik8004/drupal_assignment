@@ -10,6 +10,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\search_api\IndexInterface;
 
 /**
  * Implements hook_form_alter().
@@ -330,7 +331,9 @@ function alshaya_hm_sku_variant_info_alter(array &$variant, SKUInterface $child,
 function alshaya_hm_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
   if ($context == 'search') {
     // Product attribute labels for teaser view.
-    $labels = _alshaya_hm_get_collection_labels($sku);
+    /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+    $labels = $productInfoHelper->getValue($sku, 'collection_labels', 'plp');
     $build['#product_attribute_labels'] = [
       '#markup' => $labels,
     ];
@@ -342,11 +345,13 @@ function alshaya_hm_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, 
  */
 function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
   if ($vars['sku'] instanceof SKUInterface) {
+    // Get parent sku.
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    // Get parent sku.
     $parent_sku = $skuManager->getParentSkuBySku($vars['sku']);
-    $labels = _alshaya_hm_get_collection_labels($parent_sku);
+    /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+    $labels = $productInfoHelper->getValue($parent_sku, 'collection_labels', 'pdp');
     $vars['product_attribute_labels'] = [
       '#markup' => $labels,
     ];
@@ -354,38 +359,39 @@ function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
 }
 
 /**
- * Get collection labels from sku.
- *
- * @param \Drupal\acq_commerce\SKUInterface $sku
- *   Sku object.
- *
- * @return string
- *   Labels with markup.
+ * Implements hook_search_api_algolia_objects_alter().
  */
-function _alshaya_hm_get_collection_labels(SKUInterface $sku) {
-  $product_attribute_labels = [];
-  $label_product_environment = '';
-  if ($sku->hasField('attr_product_environment') && $sku->get('attr_product_environment')->getString()) {
-    // This gives primary label eg: conscious.
-    $label_product_environment = $sku->get('attr_product_environment')->getString();
-  }
-  if ($sku->hasField('attr_concept') && $sku->get('attr_concept')->getString()) {
-    if (strstr($sku->get('attr_concept')->getString(), ',')) {
-      $product_attribute_labels = array_merge(
-        $product_attribute_labels, explode(', ', $sku->get('attr_concept')->getString())
-      );
-    }
-    else {
-      $product_attribute_labels[] = $sku->get('attr_concept')->getString();
-    }
-  }
-  $labels = '';
-  if ($label_product_environment) {
-    $labels .= '<li class="collection-label-primary">' . $label_product_environment . '</li>';
-  }
-  foreach ($product_attribute_labels as $attribute_label) {
-    $labels .= '<li class="collection-label-default">' . $attribute_label . '</li>';
+function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
+  if ($index->id() !== 'alshaya_algolia_index') {
+    return;
   }
 
-  return $labels;
+  foreach ($objects as $id => &$object) {
+    if (empty($object['sku'])) {
+      continue;
+    }
+
+    $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
+    if (!($sku instanceof SKUInterface)) {
+      continue;
+    }
+    $node = $items[$id]->getOriginalObject()->getValue();
+    if ($sku->language()->getId() != $node->language()->getId()) {
+      continue;
+    }
+    // Add attributes required for hm as label on products.
+    if ($sku->get('attr_product_designer_collection')->getString()) {
+      $object['attr_product_designer_collection'] = $sku->get('attr_product_designer_collection')->getString();
+    }
+    if ($sku->get('attr_product_environment')->getString()) {
+      $object['attr_product_environment'] = $sku->get('attr_product_environment')->getString();
+    }
+    if ($sku->get('attr_product_collection')->getString()) {
+      $object['attr_product_collection'] = $sku->get('attr_product_collection')->getString();
+    }
+    if ($sku->get('attr_product_quality')->getString()) {
+      $object['attr_product_quality'] = $sku->get('attr_product_quality')->getString();
+    }
+  }
+
 }

@@ -27,14 +27,36 @@ const Teaser = ({hit}) => {
   }
 
   const showSwatches = drupalSettings.reactTeaserView.swatches.showSwatches;
-  const collectionLabel = {};
-  if (hit.attr_product_environment !== undefined) {
-    collectionLabel.env_label = hit.attr_product_environment;
+  const collectionLabel = [];
+  if (hit.attr_product_designer_collection !== undefined) {
+    collectionLabel.push({
+      class: 'attr_product_designer_collection',
+      value: hit.attr_product_designer_collection
+    });
   }
-  if (hit.attr_concept !== undefined) {
-    collectionLabel.concept = hit.attr_concept;
+  else if (hit.attr_product_collection !== undefined) {
+    collectionLabel.push({
+      class: 'attr_product_collection',
+      value: hit.attr_product_collection
+    });
   }
-
+  else if (hit.attr_product_environment !== undefined) {
+    collectionLabel.push({
+      class: 'attr_product_environment',
+      value: hit.attr_product_environment
+    });
+  }
+  else if (hit.attr_product_quality !== undefined) {
+    collectionLabel.push({
+      class: 'attr_product_quality',
+      value: hit.attr_product_quality
+    });
+  }
+  let labelItems = '';
+  if (collectionLabel.length > 0) {
+    labelItems = collectionLabel.map((d) => <li className={d.class} key={d.value}>{d.value}</li>);
+  }
+  console.log(collectionLabel);
   return (
     <div className="c-products__item views-row" >
       <article
@@ -56,15 +78,10 @@ const Teaser = ({hit}) => {
             <Gallery media={hit.media} title={hit.title} />
           </a>
           <div className="product-plp-detail-wrapper">
-            { (collectionLabel.env_label !== undefined || collectionLabel.concept !== undefined) &&
+            { collectionLabel.length > 0 &&
               <div className="product-labels">
                 <ul className="collection-labels">
-                  { collectionLabel.env_label !== undefined &&
-                    <li className="collection-label-primary">{collectionLabel.env_label}</li>
-                  }
-                  { collectionLabel.concept !== undefined &&
-                    <li className="collection-label-default">{collectionLabel.concept}</li>
-                  }
+                  {labelItems}
                 </ul>
               </div>
             }
