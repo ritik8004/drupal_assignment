@@ -529,7 +529,7 @@ export const checkoutAddressProcess = (e) => {
 
     return true;
   }).catch((error) => {
-    Drupal.logJavascriptError(error);
+    Drupal.logJavascriptError('Email and mobile number validation fail', error);
   });
 };
 
@@ -689,7 +689,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
         }
       }
     }).catch((error) => {
-      Drupal.logJavascriptError(error);
+      Drupal.logJavascriptError('Email and mobile number validation fail', error);
     });
   }
 };
