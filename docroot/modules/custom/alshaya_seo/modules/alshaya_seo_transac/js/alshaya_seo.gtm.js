@@ -196,36 +196,36 @@
           dataLayer.push(userDetails);
         }
 
-        $(window).on('load', function() {
-          if ($(context).filter('article[data-vmode="modal"]').length === 1
-            || $(document).find('article[data-vmode="full"]').length === 1) {
+          $(window).once('gtm-onetime').on('load', function() {
+            if ($(context).filter('article[data-vmode="modal"]').length === 1
+              || $(document).find('article[data-vmode="full"]').length === 1) {
 
-          if ($(document).find('article[data-vmode="full"]').length === 1) {
-            var productContext = $(document).find('article[data-vmode="full"]');
-          }
-          else {
-            var productContext = $(context).filter('article[data-vmode="modal"]');
-          }
-
-          var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-          product.variant = '';
-          if (currentListName != null && currentListName !== 'PDP-placeholder') {
-            product.list = currentListName;
-            currentListName = null;
-          }
-          var data = {
-            event: 'productDetailView',
-            ecommerce: {
-              currencyCode: currencyCode,
-              detail: {
-                products: [product]
-              }
+            if ($(document).find('article[data-vmode="full"]').length === 1) {
+              var productContext = $(document).find('article[data-vmode="full"]');
             }
-          };
+            else {
+              var productContext = $(context).filter('article[data-vmode="modal"]');
+            }
 
-          dataLayer.push(data);
-        }
-      });
+            var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+            product.variant = '';
+            if (currentListName != null && currentListName !== 'PDP-placeholder') {
+              product.list = currentListName;
+              currentListName = null;
+            }
+            var data = {
+              event: 'productDetailView',
+              ecommerce: {
+                currencyCode: currencyCode,
+                detail: {
+                  products: [product]
+                }
+              }
+            };
+
+            dataLayer.push(data);
+          }
+        });
       });
 
       // If we receive an empty page type, set page type as not defined.
