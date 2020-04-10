@@ -153,7 +153,7 @@ $primary_search_result_hover: $grey;
 $primary_search_text: $grey;
 
 // C-menu primary i:e Mobile and tablet header menu links.
-$header_c_menu_text: $grey;
+$header_c_menu_text: $black;
 $header_c_menu_icon_color: $black;
 $header_c_menu_icon_text: $black;
 $header_toggle_sign_default: $wild-sand;
@@ -298,7 +298,7 @@ $plp_category_desc: $black;
 $plp_facet_filter_bg: $white;
 $plp_facet_clear_border: $black;
 $plp_facet_clear_border_mobile: $black;
-$plp_facet_clear_text: $black;
+$plp_facet_clear_text: $cod-gray;
 $plp_facet_input_border: $gallery;
 $plp_facet_dropdown_bg: $white;
 $plp_facet_dropdown_icon: $black;
@@ -317,12 +317,13 @@ $plp_clear_all_btn_disabled: $grey;
 $plp_all_filter_button_color: $black;
 $plp_filter_icon: $black;
 $plp_filter_active_tick: $black;
-$facet_selected_badges_border: $cod-gray;
+$facet_selected_badges_border: $gallery;
 $facet_selected_badges_text: $cod-gray;
+$plp_mobile_separator: $gallery;
 
 // PLP Product tile.
 $plp_tile_product_title: $black;
-$plp_tile_product_title_hover: $grey;
+$plp_tile_product_title_hover: $black;
 
 // PLP Product title hover.
 $plp_pager_link: $white;
@@ -589,3 +590,7 @@ $lhn_l3_active_text: $white;
 
 // Megamenu inline layout.
 $megamenu-inline-layout-active-border-color: $black;
+
+// Autocomplete
+$autocomplete_hover: rgba(51, 51, 51, 0.06);
+$autocomplete_text: $grey;
