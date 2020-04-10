@@ -196,6 +196,7 @@
           dataLayer.push(userDetails);
         }
 
+        $(window).on('load', function() {
           if ($(context).filter('article[data-vmode="modal"]').length === 1
             || $(document).find('article[data-vmode="full"]').length === 1) {
 
@@ -224,6 +225,7 @@
 
           dataLayer.push(data);
         }
+      });
       });
 
       // If we receive an empty page type, set page type as not defined.
@@ -834,11 +836,10 @@
     if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
       mediaCount = parseInt(product.attr('gtm-dimension4'));
     }
-
     var productData = {
       name: product.attr('gtm-name'),
       id: product.attr('gtm-main-sku'),
-      price: parseFloat(product.attr('gtm-price')),
+      price: product.attr('gtm-price'),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
       dimension2: product.attr('gtm-sku-type'),
