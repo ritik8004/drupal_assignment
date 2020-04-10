@@ -215,7 +215,7 @@ class AlshayaFacetsPrettyPathsHelper {
     }
     // We have a different case for sizegroup.
     // Values coming for this filter is sigegroup:sizevalue.
-    elseif ($this->isSizeGroupEnabled() && $attribute_code == 'size') {
+    elseif ($attribute_code == 'size' && $this->isSizeGroupEnabled()) {
       $sizeBreak = explode(':', $value);
       $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
       $query->condition('name', $sizeBreak[1]);
@@ -266,7 +266,7 @@ class AlshayaFacetsPrettyPathsHelper {
 
     // Prepand sigegroup if sizegroup is enabled.
     // Do not execute it for selected filter.
-    if ($this->isSizeGroupEnabled() && $attribute_code == 'size' && strpos($encoded, ':') == FALSE) {
+    if ($attribute_code == 'size' && strpos($encoded, ':') == FALSE && $this->isSizeGroupEnabled()) {
       $sizeBreak = explode(':', $value);
       $encoded = $this->getSizegroupAttributeAliasFromValue($sizeBreak[0]) . ':' . $encoded;
     }
@@ -350,7 +350,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
 
     // Remove sizegroup from recieving value if sizegroup is enabled.
-    if ($this->isSizeGroupEnabled() && $attribute_code == 'size' && strpos($value, ':') !== FALSE) {
+    if ($attribute_code == 'size' && strpos($value, ':') !== FALSE && $this->isSizeGroupEnabled()) {
       $sizeBreak = explode(':', $value);
       $value = $sizeBreak[1];
     }
@@ -395,7 +395,7 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     // Prepending sizegroup if sizegroup is enabled.
-    if ($this->isSizeGroupEnabled() && $attribute_code == 'size' && isset($sizeBreak[0])) {
+    if ($attribute_code == 'size' && isset($sizeBreak[0]) && $this->isSizeGroupEnabled()) {
       $decoded = $this->getSizegroupAttributeValueFromAlias($sizeBreak[0]) . ':' . $decoded;
     }
     $static[$value] = $decoded;

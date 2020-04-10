@@ -170,7 +170,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
             // If user tries to load a page with only one value in URL
             // for sizegroup filter (for instance/--size-XL/)
             // we will ignore/remove that filter.
-            if ($this->alshayaPrettyPathHelper->isSizeGroupEnabled() && $key == 'size' && strpos($value, ':') == FALSE) {
+            if ($key == 'size' && strpos($value, ':') == FALSE && $this->alshayaPrettyPathHelper->isSizeGroupEnabled()) {
               continue;
             }
             $encoded[] = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $key, $value);
