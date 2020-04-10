@@ -9,6 +9,7 @@ use Drupal\acq_cart\CartInterface;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\alshaya_acm_checkout\Plugin\CheckoutPane\BillingAddress;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_alshaya_acm_checkout_pre_place_order().
@@ -67,9 +68,16 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
  * Implements hook_alshaya_my_account_links_alter().
  */
 function alshaya_acm_checkoutcom_alshaya_my_account_links_alter(array &$links) {
-  if ((alshaya_acm_customer_is_customer(\Drupal::currentUser()) || \Drupal::currentUser()->hasPermission('administer users'))
-      && \Drupal::service('acq_checkoutcom.agent_api')->getCheckoutcomConfig('vault_enabled')) {
+  $route_match = \Drupal::routeMatch();
+  /** @var \Drupal\user\UserInterface|null $user_entity_in_route */
+  $user_entity_in_route = $route_match->getParameter('user');
+  $url = $user_entity_in_route
+    ? Url::fromRoute('acq_checkoutcom.payment_cards', ['user' => $user_entity_in_route->id()])
+    : NULL;
 
+  // This calls the access() defined for the route in $url.
+  if (($route_match->getRouteName() === 'alshaya_user.user_settings_form')
+      || ($url && $url->access())) {
     // Saved cards list.
     $links['payment_cards'] = [
       'text' => t('Payment Cards'),
