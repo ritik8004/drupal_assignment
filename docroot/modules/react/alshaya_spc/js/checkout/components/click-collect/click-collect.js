@@ -30,7 +30,7 @@ import {
   DISMISS,
   FIND_YOUR_NEAREST_STORE,
   SELECT_THIS_STORE,
-  LOCATION_ACCESS_DEINED,
+  LOCATION_ACCESS_DENIED,
 } from '../../../utilities/translations';
 
 class ClickCollect extends React.Component {
@@ -445,7 +445,7 @@ class ClickCollect extends React.Component {
               {locationAccess === false
               && (
                 <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
-                  {LOCATION_ACCESS_DEINED}
+                  {LOCATION_ACCESS_DENIED}
                   <a href="#" onClick={() => updateLocationAccess(true)}>{DISMISS}</a>
                 </CheckoutMessage>
               )}
