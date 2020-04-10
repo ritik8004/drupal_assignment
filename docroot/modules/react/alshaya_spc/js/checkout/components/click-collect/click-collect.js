@@ -30,8 +30,8 @@ import {
   DISMISS,
   FIND_YOUR_NEAREST_STORE,
   SELECT_THIS_STORE,
-} from '../../../utilities/translations/labels';
-import { LOCATION_ACCESS_DEINED } from '../../../utilities/translations/messages';
+  LOCATION_ACCESS_DEINED,
+} from '../../../utilities/translations';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;

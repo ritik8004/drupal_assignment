@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import StoreItem from './StoreItem';
-import { NO_STORE_FOUND } from '../../../../utilities/translations/messages';
+import { NO_STORE_FOUND } from '../../../../utilities/translations';
 
 const StoreList = ({
   storeList, display, onStoreRadio, onStoreFinalize, selected: selectedStore, onStoreClose,
