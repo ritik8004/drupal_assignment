@@ -18,6 +18,9 @@ const getCodDescription = (surcharge, messageKey) => {
   ]);
 };
 
-const CodSurchargeInformation = ({ surcharge, messageKey }) => (<div>{getCodDescription(surcharge, messageKey)}</div>);
+const CodSurchargeInformation = ({ surcharge, messageKey }) => {
+  const codInfo = getCodDescription(surcharge, messageKey);
+  return codInfo;
+};
 
 export default CodSurchargeInformation;
