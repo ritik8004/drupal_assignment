@@ -1,7 +1,9 @@
 import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
-import CodSurchargePaymentMethodDescription
-  from '../payment-description-cod-surchage';
+import {
+  CodSurchargePaymentMethodShortDescription,
+  CodSurchargePaymentMethodDescription,
+} from '../payment-description-cod-surchage';
 import PaymentMethodCheckoutCom from '../payment-method-checkout-com';
 import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
@@ -15,7 +17,6 @@ import PaymentMethodCybersource from '../payment-method-cybersource';
 import { removeStorageInfo } from '../../../utilities/storage';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
-import getStringMessage from '../../../utilities/strings';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -113,7 +114,10 @@ export default class PaymentMethod extends React.Component {
             <label className="radio-sim radio-label">
               {method.name}
               <ConditionalView condition={method.code === 'cashondelivery' && cart.cart.surcharge.amount > 0}>
-                <CodSurchargePaymentMethodDescription surcharge={cart.cart.surcharge} />
+                <CodSurchargePaymentMethodShortDescription
+                  surcharge={cart.cart.surcharge}
+                  messageKey="cod_surcharge_short_description"
+                />
               </ConditionalView>
             </label>
 
@@ -122,7 +126,10 @@ export default class PaymentMethod extends React.Component {
 
           <ConditionalView condition={isSelected && method.code === 'cashondelivery' && cart.cart.surcharge.amount > 0}>
             <div className={`payment-method-bottom-panel ${method.code}`}>
-              <div className="cod-surcharge-desc">{getStringMessage('cod_surcharge_description')}</div>
+              <CodSurchargePaymentMethodDescription
+                surcharge={cart.cart.surcharge}
+                messageKey="cod_surcharge_description"
+              />
             </div>
           </ConditionalView>
 

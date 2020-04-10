@@ -43,7 +43,7 @@ class CashOnDelivery extends AlshayaSpcPaymentMethodPluginBase {
     foreach ($string_keys as $key) {
       $strings[] = [
         'key' => $key,
-        'value' => trim(preg_replace("/[\r\n]+/", '', $checkout_settings->get($key))),
+        'value' => strip_tags(trim(preg_replace("/[\r\n]+/", '', $checkout_settings->get($key)))),
       ];
     }
 
