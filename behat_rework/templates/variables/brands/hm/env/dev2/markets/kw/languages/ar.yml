@@ -60,7 +60,7 @@ variables:
   floor: 'Floor C'
   landmark: 'Near Landmark D'
   postal_code: '23456'
-  mobile: '1023838029'
-  anon_email: 'sampleUserName@mailinator.com'
+  mobile: '55667788'
+  anon_email: 'exampleuser@mailinator.com'
   anon_username: 'Sample User Name'
-
+  store_area: 'Salmiya'
