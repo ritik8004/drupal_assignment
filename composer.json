@@ -50,6 +50,9 @@
         "drupal/kashmir": "^1.1",
         "drupal/key_value_field": "^1.0-beta1",
         "drupal/link_attributes": "^1.5",
+        "drupal/lightning_core": "^4.7.0",
+        "drupal/lightning_media": "^3.14.0",
+        "drupal/lightning_api": "^4.4.0",
         "drupal/mailsystem": "^4.1",
         "drupal/media_entity": "^1.8",
         "drupal/media_entity_actions": "1.x-dev",
@@ -218,9 +221,7 @@
                 "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
             },
             "drupal/acquia_connector": {
-                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch",
-                "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-9.patch",
-                "Provide a way to alter list possible cores": "https://www.drupal.org/files/issues/2018-06-25/2981513-add_alter_hook_for_possible_core_ids-2.patch"
+                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-01-10/acquia_connector-2871721-25.patch"
             },
             "drupal/search_api": {
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
