@@ -339,8 +339,10 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
   /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
   $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
 
-  if (($parent instanceof SKUInterface) && $manager->fetchStyleCode($parent)) {
-    $parent_sku = $skuManager->getParentSkuBySku($child);
+  $parent_sku_value = $skuManager->getParentSkuBySku($child);
+
+  if (($parent instanceof SKUInterface) && $manager->fetchStyleCode($parent) && $parent_sku_value != NULL) {
+    $parent_sku = $parent_sku_value;
     $variant['parent_sku'] = $parent_sku->getSku();
     $variant['color_attribute'] = \Drupal::config('alshaya_color_split.settings')->get('attribute_code_color_id');
   }
