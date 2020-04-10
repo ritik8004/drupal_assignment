@@ -6,7 +6,6 @@
   }
 
   .page-standard {
-    padding-bottom: 5rem;
     margin-top: 0 !important;
     padding-#{$left}: 0 !important;
     padding-#{$right}: 0 !important;
@@ -20,12 +19,26 @@
     display: none !important;
   }
 
+  .block-customer-service-block {
+    @include breakpoint($only-mobile) {
+      padding-bottom: 6.25rem;
+    }
+  }
+
+  .spc-footer {
+    padding-top: 5rem;
+
+    @include breakpoint($only-mobile) {
+      padding-top: 1rem;
+    }
+  }
+
   .spc-main,
   .spc-pre-content,
-  .spc-post-content {
+  .spc-post-content,
+  .spc-footer {
     max-width: 64.125rem;
-    margin: 0 auto;
-    margin-bottom: 0.9375rem;
+    margin: 0 auto 0.9375rem;
   }
 
   .spc-pre-content {

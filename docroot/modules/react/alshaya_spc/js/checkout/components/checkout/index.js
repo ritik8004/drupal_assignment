@@ -248,7 +248,6 @@ export default class Checkout extends React.Component {
             {billingComponent}
 
             <ConditionalView condition={window.innerWidth > 768}>
-              <VatFooterText />
               {termConditions}
             </ConditionalView>
 
@@ -270,9 +269,11 @@ export default class Checkout extends React.Component {
         </div>
         <div className="spc-post-content">
           <ConditionalView condition={window.innerWidth < 768}>
-            <VatFooterText />
             {termConditions}
           </ConditionalView>
+        </div>
+        <div className="spc-footer">
+          <VatFooterText />
         </div>
       </>
     );

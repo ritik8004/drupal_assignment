@@ -5,6 +5,10 @@
     }
   }
 
+  .spc-order-summary {
+    margin-bottom: 0.625rem;
+  }
+
   .checkout-link {
     @include breakpoint($only-mobile) {
       background: $spc-checkout-delivery-method-bg;
