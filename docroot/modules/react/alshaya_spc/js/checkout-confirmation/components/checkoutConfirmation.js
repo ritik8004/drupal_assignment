@@ -45,7 +45,6 @@ class CheckoutConfirmation extends React.Component {
           <div className="spc-content">
             <OrderSummary />
             <ConditionalView condition={window.innerWidth > 768}>
-              <VatFooterText />
               <div className="checkout-link submit">
                 <a href={Drupal.url('')} className="checkout-link">
                   {Drupal.t('continue shopping')}
@@ -65,14 +64,16 @@ class CheckoutConfirmation extends React.Component {
         </div>
         <div className="spc-post-content" />
         <ConditionalView condition={window.innerWidth < 768}>
-          <VatFooterText />
           <div className="checkout-link submit">
             <a href={Drupal.url('')} className="checkout-link">
               {Drupal.t('continue shopping')}
             </a>
           </div>
         </ConditionalView>
-        <div style={{ display: 'none' }} className="spc-checkout-confirmation-print"><CheckoutConfirmationPrint ref={(el) => { this.componentRef = el; }} /></div>
+        <div className="spc-footer">
+          <div style={{ display: 'none' }} className="spc-checkout-confirmation-print"><CheckoutConfirmationPrint ref={(el) => { this.componentRef = el; }} /></div>
+          <VatFooterText />
+        </div>
       </>
     );
   }
