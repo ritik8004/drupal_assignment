@@ -101,7 +101,6 @@
       @include breakpoint($only-mobile) {
         margin: 0;
         width: 100%;
-        padding-#{$left}: 3rem !important;
         border-width: 0 0 0.0625rem !important;
         border-color: $algolia-auto-complete-border !important;
       }
