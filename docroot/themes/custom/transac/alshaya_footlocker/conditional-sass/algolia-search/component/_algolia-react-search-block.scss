@@ -163,6 +163,7 @@
       border-radius: 0;
       width: 100%;
       max-width: inherit;
+      border: 0.5rem solid $algolia-input-border-mobile;
     }
 
     @include breakpoint($only-mobile) {
@@ -175,7 +176,6 @@
     }
 
     @include breakpoint($upto-desktop) {
-      border: 0.5rem solid $algolia-input-border-mobile;
       height: 3rem;
       line-height: 1.25rem;
     }
