@@ -18,8 +18,6 @@ const getCodDescription = (surcharge, messageKey) => {
   ]);
 };
 
-const CodSurchargePaymentMethodShortDescription = ({ surcharge, messageKey }) => <div className="spc-payment-method-desc"><div className="desc-content">{getCodDescription(surcharge, messageKey)}</div></div>;
+const CodSurchargeInformation = ({ surcharge, messageKey }) => (<div>{getCodDescription(surcharge, messageKey)}</div>);
 
-const CodSurchargePaymentMethodDescription = ({ surcharge, messageKey }) => <div className="cod-surcharge-desc">{getCodDescription(surcharge, messageKey)}</div>;
-
-export { CodSurchargePaymentMethodShortDescription, CodSurchargePaymentMethodDescription };
+export default CodSurchargeInformation;

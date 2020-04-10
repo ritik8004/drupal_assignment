@@ -1,9 +1,6 @@
 import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
-import {
-  CodSurchargePaymentMethodShortDescription,
-  CodSurchargePaymentMethodDescription,
-} from '../payment-description-cod-surchage';
+import CodSurchargeInformation from '../payment-description-cod-surchage';
 import PaymentMethodCheckoutCom from '../payment-method-checkout-com';
 import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
@@ -114,10 +111,14 @@ export default class PaymentMethod extends React.Component {
             <label className="radio-sim radio-label">
               {method.name}
               <ConditionalView condition={method.code === 'cashondelivery' && cart.cart.surcharge.amount > 0}>
-                <CodSurchargePaymentMethodShortDescription
-                  surcharge={cart.cart.surcharge}
-                  messageKey="cod_surcharge_short_description"
-                />
+                <div className="spc-payment-method-desc">
+                  <div className="desc-content">
+                    <CodSurchargeInformation
+                      surcharge={cart.cart.surcharge}
+                      messageKey="cod_surcharge_short_description"
+                    />
+                  </div>
+                </div>
               </ConditionalView>
             </label>
 
@@ -126,10 +127,12 @@ export default class PaymentMethod extends React.Component {
 
           <ConditionalView condition={isSelected && method.code === 'cashondelivery' && cart.cart.surcharge.amount > 0}>
             <div className={`payment-method-bottom-panel ${method.code}`}>
-              <CodSurchargePaymentMethodDescription
-                surcharge={cart.cart.surcharge}
-                messageKey="cod_surcharge_description"
-              />
+              <div className="cod-surcharge-desc">
+                <CodSurchargeInformation
+                  surcharge={cart.cart.surcharge}
+                  messageKey="cod_surcharge_description"
+                />
+              </div>
             </div>
           </ConditionalView>
 
