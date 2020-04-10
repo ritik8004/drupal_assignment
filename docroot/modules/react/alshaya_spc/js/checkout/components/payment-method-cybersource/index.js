@@ -66,7 +66,13 @@ class PaymentMethodCybersource extends React.Component {
   };
 
   showCardType = () => {
-    const type = document.getElementById('spc-cy-payment-card-type').value;
+    let type = document.getElementById('spc-cy-payment-card-type').value;
+
+    // Also add support for show MasterCard Active for Maestro family.
+    if (type === 'maestro') {
+      type = 'mastercard';
+    }
+
     this.setState({
       cardType: type,
     });
