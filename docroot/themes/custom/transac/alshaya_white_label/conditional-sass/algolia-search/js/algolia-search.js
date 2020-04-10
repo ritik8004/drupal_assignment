@@ -65,7 +65,7 @@
         });
       }
 
-      if ($(window).width() < 768) {
+      if ($(window).width() <= 1024) {
         // On all the pages except front page.
         if ($('.frontpage').length < 1) {
           $('body').addClass('no-sticky-algolia-search-bar');
@@ -74,15 +74,10 @@
           }, 100);
         }
         else {
-          // Show on non listing pages.
+          // On Front page.
           $('.block-alshaya-algolia-react-autocomplete').css('visibility', 'visible');
           stickyAlgoliaHeader();
         }
-      }
-      if ($(window).width() >= 768 && $(window).width() <= 1024) {
-        setTimeout(function() {
-          showAlgoliaSearchBar();
-        }, 100);
       }
     }
   };
