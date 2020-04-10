@@ -78,7 +78,7 @@ export default class AddressList extends React.Component {
     }
 
     const {
-      cart, closeModal, headingText, showEditButton, type,
+      cart, closeModal, headingText, showEditButton, type, formContext,
     } = this.props;
 
     const addressItem = [];
@@ -131,6 +131,7 @@ export default class AddressList extends React.Component {
                 default_val={defaultVal}
                 headingText={headingText}
                 processAddress={this.processAddress}
+                formContext={formContext}
               />
             </>
           </Popup>
