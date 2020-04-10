@@ -89,6 +89,7 @@ export default class BillingPopUp extends React.Component {
             closeModal={this.closeModal}
             processAddress={this.processAddress}
             showEmail={false}
+            formContext="billing"
             headingText={Drupal.t('billing information')}
             default_val={this.formatAddressData(billing)}
           />
