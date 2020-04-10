@@ -25,6 +25,13 @@ import {
 } from '../../../utilities/map/fullScreen';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import CheckoutMessage from '../../../utilities/checkout-message';
+import {
+  COLLECTION_STORE,
+  DISMISS,
+  FIND_YOUR_NEAREST_STORE,
+  SELECT_THIS_STORE,
+} from '../../../utilities/translations/labels';
+import { LOCATION_ACCESS_DEINED } from '../../../utilities/translations/messages';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -430,21 +437,21 @@ class ClickCollect extends React.Component {
             className="spc-cnc-stores-list-map"
             style={{ display: openSelectedStore ? 'none' : 'block' }}
           >
-            <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
+            <SectionTitle>{COLLECTION_STORE}</SectionTitle>
             <a className="close" onClick={closeModal}>
               &times;
             </a>
             {locationAccess === false
               && (
                 <CheckoutMessage type="warning" context="click-n-collect-store-modal modal">
-                  {Drupal.t('Access to your location acces has been denied by your browser. You can reenable location services in your browser settings.')}
-                  <a href="#" onClick={() => updateLocationAccess(true)}>Dismiss</a>
+                  {LOCATION_ACCESS_DEINED}
+                  <a href="#" onClick={() => updateLocationAccess(true)}>{DISMISS}</a>
                 </CheckoutMessage>
               )}
             <div className="spc-cnc-address-form-wrapper">
               <div className="spc-cnc-address-form-content">
                 <SectionTitle>
-                  {Drupal.t('find your nearest store')}
+                  {FIND_YOUR_NEAREST_STORE}
                 </SectionTitle>
                 <LocationSearchForm
                   ref={this.searchRef}
@@ -487,7 +494,7 @@ class ClickCollect extends React.Component {
           </div>
           <div className="spc-cnc-store-actions" data-selected-stored={openSelectedStore}>
             <button className="select-store" type="button" onClick={(e) => this.finalizeCurrentStore(e)}>
-              {Drupal.t('select this store')}
+              {SELECT_THIS_STORE}
             </button>
           </div>
           <SelectedStore
