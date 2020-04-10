@@ -504,53 +504,42 @@ class SkuInfoHelper {
    *   Variant info.
    */
   public function getVariantInfo(SKUInterface $child, string $pdp_layout, ?SKUInterface $parent = NULL) {
+    $stockInfo = $this->stockInfo($child);
+    $price = $this->priceHelper->getPriceBlockForSku($child);
+    $gallery = $this->skuImagesManager->getGallery($child, $pdp_layout, $child->label(), FALSE);
+    $plugin = $child->getPluginInstance();
+    $variant_sku = $child->getSku();
+
     $variant = [];
-    $parent_sku = $this->skuManager->getParentSkuBySku($child);
-    // Loading only those variants whose parents are not null.
-    if ($parent_sku != NULL) {
-      $stockInfo = $this->stockInfo($child);
-      $price = $this->priceHelper->getPriceBlockForSku($child);
-      $gallery = $this->skuImagesManager->getGallery($child, $pdp_layout, $child->label(), FALSE);
-      $plugin = $child->getPluginInstance();
-      $variant_sku = $child->getSku();
+    $variant['id'] = (int) $child->id();
+    $variant['sku'] = (string) $child->getSku();
+    $variant['stock'] = [
+      'status' => (int) $stockInfo['in_stock'],
+      'qty' => (float) $stockInfo['stock'],
+    ];
+    $variant['price'] = $this->renderer->renderPlain($price);
+    $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
+    $variant['layout'] = $pdp_layout;
 
-      $variant = [];
-      $variant['id'] = (int) $child->id();
-      $variant['sku'] = (string) $child->getSku();
-      $variant['stock'] = [
-        'status' => (int) $stockInfo['in_stock'],
-        'qty' => (float) $stockInfo['stock'],
-      ];
-      $variant['price'] = $this->renderer->renderPlain($price);
-      $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
-      $variant['layout'] = $pdp_layout;
-
-      // Get Max sale qty for parent SKU.
-      if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
-        if ($parent !== NULL) {
-          $max_sale_qty = $plugin->getMaxSaleQty($parent->getSku());
-        }
-
-        // If order limit is not set for parent
-        // then get order limit for each variant.
-        $max_sale_qty = !empty($max_sale_qty)
-          ? $max_sale_qty
-          : $plugin->getMaxSaleQty($variant_sku);
-
-        if (!empty($max_sale_qty)) {
-          $variant['stock']['maxSaleQty'] = $max_sale_qty;
-          $variant['orderLimitMsg'] = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
-        }
+    // Get Max sale qty for parent SKU.
+    if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
+      if ($parent !== NULL) {
+        $max_sale_qty = $plugin->getMaxSaleQty($parent->getSku());
       }
 
-      $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
-    }
-    else {
-      \Drupal::logger('alshaya_acm_product')->warning('Parent SKU of child @sku does not have a display node.', [
-        '@sku' => $child->getSku(),
-      ]);
+      // If order limit is not set for parent
+      // then get order limit for each variant.
+      $max_sale_qty = !empty($max_sale_qty)
+        ? $max_sale_qty
+        : $plugin->getMaxSaleQty($variant_sku);
+
+      if (!empty($max_sale_qty)) {
+        $variant['stock']['maxSaleQty'] = $max_sale_qty;
+        $variant['orderLimitMsg'] = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
+      }
     }
 
+    $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
     return $variant;
   }
 
