@@ -120,6 +120,7 @@ export default class BillingInfo extends React.Component {
               showEmail={false}
               showEditButton={false}
               type="billing"
+              formContext="billing"
               headingText={Drupal.t('billing information')}
               default_val={this.formatAddressData(billing)}
             />
