@@ -103,6 +103,12 @@ body {
   }
 
   @include breakpoint($only-mobile) {
-    height: 3.5rem;
+    height: 3rem;
+  }
+
+  body & {
+    @include breakpoint($upto-desktop) {
+      box-shadow: 0 0.125rem 0 0 $header_border;
+    }
   }
 }
