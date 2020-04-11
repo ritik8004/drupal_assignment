@@ -196,16 +196,9 @@
           dataLayer.push(userDetails);
         }
 
-          $(window).once('gtm-onetime').on('load', function() {
-            if ($(context).filter('article[data-vmode="modal"]').length === 1
-              || $(document).find('article[data-vmode="full"]').length === 1) {
-
-            if ($(document).find('article[data-vmode="full"]').length === 1) {
-              var productContext = $(document).find('article[data-vmode="full"]');
-            }
-            else {
-              var productContext = $(context).filter('article[data-vmode="modal"]');
-            }
+        $(window).once('gtm-onetime').on('load', function() {
+          if ($(document).find('article[data-vmode="full"]').length === 1) {
+            var productContext = $(document).find('article[data-vmode="full"]');
 
             var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
             product.variant = '';
