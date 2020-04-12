@@ -519,6 +519,7 @@ class SkuInfoHelper {
     }
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
+
     return $variant;
   }
 
