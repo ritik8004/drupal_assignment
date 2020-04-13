@@ -783,13 +783,14 @@
 
           // Track facet filters.
           $('li.facet-item').once('js-event').on('click', function () {
-            var selectedVal = $(this).find('a').attr('data-drupal-facet-item-label');
+            var selectedVal = typeof $(this).find('a').attr('data-drupal-facet-item-label') !== 'undefined'
+              ? $(this).find('a').attr('data-drupal-facet-item-label').trim() : '';
             var facetTitle = $(this).find('a').attr('data-drupal-facet-label');
             var data = {
               event: 'filter',
               siteSection: section.trim(),
               filterType: facetTitle,
-              filterValue: selectedVal.trim(),
+              filterValue: selectedVal,
             };
 
             dataLayer.push(data);
