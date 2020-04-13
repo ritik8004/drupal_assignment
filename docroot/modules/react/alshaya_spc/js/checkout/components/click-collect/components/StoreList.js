@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import StoreItem from './StoreItem';
+import getStringMessage from '../../../../utilities/strings';
 
 const StoreList = ({
   storeList, display, onStoreRadio, onStoreFinalize, selected: selectedStore, onStoreClose,
 }) => {
   if (!storeList || storeList.length === 0) {
-    return <div className="spc-cnc-empty-store-list">{Drupal.t('Sorry, No store found for your location.')}</div>;
+    return <div className="spc-cnc-empty-store-list">{getStringMessage('no_store_found')}</div>;
   }
 
   const removeClassFromStoreList = (className) => {
