@@ -19,6 +19,7 @@ $tomato: #e6591b;
 $info-blue: #4285f4;
 $error-red: #c00;
 $black-two: #333;
+$black: #000;
 $grey-light: #777;
 $warm-grey-two: #dadada;
 $white-smoke-light: #f2f2f2;
@@ -38,6 +39,7 @@ $secondary_link: $drakish-blue;
 $primary_form_selector_border: $black-two;
 $primary_form_selector: $black-two;
 $primary_form_link: $peacock-blue;
+$primary_form_input_text: $black-two;
 $primary_input_label: $grey-light;
 $primary_input_border: $grey-light;
 $primary_input_disabled: $grey-light;
@@ -439,11 +441,11 @@ $block_acm_customer_txt: $drakish-blue;
 $progress_loader: $drakish-blue;
 
 // Social Auth
-$social-network-text: $grey-light;
+$social-network-text: $black-two;
 $social-auth-bg-hover: rgba(218, 218, 218, 0.19);
 $social_auth_login_button_border: $warm-grey-two;
-$user_login_sub_text: $grey-light;
-$user_login_link_btn_text: $grey-light;
+$user_login_sub_text: $black;
+$user_login_link_btn_text: $black-two;
 $user_login_section_title: $drakish-blue;
 
 // PLP LHN block.
