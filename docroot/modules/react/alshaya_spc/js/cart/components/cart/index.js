@@ -162,7 +162,7 @@ export default class Cart extends React.Component {
         </div>
         <div className="spc-main">
           <div className="spc-content">
-            <SectionTitle animationDelayVaue="0.4s">
+            <SectionTitle animationDelayValue="0.4s">
               {Drupal.t('my shopping bag (@qty items)', { '@qty': totalItems })}
             </SectionTitle>
             <CartItems items={items} />

@@ -56,7 +56,7 @@ export default class DeliveryMethods extends React.Component {
 
     return (
       <div className="spc-checkout-delivery-methods">
-        <SectionTitle animationDelayVaue="0.4s">{Drupal.t('Delivery method')}</SectionTitle>
+        <SectionTitle animationDelayValue="0.4s">{Drupal.t('Delivery method')}</SectionTitle>
         <div className="delivery-method fadeInUp" style={{ animationDelay: '0.6s' }} onClick={() => this.changeDeliveryMethod('hd')}>
           <input id="delivery-method-hd" defaultChecked={selectedOption === 'hd'} value="hd" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
