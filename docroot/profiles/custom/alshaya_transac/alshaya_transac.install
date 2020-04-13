@@ -31,19 +31,19 @@ function alshaya_transac_update_8129() {
   \Drupal::configFactory()->getEditable('block.block.baskethorizontalproductrecommendation')->delete();
   \Drupal::configFactory()->getEditable('block.block.alshayacartpromotionsblock')->delete();
 
-  // Override located /config/override/block.block.footerlogos.
-  \Drupal::configFactory()->getEditable('block.block.footerlogos')->save();
-
-  // Override located /config/override/block.block.customerservice.
-  \Drupal::configFactory()->getEditable('block.block.customerservice')
-    ->set('visibility.request_path.pages', '/cart/login\r\n/checkout/*')
-    ->save();
-
-  // Override located /config/override/block.block.sociallinks.
-  \Drupal::configFactory()->getEditable('block.block.sociallinks')->save();
-
-  // Override located /config/override/block.block.copyright.
-  \Drupal::configFactory()->getEditable('block.block.copyright')->save();
+  $blocks = [
+    'block.block.customerservice',
+    'block.block.footerlogos',
+    'block.block.sociallinks',
+    'block.block.copyright',
+  ];
+  /* @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    $blocks,
+    'alshaya_transac',
+    'optional'
+  );
 }
 
 /**
