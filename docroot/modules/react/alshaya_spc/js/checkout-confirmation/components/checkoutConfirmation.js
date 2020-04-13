@@ -37,14 +37,13 @@ class CheckoutConfirmation extends React.Component {
           <div className="impress-msg">{Drupal.t('Thanks for shopping with us.')}</div>
           <div className="impress-subtitle">{Drupal.t('Here\'s a confirmation of your order and all the details you may need.')}</div>
           <ReactToPrint
-            trigger={() => <div className="spc-checkout-confirmation-print-button">{Drupal.t('print confirmation')}</div>}
+            trigger={() => <div className="spc-checkout-confirmation-print-button">{Drupal.t('Print Confirmation')}</div>}
             content={() => this.componentRef}
           />
         </div>
         <div className="spc-main">
           <div className="spc-content">
             <OrderSummary />
-            <VatFooterText />
             <ConditionalView condition={window.innerWidth > 768}>
               <div className="checkout-link submit">
                 <a href={Drupal.url('')} className="checkout-link">
@@ -71,7 +70,10 @@ class CheckoutConfirmation extends React.Component {
             </a>
           </div>
         </ConditionalView>
-        <div style={{ display: 'none' }} className="spc-checkout-confirmation-print"><CheckoutConfirmationPrint ref={(el) => { this.componentRef = el; }} /></div>
+        <div className="spc-footer">
+          <div style={{ display: 'none' }} className="spc-checkout-confirmation-print"><CheckoutConfirmationPrint ref={(el) => { this.componentRef = el; }} /></div>
+          <VatFooterText />
+        </div>
       </>
     );
   }

@@ -82,6 +82,8 @@ services:
     # Decorates the syslog handler.
     App\Logger\Decorator\SysLogDecorator:
         decorates: monolog.handler.syslog
+        arguments:
+            - '@alshaya_middleware.log_fromatter'
 
     App\EventListener\KernelEventsListener:
         tags:

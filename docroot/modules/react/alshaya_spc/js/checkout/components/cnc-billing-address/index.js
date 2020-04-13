@@ -144,6 +144,7 @@ export default class CnCBillingAddress extends React.Component {
                   showEmail={false}
                   showEditButton={false}
                   type="billing"
+                  formContext="billing"
                   headingText={Drupal.t('billing information')}
                   default_val={editAddressData}
                 />
@@ -154,13 +155,19 @@ export default class CnCBillingAddress extends React.Component {
       );
     }
 
+    let showMessage = shippingAsBilling;
+    // If CnC is used for delivery method, we dont show message on address.
+    if (cart.cart.delivery_type === 'cnc') {
+      showMessage = false;
+    }
+
     return (
       <div className="spc-section-billing-address cnc-flow">
         <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
             <BillingInfo cart={cart} refreshCart={refreshCart} />
-            {shippingAsBilling
+            {showMessage
             && <div className="spc-billing-help-text">{this.sameBillingAsShippingMessage()}</div>}
           </div>
         </div>

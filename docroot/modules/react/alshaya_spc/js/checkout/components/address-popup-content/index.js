@@ -12,6 +12,7 @@ const AddressContent = (props) => {
     headingText,
     showEditButton,
     type,
+    formContext,
   } = props;
 
   if (window.drupalSettings.user.uid > 0
@@ -24,6 +25,7 @@ const AddressContent = (props) => {
         showEditButton={showEditButton}
         processAddress={processAddress}
         type={type}
+        formContext={formContext}
       />
     );
   }
@@ -35,6 +37,7 @@ const AddressContent = (props) => {
       showEmail={showEmail}
       headingText={headingText}
       processAddress={processAddress}
+      formContext={formContext}
     />
   );
 };

@@ -395,6 +395,9 @@ export const getAreasList = (isParent, parentId) => {
         label: areas[i].getAttribute(labelAttribute),
       };
     }
+
+    // Sort list by label.
+    areasList.sort((a, b) => ((a.label > b.label) ? 1 : -1));
   }
 
   return areasList;
@@ -526,7 +529,7 @@ export const checkoutAddressProcess = (e) => {
 
     return true;
   }).catch((error) => {
-    Drupal.logJavascriptError(error);
+    Drupal.logJavascriptError('Email and mobile number validation fail', error);
   });
 };
 
@@ -686,7 +689,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
         }
       }
     }).catch((error) => {
-      Drupal.logJavascriptError(error);
+      Drupal.logJavascriptError('Email and mobile number validation fail', error);
     });
   }
 };

@@ -393,15 +393,8 @@ class Cart {
     ];
 
     // If shipping address add by address id.
-    if (!empty($shipping_data['customer_address_id'])) {
-      $fields_data = $shipping_data['address'];
-      $carrier_info = $shipping_data['carrier_info'];
-    }
-    else {
-      $carrier_info = $shipping_data['carrier_info'];
-      $fields_data = $this->formatAddressForShippingBilling($shipping_data);
-    }
-
+    $carrier_info = $shipping_data['carrier_info'];
+    $fields_data = $this->formatAddressForShippingBilling($shipping_data);
     $data['shipping']['shipping_address'] = $fields_data;
     $data['shipping']['shipping_carrier_code'] = $carrier_info['code'];
     $data['shipping']['shipping_method_code'] = $carrier_info['method'];
@@ -809,7 +802,7 @@ class Cart {
         // If cart is available and cart has item.
         if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
           $response = $this->drupal->triggerCheckoutEvent('validate cart', ['cart' => $cart['cart']]);
-          if ($response['status'] == TRUE) {
+          if ($response['status'] == TRUE && $exception_type === 'OOS') {
             if (!empty($response['data']['stock'])) {
               self::$stockInfo = $response['data']['stock'];
             }

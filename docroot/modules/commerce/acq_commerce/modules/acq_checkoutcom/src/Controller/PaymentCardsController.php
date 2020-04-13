@@ -8,6 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -104,10 +105,10 @@ class PaymentCardsController extends ControllerBase {
    * @return \Drupal\Core\Access\AccessResult
    *   Return access result object.
    */
-  public function checkAccess(UserInterface $user) {
+  public function checkAccess(AccountInterface $account, UserInterface $user) {
     return AccessResult::allowedIf(
       !empty($user->get('acq_customer_id')->getString())
-      && $this->currentUser->id() == $user->id()
+      && $account->id() == $user->id()
       && $this->apiHelper->getCheckoutcomConfig('vault_enabled')
     );
   }

@@ -212,6 +212,9 @@ class CartController {
    */
   private function getProcessedCartData(array $cart_data) {
     $data = [];
+
+    $data['appliedRules'] = $cart_data['cart']['applied_rule_ids'] ?? [];
+
     $data['langcode'] = $this->request->query->get('lang', 'en');
     $data['cart_id'] = $cart_data['cart']['id'];
     $data['customer'] = $cart_data['cart']['customer'] ?? NULL;
@@ -311,12 +314,17 @@ class CartController {
 
     $sku_items = array_column($cart_data['cart']['items'], 'sku');
     $items_quantity = array_column($cart_data['cart']['items'], 'qty', 'sku');
+    $items_price = array_column($cart_data['cart']['items'], 'price', 'sku');
     $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
     try {
       $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
       foreach ($data['items'] as $key => $value) {
         if (isset($items_quantity[$key])) {
           $data['items'][$key]['qty'] = $items_quantity[$key];
+        }
+
+        if (isset($items_price[$key])) {
+          $data['items'][$key]['price'] = $items_price[$key];
         }
 
         // If info is available in static array, means this we get from
@@ -519,27 +527,10 @@ class CartController {
             }
           }
 
-          // If we update/add shipping in cart by address id.
-          if (!empty($shipping_info['address_id'])) {
-            $shipping_info = [
-              'customer_address_id' => $shipping_info['address_id'],
-              'address' => [
-                'customer_address_id' => $shipping_info['address_id'],
-                'country_id' => $shipping_info['country_id'],
-                'customer_id' => $this->cart->getCartCustomerId(),
-              ],
-              'carrier_info' => [
-                'code' => $shipping_methods[0]['carrier_code'],
-                'method' => $shipping_methods[0]['method_code'],
-              ],
-            ];
-          }
-          else {
-            $shipping_info['carrier_info'] = [
-              'code' => $shipping_methods[0]['carrier_code'],
-              'method' => $shipping_methods[0]['method_code'],
-            ];
-          }
+          $shipping_info['carrier_info'] = [
+            'code' => $shipping_methods[0]['carrier_code'],
+            'method' => $shipping_methods[0]['method_code'],
+          ];
 
           $cart = $this->cart->addShippingInfo($shipping_info, $action, $update_billing);
         }

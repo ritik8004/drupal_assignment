@@ -29,7 +29,13 @@ class NewCard extends React.Component {
   };
 
   showCardType = () => {
-    const type = document.getElementById('payment-card-type').value;
+    let type = document.getElementById('payment-card-type').value;
+
+    // Also add support for show MasterCard Active for Maestro family.
+    if (type === 'maestro') {
+      type = 'mastercard';
+    }
+
     this.updateCurrentContext({
       cardType: type,
     });

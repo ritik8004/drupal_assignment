@@ -39,11 +39,16 @@ export const fetchCartData = () => {
         if (response.data.error) {
           redirectToCart();
         }
+
+        if (Object.values(response.data.items).length === 0) {
+          redirectToCart();
+        }
+
         return response.data;
       })
       .catch((error) => {
         // Processing of error here.
-        Drupal.logJavascriptError(error);
+        Drupal.logJavascriptError('Restore cart fail', error);
       });
   }
   if (!Number.isInteger(cart)) {
@@ -52,6 +57,10 @@ export const fetchCartData = () => {
     // just use and return that.
     if (cart.cart_id === null) {
       return null;
+    }
+
+    if (Object.values(cart.items).length === 0) {
+      redirectToCart();
     }
 
     // On logout cart object will have a user id and drupalSettings uid will be
@@ -78,6 +87,6 @@ export const fetchCartData = () => {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError(error);
+      Drupal.logJavascriptError('Get cart api fail', error);
     });
 };

@@ -2,13 +2,10 @@
 
 namespace Drupal\alshaya_acm_promotion;
 
-use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm\CartData;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -17,7 +14,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\Core\Cache\CacheableAjaxResponse;
 
 /**
  * Class AlshayaPromoLabelManager.
@@ -67,13 +63,6 @@ class AlshayaPromoLabelManager {
   protected $imagesManager;
 
   /**
-   * Cart Manager.
-   *
-   * @var \Drupal\acq_cart\CartStorageInterface
-   */
-  protected $cartManager;
-
-  /**
    * Config Factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -105,8 +94,6 @@ class AlshayaPromoLabelManager {
    *   Entity Type Manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity Repository.
-   * @param \Drupal\acq_cart\CartStorageInterface $cartManager
-   *   Cart Manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config Factory.
    * @param \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $promotions_manager
@@ -118,7 +105,6 @@ class AlshayaPromoLabelManager {
                               SkuImagesManager $images_manager,
                               EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
-                              CartStorageInterface $cartManager,
                               ConfigFactoryInterface $configFactory,
                               AlshayaPromotionsManager $promotions_manager,
                               RendererInterface $renderer) {
@@ -126,7 +112,6 @@ class AlshayaPromoLabelManager {
     $this->imagesManager = $images_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityRepository = $entity_repository;
-    $this->cartManager = $cartManager;
     $this->configFactory = $configFactory;
     $this->promoManager = $promotions_manager;
     $this->renderer = $renderer;
@@ -227,49 +212,36 @@ class AlshayaPromoLabelManager {
   /**
    * Fetch promotion dynamic label.
    *
+   * @param \Drupal\alshaya_acm\CartData $cart
+   *   Cart.
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product SKU.
-   * @param null|\Drupal\Core\Entity\EntityInterface[] $promotion_nodes
-   *   List of promotion nodes.
    *
    * @return string
    *   Dynamic Promotion Label or NULL.
    */
-  public function getSkuPromoDynamicLabel(SKU $sku, $promotion_nodes = NULL) {
-    $labels = NULL;
-    $promos = $this->getCurrentSkuPromos($sku, 'links', $promotion_nodes);
-    if (!empty($promos)) {
-      $labels = implode('<br>', $promos);
-    }
-
-    return $labels;
+  public function getSkuPromoDynamicLabel(CartData $cart, SKU $sku) {
+    $promos = $this->getCurrentSkuPromos($cart, $sku, 'links');
+    return is_array($promos) ? implode('<br>', $promos) : '';
   }
 
   /**
    * Fetch current SKU Dynamic Promos.
    *
+   * @param \Drupal\alshaya_acm\CartData $cart
+   *   Cart.
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product SKU.
    * @param string $view_mode
    *   Links or default.
-   * @param null|\Drupal\Core\Entity\EntityInterface[] $promotion_nodes
-   *   List of promotion nodes.
    *
    * @return array
    *   List of promotions.
    */
-  public function getCurrentSkuPromos(SKU $sku, $view_mode, $promotion_nodes = NULL) {
-    // Fetch parent SKU for the current SKU.
-    $parentSku = $this->skuManager->getParentSkuBySku($sku);
-    if (!empty($parentSku)) {
-      $sku = $parentSku;
-    }
-
+  public function getCurrentSkuPromos(CartData $cart, SKU $sku, $view_mode) {
     $promos = [];
 
-    if (is_null($promotion_nodes)) {
-      $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
-    }
+    $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
 
     foreach ($promotion_nodes as $promotion_node) {
       if (is_numeric($promotion_node)) {
@@ -286,7 +258,7 @@ class AlshayaPromoLabelManager {
         $sku->language()->getId()
       );
 
-      $promoDisplay = $this->preparePromoDisplay($promotion_node, $sku, $view_mode);
+      $promoDisplay = $this->preparePromoDisplay($promotion_node, $sku, $view_mode, $cart);
       if ($promoDisplay) {
         $promos[$promotion_node->id()] = $promoDisplay;
       }
@@ -304,16 +276,25 @@ class AlshayaPromoLabelManager {
    *   SKU Entity.
    * @param string $view_mode
    *   Links or default.
+   * @param \Drupal\alshaya_acm\CartData $cart
+   *   Cart.
    *
    * @return array|string|null
    *   Return render array of Promos.
    */
-  private function preparePromoDisplay(NodeInterface $promotion, SKU $sku, $view_mode) {
+  private function preparePromoDisplay(NodeInterface $promotion, SKU $sku, $view_mode, CartData $cart) {
     $promoDisplay = FALSE;
-    $promotionLabel = $this->getPromotionLabel($promotion, $sku);
+    $promotionLabel = $this->getPromotionLabel($promotion, $sku, $cart);
 
     if (!empty($promotionLabel)) {
       switch ($view_mode) {
+        case 'api':
+          $promoDisplay = [];
+          $promoDisplay['link'] = $promotion->toUrl()->toString(TRUE)->getGeneratedUrl();
+          $promoDisplay['promotion_nid'] = (int) $promotion->id();
+          $promoDisplay['label'] = $promotionLabel['dynamic_label'];
+          break;
+
         case 'links':
           // In case of links just send dynamic label.
           try {
@@ -384,27 +365,29 @@ class AlshayaPromoLabelManager {
    *
    * @param \Drupal\node\NodeInterface $promotion
    *   Promotion Node.
-   * @param \Drupal\acq_sku\Entity\SKU $currentSKU
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product SKU.
+   * @param \Drupal\alshaya_acm\CartData|null $cart
+   *   Cart.
    *
    * @return array|mixed
    *   Return original and dynamic promo label.
    */
-  private function getPromotionLabel(NodeInterface $promotion, SKU $currentSKU) {
+  private function getPromotionLabel(NodeInterface $promotion, SKU $sku, CartData $cart = NULL) {
     $label = [
       'original_label' => $promotion->get('field_acq_promotion_label')->getString(),
       'dynamic_label' => '',
     ];
 
     if (!empty($this->isDynamicLabelsEnabled()) && $this->isPromotionLabelDynamic($promotion)) {
-      $cartSKUs = $this->cartManager->getCartSkus();
+      $cartSKUs = $cart->getSkus();
 
       // If cart is not empty and has matching products.
       if (!empty($cartSKUs)) {
         $eligibleSKUs = $this->getPromoEligibleSkus($promotion, $cartSKUs);
 
-        if (in_array($currentSKU->getSku(), $eligibleSKUs) && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
-          $this->overridePromotionLabel($label, $promotion, $eligibleSKUs);
+        if (in_array($sku->getSku(), $eligibleSKUs) && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
+          $this->overridePromotionLabel($label, $promotion, $cart, $eligibleSKUs);
         }
       }
     }
@@ -444,16 +427,17 @@ class AlshayaPromoLabelManager {
    *   Default Label.
    * @param \Drupal\node\NodeInterface $promotion
    *   Promotion Node.
-   * @param array|mixed $eligibleSKUs
+   * @param \Drupal\alshaya_acm\CartData $cart
+   *   Cart.
+   * @param array $eligibleSKUs
    *   Eligible SKUs as per promotion.
    */
-  private function overridePromotionLabel(&$label, NodeInterface $promotion, $eligibleSKUs) {
+  private function overridePromotionLabel(&$label, NodeInterface $promotion, CartData $cart, array $eligibleSKUs) {
     // Calculate cart quantity.
     $eligible_cart_qty = 0;
-    $cart_items = $this->cartManager->getCart(FALSE)->items();
-    foreach ($cart_items as $item) {
+    foreach ($cart->getItems() as $item) {
       if (in_array($item['sku'], $eligibleSKUs)) {
-        $eligible_cart_qty += $item['qty'];
+        $eligible_cart_qty += $item['quantity'];
       }
     }
 
@@ -545,33 +529,6 @@ class AlshayaPromoLabelManager {
   }
 
   /**
-   * Prepare or update response commands.
-   *
-   * @param string $label
-   *   Label HTML.
-   * @param string $skuId
-   *   Sku ID.
-   * @param \Drupal\Core\Ajax\AjaxResponse|null $response
-   *   Ajax Response.
-   *
-   * @return \Drupal\Core\Cache\CacheableAjaxResponse
-   *   Ajax Response.
-   */
-  public function prepareResponse($label, $skuId, $response = NULL) {
-    if (empty($response)) {
-      $response = new CacheableAjaxResponse();
-    }
-
-    if ($response instanceof AjaxResponse) {
-      $dynamic_label_selector = '.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId;
-      $response->addCommand(new HtmlCommand($dynamic_label_selector, $label));
-      $response->addCommand(new SettingsCommand(['alshayaAcmPromotionslabels' => [$skuId => $label]], TRUE));
-    }
-
-    return $response;
-  }
-
-  /**
    * Get promotion label data for product detail (full/modal).
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -638,7 +595,6 @@ class AlshayaPromoLabelManager {
         case 'full':
           // Add a flag to update promo label dynamically.
           $build['promotions']['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
-          $build['promotions']['#attached']['drupalSettings']['alshayaAcmPromotions'][$sku->id()] = TRUE;
 
           // Add container for dynamic promotion display.
           $build['promotions']['dynamic_label'] = [

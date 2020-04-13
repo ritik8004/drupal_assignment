@@ -52,7 +52,6 @@ do
     drush -l $site.$env-alshaya.acsitefactory.com sync-stores
     drush -l $site.$env-alshaya.acsitefactory.com sync-commerce-promotions
     drush -l $site.$env-alshaya.acsitefactory.com queue-run acq_promotion_attach_queue
-    drush -l $site.$env-alshaya.acsitefactory.com queue-run acq_promotion_detach_queue
     drush -l $site.$env-alshaya.acsitefactory.com sapi-i
 
     ## Clearing cache before running updb to the site.

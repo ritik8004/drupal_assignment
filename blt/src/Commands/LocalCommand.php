@@ -12,6 +12,17 @@ use Symfony\Component\Yaml\Yaml;
 class LocalCommand extends BltTasks {
 
   /**
+   * Mapping of stack aliases.
+   *
+   * @var array
+   */
+  protected $stacks = [
+    1 => 'alshaya.01',
+    2 => 'alshaya2.02',
+    3 => 'alshaya3bis.01',
+  ];
+
+  /**
    * Sync DB from remote and set stage file proxy.
    *
    * @param string $site
@@ -29,7 +40,10 @@ class LocalCommand extends BltTasks {
     // Reset local settings file.
     $this->invokeCommand('local:reset-local-settings');
 
-    $env = is_numeric(substr($env, 0, 2)) ? $env : '01' . $env;
+    if (is_numeric(substr($env, 0, 2))) {
+      $this->yell('Please remove stack numbers, code is now upgraded to take care of it. Just say test / uat / dev2 / etc.');
+      return;
+    }
 
     $info = $this->validateAndPrepareInfo($site, $env);
 
@@ -246,17 +260,23 @@ class LocalCommand extends BltTasks {
 
     $info['local']['url'] = 'local.alshaya-' . $site . '.com';
     $info['local']['alias'] = 'self';
-    $info['remote']['alias'] = 'alshaya.' . $env;
 
-    // Get remote data to confirm site code is valid and we can get db role
-    // and remote url.
-    $remote_data = $this->getSitesData($info['remote']['alias']);
+    foreach ($this->stacks as $alias_prefix) {
+      $info['remote']['alias'] = $alias_prefix . $env;
 
-    $info['remote']['db_role'] = $this->extractInfo($remote_data, $remote_site, 'db_role');
-    $info['remote']['url'] = $this->extractInfo($remote_data, $remote_site, 'url');
+      // Get remote data to confirm site code is valid and we can get db role
+      // and remote url.
+      $remote_data = $this->getSitesData($info['remote']['alias']);
 
-    $info['origin_dir'] = 'sites/g/files/' . $info['remote']['db_role'];
-    $info['origin'] = 'https://' . $info['remote']['url'];
+      $info['remote']['db_role'] = $this->extractInfo($remote_data, $remote_site, 'db_role');
+      if (empty($info['remote']['db_role'])) {
+        continue;
+      }
+      $info['remote']['url'] = $this->extractInfo($remote_data, $remote_site, 'url');
+      $info['origin_dir'] = 'sites/g/files/' . $info['remote']['db_role'];
+      $info['origin'] = 'https://' . $info['remote']['url'];
+      break;
+    }
 
     if (empty($info['remote']['db_role']) || empty($info['remote']['url'])) {
       $this->yell('Site seems not installed on requested env or you do not have access to this env, check again please.', 40, 'red');
