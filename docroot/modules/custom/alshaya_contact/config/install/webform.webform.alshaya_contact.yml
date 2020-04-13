@@ -8,7 +8,7 @@ template: false
 id: alshaya_contact
 title: 'Contact us'
 description: 'Alshaya contact us.'
-elements: "select_your_preference_of_channel_of_communication:\n  '#type': radios\n  '#title': 'Select your prefered communication channel'\n  '#default_value': Email\n  '#title_display': inline\n  '#options':\n    Email: Email\n    Mobile: Mobile\n  '#required': true\nfirst_name:\n  '#type': textfield\n  '#title': 'First name'\n  '#required': true\nlast_name:\n  '#type': textfield\n  '#title': 'Last name'\n  '#required': true\nmobile_number:\n  '#type': mobile_number\n  '#title': 'Mobile number'\n  '#verify': none\nemail:\n  '#type': email\n  '#title': 'Email Address'\n  '#required': true\nmessage:\n  '#type': textarea\n  '#title': 'Message'\n  '#field_suffix': '220'\n  '#required': true\n  '#counter_type': character\n  '#counter_maximum': '220'\n  '#counter_message': ' '"
+elements: "select_your_preference_of_channel_of_communication:\n  '#type': radios\n  '#title': 'Select your prefered communication channel'\n  '#default_value': Email\n  '#title_display': inline\n  '#options':\n    Email: Email\n    Mobile: Mobile\n  '#required': true\nfirst_name:\n  '#type': textfield\n  '#title': 'First name'\n  '#required': true\nlast_name:\n  '#type': textfield\n  '#title': 'Last name'\n  '#required': true\nmobile_number:\n  '#type': mobile_number\n  '#title': 'Mobile number'\n  '#verify': none\nemail:\n  '#type': email\n  '#title': 'Email Address'\n  '#required': true\nmessage:\n  '#type': textarea\n  '#title': 'Message'\n  '#field_suffix': '220'\n  '#required': true\n  '#counter_type': character\n  '#counter_maximum': '220'\n  '#counter_message': ' '\nrequest_from:\n  '#type': radios\n  '#title': 'Request From'\n  '#default_value': Web\n  '#title_display': inline\n  '#options':\n    Web: Web\n    MobileApp: MobileApp\n  '#required': true"
 css: ''
 javascript: ''
 settings:
@@ -143,3 +143,11 @@ handlers:
       return_path: ''
       sender_mail: ''
       sender_name: ''
+  mobile_number_validation:
+    id: webform_mobile_number_validation
+    label: 'Mobile Number Validation'
+    handler_id: mobile_number_validation
+    status: true
+    conditions: {  }
+    weight: 0
+    settings: {  }
