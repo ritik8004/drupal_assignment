@@ -35,7 +35,9 @@ function alshaya_transac_update_8129() {
   \Drupal::configFactory()->getEditable('block.block.footerlogos')->save();
 
   // Override located /config/override/block.block.customerservice.
-  \Drupal::configFactory()->getEditable('block.block.customerservice')->save();
+  \Drupal::configFactory()->getEditable('block.block.customerservice')
+    ->set('visibility.request_path.pages', '/cart/login\r\n/checkout/*')
+    ->save();
 
   // Override located /config/override/block.block.sociallinks.
   \Drupal::configFactory()->getEditable('block.block.sociallinks')->save();
