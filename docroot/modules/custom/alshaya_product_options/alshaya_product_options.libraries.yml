@@ -1,0 +1,7 @@
+sizegroup_filter:
+  version: 1.x
+  js:
+    js/alshaya_product_options.sizegroup_filter.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery

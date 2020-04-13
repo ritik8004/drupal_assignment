@@ -14,6 +14,24 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Change widget for plp_size, promo_size facet from checkbox
+ * to new widget "size_group_list".
+ */
+function alshaya_hm_update_8046() {
+  $size_facets = [
+    'facets.facet.plp_size',
+    'facets.facet.promo_size',
+    'facets.facet.size',
+  ];
+
+  foreach ($size_facets as $config) {
+    \Drupal::configFactory()->getEditable($config)->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new fields and index them.
  */
 function alshaya_hm_update_8045() {
