@@ -2,12 +2,17 @@ import React from 'react';
 import parse from 'html-react-parser';
 
 const OrderSummaryItem = (props) => {
-  const { type, label, value } = props;
+  const {
+    type,
+    label,
+    value,
+    animationDelay: animationDelayValue,
+  } = props;
 
   if (type === 'address') {
     const { name, address } = props;
     return (
-      <div className="spc-order-summary-item spc-order-summary-address-item">
+      <div className="spc-order-summary-item spc-order-summary-address-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value">
           <span className="spc-address-name">
@@ -24,7 +29,7 @@ const OrderSummaryItem = (props) => {
   if (type === 'cnc') {
     const { name, address, phone } = props;
     return (
-      <div className="spc-order-summary-item spc-order-summary-address-item">
+      <div className="spc-order-summary-item spc-order-summary-address-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value">
           <span className="spc-address-name">
@@ -41,7 +46,7 @@ const OrderSummaryItem = (props) => {
 
   if (type === 'markup') {
     return (
-      <div className="spc-order-summary-item spc-order-summary-markup-item">
+      <div className="spc-order-summary-item spc-order-summary-markup-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value">{parse(value)}</span>
       </div>
@@ -49,7 +54,7 @@ const OrderSummaryItem = (props) => {
   }
 
   return (
-    <div className="spc-order-summary-item">
+    <div className="spc-order-summary-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
       <span className="spc-label">{`${label}:`}</span>
       <span className="spc-value">{value}</span>
     </div>

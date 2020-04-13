@@ -87,7 +87,13 @@ export default class PaymentMethod extends React.Component {
 
   render() {
     const { method } = this.props;
-    const { isSelected, changePaymentMethod, cart } = this.props;
+    const {
+      isSelected,
+      changePaymentMethod,
+      cart,
+      animationOffset,
+    } = this.props;
+    const animationDelayValue = `${1 + animationOffset}s`;
 
     if (method.code === 'checkout_com_applepay') {
       if (!(ApplePay.isAvailable())) {
@@ -97,7 +103,7 @@ export default class PaymentMethod extends React.Component {
 
     return (
       <>
-        <div className={`payment-method payment-method-${method.code}`} onClick={() => changePaymentMethod(method.code)}>
+        <div className={`payment-method fadeInUp payment-method-${method.code}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
           <div className="payment-method-top-panel">
             <input
               id={`payment-method-${method.code}`}

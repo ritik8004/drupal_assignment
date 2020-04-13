@@ -64,7 +64,7 @@ export default class DeliveryInformation extends React.Component {
     }
 
     return (
-      <div className="spc-checkout-delivery-information">
+      <div className="spc-checkout-delivery-information fadeInUp" style={{ animationDelay: '0.8s' }}>
         <SectionTitle>{title}</SectionTitle>
         {deliveryComponent}
       </div>

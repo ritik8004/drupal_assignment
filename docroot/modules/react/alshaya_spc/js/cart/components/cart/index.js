@@ -146,6 +146,7 @@ export default class Cart extends React.Component {
     return (
       <>
         <div className="spc-pre-content">
+          <MobileCartPreview total_items={totalItems} totals={totals} />
           {/* This will be used for global error message. */}
           <CheckoutMessage type={messageType} context="page-level-cart">
             {message}
@@ -158,12 +159,10 @@ export default class Cart extends React.Component {
           <CheckoutMessage type={actionMessageType} context="page-level-cart-action">
             {actionMessage}
           </CheckoutMessage>
-
-          <MobileCartPreview total_items={totalItems} totals={totals} />
         </div>
         <div className="spc-main">
           <div className="spc-content">
-            <SectionTitle>
+            <SectionTitle animationDelayVaue="0.4s">
               {Drupal.t('my shopping bag (@qty items)', { '@qty': totalItems })}
             </SectionTitle>
             <CartItems items={items} />
@@ -175,6 +174,7 @@ export default class Cart extends React.Component {
               in_stock={inStock}
               cart_promo={cartPromo}
               show_checkout_button
+              animationDelay="0.6s"
             />
           </div>
         </div>

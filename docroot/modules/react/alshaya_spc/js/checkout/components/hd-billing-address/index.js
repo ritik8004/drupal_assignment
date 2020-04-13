@@ -104,7 +104,7 @@ export default class HDBillingAddress extends React.Component {
     }
 
     return (
-      <div className="spc-section-billing-address">
+      <div className="spc-section-billing-address fadeInUp" style={{ animationDelay: '1.4s' }}>
         <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">

@@ -39,8 +39,8 @@ export default class CartRecommendedProducts extends React.Component {
     if (Object.keys(recommendedProducts).length > 0) {
       return (
         <>
-          <SectionTitle>{sectionTitle}</SectionTitle>
-          <div className="spc-recommended-products">
+          <SectionTitle animationDelayVaue="0.6s">{sectionTitle}</SectionTitle>
+          <div className="spc-recommended-products fadeInUp" style={{ animationDelay: '0.8s' }}>
             <button className="nav-prev" type="button" onClick={() => { this.listHorizontalScroll('prev'); }} />
             <div className="block-content">
               { Object.keys(recommendedProducts).map(

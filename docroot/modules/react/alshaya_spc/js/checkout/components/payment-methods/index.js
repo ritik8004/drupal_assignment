@@ -157,10 +157,12 @@ export default class PaymentMethods extends React.Component {
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
+    const activePaymentMethods = this.getPaymentMethods(active);
+    const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
 
-    Object.entries(this.getPaymentMethods(active)).forEach(([key, method]) => {
+    Object.entries(activePaymentMethods).forEach(([key, method], index) => {
       this.paymentMethodRefs[method.code] = React.createRef();
-
+      const animationOffset = animationInterval * index;
       methods.push(<PaymentMethod
         cart={cart}
         ref={this.paymentMethodRefs[method.code]}
@@ -169,13 +171,14 @@ export default class PaymentMethods extends React.Component {
         isSelected={cart.cart.cart_payment_method === method.code}
         key={key}
         method={method}
+        animationOffset={animationOffset}
       />);
     });
 
     const activeClass = active ? 'active' : 'in-active';
 
     return (
-      <div id="spc-payment-methods" className="spc-checkout-payment-options">
+      <div id="spc-payment-methods" className="spc-checkout-payment-options fadeInUp" style={{ animationDelay: '1s' }}>
         <ConditionalView condition={Object.keys(methods).length > 0}>
           <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
           <div className={`payment-methods ${activeClass}`}>{methods}</div>

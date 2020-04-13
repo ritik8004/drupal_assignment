@@ -6,8 +6,9 @@ const CartItems = (props) => {
   const { items } = props;
 
   const productItems = [];
-  Object.entries(items).forEach(([key, product]) => {
-    productItems.push(<CartItem key={key} item={product} />);
+  Object.entries(items).forEach(([key, product], index) => {
+    const animationOffset = (1 + index) / 5;
+    productItems.push(<CartItem animationOffset={animationOffset} key={key} item={product} />);
   });
 
   return (
