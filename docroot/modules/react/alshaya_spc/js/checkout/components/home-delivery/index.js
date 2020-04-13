@@ -86,7 +86,10 @@ export default class HomeDeliveryInfo extends React.Component {
         } else if (key === 'area_parent') {
           fillVal = gerAreaLabelById(true, fillVal);
         }
-        addressData.push(fillVal);
+
+        if (fillVal !== null) {
+          addressData.push(fillVal);
+        }
       }
     });
 
