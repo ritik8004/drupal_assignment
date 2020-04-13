@@ -3254,6 +3254,7 @@ class SkuManager {
 
     $configurable_attributes = $this->getConfigurableAttributes($sku);
 
+    $sizeGroupingEnabled = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
     // Gather data from children to set in parent.
     foreach ($children as $child) {
       $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
@@ -3280,9 +3281,21 @@ class SkuManager {
         $field_data = $child->get($field_key)->getValue();
 
         if (!empty($field_data)) {
-          foreach ($field_data as $field_value) {
-            $data[$key][$field_value['value']] = $field_value['value'];
+          $size_group = '';
+          if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
+            $size_group = $child->get('attr_size_group_code')->getString();
+            // Group all the sizes without group in a section in bottom.
+            $size_group = $size_group ?: 'other';
           }
+          foreach ($field_data as $field_value) {
+            if (!empty($size_group)) {
+              $data[$key][$size_group . ':' . $field_value['value']] = $size_group . ':' . $field_value['value'];
+            }
+            else {
+              $data[$key][$field_value['value']] = $field_value['value'];
+            }
+          }
+
         }
       }
     }
@@ -3294,8 +3307,19 @@ class SkuManager {
       $field_data = $sku->get($field_key)->getValue();
 
       if (!empty($field_data)) {
+        $size_group = '';
+        if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
+          $size_group = $child->get('attr_size_group_code')->getString();
+          // Group all the sizes without group in a section in bottom.
+          $size_group = $size_group ?: 'other';
+        }
         foreach ($field_data as $field_value) {
-          $data[$key][$field_value['value']] = $field_value['value'];
+          if (!empty($size_group)) {
+            $data[$key][$size_group . ':' . $field_value['value']] = $size_group . ':' . $field_value['value'];
+          }
+          else {
+            $data[$key][$field_value['value']] = $field_value['value'];
+          }
         }
       }
     }

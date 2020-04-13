@@ -2,18 +2,22 @@ import React from 'react';
 import FilterPanel from '../panels/FilterPanel';
 import SortByList from '../algolia/widgets/SortByList';
 import ColorFilter from '../algolia/widgets/ColorFilter';
+import SizeGroupFilter from '../algolia/widgets/SizeGroupFilter';
 import RefinementList from '../algolia/widgets/RefinementList';
 import PriceFilter from '../algolia/widgets/PriceFilter';
 import renderWidget from './RenderWidget';
 
 const WidgetManager = React.memo((props) => {
-  const {facet: filter, indexName, itemCount, facet: { name }}  = props;
+  const
+    {
+      facet: filter, indexName, itemCount, facet: { name },
+    } = props;
 
-  var currentWidget = '';
-  var className = '';
+  let currentWidget = '';
+  let className = '';
   switch (filter.widget.type) {
     case 'sort_by':
-      currentWidget = <SortByList defaultRefinement={indexName} items={filter.widget.items}/>;
+      currentWidget = <SortByList defaultRefinement={indexName} items={filter.widget.items} />;
       break;
 
     case 'swatch_list':
@@ -22,12 +26,38 @@ const WidgetManager = React.memo((props) => {
       break;
 
     case 'range_checkbox':
-      currentWidget = <PriceFilter name={name} attribute={filter.identifier} granularity={parseInt(filter.widget.config.granularity)} itemCount={itemCount} />;
+      currentWidget = (
+        <PriceFilter
+          name={name}
+          attribute={filter.identifier}
+          granularity={parseInt(filter.widget.config.granularity, 10)}
+          itemCount={itemCount}
+        />
+      );
+      break;
+
+    case 'size_group_list':
+      className = 'size_group_list';
+      currentWidget = (
+        <SizeGroupFilter
+          name={name}
+          attribute={filter.identifier}
+          granularity={parseInt(filter.widget.config.granularity, 10)}
+          itemCount={itemCount}
+        />
+      );
       break;
 
     case 'checkbox':
     default:
-      currentWidget = <RefinementList name={name} attribute={filter.identifier} searchable={false} itemCount={itemCount} />;
+      currentWidget = (
+        <RefinementList
+          name={name}
+          attribute={filter.identifier}
+          searchable={false}
+          itemCount={itemCount}
+        />
+      );
   }
 
   return (
