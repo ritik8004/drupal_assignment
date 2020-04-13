@@ -50,6 +50,7 @@ class ClicknCollectContextProvider extends React.Component {
       contactInfo,
       cartSelectedStore,
       clickCollectModal: false,
+      locationAccess: true,
     };
   }
 
@@ -69,11 +70,13 @@ class ClicknCollectContextProvider extends React.Component {
     });
   }
 
-  updateCoordsAndStoreList = (coords, storeList) => {
-    this.setState({
+  updateCoordsAndStoreList = (coords, storeList, accessStatus = null) => {
+    this.setState((prevState) => ({
+      ...prevState,
       coords,
       storeList,
-    });
+      locationAccess: (accessStatus !== null) ? accessStatus : prevState.locationAccess,
+    }));
   }
 
   updateCoords = (coords) => {
@@ -96,6 +99,13 @@ class ClicknCollectContextProvider extends React.Component {
     this.setState({ clickCollectModal: status });
   }
 
+  updateLocationAccess = (accessStatus) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      locationAccess: accessStatus,
+    }));
+  }
+
   render() {
     const { children } = this.props;
 
@@ -109,6 +119,7 @@ class ClicknCollectContextProvider extends React.Component {
             updateCoords: this.updateCoords,
             updateContactInfo: this.updateContactInfo,
             updateModal: this.updateModal,
+            updateLocationAccess: this.updateLocationAccess,
           }
         }
       >
