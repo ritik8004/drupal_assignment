@@ -1,0 +1,18 @@
+.multistep-checkout {
+  .fieldset-wrapper {
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.user-page.checkout-login {
+  a.back-link {
+    @include breakpoint($only-mobile) {
+      @include icon(chevronleft, before) {
+        font-weight: bold;
+        top: -0.4375rem;
+      }
+    }
+  }
+}

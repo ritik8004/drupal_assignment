@@ -2,19 +2,17 @@
   border-top-width: 0.0625rem;
 
   .l-container {
-    @include container(75.3125rem);
+    @include container(77rem);
   }
 
   @include breakpoint($tablet) {
     padding-bottom: 3.125rem;
-    margin-bottom: 1.25rem;
-    border-bottom: 0.0625rem solid $footer_border_top;
     border-top-width: 0.0625rem;
   }
 
   .primary--footer--right {
     @include breakpoint($only-tablet) {
-      padding-#{$left}: 5%;
+      padding-#{$left}: 3%;
     }
 
     @include breakpoint($tablet) {
@@ -24,7 +22,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 27%;
+      width: 30%;
     }
   }
 
@@ -65,7 +63,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 72%;
+      width: 68%;
     }
 
     @include breakpoint($mobile) {
@@ -152,6 +150,10 @@
   }
 }
 
+.c-footer-menu--category {
+  text-transform: none;
+}
+
 .alshaya-newsletter-subscribe {
   @include breakpoint($only-mobile) {
     margin: 2.5rem 1rem 2rem;
@@ -163,6 +165,8 @@
   }
 
   @include breakpoint($tablet) {
+    padding-#{$left}: 1.125rem;
+
     #footer-newsletter-form-wrapper {
       width: auto;
     }
@@ -170,7 +174,6 @@
 
   @include breakpoint($desktop) {
     max-width: 100%;
-    padding-#{$left}: 1.125rem;
   }
 
   #edit-email {
@@ -178,6 +181,7 @@
     border-width: 0.0625rem;
     padding-#{$left}: 0.3125rem;
     height: 2.5rem;
+    font-size: 0.875rem;
 
     @include ellipsis-text;
 
@@ -261,10 +265,21 @@
 .language--switcher {
   @include breakpoint($tablet) {
     margin-top: 1.75rem;
+    margin-#{$left}: 1.125rem;
   }
 
   @include breakpoint($only-mobile) {
     padding: 0 0.875rem 0.875rem;
+  }
+}
+
+#alshaya-newsletter-subscribe {
+  #edit-email {
+    padding-#{$right}: 31%;
+
+    @include breakpoint($only-tablet) {
+      padding-#{$right}: 33% !important;
+    }
   }
 }
 
