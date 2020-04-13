@@ -5,7 +5,7 @@ namespace Drupal\alshaya_contact\Plugin\WebformHandler;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
-use Drupal\mobile_number\MobileNumberUtil;
+use Drupal\mobile_number\MobileNumberUtilInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -30,7 +30,7 @@ class MobileValidationWebformHandler extends WebformHandlerBase {
   /**
    * The mobile util service.
    *
-   * @var \Drupal\mobile_number\MobileNumberUtil
+   * @var \Drupal\mobile_number\MobileNumberUtilInterface
    */
   protected $mobileUtil;
 
@@ -51,7 +51,7 @@ class MobileValidationWebformHandler extends WebformHandlerBase {
    *   Entity type Manager.
    * @param \Drupal\webform\WebformSubmissionConditionsValidatorInterface $conditions_validator
    *   Webform condition validate interface.
-   * @param \Drupal\mobile_number\MobileNumberUtil $mobile_util
+   * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   The mobile_util service.
    */
 
@@ -66,7 +66,7 @@ class MobileValidationWebformHandler extends WebformHandlerBase {
     ConfigFactoryInterface $config_factory,
     EntityTypeManagerInterface $entity_type_manager,
     WebformSubmissionConditionsValidatorInterface $conditions_validator,
-    MobileNumberUtil $mobile_util
+    MobileNumberUtilInterface $mobile_util
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger_factory, $config_factory, $entity_type_manager, $conditions_validator);
     $this->mobileUtil = $mobile_util;
