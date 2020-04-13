@@ -133,7 +133,7 @@ export default class CartPromoBlock extends React.Component {
     }
 
     return (
-      <div className="spc-promo-code-block">
+      <div className="spc-promo-code-block fadeInUp" style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{Drupal.t('have a promo code?')}</SectionTitle>
         <div className="block-content">
           <input id="promo-code" disabled={disabledState} type="text" placeholder={Drupal.t('Promo code')} />

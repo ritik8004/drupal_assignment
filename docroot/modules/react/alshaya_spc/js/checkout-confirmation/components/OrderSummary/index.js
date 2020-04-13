@@ -98,27 +98,28 @@ const OrderSummary = () => {
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
-        <OrderSummaryItem label={Drupal.t('confirmation email sent to')} value={customEmail} />
-        <OrderSummaryItem label={Drupal.t('order number')} value={orderNumber} />
+        <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('confirmation email sent to')} value={customEmail} />
+        <OrderSummaryItem animationDelay="0.6s" label={Drupal.t('order number')} value={orderNumber} />
 
         <ConditionalView condition={transactionId !== undefined && transactionId !== null}>
-          <OrderSummaryItem label={Drupal.t('Transaction ID')} value={transactionId} />
+          <OrderSummaryItem animationDelay="0.7s" label={Drupal.t('Transaction ID')} value={transactionId} />
         </ConditionalView>
         <ConditionalView condition={paymentId !== undefined && paymentId !== null}>
-          <OrderSummaryItem label={Drupal.t('Payment ID')} value={paymentId} />
+          <OrderSummaryItem animationDelay="0.7s" label={Drupal.t('Payment ID')} value={paymentId} />
         </ConditionalView>
         <ConditionalView condition={resultCode !== undefined && resultCode !== null}>
-          <OrderSummaryItem label={Drupal.t('Result code')} value={resultCode} />
+          <OrderSummaryItem animationDelay="0.7s" label={Drupal.t('Result code')} value={resultCode} />
         </ConditionalView>
         <ConditionalView condition={bankDetails !== undefined && bankDetails !== null}>
           <OrderSummaryItem
             type="markup"
             label={Drupal.t('Bank details')}
             value={bankDetails}
+            animationDelay="0.7s"
           />
         </ConditionalView>
       </div>
-      <div className="spc-order-summary-order-detail">
+      <div className="spc-order-summary-order-detail fadeInUp" style={{ animationDelay: '0.8s' }}>
         <input type="checkbox" id="spc-detail-open" />
         <label htmlFor="spc-detail-open">{Drupal.t('order detail')}</label>
         <div className="spc-detail-content">
