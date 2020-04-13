@@ -217,6 +217,10 @@ class AlshayaFeedSkuInfoHelper {
       // Replace the token for keywords.
       $keywords = $this->tokenService->replace($nodeMetatags['keywords'], ['node' => $node], ['langcode' => $lang], new BubbleableMetadata());
 
+      // Prepare promotions data.
+      $promotions_array = array_column($this->skuManager->getPromotions($sku), 'text');
+      $promotion_label = implode('|', $promotions_array);
+
       $priceRange = $this->getRange($prices['final_price']);
       $parentProduct = [
         'group_id' => $sku->getSku(),
@@ -233,6 +237,7 @@ class AlshayaFeedSkuInfoHelper {
         'keywords' => $keywords,
         'categoryCollection' => $this->skuInfoHelper->getProductCategories($node, $lang),
         'attributes' => $this->skuInfoHelper->getAttributes($sku, ['description', 'short_description']),
+        'promotion_label' => $promotion_label,
       ];
 
       $parentProduct['linked_skus'] = [];
