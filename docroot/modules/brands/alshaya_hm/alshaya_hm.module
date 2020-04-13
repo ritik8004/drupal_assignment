@@ -323,16 +323,3 @@ function alshaya_hm_sku_variant_info_alter(array &$variant, SKUInterface $child,
     'markup' => $warning_markup,
   ];
 }
-
-/**
- * Implements hook_alshaya_acm_product_light_product_data_alter().
- */
-function alshaya_hm_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
-  // Add attributes required for hm as label on products.
-  if ($sku->get('attr_product_environment')->getString()) {
-    $data['collection_labels']['attr_product_environment'] = $sku->get('attr_product_environment')->getString();
-  }
-  if ($sku->get('attr_concept')->getString()) {
-    $data['collection_labels']['attr_concept'] = $sku->get('attr_concept')->getString();
-  }
-}
