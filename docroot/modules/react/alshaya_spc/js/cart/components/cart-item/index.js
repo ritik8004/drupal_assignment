@@ -102,6 +102,7 @@ export default class CartItem extends React.Component {
         final_price: finalPrice,
         free_item: freeItem,
       },
+      animationOffset,
     } = this.props;
 
     const { isItemError, errorMessage } = this.state;
@@ -110,8 +111,10 @@ export default class CartItem extends React.Component {
       OOSClass = 'error';
     }
 
+    const animationDelayValue = `${0.3 + animationOffset}s`;
+
     return (
-      <div className="spc-cart-item" data-sku={sku}>
+      <div className="spc-cart-item fadeInUp" style={{ animationDelay: animationDelayValue }} data-sku={sku}>
         <div className="spc-product-tile">
           <div className="spc-product-image">
             <CheckoutItemImage img_data={extraData.cart_image} />

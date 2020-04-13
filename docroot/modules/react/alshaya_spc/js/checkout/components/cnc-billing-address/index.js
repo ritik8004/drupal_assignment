@@ -162,7 +162,7 @@ export default class CnCBillingAddress extends React.Component {
     }
 
     return (
-      <div className="spc-section-billing-address cnc-flow">
+      <div className="spc-section-billing-address cnc-flow appear" style={{ animationDelay: '0.2s' }}>
         <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">

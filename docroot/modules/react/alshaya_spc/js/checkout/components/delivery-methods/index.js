@@ -56,8 +56,8 @@ export default class DeliveryMethods extends React.Component {
 
     return (
       <div className="spc-checkout-delivery-methods">
-        <SectionTitle>{Drupal.t('Delivery method')}</SectionTitle>
-        <div className="delivery-method" onClick={() => this.changeDeliveryMethod('hd')}>
+        <SectionTitle animationDelayValue="0.4s">{Drupal.t('Delivery method')}</SectionTitle>
+        <div className="delivery-method fadeInUp" style={{ animationDelay: '0.6s' }} onClick={() => this.changeDeliveryMethod('hd')}>
           <input id="delivery-method-hd" defaultChecked={selectedOption === 'hd'} value="hd" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
             <span className="icon"><HomeDeliverySVG /></span>
@@ -67,7 +67,7 @@ export default class DeliveryMethods extends React.Component {
             </div>
           </label>
         </div>
-        <div className="delivery-method" onClick={() => this.changeDeliveryMethod('cnc')}>
+        <div className="delivery-method fadeInUp" style={{ animationDelay: '0.7s' }} onClick={() => this.changeDeliveryMethod('cnc')}>
           <input id="delivery-method-cnc" defaultChecked={selectedOption === 'cnc'} disabled={cncDisabled} value="cnc" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
             <span className="icon"><ClickCollectSVG /></span>
