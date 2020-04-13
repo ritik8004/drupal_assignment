@@ -31,7 +31,7 @@ import {
   FIND_YOUR_NEAREST_STORE,
   SELECT_THIS_STORE,
   LOCATION_ACCESS_DENIED,
-} from '../../../utilities/translations';
+} from '../../../utilities/translations/checkout';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
