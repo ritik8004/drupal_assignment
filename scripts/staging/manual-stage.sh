@@ -10,8 +10,9 @@
 sites="$1"
 target_env="$2"
 type="$3"
+user=`whoami`
 
-target_alias=`drush sa | grep "$target_env\$"`
+target_alias=`drush sa | grep "@$user.$target_env\$"`
 if [[ -z "$target_alias" ]]; then
   echo "Invalid target env $target_env"
   exit
