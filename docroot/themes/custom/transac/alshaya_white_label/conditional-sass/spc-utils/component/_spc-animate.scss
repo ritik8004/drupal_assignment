@@ -2,7 +2,7 @@
 .fadeInUp {
   animation-name: fadeInUp;
   animation-duration: 0.45s;
-  animation-fill-mode: both;
+  animation-fill-mode: backwards;
 
   &.notInMobile {
     @include breakpoint($only-mobile) {
@@ -12,6 +12,30 @@
 }
 
 @keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.appear {
+  animation-name: appear;
+  animation-duration: 0.3s;
+  animation-fill-mode: backwards;
+
+  &.notInMobile {
+    @include breakpoint($only-mobile) {
+      animation: none;
+    }
+  }
+}
+
+@keyframes appear {
   0% {
     opacity: 0;
     transform: translateY(20px);
