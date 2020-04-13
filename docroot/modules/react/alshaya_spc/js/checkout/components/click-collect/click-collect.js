@@ -25,13 +25,7 @@ import {
 } from '../../../utilities/map/fullScreen';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import CheckoutMessage from '../../../utilities/checkout-message';
-import {
-  COLLECTION_STORE,
-  DISMISS,
-  FIND_YOUR_NEAREST_STORE,
-  SELECT_THIS_STORE,
-  LOCATION_ACCESS_DENIED,
-} from '../../../utilities/translations/checkout';
+import getStringMessage from '../../../utilities/strings';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -437,7 +431,7 @@ class ClickCollect extends React.Component {
             className="spc-cnc-stores-list-map"
             style={{ display: openSelectedStore ? 'none' : 'block' }}
           >
-            <SectionTitle>{COLLECTION_STORE}</SectionTitle>
+            <SectionTitle>{getStringMessage('collection_store')}</SectionTitle>
             <a className="close" onClick={closeModal}>
               &times;
             </a>
@@ -445,13 +439,13 @@ class ClickCollect extends React.Component {
               {locationAccess === false
               && (
                 <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
-                  {LOCATION_ACCESS_DENIED}
-                  <a href="#" onClick={() => updateLocationAccess(true)}>{DISMISS}</a>
+                  {getStringMessage('location_access_denied')}
+                  <a href="#" onClick={() => updateLocationAccess(true)}>{getStringMessage('dismiss')}</a>
                 </CheckoutMessage>
               )}
               <div className="spc-cnc-address-form-content">
                 <SectionTitle>
-                  {FIND_YOUR_NEAREST_STORE}
+                  {getStringMessage('find_your_nearest_store')}
                 </SectionTitle>
                 <LocationSearchForm
                   ref={this.searchRef}
@@ -494,7 +488,7 @@ class ClickCollect extends React.Component {
           </div>
           <div className="spc-cnc-store-actions" data-selected-stored={openSelectedStore}>
             <button className="select-store" type="button" onClick={(e) => this.finalizeCurrentStore(e)}>
-              {SELECT_THIS_STORE}
+              {getStringMessage('select_this_store')}
             </button>
           </div>
           <SelectedStore

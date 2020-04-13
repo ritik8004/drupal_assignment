@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import StoreItem from './StoreItem';
-import { NO_STORE_FOUND } from '../../../../utilities/translations/checkout';
+import getStringMessage from '../../../../utilities/strings';
 
 const StoreList = ({
   storeList, display, onStoreRadio, onStoreFinalize, selected: selectedStore, onStoreClose,
 }) => {
   if (!storeList || storeList.length === 0) {
-    return <div className="spc-cnc-empty-store-list">{NO_STORE_FOUND}</div>;
+    return <div className="spc-cnc-empty-store-list">{getStringMessage('no_store_found')}</div>;
   }
 
   const removeClassFromStoreList = (className) => {
