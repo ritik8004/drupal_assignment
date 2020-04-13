@@ -213,6 +213,15 @@ class AlshayaFacetsPrettyPathsHelper {
       $query->condition('field_sku_attribute_code', $attribute_code);
       $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
     }
+    // We have a different case for sizegroup.
+    // Values coming for this filter is sigegroup:sizevalue.
+    elseif ($attribute_code == 'size' && $this->isSizeGroupEnabled()) {
+      $sizeBreak = explode(':', $value);
+      $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
+      $query->condition('name', $sizeBreak[1]);
+      $query->condition('field_sku_attribute_code', $attribute_code);
+      $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+    }
     else {
       $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
       $query->condition('name', $value);
@@ -255,6 +264,65 @@ class AlshayaFacetsPrettyPathsHelper {
       $encoded = str_replace($original, $replacement, $encoded);
     }
 
+    // Prepand sigegroup if sizegroup is enabled.
+    // Do not execute it for selected filter.
+    if ($attribute_code == 'size' && strpos($encoded, ':') == FALSE && $this->isSizeGroupEnabled()) {
+      $sizeBreak = explode(':', $value);
+      $encoded = $this->getSizegroupAttributeAliasFromValue($sizeBreak[0]) . ':' . $encoded;
+    }
+
+    $this->cache->set($cid, $encoded, Cache::PERMANENT, $tags);
+    return $encoded;
+  }
+
+  /**
+   * Get the sizegroup attribute alias from value.
+   *
+   * @return string
+   *   Alias.
+   */
+  protected function getSizegroupAttributeAliasFromValue($value) {
+    // In case of other we don't have any attribute so return it as well.
+    if ($value == 'other') {
+      return 'other';
+    }
+
+    $cid = implode(':', [
+      'sizegroup-encode',
+      $value,
+    ]);
+
+    $cache = $this->cache->get($cid);
+    if (!empty($cache)) {
+      return $cache->data;
+    }
+
+    $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
+    $query->condition('name', $value);
+    $query->condition('field_sku_attribute_code', 'size_group_code');
+    $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+
+    $ids = $query->execute();
+
+    $tags = [];
+    foreach ($ids ?? [] as $id) {
+      $alias = $this->aliasManager->getAliasByPath('/taxonomy/term/' . $id, 'en');
+      $alias = trim($alias, '/');
+
+      if (strpos($alias, 'taxonomy/term') === FALSE) {
+        $tags[] = 'taxonomy_term:' . $id;
+        $encoded = str_replace($this->getProductOptionAliasPrefix() . '/', '', $alias);
+
+        // Decode it once, it will be encoded again later.
+        $encoded = urldecode($encoded);
+        break;
+      }
+    }
+
+    foreach (self::REPLACEMENTS as $original => $replacement) {
+      $encoded = str_replace($original, $replacement, $encoded);
+    }
+
     $this->cache->set($cid, $encoded, Cache::PERMANENT, $tags);
     return $encoded;
   }
@@ -280,6 +348,12 @@ class AlshayaFacetsPrettyPathsHelper {
 
     $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
+
+    // Remove sizegroup from recieving value if sizegroup is enabled.
+    if ($attribute_code == 'size' && strpos($value, ':') !== FALSE && $this->isSizeGroupEnabled()) {
+      $sizeBreak = explode(':', $value);
+      $value = $sizeBreak[1];
+    }
 
     // We use ids only for category.
     if ($attribute_code === 'field_category') {
@@ -320,7 +394,64 @@ class AlshayaFacetsPrettyPathsHelper {
       }
     }
 
+    // Prepending sizegroup if sizegroup is enabled.
+    if ($attribute_code == 'size' && isset($sizeBreak[0]) && $this->isSizeGroupEnabled()) {
+      $decoded = $this->getSizegroupAttributeValueFromAlias($sizeBreak[0]) . ':' . $decoded;
+    }
     $static[$value] = $decoded;
+
+    return $decoded;
+  }
+
+  /**
+   * Get the size attribute value from alias.
+   *
+   * @return string
+   *   Alias.
+   */
+  protected function getSizegroupAttributeValueFromAlias($alias) {
+    if ($alias == 'other') {
+      return 'other';
+    }
+
+    $cid = implode(':', [
+      'sizegroup-decode',
+      $alias,
+    ]);
+
+    $cache = $this->cache->get($cid);
+    if (!empty($cache)) {
+      return $cache->data;
+    }
+
+    $decoded = $alias;
+    foreach (self::REPLACEMENTS as $original => $replacement) {
+      $decoded = str_replace($replacement, $original, $decoded);
+    }
+
+    $current_langcode = 'en';
+
+    $type = 'taxonomy_term';
+    $storage = $this->entityTypeManager->getStorage($type);
+
+    $id = str_replace(
+      '/taxonomy/term/',
+      '',
+      $this->aliasManager->getPathByAlias('/' . $this->getProductOptionAliasPrefix() . '/' . $decoded, $current_langcode)
+    );
+
+    if ($id) {
+      $entity = $storage->load($id);
+
+      if ($entity instanceof EntityInterface) {
+        if ($entity->language()->getId() != $current_langcode && $entity->hasTranslation($current_langcode)) {
+          $entity = $entity->getTranslation($current_langcode);
+        }
+        $decoded = $entity->label();
+
+        $this->cache->set($cid, $decoded, Cache::PERMANENT, ['taxonomy_term:' . $id]);
+      }
+    }
     return $decoded;
   }
 
@@ -550,6 +681,22 @@ class AlshayaFacetsPrettyPathsHelper {
     $source = $this->configFactory->getEditable('facets.facet_source.search_api__' . $mapping['id']);
     $static[$type] = ($source->get('url_processor') === 'alshaya_facets_pretty_paths');
     return $static[$type];
+  }
+
+  /**
+   * Check if size grouping filter is enabled.
+   *
+   * @return int
+   *   0 if not available, 1 if size grouping available.
+   */
+  public function isSizeGroupEnabled() {
+    static $status = NULL;
+
+    if (!isset($status)) {
+      $status = \Drupal::config('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
+    }
+
+    return $status;
   }
 
 }
