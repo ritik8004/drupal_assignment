@@ -12,6 +12,8 @@ import SpecialPrice from '../../../utilities/special-price';
 import dispatchCustomEvent from '../../../utilities/events';
 import Notifications from './components/Notifications';
 import QtyLimit from '../qty-limit';
+import DynamicPromotionProductItem
+  from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -106,6 +108,7 @@ export default class CartItem extends React.Component {
         max_sale_qty: maxSaleQty,
       },
       animationOffset,
+      productPromotion,
     } = this.props;
 
     const { isItemError, errorMessage } = this.state;
@@ -115,6 +118,13 @@ export default class CartItem extends React.Component {
     }
 
     const animationDelayValue = `${0.3 + animationOffset}s`;
+
+    let dynamicPromoLabels = null;
+    if (productPromotion !== false && productPromotion.labels.length !== 0) {
+      Object.values(productPromotion.labels).forEach((message) => {
+        dynamicPromoLabels = message;
+      });
+    }
 
     return (
       <div className="spc-cart-item fadeInUp" style={{ animationDelay: animationDelayValue }} data-sku={sku}>
@@ -174,6 +184,7 @@ export default class CartItem extends React.Component {
               maxSaleQty={maxSaleQty}
             />
           )}
+          <DynamicPromotionProductItem type="alert" dynamicPromoLabels={dynamicPromoLabels} />
         </Notifications>
         {/* @Todo: Show OOS only once. */}
         {isItemError
