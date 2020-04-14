@@ -23,6 +23,7 @@ class MagazinePdpLayout extends PdpLayoutBase {
    * {@inheritdoc}
    */
   public function getRenderArray(array &$variables) {
+    $variables['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
     $variables['#attached']['library'][] = 'alshaya_white_label/magazine_attribute';
     $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
     $variables['#attached']['drupalSettings']['color_swatches_hover'] = TRUE;

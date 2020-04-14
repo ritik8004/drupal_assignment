@@ -16,7 +16,6 @@ use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
-use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\file\Entity\File;
 
@@ -576,15 +575,10 @@ function alshaya_white_label_preprocess_node(&$variables) {
         /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
         $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
         $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
-        if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-          $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
-          $pdp_plugin = $pdp_layout_plugin_manager->createInstance('magazine', []);
-          $pdp_plugin->getRenderArray($variables);
-        }
-        else {
-          $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
-          $variables['#attached']['library'][] = 'alshaya_white_label/stickybutton';
-        }
+        $plugin_id = _alshaya_white_label_get_layout_plugin_id($pdp_layout);
+        $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
+        $pdp_plugin = $pdp_layout_plugin_manager->createInstance($plugin_id, []);
+        $pdp_plugin->getRenderArray($variables);
         if ($variables['show_crosssell_as_matchback']) {
           $variables['#attached']['library'][] = 'alshaya_white_label/matchback_layout';
         }
@@ -841,11 +835,10 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
-      if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-        $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
-        $pdp_plugin = $pdp_layout_plugin_manager->createInstance('magazine', []);
-        $pdp_plugin->getTemplateName($suggestions);
-      }
+      $plugin_id = _alshaya_white_label_get_layout_plugin_id($pdp_layout);
+      $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
+      $pdp_plugin = $pdp_layout_plugin_manager->createInstance($plugin_id, []);
+      $pdp_plugin->getTemplateName($suggestions);
     }
   }
 }
@@ -1691,4 +1684,22 @@ function alshaya_white_label_preprocess_image_style(&$variables) {
 function alshaya_white_label_theme_registry_alter(array &$theme_registry) {
   $theme_registry['image']['variables']['skip_lazy_loading'] = NULL;
   $theme_registry['image_style']['variables']['skip_lazy_loading'] = NULL;
+}
+
+/**
+ * To get the plugin id from the pdp layout.
+ *
+ * @param string $pdp_layout
+ *   pdp layout selected.
+ *
+ * @return string
+ *   Plugin id.
+ */
+function _alshaya_white_label_get_layout_plugin_id($pdp_layout) {
+  $plugin_id = 'default';
+  if (strpos($pdp_layout, '-') > -1) {
+    $split_layout = explode('-', $pdp_layout);
+    $plugin_id = end($split_layout);
+  }
+  return $plugin_id;
 }
