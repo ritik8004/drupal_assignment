@@ -4,6 +4,7 @@ import SectionTitle from '../../../utilities/section-title';
 import HomeDeliverySVG from '../hd-svg';
 import ClickCollectSVG from '../cc-svg';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import { isCnCEnabled } from '../../../utilities/checkout_util';
 
 export default class DeliveryMethods extends React.Component {
   constructor(props) {
@@ -24,11 +25,10 @@ export default class DeliveryMethods extends React.Component {
 
   // On delivery method change.
   changeDeliveryMethod = (method) => {
+    const { cart, refreshCart } = this.props;
     // Not process click for cnc if disabled.
-    const { cart: { cnc_enabled: cncEnabled } } = this.props;
-    if ((!drupalSettings.cnc_enabled
-      || !cncEnabled
-    ) && method === 'cnc') {
+    if (!isCnCEnabled(cart.cart)
+      && method === 'cnc') {
       return;
     }
 
@@ -44,30 +44,24 @@ export default class DeliveryMethods extends React.Component {
       },
     });
     document.dispatchEvent(event);
-    // Add delivery method in cart storage.
-    const { cart, refreshCart } = this.props;
     cart.delivery_type = method;
     refreshCart(cart);
     smoothScrollTo('.spc-checkout-delivery-information');
   }
 
   render() {
-    const { cart: { cnc_enabled: cncEnabled } } = this.props;
+    const { cart } = this.props;
     const hdSubtitle = Drupal.t('Standard delivery for purchases over KD 250');
     const { selectedOption } = this.state;
     let cncSubtitle = window.drupalSettings.cnc_subtitle_available || '';
-    const cncGlobaleEnable = drupalSettings.cnc_enabled;
 
-    // If CNC is disabled.
-    let cncAvailable = true;
-    if (!cncGlobaleEnable || !cncEnabled) {
+    const isCnCAvailable = isCnCEnabled(cart.cart);
+    let cncInactiveClass = 'active';
+    // If CnC disabled.
+    if (!isCnCAvailable) {
       cncSubtitle = window.drupalSettings.cnc_subtitle_unavailable || '';
-      cncAvailable = false;
+      cncInactiveClass = 'in-active';
     }
-
-    const cncInactiveClass = cncAvailable === false
-      ? 'in-active'
-      : 'active';
 
     return (
       <div className="spc-checkout-delivery-methods">
@@ -83,7 +77,7 @@ export default class DeliveryMethods extends React.Component {
           </label>
         </div>
         <div className={`delivery-method fadeInUp ${cncInactiveClass}`} style={{ animationDelay: '0.7s' }} onClick={() => this.changeDeliveryMethod('cnc')}>
-          <input id="delivery-method-cnc" defaultChecked={selectedOption === 'cnc'} disabled={cncAvailable} value="cnc" name="delivery-method" type="radio" />
+          <input id="delivery-method-cnc" defaultChecked={selectedOption === 'cnc'} disabled={isCnCAvailable} value="cnc" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
             <span className="icon"><ClickCollectSVG /></span>
             <div className="delivery-method-name">
