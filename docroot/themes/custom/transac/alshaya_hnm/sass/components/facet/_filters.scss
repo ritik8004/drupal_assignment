@@ -166,7 +166,8 @@
   }
 }
 
-#block-plpsize {
+#block-plpsize,
+#block-promosize {
   > ul {
     font-size: 0.75rem;
     line-height: 2;
@@ -219,7 +220,8 @@
 }
 
 .all-filters {
-  #block-plpsize {
+  #block-plpsize,
+  #block-promosize {
     > ul {
       > li {
         @include icon(chevron#{$right}, after) {
