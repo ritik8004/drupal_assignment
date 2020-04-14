@@ -198,6 +198,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $encoded = $value;
 
     $entity_type = 'term';
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     // We use ids only for category.
     if ($attribute_code == 'field_acq_promotion_label') {
@@ -218,10 +219,10 @@ class AlshayaFacetsPrettyPathsHelper {
       $query->condition('name', $value);
       $query->condition('field_sku_attribute_code', $attribute_code);
       $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+      $query->condition('langcode', $langcode);
     }
 
     $ids = $query->execute();
-    $langcode = 'en';
 
     foreach ($ids ?? [] as $id) {
       if ($entity_type == 'term') {
