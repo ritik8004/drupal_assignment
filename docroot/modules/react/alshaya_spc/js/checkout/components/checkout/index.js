@@ -22,6 +22,7 @@ import TermsConditions from '../terms-conditions';
 import {
   removeFullScreenLoader,
   addShippingInCart,
+  isCnCEnabled,
 } from '../../../utilities/checkout_util';
 import {
   prepareAddressDataFromCartShipping,
@@ -70,6 +71,12 @@ export default class Checkout extends React.Component {
       if (cartData instanceof Promise) {
         cartData.then((result) => {
           let cartObj = { cart: result };
+          // If CnC is not available and cart has CnC
+          // method selected.
+          if (result.delivery_type === 'cnc'
+            && !isCnCEnabled(result)) {
+            cartObj.delivery_type = 'hd';
+          }
           addInfoInStorage(cartObj);
           checkCartCustomer(cartObj).then((updated) => {
             if (updated) {
