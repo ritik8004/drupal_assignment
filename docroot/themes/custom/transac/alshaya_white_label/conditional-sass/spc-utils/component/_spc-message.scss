@@ -56,6 +56,43 @@
       }
     }
 
+    &.spc-checkout-warning-message-container {
+      background-color: $spc-checkout-warning-message-background;
+      margin-bottom: 1rem;
+      margin-top: 0.625rem;
+
+      .spc-checkout-warning-message {
+        font-family: $alshaya-bold;
+        font-weight: normal;
+        font-size: 0.875rem;
+        display: block;
+        padding-#{$left}: 3rem;
+        padding-#{$right}: 1rem;
+        margin-#{$left}: 1rem;
+        color: $spc-checkout-warning-message;
+        position: relative;
+
+        a {
+          padding-top: 0.625rem;
+          font-family: $alshaya-thin;
+          font-weight: normal;
+          color: $spc-checkout-warning-message;
+          text-decoration: underline;
+          display: block;
+        }
+
+        @include icon(warning) {
+          width: 2.125rem;
+          height: 2.125rem;
+          display: inline-block;
+          font-size: 2rem;
+          position: absolute;
+          #{$left}: 0;
+          top: 0;
+        }
+      }
+    }
+
     .spc-message {
       font-size: 1rem;
       margin-#{$left}: 1rem;

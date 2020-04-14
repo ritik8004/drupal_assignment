@@ -105,6 +105,7 @@ $_spc-discount-text: #cd2026;
 $_spc-area-panel-placeholder: #b3b3b3;
 $_spc-billing-help: #007aff;
 $_spc-cart-alert: #238ae8;
+$_spc-warning-bg: #ffd1a1;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1167,6 +1168,8 @@ $spc-order-summary-discount-text: $_spc-discount-text;
 $spc-order-summary-hero-total-border: $warm-grey-two;
 $spc-order-total-suffix-text: $grey-light;
 $spc-checkout-error-message-background: $red-error;
+$spc-checkout-warning-message: $mothercare-black;
+$spc-checkout-warning-message-background: $_spc-warning-bg;
 $spc-checkout-error-message-color: $white-five;
 $spc-checkout-success-message-background: $tealish;
 $spc-checkout-success-message-color: $white-five;

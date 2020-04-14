@@ -141,6 +141,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Markup for cart page.
    */
   public function cart() {
+    $acm_config = $this->configFactory->get('alshaya_acm.settings');
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="spc-cart"></div>',
@@ -150,6 +152,16 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
         ],
+        'drupalSettings' => [
+          'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+        ],
+      ],
+      '#cache' => [
+        'contexts' => [
+          'languages:' . LanguageInterface::TYPE_INTERFACE,
+          'user',
+        ],
+        'tags' => $acm_config->getCacheTags(),
       ],
     ];
   }
@@ -209,6 +221,36 @@ class AlshayaSpcController extends ControllerBase {
     $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
     $geolocation_config = $this->configFactory->get('geolocation.settings');
     $cache_tags = Cache::mergeTags($cache_tags, array_merge($store_finder_config->getCacheTags(), $geolocation_config->getCacheTags()));
+
+    $strings[] = [
+      'key' => 'find_your_nearest_store',
+      'value' => $this->t('find your nearest store'),
+    ];
+
+    $strings[] = [
+      'key' => 'select_this_store',
+      'value' => $this->t('select this store'),
+    ];
+
+    $strings[] = [
+      'key' => 'collection_store',
+      'value' => $this->t('Collection Store'),
+    ];
+
+    $strings[] = [
+      'key' => 'dismiss',
+      'value' => $this->t('Dismiss'),
+    ];
+
+    $strings[] = [
+      'key' => 'location_access_denied',
+      'value' => $this->t('Access to your location access has been denied by your browser. You can reenable location services in your browser settings.'),
+    ];
+
+    $strings[] = [
+      'key' => 'no_store_found',
+      'value' => $this->t('Sorry, No store found for your location.'),
+    ];
 
     $build = [
       '#theme' => 'spc_checkout',
