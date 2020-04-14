@@ -24,6 +24,14 @@ export default class DeliveryMethods extends React.Component {
 
   // On delivery method change.
   changeDeliveryMethod = (method) => {
+    // Not process click for cnc if disabled.
+    const { cart: { cnc_enabled: cncEnabled } } = this.props;
+    if ((!drupalSettings.cnc_enabled
+      || !cncEnabled
+    ) && method === 'cnc') {
+      return;
+    }
+
     this.setState({
       selectedOption: method,
     });
@@ -44,15 +52,22 @@ export default class DeliveryMethods extends React.Component {
   }
 
   render() {
-    const { cart: { cnc_disabled: cncDisabled } } = this.props;
+    const { cart: { cnc_enabled: cncEnabled } } = this.props;
     const hdSubtitle = Drupal.t('Standard delivery for purchases over KD 250');
     const { selectedOption } = this.state;
     let cncSubtitle = window.drupalSettings.cnc_subtitle_available || '';
+    const cncGlobaleEnable = drupalSettings.cnc_enabled;
 
     // If CNC is disabled.
-    if (cncDisabled) {
+    let cncAvailable = true;
+    if (!cncGlobaleEnable || !cncEnabled) {
       cncSubtitle = window.drupalSettings.cnc_subtitle_unavailable || '';
+      cncAvailable = false;
     }
+
+    const cncInactiveClass = cncAvailable === false
+      ? 'in-active'
+      : 'active';
 
     return (
       <div className="spc-checkout-delivery-methods">
@@ -67,8 +82,8 @@ export default class DeliveryMethods extends React.Component {
             </div>
           </label>
         </div>
-        <div className="delivery-method fadeInUp" style={{ animationDelay: '0.7s' }} onClick={() => this.changeDeliveryMethod('cnc')}>
-          <input id="delivery-method-cnc" defaultChecked={selectedOption === 'cnc'} disabled={cncDisabled} value="cnc" name="delivery-method" type="radio" />
+        <div className={`delivery-method fadeInUp ${cncInactiveClass}`} style={{ animationDelay: '0.7s' }} onClick={() => this.changeDeliveryMethod('cnc')}>
+          <input id="delivery-method-cnc" defaultChecked={selectedOption === 'cnc'} disabled={cncAvailable} value="cnc" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
             <span className="icon"><ClickCollectSVG /></span>
             <div className="delivery-method-name">
