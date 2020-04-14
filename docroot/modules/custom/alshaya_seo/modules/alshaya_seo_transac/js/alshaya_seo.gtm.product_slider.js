@@ -94,7 +94,7 @@
 
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        if ($(this).isElementInViewPort(0)) {
+        if ($(this).isElementInViewPort(0, 40)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = pdpListName;

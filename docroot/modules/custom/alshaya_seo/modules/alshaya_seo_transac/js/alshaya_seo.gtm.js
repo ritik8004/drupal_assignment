@@ -1201,10 +1201,9 @@
     var listName = body.attr('gtm-list-name');
     // Send impression for each product added on page (page 1 or X).
     var count = productLinkProcessedSelector.length + 1;
-
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        if ($(this).isElementInViewPort(10, true)) {
+        if ($(this).isElementInViewPort(0, 10)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;

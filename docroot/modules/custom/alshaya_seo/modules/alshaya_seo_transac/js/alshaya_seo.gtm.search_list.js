@@ -9,7 +9,9 @@
   Drupal.behaviors.seoGoogleTagManagerSearchList = {
     attach: function (context, settings) {
       // Trigger incase of page load & filter selected from SRP.
-      Drupal.alshaya_seo_gtm_prepare_and_push_product_impression($('.view-search'), settings);
+      $(window).once('search-list-page-load').on('load', function () {
+        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression($('.view-search'), settings);
+      });
 
       $(window).once('alshaya-seo-gtm-product-search').on('scroll', debounce(function (event) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression($('.view-search'), settings);
