@@ -1,9 +1,9 @@
-const ItemLowQuantity = ({ in_stock: inStock, stock, qty }) => {
-  if (inStock && stock < qty) {
-    return Drupal.t('This product is not available in selected quantity. Please adjust the quantity to proceed.');
-  }
+import React from 'react';
 
-  return null;
-};
+const ItemLowQuantity = ({ in_stock: inStock, stock, qty }) => (
+  (inStock && stock < qty)
+    ? Drupal.t('This product is not available in selected quantity. Please adjust the quantity to proceed.')
+    : null
+);
 
-export default ItemLowQuantity;
+export default React.memo(ItemLowQuantity);
