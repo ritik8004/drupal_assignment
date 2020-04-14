@@ -14,6 +14,7 @@ import Notifications from './components/Notifications';
 import QtyLimit from '../qty-limit';
 import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
+import CartItemFree from '../cart-item-free';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -143,8 +144,6 @@ export default class CartItem extends React.Component {
                   finalPrice={parseFloat(finalPrice)}
                 />
               </div>
-              {freeItem === true
-              && <div>{Drupal.t('FREE')}</div>}
             </div>
             <div className="spc-product-attributes-wrapper">
               {configurableValues.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.attribute_code}-${key.value}`} label={key} />)}
@@ -184,6 +183,7 @@ export default class CartItem extends React.Component {
               maxSaleQty={maxSaleQty}
             />
           )}
+          <CartItemFree type="alert" filled="true" freeItem={freeItem} />
           <DynamicPromotionProductItem type="alert" dynamicPromoLabels={dynamicPromoLabels} />
         </Notifications>
         {/* @Todo: Show OOS only once. */}

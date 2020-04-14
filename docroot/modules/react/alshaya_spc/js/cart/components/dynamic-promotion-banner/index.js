@@ -17,7 +17,7 @@ const DynamicPromotionBanner = (props) => {
       <DynamicPromotionBannerItem
         status="active"
         key={ruleId}
-        ruleID={ruleId}
+        ruleId={ruleId}
         label={label}
         type={type}
       />,
