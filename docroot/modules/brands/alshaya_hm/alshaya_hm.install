@@ -16,6 +16,7 @@ use Drupal\block\Entity\Block;
  *
  * Change widget for plp_size, promo_size facet from checkbox
  * to new widget "size_group_list".
+ * Queued all items for re-indexation.
  */
 function alshaya_hm_update_8046() {
   $size_facets = [
@@ -27,6 +28,8 @@ function alshaya_hm_update_8046() {
   foreach ($size_facets as $config) {
     \Drupal::configFactory()->getEditable($config)->save();
   }
+
+  _alshaya_search_api_reindex();
 }
 
 /**
