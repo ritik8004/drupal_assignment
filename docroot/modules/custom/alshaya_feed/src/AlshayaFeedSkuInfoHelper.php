@@ -219,7 +219,7 @@ class AlshayaFeedSkuInfoHelper {
 
       // Prepare promotions data.
       $promotions_array = array_column($this->skuManager->getPromotions($sku), 'text');
-      $promotion_label = implode('|', $promotions_array);
+      $promotion_label = implode(' | ', $promotions_array);
 
       $priceRange = $this->getRange($prices['final_price']);
       $parentProduct = [
