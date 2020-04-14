@@ -25,11 +25,12 @@ class MobileValidationWebformHandler extends WebformHandlerBase {
   use StringTranslationTrait;
 
   /**
-   * Check maxlenght on mobile number.
+   * Check the mobile number is valid or not.
    */
   public function validateForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {
     $preference_channel = $webform_submission->getElementData('select_your_preference_of_channel_of_communication');
     $mobile_number = $webform_submission->getElementData('dummy_field_mobile_number');
+    $original_mobile_number = $webform_submission->getElementData('mobile_number');
     if ($preference_channel == 'Mobile' && empty($mobile_number)) {
       $form_state->setErrorByName('mobile_number', $this->t('Mobile Number is mandatory'));
     }
@@ -37,7 +38,12 @@ class MobileValidationWebformHandler extends WebformHandlerBase {
       $util = \Drupal::service('mobile_number.util');
       $mobile_number_obj = $util->getMobileNumber($mobile_number);
       if (!is_object($mobile_number_obj)) {
-        $form_state->setErrorByName('mobile_number', $this->t('Invalid mobile number'));
+        $form_state->setErrorByName('mobile_number', $this->t('The phone number %value provided for %field is not a valid mobile number for country %country.',
+          [
+            '%value' => $mobile_number,
+            '%field' => $this->t('Mobile Number'),
+            '%country' => $original_mobile_number['country-code'],
+          ]));
       }
     }
   }

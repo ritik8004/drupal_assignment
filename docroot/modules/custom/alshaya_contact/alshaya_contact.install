@@ -12,6 +12,22 @@ use Drupal\lightning_core\ConfigHelper;
  *
  * Add wenform handler on mobile number validation and add request_from field.
  */
+function alshaya_contact_update_8003() {
+  $strings = [
+    'Mobile Number is mandatory' => [
+      'en' => 'Mobile Number is mandatory',
+      'ar' => 'رقم الهاتف إلزامي',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add wenform handler on mobile number validation and add request_from field.
+ */
 function alshaya_contact_update_8002() {
   $configs = [
     'webform.webform.alshaya_contact',
