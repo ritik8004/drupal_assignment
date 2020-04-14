@@ -218,7 +218,7 @@ class AlshayaFeedSkuInfoHelper {
       $keywords = $this->tokenService->replace($nodeMetatags['keywords'], ['node' => $node], ['langcode' => $lang], new BubbleableMetadata());
 
       // Prepare promotions data.
-      $promotions_array = array_column($this->skuManager->getPromotions($sku), 'text');
+      $promotions_array = array_column($this->skuManager->getPromotionsForSearchViewFromSkuId($sku), 'text');
       $promotion_label = implode(' | ', $promotions_array);
 
       $priceRange = $this->getRange($prices['final_price']);
