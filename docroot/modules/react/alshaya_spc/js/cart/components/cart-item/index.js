@@ -108,6 +108,7 @@ export default class CartItem extends React.Component {
         free_item: freeItem,
         max_sale_qty: maxSaleQty,
       },
+      qtyLimit: currentQtyLimit,
       animationOffset,
       productPromotion,
     } = this.props;
@@ -175,14 +176,16 @@ export default class CartItem extends React.Component {
           && (
             <QtyLimit
               type="conditional"
-              showWarning={
-                parseInt(maxSaleQty, 10) !== 0 && parseInt(qty, 10) >= parseInt(maxSaleQty, 10)
-              }
               showAlert={
-                parseInt(maxSaleQty, 10) !== 0 && parseInt(qty, 10) < parseInt(maxSaleQty, 10)
+                parseInt(maxSaleQty, 10) !== 0
+                && parseInt(currentQtyLimit, 10) >= parseInt(maxSaleQty, 10)
+              }
+              showWarning={
+                parseInt(maxSaleQty, 10) !== 0
+                && parseInt(currentQtyLimit, 10) < parseInt(maxSaleQty, 10)
               }
               filled="true"
-              qty={qty}
+              qty={currentQtyLimit}
               maxSaleQty={maxSaleQty}
             />
           )}
