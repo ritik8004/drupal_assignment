@@ -4,14 +4,17 @@
    * Check if element is fully visible in viewport or not.
    *
    * @param offset
+   * @param isElementPartiallyVisible
    *
    * @returns {boolean}
    */
-  $.fn.isElementInViewPort = function (offset) {
+  $.fn.isElementInViewPort = function (offset, isElementPartiallyVisible = false) {
     try {
       // Get element top and bottom.
       var elementTop = $(this).offset().top - offset;
-      var elementBottom = elementTop + $(this).outerHeight();
+      var elementBottom = isElementPartiallyVisible
+                          ? elementTop + offset
+                          : elementTop + $(this).outerHeight();
 
       // Get window top and bottom.
       var viewportTop = $(window).scrollTop();
