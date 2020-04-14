@@ -77,7 +77,7 @@ export default class DeliveryMethods extends React.Component {
           </label>
         </div>
         <div className={`delivery-method fadeInUp ${cncInactiveClass}`} style={{ animationDelay: '0.7s' }} onClick={() => this.changeDeliveryMethod('cnc')}>
-          <input id="delivery-method-cnc" defaultChecked={selectedOption === 'cnc'} disabled={isCnCAvailable} value="cnc" name="delivery-method" type="radio" />
+          <input id="delivery-method-cnc" defaultChecked={selectedOption === 'cnc'} disabled={isCnCAvailable ? false : 'disabled'} value="cnc" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
             <span className="icon"><ClickCollectSVG /></span>
             <div className="delivery-method-name">
