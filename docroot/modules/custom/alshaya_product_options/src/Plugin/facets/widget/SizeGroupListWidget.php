@@ -35,7 +35,7 @@ class SizeGroupListWidget extends LinksWidget {
     }
 
     $items = [];
-    $othersLabel = (string) $this->t('other');
+    $othersLabel = 'other';
     // Moving others at the bottom of the list.
     if (isset($sizeGroups[$othersLabel])) {
       $copyOtherlabels = $sizeGroups[$othersLabel];
