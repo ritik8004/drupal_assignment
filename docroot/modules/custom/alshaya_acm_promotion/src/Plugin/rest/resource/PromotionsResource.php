@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_promotion\Plugin\rest\resource;
 
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
@@ -29,11 +30,6 @@ use Drupal\rest\ModifiedResourceResponse;
 class PromotionsResource extends ResourceBase {
 
   /**
-   * Node bundle machine name.
-   */
-  const NODE_BUNDLE = 'acq_promotion';
-
-  /**
    * The content to be cached.
    *
    * @var array
@@ -53,6 +49,13 @@ class PromotionsResource extends ResourceBase {
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
+
+  /**
+   * Entity Repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
 
   /**
    * The database connection.
@@ -85,6 +88,8 @@ class PromotionsResource extends ResourceBase {
    *   The language manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity Repository.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -97,11 +102,13 @@ class PromotionsResource extends ResourceBase {
                               LoggerInterface $logger,
                               LanguageManagerInterface $language_manager,
                               EntityTypeManagerInterface $entity_type_manager,
+                              EntityRepositoryInterface $entity_repository,
                               Connection $connection,
                               ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->entityRepository = $entity_repository;
     $this->connection = $connection;
     $this->moduleHandler = $module_handler;
   }
@@ -118,6 +125,7 @@ class PromotionsResource extends ResourceBase {
       $container->get('logger.factory')->get('alshaya_acm_promotion'),
       $container->get('language_manager'),
       $container->get('entity_type.manager'),
+      $container->get('entity.repository'),
       $container->get('database'),
       $container->get('module_handler')
     );
@@ -152,24 +160,15 @@ class PromotionsResource extends ResourceBase {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $nids = $this->getAllPromotions($langcode);
     $response_data = [];
+
+    $cacheability = new CacheableMetadata();
+
     if (!empty($nids)) {
       $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
 
-      // Get the active promotion settings from "alshaya_cart_promotions_block".
-      $blocks = $this->entityTypeManager->getStorage('block')->loadByProperties(['plugin' => 'alshaya_cart_promotions_block', 'status' => TRUE]);
-      $block = reset($blocks);
-      $active_promotions = !empty($block->get('settings')['promotions'])
-        ? array_filter($block->get('settings')['promotions'])
-        : [];
-      $tag = "config:{$this->entityTypeManager->getDefinition('block')->getConfigPrefix()}.{$block->id()}";
-      // Check if the current language is arabic.
-      $default_language = $this->languageManager->getDefaultLanguage()->getId();
-      $getTranslatedNode = ($langcode !== $default_language);
-
       foreach ($nodes as $node) {
-        if ($getTranslatedNode && $node->hasTranslation($langcode)) {
-          $node = $node->getTranslation($langcode);
-        }
+        $node = $this->entityRepository->getTranslationFromContext($node);
+
         // Get bubbleable metadata for CacheableDependency to avoid fatal error.
         $node_url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString(TRUE);
 
@@ -178,7 +177,6 @@ class PromotionsResource extends ResourceBase {
           'name' => $node->label(),
           'path' => $node_url->getGeneratedUrl(),
           'commerce_id' => (int) $node->get('field_acq_promotion_rule_id')->first()->getString(),
-          'promote' => in_array($node->get('field_acq_promotion_rule_id')->first()->getString(), $active_promotions),
           'promo_sub_tpe' => $node->get('field_alshaya_promotion_subtype')->first()->getString(),
           'promo_desc' => $node->get('field_acq_promotion_description')->first() ? $node->get('field_acq_promotion_description')->first()->getValue()['value'] : '',
           'promo_label' => $node->get('field_acq_promotion_label')->getString(),
@@ -188,10 +186,11 @@ class PromotionsResource extends ResourceBase {
 
         $response_data[] = $data;
         $this->content[] = $node;
+        $cacheability->addCacheableDependency($node);
       }
 
       $response = new ResourceResponse($response_data);
-      $this->addCacheableDependency($response, $tag);
+      $response->addCacheableDependency($cacheability);
       return $response;
     }
 
