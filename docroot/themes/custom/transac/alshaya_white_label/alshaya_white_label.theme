@@ -1690,7 +1690,7 @@ function alshaya_white_label_theme_registry_alter(array &$theme_registry) {
  * To get the plugin id from the pdp layout.
  *
  * @param string $pdp_layout
- *   pdp layout selected.
+ *   Pdp layout selected.
  *
  * @return string
  *   Plugin id.
