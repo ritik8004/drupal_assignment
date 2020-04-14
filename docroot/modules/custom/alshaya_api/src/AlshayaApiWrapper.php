@@ -16,6 +16,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use GuzzleHttp\TransferStats;
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
 
@@ -227,6 +228,20 @@ class AlshayaApiWrapper {
       elseif ($method == 'PUT') {
         $options['json'] = $data;
       }
+
+      $that = $this;
+      $options['on_stats'] = function (TransferStats $stats) use ($that) {
+        $code = ($stats->hasResponse())
+          ? $stats->getResponse()->getStatusCode()
+          : 0;
+
+        $that->logger->info(sprintf(
+          'Finished API request %s in %.4f. Response code: %d',
+          $stats->getEffectiveUri(),
+          $stats->getTransferTime(),
+          $code
+        ));
+      };
 
       $response = $client->request($method, $url, $options);
       $result = $response->getBody()->getContents();
