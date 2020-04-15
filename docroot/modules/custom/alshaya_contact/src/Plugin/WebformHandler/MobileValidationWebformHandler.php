@@ -29,6 +29,8 @@ class MobileValidationWebformHandler extends WebformHandlerBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {
     $webform_data = $webform_submission->getData();
+
+    // mobile_number_full only available on API. Validation only allow API.
     if (array_key_exists("mobile_number_full", $webform_data)) {
       $mobile_number = $webform_submission->getElementData('mobile_number_full');
       $preference_channel = $webform_submission->getElementData('select_your_preference_of_channel_of_communication');
