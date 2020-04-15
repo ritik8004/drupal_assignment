@@ -255,6 +255,11 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Access to your location access has been denied by your browser. You can reenable location services in your browser settings.'),
     ];
 
+    $strings[] = [
+      'key' => 'location_outside_country_hd',
+      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => 'EG']) . '</span><br/>' . $this->t('We don\'t support delivery outside @country. Please enter an address with in country @country below to continue.', ['@country' => 'HH']),
+    ];
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
