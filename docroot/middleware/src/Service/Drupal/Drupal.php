@@ -3,6 +3,7 @@
 namespace App\Service\Drupal;
 
 use GuzzleHttp\Cookie\SetCookie;
+use GuzzleHttp\TransferStats;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -53,6 +54,65 @@ class Drupal {
   }
 
   /**
+   * Wrapper function to invoke Drupal API.
+   *
+   * @param string $method
+   *   Request method - get/post.
+   * @param string $url
+   *   URL without language code.
+   * @param array $request_options
+   *   Request options.
+   *
+   * @return mixed|\Psr\Http\Message\ResponseInterface
+   *   Response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  protected function invokeApi(string $method, string $url, array $request_options = []) {
+    $client = $this->drupalInfo->getDrupalApiClient();
+
+    // Add language code in url.
+    $url = '/' . $this->drupalInfo->getDrupalLangcode() . $url;
+
+    $that = $this;
+    $request_options['on_stats'] = function (TransferStats $stats) use ($that) {
+      $code = ($stats->hasResponse())
+        ? $stats->getResponse()->getStatusCode()
+        : 0;
+
+      $that->logger->info(sprintf(
+        'Finished API request %s in %.4f. Response code: %d',
+        $stats->getEffectiveUri(),
+        $stats->getTransferTime(),
+        $code
+      ));
+    };
+
+    $request_options['headers']['Host'] = $this->drupalInfo->getDrupalBaseUrl();
+    $request_options['timeout'] = $request_options['timeout'] ?? 30;
+    return $client->request($method, $url, $request_options);
+  }
+
+  /**
+   * Wrapper function to invoke Drupal API.
+   *
+   * @param string $method
+   *   Request method - get/post.
+   * @param string $url
+   *   URL without language code.
+   * @param array $request_options
+   *   Request options.
+   *
+   * @return mixed|\Psr\Http\Message\ResponseInterface
+   *   Response.
+   */
+  protected function invokeApiWithSession(string $method, string $url, array $request_options = []) {
+    $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
+    $request_options['headers']['Cookie'] = $cookies->__toString();
+    return $this->invokeApiWithSession($method, $url, $request_options);
+  }
+
+  /**
    * Get info from drupal for cart items data.
    *
    * @param array $skus
@@ -62,11 +122,10 @@ class Drupal {
    *   Items data with info from drupal.
    */
   public function getCartItemDrupalData(array $skus) {
-    $client = $this->drupalInfo->getDrupalApiClient();
     $data = [];
     foreach ($skus as $sku) {
-      $url = sprintf('/%s/rest/v1/product/%s', $this->drupalInfo->getDrupalLangcode(), $sku) . '?context=cart';
-      $response = $client->request('GET', $url, ['headers' => ['Host' => $this->drupalInfo->getDrupalBaseUrl()]]);
+      $url = sprintf('/rest/v1/product/%s', $sku) . '?context=cart';
+      $response = $this->invokeApi('GET', $url);
       $result = $response->getBody()->getContents();
       $data[$sku] = json_decode($result, TRUE);
     }
@@ -88,22 +147,13 @@ class Drupal {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function triggerCheckoutEvent(string $event, array $data) {
+    $url = '/spc/checkout-event';
+
     $data['action'] = $event;
-
-    $client = $this->drupalInfo->getDrupalApiClient();
-    $url = sprintf('/%s/spc/checkout-event', $this->drupalInfo->getDrupalLangcode());
-    $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
-
-    $options = [
-      'headers' => [
-        'Host' => $this->drupalInfo->getDrupalBaseUrl(),
-        'Cookie' => $cookies->__toString(),
-      ],
-      'form_params' => $data,
-    ];
+    $options = ['form_params' => $data];
 
     try {
-      $response = $client->request('POST', $url, $options);
+      $response = $this->invokeApiWithSession('POST', $url, $options);
       $result = $response->getBody()->getContents();
       return json_decode($result, TRUE);
     }
@@ -127,11 +177,10 @@ class Drupal {
    *   Linked skus data.
    */
   public function getDrupalLinkedSkus(array $skus) {
-    $client = $this->drupalInfo->getDrupalApiClient();
     $data = [];
     foreach ($skus as $sku) {
-      $url = sprintf('/%s/rest/v1/product/%s/linked?context=cart', $this->drupalInfo->getDrupalLangcode(), $sku);
-      $response = $client->request('GET', $url, ['headers' => ['Host' => $this->drupalInfo->getDrupalBaseUrl()]]);
+      $url = sprintf('/rest/v1/product/%s/linked?context=cart', $sku);
+      $response = $this->invokeApi('GET', $url);
       $result = $response->getBody()->getContents();
       $data[$sku] = json_decode($result, TRUE);
     }
@@ -146,9 +195,8 @@ class Drupal {
    *   All promo data.
    */
   public function getAllPromoData() {
-    $client = $this->drupalInfo->getDrupalApiClient();
-    $url = sprintf('/%s/rest/v1/promotion/all', $this->drupalInfo->getDrupalLangcode());
-    $response = $client->request('GET', $url, ['headers' => ['Host' => $this->drupalInfo->getDrupalBaseUrl()]]);
+    $url = '/rest/v1/promotion/all';
+    $response = $this->invokeApi('GET', $url);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);
   }
@@ -157,15 +205,8 @@ class Drupal {
    * Get Drupal uid and customer id for the user in session.
    */
   public function getSessionCustomerInfo() {
-    $client = $this->drupalInfo->getDrupalApiClient();
-    $url = sprintf('/%s/spc/customer', $this->drupalInfo->getDrupalLangcode());
-    $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
-    $response = $client->request('GET', $url, [
-      'headers' => [
-        'Host' => $this->drupalInfo->getDrupalBaseUrl(),
-        'Cookie' => $cookies->__toString(),
-      ],
-    ]);
+    $url = '/spc/customer';
+    $response = $this->invokeApiWithSession('GET', $url);
     $result = $response->getBody()->getContents();
     $customer = json_decode($result, TRUE);
 
@@ -187,13 +228,8 @@ class Drupal {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getStoreInfo($store_code) {
-    $client = $this->drupalInfo->getDrupalApiClient();
-    $url = sprintf('/%s/cnc/store/%s', $this->drupalInfo->getDrupalLangcode(), $store_code);
-    $response = $client->request('GET', $url, [
-      'headers' => [
-        'Host' => $this->drupalInfo->getDrupalBaseUrl(),
-      ],
-    ]);
+    $url = sprintf('/cnc/store/%s', $store_code);
+    $response = $this->invokeApi('GET', $url);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);
   }
