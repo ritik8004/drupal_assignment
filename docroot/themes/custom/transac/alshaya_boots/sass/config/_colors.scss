@@ -374,10 +374,12 @@ $address_area_select: $warm-grey-two;
 $user_account_wrapper_light: $black-two;
 $password_tooltip_list: $error-red;
 $user_nav_link: $drakish-blue;
-$user_nav_mobile_link: $drakish-blue;
+$user_nav_mobile_link: $black-two;
 $user_order_list_border: $warm-grey-two;
 $user_order_help_text: $white;
 $user_order_help_bg: $link-water-three;
+$user_order_help_text_links: $white;
+$label_dark: $black-two;
 
 // User Form
 $user_field_link: $drakish-blue;
@@ -387,7 +389,9 @@ $user_pwd_unmask: $black-two;
 $user_account_nav: $black-two;
 $my_account_nav: $primary_text;
 $my_account_nav_active: $drakish-blue;
+$my_account_nav_hover: $drakish-blue;
 $user_form_layout_divider_color: $grey-light;
+$my_account_back_link_icon: $drakish-blue;
 
 //block-myaccountneedhelp
 $myaccountneedhelp_text: $drakish-blue;
@@ -426,6 +430,13 @@ $webform_contact_legend: $drakish-blue;
 // Order detail, recent orders, order list page.//no VD
 $order_search_form_icon: $drakish-blue;
 $order_search_form_border: $grey-light;
+$order_detail_td_light_content: $grey-light;
+$order_recent_toggle_icon: $drakish-blue;
+$order_detail_table_bg: $white;
+$order_accordion_open_bg: $white;
+$order_details_row_border: $warm-grey-two;
+$order_recent_order_order_detail_link_bg: $white-smoke-light;
+$order_recent_order_order_detail_link: $drakish-blue;
 
 // Order print.
 $order_print_order_details_row_label: $grey-light;
