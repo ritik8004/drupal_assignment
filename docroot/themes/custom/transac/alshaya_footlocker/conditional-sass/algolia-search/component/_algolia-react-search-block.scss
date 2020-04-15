@@ -210,7 +210,7 @@
     }
   }
 
-  &.focused.show-algolia-search-bar {
+  &.focused {
     #alshaya-algolia-autocomplete {
       .react-autosuggest__container {
         &::after {
