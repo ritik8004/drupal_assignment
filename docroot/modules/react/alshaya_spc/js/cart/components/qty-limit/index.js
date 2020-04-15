@@ -1,5 +1,9 @@
-const QtyLimit = ({ qty, maxSaleQty }) => ((parseInt(qty, 10) >= parseInt(maxSaleQty, 10))
-  ? Drupal.t('Purchase limit has been reached')
-  : Drupal.t('Limited to @max_sale_qty per customer', { '@max_sale_qty': maxSaleQty }));
+import React from 'react';
 
-export default QtyLimit;
+const QtyLimit = ({ qty, maxSaleQty }) => (
+  (parseInt(qty, 10) >= parseInt(maxSaleQty, 10))
+    ? Drupal.t('Purchase limit has been reached')
+    : Drupal.t('Limited to @max_sale_qty per customer', { '@max_sale_qty': maxSaleQty })
+);
+
+export default React.memo(QtyLimit);

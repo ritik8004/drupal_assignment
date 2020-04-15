@@ -1,9 +1,7 @@
-const CartItemFree = (props) => {
-  const { freeItem } = props;
-  if (freeItem === true) {
-    return Drupal.t('Free gift with purchase');
-  }
-  return null;
-};
+import React from 'react';
 
-export default CartItemFree;
+const CartItemFree = ({ freeItem }) => (
+  (freeItem === true) ? Drupal.t('Free gift with purchase') : null
+);
+
+export default React.memo(CartItemFree);
