@@ -1,0 +1,14 @@
+.user-form,
+.address-book-address,
+.webform-submission-alshaya-contact-form,
+#selected-store-wrapper {
+  .mobile-number-field {
+    label {
+      display: inline-block;
+
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+  }
+}
