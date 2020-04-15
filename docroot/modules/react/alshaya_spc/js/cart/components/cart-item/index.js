@@ -53,17 +53,26 @@ export default class CartItem extends React.Component {
    * Remove item from the cart.
    */
   removeCartItem = (sku, action, id) => {
-    const cartData = updateCartItemData(action, sku, 0);
     // Adding class on remove button for showing progress when click.
     document.getElementById(`remove-item-${id}`).classList.add('loading');
+    const afterCartUpdate = () => {
+      // Remove loading class.
+      document.getElementById(`remove-item-${id}`).classList.remove('loading');
+    };
+    this.triggerUpdateCart(action, sku, 0, afterCartUpdate);
+  };
+
+  /**
+   * Trigger update cart api call.
+   */
+  triggerUpdateCart = (action, sku, qty, callback = null) => {
+    const cartData = updateCartItemData(action, sku, qty);
     if (cartData instanceof Promise) {
       cartData.then((result) => {
-        // Remove loading class.
-        document.getElementById(`remove-item-${id}`).classList.remove('loading');
+        if (callback !== null) {
+          callback();
+        }
         const cartResult = result;
-        // Refreshing mini-cart.
-        const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartResult } });
-        document.dispatchEvent(eventMiniCart);
 
         let messageInfo = null;
         if (cartResult.error !== undefined) {
@@ -78,6 +87,10 @@ export default class CartItem extends React.Component {
           };
         }
 
+        // Refreshing mini-cart.
+        const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartResult } });
+        document.dispatchEvent(eventMiniCart);
+
         // Refreshing cart components.
         const eventCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => cartResult } });
         document.dispatchEvent(eventCart);
@@ -88,7 +101,7 @@ export default class CartItem extends React.Component {
         }
       });
     }
-  };
+  }
 
   render() {
     const {
@@ -128,8 +141,16 @@ export default class CartItem extends React.Component {
       });
     }
 
+    const qtyLimitClass = (drupalSettings.quantity_limit_enabled && currentQtyLimit > maxSaleQty)
+      ? 'sku-max-quantity-limit-reached'
+      : '';
+
     return (
-      <div className="spc-cart-item fadeInUp" style={{ animationDelay: animationDelayValue }} data-sku={sku}>
+      <div
+        className={`spc-cart-item fadeInUp ${qtyLimitClass}`}
+        style={{ animationDelay: animationDelayValue }}
+        data-sku={sku}
+      >
         <div className="spc-product-tile">
           <div className="spc-product-image">
             <CheckoutItemImage img_data={extraData.cart_image} />
@@ -159,6 +180,7 @@ export default class CartItem extends React.Component {
                 stock={stock}
                 sku={sku}
                 is_disabled={!inStock || freeItem}
+                onQtyChange={this.triggerUpdateCart}
                 maxLimit={
                   drupalSettings.quantity_limit_enabled && maxSaleQty !== 0 ? maxSaleQty : null
                 }
@@ -171,7 +193,6 @@ export default class CartItem extends React.Component {
         </div>
         <Notifications>
           <CartItemOOS type="warning" inStock={inStock} />
-          <ItemLowQuantity type="alert" stock={stock} qty={qty} in_stock={inStock} />
           {drupalSettings.quantity_limit_enabled
           && (
             <QtyLimit
@@ -189,12 +210,11 @@ export default class CartItem extends React.Component {
               maxSaleQty={maxSaleQty}
             />
           )}
+          <ItemLowQuantity type="alert" stock={stock} qty={qty} in_stock={inStock} />
           <CartItemFree type="alert" filled="true" freeItem={freeItem} />
           <DynamicPromotionProductItem type="alert" dynamicPromoLabels={dynamicPromoLabels} />
+          {isItemError && (<CartItemError type="alert" errorMessage={errorMessage} />)}
         </Notifications>
-        {/* @Todo: Show OOS only once. */}
-        {isItemError
-          && <CartItemError errorMessage={errorMessage} />}
       </div>
     );
   }

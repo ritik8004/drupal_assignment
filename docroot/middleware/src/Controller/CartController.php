@@ -318,9 +318,15 @@ class CartController {
     $items_quantity = array_column($cart_data['cart']['items'], 'qty', 'sku');
     $items_price = array_column($cart_data['cart']['items'], 'price', 'sku');
     $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
+    $errors = array_column($cart_data['cart']['items'], 'extension_attributes', 'sku');
     try {
       $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
       foreach ($data['items'] as $key => $value) {
+
+        if (!empty($errors[$key]) && !empty($errors[$key]['error_message'])) {
+          $data['items'][$key]['error'] = $errors[$key]['error_message'];
+        }
+
         if (isset($items_quantity[$key])) {
           $data['items'][$key]['qty'] = $items_quantity[$key];
         }
