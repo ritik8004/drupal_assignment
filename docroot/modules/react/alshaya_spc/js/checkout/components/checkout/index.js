@@ -118,6 +118,8 @@ export default class Checkout extends React.Component {
             }
           });
         });
+      } else {
+        window.location = Drupal.url('');
       }
     } catch (error) {
       // In case of error, do nothing.
