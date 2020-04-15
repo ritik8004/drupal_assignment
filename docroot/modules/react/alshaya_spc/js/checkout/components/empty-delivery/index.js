@@ -76,7 +76,7 @@ export default class EmptyDeliveryText extends React.Component {
   }
 
   cncEvent = () => {
-    const { storeList } = this.context;
+    const { storeList, updateLocationAccess } = this.context;
 
     if (this.getDeliveryType() !== 'cnc' || storeList.length > 0) {
       return;
@@ -90,12 +90,17 @@ export default class EmptyDeliveryText extends React.Component {
     }, 200);
 
     getLocationAccess()
-      .then((pos) => {
-        fetchStoresHelper({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-      });
+      .then(
+        (pos) => {
+          fetchStoresHelper({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          });
+        },
+        () => {
+          updateLocationAccess(false);
+        },
+      );
   }
 
   /**
@@ -151,7 +156,7 @@ export default class EmptyDeliveryText extends React.Component {
 
           if (!currentItem.defaultCenter) {
             storeUpdated = true;
-            updateCoordsAndStoreList(currentItem.coords, response.data);
+            updateCoordsAndStoreList(currentItem.coords, response.data, true);
           }
         } else {
           storeUpdated = true;

@@ -151,6 +151,7 @@ export default class AddressForm extends React.Component {
       headingText,
       closeModal,
       showEmail,
+      formContext,
     } = this.props;
     const {
       area_list: areaList,
@@ -161,6 +162,12 @@ export default class AddressForm extends React.Component {
     let defaultAddressVal = [];
     if (defaultVal) {
       defaultAddressVal = defaultVal;
+    }
+
+    // Check if billing address form.
+    let mapToAddressFormBtnText = Drupal.t('deliver to my location');
+    if (formContext === 'billing') {
+      mapToAddressFormBtnText = Drupal.t('select my location');
     }
 
     let isEditAddress = false;
@@ -214,7 +221,7 @@ export default class AddressForm extends React.Component {
               className="spc-deliver-button"
               onClick={() => this.deliverToCurrentLocation()}
             >
-              {Drupal.t('deliver to my location')}
+              {mapToAddressFormBtnText}
             </div>
             {window.innerWidth < 768 && (
               <div className="spc-address-form-map">

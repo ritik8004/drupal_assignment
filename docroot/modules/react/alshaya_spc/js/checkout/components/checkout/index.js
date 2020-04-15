@@ -22,6 +22,7 @@ import TermsConditions from '../terms-conditions';
 import {
   removeFullScreenLoader,
   addShippingInCart,
+  isCnCEnabled,
 } from '../../../utilities/checkout_util';
 import {
   prepareAddressDataFromCartShipping,
@@ -70,6 +71,12 @@ export default class Checkout extends React.Component {
       if (cartData instanceof Promise) {
         cartData.then((result) => {
           let cartObj = { cart: result };
+          // If CnC is not available and cart has CnC
+          // method selected.
+          if (result.delivery_type === 'cnc'
+            && !isCnCEnabled(result)) {
+            cartObj.delivery_type = 'hd';
+          }
           addInfoInStorage(cartObj);
           checkCartCustomer(cartObj).then((updated) => {
             if (updated) {
@@ -248,7 +255,6 @@ export default class Checkout extends React.Component {
             {billingComponent}
 
             <ConditionalView condition={window.innerWidth > 768}>
-              <VatFooterText />
               {termConditions}
             </ConditionalView>
 
@@ -265,14 +271,17 @@ export default class Checkout extends React.Component {
               in_stock={cart.cart.in_stock}
               cart_promo={cart.cart.cart_promo}
               show_checkout_button={false}
+              animationDelay="0.4s"
             />
           </div>
         </div>
         <div className="spc-post-content">
           <ConditionalView condition={window.innerWidth < 768}>
-            <VatFooterText />
             {termConditions}
           </ConditionalView>
+        </div>
+        <div className="spc-footer">
+          <VatFooterText />
         </div>
       </>
     );

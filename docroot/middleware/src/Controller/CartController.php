@@ -527,27 +527,10 @@ class CartController {
             }
           }
 
-          // If we update/add shipping in cart by address id.
-          if (!empty($shipping_info['address_id'])) {
-            $shipping_info = [
-              'customer_address_id' => $shipping_info['address_id'],
-              'address' => [
-                'customer_address_id' => $shipping_info['address_id'],
-                'country_id' => $shipping_info['country_id'],
-                'customer_id' => $this->cart->getCartCustomerId(),
-              ],
-              'carrier_info' => [
-                'code' => $shipping_methods[0]['carrier_code'],
-                'method' => $shipping_methods[0]['method_code'],
-              ],
-            ];
-          }
-          else {
-            $shipping_info['carrier_info'] = [
-              'code' => $shipping_methods[0]['carrier_code'],
-              'method' => $shipping_methods[0]['method_code'],
-            ];
-          }
+          $shipping_info['carrier_info'] = [
+            'code' => $shipping_methods[0]['carrier_code'],
+            'method' => $shipping_methods[0]['method_code'],
+          ];
 
           $cart = $this->cart->addShippingInfo($shipping_info, $action, $update_billing);
         }

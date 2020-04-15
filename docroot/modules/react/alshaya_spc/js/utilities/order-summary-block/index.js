@@ -39,6 +39,7 @@ const OrderSummaryBlock = (props) => {
     items,
     totals,
     in_stock: inStock,
+    animationDelay: animationDelayValue,
   } = props;
   const promoData = cartPromo;
   let orderSummaryTitle = Drupal.t('Order Summary');
@@ -54,7 +55,7 @@ const OrderSummaryBlock = (props) => {
   }
 
   return (
-    <div className="spc-order-summary-block">
+    <div className="spc-order-summary-block fadeInUp notInMobile" style={{ animationDelay: animationDelayValue }}>
       <SectionTitle>{orderSummaryTitle}</SectionTitle>
       {/* To Be used on Checkout Delivery pages. */}
       {!showCheckoutButton

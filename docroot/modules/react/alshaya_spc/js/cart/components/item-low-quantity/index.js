@@ -1,16 +1,7 @@
-import React from 'react';
-
-const ItemLowQuantity = (props) => {
-  const {
-    in_stock: inStock,
-    stock,
-    qty,
-  } = props;
-  if (inStock && stock < qty) {
-    return <div className="spc-cart-item-warning-item">{Drupal.t('This product is not available in selected quantity. Please adjust the quantity to proceed.')}</div>;
-  }
-
-  return (null);
-};
+const ItemLowQuantity = ({ in_stock: inStock, stock, qty }) => (
+  (inStock && stock < qty)
+    ? Drupal.t('This product is not available in selected quantity. Please adjust the quantity to proceed.')
+    : null
+);
 
 export default ItemLowQuantity;

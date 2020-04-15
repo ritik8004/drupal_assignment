@@ -3,6 +3,8 @@
 namespace App\Service\Magento;
 
 use App\Service\Utility;
+use GuzzleHttp\TransferStats;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class MagentoApiWrapper.
@@ -24,16 +26,28 @@ class MagentoApiWrapper {
   protected $utility;
 
   /**
+   * Logger.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * MagentoInfo constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
    *   Service providing Magento info.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger.
    */
-  public function __construct(MagentoInfo $magento_info, Utility $utility) {
+  public function __construct(MagentoInfo $magento_info,
+                              Utility $utility,
+                              LoggerInterface $logger) {
     $this->magentoInfo = $magento_info;
     $this->utility = $utility;
+    $this->logger = $logger;
   }
 
   /**
@@ -43,19 +57,34 @@ class MagentoApiWrapper {
    *   Request method.
    * @param string $url
    *   Request URL.
-   * @param array $data
-   *   Request data (optional).
+   * @param array $request_options
+   *   Request options (optional).
    *
    * @return mixed
    *   Response data.
    *
    * @throws \Exception
    */
-  public function doRequest(string $method, string $url, array $data = []) {
+  public function doRequest(string $method, string $url, array $request_options = []) {
+    $that = $this;
+    $request_options['on_stats'] = function (TransferStats $stats) use ($that) {
+      $code = ($stats->hasResponse())
+        ? $stats->getResponse()->getStatusCode()
+        : 0;
+
+      $that->logger->info(sprintf(
+        'Finished API request %s in %.4f. Response code: %d',
+        $stats->getEffectiveUri(),
+        $stats->getTransferTime(),
+        $code
+      ));
+    };
+
+    $request_options['timeout'] = $request_options['timeout'] ?? 30;
     $response = $this->magentoInfo->getMagentoApiClient()->request(
       $method,
       $this->magentoInfo->getMagentoUrl() . '/' . ltrim($url, '/'),
-      $data
+      $request_options
     );
 
     $result = $response->getBody()->getContents();

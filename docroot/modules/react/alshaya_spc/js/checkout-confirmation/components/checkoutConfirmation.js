@@ -33,7 +33,7 @@ class CheckoutConfirmation extends React.Component {
 
     return (
       <>
-        <div className="spc-pre-content">
+        <div className="spc-pre-content fadeInUp" style={{ animationDelay: '0.4s' }}>
           <div className="impress-msg">{Drupal.t('Thanks for shopping with us.')}</div>
           <div className="impress-subtitle">{Drupal.t('Here\'s a confirmation of your order and all the details you may need.')}</div>
           <ReactToPrint
@@ -45,8 +45,7 @@ class CheckoutConfirmation extends React.Component {
           <div className="spc-content">
             <OrderSummary />
             <ConditionalView condition={window.innerWidth > 768}>
-              <VatFooterText />
-              <div className="checkout-link submit">
+              <div className="checkout-link submit fadeInUp" style={{ animationDelay: '1s' }}>
                 <a href={Drupal.url('')} className="checkout-link">
                   {Drupal.t('continue shopping')}
                 </a>
@@ -60,19 +59,22 @@ class CheckoutConfirmation extends React.Component {
               totals={totals}
               cart_promo={[]}
               show_checkout_button={false}
+              animationDelay="0.4s"
             />
           </div>
         </div>
         <div className="spc-post-content" />
         <ConditionalView condition={window.innerWidth < 768}>
-          <VatFooterText />
           <div className="checkout-link submit">
             <a href={Drupal.url('')} className="checkout-link">
               {Drupal.t('continue shopping')}
             </a>
           </div>
         </ConditionalView>
-        <div style={{ display: 'none' }} className="spc-checkout-confirmation-print"><CheckoutConfirmationPrint ref={(el) => { this.componentRef = el; }} /></div>
+        <div className="spc-footer">
+          <div style={{ display: 'none' }} className="spc-checkout-confirmation-print"><CheckoutConfirmationPrint ref={(el) => { this.componentRef = el; }} /></div>
+          <VatFooterText />
+        </div>
       </>
     );
   }

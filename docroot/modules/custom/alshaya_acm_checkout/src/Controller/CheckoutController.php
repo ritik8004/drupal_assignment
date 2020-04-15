@@ -121,6 +121,15 @@ class CheckoutController implements ContainerInjectionInterface {
    *   AjaxResponse object.
    */
   public function useAddress(Profile $profile) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    // If cart no longer available, redirect the user to basket page.
+    if (!($cart instanceof CartInterface)) {
+      $response = new AjaxResponse();
+      $response->addCommand(new RedirectCommand(Url::fromRoute('acq_cart.cart')->toString()));
+      return $response;
+    }
+
     $update = $this->checkoutHelper->getFullAddressFromEntity($profile);
     $this->checkoutHelper->setCartShippingHistory(
       'hd',

@@ -22,7 +22,6 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
       <div className="spc-main">
         <div className="spc-content">
           <OrderSummary />
-          <VatFooterText />
         </div>
         <div className="spc-sidebar">
           <OrderSummaryBlock
@@ -35,6 +34,7 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
         </div>
       </div>
       <div className="spc-checkout-confirmation-footer">
+        <VatFooterText />
         <div className="customer-service-text">
           <div className="title">{Drupal.t('CUSTOMER SERVICE')}</div>
           <div className="content" dangerouslySetInnerHTML={{ __html: customerServiceText.value }} />

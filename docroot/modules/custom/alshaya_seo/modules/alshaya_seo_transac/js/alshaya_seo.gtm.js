@@ -196,34 +196,29 @@
           dataLayer.push(userDetails);
         }
 
-          if ($(context).filter('article[data-vmode="modal"]').length === 1
-            || $(document).find('article[data-vmode="full"]').length === 1) {
-
+        $(window).once('gtm-onetime').on('load', function() {
           if ($(document).find('article[data-vmode="full"]').length === 1) {
             var productContext = $(document).find('article[data-vmode="full"]');
-          }
-          else {
-            var productContext = $(context).filter('article[data-vmode="modal"]');
-          }
 
-          var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-          product.variant = '';
-          if (currentListName != null && currentListName !== 'PDP-placeholder') {
-            product.list = currentListName;
-            currentListName = null;
-          }
-          var data = {
-            event: 'productDetailView',
-            ecommerce: {
-              currencyCode: currencyCode,
-              detail: {
-                products: [product]
-              }
+            var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+            product.variant = '';
+            if (currentListName != null && currentListName !== 'PDP-placeholder') {
+              product.list = currentListName;
+              currentListName = null;
             }
-          };
+            var data = {
+              event: 'productDetailView',
+              ecommerce: {
+                currencyCode: currencyCode,
+                detail: {
+                  products: [product]
+                }
+              }
+            };
 
-          dataLayer.push(data);
-        }
+            dataLayer.push(data);
+          }
+        });
       });
 
       // If we receive an empty page type, set page type as not defined.
@@ -783,13 +778,14 @@
 
           // Track facet filters.
           $('li.facet-item').once('js-event').on('click', function () {
-            var selectedVal = $(this).find('a').attr('data-drupal-facet-item-label');
+            var selectedVal = typeof $(this).find('a').attr('data-drupal-facet-item-label') !== 'undefined'
+              ? $(this).find('a').attr('data-drupal-facet-item-label').trim() : '';
             var facetTitle = $(this).find('a').attr('data-drupal-facet-label');
             var data = {
               event: 'filter',
               siteSection: section.trim(),
               filterType: facetTitle,
-              filterValue: selectedVal.trim(),
+              filterValue: selectedVal,
             };
 
             dataLayer.push(data);
@@ -826,11 +822,10 @@
     if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
       mediaCount = parseInt(product.attr('gtm-dimension4'));
     }
-
     var productData = {
       name: product.attr('gtm-name'),
       id: product.attr('gtm-main-sku'),
-      price: parseFloat(product.attr('gtm-price')),
+      price: product.attr('gtm-price'),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
       dimension2: product.attr('gtm-sku-type'),
@@ -1193,10 +1188,9 @@
     var listName = body.attr('gtm-list-name');
     // Send impression for each product added on page (page 1 or X).
     var count = productLinkProcessedSelector.length + 1;
-
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        if ($(this).isElementInViewPort(0)) {
+        if ($(this).isElementInViewPort(0, 10)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;

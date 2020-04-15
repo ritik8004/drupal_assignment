@@ -170,7 +170,7 @@ class ContactInfoForm extends React.Component {
             className="spc-address-form-submit"
             type="submit"
           >
-            {Drupal.t('Save')}
+            {Drupal.t('Continue')}
           </button>
         </div>
       </form>

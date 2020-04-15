@@ -17,13 +17,15 @@ import ClicknCollectMap from './components/ClicknCollectMap';
 import ToggleButton from './components/ToggleButton';
 import LocationSearchForm from './components/LocationSearchForm';
 import DeviceView from '../../../common/components/device-view';
-import FullScreenSVG from '../full-screen-svg';
+import FullScreenSVG from '../../../svg-component/full-screen-svg';
 import {
   requestFullscreen,
   isFullScreen,
   exitFullscreen,
 } from '../../../utilities/map/fullScreen';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import CheckoutMessage from '../../../utilities/checkout-message';
+import getStringMessage from '../../../utilities/strings';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -169,11 +171,11 @@ class ClickCollect extends React.Component {
           this.fetchAvailableStores({
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
-          });
+          }, true);
         },
         () => {
           this.nearMeBtn.classList.remove('active');
-          this.fetchAvailableStores(getDefaultMapCenter());
+          this.fetchAvailableStores(getDefaultMapCenter(), false);
         },
       )
       .catch((error) => {
@@ -185,7 +187,7 @@ class ClickCollect extends React.Component {
   /**
    * Fetch available stores for given lat and lng.
    */
-  fetchAvailableStores = (coords) => {
+  fetchAvailableStores = (coords, locationAccess = null) => {
     const { updateCoordsAndStoreList } = this.context;
     showFullScreenLoader();
     // Create fetcher object to fetch stores.
@@ -196,7 +198,7 @@ class ClickCollect extends React.Component {
       .then((response) => {
         this.selectStoreButtonVisibility(false);
         if (typeof response.error === 'undefined') {
-          updateCoordsAndStoreList(coords, response.data);
+          updateCoordsAndStoreList(coords, response.data, locationAccess);
           this.showOpenMarker(response);
         } else {
           updateCoordsAndStoreList(coords, []);
@@ -398,6 +400,8 @@ class ClickCollect extends React.Component {
       coords,
       storeList,
       selectedStore,
+      locationAccess,
+      updateLocationAccess,
     } = this.context;
 
     const {
@@ -427,14 +431,21 @@ class ClickCollect extends React.Component {
             className="spc-cnc-stores-list-map"
             style={{ display: openSelectedStore ? 'none' : 'block' }}
           >
-            <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
+            <SectionTitle>{getStringMessage('collection_store')}</SectionTitle>
             <a className="close" onClick={closeModal}>
               &times;
             </a>
             <div className="spc-cnc-address-form-wrapper">
+              {locationAccess === false
+              && (
+                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
+                  {getStringMessage('location_access_denied')}
+                  <a href="#" onClick={() => updateLocationAccess(true)}>{getStringMessage('dismiss')}</a>
+                </CheckoutMessage>
+              )}
               <div className="spc-cnc-address-form-content">
                 <SectionTitle>
-                  {Drupal.t('find your nearest store')}
+                  {getStringMessage('find_your_nearest_store')}
                 </SectionTitle>
                 <LocationSearchForm
                   ref={this.searchRef}
@@ -477,7 +488,7 @@ class ClickCollect extends React.Component {
           </div>
           <div className="spc-cnc-store-actions" data-selected-stored={openSelectedStore}>
             <button className="select-store" type="button" onClick={(e) => this.finalizeCurrentStore(e)}>
-              {Drupal.t('select this store')}
+              {getStringMessage('select_this_store')}
             </button>
           </div>
           <SelectedStore
