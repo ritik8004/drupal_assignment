@@ -11,11 +11,11 @@
    *
    * @returns {boolean}
    */
-  $.fn.isElementInViewPort = function (offset, elementPartialOffsetTop = 0) {
+  $.fn.isElementInViewPort = function (offset, elementPartialOffsetTop) {
     try {
       // Get element top and bottom.
       var elementTop = $(this).offset().top - offset;
-      var elementBottom = elementPartialOffsetTop > 0
+      var elementBottom = (elementPartialOffsetTop !== 'undefined')
                           ? elementTop + elementPartialOffsetTop
                           : elementTop + $(this).outerHeight();
 
