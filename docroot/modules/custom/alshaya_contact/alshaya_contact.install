@@ -10,8 +10,7 @@ use Drupal\lightning_core\ConfigHelper;
 /**
  * Implements hook_update_N().
  *
- * Add wenform handler on mobile number validation, add request_from field
- * and translate the text.
+ * Add wenform handler on mobile number validation, add request_from field.
  */
 function alshaya_contact_update_8002() {
   $configs = [
