@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f65796d34a31b2479359c6f8ade323d9",
+    "content-hash": "51efb10725cc69e5f0b5313d25854f0f",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -7277,9 +7277,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "8.x-1.0-alpha11",
                     "datestamp": "1551291083",
