@@ -224,7 +224,7 @@
     }
   }
 
-  &.focused.show-algolia-search-bar {
+  &.focused {
     #alshaya-algolia-autocomplete {
       .react-autosuggest__container {
         &::after {
@@ -321,6 +321,20 @@
         .menu--mobile-navigation,
         #block-cartminiblock {
           display: none;
+        }
+      }
+
+      .block-alshaya-algolia-react-autocomplete {
+        &.focused {
+          .algolia-search-back-icon {
+            visibility: hidden;
+          }
+
+          &.show-algolia-search-bar {
+            .algolia-search-back-icon {
+              visibility: visible;
+            }
+          }
         }
       }
     }
