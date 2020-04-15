@@ -14,7 +14,7 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
-import EditAddressSVG from '../edit-address-svg';
+import EditAddressSVG from '../../../svg-component/edit-address-svg';
 import {
   getInfoFromStorage,
 } from '../../../utilities/storage';

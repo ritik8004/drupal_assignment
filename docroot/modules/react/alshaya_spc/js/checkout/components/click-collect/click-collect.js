@@ -17,7 +17,7 @@ import ClicknCollectMap from './components/ClicknCollectMap';
 import ToggleButton from './components/ToggleButton';
 import LocationSearchForm from './components/LocationSearchForm';
 import DeviceView from '../../../common/components/device-view';
-import FullScreenSVG from '../full-screen-svg';
+import FullScreenSVG from '../../../svg-component/full-screen-svg';
 import {
   requestFullscreen,
   isFullScreen,
