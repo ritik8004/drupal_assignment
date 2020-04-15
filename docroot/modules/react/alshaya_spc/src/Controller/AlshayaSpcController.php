@@ -257,7 +257,7 @@ class AlshayaSpcController extends ControllerBase {
 
     $strings[] = [
       'key' => 'location_outside_country_hd',
-      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => 'EG']) . '</span><br/>' . $this->t('We don\'t support delivery outside @country. Please enter an address with in country @country below to continue.', ['@country' => 'HH']),
+      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_code]) . '</span><br/>' . $this->t('We don\'t support delivery outside @country. Please enter an address with in country @country below to continue.', ['@country' => $country_code]),
     ];
 
     $build = [
