@@ -1018,14 +1018,14 @@ class SkuManager {
    */
   public function getLabelsData(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
     static $static_labels_cache = [];
-    $langcode = $sku_entity->language()->getId();
+
     $sku = $sku_entity->getSku();
 
-    if (!$reset && !empty($static_labels_cache[$sku][$langcode][$type])) {
-      return $static_labels_cache[$sku][$langcode][$type];
+    if (!$reset && !empty($static_labels_cache[$sku][$type])) {
+      return $static_labels_cache[$sku][$type];
     }
 
-    $static_labels_cache[$sku][$langcode][$type] = [];
+    $static_labels_cache[$sku][$type] = [];
 
     $labels_data = $this->getSkuLabel($sku_entity);
 
@@ -1087,7 +1087,7 @@ class SkuManager {
         ];
         $row['position'] = $data[$position_key];
 
-        $static_labels_cache[$sku][$langcode][$type][] = $row;
+        $static_labels_cache[$sku][$type][] = $row;
 
         // Disable subsequent images if flag is true.
         if ($data['disable_subsequents']) {
@@ -1096,7 +1096,7 @@ class SkuManager {
       }
     }
 
-    return $static_labels_cache[$sku][$langcode][$type];
+    return $static_labels_cache[$sku][$type];
   }
 
   /**
