@@ -1,7 +1,6 @@
 import React from 'react';
 
-const DynamicPromotionProductItem = (props) => {
-  const { dynamicPromoLabels } = props;
+const DynamicPromotionProductItem = ({ dynamicPromoLabels }) => {
   if (dynamicPromoLabels === null) {
     return null;
   }

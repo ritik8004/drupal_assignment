@@ -25,7 +25,7 @@ const Notifications = ({ children }) => {
     }
 
     if (child.props.type !== 'conditional') {
-      notificationTypes[child.props.type].push(createReactElement(child));
+      notificationTypes[child.props.type].push(child);
     } else {
       // For conditional component do not show anything, if showAlert or showWarning
       // both conditions are false.
