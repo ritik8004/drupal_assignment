@@ -1,0 +1,8 @@
+effects:
+  373ba336-9855-4368-be3f-cffac44b8b72:
+    uuid: 373ba336-9855-4368-be3f-cffac44b8b72
+    id: image_scale
+    data:
+      width: null
+      height: 638
+      upscale: false
