@@ -476,7 +476,7 @@
         visibility: hidden;
       }
 
-      &.focused.show-algolia-search-bar {
+      &.focused {
         .algolia-search-back-icon {
           visibility: visible;
 
