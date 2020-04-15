@@ -226,20 +226,9 @@
         }
       });
 
-      // List of Pages where we need to push out list of product being rendered to GTM.
-      var impressionPages = [
-        'home page',
-        'search result page',
-        'product listing page',
-        'product detail page',
-        'advanced page',
-        'department page',
-        'promotion page'
-      ];
-
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === 'not defined') {
-        if (document.location.pathname.startsWith('/' + drupalSettings.path.currentLanguage + '/user')) {
+        if (document.location.pathname.indexOf('/' + drupalSettings.path.currentLanguage + '/user') == 0) {
           var currPath = document.location.pathname;
           var pagePath = currPath.replace('/' + drupalSettings.path.currentLanguage + '/user/', '');
           var gtmPageTypeArray = pagePath.split('/');
@@ -304,8 +293,15 @@
 
       // Cookie based events, only to be processed once on page load.
       $(document).once('gtm-onetime').each(function () {
-        // Fire sign-in success event on successful sign-in.
-        if (userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
+        // Check if social login window opened to avoid GTM push from
+        // social login window.
+        var socialWindow = false;
+        if(window.name == 'ConnectWithSocialAuth'){
+          var socialWindow = true;
+        }
+
+        // Fire sign-in success event on successful sign-in from parent window.
+        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
           localStorage.setItem('userID', userDetails.userID);
         }
@@ -423,70 +419,6 @@
           var keyword = $('input#edit-store-location').val();
           var resultCount = $('li.select-store', context).length;
           Drupal.alshaya_seo_gtm_push_store_finder_search(keyword, 'checkout', resultCount);
-        }
-      }
-
-      /**
-       * Impressions tracking on listing pages with Products.
-       */
-      if ((gtmPageType === 'product detail page') || (gtmPageType === 'cart page')) {
-        var count_pdp_items = 1;
-        if (!drupalSettings.hasOwnProperty('impressions_position')) {
-          drupalSettings.impressions_position = [];
-        }
-
-        productLinkSelector.each(function () {
-          // Fetch attributes for this product.
-          var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
-          // Keep variant empty for impression pages. Populated only post add to cart action.
-          impression.variant = '';
-
-          var pdpListName = '';
-          var upSellCrossSellSelector = $(this).closest('.view-product-slider').parent('.views-element-container').parent();
-          if (!$(this).closest('.owl-item').hasClass('cloned') && !upSellCrossSellSelector.hasClass('mobile-only-block')) {
-            // Check whether the product is in US or CS region & update list accordingly.
-            if (listName.indexOf('placeholder') > -1) {
-              if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
-                pdpListName = listName.replace('placeholder', 'CS');
-              }
-              else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
-                pdpListName = listName.replace('placeholder', 'US');
-              }
-              else if (upSellCrossSellSelector.hasClass('horizontal-related')) {
-                pdpListName = listName.replace('placeholder', 'RELATED');
-              }
-            }
-
-            impression.list = pdpListName;
-            impression.position = count_pdp_items;
-            impressions.push(impression);
-            drupalSettings.impressions_position[$(this).attr('data-nid') + '-' + pdpListName] = count_pdp_items;
-            count_pdp_items++;
-          }
-        });
-
-        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
-      }
-      else if ($.inArray(gtmPageType, impressionPages) !== -1) {
-        var count = productLinkProcessedSelector.length + 1;
-
-        if (productLinkSelector.length > 0) {
-          productLinkSelector.each(function () {
-            if (!$(this).hasClass('impression-processed')) {
-              $(this).addClass('impression-processed');
-              var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
-              impression.list = listName;
-              impression.position = count;
-              // Keep variant empty for impression pages. Populated only post add to cart action.
-              impression.variant = '';
-              impressions.push(impression);
-              count++;
-            }
-          });
-
-          if (impressions.length > 0) {
-            Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
-          }
         }
       }
 
@@ -850,29 +782,22 @@
        * Tracking clicks on fitler & sort options.
        */
       if (listName !== undefined) {
-        if (listName.includes('PLP') || listName === 'Search Results Page') {
+        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page') {
           var section = listName;
-          if (listName.includes('PLP')) {
+          if (listName.indexOf('PLP') > -1) {
             section = $('h1.c-page-title').text().toLowerCase();
           }
 
           // Track facet filters.
           $('li.facet-item').once('js-event').on('click', function () {
-            var selectedVal = '';
-            var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
-            if ($(this).find('input.facets-checkbox').length > 0) {
-              // Select value of facets other than color and remove item count.
-              selectedVal = $(this).find('label>span.facet-item__value').text();
-            }
-            else {
-              // Select value for color facet filtered and remove item count.
-              selectedVal = $(this).find('a>span.facet-item__value').text();
-            }
+            var selectedVal = typeof $(this).find('a').attr('data-drupal-facet-item-label') !== 'undefined'
+              ? $(this).find('a').attr('data-drupal-facet-item-label').trim() : '';
+            var facetTitle = $(this).find('a').attr('data-drupal-facet-label');
             var data = {
               event: 'filter',
               siteSection: section.trim(),
               filterType: facetTitle,
-              filterValue: selectedVal.trim(),
+              filterValue: selectedVal,
             };
 
             dataLayer.push(data);
@@ -1260,6 +1185,39 @@
     }
 
     return selectedMethodLabel;
+  };
+
+  /**
+   * Helper function to push productImpression to GTM.
+   *
+   * @param customerType
+   */
+  Drupal.alshaya_seo_gtm_prepare_and_push_product_impression = function (context, settings) {
+    var impressions = [];
+    var body = $('body');
+    var currencyCode = body.attr('gtm-currency');
+    var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
+    var productLinkProcessedSelector = $('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
+    var listName = body.attr('gtm-list-name');
+    // Send impression for each product added on page (page 1 or X).
+    var count = productLinkProcessedSelector.length + 1;
+    if (productLinkSelector.length > 0) {
+      productLinkSelector.each(function () {
+        if ($(this).isElementInViewPort(0, 10)) {
+          $(this).addClass('impression-processed');
+          var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
+          impression.list = listName;
+          impression.position = count;
+          // Keep variant empty for impression pages. Populated only post add to cart action.
+          impression.variant = '';
+          impressions.push(impression);
+          count++;
+        }
+      });
+      if (impressions.length > 0) {
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
+      }
+    }
   };
 
   // Ajax command to push deliveryAddress Event.

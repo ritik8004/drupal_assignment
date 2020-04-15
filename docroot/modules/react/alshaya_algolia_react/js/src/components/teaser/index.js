@@ -5,9 +5,9 @@ import Promotions from '../promotions';
 import Lables from '../labels';
 import { getCurrentSearchQueryString, setClickedItem } from '../../utils';
 import Parser from 'html-react-parser';
+import Swatches from '../swatch';
 
 const Teaser = ({hit}) => {
-  const swatches = (null);
 
   const localStorageStore = (event) => {
     const articleNode = event.target.closest('.node--view-mode-search-result');
@@ -25,6 +25,8 @@ const Teaser = ({hit}) => {
 
     setClickedItem(storage_details);
   }
+
+  const showSwatches = drupalSettings.reactTeaserView.swatches.showSwatches;
 
   return (
     <div className="c-products__item views-row" >
@@ -62,7 +64,7 @@ const Teaser = ({hit}) => {
               <Price price={hit.original_price} final_price={hit.final_price} />
             }
             <Promotions promotions={hit.promotions}/>
-            {swatches}
+            {showSwatches ? <Swatches swatches={hit.swatches} url={hit.url} /> : null}
           </div>
         </div>
         <Lables labels={hit.product_labels} sku={hit.sku} />

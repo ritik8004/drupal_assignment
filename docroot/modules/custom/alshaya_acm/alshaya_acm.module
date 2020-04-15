@@ -179,8 +179,14 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
       // If current sku entity is one of the free gift sku items, mark it as
       // free.
-      if (in_array($sku_entity->getSku(), $free_gift_skus)) {
+      if (in_array($id, $free_gift_skus)) {
         $is_free_sku_item = TRUE;
+      }
+      else {
+        $parent = $skuManager->getParentSkuBySku($id);
+        if ($parent instanceof SKU && in_array($parent->getSku(), $free_gift_skus)) {
+          $is_free_sku_item = TRUE;
+        }
       }
 
       $item['name'] = _alshaya_acm_update_product_name(
@@ -810,6 +816,39 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
     $total_price['#final_price'] = _alshaya_acm_format_price_with_decimal($item_cart_price['final_price'] * $item['quantity']['#default_value']);
   }
 
+  // If free gift rule is based on quantity limit (quote_item_qty) then we want
+  // to show coupon details only when threshold is reached.
+  $show_coupon = TRUE;
+  foreach ($promotions as $id => $promotion) {
+    // 'condition_value' is set in promotions only for
+    // rule with 'quote_item_qty' in conditions.
+    $condition_value = isset($promotion['condition_value']) ? $promotion['condition_value'] : '';
+    if (!empty($condition_value)) {
+      // Calculate cart quantity.
+      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+      $cart_items = $cart_storage->getCart(FALSE)->items();
+
+      // If cart is not empty and has matching products.
+      if (!empty($cart_items)) {
+        $eligible_cart_qty = 0;
+        $cart_skus = array_column($cart_items, 'sku');
+        $promotion_node = \Drupal::entityTypeManager()->getStorage('node')->load($id);
+
+        /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promotionLabelManager */
+        $promotionLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
+        $eligibleSKUs = $promotionLabelManager->getPromoEligibleSkus($promotion_node, $cart_skus);
+
+        foreach ($cart_items as $item) {
+          if (in_array($item['sku'], $eligibleSKUs)) {
+            $eligible_cart_qty += $item['qty'];
+          }
+        }
+        $show_coupon = (($condition_value - $eligible_cart_qty) >= 1) ? FALSE : $show_coupon;
+      }
+    }
+  }
+
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $promotions_manager */
   $promotions_manager = \Drupal::service('alshaya_acm_promotion.manager');
 
@@ -823,7 +862,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
   // If we have free gift promotions linked with the current item, generate
   // the label for them.
   $free_gift_cart_promotions = [];
-  if (!empty($free_gift_promos)) {
+  if (!empty($free_gift_promos) && $show_coupon) {
     $free_gift_cart_promotions = [
       '#theme' => 'free_gift_cart_label',
       '#promos' => $free_gift_promos,
@@ -839,8 +878,10 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
 
   if (empty($name)) {
     if ($is_free_sku_item) {
+      /* @var \Drupal\node\Entity\Node $product_node */
+      $product_node = alshaya_acm_product_get_display_node($sku_entity);
       $name = [
-        '#title' => $sku_entity->get('name')->getString(),
+        '#title' => $product_node ? $product_node->getTitle() : $sku_entity->get('name')->getString(),
         '#type' => 'link',
         '#url' => Url::fromRoute('alshaya_acm_promotion.free_gift_modal',
           [

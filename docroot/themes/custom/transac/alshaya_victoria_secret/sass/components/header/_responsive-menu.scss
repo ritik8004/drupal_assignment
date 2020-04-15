@@ -100,7 +100,7 @@ header {
 
   .main--menu {
     top: 5.625rem;
-    z-index: 10;
+    z-index: 14;
 
     ul {
       width: 100%;
@@ -168,16 +168,18 @@ header {
     }
   }
 
-  .branding__menu {
-    position: static;
-    box-shadow: none;
-  }
-
   body {
     margin-top: 5.5rem;
 
     @include breakpoint($only-tablet) {
       margin-top: 5.4375rem;
+    }
+
+    &:not(.no-sticky-algolia-search-bar) {
+      .branding__menu {
+        position: static;
+        box-shadow: none;
+      }
     }
   }
 
@@ -211,7 +213,7 @@ header {
   #block-cartminiblock {
     position: absolute;
     display: block;
-    z-index: 99;
+    z-index: 10;
     transform: translate3d(0, 0, 0);
     -webkit-overflow-scrolling: touch;
 

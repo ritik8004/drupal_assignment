@@ -39,7 +39,16 @@ class AlshayaFeatureProcess {
     $this->destinationPath = $parameters['build_path'];
     $this->config = $parameters['variables'];
     $this->validFeatures = $parameters['features'] ?? [];
-    $this->suiteLocators = [$this->sourcePath . DIRECTORY_SEPARATOR . 'common'];
+    $this->viewport = $parameters['viewport'];
+    $environment = explode('-', $parameters['site']);
+    if ($environment[2] == 'dev2') {
+      $this->suiteLocators = [
+        $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc',
+        $this->sourcePath . DIRECTORY_SEPARATOR];
+    }
+    else {
+      $this->suiteLocators = [$this->sourcePath . DIRECTORY_SEPARATOR . 'common', $this->sourcePath . DIRECTORY_SEPARATOR];
+    }
   }
 
   /**

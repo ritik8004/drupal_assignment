@@ -1,4 +1,6 @@
 {{ attach_library('alshaya_white_label/dynamic-promotions') }}
+{{ attach_library('alshaya_white_label/free_gifts') }}
+
 <div {{ gtm_attributes }}>
     {% if image is not empty %}
         <div class="image">{{ image }}</div>
@@ -33,7 +35,7 @@
         {%  if  promotions is not empty %}
             <div class="sku-promotions">
               {% for id, promotion in promotions %}
-                {% if promotion.text and promotion.skus is empty %}
+                {% if promotion.text and (promotion.skus is empty or promotion.condition_value ) %}
                   <div class="tooltip-wrap">
                     <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
                       {{ promotion.text }}

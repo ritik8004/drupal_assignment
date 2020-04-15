@@ -1,14 +1,14 @@
 local:
-    root: "/var/www/alshaya/docroot"
-    uri: 'http://local.alshaya.com'
+  root: "/var/www/alshaya/docroot"
+  uri: 'http://local.alshaya.com'
 
 vm:
-    host: local.alshaya.com
-    root: "/var/www/alshaya/docroot"
-    uri: 'local.alshaya.com'
-    user: vagrant
-    ssh:
-        options: '-o PasswordAuthentication=no -i "~/.vagrant.d/insecure_private_key"'
+  host: local.alshaya.com
+  root: "/var/www/alshaya/docroot"
+  uri: 'local.alshaya.com'
+  user: vagrant
+  ssh:
+    options: '-o PasswordAuthentication=no -i "~/.vagrant.d/insecure_private_key"'
 
 # Application 'alshaya', environment '01dev'.
 01dev:
@@ -233,6 +233,7 @@ vm:
   paths:
     drush-script: drush9
 
+
 # Application 'alshaya', environment '01uat'.
 01uat:
   root: /var/www/html/alshaya.01uat/docroot
@@ -247,6 +248,7 @@ vm:
   user: alshaya.01uat
   paths:
     drush-script: drush9
+
 
 # Application 'alshaya', environment '01uatup'.
 01uatup:
@@ -263,6 +265,7 @@ vm:
   paths:
     drush-script: drush9
 
+
 # Application 'alshaya', environment '01update'.
 01update:
   root: /var/www/html/alshaya.01update/docroot
@@ -275,245 +278,5 @@ vm:
     root: /mnt/gfs/alshaya.01update/livedev/docroot
   host: alshaya01update.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01update
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02dev'.
-02dev:
-  root: /var/www/html/alshaya2.02dev/docroot
-  ac-site: alshaya2
-  ac-env: 02dev
-  ac-realm: enterprise-g1
-  uri: alshaya202dev.enterprise-g1.acquia-sites.com
-  02dev.livedev:
-    parent: '@alshaya2.02dev'
-    root: /mnt/gfs/alshaya2.02dev/livedev/docroot
-  host: alshaya202dev.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02dev
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02dev2'.
-02dev2:
-  root: /var/www/html/alshaya2.02dev2/docroot
-  ac-site: alshaya2
-  ac-env: 02dev2
-  ac-realm: enterprise-g1
-  uri: alshaya202dev2.enterprise-g1.acquia-sites.com
-  02dev2.livedev:
-    parent: '@alshaya2.02dev2'
-    root: /mnt/gfs/alshaya2.02dev2/livedev/docroot
-  host: alshaya202dev2.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02dev2
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02dev2up'.
-02dev2up:
-  root: /var/www/html/alshaya2.02dev2up/docroot
-  ac-site: alshaya2
-  ac-env: 02dev2up
-  ac-realm: enterprise-g1
-  uri: alshaya202dev2up.enterprise-g1.acquia-sites.com
-  02dev2up.livedev:
-    parent: '@alshaya2.02dev2up'
-    root: /mnt/gfs/alshaya2.02dev2up/livedev/docroot
-  host: alshaya202dev2up.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02dev2up
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02dev3'.
-02dev3:
-  root: /var/www/html/alshaya2.02dev3/docroot
-  ac-site: alshaya2
-  ac-env: 02dev3
-  ac-realm: enterprise-g1
-  uri: alshaya202dev3.enterprise-g1.acquia-sites.com
-  02dev3.livedev:
-    parent: '@alshaya2.02dev3'
-    root: /mnt/gfs/alshaya2.02dev3/livedev/docroot
-  host: alshaya202dev3.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02dev3
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02dev3up'.
-02dev3up:
-  root: /var/www/html/alshaya2.02dev3up/docroot
-  ac-site: alshaya2
-  ac-env: 02dev3up
-  ac-realm: enterprise-g1
-  uri: alshaya202dev3up.enterprise-g1.acquia-sites.com
-  02dev3up.livedev:
-    parent: '@alshaya2.02dev3up'
-    root: /mnt/gfs/alshaya2.02dev3up/livedev/docroot
-  host: alshaya202dev3up.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02dev3up
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02devup'.
-02devup:
-  root: /var/www/html/alshaya2.02devup/docroot
-  ac-site: alshaya2
-  ac-env: 02devup
-  ac-realm: enterprise-g1
-  uri: alshaya202devup.enterprise-g1.acquia-sites.com
-  02devup.livedev:
-    parent: '@alshaya2.02devup'
-    root: /mnt/gfs/alshaya2.02devup/livedev/docroot
-  host: alshaya202devup.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02devup
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02live'.
-02live:
-  root: /var/www/html/alshaya2.02live/docroot
-  ac-site: alshaya2
-  ac-env: 02live
-  ac-realm: enterprise-g1
-  uri: alshaya202live.enterprise-g1.acquia-sites.com
-  02live.livedev:
-    parent: '@alshaya2.02live'
-    root: /mnt/gfs/alshaya2.02live/livedev/docroot
-  host: alshaya202live.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02live
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02pprod'.
-02pprod:
-  root: /var/www/html/alshaya2.02pprod/docroot
-  ac-site: alshaya2
-  ac-env: 02pprod
-  ac-realm: enterprise-g1
-  uri: alshaya202pprod.enterprise-g1.acquia-sites.com
-  02pprod.livedev:
-    parent: '@alshaya2.02pprod'
-    root: /mnt/gfs/alshaya2.02pprod/livedev/docroot
-  host: alshaya202pprod.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02pprod
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02pprodup'.
-02pprodup:
-  root: /var/www/html/alshaya2.02pprodup/docroot
-  ac-site: alshaya2
-  ac-env: 02pprodup
-  ac-realm: enterprise-g1
-  uri: alshaya202pprodup.enterprise-g1.acquia-sites.com
-  02pprodup.livedev:
-    parent: '@alshaya2.02pprodup'
-    root: /mnt/gfs/alshaya2.02pprodup/livedev/docroot
-  host: alshaya202pprodup.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02pprodup
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02qa2'.
-02qa2:
-  root: /var/www/html/alshaya2.02qa2/docroot
-  ac-site: alshaya2
-  ac-env: 02qa2
-  ac-realm: enterprise-g1
-  uri: alshaya202qa2.enterprise-g1.acquia-sites.com
-  02qa2.livedev:
-    parent: '@alshaya2.02qa2'
-    root: /mnt/gfs/alshaya2.02qa2/livedev/docroot
-  host: alshaya202qa2.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02qa2
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02qa2up'.
-02qa2up:
-  root: /var/www/html/alshaya2.02qa2up/docroot
-  ac-site: alshaya2
-  ac-env: 02qa2up
-  ac-realm: enterprise-g1
-  uri: alshaya202qa2up.enterprise-g1.acquia-sites.com
-  02qa2up.livedev:
-    parent: '@alshaya2.02qa2up'
-    root: /mnt/gfs/alshaya2.02qa2up/livedev/docroot
-  host: alshaya202qa2up.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02qa2up
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02test'.
-02test:
-  root: /var/www/html/alshaya2.02test/docroot
-  ac-site: alshaya2
-  ac-env: 02test
-  ac-realm: enterprise-g1
-  uri: alshaya202test.enterprise-g1.acquia-sites.com
-  02test.livedev:
-    parent: '@alshaya2.02test'
-    root: /mnt/gfs/alshaya2.02test/livedev/docroot
-  host: alshaya202test.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02test
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02testup'.
-02testup:
-  root: /var/www/html/alshaya2.02testup/docroot
-  ac-site: alshaya2
-  ac-env: 02testup
-  ac-realm: enterprise-g1
-  uri: alshaya202testup.enterprise-g1.acquia-sites.com
-  02testup.livedev:
-    parent: '@alshaya2.02testup'
-    root: /mnt/gfs/alshaya2.02testup/livedev/docroot
-  host: alshaya202testup.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02testup
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02uat'.
-02uat:
-  root: /var/www/html/alshaya2.02uat/docroot
-  ac-site: alshaya2
-  ac-env: 02uat
-  ac-realm: enterprise-g1
-  uri: alshaya202uat.enterprise-g1.acquia-sites.com
-  02uat.livedev:
-    parent: '@alshaya2.02uat'
-    root: /mnt/gfs/alshaya2.02uat/livedev/docroot
-  host: alshaya202uat.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02uat
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02uatup'.
-02uatup:
-  root: /var/www/html/alshaya2.02uatup/docroot
-  ac-site: alshaya2
-  ac-env: 02uatup
-  ac-realm: enterprise-g1
-  uri: alshaya202uatup.enterprise-g1.acquia-sites.com
-  02uatup.livedev:
-    parent: '@alshaya2.02uatup'
-    root: /mnt/gfs/alshaya2.02uatup/livedev/docroot
-  host: alshaya202uatup.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02uatup
-  paths:
-    drush-script: drush9
-
-# Application 'alshaya2', environment '02update'.
-02update:
-  root: /var/www/html/alshaya2.02update/docroot
-  ac-site: alshaya2
-  ac-env: 02update
-  ac-realm: enterprise-g1
-  uri: alshaya202update.enterprise-g1.acquia-sites.com
-  02update.livedev:
-    parent: '@alshaya2.02update'
-    root: /mnt/gfs/alshaya2.02update/livedev/docroot
-  host: alshaya202update.ssh.enterprise-g1.acquia-sites.com
-  user: alshaya2.02update
   paths:
     drush-script: drush9

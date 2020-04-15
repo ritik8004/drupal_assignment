@@ -8,28 +8,11 @@
 
 // for all browsers, promo content.
 body {
-  &.nodetype--acq_product {
-    &.free-gift-promo-list-overlay.free-gift-detail-modal {
-      .ui-dialog {
-        .ui-dialog-content#drupal-modal {
-          @include breakpoint($desktop) {
-            height: auto !important;
-          }
-        }
-      }
-    }
-  }
-}
-
-// specific to IE, for promo list.
-body.ie {
-  &.nodetype--acq_product {
-    &.free-gift-promo-list-overlay:not(.free-gift-detail-modal) {
-      .ui-dialog {
-        .ui-dialog-content#drupal-modal {
-          @include breakpoint($desktop) {
-            height: auto !important;
-          }
+  &.free-gift-promo-list-overlay.free-gift-detail-modal {
+    .ui-dialog {
+      .ui-dialog-content#drupal-modal {
+        @include breakpoint($desktop) {
+          height: 39.5rem !important;
         }
       }
     }

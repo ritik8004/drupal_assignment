@@ -81,7 +81,7 @@ $pending_btn_bg: $tomato;
 $returned_btn_bg: $WE_grey_one;
 $complete_btn_bg: $medium-green;
 $primary_brand_button_text: $WE_white;
-$secondary_brand_button_text: $WE_white_five;
+$secondary_brand_button_text: $WE_grey_three;
 $primary_brand_button: $WE_grey_three;
 $secondary_submit_button_text: $WE_white_three;
 
@@ -520,17 +520,18 @@ $_sitemap_l3: $WE_grey_three;
 $webform_contact_legend: $WE_grey_three;
 
 // 404 & Maintenance Pages.
-$maintenance_body_bg: $WE_white;
-$maintenance_link: $WE_white;
-$maintenance_link_border: $WE_white;
+$maintenance_body_bg: $WE_gray_six;
+$maintenance_link: $WE_grey_two;
+$maintenance_link_hover: $WE_grey_three;
 $maintenance_titles: $WE_white;
 $maintenance_container_border_top: $WE_gray_six;
 $maintenance_container_bg: $WE_gray_six;
-$maintenance_container_border: $WE_grey_three;
+$maintenance_container_border: $WE_grey_two;
 $maintenance_body_text_strong: $WE_grey_three;
 $maintenance_body_text_regular: $WE_grey_three;
 $maintenance_body_text_arabic: $WE_black_one;
-$maintenance_text_shadow: rgba(0, 0, 0, 0.5);
+//$maintenance_text_shadow: rgba(0, 0, 0, 0.5);
+$content_pagetitle: $WE_grey_three;
 
 // Store finder.
 $store_finder_header: $WE_black_one;
@@ -575,7 +576,7 @@ $plp_sort_by_label: $WE_grey_three;
 $plp_sort_for_label: $WE_grey_two;
 $plp_facet_filter: $WE_grey_three;
 $plp_facet_filter_bg: $WE_grey_three;
-$plp_facet_filter_link: $WE_grey_two;
+$plp_facet_filter_link: $WE_white;
 $plp_facet_border: $WE_gray_twelve;
 $plp_facet_wrapper_shadow: $WE_shadow;
 $plp_facet_clear_border: $WE_grey_three;

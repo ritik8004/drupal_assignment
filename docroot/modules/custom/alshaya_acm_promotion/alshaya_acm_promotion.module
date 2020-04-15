@@ -190,7 +190,22 @@ function alshaya_acm_promotion_alshaya_acm_get_remove_from_basket_link_alter(&$r
 
     $free_skus = $manager->getFreeSkusByRuleId($rule_id);
 
-    if (in_array($sku->getSku(), $free_skus)) {
+    $sku_string = $sku->getSku();
+    $is_free_sku_item = FALSE;
+
+    if (in_array($sku_string, $free_skus)) {
+      $is_free_sku_item = TRUE;
+    }
+    else {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $parent = $skuManager->getParentSkuBySku($sku_string);
+      if ($parent instanceof SKU && in_array($parent->getSku(), $free_skus)) {
+        $is_free_sku_item = TRUE;
+      }
+    }
+
+    if ($is_free_sku_item) {
       if ($coupon && $promotion->get('field_coupon_code')->getString() == $coupon) {
         // For coupon based promotions we want to allow removal.
         // But we need to remove the coupon as well.

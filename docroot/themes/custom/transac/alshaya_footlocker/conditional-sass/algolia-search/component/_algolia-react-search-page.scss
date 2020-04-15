@@ -1,0 +1,155 @@
+#alshaya-algolia-search {
+  .c-page-title {
+    font-family: $fl-thin;
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    font-weight: normal;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1.25rem;
+      text-align: center;
+      padding: 1.05rem 0;
+    }
+  }
+
+  .block-alshaya-category-lhn-block {
+    a {
+      letter-spacing: 0.0625rem;
+    }
+  }
+
+  .block-facet-blockcategory-facet-search {
+    a {
+      @include breakpoint($desktop) {
+        text-transform: uppercase;
+        letter-spacing: 0.0625rem;
+      }
+    }
+  }
+
+  #sort_by {
+    li {
+      a {
+        padding-#{$left}: 1.25rem;
+
+        &::before {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          #{$left}: 1.125rem;
+          font-size: 1.875rem;
+          content: '';
+          width: 0.875rem;
+          height: 0.875rem;
+          display: inline-block;
+          border-radius: 100%;
+          border: 0.0625rem solid $primary_radiobtn_empty;
+          margin-#{$right}: 1rem;
+        }
+      }
+
+      &.active-item a {
+        &::before {
+          border: 0.1875rem solid $primary_radiobtn_filled;
+        }
+      }
+    }
+  }
+
+  .block-alshaya-search-facets-block-all {
+    .all-filters-algolia {
+      #sort_by {
+        li {
+          a {
+            padding-#{$left}: 1.5rem;
+
+            &::before {
+              #{$left}: 1.125rem;
+              font-size: 1.875rem;
+              width: 1.3125rem;
+              height: 1.3125rem;
+            }
+          }
+
+          &.active-item a {
+            &::before {
+              border: 0.1875rem solid $primary_radiobtn_filled;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .filter__inner {
+    .c-collapse-item:not(#sort_by),
+    .c-collapse-item:not(.block-facet--swatch-list) {
+      li {
+        &.facet-item {
+          .facet-item__value {
+            @include icon(checkboxempty) {
+              font-size: 1.3125rem;
+              color: $primary_checkbox_empty;
+              margin-#{$right}: 0.5rem;
+              margin-top: 0;
+            }
+          }
+
+          &.is-active {
+            .facet-item__value {
+              @include icon(checkboxfull) {
+                color: $primary_checkbox_filled;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .c-content__region {
+    .sticky-filter-wrapper {
+      .c-collapse-item {
+        .c-collapse__title {
+          text-transform: uppercase;
+          font-size: 0.875rem;
+          line-height: 2.9375rem;
+          padding-#{$right}: 2.6875rem;
+          color: $algolia_react-facet-item-color;
+        }
+      }
+    }
+
+    .filter-fixed-top {
+      @include breakpoint($tablet) {
+        .sticky-filter-wrapper {
+          .c-collapse-item {
+            .c-collapse__title {
+              color: $lhn_sticky-filter-title;
+            }
+          }
+        }
+
+        .show-all-filters-algolia {
+          color: $lhn_sticky-filter-title;
+
+          &::before {
+            color: $lhn_sticky-filter-title;
+          }
+        }
+      }
+    }
+  }
+
+  .show-all-filters-algolia {
+    text-transform: uppercase;
+    height: 2.9375rem;
+    line-height: 2.9375rem;
+    font-size: 0.875rem;
+    padding-#{$left}: 1.875rem;
+
+    @include breakpoint($only-mobile) {
+      height: 2.9975rem;
+    }
+  }
+}

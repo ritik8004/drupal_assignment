@@ -1,0 +1,24 @@
+#alshaya-algolia-search {
+  .filter-sort-title {
+    text-transform: capitalize;
+  }
+
+  .block-page-title-block .c-page-title {
+    @include breakpoint($only-mobile) {
+      font-size: 1.25rem;
+      text-align: center;
+      padding: 0.75rem 0;
+      border-bottom: 0.0625rem solid $plp_mobile_separator;
+      color: $page_title;
+      line-height: 1;
+    }
+  }
+
+  .show-all-filters-algolia {
+    text-transform: capitalize;
+  }
+
+  .show-all-filters-algolia::before {
+    top: 46%;
+  }
+}
