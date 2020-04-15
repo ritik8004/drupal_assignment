@@ -109,7 +109,7 @@ class Drupal {
   protected function invokeApiWithSession(string $method, string $url, array $request_options = []) {
     $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
     $request_options['headers']['Cookie'] = $cookies->__toString();
-    return $this->invokeApiWithSession($method, $url, $request_options);
+    return $this->invokeApi($method, $url, $request_options);
   }
 
   /**
