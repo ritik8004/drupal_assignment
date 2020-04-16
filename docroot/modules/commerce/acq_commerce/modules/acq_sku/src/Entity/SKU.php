@@ -283,6 +283,21 @@ class SKU extends ContentEntityBase implements SKUInterface {
       return NULL;
     }
 
+    // Using multiple function to get extension to avoid cases with query
+    // string and hash in URLs.
+    $extension = strtolower(pathinfo(parse_url($data['file'], PHP_URL_PATH), PATHINFO_EXTENSION));
+
+    // Filter by extension only if value set for the setting.
+    $allowed_extensions = Settings::get('allowed_product_extensions', NULL);
+    if ($allowed_extensions && !in_array($extension, $allowed_extensions)) {
+      \Drupal::logger('acq_sku')->warning('Skipping product media file because of unsupported extension. SKU: @sku, File: @file', [
+        '@file' => $data['file'],
+        '@sku' => $this->getSku(),
+      ]);
+
+      return FALSE;
+    }
+
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {
       /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
