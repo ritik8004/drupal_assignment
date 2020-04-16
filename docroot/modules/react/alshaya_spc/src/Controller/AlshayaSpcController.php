@@ -191,9 +191,11 @@ class AlshayaSpcController extends ControllerBase {
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
       $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
 
+      $user_mobile_number = $user->get('field_mobile_number')->first();
       $user_name = [
         'fname' => $user->get('field_first_name')->first()->getString(),
         'lname' => $user->get('field_last_name')->first()->getString(),
+        'mobile' => !empty($user_mobile_number) ? $user_mobile_number->getValue()['local_number'] : '',
       ];
 
       $default_profile = $this->entityTypeManager->getStorage('profile')
