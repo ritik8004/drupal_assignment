@@ -34,14 +34,17 @@ export const fetchCartData = () => {
     return Axios.get(apiUrl).then((response) => {
       if (typeof response !== 'object') {
         redirectToCart();
+        return;
       }
 
       if (response.data.error) {
         redirectToCart();
+        return;
       }
 
       if (Object.values(response.data.items).length === 0) {
         redirectToCart();
+        return;
       }
 
       return response.data;
