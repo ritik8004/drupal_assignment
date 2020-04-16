@@ -423,3 +423,9 @@
 .open--accordion .is-accordion {
   @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/minus.svg', 2rem, 2rem, after);
 }
+
+.c-footer {
+  @include breakpoint($only-mobile) {
+    padding-top: 1rem;
+  }
+}
