@@ -7,6 +7,7 @@ use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Drupal\Component\Utility\Crypt;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionUtils;
 use Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
@@ -38,16 +39,28 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
   protected $connection;
 
   /**
+   * Logger.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * SessionHandler constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
    * @param \Doctrine\DBAL\Driver\Connection $connection
    *   The database connection.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger.
    */
-  public function __construct(RequestStack $request_stack, Connection $connection) {
+  public function __construct(RequestStack $request_stack,
+                              Connection $connection,
+                              LoggerInterface $logger) {
     $this->requestStack = $request_stack;
     $this->connection = $connection;
+    $this->logger = $logger;
 
     // Here we try to set the legacy cookies we set in close()
     // in original expected keys if for some reason they are not available.
@@ -167,8 +180,12 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
     $qb = $this->connection->createQueryBuilder();
     $qb->delete('sessions');
     $qb->where('timestamp < :timestamp');
-    $qb->setParameter('project', (int) $_SERVER['REQUEST_TIME'] - $lifetime);
+    $qb->setParameter('timestamp', (int) $_SERVER['REQUEST_TIME'] - $lifetime);
     $qb->execute();
+
+    // Add entry in log to ensure we can know when GC stops working.
+    $this->logger->info('GC executed.');
+
     return TRUE;
   }
 
