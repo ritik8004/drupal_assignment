@@ -20,7 +20,7 @@ class NewCard extends React.Component {
 
     const date = new Date();
     this.dateMin = `${date.getMonth() + 1}-${date.getFullYear().toString().substr(-2)}`;
-    this.acceptedCards = ['visa', 'mastercard', 'diners'];
+    this.acceptedCards = drupalSettings.checkoutCom.acceptedCards;
   }
 
   updateCurrentContext = (obj) => {
@@ -124,7 +124,7 @@ class NewCard extends React.Component {
     const { handleCardCvvChange, enableCheckoutLink } = this.props;
 
     const cardTypes = Object.entries(this.acceptedCards).map(([, type]) => (
-      <CardTypeSVG key={type} type={type} class={`${type} ${cardType === type ? 'is-active' : ''}`} />
+      <CardTypeSVG key={type} type={type} class={`${type} is-active`} />
     ));
 
     return (
