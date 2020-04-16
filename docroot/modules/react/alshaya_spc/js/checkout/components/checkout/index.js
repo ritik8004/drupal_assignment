@@ -71,7 +71,8 @@ export default class Checkout extends React.Component {
       const cartData = fetchCartData();
       if (cartData instanceof Promise) {
         cartData.then((result) => {
-          if (result === undefined) {
+          if (result === undefined
+            || result === null) {
             return;
           }
 
