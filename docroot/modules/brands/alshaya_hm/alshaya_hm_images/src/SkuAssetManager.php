@@ -345,6 +345,10 @@ class SkuAssetManager {
       trim($data['filename'], '/'),
     ]);
 
+    if (!$this->validateFileExtension($sku, $url)) {
+      return FALSE;
+    }
+
     // Download the file contents.
     try {
       $options = [
@@ -444,6 +448,10 @@ class SkuAssetManager {
     }
 
     $url = $this->getSkuAssetUrlLiquidPixel($asset);
+
+    if (!$this->validateFileExtension($sku, $url)) {
+      return FALSE;
+    }
 
     // Download the file contents.
     try {
@@ -645,8 +653,11 @@ class SkuAssetManager {
    */
   private function getSkuAssetUrlLiquidPixel(array $asset) {
     $base_url = $this->hmImageSettings->get('base_url');
-    list($set, $image_location_identifier) = $this->getAssetAttributes($asset, 'pdp_fullscreen');
-    $query_options = $this->getAssetQueryString($set, $image_location_identifier);
+    $asset_attributes = $this->getAssetAttributes($asset, 'pdp_fullscreen');
+    $query_options = $this->getAssetQueryString(
+      $asset_attributes['set'],
+      $asset_attributes['image_location_identifier']
+    );
     return Url::fromUri($base_url, ['query' => $query_options])->toString();
   }
 
@@ -693,7 +704,7 @@ class SkuAssetManager {
    * @return array
    *   Array of asset attributes.
    */
-  public function getAssetAttributes(array $asset, $location_image) {
+  protected function getAssetAttributes(array $asset, $location_image) {
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
     $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
@@ -711,7 +722,10 @@ class SkuAssetManager {
       $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] . "]";
     }
 
-    return [$set, $image_location_identifier];
+    return [
+      'set' => $set,
+      'image_location_identifier' => $image_location_identifier,
+    ];
   }
 
   /**
@@ -1052,6 +1066,38 @@ class SkuAssetManager {
     $query->condition('id', $sku_id);
     $query->condition('langcode', $current_langcode);
     return $query->execute()->fetchAssoc();
+  }
+
+  /**
+   * Helper function to validate if the file extension is supported.
+   *
+   * Adds log message if unsupported file validation requested.
+   *
+   * @param string $sku
+   *   SKU for logging.
+   * @param string $url
+   *   URL of the file to download.
+   *
+   * @return bool
+   *   TRUE if supported.
+   */
+  private function validateFileExtension(string $sku, string $url) {
+    // Using multiple function to get extension to avoid cases with query
+    // string and hash in URLs.
+    $extension = strtolower(pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
+
+    // Filter by extension only if value set for the setting.
+    $allowed_extensions = Settings::get('allowed_product_extensions', NULL);
+    if ($allowed_extensions && !in_array($extension, $allowed_extensions)) {
+      $this->logger->warning('Skipping product media file because of unsupported extension. SKU: @sku, File: @file', [
+        '@file' => $url,
+        '@sku' => $sku,
+      ]);
+
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
 }
