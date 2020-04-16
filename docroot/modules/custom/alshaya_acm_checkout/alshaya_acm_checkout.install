@@ -11,6 +11,43 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Increase size of shipping method description fields.
+ *
+ * This is a temporary solution. We will stop using this taxonomy once we move
+ * to SPC - CORE-10070.
+ */
+function alshaya_acm_checkout_update_8008() {
+  $entity_type = 'taxonomy_term';
+  $field_length = 510;
+
+  $fields = [
+    'field_shipping_method_cart_desc',
+    'field_shipping_method_desc',
+  ];
+
+  foreach ($fields as $field_name) {
+    $database = \Drupal::database();
+
+    // Resize the main field data table.
+    $database->query("ALTER TABLE {$entity_type}__{$field_name} MODIFY {$field_name}_value VARCHAR({$field_length})");
+
+    // Update storage schema.
+    $storage_key = $entity_type . '.field_schema_data.' . $field_name;
+    $storage_schema = \Drupal::keyValue('entity.storage_schema.sql');
+    $field_schema = $storage_schema->get($storage_key);
+    $field_schema[$entity_type . '__' . $field_name]['fields'][$field_name . '_value']['length'] = $field_length;
+    $storage_schema->set($storage_key, $field_schema);
+
+    // Update field configuration.
+    $config = \Drupal::configFactory()->getEditable("field.storage.{$entity_type}.{$field_name}");
+    $config->set('settings.max_length', $field_length);
+    $config->save(TRUE);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update Knet payment label for Arabic.
  */
 function alshaya_acm_checkout_update_8007() {
