@@ -12,6 +12,16 @@
       .block-views-exposed-filter-blocksearch-page legend {
         color: $lhn_sticky-filter-title;
       }
+
+      .views-exposed-form.bef-exposed-form .form--inline .form-item legend {
+        .fieldset-legend {
+          color: $lhn_sticky-filter-title;
+        }
+
+        &::after {
+          color: $lhn_sticky-filter-title;
+        }
+      }
     }
 
     @include breakpoint($tablet) {
