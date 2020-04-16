@@ -196,28 +196,12 @@
           dataLayer.push(userDetails);
         }
 
-        $(window).once('gtm-onetime').on('load', function() {
-          if ($(document).find('article[data-vmode="full"]').length === 1) {
-            var productContext = $(document).find('article[data-vmode="full"]');
-
-            var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-            product.variant = '';
-            if (currentListName != null && currentListName !== 'PDP-placeholder') {
-              product.list = currentListName;
-              currentListName = null;
-            }
-            var data = {
-              event: 'productDetailView',
-              ecommerce: {
-                currencyCode: currencyCode,
-                detail: {
-                  products: [product]
-                }
-              }
-            };
-
-            dataLayer.push(data);
-          }
+        $(window).once('configurable-swatch-gtm').on('load', function() {
+          var selected_swatch = $('.configurable-swatch .select-buttons li');
+          Drupal.alshaya_seo_push_product_details_view(selected_swatch);
+          $(selected_swatch).once('configurable-swatch-gtm').on('click', function () {
+            Drupal.alshaya_seo_push_product_details_view($(this));
+          });
         });
       });
 
@@ -1213,6 +1197,36 @@
       }
     }
   };
+
+  Drupal.alshaya_seo_push_product_details_view = function (selected_swatch) {
+    var selected_swatch_link = selected_swatch.find('a.picked');
+    if (selected_swatch_link.data('productDetailsViewPushed') === 1) {
+      return;
+    }
+
+    var currencyCode = $('body').attr('gtm-currency');
+    var productContext = $(document).find('article[data-vmode="full"]');
+    if (productContext.length === 1) {
+      var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+      product.variant = '';
+      if (currentListName != null && currentListName !== 'PDP-placeholder') {
+        product.list = currentListName;
+        currentListName = null;
+      }
+      var data = {
+        event: 'productDetailView',
+        ecommerce: {
+          currencyCode: currencyCode,
+          detail: {
+            products: [product]
+          }
+        }
+      };
+
+      dataLayer.push(data);
+      selected_swatch_link.data('productDetailsViewPushed', 1);
+    }
+  }
 
   // Ajax command to push deliveryAddress Event.
   $.fn.triggerDeliveryAddress = function () {
