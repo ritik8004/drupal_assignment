@@ -61,9 +61,12 @@
       margin-bottom: 1rem;
       margin-top: 0.625rem;
 
-      .spc-checkout-warning-message {
+      .font-bold {
         font-family: $alshaya-bold;
         font-weight: normal;
+      }
+
+      .spc-checkout-warning-message {
         font-size: 0.875rem;
         display: block;
         padding-#{$left}: 3rem;

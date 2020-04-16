@@ -439,7 +439,7 @@ class ClickCollect extends React.Component {
               {locationAccess === false
               && (
                 <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
-                  {getStringMessage('location_access_denied')}
+                  <span className="font-bold">{getStringMessage('location_access_denied')}</span>
                   <a href="#" onClick={() => updateLocationAccess(true)}>{getStringMessage('dismiss')}</a>
                 </CheckoutMessage>
               )}
