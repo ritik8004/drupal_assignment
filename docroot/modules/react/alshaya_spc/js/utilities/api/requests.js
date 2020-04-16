@@ -31,25 +31,26 @@ export const fetchCartData = () => {
     // Prepare api url.
     const apiUrl = restoreCartApiUrl();
 
-    return Axios.get(apiUrl)
-      .then((response) => {
-        if (typeof response !== 'object') {
-          redirectToCart();
-        }
-        if (response.data.error) {
-          redirectToCart();
-        }
+    return Axios.get(apiUrl).then((response) => {
+      if (typeof response !== 'object') {
+        redirectToCart();
+      }
 
-        if (Object.values(response.data.items).length === 0) {
-          redirectToCart();
-        }
+      if (response.data.error) {
+        redirectToCart();
+      }
 
-        return response.data;
-      })
-      .catch((error) => {
-        // Processing of error here.
-        Drupal.logJavascriptError('Restore cart fail', error);
-      });
+      if (Object.values(response.data.items).length === 0) {
+        redirectToCart();
+      }
+
+      return response.data;
+    }).catch((error) => {
+      // Processing of error here.
+      Drupal.logJavascriptError('Restore cart fail', error);
+
+      redirectToCart();
+    });
   }
   if (!Number.isInteger(cart)) {
     // If we get integer, mean we get only cart id and thus we need to fetch
