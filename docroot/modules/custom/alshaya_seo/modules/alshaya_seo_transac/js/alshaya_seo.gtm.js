@@ -197,11 +197,19 @@
         }
 
         $(window).once('configurable-swatch-gtm').on('load', function() {
-          var selected_swatch = $('.configurable-swatch .select-buttons li');
-          Drupal.alshaya_seo_push_product_details_view(selected_swatch);
-          $(selected_swatch).once('configurable-swatch-gtm').on('click', function () {
-            Drupal.alshaya_seo_push_product_details_view($(this));
-          });
+          // Get all the swatches that are displayed.
+          var swatchList = $('.configurable-swatch .select-buttons li');
+          if (swatchList.length > 0) {
+            // On page load we find and send the selected <li>.
+            var selectedSwatch = swatchList.find('a.picked').parent();
+            Drupal.alshaya_seo_push_product_details_view(selectedSwatch);
+            // When user clicks on a swatch, we check the clicked element and
+            // push details to GTM.
+            swatchList.once('configurable-swatch-gtm').on('click', function () {
+              // The <li> item of the swatch that has been selected.
+              Drupal.alshaya_seo_push_product_details_view($(this));
+            });
+          }
         });
       });
 
@@ -1198,9 +1206,16 @@
     }
   };
 
-  Drupal.alshaya_seo_push_product_details_view = function (selected_swatch) {
-    var selected_swatch_link = selected_swatch.find('a.picked');
-    if (selected_swatch_link.data('productDetailsViewPushed') === 1) {
+  /**
+   * Helper function to push productImpression to GTM.
+   *
+   * @param customerType
+   */
+  Drupal.alshaya_seo_push_product_details_view = function (selectedSwatch) {
+    var selectedSwatchLink = selectedSwatch.find('a.picked');
+    // If swatch was already selected on page load or by user then we do not
+    // process that swatch again.
+    if (selectedSwatchLink.data('productDetailsViewPushed') === 1) {
       return;
     }
 
@@ -1224,7 +1239,8 @@
       };
 
       dataLayer.push(data);
-      selected_swatch_link.data('productDetailsViewPushed', 1);
+      // Mark that swatch has already been processed.
+      selectedSwatchLink.data('productDetailsViewPushed', 1);
     }
   }
 
