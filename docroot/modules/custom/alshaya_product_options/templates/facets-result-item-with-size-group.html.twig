@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Default theme implementation of a facet result item with sizegroup.
+ *
+ * Available variables:
+ * - items: The item value.
+ * - value: The group value.
+ *
+ * @ingroup themeable
+ */
+#}
+<span class="sizegroup-filter">{{ value }}</span>
+<ul class="sizegroup" id="{{ value }}">
+  {%- if items -%}
+    {%- for item in items -%}
+      {%- if item.class -%}
+        <li class="facet-item {{item.class}}">{{ item.element }}</li>
+      {%- else -%}
+        <li class="facet-item">{{ item.element }}</li>
+    {%- endif -%}
+    {%- endfor -%}
+  {%- else -%}
+    {{- empty -}}
+  {%- endif -%}
+</ul>

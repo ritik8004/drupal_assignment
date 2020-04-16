@@ -142,6 +142,7 @@ class SkusProductList extends ResourceBase {
     $this->mobileAppUtility = $mobile_app_utility;
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->entityTypeManager = $entity_type_manager;
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuManager = $sku_manager;
     $this->cache = [
       'tags' => [],
@@ -297,7 +298,7 @@ class SkusProductList extends ResourceBase {
     $promotions = [];
     $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
     foreach ($promotions_data as $nid => $promotion) {
-      if (is_object($nid)) {
+      if (is_numeric($nid)) {
         $this->cache['tags'][] = 'node:' . $nid;
         $promotion_node = $this->nodeStorage->load($nid);
         $promotions[] = [

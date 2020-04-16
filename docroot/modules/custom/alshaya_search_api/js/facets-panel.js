@@ -77,7 +77,7 @@
 
       // On clicking on back button, reset the block title and add class so
       // that facet blocks can be closed.
-      $('.facet-all-back').on('click', function() {
+      $('.facet-all-back, .back-facet-list').once('facet-all-back-processed').on('click', function() {
         $(this).hide();
         $('.filter-sort-title').html(Drupal.t('filter & sort'));
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');

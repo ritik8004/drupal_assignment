@@ -34,6 +34,22 @@ function alshaya_aeo_transac_update_8001() {
 }
 
 /**
+ * Implements hook_update_N().
+ *
+ * Override PDP image style to sharpen the images before zoom.
+ */
+function alshaya_aeo_transac_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $styles = [
+    'image.style.product_zoom_medium_606x504',
+  ];
+
+  $manager->updateConfigs($styles, 'alshaya_image_styles');
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_aeo_transac_install() {
