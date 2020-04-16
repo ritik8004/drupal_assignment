@@ -27,13 +27,7 @@ export default class GoogleMap extends React.Component {
       ? window.google.maps.ControlPosition.RIGHT_BOTTOM
       : window.google.maps.ControlPosition.LEFT_BOTTOM;
 
-    let data = {};
-    const { isEditAddress } = this.props;
-    // If adress is being edited, means don't need to
-    // set current location.
-    if (isEditAddress === false) {
-      data = this.setCurrentLocationCoords();
-    }
+    const data = {};
 
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
