@@ -73,6 +73,7 @@ export default class Checkout extends React.Component {
         cartData.then((result) => {
           if (result === undefined
             || result === null) {
+            redirectToCart();
             return;
           }
 
