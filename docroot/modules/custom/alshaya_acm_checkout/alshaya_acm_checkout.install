@@ -6,6 +6,8 @@
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\Core\Entity\Sql\DefaultTableMapping;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -18,6 +20,7 @@ use Drupal\taxonomy\Entity\Term;
  */
 function alshaya_acm_checkout_update_8008() {
   $entity_type = 'taxonomy_term';
+  $bundle = 'shipping_method';
   $field_length = 510;
 
   $fields = [
@@ -28,14 +31,21 @@ function alshaya_acm_checkout_update_8008() {
   foreach ($fields as $field_name) {
     $database = \Drupal::database();
 
+    $field = FieldConfig::loadByName($entity_type, $bundle, $field_name);
+    $mapping = DefaultTableMapping::create(\Drupal::entityTypeManager()->getDefinition('taxonomy_term'), [$field->getFieldStorageDefinition()]);
+    $main_table = $mapping->getDedicatedDataTableName($field->getFieldStorageDefinition());
+    $revision_table = $mapping->getDedicatedRevisionTableName($field->getFieldStorageDefinition());
+
     // Resize the main field data table.
-    $database->query("ALTER TABLE {$entity_type}__{$field_name} MODIFY {$field_name}_value VARCHAR({$field_length})");
+    $database->query("ALTER TABLE {$main_table} MODIFY {$field_name}_value VARCHAR({$field_length})");
+    $database->query("ALTER TABLE {$revision_table} MODIFY {$field_name}_value VARCHAR({$field_length})");
 
     // Update storage schema.
     $storage_key = $entity_type . '.field_schema_data.' . $field_name;
     $storage_schema = \Drupal::keyValue('entity.storage_schema.sql');
     $field_schema = $storage_schema->get($storage_key);
-    $field_schema[$entity_type . '__' . $field_name]['fields'][$field_name . '_value']['length'] = $field_length;
+    $field_schema[$main_table]['fields'][$field_name . '_value']['length'] = $field_length;
+    $field_schema[$revision_table]['fields'][$field_name . '_value']['length'] = $field_length;
     $storage_schema->set($storage_key, $field_schema);
 
     // Update field configuration.
