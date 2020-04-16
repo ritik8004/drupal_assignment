@@ -11,6 +11,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use AlgoliaSearch\Client;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_module_implements_alter().
@@ -167,7 +168,13 @@ function alshaya_search_algolia_alshaya_seo_google_sitelink_searchbox_url_alter(
 /**
  * Implements hook_alshaya_search_filter_link_alter().
  */
-function alshaya_search_algolia_alshaya_search_filter_link_alter(&$link, $attribute) {
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $link = '/' . $langcode . '/search#refinementList[attr_' . $attribute . '][0]=';
+function alshaya_search_algolia_alshaya_search_filter_link_alter(string &$link, string $attribute_code, string $value) {
+  // Modify url so that it can be interpreted by Algolia.
+  $url_options = [
+    'query' => [
+      "refinementList[attr_$attribute_code][0]" => $value,
+    ],
+  ];
+  $link = Url::fromUri('internal:/search', $url_options)->toString();
+  $link = str_replace('?', '#', $link);
 }
