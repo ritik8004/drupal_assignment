@@ -173,12 +173,13 @@ export default class CartItem extends React.Component {
           && (
             <QtyLimit
               type="conditional"
-              showAlert={
+              showWarning={
                 parseInt(maxSaleQty, 10) !== 0 && parseInt(qty, 10) >= parseInt(maxSaleQty, 10)
               }
-              showWarning={
+              showAlert={
                 parseInt(maxSaleQty, 10) !== 0 && parseInt(qty, 10) < parseInt(maxSaleQty, 10)
               }
+              filled="true"
               qty={qty}
               maxSaleQty={maxSaleQty}
             />
