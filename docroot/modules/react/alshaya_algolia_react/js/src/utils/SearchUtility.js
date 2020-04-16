@@ -18,7 +18,16 @@ function showSearchResultContainer() {
   Array.prototype.forEach.call(contentDiv.parentNode.children, element => {
     element.style.display = 'none';
   });
-  body.classList.add("hide-header") ;
+  let search_query = getSearchQuery();
+
+  // On search page, we always show search results. So need to hide header on VS
+  // only when there is search query.
+  if (search_query !== '' && search_query !== null) {
+    body.classList.add("hide-header") ;
+  }
+  else {
+    body.classList.remove('hide-header');
+  }
   searchResultDiv.style.display = 'block';
   searchResultDiv.className = 'show-algolia-result';
   searchResultDiv.style.minHeight = '26.5rem';
