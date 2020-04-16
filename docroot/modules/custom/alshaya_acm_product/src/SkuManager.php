@@ -3309,7 +3309,7 @@ class SkuManager {
       if (!empty($field_data)) {
         $size_group = '';
         if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
-          $size_group = $child->get('attr_size_group_code')->getString();
+          $size_group = $sku->get('attr_size_group_code')->getString();
           // Group all the sizes without group in a section in bottom.
           $size_group = $size_group ?: 'other';
         }
