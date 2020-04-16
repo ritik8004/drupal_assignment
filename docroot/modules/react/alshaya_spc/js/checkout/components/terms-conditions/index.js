@@ -9,7 +9,7 @@ export default class TermsConditions extends React.Component {
 
   render() {
     return (
-      <div className="spc-checkout-terms-conditions fadeInUp" style={{ animationDelay: '1.5s' }}>
+      <div className="spc-checkout-terms-conditions fadeInUp" style={{ animationDelay: '0.6s' }}>
         {parse(this.getHtmlMarkup())}
       </div>
     );
