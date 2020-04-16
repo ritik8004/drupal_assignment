@@ -211,9 +211,7 @@ class Cart {
     $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
-      $cart_response = $this->magentoApiWrapper->doRequest('GET', $url);
-      $this->convertCartItemsExceptionTypes($cart_response);
-      self::$cart = $cart_response;
+      self::$cart = $this->magentoApiWrapper->doRequest('GET', $url);
       return self::$cart;
     }
     catch (\Exception $e) {
@@ -768,7 +766,6 @@ class Cart {
       static::$cart[$cart_id] = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
       $cart = static::$cart[$cart_id];
 
-      $this->convertCartItemsExceptionTypes($cart);
       // If exception at response message level.
       if ($cart['response_message'][1] == 'json_error') {
         $messages = json_decode($cart['response_message'][0], TRUE);
@@ -819,24 +816,6 @@ class Cart {
 
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
-    }
-  }
-
-  /**
-   * Convert individual cart item errors to error type.
-   *
-   * @param array $cart
-   *   The cart array.
-   */
-  public function convertCartItemsExceptionTypes(array &$cart) {
-    if (!empty($cart['cart']['items'])) {
-      foreach ($cart['cart']['items'] as &$item) {
-        foreach ($item['extension_attributes'] as $att_type => $msg) {
-          if ($att_type == 'error_message') {
-            $item['extension_attributes'][$att_type] = $this->exceptionType($msg);
-          }
-        }
-      }
     }
   }
 

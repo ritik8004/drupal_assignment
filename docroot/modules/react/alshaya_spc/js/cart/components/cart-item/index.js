@@ -193,6 +193,7 @@ export default class CartItem extends React.Component {
         </div>
         <Notifications>
           <CartItemOOS type="warning" inStock={inStock} />
+          <ItemLowQuantity type="alert" stock={stock} qty={qty} in_stock={inStock} />
           {drupalSettings.quantity_limit_enabled
           && (
             <QtyLimit
@@ -210,7 +211,6 @@ export default class CartItem extends React.Component {
               maxSaleQty={maxSaleQty}
             />
           )}
-          <ItemLowQuantity type="alert" stock={stock} qty={qty} in_stock={inStock} />
           <CartItemFree type="alert" filled="true" freeItem={freeItem} />
           <DynamicPromotionProductItem type="alert" dynamicPromoLabels={dynamicPromoLabels} />
           {isItemError && (<CartItemError type="alert" errorMessage={errorMessage} />)}
