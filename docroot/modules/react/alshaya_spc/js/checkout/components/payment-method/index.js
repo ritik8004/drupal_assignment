@@ -93,7 +93,7 @@ export default class PaymentMethod extends React.Component {
       cart,
       animationOffset,
     } = this.props;
-    const animationDelayValue = `${1 + animationOffset}s`;
+    const animationDelayValue = `${0.4 + animationOffset}s`;
 
     if (method.code === 'checkout_com_applepay') {
       if (!(ApplePay.isAvailable())) {
