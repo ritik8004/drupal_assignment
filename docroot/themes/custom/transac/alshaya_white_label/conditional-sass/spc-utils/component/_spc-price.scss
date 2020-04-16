@@ -8,6 +8,10 @@
     + .special--price {
       display: inline-block;
     }
+
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: 0.3125rem;
+    }
   }
 
   .price-currency {
