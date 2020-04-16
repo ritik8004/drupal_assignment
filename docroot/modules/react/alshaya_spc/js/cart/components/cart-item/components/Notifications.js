@@ -39,8 +39,6 @@ const Notifications = ({ children }) => {
       notificationTypes[newType].push(
         createReactElement(child, { ...origProps, type: newType }),
       );
-
-      console.log(notificationTypes);
     }
   });
 
