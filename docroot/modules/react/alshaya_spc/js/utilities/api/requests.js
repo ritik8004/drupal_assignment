@@ -47,7 +47,7 @@ export const fetchCartData = () => {
       return response.data;
     }).catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('Restore cart fail', error);
+      Drupal.logJavascriptError('Failed to restore cart.', error);
 
       redirectToCart();
     });
@@ -88,6 +88,6 @@ export const fetchCartData = () => {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('Get cart api fail', error);
+      Drupal.logJavascriptError('Failed to get cart.', error);
     });
 };
