@@ -34,14 +34,17 @@ export const fetchCartData = () => {
     return Axios.get(apiUrl).then((response) => {
       if (typeof response !== 'object') {
         redirectToCart();
+        return null;
       }
 
       if (response.data.error) {
         redirectToCart();
+        return null;
       }
 
       if (Object.values(response.data.items).length === 0) {
         redirectToCart();
+        return null;
       }
 
       return response.data;
@@ -50,6 +53,7 @@ export const fetchCartData = () => {
       Drupal.logJavascriptError('Failed to restore cart.', error);
 
       redirectToCart();
+      return null;
     });
   }
   if (!Number.isInteger(cart)) {
