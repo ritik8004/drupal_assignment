@@ -1207,15 +1207,15 @@
   };
 
   /**
-   * Helper function to push productImpression to GTM.
+   * Helper function to push productDetailView to GTM.
    *
-   * @param customerType
+   * @param selectedSwatch
+   *   The selected swatch list element.
    */
   Drupal.alshaya_seo_push_product_details_view = function (selectedSwatch) {
-    var selectedSwatchLink = selectedSwatch.find('a.picked');
     // If swatch was already selected on page load or by user then we do not
     // process that swatch again.
-    if (selectedSwatchLink.data('productDetailsViewPushed') === 1) {
+    if (selectedSwatch.data('productDetailsViewPushed') === 1) {
       return;
     }
 
@@ -1240,7 +1240,7 @@
 
       dataLayer.push(data);
       // Mark that swatch has already been processed.
-      selectedSwatchLink.data('productDetailsViewPushed', 1);
+      selectedSwatch.data('productDetailsViewPushed', 1);
     }
   }
 
