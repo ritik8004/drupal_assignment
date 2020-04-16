@@ -12,10 +12,13 @@ use Drupal\taxonomy\Entity\Term;
  * Implements hook_update_N().
  *
  * Increase size of shipping method description fields.
+ *
+ * This is a temporary solution. We will stop using this taxonomy once we move
+ * to SPC - CORE-10070.
  */
 function alshaya_acm_checkout_update_8008() {
   $entity_type = 'taxonomy_term';
-  $field_length = 500;
+  $field_length = 510;
 
   $fields = [
     'field_shipping_method_cart_desc',
