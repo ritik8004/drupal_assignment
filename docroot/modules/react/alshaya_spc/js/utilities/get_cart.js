@@ -6,7 +6,7 @@ import { getInfoFromStorage } from './storage';
  *
  * @returns {string}
  */
-export const getCartApiUrl = () => i18nMiddleWareUrl('cart');
+export const getCartApiUrl = () => i18nMiddleWareUrl('cart/get');
 
 export const cartAvailableInStorage = () => {
   // Get data from local storage.
