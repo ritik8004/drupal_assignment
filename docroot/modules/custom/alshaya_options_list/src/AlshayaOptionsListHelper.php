@@ -343,12 +343,12 @@ class AlshayaOptionsListHelper {
   public function getAttributeUrl($attributeCode, $value = '') {
     $url_options = [
       'query' => [
-        'f[0]' => $attributeCode . ':' . $value,
+        'f[0]' => $attributeCode . ':',
       ],
     ];
     $link = Url::fromUri('internal:/search', $url_options)->toString();
     $this->moduleHandler->alter('alshaya_search_filter_link', $link, $attributeCode);
-    return $link;
+    return $link . urlencode($value);
   }
 
 }

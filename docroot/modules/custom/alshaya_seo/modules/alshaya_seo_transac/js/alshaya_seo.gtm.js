@@ -196,27 +196,19 @@
           dataLayer.push(userDetails);
         }
 
-        $(window).once('gtm-onetime').on('load', function() {
-          if ($(document).find('article[data-vmode="full"]').length === 1) {
-            var productContext = $(document).find('article[data-vmode="full"]');
-
-            var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-            product.variant = '';
-            if (currentListName != null && currentListName !== 'PDP-placeholder') {
-              product.list = currentListName;
-              currentListName = null;
-            }
-            var data = {
-              event: 'productDetailView',
-              ecommerce: {
-                currencyCode: currencyCode,
-                detail: {
-                  products: [product]
-                }
-              }
-            };
-
-            dataLayer.push(data);
+        $(window).once('configurable-swatch-gtm').on('load', function() {
+          // Get all the swatches that are displayed.
+          var swatchList = $('.configurable-swatch .select-buttons li');
+          if (swatchList.length > 0) {
+            // On page load we find and send the selected <li>.
+            var selectedSwatch = swatchList.find('a.picked').parent();
+            Drupal.alshaya_seo_push_product_details_view(selectedSwatch);
+            // When user clicks on a swatch, we check the clicked element and
+            // push details to GTM.
+            swatchList.once('configurable-swatch-gtm').on('click', function () {
+              // The <li> item of the swatch that has been selected.
+              Drupal.alshaya_seo_push_product_details_view($(this));
+            });
           }
         });
       });
@@ -1213,6 +1205,44 @@
       }
     }
   };
+
+  /**
+   * Helper function to push productDetailView to GTM.
+   *
+   * @param selectedSwatch
+   *   The selected swatch list element.
+   */
+  Drupal.alshaya_seo_push_product_details_view = function (selectedSwatch) {
+    // If swatch was already selected on page load or by user then we do not
+    // process that swatch again.
+    if (selectedSwatch.data('productDetailsViewPushed') === 1) {
+      return;
+    }
+
+    var currencyCode = $('body').attr('gtm-currency');
+    var productContext = $(document).find('article[data-vmode="full"]');
+    if (productContext.length === 1) {
+      var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+      product.variant = '';
+      if (currentListName != null && currentListName !== 'PDP-placeholder') {
+        product.list = currentListName;
+        currentListName = null;
+      }
+      var data = {
+        event: 'productDetailView',
+        ecommerce: {
+          currencyCode: currencyCode,
+          detail: {
+            products: [product]
+          }
+        }
+      };
+
+      dataLayer.push(data);
+      // Mark that swatch has already been processed.
+      selectedSwatch.data('productDetailsViewPushed', 1);
+    }
+  }
 
   // Ajax command to push deliveryAddress Event.
   $.fn.triggerDeliveryAddress = function () {
