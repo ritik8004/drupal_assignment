@@ -38,20 +38,6 @@ export const getUserAddressList = () => axios.get('user-address-list')
   });
 
 /**
- * Update default address for the user.
- *
- * @param {*} addressId
- */
-export const updateUserDefaultAddress = (addressId) => axios.post('set-default-address', {
-  addressId,
-})
-  .then((response) => response)
-  .catch((error) => {
-    // Processing of error here.
-    Drupal.logJavascriptError('update-user-default-address', error);
-  });
-
-/**
  * Add / Edit address for customer.
  *
  * @param {*} address

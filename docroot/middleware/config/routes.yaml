@@ -1,64 +1,64 @@
-get_cart:
-    path: /cart
+cart.get_cart:
+    path: /cart/get-cart
     controller: App\Controller\CartController::getCart
     methods: GET
 
-restore_cart:
-    path: /restore-cart
+cart.restore_cart:
+    path: /cart/restore-cart
     controller: App\Controller\CartController::restoreCart
     methods: GET
 
-update_cart:
-    path: /update-cart
+cart.update_cart:
+    path: /cart/update-cart
     controller: App\Controller\CartController::updateCart
     methods: POST
 
-get_shipping_methods:
-    path: /cart/shipping-methods
-    controller: App\Controller\CartController::shippingMethods
-    methods: POST
-
-place_order:
-    path: /cart/place-order
-    controller: App\Controller\CartController::placeOrder
-    methods: POST
-
-associate_cart:
+cart.associate_cart:
     path: /associate-cart
     controller: App\Controller\CartController::associateCart
     methods: GET
 
-checkoutcom_payment_success:
+cart.get_shipping_methods:
+    path: /cart/shipping-methods
+    controller: App\Controller\CartController::shippingMethods
+    methods: POST
+
+cart.place_order:
+    path: /cart/place-order
+    controller: App\Controller\CartController::placeOrder
+    methods: POST
+
+payment.checkoutcom_payment_success:
     path: /payment/checkout-com-success
     controller: App\Controller\PaymentController::handleCheckoutComSuccess
     methods: GET
 
-checkoutcom_payment_error:
+payment.checkoutcom_payment_error:
     path: /payment/checkout-com-error
     controller: App\Controller\PaymentController::handleCheckoutComError
     methods: GET
 
-knet_payment_response:
+payment.knet_payment_response:
     path: /payment/knet-response
     controller: App\Controller\PaymentController::handleKnetResponse
     methods: POST
 
-knet_payment_error:
+payment.knet_payment_error:
     path: /payment/knet-error/{state_key}
     controller: App\Controller\PaymentController::handleKnetError
     methods: GET
 
-cybersource_payment_token:
+payment.cybersource_payment_token:
     path: /payment/cybersource/get-token
     controller: App\Controller\PaymentController::getCybersourceToken
     methods: POST
 
-cybersource_payment_finalise:
+payment.cybersource_payment_finalise:
     path: /payment/cybersource/finalise
     controller: App\Controller\PaymentController::finaliseCybersource
     methods: POST
 
-checkout_com_apple_pay_save:
+payment.checkout_com_apple_pay_save:
     path: /payment/checkout-com-apple-pay/save
     controller: App\Controller\PaymentController::saveApplePayPayment
     methods: POST
