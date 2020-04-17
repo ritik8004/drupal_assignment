@@ -330,7 +330,7 @@ class AlshayaOptionsListHelper {
   /**
    * Return links of all options pages that have been created.
    *
-   * @param string $attribute_code
+   * @param string $attributeCode
    *   Attribute code.
    * @param string $value
    *   Value for the facet.
@@ -340,15 +340,15 @@ class AlshayaOptionsListHelper {
    *
    * @todo When DLP is enabled on search, add condition to generate pretty url.
    */
-  public function getAttributeUrl(string $attribute_code, string $value = '') {
+  public function getAttributeUrl($attributeCode, $value = '') {
     $url_options = [
       'query' => [
-        'f[0]' => $attribute_code . ':' . $value,
+        'f[0]' => $attributeCode . ':',
       ],
     ];
     $link = Url::fromUri('internal:/search', $url_options)->toString();
-    $this->moduleHandler->alter('alshaya_search_filter_link', $link, $attribute_code, $value);
-    return $link;
+    $this->moduleHandler->alter('alshaya_search_filter_link', $link, $attributeCode);
+    return $link . urlencode($value);
   }
 
 }
