@@ -1,20 +1,20 @@
 cart.get_cart:
-    path: /cart/get-cart
+    path: /cart/get
     controller: App\Controller\CartController::getCart
     methods: GET
 
 cart.restore_cart:
-    path: /cart/restore-cart
+    path: /cart/restore
     controller: App\Controller\CartController::restoreCart
     methods: GET
 
 cart.update_cart:
-    path: /cart/update-cart
+    path: /cart/update
     controller: App\Controller\CartController::updateCart
     methods: POST
 
 cart.associate_cart:
-    path: /associate-cart
+    path: /cart/associate
     controller: App\Controller\CartController::associateCart
     methods: GET
 
