@@ -30,7 +30,7 @@ export const addressFormInlineErrorScroll = (selector) => {
 /**
  * Get the address list of the current logged in user.
  */
-export const getUserAddressList = () => axios.get('user-address-list')
+export const getUserAddressList = () => axios.get('spc/user-address-list')
   .then((response) => response.data)
   .catch((error) => {
     // Processing of error here.
@@ -43,7 +43,7 @@ export const getUserAddressList = () => axios.get('user-address-list')
  * @param {*} address
  * @param {*} isDefault
  */
-export const addEditUserAddress = (address, isDefault) => axios.post('add-edit-address', {
+export const addEditUserAddress = (address, isDefault) => axios.post('spc/add-edit-address', {
   address,
   isDefault,
 })
