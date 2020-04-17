@@ -132,6 +132,153 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
   font-display: swap;
 }
 
+// HM Sans
+@font-face {
+  font-family: 'HM Sans Regular';
+  src: url('#{$base_theme_fonts_directory_path}/HMSans-Regular.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSans-Regular.eot?#iefvz') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Regular.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Semi Bold';
+  src: url('#{$base_theme_fonts_directory_path}/HMSans-SemiBold.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSans-SemiBold.eot?#pehiz') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-SemiBold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-SemiBold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Bold';
+  src: url('#{$base_theme_fonts_directory_path}/HMSans-Bold.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSans-Bold.eot?#yeflx') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Bold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Italic';
+  src: url('#{$base_theme_fonts_directory_path}/HMSans-Italic.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSans-Italic.eot?#yeflx') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Italic.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Light';
+  src: url('#{$base_theme_fonts_directory_path}/HMSans-Light.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSans-Light.eot?#yeflx') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Light.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// HM Arabic
+@font-face {
+  font-family: 'HM Sans Arabic Regular';
+  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.eot?#defiz') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Arabic Semi Bold';
+  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.eot?#gefiz') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Arabic Bold';
+  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.eot?#fefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Arabic Light';
+  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.eot?#defiz') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// HM Serif
+@font-face {
+  font-family: 'HM Serif Regular';
+  src: url('#{$base_theme_fonts_directory_path}/HMSerif-Regular.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSerif-Regular.eot?#refix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSerif-Regular.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSerif-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Serif Italic';
+  src: url('#{$base_theme_fonts_directory_path}/HMSerif-Italic.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSerif-Italic.eot?#refix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSerif-Italic.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSerif-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Serif SemiBold';
+  src: url('#{$base_theme_fonts_directory_path}/HMSerif-SemiBold.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSerif-SemiBold.eot?#refix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSerif-SemiBold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSerif-SemiBold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 // H&M specific font family
 // English fonts.
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
