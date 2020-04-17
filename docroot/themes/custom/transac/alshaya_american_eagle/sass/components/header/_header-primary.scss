@@ -10,7 +10,7 @@
       text-align: center;
     }
 
-    html[lang='ar'] & {
+    html[lang=ar] & {
       width: auto;
 
       @include breakpoint($only-mobile) {
@@ -22,7 +22,7 @@
 
         @include breakpoint($desktop) {
           margin-#{$left}: 0.9375rem;
-          margin-top: 0.125rem;
+          margin-top: 0;
         }
 
         @include breakpoint($only-tablet) {
@@ -429,6 +429,10 @@ header {
     @include breakpoint($desktop) {
       padding-top: 1.625rem;
       padding-bottom: 1.125rem;
+
+      html[lang=ar] & {
+        padding-bottom: 1.5rem;
+      }
     }
   }
 
