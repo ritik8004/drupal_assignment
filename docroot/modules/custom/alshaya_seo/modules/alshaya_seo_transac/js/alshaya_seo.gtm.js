@@ -39,6 +39,22 @@
         $(this).attr('gtm-main-sku', variant);
         $(this).attr('gtm-product-sku', variant);
         $(this).attr('gtm-price', variantInfo['gtm_price']);
+        Drupal.alshaya_seo_push_product_details_view();
+      });
+
+      // For configurable grouped products.
+      $('article.entity--type-node').once('alshaya-seo-gtm-configurable-grouped').on('group-configurable-item-selected', function (event, variant) {
+        var sku = $(this).attr('data-sku');
+        var productKey = ($(this).attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        if (typeof drupalSettings[productKey][sku] === 'undefined') {
+          return;
+        }
+
+        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+        $(this).attr('gtm-main-sku', variantInfo.parent_sku);
+        $(this).attr('gtm-product-sku', variant);
+        $(this).attr('gtm-price', variantInfo['gtm_price']);
+        Drupal.alshaya_seo_push_product_details_view();
       });
 
       $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
@@ -197,27 +213,7 @@
         }
 
         $(window).once('gtm-onetime').on('load', function() {
-          if ($(document).find('article[data-vmode="full"]').length === 1) {
-            var productContext = $(document).find('article[data-vmode="full"]');
-
-            var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-            product.variant = '';
-            if (currentListName != null && currentListName !== 'PDP-placeholder') {
-              product.list = currentListName;
-              currentListName = null;
-            }
-            var data = {
-              event: 'productDetailView',
-              ecommerce: {
-                currencyCode: currencyCode,
-                detail: {
-                  products: [product]
-                }
-              }
-            };
-
-            dataLayer.push(data);
-          }
+          Drupal.alshaya_seo_push_product_details_view();
         });
       });
 
@@ -1214,6 +1210,41 @@
     }
   };
 
+  /**
+   * Helper function to push productDetailView to GTM.
+   *
+   * @param selectedSwatch
+   *   The selected swatch list element.
+   */
+  Drupal.alshaya_seo_push_product_details_view = function () {
+    var productContext = $(document).find('article[data-vmode="full"]');
+    if (productContext.length === 1) {
+      var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+      var dataPrefix = 'pushedProduct_';
+      // Check if it has already been processed before.
+      if (productContext.data(dataPrefix + product.id) === 1) {
+        return ;
+      }
+      var currencyCode = $('body').attr('gtm-currency');
+      product.variant = '';
+      if (currentListName != null && currentListName !== 'PDP-placeholder') {
+        product.list = currentListName;
+        currentListName = null;
+      }
+      var data = {
+        event: 'productDetailView',
+        ecommerce: {
+          currencyCode: currencyCode,
+          detail: {
+            products: [product]
+          }
+        }
+      };
+      dataLayer.push(data);
+      // Do it so that the same item is not processed again.
+      productContext.data(dataPrefix + product.id, 1);
+    }
+  }
   // Ajax command to push deliveryAddress Event.
   $.fn.triggerDeliveryAddress = function () {
     dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
