@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66a7910796ae87ea3bf5b3f9a6a1e60a",
+    "content-hash": "838501ffdcebbe53c2e87c8c589cc8ca",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11828,6 +11828,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Undefined offset error": "https://www.drupal.org/files/issues/2019-07-08/3063027-5-undefined-offset.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -19601,20 +19604,6 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-03-23T12:14:52+00:00"
         },
         {
