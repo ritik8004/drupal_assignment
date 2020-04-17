@@ -49,14 +49,6 @@ alshaya_spc.checkout.add_edit_address:
   requirements:
     _role: 'authenticated'
 
-alshaya_spc.checkout.delete_address:
-  path: '/delete-address'
-  defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::deleteCustomerAddress'
-  methods:  [POST]
-  requirements:
-    _role: 'authenticated'
-
 alshaya_spc.checkout.cnc_json:
   path: '/cnc/stores/{cart_id}/{lat}/{lon}'
   defaults:
