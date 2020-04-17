@@ -2,6 +2,9 @@
   .promo-submit {
     text-transform: uppercase;
     font-family: $alshaya-bold;
+
+    @include arabic-letter-spacing;
+
     letter-spacing: 1.14px;
   }
 
