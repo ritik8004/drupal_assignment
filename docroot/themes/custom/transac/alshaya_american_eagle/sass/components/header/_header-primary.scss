@@ -558,21 +558,6 @@ header {
       }
     }
 
-    .search-active {
-      .mobile--search {
-        @include icon_img('#{$aeo_theme_img_directory_path}/assets/search-selected.svg', 2rem, 2rem);
-
-        &::before {
-          @include breakpoint($only-mobile) {
-            top: -0.1875rem;
-            height: 1.75rem;
-            width: 1.625rem;
-            #{$left}: -0.4375rem;
-          }
-        }
-      }
-    }
-
     .store {
       font-size: 0;
       position: absolute;
