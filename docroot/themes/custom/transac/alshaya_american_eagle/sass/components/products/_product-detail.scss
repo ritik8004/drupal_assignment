@@ -253,6 +253,10 @@
 
           &::after {
             #{$right}: 1.5rem;
+
+            html[lang=ar] & {
+              right: 1.5rem;
+            }
           }
         }
 
@@ -262,6 +266,10 @@
             font-size: 1.125rem;
             color: $pdp_product_volume_value;
             padding-#{$left}: 1rem;
+
+            html[lang=ar] & {
+              direction: ltr;
+            }
           }
 
           @include breakpoint($only-tablet) {
