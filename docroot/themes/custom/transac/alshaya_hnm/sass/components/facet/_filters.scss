@@ -165,3 +165,107 @@
     }
   }
 }
+
+#block-plpsize,
+#block-promosize {
+  > ul {
+    font-size: 0.75rem;
+    line-height: 2;
+    color: $plp_facet_filter_link;
+
+    .sizegroup-filter {
+      cursor: pointer;
+      display: block;
+      padding-#{$left}: 1.125rem;
+    }
+
+    > li {
+      margin-bottom: 0;
+      position: relative;
+      text-transform: capitalize;
+
+      &.is-open {
+        font-family: $hnm-demibold;
+
+        &::after {
+          top: 0.75rem;
+          transform: translateY(-50%) rotate(180deg);
+        }
+
+        > ul.sizegroup {
+          display: block !important;
+          position: initial;
+          border: none;
+          margin: 0;
+          overflow-y: unset;
+
+          .facet-item {
+            font-family: $hnm-regular;
+            padding: 0;
+            padding-#{$left}: 2.125rem !important;
+          }
+        }
+      }
+
+      @include icon(dropdown-expand, after);
+
+      &::after {
+        position: absolute;
+        #{$right}: 0.6875rem;
+        top: -5px;
+        font-size: 2.25rem;
+      }
+    }
+  }
+}
+
+.all-filters {
+  #block-plpsize,
+  #block-promosize {
+    > ul {
+      > li {
+        @include icon(chevron#{$right}, after) {
+          color: $plp_all_filter_filter_arrow;
+          font-size: 1.5rem;
+          width: 2rem;
+          cursor: pointer;
+          pointer-events: none;
+          position: absolute;
+          #{$right}: 0.625rem;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        &.show-facet {
+          display: block !important;
+
+          .sizegroup-filter {
+            display: none;
+          }
+
+          &::after {
+            display: none;
+          }
+
+          ul.sizegroup {
+            display: block;
+            line-height: 2.9375rem;
+          }
+        }
+      }
+
+      .sizegroup-filter {
+        padding: 1.25rem 2rem;
+        height: auto;
+        font-size: 0.75rem;
+        line-height: 1.2;
+        border-bottom: 1px solid $plp_all_filter_item_border;
+        letter-spacing: normal;
+      }
+    }
+
+    ul.sizegroup {
+      display: none;
+    }
+  }
+}
