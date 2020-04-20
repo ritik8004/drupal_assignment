@@ -728,6 +728,13 @@ class SkuImagesManager {
           // For now we are displaying only image slider on search results
           // page and PLP.
           if (!empty($media_item['drupal_uri'])) {
+
+            // Do not show swatch image in plp gallery section.
+            if (isset($media_item['roles'])
+              && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
+              continue;
+            }
+
             if (empty($search_main_image)) {
               $search_main_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing');
             }
@@ -1112,6 +1119,13 @@ class SkuImagesManager {
     // Create our thumbnails to be rendered for zoom.
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
       if (!empty($media_item['drupal_uri'])) {
+
+        // Do not show swatch image in plp gallery section.
+        if (isset($media_item['roles'])
+          && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
+          continue;
+        }
+
         $file_uri = $media_item['drupal_uri'];
 
         // Show original full image in the modal inside a draggable container.
