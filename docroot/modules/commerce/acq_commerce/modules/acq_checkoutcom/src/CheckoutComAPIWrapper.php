@@ -476,7 +476,7 @@ class CheckoutComAPIWrapper {
       }
     }
 
-    $this->logInfo('checkout.com: for cart: @cart_id response for @action is: @response', [
+    $this->logInfo('checkout.com: response for @action is: @response', [
       '@action' => $action,
       '@response' => $response,
     ]);
@@ -595,9 +595,7 @@ class CheckoutComAPIWrapper {
       return ($client->get($endpoint, []));
     };
 
-    $cart = $this->cartStorage->getCart(FALSE);
-    $this->logInfo('checkout.com: for cart: @cart_id, received payment token: @payment_token', [
-      '@cart_id' => $cart->id(),
+    $this->logInfo('checkout.com: received payment token: @payment_token', [
       '@payment_token' => $payment_token,
     ]);
     try {
@@ -607,8 +605,6 @@ class CheckoutComAPIWrapper {
       $this->logger->error(
         'Error occurred while getting info on payment failure, for cart: @cart_id, payment token: @payment_token with message: @message.',
         [
-          '@cart_id' => $cart->id(),
-          '@mail' => $cart->customerEmail(),
           '@payment_token' => $payment_token,
           '@message' => $e->getMessage(),
         ]
