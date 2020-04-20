@@ -613,7 +613,7 @@ class CheckoutComAPIWrapper {
     }
     catch (\UnexpectedValueException $e) {
       $this->logger->error(
-        'Error occurred while getting info on payment failure, for cart: @cart_id, payment token: @payment_token with message: @message.',
+        'Error occurred while getting info on payment failure, for payment token: @payment_token with message: @message.',
         [
           '@payment_token' => $payment_token,
           '@message' => $e->getMessage(),
