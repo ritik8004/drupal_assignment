@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import Cookies from 'js-cookie';
 import {
   cartAvailableInStorage,
   getCartApiUrl,
@@ -25,7 +26,7 @@ export const fetchClicknCollectStores = (coords) => {
 export const fetchCartData = () => {
   // If session cookie not exists, no need to process/check.
   if (drupalSettings.user.uid === 0
-    && document.cookie.indexOf('PHPSESSID') === -1) {
+    && !Cookies.get('PHPSESSID')) {
     removeCartFromStorage();
     return null;
   }
