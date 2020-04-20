@@ -4,6 +4,7 @@ namespace Drupal\acq_checkoutcom\Controller;
 
 use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -56,6 +57,13 @@ class PaymentCardsController extends ControllerBase {
   protected $messenger;
 
   /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * PaymentCardsController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\Request $current_request
@@ -68,19 +76,23 @@ class PaymentCardsController extends ControllerBase {
    *   The current user.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   Messenger service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory service.
    */
   public function __construct(
     Request $current_request,
     Renderer $renderer,
     ApiHelper $api_helper,
     AccountProxyInterface $account_proxy,
-    MessengerInterface $messenger
+    MessengerInterface $messenger,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
     $this->apiHelper = $api_helper;
     $this->currentUser = $account_proxy;
     $this->messenger = $messenger;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -92,7 +104,8 @@ class PaymentCardsController extends ControllerBase {
       $container->get('renderer'),
       $container->get('acq_checkoutcom.agent_api'),
       $container->get('current_user'),
-      $container->get('messenger')
+      $container->get('messenger'),
+      $container->get('config.factory')
     );
   }
 
@@ -106,10 +119,14 @@ class PaymentCardsController extends ControllerBase {
    *   Return access result object.
    */
   public function checkAccess(AccountInterface $account, UserInterface $user) {
+    $enabled_links = $this->configFactory->get('alshaya_user.settings')->get('my_account_enabled_links');
+    $enabled_links = unserialize($enabled_links);
+
     return AccessResult::allowedIf(
       !empty($user->get('acq_customer_id')->getString())
       && $account->id() == $user->id()
       && $this->apiHelper->getCheckoutcomConfig('vault_enabled')
+      && !empty($enabled_links['payment_cards'])
     );
   }
 
