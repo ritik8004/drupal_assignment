@@ -1,0 +1,76 @@
+cart_utilities:
+  js:
+    js/cart_utilities.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+mini_cart:
+  version: 1.x
+  footer: true
+  js:
+    dist/minicart.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+
+cart:
+  version: 1.x
+  footer: true
+  js:
+    dist/cart.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+    - alshaya_spc/cart_utilities
+
+checkout:
+  version: 1.x
+  footer: true
+  js:
+    dist/checkout.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+
+add_to_cart:
+  version: 1.x
+  footer: true
+  js:
+    js/add_to_cart.js: { }
+  dependencies:
+    - alshaya_spc/cart_utilities
+    - core/drupalSettings
+
+checkout-confirmation:
+  version: 1.x
+  footer: true
+  js:
+    dist/checkout_confirmation.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+
+checkout_sandbox_kit:
+  remote: https://cdn.checkout.com
+  version: VERSION
+  license:
+    name: UNKNOWN
+    url: UNKNOWN
+    gpl-compatible: FALSE
+  js:
+    https://cdn.checkout.com/sandbox/js/checkoutkit.js: { type: external }
+
+checkout_live_kit:
+  remote: https://cdn.checkout.com
+  version: VERSION
+  license:
+    name: UNKNOWN
+    url: UNKNOWN
+    gpl-compatible: FALSE
+  js:
+    https://cdn.checkout.com/js/checkoutkit.js: { type: external }
+
+googlemapapi:
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/drupalSettings
+  js:
+    js/google-maps-api.js: {}

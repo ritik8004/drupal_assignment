@@ -1,0 +1,30 @@
+.spc-order-summary-order-preview,
+.spc-order-summary-order-detail {
+  > label {
+    text-transform: lowercase;
+  }
+
+  .spc-order-summary-item {
+    &.spc-order-summary-markup-item {
+      .spc-value {
+        .banktransfer__details {
+          > div {
+            > span {
+              &:first-child {
+                text-transform: lowercase;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .spc-label {
+      text-transform: lowercase;
+    }
+  }
+}
+
+.spc-checkout-confirmation-print-button {
+  text-transform: lowercase;
+}

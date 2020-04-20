@@ -6,38 +6,13 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  function updateAlshayaPromotionsLabel(alshayaAcmPromotions) {
-    for (var dynamicPromotionSku in alshayaAcmPromotions) {
-      if (alshayaAcmPromotions.hasOwnProperty(dynamicPromotionSku)) {
-        var cartQuantity = $('#block-cartminiblock #mini-cart-wrapper span.quantity');
-
-        // If cart is not empty.
-        if (cartQuantity.length) {
-          // Check if we already have fetched dynamic label.
-          if (drupalSettings.alshayaAcmPromotionslabels !== undefined && drupalSettings.alshayaAcmPromotionslabels[dynamicPromotionSku] !== undefined) {
-            var promotionLabelDiv = $('.promotions-dynamic-label.sku-' + dynamicPromotionSku).html(drupalSettings.alshayaAcmPromotionslabels[dynamicPromotionSku]);
-            promotionLabelDiv.trigger('dynamic:promotion:label:ajax:complete');
-          }
-          else {
-            var getPromoLabel = new Drupal.ajax({
-              url: Drupal.url('get-promotion-dynamic-label/' + dynamicPromotionSku),
-              element: false,
-              base: false,
-              progress: {type: 'throbber'},
-              submit: {js: true}
-            });
-
-            getPromoLabel.options.type = 'GET';
-            getPromoLabel.execute();
-          }
-        }
-      }
-    }
-  }
-
   Drupal.behaviors.alshayaPromotionsLabelManager = {
     attach: function (context) {
       Drupal.alshayaPromotions.initializeDynamicPromotions(context);
+      // Update promotion label on product-add-to-cart-success.
+      $('.sku-base-form', context).once('js-process-promo-label').on('product-add-to-cart-success', function (event, productData, cartData) {
+        Drupal.alshayaPromotions.refreshDynamicLabels(productData.sku, cartData);
+      });
     }
   };
 
@@ -71,12 +46,10 @@
    * Js to initialize dynamic promotion labels.
    * @param context
    */
-  Drupal.alshayaPromotions.initializeDynamicPromotions = function (context) {
-    var alshayaAcmPromotions = drupalSettings.alshayaAcmPromotions;
-
-    if (alshayaAcmPromotions !== undefined) {
-      // Slide down the dynamic label.
-      $('.promotions-dynamic-label', context).on('cart:notification:animation:complete dynamic:promotion:label:ajax:complete', function() {
+  Drupal.alshayaPromotions.initializeDynamicPromotions = function () {
+    // Slide down the dynamic label.
+    $('.promotions-dynamic-label').once('initializeDynamicPromotions').each(function () {
+      $(this).on('cart:notification:animation:complete', function() {
         if ($(window).width() > 767) {
           $(this).slideDown('slow', function() {
           });
@@ -94,29 +67,52 @@
         }
       });
 
-      // Go ahead and display dynamic promotions.
-      $('.acq-content-product .content__title_wrapper .promotions .promotions-dynamic-label', context).once('update-promo-label-pdp').each(function () {
-        updateAlshayaPromotionsLabel(alshayaAcmPromotions);
-      });
+      var sku = $(this).parents('[data-sku]:first').attr('data-sku');
+      Drupal.alshayaPromotions.displayDynamicLabels(sku);
+    });
 
-
-      // Cut the Dynamic promotion wrapper and insert it after add to cart button.
-      if ($(window).width() < 768) {
-        if ($('.promotions .sku-dynamic-promotion-link').length > 0) {
-          var dynamicPromotionWrapper = $('.promotions .promotions-dynamic-label').clone();
-          if ($('.basic-details-wrapper .promotions-dynamic-label').length < 1) {
-            dynamicPromotionWrapper.once('bind-promotions-dynamic-label-events').insertAfter($('.edit-add-to-cart'));
-          }
-          else {
-            // Replace the same promotion wrapper with updated dynamic label.
-            $('.basic-details-wrapper .promotions-dynamic-label').replaceWith(dynamicPromotionWrapper);
-          }
+    // Cut the Dynamic promotion wrapper and insert it after add to cart button.
+    if ($(window).width() < 768) {
+      if ($('.promotions .sku-dynamic-promotion-link').length > 0) {
+        var dynamicPromotionWrapper = $('.promotions .promotions-dynamic-label').clone();
+        if ($('.basic-details-wrapper .promotions-dynamic-label').length < 1) {
+          dynamicPromotionWrapper.once('bind-promotions-dynamic-label-events').insertAfter($('.edit-add-to-cart'));
         }
         else {
-          $('.basic-details-wrapper .promotions-dynamic-label').remove();
+          // Replace the same promotion wrapper with updated dynamic label.
+          $('.basic-details-wrapper .promotions-dynamic-label').replaceWith(dynamicPromotionWrapper);
         }
       }
+      else {
+        $('.basic-details-wrapper .promotions-dynamic-label').remove();
+      }
     }
+  };
+
+  Drupal.alshayaPromotions.refreshDynamicLabels = function (sku, cartData) {
+    var cartDataUrl = Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartData);
+    jQuery.ajax({
+      url: Drupal.url('promotions/dynamic-label-product/' + sku) + '?' + cartDataUrl,
+      method: 'GET',
+      async: true,
+      success: function (response) {
+        Drupal.alshayaPromotions.updateDynamicLabel(sku, response);
+      }
+    });
+  };
+
+  Drupal.alshayaPromotions.displayDynamicLabels = function (sku) {
+    var cartData = Drupal.alshayaSpc.getCartData();
+    if (!cartData) {
+      return;
+    }
+
+    Drupal.alshayaPromotions.refreshDynamicLabels(sku, cartData);
+  };
+
+  Drupal.alshayaPromotions.updateDynamicLabel = function (sku, response) {
+    $('[data-sku="' + sku + '"]').find('.promotions-dynamic-label').html(response.label);
+    $('[data-sku="' + sku + '"]').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
   };
 
 })(jQuery, Drupal, drupalSettings);

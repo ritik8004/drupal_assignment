@@ -8,13 +8,29 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
-global $_acsf_site_name;
-$acsf_site_code = substr($_acsf_site_name, 0, -2);
-$country_code = substr($_acsf_site_name, -2);
+
+require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
+$env = alshaya_get_site_environment();
+
+if ($env === 'local') {
+  global $host_site_code;
+  $home = '/home/vagrant';
+
+  $site_country_code = alshaya_get_site_country_code($host_site_code);
+}
+else {
+  global $_acsf_site_name;
+  $home = $_SERVER['HOME'];
+
+  $site_country_code = alshaya_get_site_country_code($_acsf_site_name);
+}
+
+$acsf_site_code = $site_country_code['site_code'];
+$country_code = $site_country_code['country_code'];
 
 // Allow overriding settings and config to set secret info directly from
 // include files on server which can be per brand or brand country combination.
-$settings_path = $settings['server_home_dir'] . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings-';
+$settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings-';
 
 $brand_country_file = $settings_path . $acsf_site_code . $country_code . '.php';
 if (file_exists($brand_country_file)) {

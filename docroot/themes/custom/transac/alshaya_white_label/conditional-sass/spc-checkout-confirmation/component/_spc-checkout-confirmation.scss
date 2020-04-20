@@ -1,0 +1,69 @@
+#spc-checkout-confirmation {
+  .spc-order-summary-block {
+    .spc-checkout-section-title {
+      display: none;
+    }
+  }
+
+  .spc-order-summary {
+    margin-bottom: 0.625rem;
+  }
+
+  .checkout-link {
+    @include breakpoint($only-mobile) {
+      background: $spc-checkout-delivery-method-bg;
+      padding: 1.25rem;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 4;
+      box-shadow: 0 -1px 20px 9px $sticky-btn;
+      display: block;
+      height: auto;
+
+      a {
+        position: relative;
+        background: $primary_btn_bg;
+        height: 3.25rem;
+        width: 100%;
+        box-shadow: none;
+        display: inline-flex;
+      }
+    }
+  }
+
+  .spc-pre-content {
+    position: relative;
+
+    .spc-checkout-confirmation-print-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 2.25rem;
+      padding: 0 0.625rem;
+      background: $spc-change-address-header;
+      border: 1px solid $spc-deliver-button;
+      color: $spc-deliver-button;
+      font-size: 0.8125rem;
+      border-radius: 0.25rem;
+      position: absolute;
+      top: 0;
+      min-width: 11.5rem;
+      cursor: pointer;
+      #{$right}: 0;
+      transition: all 0.3s ease-in-out;
+
+      &:hover {
+        background: $spc-deliver-button;
+        color: $spc-change-address-header;
+      }
+
+      @include breakpoint($only-mobile) {
+        display: flex;
+        margin: 0 auto;
+        position: relative;
+        width: 11.5rem;
+      }
+    }
+  }
+}
