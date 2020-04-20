@@ -136,3 +136,19 @@
     }
   }
 }
+
+.mobilegallery {
+  #product-image-gallery-mobile {
+    button.slick-arrow {
+      display: none !important;
+    }
+  }
+}
+
+#product-full-screen-gallery-container {
+  .slick-arrow {
+    @include breakpoint($only-tablet) {
+      display: none !important;
+    }
+  }
+}
