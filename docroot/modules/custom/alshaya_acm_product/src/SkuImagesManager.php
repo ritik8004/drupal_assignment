@@ -1140,21 +1140,30 @@ class SkuImagesManager {
       }
     }
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
-      // @TODO:
-      // Receiving video_provider as NULL, should be set to youtube
-      // or vimeo. Till then using $type as provider flag.
-      $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
-      $thumbnails[] = [
-        'thumburl' => $media_item['file'],
-        'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
-        'video_title' => $media_item['video_title'],
-        'video_desc' => $media_item['video_description'],
-        'type' => $type,
-        // @TODO: should this be config?
-        'width' => 81,
-        // @TODO: should this be config?
-        'height' => 81,
-      ];
+      if (isset($media_item['video_url'])) {
+        // @TODO:
+        // Receiving video_provider as NULL, should be set to youtube
+        // or vimeo. Till then using $type as provider flag.
+        $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
+        $thumbnails[] = [
+          'thumburl' => $media_item['file'],
+          'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
+          'video_title' => $media_item['video_title'],
+          'video_desc' => $media_item['video_description'],
+          'type' => $type,
+          // @TODO: should this be config?
+          'width' => 81,
+          // @TODO: should this be config?
+          'height' => 81,
+        ];
+      }
+      else {
+        $thumbnails[] = [
+          'url' => file_create_url($media_item['drupal_uri']),
+          'video_title' => $media_item['label'],
+          'type' => 'video',
+        ];
+      }
     }
 
     $return['thumbnails'] = $thumbnails;

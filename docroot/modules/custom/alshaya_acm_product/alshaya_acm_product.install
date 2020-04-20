@@ -10,6 +10,17 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
 
 /**
+ * Add config to turn video download on/off.
+ */
+function alshaya_acm_product_update_8057() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product'
+  );
+}
+
+/**
  * Implements hook_update_N().
  *
  * Invalidate cache for promotions and requeue all impacted products.
