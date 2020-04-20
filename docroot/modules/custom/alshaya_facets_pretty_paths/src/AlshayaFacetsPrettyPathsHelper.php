@@ -271,14 +271,14 @@ class AlshayaFacetsPrettyPathsHelper {
       $encoded = str_replace($original, $replacement, $encoded);
     }
 
-    // Prepand sigegroup if sizegroup is enabled.
-    // Do not execute it for selected filter.
-    if ($attribute_code == 'size' && strpos($encoded, ':') == FALSE && $this->isSizeGroupEnabled()) {
+    // Prepend size-group if enabled.
+    if ($attribute_code == 'size' && strpos($encoded, ':') === FALSE && $this->isSizeGroupEnabled()) {
       $sizeBreak = explode(':', $value);
       $encoded = $this->getSizegroupAttributeAliasFromValue($sizeBreak[0]) . ':' . $encoded;
     }
 
     $this->cache->set($cid, $encoded, Cache::PERMANENT, $tags);
+    $static[$cid] = $encoded;
     return $encoded;
   }
 
@@ -298,6 +298,12 @@ class AlshayaFacetsPrettyPathsHelper {
       'sizegroup-encode',
       $value,
     ]);
+
+    // First check static value.
+    static $static;
+    if (!empty($static[$cid])) {
+      return $static[$cid];
+    }
 
     $cache = $this->cache->get($cid);
     if (!empty($cache)) {
