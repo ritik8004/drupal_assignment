@@ -32,6 +32,21 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 }
 
 @font-face {
+  font-family: "AvenirNextLTW01-Regular";
+  src: url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Tahoma-Bold";
   src: url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.eot");
   src:
@@ -67,6 +82,9 @@ $aeo-bold-nodir: 'AvenirNext-DemiBold', 'Tahoma-Bold', 'Arial';
 
 $aeo-thin: 'AvenirNext', 'Tahoma', 'Arial';
 $aeo-thin-nodir: 'AvenirNext', 'Tahoma', 'Arial';
+
+$aeo-regular: 'AvenirNextLTW01-Regular', 'Tahoma', 'Arial';
+$aeo-regular-nodir: 'AvenirNextLTW01-Regular', 'Tahoma', 'Arial';
 
 $aeo-arabic-bold: 'Tahoma-Bold', 'AvenirNext-DemiBold', 'Arial';
 $aeo-arabic-bold-nodir: 'Tahoma-Bold', 'AvenirNext-DemiBold', 'Arial';

@@ -1,0 +1,56 @@
+@include breakpoint($only-mobile) {
+  .block-alshaya-super-category-menu {
+    height: 2.875rem;
+    transition: height 0.4s;
+
+    .hide-minimalistic-header.no-sticky-algolia-search-bar & {
+      height: 0;
+      overflow: hidden;
+    }
+  }
+
+  .c-menu-primary .region__menu-primary .menu--mobile-navigation,
+  #block-cartminiblock {
+    transition: transform 0.4s, -webkit-transform 0.4s;
+    transform: none;
+
+    .hide-minimalistic-header.no-sticky-algolia-search-bar & {
+      transform: translate3d(0, -2.875rem, 0);
+    }
+  }
+
+  .c-menu-primary .region__menu-primary #block-mobilenavigation {
+    z-index: 11;
+
+    ul {
+      z-index: 10;
+    }
+  }
+
+  body {
+    &.hide-minimalistic-header.no-sticky-algolia-search-bar {
+      margin-top: 2.75rem;
+
+      .toggle--sign,
+      .mobile--close {
+        top: 2.75rem;
+      }
+
+      &.logged-in {
+        .toggle--sign {
+          top: 2.75rem;
+        }
+      }
+    }
+  }
+
+  .c-plp {
+    #block-subcategoryblock {
+      top: -3.125rem !important;
+
+      &.mobile-sticky-sub-category {
+        transform: translateY(8.8125rem);
+      }
+    }
+  }
+}

@@ -11,6 +11,28 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Site\Settings;
 use Drupal\block\BlockInterface;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\facets\Entity\Facet;
+
+/**
+ * Implements hook_update_N().
+ *
+ * To remove old category facets.
+ */
+function alshaya_transac_update_8128() {
+  // Facets to remove.
+  $old_category_facets = [
+    'category',
+    'plp_category_facet',
+    'promotion_category_facet',
+  ];
+
+  foreach ($old_category_facets as $facets) {
+    $facet = Facet::load($facets);
+    if (isset($facet)) {
+      $facet->delete();
+    }
+  }
+}
 
 /**
  * Implements hook_update_N().

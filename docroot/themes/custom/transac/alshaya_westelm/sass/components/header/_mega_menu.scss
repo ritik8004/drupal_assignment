@@ -111,7 +111,6 @@
     ul.menu--two__list {
       @include breakpoint($desktop) {
         max-width: 67.5rem;
-        border-top-width: 1rem;
       }
     }
   }

@@ -51,8 +51,10 @@
 }
 
 .c-footer-secondary {
-  padding-top: 1.125rem;
-  border-top: 0.0625rem solid $checkout_footer_border-top;
+  @include breakpoint($tablet) {
+    padding-top: 1.125rem;
+    border-top: 0.0625rem solid $checkout_footer_border-top;
+  }
 
   .l-container {
     @include container(77rem);
@@ -108,7 +110,6 @@
 
     @include breakpoint($only-mobile) {
       flex-basis: 100%;
-      margin-bottom: 1.5rem;
     }
 
     li {
@@ -116,6 +117,14 @@
         @include breakpoint($tablet) {
           margin-#{$right}: 1.5rem;
         }
+      }
+    }
+
+    ul {
+      .alias--cart-checkout-payment &,
+      .alias--cart-checkout-delivery &,
+      .alias--cart & {
+        margin-bottom: 3rem;
       }
     }
   }
