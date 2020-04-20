@@ -1210,9 +1210,6 @@
 
   /**
    * Helper function to push productDetailView to GTM.
-   *
-   * @param selectedSwatch
-   *   The selected swatch list element.
    */
   Drupal.alshaya_seo_push_product_details_view = function () {
     var productContext = $(document).find('article[data-vmode="full"]');
