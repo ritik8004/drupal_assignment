@@ -11,7 +11,7 @@ export default class CartQuantitySelect extends React.Component {
   }
 
   prepareOptions = (stock, qty, maxLimit) => {
-    let cartMaxQty = window.drupalSettings.alshaya_spc.max_cart_qty;
+    let cartMaxQty = drupalSettings.alshaya_spc.max_cart_qty;
     if (maxLimit != null) {
       cartMaxQty = (maxLimit < stock) ? maxLimit : stock;
     }
