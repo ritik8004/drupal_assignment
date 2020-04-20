@@ -267,7 +267,10 @@ class CheckoutComController implements ContainerInjectionInterface {
     // Validate cart too.
     $cart = $this->cartStorage->getCart(FALSE);
     if (empty($cart)) {
-      $this->logger->warning('User shown 404 page as no cart available in session.');
+      $this->logger->warning('User shown 404 page as no cart available in session. Payment data: @data', [
+        '@data' => json_encode($data),
+      ]);
+
       throw new NotFoundHttpException();
     }
 
