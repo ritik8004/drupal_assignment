@@ -26,32 +26,28 @@
         product.attr('gtm-price', variantInfo['gtm_price']);
       });
 
-      // For simple grouped products.
-      $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected', function (event, variant) {
+      // For simple/configurable grouped products.
+      $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected group-configurable-item-selected', function (event, variant) {
         var sku = $(this).attr('data-sku');
         var productKey = ($(this).attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
         if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
-        var variantInfo = drupalSettings[productKey][sku]['group'][variant];
+        var variantInfo = '';
+        var main_sku = '';
+        if (event.type === 'group-configurable-item-selected') {
+          variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+          main_sku = variantInfo.parent_sku;
+        }
+        else {
+          variantInfo = drupalSettings[productKey][sku]['group'][variant];
+          main_sku = variant;
+        }
 
-        $(this).attr('gtm-main-sku', variant);
+        $(this).attr('gtm-main-sku', main_sku);
         $(this).attr('gtm-product-sku', variant);
         $(this).attr('gtm-price', variantInfo['gtm_price']);
-        Drupal.alshaya_seo_push_product_details_view();
-      });
-
-      // For configurable grouped products.
-      $('article.entity--type-node').once('alshaya-seo-gtm-configurable-grouped').on('group-configurable-item-selected', function (event, variant) {
-        var sku = $(this).attr('data-sku');
-        var productKey = ($(this).attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-        if (typeof drupalSettings[productKey][sku] === 'undefined') {
-          return;
-        }
-
-        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
-        $(this).attr('gtm-main-sku', variantInfo.parent_sku);
         Drupal.alshaya_seo_push_product_details_view();
       });
 
