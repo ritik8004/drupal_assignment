@@ -5,7 +5,10 @@ import {
   redirectToCart,
 } from '../get_cart';
 import { restoreCartApiUrl } from '../update_cart';
-import { getInfoFromStorage } from '../storage';
+import {
+  getInfoFromStorage,
+  removeCartFromStorage,
+} from '../storage';
 
 export const fetchClicknCollectStores = (coords) => {
   const { cart } = getInfoFromStorage();
@@ -23,6 +26,7 @@ export const fetchCartData = () => {
   // If session cookie not exists, no need to process/check.
   if (drupalSettings.user.uid === 0
     && document.cookie.indexOf('PHPSESSID') === -1) {
+    removeCartFromStorage();
     return null;
   }
 
