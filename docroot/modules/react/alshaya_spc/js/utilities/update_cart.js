@@ -10,14 +10,14 @@ import dispatchCustomEvent from './events';
  *
  * @returns {string}
  */
-export const updateCartApiUrl = () => i18nMiddleWareUrl('update-cart');
+export const updateCartApiUrl = () => i18nMiddleWareUrl('cart/update');
 
 /**
  * Get the middleware update cart endpoint.
  *
  * @returns {string}
  */
-export const restoreCartApiUrl = () => i18nMiddleWareUrl('restore-cart');
+export const restoreCartApiUrl = () => i18nMiddleWareUrl('cart/restore');
 
 /**
  * Apply/Remove the promo code.
