@@ -15,6 +15,11 @@ set classes = [
         {% else %}
           <div id="product-zoom-container"></div>
         {% endif %}
+        {% if content.videos is not empty %}
+          <div class="alshaya-videos-wrapper">
+            {{ content.videos }}
+          </div>
+        {% endif %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}

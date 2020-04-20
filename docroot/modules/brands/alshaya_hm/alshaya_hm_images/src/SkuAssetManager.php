@@ -223,13 +223,15 @@ class SkuAssetManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU Entity.
+   * @param string $asset_type
+   *   (optional) Type of the asset to be rendered.
    *
    * @return array
    *   Get assets for SKU.
    *
    * @throws \Exception
    */
-  public function getAssets(SKU $sku) {
+  public function getAssets(SKU $sku, $asset_type = 'images') {
     $assets = unserialize($sku->get('attr_assets')->getString());
 
     if (!is_array($assets) || empty($assets)) {
@@ -242,6 +244,11 @@ class SkuAssetManager {
       // Sanity check, we always need asset id.
       if (empty($asset['Data']['AssetId'])) {
         unset($assets[$index]);
+        continue;
+      }
+
+      $type = ($asset['Data']['AssetType'] === 'MovingMedia') ? 'videos' : 'images';
+      if ($asset_type !== $type) {
         continue;
       }
 
@@ -269,7 +276,9 @@ class SkuAssetManager {
 
       // Use pims/asset id for lock key.
       try {
-        $file = $this->downloadImage($asset, $sku->getSku());
+        $file = ($type === 'videos')
+        ? $this->downloadVideo($asset, $sku->getSku())
+        : $this->downloadImage($asset, $sku->getSku());
       }
       catch (\Exception $e) {
         watchdog_exception('SkuAssetManager', $e);
@@ -295,7 +304,8 @@ class SkuAssetManager {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
 
-      $this->logger->notice('Downloaded new asset images for sku @sku.', [
+      $this->logger->notice('Downloaded new asset @asset_type for sku @sku.', [
+        '@asset_type' => $asset_type,
         '@sku' => $sku->getSku(),
       ]);
     }
@@ -332,7 +342,8 @@ class SkuAssetManager {
     // Check if file already exists in the directory.
     if (file_exists($target)) {
       // If file exists in directory, check if file entity exists.
-      $files = reset($this->fileStorage->loadByProperties(['uri' => $target]));
+      $uri = $this->fileStorage->loadByProperties(['uri' => $target]);
+      $files = reset($uri);
       if (!empty($files) && $files instanceof FileInterface) {
         return $files;
       }
@@ -606,11 +617,13 @@ class SkuAssetManager {
    *   Page on which the asset needs to be rendered.
    * @param array $avoid_assets
    *   (optional) Array of AssetId to avoid.
+   * @param string $asset_type
+   *   (optional) Type of the asset to be rendered.
    *
    * @return array
    *   Array of urls to sku assets.
    */
-  public function getSkuAssets($sku, $page_type, array $avoid_assets = []) {
+  public function getSkuAssets($sku, $page_type, array $avoid_assets = [], $asset_type = 'images') {
     $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $sku = $skuEntity->getSku();
 
@@ -620,7 +633,9 @@ class SkuAssetManager {
       $unserialized_assets = unserialize($assets_data[0]['value']);
 
       if ($unserialized_assets) {
-        $assets = $this->sortSkuAssets($sku, $page_type, $unserialized_assets);
+        $assets = ($asset_type === 'videos')
+          ? $this->filterSkuAssetType($unserialized_assets, 'MovingMedia')
+          : $this->sortSkuAssets($sku, $page_type, $unserialized_assets);
       }
     }
 
@@ -628,7 +643,7 @@ class SkuAssetManager {
       return [];
     }
 
-    $media = $this->getAssets($skuEntity);
+    $media = $this->getAssets($skuEntity, $asset_type);
 
     $return = [];
 
@@ -933,16 +948,18 @@ class SkuAssetManager {
    *   Page on which the asset needs to be rendered.
    * @param array $avoid_assets
    *   (optional) Array of AssetId to avoid.
+   * @param string $asset_type
+   *   (optional) Type of the asset to be rendered.
    *
    * @return array
    *   Array of sku child assets.
    */
-  public function getChildSkuAssets(SKU $sku, $context, array $avoid_assets = []) {
+  public function getChildSkuAssets(SKU $sku, $context, array $avoid_assets = [], $asset_type = 'images') {
     $child_skus = $this->skuManager->getValidChildSkusAsString($sku);
 
     $assets = [];
     foreach ($child_skus ?? [] as $child_sku) {
-      $assets[$child_sku] = $this->getSkuAssets($child_sku, $context, $avoid_assets);
+      $assets[$child_sku] = $this->getSkuAssets($child_sku, $context, $avoid_assets, $asset_type);
     }
 
     return $assets;
@@ -1029,25 +1046,27 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to get images for a SKU.
+   * Helper function to get assets for a SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Parent Sku.
    * @param string $page_type
    *   Type of page.
+   * @param string $asset_type
+   *   Type of asset.
    *
-   * @return array|images
-   *   Array of images for the SKU.
+   * @return array|assets
+   *   Array of assets (images/videos) for the SKU.
    */
-  public function getImagesForSku(SKU $sku, $page_type) {
-    $images = [];
+  public function getAssetsForSku(SKU $sku, $page_type, $asset_type = 'images') {
+    $assets = [];
     if ($sku->bundle() == 'simple') {
-      $images = $this->getSkuAssets($sku, $page_type);
+      $assets = $this->getSkuAssets($sku, $page_type, [], $asset_type);
     }
     elseif ($sku->bundle() == 'configurable') {
-      $images = $this->getChildSkuAssets($sku, $page_type);
+      $assets = $this->getChildSkuAssets($sku, $page_type);
     }
-    return $images;
+    return $assets;
   }
 
   /**
@@ -1098,6 +1117,182 @@ class SkuAssetManager {
     }
 
     return TRUE;
+  }
+
+  /**
+   * Download Drupal Video file.
+   *
+   * @param array $asset
+   *   Asset data.
+   * @param string $sku
+   *   SKU of asset.
+   *
+   * @return \Drupal\file\FileInterface|null|string
+   *   File from asset if available.
+   *
+   * @throws \Exception
+   */
+  private function downloadVideo(array &$asset, string $sku) {
+    $lock_key = '';
+
+    // Allow disabling this through settings.
+    if (Settings::get('media_avoid_parallel_downloads', 1)) {
+
+      $id = $asset['pims_video']['id'] ?? $asset['Data']['AssetId'];
+      $lock_key = 'download_video_' . $id;
+
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $this->lock->acquire($lock_key);
+
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
+
+          // Check once if downloaded by another process.
+          $cache = $this->cacheMediaFileMapping->get($lock_key);
+          if ($cache && $cache->data) {
+            $file = $this->fileStorage->load($cache->data);
+            if ($file instanceof FileInterface) {
+              return $file;
+            }
+
+            throw new \Exception(sprintf('File id %s mapped for %s in cache invalid, not retrying', $cache->data, $id));
+          }
+        }
+      } while (!$lock_acquired);
+    }
+
+    $file = NULL;
+    if (isset($asset['pims_video']) && is_array($asset['pims_video'])) {
+      $file = $this->downloadPimsVideo($asset['pims_video'], $sku);
+    }
+
+    if ($file instanceof FileInterface) {
+      if ($lock_key) {
+        // Add file id in cache for other processes to be able to use.
+        $this->cacheMediaFileMapping->set($lock_key, $file->id(), $this->time->getRequestTime() + 120);
+      }
+
+      $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
+        '@fid' => $file->id(),
+        '@uri' => $file->getFileUri(),
+        '@id' => $id,
+      ]);
+    }
+
+    if ($lock_key) {
+      $this->lock->release($lock_key);
+    }
+
+    return $file;
+  }
+
+  /**
+   * Download video for PIMS Data and store in Drupal.
+   *
+   * @param array $data
+   *   PIMS Data.
+   * @param string $sku
+   *   SKU of asset.
+   *
+   * @return \Drupal\file\FileInterface|null|string
+   *   File entity if image download successful.
+   */
+  private function downloadPimsVideo(array &$data, string $sku) {
+    // If image is blacklisted, block download.
+    if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
+      return NULL;
+    }
+
+    $base_url = $this->hmImageSettings->get('pims_base_url');
+    $pims_directory = $this->hmImageSettings->get('pims_directory');
+
+    // Prepare the directory path.
+    $directory = 'public://assets-shared/videos/' . trim($data['path'], '/');
+    $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
+
+    // Check if file already exists in the directory.
+    if (file_exists($target)) {
+      // If file exists in directory, check if file entity exists.
+      $uri = $this->fileStorage->loadByProperties(['uri' => $target]);
+      $files = reset($uri);
+      if (!empty($files) && $files instanceof FileInterface) {
+        return $files;
+      }
+    }
+
+    $url = implode('/', [
+      trim($base_url, '/'),
+      trim($pims_directory, '/'),
+      trim($data['path'], '/'),
+      trim($data['filename'], '/'),
+    ]);
+
+    if (!$this->validateFileExtension($sku, $url)) {
+      return FALSE;
+    }
+
+    // Download the file contents.
+    try {
+      // @TODO: Need to discuss and update this timeout.
+      $options = [
+        'timeout' => Settings::get('media_download_timeout', 500),
+      ];
+      $file_stream = $this->httpClient->get($url, $options);
+      $file_data = $file_stream->getBody();
+      $file_data_length = $file_stream->getHeader('Content-Length');
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Failed to download asset file for sku @sku from @url, error: @message', [
+        '@sku' => $sku,
+        '@url' => $url,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    // Check to ensure empty file is not saved in SKU.
+    // Using Content-Length Header to check for valid image data, sometimes we
+    // also get a 0 byte image with response 200 instead of 404.
+    // So only checking $file_data is not enough.
+    if (!isset($file_data_length) || $file_data_length[0] === '0') {
+      // @TODO: SAVE blacklist info in a way so it does not have dependency on SKU.
+      // Blacklist this image URL to prevent subsequent downloads for 1 day.
+      $data['blacklist_expiry'] = strtotime('+1 day');
+      // Leave a message for developers to find out why this happened.
+      $this->logger->error('Empty file detected during download, blacklisted for 1 day from now. File remote id: @remote_id, File URL: @url on SKU @sku. @trace', [
+        '@url' => $url,
+        '@sku' => $sku,
+        '@remote_id' => $data['filename'],
+        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+      ]);
+
+      return 'blacklisted';
+    }
+
+    // Check if image was blacklisted, remove it from blacklist.
+    if (isset($data['blacklist_expiry'])) {
+      unset($data['blacklist_expiry']);
+    }
+
+    // Prepare the directory.
+    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+    try {
+      $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
+
+      if (!($file instanceof FileInterface)) {
+        throw new \Exception('Failed to save asset file');
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Failed to save asset file for sku @sku at @uri, error: @message', [
+        '@sku' => $sku,
+        '@uri' => $target,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    return $file ?? NULL;
   }
 
 }

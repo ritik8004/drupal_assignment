@@ -229,7 +229,7 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
 
     if ($sku instanceof SKU) {
-      $pdp_images = $sku_assets_manager->getImagesForSku($sku, 'pdp');
+      $pdp_images = $sku_assets_manager->getAssetsForSku($sku, 'pdp');
 
       foreach ($pdp_images['pdp_thumbnail'] ?? [] as $key => $thumbnail) {
         $thumb_images[$key]['zoomurl'] = $pdp_images['pdp_fullscreen'][$key]['url'];
