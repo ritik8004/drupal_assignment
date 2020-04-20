@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  *
  * Invalidate cache for promotions and requeue all impacted products.
  */
-function alshaya_acm_product_update_8056() {
+function alshaya_acm_product_update_8057() {
   \Drupal::cache('product_processed_data')->invalidateAll();
 
   // Re-queue all the products that have a promotion mapped.
@@ -27,6 +27,19 @@ function alshaya_acm_product_update_8056() {
   foreach ($products as $product) {
     $queueUtility->queueProduct($product);
   }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add config to turn video download on/off.
+ */
+function alshaya_acm_product_update_8056() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product'
+  );
 }
 
 /**

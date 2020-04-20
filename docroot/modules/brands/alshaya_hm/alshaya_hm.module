@@ -51,7 +51,7 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
             $sku = SKU::loadFromSku($item['sku']);
             if ($sku instanceof SKU) {
               $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-              $images = $sku_assets_manager->getAssetsForSku($sku, 'pdp', 'images');
+              $images = $sku_assets_manager->getAssetsForSku($sku, 'pdp');
               if (!empty($images[0]) && isset($images[0]['url'])) {
                 $data_layer['cartItemsFlocktory'][$key]['image'] = $images[0]['url']->toString();
               }

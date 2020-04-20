@@ -57,7 +57,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   public function onProductInfoRequested(ProductInfoRequestedEvent $event) {
     switch ($event->getFieldCode()) {
       case 'media':
-      case 'videos':
         $this->processMedia($event);
         break;
 
@@ -83,20 +82,22 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $context = $event->getContext();
-    $asset_type = ($event->getFieldCode() === 'media') ? 'images' : $event->getFieldCode();
 
     // We show same images for pdp, modal, modal-magazine.
     // To avoid adding extra configs for them (sorting assets) we use pdp
     // for all three cases.
-    $context = (strpos($context, 'modal') > -1) ? 'pdp' : $context;
+    $context = ((strpos($context, 'modal') > -1) || ($context === 'pdp-magazine'))
+      ? 'pdp' : $context;
 
     switch ($context) {
       case 'cart':
       case 'pdp':
-        $media = $this->skuAssetsManager->getAssetsForSku($sku, $context, $asset_type);
+      case 'pdp-magazine':
+        $media = $this->skuAssetsManager->getAssetsForSku($sku, $context);
 
         $return = [];
         foreach ($media as $item) {
+          $asset_type = ($item['Data']['AssetType'] === 'MovingMedia') ? 'videos' : 'images';
           $item['label'] = $sku->label();
           $return['media_items'][$asset_type][] = $item;
         }
@@ -106,9 +107,9 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
       case 'search':
         // Lookup images on current SKU if its a simple SKU.
-        $main_image_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp', 'images');
+        $main_image_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp');
         $avoid_assets = !empty($main_image_assets) ? [$main_image_assets[0]['Data']['AssetId']] : [];
-        $hover_image_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp_hover', 'images', $avoid_assets);
+        $hover_image_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp_hover', $avoid_assets);
 
         $return = [];
 
@@ -124,11 +125,11 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         break;
 
       case 'teaser':
-        $teaser_assets = $this->skuAssetsManager->getSkuAssets($sku, 'teaser', 'images');
+        $teaser_assets = $this->skuAssetsManager->getSkuAssets($sku, 'teaser');
 
         // Try once with plp assets if nothing found for teaser.
         if (empty($teaser_assets)) {
-          $teaser_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp', 'images');
+          $teaser_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp');
         }
 
         $return = [];
@@ -157,7 +158,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $swatch_type = $this->skuAssetsManager->getSkuSwatchType($parent);
 
     if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
-      $assets = $this->skuAssetsManager->getSkuAssets($sku, 'swatch', 'images');
+      $assets = $this->skuAssetsManager->getSkuAssets($sku, 'swatch');
     }
 
     // If swatch type is not miniature_image or assets were missing from
