@@ -179,7 +179,7 @@ class SkuImagesManager {
 
     $cache = $this->productCacheManager->get($sku, $cache_key);
 
-    if (is_array($cache)) {
+    if (is_array($cache) && !empty($cache)) {
       return $cache;
     }
 

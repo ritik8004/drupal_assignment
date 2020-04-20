@@ -7,6 +7,11 @@
     {% else %}
       <div id="product-zoom-container"></div>
     {% endif %}
+    {% if content.videos is not empty %}
+      <div class="alshaya-videos-wrapper">
+        {{ content.videos }}
+      </div>
+    {% endif %}
   </div>
 {% endblock %}
 {% block contentSidebar %}
