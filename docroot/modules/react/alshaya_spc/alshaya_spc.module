@@ -83,7 +83,7 @@ function alshaya_spc_block_access(Block $block, $operation, AccountInterface $ac
 function alshaya_spc_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
   unset($form['add_to_cart']['#ajax']);
   $form['#attached']['library'][] = 'alshaya_spc/add_to_cart';
-  $form['#attached']['drupalSettings']['alshaya_spc']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/update-cart';
+  $form['#attached']['drupalSettings']['alshaya_spc']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
 }
 
 /**
@@ -188,7 +188,7 @@ function _alshaya_spc_get_location_term_by_location_id($location_id) {
  * Implements hook_alshaya_social_SOICAL_NETWORK_alter().
  */
 function alshaya_spc_alshaya_social_social_auth_facebook_alter(&$network, $route_name) {
-  $network['text_link'] = in_array($route_name, ['alshaya_spc.login'])
+  $network['text_link'] = in_array($route_name, ['alshaya_spc.checkout.login'])
     ? t('sign in with Facebook')
     : t('sign up with Facebook');
 }
@@ -197,7 +197,7 @@ function alshaya_spc_alshaya_social_social_auth_facebook_alter(&$network, $route
  * Implements hook_alshaya_social_SOICAL_NETWORK_alter().
  */
 function alshaya_spc_alshaya_social_social_auth_google_alter(&$network, $route_name) {
-  $network['text_link'] = in_array($route_name, ['alshaya_spc.login'])
+  $network['text_link'] = in_array($route_name, ['alshaya_spc.checkout.login'])
     ? t('sign in with Google')
     : t('sign up with Google');
 }
