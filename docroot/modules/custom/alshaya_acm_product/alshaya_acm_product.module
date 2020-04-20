@@ -370,13 +370,6 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['alshaya_videos'] = [
-    'variables' => [
-      'videoUrl' => NULL,
-      'videoLabel' => NULL,
-    ],
-  ];
-
   return $items;
 }
 
@@ -494,9 +487,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-
-    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuVideosManager */
-    $skuVideosManager = \Drupal::service('alshaya_acm_product.sku_videos_manager');
 
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku));
     $sku_entity = SKU::loadFromSku($sku);
@@ -656,8 +646,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
-        $build['videos'] = $skuVideosManager->getVideo($sku_entity, $context);
-
         $settingsKey = ($view_mode === 'matchback') ? 'matchback' : 'productInfo';
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($gallery)
           ? \Drupal::service('renderer')->renderPlain($gallery)

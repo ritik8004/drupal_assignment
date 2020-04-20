@@ -108,16 +108,16 @@ function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SK
   // Check if the gallery has a main image. If not, look for assets.
   if ($context == 'search') {
     // Lookup images on current SKU if its a simple SKU.
-    $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', 'images');
+    $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp');
     $avoid_assets = !empty($main_image_assets) && !empty($main_image_assets[0]['Data']) ? [$main_image_assets[0]['Data']['AssetId']] : [];
-    $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', 'images', $avoid_assets);
+    $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', $avoid_assets);
 
     // If no assets attached & the sku is configurable, try to use the
     // assets attached with first child sku.
     if (empty($main_image_assets) && empty($hover_image_assets) && ($sku->bundle() === 'configurable')) {
-      $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', 'images');
+      $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp');
       $avoid_assets = !empty($main_image_assets) && !empty($main_image_assets[0]['Data']) ? [$main_image_assets[0]['Data']['AssetId']] : [];
-      $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', 'images', $avoid_assets);
+      $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', $avoid_assets);
     }
 
     $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;
@@ -146,7 +146,7 @@ function alshaya_hm_images_alshaya_acm_product_media_items_alter(array &$media, 
   /** @var \Drupal\alshaya_hm_images\SkuAssetManager $assetsManager */
   $assetsManager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
 
-  $assets = $assetsManager->getAssets($sku, 'images');
+  $assets = $assetsManager->getAssets($sku);
 
   foreach ($assets ?? [] as $asset) {
     if (!empty($asset['drupal_uri'])) {
@@ -192,11 +192,11 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
       return;
     }
 
-    $teaser_assets = $sku_assets_manager->getSkuAssets($sku_for_gallery, 'teaser', 'images');
+    $teaser_assets = $sku_assets_manager->getSkuAssets($sku_for_gallery, 'teaser');
 
     // Try once with plp assets if nothing found for teaser.
     if (empty($teaser_assets)) {
-      $teaser_assets = $sku_assets_manager->getSkuAssets($sku_for_gallery, 'plp', 'images');
+      $teaser_assets = $sku_assets_manager->getSkuAssets($sku_for_gallery, 'plp');
     }
 
     if (!empty($teaser_assets)) {
@@ -205,7 +205,7 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
     }
   }
   elseif ($context == 'pdp' && !empty($build['free_gift_promotions']['#free_sku_code']) && empty($build['free_gift_promotions']['#sku_image'])) {
-    $free_sku_assets = $sku_assets_manager->getSkuAssets($build['free_gift_promotions']['#free_sku_code'], 'swatch', 'images');
+    $free_sku_assets = $sku_assets_manager->getSkuAssets($build['free_gift_promotions']['#free_sku_code'], 'swatch');
 
     if (!empty($free_sku_assets)) {
       $build['free_gift_promotions']['#sku_image'] = [
@@ -229,7 +229,7 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
 
     if ($sku instanceof SKU) {
-      $pdp_images = $sku_assets_manager->getAssetsForSku($sku, 'pdp', 'images');
+      $pdp_images = $sku_assets_manager->getAssetsForSku($sku, 'pdp');
 
       foreach ($pdp_images['pdp_thumbnail'] ?? [] as $key => $thumbnail) {
         $thumb_images[$key]['zoomurl'] = $pdp_images['pdp_fullscreen'][$key]['url'];
@@ -287,7 +287,7 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
 
             $assets = [];
             if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
-              $assets = $sku_asset_manager->getSkuAssets($variant_sku, 'swatch', 'images');
+              $assets = $sku_asset_manager->getSkuAssets($variant_sku, 'swatch');
             }
 
             $options[$key] = $variant_sku->get('attr_color_label')->getString();

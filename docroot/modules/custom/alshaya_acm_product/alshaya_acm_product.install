@@ -12,6 +12,19 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add config to turn video download on/off.
+ */
+function alshaya_acm_product_update_8056() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new settings as enable_size_grouping_filter.
  */
 function alshaya_acm_product_update_8055() {

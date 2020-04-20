@@ -154,6 +154,13 @@ class SkuAssetManager {
   private $cacheMediaFileMapping;
 
   /**
+   * Config alshaya_acm_product.settings.
+   *
+   * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
+   */
+  protected $acmProductSettings;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -216,6 +223,7 @@ class SkuAssetManager {
     $this->cacheMediaFileMapping = $cache_media_file_mapping;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
+    $this->acmProductSettings = $this->configFactory->get('alshaya_acm_product.settings');
   }
 
   /**
@@ -223,15 +231,13 @@ class SkuAssetManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU Entity.
-   * @param string $asset_type
-   *   Type of the asset to be rendered.
    *
    * @return array
    *   Get assets for SKU.
    *
    * @throws \Exception
    */
-  public function getAssets(SKU $sku, $asset_type) {
+  public function getAssets(SKU $sku) {
     $assets = unserialize($sku->get('attr_assets')->getString());
 
     if (!is_array($assets) || empty($assets)) {
@@ -239,17 +245,12 @@ class SkuAssetManager {
     }
 
     $save = FALSE;
+    $download = TRUE;
 
     foreach ($assets as $index => &$asset) {
       // Sanity check, we always need asset id.
       if (empty($asset['Data']['AssetId'])) {
         unset($assets[$index]);
-        continue;
-      }
-
-      // We want to process assets of type $asset_type only.
-      $type = ($asset['Data']['AssetType'] === 'MovingMedia') ? 'videos' : 'images';
-      if ($asset_type !== $type) {
         continue;
       }
 
@@ -270,32 +271,21 @@ class SkuAssetManager {
         unset($asset['fid']);
       }
 
-      switch ($type) {
-        case 'images':
-          if (empty(SKU::$downloadImage)) {
-            unset($assets[$index]);
-            continue;
-          }
+      if (empty(SKU::$downloadImage)) {
+        unset($assets[$index]);
+        continue;
+      }
 
-          // Use pims/asset id for lock key.
-          try {
-            $file = $this->downloadImage($asset, $sku->getSku());
-          }
-          catch (\Exception $e) {
-            watchdog_exception('SkuAssetManager', $e);
-          }
-          break;
+      if (($asset['Data']['AssetType'] === 'MovingMedia') && ($this->acmProductSettings->get('pause_videos_download'))) {
+        $download = FALSE;
+      }
 
-        case 'videos':
-          // Use pims/asset id for lock key.
-          try {
-            $file = (!$this->hmImageSettings->get('pause_videos_download'))
-              ? $this->downloadVideo($asset, $sku->getSku()) : '';
-          }
-          catch (\Exception $e) {
-            watchdog_exception('SkuAssetManager', $e);
-          }
-          break;
+      // Use pims/asset id for lock key.
+      try {
+        $file = $download ? $this->downloadAsset($asset, $sku->getSku()) : '';
+      }
+      catch (\Exception $e) {
+        watchdog_exception('SkuAssetManager', $e);
       }
 
       if ($file instanceof FileInterface) {
@@ -318,8 +308,7 @@ class SkuAssetManager {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
 
-      $this->logger->notice('Downloaded new @asset_type asset for sku @sku.', [
-        '@asset_type' => $asset_type,
+      $this->logger->notice('Downloaded new asset for sku @sku.', [
         '@sku' => $sku->getSku(),
       ]);
     }
@@ -330,17 +319,19 @@ class SkuAssetManager {
   }
 
   /**
-   * Download image for PIMS Data and store in Drupal.
+   * Download asset for PIMS Data and store in Drupal.
    *
    * @param array $data
    *   PIMS Data.
    * @param string $sku
    *   SKU of asset.
+   * @param string $asset_type
+   *   Type of asset.
    *
    * @return \Drupal\file\FileInterface|null|string
    *   File entity if image download successful.
    */
-  private function downloadPimsImage(array &$data, string $sku) {
+  private function downloadPimsAsset(array &$data, string $sku, string $asset_type) {
     // If image is blacklisted, block download.
     if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
       return NULL;
@@ -350,7 +341,10 @@ class SkuAssetManager {
     $pims_directory = $this->hmImageSettings->get('pims_directory');
 
     // Prepare the directory path.
-    $directory = 'public://assets-shared/' . trim($data['path'], '/');
+    // @TODO: Need to move video directory to a common folder.
+    $directory = ($asset_type === 'video')
+      ? 'public://hm/videos/' . trim($data['path'], '/')
+      : 'public://assets-shared/' . trim($data['path'], '/');
     $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
 
     // Check if file already exists in the directory.
@@ -375,9 +369,11 @@ class SkuAssetManager {
     }
 
     // Download the file contents.
+    // @TODO: timeout is increased here to successfully download video.
+    // Need to discuss and fix this.
     try {
       $options = [
-        'timeout' => Settings::get('media_download_timeout', 5),
+        'timeout' => Settings::get('media_download_timeout', 500),
       ];
 
       $file_stream = $this->httpClient->get($url, $options);
@@ -563,14 +559,14 @@ class SkuAssetManager {
    *
    * @throws \Exception
    */
-  private function downloadImage(array &$asset, string $sku) {
+  private function downloadAsset(array &$asset, string $sku) {
     $lock_key = '';
+    $type = ($asset['Data']['AssetType'] === 'MovingMedia') ? 'video' : 'image';
 
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {
-
-      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
-      $lock_key = 'download_image_' . $id;
+      $id = $asset['pims_' . $type]['id'] ?? $asset['Data']['AssetId'];
+      $lock_key = 'download_' . $type . '_' . $id;
 
       // Acquire lock to ensure parallel processes are executed one by one.
       do {
@@ -595,8 +591,8 @@ class SkuAssetManager {
     }
 
     $file = NULL;
-    if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
-      $file = $this->downloadPimsImage($asset['pims_image'], $sku);
+    if (isset($asset['pims_' . $type]) && is_array($asset['pims_' . $type])) {
+      $file = $this->downloadPimsAsset($asset['pims_' . $type], $sku, $type);
     }
     elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
       $file = $this->downloadLiquidPixelImage($asset, $sku);
@@ -629,15 +625,13 @@ class SkuAssetManager {
    *   SKU text or full entity object.
    * @param string $page_type
    *   Page on which the asset needs to be rendered.
-   * @param string $asset_type
-   *   Type of the asset to be rendered.
    * @param array $avoid_assets
    *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of urls to sku assets.
    */
-  public function getSkuAssets($sku, $page_type, $asset_type, array $avoid_assets = []) {
+  public function getSkuAssets($sku, $page_type, array $avoid_assets = []) {
     $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $sku = $skuEntity->getSku();
 
@@ -647,7 +641,7 @@ class SkuAssetManager {
       $unserialized_assets = unserialize($assets_data[0]['value']);
 
       if ($unserialized_assets) {
-        $assets = $this->sortSkuAssets($sku, $page_type, $unserialized_assets, $asset_type);
+        $assets = $this->sortSkuAssets($sku, $page_type, $unserialized_assets);
       }
     }
 
@@ -655,7 +649,7 @@ class SkuAssetManager {
       return [];
     }
 
-    $media = $this->getAssets($skuEntity, $asset_type);
+    $media = $this->getAssets($skuEntity);
 
     $return = [];
 
@@ -818,125 +812,111 @@ class SkuAssetManager {
    *   Page on which the asset needs to be rendered.
    * @param array $assets
    *   Array of mixed asset types.
-   * @param string $asset_type
-   *   Type of the asset.
    *
    * @return array
    *   Array of assets sorted by their asset types & angles.
    */
-  public function sortSkuAssets($sku, $page_type, array $assets, $asset_type) {
-    switch ($asset_type) {
-      case 'images':
-        $alshaya_hm_images_config = $this->configFactory->get('alshaya_hm_images.settings');
-        // Fetch weights of asset types based on the pagetype.
-        $sku_asset_type_weights = $alshaya_hm_images_config->get('weights')[$page_type];
+  public function sortSkuAssets($sku, $page_type, array $assets) {
+    $alshaya_hm_images_config = $this->configFactory->get('alshaya_hm_images.settings');
+    // Fetch weights of asset types based on the pagetype.
+    $sku_asset_type_weights = $alshaya_hm_images_config->get('weights')[$page_type];
 
-        // Fetch angle config.
-        $sort_angle_weights = $alshaya_hm_images_config->get('weights')['angle'];
+    // Fetch angle config.
+    $sort_angle_weights = $alshaya_hm_images_config->get('weights')['angle'];
 
-        // Check if there are any overrides for category this product page is
-        // tagged with.
-        $config_overrides = $this->overrideConfig($sku, $page_type);
+    // Check if there are any overrides for category this product page is
+    // tagged with.
+    $config_overrides = $this->overrideConfig($sku, $page_type);
 
-        if (!empty($config_overrides)) {
-          if (isset($config_overrides['weights']['angle'])) {
-            $sort_angle_weights = $config_overrides['weights']['angle'];
-          }
+    if (!empty($config_overrides)) {
+      if (isset($config_overrides['weights']['angle'])) {
+        $sort_angle_weights = $config_overrides['weights']['angle'];
+      }
 
-          if (isset($config_overrides['weights'][$page_type])) {
-            $sku_asset_type_weights = $config_overrides['weights'][$page_type];
-          }
-        }
-        // Create multi-dimensional array of assets keyed by their asset type.
-        if (!empty($assets)) {
-          $grouped_assets = [];
-          foreach ($sku_asset_type_weights as $asset_type => $weight) {
-            $grouped_assets[$asset_type] = $this->filterSkuAssetType($assets, $asset_type);
-          }
+      if (isset($config_overrides['weights'][$page_type])) {
+        $sku_asset_type_weights = $config_overrides['weights'][$page_type];
+      }
+    }
+    // Create multi-dimensional array of assets keyed by their asset type.
+    if (!empty($assets)) {
+      $grouped_assets = [];
+      foreach ($sku_asset_type_weights as $asset_type => $weight) {
+        $grouped_assets[$asset_type] = $this->filterSkuAssetType($assets, $asset_type);
+      }
 
-          // Sort items based on the angle config.
-          foreach ($grouped_assets as $key => $asset) {
-            if (!empty($asset)) {
-              $sort_angle_weights = array_flip($sort_angle_weights);
-              uasort($asset, function ($a, $b) use ($key) {
-                // Different rules for LookBook and reset.
-                if ($key != 'Lookbook') {
-                  // For non-lookbook first check packaging in/out.
-                  // packaging=false first.
-                  // IsMultiPack didn't help, we check Facing now.
-                  $a_packaging = isset($a['Data']['Angle']['Packaging'])
-                    ? (float) $a['Data']['Angle']['Packaging']
-                    : NULL;
-                  $b_packaging = isset($b['Data']['Angle']['Packaging'])
-                    ? (float) $b['Data']['Angle']['Packaging']
-                    : NULL;
+      // Sort items based on the angle config.
+      foreach ($grouped_assets as $key => $asset) {
+        if (!empty($asset)) {
+          $sort_angle_weights = array_flip($sort_angle_weights);
+          uasort($asset, function ($a, $b) use ($key) {
+            // Different rules for LookBook and reset.
+            if ($key != 'Lookbook') {
+              // For non-lookbook first check packaging in/out.
+              // packaging=false first.
+              // IsMultiPack didn't help, we check Facing now.
+              $a_packaging = isset($a['Data']['Angle']['Packaging'])
+                ? (float) $a['Data']['Angle']['Packaging']
+                : NULL;
+              $b_packaging = isset($b['Data']['Angle']['Packaging'])
+                ? (float) $b['Data']['Angle']['Packaging']
+                : NULL;
 
-                  if ($a_packaging != $b_packaging) {
-                    return $a_packaging === 'true' ? -1 : 1;
-                  }
-                }
-
-                $a_multi_pack = isset($a['Data']['IsMultiPack'])
-                  ? $a['Data']['IsMultiPack']
-                  : NULL;
-                $b_multi_pack = isset($b['Data']['IsMultiPack'])
-                  ? $b['Data']['IsMultiPack']
-                  : NULL;
-                if ($a_multi_pack != $b_multi_pack) {
-                  return $a_multi_pack === 'true' ? -1 : 1;
-                }
-
-                // IsMultiPack didn't help, we check Facing now.
-                $a_facing = isset($a['Data']['Angle']['Facing'])
-                  ? (float) $a['Data']['Angle']['Facing']
-                  : 0;
-                $b_facing = isset($b['Data']['Angle']['Facing'])
-                  ? (float) $b['Data']['Angle']['Facing']
-                  : 0;
-
-                if ($a_facing != $b_facing) {
-                  return $a_facing - $b_facing < 0 ? -1 : 1;
-                }
-
-                // Finally sort by Number.
-                $a_number = isset($a['Data']['Angle']['Number'])
-                  ? (float) $a['Data']['Angle']['Number']
-                  : 0;
-
-                $b_number = isset($b['Data']['Angle']['Number'])
-                  ? (float) $b['Data']['Angle']['Number']
-                  : 0;
-
-                if ($a_number != $b_number) {
-                  return $a_number - $b_number < 0 ? -1 : 1;
-                }
-
-                return 0;
-              });
-              $grouped_assets[$key] = $asset;
+              if ($a_packaging != $b_packaging) {
+                return $a_packaging === 'true' ? -1 : 1;
+              }
             }
-            else {
-              unset($grouped_assets[$key]);
+
+            $a_multi_pack = isset($a['Data']['IsMultiPack'])
+              ? $a['Data']['IsMultiPack']
+              : NULL;
+            $b_multi_pack = isset($b['Data']['IsMultiPack'])
+              ? $b['Data']['IsMultiPack']
+              : NULL;
+            if ($a_multi_pack != $b_multi_pack) {
+              return $a_multi_pack === 'true' ? -1 : 1;
             }
-          }
 
-          // Flatten the assets array.
-          $flattened_assets = [];
-          foreach ($grouped_assets as $assets) {
-            $flattened_assets = array_merge($flattened_assets, $assets);
-          }
+            // IsMultiPack didn't help, we check Facing now.
+            $a_facing = isset($a['Data']['Angle']['Facing'])
+              ? (float) $a['Data']['Angle']['Facing']
+              : 0;
+            $b_facing = isset($b['Data']['Angle']['Facing'])
+              ? (float) $b['Data']['Angle']['Facing']
+              : 0;
 
-          return $flattened_assets;
+            if ($a_facing != $b_facing) {
+              return $a_facing - $b_facing < 0 ? -1 : 1;
+            }
+
+            // Finally sort by Number.
+            $a_number = isset($a['Data']['Angle']['Number'])
+              ? (float) $a['Data']['Angle']['Number']
+              : 0;
+
+            $b_number = isset($b['Data']['Angle']['Number'])
+              ? (float) $b['Data']['Angle']['Number']
+              : 0;
+
+            if ($a_number != $b_number) {
+              return $a_number - $b_number < 0 ? -1 : 1;
+            }
+
+            return 0;
+          });
+          $grouped_assets[$key] = $asset;
         }
-        break;
-
-      case 'videos':
-        $filtered_assets = $this->filterSkuAssetType($assets, 'MovingMedia');
-
-        if (!empty($filtered_assets)) {
-          return $filtered_assets;
+        else {
+          unset($grouped_assets[$key]);
         }
-        break;
+      }
+
+      // Flatten the assets array.
+      $flattened_assets = [];
+      foreach ($grouped_assets as $assets) {
+        $flattened_assets = array_merge($flattened_assets, $assets);
+      }
+
+      return $flattened_assets;
     }
 
     return $assets;
@@ -972,20 +952,18 @@ class SkuAssetManager {
    *   Parent sku for which we pulling child assets.
    * @param string $context
    *   Page on which the asset needs to be rendered.
-   * @param string $asset_type
-   *   Type of the asset to be rendered.
    * @param array $avoid_assets
    *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of sku child assets.
    */
-  public function getChildSkuAssets(SKU $sku, $context, $asset_type, array $avoid_assets = []) {
+  public function getChildSkuAssets(SKU $sku, $context, array $avoid_assets = []) {
     $child_skus = $this->skuManager->getValidChildSkusAsString($sku);
 
     $assets = [];
     foreach ($child_skus ?? [] as $child_sku) {
-      $assets[$child_sku] = $this->getSkuAssets($child_sku, $context, $asset_type, $avoid_assets);
+      $assets[$child_sku] = $this->getSkuAssets($child_sku, $context, $avoid_assets);
     }
 
     return $assets;
@@ -1078,19 +1056,17 @@ class SkuAssetManager {
    *   Parent Sku.
    * @param string $page_type
    *   Type of page.
-   * @param string $asset_type
-   *   Type of asset.
    *
    * @return array|assets
-   *   Array of assets (images/videos) for the SKU.
+   *   Array of assets for the SKU.
    */
-  public function getAssetsForSku(SKU $sku, $page_type, $asset_type) {
+  public function getAssetsForSku(SKU $sku, $page_type) {
     $assets = [];
     if ($sku->bundle() == 'simple') {
-      $assets = $this->getSkuAssets($sku, $page_type, $asset_type);
+      $assets = $this->getSkuAssets($sku, $page_type);
     }
     elseif ($sku->bundle() == 'configurable') {
-      $assets = $this->getChildSkuAssets($sku, $page_type, $asset_type);
+      $assets = $this->getChildSkuAssets($sku, $page_type);
     }
     return $assets;
   }
@@ -1143,182 +1119,6 @@ class SkuAssetManager {
     }
 
     return TRUE;
-  }
-
-  /**
-   * Download Drupal Video file.
-   *
-   * @param array $asset
-   *   Asset data.
-   * @param string $sku
-   *   SKU of asset.
-   *
-   * @return \Drupal\file\FileInterface|null|string
-   *   File from asset if available.
-   *
-   * @throws \Exception
-   */
-  private function downloadVideo(array &$asset, string $sku) {
-    $lock_key = '';
-
-    // Allow disabling this through settings.
-    if (Settings::get('media_avoid_parallel_downloads', 1)) {
-
-      $id = $asset['pims_video']['id'] ?? $asset['Data']['AssetId'];
-      $lock_key = 'download_video_' . $id;
-
-      // Acquire lock to ensure parallel processes are executed one by one.
-      do {
-        $lock_acquired = $this->lock->acquire($lock_key);
-
-        // Sleep for half a second before trying again.
-        if (!$lock_acquired) {
-          usleep(500000);
-
-          // Check once if downloaded by another process.
-          $cache = $this->cacheMediaFileMapping->get($lock_key);
-          if ($cache && $cache->data) {
-            $file = $this->fileStorage->load($cache->data);
-            if ($file instanceof FileInterface) {
-              return $file;
-            }
-
-            throw new \Exception(sprintf('File id %s mapped for %s in cache invalid, not retrying', $cache->data, $id));
-          }
-        }
-      } while (!$lock_acquired);
-    }
-
-    $file = NULL;
-    if (isset($asset['pims_video']) && is_array($asset['pims_video'])) {
-      $file = $this->downloadPimsVideo($asset['pims_video'], $sku);
-    }
-
-    if ($file instanceof FileInterface) {
-      if ($lock_key) {
-        // Add file id in cache for other processes to be able to use.
-        $this->cacheMediaFileMapping->set($lock_key, $file->id(), $this->time->getRequestTime() + 120);
-      }
-
-      $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
-        '@fid' => $file->id(),
-        '@uri' => $file->getFileUri(),
-        '@id' => $id,
-      ]);
-    }
-
-    if ($lock_key) {
-      $this->lock->release($lock_key);
-    }
-
-    return $file;
-  }
-
-  /**
-   * Download video for PIMS Data and store in Drupal.
-   *
-   * @param array $data
-   *   PIMS Data.
-   * @param string $sku
-   *   SKU of asset.
-   *
-   * @return \Drupal\file\FileInterface|null|string
-   *   File entity if image download successful.
-   */
-  private function downloadPimsVideo(array &$data, string $sku) {
-    // If image is blacklisted, block download.
-    if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
-      return NULL;
-    }
-
-    $base_url = $this->hmImageSettings->get('pims_base_url');
-    $pims_directory = $this->hmImageSettings->get('pims_directory');
-
-    // Prepare the directory path.
-    $directory = 'public://assets-shared/videos/' . trim($data['path'], '/');
-    $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
-
-    // Check if file already exists in the directory.
-    if (file_exists($target)) {
-      // If file exists in directory, check if file entity exists.
-      $uri = $this->fileStorage->loadByProperties(['uri' => $target]);
-      $files = reset($uri);
-      if (!empty($files) && $files instanceof FileInterface) {
-        return $files;
-      }
-    }
-
-    $url = implode('/', [
-      trim($base_url, '/'),
-      trim($pims_directory, '/'),
-      trim($data['path'], '/'),
-      trim($data['filename'], '/'),
-    ]);
-
-    if (!$this->validateFileExtension($sku, $url)) {
-      return FALSE;
-    }
-
-    // Download the file contents.
-    try {
-      // @TODO: Need to discuss and update this timeout.
-      $options = [
-        'timeout' => Settings::get('media_download_timeout', 500),
-      ];
-      $file_stream = $this->httpClient->get($url, $options);
-      $file_data = $file_stream->getBody();
-      $file_data_length = $file_stream->getHeader('Content-Length');
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to download asset file for sku @sku from @url, error: @message', [
-        '@sku' => $sku,
-        '@url' => $url,
-        '@message' => $e->getMessage(),
-      ]);
-    }
-
-    // Check to ensure empty file is not saved in SKU.
-    // Using Content-Length Header to check for valid image data, sometimes we
-    // also get a 0 byte image with response 200 instead of 404.
-    // So only checking $file_data is not enough.
-    if (!isset($file_data_length) || $file_data_length[0] === '0') {
-      // @TODO: SAVE blacklist info in a way so it does not have dependency on SKU.
-      // Blacklist this image URL to prevent subsequent downloads for 1 day.
-      $data['blacklist_expiry'] = strtotime('+1 day');
-      // Leave a message for developers to find out why this happened.
-      $this->logger->error('Empty file detected during download, blacklisted for 1 day from now. File remote id: @remote_id, File URL: @url on SKU @sku. @trace', [
-        '@url' => $url,
-        '@sku' => $sku,
-        '@remote_id' => $data['filename'],
-        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
-      ]);
-
-      return 'blacklisted';
-    }
-
-    // Check if image was blacklisted, remove it from blacklist.
-    if (isset($data['blacklist_expiry'])) {
-      unset($data['blacklist_expiry']);
-    }
-
-    // Prepare the directory.
-    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-    try {
-      $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
-
-      if (!($file instanceof FileInterface)) {
-        throw new \Exception('Failed to save asset file');
-      }
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to save asset file for sku @sku at @uri, error: @message', [
-        '@sku' => $sku,
-        '@uri' => $target,
-        '@message' => $e->getMessage(),
-      ]);
-    }
-
-    return $file ?? NULL;
   }
 
 }

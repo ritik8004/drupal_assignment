@@ -61,14 +61,15 @@ weights:
     DETAIL_IMAGE: 5
   pdp:
     Lookbook: 1
-    Environmental: 2
-    CreativeDetail: 3
-    DescriptiveStillLife: 4
-    Pictogram: 5
-    DescriptiveDetail: 6
-    MODEL_IMAGE: 7
-    STILL_LIFE_FRONT_URL: 8
-    DETAIL_IMAGE: 9
+    MovingMedia: 2
+    Environmental: 3
+    CreativeDetail: 4
+    DescriptiveStillLife: 5
+    Pictogram: 6
+    DescriptiveDetail: 7
+    MODEL_IMAGE: 8
+    STILL_LIFE_FRONT_URL: 9
+    DETAIL_IMAGE: 10
   teaser:
     Lookbook: 1
     DescriptiveStillLife: 2
@@ -121,7 +122,6 @@ style_identifiers:
   order_detail: 'file:/product/thumb'
   checkout_summary: 'file:/product/thumb'
 swatch_plp_limit: 3
-pause_videos_download: FALSE
 # Sample structure for override, until we have a config UI.
 #overrides:
 #  146:
