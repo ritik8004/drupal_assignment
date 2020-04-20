@@ -121,6 +121,7 @@ style_identifiers:
   order_detail: 'file:/product/thumb'
   checkout_summary: 'file:/product/thumb'
 swatch_plp_limit: 3
+pause_videos_download: FALSE
 # Sample structure for override, until we have a config UI.
 #overrides:
 #  146:
