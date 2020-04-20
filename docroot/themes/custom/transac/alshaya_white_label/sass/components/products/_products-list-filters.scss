@@ -152,6 +152,7 @@ html {
 
     &__inner {
       padding-bottom: 9.375rem;
+      // filter scroll at all resolutions.
       overflow-y: auto;
 
       .block-views-exposed-filter-blockalshaya-product-list-block-1,
