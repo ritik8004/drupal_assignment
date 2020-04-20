@@ -188,6 +188,12 @@ class AlshayaFacetsPrettyPathsHelper {
       return $value;
     }
 
+    // First check static value.
+    static $static;
+    if (!empty($static[$cid])) {
+      return $static[$cid];
+    }
+
     $cache = $this->cache->get($cid);
     if (!empty($cache)) {
       return $cache->data;
@@ -325,6 +331,7 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     $this->cache->set($cid, $encoded, Cache::PERMANENT, $tags);
+    $static[$cid] = $encoded;
     return $encoded;
   }
 
