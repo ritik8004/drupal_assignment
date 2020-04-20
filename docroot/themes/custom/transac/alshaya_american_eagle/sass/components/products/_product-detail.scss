@@ -164,6 +164,8 @@
           text-transform: uppercase;
           width: 100%;
           margin-#{$left}: 0;
+          font-family: $aeo-regular;
+          font-weight: 600;
 
           &.fix-button {
             @include breakpoint($only-mobile) {

@@ -1,8 +1,7 @@
 // share fields on product detail page
 .sharethis-wrapper {
   @include breakpoint($only-mobile) {
-    border-bottom: 0;
-    margin: 1rem 0 5rem;
+    margin: 1rem 0 0;
   }
 
   > span {
