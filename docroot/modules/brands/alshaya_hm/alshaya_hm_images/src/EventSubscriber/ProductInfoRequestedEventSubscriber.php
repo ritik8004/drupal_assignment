@@ -57,6 +57,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   public function onProductInfoRequested(ProductInfoRequestedEvent $event) {
     switch ($event->getFieldCode()) {
       case 'media':
+      case 'videos':
         $this->processMedia($event);
         break;
 
@@ -82,6 +83,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $context = $event->getContext();
+    $asset_type = ($event->getFieldCode() === 'media') ? 'images' : $event->getFieldCode();
 
     // We show same images for pdp, modal, modal-magazine.
     // To avoid adding extra configs for them (sorting assets) we use pdp
@@ -91,12 +93,12 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     switch ($context) {
       case 'cart':
       case 'pdp':
-        $media = $this->skuAssetsManager->getImagesForSku($sku, $context);
+        $media = $this->skuAssetsManager->getAssetsForSku($sku, $context, $asset_type);
 
         $return = [];
         foreach ($media as $item) {
           $item['label'] = $sku->label();
-          $return['media_items']['images'][] = $item;
+          $return['media_items'][$asset_type][] = $item;
         }
 
         $event->setValue($return);
