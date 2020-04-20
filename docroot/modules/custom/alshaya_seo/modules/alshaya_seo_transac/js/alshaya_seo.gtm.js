@@ -52,8 +52,6 @@
 
         var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
         $(this).attr('gtm-main-sku', variantInfo.parent_sku);
-        $(this).attr('gtm-product-sku', variant);
-        $(this).attr('gtm-price', variantInfo['gtm_price']);
         Drupal.alshaya_seo_push_product_details_view();
       });
 
