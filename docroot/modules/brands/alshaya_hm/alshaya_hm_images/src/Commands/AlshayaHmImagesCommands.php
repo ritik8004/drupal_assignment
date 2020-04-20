@@ -115,7 +115,7 @@ class AlshayaHmImagesCommands extends DrushCommands {
         continue;
       }
 
-      $assets = $manager->getAssets($entity);
+      $assets = $manager->getAssets($entity, 'images');
       $messages = [];
       foreach ($assets ?? [] as $asset) {
         if ((isset($asset['is_old_format']) && $asset['is_old_format']) || empty($asset['Data']['FilePath'])) {

@@ -224,14 +224,14 @@ class SkuAssetManager {
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU Entity.
    * @param string $asset_type
-   *   (optional) Type of the asset to be rendered.
+   *   Type of the asset to be rendered.
    *
    * @return array
    *   Get assets for SKU.
    *
    * @throws \Exception
    */
-  public function getAssets(SKU $sku, $asset_type = 'images') {
+  public function getAssets(SKU $sku, $asset_type) {
     $assets = unserialize($sku->get('attr_assets')->getString());
 
     if (!is_array($assets) || empty($assets)) {
@@ -247,6 +247,7 @@ class SkuAssetManager {
         continue;
       }
 
+      // We want to process assets of type $asset_type only.
       $type = ($asset['Data']['AssetType'] === 'MovingMedia') ? 'videos' : 'images';
       if ($asset_type !== $type) {
         continue;
@@ -269,19 +270,32 @@ class SkuAssetManager {
         unset($asset['fid']);
       }
 
-      if (empty(SKU::$downloadImage)) {
-        unset($assets[$index]);
-        continue;
-      }
+      switch ($type) {
+        case 'images':
+          if (empty(SKU::$downloadImage)) {
+            unset($assets[$index]);
+            continue;
+          }
 
-      // Use pims/asset id for lock key.
-      try {
-        $file = ($type === 'videos')
-        ? $this->downloadVideo($asset, $sku->getSku())
-        : $this->downloadImage($asset, $sku->getSku());
-      }
-      catch (\Exception $e) {
-        watchdog_exception('SkuAssetManager', $e);
+          // Use pims/asset id for lock key.
+          try {
+            $file = $this->downloadImage($asset, $sku->getSku());
+          }
+          catch (\Exception $e) {
+            watchdog_exception('SkuAssetManager', $e);
+          }
+          break;
+
+        case 'videos':
+          // Use pims/asset id for lock key.
+          try {
+            $file = (!$this->hmImageSettings->get('pause_videos_download'))
+              ? $this->downloadVideo($asset, $sku->getSku()) : '';
+          }
+          catch (\Exception $e) {
+            watchdog_exception('SkuAssetManager', $e);
+          }
+          break;
       }
 
       if ($file instanceof FileInterface) {
@@ -304,7 +318,7 @@ class SkuAssetManager {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
 
-      $this->logger->notice('Downloaded new asset @asset_type for sku @sku.', [
+      $this->logger->notice('Downloaded new @asset_type asset for sku @sku.', [
         '@asset_type' => $asset_type,
         '@sku' => $sku->getSku(),
       ]);
@@ -615,15 +629,15 @@ class SkuAssetManager {
    *   SKU text or full entity object.
    * @param string $page_type
    *   Page on which the asset needs to be rendered.
+   * @param string $asset_type
+   *   Type of the asset to be rendered.
    * @param array $avoid_assets
    *   (optional) Array of AssetId to avoid.
-   * @param string $asset_type
-   *   (optional) Type of the asset to be rendered.
    *
    * @return array
    *   Array of urls to sku assets.
    */
-  public function getSkuAssets($sku, $page_type, array $avoid_assets = [], $asset_type = 'images') {
+  public function getSkuAssets($sku, $page_type, $asset_type, array $avoid_assets = []) {
     $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $sku = $skuEntity->getSku();
 
@@ -633,9 +647,7 @@ class SkuAssetManager {
       $unserialized_assets = unserialize($assets_data[0]['value']);
 
       if ($unserialized_assets) {
-        $assets = ($asset_type === 'videos')
-          ? $this->filterSkuAssetType($unserialized_assets, 'MovingMedia')
-          : $this->sortSkuAssets($sku, $page_type, $unserialized_assets);
+        $assets = $this->sortSkuAssets($sku, $page_type, $unserialized_assets, $asset_type);
       }
     }
 
@@ -806,111 +818,125 @@ class SkuAssetManager {
    *   Page on which the asset needs to be rendered.
    * @param array $assets
    *   Array of mixed asset types.
+   * @param string $asset_type
+   *   Type of the asset.
    *
    * @return array
    *   Array of assets sorted by their asset types & angles.
    */
-  public function sortSkuAssets($sku, $page_type, array $assets) {
-    $alshaya_hm_images_config = $this->configFactory->get('alshaya_hm_images.settings');
-    // Fetch weights of asset types based on the pagetype.
-    $sku_asset_type_weights = $alshaya_hm_images_config->get('weights')[$page_type];
+  public function sortSkuAssets($sku, $page_type, array $assets, $asset_type) {
+    switch ($asset_type) {
+      case 'images':
+        $alshaya_hm_images_config = $this->configFactory->get('alshaya_hm_images.settings');
+        // Fetch weights of asset types based on the pagetype.
+        $sku_asset_type_weights = $alshaya_hm_images_config->get('weights')[$page_type];
 
-    // Fetch angle config.
-    $sort_angle_weights = $alshaya_hm_images_config->get('weights')['angle'];
+        // Fetch angle config.
+        $sort_angle_weights = $alshaya_hm_images_config->get('weights')['angle'];
 
-    // Check if there are any overrides for category this product page is
-    // tagged with.
-    $config_overrides = $this->overrideConfig($sku, $page_type);
+        // Check if there are any overrides for category this product page is
+        // tagged with.
+        $config_overrides = $this->overrideConfig($sku, $page_type);
 
-    if (!empty($config_overrides)) {
-      if (isset($config_overrides['weights']['angle'])) {
-        $sort_angle_weights = $config_overrides['weights']['angle'];
-      }
+        if (!empty($config_overrides)) {
+          if (isset($config_overrides['weights']['angle'])) {
+            $sort_angle_weights = $config_overrides['weights']['angle'];
+          }
 
-      if (isset($config_overrides['weights'][$page_type])) {
-        $sku_asset_type_weights = $config_overrides['weights'][$page_type];
-      }
-    }
-    // Create multi-dimensional array of assets keyed by their asset type.
-    if (!empty($assets)) {
-      $grouped_assets = [];
-      foreach ($sku_asset_type_weights as $asset_type => $weight) {
-        $grouped_assets[$asset_type] = $this->filterSkuAssetType($assets, $asset_type);
-      }
-
-      // Sort items based on the angle config.
-      foreach ($grouped_assets as $key => $asset) {
-        if (!empty($asset)) {
-          $sort_angle_weights = array_flip($sort_angle_weights);
-          uasort($asset, function ($a, $b) use ($key) {
-            // Different rules for LookBook and reset.
-            if ($key != 'Lookbook') {
-              // For non-lookbook first check packaging in/out.
-              // packaging=false first.
-              // IsMultiPack didn't help, we check Facing now.
-              $a_packaging = isset($a['Data']['Angle']['Packaging'])
-                ? (float) $a['Data']['Angle']['Packaging']
-                : NULL;
-              $b_packaging = isset($b['Data']['Angle']['Packaging'])
-                ? (float) $b['Data']['Angle']['Packaging']
-                : NULL;
-
-              if ($a_packaging != $b_packaging) {
-                return $a_packaging === 'true' ? -1 : 1;
-              }
-            }
-
-            $a_multi_pack = isset($a['Data']['IsMultiPack'])
-              ? $a['Data']['IsMultiPack']
-              : NULL;
-            $b_multi_pack = isset($b['Data']['IsMultiPack'])
-              ? $b['Data']['IsMultiPack']
-              : NULL;
-            if ($a_multi_pack != $b_multi_pack) {
-              return $a_multi_pack === 'true' ? -1 : 1;
-            }
-
-            // IsMultiPack didn't help, we check Facing now.
-            $a_facing = isset($a['Data']['Angle']['Facing'])
-              ? (float) $a['Data']['Angle']['Facing']
-              : 0;
-            $b_facing = isset($b['Data']['Angle']['Facing'])
-              ? (float) $b['Data']['Angle']['Facing']
-              : 0;
-
-            if ($a_facing != $b_facing) {
-              return $a_facing - $b_facing < 0 ? -1 : 1;
-            }
-
-            // Finally sort by Number.
-            $a_number = isset($a['Data']['Angle']['Number'])
-              ? (float) $a['Data']['Angle']['Number']
-              : 0;
-
-            $b_number = isset($b['Data']['Angle']['Number'])
-              ? (float) $b['Data']['Angle']['Number']
-              : 0;
-
-            if ($a_number != $b_number) {
-              return $a_number - $b_number < 0 ? -1 : 1;
-            }
-
-            return 0;
-          });
-          $grouped_assets[$key] = $asset;
+          if (isset($config_overrides['weights'][$page_type])) {
+            $sku_asset_type_weights = $config_overrides['weights'][$page_type];
+          }
         }
-        else {
-          unset($grouped_assets[$key]);
+        // Create multi-dimensional array of assets keyed by their asset type.
+        if (!empty($assets)) {
+          $grouped_assets = [];
+          foreach ($sku_asset_type_weights as $asset_type => $weight) {
+            $grouped_assets[$asset_type] = $this->filterSkuAssetType($assets, $asset_type);
+          }
+
+          // Sort items based on the angle config.
+          foreach ($grouped_assets as $key => $asset) {
+            if (!empty($asset)) {
+              $sort_angle_weights = array_flip($sort_angle_weights);
+              uasort($asset, function ($a, $b) use ($key) {
+                // Different rules for LookBook and reset.
+                if ($key != 'Lookbook') {
+                  // For non-lookbook first check packaging in/out.
+                  // packaging=false first.
+                  // IsMultiPack didn't help, we check Facing now.
+                  $a_packaging = isset($a['Data']['Angle']['Packaging'])
+                    ? (float) $a['Data']['Angle']['Packaging']
+                    : NULL;
+                  $b_packaging = isset($b['Data']['Angle']['Packaging'])
+                    ? (float) $b['Data']['Angle']['Packaging']
+                    : NULL;
+
+                  if ($a_packaging != $b_packaging) {
+                    return $a_packaging === 'true' ? -1 : 1;
+                  }
+                }
+
+                $a_multi_pack = isset($a['Data']['IsMultiPack'])
+                  ? $a['Data']['IsMultiPack']
+                  : NULL;
+                $b_multi_pack = isset($b['Data']['IsMultiPack'])
+                  ? $b['Data']['IsMultiPack']
+                  : NULL;
+                if ($a_multi_pack != $b_multi_pack) {
+                  return $a_multi_pack === 'true' ? -1 : 1;
+                }
+
+                // IsMultiPack didn't help, we check Facing now.
+                $a_facing = isset($a['Data']['Angle']['Facing'])
+                  ? (float) $a['Data']['Angle']['Facing']
+                  : 0;
+                $b_facing = isset($b['Data']['Angle']['Facing'])
+                  ? (float) $b['Data']['Angle']['Facing']
+                  : 0;
+
+                if ($a_facing != $b_facing) {
+                  return $a_facing - $b_facing < 0 ? -1 : 1;
+                }
+
+                // Finally sort by Number.
+                $a_number = isset($a['Data']['Angle']['Number'])
+                  ? (float) $a['Data']['Angle']['Number']
+                  : 0;
+
+                $b_number = isset($b['Data']['Angle']['Number'])
+                  ? (float) $b['Data']['Angle']['Number']
+                  : 0;
+
+                if ($a_number != $b_number) {
+                  return $a_number - $b_number < 0 ? -1 : 1;
+                }
+
+                return 0;
+              });
+              $grouped_assets[$key] = $asset;
+            }
+            else {
+              unset($grouped_assets[$key]);
+            }
+          }
+
+          // Flatten the assets array.
+          $flattened_assets = [];
+          foreach ($grouped_assets as $assets) {
+            $flattened_assets = array_merge($flattened_assets, $assets);
+          }
+
+          return $flattened_assets;
         }
-      }
+        break;
 
-      // Flatten the assets array.
-      $flattened_assets = [];
-      foreach ($grouped_assets as $assets) {
-        $flattened_assets = array_merge($flattened_assets, $assets);
-      }
+      case 'videos':
+        $filtered_assets = $this->filterSkuAssetType($assets, 'MovingMedia');
 
-      return $flattened_assets;
+        if (!empty($filtered_assets)) {
+          return $filtered_assets;
+        }
+        break;
     }
 
     return $assets;
@@ -946,20 +972,20 @@ class SkuAssetManager {
    *   Parent sku for which we pulling child assets.
    * @param string $context
    *   Page on which the asset needs to be rendered.
+   * @param string $asset_type
+   *   Type of the asset to be rendered.
    * @param array $avoid_assets
    *   (optional) Array of AssetId to avoid.
-   * @param string $asset_type
-   *   (optional) Type of the asset to be rendered.
    *
    * @return array
    *   Array of sku child assets.
    */
-  public function getChildSkuAssets(SKU $sku, $context, array $avoid_assets = [], $asset_type = 'images') {
+  public function getChildSkuAssets(SKU $sku, $context, $asset_type, array $avoid_assets = []) {
     $child_skus = $this->skuManager->getValidChildSkusAsString($sku);
 
     $assets = [];
     foreach ($child_skus ?? [] as $child_sku) {
-      $assets[$child_sku] = $this->getSkuAssets($child_sku, $context, $avoid_assets, $asset_type);
+      $assets[$child_sku] = $this->getSkuAssets($child_sku, $context, $asset_type, $avoid_assets);
     }
 
     return $assets;
@@ -1058,13 +1084,13 @@ class SkuAssetManager {
    * @return array|assets
    *   Array of assets (images/videos) for the SKU.
    */
-  public function getAssetsForSku(SKU $sku, $page_type, $asset_type = 'images') {
+  public function getAssetsForSku(SKU $sku, $page_type, $asset_type) {
     $assets = [];
     if ($sku->bundle() == 'simple') {
-      $assets = $this->getSkuAssets($sku, $page_type, [], $asset_type);
+      $assets = $this->getSkuAssets($sku, $page_type, $asset_type);
     }
     elseif ($sku->bundle() == 'configurable') {
-      $assets = $this->getChildSkuAssets($sku, $page_type);
+      $assets = $this->getChildSkuAssets($sku, $page_type, $asset_type);
     }
     return $assets;
   }
