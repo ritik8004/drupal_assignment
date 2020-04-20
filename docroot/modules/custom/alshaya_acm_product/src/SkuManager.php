@@ -2819,6 +2819,9 @@ class SkuManager {
 
       case 'magazine':
         return $context . '-' . $pdp_layout;
+
+      case 'magazine_v2':
+        return $context . '-' . $pdp_layout;
     }
   }
 

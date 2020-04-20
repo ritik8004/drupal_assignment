@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "algoliasearch": "^3.34.0",
+    "alshaya_pdp_react": "file:alshaya_pdp_react",
     "axios": "^0.19.0",
     "cleave.js": "^1.5.6",
     "google-maps-react": "^2.0.2",
