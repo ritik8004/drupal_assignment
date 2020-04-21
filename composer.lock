@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "51efb10725cc69e5f0b5313d25854f0f",
+    "content-hash": "01b72b20d8cd25c812c8398c47d7277d",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -3408,7 +3408,7 @@
                 "phpcodesniffer-search-depth": 4,
                 "patches_applied": {
                     "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-01-10/acquia_connector-2871721-25.patch",
-                    "Set index writable again after conditions are met": "patches/set-index-writable-again-after-conditions-are-met.patch"
+                    "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2020-04-21/2922201-16.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5397,7 +5397,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.9",
-                    "datestamp": "1574140673",
+                    "datestamp": "1549832280",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5415,10 +5415,6 @@
                 {
                     "name": "e0ipso",
                     "homepage": "https://www.drupal.org/user/550110"
-                },
-                {
-                    "name": "eojthebrave",
-                    "homepage": "https://www.drupal.org/user/79230"
                 }
             ],
             "description": "Declare all the consumers of your API",
