@@ -23,6 +23,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\rest\ModifiedResourceResponse;
 use http\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -386,7 +387,12 @@ class PromotionController extends ControllerBase {
    */
   public function getPromotionDynamicLabelForCart(Request $request) {
     $get = $request->query->all();
-    $cart = CartData::createFromArray($get);
+    try {
+      $cart = CartData::createFromArray($get);
+    }
+    catch (\Exception $e) {
+      return new ModifiedResourceResponse();
+    }
 
     // Add cache metadata.
     $cache_array = [
@@ -407,7 +413,7 @@ class PromotionController extends ControllerBase {
     ];
 
     foreach ($this->promotionsManager->getCartPromotions($cart->getAppliedRules()) ?? [] as $rule_id => $promotion) {
-      $promotion_data = $this->promotionsManager->getPromotionData($promotion);
+      $promotion_data = $this->promotionsManager->getPromotionData($promotion, $cart);
       if (!empty($promotion_data)) {
         $cartLabels['qualified'][$rule_id] = [
           'rule_id' => $rule_id,
@@ -420,7 +426,7 @@ class PromotionController extends ControllerBase {
     $applicableInactivePromotion = $this->promotionsManager->getInactiveCartPromotion($cart->getAppliedRules());
     if ($applicableInactivePromotion instanceof NodeInterface) {
       $rule_id = $applicableInactivePromotion->get('field_acq_promotion_rule_id')->getString();
-      $promotion_data = $this->promotionsManager->getPromotionData($applicableInactivePromotion, FALSE);
+      $promotion_data = $this->promotionsManager->getPromotionData($applicableInactivePromotion, $cart, FALSE);
 
       if (!empty($promotion_data)) {
         $cartLabels['next_eligible'] = [
@@ -428,6 +434,7 @@ class PromotionController extends ControllerBase {
           'type' => $promotion_data['type'],
           'label' => $promotion_data['label'],
           'threshold_reached' => !empty($promotion_data['threshold_reached']),
+          'coupon' => $promotion_data['coupon'] ?? '',
         ];
       }
     }

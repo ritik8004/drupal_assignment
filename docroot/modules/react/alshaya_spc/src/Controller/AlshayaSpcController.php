@@ -151,6 +151,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart',
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
+          'alshaya_acm_promotion/basket_labels_manager',
         ],
         'drupalSettings' => [
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
