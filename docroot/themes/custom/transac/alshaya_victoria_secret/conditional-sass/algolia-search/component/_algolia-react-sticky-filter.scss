@@ -15,7 +15,7 @@
       .show-all-filters-algolia,
       .block-facet-blockcategory-facet-search {
         @include breakpoint($only-mobile) {
-          top: 5.625rem;
+          top: 2.75rem;
         }
       }
     }
