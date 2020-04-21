@@ -282,7 +282,7 @@ class SkuAssetManager {
 
       // Use pims/asset id for lock key.
       try {
-        $file = $download ? $this->downloadAsset($asset, $sku->getSku()) : '';
+        $file = $download ? $this->downloadAsset($asset, $sku->getSku()) : NULL;
       }
       catch (\Exception $e) {
         watchdog_exception('SkuAssetManager', $e);
@@ -369,11 +369,13 @@ class SkuAssetManager {
     }
 
     // Download the file contents.
-    // @TODO: timeout is increased here to successfully download video.
-    // Need to discuss and fix this.
     try {
+      $timeout = Settings::get('media_download_timeout_' . $asset_type, NULL);
+      if (!isset($timeout)) {
+        $timeout = Settings::get('media_download_timeout', 5);
+      }
       $options = [
-        'timeout' => Settings::get('media_download_timeout', 500),
+        'timeout' => $timeout,
       ];
 
       $file_stream = $this->httpClient->get($url, $options);
@@ -561,7 +563,7 @@ class SkuAssetManager {
    */
   private function downloadAsset(array &$asset, string $sku) {
     $lock_key = '';
-    $type = ($asset['Data']['AssetType'] === 'MovingMedia') ? 'video' : 'image';
+    $type = $this->skuManager->getAssetType($asset);
 
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {

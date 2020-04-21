@@ -3580,4 +3580,27 @@ class SkuManager {
     return $config[$key];
   }
 
+  /**
+   * Helper function to get asset type.
+   *
+   * @param array $asset
+   *   Array of asset details.
+   *
+   * @return string
+   *   Asset type (video/image).
+   */
+  public function getAssetType(array $asset) {
+    if (isset($asset['Data']['AssetType'])) {
+      switch ($asset['Data']['AssetType']) {
+        case 'MovingMedia':
+          $type = 'video';
+          break;
+
+        default:
+          $type = 'image';
+      }
+    }
+    return $type;
+  }
+
 }
