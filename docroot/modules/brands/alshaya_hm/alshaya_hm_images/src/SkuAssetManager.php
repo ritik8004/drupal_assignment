@@ -276,7 +276,8 @@ class SkuAssetManager {
         continue;
       }
 
-      if (($asset['Data']['AssetType'] === 'MovingMedia') && ($this->acmProductSettings->get('pause_videos_download'))) {
+      if (($this->skuManager->getAssetType($asset) === 'video')
+        && ($this->acmProductSettings->get('pause_videos_download'))) {
         $download = FALSE;
       }
 
