@@ -135,6 +135,10 @@ function alshaya_aeo_transac_install() {
       'en' => 'American Eagle Online',
       'ar' => 'النسر الاميركي اون لاين',
     ],
+    'division_name' => [
+      'en' => 'Gender',
+      'ar' => 'الجنس',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
