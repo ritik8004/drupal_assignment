@@ -10,6 +10,19 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Hide swatch image in pdp gallery section.
+ */
+function alshaya_aeo_transac_update_8003() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Disable color block, color family is being used as color facet.
  */
 function alshaya_aeo_transac_update_8001() {
