@@ -435,6 +435,7 @@ class PromotionController extends ControllerBase {
           'label' => $promotion_data['label'],
           'threshold_reached' => !empty($promotion_data['threshold_reached']),
           'coupon' => $promotion_data['coupon'] ?? '',
+          'couponDiscount' => $promotion_data['couponDiscount'] ?? 0,
         ];
       }
     }
