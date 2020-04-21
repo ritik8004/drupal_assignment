@@ -810,6 +810,13 @@ class AlshayaPromotionsManager {
             if ($promotionCartStatus === AcqPromotionInterface::STATUS_CAN_BE_APPLIED) {
               $data['threshold_reached'] = TRUE;
               $data['coupon'] = $promotion->get('field_coupon_code')->getString();
+
+              // Get Promotion Percentage.
+              $promotion_data = $promotion->get('field_acq_promotion_data')->getString();
+              $promotion_data = unserialize($promotion_data);
+              if (!empty($promotion_data) && !empty($promotion_data['discount'])) {
+                $data['couponDiscount'] = $promotion_data['discount'];
+              }
             }
           }
         }
