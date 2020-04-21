@@ -77,9 +77,9 @@
   }
 }
 
-.mobile--overlay .block-alshaya-algolia-react-autocomplete {
+body.mobile--overlay .block-alshaya-algolia-react-autocomplete {
   &::before {
-    @include breakpoint($only-tablet) {
+    @include breakpoint($upto-desktop) {
       opacity: 1;
       z-index: 15;
       background: $header_mobile_menu_overlay;
