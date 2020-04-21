@@ -218,3 +218,8 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
+ division_name:
+    label: 'Gender'
+    cardinality: -1
+    index: 1
+    facet: 1
