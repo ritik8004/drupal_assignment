@@ -54,14 +54,14 @@ installed_extras:
   - nodejs
   - selenium
   - solr
-  - xdebug
+  - xdebug-beta
   - memcached
   - tideways
   - varnish
   - pimpmylog
   - drupalconsole
 
-php_version: '7.2'
+php_version: '7.3'
 php_packages_extra:
   - "php{{ php_version }}-bz2"
   - "php{{ php_version }}-bcmath"
