@@ -281,12 +281,12 @@ dynamic-promotions:
     theme:
       css/conditional-sass/dynamic-promotions/dynamic-promotions.ltr.css: {}
 
-additional-attribute:
+pdp-additional-attributes:
   js:
-    conditional-sass/additional-attribute/js/pdp-overlay-attribute.js: {}
+    conditional-sass/pdp-additional-attributes/js/pdp-overlay-attribute.js: {}
   css:
     theme:
-      css/conditional-sass/additional-attribute/additional-attribute.ltr.css: {}
+      css/conditional-sass/pdp-additional-attributes/pdp-additional-attributes.ltr.css: {}
 
 free_gifts:
   js:
