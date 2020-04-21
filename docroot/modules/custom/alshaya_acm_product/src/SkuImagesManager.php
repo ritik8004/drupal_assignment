@@ -185,7 +185,7 @@ class SkuImagesManager {
 
     try {
       $skuForGallery = $check_parent_child ? $this->getSkuForGallery($sku, $check_parent_child) : $sku;
-      $data = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? [];
+      $data = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? NULL;
 
       foreach ($data['media_items']['images'] ?? [] as $key => $item) {
         if (empty($item['label'])) {
