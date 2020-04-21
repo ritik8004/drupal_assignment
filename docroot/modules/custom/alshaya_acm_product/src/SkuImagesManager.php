@@ -179,7 +179,7 @@ class SkuImagesManager {
 
     $cache = $this->productCacheManager->get($sku, $cache_key);
 
-    if (is_array($cache) && !empty($cache)) {
+    if (is_array($cache)) {
       return $cache;
     }
 
@@ -325,7 +325,7 @@ class SkuImagesManager {
       if ($media_item['media_type'] == 'image') {
         $return['media_items']['images'][] = $media_item;
       }
-      elseif (!empty($media_item['video_url'])) {
+      elseif (!empty($media_item['video_url']) || $media_item['media_type'] === 'video') {
         $return['media_items']['videos'][] = $media_item;
       }
     }
@@ -1160,7 +1160,7 @@ class SkuImagesManager {
       else {
         $thumbnails[] = [
           'url' => file_create_url($media_item['drupal_uri']),
-          'video_title' => $media_item['label'],
+          'video_title' => $media_item['label'] ?? '',
           'type' => 'video',
         ];
       }

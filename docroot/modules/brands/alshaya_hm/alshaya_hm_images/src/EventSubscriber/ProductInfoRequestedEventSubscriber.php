@@ -7,6 +7,7 @@ use Drupal\acq_sku\ProductInfoRequestedEvent;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Class ProductInfoRequestedEventSubscriber.
@@ -25,13 +26,23 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   private $skuAssetsManager;
 
   /**
+   * SKU Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  private $skuManager;
+
+  /**
    * ProductInfoRequestedEventSubscriber constructor.
    *
    * @param \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager
    *   SKU Assets Manager.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   Sku manager service.
    */
-  public function __construct(SkuAssetManager $sku_assets_manager) {
+  public function __construct(SkuAssetManager $sku_assets_manager, SkuManager $skuManager) {
     $this->skuAssetsManager = $sku_assets_manager;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -86,20 +97,31 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     // We show same images for pdp, modal, modal-magazine.
     // To avoid adding extra configs for them (sorting assets) we use pdp
     // for all three cases.
-    $context = ((strpos($context, 'modal') > -1) || ($context === 'pdp-magazine'))
-      ? 'pdp' : $context;
+    $context = (strpos($context, 'modal') > -1) ? 'pdp' : $context;
 
     switch ($context) {
       case 'cart':
       case 'pdp':
-      case 'pdp-magazine':
         $media = $this->skuAssetsManager->getAssetsForSku($sku, $context);
 
         $return = [];
         foreach ($media as $item) {
-          $asset_type = ($item['Data']['AssetType'] === 'MovingMedia') ? 'videos' : 'images';
-          $item['label'] = $sku->label();
-          $return['media_items'][$asset_type][] = $item;
+          $asset_type = $this->skuManager->getAssetType($item);
+
+          switch ($asset_type) {
+            case 'image':
+              $item['label'] = $sku->label();
+              $return['media_items']['images'][] = $item;
+              break;
+
+            case 'video':
+              $item['label'] = $sku->label();
+              $return['media_items']['videos'][] = $item;
+              break;
+
+            default:
+              continue;
+          }
         }
 
         $event->setValue($return);
