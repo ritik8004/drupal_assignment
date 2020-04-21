@@ -83,9 +83,6 @@ function _alshaya_spc_translations() {
       'Full Name' => [
         'ar' => 'الاسم الكامل',
       ],
-      'find your nearest store' => [
-        'ar' => 'ابحث عن المحلات القريبة إليك لاستلام طلبيتك',
-      ],
       'CVV' => [
         'ar' => 'CVV الرقم السري',
       ],
@@ -115,6 +112,66 @@ function _alshaya_spc_translations() {
       ],
       'Thanks for shopping with us.' => [
         'ar' => '.شكراً لتسوقكم معنا عبر الموقع',
+      ],
+      'Order Confirmation page' => [
+        'ar' => 'صفحة تأكيد الطلبية',
+      ],
+      'confirmation email sent to' => [
+        'ar' => 'تم إرسال رسالة التأكيد إلى',
+      ],
+      'order number' => [
+        'ar' => 'ارقم الطلبية',
+      ],
+      'order detail' => [
+        'ar' => 'تفاصيل الطلبية',
+      ],
+      'delivery to' => [
+        'ar' => 'التوصيل إلى',
+      ],
+      'mobile number' => [
+        'ar' => 'رقم الجوال',
+      ],
+      'payment method' => [
+        'ar' => 'طريقة الدفع',
+      ],
+      'delivery type' => [
+        'ar' => 'نوع التوصيل',
+      ],
+      'expected delivery within' => [
+        'ar' => 'التوصيل متوقع خلال',
+      ],
+      'number of items' => [
+        'ar' => 'عدد القطع',
+      ],
+      'Collection details' => [
+        'ar' => 'ببيانات الاستلام',
+      ],
+      'Collect in store from' => [
+        'ar' => 'استلم من المحل التالي',
+      ],
+      'Selected store' => [
+        'ar' => 'المحل المختار',
+      ],
+      'Sorry, something went wrong. Please try again later' => [
+        'ar' => 'عذرا ، حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقًا',
+      ],
+      'Dismiss' => [
+        'ar' => 'حذف',
+      ],
+      'Select this Store' => [
+        'ar' => 'اختر هذا المحل',
+      ],
+      'Find your nearest store' => [
+        'ar' => 'ابحث عن المحلات القريبة إليك لاستلام طلبيتك',
+      ],
+      'Access to your location access has been denied by your browser. You can reenable location services in your browser settings.' => [
+        'ar' => 'تم رفض الوصول إلى موقعك من قبل المستعرض الخاص بك. يمكنك تفعيل خدمات تحديد الموقع من إعدادات المتصفح الخاص بك',
+      ],
+      'You are browsing outside @country' => [
+        'ar' => '@country انت تتصفح خارج',
+      ],
+      'We don\'t support delivery outside @country. Please enter an address with in country @country below to continue.' => [
+        'ar' => '.أدناه للمتابعة @country يرجى إدخال عنوان في البلد .@country لا ندعم التوصيل خارج',
       ],
     ],
   ];
