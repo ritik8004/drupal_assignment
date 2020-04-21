@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import PriceTagSVG from '../../../svg-component/price-tag-svg';
 
 const DynamicPromotionBannerItem = (props) => {
@@ -14,7 +15,7 @@ const DynamicPromotionBannerItem = (props) => {
     return (
       <div className={`promotion ${type}`} threshold={threshold} data-rule-id={ruleId}>
         <PriceTagSVG />
-        <span className="promotion-text">{label}</span>
+        <span className="promotion-text">{parse(label)}</span>
       </div>
     );
   }
@@ -22,7 +23,7 @@ const DynamicPromotionBannerItem = (props) => {
   return (
     <div data-rule-id={ruleId} className={`promotion ${type}`}>
       { type === 'fixed_percentage_discount_order' && <PriceTagSVG /> }
-      <span className="promotion-text">{label}</span>
+      <span className="promotion-text">{parse(label)}</span>
     </div>
   );
 };
