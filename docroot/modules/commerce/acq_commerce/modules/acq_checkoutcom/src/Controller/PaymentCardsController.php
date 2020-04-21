@@ -99,6 +99,8 @@ class PaymentCardsController extends ControllerBase {
   /**
    * Helper method to check access.
    *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The account object.
    * @param \Drupal\user\UserInterface $user
    *   The user object.
    *
