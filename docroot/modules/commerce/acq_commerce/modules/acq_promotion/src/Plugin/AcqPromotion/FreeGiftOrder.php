@@ -3,6 +3,7 @@
 namespace Drupal\acq_promotion\Plugin\AcqPromotion;
 
 use Drupal\acq_promotion\AcqPromotionBase;
+use Drupal\alshaya_acm\CartData;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -82,8 +83,8 @@ class FreeGiftOrder extends AcqPromotionBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
-  public function getInactiveLabel() {
-    $label = parent::getInactiveLabel();
+  public function getInactiveLabel(CartData $cart) {
+    $label = parent::getInactiveLabel($cart);
     $promotion_id = $this->promotionNode->id();
     $promotion_data = unserialize($this->promotionNode->get('field_acq_promotion_data')->getString());
 
@@ -105,7 +106,7 @@ class FreeGiftOrder extends AcqPromotionBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
-  public function getActiveLabel() {
+  public function getActiveLabel(CartData $cart) {
     $free_skus = $this->alshayaPromotionsManager->getFreeGiftSkuEntitiesByPromotionId($this->promotionNode->id());
     $free_sku_entity = reset($free_skus);
 

@@ -8,6 +8,7 @@ use Drupal\acq_promotion\AcqPromotionPluginManager;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_acm\CartData;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
@@ -767,13 +768,15 @@ class AlshayaPromotionsManager {
    *
    * @param \Drupal\node\NodeInterface $promotion
    *   Promotion Node.
+   * @param \Drupal\alshaya_acm\CartData $cart
+   *   Cart Data.
    * @param bool $status
    *   Active or Inactive Flag.
    *
    * @return array|null
    *   Promotion data.
    */
-  public function getPromotionData(NodeInterface $promotion, $status = TRUE) {
+  public function getPromotionData(NodeInterface $promotion, CartData $cart, $status = TRUE) {
     $data = NULL;
     $field_alshaya_promotion_subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
     $acqPromotionTypes = $this->getAcqPromotionTypes();
@@ -794,7 +797,7 @@ class AlshayaPromotionsManager {
           $promotion
         );
         if ($promotionPlugin instanceof AcqPromotionInterface) {
-          $label = $status ? $promotionPlugin->getActiveLabel() : $promotionPlugin->getInactiveLabel();
+          $label = $status ? $promotionPlugin->getActiveLabel($cart) : $promotionPlugin->getInactiveLabel($cart);
 
           if (!empty($label)) {
             $data = [
@@ -803,9 +806,10 @@ class AlshayaPromotionsManager {
             ];
 
             // Add threshold_reached flag to update promotion label classes.
-            $promotionCartStatus = $promotionPlugin->getPromotionCartStatus();
+            $promotionCartStatus = $promotionPlugin->getPromotionCartStatus($cart);
             if ($promotionCartStatus === AcqPromotionInterface::STATUS_CAN_BE_APPLIED) {
               $data['threshold_reached'] = TRUE;
+              $data['coupon'] = $promotion->get('field_coupon_code')->getString();
             }
           }
         }
