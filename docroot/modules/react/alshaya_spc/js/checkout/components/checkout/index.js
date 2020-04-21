@@ -32,6 +32,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
+import dispatchCustomEvent from '../../../utilities/events';
 
 window.fetchStore = 'idle';
 
@@ -111,6 +112,7 @@ export default class Checkout extends React.Component {
                     addInfoInStorage(cartInfo);
                   }
 
+                  dispatchCustomEvent('checkoutCartUpdate', cartInfo);
                   this.setState({
                     wait: false,
                     cart: cartInfo,
@@ -118,6 +120,7 @@ export default class Checkout extends React.Component {
                 });
               }
             } else {
+              dispatchCustomEvent('checkoutCartUpdate', cartObj);
               this.setState({
                 wait: false,
                 cart: cartObj,

@@ -249,13 +249,11 @@ class StoresFinderUtility {
    *
    * @param array $store_codes
    *   The array of store codes.
-   * @param string $langcode
-   *   (Optional) The language code.
    *
    * @return array
    *   Return array of stores.
    */
-  public function getStoreNodes(array $store_codes, $langcode = NULL) {
+  public function getStoreNodes(array $store_codes) {
     $cid = 'store_codes:list';
     // Fetch from cache if available.
     $cache = $this->cache->get($cid);
@@ -295,7 +293,7 @@ class StoresFinderUtility {
       $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
     }
 
-    $store_nodes = $this->getStoreNodes($store_codes, $langcode);
+    $store_nodes = $this->getStoreNodes($store_codes);
     // Load multiple nodes all together.
     $nids = array_keys($store_nodes);
 
@@ -316,34 +314,21 @@ class StoresFinderUtility {
 
     $nodes = $this->nodeStorage->loadMultiple($nids);
     $config = $this->configFactory->get('alshaya_click_collect.settings');
-    $address = $this->addressBookManager->getAddressStructureWithEmptyValues();
     // Loop through node and add store address/opening hours/delivery time etc.
     foreach ($nodes as $nid => $node) {
-      $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
-      $prepared_stores[$nid] = $this->getStoreExtraData($store_codes, $node);
       $store = is_array($stores[$store_nodes[$nid]['field_store_locator_id_value']]) ? $stores[$store_nodes[$nid]['field_store_locator_id_value']] : [];
+      $store['gtm_cart_address'] = $this->getStoreAddress($node, TRUE, TRUE);
       if (!empty($store['rnc_available'])) {
         $store['delivery_time'] = $config->get('click_collect_rnc');
       }
+      $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+      $store['cart_address'] = $this->getStoreAddress($node, TRUE);
 
-      $store['cart_address'] = $address;
-      // V1 - we update only area in address.
-      $store['cart_address']['extension']['address_area_segment'] = $node->get('field_store_area')->getString();
-
-      // V2 - copy address from Store.
-      if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-        $store_address = $node->get('field_address')->getValue();
-
-        if ($store_address) {
-          $store['cart_address'] = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
-        }
-      }
-
+      $prepared_stores[$nid] = $this->getStoreExtraData($store_codes, $node);
       $prepared_stores[$nid] += $store;
       // Unset the store for which we found the node, so that we can log the
       // store codes for which nodes are missing.
       unset($stores[$store_nodes[$nid]['field_store_locator_id_value']]);
-
       // Add in cache.
       $cid = 'store_node:' . $langcode . ':' . $nid;
       $this->cache->set($cid, $prepared_stores[$nid], Cache::PERMANENT, ['node_type:store']);

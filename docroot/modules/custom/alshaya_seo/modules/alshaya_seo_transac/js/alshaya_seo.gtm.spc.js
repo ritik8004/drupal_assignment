@@ -38,6 +38,8 @@
     // GTM data for SPC cart.
     if (cart_data !== undefined) {
       dataLayer[0].ecommerce.checkout.actionField.step = step;
+      dataLayer[0].privilegeCustomer = "Regular Customer";
+      dataLayer[0].privilegesCardNumber = "";
       dataLayer[0].productSKU = [];
       dataLayer[0].productStyleCode = [];
       dataLayer[0].cartTotalValue = cart_data.cart_total;

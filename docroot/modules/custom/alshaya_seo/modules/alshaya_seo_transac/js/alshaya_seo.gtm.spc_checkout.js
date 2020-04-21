@@ -6,6 +6,13 @@
 (function ($, Drupal, dataLayer) {
   'use strict';
 
+  document.addEventListener('checkoutCartUpdate', function (e) {
+    var step = Drupal.alshaya_seo_spc.getStepFromContainer();
+    Drupal.alshaya_seo_spc.cartGtm(e.detail.cart, step);
+    Drupal.alshaya_seo_spc.pushStoreData(e.detail.cart);
+    Drupal.alshaya_seo_spc.pushHddata(e.detail.cart);
+  });
+
   document.addEventListener('deliveryMethodChange', function (e) {
     var deliveryMethod = e.detail.data;
     if (deliveryMethod === 'hd') {
@@ -18,12 +25,7 @@
 
   document.addEventListener('refreshCartOnCnCSelect', function (e) {
     var cart_data = e.detail;
-    var data = {
-      event: 'storeSelect',
-      storeName: cart_data.cart.store_info.name,
-      storeAddress: cart_data.cart.store_info.address,
-    };
-    dataLayer.push(data);
+    Drupal.alshaya_seo_spc.pushStoreData(cart_data.cart);
     var data = {
       event: 'checkoutOption',
       ecommerce: {
@@ -40,6 +42,7 @@
   });
 
   document.addEventListener('refreshCartOnAddress', function (e) {
+    Drupal.alshaya_seo_spc.pushHddata(e.detail.cart);
     var data = {
       event: 'checkoutOption',
       ecommerce: {
@@ -67,6 +70,35 @@
   document.addEventListener('orderPaymentMethod', function (e) {
     Drupal.alshaya_seo_spc.gtmPushCheckoutOption(e.detail.payment_method, 3);
   });
+
+  Drupal.alshaya_seo_spc.pushStoreData = function(cart) {
+    if (cart.delivery_type !== 'cnc' || !cart.store_info) {
+      return;
+    }
+
+    dataLayer[0].deliveryOption = 'Click and Collect';
+    dataLayer[0].deliveryType = 'ship_to_store';
+    dataLayer[0].storeLocation = cart.store_info.name;
+    dataLayer[0].storeAddress = cart.store_info.gtm_cart_address.address_line1 + ' ' +  cart.store_info.gtm_cart_address.administrative_area_display;
+  }
+
+  Drupal.alshaya_seo_spc.pushHddata = function(cart) {
+    if (cart.delivery_type !== 'hd' || !cart.shipping_methods) {
+      return;
+    }
+    //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
+    var area_id = cart.shipping_address[drupalSettings.address_fields.administrative_area.key];
+    if (!area_id) {
+      return;
+    }
+
+    dataLayer[0].deliveryOption = 'Home Delivery';
+    dataLayer[0].deliveryType = cart.shipping_methods[0].carrier_title;
+
+    var input = document.querySelector('[data-id="'+ area_id +'"]');
+    dataLayer[0].deliveryArea = $(input).data('label');
+    dataLayer[0].deliveryCity = $(input).data('parent-label');
+  }
 
   Drupal.alshaya_seo_spc.gtmDeliveryMethod = function (method) {
     var data = {

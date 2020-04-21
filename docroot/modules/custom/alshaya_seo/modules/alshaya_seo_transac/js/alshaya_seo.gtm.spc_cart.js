@@ -7,6 +7,7 @@
   'use strict';
 
   Drupal.alshaya_seo_spc = Drupal.alshaya_seo_spc || {};
+
   /**
    * GTM datalayer removeFromcart, addToCart events.
    *
