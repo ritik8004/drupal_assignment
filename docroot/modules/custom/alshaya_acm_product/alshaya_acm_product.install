@@ -38,7 +38,9 @@ function alshaya_acm_product_update_8055() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_acm_product.settings'],
-    'alshaya_acm_product'
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
   );
 }
 
