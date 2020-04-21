@@ -75,5 +75,16 @@
       background: $_transparent_overlay;
       z-index: 3;
     }
+
+    .payment-method-bottom-panel {
+      display: none;
+    }
+
+    .radio-sim {
+      @include icon(radio-empty, before) {
+        color: $spc-checkout-radio-empty;
+        border: none;
+      }
+    }
   }
 }
