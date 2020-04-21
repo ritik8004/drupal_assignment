@@ -313,18 +313,19 @@
     if (product.hasOwnProperty('configurable_values')) {
       productDetails.dimension2 = 'configurable';
     }
-    if (product.final_price != product.original_price) {
-      productDetails.dimension3 = 'discounted';
+    if (product.gtm_attributes.hasOwnProperty('dimension3')) {
+      productDetails.dimension3 = product.gtm_attributes.dimension3;
     }
-    if (product.gtm_attributes.hasOwnProperty('dimension4') && product.gtm_attributes.dimension4) {
+    if (product.gtm_attributes.hasOwnProperty('dimension4')) {
       productDetails.dimension4 = product.gtm_attributes.dimension4;
     }
-    if (product.gtm_attributes.hasOwnProperty('dimension5') && product.gtm_attributes.dimension5) {
+    if (product.gtm_attributes.hasOwnProperty('dimension5')) {
       productDetails.dimension5 = product.gtm_attributes.dimension5;
     }
-    if (product.gtm_attributes.hasOwnProperty('dimension6') && product.gtm_attributes.dimension6) {
+    if (product.gtm_attributes.hasOwnProperty('dimension6')) {
       productDetails.dimension6 = product.gtm_attributes.dimension6;
     }
+
     if ($.cookie('product-list') !== undefined) {
       var listValues = JSON.parse($.cookie('product-list'));
       if (listValues.hasOwnProperty(product.parent_sku)) {
