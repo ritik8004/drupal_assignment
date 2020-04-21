@@ -31,15 +31,14 @@
   }
 }
 
-.c-user--node {
-  .c-sidebar-first {
-    .my-account-nav {
-      a {
-        &::after {
-          @include breakpoint($upto-tablet) {
-            font-size: 2.25rem;
-            #{$right}: 0;
-          }
+.c-user--node.l-two--sf {
+  aside.c-sidebar-first {
+    li a {
+      &::after {
+        @include breakpoint($only-mobile) {
+          font-size: 2.25rem;
+          #{$right}: 0;
+          color: $user_nav_link;
         }
       }
     }

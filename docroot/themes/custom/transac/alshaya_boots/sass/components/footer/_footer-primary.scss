@@ -199,8 +199,14 @@
 
   .form-submit {
     padding: 0.75rem 1.125rem;
-    border-top-#{$right}-radius: 0.125rem;
-    border-bottom-#{$right}-radius: 0.125rem;
+    border-top-#{$right}-radius: 0.1875rem;
+    border-bottom-#{$right}-radius: 0.1875rem;
+
+    .ladda-label {
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
 
     html[lang=ar] & {
       padding: 0.875rem 1.125rem;
@@ -216,7 +222,7 @@
   #edit-email {
     padding-#{$right}: 31%;
     border: 1px solid #dadada;
-    border-radius: 0.125rem;
+    border-radius: 0.1875rem;
     padding-#{$left}: 0.5rem;
     height: 2.5rem;
 

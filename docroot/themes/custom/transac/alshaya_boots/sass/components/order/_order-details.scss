@@ -52,3 +52,38 @@
     font-family: $bp-light;
   }
 }
+
+#block-content {
+  .order-items li {
+    a {
+      &::after {
+        @include breakpoint($only-mobile) {
+          font-size: 2rem;
+        }
+      }
+
+      .light {
+        @include breakpoint($upto-desktop) {
+          font-size: 0.875rem;
+        }
+      }
+
+      .dark {
+        @include breakpoint($upto-desktop) {
+          font-size: 0.875rem;
+
+          &.order-name {
+            font-size: 0.8125rem;
+            text-transform: capitalize;
+          }
+        }
+      }
+
+      > div > div {
+        @include breakpoint($only-mobile) {
+          padding: 0 0.5rem;
+        }
+      }
+    }
+  }
+}

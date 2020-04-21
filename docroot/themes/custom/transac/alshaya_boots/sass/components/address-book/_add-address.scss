@@ -50,6 +50,12 @@
       min-height: 2.25rem;
       padding-#{$right}: 0;
     }
+
+    @include breakpoint($upto-desktop) {
+      min-height: 2.5rem;
+      padding: 0.75rem;
+      padding-#{$left}: 2.25rem;
+    }
   }
 
   .address--content {
@@ -65,11 +71,26 @@
       padding-#{$right}: 0;
       flex-basis: 75%;
     }
+
+    @include breakpoint($upto-desktop) {
+      flex-basis: 49%;
+    }
   }
 
   &.default {
     .address--primary {
       font-family: $bp-light;
+
+      @include breakpoint($upto-desktop) {
+        flex-basis: 76%;
+        padding: 0.75rem 2.5rem;
+      }
+    }
+
+    .address--edit {
+      @include breakpoint($upto-desktop) {
+        padding: 0.75rem 1.875rem;
+      }
     }
   }
 
@@ -78,6 +99,11 @@
     padding-#{$right}: 0;
     display: flex;
     flex-flow: row nowrap;
+
+    @include breakpoint($upto-desktop) {
+      padding: 0;
+      height: 2.5rem;
+    }
   }
 
   .address--edit,
@@ -93,6 +119,18 @@
       }
     }
   }
+
+  .address--edit {
+    @include breakpoint($upto-desktop) {
+      padding: 0.75rem 1.875rem;
+    }
+  }
+
+  .address--delete {
+    @include breakpoint($upto-desktop) {
+      padding: 0.75rem 1.5rem;
+    }
+  }
 }
 
 .user__address--column {
@@ -102,5 +140,9 @@
     &:nth-of-type(odd) {
       margin-#{$right}: 1.5rem;
     }
+  }
+
+  @include breakpoint($only-tablet) {
+    width: calc(60% - 0.75rem);
   }
 }
