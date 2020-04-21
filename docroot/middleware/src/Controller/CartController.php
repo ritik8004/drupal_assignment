@@ -415,7 +415,7 @@ class CartController {
   }
 
   /**
-   * Update cart controller.
+   * Cart controller for cart update operations.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Current request.
