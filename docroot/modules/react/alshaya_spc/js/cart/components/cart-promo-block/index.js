@@ -3,6 +3,7 @@ import React from 'react';
 import { applyRemovePromo } from '../../../utilities/update_cart';
 import SectionTitle from '../../../utilities/section-title';
 import dispatchCustomEvent from '../../../utilities/events';
+import DynamicPromotionCode from './DynamicPromotionCode';
 
 export default class CartPromoBlock extends React.Component {
   constructor(props) {
@@ -124,12 +125,32 @@ export default class CartPromoBlock extends React.Component {
 
   render() {
     const { promoApplied, disabled, buttonText } = this.state;
-    const { inStock } = this.props;
+    const { inStock, dynamicPromoLabelsCart } = this.props;
     const promoRemoveActive = promoApplied ? 'active' : '';
     let disabledState = false;
     // Disable the promo field if out of stock or disabled.
     if (disabled === true || inStock === false) {
       disabledState = true;
+    }
+    // Check for Dynamic promotion codes.
+    let couponCode = null;
+    let couponLabel = null;
+    if (dynamicPromoLabelsCart !== null) {
+      if (dynamicPromoLabelsCart.next_eligible !== undefined
+        && dynamicPromoLabelsCart.next_eligible.type !== undefined) {
+        const {
+          coupon,
+          couponDiscount,
+          threshold_reached: thresholdReached,
+        } = dynamicPromoLabelsCart.next_eligible;
+
+        if (thresholdReached === true
+          && coupon !== undefined
+          && couponDiscount !== undefined) {
+          couponCode = coupon;
+          couponLabel = Drupal.t('Use and get @percent% off', { '@percent': couponDiscount });
+        }
+      }
     }
 
     return (
@@ -140,6 +161,7 @@ export default class CartPromoBlock extends React.Component {
           <button id="promo-remove-button" type="button" className={`promo-remove ${promoRemoveActive}`} onClick={() => { this.promoAction(promoApplied, inStock); }}>{Drupal.t('Remove')}</button>
           <button id="promo-action-button" type="button" disabled={disabledState} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock); }}>{buttonText}</button>
           <div id="promo-message" />
+          <DynamicPromotionCode code={couponCode} label={couponLabel} />
         </div>
       </div>
     );
