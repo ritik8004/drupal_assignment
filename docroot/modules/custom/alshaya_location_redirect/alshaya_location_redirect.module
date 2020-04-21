@@ -81,6 +81,11 @@ function alshaya_location_redirect_page_attachments_alter(array &$page) {
         'vs' => [
           'ae' => 'https://www.victoriassecret.ae',
         ],
+        'we' => [
+          'ae' => 'https://www.westelm.ae',
+          'kw' => 'https://www.westelm.com.kw',
+          'sa' => 'https://www.westelm.com.sa',
+        ],
       ];
 
       // Add the current brand, country and CF worker url to drupal settings.
