@@ -1,0 +1,144 @@
+.c-plp {
+  .region__content {
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar {
+      @include breakpoint($only-mobile) {
+        padding-bottom: 1.25rem;
+      }
+
+      .filter-list-label {
+        text-transform: capitalize;
+        font-size: 0.8125rem;
+      }
+
+      ul {
+        li {
+          a {
+            span {
+              &.facet-item__value {
+                font-family: $bp-light;
+                text-transform: capitalize;
+                padding-#{$left}: 0.625rem;
+              }
+            }
+          }
+
+          &.clear-all a {
+            text-transform: capitalize;
+            font-size: 0.6875rem !important;
+          }
+        }
+      }
+    }
+
+    .block-page-title-block {
+      &.mobile {
+        h1 {
+          @include breakpoint($only-mobile) {
+            font-size: 1.5rem;
+            padding: 0.75rem 0 1rem;
+          }
+        }
+      }
+    }
+
+    .view-empty {
+      @include breakpoint($only-mobile) {
+        text-align: center;
+      }
+    }
+  }
+
+  .c-products__item {
+    font-size: 0.875rem;
+
+    .field--name-name {
+      text-transform: capitalize;
+    }
+
+    .promotions {
+      .sku-promotion-link {
+        font-family: $bp-light;
+        font-weight: bold;
+      }
+    }
+
+    article {
+      &:hover {
+        &::after {
+          display: none;
+        }
+      }
+
+      .alshaya_search_slider {
+        display: none;
+
+        .slick-slider {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .c-sidebar-first {
+    @include breakpoint($desktop) {
+      width: 21.76%;
+      max-width: 16.8125rem;
+    }
+  }
+
+  main {
+    @include breakpoint($desktop) {
+      width: 74.51%;
+      max-width: 57.5625rem;
+    }
+  }
+
+  .c-products-list {
+    &.product-small {
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          max-height: 23.5rem;
+        }
+
+        .alshaya_search_mainimage {
+          @include breakpoint($only-mobile) {
+            height: 14.625rem;
+          }
+        }
+      }
+    }
+
+    &.view-search {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0;
+        padding-#{$right}: 0;
+      }
+    }
+  }
+
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 23.5rem;
+
+            &:hover {
+              max-height: 23.5rem !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  ul.js-pager__items {
+    a {
+      padding: 0.625rem 7.25rem;
+      border-radius: 0.1875rem;
+      font-size: 0.875rem;
+    }
+  }
+}
