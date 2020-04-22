@@ -151,6 +151,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart',
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
+          'alshaya_acm_promotion/basket_labels_manager',
         ],
         'drupalSettings' => [
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
@@ -191,9 +192,11 @@ class AlshayaSpcController extends ControllerBase {
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
       $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
 
+      $user_mobile_number = $user->get('field_mobile_number')->first();
       $user_name = [
         'fname' => $user->get('field_first_name')->first()->getString(),
         'lname' => $user->get('field_last_name')->first()->getString(),
+        'mobile' => !empty($user_mobile_number) ? $user_mobile_number->getValue()['local_number'] : '',
       ];
 
       $default_profile = $this->entityTypeManager->getStorage('profile')
@@ -253,6 +256,12 @@ class AlshayaSpcController extends ControllerBase {
     $strings[] = [
       'key' => 'location_access_denied',
       'value' => $this->t('Access to your location access has been denied by your browser. You can reenable location services in your browser settings.'),
+    ];
+
+    $country_name = $this->mobileUtil->getCountryName($country_code);
+    $strings[] = [
+      'key' => 'location_outside_country_hd',
+      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>' . $this->t("We don't support delivery outside @country. Please enter an address with in country @country below to continue.", ['@country' => $country_name]),
     ];
 
     $build = [

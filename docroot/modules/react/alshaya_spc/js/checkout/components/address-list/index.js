@@ -109,6 +109,7 @@ export default class AddressList extends React.Component {
     const defaultVal = {
       static: {
         fullname: `${window.drupalSettings.user_name.fname} ${window.drupalSettings.user_name.lname}`,
+        telephone: drupalSettings.user_name.mobile,
       },
     };
 

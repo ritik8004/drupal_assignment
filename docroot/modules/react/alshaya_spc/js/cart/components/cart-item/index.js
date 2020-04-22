@@ -158,7 +158,9 @@ export default class CartItem extends React.Component {
                 stock={stock}
                 sku={sku}
                 is_disabled={!inStock || freeItem}
-                maxLimit={drupalSettings.quantity_limit_enabled ? maxSaleQty : null}
+                maxLimit={
+                  drupalSettings.quantity_limit_enabled && maxSaleQty !== 0 ? maxSaleQty : null
+                }
               />
             </div>
           </div>
@@ -173,12 +175,13 @@ export default class CartItem extends React.Component {
           && (
             <QtyLimit
               type="conditional"
-              showAlert={
+              showWarning={
                 parseInt(maxSaleQty, 10) !== 0 && parseInt(qty, 10) >= parseInt(maxSaleQty, 10)
               }
-              showWarning={
+              showAlert={
                 parseInt(maxSaleQty, 10) !== 0 && parseInt(qty, 10) < parseInt(maxSaleQty, 10)
               }
+              filled="true"
               qty={qty}
               maxSaleQty={maxSaleQty}
             />

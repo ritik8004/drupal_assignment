@@ -25,7 +25,7 @@ export default class MiniCart extends React.Component {
       if (cartData instanceof Promise) {
         cartData.then((result) => {
           let resultVal = result;
-          if (typeof resultVal === 'undefined') {
+          if (typeof resultVal === 'undefined' || resultVal === null) {
             resultVal = this.emptyResult;
           } else if (typeof resultVal.error !== 'undefined' && resultVal.error) {
             this.setState({

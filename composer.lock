@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01b72b20d8cd25c812c8398c47d7277d",
+    "content-hash": "72b1ae78d42db5fd25e8dc794dd3e152",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -23596,6 +23596,17 @@
         {
             "name": "webflo/drupal-core-require-dev",
             "version": "8.7.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webflo/drupal-core-require-dev.git",
+                "reference": "56eb5356cd7fd44a35856b5018265c5ff42fb521"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webflo/drupal-core-require-dev/zipball/56eb5356cd7fd44a35856b5018265c5ff42fb521",
+                "reference": "56eb5356cd7fd44a35856b5018265c5ff42fb521",
+                "shasum": ""
+            },
             "require": {
                 "behat/mink": "1.7.x-dev",
                 "behat/mink-goutte-driver": "^1.2",

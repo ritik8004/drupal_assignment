@@ -224,10 +224,11 @@ export default class EmptyDeliveryText extends React.Component {
     let defaultVal = null;
     // If logged in user.
     if (drupalSettings.user.uid > 0) {
-      const { fname, lname } = drupalSettings.user_name;
+      const { fname, lname, mobile } = drupalSettings.user_name;
       defaultVal = {
         static: {
           fullname: `${fname} ${lname}`,
+          telephone: mobile,
         },
       };
     } else if (cartVal.carrier_info !== null && cartVal.shipping_address !== null) {

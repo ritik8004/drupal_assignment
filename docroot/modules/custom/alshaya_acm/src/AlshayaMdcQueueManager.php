@@ -69,6 +69,7 @@ class AlshayaMdcQueueManager {
     $brand_module = $this->configFactory->get('alshaya.installed_brand')->get('module');
     $brand_name = str_replace('alshaya_', '', $brand_module);
     $brand_name = ($brand_name == 'hm') ? 'hnm' : $brand_name;
+    $brand_name = ($brand_name == 'bbw_transac') ? 'bb' : $brand_name;
 
     $rabbitmq_directory = $mdc_config->get('rabbitmq_credentials_directory');
 

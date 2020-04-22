@@ -14,6 +14,8 @@
 
     h1 {
       letter-spacing: 1px;
+
+      @include arabic-letter-spacing;
     }
 
     @include breakpoint($only-mobile) {

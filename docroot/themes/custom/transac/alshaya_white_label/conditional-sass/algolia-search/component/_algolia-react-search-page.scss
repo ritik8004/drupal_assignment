@@ -230,8 +230,7 @@
   .mobile--overlay {
     #alshaya-algolia-search {
       .block-alshaya-plp-facets-block-all,
-      .block-alshaya-promo-facets-block-all,
-      .block-alshaya-search-facets-block-all {
+      .block-alshaya-promo-facets-block-all {
         height: 2.9375rem;
       }
     }
@@ -249,6 +248,13 @@
           margin-top: 0;
         }
       }
+    }
+  }
+
+  .path--cart {
+    #alshaya-algolia-search {
+      margin-#{$left}: -0.5rem;
+      margin-#{$right}: -0.5rem;
     }
   }
 }

@@ -30,25 +30,11 @@ export const addressFormInlineErrorScroll = (selector) => {
 /**
  * Get the address list of the current logged in user.
  */
-export const getUserAddressList = () => axios.get('user-address-list')
+export const getUserAddressList = () => axios.get('spc/user-address-list')
   .then((response) => response.data)
   .catch((error) => {
     // Processing of error here.
     Drupal.logJavascriptError('get-user-address-list', error);
-  });
-
-/**
- * Update default address for the user.
- *
- * @param {*} addressId
- */
-export const updateUserDefaultAddress = (addressId) => axios.post('set-default-address', {
-  addressId,
-})
-  .then((response) => response)
-  .catch((error) => {
-    // Processing of error here.
-    Drupal.logJavascriptError('update-user-default-address', error);
   });
 
 /**
@@ -57,7 +43,7 @@ export const updateUserDefaultAddress = (addressId) => axios.post('set-default-a
  * @param {*} address
  * @param {*} isDefault
  */
-export const addEditUserAddress = (address, isDefault) => axios.post('add-edit-address', {
+export const addEditUserAddress = (address, isDefault) => axios.post('spc/add-edit-address', {
   address,
   isDefault,
 })
