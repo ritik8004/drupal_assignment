@@ -19,6 +19,12 @@ use Drupal\Core\Routing\RouteMatchInterface;
  */
 function alshaya_spc_theme($existing, $type, $theme, $path) {
   return [
+    'spc_cart' => [
+      'variables' => [
+        'areas' => [],
+        'strings' => [],
+      ],
+    ],
     'spc_checkout' => [
       'variables' => [
         'areas' => [],
