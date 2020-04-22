@@ -61,7 +61,7 @@
               id: product.parent_sku,
               price: product.final_price,
               count: product.qty,
-              title: product.gtm_attributes['gtm-name'],
+              title: product.gtm_attributes.name,
               image: product.extra_data.cart_image,
             };
             dataLayer[0].cartItemsFlocktory.push(flocktory);
