@@ -276,7 +276,7 @@ class SkuAssetManager {
         continue;
       }
 
-      if (($this->skuManager->getAssetType($asset, $sku) === 'video')
+      if (($this->skuManager->getAssetType($asset) === 'video')
         && ($this->acmProductSettings->get('pause_videos_download'))) {
         $download = FALSE;
       }
@@ -343,7 +343,7 @@ class SkuAssetManager {
 
     // Prepare the directory path.
     $directory = ($asset_type === 'video')
-      ? 'brand://videos/' . trim($data['path'], '/')
+      ? 'brand://' . $asset_type . '/' . trim($data['path'], '/')
       : 'public://assets-shared/' . trim($data['path'], '/');
     $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
 
@@ -563,8 +563,7 @@ class SkuAssetManager {
    */
   private function downloadAsset(array &$asset, string $sku) {
     $lock_key = '';
-    $sku_entity = SKU::loadFromSku($sku);
-    $type = $this->skuManager->getAssetType($asset, $sku_entity);
+    $type = $this->skuManager->getAssetType($asset);
 
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {
