@@ -40,7 +40,7 @@ class Utility {
   }
 
   /**
-   * Checks if message related with magento log file reporting.
+   * Checks if need to return default error message.
    *
    * @param string $message
    *   Error message.
@@ -48,14 +48,22 @@ class Utility {
    * @return bool
    *   If message contains MDC server error message.
    */
-  public function isBackendServerError(string $message) {
-    if (stripos($message, 'report id') !== FALSE) {
-      $this->logger->error($message);
+  public function showDefaultMessage(string $message) {
+    $patterns = [
+      'report id',
+      'curl'
+    ];
 
-      return TRUE;
+    $showDefaultMessage = FALSE;
+    foreach ($patterns as $pattern) {
+      if (stripos($message, $pattern) !== FALSE) {
+        $this->logger->error($message);
+        $showDefaultMessage = TRUE;
+        break;
+      }
     }
 
-    return FALSE;
+    return $showDefaultMessage;
   }
 
   /**
@@ -90,7 +98,7 @@ class Utility {
    *   Error message.
    */
   public function processErrorMessage(string $message) {
-    if ($this->isBackendServerError($message)) {
+    if ($this->showDefaultMessage($message)) {
       $message = $this->getDefaultErrorMessage();
     }
 
