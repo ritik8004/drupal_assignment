@@ -15,7 +15,6 @@ import QtyLimit from '../qty-limit';
 import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 import CartItemFree from '../cart-item-free';
-import getStringMessage from '../../../utilities/strings';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -80,11 +79,6 @@ export default class CartItem extends React.Component {
           messageInfo = {
             type: 'error',
             message: cartResult.error_message,
-          };
-        } else if (cartResult.response_message.status === 'json_error') {
-          messageInfo = {
-            type: 'error',
-            message: getStringMessage(cartResult.response_message.msg),
           };
         } else {
           messageInfo = {

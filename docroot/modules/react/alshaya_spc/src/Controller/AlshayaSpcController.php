@@ -143,14 +143,9 @@ class AlshayaSpcController extends ControllerBase {
   public function cart() {
     $acm_config = $this->configFactory->get('alshaya_acm.settings');
 
-    $strings[] = [
-      'key' => 'quantity_limit',
-      'value' => $this->t('This product is not available in the selected quantity. Please adjust the quantity to proceed.'),
-    ];
-
     return [
-      '#theme' => 'spc_cart',
-      '#strings' => $strings,
+      '#type' => 'markup',
+      '#markup' => '<div id="spc-cart"></div>',
       '#attached' => [
         'library' => [
           'alshaya_spc/cart',
