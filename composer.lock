@@ -11,9 +11,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/HubSpot/pace/archive/master.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/HubSpot/pace/archive/master.zip"
             },
             "type": "drupal-library"
         },
@@ -999,8 +997,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/fengyuanchen/cropper/zipball/30c58b29ee21010e17e58ebab165fbd84285c685",
-                "reference": "30c58b29ee21010e17e58ebab165fbd84285c685",
-                "shasum": null
+                "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "type": "bower-asset",
             "license": [
@@ -1018,8 +1015,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/enyo/dropzone/zipball/5b82186d5f18540a1d13b6f4914fdc6220617ef5",
-                "reference": "5b82186d5f18540a1d13b6f4914fdc6220617ef5",
-                "shasum": null
+                "reference": "5b82186d5f18540a1d13b6f4914fdc6220617ef5"
             },
             "type": "bower-asset"
         },
@@ -1034,8 +1030,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/15bc73803f76bc53b654b9fdbbbc096f56d7c03d",
-                "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d",
-                "shasum": null
+                "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "type": "bower-asset",
             "license": [
@@ -1053,8 +1048,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/kenwheeler/slick/zipball/0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee",
-                "reference": "0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee",
-                "shasum": null
+                "reference": "0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee"
             },
             "require": {
                 "bower-asset/jquery": ">=1.7"
@@ -1248,9 +1242,7 @@
             "version": "4.9.2",
             "dist": {
                 "type": "zip",
-                "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip"
             },
             "type": "drupal-library"
         },
@@ -1259,9 +1251,7 @@
             "version": "2.2.6",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip"
             },
             "type": "drupal-library"
         },
@@ -15612,9 +15602,7 @@
             "version": "1.4.2",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip"
             },
             "type": "drupal-library"
         },
@@ -15822,9 +15810,7 @@
             "version": "1.17.0",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip"
             },
             "type": "drupal-library"
         },
@@ -23721,5 +23707,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.2"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }
