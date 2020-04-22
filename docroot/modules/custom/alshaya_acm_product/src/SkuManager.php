@@ -3621,7 +3621,7 @@ class SkuManager {
   /**
    * Helper function to get all asset types.
    *
-   * @param string $asset
+   * @param string $keyword
    *   Keyword to identify the asset data.
    *
    * @return array
