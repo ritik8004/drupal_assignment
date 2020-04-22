@@ -60,13 +60,6 @@
         height: 2.5rem;
       }
     }
-
-    &::after {
-      @include breakpoint($only-mobile) {
-        font-size: 2rem;
-        line-height: 1.3;
-      }
-    }
   }
 
   &.active--search {
