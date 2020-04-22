@@ -39,12 +39,3 @@ function alshaya_hnm_form_alter(&$form, FormStateInterface $form_state, $form_id
 function alshaya_hnm_js_alter(&$javascript) {
   unset($javascript['themes/custom/alshaya_white_label/menu.js']);
 }
-
-/**
- * Implements hook_preprocess_node().
- */
-function alshaya_hm_preprocess_node(&$variables) {
-  if ($variables['node']->bundle() === 'acq_product' && $variables['view_mode'] == 'full') {
-    $variables['#attached']['library'][] = 'alshaya_hnm/pdp_overlay';
-  }
-}

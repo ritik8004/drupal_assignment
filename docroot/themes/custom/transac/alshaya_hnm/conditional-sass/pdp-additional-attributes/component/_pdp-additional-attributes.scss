@@ -1,0 +1,16 @@
+.attribute-sliderbar {
+  &__content {
+    letter-spacing: 1px;
+
+    h3 {
+      font-family: $hnm-demibold;
+    }
+  }
+}
+
+.pdp-overlay-details,
+.attribute-sliderbar__title {
+  font-family: $hnm-demibold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}

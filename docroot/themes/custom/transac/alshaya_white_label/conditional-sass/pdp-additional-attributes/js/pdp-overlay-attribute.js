@@ -6,10 +6,10 @@
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.pdp_overlay = {
+  Drupal.behaviors.pdp_overlay_attributes = {
     attach: function (context, settings) {
-      $('.popup-details').once('attribute-sliderbar').on('click', function () {
-        $('.attribute-sliderbar').addClass('attribute-sliderbar-active');
+      $('.pdp-overlay-details').once('attribute-sliderbar').on('click', function () {
+        $('.attribute-sliderbar').addClass('attribute-sliderbar-active pdp-addon-attr-overlay');
 
         if ($(window).width() > 1023) {
           $('html').addClass('all-filters-overlay');
