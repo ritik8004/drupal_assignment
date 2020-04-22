@@ -106,7 +106,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
         $return = [];
         foreach ($media as $item) {
-          $asset_type = $this->skuManager->getAssetType($item);
+          $asset_type = $this->skuManager->getAssetType($item, $sku);
 
           switch ($asset_type) {
             case 'image':
