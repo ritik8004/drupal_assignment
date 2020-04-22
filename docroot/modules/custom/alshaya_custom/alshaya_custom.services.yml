@@ -10,3 +10,7 @@ services:
   alshaya_custom.alshaya_country_manager:
     class: Drupal\alshaya_custom\AlshayaCountryManager
     arguments: [ '@module_handler' ]
+  stream_wrapper.brand:
+    class: Drupal\alshaya_custom\StreamWrapper\BrandFilesStreamWrapper
+    tags:
+      - { name: stream_wrapper, scheme: brand }

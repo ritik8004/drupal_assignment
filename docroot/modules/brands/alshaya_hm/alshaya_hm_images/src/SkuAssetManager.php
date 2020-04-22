@@ -342,9 +342,8 @@ class SkuAssetManager {
     $pims_directory = $this->hmImageSettings->get('pims_directory');
 
     // Prepare the directory path.
-    // @TODO: Need to move video directory to a common folder.
     $directory = ($asset_type === 'video')
-      ? 'public://hm/videos/' . trim($data['path'], '/')
+      ? 'brand://videos/' . trim($data['path'], '/')
       : 'public://assets-shared/' . trim($data['path'], '/');
     $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
 
@@ -564,7 +563,8 @@ class SkuAssetManager {
    */
   private function downloadAsset(array &$asset, string $sku) {
     $lock_key = '';
-    $type = $this->skuManager->getAssetType($asset, $sku);
+    $sku_entity = SKU::loadFromSku($sku);
+    $type = $this->skuManager->getAssetType($asset, $sku_entity);
 
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {
