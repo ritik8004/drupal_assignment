@@ -57,16 +57,20 @@ export default class AddressForm extends React.Component {
   };
 
   eventListener = (e) => {
-    const coords = e.detail.coords();
-    if (this.isComponentMounted) {
-      this.positionMapAndUpdateAddress(coords, false);
+    if (!this.isComponentMounted) {
+      return;
     }
+    const coords = e.detail.coords();
+    this.positionMapAndUpdateAddress(coords, false);
   };
 
   /**
    * Show error on popup.
    */
   handleAddressPopUpError = (e) => {
+    if (!this.isComponentMounted) {
+      return;
+    }
     const { type, message } = e.detail;
     this.setState({
       messageType: type,
@@ -143,6 +147,7 @@ export default class AddressForm extends React.Component {
             getMap().panTo(marker.getPosition());
             getMap().setZoom(getHDMapZoom());
             window.spcMarkers.push(marker);
+            removeFullScreenLoader();
           }
         }
       },
