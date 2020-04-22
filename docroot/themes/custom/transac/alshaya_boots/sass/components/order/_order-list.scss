@@ -35,3 +35,46 @@
     }
   }
 }
+
+.alshaya-acm-customer-order-list-search {
+  .form-item-search {
+    label {
+      color: $order_search_form_label_mobile;
+      font-size: 0.875rem;
+      height: 2.5rem;
+      line-height: 2.75;
+
+      &::before {
+        color: $order_search_form_icon;
+      }
+    }
+
+    input {
+      border-color: $order_search_input_bg_border;
+    }
+  }
+
+  .form-type-select {
+    select {
+      @include breakpoint($only-mobile) {
+        height: 2.5rem;
+      }
+    }
+  }
+
+  &.active--search {
+    .form-item-search {
+      label {
+        @include breakpoint($only-mobile) {
+          background-color: $order_search_form_active_bg;
+          color: $order_search_form_active_text;
+          border: 1px solid $order_search_form_active_border;
+
+          &::before {
+            color: $order_search_form_active_icon;
+          }
+        }
+      }
+    }
+  }
+}

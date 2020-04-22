@@ -78,12 +78,13 @@ $primary_full_page_overlay_bg: rgba(51, 51, 51, 0.6);
 $highlights_subtitle_hover: $drakish-blue;
 
 // Dropdown.
-$primary_dropdown_arrow_bg: $white;
+$primary_dropdown_arrow_bg: transparent;
 $primary_dropdown_text: $black-two;
 $primary_dropdown_border: $warm-grey-two;
 $primary_dropdown_option_hover: $white-smoke-light;
 $primary_dropdown_option_border: $white;
 $primary_dropdown_option_disbled: $warm-grey-two;
+$primary_dropdown_arrow_icon: $drakish-blue;
 
 // Text Area
 $primary_textarea_suffix: $black-two;
@@ -429,7 +430,11 @@ $webform_contact_legend: $drakish-blue;
 
 // Order detail, recent orders, order list page.//no VD
 $order_search_form_icon: $drakish-blue;
-$order_search_form_border: $grey-light;
+$order_search_form_border: $warm-grey-two;
+$order_search_form_active_border: $drakish-blue;
+$order_search_form_active_bg: $drakish-blue;
+$order_search_form_active_icon: $white;
+$order_search_form_active_text: $white;
 $order_detail_td_light_content: $grey-light;
 $order_recent_toggle_icon: $drakish-blue;
 $order_detail_table_bg: $white;
@@ -437,6 +442,11 @@ $order_accordion_open_bg: $white;
 $order_details_row_border: $warm-grey-two;
 $order_recent_order_order_detail_link_bg: $white-smoke-light;
 $order_recent_order_order_detail_link: $drakish-blue;
+$order_search_form_label_mobile: $black-two;
+$user_order_list_light: $grey-light;
+$user_order_list_hover_link_bg: $white;
+$user_order_list_text: $drakish-blue;
+$order_search_input_bg_border: $white-smoke-light;
 
 // Order print.
 $order_print_order_details_row_label: $grey-light;
