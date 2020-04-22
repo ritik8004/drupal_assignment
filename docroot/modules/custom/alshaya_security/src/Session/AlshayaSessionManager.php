@@ -32,12 +32,17 @@ class AlshayaSessionManager extends SessionManager {
     $name = $this->getName();
     $original = SessionUtils::popSessionCookie($name, $this->getId());
     if ($original) {
-      // Add the cookie as per new browser expectations.
-      header($original . '; SameSite=None', FALSE);
+      if (stripos($original, 'SameSite') === FALSE) {
+        $original .= '; SameSite=None';
+      }
+
+      // Add the original cookie as per new browser expectations back.
+      header($original, FALSE);
 
       // Add the legacy cookie.
-      $header = str_replace($name, $name . self::LEGACY_SUFFIX, $original);
-      header($header, FALSE);
+      $legacy = str_replace($name, $name . self::LEGACY_SUFFIX, $original);
+      $legacy = str_ireplace('; SameSite=None', '', $legacy);
+      header($legacy, FALSE);
     }
   }
 
