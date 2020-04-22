@@ -51,7 +51,7 @@ class Utility {
   public function showDefaultMessage(string $message) {
     $patterns = [
       'report id',
-      'curl'
+      'curl',
     ];
 
     $showDefaultMessage = FALSE;
