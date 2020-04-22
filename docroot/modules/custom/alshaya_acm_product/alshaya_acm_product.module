@@ -376,7 +376,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['product_details_overlay_markup'] = [
+  $items['pdp_additional_attribute_overlay'] = [
     'variables' => [
       'properties' => [],
     ],

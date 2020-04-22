@@ -348,7 +348,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $details_overlay_markup = [
-      '#theme' => 'product_details_overlay_markup',
+      '#theme' => 'pdp_additional_attribute_overlay',
       '#properties' => $product_details,
     ];
 

@@ -15,15 +15,16 @@ use Drupal\block\Entity\Block;
  * Implements hook_update_N().
  *
  * Translations for additional attributes.
+ * Override pdp display configuration to enable overlay.
  */
 function alshaya_hm_update_8047() {
   $strings = [
-    'TITLE NAME' => [
-      'en' => 'TITLE NAME',
+    'Title Name' => [
+      'en' => 'Title Name',
       'ar' => 'اسم المنتج',
     ],
-    'ARTICLE DESCRIPTION' => [
-      'en' => 'ARTICLE DESCRIPTION',
+    'Article Description' => [
+      'en' => 'Article Description',
       'ar' => 'وصف المقال',
     ],
     'Function' => [
@@ -94,16 +95,24 @@ function alshaya_hm_update_8047() {
       'en' => 'Lisence Item',
       'ar' => 'ترخيص المنتج',
     ],
-    'DETAILS' => [
-      'en' => 'DETAILS',
+    'Details' => [
+      'en' => 'Details',
       'ar' => 'تفاصيل',
     ],
   ];
 
   alshaya_i18n_save_translations($strings);
+
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product'
+  );
 }
 
 /**
+ * Implements hook_update_N().
+ *
  * Change widget for plp_size, promo_size facet from checkbox
  * to new widget "size_group_list".
  * Queued all items for re-indexation.
@@ -973,12 +982,12 @@ function alshaya_hm_install() {
       'en' => 'Art. no.',
       'ar' => 'فن. لا.',
     ],
-    'TITLE NAME' => [
-      'en' => 'TITLE NAME',
+    'Title Name' => [
+      'en' => 'Title Name',
       'ar' => 'اسم المنتج',
     ],
-    'ARTICLE DESCRIPTION' => [
-      'en' => 'ARTICLE DESCRIPTION',
+    'Article Description' => [
+      'en' => 'Article Description',
       'ar' => 'وصف المقال',
     ],
     'Function' => [
@@ -1049,8 +1058,8 @@ function alshaya_hm_install() {
       'en' => 'Lisence Item',
       'ar' => 'ترخيص المنتج',
     ],
-    'DETAILS' => [
-      'en' => 'DETAILS',
+    'Details' => [
+      'en' => 'Details',
       'ar' => 'تفاصيل',
     ],
   ];
