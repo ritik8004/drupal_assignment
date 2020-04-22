@@ -126,6 +126,7 @@ export default class CartItem extends React.Component {
         final_price: finalPrice,
         free_item: freeItem,
         max_sale_qty: maxSaleQty,
+        error_msg: itemErrorMsg,
       },
       qtyLimit: currentQtyLimit,
       animationOffset,
@@ -206,12 +207,14 @@ export default class CartItem extends React.Component {
               type="conditional"
               showAlert={
                 parseInt(maxSaleQty, 10) !== 0
-                && parseInt(currentQtyLimit, 10) >= parseInt(maxSaleQty, 10)
+                && (parseInt(currentQtyLimit, 10) === parseInt(maxSaleQty, 10)
+                  || itemErrorMsg === 'The maximum quantity per item has been exceeded')
               }
               showWarning={
                 parseInt(maxSaleQty, 10) !== 0
                 && parseInt(currentQtyLimit, 10) < parseInt(maxSaleQty, 10)
               }
+              errMsg={itemErrorMsg}
               filled="true"
               qty={currentQtyLimit}
               maxSaleQty={maxSaleQty}

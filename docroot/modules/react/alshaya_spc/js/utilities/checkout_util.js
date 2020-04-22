@@ -330,6 +330,7 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
   // If no error or OOS.
   if (cartResult.error === undefined
     && cartResult.in_stock !== false
+    && cartResult.is_error === false
     && (cartResult.response_message === null
       || cartResult.response_message.status !== 'error_coupon')) {
     // If storage has same number of items as we get in cart.
