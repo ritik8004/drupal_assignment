@@ -240,25 +240,32 @@ class AlshayaAcmApiWrapper extends APIWrapper {
     }
     catch (\Exception $e) {
       if ($this->isDoubleCheckEnabled()) {
-        $cart = self::getCartFromStorage();
-        $cartReservedOrderId = $cart->getExtension('real_reserved_order_id');
-        $lastOrder = self::getLastOrder((int) $cart->customerId());
+        try {
+          $cart = self::getCartFromStorage();
+          $cartReservedOrderId = $cart->getExtension('real_reserved_order_id');
+          $lastOrder = self::getLastOrder((int) $cart->customerId());
 
-        if ($lastOrder && $cartReservedOrderId === $lastOrder['increment_id']) {
-          $this->logger->warning('Place order failed but order was placed, we will move forward. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
-            '@message' => $e->getMessage(),
-            '@order_id' => $cartReservedOrderId,
-            '@cart_id' => $cart->id(),
-          ]);
+          if ($lastOrder && $cartReservedOrderId === $lastOrder['increment_id']) {
+            $this->logger->warning('Place order failed but order was placed, we will move forward. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
+              '@message' => $e->getMessage(),
+              '@order_id' => $cartReservedOrderId,
+              '@cart_id' => $cart->id(),
+            ]);
 
-          $this->dispatcher->dispatch(OrderPlacedEvent::EVENT_NAME, new OrderPlacedEvent($lastOrder, $cart->id()));
-          return $lastOrder;
+            $this->dispatcher->dispatch(OrderPlacedEvent::EVENT_NAME, new OrderPlacedEvent($lastOrder, $cart->id()));
+            return $lastOrder;
+          }
+          else {
+            $this->logger->warning('Place order failed and we tried to double check but order was not found. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
+              '@message' => $e->getMessage(),
+              '@order_id' => $cartReservedOrderId,
+              '@cart_id' => $cart->id(),
+            ]);
+          }
         }
-        else {
-          $this->logger->warning('Place order failed and we tried to double check but order was not found. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
-            '@message' => $e->getMessage(),
-            '@order_id' => $cartReservedOrderId,
-            '@cart_id' => $cart->id(),
+        catch (\Exception $doubleException) {
+          $this->logger->error('Error occurred while trying to double check. Exception: @message', [
+            '@message' => $doubleException->getMessage(),
           ]);
         }
       }
