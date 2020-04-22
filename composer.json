@@ -367,9 +367,6 @@
             },
             "drupal/robotstxt": {
                 "Redirection when using a language prefix path": "https://www.drupal.org/files/issues/2018-04-11/robotstxt-avoid_redirection-2930799-5.patch"
-            },
-            "drupal/schemata": {
-                "Undefined offset error": "https://www.drupal.org/files/issues/2019-07-08/3063027-5-undefined-offset.patch"
             }
         },
         "installer-paths": {
