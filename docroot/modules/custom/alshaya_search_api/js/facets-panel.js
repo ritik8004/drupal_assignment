@@ -365,8 +365,9 @@
             }
             filterposition = $('.show-all-filters').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
 
-            // To check if algolia is enabled, calculate height as per minimalistic header implementation.
-            if ($('body').hasClass('no-sticky-algolia-search-bar')) {
+            // To check if algolia is enabled and has supercategory menu,
+            // calculate height as per minimalistic header implementation.
+            if ($('body').hasClass('no-sticky-algolia-search-bar') && supercategorymenuHeight) {
               fixedNavHeight = nav.outerHeight() + supercategorymenuHeight - $('.block-alshaya-super-category').outerHeight();
             }
             else {

@@ -1,11 +1,15 @@
 import Axios from 'axios';
+import Cookies from 'js-cookie';
 import {
   cartAvailableInStorage,
   getCartApiUrl,
   redirectToCart,
 } from '../get_cart';
 import { restoreCartApiUrl } from '../update_cart';
-import { getInfoFromStorage } from '../storage';
+import {
+  getInfoFromStorage,
+  removeCartFromStorage,
+} from '../storage';
 
 export const fetchClicknCollectStores = (coords) => {
   const { cart } = getInfoFromStorage();
@@ -20,6 +24,13 @@ export const fetchClicknCollectStores = (coords) => {
 };
 
 export const fetchCartData = () => {
+  // If session cookie not exists, no need to process/check.
+  if (drupalSettings.user.uid === 0
+    && !Cookies.get('PHPSESSID')) {
+    removeCartFromStorage();
+    return null;
+  }
+
   // Check if cart available in storage.
   let cart = cartAvailableInStorage();
 
@@ -34,14 +45,17 @@ export const fetchCartData = () => {
     return Axios.get(apiUrl).then((response) => {
       if (typeof response !== 'object') {
         redirectToCart();
+        return null;
       }
 
       if (response.data.error) {
         redirectToCart();
+        return null;
       }
 
       if (Object.values(response.data.items).length === 0) {
         redirectToCart();
+        return null;
       }
 
       return response.data;
@@ -50,6 +64,7 @@ export const fetchCartData = () => {
       Drupal.logJavascriptError('Failed to restore cart.', error);
 
       redirectToCart();
+      return null;
     });
   }
   if (!Number.isInteger(cart)) {

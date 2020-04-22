@@ -81,6 +81,8 @@
         cursor: pointer;
         padding: 0.75rem;
 
+        @include arabic-letter-spacing;
+
         &:hover,
         &.spcSelect__option--is-selected {
           background: $spc-select_bg_hover;

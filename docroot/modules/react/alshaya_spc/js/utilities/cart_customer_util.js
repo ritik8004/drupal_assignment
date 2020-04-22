@@ -3,7 +3,7 @@ import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from './s
 import i18nMiddleWareUrl from './i18n_url';
 
 const associateCart = () => {
-  const url = i18nMiddleWareUrl('associate-cart');
+  const url = i18nMiddleWareUrl('cart/associate');
   return Axios.get(url)
     .then((response) => {
       if (response.data) {
@@ -12,7 +12,7 @@ const associateCart = () => {
     })
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('associate-cart', error);
+      Drupal.logJavascriptError('cart/associate', error);
     });
 };
 

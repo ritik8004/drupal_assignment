@@ -74,6 +74,10 @@
         color: $primary_minicart_quantity_bg;
         font-size: 0.625rem;
         margin-#{$left}: 0.25rem;
+
+        html[lang=ar] & {
+          margin-left: 0.25rem;
+        }
       }
     }
 

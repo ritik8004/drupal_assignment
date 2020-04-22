@@ -82,15 +82,25 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
     $sandbox = ($this->checkoutComApiHelper->getCheckoutcomConfig('environment') === 'sandbox');
     $build['#cache']['contexts'] = ['user'];
     $build['#cache']['tags'] = ['user:' . $this->currentUser->id()];
+
+    $acceptedCards = ['visa', 'mastercard', 'diners'];
+
+    if ($this->checkoutComApiHelper->getCheckoutcomConfig('mada_enabled')) {
+      array_unshift($acceptedCards, 'mada');
+    }
+
+    $tokenizedCards = alshaya_acm_customer_is_customer($this->currentUser)
+      ? $this->customerCardWithFilteredFields()
+      : [];
+
     $build['#attached']['drupalSettings']['checkoutCom'] = [
+      'acceptedCards' => $acceptedCards,
       'enforce3d' => $this->checkoutComApiHelper->getCheckoutcomConfig('verify3dsecure'),
       'processMada' => $this->checkoutComApiHelper->getCheckoutcomConfig('mada_enabled'),
       'tokenize' => $this->checkoutComApiHelper->getCheckoutcomConfig('vault_enabled'),
       'publicKey' => $this->checkoutComApiHelper->getCheckoutcomConfig('public_key'),
       'debugMode' => $sandbox,
-      'tokenizedCards' => alshaya_acm_customer_is_customer($this->currentUser)
-      ? $this->customerCardWithFilteredFields()
-      : [],
+      'tokenizedCards' => $tokenizedCards,
     ];
 
     $build['#attached']['library'][] = $sandbox

@@ -71,6 +71,12 @@ export default class Checkout extends React.Component {
       const cartData = fetchCartData();
       if (cartData instanceof Promise) {
         cartData.then((result) => {
+          if (result === undefined
+            || result === null) {
+            redirectToCart();
+            return;
+          }
+
           let cartObj = { cart: result };
           // If CnC is not available and cart has CnC
           // method selected.

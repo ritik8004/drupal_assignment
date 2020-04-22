@@ -187,7 +187,11 @@ export default class Cart extends React.Component {
             <CartItems dynamicPromoLabelsProduct={dynamicPromoLabelsProduct} items={items} />
           </div>
           <div className="spc-sidebar">
-            <CartPromoBlock coupon_code={couponCode} inStock={inStock} />
+            <CartPromoBlock
+              coupon_code={couponCode}
+              inStock={inStock}
+              dynamicPromoLabelsCart={dynamicPromoLabelsCart}
+            />
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}

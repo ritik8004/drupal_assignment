@@ -345,33 +345,26 @@
       width: 2rem;
       background: $checkout_payment_method_icon_bg;
       margin-#{$left}: 0.5625rem;
-      opacity: 0.3;
 
       &-visa {
         background: url(#{$base_theme_img_directory_path}/cards/card-visa-logo.svg) no-repeat;
         background-size: 100%;
-
-        &.active {
-          opacity: 1;
-        }
       }
 
       &-mastercard {
         background: url(#{$base_theme_img_directory_path}/cards/card-mastercard-logo.svg) no-repeat;
         background-size: 100%;
+      }
 
-        &.active {
-          opacity: 1;
-        }
+      &-mada {
+        background: url(#{$base_theme_img_directory_path}/cards/card-mada-logo.svg) no-repeat;
+        background-size: 100%;
+        width: 3.5rem;
       }
 
       &-diners-club {
         background: url(#{$base_theme_img_directory_path}/cards/diner-club-active.svg) no-repeat;
         background-size: 100%;
-
-        &.active {
-          opacity: 1;
-        }
       }
     }
   }

@@ -20,35 +20,28 @@ import { smoothScrollToAddressField } from './smoothScroll';
  *
  * @param {*} selector
  */
-export const addressFormInlineErrorScroll = (selector) => {
-  const errorElement = document.querySelector(selector);
+export const addressFormInlineErrorScroll = () => {
+  // Find where the error is.
+  const addressFieldsSelector = '.delivery-address-fields > div > div.error:not(:empty)';
+  let errorElement = document.querySelector(addressFieldsSelector);
+  // If error found in address fields, scroll and return.
   if (errorElement !== undefined && errorElement !== null) {
     smoothScrollToAddressField(errorElement);
+    return;
   }
+  const contactFieldsSelector = '.spc-checkout-contact-information-fields > div > div.error:not(:empty)';
+  errorElement = document.querySelector(contactFieldsSelector);
+  smoothScrollToAddressField(errorElement, true);
 };
 
 /**
  * Get the address list of the current logged in user.
  */
-export const getUserAddressList = () => axios.get('user-address-list')
+export const getUserAddressList = () => axios.get('spc/user-address-list')
   .then((response) => response.data)
   .catch((error) => {
     // Processing of error here.
     Drupal.logJavascriptError('get-user-address-list', error);
-  });
-
-/**
- * Update default address for the user.
- *
- * @param {*} addressId
- */
-export const updateUserDefaultAddress = (addressId) => axios.post('set-default-address', {
-  addressId,
-})
-  .then((response) => response)
-  .catch((error) => {
-    // Processing of error here.
-    Drupal.logJavascriptError('update-user-default-address', error);
   });
 
 /**
@@ -57,7 +50,7 @@ export const updateUserDefaultAddress = (addressId) => axios.post('set-default-a
  * @param {*} address
  * @param {*} isDefault
  */
-export const addEditUserAddress = (address, isDefault) => axios.post('add-edit-address', {
+export const addEditUserAddress = (address, isDefault) => axios.post('spc/add-edit-address', {
   address,
   isDefault,
 })
@@ -272,7 +265,7 @@ export const addEditAddressToCustomer = (e) => {
   if (notValidAddress) {
     // Removing loader in case validation fail.
     removeFullScreenLoader();
-    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
+    addressFormInlineErrorScroll();
     return;
   }
 
@@ -441,7 +434,7 @@ export const checkoutAddressProcess = (e) => {
   if (notValidAddress) {
     // Remove the loader.
     removeFullScreenLoader();
-    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
+    addressFormInlineErrorScroll();
     return;
   }
 
@@ -592,7 +585,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
   // If not valid.
   if (isValid) {
     removeFullScreenLoader();
-    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
+    addressFormInlineErrorScroll();
     return;
   }
 

@@ -1,0 +1,11 @@
+services:
+  alshaya_acm_checkoutcom.route_subscriber:
+    class: Drupal\alshaya_acm_checkoutcom\Routing\RouteSubscriber
+    arguments: ['@alshaya_acm_checkoutcom.payment_cards_page_access_check']
+    tags:
+      - { name: event_subscriber }
+  alshaya_acm_checkoutcom.payment_cards_page_access_check:
+    class: Drupal\alshaya_acm_checkoutcom\Access\PaymentCardsPageAccessCheck
+    arguments: ['@acq_checkoutcom.agent_api', '@config.factory']
+    tags:
+      - { name: access_check }
