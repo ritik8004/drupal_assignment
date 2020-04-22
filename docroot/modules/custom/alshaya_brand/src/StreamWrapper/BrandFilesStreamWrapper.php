@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_custom\StreamWrapper;
+namespace Drupal\alshaya_brand\StreamWrapper;
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\DrupalKernel;
@@ -114,7 +114,7 @@ class BrandFilesStreamWrapper extends LocalStream {
         $site_path = DrupalKernel::findSitePath(Request::createFromGlobals());
       }
     }
-    return Settings::get('file_brand_path', $site_path . '/files');
+    return Settings::get('alshaya_brand_shared_folder', $site_path . '/files');
   }
 
 }
