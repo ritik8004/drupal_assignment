@@ -9,7 +9,6 @@ use Drupal\facets\FacetInterface;
 use Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay;
 use Drupal\facets\Processor\BuildProcessorInterface;
 use Drupal\facets\Processor\ProcessorPluginBase;
-use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -91,8 +90,7 @@ class HideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildProcesso
     $source = $facet->getFacetSource();
 
     // Support multiple entity types when using Search API.
-    if (($source instanceof SearchApiDisplay) &&
-      ($facet->getUseHierarchy())) {
+    if ($source instanceof SearchApiDisplay) {
       $field_id = $facet->getFieldIdentifier();
 
       // Load the index from the source, load the definition from the
