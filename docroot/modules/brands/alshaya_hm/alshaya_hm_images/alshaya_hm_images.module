@@ -152,7 +152,7 @@ function alshaya_hm_images_alshaya_acm_product_media_items_alter(array &$media, 
 
   foreach ($assets ?? [] as $asset) {
     if (!empty($asset['drupal_uri'])) {
-      $asset['media_type'] = $skuManager->getAssetType($asset);;
+      $asset['media_type'] = $skuManager->getAssetType($asset, $sku);;
       $media[] = $asset;
     }
   }
