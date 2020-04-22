@@ -20,11 +20,18 @@ import { smoothScrollToAddressField } from './smoothScroll';
  *
  * @param {*} selector
  */
-export const addressFormInlineErrorScroll = (selector) => {
-  const errorElement = document.querySelector(selector);
+export const addressFormInlineErrorScroll = () => {
+  // Find where the error is.
+  const addressFieldsSelector = '.delivery-address-fields > div > div.error:not(:empty)';
+  let errorElement = document.querySelector(addressFieldsSelector);
+  // If error found in address fields, scroll and return.
   if (errorElement !== undefined && errorElement !== null) {
     smoothScrollToAddressField(errorElement);
+    return;
   }
+  const contactFieldsSelector = '.spc-checkout-contact-information-fields > div > div.error:not(:empty)';
+  errorElement = document.querySelector(contactFieldsSelector);
+  smoothScrollToAddressField(errorElement, true);
 };
 
 /**
@@ -258,7 +265,7 @@ export const addEditAddressToCustomer = (e) => {
   if (notValidAddress) {
     // Removing loader in case validation fail.
     removeFullScreenLoader();
-    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
+    addressFormInlineErrorScroll();
     return;
   }
 
@@ -427,7 +434,7 @@ export const checkoutAddressProcess = (e) => {
   if (notValidAddress) {
     // Remove the loader.
     removeFullScreenLoader();
-    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
+    addressFormInlineErrorScroll();
     return;
   }
 
@@ -578,7 +585,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
   // If not valid.
   if (isValid) {
     removeFullScreenLoader();
-    addressFormInlineErrorScroll('.delivery-address-fields > div > div.error:not(:empty)');
+    addressFormInlineErrorScroll();
     return;
   }
 
