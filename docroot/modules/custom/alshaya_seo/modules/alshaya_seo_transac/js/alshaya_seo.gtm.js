@@ -673,9 +673,6 @@
           }
 
           currentListName = subListName;
-          if (!($.isEmptyObject(drupalSettings.impressions_position))) {
-            position = drupalSettings.impressions_position[that.attr('data-nid') + '-' + subListName];
-          }
           Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);
         });
       });
