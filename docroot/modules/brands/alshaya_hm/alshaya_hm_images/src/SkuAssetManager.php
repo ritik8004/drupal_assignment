@@ -276,7 +276,7 @@ class SkuAssetManager {
         continue;
       }
 
-      if (($this->skuManager->getAssetType($asset) === 'video')
+      if (($this->skuManager->getAssetType($asset, $sku) === 'video')
         && ($this->acmProductSettings->get('pause_videos_download'))) {
         $download = FALSE;
       }
@@ -564,7 +564,7 @@ class SkuAssetManager {
    */
   private function downloadAsset(array &$asset, string $sku) {
     $lock_key = '';
-    $type = $this->skuManager->getAssetType($asset);
+    $type = $this->skuManager->getAssetType($asset, $sku);
 
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {

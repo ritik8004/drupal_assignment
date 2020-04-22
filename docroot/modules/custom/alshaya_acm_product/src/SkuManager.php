@@ -3585,22 +3585,66 @@ class SkuManager {
    *
    * @param array $asset
    *   Array of asset details.
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
    *
    * @return string
    *   Asset type (video/image).
    */
-  public function getAssetType(array $asset) {
-    if (isset($asset['Data']['AssetType'])) {
-      switch ($asset['Data']['AssetType']) {
-        case 'MovingMedia':
-          $type = 'video';
-          break;
+  public function getAssetType(array $asset, SKU $sku) {
+    $cache_key = implode(':', array_filter(['asset_type', $asset['Data']['AssetType']]));
+    $cache = $this->productCacheManager->get($sku, $cache_key);
 
-        default:
-          $type = 'image';
+    if (!empty($cache)) {
+      return $cache;
+    }
+
+    $type = '';
+    if (isset($asset['Data']['AssetType'])) {
+      $video_types = $this->getAllAssetTypes('MovingMedia');
+      $image_types = $this->getAllAssetTypes('StillMediaComponents');
+
+      if (in_array($asset['Data']['AssetType'], $video_types)) {
+        $type = 'video';
+      }
+      elseif (in_array($asset['Data']['AssetType'], $image_types)) {
+        $type = 'image';
       }
     }
+    $this->productCacheManager->set($sku, $cache_key, $type);
+
     return $type;
+  }
+
+  /**
+   * Helper function to get all asset types.
+   *
+   * @param string $asset
+   *   Keyword to identify the asset data.
+   *
+   * @return array
+   *   Array of asset types.
+   */
+  public function getAllAssetTypes($keyword) {
+    $asset_types = [];
+    $query = $this->connection->select('acq_sku_field_data', 'asfd');
+    $query->fields('asfd', ['attr_assets__value']);
+    $query->condition('attr_assets__value', '%' . $keyword . '%', 'LIKE');
+    $query->distinct();
+    $result = $query->execute()->fetchAll();
+
+    foreach ($result ?? [] as $assets) {
+      $unserialized_assets = unserialize($assets->attr_assets__value);
+      foreach ($unserialized_assets ?? [] as $asset) {
+        if (isset($asset['Data']['AssetType'])
+          && (strpos($asset['Data']['AssetType'], $keyword) !== FALSE)
+          && !in_array($asset['Data']['AssetType'], $asset_types)) {
+          $asset_types[] = $asset['Data']['AssetType'];
+        }
+      }
+    }
+
+    return $asset_types;
   }
 
 }
