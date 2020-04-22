@@ -19,18 +19,24 @@ export const smoothScrollTo = (selector) => {
  *
  * @param {*} element
  */
-export const smoothScrollToAddressField = (element) => {
+export const smoothScrollToAddressField = (element, contactField = false) => {
   const container = document.querySelector('.spc-address-form-sidebar');
   let offsetPosition = 0;
+  let addressOffset = 0;
+  let contactheaderOffset = 0;
+  if (contactField === true) {
+    addressOffset = document.querySelector('.delivery-address-fields').offsetHeight;
+    contactheaderOffset = document.querySelector('.spc-contact-information-header').offsetHeight;
+  }
   if (window.innerWidth < 768) {
     // Header offset in mobile is section title + field height.
     const headerOffset = 56 + 45;
     const elementPosition = element.getBoundingClientRect().top;
-    offsetPosition = elementPosition - headerOffset;
+    offsetPosition = elementPosition - headerOffset + addressOffset + contactheaderOffset;
   } else {
     const headerOffset = 27;
     const elementPosition = element.offsetTop;
-    offsetPosition = headerOffset - elementPosition;
+    offsetPosition = headerOffset - elementPosition + addressOffset + contactheaderOffset;
   }
   container.scrollBy({
     top: offsetPosition,
