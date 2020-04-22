@@ -15,6 +15,7 @@ import QtyLimit from '../qty-limit';
 import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 import CartItemFree from '../cart-item-free';
+import { isQtyLimitReached } from '../../../utilities/checkout_util';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -201,8 +202,8 @@ export default class CartItem extends React.Component {
               type="conditional"
               showAlert={
                 parseInt(maxSaleQty, 10) !== 0
-                && (parseInt(currentQtyLimit, 10) === parseInt(maxSaleQty, 10)
-                  || itemErrorMsg === 'The maximum quantity per item has been exceeded')
+                && (parseInt(currentQtyLimit, 10) >= parseInt(maxSaleQty, 10)
+                  || isQtyLimitReached(itemErrorMsg))
               }
               showWarning={
                 parseInt(maxSaleQty, 10) !== 0

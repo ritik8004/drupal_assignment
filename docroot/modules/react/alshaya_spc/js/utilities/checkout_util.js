@@ -424,3 +424,5 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
 };
 
 export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info'), data);
+
+export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per item has been exceeded');
