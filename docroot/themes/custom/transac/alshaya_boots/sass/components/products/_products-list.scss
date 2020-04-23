@@ -63,22 +63,6 @@
         font-weight: bold;
       }
     }
-
-    article {
-      &:hover {
-        &::after {
-          display: none;
-        }
-      }
-
-      .alshaya_search_slider {
-        display: none;
-
-        .slick-slider {
-          display: none;
-        }
-      }
-    }
   }
 
   .c-sidebar-first {
