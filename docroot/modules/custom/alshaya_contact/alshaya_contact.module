@@ -37,6 +37,9 @@ function alshaya_contact_form_webform_submission_alshaya_contact_add_form_alter(
 
   // Custom validation for contact form.
   $form['#validate'][] = '_alshaya_contact_alshaya_contact_form_validate';
+
+  // Including convert to select js
+  $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
 }
 
 /**
