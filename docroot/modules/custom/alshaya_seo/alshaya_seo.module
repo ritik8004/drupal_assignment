@@ -37,6 +37,7 @@ function _alshaya_seo_process_gtm() {
   $whitelisted_routes = [
     'views.ajax',
     'alshaya_acm_product.product_modal',
+    'alshaya_acm_product.get_related_products',
   ];
 
   // Disable SEO modifications for non-customer users (admins).
