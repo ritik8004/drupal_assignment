@@ -22,7 +22,6 @@ services:
       - '@file.usage'
       - '@lock.persistent'
       - '@cache.media_file_mapping'
-      - '@alshaya_acm_product.sku_videos_manager'
   alshaya_hm_images.route_subscriber:
     class: Drupal\alshaya_hm_images\Routing\RouteSubscriber
     tags:
@@ -31,7 +30,6 @@ services:
     class: Drupal\alshaya_hm_images\EventSubscriber\ProductInfoRequestedEventSubscriber
     arguments:
       - '@alshaya_hm_images.skuassetsmanager'
-      - '@alshaya_acm_product.sku_videos_manager'
     tags:
       - { name: 'event_subscriber' }
   alshaya_hm_images.product_updated_event:

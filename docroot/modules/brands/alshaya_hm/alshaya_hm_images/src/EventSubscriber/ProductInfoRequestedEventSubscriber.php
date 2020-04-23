@@ -7,7 +7,6 @@ use Drupal\acq_sku\ProductInfoRequestedEvent;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\alshaya_acm_product\SkuVideosManager;
 
 /**
  * Class ProductInfoRequestedEventSubscriber.
@@ -26,23 +25,13 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   private $skuAssetsManager;
 
   /**
-   * SKU Videos Manager.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuVideosManager
-   */
-  private $skuVideosManager;
-
-  /**
    * ProductInfoRequestedEventSubscriber constructor.
    *
    * @param \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager
    *   SKU Assets Manager.
-   * @param \Drupal\alshaya_acm_product\SkuVideosManager $skuVideosManager
-   *   Sku Videos manager service.
    */
-  public function __construct(SkuAssetManager $sku_assets_manager, SkuVideosManager $skuVideosManager) {
+  public function __construct(SkuAssetManager $sku_assets_manager) {
     $this->skuAssetsManager = $sku_assets_manager;
-    $this->skuVideosManager = $skuVideosManager;
   }
 
   /**
@@ -106,7 +95,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
         $return = [];
         foreach ($media as $item) {
-          $asset_type = $this->skuVideosManager->getAssetType($item);
+          $asset_type = $this->skuAssetsManager->getAssetType($item);
 
           switch ($asset_type) {
             case 'image':

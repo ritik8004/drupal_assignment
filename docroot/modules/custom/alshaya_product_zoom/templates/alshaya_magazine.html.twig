@@ -14,7 +14,7 @@
           <div data-iframe="{{ thumbs.url }}" class="pdp-video pdp-video-{{ loop.index0 }} video">
             <video class="gallery-video" width="400" height="635"" controls>
               <source src=" {{ thumbs.url }} ">
-              Your browser does not support the video tag.
+              {{ 'Your browser does not support the video tag.'|t }}
             </video>
           </div>
         {% elseif loop.first %}

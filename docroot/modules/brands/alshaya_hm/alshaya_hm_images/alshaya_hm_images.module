@@ -145,14 +145,12 @@ function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SK
 function alshaya_hm_images_alshaya_acm_product_media_items_alter(array &$media, SKU $sku) {
   /** @var \Drupal\alshaya_hm_images\SkuAssetManager $assetsManager */
   $assetsManager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-  /** @var \Drupal\alshaya_acm_product\SkuVideosManager $skuVideosManager */
-  $skuVideosManager = \Drupal::service('alshaya_acm_product.sku_videos_manager');
 
   $assets = $assetsManager->getAssets($sku);
 
   foreach ($assets ?? [] as $asset) {
     if (!empty($asset['drupal_uri'])) {
-      $asset['media_type'] = $skuVideosManager->getAssetType($asset);;
+      $asset['media_type'] = $assetsManager->getAssetType($asset);;
       $media[] = $asset;
     }
   }
