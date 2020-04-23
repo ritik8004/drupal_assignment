@@ -113,12 +113,11 @@ class ProductLinkedSkusResource extends ResourceBase {
 
     // Check parameter is empty or not.
     if ($parameter = $this->requestStack->query->get('use_parent')) {
-      // Check parameter value is not equal to 1.
-      if ($parameter != 1) {
-        throw new NotFoundHttpException($this->t("page not found"));
+      // Check parameter value is equal to 1.
+      if ($parameter == 1) {
+        // Get parent SKU entity.
+        $skuEntity = $this->sku_manager->getParentSkuBySku($sku);
       }
-      // Get parent SKU entity.
-      $skuEntity = $this->sku_manager->getParentSkuBySku($sku);
     }
 
     if (!$skuEntity instanceof SKUInterface) {
