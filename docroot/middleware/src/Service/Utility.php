@@ -48,7 +48,7 @@ class Utility {
    * @return bool
    *   If message contains MDC server error message.
    */
-  public function showDefaultMessage(string $message) {
+  private function showDefaultMessage(string $message) {
     $patterns = [
       'report id',
       'curl',
