@@ -880,7 +880,7 @@ class SkuManager {
 
       // Get the promotion with language fallback, if it did not have a
       // translation for $langcode.
-      $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node);
+      $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node, $sku->language()->getId());
       $promotion_text = $promotion_node->get('field_acq_promotion_label')->getString();
 
       $description = '';
