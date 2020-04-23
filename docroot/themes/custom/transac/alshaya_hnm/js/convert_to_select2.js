@@ -26,6 +26,18 @@
           });
         });
 
+        $('.contact-us-feedback .form-select').once('select2select').select2({
+          minimumResultsForSearch: -1
+        });
+
+        $('.contact-us-type .form-select').once('select2select').select2({
+          minimumResultsForSearch: -1
+        });
+
+        $('.contact-us-reason .form-select').once('select2select').select2({
+          minimumResultsForSearch: -1
+        });
+
         $('#table-cart-items .form-select').once('select2select').select2({
           minimumResultsForSearch: -1
         });
