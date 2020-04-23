@@ -9,6 +9,7 @@ use Drupal\acq_promotion\AcqPromotionPluginManager;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_acm\CartData;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
@@ -666,12 +667,18 @@ class AlshayaPromotionsManager {
   public function getCartPromotions() {
     $cartPromotionsApplied = &drupal_static(__FUNCTION__);
 
-    if (!isset($cartPromotionsApplied)
-      && $cart = $this->cartStorage->getCart(FALSE)) {
-      $cartRulesApplied = $cart->getCart()->cart_rules;
+    if (!isset($cartPromotionsApplied)) {
+      $cart = CartData::getCart() ?? $this->cartStorage->getCart(FALSE);
+      if (empty($cart)) {
+        return [];
+      }
 
-      if (!empty($cartRulesApplied)) {
-        foreach ($cartRulesApplied as $rule_id) {
+      $appliedRules = $cart instanceof CartData
+        ? $cart->getAppliedRules()
+        : $cart->getCart()->cart_rules;
+
+      if (!empty($appliedRules)) {
+        foreach ($appliedRules as $rule_id) {
           $promotion_node = $this->getPromotionByRuleId($rule_id);
           if ($promotion_node instanceof NodeInterface) {
             $cartPromotionsApplied[$rule_id] = $promotion_node;
@@ -689,7 +696,7 @@ class AlshayaPromotionsManager {
    * @return array
    *   List of promotions sorted by price and priority.
    */
-  public function getSortedCartPromotions() {
+  protected function getSortedCartPromotions() {
     $cid = 'alshaya_acm_promotions:cart:sorted';
     $cache = $this->alshayaAcmPromotionCache->get($cid);
 

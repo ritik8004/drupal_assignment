@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_promotion;
 
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm\CartData;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -235,14 +236,9 @@ class AlshayaPromoLabelManager {
    * @return string
    *   Dynamic Promotion Label or NULL.
    */
-  public function getSkuPromoDynamicLabel(SKU $sku, $promotion_nodes = NULL) {
-    $labels = NULL;
+  public function getSkuPromoDynamicLabel(SKU $sku, array $promotion_nodes = NULL) {
     $promos = $this->getCurrentSkuPromos($sku, 'links', $promotion_nodes);
-    if (!empty($promos)) {
-      $labels = implode('<br>', $promos);
-    }
-
-    return $labels;
+    return is_array($promos) ? implode('<br>', $promos) : '';
   }
 
   /**
@@ -252,13 +248,13 @@ class AlshayaPromoLabelManager {
    *   Product SKU.
    * @param string $view_mode
    *   Links or default.
-   * @param null|\Drupal\Core\Entity\EntityInterface[] $promotion_nodes
+   * @param \Drupal\Core\Entity\EntityInterface[] $promotion_nodes
    *   List of promotion nodes.
    *
    * @return array
    *   List of promotions.
    */
-  public function getCurrentSkuPromos(SKU $sku, $view_mode, $promotion_nodes = NULL) {
+  public function getCurrentSkuPromos(SKU $sku, $view_mode, array $promotion_nodes = []) {
     // Fetch parent SKU for the current SKU.
     $parentSku = $this->skuManager->getParentSkuBySku($sku);
     if (!empty($parentSku)) {
@@ -267,9 +263,9 @@ class AlshayaPromoLabelManager {
 
     $promos = [];
 
-    if (is_null($promotion_nodes)) {
-      $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
-    }
+    $promotion_nodes = empty($promotion_nodes)
+      ? $this->skuManager->getSkuPromotions($sku, ['cart'])
+      : $promotion_nodes;
 
     foreach ($promotion_nodes as $promotion_node) {
       if (is_numeric($promotion_node)) {
@@ -314,6 +310,14 @@ class AlshayaPromoLabelManager {
 
     if (!empty($promotionLabel)) {
       switch ($view_mode) {
+        case 'api':
+          $promoDisplay = [
+            'link' => $promotion->toUrl()->toString(TRUE)->getGeneratedUrl(),
+            'promotion_nid' => (int) $promotion->id(),
+            'label' => $promotionLabel['dynamic_label'],
+          ];
+          break;
+
         case 'links':
           // In case of links just send dynamic label.
           try {
@@ -384,26 +388,27 @@ class AlshayaPromoLabelManager {
    *
    * @param \Drupal\node\NodeInterface $promotion
    *   Promotion Node.
-   * @param \Drupal\acq_sku\Entity\SKU $currentSKU
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product SKU.
    *
    * @return array|mixed
    *   Return original and dynamic promo label.
    */
-  private function getPromotionLabel(NodeInterface $promotion, SKU $currentSKU) {
+  private function getPromotionLabel(NodeInterface $promotion, SKU $sku) {
     $label = [
       'original_label' => $promotion->get('field_acq_promotion_label')->getString(),
       'dynamic_label' => '',
     ];
 
     if (!empty($this->isDynamicLabelsEnabled()) && $this->isPromotionLabelDynamic($promotion)) {
-      $cartSKUs = $this->cartManager->getCartSkus();
+      $cart = CartData::getCart();
+      $cartSKUs = $cart ? $cart->getSkus() : $this->cartManager->getCartSkus();
 
       // If cart is not empty and has matching products.
       if (!empty($cartSKUs)) {
         $eligibleSKUs = $this->getPromoEligibleSkus($promotion, $cartSKUs);
 
-        if (in_array($currentSKU->getSku(), $eligibleSKUs) && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
+        if (in_array($sku->getSku(), $eligibleSKUs) && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
           $this->overridePromotionLabel($label, $promotion, $eligibleSKUs);
         }
       }
@@ -444,16 +449,21 @@ class AlshayaPromoLabelManager {
    *   Default Label.
    * @param \Drupal\node\NodeInterface $promotion
    *   Promotion Node.
-   * @param array|mixed $eligibleSKUs
+   * @param array $eligibleSKUs
    *   Eligible SKUs as per promotion.
    */
-  private function overridePromotionLabel(&$label, NodeInterface $promotion, $eligibleSKUs) {
+  private function overridePromotionLabel(&$label, NodeInterface $promotion, array $eligibleSKUs) {
     // Calculate cart quantity.
     $eligible_cart_qty = 0;
-    $cart_items = $this->cartManager->getCart(FALSE)->items();
+    $cart = CartData::getCart();
+    $cart_items = $cart
+      ? $cart->getItems()
+      : $this->cartManager->getCart(FALSE)->items();
+
     foreach ($cart_items as $item) {
       if (in_array($item['sku'], $eligibleSKUs)) {
-        $eligible_cart_qty += $item['qty'];
+        $quantity = $item['quantity'] ?? $item['qty'];
+        $eligible_cart_qty += $quantity;
       }
     }
 

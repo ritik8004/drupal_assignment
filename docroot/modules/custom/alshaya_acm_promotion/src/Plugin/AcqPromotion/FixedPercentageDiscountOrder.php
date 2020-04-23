@@ -1,10 +1,11 @@
 <?php
 
-namespace Drupal\acq_promotion\Plugin\AcqPromotion;
+namespace Drupal\alshaya_acm_promotion\Plugin\AcqPromotion;
 
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_promotion\AcqPromotionBase;
+use Drupal\alshaya_acm\CartData;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\node\NodeInterface;
@@ -121,12 +122,17 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
     }
 
     $reached = FALSE;
-    $cart = $this->cartStorage->getCart(FALSE);
+    $cart = CartData::getCart() ?? $this->cartStorage->getCart(FALSE);
 
     // Compare Cart sub against promotion condition of Subtotal as threshold.
-    if ($cart instanceof CartInterface
-      && !empty($cartTotals = $cart->totals())) {
+    if ($cart instanceof CartInterface && !empty($cartTotals = $cart->totals())) {
       $cartValue = $cartTotals['sub'];
+    }
+    elseif ($cart instanceof CartData) {
+      $cartValue = $cart->getSubTotal();
+    }
+
+    if (!empty($cartValue)) {
       $threshold_price = $this->alshayaPromotionsManager->getPromotionThresholdPrice($promotion_data);
       $operator = $this->alshayaPromotionsManager->getPromotionOperator($promotion_data);
 
