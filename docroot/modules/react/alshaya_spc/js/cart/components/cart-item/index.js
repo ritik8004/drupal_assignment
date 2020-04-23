@@ -60,13 +60,21 @@ export default class CartItem extends React.Component {
       // Remove loading class.
       document.getElementById(`remove-item-${id}`).classList.remove('loading');
     };
-    this.triggerUpdateCart(action, sku, 0, afterCartUpdate);
+    this.triggerUpdateCart({
+      action,
+      sku,
+      qty: 0,
+      callback: afterCartUpdate,
+      successMsg: Drupal.t('The product has been removed from your cart.'),
+    });
   };
 
   /**
    * Trigger update cart api call.
    */
-  triggerUpdateCart = (action, sku, qty, callback = null) => {
+  triggerUpdateCart = ({
+    action, sku, qty, successMsg, callback = null,
+  }) => {
     const cartData = updateCartItemData(action, sku, qty);
     if (cartData instanceof Promise) {
       cartData.then((result) => {
@@ -84,7 +92,7 @@ export default class CartItem extends React.Component {
         } else {
           messageInfo = {
             type: 'success',
-            message: Drupal.t('The product has been removed from your cart.'),
+            message: successMsg,
           };
         }
 
@@ -203,7 +211,7 @@ export default class CartItem extends React.Component {
               showAlert={
                 parseInt(maxSaleQty, 10) !== 0
                 && (parseInt(currentQtyLimit, 10) >= parseInt(maxSaleQty, 10)
-                  || isQtyLimitReached(itemErrorMsg))
+                  || (itemErrorMsg !== undefined && isQtyLimitReached(itemErrorMsg)))
               }
               showWarning={
                 parseInt(maxSaleQty, 10) !== 0
