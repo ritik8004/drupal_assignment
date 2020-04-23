@@ -355,6 +355,12 @@ class SkuAssetManager {
       if (!empty($files) && $files instanceof FileInterface) {
         return $files;
       }
+      else {
+        $file_data = file_get_contents($target);
+        $file = $this->saveAssetData($file_data, $target, $sku);
+
+        return $file;
+      }
     }
 
     $url = implode('/', [
@@ -416,20 +422,7 @@ class SkuAssetManager {
 
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-    try {
-      $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
-
-      if (!($file instanceof FileInterface)) {
-        throw new \Exception('Failed to save asset file');
-      }
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to save asset file for sku @sku at @uri, error: @message', [
-        '@sku' => $sku,
-        '@uri' => $target,
-        '@message' => $e->getMessage(),
-      ]);
-    }
+    $file = $this->saveAssetData($file_data, $target, $sku);
 
     return $file ?? NULL;
   }
@@ -1139,6 +1132,38 @@ class SkuAssetManager {
     elseif (strpos($asset['Data']['AssetType'], 'StillMediaComponents') !== FALSE) {
       return 'image';
     }
+  }
+
+  /**
+   * Helper function to save asset data.
+   *
+   * @param string $file_data
+   *   File data.
+   * @param string $target
+   *   File path.
+   * @param string $sku
+   *   SKU string.
+   *
+   * @return \Drupal\file\FileInterface
+   *   File entity.
+   */
+  private function saveAssetData(string $file_data, string $target, string $sku) {
+    try {
+      $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
+
+      if (!($file instanceof FileInterface)) {
+        throw new \Exception('Failed to save asset file');
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Failed to save asset file for sku @sku at @uri, error: @message', [
+        '@sku' => $sku,
+        '@uri' => $target,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    return $file;
   }
 
 }
