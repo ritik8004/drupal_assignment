@@ -424,3 +424,6 @@ pimpmylog_grant_all_privs: true
 mysql_slow_query_log_enabled: true
 mysql_slow_query_time: 1
 mysql_wait_timeout: 300
+
+# Set the path to a compatible python interpreter on Ubuntu 16.04
+ansible_python_interpreter: /usr/bin/python
