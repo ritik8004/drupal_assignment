@@ -15,12 +15,7 @@
 
   document.addEventListener('deliveryMethodChange', function (e) {
     var deliveryMethod = e.detail.data;
-    if (deliveryMethod === 'hd') {
-      Drupal.alshayaSeoSpc.gtmDeliveryMethod('Home Delivery');
-    }
-    else {
-      Drupal.alshayaSeoSpc.gtmDeliveryMethod('Click & Collect');
-    }
+    Drupal.alshayaSeoSpc.gtmDeliveryMethod(deliveryMethod === 'hd' ? 'Home Delivery' : 'Click & Collect');
   });
 
   document.addEventListener('refreshCartOnCnCSelect', function (e) {
@@ -83,7 +78,7 @@
   }
 
   Drupal.alshayaSeoSpc.pushHomeDeliveryData = function(cart) {
-    if (cart.delivery_type !== 'hd' || !cart.shipping_methods) {
+    if (cart.delivery_type !== 'hd' || !cart.shipping_methods || !cart.shipping_address) {
       return;
     }
     //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
@@ -133,19 +128,19 @@
   Drupal.behaviors.spcCheckoutGtm = {
     attach: function (context, settings) {
       var step = Drupal.alshayaSeoSpc.getStepFromContainer();
-
-      if (localStorage.hasOwnProperty('userID')) {
-        if (step === 2) {
-          Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Home Delivery', 2);
+      var cart_data = Drupal.alshayaSeoSpc.getCartData();
+      $(document).once('spc-checkout-gtm-onetime').each(function() {
+        if (cart_data !== null && step === 2) {
+          Drupal.alshayaSeoSpc.gtmPushCheckoutOption(
+           cart_data.cart.delivery_type === 'hd' ? 'Home Delivery' : 'Click & Collect',
+            step
+          );
         }
-      }
 
-      /**
-       * Fire checkoutOption on cart page.
-       */
-      if (drupalSettings.user.uid !== 0) {
-        Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
-      }
+        if (drupalSettings.user.uid !== 0) {
+          Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
+        }
+      });
     }
   };
 

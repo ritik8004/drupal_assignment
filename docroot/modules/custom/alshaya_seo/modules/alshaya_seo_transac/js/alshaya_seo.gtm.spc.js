@@ -8,7 +8,13 @@
 
   Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {}
   Drupal.alshayaSeoSpc.getCartData = function() {
-    return JSON.parse(localStorage.getItem('cart_data'));
+    var cart_data = JSON.parse(localStorage.getItem('cart_data'));
+    if (cart_data !== null && cart_data
+      && cart_data.cart && cart_data.cart.cart_id
+    ) {
+      return cart_data;
+    }
+    return null;
   }
 
   /**

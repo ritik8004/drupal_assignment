@@ -9,7 +9,7 @@
   Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
 
   /**
-   * GTM datalayer removeFromcart, addToCart events.
+   * GTM datalayer remove from cart, addToCart events.
    *
    * @param product
    *   Product object with gtm attributes.
@@ -141,9 +141,11 @@
     attach: function (context, settings) {
       var step = Drupal.alshayaSeoSpc.getStepFromContainer();
       var cart_data = Drupal.alshayaSeoSpc.getCartData();
-      if (cart_data !== null && cart_data && cart_data.cart && cart_data.cart.cart_id) {
-        Drupal.alshayaSeoSpc.cartGtm(cart_data.cart, step);
-      }
+      $(document).once('spc-cart-gtm-onetime').each(function() {
+        if (cart_data !== null) {
+          Drupal.alshayaSeoSpc.cartGtm(cart_data.cart, step);
+        }
+      });
 
       // Track Product impressions.
       $(window).once('alshaya-seo-gtm-cart-pi').on('scroll', debounce(function (event) {
