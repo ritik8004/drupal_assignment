@@ -248,13 +248,13 @@ class AlshayaPromoLabelManager {
    *   Product SKU.
    * @param string $view_mode
    *   Links or default.
-   * @param \Drupal\Core\Entity\EntityInterface[] $promotion_nodes
+   * @param null|\Drupal\Core\Entity\EntityInterface[] $promotion_nodes
    *   List of promotion nodes.
    *
    * @return array
    *   List of promotions.
    */
-  public function getCurrentSkuPromos(SKU $sku, $view_mode, array $promotion_nodes = []) {
+  public function getCurrentSkuPromos(SKU $sku, $view_mode, array $promotion_nodes = NULL) {
     // Fetch parent SKU for the current SKU.
     $parentSku = $this->skuManager->getParentSkuBySku($sku);
     if (!empty($parentSku)) {
