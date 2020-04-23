@@ -310,7 +310,8 @@ class CartController {
 
     // For determining global OOS for cart.
     $data['in_stock'] = TRUE;
-
+    // If there are any error at cart item level.
+    $data['is_error'] = FALSE;
     // Whether CnC enabled or not.
     $data['cnc_enabled'] = TRUE;
 
@@ -318,11 +319,17 @@ class CartController {
     $items_quantity = array_column($cart_data['cart']['items'], 'qty', 'sku');
     $items_price = array_column($cart_data['cart']['items'], 'price', 'sku');
     $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
+    $extension_attributes = array_column($cart_data['cart']['items'], 'extension_attributes', 'sku');
     try {
       $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
       foreach ($data['items'] as $key => $value) {
         if (isset($items_quantity[$key])) {
           $data['items'][$key]['qty'] = $items_quantity[$key];
+        }
+
+        if (isset($extension_attributes[$key]) && $extension_attributes[$key]['error_message']) {
+          $data['items'][$key]['error_msg'] = $extension_attributes[$key]['error_message'];
+          $data['is_error'] = TRUE;
         }
 
         if (isset($items_price[$key])) {

@@ -330,6 +330,7 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
   // If no error or OOS.
   if (cartResult.error === undefined
     && cartResult.in_stock !== false
+    && cartResult.is_error === false
     && (cartResult.response_message === null
       || cartResult.response_message.status !== 'error_coupon')) {
     // If storage has same number of items as we get in cart.
@@ -423,3 +424,5 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
 };
 
 export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info'), data);
+
+export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per item has been exceeded');
