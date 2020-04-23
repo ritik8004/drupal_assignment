@@ -221,37 +221,6 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
 }
 
 /**
- * Implements hook_acq_sku_pdp_gallery_media_alter().
- */
-function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb_images, $sku) {
-  if (empty($main_image) && ($sku instanceof SKU)) {
-    /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
-    $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-
-    if ($sku instanceof SKU) {
-      $pdp_images = $sku_assets_manager->getAssetsForSku($sku, 'pdp');
-
-      foreach ($pdp_images['pdp_thumbnail'] ?? [] as $key => $thumbnail) {
-        $thumb_images[$key]['zoomurl'] = $pdp_images['pdp_fullscreen'][$key]['url'];
-        $thumb_images[$key]['thumburl'] = $thumbnail['url'];
-        $thumb_images[$key]['mediumurl'] = $pdp_images['pdp_main'][$key]['url'];
-        $thumb_images[$key]['type'] = 'image';
-        $thumb_images[$key]['fullurl'] = $pdp_images['pdp_fullscreen'][$key]['url'];
-        $thumb_images[$key]['label'] = $sku->label();
-      }
-
-      // Check on main images is sufficient here, since zoom images are
-      // variations of main images.
-      if (!empty($pdp_images['pdp_main'])) {
-        $main_image['zoomurl'] = $pdp_images['pdp_fullscreen'][0]['url'];
-        $main_image['mediumurl'] = $pdp_images['pdp_main'][0]['url'];
-        $main_image['label'] = $sku->label();
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
