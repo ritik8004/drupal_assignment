@@ -6,7 +6,7 @@
 (function ($, Drupal, drupalSettings, dataLayer) {
   'use strict';
 
-  Drupal.alshaya_seo_spc = Drupal.alshaya_seo_spc || {};
+  Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
 
   /**
    * GTM datalayer removeFromcart, addToCart events.
@@ -16,7 +16,7 @@
    * @param gtmEvent
    *   GTM event string removeFromcart, addToCart.
    */
-  Drupal.alshaya_seo_spc.gtmUpdateCartItem = function (product, gtmEvent) {
+  Drupal.alshayaSeoSpc.gtmUpdateCartItem = function (product, gtmEvent) {
     var productData = {
       event: gtmEvent,
       ecommerce: {
@@ -26,7 +26,7 @@
         }
       }
     };
-    var productDetails = Drupal.alshaya_seo_spc.gtmProduct(product);
+    var productDetails = Drupal.alshayaSeoSpc.gtmProduct(product);
     productDetails.metric2 = product.final_price;
     productData.ecommerce.add.product.push(productDetails);
     dataLayer.push(productData);
@@ -37,7 +37,7 @@
    *
    * @param customerType
    */
-  Drupal.alshaya_seo_spc.prepareProductImpression = function (context, settings, skus, position) {
+  Drupal.alshayaSeoSpc.prepareProductImpression = function (context, settings, skus, position) {
     var impressions = [];
     var currencyCode = settings.alshaya_spc.currency_config.currency_code;
     var listName = $('body').attr('gtm-list-name');
@@ -97,8 +97,8 @@
   };
 
   document.addEventListener('refreshCart', function (e) {
-    var step = Drupal.alshaya_seo_spc.getStepFromContainer();
-    Drupal.alshaya_seo_spc.cartGtm(e.detail.data(), step);
+    var step = Drupal.alshayaSeoSpc.getStepFromContainer();
+    Drupal.alshayaSeoSpc.cartGtm(e.detail.data(), step);
   });
 
   document.addEventListener('updateCartItemData', function (e) {
@@ -113,7 +113,7 @@
       item.qty = qty - item.qty;
       gtmEvent = 'addToCart';
     }
-    Drupal.alshaya_seo_spc.gtmUpdateCartItem(item, gtmEvent);
+    Drupal.alshayaSeoSpc.gtmUpdateCartItem(item, gtmEvent);
   });
 
   document.addEventListener('promoCodeSuccess', function (e) {
@@ -139,10 +139,10 @@
 
   Drupal.behaviors.spcCartGtm = {
     attach: function (context, settings) {
-      var step = Drupal.alshaya_seo_spc.getStepFromContainer();
-      var cart_data = JSON.parse(localStorage.getItem('cart_data'));
+      var step = Drupal.alshayaSeoSpc.getStepFromContainer();
+      var cart_data = Drupal.alshayaSeoSpc.getCartData();
       if (cart_data !== null && cart_data && cart_data.cart && cart_data.cart.cart_id) {
-        Drupal.alshaya_seo_spc.cartGtm(cart_data.cart, step);
+        Drupal.alshayaSeoSpc.cartGtm(cart_data.cart, step);
       }
 
       // Track Product impressions.
@@ -157,7 +157,7 @@
           }
         });
         if (step === 1 && productSkus.length > 0) {
-          Drupal.alshaya_seo_spc.prepareProductImpression(context, settings, productSkus, position);
+          Drupal.alshayaSeoSpc.prepareProductImpression(context, settings, productSkus, position);
         }
       }, 500));
 
@@ -172,7 +172,7 @@
           }
         });
         if (step === 1 && productSkus.length > 0) {
-          Drupal.alshaya_seo_spc.prepareProductImpression(context, settings, productSkus, position);
+          Drupal.alshayaSeoSpc.prepareProductImpression(context, settings, productSkus, position);
         }
       }, 500));
     }

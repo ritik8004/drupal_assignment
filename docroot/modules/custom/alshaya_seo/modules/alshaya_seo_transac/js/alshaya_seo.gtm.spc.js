@@ -6,21 +6,24 @@
 (function ($, Drupal, drupalSettings, dataLayer) {
   'use strict';
 
-  Drupal.alshaya_seo_spc = Drupal.alshaya_seo_spc || {}
-  Drupal.alshaya_seo_spc.getCartData = function() {
+  Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {}
+  Drupal.alshayaSeoSpc.getCartData = function() {
     return JSON.parse(localStorage.getItem('cart_data'));
   }
 
   /**
    * Helper function to get step number from body attr gtm-container.
    */
-  Drupal.alshaya_seo_spc.getStepFromContainer = function () {
+  Drupal.alshayaSeoSpc.getStepFromContainer = function () {
     var step = 1;
-    var cart_data = Drupal.alshaya_seo_spc.getCartData();
+    var cart_data = Drupal.alshayaSeoSpc.getCartData();
     if (window.location.href.indexOf('checkout') > -1) {
       step = 2;
     }
-    if (cart_data !== null && cart_data.cart.hasOwnProperty('cart_payment_method') && cart_data.cart.cart_payment_method !== null) {
+    if (cart_data !== null
+      && cart_data.cart.hasOwnProperty('cart_payment_method')
+      && cart_data.cart.cart_payment_method !== null
+    ) {
       step = 3;
     }
     return step;
@@ -34,7 +37,7 @@
    * @param step
    *   Checkout step for gtm checkout event.
    */
-  Drupal.alshaya_seo_spc.cartGtm = function(cart_data, step) {
+  Drupal.alshayaSeoSpc.cartGtm = function(cart_data, step) {
     // GTM data for SPC cart.
     if (cart_data !== undefined) {
       dataLayer[0].ecommerce.checkout.actionField.step = step;
@@ -54,7 +57,7 @@
         Object.entries(items).forEach(([key, product]) => {
           dataLayer[0].productStyleCode.push(product.parent_sku);
           dataLayer[0].productSKU.push(key);
-          var productData = Drupal.alshaya_seo_spc.gtmProduct(product);
+          var productData = Drupal.alshayaSeoSpc.gtmProduct(product);
           dataLayer[0].ecommerce.checkout.products.push(productData);
           if (typeof dataLayer[0].cartItemsFlocktory !== 'undefined') {
             var flocktory = {
@@ -79,7 +82,7 @@
    * @returns {{quantity: *, price, name: *, variant: *, id: *, category: *,
    *   brand: *}} Product details object with gtm attributes.
    */
-  Drupal.alshaya_seo_spc.gtmProduct = function (product) {
+  Drupal.alshayaSeoSpc.gtmProduct = function (product) {
     var productDetails = {
       quantity: product.qty,
     };

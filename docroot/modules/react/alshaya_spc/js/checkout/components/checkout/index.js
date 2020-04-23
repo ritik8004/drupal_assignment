@@ -112,19 +112,19 @@ export default class Checkout extends React.Component {
                     addInfoInStorage(cartInfo);
                   }
 
-                  dispatchCustomEvent('checkoutCartUpdate', cartInfo);
                   this.setState({
                     wait: false,
                     cart: cartInfo,
                   });
+                  dispatchCustomEvent('checkoutCartUpdate', cartInfo);
                 });
               }
             } else {
-              dispatchCustomEvent('checkoutCartUpdate', cartObj);
               this.setState({
                 wait: false,
                 cart: cartObj,
               });
+              dispatchCustomEvent('checkoutCartUpdate', cartObj);
             }
           });
         });
