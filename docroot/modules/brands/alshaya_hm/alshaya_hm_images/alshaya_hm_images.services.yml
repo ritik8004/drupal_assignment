@@ -22,7 +22,6 @@ services:
       - '@file.usage'
       - '@lock.persistent'
       - '@cache.media_file_mapping'
-      - '@current_user'
   alshaya_hm_images.route_subscriber:
     class: Drupal\alshaya_hm_images\Routing\RouteSubscriber
     tags:
