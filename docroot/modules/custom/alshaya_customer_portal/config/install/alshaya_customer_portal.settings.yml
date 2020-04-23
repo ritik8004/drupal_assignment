@@ -1,0 +1,10 @@
+iframe:
+  attributes:
+    id: 'customer-portal'
+    frameborder: ''
+    height: '100%'
+    width: '100%'
+logged_in_url: 'https://alshaya--tst1.custhelp.com/ci/pta/login/redirect/app/home/p_li/'
+anonymous_url: 'https://alshaya--tst1.custhelp.com/app/home/'
+logout_url: 'https://alshaya--tst1.custhelp.com/ci/pta/logout'
+encryption_secret_key: 'Alshaya2020PTASecrEtKey123456789'

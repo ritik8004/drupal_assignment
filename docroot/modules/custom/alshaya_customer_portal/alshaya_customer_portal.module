@@ -1,0 +1,212 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Alshaya Customer Portal module.
+ */
+
+use Drupal\alshaya_customer_portal\Utility\Aes;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_token_info().
+ */
+function alshaya_customer_portal_token_info() {
+  $info = [];
+
+  $info['types']['customer_portal'] = [
+    'name' => t('Customer Portal'),
+    'description' => t('Tokens for association with Customer Portal.'),
+  ];
+
+  $info['tokens']['customer_portal']['sso'] = [
+    'name' => t('SSO'),
+    'description' => t('SSO for login to Customer Portal.'),
+  ];
+
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function alshaya_customer_portal_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $replacements = [];
+
+  if ($type == 'customer_portal') {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'sso':
+          $user = $data['user'] ?? NULL;
+          $config = \Drupal::config('alshaya_customer_portal.settings');
+          // Check that user is not anonymous.
+          if ($user instanceof UserInterface && $user->isAuthenticated()) {
+            // Fetch user details to create SSO link.
+            $bubbleable_metadata->addCacheableDependency($user);
+            $bubbleable_metadata->addCacheableDependency($config);
+            $bubbleable_metadata->addCacheContexts(['user']);
+            $encrypted_string = _get_encrypted_data_for_customer_portal($user);
+            $sso_url = $config->get('logged_in_url') . $encrypted_string;
+          }
+          else {
+            $sso_url = $config->get('anonymous_url');
+          }
+          $replacements[$original] = _get_iframe_markup($sso_url, $user);
+          break;
+      }
+    }
+  }
+
+  return $replacements;
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function alshaya_customer_portal_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $node = $build['#node'];
+  if ($node->bundle() == 'static_html') {
+    // Get current node's static html field.
+    $body = $node->get('body')->value;
+    // Check if the [customer_portal:sso] token is there in the content.
+    if (preg_match('/\[customer_portal\:sso\]/', $body)) {
+      $user = \Drupal::currentUser();
+      $user = \Drupal::entityTypeManager()->getStorage('user')->load($user->id());
+      $bubbleable_metadata = new BubbleableMetadata();
+      $body = \Drupal::token()->replace($body, ['user' => $user], [], $bubbleable_metadata);
+      $bubbleable_metadata->applyTo($build['body']);
+      // Replace the text in the body with the token replaced text.
+      $build['body'][0]['#text'] = $body;
+    }
+  }
+}
+
+/**
+ * Implements hook_user_logout().
+ *
+ *   Logs out user from Customer Portal.
+ */
+function alshaya_customer_portal_user_logout(AccountInterface $account) {
+  // $config = \Drupal::config('alshaya_customer_portal.settings');
+  // Need to send user to the logout page of Customer portal site. This will
+  // remove the cookies for Customer portal.
+  // $response = new RedirectResponse($config->get('logout_url'));
+  // $response->send();
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_customer_portal_theme() {
+  return [
+    'alshaya_customer_portal_iframe' => [
+      'variables' => [
+        'iframe' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Maps the required keys for Customer Portal with the values of user.
+ *
+ * @param \Drupal\user\UserInterface $user
+ *   The user object.
+ * @param string $key
+ *   The encryption key.
+ *
+ * @return array
+ *   The mapped array.
+ */
+function _map_user_with_customer_portal_fields(UserInterface $user, string $key) {
+  return [
+    'p_li_passwd' => $key,
+    'p_userid' => $user->getEmail(),
+    // 'p_passwd' => 'null',
+    'p_email.addr' => $user->getEmail(),
+    'p_name.first' => $user->get('field_first_name')->getString(),
+    'p_name.last' => $user->get('field_last_name')->getString(),
+  ];
+
+}
+
+/**
+ * Removes special characters from encoded string and prepares it for URL.
+ *
+ *  This is as per the requirement of Customer Portal.
+ *
+ * @param string $string
+ *   The string to clean.
+ *
+ * @return string
+ *   The string with the special characters '+', '/' and '='.
+ */
+function _clean_special_characters_for_url(string $string) {
+  $string = str_replace('+', '_', $string);
+  $string = str_replace('/', '~', $string);
+  $string = str_replace('=', '*', $string);
+
+  return $string;
+}
+
+/**
+ * Returns encrypted part of SSO URL for Customer portal link.
+ *
+ * @param \Drupal\user\UserInterface $user
+ *   The user object.
+ *
+ * @return string
+ *   The encrypted string that is ready to be used for SSO.
+ */
+function _get_encrypted_data_for_customer_portal(UserInterface $user) {
+  $secret_key = \Drupal::config('alshaya_customer_portal.settings')->get('encryption_secret_key');
+  $map = _map_user_with_customer_portal_fields($user, $secret_key);
+  // Format the data in the form "a=b&c=d".
+  $final_data = '';
+  foreach ($map as $key => $value) {
+    $final_data .= $key . '=' . $value . '&';
+  }
+  // Remove the trailing &.
+  $final_data = rtrim($final_data, '&');
+  // Set up onject for encryption using AES-256-CBS algorithm.
+  $encrypted_string = new Aes($final_data, $secret_key, 256);
+  $encrypted_string = $encrypted_string->encrypt();
+  // Remove some special characters to make it URL friendly.
+  $encrypted_string = _clean_special_characters_for_url($encrypted_string);
+
+  return $encrypted_string;
+}
+
+/**
+ * Get Iframe markup.
+ *
+ * @return string
+ *   The iframe markup.
+ */
+function _get_iframe_markup(string $sso_url, UserInterface $user = NULL) {
+  $config = \Drupal::config('alshaya_customer_portal.settings');
+  $build = [
+    '#theme' => 'alshaya_customer_portal_iframe',
+    '#iframe' => [
+      'src' => $sso_url,
+      'frameborder' => $config->get('iframe.attributes.frameborder'),
+      'height' => $config->get('iframe.attributes.height'),
+      'width' => $config->get('iframe.attributes.width'),
+      'id' => $config->get('iframe.attributes.id'),
+    ],
+    '#cache' => [
+      'tags' => ['user:' . $user->id()],
+      'contexts' => ['user'],
+    ],
+  ];
+
+  $renderer = \Drupal::service('renderer');
+  $renderer->addCacheableDependency($build, $config);
+  $renderer->addCacheableDependency($build, $user);
+
+  return $renderer->renderPlain($build);
+}
