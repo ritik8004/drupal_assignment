@@ -613,10 +613,6 @@ function alshaya_white_label_preprocess_node(&$variables) {
       $variables['#attached']['library'][] = 'alshaya_stores_finder/store_finder_preserve_history';
     }
   }
-
-  if ($variables['node']->bundle() === 'acq_product' && $variables['view_mode'] == 'full') {
-    $variables['#attached']['library'][] = 'alshaya_white_label/additional-attribute';
-  }
 }
 
 /**
