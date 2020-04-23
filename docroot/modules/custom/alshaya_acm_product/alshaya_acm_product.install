@@ -1135,8 +1135,6 @@ function alshaya_acm_product_install() {
   ];
   $product_config_factory->set('content', $content);
   $product_config_factory->save();
-
-  \Drupal::service('module_installer')->install(['alshaya_brand']);
 }
 
 /**
