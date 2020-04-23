@@ -327,6 +327,9 @@ function _alshaya_acm_checkout_get_last_order_from_session() {
 
   // Throw access denied if nothing in session.
   if (empty($order_id)) {
+    \Drupal::logger('alshaya_acm_checkout')->error('Attempt to load last order from session was done with empty/invalid value. Value: @value', [
+      '@value' => $session->get('last_order_id'),
+    ]);
     throw new AccessDeniedHttpException();
   }
 
