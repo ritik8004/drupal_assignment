@@ -2,7 +2,7 @@ var path = require("path");
 var buildPath = '/modules/react/alshaya_pdp_react/dist/';
 var config = {
   entry: {
-    pdp_layout: './js/utilities/pdp_layout.js',
+    pdp_layout: './js/pdp_layout.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

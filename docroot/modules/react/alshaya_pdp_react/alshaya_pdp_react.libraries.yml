@@ -5,3 +5,4 @@ pdp_magazine_v2_layout:
     dist/pdp_layout.bundle.js: { }
   dependencies:
     - alshaya_react/react
+    - core/drupalSettings
