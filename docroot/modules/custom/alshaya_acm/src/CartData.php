@@ -5,7 +5,6 @@ namespace Drupal\alshaya_acm;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\Cache;
-use http\Exception\InvalidArgumentException;
 
 /**
  * Class CartData.
@@ -88,13 +87,13 @@ class CartData {
 
     foreach ($data['products'] ?? [] as $product) {
       if (empty($product['sku']) || empty($product['quantity'])) {
-        throw new InvalidArgumentException();
+        throw new \InvalidArgumentException();
       }
 
       $entity = SKU::loadFromSku($product['sku']);
 
       if (!($entity instanceof SKUInterface)) {
-        throw new InvalidArgumentException();
+        throw new \InvalidArgumentException();
       }
 
       $item = [
@@ -112,7 +111,7 @@ class CartData {
     $applied_rules = explode(',', $data['cart']['applied_rules'] ?? '');
 
     if (empty($items) || empty($subtotal)) {
-      throw new InvalidArgumentException();
+      throw new \InvalidArgumentException();
     }
 
     self::$selfReference = new static($items, $subtotal, $applied_rules);
