@@ -22,6 +22,7 @@ use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
+use Drupal\file\Entity\File;
 
 /**
  * SkuAssetManager Class.
@@ -354,6 +355,18 @@ class SkuAssetManager {
       $files = reset($uri);
       if (!empty($files) && $files instanceof FileInterface) {
         return $files;
+      }
+      else {
+        // If file exists in directory but file entity doesnt exist
+        // then create file entity.
+        $file = File::create([
+          'uri' => $target,
+          'uid' => 0,
+          'status' => FILE_STATUS_PERMANENT,
+        ]);
+        $file->save();
+
+        return $file;
       }
     }
 
