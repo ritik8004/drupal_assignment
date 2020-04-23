@@ -142,12 +142,6 @@ class AlshayaSpcController extends ControllerBase {
    */
   public function cart() {
     $acm_config = $this->configFactory->get('alshaya_acm.settings');
-    $seo_config = $this->configFactory->get('alshaya_seo.disabled_gtm_vars');
-
-    $cache_tags = Cache::mergeTags(
-      $acm_config->getCacheTags(),
-      $seo_config->getCacheTags()
-    );
 
     return [
       '#type' => 'markup',
@@ -161,7 +155,6 @@ class AlshayaSpcController extends ControllerBase {
         ],
         'drupalSettings' => [
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
-          'gtm_disabled_vars' => $seo_config->get('disabled_vars'),
         ],
       ],
       '#cache' => [
@@ -169,7 +162,7 @@ class AlshayaSpcController extends ControllerBase {
           'languages:' . LanguageInterface::TYPE_INTERFACE,
           'user',
         ],
-        'tags' => $cache_tags,
+        'tags' => $acm_config->getCacheTags(),
       ],
     ];
   }
@@ -230,15 +223,7 @@ class AlshayaSpcController extends ControllerBase {
 
     $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
     $geolocation_config = $this->configFactory->get('geolocation.settings');
-    $seo_config = $this->configFactory->get('alshaya_seo.disabled_gtm_vars');
-    $cache_tags = Cache::mergeTags(
-      $cache_tags,
-      array_merge(
-        $store_finder_config->getCacheTags(),
-        $geolocation_config->getCacheTags(),
-        $seo_config->getCacheTags()
-      )
-    );
+    $cache_tags = Cache::mergeTags($cache_tags, array_merge($store_finder_config->getCacheTags(), $geolocation_config->getCacheTags()));
 
     $cnc_enabled = $cc_config->get('feature_status') == 'enabled';
     if ($cnc_enabled) {
@@ -310,7 +295,6 @@ class AlshayaSpcController extends ControllerBase {
               'method' => $cncTerm->get('field_shipping_method_code')->getString(),
             ],
           ],
-          'gtm_disabled_vars' => $seo_config->get('disabled_vars'),
         ],
       ],
       '#cache' => [

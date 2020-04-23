@@ -50,7 +50,7 @@
       var items = cart_data.items;
       if (items !== undefined) {
         dataLayer[0].ecommerce.checkout.products = [];
-        if (!drupalSettings.gtm_disabled_vars.includes('cartItemsFlocktory')) {
+        if (!drupalSettings.gtm.disabled_vars.includes('cartItemsFlocktory')) {
           dataLayer[0].cartItemsFlocktory = [];
         }
 
