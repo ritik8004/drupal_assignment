@@ -11,6 +11,8 @@ use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Provides a resource to get product details with linked skus.
@@ -33,6 +35,20 @@ class ProductLinkedSkusResource extends ResourceBase {
   private $skuInfoHelper;
 
   /**
+   * The request stack service.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
+   * The SKU entity manager service.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -47,6 +63,10 @@ class ProductLinkedSkusResource extends ResourceBase {
    *   Logger channel.
    * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   TSku info helper.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   The SKU manager.
    */
   public function __construct(
     array $configuration,
@@ -54,10 +74,14 @@ class ProductLinkedSkusResource extends ResourceBase {
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    SkuInfoHelper $sku_info_helper
+    SkuInfoHelper $sku_info_helper,
+    RequestStack $request_stack,
+    SkuManager $skuManager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuInfoHelper = $sku_info_helper;
+    $this->request = $request_stack->getCurrentRequest();
+    $this->sku_manager = $skuManager;
   }
 
   /**
@@ -70,7 +94,9 @@ class ProductLinkedSkusResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_acm_product'),
-      $container->get('alshaya_acm_product.sku_info')
+      $container->get('alshaya_acm_product.sku_info'),
+      $container->get('request_stack'),
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 
@@ -84,6 +110,12 @@ class ProductLinkedSkusResource extends ResourceBase {
    */
   public function get(string $sku) {
     $skuEntity = SKU::loadFromSku($sku);
+
+    // Check parameter is empty or not.
+    if ($this->request->query->get('use_parent') == 1) {
+      // Get parent SKU entity.
+      $skuEntity = $this->sku_manager->getParentSkuBySku($sku);
+    }
 
     if (!$skuEntity instanceof SKUInterface) {
       throw new NotFoundHttpException($this->t("page not found"));
