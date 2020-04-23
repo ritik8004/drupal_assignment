@@ -168,13 +168,17 @@ class ClickCollect extends React.Component {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
           };
-          const [userCountrySame] = await getUserLocation(coords);
-          // If user and site country not same, don;t process.
-          if (!userCountrySame) {
-            removeFullScreenLoader();
-            // Show error message.
-            showOutsideCountryError(true);
-            return;
+          try {
+            const [userCountrySame] = await getUserLocation(coords);
+            // If user and site country not same, don;t process.
+            if (!userCountrySame) {
+              removeFullScreenLoader();
+              // Show error message.
+              showOutsideCountryError(true);
+              return;
+            }
+          } catch (error) {
+            Drupal.logJavascriptError('clickncollect-checkUserCountry', error);
           }
 
           this.fetchAvailableStores({

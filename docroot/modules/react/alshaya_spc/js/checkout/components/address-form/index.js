@@ -99,30 +99,34 @@ export default class AddressForm extends React.Component {
    * Fills the address form with the geocode info and pan map.
    */
   positionMapAndUpdateAddress = async (coords, triggerEvent) => {
-    const [userCountrySame, address] = await getUserLocation(coords);
-    // If user and site country not same, don;t process.
-    if (!userCountrySame) {
-      if (triggerEvent) {
-        removeFullScreenLoader();
-        // Trigger event to update.
-        dispatchCustomEvent('addressPopUpError', {
-          type: 'warning',
-          message: parse(getStringMessage('location_outside_country_hd')),
-        });
+    try {
+      const [userCountrySame, address] = await getUserLocation(coords);
+      // If user and site country not same, don;t process.
+      if (!userCountrySame) {
+        if (triggerEvent) {
+          removeFullScreenLoader();
+          // Trigger event to update.
+          dispatchCustomEvent('addressPopUpError', {
+            type: 'warning',
+            message: parse(getStringMessage('location_outside_country_hd')),
+          });
+        }
+        return;
       }
-      return;
-    }
 
-    // Fill the info in address form.
-    fillValueInAddressFromGeocode(address);
-    // Remove all markers from the map.
-    removeAllMarkersFromMap();
-    // Pan the map to location.
-    const marker = createMarker(coords, getMap());
-    getMap().panTo(marker.getPosition());
-    getMap().setZoom(getHDMapZoom());
-    window.spcMarkers.push(marker);
-    removeFullScreenLoader();
+      // Fill the info in address form.
+      fillValueInAddressFromGeocode(address);
+      // Remove all markers from the map.
+      removeAllMarkersFromMap();
+      // Pan the map to location.
+      const marker = createMarker(coords, getMap());
+      getMap().panTo(marker.getPosition());
+      getMap().setZoom(getHDMapZoom());
+      window.spcMarkers.push(marker);
+      removeFullScreenLoader();
+    } catch (error) {
+      Drupal.logJavascriptError('homedelivery-checkUserCountry', error);
+    }
   };
 
   /**

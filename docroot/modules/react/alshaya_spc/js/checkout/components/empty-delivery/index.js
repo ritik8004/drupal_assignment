@@ -97,21 +97,28 @@ export default class EmptyDeliveryText extends React.Component {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
           };
-          const [userCountrySame] = await getUserLocation(coords);
-
-          // If user and site country not same, don;t process.
-          if (!userCountrySame) {
-            removeFullScreenLoader();
-            // Trigger event to update.
-            showOutsideCountryError(true);
-            return;
+          try {
+            const [userCountrySame] = await getUserLocation(coords);
+            // If user and site country not same, don;t process.
+            if (!userCountrySame) {
+              removeFullScreenLoader();
+              // Trigger event to update.
+              showOutsideCountryError(true);
+              return;
+            }
+          } catch (error) {
+            Drupal.logJavascriptError('clickncollect-checkUserCountry', error);
           }
           fetchStoresHelper(coords);
         },
         () => {
           updateLocationAccess(false);
         },
-      );
+      )
+      .catch((error) => {
+        removeFullScreenLoader();
+        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error);
+      });
   }
 
   /**
