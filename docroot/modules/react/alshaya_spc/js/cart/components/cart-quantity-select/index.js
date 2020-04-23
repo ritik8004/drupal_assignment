@@ -38,7 +38,13 @@ export default class CartQuantitySelect extends React.Component {
   handleChange = (selectedOption) => {
     const { sku, onQtyChange } = this.props;
     this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.add('loading');
-    onQtyChange('update item', sku, selectedOption.value, this.afterCartUpdate);
+    onQtyChange({
+      action: 'update item',
+      sku,
+      qty: selectedOption.value,
+      callback: this.afterCartUpdate,
+      successMsg: Drupal.t('Your bag has been updated successfully.'),
+    });
   };
 
   afterCartUpdate = () => {
