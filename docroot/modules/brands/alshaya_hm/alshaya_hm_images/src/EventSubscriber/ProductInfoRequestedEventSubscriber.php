@@ -7,7 +7,7 @@ use Drupal\acq_sku\ProductInfoRequestedEvent;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_acm_product\SkuVideosManager;
 
 /**
  * Class ProductInfoRequestedEventSubscriber.
@@ -26,23 +26,23 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   private $skuAssetsManager;
 
   /**
-   * SKU Manager.
+   * SKU Videos Manager.
    *
-   * @var \Drupal\alshaya_acm_product\SkuManager
+   * @var \Drupal\alshaya_acm_product\SkuVideosManager
    */
-  private $skuManager;
+  private $skuVideosManager;
 
   /**
    * ProductInfoRequestedEventSubscriber constructor.
    *
    * @param \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager
    *   SKU Assets Manager.
-   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
-   *   Sku manager service.
+   * @param \Drupal\alshaya_acm_product\SkuVideosManager $skuVideosManager
+   *   Sku Videos manager service.
    */
-  public function __construct(SkuAssetManager $sku_assets_manager, SkuManager $skuManager) {
+  public function __construct(SkuAssetManager $sku_assets_manager, SkuVideosManager $skuVideosManager) {
     $this->skuAssetsManager = $sku_assets_manager;
-    $this->skuManager = $skuManager;
+    $this->skuVideosManager = $skuVideosManager;
   }
 
   /**
@@ -106,7 +106,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
         $return = [];
         foreach ($media as $item) {
-          $asset_type = $this->skuManager->getAssetType($item);
+          $asset_type = $this->skuVideosManager->getAssetType($item);
 
           switch ($asset_type) {
             case 'image':
