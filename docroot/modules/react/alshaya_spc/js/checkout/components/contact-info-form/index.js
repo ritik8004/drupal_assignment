@@ -6,7 +6,7 @@ import {
   showFullScreenLoader, validateInfo,
 } from '../../../utilities/checkout_util';
 import FixedFields from '../fixed-fields';
-import { validateContactInfo } from '../../../utilities/address_util';
+import { validateContactInfo, addressFormInlineErrorScroll } from '../../../utilities/address_util';
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import dispatchCustomEvent from '../../../utilities/events';
 
@@ -17,8 +17,9 @@ class ContactInfoForm extends React.Component {
     e.preventDefault();
 
     if (drupalSettings.user.uid === 0) {
-      const notValidAddress = validateContactInfo(e, false);
+      const notValidAddress = validateContactInfo(e, true);
       if (notValidAddress) {
+        addressFormInlineErrorScroll();
         return;
       }
     }
