@@ -51,6 +51,7 @@ class Utility {
   public function isBackendServerError(string $message) {
     if (stripos($message, 'report id') !== FALSE) {
       $this->logger->error($message);
+
       return TRUE;
     }
 
