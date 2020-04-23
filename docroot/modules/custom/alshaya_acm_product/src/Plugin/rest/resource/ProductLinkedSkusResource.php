@@ -109,7 +109,6 @@ class ProductLinkedSkusResource extends ResourceBase {
    *   The response containing linked skus of the given sku.
    */
   public function get(string $sku) {
-
     $skuEntity = SKU::loadFromSku($sku);
 
     // Check parameter is empty or not.
