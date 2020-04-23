@@ -247,22 +247,24 @@ $checkout_progress_next_txt: $black-two;
 $color_facet_active_border: $drakish-blue;
 $plp_facet_filter: $cool-blue-two;
 $plp_facet_filter_bg: $drakish-blue;
-$plp_facet_item_label: $black-two; //need to change
+$plp_facet_item_label: $black-two;
 $plp_facet_filter_link: $white;
 $plp_facet_clear_border: $drakish-blue;
 $plp_facet_clear_border_mobile: $drakish-blue;
-$plp_facet_clear_text: $drakish-blue;
+$plp_facet_clear_text: $black-two;
 $plp_facet_input_border: $warm-grey-two;
 $plp_facet_label: $black-two;
+$plp_selected_filter_label_text: $black-two;
 $plp_facet_filter_label: $black-two;
 $plp_facet_border: $warm-grey-two;
-$plp_facet_summary_filter_icon: $drakish-blue;
+$plp_facet_summary_filter_icon: $white;
 $plp_item_label: $black-two;
 $plp_promotion_description: $cool-blue-two;
 $plp_promotion_link: $error-red;
 $plp_all_filter_filter_arrow: $drakish-blue;
-$plp_filter_icon: $drakish-blue;
+$plp_filter_icon: $cod-gray;
 $plp_filter_active_tick: $drakish-blue;
+$plp_all_filter_button_color: $drakish-blue;
 $search_facet_active_title_bg: $cool-blue-two;
 
 // PLP All filter colors
@@ -272,11 +274,14 @@ $plp_clear_all_btn_text: $drakish-blue;
 $plp_filterbar_clearall_border: $drakish-blue;
 $plp_filterbar_clearall_text: $drakish-blue;
 $plp_filter_active_item: $cool-blue-two;
+$plp_all_filter_title: $black-two;
 
 // PLP Product tile.
 $plp_tile_product_title: $black-two;
 $plp_tile_product_title_hover: $black-two;
 $plp_tile_product_special_price: $error-red;
+$plp_pager_link: $drakish-blue;
+$plp_pager_link_border: $link-water-two;
 
 // Product detail page.
 $pdp_product_special_price: $error-red;
