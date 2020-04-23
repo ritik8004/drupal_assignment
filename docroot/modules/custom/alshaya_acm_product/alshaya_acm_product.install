@@ -12,6 +12,22 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add translations for details label.
+ */
+function alshaya_acm_product_update_8056() {
+  $strings = [
+    'Details' => [
+      'en' => 'DETAILS',
+      'ar' => 'تفاصيل',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new settings as enable_size_grouping_filter.
  */
 function alshaya_acm_product_update_8055() {
@@ -1096,6 +1112,15 @@ function alshaya_acm_product_install() {
   ];
   $product_config_factory->set('content', $content);
   $product_config_factory->save();
+
+  $strings = [
+    'Details' => [
+      'en' => 'DETAILS',
+      'ar' => 'تفاصيل',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**

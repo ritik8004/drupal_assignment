@@ -21,7 +21,6 @@ use Drupal\block\Entity\Block;
 function alshaya_hm_update_8047() {
   $strings = [
     'TITLE NAME' => [
-      'en' => 'TITLE NAME',
       'ar' => 'اسم المنتج',
     ],
     'ARTICLE DESCRIPTION' => [
@@ -99,10 +98,6 @@ function alshaya_hm_update_8047() {
     'LICENSE ITEM' => [
       'en' => 'LICENSE ITEM',
       'ar' => 'ترخيص المنتج',
-    ],
-    'Details' => [
-      'en' => 'DETAILS',
-      'ar' => 'تفاصيل',
     ],
   ];
 
@@ -990,7 +985,6 @@ function alshaya_hm_install() {
       'ar' => 'فن. لا.',
     ],
     'TITLE NAME' => [
-      'en' => 'TITLE NAME',
       'ar' => 'اسم المنتج',
     ],
     'ARTICLE DESCRIPTION' => [
@@ -1068,10 +1062,6 @@ function alshaya_hm_install() {
     'LICENSE ITEM' => [
       'en' => 'LICENSE ITEM',
       'ar' => 'ترخيص المنتج',
-    ],
-    'Details' => [
-      'en' => 'DETAILS',
-      'ar' => 'تفاصيل',
     ],
   ];
 
