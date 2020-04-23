@@ -23,7 +23,6 @@ use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
 use Drupal\file\Entity\File;
-use Drupal\Core\Session\AccountProxy;
 
 /**
  * SkuAssetManager Class.
@@ -163,13 +162,6 @@ class SkuAssetManager {
   protected $acmProductSettings;
 
   /**
-   * Drupal\Core\Session\AccountProxy definition.
-   *
-   * @var \Drupal\Core\Session\AccountProxy
-   */
-  protected $currentUser;
-
-  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -200,8 +192,6 @@ class SkuAssetManager {
    *   Lock service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_media_file_mapping
    *   Cache for media_file_mapping.
-   * @param \Drupal\Core\Session\AccountProxy $current_user
-   *   Current user object.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -216,8 +206,7 @@ class SkuAssetManager {
                               TimeInterface $time,
                               FileUsageInterface $file_usage,
                               LockBackendInterface $lock,
-                              CacheBackendInterface $cache_media_file_mapping,
-                              AccountProxy $current_user) {
+                              CacheBackendInterface $cache_media_file_mapping) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -233,7 +222,6 @@ class SkuAssetManager {
     $this->fileUsage = $file_usage;
     $this->lock = $lock;
     $this->cacheMediaFileMapping = $cache_media_file_mapping;
-    $this->currentUser = $current_user;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
   }
@@ -369,10 +357,11 @@ class SkuAssetManager {
         return $files;
       }
       else {
-        // Create a file entity.
+        // If file exists in directory but file entity doesnt exist
+        // then create file entity.
         $file = File::create([
           'uri' => $target,
-          'uid' => $this->currentUser->id(),
+          'uid' => 0,
           'status' => FILE_STATUS_PERMANENT,
         ]);
         $file->save();
