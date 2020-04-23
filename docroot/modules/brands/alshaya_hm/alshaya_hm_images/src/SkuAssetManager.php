@@ -22,7 +22,6 @@ use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
-use Drupal\alshaya_acm_product\SkuVideosManager;
 
 /**
  * SkuAssetManager Class.
@@ -162,13 +161,6 @@ class SkuAssetManager {
   protected $acmProductSettings;
 
   /**
-   * SKU Videos Manager.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuVideosManager
-   */
-  protected $skuVideosManager;
-
-  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -199,8 +191,6 @@ class SkuAssetManager {
    *   Lock service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_media_file_mapping
    *   Cache for media_file_mapping.
-   * @param \Drupal\alshaya_acm_product\SkuVideosManager $skuVideosManager
-   *   Sku Videos Manager.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -215,8 +205,7 @@ class SkuAssetManager {
                               TimeInterface $time,
                               FileUsageInterface $file_usage,
                               LockBackendInterface $lock,
-                              CacheBackendInterface $cache_media_file_mapping,
-                              SkuVideosManager $skuVideosManager) {
+                              CacheBackendInterface $cache_media_file_mapping) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -232,10 +221,8 @@ class SkuAssetManager {
     $this->fileUsage = $file_usage;
     $this->lock = $lock;
     $this->cacheMediaFileMapping = $cache_media_file_mapping;
-    $this->skuVideosManager = $skuVideosManager;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
-    $this->acmProductSettings = $this->configFactory->get('alshaya_acm_product.settings');
   }
 
   /**
@@ -288,7 +275,8 @@ class SkuAssetManager {
         continue;
       }
 
-      if (($this->skuVideosManager->getAssetType($asset) === 'video')
+      $this->acmProductSettings = $this->configFactory->get('alshaya_acm_product.settings');
+      if (($this->getAssetType($asset) === 'video')
         && ($this->acmProductSettings->get('pause_videos_download'))) {
         $download = FALSE;
       }
@@ -575,7 +563,7 @@ class SkuAssetManager {
    */
   private function downloadAsset(array &$asset, string $sku) {
     $lock_key = '';
-    $type = $this->skuVideosManager->getAssetType($asset);
+    $type = $this->getAssetType($asset);
 
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {
@@ -1133,6 +1121,24 @@ class SkuAssetManager {
     }
 
     return TRUE;
+  }
+
+  /**
+   * Helper function to get asset type.
+   *
+   * @param array $asset
+   *   Array of asset details.
+   *
+   * @return string
+   *   Asset type (video/image).
+   */
+  public function getAssetType(array $asset) {
+    if (strpos($asset['Data']['AssetType'], 'MovingMedia') !== FALSE) {
+      return 'video';
+    }
+    elseif (strpos($asset['Data']['AssetType'], 'StillMediaComponents') !== FALSE) {
+      return 'image';
+    }
   }
 
 }
