@@ -79,45 +79,6 @@
     }
   }
 
-  .c-products-list {
-    &.product-small {
-      .alshaya_search_gallery {
-        @include breakpoint($desktop) {
-          max-height: 23.5rem;
-        }
-
-        .alshaya_search_mainimage {
-          @include breakpoint($only-mobile) {
-            height: 14.625rem;
-          }
-        }
-      }
-    }
-
-    &.view-search {
-      @include breakpoint($only-mobile) {
-        padding-#{$left}: 0;
-        padding-#{$right}: 0;
-      }
-    }
-  }
-
-  &.l-two--sf {
-    .c-products-list {
-      &.product-small {
-        .alshaya_search_gallery {
-          @include breakpoint($desktop) {
-            max-height: 23.5rem;
-
-            &:hover {
-              max-height: 23.5rem !important;
-            }
-          }
-        }
-      }
-    }
-  }
-
   ul.js-pager__items {
     a {
       padding: 0.625rem 7.25rem;
