@@ -222,6 +222,9 @@ class CheckoutHelper {
 
     $session = $this->currentRequest->getSession();
     $session->set('last_order_id', $order_id);
+    $this->logger->info('Order id for last order set in session. Order id: @value', [
+      '@value' => $order_id,
+    ]);
 
     $current_user_id = 0;
 
