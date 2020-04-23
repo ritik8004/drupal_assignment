@@ -140,7 +140,7 @@
   Drupal.behaviors.spcCartGtm = {
     attach: function (context, settings) {
       var step = Drupal.alshayaSeoSpc.getStepFromContainer();
-      var cart_data = Drupal.alshayaSeoSpc.getCartData();
+      var cart_data = Drupal.alshayaSpc.getCartData();
       $(document).once('spc-cart-gtm-onetime').each(function() {
         if (cart_data !== null) {
           Drupal.alshayaSeoSpc.cartGtm(cart_data.cart, step);

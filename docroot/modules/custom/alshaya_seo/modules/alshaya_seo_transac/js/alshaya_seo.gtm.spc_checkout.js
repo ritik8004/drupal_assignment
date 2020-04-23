@@ -128,7 +128,7 @@
   Drupal.behaviors.spcCheckoutGtm = {
     attach: function (context, settings) {
       var step = Drupal.alshayaSeoSpc.getStepFromContainer();
-      var cart_data = Drupal.alshayaSeoSpc.getCartData();
+      var cart_data = Drupal.alshayaSpc.getCartData();
       $(document).once('spc-checkout-gtm-onetime').each(function() {
         if (cart_data !== null && step === 2) {
           Drupal.alshayaSeoSpc.gtmPushCheckoutOption(

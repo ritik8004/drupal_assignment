@@ -6,23 +6,14 @@
 (function ($, Drupal, drupalSettings, dataLayer) {
   'use strict';
 
-  Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {}
-  Drupal.alshayaSeoSpc.getCartData = function() {
-    var cart_data = JSON.parse(localStorage.getItem('cart_data'));
-    if (cart_data !== null && cart_data
-      && cart_data.cart && cart_data.cart.cart_id
-    ) {
-      return cart_data;
-    }
-    return null;
-  }
+  Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
 
   /**
    * Helper function to get step number from body attr gtm-container.
    */
   Drupal.alshayaSeoSpc.getStepFromContainer = function () {
     var step = 1;
-    var cart_data = Drupal.alshayaSeoSpc.getCartData();
+    var cart_data = Drupal.alshayaSpc.getCartData();
     if (window.location.href.indexOf('checkout') > -1) {
       step = 2;
     }
