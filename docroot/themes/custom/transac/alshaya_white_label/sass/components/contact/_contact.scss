@@ -309,6 +309,13 @@
     .contact-us-feedback,
     .contact-us-type,
     .contact-us-reason {
+      &.form-type-select {
+        label.error {
+          position: absolute;
+          top: 2.25rem;
+        }
+      }
+
       @include breakpoint($only-mobile) {
         @include select-wrapper(100%);
 
@@ -340,6 +347,13 @@
 
       .select2-container {
         @include select2-style(100%);
+      }
+
+      select.form-select {
+        @include breakpoint($upto-desktop) {
+          color: $primary_dropdown_text;
+          font-size: 0.875rem;
+        }
       }
     }
   }
