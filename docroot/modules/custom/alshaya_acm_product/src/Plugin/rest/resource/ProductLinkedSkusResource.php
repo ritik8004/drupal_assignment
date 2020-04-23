@@ -37,9 +37,9 @@ class ProductLinkedSkusResource extends ResourceBase {
   /**
    * The request stack service.
    *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
+   * @var \Symfony\Component\HttpFoundation\Request
    */
-  protected $requestStack;
+  protected $request;
 
   /**
    * The SKU entity manager service.
@@ -80,7 +80,7 @@ class ProductLinkedSkusResource extends ResourceBase {
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuInfoHelper = $sku_info_helper;
-    $this->requestStack = $request_stack->getCurrentRequest();
+    $this->request = $request_stack->getCurrentRequest();
     $this->sku_manager = $skuManager;
   }
 
@@ -112,7 +112,7 @@ class ProductLinkedSkusResource extends ResourceBase {
     $skuEntity = SKU::loadFromSku($sku);
 
     // Check parameter is empty or not.
-    if ($parameter = $this->requestStack->query->get('use_parent')) {
+    if ($parameter = $this->request->query->get('use_parent')) {
       // Check parameter value is equal to 1.
       if ($parameter == 1) {
         // Get parent SKU entity.
