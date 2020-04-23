@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_sku\SKUFieldsManager;
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 use Drupal\Component\Utility\Unicode;
@@ -19,84 +20,88 @@ use Drupal\block\Entity\Block;
  */
 function alshaya_hm_update_8047() {
   $strings = [
-    'Title Name' => [
-      'en' => 'Title Name',
+    'TITLE NAME' => [
+      'en' => 'TITLE NAME',
       'ar' => 'اسم المنتج',
     ],
-    'Article Description' => [
-      'en' => 'Article Description',
+    'ARTICLE DESCRIPTION' => [
+      'en' => 'ARTICLE DESCRIPTION',
       'ar' => 'وصف المقال',
     ],
-    'Function' => [
-      'en' => 'Function',
+    'FUNCTION' => [
+      'en' => 'FUNCTION',
       'ar' => 'الوظيفة',
     ],
-    'Age Group' => [
-      'en' => 'Age Group',
+    'AGE GROUP' => [
+      'en' => 'AGE GROUP',
       'ar' => 'الفئة العمرية',
     ],
-    'Style' => [
-      'en' => 'Style',
+    'STYLE' => [
+      'en' => 'STYLE',
       'ar' => 'التصميم',
     ],
-    'Clothing Style' => [
-      'en' => 'Clothing Style',
+    'CLOTHING STYLE' => [
+      'en' => 'CLOTHING STYLE',
       'ar' => 'تصميم الملابس',
     ],
-    'Collar Style' => [
-      'en' => 'Collar Style',
+    'COLLAR STYLE' => [
+      'en' => 'COLLAR STYLE',
       'ar' => 'تصميم الياقة',
     ],
-    'Neckline Style' => [
-      'en' => 'Neckline Style',
+    'NECKLINE STYLE' => [
+      'en' => 'NECKLINE STYLE',
       'ar' => 'تصميم القبة',
     ],
-    'Accessories Style' => [
-      'en' => 'Accessories Style',
+    'ACCESSORIES STYLE' => [
+      'en' => 'ACCESSORIES STYLE',
       'ar' => 'تصميم الإكسسوارات',
     ],
-    'Footwear Style' => [
-      'en' => 'Footwear Style',
+    'FOOTWEAR STYLE' => [
+      'en' => 'FOOTWEAR STYLE',
       'ar' => 'تصميم الحذاء',
     ],
-    'Descriptive Length' => [
-      'en' => 'Descriptive Length',
+    'FIT' => [
+      'en' => 'FIT',
+      'ar' => 'القصة',
+    ],
+    'DESCRIPTIVE LENGTH' => [
+      'en' => 'DESCRIPTIVE LENGTH',
       'ar' => 'الطول الوصفي',
     ],
-    'Garment Length' => [
-      'en' => 'Garment Length',
+    'GARMENT LENGTH' => [
+      'en' => 'GARMENT LENGTH',
       'ar' => 'طول الملابس',
     ],
-    'Sleeve Length' => [
-      'en' => 'Sleeve Length',
+    'SLEEVE LENGTH' => [
+      'en' => 'SLEEVE LENGTH',
       'ar' => 'طول الأكمام',
     ],
-    'Waist Rise' => [
-      'en' => 'Waist Rise',
+    'WAIST RISE' => [
+      'en' => 'WAIST RISE',
       'ar' => 'ارتفاع الخصر',
     ],
-    'Heel Height' => [
-      'en' => 'Heel Height',
+    'HEEL HEIGHT' => [
+      'en' => 'HEEL HEIGHT',
       'ar' => 'ارتفاع الكعب',
     ],
-    'Measurments in cm' => [
-      'en' => 'Measurments in cm',
+    'MEASURMENTS IN CM' => [
+      'en' => 'MEASURMENTS IN CM',
       'ar' => 'المقاسات في سم',
     ],
-    'Textual Print' => [
-      'en' => 'Textual Print',
+    'TEXTUAL PRINT' => [
+      'en' => 'TEXTUAL PRINT',
       'ar' => 'الطبعات',
     ],
-    'License Company' => [
-      'en' => 'License Company',
+    'LICENSE COMPANY' => [
+      'en' => 'LICENSE COMPANY',
       'ar' => 'ترخيص الشركة',
     ],
-    'Lisence Item' => [
-      'en' => 'Lisence Item',
+    'LICENSE ITEM' => [
+      'en' => 'LICENSE ITEM',
       'ar' => 'ترخيص المنتج',
     ],
     'Details' => [
-      'en' => 'Details',
+      'en' => 'DETAILS',
       'ar' => 'تفاصيل',
     ],
   ];
@@ -106,7 +111,9 @@ function alshaya_hm_update_8047() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_acm_product.display_settings'],
-    'alshaya_acm_product'
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
   );
 }
 
@@ -982,84 +989,88 @@ function alshaya_hm_install() {
       'en' => 'Art. no.',
       'ar' => 'فن. لا.',
     ],
-    'Title Name' => [
-      'en' => 'Title Name',
+    'TITLE NAME' => [
+      'en' => 'TITLE NAME',
       'ar' => 'اسم المنتج',
     ],
-    'Article Description' => [
-      'en' => 'Article Description',
+    'ARTICLE DESCRIPTION' => [
+      'en' => 'ARTICLE DESCRIPTION',
       'ar' => 'وصف المقال',
     ],
-    'Function' => [
-      'en' => 'Function',
+    'FUNCTION' => [
+      'en' => 'FUNCTION',
       'ar' => 'الوظيفة',
     ],
-    'Age Group' => [
-      'en' => 'Age Group',
+    'AGE GROUP' => [
+      'en' => 'AGE GROUP',
       'ar' => 'الفئة العمرية',
     ],
-    'Style' => [
-      'en' => 'Style',
+    'STYLE' => [
+      'en' => 'STYLE',
       'ar' => 'التصميم',
     ],
-    'Clothing Style' => [
-      'en' => 'Clothing Style',
+    'CLOTHING STYLE' => [
+      'en' => 'CLOTHING STYLE',
       'ar' => 'تصميم الملابس',
     ],
-    'Collar Style' => [
-      'en' => 'Collar Style',
+    'COLLAR STYLE' => [
+      'en' => 'COLLAR STYLE',
       'ar' => 'تصميم الياقة',
     ],
-    'Neckline Style' => [
-      'en' => 'Neckline Style',
+    'NECKLINE STYLE' => [
+      'en' => 'NECKLINE STYLE',
       'ar' => 'تصميم القبة',
     ],
-    'Accessories Style' => [
-      'en' => 'Accessories Style',
+    'ACCESSORIES STYLE' => [
+      'en' => 'ACCESSORIES STYLE',
       'ar' => 'تصميم الإكسسوارات',
     ],
-    'Footwear Style' => [
-      'en' => 'Footwear Style',
+    'FOOTWEAR STYLE' => [
+      'en' => 'FOOTWEAR STYLE',
       'ar' => 'تصميم الحذاء',
     ],
-    'Descriptive Length' => [
-      'en' => 'Descriptive Length',
+    'FIT' => [
+      'en' => 'FIT',
+      'ar' => 'القصة',
+    ],
+    'DESCRIPTIVE LENGTH' => [
+      'en' => 'DESCRIPTIVE LENGTH',
       'ar' => 'الطول الوصفي',
     ],
-    'Garment Length' => [
-      'en' => 'Garment Length',
+    'GARMENT LENGTH' => [
+      'en' => 'GARMENT LENGTH',
       'ar' => 'طول الملابس',
     ],
-    'Sleeve Length' => [
-      'en' => 'Sleeve Length',
+    'SLEEVE LENGTH' => [
+      'en' => 'SLEEVE LENGTH',
       'ar' => 'طول الأكمام',
     ],
-    'Waist Rise' => [
-      'en' => 'Waist Rise',
+    'WAIST RISE' => [
+      'en' => 'WAIST RISE',
       'ar' => 'ارتفاع الخصر',
     ],
-    'Heel Height' => [
-      'en' => 'Heel Height',
+    'HEEL HEIGHT' => [
+      'en' => 'HEEL HEIGHT',
       'ar' => 'ارتفاع الكعب',
     ],
-    'Measurments in cm' => [
-      'en' => 'Measurments in cm',
+    'MEASURMENTS IN CM' => [
+      'en' => 'MEASURMENTS IN CM',
       'ar' => 'المقاسات في سم',
     ],
-    'Textual Print' => [
-      'en' => 'Textual Print',
+    'TEXTUAL PRINT' => [
+      'en' => 'TEXTUAL PRINT',
       'ar' => 'الطبعات',
     ],
-    'License Company' => [
-      'en' => 'License Company',
+    'LICENSE COMPANY' => [
+      'en' => 'LICENSE COMPANY',
       'ar' => 'ترخيص الشركة',
     ],
-    'Lisence Item' => [
-      'en' => 'Lisence Item',
+    'LICENSE ITEM' => [
+      'en' => 'LICENSE ITEM',
       'ar' => 'ترخيص المنتج',
     ],
     'Details' => [
-      'en' => 'Details',
+      'en' => 'DETAILS',
       'ar' => 'تفاصيل',
     ],
   ];

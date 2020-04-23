@@ -272,79 +272,79 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     // To display detailed description in overlay section.
     $product_details = [];
     if ($function = $sku_entity->get('attr_function')->getValue()) {
-      $product_details[] = ['label' => $this->t('Function'), 'data' => $function];
+      $product_details[] = ['label' => $this->t('FUNCTION'), 'data' => $function];
     }
 
     if ($age_group = $sku_entity->get('attr_age_group')->getValue()) {
-      $product_details[] = ['label' => $this->t('Age Group'), 'data' => $age_group];
+      $product_details[] = ['label' => $this->t('AGE GROUP'), 'data' => $age_group];
     }
 
     if ($style = $sku_entity->get('attr_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('Style'), 'data' => $style];
+      $product_details[] = ['label' => $this->t('STYLE'), 'data' => $style];
     }
 
     if ($clothing_style = $sku_entity->get('attr_clothing_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('Clothing Style'), 'data' => $clothing_style];
+      $product_details[] = ['label' => $this->t('CLOTHING STYLE'), 'data' => $clothing_style];
     }
 
     if ($collar_style = $sku_entity->get('attr_collar_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('Collar Style'), 'data' => $collar_style];
+      $product_details[] = ['label' => $this->t('COLLAR STYLE'), 'data' => $collar_style];
     }
 
     if ($neckline_style = $sku_entity->get('attr_neckline_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('Neckline Style'), 'data' => $neckline_style];
+      $product_details[] = ['label' => $this->t('NECKLINE STYLE'), 'data' => $neckline_style];
     }
 
     if ($accessories_style = $sku_entity->get('attr_accessories_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('`Accessories Style'), 'data' => $accessories_style];
+      $product_details[] = ['label' => $this->t('ACCESSORIES STYLE'), 'data' => $accessories_style];
     }
 
     if ($footwear_style = $sku_entity->get('attr_footwear_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('Footwear Style'), 'data' => $footwear_style];
+      $product_details[] = ['label' => $this->t('FOOTWEAR STYLE'), 'data' => $footwear_style];
     }
 
     if ($fit = $sku_entity->get('attr_fit')->getValue()) {
-      $product_details[] = ['label' => $this->t('Fit'), 'data' => $fit];
+      $product_details[] = ['label' => $this->t('FIT'), 'data' => $fit];
     }
 
     if ($descriptive_length = $sku_entity->get('attr_descriptive_length')->getValue()) {
-      $product_details[] = ['label' => $this->t('Descriptive Length'), 'data' => $descriptive_length];
+      $product_details[] = ['label' => $this->t('DESCRIPTIVE LENGTH'), 'data' => $descriptive_length];
     }
 
     if ($garment_length = $sku_entity->get('attr_garment_length')->getValue()) {
-      $product_details[] = ['label' => $this->t('Garment Length'), 'data' => $garment_length];
+      $product_details[] = ['label' => $this->t('GARMENT LENGTH'), 'data' => $garment_length];
     }
 
     if ($sleeve_length = $sku_entity->get('attr_sleeve_length')->getValue()) {
-      $product_details[] = ['label' => $this->t('Sleeve Length'), 'data' => $sleeve_length];
+      $product_details[] = ['label' => $this->t('SLEEVE LENGTH'), 'data' => $sleeve_length];
     }
 
     if ($waist_rise = $sku_entity->get('attr_waist_rise')->getValue()) {
-      $product_details[] = ['label' => $this->t('Waist Rise'), 'data' => $waist_rise];
+      $product_details[] = ['label' => $this->t('WAIST RISE'), 'data' => $waist_rise];
     }
 
     if ($heel_height = $sku_entity->get('attr_heel_height')->getValue()) {
-      $product_details[] = ['label' => $this->t('Heel Height'), 'data' => $heel_height];
+      $product_details[] = ['label' => $this->t('HEEL HEIGHT'), 'data' => $heel_height];
     }
 
     if ($measurements_in_cm = $sku_entity->get('attr_measurements_in_cm')->getValue()) {
-      $product_details[] = ['label' => $this->t('Measurments in cm'), 'data' => $measurements_in_cm];
+      $product_details[] = ['label' => $this->t('MEASURMENTS IN CM'), 'data' => $measurements_in_cm];
     }
 
     if ($fragrance_name = $sku_entity->get('attr_fragrance_name')->getValue()) {
-      $product_details[] = ['label' => $this->t('Fragrance Name'), 'data' => $fragrance_name];
+      $product_details[] = ['label' => $this->t('FRAGRANCE NAME'), 'data' => $fragrance_name];
     }
 
     if ($textual_print = $sku_entity->get('attr_textual_print')->getValue()) {
-      $product_details[] = ['label' => $this->t('Textual print'), 'data' => $textual_print];
+      $product_details[] = ['label' => $this->t('TEXTUAL PRINT'), 'data' => $textual_print];
     }
 
     if ($article_license_company = $sku_entity->get('attr_article_license_company')->getValue()) {
-      $product_details[] = ['label' => $this->t('Article License Company'), 'data' => $article_license_company];
+      $product_details[] = ['label' => $this->t('LICENSE COMPANY'), 'data' => $article_license_company];
     }
 
     if ($article_license_item = $sku_entity->get('attr_article_license_item')->getValue()) {
-      $product_details[] = ['label' => $this->t('Ariticle Lisence Item'), 'data' => $article_license_item];
+      $product_details[] = ['label' => $this->t('Lisence Item'), 'data' => $article_license_item];
     }
 
     $details_overlay_markup = [
