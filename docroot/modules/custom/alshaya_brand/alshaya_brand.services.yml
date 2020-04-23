@@ -1,0 +1,5 @@
+services:
+  stream_wrapper.brand:
+    class: Drupal\alshaya_brand\StreamWrapper\BrandFilesStreamWrapper
+    tags:
+      - { name: stream_wrapper, scheme: brand }
