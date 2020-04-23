@@ -15,6 +15,7 @@ $WE_gray_ten: #a0a0a0;
 $WE_gray_eleven: #f0f0f0;
 $WE_gray_twelve: #eeee;
 $WE_gray_thirteen: #515151;
+$WE_gray_fourteen: rgba(0, 0, 0, 0.19);
 $WE_shadow: rgba(128, 128, 128, 0.5);
 $WE_white: #fff;
 $WE_white_two: #f9f9f9;
@@ -363,6 +364,9 @@ $checkout_login_tab_border_active: $WE_grey_three;
 $checkout_login_tab_text_active: $WE_black_one;
 $checkout_guest_button_border: $WE_grey_three;
 $checkout_guest_button_txt: $WE_grey_three;
+$checkout_login_submit_button_background: $WE_grey_three;
+$checkout_login_back_to_basket_text: $WE_grey_three;
+$checkout_login_link_text: $WE_grey_three;
 
 // Checkout click and collect heading cnc form.
 $checkout_cc_cnc_form_title_border: $WE_white_five;
@@ -617,11 +621,16 @@ $free-gifts-coupon-code-text: $WE_grey_one;
 $free-gifts-border: $WE_grey_one;
 $free-gifts-text: $WE_grey_three;
 $free-gifts-select-button-bg: $WE_grey_three;
-$free-gifts-modal-product-name: $black;
-$free-gifts-modal-product-description-label: $black;
+$free-gifts-modal-product-name: $WE_black_one;
+$free-gifts-modal-product-description-label: $WE_black_one;
 $free-gifts-modal-product-item-code: $WE_grey_one;
 $cart-free-gifts-message: $WE_grey_three;
 $cart-free-gifts-title: $WE_grey_three;
 $cart-free-gifts-label: $WE_white;
 $cart-free-gifts-label-background: $WE_grey_one;
 $cart-free-gifts-button-color: $WE_white;
+
+// SPC Cart.
+$spc-deliver-button: $WE_grey_three;
+$spc-cnc-toggle-bg-active: $WE_grey_three;
+$spc-checkout-cnc-map-expand: $WE_deep_blue;

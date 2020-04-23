@@ -1,0 +1,9 @@
+.spc-promo-code-block {
+  .promo-submit {
+    text-transform: uppercase;
+  }
+
+  input#promo-code::placeholder {
+    text-transform: uppercase;
+  }
+}

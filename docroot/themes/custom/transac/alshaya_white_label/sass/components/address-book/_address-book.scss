@@ -407,6 +407,10 @@
     display: block;
     margin-top: 1.25rem;
 
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.25rem;
+    }
+
     @include breakpoint($tablet) {
       display: inline-block;
       position: absolute;

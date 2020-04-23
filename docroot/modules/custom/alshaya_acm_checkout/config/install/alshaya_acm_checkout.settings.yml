@@ -5,7 +5,7 @@ checkout_guest_email_usage:
 checkout_guest_login:
   value: ''
 checkout_terms_condition:
-  value: '<p>I confirm that I have read and accept the <a class="payment-privacy-policy" href="#">Privacy Policy</a> and <a class="payment-tnc" href="#">Terms &amp; Conditions</a> of purchase. Read our <a class="payment-return policy" href="#">Return Policy</a></p>'
+  value: '<p>By placing your order, you agree to our <a class="payment-privacy-policy" href="#">Privacy Policy</a> and <a class="payment-tnc" href="#">Terms &amp; Conditions</a>. Read our Return Policy <a class="payment-return policy" href="#">here</a></p>'
   format: 'rich_text'
 checkout_customer_service:
   value: '<p>For Kuwait <span class="light no-direction">+965 XXX XX XX</span></p><p>For other regions <span class="light no-direction">8 (800) XXX XX X</span></p><p><span class="light">We are open from Sunday – Saturday from 9:30 am – 8:30 pm (Kuwait Local Time, GMT +3)</span></p>'

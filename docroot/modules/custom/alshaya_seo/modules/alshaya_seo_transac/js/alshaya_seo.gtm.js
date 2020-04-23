@@ -26,19 +26,29 @@
         product.attr('gtm-price', variantInfo['gtm_price']);
       });
 
-      // For simple grouped products.
-      $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected', function (event, variant) {
+      // For simple/configurable grouped products.
+      $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected group-configurable-item-selected', function (event, variant) {
         var sku = $(this).attr('data-sku');
         var productKey = ($(this).attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
         if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
-        var variantInfo = drupalSettings[productKey][sku]['group'][variant];
+        var variantInfo = '';
+        var main_sku = '';
+        if (event.type === 'group-configurable-item-selected') {
+          variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+          main_sku = variantInfo.parent_sku;
+        }
+        else {
+          variantInfo = drupalSettings[productKey][sku]['group'][variant];
+          main_sku = variant;
+        }
 
-        $(this).attr('gtm-main-sku', variant);
+        $(this).attr('gtm-main-sku', main_sku);
         $(this).attr('gtm-product-sku', variant);
         $(this).attr('gtm-price', variantInfo['gtm_price']);
+        Drupal.alshaya_seo_push_product_details_view();
       });
 
       $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
@@ -97,8 +107,8 @@
       });
 
       // Push GTM event on add to cart failure.
-      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function () {
-        var sku = $(this).closest('article[gtm-type="gtm-product-link"]').attr('gtm-main-sku');
+      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e, productInfo) {
+        var sku = productInfo.parentSku;
         var errorMessage = $('.errors-container .error .message', $(this)).text();
         // Get selected attributes.
         var attributes = [];
@@ -197,27 +207,7 @@
         }
 
         $(window).once('gtm-onetime').on('load', function() {
-          if ($(document).find('article[data-vmode="full"]').length === 1) {
-            var productContext = $(document).find('article[data-vmode="full"]');
-
-            var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-            product.variant = '';
-            if (currentListName != null && currentListName !== 'PDP-placeholder') {
-              product.list = currentListName;
-              currentListName = null;
-            }
-            var data = {
-              event: 'productDetailView',
-              ecommerce: {
-                currencyCode: currencyCode,
-                detail: {
-                  products: [product]
-                }
-              }
-            };
-
-            dataLayer.push(data);
-          }
+          Drupal.alshaya_seo_push_product_details_view();
         });
       });
 
@@ -550,13 +540,6 @@
           dataLayer.push(data);
         });
       });
-
-      /**
-       * Fire checkoutOption on cart page.
-       */
-      if (gtmPageType === 'cart page' && drupalSettings.user.uid !== 0) {
-        Drupal.alshaya_seo_gtm_push_checkout_option('Logged In', 1);
-      }
 
       /**
        * Tracking Home Delivery.
@@ -1214,9 +1197,88 @@
     }
   };
 
+  /**
+   * Helper function to push productDetailView to GTM.
+   */
+  Drupal.alshaya_seo_push_product_details_view = function () {
+    var productContext = $(document).find('article[data-vmode="full"]');
+    if (productContext.length === 1) {
+      var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+      var dataPrefix = 'pushedProduct_';
+      // Check if it has already been processed before.
+      if (productContext.data(dataPrefix + product.id) === 1) {
+        return ;
+      }
+      var currencyCode = $('body').attr('gtm-currency');
+      product.variant = '';
+      if (currentListName != null && currentListName !== 'PDP-placeholder') {
+        product.list = currentListName;
+        currentListName = null;
+      }
+      var data = {
+        event: 'productDetailView',
+        ecommerce: {
+          currencyCode: currencyCode,
+          detail: {
+            products: [product]
+          }
+        }
+      };
+      dataLayer.push(data);
+      // Do it so that the same item is not processed again.
+      productContext.data(dataPrefix + product.id, 1);
+    }
+  }
   // Ajax command to push deliveryAddress Event.
   $.fn.triggerDeliveryAddress = function () {
     dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
+  };
+
+  /**
+   * Log errors and track on GA.
+   *
+   * @param context
+   * @param error
+   */
+  Drupal.logJavascriptError = function (context, error) {
+    var message = (error.message !== undefined)
+      ? error.message
+      : error;
+    var errorData = {
+      event: 'eventTracker',
+      eventCategory: context,
+      eventLabel: 'Error occurred on ' + window.location.href,
+      eventAction: message,
+      eventValue: 0,
+      nonInteraction: 0,
+    };
+
+    try {
+      // Log error on console.
+      if (drupalSettings.gtm.log_errors_to_console !== undefined
+        && drupalSettings.gtm.log_errors_to_console) {
+        console.error(error);
+      }
+
+      // Track error on GA.
+      if (drupalSettings.gtm.log_errors_to_ga !== undefined
+        && drupalSettings.gtm.log_errors_to_ga
+        && dataLayer !== undefined) {
+        dataLayer.push(errorData);
+      }
+    } catch (e) {
+      // Do nothing.
+    }
+  };
+
+  window.onerror = function (message, url, lineNo, columnNo, error) {
+    if (error !== null) {
+      Drupal.logJavascriptError('Uncaught errors', error);
+    }
+    else if (message !== null) {
+      Drupal.logJavascriptError('Uncaught errors', message);
+    }
+    return true;
   };
 
 })(jQuery, Drupal, dataLayer);

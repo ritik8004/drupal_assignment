@@ -195,10 +195,10 @@
 
           > ul.sizegroup {
             display: block;
-            position: initial;
+            position: static;
             border: none;
             margin: 0;
-            overflow-y: unset;
+            overflow-y: visible;
 
             .facet-item {
               font-family: $hnm-regular;

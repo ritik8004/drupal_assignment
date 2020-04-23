@@ -180,7 +180,8 @@ header {
   }
 
   form,
-  .block-cart-mini-block {
+  .block-cart-mini-block,
+  .block-alshaya-react-mini-cart {
     @include breakpoint($only-mobile) {
       margin-top: 0;
     }
@@ -258,7 +259,8 @@ header {
     }
   }
 
-  .block-cart-mini-block {
+  .block-cart-mini-block,
+  .block-alshaya-react-mini-cart {
     font-size: 0.875rem;
     text-align: $right;
     color: $primary_minicart_text;
@@ -305,6 +307,11 @@ header {
       margin-top: 6px;
       margin-right: 2px;
       padding-#{$right}: 1rem;
+
+      .price-amount {
+        padding: 0 0.25rem;
+        margin: 0;
+      }
 
       @include breakpoint($only-mobile) {
         display: none;
@@ -1680,7 +1687,8 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-#block-cartminiblock {
+#block-cartminiblock,
+.block-alshaya-react-mini-cart {
   position: relative;
 }
 

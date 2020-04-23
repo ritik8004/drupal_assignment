@@ -72,7 +72,12 @@
         width: 100%;
         padding-#{$left}: 3rem !important;
         border: 0 solid $algolia-auto-complete-border;
-        height: 4.0625rem;
+        height: 3.6875rem;
+
+        // For PB arabic, header height is different.
+        html[lang=ar] & {
+          height: 4.0625rem;
+        }
       }
 
       @include breakpoint($tablet) {

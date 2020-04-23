@@ -65,6 +65,14 @@ interface CartStorageInterface {
   public function getCart($create_new);
 
   /**
+   * Get skus of current cart items.
+   *
+   * @return array
+   *   Items in the current cart.
+   */
+  public function getCartSkus();
+
+  /**
    * Updates the current cart in storage.
    *
    * @param bool $create_new

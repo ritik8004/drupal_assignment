@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_spc_install() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  if ($translations = _alshaya_spc_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_schema().
+ */
+function alshaya_spc_schema() {
+  $schema = [];
+
+  $schema['middleware_payment_data'] = [
+    'description' => 'Stores payment data info from middleware.',
+    'fields' => [
+      'cart_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Cart or Quote id.',
+      ],
+      'unique_id' => [
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Payment token id.',
+      ],
+      'data' => [
+        'type' => 'blob',
+        'not null' => TRUE,
+        'size' => 'big',
+        'description' => 'Serialized array containing payment data.',
+      ],
+      'timestamp' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Unix timestamp of when the data was saved.',
+      ],
+    ],
+    'primary key' => ['cart_id'],
+    'unique keys' => ['middleware_payment_data__unique_id' => ['unique_id']],
+  ];
+
+  return $schema;
+}

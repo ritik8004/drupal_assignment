@@ -1,0 +1,129 @@
+.payment-method.payment-method-checkout_com,
+.payment-method.payment-method-cybersource {
+  .error {
+    font-size: 0.75rem;
+    color: $primary_input_inline_error;
+    padding-top: 0.3125rem;
+    display: block;
+  }
+
+  .payment-method-bottom-panel {
+    padding: 1.25rem;
+    padding-#{$left}: 3rem;
+
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 2.25rem;
+    }
+  }
+
+  input {
+    padding: 0;
+    border: none;
+    border-bottom: 1px solid $spc-cc-border;
+    color: $spc-cc-input;
+    width: 100%;
+
+    &:focus {
+      outline: 0 !important;
+    }
+
+    &:not(.error):focus ~ .c-input__bar::before,
+    &:not(.error):focus ~ .c-input__bar::after {
+      width: 50%;
+    }
+
+    ~ label {
+      color: $spc-cc-placeholder;
+    }
+  }
+
+  .spc-type-cc-number {
+    max-width: 20rem;
+    width: 100%;
+    margin-bottom: 2.5rem;
+
+    @include breakpoint($only-mobile) {
+      max-width: 14.875rem;
+      width: 100%;
+    }
+  }
+
+  .spc-type-cc-number,
+  .spc-type-expiry,
+  .spc-type-cvv {
+    label {
+      white-space: nowrap;
+      width: 80%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .spc-type-expiry,
+  .spc-type-cvv {
+    width: 9.375rem;
+    display: inline-block;
+    vertical-align: top;
+
+    @include breakpoint($only-mobile) {
+      width: 6.8125rem;
+    }
+  }
+
+  .spc-type-expiry {
+    margin-#{$right}: 1.25rem;
+  }
+
+  .spc-card-types-wrapper {
+    clear: both;
+    width: 100%;
+  }
+
+  .spc-type-cvv {
+    .tooltip-anchor {
+      position: absolute;
+      top: -0.3125rem;
+      #{$right}: 0;
+      z-index: 1;
+
+      .tooltip-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        p {
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .spc-payment-save-card {
+    font-size: 0.875rem;
+    color: $spc-checkout-payment-saved-card-text;
+    margin-top: 1.25rem;
+
+    label {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      max-width: 19.875rem;
+      line-height: 1.5;
+
+      @include breakpoint($only-mobile) {
+        max-width: 13.0625rem;
+      }
+
+      &::before {
+        margin-#{$right}: 0.625rem;
+        font-size: 1.5rem;
+        color: $spc-checkout-radio-empty;
+      }
+    }
+
+    input[type=checkbox]:checked ~ label::before {
+      color: $spc-checkout-radio-filled;
+    }
+  }
+}

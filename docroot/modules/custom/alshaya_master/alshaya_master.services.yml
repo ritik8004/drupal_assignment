@@ -12,3 +12,9 @@ services:
     class: Drupal\alshaya_master\EventSubscriber\RedirectOptionsSubscriber
     tags:
       - { name: event_subscriber }
+
+  alshaya_master.form_ajax_response_builder:
+    decorates: form_ajax_response_builder
+    public: false
+    class: Drupal\alshaya_master\Decorator\AlshayaFormAjaxResponseBuilder
+    arguments: ['@main_content_renderer.ajax', '@current_route_match']

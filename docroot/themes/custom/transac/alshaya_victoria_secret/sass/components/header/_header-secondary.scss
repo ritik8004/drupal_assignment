@@ -77,9 +77,10 @@
   }
 }
 
-.mobile--overlay .block-alshaya-algolia-react-autocomplete {
+// Mobile needs z-index as well.
+body.mobile--overlay .block-alshaya-algolia-react-autocomplete {
   &::before {
-    @include breakpoint($only-tablet) {
+    @include breakpoint($upto-desktop) {
       opacity: 1;
       z-index: 15;
       background: $header_mobile_menu_overlay;

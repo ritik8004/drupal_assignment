@@ -8,7 +8,7 @@ field_name: field_shipping_method_cart_desc
 entity_type: taxonomy_term
 type: string
 settings:
-  max_length: 255
+  max_length: 510
   is_ascii: false
   case_sensitive: false
 module: core
