@@ -46,7 +46,7 @@
         $(this).addClass('is-open');
       });
 
-      $('.all-filters').on('click', '#block-plpsize >ul >li, #block-promosize >ul >li', function (event) {
+      $('.all-filters').once('plp-size-group').on('click', '#block-plpsize > ul > li, #block-promosize > ul > li', function (event) {
         // Update the title on click of facet.
         var facet_title = $(event.target).text();
 
@@ -63,6 +63,8 @@
         $(this).removeClass('show-facet');
         $('.all-filters #block-plpsize >ul >li, .all-filters #block-promosize >ul >li').hide();
         $(this).addClass('show-facet');
+        // Store the sizegroup id for ajax.
+        $('main #all-filter-active-facet-sort').attr('data-size-group-id', $(this).find('ul').attr('id'));
         // Pass comma separated ids for the elements to make visible.
         // This is separate by , so that other JS logic bypasses it
         // and this will be handled by this behaviour specifically
@@ -86,6 +88,7 @@
           $selectedGrandChild.closest('.c-facet').find('.c-facet__title').trigger('click');
           // Reset the show facet class to reset to original state.
           $('.all-filters #block-plpsize >ul >li.show-facet, .all-filters #block-promosize >ul >li.show-facet').removeClass('show-facet');
+          $('main #all-filter-active-facet-sort').attr('data-size-group-id', '');
         }
 
         // Stop event bubbling and normal execution.
