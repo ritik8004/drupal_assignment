@@ -22,6 +22,8 @@ use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
+use Drupal\file\Entity\File;
+use Drupal\Core\Session\AccountProxy;
 
 /**
  * SkuAssetManager Class.
@@ -161,6 +163,13 @@ class SkuAssetManager {
   protected $acmProductSettings;
 
   /**
+   * Drupal\Core\Session\AccountProxy definition.
+   *
+   * @var \Drupal\Core\Session\AccountProxy
+   */
+  protected $currentUser;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -191,6 +200,8 @@ class SkuAssetManager {
    *   Lock service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_media_file_mapping
    *   Cache for media_file_mapping.
+   * @param \Drupal\Core\Session\AccountProxy $current_user
+   *   Current user object.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -205,7 +216,8 @@ class SkuAssetManager {
                               TimeInterface $time,
                               FileUsageInterface $file_usage,
                               LockBackendInterface $lock,
-                              CacheBackendInterface $cache_media_file_mapping) {
+                              CacheBackendInterface $cache_media_file_mapping,
+                              AccountProxy $current_user) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -221,6 +233,7 @@ class SkuAssetManager {
     $this->fileUsage = $file_usage;
     $this->lock = $lock;
     $this->cacheMediaFileMapping = $cache_media_file_mapping;
+    $this->currentUser = $current_user;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
   }
@@ -356,8 +369,13 @@ class SkuAssetManager {
         return $files;
       }
       else {
-        $file_data = file_get_contents($target);
-        $file = $this->saveAssetData($file_data, $target, $sku);
+        // Create a file entity.
+        $file = File::create([
+          'uri' => $target,
+          'uid' => $this->currentUser->id(),
+          'status' => FILE_STATUS_PERMANENT,
+        ]);
+        $file->save();
 
         return $file;
       }
@@ -422,7 +440,20 @@ class SkuAssetManager {
 
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-    $file = $this->saveAssetData($file_data, $target, $sku);
+    try {
+      $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
+
+      if (!($file instanceof FileInterface)) {
+        throw new \Exception('Failed to save asset file');
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Failed to save asset file for sku @sku at @uri, error: @message', [
+        '@sku' => $sku,
+        '@uri' => $target,
+        '@message' => $e->getMessage(),
+      ]);
+    }
 
     return $file ?? NULL;
   }
@@ -1132,38 +1163,6 @@ class SkuAssetManager {
     elseif (strpos($asset['Data']['AssetType'], 'StillMediaComponents') !== FALSE) {
       return 'image';
     }
-  }
-
-  /**
-   * Helper function to save asset data.
-   *
-   * @param string $file_data
-   *   File data.
-   * @param string $target
-   *   File path.
-   * @param string $sku
-   *   SKU string.
-   *
-   * @return \Drupal\file\FileInterface
-   *   File entity.
-   */
-  private function saveAssetData(string $file_data, string $target, string $sku) {
-    try {
-      $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
-
-      if (!($file instanceof FileInterface)) {
-        throw new \Exception('Failed to save asset file');
-      }
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to save asset file for sku @sku at @uri, error: @message', [
-        '@sku' => $sku,
-        '@uri' => $target,
-        '@message' => $e->getMessage(),
-      ]);
-    }
-
-    return $file;
   }
 
 }
