@@ -4,6 +4,7 @@ namespace App\Service\Magento;
 
 use App\Service\Utility;
 use GuzzleHttp\TransferStats;
+use GuzzleHttp\Exception\ConnectException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -110,7 +111,7 @@ class MagentoApiWrapper {
         }
       }
     }
-    catch (\Exception $e) {
+    catch (ConnectException $e) {
       $this->logger->error($e->getMessage());
       throw new \Exception($this->utility->getDefaultErrorMessage(), 500);
     }
