@@ -178,3 +178,5 @@ services:
     class: Drupal\alshaya_acm_product\Service\ProductOrderLimit
     arguments:
       - '@alshaya_acm_product.skumanager'
+  alshaya_acm_product.sku_videos_manager:
+    class: Drupal\alshaya_acm_product\SkuVideosManager

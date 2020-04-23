@@ -7,7 +7,6 @@ use Drupal\Core\DrupalKernel;
 use Drupal\Core\Site\Settings;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\StreamWrapper\LocalStream;
-use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -16,13 +15,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 class BrandFilesStreamWrapper extends LocalStream {
 
   use StringTranslationTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function getType() {
-    return StreamWrapperInterface::LOCAL_NORMAL;
-  }
 
   /**
    * {@inheritdoc}
@@ -67,12 +59,10 @@ class BrandFilesStreamWrapper extends LocalStream {
    */
   public static function baseUrl() {
     $settings_base_url = Settings::get('file_brand_base_url', '');
-    if ($settings_base_url) {
-      return (string) $settings_base_url;
-    }
-    else {
-      return $GLOBALS['base_url'] . '/' . static::basePath();
-    }
+
+    return $settings_base_url
+      ? (string) $settings_base_url
+      : $GLOBALS['base_url'] . '/' . static::basePath();
   }
 
   /**

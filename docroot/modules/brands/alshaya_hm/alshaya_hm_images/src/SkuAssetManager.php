@@ -22,6 +22,7 @@ use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
+use Drupal\alshaya_acm_product\SkuVideosManager;
 
 /**
  * SkuAssetManager Class.
@@ -156,9 +157,16 @@ class SkuAssetManager {
   /**
    * Config alshaya_acm_product.settings.
    *
-   * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
+   * @var Drupal\Core\Config\ImmutableConfig
    */
   protected $acmProductSettings;
+
+  /**
+   * SKU Videos Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuVideosManager
+   */
+  protected $skuVideosManager;
 
   /**
    * SkuAssetManager constructor.
@@ -191,6 +199,8 @@ class SkuAssetManager {
    *   Lock service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_media_file_mapping
    *   Cache for media_file_mapping.
+   * @param \Drupal\alshaya_acm_product\SkuVideosManager $skuVideosManager
+   *   Sku Videos Manager.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -205,7 +215,8 @@ class SkuAssetManager {
                               TimeInterface $time,
                               FileUsageInterface $file_usage,
                               LockBackendInterface $lock,
-                              CacheBackendInterface $cache_media_file_mapping) {
+                              CacheBackendInterface $cache_media_file_mapping,
+                              SkuVideosManager $skuVideosManager) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -221,6 +232,7 @@ class SkuAssetManager {
     $this->fileUsage = $file_usage;
     $this->lock = $lock;
     $this->cacheMediaFileMapping = $cache_media_file_mapping;
+    $this->skuVideosManager = $skuVideosManager;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
     $this->acmProductSettings = $this->configFactory->get('alshaya_acm_product.settings');
@@ -276,7 +288,7 @@ class SkuAssetManager {
         continue;
       }
 
-      if (($this->skuManager->getAssetType($asset) === 'video')
+      if (($this->skuVideosManager->getAssetType($asset) === 'video')
         && ($this->acmProductSettings->get('pause_videos_download'))) {
         $download = FALSE;
       }
@@ -563,7 +575,7 @@ class SkuAssetManager {
    */
   private function downloadAsset(array &$asset, string $sku) {
     $lock_key = '';
-    $type = $this->skuManager->getAssetType($asset);
+    $type = $this->skuVideosManager->getAssetType($asset);
 
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {
