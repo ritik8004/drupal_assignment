@@ -2,7 +2,6 @@
 
 namespace Drupal\acq_promotion;
 
-use Drupal\alshaya_acm\CartData;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\node\NodeInterface;
 
@@ -43,28 +42,28 @@ abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterf
   /**
    * {@inheritdoc}
    */
-  public function getInactiveLabel(CartData $cart) {
+  public function getInactiveLabel() {
     return $this->promotionNode->get('field_acq_promotion_label')->getString();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getActiveLabel(CartData $cart) {
+  public function getActiveLabel() {
     return '';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getPromotionCartStatus(CartData $cart) {
+  public function getPromotionCartStatus() {
     return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getPromotionCodeLabel(CartData $cart) {
+  public function getPromotionCodeLabel() {
     return '';
   }
 
