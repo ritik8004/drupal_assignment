@@ -150,7 +150,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
   protected function selectCheckoutComPayment(array $card) {
     // Set the card related data in session to use it to prepare request data
     // for checkout.com api.
-    if ($card['mada'] || $this->checkoutComApi->isCheckout3dEnabled()) {
+    if ($card['mada']) {
       $session = $this->currentRequest->getSession();
       $session->set('acq_checkout_com_card', $card);
     }

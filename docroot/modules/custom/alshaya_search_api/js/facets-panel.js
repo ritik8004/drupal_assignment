@@ -326,6 +326,13 @@
           $('.all-filters #' + active_facet_sort).show();
         }
 
+        // Also restore the state for size Group facet post AJAX.
+        var sizeGroupFilter = $('#all-filter-active-facet-sort').attr('data-size-group-id');
+        if (sizeGroupFilter.length > 0) {
+          $('.all-filters #block-plpsize > ul > li, .all-filters #block-promosize > ul > li').hide();
+          $('.all-filters #' + sizeGroupFilter).parent().addClass('show-facet');
+        }
+
         // If there any active facet filter.
         updateFacetTitlesWithSelected();
         updateCategoryTitle();
