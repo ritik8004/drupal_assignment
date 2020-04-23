@@ -4,6 +4,7 @@ namespace App\Service\Magento;
 
 use App\Service\Utility;
 use GuzzleHttp\TransferStats;
+use GuzzleHttp\Exception\ConnectException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -81,32 +82,38 @@ class MagentoApiWrapper {
     };
 
     $request_options['timeout'] = $request_options['timeout'] ?? 30;
-    $response = $this->magentoInfo->getMagentoApiClient()->request(
-      $method,
-      $this->magentoInfo->getMagentoUrl() . '/' . ltrim($url, '/'),
-      $request_options
-    );
+    try {
+      $response = $this->magentoInfo->getMagentoApiClient()->request(
+        $method,
+        $this->magentoInfo->getMagentoUrl() . '/' . ltrim($url, '/'),
+        $request_options
+      );
 
-    $result = $response->getBody()->getContents();
+      $result = $response->getBody()->getContents();
 
-    $result = is_string($result) && !empty($result)
-      ? json_decode($result, TRUE)
-      : $result;
+      $result = is_string($result) && !empty($result)
+        ? json_decode($result, TRUE)
+        : $result;
 
-    if ($response->getStatusCode() > 500) {
-      throw new \Exception('Back-end system is down', 600);
+      if ($response->getStatusCode() > 500) {
+        throw new \Exception('Back-end system is down', 600);
+      }
+      elseif ($response->getStatusCode() !== 200) {
+        if (empty($result)) {
+          throw new \Exception($this->utility->getDefaultErrorMessage(), 500);
+        }
+        elseif (!empty($result['message'])) {
+          throw new \Exception($this->getProcessedErrorMessage($result), 500);
+        }
+        elseif (!empty($result['messages']) && !empty($result['messages']['error'])) {
+          $error = reset($result['messages']['error']);
+          throw new \Exception($error['message'], $error['code']);
+        }
+      }
     }
-    elseif ($response->getStatusCode() !== 200) {
-      if (empty($result)) {
-        throw new \Exception($this->utility->getDefaultErrorMessage(), 500);
-      }
-      elseif (!empty($result['message'])) {
-        throw new \Exception($this->getProcessedErrorMessage($result), 500);
-      }
-      elseif (!empty($result['messages']) && !empty($result['messages']['error'])) {
-        $error = reset($result['messages']['error']);
-        throw new \Exception($error['message'], $error['code']);
-      }
+    catch (ConnectException $e) {
+      $this->logger->error($e->getMessage());
+      throw new \Exception($this->utility->getDefaultErrorMessage(), 500);
     }
 
     return $result;

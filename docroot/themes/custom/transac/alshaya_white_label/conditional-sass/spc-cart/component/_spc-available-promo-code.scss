@@ -12,8 +12,6 @@
     transition: all 0.3s ease-in-out;
     height: 2.25rem;
 
-    @include link-ripple;
-
     &:hover {
       border-style: solid;
     }
@@ -31,11 +29,12 @@
   }
 }
 
-.promo-continue-shopping-wrapper {
+.spc-promo-code-block {
   .promotion-available-code {
-    margin-top: 1.875rem;
+    margin-top: 1.25rem;
 
     .promotion-coupon-code {
+      background: $basket_fixed_percentage_threshold_reached_bg;
       margin-#{$left}: 0;
       margin-#{$right}: 0.625rem;
     }

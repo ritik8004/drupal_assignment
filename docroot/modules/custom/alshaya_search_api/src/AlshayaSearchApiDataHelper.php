@@ -52,4 +52,28 @@ class AlshayaSearchApiDataHelper {
     return is_array($values) ? $values : [];
   }
 
+  /**
+   * Get all the products that have value available in the specified field.
+   *
+   * @param string $field
+   *   Field for which we want to check.
+   *
+   * @return array
+   *   Array containing all the product SKUs.
+   */
+  public function getProductsWithDataInField(string $field): array {
+    try {
+      $query = $this->connection->select('search_api_db_product_' . $field, $field);
+      $query->leftJoin('search_api_db_product', 'main', "main.item_id = ${field}.item_id");
+      $query->addField('main', 'sku');
+      $values = $query->execute()->fetchAllKeyed(0, 0);
+    }
+    catch (\Exception $e) {
+      // Do nothing, we may have disabled indexes temporarily.
+      $values = [];
+    }
+
+    return is_array($values) ? array_filter($values) : [];
+  }
+
 }

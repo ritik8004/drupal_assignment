@@ -235,7 +235,9 @@ class CartController {
     }
 
     // Store delivery method when required.
-    if (!empty($shipping_info = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'])) {
+    if (isset($cart_data['cart']['extension_attributes'], $cart_data['cart']['extension_attributes']['shipping_assignments'])
+      && !empty($shipping_info = $cart_data['cart']['extension_attributes']['shipping_assignments'])
+      && !empty($shipping_info = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'])) {
       $data['carrier_info'] = $shipping_info['method'];
 
       if (empty($shipping_info['method']) && !empty($shipping_info['extension_attributes']['click_and_collect_type'])) {
@@ -413,7 +415,7 @@ class CartController {
   }
 
   /**
-   * Update cart controller.
+   * Cart controller for cart update operations.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Current request.
