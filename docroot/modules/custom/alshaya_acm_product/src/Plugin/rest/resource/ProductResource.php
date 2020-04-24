@@ -260,7 +260,7 @@ class ProductResource extends ResourceBase {
    * @return array
    *   Product categorisations.
    */
-  public function getSkuCategorisations(NodeInterface $node) {
+  private function getSkuCategorisations(NodeInterface $node) {
     $lang = $this->languageManager->getCurrentLanguage()->getId();
     $categories = $node->get('field_category')->referencedEntities();
     $terms = [];
