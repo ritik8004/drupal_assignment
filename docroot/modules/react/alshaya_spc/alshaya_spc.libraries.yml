@@ -1,6 +1,6 @@
 cart_utilities:
   js:
-    js/cart_utilities.js: { }
+    assets/js/cart_utilities.js: { }
   dependencies:
     - core/jquery
     - core/drupal
@@ -34,7 +34,7 @@ add_to_cart:
   version: 1.x
   footer: true
   js:
-    js/add_to_cart.js: { }
+    assets/js/add_to_cart.js: { }
   dependencies:
     - alshaya_spc/cart_utilities
     - core/drupalSettings

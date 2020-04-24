@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 (function ($, Drupal, document) {
   'use strict';
 
@@ -25,7 +23,7 @@
             // If sku is variant type.
             var is_configurable = $(form).attr('data-sku-type') === 'configurable';
             // If `selected_variant_sku` available, means its configurable.
-            if (is_configurable && $('[name="selected_variant_sku"]', form).length > 0) {
+            if ($('[name="selected_variant_sku"]', form).length > 0) {
               currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
               variant_sku = currentSelectedVariant;
             }
@@ -92,7 +90,7 @@
                 // If there any error we throw from middleware.
                 if (response.error === true) {
                   if (response.error_code === '400') {
-                    localStorage.clear();
+                    Drupal.alshayaSpc.clearCartData();
                     $(that).trigger('click');
                     return;
                   }
@@ -115,6 +113,44 @@
 
                   // Trigger the success event for other listeners.
                   $(form).trigger('product-add-to-cart-success', [productData, response]);
+
+                  var productInfo = drupalSettings.productInfo[productData.parentSku];
+                  var options = {};
+                  var productUrl = productInfo.url;
+                  var price = productInfo.priceRaw;
+                  var promotions = productInfo.promotions;
+                  var productDataSKU = productData.sku;
+
+                  if (productInfo.type === 'configurable') {
+                    var productVariantInfo = productInfo['variants'][productData.variant];
+                    productDataSKU = productData.variant;
+                    price = productVariantInfo.priceRaw;
+                    promotions = productVariantInfo.promotions;
+                    options = productVariantInfo.configurableOptions;
+
+                    if (productVariantInfo.url !== undefined) {
+                      var langcode = $('html').attr('lang');
+                      productUrl = productVariantInfo.url[langcode];
+                    }
+                  }
+                  else if (productInfo.group !== undefined) {
+                    var productVariantInfo = productInfo.group[productData.sku];
+                    price = productVariantInfo.priceRaw;
+                    promotions = productVariantInfo.promotions;
+
+                    var langcode = $('html').attr('lang');
+                    productUrl = productVariantInfo.url[langcode];
+                  }
+
+                  Drupal.alshayaSpc.storeProductData(
+                    productDataSKU,
+                    productData.product_name,
+                    productUrl,
+                    productData.image,
+                    price,
+                    options,
+                    promotions
+                  );
 
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => response, productData }});
