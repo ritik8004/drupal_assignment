@@ -302,8 +302,27 @@
     }
 
     .webform-element-description {
+      font-size: 0.8125rem;
       line-height: 1.5;
       color: $primary_input_label;
+    }
+
+    .form-managed-file {
+      .form-submit {
+        width: auto;
+        height: auto;
+        color: $primary_input_label;
+        background: none;
+        margin-bottom: 0.3125rem;
+        margin-top: 0;
+        border: none;
+        float: none;
+        text-decoration: underline;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
     }
 
     .contact-us-feedback,
