@@ -267,7 +267,8 @@
                 "CORE-11129 - Form states on multivalued select list field": "https://www.drupal.org/files/issues/2019-05-26/states-multiselect-1149078-109.patch",
                 "CORE-6691 - Add traces to module handler code": "patches/core/traces_for_module_implements_cache.patch",
                 "CORE-6525 - Add autofix for missing block plugin issue" : "patches/core/autofix-block-plugin-cache-clear-issue.patch",
-                "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch"
+                "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch",
+                "CORE-14983 - Set new twig_extension_hash_prefix state in invalidate method": "patches/core/set-new-twig_extension_hash_prefix-during-invalidate.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
