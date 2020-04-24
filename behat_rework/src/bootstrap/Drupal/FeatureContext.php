@@ -253,8 +253,7 @@ class FeatureContext extends CustomMinkContext
         }
         continue;
       }
-      $this->product = $item->find('css', 'h2.field--name-name')->getText();
-      $page->clickLink($this->product);
+      $item->find('css', 'h2.field--name-name a')->click();
       break;
     }
   }
@@ -2022,5 +2021,28 @@ class FeatureContext extends CustomMinkContext
       }
     }
     $this->getSession()->wait(1000);
+  }
+
+  /**
+   * Checks, that page doesn't contain specified text
+   * Example: Then I should not see "Batman is Bruce Wayne" on page
+   * Example: And I should not see "Batman is Bruce Wayne" on page
+   *
+   * @Then /^(?:|I )should not see "(?P<text>(?:[^"]|\\")*)" on page$/
+   */
+  public function assertTextNotInPaget($text)
+  {
+    if (!empty($text)) {
+      $actual = $this->getSession()->getPage()->getText();
+      $actual = preg_replace('/\s+/u', ' ', $actual);
+      $regex = '/'.preg_quote($text, '/').'/ui';
+      $message = sprintf('The text "%s" appears in the text of this page, but it should not.', $text);
+
+      if (!preg_match($regex, $actual)) {
+        return;
+      }
+
+      throw new \Exception($message);
+    }
   }
 }
