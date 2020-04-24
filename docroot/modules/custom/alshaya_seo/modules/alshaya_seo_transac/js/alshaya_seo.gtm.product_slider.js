@@ -94,7 +94,11 @@
 
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        if ($(this).isElementInViewPort(0)) {
+        // 40 is passed as the second argument as in product sliders we can see
+        // that much of the top portion of the slider images is white in color
+        // and hence user needs to scroll more to view the product and that is
+        // when we trigger the GTM event.
+        if ($(this).isElementInViewPort(0, 40)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = pdpListName;

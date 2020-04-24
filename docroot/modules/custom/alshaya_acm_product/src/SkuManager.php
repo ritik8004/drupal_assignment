@@ -880,7 +880,7 @@ class SkuManager {
 
       // Get the promotion with language fallback, if it did not have a
       // translation for $langcode.
-      $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node);
+      $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node, $sku->language()->getId());
       $promotion_text = $promotion_node->get('field_acq_promotion_label')->getString();
 
       $description = '';
@@ -1018,14 +1018,14 @@ class SkuManager {
    */
   public function getLabelsData(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
     static $static_labels_cache = [];
-
+    $langcode = $sku_entity->language()->getId();
     $sku = $sku_entity->getSku();
 
-    if (!$reset && !empty($static_labels_cache[$sku][$type])) {
-      return $static_labels_cache[$sku][$type];
+    if (!$reset && !empty($static_labels_cache[$sku][$langcode][$type])) {
+      return $static_labels_cache[$sku][$langcode][$type];
     }
 
-    $static_labels_cache[$sku][$type] = [];
+    $static_labels_cache[$sku][$langcode][$type] = [];
 
     $labels_data = $this->getSkuLabel($sku_entity);
 
@@ -1087,7 +1087,7 @@ class SkuManager {
         ];
         $row['position'] = $data[$position_key];
 
-        $static_labels_cache[$sku][$type][] = $row;
+        $static_labels_cache[$sku][$langcode][$type][] = $row;
 
         // Disable subsequent images if flag is true.
         if ($data['disable_subsequents']) {
@@ -1096,7 +1096,7 @@ class SkuManager {
       }
     }
 
-    return $static_labels_cache[$sku][$type];
+    return $static_labels_cache[$sku][$langcode][$type];
   }
 
   /**
@@ -3309,7 +3309,7 @@ class SkuManager {
       if (!empty($field_data)) {
         $size_group = '';
         if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
-          $size_group = $child->get('attr_size_group_code')->getString();
+          $size_group = $sku->get('attr_size_group_code')->getString();
           // Group all the sizes without group in a section in bottom.
           $size_group = $size_group ?: 'other';
         }

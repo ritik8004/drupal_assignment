@@ -233,7 +233,7 @@
     }
   }
 
-  &.focused.show-algolia-search-bar {
+  &.focused {
     #alshaya-algolia-autocomplete {
       .react-autosuggest__container {
         &::after {
@@ -320,7 +320,8 @@ body {
       }
 
       header {
-        .block-cart-mini-block {
+        .block-cart-mini-block,
+        .block-alshaya-react-mini-cart {
           width: 33.33%;
         }
       }
@@ -355,6 +356,20 @@ body {
       .block-alshaya-react-mini-cart {
         @include breakpoint($only-mobile) {
           display: none;
+        }
+      }
+
+      .block-alshaya-algolia-react-autocomplete {
+        &.focused {
+          .algolia-search-back-icon {
+            visibility: hidden;
+          }
+
+          &.show-algolia-search-bar {
+            .algolia-search-back-icon {
+              visibility: visible;
+            }
+          }
         }
       }
     }

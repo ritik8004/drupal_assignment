@@ -144,7 +144,8 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
             $account->save();
           }
 
-          $this->ordersManager->clearOrderCache($account->getEmail(), $account->id());
+          $customer_id = (int) $account->get('acq_customer_id')->getString();
+          $this->ordersManager->clearOrderCache($customer_id, $account->id());
         }
 
         // While debugging we log the whole cart object.

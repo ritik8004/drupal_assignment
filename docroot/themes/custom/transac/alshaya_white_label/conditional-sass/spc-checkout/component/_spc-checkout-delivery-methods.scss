@@ -9,6 +9,10 @@
     padding-#{$left}: 3rem;
     position: relative;
 
+    &.in-active {
+      opacity: 0.5;
+    }
+
     .sub-title {
       display: block;
     }

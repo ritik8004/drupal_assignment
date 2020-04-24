@@ -300,6 +300,30 @@ class OrdersManager {
   }
 
   /**
+   * Helper function to get last order incremental id of the customer.
+   *
+   * @param int $customer_id
+   *   Customer ID to get order for.
+   *
+   * @return array
+   *   Order array if found.
+   */
+  public function getLastOrder(int $customer_id) {
+    $query = $this->getOrdersQuery('customer_id', $customer_id);
+    $query['searchCriteria']['pageSize'] = 1;
+
+    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
+    $result = json_decode($response ?? [], TRUE);
+    $count = $result['total_count'] ?? 0;
+    if (empty($count)) {
+      return NULL;
+    }
+
+    $order = reset($result['items']);
+    return $this->cleanupOrder($order);
+  }
+
+  /**
    * Cleanup order array as expected by Drupal.
    *
    * @param array $order

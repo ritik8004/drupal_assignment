@@ -5,6 +5,8 @@
         font-family: $hnm-bold;
         letter-spacing: 1.14px;
         text-transform: uppercase;
+
+        @include arabic-letter-spacing;
       }
 
       .spc-cnc-store-name {
@@ -37,5 +39,7 @@
   .select-store {
     letter-spacing: 1.14px;
     text-transform: uppercase;
+
+    @include arabic-letter-spacing;
   }
 }

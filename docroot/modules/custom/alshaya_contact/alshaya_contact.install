@@ -10,6 +10,42 @@ use Drupal\lightning_core\ConfigHelper;
 /**
  * Implements hook_update_N().
  *
+ * Request_from field access removed and add archive false.
+ */
+function alshaya_contact_update_8003() {
+  $configs = [
+    'webform.webform.alshaya_contact',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_contact');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add wenform handler on mobile number validation, add request_from field.
+ * Add translation.
+ */
+function alshaya_contact_update_8002() {
+  $configs = [
+    'webform.webform.alshaya_contact',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_contact');
+
+  // Add translation strings.
+  $strings = [
+    'Mobile Number is mandatory' => [
+      'ar' => 'رقم الهاتف إلزامي',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update form id for contact webform in captcha config.
  */
 function alshaya_contact_update_8001() {
@@ -32,4 +68,13 @@ function alshaya_contact_install() {
     $config->set('handlers.email.settings.to_mail', 'customerservice@alshaya.com');
     $config->save();
   }
+
+  // Add translation strings.
+  $strings = [
+    'Mobile Number is mandatory' => [
+      'ar' => 'رقم الهاتف إلزامي',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }

@@ -25,7 +25,7 @@ const Notifications = ({ children }) => {
     }
 
     if (child.props.type !== 'conditional') {
-      notificationTypes[child.props.type].push(createReactElement(child));
+      notificationTypes[child.props.type].push(child);
     } else {
       // For conditional component do not show anything, if showAlert or showWarning
       // both conditions are false.
@@ -43,7 +43,7 @@ const Notifications = ({ children }) => {
   });
 
   return (
-    <div>
+    <div className="spc-warnings-alerts">
       <div className="spc-cart-item-warnings">
         {notificationTypes.warning.map((warningItem) => (
           <div className="spc-cart-item-warnings-item" key={warningItem.type.name}>
@@ -53,7 +53,7 @@ const Notifications = ({ children }) => {
       </div>
       <div className="spc-cart-item-alerts">
         {notificationTypes.alert.map((alertItem) => (
-          <div className="spc-cart-item-alerts-item" key={alertItem.type.name}>
+          <div className="spc-cart-item-alerts-item" data-filled={alertItem.props.filled} key={alertItem.type.name}>
             { alertItem }
           </div>
         ))}

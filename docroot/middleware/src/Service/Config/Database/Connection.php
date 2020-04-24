@@ -32,7 +32,7 @@ class Connection extends DoctrineConnection {
     // Get site environment.
     require_once $params['path'] . '/../factory-hooks/environments/environments.php';
     $env = alshaya_get_site_environment();
-    if ($env === 'local') {
+    if ($env === 'local' || $env === 'travis') {
       if (!empty($_SERVER['HTTP_HOST'])) {
         $hostname_parts = explode('.', $_SERVER['HTTP_HOST']);
         $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);

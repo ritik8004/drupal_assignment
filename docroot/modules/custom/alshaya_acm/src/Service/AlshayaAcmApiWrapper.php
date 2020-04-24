@@ -7,6 +7,7 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\Conductor\ClientFactory;
 use Drupal\acq_commerce\Conductor\RouteException;
 use Drupal\acq_commerce\Connector\ConnectorException;
+use Drupal\acq_commerce\Event\OrderPlacedEvent;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
@@ -42,6 +43,13 @@ class AlshayaAcmApiWrapper extends APIWrapper {
   protected $alshayaApi;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
@@ -68,6 +76,7 @@ class AlshayaAcmApiWrapper extends APIWrapper {
                               AlshayaApiWrapper $alshaya_api) {
     parent::__construct($client_factory, $config_factory, $logger_factory, $i18nHelper, $api_helper, $dispatcher);
     $this->alshayaApi = $alshaya_api;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -230,6 +239,37 @@ class AlshayaAcmApiWrapper extends APIWrapper {
       return parent::placeOrder($cart_id, $customer_id);
     }
     catch (\Exception $e) {
+      if ($this->isDoubleCheckEnabled()) {
+        try {
+          $cart = self::getCartFromStorage();
+          $cartReservedOrderId = $cart->getExtension('real_reserved_order_id');
+          $lastOrder = self::getLastOrder((int) $cart->customerId());
+
+          if ($lastOrder && $cartReservedOrderId === $lastOrder['increment_id']) {
+            $this->logger->warning('Place order failed but order was placed, we will move forward. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
+              '@message' => $e->getMessage(),
+              '@order_id' => $cartReservedOrderId,
+              '@cart_id' => $cart->id(),
+            ]);
+
+            $this->dispatcher->dispatch(OrderPlacedEvent::EVENT_NAME, new OrderPlacedEvent($lastOrder, $cart->id()));
+            return $lastOrder;
+          }
+          else {
+            $this->logger->warning('Place order failed and we tried to double check but order was not found. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
+              '@message' => $e->getMessage(),
+              '@order_id' => $cartReservedOrderId,
+              '@cart_id' => $cart->id(),
+            ]);
+          }
+        }
+        catch (\Exception $doubleException) {
+          $this->logger->error('Error occurred while trying to double check. Exception: @message', [
+            '@message' => $doubleException->getMessage(),
+          ]);
+        }
+      }
+
       $event = new AlshayaAcmPlaceOrderFailedEvent($e->getMessage());
       $this->dispatcher->dispatch(AlshayaAcmPlaceOrderFailedEvent::EVENT_NAME, $event);
       throw $e;
@@ -252,6 +292,51 @@ class AlshayaAcmApiWrapper extends APIWrapper {
     $response['sku'] = $sku;
 
     return $response;
+  }
+
+  /**
+   * Check in config if we need to double check on place order exception.
+   *
+   * @return bool
+   *   TRUE if we need to double check on place order exception.
+   */
+  private function isDoubleCheckEnabled() {
+    static $value = NULL;
+
+    if (!isset($value)) {
+      // If not set, we will consider it as TRUE.
+      $value = $this->configFactory->get('alshaya_acm_checkout.settings')->get('place_order_double_check_after_exception') ?? TRUE;
+    }
+
+    return $value;
+  }
+
+  /**
+   * Function to get cart from session.
+   *
+   * We use this as workaround as adding service as dependency is resulting
+   * into circular dependency error. Also, we are going to move away from this
+   * very very soon in CORE-10070.
+   *
+   * @return \Drupal\acq_cart\CartInterface
+   *   Cart.
+   */
+  protected static function getCartFromStorage() {
+    return \Drupal::service('acq_cart.cart_storage')->getCart(FALSE);
+  }
+
+  /**
+   * Function to get last order for customer.
+   *
+   * We use this as workaround as adding service as dependency is resulting
+   * into circular dependency error. Also, we are going to move away from this
+   * very very soon in CORE-10070.
+   *
+   * @return array|null
+   *   Order data as array if found.
+   */
+  protected static function getLastOrder(int $customer_id) {
+    return \Drupal::service('alshaya_acm_customer.orders_manager')->getLastOrder($customer_id);
   }
 
 }

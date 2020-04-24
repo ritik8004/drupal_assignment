@@ -156,6 +156,8 @@
         text-transform: uppercase;
         font-size: 1rem;
         margin: 2.45rem 0;
+
+        @include arabic-letter-spacing;
       }
     }
 
@@ -436,11 +438,11 @@
       font-family: $alshaya-bold;
       margin: 1em 0;
       margin-bottom: 2rem;
-      padding: 0;
+      padding: 0 0.75rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 12.5625rem;
+      min-width: 12.5625rem;
       height: 2.875rem;
 
       &:hover {

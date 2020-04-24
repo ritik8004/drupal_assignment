@@ -188,6 +188,12 @@ class AlshayaFacetsPrettyPathsHelper {
       return $value;
     }
 
+    // First check static value.
+    static $static;
+    if (!empty($static[$cid])) {
+      return $static[$cid];
+    }
+
     $cache = $this->cache->get($cid);
     if (!empty($cache)) {
       return $cache->data;
@@ -198,6 +204,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $encoded = $value;
 
     $entity_type = 'term';
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     // We use ids only for category.
     if ($attribute_code == 'field_acq_promotion_label') {
@@ -227,10 +234,10 @@ class AlshayaFacetsPrettyPathsHelper {
       $query->condition('name', $value);
       $query->condition('field_sku_attribute_code', $attribute_code);
       $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+      $query->condition('langcode', $langcode);
     }
 
     $ids = $query->execute();
-    $langcode = 'en';
 
     foreach ($ids ?? [] as $id) {
       if ($entity_type == 'term') {
@@ -264,14 +271,14 @@ class AlshayaFacetsPrettyPathsHelper {
       $encoded = str_replace($original, $replacement, $encoded);
     }
 
-    // Prepand sigegroup if sizegroup is enabled.
-    // Do not execute it for selected filter.
-    if ($attribute_code == 'size' && strpos($encoded, ':') == FALSE && $this->isSizeGroupEnabled()) {
+    // Prepend size-group if enabled.
+    if ($attribute_code == 'size' && strpos($encoded, ':') === FALSE && $this->isSizeGroupEnabled()) {
       $sizeBreak = explode(':', $value);
       $encoded = $this->getSizegroupAttributeAliasFromValue($sizeBreak[0]) . ':' . $encoded;
     }
 
     $this->cache->set($cid, $encoded, Cache::PERMANENT, $tags);
+    $static[$cid] = $encoded;
     return $encoded;
   }
 
@@ -291,6 +298,12 @@ class AlshayaFacetsPrettyPathsHelper {
       'sizegroup-encode',
       $value,
     ]);
+
+    // First check static value.
+    static $static;
+    if (!empty($static[$cid])) {
+      return $static[$cid];
+    }
 
     $cache = $this->cache->get($cid);
     if (!empty($cache)) {
@@ -324,6 +337,7 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     $this->cache->set($cid, $encoded, Cache::PERMANENT, $tags);
+    $static[$cid] = $encoded;
     return $encoded;
   }
 

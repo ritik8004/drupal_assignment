@@ -3,6 +3,7 @@ services:
     class: Drupal\alshaya_security\Session\AlshayaSessionConfiguration
     decorates: session_configuration
     public: false
+    arguments: ['%session.storage.options%']
   alshaya_security.subscriber:
     class: Drupal\alshaya_security\AlshayaSecuritySubscriber
     tags:

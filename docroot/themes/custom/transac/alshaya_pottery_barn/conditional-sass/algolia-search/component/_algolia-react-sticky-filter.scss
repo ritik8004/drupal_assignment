@@ -3,7 +3,11 @@
     .show-all-filters-algolia,
     .block-facet-blockcategory-facet-search {
       @include breakpoint($only-mobile) {
-        top: 4.0625rem;
+        top: 3.6875rem;
+
+        html[lang=ar] & {
+          top: 4.0625rem;
+        }
       }
     }
   }

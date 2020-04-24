@@ -6,7 +6,54 @@
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\Core\Entity\Sql\DefaultTableMapping;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Increase size of shipping method description fields.
+ *
+ * This is a temporary solution. We will stop using this taxonomy once we move
+ * to SPC - CORE-10070.
+ */
+function alshaya_acm_checkout_update_8008() {
+  $entity_type = 'taxonomy_term';
+  $bundle = 'shipping_method';
+  $field_length = 510;
+
+  $fields = [
+    'field_shipping_method_cart_desc',
+    'field_shipping_method_desc',
+  ];
+
+  foreach ($fields as $field_name) {
+    $database = \Drupal::database();
+
+    $field = FieldConfig::loadByName($entity_type, $bundle, $field_name);
+    $mapping = DefaultTableMapping::create(\Drupal::entityTypeManager()->getDefinition('taxonomy_term'), [$field->getFieldStorageDefinition()]);
+    $main_table = $mapping->getDedicatedDataTableName($field->getFieldStorageDefinition());
+    $revision_table = $mapping->getDedicatedRevisionTableName($field->getFieldStorageDefinition());
+
+    // Resize the main field data table.
+    $database->query("ALTER TABLE {$main_table} MODIFY {$field_name}_value VARCHAR({$field_length})");
+    $database->query("ALTER TABLE {$revision_table} MODIFY {$field_name}_value VARCHAR({$field_length})");
+
+    // Update storage schema.
+    $storage_key = $entity_type . '.field_schema_data.' . $field_name;
+    $storage_schema = \Drupal::keyValue('entity.storage_schema.sql');
+    $field_schema = $storage_schema->get($storage_key);
+    $field_schema[$main_table]['fields'][$field_name . '_value']['length'] = $field_length;
+    $field_schema[$revision_table]['fields'][$field_name . '_value']['length'] = $field_length;
+    $storage_schema->set($storage_key, $field_schema);
+
+    // Update field configuration.
+    $config = \Drupal::configFactory()->getEditable("field.storage.{$entity_type}.{$field_name}");
+    $config->set('settings.max_length', $field_length);
+    $config->save(TRUE);
+  }
+}
 
 /**
  * Implements hook_update_N().

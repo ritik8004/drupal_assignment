@@ -26,19 +26,29 @@
         product.attr('gtm-price', variantInfo['gtm_price']);
       });
 
-      // For simple grouped products.
-      $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected', function (event, variant) {
+      // For simple/configurable grouped products.
+      $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected group-configurable-item-selected', function (event, variant) {
         var sku = $(this).attr('data-sku');
         var productKey = ($(this).attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
         if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
-        var variantInfo = drupalSettings[productKey][sku]['group'][variant];
+        var variantInfo = '';
+        var main_sku = '';
+        if (event.type === 'group-configurable-item-selected') {
+          variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+          main_sku = variantInfo.parent_sku;
+        }
+        else {
+          variantInfo = drupalSettings[productKey][sku]['group'][variant];
+          main_sku = variant;
+        }
 
-        $(this).attr('gtm-main-sku', variant);
+        $(this).attr('gtm-main-sku', main_sku);
         $(this).attr('gtm-product-sku', variant);
         $(this).attr('gtm-price', variantInfo['gtm_price']);
+        Drupal.alshaya_seo_push_product_details_view();
       });
 
       $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
@@ -196,34 +206,9 @@
           dataLayer.push(userDetails);
         }
 
-          if ($(context).filter('article[data-vmode="modal"]').length === 1
-            || $(document).find('article[data-vmode="full"]').length === 1) {
-
-          if ($(document).find('article[data-vmode="full"]').length === 1) {
-            var productContext = $(document).find('article[data-vmode="full"]');
-          }
-          else {
-            var productContext = $(context).filter('article[data-vmode="modal"]');
-          }
-
-          var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-          product.variant = '';
-          if (currentListName != null && currentListName !== 'PDP-placeholder') {
-            product.list = currentListName;
-            currentListName = null;
-          }
-          var data = {
-            event: 'productDetailView',
-            ecommerce: {
-              currencyCode: currencyCode,
-              detail: {
-                products: [product]
-              }
-            }
-          };
-
-          dataLayer.push(data);
-        }
+        $(window).once('gtm-onetime').on('load', function() {
+          Drupal.alshaya_seo_push_product_details_view();
+        });
       });
 
       // If we receive an empty page type, set page type as not defined.
@@ -827,11 +812,10 @@
     if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
       mediaCount = parseInt(product.attr('gtm-dimension4'));
     }
-
     var productData = {
       name: product.attr('gtm-name'),
       id: product.attr('gtm-main-sku'),
-      price: parseFloat(product.attr('gtm-price')),
+      price: product.attr('gtm-price'),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
       dimension2: product.attr('gtm-sku-type'),
@@ -1194,10 +1178,9 @@
     var listName = body.attr('gtm-list-name');
     // Send impression for each product added on page (page 1 or X).
     var count = productLinkProcessedSelector.length + 1;
-
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        if ($(this).isElementInViewPort(0)) {
+        if ($(this).isElementInViewPort(0, 10)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;
@@ -1214,6 +1197,38 @@
     }
   };
 
+  /**
+   * Helper function to push productDetailView to GTM.
+   */
+  Drupal.alshaya_seo_push_product_details_view = function () {
+    var productContext = $(document).find('article[data-vmode="full"]');
+    if (productContext.length === 1) {
+      var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+      var dataPrefix = 'pushedProduct_';
+      // Check if it has already been processed before.
+      if (productContext.data(dataPrefix + product.id) === 1) {
+        return ;
+      }
+      var currencyCode = $('body').attr('gtm-currency');
+      product.variant = '';
+      if (currentListName != null && currentListName !== 'PDP-placeholder') {
+        product.list = currentListName;
+        currentListName = null;
+      }
+      var data = {
+        event: 'productDetailView',
+        ecommerce: {
+          currencyCode: currencyCode,
+          detail: {
+            products: [product]
+          }
+        }
+      };
+      dataLayer.push(data);
+      // Do it so that the same item is not processed again.
+      productContext.data(dataPrefix + product.id, 1);
+    }
+  }
   // Ajax command to push deliveryAddress Event.
   $.fn.triggerDeliveryAddress = function () {
     dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});

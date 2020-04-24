@@ -28,8 +28,21 @@ gtm_spc_cart:
   js:
     js/alshaya_seo.gtm.spc_cart.js: {}
   dependencies:
-    - alshaya_master/jquery_is_in_viewport
+    - alshaya_seo_transac/gtm_spc
     - core/drupal.debounce
+
+gtm_spc_checkout:
+  js:
+    js/alshaya_seo.gtm.spc_checkout.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm_spc
+
+gtm_spc:
+  js:
+    js/alshaya_seo.gtm.spc.js: {}
+  dependencies:
+    - core/jquery
+    - core/Drupal
 
 product_list:
   version: 1.x
@@ -37,7 +50,7 @@ product_list:
     js/alshaya_seo.gtm.product_list.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
-    - alshaya_seo_master/jquery_is_in_viewport
+    - alshaya_master/jquery_is_in_viewport
     - core/drupal.debounce
 search_list:
   version: 1.x
@@ -45,7 +58,7 @@ search_list:
     js/alshaya_seo.gtm.search_list.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
-    - alshaya_seo_master/jquery_is_in_viewport
+    - alshaya_master/jquery_is_in_viewport
     - core/drupal.debounce
 product_slider:
   version: 1.x
@@ -53,5 +66,5 @@ product_slider:
     js/alshaya_seo.gtm.product_slider.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
-    - alshaya_seo_master/jquery_is_in_viewport
+    - alshaya_master/jquery_is_in_viewport
     - core/drupal.debounce

@@ -20,7 +20,8 @@ class SecureText {
    */
   public function encrypt($str, $key) {
     $str = $this->pkcs5Pad($str);
-    $encrypted = openssl_encrypt($str, 'AES-128-CBC', $key, OPENSSL_ZERO_PADDING, $key);
+    $iv = substr($key, 0, 16);
+    $encrypted = openssl_encrypt($str, 'AES-128-CBC', $key, OPENSSL_ZERO_PADDING, $iv);
     $encrypted = base64_decode($encrypted);
     $encrypted = unpack('C*', ($encrypted));
     $encrypted = $this->byteArray2Hex($encrypted);

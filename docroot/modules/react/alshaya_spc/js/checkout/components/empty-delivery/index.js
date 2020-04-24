@@ -18,6 +18,7 @@ import ClickCollectContainer from '../click-collect';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import createFetcher from '../../../utilities/api/fetcher';
 import { fetchClicknCollectStores } from '../../../utilities/api/requests';
+import { getUserLocation } from '../../../utilities/map/map_utils';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -76,7 +77,7 @@ export default class EmptyDeliveryText extends React.Component {
   }
 
   cncEvent = () => {
-    const { storeList, updateLocationAccess } = this.context;
+    const { storeList, updateLocationAccess, showOutsideCountryError } = this.context;
 
     if (this.getDeliveryType() !== 'cnc' || storeList.length > 0) {
       return;
@@ -91,16 +92,33 @@ export default class EmptyDeliveryText extends React.Component {
 
     getLocationAccess()
       .then(
-        (pos) => {
-          fetchStoresHelper({
+        async (pos) => {
+          const coords = {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
-          });
+          };
+          try {
+            const [userCountrySame] = await getUserLocation(coords);
+            // If user and site country not same, don;t process.
+            if (!userCountrySame) {
+              removeFullScreenLoader();
+              // Trigger event to update.
+              showOutsideCountryError(true);
+              return;
+            }
+          } catch (error) {
+            Drupal.logJavascriptError('clickncollect-checkUserCountry', error);
+          }
+          fetchStoresHelper(coords);
         },
         () => {
           updateLocationAccess(false);
         },
-      );
+      )
+      .catch((error) => {
+        removeFullScreenLoader();
+        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error);
+      });
   }
 
   /**
@@ -108,7 +126,7 @@ export default class EmptyDeliveryText extends React.Component {
    */
   fetchStoresHelper = (coords, defaultCenter = false) => {
     // State from context, whether the modal is open or not.
-    const { clickCollectModal } = this.context;
+    const { clickCollectModal, showOutsideCountryError } = this.context;
     // Add all requests in array to update storeLists only once when
     // multiple requests are in progress.
     this.openStoreRequests.push({ coords, defaultCenter });
@@ -156,6 +174,7 @@ export default class EmptyDeliveryText extends React.Component {
 
           if (!currentItem.defaultCenter) {
             storeUpdated = true;
+            showOutsideCountryError(false);
             updateCoordsAndStoreList(currentItem.coords, response.data, true);
           }
         } else {
@@ -224,10 +243,11 @@ export default class EmptyDeliveryText extends React.Component {
     let defaultVal = null;
     // If logged in user.
     if (drupalSettings.user.uid > 0) {
-      const { fname, lname } = drupalSettings.user_name;
+      const { fname, lname, mobile } = drupalSettings.user_name;
       defaultVal = {
         static: {
           fullname: `${fname} ${lname}`,
+          telephone: mobile,
         },
       };
     } else if (cartVal.carrier_info !== null && cartVal.shipping_address !== null) {

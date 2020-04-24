@@ -198,23 +198,23 @@
     }
 
     @include breakpoint($mobile) {
-      min-height: 20rem;
+      min-height: 22.3rem;
     }
 
     @include breakpoint($iphone) {
-      min-height: 21rem;
+      min-height: 23.1rem;
     }
 
     @include breakpoint($iphone-plus) {
-      min-height: 22.5rem;
+      min-height: 24.3rem;
     }
 
     @include breakpoint($tablet) {
-      min-height: 24rem;
+      min-height: 25.5rem;
     }
 
     @include breakpoint($desktop) {
-      min-height: 25rem;
+      min-height: 26rem;
     }
   }
 

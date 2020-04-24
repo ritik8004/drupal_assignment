@@ -1,9 +1,10 @@
 import React from 'react';
 
 import SectionTitle from '../../../utilities/section-title';
-import HomeDeliverySVG from '../hd-svg';
-import ClickCollectSVG from '../cc-svg';
+import HomeDeliverySVG from '../../../svg-component/hd-svg';
+import ClickCollectSVG from '../../../svg-component/cc-svg';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import { isCnCEnabled } from '../../../utilities/checkout_util';
 
 export default class DeliveryMethods extends React.Component {
   constructor(props) {
@@ -24,6 +25,13 @@ export default class DeliveryMethods extends React.Component {
 
   // On delivery method change.
   changeDeliveryMethod = (method) => {
+    const { cart, refreshCart } = this.props;
+    // Not process click for cnc if disabled.
+    if (!isCnCEnabled(cart.cart)
+      && method === 'cnc') {
+      return;
+    }
+
     this.setState({
       selectedOption: method,
     });
@@ -36,28 +44,29 @@ export default class DeliveryMethods extends React.Component {
       },
     });
     document.dispatchEvent(event);
-    // Add delivery method in cart storage.
-    const { cart, refreshCart } = this.props;
     cart.delivery_type = method;
     refreshCart(cart);
     smoothScrollTo('.spc-checkout-delivery-information');
   }
 
   render() {
-    const { cart: { cnc_disabled: cncDisabled } } = this.props;
+    const { cart } = this.props;
     const hdSubtitle = Drupal.t('Standard delivery for purchases over KD 250');
     const { selectedOption } = this.state;
     let cncSubtitle = window.drupalSettings.cnc_subtitle_available || '';
 
-    // If CNC is disabled.
-    if (cncDisabled) {
+    const isCnCAvailable = isCnCEnabled(cart.cart);
+    let cncInactiveClass = 'active';
+    // If CnC disabled.
+    if (!isCnCAvailable) {
       cncSubtitle = window.drupalSettings.cnc_subtitle_unavailable || '';
+      cncInactiveClass = 'in-active';
     }
 
     return (
       <div className="spc-checkout-delivery-methods">
         <SectionTitle animationDelayValue="0.4s">{Drupal.t('Delivery method')}</SectionTitle>
-        <div className="delivery-method fadeInUp" style={{ animationDelay: '0.6s' }} onClick={() => this.changeDeliveryMethod('hd')}>
+        <div className="delivery-method fadeInUp" style={{ animationDelay: '0.4s' }} onClick={() => this.changeDeliveryMethod('hd')}>
           <input id="delivery-method-hd" defaultChecked={selectedOption === 'hd'} value="hd" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
             <span className="icon"><HomeDeliverySVG /></span>
@@ -67,8 +76,8 @@ export default class DeliveryMethods extends React.Component {
             </div>
           </label>
         </div>
-        <div className="delivery-method fadeInUp" style={{ animationDelay: '0.7s' }} onClick={() => this.changeDeliveryMethod('cnc')}>
-          <input id="delivery-method-cnc" defaultChecked={selectedOption === 'cnc'} disabled={cncDisabled} value="cnc" name="delivery-method" type="radio" />
+        <div className={`delivery-method fadeInUp ${cncInactiveClass}`} style={{ animationDelay: '0.5s' }} onClick={() => this.changeDeliveryMethod('cnc')}>
+          <input id="delivery-method-cnc" defaultChecked={selectedOption === 'cnc'} disabled={isCnCAvailable ? false : 'disabled'} value="cnc" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
             <span className="icon"><ClickCollectSVG /></span>
             <div className="delivery-method-name">

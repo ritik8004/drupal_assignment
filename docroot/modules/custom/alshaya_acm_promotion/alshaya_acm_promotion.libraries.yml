@@ -9,3 +9,12 @@ label_manager:
     - core/drupal.ajax
     - core/drupalSettings
     - alshaya_white_label/dynamic-promotions
+
+basket_labels_manager:
+  version: 1.x
+  js:
+    assets/js/alshaya_promotions_label.basket.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal

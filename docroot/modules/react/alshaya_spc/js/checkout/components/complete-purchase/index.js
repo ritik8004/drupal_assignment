@@ -125,7 +125,7 @@ export default class CompletePurchase extends React.Component {
       : '';
 
     return (
-      <div className={`checkout-link fadeInUp notInMobile submit ${className} ${paymentMethod}`} style={{ animationDelay: '1.6s' }}>
+      <div className={`checkout-link fadeInUp notInMobile submit ${className} ${paymentMethod}`} style={{ animationDelay: '0.5s' }}>
         {window.innerWidth < 768
           && (
           <div className="order-preview">
