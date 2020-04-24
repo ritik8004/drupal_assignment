@@ -221,7 +221,7 @@ class PromotionController extends ControllerBase {
 
         default:
           // We support only specific types for now.
-          continue;
+          continue 2;
       }
 
       $items[] = $item;
