@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df2aba5a54a7116342a75bd9de199d12",
+    "content-hash": "5c2a71849a076f3199b48ca7481b34f7",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -22586,16 +22586,16 @@
         },
         {
             "name": "geerlingguy/drupal-vm",
-            "version": "4.9.2",
+            "version": "5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/geerlingguy/drupal-vm.git",
-                "reference": "b3fb327832e5d78c7889c1d1428e85ded1592a28"
+                "reference": "f8bb9218f068994f731647997c7ace195f6ee193"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/geerlingguy/drupal-vm/zipball/b3fb327832e5d78c7889c1d1428e85ded1592a28",
-                "reference": "b3fb327832e5d78c7889c1d1428e85ded1592a28",
+                "url": "https://api.github.com/repos/geerlingguy/drupal-vm/zipball/f8bb9218f068994f731647997c7ace195f6ee193",
+                "reference": "f8bb9218f068994f731647997c7ace195f6ee193",
                 "shasum": ""
             },
             "type": "vm",
@@ -22605,12 +22605,12 @@
             ],
             "authors": [
                 {
-                    "name": "Oskar Schöldström",
-                    "homepage": "http://oxy.fi"
-                },
-                {
                     "name": "Jeff Geerling",
                     "homepage": "https://www.jeffgeerling.com"
+                },
+                {
+                    "name": "Oskar Schöldström",
+                    "homepage": "http://oxy.fi"
                 }
             ],
             "description": "A VM for local Drupal development, built with Vagrant + Ansible",
@@ -22621,7 +22621,7 @@
                 "virtual machine",
                 "vm"
             ],
-            "time": "2019-01-03T16:19:18+00:00"
+            "time": "2020-02-27T17:21:18+00:00"
         },
         {
             "name": "jakoch/phantomjs-installer",
@@ -23712,6 +23712,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.2"
-    },
-    "plugin-api-version": "1.1.0"
+    }
 }
