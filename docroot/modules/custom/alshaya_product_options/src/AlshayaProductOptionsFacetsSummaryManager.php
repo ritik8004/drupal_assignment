@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_product_options;
 
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Link;
 use Drupal\facets\Entity\Facet;
 use Drupal\facets\Exception\InvalidProcessorException;
@@ -154,8 +155,10 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
         $value = $swatch ? $swatch['name'] : $result->getDisplayValue();
 
         // Change the size label if size grouping is enabled.
-        if ($this->isSizeGroupEnabled() && $facet->getFieldIdentifier() == 'attr_size' && strpos($value, ':') !== FALSE) {
-          $sizeGroupArr = explode(':', $value);
+        if ($facet->getFieldIdentifier() == 'attr_size'
+          && strpos($value, SkuManager::SIZE_GROUP_SEPARATOR) !== FALSE
+          && $this->isSizeGroupEnabled()) {
+          $sizeGroupArr = explode(SkuManager::SIZE_GROUP_SEPARATOR, $value);
           $value = $sizeGroupArr[1];
         }
         $item = [
