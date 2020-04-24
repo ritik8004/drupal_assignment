@@ -100,8 +100,8 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
           // Video files are used across markets of the brand
           // so even if the usage on this site is empty,
           // it might be used by another market.
-          if (empty($this->fileUsage->listUsage($file))
-            && ($this->skuAssetsManager->getAssetType($asset) !== 'video')) {
+          if (($this->skuAssetsManager->getAssetType($asset) !== 'video')
+            && (empty($this->fileUsage->listUsage($file)))) {
             $this->logger->notice('Deleting file @fid for sku @sku as it is getting deleted', [
               '@fid' => $file->id(),
               '@sku' => $entity->getSku(),
