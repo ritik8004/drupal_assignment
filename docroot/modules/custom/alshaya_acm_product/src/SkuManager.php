@@ -64,6 +64,8 @@ class SkuManager {
 
   const FREE_GIFT_SUB_TYPE_ONE_SKU = 1;
 
+  const SIZE_GROUP_SEPARATOR = '|';
+
   /**
    * Flag to allow merge children in alshaya_color_split.
    *
@@ -3287,15 +3289,16 @@ class SkuManager {
             // Group all the sizes without group in a section in bottom.
             $size_group = $size_group ?: 'other';
           }
+
           foreach ($field_data as $field_value) {
             if (!empty($size_group)) {
-              $data[$key][$size_group . ':' . $field_value['value']] = $size_group . ':' . $field_value['value'];
+              $value = $size_group . self::SIZE_GROUP_SEPARATOR . $field_value['value'];
+              $data[$key][$value] = $value;
             }
             else {
               $data[$key][$field_value['value']] = $field_value['value'];
             }
           }
-
         }
       }
     }
@@ -3315,7 +3318,8 @@ class SkuManager {
         }
         foreach ($field_data as $field_value) {
           if (!empty($size_group)) {
-            $data[$key][$size_group . ':' . $field_value['value']] = $size_group . ':' . $field_value['value'];
+            $value = $size_group . self::SIZE_GROUP_SEPARATOR . $field_value['value'];
+            $data[$key][$value] = $value;
           }
           else {
             $data[$key][$field_value['value']] = $field_value['value'];
