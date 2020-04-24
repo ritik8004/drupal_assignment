@@ -675,9 +675,19 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $plugin = $sku_entity->getPluginInstance();
 
+        // This link will be same irrespective of simple or configurable sku.
+        $node_relative_link = str_replace('/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . '/',
+          '',
+          $entity->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['link'] = $node_relative_link;
+
         // Get max sale qty for simple product.
         if ($sku_entity->bundle() == 'simple') {
           $max_sale_qty = $quantity_limit_enabled ? $plugin->getMaxSaleQty($sku_entity) : 0;
+          $prices = $skuManager->getMinPrices($sku_entity);
+          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['original_price'] = $skuInfo->formatPriceDisplay((float) $prices['price']);
+          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['final_price'] = $skuInfo->formatPriceDisplay((float) $prices['final_price']);
+          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['promotions'] = $skuInfo->promotionLabelData($sku_entity);
         }
         elseif ($sku_entity->bundle() == 'configurable') {
           $max_sale_qty = 0;

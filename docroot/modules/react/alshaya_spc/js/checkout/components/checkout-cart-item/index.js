@@ -21,7 +21,7 @@ const CheckoutCartItem = (props) => {
     <div className="product-item">
       <div className="spc-product-image">
         <ConditionalView condition={extra_data.cart_image !== null}>
-          <CheckoutItemImage img_data={extra_data.cart_image} />
+          <CheckoutItemImage ImgData={extra_data.cart_image} />
         </ConditionalView>
       </div>
       <div className="spc-product-meta-data">

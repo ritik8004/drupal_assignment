@@ -15,40 +15,61 @@ import QtyLimit from '../qty-limit';
 import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 import CartItemFree from '../cart-item-free';
+import { getProductDetail } from '../../../utilities/product_util';
+import { getStorageInfo } from '../../../utilities/storage';
 import { isQtyLimitReached } from '../../../utilities/checkout_util';
 
 export default class CartItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isItemError: false,
-      errorMessage: null,
+      wait: true,
     };
   }
 
   componentDidMount() {
-    document.addEventListener('spcCartItemError', this.handleCartItemError, false);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('spcCartItemError', this.handleCartItemError, false);
-  }
-
-  /**
-   * Handle and show error on continue cart action.
-   */
-  handleCartItemError = (e) => {
-    const { item: { sku } } = this.props;
-    const errorMessage = e.detail;
-    if (errorMessage !== null
-      && errorMessage !== undefined
-      && errorMessage[sku] !== undefined) {
+    const { item } = this.props;
+    // Key will be like 'product:en:testsku'
+    const storageKey = `product:${drupalSettings.path.currentLanguage}:${item.sku}`;
+    const productInfo = getStorageInfo(storageKey);
+    // If product available in localstorage.
+    if (productInfo !== null) {
       this.setState({
-        isItemError: true,
-        errorMessage: errorMessage[sku],
+        wait: false,
       });
+
+      return;
     }
-  };
+
+    if (item.sku !== undefined) {
+      // Fetch product detail from backend.
+      const productData = getProductDetail(item.sku);
+      if (productData instanceof Promise) {
+        productData.then((result) => {
+          // If no error.
+          if (result.sku !== undefined) {
+            // Prepare data and add in local storage.
+            const data = {
+              originalPrice: result.original_price,
+              finalPrice: result.final_price,
+              link: result.relative_link,
+              product_name: result.title,
+              image: (result.extra_data.cart_image !== undefined)
+                ? result.extra_data.cart_image.url
+                : '',
+              promotions: result.promotions,
+              configurableOptions: result.configurable_values,
+            };
+            const key = `product:${drupalSettings.path.currentLanguage}:${result.sku}`;
+            localStorage.setItem(key, JSON.stringify(data));
+            this.setState({
+              wait: false,
+            });
+          }
+        });
+      }
+    }
+  }
 
   /**
    * Remove item from the cart.
@@ -113,28 +134,66 @@ export default class CartItem extends React.Component {
   }
 
   render() {
+    const { wait } = this.state;
+    if (wait === true) {
+      return (null);
+    }
+
     const {
       item: {
-        title,
-        relative_link: relativeLink,
-        stock,
-        qty,
-        in_stock: inStock,
-        original_price: originalPrice,
-        configurable_values: configurableValues,
-        promotions,
-        extra_data: extraData,
         sku,
+        qty,
         id,
-        final_price: finalPrice,
-        free_item: freeItem,
-        max_sale_qty: maxSaleQty,
+        freeItem,
         error_msg: itemErrorMsg,
       },
       qtyLimit: currentQtyLimit,
       animationOffset,
       productPromotion,
     } = this.props;
+    // Key will be like 'product:en:testsku'
+    const storageKey = `product:${drupalSettings.path.currentLanguage}:${sku}`;
+    const {
+      product_name: productName,
+      finalPrice,
+      originalPrice,
+      image,
+      link,
+      promotions,
+      configurableOptions,
+    } = getStorageInfo(storageKey);
+    const cartImage = {
+      url: image,
+      alt: productName,
+      title: productName,
+    };
+
+    // const {
+    //   item: {
+    //     title,
+    //     relative_link: relativeLink,
+    //     stock,
+    //     qty,
+    //     in_stock: inStock,
+    //     original_price: originalPrice,
+    //     configurable_values: configurableValues,
+    //     promotions,
+    //     extra_data: extraData,
+    //     sku,
+    //     id,
+    //     final_price: finalPrice,
+    //     free_item: freeItem,
+    //     max_sale_qty: maxSaleQty,
+    //     error_msg: itemErrorMsg,
+    //   },
+    //   qtyLimit: currentQtyLimit,
+    //   animationOffset,
+    //   productPromotion,
+    // } = this.props;
+
+    const maxSaleQty = 2;
+    const stock = 100;
+    const inStock = true;
 
     const { isItemError, errorMessage } = this.state;
     let OOSClass = '';
@@ -165,12 +224,12 @@ export default class CartItem extends React.Component {
       >
         <div className="spc-product-tile">
           <div className="spc-product-image">
-            <CheckoutItemImage img_data={extraData.cart_image} />
+            <CheckoutItemImage ImgData={cartImage} />
           </div>
           <div className="spc-product-container">
             <div className="spc-product-title-price">
               <div className="spc-product-title">
-                <a href={Drupal.url(relativeLink)}>{title}</a>
+                <a href={Drupal.url(link)}>{productName}</a>
               </div>
               <div className="spc-product-price">
                 <SpecialPrice
@@ -180,7 +239,7 @@ export default class CartItem extends React.Component {
               </div>
             </div>
             <div className="spc-product-attributes-wrapper">
-              {configurableValues.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.attribute_code}-${key.value}`} label={key} />)}
+              {configurableOptions.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.attribute_code}-${key.value}`} label={key} />)}
             </div>
           </div>
           <div className="spc-product-tile-actions">

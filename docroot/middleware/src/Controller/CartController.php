@@ -321,50 +321,35 @@ class CartController {
     $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
     $extension_attributes = array_column($cart_data['cart']['items'], 'extension_attributes', 'sku');
     try {
-      $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
-      foreach ($data['items'] as $key => $value) {
-        if (isset($items_quantity[$key])) {
-          $data['items'][$key]['qty'] = $items_quantity[$key];
-        }
-
-        if (isset($extension_attributes[$key], $extension_attributes[$key]['error_message'])
-          && $extension_attributes[$key]['error_message']) {
-          $data['items'][$key]['error_msg'] = $extension_attributes[$key]['error_message'];
-          $data['is_error'] = TRUE;
-        }
-
-        if (isset($items_price[$key])) {
-          $data['items'][$key]['price'] = $items_price[$key];
-        }
+      $data['items'] = [];
+      foreach ($sku_items as $sku) {
+        $data['items'][$sku]['qty'] = $items_quantity[$sku];
+        $data['items'][$sku]['price'] = $items_price[$sku];
+        $data['items'][$sku]['sku'] = $sku;
+        $data['items'][$sku]['id'] = $items_id[$sku];
 
         // If info is available in static array, means this we get from
         // the cart update operation. We use that.
         if (!empty(Cart::$stockInfo)
           && isset(Cart::$stockInfo[$key])
           && !Cart::$stockInfo[$key]) {
-          $data['items'][$key]['in_stock'] = FALSE;
-          $data['items'][$key]['stock'] = 0;
+          $data['items'][$sku]['in_stock'] = FALSE;
+          $data['items'][$sku]['stock'] = 0;
         }
 
-        // If CnC is disabled for any item, we don't process and consider
-        // CnC disabled.
-        if ($data['cnc_enabled'] && isset($data['items'][$key]['delivery_options']['click_and_collect'])) {
-          $data['cnc_enabled'] = $data['items'][$key]['delivery_options']['click_and_collect']['status'];
-        }
-
-        // For the OOS.
-        if ($data['in_stock']
-          && (isset($data['items'][$key]['in_stock']) && !$data['items'][$key]['in_stock'])) {
-          $data['in_stock'] = FALSE;
+        if (isset($extension_attributes[$sku]) && $extension_attributes[$sku]['error_message']
+          && $extension_attributes[$key]['error_message']) {
+          $data['items'][$sku]['error_msg'] = $extension_attributes[$sku]['error_message'];
+          $data['is_error'] = TRUE;
         }
 
         // This is to determine whether item to be shown free or not in cart.
-        $data['items'][$key]['free_item'] = FALSE;
+        $data['items'][$sku]['freeItem'] = FALSE;
         foreach ($cart_data['totals']['items'] as $total_item) {
-          if (in_array($value['sku'], array_keys($items_id))
-            && $items_id[$value['sku']] == $total_item['item_id']
-            && ($total_item['price'] * $items_quantity[$value['sku']] === $total_item['discount_amount'])) {
-            $data['items'][$key]['free_item'] = TRUE;
+          // If total price of item matches discount, we mark as free.
+          if ($items_id[$sku] == $total_item['item_id']
+            && $total_item['price'] * $items_quantity[$sku] === $total_item['discount_amount']) {
+            $data['items'][$sku]['freeItem'] = TRUE;
             break;
           }
         }
