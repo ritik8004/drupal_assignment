@@ -216,6 +216,7 @@ class ProductResource extends ResourceBase {
     $data = $this->getSkuData($skuEntity, $link);
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
+    $data['categorisations'] = $this->getSkuCategorisations($node);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
@@ -230,6 +231,30 @@ class ProductResource extends ResourceBase {
     $response->addCacheableDependency($cacheableMetadata);
 
     return $response;
+  }
+
+  /**
+   * Wrapper function to get product categorisations.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Product node.
+   *
+   * @return array
+   *   Product categorisations.
+   */
+  private function getSkuCategorisations(NodeInterface $node) {
+    $lang = $this->languageManager->getCurrentLanguage()->getId();
+    $categories = $node->get('field_category')->referencedEntities();
+    $terms = [];
+    if (!empty($categories)) {
+      foreach ($categories as $term) {
+        $term = $this->skuInfoHelper->getEntityTranslation($term, $lang);
+        $terms[$term->get('field_commerce_id')->getString()] = [
+          $term->get('field_commerce_id')->getString() => $term->label(),
+        ];
+      }
+    }
+    return $terms;
   }
 
   /**
