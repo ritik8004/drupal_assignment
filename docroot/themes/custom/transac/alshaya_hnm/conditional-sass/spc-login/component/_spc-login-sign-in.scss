@@ -2,6 +2,8 @@
   .block-page-title-block {
     h1 {
       letter-spacing: 1px;
+
+      @include arabic-letter-spacing;
     }
   }
 
@@ -20,10 +22,14 @@
 
     .form-submit {
       letter-spacing: 1px;
+
+      @include arabic-letter-spacing;
     }
 
     .edit-checkout-as-guest {
       letter-spacing: 1px;
+
+      @include arabic-letter-spacing;
     }
 
     .ashaya-spc-login-form {

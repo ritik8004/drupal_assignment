@@ -105,13 +105,22 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
         }
       }
 
-      // If we have new categories - add them for cache invalidation.
-      foreach (array_diff($current_category_ids, $indexed_category_ids) ?? [] as $new_category) {
-        $this->queueCacheInvalidation(self::CACHE_TAG_PREFIX . $new_category);
+      // If the product goes OOS, invalidate all the term pages.
+      if ($entity->getPluginInstance()->isProductInStock($entity)) {
+        $categories_to_invalidate = array_merge(
+          // If we have new categories - add them for cache invalidation.
+          array_diff($current_category_ids, $indexed_category_ids),
+
+          // If we have categories removed - add them for cache invalidation.
+          array_diff($indexed_category_ids, $current_category_ids)
+        );
       }
-      // If we have categories removed - add them for cache invalidation.
-      foreach (array_diff($indexed_category_ids, $current_category_ids) ?? [] as $new_category) {
-        $this->queueCacheInvalidation(self::CACHE_TAG_PREFIX . $new_category);
+      else {
+        $categories_to_invalidate = array_merge($current_category_ids, $indexed_category_ids);
+      }
+
+      foreach ($categories_to_invalidate ?? [] as $category) {
+        $this->queueCacheInvalidation(self::CACHE_TAG_PREFIX . $category);
       }
     }
   }

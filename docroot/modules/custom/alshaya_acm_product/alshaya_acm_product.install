@@ -12,6 +12,58 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add config to turn video download on/off.
+ * Enable alshaya_brand module.
+ */
+function alshaya_acm_product_update_8057() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+  \Drupal::service('module_installer')->install(['alshaya_brand']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Invalidate cache for promotions and requeue all impacted products.
+ */
+function alshaya_acm_product_update_8056() {
+  \Drupal::cache('product_processed_data')->invalidateAll();
+
+  // Re-queue all the products that have a promotion mapped.
+  /** @var \Drupal\alshaya_search_api\AlshayaSearchApiDataHelper $searchApiDataHelper */
+  $searchApiDataHelper = \Drupal::service('alshaya_search_api.data_helper');
+  $products = $searchApiDataHelper->getProductsWithDataInField('field_acq_promotion_label');
+
+  /** @var \Drupal\alshaya_acm_product\Service\ProductQueueUtility $queueUtility */
+  $queueUtility = \Drupal::service('alshaya_acm_product.product_queue_utility');
+  foreach ($products as $product) {
+    $queueUtility->queueProduct($product);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new settings as enable_size_grouping_filter.
+ */
+function alshaya_acm_product_update_8055() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-saving the linked sku and PDP resource to moved outside mobile app.
  */
 function alshaya_acm_product_update_8054() {

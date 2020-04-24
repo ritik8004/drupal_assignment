@@ -15,7 +15,7 @@ const MobileCartPreview = (props) => {
 
   return (
     <>
-      <div className="spc-mobile-cart-preview">
+      <div className="spc-mobile-cart-preview fadeInUp" style={{ animationDelay: '0.5s' }}>
         <span className="cart-quantity">{Drupal.t('@total items', { '@total': totalItems })}</span>
         <span className="cart-text">{`${totalText} :`}</span>
         <span className="cart-value"><PriceElement amount={baseGrandTotal} /></span>

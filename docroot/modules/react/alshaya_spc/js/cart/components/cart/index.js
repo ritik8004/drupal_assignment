@@ -14,7 +14,8 @@ import { stickyMobileCartPreview, stickySidebar } from '../../../utilities/stick
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { fetchCartData } from '../../../utilities/api/requests';
-import PromotionsDynamicLabels from '../../../utilities/promotions-dynamic-labels';
+import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
+import DynamicPromotionBanner from '../dynamic-promotion-banner';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -28,6 +29,8 @@ export default class Cart extends React.Component {
       amount: null,
       couponCode: null,
       cartPromo: null,
+      dynamicPromoLabelsCart: null,
+      dynamicPromoLabelsProduct: null,
       inStock: true,
     };
   }
@@ -73,7 +76,7 @@ export default class Cart extends React.Component {
         if (cartData instanceof Promise) {
           cartData.then((result) => {
             if (typeof result.error === 'undefined') {
-              PromotionsDynamicLabels.apply(result);
+              PromotionsDynamicLabelsUtil.apply(result);
             }
           });
         }
@@ -95,11 +98,26 @@ export default class Cart extends React.Component {
 
     // Event handles cart message update.
     document.addEventListener('spcCartMessageUpdate', this.handleCartMessageUpdateEvent, false);
+
+    // Event handle for Dynamic Promotion available.
+    document.addEventListener('applyDynamicPromotions', this.saveDynamicPromotions, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCartMessageUpdate', this.handleCartMessageUpdateEvent, false);
   }
+
+  saveDynamicPromotions = (event) => {
+    const {
+      cart_labels: cartLabels,
+      products_labels: productLabels,
+    } = event.detail;
+
+    this.setState({
+      dynamicPromoLabelsCart: cartLabels,
+      dynamicPromoLabelsProduct: productLabels,
+    });
+  };
 
   handleCartMessageUpdateEvent = (event) => {
     const { type, message } = event.detail;
@@ -127,6 +145,8 @@ export default class Cart extends React.Component {
       cartPromo,
       actionMessageType,
       actionMessage,
+      dynamicPromoLabelsCart,
+      dynamicPromoLabelsProduct,
     } = this.state;
 
     if (wait) {
@@ -145,36 +165,39 @@ export default class Cart extends React.Component {
 
     return (
       <>
-        <div className="spc-pre-content">
+        <div className="spc-pre-content fadeInUp" style={{ animationDelay: '0.4s' }}>
+          <MobileCartPreview total_items={totalItems} totals={totals} />
           {/* This will be used for global error message. */}
           <CheckoutMessage type={messageType} context="page-level-cart">
             {message}
           </CheckoutMessage>
 
-          <div id="spc-cart-promotion-dynamic-message-qualified" />
-          <div id="spc-cart-promotion-dynamic-message-next-eligible" />
+          <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
 
           {/* This will be used for any action/event on basket page. */}
           <CheckoutMessage type={actionMessageType} context="page-level-cart-action">
             {actionMessage}
           </CheckoutMessage>
-
-          <MobileCartPreview total_items={totalItems} totals={totals} />
         </div>
         <div className="spc-main">
           <div className="spc-content">
-            <SectionTitle>
+            <SectionTitle animationDelayValue="0.4s">
               {Drupal.t('my shopping bag (@qty items)', { '@qty': totalItems })}
             </SectionTitle>
-            <CartItems items={items} />
+            <CartItems dynamicPromoLabelsProduct={dynamicPromoLabelsProduct} items={items} />
           </div>
           <div className="spc-sidebar">
-            <CartPromoBlock coupon_code={couponCode} inStock={inStock} />
+            <CartPromoBlock
+              coupon_code={couponCode}
+              inStock={inStock}
+              dynamicPromoLabelsCart={dynamicPromoLabelsCart}
+            />
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}
               cart_promo={cartPromo}
               show_checkout_button
+              animationDelay="0.5s"
             />
           </div>
         </div>

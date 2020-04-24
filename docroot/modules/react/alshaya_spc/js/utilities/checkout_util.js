@@ -387,6 +387,24 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
 };
 
 /**
+ * Check if CnC enabled or not.
+ *
+ * @param {*} cart
+ */
+export const isCnCEnabled = (cart) => {
+  const { cnc_enabled: cncEnabled } = cart;
+  const cncGlobaleEnable = drupalSettings.cnc_enabled;
+
+  let cncAvailable = true;
+  // If CNC is disabled.
+  if (!cncGlobaleEnable || !cncEnabled) {
+    cncAvailable = false;
+  }
+
+  return cncAvailable;
+};
+
+/**
  * Determines if delivery method set in cart is same as user
  * selected or not.
  */

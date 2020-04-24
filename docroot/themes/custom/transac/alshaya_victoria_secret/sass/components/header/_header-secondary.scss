@@ -59,3 +59,31 @@
     height: 2.5rem;
   }
 }
+
+.block-alshaya-algolia-react-autocomplete {
+  &::before {
+    @include breakpoint($only-tablet) {
+      content: '';
+      background: transparent;
+      position: absolute;
+      z-index: -1;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    }
+  }
+}
+
+// Mobile needs z-index as well.
+body.mobile--overlay .block-alshaya-algolia-react-autocomplete {
+  &::before {
+    @include breakpoint($upto-desktop) {
+      opacity: 1;
+      z-index: 15;
+      background: $header_mobile_menu_overlay;
+    }
+  }
+}

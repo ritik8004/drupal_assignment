@@ -265,6 +265,7 @@
 .language--switcher {
   @include breakpoint($tablet) {
     margin-top: 1.75rem;
+    margin-#{$left}: 1.125rem;
   }
 
   @include breakpoint($only-mobile) {
@@ -396,11 +397,13 @@
       color: $black;
       font-family: $alshaya-bold;
       font-size: 0.875rem;
+      padding-#{$left}: 1.125rem;
 
       @include breakpoint($only-mobile) {
         margin-top: 2.375rem;
-        margin-bottom: 1.25rem;
+        margin-bottom: 0.625rem;
         text-align: center;
+        padding-#{$left}: 0;
       }
     }
   }
@@ -421,4 +424,10 @@
 
 .open--accordion .is-accordion {
   @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/minus.svg', 2rem, 2rem, after);
+}
+
+.c-footer {
+  @include breakpoint($only-mobile) {
+    padding-top: 1rem;
+  }
 }

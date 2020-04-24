@@ -12,8 +12,12 @@
     }
   }
 
-  @include breakpoint($upto-desktop) {
+  @include breakpoint($upto-tablet) {
     top: 5.625rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    top: 5.425rem;
   }
 
   .algolia-search-cleartext-icon {
@@ -217,6 +221,11 @@
       &--open {
         border-radius: 0;
 
+        @include breakpoint($only-tablet) {
+          border: none;
+          border-bottom: 1px solid $algolia-auto-complete-border;
+        }
+
         @include breakpoint($desktop) {
           border: 1px solid $algolia-auto-complete-border;
         }
@@ -224,7 +233,7 @@
     }
   }
 
-  &.focused.show-algolia-search-bar {
+  &.focused {
     #alshaya-algolia-autocomplete {
       .react-autosuggest__container {
         &::after {
@@ -248,81 +257,119 @@
       }
     }
   }
+}
 
-  body {
-    &:not(.no-sticky-algolia-search-bar) {
+body {
+  &:not(.no-sticky-algolia-search-bar) {
+    @include breakpoint($only-mobile) {
       margin-top: 9rem;
+    }
 
-      .block-alshaya-algolia-react-autocomplete {
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($only-mobile) {
         padding: 0;
+      }
+    }
+
+    .block-alshaya-super-category-menu,
+    .menu--mobile-navigation,
+    #block-cartminiblock,
+    .block-alshaya-react-mini-cart {
+      @include breakpoint($only-mobile) {
+        position: absolute !important;
+      }
+    }
+
+    header {
+      .c-header__region {
+        @include breakpoint($only-mobile) {
+          height: auto;
+        }
+      }
+    }
+  }
+
+  .block-alshaya-algolia-react-autocomplete {
+    .algolia-search-back-icon {
+      @include breakpoint($only-mobile) {
+        #{$left}: 0;
+        top: 0.5rem;
+      }
+    }
+  }
+
+  // Specific to frontpage.
+  &.frontpage {
+    @include breakpoint($upto-desktop) {
+      .c-menu-primary {
+        .menu--mobile-navigation {
+          width: 66.66%;
+
+          ul {
+            li {
+              &:nth-child(2) {
+                display: none;
+              }
+            }
+          }
+        }
+
+        .store {
+          width: 100%;
+        }
+      }
+
+      header {
+        .block-cart-mini-block,
+        .block-alshaya-react-mini-cart {
+          width: 33.33%;
+        }
+      }
+    }
+
+    &:not(.no-sticky-algolia-search-bar) {
+      @include breakpoint($only-tablet) {
+        margin-top: 8.775rem;
+      }
+    }
+  }
+
+  &.no-sticky-algolia-search-bar {
+    .block-alshaya-algolia-react-autocomplete {
+      &.show-algolia-search-bar {
+        @include breakpoint($only-mobile) {
+          z-index: 13;
+        }
+      }
+    }
+  }
+
+  &:not(.frontpage) {
+    &.hide-header {
+      @include breakpoint($only-mobile) {
+        margin-top: 3.375rem;
       }
 
       .block-alshaya-super-category-menu,
       .menu--mobile-navigation,
       #block-cartminiblock,
       .block-alshaya-react-mini-cart {
-        position: absolute !important;
-      }
-
-      header {
-        .c-header__region {
-          height: auto;
+        @include breakpoint($only-mobile) {
+          display: none;
         }
       }
-    }
 
-    .block-alshaya-algolia-react-autocomplete {
-      .algolia-search-back-icon {
-        #{$left}: 0;
-        top: 0.5rem;
-      }
-    }
+      .block-alshaya-algolia-react-autocomplete {
+        &.focused {
+          .algolia-search-back-icon {
+            visibility: hidden;
+          }
 
-    &.frontpage {
-      @include breakpoint($only-mobile) {
-        .c-menu-primary {
-          .menu--mobile-navigation {
-            width: 66.66%;
-
-            ul {
-              li {
-                &:nth-child(2) {
-                  display: none;
-                }
-              }
+          &.show-algolia-search-bar {
+            .algolia-search-back-icon {
+              visibility: visible;
             }
           }
-
-          .store {
-            width: 100%;
-          }
-        }
-
-        header {
-          .block-cart-mini-block {
-            width: 33.33%;
-          }
-        }
-      }
-    }
-
-    &.no-sticky-algolia-search-bar {
-      .block-alshaya-algolia-react-autocomplete {
-        &.show-algolia-search-bar {
-          z-index: 13;
-        }
-      }
-    }
-
-    &:not(.frontpage) {
-      &.hide-header {
-        margin-top: 3.375rem;
-
-        .block-alshaya-super-category-menu,
-        .menu--mobile-navigation,
-        #block-cartminiblock,
-        .block-alshaya-react-mini-cart {
-          display: none;
         }
       }
     }

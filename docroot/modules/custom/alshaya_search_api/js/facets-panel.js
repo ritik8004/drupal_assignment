@@ -77,7 +77,7 @@
 
       // On clicking on back button, reset the block title and add class so
       // that facet blocks can be closed.
-      $('.facet-all-back').on('click', function() {
+      $('.facet-all-back, .back-facet-list').once('facet-all-back-processed').on('click', function() {
         $(this).hide();
         $('.filter-sort-title').html(Drupal.t('filter & sort'));
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
@@ -365,8 +365,9 @@
             }
             filterposition = $('.show-all-filters').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
 
-            // To check if algolia is enabled, calculate height as per minimalistic header implementation.
-            if ($('body').hasClass('no-sticky-algolia-search-bar')) {
+            // To check if algolia is enabled and has supercategory menu,
+            // calculate height as per minimalistic header implementation.
+            if ($('body').hasClass('no-sticky-algolia-search-bar') && supercategorymenuHeight) {
               fixedNavHeight = nav.outerHeight() + supercategorymenuHeight - $('.block-alshaya-super-category').outerHeight();
             }
             else {

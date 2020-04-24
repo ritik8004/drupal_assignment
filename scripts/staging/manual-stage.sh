@@ -10,8 +10,9 @@
 sites="$1"
 target_env="$2"
 type="$3"
+user=`whoami`
 
-target_alias=`drush sa | grep "$target_env\$"`
+target_alias=`drush sa | grep "@$user.$target_env\$"`
 if [[ -z "$target_alias" ]]; then
   echo "Invalid target env $target_env"
   exit
@@ -122,14 +123,7 @@ do
   files_folder="sites/g/files/$site_files/files"
   target_files_folder="/var/www/html/$AH_SITE_GROUP.$target_env/docroot/$files_folder"
 
-  rsync -a $files_folder/swatches $target:$target_files_folder
-  rsync -a $files_folder/20* $target:$target_files_folder
-  rsync -a $files_folder/labels $target:$target_files_folder
-  rsync -a $files_folder/maintenance_mode_image $target:$target_files_folder
-  rsync -a $files_folder/media-icons $target:$target_files_folder
-  rsync -a $files_folder/hero-image $target:$target_files_folder
-  rsync -a $files_folder/desktop-image $target:$target_files_folder
-  rsync -t $files_folder/* $target:$target_files_folder
+  rsync -a $files_folder/* --exclude 'styles' --exclude 'media' --exclude 'assets' --exclude 'assets-shared' $target:$target_files_folder
 
   if [[ "$type" == "iso" ]]; then
     echo

@@ -1,5 +1,5 @@
 visibility:
   request_path:
     id: request_path
-    pages: "/cart/checkout\r\n/cart/checkout/*"
+    pages: "/cart/login\r\n/checkout"
     negate: FALSE

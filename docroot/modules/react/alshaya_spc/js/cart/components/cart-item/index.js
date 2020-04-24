@@ -10,6 +10,11 @@ import CartQuantitySelect from '../cart-quantity-select';
 import { updateCartItemData } from '../../../utilities/update_cart';
 import SpecialPrice from '../../../utilities/special-price';
 import dispatchCustomEvent from '../../../utilities/events';
+import Notifications from './components/Notifications';
+import QtyLimit from '../qty-limit';
+import DynamicPromotionProductItem
+  from '../dynamic-promotion-banner/DynamicPromotionProductItem';
+import CartItemFree from '../cart-item-free';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -101,7 +106,10 @@ export default class CartItem extends React.Component {
         id,
         final_price: finalPrice,
         free_item: freeItem,
+        max_sale_qty: maxSaleQty,
       },
+      animationOffset,
+      productPromotion,
     } = this.props;
 
     const { isItemError, errorMessage } = this.state;
@@ -110,8 +118,17 @@ export default class CartItem extends React.Component {
       OOSClass = 'error';
     }
 
+    const animationDelayValue = `${0.3 + animationOffset}s`;
+
+    let dynamicPromoLabels = null;
+    if (productPromotion !== false && productPromotion.labels.length !== 0) {
+      Object.values(productPromotion.labels).forEach((message) => {
+        dynamicPromoLabels = message;
+      });
+    }
+
     return (
-      <div className="spc-cart-item" data-sku={sku}>
+      <div className="spc-cart-item fadeInUp" style={{ animationDelay: animationDelayValue }} data-sku={sku}>
         <div className="spc-product-tile">
           <div className="spc-product-image">
             <CheckoutItemImage img_data={extraData.cart_image} />
@@ -127,8 +144,6 @@ export default class CartItem extends React.Component {
                   finalPrice={parseFloat(finalPrice)}
                 />
               </div>
-              {freeItem === true
-              && <div>{Drupal.t('FREE')}</div>}
             </div>
             <div className="spc-product-attributes-wrapper">
               {configurableValues.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.attribute_code}-${key.value}`} label={key} />)}
@@ -143,6 +158,9 @@ export default class CartItem extends React.Component {
                 stock={stock}
                 sku={sku}
                 is_disabled={!inStock || freeItem}
+                maxLimit={
+                  drupalSettings.quantity_limit_enabled && maxSaleQty !== 0 ? maxSaleQty : null
+                }
               />
             </div>
           </div>
@@ -150,16 +168,27 @@ export default class CartItem extends React.Component {
         <div className="spc-promotions">
           {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
         </div>
-        <div className="spc-cart-item-warning">
-          <CartItemOOS inStock={inStock} />
-          <ItemLowQuantity stock={stock} qty={qty} in_stock={inStock} />
-        </div>
-        <div className="spc-cart-item-alerts">
-          <div className="spc-cart-promotion-dynamic-message-product" />
-          {/* Dynamic promo labels buy 2 more items, free gifts labels,
-           qty limit labels go here. Name the child component
-           .spc-cart-item-alerts-item */}
-        </div>
+        <Notifications>
+          <CartItemOOS type="warning" inStock={inStock} />
+          <ItemLowQuantity type="alert" stock={stock} qty={qty} in_stock={inStock} />
+          {drupalSettings.quantity_limit_enabled
+          && (
+            <QtyLimit
+              type="conditional"
+              showWarning={
+                parseInt(maxSaleQty, 10) !== 0 && parseInt(qty, 10) >= parseInt(maxSaleQty, 10)
+              }
+              showAlert={
+                parseInt(maxSaleQty, 10) !== 0 && parseInt(qty, 10) < parseInt(maxSaleQty, 10)
+              }
+              filled="true"
+              qty={qty}
+              maxSaleQty={maxSaleQty}
+            />
+          )}
+          <CartItemFree type="alert" filled="true" freeItem={freeItem} />
+          <DynamicPromotionProductItem type="alert" dynamicPromoLabels={dynamicPromoLabels} />
+        </Notifications>
         {/* @Todo: Show OOS only once. */}
         {isItemError
           && <CartItemError errorMessage={errorMessage} />}

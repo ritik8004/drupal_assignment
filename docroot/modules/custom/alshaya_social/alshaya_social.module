@@ -107,7 +107,7 @@ function alshaya_social_preprocess_alshaya_social(&$variables) {
     $variables['destination'] = Url::fromRoute($route_name, ['step' => 'delivery'])->toString();
   }
 
-  if ($route_name == 'alshaya_spc.login') {
+  if ($route_name == 'alshaya_spc.checkout.login') {
     $variables['destination'] = Url::fromRoute('alshaya_spc.checkout', [])->toString();
   }
 

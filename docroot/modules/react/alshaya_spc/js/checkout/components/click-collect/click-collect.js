@@ -1,6 +1,7 @@
 import React from 'react';
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
+import parse from 'html-react-parser';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import createFetcher from '../../../utilities/api/fetcher';
 import { fetchClicknCollectStores } from '../../../utilities/api/requests';
@@ -17,13 +18,16 @@ import ClicknCollectMap from './components/ClicknCollectMap';
 import ToggleButton from './components/ToggleButton';
 import LocationSearchForm from './components/LocationSearchForm';
 import DeviceView from '../../../common/components/device-view';
-import FullScreenSVG from '../full-screen-svg';
+import FullScreenSVG from '../../../svg-component/full-screen-svg';
 import {
   requestFullscreen,
   isFullScreen,
   exitFullscreen,
 } from '../../../utilities/map/fullScreen';
+import CheckoutMessage from '../../../utilities/checkout-message';
+import getStringMessage from '../../../utilities/strings';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import { getUserLocation } from '../../../utilities/map/map_utils';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -43,8 +47,6 @@ class ClickCollect extends React.Component {
     this.state = {
       openSelectedStore: openSelectedStore || false,
       mapFullScreen: false,
-      errorSuccessMessage: null,
-      messageType: null,
     };
   }
 
@@ -56,6 +58,7 @@ class ClickCollect extends React.Component {
       selectedStore,
       updateModal,
       storeList,
+      outsideCountryError,
     } = this.context;
     updateModal(true);
 
@@ -93,27 +96,21 @@ class ClickCollect extends React.Component {
     // On marker click.
     document.addEventListener('markerClick', this.mapMarkerClick);
 
-    // Handle error on popup.
-    document.addEventListener('addressPopUpError', this.handleAddressPopUpError, false);
+    if (outsideCountryError) {
+      smoothScrollTo('.spc-cnc-address-form-sidebar .spc-checkout-section-title');
+    }
+  }
+
+  componentDidUpdate() {
+    const { outsideCountryError } = this.context;
+    if (outsideCountryError) {
+      smoothScrollTo('.spc-cnc-address-form-sidebar .spc-checkout-section-title');
+    }
   }
 
   componentWillUnmount() {
     document.removeEventListener('markerClick', this.mapMarkerClick);
-    document.removeEventListener('addressPopUpError', this.handleAddressPopUpError, false);
   }
-
-  /**
-   * Show error on popup.
-   */
-  handleAddressPopUpError = (e) => {
-    const { type, message } = e.detail;
-    this.setState({
-      messageType: type,
-      errorSuccessMessage: message,
-    });
-    // Scroll to error.
-    smoothScrollTo('.spc-cnc-selected-store-header .spc-checkout-section-title');
-  };
 
   mapMarkerClick = (e) => {
     const index = e.detail.markerSettings.zIndex - 1;
@@ -160,23 +157,43 @@ class ClickCollect extends React.Component {
     if (e) {
       e.preventDefault();
     }
-
+    const { showOutsideCountryError } = this.context;
     this.searchplaceInput.value = '';
     this.nearMeBtn.classList.add('active');
+    showFullScreenLoader();
     getLocationAccess()
       .then(
-        (pos) => {
+        async (pos) => {
+          const coords = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          };
+          try {
+            const [userCountrySame] = await getUserLocation(coords);
+            // If user and site country not same, don;t process.
+            if (!userCountrySame) {
+              removeFullScreenLoader();
+              // Show error message.
+              showOutsideCountryError(true);
+              return;
+            }
+          } catch (error) {
+            Drupal.logJavascriptError('clickncollect-checkUserCountry', error);
+          }
+
           this.fetchAvailableStores({
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
-          });
+          }, true);
         },
         () => {
+          removeFullScreenLoader();
           this.nearMeBtn.classList.remove('active');
-          this.fetchAvailableStores(getDefaultMapCenter());
+          this.fetchAvailableStores(getDefaultMapCenter(), false);
         },
       )
       .catch((error) => {
+        removeFullScreenLoader();
         Drupal.logJavascriptError('clickncollect-getCurrentPosition', error);
       });
     return false;
@@ -185,8 +202,8 @@ class ClickCollect extends React.Component {
   /**
    * Fetch available stores for given lat and lng.
    */
-  fetchAvailableStores = (coords) => {
-    const { updateCoordsAndStoreList } = this.context;
+  fetchAvailableStores = (coords, locationAccess = null) => {
+    const { updateCoordsAndStoreList, showOutsideCountryError } = this.context;
     showFullScreenLoader();
     // Create fetcher object to fetch stores.
     const storeFetcher = createFetcher(fetchClicknCollectStores);
@@ -196,11 +213,12 @@ class ClickCollect extends React.Component {
       .then((response) => {
         this.selectStoreButtonVisibility(false);
         if (typeof response.error === 'undefined') {
-          updateCoordsAndStoreList(coords, response.data);
+          updateCoordsAndStoreList(coords, response.data, locationAccess);
           this.showOpenMarker(response);
         } else {
           updateCoordsAndStoreList(coords, []);
         }
+        showOutsideCountryError(false);
         removeFullScreenLoader();
       })
       .catch((error) => {
@@ -299,8 +317,6 @@ class ClickCollect extends React.Component {
     const { selectedStore, storeList } = this.context;
     this.setState({
       openSelectedStore: false,
-      messageType: null,
-      errorSuccessMessage: null,
     });
     this.selectStoreButtonVisibility(true);
     this.openMarkerOfStore(selectedStore.code, storeList);
@@ -398,13 +414,15 @@ class ClickCollect extends React.Component {
       coords,
       storeList,
       selectedStore,
+      locationAccess,
+      updateLocationAccess,
+      outsideCountryError,
+      showOutsideCountryError,
     } = this.context;
 
     const {
       openSelectedStore,
       mapFullScreen,
-      messageType,
-      errorSuccessMessage,
     } = this.state;
 
     const { closeModal } = this.props;
@@ -427,14 +445,28 @@ class ClickCollect extends React.Component {
             className="spc-cnc-stores-list-map"
             style={{ display: openSelectedStore ? 'none' : 'block' }}
           >
-            <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
+            <SectionTitle>{getStringMessage('collection_store')}</SectionTitle>
             <a className="close" onClick={closeModal}>
               &times;
             </a>
             <div className="spc-cnc-address-form-wrapper">
+              {locationAccess === false
+              && (
+                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
+                  <span className="font-bold">{getStringMessage('location_access_denied')}</span>
+                  <a href="#" onClick={() => updateLocationAccess(true)}>{getStringMessage('dismiss')}</a>
+                </CheckoutMessage>
+              )}
+              {outsideCountryError === true
+              && (
+                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
+                  <span className="font-bold">{parse(getStringMessage('location_outside_country_cnc'))}</span>
+                  <a href="#" onClick={() => showOutsideCountryError(false)}>{getStringMessage('dismiss')}</a>
+                </CheckoutMessage>
+              )}
               <div className="spc-cnc-address-form-content">
                 <SectionTitle>
-                  {Drupal.t('find your nearest store')}
+                  {getStringMessage('find_your_nearest_store')}
                 </SectionTitle>
                 <LocationSearchForm
                   ref={this.searchRef}
@@ -477,15 +509,13 @@ class ClickCollect extends React.Component {
           </div>
           <div className="spc-cnc-store-actions" data-selected-stored={openSelectedStore}>
             <button className="select-store" type="button" onClick={(e) => this.finalizeCurrentStore(e)}>
-              {Drupal.t('select this store')}
+              {getStringMessage('select_this_store')}
             </button>
           </div>
           <SelectedStore
             store={selectedStore}
             open={openSelectedStore}
             closePanel={this.closeSelectedStorePanel}
-            messageType={messageType}
-            errorSuccessMessage={errorSuccessMessage}
           />
         </div>
       </div>

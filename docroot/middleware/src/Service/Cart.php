@@ -394,7 +394,9 @@ class Cart {
 
     // If shipping address add by address id.
     $carrier_info = $shipping_data['carrier_info'];
-    $fields_data = $this->formatAddressForShippingBilling($shipping_data);
+    $fields_data = !empty($shipping_data['customer_address_id'])
+      ? $shipping_data['address']
+      : $this->formatAddressForShippingBilling($shipping_data);
     $data['shipping']['shipping_address'] = $fields_data;
     $data['shipping']['shipping_carrier_code'] = $carrier_info['code'];
     $data['shipping']['shipping_method_code'] = $carrier_info['method'];

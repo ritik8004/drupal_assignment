@@ -141,6 +141,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Markup for cart page.
    */
   public function cart() {
+    $acm_config = $this->configFactory->get('alshaya_acm.settings');
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="spc-cart"></div>',
@@ -149,7 +151,18 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart',
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
+          'alshaya_acm_promotion/basket_labels_manager',
         ],
+        'drupalSettings' => [
+          'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+        ],
+      ],
+      '#cache' => [
+        'contexts' => [
+          'languages:' . LanguageInterface::TYPE_INTERFACE,
+          'user',
+        ],
+        'tags' => $acm_config->getCacheTags(),
       ],
     ];
   }
@@ -179,9 +192,11 @@ class AlshayaSpcController extends ControllerBase {
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
       $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
 
+      $user_mobile_number = $user->get('field_mobile_number')->first();
       $user_name = [
         'fname' => $user->get('field_first_name')->first()->getString(),
         'lname' => $user->get('field_last_name')->first()->getString(),
+        'mobile' => !empty($user_mobile_number) ? $user_mobile_number->getValue()['local_number'] : '',
       ];
 
       $default_profile = $this->entityTypeManager->getStorage('profile')
@@ -210,6 +225,50 @@ class AlshayaSpcController extends ControllerBase {
     $geolocation_config = $this->configFactory->get('geolocation.settings');
     $cache_tags = Cache::mergeTags($cache_tags, array_merge($store_finder_config->getCacheTags(), $geolocation_config->getCacheTags()));
 
+    $cnc_enabled = $cc_config->get('feature_status') == 'enabled';
+    if ($cnc_enabled) {
+      $strings[] = [
+        'key' => 'find_your_nearest_store',
+        'value' => $this->t('find your nearest store'),
+      ];
+
+      $strings[] = [
+        'key' => 'select_this_store',
+        'value' => $this->t('select this store'),
+      ];
+
+      $strings[] = [
+        'key' => 'collection_store',
+        'value' => $this->t('Collection Store'),
+      ];
+
+      $strings[] = [
+        'key' => 'no_store_found',
+        'value' => $this->t('Sorry, No store found for your location.'),
+      ];
+    }
+
+    $strings[] = [
+      'key' => 'dismiss',
+      'value' => $this->t('Dismiss'),
+    ];
+
+    $strings[] = [
+      'key' => 'location_access_denied',
+      'value' => $this->t('Access to your location access has been denied by your browser. You can reenable location services in your browser settings.'),
+    ];
+
+    $country_name = $this->mobileUtil->getCountryName($country_code);
+    $strings[] = [
+      'key' => 'location_outside_country_hd',
+      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>' . $this->t("We don't support delivery outside @country. Please enter an address with in country @country below to continue.", ['@country' => $country_name]),
+    ];
+
+    $strings[] = [
+      'key' => 'location_outside_country_cnc',
+      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>' . $this->t("We don't support delivery outside @country. Please select a store with in country @country below to continue.", ['@country' => $country_name]),
+    ];
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
@@ -221,6 +280,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_white_label/spc-checkout',
         ],
         'drupalSettings' => [
+          'cnc_enabled' => $cnc_enabled,
           'cnc_subtitle_available' => $cc_config->get('checkout_click_collect_available'),
           'cnc_subtitle_unavailable' => $cc_config->get('checkout_click_collect_unavailable'),
           'terms_condition' => $checkout_settings->get('checkout_terms_condition.value'),

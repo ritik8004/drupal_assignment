@@ -20,7 +20,7 @@ class NewCard extends React.Component {
 
     const date = new Date();
     this.dateMin = `${date.getMonth() + 1}-${date.getFullYear().toString().substr(-2)}`;
-    this.acceptedCards = ['visa', 'mastercard', 'diners'];
+    this.acceptedCards = drupalSettings.checkoutCom.acceptedCards;
   }
 
   updateCurrentContext = (obj) => {
@@ -124,7 +124,7 @@ class NewCard extends React.Component {
     const { handleCardCvvChange, enableCheckoutLink } = this.props;
 
     const cardTypes = Object.entries(this.acceptedCards).map(([, type]) => (
-      <CardTypeSVG key={type} type={type} class={`${type} ${cardType === type ? 'is-active' : ''}`} />
+      <CardTypeSVG key={type} type={type} class={`${type} is-active`} />
     ));
 
     return (
@@ -139,6 +139,8 @@ class NewCard extends React.Component {
                 onCreditCardTypeChanged: this.handleCardTypeChanged,
               }}
               required
+              name="spc-no-autocomplete-name"
+              autoComplete="off"
               onChange={() => this.showCardType()}
               onBlur={(e) => this.handleCardNumberChange(e, 'blur')}
             />
@@ -157,6 +159,8 @@ class NewCard extends React.Component {
                 delimiter: '/',
               }}
               required
+              name="spc-no-autocomplete-expiry"
+              autoComplete="off"
               onBlur={(e) => this.handleCardExpiryChange(e, 'blur')}
             />
             <div className="c-input__bar" />
@@ -171,6 +175,8 @@ class NewCard extends React.Component {
               pattern="\d{3,4}"
               maxLength="4"
               required
+              name="spc-no-autocomplete-cvv"
+              autoComplete="off"
               onChange={(e) => enableCheckoutLink(e)}
               onBlur={(e) => handleCardCvvChange(e, 'blur')}
             />

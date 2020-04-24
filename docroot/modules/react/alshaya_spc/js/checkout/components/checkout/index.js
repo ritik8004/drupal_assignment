@@ -22,6 +22,7 @@ import TermsConditions from '../terms-conditions';
 import {
   removeFullScreenLoader,
   addShippingInCart,
+  isCnCEnabled,
 } from '../../../utilities/checkout_util';
 import {
   prepareAddressDataFromCartShipping,
@@ -30,6 +31,8 @@ import {
 import ConditionalView from '../../../common/components/conditional-view';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
+import { redirectToCart } from '../../../utilities/get_cart';
+import dispatchCustomEvent from '../../../utilities/events';
 
 window.fetchStore = 'idle';
 
@@ -69,7 +72,19 @@ export default class Checkout extends React.Component {
       const cartData = fetchCartData();
       if (cartData instanceof Promise) {
         cartData.then((result) => {
+          if (result === undefined
+            || result === null) {
+            redirectToCart();
+            return;
+          }
+
           let cartObj = { cart: result };
+          // If CnC is not available and cart has CnC
+          // method selected.
+          if (result.delivery_type === 'cnc'
+            && !isCnCEnabled(result)) {
+            cartObj.delivery_type = 'hd';
+          }
           addInfoInStorage(cartObj);
           checkCartCustomer(cartObj).then((updated) => {
             if (updated) {
@@ -101,6 +116,7 @@ export default class Checkout extends React.Component {
                     wait: false,
                     cart: cartInfo,
                   });
+                  dispatchCustomEvent('checkoutCartUpdate', cartInfo);
                 });
               }
             } else {
@@ -108,9 +124,12 @@ export default class Checkout extends React.Component {
                 wait: false,
                 cart: cartObj,
               });
+              dispatchCustomEvent('checkoutCartUpdate', cartObj);
             }
           });
         });
+      } else {
+        redirectToCart();
       }
     } catch (error) {
       // In case of error, do nothing.
@@ -264,6 +283,7 @@ export default class Checkout extends React.Component {
               in_stock={cart.cart.in_stock}
               cart_promo={cart.cart.cart_promo}
               show_checkout_button={false}
+              animationDelay="0.4s"
             />
           </div>
         </div>

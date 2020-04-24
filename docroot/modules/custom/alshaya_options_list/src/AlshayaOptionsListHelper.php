@@ -348,7 +348,7 @@ class AlshayaOptionsListHelper {
     ];
     $link = Url::fromUri('internal:/search', $url_options)->toString();
     $this->moduleHandler->alter('alshaya_search_filter_link', $link, $attributeCode);
-    return $link . $value;
+    return $link . urlencode($value);
   }
 
 }

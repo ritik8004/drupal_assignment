@@ -1,11 +1,15 @@
 import Axios from 'axios';
+import Cookies from 'js-cookie';
 import {
   cartAvailableInStorage,
   getCartApiUrl,
   redirectToCart,
 } from '../get_cart';
 import { restoreCartApiUrl } from '../update_cart';
-import { getInfoFromStorage } from '../storage';
+import {
+  getInfoFromStorage,
+  removeCartFromStorage,
+} from '../storage';
 
 export const fetchClicknCollectStores = (coords) => {
   const { cart } = getInfoFromStorage();
@@ -20,6 +24,13 @@ export const fetchClicknCollectStores = (coords) => {
 };
 
 export const fetchCartData = () => {
+  // If session cookie not exists, no need to process/check.
+  if (drupalSettings.user.uid === 0
+    && !Cookies.get('PHPSESSID')) {
+    removeCartFromStorage();
+    return null;
+  }
+
   // Check if cart available in storage.
   let cart = cartAvailableInStorage();
 
@@ -31,25 +42,30 @@ export const fetchCartData = () => {
     // Prepare api url.
     const apiUrl = restoreCartApiUrl();
 
-    return Axios.get(apiUrl)
-      .then((response) => {
-        if (typeof response !== 'object') {
-          redirectToCart();
-        }
-        if (response.data.error) {
-          redirectToCart();
-        }
+    return Axios.get(apiUrl).then((response) => {
+      if (typeof response !== 'object') {
+        redirectToCart();
+        return null;
+      }
 
-        if (Object.values(response.data.items).length === 0) {
-          redirectToCart();
-        }
+      if (response.data.error) {
+        redirectToCart();
+        return null;
+      }
 
-        return response.data;
-      })
-      .catch((error) => {
-        // Processing of error here.
-        Drupal.logJavascriptError('Restore cart fail', error);
-      });
+      if (Object.values(response.data.items).length === 0) {
+        redirectToCart();
+        return null;
+      }
+
+      return response.data;
+    }).catch((error) => {
+      // Processing of error here.
+      Drupal.logJavascriptError('Failed to restore cart.', error);
+
+      redirectToCart();
+      return null;
+    });
   }
   if (!Number.isInteger(cart)) {
     // If we get integer, mean we get only cart id and thus we need to fetch
@@ -87,6 +103,6 @@ export const fetchCartData = () => {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('Get cart api fail', error);
+      Drupal.logJavascriptError('Failed to get cart.', error);
     });
 };

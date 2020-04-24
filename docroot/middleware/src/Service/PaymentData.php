@@ -91,13 +91,22 @@ class PaymentData {
    * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
    */
   public function setPaymentData(int $cart_id, string $unique_id, array $data) {
-    $this->connection->delete(self::TABLE_NAME, ['cart_id' => $cart_id]);
-    $this->connection->insert(self::TABLE_NAME, [
-      'cart_id' => $cart_id,
-      'unique_id' => $unique_id,
-      'data' => serialize($data),
-      'timestamp' => (int) $_SERVER['REQUEST_TIME'],
-    ]);
+    $this->connection->delete(self::TABLE_NAME, ['cart_id' => $cart_id], [ParameterType::INTEGER]);
+    $this->connection->insert(
+      self::TABLE_NAME,
+      [
+        'cart_id' => $cart_id,
+        'unique_id' => $unique_id,
+        'data' => serialize($data),
+        'timestamp' => (int) $_SERVER['REQUEST_TIME'],
+      ],
+      [
+        ParameterType::INTEGER,
+        ParameterType::STRING,
+        ParameterType::STRING,
+        ParameterType::INTEGER,
+      ]
+    );
   }
 
 }

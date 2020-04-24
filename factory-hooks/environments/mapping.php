@@ -221,6 +221,16 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'aeokw_dev',
       ],
     ],
+    'aeosa' => [
+      'dev2' => [
+        'magento' => 'aeo_uat',
+        'conductor' => 'aeosa_uat',
+      ],
+      'local' => [
+        'magento' => 'aeo_uat',
+        'conductor' => 'aeosa_uat',
+      ],
+    ],
   ];
 
   // All 01update should match 01live.

@@ -46,6 +46,7 @@
             text-transform: capitalize;
             color: $plp_facet_clear_text;
             letter-spacing: 1px;
+            text-decoration: underline;
           }
         }
       }
@@ -59,6 +60,12 @@
             padding: 0.75rem 0 1rem;
           }
         }
+      }
+    }
+
+    .view-empty {
+      @include breakpoint($only-mobile) {
+        text-align: center;
       }
     }
   }
@@ -124,11 +131,22 @@
   .c-products-list {
     &.product-small {
       .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          max-height: 23.5rem;
+        }
+
         .alshaya_search_mainimage {
           @include breakpoint($only-mobile) {
             height: 14.625rem;
           }
         }
+      }
+    }
+
+    &.view-search {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0;
+        padding-#{$right}: 0;
       }
     }
   }
@@ -138,16 +156,28 @@
       &.product-small {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
-            max-height: 21.75rem;
-          }
+            max-height: 23.5rem;
 
-          &:hover {
-            @include breakpoint($desktop) {
-              max-height: 21.75rem !important;
+            &:hover {
+              max-height: 23.5rem !important;
             }
           }
         }
       }
+    }
+  }
+
+  ul.js-pager__items {
+    margin-top: 2rem;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 4rem;
+    }
+
+    a {
+      padding: 0.75rem 7.125rem 0.5rem;
+      text-transform: uppercase;
+      background: $plp_pager_link_bg;
     }
   }
 }

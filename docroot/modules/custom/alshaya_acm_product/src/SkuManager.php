@@ -880,7 +880,7 @@ class SkuManager {
 
       // Get the promotion with language fallback, if it did not have a
       // translation for $langcode.
-      $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node);
+      $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node, $sku->language()->getId());
       $promotion_text = $promotion_node->get('field_acq_promotion_label')->getString();
 
       $description = '';
@@ -1018,14 +1018,14 @@ class SkuManager {
    */
   public function getLabelsData(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
     static $static_labels_cache = [];
-
+    $langcode = $sku_entity->language()->getId();
     $sku = $sku_entity->getSku();
 
-    if (!$reset && !empty($static_labels_cache[$sku][$type])) {
-      return $static_labels_cache[$sku][$type];
+    if (!$reset && !empty($static_labels_cache[$sku][$langcode][$type])) {
+      return $static_labels_cache[$sku][$langcode][$type];
     }
 
-    $static_labels_cache[$sku][$type] = [];
+    $static_labels_cache[$sku][$langcode][$type] = [];
 
     $labels_data = $this->getSkuLabel($sku_entity);
 
@@ -1087,7 +1087,7 @@ class SkuManager {
         ];
         $row['position'] = $data[$position_key];
 
-        $static_labels_cache[$sku][$type][] = $row;
+        $static_labels_cache[$sku][$langcode][$type][] = $row;
 
         // Disable subsequent images if flag is true.
         if ($data['disable_subsequents']) {
@@ -1096,7 +1096,7 @@ class SkuManager {
       }
     }
 
-    return $static_labels_cache[$sku][$type];
+    return $static_labels_cache[$sku][$langcode][$type];
   }
 
   /**
@@ -3256,6 +3256,7 @@ class SkuManager {
 
     $configurable_attributes = $this->getConfigurableAttributes($sku);
 
+    $sizeGroupingEnabled = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
     // Gather data from children to set in parent.
     foreach ($children as $child) {
       $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
@@ -3282,9 +3283,21 @@ class SkuManager {
         $field_data = $child->get($field_key)->getValue();
 
         if (!empty($field_data)) {
-          foreach ($field_data as $field_value) {
-            $data[$key][$field_value['value']] = $field_value['value'];
+          $size_group = '';
+          if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
+            $size_group = $child->get('attr_size_group_code')->getString();
+            // Group all the sizes without group in a section in bottom.
+            $size_group = $size_group ?: 'other';
           }
+          foreach ($field_data as $field_value) {
+            if (!empty($size_group)) {
+              $data[$key][$size_group . ':' . $field_value['value']] = $size_group . ':' . $field_value['value'];
+            }
+            else {
+              $data[$key][$field_value['value']] = $field_value['value'];
+            }
+          }
+
         }
       }
     }
@@ -3296,8 +3309,19 @@ class SkuManager {
       $field_data = $sku->get($field_key)->getValue();
 
       if (!empty($field_data)) {
+        $size_group = '';
+        if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
+          $size_group = $sku->get('attr_size_group_code')->getString();
+          // Group all the sizes without group in a section in bottom.
+          $size_group = $size_group ?: 'other';
+        }
         foreach ($field_data as $field_value) {
-          $data[$key][$field_value['value']] = $field_value['value'];
+          if (!empty($size_group)) {
+            $data[$key][$size_group . ':' . $field_value['value']] = $size_group . ':' . $field_value['value'];
+          }
+          else {
+            $data[$key][$field_value['value']] = $field_value['value'];
+          }
         }
       }
     }

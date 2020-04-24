@@ -125,6 +125,15 @@
           border: none;
         }
 
+        @include breakpoint($tablet) {
+          position: sticky;
+          bottom: 0;
+          background: $spc-checkout-address-form-bg;
+          box-shadow: 0 -1px 20px 9px $sticky-btn;
+          padding-top: 1.25rem;
+          z-index: 2;
+        }
+
         padding-bottom: 1.25rem;
 
         @include breakpoint($only-mobile) {

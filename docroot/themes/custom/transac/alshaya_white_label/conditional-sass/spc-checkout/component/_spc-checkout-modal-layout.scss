@@ -10,6 +10,10 @@
       border: none !important;
       padding: 0 !important;
 
+      .fadeInUp {
+        animation: none !important;
+      }
+
       @include breakpoint($only-mobile) {
         overflow-y: auto !important;
       }

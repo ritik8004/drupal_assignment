@@ -244,20 +244,18 @@ class SkuInfoHelper {
    *   Attributes.
    */
   public function getAttributes(SKUInterface $sku, array $unused_options = []): array {
-    $skuData = $sku->toArray();
-
+    $skuData = $sku->get('attributes')->getValue();
     $attributes = [];
-    foreach ($skuData['attributes'] as $row) {
+    foreach ($skuData as $row) {
       if (!empty($unused_options) && in_array($row['key'], $unused_options)) {
         continue;
       }
-
-      // Can not use data from $skuData['attributes'] as it is key_value
-      // field type, and value is varchar field with limit of 255, Which strips
-      // the text beyond the limit for description, and some of fields have key
-      // stored instead of value, value is saved in it's separate table.
-      if (isset($skuData["attr_{$row['key']}"])) {
-        $row['value'] = $sku->get("attr_{$row['key']}")->getString();
+      $field_name = "attr_{$row['key']}";
+      // This is done to fetch values of fields like entity reference fields.
+      // Otherwise we would only get raw values, like the reference ID in case
+      // of entity reference fields.
+      if ($sku->hasField($field_name)) {
+        $row['value'] = $sku->get($field_name)->getString();
       }
       // Remove un-wanted description key.
       unset($row['description']);
@@ -336,7 +334,13 @@ class SkuInfoHelper {
     }
 
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
-      $return['videos'][] = $media_item['video_url'];
+      $video_url = $media_item['video_url']
+        ? $media_item['video_url']
+        : file_create_url($media_item['drupal_uri']);
+
+      $return['videos'][] = [
+        'video_url' => $video_url,
+      ];
     }
 
     return $return;
@@ -384,7 +388,6 @@ class SkuInfoHelper {
    *   The string of terms hierarchy.
    */
   protected function getProductCategoryHierarchy(TermInterface $term, $lang = NULL) {
-
     $static = &drupal_static('alshaya_acm_product_get_product_category_hierarchy', []);
     $tid = $term->id();
 
@@ -399,7 +402,6 @@ class SkuInfoHelper {
         $termHierarchy[] = $parent->getName();
       }
     }
-
     $static[$tid][$lang] = ($termHierarchy) ? implode('|', $termHierarchy) : $term->getName();
     return $static[$tid][$lang];
   }

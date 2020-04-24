@@ -2,9 +2,9 @@
 
 namespace Drupal\acq_promotion\Plugin\AcqPromotion;
 
-use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_promotion\AcqPromotionBase;
+use Drupal\alshaya_acm\CartData;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\node\NodeInterface;
@@ -79,8 +79,8 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
   /**
    * {@inheritdoc}
    */
-  public function getInactiveLabel() {
-    $label = parent::getInactiveLabel();
+  public function getInactiveLabel(CartData $cart) {
+    $label = parent::getInactiveLabel($cart);
     $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
     $promotion_data = unserialize($promotion_data);
 
@@ -88,7 +88,7 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
     $coupon = $this->promotionNode->get('field_coupon_code')->getString();
     if (!empty($coupon)) {
       $classes = 'promotion-coupon-code';
-      if (!empty($promotion_data) && !empty($promotion_data['discount']) && $this->checkThresholdReached($promotion_data)) {
+      if (!empty($promotion_data) && !empty($promotion_data['discount']) && $this->checkThresholdReached($cart, $promotion_data)) {
         $label = $this->t('Your order qualifies for @percent% OFF', [
           '@percent' => $promotion_data['discount'],
         ]);
@@ -108,25 +108,25 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
   /**
    * Compare cart sub total and promotion threshold price.
    *
+   * @param \Drupal\alshaya_acm\CartData $cart
+   *   Cart Data.
    * @param array $promotion_data
    *   Promotion Data.
    *
    * @return bool
    *   Flag if threshold value reached.
    */
-  public function checkThresholdReached(array $promotion_data = NULL) {
+  private function checkThresholdReached(CartData $cart, array $promotion_data = NULL) {
     if (is_null($promotion_data)) {
       $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
       $promotion_data = unserialize($promotion_data);
     }
 
     $reached = FALSE;
-    $cart = $this->cartStorage->getCart(FALSE);
 
     // Compare Cart sub against promotion condition of Subtotal as threshold.
-    if ($cart instanceof CartInterface
-      && !empty($cartTotals = $cart->totals())) {
-      $cartValue = $cartTotals['sub'];
+    if ($cart instanceof CartData) {
+      $cartValue = $cart->getSubTotal();
       $threshold_price = $this->alshayaPromotionsManager->getPromotionThresholdPrice($promotion_data);
       $operator = $this->alshayaPromotionsManager->getPromotionOperator($promotion_data);
 
@@ -181,16 +181,16 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
   /**
    * {@inheritdoc}
    */
-  public function getPromotionCartStatus() {
-    return $this->checkThresholdReached() ? self::STATUS_CAN_BE_APPLIED : NULL;
+  public function getPromotionCartStatus(CartData $cart) {
+    return $this->checkThresholdReached($cart) ? self::STATUS_CAN_BE_APPLIED : NULL;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getPromotionCodeLabel() {
+  public function getPromotionCodeLabel(CartData $cart) {
     $label = '';
-    if ($this->checkThresholdReached()) {
+    if ($this->checkThresholdReached($cart)) {
       $coupon = $this->promotionNode->get('field_coupon_code')->getString();
 
       $label = '<div class="promotion-coupon-code available" data-coupon-code="' . $coupon . '">' . $coupon . '</div>';

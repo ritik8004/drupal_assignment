@@ -8,3 +8,16 @@
     }
   }
 }
+
+.path--search:not(.hide-header) {
+  #alshaya-algolia-search {
+    .filter-fixed-top {
+      .show-all-filters-algolia,
+      .block-facet-blockcategory-facet-search {
+        @include breakpoint($only-mobile) {
+          top: 2.75rem;
+        }
+      }
+    }
+  }
+}

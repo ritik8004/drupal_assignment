@@ -74,6 +74,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
       updateCoordsAndStoreList,
       cartSelectedStore,
       updateSelectStore,
+      showOutsideCountryError,
     } = this.context;
 
     const fetchAgain = cartSelectedStore !== null
@@ -110,6 +111,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
           }
         }
 
+        showOutsideCountryError(false);
         updateCoordsAndStoreList(fetchCoords, response.data);
         window.fetchStore = 'finished';
 

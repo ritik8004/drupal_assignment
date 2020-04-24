@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import GoogleMap from '../../../utilities/map/GoogleMap';
 import {
   createMarker,
@@ -6,6 +7,7 @@ import {
   getHDMapZoom,
   removeAllMarkersFromMap,
   fillValueInAddressFromGeocode,
+  getUserLocation,
 } from '../../../utilities/map/map_utils';
 import {
   getAreasList,
@@ -15,6 +17,12 @@ import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
 import CheckoutMessage from '../../../utilities/checkout-message';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import getStringMessage from '../../../utilities/strings';
+import dispatchCustomEvent from '../../../utilities/events';
+import {
+  showFullScreenLoader,
+  removeFullScreenLoader,
+} from '../../../utilities/checkout_util';
 
 export default class AddressForm extends React.Component {
   isComponentMounted = true;
@@ -52,7 +60,7 @@ export default class AddressForm extends React.Component {
   eventListener = (e) => {
     const coords = e.detail.coords();
     if (this.isComponentMounted) {
-      this.positionMapAndUpdateAddress(coords);
+      this.positionMapAndUpdateAddress(coords, false);
     }
   };
 
@@ -69,6 +77,13 @@ export default class AddressForm extends React.Component {
     smoothScrollTo('.spc-address-form-sidebar .spc-checkout-section-title');
   };
 
+  hidePopUpError = () => {
+    this.setState({
+      messageType: null,
+      errorSuccessMessage: null,
+    });
+  };
+
   /**
    * Refresh the child areas list on selection / change
    * of the parent area.
@@ -83,66 +98,75 @@ export default class AddressForm extends React.Component {
   /**
    * Fills the address form with the geocode info and pan map.
    */
-  positionMapAndUpdateAddress = (coords) => {
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode(
-      {
-        location: coords,
-      },
-      (results, status) => {
-        if (status === 'OK') {
-          if (results[0]) {
-            // Use this address info.
-            const address = results[0].address_components;
-
-            // Flag to determine if user country same as site.
-            let userCountrySame = false;
-            // Checking if user current location belongs to same
-            // country or not by location coords geocode.
-            for (let i = 0; i < address.length; i++) {
-              if (address[i].types.indexOf('country') !== -1
-                && address[i].short_name === drupalSettings.country_code) {
-                userCountrySame = true;
-                break;
-              }
-            }
-
-            // If user and site country not same, don;t process.
-            if (!userCountrySame) {
-              // @TODO: Add some indication to user.
-              return;
-            }
-
-            // Fill the info in address form.
-            fillValueInAddressFromGeocode(address);
-            // Remove all markers from the map.
-            removeAllMarkersFromMap();
-            // Pan the map to location.
-            const marker = createMarker(coords, getMap());
-            getMap().panTo(marker.getPosition());
-            getMap().setZoom(getHDMapZoom());
-            window.spcMarkers.push(marker);
-          }
+  positionMapAndUpdateAddress = async (coords, triggerEvent) => {
+    try {
+      const [userCountrySame, address] = await getUserLocation(coords);
+      // If user and site country not same, don;t process.
+      if (!userCountrySame) {
+        if (triggerEvent) {
+          removeFullScreenLoader();
+          // Trigger event to update.
+          dispatchCustomEvent('addressPopUpError', {
+            type: 'warning',
+            message: parse(getStringMessage('location_outside_country_hd')),
+          });
         }
-      },
-    );
+        return;
+      }
+
+      // Fill the info in address form.
+      fillValueInAddressFromGeocode(address);
+      // Remove all markers from the map.
+      removeAllMarkersFromMap();
+      // Pan the map to location.
+      const marker = createMarker(coords, getMap());
+      getMap().panTo(marker.getPosition());
+      getMap().setZoom(getHDMapZoom());
+      window.spcMarkers.push(marker);
+      removeFullScreenLoader();
+    } catch (error) {
+      Drupal.logJavascriptError('homedelivery-checkUserCountry', error);
+    }
   };
 
   /**
    * When user click on deliver to current location.
    */
   deliverToCurrentLocation = () => {
+    // Show loader.
+    showFullScreenLoader();
     if (navigator && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos) => {
-        const currentCoords = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        };
-
-        this.positionMapAndUpdateAddress(currentCoords);
-      });
+      navigator.geolocation.getCurrentPosition(
+        this.locationSuccessCallback,
+        this.locationErrorCallback,
+      );
     }
   };
+
+  /**
+   * Success callback handler on location access.
+   */
+  locationSuccessCallback = (pos) => {
+    const currentCoords = {
+      lat: pos.coords.latitude,
+      lng: pos.coords.longitude,
+    };
+
+    this.positionMapAndUpdateAddress(currentCoords, true);
+  }
+
+  /**
+   * Error callback handler on location access.
+   */
+  locationErrorCallback = () => {
+    // Remove loader.
+    removeFullScreenLoader();
+    // Show location access message.
+    dispatchCustomEvent('addressPopUpError', {
+      type: 'warning',
+      message: getStringMessage('location_access_denied'),
+    });
+  }
 
   render() {
     const dynamicFields = [];
@@ -215,6 +239,10 @@ export default class AddressForm extends React.Component {
               && (
               <CheckoutMessage type={messageType} context="new-address-form-modal modal">
                 {errorSuccessMessage}
+                {messageType === 'warning'
+                && (
+                  <a href="#" onClick={() => this.hidePopUpError()}>{getStringMessage('dismiss')}</a>
+                )}
               </CheckoutMessage>
               )}
             <div
