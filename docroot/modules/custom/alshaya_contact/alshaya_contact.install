@@ -12,7 +12,7 @@ use Drupal\lightning_core\ConfigHelper;
  *
  * Add new feilds new contact us form.
  */
-function alshaya_contact_update_8006() {
+function alshaya_contact_update_8004() {
   $configs = [
     'webform.webform.alshaya_contact',
   ];
