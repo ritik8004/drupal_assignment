@@ -305,3 +305,35 @@ export const geocodeAddressToLatLng = () => {
     });
   }
 };
+
+export const getUserLocation = (coords) => {
+  const geocoder = new window.google.maps.Geocoder();
+  // Flag to determine if user country same as site.
+  let userCountrySame = false;
+  let address = [];
+  return new Promise((resolve, reject) => {
+    geocoder.geocode(
+      { location: coords },
+      (results, status) => {
+        if (status === 'OK') {
+          if (results[0]) {
+            // Use this address info.
+            address = results[0].address_components;
+            // Checking if user current location belongs to same
+            // country or not by location coords geocode.
+            for (let i = 0; i < address.length; i++) {
+              if (address[i].types.indexOf('country') !== -1
+                && address[i].short_name === drupalSettings.country_code) {
+                userCountrySame = true;
+                break;
+              }
+            }
+            resolve([userCountrySame, address]);
+          }
+        } else {
+          reject(status);
+        }
+      },
+    );
+  });
+};
