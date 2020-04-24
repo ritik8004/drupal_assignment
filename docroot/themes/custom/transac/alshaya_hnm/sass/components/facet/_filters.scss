@@ -194,10 +194,10 @@
 
         > ul.sizegroup {
           display: block !important;
-          position: static;
+          position: initial;
           border: none;
           margin: 0;
-          overflow-y: visible;
+          overflow-y: unset;
 
           .facet-item {
             font-family: $hnm-regular;

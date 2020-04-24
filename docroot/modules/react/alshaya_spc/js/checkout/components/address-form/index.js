@@ -7,6 +7,7 @@ import {
   getHDMapZoom,
   removeAllMarkersFromMap,
   fillValueInAddressFromGeocode,
+  getUserLocation,
 } from '../../../utilities/map/map_utils';
 import {
   getAreasList,
@@ -101,57 +102,35 @@ export default class AddressForm extends React.Component {
   /**
    * Fills the address form with the geocode info and pan map.
    */
-  positionMapAndUpdateAddress = (coords, triggerEvent) => {
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode(
-      {
-        location: coords,
-      },
-      (results, status) => {
-        if (status === 'OK') {
-          if (results[0]) {
-            // Use this address info.
-            const address = results[0].address_components;
-
-            // Flag to determine if user country same as site.
-            let userCountrySame = false;
-            // Checking if user current location belongs to same
-            // country or not by location coords geocode.
-            for (let i = 0; i < address.length; i++) {
-              if (address[i].types.indexOf('country') !== -1
-                && address[i].short_name === drupalSettings.country_code) {
-                userCountrySame = true;
-                break;
-              }
-            }
-
-            // If user and site country not same, don;t process.
-            if (!userCountrySame) {
-              if (triggerEvent) {
-                removeFullScreenLoader();
-                // Trigger event to update.
-                dispatchCustomEvent('addressPopUpError', {
-                  type: 'warning',
-                  message: parse(getStringMessage('location_outside_country_hd')),
-                });
-              }
-              return;
-            }
-
-            // Fill the info in address form.
-            fillValueInAddressFromGeocode(address);
-            // Remove all markers from the map.
-            removeAllMarkersFromMap();
-            // Pan the map to location.
-            const marker = createMarker(coords, getMap());
-            getMap().panTo(marker.getPosition());
-            getMap().setZoom(getHDMapZoom());
-            window.spcMarkers.push(marker);
-            removeFullScreenLoader();
-          }
+  positionMapAndUpdateAddress = async (coords, triggerEvent) => {
+    try {
+      const [userCountrySame, address] = await getUserLocation(coords);
+      // If user and site country not same, don;t process.
+      if (!userCountrySame) {
+        if (triggerEvent) {
+          removeFullScreenLoader();
+          // Trigger event to update.
+          dispatchCustomEvent('addressPopUpError', {
+            type: 'warning',
+            message: parse(getStringMessage('location_outside_country_hd')),
+          });
         }
-      },
-    );
+        return;
+      }
+
+      // Fill the info in address form.
+      fillValueInAddressFromGeocode(address);
+      // Remove all markers from the map.
+      removeAllMarkersFromMap();
+      // Pan the map to location.
+      const marker = createMarker(coords, getMap());
+      getMap().panTo(marker.getPosition());
+      getMap().setZoom(getHDMapZoom());
+      window.spcMarkers.push(marker);
+      removeFullScreenLoader();
+    } catch (error) {
+      Drupal.logJavascriptError('homedelivery-checkUserCountry', error);
+    }
   };
 
   /**
