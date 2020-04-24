@@ -8,6 +8,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\alshaya_hm_images\SkuAssetManager;
 
 /**
  * Class ProductUpdatedEventSubscriber.
@@ -38,6 +39,13 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
   private $fileUsage;
 
   /**
+   * SKU Assets Manager.
+   *
+   * @var \Drupal\alshaya_hm_images\SkuAssetManager
+   */
+  private $skuAssetsManager;
+
+  /**
    * ProductUpdatedEventSubscriber constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -46,13 +54,17 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Logger Factory.
    * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
    *   File usage.
+   * @param \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager
+   *   SKU Assets Manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LoggerChannelFactoryInterface $logger_factory,
-                              FileUsageInterface $file_usage) {
+                              FileUsageInterface $file_usage,
+                              SkuAssetManager $sku_assets_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->logger = $logger_factory->get('alshaya_hm_images');
     $this->fileUsage = $file_usage;
+    $this->skuAssetsManager = $sku_assets_manager;
   }
 
   /**
@@ -84,8 +96,12 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
         if ($file instanceof FileInterface) {
           // Remove usage of file.
           $this->fileUsage->delete($file, $entity->getEntityTypeId(), $entity->getEntityTypeId(), $entity->id());
-          // Delete file if there is no usage.
-          if (empty($this->fileUsage->listUsage($file))) {
+          // Delete file if there is no usage and it is not a video.
+          // Video files are used across markets of the brand
+          // so even if the usage on this site is empty,
+          // it might be used by another market.
+          if (empty($this->fileUsage->listUsage($file))
+            && ($this->skuAssetsManager->getAssetType($asset) !== 'video')) {
             $this->logger->notice('Deleting file @fid for sku @sku as it is getting deleted', [
               '@fid' => $file->id(),
               '@sku' => $entity->getSku(),
