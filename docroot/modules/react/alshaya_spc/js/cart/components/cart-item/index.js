@@ -30,37 +30,11 @@ export default class CartItem extends React.Component {
     const { item } = this.props;
     // Key will be like 'product:en:testsku'
     Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
-
-    // if (item.sku !== undefined) {
-    //   // Fetch product detail from backend.
-    //   const productData = Drupal.alshayaSpc.getProductData(cartData);
-    //   if (productData instanceof Promise) {
-    //     productData.then((result) => {
-    //       // If no error.
-    //       if (result.sku !== undefined) {
-    //         // Prepare data and add in local storage.
-    //         const data = {
-    //           originalPrice: result.original_price,
-    //           finalPrice: result.final_price,
-    //           link: result.relative_link,
-    //           product_name: result.title,
-    //           image: (result.extra_data.cart_image !== undefined)
-    //             ? result.extra_data.cart_image.url
-    //             : '',
-    //           promotions: result.promotions,
-    //           configurableOptions: result.configurable_values,
-    //         };
-    //         const key = `product:${drupalSettings.path.currentLanguage}:${result.sku}`;
-    //         localStorage.setItem(key, JSON.stringify(data));
-    //         this.setState({
-    //           wait: false,
-    //         });
-    //       }
-    //     });
-    //   }
-    // }
   }
 
+  /**
+   * Call back to get product data from storage.
+   */
   productDataCallback = (productData) => {
     // If sku info available.
     if (productData !== null && productData.sku !== undefined) {
@@ -69,7 +43,7 @@ export default class CartItem extends React.Component {
         productInfo: productData,
       });
     }
-  }
+  };
 
   /**
    * Remove item from the cart.
@@ -145,6 +119,9 @@ export default class CartItem extends React.Component {
         qty,
         id,
         freeItem,
+        stock,
+        in_stock: inStock,
+        max_sale_qty: maxSaleQty,
         error_msg: itemErrorMsg,
       },
       qtyLimit: currentQtyLimit,
@@ -168,33 +145,6 @@ export default class CartItem extends React.Component {
       alt: title,
       title: title,
     };
-
-    // const {
-    //   item: {
-    //     title,
-    //     relative_link: relativeLink,
-    //     stock,
-    //     qty,
-    //     in_stock: inStock,
-    //     original_price: originalPrice,
-    //     configurable_values: configurableValues,
-    //     promotions,
-    //     extra_data: extraData,
-    //     sku,
-    //     id,
-    //     final_price: finalPrice,
-    //     free_item: freeItem,
-    //     max_sale_qty: maxSaleQty,
-    //     error_msg: itemErrorMsg,
-    //   },
-    //   qtyLimit: currentQtyLimit,
-    //   animationOffset,
-    //   productPromotion,
-    // } = this.props;
-
-    const maxSaleQty = 2;
-    const stock = 100;
-    const inStock = true;
 
     const { isItemError, errorMessage } = this.state;
     let OOSClass = '';

@@ -330,15 +330,6 @@ class CartController {
         $data['items'][$sku]['sku'] = $sku;
         $data['items'][$sku]['id'] = $items_id[$sku];
 
-        // If info is available in static array, means this we get from
-        // the cart update operation. We use that.
-        if (!empty(Cart::$stockInfo)
-          && isset(Cart::$stockInfo[$key])
-          && !Cart::$stockInfo[$key]) {
-          $data['items'][$sku]['in_stock'] = FALSE;
-          $data['items'][$sku]['stock'] = 0;
-        }
-
         if (isset($extension_attributes[$sku]) && $extension_attributes[$sku]['error_message']
           && $extension_attributes[$key]['error_message']) {
           $data['items'][$sku]['error_msg'] = $extension_attributes[$sku]['error_message'];
@@ -354,6 +345,26 @@ class CartController {
             $data['items'][$sku]['freeItem'] = TRUE;
             break;
           }
+        }
+
+        // Get stock data.
+        $stockInfo = $this->drupal->getCartItemDrupalStock($sku);
+        $data['items'][$sku]['in_stock'] = $stockInfo['in_stock'];
+        $data['items'][$sku]['stock'] = $stockInfo['stock'];
+        $data['items'][$sku]['max_sale_qty'] = $stockInfo['max_sale_qty'] ?? 0;
+
+        // If info is available in static array, means this we get from
+        // the cart update operation. We use that.
+        if (!empty(Cart::$stockInfo)
+          && isset(Cart::$stockInfo[$key])
+          && !Cart::$stockInfo[$key]) {
+          $data['items'][$sku]['in_stock'] = FALSE;
+          $data['items'][$sku]['stock'] = 0;
+        }
+
+        // If any item is OOS.
+        if (!$data['items'][$sku]['in_stock'] || $data['items'][$sku]['stock'] == 0) {
+          $data['in_stock'] = FALSE;
         }
       }
 
