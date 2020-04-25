@@ -20,6 +20,7 @@ services:
       - '@config.factory'
       - '@alshaya_acm_promotion.manager'
       - '@renderer'
+      - '@language_manager'
   cache.alshaya_acm_promotion:
     class: Drupal\Core\Cache\CacheInterface
     tags:
