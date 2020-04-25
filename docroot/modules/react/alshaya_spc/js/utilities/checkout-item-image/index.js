@@ -1,7 +1,7 @@
 import React from 'react';
 
 const CheckoutItemImage = (props) => {
-  const { ImgData } = props;
+  const { img_data: ImgData } = props;
 
   if (ImgData === undefined || ImgData.url === undefined) {
     return null;

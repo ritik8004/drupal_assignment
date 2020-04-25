@@ -10,7 +10,6 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Url;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -555,12 +554,6 @@ class SkuInfoHelper {
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
 
-    $prices = $this->skuManager->getMinPrices($child);
-    $variant['original_price'] = $this->formatPriceDisplay((float) $prices['price']);
-    $variant['final_price'] = $this->formatPriceDisplay((float) $prices['final_price']);
-    $variant['promotions'] = $this->promotionLabelData($child);
-    $variant['configurableOptions'] = $this->skuManager->getConfigurableValues($child);
-
     // Get Max sale qty for parent SKU.
     if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
       if ($parent !== NULL) {
@@ -617,31 +610,6 @@ class SkuInfoHelper {
         break;
     }
     return $static[$sku_string];
-  }
-
-  /**
-   * Prepare promotion label data.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU object.
-   *
-   * @return array
-   *   Promotion label data.
-   */
-  public function promotionLabelData(SKUInterface $sku) {
-    $promotions = [];
-    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
-    foreach ($promotions_data as $nid => $promotion) {
-      $promotions[] = [
-        'text' => $promotion['text'],
-        'promo_web_url' => str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
-          '',
-          Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl()),
-        'promo_node' => $nid,
-      ];
-    }
-
-    return $promotions;
   }
 
   /**
