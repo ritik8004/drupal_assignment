@@ -574,6 +574,7 @@ class SkuInfoHelper {
     }
 
     $variant['configurableOptions'] = $this->skuManager->getConfigurableValues($child);
+    $variant['configurableOptions'] = array_values($variant['configurableOptions']);
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
 

@@ -17,6 +17,12 @@ const CheckoutCartItem = (props) => {
       final_price: finalPrice,
     },
   } = props;
+
+  // @Todo: Handle this in CORE-17764.
+  if (relativeLink === undefined) {
+    return (null);
+  }
+
   return (
     <div className="product-item">
       <div className="spc-product-image">

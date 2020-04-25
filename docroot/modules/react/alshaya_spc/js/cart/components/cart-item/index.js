@@ -240,7 +240,7 @@ export default class CartItem extends React.Component {
               </div>
             </div>
             <div className="spc-product-attributes-wrapper">
-              {options.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.attribute_code}-${key.value}`} label={key} />)}
+              {options.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.value}`} label={key} />)}
             </div>
           </div>
           <div className="spc-product-tile-actions">
