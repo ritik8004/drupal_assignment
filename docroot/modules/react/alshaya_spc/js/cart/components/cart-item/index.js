@@ -15,8 +15,6 @@ import QtyLimit from '../qty-limit';
 import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 import CartItemFree from '../cart-item-free';
-import { getProductDetail } from '../../../utilities/product_util';
-import { getStorageInfo } from '../../../utilities/storage';
 import { isQtyLimitReached } from '../../../utilities/checkout_util';
 
 export default class CartItem extends React.Component {
@@ -24,50 +22,52 @@ export default class CartItem extends React.Component {
     super(props);
     this.state = {
       wait: true,
+      productInfo: null,
     };
   }
 
   componentDidMount() {
     const { item } = this.props;
     // Key will be like 'product:en:testsku'
-    const storageKey = `product:${drupalSettings.path.currentLanguage}:${item.sku}`;
-    const productInfo = getStorageInfo(storageKey);
-    // If product available in localstorage.
-    if (productInfo !== null) {
+    Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
+
+    // if (item.sku !== undefined) {
+    //   // Fetch product detail from backend.
+    //   const productData = Drupal.alshayaSpc.getProductData(cartData);
+    //   if (productData instanceof Promise) {
+    //     productData.then((result) => {
+    //       // If no error.
+    //       if (result.sku !== undefined) {
+    //         // Prepare data and add in local storage.
+    //         const data = {
+    //           originalPrice: result.original_price,
+    //           finalPrice: result.final_price,
+    //           link: result.relative_link,
+    //           product_name: result.title,
+    //           image: (result.extra_data.cart_image !== undefined)
+    //             ? result.extra_data.cart_image.url
+    //             : '',
+    //           promotions: result.promotions,
+    //           configurableOptions: result.configurable_values,
+    //         };
+    //         const key = `product:${drupalSettings.path.currentLanguage}:${result.sku}`;
+    //         localStorage.setItem(key, JSON.stringify(data));
+    //         this.setState({
+    //           wait: false,
+    //         });
+    //       }
+    //     });
+    //   }
+    // }
+  }
+
+  productDataCallback = (productData) => {
+    // If sku info available.
+    if (productData !== null && productData.sku !== undefined) {
       this.setState({
         wait: false,
+        productInfo: productData,
       });
-
-      return;
-    }
-
-    if (item.sku !== undefined) {
-      // Fetch product detail from backend.
-      const productData = getProductDetail(item.sku);
-      if (productData instanceof Promise) {
-        productData.then((result) => {
-          // If no error.
-          if (result.sku !== undefined) {
-            // Prepare data and add in local storage.
-            const data = {
-              originalPrice: result.original_price,
-              finalPrice: result.final_price,
-              link: result.relative_link,
-              product_name: result.title,
-              image: (result.extra_data.cart_image !== undefined)
-                ? result.extra_data.cart_image.url
-                : '',
-              promotions: result.promotions,
-              configurableOptions: result.configurable_values,
-            };
-            const key = `product:${drupalSettings.path.currentLanguage}:${result.sku}`;
-            localStorage.setItem(key, JSON.stringify(data));
-            this.setState({
-              wait: false,
-            });
-          }
-        });
-      }
     }
   }
 
@@ -80,6 +80,9 @@ export default class CartItem extends React.Component {
     const afterCartUpdate = () => {
       // Remove loading class.
       document.getElementById(`remove-item-${id}`).classList.remove('loading');
+      // Remove from storage.
+      Drupal.alshayaSpc.removeProductData(sku);
+
     };
     this.triggerUpdateCart({
       action,
@@ -151,21 +154,22 @@ export default class CartItem extends React.Component {
       animationOffset,
       productPromotion,
     } = this.props;
-    // Key will be like 'product:en:testsku'
-    const storageKey = `product:${drupalSettings.path.currentLanguage}:${sku}`;
+
     const {
-      product_name: productName,
-      finalPrice,
-      originalPrice,
-      image,
-      link,
-      promotions,
-      configurableOptions,
-    } = getStorageInfo(storageKey);
+      productInfo: {
+        image,
+        options,
+        promotions,
+        title,
+        url,
+        price,
+        finalPrice,
+      },
+    } = this.state;
     const cartImage = {
       url: image,
-      alt: productName,
-      title: productName,
+      alt: title,
+      title: title,
     };
 
     // const {
@@ -229,17 +233,17 @@ export default class CartItem extends React.Component {
           <div className="spc-product-container">
             <div className="spc-product-title-price">
               <div className="spc-product-title">
-                <a href={Drupal.url(link)}>{productName}</a>
+                <a href={url}>{title}</a>
               </div>
               <div className="spc-product-price">
                 <SpecialPrice
-                  price={parseFloat(originalPrice)}
+                  price={parseFloat(price)}
                   finalPrice={parseFloat(finalPrice)}
                 />
               </div>
             </div>
             <div className="spc-product-attributes-wrapper">
-              {configurableOptions.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.attribute_code}-${key.value}`} label={key} />)}
+              {options.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.attribute_code}-${key.value}`} label={key} />)}
             </div>
           </div>
           <div className="spc-product-tile-actions">

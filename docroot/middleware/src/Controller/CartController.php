@@ -319,10 +319,12 @@ class CartController {
     $items_quantity = array_column($cart_data['cart']['items'], 'qty', 'sku');
     $items_price = array_column($cart_data['cart']['items'], 'price', 'sku');
     $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
+    $items_name = array_column($cart_data['cart']['items'], 'name', 'sku');
     $extension_attributes = array_column($cart_data['cart']['items'], 'extension_attributes', 'sku');
     try {
       $data['items'] = [];
       foreach ($sku_items as $sku) {
+        $data['items'][$sku]['title'] = $items_name[$sku];
         $data['items'][$sku]['qty'] = $items_quantity[$sku];
         $data['items'][$sku]['price'] = $items_price[$sku];
         $data['items'][$sku]['sku'] = $sku;

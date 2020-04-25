@@ -41,6 +41,12 @@
     return $.param(data);
   };
 
+  Drupal.alshayaSpc.removeProductData = function (sku) {
+    var langcode = $('html').attr('lang');
+    var key = ['product', langcode, sku].join(':');
+    localStorage.removeItem(key);
+  };
+
   Drupal.alshayaSpc.getProductData = function (sku, callback) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');
@@ -48,7 +54,7 @@
     var data = null;
 
     try {
-      data = JSON.stringify(localStorage.getItem(key));
+      data = JSON.parse(localStorage.getItem(key));
     }
     catch (e) {
       // Do nothing, we will use PDP API to get the info again.
@@ -56,13 +62,13 @@
 
     var expireTime = drupalSettings.alshaya_spc.productExpirationTime * 60 * 1000;
     var currentTime = new Date().getTime();
-    if (data !== null || data.created - currentTime < expireTime) {
+    if (data !== null && data.created - currentTime < expireTime) {
       callback(data);
     }
 
     var apiResponse = null;
     $.ajax({
-      url: Drupal.url('rest/v1/product' + sku) + '?context=cart',
+      url: Drupal.url('rest/v1/product/' + sku) + '?context=cart',
       type: 'GET',
       dataType: 'json',
       success: function (response) {
@@ -80,6 +86,7 @@
           response.link,
           image,
           response.original_price,
+          response.final_price,
           response.configurable_values,
           response.promotions
         );
@@ -89,7 +96,7 @@
     });
   };
 
-  Drupal.alshayaSpc.storeProductData = function (sku, title, url, image, price, options, promotions) {
+  Drupal.alshayaSpc.storeProductData = function (sku, title, url, image, price, finalPrice, options, promotions) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');
     var data = {
@@ -98,6 +105,7 @@
       'url': url,
       'image': image,
       'price': price,
+      'finalPrice': finalPrice,
       'options': options,
       'promotions': promotions,
       'created': new Date().getTime(),
