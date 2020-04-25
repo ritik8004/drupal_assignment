@@ -17,6 +17,11 @@ function alshaya_contact_form_webform_submission_alshaya_contact_add_form_alter(
   $form['elements']['last_name']['#attributes']['specialchar'] = 'specialchar';
   $form['elements']['first_name']['#maxlength'] = 50;
   $form['elements']['last_name']['#maxlength'] = 50;
+  $form['elements']['order_number']['#title'] = t('Order number') . ' <span>(' . t('Optional') . ')</span>';
+  $form['elements']['missing_items']['#title'] = t('Missing items') . ' <span>(' . t('Optional') . ')</span>';
+  $form['elements']['file']['#description'] = t('@file_size MB limit. Allowed types: @file_extension',
+    ['@file_size' => $form['elements']['file']['#max_filesize'], '@file_extension' => $form['elements']['file']['#file_extensions']]);
+
   // request_from field hide on add form.
   $form['elements']['request_from']['#access'] = FALSE;
   // Override mail validation pattern.
