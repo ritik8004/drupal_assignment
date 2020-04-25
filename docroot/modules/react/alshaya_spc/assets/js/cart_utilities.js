@@ -41,12 +41,6 @@
     return $.param(data);
   };
 
-  Drupal.alshayaSpc.removeProductData = function (sku) {
-    var langcode = $('html').attr('lang');
-    var key = ['product', langcode, sku].join(':');
-    localStorage.removeItem(key);
-  };
-
   Drupal.alshayaSpc.getProductData = function (sku, callback) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');

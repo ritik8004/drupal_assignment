@@ -80,9 +80,6 @@ export default class CartItem extends React.Component {
     const afterCartUpdate = () => {
       // Remove loading class.
       document.getElementById(`remove-item-${id}`).classList.remove('loading');
-      // Remove from storage.
-      Drupal.alshayaSpc.removeProductData(sku);
-
     };
     this.triggerUpdateCart({
       action,
