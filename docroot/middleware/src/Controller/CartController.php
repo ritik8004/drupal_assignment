@@ -356,8 +356,8 @@ class CartController {
         // If info is available in static array, means this we get from
         // the cart update operation. We use that.
         if (!empty(Cart::$stockInfo)
-          && isset(Cart::$stockInfo[$key])
-          && !Cart::$stockInfo[$key]) {
+          && isset(Cart::$stockInfo[$sku])
+          && !Cart::$stockInfo[$sku]) {
           $data['items'][$sku]['in_stock'] = FALSE;
           $data['items'][$sku]['stock'] = 0;
         }
