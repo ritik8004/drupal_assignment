@@ -206,7 +206,7 @@
     background: $primary_btn_bg;
     margin-bottom: 7.1875rem;
     border: none;
-    margin-top: 3rem;
+    margin-top: 3.5rem;
     line-height: 1;
     float: $left;
   }
@@ -289,25 +289,43 @@
       }
     }
 
+    .form-item-order-number,
+    .form-item-missing-items {
+      .js-form-required.form-required,
+      .error {
+        span {
+          display: none;
+        }
+      }
+    }
+
     .form-item-order-number {
       margin-top: 1.5rem;
     }
 
     .form-item-file {
       width: 100%;
+      margin-bottom: 3rem;
 
       input {
         color: $primary_input_label;
+        border-bottom: 0;
       }
+    }
+
+    margin-top: 1.5rem;
+
+    .captcha {
+      margin-top: 0;
     }
 
     .webform-element-description {
       font-size: 0.8125rem;
-      line-height: 1.5;
+      margin-top: 0.25rem;
       color: $primary_input_label;
     }
 
-    .form-managed-file {
+    .form-type-managed-file {
       .form-submit {
         width: auto;
         height: auto;
@@ -322,6 +340,29 @@
         &:hover {
           text-decoration: none;
         }
+      }
+
+      .messages.messages--warning,
+      .messages.messages--error {
+        margin-top: 0;
+        display: inline-block;
+        padding-#{$left}: 2.5rem;
+
+        &::before {
+          position: absolute;
+          #{$left}: 0.1875rem;
+        }
+      }
+
+      .form-item--error-message {
+        ul {
+          list-style: none;
+          padding: 0;
+        }
+      }
+
+      label {
+        display: none;
       }
     }
 
