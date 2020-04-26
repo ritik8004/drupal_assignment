@@ -18,6 +18,21 @@ function alshaya_contact_update_8004() {
   ];
 
   \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_contact');
+
+  // Add translation strings.
+  $strings = [
+    'Order number' => [
+      'ar' => 'رقم الطلبية',
+    ],
+    'Missing items' => [
+      'ar' => 'العناصر المفقودة',
+    ],
+    '@file_size MB limit. Allowed types: @file_extension' => [
+      'ar' => '@file_size ميغابايت. الأنواع المسموح بها: @file_extension',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
