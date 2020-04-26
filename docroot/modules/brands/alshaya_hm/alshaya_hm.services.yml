@@ -7,3 +7,11 @@ services:
       - '@renderer'
     tags:
       - { name: 'event_subscriber' }
+
+  alshaya_hm.preprocess_alshaya_magazine_event:
+    class: '\Drupal\alshaya_hm\EventSubscriber\PreprocessMagazineSubscriber'
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@acq_sku.product_info_helper'
+    tags:
+      - { name: 'event_subscriber' }

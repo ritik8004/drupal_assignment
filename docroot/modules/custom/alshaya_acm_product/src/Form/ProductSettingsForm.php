@@ -296,8 +296,7 @@ class ProductSettingsForm extends ConfigFormBase {
     ];
 
     // Prepare PDP layout select options.
-    $alshaya_pdp_layouts = $this->pdpLayoutManager;
-    $layouts = $alshaya_pdp_layouts->getDefinitions();
+    $layouts = $this->pdpLayoutManager->getDefinitions();
     $pdp_layout_options = [];
     foreach ($layouts as $key => $value) {
       $pdp_layout_options[$key] = $value['label']->__toString();

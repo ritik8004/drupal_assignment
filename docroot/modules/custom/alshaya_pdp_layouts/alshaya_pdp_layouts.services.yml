@@ -2,3 +2,10 @@ services:
   plugin.manager.alshaya_pdp_layouts:
     class: Drupal\alshaya_pdp_layouts\PdpLayoutManager
     parent: default_plugin_manager
+
+  alshaya_pdp_layouts.preprocess_alshaya_magazine_event:
+    class: '\Drupal\alshaya_pdp_layouts\EventSubscriber\PreprocessMagazineSubscriber'
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+    tags:
+      - { name: 'event_subscriber' }
