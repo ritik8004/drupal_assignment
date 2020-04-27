@@ -4,13 +4,17 @@ config:
   webroot: docroot
 
 proxy:
-  appserver:
+  edge:
     - "local.alshaya*.com"
-    #- local.alshaya-hmkw.com
+    - edge.acquia.lndo.site
 
 services:
   appserver:
     type: php:7.3
+    ssl: true
+    overrides:
+      environment:
+        DEVEL_ENV: lando
 
   hmkw_database:
     type: mysql
@@ -23,6 +27,18 @@ services:
   memcache1:
     type: memcached:1.5.11
     portforward: 11211
+
+  memcache2:
+    type: memcached:1.5.11
+    portforward: 11212
+
+  edge:
+    type: varnish:4.1
+    backends:
+      - appserver
+    ssl: true
+    config:
+      vcl: architecture/varnish/varnish-4-lando.vcl
 
 tooling:
   blt:
