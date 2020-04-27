@@ -2823,6 +2823,7 @@ class SkuManager {
         return $context;
 
       case 'magazine':
+      case 'magazine_v2':
         return $context . '-' . $pdp_layout;
     }
   }
