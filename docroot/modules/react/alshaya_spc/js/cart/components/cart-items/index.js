@@ -7,10 +7,6 @@ export default class CartItems extends React.Component {
 
   static qtyLimits = {};
 
-  constructor(props) {
-    super(props);
-  }
-
   productCheckCallable = (sku) => {
     const { items } = this.props;
     if (CartItems.products[sku] === undefined) {
