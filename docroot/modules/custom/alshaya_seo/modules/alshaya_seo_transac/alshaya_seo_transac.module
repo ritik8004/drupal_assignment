@@ -50,19 +50,12 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     // Add GTM events for SPC cart.
     if (\Drupal::moduleHandler()->moduleExists('alshaya_spc')) {
       $route_match = \Drupal::routeMatch();
-      $is_cart_checkout = FALSE;
       if ($route_match->getRouteName() == 'acq_cart.cart') {
-        $is_cart_checkout = TRUE;
         $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_cart';
       }
 
       if ($route_match->getRouteName() == 'alshaya_spc.checkout') {
-        $is_cart_checkout = TRUE;
         $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_checkout';
-      }
-
-      if ($is_cart_checkout) {
-        $page['#attached']['library'][] = 'alshaya_spc/cart_utilities';
       }
     }
 
