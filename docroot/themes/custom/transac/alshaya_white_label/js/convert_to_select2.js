@@ -17,6 +17,10 @@
           minimumResultsForSearch: -1
         });
 
+        $('.contact-us-feedback .form-select, .contact-us-type .form-select, .contact-us-reason .form-select').once('select2select').select2({
+          minimumResultsForSearch: -1
+        });
+
         $('.select2-select').once('select2select').each(function () {
           var placeHolder = $(this).find('option[value=""]').text();
           $(this).select2({

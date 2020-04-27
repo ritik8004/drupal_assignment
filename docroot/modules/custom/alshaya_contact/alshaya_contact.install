@@ -10,6 +10,34 @@ use Drupal\lightning_core\ConfigHelper;
 /**
  * Implements hook_update_N().
  *
+ * Add new feilds new contact us form.
+ */
+function alshaya_contact_update_8004() {
+  $configs = [
+    'webform.webform.alshaya_contact',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_contact');
+
+  // Add translation strings.
+  $strings = [
+    'Order number' => [
+      'ar' => 'رقم الطلبية',
+    ],
+    'Missing items' => [
+      'ar' => 'العناصر المفقودة',
+    ],
+    '@file_size MB limit. Allowed types: @file_extension' => [
+      'ar' => '@file_size ميغابايت. الأنواع المسموح بها: @file_extension',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Request_from field access removed and add archive false.
  */
 function alshaya_contact_update_8003() {
