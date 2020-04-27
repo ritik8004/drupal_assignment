@@ -152,7 +152,6 @@
       var storeFinderFormSelector = $('form#views-exposed-form-stores-finder-page-1');
       var isCCPage = false;
       var isPaymentPage = false;
-      var isSearchPage = false;
       var isRegistrationSuccessPage = false;
       var isStoreFinderPage = false;
       var originalCartQty = 0;
@@ -246,10 +245,6 @@
 
       if (document.location.pathname === Drupal.url('store-finder/list')) {
         isStoreFinderPage = true;
-      }
-
-      if (document.location.pathname === Drupal.url('search')) {
-        isSearchPage = true;
       }
 
       if ((isRegistrationSuccessPage) && (context === document)) {
