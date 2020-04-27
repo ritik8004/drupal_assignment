@@ -240,7 +240,7 @@ export const validateAddressFields = (e, validateEmail) => {
       if (field.required === true) {
         const addField = e.target.elements[key].value.trim();
         if (addField.length === 0) {
-          document.getElementById(`${key}-error`).innerHTML = Drupal.t('Please enter @label.', { '@label': field.label });
+          document.getElementById(`${key}-error`).innerHTML = getStringMessage('address_please_enter', { '@label': field.label });
           document.getElementById(`${key}-error`).classList.add('error');
           isError = true;
         } else {
@@ -478,7 +478,7 @@ export const checkoutAddressProcess = (e) => {
         document.getElementById('email-error').classList.add('error');
         isError = true;
       } else if (response.data.email === 'exists') {
-        document.getElementById('email-error').innerHTML = getStringMessage('Customer already exists.');
+        document.getElementById('email-error').innerHTML = getStringMessage('form_error_customer_exists');
         document.getElementById('email-error').classList.add('error');
         isError = true;
       } else {

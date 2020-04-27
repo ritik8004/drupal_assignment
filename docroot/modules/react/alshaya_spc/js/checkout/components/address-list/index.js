@@ -122,7 +122,7 @@ export default class AddressList extends React.Component {
         </a>
         <div className="address-list-content">
           <div className="spc-add-new-address-btn" onClick={this.openModal}>
-            {getStringMessage('add new address')}
+            {getStringMessage('add_new_address')}
           </div>
           <Popup open={open} onClose={this.closeModal} closeOnDocumentClick={false}>
             <>

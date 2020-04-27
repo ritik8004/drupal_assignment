@@ -92,7 +92,7 @@ function _alshaya_spc_translations() {
       'Expiry' => [
         'ar' => 'تاريخ انتهاء البطاقة',
       ],
-      'Your shopping bag is empty' => [
+      'Your shopping bag is empty.' => [
         'ar' => 'حقيبة التسوق الخاصة بك فارغة',
       ],
       'We will send you a text message once your order is ready for collection.' => [
@@ -131,12 +131,6 @@ function _alshaya_spc_translations() {
       'delivery to' => [
         'ar' => 'التوصيل إلى',
       ],
-      'mobile number' => [
-        'ar' => 'رقم الجوال',
-      ],
-      'payment method' => [
-        'ar' => 'طريقة الدفع',
-      ],
       'delivery type' => [
         'ar' => 'نوع التوصيل',
       ],
@@ -171,7 +165,10 @@ function _alshaya_spc_translations() {
         'ar' => '@country انت تتصفح خارج',
       ],
       'We don\'t support delivery outside @country. Please enter an address with in country @country below to continue.' => [
-        'ar' => '.أدناه للمتابعة @country يرجى إدخال عنوان في البلد .@country لا ندعم التوصيل خارج',
+        'ar' => '.أدناه للمتابعة country@ يرجى إدخال عنوان في البلد .country@ لا ندعم التوصيل خارج',
+      ],
+      'We don\'t support delivery outside @country. Please select a store with in country @country below to continue.' => [
+        'ar' => 'أدناه للمتابعة country@ يرجى اختيار محلا في البلد .country@ لا ندعم التوصيل خارج.',
       ],
       'Please enter your full name.' => [
         'ar' => 'يرجى إدخال اسمك الكامل.',
@@ -187,6 +184,18 @@ function _alshaya_spc_translations() {
       ],
       'Customer already exists.' => [
         'ar' => 'الحساب موجود مسبقا.',
+      ],
+      'Your bag has been updated successfully.' => [
+        'ar' => 'تم تحديث حقيبتك بنجاح.',
+      ],
+      'Search for @label' => [
+        'ar' => '@label البحث عن',
+      ],
+      'Select @label' => [
+        'ar' => '@label اختر',
+      ],
+      'Please enter @label.' => [
+        'ar' => '@label يرجى إدخال',
       ],
     ],
   ];

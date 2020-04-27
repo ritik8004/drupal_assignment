@@ -8,6 +8,7 @@ import {
 import {
   geocodeAddressToLatLng,
 } from '../../../utilities/map/map_utils';
+import getStringMessage from '../../../utilities/strings';
 
 export default class ParentAreaSelect extends React.Component {
   constructor(props) {
@@ -117,7 +118,7 @@ export default class ParentAreaSelect extends React.Component {
   render() {
     const { areas: options, currentOption, showFilterList } = this.state;
     const { field, field_key: fieldKey } = this.props;
-    const panelTitle = Drupal.t('Select @label', { '@label': field.label });
+    const panelTitle = getStringMessage('address_select', { '@label': field.label });
 
     const currentOptionAvailable = (currentOption !== undefined
       && currentOption !== null
@@ -147,7 +148,7 @@ export default class ParentAreaSelect extends React.Component {
             <FilterList
               selected={currentOption}
               options={options}
-              placeHolderText={Drupal.t('Search for @label', { '@label': field.label })}
+              placeHolderText={getStringMessage('address_search_for', { '@label': field.label })}
               processingCallback={this.processSelectedItem}
               toggleFilterList={this.toggleFilterList}
               panelTitle={panelTitle}

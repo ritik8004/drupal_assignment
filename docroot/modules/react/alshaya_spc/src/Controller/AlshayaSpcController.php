@@ -374,6 +374,21 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Enter a location'),
     ];
 
+    $strings[] = [
+      'key' => 'address_search_for',
+      'value' => $this->t('Search for @label'),
+    ];
+
+    $strings[] = [
+      'key' => 'address_select',
+      'value' => $this->t('Select @label'),
+    ];
+
+    $strings[] = [
+      'key' => 'address_please_enter',
+      'value' => $this->t('Please enter @label.'),
+    ];
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,

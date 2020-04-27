@@ -233,7 +233,7 @@ export default class Checkout extends React.Component {
     if (cart === null) {
       return (
         <>
-          <EmptyResult Message={Drupal.t('your shopping basket is empty.')} />
+          <EmptyResult Message={Drupal.t('your shopping bag is empty.')} />
         </>
       );
     }

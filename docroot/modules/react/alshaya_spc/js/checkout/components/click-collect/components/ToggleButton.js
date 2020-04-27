@@ -9,14 +9,14 @@ const ToggleButton = ({ toggleStoreView }) => (
         type="button"
         onClick={(e) => toggleStoreView(e, 'list')}
       >
-        {getStringMessage('List view')}
+        {getStringMessage('cnc_list_view')}
       </button>
       <button
         className="stores-map-view"
         type="button"
         onClick={(e) => toggleStoreView(e, 'map')}
       >
-        {getStringMessage('Map view')}
+        {getStringMessage('cnc_map_view')}
       </button>
     </div>
   </div>
