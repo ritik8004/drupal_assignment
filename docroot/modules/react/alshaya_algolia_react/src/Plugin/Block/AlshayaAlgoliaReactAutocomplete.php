@@ -4,6 +4,7 @@ namespace Drupal\alshaya_algolia_react\Plugin\Block;
 
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\block\BlockInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
@@ -164,6 +165,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'filters' => $this->getFilters($index_name),
             'enable_lhn_tree_search' => $product_category_settings->get('enable_lhn_tree_search'),
             'category_facet_label' => $this->t('Category'),
+            'sizeGroupSeparator' => SkuManager::SIZE_GROUP_SEPARATOR,
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'] ?? 4,
