@@ -14,9 +14,10 @@ Feature: Test MiniCart page
 
   Scenario: As a Guest, I should be able add content in minicart
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .name" element
@@ -47,6 +48,7 @@ Feature: Test MiniCart page
     And I wait for the page to load
     And I wait for AJAX to finish
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
@@ -80,6 +82,7 @@ Feature: Test MiniCart page
     And I wait for the page to load
     And I wait for AJAX to finish
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 10 seconds

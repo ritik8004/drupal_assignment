@@ -8,6 +8,7 @@ Feature: Test basket page
 
   Scenario: As a Guest, I should be able to add more quantity
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
@@ -87,6 +88,7 @@ Feature: Test basket page
   @mobile
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer (mobile)
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
@@ -105,6 +107,7 @@ Feature: Test basket page
 
   Scenario: As a Guest, I should be able to remove products from the basket
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
@@ -115,12 +118,12 @@ Feature: Test basket page
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I should not see "{subtotal}"
-    Then I should not see "{order_total}"
-    Then I should not see "{order_summary}"
-    Then I should not see "{promo_code}"
-    And I should not see "{excluding_delivery}"
-    And I should not see "{vat}"
+    And I should not see "{subtotal}" on page
+    Then I should not see "{order_total}" on page
+    Then I should not see "{order_summary}" on page
+    Then I should not see "{promo_code}" on page
+    And I should not see "{excluding_delivery}" on page
+    And I should not see "{vat}" on page
     Then I should see "Your Shopping Bag Is Empty."
     And I should see the link "{continue_shopping}"
 
@@ -130,6 +133,7 @@ Feature: Test basket page
     And I wait for the page to load
     And I wait for AJAX to finish
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 15 seconds
@@ -207,9 +211,11 @@ Feature: Test basket page
   @language @desktop
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer in second language
     When I follow "{language_link}"
+    And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 15 seconds
@@ -253,6 +259,7 @@ Feature: Test basket page
     And I wait for the page to load
     And I wait for AJAX to finish
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 15 seconds
@@ -263,12 +270,12 @@ Feature: Test basket page
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I should not see "{language_subtotal}"
-    Then I should not see "{language_order_total}"
-    Then I should not see "{language_order_summary}"
-    Then I should not see "{language_promo_code}"
-    And I should not see "{language_excluding_delivery}"
-    And I should not see "{language_vat}"
+    And I should not see "{language_subtotal}" on page
+    Then I should not see "{language_order_total}" on page
+    Then I should not see "{language_order_summary}" on page
+    Then I should not see "{language_promo_code}" on page
+    And I should not see "{language_excluding_delivery}" on page
+    And I should not see "{language_vat}" on page
     Then I should see "Your Shopping Bag Is Empty."
     And I should see the link "{language_continue_shopping}"
 
@@ -289,11 +296,11 @@ Feature: Test basket page
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I should not see "{language_subtotal}"
-    Then I should not see "{language_order_total}"
-    Then I should not see "{language_order_summary}"
-    Then I should not see "{language_promo_code}"
-    And I should not see "{language_excluding_delivery}"
-    And I should not see "{language_vat}"
+    And I should not see "{language_subtotal}" on page
+    Then I should not see "{language_order_total}" on page
+    Then I should not see "{language_order_summary}" on page
+    Then I should not see "{language_promo_code}" on page
+    And I should not see "{language_excluding_delivery}" on page
+    And I should not see "{language_vat}" on page
     Then I should see "Your Shopping Bag Is Empty."
     And I should see the link "{language_continue_shopping}"
