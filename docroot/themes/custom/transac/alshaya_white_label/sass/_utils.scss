@@ -332,8 +332,8 @@ body {
   }
 }
 
-@mixin arabic-line-height {
+@mixin arabic-line-height ($value) {
   html[lang='ar'] & {
-    line-height: normal;
+    line-height: $value;
   }
 }

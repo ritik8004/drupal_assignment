@@ -12,7 +12,7 @@
     width: 100%;
 
     .spc-address {
-      @include arabic-line-height;
+      @include arabic-line-height(1.35);
     }
 
     .spc-label {

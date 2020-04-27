@@ -88,7 +88,7 @@
     margin-top: 0.25rem;
     color: $spc-promo-code-success;
 
-    @include arabic-line-height;
+    @include arabic-line-height('normal');
 
     @include breakpoint($only-mobile) {
       padding-#{$left}: 0.625rem;
