@@ -26,6 +26,10 @@
           });
         });
 
+        $('.contact-us-feedback .form-select, .contact-us-type .form-select, .contact-us-reason .form-select').once('select2select').select2({
+          minimumResultsForSearch: -1
+        });
+
         $('#table-cart-items .form-select').once('select2select').select2({
           minimumResultsForSearch: -1
         });
