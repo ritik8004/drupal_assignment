@@ -42,6 +42,12 @@ export default class CartItem extends React.Component {
         wait: false,
         productInfo: productData,
       });
+
+      // If max sale quantity feature enabled.
+      if (drupalSettings.quantity_limit_enabled) {
+        const { callable } = this.props;
+        callable(productData.sku);
+      }
     }
   };
 
@@ -102,6 +108,14 @@ export default class CartItem extends React.Component {
         // Trigger message.
         if (messageInfo !== null) {
           dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
+        }
+
+        // If qty limit enabled.
+        if (drupalSettings.quantity_limit_enabled) {
+          const { skus, callable } = this.props;
+          Object.entries(skus).forEach(([, productSku]) => {
+            callable(productSku);
+          });
         }
       });
     }

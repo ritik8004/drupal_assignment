@@ -58,6 +58,7 @@
     var currentTime = new Date().getTime();
     if (data !== null && data.created - currentTime < expireTime) {
       callback(data);
+      return;
     }
 
     var apiResponse = null;
