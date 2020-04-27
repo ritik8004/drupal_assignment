@@ -1,7 +1,7 @@
 .c-plp .c-content__region .all-filters,
 .c-plp .c-content__region .all-filters-algolia {
   .filter__inner {
-    @include breakpoint($tablet) {
+    @include breakpoint($only-tablet) {
       height: calc(100vh - 5.3125rem - 9.375rem);
       padding-bottom: 0;
     }
@@ -64,7 +64,7 @@
   }
 
   .filter__head {
-    @include breakpoint($desktop) {
+    @include breakpoint($tablet) {
       height: 5.3125rem;
     }
 
