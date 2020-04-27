@@ -208,6 +208,10 @@ class LocalCommand extends BltTasks {
     if (!isset($path)) {
       $path = '/var/www/alshaya/files-private';
 
+      if (getenv('DEVEL_ENV') == 'lando') {
+        $path = '/app/files-private';
+      }
+
       if (!file_exists($path)) {
         $this->say('Creating temp directory at: ' . $path);
         $taskFilesystemStack = $this->taskFilesystemStack();
