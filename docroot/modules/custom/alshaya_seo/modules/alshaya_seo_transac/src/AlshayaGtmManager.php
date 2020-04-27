@@ -125,6 +125,7 @@ class AlshayaGtmManager {
     'dimension8' => 'gtm-dimension8',
     'dimension3' => 'gtm-dimension3',
     'metric1' => 'gtm-metric1',
+    'product-price' => 'gtm-product-price',
   ];
 
   /**
@@ -411,11 +412,27 @@ class AlshayaGtmManager {
     $original_price = $prices['price'];
     $final_price = $prices['final_price'];
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
+    if (isset($prices['children'])) {
+      $children = $prices['children'];
+      $selling_prices = array_map(function ($children) {
+        return $children['selling_price'];
+      }, $children);
+      $price_range_array = [min($selling_prices), max($selling_prices)];
+      $price_range = implode('-', array_unique($price_range_array));
+    }
 
     if ($sku->bundle() == 'configurable') {
       $prices = $this->skuManager->getMinPrices($sku);
       $original_price = $prices['price'];
       $final_price = $prices['final_price'];
+      if (isset($prices['children'])) {
+        $children = $prices['children'];
+        $selling_prices = array_map(function ($children) {
+          return $children['selling_price'];
+        }, $children);
+        $price_range_array = [min($selling_prices), max($selling_prices)];
+        $price_range = implode('-', array_unique($price_range_array));
+      }
     }
 
     $product_type = 'Regular Product';
@@ -451,6 +468,7 @@ class AlshayaGtmManager {
       : 'image not available';
 
     $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
+    $attributes['gtm-product-price'] = $price_range ?? NULL;
 
     if ($final_price
       && ($original_price !== $final_price)
