@@ -43,6 +43,7 @@ gtm_spc:
   dependencies:
     - core/jquery
     - core/Drupal
+    - alshaya_spc/cart_utilities
 
 product_list:
   version: 1.x
