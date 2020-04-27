@@ -386,7 +386,12 @@ class PromotionController extends ControllerBase {
    */
   public function getPromotionDynamicLabelForCart(Request $request) {
     $get = $request->query->all();
-    $cart = CartData::createFromArray($get);
+    try {
+      $cart = CartData::createFromArray($get);
+    }
+    catch (\InvalidArgumentException $e) {
+      return new CacheableJsonResponse([]);
+    }
 
     // Add cache metadata.
     $cache_array = [
