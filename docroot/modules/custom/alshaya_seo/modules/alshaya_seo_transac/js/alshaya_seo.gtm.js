@@ -252,26 +252,6 @@
         isSearchPage = true;
       }
 
-      if (isSearchPage) {
-        $('.c-header #edit-keywords').once('internalsearch').each(function () {
-          var keyword = Drupal.getQueryVariable('keywords');
-          var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
-          noOfResult = isNaN(noOfResult) ? 0 : noOfResult;
-
-          var action = noOfResult === 0 ? '404 Results' : 'Successful Search';
-          var interaction = noOfResult === 0 ? noOfResult : 1;
-
-          dataLayer.push({
-            event: 'eventTracker',
-            eventCategory: 'Internal Site Search',
-            eventAction: action,
-            eventLabel: keyword,
-            eventValue: noOfResult,
-            nonInteraction: interaction,
-          });
-        });
-      }
-
       if ((isRegistrationSuccessPage) && (context === document)) {
         Drupal.alshaya_seo_gtm_push_signin_type('Registration Success');
       }
@@ -1240,5 +1220,25 @@
   $.fn.triggerDeliveryAddress = function () {
     dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
   };
+
+  Drupal.alshaya_seo_gtm_push_search_event = function(context, settings) {
+    $('.c-header #edit-keywords').once('internalsearch').each(function () {
+      var keyword = Drupal.getQueryVariable('keywords');
+      var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
+      noOfResult = isNaN(noOfResult) ? 0 : noOfResult;
+
+      var action = noOfResult === 0 ? '404 Results' : 'Successful Search';
+      var interaction = noOfResult === 0 ? noOfResult : 1;
+
+      dataLayer.push({
+        event: 'eventTracker',
+        eventCategory: 'Internal Site Search',
+        eventAction: action,
+        eventLabel: keyword,
+        eventValue: noOfResult,
+        nonInteraction: interaction,
+      });
+    });
+  }
 
 })(jQuery, Drupal, dataLayer);
