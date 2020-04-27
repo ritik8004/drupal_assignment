@@ -340,9 +340,12 @@ class CartController {
         $data['items'][$sku]['freeItem'] = FALSE;
         foreach ($cart_data['totals']['items'] as $total_item) {
           // If total price of item matches discount, we mark as free.
-          if ($items_id[$sku] == $total_item['item_id']
-            && $total_item['price'] * $items_quantity[$sku] === $total_item['discount_amount']) {
-            $data['items'][$sku]['freeItem'] = TRUE;
+          if ($items_id[$sku] == $total_item['item_id']) {
+            // Final price to use.
+            $data['items'][$sku]['finalPrice'] = $total_item['price_incl_tax'];
+            if ($total_item['price'] * $items_quantity[$sku] === $total_item['discount_amount']) {
+              $data['items'][$sku]['freeItem'] = TRUE;
+            }
             break;
           }
         }

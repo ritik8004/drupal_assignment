@@ -120,6 +120,7 @@ export default class CartItem extends React.Component {
         id,
         freeItem,
         stock,
+        finalPrice,
         in_stock: inStock,
         max_sale_qty: maxSaleQty,
         error_msg: itemErrorMsg,
@@ -137,13 +138,12 @@ export default class CartItem extends React.Component {
         title,
         url,
         price,
-        finalPrice,
       },
     } = this.state;
     const cartImage = {
       url: image,
       alt: title,
-      title: title,
+      title,
     };
 
     const { isItemError, errorMessage } = this.state;
@@ -175,7 +175,7 @@ export default class CartItem extends React.Component {
       >
         <div className="spc-product-tile">
           <div className="spc-product-image">
-            <CheckoutItemImage ImgData={cartImage} />
+            <CheckoutItemImage img_data={cartImage} />
           </div>
           <div className="spc-product-container">
             <div className="spc-product-title-price">

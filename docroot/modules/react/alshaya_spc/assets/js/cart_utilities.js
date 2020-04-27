@@ -80,7 +80,6 @@
           response.link,
           image,
           response.original_price,
-          response.final_price,
           response.configurable_values,
           response.promotions
         );
@@ -90,7 +89,7 @@
     });
   };
 
-  Drupal.alshayaSpc.storeProductData = function (sku, title, url, image, price, finalPrice, options, promotions) {
+  Drupal.alshayaSpc.storeProductData = function (sku, title, url, image, price, options, promotions) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');
     var data = {
@@ -99,7 +98,6 @@
       'url': url,
       'image': image,
       'price': price,
-      'finalPrice': finalPrice,
       'options': options,
       'promotions': promotions,
       'created': new Date().getTime(),

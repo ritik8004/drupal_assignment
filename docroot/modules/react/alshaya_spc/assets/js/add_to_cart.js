@@ -118,7 +118,6 @@
                   var options = [];
                   var productUrl = productInfo.url;
                   var price = productInfo.priceRaw;
-                  var finalPrice = productInfo.finalPriceRaw;
                   var promotions = productInfo.promotions;
                   var productDataSKU = productData.sku;
 
@@ -126,7 +125,6 @@
                     var productVariantInfo = productInfo['variants'][productData.variant];
                     productDataSKU = productData.variant;
                     price = productVariantInfo.priceRaw;
-                    finalPrice = productVariantInfo.finalPriceRaw;
                     promotions = productVariantInfo.promotions;
                     options = productVariantInfo.configurableOptions;
 
@@ -138,7 +136,6 @@
                   else if (productInfo.group !== undefined) {
                     var productVariantInfo = productInfo.group[productData.sku];
                     price = productVariantInfo.priceRaw;
-                    finalPrice = productVariantInfo.finalPriceRaw;
                     promotions = productVariantInfo.promotions;
 
                     var langcode = $('html').attr('lang');
@@ -151,7 +148,6 @@
                     productUrl,
                     productData.image,
                     price,
-                    finalPrice,
                     options,
                     promotions
                   );
