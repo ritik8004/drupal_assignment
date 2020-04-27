@@ -1,0 +1,29 @@
+// Apply Select Wrapper mixin for all resolutions.
+// Style it in two stages.
+// 1. Apply select-wrapper($wrapper-width) on form-item div.
+// 2. Then apply select2-style mixin on selec2-container div for desktop.
+// Above only true if using select2 on desktop.
+// 3. Apply select-style mixin for select tag on mobile and tablets.
+@mixin select-wrapper($wrapper-width) {
+  width: $wrapper-width;
+  margin-bottom: 0.75rem;
+  position: relative;
+
+  @include icon(chevrondown, after) {
+    font-size: 2.25rem;
+    line-height: 1.2;
+    pointer-events: none;
+    position: absolute;
+    #{$right}: 0;
+    top: 0;
+    text-align: center;
+    background-color: $primary_dropdown_arrow_bg;
+    width: 2.1875rem;
+    height: 2.5rem;
+    color: $primary_dropdown_arrow_icon;
+
+    @include breakpoint($tablet) {
+      z-index: 3;
+    }
+  }
+}
