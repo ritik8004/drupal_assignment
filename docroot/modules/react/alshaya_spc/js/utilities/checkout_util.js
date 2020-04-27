@@ -384,6 +384,15 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
       type: 'error',
       message: Drupal.t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'),
     });
+    return;
+  }
+
+  if (cartResult.is_error) {
+    // Dispatch event for error to show.
+    dispatchCustomEvent('spcCartMessageUpdate', {
+      type: null,
+      message: null,
+    });
   }
 };
 
