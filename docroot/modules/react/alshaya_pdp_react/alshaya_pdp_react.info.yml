@@ -1,7 +1,0 @@
-name: Alshaya PDP React
-type: module
-description: 'Implements a PDP Layout in React'
-package: 'Alshaya'
-core: 8.x
-dependencies:
-  - alshaya_react:alshaya_react

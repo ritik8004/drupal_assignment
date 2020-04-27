@@ -847,7 +847,6 @@ class SkuImagesManager {
         break;
 
       case 'pdp-magazine':
-      case 'pdp-magazine_v2':
         $mediaItems = $this->getThumbnailsFromMedia($media, FALSE);
         $thumbnails = $mediaItems['thumbnails'];
 
