@@ -436,9 +436,9 @@ function alshaya_acm_product_generate_video_embed_url($url, $provider) {
 function alshaya_acm_product_get_sku_configurable_values_for_cart($sku) {
   $configurableFieldValues = [];
   $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
   if ($sku instanceof SKUInterface) {
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     // Get the parent SKU so that its configurable attributes can be fetched.
     if ($sku->bundle() !== 'configurable') {
       $parent_sku = $skuManager->getParentSkuBySku($sku);
