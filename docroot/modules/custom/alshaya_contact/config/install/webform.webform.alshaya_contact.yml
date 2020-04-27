@@ -175,7 +175,7 @@ handlers:
       from_options: {  }
       from_name: 'Contact us form submission on [site:name]'
       subject: '[site:name] – contact us form autoreply'
-      body: "Dear&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name],\r\n<p>Thank you for contacting Alshaya Customer Service.<br />\r\nThis is a confirmation that we have received your feedback, , please note that we will be responding to you within 3 working days</p>\r\n\r\n<p>Your feedback is important to us.</p>\r\n\r\n<p>Always at your service,<br />\r\nGroup Customer Service</p>"
+      body: "Dear&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name],\r\n<p>Thank you for contacting Alshaya Customer Service.<br />\r\nThis is a confirmation that we have received your feedback, please note that we will be responding to you within 48 hours.</p>\r\n\r\n<p>Your feedback is important to us.</p>\r\n\r\n<p>Always at your service,<br />\r\nGroup Customer Service</p>"
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
