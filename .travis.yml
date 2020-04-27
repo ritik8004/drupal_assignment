@@ -8,27 +8,27 @@ dist: trusty
 matrix:
   fast_finish: true
   include:
-  - php: 7.3
+  - php: 7.2
     env:
       - INSTALL_TYPE=install
       - PROFILE=alshaya_transac
     if: type IN (pull_request, cron)
-  - php: 7.3
+  - php: 7.2
     env:
       - INSTALL_TYPE=install
       - PROFILE=alshaya_non_transac
     if: type IN (pull_request, cron)
-  #- php: 7.3
+  #- php: 7.2
   #  env:
   #  - INSTALL_TYPE=update
   #  - PROFILE=alshaya_transac
   #  if: type = pull_request
-  #- php: 7.3
+  #- php: 7.2
   #  env:
   #  - INSTALL_TYPE=update
   #  - PROFILE=alshaya_non_transac
   #  if: type = pull_request
-  - php: 7.3
+  - php: 7.2
     if: type = push
 
 env:
@@ -111,10 +111,10 @@ deploy:
     on:
       all_branches: true
       tags: false
-      php: 7.3
+      php: 7.2
   - provider: script
     script: "$BLT_DIR/scripts/travis/deploy_tag"
     skip_cleanup: true
     on:
       tags: true
-      php: 7.3
+      php: 7.2
