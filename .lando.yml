@@ -1,0 +1,33 @@
+name: alshaya
+recipe: drupal8
+config:
+  webroot: docroot
+
+proxy:
+  appserver:
+    - "local.alshaya*.com"
+    #- local.alshaya-hmkw.com
+
+services:
+  appserver:
+    type: php:7.3
+
+  hmkw_database:
+    type: mysql
+    portforward: 33061
+    creds:
+      database: drupal_alshaya_hmkw
+      user: drupal
+      password: drupal
+
+  memcache1:
+    type: memcached:1.5.11
+    portforward: 11211
+
+tooling:
+  blt:
+    service: appserver
+    cmd: /app/vendor/acquia/blt/bin/blt
+
+excludes:
+  - vendor
