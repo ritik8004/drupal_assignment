@@ -331,3 +331,9 @@ body {
     letter-spacing: normal;
   }
 }
+
+@mixin arabic-line-height ($value) {
+  html[lang='ar'] & {
+    line-height: $value;
+  }
+}
