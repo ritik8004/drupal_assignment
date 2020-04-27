@@ -152,7 +152,6 @@
       var storeFinderFormSelector = $('form#views-exposed-form-stores-finder-page-1');
       var isCCPage = false;
       var isPaymentPage = false;
-      var isSearchPage = false;
       var isRegistrationSuccessPage = false;
       var isStoreFinderPage = false;
       var originalCartQty = 0;
@@ -246,30 +245,6 @@
 
       if (document.location.pathname === Drupal.url('store-finder/list')) {
         isStoreFinderPage = true;
-      }
-
-      if (document.location.pathname === Drupal.url('search')) {
-        isSearchPage = true;
-      }
-
-      if (isSearchPage) {
-        $('.c-header #edit-keywords').once('internalsearch').each(function () {
-          var keyword = Drupal.getQueryVariable('keywords');
-          var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
-          noOfResult = isNaN(noOfResult) ? 0 : noOfResult;
-
-          var action = noOfResult === 0 ? '404 Results' : 'Successful Search';
-          var interaction = noOfResult === 0 ? noOfResult : 1;
-
-          dataLayer.push({
-            event: 'eventTracker',
-            eventCategory: 'Internal Site Search',
-            eventAction: action,
-            eventLabel: keyword,
-            eventValue: noOfResult,
-            nonInteraction: interaction,
-          });
-        });
       }
 
       if ((isRegistrationSuccessPage) && (context === document)) {
