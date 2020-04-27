@@ -5,6 +5,8 @@
  * Contains install, update, uninstall hooks for alshaya_pdp_layouts module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
 /**
  * Implements hook_update_N().
  *
@@ -16,6 +18,7 @@ function alshaya_pdp_layouts_install() {
   $manager->updateConfigs(
     ['core.entity_form_display.node.acq_product.default', 'core.entity_view_display.node.acq_product.default'],
     'alshaya_pdp_layouts',
-    'override'
+    'optional',
+    AlshayaConfigManager::MODE_RESAVE
   );
 }

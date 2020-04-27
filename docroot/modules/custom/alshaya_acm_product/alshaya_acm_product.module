@@ -634,12 +634,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
           $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
           $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
-          if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
-            $build['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
-          }
-          else {
-            $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
-          }
           if ($quantity_limit_enabled) {
             $build['#attached']['library'][] = 'alshaya_white_label/order-qty-limit';
           }

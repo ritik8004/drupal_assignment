@@ -2,17 +2,15 @@
 
 namespace Drupal\alshaya_pdp_layouts\Plugin\PdpLayout;
 
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-
 /**
  * Provides the default laypout for PDP.
  *
  * @PdpLayout(
  *   id = "default",
- *   label = @Translation("Default"),
+ *   label = @Translation("Classic"),
  * )
  */
-class DefaultPdpLayout extends PdpLayoutBase implements ContainerFactoryPluginInterface {
+class DefaultPdpLayout extends PdpLayoutBase {
 
   /**
    * {@inheritdoc}
@@ -25,7 +23,9 @@ class DefaultPdpLayout extends PdpLayoutBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function getRenderArray(array &$variables) {
-
+    $variables['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
+    $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
+    $variables['#attached']['library'][] = 'alshaya_white_label/stickybutton';
   }
 
 }
