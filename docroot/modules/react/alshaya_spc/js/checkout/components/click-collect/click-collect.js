@@ -431,7 +431,7 @@ class ClickCollect extends React.Component {
             className="spc-cnc-stores-list-map"
             style={{ display: openSelectedStore ? 'none' : 'block' }}
           >
-            <SectionTitle>{getStringMessage('collection_store')}</SectionTitle>
+            <SectionTitle>{getStringMessage('cnc_collection_store')}</SectionTitle>
             <a className="close" onClick={closeModal}>
               &times;
             </a>
@@ -439,13 +439,13 @@ class ClickCollect extends React.Component {
               {locationAccess === false
               && (
                 <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
-                  <span className="font-bold">{getStringMessage('location_access_denied')}</span>
+                  <span className="font-bold">{getStringMessage('cnc_location_access_denied')}</span>
                   <a href="#" onClick={() => updateLocationAccess(true)}>{getStringMessage('dismiss')}</a>
                 </CheckoutMessage>
               )}
               <div className="spc-cnc-address-form-content">
                 <SectionTitle>
-                  {getStringMessage('find_your_nearest_store')}
+                  {getStringMessage('cnc_find_your_nearest_store')}
                 </SectionTitle>
                 <LocationSearchForm
                   ref={this.searchRef}
@@ -488,7 +488,7 @@ class ClickCollect extends React.Component {
           </div>
           <div className="spc-cnc-store-actions" data-selected-stored={openSelectedStore}>
             <button className="select-store" type="button" onClick={(e) => this.finalizeCurrentStore(e)}>
-              {getStringMessage('select_this_store')}
+              {getStringMessage('cnc_select_this_store')}
             </button>
           </div>
           <SelectedStore

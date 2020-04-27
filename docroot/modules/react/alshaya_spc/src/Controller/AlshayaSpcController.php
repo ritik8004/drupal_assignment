@@ -225,26 +225,67 @@ class AlshayaSpcController extends ControllerBase {
     $geolocation_config = $this->configFactory->get('geolocation.settings');
     $cache_tags = Cache::mergeTags($cache_tags, array_merge($store_finder_config->getCacheTags(), $geolocation_config->getCacheTags()));
 
+    $country_name = $this->mobileUtil->getCountryName($country_code);
+    $strings[] = [
+      'key' => 'location_outside_country_hd',
+      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>' . $this->t("We don't support delivery outside @country. Please enter an address with in country @country below to continue.", ['@country' => $country_name]),
+    ];
+
     $cnc_enabled = $cc_config->get('feature_status') == 'enabled';
     if ($cnc_enabled) {
       $strings[] = [
-        'key' => 'find_your_nearest_store',
+        'key' => 'cnc_find_your_nearest_store',
         'value' => $this->t('find your nearest store'),
       ];
 
       $strings[] = [
-        'key' => 'select_this_store',
+        'key' => 'cnc_select_this_store',
         'value' => $this->t('select this store'),
       ];
 
       $strings[] = [
-        'key' => 'collection_store',
+        'key' => 'cnc_collection_store',
         'value' => $this->t('Collection Store'),
       ];
 
       $strings[] = [
-        'key' => 'no_store_found',
+        'key' => 'cnc_no_store_found',
         'value' => $this->t('Sorry, No store found for your location.'),
+      ];
+
+      $strings[] = [
+        'key' => 'cnc_collect_in_store',
+        'value' => $this->t('Collect in store from'),
+      ];
+
+      $strings[] = [
+        'key' => 'cnc_collection_details',
+        'value' => $this->t('Collection details'),
+      ];
+
+      $strings[] = [
+        'key' => 'cnc_selected_store',
+        'value' => $this->t('Selected store'),
+      ];
+
+      $strings[] = [
+        'key' => 'cnc_contact_info_subtitle',
+        'value' => $this->t('We will send you a text message once your order is ready for collection.'),
+      ];
+
+      $strings[] = [
+        'key' => 'cnc_list_view',
+        'value' => $this->t('List view'),
+      ];
+
+      $strings[] = [
+        'key' => 'cnc_map_view',
+        'value' => $this->t('Map view'),
+      ];
+
+      $strings[] = [
+        'key' => 'cnc_near_me',
+        'value' => $this->t('Near me'),
       ];
     }
 
@@ -254,14 +295,83 @@ class AlshayaSpcController extends ControllerBase {
     ];
 
     $strings[] = [
+      'key' => 'contact_information',
+      'value' => $this->t('contact information'),
+    ];
+
+    $strings[] = [
+      'key' => 'ci_full_name',
+      'value' => $this->t('Full Name'),
+    ];
+
+    $strings[] = [
+      'key' => 'ci_mobile_number',
+      'value' => $this->t('Mobile Number'),
+    ];
+
+    $strings[] = [
+      'key' => 'ci_email',
+      'value' => $this->t('Email'),
+    ];
+
+    $strings[] = [
       'key' => 'location_access_denied',
       'value' => $this->t('Access to your location access has been denied by your browser. You can reenable location services in your browser settings.'),
     ];
 
-    $country_name = $this->mobileUtil->getCountryName($country_code);
     $strings[] = [
-      'key' => 'location_outside_country_hd',
-      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>' . $this->t("We don't support delivery outside @country. Please enter an address with in country @country below to continue.", ['@country' => $country_name]),
+      'key' => 'form_error_full_name',
+      'value' => $this->t('Please enter your full name.'),
+    ];
+
+    $strings[] = [
+      'key' => 'form_error_email',
+      'value' => $this->t('Please enter email.'),
+    ];
+
+    $strings[] = [
+      'key' => 'form_error_mobile_number',
+      'value' => $this->t('Please enter mobile number.'),
+    ];
+
+    $strings[] = [
+      'key' => 'form_error_valid_mobile_number',
+      'value' => $this->t('Please enter valid mobile number.'),
+    ];
+
+    $strings[] = [
+      'key' => 'form_error_customer_exists',
+      'value' => $this->t('Customer already exists.'),
+    ];
+
+    $strings[] = [
+      'key' => 'hd_deliver_to_my_location',
+      'value' => $this->t('deliver to my location'),
+    ];
+
+    $strings[] = [
+      'key' => 'billing_select_my_location',
+      'value' => $this->t('select my location'),
+    ];
+
+    $strings[] = [
+      'key' => 'address_save',
+      'value' => $this->t('save', [], ['context' => 'button']),
+    ];
+
+    $strings[] = [
+      'key' => 'change_address',
+      'value' => $this->t('change address'),
+    ];
+
+    $strings[] = [
+      'key' => 'add_new_address',
+      'value' => $this->t('add new address'),
+    ];
+
+    $strings[] = [
+      'key' => 'map_enter_location',
+      'value' => $this->t('Enter a location'),
     ];
 
     $build = [

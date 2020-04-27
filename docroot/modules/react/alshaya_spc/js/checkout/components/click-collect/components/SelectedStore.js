@@ -3,6 +3,7 @@ import ContactInfoForm from '../../contact-info-form';
 import StoreItem from './StoreItem';
 import SectionTitle from '../../../../utilities/section-title';
 import CheckoutMessage from '../../../../utilities/checkout-message';
+import getStringMessage from '../../../../utilities/strings';
 
 const SelectedStore = ({
   store, open, closePanel, messageType, errorSuccessMessage,
@@ -15,7 +16,7 @@ const SelectedStore = ({
     <div id="click-and-collect-selected-store" style={{ display: open ? 'block' : 'none', width: '100%' }}>
       <div className="spc-cnc-selected-store-header">
         <span className="spc-cnc-selected-store-back" onClick={() => closePanel()} />
-        <SectionTitle>{Drupal.t('collection details')}</SectionTitle>
+        <SectionTitle>{getStringMessage('cnc_collection_details')}</SectionTitle>
       </div>
       {errorSuccessMessage !== null
         && (
@@ -23,12 +24,12 @@ const SelectedStore = ({
           {errorSuccessMessage}
         </CheckoutMessage>
         )}
-      <SectionTitle>{Drupal.t('selected store')}</SectionTitle>
+      <SectionTitle>{getStringMessage('cnc_selected_store')}</SectionTitle>
       <div className="store-details-wrapper">
         <StoreItem display="default" store={store} />
       </div>
       <div className="spc-cnc-contact-form">
-        <ContactInfoForm subTitle={Drupal.t('We will send you a text message once your order is ready for collection.')} store={store} />
+        <ContactInfoForm subTitle={getStringMessage('cnc_contact_info_subtitle')} store={store} />
       </div>
     </div>
   );

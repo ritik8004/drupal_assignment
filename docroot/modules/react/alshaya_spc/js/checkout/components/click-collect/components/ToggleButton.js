@@ -1,4 +1,5 @@
 import React from 'react';
+import getStringMessage from '../../../../utilities/strings';
 
 const ToggleButton = ({ toggleStoreView }) => (
   <div className="toggle-store-view">
@@ -8,14 +9,14 @@ const ToggleButton = ({ toggleStoreView }) => (
         type="button"
         onClick={(e) => toggleStoreView(e, 'list')}
       >
-        {Drupal.t('List view')}
+        {getStringMessage('List view')}
       </button>
       <button
         className="stores-map-view"
         type="button"
         onClick={(e) => toggleStoreView(e, 'map')}
       >
-        {Drupal.t('Map view')}
+        {getStringMessage('Map view')}
       </button>
     </div>
   </div>

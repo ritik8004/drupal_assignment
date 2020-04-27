@@ -10,6 +10,7 @@ import {
 import {
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
+import getStringMessage from '../../../utilities/strings';
 
 export default class AddressList extends React.Component {
   constructor(props) {
@@ -115,13 +116,13 @@ export default class AddressList extends React.Component {
 
     return (
       <>
-        <header className="spc-change-address">{Drupal.t('change address')}</header>
+        <header className="spc-change-address">{getStringMessage('change_address')}</header>
         <a className="close" onClick={closeModal}>
           &times;
         </a>
         <div className="address-list-content">
           <div className="spc-add-new-address-btn" onClick={this.openModal}>
-            {Drupal.t('add new address')}
+            {getStringMessage('add new address')}
           </div>
           <Popup open={open} onClose={this.closeModal} closeOnDocumentClick={false}>
             <>

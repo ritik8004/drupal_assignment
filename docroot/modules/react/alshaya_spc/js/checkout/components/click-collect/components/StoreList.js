@@ -6,7 +6,7 @@ const StoreList = ({
   storeList, display, onStoreRadio, onStoreFinalize, selected: selectedStore, onStoreClose,
 }) => {
   if (!storeList || storeList.length === 0) {
-    return <div className="spc-cnc-empty-store-list">{getStringMessage('no_store_found')}</div>;
+    return <div className="spc-cnc-empty-store-list">{getStringMessage('cnc_no_store_found')}</div>;
   }
 
   const removeClassFromStoreList = (className) => {

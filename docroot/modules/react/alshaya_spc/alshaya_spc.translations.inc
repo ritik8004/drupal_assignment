@@ -83,6 +83,9 @@ function _alshaya_spc_translations() {
       'Full Name' => [
         'ar' => 'الاسم الكامل',
       ],
+      'Email' => [
+        'ar' => 'البريد الإلكتروني',
+      ],
       'CVV' => [
         'ar' => 'CVV الرقم السري',
       ],
@@ -158,9 +161,6 @@ function _alshaya_spc_translations() {
       'Dismiss' => [
         'ar' => 'حذف',
       ],
-      'Select this Store' => [
-        'ar' => 'اختر هذا المحل',
-      ],
       'Find your nearest store' => [
         'ar' => 'ابحث عن المحلات القريبة إليك لاستلام طلبيتك',
       ],
@@ -172,6 +172,21 @@ function _alshaya_spc_translations() {
       ],
       'We don\'t support delivery outside @country. Please enter an address with in country @country below to continue.' => [
         'ar' => '.أدناه للمتابعة @country يرجى إدخال عنوان في البلد .@country لا ندعم التوصيل خارج',
+      ],
+      'Please enter your full name.' => [
+        'ar' => 'يرجى إدخال اسمك الكامل.',
+      ],
+      'Please enter email.' => [
+        'ar' => 'يرجى إدخال البريد الإلكتروني.',
+      ],
+      'Please enter mobile number.' => [
+        'ar' => 'يرجى إدخال رقم الجوال.',
+      ],
+      'Please enter valid mobile number.' => [
+        'ar' => 'يرجى إدخال رقم الجوال صحيح.',
+      ],
+      'Customer already exists.' => [
+        'ar' => 'الحساب موجود مسبقا.',
       ],
     ],
   ];
