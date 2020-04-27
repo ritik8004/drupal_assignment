@@ -2758,8 +2758,7 @@ class SkuManager {
 
     // Load default from config.
     if (!isset($static['default'])) {
-      $node_layout = $entity->get('field_select_pdp_layout')->value;
-      $static['default'] = $node_layout ? $node_layout : $this->getConfig('alshaya_acm_product.settings')->get('pdp_layout');
+      $static['default'] = $this->getConfig('alshaya_acm_product.settings')->get('pdp_layout');
     }
 
     // If we don't have product node, let's just return default.
@@ -2776,7 +2775,13 @@ class SkuManager {
     // available from terms.
     $static[$entity->id()] = $static['default'];
 
-    if (($term_list = $entity->get('field_category')->getValue())) {
+    // The layout has been overriden at node level.
+    if ($entity instanceof NodeInterface && !empty($entity->get('field_select_pdp_layout')->value)) {
+      $static[$entity->id()] = $entity->get('field_select_pdp_layout')->value;
+    }
+
+    // The layout has been overriden at category level.
+    elseif (($term_list = $entity->get('field_category')->getValue())) {
       if ($inner_term = $this->productCategoryHelper->termTreeGroup($term_list)) {
         $term = $this->termStorage->load($inner_term);
         if ($term instanceof TermInterface) {
