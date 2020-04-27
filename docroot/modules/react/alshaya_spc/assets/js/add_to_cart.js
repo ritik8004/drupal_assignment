@@ -120,11 +120,13 @@
                   var price = productInfo.priceRaw;
                   var promotions = productInfo.promotions;
                   var productDataSKU = productData.sku;
+                  var parentSKU = productData.sku;
 
                   if (productInfo.type === 'configurable') {
                     var productVariantInfo = productInfo['variants'][productData.variant];
                     productDataSKU = productData.variant;
                     price = productVariantInfo.priceRaw;
+                    parentSKU = productVariantInfo.parent_sku;
                     promotions = productVariantInfo.promotions;
                     options = productVariantInfo.configurableOptions;
 
@@ -136,6 +138,7 @@
                   else if (productInfo.group !== undefined) {
                     var productVariantInfo = productInfo.group[productData.sku];
                     price = productVariantInfo.priceRaw;
+                    parentSKU = productVariantInfo.parent_sku;
                     promotions = productVariantInfo.promotions;
 
                     var langcode = $('html').attr('lang');
@@ -144,6 +147,7 @@
 
                   Drupal.alshayaSpc.storeProductData(
                     productDataSKU,
+                    parentSKU,
                     productData.product_name,
                     productUrl,
                     productData.image,

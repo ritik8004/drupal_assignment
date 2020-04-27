@@ -76,6 +76,7 @@
 
         var data = Drupal.alshayaSpc.storeProductData(
           response.sku,
+          response.parent_sku,
           response.title,
           response.link,
           image,
@@ -89,11 +90,12 @@
     });
   };
 
-  Drupal.alshayaSpc.storeProductData = function (sku, title, url, image, price, options, promotions) {
+  Drupal.alshayaSpc.storeProductData = function (sku, parentSKU, title, url, image, price, options, promotions) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');
     var data = {
       'sku': sku,
+      'parentSKU': parentSKU,
       'title': title,
       'url': url,
       'image': image,
