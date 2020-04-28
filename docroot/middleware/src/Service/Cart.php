@@ -94,6 +94,13 @@ class Cart {
   protected $session;
 
   /**
+   * Session cache.
+   *
+   * @var \App\Service\SessionCache
+   */
+  protected $cache;
+
+  /**
    * Checkout.com API Wrapper.
    *
    * @var \App\Service\CheckoutCom\CustomerCards
@@ -133,6 +140,8 @@ class Cart {
    *   System Settings service.
    * @param \App\Service\SessionStorage $session
    *   Service for session.
+   * @param \App\Service\SessionCache $cache
+   *   Session Cache.
    * @param \App\Service\CheckoutCom\CustomerCards $customer_cards
    *   Checkout.com API Wrapper.
    * @param \App\Service\Drupal\Drupal $drupal
@@ -149,6 +158,7 @@ class Cart {
     PaymentData $payment_data,
     SystemSettings $settings,
     SessionStorage $session,
+    SessionCache $cache,
     CustomerCards $customer_cards,
     Drupal $drupal,
     LoggerInterface $logger
@@ -161,6 +171,7 @@ class Cart {
     $this->paymentData = $payment_data;
     $this->settings = $settings;
     $this->session = $session;
+    $this->cache = $cache;
     $this->customerCards = $customer_cards;
     $this->drupal = $drupal;
     $this->logger = $logger;
@@ -633,6 +644,8 @@ class Cart {
       'additional_data' => $data['additional_data'],
     ];
 
+    $this->cache->set('payment_method', 600, $data['method']);
+
     return $this->updateCart($update);
   }
 
@@ -856,6 +869,12 @@ class Cart {
       return $static[$key];
     }
 
+    $cache = $this->cache->get('delivery_methods');
+    if (isset($cache) && $cache['key'] === $key) {
+      $static[$key] = $cache['methods'];
+      return $static[$key];
+    }
+
     $url = sprintf('carts/%d/estimate-shipping-methods', $this->getCartId());
 
     try {
@@ -870,6 +889,12 @@ class Cart {
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
+    $cache = [
+      'key' => $key,
+      'methods' => $static[$key],
+    ];
+
+    $this->cache->set('delivery_methods', 600, $cache);
     return $static[$key];
   }
 
@@ -882,21 +907,35 @@ class Cart {
   public function getPaymentMethods() {
     static $static;
 
-    if (!empty($static)) {
-      return $static;
+    $cart = $this->getCart();
+    $type = $cart['shipping']['method'] ?? '';
+
+    if (empty($type)) {
+      return NULL;
+    }
+
+    $key = 'payment_methods_' . $type;
+    if (isset($static[$key])) {
+      return $static[$key];
+    }
+
+    $static[$key] = $this->cache->get($key);
+    if (isset($static[$key])) {
+      return $static[$key];
     }
 
     $url = sprintf('carts/%d/payment-methods', $this->getCartId());
 
     try {
-      $static = $this->magentoApiWrapper->doRequest('GET', $url);
+      $static[$key] = $this->magentoApiWrapper->doRequest('GET', $url);
     }
     catch (\Exception $e) {
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
-    return $static;
+    $this->cache->set($key, 600, $static[$key]);
+    return $static[$key];
   }
 
   /**
@@ -936,8 +975,12 @@ class Cart {
       $result = $this->magentoApiWrapper->doRequest('PUT', $url, ['json' => $data]);
       $order_id = (int) str_replace('"', '', $result);
 
-      // Remove cart id from session.
+      // Remove cart id and other caches from session.
       $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+      $this->cache->delete('delivery_methods');
+      $this->cache->delete('payment_methods_home_delivery');
+      $this->cache->delete('payment_methods_click_and_collect');
+      $this->cache->delete('payment_method');
 
       // Set order in session for later use.
       $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
