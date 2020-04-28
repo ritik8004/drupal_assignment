@@ -51,7 +51,7 @@ export default class CompletePurchase extends React.Component {
     const { cart, validateBeforePlaceOrder } = this.props;
 
     dispatchCustomEvent('orderPaymentMethod', {
-      payment_method: cart.cart.cart_payment_method,
+      payment_method: cart.cart.payment.method,
     });
 
     // If purchase button is not clickable.
@@ -71,7 +71,7 @@ export default class CompletePurchase extends React.Component {
         return;
       }
 
-      placeOrder(cart.cart.cart_payment_method);
+      placeOrder(cart.cart.payment.method);
     } catch (error) {
       Drupal.logJavascriptError('place-order', error);
     }
@@ -87,11 +87,11 @@ export default class CompletePurchase extends React.Component {
     // If delivery method selected same as what in cart.
     const deliverSameAsInCart = isDeliveryTypeSameAsInCart(cart);
     // If shipping info set in cart or not.
-    const isShippingSet = (cart.cart.carrier_info !== null);
+    const isShippingSet = (cart.cart.shipping.method !== null);
     // If billing info set in cart or not.
     let isBillingSet = false;
     if (cart.cart.billing_address !== null) {
-      if (cart.cart.delivery_type === 'home_delivery') {
+      if (cart.cart.shipping.type === 'home_delivery') {
         isBillingSet = true;
       } else if (cart.cart.billing_address.city.length > 0
         && cart.cart.billing_address.city !== 'NONE') {
@@ -120,8 +120,8 @@ export default class CompletePurchase extends React.Component {
     const className = this.completePurchaseButtonActive()
       ? 'active'
       : 'in-active';
-    const paymentMethod = cart.cart.cart_payment_method !== undefined
-      ? cart.cart.cart_payment_method
+    const paymentMethod = cart.cart.payment.method !== undefined
+      ? cart.cart.payment.method
       : '';
 
     return (

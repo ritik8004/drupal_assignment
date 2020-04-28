@@ -127,13 +127,6 @@ class AlshayaSpcOrderHelper {
   protected $countryRepository;
 
   /**
-   * Secure Text service provider.
-   *
-   * @var \Drupal\alshaya_spc\Helper\SecureText
-   */
-  protected $secureText;
-
-  /**
    * Request Stack.
    *
    * @var \Symfony\Component\HttpFoundation\Request|null
@@ -195,8 +188,6 @@ class AlshayaSpcOrderHelper {
    *   Checkout option manager.
    * @param \Drupal\address\Repository\CountryRepository $countryRepository
    *   Country Repository.
-   * @param \Drupal\alshaya_spc\Helper\SecureText $secure_text
-   *   Secure Text service provider.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request Stack.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
@@ -220,7 +211,6 @@ class AlshayaSpcOrderHelper {
                               MobileNumberUtilInterface $mobile_util,
                               CheckoutOptionsManager $checkout_options_manager,
                               CountryRepository $countryRepository,
-                              SecureText $secure_text,
                               RequestStack $request_stack,
                               OrdersManager $orders_manager,
                               ConfigFactory $configFactory,
@@ -238,7 +228,6 @@ class AlshayaSpcOrderHelper {
     $this->mobileUtil = $mobile_util;
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->countryRepository = $countryRepository;
-    $this->secureText = $secure_text;
     $this->request = $request_stack->getCurrentRequest();
     $this->ordersManager = $orders_manager;
     $this->configFactory = $configFactory;
@@ -264,7 +253,7 @@ class AlshayaSpcOrderHelper {
       throw new NotFoundHttpException();
     }
 
-    $data = json_decode($this->secureText->decrypt(
+    $data = json_decode(SecureText::decrypt(
       $id,
       Settings::get('alshaya_api.settings')['consumer_secret']
     ), TRUE);

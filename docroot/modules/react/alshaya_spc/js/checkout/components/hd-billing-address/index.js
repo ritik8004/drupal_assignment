@@ -80,11 +80,11 @@ export default class HDBillingAddress extends React.Component {
   render() {
     const { cart, refreshCart } = this.props;
     const { shippingAsBilling } = this.state;
+
     // If carrier info not set on cart, means shipping is not
     // set. Thus billing is also not set and thus no need to
     // show billing info.
-    if (cart.cart.carrier_info === undefined
-      || cart.cart.carrier_info === null
+    if (cart.cart.shipping.method === null
       || cart.cart.billing_address === null
       || cart.cart.billing_address.city === 'NONE') {
       return (null);
@@ -92,14 +92,14 @@ export default class HDBillingAddress extends React.Component {
 
     // No need to show the billing address change for the
     // COD payment method.
-    if (cart.cart.cart_payment_method === undefined
-      || cart.cart.cart_payment_method === 'cashondelivery') {
+    if (cart.cart.payment.method === undefined
+      || cart.cart.payment.method === 'cashondelivery') {
       return (null);
     }
 
     let showMessage = shippingAsBilling;
     // If CnC is used for delivery method, we dont show message on address.
-    if (cart.cart.delivery_type === 'click_and_collect') {
+    if (cart.cart.shipping.type === 'click_and_collect') {
       showMessage = false;
     }
 

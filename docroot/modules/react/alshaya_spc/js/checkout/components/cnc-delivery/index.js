@@ -128,7 +128,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
       cart: {
         cart: {
           store_info: { name, address },
-          shipping_address: shippingAddress,
+          shipping: { address: shippingAddress },
         },
       },
     } = this.props;

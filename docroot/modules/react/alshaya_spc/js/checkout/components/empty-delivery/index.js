@@ -250,10 +250,10 @@ export default class EmptyDeliveryText extends React.Component {
           telephone: mobile,
         },
       };
-    } else if (cartVal.carrier_info !== null && cartVal.shipping_address !== null) {
+    } else if (cartVal.shipping.method !== null && cartVal.shipping.address !== null) {
       // If carrier info set, means shipping is set.
       // Get name info from there.
-      const shippingAddress = cartVal.shipping_address;
+      const shippingAddress = cartVal.shipping.address;
       defaultVal = {
         static: {
           fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,

@@ -400,7 +400,7 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
   }
 
   if (cart.delivery_type !== undefined
-    && cart.delivery_type === cart.cart.delivery_type) {
+    && cart.delivery_type === cart.cart.shipping.type) {
     return true;
   }
 

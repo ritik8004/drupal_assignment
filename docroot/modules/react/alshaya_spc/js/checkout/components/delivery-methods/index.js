@@ -14,8 +14,8 @@ export default class DeliveryMethods extends React.Component {
 
     if (cart.delivery_type) {
       deliveryType = cart.delivery_type;
-    } else if (cart.cart.delivery_type) {
-      deliveryType = cart.cart.delivery_type;
+    } else if (cart.cart.shipping.type) {
+      deliveryType = cart.cart.shipping.type;
     }
 
     this.state = {

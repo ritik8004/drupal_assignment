@@ -15,7 +15,7 @@ const ShippingMethods = ({ cart, refreshCart }) => {
     }
 
     const carrirerInfo = `${method.carrier_code}_${method.method_code}`;
-    const selected = cart.cart.carrier_info === carrirerInfo
+    const selected = cart.cart.shipping.method === carrirerInfo
       ? method.method_code
       : '';
     methods.push(<ShippingMethod

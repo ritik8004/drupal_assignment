@@ -49,11 +49,7 @@ export default class PaymentMethods extends React.Component {
   isActive = () => {
     const { cart } = this.props;
 
-    if (cart.cart.payment_methods === undefined) {
-      return false;
-    }
-
-    if (cart.cart.payment_methods.length === 0) {
+    if (cart.cart.payment.methods === undefined || cart.cart.payment.methods.length === 0) {
       return false;
     }
 
@@ -68,9 +64,16 @@ export default class PaymentMethods extends React.Component {
     const paymentMethods = this.getPaymentMethods(true);
     const { cart } = this.props;
 
-    // Select first payment method by default.
-    if (cart.cart.cart_payment_method === undefined
-      || paymentMethods[cart.cart.cart_payment_method] === undefined) {
+    if (cart.cart.payment.method === undefined
+      || paymentMethods[cart.cart.payment.method] === undefined) {
+      // Select default from previous order if available.
+      if (cart.cart.payment.default !== undefined
+        || paymentMethods[cart.cart.payment.default] !== undefined) {
+        this.changePaymentMethod(paymentMethods[cart.cart.payment.default]);
+        return;
+      }
+
+      // Select first payment method by default.
       this.changePaymentMethod(Object.keys(paymentMethods)[0]);
     }
   };
@@ -80,7 +83,7 @@ export default class PaymentMethods extends React.Component {
     let paymentMethods = [];
 
     if (active) {
-      Object.entries(cart.cart.payment_methods).forEach(([, method]) => {
+      Object.entries(cart.cart.payment.methods).forEach(([, method]) => {
         // If payment method from api response not exists in
         // available payment methods in drupal, ignore it.
         if (method.code in drupalSettings.payment_methods) {
@@ -108,7 +111,7 @@ export default class PaymentMethods extends React.Component {
       cart,
     });
 
-    if (!this.isActive() || cart.cart.cart_payment_method === method) {
+    if (!this.isActive() || cart.cart.payment.method === method) {
       return;
     }
 
@@ -149,7 +152,7 @@ export default class PaymentMethods extends React.Component {
     const { cart } = this.props;
 
     // Trigger validate of selected component.
-    return this.paymentMethodRefs[cart.cart.cart_payment_method].current.validateBeforePlaceOrder();
+    return this.paymentMethodRefs[cart.cart.payment.method].current.validateBeforePlaceOrder();
   };
 
   render = () => {
@@ -168,7 +171,7 @@ export default class PaymentMethods extends React.Component {
         ref={this.paymentMethodRefs[method.code]}
         refreshCart={refreshCart}
         changePaymentMethod={this.changePaymentMethod}
-        isSelected={cart.cart.cart_payment_method === method.code}
+        isSelected={cart.cart.payment.method === method.code}
         key={key}
         method={method}
         animationOffset={animationOffset}

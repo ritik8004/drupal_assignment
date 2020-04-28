@@ -1,18 +1,11 @@
 import React from 'react';
 import ClicknCollectContextProvider from '../../../context/ClicknCollect';
-import { checkCartCustomer } from '../../../utilities/cart_customer_util';
-import EmptyResult from '../../../utilities/empty-result';
-import { fetchCartData } from '../../../utilities/api/requests';
+import { fetchCartDataForCheckout } from '../../../utilities/api/requests';
 import Loading from '../../../utilities/loading';
 import OrderSummaryBlock from '../../../utilities/order-summary-block';
 import HDBillingAddress from '../hd-billing-address';
 import CnCBillingAddress from '../cnc-billing-address';
 import { stickySidebar } from '../../../utilities/stickyElements/stickyElements';
-import {
-  addInfoInStorage,
-  getInfoFromStorage,
-  removeCartFromStorage,
-} from '../../../utilities/storage';
 import CompletePurchase from '../complete-purchase';
 import DeliveryInformation from '../delivery-information';
 import DeliveryMethods from '../delivery-methods';
@@ -21,13 +14,8 @@ import CheckoutMessage from '../../../utilities/checkout-message';
 import TermsConditions from '../terms-conditions';
 import {
   removeFullScreenLoader,
-  addShippingInCart,
   isCnCEnabled,
 } from '../../../utilities/checkout_util';
-import {
-  prepareAddressDataFromCartShipping,
-  prepareCnCAddressFromCartShipping,
-} from '../../../utilities/address_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
@@ -52,24 +40,8 @@ export default class Checkout extends React.Component {
 
   componentDidMount() {
     try {
-      // If logged in user.
-      if (window.drupalSettings.user.uid > 0) {
-        const tempCart = getInfoFromStorage();
-        // If cart available in storage and shipping address
-        // already not set in cart and user has address
-        // available, remove cart from local storage so
-        // so that fresh cart is fetched and thus shipping
-        // info can be set in cart.
-        if (tempCart !== null
-          && (tempCart.cart === undefined
-            || (tempCart.cart.shipping_address === null
-          && window.drupalSettings.user_name.address_available))) {
-          removeCartFromStorage();
-        }
-      }
-
       // Fetch cart data.
-      const cartData = fetchCartData();
+      const cartData = fetchCartDataForCheckout();
       if (cartData instanceof Promise) {
         cartData.then((result) => {
           if (result === undefined
@@ -78,55 +50,28 @@ export default class Checkout extends React.Component {
             return;
           }
 
-          let cartObj = { cart: result };
-          // If CnC is not available and cart has CnC
-          // method selected.
-          if (result.delivery_type === 'cnc'
-            && !isCnCEnabled(result)) {
-            cartObj.delivery_type = 'hd';
+          // Redirect to basket if uid don't match, we will handle
+          // association and everything there.
+          if (result.uid !== drupalSettings.user.uid) {
+            redirectToCart();
+            return;
           }
-          addInfoInStorage(cartObj);
-          checkCartCustomer(cartObj).then((updated) => {
-            if (updated) {
-              cartObj = getInfoFromStorage();
-            }
 
-            // If shipping address is set but carrier is not
-            // available, we set it.
-            if (result.carrier_info !== undefined
-              && result.carrier_info === null
-              && result.shipping_address !== null) {
-              const shippinData = result.delivery_type === 'cnc'
-                ? prepareCnCAddressFromCartShipping(result.shipping_address, result.store_info)
-                : prepareAddressDataFromCartShipping(result.shipping_address);
-              const updateData = addShippingInCart('update shipping', shippinData);
-              if (updateData instanceof Promise) {
-                updateData.then((cartResult) => {
-                  let cartInfo = cartObj;
-                  // If no error.
-                  if (cartResult.error === undefined) {
-                    cartInfo = {
-                      cart: cartResult,
-                    };
-                    // Update cart object.
-                    addInfoInStorage(cartInfo);
-                  }
+          const cart = result;
 
-                  this.setState({
-                    wait: false,
-                    cart: cartInfo,
-                  });
-                  dispatchCustomEvent('checkoutCartUpdate', cartInfo);
-                });
-              }
-            } else {
-              this.setState({
-                wait: false,
-                cart: cartObj,
-              });
-              dispatchCustomEvent('checkoutCartUpdate', cartObj);
-            }
+          // Set default as user selection for handling conditions.
+          cart.delivery_type = result.shipping.type;
+
+          // If CnC is not available and cart has CnC method selected.
+          if (cart.shipping.type === 'click_and_collect' && !isCnCEnabled(result)) {
+            cart.delivery_type = 'home_delivery';
+          }
+
+          this.setState({
+            wait: false,
+            cart: { cart },
           });
+          dispatchCustomEvent('checkoutCartUpdate', cartInfo);
         });
       } else {
         redirectToCart();
@@ -179,12 +124,9 @@ export default class Checkout extends React.Component {
       redirectToBasketOnError = true;
     }
 
-    // Update info in storage.
-    addInfoInStorage(cart);
-
     // If need to redirect to basket page.
     if (redirectToBasketOnError === true) {
-      window.location.href = Drupal.url('cart');
+      redirectToCart();
       return;
     }
 
@@ -201,8 +143,8 @@ export default class Checkout extends React.Component {
   getBillingComponent = () => {
     const { cart } = this.state;
 
-    if (cart.cart.delivery_type === 'hd'
-      || (cart.delivery_type !== undefined && cart.delivery_type === 'hd')) {
+    if (cart.cart.shipping.type === 'home_delivery'
+      || (cart.delivery_type !== undefined && cart.delivery_type === 'home_delivery')) {
       return (
         <HDBillingAddress
           refreshCart={this.refreshCart}
@@ -217,7 +159,7 @@ export default class Checkout extends React.Component {
         cart={cart}
       />
     );
-  }
+  };
 
   render() {
     const {
@@ -234,11 +176,7 @@ export default class Checkout extends React.Component {
 
     // If cart not available.
     if (cart === null) {
-      return (
-        <>
-          <EmptyResult Message={Drupal.t('your shopping basket is empty.')} />
-        </>
-      );
+      return redirectToCart();
     }
 
     const termConditions = <TermsConditions />;
