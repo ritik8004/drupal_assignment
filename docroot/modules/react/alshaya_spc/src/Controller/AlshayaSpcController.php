@@ -345,6 +345,11 @@ class AlshayaSpcController extends ControllerBase {
     ];
 
     $strings[] = [
+      'key' => 'form_error_email_not_valid',
+      'value' => $this->t('The email address %mail is not valid.'),
+    ];
+
+    $strings[] = [
       'key' => 'hd_deliver_to_my_location',
       'value' => $this->t('deliver to my location'),
     ];

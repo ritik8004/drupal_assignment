@@ -474,7 +474,7 @@ export const checkoutAddressProcess = (e) => {
     // Do the processing only if we did email validation.
     if (response.data.email !== undefined) {
       if (response.data.email === 'invalid') {
-        document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', { '%mail': validationData.email });
+        document.getElementById('email-error').innerHTML = getStringMessage('form_error_email_not_valid', { '%mail': validationData.email });
         document.getElementById('email-error').classList.add('error');
         isError = true;
       } else if (response.data.email === 'exists') {

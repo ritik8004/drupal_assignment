@@ -87,7 +87,7 @@ class ContactInfoForm extends React.Component {
 
         if (result.data.email !== undefined) {
           if (result.data.email === 'invalid') {
-            document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', { '%mail': validationData.email });
+            document.getElementById('email-error').innerHTML = getStringMessage('form_error_email_not_valid', { '%mail': validationData.email });
             document.getElementById('email-error').classList.add('error');
             isError = true;
           } else if (result.data.email === 'exists') {

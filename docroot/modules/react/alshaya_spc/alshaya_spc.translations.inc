@@ -197,6 +197,21 @@ function _alshaya_spc_translations() {
       'Please enter @label.' => [
         'ar' => '@label يرجى إدخال',
       ],
+      'The email address %mail is not valid.' => [
+        'ar' => 'عنوان البريد الإلكتروني mail% غير صحيح.',
+      ],
+      'Transaction ID' => [
+        'ar' => 'رمز العملية',
+      ],
+      'Payment ID' => [
+        'ar' => 'رمز الدفع',
+      ],
+      'Result code' => [
+        'ar' => 'رمز النتيجة',
+      ],
+      'available instore within' => [
+        'ar' => 'متوفر في المحل خلال',
+      ],
     ],
   ];
 }
