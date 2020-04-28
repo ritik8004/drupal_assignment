@@ -1158,11 +1158,19 @@ class SkuImagesManager {
         ];
       }
       else {
-        $thumbnails[] = [
+        $video_data = [
           'url' => file_create_url($media_item['drupal_uri']),
           'video_title' => $media_item['label'] ?? '',
           'type' => 'video',
         ];
+        // Insert video at second position.
+        $current_second_element = isset($thumbnails[1]) ? $thumbnails[1] : '';
+        if (!empty($current_second_element)) {
+          $thumbnails[1] = $video_data;
+          $thumbnails[] = $current_second_element;
+          continue;
+        }
+        $thumbnails[] = $video_data;
       }
     }
 
