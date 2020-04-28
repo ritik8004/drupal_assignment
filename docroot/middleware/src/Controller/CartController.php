@@ -354,7 +354,6 @@ class CartController {
         $stockInfo = $this->drupal->getCartItemDrupalStock($sku);
         $data['items'][$sku]['in_stock'] = $stockInfo['in_stock'];
         $data['items'][$sku]['stock'] = $stockInfo['stock'];
-        $data['items'][$sku]['max_sale_qty'] = $stockInfo['max_sale_qty'] ?? 0;
 
         // If info is available in static array, means this we get from
         // the cart update operation. We use that.

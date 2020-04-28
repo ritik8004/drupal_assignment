@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  *
  * Re-saving the stock resource to moved outside mobile app.
  */
-function alshaya_acm_product_update_8058() {
+function alshaya_acm_product_update_8059() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $configs = [

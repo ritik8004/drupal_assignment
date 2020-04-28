@@ -29,10 +29,11 @@ export default class CartItems extends React.Component {
       Object.entries(items).forEach(([, productData]) => {
         const key = `product:${drupalSettings.path.currentLanguage}:${productData.sku}`;
         const product = JSON.parse(localStorage.getItem(key));
-        qtyLimits[product.parentSKU] = (product !== null
-          && typeof qtyLimits[product.parentSKU] !== 'undefined')
-          ? qtyLimits[product.parentSKU] + productData.qty
-          : productData.qty;
+        if (product !== null && product.maxSaleQtyParent) {
+          qtyLimits[product.parentSKU] = (typeof qtyLimits[product.parentSKU] !== 'undefined')
+            ? qtyLimits[product.parentSKU] + productData.qty
+            : productData.qty;
+        }
       });
 
       // If more than one child sku of a common parent sku is added to cart
@@ -66,6 +67,11 @@ export default class CartItems extends React.Component {
         productPromotion = dynamicPromoLabelsProduct[key];
       }
       const animationOffset = (1 + index) / 5;
+
+      const productQtyLimit = (drupalSettings.quantity_limit_enabled)
+        ? (CartItems.qtyLimits[product.sku] || product.qty)
+        : 0;
+
       productItems.push(
         <CartItem
           animationOffset={animationOffset}
@@ -73,7 +79,7 @@ export default class CartItems extends React.Component {
           item={product}
           skus={skus}
           callable={this.productCheckCallable}
-          qtyLimit={CartItems.qtyLimits[product.sku] || 0}
+          qtyLimit={productQtyLimit}
           productPromotion={productPromotion}
         />,
       );

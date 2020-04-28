@@ -136,7 +136,6 @@ export default class CartItem extends React.Component {
         stock,
         finalPrice,
         in_stock: inStock,
-        max_sale_qty: maxSaleQty,
         error_msg: itemErrorMsg,
       },
       qtyLimit: currentQtyLimit,
@@ -152,6 +151,8 @@ export default class CartItem extends React.Component {
         title,
         url,
         price,
+        maxSaleQty,
+        maxSaleQtyParent,
       },
     } = this.state;
     const cartImage = {

@@ -121,6 +121,8 @@
                   var promotions = productInfo.promotions;
                   var productDataSKU = productData.sku;
                   var parentSKU = productData.sku;
+                  var maxSaleQty = productData.maxSaleQty;
+                  var maxSaleQtyParent = productData.max_sale_qty_parent;
 
                   if (productInfo.type === 'configurable') {
                     var productVariantInfo = productInfo['variants'][productData.variant];
@@ -129,6 +131,8 @@
                     parentSKU = productVariantInfo.parent_sku;
                     promotions = productVariantInfo.promotions;
                     options = productVariantInfo.configurableOptions;
+                    maxSaleQty = productVariantInfo.maxSaleQty;
+                    maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
 
                     if (productVariantInfo.url !== undefined) {
                       var langcode = $('html').attr('lang');
@@ -140,6 +144,8 @@
                     price = productVariantInfo.priceRaw;
                     parentSKU = productVariantInfo.parent_sku;
                     promotions = productVariantInfo.promotions;
+                    maxSaleQty = productVariantInfo.maxSaleQty;
+                    maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
 
                     var langcode = $('html').attr('lang');
                     productUrl = productVariantInfo.url[langcode];
@@ -153,7 +159,9 @@
                     productData.image,
                     price,
                     options,
-                    promotions
+                    promotions,
+                    maxSaleQty,
+                    maxSaleQtyParent
                   );
 
                   // Triggering event to notify react component.
