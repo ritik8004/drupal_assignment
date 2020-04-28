@@ -152,19 +152,19 @@
                     productUrl = productVariantInfo.url[langcode];
                   }
 
-                  Drupal.alshayaSpc.storeProductData(
-                    productDataSKU,
-                    parentSKU,
-                    productData.product_name,
-                    productUrl,
-                    productData.image,
-                    price,
-                    options,
-                    promotions,
-                    maxSaleQty,
-                    maxSaleQtyParent,
-                    gtmAttributes
-                  );
+                  Drupal.alshayaSpc.storeProductData({
+                    sku: productDataSKU,
+                    parentSKU: parentSKU,
+                    title: productData.product_name,
+                    url: productUrl,
+                    image: productData.image,
+                    price: price,
+                    options: options,
+                    promotions: promotions,
+                    maxSaleQty: maxSaleQty,
+                    maxSaleQtyParent: maxSaleQtyParent,
+                    gtmAttributes: gtmAttributes,
+                  });
 
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => response, productData }});

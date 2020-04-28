@@ -75,44 +75,44 @@
           image = response.extra_data['cart_image']['url'];
         }
 
-        var data = Drupal.alshayaSpc.storeProductData(
-          response.sku,
-          response.parent_sku,
-          response.title,
-          response.link,
-          image,
-          response.original_price,
-          response.configurable_values,
-          response.promotions,
-          response.max_sale_qty,
-          response.max_sale_qty_parent,
-          response.gtm_attributes
-        );
+        var data = Drupal.alshayaSpc.storeProductData({
+          sku: response.sku,
+          parentSKU: response.parent_sku,
+          title: response.title,
+          url: response.link,
+          image: image,
+          price: response.original_price,
+          options: response.configurable_values,
+          promotions: response.promotions,
+          maxSaleQty: response.max_sale_qty,
+          maxSaleQtyParent: response.max_sale_qty_parent,
+          gtmAttributes: response.gtm_attributes,
+        });
 
         callback(data, extraData);
       }
     });
   };
 
-  Drupal.alshayaSpc.storeProductData = function (sku, parentSKU, title, url, image, price, options, promotions, maxSaleQty, maxSaleQtyParent, gtmAttributes) {
+  Drupal.alshayaSpc.storeProductData = function (data) {
     var langcode = $('html').attr('lang');
-    var key = ['product', langcode, sku].join(':');
-    var data = {
-      'sku': sku,
-      'parentSKU': parentSKU,
-      'title': title,
-      'url': url,
-      'image': image,
-      'price': price,
-      'options': options,
-      'promotions': promotions,
-      'maxSaleQty': maxSaleQty,
-      'maxSaleQtyParent': maxSaleQtyParent,
-      'gtmAttributes': gtmAttributes,
+    var key = ['product', langcode, data.sku].join(':');
+    var productData = {
+      'sku': data.sku,
+      'parentSKU': data.parentSKU,
+      'title': data.title,
+      'url': data.url,
+      'image': data.image,
+      'price': data.price,
+      'options': data.options,
+      'promotions': data.promotions,
+      'maxSaleQty': data.maxSaleQty,
+      'maxSaleQtyParent': data.maxSaleQtyParent,
+      'gtmAttributes': data.gtmAttributes,
       'created': new Date().getTime(),
     };
 
-    localStorage.setItem(key, JSON.stringify(data));
+    localStorage.setItem(key, JSON.stringify(productData));
 
     // Return as well if required for re-use.
     return data;
