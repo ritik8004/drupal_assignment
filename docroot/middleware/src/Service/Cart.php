@@ -1112,7 +1112,13 @@ class Cart {
     $cart['shipping'] = $cart['cart']['extension_attributes']['shipping_assignments'][0]['shipping'] ?? [];
     unset($cart['cart']['extension_attributes']['shipping_assignments']);
 
-    $cart['shipping']['type'] = $cart['shipping']['extension_attributes']['click_and_collect_type'] ?? '';
+    $shippingMethod = $cart['shipping']['method'] ?? '';
+    $cart['shipping']['type'] = strpos($shippingMethod, 'click_and_collect') !== FALSE
+      ? 'click_and_collect'
+      : $shippingMethod;
+
+    $cart['shipping']['clickCollectType'] = $cart['shipping']['extension_attributes']['click_and_collect_type'] ?? '';
+    $cart['shipping']['storeCode'] = $cart['shipping']['extension_attributes']['store_code'] ?? '';
     unset($cart['shipping']['extension_attributes']);
 
     // Initialise payment data holder.

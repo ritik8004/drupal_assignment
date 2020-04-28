@@ -386,6 +386,10 @@ class CartController {
 
     $response['customer'] = CustomerHelper::getCustomerPublicData($data['customer'] ?? []);
     $response['shipping'] = $data['shipping'] ?? [];
+
+    if (!empty($response['shipping']['storeCode'])) {
+      $response['shipping']['storeInfo'] = $this->drupal->getStoreInfo($response['shipping']['storeCode']);
+    }
     $response['payment'] = $data['payment'] ?? [];
 
     // Set method to null if empty to reduce the number of conditions in JS.

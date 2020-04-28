@@ -67,7 +67,7 @@ export default class DeliveryMethods extends React.Component {
       <div className="spc-checkout-delivery-methods">
         <SectionTitle animationDelayValue="0.4s">{Drupal.t('Delivery method')}</SectionTitle>
         <div className="delivery-method fadeInUp" style={{ animationDelay: '0.4s' }} onClick={() => this.changeDeliveryMethod('home_delivery')}>
-          <input id="delivery-method-hd" defaultChecked={selectedOption === 'home_delivery'} value="hd" name="delivery-method" type="radio" />
+          <input id="delivery-method-home_delivery" defaultChecked={selectedOption === 'home_delivery'} value="home_delivery" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
             <span className="icon"><HomeDeliverySVG /></span>
             <div className="delivery-method-name">
@@ -77,7 +77,7 @@ export default class DeliveryMethods extends React.Component {
           </label>
         </div>
         <div className={`delivery-method fadeInUp ${cncInactiveClass}`} style={{ animationDelay: '0.5s' }} onClick={() => this.changeDeliveryMethod('click_and_collect')}>
-          <input id="delivery-method-cnc" defaultChecked={selectedOption === 'click_and_collect'} disabled={isCnCAvailable ? false : 'disabled'} value="cnc" name="delivery-method" type="radio" />
+          <input id="delivery-method-click_and_collect" defaultChecked={selectedOption === 'click_and_collect'} disabled={isCnCAvailable ? false : 'disabled'} value="click_and_collect" name="delivery-method" type="radio" />
           <label className="radio-sim radio-label">
             <span className="icon"><ClickCollectSVG /></span>
             <div className="delivery-method-name">

@@ -15,7 +15,7 @@
 
   document.addEventListener('deliveryMethodChange', function (e) {
     var deliveryMethod = e.detail.data;
-    Drupal.alshayaSeoSpc.gtmDeliveryMethod(deliveryMethod === 'hd' ? 'Home Delivery' : 'Click & Collect');
+    Drupal.alshayaSeoSpc.gtmDeliveryMethod(deliveryMethod === 'home_delivery' ? 'Home Delivery' : 'Click & Collect');
   });
 
   document.addEventListener('refreshCartOnCnCSelect', function (e) {
@@ -78,7 +78,7 @@
   }
 
   Drupal.alshayaSeoSpc.pushHomeDeliveryData = function(cart) {
-    if (cart.delivery_type !== 'hd' || !cart.shipping_methods || !cart.shipping_address) {
+    if (cart.delivery_type !== 'home_delivery' || !cart.shipping_methods || !cart.shipping_address) {
       return;
     }
     //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
@@ -134,7 +134,7 @@
           Drupal.alshayaSeoSpc.cartGtm(cart_data, step);
           if (step === 2) {
             Drupal.alshayaSeoSpc.gtmPushCheckoutOption(
-              cart_data.cart.delivery_type === 'hd' ? 'Home Delivery' : 'Click & Collect',
+              cart_data.cart.delivery_type === 'home_delivery' ? 'Home Delivery' : 'Click & Collect',
               step
             );
           }

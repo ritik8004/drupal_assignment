@@ -18,11 +18,13 @@ export default class DeliveryInformation extends React.Component {
     const deliveryType = this.getDeliveryMethodToShow(cart);
     if (deliveryType === 'home_delivery' && cart.cart.shipping.address !== null) {
       return false;
-    } if (deliveryType === 'click_and_collect' && typeof cart.cart.store_info !== 'undefined') {
+    }
+    if (deliveryType === 'click_and_collect' && typeof cart.cart.shipping.storeInfo !== 'undefined') {
       return false;
     }
+
     return true;
-  }
+  };
 
   getDeliveryMethodToShow = (cart) => {
     if (typeof cart.delivery_type !== 'undefined') {
@@ -32,7 +34,7 @@ export default class DeliveryInformation extends React.Component {
       return cart.cart.shipping.type;
     }
     return 'home_delivery';
-  }
+  };
 
   render() {
     const { cart, refreshCart } = this.props;
