@@ -14,6 +14,13 @@ class PreprocessMagazineEvent extends Event {
   const EVENT_NAME = 'preprocess_alshaya_magazine';
 
   /**
+   * Variables array.
+   *
+   * @var array
+   */
+  private $variables;
+
+  /**
    * PreprocessMagazineEvent constructor.
    *
    * @param array $variables

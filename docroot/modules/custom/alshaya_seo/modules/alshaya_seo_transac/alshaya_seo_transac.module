@@ -53,6 +53,7 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       if ($route_match->getRouteName() == 'acq_cart.cart') {
         $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_cart';
       }
+
       if ($route_match->getRouteName() == 'alshaya_spc.checkout') {
         $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_checkout';
       }

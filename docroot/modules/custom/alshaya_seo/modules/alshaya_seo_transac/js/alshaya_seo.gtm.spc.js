@@ -18,12 +18,37 @@
       step = 2;
     }
     if (cart_data !== null
-      && cart_data.cart.hasOwnProperty('cart_payment_method')
-      && cart_data.cart.cart_payment_method !== null
+      && cart_data.hasOwnProperty('cart_payment_method')
+      && cart_data.cart_payment_method !== null
     ) {
       step = 3;
     }
     return step;
+  };
+
+  /**
+   * Helper function to get product GTM attributes.
+   *
+   * @param product
+   *   Product Object with gtm attributes.
+   * @returns {{quantity: *, price, name: *, variant: *, id: *, category: *,
+   *   brand: *}} Product details object with gtm attributes.
+   */
+  Drupal.alshayaSeoSpc.gtmProduct = function (product) {
+    var productDetails = {
+      quantity: product.qty,
+    };
+    for (var gtmKey in product.gtm_attributes) {
+      productDetails[gtmKey] = product.gtm_attributes[gtmKey];
+    }
+
+    if ($.cookie('product-list') !== undefined) {
+      var listValues = JSON.parse($.cookie('product-list'));
+      if (listValues.hasOwnProperty(product.parent_sku)) {
+        productDetails.list = listValues[product.parent_sku];
+      }
+    }
+    return productDetails;
   };
 
   /**
@@ -70,31 +95,5 @@
       }
     }
   };
-
-  /**
-   * Helper function to get product GTM attributes.
-   *
-   * @param product
-   *   Product Object with gtm attributes.
-   * @returns {{quantity: *, price, name: *, variant: *, id: *, category: *,
-   *   brand: *}} Product details object with gtm attributes.
-   */
-  Drupal.alshayaSeoSpc.gtmProduct = function (product) {
-    var productDetails = {
-      quantity: product.qty,
-    };
-    for (var gtmKey in product.gtm_attributes) {
-      productDetails[gtmKey] = product.gtm_attributes[gtmKey];
-    }
-
-    if ($.cookie('product-list') !== undefined) {
-      var listValues = JSON.parse($.cookie('product-list'));
-      if (listValues.hasOwnProperty(product.parent_sku)) {
-        productDetails.list = listValues[product.parent_sku];
-      }
-    }
-    return productDetails;
-  };
-
 
 })(jQuery, Drupal, drupalSettings, dataLayer);

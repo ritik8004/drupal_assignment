@@ -39,13 +39,15 @@ function alshaya_pdp_layouts_allowed_values_function(FieldStorageConfig $definit
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function alshaya_pdp_layouts_form_node_acq_product_edit_form_alter(&$form, $form_state, $form_id) {
-  $product_settings_form = \Drupal::config('alshaya_acm_product.settings');
-  $global_layout = $product_settings_form->get('pdp_layout');
-  // Adding a description to show the inherit settings for PDP layout.
-  $form['field_select_pdp_layout']['widget']['#description'] = FieldFilteredMarkup::create(t('Inherit layout will apply the layout selected globally: @global_layout', ['@global_layout' => $global_layout]));
-  // Changing the label of the none option.
-  $form['field_select_pdp_layout']['widget']['#options']['_none'] = t('Inherit');
+function alshaya_pdp_layouts_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'node_acq_product_edit_form' || $form_id == 'node_acq_product_form') {
+    $product_settings_form = \Drupal::config('alshaya_acm_product.settings');
+    $global_layout = $product_settings_form->get('pdp_layout');
+    // Adding a description to show the inherit settings for PDP layout.
+    $form['field_select_pdp_layout']['widget']['#description'] = FieldFilteredMarkup::create(t('Inherit layout will apply the layout selected globally: @global_layout', ['@global_layout' => $global_layout]));
+    // Changing the label of the none option.
+    $form['field_select_pdp_layout']['widget']['#options']['_none'] = t('Inherit');
+  }
 }
 
 /**

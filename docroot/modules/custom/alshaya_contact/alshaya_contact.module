@@ -8,19 +8,6 @@
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Implements hook_alshaya_i18n_onetime_translation_add().
- */
-function alshaya_contact_alshaya_i18n_onetime_translation_add() {
-  // Set contact form translation.
-  $contact_content = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.alshaya_contact');
-  $contact_content->set('title', 'اتصل بنا');
-  $contact_content->set('elements', "select_your_preference_of_channel_of_communication:\n  '#title': 'حدد قناة الاتصال المفضلة لديك'\n  '#options':\n    Email: 'البريد الإكتروني'\n    Mobile: 'رقم الجوال'\nfirst_name:\n  '#title': 'الاسم الأول'\nlast_name:\n  '#title': 'اسم العائلة'\nmobile_number:\n  '#title': 'رقم الجوال'\nemail:\n  '#title': 'عنوان البريد الإلكتروني'\nmessage:\n  '#title': 'رسالة نصية:'\n");
-  $contact_content->set('handlers.email.settings.body', "<strong>تفضيلات التواصل</strong> - [webform_submission:values:select_your_preference_of_channel_of_communication]<br />\r\n<br />\r\n<strong>اسم</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name]<br />\r\n<br />\r\n<strong>رقم الجوال</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:mobile_number]<br />\r\n<br />\r\n<strong>عنوان البريد الإلكتروني</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:email]<br />\r\n<br />\r\n<strong>رسالة</strong> -&nbsp;<br />\r\n<br />\r\n[webform_submission:values:first_name]&nbsp;[webform_submission:values:message]");
-  $contact_content->set('settings.confirmation_message', 'شكرا لإتصالك بنا. سنقوم بالرد عليك في أقرب وقت ممكن!');
-  $contact_content->save();
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_contact_form_webform_submission_alshaya_contact_add_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -30,6 +17,11 @@ function alshaya_contact_form_webform_submission_alshaya_contact_add_form_alter(
   $form['elements']['last_name']['#attributes']['specialchar'] = 'specialchar';
   $form['elements']['first_name']['#maxlength'] = 50;
   $form['elements']['last_name']['#maxlength'] = 50;
+  $form['elements']['order_number']['#title'] = t('Order number') . ' <span>(' . t('Optional') . ')</span>';
+  $form['elements']['missing_items']['#title'] = t('Missing items') . ' <span>(' . t('Optional') . ')</span>';
+  $form['elements']['file']['#description'] = t('@file_size MB limit. Allowed types: @file_extension',
+    ['@file_size' => $form['elements']['file']['#max_filesize'], '@file_extension' => $form['elements']['file']['#file_extensions']]);
+
   // request_from field hide on add form.
   $form['elements']['request_from']['#access'] = FALSE;
   // Override mail validation pattern.
@@ -37,6 +29,9 @@ function alshaya_contact_form_webform_submission_alshaya_contact_add_form_alter(
 
   // Custom validation for contact form.
   $form['#validate'][] = '_alshaya_contact_alshaya_contact_form_validate';
+
+  // Including convert to select js.
+  $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
 }
 
 /**
