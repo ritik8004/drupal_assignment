@@ -151,7 +151,9 @@ export default class CartItem extends React.Component {
       });
     }
 
-    const qtyLimitClass = (drupalSettings.quantity_limit_enabled && currentQtyLimit > maxSaleQty)
+    const qtyLimitClass = (drupalSettings.quantity_limit_enabled
+      && currentQtyLimit > maxSaleQty
+      && maxSaleQty > 0)
       ? 'sku-max-quantity-limit-reached'
       : '';
 
