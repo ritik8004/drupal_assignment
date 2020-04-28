@@ -2,8 +2,6 @@
 
 namespace Drupal\acq_promotion;
 
-use Drupal\alshaya_acm\CartData;
-
 /**
  * An interface for all Acq Promotion type plugins.
  */
@@ -17,45 +15,33 @@ interface AcqPromotionInterface {
   /**
    * Get inactive promo label.
    *
-   * @param \Drupal\alshaya_acm\CartData $cart
-   *   Cart Data.
-   *
    * @return mixed
    *   Inactive promo label.
    */
-  public function getInactiveLabel(CartData $cart);
+  public function getInactiveLabel();
 
   /**
    * Get active promo label.
    *
-   * @param \Drupal\alshaya_acm\CartData $cart
-   *   Cart Data.
-   *
    * @return mixed
    *   Active promo label.
    */
-  public function getActiveLabel(CartData $cart);
+  public function getActiveLabel();
 
   /**
    * Get promotion status based on cart.
    *
-   * @param \Drupal\alshaya_acm\CartData $cart
-   *   Cart Data.
-   *
    * @return bool
    *   Promotion status.
    */
-  public function getPromotionCartStatus(CartData $cart);
+  public function getPromotionCartStatus();
 
   /**
    * Get promotion code label for cart promotions.
    *
-   * @param \Drupal\alshaya_acm\CartData $cart
-   *   Cart Data.
-   *
    * @return string
    *   Label.
    */
-  public function getPromotionCodeLabel(CartData $cart);
+  public function getPromotionCodeLabel();
 
 }

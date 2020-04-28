@@ -353,3 +353,21 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
     $form_state
   );
 }
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ */
+function alshaya_acm_promotion_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
+  $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
+  $variant['promotions'] = $promoLabelManager->getPromotionLabelForProductDetail($child, 'api');
+}
+
+/**
+ * Implements hook_sku_product_info_alter().
+ */
+function alshaya_acm_promotion_sku_product_info_alter(array &$product_info, SKUInterface $sku) {
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
+  $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
+  $product_info['promotions'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'api');
+}

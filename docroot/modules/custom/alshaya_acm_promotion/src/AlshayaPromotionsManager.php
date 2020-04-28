@@ -652,12 +652,17 @@ class AlshayaPromotionsManager {
    * @return array
    *   List of promotions.
    */
-  public function getCartPromotions(array $applied_rules) {
+  public function getCartPromotions() {
     $cartPromotionsApplied = &drupal_static(__FUNCTION__);
 
     if (!isset($cartPromotionsApplied)) {
-      if (!empty($applied_rules)) {
-        foreach ($applied_rules as $rule_id) {
+      $cart = CartData::getCart();
+      $appliedRules = ($cart instanceof CartData)
+        ? $cart->getAppliedRules()
+        : [];
+
+      if (!empty($appliedRules)) {
+        foreach ($appliedRules as $rule_id) {
           $promotion_node = $this->getPromotionByRuleId($rule_id);
           if ($promotion_node instanceof NodeInterface) {
             $cartPromotionsApplied[$rule_id] = $promotion_node;
@@ -768,15 +773,13 @@ class AlshayaPromotionsManager {
    *
    * @param \Drupal\node\NodeInterface $promotion
    *   Promotion Node.
-   * @param \Drupal\alshaya_acm\CartData $cart
-   *   Cart Data.
    * @param bool $status
    *   Active or Inactive Flag.
    *
    * @return array|null
    *   Promotion data.
    */
-  public function getPromotionData(NodeInterface $promotion, CartData $cart, $status = TRUE) {
+  public function getPromotionData(NodeInterface $promotion, $status = TRUE) {
     $data = NULL;
     $field_alshaya_promotion_subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
     $acqPromotionTypes = $this->getAcqPromotionTypes();
@@ -797,7 +800,7 @@ class AlshayaPromotionsManager {
           $promotion
         );
         if ($promotionPlugin instanceof AcqPromotionInterface) {
-          $label = $status ? $promotionPlugin->getActiveLabel($cart) : $promotionPlugin->getInactiveLabel($cart);
+          $label = $status ? $promotionPlugin->getActiveLabel() : $promotionPlugin->getInactiveLabel();
 
           if (!empty($label)) {
             $data = [
@@ -806,7 +809,7 @@ class AlshayaPromotionsManager {
             ];
 
             // Add threshold_reached flag to update promotion label classes.
-            $promotionCartStatus = $promotionPlugin->getPromotionCartStatus($cart);
+            $promotionCartStatus = $promotionPlugin->getPromotionCartStatus();
             if ($promotionCartStatus === AcqPromotionInterface::STATUS_CAN_BE_APPLIED) {
               $data['threshold_reached'] = TRUE;
               $data['coupon'] = $promotion->get('field_coupon_code')->getString();
@@ -835,7 +838,7 @@ class AlshayaPromotionsManager {
    * @return mixed|null
    *   Inactive promotion node.
    */
-  public function getInactiveCartPromotion(array $applied_rules) {
+  public function getInactiveCartPromotion() {
     $inactiveCartPromotion = &drupal_static(__FUNCTION__);
 
     if (isset($inactiveCartPromotion)) {
@@ -844,7 +847,7 @@ class AlshayaPromotionsManager {
 
     $allCartPromotions = $this->getSortedCartPromotions();
     $appliedPromotionIds = [];
-    $cartPromotionsApplied = $this->getCartPromotions($applied_rules) ?? [];
+    $cartPromotionsApplied = $this->getCartPromotions() ?? [];
     foreach ($cartPromotionsApplied as $promotion) {
       $appliedPromotionIds[] = $promotion->id();
     }

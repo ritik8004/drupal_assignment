@@ -64,6 +64,8 @@ class SkuManager {
 
   const FREE_GIFT_SUB_TYPE_ONE_SKU = 1;
 
+  const SIZE_GROUP_SEPARATOR = '|';
+
   /**
    * Flag to allow merge children in alshaya_color_split.
    *
@@ -1591,6 +1593,10 @@ class SkuManager {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
 
+    if ($this->isSkuFreeGift($sku_entity)) {
+      return $plugin->getParentSku($sku_entity, FALSE);
+    }
+
     return $plugin->getParentSku($sku_entity);
   }
 
@@ -2775,7 +2781,13 @@ class SkuManager {
     // available from terms.
     $static[$entity->id()] = $static['default'];
 
-    if (($term_list = $entity->get('field_category')->getValue())) {
+    // The layout has been overriden at node level.
+    if ($entity instanceof NodeInterface && !empty($entity->get('field_select_pdp_layout')->value)) {
+      $static[$entity->id()] = $entity->get('field_select_pdp_layout')->value;
+    }
+
+    // The layout has been overriden at category level.
+    elseif (($term_list = $entity->get('field_category')->getValue())) {
       if ($inner_term = $this->productCategoryHelper->termTreeGroup($term_list)) {
         $term = $this->termStorage->load($inner_term);
         if ($term instanceof TermInterface) {
@@ -3287,15 +3299,16 @@ class SkuManager {
             // Group all the sizes without group in a section in bottom.
             $size_group = $size_group ?: 'other';
           }
+
           foreach ($field_data as $field_value) {
             if (!empty($size_group)) {
-              $data[$key][$size_group . ':' . $field_value['value']] = $size_group . ':' . $field_value['value'];
+              $value = $size_group . self::SIZE_GROUP_SEPARATOR . $field_value['value'];
+              $data[$key][$value] = $value;
             }
             else {
               $data[$key][$field_value['value']] = $field_value['value'];
             }
           }
-
         }
       }
     }
@@ -3315,7 +3328,8 @@ class SkuManager {
         }
         foreach ($field_data as $field_value) {
           if (!empty($size_group)) {
-            $data[$key][$size_group . ':' . $field_value['value']] = $size_group . ':' . $field_value['value'];
+            $value = $size_group . self::SIZE_GROUP_SEPARATOR . $field_value['value'];
+            $data[$key][$value] = $value;
           }
           else {
             $data[$key][$field_value['value']] = $field_value['value'];

@@ -363,7 +363,7 @@ class AlshayaYamlProcess {
 
     $yaml['extensions']['Bex\Behat\ScreenshotExtension']['image_drivers'] = [
       'local' =>  [
-        'screenshot_directory' => "%paths.base%/features/$profile/screenshots",
+        'screenshot_directory' => "%paths.base%/features/$profile-$viewport/screenshots",
       ],
     ];
 

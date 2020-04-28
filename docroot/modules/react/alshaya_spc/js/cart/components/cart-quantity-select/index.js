@@ -1,8 +1,5 @@
 import React from 'react';
-
 import Select from 'react-select';
-import { updateCartItemData } from '../../../utilities/update_cart';
-import dispatchCustomEvent from '../../../utilities/events';
 
 export default class CartQuantitySelect extends React.Component {
   constructor(props) {
@@ -39,39 +36,19 @@ export default class CartQuantitySelect extends React.Component {
   };
 
   handleChange = (selectedOption) => {
-    const { sku } = this.props;
+    const { sku, onQtyChange } = this.props;
     this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.add('loading');
-    const cartData = updateCartItemData('update item', sku, selectedOption.value);
-    if (cartData instanceof Promise) {
-      cartData.then((result) => {
-        const resultVal = result;
-        this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.remove('loading');
-        let messageInfo = null;
-        // If error.
-        if (resultVal.error !== undefined
-          && resultVal.error === true) {
-          messageInfo = {
-            type: 'error',
-            message: resultVal.error_message,
-          };
-        } else {
-          messageInfo = {
-            type: 'success',
-            message: Drupal.t('Your bag has been updated successfully.'),
-          };
-        }
-        const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => resultVal } });
-        document.dispatchEvent(miniCartEvent);
+    onQtyChange({
+      action: 'update item',
+      sku,
+      qty: selectedOption.value,
+      callback: this.afterCartUpdate,
+      successMsg: Drupal.t('Your bag has been updated successfully.'),
+    });
+  };
 
-        const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => resultVal } });
-        document.dispatchEvent(refreshCartEvent);
-
-        // Trigger message.
-        if (messageInfo !== null) {
-          dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
-        }
-      });
-    }
+  afterCartUpdate = () => {
+    this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.remove('loading');
   };
 
   render() {

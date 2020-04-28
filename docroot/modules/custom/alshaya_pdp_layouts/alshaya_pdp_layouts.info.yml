@@ -1,0 +1,5 @@
+name: 'Alshaya PDP Layouts'
+type: module
+description: 'Module to setup PDP Layouts Plugin System'
+package: 'Alshaya'
+core: 8.x

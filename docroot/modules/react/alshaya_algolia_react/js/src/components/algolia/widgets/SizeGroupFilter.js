@@ -14,7 +14,7 @@ const SizeGroupFilter = (
   // Preparing sizes according to their groups.
   const groupedItems = [];
   Object.values(items).forEach((item) => {
-    const data = item.label.split(':');
+    const data = item.label.split(drupalSettings.algoliaSearch.sizeGroupSeparator);
     if (groupedItems[data[0]] === undefined) {
       groupedItems[data[0]] = [];
     }
@@ -41,7 +41,7 @@ const SizeGroupFilter = (
           <ul className="sizegroup" id={group}>
             {Object.values(groupedItems[group]).map((item) => (
               <li
-                key={`${group}-${item.label.split(':').pop()}`}
+                key={`${group}-${item.label.split(drupalSettings.algoliaSearch.sizeGroupSeparator).pop()}`}
                 className={`facet-item  ${(item.isRefined ? 'is-active' : '')}`}
                 datadrupalfacetlabel={props.name}
                 onClick={(event) => {
@@ -52,7 +52,7 @@ const SizeGroupFilter = (
                 <span
                   className="facet-item__value"
                 >
-                  {item.label.split(':').pop().trim()}
+                  {item.label.split(drupalSettings.algoliaSearch.sizeGroupSeparator).pop().trim()}
                   <span className="facet-item__count">
                     (
                     {item.count}

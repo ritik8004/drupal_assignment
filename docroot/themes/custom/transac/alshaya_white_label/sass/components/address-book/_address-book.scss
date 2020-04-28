@@ -401,6 +401,12 @@
     top: -1.25rem;
   }
 
+  #address-book-form-open {
+    @include breakpoint($only-mobile) {
+      margin-top: 2.25rem;
+    }
+  }
+
   .block-system > a {
     @extend %button-wide;
 

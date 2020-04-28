@@ -53,6 +53,7 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       if ($route_match->getRouteName() == 'acq_cart.cart') {
         $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_cart';
       }
+
       if ($route_match->getRouteName() == 'alshaya_spc.checkout') {
         $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_checkout';
       }
@@ -553,5 +554,6 @@ function alshaya_seo_transac_views_pre_render(ViewExecutable $view) {
   elseif ($view->id() == 'product_slider') {
     // Attach GTM slider js on product slider.
     $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
+    $view->element['#attached']['library'][] = 'alshaya_seo_transac/linked_products';
   }
 }

@@ -373,7 +373,7 @@ class PromotionController extends ControllerBase {
     Cache::mergeTags($cache_array['tags'], $sku->getCacheTags());
     Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
 
-    $label = $this->promoLabelManager->getSkuPromoDynamicLabel($cart, $sku);
+    $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku);
     $response = new CacheableJsonResponse(['label' => $label]);
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
     return $response;
@@ -404,7 +404,7 @@ class PromotionController extends ControllerBase {
     $productLabels = [];
     foreach ($cart->getItems() as $item) {
       $productLabels[$item['sku']]['sku'] = $item['sku'];
-      $productLabels[$item['sku']]['labels'] = $this->promoLabelManager->getCurrentSkuPromos($cart, $item['entity'], 'api');
+      $productLabels[$item['sku']]['labels'] = $this->promoLabelManager->getCurrentSkuPromos($item['entity'], 'api');
     }
 
     $cartLabels = [
@@ -412,8 +412,8 @@ class PromotionController extends ControllerBase {
       'next_eligible' => [],
     ];
 
-    foreach ($this->promotionsManager->getCartPromotions($cart->getAppliedRules()) ?? [] as $rule_id => $promotion) {
-      $promotion_data = $this->promotionsManager->getPromotionData($promotion, $cart);
+    foreach ($this->promotionsManager->getCartPromotions() ?? [] as $rule_id => $promotion) {
+      $promotion_data = $this->promotionsManager->getPromotionData($promotion);
       if (!empty($promotion_data)) {
         $cartLabels['qualified'][$rule_id] = [
           'rule_id' => $rule_id,
@@ -423,10 +423,10 @@ class PromotionController extends ControllerBase {
       }
     }
 
-    $applicableInactivePromotion = $this->promotionsManager->getInactiveCartPromotion($cart->getAppliedRules());
+    $applicableInactivePromotion = $this->promotionsManager->getInactiveCartPromotion();
     if ($applicableInactivePromotion instanceof NodeInterface) {
       $rule_id = $applicableInactivePromotion->get('field_acq_promotion_rule_id')->getString();
-      $promotion_data = $this->promotionsManager->getPromotionData($applicableInactivePromotion, $cart, FALSE);
+      $promotion_data = $this->promotionsManager->getPromotionData($applicableInactivePromotion, FALSE);
 
       if (!empty($promotion_data)) {
         $cartLabels['next_eligible'] = [
