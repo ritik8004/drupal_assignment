@@ -76,15 +76,14 @@ class AlshayaCustomerPortalHelper {
 
     $build = [
       '#type' => 'inline_template',
-      '#template' => '<iframe
-       frameborder="' . $config->get('iframe.attributes.frameborder') . '"
-       height="' . $config->get('iframe.attributes.height') . '"
-       width="' . $config->get('iframe.attributes.width') . '"
-       id="' . $config->get('iframe.attributes.id') . '"
-       src="' . $sso_url . '"
-       ></iframe>',
+      '#template' => '<iframe frameborder="{{ fb }}" height="{{ height }}"
+       width="{{ width }}" id="{{ id }}" src="{{ src }}"></iframe>',
       '#context' => [
-        'url' => 'url here',
+        'fb' => $config->get('iframe.attributes.frameborder'),
+        'height' => $config->get('iframe.attributes.height'),
+        'width' => $config->get('iframe.attributes.width'),
+        'id' => $config->get('iframe.attributes.id'),
+        'src' => $sso_url,
       ],
       '#cache' => [
         'tags' => ['user:' . $user->id()],
