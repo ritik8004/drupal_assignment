@@ -3,7 +3,9 @@
 namespace Drupal\alshaya_customer_portal;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\user\UserInterface;
 
 /**
@@ -26,16 +28,29 @@ class AlshayaCustomerPortalHelper {
   protected $renderer;
 
   /**
+   * Logger service object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * Constructs the AlshayaCustomerPortalHelper object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory service.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger service object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, RendererInterface $renderer) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    RendererInterface $renderer,
+    LoggerChannelFactoryInterface $logger_factory) {
     $this->configFactory = $config_factory;
     $this->renderer = $renderer;
+    $this->logger = $logger_factory->get('alshaya_customer_portal');
   }
 
   /**
@@ -48,7 +63,12 @@ class AlshayaCustomerPortalHelper {
    *   The encrypted string that is ready to be used for SSO.
    */
   public function getEncryptedDataForCustomerPortal(UserInterface $user) {
-    $secret_key = $this->configFactory->get('alshaya_customer_portal.settings')->get('encryption_secret_key');
+    $secret_key = Settings::get('alshaya_customer_portal')['encryption_secret_key'];
+    $encrypted_string = '';
+    if (empty($secret_key)) {
+      $this->logger->notice('No secret key provided for Customer Portal!');
+      return $encrypted_string;
+    }
     $map = $this->mapUserWithCustomerPortalFields($user, $secret_key);
     // Format the data in the form "a=b&c=d".
     $final_data = '';
