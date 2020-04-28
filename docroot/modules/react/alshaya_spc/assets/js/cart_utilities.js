@@ -41,7 +41,7 @@
     return $.param(data);
   };
 
-  Drupal.alshayaSpc.getProductData = function (sku, callback) {
+  Drupal.alshayaSpc.getProductData = function (sku, callback, extraData = {}) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');
 
@@ -57,7 +57,7 @@
     var expireTime = drupalSettings.alshaya_spc.productExpirationTime * 60 * 1000;
     var currentTime = new Date().getTime();
     if (data !== null && data.created - currentTime < expireTime) {
-      callback(data);
+      callback(data, extraData);
       return;
     }
 
@@ -85,15 +85,16 @@
           response.configurable_values,
           response.promotions,
           response.max_sale_qty,
-          response.max_sale_qty_parent
+          response.max_sale_qty_parent,
+          response.gtm_attributes
         );
 
-        callback(data);
+        callback(data, extraData);
       }
     });
   };
 
-  Drupal.alshayaSpc.storeProductData = function (sku, parentSKU, title, url, image, price, options, promotions, maxSaleQty, maxSaleQtyParent) {
+  Drupal.alshayaSpc.storeProductData = function (sku, parentSKU, title, url, image, price, options, promotions, maxSaleQty, maxSaleQtyParent, gtmAttributes) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');
     var data = {
@@ -107,6 +108,7 @@
       'promotions': promotions,
       'maxSaleQty': maxSaleQty,
       'maxSaleQtyParent': maxSaleQtyParent,
+      'gtmAttributes': gtmAttributes,
       'created': new Date().getTime(),
     };
 

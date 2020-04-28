@@ -152,7 +152,6 @@ export default class CartItem extends React.Component {
         url,
         price,
         maxSaleQty,
-        maxSaleQtyParent,
       },
     } = this.state;
     const cartImage = {

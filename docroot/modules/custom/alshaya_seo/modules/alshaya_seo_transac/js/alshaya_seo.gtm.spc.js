@@ -31,21 +31,23 @@
    *
    * @param product
    *   Product Object with gtm attributes.
+   * @param qty
+   *   Quantity of the product in cart.
    * @returns {{quantity: *, price, name: *, variant: *, id: *, category: *,
    *   brand: *}} Product details object with gtm attributes.
    */
-  Drupal.alshayaSeoSpc.gtmProduct = function (product) {
+  Drupal.alshayaSeoSpc.gtmProduct = function (product, qty) {
     var productDetails = {
-      quantity: product.qty,
+      quantity: qty,
     };
-    for (var gtmKey in product.gtm_attributes) {
-      productDetails[gtmKey] = product.gtm_attributes[gtmKey];
+    for (var gtmKey in product.gtmAttributes) {
+      productDetails[gtmKey] = product.gtmAttributes[gtmKey];
     }
 
     if ($.cookie('product-list') !== undefined) {
       var listValues = JSON.parse($.cookie('product-list'));
-      if (listValues.hasOwnProperty(product.parent_sku)) {
-        productDetails.list = listValues[product.parent_sku];
+      if (listValues.hasOwnProperty(product.parentSKU)) {
+        productDetails.list = listValues[product.parentSKU];
       }
     }
     return productDetails;
@@ -77,21 +79,35 @@
         }
 
         Object.entries(items).forEach(([key, product]) => {
-          dataLayer[0].productStyleCode.push(product.parent_sku);
-          dataLayer[0].productSKU.push(key);
-          var productData = Drupal.alshayaSeoSpc.gtmProduct(product);
-          dataLayer[0].ecommerce.checkout.products.push(productData);
-          if (typeof dataLayer[0].cartItemsFlocktory !== 'undefined') {
-            var flocktory = {
-              id: product.parent_sku,
-              price: product.final_price,
-              count: product.qty,
-              title: product.gtm_attributes.name,
-              image: product.extra_data.cart_image,
-            };
-            dataLayer[0].cartItemsFlocktory.push(flocktory);
-          }
+          Drupal.alshayaSpc.getProductData(key, Drupal.alshayaSeoSpc.cartGtmCallback, {
+            qty: product.qty,
+            finalPrice: product.finalPrice
+          });
         });
+      }
+    }
+  };
+
+  /**
+   * Callback for product data used in Drupal.alshayaSeoSpc.cartGtm().
+   *
+   * @param product
+   */
+  Drupal.alshayaSeoSpc.cartGtmCallback = function(product, extraData) {
+    if (product !== undefined && product.sku !== undefined) {
+      dataLayer[0].productStyleCode.push(product.parentSKU);
+      dataLayer[0].productSKU.push(product.sku);
+      var productData = Drupal.alshayaSeoSpc.gtmProduct(product, 1);
+      dataLayer[0].ecommerce.checkout.products.push(productData);
+      if (typeof dataLayer[0].cartItemsFlocktory !== 'undefined') {
+        var flocktory = {
+          id: product.parentSKU,
+          price: extraData.finalPrice,
+          count: extraData.qty,
+          title: product.gtmAttributes.name,
+          image: product.image,
+        };
+        dataLayer[0].cartItemsFlocktory.push(flocktory);
       }
     }
   };
