@@ -17,8 +17,8 @@ function alshaya_pdp_layouts_install() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['core.entity_form_display.node.acq_product.default', 'core.entity_view_display.node.acq_product.default'],
-    'alshaya_pdp_layouts',
-    'optional',
+    'acq_sku',
+    'install',
     AlshayaConfigManager::MODE_RESAVE
   );
 }
