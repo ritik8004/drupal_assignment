@@ -407,6 +407,13 @@
 
       .select2-container {
         @include select2-style(100%);
+
+        .select2-selection {
+          .select2-selection__rendered {
+            color: $webform_contact_dropdown_disable_text;
+            font-size: 1rem;
+          }
+        }
       }
 
       select.form-select {
