@@ -43,12 +43,10 @@ function alshaya_customer_portal_tokens($type, $tokens, array $data, array $opti
             $customer_portal_helper = \Drupal::service('alshaya_customer_portal.helper');
             // Check that user is not anonymous.
             if ($user->isAuthenticated()) {
-              // Fetch user details to create SSO link.
-              $bubbleable_metadata->addCacheableDependency($user);
-              $bubbleable_metadata->addCacheableDependency($config);
-              $bubbleable_metadata->addCacheContexts(['user']);
               $encrypted_string = $customer_portal_helper->getEncryptedDataForCustomerPortal($user);
               $sso_url = $config->get('logged_in_url') . $encrypted_string;
+              $bubbleable_metadata->addCacheableDependency($config);
+              $bubbleable_metadata->addCacheContexts(['user']);
             }
             else {
               $sso_url = $config->get('anonymous_url');
