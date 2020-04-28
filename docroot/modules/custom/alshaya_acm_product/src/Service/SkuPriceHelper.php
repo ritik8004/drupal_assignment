@@ -202,7 +202,7 @@ class SkuPriceHelper {
     $child_prices = array_column($prices['children'], 'price');
     $child_final_prices = array_column($prices['children'], 'final_price');
     $discounts = array_column($prices['children'], 'discount');
-    $selling_prices = array_column($prices['children'], 'selling_price');
+    $selling_prices = $this->getChildSellingPrices($prices);
 
     // We show normal price(no range) only in below conditions.
     // 0. It is possible that one product has final price but other doesn't
@@ -250,7 +250,7 @@ class SkuPriceHelper {
    * @return string
    *   String with min - max or just min.
    */
-  private function getMinMax(array $prices):string {
+  public function getMinMax(array $prices):string {
     $min = min($prices);
     $max = max($prices);
 
@@ -301,6 +301,20 @@ class SkuPriceHelper {
     }
 
     return (string) $this->t('Save upto @discount%', ['@discount' => max($discounts)]);
+  }
+
+  /**
+   * Wrapper function to get config.
+   *
+   * @param array $prices
+   *   Min prices.
+   *
+   * @return array
+   *   $selling_prices.
+   */
+  public function getChildSellingPrices(array $prices) {
+    $selling_prices = array_column($prices['children'], 'selling_price');
+    return $selling_prices;
   }
 
 }

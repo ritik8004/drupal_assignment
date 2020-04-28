@@ -27,6 +27,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 
 /**
  * Class AlshayaGtmManager.
@@ -255,6 +256,13 @@ class AlshayaGtmManager {
   protected $productCategoryHelper;
 
   /**
+   * SKU Price Helper.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\SkuPriceHelper
+   */
+  protected $skuPriceHelper;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -293,6 +301,8 @@ class AlshayaGtmManager {
    *   Entity Repository object.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $productCategoryHelper
    *   Product Category Helper.
+   * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $sku_price_helper
+   *   SKU Price Helper.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -311,7 +321,8 @@ class AlshayaGtmManager {
                               ModuleHandlerInterface $module_handler,
                               OrdersManager $orders_manager,
                               EntityRepositoryInterface $entityRepository,
-                              ProductCategoryHelper $productCategoryHelper) {
+                              ProductCategoryHelper $productCategoryHelper,
+                              SkuPriceHelper $sku_price_helper) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -330,6 +341,7 @@ class AlshayaGtmManager {
     $this->ordersManager = $orders_manager;
     $this->entityRepository = $entityRepository;
     $this->productCategoryHelper = $productCategoryHelper;
+    $this->skuPriceHelper = $sku_price_helper;
   }
 
   /**
@@ -412,26 +424,20 @@ class AlshayaGtmManager {
     $original_price = $prices['price'];
     $final_price = $prices['final_price'];
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
-    if (isset($prices['children'])) {
-      $children = $prices['children'];
-      $selling_prices = array_map(function ($children) {
-        return $children['selling_price'];
-      }, $children);
-      $price_range_array = [min($selling_prices), max($selling_prices)];
-      $price_range = implode('-', array_unique($price_range_array));
+    if ($this->skuPriceHelper->isPriceModeFromTo()) {
+      $selling_prices = $this->skuPriceHelper->getChildSellingPrices($prices);
+      $price_range_markup = strip_tags($this->skuPriceHelper->getMinMax($selling_prices));
+      preg_match('/\d.*/', trim(preg_replace('/\s+/', ' ', $price_range_markup)), $price_range);
     }
 
     if ($sku->bundle() == 'configurable') {
       $prices = $this->skuManager->getMinPrices($sku);
       $original_price = $prices['price'];
       $final_price = $prices['final_price'];
-      if (isset($prices['children'])) {
-        $children = $prices['children'];
-        $selling_prices = array_map(function ($children) {
-          return $children['selling_price'];
-        }, $children);
-        $price_range_array = [min($selling_prices), max($selling_prices)];
-        $price_range = implode('-', array_unique($price_range_array));
+      if ($this->skuPriceHelper->isPriceModeFromTo()) {
+        $selling_prices = $this->skuPriceHelper->getChildSellingPrices($prices);
+        $price_range_markup = strip_tags($this->skuPriceHelper->getMinMax($selling_prices));
+        preg_match('/\d.*/', trim(preg_replace('/\s+/', ' ', $price_range_markup)), $price_range);
       }
     }
 
@@ -468,7 +474,7 @@ class AlshayaGtmManager {
       : 'image not available';
 
     $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
-    $attributes['gtm-product-price'] = $price_range ?? NULL;
+    $attributes['gtm-product-price'] = $price_range[0] ?? (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
 
     if ($final_price
       && ($original_price !== $final_price)

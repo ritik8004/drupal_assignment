@@ -60,8 +60,8 @@
         if (addedProduct.attr('gtm-sku-type') === 'configurable') {
           selectedVariant = $('.selected-variant-sku', $(this)).val();
         }
-
-        var product = Drupal.alshaya_seo_gtm_get_product_values_for_cart(addedProduct);
+        addedProduct.attr('gtm-product-price', addedProduct.attr('gtm-price'));
+        var product = Drupal.alshaya_seo_gtm_get_product_values(addedProduct);
 
         // Remove product position: Not needed while adding to cart.
         delete product.position;
@@ -823,52 +823,6 @@
       name: product.attr('gtm-name'),
       id: product.attr('gtm-main-sku'),
       price: product.attr('gtm-product-price'),
-      category: product.attr('gtm-category'),
-      variant: product.attr('gtm-product-sku'),
-      dimension2: product.attr('gtm-sku-type'),
-      dimension3: product.attr('gtm-dimension3'),
-      dimension4: mediaCount
-    };
-
-    if (product.attr('gtm-brand')) {
-      productData.brand = product.attr('gtm-brand');
-    }
-
-    if (product.attr('gtm-dimension1')) {
-      productData.dimension1 = product.attr('gtm-dimension1');
-    }
-
-    if (product.attr('gtm-dimension5')) {
-      productData.dimension5 = product.attr('gtm-dimension5');
-    }
-
-    // If list variable is set in cookie, retrieve it.
-    if ($.cookie('product-list') !== undefined) {
-      var listValues = JSON.parse($.cookie('product-list'));
-      if (listValues[productData.id]) {
-        productData.list = listValues[productData.id]
-      }
-    }
-
-    return productData;
-  };
-
-  /**
-   * Function to provide product data object for cart event.
-   *
-   * @param product
-   *   jQuery object which contains all gtm attributes.
-   */
-  Drupal.alshaya_seo_gtm_get_product_values_for_cart = function (product) {
-    var mediaCount = 'image not available';
-
-    if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
-      mediaCount = parseInt(product.attr('gtm-dimension4'));
-    }
-    var productData = {
-      name: product.attr('gtm-name'),
-      id: product.attr('gtm-main-sku'),
-      price: product.attr('gtm-price'),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
       dimension2: product.attr('gtm-sku-type'),
