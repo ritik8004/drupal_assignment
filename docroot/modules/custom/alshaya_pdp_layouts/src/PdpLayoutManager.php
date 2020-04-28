@@ -53,7 +53,13 @@ class PdpLayoutManager extends DefaultPluginManager {
   }
 
   /**
-   * {@inheritdoc}
+   * Get plugin instance from pdp layout.
+   *
+   * @param string $pdp_layout
+   *   PDP layout.
+   *
+   * @return object
+   *   PDP plugin instance.
    */
   public function getInstanceByLayout($pdp_layout) {
     $plugin_id = 'default';
@@ -61,7 +67,8 @@ class PdpLayoutManager extends DefaultPluginManager {
       $split_layout = explode('-', $pdp_layout);
       $plugin_id = end($split_layout);
     }
-    return $plugin_id;
+    $pdp_plugin = $this->createInstance($plugin_id, []);
+    return $pdp_plugin;
   }
 
 }

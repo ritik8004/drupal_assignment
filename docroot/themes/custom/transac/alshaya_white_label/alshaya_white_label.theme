@@ -576,8 +576,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
         $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
         $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
         $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
-        $plugin_id = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
-        $pdp_plugin = $pdp_layout_plugin_manager->createInstance($plugin_id, []);
+        $pdp_plugin = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
         $pdp_plugin->getRenderArray($variables);
         if ($variables['show_crosssell_as_matchback']) {
           $variables['#attached']['library'][] = 'alshaya_white_label/matchback_layout';
@@ -836,8 +835,7 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
       $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
-      $plugin_id = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
-      $pdp_plugin = $pdp_layout_plugin_manager->createInstance($plugin_id, []);
+      $pdp_plugin = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
       $pdp_plugin->getTemplateName($suggestions);
     }
   }
@@ -1685,4 +1683,3 @@ function alshaya_white_label_theme_registry_alter(array &$theme_registry) {
   $theme_registry['image']['variables']['skip_lazy_loading'] = NULL;
   $theme_registry['image_style']['variables']['skip_lazy_loading'] = NULL;
 }
-                                                                                                                                                                                                                                                                                                                                                                                                                               
