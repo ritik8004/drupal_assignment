@@ -18,13 +18,13 @@ class SecureText {
    * @return array|bool|string
    *   Encrypted value.
    */
-  public function encrypt($str, $key) {
-    $str = $this->pkcs5Pad($str);
+  public static function encrypt($str, $key) {
+    $str = self::pkcs5Pad($str);
     $iv = substr($key, 0, 16);
     $encrypted = openssl_encrypt($str, 'AES-128-CBC', $key, OPENSSL_ZERO_PADDING, $iv);
     $encrypted = base64_decode($encrypted);
     $encrypted = unpack('C*', ($encrypted));
-    $encrypted = $this->byteArray2Hex($encrypted);
+    $encrypted = self::byteArray2Hex($encrypted);
     $encrypted = urlencode($encrypted);
     return $encrypted;
   }
@@ -38,7 +38,7 @@ class SecureText {
    * @return string
    *   result string.
    */
-  protected function pkcs5Pad($text) {
+  protected static function pkcs5Pad($text) {
     $blockSize = 16;
     $pad = $blockSize - (strlen($text) % $blockSize);
     return $text . str_repeat(chr($pad), $pad);
@@ -53,7 +53,7 @@ class SecureText {
    * @return string
    *   Result string.
    */
-  protected function byteArray2Hex($byteArray) {
+  protected static function byteArray2Hex($byteArray) {
     $chars = array_map('chr', $byteArray);
     $bin = implode('', $chars);
     return bin2hex($bin);
@@ -70,13 +70,13 @@ class SecureText {
    * @return mixed
    *   Decrypted response.
    */
-  public function decrypt($code, $key) {
-    $code = $this->hex2ByteArray(trim($code));
-    $code = $this->byteArray2String($code);
+  public static function decrypt($code, $key) {
+    $code = self::hex2ByteArray(trim($code));
+    $code = self::byteArray2String($code);
     $iv = substr($key, 0, 16);
     $code = base64_encode($code);
     $decrypted = openssl_decrypt($code, 'AES-128-CBC', $key, OPENSSL_ZERO_PADDING, $iv);
-    return $this->pkcs5Unpad($decrypted);
+    return self::pkcs5Unpad($decrypted);
   }
 
   /**
@@ -88,7 +88,7 @@ class SecureText {
    * @return mixed
    *   Output value.
    */
-  protected function hex2ByteArray($hexString) {
+  protected static function hex2ByteArray($hexString) {
     $string = hex2bin($hexString);
     return unpack('C*', $string);
   }
@@ -102,7 +102,7 @@ class SecureText {
    * @return mixed
    *   Output value.
    */
-  protected function byteArray2String($byteArray) {
+  protected static function byteArray2String($byteArray) {
     $chars = array_map('chr', $byteArray);
     return implode('', $chars);
   }
@@ -116,7 +116,7 @@ class SecureText {
    * @return mixed
    *   Output value.
    */
-  protected function pkcs5Unpad($text) {
+  protected static function pkcs5Unpad($text) {
     $pad = ord($text{strlen($text) - 1});
     if ($pad > strlen($text)) {
       return FALSE;
