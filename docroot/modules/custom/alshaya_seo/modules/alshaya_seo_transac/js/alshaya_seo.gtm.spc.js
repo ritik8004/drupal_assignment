@@ -17,7 +17,8 @@
     if (window.location.href.indexOf('checkout') > -1) {
       step = 2;
     }
-    if (cart_data !== null
+    if (window.location.href.indexOf('checkout') > -1
+      && cart_data !== null
       && cart_data.hasOwnProperty('cart_payment_method')
       && cart_data.cart_payment_method !== null
     ) {
