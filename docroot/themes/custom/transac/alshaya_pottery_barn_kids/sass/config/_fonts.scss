@@ -1,14 +1,1 @@
 // Define Fonts
-$openSans: 'Open Sans';
-$cairo: 'Cairo';
-
-// Theme specific font family
-// English fonts.
-// Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
-$primary-font: $openSans, $cairo, 'Arial';
-
-// Arabic fonts.
-// Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$font-arabic: $openSans, $cairo, 'Arial';
-
-$body_font: $primary-font;
