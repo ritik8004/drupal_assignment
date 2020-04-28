@@ -79,7 +79,8 @@ class AlshayaCustomerPortalHelper {
     $final_data = rtrim($final_data, '&');
     // Encrypt the data.
     $encrypted_string = $this->encrypt($final_data, $secret_key, 'AES-256-CBC');
-    // Remove some special characters to make it URL friendly.
+    // Remove some special characters to make it URL friendly as per the
+    // requirement of customer portal.
     $encrypted_string = $this->cleanSpecialCharactersForUrl($encrypted_string);
 
     return $encrypted_string;
