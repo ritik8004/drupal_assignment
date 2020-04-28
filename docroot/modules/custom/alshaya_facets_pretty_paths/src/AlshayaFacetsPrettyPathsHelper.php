@@ -221,9 +221,11 @@ class AlshayaFacetsPrettyPathsHelper {
       $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
     }
     // We have a different case for sizegroup.
-    // Values coming for this filter is sigegroup:sizevalue.
-    elseif ($attribute_code == 'size' && $this->isSizeGroupEnabled()) {
-      $sizeBreak = explode(':', $value);
+    // Values coming for this filter is sigegroup||sizevalue.
+    elseif ($attribute_code == 'size'
+      && strpos($value, SkuManager::SIZE_GROUP_SEPARATOR) !== FALSE
+      && $this->isSizeGroupEnabled()) {
+      $sizeBreak = explode(SkuManager::SIZE_GROUP_SEPARATOR, $value);
       $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
       $query->condition('name', $sizeBreak[1]);
       $query->condition('field_sku_attribute_code', $attribute_code);
@@ -272,9 +274,13 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     // Prepend size-group if enabled.
-    if ($attribute_code == 'size' && strpos($encoded, ':') === FALSE && $this->isSizeGroupEnabled()) {
-      $sizeBreak = explode(':', $value);
-      $encoded = $this->getSizegroupAttributeAliasFromValue($sizeBreak[0]) . ':' . $encoded;
+    if ($attribute_code == 'size'
+      && strpos($encoded, SkuManager::SIZE_GROUP_SEPARATOR) === FALSE
+      && $this->isSizeGroupEnabled()) {
+      $sizeBreak = explode(SkuManager::SIZE_GROUP_SEPARATOR, $value);
+      $encoded = $this->getSizegroupAttributeAliasFromValue($sizeBreak[0])
+        . SkuManager::SIZE_GROUP_SEPARATOR
+        . $encoded;
     }
 
     $this->cache->set($cid, $encoded, Cache::PERMANENT, $tags);
@@ -364,8 +370,10 @@ class AlshayaFacetsPrettyPathsHelper {
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
 
     // Remove sizegroup from recieving value if sizegroup is enabled.
-    if ($attribute_code == 'size' && strpos($value, ':') !== FALSE && $this->isSizeGroupEnabled()) {
-      $sizeBreak = explode(':', $value);
+    if ($attribute_code == 'size'
+      && strpos($value, SkuManager::SIZE_GROUP_SEPARATOR) !== FALSE
+      && $this->isSizeGroupEnabled()) {
+      $sizeBreak = explode(SkuManager::SIZE_GROUP_SEPARATOR, $value);
       $value = $sizeBreak[1];
     }
 
@@ -410,7 +418,9 @@ class AlshayaFacetsPrettyPathsHelper {
 
     // Prepending sizegroup if sizegroup is enabled.
     if ($attribute_code == 'size' && isset($sizeBreak[0]) && $this->isSizeGroupEnabled()) {
-      $decoded = $this->getSizegroupAttributeValueFromAlias($sizeBreak[0]) . ':' . $decoded;
+      $decoded = $this->getSizegroupAttributeValueFromAlias($sizeBreak[0])
+        . SkuManager::SIZE_GROUP_SEPARATOR
+        . $decoded;
     }
     $static[$value] = $decoded;
 

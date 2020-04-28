@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_product_options\Plugin\facets\widget;
 
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\Plugin\facets\widget\LinksWidget;
 
@@ -26,8 +27,8 @@ class SizeGroupListWidget extends LinksWidget {
     $sizeGroups = [];
     foreach ($items as $item) {
       if (isset($item['#title'], $item['#title']['#value'])) {
-        if (strpos($item['#title']['#value'], ':') !== FALSE) {
-          $sizeGroupArr = explode(':', $item['#title']['#value']);
+        if (strpos($item['#title']['#value'], SkuManager::SIZE_GROUP_SEPARATOR) !== FALSE) {
+          $sizeGroupArr = explode(SkuManager::SIZE_GROUP_SEPARATOR, $item['#title']['#value']);
           $item['#title']['#value'] = $sizeGroupArr[1];
           $sizeGroups[$sizeGroupArr[0]][] = $item;
         }

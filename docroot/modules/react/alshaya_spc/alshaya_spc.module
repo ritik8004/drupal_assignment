@@ -46,6 +46,8 @@ function alshaya_spc_preprocess_html(&$variables) {
   $variables['#attached']['drupalSettings']['alshaya_spc']['currency_config'] = $currency_config;
 
   $product_config = \Drupal::config('alshaya_acm_product.settings');
+  // Time we get from configuration is in minutes.
+  $variables['#attached']['drupalSettings']['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
   $variables['#attached']['drupalSettings']['alshaya_spc']['vat_text'] = $product_config->get('vat_text');
   $variables['#attached']['drupalSettings']['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
   $variables['#attached']['drupalSettings']['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();

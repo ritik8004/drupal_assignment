@@ -804,7 +804,7 @@ class Cart {
         // If cart is available and cart has item.
         if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
           $response = $this->drupal->triggerCheckoutEvent('validate cart', ['cart' => $cart['cart']]);
-          if ($response['status'] == TRUE && $exception_type === 'OOS') {
+          if ($response['status'] == TRUE) {
             if (!empty($response['data']['stock'])) {
               self::$stockInfo = $response['data']['stock'];
             }

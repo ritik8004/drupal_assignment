@@ -374,7 +374,6 @@ class ProductResource extends ResourceBase {
       }
     }
 
-    $data['max_sale_qty'] = $stockInfo['max_sale_qty'];
     $data['delivery_options'] = [
       'home_delivery' => [],
       'click_and_collect' => [],

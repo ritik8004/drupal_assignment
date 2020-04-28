@@ -11,6 +11,10 @@
     justify-content: space-between;
     width: 100%;
 
+    .spc-address {
+      @include arabic-line-height(1.5);
+    }
+
     .spc-label {
       color: $spc-checkout-order-detail-label;
     }
