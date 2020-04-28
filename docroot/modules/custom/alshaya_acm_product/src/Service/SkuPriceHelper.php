@@ -304,7 +304,7 @@ class SkuPriceHelper {
   }
 
   /**
-   * Wrapper function to get config.
+   * Helper function to get child selling prices.
    *
    * @param array $prices
    *   Min prices.
