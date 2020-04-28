@@ -80,6 +80,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
               'section_id' => '9876644',
             ],
           ],
+          'auto_heal_discovery_cache' => '1',
         ],
       ],
       'kw' => [
@@ -158,6 +159,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
               'section_id' => '9876648',
             ],
           ],
+          'auto_heal_discovery_cache' => '1',
         ],
       ],
       'ae' => [
@@ -199,6 +201,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
               "short_name" => "FL",
             ],
           ],
+          'auto_heal_discovery_cache' => '1',
         ],
       ],
       'ae' => [
@@ -240,6 +243,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
               "short_name" => "PB",
             ],
           ],
+          'auto_heal_discovery_cache' => '1',
         ],
       ],
       'ae' => [
@@ -290,6 +294,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
               'section_id' => '9876645',
             ],
           ],
+          'auto_heal_discovery_cache' => '1',
         ],
       ],
     ],
