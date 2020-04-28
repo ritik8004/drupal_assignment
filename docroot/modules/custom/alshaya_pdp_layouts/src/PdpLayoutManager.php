@@ -52,4 +52,16 @@ class PdpLayoutManager extends DefaultPluginManager {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getInstanceByLayout($pdp_layout) {
+    $plugin_id = 'default';
+    if (strpos($pdp_layout, '-') > -1) {
+      $split_layout = explode('-', $pdp_layout);
+      $plugin_id = end($split_layout);
+    }
+    return $plugin_id;
+  }
+
 }

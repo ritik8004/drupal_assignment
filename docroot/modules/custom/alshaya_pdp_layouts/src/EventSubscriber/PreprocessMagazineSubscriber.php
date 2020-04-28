@@ -47,7 +47,7 @@ class PreprocessMagazineSubscriber implements EventSubscriberInterface {
    *   Preprocess magazine event.
    */
   public function onPreprocessMagazine(PreprocessMagazineEvent $event) {
-    $vars = $event->variables;
+    $vars = $event->getVariables();
     if ($vars['sku'] instanceof SKUInterface) {
       // Get parent sku.
       $parent_sku = $this->skuManager->getParentSkuBySku($vars['sku']);
