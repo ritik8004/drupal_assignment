@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_facets_pretty_paths\Plugin\facets\url_processor;
 
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
@@ -192,11 +193,12 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         foreach ($filters_current_result_array as $key => $values) {
           $encoded = [];
           foreach ($values as $value) {
-            // If sizegroup is enabled.
-            // If user tries to load a page with only one value in URL
-            // for sizegroup filter (for instance/--size-XL/)
+            // If sizegroup is enabled and user tries to load a page with only
+            // one value in URL for sizegroup filter (for instance/--size-XL/)
             // we will ignore/remove that filter.
-            if ($key == 'size' && strpos($value, ':') == FALSE && $this->alshayaPrettyPathHelper->isSizeGroupEnabled()) {
+            if ($key == 'size'
+              && strpos($value, SkuManager::SIZE_GROUP_SEPARATOR) === FALSE
+              && $this->alshayaPrettyPathHelper->isSizeGroupEnabled()) {
               continue;
             }
             $encoded[] = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $key, $value);

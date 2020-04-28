@@ -141,9 +141,7 @@ function alshaya_performance_flush_frontend_caches($include_twig = FALSE) {
   _drupal_flush_css_js();
 
   if ($include_twig) {
-    // Generate new twig extension hash
-    // to avoid next requests to set it and make things slow.
-    \Drupal::service('alshaya_performance.twig')->generateTwigExtensionHash();
+    \Drupal::service('twig')->invalidate();
   }
 }
 
