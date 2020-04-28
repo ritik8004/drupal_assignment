@@ -1,0 +1,25 @@
+name: Alshaya Pottery Barn Kids
+type: theme
+description: 'Theme for Alshaya Pottery Barn Kids Brand.'
+core: 8.x
+base theme: alshaya_pottery_barn
+alshaya_theme_type: transac
+
+regions:
+  banner_top: 'Top Banner'
+  menu_primary: 'Menu Primary'
+  menu_secondary: 'Menu Secondary'
+  header: Header
+  pre_content: 'Pre content'
+  breadcrumb: Breadcrumb
+  hero_content: 'Hero Content'
+  highlighted: 'Highlight Content'
+  content: Content
+  sidebar_first: 'Sidebar first'
+  sidebar_second: 'Sidebar second'
+  post_content: 'Post content'
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - alshaya_pottery_barn_kids/global_styles
