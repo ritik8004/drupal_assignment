@@ -22,17 +22,17 @@ function selectedFiltersLables(attribute, value, filter) {
     }
 
     case 'hierarchy':
-      selctionText = value.replace('$(attribute):', '').trim();
+      selctionText = value.replace(`${attribute}:`, '').trim();
       break;
 
     case 'range_checkbox': {
-      const price = value.replace('$(attribute):', '').trim();
+      const price = value.replace(`${attribute}:`, '').trim();
       selctionText = getPriceRangeLabel(price);
       break;
     }
 
     case 'size_group_list': {
-      selctionSizeText = value.replace('$(attribute):', '');
+      selctionSizeText = value.replace(`${attribute}:`, '');
       selctionText = selctionSizeText.split(drupalSettings.algoliaSearch.sizeGroupSeparator).pop().trim();
       break;
     }
