@@ -198,7 +198,7 @@ function _alshaya_spc_translations() {
         'ar' => '@label يرجى إدخال',
       ],
       'The email address %mail is not valid.' => [
-        'ar' => 'عنوان البريد الإلكتروني mail% غير صحيح.',
+        'ar' => 'عنوان البريد الإلكتروني %mail غير صحيح.',
       ],
       'Transaction ID' => [
         'ar' => 'رمز العملية',
