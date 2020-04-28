@@ -240,7 +240,7 @@
         e.detail.productData.parentSku,
         e.detail.productData.variant,
         e.detail.productData.totalQty,
-        e.detail.data,
+        e.detail.data
       );
     }
     else {
@@ -249,7 +249,7 @@
           cart_item.parent_sku,
           cart_item.sku,
           cart_item.qty,
-          e.detail.items,
+          e.detail.items
         );
       });
     }
