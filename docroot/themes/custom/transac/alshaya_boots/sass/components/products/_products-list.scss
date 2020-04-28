@@ -27,6 +27,11 @@
           &.clear-all a {
             text-transform: capitalize;
             font-size: 0.6875rem !important;
+
+            @include breakpoint($only-mobile) {
+              font-family: $bp-light;
+              letter-spacing: 1px;
+            }
           }
         }
       }
@@ -37,7 +42,7 @@
         h1 {
           @include breakpoint($only-mobile) {
             font-size: 1.5rem;
-            padding: 0.75rem 0 1rem;
+            padding: 1.437rem 0;
           }
         }
       }
@@ -55,6 +60,10 @@
 
     .field--name-name {
       text-transform: capitalize;
+
+      @include breakpoint($upto-desktop) {
+        font-size: 0.75rem;
+      }
     }
 
     .promotions {
@@ -76,6 +85,22 @@
     @include breakpoint($desktop) {
       width: 74.51%;
       max-width: 57.5625rem;
+    }
+  }
+
+  .c-products-list {
+    &.product-small {
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          max-height: 14.4375rem;
+        }
+
+        .alshaya_search_mainimage {
+          @include breakpoint($only-mobile) {
+            height: 11rem;
+          }
+        }
+      }
     }
   }
 
