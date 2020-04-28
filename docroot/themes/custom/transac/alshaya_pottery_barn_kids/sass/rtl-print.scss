@@ -7,23 +7,35 @@ $dir: rtl;
 @import '../node_modules/breakpoint-sass/stylesheets/breakpoint';
 
 // Reset to normalize browser styles.
-@import "../../alshaya_pottery_barn/sass/reset";
-@import "../../alshaya_pottery_barn/sass/icons";
+@import "../../alshaya_white_label/sass/reset";
+@import "../../alshaya_white_label/sass/icons";
 
 // Config file that contains centralized variables.
+@import "../../alshaya_white_label/sass/config/**/*";
 @import "../../alshaya_pottery_barn/sass/config/**/*";
 @import "config/**/*";
+@import "../../alshaya_white_label/sass/utils";
 @import "../../alshaya_pottery_barn/sass/utils";
+@import "utils";
 
 // Utilities for building multilingual websites.
+@import "../../alshaya_white_label/sass/directional";
 @import "../../alshaya_pottery_barn/sass/directional";
+@import "directional";
 
 // These are the default base styles applied to HTML elements.
+@import "../../alshaya_white_label/sass/base/**/*";
 @import "../../alshaya_pottery_barn/sass/base/**/*";
+@import "base/**/*";
+
+// Layout and State
+@import "../../alshaya_white_label/sass/layout/**/*";
 @import "../../alshaya_pottery_barn/sass/layout/**/*";
+@import "../../alshaya_white_label/sass/state/_states.scss"; //@todo: use wildcard - not sure why **/** is not working here.
 @import "../../alshaya_pottery_barn/sass/state/**/*";
 
 // Design components are reusable styling that can be applied using just the CSS
 // class names specified in the component. Also known as design 'modules'.
+@import "../../alshaya_white_label/sass/components/**/*";
 @import "../../alshaya_pottery_barn/sass/components/**/*";
 @import "components/**/*";
