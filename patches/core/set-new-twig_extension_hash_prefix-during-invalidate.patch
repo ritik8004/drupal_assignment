@@ -1,0 +1,43 @@
+diff --git a/core/lib/Drupal/Core/Template/TwigEnvironment.php b/core/lib/Drupal/Core/Template/TwigEnvironment.php
+index 42623445..68a78cc9 100644
+--- a/core/lib/Drupal/Core/Template/TwigEnvironment.php
++++ b/core/lib/Drupal/Core/Template/TwigEnvironment.php
+@@ -43,6 +43,13 @@ class TwigEnvironment extends \Twig_Environment {
+    */
+   protected $twigCachePrefix = '';
+ 
++  /**
++   * The template cache filename prefix.
++   *
++   * @var string
++   */
++  protected $twigExtensionHash = '';
++
+   /**
+    * Constructs a TwigEnvironment object and stores cache and storage
+    * internally.
+@@ -62,6 +69,7 @@ class TwigEnvironment extends \Twig_Environment {
+    */
+   public function __construct($root, CacheBackendInterface $cache, $twig_extension_hash, StateInterface $state, \Twig_LoaderInterface $loader = NULL, array $options = []) {
+     $this->state = $state;
++    $this->twigExtensionHash = $twig_extension_hash;
+ 
+     // Ensure that twig.engine is loaded, given that it is needed to render a
+     // template because functions like TwigExtension::escapeFilter() are called.
+@@ -108,8 +116,15 @@ class TwigEnvironment extends \Twig_Environment {
+    */
+   public function invalidate() {
+     PhpStorageFactory::get('twig')->deleteAll();
++    // Generate new twig twig_extension_hash_prefix to avoid
++    // it save during any web request to set it and make things slow.
++    $newExtensionHashPrefix = [
++      'twig_extension_hash' => $this->twigExtensionHash,
++      // Generate a new prefix which invalidates any existing cached files.
++      'twig_cache_prefix' => uniqid(),
++    ];
++    $this->state->set(TwigEnvironment::CACHE_PREFIX_METADATA_KEY, $newExtensionHashPrefix);
+     $this->templateClasses = [];
+-    $this->state->delete(static::CACHE_PREFIX_METADATA_KEY);
+   }
+ 
+   /**

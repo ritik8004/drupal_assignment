@@ -33,7 +33,7 @@ function selectedFiltersLables(attribute, value, filter) {
 
     case 'size_group_list': {
       selctionSizeText = value.replace('$(attribute):', '');
-      selctionText = selctionSizeText.split(':').pop().trim();
+      selctionText = selctionSizeText.split(drupalSettings.algoliaSearch.sizeGroupSeparator).pop().trim();
       break;
     }
 

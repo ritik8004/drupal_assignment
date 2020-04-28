@@ -330,6 +330,7 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
   // If no error or OOS.
   if (cartResult.error === undefined
     && cartResult.in_stock !== false
+    && cartResult.is_error === false
     && (cartResult.response_message === null
       || cartResult.response_message.status !== 'error_coupon')) {
     // If storage has same number of items as we get in cart.
@@ -383,6 +384,15 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
       type: 'error',
       message: Drupal.t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'),
     });
+    return;
+  }
+
+  if (cartResult.is_error) {
+    // Dispatch event for error to show.
+    dispatchCustomEvent('spcCartMessageUpdate', {
+      type: null,
+      message: null,
+    });
   }
 };
 
@@ -423,3 +433,5 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
 };
 
 export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info'), data);
+
+export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per item has been exceeded');

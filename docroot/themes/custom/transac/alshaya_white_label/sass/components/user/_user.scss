@@ -232,7 +232,7 @@
   }
 
   .form-wrapper,
-  .form-item {
+  .form-item:not(.mobile-number-field) {
     margin-top: 3em;
     position: relative;
 
@@ -313,12 +313,6 @@
   }
 
   .user-form {
-    margin-top: -3em;
-
-    @include breakpoint($only-tablet) {
-      margin-top: -0.6rem;
-    }
-
     @include breakpoint($upto-desktop) {
       margin-bottom: 2rem;
     }

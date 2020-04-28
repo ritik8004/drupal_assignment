@@ -12,7 +12,7 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
   return (
     <div ref={ref} className="spc-order-confirmation-wrapper" dir={direction}>
       <div className="spc-print-header">
-        <img src={logo} />
+        <img src={logo.logo_url} />
         <span className="spc-checkout-confirmation-title">{Drupal.t('Order confirmation')}</span>
       </div>
       <div className="spc-pre-content">
