@@ -91,7 +91,7 @@ export default class CompletePurchase extends React.Component {
     // If billing info set in cart or not.
     let isBillingSet = false;
     if (cart.cart.billing_address !== null) {
-      if (cart.cart.delivery_type === 'hd') {
+      if (cart.cart.delivery_type === 'home_delivery') {
         isBillingSet = true;
       } else if (cart.cart.billing_address.city.length > 0
         && cart.cart.billing_address.city !== 'NONE') {

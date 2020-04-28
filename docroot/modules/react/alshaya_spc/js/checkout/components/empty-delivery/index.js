@@ -79,7 +79,7 @@ export default class EmptyDeliveryText extends React.Component {
   cncEvent = () => {
     const { storeList, updateLocationAccess, showOutsideCountryError } = this.context;
 
-    if (this.getDeliveryType() !== 'cnc' || storeList.length > 0) {
+    if (this.getDeliveryType() !== 'click_and_collect' || storeList.length > 0) {
       return;
     }
 
@@ -200,7 +200,7 @@ export default class EmptyDeliveryText extends React.Component {
   closeModal = () => {
     this.setState({ open: false });
 
-    if (this.getDeliveryType() === 'cnc') {
+    if (this.getDeliveryType() === 'click_and_collect') {
       const { updateModal } = this.context;
       updateModal(false);
     }
@@ -266,11 +266,11 @@ export default class EmptyDeliveryText extends React.Component {
     const popup = (
       <Popup
         open={open}
-        className={deliveryType === 'cnc' ? '' : getAddressPopupClassName()}
+        className={deliveryType === 'click_and_collect' ? '' : getAddressPopupClassName()}
         onClose={this.closeModal}
         closeOnDocumentClick={false}
       >
-        {deliveryType === 'cnc'
+        {deliveryType === 'click_and_collect'
           ? (
             <ClickCollectContainer
               closeModal={this.closeModal}
@@ -296,7 +296,7 @@ export default class EmptyDeliveryText extends React.Component {
     return (
       <div className="spc-empty-delivery-information">
         <div onClick={this.openModal} className="spc-checkout-empty-delivery-text">
-          {deliveryType === 'cnc'
+          {deliveryType === 'click_and_collect'
             ? Drupal.t('select your preferred collection store')
             : Drupal.t('please add your contact details and address.')}
         </div>

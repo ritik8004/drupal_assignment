@@ -91,7 +91,7 @@ export default class PaymentMethods extends React.Component {
       paymentMethods = paymentMethods.sort((a, b) => a.weight - b.weight);
     } else {
       Object.entries(drupalSettings.payment_methods).forEach(([, method]) => {
-        if (!(cart.delivery_type !== undefined && cart.delivery_type === 'cnc' && method.code === 'cashondelivery')) {
+        if (!(cart.delivery_type !== undefined && cart.delivery_type === 'click_and_collect' && method.code === 'cashondelivery')) {
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
         }
       });

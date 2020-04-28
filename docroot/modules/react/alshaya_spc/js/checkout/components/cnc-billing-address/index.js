@@ -157,7 +157,7 @@ export default class CnCBillingAddress extends React.Component {
 
     let showMessage = shippingAsBilling;
     // If CnC is used for delivery method, we dont show message on address.
-    if (cart.cart.delivery_type === 'cnc') {
+    if (cart.cart.delivery_type === 'click_and_collect') {
       showMessage = false;
     }
 

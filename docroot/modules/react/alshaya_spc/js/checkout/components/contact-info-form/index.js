@@ -36,7 +36,7 @@ class ContactInfoForm extends React.Component {
         telephone: `+${drupalSettings.country_mobile_code}${cleanMobileNumber(e.target.elements.mobile.value)}`,
         country_id: drupalSettings.country_code,
       },
-      shipping_type: 'cnc',
+      shipping_type: 'click_and_collect',
       store: {
         name: store.name,
         code: store.code,
