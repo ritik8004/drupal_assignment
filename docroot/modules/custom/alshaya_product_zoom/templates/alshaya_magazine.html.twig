@@ -12,6 +12,7 @@
           </div>
         {% elseif thumbs.type == 'video' %}
           <figure class="pdp-asset pdp-video pdp-asset-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}">
+            <button class="pdp-video-close"></button>
             <video class="gallery-video b-lazy" muted="muted">
               <source src="{{ lazy_load_placeholder }}" data-src="{{ thumbs.url }}">
               {{ 'Your browser does not support the video tag.'|t }}
@@ -48,6 +49,7 @@
         <div class="yt-vi-container cloudzoom__video_modal"></div>
         <ul id="product-full-screen-gallery">
           {% for thumbs in thumbnails %}
+            {# As per new desgn we dont show videos in full screen modal galleries. #}
             {% if thumbs.type != 'youtube' and thumbs.type != 'vimeo' and thumbs.type != 'video'%}
               <li>
                 <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
@@ -65,6 +67,7 @@
       <div class="mob-imagegallery__wrapper">
         <ul id="product-image-gallery-mob" class="mob-imagegallery__thumbnails {{ pager_flag }}">
             {% for thumbs in thumbnails %}
+              {# As per new desgn we dont show videos in full screen modal galleries. #}
               {% if thumbs.type != 'youtube' and thumbs.type != 'vimeo' and thumbs.type != 'video'%}
                 <li class="mob-imagegallery__thumbnails__image zoom">
                   <img class="b-lazy" data-src="{{ thumbs.fullurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
