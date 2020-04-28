@@ -39,6 +39,10 @@
         .block-views-exposed-filter-blocksearch-page {
           fieldset.form-wrapper {
             .fieldset-legend {
+              @include breakpoint($only-mobile) {
+                font-size: 0.875rem;
+              }
+
               @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.375rem) {
                 #{$right}: 1.6875rem;
                 top: 1.5rem;
@@ -49,6 +53,10 @@
 
         .c-facet.c-accordion {
           .c-accordion__title {
+            @include breakpoint($only-mobile) {
+              font-size: 0.875rem;
+            }
+
             @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.375rem) {
               #{$right}: 1.6875rem;
               top: 1.5rem;
