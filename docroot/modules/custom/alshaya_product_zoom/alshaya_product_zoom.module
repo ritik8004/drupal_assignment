@@ -43,6 +43,17 @@ function alshaya_product_zoom_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'matchback_gallery',
     ],
+    'alshaya_magazine_v2' => [
+      'variables' => [
+        'sku' => '',
+        'thumbnails' => '',
+        'pager_flag' => '',
+        'properties' => '',
+        'labels' => '',
+        'lazy_load_placeholder' => \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder'),
+      ],
+      'template' => 'alshaya_magazine_v2',
+    ],
   ];
 }
 

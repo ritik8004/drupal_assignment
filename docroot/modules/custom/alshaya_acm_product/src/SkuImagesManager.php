@@ -847,7 +847,6 @@ class SkuImagesManager {
         break;
 
       case 'pdp-magazine':
-      case 'pdp-magazine_v2':
         $mediaItems = $this->getThumbnailsFromMedia($media, FALSE);
         $thumbnails = $mediaItems['thumbnails'];
 
@@ -878,6 +877,52 @@ class SkuImagesManager {
 
           $gallery['alshaya_magazine'] = [
             '#theme' => 'alshaya_magazine',
+            '#sku' => $sku,
+            '#thumbnails' => $thumbnails,
+            '#pager_flag' => $pager_flag,
+            '#labels' => $labels,
+            '#attached' => [
+              'library' => [
+                'alshaya_product_zoom/cloud_zoom',
+                'alshaya_product_zoom/product.cloud_zoom',
+                'alshaya_product_zoom/magazine_gallery',
+              ],
+            ],
+          ];
+        }
+        break;
+
+      case 'pdp-magazine_v2':
+        $mediaItems = $this->getThumbnailsFromMedia($media, FALSE);
+        $thumbnails = $mediaItems['thumbnails'];
+
+        // If thumbnails available.
+        if (!empty($thumbnails)) {
+          $config_name = ($context == 'modal') ? 'pdp_slider_items_settings.pdp_slider_items_number_cs_us' : 'pdp_gallery_pager_limit';
+          $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
+            ->get($config_name);
+
+          $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+
+          $gallery = [
+            '#type' => 'container',
+            '#attributes' => [
+              'class' => ['gallery-wrapper'],
+            ],
+          ];
+
+          $sku_identifier = Unicode::strtolower(Html::cleanCssIdentifier($sku->getSku()));
+
+          $labels = [
+            '#theme' => 'product_labels',
+            '#labels' => $this->skuManager->getLabels($sku, 'pdp'),
+            '#sku' => $sku_identifier,
+            '#mainsku' => $sku_identifier,
+            '#type' => 'pdp',
+          ];
+
+          $gallery['alshaya_magazine_v2'] = [
+            '#theme' => 'alshaya_magazine_v2',
             '#sku' => $sku,
             '#thumbnails' => $thumbnails,
             '#pager_flag' => $pager_flag,
