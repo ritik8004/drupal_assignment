@@ -54,7 +54,7 @@
         $(this).removeClass('hide-controls');
       });
 
-      // When video is playng.
+      // When video is playing.
       $('video.gallery-video').once('video-player-playing').on('playing', function () {
         $(this).addClass('playing');
         $(this).addClass('hide-controls');
