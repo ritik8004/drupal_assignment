@@ -665,14 +665,22 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           }
         }
 
-        $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
-        $settingsKey = ($view_mode === 'matchback') ? 'matchback' : 'productInfo';
-        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($gallery)
-          ? \Drupal::service('renderer')->renderPlain($gallery)
-          : '';
+        $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
+        $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $skuManager->showImagesFromChildrenAfterAllOptionsSelected();
 
         /** @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper $skuInfo */
         $skuInfo = \Drupal::service('alshaya_acm_product.sku_info');
+
+        $productInfo = $skuInfo->getProductInfo($sku_entity);
+        $productInfo['url'] = $entity->toUrl()->toString(TRUE)->getGeneratedUrl();
+        $productInfo['identifier'] = $sku_identifier;
+        $productInfo['layout'] = $pdp_layout;
+
+        $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
+        $productInfo['gallery'] = !empty($gallery)
+          ? \Drupal::service('renderer')->renderPlain($gallery)
+          : '';
+
         // In case of oos product if parent product don't have gallery info
         // then get gallery info from their first child and
         // push into drupal settings.
@@ -680,22 +688,17 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $child = $skuImagesManager->getFirstChildWithMedia($sku_entity);
           if (!empty($child)) {
             $childVariant = $skuInfo->getVariantInfo($child, $pdp_layout);
-            $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
+            $productInfo['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
           }
         }
-        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['layout'] = $pdp_layout;
-        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['identifier'] = $sku_identifier;
-        $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $skuManager->showImagesFromChildrenAfterAllOptionsSelected();
-        /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-        $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['cart_title'] = $productInfoHelper->getTitle($sku_entity, 'basket');
+
         $image = alshaya_acm_get_product_display_image($sku_entity, 'pdp_gallery_thumbnail', 'cart');
         // Prepare image style url.
         if (!empty($image['#uri'])) {
           $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
         }
-        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['cart_image'] = is_string($image) ? $image : '';
-        $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
+        $productInfo['cart_image'] = is_string($image) ? $image : '';
+
         $plugin = $sku_entity->getPluginInstance();
 
         // Get max sale qty for simple product.
@@ -715,15 +718,19 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             }
           }
 
-          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
+          $productInfo['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
         }
 
         // Setting max sale qty variables at parent level.
         if (!empty($max_sale_qty)) {
-          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['maxSaleQty'] = $max_sale_qty;
-          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['orderLimitMsg'] = $productOrderLimit->maxSaleQtyMessage($max_sale_qty);
+          $productInfo['maxSaleQty'] = $max_sale_qty;
+
+          $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
+          $productInfo['orderLimitMsg'] = $productOrderLimit->maxSaleQtyMessage($max_sale_qty);
         }
-        $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
+
+        $settingsKey = ($view_mode === 'matchback') ? 'matchback' : 'productInfo';
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()] = $productInfo;
       }
 
       if (isset($context)) {

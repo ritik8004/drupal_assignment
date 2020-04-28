@@ -327,7 +327,8 @@ class CartController {
           $data['items'][$key]['qty'] = $items_quantity[$key];
         }
 
-        if (isset($extension_attributes[$key]) && $extension_attributes[$key]['error_message']) {
+        if (isset($extension_attributes[$key], $extension_attributes[$key]['error_message'])
+          && $extension_attributes[$key]['error_message']) {
           $data['items'][$key]['error_msg'] = $extension_attributes[$key]['error_message'];
           $data['is_error'] = TRUE;
         }

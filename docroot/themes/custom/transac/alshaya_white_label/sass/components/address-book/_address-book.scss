@@ -401,15 +401,17 @@
     top: -1.25rem;
   }
 
+  #address-book-form-open {
+    @include breakpoint($only-mobile) {
+      margin-top: 2.25rem;
+    }
+  }
+
   .block-system > a {
     @extend %button-wide;
 
     display: block;
     margin-top: 1.25rem;
-
-    @include breakpoint($only-mobile) {
-      margin-bottom: 1.25rem;
-    }
 
     @include breakpoint($tablet) {
       display: inline-block;

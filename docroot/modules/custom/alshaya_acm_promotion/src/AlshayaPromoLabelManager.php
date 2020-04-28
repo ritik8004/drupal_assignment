@@ -9,6 +9,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -84,6 +85,13 @@ class AlshayaPromoLabelManager {
   protected $renderer;
 
   /**
+   * Language Manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManager
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaPromoLabelManager constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -100,6 +108,8 @@ class AlshayaPromoLabelManager {
    *   Promotions Manager.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Renderer.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager.
    */
   public function __construct(SkuManager $sku_manager,
                               SkuImagesManager $images_manager,
@@ -107,7 +117,8 @@ class AlshayaPromoLabelManager {
                               EntityRepositoryInterface $entity_repository,
                               ConfigFactoryInterface $configFactory,
                               AlshayaPromotionsManager $promotions_manager,
-                              RendererInterface $renderer) {
+                              RendererInterface $renderer,
+                              LanguageManagerInterface $language_manager) {
     $this->skuManager = $sku_manager;
     $this->imagesManager = $images_manager;
     $this->entityTypeManager = $entity_type_manager;
@@ -115,6 +126,7 @@ class AlshayaPromoLabelManager {
     $this->configFactory = $configFactory;
     $this->promoManager = $promotions_manager;
     $this->renderer = $renderer;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -283,11 +295,13 @@ class AlshayaPromoLabelManager {
     if (!empty($promotionLabel)) {
       switch ($view_mode) {
         case 'api':
-          $promoDisplay = [
-            'link' => $promotion->toUrl()->toString(TRUE)->getGeneratedUrl(),
-            'promotion_nid' => (int) $promotion->id(),
-            'label' => $promotionLabel['dynamic_label'],
-          ];
+          if (!empty($promotionLabel['dynamic_label'])) {
+            $promoDisplay = [
+              'link' => $promotion->toUrl()->toString(TRUE)->getGeneratedUrl(),
+              'promotion_nid' => (int) $promotion->id(),
+              'label' => $promotionLabel['dynamic_label'],
+            ];
+          }
           break;
 
         case 'links':
@@ -538,7 +552,8 @@ class AlshayaPromoLabelManager {
   public function getPromotionLabelForProductDetail(SKU $sku, string $view_mode) {
     // Get promotions for the product.
     $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
-    $promotions = $this->skuManager->preparePromotionsDisplay($sku, $promotion_nodes, 'links', ['cart'], 'full');
+    $displayMode = $view_mode === 'api' ? 'api' : 'links';
+    $promotions = $this->skuManager->preparePromotionsDisplay($sku, $promotion_nodes, $displayMode, ['cart'], 'full');
 
     // Return early if no promotions found for product in context.
     if (empty($promotions)) {
@@ -556,6 +571,30 @@ class AlshayaPromoLabelManager {
       else {
         $free_gift_promotions[$promotion_id] = $promotion;
       }
+    }
+
+    if ($view_mode === 'api') {
+      $apiPromotions = [];
+
+      foreach ($generic_promotions as $nid => $promotion) {
+        $url = Url::fromRoute('entity.node.canonical', ['node' => $nid])
+          ->toString(TRUE)
+          ->getGeneratedUrl();
+
+        $url = str_replace(
+          '/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+          '',
+          $url
+        );
+
+        $apiPromotions[] = [
+          'text' => $promotion['text'],
+          'promo_web_url' => $url,
+          'promo_node' => $nid,
+        ];
+      }
+
+      return $apiPromotions;
     }
 
     if (!empty($generic_promotions)) {

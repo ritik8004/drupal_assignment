@@ -160,6 +160,7 @@ services:
       - '@alshaya_acm_product.product_order_limit'
       - '@config.factory'
       - '@alshaya_acm_product.category_helper'
+      - '@acq_sku.product_info_helper'
 
   alshaya_acm_product.product_queue_utility:
     class: Drupal\alshaya_acm_product\Service\ProductQueueUtility

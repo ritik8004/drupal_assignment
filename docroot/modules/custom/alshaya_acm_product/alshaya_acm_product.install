@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  *
  * Add translations for details label.
  */
-function alshaya_acm_product_update_8057() {
+function alshaya_acm_product_update_8058() {
   $strings = [
     'Details' => [
       'en' => 'DETAILS',
@@ -26,6 +26,21 @@ function alshaya_acm_product_update_8057() {
 }
 
 /**
+ * Add new settings for local storage cache time for product data.
+ */
+function alshaya_acm_product_update_8057() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Invalidate cache for promotions and requeue all impacted products.
  */
 function alshaya_acm_product_update_8056() {
