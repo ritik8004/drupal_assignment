@@ -61,6 +61,10 @@ export const fetchCartData = () => {
 
       return response.data;
     }).catch((error) => {
+      if (error.message === 'Request aborted') {
+        return error.message;
+      }
+
       // Processing of error here.
       Drupal.logJavascriptError('Failed to restore cart.', error);
 
