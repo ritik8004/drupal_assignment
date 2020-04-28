@@ -1,0 +1,99 @@
+<div id="product-zoom-container">
+  {% block magazineGallery %}
+    <div class="magazine__gallery--container">
+      {% for thumbs in thumbnails %}
+        {% if thumbs.type == 'youtube' %}
+          <div data-iframe="{{ thumbs.url }}" class="pdp-video pdp-video-{{ loop.index0 }} youtube">
+            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
+          </div>
+        {% elseif thumbs.type == 'vimeo' %}
+          <div data-iframe="{{ thumbs.url }}" class="pdp-video pdp-video-{{ loop.index0 }} vimeo">
+            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
+          </div>
+        {% elseif thumbs.type == 'video' %}
+          <div data-iframe="{{ thumbs.url }}" class="pdp-video pdp-video-{{ loop.index0 }} video">
+            <video class="gallery-video" width="400" height="635"" controls>
+              <source src=" {{ thumbs.url }} ">
+              {{ 'Your browser does not support the video tag.'|t }}
+            </video>
+          </div>
+        {% elseif loop.first %}
+          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}  data-scale="2">
+            <img data-zoom-url="{{ thumbs.zoomurl }}" class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }} "alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
+            {%  if labels|length > 0 %}
+              <div class="product-labels">
+                {{ labels }}
+              </div>
+            {% endif %}
+          </figure>
+        {% else %}
+          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }} data-scale="2">
+            <img class="b-lazy" data-zoom-url="{{ thumbs.zoomurl }}" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
+          </figure>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endblock %}
+  <div class="magazine-product-description">
+    <div class="magazine-swatch-placeholder"></div>
+    <div class="magazine-desc-wrapper"> {{ description }}</div>
+  </div>
+  {% block modalGallery %}
+    <div id="product-full-screen-gallery-container" style="display: none;">
+      <div class="imagegallery__wrapper thumbnail-count-{{ thumbnails|length }}">
+        <div class="yt-vi-container cloudzoom__video_modal"></div>
+        <ul id="product-full-screen-gallery">
+          {% for thumbs in thumbnails %}
+            {% if thumbs.type == 'youtube' %}
+              <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video youtube">
+                <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
+              </li>
+            {% elseif thumbs.type == 'vimeo' %}
+              <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video vimeo">
+                <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
+              </li>
+            {% else %}
+              <li>
+                <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
+                  <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endblock %}
+  {% block modalMobileGallery %}
+    <div id="product-image-gallery-container-mobile" class="mob-imagegallery" style="display: none;">
+      <div class="mob-imagegallery__wrapper">
+        <ul id="product-image-gallery-mob" class="mob-imagegallery__thumbnails {{ pager_flag }}">
+            {% for thumbs in thumbnails %}
+                {% if thumbs.type == 'youtube' %}
+                  <li class="mob-imagegallery__thumbnails__video youtube">
+                    <div class="mobileplayer-wrapper">
+                      <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                    </div>
+                  </li>
+                {% elseif thumbs.type == 'vimeo' %}
+                  <li data-iframe="{{ thumbs.url }}" class="mob-imagegallery__thumbnails__video vimeo">
+                    <div class="mobileplayer-wrapper">
+                      <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                    </div>
+                  </li>
+                {% else %}
+                  <li class="mob-imagegallery__thumbnails__image zoom">
+                    <img class="b-lazy" data-src="{{ thumbs.fullurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+                  </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+          {%  if labels|length > 0 %}
+            <div class="product-labels">
+                {{ labels }}
+            </div>
+          {% endif %}
+      </div>
+    </div>
+  {% endblock %}
+</div>
