@@ -385,19 +385,22 @@ class PromotionController extends ControllerBase {
    *   Request.
    */
   public function getPromotionDynamicLabelForCart(Request $request) {
+    $cache_array = [
+      'tags' => ['node_type:acq_promotion'],
+      'contexts' => ['url.query_args'],
+    ];
+
     $get = $request->query->all();
     try {
       $cart = CartData::createFromArray($get);
     }
     catch (\InvalidArgumentException $e) {
-      return new CacheableJsonResponse([]);
+      $response = new CacheableJsonResponse([]);
+      $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
+      return $response;
     }
 
-    // Add cache metadata.
-    $cache_array = [
-      'tags' => ['node_type:acq_promotion'],
-      'contexts' => ['url.query_args'],
-    ];
+    // Add cache metadata from cart.
     Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
 
     $productLabels = [];
