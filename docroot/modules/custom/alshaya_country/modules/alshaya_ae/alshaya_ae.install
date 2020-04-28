@@ -129,11 +129,15 @@ function alshaya_ae_install() {
  * Implements hook_update_dependencies().
  */
 function alshaya_ae_update_dependencies() {
-  return [
-    'alshaya_ae' => [
-      '8006' => [
-        'acq_commerce' => '8002',
+  // Adding this dependency only for transac sites.
+  $modulehandler = \Drupal::service("module_handler");
+  if ($modulehandler->moduleExists("acq_commerce")) {
+    return [
+      'alshaya_ae' => [
+        '8006' => [
+          'acq_commerce' => '8002',
+        ],
       ],
-    ],
-  ];
+    ];
+  }
 }
