@@ -122,17 +122,17 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: no-reply@acquia.com
+      to_mail: customerservice@alshaya.com
       to_options: {  }
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
       bcc_options: {  }
-      from_mail: default
+      from_mail: _default
       from_options: {  }
       from_name: 'Contact us form submission on [site:name]'
-      subject: 'Contact us form submission on [site:name]'
-      body: "<strong>Communication preference</strong> - [webform_submission:values:select_your_preference_of_channel_of_communication]<br />\n<br />\n<strong>Name</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name]<br />\n<br />\n<strong>Mobile</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:mobile_number]<br />\n<br />\n<strong>Email</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:email]<br />\n<br />\n<strong>Message</strong> -&nbsp;<br />\n<br />\n[webform_submission:values:first_name]&nbsp;[webform_submission:values:message]"
+      subject: 'Feedback form : [webform_submission:values:feedback] | [site:name] | [webform_submission:values:type] | [webform_submission:values:reason1][webform_submission:values:reason2][webform_submission:values:reason3][webform_submission:values:reason4]'
+      body: "Communication preference - [webform_submission:values:select_your_preference_of_channel_of_communication]<br />\r\n<br />\r\nName -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name]<br />\r\n<br />\r\nMobile -&nbsp;[webform_submission:values:mobile_number]<br />\r\n<br />\r\nEmail -&nbsp;[webform_submission:values:email]<br />\r\n<br />\r\nFeedback&nbsp;-&nbsp;[webform_submission:values:feedback]<br />\r\n<br />\r\nType&nbsp;-&nbsp;[webform_submission:values:type]<br />\r\n<br />\r\nReason&nbsp;-&nbsp;[webform_submission:values:reason1][webform_submission:values:reason2][webform_submission:values:reason3][webform_submission:values:reason4]<br />\r\n<br />\r\nMessage -&nbsp;<br />\r\n<br />\r\n&nbsp;[webform_submission:values:message]<br />"
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
@@ -143,6 +143,9 @@ handlers:
       return_path: ''
       sender_mail: ''
       sender_name: ''
+      exclude_empty_checkbox: false
+      twig: false
+      theme_name: ''
   mobile_number_validation:
     id: webform_mobile_number_validation
     label: 'Mobile Number Validation'
@@ -151,3 +154,37 @@ handlers:
     conditions: {  }
     weight: 0
     settings: {  }
+  email_1:
+    id: email
+    label: 'notification email'
+    handler_id: email_1
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: '[webform_submission:values:email:raw]'
+      to_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: 'Contact us form submission on [site:name]'
+      subject: '[site:name] – contact us form autoreply'
+      body: "Dear&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name],\r\n<p>Thank you for contacting Alshaya Customer Service.<br />\r\nThis is a confirmation that we have received your feedback, please note that we will be responding to you within 48 hours.</p>\r\n\r\n<p>Your feedback is important to us.</p>\r\n\r\n<p>Always at your service,<br />\r\nGroup Customer Service</p>"
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      html: true
+      attachments: false
+      twig: false
+      debug: false
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      theme_name: ''

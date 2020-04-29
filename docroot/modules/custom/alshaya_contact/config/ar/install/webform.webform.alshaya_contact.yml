@@ -1,0 +1,85 @@
+title: 'اتصل بنا'
+elements: |
+  select_your_preference_of_channel_of_communication:
+    '#title': 'حدد قناة الاتصال المفضلة لديك'
+    '#default_value': Email
+    '#options':
+      Email: 'البريد الإكتروني'
+      Mobile: 'رقم الجوال'
+  first_name:
+    '#title': 'الاسم الأول'
+  last_name:
+    '#title': 'اسم العائلة'
+  mobile_number:
+    '#title': 'رقم الجوال'
+  email:
+    '#title': 'عنوان البريد الإلكتروني'
+  feedback:
+    '#title': 'ملاحظات'
+    '#options':
+      online_shopping: 'التسوق أونلاين'
+      feeback_inquiry: 'الملاحظات والاستفسار'
+    '#empty_option': 'ملاحظات'
+  type:
+    '#title': النوع
+    '#options':
+      complaint: الشكوى
+      inquiry: الاستفسار
+    '#empty_option': النوع
+  reason1:
+    '#title': 'حدّد السبب'
+    '#options':
+      order_related: 'متعلق بالطلبية (ألغيت / تأخرت)'
+      wrong_delivery: 'خطأ بالتوصيل'
+      missing_items: 'العناصر المفقودة'
+      damaged_items: 'منتجات معيبة'
+      refund_not_received: 'لم يتم استلام المبلغ'
+      others: أخرى
+    '#empty_option': 'حدّد السبب'
+  reason2:
+    '#title': 'حدّد السبب'
+    '#options':
+      order_status: 'حالة الطلب'
+      exchange_refund: 'سياسة الاستبدال والاسترجاع'
+      products: المنتجات
+      others: أخرى
+    '#empty_option': 'حدّد السبب'
+  reason3:
+    '#title': 'حدّد السبب'
+    '#options':
+      alshaya_privileges_club: 'نادي امتيازات الشايع'
+      faulty_items: 'منتجات معيبة'
+      alshaya_card: 'بطاقة الشايع'
+      refund_not_received: 'لم يتم استلام المبلغ'
+      in_store_services: 'الخدمات المتوفرة داخل المحل'
+      other: أخرى
+    '#empty_option': 'حدّد السبب'
+  reason4:
+    '#title': 'حدّد السبب'
+    '#options':
+      alshaya_card: 'بطاقة الشايع'
+      alshaya_privileges_club: 'نادي امتيازات الشايع'
+      exchange_refund_policy: 'سياسة الاستبدال والاسترجاع'
+      others: أخرى
+    '#empty_option': 'حدّد السبب'
+  order_number:
+    '#title': 'رقم الطلبية'
+  missing_items:
+    '#title': 'العناصر المفقودة'
+  message:
+    '#title': 'رسالة نصية:'
+    '#field_suffix': '220'
+settings:
+  confirmation_message: 'شكرا لإتصالك بنا. سنقوم بالرد عليك في أقرب وقت ممكن!'
+handlers:
+  email:
+    settings:
+      to_mail: customerservice@alshaya.com
+      from_name: 'اتصل بنا نموذج التقديم على [site:name]'
+      subject: 'نموذج الملاحظات : [webform_submission:values:feedback] | [site:name] | [webform_submission:values:type] | [webform_submission:values:reason1][webform_submission:values:reason2][webform_submission:values:reason3][webform_submission:values:reason4]'
+      body: "<strong>تفضيلات التواصل</strong> - [webform_submission:values:select_your_preference_of_channel_of_communication]<br />\r\n<br />\r\n<strong>اسم</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name]<br />\r\n<br />\r\n<strong>رقم الجوال</strong> -&nbsp;[webform_submission:values:mobile_number]<br />\r\n<br />\r\n<strong>عنوان البريد الإلكتروني</strong> -&nbsp;[webform_submission:values:email]<br />\r\n<br />\r\n<strong>ملاحظات</strong>&nbsp;-&nbsp;[webform_submission:values:feedback]<br />\r\n<br />\r\n<strong>النوع</strong>&nbsp;-&nbsp;[webform_submission:values:type]<br />\r\n<br />\r\n<strong>حدّد السبب</strong>&nbsp;-&nbsp;[webform_submission:values:reason1][webform_submission:values:reason2][webform_submission:values:reason3][webform_submission:values:reason4]<br />\r\n<br />\r\n<strong>رسالة</strong>-&nbsp;<br /><br />[webform_submission:values:message]<br />"
+  email_1:
+    settings:
+      from_name: 'اتصل بنا نموذج التقديم على [site:name]'
+      subject: '[site:name] – الرد التلقائي لنموذج "تواصل معنا'
+      body: "العزيز&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name],\r\n<p>شكرًا لتواصلك مع فريق خدمة عملاء الشايع.<br />\r\nهذا تأكيد بأننا قد تلقينا ملاحظاتك ، يرجى ملاحظة أننا سنرد عليك في غضون 48 ساعة.</p>\r\n\r\n<p>رأيك يهمنا.</p>\r\n\r\n<p>في خدمتك دائمًأ،<br />\r\nفريق خدمة العملاء.</p>"
