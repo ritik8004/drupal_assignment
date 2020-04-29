@@ -248,7 +248,7 @@ class CartController {
       if (!empty($shipping_info['method'])) {
         $custom_shipping_attributes = [];
         $data['shipping_address'] = $shipping_info['address'];
-        foreach ($shipping_info['address']['custom_attributes'] as $key => $value) {
+        foreach ($shipping_info['address']['custom_attributes'] as $value) {
           $custom_shipping_attributes[$value['attribute_code']] = $value['value'];
         }
         unset($data['shipping_address']['custom_attributes']);
@@ -261,7 +261,7 @@ class CartController {
       if (!empty($cart_data['cart']['billing_address'])
         && !empty($cart_data['cart']['billing_address']['firstname'])) {
         $data['billing_address'] = $cart_data['cart']['billing_address'];
-        foreach ($data['billing_address']['custom_attributes'] as $key => $attribute) {
+        foreach ($data['billing_address']['custom_attributes'] as $attribute) {
           $data['billing_address'][$attribute['attribute_code']] = $attribute['value'];
         }
         unset($data['billing_address']['custom_attributes']);
@@ -315,58 +315,50 @@ class CartController {
     // Whether CnC enabled or not.
     $data['cnc_enabled'] = TRUE;
 
-    $sku_items = array_column($cart_data['cart']['items'], 'sku');
-    $items_quantity = array_column($cart_data['cart']['items'], 'qty', 'sku');
-    $items_price = array_column($cart_data['cart']['items'], 'price', 'sku');
-    $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
-    $extension_attributes = array_column($cart_data['cart']['items'], 'extension_attributes', 'sku');
     try {
-      $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
-      foreach ($data['items'] as $key => $value) {
-        if (isset($items_quantity[$key])) {
-          $data['items'][$key]['qty'] = $items_quantity[$key];
-        }
-
-        if (isset($extension_attributes[$key], $extension_attributes[$key]['error_message'])
-          && $extension_attributes[$key]['error_message']) {
-          $data['items'][$key]['error_msg'] = $extension_attributes[$key]['error_message'];
+      $data['items'] = [];
+      foreach ($cart_data['cart']['items'] as $item) {
+        $data['items'][$item['sku']]['title'] = $item['name'];
+        $data['items'][$item['sku']]['qty'] = $item['qty'];
+        $data['items'][$item['sku']]['price'] = $item['price'];
+        $data['items'][$item['sku']]['sku'] = $item['sku'];
+        $data['items'][$item['sku']]['id'] = $item['item_id'];
+        if (isset($item['extension_attributes'], $item['extension_attributes']['error_message'])) {
+          $data['items'][$item['sku']]['error_msg'] = $item['extension_attributes']['error_message'];
           $data['is_error'] = TRUE;
         }
 
-        if (isset($items_price[$key])) {
-          $data['items'][$key]['price'] = $items_price[$key];
+        // This is to determine whether item to be shown free or not in cart.
+        $data['items'][$item['sku']]['freeItem'] = FALSE;
+        foreach ($cart_data['totals']['items'] as $total_item) {
+          // If total price of item matches discount, we mark as free.
+          if ($item['item_id'] == $total_item['item_id']) {
+            // Final price to use.
+            $data['items'][$item['sku']]['finalPrice'] = $total_item['price_incl_tax'];
+            if ($total_item['price'] * $item['qty'] == $total_item['discount_amount']) {
+              $data['items'][$item['sku']]['freeItem'] = TRUE;
+            }
+            break;
+          }
         }
+
+        // Get stock data.
+        $stockInfo = $this->drupal->getCartItemDrupalStock($item['sku']);
+        $data['items'][$item['sku']]['in_stock'] = $stockInfo['in_stock'];
+        $data['items'][$item['sku']]['stock'] = $stockInfo['stock'];
 
         // If info is available in static array, means this we get from
         // the cart update operation. We use that.
         if (!empty(Cart::$stockInfo)
-          && isset(Cart::$stockInfo[$key])
-          && !Cart::$stockInfo[$key]) {
-          $data['items'][$key]['in_stock'] = FALSE;
-          $data['items'][$key]['stock'] = 0;
+          && isset(Cart::$stockInfo[$item['sku']])
+          && !Cart::$stockInfo[$item['sku']]) {
+          $data['items'][$item['sku']]['in_stock'] = FALSE;
+          $data['items'][$item['sku']]['stock'] = 0;
         }
 
-        // If CnC is disabled for any item, we don't process and consider
-        // CnC disabled.
-        if ($data['cnc_enabled'] && isset($data['items'][$key]['delivery_options']['click_and_collect'])) {
-          $data['cnc_enabled'] = $data['items'][$key]['delivery_options']['click_and_collect']['status'];
-        }
-
-        // For the OOS.
-        if ($data['in_stock']
-          && (isset($data['items'][$key]['in_stock']) && !$data['items'][$key]['in_stock'])) {
+        // If any item is OOS.
+        if (!$data['items'][$item['sku']]['in_stock'] || $data['items'][$item['sku']]['stock'] == 0) {
           $data['in_stock'] = FALSE;
-        }
-
-        // This is to determine whether item to be shown free or not in cart.
-        $data['items'][$key]['free_item'] = FALSE;
-        foreach ($cart_data['totals']['items'] as $total_item) {
-          if (in_array($value['sku'], array_keys($items_id))
-            && $items_id[$value['sku']] == $total_item['item_id']
-            && ($total_item['price'] * $items_quantity[$value['sku']] === $total_item['discount_amount'])) {
-            $data['items'][$key]['free_item'] = TRUE;
-            break;
-          }
         }
       }
 
@@ -394,6 +386,7 @@ class CartController {
       }
 
       // Prepare recommended product data.
+      $sku_items = array_column($cart_data['cart']['items'], 'sku');
       $recommended_products = $this->drupal->getDrupalLinkedSkus($sku_items);
       $recommended_products_data = [];
       $data['recommended_products'] = [];
