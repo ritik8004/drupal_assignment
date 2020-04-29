@@ -1,0 +1,55 @@
+.nodetype--acq_product {
+  .page-wrapper {
+    background-color: $pdp_background;
+  }
+
+  @include breakpoint($tablet) {
+    .region__content {
+      margin: 0 !important;
+    }
+  }
+}
+
+.magv2-pdp-gallery {
+  .magazine__gallery--container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 1.25rem;
+    width: 72%;
+    float: #{$left};
+
+    @include breakpoint($only-mobile) {
+      grid-gap: 0.5rem;
+    }
+
+    .pdp-images {
+      position: relative;
+      cursor: pointer;
+      margin-top: 0.625rem;
+    }
+
+    figure {
+      margin: 0;
+
+      &.magazine-image-zoomed {
+        overflow: hidden;
+
+        .magazine-image-zoom-placeholder {
+          z-index: 1;
+        }
+      }
+
+      .magazine-image-zoom-placeholder {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-repeat: no-repeat;
+        z-index: -1;
+        background-size: cover;
+      }
+    }
+  }
+}
