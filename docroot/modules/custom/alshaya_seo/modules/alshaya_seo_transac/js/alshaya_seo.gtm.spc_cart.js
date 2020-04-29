@@ -278,10 +278,16 @@
         }
       }
     };
-    var productDetails = Drupal.alshayaSpcGtmProduct(product);
-    productDetails.metric2 = product.final_price;
-    productData.ecommerce.add.product.push(productDetails);
-    dataLayer.push(productData);
+
+    // Get product info from storage.
+    var key = 'product:' + drupalSettings.path.currentLanguage + ':' + product.sku;
+    var productInfo = JSON.parse(localStorage.getItem(key));
+    if (productInfo !== null) {
+      var productDetails = Drupal.alshayaSeoSpc.gtmProduct(productInfo, product.qty);
+      productDetails.metric2 = product.finalPrice;
+      productData.ecommerce.add.product.push(productDetails);
+      dataLayer.push(productData);
+    }
   };
 
   /**
