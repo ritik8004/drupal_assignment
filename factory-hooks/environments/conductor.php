@@ -222,10 +222,10 @@ $conductors = [
     'site_id' => 57,
   ],
   // Pottery Barn Kids KW.
-  'pbkkw_qa' => [
-    'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
-    'hmac_secret' => 'ZWQwZjNiNTYtYTRkOC00',
-    'site_id' => 31,
+  'pbkkw_uat' => [
+    'hmac_id' => 'cf6afd0bd1624636bd21f4581dc5e252',
+    'hmac_secret' => 'NDBhYjQ3NjQtNDZmNy00',
+    'site_id' => 40,
   ],
   // Pottery Barn Kids AE.
   'pbkae_qa' => [
