@@ -202,7 +202,7 @@ class SkuPriceHelper {
     $child_prices = array_column($prices['children'], 'price');
     $child_final_prices = array_column($prices['children'], 'final_price');
     $discounts = array_column($prices['children'], 'discount');
-    $selling_prices = $this->getChildSellingPrices($prices);
+    $selling_prices = array_column($prices['children'], 'selling_price');
 
     // We show normal price(no range) only in below conditions.
     // 0. It is possible that one product has final price but other doesn't
@@ -309,12 +309,35 @@ class SkuPriceHelper {
    * @param array $prices
    *   Min prices.
    *
-   * @return array
-   *   $selling_prices.
+   * @return string
+   *   Prices.
    */
-  public function getChildSellingPrices(array $prices) {
-    $selling_prices = array_column($prices['children'], 'selling_price');
-    return $selling_prices;
+  public function getProductPrice(array $prices) {
+    $display_mode = $this->displayMode;
+    switch ($display_mode) {
+      case self::PRICE_DISPLAY_MODE_FROM_TO:
+        if (isset($prices['children'])) {
+          $selling_prices = array_column($prices['children'], 'selling_price');
+          $min = min($selling_prices);
+          $max = max($selling_prices);
+
+          if ($min == $max) {
+            $product_price = (float) _alshaya_acm_format_price_with_decimal((float) $min, '.', '');
+            return $product_price;
+          }
+
+          $product_price = (float) _alshaya_acm_format_price_with_decimal((float) $min, '.', '') . ' - ' . (float) _alshaya_acm_format_price_with_decimal((float) $max, '.', '');
+
+        }
+
+        break;
+
+      case self::PRICE_DISPLAY_MODE_SIMPLE:
+        $product_price = (float) _alshaya_acm_format_price_with_decimal((float) $prices['final_price'], '.', '');
+
+        break;
+    }
+    return $product_price;
   }
 
 }

@@ -424,21 +424,13 @@ class AlshayaGtmManager {
     $original_price = $prices['price'];
     $final_price = $prices['final_price'];
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
-    if ($this->skuPriceHelper->isPriceModeFromTo()) {
-      $selling_prices = $this->skuPriceHelper->getChildSellingPrices($prices);
-      $price_range_markup = strip_tags($this->skuPriceHelper->getMinMax($selling_prices));
-      preg_match('/\d.*/', trim(preg_replace('/\s+/', ' ', $price_range_markup)), $price_range);
-    }
+    $product_price = $this->skuPriceHelper->getProductPrice($prices);
 
     if ($sku->bundle() == 'configurable') {
       $prices = $this->skuManager->getMinPrices($sku);
       $original_price = $prices['price'];
       $final_price = $prices['final_price'];
-      if ($this->skuPriceHelper->isPriceModeFromTo()) {
-        $selling_prices = $this->skuPriceHelper->getChildSellingPrices($prices);
-        $price_range_markup = strip_tags($this->skuPriceHelper->getMinMax($selling_prices));
-        preg_match('/\d.*/', trim(preg_replace('/\s+/', ' ', $price_range_markup)), $price_range);
-      }
+      $product_price = $this->skuPriceHelper->getProductPrice($prices);
     }
 
     $product_type = 'Regular Product';
@@ -474,7 +466,7 @@ class AlshayaGtmManager {
       : 'image not available';
 
     $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
-    $attributes['gtm-product-price'] = $price_range[0] ?? (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
+    $attributes['gtm-product-price'] = $product_price;
 
     if ($final_price
       && ($original_price !== $final_price)
