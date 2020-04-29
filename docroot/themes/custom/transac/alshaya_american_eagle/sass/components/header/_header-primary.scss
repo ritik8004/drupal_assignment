@@ -10,7 +10,7 @@
       text-align: center;
     }
 
-    html[lang='ar'] & {
+    html[lang=ar] & {
       width: auto;
 
       @include breakpoint($only-mobile) {
@@ -22,7 +22,7 @@
 
         @include breakpoint($desktop) {
           margin-#{$left}: 0.9375rem;
-          margin-top: 0.125rem;
+          margin-top: 0;
         }
 
         @include breakpoint($only-tablet) {
@@ -250,10 +250,11 @@ header.c-header {
       }
 
       @include breakpoint($desktop) {
-        top: 0.125rem;
+        top: 0.0625rem;
         height: 1.875rem;
         width: 1.6875rem;
-        #{$left}: 0.1875rem;
+        #{$left}: 0.3125rem;
+        background-size: 1.4375rem;
 
         html[lang=ar] & {
           right: -0.25rem;
@@ -289,6 +290,10 @@ header.c-header {
       #{$left}: -0.0625rem;
       background: transparent;
       padding-top: 0;
+
+      @include breakpoint($desktop) {
+        #{$left}: 0;
+      }
 
       @include breakpoint($only-tablet) {
         html[lang=ar] & {
@@ -373,6 +378,11 @@ header.c-header {
       padding-#{$right}: 0.5rem;
       margin-top: 0.625rem;
       margin-#{$right}: 0;
+
+      @include breakpoint($desktop) {
+        margin-#{$right}: 0.25rem;
+        margin-top: 0.375rem;
+      }
     }
   }
 
@@ -418,6 +428,11 @@ header {
   .c-header__region {
     @include breakpoint($desktop) {
       padding-top: 1.625rem;
+      padding-bottom: 1.125rem;
+
+      html[lang=ar] & {
+        padding-bottom: 1.5rem;
+      }
     }
   }
 
@@ -543,21 +558,6 @@ header {
       }
     }
 
-    .search-active {
-      .mobile--search {
-        @include icon_img('#{$aeo_theme_img_directory_path}/assets/search-selected.svg', 2rem, 2rem);
-
-        &::before {
-          @include breakpoint($only-mobile) {
-            top: -0.1875rem;
-            height: 1.75rem;
-            width: 1.625rem;
-            #{$left}: -0.4375rem;
-          }
-        }
-      }
-    }
-
     .store {
       font-size: 0;
       position: absolute;
@@ -636,6 +636,12 @@ header {
   @include breakpoint($desktop) {
     background: $mm_bg_desk;
   }
+
+  &__region {
+    @include breakpoint($desktop) {
+      height: 3rem;
+    }
+  }
 }
 
 /*
@@ -653,7 +659,7 @@ header {
     li.menu--one__list-item {
       display: inline-block;
       vertical-align: middle;
-      height: 2.625rem;
+      height: 2.875rem;
 
       a.menu--one__link {
         display: block;
@@ -663,7 +669,7 @@ header {
         text-transform: capitalize;
         font-family: $alshaya-thin;
         height: 2.75rem;
-        padding: 0.8125rem 1.5rem 0;
+        padding: 1rem 1.5rem 0;
 
         &::after {
           content: '';
