@@ -1,6 +1,6 @@
 #spc-cart {
-  @include breakpoint($tablet) {
-    padding-top: 2.5rem;
+  @include breakpoint($mobile) {
+    padding-top: 1.25rem;
   }
 
   .spc-content {
@@ -13,9 +13,8 @@
 }
 
 .spc-mobile-cart-preview {
-  //background-color: $spc-order-summary-totals-bg;
-  background-color: red;
-  padding: 2rem 0;
+  background-color: $spc-order-summary-totals-bg;
+  padding: 1.25rem 0;
 
   .cart-text {
     font-size: 0.875rem;

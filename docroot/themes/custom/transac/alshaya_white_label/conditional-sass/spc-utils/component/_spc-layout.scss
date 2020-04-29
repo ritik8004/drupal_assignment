@@ -1,6 +1,12 @@
 .alias--cart,
 .alias--checkout,
 .alias--checkout-confirmation {
+  .spc-pre-content-sticky {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.9375rem;
+    }
+  }
+
   .page-wrapper {
     background-color: $spc-cart-background;
   }

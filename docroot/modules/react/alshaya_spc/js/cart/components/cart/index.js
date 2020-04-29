@@ -66,9 +66,6 @@ export default class Cart extends React.Component {
           });
         }
 
-        // Make cart preview sticky.
-        stickyMobileCartPreview();
-
         // Make side bar sticky.
         stickySidebar();
 
@@ -117,6 +114,9 @@ export default class Cart extends React.Component {
       dynamicPromoLabelsCart: cartLabels,
       dynamicPromoLabelsProduct: productLabels,
     });
+
+    // Make cart preview sticky.
+    stickyMobileCartPreview();
   };
 
   handleCartMessageUpdateEvent = (event) => {
@@ -149,8 +149,21 @@ export default class Cart extends React.Component {
       dynamicPromoLabelsProduct,
     } = this.state;
 
+    let preContentActive = 'hidden';
+
     if (wait) {
       return <Loading />;
+    }
+
+    if (message !== undefined || actionMessage !== undefined) {
+      preContentActive = 'visible';
+    }
+
+    if (dynamicPromoLabelsCart !== null) {
+      if (dynamicPromoLabelsCart.qualified.length !== 0
+        || dynamicPromoLabelsCart.next_eligible.length !== 0) {
+        preContentActive = 'visible';
+      }
     }
 
     if (!wait && items.length === 0) {
@@ -165,19 +178,20 @@ export default class Cart extends React.Component {
 
     return (
       <>
-        <div className="spc-pre-content fadeInUp" style={{ animationDelay: '0.4s' }}>
-          <MobileCartPreview total_items={totalItems} totals={totals} />
+        <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
           {/* This will be used for global error message. */}
           <CheckoutMessage type={messageType} context="page-level-cart">
             {message}
           </CheckoutMessage>
-
-          <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
-
           {/* This will be used for any action/event on basket page. */}
           <CheckoutMessage type={actionMessageType} context="page-level-cart-action">
             {actionMessage}
           </CheckoutMessage>
+          {/* This will be used for Dynamic promotion labels. */}
+          <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
+        </div>
+        <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
+          <MobileCartPreview total_items={totalItems} totals={totals} />
         </div>
         <div className="spc-main">
           <div className="spc-content">
