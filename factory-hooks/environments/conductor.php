@@ -221,6 +221,24 @@ $conductors = [
     'hmac_secret' => 'NjhjMjRmNDEtNTJkMS00',
     'site_id' => 57,
   ],
+  // Pottery Barn Kids KW.
+  'pbkkw_qa' => [
+    'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
+    'hmac_secret' => 'ZWQwZjNiNTYtYTRkOC00',
+    'site_id' => 31,
+  ],
+  // Pottery Barn Kids AE.
+  'pbkae_qa' => [
+    'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
+    'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
+    'site_id' => 33,
+  ],
+  // Pottery Barn Kids SA.
+  'pbksa_qa' => [
+    'hmac_id' => '76f67886b7d34f3aad6ae85e75f93550',
+    'hmac_secret' => 'NTI1ZjAwMTUtMzE5OS00',
+    'site_id' => 32,
+  ],
   // BathBodyWorks KW.
   'bbwkw_qa' => [
     'hmac_id' => '0b92904888cd422f8acd2938e199916e',

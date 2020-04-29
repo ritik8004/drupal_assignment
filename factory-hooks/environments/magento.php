@@ -229,6 +229,25 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 15],
     ],
   ],
+  // Pottery Barn Kids.
+  'pbk_qa' => [
+    'url' => 'https://integration-5ojmyuq-rfuu4sicyisyw.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'auf96nt6b1loar4yc2qm55pluqd5sgrn',
+      'consumer_secret' => 'i1lhnoafn6a1ggjou2juj366cpcnnhel',
+      'access_token' => 's4rfv318v1gxmrnq8mjdn01uhejd8760',
+      'access_token_secret' => '4x5otnn378pjr1v3acnmoe934niwjlw7',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+  ],
   // Victoria Secret.
   'vs_qa' => [
     'url' => 'https://integration-5ojmyuq-kpwgmbven7d7y.eu-3.magentosite.cloud',
