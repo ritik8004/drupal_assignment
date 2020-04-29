@@ -27,7 +27,42 @@ all cases, this will mean `$HOME/.lando/keys` - and then rebuild using `lando re
 Unfortunately, I couldn't find a way to get ssh agent forwarding going, so password protected keys will require the
 password on each use, which is a minor irritation.
 
-## Notes on Services
+### Build steps
+
+Ensure that you've added your sites to the /etc/hosts file on your local machine, and that you've copied your SSH keys
+as per the instructions above.
+
+All steps are executed on your host OS.
+
+  * `composer clear-cache`
+  * `composer install`
+  * `composer blt-alias`
+  * `lando start` - this will configure and set up your containers and services.
+
+  * `blt blt:init:git-hooks`
+  * `blt blt:init:settings`
+  * `lando frontend-setup` - see notes on BLT below
+  * `lando frontend-build` - see notes on BLT below
+  * `lando blt refresh:local <sitename>` - where <sitename> is the site you want to build
+
+You should now be able to access the site in your browser at https://local.alshaya-<sitename>.com/
+
+Drush commands can be executed from your host OS using `lando drush`.
+
+## Services
+
+The following ports are exposed on localhost
+
+ - 80/443 : varnish
+ - 33061 : mysql
+ - 11211 : memcache1
+ - 11212 : memcache2
+
+Having mysql exposed on localhost is useful for connecting to mysql from clients running on the host OS, such as
+"Sequel Pro".
+
+Exposing the ports of the memcache services is useful for being able to debug memcache from your terminal, by issuing
+commands via netcat or telnet.
 
 ### MySQL
 
@@ -37,8 +72,13 @@ need to add another line here to create your database.
 
 ### Varnish
 
-There is a separate varnish file for Lando in `architecture/varnish/varnish-4-lando.vcl`. The existing file does not
-compile when using Lando.
+There is a separate varnish file for Lando in `architecture/varnish/varnish-4-lando.vcl`. The existing file did not
+compile when using Lando, hence the need for a Lando specific version.
+
+### Memcache
+
+We are using two memcache services in a similar setup to other environments. The idea here is that we may flush out
+some of the memcache issues we've seen by replicating other environments more closely.
 
 ## Tooling
 
@@ -47,8 +87,8 @@ compile when using Lando.
 We've provided BLT tooling so that you can run BLT commands inside the container using `lando blt <command>`.
 
 However, in the case of the frontend build tools, these are executed within a node container. Therefore, we're not
-actually executing the BLT commands here - we're doing what the BLT commands would ultimately do, which is running some
- scripts from our `blt/scripts` folder.
+actually executing the BLT commands in this case - we're doing what the BLT commands would ultimately do, which is
+running some scripts from our `blt/scripts` folder.
 
 This is not ideal since it means we could get out of date if the blt code in that area changes.
 
