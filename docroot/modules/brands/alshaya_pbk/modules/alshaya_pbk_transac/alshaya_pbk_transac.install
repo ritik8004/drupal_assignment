@@ -8,11 +8,32 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add new field as quantity set.
+ */
+function alshaya_pbk_transac_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  $manager->updateConfigs(
+    ['acq_sku.configurable_form_settings'],
+    'acq_sku'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_pbk_transac_install() {
-  // Enable and set alshaya_pottery_bran_kids as default theme
-  // and set the site logo,
+  // Enable and set alshaya_pottery_bran_kids as default theme and set the site logo,
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_pottery_bran_kids');
 
