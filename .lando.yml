@@ -16,13 +16,13 @@ services:
       environment:
         DEVEL_ENV: lando
 
-  hmkw_database:
+  database:
     type: mysql
     portforward: 33061
-    creds:
-      database: drupal_alshaya_hmkw
-      user: drupal
-      password: drupal
+    run_as_root:
+      # Create extra databases.
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmkw; GRANT ALL PRIVILEGES ON drupal_alshaya_hmkw.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmae; GRANT ALL PRIVILEGES ON drupal_alshaya_hmae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
 
   memcache1:
     type: memcached:1.5.11
@@ -40,10 +40,21 @@ services:
     config:
       vcl: architecture/varnish/varnish-4-lando.vcl
 
+  node:
+    type: node:8
+
 tooling:
   blt:
     service: appserver
     cmd: /app/vendor/acquia/blt/bin/blt
+
+  frontend-setup:
+    service: node
+    cmd:  bash /app/blt/scripts/frontend-setup.sh /app/docroot && bash /app/blt/scripts/react-setup.sh /app/docroot
+
+  frontend-build:
+    service: node
+    cmd:  bash /app/blt/scripts/frontend-build.sh /app/docroot && bash /app/blt/scripts/react-build.sh /app/docroot
 
 excludes:
   - vendor
