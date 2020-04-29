@@ -17,8 +17,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a filter that replaces tokens for Customer Portal.
  *
  * @Filter(
- *   id = "alshaya_token_filter",
- *   title = @Translation("Replaces Customer portal tokens with their values"),
+ *   id = "alshaya_customer_portal_token_filter",
+ *   title = @Translation("Replace Customer portal tokens with their values"),
  *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE
  * )
  */
@@ -93,8 +93,6 @@ class AlshayaCustomerPortalTokenFilter extends FilterBase implements ContainerFa
    * {@inheritdoc}
    */
   public function process($text, $langcode) {
-    $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-    $bubbleable_metadata = new BubbleableMetadata();
     $replacements = [];
 
     // Scan and get only the customer portal tokens.
@@ -105,8 +103,14 @@ class AlshayaCustomerPortalTokenFilter extends FilterBase implements ContainerFa
       }
     }, ARRAY_FILTER_USE_KEY);
 
+    if (empty($customer_portal_tokens)) {
+      return new FilterProcessResult();
+    }
+
     // Generate replacement texts for the customer portal tokens.
+    $bubbleable_metadata = new BubbleableMetadata();
     if (!empty($customer_portal_tokens)) {
+      $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
       foreach ($customer_portal_tokens as $type => $tokens) {
         $replacements = $this->token->generate($type, $tokens, ['user' => $user], ['clear' => TRUE], $bubbleable_metadata);
       }
