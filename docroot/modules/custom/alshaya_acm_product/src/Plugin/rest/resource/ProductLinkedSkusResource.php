@@ -138,7 +138,7 @@ class ProductLinkedSkusResource extends ResourceBase {
         $related_skus += $this->getLinkedSkus($skuEntity, $linked_type);
       }
       // Remove duplicate product array.
-      $related_skus = array_map("unserialize", array_unique(array_map("serialize", $related_skus)));
+      $related_skus = array_unique($related_skus, SORT_REGULAR);
 
       $data['linked'][] = [
         'link_type' => $linked_type,
