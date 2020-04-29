@@ -303,6 +303,13 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             $identifier = $facet->getFieldIdentifier();
           }
 
+          // For HNM we are using "size_group_list" widget type
+          // for size facet. If sizegroup is not enabled then force
+          // to make widget type checkbox.
+          if ($block_id == 'size' && !$this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter')) {
+            $widget['type'] = 'checkbox';
+          }
+
           $filter_facets[$identifier] = [
             'identifier' => $identifier,
             'label' => $block->label(),

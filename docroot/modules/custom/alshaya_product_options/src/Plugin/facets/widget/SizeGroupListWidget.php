@@ -24,6 +24,8 @@ class SizeGroupListWidget extends LinksWidget {
     $build = parent::build($facet);
     // If sizegroup setting is not enabled then make it default.
     if (!$this->isSizeGroupEnabled()) {
+      $build['#attributes']['class'][] = 'js-facets-checkbox-links';
+      $build['#attached']['library'][] = 'facets/drupal.facets.checkbox-widget';
       return $build;
     }
     $items = $build['#items'];
