@@ -10,6 +10,23 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Update sort orders for size facet to match order in Magento.
+ */
+function alshaya_aeo_transac_update_8005() {
+  $size_facets = [
+    'facets.facet.size',
+    'facets.facet.plp_size',
+    'facets.facet.promo_size',
+  ];
+
+  foreach ($size_facets as $config) {
+    \Drupal::configFactory()->getEditable($config)->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new sku attribute division_name.
  */
 function alshaya_aeo_transac_update_8004() {

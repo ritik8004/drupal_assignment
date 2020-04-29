@@ -175,8 +175,7 @@ export default class Checkout extends React.Component {
     let redirectToBasketOnError = false;
     // If OOS error, redirect to basket page.
     if (cart.cart.response_message !== null
-      && cart.cart.response_message.status === 'json_error'
-      && cart.cart.response_message.msg === 'OOS') {
+      && cart.cart.response_message.status === 'json_error') {
       redirectToBasketOnError = true;
     }
 

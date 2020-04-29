@@ -14,6 +14,13 @@ use Drupal\Core\Cache\Cache;
 class CartData {
 
   /**
+   * Reference to object of current class.
+   *
+   * @var \Drupal\alshaya_acm\CartData|null
+   */
+  private static $selfReference = NULL;
+
+  /**
    * Cart items.
    *
    * @var array
@@ -53,6 +60,16 @@ class CartData {
   }
 
   /**
+   * Return cart data object if available.
+   *
+   * @return null|\Drupal\alshaya_acm\CartData
+   *   CartData object if available.
+   */
+  public static function getCart() {
+    return self::$selfReference;
+  }
+
+  /**
    * Wrapper to prepare cart data and create object.
    *
    * @param array $data
@@ -62,6 +79,10 @@ class CartData {
    *   Cart data object.
    */
   public static function createFromArray(array $data) {
+    if (isset(self::$selfReference)) {
+      return self::$selfReference;
+    }
+
     $items = [];
 
     foreach ($data['products'] ?? [] as $product) {
@@ -93,7 +114,8 @@ class CartData {
       throw new \InvalidArgumentException();
     }
 
-    return new static($items, $subtotal, $applied_rules);
+    self::$selfReference = new static($items, $subtotal, $applied_rules);
+    return self::$selfReference;
   }
 
   /**

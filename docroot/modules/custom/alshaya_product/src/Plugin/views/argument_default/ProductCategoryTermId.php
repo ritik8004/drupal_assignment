@@ -91,17 +91,23 @@ class ProductCategoryTermId extends ArgumentDefaultPluginBase implements Cacheab
     // This is not dependent on any external data, store in static cache.
     static $argument = NULL;
 
+    if (isset($argument)) {
+      return $argument;
+    }
+
+    $argument = '';
+
     // Rely on the Request object to get the taxonomy term ids as views
     // arguments rather than Route matcher service. In case of AJAX requests
     // populating the facets, the arguments don't get populated leading to empty
     // facets on PLP/Promotion detail page post AJAX request.
-    if (is_null($argument)
-      && ($url_object = $this->pathValidator->getUrlIfValid($this->requestStack->getCurrentRequest()->getPathInfo()))
+    $url = $this->requestStack->getCurrentRequest()->getPathInfo();
+    $url = explode('--', $url)[0];
+
+    if (($url_object = $this->pathValidator->getUrlIfValid($url))
       && ($url_object->getRouteName() == 'entity.taxonomy_term.canonical')
       && ($taxonomy_tid = $url_object->getRouteParameters()['taxonomy_term'])
-      && (($taxonomy_term = Term::load($taxonomy_tid)) instanceof TermInterface)
-    ) {
-      $argument = '';
+      && (($taxonomy_term = Term::load($taxonomy_tid)) instanceof TermInterface)) {
 
       // Support group by sub-categories.
       if ($taxonomy_term->get('field_group_by_sub_categories')->getString()) {

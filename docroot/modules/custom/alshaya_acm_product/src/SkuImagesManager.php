@@ -1204,11 +1204,12 @@ class SkuImagesManager {
         ];
       }
       else {
-        $thumbnails[] = [
+        $video_data[] = [
           'url' => file_create_url($media_item['drupal_uri']),
           'video_title' => $media_item['label'] ?? '',
           'type' => 'video',
         ];
+        array_splice($thumbnails, 1, 0, $video_data);
       }
     }
 
