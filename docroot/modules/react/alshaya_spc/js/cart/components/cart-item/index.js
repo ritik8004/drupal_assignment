@@ -21,32 +21,33 @@ export default class CartItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isItemError: false,
-      errorMessage: null,
+      wait: true,
+      productInfo: null,
     };
   }
 
   componentDidMount() {
-    document.addEventListener('spcCartItemError', this.handleCartItemError, false);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('spcCartItemError', this.handleCartItemError, false);
+    const { item } = this.props;
+    // Key will be like 'product:en:testsku'
+    Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
   }
 
   /**
-   * Handle and show error on continue cart action.
+   * Call back to get product data from storage.
    */
-  handleCartItemError = (e) => {
-    const { item: { sku } } = this.props;
-    const errorMessage = e.detail;
-    if (errorMessage !== null
-      && errorMessage !== undefined
-      && errorMessage[sku] !== undefined) {
+  productDataCallback = (productData) => {
+    // If sku info available.
+    if (productData !== null && productData.sku !== undefined) {
       this.setState({
-        isItemError: true,
-        errorMessage: errorMessage[sku],
+        wait: false,
+        productInfo: productData,
       });
+
+      // If max sale quantity feature enabled.
+      if (drupalSettings.quantity_limit_enabled) {
+        const { callable } = this.props;
+        callable(productData.sku);
+      }
     }
   };
 
@@ -108,33 +109,56 @@ export default class CartItem extends React.Component {
         if (messageInfo !== null) {
           dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
         }
+
+        // If qty limit enabled.
+        if (drupalSettings.quantity_limit_enabled) {
+          const { skus, callable } = this.props;
+          Object.entries(skus).forEach(([, productSku]) => {
+            callable(productSku);
+          });
+        }
       });
     }
   }
 
   render() {
+    const { wait } = this.state;
+    if (wait === true) {
+      return (null);
+    }
+
     const {
       item: {
-        title,
-        relative_link: relativeLink,
-        stock,
-        qty,
-        in_stock: inStock,
-        original_price: originalPrice,
-        configurable_values: configurableValues,
-        promotions,
-        extra_data: extraData,
         sku,
+        qty,
         id,
-        final_price: finalPrice,
-        free_item: freeItem,
-        max_sale_qty: maxSaleQty,
+        freeItem,
+        stock,
+        finalPrice,
+        in_stock: inStock,
         error_msg: itemErrorMsg,
       },
       qtyLimit: currentQtyLimit,
       animationOffset,
       productPromotion,
     } = this.props;
+
+    const {
+      productInfo: {
+        image,
+        options,
+        promotions,
+        title,
+        url,
+        price,
+        maxSaleQty,
+      },
+    } = this.state;
+    const cartImage = {
+      url: image,
+      alt: title,
+      title,
+    };
 
     const { isItemError, errorMessage } = this.state;
     let OOSClass = '';
@@ -165,22 +189,22 @@ export default class CartItem extends React.Component {
       >
         <div className="spc-product-tile">
           <div className="spc-product-image">
-            <CheckoutItemImage img_data={extraData.cart_image} />
+            <CheckoutItemImage img_data={cartImage} />
           </div>
           <div className="spc-product-container">
             <div className="spc-product-title-price">
               <div className="spc-product-title">
-                <a href={Drupal.url(relativeLink)}>{title}</a>
+                <a href={url}>{title}</a>
               </div>
               <div className="spc-product-price">
                 <SpecialPrice
-                  price={parseFloat(originalPrice)}
+                  price={parseFloat(price)}
                   finalPrice={parseFloat(finalPrice)}
                 />
               </div>
             </div>
             <div className="spc-product-attributes-wrapper">
-              {configurableValues.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.attribute_code}-${key.value}`} label={key} />)}
+              {options.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.value}`} label={key} />)}
             </div>
           </div>
           <div className="spc-product-tile-actions">
