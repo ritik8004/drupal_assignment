@@ -228,7 +228,7 @@ class AlshayaSpcController extends ControllerBase {
     $country_name = $this->mobileUtil->getCountryName($country_code);
     $strings[] = [
       'key' => 'location_outside_country_hd',
-      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>' . $this->t("We don't support delivery outside @country. Please enter an address with in country @country below to continue.", ['@country' => $country_name]),
+      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>' . $this->t("We don't support delivery outside @country.") . $this->t('Please enter an address with in country @country below to continue.', ['@country' => $country_name]),
     ];
 
     $cnc_enabled = $cc_config->get('feature_status') == 'enabled';
