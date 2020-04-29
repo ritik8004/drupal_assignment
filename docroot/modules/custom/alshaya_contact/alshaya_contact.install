@@ -12,7 +12,7 @@ use Drupal\lightning_core\ConfigHelper;
  *
  * Add new feilds new contact us form.
  */
-function alshaya_contact_update_8004() {
+function alshaya_contact_update_8003() {
   $configs = [
     'webform.webform.alshaya_contact',
   ];
@@ -33,19 +33,6 @@ function alshaya_contact_update_8004() {
   ];
 
   alshaya_i18n_save_translations($strings);
-}
-
-/**
- * Implements hook_update_N().
- *
- * Request_from field access removed and add archive false.
- */
-function alshaya_contact_update_8003() {
-  $configs = [
-    'webform.webform.alshaya_contact',
-  ];
-
-  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_contact');
 }
 
 /**
