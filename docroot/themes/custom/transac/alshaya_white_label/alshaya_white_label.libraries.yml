@@ -146,6 +146,13 @@ cleave:
   js:
     vendor/js/cleave.min.js: {}
 
+pdp-video-player:
+  js:
+    js/pdp-native-video.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
 plp_search_js:
   js:
     js/plp-search.js: {}
@@ -172,6 +179,7 @@ magazine_attribute:
     theme:
       css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
   dependencies:
+    - alshaya_white_label/pdp-video-player
     - alshaya_white_label/attribute.common
     - core/jquery.ui.effects.slide
 
