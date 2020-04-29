@@ -183,7 +183,7 @@
   };
 
   // Submit form on success.
-  $.fn.checkoutPaymentSuccess = function () {
+  $.fn.checkoutApplePaymentSuccess = function () {
     // Begin session
     applePaySessionObject.begin();
   };
