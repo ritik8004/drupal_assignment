@@ -360,7 +360,11 @@ class PromotionController extends ControllerBase {
     // Add cache metadata.
     $cache_array = [
       'tags' => ['node_type:acq_promotion'],
-      'contexts' => ['session', 'cookies:Drupal_visitor_acq_cart_id'],
+      'contexts' => [
+        'session',
+        'cookies:Drupal_visitor_acq_cart_id',
+        'languages',
+      ],
     ];
 
     $cart_id = $this->cartStorage->getCartId(FALSE);
@@ -387,7 +391,7 @@ class PromotionController extends ControllerBase {
   public function getPromotionDynamicLabelForCart(Request $request) {
     $cache_array = [
       'tags' => ['node_type:acq_promotion'],
-      'contexts' => ['url.query_args'],
+      'contexts' => ['url.query_args', 'languages'],
     ];
 
     $get = $request->query->all();
