@@ -250,7 +250,7 @@ class SkuPriceHelper {
    * @return string
    *   String with min - max or just min.
    */
-  public function getMinMax(array $prices):string {
+  private function getMinMax(array $prices):string {
     $min = min($prices);
     $max = max($prices);
 
@@ -304,7 +304,7 @@ class SkuPriceHelper {
   }
 
   /**
-   * Helper function to get child selling prices.
+   * Helper function to get product price based on display mode.
    *
    * @param array $prices
    *   Min prices.
