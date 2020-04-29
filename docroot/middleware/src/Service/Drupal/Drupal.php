@@ -134,6 +134,22 @@ class Drupal {
   }
 
   /**
+   * Get stock info from drupal for sku.
+   *
+   * @param string $sku
+   *   SKU.
+   *
+   * @return array
+   *   Items data with info from drupal.
+   */
+  public function getCartItemDrupalStock($sku) {
+    $url = sprintf('/rest/v1/stock/%s', $sku);
+    $response = $this->invokeApi('GET', $url);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
+  /**
    * Trigger event to let Drupal know about the update.
    *
    * @param string $event
