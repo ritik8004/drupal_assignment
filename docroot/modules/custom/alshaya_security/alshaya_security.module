@@ -5,6 +5,10 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\Core\Routing\TrustedRedirectResponse;
+
 /**
  * Implements hook_autologout_prevent().
  */
@@ -16,5 +20,33 @@ function alshaya_security_autologout_prevent() {
     if ($currentUser->isAuthenticated() && alshaya_acm_customer_is_customer($currentUser)) {
       return TRUE;
     }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_security_form_user_pass_reset_alter(&$form, FormStateInterface $form_state) {
+  // Below we try to restrict use of the reset password link only on one
+  // browser, if user has already clicked once or by any chance tried to share
+  // the link for which the tool tried to preview, this link will expire.
+  // It was reported as a security issue as the link was leaked to tracking
+  // tools and anyone could try to use it before clicking on log in.
+  $session = \Drupal::request()->getSession();
+  $hash = \Drupal::routeMatch()->getParameter('hash');
+
+  // This cache is using database (when added here) and also is of type
+  // permanent so no chance of loosing this info when doing drush cr.
+  $cache = \Drupal::cache('user_used_hash')->get($hash);
+  if (empty($cache) || empty($cache->data)) {
+    $session->set('hash', $hash);
+    $expire = \Drupal::time()->getRequestTime();
+    $expire += \Drupal::config('user.settings')->get('password_reset_timeout');
+    \Drupal::cache('user_used_hash')->set($hash, $session->getId(), $expire);
+  }
+  elseif ($cache->data !== $session->getId()) {
+    \Drupal::logger('alshaya_security')->warning('User tried to use the reset link on different browser.');
+    $response = new TrustedRedirectResponse(Url::fromRoute('user.pass')->toString());
+    $response->send();
   }
 }
