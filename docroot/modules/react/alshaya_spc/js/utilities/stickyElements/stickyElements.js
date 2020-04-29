@@ -58,7 +58,7 @@ function stickyMobileCartPreview() {
   let menuHeight = 0;
 
   // SPC Cart Preview offset.
-  const cartPreviewOffset = cartPreview[0].offsetHeight / 2;
+  const cartPreviewOffset = cartPreview[0].offsetHeight / 1.75;
 
   // SPC-Pre-Content offset.
   // Content might come via AJAX.
@@ -82,7 +82,7 @@ function stickyMobileCartPreview() {
       if (window.pageYOffset > cartOffsetTop) {
         if (!cartPreview[0].classList.contains('sticky')) {
           cartPreview[0].classList.add('sticky');
-          document.getElementsByClassName('spc-main')[0].style.paddingTop = `${cartPreview[0].offsetHeight + 15}px`;
+          document.getElementsByClassName('spc-main')[0].style.paddingTop = `${cartPreview[0].offsetHeight}px`;
           cartPreview[0].style.top = `${menuHeight}px`;
         }
       } else {
