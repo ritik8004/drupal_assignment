@@ -560,11 +560,10 @@ class SkuInfoHelper {
     if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
       if ($parent !== NULL) {
         $max_sale_qty = $plugin->getMaxSaleQty($parent->getSku());
-      }
-
-      // If max sale quantity is available at parent level, we use that.
-      if (!empty($max_sale_qty)) {
-        $variant['max_sale_qty_parent'] = TRUE;
+        // If max sale quantity is available at parent level, we use that.
+        if (!empty($max_sale_qty)) {
+          $variant['max_sale_qty_parent'] = TRUE;
+        }
       }
 
       // If order limit is not set for parent

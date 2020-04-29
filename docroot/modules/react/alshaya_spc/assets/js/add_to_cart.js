@@ -118,7 +118,7 @@
                   var options = [];
                   var productUrl = productInfo.url;
                   var price = productInfo.priceRaw;
-                  var promotions = productInfo.promotions;
+                  var promotions = productInfo.promotionsRaw;
                   var productDataSKU = productData.sku;
                   var parentSKU = productData.sku;
                   var maxSaleQty = productData.maxSaleQty;
@@ -130,7 +130,7 @@
                     productDataSKU = productData.variant;
                     price = productVariantInfo.priceRaw;
                     parentSKU = productVariantInfo.parent_sku;
-                    promotions = productVariantInfo.promotions;
+                    promotions = productVariantInfo.promotionsRaw;
                     options = productVariantInfo.configurableOptions;
                     maxSaleQty = productVariantInfo.maxSaleQty;
                     maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
@@ -144,7 +144,7 @@
                     var productVariantInfo = productInfo.group[productData.sku];
                     price = productVariantInfo.priceRaw;
                     parentSKU = productVariantInfo.parent_sku;
-                    promotions = productVariantInfo.promotions;
+                    promotions = productVariantInfo.promotionsRaw;
                     maxSaleQty = productVariantInfo.maxSaleQty;
                     maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
 

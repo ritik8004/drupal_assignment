@@ -373,7 +373,7 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
 
   $variant['promotions'] = !empty($promotion_label['promotions'])
     ? render($promotion_label['promotions'])
-    : [];
+    : '';
 
   $variant['free_gift_promotions'] = !empty($promotion_label['free_gift_promotions'])
     ? render($promotion_label['free_gift_promotions'])
