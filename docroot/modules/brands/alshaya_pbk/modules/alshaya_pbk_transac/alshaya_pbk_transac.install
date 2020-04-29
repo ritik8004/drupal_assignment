@@ -35,7 +35,7 @@ function alshaya_pbk_transac_update_8001() {
 function alshaya_pbk_transac_install() {
   // Enable and set alshaya_pottery_bran_kids as default theme and set the site logo,
   // favicon icon and email logo path.
-  _alshaya_master_initialize_brand_theme('alshaya_pottery_bran_kids');
+  _alshaya_master_initialize_brand_theme('alshaya_pottery_barn_kids');
 
   // Set store id - EN.
   \Drupal::configFactory()->getEditable('acq_commerce.store')
