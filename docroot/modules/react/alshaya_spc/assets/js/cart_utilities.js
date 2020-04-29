@@ -75,9 +75,13 @@
           image = response.extra_data['cart_image']['url'];
         }
 
+        var parentSKU = response.parent_sku !== null
+          ? response.parent_sku
+          : response.sku;
+        console.log(response);
         var data = Drupal.alshayaSpc.storeProductData({
           sku: response.sku,
-          parentSKU: response.parent_sku,
+          parentSKU: parentSKU,
           title: response.title,
           url: response.link,
           image: image,

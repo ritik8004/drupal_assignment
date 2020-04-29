@@ -350,7 +350,7 @@ class ProductResource extends ResourceBase {
       $data['link'] = $link;
     }
     $parent_sku = $this->skuManager->getParentSkuBySku($sku);
-    $data['parent_sku'] = $parent_sku ? $parent_sku->getSku() : $sku->getSku();
+    $data['parent_sku'] = $parent_sku ? $parent_sku->getSku() : NULL;
     $data['title'] = (string) $this->productInfoHelper->getTitle($sku, 'pdp');
 
     $prices = $this->skuManager->getMinPrices($sku);
