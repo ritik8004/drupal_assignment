@@ -1139,13 +1139,15 @@ class SkuImagesManager {
         ];
       }
     }
+    $insert_video_at_second = TRUE;
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
+      $video_data = [];
       if (isset($media_item['video_url'])) {
         // @TODO:
         // Receiving video_provider as NULL, should be set to youtube
         // or vimeo. Till then using $type as provider flag.
         $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
-        $thumbnails[] = [
+        $video_data[] = [
           'thumburl' => $media_item['file'],
           'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
           'video_title' => $media_item['video_title'],
@@ -1163,7 +1165,13 @@ class SkuImagesManager {
           'video_title' => $media_item['label'] ?? '',
           'type' => 'video',
         ];
+      }
+      if ($insert_video_at_second) {
         array_splice($thumbnails, 1, 0, $video_data);
+        $insert_video_at_second = FALSE;
+      }
+      else {
+        $thumbnails[] = reset($video_data);
       }
     }
 
