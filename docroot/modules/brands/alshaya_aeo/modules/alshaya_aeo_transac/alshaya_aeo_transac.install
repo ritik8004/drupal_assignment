@@ -10,46 +10,6 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
- * Add new sku attribute division_name.
- */
-function alshaya_aeo_transac_update_8004() {
-  $strings = [
-    'Gender' => [
-      'ar' => 'الجنس',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.sku_base_fields'],
-    'alshaya_acm_product'
-  );
-
-  \Drupal::service('acq_sku.fields_manager')->addFields();
-
-  // Re-save indexes.
-  _alshaya_search_resave_indexes();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Hide swatch image in pdp gallery section.
- */
-function alshaya_aeo_transac_update_8003() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.display_settings'],
-    'alshaya_acm_product'
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * Disable color block, color family is being used as color facet.
  */
 function alshaya_aeo_transac_update_8001() {
@@ -77,6 +37,10 @@ function alshaya_aeo_transac_update_8001() {
  * Implements hook_update_N().
  *
  * Override PDP image style to sharpen the images before zoom.
+ *
+ * Add new sku attribute division_name.
+ *
+ * Hide swatch image in pdp gallery section.
  */
 function alshaya_aeo_transac_update_8002() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
@@ -87,6 +51,25 @@ function alshaya_aeo_transac_update_8002() {
   ];
 
   $manager->updateConfigs($styles, 'alshaya_image_styles');
+
+  $strings = [
+    'Gender' => [
+      'ar' => 'الجنس',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Re-save indexes.
+  _alshaya_search_resave_indexes();
 }
 
 /**
