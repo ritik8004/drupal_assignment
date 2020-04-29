@@ -10,6 +10,15 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_customer_portal module.
+ */
+function alshaya_mc_update_8320() {
+  \Drupal::service('module_installer')->install(['alshaya_customer_portal']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update config for enable_lhn_tree_search
  * for sidebar visibility in search page.
  * Queue items for alshaya_algolia_index.
