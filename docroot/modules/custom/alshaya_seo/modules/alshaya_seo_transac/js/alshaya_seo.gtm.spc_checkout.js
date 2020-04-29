@@ -67,22 +67,22 @@
   });
 
   Drupal.alshayaSeoSpc.pushStoreData = function(cart) {
-    if (cart.delivery_type !== 'cnc' || !cart.store_info) {
+    if (cart.delivery_type !== 'click_and_collect' || !cart.shipping.storeInfo) {
       return;
     }
 
     dataLayer[0].deliveryOption = 'Click and Collect';
     dataLayer[0].deliveryType = 'ship_to_store';
-    dataLayer[0].storeLocation = cart.store_info.name;
-    dataLayer[0].storeAddress = cart.store_info.gtm_cart_address.address_line1 + ' ' +  cart.store_info.gtm_cart_address.administrative_area_display;
-  }
+    dataLayer[0].storeLocation = cart.shipping.storeInfo.name;
+    dataLayer[0].storeAddress = cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' +  cart.shipping.storeInfo.gtm_cart_address.administrative_area_display;
+  };
 
   Drupal.alshayaSeoSpc.pushHomeDeliveryData = function(cart) {
-    if (cart.delivery_type !== 'home_delivery' || !cart.shipping_methods || !cart.shipping_address) {
+    if (cart.delivery_type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
       return;
     }
     //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
-    var area_id = cart.shipping_address[drupalSettings.address_fields.administrative_area.key];
+    var area_id = cart.shipping.address[drupalSettings.address_fields.administrative_area.key];
     if (!area_id) {
       return;
     }
@@ -93,7 +93,7 @@
     var input = document.querySelector('[data-id="'+ area_id +'"]');
     dataLayer[0].deliveryArea = $(input).data('label');
     dataLayer[0].deliveryCity = $(input).data('parent-label');
-  }
+  };
 
   Drupal.alshayaSeoSpc.gtmDeliveryMethod = function (method) {
     var data = {

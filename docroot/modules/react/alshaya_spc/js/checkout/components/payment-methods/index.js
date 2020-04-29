@@ -10,6 +10,7 @@ import {
 import ConditionalView from '../../../common/components/conditional-view';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
+import ApplePay from '../../../utilities/apple_pay';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -62,10 +63,16 @@ export default class PaymentMethods extends React.Component {
     }
 
     const paymentMethods = this.getPaymentMethods(true);
+
+    if (Object.keys(paymentMethods).length === 0) {
+      return;
+    }
+
     const { cart } = this.props;
 
     if (cart.cart.payment.method === undefined
-      || paymentMethods[cart.cart.payment.method] === undefined) {
+      || paymentMethods[cart.cart.payment.method] === undefined
+      || document.getElementById(`payment-method-${cart.cart.payment.method}`) === null) {
       // Select default from previous order if available.
       if (cart.cart.payment.default !== undefined
         || paymentMethods[cart.cart.payment.default] !== undefined) {
@@ -87,6 +94,10 @@ export default class PaymentMethods extends React.Component {
         // If payment method from api response not exists in
         // available payment methods in drupal, ignore it.
         if (method.code in drupalSettings.payment_methods) {
+          if (method.code === 'checkout_com_applepay' && !(ApplePay.isAvailable())) {
+            return;
+          }
+
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
         }
       });
@@ -134,8 +145,13 @@ export default class PaymentMethods extends React.Component {
     const cartUpdate = addPaymentMethodInCart('update payment', data);
     if (cartUpdate instanceof Promise) {
       cartUpdate.then((result) => {
-        // @TODO: Handle exception.
-        document.getElementById(`payment-method-${method}`).checked = true;
+        const paymentDiv = document.getElementById(`payment-method-${method}`);
+        if (paymentDiv === null) {
+          this.selectDefault();
+          return;
+        }
+
+        paymentDiv.checked = true;
 
         const { cart: cartData } = this.props;
         cartData.cart = result;
