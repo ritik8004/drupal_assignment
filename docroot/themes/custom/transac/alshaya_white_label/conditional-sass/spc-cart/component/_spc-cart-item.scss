@@ -65,6 +65,12 @@
           }
         }
 
+        &.loading {
+          svg {
+            visibility: hidden;
+          }
+        }
+
         @include componentLoader(transparent, 'after');
       }
     }
