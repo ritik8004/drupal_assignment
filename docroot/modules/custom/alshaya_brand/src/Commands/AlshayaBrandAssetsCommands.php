@@ -9,6 +9,7 @@ use Drush\Commands\DrushCommands;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Symfony\Component\Yaml\Yaml;
+use Consolidation\SiteProcess\ProcessManager;
 
 /**
  * Class AlshayaBrandAssetsCommands.
@@ -177,7 +178,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
 
     $domains = $this->getBrandDomains();
 
-    foreach ($domains as $domain) {
+    foreach ($domains ?? [] as $domain) {
       $command = sprintf('drush -l %s list-unused-brand-asset-paths', $domain[1]);
       $get_unused_brand_assets = $this->processManager()->process($command);
       $get_unused_brand_assets->mustRun();
@@ -186,13 +187,15 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
 
       foreach ($data as $line) {
         if (preg_match('/^\d/', $line) === 1) {
-          $array = explode(" | ", $line);
+          $array = explode(' | ', $line);
           $unused_brand_assets[$domain[1]][$array[0]] = $array[1];
         }
       }
     }
-    // Get list of unused assets common in all the markets of a brand.
-    $unused_brand_assets = call_user_func_array('array_intersect', $unused_brand_assets);
+    if (!empty($unused_brand_assets)) {
+      // Get list of unused assets common in all the markets of a brand.
+      $unused_brand_assets = call_user_func_array('array_intersect', $unused_brand_assets);
+    }
 
     if (empty($unused_brand_assets)) {
       $this->logger()->notice('No unused brand assets found.');
@@ -204,6 +207,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
       'init_message' => dt('Processing all files to check if they are still used...'),
       'progress_message' => dt('Completed @current step of @total.'),
       'error_message' => dt('Failed to check for unused media files.'),
+      'finished' => [__CLASS__, 'batchFinishedCallback'],
     ];
 
     foreach (array_chunk($unused_brand_assets, $batch_size, TRUE) as $chunk) {
@@ -228,23 +232,17 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    *   Dry run flag.
    */
   public static function deleteUnusedBrandAssetsAllMarketsChunk(array $files, $dry_run) {
-    /** @var \Drupal\file\FileStorageInterface $fileStorage */
-    $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
     $logger = \Drupal::logger('AlshayaBrandAssetsCommands');
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+    $file_system = \Drupal::service('file_system');
 
     foreach ($files as $uri) {
-      $uri = $fileStorage->loadByProperties(['uri' => $uri]);
-      $file = reset($uri);
+      $logger->notice('Delete file with uri @uri', [
+        '@uri' => $uri,
+      ]);
 
-      if ($file instanceof FileInterface) {
-        $logger->notice('Delete file entity @fid with uri @uri', [
-          '@fid' => $file->id(),
-          '@uri' => $file->getFileUri(),
-        ]);
-
-        if (!$dry_run) {
-          $file->delete();
-        }
+      if (!$dry_run) {
+        $file_system->delete($uri);
       }
     }
   }
@@ -262,7 +260,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
 
     $selfRecord = $this->siteAliasManager()->getSelf();
 
-    /** @var \Consolidation\SiteProcess\SiteProcess $acspm */
+    /** @var \Consolidation\SiteProcess\SiteProcess $atl */
     $atl = $this->processManager()->drush($selfRecord, 'acsf-tools-list', [], ['fields' => 'domains']);
     $atl->mustRun();
     $data = $atl->getOutput();
@@ -283,13 +281,43 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
         if (strpos($line, 'domains') > -1) {
           continue;
         }
-        $yaml_data .= substr($line, 2) . PHP_EOL;
+        $yaml_data .= $line . PHP_EOL;
       }
     }
 
     $domains = Yaml::parse($yaml_data);
 
     return $domains;
+  }
+
+  /**
+   * Batch finished callback.
+   *
+   * @param bool $success
+   *   Success or fail import.
+   * @param array $results
+   *   Result array.
+   * @param array $operations
+   *   Operation array.
+   */
+  public static function batchFinishedCallback($success, array $results = [], array $operations = []) {
+    if ($success) {
+      $logger = \Drupal::logger('AlshayaBrandAssetsCommands');
+      $brand_assets_commands = \Drupal::service('alshaya_brand.commands');
+      $processManager = ProcessManager::createDefault();
+
+      $domains = $brand_assets_commands->getBrandDomains();
+
+      foreach ($domains ?? [] as $domain) {
+        $command = sprintf('drush -l %s delete-unused-unavailable-file-entities', $domain[1]);
+        $get_unused_brand_assets = $processManager->process($command);
+        $get_unused_brand_assets->mustRun();
+
+        $logger->notice('Brand asset clean up complete for @domain', [
+          '@domain' => $domain[1],
+        ]);
+      }
+    }
   }
 
 }
