@@ -322,7 +322,7 @@ class SkuPriceHelper {
           $max = max($selling_prices);
 
           if ($min == $max) {
-            $product_price = (float) _alshaya_acm_format_price_with_decimal((float) $min, '.', '');
+            $product_price = _alshaya_acm_format_price_with_decimal((float) $min, '.', '');
             return $product_price;
           }
 
@@ -331,7 +331,7 @@ class SkuPriceHelper {
         break;
 
       case self::PRICE_DISPLAY_MODE_SIMPLE:
-        $product_price = (float) _alshaya_acm_format_price_with_decimal((float) $prices['final_price'], '.', '');
+        $product_price = _alshaya_acm_format_price_with_decimal((float) $prices['final_price'], '.', '');
         break;
     }
     return $product_price;
