@@ -14,8 +14,7 @@ use Drupal\block\Entity\Block;
  */
 function alshaya_aeo_transac_update_8004() {
   $strings = [
-    'division_name' => [
-      'en' => 'Gender',
+    'Gender' => [
       'ar' => 'الجنس',
     ],
   ];
@@ -30,10 +29,6 @@ function alshaya_aeo_transac_update_8004() {
   );
 
   \Drupal::service('acq_sku.fields_manager')->addFields();
-
-  // Re-save index configs to apply overrides.
-  \Drupal::configFactory()->getEditable('search_api.index.acquia_search_index')->save();
-  \Drupal::configFactory()->getEditable('search_api.index.product')->save();
 
   // Re-save indexes.
   _alshaya_search_resave_indexes();
@@ -135,8 +130,7 @@ function alshaya_aeo_transac_install() {
       'en' => 'American Eagle Online',
       'ar' => 'النسر الاميركي اون لاين',
     ],
-    'division_name' => [
-      'en' => 'Gender',
+    'Gender' => [
       'ar' => 'الجنس',
     ],
   ];
