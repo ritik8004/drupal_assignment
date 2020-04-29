@@ -314,6 +314,7 @@ class SkuPriceHelper {
    */
   public function getProductPrice(array $prices) {
     $display_mode = $this->displayMode;
+    $product_price = '';
     switch ($display_mode) {
       case self::PRICE_DISPLAY_MODE_FROM_TO:
         if (isset($prices['children'])) {
