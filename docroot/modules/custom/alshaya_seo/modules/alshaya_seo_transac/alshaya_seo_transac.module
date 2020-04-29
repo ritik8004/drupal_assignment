@@ -540,16 +540,18 @@ function alshaya_seo_transac_alshaya_acm_product_light_product_data_alter(SKU $s
  * Implements hook_alshaya_acm_product_build_alter().
  */
 function alshaya_seo_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  if (in_array($context, ['matchback', 'full'])) {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
-  $productNode = $skuManager->getDisplayNode($sku->getSku());
-  if ($productNode instanceof NodeInterface) {
-    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
-    $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
-    $attributes = $gtmManager->fetchProductGtmAttributes($productNode, 'full');
-    $settingsKey = ($context === 'matchback') ? 'matchback' : 'productInfo';
-    $build['#attached']['drupalSettings'][$settingsKey][$sku->getSku()]['gtm_attributes'] = $gtmManager->convertHtmlAttributesToDatalayer($attributes);
+    $productNode = $skuManager->getDisplayNode($sku->getSku());
+    if ($productNode instanceof NodeInterface) {
+      /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
+      $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+      $attributes = $gtmManager->fetchProductGtmAttributes($productNode, 'full');
+      $settingsKey = ($context === 'matchback') ? 'matchback' : 'productInfo';
+      $build['#attached']['drupalSettings'][$settingsKey][$sku->getSku()]['gtm_attributes'] = $gtmManager->convertHtmlAttributesToDatalayer($attributes);
+    }
   }
 }
 

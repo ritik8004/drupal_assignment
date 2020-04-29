@@ -143,7 +143,7 @@ class Drupal {
    *   Items data with info from drupal.
    */
   public function getCartItemDrupalStock($sku) {
-    $url = sprintf('/rest/v1/product/%s', $sku) . '?context=cart';
+    $url = sprintf('/rest/v1/stock/%s', $sku);
     $response = $this->invokeApi('GET', $url);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);
