@@ -104,7 +104,7 @@ class AlshayaCustomerPortalTokenFilter extends FilterBase implements ContainerFa
     }, ARRAY_FILTER_USE_KEY);
 
     if (empty($customer_portal_tokens)) {
-      return new FilterProcessResult();
+      return new FilterProcessResult($text);
     }
 
     // Generate replacement texts for the customer portal tokens.
