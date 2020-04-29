@@ -326,15 +326,12 @@ class SkuPriceHelper {
             return $product_price;
           }
 
-          $product_price = (float) _alshaya_acm_format_price_with_decimal((float) $min, '.', '') . ' - ' . (float) _alshaya_acm_format_price_with_decimal((float) $max, '.', '');
-
+          $product_price = _alshaya_acm_format_price_with_decimal((float) $min, '.', '') . ' - ' . _alshaya_acm_format_price_with_decimal((float) $max, '.', '');
         }
-
         break;
 
       case self::PRICE_DISPLAY_MODE_SIMPLE:
         $product_price = (float) _alshaya_acm_format_price_with_decimal((float) $prices['final_price'], '.', '');
-
         break;
     }
     return $product_price;
