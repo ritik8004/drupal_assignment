@@ -122,29 +122,24 @@ class ProductLinkedSkusResource extends ResourceBase {
     }
 
     $data = [];
-    foreach ($skuIds as $sku) {
-      $skuEntity = SKU::loadFromSku($sku);
+    foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
+      $related_skus = [];
 
-      if (!$skuEntity instanceof SKUInterface) {
-        throw new NotFoundHttpException($this->t("page not found"));
-      }
-
-      foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $key => $linked_type) {
-        // Check equal to link_type value.
-        if ($data['linked'][$key]['link_type'] == $linked_type) {
-          $result = $this->getLinkedSkus($skuEntity, $linked_type);
-          // Check is not empty.
-          if (!empty($result)) {
-            // Array merge and remove duplicate array.
-            $data['linked'][$key]['skus'] = array_map("unserialize", array_unique(array_map("serialize", array_merge($data['linked'][$key]['skus'], $result))));
-          }
-          continue;
+      foreach ($skuIds as $sku) {
+        $skuEntity = SKU::loadFromSku($sku);
+        if (!$skuEntity instanceof SKUInterface) {
+          throw new NotFoundHttpException($this->t("page not found"));
         }
-        $data['linked'][] = [
-          'link_type' => $linked_type,
-          'skus' => $this->getLinkedSkus($skuEntity, $linked_type),
-        ];
+
+        $related_skus += $this->getLinkedSkus($skuEntity, $linked_type);
       }
+      // Remove duplicate product array.
+      $related_skus = array_map("unserialize", array_unique(array_map("serialize", $related_skus)));
+
+      $data['linked'][] = [
+        'link_type' => $linked_type,
+        'skus' => $related_skus,
+      ];
     }
 
     $response = new ResourceResponse($data);
