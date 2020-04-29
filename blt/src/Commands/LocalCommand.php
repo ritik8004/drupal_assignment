@@ -77,13 +77,21 @@ class LocalCommand extends BltTasks {
       ->uri($info['local']['url'])
       ->run();
 
-    $this->say('Restarting memcache service');
-    $this->taskDrush()
-      ->drush('ssh')
-      ->arg('sudo service memcached restart')
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
+    $devel_env = getenv('DEVEL_ENV');
+
+    // If we're running Lando, skip this.
+    if (empty($devel_env) || $devel_env !== 'lando') {
+      $this->say('Restarting memcache service');
+      $this->taskDrush()
+        ->drush('ssh')
+        ->arg('sudo service memcached restart')
+        ->alias($info['local']['alias'])
+        ->uri($info['local']['url'])
+        ->run();
+    }
+    else {
+      $this->say('Skipping Memcache restart since we are running Lando');
+    }
 
     $this->say('Disable cloud modules');
     $this->taskDrush()
