@@ -21,7 +21,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
@@ -101,13 +100,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
   protected $moduleHandler;
 
   /**
-   * Language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  private $languageManager;
-
-  /**
    * Sku info helper.
    *
    * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
@@ -150,8 +142,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   Module handler.
    * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   Sku info helper object.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   Language manager.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   The Product Category helper service.
    */
@@ -169,7 +159,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
     ProductOptionsManager $product_options_manager,
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
-    LanguageManagerInterface $language_manager,
     ProductCategoryHelper $product_category_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
@@ -186,7 +175,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
     ];
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
-    $this->languageManager = $language_manager;
     $this->productCategoryHelper = $product_category_helper;
   }
 
@@ -208,7 +196,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $container->get('acq_sku.product_options_manager'),
       $container->get('module_handler'),
       $container->get('alshaya_acm_product.sku_info'),
-      $container->get('language_manager'),
       $container->get('alshaya_acm_product.category_helper')
     );
   }
@@ -240,7 +227,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data = $this->getSkuData($skuEntity, $link);
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
-    $data['categorisations'] = $this->getSkuCategorisations($node);
+    $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
@@ -255,68 +242,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $response->addCacheableDependency($cacheableMetadata);
 
     return $response;
-  }
-
-  /**
-   * Wrapper function to get product categorisations.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   Product node.
-   *
-   * @return array
-   *   Product categorisations.
-   */
-  private function getSkuCategorisations(NodeInterface $node) {
-    $lang = $this->languageManager->getCurrentLanguage()->getId();
-    $categories = $node->get('field_category')->referencedEntities();
-    $terms = [];
-    if (!empty($categories)) {
-      foreach ($categories as $term) {
-        $term = $this->skuInfoHelper->getEntityTranslation($term, $lang);
-        $terms[] = $this->getProductCategoryHierarchy($term, $lang);
-      }
-    }
-    return $terms;
-  }
-
-  /**
-   * Get category hierarchy.
-   *
-   * @param \Drupal\taxonomy\TermInterface $term
-   *   The term object.
-   * @param string|null $lang
-   *   The lang code.
-   *
-   * @return array
-   *   The string of terms hierarchy.
-   */
-  protected function getProductCategoryHierarchy(TermInterface $term, $lang = NULL) {
-    $static = &drupal_static('alshaya_acm_product_get_product_category_hierarchy', []);
-    $tid = $term->id();
-
-    if (isset($static[$tid][$lang])) {
-      return $static[$tid][$lang];
-    }
-    $sourceTerm[] = ['target_id' => $tid];
-    $termHierarchy = [];
-    if ($parents = $this->productCategoryHelper->getBreadcrumbTermList($sourceTerm)) {
-      foreach (array_reverse($parents) as $parent) {
-        $parent = $this->skuInfoHelper->getEntityTranslation($parent, $lang);
-        $termHierarchy[] = [
-          'id' => $parent->get('field_commerce_id')->getString(),
-          'label' => $parent->label(),
-        ];
-      }
-    }
-    // Incase if category don't have hierarchy use term details.
-    if (count($termHierarchy) == 0) {
-      $termHierarchy[] = [
-        'id' => $term->get('field_commerce_id')->getString(),
-        'label' => $term->label(),
-      ];
-    }
-    $static[$tid][$lang] = $termHierarchy;
-    return $static[$tid][$lang];
   }
 
   /**
