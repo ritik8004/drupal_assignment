@@ -109,6 +109,10 @@ class ProductLinkedSkusResource extends ResourceBase {
    *   The response containing linked skus of the given sku.
    */
   public function get(string $sku) {
+    $skuEntity = SKU::loadFromSku($sku);
+    if (!$skuEntity instanceof SKUInterface) {
+      throw new NotFoundHttpException($this->t("page not found"));
+    }
     $skuIds[] = $sku;
 
     // Check parameter is equal to 1.
@@ -128,7 +132,7 @@ class ProductLinkedSkusResource extends ResourceBase {
       foreach ($skuIds as $sku) {
         $skuEntity = SKU::loadFromSku($sku);
         if (!$skuEntity instanceof SKUInterface) {
-          throw new NotFoundHttpException($this->t("page not found"));
+          continue;
         }
 
         $related_skus += $this->getLinkedSkus($skuEntity, $linked_type);
