@@ -1,0 +1,8 @@
+services:
+  alshaya_brand.commands:
+    class: Drupal\alshaya_brand\Commands\AlshayaBrandAssetsCommands
+    arguments:
+      - '@logger.factory'
+      - '@database'
+    tags:
+      - { name: drush.command }
