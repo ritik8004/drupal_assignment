@@ -432,6 +432,23 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
   return false;
 };
 
+/**
+ * Get recommended products.
+ *
+ * @param {*} skus
+ * @param {*} type
+ */
+export const getRecommendedProducts = (skus, type) => {
+  let skuString = Object.keys(skus).map((key) => {
+    return `skus[${key}]` + '=' + encodeURIComponent(skus[key])
+  }).join('&');
+
+  return axios.get(`products/cart-linked-skus?type=${type}&${skuString}`)
+  .then((response) => {
+    return response.data;
+  });
+};
+
 export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info'), data);
 
 export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per item has been exceeded');

@@ -2,6 +2,7 @@ import React from 'react';
 import smoothscroll from 'smoothscroll-polyfill';
 import RecommendedProduct from '../../../utilities/recommended-product';
 import SectionTitle from '../../../utilities/section-title';
+import { getRecommendedProducts } from '../../../utilities/checkout_util';
 import isRTL from '../../../utilities/rtl';
 // Use smoothscroll to fill for Safari and IE,
 // Otherwise while scrollIntoView() is supported by all,
@@ -10,6 +11,35 @@ smoothscroll.polyfill();
 
 
 export default class CartRecommendedProducts extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      wait: true,
+      items: [],
+    };
+  }
+
+  componentDidMount() {
+    const { items } = this.props;
+    if (items !== undefined
+      && Object.keys(items).length > 0) {
+      let skus = [];
+      Object.entries(items).forEach(([, item]) => {
+        skus.push(item.sku);
+      });
+
+      const recommendedProducts = getRecommendedProducts(skus, 'crosssell');
+      if (recommendedProducts instanceof Promise) {
+        recommendedProducts.then((result) => {
+          // If there is no error.
+          if (result.error === undefined) {
+            // Something here.
+          }
+        });
+      }
+    }
+  }
+
   listHorizontalScroll = (direction) => {
     // Lets try native scroll for now using scroll-snap from CSS
     // if doesnt work out this has to be a slider.
@@ -30,6 +60,11 @@ export default class CartRecommendedProducts extends React.Component {
   };
 
   render() {
+    const { wait, items } = this.state;
+    if (wait === true) {
+      return (null);
+    }
+
     const {
       recommended_products: recommendedProducts,
       sectionTitle,
