@@ -6,3 +6,4 @@ package: Alshaya
 dependencies:
   - autologout:autologout
   - drupal:language
+  - pcb:pcb

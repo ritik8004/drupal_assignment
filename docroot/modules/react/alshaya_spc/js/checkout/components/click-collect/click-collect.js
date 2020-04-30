@@ -141,7 +141,7 @@ class ClickCollect extends React.Component {
    */
   placesAutocompleteHandler = () => {
     const place = this.autocomplete.getPlace();
-    this.nearMeBtn.classList.remove('active');
+    this.changeNearMeButtonStatus('in-active');
     if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
       this.fetchAvailableStores({
         lat: place.geometry.location.lat(),
@@ -150,6 +150,19 @@ class ClickCollect extends React.Component {
     }
   };
 
+  changeNearMeButtonStatus = (status) => {
+    if (status === 'active') {
+      this.nearMeBtn.classList.add('active');
+      this.nearMeBtn.disabled = true;
+      return;
+    }
+
+    if (status === 'in-active') {
+      this.nearMeBtn.classList.remove('active');
+      this.nearMeBtn.disabled = false;
+    }
+  }
+
   /**
    * Get current location coordinates.
    */
@@ -157,17 +170,22 @@ class ClickCollect extends React.Component {
     if (e) {
       e.preventDefault();
     }
-    const { showOutsideCountryError } = this.context;
+    const { showOutsideCountryError, coords } = this.context;
     this.searchplaceInput.value = '';
-    this.nearMeBtn.classList.add('active');
+    this.changeNearMeButtonStatus('active');
     showFullScreenLoader();
     getLocationAccess()
       .then(
         async (pos) => {
-          const coords = {
+          const userCoords = {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
           };
+
+          if (JSON.stringify(coords) === JSON.stringify(userCoords)) {
+            return;
+          }
+
           try {
             const [userCountrySame] = await getUserLocation(coords);
             // If user and site country not same, don;t process.
@@ -181,15 +199,16 @@ class ClickCollect extends React.Component {
             Drupal.logJavascriptError('clickncollect-checkUserCountry', error);
           }
 
-          this.fetchAvailableStores({
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-          }, true);
+          this.fetchAvailableStores(userCoords, true);
         },
         () => {
           removeFullScreenLoader();
-          this.nearMeBtn.classList.remove('active');
-          this.fetchAvailableStores(getDefaultMapCenter(), false);
+          const defaultMapCenter = getDefaultMapCenter();
+          if (JSON.stringify(coords) === JSON.stringify(defaultMapCenter)) {
+            return;
+          }
+          this.changeNearMeButtonStatus('in-active');
+          this.fetchAvailableStores(defaultMapCenter, false);
         },
       )
       .catch((error) => {
