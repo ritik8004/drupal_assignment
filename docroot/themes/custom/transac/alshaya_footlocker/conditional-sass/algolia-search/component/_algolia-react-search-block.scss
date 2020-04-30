@@ -227,7 +227,15 @@ body:not(.frontpage) {
     #alshaya-algolia-autocomplete {
       .react-autosuggest__container {
         &::after {
-          opacity: 0;
+          @include breakpoint($upto-desktop) {
+            opacity: 0;
+          }
+        }
+
+        .react-autosuggest__input {
+          @include breakpoint($only-tablet) {
+            padding-#{$left}: 0.7rem !important;
+          }
         }
       }
     }
