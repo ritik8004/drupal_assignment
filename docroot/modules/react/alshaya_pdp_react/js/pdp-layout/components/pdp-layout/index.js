@@ -6,28 +6,28 @@ export default class PdpLayout extends React.Component {
     super(props);
     this.state = {
       sku: null,
-      productInfo: null,
+      pdpGallery: null,
     };
   }
 
   componentDidMount() {
-    let data = window.drupalSettings.productInfo;
+    let data = window.drupalSettings.pdpGallery;
     let skuItemCode = Object.keys(data)[0];
     this.setState({
       sku: skuItemCode,
-      productInfo: data,
+      pdpGallery: data,
     });
 
   }
 
   render() {
-    const { sku, productInfo } = this.state;
+    const { sku, pdpGallery } = this.state;
 
     return (
       <>
         <div className="pdp-layout-wrapper">Item Code: {sku}</div>
-        {(sku &&  productInfo) && (
-          <PdpGallery skuCode={sku} productInfo={productInfo} />
+        {(sku &&  pdpGallery) && (
+          <PdpGallery skuCode={sku} pdpGallery={pdpGallery} />
         )}
 
       </>

@@ -9,6 +9,11 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Core\Field\FieldFilteredMarkup;
 use Drupal\alshaya_pdp_layouts\Event\PreprocessMagazineEvent;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\Component\Utility\Unicode;
+use Drupal\Component\Utility\Html;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Set dynamic allowed values for the select pdp layout field.
@@ -59,4 +64,51 @@ function alshaya_pdp_layouts_preprocess_alshaya_magazine(&$vars) {
   $event_dispatcher = \Drupal::service('event_dispatcher');
   $event_dispatcher->dispatch(PreprocessMagazineEvent::EVENT_NAME, $event);
   $vars = $event->getVariables();
+}
+
+/**
+ * Implements hook_preprocess_node__acq_product__full_magazine_v2().
+ */
+function alshaya_pdp_layouts_preprocess_node__acq_product__full_magazine_v2(&$vars) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+  $entity = $vars['elements']['#node'];
+  $sku = $sku_manager->getSkuForNode($entity);
+  $sku_entity = SKU::loadFromSku($sku);
+  $gallery = [];
+
+  if ($sku_entity instanceof SKUInterface) {
+    $sku_image_manager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+    $media = $sku_image_manager->getProductMedia($sku_entity, SkuManager::PDP_LAYOUT_MAGAZINE_V2, FALSE);
+    if (!empty($media)) {
+      $mediaItems = $sku_image_manager->getThumbnailsFromMedia($media, FALSE);
+      $thumbnails = $mediaItems['thumbnails'];
+      // If thumbnails available.
+      if (!empty($thumbnails)) {
+        $pdp_gallery_pager_limit = \Drupal::config('alshaya_acm_product.settings')
+          ->get('pdp_gallery_pager_limit');
+
+        $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+
+        $sku_identifier = Unicode::strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
+
+        $labels = [
+          '#theme' => 'product_labels',
+          '#labels' => $sku_manager->getLabels($sku_entity, 'pdp'),
+          '#sku' => $sku_identifier,
+          '#mainsku' => $sku_identifier,
+          '#type' => 'pdp',
+        ];
+
+        $gallery = [
+          '#sku' => $sku,
+          '#thumbnails' => $thumbnails,
+          '#pager_flag' => $pager_flag,
+          '#labels' => $labels,
+        ];
+
+        $vars['#attached']['drupalSettings']['pdpGallery'][$sku] = $gallery;
+      }
+    }
+  }
 }
