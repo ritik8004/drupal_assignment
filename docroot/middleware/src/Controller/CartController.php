@@ -262,10 +262,12 @@ class CartController {
     $data['cart_id'] = $cart_data['cart']['id'];
     $data['uid'] = $this->getDrupalInfo('uid') ?: 0;
     $data['langcode'] = $this->request->query->get('lang', 'en');
+    $data['customer'] = $cart_data['customer'] ?? NULL;
 
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
     $data['appliedRules'] = $cart_data['cart']['applied_rule_ids'] ?? [];
 
+    $data['items_qty'] = $cart_data['cart']['items_qty'];
     $data['cart_total'] = $cart_data['totals']['base_grand_total'];
     $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
     $data['totals'] = [

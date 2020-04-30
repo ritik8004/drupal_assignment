@@ -11,6 +11,10 @@
     Drupal.alshayaSeoSpc.cartGtm(e.detail.cart, step);
     Drupal.alshayaSeoSpc.pushStoreData(e.detail.cart);
     Drupal.alshayaSeoSpc.pushHomeDeliveryData(e.detail.cart);
+
+    if (drupalSettings.user.uid !== 0) {
+      Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
+    }
   });
 
   document.addEventListener('deliveryMethodChange', function (e) {
@@ -123,28 +127,6 @@
     };
 
     dataLayer.push(data);
-  };
-
-  Drupal.behaviors.spcCheckoutGtm = {
-    attach: function (context, settings) {
-      var step = Drupal.alshayaSeoSpc.getStepFromContainer();
-      var cart_data = Drupal.alshayaSpc.getCartData();
-      $(document).once('spc-checkout-gtm-onetime').each(function() {
-        if (cart_data !== null) {
-          Drupal.alshayaSeoSpc.cartGtm(cart_data, step);
-          if (step === 2) {
-            Drupal.alshayaSeoSpc.gtmPushCheckoutOption(
-              cart_data.cart.delivery_type === 'home_delivery' ? 'Home Delivery' : 'Click & Collect',
-              step
-            );
-          }
-        }
-
-        if (drupalSettings.user.uid !== 0) {
-          Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
-        }
-      });
-    }
   };
 
 })(jQuery, Drupal, dataLayer);

@@ -1115,7 +1115,7 @@ class Cart {
     $shippingMethod = $cart['shipping']['method'] ?? '';
     $cart['shipping']['type'] = strpos($shippingMethod, 'click_and_collect') !== FALSE
       ? 'click_and_collect'
-      : $shippingMethod;
+      : 'home_delivery';
 
     $cart['shipping']['clickCollectType'] = $cart['shipping']['extension_attributes']['click_and_collect_type'] ?? '';
     $cart['shipping']['storeCode'] = $cart['shipping']['extension_attributes']['store_code'] ?? '';

@@ -287,22 +287,26 @@ class AlshayaSpcOrderHelper {
    *   The response containing delivery methods data.
    */
   public function getSkuDetails(array $item) {
-    $data['title'] = $item['name'];
-    $data['final_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
-    $data['extra_data']['cart_image'] = NULL;
-    $data['relative_link'] = '';
+    // We will use this as flag in React to avoid reading from local storage
+    // and also avoid doing API call.
+    $data['prepared'] = TRUE;
 
-    $data['configurable_values'] = [];
+    $data['title'] = $item['name'];
+    $data['price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
+    $data['image'] = NULL;
+    $data['url'] = '';
+
+    $data['options'] = [];
     $node = $this->skuManager->getDisplayNode($item['sku']);
     $skuEntity = SKU::loadFromSku($item['sku']);
     if (($skuEntity instanceof SKUInterface) && ($node instanceof NodeInterface)) {
       $data['title'] = $this->productInfoHelper->getTitle($skuEntity, 'basket');
-      $data['relative_link'] = $node->toUrl('canonical', ['absolute' => FALSE])->toString();
-      $data['extra_data']['cart_image'] = $this->getProductDisplayImage($skuEntity, 'cart_thumbnail', 'cart');
+      $data['url'] = $node->toUrl('canonical', ['absolute' => FALSE])->toString();
+      $data['image'] = $this->getProductDisplayImage($skuEntity, 'cart_thumbnail', 'cart');
       // Check if we can find a parent SKU for this to get proper name.
       if ($this->skuManager->getParentSkuBySku($skuEntity)) {
         // Get configurable values.
-        $data['configurable_values'] = array_values($this->skuManager->getConfigurableValues($skuEntity));
+        $data['options'] = array_values($this->skuManager->getConfigurableValues($skuEntity));
       }
     }
 
@@ -319,8 +323,8 @@ class AlshayaSpcOrderHelper {
    * @param string $context
    *   (optional) Context for image.
    *
-   * @return array
-   *   Return string of uri or Null if not found.
+   * @return string
+   *   Return url of image or null if not found.
    */
   protected function getProductDisplayImage($sku, $image_style = '', $context = '') {
     // Load the first image.
@@ -328,26 +332,18 @@ class AlshayaSpcOrderHelper {
 
     // If we have image for the product.
     if (!empty($media_image)) {
-      $image = [
-        'url' => ImageStyle::load($image_style)->buildUrl($media_image['drupal_uri']),
-        'title' => $sku->label(),
-        'alt' => $sku->label(),
-      ];
+      $image = ImageStyle::load($image_style)->buildUrl($media_image['drupal_uri']);
     }
     else {
       // If still image is not available, set default one.
       $default_image_url = $this->skuImagesManager->getProductDefaultImageUrl();
 
       if ($default_image_url) {
-        $image = [
-          'url' => $default_image_url,
-          'title' => $sku->label(),
-          'alt' => $sku->label(),
-        ];
+        $image = $default_image_url;
       }
     }
 
-    return $image ?? [];
+    return $image ?? '';
   }
 
   /**

@@ -71,7 +71,8 @@ export default class Checkout extends React.Component {
             wait: false,
             cart: { cart },
           });
-          dispatchCustomEvent('checkoutCartUpdate', cartInfo);
+
+          dispatchCustomEvent('checkoutCartUpdate', { cart });
         });
       } else {
         redirectToCart();

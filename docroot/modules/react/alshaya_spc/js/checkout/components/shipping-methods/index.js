@@ -3,12 +3,12 @@ import React from 'react';
 import ShippingMethod from '../shipping-method';
 
 const ShippingMethods = ({ cart, refreshCart }) => {
-  if (!cart.cart.shipping_methods) {
+  if (!cart.cart.shipping.methods) {
     return null;
   }
 
   const methods = [];
-  Object.entries(cart.cart.shipping_methods).forEach(([key, method]) => {
+  Object.entries(cart.cart.shipping.methods).forEach(([key, method]) => {
     // Don't show CNC in HD methods.
     if (method.carrier_code === window.drupalSettings.map.cnc_shipping.code) {
       return;
@@ -28,7 +28,7 @@ const ShippingMethods = ({ cart, refreshCart }) => {
   });
 
   return (
-    <div className={`shipping-methods shipping-methods-${cart.cart.shipping_methods.length}`}>
+    <div className={`shipping-methods shipping-methods-${cart.cart.shipping.methods.length}`}>
       {methods}
     </div>
   );

@@ -16,6 +16,16 @@ export default class CheckoutCartItem extends React.Component {
 
   componentDidMount() {
     const { item } = this.props;
+
+    if (item.hasOwnProperty('prepared')) {
+      this.setState({
+        wait: false,
+        productInfo: item,
+      });
+
+      return;
+    }
+
     // Key will be like 'product:en:testsku'
     Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
   }

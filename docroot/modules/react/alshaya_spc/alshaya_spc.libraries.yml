@@ -46,6 +46,7 @@ checkout-confirmation:
     dist/checkout_confirmation.bundle.js: { }
   dependencies:
     - alshaya_react/react
+    - alshaya_spc/cart_utilities
 
 checkout_sandbox_kit:
   remote: https://cdn.checkout.com
