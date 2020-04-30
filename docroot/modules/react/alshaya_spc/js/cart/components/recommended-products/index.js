@@ -16,6 +16,8 @@ export default class CartRecommendedProducts extends React.Component {
       wait: true,
       recommendedProducts: [],
     };
+
+    this.recommendedProductRef = React.createRef();
   }
 
   componentDidMount() {
@@ -27,6 +29,13 @@ export default class CartRecommendedProducts extends React.Component {
 
     // Event handles cart recommendation refresh.
     document.addEventListener('spcRefreshCartRecommendation', this.spcRefreshCartRecommendation, false);
+  }
+
+  componentDidUpdate() {
+    const { wait } = this.state;
+    if (wait === false) {
+      Drupal.ajax.bindAjaxLinks(this.recommendedProductRef.current);
+    }
   }
 
   componentWillUnmount() {
@@ -98,7 +107,7 @@ export default class CartRecommendedProducts extends React.Component {
       return (
         <>
           <SectionTitle animationDelayValue="0.6s">{sectionTitle}</SectionTitle>
-          <div className="spc-recommended-products fadeInUp" style={{ animationDelay: '0.8s' }}>
+          <div ref={this.recommendedProductRef} className="spc-recommended-products fadeInUp" style={{ animationDelay: '0.8s' }}>
             <button className="nav-prev" type="button" onClick={() => { this.listHorizontalScroll('prev'); }} />
             <div className="block-content">
               { Object.keys(recommendedProducts).map(
