@@ -19,10 +19,24 @@ export default class CartRecommendedProducts extends React.Component {
   }
 
   componentDidMount() {
+    // Remove any old storage.
+    const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
+    localStorage.removeItem(key);
     const { items } = this.props;
+    this.spcRecommendationHandler(items);
+
+    // Event handles cart recommendation refresh.
+    document.addEventListener('spcRefreshCartRecommendation', this.spcRefreshCartRecommendation, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('spcRefreshCartRecommendation', this.spcRefreshCartRecommendation, false);
+  }
+
+  spcRecommendationHandler = (items) => {
     if (items !== undefined
       && Object.keys(items).length > 0) {
-      let skus = [];
+      const skus = [];
       Object.entries(items).forEach(([, item]) => {
         skus.push(item.sku);
       });
@@ -40,12 +54,17 @@ export default class CartRecommendedProducts extends React.Component {
 
             // Storing in localstorage to be used by GTM.
             const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
-            localStorage.setItem(key, result.data);
+            localStorage.setItem(key, JSON.stringify(result.data));
           }
         });
       }
     }
-  }
+  };
+
+  spcRefreshCartRecommendation = (event) => {
+    const { items } = event.detail;
+    this.spcRecommendationHandler(items);
+  };
 
   listHorizontalScroll = (direction) => {
     // Lets try native scroll for now using scroll-snap from CSS
