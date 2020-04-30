@@ -101,10 +101,11 @@ function alshaya_pdp_layouts_preprocess_node__acq_product__full_magazine_v2(&$va
         ];
 
         $gallery = [
-          '#sku' => $sku,
-          '#thumbnails' => $thumbnails,
-          '#pager_flag' => $pager_flag,
-          '#labels' => $labels,
+          'sku' => $sku,
+          'thumbnails' => $thumbnails,
+          'pager_flag' => $pager_flag,
+          'labels' => $labels,
+          'lazy_load_placeholder' => \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder'),
         ];
 
         $vars['#attached']['drupalSettings']['pdpGallery'][$sku] = $gallery;
