@@ -435,3 +435,30 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
 export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info'), data);
 
 export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per item has been exceeded');
+
+export const getAmountWithCurrency = (priceAmount) => {
+  let amount = priceAmount === null ? 0 : priceAmount;
+  amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
+  const { currency_config: currencyConfig } = drupalSettings.alshaya_spc;
+  const priceParts = [
+    currencyConfig.currency_code,
+    amount.toFixed(currencyConfig.decimal_points),
+  ];
+
+  return currencyConfig.currency_code_position === 'before'
+    ? priceParts.join(' ')
+    : priceParts.reverse().join(' ');
+};
+
+export const replaceCodTokens = (amount, text) => {
+  if (text.length === 0) {
+    return '';
+  }
+
+  const textSplit = text.split('[surcharge]');
+  return textSplit.reduce((prefix, suffix) => [
+    prefix,
+    getAmountWithCurrency(amount),
+    suffix,
+  ]);
+};

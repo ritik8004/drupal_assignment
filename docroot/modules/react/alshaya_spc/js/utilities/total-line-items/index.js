@@ -4,6 +4,7 @@ import VatText from '../vat-text';
 import FreeDeliveryText from '../free-delivery-text';
 import ConditionalView from '../../common/components/conditional-view';
 import getStringMessage from '../strings';
+import { replaceCodTokens } from '../checkout_util';
 
 class TotalLineItems extends React.Component {
   /**
@@ -47,7 +48,7 @@ class TotalLineItems extends React.Component {
           <TotalLineItem
             tooltip
             name="surcharge-total"
-            tooltipContent={getStringMessage('cod_surcharge_tooltip')}
+            tooltipContent={replaceCodTokens(totals.surcharge, getStringMessage('cod_surcharge_tooltip'))}
             title={getStringMessage('cod_surcharge_label')}
             value={totals.surcharge}
           />
