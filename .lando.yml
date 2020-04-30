@@ -15,6 +15,9 @@ services:
     overrides:
       environment:
         DEVEL_ENV: lando
+    run_as_root:
+      - "apt-get update -y"
+      - "apt-get install netcat -y"
 
   database:
     type: mysql

@@ -357,9 +357,9 @@ class CustomCommand extends BltTasks {
     if ($is_lando) {
       $app_root = '/app';
 
-      // @todo look into clearing memcache.
-      // $this->_exec('nc memcache1 11211 <<< "flush_all"');
-      // $this->_exec('nc memcache2 11211 <<< "flush_all"');
+      // Flush memcache.
+      $this->_exec('echo "flush_all" > nc -q 2 memcache1 11211');
+      $this->_exec('echo "flush_all" > nc -q 2 memcache2 11211');
     }
     else {
       $app_root = '/var/www/alshaya';
