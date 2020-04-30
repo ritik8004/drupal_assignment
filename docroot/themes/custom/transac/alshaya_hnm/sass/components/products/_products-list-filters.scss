@@ -1,16 +1,6 @@
 .c-plp .c-content__region .all-filters,
 .c-plp .c-content__region .all-filters-algolia {
   .filter__inner {
-    @include breakpoint($only-tablet) {
-      height: calc(100vh - 5.3125rem - 9.375rem);
-      padding-bottom: 0;
-    }
-
-    @include breakpoint($desktop) {
-      height: calc(100vh - 5.3125rem - 8.25rem);
-      padding-bottom: 0;
-    }
-
     .views-exposed-form.c-accordion,
     .c-facet.c-accordion {
       .c-accordion__title {
@@ -36,39 +26,9 @@
         text-transform: uppercase;
       }
     }
-
-    .c-facet {
-      &.show-facet {
-        ul {
-          @include breakpoint($tablet) {
-            height: calc(100vh - 5.3125rem - 9.375rem);
-          }
-
-          @include breakpoint($desktop) {
-            height: calc(100vh - 5.3125rem - 8.25rem);
-          }
-        }
-      }
-
-      &.c-accordion:not(.block-facet-blockcategory-facet-search) ul,
-      &.c-collapse-item:not(.block-facet-blockcategory-facet-search) ul {
-        @include breakpoint($tablet) {
-          height: calc(100vh - 5.3125rem - 9.375rem);
-          max-height: none;
-        }
-
-        @include breakpoint($desktop) {
-          height: calc(100vh - 5.3125rem - 8.25rem);
-        }
-      }
-    }
   }
 
   .filter__head {
-    @include breakpoint($tablet) {
-      height: 5.3125rem;
-    }
-
     .filter-sort-title {
       font-family: $hnm-demibold;
       letter-spacing: 1px;
