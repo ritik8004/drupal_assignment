@@ -17,7 +17,7 @@ export default class CheckoutCartItem extends React.Component {
   componentDidMount() {
     const { item } = this.props;
 
-    if (item.hasOwnProperty('prepared')) {
+    if (Object.prototype.hasOwnProperty.call(item, 'prepared')) {
       this.setState({
         wait: false,
         productInfo: item,

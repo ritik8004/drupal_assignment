@@ -92,7 +92,7 @@
     }
 
     dataLayer[0].deliveryOption = 'Home Delivery';
-    dataLayer[0].deliveryType = cart.shipping_methods[0].carrier_title;
+    dataLayer[0].deliveryType = cart.shipping.methods[0].carrier_title;
 
     var input = document.querySelector('[data-id="'+ area_id +'"]');
     dataLayer[0].deliveryArea = $(input).data('label');

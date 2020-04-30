@@ -359,7 +359,7 @@ class PaymentController {
     }
 
     $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
-      '@quote_id' => $data['quote_id'],
+      '@quote_id' => $response['quote_id'],
       '@message' => json_encode($data),
     ]);
 
