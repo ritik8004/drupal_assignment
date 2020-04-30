@@ -21,7 +21,7 @@ function getPosition(element) {
 /**
  * Helper to get Sidebar Offset based on page.
  */
-function getSiderBarOffsetTop() {
+function getSidebarOffsetTop() {
   let offSet = 0;
   let preContentOffset = 0;
   if (document.getElementsByClassName('spc-pre-content').length > 0) {
@@ -48,45 +48,47 @@ function getSiderBarOffsetTop() {
  */
 function stickyMobileCartPreview() {
   const cartPreview = document.getElementsByClassName('spc-mobile-cart-preview');
-  // Check for super category menu.
-  const superCategoryMenu = document.getElementById('block-supercategorymenu');
-  let superCatFlag = false;
-  let superCatHeight; let
-    brandingMenuHeight;
-  [superCatHeight, brandingMenuHeight] = [0, 0];
-  if (cartPreview.length) {
-    if (superCategoryMenu) {
-      superCatHeight = superCategoryMenu.offsetHeight + document.getElementById('block-mobilenavigation').offsetHeight;
-      cartPreview[0].style.top = `${superCatHeight}px`;
-      superCatFlag = true;
-    } else {
-      brandingMenuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
-      if (cartPreview[0] !== undefined) {
-        cartPreview[0].style.top = `${brandingMenuHeight}px`;
-      }
-    }
-  } else {
+  // If for some reason block is not available, dont proceed.
+  if (cartPreview.length === 0) {
     return;
   }
+
+  // Check for super category menu.
+  const superCategoryMenu = document.getElementById('block-supercategorymenu');
+  let menuHeight = 0;
+
+  // SPC Cart Preview offset.
+  const cartPreviewOffset = cartPreview[0].offsetHeight / 1.75;
+
+  // SPC-Pre-Content offset.
+  // Content might come via AJAX.
+  const preContentHeight = document.getElementsByClassName('spc-pre-content')[0].offsetHeight;
+
+  // Breadcrumb offset.
+  const breadCrumbHeight = document.getElementsByClassName('c-breadcrumb')[0].offsetHeight;
+
+  // Menu offset.
+  if (superCategoryMenu) {
+    menuHeight = superCategoryMenu.offsetHeight + document.getElementById('block-mobilenavigation').offsetHeight;
+  } else {
+    menuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
+  }
+
   window.addEventListener('scroll', () => {
     // Mobile cart sticky header.
     if (window.innerWidth < 768) {
-      if (cartPreview.length === 0) {
-        return;
-      }
+      const cartOffsetTop = menuHeight + breadCrumbHeight + preContentHeight - cartPreviewOffset;
 
-      const cartPreviewOffset = getPosition(cartPreview[0]);
-      const cartOffsetTop = superCatFlag === false
-        ? cartPreviewOffset.top - brandingMenuHeight
-        : cartPreviewOffset.top - superCatHeight;
       if (window.pageYOffset > cartOffsetTop) {
         if (!cartPreview[0].classList.contains('sticky')) {
           cartPreview[0].classList.add('sticky');
           document.getElementsByClassName('spc-main')[0].style.paddingTop = `${cartPreview[0].offsetHeight}px`;
+          cartPreview[0].style.top = `${menuHeight}px`;
         }
       } else {
         cartPreview[0].classList.remove('sticky');
         document.getElementsByClassName('spc-main')[0].style.paddingTop = 0;
+        cartPreview[0].style.top = 0;
       }
     }
   });
@@ -114,7 +116,7 @@ function stickySidebar() {
         }
       }
 
-      const offSet = getSiderBarOffsetTop();
+      const offSet = getSidebarOffsetTop();
       // Sidebar.
       const spcSidebar = document.getElementsByClassName('spc-sidebar');
 

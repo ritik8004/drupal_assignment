@@ -4,9 +4,10 @@
     display: flex;
     align-items: center;
     padding: 0.5625rem 0;
+    margin-bottom: 1.25rem;
 
-    @include breakpoint($tablet) {
-      margin-bottom: 2.5rem;
+    &:first-child {
+      margin-top: 1.25rem;
     }
 
     &.spc-checkout-error-message-container {

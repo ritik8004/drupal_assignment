@@ -1,6 +1,12 @@
 .alias--cart,
 .alias--checkout,
 .alias--checkout-confirmation {
+  .spc-pre-content-sticky {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.25rem;
+    }
+  }
+
   .page-wrapper {
     background-color: $spc-cart-background;
   }
@@ -89,7 +95,7 @@
 
       @include breakpoint($only-mobile) {
         width: 100%;
-        margin-top: 1.5625rem;
+        margin-top: 1.25rem;
       }
     }
   }

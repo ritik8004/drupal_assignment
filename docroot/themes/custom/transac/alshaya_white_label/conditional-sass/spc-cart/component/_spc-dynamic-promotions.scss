@@ -90,8 +90,12 @@
     min-height: 3.25rem;
     font-family: $alshaya-bold;
     display: inline-flex;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
 
     @include arabic-letter-spacing;
 
@@ -131,7 +135,6 @@
     svg {
       width: 2.1875rem;
       margin: 0 0.5rem;
-      align-self: center;
     }
   }
 
