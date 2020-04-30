@@ -92,9 +92,11 @@
       }
     }
 
-    &:hover::before,
-    &.active::before {
-      color: $store_finder_btn_act_hover_state;
+    &:hover,
+    &.active {
+      &::before {
+        color: $store_finder_btn_act_hover_state;
+      }
     }
   }
 
@@ -152,6 +154,7 @@
 
   .list-view-locator {
     cursor: pointer;
+    border: 0;
 
     .row-title {
       color: $store_finder_glossary_text;

@@ -19,7 +19,7 @@
   .primary__footer--menu {
     @include breakpoint($tablet) {
       flex-grow: 1;
-      flex-basis: 24%;
+      width: 24%;
     }
   }
 
@@ -30,28 +30,28 @@
     }
 
     @include breakpoint($tablet) {
-      flex-basis: 28%;
+      width: 28%;
       flex-grow: 1;
     }
   }
 
   .footer__categories {
     @include breakpoint($only-tablet) {
-      flex-basis: 17%;
+      width: 17%;
     }
 
     @include breakpoint($desktop) {
-      flex-basis: 23%;
+      width: 23%;
     }
   }
 
   .footer__help {
     @include breakpoint($only-tablet) {
-      flex-basis: 22%;
+      width: 22%;
     }
 
     @include breakpoint($desktop) {
-      flex-basis: 24%;
+      width: 24%;
 
       .c-footer-menu--help {
         html[lang=ar] & {
@@ -63,20 +63,20 @@
 
   .footer__about {
     @include breakpoint($desktop) {
-      flex-basis: 26%;
+      width: 26%;
     }
   }
 
   .footer_primary-right-block {
     @include breakpoint($desktop) {
-      flex-basis: 27%;
+      width: 27%;
     }
   }
 
   .footer__about,
   .footer_primary-right-block {
     @include breakpoint($only-tablet) {
-      flex-basis: 27%;
+      width: 27%;
     }
   }
 
@@ -226,7 +226,7 @@
 #alshaya-newsletter-subscribe {
   #edit-email {
     padding-#{$right}: 31%;
-    border: 1px solid #dadada;
+    border: 1px solid $newsletter_input_border;
     border-radius: 0.1875rem;
     padding-#{$left}: 0.5rem;
     height: 2.5rem;
