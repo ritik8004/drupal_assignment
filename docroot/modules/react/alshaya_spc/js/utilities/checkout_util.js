@@ -443,7 +443,7 @@ export const getRecommendedProducts = (skus, type) => {
     return `skus[${key}]` + '=' + encodeURIComponent(skus[key])
   }).join('&');
 
-  return axios.get(`products/cart-linked-skus?type=${type}&${skuString}`)
+  return axios.get(`products/cart-linked-skus?type=${type}&${skuString}&context=cart`)
   .then((response) => {
     return response.data;
   });

@@ -9,13 +9,12 @@ import isRTL from '../../../utilities/rtl';
 // Smooth transition is not supported apart from Chrome & FF.
 smoothscroll.polyfill();
 
-
 export default class CartRecommendedProducts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       wait: true,
-      items: [],
+      recommendedProducts: [],
     };
   }
 
@@ -28,12 +27,16 @@ export default class CartRecommendedProducts extends React.Component {
         skus.push(item.sku);
       });
 
+      // Get recommended products.
       const recommendedProducts = getRecommendedProducts(skus, 'crosssell');
       if (recommendedProducts instanceof Promise) {
         recommendedProducts.then((result) => {
           // If there is no error.
           if (result.error === undefined) {
-            // Something here.
+            this.setState({
+              wait: false,
+              recommendedProducts: result.data,
+            });
           }
         });
       }
@@ -60,15 +63,12 @@ export default class CartRecommendedProducts extends React.Component {
   };
 
   render() {
-    const { wait, items } = this.state;
+    const { wait, recommendedProducts } = this.state;
     if (wait === true) {
       return (null);
     }
 
-    const {
-      recommended_products: recommendedProducts,
-      sectionTitle,
-    } = this.props;
+    const { sectionTitle } = this.props;
 
     // If recommended products available.
     if (Object.keys(recommendedProducts).length > 0) {

@@ -89,6 +89,7 @@ class CartLinkedSkusController extends ControllerBase {
       $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
         '#cache' => [
           'tags' => $cache_tags,
+          'contexts' => ['url.query_args', 'languages'],
         ],
       ]));
 
