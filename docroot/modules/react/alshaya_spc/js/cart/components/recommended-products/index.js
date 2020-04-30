@@ -54,8 +54,8 @@ export default class CartRecommendedProducts extends React.Component {
       const recommendedProducts = getRecommendedProducts(skus, 'crosssell');
       if (recommendedProducts instanceof Promise) {
         recommendedProducts.then((result) => {
-          // If there is no error.
-          if (result.error === undefined) {
+          // If there is no error and there are recommended products.
+          if (result.error === undefined && result.length > 0) {
             this.setState({
               wait: false,
               recommendedProducts: result.data,
