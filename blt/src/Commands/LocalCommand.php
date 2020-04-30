@@ -79,8 +79,14 @@ class LocalCommand extends BltTasks {
 
     $devel_env = getenv('DEVEL_ENV');
 
-    // If we're running Lando, skip this.
-    if (empty($devel_env) || $devel_env !== 'lando') {
+    if (!empty($devel_env) && $devel_env === 'lando') {
+      // If we're running Lando, our best option is to flush our memcache
+      // services.
+      $this->say('Flushing memcache servers.');
+      $this->_exec('echo "flush_all" > nc -q 2 memcache1 11211');
+      $this->_exec('echo "flush_all" > nc -q 2 memcache2 11211');
+    }
+    else {
       $this->say('Restarting memcache service');
       $this->taskDrush()
         ->drush('ssh')
@@ -88,11 +94,6 @@ class LocalCommand extends BltTasks {
         ->alias($info['local']['alias'])
         ->uri($info['local']['url'])
         ->run();
-    }
-    else {
-      $this->say('Flushing memcache servers.');
-      $this->_exec('echo "flush_all" > nc -q 2 memcache1 11211');
-      $this->_exec('echo "flush_all" > nc -q 2 memcache2 11211');
     }
 
     $this->say('Disable cloud modules');
