@@ -23,6 +23,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
  * Provides a resource to get product details.
@@ -108,6 +109,13 @@ class ProductResource extends ResourceBase {
   private $languageManager;
 
   /**
+   * Product category helper service.
+   *
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
+   */
+  protected $productCategoryHelper;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -136,6 +144,8 @@ class ProductResource extends ResourceBase {
    *   Sku info helper object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   The Product Category helper service.
    */
   public function __construct(
     array $configuration,
@@ -150,7 +160,8 @@ class ProductResource extends ResourceBase {
     ProductOptionsManager $product_options_manager,
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    ProductCategoryHelper $product_category_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -166,6 +177,7 @@ class ProductResource extends ResourceBase {
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
     $this->languageManager = $language_manager;
+    $this->productCategoryHelper = $product_category_helper;
   }
 
   /**
@@ -185,7 +197,8 @@ class ProductResource extends ResourceBase {
       $container->get('acq_sku.product_options_manager'),
       $container->get('module_handler'),
       $container->get('alshaya_acm_product.sku_info'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('alshaya_acm_product.category_helper')
     );
   }
 
@@ -216,6 +229,7 @@ class ProductResource extends ResourceBase {
     $data = $this->getSkuData($skuEntity, $link);
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
+    $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
