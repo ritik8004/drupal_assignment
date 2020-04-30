@@ -97,8 +97,9 @@ This is not ideal since it means we could get out of date if the blt code in tha
 Performance is not as good as a dedicated VM, for a number of reasons, but mostly docker related rather than Lando.
 
 We have made some attempt to improve this by using excludes within .lando.yml to exclude vendor folder from shares.
-Instead, it's contents are copied into the container at build time. However, this does mean that containers must be
-rebuilt after each composer operation that changes the contents of your vendor folder.
+Instead, it's contents are copied into the container at build time. However, this does mean that containers **must be
+rebuilt after each composer operation that changes the contents of your vendor folder**, for example `composer install`
+or `composer update`.  Luckily this doesn't take long.  To do this, use `lando rebuild -y`.
 
 On local, it has been found that updating docker preferences on mac to only mount project folder and $HOME/.lando
 folder into containers.
