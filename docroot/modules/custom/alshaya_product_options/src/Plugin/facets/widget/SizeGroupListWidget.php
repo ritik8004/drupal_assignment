@@ -72,6 +72,8 @@ class SizeGroupListWidget extends LinksWidget {
 
     $build['#items'] = $items;
     $build['#attributes']['class'][] = 'js-facets-checkbox-links';
+    // Adding class for sizegroup filter.
+    $build['#attributes']['class'][] = 'size_group_list';
     $build['#attached']['library'][] = 'facets/drupal.facets.checkbox-widget';
     $build['#attached']['library'][] = 'alshaya_product_options/sizegroup_filter';
 
