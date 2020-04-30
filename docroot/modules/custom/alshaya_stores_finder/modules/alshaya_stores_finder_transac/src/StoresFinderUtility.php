@@ -324,10 +324,7 @@ class StoresFinderUtility {
       }
       $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
       $store['cart_address'] = $address;
-      // V2 - copy address from Store.
-      if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2
-        && ($store_address = $node->get('field_address')->getValue())
-      ) {
+      if ($store_address = $node->get('field_address')->getValue()) {
         $store['cart_address'] = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
       }
 
