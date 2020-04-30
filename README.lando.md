@@ -104,5 +104,8 @@ or `composer update`.  Luckily this doesn't take long.  To do this, use `lando r
 On local, it has been found that updating docker preferences on mac to only mount project folder and $HOME/.lando
 folder into containers.
 
-- For reference: https://docs.lando.dev/config/performance.html
+For reference:
+
+- https://docs.lando.dev/config/performance.html
+- https://github.com/lando/lando/issues/763
 
