@@ -42,6 +42,9 @@ services:
     config:
       vcl: architecture/varnish/varnish-4-lando.vcl
 
+  solr:
+    type: solr:5.5
+
   node:
     type: node:8
 
