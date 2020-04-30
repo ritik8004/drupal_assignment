@@ -207,8 +207,8 @@ class AlshayaSpcController extends ControllerBase {
 
       $user_mobile_number = $user->get('field_mobile_number')->first();
       $user_name = [
-        'fname' => $user->get('field_first_name')->first()->getString(),
-        'lname' => $user->get('field_last_name')->first()->getString(),
+        'fname' => $user->get('field_first_name')->getString(),
+        'lname' => $user->get('field_last_name')->getString(),
         'mobile' => !empty($user_mobile_number) ? $user_mobile_number->getValue()['local_number'] : '',
       ];
 
