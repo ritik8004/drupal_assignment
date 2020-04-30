@@ -90,7 +90,9 @@ class LocalCommand extends BltTasks {
         ->run();
     }
     else {
-      $this->say('Skipping Memcache restart since we are running Lando');
+      $this->say('Flushing memcache servers.');
+      $this->_exec('echo "flush_all" > nc -q 2 memcache1 11211');
+      $this->_exec('echo "flush_all" > nc -q 2 memcache2 11211');
     }
 
     $this->say('Disable cloud modules');
