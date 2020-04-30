@@ -25,6 +25,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
  * Provides a resource to get product details.
@@ -117,6 +118,13 @@ class ProductResource extends ResourceBase {
   private $requestStack;
 
   /**
+   * Product category helper service.
+   *
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
+   */
+  protected $productCategoryHelper;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -147,6 +155,8 @@ class ProductResource extends ResourceBase {
    *   Language manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   The Product Category helper service.
    */
   public function __construct(
     array $configuration,
@@ -162,7 +172,8 @@ class ProductResource extends ResourceBase {
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
     LanguageManagerInterface $language_manager,
-    RequestStack $request_stack
+    RequestStack $request_stack,
+    ProductCategoryHelper $product_category_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -179,6 +190,7 @@ class ProductResource extends ResourceBase {
     $this->skuInfoHelper = $sku_info_helper;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack;
+    $this->productCategoryHelper = $product_category_helper;
   }
 
   /**
@@ -199,7 +211,8 @@ class ProductResource extends ResourceBase {
       $container->get('module_handler'),
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('language_manager'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('alshaya_acm_product.category_helper')
     );
   }
 
@@ -234,6 +247,7 @@ class ProductResource extends ResourceBase {
       $node->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
+    $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
