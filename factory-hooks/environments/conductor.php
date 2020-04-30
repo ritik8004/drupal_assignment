@@ -506,6 +506,32 @@ $conductors = [
   'aeoeg_prod' => [
     'site_id' => 208,
   ],
+  // Boots pharmacy.
+  'bpkw_dev' => [
+    'hmac_id' => 'd498a56fab204489ad5c3de9840d8e98',
+    'hmac_secret' => 'YjM5Mjc1M2QtNDhkNC00',
+    'site_id' => 209,
+  ],
+  'bpkw_qa' => [
+    'hmac_id' => '602caba2dc7a4ab3801169a1e8c5eb77',
+    'hmac_secret' => 'NTA1MGIzNWQtYTc3My00',
+    'site_id' => 213,
+  ],
+  'bpsa_qa' => [
+    'hmac_id' => '95d0b54224a444cfb48f922c56055df3',
+    'hmac_secret' => 'OGJlN2QyZjUtZmVlYS00',
+    'site_id' => 214,
+  ],
+  'bpae_qa' => [
+    'hmac_id' => '2bd4976d93e743de8374ff38e8b45a53',
+    'hmac_secret' => 'YTUzMjBjNmYtY2RmZi00',
+    'site_id' => 215,
+  ],
+  'bpeg_qa' => [
+    'hmac_id' => 'c2615c9507594034a76a2dc4ff5f10e2',
+    'hmac_secret' => 'MDkyNjMzNmQtOWI4NC00',
+    'site_id' => 216,
+  ],
 ];
 
 // Default values for each ACM middleware.
