@@ -215,6 +215,9 @@ function _alshaya_spc_translations() {
       'available instore within' => [
         'ar' => 'متوفر في المحل خلال',
       ],
+      'please enter promo code.' => [
+        'ar' => 'يرجى ادخال رمز العرض.',
+      ],
     ],
   ];
 }
