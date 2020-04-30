@@ -25,7 +25,7 @@
   padding: 1.1875rem 0 1.125rem;
 
   @include breakpoint($only-mobile) {
-    border-bottom: 1px solid $lang_switch_firsttime_border;
+    border-bottom: none;
   }
 
   @include breakpoint($only-tablet) {
@@ -61,8 +61,6 @@
 
         a {
           margin: 0 1.125rem 0 0;
-          margin-top: 0;
-          margin-bottom: 0;
 
           @include breakpoint($desktop) {
             margin-#{$right}: 0.6875rem;
@@ -83,7 +81,7 @@
       a {
         @include arabic-letter-spacing;
 
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
         text-transform: uppercase;
         color: $footer_link;
         line-height: 1.29;
@@ -95,7 +93,6 @@
         }
 
         &.is-active {
-          color: $footer_link_active;
           text-decoration: none;
         }
       }
@@ -136,10 +133,6 @@
 
       a {
         color: $footer_link2;
-
-        &.is-active {
-          color: $footer_link_active;
-        }
       }
 
       &:first-child {
@@ -179,6 +172,7 @@
 
   .c-footer-is-accordion {
     margin-top: 0;
+    border-bottom: none;
   }
 
   &__region {
@@ -222,20 +216,20 @@
       @include breakpoint($upto-tablet) {
         width: 100%;
         text-align: center;
-        border-bottom: 1px solid $accordion_footer_border;
         border-top: none;
       }
 
       .is-accordion {
         @include arabic-letter-spacing;
 
-        font-family: $hnm-bold;
+        font-family: $hnm-demibold;
         text-align: $left;
         color: $accordion_bg;
         text-transform: uppercase;
         margin-top: 0;
-        font-size: 0.875rem;
-        letter-spacing: 1.2px;
+        font-size: 0.8125rem;
+        line-height: 1.25rem;
+        letter-spacing: 0;
         margin-bottom: 0.5rem;
 
         @include breakpoint($upto-tablet) {
@@ -244,20 +238,29 @@
         }
 
         @include breakpoint($desktop) {
-          font-size: 0.875rem;
-          letter-spacing: 1px;
           margin-bottom: 0.625rem;
         }
       }
 
       .accordion--body {
         display: none;
-        border-top: 1px solid $white-smoke-border;
+        border-top: none;
+
+        @include breakpoint($only-mobile) {
+          padding: 0 0.5rem;
+        }
 
         @include breakpoint($tablet) {
-          border-top: 0;
           display: block !important;
           height: 100% !important;
+        }
+      }
+
+      &.open--accordion {
+        .is-accordion {
+          color: $venetian_red;
+
+          @include icon(minus, after);
         }
       }
     }
@@ -274,25 +277,29 @@
       a {
         display: block;
         text-decoration: none;
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
         line-height: 1.71;
         text-align: $left;
-        color: $footer_link_active;
+        color: $footer_link;
         text-transform: capitalize;
         font-family: $hnm-regular;
 
         @include breakpoint($upto-tablet) {
-          text-align: center;
           padding: 0.625rem 0;
         }
 
         @include breakpoint($desktop) {
-          font-size: 0.875rem;
-          line-height: 1.57;
+          font-size: 0.8125rem;
+          line-height: 2rem;
         }
 
         &:hover {
-          color: $footer_link;
+          text-decoration: underline;
+
+          &:active {
+            text-decoration: none;
+            color: $default-anchor-link-hover;
+          }
         }
       }
 
@@ -349,7 +356,6 @@
 .block-alshaya-newsletter {
   @include clearfix;
 
-  color: $footer_link;
   float: $right;
   position: relative;
   width: 100%;
@@ -371,9 +377,10 @@
     @include arabic-letter-spacing;
 
     font-family: $hnm-bold;
-    font-weight: normal;
-    font-size: 0.875rem;
-    letter-spacing: 1.2px;
+    font-weight: bold;
+    font-size: 0.8125rem;
+    letter-spacing: 0;
+    line-height: 1.25rem;
     text-align: $left;
     color: $footer_title_h3;
     text-transform: uppercase;
@@ -385,7 +392,6 @@
     }
 
     @include breakpoint($desktop) {
-      letter-spacing: 1px;
       margin-bottom: 0.625rem;
     }
   }
@@ -397,20 +403,20 @@
 
   .newsletter-block-label {
     font-family: $hnm-regular;
-    font-size: 0.875rem;
-    line-height: 1.5;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
     text-align: $left;
     color: $footer_newsletter_label;
     padding: 0;
 
     @include breakpoint($tablet) {
       width: 11.875rem;
-      line-height: 1.29;
+      line-height: 1.25rem;
     }
 
     @include breakpoint($desktop) {
       width: 100%;
-      line-height: 1.5;
+      line-height: 1.25rem;
     }
   }
 
@@ -436,11 +442,10 @@
     font-size: 0.875rem;
     line-height: 2;
     text-align: $left;
-    background-color: $hnm-black;
-    border-bottom: 1px solid $footer_input_text !important;
+    background: none;
+    border-bottom: 1px solid $hnm-black !important;
     padding-#{$right}: 33%;
     height: 2rem;
-    color: $footer_input_text !important;
     margin-top: 1.75rem;
 
     @include breakpoint($upto-desktop) {
@@ -520,37 +525,17 @@
 
 .c-footer-is-accordion {
   .is-accordion {
-    font-weight: normal;
-
     @include breakpoint($only-mobile) {
       margin: 0;
       padding: 0.875rem 0;
       position: relative;
       overflow: hidden;
 
-      @include icon(dropdown-expand, after) {
+      @include icon(plus, after) {
         position: absolute;
-        #{$right}: 0.33rem;
-        font-size: 2.25rem;
-        width: 1.75rem;
+        #{$right}: 1.75rem;
+        font-size: 1rem;
         top: 50%;
-        transform: translateY(-50%);
-      }
-    }
-  }
-}
-
-.c-footer-primary {
-  .open--accordion {
-    .is-accordion {
-      @include breakpoint($only-mobile) {
-        @include icon(dropdown-collapse, after);
-      }
-    }
-
-    .accordion--body {
-      @include breakpoint($only-mobile) {
-        border-top: 2px solid $accordion_footer_border;
       }
     }
   }
