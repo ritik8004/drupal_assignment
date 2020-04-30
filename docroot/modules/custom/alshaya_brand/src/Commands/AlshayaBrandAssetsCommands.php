@@ -191,6 +191,11 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
           $unused_brand_assets[$domain[1]][$array[0]] = $array[1];
         }
       }
+      // Batch operation to clean up unused file entities.
+      $batch_operation_clean_up_unused_file_entities[] = [
+        [__CLASS__, 'deleteUnusedUnavailableFileEntitiesForDomain'],
+        $domain,
+      ];
     }
     if (!empty($unused_brand_assets)) {
       // Get list of unused assets common in all the markets of a brand.
@@ -207,7 +212,6 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
       'init_message' => dt('Processing all files to check if they are still used...'),
       'progress_message' => dt('Completed @current step of @total.'),
       'error_message' => dt('Failed to check for unused media files.'),
-      'finished' => [__CLASS__, 'batchFinishedCallback'],
     ];
 
     foreach (array_chunk($unused_brand_assets, $batch_size, TRUE) as $chunk) {
@@ -216,6 +220,10 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
         [$chunk, $dry_run],
       ];
     }
+
+    // Adding operations for cleaning up file entities at the end of
+    // operations to clean up unused asset files.
+    $batch['operations'] = array_merge($batch['operations'], $batch_operation_clean_up_unused_file_entities);
 
     batch_set($batch);
 
@@ -245,6 +253,25 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
         $file_system->delete($uri);
       }
     }
+  }
+
+  /**
+   * Batch callback for deleteUnusedUnavailableFileEntities.
+   *
+   * @param string $domain
+   *   Domain to process.
+   */
+  public static function deleteUnusedUnavailableFileEntitiesForDomain(string $domain) {
+    $logger = \Drupal::logger('AlshayaBrandAssetsCommands');
+    $processManager = ProcessManager::createDefault();
+
+    $command = sprintf('drush -l %s delete-unused-unavailable-file-entities', $domain);
+    $get_unused_brand_assets = $processManager->process($command);
+    $get_unused_brand_assets->mustRun();
+
+    $logger->notice('Brand asset clean up complete for @domain', [
+      '@domain' => $domain,
+    ]);
   }
 
   /**
@@ -288,36 +315,6 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     $domains = Yaml::parse($yaml_data);
 
     return $domains;
-  }
-
-  /**
-   * Batch finished callback.
-   *
-   * @param bool $success
-   *   Success or fail import.
-   * @param array $results
-   *   Result array.
-   * @param array $operations
-   *   Operation array.
-   */
-  public static function batchFinishedCallback($success, array $results = [], array $operations = []) {
-    if ($success) {
-      $logger = \Drupal::logger('AlshayaBrandAssetsCommands');
-      $brand_assets_commands = \Drupal::service('alshaya_brand.commands');
-      $processManager = ProcessManager::createDefault();
-
-      $domains = $brand_assets_commands->getBrandDomains();
-
-      foreach ($domains ?? [] as $domain) {
-        $command = sprintf('drush -l %s delete-unused-unavailable-file-entities', $domain[1]);
-        $get_unused_brand_assets = $processManager->process($command);
-        $get_unused_brand_assets->mustRun();
-
-        $logger->notice('Brand asset clean up complete for @domain', [
-          '@domain' => $domain[1],
-        ]);
-      }
-    }
   }
 
 }
