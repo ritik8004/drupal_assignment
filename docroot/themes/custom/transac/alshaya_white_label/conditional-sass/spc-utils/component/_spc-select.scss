@@ -2,7 +2,9 @@
   width: 100%;
   height: 1.5rem;
 
-  @include componentLoader(transparent, 'after');
+  @include componentLoader(transparent, 'after') {
+    background-position: $right;
+  }
 
   &.loading + .spc-select {
     display: none;
