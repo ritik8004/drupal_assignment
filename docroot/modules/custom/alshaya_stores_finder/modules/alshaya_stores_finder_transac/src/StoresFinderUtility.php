@@ -314,6 +314,7 @@ class StoresFinderUtility {
 
     $nodes = $this->nodeStorage->loadMultiple($nids);
     $config = $this->configFactory->get('alshaya_click_collect.settings');
+    $address = $this->addressBookManager->getAddressStructureWithEmptyValues();
     // Loop through node and add store address/opening hours/delivery time etc.
     foreach ($nodes as $nid => $node) {
       $store = is_array($stores[$store_nodes[$nid]['field_store_locator_id_value']]) ? $stores[$store_nodes[$nid]['field_store_locator_id_value']] : [];
@@ -322,7 +323,10 @@ class StoresFinderUtility {
         $store['delivery_time'] = $config->get('click_collect_rnc');
       }
       $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
-      $store['cart_address'] = $this->getStoreAddress($node, TRUE);
+      $store['cart_address'] = $address;
+      if ($store_address = $node->get('field_address')->getValue()) {
+        $store['cart_address'] = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
+      }
 
       $prepared_stores[$nid] = $this->getStoreExtraData($store_codes, $node);
       $prepared_stores[$nid] += $store;
