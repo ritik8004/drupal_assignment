@@ -431,7 +431,7 @@ class Cart {
    *   If cart has error or not.
    */
   public function cartHasError(array $cart) {
-    if ($cart['error'] || $cart['response_message'][1] == 'json_error') {
+    if ((isset($cart['error']) && $cart['error']) || $cart['response_message'][1] == 'json_error') {
       return TRUE;
     }
 
