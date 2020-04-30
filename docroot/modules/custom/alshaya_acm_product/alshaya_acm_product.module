@@ -698,6 +698,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // Setting max sale qty variables at parent level.
         if (!empty($max_sale_qty)) {
           $productInfo['maxSaleQty'] = $max_sale_qty;
+          $productInfo['max_sale_qty_parent'] = FALSE;
 
           $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
           $productInfo['orderLimitMsg'] = $productOrderLimit->maxSaleQtyMessage($max_sale_qty);
