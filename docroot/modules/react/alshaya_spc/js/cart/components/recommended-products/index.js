@@ -37,6 +37,10 @@ export default class CartRecommendedProducts extends React.Component {
               wait: false,
               recommendedProducts: result.data,
             });
+
+            // Storing in localstorage to be used by GTM.
+            const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
+            localStorage.setItem(key, result.data);
           }
         });
       }

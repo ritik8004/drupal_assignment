@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Class CartLinkedSkusController.
+ */
 class CartLinkedSkusController extends ControllerBase {
 
   /**
@@ -38,6 +41,16 @@ class CartLinkedSkusController extends ControllerBase {
    */
   protected $skuManager;
 
+  /**
+   * CartLinkedSkusController constructor.
+   *
+   * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
+   *   Sku info helper.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   SKU manager service.
+   */
   public function __construct(SkuInfoHelper $sku_info_helper,
                               RequestStack $request_stack,
                               SkuManager $skuManager) {
