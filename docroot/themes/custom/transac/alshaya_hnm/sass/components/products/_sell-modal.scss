@@ -22,6 +22,24 @@
   .full-prod-link {
     font-family: $hnm-bold;
     color: $pdp_modal_full_prodlink;
+
+    @include if-ltr {
+      @include icon(arrow-#{$right}, after);
+
+      &::after {
+        font-size: 1rem;
+        line-height: 1.8rem;
+      }
+    }
+
+    @include if-rtl {
+      @include icon(arrow-#{$right}, before);
+
+      &::before {
+        font-size: 1rem;
+        line-height: 1.8rem;
+      }
+    }
   }
 
   .field--name-field-skus .sku-base-form button[type="submit"] {

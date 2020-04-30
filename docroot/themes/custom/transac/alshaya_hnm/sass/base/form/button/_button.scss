@@ -1,7 +1,10 @@
 %button-wide,
 .button-wide {
-  font-family: $hnm-bold;
+  font-family: $hnm-demibold;
   text-transform: uppercase;
+  background-color: $primary_btn_bg;
+  font-size: 0.8125rem;
+  text-align: center;
 }
 
 %button-brand,

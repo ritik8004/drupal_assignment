@@ -4,129 +4,13 @@
 $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 
 @font-face {
-  font-family: 'Ampersand_bold';
-  src: url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.eot');
-  src:
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.eot?#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.woff') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.ttf') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.svg#HMAmpersand-Bold') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Amperserif_regular';
-  src: url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.eot');
-  src:
-    url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.eot?#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.woff') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.ttf') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.svg#HMAmperserif-Regular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Ampersand_regular';
-  src: url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.eot');
-  src:
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.eot?#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.woff') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.ttf') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.svg#HMAmpersand-Regular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Ampersand_demibold';
-  src: url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.eot');
-  src:
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.eot?#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.woff') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.ttf') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.svg#HMAmpersand-DemiBold') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "GESSTwoMedium-Medium";
-  src: url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.eot");
-  src:
-    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "GESSTwoLight-Light";
-  src: url("#{$base_theme_fonts_directory_path}/GESSTwoLight.eot");
-  src:
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "GESSTwoBold-Bold";
-  src: url("#{$base_theme_fonts_directory_path}/GESSTwoBold.eot");
-  src:
-    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "GEDinarTwo-Medium";
-  src: url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.eot");
-  src:
-    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'hnm-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?k2mqf');
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?fAKYu');
   src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?k2mqf#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?k2mqf') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?k2mqf') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?k2mqf#alshaya-icons') format('svg');
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?fAKYu#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?fAKYu') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?fAKYu') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?fAKYsu#alshaya-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -196,11 +80,11 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 // HM Arabic
 @font-face {
   font-family: 'HM Sans Arabic Regular';
-  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.eot');
+  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.eot?jAKPu');
   src:
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.eot?#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff') format('woff');
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.eot?jAKPu#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff2?jAKPu') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff?jAKPu') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -208,11 +92,11 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 
 @font-face {
   font-family: 'HM Sans Arabic Semi Bold';
-  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.eot');
+  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.eot?jDKPu');
   src:
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.eot?#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff') format('woff');
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.eot?jDKPu#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff2?jDKPu') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff?jDKPu') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -220,11 +104,11 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 
 @font-face {
   font-family: 'HM Sans Arabic Bold';
-  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.eot');
+  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.eot?jDKZu');
   src:
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.eot?#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff') format('woff');
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.eot?jDKZu#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff2?jDKZu') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff?jDKZu') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -232,11 +116,11 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 
 @font-face {
   font-family: 'HM Sans Arabic Light';
-  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.eot');
+  src: url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.eot?jNKZu');
   src:
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.eot?#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff') format('woff');
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.eot?jNKZu#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff2?jNKZu') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff?jNKZu') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -282,31 +166,31 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 // H&M specific font family
 // English fonts.
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
-$hnm-bold: 'Ampersand_bold', 'GESSTwoBold-Bold', 'Arial';
-$hnm-bold-nodir: 'Ampersand_bold', 'GESSTwoBold-Bold', 'Arial';
+$hnm-bold: 'HM Sans Bold', 'HM Sans Arabic Bold', 'sans-serif', 'Arial';
+$hnm-bold-nodir: 'HM Sans Bold', 'HM Sans Arabic Bold', 'sans-serif', 'Arial';
 
-$hnm-demibold: 'Ampersand_demibold', 'GESSTwoMedium-Medium', 'Arial';
-$hnm-demibold-nodir: 'Ampersand_demibold', 'GESSTwoMedium-Medium', 'Arial';
+$hnm-demibold: 'HM Sans Semi Bold', 'HM Sans Arabic Semi Bold', 'sans-serif', 'Arial';
+$hnm-demibold-nodir: 'HM Sans Semi Bold', 'HM Sans Arabic Semi Bold', 'sans-serif', 'Arial';
 
-$hnm-regular: 'Ampersand_regular', 'GESSTwoLight-Light', 'Arial';
-$hnm-regular-nodir: 'Ampersand_regular', 'GESSTwoLight-Light', 'Arial';
+$hnm-regular: 'HM Sans Regular', 'HM Sans Arabic Regular', 'sans-serif', 'Arial';
+$hnm-regular-nodir: 'HM Sans Regular', 'HM Sans Arabic Regular', 'sans-serif', 'Arial';
 
-$hnmpromo-regular: 'Amperserif_regular', 'GEDinarTwo-Medium', 'Arial';
-$hnmpromo-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium', 'Arial';
+$hnmpromo-regular: 'HM Serif Regular', 'Times New Roman', 'Arial';
+$hnmpromo-regular-nodir: 'HM Serif Regular', 'Times New Roman', 'Arial';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$hnm-arabic-bold: 'Ampersand_bold', 'GESSTwoBold-Bold', 'Arial';
-$hnm-arabic-bold-nodir: 'Ampersand_bold', 'GESSTwoBold-Bold', 'Arial';
+$hnm-arabic-bold: 'HM Sans Bold', 'HM Sans Arabic Bold', 'sans-serif', 'Arial';
+$hnm-arabic-bold-nodir: 'HM Sans Bold', 'HM Sans Arabic Bold', 'sans-serif', 'Arial';
 
-$hnm-arabic-medium: 'Ampersand_demibold', 'GESSTwoMedium-Medium', 'Arial';
-$hnm-arabic-medium-nodir: 'Ampersand_demibold', 'GESSTwoMedium-Medium', 'Arial';
+$hnm-arabic-medium: 'HM Sans Semi Bold', 'HM Sans Arabic Semi Bold', 'sans-serif', 'Arial';
+$hnm-arabic-medium-nodir: 'HM Sans Semi Bold', 'HM Sans Arabic Semi Bold', 'sans-serif', 'Arial';
 
-$hnm-arabic-regular: 'Ampersand_regular', 'GESSTwoLight-Light', 'Arial';
-$hnm-arabic-regular-nodir: 'Ampersand_regular', 'GESSTwoLight-Light', 'Arial';
+$hnm-arabic-regular: 'HM Sans Regular', 'HM Sans Arabic Regular', 'sans-serif', 'Arial';
+$hnm-arabic-regular-nodir: 'HM Sans Regular', 'HM Sans Arabic Regular', 'sans-serif', 'Arial';
 
-$hnmpromo-arabic-regular: 'Amperserif_regular', 'GEDinarTwo-Medium', 'Arial';
-$hnmpromo-arabic-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium', 'Arial';
+$hnmpromo-arabic-regular: 'HM Serif Regular', 'Times New Roman', 'Arial';
+$hnmpromo-arabic-regular-nodir: 'HM Serif Regular', 'Times New Roman', 'Arial';
 
 $hnm-icons: 'hnm-icons';
 $body_font: $hnm-regular;
@@ -318,41 +202,20 @@ $alshaya-bold: $hnm-bold;
 $alshaya-arabic-bold: $hnm-arabic-bold;
 $alshaya-thin: $hnm-regular;
 $alshaya-arabic-thin: $hnm-arabic-regular;
-
-// Campaign-plp-style-1 font family.
-@font-face {
-  font-family: 'Sunrise';
-  src: url("#{$base_theme_fonts_directory_path}/Sunrise.eot");
-  src:
-    url("#{$base_theme_fonts_directory_path}/Sunrise.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/Sunrise.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/Sunrise.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/Sunrise.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/Sunrise.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/Sunrise.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-$campaign-plp-style-1-font: 'Sunrise', 'GESSTwoMedium-Medium', 'Arial';
-$campaign-plp-style-1-arabic-font: 'Sunrise', 'GESSTwoMedium-Medium', 'Arial';
+$campaign-plp-style-1-font: $hnm-regular;
+$campaign-plp-style-1-arabic-font: $hnm-arabic-regular;
 
 // Icon Fonts
 $icons: (
   arrowup: "\e93b",
   login: "\e929",
-  chevrondown: "\25bd",
-  chevronleft: "\e901",
-  chevronright: "\e902",
-  chevronup: "\e903",
-  check: "\e904",
-  close: "\e905",
+  chevronleft: "\e902",
+  chevronright: "\e903",
+  chevronup: "\e904",
+  check: "\e905",
   checkshape: "\e906",
   circle-stroke-shape: "\e907",
   circle-shape: "\e908",
-  check-box-empty: "\e909",
-  check-box-filled: "\e90a",
   delivery: "\e90b",
   direction-fill: "\e90c",
   direction-stroke: "\e90d",
@@ -371,11 +234,8 @@ $icons: (
   loader path1: "\e91a",
   loader path2: "\e91b",
   loader path3: "\e91c",
-  search: "\e91d",
   menu: "\e91e",
   list: "\e91f",
-  shopping-bag: "\e920",
-  mappin: "\e921",
   map: "\e922",
   mylocation: "\e923",
   newsletter: "\e924",
@@ -389,10 +249,23 @@ $icons: (
   pinterest: "\1f4cc",
   instagram: "\1f305",
   youtube: "\1f4fa",
-  filter: "\e93c",
   edit-input: "\e93d",
-  arrow-left: "\e93e",
-  arrow-right: "\e93f"
+  bell: "\e006",
+  marquee-plus: "\e083",
+  price-tag: "\e93a",
+  bin: "\e9ad",
+  plus: "\e901",
+  close: "\e92a",
+  check-box-empty: "\e92c",
+  check-box-filled: "\e92d",
+  filter: "\e925",
+  search: "\e92f",
+  shopping-bag: "\e930",
+  arrow-left: "\e92e",
+  arrow-right: "\e92b",
+  chevrondown: "\e931",
+  minus: "\e900",
+  store: "\e909",
 );
 
 @mixin iconbase() {

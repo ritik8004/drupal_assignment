@@ -1,0 +1,123 @@
+.description-first {
+  font-size: 1.25rem;
+  color: $hnm-black-three;
+  line-height: 1.2;
+  font-family: $hnmpromo-regular;
+}
+
+.magazine__gallery--container {
+  .magazine-product-description {
+    .magazine-desc-wrapper {
+      background-color: $white-five;
+
+      @include breakpoint($upto-desktop) {
+        padding: 4rem 1rem;
+      }
+
+      div[class*="label"] {
+        font-size: 0.8125rem;
+        font-family: $hnm-demibold;
+        color: $hnm-black-three;
+        letter-spacing: normal;
+        text-transform: capitalize;
+      }
+
+      ul {
+        li {
+          &::after {
+            content: none;
+          }
+        }
+      }
+
+      .composition-wrapper {
+        margin: 0;
+      }
+
+      > * {
+        text-align: #{$left};
+
+        @include breakpoint($desktop-wide) {
+          margin-#{$left}: auto;
+          margin-#{$right}: auto;
+          max-width: 42.188rem;
+        }
+      }
+
+      div[class*="value"] {
+        color: $gray44;
+      }
+    }
+  }
+}
+
+.description-details {
+  > div {
+    display: block;
+    margin-bottom: 0.5rem !important;
+    line-height: 1rem;
+
+    div[class*='-label'] + div[class*='-value']:not([hidden='hidden']) {
+      &::before {
+        background-color: $gray44;
+        content: '';
+        display: inline-block;
+        height: 0.125rem;
+        margin-#{$left}: 0.3125rem;
+        margin-#{$right}: 0.3125rem;
+        position: relative;
+        top: -0.1875rem;
+        width: 0.938rem;
+      }
+    }
+
+    &::after {
+      content: none;
+    }
+  }
+}
+
+.magazine-layout-node {
+  .content__title_wrapper {
+    .promotions {
+      a {
+        font-size: 1.25rem;
+        color: $venetian_red;
+        text-decoration: none;
+      }
+    }
+
+    @include breakpoint($upto-tablet) {
+      .promotions {
+        a {
+          font-size: 1rem;
+        }
+      }
+
+      h1 {
+        span {
+          font-size: 1rem;
+        }
+      }
+
+      &.fixed {
+        background: $seashell_grey;
+      }
+
+      .basic-details-wrapper {
+        .sku-base-form {
+          .size-tray-link {
+            font-size: 0.6875rem;
+            border-color: $light_grey;
+            color: $hnm-black-three;
+
+            @include icon(chevrondown, after) {
+              font-size: 0.5rem;
+              right: 1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
