@@ -10,22 +10,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
 
 /**
- * Implements hook_update_N().
- *
- * Add translations for details label.
- */
-function alshaya_acm_product_update_8058() {
-  $strings = [
-    'Details' => [
-      'en' => 'DETAILS',
-      'ar' => 'تفاصيل',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
  * Add new settings for local storage cache time for product data.
  */
 function alshaya_acm_product_update_8057() {
@@ -1148,14 +1132,6 @@ function alshaya_acm_product_install() {
   $product_config_factory->set('content', $content);
   $product_config_factory->save();
 
-  $strings = [
-    'Details' => [
-      'en' => 'DETAILS',
-      'ar' => 'تفاصيل',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
 }
 
 /**

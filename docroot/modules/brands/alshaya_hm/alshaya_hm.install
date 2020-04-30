@@ -99,6 +99,10 @@ function alshaya_hm_update_8047() {
       'en' => 'LICENSE ITEM',
       'ar' => 'ترخيص المنتج',
     ],
+    'Details' => [
+      'en' => 'DETAILS',
+      'ar' => 'تفاصيل',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
@@ -1062,6 +1066,10 @@ function alshaya_hm_install() {
     'LICENSE ITEM' => [
       'en' => 'LICENSE ITEM',
       'ar' => 'ترخيص المنتج',
+    ],
+    'Details' => [
+      'en' => 'DETAILS',
+      'ar' => 'تفاصيل',
     ],
   ];
 
