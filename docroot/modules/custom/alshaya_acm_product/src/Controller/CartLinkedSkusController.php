@@ -59,6 +59,9 @@ class CartLinkedSkusController extends ControllerBase {
     $this->skuManager = $skuManager;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_acm_product.sku_info'),
@@ -67,6 +70,15 @@ class CartLinkedSkusController extends ControllerBase {
     );
   }
 
+  /**
+   * Get linked crosssell skus of given skus.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
+   * @return \Drupal\Core\Cache\CacheableJsonResponse
+   *   Response object.
+   */
   public function getLinkedSkusForCart(Request $request) {
     try {
       $queryParams = $request->query->all();

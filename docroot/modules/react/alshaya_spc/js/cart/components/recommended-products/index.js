@@ -55,7 +55,7 @@ export default class CartRecommendedProducts extends React.Component {
       if (recommendedProducts instanceof Promise) {
         recommendedProducts.then((result) => {
           // If there is no error and there are recommended products.
-          if (result.error === undefined && result.length > 0) {
+          if (result.error === undefined && result.data !== undefined) {
             this.setState({
               wait: false,
               recommendedProducts: result.data,
