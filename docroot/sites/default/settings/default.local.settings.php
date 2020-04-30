@@ -33,7 +33,7 @@ $drupal_database = ( $host_site_code == 'default_local' ? 'drupal' : 'drupal_als
 $host = 'localhost';
 
 if (isset($_ENV['DEVEL_ENV']) && ($_ENV['DEVEL_ENV'] == 'lando')) {
-  $host = str_replace('-', '_', $host_site_code) . '_database';
+  $host = 'database';
 }
 
 $databases = array(
