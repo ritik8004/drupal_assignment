@@ -93,7 +93,7 @@ function _alshaya_spc_translations() {
         'ar' => 'تاريخ انتهاء البطاقة',
       ],
       'Your shopping bag is empty.' => [
-        'ar' => 'حقيبة التسوق الخاصة بك فارغة',
+        'ar' => 'حقيبة التسوق الخاصة بك فارغة.',
       ],
       'We will send you a text message once your order is ready for collection.' => [
         'ar' => 'سنقوم بإرسال رسالة قصيرة عندما تكون الطلبية جاهزة للاستلام',
