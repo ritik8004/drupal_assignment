@@ -61,8 +61,10 @@ function alshaya_aeo_transac_update_8002() {
   alshaya_i18n_save_translations($strings);
 
   $manager->updateConfigs(
-    ['alshaya_acm_product.display_settings'],
-    ['alshaya_acm_product.sku_base_fields'],
+    [
+      'alshaya_acm_product.display_settings',
+      'alshaya_acm_product.sku_base_fields',
+    ],
     'alshaya_acm_product'
   );
 
