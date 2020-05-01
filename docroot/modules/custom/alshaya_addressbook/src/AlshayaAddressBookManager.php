@@ -175,8 +175,15 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Address entity if found or NULL.
    */
   public function getUserAddressByCommerceId($commerce_id) {
-    if ($addresses = $this->profileStorage->loadByProperties(['field_address_id' => $commerce_id])) {
-      return reset($addresses);
+    try {
+      $addresses = $this->profileStorage->loadByProperties(['field_address_id' => $commerce_id]);
+      return $addresses ? reset($addresses) : NULL;
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Failed to load address for the commerce id: @commerce_id, message: @message', [
+        '@commerce_id' => $commerce_id,
+        '@message' => $e->getMessage(),
+      ]);
     }
 
     return NULL;
