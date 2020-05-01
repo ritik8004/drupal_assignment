@@ -218,7 +218,9 @@
     #alshaya-algolia-autocomplete {
       .react-autosuggest__container {
         &::after {
-          opacity: 0;
+          @include breakpoint($upto-tablet) {
+            opacity: 0;
+          }
         }
       }
     }
