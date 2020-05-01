@@ -22,6 +22,12 @@ class SizeGroupListWidget extends LinksWidget {
    */
   public function build(FacetInterface $facet) {
     $build = parent::build($facet);
+    // If sizegroup setting is not enabled then make it default.
+    if (!$this->isSizeGroupEnabled()) {
+      $build['#attributes']['class'][] = 'js-facets-checkbox-links';
+      $build['#attached']['library'][] = 'facets/drupal.facets.checkbox-widget';
+      return $build;
+    }
     $items = $build['#items'];
 
     $sizeGroups = [];
@@ -66,10 +72,28 @@ class SizeGroupListWidget extends LinksWidget {
 
     $build['#items'] = $items;
     $build['#attributes']['class'][] = 'js-facets-checkbox-links';
+    // Adding class for sizegroup filter.
+    $build['#attributes']['class'][] = 'size_group_list';
     $build['#attached']['library'][] = 'facets/drupal.facets.checkbox-widget';
     $build['#attached']['library'][] = 'alshaya_product_options/sizegroup_filter';
 
     return $build;
+  }
+
+  /**
+   * Check if size grouping filter is enabled.
+   *
+   * @return int
+   *   0 if not available, 1 if size grouping available.
+   */
+  protected function isSizeGroupEnabled() {
+    static $status = NULL;
+
+    if (!isset($status)) {
+      $status = \Drupal::config('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
+    }
+
+    return $status;
   }
 
 }
