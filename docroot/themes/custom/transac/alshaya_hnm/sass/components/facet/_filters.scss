@@ -229,7 +229,7 @@
 
 #block-plpsize,
 #block-promosize {
-  > ul {
+  > ul.size_group_list {
     font-size: 0.75rem;
     line-height: 2;
     color: $plp_facet_filter_link;
@@ -301,7 +301,7 @@
 .all-filters {
   #block-plpsize,
   #block-promosize {
-    > ul {
+    > ul.size_group_list {
       > li {
         @include icon(chevron#{$right}, after) {
           color: $plp_all_filter_filter_arrow;
