@@ -52,7 +52,11 @@
       max-width: calc(100% - 2.5rem);
     }
 
-    margin-bottom: 1.25rem;
+    margin-bottom: 2.5rem;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.25rem;
+    }
   }
 
   .spc-post-content {
@@ -95,7 +99,7 @@
 
       @include breakpoint($only-mobile) {
         width: 100%;
-        margin-top: 1.25rem;
+        margin-top: 2.5rem;
       }
     }
   }
