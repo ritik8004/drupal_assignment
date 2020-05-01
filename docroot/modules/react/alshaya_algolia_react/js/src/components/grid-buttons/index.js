@@ -3,20 +3,24 @@ import React from 'react';
 const GridButtons = (props) => (
   <div className="grid-buttons">
     <div className="large-col-grid" onClick={props.toggle}>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-        <g className="grid" fill="none" fillRule="evenodd">
-          <path className="grid-box" d="M-4-4h24v24H-4z" />
-          <path className="grid-border" d="M1 1.994v12.012c0 .548.446.994.994.994h12.012a.995.995 0 0 0 .994-.994V1.994A.995.995 0 0 0 14.006 1H1.994A.995.995 0 0 0 1 1.994zm-1 0C0 .893.895 0 1.994 0h12.012C15.107 0 16 .895 16 1.994v12.012A1.995 1.995 0 0 1 14.006 16H1.994A1.995 1.995 0 0 1 0 14.006V1.994z" fill="#222" />
+      <svg className="g2" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15">
+        <g className="grid" fill="#DADADA" fillRule="nonzero">
+          <path d="M0 0h7v15H0zM8 0h7v15H8z"></path>
         </g>
+      </svg>
+      <svg className="g1" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15">
+        <path className="grid" fill="#DADADA" fillRule="nonzero" d="M0 0h15v15H0z"></path>
       </svg>
     </div>
     <div className="small-col-grid active" onClick={props.toggle}>
-      <svg xmlns="http://www.w3.org/2000/svg" xlinkHref="http://www.w3.org/1999/xlink" width="16" height="16">
-        <defs>
-          <path d="M5 9.997L9.997 10 10 5.003 5.003 5 5 9.997zM4 5.003A.996.996 0 0 1 5.003 4h4.994A.996.996 0 0 1 11 5.003v4.994A.996.996 0 0 1 9.997 11H5.003A.996.996 0 0 1 4 9.997V5.003zm1 13.994L9.997 19 10 14.003 5.003 14 5 18.997zm-1-4.994A.996.996 0 0 1 5.003 13h4.994A.996.996 0 0 1 11 14.003v4.994A.996.996 0 0 1 9.997 20H5.003A.996.996 0 0 1 4 18.997v-4.994zm10-4.006l4.997.003L19 5.003 14.003 5 14 9.997zm-1-4.994A.996.996 0 0 1 14.003 4h4.994A.996.996 0 0 1 20 5.003v4.994A.996.996 0 0 1 18.997 11h-4.994A.996.996 0 0 1 13 9.997V5.003zm1 13.994l4.997.003.003-4.997L14.003 14 14 18.997zm-1-4.994A.996.996 0 0 1 14.003 13h4.994A.996.996 0 0 1 20 14.003v4.994A.996.996 0 0 1 18.997 20h-4.994A.996.996 0 0 1 13 18.997v-4.994z" id="prefix__a" />
-        </defs>
-        <g className="grid" transform="translate(-4 -4)" fill="none" fillRule="evenodd">
-          <use fill="#222" xlinkHref="#prefix__a" />
+      <svg className="g3" xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15">
+        <g className="grid" fill="#DADADA" fillRule="nonzero">
+          <path d="M0 0h4v7H0zM5 0h4v7H5zM10 0h4v7h-4zM10 8h4v7h-4zM5 8h4v7H5zM0 8h4v7H0z"></path>
+        </g>
+      </svg>
+      <svg className="g2" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15">
+        <g className="grid" fill="#DADADA" fillRule="nonzero">
+          <path d="M0 0h7v15H0zM8 0h7v15H8z"></path>
         </g>
       </svg>
     </div>

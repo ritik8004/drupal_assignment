@@ -303,4 +303,35 @@
       color: $venetian_red !important;
     }
   }
+
+  .block-alshaya-grid-count-block {
+    .grid-buttons {
+      .large-col-grid,
+      .small-col-grid {
+        width: 1.5rem;
+        height: 1.5rem;
+        display: inline-block;
+
+        svg {
+          display: none;
+        }
+      }
+
+      .large-col-grid {
+        background: url('../../../imgs/icons/large-grid-inactive.svg') no-repeat center;
+
+        &.active {
+          background: url('../../../imgs/icons/large-grid-active.svg') no-repeat center;
+        }
+      }
+
+      .small-col-grid {
+        background: url('../../../imgs/icons/small-grid-inactive.svg') no-repeat center;
+
+        &.active {
+          background: url('../../../imgs/icons/small-grid-active.svg') no-repeat center;
+        }
+      }
+    }
+  }
 }
