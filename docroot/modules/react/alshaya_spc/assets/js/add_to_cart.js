@@ -153,10 +153,10 @@
                   );
 
                   // Triggering event to notify react component.
-                  var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => response, productData }});
+                  var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: (function () { return response;  }), productData: productData}});
                   document.dispatchEvent(event);
 
-                  var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => response }});
+                  var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: (function () { return response; })}});
                   document.dispatchEvent(event);
                 }
               }
