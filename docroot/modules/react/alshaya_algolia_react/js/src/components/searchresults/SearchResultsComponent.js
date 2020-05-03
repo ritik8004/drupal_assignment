@@ -80,6 +80,14 @@ const SearchResultsComponent = props => {
     return sortedItems;
   }
 
+  // Uses the Algolia optionalFilters feature.
+  // Super Category is currently the only optional filter in use.
+  // We want to promote the products belonging to current page super category
+  // to the top of the search results.
+  var optionalFilters = drupalSettings.superCategory
+    ? `${drupalSettings.superCategory.search_facet}:${drupalSettings.superCategory.term}`
+    : null
+
   return (
     <InstantSearch
       searchClient={algoliaSearchClient}
@@ -89,6 +97,7 @@ const SearchResultsComponent = props => {
       onSearchStateChange={props.onSearchStateChange}
     >
       <Configure clickAnalytics hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
+      {optionalFilters ? <Configure optionalFilters={optionalFilters} /> : null}
       {hasCategoryFilter() && isDesktop() && (
         <SideBar>
           <HierarchicalMenu

@@ -177,6 +177,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     $term = $this->productCategoryTree->getCategoryTermRequired();
     if (!empty($term) && isset($term_data[$term['id']])) {
       $term_data[$term['id']]['class'] .= ' active';
+      $super_category = $term['label'];
     }
 
     return [
@@ -185,6 +186,12 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       '#attached' => [
         'library' => [
           'alshaya_super_category/minimalistic_header',
+        ],
+        'drupalSettings' => [
+          'superCategory' => [
+            'term' => $super_category,
+            'search_facet' => $this->configFactory->get('alshaya_super_category.settings')->get('search_facet'),
+          ],
         ],
       ],
     ];
