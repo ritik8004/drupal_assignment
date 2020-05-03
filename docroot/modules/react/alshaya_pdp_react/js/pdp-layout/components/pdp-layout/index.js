@@ -1,5 +1,6 @@
 import React from 'react';
 import PdpGallery from '../pdp-gallery';
+import PdpDescription from '../pdp-description';
 
 export default class PdpLayout extends React.Component {
   constructor(props) {
@@ -24,13 +25,16 @@ export default class PdpLayout extends React.Component {
     const { sku, pdpGallery } = this.state;
 
     return (
-      <>
+    <React.Fragment>
         <div className="pdp-layout-wrapper">Item Code: {sku}</div>
         {(sku &&  pdpGallery) && (
-          <PdpGallery skuCode={sku} pdpGallery={pdpGallery} />
+          <React.Fragment>
+            <PdpGallery skuCode={sku} pdpGallery={pdpGallery} ></PdpGallery>
+            <PdpDescription skuCode={sku} pdpDescription={pdpGallery} ></PdpDescription>
+          </React.Fragment>
         )}
 
-      </>
+    </React.Fragment>
     );
   }
 }

@@ -75,6 +75,7 @@ function alshaya_pdp_layouts_preprocess_node__acq_product__full_magazine_v2(&$va
   $entity = $vars['elements']['#node'];
   $sku = $sku_manager->getSkuForNode($entity);
   $sku_entity = SKU::loadFromSku($sku);
+  $vars['sku'] = $sku_entity;
   $gallery = [];
 
   if ($sku_entity instanceof SKUInterface) {
@@ -109,6 +110,13 @@ function alshaya_pdp_layouts_preprocess_node__acq_product__full_magazine_v2(&$va
         ];
 
         $vars['#attached']['drupalSettings']['pdpGallery'][$sku] = $gallery;
+
+        // Get the product description.
+        $event = new PreprocessMagazineEvent($vars);
+        $event_dispatcher = \Drupal::service('event_dispatcher');
+        $event_dispatcher->dispatch(PreprocessMagazineEvent::EVENT_NAME, $event);
+        $product_description = $event->getVariables();
+        $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['description'] = $product_description['description'];
       }
     }
   }
