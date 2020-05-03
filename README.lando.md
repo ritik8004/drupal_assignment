@@ -14,7 +14,7 @@ Having said that, it'd be great to get people using it and fixing issues.
 ### Host resolution
 
 Because we're not using .lndo URLs which get resolved by public DNS, we need to edit our own /etc/hosts files to add
-entries for the Alshaya sites - in the same way that the Vagrant VM plugin does this for us.
+entries for the Alshaya sites - in the same way that the Vagrant VM plugin does this for us when using DrupalVM.
 
 ### SSH
 
@@ -39,15 +39,15 @@ All steps are executed on your host OS.
   * `composer blt-alias`
   * `lando start` - this will configure and set up your containers and services.
 
-  * `blt blt:init:git-hooks`
-  * `blt blt:init:settings`
+  * `lando blt blt:init:git-hooks`
+  * `lando blt blt:init:settings`
   * `lando frontend-setup` - see notes on BLT below
   * `lando frontend-build` - see notes on BLT below
   * `lando blt refresh:local <sitename>` - where <sitename> is the site you want to build
 
 You should now be able to access the site in your browser at https://local.alshaya-<sitename>.com/
 
-Drush commands can be executed from your host OS using `lando drush`.
+Drush commands can be executed from your host OS using `lando drush -l <site_url>`.
 
 ## Services
 
@@ -68,7 +68,7 @@ commands via netcat or telnet.
 
 When the mysql service is started, commands are run to create databases for the sites if they don't already exist. These
 commands can be found in the service config in the lando file. If you're adding new sites, as things stand, you'll
-need to add another line here to create your database.
+need to add another similar line here to create your database.
 
 ### Varnish
 
@@ -96,7 +96,7 @@ This is not ideal since it means we could get out of date if the blt code in tha
 
 Performance is not as good as a dedicated VM, for a number of reasons, but mostly docker related rather than Lando.
 
-We have made some attempt to improve this by using excludes within .lando.yml to exclude vendor folder from shares.
+We have made some attempt to improve this by using `excludes` within `.lando.yml` to exclude vendor folder from shares.
 Instead, it's contents are copied into the container at build time. However, this does mean that containers **must be
 rebuilt after each composer operation that changes the contents of your vendor folder**, for example `composer install`
 or `composer update`.  Luckily this doesn't take long.  To do this, use `lando rebuild -y`.
