@@ -3,8 +3,6 @@ header {
   .block-cart-mini-block,
   .block-alshaya-react-mini-cart {
     .cart-link {
-      #{$right}: 2.375rem;
-
       @include breakpoint($upto-desktop) {
         background-size: 2.375rem;
         width: 2.25rem;
