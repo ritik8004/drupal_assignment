@@ -1142,6 +1142,12 @@ class SkuImagesManager {
             'type' => 'image',
           ];
         }
+        else {
+          // Log the corrupt image file if image styles are not loaded.
+          \Drupal::logger('acq_sku')->warning('Image style could not be loaded, corrupt image found at @file_uri', [
+            '@file_uri' => $file_uri,
+          ]);
+        }
       }
     }
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
