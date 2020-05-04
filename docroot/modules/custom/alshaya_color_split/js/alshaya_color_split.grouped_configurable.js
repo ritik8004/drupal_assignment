@@ -37,8 +37,6 @@
         }
 
         var productChanged = false;
-        // Trigger event for other modules to hook into.
-        $(node).trigger('group-configurable-item-selected', variant);
         if ($(node).attr('data-vmode') === 'full') {
           if (window.location.pathname !== variantInfo.url[$('html').attr('lang')]) {
             var url = variantInfo.url[$('html').attr('lang')] + location.search;
