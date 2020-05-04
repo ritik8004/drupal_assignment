@@ -28,6 +28,7 @@ import CheckoutMessage from '../../../utilities/checkout-message';
 import getStringMessage from '../../../utilities/strings';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { getUserLocation } from '../../../utilities/map/map_utils';
+import dispatchCustomEvent from '../../../utilities/events';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -354,6 +355,7 @@ class ClickCollect extends React.Component {
 
     // Find the store object with the given store-code from the store list.
     const store = _find(storeList, { code: storeCode });
+    dispatchCustomEvent('storeSelected', { store });
     updateSelectStore(store);
     this.setState({
       openSelectedStore: true,
