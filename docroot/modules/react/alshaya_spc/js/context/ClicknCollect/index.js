@@ -51,6 +51,7 @@ class ClicknCollectContextProvider extends React.Component {
       cartSelectedStore,
       clickCollectModal: false,
       locationAccess: true,
+      animateLocationMessage: '',
     };
   }
 
@@ -100,11 +101,27 @@ class ClicknCollectContextProvider extends React.Component {
   }
 
   updateLocationAccess = (accessStatus) => {
+    // Animate location denied message.
+    if (accessStatus === true) {
+      this.setState({
+        animateLocationMessage: 'fadeOutUp',
+      });
+
+      setTimeout(() => {
+        this.setState((prevState) => ({
+          ...prevState,
+          locationAccess: accessStatus,
+        }));
+      }, 450);
+
+      return;
+    }
+
     this.setState((prevState) => ({
       ...prevState,
       locationAccess: accessStatus,
     }));
-  }
+  };
 
   render() {
     const { children } = this.props;
