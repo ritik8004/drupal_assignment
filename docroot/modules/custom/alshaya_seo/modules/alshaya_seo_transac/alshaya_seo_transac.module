@@ -560,7 +560,7 @@ function alshaya_seo_transac_alshaya_acm_product_light_product_data_alter(SKU $s
  * Implements hook_alshaya_acm_product_build_alter().
  */
 function alshaya_seo_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
-  if (in_array($context, ['matchback', 'full'])) {
+  if (in_array($context, ['matchback', 'pdp'])) {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 

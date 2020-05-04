@@ -123,7 +123,7 @@
                   var parentSKU = productData.sku;
                   var maxSaleQty = productData.maxSaleQty;
                   var maxSaleQtyParent = productData.max_sale_qty_parent;
-                  var gtmAttributes = productData.gtm_attributes;
+                  var gtmAttributes = productInfo.gtm_attributes;
 
                   if (productInfo.type === 'configurable') {
                     var productVariantInfo = productInfo['variants'][productData.variant];
