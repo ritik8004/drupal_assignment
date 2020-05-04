@@ -5,7 +5,7 @@ import CheckoutConfigurableOption from '../../../utilities/checkout-configurable
 import SpecialPrice from '../../../utilities/special-price';
 import ConditionalView from '../../../common/components/conditional-view';
 
-export default class CheckoutCartItem extends React.Component {
+class CheckoutCartItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -99,3 +99,5 @@ export default class CheckoutCartItem extends React.Component {
     );
   }
 }
+
+export default CheckoutCartItem;

@@ -255,10 +255,6 @@ class CartController {
   private function getProcessedCartData(array $cart_data) {
     $data = [];
 
-    // @TODO: Remove this.
-    $data['cart_promo'] = [];
-    $data['recommended_products'] = [];
-
     $data['cart_id'] = $cart_data['cart']['id'];
     $data['uid'] = $this->getDrupalInfo('uid') ?: 0;
     $data['langcode'] = $this->request->query->get('lang', 'en');

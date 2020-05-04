@@ -132,27 +132,6 @@ class Drupal {
   }
 
   /**
-   * Get info from drupal for cart items data.
-   *
-   * @param array $skus
-   *   Skus.
-   *
-   * @return array
-   *   Items data with info from drupal.
-   */
-  public function getCartItemDrupalData(array $skus) {
-    $data = [];
-    foreach ($skus as $sku) {
-      $url = sprintf('/rest/v1/product/%s', $sku) . '?context=cart';
-      $response = $this->invokeApi('GET', $url);
-      $result = $response->getBody()->getContents();
-      $data[$sku] = json_decode($result, TRUE);
-    }
-
-    return $data;
-  }
-
-  /**
    * Get stock info from drupal for sku.
    *
    * @param string $sku
@@ -200,19 +179,6 @@ class Drupal {
     }
 
     return ['status' => FALSE];
-  }
-
-  /**
-   * Get all promo data from drupal.
-   *
-   * @return mixed
-   *   All promo data.
-   */
-  public function getAllPromoData() {
-    $url = '/rest/v1/promotion/all';
-    $response = $this->invokeApi('GET', $url);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
   }
 
   /**
