@@ -81,12 +81,17 @@ class CartLinkedSkusController extends ControllerBase {
    */
   public function getLinkedSkusForCart(Request $request) {
     try {
+      $cache_array = [
+        'contexts' => ['url.query_args', 'languages'],
+      ];
       $queryParams = $request->query->all();
       // If type or sku not available or not of crosssell type.
       if (empty($queryParams['type'])
         || empty($queryParams['skus'])
         || $queryParams['type'] != AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL) {
-        return new ModifiedResourceResponse([]);
+        $response = new CacheableJsonResponse([]);
+        $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
+        return $response;
       }
 
       $result = [];
@@ -110,12 +115,10 @@ class CartLinkedSkusController extends ControllerBase {
         }
       }
 
+      $cache_array['tags'] = $cache_tags;
       $response = new CacheableJsonResponse($result);
       $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
-        '#cache' => [
-          'tags' => $cache_tags,
-          'contexts' => ['url.query_args', 'languages'],
-        ],
+        '#cache' => $cache_array,
       ]));
 
       return $response;
