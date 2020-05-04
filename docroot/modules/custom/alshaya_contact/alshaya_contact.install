@@ -86,6 +86,12 @@ function alshaya_contact_install() {
     'Mobile Number is mandatory' => [
       'ar' => 'رقم الهاتف إلزامي',
     ],
+    'Order number' => [
+      'ar' => 'رقم الطلبية',
+    ],
+    'Missing items' => [
+      'ar' => 'العناصر المفقودة',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
