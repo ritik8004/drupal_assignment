@@ -439,14 +439,10 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
  * @param {*} type
  */
 export const getRecommendedProducts = (skus, type) => {
-  let skuString = Object.keys(skus).map((key) => {
-    return `skus[${key}]` + '=' + encodeURIComponent(skus[key])
-  }).join('&');
+  const skuString = Object.keys(skus).map((key) => `skus[${key}]=${encodeURIComponent(skus[key])}`).join('&');
 
   return axios.get(`products/cart-linked-skus?type=${type}&${skuString}&context=cart`)
-  .then((response) => {
-    return response.data;
-  });
+    .then((response) => response.data);
 };
 
 export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info'), data);
