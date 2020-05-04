@@ -1,0 +1,10 @@
+configurable_use_parent_images: 'fallback'
+image_thumb_gallery: true
+color_swatches: true
+swatches:
+  pdp:
+    - color
+  plp:
+    - actual_color_label_code
+plp_slider:
+  item: 3
