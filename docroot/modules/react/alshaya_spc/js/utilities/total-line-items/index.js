@@ -56,7 +56,7 @@ class TotalLineItems extends React.Component {
         <div className="hero-total">
           <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={totals.base_grand_total} />
           <div className="delivery-vat">
-            <FreeDeliveryText freeDelivery={totals.free_delivery} text={Drupal.t('excluding delivery')} />
+            <FreeDeliveryText freeDelivery={totals.free_delivery} text={Drupal.t('Excluding delivery')} />
             <VatText />
           </div>
         </div>

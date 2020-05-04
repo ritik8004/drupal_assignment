@@ -55,7 +55,7 @@
     margin-bottom: 2.5rem;
 
     @include breakpoint($only-mobile) {
-      margin-bottom: 1.25rem;
+      margin-bottom: 0;
     }
   }
 
@@ -144,5 +144,22 @@
     margin-top: 2.5rem;
 
     @include clearfix;
+  }
+}
+
+.alias--cart,
+.alias--checkout-confirmation {
+  .c-footer {
+    @include breakpoint($only-mobile) {
+      padding-bottom: 5.625rem;
+    }
+  }
+}
+
+.alias--checkout {
+  .c-footer {
+    @include breakpoint($only-mobile) {
+      padding-bottom: 7.8125rem;
+    }
   }
 }
