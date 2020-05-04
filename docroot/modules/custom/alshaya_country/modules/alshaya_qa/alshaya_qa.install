@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_qa.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_qa_install() {
+  // Add iso_currency_code for qatar sites.
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'QAR')
+    ->save();
+
+  // Country code and timezone for Qatar.
+  alshaya_country_set_default_regional_info('QA');
+
+  // Store finder search placeholder for Qatar.
+  alshaya_country_set_default_store_search_placeholder('e.g. Doha', 'الدوحة‎');
+
+  $strings = [
+    'seo_country' => [
+      'en' => 'Qatar',
+      'ar' => 'قطر‎',
+    ],
+    'seo_city1' => [
+      'en' => 'Doha',
+      'ar' => 'الدوحة‎',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
