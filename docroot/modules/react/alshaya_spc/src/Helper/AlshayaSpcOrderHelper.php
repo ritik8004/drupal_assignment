@@ -299,7 +299,9 @@ class AlshayaSpcOrderHelper {
    */
   public function getSkuDetails(array $item) {
     $data['title'] = $item['name'];
-    $data['final_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
+    $data['finalPrice'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
+    $data['sku'] = $item['sku'];
+    $data['id'] = $item['item_id'];
     $data['extra_data']['cart_image'] = NULL;
     $data['relative_link'] = '';
 
