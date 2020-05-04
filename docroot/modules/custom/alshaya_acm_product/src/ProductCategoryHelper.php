@@ -222,8 +222,10 @@ class ProductCategoryHelper {
     $terms = [];
     if (!empty($categories)) {
       foreach ($categories as $term) {
-        $term = $this->getEntityTranslation($term, $lang);
-        $terms[] = $this->getProductCategoryHierarchy($term, $lang);
+        if ($term->get('field_commerce_status')->getString() == '1') {
+          $term = $this->getEntityTranslation($term, $lang);
+          $terms[] = $this->getProductCategoryHierarchy($term, $lang);
+        }
       }
     }
     return $terms;
