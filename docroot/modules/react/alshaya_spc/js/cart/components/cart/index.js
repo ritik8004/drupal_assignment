@@ -135,7 +135,6 @@ export default class Cart extends React.Component {
     const {
       wait,
       items,
-      recommendedProducts,
       messageType,
       message,
       totalItems,
@@ -170,8 +169,6 @@ export default class Cart extends React.Component {
       return (
         <>
           <EmptyResult Message={Drupal.t('Your shopping bag is empty.')} />
-          <CartRecommendedProducts sectionTitle={Drupal.t('new arrivals')} recommended_products={recommendedProducts} />
-          <CartRecommendedProducts sectionTitle={Drupal.t('trending now')} recommended_products={recommendedProducts} />
         </>
       );
     }
@@ -216,7 +213,7 @@ export default class Cart extends React.Component {
           </div>
         </div>
         <div className="spc-post-content">
-          <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} recommended_products={recommendedProducts} />
+          <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} items={items} />
         </div>
         <div className="spc-footer">
           <VatFooterText />

@@ -385,27 +385,6 @@ class CartController {
         }
       }
 
-      // Prepare recommended product data.
-      $sku_items = array_column($cart_data['cart']['items'], 'sku');
-      $recommended_products = $this->drupal->getDrupalLinkedSkus($sku_items);
-      $recommended_products_data = [];
-      $data['recommended_products'] = [];
-      // If there any recommended products.
-      if (!empty($recommended_products)) {
-        foreach ($recommended_products as $recommended_product) {
-          if (!empty($recommended_product['linked'])) {
-            foreach ($recommended_product['linked'] as $linked) {
-              if ($linked['link_type'] == 'crosssell' && !empty($linked['skus'])) {
-                foreach ($linked['skus'] as $link) {
-                  $recommended_products_data[$link['sku']] = $link;
-                }
-              }
-            }
-          }
-        }
-        $data['recommended_products'] = $recommended_products_data;
-      }
-
       $data['uid'] = $this->getDrupalInfo('uid') ?: 0;
     }
     catch (\Exception $e) {
