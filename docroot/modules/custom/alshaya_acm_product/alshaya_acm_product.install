@@ -12,6 +12,21 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add translation for label.
+ */
+function alshaya_acm_product_update_8060() {
+  $strings = [
+    'Details' => [
+      'ar' => 'تفاصيل',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-saving the stock resource to moved outside mobile app.
  */
 function alshaya_acm_product_update_8059() {
@@ -45,8 +60,6 @@ function alshaya_acm_product_update_8058() {
 }
 
 /**
- * Implements hook_update_N().
- *
  * Add new settings for local storage cache time for product data.
  */
 function alshaya_acm_product_update_8057() {
@@ -1168,6 +1181,14 @@ function alshaya_acm_product_install() {
   ];
   $product_config_factory->set('content', $content);
   $product_config_factory->save();
+  // Translation for label.
+  $strings = [
+    'Details' => [
+      'ar' => 'تفاصيل',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
