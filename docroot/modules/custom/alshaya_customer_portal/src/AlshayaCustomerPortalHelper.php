@@ -80,42 +80,12 @@ class AlshayaCustomerPortalHelper {
     // Encrypt the data.
     $encrypted_string = $this->encrypt($final_data, $secret_key, 'AES-256-CBC');
     // Remove some special characters to make it URL friendly as per the
-    // requirement of customer portal.
+    // requirement of customer portal. Documentation for this can be found in
+    // "Configuring-pass-through-authentication.pdf" attached to ticket
+    // https://alshayagroup.atlassian.net/browse/CORE-16466.
     $encrypted_string = $this->cleanSpecialCharactersForUrl($encrypted_string);
 
     return $encrypted_string;
-  }
-
-  /**
-   * Get Iframe markup.
-   *
-   * @return string
-   *   The iframe markup.
-   */
-  public function getIframeMarkup(string $sso_url, UserInterface $user = NULL) {
-    $config = $this->configFactory->get('alshaya_customer_portal.settings');
-
-    $build = [
-      '#type' => 'inline_template',
-      '#template' => '<iframe frameborder="{{ fb }}" height="{{ height }}"
-       width="{{ width }}" id="{{ id }}" src="{{ src }}"></iframe>',
-      '#context' => [
-        'fb' => $config->get('iframe.attributes.frameborder'),
-        'height' => $config->get('iframe.attributes.height'),
-        'width' => $config->get('iframe.attributes.width'),
-        'id' => $config->get('iframe.attributes.id'),
-        'src' => $sso_url,
-      ],
-      '#cache' => [
-        'tags' => ['user:' . $user->id()],
-        'contexts' => ['user'],
-      ],
-    ];
-
-    $this->renderer->addCacheableDependency($build, $config);
-    $this->renderer->addCacheableDependency($build, $user);
-
-    return $this->renderer->renderPlain($build);
   }
 
   /**
@@ -160,34 +130,6 @@ class AlshayaCustomerPortalHelper {
   }
 
   /**
-   * Validates if parameters set are correct or not.
-   *
-   * @return bool
-   *   If valid, TRUE is returned, else FALSE.
-   */
-  protected function validateParams(string &$data, string $method) {
-    if ($data != NULL && $method != NULL) {
-      // Check if padding needs to be added or not.
-      if ($pad = (32 - (strlen($data) % 32))) {
-        $this->addPadding($data, $pad);
-      }
-      return TRUE;
-    }
-    else {
-      return FALSE;
-    }
-  }
-
-  /**
-   * Adds 0 Padding.
-   */
-  protected function addPadding(string &$data, string $multiplier) {
-    $data .= '&';
-    $multiplier--;
-    $data .= str_repeat(0, $multiplier);
-  }
-
-  /**
    * Encrypts data using AES-256-CBC algorithm.
    *
    * @return string
@@ -196,14 +138,9 @@ class AlshayaCustomerPortalHelper {
    * @throws Exception
    */
   protected function encrypt(string $data, string $key, string $method) {
-    if ($this->validateParams($data, $method)) {
-      // Get the initialization vector.
-      $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($method));
-      return trim(openssl_encrypt($data, $method, $key, OPENSSL_ZERO_PADDING, $iv));
-    }
-    else {
-      throw new \Exception('Invlid params!');
-    }
+    // Get the initialization vector.
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($method));
+    return trim(openssl_encrypt($data, $method, $key, 0, $iv));
   }
 
 }

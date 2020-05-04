@@ -19,9 +19,9 @@ function alshaya_customer_portal_token_info() {
     'description' => t('Tokens for association with Customer Portal.'),
   ];
 
-  $info['tokens']['customer_portal']['iframe'] = [
-    'name' => t('Iframe'),
-    'description' => t('Iframe with embedded SSO to Customer Portal.'),
+  $info['tokens']['customer_portal']['sso_url'] = [
+    'name' => t('SSO Url'),
+    'description' => t('SSO url to Customer Portal.'),
   ];
 
   return $info;
@@ -51,7 +51,7 @@ function alshaya_customer_portal_tokens($type, $tokens, array $data, array $opti
               $sso_url = $config->get('logged_in_url') . $encrypted_string;
             }
             else {
-              $sso_url = $config->get('logout_url');
+              $sso_url = $config->get('anonymous_url');
             }
             $replacements[$original] = $sso_url;
           }
