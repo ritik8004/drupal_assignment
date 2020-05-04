@@ -74,7 +74,7 @@ alshaya_spc.checkout.customer:
 alshaya_spc.checkout.checkout_event:
   path: '/spc/checkout-event'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCheckoutEventController::postCheckoutEvent'
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCheckoutEventController::checkoutEvent'
   methods: [POST]
   requirements:
     _permission: 'access content'

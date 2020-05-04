@@ -2,6 +2,7 @@
 
 namespace App\Service\Drupal;
 
+use App\Service\Config\SystemSettings;
 use GuzzleHttp\Cookie\SetCookie;
 use GuzzleHttp\TransferStats;
 use Psr\Log\LoggerInterface;
@@ -27,6 +28,13 @@ class Drupal {
   private $request;
 
   /**
+   * System Settings service.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  private $settings;
+
+  /**
    * Logger.
    *
    * @var \Psr\Log\LoggerInterface
@@ -40,16 +48,20 @@ class Drupal {
    *   Drupal info service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger.
    */
   public function __construct(
     DrupalInfo $drupal_info,
     RequestStack $request_stack,
+    SystemSettings $settings,
     LoggerInterface $logger
   ) {
     $this->drupalInfo = $drupal_info;
     $this->request = $request_stack;
+    $this->settings = $settings;
     $this->logger = $logger;
   }
 
@@ -107,8 +119,15 @@ class Drupal {
    *   Response.
    */
   protected function invokeApiWithSession(string $method, string $url, array $request_options = []) {
+    // Add current request cookies to ensure request is done with same session
+    // as the browser.
     $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
     $request_options['headers']['Cookie'] = $cookies->__toString();
+
+    // Add a custom header to ensure Drupal allows this request without
+    // further authentication.
+    $request_options['headers']['alshaya-middleware'] = md5($this->settings->getSettings('middleware_auth'));
+
     return $this->invokeApi($method, $url, $request_options);
   }
 
