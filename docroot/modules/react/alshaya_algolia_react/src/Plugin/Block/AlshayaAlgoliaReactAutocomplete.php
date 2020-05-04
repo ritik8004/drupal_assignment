@@ -420,6 +420,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       'config:alshaya_acm_product.display_settings',
       'config:alshaya_search_api.listing_settings',
       'config:alshaya_search.settings',
+      'config:alshaya_acm_product.settings',
     ]);
   }
 
