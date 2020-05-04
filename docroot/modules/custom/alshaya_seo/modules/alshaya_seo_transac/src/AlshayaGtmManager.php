@@ -27,7 +27,6 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 
 /**
  * Class AlshayaGtmManager.
@@ -126,7 +125,6 @@ class AlshayaGtmManager {
     'dimension8' => 'gtm-dimension8',
     'dimension3' => 'gtm-dimension3',
     'metric1' => 'gtm-metric1',
-    'product-price' => 'gtm-product-price',
   ];
 
   /**
@@ -256,13 +254,6 @@ class AlshayaGtmManager {
   protected $productCategoryHelper;
 
   /**
-   * SKU Price Helper.
-   *
-   * @var \Drupal\alshaya_acm_product\Service\SkuPriceHelper
-   */
-  protected $skuPriceHelper;
-
-  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -301,8 +292,6 @@ class AlshayaGtmManager {
    *   Entity Repository object.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $productCategoryHelper
    *   Product Category Helper.
-   * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $sku_price_helper
-   *   SKU Price Helper.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -321,8 +310,7 @@ class AlshayaGtmManager {
                               ModuleHandlerInterface $module_handler,
                               OrdersManager $orders_manager,
                               EntityRepositoryInterface $entityRepository,
-                              ProductCategoryHelper $productCategoryHelper,
-                              SkuPriceHelper $sku_price_helper) {
+                              ProductCategoryHelper $productCategoryHelper) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -341,7 +329,6 @@ class AlshayaGtmManager {
     $this->ordersManager = $orders_manager;
     $this->entityRepository = $entityRepository;
     $this->productCategoryHelper = $productCategoryHelper;
-    $this->skuPriceHelper = $sku_price_helper;
   }
 
   /**
@@ -424,13 +411,11 @@ class AlshayaGtmManager {
     $original_price = $prices['price'];
     $final_price = $prices['final_price'];
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
-    $product_price = $this->skuPriceHelper->getProductPrice($prices);
 
     if ($sku->bundle() == 'configurable') {
       $prices = $this->skuManager->getMinPrices($sku);
       $original_price = $prices['price'];
       $final_price = $prices['final_price'];
-      $product_price = $this->skuPriceHelper->getProductPrice($prices);
     }
 
     $product_type = 'Regular Product';
@@ -465,8 +450,7 @@ class AlshayaGtmManager {
       ? count($media['media_items']['images'])
       : 'image not available';
 
-    $attributes['gtm-price'] = _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
-    $attributes['gtm-product-price'] = $product_price;
+    $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
 
     if ($final_price
       && ($original_price !== $final_price)
