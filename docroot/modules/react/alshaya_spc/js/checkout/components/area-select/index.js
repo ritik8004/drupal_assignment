@@ -10,6 +10,8 @@ import {
 } from '../../../utilities/map/map_utils';
 
 export default class AreaSelect extends React.Component {
+  isComponentMounted = true;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -29,9 +31,16 @@ export default class AreaSelect extends React.Component {
   }
 
   componentDidMount() {
+    this.isComponentMounted = true;
     this.getAreaList();
     // Trigger event for handling area update from map.
     document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
+  }
+
+  componentWillUnmount() {
+    this.isComponentMounted = false;
+    // Trigger event for handling area update from map.
+    document.removeEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
   }
 
   areaCurrentOption = () => {
@@ -49,6 +58,9 @@ export default class AreaSelect extends React.Component {
    * When we search in google, update address.
    */
   updateAreaFromGoogleMap = (e) => {
+    if (!this.isComponentMounted) {
+      return;
+    }
     const data = e.detail.data();
     this.setState({
       currentOption: data.id,
