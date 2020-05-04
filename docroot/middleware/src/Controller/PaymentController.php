@@ -434,6 +434,7 @@ class PaymentController {
     $message = 'User either cancelled or response url returned error.';
     $message .= PHP_EOL . 'Debug info:' . PHP_EOL;
     foreach ($data as $key => $value) {
+      $value = is_array($value) ? json_encode($value) : $value;
       $message .= $key . ': ' . $value . PHP_EOL;
     }
 
