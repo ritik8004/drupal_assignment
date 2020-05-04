@@ -195,29 +195,34 @@
           dataLayer.push(userDetails);
         }
 
-        $(window).once('gtm-onetime').on('load', function() {
+          if ($(context).filter('article[data-vmode="modal"]').length === 1
+            || $(document).find('article[data-vmode="full"]').length === 1) {
+
           if ($(document).find('article[data-vmode="full"]').length === 1) {
             var productContext = $(document).find('article[data-vmode="full"]');
-
-            var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-            product.variant = '';
-            if (currentListName != null && currentListName !== 'PDP-placeholder') {
-              product.list = currentListName;
-              currentListName = null;
-            }
-            var data = {
-              event: 'productDetailView',
-              ecommerce: {
-                currencyCode: currencyCode,
-                detail: {
-                  products: [product]
-                }
-              }
-            };
-
-            dataLayer.push(data);
           }
-        });
+          else {
+            var productContext = $(context).filter('article[data-vmode="modal"]');
+          }
+
+          var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+          product.variant = '';
+          if (currentListName != null && currentListName !== 'PDP-placeholder') {
+            product.list = currentListName;
+            currentListName = null;
+          }
+          var data = {
+            event: 'productDetailView',
+            ecommerce: {
+              currencyCode: currencyCode,
+              detail: {
+                products: [product]
+              }
+            }
+          };
+
+          dataLayer.push(data);
+        }
       });
 
       // If we receive an empty page type, set page type as not defined.
@@ -804,10 +809,11 @@
     if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
       mediaCount = parseInt(product.attr('gtm-dimension4'));
     }
+
     var productData = {
       name: product.attr('gtm-name'),
       id: product.attr('gtm-main-sku'),
-      price: product.attr('gtm-price'),
+      price: parseFloat(product.attr('gtm-price')),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
       dimension2: product.attr('gtm-sku-type'),
