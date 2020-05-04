@@ -357,9 +357,10 @@
     var impressions = [];
     var currencyCode = settings.alshaya_spc.currency_config.currency_code;
     var listName = $('body').attr('gtm-list-name');
-    var cart_data = JSON.parse(localStorage.getItem('cart_data'));
-    if (cart_data.cart.recommended_products !== null) {
-      var items = cart_data.cart.recommended_products;
+    const key = 'recommendedProduct:' + settings.path.currentLanguage;
+    var recommendedProducts = JSON.parse(localStorage.getItem('cart_data'));
+    if (recommendedProducts !== null) {
+      var items = recommendedProducts;
       var count = position + 1;
       Object.entries(items).forEach(([key, product]) => {
         if (skus.includes(key)) {

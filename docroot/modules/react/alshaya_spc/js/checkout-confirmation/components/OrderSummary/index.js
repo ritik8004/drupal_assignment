@@ -129,7 +129,7 @@ const OrderSummary = () => {
           {(storeAddress.length > 0 && storeInfo !== undefined)
             && (
               <>
-               <OrderSummaryItem
+                <OrderSummaryItem
                   type="click_and_collect"
                   label={Drupal.t('collection store')}
                   name={storeInfo.store_name}

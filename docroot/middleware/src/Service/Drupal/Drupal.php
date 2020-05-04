@@ -182,27 +182,6 @@ class Drupal {
   }
 
   /**
-   * Get linked skus info from Drupal.
-   *
-   * @param array $skus
-   *   Skus.
-   *
-   * @return array
-   *   Linked skus data.
-   */
-  public function getDrupalLinkedSkus(array $skus) {
-    $data = [];
-    foreach ($skus as $sku) {
-      $url = sprintf('/rest/v1/product/%s/linked?context=cart', $sku);
-      $response = $this->invokeApi('GET', $url);
-      $result = $response->getBody()->getContents();
-      $data[$sku] = json_decode($result, TRUE);
-    }
-
-    return $data;
-  }
-
-  /**
    * Get all promo data from drupal.
    *
    * @return mixed

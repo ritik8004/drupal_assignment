@@ -20,6 +20,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
+import dispatchCustomEvent from '../../../utilities/events';
 
 window.fetchStore = 'idle';
 
