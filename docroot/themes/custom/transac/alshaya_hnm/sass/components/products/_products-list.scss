@@ -248,20 +248,15 @@
       text-transform: uppercase;
     }
 
-    @include breakpoint($mobile) {
-      min-height: 22.3rem;
+    @include breakpoint($only-mobile) {
+      &:nth-of-type(2n+1) {
+        clear: both;
+      }
     }
 
-    @include breakpoint($iphone) {
-      min-height: 23.1rem;
-    }
-
-    @include breakpoint($iphone-plus) {
-      min-height: 24.3rem;
-    }
-
-    @include breakpoint($tablet) {
-      min-height: 25.5rem;
+    @include breakpoint($upto-desktop) {
+      height: auto !important;
+      min-height: auto;
     }
 
     @include breakpoint($desktop) {
