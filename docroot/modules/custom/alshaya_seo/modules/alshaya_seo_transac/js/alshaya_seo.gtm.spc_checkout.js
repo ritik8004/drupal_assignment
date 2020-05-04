@@ -6,6 +6,70 @@
 (function ($, Drupal, dataLayer) {
   'use strict';
 
+  Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
+
+  Drupal.alshayaSeoSpc.pushStoreData = function(cart) {
+    if (cart.delivery_type !== 'click_and_collect' || !cart.shipping.storeInfo) {
+      return;
+    }
+
+    dataLayer[0].deliveryOption = 'Click and Collect';
+    dataLayer[0].deliveryType = 'ship_to_store';
+    delete dataLayer[0].deliveryArea;
+    delete dataLayer[0].deliveryCity;
+    dataLayer[0].storeLocation = cart.shipping.storeInfo.name;
+    dataLayer[0].storeAddress = cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' +  cart.shipping.storeInfo.gtm_cart_address.administrative_area_display;
+  };
+
+  Drupal.alshayaSeoSpc.pushHomeDeliveryData = function(cart) {
+    if (cart.delivery_type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
+      return;
+    }
+    //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
+    var area_id = cart.shipping.address[drupalSettings.address_fields.administrative_area.key];
+    if (!area_id) {
+      return;
+    }
+
+    dataLayer[0].deliveryOption = 'Home Delivery';
+    dataLayer[0].deliveryType = cart.shipping.methods[0].carrier_title;
+    delete dataLayer[0].storeLocation;
+    delete dataLayer[0].storeAddress;
+    var input = document.querySelector('[data-id="'+ area_id +'"]');
+    dataLayer[0].deliveryArea = $(input).data('label');
+    dataLayer[0].deliveryCity = $(input).data('parent-label');
+  };
+
+  Drupal.alshayaSeoSpc.gtmDeliveryMethod = function (method) {
+    var data = {
+      event: 'deliveryOption',
+      eventLabel: method,
+    };
+    dataLayer.push(data);
+  };
+
+  /**
+   * Helper function to push checkout option to GTM.
+   *
+   * @param optionLabel
+   * @param step
+   */
+  Drupal.alshayaSeoSpc.gtmPushCheckoutOption = function (optionLabel, step) {
+    var data = {
+      event: 'checkoutOption',
+      ecommerce: {
+        checkout_option: {
+          actionField: {
+            step: step,
+            option: optionLabel
+          }
+        }
+      }
+    };
+
+    dataLayer.push(data);
+  };
+
   document.addEventListener('checkoutCartUpdate', function (e) {
     var step = Drupal.alshayaSeoSpc.getStepFromContainer();
     Drupal.alshayaSeoSpc.cartGtm(e.detail.cart, step);
@@ -81,52 +145,17 @@
     dataLayer[0].storeAddress = cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' +  cart.shipping.storeInfo.gtm_cart_address.administrative_area_display;
   };
 
-  Drupal.alshayaSeoSpc.pushHomeDeliveryData = function(cart) {
-    if (cart.delivery_type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
-      return;
-    }
-    //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
-    var area_id = cart.shipping.address[drupalSettings.address_fields.administrative_area.key];
-    if (!area_id) {
-      return;
-    }
-
-    dataLayer[0].deliveryOption = 'Home Delivery';
-    dataLayer[0].deliveryType = cart.shipping.methods[0].carrier_title;
-
-    var input = document.querySelector('[data-id="'+ area_id +'"]');
-    dataLayer[0].deliveryArea = $(input).data('label');
-    dataLayer[0].deliveryCity = $(input).data('parent-label');
-  };
-
-  Drupal.alshayaSeoSpc.gtmDeliveryMethod = function (method) {
-    var data = {
-      event: 'deliveryOption',
-      eventLabel: method,
-    };
-    dataLayer.push(data);
-  };
-
-  /**
-   * Helper function to push checkout option to GTM.
-   *
-   * @param optionLabel
-   * @param step
-   */
-  Drupal.alshayaSeoSpc.gtmPushCheckoutOption = function (optionLabel, step) {
-    var data = {
-      event: 'checkoutOption',
-      ecommerce: {
-        checkout_option: {
-          actionField: {
-            step: step,
-            option: optionLabel
-          }
-        }
-      }
-    };
-
-    dataLayer.push(data);
-  };
+  document.addEventListener('storeSelected', function (e) {
+    dataLayer.push({
+      event: 'VirtualPageview',
+      virtualPageURL: ' /virtualpv/click-and-collect/step2/select-store',
+      virtualPageTitle: 'C&C Step 2 – Select Store'
+    },
+    {
+      event: 'storeSelect',
+      storeName: e.detail.store.name,
+      storeAddress: e.detail.store.address.replace(/<[^>]+>(\s+)|(\n+)/g, ''),
+    });
+  });
 
 })(jQuery, Drupal, dataLayer);
