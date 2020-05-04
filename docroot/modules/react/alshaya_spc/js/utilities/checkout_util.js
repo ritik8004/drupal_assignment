@@ -436,29 +436,43 @@ export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info')
 
 export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per item has been exceeded');
 
-export const getAmountWithCurrency = (priceAmount) => {
+/**
+ * Get amount with currency.
+ *
+ * @param priceAmount
+ *   The price amount.
+ * @param string
+ *   True to Return amount with currency as string, false to return as array.
+ *
+ * @returns {string|*}
+ *   Return string with price and currency or return array of price and currency.
+ */
+export const getAmountWithCurrency = (priceAmount, string = true) => {
   let amount = priceAmount === null ? 0 : priceAmount;
   amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
   const { currency_config: currencyConfig } = drupalSettings.alshaya_spc;
-  const priceParts = [
-    currencyConfig.currency_code,
-    amount.toFixed(currencyConfig.decimal_points),
-  ];
+  // Here currency and amount keys are used in PriceElement component.
+  const priceParts = {
+    currency: currencyConfig.currency_code,
+    amount: amount.toFixed(currencyConfig.decimal_points),
+  };
 
-  return currencyConfig.currency_code_position === 'before'
-    ? priceParts.join(' ')
-    : priceParts.reverse().join(' ');
+  const returnArray = currencyConfig.currency_code_position === 'before'
+    ? priceParts
+    : Object.assign([], priceParts).reverse();
+
+  if (!string) {
+    return returnArray;
+  }
+
+  return Object.values(returnArray).join(' ');
 };
 
-export const replaceCodTokens = (amount, text) => {
+export const replaceCodTokens = (replaceMent, text) => {
   if (text.length === 0) {
     return '';
   }
 
   const textSplit = text.split('[surcharge]');
-  return textSplit.reduce((prefix, suffix) => [
-    prefix,
-    getAmountWithCurrency(amount),
-    suffix,
-  ]);
+  return textSplit.reduce((prefix, suffix) => [prefix, replaceMent, suffix]);
 };
