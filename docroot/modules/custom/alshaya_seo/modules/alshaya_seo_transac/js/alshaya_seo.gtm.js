@@ -60,7 +60,7 @@
         if (addedProduct.attr('gtm-sku-type') === 'configurable') {
           selectedVariant = $('.selected-variant-sku', $(this)).val();
         }
-        addedProduct.attr('gtm-product-price', addedProduct.attr('gtm-price'));
+
         var product = Drupal.alshaya_seo_gtm_get_product_values(addedProduct);
 
         // Remove product position: Not needed while adding to cart.
@@ -797,7 +797,7 @@
     var productData = {
       name: product.attr('gtm-name'),
       id: product.attr('gtm-main-sku'),
-      price: product.attr('gtm-product-price'),
+      price: product.attr('gtm-price'),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
       dimension2: product.attr('gtm-sku-type'),
