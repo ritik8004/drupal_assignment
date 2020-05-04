@@ -60,6 +60,8 @@ function alshaya_acm_product_update_8058() {
 }
 
 /**
+ * Implements hook_update_N().
+ *
  * Add new settings for local storage cache time for product data.
  */
 function alshaya_acm_product_update_8057() {
