@@ -451,7 +451,7 @@ export const getAmountWithCurrency = (priceAmount, string = true) => {
   let amount = priceAmount === null ? 0 : priceAmount;
   amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
   const { currency_config: currencyConfig } = drupalSettings.alshaya_spc;
-  // Here currency and amount keys are used in PriceElement component.
+  // The keys currency and amount are used in PriceElement component.
   const priceParts = {
     currency: currencyConfig.currency_code,
     amount: amount.toFixed(currencyConfig.decimal_points),
@@ -468,11 +468,11 @@ export const getAmountWithCurrency = (priceAmount, string = true) => {
   return Object.values(returnArray).join(' ');
 };
 
-export const replaceCodTokens = (replaceMent, text) => {
+export const replaceCodTokens = (replacement, text) => {
   if (text.length === 0) {
     return '';
   }
 
   const textSplit = text.split('[surcharge]');
-  return textSplit.reduce((prefix, suffix) => [prefix, replaceMent, suffix]);
+  return textSplit.reduce((prefix, suffix) => [prefix, replacement, suffix]);
 };
