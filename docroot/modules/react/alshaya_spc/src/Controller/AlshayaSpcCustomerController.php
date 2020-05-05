@@ -4,7 +4,6 @@ namespace Drupal\alshaya_spc\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper;
-use Drupal\Core\Site\Settings;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -109,15 +108,6 @@ class AlshayaSpcCustomerController extends ControllerBase {
    *   Json response.
    */
   public function getUserCustomerId(Request $request) {
-    $secret = $request->headers->get('alshaya-middleware') ?? '';
-    if ($secret !== md5(Settings::get('middleware_auth'))) {
-      $this->logger->error('Customer info requested with invalid alshaya-middleware header value: @value', [
-        '@value' => $secret,
-      ]);
-
-      throw new AccessDeniedHttpException();
-    }
-
     $response = [
       'customer_id' => 0,
       'uid' => 0,

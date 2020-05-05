@@ -47,3 +47,11 @@ services:
 
   alshaya_spc.stock_helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper
+
+  alshaya_spc.middleware_access_check:
+    class: Drupal\alshaya_spc\Access\MiddlewareAccessCheck
+    tags:
+      -
+        name: access_check
+        needs_incoming_request: TRUE
+        applies_to: _middleware_request_check

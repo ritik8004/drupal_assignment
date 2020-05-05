@@ -8,11 +8,9 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\Core\Site\Settings;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -110,15 +108,6 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function checkoutEvent(Request $request) {
-    $secret = $request->headers->get('alshaya-middleware') ?? '';
-    if ($secret !== md5(Settings::get('middleware_auth'))) {
-      $this->logger->error('Checkout event invoked with invalid alshaya-middleware header value: @value', [
-        '@value' => $secret,
-      ]);
-
-      throw new AccessDeniedHttpException();
-    }
-
     $action = $request->request->get('action');
     $cart = $request->request->get('cart');
     if (empty($action) || empty($cart)) {

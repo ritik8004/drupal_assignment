@@ -69,7 +69,7 @@ alshaya_spc.checkout.customer:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::getUserCustomerId'
   methods: [GET]
   requirements:
-    _permission: 'access content'
+    _middleware_request_check: 'TRUE'
 
 alshaya_spc.checkout.checkout_event:
   path: '/spc/checkout-event'
@@ -77,4 +77,4 @@ alshaya_spc.checkout.checkout_event:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCheckoutEventController::checkoutEvent'
   methods: [POST]
   requirements:
-    _permission: 'access content'
+    _middleware_request_check: 'TRUE'
