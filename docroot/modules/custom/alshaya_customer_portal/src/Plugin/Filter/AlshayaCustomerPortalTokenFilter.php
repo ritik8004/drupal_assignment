@@ -19,6 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Filter(
  *   id = "alshaya_customer_portal_token_filter",
  *   title = @Translation("Replace Customer portal tokens with their values"),
+ *   description = @Translation("This filter is used to replace customer portal tokens with their values."),
  *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE
  * )
  */
