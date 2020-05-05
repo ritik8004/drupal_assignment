@@ -344,6 +344,14 @@ export const addEditAddressToCustomer = (e) => {
                       type: 'error',
                       message: cartResult.error_message,
                     });
+
+                    // Add address id in hidden id field so that on next
+                    // save, new address is not created but uses existing one.
+                    const addressIdHiddenElement = document.getElementsByName('address_id');
+                    if (addressIdHiddenElement.length > 0) {
+                      document.getElementsByName('address_id')[0].value = list.data[firstKey].address_id;
+                    }
+
                     return;
                   }
 
@@ -634,6 +642,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           const address = saveCustomerAddressFromBilling(customerData);
           if (address instanceof Promise) {
             address.then((list) => {
+              let addressId = null;
               if (list !== null) {
                 if (list.error === true) {
                   removeFullScreenLoader();
@@ -647,6 +656,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                 const firstKey = Object.keys(list.data)[0];
                 // Set the address id.
                 formData.static.customer_address_id = list.data[firstKey].address_mdc_id;
+                addressId = list.data[firstKey].address_id;
               }
 
               // Update billing address.
@@ -666,6 +676,17 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                       type: 'error',
                       message: cartResult.error_message,
                     });
+
+                    // If not null, means this is for logged in user.
+                    if (addressId !== null) {
+                      // Add address id in hidden id field so that on next
+                      // save, new address is not created but uses existing one.
+                      const addressIdHiddenElement = document.getElementsByName('address_id');
+                      if (addressIdHiddenElement.length > 0) {
+                        document.getElementsByName('address_id')[0].value = addressId;
+                      }
+                    }
+
                     return;
                   }
 
