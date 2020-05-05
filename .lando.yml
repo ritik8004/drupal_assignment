@@ -1,0 +1,68 @@
+name: alshaya
+recipe: drupal8
+config:
+  webroot: docroot
+
+proxy:
+  edge:
+    - "local.alshaya*.com"
+    - edge.acquia.lndo.site
+
+services:
+  appserver:
+    type: php:7.3
+    ssl: true
+    overrides:
+      environment:
+        DEVEL_ENV: lando
+    run_as_root:
+      - "apt-get update -y"
+      - "apt-get install netcat -y"
+
+  database:
+    type: mysql
+    portforward: 33061
+    run_as_root:
+      # Create site databases. TODO: check if we can automate this some other way.
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmkw; GRANT ALL PRIVILEGES ON drupal_alshaya_hmkw.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmae; GRANT ALL PRIVILEGES ON drupal_alshaya_hmae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmsa; GRANT ALL PRIVILEGES ON drupal_alshaya_hmsa.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_dhuae; GRANT ALL PRIVILEGES ON drupal_alshaya_dhuae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
+
+  memcache1:
+    type: memcached:1.5.11
+    portforward: 11211
+
+  memcache2:
+    type: memcached:1.5.11
+    portforward: 11212
+
+  edge:
+    type: varnish:4.1
+    backends:
+      - appserver
+    ssl: true
+    config:
+      vcl: architecture/varnish/varnish-4-lando.vcl
+
+  solr:
+    type: solr:5.5
+
+  node:
+    type: node:8
+
+tooling:
+  blt:
+    service: appserver
+    cmd: /app/vendor/acquia/blt/bin/blt
+
+  frontend-setup:
+    service: node
+    cmd:  bash /app/blt/scripts/frontend-setup.sh /app/docroot && bash /app/blt/scripts/react-setup.sh /app/docroot
+
+  frontend-build:
+    service: node
+    cmd:  bash /app/blt/scripts/frontend-build.sh /app/docroot && bash /app/blt/scripts/react-build.sh /app/docroot
+
+excludes:
+  - vendor
