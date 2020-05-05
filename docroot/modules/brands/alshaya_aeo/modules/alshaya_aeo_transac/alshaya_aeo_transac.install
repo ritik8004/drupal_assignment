@@ -10,32 +10,6 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
- * Disable color block, color family is being used as color facet.
- */
-function alshaya_aeo_transac_update_8001() {
-  $blocks = [
-    'plpcolor' => 'plpcolorfamily',
-    'promocolor' => 'promocolorfamily',
-    'color' => 'colorfamily',
-  ];
-
-  foreach ($blocks as $old_id => $new_id) {
-    $old_block = Block::load($old_id);
-    $new_block = Block::load($new_id);
-
-    // Set weight of new block same as old block.
-    $new_block->setWeight($old_block->getWeight());
-    $new_block->save();
-
-    // Keep the old block disabled.
-    $old_block->disable();
-    $old_block->save();
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Override PDP image style to sharpen the images before zoom.
  *
  * Add new sku attribute division_name.
@@ -72,6 +46,32 @@ function alshaya_aeo_transac_update_8002() {
 
   // Re-save indexes.
   _alshaya_search_resave_indexes();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disable color block, color family is being used as color facet.
+ */
+function alshaya_aeo_transac_update_8001() {
+  $blocks = [
+    'plpcolor' => 'plpcolorfamily',
+    'promocolor' => 'promocolorfamily',
+    'color' => 'colorfamily',
+  ];
+
+  foreach ($blocks as $old_id => $new_id) {
+    $old_block = Block::load($old_id);
+    $new_block = Block::load($new_id);
+
+    // Set weight of new block same as old block.
+    $new_block->setWeight($old_block->getWeight());
+    $new_block->save();
+
+    // Keep the old block disabled.
+    $old_block->disable();
+    $old_block->save();
+  }
 }
 
 /**

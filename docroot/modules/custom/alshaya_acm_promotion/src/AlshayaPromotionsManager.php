@@ -9,6 +9,7 @@ use Drupal\acq_promotion\AcqPromotionPluginManager;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_acm\CartData;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
@@ -38,6 +39,11 @@ class AlshayaPromotionsManager {
    * Denotes the fixed_amount_discount_order promotion subtype.
    */
   const SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER = 'fixed_amount_discount_order';
+
+  /**
+   * Denotes the free_gift_order promotion subtype.
+   */
+  const SUBTYPE_FREE_GIFT = 'free_gift_order';
 
   /**
    * Denotes the free_shipping_order promotion subtype.
@@ -260,6 +266,9 @@ class AlshayaPromotionsManager {
         elseif ($promotion['action'] == 'cart_fixed') {
           return self::SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER;
         }
+        elseif ($promotion['action'] == 'ampromo_cart') {
+          return self::SUBTYPE_FREE_GIFT;
+        }
       }
       elseif (isset($promotion['free_shipping']) && $promotion['free_shipping'] == 2) {
         return self::SUBTYPE_FREE_SHIPPING_ORDER;
@@ -359,6 +368,7 @@ class AlshayaPromotionsManager {
         'value' => [
           self::SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER,
           self::SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER,
+          self::SUBTYPE_FREE_GIFT,
           self::SUBTYPE_FREE_SHIPPING_ORDER,
         ],
         'operator' => 'IN',
@@ -657,12 +667,18 @@ class AlshayaPromotionsManager {
   public function getCartPromotions() {
     $cartPromotionsApplied = &drupal_static(__FUNCTION__);
 
-    if (!isset($cartPromotionsApplied)
-      && $cart = $this->cartStorage->getCart(FALSE)) {
-      $cartRulesApplied = $cart->getCart()->cart_rules;
+    if (!isset($cartPromotionsApplied)) {
+      $cart = CartData::getCart() ?? $this->cartStorage->getCart(FALSE);
+      if (empty($cart)) {
+        return [];
+      }
 
-      if (!empty($cartRulesApplied)) {
-        foreach ($cartRulesApplied as $rule_id) {
+      $appliedRules = $cart instanceof CartData
+        ? $cart->getAppliedRules()
+        : $cart->getCart()->cart_rules;
+
+      if (!empty($appliedRules)) {
+        foreach ($appliedRules as $rule_id) {
           $promotion_node = $this->getPromotionByRuleId($rule_id);
           if ($promotion_node instanceof NodeInterface) {
             $cartPromotionsApplied[$rule_id] = $promotion_node;
@@ -680,7 +696,7 @@ class AlshayaPromotionsManager {
    * @return array
    *   List of promotions sorted by price and priority.
    */
-  public function getSortedCartPromotions() {
+  protected function getSortedCartPromotions() {
     $cid = 'alshaya_acm_promotions:cart:sorted';
     $cache = $this->alshayaAcmPromotionCache->get($cid);
 
@@ -812,6 +828,14 @@ class AlshayaPromotionsManager {
             $promotionCartStatus = $promotionPlugin->getPromotionCartStatus();
             if ($promotionCartStatus === AcqPromotionInterface::STATUS_CAN_BE_APPLIED) {
               $data['threshold_reached'] = TRUE;
+              $data['coupon'] = $promotion->get('field_coupon_code')->getString();
+
+              // Get Promotion Percentage.
+              $promotion_data = $promotion->get('field_acq_promotion_data')->getString();
+              $promotion_data = unserialize($promotion_data);
+              if (!empty($promotion_data) && !empty($promotion_data['discount'])) {
+                $data['couponDiscount'] = $promotion_data['discount'];
+              }
             }
           }
         }

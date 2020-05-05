@@ -4,6 +4,7 @@ namespace Drupal\alshaya_algolia_react\Plugin\Block;
 
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\block\BlockInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
@@ -164,6 +165,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'filters' => $this->getFilters($index_name),
             'enable_lhn_tree_search' => $product_category_settings->get('enable_lhn_tree_search'),
             'category_facet_label' => $this->t('Category'),
+            'sizeGroupSeparator' => SkuManager::SIZE_GROUP_SEPARATOR,
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'] ?? 4,
@@ -301,6 +303,14 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             $identifier = $facet->getFieldIdentifier();
           }
 
+          // For HNM we are using "size_group_list" widget type
+          // for size facet. If sizegroup is not enabled then force
+          // to make widget type checkbox.
+          if ($facet->getFieldIdentifier() == 'attr_size'
+            && !$this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter')) {
+            $widget['type'] = 'checkbox';
+          }
+
           $filter_facets[$identifier] = [
             'identifier' => $identifier,
             'label' => $block->label(),
@@ -410,6 +420,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       'config:alshaya_acm_product.display_settings',
       'config:alshaya_search_api.listing_settings',
       'config:alshaya_search.settings',
+      'config:alshaya_acm_product.settings',
     ]);
   }
 

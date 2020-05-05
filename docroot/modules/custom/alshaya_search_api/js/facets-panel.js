@@ -77,7 +77,7 @@
 
       // On clicking on back button, reset the block title and add class so
       // that facet blocks can be closed.
-      $('.facet-all-back').on('click', function() {
+      $('.facet-all-back, .back-facet-list').once('facet-all-back-processed').on('click', function() {
         $(this).hide();
         $('.filter-sort-title').html(Drupal.t('filter & sort'));
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
@@ -326,6 +326,13 @@
           $('.all-filters #' + active_facet_sort).show();
         }
 
+        // Also restore the state for size Group facet post AJAX.
+        var sizeGroupFilter = $('#all-filter-active-facet-sort').attr('data-size-group-id');
+        if (sizeGroupFilter.length > 0) {
+          $('.all-filters #block-plpsize > ul > li, .all-filters #block-promosize > ul > li').hide();
+          $('.all-filters #' + sizeGroupFilter).parent().addClass('show-facet');
+        }
+
         // If there any active facet filter.
         updateFacetTitlesWithSelected();
         updateCategoryTitle();
@@ -364,7 +371,15 @@
               supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
             }
             filterposition = $('.show-all-filters').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
-            fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
+
+            // To check if algolia is enabled and has supercategory menu,
+            // calculate height as per minimalistic header implementation.
+            if ($('body').hasClass('no-sticky-algolia-search-bar') && supercategorymenuHeight) {
+              fixedNavHeight = nav.outerHeight() + supercategorymenuHeight - $('.block-alshaya-super-category').outerHeight();
+            }
+            else {
+              fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
+            }
           }
         }
 

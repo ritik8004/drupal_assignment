@@ -11,8 +11,11 @@
  * Add iso_currency_code for kuwait sites.
  */
 function alshaya_kw_update_8004() {
-  if ($config = \Drupal::configFactory()->getEditable('acq_commerce.currency')) {
-    $config->set('iso_currency_code', 'KWD')->save();
+  $modulehandler = \Drupal::service("module_handler");
+  if ($modulehandler->moduleExists("acq_commerce")) {
+    if ($config = \Drupal::configFactory()->getEditable('acq_commerce.currency')) {
+      $config->set('iso_currency_code', 'KWD')->save();
+    }
   }
 }
 
@@ -91,14 +94,18 @@ function alshaya_kw_update_8001() {
  * Implements hook_update_dependencies().
  */
 function alshaya_kw_update_dependencies() {
-  return [
-    'alshaya_kw' => [
-      '8002' => [
-        'alshaya_seo_transac' => '8402',
+  // Adding this dependency only for transac sites.
+  $modulehandler = \Drupal::service("module_handler");
+  if ($modulehandler->moduleExists("acq_commerce")) {
+    return [
+      'alshaya_kw' => [
+        '8002' => [
+          'alshaya_seo_transac' => '8402',
+        ],
+        '8004' => [
+          'acq_commerce' => '8002',
+        ],
       ],
-      '8004' => [
-        'acq_commerce' => '8002',
-      ],
-    ],
-  ];
+    ];
+  }
 }

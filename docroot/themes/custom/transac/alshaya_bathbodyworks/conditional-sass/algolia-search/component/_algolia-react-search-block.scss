@@ -101,7 +101,6 @@
       @include breakpoint($only-mobile) {
         margin: 0;
         width: 100%;
-        padding-#{$left}: 3rem !important;
         border-width: 0 0 0.0625rem !important;
         border-color: $algolia-auto-complete-border !important;
       }
@@ -110,6 +109,7 @@
         height: 3.5rem;
         border: 0.5rem solid $algolia-input-box-shadow;
         line-height: 1.25rem;
+        padding-#{$left}: 3rem !important;
       }
 
       @include breakpoint($desktop) {
@@ -159,7 +159,11 @@
         }
 
         @include breakpoint($only-tablet) {
-          content: none;
+          top: 0.5rem;
+          #{$right}: unset;
+          #{$left}: -0.5rem;
+          opacity: 1;
+          transition: opacity 0.2s;
         }
 
         @include breakpoint($desktop) {
@@ -178,8 +182,15 @@
       &--open {
         .react-autosuggest__input {
           @include breakpoint($tablet) {
-            border: 1px solid $algolia-auto-complete-border;
             border-radius: 0;
+          }
+
+          @include breakpoint($only-tablet) {
+            border-bottom: 0.5rem solid $algolia-input-box-shadow;
+          }
+
+          @include breakpoint($desktop) {
+            border-bottom: 0.0625rem solid $algolia-auto-complete-border;
           }
         }
       }
@@ -213,6 +224,11 @@
           border-top: none;
         }
 
+        @include breakpoint($only-tablet) {
+          border: none;
+          border-bottom: 1px solid $algolia-auto-complete-border;
+        }
+
         @include breakpoint($desktop) {
           border-top: none;
         }
@@ -224,40 +240,62 @@
     #alshaya-algolia-autocomplete {
       .react-autosuggest__container {
         &::after {
-          opacity: 0;
+          @include breakpoint($upto-desktop) {
+            opacity: 0;
+          }
+        }
+
+        .react-autosuggest__input {
+          @include breakpoint($only-tablet) {
+            padding-#{$left}: 0.7rem !important;
+          }
         }
       }
     }
   }
 }
 
-@include breakpoint($only-mobile) {
-  body {
-    &:not(.no-sticky-algolia-search-bar) {
+body {
+  &:not(.no-sticky-algolia-search-bar) {
+    @include breakpoint($only-mobile) {
       margin-top: 6.875rem;
+    }
 
-      html[lang=ar] & {
+    html[lang=ar] & {
+      @include breakpoint($only-mobile) {
         margin-top: 6.875rem;
-      }
-
-      .block-alshaya-algolia-react-autocomplete {
-        padding: 0;
       }
     }
 
-    &.no-sticky-algolia-search-bar {
-      .block-alshaya-algolia-react-autocomplete {
-        &.show-algolia-search-bar {
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($only-mobile) {
+        padding: 0;
+      }
+    }
+  }
+
+  &.no-sticky-algolia-search-bar {
+    .block-alshaya-algolia-react-autocomplete {
+      &.show-algolia-search-bar {
+        @include breakpoint($only-mobile) {
           top: -0.25rem;
         }
       }
     }
+  }
 
-    &.frontpage:not(.Sticky-algolia-search) {
-      #alshaya-algolia-autocomplete {
-        .react-autosuggest__input {
+  &.frontpage:not(.Sticky-algolia-search) {
+    #alshaya-algolia-autocomplete {
+      .react-autosuggest__input {
+        @include breakpoint($only-mobile) {
           border-top: 0.0625rem solid $algolia-auto-complete-border !important;
         }
+      }
+    }
+
+    .mobile--search {
+      @include breakpoint($only-tablet) {
+        display: none;
       }
     }
   }

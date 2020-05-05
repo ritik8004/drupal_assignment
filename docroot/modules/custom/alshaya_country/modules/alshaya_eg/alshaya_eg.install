@@ -11,8 +11,11 @@
  * Add iso_currency_code for eg sites.
  */
 function alshaya_eg_update_8001() {
-  if ($config = \Drupal::configFactory()->getEditable('acq_commerce.currency')) {
-    $config->set('iso_currency_code', 'EGP')->save();
+  $modulehandler = \Drupal::service("module_handler");
+  if ($modulehandler->moduleExists("acq_commerce")) {
+    if ($config = \Drupal::configFactory()->getEditable('acq_commerce.currency')) {
+      $config->set('iso_currency_code', 'EGP')->save();
+    }
   }
 }
 
@@ -47,11 +50,15 @@ function alshaya_eg_install() {
  * Implements hook_update_dependencies().
  */
 function alshaya_eg_update_dependencies() {
-  return [
-    'alshaya_eg' => [
-      '8001' => [
-        'acq_commerce' => '8002',
+  // Adding this dependency only for transac sites.
+  $modulehandler = \Drupal::service("module_handler");
+  if ($modulehandler->moduleExists("acq_commerce")) {
+    return [
+      'alshaya_eg' => [
+        '8001' => [
+          'acq_commerce' => '8002',
+        ],
       ],
-    ],
-  ];
+    ];
+  }
 }

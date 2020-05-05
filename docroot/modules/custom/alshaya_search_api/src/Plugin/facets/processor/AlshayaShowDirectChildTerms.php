@@ -108,6 +108,10 @@ class AlshayaShowDirectChildTerms extends ProcessorPluginBase implements BuildPr
         return $term->id();
       }
     }
+    elseif ($this->currentRequest->attributes->get('_route') == 'rest.category_product_list.GET') {
+      // In case of rest resource.
+      return $this->currentRequest->attributes->get('id');
+    }
 
     return NULL;
   }

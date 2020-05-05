@@ -64,6 +64,8 @@ class SkuManager {
 
   const FREE_GIFT_SUB_TYPE_ONE_SKU = 1;
 
+  const SIZE_GROUP_SEPARATOR = '|';
+
   /**
    * Flag to allow merge children in alshaya_color_split.
    *
@@ -880,7 +882,7 @@ class SkuManager {
 
       // Get the promotion with language fallback, if it did not have a
       // translation for $langcode.
-      $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node);
+      $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node, $sku->language()->getId());
       $promotion_text = $promotion_node->get('field_acq_promotion_label')->getString();
 
       $description = '';
@@ -3254,6 +3256,7 @@ class SkuManager {
 
     $configurable_attributes = $this->getConfigurableAttributes($sku);
 
+    $sizeGroupingEnabled = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
     // Gather data from children to set in parent.
     foreach ($children as $child) {
       $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
@@ -3280,8 +3283,21 @@ class SkuManager {
         $field_data = $child->get($field_key)->getValue();
 
         if (!empty($field_data)) {
+          $size_group = '';
+          if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
+            $size_group = $child->get('attr_size_group_code')->getString();
+            // Group all the sizes without group in a section in bottom.
+            $size_group = $size_group ?: 'other';
+          }
+
           foreach ($field_data as $field_value) {
-            $data[$key][$field_value['value']] = $field_value['value'];
+            if (!empty($size_group)) {
+              $value = $size_group . self::SIZE_GROUP_SEPARATOR . $field_value['value'];
+              $data[$key][$value] = $value;
+            }
+            else {
+              $data[$key][$field_value['value']] = $field_value['value'];
+            }
           }
         }
       }
@@ -3294,8 +3310,20 @@ class SkuManager {
       $field_data = $sku->get($field_key)->getValue();
 
       if (!empty($field_data)) {
+        $size_group = '';
+        if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
+          $size_group = $sku->get('attr_size_group_code')->getString();
+          // Group all the sizes without group in a section in bottom.
+          $size_group = $size_group ?: 'other';
+        }
         foreach ($field_data as $field_value) {
-          $data[$key][$field_value['value']] = $field_value['value'];
+          if (!empty($size_group)) {
+            $value = $size_group . self::SIZE_GROUP_SEPARATOR . $field_value['value'];
+            $data[$key][$value] = $value;
+          }
+          else {
+            $data[$key][$field_value['value']] = $field_value['value'];
+          }
         }
       }
     }

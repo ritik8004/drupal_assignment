@@ -223,6 +223,14 @@ body {
   @include breakpoint($only-mobile) {
     margin-top: 3.6875rem;
   }
+
+  @include breakpoint($desktop) {
+    &.overlay {
+      &::before {
+        opacity: 0;
+      }
+    }
+  }
 }
 
 .branding__menu {
@@ -255,6 +263,18 @@ body {
 
   .menu--two__list {
     padding-top: 1.25rem;
+  }
+
+  &:not(.megamenu-inline-layout) {
+    li.menu--one__list-item {
+      ul.menu--two__list {
+        max-height: none;
+        height: auto;
+        padding-bottom: 1.25rem;
+        box-shadow: 0 0.1875rem 0.3125rem 0 $WE_gray_fourteen;
+        border: 1px solid $WE_white_three;
+      }
+    }
   }
 }
 

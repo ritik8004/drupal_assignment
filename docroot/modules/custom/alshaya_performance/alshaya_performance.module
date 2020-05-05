@@ -141,7 +141,6 @@ function alshaya_performance_flush_frontend_caches($include_twig = FALSE) {
   _drupal_flush_css_js();
 
   if ($include_twig) {
-    // Wipe the Twig PHP Storage cache.
     \Drupal::service('twig')->invalidate();
   }
 }

@@ -5,7 +5,9 @@
  * Module file.
  */
 
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
@@ -142,4 +144,20 @@ function alshaya_paragraphs_preprocess_paragraph(&$variables) {
   if ($variables['elements']['#paragraph']->getType() == 'promo_block') {
     $variables['#attached']['library'][] = 'alshaya_paragraphs/paragraphs_js';
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function alshaya_paragraphs_paragraph_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  // We do not display promo blocks on website which are meant to be displayed
+  // only in mobile app.
+  if (($operation === 'view') && ($entity->bundle() === 'promo_block')) {
+    $visible_on = $entity->get('field_promo_block_visible_on')->getString();
+    if (($visible_on === 'mobile_app') && (in_array(\Drupal::routeMatch()->getRouteName(), ['alshaya_master.home', 'entity.node.canonical']))) {
+      return AccessResult::forbidden();
+    }
+  }
+
+  return AccessResult::neutral();
 }

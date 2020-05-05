@@ -151,7 +151,8 @@ html {
     }
 
     &__inner {
-      padding-bottom: 9.375rem;
+      // filter scroll at all resolutions.
+      overflow-y: auto;
 
       .block-views-exposed-filter-blockalshaya-product-list-block-1,
       .block-views-exposed-filter-blockalshaya-product-list-block-2,
@@ -538,6 +539,77 @@ html {
       ul {
         margin-bottom: 0;
       }
+    }
+  }
+}
+
+// All filters Height / overflow issues - all brands
+$all-filter-height-mobile: calc(100vh - 3.75rem - 7.375rem);
+$all-filter-height-tablet: calc(100vh - 5.3125rem - 9.375rem);
+$all-filter-height-desktop: calc(100vh - 5.3125rem - 8.25rem);
+
+.c-plp .c-content__region .all-filters,
+.c-plp .c-content__region .all-filters-algolia {
+  .filter__inner {
+    @include breakpoint($only-mobile) {
+      height: $all-filter-height-mobile;
+      padding-bottom: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      height: $all-filter-height-tablet;
+      padding-bottom: 0;
+    }
+
+    @include breakpoint($desktop) {
+      height: $all-filter-height-desktop;
+      padding-bottom: 0;
+    }
+
+    .c-facet {
+      &.show-facet {
+        ul {
+          @include breakpoint($only-mobile) {
+            height: $all-filter-height-mobile;
+            padding-bottom: 0;
+          }
+
+          @include breakpoint($tablet) {
+            height: $all-filter-height-tablet;
+          }
+
+          @include breakpoint($desktop) {
+            height: $all-filter-height-desktop;
+          }
+        }
+      }
+
+      &.c-accordion:not(.block-facet-blockcategory-facet-search) ul,
+      &.c-collapse-item:not(.block-facet-blockcategory-facet-search) ul {
+        @include breakpoint($only-mobile) {
+          height: $all-filter-height-mobile;
+          padding-bottom: 0;
+        }
+
+        @include breakpoint($tablet) {
+          height: $all-filter-height-tablet;
+          max-height: none;
+        }
+
+        @include breakpoint($desktop) {
+          height: $all-filter-height-desktop;
+        }
+      }
+    }
+  }
+
+  .filter__head {
+    @include breakpoint($only-mobile) {
+      height: 3.75rem;
+    }
+
+    @include breakpoint($tablet) {
+      height: 5.3125rem;
     }
   }
 }

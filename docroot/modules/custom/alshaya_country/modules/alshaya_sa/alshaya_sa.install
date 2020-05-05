@@ -11,8 +11,11 @@
  * Add iso_currency_code for sa sites.
  */
 function alshaya_sa_update_8005() {
-  if ($config = \Drupal::configFactory()->getEditable('acq_commerce.currency')) {
-    $config->set('iso_currency_code', 'SAR')->save();
+  $modulehandler = \Drupal::service("module_handler");
+  if ($modulehandler->moduleExists("acq_commerce")) {
+    if ($config = \Drupal::configFactory()->getEditable('acq_commerce.currency')) {
+      $config->set('iso_currency_code', 'SAR')->save();
+    }
   }
 }
 
@@ -107,11 +110,15 @@ function alshaya_sa_update_8002() {
  * Implements hook_update_dependencies().
  */
 function alshaya_sa_update_dependencies() {
-  return [
-    'alshaya_sa' => [
-      '8005' => [
-        'acq_commerce' => '8002',
+  // Adding this dependency only for transac sites.
+  $modulehandler = \Drupal::service("module_handler");
+  if ($modulehandler->moduleExists("acq_commerce")) {
+    return [
+      'alshaya_sa' => [
+        '8005' => [
+          'acq_commerce' => '8002',
+        ],
       ],
-    ],
-  ];
+    ];
+  }
 }

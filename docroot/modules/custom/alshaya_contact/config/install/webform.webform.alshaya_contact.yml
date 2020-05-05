@@ -5,6 +5,7 @@ open: null
 close: null
 uid: 1
 template: false
+archive: false
 id: alshaya_contact
 title: 'Contact us'
 description: 'Alshaya contact us.'

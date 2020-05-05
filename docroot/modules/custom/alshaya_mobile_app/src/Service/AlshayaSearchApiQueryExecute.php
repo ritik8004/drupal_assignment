@@ -437,18 +437,6 @@ class AlshayaSearchApiQueryExecute {
     if ($server->supportsFeature('search_api_facets')) {
       $facet_data = [];
       foreach ($facets as $facet) {
-        // New category facets ids.
-        $new_category_facets = [
-          'category_facet_promo',
-          'category_facet_plp',
-        ];
-        // For mobile app, we still using old category facets. Thus skip new
-        // category facets processing.
-        // @Todo: Remove this in future when using new category facets.
-        if (in_array($facet->id(), $new_category_facets)) {
-          continue;
-        }
-
         $facet_data[$facet->id()] = [
           'field' => $facet->getFieldIdentifier(),
           'limit' => $facet->getHardLimit(),
@@ -688,38 +676,12 @@ class AlshayaSearchApiQueryExecute {
    *   Facet block object.
    */
   public function getFacetBlock(string $facet_id) {
-    $new_category_facet = [
-      'category_facet_plp',
-      'category_facet_promo',
-      'category_facet_search',
-    ];
-    $old_category_facets = [
-      'category' => 'categoryfacetsearch',
-      'plp_category_facet' => 'categoryfacetplp',
-      'promotion_category_facet' => 'categoryfacetpromo',
-    ];
-    // For mobile app, we still use old category facet. Thus we do not return
-    // new category facet in response.
-    // @Todo: Remove code to skip new category facet for mobile app in future.
-    if (in_array($facet_id, $new_category_facet)) {
-      return NULL;
-    }
-
     // Block id will be same as facet id with no underscore.
     // Example - plp_category_facet => plpcategoryfacet.
     $block_id = str_replace('_', '', $facet_id);
     // Load facet block to get title.
     $block = $this->entityTypeManager->getStorage('block')->load($block_id);
     if ($block instanceof Block) {
-      // @Todo: Remove code to use old category facet for mobile app.
-      if (isset($old_category_facets[$facet_id])) {
-        $block->setStatus(TRUE);
-        if ($new_category_facet_block = $this->entityTypeManager->getStorage('block')->load($old_category_facets[$facet_id])) {
-          // Assign the weight of the new category facet so that it will always
-          // be on the top of the list.
-          $block->setWeight($new_category_facet_block->getWeight());
-        }
-      }
       return $block;
     }
 

@@ -16,6 +16,7 @@
     if (!$('#alshaya-algolia-search').hasClass('show-algolia-result') && !$('#alshaya-algolia-search').is(':visible')) {
       return;
     }
+    Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
     // Avoid triggering again for each page.
     var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val().trim();
     if (_.indexOf(searchQuery, currentsearch) < 0 && initNoOfResults !== noOfResult) {
@@ -34,7 +35,6 @@
       });
     }
 
-    Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
     $(window).once('alshaya-seo-gtm-product-search-algolia').on('scroll', debounce(function (event) {
       Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
     }, 500));

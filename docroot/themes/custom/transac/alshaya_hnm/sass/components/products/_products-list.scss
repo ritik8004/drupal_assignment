@@ -196,6 +196,15 @@
       padding: 0.5rem 0.8125rem;
       text-transform: uppercase;
     }
+
+    @include breakpoint($upto-desktop) {
+      height: auto !important;
+      min-height: auto;
+    }
+
+    @include breakpoint($desktop) {
+      min-height: 26rem;
+    }
   }
 
   ul.js-pager__items {

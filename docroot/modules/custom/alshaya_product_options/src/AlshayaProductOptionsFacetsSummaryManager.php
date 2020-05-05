@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_product_options;
 
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Link;
 use Drupal\facets\Entity\Facet;
 use Drupal\facets\Exception\InvalidProcessorException;
@@ -12,6 +13,7 @@ use Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager;
 use Drupal\facets_summary\Processor\BuildProcessorInterface;
 use Drupal\facets_summary\Processor\ProcessorInterface;
 use Drupal\facets_summary\Processor\ProcessorPluginManager;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class AlshayaProductOptionsFacetsSummaryManager.
@@ -35,6 +37,13 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
   protected $swatches;
 
   /**
+   * Config Factory service object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Constructs a new instance of the AlshayaProductOptionsFacetsSummaryManager.
    *
    * @param \Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager $facet_summary_manager
@@ -47,14 +56,18 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
    *   The facets summary processor plugin manager.
    * @param \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager
    *   The facet manager service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    */
   public function __construct(DefaultFacetsSummaryManager $facet_summary_manager,
                               SwatchesHelper $swatches,
                               FacetSourcePluginManager $facet_source_manager,
                               ProcessorPluginManager $processor_plugin_manager,
-                              DefaultFacetManager $facet_manager) {
+                              DefaultFacetManager $facet_manager,
+                              ConfigFactoryInterface $config_factory) {
     $this->facetSummaryManager = $facet_summary_manager;
     $this->swatches = $swatches;
+    $this->configFactory = $config_factory;
 
     parent::__construct($facet_source_manager, $processor_plugin_manager, $facet_manager);
   }
@@ -140,6 +153,14 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
       if ($result->isActive()) {
         $swatch = $this->swatches->getSwatchForFacet($facet, $result->getDisplayValue());
         $value = $swatch ? $swatch['name'] : $result->getDisplayValue();
+
+        // Change the size label if size grouping is enabled.
+        if ($facet->getFieldIdentifier() == 'attr_size'
+          && strpos($value, SkuManager::SIZE_GROUP_SEPARATOR) !== FALSE
+          && $this->isSizeGroupEnabled()) {
+          $sizeGroupArr = explode(SkuManager::SIZE_GROUP_SEPARATOR, $value);
+          $value = $sizeGroupArr[1];
+        }
         $item = [
           '#theme' => 'facets_result_item__summary',
           '#value' => $value,
@@ -157,6 +178,22 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
       }
     }
     return $items;
+  }
+
+  /**
+   * Check if size grouping filter is enabled.
+   *
+   * @return int
+   *   0 if not available, 1 if size grouping available.
+   */
+  protected function isSizeGroupEnabled() {
+    static $status = NULL;
+
+    if (!isset($status)) {
+      $status = $this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter');
+    }
+
+    return $status;
   }
 
 }
