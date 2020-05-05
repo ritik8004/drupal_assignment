@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_search_algolia\Service;
 
+use AlgoliaSearch\Client;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
@@ -21,6 +22,7 @@ use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\file\FileInterface;
 use Drupal\alshaya_product_options\SwatchesHelper;
+use Drupal\Core\Language\LanguageManager;
 
 /**
  * Class AlshayaAlgoliaIndexHelper.
@@ -116,6 +118,13 @@ class AlshayaAlgoliaIndexHelper {
   protected $swatchesHelper;
 
   /**
+   * The language manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManager
+   */
+  protected $languageManager;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -142,6 +151,8 @@ class AlshayaAlgoliaIndexHelper {
    *   The config factory service.
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches_helper
    *   The Swatches helper service.
+   * @param \Drupal\Core\Language\LanguageManager $language_manager
+   *   The lnaguage manager service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -158,7 +169,8 @@ class AlshayaAlgoliaIndexHelper {
     SkuPriceHelper $sku_price_helper,
     ProductCategoryManager $product_category_manager,
     ConfigFactory $config_factory,
-    SwatchesHelper $swatches_helper
+    SwatchesHelper $swatches_helper,
+    LanguageManager $language_manager
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -172,6 +184,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->productCategoryManager = $product_category_manager;
     $this->configFactory = $config_factory;
     $this->swatchesHelper = $swatches_helper;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -612,6 +625,48 @@ class AlshayaAlgoliaIndexHelper {
       }
     }
 
+  }
+
+  /**
+   * Helps to add new facet to the index.
+   *
+   * @param string $attr_name
+   *   The name of the attribute.
+   * @param bool $is_entity_field
+   *   Indicates if the attribute a field of an entity or not.
+   *
+   * @return bool
+   *   TRUE if attribute is added to index, else FALSE.
+   *
+   * @throws \Exception
+   *   If attribute is already present in the index, then exception is thrown.
+   */
+  public function addNewFacetToIndex(string $attr_name, bool $is_entity_field = FALSE) {
+    $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
+    $client_config = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
+    $client = new Client($backend_config['application_id'], $backend_config['api_key']);
+    $index_name = $client_config['algolia_index_name'];
+    $field_name = $is_entity_field ? 'attr_' . $attr_name : $attr_name;
+
+    foreach ($this->languageManager->getLanguages() as $language) {
+      $index = $client->initIndex($index_name . '_' . $language->getId());
+      $settings = $index->getSettings();
+      if (in_array($field_name, $settings['attributesForFaceting'])) {
+        throw new \Exception("The field $field_name is already added to the index.");
+      }
+
+      $settings['attributesForFaceting'][] = $field_name;
+      $index->setSettings($settings);
+
+      foreach ($settings['replicas'] as $replica) {
+        $replicaIndex = $client->initIndex($replica);
+        $replicaSettings = $replicaIndex->getSettings();
+        $replicaSettings['attributesForFaceting'][] = $field_name;
+        $replicaIndex->setSettings($replicaSettings);
+      }
+    }
+
+    return TRUE;
   }
 
 }
