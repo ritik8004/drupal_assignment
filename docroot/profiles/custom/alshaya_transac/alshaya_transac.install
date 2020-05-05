@@ -831,6 +831,7 @@ function alshaya_transac_install() {
     'alshaya_facets_pretty_paths',
     'exponea',
     'alshaya_spc',
+    'alshaya_pdp_layouts',
   ];
 
   // Add 10 MB per module we are going to enable above.

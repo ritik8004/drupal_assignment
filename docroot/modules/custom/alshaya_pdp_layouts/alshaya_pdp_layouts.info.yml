@@ -3,3 +3,5 @@ type: module
 description: 'Module to setup PDP Layouts Plugin System'
 package: 'Alshaya'
 core: 8.x
+dependencies:
+  - alshaya_acm:alshaya_acm_product
