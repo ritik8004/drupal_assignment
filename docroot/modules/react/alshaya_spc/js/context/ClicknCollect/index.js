@@ -51,6 +51,7 @@ class ClicknCollectContextProvider extends React.Component {
       cartSelectedStore,
       clickCollectModal: false,
       locationAccess: true,
+      outsideCountryError: false,
       animateLocationMessage: '',
     };
   }
@@ -123,6 +124,13 @@ class ClicknCollectContextProvider extends React.Component {
     }));
   };
 
+  showOutsideCountryError = (status) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      outsideCountryError: status,
+    }));
+  }
+
   render() {
     const { children } = this.props;
 
@@ -137,6 +145,7 @@ class ClicknCollectContextProvider extends React.Component {
             updateContactInfo: this.updateContactInfo,
             updateModal: this.updateModal,
             updateLocationAccess: this.updateLocationAccess,
+            showOutsideCountryError: this.showOutsideCountryError,
           }
         }
       >
