@@ -1,25 +1,19 @@
 import React from 'react';
+import { getAmountWithCurrency } from '../checkout_util';
 
-const PriceElement = (props) => {
-  let { amount: priceAmount } = props;
+const PriceElement = ({ amount: priceAmount }) => {
   if (typeof priceAmount === 'undefined') {
     return (null);
   }
 
-  const { currency_config: currencyConfig } = window.drupalSettings.alshaya_spc;
-  priceAmount = priceAmount === null ? 0 : priceAmount;
-  const amount = !Number.isNaN(Number(priceAmount)) === true
-    ? parseFloat(priceAmount)
-    : 0;
-  const priceParts = [
-    (<span key="currency" className="price-currency suffix">{currencyConfig.currency_code}</span>),
-    (<span key="amount" className="price-amount">{amount.toFixed(currencyConfig.decimal_points)}</span>),
-  ];
+  const priceParts = { ...getAmountWithCurrency(priceAmount, false) };
+  priceParts.amount = (<span key="amount" className="price-amount">{priceParts.amount}</span>);
+  priceParts.currency = (<span key="currency" className="price-currency suffix">{priceParts.currency}</span>);
 
   return (
     <span className="price-wrapper">
       <div className="price">
-        {currencyConfig.currency_code_position === 'before' ? priceParts : priceParts.reverse()}
+        {priceParts}
       </div>
     </span>
   );
