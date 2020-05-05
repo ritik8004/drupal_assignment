@@ -89,25 +89,6 @@
         }
       }
 
-      // Non Size group product
-      .configurable-select {
-        & > label {
-          display: none;
-        }
-
-        @include breakpoint($only-mobile) {
-          @include select-wrapper(100%);
-
-          select.form-select {
-            @include select-style(100%);
-          }
-
-          &::after {
-            top: 0.5rem;
-          }
-        }
-      }
-
       .form-item {
         padding: 0.625rem 0;
       }
@@ -257,5 +238,38 @@
 
   strong {
     color: $pdp_free_delivery_text;
+  }
+}
+
+.description-wrapper {
+  .field__label,
+  .desc-label,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: $alshaya-bold;
+    font-size: 0.875rem;
+    font-weight: normal;
+  }
+
+  .field__label {
+    padding-bottom: 0.75rem;
+  }
+
+  .desc-value,
+  .text {
+    padding-top: 0;
+    font-size: 0.75rem;
+
+    p {
+      margin-top: 0;
+    }
+  }
+
+  .desc-wrapper {
+    border-color: $pdp_desc_wrapper_title_border;
   }
 }
