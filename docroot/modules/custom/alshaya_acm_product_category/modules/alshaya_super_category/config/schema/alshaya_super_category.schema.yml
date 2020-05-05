@@ -20,6 +20,3 @@ alshaya_super_category.settings:
       sequence:
         type: string
         label: 'Menu type'
-    search_facet:
-      type: string
-      label: 'The search facet which maps to the super category term'

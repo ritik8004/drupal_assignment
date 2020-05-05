@@ -5,26 +5,6 @@
  * Super category install file.
  */
 
-use Drupal\alshaya_config\AlshayaConfigManager;
-
-/**
- * Implements hook_update_N().
- *
- * Add a new config key for specifying which search facet maps to the super
- * category.
- */
-function alshaya_super_category_update_8005() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-
-  $manager->updateConfigs(
-    ['alshaya_super_category.settings'],
-    'alshaya_super_category',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
-}
-
 /**
  * Implements hook_update_N().
  *
