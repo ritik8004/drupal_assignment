@@ -416,7 +416,7 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
 export const getRecommendedProducts = (skus, type) => {
   const skuString = Object.keys(skus).map((key) => `skus[${key}]=${encodeURIComponent(skus[key])}`).join('&');
 
-  return axios.get(`products/cart-linked-skus?type=${type}&${skuString}&context=cart`)
+  return axios.get(`products/cart-linked-skus?type=${type}&${skuString}&context=cart&cacheable=1`)
     .then((response) => response.data);
 };
 
