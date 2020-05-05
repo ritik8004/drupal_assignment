@@ -14,18 +14,20 @@
   }
 
   &.go-fullscreen {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 12;
-    padding: 2rem 1.5rem;
-    height: 100vh;
-    background: $magazine-pdp-video-modal-bg;
+    @include breakpoint($only-mobile) {
+      position: fixed !important;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 12;
+      padding: 2rem 1.5rem;
+      height: 100vh;
+      background: $magazine-pdp-video-modal-bg;
 
-    .pdp-video-close {
-      display: block;
+      .pdp-video-close {
+        display: block;
+      }
     }
   }
 
@@ -42,19 +44,24 @@
         background-image: url(/themes/custom/transac/alshaya_white_label/imgs/icons/ic-pause.svg);
       }
 
-      &:hover + .pdp-video-controls {
-        display: block !important;
+      @include breakpoint($desktop) {
+        &:hover + .pdp-video-controls {
+          opacity: 1 !important;
+        }
       }
     }
 
     &.hide-controls {
       + .pdp-video-controls {
-        display: none;
+        opacity: 0;
       }
     }
   }
 
   .pdp-video-controls {
+    opacity: 1;
+    transition: opacity 0.4s ease-in-out;
+
     .control {
       content: '';
       display: block;
