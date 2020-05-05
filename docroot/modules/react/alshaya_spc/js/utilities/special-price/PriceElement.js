@@ -6,13 +6,9 @@ const PriceElement = ({ amount: priceAmount }) => {
     return (null);
   }
 
-  const amountWithCurrency = getAmountWithCurrency(priceAmount, false);
-  const priceParts = Object.keys(amountWithCurrency).map((key) => {
-    if (key === 'amount') {
-      return (<span key="amount" className="price-amount">{amountWithCurrency[key]}</span>);
-    }
-    return (<span key="currency" className="price-currency suffix">{amountWithCurrency[key]}</span>);
-  });
+  const priceParts = { ...getAmountWithCurrency(priceAmount, false) };
+  priceParts.amount = (<span key="amount" className="price-amount">{priceParts.amount}</span>);
+  priceParts.currency = (<span key="currency" className="price-currency suffix">{priceParts.currency}</span>);
 
   return (
     <span className="price-wrapper">
