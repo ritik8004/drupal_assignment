@@ -1,12 +1,12 @@
 import React from 'react';
 
 const PdpDescription = (props) => {
-  const { skuCode, pdpDescription } = props;
-  console.log(pdpDescription);
+  const { skuCode } = props;
+
   return (
     <>
-      <div className="pdp-description-wrapper"></div>
+      <div className="pdp-description-wrapper">{skuCode}</div>
     </>
   );
-}
+};
 export default PdpDescription;

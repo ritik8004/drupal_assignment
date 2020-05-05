@@ -28,4 +28,11 @@ class DefaultPdpLayout extends PdpLayoutBase {
     $variables['#attached']['library'][] = 'alshaya_white_label/stickybutton';
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getContextFromPluginId($context, $pdp_layout) {
+    return $context;
+  }
+
 }
