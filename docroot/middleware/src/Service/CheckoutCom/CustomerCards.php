@@ -54,6 +54,8 @@ class CustomerCards {
     $cards = $this->getCustomerCards($customer_id);
     $decode_hash = $this->deocodePublicHash($card_hash);
     if (isset($cards[$decode_hash])) {
+      // Avoid notices.
+      $cards[$decode_hash]['mada'] = $cards[$decode_hash]['mada'] ?? FALSE;
       return $cards[$decode_hash];
     }
     return NULL;

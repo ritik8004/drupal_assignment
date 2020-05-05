@@ -10,30 +10,6 @@ import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 
 /**
- * Get shipping methods.
- *
- * @param cartId
- * @param data
- * @returns {boolean}
- */
-export const getShippingMethods = (cartId, data) => {
-  const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
-
-  return axios
-    .post(`${middlewareUrl}/cart/shipping-methods`, {
-      data,
-      cartId,
-    })
-    .then(
-      (response) => response.data,
-      (error) => {
-        // Processing of error here.
-        Drupal.logJavascriptError('get-shipping-method', error);
-      },
-    );
-};
-
-/**
  * Place ajax fulll screen loader.
  */
 export const showFullScreenLoader = () => {
@@ -60,7 +36,6 @@ export const removeFullScreenLoader = () => {
 /**
  * Place order.
  *
- * @param cart_id
  * @param paymentMethod
  * @returns {boolean}
  */
@@ -425,7 +400,7 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
   }
 
   if (cart.delivery_type !== undefined
-    && cart.delivery_type === cart.cart.delivery_type) {
+    && cart.delivery_type === cart.cart.shipping.type) {
     return true;
   }
 

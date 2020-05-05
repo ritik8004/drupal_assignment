@@ -71,9 +71,9 @@ export default class AddressList extends React.Component {
 
   render() {
     const { addressList, open } = this.state;
+
     // If no address list available.
-    if (addressList === undefined
-      || addressList.length === 0) {
+    if (addressList === undefined || addressList.length === 0) {
       return (null);
     }
 
@@ -83,13 +83,13 @@ export default class AddressList extends React.Component {
 
     const addressItem = [];
     Object.entries(addressList).forEach(([key, address]) => {
-      const fieldToCheck = type === 'billing'
-        ? 'billing_address'
-        : 'shipping_address';
+      const addressData = (type === 'billing')
+        ? cart.cart.billing_address
+        : cart.cart.shipping.address;
       let isSelected = false;
-      if (cart.cart[fieldToCheck].city !== 'NONE'
-        && (cart.cart.delivery_type === 'hd' || type === 'billing')
-        && cart.cart[fieldToCheck].customer_address_id.toString() === address.address_mdc_id) {
+      if (addressData.city !== 'NONE'
+        && (cart.cart.shipping.type === 'home_delivery' || type === 'billing')
+        && addressData.customer_address_id.toString() === address.address_mdc_id) {
         isSelected = true;
       }
       addressItem.push(

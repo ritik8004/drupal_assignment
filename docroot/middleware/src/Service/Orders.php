@@ -4,11 +4,14 @@ namespace App\Service;
 
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
+use Drupal\alshaya_acm_customer\HelperTrait\Orders as OrdersHelper;
 
 /**
  * Class Orders.
  */
 class Orders {
+
+  use OrdersHelper;
 
   /**
    * The last order id storage key.
@@ -55,27 +58,27 @@ class Orders {
   }
 
   /**
-   * Get order by order id.
+   * Helper function to get last order of the customer.
    *
-   * @param int $order_id
-   *   Order id.
+   * @param int $customer_id
+   *   Customer ID to get order for.
    *
    * @return array
-   *   Order data.
+   *   Order array if found.
    */
-  public function getOrder(int $order_id) {
-    $url = sprintf('orders/%d', $order_id);
+  public function getLastOrder(int $customer_id) {
+    $query = $this->getOrdersQuery('customer_id', $customer_id);
+    $query['searchCriteria']['pageSize'] = 1;
 
-    try {
-      $data = $this->magentoApiWrapper->doRequest('GET', $url);
+    $requestOptions = ['query' => $query];
+    $result = $this->magentoApiWrapper->doRequest('GET', 'orders', $requestOptions);
+    $count = $result['total_count'] ?? 0;
+    if (empty($count)) {
+      return NULL;
+    }
 
-      // @TODO: Do order processing.
-      return $data;
-    }
-    catch (\Exception $e) {
-      // Exception handling here.
-      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
-    }
+    $order = reset($result['items']);
+    return $this->cleanupOrder($order);
   }
 
 }
