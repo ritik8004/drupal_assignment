@@ -346,7 +346,6 @@
 
           &:nth-of-type(4n+1) {
             margin-#{$left}: 0;
-            clear: #{$left};
           }
         }
 
@@ -357,7 +356,7 @@
 
           &:nth-of-type(3n+1) {
             margin-#{$left}: 0;
-            clear: #{$left};
+            clear: both;
           }
         }
 
@@ -368,7 +367,6 @@
 
           &:nth-of-type(2n+1) {
             margin-#{$left}: 0;
-            clear: #{$left};
           }
         }
       }
