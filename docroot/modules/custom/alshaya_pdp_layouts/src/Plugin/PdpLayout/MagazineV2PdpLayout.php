@@ -21,6 +21,8 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
  */
 class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPluginInterface {
 
+  const PDP_LAYOUT_MAGAZINE_V2 = 'pdp-magazine_v2';
+
   /**
    * The SKU Manager.
    *
@@ -79,7 +81,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
     if ($sku_entity instanceof SKUInterface) {
       $sku_image_manager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-      $media = $sku_image_manager->getProductMedia($sku_entity, SkuManager::PDP_LAYOUT_MAGAZINE_V2, FALSE);
+      $media = $sku_image_manager->getProductMedia($sku_entity, self::PDP_LAYOUT_MAGAZINE_V2, FALSE);
       if (!empty($media)) {
         $mediaItems = $sku_image_manager->getThumbnailsFromMedia($media, FALSE);
         $thumbnails = $mediaItems['thumbnails'];
