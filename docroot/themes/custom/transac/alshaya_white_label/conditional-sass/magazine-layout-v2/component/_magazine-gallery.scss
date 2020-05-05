@@ -1,6 +1,8 @@
 .nodetype--acq_product {
   .page-wrapper {
-    background-color: $pdp_background;
+    @include breakpoint($tablet) {
+      background-color: $pdp_background;
+    }
   }
 
   @include breakpoint($tablet) {
@@ -11,7 +13,11 @@
 }
 
 .magv2-pdp-gallery {
-  .magazine__gallery--container {
+  .magazine__gallery--container-desktop {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
@@ -48,6 +54,27 @@
         background-repeat: no-repeat;
         z-index: -1;
         background-size: cover;
+      }
+    }
+  }
+
+  .magazine__gallery--container-mobile {
+    @include breakpoint($only-mobile) {
+      display: block;
+
+      .slick-dots {
+        display: flex !important;
+        justify-content: center;
+        background: $white-five;
+
+        button {
+          font-size: 0;
+          display: block;
+          cursor: pointer;
+          color: transparent;
+          border: 0;
+          background: 0 0;
+        }
       }
     }
   }
