@@ -49,7 +49,7 @@ const AllFilters = (props) => {
           const additionalSelectionHtml = (additionalSelection > 0) ? '<span class="total-count"> (+' + additionalSelection + ')</span>' : '';
           element.getElementsByTagName('h3')[0].innerHTML = '<span>' + textContent + '</span>';
           element.getElementsByTagName('h3')[0].innerHTML += '<div class="selected-facets">' +
-          '<span class="title">' + displayItems.join() + '</span>' +
+          '<span class="title">' + displayItems.join(", ") + '</span>' +
           additionalSelectionHtml +
           '</div>';
         }

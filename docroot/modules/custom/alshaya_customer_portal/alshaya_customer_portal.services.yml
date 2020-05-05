@@ -1,0 +1,4 @@
+services:
+  alshaya_customer_portal.helper:
+    class: Drupal\alshaya_customer_portal\AlshayaCustomerPortalHelper
+    arguments: ['@config.factory', '@renderer', '@logger.factory']

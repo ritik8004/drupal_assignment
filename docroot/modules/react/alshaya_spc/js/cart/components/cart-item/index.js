@@ -16,6 +16,7 @@ import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 import CartItemFree from '../cart-item-free';
 import { isQtyLimitReached } from '../../../utilities/checkout_util';
+import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -151,7 +152,9 @@ export default class CartItem extends React.Component {
       });
     }
 
-    const qtyLimitClass = (drupalSettings.quantity_limit_enabled && currentQtyLimit > maxSaleQty)
+    const qtyLimitClass = (drupalSettings.quantity_limit_enabled
+      && currentQtyLimit > maxSaleQty
+      && maxSaleQty > 0)
       ? 'sku-max-quantity-limit-reached'
       : '';
 
@@ -182,7 +185,7 @@ export default class CartItem extends React.Component {
             </div>
           </div>
           <div className="spc-product-tile-actions">
-            <button title={Drupal.t('remove this item')} type="button" id={`remove-item-${id}`} className={`spc-remove-btn ${OOSClass}`} onClick={() => { this.removeCartItem(sku, 'remove item', id); }}>{Drupal.t('remove')}</button>
+            <button title={Drupal.t('remove this item')} type="button" id={`remove-item-${id}`} className={`spc-remove-btn ${OOSClass}`} onClick={() => { this.removeCartItem(sku, 'remove item', id); }}><TrashIconSVG /></button>
             <div className="qty">
               <div className="qty-loader-placeholder" />
               <CartQuantitySelect

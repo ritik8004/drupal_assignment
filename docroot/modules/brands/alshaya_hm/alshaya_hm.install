@@ -28,8 +28,6 @@ function alshaya_hm_update_8046() {
   foreach ($size_facets as $config) {
     \Drupal::configFactory()->getEditable($config)->save();
   }
-
-  _alshaya_search_api_reindex();
 }
 
 /**
