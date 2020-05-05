@@ -55,6 +55,8 @@
       display: block;
       position: relative;
 
+      @include arabic-line-height(1.5);
+
       .spc-billing-help-text {
         margin-top: 1.25rem;
         color: $spc-checkout-billing-help-text;

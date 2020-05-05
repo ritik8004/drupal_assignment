@@ -21,6 +21,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
  * Provides a resource to get product details excliding linked products.
@@ -106,6 +107,13 @@ class ProductExcludeLinkedResource extends ResourceBase {
   protected $skuInfoHelper;
 
   /**
+   * Product category helper service.
+   *
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
+   */
+  protected $productCategoryHelper;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -134,6 +142,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   Module handler.
    * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   Sku info helper object.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   The Product Category helper service.
    */
   public function __construct(
     array $configuration,
@@ -148,7 +158,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
     MobileAppUtility $mobile_app_utility,
     ProductOptionsManager $product_options_manager,
     ModuleHandlerInterface $module_handler,
-    SkuInfoHelper $sku_info_helper
+    SkuInfoHelper $sku_info_helper,
+    ProductCategoryHelper $product_category_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -164,6 +175,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     ];
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
+    $this->productCategoryHelper = $product_category_helper;
   }
 
   /**
@@ -183,7 +195,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $container->get('alshaya_mobile_app.utility'),
       $container->get('acq_sku.product_options_manager'),
       $container->get('module_handler'),
-      $container->get('alshaya_acm_product.sku_info')
+      $container->get('alshaya_acm_product.sku_info'),
+      $container->get('alshaya_acm_product.category_helper')
     );
   }
 
@@ -214,6 +227,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data = $this->getSkuData($skuEntity, $link);
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
+    $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 

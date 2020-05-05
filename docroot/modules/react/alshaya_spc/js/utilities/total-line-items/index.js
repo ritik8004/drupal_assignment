@@ -4,6 +4,7 @@ import VatText from '../vat-text';
 import FreeDeliveryText from '../free-delivery-text';
 import ConditionalView from '../../common/components/conditional-view';
 import getStringMessage from '../strings';
+import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
 
 class TotalLineItems extends React.Component {
   /**
@@ -47,7 +48,10 @@ class TotalLineItems extends React.Component {
           <TotalLineItem
             tooltip
             name="surcharge-total"
-            tooltipContent={getStringMessage('cod_surcharge_tooltip')}
+            tooltipContent={replaceCodTokens(
+              getAmountWithCurrency(totals.surcharge),
+              getStringMessage('cod_surcharge_tooltip'),
+            )}
             title={getStringMessage('cod_surcharge_label')}
             value={totals.surcharge}
           />
@@ -56,7 +60,7 @@ class TotalLineItems extends React.Component {
         <div className="hero-total">
           <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={totals.base_grand_total} />
           <div className="delivery-vat">
-            <FreeDeliveryText freeDelivery={totals.free_delivery} text={Drupal.t('excluding delivery')} />
+            <FreeDeliveryText freeDelivery={totals.free_delivery} text={Drupal.t('Excluding delivery')} />
             <VatText />
           </div>
         </div>

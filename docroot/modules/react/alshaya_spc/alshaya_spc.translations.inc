@@ -20,7 +20,7 @@ function _alshaya_spc_translations() {
       'subtotal' => [
         'ar' => 'المبلغ',
       ],
-      'excluding delivery' => [
+      'Excluding delivery' => [
         'ar' => 'قبل التوصيل',
       ],
       'Shopping Bag' => [

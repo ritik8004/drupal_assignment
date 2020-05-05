@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\taxonomy\TermInterface;
+use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
@@ -204,6 +205,92 @@ class ProductCategoryHelper {
     }
 
     return [];
+  }
+
+  /**
+   * Wrapper function to get product categorisations.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Product node.
+   *
+   * @return array
+   *   Product categorisations.
+   */
+  public function getSkuCategorisations(NodeInterface $node) {
+    $lang = $this->languageManager->getCurrentLanguage()->getId();
+    $categories = $node->get('field_category')->referencedEntities();
+    $terms = [];
+    if (!empty($categories)) {
+      foreach ($categories as $term) {
+        if ($term->get('field_commerce_status')->getString() == '1') {
+          $term = $this->getEntityTranslation($term, $lang);
+          $terms[] = $this->getProductCategoryHierarchy($term, $lang);
+        }
+      }
+    }
+    return $terms;
+  }
+
+  /**
+   * Get category hierarchy.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   The term object.
+   * @param string|null $lang
+   *   The lang code.
+   *
+   * @return array
+   *   The string of terms hierarchy.
+   */
+  protected function getProductCategoryHierarchy(TermInterface $term, $lang = NULL) {
+    $static = &drupal_static('alshaya_acm_product_get_product_category_hierarchy', []);
+    $tid = $term->id();
+
+    if (isset($static[$tid][$lang])) {
+      return $static[$tid][$lang];
+    }
+    $sourceTerm[] = ['target_id' => $tid];
+    $termHierarchy = [];
+    if ($parents = $this->getBreadcrumbTermList($sourceTerm)) {
+      foreach (array_reverse($parents) as $parent) {
+        $parent = $this->getEntityTranslation($parent, $lang);
+        $termHierarchy[] = [
+          'id' => $parent->get('field_commerce_id')->getString(),
+          'label' => $parent->label(),
+        ];
+      }
+    }
+    // Incase if category don't have hierarchy use term details.
+    if (count($termHierarchy) == 0) {
+      $termHierarchy[] = [
+        'id' => $term->get('field_commerce_id')->getString(),
+        'label' => $term->label(),
+      ];
+    }
+    $static[$tid][$lang] = $termHierarchy;
+    return $static[$tid][$lang];
+  }
+
+  /**
+   * Get translation of given entity for given langcode.
+   *
+   * @param object $entity
+   *   The entity object.
+   * @param string $langcode
+   *   The language code.
+   *
+   * @return object
+   *   Return entity object with translation if exists otherwise as is.
+   */
+  public function getEntityTranslation($entity, $langcode) {
+    if (($entity instanceof ContentEntityInterface
+         || $entity instanceof ConfigEntityInterface)
+        && $entity->language()->getId() != $langcode
+        && $entity->hasTranslation($langcode)
+    ) {
+      $entity = $entity->getTranslation($langcode);
+    }
+    return $entity;
   }
 
 }

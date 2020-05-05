@@ -9,7 +9,7 @@ archive: false
 id: alshaya_contact
 title: 'Contact us'
 description: 'Alshaya contact us.'
-elements: "select_your_preference_of_channel_of_communication:\n  '#type': radios\n  '#title': 'Select your prefered communication channel'\n  '#default_value': Email\n  '#title_display': inline\n  '#options':\n    Email: Email\n    Mobile: Mobile\n  '#required': true\nfirst_name:\n  '#type': textfield\n  '#title': 'First name'\n  '#required': true\nlast_name:\n  '#type': textfield\n  '#title': 'Last name'\n  '#required': true\nmobile_number:\n  '#type': mobile_number\n  '#title': 'Mobile number'\n  '#verify': none\nemail:\n  '#type': email\n  '#title': 'Email Address'\n  '#required': true\nmessage:\n  '#type': textarea\n  '#title': 'Message'\n  '#field_suffix': '220'\n  '#required': true\n  '#counter_type': character\n  '#counter_maximum': '220'\n  '#counter_message': ' '\nrequest_from:\n  '#type': radios\n  '#title': 'Request From'\n  '#default_value': web\n  '#title_display': inline\n  '#options':\n    web: web\n    mapp: mapp\n  '#required': true"
+elements: "select_your_preference_of_channel_of_communication:\n  '#type': radios\n  '#title': 'Select your prefered communication channel'\n  '#default_value': Email\n  '#title_display': inline\n  '#options':\n    Email: Email\n    Mobile: Mobile\n  '#required': true\nfirst_name:\n  '#type': textfield\n  '#title': 'First name'\n  '#required': true\nlast_name:\n  '#type': textfield\n  '#title': 'Last name'\n  '#required': true\nmobile_number:\n  '#type': mobile_number\n  '#title': 'Mobile number'\n  '#verify': none\nemail:\n  '#type': email\n  '#title': 'Email Address'\n  '#required': true\nrequest_from:\n  '#type': radios\n  '#title': 'Request From'\n  '#default_value': web\n  '#title_display': inline\n  '#options':\n    web: web\n    mapp: mapp\n  '#access': false\nfeedback:\n  '#type': select\n  '#title': Feedback\n  '#title_display': invisible\n  '#options':\n    online_shopping: 'Online Shopping'\n    feeback_inquiry: 'Feedback Inquiry'\n  '#empty_option': 'Select feedback'\n  '#required': true\n  '#wrapper_attributes':\n    class:\n      - contact-us-feedback\ntype:\n  '#type': select\n  '#title': Type\n  '#title_display': invisible\n  '#options':\n    complaint: Complaint\n    inquiry: Inquiry\n  '#empty_option': 'Select type'\n  '#required': true\n  '#states':\n    visible:\n      - ':input[name=\"feedback\"]':\n          value: online_shopping\n      - or\n      - ':input[name=\"feedback\"]':\n          value: feeback_inquiry\n  '#wrapper_attributes':\n    class:\n      - contact-us-type\nreason1:\n  '#type': select\n  '#title': Reason\n  '#title_display': invisible\n  '#options':\n    order_related: 'Order related (Cancelled/Delayed)'\n    wrong_delivery: 'Wrong delivery'\n    missing_items: 'Missing items'\n    damaged_items: 'Damaged items'\n    refund_not_received: 'Refund not received'\n    others: Others\n  '#empty_option': 'Select reasons'\n  '#required': true\n  '#states':\n    visible:\n      ':input[name=\"feedback\"]':\n        value: online_shopping\n      ':input[name=\"type\"]':\n        value: complaint\n  '#wrapper_attributes':\n    class:\n      - contact-us-reason\nreason2:\n  '#type': select\n  '#title': Reason\n  '#title_display': invisible\n  '#options':\n    order_status: 'Order status'\n    exchange_refund: 'Exchange and refund policy'\n    products: Products\n    others: Others\n  '#empty_option': 'Select reasons'\n  '#required': true\n  '#states':\n    visible:\n      ':input[name=\"feedback\"]':\n        value: online_shopping\n      ':input[name=\"type\"]':\n        value: inquiry\n  '#wrapper_attributes':\n    class:\n      - contact-us-reason\nreason3:\n  '#type': select\n  '#title': Reason\n  '#title_display': invisible\n  '#options':\n    alshaya_privileges_club: 'Alshaya privileges club'\n    faulty_items: 'Faulty items'\n    alshaya_card: 'Alshaya card'\n    refund_not_received: 'Refund not received'\n    in_store_services: 'In store services'\n    other: Others\n  '#empty_option': 'Select reasons'\n  '#required': true\n  '#states':\n    visible:\n      ':input[name=\"feedback\"]':\n        value: feeback_inquiry\n      ':input[name=\"type\"]':\n        value: complaint\n  '#wrapper_attributes':\n    class:\n      - contact-us-reason\nreason4:\n  '#type': select\n  '#title': Reason\n  '#title_display': invisible\n  '#options':\n    alshaya_card: 'Alshaya card'\n    alshaya_privileges_club: 'Alshaya privileges club'\n    exchange_refund_policy: 'Exchange and refund policy'\n    others: Others\n  '#empty_option': 'Select reasons'\n  '#required': true\n  '#states':\n    visible:\n      ':input[name=\"feedback\"]':\n        value: feeback_inquiry\n      ':input[name=\"type\"]':\n        value: inquiry\n  '#wrapper_attributes':\n    class:\n      - contact-us-reason\norder_number:\n  '#type': textfield\n  '#title': 'Order number'\n  '#maxlength': '20'\n  '#states':\n    required:\n      - ':input[name=\"reason1\"]':\n          value: order_related\n      - or\n      - ':input[name=\"reason1\"]':\n          value: damaged_items\n      - or\n      - ':input[name=\"reason1\"]':\n          value: missing_items\nmissing_items:\n  '#type': textfield\n  '#title': 'Missing items'\n  '#maxlength': '20'\n  '#states':\n    required:\n      - ':input[name=\"reason1\"]':\n          value: damaged_items\n      - or\n      - ':input[name=\"reason1\"]':\n          value: missing_items\nmessage:\n  '#type': textarea\n  '#title': Message\n  '#field_suffix': '220'\n  '#required': true\n  '#counter_type': character\n  '#counter_maximum': '220'\n  '#counter_message': ' '"
 css: ''
 javascript: ''
 settings:
@@ -123,17 +123,17 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: no-reply@acquia.com
+      to_mail: customerservice@alshaya.com
       to_options: {  }
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
       bcc_options: {  }
-      from_mail: default
+      from_mail: _default
       from_options: {  }
       from_name: 'Contact us form submission on [site:name]'
-      subject: 'Contact us form submission on [site:name]'
-      body: "<strong>Communication preference</strong> - [webform_submission:values:select_your_preference_of_channel_of_communication]<br />\n<br />\n<strong>Name</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name]<br />\n<br />\n<strong>Mobile</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:mobile_number]<br />\n<br />\n<strong>Email</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:email]<br />\n<br />\n<strong>Message</strong> -&nbsp;<br />\n<br />\n[webform_submission:values:first_name]&nbsp;[webform_submission:values:message]"
+      subject: 'Feedback form : [webform_submission:values:feedback] | [site:name] | [webform_submission:values:type] | [webform_submission:values:reason1][webform_submission:values:reason2][webform_submission:values:reason3][webform_submission:values:reason4]'
+      body: "Communication preference - [webform_submission:values:select_your_preference_of_channel_of_communication]<br />\r\n<br />\r\nName -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name]<br />\r\n<br />\r\nMobile -&nbsp;[webform_submission:values:mobile_number]<br />\r\n<br />\r\nEmail -&nbsp;[webform_submission:values:email]<br />\r\n<br />\r\nFeedback&nbsp;-&nbsp;[webform_submission:values:feedback]<br />\r\n<br />\r\nType&nbsp;-&nbsp;[webform_submission:values:type]<br />\r\n<br />\r\nReason&nbsp;-&nbsp;[webform_submission:values:reason1][webform_submission:values:reason2][webform_submission:values:reason3][webform_submission:values:reason4]<br />\r\n<br />\r\nMessage -&nbsp;<br />\r\n<br />\r\n&nbsp;[webform_submission:values:message]<br />"
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
@@ -144,6 +144,9 @@ handlers:
       return_path: ''
       sender_mail: ''
       sender_name: ''
+      exclude_empty_checkbox: false
+      twig: false
+      theme_name: ''
   mobile_number_validation:
     id: webform_mobile_number_validation
     label: 'Mobile Number Validation'
@@ -152,3 +155,37 @@ handlers:
     conditions: {  }
     weight: 0
     settings: {  }
+  email_1:
+    id: email
+    label: 'notification email'
+    handler_id: email_1
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: '[webform_submission:values:email:raw]'
+      to_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: 'Contact us form submission on [site:name]'
+      subject: '[site:name] – contact us form autoreply'
+      body: "Dear&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name],\r\n<p>Thank you for contacting Alshaya Customer Service.<br />\r\nThis is a confirmation that we have received your feedback, please note that we will be responding to you within 48 hours.</p>\r\n\r\n<p>Your feedback is important to us.</p>\r\n\r\n<p>Always at your service,<br />\r\nGroup Customer Service</p>"
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      html: true
+      attachments: false
+      twig: false
+      debug: false
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      theme_name: ''

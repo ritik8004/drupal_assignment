@@ -5,6 +5,7 @@
   height: 2.5rem;
   position: relative;
   background: none;
+  z-index: -1;
 
   @include breakpoint($only-mobile) {
     height: 1.875rem;
