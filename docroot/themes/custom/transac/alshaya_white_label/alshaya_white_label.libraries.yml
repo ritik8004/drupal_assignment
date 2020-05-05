@@ -148,7 +148,10 @@ cleave:
 
 pdp-video-player:
   js:
-    js/pdp-native-video.js: {}
+    conditional-sass/pdp-video/js/pdp-native-video.js: {}
+  css:
+    theme:
+      css/conditional-sass/pdp-video/pdp-video.ltr.css: {}
   dependencies:
     - core/jquery
     - core/drupal
