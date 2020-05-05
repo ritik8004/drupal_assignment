@@ -14,7 +14,8 @@ const PdpLayout = () => {
       <div>Product data not available</div>
     );
 
-    return (sku &&  pdpGallery) ? <React.Fragment> <PdpGallery skuCode={sku} pdpGallery={pdpGallery} ></PdpGallery> 
+    return (sku &&  pdpGallery) ?
+    <React.Fragment> <PdpGallery skuCode={sku} pdpGallery={pdpGallery} ></PdpGallery> 
     <PdpDescription skuCode={sku} pdpDescription={pdpGallery} ></PdpDescription>
     </React.Fragment> : emptyRes;
   }
