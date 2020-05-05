@@ -59,7 +59,7 @@ export default class BillingInfo extends React.Component {
    */
   processAddress = (e) => {
     const { cart } = this.props;
-    return processBillingUpdateFromForm(e, cart.cart.shipping_address);
+    return processBillingUpdateFromForm(e, cart.cart.shipping.address);
   }
 
   /**

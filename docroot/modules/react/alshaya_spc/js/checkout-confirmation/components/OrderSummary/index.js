@@ -129,7 +129,13 @@ const OrderSummary = () => {
           {(storeAddress.length > 0 && storeInfo !== undefined)
             && (
               <>
-                <OrderSummaryItem type="cnc" label={Drupal.t('collection store')} name={storeInfo.store_name} phone={storePhone} address={storeAddress.join(', ')} />
+                <OrderSummaryItem
+                  type="click_and_collect"
+                  label={Drupal.t('collection store')}
+                  name={storeInfo.store_name}
+                  phone={storePhone}
+                  address={storeAddress.join(', ')}
+                />
                 <OrderSummaryItem label={Drupal.t('collection by')} value={customerName} />
               </>
             )}

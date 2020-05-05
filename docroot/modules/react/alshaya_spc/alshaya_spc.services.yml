@@ -14,9 +14,6 @@ services:
       - '@database'
       - '@request_stack'
 
-  alshaya_spc.secure_text_helper:
-    class: Drupal\alshaya_spc\Helper\SecureText
-
   alshaya_spc.customer_helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper
     arguments:
@@ -42,7 +39,6 @@ services:
       - '@mobile_number.util'
       - '@alshaya_acm_checkout.options_manager'
       - '@address.country_repository'
-      - '@alshaya_spc.secure_text_helper'
       - '@request_stack'
       - '@alshaya_acm_customer.orders_manager'
       - '@config.factory'
@@ -51,3 +47,11 @@ services:
 
   alshaya_spc.stock_helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper
+
+  alshaya_spc.middleware_access_check:
+    class: Drupal\alshaya_spc\Access\MiddlewareAccessCheck
+    tags:
+      -
+        name: access_check
+        needs_incoming_request: TRUE
+        applies_to: _middleware_request_check

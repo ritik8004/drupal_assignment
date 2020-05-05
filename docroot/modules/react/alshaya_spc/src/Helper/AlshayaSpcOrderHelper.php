@@ -127,13 +127,6 @@ class AlshayaSpcOrderHelper {
   protected $countryRepository;
 
   /**
-   * Secure Text service provider.
-   *
-   * @var \Drupal\alshaya_spc\Helper\SecureText
-   */
-  protected $secureText;
-
-  /**
    * Request Stack.
    *
    * @var \Symfony\Component\HttpFoundation\Request|null
@@ -195,8 +188,6 @@ class AlshayaSpcOrderHelper {
    *   Checkout option manager.
    * @param \Drupal\address\Repository\CountryRepository $countryRepository
    *   Country Repository.
-   * @param \Drupal\alshaya_spc\Helper\SecureText $secure_text
-   *   Secure Text service provider.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request Stack.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
@@ -220,7 +211,6 @@ class AlshayaSpcOrderHelper {
                               MobileNumberUtilInterface $mobile_util,
                               CheckoutOptionsManager $checkout_options_manager,
                               CountryRepository $countryRepository,
-                              SecureText $secure_text,
                               RequestStack $request_stack,
                               OrdersManager $orders_manager,
                               ConfigFactory $configFactory,
@@ -238,7 +228,6 @@ class AlshayaSpcOrderHelper {
     $this->mobileUtil = $mobile_util;
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->countryRepository = $countryRepository;
-    $this->secureText = $secure_text;
     $this->request = $request_stack->getCurrentRequest();
     $this->ordersManager = $orders_manager;
     $this->configFactory = $configFactory;
@@ -264,7 +253,7 @@ class AlshayaSpcOrderHelper {
       throw new NotFoundHttpException();
     }
 
-    $data = json_decode($this->secureText->decrypt(
+    $data = json_decode(SecureText::decrypt(
       $id,
       Settings::get('alshaya_api.settings')['consumer_secret']
     ), TRUE);
@@ -298,24 +287,28 @@ class AlshayaSpcOrderHelper {
    *   The response containing delivery methods data.
    */
   public function getSkuDetails(array $item) {
+    // We will use this as flag in React to avoid reading from local storage
+    // and also avoid doing API call.
+    $data['prepared'] = TRUE;
+
     $data['title'] = $item['name'];
     $data['finalPrice'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
     $data['sku'] = $item['sku'];
     $data['id'] = $item['item_id'];
-    $data['extra_data']['cart_image'] = NULL;
-    $data['relative_link'] = '';
+    $data['image'] = NULL;
+    $data['url'] = '';
 
-    $data['configurable_values'] = [];
+    $data['options'] = [];
     $node = $this->skuManager->getDisplayNode($item['sku']);
     $skuEntity = SKU::loadFromSku($item['sku']);
     if (($skuEntity instanceof SKUInterface) && ($node instanceof NodeInterface)) {
       $data['title'] = $this->productInfoHelper->getTitle($skuEntity, 'basket');
-      $data['relative_link'] = $node->toUrl('canonical', ['absolute' => FALSE])->toString();
-      $data['extra_data']['cart_image'] = $this->getProductDisplayImage($skuEntity, 'cart_thumbnail', 'cart');
+      $data['url'] = $node->toUrl('canonical', ['absolute' => FALSE])->toString();
+      $data['image'] = $this->getProductDisplayImage($skuEntity, 'cart_thumbnail', 'cart');
       // Check if we can find a parent SKU for this to get proper name.
       if ($this->skuManager->getParentSkuBySku($skuEntity)) {
         // Get configurable values.
-        $data['configurable_values'] = array_values($this->skuManager->getConfigurableValues($skuEntity));
+        $data['options'] = array_values($this->skuManager->getConfigurableValues($skuEntity));
       }
     }
 
@@ -332,8 +325,8 @@ class AlshayaSpcOrderHelper {
    * @param string $context
    *   (optional) Context for image.
    *
-   * @return array
-   *   Return string of uri or Null if not found.
+   * @return string
+   *   Return url of image or null if not found.
    */
   protected function getProductDisplayImage($sku, $image_style = '', $context = '') {
     // Load the first image.
@@ -341,26 +334,18 @@ class AlshayaSpcOrderHelper {
 
     // If we have image for the product.
     if (!empty($media_image)) {
-      $image = [
-        'url' => ImageStyle::load($image_style)->buildUrl($media_image['drupal_uri']),
-        'title' => $sku->label(),
-        'alt' => $sku->label(),
-      ];
+      $image = ImageStyle::load($image_style)->buildUrl($media_image['drupal_uri']);
     }
     else {
       // If still image is not available, set default one.
       $default_image_url = $this->skuImagesManager->getProductDefaultImageUrl();
 
       if ($default_image_url) {
-        $image = [
-          'url' => $default_image_url,
-          'title' => $sku->label(),
-          'alt' => $sku->label(),
-        ];
+        $image = $default_image_url;
       }
     }
 
-    return $image ?? [];
+    return $image ?? '';
   }
 
   /**

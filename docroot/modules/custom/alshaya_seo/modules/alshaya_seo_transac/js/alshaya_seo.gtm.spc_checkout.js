@@ -9,33 +9,36 @@
   Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
 
   Drupal.alshayaSeoSpc.pushStoreData = function(cart) {
-    if (cart.delivery_type === 'cnc' && !!cart.store_info) {
-      dataLayer[0].deliveryOption = 'Click and Collect';
-      dataLayer[0].deliveryType = 'ship_to_store';
-      delete dataLayer[0].deliveryArea;
-      delete dataLayer[0].deliveryCity;
-      dataLayer[0].storeLocation = cart.store_info.name;
-      dataLayer[0].storeAddress = cart.store_info.gtm_cart_address.address_line1 + ' ' +  cart.store_info.gtm_cart_address.administrative_area_display;
+    if (cart.delivery_type !== 'click_and_collect' || !cart.shipping.storeInfo) {
+      return;
     }
-  }
+
+    dataLayer[0].deliveryOption = 'Click and Collect';
+    dataLayer[0].deliveryType = 'ship_to_store';
+    delete dataLayer[0].deliveryArea;
+    delete dataLayer[0].deliveryCity;
+    dataLayer[0].storeLocation = cart.shipping.storeInfo.name;
+    dataLayer[0].storeAddress = cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' +  cart.shipping.storeInfo.gtm_cart_address.administrative_area_display;
+  };
 
   Drupal.alshayaSeoSpc.pushHomeDeliveryData = function(cart) {
-    if (cart.delivery_type === 'hd' && !!cart.shipping_methods && !!cart.shipping_address) {
-      //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
-      var area_id = cart.shipping_address[drupalSettings.address_fields.administrative_area.key];
-      if (!area_id) {
-        return;
-      }
-
-      dataLayer[0].deliveryOption = 'Home Delivery';
-      dataLayer[0].deliveryType = cart.shipping_methods[0].carrier_title;
-      delete dataLayer[0].storeLocation;
-      delete dataLayer[0].storeAddress;
-      var input = document.querySelector('[data-id="'+ area_id +'"]');
-      dataLayer[0].deliveryArea = $(input).data('label');
-      dataLayer[0].deliveryCity = $(input).data('parent-label');
+    if (cart.delivery_type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
+      return;
     }
-  }
+    //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
+    var area_id = cart.shipping.address[drupalSettings.address_fields.administrative_area.key];
+    if (!area_id) {
+      return;
+    }
+
+    dataLayer[0].deliveryOption = 'Home Delivery';
+    dataLayer[0].deliveryType = cart.shipping.methods[0].carrier_title;
+    delete dataLayer[0].storeLocation;
+    delete dataLayer[0].storeAddress;
+    var input = document.querySelector('[data-id="'+ area_id +'"]');
+    dataLayer[0].deliveryArea = $(input).data('label');
+    dataLayer[0].deliveryCity = $(input).data('parent-label');
+  };
 
   Drupal.alshayaSeoSpc.gtmDeliveryMethod = function (method) {
     var data = {
@@ -72,11 +75,15 @@
     Drupal.alshayaSeoSpc.cartGtm(e.detail.cart, step);
     Drupal.alshayaSeoSpc.pushStoreData(e.detail.cart);
     Drupal.alshayaSeoSpc.pushHomeDeliveryData(e.detail.cart);
+
+    if (drupalSettings.user.uid !== 0) {
+      Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
+    }
   });
 
   document.addEventListener('deliveryMethodChange', function (e) {
     var deliveryMethod = e.detail.data;
-    Drupal.alshayaSeoSpc.gtmDeliveryMethod(deliveryMethod === 'hd' ? 'Home Delivery' : 'Click & Collect');
+    Drupal.alshayaSeoSpc.gtmDeliveryMethod(deliveryMethod === 'home_delivery' ? 'Home Delivery' : 'Click & Collect');
   });
 
   document.addEventListener('refreshCartOnCnCSelect', function (e) {
@@ -127,6 +134,17 @@
     Drupal.alshayaSeoSpc.gtmPushCheckoutOption(e.detail.payment_method, 3);
   });
 
+  Drupal.alshayaSeoSpc.pushStoreData = function(cart) {
+    if (cart.delivery_type !== 'click_and_collect' || !cart.shipping.storeInfo) {
+      return;
+    }
+
+    dataLayer[0].deliveryOption = 'Click and Collect';
+    dataLayer[0].deliveryType = 'ship_to_store';
+    dataLayer[0].storeLocation = cart.shipping.storeInfo.name;
+    dataLayer[0].storeAddress = cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' +  cart.shipping.storeInfo.gtm_cart_address.administrative_area_display;
+  };
+
   document.addEventListener('storeSelected', function (e) {
     dataLayer.push({
       event: 'VirtualPageview',
@@ -139,27 +157,5 @@
       storeAddress: e.detail.store.address.replace(/<[^>]+>(\s+)|(\n+)/g, ''),
     });
   });
-
-  Drupal.behaviors.spcCheckoutGtm = {
-    attach: function (context, settings) {
-      var step = Drupal.alshayaSeoSpc.getStepFromContainer();
-      var cart_data = Drupal.alshayaSpc.getCartData();
-      $(document).once('spc-checkout-gtm-onetime').each(function() {
-        if (cart_data !== null) {
-          Drupal.alshayaSeoSpc.cartGtm(cart_data, step);
-          if (step === 2) {
-            Drupal.alshayaSeoSpc.gtmPushCheckoutOption(
-              cart_data.cart.delivery_type === 'hd' ? 'Home Delivery' : 'Click & Collect',
-              step
-            );
-          }
-        }
-
-        if (drupalSettings.user.uid !== 0) {
-          Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
-        }
-      });
-    }
-  };
 
 })(jQuery, Drupal, dataLayer);
