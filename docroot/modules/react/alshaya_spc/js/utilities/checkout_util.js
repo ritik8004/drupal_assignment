@@ -423,3 +423,44 @@ export const getRecommendedProducts = (skus, type) => {
 export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info'), data);
 
 export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per item has been exceeded');
+
+/**
+ * Get amount with currency.
+ *
+ * @param priceAmount
+ *   The price amount.
+ * @param string
+ *   True to Return amount with currency as string, false to return as array.
+ *
+ * @returns {string|*}
+ *   Return string with price and currency or return array of price and currency.
+ */
+export const getAmountWithCurrency = (priceAmount, string = true) => {
+  let amount = priceAmount === null ? 0 : priceAmount;
+  amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
+  const { currency_config: currencyConfig } = drupalSettings.alshaya_spc;
+  // The keys currency and amount are used in PriceElement component.
+  const priceParts = {
+    currency: currencyConfig.currency_code,
+    amount: amount.toFixed(currencyConfig.decimal_points),
+  };
+
+  const returnArray = currencyConfig.currency_code_position === 'before'
+    ? priceParts
+    : Object.assign([], priceParts).reverse();
+
+  if (!string) {
+    return returnArray;
+  }
+
+  return Object.values(returnArray).join(' ');
+};
+
+export const replaceCodTokens = (replacement, text) => {
+  if (text.length === 0) {
+    return '';
+  }
+
+  const textSplit = text.split('[surcharge]');
+  return textSplit.reduce((prefix, suffix) => [prefix, replacement, suffix]);
+};

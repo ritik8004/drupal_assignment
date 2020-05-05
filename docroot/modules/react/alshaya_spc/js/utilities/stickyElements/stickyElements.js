@@ -148,14 +148,14 @@ function stickySidebar() {
 
         // When sticky but content bottom is reached and footer overlap
         // is imminent.
-        if (spcMainContentBottom < spcSideBarBottom) {
+        if (sidebarStickyTop > 35.2) {
+          spcSidebar[0].style.left = `${spcSidebarOffset.left}px`;
+          spcSidebar[0].classList.remove('fluid');
+        } else if (spcMainContentBottom < spcSideBarBottom) {
           if (!spcSidebar[0].classList.contains('fluid')) {
             spcSidebar[0].classList.add('fluid');
             spcSidebar[0].style.left = '';
           }
-        } else if (sidebarStickyTop > 35.2) {
-          spcSidebar[0].style.left = `${spcSidebarOffset.left}px`;
-          spcSidebar[0].classList.remove('fluid');
         }
       } else {
         spcSidebar[0].classList.remove('sticky');

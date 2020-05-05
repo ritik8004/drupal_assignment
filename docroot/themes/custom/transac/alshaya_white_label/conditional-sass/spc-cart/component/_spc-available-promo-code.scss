@@ -19,6 +19,13 @@
     html[lang=ar] & {
       padding: 0.375rem 1rem;
     }
+
+    .spc-pre-content & {
+      border: none;
+      padding: 0;
+      margin-#{$left}: 0.25rem;
+      text-decoration: underline;
+    }
   }
 
   @include breakpoint($only-mobile) {
@@ -32,6 +39,10 @@
 .spc-promo-code-block {
   .promotion-available-code {
     margin-top: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+    }
 
     .promotion-coupon-code {
       background: $basket_fixed_percentage_threshold_reached_bg;
