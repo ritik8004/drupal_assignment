@@ -8,10 +8,8 @@ header.c-header .block-views-exposed-filter-blocksearch-page {
   }
 
   .form-text {
-    @include breakpoint($desktop) {
-      // width: 20.1875rem;
-      // max-width: 20.1875rem;
-      // height: 2.5rem;
+    &::placeholder {
+      color: $primary_search_input_placeholder;
     }
   }
 }

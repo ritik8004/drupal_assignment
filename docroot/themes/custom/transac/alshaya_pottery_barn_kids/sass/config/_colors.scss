@@ -1,36 +1,18 @@
 /* Color palette for PBK */
-// @todo: Unused PB colors will be removed. They are kept here for quick reference.
-$PB_black_one: #000;
-$PB_black_two: #757575;
-$PB_grey_one: #666;
-$PBK_grey_one: #333;
-$PB_grey_two: #adadad;
-$PB_grey_five: #ebebeb;
-$PB_grey_four: #e5e5e5;
-$PB_white: #f7f7f7;
-$PBK_white: #f2f2f2;
+
 $white: #ddd;
 $white-two: #fff;
-$white-smoke: #f3f3f3;
-$PB_deep_red: #900;
-$PBK_deep_red: #c00;
-$PB_warning_red: #d0021b;
-$PB_tint_red: #dd8a8a;
-$PB_deep_blue: #0e3e6f;
-$PB_confirmation_blue: #3680cb;
-$PB_blue_turquoise: #367fca;
-$PBK_confirmation_blue: #7292be;
-$PB_alshaya_priv: #ac8e54;
-$PB_info_blue: #e8eff5;
-$PB_message_green: #499900;
-$PB_blue: #0f2e5b;
-$scarlet: #d0011b;
-$tomato: #e6591a;
-$medium-green: #3ab549;
 
-// Colors for which variables are not present in Zeplin but colors are used.
-$_black_two: $PBK_grey_one; // #333
+$PBK_black_one: #000;
+$PBK_grey_one: #333;
+$PBK_white: #f2f2f2;
+$PBK_red: #900;
+$PBK_deep_red: #c00;
+$PBK_confirmation_blue: #7292be;
+
+$_black_two: $PBK_grey_one;
 $_black_three: #353132;
+$_black_four: #222;
 $_light_blue_one: #e0eaf2;
 $_light_blue_two: #e1eaf2;
 $_gray_two: #b3b3b3;
@@ -148,3 +130,19 @@ $lhn_l3_hover: $_black_two;
 
 // PLP Filter facets
 $plp_filter_legend: $_grey_nineteen;
+$plp_facet_active_bg: $white-two;
+$plp_facet_border: $_gray_eleven;
+$plp_sort_by_options: $_gray_ten;
+$plp_filter_icon: $_grey_nineteen;
+$plp_all_filter_title: $_grey_nineteen;
+$plp_selected_filter_label_text: $PBK_black_one;
+$plp_facet_filter_bg: $_black_four;
+
+// PLP Product tile.
+$plp_tile_product_text: $_black_two;
+$plp_tile_product_title: $_gray_ten;
+$plp_tile_product_title_hover: $_gray_ten;
+$plp_tile_product_special_price: $PBK_deep_red;
+
+// PLP Grid.
+$plp_grid_active_color: $_grey_nineteen;

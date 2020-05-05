@@ -1,0 +1,49 @@
+.block-alshaya-category-lhn-block {
+  ul {
+    li {
+      a {
+        &.lhn-4,
+        &.lhn-3 {
+          &.active {
+            color: $lhn_l3_hover;
+            font-weight: normal;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-plp .c-content__region {
+  .block-views-exposed-filter-blockalshaya-product-list-block-1,
+  .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blocksearch-page {
+    legend {
+      text-transform: uppercase;
+      color: $plp_filter_legend;
+
+      &::after {
+        color: $plp_filter_legend;
+      }
+    }
+  }
+
+  .c-facet.c-accordion,
+  .c-facet.c-collapse-item {
+    .c-accordion__title,
+    .c-collapse__title {
+      text-transform: uppercase;
+      color: $plp_filter_legend;
+
+      &::after {
+        color: $plp_filter_legend;
+      }
+    }
+  }
+
+  .show-all-filters,
+  .show-all-filters-algolia {
+    color: $plp_filter_legend;
+  }
+}

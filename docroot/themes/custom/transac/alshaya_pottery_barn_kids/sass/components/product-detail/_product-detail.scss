@@ -5,4 +5,9 @@
       color: $pdp_title;
     }
   }
+
+  // Add to cart button.
+  .field--name-field-skus .sku-base-form button[type="submit"] {
+    background-color: $PBK_red;
+  }
 }
