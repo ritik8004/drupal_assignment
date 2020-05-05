@@ -127,7 +127,7 @@ export default class Cart extends React.Component {
   updateCartMessage = (actionMessageType, actionMessage) => {
     this.setState({ actionMessageType, actionMessage });
     if (document.getElementsByClassName('spc-messages-container').length > 0) {
-      smoothScrollTo('.spc-messages-container');
+      smoothScrollTo('.spc-pre-content');
     }
   };
 
