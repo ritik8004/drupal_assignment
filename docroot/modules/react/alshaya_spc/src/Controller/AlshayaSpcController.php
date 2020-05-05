@@ -407,6 +407,11 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Please enter @label.'),
     ];
 
+    $strings[] = [
+      'key' => 'location_outside_country_cnc',
+      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>' . $this->t("We don't support delivery outside @country. Please select a store with in country @country below to continue.", ['@country' => $country_name]),
+    ];
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
