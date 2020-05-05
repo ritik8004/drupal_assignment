@@ -100,3 +100,19 @@ function alshaya_mobile_app_path_update($path) {
     $mobileAppSettings->set('static_page_mappings.' . $pageKey, ltrim($path['alias'], '/'))->save();
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_mobile_app_form_webform_submission_alshaya_contact_api_form_alter(&$form, FormStateInterface $form_state) {
+  if (\Drupal::routeMatch()->getRouteName() !== 'rest.webform_rest_submit.POST') {
+    return;
+  }
+
+  // Set default values for new fields so contact form of mobile app
+  // keeps working.
+  // @TODO: Remove this in MCP-3202.
+  $form['elements']['feedback']['#default_value'] = 'feeback_inquiry';
+  $form['elements']['type']['#default_value'] = 'inquiry';
+  $form['elements']['reason4']['#default_value'] = 'others';
+}

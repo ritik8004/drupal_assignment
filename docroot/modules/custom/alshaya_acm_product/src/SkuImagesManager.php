@@ -1116,38 +1116,27 @@ class SkuImagesManager {
 
         // Show original full image in the modal inside a draggable container.
         $original_image = file_create_url($file_uri);
+
         $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
         $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
         $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
 
-        // Getting the derivative urls to validate image style path.
-        $image_small_path = ImageStyle::load($thumbnail_style)->buildUri($file_uri);
-        $image_zoom_path = ImageStyle::load($zoom_style)->buildUri($file_uri);
-        $image_medium_path = ImageStyle::load($slide_style)->buildUri($file_uri);
-
-        if ($get_main_image && empty($main_image) && file_exists($image_zoom_path) && file_exists($image_medium_path)) {
+        if ($get_main_image && empty($main_image)) {
           $main_image = [
             'zoomurl' => $image_zoom,
             'mediumurl' => $image_medium,
             'label' => $media_item['label'],
           ];
         }
-        if (file_exists($image_small_path) && file_exists($image_zoom_path) && file_exists($image_medium_path)) {
-          $thumbnails[] = [
-            'thumburl' => $image_small,
-            'mediumurl' => $image_medium,
-            'zoomurl' => $image_zoom,
-            'fullurl' => $original_image,
-            'label' => $media_item['label'] ?? '',
-            'type' => 'image',
-          ];
-        }
-        else {
-          // Log the corrupt image file if image styles are not loaded.
-          \Drupal::logger('acq_sku')->warning('Image style could not be loaded, corrupt image found at @file_uri', [
-            '@file_uri' => $file_uri,
-          ]);
-        }
+
+        $thumbnails[] = [
+          'thumburl' => $image_small,
+          'mediumurl' => $image_medium,
+          'zoomurl' => $image_zoom,
+          'fullurl' => $original_image,
+          'label' => $media_item['label'] ?? '',
+          'type' => 'image',
+        ];
       }
     }
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {

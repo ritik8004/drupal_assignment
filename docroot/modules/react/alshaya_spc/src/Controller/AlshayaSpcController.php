@@ -238,7 +238,8 @@ class AlshayaSpcController extends ControllerBase {
     $geolocation_config = $this->configFactory->get('geolocation.settings');
     $cache_tags = Cache::mergeTags($cache_tags, array_merge($store_finder_config->getCacheTags(), $geolocation_config->getCacheTags()));
 
-    $cnc_enabled = $cc_config->get('feature_status') == 'enabled';
+    $cncFeatureStatus = $cc_config->get('feature_status') ?? 'enabled';
+    $cnc_enabled = $cncFeatureStatus === 'enabled';
     if ($cnc_enabled) {
       $strings[] = [
         'key' => 'find_your_nearest_store',

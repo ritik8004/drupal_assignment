@@ -77,13 +77,24 @@ class LocalCommand extends BltTasks {
       ->uri($info['local']['url'])
       ->run();
 
-    $this->say('Restarting memcache service');
-    $this->taskDrush()
-      ->drush('ssh')
-      ->arg('sudo service memcached restart')
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
+    $devel_env = getenv('DEVEL_ENV');
+
+    if (!empty($devel_env) && $devel_env === 'lando') {
+      // If we're running Lando, our best option is to flush our memcache
+      // services.
+      $this->say('Flushing memcache servers.');
+      $this->_exec('echo "flush_all" > nc -q 2 memcache1 11211');
+      $this->_exec('echo "flush_all" > nc -q 2 memcache2 11211');
+    }
+    else {
+      $this->say('Restarting memcache service');
+      $this->taskDrush()
+        ->drush('ssh')
+        ->arg('sudo service memcached restart')
+        ->alias($info['local']['alias'])
+        ->uri($info['local']['url'])
+        ->run();
+    }
 
     $this->say('Disable cloud modules');
     $this->taskDrush()
@@ -207,6 +218,10 @@ class LocalCommand extends BltTasks {
 
     if (!isset($path)) {
       $path = '/var/www/alshaya/files-private';
+
+      if (getenv('DEVEL_ENV') == 'lando') {
+        $path = '/app/files-private';
+      }
 
       if (!file_exists($path)) {
         $this->say('Creating temp directory at: ' . $path);

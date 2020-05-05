@@ -71,7 +71,7 @@ export default class HomeDeliveryInfo extends React.Component {
 
   render() {
     const {
-      cart: { cart: { shipping_address: address } },
+      cart: { cart: { shipping: { address } } },
       cart: cartVal,
       refreshCart,
     } = this.props;

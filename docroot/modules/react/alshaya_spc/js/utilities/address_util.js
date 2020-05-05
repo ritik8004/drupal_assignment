@@ -147,7 +147,7 @@ export const prepareCnCAddressFromCartShipping = (address, store) => {
       telephone: address.telephone,
       country_id: drupalSettings.country_code,
     },
-    shipping_type: 'cnc',
+    shipping_type: 'click_and_collect',
     store: {
       name: store.name,
       code: store.code,

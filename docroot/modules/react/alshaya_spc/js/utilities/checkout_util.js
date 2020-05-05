@@ -10,30 +10,6 @@ import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 
 /**
- * Get shipping methods.
- *
- * @param cartId
- * @param data
- * @returns {boolean}
- */
-export const getShippingMethods = (cartId, data) => {
-  const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
-
-  return axios
-    .post(`${middlewareUrl}/cart/shipping-methods`, {
-      data,
-      cartId,
-    })
-    .then(
-      (response) => response.data,
-      (error) => {
-        // Processing of error here.
-        Drupal.logJavascriptError('get-shipping-method', error);
-      },
-    );
-};
-
-/**
  * Place ajax fulll screen loader.
  */
 export const showFullScreenLoader = () => {
@@ -60,7 +36,6 @@ export const removeFullScreenLoader = () => {
 /**
  * Place order.
  *
- * @param cart_id
  * @param paymentMethod
  * @returns {boolean}
  */
@@ -425,7 +400,7 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
   }
 
   if (cart.delivery_type !== undefined
-    && cart.delivery_type === cart.cart.delivery_type) {
+    && cart.delivery_type === cart.cart.shipping.type) {
     return true;
   }
 
@@ -441,10 +416,51 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
 export const getRecommendedProducts = (skus, type) => {
   const skuString = Object.keys(skus).map((key) => `skus[${key}]=${encodeURIComponent(skus[key])}`).join('&');
 
-  return axios.get(`products/cart-linked-skus?type=${type}&${skuString}&context=cart`)
+  return axios.get(`products/cart-linked-skus?type=${type}&${skuString}&context=cart&cacheable=1`)
     .then((response) => response.data);
 };
 
 export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info'), data);
 
 export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per item has been exceeded');
+
+/**
+ * Get amount with currency.
+ *
+ * @param priceAmount
+ *   The price amount.
+ * @param string
+ *   True to Return amount with currency as string, false to return as array.
+ *
+ * @returns {string|*}
+ *   Return string with price and currency or return array of price and currency.
+ */
+export const getAmountWithCurrency = (priceAmount, string = true) => {
+  let amount = priceAmount === null ? 0 : priceAmount;
+  amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
+  const { currency_config: currencyConfig } = drupalSettings.alshaya_spc;
+  // The keys currency and amount are used in PriceElement component.
+  const priceParts = {
+    currency: currencyConfig.currency_code,
+    amount: amount.toFixed(currencyConfig.decimal_points),
+  };
+
+  const returnArray = currencyConfig.currency_code_position === 'before'
+    ? priceParts
+    : Object.assign([], priceParts).reverse();
+
+  if (!string) {
+    return returnArray;
+  }
+
+  return Object.values(returnArray).join(' ');
+};
+
+export const replaceCodTokens = (replacement, text) => {
+  if (text.length === 0) {
+    return '';
+  }
+
+  const textSplit = text.split('[surcharge]');
+  return textSplit.reduce((prefix, suffix) => [prefix, replacement, suffix]);
+};

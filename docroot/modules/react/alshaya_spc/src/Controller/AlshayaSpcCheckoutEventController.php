@@ -95,7 +95,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
   }
 
   /**
-   * Set Order id in drupal session.
+   * Event triggered from Middleware to let Drupal know about it.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Request object.
@@ -107,7 +107,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function postCheckoutEvent(Request $request) {
+  public function checkoutEvent(Request $request) {
     $action = $request->request->get('action');
     $cart = $request->request->get('cart');
     if (empty($action) || empty($cart)) {
