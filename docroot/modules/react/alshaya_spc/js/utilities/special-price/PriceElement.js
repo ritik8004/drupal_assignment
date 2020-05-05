@@ -13,7 +13,7 @@ const PriceElement = ({ amount: priceAmount }) => {
   return (
     <span className="price-wrapper">
       <div className="price">
-        {priceParts}
+        {Object.values(priceParts)}
       </div>
     </span>
   );
