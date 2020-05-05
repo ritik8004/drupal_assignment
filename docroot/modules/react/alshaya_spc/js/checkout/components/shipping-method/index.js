@@ -26,7 +26,7 @@ export default class ShippingMethod extends React.Component {
     const selectCarrierInfo = `${method.carrier_code}_${method.method_code}`;
 
     // If mathod is already selected in cart.
-    if (cart.cart.carrier_info === selectCarrierInfo) {
+    if (cart.cart.shipping.method === selectCarrierInfo) {
       return;
     }
 
@@ -42,11 +42,11 @@ export default class ShippingMethod extends React.Component {
     document.dispatchEvent(event);
 
     // Prepare shipping data.
-    const tempShippingData = cart.cart.shipping_address;
+    const tempShippingData = cart.cart.shipping.address;
     Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
-      tempShippingData[key] = cart.cart.shipping_address[field.key];
+      tempShippingData[key] = cart.cart.shipping.address[field.key];
     });
-    tempShippingData.mobile = cart.cart.shipping_address.telephone;
+    tempShippingData.mobile = cart.cart.shipping.address.telephone;
 
     // Get prepared address data for shipping address update.
     const data = prepareAddressDataForShipping(tempShippingData);
@@ -57,8 +57,8 @@ export default class ShippingMethod extends React.Component {
 
     // Extra info for logged in user.
     if (drupalSettings.user.uid > 0) {
-      data.static.customer_address_id = cart.cart.shipping_address.customer_address_id;
-      data.static.customer_id = cart.cart.shipping_address.customer_id;
+      data.static.customer_address_id = cart.cart.shipping.address.customer_address_id;
+      data.static.customer_id = cart.cart.shipping.address.customer_id;
     }
 
     // Update shipping address.

@@ -10,11 +10,6 @@ namespace App\Service\Magento;
 final class CartActions {
 
   /**
-   * Action for creating new cart.
-   */
-  const CART_CREATE_NEW = 'create cart';
-
-  /**
    * Action used for adding an item in cart.
    */
   const CART_ADD_ITEM = 'add item';
@@ -63,5 +58,15 @@ final class CartActions {
    * Action used for final payment push before place order.
    */
   const CART_PAYMENT_FINALISE = 'finalise payment';
+
+  /**
+   * Actions related to checkout page.
+   */
+  const CART_CHECKOUT_ACTIONS = [
+    self::CART_SHIPPING_UPDATE,
+    self::CART_PAYMENT_UPDATE,
+    self::CART_PAYMENT_FINALISE,
+    self::CART_BILLING_UPDATE,
+  ];
 
 }

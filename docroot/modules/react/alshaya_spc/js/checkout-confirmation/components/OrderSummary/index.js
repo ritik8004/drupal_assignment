@@ -129,8 +129,14 @@ const OrderSummary = () => {
           {(storeAddress.length > 0 && storeInfo !== undefined)
             && (
               <>
-                <OrderSummaryItem type="cnc" label={Drupal.t('Collection Store')} name={storeInfo.store_name} phone={storePhone} address={storeAddress.join(', ')} />
-                <OrderSummaryItem label={Drupal.t('Collection by')} value={customerName} />
+               <OrderSummaryItem
+                  type="click_and_collect"
+                  label={Drupal.t('collection store')}
+                  name={storeInfo.store_name}
+                  phone={storePhone}
+                  address={storeAddress.join(', ')}
+                />
+                <OrderSummaryItem label={Drupal.t('collection by')} value={customerName} />
               </>
             )}
           <ConditionalView condition={billingAddress.length > 0}>

@@ -3,6 +3,11 @@ cart.get_cart:
     controller: App\Controller\CartController::getCart
     methods: GET
 
+cart.get_cart_for_checkout:
+    path: /cart/checkout
+    controller: App\Controller\CartController::getCartForCheckout
+    methods: GET
+
 cart.restore_cart:
     path: /cart/restore
     controller: App\Controller\CartController::restoreCart
@@ -17,11 +22,6 @@ cart.associate_cart:
     path: /cart/associate
     controller: App\Controller\CartController::associateCart
     methods: GET
-
-cart.get_shipping_methods:
-    path: /cart/shipping-methods
-    controller: App\Controller\CartController::shippingMethods
-    methods: POST
 
 cart.place_order:
     path: /cart/place-order

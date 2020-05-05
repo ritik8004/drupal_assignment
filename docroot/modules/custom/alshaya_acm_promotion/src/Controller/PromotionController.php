@@ -415,9 +415,23 @@ class PromotionController extends ControllerBase {
     $cartLabels = [
       'qualified' => [],
       'next_eligible' => [],
+      'applied_rules' => [],
+      'shipping_free' => FALSE,
     ];
 
     foreach ($this->promotionsManager->getCartPromotions() ?? [] as $rule_id => $promotion) {
+      $description = $promotion->get('field_acq_promotion_description')->first()
+        ? $promotion->get('field_acq_promotion_description')->first()->getValue()['value']
+        : '';
+      $cartLabels['applied_rules'][$rule_id] = [
+        'label' => $promotion->get('field_acq_promotion_label')->getString(),
+        'description' => $description,
+      ];
+
+      if ($promotion->get('field_alshaya_promotion_subtype')->getString() === 'free_shipping_order') {
+        $cartLabels['shipping_free'] = TRUE;
+      }
+
       $promotion_data = $this->promotionsManager->getPromotionData($promotion);
       if (!empty($promotion_data)) {
         $cartLabels['qualified'][$rule_id] = [

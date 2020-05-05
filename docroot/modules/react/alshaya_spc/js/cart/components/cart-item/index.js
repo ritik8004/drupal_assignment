@@ -29,7 +29,6 @@ export default class CartItem extends React.Component {
 
   componentDidMount() {
     const { item } = this.props;
-    // Key will be like 'product:en:testsku'
     Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
   }
 

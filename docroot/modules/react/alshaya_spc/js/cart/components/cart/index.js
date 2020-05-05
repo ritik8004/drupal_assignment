@@ -28,7 +28,6 @@ export default class Cart extends React.Component {
       totalItems: null,
       amount: null,
       couponCode: null,
-      cartPromo: null,
       dynamicPromoLabelsCart: null,
       dynamicPromoLabelsProduct: null,
       inStock: true,
@@ -53,7 +52,6 @@ export default class Cart extends React.Component {
           recommendedProducts: data.recommended_products,
           totalItems: data.items_qty,
           amount: data.cart_total,
-          cartPromo: data.cart_promo,
           wait: false,
           couponCode: data.coupon_code,
           inStock: data.in_stock,
@@ -142,7 +140,6 @@ export default class Cart extends React.Component {
       totals,
       couponCode,
       inStock,
-      cartPromo,
       actionMessageType,
       actionMessage,
       dynamicPromoLabelsCart,
@@ -209,7 +206,6 @@ export default class Cart extends React.Component {
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}
-              cart_promo={cartPromo}
               show_checkout_button
               animationDelay="0.5s"
             />

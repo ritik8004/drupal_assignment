@@ -15,8 +15,7 @@ class ClicknCollectContextProvider extends React.Component {
     const {
       cart: {
         customer,
-        store_info: storeInfo,
-        shipping_address: shippingAddress,
+        shipping: { storeInfo, address: shippingAddress },
       },
     } = props.cart;
 

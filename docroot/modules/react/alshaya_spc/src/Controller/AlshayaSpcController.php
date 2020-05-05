@@ -246,7 +246,8 @@ class AlshayaSpcController extends ControllerBase {
       . $this->t('Please enter an address with in country @country below to continue.', ['@country' => $country_name]),
     ];
 
-    $cnc_enabled = $cc_config->get('feature_status') == 'enabled';
+    $cncFeatureStatus = $cc_config->get('feature_status') ?? 'enabled';
+    $cnc_enabled = $cncFeatureStatus === 'enabled';
     if ($cnc_enabled) {
       $strings[] = [
         'key' => 'location_outside_country_cnc',

@@ -71,6 +71,10 @@ class AlshayaClickCollect {
    *   Return the array of all available stores.
    */
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
+    if ($this->getConfig()->get('feature_status') === 'disabled') {
+      return [];
+    }
+
     // Get the stores from Magento.
     if ($cart_stores = $this->apiWrapper->getCartStores($cart_id, $lat, $lon)) {
       $stores_by_code = [];
@@ -116,6 +120,22 @@ class AlshayaClickCollect {
    */
   public function getStoreInfo(string $store_code) {
     return $this->storesFinderUtility->getMultipleStoresExtraData([$store_code => []]);
+  }
+
+  /**
+   * Wrapper function to get config.
+   *
+   * @return \Drupal\Core\Config\ImmutableConfig
+   *   Click and collect config.
+   */
+  protected function getConfig() {
+    static $config;
+
+    if (empty($config)) {
+      $config = $this->configFactory->get('alshaya_click_collect.settings');
+    }
+
+    return $config;
   }
 
 }
