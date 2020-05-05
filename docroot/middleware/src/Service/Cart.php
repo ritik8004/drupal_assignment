@@ -644,7 +644,10 @@ class Cart {
       'additional_data' => $data['additional_data'],
     ];
 
-    $this->cache->set('payment_method', 600, $data['method']);
+    $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
+    if ($expire > 0) {
+      $this->cache->set('payment_method', $expire, $data['method']);
+    }
 
     return $this->updateCart($update);
   }
@@ -869,7 +872,8 @@ class Cart {
       return $static[$key];
     }
 
-    $cache = $this->cache->get('delivery_methods');
+    $expire = (int) $_ENV['CACHE_TIME_LIMIT_DELIVERY_METHODS'];
+    $cache = $expire > 0 ? $this->cache->get('delivery_methods') : NULL;
     if (isset($cache) && $cache['key'] === $key) {
       $static[$key] = $cache['methods'];
       return $static[$key];
@@ -894,7 +898,9 @@ class Cart {
       'methods' => $static[$key],
     ];
 
-    $this->cache->set('delivery_methods', 600, $cache);
+    if ($expire > 0) {
+      $this->cache->set('delivery_methods', $expire, $cache);
+    }
     return $static[$key];
   }
 
@@ -919,7 +925,9 @@ class Cart {
       return $static[$key];
     }
 
-    $static[$key] = $this->cache->get($key);
+    $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHODS'];
+
+    $static[$key] = $expire > 0 ? $this->cache->get($key) : NULL;
     if (isset($static[$key])) {
       return $static[$key];
     }
@@ -934,7 +942,9 @@ class Cart {
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
-    $this->cache->set($key, 600, $static[$key]);
+    if ($expire > 0) {
+      $this->cache->set($key, $expire, $static[$key]);
+    }
     return $static[$key];
   }
 
@@ -945,6 +955,11 @@ class Cart {
    *   Payment method set on cart.
    */
   public function getPaymentMethodSetOnCart() {
+    $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
+    if ($expire > 0 && ($method = $this->cache->get('payment_method'))) {
+      return $method;
+    }
+
     $url = sprintf('carts/%d/selected-payment-method', $this->getCartId());
     try {
       $result = $this->magentoApiWrapper->doRequest('GET', $url);
