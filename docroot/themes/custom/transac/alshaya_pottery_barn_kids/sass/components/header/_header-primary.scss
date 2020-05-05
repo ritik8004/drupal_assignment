@@ -1,0 +1,17 @@
+header.c-header .block-views-exposed-filter-blocksearch-page {
+  #edit-submit-search {
+    // background: $primary_search_btn_icon url('../imgs/assets/search.svg') 0.25rem 0.25rem no-repeat;
+    // background-size: 1.9rem 1.9rem;
+    // width: 2.125rem;
+    // height: 2.125rem;
+    // margin-#{$left}: -2.375rem;
+  }
+
+  .form-text {
+    @include breakpoint($desktop) {
+      // width: 20.1875rem;
+      // max-width: 20.1875rem;
+      // height: 2.5rem;
+    }
+  }
+}
