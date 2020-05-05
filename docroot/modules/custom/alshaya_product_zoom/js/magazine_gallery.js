@@ -69,7 +69,6 @@
         .on('mouseover', function(){
           $(this).addClass('magazine-image-zoomed');
           if (!$(this).hasClass('height-processed')) {
-            console.log('hello');
             $(this).addClass('height-processed');
             $(this).find('.pdp-image-zoom-wrapper').css({'height': $(this).find('img').height() + 'px'});
           }
