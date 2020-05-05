@@ -303,39 +303,4 @@ class SkuPriceHelper {
     return (string) $this->t('Save upto @discount%', ['@discount' => max($discounts)]);
   }
 
-  /**
-   * Helper function to get product price based on display mode.
-   *
-   * @param array $prices
-   *   Min prices.
-   *
-   * @return string
-   *   Prices.
-   */
-  public function getProductPrice(array $prices) {
-    $display_mode = $this->displayMode;
-    $product_price = '';
-    switch ($display_mode) {
-      case self::PRICE_DISPLAY_MODE_FROM_TO:
-        if (isset($prices['children'])) {
-          $selling_prices = array_column($prices['children'], 'selling_price');
-          $min = min($selling_prices);
-          $max = max($selling_prices);
-
-          if ($min == $max) {
-            $product_price = _alshaya_acm_format_price_with_decimal((float) $min, '.', '');
-            return $product_price;
-          }
-
-          $product_price = _alshaya_acm_format_price_with_decimal((float) $min, '.', '') . ' - ' . _alshaya_acm_format_price_with_decimal((float) $max, '.', '');
-        }
-        break;
-
-      case self::PRICE_DISPLAY_MODE_SIMPLE:
-        $product_price = _alshaya_acm_format_price_with_decimal((float) $prices['final_price'], '.', '');
-        break;
-    }
-    return $product_price;
-  }
-
 }

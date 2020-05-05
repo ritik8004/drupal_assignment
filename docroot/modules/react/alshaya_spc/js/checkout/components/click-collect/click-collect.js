@@ -439,6 +439,7 @@ class ClickCollect extends React.Component {
       updateLocationAccess,
       outsideCountryError,
       showOutsideCountryError,
+      animateLocationMessage,
     } = this.context;
 
     const {
@@ -473,7 +474,7 @@ class ClickCollect extends React.Component {
             <div className="spc-cnc-address-form-wrapper">
               {locationAccess === false
               && (
-                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
+                <CheckoutMessage type="warning" context={`click-n-collect-store-modal modal location-disable ${animateLocationMessage}`}>
                   <span className="font-bold">{getStringMessage('location_access_denied')}</span>
                   <a href="#" onClick={() => updateLocationAccess(true)}>{getStringMessage('dismiss')}</a>
                 </CheckoutMessage>
