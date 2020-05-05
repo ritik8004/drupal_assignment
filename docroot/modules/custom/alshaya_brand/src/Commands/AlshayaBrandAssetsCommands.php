@@ -186,12 +186,19 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
   public function deleteUnusedBrandAssetsAllMarkets(array $options = ['batch-size' => 50, 'dry-run' => FALSE]) {
     $dry_run = (bool) $options['dry-run'];
     $batch_size = (int) $options['batch-size'];
-    $unused_brand_assets_to_delete = [];
 
     $domains = $this->getBrandDomains();
 
-    foreach ($domains ?? [] as $domain) {
-      $command = sprintf('drush -l %s list-unused-brand-asset-paths', $domain[1]);
+    if (empty($domains)) {
+      $this->logger()->notice('Failed to fetch domains.');
+      return;
+    }
+
+    foreach ($domains as $domain) {
+      $current_domain = $domain[1];
+      $unused_brand_assets[$current_domain] = [];
+
+      $command = sprintf('drush -l %s list-unused-brand-asset-paths', $current_domain);
       $get_unused_brand_assets = $this->processManager()->process($command);
       $get_unused_brand_assets->mustRun();
       $data = $get_unused_brand_assets->getOutput();
@@ -200,14 +207,21 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
       foreach ($data as $line) {
         if (preg_match('/^\d/', $line) === 1) {
           $array = explode(' | ', $line);
-          $unused_brand_assets[$domain[1]][$array[0]] = $array[1];
+          $unused_brand_assets[$current_domain][$array[0]] = $array[1];
         }
       }
       // Batch operation to clean up unused file entities.
       $batch_operation_clean_up_unused_file_entities[] = [
         [__CLASS__, 'deleteUnusedUnavailableFileEntitiesForDomain'],
-        $domain,
+        [$current_domain],
       ];
+    }
+
+    $unused_brand_assets_merged = array_unique(call_user_func_array('array_merge', $unused_brand_assets));
+
+    if (empty($unused_brand_assets_merged)) {
+      $this->logger()->notice('No unused brand assets found.');
+      return;
     }
 
     $batch = [
@@ -217,27 +231,20 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
       'error_message' => dt('Failed to check for unused media files.'),
     ];
 
-    if (!empty($unused_brand_assets)) {
-      if (count($unused_brand_assets) > 1) {
-        // Get list of unused assets common in all the markets of a brand.
-        $unused_brand_assets_common = call_user_func_array('array_intersect', $unused_brand_assets);
+    // Get list of unused assets common in all the markets of a brand.
+    $unused_brand_assets_common = call_user_func_array('array_intersect', $unused_brand_assets);
+    // Get list of unused assets not common to all markets.
+    $unused_brand_assets_diff = array_diff($unused_brand_assets_merged, $unused_brand_assets_common);
 
-        // Get list of unused assets not common to all markets.
-        $unused_brand_assets_merged = array_unique(call_user_func_array('array_merge', $unused_brand_assets));
-        $unused_brand_assets_diff = array_diff($unused_brand_assets_merged, $unused_brand_assets_common);
-      }
-      else {
-        $unused_brand_assets_diff = reset($unused_brand_assets);
-      }
-
-      foreach ($domains ?? [] as $domain) {
+    if (!empty($unused_brand_assets_diff)) {
+      foreach ($unused_brand_assets as $domain => $assets) {
         $uri = [];
-        foreach ($unused_brand_assets_diff ?? [] as $value) {
-          if (!empty($unused_brand_assets[$domain[1]]) && in_array($value, $unused_brand_assets[$domain[1]])) {
+        foreach ($unused_brand_assets_diff as $asset) {
+          if (in_array($asset, $assets)) {
             continue;
           }
           else {
-            $uri[] = $value;
+            $uri[] = $asset;
           }
         }
         if (!empty($uri)) {
@@ -246,20 +253,13 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
           // Batch operation to check if brand asset entity exists.
           $batch['operations'][] = [
             [__CLASS__, 'checkBrandAssetFileForDomain'],
-            [$domain[1], $uris],
+            [$domain, $uris],
           ];
         }
       }
     }
 
-    $unused_brand_assets_to_delete = !empty($unused_brand_assets_merged) ? $unused_brand_assets_merged : $unused_brand_assets_diff;
-
-    if (empty($unused_brand_assets_to_delete)) {
-      $this->logger()->notice('No unused brand assets found.');
-      return;
-    }
-
-    foreach (array_chunk($unused_brand_assets_to_delete, $batch_size, TRUE) as $chunk) {
+    foreach (array_chunk($unused_brand_assets_merged, $batch_size, TRUE) as $chunk) {
       $batch['operations'][] = [
         [__CLASS__, 'deleteUnusedBrandAssetsAllMarketsChunk'],
         [$chunk, $dry_run],
