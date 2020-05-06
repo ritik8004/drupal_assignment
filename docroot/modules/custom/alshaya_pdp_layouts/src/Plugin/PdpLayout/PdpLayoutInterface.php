@@ -48,6 +48,6 @@ interface PdpLayoutInterface extends PluginInspectionInterface, DerivativeInspec
    * @return string
    *   The context key of the PDP Layout.
    */
-  public function getContextFromPluginId(string $context, string $pdp_layout);
+  public function getCotextFromPdpLayout(string $context, string $pdp_layout);
 
 }

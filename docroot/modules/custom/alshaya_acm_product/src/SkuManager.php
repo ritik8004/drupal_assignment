@@ -2837,7 +2837,7 @@ class SkuManager {
    */
   public function getContextFromLayoutKey($context, $pdp_layout) {
     $plugin_manager = $this->pdpLayoutManager->createInstance($pdp_layout, []);
-    $context_key = $plugin_manager->getContextFromPluginId($context, $pdp_layout);
+    $context_key = $plugin_manager->getCotextFromPdpLayout($context, $pdp_layout);
     return $context_key;
   }
 

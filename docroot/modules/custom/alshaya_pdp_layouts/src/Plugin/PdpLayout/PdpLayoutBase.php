@@ -40,7 +40,7 @@ abstract class PdpLayoutBase extends PluginBase implements PdpLayoutInterface {
   /**
    * {@inheritdoc}
    */
-  public function getContextFromPluginId($context, $pdp_layout) {
+  public function getCotextFromPdpLayout($context, $pdp_layout) {
     return $context;
   }
 

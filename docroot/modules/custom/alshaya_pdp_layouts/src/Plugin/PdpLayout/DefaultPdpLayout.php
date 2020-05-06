@@ -31,7 +31,7 @@ class DefaultPdpLayout extends PdpLayoutBase {
   /**
    * {@inheritdoc}
    */
-  public function getContextFromPluginId($context, $pdp_layout) {
+  public function getCotextFromPdpLayout($context, $pdp_layout) {
     return $context;
   }
 
