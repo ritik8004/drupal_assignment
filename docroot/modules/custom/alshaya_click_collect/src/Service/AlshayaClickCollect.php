@@ -74,6 +74,7 @@ class AlshayaClickCollect {
     // Get the stores from Magento.
     if ($cart_stores = $this->apiWrapper->getCartStores($cart_id, $lat, $lon)) {
       $stores_by_code = [];
+      $config_cnc_rnc = $this->configFactory->get('alshaya_click_collect.settings')->get('click_collect_rnc');;
       foreach ($cart_stores as $cart_store) {
         $stores_by_code[$cart_store['code']] = $cart_store;
       }
@@ -86,6 +87,14 @@ class AlshayaClickCollect {
         $store['formatted_distance'] = $this->t('@distance miles', [
           '@distance' => number_format((float) $store_cart_data['distance'], 2, '.', ''),
         ]);
+
+        // Display sts label by default.
+        $store['delivery_time'] = $store_cart_data['sts_delivery_time_label'];
+
+        // Display configured value for rnc if available.
+        if ($store['rnc_available']) {
+          $store['delivery_time'] = $config_cnc_rnc;
+        }
       }
 
       // Sort the stores first by distance and then by name.

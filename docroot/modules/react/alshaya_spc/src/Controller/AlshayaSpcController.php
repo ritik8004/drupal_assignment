@@ -241,11 +241,20 @@ class AlshayaSpcController extends ControllerBase {
     $country_name = $this->mobileUtil->getCountryName($country_code);
     $strings[] = [
       'key' => 'location_outside_country_hd',
-      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>' . $this->t("We don't support delivery outside @country.") . $this->t('Please enter an address with in country @country below to continue.', ['@country' => $country_name]),
+      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>'
+      . $this->t("We don't support delivery outside @country.", ['@country' => $country_name])
+      . $this->t('Please enter an address with in country @country below to continue.', ['@country' => $country_name]),
     ];
 
     $cnc_enabled = $cc_config->get('feature_status') == 'enabled';
     if ($cnc_enabled) {
+      $strings[] = [
+        'key' => 'location_outside_country_cnc',
+        'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>'
+        . $this->t("We don't support delivery outside @country.", ['@country' => $country_name])
+        . $this->t('Please select a store with in country @country below to continue.', ['@country' => $country_name]),
+      ];
+
       $strings[] = [
         'key' => 'cnc_find_your_nearest_store',
         'value' => $this->t('find your nearest store'),
@@ -405,11 +414,6 @@ class AlshayaSpcController extends ControllerBase {
     $strings[] = [
       'key' => 'address_please_enter',
       'value' => $this->t('Please enter @label.'),
-    ];
-
-    $strings[] = [
-      'key' => 'location_outside_country_cnc',
-      'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>' . $this->t("We don't support delivery outside @country. Please select a store with in country @country below to continue.", ['@country' => $country_name]),
     ];
 
     $build = [
