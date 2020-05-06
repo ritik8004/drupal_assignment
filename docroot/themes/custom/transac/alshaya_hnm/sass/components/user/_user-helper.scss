@@ -4,9 +4,8 @@
     @include breakpoint($upto-tablet) {
       .my-account-nav {
         a {
-          @include icon(chevron#{$right}, after) {
-            font-size: 1.6rem;
-            font-weight: bold;
+          @include icon(arrow-#{$right}, after) {
+            font-size: 1rem;
             color: $myaccount_icon;
           }
         }
@@ -21,6 +20,7 @@
           @include arabic-letter-spacing;
 
           font-family: $hnm-demibold;
+          font-size: 0.8125rem;
           text-transform: uppercase;
           letter-spacing: 0.8px;
           color: $myaccount_mobile_title;
@@ -40,8 +40,9 @@
   .user-login-form {
     .form-text,
     .form-email {
-      color: $login_form_text !important;
+      color: $hnm-black-three !important;
       font-family: $hnm-regular;
+      background-color: $seashell_grey;
     }
 
     .form-type-password .form-text {
@@ -55,6 +56,24 @@
 
       @include breakpoint($tablet) {
         margin-top: 2.8rem;
+      }
+
+      input {
+        background-color: $seashell_grey;
+        color: $hnm-black-three !important;
+        letter-spacing: normal !important;
+      }
+
+      label {
+        color: $hnm-black-three !important;
+        font-size: 0.8125rem !important;
+
+        &.error {
+          color: $venetian_red !important;
+          font-size: 0.6875rem;
+          background: $seashell_grey !important;
+          bottom: -1.5rem;
+        }
       }
     }
 
@@ -74,6 +93,36 @@
   }
 }
 
+.c-user-password {
+  .user-pass {
+    .form-item {
+      input {
+        background-color: $seashell_grey;
+        color: $hnm-black-three !important;
+      }
+
+      label {
+        color: $hnm-black-three !important;
+        font-size: 0.8125rem !important;
+
+        &.error {
+          color: $venetian_red !important;
+          font-size: 0.6875rem;
+          background: $seashell_grey;
+          bottom: -1.5rem;
+        }
+      }
+    }
+  }
+}
+
+.password-tooltip {
+  ul {
+    color: $gray44;
+    font-size: 0.6875rem;
+  }
+}
+
 .c-user-register {
   .c-content__region .user-form {
     .form-item.form-type-password {
@@ -84,19 +133,43 @@
 
     .field--name-field-subscribe-newsletter {
       p {
-        font-size: 0.875rem;
+        font-size: 0.6875rem !important;
+        color: $gray44;
 
         a {
-          color: $content_link_color;
-          font-family: $hnm-demibold;
+          color: $gray44;
+          font-family: $hnm-regular;
           text-decoration: underline;
           font-weight: normal;
+
+          &:hover {
+            color: $hnm-black-three;
+          }
         }
       }
 
       label {
         color: $newsletter_subscribe_label;
-        font-size: 0.875rem !important;
+        font-size: 0.8125rem !important;
+      }
+    }
+
+    .form-item {
+      input {
+        background-color: $seashell_grey;
+        color: $hnm-black-three !important;
+      }
+
+      label {
+        color: $hnm-black-three !important;
+        font-size: 0.8125rem;
+
+        &.error {
+          color: $venetian_red !important;
+          font-size: 0.6875rem;
+          background: $seashell_grey !important;
+          bottom: -1.5rem;
+        }
       }
     }
 
@@ -112,6 +185,22 @@
     #block-youllbeableto {
       p {
         font-size: 0.875rem;
+      }
+    }
+  }
+
+  main {
+    .user-register-form.user-form {
+      .form-actions {
+        .form-submit {
+          background-color: $hnm-black-three;
+          font-size: 0.8125rem;
+
+          &:hover {
+            background-color: $gray44;
+            border-color: $gray44;
+          }
+        }
       }
     }
   }

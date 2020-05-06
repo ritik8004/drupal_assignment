@@ -26,8 +26,8 @@
   .field--name-body {
     p {
       font-family: $hnm-regular;
-      font-size: 0.5625rem;
-      line-height: 1.44;
+      font-size: 0.8125rem;
+      line-height: 0.9375rem;
       text-align: center;
       color: $copyright_footer_text;
       margin: 0;
@@ -89,8 +89,9 @@
 
   .footer-brand-home {
     text-align: center;
-    margin: 0;
     border-bottom: none;
+    width: 12.5rem;
+    margin: 0 auto;
   }
 }
 
@@ -111,6 +112,11 @@
 #block-copyright {
   a {
     color: $copyright_footer_link;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
