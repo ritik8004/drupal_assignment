@@ -5,6 +5,8 @@
       font-family: $hnm-demibold !important;
       letter-spacing: 0.8px;
       text-transform: uppercase;
+      background-color: $seashell_grey;
+      color: $hnm-black-three;
     }
   }
 }
@@ -23,6 +25,28 @@
 }
 
 .block-alshaya-signup-signin-buttons {
+  .sub-text {
+    font-size: 0.8125rem;
+    color: $hnm-black-three;
+  }
+
+  .link-button {
+    border-color: $hnm-black-three;
+
+    span {
+      font-size: 0.8125rem;
+      color: $hnm-black-three;
+    }
+
+    &:hover {
+      background-color: unset;
+    }
+
+    &::before {
+      background: url('../imgs/icons/profile-icon.svg') no-repeat center;
+    }
+  }
+
   .sub-text::first-letter,
   .link-button span::first-letter {
     text-transform: uppercase;
@@ -42,6 +66,7 @@
 .c-user-register {
   .section-title {
     font-family: $hnm-demibold;
+    color: $hnm-black-three;
 
     &::first-letter {
       text-transform: uppercase;
