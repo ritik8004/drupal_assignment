@@ -11,6 +11,7 @@ use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Symfony\Component\Yaml\Yaml;
 use Consolidation\SiteProcess\ProcessManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class AlshayaBrandAssetsCommands.
@@ -36,6 +37,13 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
   protected $fileStorage;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  private $configFactory;
+
+  /**
    * AlshayaBrandAssetsCommands constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
@@ -44,13 +52,17 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    *   Database Connection.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
   public function __construct(LoggerChannelFactoryInterface $logger_channel_factory,
                               Connection $connection,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              ConfigFactoryInterface $config_factory) {
     $this->logger = $logger_channel_factory->get('alshaya_brand');
     $this->connection = $connection;
     $this->fileStorage = $entity_type_manager->getStorage('file');
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -184,6 +196,11 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    *   Delete unused assets across markets of a brand.
    */
   public function deleteUnusedBrandAssetsAllMarkets(array $options = ['batch-size' => 50, 'dry-run' => FALSE]) {
+    if (!$this->configFactory->get('alshaya_brand.settings')->get('brand_main_site')) {
+      $this->logger()->notice('Skipping as not main site of the brand.');
+      return;
+    }
+
     $dry_run = (bool) $options['dry-run'];
     $batch_size = (int) $options['batch-size'];
 
