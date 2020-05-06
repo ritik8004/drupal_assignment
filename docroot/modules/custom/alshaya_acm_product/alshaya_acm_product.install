@@ -11,6 +11,7 @@ use Drupal\node\Entity\Node;
 
 /**
  * Add config to turn video download on/off.
+ *
  * Enable alshaya_brand module.
  */
 function alshaya_acm_product_update_8057() {
