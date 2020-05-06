@@ -305,6 +305,22 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-pbkkw.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-pbkae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-pbksa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-pbkeg.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
 mysql_databases:
   - name: drupal
     encoding: utf8mb4
@@ -483,6 +499,22 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_bpeg
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_pbkkw
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_pbkae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_pbksa
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_pbkeg
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
