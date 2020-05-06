@@ -63,26 +63,6 @@
   }
 }
 
-.c-footer__logo {
-  &--mastercard {
-    background: url("../imgs/cards/master-card-secure-code-white.svg") no-repeat center;
-    width: 5.3125rem;
-    height: 1.625rem;
-  }
-
-  &--verisign {
-    background: url("../imgs/cards/veri-sign-white.svg") no-repeat center;
-    width: 4.375rem;
-    height: 2.1875rem;
-  }
-
-  &--visa {
-    background: url("../imgs/cards/verifiedby-visa-white.svg") no-repeat center;
-    width: 4.0625rem;
-    height: 1.8125rem;
-  }
-}
-
 #block-footerhnmlogo {
   line-height: 1;
   padding-bottom: 1.1875rem;
