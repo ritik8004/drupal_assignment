@@ -24,7 +24,7 @@
         {% elseif loop.first %}
           <figure class="pdp-asset pdp-image pdp-asset-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}  data-scale="2">
             <div class="pdp-image-zoom-wrapper">
-              <img data-zoom-url="{{ thumbs.zoomurl }}" class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }} "alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
+              <img class="b-lazy" data-zoom-url="{{ thumbs.zoomurl }}"  data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }} "alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
             </div>
             {%  if labels|length > 0 %}
               <div class="product-labels">

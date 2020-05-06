@@ -60,9 +60,10 @@
         $(this).addClass('hide-controls');
       });
 
-      $('video.gallery-video').on('mouseenter', function () {
+      $('video.gallery-video').once('video-player-controls').on('mouseenter', function () {
         if ($(this).hasClass('playing')) {
           $(this).addClass('button-preview');
+          // Wait for some time and then remove the controls again.
           setTimeout(function (video) {
             video.removeClass('button-preview');
           }, 700, $(this));
