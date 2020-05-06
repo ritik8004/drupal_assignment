@@ -13,24 +13,42 @@
 
 .c-user-password,
 .c-user-register,
-.c-user-login {
+.c-user-login,
+.c-contact,
+.c-address-book {
   &.user-page {
     border-top: 1px solid $content_pagetitle_border;
   }
 
   h1 {
     font-family: $hnm-demibold;
-    color: $title;
+    color: $hnm-black-three;
+    letter-spacing: normal;
+  }
+}
+
+.c-user-edit,
+.c-change-password {
+  h1 {
+    font-family: $hnm-demibold;
+    color: $hnm-black-three;
+    letter-spacing: normal;
   }
 }
 
 .c-user-password {
   h1 {
     top: -3.875rem;
+    font-size: 1.75rem;
 
     @include breakpoint($only-mobile) {
-      top: -3.188rem;
+      top: -3.5rem;
     }
+  }
+
+  .password--message {
+    font-size: 0.8125rem;
+    color: $hnm-black-three;
   }
 }
 
@@ -64,12 +82,14 @@
     @include breakpoint($only-mobile) {
       font-size: 0;
 
-      @include icon(arrowup, before) {
+      @include icon(arrow-left, before) {
         margin-#{$left}: -0.75rem;
         line-height: 0.875;
         font-weight: normal;
-        transform: none;
-        #{$left}: 0.4375rem;
+        #{$left}: 0.75rem;
+        font-size: 1.15rem;
+        top: 50%;
+        transform: translateY(-50%);
 
         html[lang=ar] & {
           transform: rotate(180deg);
@@ -79,8 +99,9 @@
       h1.c-page-title {
         @include arabic-letter-spacing;
 
-        font-size: 1.125rem;
+        font-size: 0.8125rem;
         letter-spacing: 0.8px;
+        line-height: 1.5rem;
       }
     }
   }

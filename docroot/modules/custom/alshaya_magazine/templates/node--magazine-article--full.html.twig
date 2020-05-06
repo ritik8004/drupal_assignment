@@ -8,7 +8,12 @@
 
 <article{{ attributes }}>
   <div{{ content_attributes }}>
-    {{ content|without('back_to_feed', 'magazine_page_title') }}
+    {{ content.field_magazine_hero_image }}
+    <div class="magazine-article-header-wrapper">
+      {{ content|without('back_to_feed', 'magazine_page_title', 'field_magazine_paragraphs', 'field_magazine_shop_the_story', 'field_magazine_hero_image') }}
+    </div>
+    {{ content.field_magazine_paragraphs }}
+    {{ content.field_magazine_shop_the_story }}
   </div>
 </article>
 
