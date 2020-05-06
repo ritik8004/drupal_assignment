@@ -122,7 +122,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     }
 
     $current_path = rtrim($this->request->getPathInfo(), '/');
-    $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
+    $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters($facet->getFacetSourceId());
 
     $active_results = [];
     foreach ($results as $key => $result) {
@@ -258,15 +258,16 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
    * active values for a specific facet are added to the facet.
    */
   protected function initializeActiveFilters($configuration) {
-    $parts = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
+    /** @var \Drupal\facets\FacetInterface $facet */
+    $facet = $configuration['facet'];
+
+    $parts = $this->alshayaPrettyPathHelper->getActiveFacetFilters($facet->getFacetSourceId());
     foreach ($parts as $part) {
       $new_parts = explode('-', $part);
 
       // First element is always the facet key.
       $key = array_shift($new_parts);
 
-      /** @var \Drupal\facets\FacetInterface $facet */
-      $facet = $configuration['facet'];
       if ($facet->getUrlAlias() != $key) {
         continue;
       }
