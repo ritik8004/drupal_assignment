@@ -445,9 +445,9 @@ $checkout_guest_button_txt: $hnm-black-three;
 $checkout_login_separtor_txt: $hnm-black-three;
 $checkout_guest_button_bg: $white-five;
 $checkout_section_titles: $hnm-black-two;
-$checkout_login_submit_button_background: $hnm-black-two;
+$checkout_login_submit_button_background: $hnm-black-three;
 $checkout_login_link_text: $hnm-black-two;
-$checkout_login_back_to_basket_text: $hnm-black-two;
+$checkout_login_back_to_basket_text: $hnm-black-three;
 
 // Checkout Click and Collect
 $checkout_cc_input: $hnm-black-two;
@@ -650,14 +650,15 @@ $spc-checkout-error-message-background: $error;
 $spc-checkout-success-message-background: $success;
 $spc-checkout-success-message-color: $white-five;
 $spc-recommended-product-promotion: $hnm-red;
-$spc-cart-promo-code-submit-enabled: $hnm-black-two;
+$spc-cart-promo-code-submit-enabled: $hnm-black-three;
 $spc-product-attributes: $grey7;
 $spc_tooltip_icon: $_tooltip_blue;
+$spc-cart-background: $default_background_color;
 
 // SPC Checkout
 $spc-checkout-page-title-border: $hnm-black;
-$spc-deliver-button: $hnm-black-two;
+$spc-deliver-button: $hnm-black-three;
 
 // SPC CnC.
-$spc-cnc-toggle-bg-active: $hnm-black-two;
-$spc-checkout-cnc-map-expand: $hnm-black-two;
+$spc-cnc-toggle-bg-active: $hnm-black-three;
+$spc-checkout-cnc-map-expand: $hnm-black-three;
