@@ -526,7 +526,7 @@ $checkout_guest_summary: $grey-ash;
 
 // Checkout Layout
 $checkout_layout_summary_block_method: $grey7;
-$block_acm_customer_txt: $hnm-black;
+$block_acm_customer_txt: $footer_bg;
 $block_acm_customer_title_bg: $white-five;
 $delivery_tab_active_bg: $hnm-grey;
 $delivery_tab_text: $grey-ash;
@@ -541,6 +541,8 @@ $delivery_payment_wrapper_border: $grey4;
 $delivery_payment_selected_bg: $hnm-grey;
 $delivery_selected_address_border: $grey4;
 $delivery_selected_address_bg: $hnm-grey;
+$checkout_section_titles: $hnm-black-three;
+$checkout_footer_txt: $hnm-black-three;
 
 // Delivery details
 $order_print_order_details_row_bg: $grey2-19;
