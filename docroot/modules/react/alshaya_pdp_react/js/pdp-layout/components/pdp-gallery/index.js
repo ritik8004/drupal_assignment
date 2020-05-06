@@ -11,7 +11,7 @@ const sliderSettings = {
 export default class PdpGallery extends React.PureComponent {
   render() {
     const { skuCode } = this.props;
-    const images = skuCode ? drupalSettings.pdpGallery[skuCode]['#thumbnails'] : [];
+    const images = skuCode ? drupalSettings.pdpGallery[skuCode].thumbnails : [];
 
     return (
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import PdpGallery from '../pdp-gallery';
 import PdpDescription from '../pdp-description';
+import PdpInfo from '../pdp-info';
 
 const PdpLayout = () => {
   let skuItemCode = null;
@@ -8,6 +9,11 @@ const PdpLayout = () => {
   if (pdpGallery) {
     [skuItemCode] = Object.keys(pdpGallery);
   }
+  const shortDesc = skuItemCode ? pdpGallery[skuItemCode].shortDesc : [];
+  const description = skuItemCode ? pdpGallery[skuItemCode].description : [];
+  const title = skuItemCode ? pdpGallery[skuItemCode].title : null;
+  const productPrice = skuItemCode ? pdpGallery[skuItemCode].productPrice : [];
+
   const emptyRes = (
     <div>Product data not available</div>
   );
@@ -16,7 +22,8 @@ const PdpLayout = () => {
     <>
       {' '}
       <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
-      <PdpDescription skuCode={skuItemCode} pdpDescription={pdpGallery} />
+      <PdpDescription skuCode={skuItemCode} pdpDescription={description} pdpShortDesc={shortDesc} />
+      <PdpInfo skuCode={skuItemCode} title={title} pdpProductPrice={productPrice} />
       {' '}
 
     </>
