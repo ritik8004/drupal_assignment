@@ -83,7 +83,7 @@ export default class AddressForm extends React.Component {
 
   hidePopUpError = (e) => {
     e.target.parentNode.parentNode.classList.add('fadeOutUp');
-
+    // Wait for warning message fade out animation.
     setTimeout(() => {
       this.setState({
         messageType: null,
