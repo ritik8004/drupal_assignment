@@ -3,18 +3,21 @@ header {
   .block-cart-mini-block,
   .block-alshaya-react-mini-cart {
     .cart-link {
+      width: 2.5rem;
+      height: 2.5rem;
+      #{$right}: -0.625rem;
+
       @include breakpoint($upto-desktop) {
-        background-size: 2.375rem;
+        background-size: 100%;
         width: 2.25rem;
         height: 2.25rem;
-        #{$right}: 0;
-        top: -2.75rem;
+        #{$right}: -0.25rem;
+        top: -2.8125rem;
       }
 
       @include breakpoint($only-tablet) {
-        #{$right}: -0.5rem;
+        #{$right}: -0.25rem;
         top: -3.5rem;
-        background-size: 2.5rem;
       }
 
       &-total {
@@ -23,14 +26,15 @@ header {
       }
 
       html[lang=ar] & {
-        @include breakpoint($upto-desktop) {
-          margin-top: 0.125rem;
-          right: 0.125rem;
+        @include breakpoint($only-tablet) {
+          margin-top: 0;
+          right: 0.25rem;
+          top: -2.8125rem;
         }
 
-        @include breakpoint($only-tablet) {
-          margin-top: 0.5rem;
-          right: 0.25rem;
+        @include breakpoint($only-mobile) {
+          margin-top: 0.25rem;
+          right: 0.125rem;
         }
       }
     }
@@ -283,7 +287,7 @@ header {
         margin: 0.75rem auto 0;
 
         html[lang=ar] & {
-          margin: 0.75rem auto 0;
+          margin: 0.5rem auto 0;
         }
       }
 
@@ -292,7 +296,7 @@ header {
         margin: 0.5rem auto 0;
 
         html[lang=ar] & {
-          margin: 0.75rem auto 0;
+          margin: 0.5rem auto 0;
         }
       }
     }
@@ -354,13 +358,6 @@ header {
       top: 0.6875rem;
       #{$left}: 4rem;
       width: 0;
-
-      &::before {
-        @include breakpoint($only-mobile) {
-          height: 1.75rem;
-          width: 1.75rem;
-        }
-      }
     }
 
     .store {
@@ -386,7 +383,7 @@ header {
 
   @include breakpoint($only-mobile) {
     .mobile--menu {
-      margin-#{$left}: 0.1875rem;
+      margin-#{$left}: 0;
       top: 0.625rem;
       padding: 0;
     }
@@ -413,46 +410,32 @@ header {
 
     html[lang=ar] & {
       @include breakpoint($only-mobile) {
-        left: 20%;
+        left: 22%;
       }
     }
   }
 
   .mobile--search {
     @include breakpoint($only-tablet) {
-      top: 0.875rem;
+      top: 1.4375rem;
       #{$right}: inherit;
-      #{$left}: 10%;
+      #{$left}: 11.1%;
 
       html[lang=ar] & {
-        right: 8.5%;
-        top: 0.875rem;
+        right: 9.8%;
+        top: 1.375rem;
       }
     }
 
     @include breakpoint($only-mobile) {
-      top: 0;
-      #{$left}: 17%;
-      padding: 0;
-      margin-#{$right}: 0;
-
-      html[lang=ar] & {
-        right: 18%;
-        top: -0.0625rem;
-      }
+      top: 1rem;
+      #{$left}: 20%;
     }
   }
 
   li .mobile--search {
-    @include icon(search) {
-      @include breakpoint($upto-desktop) {
-        font-size: 2.75rem;
-        margin-#{$right}: 0;
-        top: 0.1875rem;
-        #{$left}: -0.5rem;
-        height: 0;
-        width: 0;
-      }
+    @include breakpoint($upto-desktop) {
+      @include icon_img('#{$bp_theme_img_directory_path}/assets/search.svg', 1.6875rem, 1.6875rem);
     }
   }
 
