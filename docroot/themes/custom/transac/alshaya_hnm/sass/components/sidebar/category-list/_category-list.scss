@@ -1,13 +1,18 @@
 .c-category-list__title {
   @include arabic-letter-spacing;
 
-  font-size: 0.75rem;
-  font-family: $hnm-demibold;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  font-family: $hnm-bold;
   text-transform: uppercase;
   letter-spacing: 0.4px;
 
   a {
     color: $title;
+  }
+
+  @include breakpoint($upto-desktop) {
+    font-family: $hnm-regular;
   }
 }
 
@@ -17,14 +22,20 @@
   a {
     @include arabic-letter-spacing;
 
-    color: $primary_link-active;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    color: $hnm-black-three;
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
 
     .c-department & {
       &:hover {
         text-decoration: underline;
-        color: $primary_link-hover;
+        color: $default-anchor-link-hover;
+
+        &:active {
+          text-decoration: none;
+        }
       }
     }
   }

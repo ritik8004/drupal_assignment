@@ -123,20 +123,18 @@ body {
   .slick-prev {
     left: 0;
 
-    &::before {
-      content: '';
-      background: url('#{$base_theme_img_directory_path}/icons/arrow_prev.png') center center no-repeat;
-      background-size: 1.1875rem 2.3125rem;
+    @include icon(arrow-left, before) {
+      font-size: 1rem;
+      line-height: 1.8rem;
     }
   }
 
   .slick-next {
     right: 0;
 
-    &::before {
-      content: '';
-      background: url('#{$base_theme_img_directory_path}/icons/arrow_next.png') center center no-repeat;
-      background-size: 1.1875rem 2.3125rem;
+    @include icon(arrow-right, before) {
+      font-size: 1rem;
+      line-height: 1.8rem;
     }
   }
 }
@@ -191,7 +189,7 @@ body {
   .field__item {
     article {
       margin: 0 0.75rem;
-      text-align: center;
+      text-align: $left;
 
       @include breakpoint($only-mobile) {
         margin: 0;
@@ -204,7 +202,7 @@ body {
       line-height: 1.42857;
       letter-spacing: 0;
       text-transform: none;
-      text-align: center;
+      text-align: $left;
       color: $magazine-article-title;
 
       @include breakpoint($tablet) {
@@ -219,6 +217,7 @@ body {
 
       span {
         font-size: 0.875rem;
+        text-align: $left;
 
         @include breakpoint($only-mobile) {
           line-height: 1.2;
@@ -280,7 +279,7 @@ body {
     time,
     .label-separator {
       display: inline-block;
-      background: $magazine-article-primary-color;
+      background: $magazine-article-date-bg;
       position: relative;
       top: 0.5rem;
       padding: 0 0.625rem;
