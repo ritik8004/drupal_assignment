@@ -1,0 +1,123 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_pbk_transac.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_pbk_transac_install() {
+  // Enable and set alshaya_pottery_bran_kids as default theme
+  // and set the site logo,
+  // favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_pottery_barn_kids');
+
+  // Set store id - EN.
+  \Drupal::configFactory()->getEditable('acq_commerce.store')
+    ->set('store_id', Settings::get('store_id')['en'])
+    ->save();
+
+  // Translate store id in config.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
+    ->set('store_id', Settings::get('store_id')['ar'])
+    ->save();
+
+  // Save language prefix - EN.
+  \Drupal::configFactory()->getEditable('alshaya_api.settings')
+    ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['en'])
+    ->save();
+
+  // Save language prefix - AR.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
+    ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
+    ->save();
+
+  // Set google map marker.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_pbk_transac');
+  }
+
+  // Add string translations.
+  $strings = [
+    'our company' => [
+      'ar' => 'شركتنا',
+    ],
+    'Connect with us' => [
+      'ar' => 'اتصل بنا',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Discover' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'I would like to receive exclusive deals from Pottery Barn Kids.' => [
+      'ar' => 'أرغب في استلام عروض حصرية من بوتري بارن',
+    ],
+    '@group_name/@sku_name' => [
+      'ar' => '@sku_name/@group_name',
+    ],
+    'seo_brand_name' => [
+      'en' => 'Pottery Barn Kids',
+      'ar' => 'بوتري بارن',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
+  // Disable shop by block.
+  alshaya_config_install_configs(['block.block.shopby'], 'alshaya_transac', 'optional');
+
+  // Enable the Policies, designservices block.
+  $configs = [
+    'block.block.footerstaticlinks',
+    'block.block.designservices',
+    'system.menu.design-services',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_pbk_transac', 'optional');
+
+  // Get metatag translations on install.
+  _alshaya_pbk_transac_get_metatag_translations();
+}
+
+/**
+ * Get translations of metatag.
+ */
+function _alshaya_pbk_transac_get_metatag_translations() {
+  $strings = [
+    'alshaya_seo_sale_desc_start' => [
+      'en' => 'Get [current-date:html_year] [alshaya_seo:gender] [term:name] Sale from [site:name]. Explore our [term:parent:name] sale for our [current-date:html_year] luxury and high-quality [term:name] collection',
+      'ar' => 'احصل على عروض [current-date:html_year] على [term:name] من [site:name]. اكتشف عروض التصفية على مجموعاتنا الفاخرة وعالية الجودة [term:name]',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop luxury and high-quality [term:name]',
+      'ar' => 'شراء رفاهية عالية الجودة [term:name] جمع',
+    ],
+    'alshaya_seo_sale_title_sub_suffix' => [
+      'en' => '- [term:parent:name]',
+      'ar' => '- [term:parent:name]',
+    ],
+    'alshaya_seo_title_sub_suffix' => [
+      'en' => '- [term:parent:name]',
+      'ar' => '- [term:parent:name]',
+    ],
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => ' Sale [alshaya_seo:title_sub_suffix]',
+      'ar' => ' Sale [alshaya_seo:title_sub_suffix]',
+    ],
+    'alshaya_seo_sale_keywords' => [
+      'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
+      'ar' => 'تسوق [term:name]المنتجات عبر الإنترنت، تسوق [term:name] إكسسوارات في [alshaya_seo:country]، تسوق [term:name] إكسسوارات، تسوق [term:name]',
+    ],
+    'alshaya_seo_keywords' => [
+      'en' => 'Shop [term:name] Products Online, Buy [term:name] in [alshaya_seo:country], Shop [term:name] Products in [alshaya_seo:city1], Shop [term:name] Products in [alshaya_seo:city2]',
+      'ar' => 'تسوق مستلزمات [term:name] اونلاين, تسوق مجموعة اكسسوارات [term:name], اشتري اكسسوارات [term:name] اون لاين, تسوق اكسسوارات [term:name] من [alshaya_seo:brand_name], تسوق مستلزمات [term:name] من [alshaya_seo:brand_name], تسوق مستلزمات ال[term:name] اونلاين في [alshaya_seo:country], تسوق منتجات [term:name] في city1، تسوق منتجات [term:name] في [alshaya_seo:city2]، تسوق منتجات [term:name] في [alshaya_seo:country]',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
