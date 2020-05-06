@@ -58,11 +58,17 @@
       cursor: pointer;
     }
 
+    .pdp-image-zoom-wrapper {
+      overflow: hidden;
+      position: relative;
+    }
+
     &.magazine-image-zoomed {
       overflow: hidden;
 
       .magazine-image-zoom-placeholder {
         z-index: 1;
+        opacity: 1;
       }
     }
 
@@ -74,7 +80,7 @@
       bottom: 0;
       background-repeat: no-repeat;
       z-index: -1;
-      background-size: cover;
+      opacity: 0;
     }
   }
 
@@ -176,89 +182,6 @@
 
   .pdp-asset {
     cursor: pointer;
-
-    &.pdp-video {
-      .pdp-video-close {
-        display: none;
-        width: 2rem;
-        height: 2rem;
-        position: absolute;
-        #{$right}: 1.5rem;
-        z-index: 4;
-
-        @include icon('close', after) {
-          font-size: 1.5rem;
-          color: $magazine-pdp-video-modal-close;
-        }
-      }
-
-      &.go-fullscreen {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 12;
-        padding: 2rem 1.5rem;
-        height: 100vh;
-        background: $magazine-pdp-video-modal-bg;
-
-        .pdp-video-close {
-          display: block;
-        }
-      }
-
-      video {
-        width: 100%;
-        height: 100%;
-
-        + .pdp-video-controls .control {
-          background-image: url(/themes/custom/transac/alshaya_white_label/imgs/icons/ic-play.svg);
-        }
-
-        &.playing {
-          + .pdp-video-controls .control {
-            background-image: url(/themes/custom/transac/alshaya_white_label/imgs/icons/ic-pause.svg);
-          }
-
-          &:hover + .pdp-video-controls {
-            display: block !important;
-          }
-        }
-
-        &.hide-controls {
-          + .pdp-video-controls {
-            display: none;
-          }
-        }
-      }
-
-      .pdp-video-controls {
-        .control {
-          content: '';
-          display: block;
-          top: 50%;
-          #{$left}: 50%;
-          width: 4.375rem;
-          height: 4.375rem;
-          background-color: rgba(255, 255, 255, 0.9);
-          background-size: 35%;
-          background-repeat: no-repeat;
-          background-position: center center;
-          border-radius: 50%;
-          margin-top: -2.1875rem;
-          margin-#{$right}: -2.1875rem;
-          position: absolute;
-          z-index: 1;
-          transform: translateX(-50%);
-          pointer-events: none;
-
-          html[lang=ar] & {
-            transform: translateX(50%);
-          }
-        }
-      }
-    }
 
     @include breakpoint($tablet) {
       &.last:nth-child(odd) {
