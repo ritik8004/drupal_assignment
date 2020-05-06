@@ -386,3 +386,8 @@ secure-text:
   css:
     theme:
       css/conditional-sass/secure-text/secure-text.ltr.css: {}
+
+magazine-layout-v2:
+  css:
+    theme:
+      css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css: {}

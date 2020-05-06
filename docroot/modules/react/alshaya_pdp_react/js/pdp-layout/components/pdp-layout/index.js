@@ -8,20 +8,19 @@ const PdpLayout = () => {
   if (pdpGallery) {
     [skuItemCode] = Object.keys(pdpGallery);
   }
-  return (
+  const emptyRes = (
+    <div>Product data not available</div>
+  );
+
+  return (skuItemCode && pdpGallery) ? (
     <>
-      <div className="pdp-layout-wrapper">
-        Item Code:
-        {skuItemCode}
-      </div>
-      {(skuItemCode && pdpGallery) && (
-        <>
-          <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
-          <PdpDescription skuCode={skuItemCode} pdpDescription={pdpGallery} />
-        </>
-      )}
+      {' '}
+      <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
+      <PdpDescription skuCode={skuItemCode} pdpDescription={pdpGallery} />
+      {' '}
 
     </>
-  );
+  ) : emptyRes;
 };
+
 export default PdpLayout;

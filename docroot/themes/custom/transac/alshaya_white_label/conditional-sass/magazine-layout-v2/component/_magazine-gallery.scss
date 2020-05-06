@@ -1,0 +1,112 @@
+.nodetype--acq_product {
+  .page-wrapper {
+    @include breakpoint($tablet) {
+      background-color: $pdp_background;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .region__content {
+      margin: 0 !important;
+    }
+  }
+}
+
+.magv2-pdp-gallery {
+  .magazine__gallery--container-desktop {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 1.25rem;
+    width: 72%;
+    float: #{$left};
+
+    @include breakpoint($only-mobile) {
+      grid-gap: 0.5rem;
+    }
+
+    .magv2-pdp-images {
+      position: relative;
+      cursor: pointer;
+    }
+
+    figure {
+      margin: 0;
+
+      &.magazine-image-zoomed {
+        overflow: hidden;
+
+        .magazine-image-zoom-placeholder {
+          z-index: 1;
+        }
+      }
+
+      .magazine-image-zoom-placeholder {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-repeat: no-repeat;
+        z-index: -1;
+        background-size: cover;
+      }
+    }
+  }
+
+  .magazine__gallery--container-mobile {
+    @include breakpoint($only-mobile) {
+      display: block;
+
+      .slick-dots {
+        display: flex !important;
+        justify-content: center;
+        background: $white-five;
+
+        button {
+          font-size: 0;
+          display: block;
+          cursor: pointer;
+          color: transparent;
+          border: 0;
+          background: 0 0;
+        }
+
+        li {
+          background-color: $white-smoke-light;
+          color: $white-smoke-light;
+          border: none;
+          margin: 1em 0.5em;
+        }
+      }
+    }
+
+    @include breakpoint($tablet) {
+      display: none;
+    }
+  }
+}
+
+.ie {
+  .magazine__gallery--container {
+    display: block;
+
+    .magv2-pdp-images {
+      margin-bottom: 1.5rem;
+
+      &:nth-child(2n+1) {
+        width: calc(50% - 0.75rem);
+        float: #{$left};
+      }
+
+      &:nth-child(2n) {
+        width: calc(50% - 0.75rem);
+        float: #{$right};
+      }
+    }
+  }
+}
