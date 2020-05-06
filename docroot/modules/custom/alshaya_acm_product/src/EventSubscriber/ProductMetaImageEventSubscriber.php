@@ -72,6 +72,10 @@ class ProductMetaImageEventSubscriber implements EventSubscriberInterface {
     if (($node = $event->getContext()) && $node instanceof NodeInterface && $node->bundle() == 'acq_product') {
       $sku = $this->skuManager->getSkuForNode($node);
       $sku_entity = SKU::loadFromSku($sku);
+      if (!($sku_entity instanceof SKU)) {
+        return;
+      }
+
       $sku_media = $this->skuImagesManager->getFirstImage($sku_entity);
       if (!empty($sku_media['drupal_uri'])) {
         $teaser_image = $this->skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
