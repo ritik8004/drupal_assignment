@@ -1,0 +1,10 @@
+attribute_weights:
+  default:
+    color: 1
+    quantity_set: 2
+    size: 3
+show_quantity: TRUE
+sortable_options:
+  - color
+  - quantity_set
+  - size
