@@ -195,7 +195,7 @@ export const validateContactInfo = (e, validateEmail) => {
   const name = e.target.elements.fullname.value.trim();
   const splitedName = name.split(' ');
   if (name.length === 0 || splitedName.length === 1) {
-    document.getElementById('fullname-error').innerHTML = Drupal.t('Please enter your full name.');
+    document.getElementById('fullname-error').innerHTML = getStringMessage('form_error_full_name');
     document.getElementById('fullname-error').classList.add('error');
     isError = true;
   } else {
@@ -205,7 +205,7 @@ export const validateContactInfo = (e, validateEmail) => {
 
   const mobile = e.target.elements.mobile.value.trim();
   if (mobile.length === 0) {
-    document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter mobile number.');
+    document.getElementById('mobile-error').innerHTML = getStringMessage('form_error_mobile_number');
     document.getElementById('mobile-error').classList.add('error');
     isError = true;
   } else {
@@ -217,7 +217,7 @@ export const validateContactInfo = (e, validateEmail) => {
   if (validateEmail) {
     const email = e.target.elements.email.value.trim();
     if (email.length === 0) {
-      document.getElementById('email-error').innerHTML = Drupal.t('Please enter email.');
+      document.getElementById('email-error').innerHTML = getStringMessage('form_error_email');
       document.getElementById('email-error').classList.add('error');
       isError = true;
     } else {
@@ -240,7 +240,7 @@ export const validateAddressFields = (e, validateEmail) => {
       if (field.required === true) {
         const addField = e.target.elements[key].value.trim();
         if (addField.length === 0) {
-          document.getElementById(`${key}-error`).innerHTML = Drupal.t('Please enter @label.', { '@label': field.label });
+          document.getElementById(`${key}-error`).innerHTML = getStringMessage('address_please_enter', { '@label': field.label });
           document.getElementById(`${key}-error`).classList.add('error');
           isError = true;
         } else {
@@ -280,7 +280,7 @@ export const addEditAddressToCustomer = (e) => {
         if (result.data.mobile === false) {
           // Removing loader in case validation fail.
           removeFullScreenLoader();
-          document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+          document.getElementById('mobile-error').innerHTML = getStringMessage('form_error_valid_mobile_number');
           document.getElementById('mobile-error').classList.add('error');
         } else {
           // If valid mobile number, remove error message.
@@ -470,7 +470,7 @@ export const checkoutAddressProcess = (e) => {
 
     // If invalid mobile number.
     if (response.data.mobile === false) {
-      document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+      document.getElementById('mobile-error').innerHTML = getStringMessage('form_error_valid_mobile_number');
       document.getElementById('mobile-error').classList.add('error');
       isError = true;
     } else {
@@ -482,11 +482,11 @@ export const checkoutAddressProcess = (e) => {
     // Do the processing only if we did email validation.
     if (response.data.email !== undefined) {
       if (response.data.email === 'invalid') {
-        document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', { '%mail': validationData.email });
+        document.getElementById('email-error').innerHTML = getStringMessage('form_error_email_not_valid', { '%mail': validationData.email });
         document.getElementById('email-error').classList.add('error');
         isError = true;
       } else if (response.data.email === 'exists') {
-        document.getElementById('email-error').innerHTML = Drupal.t('Customer already exists.');
+        document.getElementById('email-error').innerHTML = getStringMessage('form_error_customer_exists');
         document.getElementById('email-error').classList.add('error');
         isError = true;
       } else {
@@ -607,7 +607,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
         if (result.data.mobile === false) {
           // Removing loader in case validation fail.
           removeFullScreenLoader();
-          document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+          document.getElementById('mobile-error').innerHTML = getStringMessage('form_error_valid_mobile_number');
           document.getElementById('mobile-error').classList.add('error');
         } else {
           // If valid mobile number, remove error message.

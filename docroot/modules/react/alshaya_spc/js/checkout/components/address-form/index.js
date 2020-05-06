@@ -201,9 +201,9 @@ export default class AddressForm extends React.Component {
     }
 
     // Check if billing address form.
-    let mapToAddressFormBtnText = Drupal.t('deliver to my location');
+    let mapToAddressFormBtnText = getStringMessage('hd_deliver_to_my_location');
     if (formContext === 'billing') {
-      mapToAddressFormBtnText = Drupal.t('select my location');
+      mapToAddressFormBtnText = getStringMessage('billing_select_my_location');
     }
 
     let isEditAddress = false;
@@ -232,7 +232,7 @@ export default class AddressForm extends React.Component {
 
     const headingDeliveryText = (headingText !== undefined)
       ? headingText
-      : Drupal.t('delivery information');
+      : getStringMessage('hd_delivery_information');
 
     return (
       <div className="spc-address-form">
@@ -288,7 +288,7 @@ export default class AddressForm extends React.Component {
                     className="spc-address-form-submit"
                     type="submit"
                   >
-                    {Drupal.t('Save')}
+                    {getStringMessage('address_save')}
                   </button>
                 </div>
               </form>

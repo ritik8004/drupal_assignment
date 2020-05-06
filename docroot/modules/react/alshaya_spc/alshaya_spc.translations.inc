@@ -83,14 +83,17 @@ function _alshaya_spc_translations() {
       'Full Name' => [
         'ar' => 'الاسم الكامل',
       ],
+      'Email' => [
+        'ar' => 'البريد الإلكتروني',
+      ],
       'CVV' => [
         'ar' => 'CVV الرقم السري',
       ],
       'Expiry' => [
         'ar' => 'تاريخ انتهاء البطاقة',
       ],
-      'Your shopping bag is empty' => [
-        'ar' => 'حقيبة التسوق الخاصة بك فارغة',
+      'Your shopping bag is empty.' => [
+        'ar' => 'حقيبة التسوق الخاصة بك فارغة.',
       ],
       'We will send you a text message once your order is ready for collection.' => [
         'ar' => 'سنقوم بإرسال رسالة قصيرة عندما تكون الطلبية جاهزة للاستلام',
@@ -128,12 +131,6 @@ function _alshaya_spc_translations() {
       'delivery to' => [
         'ar' => 'التوصيل إلى',
       ],
-      'mobile number' => [
-        'ar' => 'رقم الجوال',
-      ],
-      'payment method' => [
-        'ar' => 'طريقة الدفع',
-      ],
       'delivery type' => [
         'ar' => 'نوع التوصيل',
       ],
@@ -158,9 +155,6 @@ function _alshaya_spc_translations() {
       'Dismiss' => [
         'ar' => 'حذف',
       ],
-      'Select this Store' => [
-        'ar' => 'اختر هذا المحل',
-      ],
       'Find your nearest store' => [
         'ar' => 'ابحث عن المحلات القريبة إليك لاستلام طلبيتك',
       ],
@@ -170,8 +164,59 @@ function _alshaya_spc_translations() {
       'You are browsing outside @country' => [
         'ar' => '@country انت تتصفح خارج',
       ],
-      'We don\'t support delivery outside @country. Please enter an address with in country @country below to continue.' => [
-        'ar' => '.أدناه للمتابعة @country يرجى إدخال عنوان في البلد .@country لا ندعم التوصيل خارج',
+      'We don\'t support delivery outside @country.' => [
+        'ar' => '.country@ لا ندعم التوصيل خارج',
+      ],
+      'Please enter an address with in country @country below to continue.' => [
+        'ar' => 'أدناه للمتابعة country@ يرجى إدخال عنوان في البلد.',
+      ],
+      'Please select a store with in country @country below to continue.' => [
+        'ar' => 'أدناه للمتابعة country@ يرجى اختيار محلا في البلد.',
+      ],
+      'Please enter your full name.' => [
+        'ar' => 'يرجى إدخال اسمك الكامل.',
+      ],
+      'Please enter email.' => [
+        'ar' => 'يرجى إدخال البريد الإلكتروني.',
+      ],
+      'Please enter mobile number.' => [
+        'ar' => 'يرجى إدخال رقم الجوال.',
+      ],
+      'Please enter valid mobile number.' => [
+        'ar' => 'يرجى إدخال رقم الجوال صحيح.',
+      ],
+      'Customer already exists.' => [
+        'ar' => 'الحساب موجود مسبقا.',
+      ],
+      'Your bag has been updated successfully.' => [
+        'ar' => 'تم تحديث حقيبتك بنجاح.',
+      ],
+      'Search for @label' => [
+        'ar' => '@label البحث عن',
+      ],
+      'Select @label' => [
+        'ar' => '@label اختر',
+      ],
+      'Please enter @label.' => [
+        'ar' => '@label يرجى إدخال',
+      ],
+      'The email address %mail is not valid.' => [
+        'ar' => 'عنوان البريد الإلكتروني %mail غير صحيح.',
+      ],
+      'Transaction ID' => [
+        'ar' => 'رمز العملية',
+      ],
+      'Payment ID' => [
+        'ar' => 'رمز الدفع',
+      ],
+      'Result code' => [
+        'ar' => 'رمز النتيجة',
+      ],
+      'available instore within' => [
+        'ar' => 'متوفر في المحل خلال',
+      ],
+      'please enter promo code.' => [
+        'ar' => 'يرجى ادخال رمز العرض.',
       ],
     ],
   ];
