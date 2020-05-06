@@ -159,6 +159,10 @@ class AlshayaSocialHelper {
         $customer = $this->apiWrapper->updateCustomer($customer_array, [
           'password' => $fields['pass'],
         ]);
+
+        if (empty($customer)) {
+          throw new \Exception('Create or update customer failed.');
+        }
       }
       catch (\Exception $e) {
         $this->logger->error('Error occurred during customer registration @message', [
