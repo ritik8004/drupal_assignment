@@ -83,6 +83,7 @@ $primary_border: $hnm-black-three;
 $primary_dark_color: $hnm-black-two;
 $default_background_color: $seashell_grey;
 $default-anchor-link-hover: $venetian_red;
+$primary_text: $hnm-black-three;
 
 // Form elements.
 $primary_input: $hnm-black-two;
@@ -219,17 +220,18 @@ $user_login_sub_text: $hnm-black-two;
 $user_login_link_btn_text: $hnm-black;
 $user_login_section_title: $hnm-black;
 $user_nav_mobile_link: $hnm-black-three;
+$social-auth-bg-hover: $seashell_grey;
 
 //Address book
 $address_tile_selected_bg: $grey3;
-$address_tile_label: $grey-ash;
+$address_tile_label: $hnm-black-three;
 $address_tile_border: $grey4;
-$address_content_text: $hnm-black-two;
-$address_content_link_border: $hnm-black-two;
-$address_content_link_bg: $hnm-black-two;
+$address_content_text: $hnm-black-three;
+$address_content_link_border: $hnm-black-three;
+$address_content_link_bg: $hnm-black-three;
 $address_book_mobile_prefix: $greyish;
-$cancel_button: $hnm-black-two;
-$address_area_select: $hnm-black-two;
+$cancel_button: $hnm-black-three;
+$address_area_select: $hnm-black-three;
 
 // Modal
 $modal_close_bg: $hnm-black-two;
@@ -245,7 +247,7 @@ $sell_owl_dots: $hnm-black-two;
 $sell_label: $hnm-black-three;
 
 // Price
-$price_default: $cherry;
+$price_default: $venetian_red;
 
 // Promo Blocks
 $promo_title: $hnm-red;
@@ -376,7 +378,7 @@ $pdp_slick_dots_box_shadow: rgba(0, 0, 0, 0.3);
 
 // User my account
 $password_tooltip_list: $cerulean-two;
-$myaccount_icon: $hnm-black-two;
+$myaccount_icon: $hnm-black-three;
 $myaccount_mobile_title: $hnm-black-three;
 $myaccount_mobile_title2: $black-two;
 $privilege_card_title: $hnm-black-two;
@@ -389,16 +391,18 @@ $user_block_title: $black-three;
 $user_block_link: $hnm-black-two;
 
 // Basket.
-$basket_header_promo_bg: $hnm-black-two;
+$basket_header_promo_bg: $hnm-black-three;
 $basket_header_promo_txt: $white-five;
-$basket_block_title: $hnm-black-two;
+$basket_block_title: $hnm-black-three;
 $basket_promo_wrapper: $info;
-$basket_promo_wrapper_link: $hnm-black-two;
-$basket_continue_shopping_btn: $hnm-black-two;
-$basket_continue_shopping_text: $hnm-black-two;
+$basket_promo_wrapper_link: $hnm-black-three;
+$basket_continue_shopping_btn: $hnm-black-three;
+$basket_continue_shopping_text: $hnm-black-three;
 $basket_header_oos_txt: $_white-four;
 $basket_header_oos_bg: $error;
 $basket_available_code: $hnm-black-two;
+$basket_td_pri_txt: $hnm-black-three;
+$basket_td_sec_txt: $hnm-black-three;
 
 // Basket Promotions.
 $basket_fixed_percentage_inactive_header_promo_bg: $_hm_promo;
@@ -434,6 +438,7 @@ $order_detail_total_tr_row_price_td: $_grey_11;
 $order_details_table_total_bg: $whisper-light;
 $order_details_table_total_price: $hnm-black-three;
 $order_actions_checkout: $white-five;
+$order_detail_td_light_content: $hnm-black-three;
 
 // Checkout login.
 $checkout_login_btn_bg: $primary_btn_bg;
@@ -442,6 +447,7 @@ $checkout_mobile_back_link_icon: $black-three;
 $checkout_guest_button_border: $hnm-black-three;
 $checkout_guest_button_txt: $hnm-black-three;
 $checkout_login_separtor_txt: $hnm-black-three;
+$checkout_guest_button_bg: $seashell_grey;
 
 // Checkout Click and Collect
 $checkout_cc_input: $hnm-black-two;
@@ -479,8 +485,8 @@ $order_print_price_row_blend: $white-four;
 $order_print_price_row: $hnm-black-two;
 $order_print_item_row: $white-five;
 $order_print_item_row_blend: $grey9;
-$order_print_label: $hnm-black-two;
-$order_print_right_label: $grey7;
+$order_print_label: $hnm-black-three;
+$order_print_right_label: $hnm-black-three;
 $order_detail_total_white: $whisper-light;
 $order_detail_total_vat: $white-five;
 $order_detail_total_border: $white;
@@ -497,11 +503,12 @@ $user_order_detail_bg: $white-five;
 $user_order_detail_dark: $light-greyish;
 $user_confirmation_newsletter_label: $grey-ash;
 $user_account_wrapper_light: $gray44;
+$order_summary_sec_text: $hnm-black-three;
 
 // checkout progress
 $checkout_progress_complete_text: $brownish-grey;
 $checkout_progress_current_text: $hnm-red;
-$checkout_progress_next_txt: $hnm-black-two;
+$checkout_progress_next_txt: $hnm-black-three;
 $checkout_progress_next: $grey6;
 
 // Checkout Payment.
@@ -519,7 +526,7 @@ $checkout_payment_checkoutcom_save_card_help: $black-two;
 $checkout_guest_summary: $grey-ash;
 
 // Checkout Layout
-$checkout_layout_summary_block_method: $grey7;
+$checkout_layout_summary_block_method: $hnm-black-three;
 $block_acm_customer_txt: $footer_bg;
 $block_acm_customer_title_bg: $white-five;
 $delivery_tab_active_bg: $hnm-grey;
@@ -546,8 +553,8 @@ $order_customer_search_label_bg: $white-five;
 
 // Store finder
 $store_finder_backbtn: $hnm-red;
-$store_finder_glossary_icon: $hnm-black-two;
-$store_finder_glossary_icon_border: $hnm-black-two;
+$store_finder_glossary_icon: $hnm-black-three;
+$store_finder_glossary_icon_border: $hnm-black-three;
 $store_finder_glossary_icon_tablet_border: $white;
 $store_finder_view_link_hover: $white-five;
 $store_finder_glossary_alphabet: $grey7;
@@ -562,29 +569,29 @@ $individual_store_address: $grey7;
 $individual_store_hours_label_border: $white;
 
 // Homepage Slider
-$hp_slider_dots: $hnm-black-two;
-$hp_slider_arrows_dark: $hnm-black-two;
+$hp_slider_dots: $hnm-black-three;
+$hp_slider_arrows_dark: $hnm-black-three;
 
 // Section divider
-$section_divider_border: $hnm-black-two;
-$section_divider_text: $hnm-black-two;
+$section_divider_border: $hnm-black-three;
+$section_divider_text: $hnm-black-three;
 
 // Free Gifts
 $free-gifts-label: $scarlet;
 $free-gifts-title-text: $grey7;
-$free-gifts-coupon-code-text: $hnm-black-two;
+$free-gifts-coupon-code-text: $hnm-black-three;
 $free-gifts-border: $hnm-black-two;
 $free-gifts-text: $grey7;
-$free-gifts-select-button-bg: $hnm-black-two;
+$free-gifts-select-button-bg: $hnm-black-three;
 $cart-free-gifts-message: $grey7;
 $cart-free-gifts-title: $grey7;
 $cart-free-gifts-label: $white-five;
-$cart-free-gifts-label-background: $hnm-black-two;
+$cart-free-gifts-label-background: $hnm-black-three;
 $cart-free-gifts-button-color: $white-five;
 
 //Department page accordion
-$department_category_accordion_title_arrow: $hnm-black-two;
-$department_category_accordion_title: $hnm-black-two;
+$department_category_accordion_title_arrow: $hnm-black-three;
+$department_category_accordion_title: $hnm-black-three;
 
 // Pace progress color
 $progress_loader: $hnm-black-two;
@@ -640,3 +647,6 @@ $algolia-search-bar-background: $default_background_color;
 
 // Payment cards.
 $payment_card_text: $grey10;
+
+// Totals.
+$total_discount_total: $venetian_red;

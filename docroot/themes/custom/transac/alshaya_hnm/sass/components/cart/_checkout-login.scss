@@ -10,14 +10,21 @@
   }
 
   .checkout-login-actions-wrapper {
+    text-decoration: none;
+
     a {
       font-weight: normal;
-      font-family: $hnm-demibold;
-      color: $content_link_color;
-      font-size: 0.75rem;
+      color: $hnm-black-three;
+      font-family: $hnm-regular;
+      font-size: 0.8125rem;
 
       &:hover {
         text-decoration: underline;
+      }
+
+      &:hover:active {
+        color: $venetian_red;
+        text-decoration: none;
       }
     }
   }
@@ -26,6 +33,15 @@
     @include breakpoint($only-mobile) {
       text-transform: none;
       letter-spacing: 0;
+    }
+  }
+
+  a.back-link {
+    &::before {
+      @include breakpoint($only-mobile) {
+        font-size: 1.5rem;
+        top: 0;
+      }
     }
   }
 }
@@ -89,10 +105,20 @@
 
   #edit-checkout-login {
     .request-password-link {
-      font-family: $hnm-demibold;
       font-weight: normal;
-      color: $primary_dark_color;
-      text-decoration: underline;
+      color: $hnm-black-three;
+      font-family: $hnm-regular;
+      font-size: 0.8125rem;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &:hover:active {
+        color: $venetian_red;
+        text-decoration: none;
+      }
     }
 
     .fieldset-wrapper {
@@ -106,8 +132,15 @@
 
   #edit-checkout-guest {
     a {
+      border: 1px solid $hnm-black-three;
+
       @include breakpoint($desktop) {
         margin-top: 0.75rem;
+      }
+
+      &:hover {
+        border: 1px solid $gray44;
+        color: $gray44;
       }
     }
   }
