@@ -89,12 +89,12 @@
 
       &:nth-child(2n+1) {
         width: calc(50% - 0.75rem);
-        float: left;
+        float: #{$left};
       }
 
       &:nth-child(2n) {
         width: calc(50% - 0.75rem);
-        float: right;
+        float: #{$right};
       }
     }
   }
