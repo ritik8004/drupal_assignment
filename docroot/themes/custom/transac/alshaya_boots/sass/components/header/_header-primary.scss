@@ -3,18 +3,21 @@ header {
   .block-cart-mini-block,
   .block-alshaya-react-mini-cart {
     .cart-link {
+      width: 2.5rem;
+      height: 2.5rem;
+      #{$right}: -0.625rem;
+
       @include breakpoint($upto-desktop) {
-        background-size: 2.375rem;
+        background-size: 100%;
         width: 2.25rem;
         height: 2.25rem;
-        #{$right}: 0;
-        top: -2.75rem;
+        #{$right}: -0.25rem;
+        top: -2.8125rem;
       }
 
       @include breakpoint($only-tablet) {
-        #{$right}: -0.125rem;
-        top: -3.3125rem;
-        background-size: 2.5rem;
+        #{$right}: -0.25rem;
+        top: -3.5rem;
       }
 
       &-total {
@@ -23,13 +26,15 @@ header {
       }
 
       html[lang=ar] & {
-        @include breakpoint($upto-desktop) {
-          margin-top: 0.125rem;
-          right: 0.125rem;
+        @include breakpoint($only-tablet) {
+          margin-top: 0;
+          right: 0.25rem;
+          top: -2.8125rem;
         }
 
-        @include breakpoint($only-tablet) {
+        @include breakpoint($only-mobile) {
           margin-top: 0.25rem;
+          right: 0.125rem;
         }
       }
     }
@@ -282,7 +287,7 @@ header {
         margin: 0.75rem auto 0;
 
         html[lang=ar] & {
-          margin: 0.75rem auto 0;
+          margin: 0.5rem auto 0;
         }
       }
 
@@ -291,7 +296,7 @@ header {
         margin: 0.5rem auto 0;
 
         html[lang=ar] & {
-          margin: 0.75rem auto 0;
+          margin: 0.5rem auto 0;
         }
       }
     }
@@ -300,22 +305,14 @@ header {
 
 .c-menu-primary {
   .mobile--menu {
-    &::before {
-      @include breakpoint($only-mobile) {
-        height: 1.75rem;
-        width: 1.75rem;
-      }
-    }
-
     html[lang=ar] & {
       @include breakpoint($only-mobile) {
-        top: 0.3125rem;
-        margin-right: -0.1875rem;
+        margin-right: 0.625rem;
       }
 
       @include breakpoint($only-tablet) {
-        top: 1rem;
-        margin-right: 0.4375rem;
+        top: 1.25rem;
+        margin-right: 1.25rem;
       }
     }
   }
@@ -336,37 +333,31 @@ header {
     }
 
     .mobile--menu {
-      padding: 0.3125rem;
+      padding: 0;
       position: absolute;
       top: 1.1875rem;
       font-size: 0;
-      margin-#{$left}: 0.8125rem;
+      margin-#{$left}: 1.125rem;
 
       @include breakpoint($only-tablet) {
-        top: 1.125rem;
+        top: 1.375rem;
       }
 
       &::before {
         margin-#{$right}: 0;
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 2rem;
+        height: 2rem;
       }
     }
 
     .mobile--search {
-      padding: 0.3125rem;
+      padding: 0;
       display: block;
       font-size: 0;
       position: absolute;
       top: 0.6875rem;
       #{$left}: 4rem;
-
-      &::before {
-        @include breakpoint($only-mobile) {
-          height: 1.75rem;
-          width: 1.75rem;
-        }
-      }
+      width: 0;
     }
 
     .store {
@@ -374,16 +365,17 @@ header {
       position: absolute;
       #{$right}: 7%;
       top: 0.875rem;
-      padding: 0.625rem;
+      padding: 0;
       margin: 0;
+      width: 0;
 
       @include breakpoint($only-tablet) {
-        #{$right}: 7.2%;
+        #{$right}: 10.5%;
         top: 1.0625rem;
 
         html[lang=ar] & {
           top: 1rem;
-          left: 7.5%;
+          left: 11%;
         }
       }
     }
@@ -391,12 +383,13 @@ header {
 
   @include breakpoint($only-mobile) {
     .mobile--menu {
-      margin-#{$left}: -0.3125rem;
-      top: 0.3125rem;
+      margin-#{$left}: 0;
+      top: 0.625rem;
+      padding: 0;
     }
 
     .store {
-      #{$right}: 8%;
+      #{$right}: 20%;
       top: 0.375rem;
     }
   }
@@ -404,9 +397,11 @@ header {
   .store {
     &::before {
       font-size: 2.125rem;
-      top: -0.5625rem;
-      #{$left}: -1.125rem;
+      top: 0;
+      #{$left}: -1.75rem;
       color: $store_finder_icon;
+      height: 0;
+      width: 0;
 
       @include breakpoint($tablet) {
         z-index: 100;
@@ -415,37 +410,32 @@ header {
 
     html[lang=ar] & {
       @include breakpoint($only-mobile) {
-        left: 12%;
+        left: 22%;
       }
     }
   }
 
   .mobile--search {
     @include breakpoint($only-tablet) {
-      top: 0.875rem;
+      top: 1.4375rem;
       #{$right}: inherit;
-      #{$left}: 9.7%;
+      #{$left}: 11.1%;
 
       html[lang=ar] & {
-        right: 8%;
-        top: 0.75rem;
+        right: 9.8%;
+        top: 1.375rem;
       }
     }
 
     @include breakpoint($only-mobile) {
-      top: 0.75rem;
-      #{$left}: 5%;
+      top: 1rem;
+      #{$left}: 20%;
     }
   }
 
   li .mobile--search {
-    @include icon(search) {
-      @include breakpoint($upto-desktop) {
-        font-size: 2.5rem;
-        margin-#{$right}: 0;
-        top: -0.75rem;
-        #{$left}: 1.3125rem;
-      }
+    @include breakpoint($upto-desktop) {
+      @include icon_img('#{$bp_theme_img_directory_path}/assets/search.svg', 1.6875rem, 1.6875rem);
     }
   }
 
