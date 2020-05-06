@@ -190,7 +190,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
         'drupalSettings' => [
           'superCategory' => [
             'term' => $super_category,
-            'search_facet' => $this->configFactory->get('alshaya_super_category.settings')->get('search_facet'),
+            'search_facet' => _alshaya_super_category_get_search_facet_name(),
           ],
         ],
       ],

@@ -846,14 +846,14 @@ function alshaya_super_category_modules_installed(array $modules) {
     $index_helper = \Drupal::service('alshaya_search_algolia.index_helper');
     try {
       $index_helper->addNewFacetToIndex(_alshaya_super_category_get_search_facet_name());
+      \Drupal::logger('alshaya_super_category')
+        ->notice('Added @super_category as an attribute for faceting.', [
+          '@super_category' => _alshaya_super_category_get_search_facet_name(),
+        ]);
     }
     catch (\Exception $e) {
       \Drupal::logger('alshaya_super_category')->error('Message: @message', ['@message' => $e->getMessage()]);
     }
-    \Drupal::logger('alshaya_super_category')
-      ->notice('Added @super_category as an attribute for faceting.', [
-        '@super_category' => _alshaya_super_category_get_search_facet_name(),
-      ]);
   }
 }
 
@@ -867,14 +867,14 @@ function alshaya_super_category_status_update($status, $default_parent, $path_al
     $index_helper = \Drupal::service('alshaya_search_algolia.index_helper');
     try {
       $index_helper->addNewFacetToIndex(_alshaya_super_category_get_search_facet_name());
+      \Drupal::logger('alshaya_super_category')
+        ->notice('Added @super_category as an attribute for faceting.', [
+          '@super_category' => _alshaya_super_category_get_search_facet_name(),
+        ]);
     }
     catch (\Exception $e) {
       \Drupal::logger('alshaya_super_category')->error('Message: @message', ['@message' => $e->getMessage()]);
     }
-    \Drupal::logger('alshaya_super_category')
-      ->notice('Added @super_category as an attribute for faceting.', [
-        '@super_category' => _alshaya_super_category_get_search_facet_name(),
-      ]);
   }
 }
 
