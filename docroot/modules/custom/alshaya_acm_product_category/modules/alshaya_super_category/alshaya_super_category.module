@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
@@ -845,11 +846,7 @@ function alshaya_super_category_modules_installed(array $modules) {
     && in_array('alshaya_algolia_react', $modules)) {
     $index_helper = \Drupal::service('alshaya_search_algolia.index_helper');
     try {
-      $index_helper->addNewFacetToIndex(_alshaya_super_category_get_search_facet_name());
-      \Drupal::logger('alshaya_super_category')
-        ->notice('Added @super_category as an attribute for faceting.', [
-          '@super_category' => _alshaya_super_category_get_search_facet_name(),
-        ]);
+      $index_helper->addCustomFacetToIndex(AlshayaSuperCategoryManager::SEARCH_FACET_NAME);
     }
     catch (\Exception $e) {
       \Drupal::logger('alshaya_super_category')->error('Message: @message', ['@message' => $e->getMessage()]);
@@ -866,10 +863,10 @@ function alshaya_super_category_status_update($status, $default_parent, $path_al
   if ($status && \Drupal::moduleHandler()->moduleExists('alshaya_algolia_react')) {
     $index_helper = \Drupal::service('alshaya_search_algolia.index_helper');
     try {
-      $index_helper->addNewFacetToIndex(_alshaya_super_category_get_search_facet_name());
+      $index_helper->addCustomFacetToIndex(AlshayaSuperCategoryManager::SEARCH_FACET_NAME);
       \Drupal::logger('alshaya_super_category')
         ->notice('Added @super_category as an attribute for faceting.', [
-          '@super_category' => _alshaya_super_category_get_search_facet_name(),
+          '@super_category' => AlshayaSuperCategoryManager::SEARCH_FACET_NAME,
         ]);
     }
     catch (\Exception $e) {
@@ -882,35 +879,20 @@ function alshaya_super_category_status_update($status, $default_parent, $path_al
  * Implements hook_search_api_algolia_objects_alter().
  */
 function alshaya_super_category_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
-  if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+  if ((!\Drupal::config('alshaya_super_category.settings')->get('status'))
+    || $index->id() !== 'alshaya_algolia_index') {
     return;
   }
-
-  if ($index->id() !== 'alshaya_algolia_index') {
-    return;
-  }
-  $logger = \Drupal::logger('alshaya_super_category');
-  $facet_name = _alshaya_super_category_get_search_facet_name();
 
   foreach ($objects as $id => &$object) {
     // Do some mandatory checks.
     $node = $items[$id]->getOriginalObject()->getValue();
-    if (!$node instanceof NodeInterface || $node->bundle() != 'acq_product') {
-      continue;
-    }
-    if (empty($object['sku'])) {
-      $logger->warning('Indexing failed for the node:@nid message:SKU not available', [
-        '@nid' => $object['nid'],
-      ]);
-      unset($objects[$id]);
+    if (!$node instanceof NodeInterface || $node->bundle() != 'acq_product' || empty($object['sku'])) {
       continue;
     }
     $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
-    if (!($sku instanceof SKUInterface)) {
-      $logger->warning('Not able to load sku from node.');
-    }
-    elseif ($sku->language()->getId() != $node->language()->getId()) {
-      $logger->warning('SKU not available for language of Node');
+    if ((!($sku instanceof SKUInterface)) || ($sku->language()->getId() != $node->language()->getId())) {
+      continue;
     }
 
     $category = $node->get('field_category')->referencedEntities();
@@ -921,18 +903,8 @@ function alshaya_super_category_search_api_algolia_objects_alter(array &$objects
       // Get and index super category.
       $super_category = _alshaya_super_category_get_super_category_for_term($category);
       if ($super_category instanceof TermInterface) {
-        $object[$facet_name] = $super_category->getName();
+        $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category->getName();
       }
     }
   }
-}
-
-/**
- * Returns the facet name for Super Category in the search index.
- *
- * @return string
- *   The name of the facet.
- */
-function _alshaya_super_category_get_search_facet_name() {
-  return 'super_category';
 }

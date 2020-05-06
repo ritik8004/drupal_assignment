@@ -9,6 +9,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\metatag\MetatagManagerInterface;
@@ -190,7 +191,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
         'drupalSettings' => [
           'superCategory' => [
             'term' => $super_category,
-            'search_facet' => _alshaya_super_category_get_search_facet_name(),
+            'search_facet' => AlshayaSuperCategoryManager::SEARCH_FACET_NAME,
           ],
         ],
       ],

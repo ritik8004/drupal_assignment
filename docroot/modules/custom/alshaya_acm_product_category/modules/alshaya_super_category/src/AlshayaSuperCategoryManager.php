@@ -14,6 +14,11 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 class AlshayaSuperCategoryManager {
 
   /**
+   * The facet name for Super Category in the search index.
+   */
+  const SEARCH_FACET_NAME = 'super_category';
+
+  /**
    * Product category tree.
    *
    * @var \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface
