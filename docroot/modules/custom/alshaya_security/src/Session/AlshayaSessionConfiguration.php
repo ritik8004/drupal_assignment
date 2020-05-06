@@ -56,7 +56,21 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
           // we don't have a way to test it.
           $params = session_get_cookie_params();
           $expire = $params['lifetime'] ? REQUEST_TIME + $params['lifetime'] : 0;
-          setcookie($expected, $value, $expire, $params['path'], $options['cookie_domain'] . '; SameSite=None', TRUE, $params['httponly']);
+          // Compare current php version.
+          // We will supports setcookie() with php version <=>php7.3.
+          if (version_compare('7.3.0', phpversion()) == 1) {
+            setcookie($expected, $value, $expire, $params['path'], $options['cookie_domain'] . '; SameSite=None', TRUE, $params['httponly']);
+          }
+          else {
+            setcookie($expected, $value, [
+              'expires' => $expire,
+              'path' => $params['path'],
+              'domain' => $options['cookie_domain'],
+              'samesite' => 'None',
+              'secure' => TRUE,
+              'httponly' => $params['httponly'],
+            ]);
+          }
         }
       }
     }
