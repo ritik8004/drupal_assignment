@@ -14,6 +14,37 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Add query string in footer logo image.
+ */
+function alshaya_hm_update_8047() {
+  // Footer logo path.
+  $logo_path = '/' . drupal_get_path('theme', 'alshaya_hnm') . '/h-m-logo-bw.svg?' . REQUEST_TIME;
+  $block_content_en = "<div class='footer-brand-home'>
+                   <a href='/en' title='footer-brand-logo' rel='home' class='logo'>
+                     <img src='" . $logo_path . "' alt='HnM Logo'>
+                   </a>
+                 </div>";
+  $block_content_ar = "<div class='footer-brand-home'>
+                   <a href='/ar' title='footer-brand-logo' rel='home' class='logo'>
+                     <img src='" . $logo_path . "' alt='HnM Logo'>
+                   </a>
+                 </div>";
+
+  /* @var \Drupal\block_content\Entity\BlockContent $footer_logo_block */
+  $footer_logo_block = \Drupal::service('entity.repository')
+    ->loadEntityByUuid('block_content', '6a8aca33-da8d-4c88-953c-0ffbdcc63447');
+  $footer_logo_block->set('body', ['value' => $block_content_en, 'format' => 'rich_text']);
+  $footer_logo_block->save();
+
+  // Updating translated version.
+  $footer_logo_block_ar = $footer_logo_block->getTranslation('ar');
+  $footer_logo_block_ar->set('body', ['value' => $block_content_ar, 'format' => 'rich_text']);
+  $footer_logo_block_ar->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change widget for plp_size, promo_size facet from checkbox
  * to new widget "size_group_list".
  * Queued all items for re-indexation.
