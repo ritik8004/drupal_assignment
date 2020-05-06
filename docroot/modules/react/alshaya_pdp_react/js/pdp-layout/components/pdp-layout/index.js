@@ -12,8 +12,15 @@ const PdpLayout = () => {
     <div>Product data not available</div>
   );
 
-  return (skuItemCode &&  pdpGallery) ? <> <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
-  <PdpDescription skuCode={skuItemCode} pdpDescription={pdpGallery} /> </>: emptyRes;
+  return (skuItemCode && pdpGallery) ? (
+    <>
+      {' '}
+      <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
+      <PdpDescription skuCode={skuItemCode} pdpDescription={pdpGallery} />
+      {' '}
+
+    </>
+  ) : emptyRes;
 };
 
 export default PdpLayout;

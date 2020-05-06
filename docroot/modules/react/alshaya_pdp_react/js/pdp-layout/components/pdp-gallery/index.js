@@ -1,45 +1,42 @@
 import React from 'react';
-import PdpAsset from '../pdp-asset';
 import Slider from 'react-slick';
+import PdpAsset from '../pdp-asset';
 
-export default class PdpGallery extends React.Component {
-  constructor(props) {
-    super(props);
+const sliderSettings = {
+  dots: true,
+  infinite: false,
+  arrows: false,
+};
 
-  }
-
+export default class PdpGallery extends React.PureComponent {
   render() {
     const { skuCode } = this.props;
     const images = skuCode ? drupalSettings.pdpGallery[skuCode]['#thumbnails'] : [];
-    const sliderSettings = {
-      dots: true,
-      infinite: false,
-      arrows: false,
-    };
 
     return (
 
       <div className="magv2-pdp-gallery">
         <div className="magazine__gallery--container-desktop">
-          {images.map((image, key) => {
-            return (
-              <PdpAsset
-              key={key}
+          {images.map((image) => (
+            <PdpAsset
+              key={image.zoomurl}
               type={image.type}
               imageZoomUrl={image.zoomurl}
               imageUrl={image.mediumurl}
               alt={image.label}
               title={image.label}
-            />);
-          })}
+            />
+          ))}
         </div>
         <div className="magazine__gallery--container-mobile">
-          <Slider {...sliderSettings}>
-            {images.map((image, key) => {
-              return (
-                <img key={key} src={image.mediumurl} />
-              );
-            })}
+          <Slider
+            dots={sliderSettings.dots}
+            infinite={sliderSettings.infinite}
+            arrows={sliderSettings.arrows}
+          >
+            {images.map((image) => (
+              <img key={image.zoomurl} src={image.mediumurl} />
+            ))}
           </Slider>
         </div>
       </div>
