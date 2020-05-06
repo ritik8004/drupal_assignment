@@ -110,7 +110,7 @@ function _alshaya_spc_translations() {
       'Card Number' => [
         'ar' => 'رقم البطاقة',
       ],
-      'card no.' => [
+      'card no' => [
         'ar' => 'رقم البطاقة',
       ],
       'Thanks for shopping with us.' => [
