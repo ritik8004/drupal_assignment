@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Helper\SecureText;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Config\SystemSettings;
 use App\Service\Drupal\Drupal;
@@ -11,6 +10,7 @@ use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
 use App\Service\CheckoutCom\CustomerCards;
+use Drupal\alshaya_spc\Helper\SecureText;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -94,6 +94,13 @@ class Cart {
   protected $session;
 
   /**
+   * Session cache.
+   *
+   * @var \App\Service\SessionCache
+   */
+  protected $cache;
+
+  /**
    * Checkout.com API Wrapper.
    *
    * @var \App\Service\CheckoutCom\CustomerCards
@@ -115,13 +122,6 @@ class Cart {
   protected $logger;
 
   /**
-   * Secure Text service provider.
-   *
-   * @var \App\Helper\SecureText
-   */
-  protected $secureText;
-
-  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -140,12 +140,12 @@ class Cart {
    *   System Settings service.
    * @param \App\Service\SessionStorage $session
    *   Service for session.
+   * @param \App\Service\SessionCache $cache
+   *   Session Cache.
    * @param \App\Service\CheckoutCom\CustomerCards $customer_cards
    *   Checkout.com API Wrapper.
    * @param \App\Service\Drupal\Drupal $drupal
    *   Drupal service.
-   * @param \App\Helper\SecureText $secure_text
-   *   Secure Text service provider.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
    */
@@ -158,9 +158,9 @@ class Cart {
     PaymentData $payment_data,
     SystemSettings $settings,
     SessionStorage $session,
+    SessionCache $cache,
     CustomerCards $customer_cards,
     Drupal $drupal,
-    SecureText $secure_text,
     LoggerInterface $logger
   ) {
     $this->magentoInfo = $magento_info;
@@ -171,9 +171,9 @@ class Cart {
     $this->paymentData = $payment_data;
     $this->settings = $settings;
     $this->session = $session;
+    $this->cache = $cache;
     $this->customerCards = $customer_cards;
     $this->drupal = $drupal;
-    $this->secureText = $secure_text;
     $this->logger = $logger;
   }
 
@@ -199,8 +199,8 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart($force = FALSE) {
-    if (!empty(self::$cart) && !$force) {
-      return self::$cart;
+    if (!empty(static::$cart) && !$force) {
+      return static::$cart;
     }
 
     $cart_id = $this->getCartId();
@@ -211,11 +211,12 @@ class Cart {
     $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
-      self::$cart = $this->magentoApiWrapper->doRequest('GET', $url);
-      return self::$cart;
+      static::$cart = $this->magentoApiWrapper->doRequest('GET', $url);
+      static::$cart = $this->formatCart(static::$cart);
+      return static::$cart;
     }
     catch (\Exception $e) {
-      self::$cart = NULL;
+      static::$cart = NULL;
 
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
         $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
@@ -331,22 +332,22 @@ class Cart {
   /**
    * Format shipping info for api call.
    *
-   * @param array $shippig_info
+   * @param array $shipping_info
    *   Shipping info.
    *
    * @return array
    *   Formatted shipping info for api.
    */
-  public function prepareShippingData(array $shippig_info) {
+  public function prepareShippingData(array $shipping_info) {
     // If address id available.
-    if (!empty($shippig_info['address_id'])) {
-      $data['address_id'] = $shippig_info['address_id'];
+    if (!empty($shipping_info['address_id'])) {
+      $data['address_id'] = $shipping_info['address_id'];
     }
     else {
-      $static_fields = $shippig_info['static'];
-      unset($shippig_info['static']);
+      $static_fields = $shipping_info['static'];
+      unset($shipping_info['static']);
       $custom_attributes = [];
-      foreach ($shippig_info as $field_name => $val) {
+      foreach ($shipping_info as $field_name => $val) {
         $val = (!is_array($val) && is_null($val))
           ? ''
           : $val;
@@ -431,7 +432,7 @@ class Cart {
    *   If cart has error or not.
    */
   public function cartHasError(array $cart) {
-    if ($cart['error'] || $cart['response_message'][1] == 'json_error') {
+    if ((isset($cart['error']) && $cart['error']) || $cart['response_message'][1] == 'json_error') {
       return TRUE;
     }
 
@@ -605,7 +606,7 @@ class Cart {
 
       // After association restore the cart.
       if ($result) {
-        self::$cart = NULL;
+        static::$cart = NULL;
         $this->getCart();
         return TRUE;
       }
@@ -642,6 +643,11 @@ class Cart {
       'method' => $data['method'],
       'additional_data' => $data['additional_data'],
     ];
+
+    $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
+    if ($expire > 0) {
+      $this->cache->set('payment_method', $expire, $data['method']);
+    }
 
     return $this->updateCart($update);
   }
@@ -763,8 +769,9 @@ class Cart {
     $cart = NULL;
 
     try {
-      static::$cart[$cart_id] = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
-      $cart = static::$cart[$cart_id];
+      static::$cart = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      static::$cart = $this->formatCart(static::$cart);
+      $cart = static::$cart;
 
       // If exception at response message level.
       if ($cart['response_message'][1] == 'json_error') {
@@ -853,20 +860,48 @@ class Cart {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function shippingMethods(array $data) {
+  public function getHomeDeliveryShippingMethods(array $data) {
+    static $static;
+
     if (empty($data['address']['country_id'])) {
       return [];
+    }
+
+    $key = md5(json_encode($data));
+    if (isset($static[$key])) {
+      return $static[$key];
+    }
+
+    $expire = (int) $_ENV['CACHE_TIME_LIMIT_DELIVERY_METHODS'];
+    $cache = $expire > 0 ? $this->cache->get('delivery_methods') : NULL;
+    if (isset($cache) && $cache['key'] === $key) {
+      $static[$key] = $cache['methods'];
+      return $static[$key];
     }
 
     $url = sprintf('carts/%d/estimate-shipping-methods', $this->getCartId());
 
     try {
-      return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
+      $static[$key] = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
+
+      $static[$key] = array_filter($static[$key], function ($method) {
+        return ($method['carrier_code'] !== 'click_and_collect');
+      });
     }
     catch (\Exception $e) {
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+
+    $cache = [
+      'key' => $key,
+      'methods' => $static[$key],
+    ];
+
+    if ($expire > 0) {
+      $this->cache->set('delivery_methods', $expire, $cache);
+    }
+    return $static[$key];
   }
 
   /**
@@ -876,28 +911,56 @@ class Cart {
    *   Payment method list.
    */
   public function getPaymentMethods() {
+    static $static;
+
+    $cart = $this->getCart();
+    $type = $cart['shipping']['method'] ?? '';
+
+    if (empty($type)) {
+      return NULL;
+    }
+
+    $key = 'payment_methods_' . $type;
+    if (isset($static[$key])) {
+      return $static[$key];
+    }
+
+    $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHODS'];
+
+    $static[$key] = $expire > 0 ? $this->cache->get($key) : NULL;
+    if (isset($static[$key])) {
+      return $static[$key];
+    }
+
     $url = sprintf('carts/%d/payment-methods', $this->getCartId());
 
     try {
-      return $this->magentoApiWrapper->doRequest('GET', $url);
+      $static[$key] = $this->magentoApiWrapper->doRequest('GET', $url);
     }
     catch (\Exception $e) {
       // Exception handling here.
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+
+    if ($expire > 0) {
+      $this->cache->set($key, $expire, $static[$key]);
+    }
+    return $static[$key];
   }
 
   /**
    * Get the payment method set on cart.
    *
-   * @param int $cart_id
-   *   Cart id.
-   *
    * @return string
    *   Payment method set on cart.
    */
-  public function getPaymentMethodSetOnCart(int $cart_id) {
-    $url = sprintf('carts/%d/selected-payment-method', $cart_id);
+  public function getPaymentMethodSetOnCart() {
+    $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
+    if ($expire > 0 && ($method = $this->cache->get('payment_method'))) {
+      return $method;
+    }
+
+    $url = sprintf('carts/%d/selected-payment-method', $this->getCartId());
     try {
       $result = $this->magentoApiWrapper->doRequest('GET', $url);
       return $result['method'] ?? NULL;
@@ -927,8 +990,12 @@ class Cart {
       $result = $this->magentoApiWrapper->doRequest('PUT', $url, ['json' => $data]);
       $order_id = (int) str_replace('"', '', $result);
 
-      // Remove cart id from session.
+      // Remove cart id and other caches from session.
       $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+      $this->cache->delete('delivery_methods');
+      $this->cache->delete('payment_methods_home_delivery');
+      $this->cache->delete('payment_methods_click_and_collect');
+      $this->cache->delete('payment_method');
 
       // Set order in session for later use.
       $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
@@ -945,7 +1012,7 @@ class Cart {
       return [
         'success' => TRUE,
         'order_id' => $order_id,
-        'secure_order_id' => $this->secureText->encrypt(
+        'secure_order_id' => SecureText::encrypt(
           json_encode(['order_id' => $order_id, 'email' => $email]),
           $this->magentoInfo->getMagentoSecretInfo()['consumer_secret']
         ),
@@ -981,8 +1048,8 @@ class Cart {
   public function getCartCustomerId() {
     $cart = $this->getCart();
 
-    if (isset($cart, $cart['cart']['customer'], $cart['cart']['customer']['id'])) {
-      return $cart['cart']['customer']['id'];
+    if (isset($cart, $cart['customer'], $cart['customer']['id'])) {
+      return $cart['customer']['id'];
     }
 
     return NULL;
@@ -996,12 +1063,7 @@ class Cart {
    */
   public function getCartCustomerEmail() {
     $cart = $this->getCart();
-
-    if (isset($cart, $cart['cart']['customer'], $cart['cart']['customer']['email'])) {
-      return $cart['cart']['customer']['email'];
-    }
-
-    return NULL;
+    return $cart['customer']['email'] ?? NULL;
   }
 
   /**
@@ -1045,6 +1107,39 @@ class Cart {
       // Restore cart to get more info about what is wrong in cart.
       $this->getCart(TRUE);
     }
+  }
+
+  /**
+   * Format the cart data to have better structured array.
+   *
+   * @param array $cart
+   *   Cart response from Magento.
+   *
+   * @return array
+   *   Formatted / processed cart.
+   */
+  private function formatCart(array $cart) {
+    // Move customer data to root level.
+    $cart['customer'] = $cart['cart']['customer'] ?? [];
+    unset($cart['cart']['customer']);
+
+    // Format shipping info.
+    $cart['shipping'] = $cart['cart']['extension_attributes']['shipping_assignments'][0]['shipping'] ?? [];
+    unset($cart['cart']['extension_attributes']['shipping_assignments']);
+
+    $shippingMethod = $cart['shipping']['method'] ?? '';
+    $cart['shipping']['type'] = strpos($shippingMethod, 'click_and_collect') !== FALSE
+      ? 'click_and_collect'
+      : 'home_delivery';
+
+    $cart['shipping']['clickCollectType'] = $cart['shipping']['extension_attributes']['click_and_collect_type'] ?? '';
+    $cart['shipping']['storeCode'] = $cart['shipping']['extension_attributes']['store_code'] ?? '';
+    unset($cart['shipping']['extension_attributes']);
+
+    // Initialise payment data holder.
+    $cart['payment'] = [];
+
+    return $cart;
   }
 
 }

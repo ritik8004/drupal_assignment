@@ -334,6 +334,7 @@
             select {
               &.form-select {
                 width: 100%;
+                margin-bottom: 3.125rem;
               }
             }
           }
@@ -389,6 +390,10 @@
     }
 
     .sku-base-form {
+      @include breakpoint ($only-mobile) {
+        position: relative;
+      }
+
       button[type="submit"] {
         height: 3.125rem;
 
@@ -400,11 +405,12 @@
         @include breakpoint ($only-tablet) {
           width: 62%;
           margin-#{$left}: 0.5rem;
+        }
 
-          // html[lang=ar] & {
-          //   margin-right: 0;
-          //   margin-left: 0.5rem;
-          // }
+        @include breakpoint ($only-mobile) {
+          position: absolute;
+          #{$left}: 0;
+          bottom: 0;
         }
       }
     }

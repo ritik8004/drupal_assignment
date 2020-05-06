@@ -98,3 +98,9 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/order-qty-limit/order-qty-limit.ltr.css: css/conditional-sass/order-qty-limit/order-qty-limit.ltr.css
+
+
+  alshaya_white_label/pdp-additional-attributes:
+    css:
+      theme:
+        css/conditional-sass/pdp-additional-attributes/pdp-additional-attributes.ltr.css: css/conditional-sass/pdp-additional-attributes/pdp-additional-attributes.ltr.css

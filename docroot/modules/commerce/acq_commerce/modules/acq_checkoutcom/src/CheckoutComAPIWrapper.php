@@ -10,6 +10,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Http\ClientFactory as HttpClientFactory;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use GuzzleHttp\Exception\RequestException;
@@ -47,12 +48,6 @@ class CheckoutComAPIWrapper {
 
   // API response success code.
   const SUCCESS = '10000';
-
-  // Mada bins file name.
-  const MADA_BINS_FILE = 'mada_bins.csv';
-
-  // Mada bins test file name.
-  const MADA_BINS_FILE_TEST = 'mada_bins_test.csv';
 
   // The option that determines whether the payment method associated with
   // the successful transaction should be stored in the Vault.
@@ -261,18 +256,6 @@ class CheckoutComAPIWrapper {
   }
 
   /**
-   * Return the MADA BINS file path.
-   *
-   * @return string
-   *   Return the mada bin file path.
-   */
-  public function getMadaBinsPath() {
-    return (string) '/files/' . (($this->isLive())
-      ? self::MADA_BINS_FILE
-      : self::MADA_BINS_FILE_TEST);
-  }
-
-  /**
    * Checks if the given bin is belong to mada bin.
    *
    * @param string $bin
@@ -282,32 +265,16 @@ class CheckoutComAPIWrapper {
    *   Return true if one of the mada bin, false otherwise.
    */
   public function isMadaBin($bin) {
-    // Set mada bin file path.
-    $mada_bin_csv_path = drupal_get_path('module', 'acq_checkoutcom') . $this->getMadaBinsPath();
-
-    // Read CSV rows.
-    $mada_bin_csv_file = fopen($mada_bin_csv_path, 'r');
-
-    $mada_bin_csv_data = [];
-    while ($mada_bin_csv_row = fgetcsv($mada_bin_csv_file)) {
-      $mada_bin_csv_data[] = $mada_bin_csv_row;
-    }
-    fclose($mada_bin_csv_file);
-
-    // Remove the first row of csv columns.
-    unset($mada_bin_csv_data[0]);
-
-    // Build the mada bin array.
-    $mada_bin_array = array_map(function ($row) {
-      return $row[1];
-    }, $mada_bin_csv_data);
+    $madaBins = $this->isLive()
+      ? Settings::get('mada_bins_live')
+      : Settings::get('mada_bins_test');
 
     $this->logInfo('checkout.com: validated for bin: @bin against @mada_bin_array', [
       '@bin' => $bin,
-      '@mada_bin_array' => $mada_bin_array,
+      '@mada_bin_array' => $madaBins,
     ]);
 
-    return in_array($bin, $mada_bin_array);
+    return in_array($bin, $madaBins);
   }
 
   /**

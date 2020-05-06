@@ -100,12 +100,20 @@
       height: 3.25rem;
     }
 
+    @include breakpoint($tablet) {
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
     @include breakpoint($desktop) {
       margin-top: 0;
       margin-bottom: 1.3rem;
     }
 
     @include breakpoint($only-mobile) {
+      margin: 0.625rem;
+      width: calc(100% - 0.625rem - 0.625rem);
       padding: 0.3125rem 0;
     }
 
@@ -131,7 +139,10 @@
     svg {
       width: 2.1875rem;
       margin: 0 0.5rem;
-      align-self: center;
+
+      @include breakpoint($only-mobile) {
+        align-self: flex-start;
+      }
     }
   }
 

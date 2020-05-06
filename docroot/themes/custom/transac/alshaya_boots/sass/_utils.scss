@@ -1,12 +1,6 @@
 $bp_theme_img_directory_path: '/themes/custom/transac/alshaya_boots/imgs';
 $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_boots/imgs/icons/BP-loader.svg';
 
-@mixin ellipsis-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 @mixin ic-social {
   content: '';
   background-repeat: no-repeat;

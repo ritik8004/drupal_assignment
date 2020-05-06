@@ -207,8 +207,8 @@ class AlshayaSpcController extends ControllerBase {
 
       $user_mobile_number = $user->get('field_mobile_number')->first();
       $user_name = [
-        'fname' => $user->get('field_first_name')->first()->getString(),
-        'lname' => $user->get('field_last_name')->first()->getString(),
+        'fname' => $user->get('field_first_name')->getString(),
+        'lname' => $user->get('field_last_name')->getString(),
         'mobile' => !empty($user_mobile_number) ? $user_mobile_number->getValue()['local_number'] : '',
       ];
 
@@ -238,7 +238,8 @@ class AlshayaSpcController extends ControllerBase {
     $geolocation_config = $this->configFactory->get('geolocation.settings');
     $cache_tags = Cache::mergeTags($cache_tags, array_merge($store_finder_config->getCacheTags(), $geolocation_config->getCacheTags()));
 
-    $cnc_enabled = $cc_config->get('feature_status') == 'enabled';
+    $cncFeatureStatus = $cc_config->get('feature_status') ?? 'enabled';
+    $cnc_enabled = $cncFeatureStatus === 'enabled';
     if ($cnc_enabled) {
       $strings[] = [
         'key' => 'find_your_nearest_store',

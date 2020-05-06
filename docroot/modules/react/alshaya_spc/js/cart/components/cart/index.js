@@ -28,7 +28,6 @@ export default class Cart extends React.Component {
       totalItems: null,
       amount: null,
       couponCode: null,
-      cartPromo: null,
       dynamicPromoLabelsCart: null,
       dynamicPromoLabelsProduct: null,
       inStock: true,
@@ -53,7 +52,6 @@ export default class Cart extends React.Component {
           recommendedProducts: data.recommended_products,
           totalItems: data.items_qty,
           amount: data.cart_total,
-          cartPromo: data.cart_promo,
           wait: false,
           couponCode: data.coupon_code,
           inStock: data.in_stock,
@@ -65,9 +63,6 @@ export default class Cart extends React.Component {
             wait: false,
           });
         }
-
-        // Make cart preview sticky.
-        stickyMobileCartPreview();
 
         // Make side bar sticky.
         stickySidebar();
@@ -117,6 +112,9 @@ export default class Cart extends React.Component {
       dynamicPromoLabelsCart: cartLabels,
       dynamicPromoLabelsProduct: productLabels,
     });
+
+    // Make cart preview sticky.
+    stickyMobileCartPreview();
   };
 
   handleCartMessageUpdateEvent = (event) => {
@@ -127,7 +125,7 @@ export default class Cart extends React.Component {
   updateCartMessage = (actionMessageType, actionMessage) => {
     this.setState({ actionMessageType, actionMessage });
     if (document.getElementsByClassName('spc-messages-container').length > 0) {
-      smoothScrollTo('.spc-messages-container');
+      smoothScrollTo('.spc-pre-content');
     }
   };
 
@@ -135,49 +133,59 @@ export default class Cart extends React.Component {
     const {
       wait,
       items,
-      recommendedProducts,
       messageType,
       message,
       totalItems,
       totals,
       couponCode,
       inStock,
-      cartPromo,
       actionMessageType,
       actionMessage,
       dynamicPromoLabelsCart,
       dynamicPromoLabelsProduct,
     } = this.state;
 
+    let preContentActive = 'hidden';
+
     if (wait) {
       return <Loading />;
+    }
+
+    if (message !== undefined || actionMessage !== undefined) {
+      preContentActive = 'visible';
+    }
+
+    if (dynamicPromoLabelsCart !== null) {
+      if (dynamicPromoLabelsCart.qualified.length !== 0
+        || dynamicPromoLabelsCart.next_eligible.length !== 0) {
+        preContentActive = 'visible';
+      }
     }
 
     if (!wait && items.length === 0) {
       return (
         <>
           <EmptyResult Message={Drupal.t('Your shopping bag is empty.')} />
-          <CartRecommendedProducts sectionTitle={Drupal.t('new arrivals')} recommended_products={recommendedProducts} />
-          <CartRecommendedProducts sectionTitle={Drupal.t('trending now')} recommended_products={recommendedProducts} />
         </>
       );
     }
 
     return (
       <>
-        <div className="spc-pre-content fadeInUp" style={{ animationDelay: '0.4s' }}>
-          <MobileCartPreview total_items={totalItems} totals={totals} />
+        <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
           {/* This will be used for global error message. */}
           <CheckoutMessage type={messageType} context="page-level-cart">
             {message}
           </CheckoutMessage>
-
-          <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
-
           {/* This will be used for any action/event on basket page. */}
           <CheckoutMessage type={actionMessageType} context="page-level-cart-action">
             {actionMessage}
           </CheckoutMessage>
+          {/* This will be used for Dynamic promotion labels. */}
+          <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
+        </div>
+        <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
+          <MobileCartPreview total_items={totalItems} totals={totals} />
         </div>
         <div className="spc-main">
           <div className="spc-content">
@@ -195,14 +203,13 @@ export default class Cart extends React.Component {
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}
-              cart_promo={cartPromo}
               show_checkout_button
               animationDelay="0.5s"
             />
           </div>
         </div>
         <div className="spc-post-content">
-          <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} recommended_products={recommendedProducts} />
+          <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} items={items} />
         </div>
         <div className="spc-footer">
           <VatFooterText />

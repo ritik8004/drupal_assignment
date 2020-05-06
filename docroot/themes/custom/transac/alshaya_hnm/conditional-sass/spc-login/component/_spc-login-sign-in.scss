@@ -64,4 +64,12 @@
   .c-post-content {
     background-color: $block_acm_customer_txt;
   }
+
+  @include breakpoint($only-mobile) {
+    margin: 0 !important;
+
+    .site-brand-home a {
+      margin-#{$left}: 0;
+    }
+  }
 }

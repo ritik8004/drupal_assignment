@@ -69,9 +69,3 @@ product_slider:
     - alshaya_seo_transac/gtm
     - alshaya_master/jquery_is_in_viewport
     - core/drupal.debounce
-linked_products:
-  version: 1.x
-  js:
-    js/alshaya_seo.gtm.linked_products.js: {}
-  dependencies:
-    - alshaya_seo_transac/gtm

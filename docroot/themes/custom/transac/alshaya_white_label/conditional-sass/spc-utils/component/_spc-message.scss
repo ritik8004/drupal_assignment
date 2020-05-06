@@ -6,7 +6,11 @@
     padding: 0.5625rem 0;
 
     @include breakpoint($tablet) {
-      margin-bottom: 2.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    &:first-child {
+      margin-top: 1.25rem;
     }
 
     &.spc-checkout-error-message-container {

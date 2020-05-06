@@ -26,7 +26,7 @@ const OrderSummaryItem = (props) => {
     );
   }
 
-  if (type === 'cnc') {
+  if (type === 'click_and_collect') {
     const { name, address, phone } = props;
     return (
       <div className="spc-order-summary-item spc-order-summary-address-item fadeInUp" style={{ animationDelay: animationDelayValue }}>

@@ -41,7 +41,7 @@ class AlshayaFeatureProcess {
     $this->validFeatures = $parameters['features'] ?? [];
     $this->viewport = $parameters['viewport'];
     $environment = explode('-', $parameters['site']);
-    if ($environment[2] == 'dev2') {
+    if (in_array($environment[2], ['local', 'dev2'])) {
       $this->suiteLocators = [
         $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc',
         $this->sourcePath . DIRECTORY_SEPARATOR . $environment[0] . DIRECTORY_SEPARATOR . 'spc',

@@ -146,6 +146,7 @@ $accordion_title: $black-two;
 $accordion_sub_title: $grey-light;
 
 // Autocomplete
+$autocomplete_border: $warm-grey-two;
 $autocomplete_border_last: $white;
 $autocomplete_hover: $white-smoke-light;
 $autocomplete_text: $grey-light;
@@ -167,7 +168,7 @@ $header_secondary_menu_link_mobile: $black-two;
 $header_secondary_menu_link: $black-two;
 
 // Header mobile search.
-$header_search_border_mobile: $warm-grey-two;
+$header_search_border_mobile: $white-smoke-light;
 $header_search_active_bg: transparent;
 
 // Header - Search.
@@ -180,7 +181,7 @@ $primary_search_autocomplete_text: $grey-light;
 // C-menu primary i:e Mobile and tablet header menu links.
 $header_c_menu_text: $drakish-blue;
 $header_c_menu_icon_color: $drakish-blue;
-$header_c_menu_search_active_icon: $tomato;
+$header_c_menu_search_active_icon: $drakish-blue;
 $header_toggle_sign_default: $white-smoke-light;
 $header_toggle_sign_active_tab: $black-two;
 $header_mobile_menu_arrow: $warm-grey-two;
@@ -235,11 +236,6 @@ $copyright_footer_paragraph: $black-two;
 $newsletter_submit_btn: $drakish-blue;
 $newsletter_success: $black-two;
 $newsletter_input_border: $warm-grey-two;
-
-// Checkout Progress.
-$checkout_seperator: $grey-light;
-$checkout_progress_text: $grey-light;
-$checkout_progress_next_txt: $black-two;
 
 // Product listing page and search page.
 
@@ -408,28 +404,6 @@ $payment_card_expired_notice: $black-two;
 
 //Address book
 $address_pp_delete_closebtn: $drakish-blue;
-
-// Basket
-$basket_page_title: $drakish-blue;
-$basket_sku_promo_link: $error-red;
-$basket_oos_inline_txt: $error-red;
-$basket_oos_inline_qty_border: $error-red;
-$basket_img_border: $warm-grey-two;
-$basket_th_4th_child: rgba(218, 218, 218, 0.19);
-$basket_continue_shopping_btn_border: $drakish-blue;
-$basket_content_link_color: $drakish-blue;
-$basket_available_code: $hot-pink;
-$basket_td_sec_txt: $grey-light;
-$basket_item_bundle: $drakish-blue;
-$basket_tooltip_not_available: $warm-grey-two;
-$basket_promotion_input_border: $warm-grey-two;
-$basket_remove_link: $drakish-blue;
-$basket_horizontal_recommendation_slider_dots: $drakish-blue;
-// Basket top promotions.
-$basket_fixed_percentage_inactive_header_promo_bg: $hot-pink;
-$basket_fixed_percentage_active_header_promo_txt: $hot-pink;
-// Basket top OOS.
-$basket_header_oos_bg: $error-red;
 
 // Contact Page
 $webform_contact_legend: $drakish-blue;

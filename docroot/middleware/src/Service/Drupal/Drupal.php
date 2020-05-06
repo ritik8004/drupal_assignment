@@ -2,6 +2,7 @@
 
 namespace App\Service\Drupal;
 
+use App\Service\Config\SystemSettings;
 use GuzzleHttp\Cookie\SetCookie;
 use GuzzleHttp\TransferStats;
 use Psr\Log\LoggerInterface;
@@ -27,6 +28,13 @@ class Drupal {
   private $request;
 
   /**
+   * System Settings service.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  private $settings;
+
+  /**
    * Logger.
    *
    * @var \Psr\Log\LoggerInterface
@@ -40,16 +48,20 @@ class Drupal {
    *   Drupal info service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger.
    */
   public function __construct(
     DrupalInfo $drupal_info,
     RequestStack $request_stack,
+    SystemSettings $settings,
     LoggerInterface $logger
   ) {
     $this->drupalInfo = $drupal_info;
     $this->request = $request_stack;
+    $this->settings = $settings;
     $this->logger = $logger;
   }
 
@@ -107,30 +119,32 @@ class Drupal {
    *   Response.
    */
   protected function invokeApiWithSession(string $method, string $url, array $request_options = []) {
+    // Add current request cookies to ensure request is done with same session
+    // as the browser.
     $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
     $request_options['headers']['Cookie'] = $cookies->__toString();
+
+    // Add a custom header to ensure Drupal allows this request without
+    // further authentication.
+    $request_options['headers']['alshaya-middleware'] = md5($this->settings->getSettings('middleware_auth'));
+
     return $this->invokeApi($method, $url, $request_options);
   }
 
   /**
-   * Get info from drupal for cart items data.
+   * Get stock info from drupal for sku.
    *
-   * @param array $skus
-   *   Skus.
+   * @param string $sku
+   *   SKU.
    *
    * @return array
    *   Items data with info from drupal.
    */
-  public function getCartItemDrupalData(array $skus) {
-    $data = [];
-    foreach ($skus as $sku) {
-      $url = sprintf('/rest/v1/product/%s', $sku) . '?context=cart';
-      $response = $this->invokeApi('GET', $url);
-      $result = $response->getBody()->getContents();
-      $data[$sku] = json_decode($result, TRUE);
-    }
-
-    return $data;
+  public function getCartItemDrupalStock($sku) {
+    $url = sprintf('/rest/v1/stock/%s', $sku);
+    $response = $this->invokeApi('GET', $url);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
   }
 
   /**
@@ -168,40 +182,6 @@ class Drupal {
   }
 
   /**
-   * Get linked skus info from Drupal.
-   *
-   * @param array $skus
-   *   Skus.
-   *
-   * @return array
-   *   Linked skus data.
-   */
-  public function getDrupalLinkedSkus(array $skus) {
-    $data = [];
-    foreach ($skus as $sku) {
-      $url = sprintf('/rest/v1/product/%s/linked?context=cart', $sku);
-      $response = $this->invokeApi('GET', $url);
-      $result = $response->getBody()->getContents();
-      $data[$sku] = json_decode($result, TRUE);
-    }
-
-    return $data;
-  }
-
-  /**
-   * Get all promo data from drupal.
-   *
-   * @return mixed
-   *   All promo data.
-   */
-  public function getAllPromoData() {
-    $url = '/rest/v1/promotion/all';
-    $response = $this->invokeApi('GET', $url);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
-  }
-
-  /**
    * Get Drupal uid and customer id for the user in session.
    */
   public function getSessionCustomerInfo() {
@@ -229,6 +209,28 @@ class Drupal {
    */
   public function getStoreInfo($store_code) {
     $url = sprintf('/cnc/store/%s', $store_code);
+    $response = $this->invokeApi('GET', $url);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
+  /**
+   * Get available stores for the cart for given location.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   * @param string $latitude
+   *   The latitude.
+   * @param string $longitude
+   *   The longitude.
+   *
+   * @return mixed
+   *   Return stores list.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function getCartStores(int $cart_id, string $latitude, string $longitude) {
+    $url = sprintf('/cnc/stores/%d/%s/%s', $cart_id, $latitude, $longitude);
     $response = $this->invokeApi('GET', $url);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);

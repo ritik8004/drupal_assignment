@@ -16,6 +16,7 @@ const AddressContent = (props) => {
   } = props;
 
   if (window.drupalSettings.user.uid > 0
+    && cart.cart.customer.addresses !== undefined
     && cart.cart.customer.addresses.length > 0) {
     return (
       <AddressList

@@ -9,6 +9,10 @@
     padding-#{$left}: 3rem;
     position: relative;
 
+    @include breakpoint($only-mobile) {
+      min-height: 4.75rem;
+    }
+
     &.in-active {
       opacity: 0.5;
     }
@@ -35,6 +39,7 @@
 
     .icon {
       margin-#{$right}: 0.625rem;
+      min-width: 3.25rem;
 
       @include breakpoint($only-mobile) {
         float: $left;

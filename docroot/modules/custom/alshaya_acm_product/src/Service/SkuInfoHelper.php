@@ -554,10 +554,16 @@ class SkuInfoHelper {
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
 
+    $variant['maxSaleQty'] = 0;
+    $variant['max_sale_qty_parent'] = FALSE;
     // Get Max sale qty for parent SKU.
     if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
       if ($parent !== NULL) {
         $max_sale_qty = $plugin->getMaxSaleQty($parent->getSku());
+        // If max sale quantity is available at parent level, we use that.
+        if (!empty($max_sale_qty)) {
+          $variant['max_sale_qty_parent'] = TRUE;
+        }
       }
 
       // If order limit is not set for parent
@@ -567,12 +573,14 @@ class SkuInfoHelper {
         : $plugin->getMaxSaleQty($variant_sku);
 
       if (!empty($max_sale_qty)) {
+        $variant['maxSaleQty'] = $max_sale_qty;
         $variant['stock']['maxSaleQty'] = $max_sale_qty;
         $variant['orderLimitMsg'] = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
       }
     }
 
     $variant['configurableOptions'] = $this->skuManager->getConfigurableValues($child);
+    $variant['configurableOptions'] = array_values($variant['configurableOptions']);
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
 

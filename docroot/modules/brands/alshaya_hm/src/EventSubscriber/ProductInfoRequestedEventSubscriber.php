@@ -179,6 +179,24 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       $description_value .= '</div>';
     }
 
+    if ($title_name = $sku_entity->get('attr_title_name')->getString()) {
+      $title_name_markup = [
+        '#theme' => 'product_title_name_markup',
+        '#title' => $this->t('TITLE NAME'),
+        '#title_name' => $title_name,
+      ];
+      $description_value .= $this->renderer->renderPlain($title_name_markup);
+    }
+
+    if ($article_description = $sku_entity->get('attr_article_description')->getString()) {
+      $article_description_markup = [
+        '#theme' => 'product_article_description_markup',
+        '#title' => $this->t('ARTICLE DESCRIPTION'),
+        '#article_description' => ['#markup' => $article_description],
+      ];
+      $description_value .= $this->renderer->renderPlain($article_description_markup);
+    }
+
     // Render SKU id for magazine layou on PDP.
     if (!empty($sku_entity->getSku())) {
       $item_code = [
@@ -250,6 +268,91 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
       $prod_description[] = $specifications;
     }
+
+    // To display detailed description in overlay section.
+    $product_details = [];
+    if ($function = $sku_entity->get('attr_function')->getValue()) {
+      $product_details[] = ['label' => $this->t('FUNCTION'), 'data' => $function];
+    }
+
+    if ($age_group = $sku_entity->get('attr_age_group')->getValue()) {
+      $product_details[] = ['label' => $this->t('AGE GROUP'), 'data' => $age_group];
+    }
+
+    if ($style = $sku_entity->get('attr_style')->getValue()) {
+      $product_details[] = ['label' => $this->t('STYLE'), 'data' => $style];
+    }
+
+    if ($clothing_style = $sku_entity->get('attr_clothing_style')->getValue()) {
+      $product_details[] = ['label' => $this->t('CLOTHING STYLE'), 'data' => $clothing_style];
+    }
+
+    if ($collar_style = $sku_entity->get('attr_collar_style')->getValue()) {
+      $product_details[] = ['label' => $this->t('COLLAR STYLE'), 'data' => $collar_style];
+    }
+
+    if ($neckline_style = $sku_entity->get('attr_neckline_style')->getValue()) {
+      $product_details[] = ['label' => $this->t('NECKLINE STYLE'), 'data' => $neckline_style];
+    }
+
+    if ($accessories_style = $sku_entity->get('attr_accessories_style')->getValue()) {
+      $product_details[] = ['label' => $this->t('ACCESSORIES STYLE'), 'data' => $accessories_style];
+    }
+
+    if ($footwear_style = $sku_entity->get('attr_footwear_style')->getValue()) {
+      $product_details[] = ['label' => $this->t('FOOTWEAR STYLE'), 'data' => $footwear_style];
+    }
+
+    if ($fit = $sku_entity->get('attr_fit')->getValue()) {
+      $product_details[] = ['label' => $this->t('FIT'), 'data' => $fit];
+    }
+
+    if ($descriptive_length = $sku_entity->get('attr_descriptive_length')->getValue()) {
+      $product_details[] = ['label' => $this->t('DESCRIPTIVE LENGTH'), 'data' => $descriptive_length];
+    }
+
+    if ($garment_length = $sku_entity->get('attr_garment_length')->getValue()) {
+      $product_details[] = ['label' => $this->t('GARMENT LENGTH'), 'data' => $garment_length];
+    }
+
+    if ($sleeve_length = $sku_entity->get('attr_sleeve_length')->getValue()) {
+      $product_details[] = ['label' => $this->t('SLEEVE LENGTH'), 'data' => $sleeve_length];
+    }
+
+    if ($waist_rise = $sku_entity->get('attr_waist_rise')->getValue()) {
+      $product_details[] = ['label' => $this->t('WAIST RISE'), 'data' => $waist_rise];
+    }
+
+    if ($heel_height = $sku_entity->get('attr_heel_height')->getValue()) {
+      $product_details[] = ['label' => $this->t('HEEL HEIGHT'), 'data' => $heel_height];
+    }
+
+    if ($measurements_in_cm = $sku_entity->get('attr_measurements_in_cm')->getValue()) {
+      $product_details[] = ['label' => $this->t('MEASURMENTS IN CM'), 'data' => $measurements_in_cm];
+    }
+
+    if ($fragrance_name = $sku_entity->get('attr_fragrance_name')->getValue()) {
+      $product_details[] = ['label' => $this->t('FRAGRANCE NAME'), 'data' => $fragrance_name];
+    }
+
+    if ($textual_print = $sku_entity->get('attr_textual_print')->getValue()) {
+      $product_details[] = ['label' => $this->t('TEXTUAL PRINT'), 'data' => $textual_print];
+    }
+
+    if ($article_license_company = $sku_entity->get('attr_article_license_company')->getValue()) {
+      $product_details[] = ['label' => $this->t('LICENSE COMPANY'), 'data' => $article_license_company];
+    }
+
+    if ($article_license_item = $sku_entity->get('attr_article_license_item')->getValue()) {
+      $product_details[] = ['label' => $this->t('Lisence Item'), 'data' => $article_license_item];
+    }
+
+    $details_overlay_markup = [
+      '#theme' => 'pdp_additional_attribute_overlay',
+      '#properties' => $product_details,
+    ];
+
+    $prod_description[] = $details_overlay_markup;
 
     // Add all variables to $build in the sequence in
     // which they should be displayed.

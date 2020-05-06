@@ -28,6 +28,7 @@ import CheckoutMessage from '../../../utilities/checkout-message';
 import getStringMessage from '../../../utilities/strings';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { getUserLocation } from '../../../utilities/map/map_utils';
+import dispatchCustomEvent from '../../../utilities/events';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -141,7 +142,7 @@ class ClickCollect extends React.Component {
    */
   placesAutocompleteHandler = () => {
     const place = this.autocomplete.getPlace();
-    this.nearMeBtn.classList.remove('active');
+    this.changeNearMeButtonStatus('in-active');
     if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
       this.fetchAvailableStores({
         lat: place.geometry.location.lat(),
@@ -150,6 +151,19 @@ class ClickCollect extends React.Component {
     }
   };
 
+  changeNearMeButtonStatus = (status) => {
+    if (status === 'active') {
+      this.nearMeBtn.classList.add('active');
+      this.nearMeBtn.disabled = true;
+      return;
+    }
+
+    if (status === 'in-active') {
+      this.nearMeBtn.classList.remove('active');
+      this.nearMeBtn.disabled = false;
+    }
+  }
+
   /**
    * Get current location coordinates.
    */
@@ -157,17 +171,22 @@ class ClickCollect extends React.Component {
     if (e) {
       e.preventDefault();
     }
-    const { showOutsideCountryError } = this.context;
+    const { showOutsideCountryError, coords } = this.context;
     this.searchplaceInput.value = '';
-    this.nearMeBtn.classList.add('active');
+    this.changeNearMeButtonStatus('active');
     showFullScreenLoader();
     getLocationAccess()
       .then(
         async (pos) => {
-          const coords = {
+          const userCoords = {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
           };
+
+          if (JSON.stringify(coords) === JSON.stringify(userCoords)) {
+            return;
+          }
+
           try {
             const [userCountrySame] = await getUserLocation(coords);
             // If user and site country not same, don;t process.
@@ -181,15 +200,16 @@ class ClickCollect extends React.Component {
             Drupal.logJavascriptError('clickncollect-checkUserCountry', error);
           }
 
-          this.fetchAvailableStores({
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-          }, true);
+          this.fetchAvailableStores(userCoords, true);
         },
         () => {
           removeFullScreenLoader();
-          this.nearMeBtn.classList.remove('active');
-          this.fetchAvailableStores(getDefaultMapCenter(), false);
+          const defaultMapCenter = getDefaultMapCenter();
+          if (JSON.stringify(coords) === JSON.stringify(defaultMapCenter)) {
+            return;
+          }
+          this.changeNearMeButtonStatus('in-active');
+          this.fetchAvailableStores(defaultMapCenter, false);
         },
       )
       .catch((error) => {
@@ -336,6 +356,7 @@ class ClickCollect extends React.Component {
 
     // Find the store object with the given store-code from the store list.
     const store = _find(storeList, { code: storeCode });
+    dispatchCustomEvent('storeSelected', { store });
     updateSelectStore(store);
     this.setState({
       openSelectedStore: true,
@@ -418,6 +439,7 @@ class ClickCollect extends React.Component {
       updateLocationAccess,
       outsideCountryError,
       showOutsideCountryError,
+      animateLocationMessage,
     } = this.context;
 
     const {
@@ -452,7 +474,7 @@ class ClickCollect extends React.Component {
             <div className="spc-cnc-address-form-wrapper">
               {locationAccess === false
               && (
-                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
+                <CheckoutMessage type="warning" context={`click-n-collect-store-modal modal location-disable ${animateLocationMessage}`}>
                   <span className="font-bold">{getStringMessage('location_access_denied')}</span>
                   <a href="#" onClick={() => updateLocationAccess(true)}>{getStringMessage('dismiss')}</a>
                 </CheckoutMessage>

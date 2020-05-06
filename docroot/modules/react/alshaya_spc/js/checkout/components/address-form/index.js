@@ -34,6 +34,7 @@ export default class AddressForm extends React.Component {
       cityChanged: false,
       errorSuccessMessage: null,
       messageType: null,
+      animateClass: '',
     };
   }
 
@@ -58,16 +59,20 @@ export default class AddressForm extends React.Component {
   };
 
   eventListener = (e) => {
-    const coords = e.detail.coords();
-    if (this.isComponentMounted) {
-      this.positionMapAndUpdateAddress(coords, false);
+    if (!this.isComponentMounted) {
+      return;
     }
+    const coords = e.detail.coords();
+    this.positionMapAndUpdateAddress(coords, false);
   };
 
   /**
    * Show error on popup.
    */
   handleAddressPopUpError = (e) => {
+    if (!this.isComponentMounted) {
+      return;
+    }
     const { type, message } = e.detail;
     this.setState({
       messageType: type,
@@ -79,9 +84,15 @@ export default class AddressForm extends React.Component {
 
   hidePopUpError = () => {
     this.setState({
-      messageType: null,
-      errorSuccessMessage: null,
+      animateClass: 'fadeOutUp',
     });
+
+    setTimeout(() => {
+      this.setState({
+        messageType: null,
+        errorSuccessMessage: null,
+      });
+    }, 450);
   };
 
   /**
@@ -182,6 +193,7 @@ export default class AddressForm extends React.Component {
       cityChanged,
       errorSuccessMessage,
       messageType,
+      animateClass,
     } = this.state;
     let defaultAddressVal = [];
     if (defaultVal) {
@@ -237,7 +249,7 @@ export default class AddressForm extends React.Component {
           <div className="spc-address-form-wrapper">
             {errorSuccessMessage !== null
               && (
-              <CheckoutMessage type={messageType} context="new-address-form-modal modal">
+              <CheckoutMessage type={messageType} context={`new-address-form-modal modal ${animateClass}`}>
                 {errorSuccessMessage}
                 {messageType === 'warning'
                 && (

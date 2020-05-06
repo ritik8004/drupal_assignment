@@ -10,6 +10,8 @@ import {
 } from '../../../utilities/map/map_utils';
 
 export default class ParentAreaSelect extends React.Component {
+  isComponentMounted = true;
+
   constructor(props) {
     super(props);
     let currentOption = [];
@@ -27,6 +29,7 @@ export default class ParentAreaSelect extends React.Component {
   }
 
   componentDidMount() {
+    this.isComponentMounted = true;
     this.getAreasList();
     const { default_val: defaultVal, field, areasUpdate } = this.props;
     if (defaultVal.length !== 0
@@ -41,6 +44,12 @@ export default class ParentAreaSelect extends React.Component {
     }
 
     document.addEventListener('updateParentAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
+  }
+
+  componentWillUnmount() {
+    this.isComponentMounted = false;
+    // Trigger event for handling area update from map.
+    document.removeEventListener('updateParentAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
   }
 
   /**
@@ -86,6 +95,9 @@ export default class ParentAreaSelect extends React.Component {
    * Update area field from value of google map.
    */
   updateAreaFromGoogleMap = (e) => {
+    if (!this.isComponentMounted) {
+      return;
+    }
     const data = e.detail.data();
     const { areasUpdate } = this.props;
     this.setState({

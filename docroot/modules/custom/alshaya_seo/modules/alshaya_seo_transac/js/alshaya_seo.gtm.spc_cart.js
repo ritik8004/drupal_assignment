@@ -26,10 +26,16 @@
         }
       }
     };
-    var productDetails = Drupal.alshayaSeoSpc.gtmProduct(product);
-    productDetails.metric2 = product.final_price;
-    productData.ecommerce.add.product.push(productDetails);
-    dataLayer.push(productData);
+
+    // Get product info from storage.
+    var key = 'product:' + drupalSettings.path.currentLanguage + ':' + product.sku;
+    var productInfo = JSON.parse(localStorage.getItem(key));
+    if (productInfo !== null) {
+      var productDetails = Drupal.alshayaSeoSpc.gtmProduct(productInfo, product.qty);
+      productDetails.metric2 = product.finalPrice;
+      productData.ecommerce.add.product.push(productDetails);
+      dataLayer.push(productData);
+    }
   };
 
   /**
@@ -41,9 +47,10 @@
     var impressions = [];
     var currencyCode = settings.alshaya_spc.currency_config.currency_code;
     var listName = $('body').attr('gtm-list-name');
-    var cart_data = JSON.parse(localStorage.getItem('cart_data'));
-    if (cart_data.cart.recommended_products !== null) {
-      var items = cart_data.cart.recommended_products;
+    const key = 'recommendedProduct:' + settings.path.currentLanguage;
+    var recommendedProducts = JSON.parse(localStorage.getItem('cart_data'));
+    if (recommendedProducts !== null) {
+      var items = recommendedProducts;
       var count = position + 1;
       Object.entries(items).forEach(([key, product]) => {
         if (skus.includes(key)) {

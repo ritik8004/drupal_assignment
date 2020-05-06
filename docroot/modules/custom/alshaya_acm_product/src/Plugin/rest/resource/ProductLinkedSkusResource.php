@@ -110,22 +110,39 @@ class ProductLinkedSkusResource extends ResourceBase {
    */
   public function get(string $sku) {
     $skuEntity = SKU::loadFromSku($sku);
+    if (!$skuEntity instanceof SKUInterface) {
+      throw new NotFoundHttpException($this->t("page not found"));
+    }
+    $skuIds[] = $sku;
 
-    // Check parameter is empty or not.
+    // Check parameter is equal to 1.
     if ($this->request->query->get('use_parent') == 1) {
       // Get parent SKU entity.
       $skuEntity = $this->sku_manager->getParentSkuBySku($sku);
-    }
-
-    if (!$skuEntity instanceof SKUInterface) {
-      throw new NotFoundHttpException($this->t("page not found"));
+      if (!$skuEntity instanceof SKUInterface) {
+        throw new NotFoundHttpException($this->t("page not found"));
+      }
+      $skuIds[] = $skuEntity->getSku();
     }
 
     $data = [];
     foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
+      $related_skus = [];
+
+      foreach ($skuIds as $sku) {
+        $skuEntity = SKU::loadFromSku($sku);
+        if (!$skuEntity instanceof SKUInterface) {
+          continue;
+        }
+
+        $related_skus += $this->getLinkedSkus($skuEntity, $linked_type);
+      }
+      // Remove duplicate product array.
+      $related_skus = array_unique($related_skus, SORT_REGULAR);
+
       $data['linked'][] = [
         'link_type' => $linked_type,
-        'skus' => $this->getLinkedSkus($skuEntity, $linked_type),
+        'skus' => $related_skus,
       ];
     }
 
