@@ -165,13 +165,13 @@ function _alshaya_spc_translations() {
         'ar' => '@country انت تتصفح خارج',
       ],
       'We don\'t support delivery outside @country.' => [
-        'ar' => '.country@ لا ندعم التوصيل خارج',
+        'ar' => '.@country لا ندعم التوصيل خارج',
       ],
       'Please enter an address with in country @country below to continue.' => [
-        'ar' => 'أدناه للمتابعة country@ يرجى إدخال عنوان في البلد.',
+        'ar' => 'أدناه للمتابعة @country يرجى إدخال عنوان في البلد.',
       ],
       'Please select a store with in country @country below to continue.' => [
-        'ar' => 'أدناه للمتابعة country@ يرجى اختيار محلا في البلد.',
+        'ar' => 'أدناه للمتابعة @country يرجى اختيار محلا في البلد.',
       ],
       'Please enter your full name.' => [
         'ar' => 'يرجى إدخال اسمك الكامل.',
