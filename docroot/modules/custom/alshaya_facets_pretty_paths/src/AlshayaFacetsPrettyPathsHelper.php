@@ -485,11 +485,11 @@ class AlshayaFacetsPrettyPathsHelper {
    * @return array
    *   Filter array.
    */
-  public function getActiveFacetFilters() {
+  public function getActiveFacetFilters(string $source) {
     $alshaya_active_facet_filters = &drupal_static(__FUNCTION__, NULL);
 
-    if (isset($alshaya_active_facet_filters)) {
-      return $alshaya_active_facet_filters;
+    if (isset($alshaya_active_facet_filters[$source])) {
+      return $alshaya_active_facet_filters[$source];
     }
 
     $alshaya_active_facet_filter_string = '';
@@ -519,9 +519,22 @@ class AlshayaFacetsPrettyPathsHelper {
     // We need to remove "/any-radom-string", from active filter's string.
     $alshaya_active_facet_filter_string = !empty($alshaya_active_facet_filter_string) ? explode('/', $alshaya_active_facet_filter_string)[0] : $alshaya_active_facet_filter_string;
 
-    $alshaya_active_facet_filters = array_filter(explode('--', $alshaya_active_facet_filter_string));
+    $alshaya_active_facet_filters[$source] = array_filter(explode('--', $alshaya_active_facet_filter_string));
 
-    return $alshaya_active_facet_filters;
+    // Remove all invalid facets from URL.
+    $facets = $this->facetManager->getFacetsByFacetSourceId($source);
+    foreach ($facets ?? [] as $facet) {
+      $validAliases[] = $facet->getUrlAlias();
+    }
+
+    foreach ($alshaya_active_facet_filters[$source] as $key => $values) {
+      $alias = explode('-', $values)[0] ?? '';
+      if (!in_array($alias, $validAliases)) {
+        unset($alshaya_active_facet_filters[$source][$key]);
+      }
+    }
+
+    return $alshaya_active_facet_filters[$source];
   }
 
   /**
