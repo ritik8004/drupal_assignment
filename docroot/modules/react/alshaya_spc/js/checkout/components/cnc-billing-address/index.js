@@ -85,7 +85,7 @@ export default class CnCBillingAddress extends React.Component {
    */
   processAddress = (e) => {
     const { cart } = this.props;
-    return processBillingUpdateFromForm(e, cart.cart.shipping_address);
+    return processBillingUpdateFromForm(e, cart.cart.shipping.address);
   }
 
   /**
@@ -99,9 +99,8 @@ export default class CnCBillingAddress extends React.Component {
     const { open, shippingAsBilling } = this.state;
 
     // If carrier info not set, means shipping info not set.
-    // So we don't need to show bulling.
-    if (cart.cart.carrier_info === undefined
-      || cart.cart.carrier_info === null) {
+    // So we don't need to show billing.
+    if (cart.cart.shipping.method === null) {
       return (null);
     }
 
@@ -113,7 +112,7 @@ export default class CnCBillingAddress extends React.Component {
       billingAddressAddedByUser = false;
     }
 
-    const shippingAddress = cart.cart.shipping_address;
+    const shippingAddress = cart.cart.shipping.address;
     const editAddressData = {
       static: {
         fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,
@@ -157,7 +156,7 @@ export default class CnCBillingAddress extends React.Component {
 
     let showMessage = shippingAsBilling;
     // If CnC is used for delivery method, we dont show message on address.
-    if (cart.cart.delivery_type === 'cnc') {
+    if (cart.cart.shipping.type === 'click_and_collect') {
       showMessage = false;
     }
 

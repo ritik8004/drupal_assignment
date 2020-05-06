@@ -5,7 +5,7 @@ import CheckoutConfigurableOption from '../../../utilities/checkout-configurable
 import SpecialPrice from '../../../utilities/special-price';
 import ConditionalView from '../../../common/components/conditional-view';
 
-export default class CheckoutCartItem extends React.Component {
+class CheckoutCartItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +16,16 @@ export default class CheckoutCartItem extends React.Component {
 
   componentDidMount() {
     const { item } = this.props;
+
+    if (Object.prototype.hasOwnProperty.call(item, 'prepared')) {
+      this.setState({
+        wait: false,
+        productInfo: item,
+      });
+
+      return;
+    }
+
     // Key will be like 'product:en:testsku'
     Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
   }
@@ -89,3 +99,5 @@ export default class CheckoutCartItem extends React.Component {
     );
   }
 }
+
+export default CheckoutCartItem;

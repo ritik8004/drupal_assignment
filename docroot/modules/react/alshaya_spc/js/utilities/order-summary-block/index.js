@@ -33,7 +33,6 @@ const continueCheckout = (e, inStock) => {
 
 const OrderSummaryBlock = (props) => {
   const {
-    cart_promo: cartPromo,
     item_qty: itemQty,
     show_checkout_button: showCheckoutButton,
     items,
@@ -41,7 +40,6 @@ const OrderSummaryBlock = (props) => {
     in_stock: inStock,
     animationDelay: animationDelayValue,
   } = props;
-  const promoData = cartPromo;
   let orderSummaryTitle = Drupal.t('Order Summary');
   const continueCheckoutLink = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
   // To be used on checkout page.
@@ -67,7 +65,7 @@ const OrderSummaryBlock = (props) => {
       <div className="block-content">
         {/* To Be used later on Checkout Delivery pages. */}
         <div className="products" />
-        <TotalLineItems totals={totals} cart_promo={promoData} />
+        <TotalLineItems totals={totals} />
         {/* To Be used on cart page only. */}
         {showCheckoutButton
         && (

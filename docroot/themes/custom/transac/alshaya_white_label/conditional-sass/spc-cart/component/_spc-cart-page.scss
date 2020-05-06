@@ -1,6 +1,6 @@
 #spc-cart {
-  @include breakpoint($mobile) {
-    padding-top: 1.25rem;
+  @include breakpoint($tablet) {
+    padding-top: 2.5rem;
   }
 
   .spc-content {

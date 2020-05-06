@@ -41,6 +41,14 @@ sites:
     module: alshaya_bbw
     type: alshaya_transac
     country: ae
+  bbwbh:
+    module: alshaya_bbw
+    type: alshaya_transac
+    country: bh
+  bbwqa:
+    module: alshaya_bbw
+    type: alshaya_transac
+    country: qa
   vskw:
     module: alshaya_vs
     type: alshaya_transac

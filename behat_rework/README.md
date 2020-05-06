@@ -8,17 +8,17 @@
 
 - Check if `jdk` is installed and running on your machine.
 - `java --version` To check the java is installed.
-Otherwise install it via brew or from java: 
+Otherwise install it via brew or from java:
 [https://www.java.com/en/download/help/index_installing.xml](https://www.java.com/en/download/help/index_installing.xml)
 
 1. `cd behat_rework` :file_folder:
 2. `composer install` :hourglass_flowing_sand:
-3. `npm install --prefix bin chromedriver` :gear:
-4. `./behat-build.sh --rebuild=TRUE` This will generate feature files :rocket:. 
+3. `cd bin; npm install` :gear:
+4. `./behat-build.sh --rebuild=TRUE` This will generate feature files :rocket:.
   - parameters:
     - `--rebuild` (boolean): `TRUE` to recollect yml files and variables.
       - by default rebuild is false, and it will only regenerate features files
-        based on already collected variables. 
+        based on already collected variables.
         (It won't include any new variables.)
     - `--site` parameter supports comma separated values:
       - only brand name: `--site=hm,mc`
@@ -26,22 +26,23 @@ Otherwise install it via brew or from java:
       - brand + market + env: `--site=hm-kw-uat,hm-sa-uat`
       - brand + market + env + lang: `--site=hm-kw-uat-en,hm-sa-uat-ar`
   - :bell: :bell:
-  **NOTE: If you have modified only existing features file and "not" modified or placed any 
-  new variables you can simply execute `./behat-build.sh`.**  
+  **NOTE: If you have modified only existing features file and "not" modified or placed any
+  new variables you can simply execute `./behat-build.sh`.**
 5. (In a separate terminal window) :computer:
 ```bash
 java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
 ```
 6. The script that we ran on point 5, Has generated different profiles for each site with brand, env and language specific. i.e. = mc-sa-qa-ar, mc-sa-qa-en, hm-kw-dev-en etc..
-to Run behat test cases for: 
+to Run behat test cases for:
  - any specific site - `bin/behat --profile=hm-kw-uat-en` :fire:
  - any specific feature for a site - `bin/behat --profile=hm-kw-uat-en build/features/hm-kw-uat-en/breadcrumb.feature` :fire: :fire:
+ - any specific language for a feature - `bin/behat --profile=hm-eg-dev2-en-desktop build/features/hm-eg-dev2-en/spcbasket.feature --format pretty --tags="~language"` :fire:
 
 
 # Alshaya Behat Architecture
 
 The idea behind this custom architecture is to avoid duplication of feature
-files and maintaining feature files for multi-sites.  
+files and maintaining feature files for multi-sites.
 
 ## :scroll: Directory Structure
 
@@ -57,7 +58,7 @@ Inside `behat_rework` directory:
     ├── behat-build.sh
     ├── behat.yml
     └── README.md
-  
+
 ```
 
 ### :clipboard: Inside `/templates/variables`
@@ -79,7 +80,7 @@ Here's what actual structure will look like.
     │   │   │   ├── kw.yml
     │   │   │   ├── sa.yml
     │   │   ├── brands
-    │   │   │   ├── hm      
+    │   │   │   ├── hm
     │   │   │   │   ├── hm.yml
     │   │   │   │   ├── languages
     │   │   │   │   │   ├── en.yml
@@ -91,7 +92,7 @@ Here's what actual structure will look like.
     │   │   │   │   │   │   │   ├── en.yml
     │   │   │   │   │   │   │   ├── ar.yml
     │   │   │   │   │   ├── sa
-    │   │   │   │   │   │   ├── sa.yml    
+    │   │   │   │   │   │   ├── sa.yml
     │   │   │   │   ├── env
     │   │   │   │   │   ├── qa
     │   │   │   │   │   │   ├── qa.yml
@@ -100,7 +101,7 @@ Here's what actual structure will look like.
     │   │   │   │   │   │   ├── uat.yml
     │   │   │   │   │   │   ├── languages
     │   │   │   │   │   │   │   ├── en.yml
-    │   │   │   │   │   │   │   ├── ar.yml    
+    │   │   │   │   │   │   │   ├── ar.yml
     │   │   │   │   │   │   ├── markets
     │   │   │   │   │   │   │   ├── kw
     │   │   │   │   │   │   │   │   ├── kw.yml
@@ -116,7 +117,7 @@ Here's what actual structure will look like.
 1. Inside `variables` directory there's a `common.yml` file.
 2. at the same level as `common.yml` there are three folders:
   ```text
-   - languages 
+   - languages
    - markets
    - brands
   ```
@@ -124,18 +125,18 @@ Here's what actual structure will look like.
 of country code, and inside that folder there's a `*.yml` file, contains
 country code of 2 characters. (`kw/kw.yml`, `ae/ae.yml`, `sa/sa.yml`)
 4. `languages` directory, there are files with lang code `en.yml, ar.yml`.
-5. `brands` directory, there are folders with brand name (`hm`, `mc`) and 
+5. `brands` directory, there are folders with brand name (`hm`, `mc`) and
 inside that folder `hm.yml, mc.yml` files respectively.
- - Inside `brands` directory, there are three folders, 
+ - Inside `brands` directory, there are three folders,
    ```text
    - languages
    - markets
    - env
    ```
-  - `markets` folder have directories and `*.yml` file as described in third 
-  step. 
+  - `markets` folder have directories and `*.yml` file as described in third
+  step.
   - `env` dir contains envs folders `qa, uat, pprod` etc.
-    - Inside `env` folder it contains 
+    - Inside `env` folder it contains
       - `yml` file with env name. (`qa.yml, uat.yml`) etc.
       - And also contains folders `languages, markets`
         - `languages` folder contains files as described in fourth step.
@@ -156,7 +157,7 @@ templates/variables/brands/hm/env/uat/languages/en.yml
 templates/variables/brands/hm/env/uat/markets/kw/kw.yml
 templates/variables/brands/hm/env/uat/markets/kw/languages/en.yml
 ```
- 
+
 ### :bell: IMPORTANT Variable:
 Following file and variable is must, for any given environment.
 *For each enabled languages* (If a site has two language EN and AR):
@@ -173,8 +174,8 @@ specific brand and env.** :bangbang:
 
 
 #### :book: Guide lines for using variables format:
-- `.yml` files contains `variables`, `tests` and `tags` keys. `variables` are 
-used to replace token, Which we wrote in feature files with curly braces 
+- `.yml` files contains `variables`, `tests` and `tags` keys. `variables` are
+used to replace token, Which we wrote in feature files with curly braces
 (i.e. `{var_userame}`), inside `template/features/*/*.feature` files.
 **_variables must start with `var_` prefix._**
 
@@ -214,7 +215,7 @@ Here's an examples of a sample `*.yml` file inside languages folder.
 >  url_product_link: '/حلمات--من-تدفق-متوسط-عبوة-من-قطعتين'
 > ```
 
-#### :label: behat `tags` in `*.yml` 
+#### :label: behat `tags` in `*.yml`
 
 Add a `tags` :label: key in `*.yml` file as shown in above sample and add as many tags
 as you want to add as a list.
@@ -234,7 +235,7 @@ Scenario: As an authenticated user,
 ```
 
 add your custom tags for each scenario or feature inside the `*.feature` file
-as show in above example (`@signup @liveonly`), after that add `{@tags}` 
+as show in above example (`@signup @liveonly`), after that add `{@tags}`
 variable.
 
 :bell: :bell:
@@ -285,7 +286,7 @@ variables:
     1:                        # Row, this can be any number, it doesn't matter.
       - page                  # column #1 title
       - breadcrumb            # column #2 title
-    2:              
+    2:
       - '/ladies'             # column #1 value
       - 'Home > Ladies'       # column #2 value
     3:
@@ -300,7 +301,7 @@ variables:
 
 Features folder contains only `*.feature` files and as the name suggests, These
 are used as templates for actual feature files. so, these `*.feature` files
-usually contains variables in curly braces (`{var_username}, {var_product_url}, 
+usually contains variables in curly braces (`{var_username}, {var_product_url},
 {var_promo_block_title}` etc.) instead of actual value.
 
 Here's a sample *.feature file:
@@ -324,8 +325,8 @@ Here's the directory structure:
 ```text
     .
     ├── ...
-    ├── templates             
-    │   ├── features          
+    ├── templates
+    │   ├── features
     │   │   ├── common                   # common feature files for all sites.
     │   │   │   ├── login.feature
     │   │   │   ├── contact.feature
@@ -340,7 +341,7 @@ Here's the directory structure:
     │   │   │   │   │   ├── login.feature
     │   │   │   ├── sa
     │   │   │   │   ├── login.feature
-    │   │   │   │   ├── contact.feature 
+    │   │   │   │   ├── contact.feature
     │   ├── variables
     │   └── behat.yml
     └── ...

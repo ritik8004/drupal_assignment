@@ -49,24 +49,24 @@
         background: none;
         padding: 0;
 
-        svg g {
+        svg g path {
           fill: $spc-cart-item-trash-icon;
         }
 
         &.error {
-          svg g {
+          svg g path {
             fill: $spc-checkout-error-message-background;
           }
         }
 
         &:hover {
-          svg g {
+          svg g path {
             fill: $spc-cart-item-trash-icon-hover;
           }
         }
 
         &.loading {
-          svg {
+          svg g path {
             visibility: hidden;
           }
         }

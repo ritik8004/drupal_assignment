@@ -350,8 +350,23 @@ class CustomCommand extends BltTasks {
 
     $this->invokeCommand('local:reset-local-settings');
 
-    // Restart memcache to avoid issues because of old configs.
-    $this->_exec('sudo service memcached restart');
+    $devel_env = getenv('DEVEL_ENV');
+    $is_lando = !empty($devel_env) && $devel_env == 'lando';
+    $sudo_prefix = '';
+
+    if ($is_lando) {
+      $app_root = '/app';
+
+      // Flush memcache.
+      $this->_exec('echo "flush_all" > nc -q 2 memcache1 11211');
+      $this->_exec('echo "flush_all" > nc -q 2 memcache2 11211');
+    }
+    else {
+      $app_root = '/var/www/alshaya';
+      $sudo_prefix = 'sudo ';
+      // Restart memcache to avoid issues because of old configs.
+      $this->_exec($sudo_prefix . 'service memcached restart');
+    }
 
     /** @var \Acquia\Blt\Robo\Tasks\DrushTask $task */
     $task = $this->taskDrush()
@@ -383,8 +398,8 @@ class CustomCommand extends BltTasks {
     $this->invokeCommand('local:reset-settings-file');
 
     // Avoid file not writable issues after Drupal install.
-    $this->_exec('sudo chmod -R 777 /var/www/alshaya/docroot/sites/g/files');
-    $this->_exec('sudo chmod -R 777 /var/www/alshaya/files-private');
+    $this->_exec($sudo_prefix . 'chmod -R 777 ' . $app_root . '/docroot/sites/g/files');
+    $this->_exec($sudo_prefix . 'chmod -R 777 ' . $app_root . '/files-private');
 
     return $result;
   }

@@ -93,15 +93,17 @@
     align-items: center;
     width: 100%;
 
-    &:last-child {
-      margin-bottom: 0;
-    }
-
     @include arabic-letter-spacing;
 
     .ie & {
       // Added height intentionally to fix the IE issue, though it won't affect styling anywhere else.
       height: 3.25rem;
+    }
+
+    @include breakpoint($tablet) {
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -110,6 +112,8 @@
     }
 
     @include breakpoint($only-mobile) {
+      margin: 0.625rem;
+      width: calc(100% - 0.625rem - 0.625rem);
       padding: 0.3125rem 0;
     }
 
@@ -135,6 +139,10 @@
     svg {
       width: 2.1875rem;
       margin: 0 0.5rem;
+
+      @include breakpoint($only-mobile) {
+        align-self: flex-start;
+      }
     }
   }
 

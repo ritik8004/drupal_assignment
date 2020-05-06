@@ -51,19 +51,19 @@ class SystemSettings {
     // Get host_site_code or acsf_site_name based on environment.
     if ($env === 'local') {
       // Require local_sites.php file for host site code.
-      require DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/local_sites.php';
+      require_once DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/local_sites.php';
     }
     else {
       // Require sites.inc and post-sites-php/includes.php for ACSF site_name.
-      require DRUPAL_ROOT . '/sites/g/sites.inc';
+      require_once DRUPAL_ROOT . '/sites/g/sites.inc';
       $host = rtrim($_SERVER['HTTP_HOST'], '.');
       $data = gardens_site_data_refresh_one($host);
       $GLOBALS['gardens_site_settings'] = $data['gardens_site_settings'];
-      require DRUPAL_ROOT . '/../factory-hooks/post-sites-php/includes.php';
+      require_once DRUPAL_ROOT . '/../factory-hooks/post-sites-php/includes.php';
     }
 
     $site_country_code = alshaya_get_site_country_code($this->getSiteCode());
-    require DRUPAL_ROOT . '/../factory-hooks/environments/mapping.php';
+    require_once DRUPAL_ROOT . '/../factory-hooks/environments/mapping.php';
 
     $settings = alshaya_get_commerce_third_party_settings(
       $site_country_code['site_code'],
@@ -77,6 +77,7 @@ class SystemSettings {
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/cybersource.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_security.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/exception_message_type.php';
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/middleware_auth.php';
 
     // Include overrides.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';

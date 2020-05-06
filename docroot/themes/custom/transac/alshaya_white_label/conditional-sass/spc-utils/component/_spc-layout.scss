@@ -25,12 +25,6 @@
     display: none !important;
   }
 
-  .block-customer-service-block {
-    @include breakpoint($only-mobile) {
-      padding-bottom: 6.25rem;
-    }
-  }
-
   .spc-footer {
     padding-top: 5rem;
 
@@ -52,7 +46,11 @@
       max-width: calc(100% - 2.5rem);
     }
 
-    margin-bottom: 1.25rem;
+    margin-bottom: 2.5rem;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.25rem;
+    }
   }
 
   .spc-post-content {
@@ -95,7 +93,7 @@
 
       @include breakpoint($only-mobile) {
         width: 100%;
-        margin-top: 1.25rem;
+        margin-top: 2.5rem;
       }
     }
   }
@@ -119,12 +117,14 @@
   }
 }
 
+// Only login.
 .alias--cart-login {
   .c-footer {
     padding-top: 0;
   }
 }
 
+// Only checkout pages.
 .alias--checkout,
 .alias--checkout-confirmation {
   .c-post-content {
@@ -135,10 +135,35 @@
   }
 }
 
+// Only cart.
 .alias--cart {
   .spc-post-content {
     margin-top: 2.5rem;
 
     @include clearfix;
+  }
+
+  .spc-pre-content {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Only cart & confirmation.
+.alias--cart,
+.alias--checkout-confirmation {
+  .c-footer {
+    @include breakpoint($only-mobile) {
+      padding-bottom: 5.625rem;
+    }
+  }
+}
+
+.alias--checkout {
+  .c-footer {
+    @include breakpoint($only-mobile) {
+      padding-bottom: 7.8125rem;
+    }
   }
 }

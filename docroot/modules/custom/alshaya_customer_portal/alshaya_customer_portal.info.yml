@@ -1,0 +1,5 @@
+name: Alshaya Customer Portal
+type: module
+description: Helps to connect with the Customer Portal services
+package: Alshaya
+core: 8.x

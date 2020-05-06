@@ -554,4 +554,12 @@
       height: 4.5rem;
     }
   }
+
+  .site-brand-home {
+    a {
+      @include breakpoint($only-mobile) {
+        margin: 0;
+      }
+    }
+  }
 }

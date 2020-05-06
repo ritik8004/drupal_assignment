@@ -1,0 +1,20 @@
+{{ attach_library('alshaya_white_label/additional-attribute') }}
+{% if properties is not empty %}
+<div class="pdp-overlay-details">{{ 'Details'|t }}</div>
+  <div class="attribute-sliderbar">
+    <div class="attribute-sliderbar__head">
+      <div class="attribute-sliderbar__title">{{ 'Details'|t }}</div>
+      <div class="attribute-sliderbar__close"></div>
+    </div>
+    <div class="attribute-sliderbar__content">
+      {% for property in properties %}
+        <h3>{{ property.label }}</h3>
+        <ul>
+          {% for details in property.data %}
+            <li>{{ details.value }}</li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

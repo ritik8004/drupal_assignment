@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import {
   cartAvailableInStorage,
   getCartApiUrl,
+  getCartForCheckoutApiUrl,
   redirectToCart,
 } from '../get_cart';
 import { restoreCartApiUrl } from '../update_cart';
@@ -60,6 +61,10 @@ export const fetchCartData = () => {
 
       return response.data;
     }).catch((error) => {
+      if (error.message === 'Request aborted') {
+        return error.message;
+      }
+
       // Processing of error here.
       Drupal.logJavascriptError('Failed to restore cart.', error);
 
@@ -104,5 +109,23 @@ export const fetchCartData = () => {
     .catch((error) => {
       // Processing of error here.
       Drupal.logJavascriptError('Failed to get cart.', error);
+    });
+};
+
+export const fetchCartDataForCheckout = () => {
+  // If session cookie not exists, no need to process/check.
+  if (drupalSettings.user.uid === 0 && !Cookies.get('PHPSESSID')) {
+    removeCartFromStorage();
+    return null;
+  }
+
+  // Prepare api url.
+  const apiUrl = getCartForCheckoutApiUrl();
+
+  return Axios.get(apiUrl)
+    .then((response) => response.data)
+    .catch((error) => {
+      // Processing of error here.
+      Drupal.logJavascriptError('Failed to get cart for checkout.', error);
     });
 };

@@ -16,30 +16,32 @@ export default class DeliveryInformation extends React.Component {
     }
 
     const deliveryType = this.getDeliveryMethodToShow(cart);
-    if (deliveryType === 'hd' && cart.cart.shipping_address !== null) {
-      return false;
-    } if (deliveryType === 'cnc' && typeof cart.cart.store_info !== 'undefined') {
+    if (deliveryType === 'home_delivery' && cart.cart.shipping.address !== null) {
       return false;
     }
+    if (deliveryType === 'click_and_collect' && typeof cart.cart.shipping.storeInfo !== 'undefined') {
+      return false;
+    }
+
     return true;
-  }
+  };
 
   getDeliveryMethodToShow = (cart) => {
     if (typeof cart.delivery_type !== 'undefined') {
       return cart.delivery_type;
     }
-    if (typeof cart.cart.delivery_type !== 'undefined') {
-      return cart.cart.delivery_type;
+    if (typeof cart.cart.shipping.type !== 'undefined') {
+      return cart.cart.shipping.type;
     }
-    return 'hd';
-  }
+    return 'home_delivery';
+  };
 
   render() {
     const { cart, refreshCart } = this.props;
 
     let title = '';
     if (cart.delivery_type !== undefined) {
-      if (cart.delivery_type === 'cnc') {
+      if (cart.delivery_type === 'click_and_collect') {
         title = Drupal.t('Collection Store');
       } else {
         title = Drupal.t('delivery information');
@@ -47,7 +49,7 @@ export default class DeliveryInformation extends React.Component {
     }
 
     if (title.length === 0) {
-      title = cart.cart.delivery_type === 'cnc'
+      title = cart.cart.shipping.type === 'click_and_collect'
         ? Drupal.t('Collection Store')
         : Drupal.t('delivery information');
     }
@@ -57,9 +59,9 @@ export default class DeliveryInformation extends React.Component {
     let deliveryComponent = null;
     if (this.showEmpty(cart)) {
       deliveryComponent = <EmptyDeliveryText cart={cart} refreshCart={refreshCart} />;
-    } else if (deliveryType === 'hd') {
+    } else if (deliveryType === 'home_delivery') {
       deliveryComponent = <HomeDeliveryInfo cart={cart} refreshCart={refreshCart} />;
-    } else if (deliveryType === 'cnc') {
+    } else if (deliveryType === 'click_and_collect') {
       deliveryComponent = <ClicknCollectDeiveryInfo cart={cart} refreshCart={refreshCart} />;
     }
 
