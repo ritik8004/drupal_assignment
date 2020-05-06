@@ -75,7 +75,18 @@
           border: 0;
           background: 0 0;
         }
+
+        li {
+          background-color: $white-smoke-light;
+          color: $white-smoke-light;
+          border: none;
+          margin: 1em 0.5em;
+        }
       }
+    }
+
+    @include breakpoint($tablet) {
+      display: none;
     }
   }
 }

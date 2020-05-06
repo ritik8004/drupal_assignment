@@ -8,15 +8,12 @@ const PdpLayout = () => {
   if (pdpGallery) {
     [skuItemCode] = Object.keys(pdpGallery);
   }
-  render() {
-    const { sku, pdpGallery } = this.state;
-    const emptyRes = (
-      <div>Product data not available</div>
-    );
+  const emptyRes = (
+    <div>Product data not available</div>
+  );
 
-    return (sku &&  pdpGallery) ?
-    <React.Fragment> <PdpGallery skuCode={sku} pdpGallery={pdpGallery} ></PdpGallery> 
-    <PdpDescription skuCode={sku} pdpDescription={pdpGallery} ></PdpDescription>
-    </React.Fragment> : emptyRes;
-  }
+  return (skuItemCode &&  pdpGallery) ? <> <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
+  <PdpDescription skuCode={skuItemCode} pdpDescription={pdpGallery} /> </>: emptyRes;
 };
+
+export default PdpLayout;

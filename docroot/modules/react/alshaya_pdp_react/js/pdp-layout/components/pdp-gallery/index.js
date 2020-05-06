@@ -42,7 +42,6 @@ export default class PdpGallery extends React.Component {
             })}
           </Slider>
         </div>
-
       </div>
     );
   }
