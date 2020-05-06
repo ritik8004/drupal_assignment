@@ -3,7 +3,7 @@ import isRTL from '../rtl';
 import dispatchCustomEvent from '../events';
 import { getDefaultMapCenter } from '../checkout_util';
 
-export default class Gmap {
+export class Gmap {
   constructor() {
     this.map = {
       settings: {
@@ -68,7 +68,7 @@ export default class Gmap {
       gestureHandling: this.map.settings.gestureHandling,
     });
 
-    return this.map.googleMap;
+    // return this.map.googleMap;
   }
 
   /**
@@ -102,6 +102,7 @@ export default class Gmap {
       return;
     }
 
+    const { googlemap, settings: mapSettings } = this.map;
     this.map.geoCoder.geocode({
       componentRestrictions: {
         country: drupalSettings.country_code,
@@ -109,8 +110,8 @@ export default class Gmap {
     }, (results, status) => {
       if (status === google.maps.GeocoderStatus.OK) {
         // Just center the map and don't do anything.
-        window.spcMap.map.googleMap.setCenter(results[0].geometry.location);
-        window.spcMap.map.googleMap.setZoom(window.spcMap.map.settings.zoom);
+        googlemap.setCenter(results[0].geometry.location);
+        googlemap.setZoom(mapSettings.zoom);
         if (callBackFunc) {
           callBackFunc.call(results);
         }
@@ -254,3 +255,19 @@ export default class Gmap {
     });
   }
 }
+
+// Helper function to create a global object of gamp
+// to avoid creation of window.spcmap for cnc.
+const globalGmap = (function globalGmapHelper() {
+  let gmapObj;
+
+  return {
+    create() {
+      if (!gmapObj) {
+        gmapObj = new Gmap();
+      }
+      return gmapObj;
+    },
+  };
+}());
+export default globalGmap;
