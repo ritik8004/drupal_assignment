@@ -23,12 +23,18 @@ class AlshayaCustomHook extends BltTasks {
 
     $failed = FALSE;
     $files = explode(PHP_EOL, $arguments['changed_files']);
+    $patterns = [
+      'react/alshaya_spc/js',
+      'react/alshaya_pdp_react/js',
+    ];
     foreach ($files as $file) {
-      if (strpos($file, 'react/alshaya_spc/js') !== FALSE) {
-        $paths = explode('react/', $file);
-        $output = $this->_exec('cd ' . $paths[0] . 'react; npm run lint ' . $paths[1]);
-        if ($output->getExitCode() !== 0) {
-          $failed = TRUE;
+      foreach ($patterns as $pattern) {
+        if (strpos($file, $pattern) !== FALSE) {
+          $paths = explode('react/', $file, 2);
+          $output = $this->_exec('cd ' . $paths[0] . 'react; npm run lint ' . $paths[1]);
+          if ($output->getExitCode() !== 0) {
+            $failed = TRUE;
+          }
         }
       }
     }

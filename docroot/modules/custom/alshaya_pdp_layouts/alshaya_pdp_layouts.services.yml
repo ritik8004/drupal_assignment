@@ -5,7 +5,7 @@ services:
 
   alshaya_pdp_layouts.preprocess_alshaya_magazine_event:
     class: '\Drupal\alshaya_pdp_layouts\EventSubscriber\PreprocessMagazineSubscriber'
-    arguments:
-      - '@alshaya_acm_product.skumanager'
+    calls:
+        - [setManager, ['@?alshaya_acm_product.skumanager']]
     tags:
       - { name: 'event_subscriber' }

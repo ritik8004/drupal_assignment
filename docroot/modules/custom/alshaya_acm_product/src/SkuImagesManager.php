@@ -1099,7 +1099,7 @@ class SkuImagesManager {
    * @return array
    *   Thumbnails.
    */
-  protected function getThumbnailsFromMedia(array $media, $get_main_image = FALSE) {
+  public function getThumbnailsFromMedia(array $media, $get_main_image = FALSE) {
     $thumbnails = $media['thumbs'] ?? [];
 
     // Fetch settings.
