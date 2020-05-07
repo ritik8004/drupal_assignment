@@ -41,6 +41,11 @@ $content_link_color: $PBK_confirmation_blue;
 $primary_link: $PBK_confirmation_blue;
 $primary_input_focus_border: $PBK_confirmation_blue;
 $secondary_link: $_black_two;
+$primary_text: $_gray_ten;
+
+// Buttons.
+$primary_btn_bg: $PBK_red;
+$primary_btn_text: $white-two;
 
 // Header - Search.
 $primary_search_btn_icon: $transparent;
@@ -100,9 +105,6 @@ $newsletter_input_border: $_black_two;
 $newsletter_submit_btn: $_black_two;
 $newsletter_submit_btn_text: $white-two;
 
-// PDP
-$pdp_title: $_gray_ten;
-
 // PDP Price
 $pdp_product_price: $_black_two;
 $pdp_product_special_price_text: $PBK_deep_red;
@@ -111,13 +113,15 @@ $pdp_product_discount_price: $PBK_deep_red;
 $pdp_product_discount_text: $PBK_deep_red;
 $pdp_sidebar_link: $_black_two;
 $pdp_accordion_title: $_black_two;
-$pdp_add_to_cart_button_bg: $PBK_red;
 
-// Accordion
+// Accordion / Filter Facets
 $accordion_border: $_gray_eleven;
-$accordion_title: $_black_two;
 $accordion_sub_title: $_black_two;
 $accordion_title_disabled: $_gray_eleven;
+$accordion_title: $_grey_nineteen;
+$accordion_title_icon: $_grey_nineteen;
+$plp_filter_title: $_grey_nineteen;
+$plp_filter_icon: $_grey_nineteen;
 
 // Sharethis
 $sharethis_icon: $_black_two;
@@ -130,12 +134,9 @@ $lhn_l3: $_gray_ten;
 $lhn_l3_hover: $_black_two;
 
 // PLP Filter facets
-$plp_filter_legend: $_grey_nineteen;
 $plp_facet_active_bg: $white-two;
 $plp_facet_border: $_gray_eleven;
 $plp_sort_by_options: $_gray_ten;
-$plp_filter_icon: $_grey_nineteen;
-$plp_all_filter_title: $_grey_nineteen;
 $plp_selected_filter_label_text: $PBK_black_one;
 $plp_facet_filter_bg: $_black_four;
 

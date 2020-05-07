@@ -21,11 +21,6 @@
   .block-views-exposed-filter-blocksearch-page {
     legend {
       text-transform: uppercase;
-      color: $plp_filter_legend;
-
-      &::after {
-        color: $plp_filter_legend;
-      }
     }
   }
 
@@ -34,16 +29,6 @@
     .c-accordion__title,
     .c-collapse__title {
       text-transform: uppercase;
-      color: $plp_filter_legend;
-
-      &::after {
-        color: $plp_filter_legend;
-      }
     }
-  }
-
-  .show-all-filters,
-  .show-all-filters-algolia {
-    color: $plp_filter_legend;
   }
 }
