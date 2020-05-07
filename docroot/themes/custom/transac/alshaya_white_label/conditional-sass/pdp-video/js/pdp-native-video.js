@@ -11,6 +11,9 @@
    *
    * @param {*} element
    * The video element.
+   *
+   * @param {*} stopVideo
+   * Pass `true` here to pause video when fullscreen closes.
    */
   function playPause(element, stopVideo) {
     if (stopVideo === true) {
