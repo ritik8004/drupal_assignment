@@ -11,8 +11,15 @@
    *
    * @param {*} element
    * The video element.
+   *
+   * @param {*} stopVideo
+   * Pass `true` here to pause video when fullscreen closes.
    */
-  function playPause(element) {
+  function playPause(element, stopVideo) {
+    if (stopVideo === true) {
+      element.get(0).pause();
+      return;
+    }
     if (element.get(0).paused) {
       element.get(0).play();
     }
@@ -35,16 +42,19 @@
   Drupal.behaviors.pdpVideoPlayer = {
     attach: function (context) {
       $('.pdp-video-close').once('video-fullscreen-control').on('click', function () {
-        playPause($(this).next());
+        playPause($(this).next(), true);
         $(this).parent().removeClass('go-fullscreen');
       });
 
       // Video player controls to play pause.
       $('video.gallery-video').once('video-load').on('click', function () {
         var videoElement = $(this);
-        playPause(videoElement);
         if ($(window).width() < 768) {
           playFullScreen(videoElement);
+          playPause(videoElement, false);
+        }
+        else {
+          playPause(videoElement, false);
         }
       });
 
