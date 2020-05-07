@@ -53,6 +53,14 @@ class AlshayaMasterMobileUtilDecorator extends MobileNumberUtil {
   public function getMobileNumber($number, $country = NULL, $types = [1 => 1, 2 => 2]) {
     // Remove leading zero due to which number is un-recognizable.
     $number = ltrim($number, 0);
+
+    $countryCode = $country ?? _alshaya_custom_get_site_level_country_code();
+    $countryMobileCode = '+' . $this->getCountryCode($countryCode);
+
+    if (strpos($number, $countryMobileCode) === FALSE) {
+      $number = $countryMobileCode . $number;
+    }
+
     return $this->mobileUtil->getMobileNumber($number, $country, $types);
   }
 
