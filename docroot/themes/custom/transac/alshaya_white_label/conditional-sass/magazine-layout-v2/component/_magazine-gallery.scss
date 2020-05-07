@@ -14,10 +14,6 @@
 
 .magv2-pdp-gallery {
   .magazine__gallery--container-desktop {
-    @include breakpoint($only-mobile) {
-      display: none;
-    }
-
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
@@ -29,7 +25,7 @@
       grid-gap: 0.5rem;
     }
 
-    .magv2-pdp-images {
+    .magv2-pdp-image {
       position: relative;
       cursor: pointer;
     }
@@ -60,12 +56,11 @@
 
   .magazine__gallery--container-mobile {
     @include breakpoint($only-mobile) {
-      display: block;
-
       .slick-dots {
         display: flex !important;
         justify-content: center;
         background: $white-five;
+        width: 100%;
 
         button {
           font-size: 0;
@@ -84,9 +79,115 @@
         }
       }
     }
+  }
 
-    @include breakpoint($tablet) {
-      display: none;
+  .popup-overlay {
+    background: $white-five !important;
+
+    .popup-content {
+      background: none !important;
+      border: none !important;
+      padding: 0 !important;
+      height: 100vh !important;
+      width: 100vw !important;
+      overflow-y: auto;
+
+      @include breakpoint($tablet) {
+        padding: 5.3125rem !important;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .close {
+      position: absolute;
+      #{$right}: 0;
+      top: 1.5rem;
+
+      @include breakpoint($tablet) {
+        top: 4rem;
+      }
+
+      @include icon(close, before) {
+        font-size: 2.5rem;
+        position: fixed;
+        top: 1.75rem;
+        #{$right}: 1.75rem;
+        background: $grey-light-two;
+        border-radius: 50%;
+        color: $mothercare-black;
+        cursor: pointer;
+        opacity: 0.6;
+        z-index: 9;
+
+        @include breakpoint($tablet) {
+          top: 3.75rem;
+          #{$right}: 3.75rem;
+        }
+      }
+    }
+
+    .slick-slider {
+      .slick-next,
+      .slick-prev {
+        position: fixed;
+        bottom: 3.65rem;
+
+        @include breakpoint($tablet) {
+          top: 50%;
+          transform: translateY(-50%);
+          border-radius: 50%;
+          opacity: 0.6;
+          background: $grey-light-two;
+          bottom: unset;
+        }
+      }
+
+      .slick-prev {
+        #{$left}: 0.5rem;
+
+        @include breakpoint($tablet) {
+          #{$left}: 3.75rem;
+        }
+      }
+
+      .slick-next {
+        #{$right}: 0.5rem;
+
+        @include breakpoint($tablet) {
+          #{$right}: 3.75rem;
+        }
+      }
+
+      .slick-dots {
+        position: fixed;
+        bottom: 3.375rem;
+        #{$left}: 50%;
+        transform: translate(-50%, 0);
+
+        button {
+          font-size: 0;
+          display: block;
+          cursor: pointer;
+          color: transparent;
+          border: 0;
+          background: 0 0;
+          height: 1rem;
+        }
+
+        li {
+          background-color: $white-smoke-light;
+          color: $white-smoke-light;
+          border: none;
+          margin: 1em 0.75em;
+        }
+      }
+
+      .magv2-pdp-image {
+        cursor: auto;
+      }
     }
   }
 }
@@ -95,7 +196,7 @@
   .magazine__gallery--container {
     display: block;
 
-    .magv2-pdp-images {
+    .magv2-pdp-image {
       margin-bottom: 1.5rem;
 
       &:nth-child(2n+1) {
