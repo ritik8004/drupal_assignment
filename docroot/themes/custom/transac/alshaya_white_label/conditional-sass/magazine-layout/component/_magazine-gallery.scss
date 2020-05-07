@@ -11,7 +11,7 @@
   .ie & {
     display: block;
 
-    .pdp-image {
+    .pdp-asset {
       margin-bottom: 1.5rem;
 
       &:nth-child(2n +1) {
@@ -58,11 +58,17 @@
       cursor: pointer;
     }
 
+    .pdp-image-zoom-wrapper {
+      overflow: hidden;
+      position: relative;
+    }
+
     &.magazine-image-zoomed {
       overflow: hidden;
 
       .magazine-image-zoom-placeholder {
         z-index: 1;
+        opacity: 1;
       }
     }
 
@@ -74,7 +80,7 @@
       bottom: 0;
       background-repeat: no-repeat;
       z-index: -1;
-      background-size: cover;
+      opacity: 0;
     }
   }
 
@@ -174,7 +180,7 @@
     }
   }
 
-  .pdp-image {
+  .pdp-asset {
     cursor: pointer;
 
     @include breakpoint($tablet) {
@@ -241,7 +247,7 @@
 @include breakpoint($only-mobile) {
   .pdp-modal-overlay {
     .magazine__gallery--container {
-      .pdp-image {
+      .pdp-asset {
         #wrap {
           position: relative !important;
 
@@ -256,7 +262,7 @@
   .nodetype--acq_product {
     &.magazine-layout {
       .magazine__gallery--container {
-        .pdp-image {
+        .pdp-asset {
           #wrap {
             position: static !important;
 
@@ -281,7 +287,7 @@
 @include breakpoint($tablet) {
   .magazine-layout-ajax-throbber {
     .magazine__gallery--container {
-      .pdp-image {
+      .pdp-asset {
         #wrap {
           position: inherit !important;
         }
@@ -293,7 +299,7 @@
 }
 
 // product - labels in magazine gallery
-.magazine-layout-node .gallery-wrapper .pdp-image-0 {
+.magazine-layout-node .gallery-wrapper .pdp-asset-0 {
   position: relative;
 
   .product-labels {
@@ -362,7 +368,7 @@
   }
 }
 
-.magazine-layout-node .gallery-wrapper .pdp-image {
+.magazine-layout-node .gallery-wrapper .pdp-asset {
   position: relative;
 }
 

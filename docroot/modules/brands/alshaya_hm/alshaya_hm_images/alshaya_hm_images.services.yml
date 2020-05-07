@@ -38,5 +38,6 @@ services:
       - '@entity_type.manager'
       - '@logger.factory'
       - '@file.usage'
+      - '@alshaya_hm_images.skuassetsmanager'
     tags:
       - { name: 'event_subscriber' }

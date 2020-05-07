@@ -22,6 +22,7 @@ use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
+use Drupal\file\Entity\File;
 
 /**
  * SkuAssetManager Class.
@@ -154,6 +155,13 @@ class SkuAssetManager {
   private $cacheMediaFileMapping;
 
   /**
+   * Config alshaya_acm_product.settings.
+   *
+   * @var Drupal\Core\Config\ImmutableConfig
+   */
+  protected $acmProductSettings;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -237,6 +245,7 @@ class SkuAssetManager {
     }
 
     $save = FALSE;
+    $download = TRUE;
 
     foreach ($assets as $index => &$asset) {
       // Sanity check, we always need asset id.
@@ -267,9 +276,15 @@ class SkuAssetManager {
         continue;
       }
 
+      $this->acmProductSettings = $this->configFactory->get('alshaya_acm_product.settings');
+      if (($this->getAssetType($asset) === 'video')
+        && ($this->acmProductSettings->get('pause_videos_download'))) {
+        $download = FALSE;
+      }
+
       // Use pims/asset id for lock key.
       try {
-        $file = $this->downloadImage($asset, $sku->getSku());
+        $file = $download ? $this->downloadAsset($asset, $sku->getSku()) : NULL;
       }
       catch (\Exception $e) {
         watchdog_exception('SkuAssetManager', $e);
@@ -295,7 +310,7 @@ class SkuAssetManager {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
 
-      $this->logger->notice('Downloaded new asset images for sku @sku.', [
+      $this->logger->notice('Downloaded new asset for sku @sku.', [
         '@sku' => $sku->getSku(),
       ]);
     }
@@ -306,17 +321,19 @@ class SkuAssetManager {
   }
 
   /**
-   * Download image for PIMS Data and store in Drupal.
+   * Download asset for PIMS Data and store in Drupal.
    *
    * @param array $data
    *   PIMS Data.
    * @param string $sku
    *   SKU of asset.
+   * @param string $asset_type
+   *   Type of asset.
    *
    * @return \Drupal\file\FileInterface|null|string
    *   File entity if image download successful.
    */
-  private function downloadPimsImage(array &$data, string $sku) {
+  private function downloadPimsAsset(array &$data, string $sku, string $asset_type) {
     // If image is blacklisted, block download.
     if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
       return NULL;
@@ -326,15 +343,30 @@ class SkuAssetManager {
     $pims_directory = $this->hmImageSettings->get('pims_directory');
 
     // Prepare the directory path.
-    $directory = 'public://assets-shared/' . trim($data['path'], '/');
+    $directory = ($asset_type === 'video')
+      ? 'brand://' . $asset_type . '/' . trim($data['path'], '/')
+      : 'public://assets-shared/' . trim($data['path'], '/');
     $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
 
     // Check if file already exists in the directory.
     if (file_exists($target)) {
       // If file exists in directory, check if file entity exists.
-      $files = reset($this->fileStorage->loadByProperties(['uri' => $target]));
+      $uri = $this->fileStorage->loadByProperties(['uri' => $target]);
+      $files = reset($uri);
       if (!empty($files) && $files instanceof FileInterface) {
         return $files;
+      }
+      else {
+        // If file exists in directory but file entity doesnt exist
+        // then create file entity.
+        $file = File::create([
+          'uri' => $target,
+          'uid' => 0,
+          'status' => FILE_STATUS_PERMANENT,
+        ]);
+        $file->save();
+
+        return $file;
       }
     }
 
@@ -351,8 +383,12 @@ class SkuAssetManager {
 
     // Download the file contents.
     try {
+      $timeout = Settings::get('media_download_timeout_' . $asset_type, NULL);
+      if (!isset($timeout)) {
+        $timeout = Settings::get('media_download_timeout', 5);
+      }
       $options = [
-        'timeout' => Settings::get('media_download_timeout', 5),
+        'timeout' => $timeout,
       ];
 
       $file_stream = $this->httpClient->get($url, $options);
@@ -538,14 +574,14 @@ class SkuAssetManager {
    *
    * @throws \Exception
    */
-  private function downloadImage(array &$asset, string $sku) {
+  private function downloadAsset(array &$asset, string $sku) {
     $lock_key = '';
+    $type = $this->getAssetType($asset);
 
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {
-
-      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
-      $lock_key = 'download_image_' . $id;
+      $id = $asset['pims_' . $type]['id'] ?? $asset['Data']['AssetId'];
+      $lock_key = 'download_' . $type . '_' . $id;
 
       // Acquire lock to ensure parallel processes are executed one by one.
       do {
@@ -570,8 +606,8 @@ class SkuAssetManager {
     }
 
     $file = NULL;
-    if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
-      $file = $this->downloadPimsImage($asset['pims_image'], $sku);
+    if (isset($asset['pims_' . $type]) && is_array($asset['pims_' . $type])) {
+      $file = $this->downloadPimsAsset($asset['pims_' . $type], $sku, $type);
     }
     elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
       $file = $this->downloadLiquidPixelImage($asset, $sku);
@@ -1029,25 +1065,25 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to get images for a SKU.
+   * Helper function to get assets for a SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Parent Sku.
    * @param string $page_type
    *   Type of page.
    *
-   * @return array|images
-   *   Array of images for the SKU.
+   * @return array|assets
+   *   Array of assets for the SKU.
    */
-  public function getImagesForSku(SKU $sku, $page_type) {
-    $images = [];
+  public function getAssetsForSku(SKU $sku, $page_type) {
+    $assets = [];
     if ($sku->bundle() == 'simple') {
-      $images = $this->getSkuAssets($sku, $page_type);
+      $assets = $this->getSkuAssets($sku, $page_type);
     }
     elseif ($sku->bundle() == 'configurable') {
-      $images = $this->getChildSkuAssets($sku, $page_type);
+      $assets = $this->getChildSkuAssets($sku, $page_type);
     }
-    return $images;
+    return $assets;
   }
 
   /**
@@ -1098,6 +1134,24 @@ class SkuAssetManager {
     }
 
     return TRUE;
+  }
+
+  /**
+   * Helper function to get asset type.
+   *
+   * @param array $asset
+   *   Array of asset details.
+   *
+   * @return string
+   *   Asset type (video/image).
+   */
+  public function getAssetType(array $asset) {
+    if (strpos($asset['Data']['AssetType'], 'MovingMedia') !== FALSE) {
+      return 'video';
+    }
+    elseif (strpos($asset['Data']['AssetType'], 'StillMediaComponents') !== FALSE) {
+      return 'image';
+    }
   }
 
 }

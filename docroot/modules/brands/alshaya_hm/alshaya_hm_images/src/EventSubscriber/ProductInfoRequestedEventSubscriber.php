@@ -91,12 +91,26 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     switch ($context) {
       case 'cart':
       case 'pdp':
-        $media = $this->skuAssetsManager->getImagesForSku($sku, $context);
+        $media = $this->skuAssetsManager->getAssetsForSku($sku, $context);
 
         $return = [];
         foreach ($media as $item) {
-          $item['label'] = $sku->label();
-          $return['media_items']['images'][] = $item;
+          $asset_type = $this->skuAssetsManager->getAssetType($item);
+
+          switch ($asset_type) {
+            case 'image':
+              $item['label'] = $sku->label();
+              $return['media_items']['images'][] = $item;
+              break;
+
+            case 'video':
+              $item['label'] = $sku->label();
+              $return['media_items']['videos'][] = $item;
+              break;
+
+            default:
+              continue;
+          }
         }
 
         $event->setValue($return);
