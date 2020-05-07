@@ -107,7 +107,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $sku_entity = SKU::loadFromSku($sku);
     $vars['sku'] = $sku_entity;
     $gallery = [];
-    $product_price = [];
 
     if ($sku_entity instanceof SKUInterface) {
       $media = $this->skuImageManager->getProductMedia($sku_entity, self::PDP_LAYOUT_MAGAZINE_V2, FALSE);
@@ -143,7 +142,9 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           // Get the product details.
           $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['description'] = $vars['elements']['description'];
           $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['shortDesc'] = $vars['elements']['short_desc'];
-          $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['title'] = $entity->label();
+          $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['title'] = [
+            'label' => $entity->label(),
+          ];
 
           // Get the product price details.
           $product_price = [
