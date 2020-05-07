@@ -18,11 +18,14 @@ use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\file\FileInterface;
 use Drupal\alshaya_product_options\SwatchesHelper;
+use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\Core\Language\LanguageManager;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Class AlshayaAlgoliaIndexHelper.
@@ -125,6 +128,20 @@ class AlshayaAlgoliaIndexHelper {
   protected $languageManager;
 
   /**
+   * The product category tree service.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   */
+  protected $productCategoryTree;
+
+  /**
+   * Flag to store supercategory status.
+   *
+   * @var bool
+   */
+  protected $isSuperCategoryEnabled;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -152,7 +169,9 @@ class AlshayaAlgoliaIndexHelper {
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches_helper
    *   The Swatches helper service.
    * @param \Drupal\Core\Language\LanguageManager $language_manager
-   *   The lnaguage manager service.
+   *   The language manager service.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
+   *   The product category tree service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -170,7 +189,8 @@ class AlshayaAlgoliaIndexHelper {
     ProductCategoryManager $product_category_manager,
     ConfigFactory $config_factory,
     SwatchesHelper $swatches_helper,
-    LanguageManager $language_manager
+    LanguageManager $language_manager,
+    ProductCategoryTree $product_category_tree
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -185,6 +205,8 @@ class AlshayaAlgoliaIndexHelper {
     $this->configFactory = $config_factory;
     $this->swatchesHelper = $swatches_helper;
     $this->languageManager = $language_manager;
+    $this->productCategoryTree = $product_category_tree;
+    $this->isSuperCategoryEnabled = $config_factory->get('alshaya_super_category.settings')->get('status');
   }
 
   /**
@@ -308,6 +330,11 @@ class AlshayaAlgoliaIndexHelper {
     }
     $object['changed'] = $this->dateTime->getRequestTime();
     $object['field_category'] = $this->getFieldCategoryHierarchy($node, $node->language()->getId());
+
+    // Index the product super_category term.
+    if ($this->isSuperCategoryEnabled) {
+      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $this->getSuperCategory($node);
+    }
   }
 
   /**
@@ -628,13 +655,38 @@ class AlshayaAlgoliaIndexHelper {
   }
 
   /**
+   * Returns the supercategory for a "Product" node.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node whose supercategory is to be fetched.
+   *
+   * @return string
+   *   The supercategory term or empty string if no supercategory found.
+   */
+  protected function getSuperCategory(NodeInterface $node) {
+    $category = $node->get('field_category')->referencedEntities();
+    // We can use any category for the product here as the product would
+    // only belong to one super category.
+    $category = $category[0] ?? NULL;
+    if (!empty($category)) {
+      // Get the super category.
+      $super_category = _alshaya_super_category_get_super_category_for_term($category, $node->language()->getId());
+      if ($super_category instanceof TermInterface) {
+        return $super_category->getName();
+      }
+      elseif (is_array($super_category)) {
+        return $super_category['label'] ?? '';
+      }
+    }
+
+    return '';
+  }
+
+  /**
    * Helps to add custom facet to the index.
    *
    * @param string $attr_name
    *   The name of the attribute.
-   *
-   * @return bool
-   *   TRUE if attribute is added to index, else FALSE.
    *
    * @throws \Exception
    *   If attribute is already present in the index, then exception is thrown.
@@ -667,8 +719,6 @@ class AlshayaAlgoliaIndexHelper {
     }
 
     $this->logger->notice('Added @attr as an attribute for faceting.', ['@attr' => $attr_name]);
-
-    return TRUE;
   }
 
 }

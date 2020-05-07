@@ -80,12 +80,20 @@ const SearchResultsComponent = props => {
     return sortedItems;
   }
 
+  function getSuperCategory() {
+    let activeMenuItem = document.querySelector('.main--menu .menu--one__link.active');
+    if (activeMenuItem !== null) {
+      return activeMenuItem.getAttribute('data-super-category-label');
+    }
+    return null;
+  }
   // Uses the Algolia optionalFilters feature.
   // Super Category is currently the only optional filter in use.
   // We want to promote the products belonging to current page super category
   // to the top of the search results.
-  var optionalFilters = drupalSettings.superCategory
-    ? `${drupalSettings.superCategory.search_facet}:${drupalSettings.superCategory.term}`
+  let supercategory = getSuperCategory();
+  let optionalFilters = drupalSettings.superCategory && supercategory
+    ? `${drupalSettings.superCategory.search_facet}:${supercategory}`
     : null
 
   return (
