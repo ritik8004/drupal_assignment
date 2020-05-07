@@ -233,7 +233,7 @@ class ClickCollect extends React.Component {
         this.selectStoreButtonVisibility(false);
         if (typeof response.error === 'undefined') {
           updateCoordsAndStoreList(coords, response.data, locationAccess);
-          this.showOpenMarker(response);
+          this.showOpenMarker(response.data);
         } else {
           updateCoordsAndStoreList(coords, []);
         }
@@ -282,12 +282,10 @@ class ClickCollect extends React.Component {
   showOpenMarker = (storeList = null) => {
     const { selectedStore, storeList: contextStoreList } = this.context;
     const storeListArg = (!storeList) ? contextStoreList : storeList;
-
     if (!selectedStore) {
       this.selectStoreButtonVisibility(false);
       return;
     }
-    this.selectStoreButtonVisibility(false);
     this.openMarkerOfStore(selectedStore.code, storeListArg);
     this.closeAllInfoWindow();
   };
@@ -308,6 +306,7 @@ class ClickCollect extends React.Component {
     const index = _findIndex(storeListArg, {
       code: storeCode,
     });
+    this.selectStoreButtonVisibility(index >= 0);
 
     const self = this;
     // Wait for all markers to be placed in map before

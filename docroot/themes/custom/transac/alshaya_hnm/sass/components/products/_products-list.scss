@@ -106,12 +106,28 @@
             max-height: 22.2rem;
           }
         }
+
+        article:hover {
+          .alshaya_search_gallery {
+            @include breakpoint($desktop) {
+              max-height: 22.2rem !important;
+            }
+          }
+        }
       }
 
       &.product-large {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
             max-height: 30rem;
+          }
+        }
+
+        article:hover {
+          .alshaya_search_gallery {
+            @include breakpoint($desktop) {
+              max-height: 30rem !important;
+            }
           }
         }
       }
@@ -143,6 +159,14 @@
           }
         }
       }
+
+      article:hover {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 37.5rem !important;
+          }
+        }
+      }
     }
 
     &.product-small {
@@ -154,6 +178,14 @@
         .alshaya_search_mainimage {
           @include breakpoint($upto-desktop) {
             height: auto !important;
+          }
+        }
+      }
+
+      article:hover {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 27.6rem !important;
           }
         }
       }
@@ -228,12 +260,6 @@
             color: $plp_tile_product_title_hover;
             text-decoration: none;
           }
-        }
-      }
-
-      article:hover {
-        .alshaya_search_gallery {
-          max-height: 22.2rem !important;
         }
       }
     }

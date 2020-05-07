@@ -7,6 +7,7 @@ import {
   removeAllMarkersFromMap,
   getMap,
   getHDMapZoom,
+  onMapClick,
 } from './map_utils';
 import isRTL from '../rtl';
 import getStringMessage from '../strings';
@@ -49,7 +50,7 @@ export default class GoogleMap extends React.Component {
     // map is allowed or not.
     const mapClickable = true;
     if (mapClickable) {
-      this.googleMap.addListener('click', this.onMapClick);
+      this.googleMap.addListener('click', onMapClick);
     }
 
     // Storing all markers in global so that can be accessed from anywhere.
@@ -141,20 +142,6 @@ export default class GoogleMap extends React.Component {
       bubbles: true,
       detail: {
         coords: () => place.geometry.location,
-      },
-    });
-    document.dispatchEvent(event);
-  }
-
-  /**
-   * When click on map.
-   */
-  onMapClick = (e) => {
-    // Dispatch event so that other can use this.
-    const event = new CustomEvent('mapClicked', {
-      bubbles: true,
-      detail: {
-        coords: () => e.latLng,
       },
     });
     document.dispatchEvent(event);
