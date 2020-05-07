@@ -34,7 +34,6 @@ export default class AddressForm extends React.Component {
       cityChanged: false,
       errorSuccessMessage: null,
       messageType: null,
-      animateClass: '',
     };
   }
 
@@ -82,17 +81,15 @@ export default class AddressForm extends React.Component {
     smoothScrollTo('.spc-address-form-sidebar .spc-checkout-section-title');
   };
 
-  hidePopUpError = () => {
-    this.setState({
-      animateClass: 'fadeOutUp',
-    });
-
+  hidePopUpError = (e) => {
+    e.target.parentNode.parentNode.classList.add('fadeOutUp');
+    // Wait for warning message fade out animation.
     setTimeout(() => {
       this.setState({
         messageType: null,
         errorSuccessMessage: null,
       });
-    }, 450);
+    }, 200);
   };
 
   /**
@@ -188,13 +185,14 @@ export default class AddressForm extends React.Component {
       showEmail,
       formContext,
     } = this.props;
+
     const {
       area_list: areaList,
       cityChanged,
       errorSuccessMessage,
       messageType,
-      animateClass,
     } = this.state;
+
     let defaultAddressVal = [];
     if (defaultVal) {
       defaultAddressVal = defaultVal;
@@ -249,11 +247,11 @@ export default class AddressForm extends React.Component {
           <div className="spc-address-form-wrapper">
             {errorSuccessMessage !== null
               && (
-              <CheckoutMessage type={messageType} context={`new-address-form-modal modal ${animateClass}`}>
+              <CheckoutMessage type={messageType} context="new-address-form-modal modal">
                 {errorSuccessMessage}
                 {messageType === 'warning'
                 && (
-                  <a href="#" onClick={() => this.hidePopUpError()}>{getStringMessage('dismiss')}</a>
+                  <a href="#" onClick={(e) => this.hidePopUpError(e)}>{getStringMessage('dismiss')}</a>
                 )}
               </CheckoutMessage>
               )}

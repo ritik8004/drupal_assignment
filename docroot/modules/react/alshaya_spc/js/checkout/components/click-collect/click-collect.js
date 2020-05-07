@@ -427,16 +427,27 @@ class ClickCollect extends React.Component {
     window.spcMap.closeAllInfoWindow();
   }
 
+  dismissErrorMessage = (e, type) => {
+    const { showOutsideCountryError, updateLocationAccess } = this.context;
+    e.target.parentNode.parentNode.classList.add('fadeOutUp');
+    // Wait for warning message fade out animation.
+    setTimeout(() => {
+      if (type === 'outsidecountry') {
+        showOutsideCountryError(false);
+      }
+      if (type === 'locationAccessDenied') {
+        updateLocationAccess(true);
+      }
+    }, 200);
+  }
+
   render() {
     const {
       coords,
       storeList,
       selectedStore,
       locationAccess,
-      updateLocationAccess,
       outsideCountryError,
-      showOutsideCountryError,
-      animateLocationMessage,
     } = this.context;
 
     const {
@@ -471,16 +482,20 @@ class ClickCollect extends React.Component {
             <div className="spc-cnc-address-form-wrapper">
               {locationAccess === false
               && (
-                <CheckoutMessage type="warning" context={`click-n-collect-store-modal modal location-disable ${animateLocationMessage}`}>
+                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
                   <span className="font-bold">{getStringMessage('location_access_denied')}</span>
-                  <a href="#" onClick={() => updateLocationAccess(true)}>{getStringMessage('dismiss')}</a>
+                  <a href="#" onClick={(e) => this.dismissErrorMessage(e, 'locationAccessDenied')}>
+                    {getStringMessage('dismiss')}
+                  </a>
                 </CheckoutMessage>
               )}
               {outsideCountryError === true
               && (
-                <CheckoutMessage type="warning" context={`click-n-collect-store-modal modal location-disable ${animateLocationMessage}`}>
+                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
                   {parse(getStringMessage('location_outside_country_cnc'))}
-                  <a href="#" onClick={() => showOutsideCountryError(false)}>{getStringMessage('dismiss')}</a>
+                  <a href="#" onClick={(e) => this.dismissErrorMessage(e, 'outsidecountry')}>
+                    {getStringMessage('dismiss')}
+                  </a>
                 </CheckoutMessage>
               )}
               <div className="spc-cnc-address-form-content">
