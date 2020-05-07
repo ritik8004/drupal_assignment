@@ -55,7 +55,7 @@
         &.active {
           color: $mm_l1_link;
           border-top: 0;
-          border-bottom: 3px solid $mm_l1_link_active_border;
+          border-bottom: 0.1875rem solid $mm_l1_link_active_border;
         }
       }
     }
