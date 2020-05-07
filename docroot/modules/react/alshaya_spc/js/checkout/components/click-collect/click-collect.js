@@ -429,11 +429,13 @@ class ClickCollect extends React.Component {
 
   dismissErrorMessage = (e, type) => {
     const { showOutsideCountryError, updateLocationAccess } = this.context;
+    const { changeNearMeButtonStatus } = this;
     e.target.parentNode.parentNode.classList.add('fadeOutUp');
     // Wait for warning message fade out animation.
     setTimeout(() => {
       if (type === 'outsidecountry') {
         showOutsideCountryError(false);
+        changeNearMeButtonStatus('in-active');
       }
       if (type === 'locationAccessDenied') {
         updateLocationAccess(true);
