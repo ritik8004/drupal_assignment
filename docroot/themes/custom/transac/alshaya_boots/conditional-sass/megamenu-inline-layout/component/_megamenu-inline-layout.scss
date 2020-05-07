@@ -1,0 +1,82 @@
+@include breakpoint($desktop) {
+  .menu--one__list-item {
+    .menu--two__list {
+      .menu__links__wrapper {
+        .menu--two__list-item {
+          &:not(.move-to-right) {
+            height: 2.1875rem;
+
+            &::before {
+              display: none;
+            }
+
+            @include icon(chevron#{$right}, after) {
+              font-size: 1.5rem;
+              color: $mm_l2_l3_l4_icon;
+              font-weight: bold;
+            }
+
+            > .menu__link-wrapper {
+              margin: 0;
+              margin-#{$left}: 1.5rem;
+            }
+
+            &.active {
+              &::after {
+                transition: none;
+                color: $mm_l2_l3_l4_icon;
+              }
+            }
+
+            .menu--three__list,
+            .menu--four__list {
+              border-#{$right}: 1px solid $mm_l2_l3_l4_divider_border;
+              margin-bottom: 0.5rem;
+              margin-top: 0;
+            }
+          }
+
+          &.active {
+            background: $mm_l2_l3_l4_hover_bg;
+          }
+
+          .menu--three__list {
+            li {
+              min-height: 2.1875rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .block-alshaya-main-menu {
+    li.menu--one__list-item {
+      &.active {
+        .menu__links__wrapper {
+          .menu--two__list-item {
+            &:not(.move-to-right) {
+              &.active {
+                .menu--three__list {
+                  .menu--three__list-item {
+                    &:hover {
+                      background: $mm_l2_l3_l4_hover_bg;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        > .menu__link-wrapper {
+          .menu--one__link {
+            &::after {
+              bottom: -0.0625rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
