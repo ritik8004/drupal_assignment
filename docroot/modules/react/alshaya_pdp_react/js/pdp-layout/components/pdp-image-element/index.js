@@ -1,29 +1,23 @@
 import React from 'react';
 
-export default class PdpImageElement extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const PdpImageElement = ({
+  imageUrl, alt, title, index, onClick,
+}) => {
+  const openFullScreenView = (event) => {
+    if (onClick) {
+      onClick(event);
+    }
+  };
+  return (
+    <div className="magv2-pdp-image" onClick={openFullScreenView}>
+      <img
+        src={imageUrl}
+        alt={alt}
+        title={title}
+        data-index={index}
+      />
+    </div>
+  );
+};
 
-  imageClick = (event) => {
-    const { onClick } = this.props;
-    onClick(event);
-  }
-
-  render() {
-    const {
-      imageUrl, alt, title, index,
-    } = this.props;
-
-    return (
-      <div className="magv2-pdp-image" onClick={this.imageClick}>
-        <img
-          src={imageUrl}
-          alt={alt}
-          title={title}
-          data-index={index}
-        />
-      </div>
-    );
-  }
-}
+export default PdpImageElement;

@@ -2,20 +2,10 @@ import React from 'react';
 import Slider from 'react-slick';
 import Popup from 'reactjs-popup';
 import ConditionalView from '../../../common/components/conditional-view';
+import { sliderSettings, fullScreenSliderSettings } from '../../../common/components/utilities/slider_settings';
 import PdpImageElement from '../pdp-image-element';
 import PdpAsset from '../pdp-asset';
 
-const sliderSettings = {
-  dots: true,
-  infinite: false,
-  arrows: false,
-};
-
-const fullScreenSliderSettings = {
-  dots: true,
-  infinite: false,
-  arrows: true,
-};
 
 export default class PdpGallery extends React.PureComponent {
   constructor(props) {
@@ -32,7 +22,7 @@ export default class PdpGallery extends React.PureComponent {
       el = el.parentNode;
     }
 
-    const indexOfChildWRTSiblings = el.getAttribute('data-index');
+    const indexOfChildWRTSiblings = parseInt(el.getAttribute('data-index'), 10);
 
     this.setState({
       open: true,

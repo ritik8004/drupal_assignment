@@ -33,11 +33,7 @@ export default class PdpAsset extends React.Component {
     el.lastElementChild.style.transformOrigin = `${(((event.pageX - window.pageXOffset) - el.firstElementChild.getBoundingClientRect().left) / el.firstElementChild.offsetWidth) * 100}% ${(((event.pageY - window.pageYOffset) - el.firstElementChild.getBoundingClientRect().top) / el.firstElementChild.offsetHeight) * 100}%`;
   }
 
-  constructor(props) {
-    super(props);
-  }
-
-  imageClick = (event) => {
+  openFullScreenView = (event) => {
     const { onClick } = this.props;
     onClick(event);
   }
@@ -54,7 +50,7 @@ export default class PdpAsset extends React.Component {
           onMouseOver={PdpAsset.imageZoomIn}
           onMouseOut={PdpAsset.imageZoomOut}
           onMouseMove={PdpAsset.imagePositionZoom}
-          onClick={this.imageClick}
+          onClick={this.openFullScreenView}
           data-scale="2"
           data-index={index}
         >
