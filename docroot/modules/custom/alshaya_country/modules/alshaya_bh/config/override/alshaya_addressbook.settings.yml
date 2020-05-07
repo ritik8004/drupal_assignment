@@ -1,3 +1,4 @@
 mapping:
-  locality: 'address_block_segment'
-  area_parent: 'address_city_segment'
+  area_parent: 'address_district_segment'
+  administrative_area: 'address_city_segment'
+  address_line1: 'address_road_segment'
