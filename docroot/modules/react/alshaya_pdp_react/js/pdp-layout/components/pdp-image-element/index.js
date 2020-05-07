@@ -3,11 +3,9 @@ import React from 'react';
 export default class PdpImageElement extends React.Component {
   constructor(props) {
     super(props);
-
-    this.imageClick = this.imageClick.bind(this);
   }
 
-  imageClick(event) {
+  imageClick = (event) => {
     const { onClick } = this.props;
     onClick(event);
   }

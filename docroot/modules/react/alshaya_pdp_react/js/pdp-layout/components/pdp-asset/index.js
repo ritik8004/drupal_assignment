@@ -35,12 +35,9 @@ export default class PdpAsset extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.pdpImageContainer = React.createRef();
-    this.imageClick = this.imageClick.bind(this);
   }
 
-  imageClick(event) {
+  imageClick = (event) => {
     const { onClick } = this.props;
     onClick(event);
   }
