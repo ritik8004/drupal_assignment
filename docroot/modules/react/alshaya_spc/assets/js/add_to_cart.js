@@ -76,6 +76,9 @@
               variant: variant_sku,
             };
 
+            productData['product_name'] = settings.productInfo[page_main_sku].cart_title;
+            productData['image'] = settings.productInfo[page_main_sku].cart_image;
+
             // Configurable - normal as well as re-structured.
             if (is_configurable) {
               productData['product_name'] = settings[productKey][page_main_sku].variants[variant_sku].cart_title;
@@ -85,11 +88,6 @@
             else if (settings[productKey][page_main_sku]['group'] !== undefined) {
               productData['product_name'] = settings[productKey][page_main_sku]['group'][currentSelectedVariant].cart_title;
               productData['image'] = settings[productKey][page_main_sku]['group'][currentSelectedVariant].cart_image;
-            }
-            // Simple simple.
-            else {
-              productData['product_name'] = settings.productInfo[page_main_sku].cart_title;
-              productData['image'] = settings.productInfo[page_main_sku].cart_image;
             }
 
             // Post to ajax for cart update/create.
