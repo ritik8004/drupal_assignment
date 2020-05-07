@@ -1,0 +1,7 @@
+header.c-header .block-views-exposed-filter-blocksearch-page {
+  .form-text {
+    &::placeholder {
+      color: $primary_search_input_placeholder;
+    }
+  }
+}
