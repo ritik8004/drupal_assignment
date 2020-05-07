@@ -23,7 +23,6 @@
 
             &.active {
               &::after {
-                transition: none;
                 color: $mm_l2_l3_l4_icon;
               }
             }
