@@ -41,6 +41,8 @@ $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_boots/img
       @include icon_img_styles($height, $width);
     }
   }
+
+  @content;
 }
 
 // Mixin styles the label input fields.

@@ -71,6 +71,11 @@ class AlshayaMasterMobileUtilDecorator extends MobileNumberUtil {
    */
   public function getPhoneNumberAsString($number, $country = NULL, array $types = [1 => 1, 2 => 2]) {
     $phone = $this->getMobileNumber($number, $country, $types);
+    // If number is invalid, return it as is.
+    if (empty($phone)) {
+      return $number;
+    }
+
     return $this->libUtil()->format($phone, PhoneNumberFormat::INTERNATIONAL);
   }
 

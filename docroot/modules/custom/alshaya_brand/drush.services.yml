@@ -4,5 +4,7 @@ services:
     arguments:
       - '@logger.factory'
       - '@database'
+      - '@entity_type.manager'
+      - '@config.factory'
     tags:
       - { name: drush.command }
