@@ -1,0 +1,12 @@
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Rectangle</title>
+    <desc>Created with Sketch.</desc>
+    <g id="PB-Artboards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Back-to-top-button" fill-rule="nonzero">
+            <g id="Rectangle">
+                <rect fill="#616161" x="0" y="0" width="36" height="36"></rect>
+                <polygon id="Path-2" fill="#FFFFFF" points="18.0143433 16.3078003 29.02948 23.0006104 29.02948 20.0128784 18.0143433 13 7 20.0128784 7 23.0006104"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
