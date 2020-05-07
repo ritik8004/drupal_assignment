@@ -1,0 +1,107 @@
+#lightSlider {
+  @include breakpoint($desktop) {
+    height: 29.875rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    height: 7.25rem;
+  }
+
+  .slick-slide {
+    @include breakpoint($desktop) {
+      width: 6.5rem !important;
+      height: 8rem !important;
+      padding: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      height: 7.75rem !important;
+      padding: 0;
+    }
+
+    img {
+      height: 7.625rem;
+
+      @include breakpoint($only-tablet) {
+        height: 7.25rem;
+      }
+    }
+  }
+
+  &.pager-yes {
+    .slick-next,
+    .slick-prev {
+      #drupal-modal & {
+        html[lang=ar] & {
+          @include breakpoint($desktop) {
+            transform: rotate(0deg);
+          }
+        }
+      }
+    }
+  }
+}
+
+.owl-prev,
+.owl-next,
+.slick-prev,
+.slick-next,
+#lightSlider .slick-next,
+#lightSlider .slick-prev {
+  &::before {
+    font-size: 3rem;
+  }
+}
+
+.cloudzoom {
+  .cloudzoom__herocontainer {
+    @include breakpoint($desktop) {
+      width: calc(100% - (6.5rem + 8rem));
+      margin-#{$right}: 6.125rem;
+    }
+  }
+
+  .cloudzoom__thumbnails {
+    @include breakpoint($desktop) {
+      width: 6.5rem;
+    }
+  }
+
+  &__image {
+    .img-wrap {
+      @include breakpoint($tablet) {
+        height: 23rem;
+      }
+
+      @include breakpoint($desktop) {
+        height: 31.875rem;
+      }
+    }
+  }
+}
+
+.acq-content-product-modal {
+  #lightSlider {
+    @include breakpoint($desktop) {
+      height: 31.875rem;
+    }
+
+    .slick-next {
+      @include breakpoint($desktop) {
+        bottom: 0;
+      }
+    }
+
+    &.pager-yes {
+      @include breakpoint($only-tablet) {
+        margin-top: 1.25rem;
+      }
+    }
+
+    &.pager-no {
+      @include breakpoint($only-tablet) {
+        margin-top: 2.5rem;
+      }
+    }
+  }
+}
