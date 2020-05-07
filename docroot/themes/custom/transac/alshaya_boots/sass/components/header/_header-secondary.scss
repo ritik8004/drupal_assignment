@@ -35,6 +35,8 @@ body {
 
 // top haeder links
 .c-menu-secondary {
+  text-transform: none;
+
   @include breakpoint($only-tablet) {
     width: 20rem;
   }
