@@ -107,20 +107,43 @@
       }
     }
 
+    .c-collapse-item:not(#sort_by) {
+      &.block-facet--swatch-list {
+        li {
+          &.facet-item {
+            & > a {
+              @include breakpoint($desktop) {
+                padding-#{$left}: 2rem !important;
+                padding-#{$right}: 2rem !important;
+              }
+            }
+          }
+        }
+      }
+    }
+
     #sort_by {
       li {
-        padding-#{$left}: 3rem !important;
+        padding-#{$left}: 3.875rem !important;
+
+        @include breakpoint($desktop) {
+          padding-#{$left}: 4.5rem !important;
+        }
 
         a {
           &::before {
             position: absolute;
-            font-size: 3.75rem;
-            #{$left}: 0;
+            font-size: 3.2rem;
+            #{$left}: 0.625rem;
             top: 0;
             transform: translateY(0);
 
             @include breakpoint($only-mobile) {
               top: -0.125rem;
+            }
+
+            @include breakpoint($desktop) {
+              #{$left}: 1.125rem;
             }
           }
         }
@@ -130,14 +153,14 @@
     #attr_size.size_group_list {
       > ul {
         > li {
-          @include icon(chevron#{$right}, after) {
+          @include icon(arrow-#{$right}, after) {
             color: $plp_all_filter_filter_arrow;
             font-size: 1.5rem;
             width: 2rem;
             cursor: pointer;
             pointer-events: none;
             position: absolute;
-            #{$right}: 0.625rem;
+            #{$right}: 0.9375rem;
             top: 50%;
             transform: translateY(-50%);
           }
@@ -161,13 +184,17 @@
         }
 
         .sizegroup-filter {
-          padding: 1.25rem 2rem;
+          padding: 1.25rem 1.5rem;
           height: auto;
           font-size: 0.75rem;
           line-height: 1.2;
-          border-bottom: 1px solid $plp_all_filter_item_border;
           letter-spacing: normal;
           text-transform: capitalize;
+
+          @include breakpoint($desktop) {
+            padding-#{$left}: 2rem;
+            padding-#{$right}: 2rem;
+          }
         }
       }
 
@@ -241,7 +268,7 @@
           }
 
           &::after {
-            color: $venetian_red;
+            color: $venetian_red !important;
           }
         }
 
