@@ -216,21 +216,23 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $url = Url::fromUri('base:' . $current_path . '/');
       }
 
+      $attributes = [];
+
       // If more than 2 filters are selected, don't index.
-      if ($filters_count >= 2) {
-        $url->setOption('attributes', ['rel' => 'nofollow noindex ']);
-      }
-      else {
-        $url->setOption('attributes', ['rel' => 'follow index']);
-      }
+      $attributes['rel'] = ($filters_count >= 2)
+        ? 'nofollow noindex'
+        : 'follow index';
 
       // Getting the filter item value in English.
       // Setting attribute for the facet items.
       $filter_value_en = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $raw_value);
-      $url->setOption('attributes', [
-        'data-drupal-facet-label' => $facet_override_free ? $facet_override_free->label() : $facet->label(),
-        'data-drupal-facet-item-label' => $filter_value_en,
-      ]);
+      $attributes['data-drupal-facet-item-label'] = $filter_value_en;
+
+      $attributes['data-drupal-facet-label'] = $facet_override_free
+        ? $facet_override_free->label()
+        : $facet->label();
+
+      $url->setOption('attributes', $attributes);
       $url->setOption('query', $this->getQueryParams());
       $result->setUrl($url);
     }
