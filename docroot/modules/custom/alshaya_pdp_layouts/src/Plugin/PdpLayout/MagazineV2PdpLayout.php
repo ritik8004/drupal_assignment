@@ -145,15 +145,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['title'] = [
             'label' => $entity->label(),
           ];
-
-          // Get the product price details.
-          $product_price = [
-            'price' => $vars['elements']['price_block']['#price']['#price'],
-            'finalPrice' => $vars['elements']['price_block']['#final_price']['#price'],
-            'discountPrice' => $vars['elements']['price_block']['#discount']['#markup'],
-          ];
-
-          $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['productPrice'] = $product_price;
         }
       }
     }
