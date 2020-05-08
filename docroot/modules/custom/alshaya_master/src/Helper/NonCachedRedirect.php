@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_master\Helper;
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Cache\CacheableRedirectResponse;
 
 /**
  * Class NonCachedRedirect.
@@ -21,7 +22,7 @@ class NonCachedRedirect {
    *   URL to redirect to.
    */
   public static function redirect(string $url) {
-    $response = new RedirectResponse($url);
+    $response = new CacheableRedirectResponse($url);
 
     $request = \Drupal::request();
     // Save the session so things like messages get saved.
