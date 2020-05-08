@@ -109,7 +109,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
     // Get gallery data for the main product.
     if ($sku_entity instanceof SKUInterface) {
-      $vars['#attached']['drupalSettings']['pdpGallery'][$sku] = $this->getGalleryVariables($sku_entity, $sku);
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $this->getGalleryVariables($sku_entity);
     }
 
     // Get the product description.
@@ -120,21 +120,26 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     ];
 
     // Get the product brand logo.
-    $vars['#attached']['drupalSettings']['productInfo'][$sku]['brandLogo'] = [
-      'logo' => $vars['elements']['brand_logo']['#uri'] ?? NULL,
-      'title' => $vars['elements']['brand_logo']['#title'] ?? NULL,
-      'alt' => $vars['elements']['brand_logo']['#alt'] ?? NULL,
-    ];
+    // Todo: To be shifted in the specific brand module.
+    if (!empty($vars['elements']['brand_logo'])) {
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['brandLogo'] = [
+        'logo' => $vars['elements']['brand_logo']['#uri'],
+        'title' => $vars['elements']['brand_logo']['#title'],
+        'alt' => $vars['elements']['brand_logo']['#alt'],
+      ];
+    }
 
     // Get gallery data for product variants.
     if ($sku_entity->bundle() == 'configurable') {
       $combinations = $this->skuManager->getConfigurableCombinations($sku_entity);
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $sku_entity->get('final_price')->getString());
       foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
         $child = SKU::loadFromSku($child_sku);
         if (!$child instanceof SKUInterface) {
           continue;
         }
-        $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['variants'][$child_sku] = $this->getGalleryVariables($child, $child_sku);
+        $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['rawGallery'] = $this->getGalleryVariables($child);
+        $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $child->get('final_price')->getString());
       }
     }
 
@@ -153,7 +158,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
    * @return array
    *   The gallery array.
    */
-  public function getGalleryVariables($sku_entity, $sku) {
+  public function getGalleryVariables($sku_entity) {
+    $sku = $sku_entity->getSku();
     $gallery = [];
     $media = $this->skuImageManager->getProductMedia($sku_entity, self::PDP_LAYOUT_MAGAZINE_V2, FALSE);
     if (!empty($media)) {
