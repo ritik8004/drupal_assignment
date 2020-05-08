@@ -122,6 +122,26 @@
     .form-item-privilege-card-number2 label:not(.error) {
       color: $primary_input_label_hnm;
     }
+
+    .form-item {
+      input {
+        background-color: $seashell_grey;
+        color: $hnm-black-three !important;
+        letter-spacing: normal !important;
+      }
+
+      label {
+        color: $hnm-black-three !important;
+        font-size: 0.8125rem !important;
+
+        &.error {
+          color: $venetian_red !important;
+          font-size: 0.6875rem;
+          background: $seashell_grey !important;
+          bottom: -1.5rem;
+        }
+      }
+    }
   }
 
   #edit-checkout-terms {

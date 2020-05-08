@@ -265,9 +265,9 @@
 
             .facet-item {
               font-family: $hnm-regular;
-              padding: 1rem 0;
-              padding-#{$left}: 1.5rem;
-              padding-#{$right}: 2.8125rem;
+              padding: 1rem 0 !important;
+              padding-#{$left}: 2.5rem !important;
+              padding-#{$right}: 2.8125rem !important;
 
               &:hover {
                 background: $plp_filter_active_item;

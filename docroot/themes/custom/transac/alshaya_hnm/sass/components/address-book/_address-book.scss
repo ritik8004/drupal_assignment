@@ -18,17 +18,17 @@
 .address {
   .address--content {
     color: $address_content_text;
-    font-family: $hnm-demibold;
+    font-family: $alshaya-thin;
     font-weight: normal;
-
-    @include breakpoint($desktop) {
-      font-size: 0.75rem;
-    }
+    font-size: 0.6875rem;
+    line-height: 1rem;
   }
 
   .address--label {
     font-family: $hnm-regular;
     color: $address_tile_label;
+    font-size: 0.6875rem;
+    line-height: 1rem;
   }
 
   .address--primary {
@@ -331,7 +331,7 @@
   }
 
   .select2-selection--single {
-    background: $seashell_grey;
+    background: $white-five;
   }
 }
 

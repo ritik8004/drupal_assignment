@@ -43,3 +43,4 @@ excluded_attribute_options: []
 acq_sku__attributes_skip: { }
 max_discount_to_log: 80
 enable_size_grouping_filter: 0
+pause_videos_download: FALSE

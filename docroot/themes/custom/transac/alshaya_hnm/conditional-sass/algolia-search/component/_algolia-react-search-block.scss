@@ -177,6 +177,10 @@
       ul li {
         border-bottom: none !important;
 
+        @include breakpoint($desktop) {
+          cursor: pointer;
+        }
+
         .aa-suggestion {
           padding: 0 0.75rem;
           font-size: 0.8125rem;

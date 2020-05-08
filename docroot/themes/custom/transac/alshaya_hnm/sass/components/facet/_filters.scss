@@ -108,6 +108,8 @@
       }
 
       .fieldset-wrapper {
+        padding: 0;
+
         .form-type-radio {
           margin-right: 0;
           padding: 1rem 0;
@@ -278,9 +280,9 @@
 
           .facet-item {
             font-family: $hnm-regular;
-            padding: 1rem 0;
-            padding-#{$left}: 1.5rem;
-            padding-#{$right}: 2.8125rem;
+            padding: 1rem 0 !important;
+            padding-#{$left}: 2.5rem !important;
+            padding-#{$right}: 2.8125rem !important;
           }
         }
       }
@@ -352,6 +354,8 @@
 .c-facet.c-accordion:not(.block-facet-blockcategory-facet-search),
 .c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
   ul {
+    padding: 0;
+
     .facet-item {
       padding: 1rem 1.5rem !important;
 

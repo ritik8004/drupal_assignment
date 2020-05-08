@@ -48,3 +48,10 @@ services:
       - '@acq_cart.cart_storage'
     tags:
       - { name: 'event_subscriber' }
+
+  alshaya_acm_checkout.checkout_access_denied_logger_subscriber:
+    class: Drupal\alshaya_acm_checkout\EventSubscriber\CheckoutAccessDeniedLoggerSubscriber
+    arguments:
+      - '@current_route_match'
+    tags:
+      - { name: event_subscriber }
