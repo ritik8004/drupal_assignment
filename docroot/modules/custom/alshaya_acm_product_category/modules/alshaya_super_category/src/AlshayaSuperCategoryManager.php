@@ -7,6 +7,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
+use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Class AlshayaSuperCategoryManager.
@@ -142,6 +144,38 @@ class AlshayaSuperCategoryManager {
         }
       }
     }
+  }
+
+  /**
+   * Returns the supercategory for a "Product" node.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node whose supercategory is to be fetched.
+   *
+   * @return string
+   *   The supercategory term or empty string if no supercategory found or
+   *   node is not a product node.
+   */
+  public function getSuperCategory(NodeInterface $node) {
+    if ($node->bundle() === 'acq_product') {
+      $category = $node->get('field_category')->getValue();
+      // We can use any category for the product here as the product would
+      // only belong to one super category.
+      $category = $category[0] ?? NULL;
+      if (!empty($category)) {
+        $category = $this->entityTypeManager->getStorage('taxonomy_term')->load($category['target_id']);
+        // Get the super category.
+        $super_category = _alshaya_super_category_get_super_category_for_term($category, $node->language()->getId());
+        if ($super_category instanceof TermInterface) {
+          return $super_category->getName();
+        }
+        elseif (is_array($super_category)) {
+          return $super_category['label'] ?? '';
+        }
+      }
+    }
+
+    return '';
   }
 
 }

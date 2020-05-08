@@ -57,7 +57,7 @@ function alshaya_algolia_react_page_attachments(array &$attachments) {
 /**
  * Implements hook_alshaya_super_category_status_update().
  */
-function alshaya_super_category_status_update($status, $default_parent, $path_alter) {
+function alshaya_algolia_react_alshaya_super_category_status_update($status, $default_parent, $path_alter) {
   // Add super_category as attribute for faceting if super category is enabled
   // using the Drush command and Algolia modules are already installed.
   if ($status) {

@@ -18,14 +18,12 @@ use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
-use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\file\FileInterface;
 use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\Core\Language\LanguageManager;
-use Drupal\taxonomy\TermInterface;
 
 /**
  * Class AlshayaAlgoliaIndexHelper.
@@ -128,18 +126,11 @@ class AlshayaAlgoliaIndexHelper {
   protected $languageManager;
 
   /**
-   * The product category tree service.
+   * The super category manager service.
    *
-   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   * @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager
    */
-  protected $productCategoryTree;
-
-  /**
-   * Flag to store supercategory status.
-   *
-   * @var bool
-   */
-  protected $isSuperCategoryEnabled;
+  protected $superCategoryManager;
 
   /**
    * SkuInfoHelper constructor.
@@ -170,8 +161,8 @@ class AlshayaAlgoliaIndexHelper {
    *   The Swatches helper service.
    * @param \Drupal\Core\Language\LanguageManager $language_manager
    *   The language manager service.
-   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
-   *   The product category tree service.
+   * @param Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_manager
+   *   The super category manager service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -190,7 +181,7 @@ class AlshayaAlgoliaIndexHelper {
     ConfigFactory $config_factory,
     SwatchesHelper $swatches_helper,
     LanguageManager $language_manager,
-    ProductCategoryTree $product_category_tree
+    AlshayaSuperCategoryManager $super_category_manager
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -205,8 +196,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->configFactory = $config_factory;
     $this->swatchesHelper = $swatches_helper;
     $this->languageManager = $language_manager;
-    $this->productCategoryTree = $product_category_tree;
-    $this->isSuperCategoryEnabled = $config_factory->get('alshaya_super_category.settings')->get('status');
+    $this->superCategoryManager = $super_category_manager;
   }
 
   /**
@@ -331,9 +321,13 @@ class AlshayaAlgoliaIndexHelper {
     $object['changed'] = $this->dateTime->getRequestTime();
     $object['field_category'] = $this->getFieldCategoryHierarchy($node, $node->language()->getId());
 
+    $isSuperCategoryEnabled = &drupal_static('alshaya_super_category_status', NULL);
+    if (is_null($isSuperCategoryEnabled)) {
+      $isSuperCategoryEnabled = $this->configFactory->get('alshaya_super_category.settings')->get('status');
+    }
     // Index the product super_category term.
-    if ($this->isSuperCategoryEnabled) {
-      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $this->getSuperCategory($node);
+    if ($isSuperCategoryEnabled) {
+      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $this->superCategoryManager->getSuperCategory($node);
     }
   }
 
@@ -652,34 +646,6 @@ class AlshayaAlgoliaIndexHelper {
       }
     }
 
-  }
-
-  /**
-   * Returns the supercategory for a "Product" node.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   The node whose supercategory is to be fetched.
-   *
-   * @return string
-   *   The supercategory term or empty string if no supercategory found.
-   */
-  protected function getSuperCategory(NodeInterface $node) {
-    $category = $node->get('field_category')->referencedEntities();
-    // We can use any category for the product here as the product would
-    // only belong to one super category.
-    $category = $category[0] ?? NULL;
-    if (!empty($category)) {
-      // Get the super category.
-      $super_category = _alshaya_super_category_get_super_category_for_term($category, $node->language()->getId());
-      if ($super_category instanceof TermInterface) {
-        return $super_category->getName();
-      }
-      elseif (is_array($super_category)) {
-        return $super_category['label'] ?? '';
-      }
-    }
-
-    return '';
   }
 
   /**
