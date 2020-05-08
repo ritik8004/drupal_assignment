@@ -218,6 +218,33 @@ function _alshaya_spc_translations() {
       'please enter promo code.' => [
         'ar' => 'يرجى ادخال رمز العرض.',
       ],
+      'please add your billing address.' => [
+        'ar' => 'يرجى إدخال عنوان إرسال الفواتي',
+      ],
+      'Collection by' => [
+        'ar' => 'الاستلام من طرف',
+      ],
+      'select my location' => [
+        'ar' => 'اختيار موقعي',
+      ],
+      'Invalid Debit / Credit Card number' => [
+        'ar' => 'رقم البطاقة غير صالح',
+      ],
+      'Incorrect credit card expiration date' => [
+        'ar' => 'تاريخ انتهاء البطاقة غير صالح',
+      ],
+      'change payment card' => [
+        'ar' => 'تغيير بطاقة الدفع',
+      ],
+      'Save this card for faster payment next time you shop. (CVV number will not be saved)' => [
+        'ar' => 'احفظ هذه البطاقة للدفع بشكل أسرع في المرة القادمة التي تتسوق فيها. (CVV لن يتم حفظ رقم)',
+      ],
+      'expires' => [
+        'ar' => 'تنتهي صلاحيته في',
+      ],
+      'add new card' => [
+        'ar' => 'إضافة بطاقة جديدة',
+      ],
     ],
   ];
 }
