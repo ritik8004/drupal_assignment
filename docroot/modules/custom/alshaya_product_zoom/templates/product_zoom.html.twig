@@ -23,6 +23,17 @@
           <li data-iframe="{{ thumbs.url }}" class="cloudzoom__thumbnails__video vimeo">
             <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
           </li>
+        {% elseif thumbs.type == 'video' %}
+          <li class="cloudzoom__thumbnails__video pdp-video">
+            <button class="pdp-video-close"></button>
+            <video class="gallery-video b-lazy" muted="muted">
+              <source src="{{ lazy_load_placeholder }}" data-src="{{ thumbs.url }}">
+              {{ 'Your browser does not support the video tag.'|t }}
+            </video>
+            <div class="pdp-video-controls">
+              <div class="control" title="{{ 'Play/Pause Video'|t }}"></div>
+            </div>
+          </li>
         {% else %}
           <li>
             <a data-zoom-url="{{ thumbs.zoomurl }}" href="{{ thumbs.mediumurl }}" class="cloud-zoom-gallery cloudzoom__thumbnails__image">
@@ -51,6 +62,17 @@
                 <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
               </div>
             </li>
+          {% elseif thumbs.type == 'video' %}
+            <li class="mobilegallery__thumbnails__video pdp-video">
+              <button class="pdp-video-close"></button>
+              <video class="gallery-video b-lazy" muted="muted">
+                <source src="{{ lazy_load_placeholder }}" data-src="{{ thumbs.url }}">
+                {{ 'Your browser does not support the video tag.'|t }}
+              </video>
+              <div class="pdp-video-controls">
+                <div class="control" title="{{ 'Play/Pause Video'|t }}"></div>
+              </div>
+            </li>
           {% else %}
             <li>
               <img src="{{ thumbs.zoomurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
@@ -70,16 +92,9 @@
       <div class="imagegallery__wrapper thumbnail-count-{{ thumbnails|length }}">
         <div class="yt-vi-container cloudzoom__video_modal"></div>
         <ul id="product-full-screen-gallery">
+        {# As per new desgn we dont show videos in full screen modal galleries. #}
           {% for thumbs in thumbnails %}
-            {% if thumbs.type == 'youtube' %}
-              <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video youtube">
-                <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
-              </li>
-            {% elseif thumbs.type == 'vimeo' %}
-              <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video vimeo">
-                <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
-              </li>
-            {% else %}
+            {% if thumbs.type != 'youtube' and thumbs.type != 'vimeo' and thumbs.type != 'video'%}
               <li>
                 <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
                   <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
