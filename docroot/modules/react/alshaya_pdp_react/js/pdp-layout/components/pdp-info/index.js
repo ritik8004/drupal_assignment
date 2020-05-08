@@ -2,12 +2,15 @@ import React from 'react';
 
 const PdpInfo = (props) => {
   const { skuCode, pdpProductPrice, finalPrice } = props;
-  const discountPercantage = ((pdpProductPrice - finalPrice) / pdpProductPrice) * 100;
+  let discountPercantage = null;
+  if (!(pdpProductPrice === finalPrice)) {
+    discountPercantage = ((pdpProductPrice - finalPrice) / pdpProductPrice) * 100;
+  }
 
   return (
     <>
       <div className="pdp-title-wrapper">{skuCode}</div>
-      <div className="pdp-discount">{discountPercantage}</div>
+      <div className="discount-percentage">{discountPercantage}</div>
     </>
   );
 };

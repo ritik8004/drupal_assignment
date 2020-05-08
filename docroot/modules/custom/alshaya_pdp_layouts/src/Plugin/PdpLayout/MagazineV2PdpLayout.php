@@ -84,7 +84,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $plugin_definition,
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
-      $container->get('config.factory'),
+      $container->get('config.factory')
     );
   }
 
@@ -106,48 +106,38 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $sku = $this->skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
     $vars['sku'] = $sku_entity;
-    $gallery = [];
 
+    // Get gallery data for the main product.
     if ($sku_entity instanceof SKUInterface) {
-      $media = $this->skuImageManager->getProductMedia($sku_entity, self::PDP_LAYOUT_MAGAZINE_V2, FALSE);
-      if (!empty($media)) {
-        $mediaItems = $this->skuImageManager->getThumbnailsFromMedia($media, FALSE);
-        $thumbnails = $mediaItems['thumbnails'];
-        // If thumbnails available.
-        if (!empty($thumbnails)) {
-          $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
-            ->get('pdp_gallery_pager_limit');
+      $vars['#attached']['drupalSettings']['pdpGallery'][$sku] = $this->getGalleryVariables($sku_entity, $sku);
+    }
 
-          $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+    // Get the product description.
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['description'] = $vars['elements']['description'];
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['shortDesc'] = $vars['elements']['short_desc'];
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['title'] = [
+      'label' => $entity->label(),
+    ];
 
-          $sku_identifier = Unicode::strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
+    // Get the product brand logo.
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['brandLogo'] = [
+      'logo' => $vars['elements']['brand_logo']['#uri'] ?? NULL,
+      'title' => $vars['elements']['brand_logo']['#title'] ?? NULL,
+      'alt' => $vars['elements']['brand_logo']['#alt'] ?? NULL,
+    ];
 
-          $labels = [
-            'labels' => $this->skuManager->getLabels($sku_entity, 'pdp'),
-            'sku' => $sku_identifier,
-            'mainsku' => $sku_identifier,
-            'type' => 'pdp',
-          ];
-
-          $gallery = [
-            'sku' => $sku,
-            'thumbnails' => $thumbnails,
-            'pager_flag' => $pager_flag,
-            'labels' => $labels,
-            'lazy_load_placeholder' => $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder'),
-          ];
-
-          $vars['#attached']['drupalSettings']['pdpGallery'][$sku] = $gallery;
-
-          // Get the product details.
-          $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['description'] = $vars['elements']['description'];
-          $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['shortDesc'] = $vars['elements']['short_desc'];
-          $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['title'] = [
-            'label' => $entity->label(),
-          ];
+    // Get gallery data for product variants.
+    if ($sku_entity->bundle() == 'configurable') {
+      $combinations = $this->skuManager->getConfigurableCombinations($sku_entity);
+      foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
+        $child = SKU::loadFromSku($child_sku);
+        if (!$child instanceof SKUInterface) {
+          continue;
         }
+        $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['variants'][$child_sku] = $this->getGalleryVariables($child, $child_sku);
       }
     }
+
   }
 
   /**
@@ -155,6 +145,47 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
    */
   public function getCotextFromPdpLayout($context, $pdp_layout) {
     return $context . '-' . $pdp_layout;
+  }
+
+  /**
+   * Helper function to get gallery variables of the product.
+   *
+   * @return array
+   *   The gallery array.
+   */
+  public function getGalleryVariables($sku_entity, $sku) {
+    $gallery = [];
+    $media = $this->skuImageManager->getProductMedia($sku_entity, self::PDP_LAYOUT_MAGAZINE_V2, FALSE);
+    if (!empty($media)) {
+      $mediaItems = $this->skuImageManager->getThumbnailsFromMedia($media, FALSE);
+      $thumbnails = $mediaItems['thumbnails'];
+      // If thumbnails available.
+      if (!empty($thumbnails)) {
+        $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
+          ->get('pdp_gallery_pager_limit');
+
+        $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+
+        $sku_identifier = Unicode::strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
+
+        $labels = [
+          'labels' => $this->skuManager->getLabels($sku_entity, 'pdp'),
+          'sku' => $sku_identifier,
+          'mainsku' => $sku_identifier,
+          'type' => 'pdp',
+        ];
+
+        $gallery = [
+          'sku' => $sku,
+          'thumbnails' => $thumbnails,
+          'pager_flag' => $pager_flag,
+          'labels' => $labels,
+          'lazy_load_placeholder' => $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder'),
+        ];
+
+      }
+    }
+    return $gallery;
   }
 
 }

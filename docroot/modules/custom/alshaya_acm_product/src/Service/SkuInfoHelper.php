@@ -552,6 +552,7 @@ class SkuInfoHelper {
     ];
     $variant['price'] = $this->renderer->renderPlain($price);
     $variant['priceRaw'] = _alshaya_acm_format_price_with_decimal((float) $child->get('price')->getString());
+    $variant['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $child->get('final_price')->getString());
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
 

@@ -12,8 +12,11 @@ export default class PdpGallery extends React.PureComponent {
   render() {
     const { skuCode } = this.props;
     const images = skuCode ? drupalSettings.pdpGallery[skuCode].thumbnails : [];
+    const emptyRes = (
+      <div>Images not available</div>
+    );
 
-    return (
+    return (images) ? (
 
       <div className="magv2-pdp-gallery">
         <div className="magazine__gallery--container-desktop">
@@ -40,6 +43,6 @@ export default class PdpGallery extends React.PureComponent {
           </Slider>
         </div>
       </div>
-    );
+    ) : emptyRes;
   }
 }
