@@ -478,7 +478,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       return;
     }
 
-    $this->getLogger('MultistepCheckout')->notice($message, $args);
+    $this->getLogger('MultistepCheckout')->notice($message, $args ?? []);
   }
 
 }
