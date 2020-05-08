@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
@@ -51,4 +52,28 @@ function alshaya_algolia_react_page_attachments(array &$attachments) {
   // This is used in Algolia Analytics to filter data based on admin/non-admin
   // user.
   $attachments['#attached']['drupalSettings']['user']['isCustomer'] = _alshaya_seo_process_gtm();
+}
+
+/**
+ * Implements hook_alshaya_super_category_status_update().
+ */
+function alshaya_algolia_react_alshaya_super_category_status_update($status, $default_parent, $path_alter) {
+  // Add super_category as attribute for faceting if super category is enabled
+  // using the Drush command and Algolia modules are already installed.
+  if ($status) {
+    $index_helper = \Drupal::service('alshaya_search_algolia.index_helper');
+    try {
+      $index_helper->addCustomFacetToIndex(AlshayaSuperCategoryManager::SEARCH_FACET_NAME);
+      \Drupal::logger('alshaya_super_category')
+        ->notice('Added @super_category as an attribute for faceting.', [
+          '@super_category' => AlshayaSuperCategoryManager::SEARCH_FACET_NAME,
+        ]);
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_super_category')
+        ->error('Error while trying to add facet to index after enabling Super Category. Error: @message', [
+          '@message' => $e->getMessage(),
+        ]);
+    }
+  }
 }
