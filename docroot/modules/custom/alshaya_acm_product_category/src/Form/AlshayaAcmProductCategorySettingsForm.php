@@ -176,7 +176,21 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
   private function getChildTermIds(int $parent = 0) {
     /** @var \Drupal\taxonomy\TermStorage $termStorage */
     $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
-    $l1Terms = $termStorage->loadTree('acq_product_category', $parent, 1);
+
+    if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+      $l1Terms = $termStorage->loadTree('acq_product_category', $parent, 2);
+      foreach ($l1Terms as $key => $term) {
+        // We get 1st and 2nd levels and also check parents
+        // (only 2nd level has parents).
+        if (empty($termStorage->loadParents($term->tid))) {
+          unset($l1Terms[$key]);
+        }
+      }
+    }
+    else {
+      $l1Terms = $termStorage->loadTree('acq_product_category', $parent, 1);
+    }
+
     return $l1Terms ? array_column($l1Terms, 'name', 'tid') : [];
   }
 

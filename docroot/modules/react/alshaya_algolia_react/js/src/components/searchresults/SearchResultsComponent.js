@@ -43,35 +43,58 @@ const SearchResultsComponent = props => {
     defaultpageRender = storedvalues.page;
   }
 
+  function sortItemsByCount(items) {
+    if (items === null || items.length === 0) {
+      return items;
+    }
+
+    let sortedItems = [];
+    sortedItems = items.slice(0);
+    sortedItems.sort(function(a,b) {
+      a.items = sortItemsByCount(a.items);
+      b.items = sortItemsByCount(b.items);
+
+      return b.count - a.count;
+    });
+
+    return sortedItems;
+  }
+
   function getSortedItems(items) {
-    // Sort facet items in order of the megamenu.
     let sortedItems = [];
     if (items !== null && items.length > 0) {
-      let weight = [];
-      // Getting the title attribute for L1 items from the menu.
-      let l1MenuItems = document.getElementsByClassName('menu--one__link');
-      for (let i in l1MenuItems) {
-        try {
-          if (l1MenuItems[i].getAttribute('title') !== null) {
-            // Add 10 to allow adding All at top.
-            weight[l1MenuItems[i].getAttribute('title').trim()] = parseInt(i) + 10;
+      // If super category is enabled then we sort the filters by result count.
+      if (document.getElementById('block-supercategorymenu') !== null) {
+        sortedItems = sortItemsByCount(items);
+      }
+      else {
+        // Sort facet items in order of the megamenu.
+        let weight = [];
+        // Getting the title attribute for L1 items from the menu.
+        let l1MenuItems = document.getElementsByClassName('menu--one__link');
+        for (let i in l1MenuItems) {
+          try {
+            if (l1MenuItems[i].getAttribute('title') !== null) {
+              // Add 10 to allow adding All at top.
+              weight[l1MenuItems[i].getAttribute('title').trim()] = parseInt(i) + 10;
+            }
+          }
+          catch (e) {
           }
         }
-        catch (e) {
-        }
-      }
 
-      for (let i in items) {
-        if (weight[items[i].label.trim()] !== undefined) {
-          sortedItems[weight[items[i].label]] = items[i];
+        for (let i in items) {
+          if (weight[items[i].label.trim()] !== undefined) {
+            sortedItems[weight[items[i].label]] = items[i];
+          }
+          else if (items[i].label === window.Drupal.t('All')) {
+            // Use 1 for All to ensure Object.values work properly.
+            sortedItems[1] = items[i];
+          }
         }
-        else if (items[i].label === window.Drupal.t('All')) {
-          // Use 1 for All to ensure Object.values work properly.
-          sortedItems[1] = items[i];
-        }
-      }
 
-      sortedItems = Object.values(Object.keys(sortedItems).reduce((a, c) => (a[c] = sortedItems[c], a), {}));
+        sortedItems = Object.values(Object.keys(sortedItems).reduce((a, c) => (a[c] = sortedItems[c], a), {}));
+      }
     }
     else {
       sortedItems = items;

@@ -492,6 +492,11 @@ class AlshayaAlgoliaIndexHelper {
         continue;
       }
       $parents = array_reverse($this->termStorage->loadAllParents($category->id()));
+
+      if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+        array_shift($parents);
+      }
+
       if (in_array($category->id(), $sale_categories)) {
         // Passing the first two parents(l1&l2).
         $trim_parents = array_chunk($parents, 2)[0];

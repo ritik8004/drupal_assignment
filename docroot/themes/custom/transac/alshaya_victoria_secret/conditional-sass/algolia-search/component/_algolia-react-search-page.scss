@@ -19,8 +19,8 @@
 
   .c-content__region {
     @include breakpoint($desktop) {
-      width: 100%;
-      float: none;
+      width: 80%;
+      float: $right;
     }
 
     .sticky-filter-wrapper {
