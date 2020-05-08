@@ -125,21 +125,19 @@ function alshaya_mobile_app_form_webform_submission_alshaya_contact_api_form_alt
 function alshaya_mobile_app_entity_base_field_info(EntityTypeInterface $entity_type) {
   $fields = [];
   if ($entity_type->id() == 'menu_link_content') {
-    $r = \Drupal::service('plugin.manager.field.field_type');
     $fields['social_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Social ID'))
       ->setDescription(t('Enter the value for Social ID.'))
-      ->setDisplayOptions('form', 
-        [ 'type' => 'string',
-          'weight' => 20
-        ]
-      );
+      ->setDisplayOptions('form', [
+        'type' => 'string',
+        'weight' => 20,
+      ]);
   }
   return $fields;
 }
 
 /**
- * Implement hook_form_FORM_ID_alter();
+ * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_mobile_app_form_menu_link_content_menu_link_content_form_alter(&$form, FormStateInterface $form_state) {
   $menu_name = $form_state->getFormObject()->getEntity()->getMenuName();

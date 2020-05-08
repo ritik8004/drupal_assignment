@@ -130,7 +130,7 @@ class SocialMediaLinksResource extends ResourceBase {
           'name' => $menu_link_content->getTitle(),
           'media' => !empty($menu_class) ? str_replace(self::MENU_CLASS_PATTERN, '', $menu_class) : '',
           'url' => $menu_link_content->getUrlObject()->toString(TRUE)->getGeneratedUrl(),
-          'social_id' => !empty($menu_link_obj->social_id->value) ? $menu_link_obj->social_id->value : null,
+          'social_id' => !empty($menu_link_obj->social_id->value) ? $menu_link_obj->social_id->value : NULL,
         ];
 
         // Adding to property for using later to attach cacheable dependency.
