@@ -33,22 +33,27 @@ export default class PdpAsset extends React.Component {
     el.lastElementChild.style.transformOrigin = `${(((event.pageX - window.pageXOffset) - el.firstElementChild.getBoundingClientRect().left) / el.firstElementChild.offsetWidth) * 100}% ${(((event.pageY - window.pageYOffset) - el.firstElementChild.getBoundingClientRect().top) / el.firstElementChild.offsetHeight) * 100}%`;
   }
 
-  constructor(props) {
-    super(props);
-
-    this.pdpImageContainer = React.createRef();
+  openFullScreenView = (event) => {
+    const { onClick } = this.props;
+    onClick(event);
   }
 
   render() {
     const {
-      type, imageZoomUrl, imageUrl, alt, title,
+      type, imageZoomUrl, imageUrl, alt, title, viewport, index,
     } = this.props;
 
-    let res;
-
-    if (type === 'image') {
-      res = (
-        <figure className="magv2-pdp-images" onMouseOver={PdpAsset.imageZoomIn} onMouseOut={PdpAsset.imageZoomOut} onMouseMove={PdpAsset.imagePositionZoom} data-scale="2">
+    if (type === 'image' && viewport !== 'mobile') {
+      return (
+        <figure
+          className="magv2-pdp-image"
+          onMouseOver={PdpAsset.imageZoomIn}
+          onMouseOut={PdpAsset.imageZoomOut}
+          onMouseMove={PdpAsset.imagePositionZoom}
+          onClick={this.openFullScreenView}
+          data-scale="2"
+          data-index={index}
+        >
           <img
             src={imageUrl}
             alt={alt}
@@ -58,7 +63,6 @@ export default class PdpAsset extends React.Component {
         </figure>
       );
     }
-
-    return res;
+    return null;
   }
 }
