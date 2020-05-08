@@ -321,13 +321,10 @@ class AlshayaAlgoliaIndexHelper {
     $object['changed'] = $this->dateTime->getRequestTime();
     $object['field_category'] = $this->getFieldCategoryHierarchy($node, $node->language()->getId());
 
-    $isSuperCategoryEnabled = &drupal_static('alshaya_super_category_status', NULL);
-    if (is_null($isSuperCategoryEnabled)) {
-      $isSuperCategoryEnabled = $this->configFactory->get('alshaya_super_category.settings')->get('status');
-    }
+    $super_category = $this->superCategoryManager->getSuperCategory($node);
     // Index the product super_category term.
-    if ($isSuperCategoryEnabled) {
-      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $this->superCategoryManager->getSuperCategory($node);
+    if (!empty($super_category)) {
+      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category;
     }
   }
 

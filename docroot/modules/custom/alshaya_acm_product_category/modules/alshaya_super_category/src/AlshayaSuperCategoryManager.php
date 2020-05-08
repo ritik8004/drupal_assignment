@@ -157,7 +157,11 @@ class AlshayaSuperCategoryManager {
    *   node is not a product node.
    */
   public function getSuperCategory(NodeInterface $node) {
-    if ($node->bundle() === 'acq_product') {
+    $is_super_category_enabled = &drupal_static('alshaya_super_category_status', NULL);
+    if (is_null($is_super_category_enabled)) {
+      $is_super_category_enabled = $this->configFactory->get('alshaya_super_category.settings')->get('status');
+    }
+    if ($is_super_category_enabled && $node->bundle() === 'acq_product') {
       $category = $node->get('field_category')->getValue();
       // We can use any category for the product here as the product would
       // only belong to one super category.
@@ -168,9 +172,6 @@ class AlshayaSuperCategoryManager {
         $super_category = _alshaya_super_category_get_super_category_for_term($category, $node->language()->getId());
         if ($super_category instanceof TermInterface) {
           return $super_category->getName();
-        }
-        elseif (is_array($super_category)) {
-          return $super_category['label'] ?? '';
         }
       }
     }
