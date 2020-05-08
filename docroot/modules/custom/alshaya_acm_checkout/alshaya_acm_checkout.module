@@ -7,13 +7,14 @@
 
 use Drupal\acq_cart\CartInterface;
 use Drupal\alshaya_acm_checkout\Plugin\CheckoutPane\Analytics;
+use Drupal\alshaya_master\Helper\NonCachedRedirect;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_theme().
@@ -330,7 +331,8 @@ function _alshaya_acm_checkout_get_last_order_from_session() {
     \Drupal::logger('alshaya_acm_checkout')->error('Attempt to load last order from session was done with empty/invalid value. Value: @value', [
       '@value' => $session->get('last_order_id'),
     ]);
-    throw new AccessDeniedHttpException();
+
+    NonCachedRedirect::redirect(Url::fromRoute('acq_cart.cart')->toString());
   }
 
   /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
