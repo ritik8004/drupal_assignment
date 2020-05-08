@@ -51,7 +51,7 @@ function _alshaya_spc_translations() {
         'ar' => '(@count قطعة) المبلغ الإجمالي',
       ],
       'billing information' => [
-        'ar' => 'يرجى تزويدنا ببيانات الاتصال الخاصة بكم والعنوان',
+        'ar' => 'معلومات إرسال الفواتير',
       ],
       'change address' => [
         'ar' => 'تغيير العنوان',
