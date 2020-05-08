@@ -280,11 +280,15 @@ class SwatchesHelper {
     // If memcache went down or someone edited term directly in Drupal.
     if (empty($cache)) {
       $data = [];
+      $tid = 0;
+
       $term = $this->productOptionsManager->loadProductOptionByOptionId($attribute_code, $option_id, $langcode);
       if ($term instanceof TermInterface) {
+        $tid = $term->id();
         $data = $this->getSwatchDataFromTerm($term);
-        $this->updateCache($attribute_code, $option_id, $langcode, $term->id(), $data);
       }
+
+      $this->updateCache($attribute_code, $option_id, $langcode, $tid, $data);
     }
     else {
       $data = $cache->data;
@@ -309,7 +313,15 @@ class SwatchesHelper {
    */
   private function updateCache($attribute_code, $option_id, $langcode, $tid, array $data) {
     $cid = implode('_', [$attribute_code, $option_id, $langcode]);
-    $this->cache->set($cid, $data, Cache::PERMANENT, ['taxonomy_term:' . $tid]);
+
+    // Cache till the term is updated.
+    // If term not available, cache till a new term is created in product
+    // options vocabulary.
+    $tag = !empty($tid)
+      ? 'taxonomy_term:' . $tid
+      : 'taxonomy_term:' . ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY . ':new';
+
+    $this->cache->set($cid, $data, Cache::PERMANENT, [$tag]);
   }
 
   /**
