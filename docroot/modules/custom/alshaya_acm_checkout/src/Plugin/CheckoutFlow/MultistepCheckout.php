@@ -162,12 +162,6 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       }
     }
 
-    // Redirect to confirmation page if cart is empty and we have last order id
-    // in session.
-    if (empty($cart) && !empty($session->get('last_order_id'))) {
-      $this->redirectToStep('confirmation');
-    }
-
     // Redirect user to basket page if there are no items in cart and user is
     // trying to checkout.
     if (empty($cart) || !$cart->items()) {
