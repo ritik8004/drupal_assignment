@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_pdp_layouts\Plugin\PdpLayout;
 
-use Drupal\alshaya_pdp_layouts\Event\PreprocessMagazineEvent;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Component\Utility\Unicode;
@@ -12,7 +11,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 
 /**
  * Provides the default laypout for PDP.
@@ -48,13 +46,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   protected $configFactory;
 
   /**
-   * The Event Dispatcher.
-   *
-   * @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher
-   */
-  protected $eventDispatcher;
-
-  /**
    * Constructs a new MagazineV2PdpLayout.
    *
    * @param array $configuration
@@ -69,22 +60,18 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
    *   The SKU Image Manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
-   * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $event_dispatcher
-   *   Event Dispatcher object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_image_manager,
-                              ConfigFactoryInterface $config_factory,
-                              ContainerAwareEventDispatcher $event_dispatcher) {
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->skuManager = $sku_manager;
     $this->skuImageManager = $sku_image_manager;
     $this->configFactory = $config_factory;
-    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -98,7 +85,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('config.factory'),
-      $container->get('event_dispatcher'),
     );
   }
 
@@ -153,11 +139,12 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
           $vars['#attached']['drupalSettings']['pdpGallery'][$sku] = $gallery;
 
-          // Get the product description.
-          $event = new PreprocessMagazineEvent($vars);
-          $this->eventDispatcher->dispatch(PreprocessMagazineEvent::EVENT_NAME, $event);
-          $product_description = $event->getVariables();
-          $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['description'] = $product_description['description'];
+          // Get the product details.
+          $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['description'] = $vars['elements']['description'];
+          $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['shortDesc'] = $vars['elements']['short_desc'];
+          $vars['#attached']['drupalSettings']['pdpGallery'][$sku]['title'] = [
+            'label' => $entity->label(),
+          ];
         }
       }
     }
