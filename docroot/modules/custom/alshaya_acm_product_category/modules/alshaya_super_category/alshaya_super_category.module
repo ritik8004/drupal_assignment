@@ -6,6 +6,7 @@
  */
 
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
@@ -740,16 +741,18 @@ function alshaya_super_category_alshaya_search_query_param_alter(&$query, FormSt
 /**
  * Get super category for a given the term.
  *
- * @param \Drupal\taxonomy\TermInterface $term
- *   (optional) Term object.
+ * @param \Drupal\taxonomy\TermInterface|null $term
+ *   The term object.
+ * @param string|null $langcode
+ *   The language code.
  *
  * @return \Drupal\Core\Entity\EntityInterface|null|static
  *   Super category term.
  */
-function _alshaya_super_category_get_super_category_for_term(TermInterface $term = NULL) {
+function _alshaya_super_category_get_super_category_for_term(TermInterface $term = NULL, string $langcode = NULL) {
   if (!empty($super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired($term))) {
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     if (!empty($super_category_term = Term::load($super_category['id']))) {
+      $langcode = $langcode ?? \Drupal::languageManager()->getCurrentLanguage()->getId();
       // We doing this as we not getting translated values.
       return \Drupal::service('entity.repository')->getTranslationFromContext($super_category_term, $langcode);
     }
@@ -828,6 +831,27 @@ function alshaya_super_category_alshaya_seo_brandname_alter(&$brand_name) {
     $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
     if (!empty($super_category) && (strcmp($brand_name, $super_category['label']) != 0)) {
       $brand_name = $brand_name . ' ' . $super_category['label'];
+    }
+  }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_super_category_modules_installed(array $modules) {
+  // Add super_category as attribute for faceting if super category is enabled
+  // and once the Algolia modules are installed.
+  if (\Drupal::config('alshaya_super_category.settings')->get('status')
+    && in_array('alshaya_algolia_react', $modules)) {
+    $index_helper = \Drupal::service('alshaya_search_algolia.index_helper');
+    try {
+      $index_helper->addCustomFacetToIndex(AlshayaSuperCategoryManager::SEARCH_FACET_NAME);
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_super_category')
+        ->error('Error while trying to add facet to index after enabling Algolia. Error: @message', [
+          '@message' => $e->getMessage(),
+        ]);
     }
   }
 }
