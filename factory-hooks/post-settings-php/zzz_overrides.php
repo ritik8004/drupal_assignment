@@ -30,15 +30,19 @@ $country_code = $site_country_code['country_code'];
 
 // Allow overriding settings and config to set secret info directly from
 // include files on server which can be per brand or brand country combination.
-$settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings-';
+$settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings';
 
-$brand_country_file = $settings_path . $acsf_site_code . $country_code . '.php';
+$stack_file = $settings_path . '.php';
+if (file_exists($stack_file)) {
+  include_once $stack_file;
+}
+
+$brand_country_file = $settings_path . '-' . $acsf_site_code . $country_code . '.php';
 if (file_exists($brand_country_file)) {
   include_once $brand_country_file;
 }
 
-$brand_file = $settings_path . $acsf_site_code . '.php';
-
+$brand_file = $settings_path . '-' . $acsf_site_code . '.php';
 if (file_exists($brand_file)) {
   include_once $brand_file;
 }
