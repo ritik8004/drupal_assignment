@@ -1908,6 +1908,9 @@ function alshaya_master_install() {
     'Limited to @max_sale_qty per customer' => [
       'ar' => 'الحد الأقصى @max_sale_qty لكل زبون',
     ],
+    'Product not available online temporarily' => [
+      'ar' => 'منتج غير متوفر مأقتاً عبر الموقع',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
