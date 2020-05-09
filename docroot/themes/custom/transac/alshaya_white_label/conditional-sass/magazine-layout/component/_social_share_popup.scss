@@ -104,8 +104,8 @@
     .modal-share-this {
       @include breakpoint($desktop) {
         .share-icon {
-          left: auto;
-          right: 0;
+          #{$left}: auto !important;
+          #{$right}: 0;
         }
       }
     }
