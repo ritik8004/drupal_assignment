@@ -49,7 +49,9 @@ class AlshayaCheckoutSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Check environment specific config on each request.
+   * Redirect users from cart and checkout to user defined page.
+   *
+   * This is done only if the status is set to disable checkout.
    *
    * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
    *   The event to process.
