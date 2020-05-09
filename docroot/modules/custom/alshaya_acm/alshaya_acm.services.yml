@@ -19,6 +19,14 @@ services:
     tags:
       - { name: event_subscriber }
 
+  alshaya_acm.checkout_subscriber:
+    class: Drupal\alshaya_acm\EventSubscriber\AlshayaCheckoutSubscriber
+    arguments:
+      - '@current_route_match'
+      - '@config.factory'
+    tags:
+      - { name: event_subscriber }
+
   alshaya_acm.checkout_operation_failed_event_subscriber:
     class: Drupal\alshaya_acm\EventSubscriber\AlshayaAcmCheckoutOperationFailedEvent
     arguments:
