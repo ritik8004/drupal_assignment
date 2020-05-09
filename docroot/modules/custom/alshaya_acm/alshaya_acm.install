@@ -16,6 +16,21 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add new string translations.
+ */
+function alshaya_acm_update_8014() {
+  $strings = [
+    'Product not available online temporarily' => [
+      'ar' => 'منتج غير متوفر مأقتاً عبر الموقع',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add config to enable/disable quantity limit.
  */
 function alshaya_acm_update_8013() {
