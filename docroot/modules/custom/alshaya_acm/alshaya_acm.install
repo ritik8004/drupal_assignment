@@ -320,14 +320,6 @@ function alshaya_acm_install() {
 
   // Exclude sync requests from shield.
   _alshaya_acm_exclude_sync_from_shield();
-
-  $strings = [
-    'Product not available online temporarily' => [
-      'ar' => 'منتج غير متوفر مأقتاً عبر الموقع',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
 }
 
 /**
