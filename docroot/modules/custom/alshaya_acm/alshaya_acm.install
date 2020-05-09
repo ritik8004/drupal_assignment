@@ -20,8 +20,8 @@ use Symfony\Component\Yaml\Yaml;
  */
 function alshaya_acm_update_8014() {
   $strings = [
-    'Product not available online temporarily' => [
-      'ar' => 'منتج غير متوفر مأقتاً عبر الموقع',
+    'Add to bag is temporarily unavailable' => [
+      'ar' => 'الإضافة إلى حقيبة التسوق غير متوفرة مؤقتاً',
     ],
   ];
 

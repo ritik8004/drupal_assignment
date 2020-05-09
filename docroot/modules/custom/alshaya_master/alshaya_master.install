@@ -1905,8 +1905,8 @@ function alshaya_master_install() {
     'Limited to @max_sale_qty per customer' => [
       'ar' => 'الحد الأقصى @max_sale_qty لكل زبون',
     ],
-    'Product not available online temporarily' => [
-      'ar' => 'منتج غير متوفر مأقتاً عبر الموقع',
+    'Add to bag is temporarily unavailable' => [
+      'ar' => 'الإضافة إلى حقيبة التسوق غير متوفرة مؤقتاً',
     ],
   ];
 

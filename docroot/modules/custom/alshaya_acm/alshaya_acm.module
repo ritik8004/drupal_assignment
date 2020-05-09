@@ -1154,7 +1154,7 @@ function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_s
     $form['not_buyable_message'] = [
       '#weight' => $form['add_to_cart']['#weight'] ?? 100,
       '#type' => 'markup',
-      '#markup' => '<p class="not-buyable-message">' . t('Product not available online temporarily') . '</p>',
+      '#markup' => '<p class="not-buyable-message">' . t('Add to bag is temporarily unavailable') . '</p>',
     ];
   }
 }
