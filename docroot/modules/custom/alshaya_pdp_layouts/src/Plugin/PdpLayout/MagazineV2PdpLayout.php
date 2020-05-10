@@ -118,6 +118,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['title'] = [
       'label' => $entity->label(),
     ];
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $sku_entity->get('final_price')->getString());
 
     // Get the product brand logo.
     // Todo: To be shifted in the specific brand module.
@@ -132,7 +133,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     // Get gallery data for product variants.
     if ($sku_entity->bundle() == 'configurable') {
       $combinations = $this->skuManager->getConfigurableCombinations($sku_entity);
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $sku_entity->get('final_price')->getString());
       foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
         $child = SKU::loadFromSku($child_sku);
         if (!$child instanceof SKUInterface) {
