@@ -109,7 +109,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
               break;
 
             default:
-              continue;
+              continue 2;
           }
         }
 
