@@ -1,0 +1,120 @@
+@include breakpoint($upto-desktop) {
+  .toggle--sign {
+    .one {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+  }
+
+  .main--menu {
+    .menu__link {
+      font-family: $alshaya-bold;
+      font-size: 0.875rem;
+      color: $mm_l3_link_mobile;
+    }
+
+    ul {
+      &.menu--one__list {
+        &.menu__list {
+          > li {
+            > .menu__link-wrapper {
+              margin: 0;
+              padding: 0 1rem;
+              border-color: $mm_l1_l2_l3_l4_border;
+            }
+          }
+        }
+      }
+    }
+
+    li {
+      margin: 0;
+    }
+  }
+
+  .menu__in {
+    &::after {
+      font-size: 1.5625rem;
+      font-weight: bold;
+      #{$right}: 0.5625rem;
+      position: absolute;
+      top: -0.1875rem;
+    }
+  }
+
+  .c-menu-secondary {
+    li {
+      padding-#{$left}: 1rem;
+
+      &::after {
+        margin-top: -2.1875rem;
+        width: 1.875rem;
+        font-size: 1.5625rem;
+        #{$right}: 0.25rem;
+        font-weight: bold;
+      }
+    }
+
+    a {
+      font-family: $alshaya-bold;
+
+      &:hover,
+      &.is-active {
+        color: $header_secondary_menu_link_hover;
+      }
+    }
+  }
+
+  .menu__back {
+    background: none;
+    padding-#{$left}: 1rem;
+
+    @include icon(chevron#{$left}, after) {
+      #{$left}: 0.5rem;
+      color: $header_mobile_menu_arrow;
+      position: absolute;
+      margin-top: -0.5625rem;
+      font-size: 1.5625rem;
+      font-weight: bold;
+    }
+  }
+
+  .menu--two__list {
+    &.menu__list--active {
+      .menu--three__list {
+        &.menu__list--active {
+          .menu--four__list-item,
+          .menu-two__link-wrapper {
+            margin-#{$left}: 0;
+            margin-#{$right}: 0;
+            padding: 0 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  .back--link {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .menu--two__list-item {
+    > .menu-two__link-wrapper {
+      .menu-two__link {
+        padding-#{$right}: 1rem;
+        padding-#{$left}: 1em;
+      }
+    }
+  }
+
+  .menu--three__list-item {
+    a.menu--three__link {
+      &::after {
+        font-size: 1.5625rem;
+        font-weight: bold;
+        #{$right}: -0.5rem;
+      }
+    }
+  }
+}
