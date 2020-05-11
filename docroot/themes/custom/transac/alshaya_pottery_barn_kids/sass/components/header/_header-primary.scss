@@ -1,7 +1,127 @@
-header.c-header .block-views-exposed-filter-blocksearch-page {
-  .form-text {
-    &::placeholder {
-      color: $primary_search_input_placeholder;
+header.c-header {
+  .block-views-exposed-filter-blocksearch-page {
+    @include breakpoint($desktop) {
+      top: 0.25rem;
+    }
+
+    #edit-submit-search {
+      background: $primary_search_btn_icon url('../imgs/assets/search.svg') 0.25rem 0.25rem no-repeat;
+      background-size: 1.9rem 1.9rem;
+      width: 2.125rem;
+      height: 2.125rem;
+
+      @include breakpoint($only-tablet) {
+        height: 2.425rem;
+        margin-#{$left}: -3.375rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: -2.375rem;
+      }
+    }
+
+    .form-text {
+      height: 2.5rem;
+      width: 20.1875rem;
+      max-width: none;
+
+      &::placeholder {
+        color: $primary_search_input_placeholder;
+      }
+    }
+  }
+
+  .block-system-branding-block {
+    @include breakpoint($only-mobile) {
+      width: 75%;
+      margin-top: 1.5rem;
+    }
+
+    .site-brand-home {
+      @include breakpoint($only-mobile) {
+        max-width: 100%;
+      }
+
+      a {
+        @include breakpoint($only-tablet) {
+          width: 13.4375rem;
+          height: 2rem;
+        }
+
+        @include breakpoint($desktop) {
+          width: 18.1875rem;
+          height: 2.625rem;
+          display: block;
+        }
+
+        @include breakpoint($only-mobile) {
+          margin-#{$left}: 5.5rem;
+          max-width: 100%;
+        }
+
+        picture {
+          display: block;
+        }
+
+        img {
+          @include breakpoint($desktop) {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .block-alshaya-react-mini-cart {
+    @include breakpoint($only-mobile) {
+      margin-top: 1.5rem;
+    }
+
+    .cart-link {
+      background-size: 2.3rem;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0.6875rem;
+        margin-bottom: 0;
+      }
+
+      @include breakpoint($tablet) {
+        background-size: 2.1rem;
+        margin-bottom: 1.25rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-bottom: -0.75rem;
+      }
+    }
+  }
+}
+
+.c-menu-primary {
+  .mobile--menu {
+    @include breakpoint($only-mobile) {
+      top: 1.35rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: -0.6875rem;
+    }
+  }
+
+  .mobile--search {
+    @include breakpoint($only-mobile) {
+      #{$left}: 2.55rem;
+      top: 0.825rem;
+    }
+  }
+
+  .store {
+    @include breakpoint($only-mobile) {
+      top: 0.725rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 0.7625rem;
     }
   }
 }
