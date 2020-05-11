@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  *
  * Add translation for label.
  */
-function alshaya_acm_product_update_8060() {
+function alshaya_acm_product_update_8059() {
   $strings = [
     'Details' => [
       'ar' => 'تفاصيل',
@@ -30,7 +30,7 @@ function alshaya_acm_product_update_8060() {
  * Re-saving the stock resource to moved outside mobile app.
  * Add new settings for local storage cache time for product data.
  */
-function alshaya_acm_product_update_8059() {
+function alshaya_acm_product_update_8058() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $configs = [
