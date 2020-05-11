@@ -3,10 +3,10 @@
 namespace Drupal\alshaya_acm_product_category\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Class AlshayaAcmProductCategorySettingsForm.
@@ -14,24 +14,24 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
 
   /**
-   * Entity Type Manager.
+   * Product category tree manager.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
    */
-  private $entityTypeManager;
+  private $productCategoryTree;
 
   /**
    * Constructs a \Drupal\system\ConfigFormBase object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity Type Manager.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $productCategoryTree
+   *   Product category tree manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              ProductCategoryTree $productCategoryTree) {
     $this->setConfigFactory($config_factory);
-    $this->entityTypeManager = $entity_type_manager;
+    $this->productCategoryTree = $productCategoryTree;
   }
 
   /**
@@ -40,7 +40,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('entity_type.manager')
+      $container->get('alshaya_acm_product_category.product_category_tree')
     );
   }
 
@@ -81,7 +81,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_acm_product_category.settings');
 
-    $options = $this->getChildTermIds();
+    $options = $this->productCategoryTree->getChildTermIds();
     $form['sale_category_ids'] = [
       '#type' => 'select',
       '#title' => $this->t('SALE Categories'),
@@ -110,7 +110,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
     $new_arrivals = [];
 
     foreach ($options as $tid => $name) {
-      if ($children = $this->getChildTermIds($tid)) {
+      if ($children = $this->productCategoryTree->getChildTermIds($tid)) {
         $new_arrivals[$name] = $children;
       }
     }
@@ -160,38 +160,6 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
     ];
 
     return parent::buildForm($form, $form_state);
-  }
-
-  /**
-   * Wrapper function to get child terms of a given category.
-   *
-   * @param int $parent
-   *   Parent tid for which children needs to fetch.
-   *
-   * @return array
-   *   Categories array with tid as key and name as value.
-   *
-   * @throws \Exception
-   */
-  private function getChildTermIds(int $parent = 0) {
-    /** @var \Drupal\taxonomy\TermStorage $termStorage */
-    $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
-
-    if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
-      $l1Terms = $termStorage->loadTree('acq_product_category', $parent, 2);
-      foreach ($l1Terms as $key => $term) {
-        // We get 1st and 2nd levels and also check parents
-        // (only 2nd level has parents).
-        if (empty($termStorage->loadParents($term->tid))) {
-          unset($l1Terms[$key]);
-        }
-      }
-    }
-    else {
-      $l1Terms = $termStorage->loadTree('acq_product_category', $parent, 1);
-    }
-
-    return $l1Terms ? array_column($l1Terms, 'name', 'tid') : [];
   }
 
 }

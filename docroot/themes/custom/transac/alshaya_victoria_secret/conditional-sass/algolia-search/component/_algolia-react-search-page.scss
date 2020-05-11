@@ -18,11 +18,6 @@
   }
 
   .c-content__region {
-    @include breakpoint($desktop) {
-      width: 80%;
-      float: $right;
-    }
-
     .sticky-filter-wrapper {
       .c-collapse-item {
         .c-collapse__title {
