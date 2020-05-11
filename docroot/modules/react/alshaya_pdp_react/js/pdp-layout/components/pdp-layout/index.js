@@ -1,4 +1,5 @@
 import React from 'react';
+import ConditionalView from '../../../common/components/conditional-view';
 import PdpGallery from '../pdp-gallery';
 import PdpDescription from '../pdp-description';
 import PdpInfo from '../pdp-info';
@@ -22,17 +23,32 @@ const PdpLayout = () => {
 
   return (skuItemCode && pdpGallery) ? (
     <>
-      {' '}
-      <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
-      <PdpDescription skuCode={skuItemCode} pdpDescription={description} pdpShortDesc={shortDesc} />
-      <PdpInfo
-        skuCode={skuItemCode}
-        title={title}
-        pdpProductPrice={priceRaw}
-        finalPrice={finalPrice}
-      />
-      {' '}
-
+      <div className="magv2-header">
+        <ConditionalView condition={window.innerWidth < 768}>
+          {/* Render mobile sticky header component */}
+        </ConditionalView>
+        <ConditionalView condition={window.innerWidth > 768}>
+          {/* Render desktop sticky header component */}
+        </ConditionalView>
+      </div>
+      <div className="magv2-main">
+        <div className="magv2-content">
+          <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
+        </div>
+        <div className="magv2-sidebar">
+          <PdpDescription
+            skuCode={skuItemCode}
+            pdpDescription={description}
+            pdpShortDesc={shortDesc}
+          />
+          <PdpInfo
+            skuCode={skuItemCode}
+            title={title}
+            pdpProductPrice={priceRaw}
+            finalPrice={finalPrice}
+          />
+        </div>
+      </div>
     </>
   ) : emptyRes;
 };
