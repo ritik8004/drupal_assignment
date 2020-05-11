@@ -153,12 +153,13 @@
     display: block;
     position: absolute;
     #{$right}: 1.375rem;
-    top: -0.3125rem;
+    top: 50%;
+    transform: translateY(-50%);
 
     @include icon(close, after) {
       position: absolute;
       color: $footer_link2;
-      font-size: 2.688rem;
+      font-size: 1rem;
     }
   }
 }
