@@ -235,7 +235,7 @@
               text-transform: none;
 
               @include icon(map, before) {
-                color: $hnm-black-two;
+                color: $hnm-black-three;
               }
             }
           }
@@ -633,7 +633,7 @@
           color: $checkout_cc_view_text;
 
           @include icon(dropdown-expand, after) {
-            color: $hnm-black-two;
+            color: $hnm-black-three;
             font-size: 1.875rem;
           }
 
