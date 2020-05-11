@@ -26,20 +26,35 @@
     padding: 0.9375rem 1.25rem 0.9375rem 1.5rem;
     color: $order_summary_title;
 
-    @include icon(dropdown-expand, after) {
-      #{$right}: 0;
-      font-size: 2.483rem;
+    @include icon(chevrondown, after) {
+      #{$right}: 1rem;
+      font-size: 0.525rem;
+      color: $hnm-black-three;
     }
   }
 
   .active--accordion {
     .content-head {
-      @include icon(dropdown-collapse, after);
+      @include icon(chevrondown, after) {
+        transform: translateY(-50%) rotate(180deg);
+        font-size: 0.525rem;
+      }
     }
   }
 
   .right {
     width: calc(70% - 1.125rem);
+
+    span {
+      font-size: 0.6875rem;
+      line-height: 1rem;
+    }
+
+    a {
+      font-size: 0.8125rem;
+      line-height: 1.25rem;
+      color: $hnm-black-three;
+    }
   }
 
   .totals {
@@ -350,6 +365,10 @@
       padding: 0.75rem 0.25rem;
       letter-spacing: 1px;
     }
+
+    &:hover {
+      background: $gray44;
+    }
   }
 
   #edit-continue-shopping,
@@ -373,6 +392,10 @@
 
     @include breakpoint($upto-tablet) {
       display: none;
+    }
+
+    &:hover {
+      background: $seconday_menu_link_hover;
     }
   }
 

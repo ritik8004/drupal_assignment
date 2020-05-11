@@ -11,7 +11,7 @@
   }
 
   @include icon(chevronup, after) {
-    color: $btt_text;
+    color: $hnm-black-three;
     #{$right}: 1rem;
     background-color: $btt_bg;
 
@@ -21,7 +21,7 @@
   }
 
   font-family: $hnm-regular;
-  color: $btt_hover_text;
+  color: $gray44;
   width: 4.375rem;
   line-height: 0.9375rem;
   #{$right}: 3.125rem;

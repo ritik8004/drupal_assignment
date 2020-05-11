@@ -156,9 +156,6 @@ function alshaya_acm_checkoutcom_install() {
     'Please enter a valid credit card number' => [
       'ar' => 'يرجى إدخال رقم بطاقة ائتمان صحيح',
     ],
-    'Invalid security code (CVV)' => [
-      'ar' => 'الرقم السري للبطاقة CVV غير صحيح',
-    ],
     'An error occurred while placing your order. Please contact our customer service team for assistance.' => [
       'ar' => 'حدث خطأ عند إتمام طلبيتك، يرجى الإتصال بفريق دعم الزبائن للمساعدة',
     ],
