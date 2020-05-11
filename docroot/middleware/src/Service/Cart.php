@@ -222,7 +222,9 @@ class Cart {
         $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
       }
 
-      // Exception handling here.
+      $this->logger->error('Error while getting cart from MDC. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -254,7 +256,9 @@ class Cart {
       return $cart_id;
     }
     catch (\Exception $e) {
-      // Exception handling here.
+      $this->logger->error('Error while creating cart on MDC. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -614,7 +618,9 @@ class Cart {
       throw new \Exception('Unable to associate cart', 500);
     }
     catch (\Exception $e) {
-      // Exception handling here.
+      $this->logger->error('Error while associating cart to customer. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -821,7 +827,9 @@ class Cart {
         }
       }
 
-      // Exception handling here.
+      $this->logger->error('Error while updating cart on MDC. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -864,6 +872,9 @@ class Cart {
     static $static;
 
     if (empty($data['address']['country_id'])) {
+      $this->logger->error('Error in getting shipping methods for HD as country id not available. Data:@data', [
+        '@data' => json_encode($data),
+      ]);
       return [];
     }
 
@@ -889,7 +900,9 @@ class Cart {
       });
     }
     catch (\Exception $e) {
-      // Exception handling here.
+      $this->logger->error('Error while getting shipping methods for HD. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
@@ -917,6 +930,9 @@ class Cart {
     $type = $cart['shipping']['method'] ?? '';
 
     if (empty($type)) {
+      $this->logger->error('Error while getting payment methods from MDC. Shipping method not available in cart. Cart:@cart', [
+        '@cart' => json_encode($cart),
+      ]);
       return NULL;
     }
 
@@ -938,7 +954,9 @@ class Cart {
       $static[$key] = $this->magentoApiWrapper->doRequest('GET', $url);
     }
     catch (\Exception $e) {
-      // Exception handling here.
+      $this->logger->error('Error while getting payment methods from MDC. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
@@ -966,7 +984,9 @@ class Cart {
       return $result['method'] ?? NULL;
     }
     catch (\Exception $e) {
-      // Exception handling here.
+      $this->logger->error('Error while getting payment set on cart. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -1020,7 +1040,9 @@ class Cart {
     }
     catch (\Exception $e) {
       $this->cancelCartReservation($e->getMessage());
-      // Exception handling here.
+      $this->logger->error('Error while placing order. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }

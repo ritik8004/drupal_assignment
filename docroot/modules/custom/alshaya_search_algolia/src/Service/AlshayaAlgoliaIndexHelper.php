@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_search_algolia\Service;
 
+use AlgoliaSearch\Client;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
@@ -21,6 +22,8 @@ use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\file\FileInterface;
 use Drupal\alshaya_product_options\SwatchesHelper;
+use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
+use Drupal\Core\Language\LanguageManager;
 
 /**
  * Class AlshayaAlgoliaIndexHelper.
@@ -116,6 +119,20 @@ class AlshayaAlgoliaIndexHelper {
   protected $swatchesHelper;
 
   /**
+   * The language manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManager
+   */
+  protected $languageManager;
+
+  /**
+   * The super category manager service.
+   *
+   * @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager
+   */
+  protected $superCategoryManager;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -142,6 +159,10 @@ class AlshayaAlgoliaIndexHelper {
    *   The config factory service.
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches_helper
    *   The Swatches helper service.
+   * @param \Drupal\Core\Language\LanguageManager $language_manager
+   *   The language manager service.
+   * @param Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_manager
+   *   The super category manager service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -158,7 +179,9 @@ class AlshayaAlgoliaIndexHelper {
     SkuPriceHelper $sku_price_helper,
     ProductCategoryManager $product_category_manager,
     ConfigFactory $config_factory,
-    SwatchesHelper $swatches_helper
+    SwatchesHelper $swatches_helper,
+    LanguageManager $language_manager,
+    AlshayaSuperCategoryManager $super_category_manager
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -172,6 +195,8 @@ class AlshayaAlgoliaIndexHelper {
     $this->productCategoryManager = $product_category_manager;
     $this->configFactory = $config_factory;
     $this->swatchesHelper = $swatches_helper;
+    $this->languageManager = $language_manager;
+    $this->superCategoryManager = $super_category_manager;
   }
 
   /**
@@ -295,6 +320,12 @@ class AlshayaAlgoliaIndexHelper {
     }
     $object['changed'] = $this->dateTime->getRequestTime();
     $object['field_category'] = $this->getFieldCategoryHierarchy($node, $node->language()->getId());
+
+    $super_category = $this->superCategoryManager->getSuperCategory($node);
+    // Index the product super_category term.
+    if (!empty($super_category)) {
+      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category;
+    }
   }
 
   /**
@@ -617,6 +648,45 @@ class AlshayaAlgoliaIndexHelper {
       }
     }
 
+  }
+
+  /**
+   * Helps to add custom facet to the index.
+   *
+   * @param string $attr_name
+   *   The name of the attribute.
+   *
+   * @throws \Exception
+   *   If attribute is already present in the index, then exception is thrown.
+   */
+  public function addCustomFacetToIndex(string $attr_name) {
+    // @todo If an entity field is to be added, the function should be modified
+    // such that $attr_name should have prefix "attr_" as that is the
+    // general sytax that can be seen.
+    $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
+    $client_config = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
+    $client = new Client($backend_config['application_id'], $backend_config['api_key']);
+    $index_name = $client_config['algolia_index_name'];
+
+    foreach ($this->languageManager->getLanguages() as $language) {
+      $index = $client->initIndex($index_name . '_' . $language->getId());
+      $settings = $index->getSettings();
+      if (in_array($attr_name, $settings['attributesForFaceting'])) {
+        throw new \Exception("The attribute $attr_name is already added to the index.");
+      }
+
+      $settings['attributesForFaceting'][] = $attr_name;
+      $index->setSettings($settings);
+
+      foreach ($settings['replicas'] as $replica) {
+        $replicaIndex = $client->initIndex($replica);
+        $replicaSettings = $replicaIndex->getSettings();
+        $replicaSettings['attributesForFaceting'][] = $attr_name;
+        $replicaIndex->setSettings($replicaSettings);
+      }
+    }
+
+    $this->logger->notice('Added @attr as an attribute for faceting.', ['@attr' => $attr_name]);
   }
 
 }
