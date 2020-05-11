@@ -112,23 +112,31 @@
 
         .form-type-radio {
           margin-right: 0;
-          padding: 1rem 0;
-          padding-#{$left}: 0;
-          padding-#{$right}: 1.5rem;
+          padding: 0;
 
           &:hover {
             background: $plp_filter_active_item;
           }
 
           input[checked='checked'] ~ label {
-            font-family: $hnm-demibold;
+            font-family: $hnm-regular;
+            background-color: $filter_hover;
           }
 
           label {
+            padding: 1rem 0;
+            padding-#{$left}: 3.5625rem;
+            padding-#{$right}: 1.5rem;
+            height: auto;
+            width: 100%;
+            font-size: 0.8125rem;
+
             &::before {
-              top: -0.1875rem;
+              top: 0.1875rem;
               transform: translateY(0);
               background: transparent;
+              font-size: 3.2rem;
+              #{$left}: 0.5rem;
             }
           }
         }
@@ -242,7 +250,7 @@
 #block-plpsize,
 #block-promosize {
   > ul.size_group_list {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     line-height: 2;
     color: $plp_facet_filter_link;
 
@@ -348,7 +356,7 @@
       .sizegroup-filter {
         padding: 1.25rem 1.5rem;
         height: auto;
-        font-size: 0.75rem;
+        font-size: 0.8125rem;
         line-height: 1.2;
         letter-spacing: normal;
 

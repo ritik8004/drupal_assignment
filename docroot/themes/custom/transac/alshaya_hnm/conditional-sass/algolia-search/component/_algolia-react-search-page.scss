@@ -54,8 +54,9 @@
           color: $primary_radiobtn_empty;
           vertical-align: middle;
           border: none;
-          font-size: 1.875rem;
-          top: -0.5625rem;
+          font-size: 3.2rem;
+          top: -1.1875rem;
+          #{$left}: -1.2rem;
         }
 
         &::before {
@@ -131,6 +132,8 @@
         }
 
         a {
+          font-size: 0.8125rem;
+
           &::before {
             position: absolute;
             font-size: 3.2rem;
@@ -138,8 +141,8 @@
             top: 0;
             transform: translateY(0);
 
-            @include breakpoint($only-mobile) {
-              top: -0.125rem;
+            @include breakpoint($tablet) {
+              top: 0.1875rem;
             }
 
             @include breakpoint($desktop) {
@@ -186,7 +189,7 @@
         .sizegroup-filter {
           padding: 1.25rem 1.5rem;
           height: auto;
-          font-size: 0.75rem;
+          font-size: 0.8125rem;
           line-height: 1.2;
           letter-spacing: normal;
           text-transform: capitalize;
@@ -242,7 +245,7 @@
 
   #attr_size.size_group_list {
     > ul {
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       line-height: 2;
       color: $plp_facet_filter_link;
 
