@@ -5,25 +5,43 @@
       font-size: 0.875rem;
     }
 
+    li {
+      &:not(:first-child) {
+        @include breakpoint($tablet) {
+          padding: 0.625rem 0;
+        }
+      }
+
+      &:first-child {
+        @include breakpoint($tablet) {
+          padding-bottom: 0.625rem;
+        }
+      }
+    }
+
     a {
-      color: $primary_link-active;
+      color: $hnm-black-three;
       font-family: $hnm-regular;
       line-height: 1.9;
       text-transform: capitalize;
-      font-size: 0.875rem;
+      font-size: 0.8125rem !important;
 
       @include breakpoint($tablet) {
         font-size: 0.75rem;
       }
 
       &.active {
-        color: $content_link_color;
+        color: $hnm-black-three;
         font-family: $hnm-demibold;
         font-weight: normal;
       }
 
       &:hover {
-        color: $content_link_color;
+        color: $hnm-black-three;
+
+        &:active {
+          color: $default-anchor-link-hover;
+        }
       }
     }
   }
