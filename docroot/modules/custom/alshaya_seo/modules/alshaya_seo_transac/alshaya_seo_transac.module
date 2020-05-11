@@ -48,11 +48,14 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     }
 
     // Add GTM events for SPC cart.
-    $route_match = \Drupal::routeMatch();
-    if ($route_match->getRouteName() == 'acq_cart.cart'
-      || $route_match->getRouteName() == 'alshaya_spc.checkout') {
-      if (\Drupal::moduleHandler()->moduleExists('alshaya_spc')) {
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_spc')) {
+      $route_match = \Drupal::routeMatch();
+      if ($route_match->getRouteName() == 'acq_cart.cart') {
         $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_cart';
+      }
+
+      if ($route_match->getRouteName() == 'alshaya_spc.checkout') {
+        $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_checkout';
       }
     }
 
@@ -194,21 +197,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       case 'acq_cart.cart':
       case 'alshaya_spc.checkout':
         if ($current_route['route_name'] == 'acq_cart.cart' || $current_route['route_name'] == 'alshaya_spc.checkout') {
-
-          $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
-
-          $products = [];
-          $data_layer['privilegeCustomer'] = $cart_item_attributes['privilegeCustomer'] ?? '';
-          $data_layer['privilegesCardNumber'] = $cart_item_attributes['privilegesCardNumber'] ?? '';
-          $step = isset($cart_item_attributes['step']) ? $cart_item_attributes['step'] : NULL;
-          unset($cart_item_attributes['privilegeCustomer'], $cart_item_attributes['privilegesCardNumber'], $cart_item_attributes['step']);
-
-          foreach ($cart_item_attributes as $key => $cart_item) {
-            $product = $gtm_manager->convertHtmlAttributesToDatalayer($cart_item);
-            $product['quantity'] = $cart_item['quantity'];
-            $products[] = $product;
-          }
-
+          $step = ($current_route['route_name'] == 'acq_cart.cart') ? 1 : 2;
           $data_layer_cart = [
             'event' => 'checkout',
             'ecommerce' => [
@@ -217,7 +206,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
                 'actionField' => [
                   'step' => $step,
                 ],
-                'products' => $products,
+                'products' => [],
               ],
             ],
           ];
@@ -537,23 +526,14 @@ function alshaya_seo_transac_alshaya_reset_config_configs_to_reset_alter(array &
 function alshaya_seo_transac_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
   $productNode = $skuManager->getDisplayNode($sku->getSku());
   if ($productNode instanceof NodeInterface) {
     /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
     $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
-    $data['gtm_attributes']['gtm-category'] = implode('/', $gtmManager->fetchProductCategories($productNode));
+    $attributes = $gtmManager->fetchProductGtmAttributes($productNode, 'full');
+    $data['gtm_attributes'] = $gtmManager->convertHtmlAttributesToDatalayer($attributes);
   }
-
-  $data['gtm_attributes']['gtm-name'] = trim($sku->label());
-  $data['gtm_attributes']['dimension1'] = $sku->get('attribute_set')->getString();
-  $data['gtm_attributes']['dimension4'] = count($skuImagesManager->getAllMediaItems($sku)) ?: 'image not available';
-  $data['gtm_attributes']['dimension5'] = $sku->get('attr_product_collection')->getString();
-  $data['gtm_attributes']['dimension6'] = $sku->get('attr_size')->getString();
-  $gtm_brand = \Drupal::config('system.site')->get('name');
-  $data['gtm_attributes']['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: $gtm_brand;
 }
 
 /**
