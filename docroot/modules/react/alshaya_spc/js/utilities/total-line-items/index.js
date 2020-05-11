@@ -7,6 +7,28 @@ import getStringMessage from '../strings';
 import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
 
 class TotalLineItems extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      cartPromo: [],
+      isDeliveryFree: false,
+    };
+  }
+
+  componentDidMount = () => {
+    document.addEventListener('applyDynamicPromotions', this.saveDynamicPromotions, false);
+  };
+
+  applyDynamicPromotions = (event) => {
+    const {
+      applied_rules: cartPromo,
+      shipping_free: isDeliveryFree,
+    } = event.detail;
+
+    this.setState({ cartPromo, isDeliveryFree });
+  };
+
   /**
    * Get the content of discount tooltip.
    */
@@ -25,10 +47,11 @@ class TotalLineItems extends React.Component {
     }
 
     return promoData;
-  }
+  };
 
   render() {
-    const { cart_promo: cartPromo, totals } = this.props;
+    const { totals } = this.props;
+    const { cartPromo, isDeliveryFree } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
     return (
@@ -60,7 +83,7 @@ class TotalLineItems extends React.Component {
         <div className="hero-total">
           <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={totals.base_grand_total} />
           <div className="delivery-vat">
-            <FreeDeliveryText freeDelivery={totals.free_delivery} text={Drupal.t('Excluding delivery')} />
+            <FreeDeliveryText freeDelivery={isDeliveryFree} text={Drupal.t('excluding delivery')} />
             <VatText />
           </div>
         </div>

@@ -24,6 +24,10 @@ export default class MiniCart extends React.Component {
       const cartData = fetchCartData();
       if (cartData instanceof Promise) {
         cartData.then((result) => {
+          if (result === 'Request aborted') {
+            return;
+          }
+
           let resultVal = result;
           if (typeof resultVal === 'undefined' || resultVal === null) {
             resultVal = this.emptyResult;
@@ -54,6 +58,9 @@ export default class MiniCart extends React.Component {
           // Trigger event so that data can be passed to other components.
           this.dispatchRefereshCart(resultVal);
         });
+      } else if (cartData === 'Request aborted') {
+        // Request is aborted, user seems to have refreshed the page.
+        return;
       } else {
         // Trigger event so that data can be passed to other components.
         this.dispatchRefereshCart(this.emptyResult);

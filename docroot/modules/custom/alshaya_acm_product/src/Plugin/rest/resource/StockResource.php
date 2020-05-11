@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
+namespace Drupal\alshaya_acm_product\Plugin\rest\resource;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;

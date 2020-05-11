@@ -115,18 +115,25 @@
                   $(form).trigger('product-add-to-cart-success', [productData, response]);
 
                   var productInfo = drupalSettings.productInfo[productData.parentSku];
-                  var options = {};
+                  var options = [];
                   var productUrl = productInfo.url;
                   var price = productInfo.priceRaw;
-                  var promotions = productInfo.promotions;
+                  var promotions = productInfo.promotionsRaw;
                   var productDataSKU = productData.sku;
+                  var parentSKU = productData.sku;
+                  var maxSaleQty = productData.maxSaleQty;
+                  var maxSaleQtyParent = productData.max_sale_qty_parent;
+                  var gtmAttributes = productInfo.gtm_attributes;
 
                   if (productInfo.type === 'configurable') {
                     var productVariantInfo = productInfo['variants'][productData.variant];
                     productDataSKU = productData.variant;
                     price = productVariantInfo.priceRaw;
-                    promotions = productVariantInfo.promotions;
+                    parentSKU = productVariantInfo.parent_sku;
+                    promotions = productVariantInfo.promotionsRaw;
                     options = productVariantInfo.configurableOptions;
+                    maxSaleQty = productVariantInfo.maxSaleQty;
+                    maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
 
                     if (productVariantInfo.url !== undefined) {
                       var langcode = $('html').attr('lang');
@@ -136,21 +143,28 @@
                   else if (productInfo.group !== undefined) {
                     var productVariantInfo = productInfo.group[productData.sku];
                     price = productVariantInfo.priceRaw;
-                    promotions = productVariantInfo.promotions;
+                    parentSKU = productVariantInfo.parent_sku;
+                    promotions = productVariantInfo.promotionsRaw;
+                    maxSaleQty = productVariantInfo.maxSaleQty;
+                    maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
 
                     var langcode = $('html').attr('lang');
                     productUrl = productVariantInfo.url[langcode];
                   }
 
-                  Drupal.alshayaSpc.storeProductData(
-                    productDataSKU,
-                    productData.product_name,
-                    productUrl,
-                    productData.image,
-                    price,
-                    options,
-                    promotions
-                  );
+                  Drupal.alshayaSpc.storeProductData({
+                    sku: productDataSKU,
+                    parentSKU: parentSKU,
+                    title: productData.product_name,
+                    url: productUrl,
+                    image: productData.image,
+                    price: price,
+                    options: options,
+                    promotions: promotions,
+                    maxSaleQty: maxSaleQty,
+                    maxSaleQtyParent: maxSaleQtyParent,
+                    gtmAttributes: gtmAttributes,
+                  });
 
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: (function () { return response;  }), productData: productData}});

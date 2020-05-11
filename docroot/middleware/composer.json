@@ -25,13 +25,15 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src/",
+            "Drupal\\Component\\": "../core/lib/Drupal/Component",
+            "Drupal\\alshaya_spc\\": "../modules/react/alshaya_spc/src",
+            "Drupal\\alshaya_acm_customer\\": "../modules/custom/alshaya_acm_customer/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/",
-            "Drupal\\Component\\": "../core/lib/Drupal/Component"
+            "App\\Tests\\": "tests/"
         }
     },
     "replace": {

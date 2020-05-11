@@ -28,7 +28,6 @@ export default class Cart extends React.Component {
       totalItems: null,
       amount: null,
       couponCode: null,
-      cartPromo: null,
       dynamicPromoLabelsCart: null,
       dynamicPromoLabelsProduct: null,
       inStock: true,
@@ -53,7 +52,6 @@ export default class Cart extends React.Component {
           recommendedProducts: data.recommended_products,
           totalItems: data.items_qty,
           amount: data.cart_total,
-          cartPromo: data.cart_promo,
           wait: false,
           couponCode: data.coupon_code,
           inStock: data.in_stock,
@@ -135,14 +133,12 @@ export default class Cart extends React.Component {
     const {
       wait,
       items,
-      recommendedProducts,
       messageType,
       message,
       totalItems,
       totals,
       couponCode,
       inStock,
-      cartPromo,
       actionMessageType,
       actionMessage,
       dynamicPromoLabelsCart,
@@ -170,8 +166,6 @@ export default class Cart extends React.Component {
       return (
         <>
           <EmptyResult Message={Drupal.t('Your shopping bag is empty.')} />
-          <CartRecommendedProducts sectionTitle={Drupal.t('new arrivals')} recommended_products={recommendedProducts} />
-          <CartRecommendedProducts sectionTitle={Drupal.t('trending now')} recommended_products={recommendedProducts} />
         </>
       );
     }
@@ -209,14 +203,13 @@ export default class Cart extends React.Component {
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}
-              cart_promo={cartPromo}
               show_checkout_button
               animationDelay="0.5s"
             />
           </div>
         </div>
         <div className="spc-post-content">
-          <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} recommended_products={recommendedProducts} />
+          <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} items={items} />
         </div>
         <div className="spc-footer">
           <VatFooterText />

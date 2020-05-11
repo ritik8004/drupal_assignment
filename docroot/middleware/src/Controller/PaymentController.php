@@ -377,7 +377,7 @@ class PaymentController {
     }
 
     $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
-      '@quote_id' => $data['quote_id'],
+      '@quote_id' => $response['quote_id'],
       '@message' => json_encode($data),
     ]);
 
@@ -461,6 +461,7 @@ class PaymentController {
     $message = 'User either cancelled or response url returned error.';
     $message .= PHP_EOL . 'Debug info:' . PHP_EOL;
     foreach ($data as $key => $value) {
+      $value = is_array($value) ? json_encode($value) : $value;
       $message .= $key . ': ' . $value . PHP_EOL;
     }
 

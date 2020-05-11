@@ -150,7 +150,7 @@ class APIWrapper {
     }
 
     $address = ($type == 'shipping')
-      ? $cart['extension_attributes']['shipping_assignments'][0]['shipping']['address']
+      ? $cart['shipping']['address']
       : $cart['billing_address'];
 
     return [
@@ -336,7 +336,7 @@ class APIWrapper {
     $params = [
       'value' => $this->getCheckoutAmount($cart['totals']['grand_total'], $cart['totals']['quote_currency_code']),
       'currency' => $cart['totals']['quote_currency_code'],
-      'email' => $cart['cart']['customer']['email'],
+      'email' => $cart['customer']['email'],
     ];
 
     if (!empty($payment_data['card_token_id'])) {

@@ -101,10 +101,13 @@ class AlshayaSpcCustomerController extends ControllerBase {
   /**
    * Get user customer id.
    *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
    */
-  public function getUserCustomerId() {
+  public function getUserCustomerId(Request $request) {
     $response = [
       'customer_id' => 0,
       'uid' => 0,
