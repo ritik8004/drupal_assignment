@@ -130,7 +130,7 @@ function alshaya_mobile_app_entity_base_field_info(EntityTypeInterface $entity_t
       ->setDescription(t('Enter the value for Social ID.'))
       ->setDisplayOptions('form', [
         'type' => 'string',
-        'weight' => 20,
+        'weight' => 21,
       ]);
   }
   return $fields;
