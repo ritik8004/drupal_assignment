@@ -54,8 +54,9 @@
           color: $primary_radiobtn_empty;
           vertical-align: middle;
           border: none;
-          font-size: 1.875rem;
-          top: -0.5625rem;
+          font-size: 3.2rem;
+          top: -1.1875rem;
+          #{$left}: -1.2rem;
         }
 
         &::before {
@@ -138,8 +139,8 @@
             top: 0;
             transform: translateY(0);
 
-            @include breakpoint($only-mobile) {
-              top: -0.125rem;
+            @include breakpoint($tablet) {
+              top: 0.1875rem;
             }
 
             @include breakpoint($desktop) {
