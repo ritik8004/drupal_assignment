@@ -129,6 +129,7 @@
             padding-#{$right}: 1.5rem;
             height: auto;
             width: 100%;
+            font-size: 0.8125rem;
 
             &::before {
               top: 0.1875rem;
@@ -249,7 +250,7 @@
 #block-plpsize,
 #block-promosize {
   > ul.size_group_list {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     line-height: 2;
     color: $plp_facet_filter_link;
 
@@ -355,7 +356,7 @@
       .sizegroup-filter {
         padding: 1.25rem 1.5rem;
         height: auto;
-        font-size: 0.75rem;
+        font-size: 0.8125rem;
         line-height: 1.2;
         letter-spacing: normal;
 

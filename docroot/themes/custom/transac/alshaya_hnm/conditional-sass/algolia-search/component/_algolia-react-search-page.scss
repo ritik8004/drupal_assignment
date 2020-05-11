@@ -132,6 +132,8 @@
         }
 
         a {
+          font-size: 0.8125rem;
+
           &::before {
             position: absolute;
             font-size: 3.2rem;
@@ -187,7 +189,7 @@
         .sizegroup-filter {
           padding: 1.25rem 1.5rem;
           height: auto;
-          font-size: 0.75rem;
+          font-size: 0.8125rem;
           line-height: 1.2;
           letter-spacing: normal;
           text-transform: capitalize;
@@ -243,7 +245,7 @@
 
   #attr_size.size_group_list {
     > ul {
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       line-height: 2;
       color: $plp_facet_filter_link;
 
