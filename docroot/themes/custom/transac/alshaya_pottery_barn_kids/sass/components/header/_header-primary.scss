@@ -125,3 +125,42 @@ header.c-header {
     }
   }
 }
+
+.region.region__pre-content {
+  @include breakpoint($desktop) {
+    border-bottom: 0.0625rem solid $primary_search_border;
+    background-color: $pre_content_region_bg;
+    padding-bottom: 0.125rem;
+  }
+}
+
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    & > ul.menu--two__list {
+      .highlights {
+        img {
+          @include breakpoint($desktop) {
+            max-height: 20.25rem;
+            width: auto;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+  }
+
+  .has--three-levels .menu--three__list-item > .menu-two__link-wrapper a.menu__link {
+    @include breakpoint($desktop) {
+      font-size: 0.75rem !important;
+      line-height: 1.33;
+    }
+  }
+}
+
+// shop by room
+ul.menu--two__list li.menu--two__list-item .menu__link-wrapper .menu-two__link {
+  @include breakpoint($desktop) {
+    font-size: 0.75rem !important;
+    line-height: 1.33;
+  }
+}
