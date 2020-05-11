@@ -13,6 +13,8 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
@@ -1135,4 +1137,39 @@ function _alshaya_acm_is_order_limit_exceeded_exception(\Exception $e) {
   }
 
   return FALSE;
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  $config = \Drupal::config('alshaya_acm.cart_config');
+  $form['#cache']['tags'] = Cache::mergeTags($form['#cache']['tags'] ?? [], $config->getCacheTags());
+
+  $featureStatus = $config->get('checkout_feature') ?? 'enabled';
+  if ($featureStatus === 'disabled') {
+    $form['add_to_cart']['#access'] = FALSE;
+    $form['quantity']['#access'] = FALSE;
+
+    $form['not_buyable_message'] = [
+      '#weight' => $form['add_to_cart']['#weight'] ?? 100,
+      '#type' => 'markup',
+      '#markup' => '<p class="not-buyable-message">' . t('Add to bag is temporarily unavailable') . '</p>',
+    ];
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_acm_node_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if (($entity->bundle() == 'acq_product')) {
+    $config = \Drupal::config('alshaya_acm.cart_config');
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $config->getCacheTags());
+
+    $featureStatus = $config->get('checkout_feature') ?? 'enabled';
+    if ($featureStatus === 'disabled') {
+      $build['#attributes']['class'][] = 'checkout-disabled';
+    }
+  }
 }

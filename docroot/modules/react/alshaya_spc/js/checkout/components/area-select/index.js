@@ -8,6 +8,7 @@ import {
 import {
   geocodeAddressToLatLng,
 } from '../../../utilities/map/map_utils';
+import getStringMessage from '../../../utilities/strings';
 
 export default class AreaSelect extends React.Component {
   isComponentMounted = true;
@@ -130,7 +131,7 @@ export default class AreaSelect extends React.Component {
       options = areaList;
     }
 
-    const panelTitle = Drupal.t('Select @label', { '@label': field.label });
+    const panelTitle = getStringMessage('address_select', { '@label': field.label });
 
     const currentOptionAvailable = (currentOption !== undefined
       && currentOption !== null
@@ -162,7 +163,7 @@ export default class AreaSelect extends React.Component {
           <FilterList
             selected={currentOption}
             options={options}
-            placeHolderText={Drupal.t('Search for @label', { '@label': field.label })}
+            placeHolderText={getStringMessage('address_search_for', { '@label': field.label })}
             processingCallback={this.processSelectedItem}
             toggleFilterList={this.toggleFilterList}
             panelTitle={panelTitle}

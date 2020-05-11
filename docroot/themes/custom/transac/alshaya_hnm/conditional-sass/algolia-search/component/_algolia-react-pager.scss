@@ -3,11 +3,29 @@
     li.pager__item {
       button {
         text-transform: uppercase;
+        color: $white-five;
+        font-size: 0.8125rem;
+        background-color: $hnm-black-three;
+        font-family: $hnm-demibold;
+        letter-spacing: 1px;
+
+        &:hover {
+          background-color: $gray44;
+        }
+      }
+    }
+
+    .progressbar-container {
+      .progressbar-progress {
+        background: $hnm-black-three;
       }
     }
 
     .ais-Stats-text {
       text-transform: uppercase;
+      font-size: 0.8125rem;
+      color: $hnm-black-three;
+      font-family: $hnm-demibold;
     }
   }
 }

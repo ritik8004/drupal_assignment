@@ -16,15 +16,38 @@
       color: $hnm-black-two;
 
       @include breakpoint($desktop) {
-        text-transform: uppercase;
         letter-spacing: 0.0625rem;
       }
+    }
+
+    @include breakpoint($only-mobile) {
+      border: none;
+      text-align: center;
+
+      h3 {
+        &::after {
+          #{$right}: 2.25rem !important;
+        }
+
+        &.active {
+          background: transparent !important;
+        }
+      }
+    }
+  }
+
+  .container-without-product {
+    .block-facet-blockcategory-facet-search + .show-all-filters-algolia {
+      padding: 0 1.25rem;
     }
   }
 
   #sort_by {
     li {
       a {
+        color: $plp_all_filter_facets;
+        font-size: 0.8125rem;
+
         @include icon(radio-empty, before) {
           margin-#{$right}: 1rem;
           position: relative;
@@ -34,13 +57,26 @@
           font-size: 1.875rem;
           top: -0.5625rem;
         }
+
+        &::before {
+          background: transparent;
+        }
       }
 
-      &.active-item a {
-        font-family: $hnm-demibold;
+      &:hover {
+        background-color: $filter_hover;
+      }
 
-        @include icon(radio-filled, before) {
-          border: none;
+      &.active-item {
+        background-color: $filter_hover;
+
+        a {
+          font-family: $hnm-regular;
+          font-weight: normal;
+
+          @include icon(radio-filled, before) {
+            border: none;
+          }
         }
       }
     }
@@ -71,20 +107,43 @@
       }
     }
 
+    .c-collapse-item:not(#sort_by) {
+      &.block-facet--swatch-list {
+        li {
+          &.facet-item {
+            & > a {
+              @include breakpoint($desktop) {
+                padding-#{$left}: 2rem !important;
+                padding-#{$right}: 2rem !important;
+              }
+            }
+          }
+        }
+      }
+    }
+
     #sort_by {
       li {
-        padding-#{$left}: 3rem !important;
+        padding-#{$left}: 3.875rem !important;
+
+        @include breakpoint($desktop) {
+          padding-#{$left}: 4.5rem !important;
+        }
 
         a {
           &::before {
             position: absolute;
-            font-size: 3.75rem;
-            #{$left}: 0;
+            font-size: 3.2rem;
+            #{$left}: 0.625rem;
             top: 0;
             transform: translateY(0);
 
             @include breakpoint($only-mobile) {
               top: -0.125rem;
+            }
+
+            @include breakpoint($desktop) {
+              #{$left}: 1.125rem;
             }
           }
         }
@@ -94,14 +153,14 @@
     #attr_size.size_group_list {
       > ul {
         > li {
-          @include icon(chevron#{$right}, after) {
+          @include icon(arrow-#{$right}, after) {
             color: $plp_all_filter_filter_arrow;
             font-size: 1.5rem;
             width: 2rem;
             cursor: pointer;
             pointer-events: none;
             position: absolute;
-            #{$right}: 0.625rem;
+            #{$right}: 0.9375rem;
             top: 50%;
             transform: translateY(-50%);
           }
@@ -125,13 +184,17 @@
         }
 
         .sizegroup-filter {
-          padding: 1.25rem 2rem;
+          padding: 1.25rem 1.5rem;
           height: auto;
           font-size: 0.75rem;
           line-height: 1.2;
-          border-bottom: 1px solid $plp_all_filter_item_border;
           letter-spacing: normal;
           text-transform: capitalize;
+
+          @include breakpoint($desktop) {
+            padding-#{$left}: 2rem;
+            padding-#{$right}: 2rem;
+          }
         }
       }
 
@@ -149,11 +212,20 @@
           font-family: $hnm-demibold;
           color: $plp_facet_title;
           letter-spacing: 1px;
-          font-size: 0.6875rem;
+          font-size: 0.8125rem;
 
-          @include icon(dropdown-expand, after) {
+          @include icon(chevrondown, after) {
             position: absolute;
-            font-size: 2.25rem;
+            font-size: 0.4375rem;
+            #{$right}: 1.25rem;
+          }
+
+          &.active {
+            color: $venetian_red;
+
+            &::after {
+              color: $venetian_red;
+            }
           }
         }
       }
@@ -177,20 +249,37 @@
       .sizegroup-filter {
         cursor: pointer;
         display: block;
-        padding-#{$left}: 1.125rem;
+        padding: 1rem 0;
+        padding-#{$left}: 1.5rem;
+        padding-#{$right}: 2.8125rem;
       }
 
       > li {
         margin-bottom: 0;
         position: relative;
         text-transform: capitalize;
+        min-height: auto;
+
+        &:hover {
+          background: none;
+
+          & > span {
+            color: $venetian_red;
+          }
+
+          &::after {
+            color: $venetian_red !important;
+          }
+        }
 
         &.is-open {
           font-family: $hnm-demibold;
+          color: $venetian_red;
 
           &::after {
-            top: 0.75rem;
+            top: 1.5625rem;
             transform: translateY(-50%) rotate(180deg);
+            color: $venetian_red;
           }
 
           > ul.sizegroup {
@@ -199,22 +288,75 @@
             border: none;
             margin: 0;
             overflow-y: unset;
+            padding: 0;
 
             .facet-item {
               font-family: $hnm-regular;
-              padding: 0;
-              padding-#{$left}: 2.125rem !important;
+              padding: 1rem 0 !important;
+              padding-#{$left}: 2.5rem !important;
+              padding-#{$right}: 2.8125rem !important;
+
+              &:hover {
+                background: $plp_filter_active_item;
+              }
             }
           }
         }
 
-        @include icon(dropdown-expand, after);
+        @include icon(chevrondown, after);
 
         &::after {
           position: absolute;
-          #{$right}: 0.6875rem;
-          top: -5px;
-          font-size: 2.25rem;
+          #{$right}: 1.5rem;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 0.4375rem;
+        }
+      }
+    }
+  }
+
+  .c-page-title {
+    font-family: $hnm-demibold;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    color: $hnm-black-three;
+    text-transform: capitalize;
+  }
+
+  .special--price {
+    .price-amount,
+    .price-currency {
+      color: $venetian_red !important;
+    }
+  }
+
+  .block-alshaya-grid-count-block {
+    .grid-buttons {
+      .large-col-grid,
+      .small-col-grid {
+        width: 1.5rem;
+        height: 1.5rem;
+        display: inline-block;
+
+        svg {
+          display: none;
+        }
+      }
+
+      .large-col-grid {
+        background: url('../../../imgs/icons/large-grid-inactive.svg') no-repeat center;
+
+        &.active {
+          background: url('../../../imgs/icons/large-grid-active.svg') no-repeat center;
+        }
+      }
+
+      .small-col-grid {
+        background: url('../../../imgs/icons/small-grid-inactive.svg') no-repeat center;
+
+        &.active {
+          background: url('../../../imgs/icons/small-grid-active.svg') no-repeat center;
         }
       }
     }

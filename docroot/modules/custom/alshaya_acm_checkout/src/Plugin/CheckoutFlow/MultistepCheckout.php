@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Routing\RedirectDestinationTrait;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -144,6 +145,10 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
    * {@inheritdoc}
    */
   protected function processStepId($requested_step_id) {
+    $this->verboseLog(1, 'Initiating checkout page processing, requested step: @step', [
+      '@step' => $requested_step_id,
+    ]);
+
     $cart = $this->cartStorage->getCart(FALSE);
 
     $session = \Drupal::request()->getSession();
@@ -157,15 +162,10 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       }
     }
 
-    // Redirect to confirmation page if cart is empty and we have last order id
-    // in session.
-    if (empty($cart) && !empty($session->get('last_order_id'))) {
-      $this->redirectToStep('confirmation');
-    }
-
     // Redirect user to basket page if there are no items in cart and user is
     // trying to checkout.
     if (empty($cart) || !$cart->items()) {
+      $this->verboseLog(3, 'Redirecting user to basket page as basket is empty OR no items in cart.');
       $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
       $response->send();
       exit;
@@ -319,6 +319,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if (empty($cart)) {
+      $this->verboseLog(3, 'Redirecting user to basket cart is empty.');
       $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
       $response->send();
       exit;
@@ -356,8 +357,8 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
     if ($next_step_id = $this->getNextStepId()) {
       $current_step_id = $this->getStepId();
-      try {
 
+      try {
         if ($next_step_id == 'confirmation') {
           $method = $cart->getShippingMethodAsString();
 
@@ -434,14 +435,50 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function redirectToStep($step_id) {
+    $this->verboseLog(1, 'Redirecting user to step: @step', [
+      '@step' => $step_id,
+    ]);
+
+    parent::redirectToStep($step_id);
+  }
+
+  /**
    * Helper method for actions on exceptions.
    */
-  public function handleException() {
+  protected function handleException() {
     if ($cart = $this->getCart()) {
       $cart->setCheckoutStep('');
       $this->getCheckoutHelper()->refreshStockForProductsInCart($cart);
     }
+    $this->verboseLog(2, 'Redirecting user to basket page because of an exception.');
     throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
+  }
+
+  /**
+   * Log message if verbose mode is enabled.
+   *
+   * @param int $level
+   *   Verbosity level.
+   * @param string $message
+   *   Message to log.
+   * @param array|null $args
+   *   Log parameters.
+   */
+  protected function verboseLog(int $level, string $message, array $args = NULL) {
+    $allowedLevel = Settings::get('checkout_verbose_log_level', 10);
+
+    // If allowed level is 3 and log message level is 2, we won't log.
+    // Levels used in code so far - 1, 2, 3.
+    // Set 0 in settings to log everything.
+    // Higher the number, higher the priority.
+    if ($allowedLevel > $level) {
+      return;
+    }
+
+    $this->getLogger('MultistepCheckout')->notice($message, $args ?? []);
   }
 
 }

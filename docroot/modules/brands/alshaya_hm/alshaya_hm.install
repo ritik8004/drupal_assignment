@@ -18,7 +18,7 @@ use Drupal\block\Entity\Block;
  * Translations for additional attributes.
  * Override pdp display configuration to enable overlay.
  */
-function alshaya_hm_update_8047() {
+function alshaya_hm_update_8048() {
   $strings = [
     'TITLE NAME' => [
       'ar' => 'اسم المنتج',
@@ -114,6 +114,31 @@ function alshaya_hm_update_8047() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add query string in footer logo image.
+ */
+function alshaya_hm_update_8047() {
+  $logo_file_name = 'h-m-logo-bw.svg';
+  $logo_updated_file_name = 'h-m-logo-bw.svg?' . REQUEST_TIME;
+
+  /* @var \Drupal\block_content\Entity\BlockContent $footer_logo_block */
+  $footer_logo_block = \Drupal::service('entity.repository')
+    ->loadEntityByUuid('block_content', '6a8aca33-da8d-4c88-953c-0ffbdcc63447');
+  $footer_logo_block_content = $footer_logo_block->body->value;
+  $block_content_en = str_replace($logo_file_name, $logo_updated_file_name, $footer_logo_block_content);
+  $footer_logo_block->set('body', ['value' => $block_content_en, 'format' => 'rich_text']);
+  $footer_logo_block->save();
+
+  // Updating translated version.
+  $footer_logo_block_ar = $footer_logo_block->getTranslation('ar');
+  $footer_logo_block_content = $footer_logo_block_ar->body->value;
+  $block_content_ar = str_replace($logo_file_name, $logo_updated_file_name, $footer_logo_block_content);
+  $footer_logo_block_ar->set('body', ['value' => $block_content_ar, 'format' => 'rich_text']);
+  $footer_logo_block_ar->save();
 }
 
 /**

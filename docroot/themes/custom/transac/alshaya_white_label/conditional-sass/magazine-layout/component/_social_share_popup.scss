@@ -99,6 +99,19 @@
   }
 }
 
+.checkout-disabled {
+  &.magazine-layout-node {
+    .modal-share-this {
+      @include breakpoint($desktop) {
+        .share-icon {
+          #{$left}: auto !important;
+          #{$right}: 0;
+        }
+      }
+    }
+  }
+}
+
 .magazine-layout {
   #backtotop {
     transition: z-index 0.8s ease-in-out;

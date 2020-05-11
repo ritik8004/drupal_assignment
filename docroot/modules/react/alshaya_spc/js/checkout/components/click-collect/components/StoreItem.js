@@ -1,6 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import ConditionalView from '../../../../common/components/conditional-view';
+import getStringMessage from '../../../../utilities/strings';
 
 const StoreItem = ({
   display, index, store, onStoreChoose, onStoreExpand, onStoreFinalize, onStoreClose,
@@ -22,7 +23,7 @@ const StoreItem = ({
       <div className="store-address-content">
         <div className="store-address">{parse(store.address)}</div>
         <div className="store-delivery-time">
-          <span className="label--delivery-time">{Drupal.t('Collect in store from')}</span>
+          <span className="label--delivery-time">{getStringMessage('cnc_collect_in_store')}</span>
           <span className="delivery--time--value">{` ${store.delivery_time}`}</span>
         </div>
         <div className="store-open-hours">
@@ -51,7 +52,7 @@ const StoreItem = ({
               type="button"
               onClick={(e) => onStoreFinalize(e, store.code)}
             >
-              {Drupal.t('select this store')}
+              {getStringMessage('cnc_select_this_store')}
             </button>
           </div>
         </ConditionalView>
