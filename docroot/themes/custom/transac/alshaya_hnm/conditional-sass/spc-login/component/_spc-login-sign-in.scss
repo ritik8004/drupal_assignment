@@ -43,6 +43,22 @@
         font-family: $hnm-demibold;
         text-decoration: underline;
       }
+
+      input {
+        background-color: $seashell_grey;
+        color: $hnm-black-three !important;
+      }
+
+      label {
+        color: $hnm-black-three !important;
+        font-size: 0.8125rem !important;
+
+        &.error {
+          color: $venetian_red !important;
+          font-size: 0.6875rem;
+          background: $seashell_grey !important;
+        }
+      }
     }
 
     .checkout-login-actions-wrapper {
@@ -62,6 +78,7 @@
   }
 
   .c-post-content {
+    border-top: none;
     background-color: $block_acm_customer_txt;
   }
 

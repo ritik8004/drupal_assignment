@@ -64,6 +64,21 @@ function alshaya_acm_product_update_8058() {
  *
  * Add new settings for local storage cache time for product data.
  */
+function alshaya_acm_product_update_8058() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Add config to turn video download on/off.
+ *
+ * Enable alshaya_brand module.
+ */
 function alshaya_acm_product_update_8057() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -72,6 +87,7 @@ function alshaya_acm_product_update_8057() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+  \Drupal::service('module_installer')->install(['alshaya_brand']);
 }
 
 /**
