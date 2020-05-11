@@ -126,6 +126,9 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
       return TRUE;
     }
     catch (\Exception $exception) {
+      $this->logger->error('Error while session write. Error message: @message', [
+        '@message' => $exception->getMessage(),
+      ]);
       // If we are displaying errors, then do so with no possibility of a
       // further uncaught exception being thrown.
       return FALSE;

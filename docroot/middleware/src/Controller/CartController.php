@@ -170,9 +170,9 @@ class CartController {
     // If there is any exception/error, return as is with exception message
     // without processing further.
     if (!empty($data['error'])) {
-      $this->logger->error('Error while getting cart:{cart_id} Error:{error}', [
-        'cart_id' => $cart_id,
-        'error' => json_encode($data),
+      $this->logger->error('Error while getting cart:@cart_id Error:@error', [
+        '@cart_id' => $cart_id,
+        '@error' => json_encode($data),
       ]);
 
       return new JsonResponse($data);
@@ -211,9 +211,9 @@ class CartController {
     // If there is any exception/error, return as is with exception message
     // without processing further.
     if (!empty($data['error'])) {
-      $this->logger->error('Error while getting cart:{cart_id} Error:{error}', [
-        'cart_id' => $cart_id,
-        'error' => json_encode($data),
+      $this->logger->error('Error while getting cart:@cart_id Error:@error', [
+        '@cart_id' => $cart_id,
+        '@error' => json_encode($data),
       ]);
 
       return new JsonResponse($data);
@@ -344,6 +344,9 @@ class CartController {
       }
     }
     catch (\Exception $e) {
+      $this->logger->error('Error while processing cart data. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
@@ -555,22 +558,17 @@ class CartController {
               'redirectUrl' => $e->getMessage(),
             ]);
           }
-          elseif ($e->getCode() === 400) {
-            // Cancel reservation api when process failed for not enough data,
-            // or bad data. i.e. checkout.com cvv missing.
-            $this->cart->cancelCartReservation($e->getMessage());
-            return new JsonResponse([
-              'error' => TRUE,
-              'message' => $e->getMessage(),
-            ]);
-          }
-          else {
-            $this->cart->cancelCartReservation($e->getMessage());
-            return new JsonResponse([
-              'error' => TRUE,
-              'message' => $e->getMessage(),
-            ]);
-          }
+
+          $this->logger->error('Error during payment finalization. Error message: @message', [
+            '@message' => $e->getMessage(),
+          ]);
+          // Cancel reservation api when process failed for not enough data,
+          // or bad data. i.e. checkout.com cvv missing.
+          $this->cart->cancelCartReservation($e->getMessage());
+          return new JsonResponse([
+            'error' => TRUE,
+            'message' => $e->getMessage(),
+          ]);
         }
 
         if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
@@ -598,6 +596,10 @@ class CartController {
       case CartActions::CART_REFRESH:
         // If cart id in request not matches with what in session.
         if ($request_content['cart_id'] !== $this->cart->getCartId()) {
+          $this->logger->error('Error while cart refresh. Cart data in request not matches with cart in session. Request data: @request_data CartId in session: @cart_id', [
+            '@request_data' => json_encode($request_content),
+            '@cart_id' => $this->cart->getCartId(),
+          ]);
           // Return error response if not valid data.
           return new JsonResponse($this->utility->getErrorResponse('Invalid cart', '500'));
         }
@@ -718,12 +720,14 @@ class CartController {
   public function associateCart() {
     try {
       if (empty($this->cart->getCartId())) {
+        $this->logger->error('Error while associating cart to customer. No cart available in session');
         return new JsonResponse($this->utility->getErrorResponse('No cart in session', 404));
       }
 
       $customer = $this->drupal->getSessionCustomerInfo();
 
       if (empty($customer)) {
+        $this->logger->error('Error while associating cart to customer. No customer available in session');
         return new JsonResponse($this->utility->getErrorResponse('No user in session', 404));
       }
 
@@ -735,7 +739,9 @@ class CartController {
       $this->cart->associateCartToCustomer($customer['customer_id']);
     }
     catch (\Exception $e) {
-      // Exception handling here.
+      $this->logger->error('Error while associating cart to customer. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
     }
 
