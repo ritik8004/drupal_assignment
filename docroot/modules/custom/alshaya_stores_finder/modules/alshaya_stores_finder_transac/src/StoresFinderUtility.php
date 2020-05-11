@@ -289,7 +289,9 @@ class StoresFinderUtility {
    */
   public function getMultipleStoresExtraData(array $stores, $langcode = NULL) {
     $store_codes = array_keys($stores);
-    $langcode = $langcode ?? $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+    }
 
     $store_nodes = $this->getStoreNodes($store_codes);
     // Load multiple nodes all together.
