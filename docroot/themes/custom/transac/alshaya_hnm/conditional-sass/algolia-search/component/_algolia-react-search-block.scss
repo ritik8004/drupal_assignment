@@ -168,10 +168,7 @@
         border-bottom-left-radius: 3px;
         border-bottom-right-radius: 3px;
         box-shadow: 0 0 1.25rem 0 $search-hover;
-
-        @include breakpoint($only-mobile) {
-          background-color: unset;
-        }
+        background: $white-five;
       }
 
       ul li {
@@ -190,11 +187,11 @@
   }
 
   .react-autosuggest__input {
-    font-size: 1rem;
+    font-size: 0.8125rem;
     color: $search_placeholder_text;
 
     @include breakpoint($only-mobile) {
-      font-size: 0.8125rem;
+      font-size: 1rem;
     }
   }
 }
