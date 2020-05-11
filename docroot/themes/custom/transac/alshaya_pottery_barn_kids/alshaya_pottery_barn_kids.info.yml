@@ -23,3 +23,9 @@ regions:
 
 libraries:
   - alshaya_pottery_barn_kids/global_styles
+
+libraries-override:
+  alshaya_white_label/algolia_search:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/algolia-search/algolia-search.ltr.css: "/themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/algolia-search/algolia-search.ltr.css"
