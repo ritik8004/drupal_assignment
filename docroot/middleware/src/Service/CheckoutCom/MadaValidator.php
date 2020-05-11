@@ -2,6 +2,7 @@
 
 namespace App\Service\CheckoutCom;
 
+use App\Service\Config\SystemSettings;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
@@ -11,20 +12,31 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  */
 class MadaValidator {
 
-  // Mada bins file name.
-  const MADA_BINS_FILE = 'mada_bins.csv';
+  /**
+   * Parameter Bag.
+   *
+   * @var \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface
+   */
+  protected $params;
 
-  // Mada bins test file name.
-  const MADA_BINS_FILE_TEST = 'mada_bins_test.csv';
+  /**
+   * System Settings service.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  protected $settings;
 
   /**
    * MadaValidator constructor.
    *
    * @param \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface $params
    *   Parameter Bag.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    */
-  public function __construct(ParameterBagInterface $params) {
+  public function __construct(ParameterBagInterface $params, SystemSettings $settings) {
     $this->params = $params;
+    $this->settings = $settings;
   }
 
   /**
@@ -41,27 +53,12 @@ class MadaValidator {
   public function isMadaBin(bool $is_live, string $bin) {
     // @TODO: Future - replace this with Magento API call.
     // They have developed one for Mobile APP.
-    $mada_bin_csv_path = $this->params->get('kernel.project_dir') . '/files/';
-    $mada_bin_csv_path .= $is_live ? self::MADA_BINS_FILE : self::MADA_BINS_FILE_TEST;
-
-    // Read CSV rows.
-    $mada_bin_csv_file = fopen($mada_bin_csv_path, 'r');
-
-    $mada_bin_csv_data = [];
-    while ($mada_bin_csv_row = fgetcsv($mada_bin_csv_file)) {
-      $mada_bin_csv_data[] = $mada_bin_csv_row;
-    }
-    fclose($mada_bin_csv_file);
-
     // Remove the first row of csv columns.
-    unset($mada_bin_csv_data[0]);
+    $madaBins = $is_live
+      ? $this->settings->getSettings('mada_bins_live')
+      : $this->settings->getSettings('mada_bins_test');
 
-    // Build the mada bin array.
-    $mada_bin_array = array_map(function ($row) {
-      return $row[1];
-    }, $mada_bin_csv_data);
-
-    return in_array($bin, $mada_bin_array);
+    return in_array($bin, $madaBins);
   }
 
 }
