@@ -2,20 +2,55 @@
   .c-accordion__title {
     font-family: $hnm-demibold;
     color: $plp_facet_title;
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
+    letter-spacing: 1px;
 
-    &::after {
-      font-size: 2.25rem;
+    @include icon(chevrondown, after) {
+      font-size: 0.4375rem;
+      #{$right}: 1.25rem;
+    }
+
+    &.active {
+      color: $venetian_red;
+
+      &::after {
+        color: $venetian_red;
+      }
     }
   }
-}
 
-.show-all-filters {
-  font-family: $hnm-demibold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: $plp_facet_title;
-  font-size: 0.6875rem;
+  &.block-facet-blockcategory-facet-plp {
+    @include breakpoint($only-mobile) {
+      border: none;
+      padding-#{$left}: 1.25rem;
+      text-align: center;
+
+      h3 {
+        &::after {
+          #{$right}: 1.75rem;
+        }
+      }
+
+      ul {
+        margin-#{$left}: -1.25rem;
+      }
+    }
+
+    .c-accordion__title {
+      @include breakpoint($upto-desktop) {
+        font-size: 0.8125rem;
+        letter-spacing: 1px;
+
+        &.active {
+          color: $venetian_red;
+
+          &::after {
+            color: $venetian_red;
+          }
+        }
+      }
+    }
+  }
 }
 
 .c-plp {
@@ -25,12 +60,15 @@
     .block-facets-summary-blockfilter-bar {
       .filter-list-label {
         font-family: $hnm-demibold;
+        font-size: 0.8125rem;
+        line-height: 1.125rem;
         text-transform: capitalize;
+        color: $hnm-black-three;
       }
 
       ul li a {
         span.js-facet-deactivate::after {
-          font-size: 1rem;
+          font-size: 0.75rem;
         }
       }
 
@@ -52,16 +90,36 @@
         font-family: $hnm-demibold;
         color: $plp_facet_title;
         letter-spacing: 1px;
-        font-size: 0.6875rem;
+        font-size: 0.8125rem;
 
-        @include icon(dropdown-expand, after) {
+        @include icon(chevrondown, after) {
           position: absolute;
-          font-size: 2.25rem;
+          font-size: 0.4375rem;
+          #{$right}: 1.25rem;
+        }
+
+        &.active {
+          color: $venetian_red;
+
+          &::after {
+            color: $venetian_red;
+          }
         }
       }
 
       .fieldset-wrapper {
+        padding: 0;
+
         .form-type-radio {
+          margin-right: 0;
+          padding: 1rem 0;
+          padding-#{$left}: 0;
+          padding-#{$right}: 1.5rem;
+
+          &:hover {
+            background: $plp_filter_active_item;
+          }
+
           input[checked='checked'] ~ label {
             font-family: $hnm-demibold;
           }
@@ -70,6 +128,7 @@
             &::before {
               top: -0.1875rem;
               transform: translateY(0);
+              background: transparent;
             }
           }
         }
@@ -91,6 +150,10 @@
       }
     }
   }
+
+  .block-alshaya-plp-facets-block-all {
+    padding: 0 1.25rem;
+  }
 }
 
 .filter-fixed-top {
@@ -111,11 +174,21 @@
       .fieldset-wrapper {
         .form-type-radio {
           label {
+            padding-#{$left}: 3.875rem;
+
+            @include breakpoint($desktop) {
+              padding-#{$left}: 4.5rem;
+            }
+
             &::before {
-              font-size: 3.75rem;
-              top: -1.125rem;
-              #{$left}: 0;
+              font-size: 3.2rem;
+              top: 0.1875rem !important;
+              #{$left}: 0.625rem;
               margin-top: 0.0625rem;
+
+              @include breakpoint($desktop) {
+                #{$left}: 1.125rem;
+              }
             }
           }
         }
@@ -176,7 +249,9 @@
     .sizegroup-filter {
       cursor: pointer;
       display: block;
-      padding-#{$left}: 1.125rem;
+      padding: 1rem 0;
+      padding-#{$left}: 1.5rem;
+      padding-#{$right}: 2.8125rem;
     }
 
     > li {
@@ -184,12 +259,25 @@
       position: relative;
       text-transform: capitalize;
 
+      &:hover {
+        background: none;
+
+        & > span {
+          color: $venetian_red;
+        }
+
+        &::after {
+          color: $venetian_red !important;
+        }
+      }
+
       &.is-open {
         font-family: $hnm-demibold;
 
         &::after {
-          top: 0.75rem;
+          top: 1.5625rem;
           transform: translateY(-50%) rotate(180deg);
+          color: $venetian_red;
         }
 
         > ul.sizegroup {
@@ -198,22 +286,25 @@
           border: none;
           margin: 0;
           overflow-y: unset;
+          padding: 0;
 
           .facet-item {
             font-family: $hnm-regular;
-            padding: 0;
-            padding-#{$left}: 2.125rem !important;
+            padding: 1rem 0 !important;
+            padding-#{$left}: 2.5rem !important;
+            padding-#{$right}: 2.8125rem !important;
           }
         }
       }
 
-      @include icon(dropdown-expand, after);
+      @include icon(chevrondown, after);
 
       &::after {
         position: absolute;
-        #{$right}: 0.6875rem;
-        top: -5px;
-        font-size: 2.25rem;
+        #{$right}: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.4375rem;
       }
     }
   }
@@ -224,14 +315,14 @@
   #block-promosize {
     > ul.size_group_list {
       > li {
-        @include icon(chevron#{$right}, after) {
+        @include icon(arrow-#{$right}, after) {
           color: $plp_all_filter_filter_arrow;
           font-size: 1.5rem;
           width: 2rem;
           cursor: pointer;
           pointer-events: none;
           position: absolute;
-          #{$right}: 0.625rem;
+          #{$right}: 0.9375rem;
           top: 50%;
           transform: translateY(-50%);
         }
@@ -255,17 +346,54 @@
       }
 
       .sizegroup-filter {
-        padding: 1.25rem 2rem;
+        padding: 1.25rem 1.5rem;
         height: auto;
         font-size: 0.75rem;
         line-height: 1.2;
-        border-bottom: 1px solid $plp_all_filter_item_border;
         letter-spacing: normal;
+
+        @include breakpoint($desktop) {
+          padding-#{$left}: 2rem;
+          padding-#{$right}: 2rem;
+        }
       }
     }
 
     ul.sizegroup {
       display: none;
+    }
+  }
+}
+
+.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search),
+.c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
+  ul {
+    padding: 0;
+
+    .facet-item {
+      padding: 1rem 1.5rem !important;
+
+      span {
+        font-size: 0.8125rem;
+        line-height: 1.25rem;
+        color: $hnm-black-three;
+
+        &.facet-item__count {
+          font-size: 0.6875rem;
+          line-height: 1.25rem;
+          color: $plp_facet_count_number;
+        }
+      }
+
+      &.is-active:not(.facet-item--expanded) {
+        &::after {
+          content: unset;
+        }
+      }
+
+      &:hover {
+        background: $plp_filter_active_item;
+      }
     }
   }
 }

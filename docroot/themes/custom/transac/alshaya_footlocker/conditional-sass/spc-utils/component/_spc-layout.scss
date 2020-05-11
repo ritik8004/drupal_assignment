@@ -15,6 +15,19 @@
         width: 100%;
       }
     }
+
+    html[lang=ar] & {
+      a {
+        @include breakpoint($tablet) {
+          height: auto;
+          width: 13rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 6rem;
+        }
+      }
+    }
   }
 
   @include breakpoint($only-tablet) {

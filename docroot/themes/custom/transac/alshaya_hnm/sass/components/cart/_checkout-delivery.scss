@@ -155,6 +155,7 @@
     .tab-separator {
       color: $checkout_tab_separator;
       font-size: 0.875rem;
+      background: $seashell_grey;
 
       @include breakpoint($tablet) {
         width: 5.9%;

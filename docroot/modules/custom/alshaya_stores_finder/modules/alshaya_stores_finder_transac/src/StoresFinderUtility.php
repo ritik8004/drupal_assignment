@@ -289,9 +289,7 @@ class StoresFinderUtility {
    */
   public function getMultipleStoresExtraData(array $stores, $langcode = NULL) {
     $store_codes = array_keys($stores);
-    if (empty($langcode)) {
-      $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
-    }
+    $langcode = $langcode ?? $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
 
     $store_nodes = $this->getStoreNodes($store_codes);
     // Load multiple nodes all together.
@@ -313,15 +311,11 @@ class StoresFinderUtility {
     }
 
     $nodes = $this->nodeStorage->loadMultiple($nids);
-    $config = $this->configFactory->get('alshaya_click_collect.settings');
     $address = $this->addressBookManager->getAddressStructureWithEmptyValues();
     // Loop through node and add store address/opening hours/delivery time etc.
     foreach ($nodes as $nid => $node) {
       $store = is_array($stores[$store_nodes[$nid]['field_store_locator_id_value']]) ? $stores[$store_nodes[$nid]['field_store_locator_id_value']] : [];
       $store['gtm_cart_address'] = $this->getStoreAddress($node, TRUE, TRUE);
-      if (!empty($store['rnc_available'])) {
-        $store['delivery_time'] = $config->get('click_collect_rnc');
-      }
       $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
       $store['cart_address'] = $address;
       if ($store_address = $node->get('field_address')->getValue()) {

@@ -1,1 +1,3 @@
 max_cart_qty: '10'
+checkout_feature: 'enabled'
+checkout_disabled_page: ''

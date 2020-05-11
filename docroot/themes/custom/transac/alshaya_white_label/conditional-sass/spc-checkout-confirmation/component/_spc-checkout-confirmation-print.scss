@@ -89,6 +89,7 @@
     justify-content: space-between;
     height: 4rem;
     border-bottom: 1px solid $spc-delivery-info-separator;
+    background: $spc-checkout-print-header;
 
     img {
       max-height: 2rem;
@@ -97,7 +98,7 @@
     .spc-checkout-confirmation-title {
       font-family: $alshaya-bold;
       font-weight: normal;
-      color: $spc-checkout-print-titile;
+      color: $spc-checkout-print-header-title;
     }
   }
 
