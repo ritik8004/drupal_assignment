@@ -29,7 +29,7 @@
 .alias--cart-checkout-payment,
 .alias--cart-checkout-confirmation {
   .c-post-content {
-    background-color: $hnm-black;
+    background-color: $footer_bg;
     border-top: none;
   }
 
@@ -97,7 +97,7 @@
   }
 
   p {
-    color: $grey5;
+    color: $checkout_footer_txt;
     font-size: 0.75rem;
     margin: 0;
 
@@ -168,7 +168,7 @@
 
     font-family: $hnm-bold;
     font-weight: normal;
-    color: $block_acm_customer_title_bg;
+    color: $checkout_footer_txt;
     font-size: 0.75rem;
     letter-spacing: 1px;
     margin-bottom: 1.188rem;

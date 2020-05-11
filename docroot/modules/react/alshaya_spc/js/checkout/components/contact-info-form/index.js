@@ -9,6 +9,7 @@ import FixedFields from '../fixed-fields';
 import { validateContactInfo, addressFormInlineErrorScroll } from '../../../utilities/address_util';
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import dispatchCustomEvent from '../../../utilities/events';
+import getStringMessage from '../../../utilities/strings';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
@@ -75,7 +76,7 @@ class ContactInfoForm extends React.Component {
 
         // If invalid mobile number.
         if (result.data.mobile === false) {
-          document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+          document.getElementById('mobile-error').innerHTML = getStringMessage('form_error_valid_mobile_number');
           document.getElementById('mobile-error').classList.add('error');
           isError = true;
         } else {
@@ -86,11 +87,11 @@ class ContactInfoForm extends React.Component {
 
         if (result.data.email !== undefined) {
           if (result.data.email === 'invalid') {
-            document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', { '%mail': validationData.email });
+            document.getElementById('email-error').innerHTML = getStringMessage('form_error_email_not_valid', { '%mail': validationData.email });
             document.getElementById('email-error').classList.add('error');
             isError = true;
           } else if (result.data.email === 'exists') {
-            document.getElementById('email-error').innerHTML = Drupal.t('Customer already exists.');
+            document.getElementById('email-error').innerHTML = getStringMessage('form_error_customer_exists');
             document.getElementById('email-error').classList.add('error');
             isError = true;
           } else {

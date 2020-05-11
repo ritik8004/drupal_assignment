@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_social;
 
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -142,8 +143,23 @@ class AlshayaSocialHelper {
     // Gets user's profile from social auth provider.
     if ($user_info = $providerAuth->getUserInfo()) {
       $fields = $event->getUserFields();
-      $fields['field_first_name'] = $user_info->getFirstName();
-      $fields['field_last_name'] = $user_info->getLastName();
+      $fields['field_first_name'] = trim($user_info->getFirstName());
+      $fields['field_last_name'] = trim($user_info->getLastName());
+
+      if (empty($fields['field_first_name']) && empty($fields['field_last_name'])) {
+        $this->logger->warning('First and last name both are empty for social user, rejecting. Data @data', [
+          '@data' => json_encode($fields),
+        ]);
+
+        throw new \UnexpectedValueException('We need at-least one name to create the account');
+      }
+
+      if (empty($fields['field_first_name'])) {
+        $fields['field_first_name'] = AlshayaAddressBookManager::INVISIBLE_CHARACTER;
+      }
+      if (empty($fields['field_last_name'])) {
+        $fields['field_last_name'] = AlshayaAddressBookManager::INVISIBLE_CHARACTER;
+      }
 
       try {
         // Get the customer id for existing user.
@@ -159,6 +175,10 @@ class AlshayaSocialHelper {
         $customer = $this->apiWrapper->updateCustomer($customer_array, [
           'password' => $fields['pass'],
         ]);
+
+        if (empty($customer)) {
+          throw new \Exception('Create or update customer failed.');
+        }
       }
       catch (\Exception $e) {
         $this->logger->error('Error occurred during customer registration @message', [

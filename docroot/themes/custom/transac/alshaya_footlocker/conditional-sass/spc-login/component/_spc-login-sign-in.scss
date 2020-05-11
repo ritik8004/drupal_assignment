@@ -56,5 +56,22 @@
         max-width: 8.625rem;
       }
     }
+
+    html[lang=ar] & {
+      a {
+        @include breakpoint($tablet) {
+          height: auto;
+          width: 13rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 6rem;
+        }
+      }
+    }
+  }
+
+  html[lang=ar] & {
+    margin: 0;
   }
 }

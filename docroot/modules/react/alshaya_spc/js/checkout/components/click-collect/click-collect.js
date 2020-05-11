@@ -183,16 +183,11 @@ class ClickCollect extends React.Component {
             lng: pos.coords.longitude,
           };
 
-          if (JSON.stringify(coords) === JSON.stringify(userCoords)) {
-            return;
-          }
-
           try {
-            const [userCountrySame] = await getUserLocation(coords);
-            // If user and site country not same, don;t process.
+            // If user and site country not same, don't process.
+            const [userCountrySame] = await getUserLocation(userCoords);
             if (!userCountrySame) {
               removeFullScreenLoader();
-              // Show error message.
               showOutsideCountryError(true);
               return;
             }
@@ -200,12 +195,17 @@ class ClickCollect extends React.Component {
             Drupal.logJavascriptError('clickncollect-checkUserCountry', error);
           }
 
+          if (JSON.stringify(coords) === JSON.stringify(userCoords)) {
+            removeFullScreenLoader();
+            return;
+          }
+
           this.fetchAvailableStores(userCoords, true);
         },
         () => {
-          removeFullScreenLoader();
           const defaultMapCenter = getDefaultMapCenter();
           if (JSON.stringify(coords) === JSON.stringify(defaultMapCenter)) {
+            removeFullScreenLoader();
             return;
           }
           this.changeNearMeButtonStatus('in-active');
@@ -234,7 +234,7 @@ class ClickCollect extends React.Component {
         this.selectStoreButtonVisibility(false);
         if (typeof response.error === 'undefined') {
           updateCoordsAndStoreList(coords, response.data, locationAccess);
-          this.showOpenMarker(response);
+          this.showOpenMarker(response.data);
         } else {
           updateCoordsAndStoreList(coords, []);
         }
@@ -242,6 +242,7 @@ class ClickCollect extends React.Component {
         removeFullScreenLoader();
       })
       .catch((error) => {
+        removeFullScreenLoader();
         Drupal.logJavascriptError('clickncollect-fetchAvailableStores', error);
       });
   };
@@ -283,12 +284,10 @@ class ClickCollect extends React.Component {
   showOpenMarker = (storeList = null) => {
     const { selectedStore, storeList: contextStoreList } = this.context;
     const storeListArg = (!storeList) ? contextStoreList : storeList;
-
     if (!selectedStore) {
       this.selectStoreButtonVisibility(false);
       return;
     }
-    this.selectStoreButtonVisibility(false);
     this.openMarkerOfStore(selectedStore.code, storeListArg);
     this.closeAllInfoWindow();
   };
@@ -309,6 +308,7 @@ class ClickCollect extends React.Component {
     const index = _findIndex(storeListArg, {
       code: storeCode,
     });
+    this.selectStoreButtonVisibility(index >= 0);
 
     const self = this;
     // Wait for all markers to be placed in map before
@@ -430,16 +430,29 @@ class ClickCollect extends React.Component {
     window.spcMap.closeAllInfoWindow();
   }
 
+  dismissErrorMessage = (e, type) => {
+    const { showOutsideCountryError, updateLocationAccess } = this.context;
+    const { changeNearMeButtonStatus } = this;
+    e.target.parentNode.parentNode.classList.add('fadeOutUp');
+    // Wait for warning message fade out animation.
+    setTimeout(() => {
+      if (type === 'outsidecountry') {
+        showOutsideCountryError(false);
+        changeNearMeButtonStatus('in-active');
+      }
+      if (type === 'locationAccessDenied') {
+        updateLocationAccess(true);
+      }
+    }, 200);
+  }
+
   render() {
     const {
       coords,
       storeList,
       selectedStore,
       locationAccess,
-      updateLocationAccess,
       outsideCountryError,
-      showOutsideCountryError,
-      animateLocationMessage,
     } = this.context;
 
     const {
@@ -467,28 +480,32 @@ class ClickCollect extends React.Component {
             className="spc-cnc-stores-list-map"
             style={{ display: openSelectedStore ? 'none' : 'block' }}
           >
-            <SectionTitle>{getStringMessage('collection_store')}</SectionTitle>
+            <SectionTitle>{getStringMessage('cnc_collection_store')}</SectionTitle>
             <a className="close" onClick={closeModal}>
               &times;
             </a>
             <div className="spc-cnc-address-form-wrapper">
               {locationAccess === false
               && (
-                <CheckoutMessage type="warning" context={`click-n-collect-store-modal modal location-disable ${animateLocationMessage}`}>
+                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
                   <span className="font-bold">{getStringMessage('location_access_denied')}</span>
-                  <a href="#" onClick={() => updateLocationAccess(true)}>{getStringMessage('dismiss')}</a>
+                  <a href="#" onClick={(e) => this.dismissErrorMessage(e, 'locationAccessDenied')}>
+                    {getStringMessage('dismiss')}
+                  </a>
                 </CheckoutMessage>
               )}
               {outsideCountryError === true
               && (
                 <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
                   {parse(getStringMessage('location_outside_country_cnc'))}
-                  <a href="#" onClick={() => showOutsideCountryError(false)}>{getStringMessage('dismiss')}</a>
+                  <a href="#" onClick={(e) => this.dismissErrorMessage(e, 'outsidecountry')}>
+                    {getStringMessage('dismiss')}
+                  </a>
                 </CheckoutMessage>
               )}
               <div className="spc-cnc-address-form-content">
                 <SectionTitle>
-                  {getStringMessage('find_your_nearest_store')}
+                  {getStringMessage('cnc_find_your_nearest_store')}
                 </SectionTitle>
                 <LocationSearchForm
                   ref={this.searchRef}
@@ -531,7 +548,7 @@ class ClickCollect extends React.Component {
           </div>
           <div className="spc-cnc-store-actions" data-selected-stored={openSelectedStore}>
             <button className="select-store" type="button" onClick={(e) => this.finalizeCurrentStore(e)}>
-              {getStringMessage('select_this_store')}
+              {getStringMessage('cnc_select_this_store')}
             </button>
           </div>
           <SelectedStore

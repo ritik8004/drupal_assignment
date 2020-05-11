@@ -99,6 +99,11 @@
     @include breakpoint($desktop) {
       #{$right}: 1.5rem;
     }
+
+    @include icon(chevrondown, before) {
+      font-size: 0.5rem;
+      display: block;
+    }
   }
 
   .order__detail--link {
@@ -160,8 +165,12 @@
   line-height: 1;
   color: $block_acm_customer_title_bg;
   top: -5.7rem;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   height: 2.1875rem;
+
+  &:hover {
+    background: $gray44;
+  }
 }
 
 .alshaya-acm-customer-order-list-search {
@@ -184,6 +193,7 @@
 
         @include icon(search, before) {
           font-weight: bold;
+          font-size: 1rem;
         }
       }
     }
