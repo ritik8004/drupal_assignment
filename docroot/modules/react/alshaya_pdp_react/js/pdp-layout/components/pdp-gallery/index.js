@@ -38,11 +38,14 @@ export default class PdpGallery extends React.PureComponent {
 
   render() {
     const { skuCode } = this.props;
-    const images = skuCode ? drupalSettings.pdpGallery[skuCode].thumbnails : [];
+    const images = skuCode ? drupalSettings.productInfo[skuCode].rawGallery.thumbnails : [];
+    const emptyRes = (
+      <div>Images not available</div>
+    );
     const { open, currentIndex } = this.state;
     const { showFullScreenModal, closeModal } = this;
 
-    return (
+    return (images) ? (
 
       <div className="magv2-pdp-gallery">
         <ConditionalView condition={window.innerWidth > 768}>
@@ -108,6 +111,6 @@ export default class PdpGallery extends React.PureComponent {
           </div>
         </Popup>
       </div>
-    );
+    ) : emptyRes;
   }
 }

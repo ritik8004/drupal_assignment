@@ -517,7 +517,6 @@ class SkuInfoHelper {
     $productInfo = [];
     $productInfo['type'] = $sku->bundle();
     $productInfo['priceRaw'] = _alshaya_acm_format_price_with_decimal((float) $sku->get('price')->getString());
-    $productInfo['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $sku->get('final_price')->getString());
     $productInfo['cart_title'] = $this->productInfoHelper->getTitle($sku, 'basket');
     $this->moduleHandler->alter('sku_product_info', $productInfo, $sku);
     return $productInfo;

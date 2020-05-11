@@ -6,16 +6,16 @@ import PdpInfo from '../pdp-info';
 
 const PdpLayout = () => {
   let skuItemCode = null;
-  const { pdpGallery } = drupalSettings;
   const { productInfo } = drupalSettings;
-  if (pdpGallery) {
-    [skuItemCode] = Object.keys(pdpGallery);
+  if (productInfo) {
+    [skuItemCode] = Object.keys(productInfo);
   }
-  const shortDesc = skuItemCode ? pdpGallery[skuItemCode].shortDesc : [];
-  const description = skuItemCode ? pdpGallery[skuItemCode].description : [];
-  const title = skuItemCode ? pdpGallery[skuItemCode].title : null;
+  const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
+  const description = skuItemCode ? productInfo[skuItemCode].description : [];
+  const title = skuItemCode ? productInfo[skuItemCode].title : null;
   const priceRaw = skuItemCode ? productInfo[skuItemCode].priceRaw : null;
   const finalPrice = skuItemCode ? productInfo[skuItemCode].finalPrice : null;
+  const pdpGallery = skuItemCode ? productInfo[skuItemCode].rawGallery : [];
 
   const emptyRes = (
     <div>Product data not available</div>
