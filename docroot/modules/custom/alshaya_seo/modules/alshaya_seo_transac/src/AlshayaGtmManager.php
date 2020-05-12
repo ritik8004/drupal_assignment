@@ -1049,7 +1049,6 @@ class AlshayaGtmManager {
         break;
 
       case 'cart page':
-      case 'checkout login page':
       case 'checkout delivery page':
       case 'checkout payment page':
         $cart = $this->cartStorage->getCart(FALSE);
@@ -1199,11 +1198,13 @@ class AlshayaGtmManager {
           $page_dl_attributes['cartItemsFlocktory'] = $this->formatCartFlocktory($orderItems);
         }
 
-        if ($deliveryArea) {
-          $page_dl_attributes['deliveryArea'] = $deliveryArea;
-        }
-        if ($deliveryCity) {
-          $page_dl_attributes['deliveryCity'] = $deliveryCity;
+        if (empty($store_code)) {
+          if ($deliveryArea) {
+            $page_dl_attributes['deliveryArea'] = $deliveryArea;
+          }
+          if ($deliveryCity) {
+            $page_dl_attributes['deliveryCity'] = $deliveryCity;
+          }
         }
 
         break;
