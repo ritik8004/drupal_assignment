@@ -43,6 +43,10 @@ $primary_input_focus_border: $PBK_confirmation_blue;
 $secondary_link: $_black_two;
 $primary_text: $_gray_ten;
 
+// Slug banner
+$slug_banner_bg: $PBK_confirmation_blue;
+$slug_banner_text: $white-two;
+
 // Buttons.
 $primary_btn_bg: $PBK_red;
 $primary_btn_text: $white-two;
@@ -94,6 +98,7 @@ $breadcrumb_link_active: $_black_two;
 $footer_bg: $PBK_white;
 $footer_title_h3: $_black_two;
 $footer_link_hover: $_black_two;
+$footer_link: $_gray_ten;
 
 // Our Brands.
 $our_brands_footer_separator: $_black_two;

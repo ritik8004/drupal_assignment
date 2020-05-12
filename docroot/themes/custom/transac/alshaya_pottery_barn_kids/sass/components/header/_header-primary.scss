@@ -1,4 +1,10 @@
 header.c-header {
+  .c-header__region {
+    @include breakpoint($only-tablet) {
+      margin-top: 0;
+    }
+  }
+
   .block-views-exposed-filter-blocksearch-page {
     @include breakpoint($desktop) {
       top: 0.25rem;
@@ -57,6 +63,7 @@ header.c-header {
         @include breakpoint($only-mobile) {
           margin-#{$left}: 5.5rem;
           max-width: 100%;
+          margin-top: 0.3125rem;
         }
 
         picture {
@@ -72,6 +79,7 @@ header.c-header {
     }
   }
 
+  .block-cart-mini-block,
   .block-alshaya-react-mini-cart {
     @include breakpoint($only-mobile) {
       margin-top: 1.5rem;
@@ -81,7 +89,7 @@ header.c-header {
       background-size: 2.3rem;
 
       @include breakpoint($only-mobile) {
-        margin-top: 0.6875rem;
+        margin-top: -0.075rem;
         margin-bottom: 0;
       }
 
@@ -123,5 +131,44 @@ header.c-header {
     @include breakpoint($only-tablet) {
       margin-top: 0.7625rem;
     }
+  }
+}
+
+.region.region__pre-content {
+  @include breakpoint($desktop) {
+    border-bottom: 0.0625rem solid $primary_search_border;
+    background-color: $pre_content_region_bg;
+    padding-bottom: 0.125rem;
+  }
+}
+
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    & > ul.menu--two__list {
+      .highlights {
+        img {
+          @include breakpoint($desktop) {
+            max-height: 20.25rem;
+            width: auto;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+  }
+
+  .has--three-levels .menu--three__list-item > .menu-two__link-wrapper a.menu__link {
+    @include breakpoint($desktop) {
+      font-size: 0.75rem !important;
+      line-height: 1.33;
+    }
+  }
+}
+
+// shop by room
+ul.menu--two__list li.menu--two__list-item .menu__link-wrapper .menu-two__link {
+  @include breakpoint($desktop) {
+    font-size: 0.75rem !important;
+    line-height: 1.33;
   }
 }
