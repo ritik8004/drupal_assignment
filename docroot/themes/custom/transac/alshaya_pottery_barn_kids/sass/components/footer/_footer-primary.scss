@@ -10,8 +10,10 @@
       }
 
       &.is-accordion {
-        font-weight: normal;
-        text-transform: none;
+        @include breakpoint($only-mobile) {
+          font-weight: normal;
+          text-transform: none;
+        }
       }
     }
   }
