@@ -19,9 +19,9 @@
     var markup = '<div class="notification">';
     markup += '<div class="col-1">';
     markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
-    markup += '<span class="qty">' + Drupal.t('Qty: ') + data.quantity + '</span></div>';
+    markup += '<span class="qty">' + Drupal.t('Qty') + ': ' + data.quantity + '</span></div>';
     markup += '<div class="col-2"><span class="name">' + data.name + '</span>';
-    markup += Drupal.t('has been added to your cart');
+    markup += Drupal.t('has been added to your cart.');
     markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
     markup += '</div>';
     markup += '</div>';
@@ -36,12 +36,12 @@
     markup += '</div>';
     markup += '<div class="col-2">';
     markup += '<div class="name">' + data.name + '</div>';
-    markup += '<div class="prod-added-text">' + Drupal.t('has been added to your cart') + '</div>';
+    markup += '<div class="prod-added-text">' + Drupal.t('has been added to your cart.') + '</div>';
     markup += '<div classs="matchback-notification-qty">';
     markup += Drupal.t('Quantity: ');
     markup += '<span class="qty">' + data.quantity + '</span>';
     markup += '</div>';
-    markup += '<div class="matchback-prod-added-text">' + Drupal.t('has been added to your cart') + '</div>';
+    markup += '<div class="matchback-prod-added-text">' + Drupal.t('has been added to your cart.') + '</div>';
     markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
     markup += '</div>';
     markup += '</div>';

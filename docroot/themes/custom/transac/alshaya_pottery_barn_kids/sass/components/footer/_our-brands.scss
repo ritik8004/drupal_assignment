@@ -1,0 +1,7 @@
+.c-our-brands {
+  @include breakpoint($tablet) {
+    .section-title {
+      font-size: 0.75rem;
+    }
+  }
+}

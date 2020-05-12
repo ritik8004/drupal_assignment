@@ -18,6 +18,10 @@ class MiddlewareLogFormatter implements FormatterInterface {
    * {@inheritdoc}
    */
   public function format(array $record) {
+    // Get and handle placeholders.
+    $message_placeholders = $this->getMessagePlaceholder($record['context']);
+    $record['message'] = strtr($record['message'], $message_placeholders);
+
     return strtr(self::LOGGER_FORMAT, [
       '!base_url' => $record['extra'] ? $record['extra']['server'] : '',
       '!timestamp' => time(),
@@ -41,6 +45,26 @@ class MiddlewareLogFormatter implements FormatterInterface {
     }
 
     return $records;
+  }
+
+  /**
+   * Prepare placeholder variables.
+   *
+   * @param array $context
+   *   Placeholder context array.
+   *
+   * @return array
+   *   Placeholder array.
+   */
+  private function getMessagePlaceholder(array $context) {
+    $variables = [];
+    foreach ($context as $key => $variable) {
+      if (!empty($key) && ($key[0] === '@' || $key[0] === '%' || $key[0] === '!')) {
+        $variables[$key] = $variable;
+      }
+    }
+
+    return $variables;
   }
 
 }

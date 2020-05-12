@@ -18,6 +18,8 @@
   }
 
   .customer-cart-form {
+    font-size: 0.8125rem;
+
     .price-currency.prefix,
     .price-currency.suffix {
       font-family: $hnm-regular;
@@ -93,14 +95,16 @@
   font-family: $hnm-regular;
   color: $privilege_card_title;
 
-  @include icon(dropdown-expand, after) {
+  @include icon(chevrondown, after) {
     #{$right}: 0.3125rem;
     color: $myaccount_icon;
-    font-size: 2.4rem;
+    font-size: 0.525rem;
   }
 
   &.ui-state-active {
-    @include icon(dropdown-collapse, after);
+    @include icon(chevrondown, after) {
+      transform: translateY(-50%) rotate(180deg);
+    }
   }
 }
 

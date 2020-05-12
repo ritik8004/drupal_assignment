@@ -7,9 +7,8 @@
 
   li {
     @include breakpoint($upto-desktop) {
-      @include icon(chevron#{$right}, after) {
-        color: $mm_mobile_icon;
-        font-weight: bold;
+      &::after {
+        content: '';
       }
     }
   }
@@ -20,30 +19,37 @@
     font-family: $hnm-regular;
 
     @include breakpoint($upto-desktop) {
-      color: $mm_l1_link;
-      text-transform: uppercase;
-      font-size: 0.875rem;
-      letter-spacing: 1px;
+      color: $seconday_menu_link;
+      text-transform: capitalize;
+      font-size: 0.8125rem;
+
+      &:hover {
+        color: inherit;
+        background: none;
+      }
     }
 
     @include breakpoint($desktop) {
-      color: $mm_l1_link_desktop;
+      color: $seconday_menu_link;
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       line-height: 1.2;
       vertical-align: middle;
       letter-spacing: 0.8px;
-      text-transform: uppercase;
+      text-transform: capitalize;
       padding: 0.375rem 0.75rem;
 
-      &:hover,
-      &.is-active {
-        background-color: $mm_l1_link_desktop_active_bg !important;
-        color: $mm_l1_link_desktop !important;
+      &:hover {
+        background-color: $default_background_color;
+        color: $seconday_menu_link_hover;
+      }
+
+      &:hover:active {
+        color: $default-anchor-link-hover;
       }
 
       &.language-link {
-        font-family: $hnm-arabic-medium !important;
+        font-family: $hnm-arabic-regular !important;
         letter-spacing: normal;
 
         html[lang='ar'] & {
@@ -55,10 +61,14 @@
 
     line-height: 1;
 
-    &:hover,
+    &:hover:active {
+      background-color: $default_background_color;
+      color: $default-anchor-link-hover;
+    }
+
     &.is-active {
-      background-color: $mm_bg;
-      color: $mm_l1_link;
+      background: $default_background_color;
+      color: $seconday_menu_link;
     }
   }
 
@@ -231,7 +241,7 @@ html[lang='ar'] {
 @include breakpoint($upto-desktop) {
   #block-account-menu {
     ul {
-      background-color: $white-five;
+      background-color: $default_background_color;
     }
   }
 }

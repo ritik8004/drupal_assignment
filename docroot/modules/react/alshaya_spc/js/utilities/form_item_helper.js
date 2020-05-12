@@ -1,4 +1,5 @@
 import dispatchCustomEvent from './events';
+import getStringMessage from './strings';
 
 export const markFieldAsValid = (id) => {
   try {
@@ -23,7 +24,7 @@ export const showRequiredMessage = (id) => {
     const title = document.getElementById(id).parentNode.querySelector('label');
     const message = (title === null)
       ? Drupal.t('This field is required.')
-      : Drupal.t('Please enter @label.', { '@label': title.innerHTML });
+      : getStringMessage('address_please_enter', { '@label': title.innerHTML });
     document.getElementById(id).innerHTML = message;
     document.getElementById(id).classList.add('error');
   } catch (e) {

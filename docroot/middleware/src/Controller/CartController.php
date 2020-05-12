@@ -634,7 +634,11 @@ class CartController {
    */
   public function placeOrder(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
-    if (!isset($request_content['data'])) {
+    if (!isset($request_content['data']) || empty($this->cart->getCartId())) {
+      $this->logger->error('Trying to place order with either invalid request data or invalid cart. Request data:@data CartId:@cart_id', [
+        '@data' => json_encode($request_content['data']),
+        '@cart_id' => $this->cart->getCartId(),
+      ]);
       return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
@@ -664,6 +668,7 @@ class CartController {
   private function validateRequestData(array $request_content) {
     // If action info or cart id not available.
     if (empty($request_content['action'])) {
+      $this->logger->error('Cart update operation not containing any action.');
       return FALSE;
     }
 
@@ -671,6 +676,14 @@ class CartController {
     if ($request_content['action'] === CartActions::CART_ADD_ITEM
       && empty($request_content['cart_id'])) {
       return TRUE;
+    }
+
+    // For any cart update operation, cart should be available in session.
+    if (!$this->cart->getCartId()) {
+      $this->logger->error('Trying to do cart update operation while cart is not available in session. Data: @request_data', [
+        '@request_data' => json_encode($request_content),
+      ]);
+      return FALSE;
     }
 
     // Backend validation.
@@ -685,6 +698,10 @@ class CartController {
 
       // This is serious.
       if ($cart_customer_id !== $session_customer_id) {
+        $this->logger->error('Mismatch session customer id:@session_customer_id and card customer id:@cart_customer_id.', [
+          '@session_customer_id' => $session_customer_id,
+          '@cart_customer_id' => $cart_customer_id,
+        ]);
         return FALSE;
       }
     }

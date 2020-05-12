@@ -156,13 +156,17 @@
     background-color: $hnm-grey;
 
     td {
-      @include icon(dropdown-expand, after) {
-        font-size: 2.483rem;
+      @include icon(chevrondown, after) {
+        font-size: 0.525rem;
+        color: $hnm-black-three;
       }
     }
 
     &.expanded-row td {
-      @include icon(dropdown-collapse, after);
+      @include icon(chevrondown, after) {
+        transform: translateY(-50%) rotate(180deg);
+        font-size: 0.525rem;
+      }
     }
   }
 
