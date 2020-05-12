@@ -5,25 +5,42 @@
     max-width: 80.25rem;
   }
 
-  li.menu--one__list-item {
-    .menu__in::after {
-      font-size: 2rem;
-      margin-top: -0.6625rem;
-    }
-
-    a.menu--one__link {
-      @include breakpoint($only-tablet) {
-        font-size: 1rem;
-        color: $header_secondary_menu_link_mobile;
+  // Mobile and Tablet font size and icon size all levels.
+  .main--menu .menu__list .menu__list-item {
+    @include breakpoint($only-mobile) {
+      .menu__in::after {
+        font-size: 2rem;
+        margin-top: -0.6625rem;
       }
 
+      .menu__link {
+        font-size: 1rem;
+        color: $header_secondary_menu_link_mobile;
+
+        &::after {
+          font-size: 2rem;
+          margin-top: 0.0375rem;
+        }
+      }
+
+      .back--link {
+        font-size: 1rem;
+        color: $header_secondary_menu_link_mobile;
+
+        &::before {
+          font-size: 2rem;
+          margin-top: -0.0625rem;
+        }
+      }
+    }
+  }
+
+  // desktop hover underline
+  li.menu--one__list-item {
+    a.menu--one__link {
       &:hover a.menu--one__link {
         @include breakpoint($desktop) {
           box-shadow: 0 0.125rem 0 0 $mm_l1_link_active_shadow;
-        }
-
-        @include breakpoint($only-tablet) {
-          font-size: 1rem;
         }
       }
     }
