@@ -15,6 +15,12 @@
       width: 100%;
     }
   }
+
+  .algolia-search-cleartext-icon {
+    @include breakpoint($tablet) {
+      #{$right}: 1.7rem;
+    }
+  }
 }
 
 body.frontpage {
