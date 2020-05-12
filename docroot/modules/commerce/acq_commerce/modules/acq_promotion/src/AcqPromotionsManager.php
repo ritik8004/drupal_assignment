@@ -545,10 +545,12 @@ class AcqPromotionsManager {
       '@skus' => implode(',', $skus),
     ]);
 
-    // Update Skus algolia indexing.
-    $skus = $this->getSkusForPromotion($rule_id);
-    $event = new PromotionMappingUpdatedEvent($skus);
-    $this->dispatcher->dispatch(PromotionMappingUpdatedEvent::EVENT_NAME, $event);
+    // Update Skus for algolia indexing.
+    if (empty($skus)) {
+      $skus = $this->getSkusForPromotion($rule_id);
+      $event = new PromotionMappingUpdatedEvent($skus);
+      $this->dispatcher->dispatch(PromotionMappingUpdatedEvent::EVENT_NAME, $event);
+    }
 
     $delete = $this->connection->delete('acq_sku_promotion');
     $delete->condition('rule_id', $rule_id);
