@@ -138,12 +138,7 @@ class ContactInfoForm extends React.Component {
           }
 
           updateContactInfo(formData.static);
-          const cartData = {
-            cart: cartResult,
-            delivery_type: cartResult.delivery_type,
-            address: formData.store.address,
-          };
-          dispatchCustomEvent('refreshCartOnCnCSelect', cartData);
+          dispatchCustomEvent('refreshCartOnCnCSelect', { cart: cartResult });
           return null;
         })
         .catch((error) => {
