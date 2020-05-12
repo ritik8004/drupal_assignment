@@ -1,0 +1,13 @@
+@include breakpoint($upto-desktop) {
+  .main--menu {
+    ul {
+      &.menu--one__list.menu__list {
+        > li {
+          &.options-list--mobile-link {
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
+}
