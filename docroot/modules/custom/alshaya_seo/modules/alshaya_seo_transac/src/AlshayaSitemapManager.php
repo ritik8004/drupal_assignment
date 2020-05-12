@@ -164,16 +164,16 @@ class AlshayaSitemapManager {
    */
   private function addSitemapVariant(TermInterface $term) {
     $variant_name = $this->getVariantName($term->toUrl()->toString());
-    $variants = $this->getAllVariants();
 
-    if (!in_array($variant_name, $variants)) {
-      $settings = [
-        'type' => 'alshaya_hreflang',
-        'label' => $term->id(),
-        'weight' => $term->getWeight(),
-      ];
-      $this->generator->getSitemapManager()->addSitemapVariant($this->getVariantName($term->toUrl()->toString()), $settings);
-    }
+    $settings = [
+      'type' => 'alshaya_hreflang',
+      'label' => $term->id(),
+      'weight' => $term->getWeight(),
+    ];
+    // If variant is already present, then the following will update the list of
+    // variants with the updated value in $settings. It will not create a
+    // duplicate variant.
+    $this->generator->getSitemapManager()->addSitemapVariant($this->getVariantName($term->toUrl()->toString()), $settings);
 
     return $variant_name;
   }
