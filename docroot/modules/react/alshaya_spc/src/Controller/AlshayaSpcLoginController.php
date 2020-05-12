@@ -160,6 +160,11 @@ class AlshayaSpcLoginController extends ControllerBase {
     $build['#cache']['tags'][] = 'config:alshaya_social.settings';
     $build['#cache']['tags'][] = 'config:alshaya_acm_checkout.settings';
     $build['#attached'] = [
+      'drupalSettings' => [
+        'country_name' => function_exists('_alshaya_country_get_site_level_country_name')
+        ? _alshaya_country_get_site_level_country_name()
+        : '',
+      ],
       'library' => [
         'alshaya_white_label/spc-login',
       ],

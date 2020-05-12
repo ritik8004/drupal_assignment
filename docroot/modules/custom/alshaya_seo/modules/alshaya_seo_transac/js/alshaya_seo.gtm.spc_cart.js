@@ -148,9 +148,9 @@
     attach: function (context, settings) {
       var step = Drupal.alshayaSeoSpc.getStepFromContainer();
       var cart_data = Drupal.alshayaSpc.getCartData();
-      $(document).once('spc-cart-gtm-onetime').each(function() {
-        if (cart_data !== null) {
-          Drupal.alshayaSeoSpc.cartGtm(cart_data.cart, step);
+      $('body[gtm-container="cart page"]').once('spc-cart-gtm-onetime').each(function() {
+        if (cart_data) {
+          Drupal.alshayaSeoSpc.cartGtm(cart_data, step);
         }
       });
 
