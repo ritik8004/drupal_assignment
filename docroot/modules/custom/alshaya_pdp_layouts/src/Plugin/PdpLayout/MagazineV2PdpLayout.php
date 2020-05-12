@@ -11,6 +11,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Component\Utility\NestedArray;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 
 /**
  * Provides the default laypout for PDP.
@@ -130,14 +132,24 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       ];
     }
 
-    // Get gallery data for product variants.
+    $options = [];
+    // Get gallery and combination data for product variants.
     if ($sku_entity->bundle() == 'configurable') {
-      $combinations = $this->skuManager->getConfigurableCombinations($sku_entity);
+      $product_tree = Configurable::deriveProductTree($sku_entity);
+      $combinations = $product_tree['combinations'];
+      $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['bySku'] = $combinations['by_sku'];
       foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
         $child = SKU::loadFromSku($child_sku);
         if (!$child instanceof SKUInterface) {
           continue;
         }
+        $options = NestedArray::mergeDeepArray([$options, $this->skuManager->getCombinationArray($combination)], TRUE);
+        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['combinations'] = $options;
+        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['byAttribute'] = $combinations['by_attribute'];
+        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'] = $product_tree['configurables'];
+        // Get the first child from attribute_sku.
+        $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
+        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['firstChild'] = reset($sorted_variants);
         $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['rawGallery'] = $this->getGalleryVariables($child);
         $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $child->get('final_price')->getString());
       }
