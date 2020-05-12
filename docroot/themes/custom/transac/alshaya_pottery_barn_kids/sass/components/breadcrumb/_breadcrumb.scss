@@ -1,0 +1,9 @@
+.c-breadcrumb {
+  li {
+    &:last-of-type {
+      a {
+        font-weight: normal;
+      }
+    }
+  }
+}
