@@ -1,6 +1,6 @@
 .c-menu-secondary {
   li {
-    @include breakpoint($upto-desktop) {
+    @include breakpoint($only-mobile) {
       &::after {
         font-size: 2rem;
         margin-top: -2.5625rem;
@@ -12,7 +12,7 @@
     font-size: 1rem;
     line-height: 1.25;
 
-    @include breakpoint($desktop) {
+    @include breakpoint($tablet) {
       text-transform: capitalize;
       font-size: 0.75rem;
       line-height: 1.85;
