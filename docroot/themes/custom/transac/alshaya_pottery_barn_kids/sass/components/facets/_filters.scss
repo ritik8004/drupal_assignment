@@ -4,10 +4,21 @@
       a {
         &.lhn-4,
         &.lhn-3 {
+          @include breakpoint($desktop) {
+            font-size: 0.875rem;
+          }
+
           &.active {
             color: $lhn_l3_hover;
             font-weight: normal;
             text-decoration: underline;
+          }
+        }
+
+        &.lhn-2 {
+          @include breakpoint($desktop) {
+            font-size: 0.75rem;
+            text-transform: none;
           }
         }
       }
