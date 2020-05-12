@@ -116,7 +116,7 @@
   Drupal.alshayaSeoSpc.loginData = function(cart_data) {
     const cartLoginData = {
       language: drupalSettings.path.currentLanguage,
-      country: drupalSettings.alshaya_spc.country_code,
+      country: drupalSettings.country_name,
       currency: drupalSettings.alshaya_spc.currency_config.currency_code,
       pageType: 'checkout login page',
       productSKU: [],

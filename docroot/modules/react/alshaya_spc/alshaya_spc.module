@@ -52,9 +52,6 @@ function alshaya_spc_preprocess_html(&$variables) {
   $variables['#attached']['drupalSettings']['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
   $variables['#attached']['drupalSettings']['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
   $variables['#attached']['drupalSettings']['alshaya_spc']['max_cart_qty'] = \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty');
-  $variables['#attached']['drupalSettings']['alshaya_spc']['country_code'] = function_exists('_alshaya_country_get_site_level_country_name')
-    ? _alshaya_country_get_site_level_country_name()
-    : '';
 
   /* @var \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager */
   $sku_images_manager = \Drupal::service('alshaya_acm_product.sku_images_manager');
