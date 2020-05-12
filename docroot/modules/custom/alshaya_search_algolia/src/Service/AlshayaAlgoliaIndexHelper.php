@@ -331,13 +331,17 @@ class AlshayaAlgoliaIndexHelper {
       $this->removeAttributesFromIndex($object);
     }
     $object['changed'] = $this->dateTime->getRequestTime();
-    $object['field_category'] = $this->getFieldCategoryHierarchy($node, $node->language()->getId());
+
+    $langcode = $node->language()->getId();
+    $object['field_category'] = $this->getFieldCategoryHierarchy($node, $langcode);
 
     $super_category = $this->superCategoryManager->getSuperCategory($node);
+    $super_category_list[] = $this->t('All', [], ['langcode' => $langcode]);
     // Index the product super_category term.
     if (!empty($super_category)) {
-      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category;
+      $super_category_list[] = $super_category;
     }
+    $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category_list;
   }
 
   /**

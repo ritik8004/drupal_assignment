@@ -27,7 +27,8 @@ export {
 export {
   getFilters,
   hasCategoryFilter,
-  getSortedItems
+  getSortedItems,
+  hasSuperCategoryFilter
 } from './FilterUtils';
 
 export {

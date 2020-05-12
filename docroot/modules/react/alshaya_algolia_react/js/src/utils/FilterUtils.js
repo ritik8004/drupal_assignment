@@ -13,13 +13,13 @@ function getAllFilters() {
  * Get all the filters that we want to show for sticky filter
  * panel on top and "All filters".
  *
- * As of now, filtering out field_category, as it is not
+ * As of now, filtering out field_category and super_category, as it is not
  * displayed anywhere and ideally it will be part of lhn sidebar.
  */
 function getFilters() {
   let filters = getAllFilters();
   _.remove(filters, function (filter) {
-    return filter.identifier === 'field_category';
+    return (filter.identifier === 'field_category' || filter.identifier === 'super_category');
   });
   return filters;
 }
@@ -102,8 +102,24 @@ function getSortedItems(items) {
   return sortedItems;
 }
 
+/**
+ * Return true if filters contains super_category field,
+ * which is used for menu facet in lhn sidebar.
+ */
+function hasSuperCategoryFilter() {
+  if (!drupalSettings.algoliaSearch.enable_lhn_tree_search) {
+    return false;
+  }
+  let filters = getAllFilters();
+  const isSuperCategoryPresent = _.findIndex(filters, { 'identifier': 'super_category' });
+  if (isSuperCategoryPresent !== -1) {
+    return (isSuperCategoryPresent >= 0);
+  }
+}
+
 export {
   getFilters,
   hasCategoryFilter,
-  getSortedItems
+  getSortedItems,
+  hasSuperCategoryFilter
 }
