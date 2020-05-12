@@ -18,7 +18,7 @@
 
   .algolia-search-cleartext-icon {
     @include breakpoint($tablet) {
-      right: 1.7rem;
+      #{$right}: 1.7rem;
     }
   }
 }
