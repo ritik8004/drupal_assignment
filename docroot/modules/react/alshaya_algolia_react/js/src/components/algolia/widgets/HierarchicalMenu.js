@@ -45,7 +45,7 @@ const HierarchicalMenu = (props) => {
           {item.items && item.items.length > 0 && (
             <HierarchicalMenu
               sortResults={false}
-              items={getSortedItems(item.items)}
+              items={getSortedItems(item.items, 'category')}
               refine={refine}
               createURL={createURL}
               facetLevel={facetLevel + 1}

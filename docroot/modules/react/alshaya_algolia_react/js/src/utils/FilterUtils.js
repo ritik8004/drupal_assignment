@@ -46,11 +46,8 @@ function hasCategoryFilter() {
  * hierarchical menu component so we have custom method for sorting.
  */
 function sortItemsByCount(items) {
-  if (items === null || items.length === 0) {
-    return items;
-  }
-
   let sortedItems = [];
+
   sortedItems = items.slice(0);
   sortedItems.sort(function(a,b) {
     return b.count - a.count;
@@ -59,44 +56,63 @@ function sortItemsByCount(items) {
   return sortedItems;
 }
 
-function getSortedItems(items) {
+
+function sortItemsByMegaMenu(items, selector, label) {
   let sortedItems = [];
-  if (items !== null && items.length > 0) {
-    // If super category is enabled then we sort the filters by result count.
-    if (document.getElementById('block-supercategorymenu') !== null) {
-      sortedItems = sortItemsByCount(items);
+
+  // Sort facet items in order of the megamenu.
+  let weight = [];
+  // Getting the attribute for L1 items from the menu.
+  let l1MenuItems = document.querySelectorAll(selector);
+  for (let i in l1MenuItems) {
+    try {
+      if (l1MenuItems[i].getAttribute(label) !== null) {
+        // Add 10 to allow adding All at top.
+        weight[l1MenuItems[i].getAttribute(label).trim()] = parseInt(i) + 10;
+      }
     }
-    else {
-      // Sort facet items in order of the megamenu.
-      let weight = [];
-      // Getting the title attribute for L1 items from the menu.
-      let l1MenuItems = document.getElementsByClassName('menu--one__link');
-      for (let i in l1MenuItems) {
-        try {
-          if (l1MenuItems[i].getAttribute('title') !== null) {
-            // Add 10 to allow adding All at top.
-            weight[l1MenuItems[i].getAttribute('title').trim()] = parseInt(i) + 10;
-          }
-        }
-        catch (e) {
-        }
-      }
-
-      for (let i in items) {
-        if (weight[items[i].label.trim()] !== undefined) {
-          sortedItems[weight[items[i].label]] = items[i];
-        }
-        else if (items[i].label === window.Drupal.t('All')) {
-          // Use 1 for All to ensure Object.values work properly.
-          sortedItems[1] = items[i];
-        }
-      }
-
-      sortedItems = Object.values(Object.keys(sortedItems).reduce((a, c) => (a[c] = sortedItems[c], a), {}));
+    catch (e) {
     }
   }
-  else {
-    sortedItems = items;
+  for (let i in items) {
+    if (weight[items[i].label.trim()] !== undefined) {
+      sortedItems[weight[items[i].label]] = items[i];
+    }
+    else if (items[i].label === window.Drupal.t('All')) {
+      // Use 1 for All to ensure Object.values work properly.
+      sortedItems[1] = items[i];
+    }
+  }
+  sortedItems = Object.values(Object.keys(sortedItems).reduce((a, c) => (a[c] = sortedItems[c], a), {}));
+
+  return sortedItems;
+}
+
+function getSortedItems(items, element) {
+  if (items === null || items.length === 0) {
+    return items;
+  }
+
+  let sortedItems = [];
+
+  switch (element) {
+    case 'category': {
+      // If super category is enabled then we sort the category filters by result count.
+      if (document.getElementById('block-supercategorymenu') !== null) {
+        sortedItems = sortItemsByCount(items);
+      }
+      else {
+        sortedItems = sortItemsByMegaMenu(items, '.menu--one__link', 'title');
+      }
+      break;
+
+    }
+    case 'supercategory': {
+      if (document.getElementById('block-supercategorymenu') !== null) {
+        sortedItems = sortItemsByMegaMenu(items, '[data-super-category-label]', 'data-super-category-label');
+      }
+      break;
+    }
   }
 
   return sortedItems;
