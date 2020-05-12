@@ -1,0 +1,29 @@
+.c-footer-primary {
+  .c-footer-menu--about,
+  .c-footer-menu--help,
+  .c-footer-menu--category,
+  .block-alshaya-newsletter,
+  .c-footer-menu--static-links {
+    h3 {
+      @include breakpoint($tablet) {
+        font-size: 0.75rem;
+      }
+
+      &.is-accordion {
+        @include breakpoint($only-mobile) {
+          font-weight: normal;
+          text-transform: none;
+        }
+      }
+    }
+  }
+}
+
+.c-footer-primary {
+  .block-alshaya-newsletter {
+    &.alshaya-newsletter-subscribe .form-submit {
+      font-size: 0.875rem;
+      font-weight: normal;
+    }
+  }
+}
