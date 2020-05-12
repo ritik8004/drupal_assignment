@@ -40,3 +40,9 @@ body:not(.frontpage) {
     }
   }
 }
+
+body:not(.no-sticky-algolia-search-bar) header .c-header__region {
+  @include breakpoint($only-mobile) {
+    height: 3.375rem;
+  }
+}
