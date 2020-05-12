@@ -220,7 +220,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
       // If more than 2 filters are selected, don't index.
       $attributes['rel'] = ($filters_count > 2)
-        ? 'nofollow noindex'
+        ? 'nofollow'
         : 'follow index';
 
       // Getting the filter item value in English.
