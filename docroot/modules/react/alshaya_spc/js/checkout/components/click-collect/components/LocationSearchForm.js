@@ -1,4 +1,5 @@
 import React from 'react';
+import getStringMessage from '../../../../utilities/strings';
 
 const LocationSearchForm = React.forwardRef((props, ref) => (
   <div className="spc-cnc-location-search-wrapper" ref={ref}>
@@ -18,7 +19,7 @@ const LocationSearchForm = React.forwardRef((props, ref) => (
       type="button"
       onClick={(e) => props.getCurrentPosition(e)}
     >
-      {Drupal.t('Near me')}
+      {getStringMessage('cnc_near_me')}
     </button>
   </div>
 ));

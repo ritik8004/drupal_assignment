@@ -33,6 +33,7 @@ $_grey_sixteen: #696969;
 $_grey_seventeen: #b4b3b3;
 $_grey_eighteen: #4a4a4a;
 $_grey_nineteen: #1a1a1a;
+$_grey_twenty: #ccc;
 
 $transparent: transparent;
 
@@ -42,6 +43,10 @@ $primary_link: $PBK_confirmation_blue;
 $primary_input_focus_border: $PBK_confirmation_blue;
 $secondary_link: $_black_two;
 $primary_text: $_gray_ten;
+
+// Slug banner
+$slug_banner_bg: $PBK_confirmation_blue;
+$slug_banner_text: $white-two;
 
 // Buttons.
 $primary_btn_bg: $PBK_red;
@@ -53,13 +58,24 @@ $primary_search_border: $_gray_eleven;
 $primary_search_input: $PBK_grey_one;
 $primary_search_input_placeholder: $_gray_two;
 
+// Algolia Autocomplete
+$algolia-auto-complete-border: $_gray_eleven;
+$algolia-suggestion-border: $_gray_eleven;
+$algolia-input-text: $PBK_grey_one;
+$algolia-suggestion-text: $PBK_grey_one;
+$algolia-input-placeholder-text: $_gray_two;
+$algolia-search-icon: $_black_two;
+$algolia-react-highlighted-bg: $PBK_confirmation_blue;
+$algolia-search-suggestion-hover-bg: $_gray_five;
+$algolia-react-highlighted-text: $primary_btn_text;
+
 //Header - Top header.
+$header_secondary_bg_upto_desk: $white-two;
 $header_secondary_bg: $PBK_white;
-$header_secondary_bg_upto_desk: $PBK_white;
 $header_secondary_menu_link_mobile: $PBK_grey_one;
 $header_secondary_menu_link: $PBK_grey_one;
 $header_secondary_menu_link_hover_bg: $white-two;
-$header_secondary_menu_link_border: $PBK_white;
+$header_secondary_menu_link_border: $transparent;
 $user_block_link: $PBK_confirmation_blue;
 
 // Mega menu.
@@ -83,6 +99,7 @@ $breadcrumb_link_active: $_black_two;
 $footer_bg: $PBK_white;
 $footer_title_h3: $_black_two;
 $footer_link_hover: $_black_two;
+$footer_link: $_gray_ten;
 
 // Our Brands.
 $our_brands_footer_separator: $_black_two;
@@ -139,6 +156,7 @@ $plp_facet_border: $_gray_eleven;
 $plp_sort_by_options: $_gray_ten;
 $plp_selected_filter_label_text: $PBK_black_one;
 $plp_facet_filter_bg: $_black_four;
+$plp_filter_divider: $_grey_twenty;
 
 // PLP Product tile.
 $plp_tile_product_text: $_black_two;
@@ -148,3 +166,8 @@ $plp_tile_product_special_price: $PBK_deep_red;
 
 // PLP Grid.
 $plp_grid_active_color: $_grey_nineteen;
+
+// Section divider
+$section_divider_border: $_gray_ten;
+$section_divider_text: $PBK_grey_one;
+$section_divider_bg: $white-two;

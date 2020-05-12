@@ -4,6 +4,7 @@ import SectionTitle from '../../../utilities/section-title';
 import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
 import { cleanMobileNumber } from '../../../utilities/checkout_util';
+import getStringMessage from '../../../utilities/strings';
 
 const FixedFields = ({
   defaultVal, showEmail, showFullName = true, subTitle,
@@ -19,7 +20,7 @@ const FixedFields = ({
   return (
     <div className={`spc-checkout-contact-information ${hasSubTitle}`} id="spc-checkout-contact-info">
       <div className="spc-contact-information-header">
-        <SectionTitle>{Drupal.t('contact information')}</SectionTitle>
+        <SectionTitle>{getStringMessage('contact_information')}</SectionTitle>
         <span className="spc-contact-info-desc">{subTitle}</span>
       </div>
       <div className="spc-checkout-contact-information-fields">
@@ -30,7 +31,7 @@ const FixedFields = ({
             name="fullname"
             defaultValue={defaultValue !== '' ? defaultValue.fullname : ''}
             className={defaultValue !== '' && defaultValue.fullname !== '' ? 'focus' : ''}
-            label={Drupal.t('Full Name')}
+            label={getStringMessage('ci_full_name')}
           />
         </ConditionalView>
         <ConditionalView condition={showEmail}>
@@ -39,7 +40,7 @@ const FixedFields = ({
             name="email"
             defaultValue={defaultValue !== '' ? defaultValue.email : ''}
             className={defaultValue !== '' && defaultValue.email !== '' ? 'focus' : ''}
-            label={Drupal.t('Email')}
+            label={getStringMessage('ci_email')}
           />
         </ConditionalView>
         <TextField
@@ -47,7 +48,7 @@ const FixedFields = ({
           name="mobile"
           defaultValue={defaultValue !== '' ? cleanMobileNumber(defaultValue.telephone) : ''}
           className={defaultValue !== '' && defaultValue.telephone !== '' ? 'focus' : ''}
-          label={Drupal.t('Mobile Number')}
+          label={getStringMessage('ci_mobile_number')}
         />
         <input type="hidden" name="address_id" value={defaultValue !== '' && defaultValue.address_id !== null ? defaultValue.address_id : 0} />
       </div>

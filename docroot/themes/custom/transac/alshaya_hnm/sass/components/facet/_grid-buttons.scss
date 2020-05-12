@@ -1,0 +1,23 @@
+.large-col-grid {
+  &.active {
+    svg .grid {
+      .grid-box {
+        fill: none;
+      }
+
+      .grid-border {
+        fill: $venetian_red;
+      }
+    }
+  }
+}
+
+.small-col-grid {
+  &.active {
+    svg .grid {
+      use {
+        fill: $venetian_red;
+      }
+    }
+  }
+}

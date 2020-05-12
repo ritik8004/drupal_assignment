@@ -105,6 +105,13 @@ class PaymentController {
   protected $utility;
 
   /**
+   * K-Net response data.
+   *
+   * @var array
+   */
+  protected $knetResponseData = [];
+
+  /**
    * PaymentController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
@@ -232,7 +239,11 @@ class PaymentController {
         ['@cart_id' => $cart['cart']['id'], '@message' => $e->getMessage()]
       );
       $this->cart->cancelCartReservation($e->getMessage());
-      $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year')));
+      $payment_data = [
+        'status' => self::PAYMENT_FAILED_VALUE,
+        'payment_method' => 'checkoutcom',
+      ];
+      $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
       $response->setTargetUrl('/' . $data['data']['langcode'] . '/checkout');
     }
 
@@ -264,7 +275,11 @@ class PaymentController {
     }
 
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
-    $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_DECLINED_VALUE, strtotime('+1 year')));
+    $payment_data = [
+      'status' => self::PAYMENT_DECLINED_VALUE,
+      'payment_method' => 'checkoutcom',
+    ];
+    $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
     return $response;
   }
 
@@ -315,6 +330,9 @@ class PaymentController {
     $response['customer_id'] = (int) $data['udf2'];
     $response['quote_id'] = (int) $data['udf3'];
     $response['state_key'] = $data['udf4'];
+
+    // Assign to property so that can be used other places.
+    $this->knetResponseData = $response;
 
     try {
       $state = $this->validateKnetRequest('response', $response['state_key']);
@@ -398,7 +416,16 @@ class PaymentController {
 
       $this->cart->cancelCartReservation($e->getMessage());
 
-      $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year')));
+      $payment_data = [
+        'status' => self::PAYMENT_FAILED_VALUE,
+        'payment_method' => 'knet',
+        'data' => [
+          'transaction_id' => !empty($response['transaction_id']) ? $response['transaction_id'] : $response['quote_id'],
+          'payment_id' => $response['payment_id'],
+          'result_code' => $response['result'],
+        ],
+      ];
+      $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
       $redirect->setTargetUrl('/' . $state['data']['langcode'] . '/checkout');
     }
 
@@ -446,7 +473,21 @@ class PaymentController {
     $this->cart->cancelCartReservation($message);
 
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
-    $response->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_FAILED_VALUE, strtotime('+1 year')));
+
+    $payment_data = [
+      'status' => self::PAYMENT_FAILED_VALUE,
+      'payment_method' => 'knet',
+    ];
+
+    if (!empty($this->knetResponseData)) {
+      $payment_data['data'] = [
+        'transaction_id' => $this->knetResponseData['transaction_id'] ?? $this->knetResponseData['quote_id'],
+        'payment_id' => $this->knetResponseData['payment_id'] ?? '',
+        'result_code' => $this->knetResponseData['result'] ?? '',
+      ];
+    }
+
+    $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
     return $response;
   }
 

@@ -51,7 +51,6 @@ class ClicknCollectContextProvider extends React.Component {
       clickCollectModal: false,
       locationAccess: true,
       outsideCountryError: false,
-      animateLocationMessage: '',
     };
   }
 
@@ -101,22 +100,6 @@ class ClicknCollectContextProvider extends React.Component {
   }
 
   updateLocationAccess = (accessStatus) => {
-    // Animate location denied message.
-    if (accessStatus === true) {
-      this.setState({
-        animateLocationMessage: 'fadeOutUp',
-      });
-
-      setTimeout(() => {
-        this.setState((prevState) => ({
-          ...prevState,
-          locationAccess: accessStatus,
-        }));
-      }, 450);
-
-      return;
-    }
-
     this.setState((prevState) => ({
       ...prevState,
       locationAccess: accessStatus,

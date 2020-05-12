@@ -259,7 +259,7 @@
       @include arabic-letter-spacing;
 
       font-family: $hnm-demibold;
-      color: $hnm-black-two;
+      color: $hnm-black-three;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -285,7 +285,7 @@
     font-family: $hnm-regular;
     font-size: 0.875rem;
     line-height: 1.83;
-    color: $hnm-black-two;
+    color: $hnm-black-three;
   }
 
   strong {
@@ -331,11 +331,11 @@
     &__label {
       @include arabic-letter-spacing;
 
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       font-family: $hnm-bold;
       text-transform: uppercase;
       font-weight: normal;
-      color: $title;
+      color: $hnm-black-three;
       letter-spacing: 0.5px;
     }
 
@@ -412,7 +412,8 @@
   .care-instructions-wrapper,
   .concept-wrapper,
   .warning-wrapper {
-    color: $pdp_desc_wrapper;
+    color: $gray44;
+    font-size: 0.6875rem;
     margin-top: 0.75rem;
 
     .composition-label,
@@ -422,9 +423,10 @@
       @include arabic-letter-spacing;
 
       font-family: $hnm-demibold;
-      color: $pdp_desc_wrapper_label;
+      color: $hnm-black-three;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      font-size: 0.8125rem;
     }
 
     ul {
@@ -457,8 +459,8 @@
   .c-accordion {
     &__title {
       font-family: $hnm-regular;
-      font-size: 0.875rem;
-      color: $accordion_title;
+      font-size: 0.8125rem;
+      color: $hnm-black-three;
       line-height: 2.5;
       height: auto;
       margin-bottom: 0.3125rem;
@@ -474,8 +476,9 @@
         }
       }
 
-      &::after {
+      @include icon(chevrondown, after) {
         #{$right}: 0.9375rem;
+        font-size: 0.5rem;
       }
 
       .subtitle {
@@ -483,7 +486,7 @@
 
         font-family: $hnm-regular;
         font-size: 0.6875rem;
-        color: $accordion_subtitle;
+        color: $gray44;
         line-height: 1.2;
         text-transform: none;
         margin-top: -0.25rem;
@@ -502,8 +505,9 @@
           }
 
           span {
-            color: $accordion_title;
+            color: $hnm-black-three;
             font-family: $hnm-regular;
+            font-size: 0.6875rem;
           }
         }
       }
@@ -719,12 +723,12 @@
   }
 
   h4 {
-    color: $pdp_desc_wrapper;
+    color: $gray44;
   }
 
   .selected-text {
     font-family: $hnm-bold;
-    color: $pdp_select_selectedtext;
+    color: $hnm-black-three;
     display: inline-block;
   }
 
@@ -739,27 +743,28 @@
       }
 
       a:hover {
-        color: $pdp_select_selectedtext;
-        background: $pdp_select_hover;
+        color: $white-five;
+        background: $gray44;
+        border-color: $gray44;
       }
 
       a,
       span {
         @include u-visibility(block);
 
-        border: 1px solid $pdp_swatch_selected_border;
+        border: 1px solid $hnm-black-three;
         text-align: center;
         padding: 0.596rem;
         min-width: 2.375rem;
         max-height: 2.375rem;
         font-family: $hnm-regular;
-        font-size: 0.875rem;
-        color: $pdp_select_selectedtext;
+        font-size: 0.8125rem;
+        color: $hnm-black-three;
 
         &.picked {
           color: $white-five;
           font-weight: bold;
-          background: $hnm-black-two;
+          background: $hnm-black-three;
         }
 
         .form-item-configurables-article-castor-id & {
@@ -925,7 +930,15 @@ article[gtm-sku-type="simple"] {
 }
 
 .select2-container--open {
-  z-index: 4;
+  z-index: 9;
+}
+
+.acq-content-product {
+  .form-item-configurables-size {
+    .selected-text {
+      color: $hnm-black-three;
+    }
+  }
 }
 
 .ui-dialog,
@@ -1086,6 +1099,14 @@ html[lang=ar] {
 .field--name-field-skus {
   .sku-base-form {
     button[type="submit"] {
+      font-size: 0.8125rem;
+      background-color: $hnm-black-three;
+      font-family: $hnm-demibold;
+
+      &:hover {
+        background-color: $gray44;
+      }
+
       @include breakpoint($tablet) {
         margin-#{$left}: 0;
       }
@@ -1127,5 +1148,97 @@ html[lang=ar] {
         bottom: 4.1875rem;
       }
     }
+  }
+}
+
+#product-full-screen-gallery-container {
+  background-color: $default_background_color;
+
+  @include breakpoint($tablet) {
+    padding: 5.3125rem;
+  }
+}
+
+#product-full-screen-gallery-container,
+#product-image-gallery-container-mobile {
+  .slick-slider {
+    > .i-dots.slick-dots {
+      overflow: inherit;
+
+      .slick-dots-container {
+        > li {
+          background-color: $pdp_slick_dots_background !important;
+          box-shadow: 0 0 0.125rem 0 $pdp_slick_dots_box_shadow;
+
+          &.slick-active {
+            background: $white-five !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-tablet) {
+  .size-tray {
+    .size-tray-buttons {
+      .size-guide-link {
+        color: $hnm-black-three;
+        text-decoration: underline;
+      }
+
+      .size-tray-close {
+        background: $white-five;
+        position: relative;
+        height: 1.75rem;
+        width: 1.75rem;
+
+        &::before {
+          color: inherit;
+          font-size: 0.6rem;
+          position: absolute;
+          right: 0.5625rem;
+          top: 0.625rem;
+        }
+      }
+    }
+  }
+
+  .c-pdp.l-one--w {
+    padding: 0 1.25rem;
+
+    .show-sticky-wrapper.fixed {
+      margin: 0 -1.25rem;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .size-guide-link {
+    color: $gray44 !important;
+  }
+}
+
+.content__title_wrapper {
+  h1 {
+    span {
+      font-size: 1.25rem;
+      color: $hnm-black-three;
+    }
+  }
+
+  .price {
+    font-size: 1.25rem;
+    color: $hnm-black-three;
+    font-family: $hnm-regular;
+
+    @include breakpoint($upto-tablet) {
+      font-size: 1rem;
+    }
+  }
+
+  .content--item-code {
+    color: $gray44;
+    font-size: 0.6875rem;
   }
 }
