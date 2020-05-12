@@ -259,7 +259,7 @@
       @include arabic-letter-spacing;
 
       font-family: $hnm-demibold;
-      color: $hnm-black-two;
+      color: $hnm-black-three;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -285,7 +285,7 @@
     font-family: $hnm-regular;
     font-size: 0.875rem;
     line-height: 1.83;
-    color: $hnm-black-two;
+    color: $hnm-black-three;
   }
 
   strong {
@@ -1183,7 +1183,7 @@ html[lang=ar] {
   .size-tray {
     .size-tray-buttons {
       .size-guide-link {
-        color: $hnm-black-two;
+        color: $hnm-black-three;
         text-decoration: underline;
       }
 
