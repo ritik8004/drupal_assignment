@@ -1,0 +1,32 @@
+.c-plp {
+  .c-page-title {
+    text-transform: none;
+    font-weight: 600 !important;
+    font-size: 1.5rem !important;
+
+    @include breakpoint($tablet) {
+      padding-bottom: 1.125rem;
+    }
+  }
+}
+
+.c-products-list {
+  .view-alshaya-product-list,
+  &.view-search,
+  &.block-views-blockalshaya-product-list-block-1 {
+    margin-top: 1.625rem;
+  }
+}
+
+.c-plp .region__content {
+  .block-facets-summary-blockfilter-bar-promotions,
+  .block-facets-summary-blockfilter-bar-plp,
+  .block-facets-summary-blockfilter-bar {
+    padding-top: 0.75rem;
+    border-bottom: 1px solid $plp_filter_divider;
+
+    @include breakpoint($only-mobile) {
+      padding-bottom: 0.875rem;
+    }
+  }
+}
