@@ -1,24 +1,55 @@
-.block-alshaya-category-lhn-block {
-  ul {
-    li {
-      a {
-        &.lhn-4,
-        &.lhn-3 {
-          @include breakpoint($desktop) {
-            font-size: 0.875rem;
-          }
+// department page specific.
+.c-department {
+  .c-category-list {
+    .c-category-list__items {
+      .c-category-list__title {
+        @include breakpoint($desktop) {
+          font-size: 0.75rem;
+          text-transform: none;
+        }
+      }
+    }
 
-          &.active {
-            color: $lhn_l3_hover;
-            font-weight: normal;
-            text-decoration: underline;
-          }
+    .c-category-list__item {
+      a {
+        @include breakpoint($desktop) {
+          font-size: 0.875rem;
         }
 
-        &.lhn-2 {
-          @include breakpoint($desktop) {
-            font-size: 0.75rem;
-            text-transform: none;
+        &.active {
+          color: $lhn_l3_hover;
+          font-weight: normal;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// PLP Specific.
+.c-plp {
+  .block-alshaya-category-lhn-block {
+    ul {
+      li {
+        a {
+          &.lhn-4,
+          &.lhn-3 {
+            @include breakpoint($desktop) {
+              font-size: 0.875rem;
+            }
+
+            &.active {
+              color: $lhn_l3_hover;
+              font-weight: normal;
+              text-decoration: underline;
+            }
+          }
+
+          &.lhn-2 {
+            @include breakpoint($desktop) {
+              font-size: 0.75rem;
+              text-transform: none;
+            }
           }
         }
       }
