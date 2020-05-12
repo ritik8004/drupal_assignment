@@ -139,7 +139,7 @@ function alshaya_facets_pretty_paths_page_attachments_alter(array &$page) {
   // taxonomy term, and then checking the bundle type.
   $routematch = \Drupal::routeMatch();
 
-  if ($routematch->getRouteName() != 'entity.taxonomy_term.canonical') {
+  if (empty($routematch) || $routematch->getRouteName() != 'entity.taxonomy_term.canonical') {
     return;
   }
 
