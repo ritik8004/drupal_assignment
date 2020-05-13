@@ -1,0 +1,70 @@
+.c-pdp {
+  .acq-content-product {
+    color: $primary_text;
+  }
+
+  .content__title_wrapper h1 span {
+    font-weight: normal;
+    font-size: 1rem;
+    color: $pdp_product_title;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+.c-pdp {
+  .acq-content-product {
+    .select2Option h4 {
+      font-size: 0.875rem;
+
+      .selected-text {
+        padding-left: 0.375rem;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .field--name-field-skus .sku-base-form .form-item label {
+    font-size: 0.875rem;
+    line-height: 1;
+  }
+
+  .basic-details-wrapper .field--name-field-skus .form-item-quantity .select2-container .select2-selection .select2-selection__rendered {
+    font-size: 0.875rem;
+  }
+
+  .select2-dropdown ul.select2-results__options li.select2-results__option {
+    font-size: 0.875rem;
+  }
+
+  .short-description-wrapper {
+    .field__label {
+      font-size: 0.9375rem;
+    }
+
+    .field__content .desc-wrapper .desc-value {
+      color: $pdp_short_description_text;
+    }
+
+    .read-more-description-link-mobile,
+    .read-more-description-link {
+      font-size: 0.75rem;
+      font-weight: normal;
+      text-decoration: underline;
+    }
+  }
+
+  .content--dimensions-and-care .c-accordion__title {
+    font-weight: 700;
+  }
+
+  .delivery-options-wrapper {
+    .field__label {
+      font-weight: 700;
+    }
+
+    .c-accordion__title .subtitle {
+      font-size: 0.75rem;
+    }
+  }
+}
