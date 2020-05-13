@@ -30,3 +30,41 @@
     }
   }
 }
+
+// tiles of proudcts in plp and search page.
+.c-plp {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  .region__content .block-page-title-block {
+    margin-bottom: 0;
+
+    .c-page-title {
+      @include breakpoint($only-tablet) {
+        padding-bottom: 0;
+      }
+    }
+
+    &.mobile h1 {
+      @include breakpoint($only-mobile) {
+        padding: 1.75rem 0;
+      }
+    }
+  }
+
+  .c-products__item {
+    .field--name-name a {
+      font-weight: 400;
+    }
+
+    .price-wrapper {
+      font-size: 0.875rem;
+    }
+  }
+
+  // Load more button.
+  ul.js-pager__items a {
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+}

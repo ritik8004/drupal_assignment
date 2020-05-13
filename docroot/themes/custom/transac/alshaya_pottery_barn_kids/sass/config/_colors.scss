@@ -43,6 +43,7 @@ $primary_link: $PBK_confirmation_blue;
 $primary_input_focus_border: $PBK_confirmation_blue;
 $secondary_link: $_black_two;
 $primary_text: $_gray_ten;
+$secondary_text: $PBK_grey_one;
 
 // Slug banner
 $slug_banner_bg: $PBK_confirmation_blue;
@@ -121,6 +122,10 @@ $newsletter_input_bg: $transparent;
 $newsletter_input_border: $_black_two;
 $newsletter_submit_btn: $_black_two;
 $newsletter_submit_btn_text: $white-two;
+
+// PDP
+$pdp_product_title: $_gray_ten;
+$pdp_short_description_text: $PBK_grey_one;
 
 // PDP Price
 $pdp_product_price: $_black_two;
