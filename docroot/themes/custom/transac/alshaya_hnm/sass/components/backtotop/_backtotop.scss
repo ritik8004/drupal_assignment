@@ -2,36 +2,42 @@
   @include breakpoint($only-mobile) {
     #{$right}: 0;
     bottom: 0.25rem;
-    line-height: 7.5rem;
-    height: 4.375rem;
   }
 
   @include breakpoint($only-tablet) {
     #{$right}: 0.875rem;
   }
 
-  @include icon(chevronup, after) {
-    color: $hnm-black-three;
+  @include icon(arrow-left, after) {
+    color: $btt_icon;
     #{$right}: 1rem;
-    background-color: $btt_bg;
+    background-color: inherit;
+    border-radius: 0;
+    font-size: 1rem;
+    position: static;
 
     @include breakpoint($tablet) {
       top: -2.5rem;
     }
   }
 
-  font-family: $hnm-regular;
-  color: $gray44;
-  width: 4.375rem;
-  line-height: 0.9375rem;
-  #{$right}: 3.125rem;
-  text-transform: uppercase;
+  width: auto;
+  line-height: 0;
+  #{$right}: 4.125rem;
   height: auto;
+  font-size: 0;
+  transform: rotate(90deg);
+  padding: 0.875rem;
+  background-color: $btt_bg;
 
   &.backtotop-nofooter {
     position: fixed;
     bottom: 0.25rem;
     top: auto;
+  }
+
+  &:hover {
+    opacity: unset !important;
   }
 }
 

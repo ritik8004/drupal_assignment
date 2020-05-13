@@ -93,6 +93,7 @@ $primary_input_placeholder: $grey6;
 $primary_input_label: $greyish;
 $primary_input_label_hnm: $greyish;
 $primary_input_focus_border: transparent;
+$primary_input_inline_error: $venetian_red;
 
 //Buttons.
 $primary_btn_bg: $hnm-black-three;
@@ -166,7 +167,8 @@ $accordion_footer_border: $white-smoke-border;
 $accordion_bg: $hnm-black-three;
 
 // Back to top
-$btt_bg: $white-three;
+$btt_bg: $light_orange;
+$btt_icon: $hnm-black-three;
 
 // Breadcrumb.
 $breadcrumb_link_light: $grey8;
@@ -334,9 +336,9 @@ $plp_pager_link: $hnm-black-three;
 $plp_pager_link_border: $hnm-black-three;
 $plp__label_active_bg: $white-five;
 $plp_facet_title: $hnm-black-three;
-$plp_promotion_description: $hnm-black-four;
-$plp_grid_active_color: $hnm-black-four;
-$plp_sort_by_options: $hnm-black-four;
+$plp_promotion_description: $hnm-black-three;
+$plp_grid_active_color: $hnm-black-three;
+$plp_sort_by_options: $hnm-black-three;
 $plp_all_filter_button_color: $hnm-black-three;
 $plp_clear_all_btn_text: $hnm-black-three;
 $plp_all_filter_filter_arrow: $hnm-black-three;
@@ -345,6 +347,7 @@ $plp_filter_active_tick: $hnm-black-three;
 $selected_facet_text: $gray44;
 $plp_facet_count_number: $gray44;
 $plp_filter_active_item: $light_orange;
+$plp_tile_product_text: $hnm-black-three;
 
 // PLP All filter colors
 $plp_all_filter_title: $hnm-black-three;
@@ -353,7 +356,7 @@ $plp_all_filter_facets: $hnm-black-three;
 
 // PDP
 $pdp_modal_full_prodlink: $hnm-black-three;
-$pdp_product_price: $black-two;
+$pdp_product_price: $hnm-black-three;
 $pdp_product_itemcode: $grey7;
 $pdp_product_itemcode_mobile: $grey10;
 $pdp_swatch_border: $white-five;
@@ -394,8 +397,8 @@ $user_block_title: $black-three;
 $user_block_link: $hnm-black-three;
 
 // Basket.
-$basket_header_promo_bg: $hnm-black-three;
-$basket_header_promo_txt: $white-five;
+$basket_header_promo_bg: $seashell_grey;
+$basket_header_promo_txt: $hnm-black-three;
 $basket_block_title: $hnm-black-three;
 $basket_promo_wrapper: $info;
 $basket_promo_wrapper_link: $hnm-black-three;
@@ -619,7 +622,7 @@ $colour-swatches-simple-effect-bg: $grey1;
 $magazine-textarea-color: $hnm-black-three;
 $magazine-label-color: $hnm-black-three;
 $magazine-article-title: $hnm-black-three;
-$magazine-article-back-to-feed: $hnm-black-four;
+$magazine-article-back-to-feed: $hnm-black-three;
 $magazine-article-title-overflow-shadow: $hnm-black-three;
 $magazine-article-primary-color: $hnm-black-three;
 $magazine-article-more-link-hover-color: $gray44;
