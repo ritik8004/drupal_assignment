@@ -3,10 +3,12 @@ import ConditionalView from '../../../common/components/conditional-view';
 import PdpGallery from '../pdp-gallery';
 import PdpDescription from '../pdp-description';
 import PdpInfo from '../pdp-info';
+import PdpCart from '../pdp-cart';
 
 const PdpLayout = () => {
   let skuItemCode = null;
   const { productInfo } = drupalSettings;
+  const { configurableCombinations } = drupalSettings;
   if (productInfo) {
     [skuItemCode] = Object.keys(productInfo);
   }
@@ -47,6 +49,7 @@ const PdpLayout = () => {
             pdpProductPrice={priceRaw}
             finalPrice={finalPrice}
           />
+          <PdpCart skuCode={skuItemCode} configurableCombinations={configurableCombinations} />
         </div>
       </div>
     </>

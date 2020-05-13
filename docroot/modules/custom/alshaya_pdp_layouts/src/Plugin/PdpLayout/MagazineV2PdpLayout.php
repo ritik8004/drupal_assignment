@@ -152,6 +152,9 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['firstChild'] = reset($sorted_variants);
         $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['rawGallery'] = $this->getGalleryVariables($child);
         $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $child->get('final_price')->getString());
+        if ($child_sku == reset($sorted_variants)) {
+          $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $this->getGalleryVariables($child);
+        }
       }
     }
 
