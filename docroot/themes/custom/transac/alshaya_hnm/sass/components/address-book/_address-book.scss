@@ -214,14 +214,6 @@
         font-size: 0.8125rem !important;
       }
     }
-
-    .form-type-select {
-      .select2-selection__arrow {
-        &::after {
-          background-color: $seashell_grey !important;
-        }
-      }
-    }
   }
 }
 
