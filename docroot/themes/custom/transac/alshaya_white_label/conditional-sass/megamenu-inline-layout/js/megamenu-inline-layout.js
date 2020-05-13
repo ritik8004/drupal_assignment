@@ -22,8 +22,10 @@
 
     // On mouseleave removed active class from all the places.
     $('.block-alshaya-main-menu').mouseleave(function () {
-      $(parent, listTwoItem, listThreeItem).removeClass('active');
-
+      $(parent).removeClass('active');
+      $(listTwoItem).removeClass('active');
+      $(listThreeItem).removeClass('active');
+      $(parent).parent().removeClass('active--menu--links');
       // Checking if first l2 doesn't have l3 and it is in active state.
       if (!$('.menu__links__wrapper > .menu--two__list-item.last-element:not(.move-to-right):first').hasClass('active')) {
         $('.move-to-right').removeClass('move-to-left');
