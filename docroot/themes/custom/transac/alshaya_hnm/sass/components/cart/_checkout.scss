@@ -174,6 +174,13 @@
         .price-amount,
         .select2-selection__rendered {
           font-family: $hnm-regular-nodir;
+          font-size: 0.8125rem;
+        }
+
+        &:first-child {
+          a {
+            font-size: 0.8125rem !important;
+          }
         }
       }
 
@@ -223,7 +230,7 @@
   }
 
   #table-cart-totals {
-    font-size: 14px;
+    font-size: 0.8125rem !important;
 
     table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] {
       td {
@@ -288,6 +295,9 @@
 
     .edit-continue-shopping-mobile,
     #edit-continue-shopping-mobile {
+      font-size: 0.8125rem;
+      color: $basket_continue_shopping_text;
+
       @include breakpoint($tablet) {
         display: block;
         font-family: $hnm-bold;
@@ -295,7 +305,6 @@
         text-decoration: underline;
         border: 0;
         padding: 0;
-        color: $basket_continue_shopping_text;
       }
 
       @include breakpoint($only-mobile) {
@@ -354,7 +363,7 @@
     min-width: 10.8125rem;
     text-transform: uppercase;
     font-family: $hnm-bold;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     letter-spacing: normal;
     padding: 0.625rem 0.25rem;
 
