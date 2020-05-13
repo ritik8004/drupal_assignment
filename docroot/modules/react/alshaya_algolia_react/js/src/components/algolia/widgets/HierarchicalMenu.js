@@ -1,5 +1,6 @@
 import React from 'react';
 import { connectHierarchicalMenu } from 'react-instantsearch-dom';
+import { getSortedItems } from '../../../utils';
 
 const HierarchicalMenu = (props) => {
   const { items, refine, createURL, facetLevel } = props;
@@ -44,7 +45,7 @@ const HierarchicalMenu = (props) => {
           {item.items && item.items.length > 0 && (
             <HierarchicalMenu
               sortResults={false}
-              items={item.items}
+              items={getSortedItems(item.items, 'category')}
               refine={refine}
               createURL={createURL}
               facetLevel={facetLevel + 1}
