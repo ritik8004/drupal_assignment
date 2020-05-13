@@ -28,6 +28,7 @@ services:
       - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmae; GRANT ALL PRIVILEGES ON drupal_alshaya_hmae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
       - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmsa; GRANT ALL PRIVILEGES ON drupal_alshaya_hmsa.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
       - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_dhuae; GRANT ALL PRIVILEGES ON drupal_alshaya_dhuae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_flae; GRANT ALL PRIVILEGES ON drupal_alshaya_flae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
 
   memcache1:
     type: memcached:1.5.11
@@ -63,6 +64,17 @@ tooling:
   frontend-build:
     service: node
     cmd:  bash /app/blt/scripts/frontend-build.sh /app/docroot && bash /app/blt/scripts/react-build.sh /app/docroot
+
+  xdebug-on:
+    service: appserver
+    description: Enable xdebug for Apache.
+    cmd: docker-php-ext-enable xdebug && service apache2 reload
+    user: root
+  xdebug-off:
+    service: appserver
+    description: Disable xdebug for Apache.
+    cmd: rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && service apache2 reload
+    user: root
 
 excludes:
   - vendor

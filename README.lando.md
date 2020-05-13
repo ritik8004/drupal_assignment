@@ -92,7 +92,13 @@ running some scripts from our `blt/scripts` folder.
 
 This is not ideal since it means we could get out of date if the blt code in that area changes.
 
-### Performance
+### Xdebug
+
+Xdebug can be enabled/disabled quickly by using the `lando xdebug-on` and `lando xdebug-off` commands.
+
+When xdebug is enabled, it will also apply to drush commands executed with `lando drush`.
+
+## Performance
 
 Performance is not as good as a dedicated VM, for a number of reasons, but mostly docker related rather than Lando.
 
