@@ -906,6 +906,10 @@ class Cart {
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
+    // Resetting the array keys or key might not start with 0 if first method is
+    // cnc related and we filter it out.
+    $static[$key] = array_values($static[$key]);
+
     $cache = [
       'key' => $key,
       'methods' => $static[$key],
