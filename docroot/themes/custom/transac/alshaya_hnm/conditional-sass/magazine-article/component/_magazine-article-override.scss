@@ -3,21 +3,8 @@
   .magazine-article-title,
   h2 a {
     font-family: $hnm-demibold;
-    font-size: 1.75rem;
-    line-height: 1.28;
     font-weight: 400;
     text-transform: none;
-  }
-
-  h2 a {
-    &:hover {
-      text-decoration: underline;
-
-      &:active {
-        color: $default-anchor-link-hover;
-        text-decoration: none;
-      }
-    }
   }
 
   .field--name-field-magazine-slogan {
@@ -140,6 +127,22 @@ body {
 }
 
 .path--magazine {
+  h2 a {
+    font-size: 1.75rem;
+    line-height: 2.25rem;
+  }
+
+  h2 a {
+    &:hover {
+      text-decoration: underline;
+
+      &:active {
+        color: $default-anchor-link-hover;
+        text-decoration: none;
+      }
+    }
+  }
+
   .block-page-title-block {
     h1 {
       font-family: $hnm-bold;
@@ -224,10 +227,17 @@ body {
 }
 
 .field--name-field-magazine-shop-the-story {
-  .c-products__item__label span,
-  .price-block {
-    font-family: $hnm-regular;
-    font-weight: normal;
+  .field__item {
+    .c-products__item__label span,
+    .price-block {
+      font-family: $hnm-regular;
+      font-weight: normal;
+      font-size: 0.8125rem;
+    }
+
+    .price-block {
+      font-size: 0.8125rem;
+    }
   }
 }
 
@@ -236,6 +246,18 @@ body {
 }
 
 .nodetype--magazine_article {
+  .magazine-article-title {
+    font-size: 2.5rem;
+    line-height: 3rem;
+    margin-bottom: 0.875rem;
+    font-family: $hnm-demibold;
+    font-weight: 400;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1.75rem;
+    }
+  }
+
   .field--name-field-magazine-paragraphs {
     ul {
       li {
@@ -247,6 +269,7 @@ body {
 
     p {
       font-family: $hnmpromo-regular;
+      font-size: 1rem;
       line-height: 1.25rem;
 
       i {
@@ -267,9 +290,12 @@ body {
     }
   }
 
-  .magazine-detail-page-title {
-    font-family: $hnm-regular;
-    font-weight: 400;
+  .magazine-page-title {
+    .magazine-detail-page-title {
+      font-family: $alshaya-bold;
+      font-weight: 400;
+      font-size: 1.75rem;
+    }
   }
 
   .field__items {
@@ -283,9 +309,22 @@ body {
     background: $white-five;
   }
 
-  .field--name-field-magazine-date,
-  .magazine-shop-the-story__label {
+  .field--name-field-magazine-date {
     padding-bottom: 1.25rem;
+  }
+
+  .magazine-shop-the-story__label {
+    margin-top: 3rem;
+
+    .label-separator {
+      font-size: 1.75rem;
+      line-height: 2.25rem;
+      font-family: $hnmpromo-regular;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1.5rem;
+      }
+    }
   }
 }
 
