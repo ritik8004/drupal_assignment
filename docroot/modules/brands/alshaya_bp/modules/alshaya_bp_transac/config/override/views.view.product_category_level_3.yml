@@ -1,0 +1,8 @@
+display:
+  entity_reference_1:
+    display_options:
+      filters:
+        depth_level:
+          operator: '<'
+          value:
+            value: '4'
