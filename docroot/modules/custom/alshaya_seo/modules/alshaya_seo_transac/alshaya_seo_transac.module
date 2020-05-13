@@ -514,6 +514,36 @@ function alshaya_seo_transac_simple_sitemap_arbitrary_links_alter(&$arbitrary_li
 }
 
 /**
+ * Implements hook_simple_sitemap_links_alter().
+ */
+function alshaya_seo_transac_simple_sitemap_links_alter(array &$links, $sitemap_variant) {
+  if ($sitemap_variant === 'default') {
+    // Get the URLs of homepage nodes.
+    $entityDetails = \Drupal::configFactory()->get('alshaya_master.home')->get('entity');
+    if (!empty($entityDetails)) {
+      $languages = \Drupal::languageManager()->getLanguages();
+      $storage = \Drupal::entityTypeManager()->getStorage($entityDetails['entity_type']);
+      $entity = $storage->load($entityDetails['id']);
+      $urls[] = $entity->toUrl('canonical', ['absolute' => TRUE])->toString();
+      unset($languages[$entity->language()->getId()]);
+      foreach ($languages as $langcode => $language) {
+        $entity = $entity->getTranslation($langcode);
+        $urls[] = $entity->toUrl('canonical', ['absolute' => TRUE])->toString();
+      }
+
+      // Unset url alias of homepage nodes.
+      $sitemap_links = array_column($links, 'url');
+      foreach ($urls as $url) {
+        $key = array_search($url, $sitemap_links);
+        if (!is_bool($key)) {
+          unset($links[$key]);
+        }
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_alshaya_reset_config_configs_to_reset_alter().
  */
 function alshaya_seo_transac_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
