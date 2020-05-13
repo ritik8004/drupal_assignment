@@ -32,4 +32,14 @@ function alshaya_menus_install() {
   $attributes['title'] = [];
   $attributes['title']['label'] = '';
   $storedConfig->set('attributes', $attributes)->save();
+  // Added social ID field.
+  $storage_definition = BaseFieldDefinition::create('string')
+    ->setLabel(t('Social ID'))
+    ->setDescription(t('Enter the value for Social ID.'))
+    ->setDisplayOptions('form', [
+      'type' => 'string',
+      'weight' => 21,
+    ]);
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('social_id', 'menu_link_content', 'menu_link_content', $storage_definition);
 }
