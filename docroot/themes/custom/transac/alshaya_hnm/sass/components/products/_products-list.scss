@@ -255,19 +255,26 @@
       list-style: none;
       display: flex;
       margin-top: 8px;
-      justify-content: center;
       font-size: 0.6875rem;
-      text-transform: uppercase;
       line-height: 1rem;
       flex-wrap: wrap;
+      justify-content: center;
 
       @include breakpoint($tablet) {
         line-height: 1.273;
       }
 
       li {
-        &.collection-label-primary {
-          color: $collection_label_primary;
+        &.attr_product_environment {
+          color: $collection_label_environment;
+        }
+
+        &.attr_product_collection {
+          color: $collection_label_collection;
+        }
+
+        &.attr_product_quality {
+          color: $collection_label_default;
         }
 
         &.collection-label-default {
