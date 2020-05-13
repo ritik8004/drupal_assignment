@@ -131,7 +131,7 @@ const OrderSummary = () => {
               <>
                 <OrderSummaryItem
                   type="click_and_collect"
-                  label={Drupal.t('collection store')}
+                  label={Drupal.t('Collection Store')}
                   name={storeInfo.store_name}
                   phone={storePhone}
                   address={storeAddress.join(', ')}
