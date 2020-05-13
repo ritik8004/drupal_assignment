@@ -73,6 +73,10 @@
     .c-accordion__title,
     .c-collapse__title {
       text-transform: uppercase;
+
+      @include breakpoint($only-mobile) {
+        font-weight: 700;
+      }
     }
   }
 }
