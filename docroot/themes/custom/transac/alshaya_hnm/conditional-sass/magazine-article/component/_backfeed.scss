@@ -1,3 +1,19 @@
-.magazine-back-to-feed {
-  #{$left}: calc((100% - 83.25rem) / 2);
+.magazine-backfeed {
+  .magazine-back-to-feed {
+    #{$left}: calc((100% - 83.25rem) / 2);
+    text-transform: none;
+    font-family: $hnm-regular !important;
+    color: $magazine-article-back-to-feed;
+    font-weight: 600;
+    letter-spacing: 0.031rem;
+
+    @include breakpoint($only-mobile) {
+      font-weight: 600;
+
+      @include icon(arrow-#{$left}, before) {
+        font-size: 1.35rem;
+        margin-top: 0.125rem !important;
+      }
+    }
+  }
 }
