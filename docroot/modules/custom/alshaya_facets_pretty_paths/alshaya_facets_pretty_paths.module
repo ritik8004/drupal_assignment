@@ -162,8 +162,8 @@ function alshaya_facets_pretty_paths_page_attachments_alter(array &$page) {
         [
           '#tag' => 'meta',
           '#attributes' => [
-            'rel' => 'robots',
-            'href' => 'noindex',
+            'name' => 'robots',
+            'content' => 'noindex',
           ],
         ],
         'noindex',
