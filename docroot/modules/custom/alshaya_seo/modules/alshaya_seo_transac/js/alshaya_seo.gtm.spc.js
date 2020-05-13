@@ -96,7 +96,9 @@
    */
   Drupal.alshayaSeoSpc.cartGtmCallback = function(product, extraData) {
     if (product !== undefined && product.sku !== undefined) {
-      dataLayer[0].productStyleCode.push(product.parentSKU);
+      // gtmAttributes.id contains value of "getSkuForNode", which we need
+      // to pass for productStyleCode.
+      dataLayer[0].productStyleCode.push(product.gtmAttributes.id);
       dataLayer[0].productSKU.push(product.sku);
       var productData = Drupal.alshayaSeoSpc.gtmProduct(product, 1);
       dataLayer[0].ecommerce.checkout.products.push(productData);
@@ -132,7 +134,9 @@
         function(product, extraData) {
           delete items[product.sku];
           cartLoginData.productSKU.push(product.sku);
-          cartLoginData.productStyleCode.push(product.parentSKU);
+          // gtmAttributes.id contains value of "getSkuForNode", which we need
+          // to pass for productStyleCode.
+          cartLoginData.productStyleCode.push(product.gtmAttributes.id);
           if (Object.keys(items).length === 0) {
             dataLayer.push(cartLoginData);
           }
