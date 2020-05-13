@@ -9,7 +9,7 @@
   Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
 
   Drupal.alshayaSeoSpc.pushStoreData = function(cart) {
-    if (cart.delivery_type !== 'click_and_collect' || !cart.shipping.storeInfo) {
+    if (cart.shipping.type !== 'click_and_collect' || !cart.shipping.storeInfo) {
       return;
     }
 
@@ -22,7 +22,7 @@
   };
 
   Drupal.alshayaSeoSpc.pushHomeDeliveryData = function(cart) {
-    if (cart.delivery_type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
+    if (cart.shipping.type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
       return;
     }
     //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
@@ -127,23 +127,16 @@
   });
 
   document.addEventListener('refreshCartOnPaymentMethod', function (e) {
-    Drupal.alshayaSeoSpc.cartGtm(e.detail.cart.cart, 3);
+    // Clone "checkout" datalayer event to trigger it again for payment.
+    const paymentMethodDataLayer = JSON.parse(JSON.stringify(dataLayer[0]));
+    paymentMethodDataLayer.ecommerce.checkout.actionField.step = 3;
+    paymentMethodDataLayer.pageType = 'checkout payment page';
+    dataLayer.push(paymentMethodDataLayer);
   });
 
   document.addEventListener('orderPaymentMethod', function (e) {
     Drupal.alshayaSeoSpc.gtmPushCheckoutOption(e.detail.payment_method, 3);
   });
-
-  Drupal.alshayaSeoSpc.pushStoreData = function(cart) {
-    if (cart.delivery_type !== 'click_and_collect' || !cart.shipping.storeInfo) {
-      return;
-    }
-
-    dataLayer[0].deliveryOption = 'Click and Collect';
-    dataLayer[0].deliveryType = 'ship_to_store';
-    dataLayer[0].storeLocation = cart.shipping.storeInfo.name;
-    dataLayer[0].storeAddress = cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' +  cart.shipping.storeInfo.gtm_cart_address.administrative_area_display;
-  };
 
   document.addEventListener('storeSelected', function (e) {
     dataLayer.push({

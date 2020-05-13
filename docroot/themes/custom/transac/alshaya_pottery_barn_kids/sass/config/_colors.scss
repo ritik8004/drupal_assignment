@@ -33,6 +33,7 @@ $_grey_sixteen: #696969;
 $_grey_seventeen: #b4b3b3;
 $_grey_eighteen: #4a4a4a;
 $_grey_nineteen: #1a1a1a;
+$_grey_twenty: #ccc;
 
 $transparent: transparent;
 
@@ -42,6 +43,11 @@ $primary_link: $PBK_confirmation_blue;
 $primary_input_focus_border: $PBK_confirmation_blue;
 $secondary_link: $_black_two;
 $primary_text: $_gray_ten;
+$secondary_text: $PBK_grey_one;
+
+// Slug banner
+$slug_banner_bg: $PBK_confirmation_blue;
+$slug_banner_text: $white-two;
 
 // Buttons.
 $primary_btn_bg: $PBK_red;
@@ -94,6 +100,7 @@ $breadcrumb_link_active: $_black_two;
 $footer_bg: $PBK_white;
 $footer_title_h3: $_black_two;
 $footer_link_hover: $_black_two;
+$footer_link: $_gray_ten;
 
 // Our Brands.
 $our_brands_footer_separator: $_black_two;
@@ -115,6 +122,10 @@ $newsletter_input_bg: $transparent;
 $newsletter_input_border: $_black_two;
 $newsletter_submit_btn: $_black_two;
 $newsletter_submit_btn_text: $white-two;
+
+// PDP
+$pdp_product_title: $_gray_ten;
+$pdp_short_description_text: $PBK_grey_one;
 
 // PDP Price
 $pdp_product_price: $_black_two;
@@ -150,6 +161,7 @@ $plp_facet_border: $_gray_eleven;
 $plp_sort_by_options: $_gray_ten;
 $plp_selected_filter_label_text: $PBK_black_one;
 $plp_facet_filter_bg: $_black_four;
+$plp_filter_divider: $_grey_twenty;
 
 // PLP Product tile.
 $plp_tile_product_text: $_black_two;
@@ -159,3 +171,8 @@ $plp_tile_product_special_price: $PBK_deep_red;
 
 // PLP Grid.
 $plp_grid_active_color: $_grey_nineteen;
+
+// Section divider
+$section_divider_border: $_gray_ten;
+$section_divider_text: $PBK_grey_one;
+$section_divider_bg: $white-two;

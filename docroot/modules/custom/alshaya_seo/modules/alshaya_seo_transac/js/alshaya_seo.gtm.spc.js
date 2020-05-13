@@ -113,4 +113,35 @@
     }
   };
 
+  Drupal.alshayaSeoSpc.loginData = function(cart_data) {
+    const cartLoginData = {
+      language: drupalSettings.path.currentLanguage,
+      country: drupalSettings.country_name,
+      currency: drupalSettings.alshaya_spc.currency_config.currency_code,
+      pageType: 'checkout login page',
+      productSKU: [],
+      productStyleCode: [],
+      cartTotalValue: cart_data.cart_total,
+      cartItemsCount: cart_data.items_qty,
+    }
+    // Copy items object.
+    var items = JSON.parse(JSON.stringify(cart_data.items));
+    Object.entries(items).forEach(([key, product]) => {
+      Drupal.alshayaSpc.getProductData(
+        key,
+        function(product, extraData) {
+          delete items[product.sku];
+          cartLoginData.productSKU.push(product.sku);
+          cartLoginData.productStyleCode.push(product.parentSKU);
+          if (Object.keys(items).length === 0) {
+            dataLayer.push(cartLoginData);
+          }
+        },
+        {
+        qty: product.qty,
+        finalPrice: product.finalPrice
+      });
+    });
+  };
+
 })(jQuery, Drupal, drupalSettings, dataLayer);

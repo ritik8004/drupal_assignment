@@ -1,5 +1,6 @@
 import React from 'react';
 import Cookies from 'js-cookie';
+import parse from 'html-react-parser';
 import SectionTitle from '../../../utilities/section-title';
 import PaymentMethod from '../payment-method';
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
@@ -37,11 +38,11 @@ export default class PaymentMethods extends React.Component {
       if (paymentErrorInfo.payment_method !== undefined
         && paymentErrorInfo.payment_method === 'knet'
         && paymentErrorInfo.data !== undefined) {
-        message = getStringMessage('knet_error', {
+        message = parse(getStringMessage('knet_error', {
           '@transaction_id': paymentErrorInfo.data.transaction_id,
           '@payment_id': paymentErrorInfo.data.payment_id,
           '@result_code': paymentErrorInfo.data.result_code,
-        });
+        }));
       } else if (paymentErrorInfo.status !== undefined
         && paymentErrorInfo.status === 'declined') {
         message = getStringMessage('transaction_failed');
@@ -97,7 +98,13 @@ export default class PaymentMethods extends React.Component {
 
       // Select first payment method by default.
       this.changePaymentMethod(Object.keys(paymentMethods)[0]);
+      return;
     }
+
+    // Dispatch event for GTM checkout step 3.
+    dispatchCustomEvent('refreshCartOnPaymentMethod', {
+      cart,
+    });
   };
 
   getPaymentMethods = (active) => {
