@@ -45,6 +45,7 @@
       @include breakpoint($only-mobile) {
         font-size: 1.5rem;
         top: 0;
+        #{$left}: 0;
       }
     }
   }

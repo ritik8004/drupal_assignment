@@ -26,6 +26,8 @@
       }
 
       .store-location-input {
+        font-size: 0.8125rem;
+
         @include breakpoint($only-mobile) {
           background: url(../imgs/icons/store-search.svg) $right 1.063rem center no-repeat;
         }
@@ -112,13 +114,13 @@
       font-family: $hnm-regular;
       font-weight: normal;
       text-transform: none;
+      font-size: 0.8125rem;
 
       @include breakpoint($only-mobile) {
         color: $checkout_cc_view_text;
       }
 
       @include breakpoint($desktop) {
-        font-size: 0.875rem;
         color: $checkout_cc_view_text;
         width: 30.5%;
         padding-#{$left}: 2.625rem;
@@ -189,7 +191,7 @@
           }
 
           .label--delivery-time {
-            font-size: 0.75rem;
+            font-size: 0.8125rem;
             font-weight: normal;
             font-family: $hnm-demibold;
             color: $checkout_cc_view_text;
@@ -243,7 +245,7 @@
           .store-open-hours {
             .hours--label {
               color: $checkout_cc_view_text;
-              font-size: 0.75rem;
+              font-size: 0.8125rem;
               font-weight: normal;
               font-family: $hnm-demibold;
               position: relative;
@@ -286,7 +288,7 @@
                 color: $checkout_cc_view_text;
                 font-family: $hnm-demibold;
                 font-weight: normal;
-                font-size: 0.75rem;
+                font-size: 0.8125rem;
                 margin-bottom: 0.3125rem;
 
                 @include icon(dropdown-expand, after) {
@@ -331,7 +333,7 @@
             .open--hours {
               display: none;
               color: $checkout_cc_list_open_hours;
-              font-size: 0.75rem;
+              font-size: 0.8125rem;
               line-height: 1.57;
 
               .key-value-key {
@@ -354,7 +356,7 @@
               }
 
               @include breakpoint($only-mobile) {
-                font-size: 0.75rem;
+                font-size: 0.8125rem;
                 line-height: 1.83;
 
                 .key-value-key {
@@ -537,7 +539,7 @@
       }
 
       .label--delivery-time {
-        font-size: 0.75rem;
+        font-size: 0.8125rem;
         font-weight: normal;
         font-family: $hnm-demibold;
         color: $checkout_cc_view_text;
@@ -655,7 +657,7 @@
 
         @include breakpoint($only-tablet) {
           color: $checkout_cc_list_open_hours_tablet;
-          font-size: 0.75rem;
+          font-size: 0.8125rem;
           padding-top: 0.25rem;
 
           .key-value-key {
@@ -710,6 +712,7 @@
     #store-finder-wrapper {
       .cc-near-me {
         padding: 0.4375rem 1.25rem;
+        font-size: 0.8125rem;
 
         &::before {
           background: url('../imgs/icons/ic-mylocation.svg') no-repeat;
