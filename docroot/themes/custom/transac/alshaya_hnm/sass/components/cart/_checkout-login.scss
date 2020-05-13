@@ -14,7 +14,7 @@
 
     a {
       font-weight: normal;
-      color: $hnm-black-three;
+      color: $checkout_login_back_to_basket;
       font-family: $hnm-regular;
       font-size: 0.8125rem;
 
@@ -23,8 +23,12 @@
       }
 
       &:hover:active {
-        color: $venetian_red;
+        color: $checkout_login_active;
         text-decoration: none;
+      }
+
+      &.back-to-basket {
+        font-size: 0.8125rem !important;
       }
     }
   }
@@ -99,14 +103,14 @@
       line-height: 1.29;
       text-transform: uppercase;
       font-weight: normal;
-      color: $primary_dark_color;
+      color: $checkout_login_title;
     }
   }
 
   #edit-checkout-login {
     .request-password-link {
       font-weight: normal;
-      color: $hnm-black-three;
+      color: $checkout_login_forgot_pass;
       font-family: $hnm-regular;
       font-size: 0.8125rem;
       text-decoration: none;
@@ -116,7 +120,7 @@
       }
 
       &:hover:active {
-        color: $venetian_red;
+        color: $checkout_login_active;
         text-decoration: none;
       }
     }
@@ -132,15 +136,15 @@
 
   #edit-checkout-guest {
     a {
-      border: 1px solid $hnm-black-three;
+      border: 1px solid $checkout_guest_button_border;
 
       @include breakpoint($desktop) {
         margin-top: 0.75rem;
       }
 
       &:hover {
-        border: 1px solid $gray44;
-        color: $gray44;
+        border: 1px solid $checkout_guest_button_border_hover;
+        color: $checkout_guest_button_txt_hover;
       }
     }
   }
@@ -155,12 +159,12 @@
     }
 
     .checkout-guest-email-usage {
-      color: $primary_dark_color;
+      color: $checkout_guest_email;
       font-family: $hnm-bold;
       font-weight: normal;
 
       @include breakpoint($tablet) {
-        color: $primary_dark_color;
+        color: $checkout_guest_email;
       }
     }
   }

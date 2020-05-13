@@ -5,8 +5,8 @@
       font-family: $hnm-demibold !important;
       letter-spacing: 0.8px;
       text-transform: uppercase;
-      background-color: $seashell_grey;
-      color: $hnm-black-three;
+      background-color: $default_background_color;
+      color: $checkout_login_separtor_txt;
     }
   }
 }
@@ -27,24 +27,24 @@
 .block-alshaya-signup-signin-buttons {
   .sub-text {
     font-size: 0.8125rem;
-    color: $hnm-black-three;
+    color: $user_login_sub_text;
   }
 
   .link-button {
-    border-color: $hnm-black-three;
-    color: $hnm-black-three;
+    border-color: $user_login_link_btn_border;
+    color: $user_login_link_btn_text;
 
     span {
       font-size: 0.8125rem;
-      color: $hnm-black-three;
+      color: $user_login_link_btn_text;
     }
 
     &:hover {
       background-color: unset;
-      border: 1px solid $gray44;
+      border: 1px solid $user_login_link_btn_hover;
 
       span {
-        color: $gray44;
+        color: $user_login_link_btn_hover;
       }
 
       &::before {
@@ -68,6 +68,7 @@
     #edit-checkout-guest-checkout-as-guest {
       font-family: $alshaya-thin;
       letter-spacing: 1px;
+      font-size: 0.8125rem;
     }
   }
 }
@@ -76,7 +77,7 @@
 .c-user-register {
   .section-title {
     font-family: $hnm-demibold;
-    color: $hnm-black-three;
+    color: $user_login_section_title;
 
     &::first-letter {
       text-transform: uppercase;
