@@ -221,8 +221,10 @@ $social_links_hover: $grey5;
 $social-network-text: $hnm-black-three;
 $social_auth_login_button_border: $_greenish_1;
 $user_login_sub_text: $hnm-black-three;
-$user_login_link_btn_text: $hnm-black;
-$user_login_section_title: $hnm-black;
+$user_login_link_btn_text: $hnm-black-three;
+$user_login_link_btn_border: $hnm-black-three;
+$user_login_link_btn_hover: $gray44;
+$user_login_section_title: $hnm-black-three;
 $user_nav_mobile_link: $hnm-black-three;
 $social-auth-bg-hover: $seashell_grey;
 
@@ -453,6 +455,13 @@ $checkout_guest_button_border: $hnm-black-three;
 $checkout_guest_button_txt: $hnm-black-three;
 $checkout_login_separtor_txt: $hnm-black-three;
 $checkout_guest_button_bg: $seashell_grey;
+$checkout_login_back_to_basket: $hnm-black-three;
+$checkout_login_title: $hnm-black-three;
+$checkout_login_forgot_pass: $hnm-black-three;
+$checkout_login_active: $venetian_red;
+$checkout_guest_button_border_hover: $gray44;
+$checkout_guest_button_txt_hover: $gray44;
+$checkout_guest_email: $primary_dark_color;
 
 // Checkout Click and Collect
 $checkout_cc_input: $hnm-black-three;
