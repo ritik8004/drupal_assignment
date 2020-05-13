@@ -23,7 +23,8 @@ import StickyFilter from '../panels/StickyFilter';
 import withURLSync from '../url-sync';
 import Pagination from '../algolia/Pagination';
 import HierarchicalMenu from '../algolia/widgets/HierarchicalMenu';
-import { hasCategoryFilter, getAlgoliaStorageValues } from '../../utils';
+import Menu from '../algolia/widgets/Menu';
+import { hasCategoryFilter, getAlgoliaStorageValues, getSortedItems, hasSuperCategoryFilter } from '../../utils';
 import { isDesktop } from '../../utils/QueryStringUtils';
 
 /**
@@ -41,43 +42,6 @@ const SearchResultsComponent = props => {
   var defaultpageRender = false;
   if (storedvalues !== null && typeof storedvalues.page !== null) {
     defaultpageRender = storedvalues.page;
-  }
-
-  function getSortedItems(items) {
-    // Sort facet items in order of the megamenu.
-    let sortedItems = [];
-    if (items !== null && items.length > 0) {
-      let weight = [];
-      // Getting the title attribute for L1 items from the menu.
-      let l1MenuItems = document.getElementsByClassName('menu--one__link');
-      for (let i in l1MenuItems) {
-        try {
-          if (l1MenuItems[i].getAttribute('title') !== null) {
-            // Add 10 to allow adding All at top.
-            weight[l1MenuItems[i].getAttribute('title').trim()] = parseInt(i) + 10;
-          }
-        }
-        catch (e) {
-        }
-      }
-
-      for (let i in items) {
-        if (weight[items[i].label.trim()] !== undefined) {
-          sortedItems[weight[items[i].label]] = items[i];
-        }
-        else if (items[i].label === window.Drupal.t('All')) {
-          // Use 1 for All to ensure Object.values work properly.
-          sortedItems[1] = items[i];
-        }
-      }
-
-      sortedItems = Object.values(Object.keys(sortedItems).reduce((a, c) => (a[c] = sortedItems[c], a), {}));
-    }
-    else {
-      sortedItems = items;
-    }
-
-    return sortedItems;
   }
 
   function getSuperCategory() {
@@ -106,33 +70,53 @@ const SearchResultsComponent = props => {
     >
       <Configure clickAnalytics hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
       {optionalFilters ? <Configure optionalFilters={optionalFilters} /> : null}
-      {hasCategoryFilter() && isDesktop() && (
-        <SideBar>
+      <SideBar>
+        {hasSuperCategoryFilter() && isDesktop() && (
+          <Menu
+            transformItems={items => getSortedItems(items, 'supercategory')}
+            attribute='super_category'
+          />
+        )}
+        {hasCategoryFilter() && isDesktop() && (
           <HierarchicalMenu
-            transformItems={items => getSortedItems(items)}
+            transformItems={items => getSortedItems(items, 'category')}
             attributes={[
               'field_category.lvl0',
               'field_category.lvl1',
             ]}
           />
-        </SideBar>
-      )}
+        )}
+      </SideBar>
       <MainContent>
         <StickyFilter>
           {(callback) => (
             <React.Fragment>
               <Filters indexName={indexName} limit={4} callback={(callerProps) => callback(callerProps)}/>
-              {hasCategoryFilter() && !isDesktop() && (
+              {!isDesktop() && (
                 <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop">
                   <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
-                  <HierarchicalMenu
-                    transformItems={items => getSortedItems(items)}
-                    attributes={[
-                      'field_category.lvl0',
-                      'field_category.lvl1',
-                    ]}
-                    facetLevel={1}
-                  />
+                  {hasSuperCategoryFilter() && (
+                    <div className="supercategory-facet c-accordion">
+                      <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.filters.super_category.label}</h3>
+                      <Menu
+                        transformItems={items => getSortedItems(items, 'supercategory')}
+                        attribute='super_category'
+                      />
+                    </div>
+                  )}
+                  {hasCategoryFilter() && (
+                    <div className="c-accordion">
+                      <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
+                      <HierarchicalMenu
+                        transformItems={items => getSortedItems(items, 'category')}
+                        attributes={[
+                          'field_category.lvl0',
+                          'field_category.lvl1',
+                        ]}
+                        facetLevel={1}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
               <div className={"show-all-filters-algolia hide-for-desktop " + (!hasCategoryFilter() ? 'empty-category' : '')}>
