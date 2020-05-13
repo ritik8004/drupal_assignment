@@ -24,6 +24,7 @@ use Drupal\file\FileInterface;
 use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\Core\Language\LanguageManager;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Class AlshayaAlgoliaIndexHelper.
@@ -133,6 +134,13 @@ class AlshayaAlgoliaIndexHelper {
   protected $superCategoryManager;
 
   /**
+   * Product category tree manager.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   */
+  private $productCategoryTree;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -163,6 +171,8 @@ class AlshayaAlgoliaIndexHelper {
    *   The language manager service.
    * @param Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_manager
    *   The super category manager service.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $productCategoryTree
+   *   Product category tree manager.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -181,7 +191,8 @@ class AlshayaAlgoliaIndexHelper {
     ConfigFactory $config_factory,
     SwatchesHelper $swatches_helper,
     LanguageManager $language_manager,
-    AlshayaSuperCategoryManager $super_category_manager
+    AlshayaSuperCategoryManager $super_category_manager,
+    ProductCategoryTree $productCategoryTree
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -197,6 +208,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->swatchesHelper = $swatches_helper;
     $this->languageManager = $language_manager;
     $this->superCategoryManager = $super_category_manager;
+    $this->productCategoryTree = $productCategoryTree;
   }
 
   /**
@@ -319,13 +331,17 @@ class AlshayaAlgoliaIndexHelper {
       $this->removeAttributesFromIndex($object);
     }
     $object['changed'] = $this->dateTime->getRequestTime();
-    $object['field_category'] = $this->getFieldCategoryHierarchy($node, $node->language()->getId());
+
+    $langcode = $node->language()->getId();
+    $object['field_category'] = $this->getFieldCategoryHierarchy($node, $langcode);
 
     $super_category = $this->superCategoryManager->getSuperCategory($node);
+    $super_category_list[] = $this->t('All', [], ['langcode' => $langcode]);
     // Index the product super_category term.
     if (!empty($super_category)) {
-      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category;
+      $super_category_list[] = $super_category;
     }
+    $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category_list;
   }
 
   /**
@@ -522,7 +538,9 @@ class AlshayaAlgoliaIndexHelper {
       if ($category->get('field_commerce_status')->getString() !== '1' || $category->get('field_category_include_menu')->getString() !== '1') {
         continue;
       }
-      $parents = array_reverse($this->termStorage->loadAllParents($category->id()));
+
+      $parents = $this->productCategoryTree->getAllParents($category);
+
       if (in_array($category->id(), $sale_categories)) {
         // Passing the first two parents(l1&l2).
         $trim_parents = array_chunk($parents, 2)[0];
