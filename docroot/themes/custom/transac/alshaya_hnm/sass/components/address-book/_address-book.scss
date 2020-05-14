@@ -20,14 +20,14 @@
     color: $address_content_text;
     font-family: $alshaya-thin;
     font-weight: normal;
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     line-height: 1rem;
   }
 
   .address--label {
     font-family: $hnm-regular;
     color: $address_tile_label;
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     line-height: 1rem;
   }
 
@@ -119,9 +119,13 @@
       letter-spacing: 0;
 
       @include breakpoint($desktop) {
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
       }
     }
+  }
+
+  .address--options {
+    border-top: none;
   }
 }
 
@@ -208,14 +212,6 @@
       input[type=text] ~ label:not(.active-label) {
         color: $hnm-black-three !important;
         font-size: 0.8125rem !important;
-      }
-    }
-
-    .form-type-select {
-      .select2-selection__arrow {
-        &::after {
-          background-color: $seashell_grey !important;
-        }
       }
     }
   }
@@ -358,7 +354,7 @@
       #{$left}: 0;
       width: 2rem !important;
       height: 2rem !important;
-      z-index: 9;
+      z-index: 4;
       background: $white-five;
     }
   }

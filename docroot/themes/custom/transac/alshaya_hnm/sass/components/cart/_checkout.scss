@@ -6,11 +6,12 @@
       color: $order_summary_title;
       font-weight: normal;
       font-family: $hnm-demibold;
+      font-size: 0.8125rem;
     }
 
     a {
       float: $right;
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       color: $order_summary_link;
       font-weight: normal;
       font-family: $hnm-demibold;
@@ -25,6 +26,7 @@
     width: 100%;
     padding: 0.9375rem 1.25rem 0.9375rem 1.5rem;
     color: $order_summary_title;
+    font-size: 0.8125rem;
 
     @include icon(chevrondown, after) {
       #{$right}: 1rem;
@@ -46,18 +48,20 @@
     width: calc(70% - 1.125rem);
 
     span {
-      font-size: 0.6875rem;
+      font-size: 0.8125rem;
       line-height: 1rem;
     }
 
     a {
       font-size: 0.8125rem;
       line-height: 1.25rem;
-      color: $hnm-black-three;
     }
   }
 
   .totals {
+    font-size: 0.8125rem;
+    border-top: none;
+
     .order-total {
       > span,
       span.price-currency,
@@ -91,6 +95,10 @@
       color: $order_summary_product_price_discount;
     }
   }
+
+  li {
+    border-top: none;
+  }
 }
 
 .totals {
@@ -115,7 +123,7 @@
   }
 
   .status {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     margin-top: 0.5rem;
     display: block;
   }
@@ -320,10 +328,10 @@
     tr[data-drupal-selector="edit-totals-grand"] {
       td:first-child span {
         display: block;
-        font-size: 0.625rem;
+        font-size: 0.8125rem;
 
         @include breakpoint($desktop) {
-          font-size: 0.75rem;
+          font-size: 0.8125rem;
         }
       }
 
@@ -383,7 +391,7 @@
   #edit-continue-shopping,
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     border: 1px solid $secondary_border;
     display: block;
     padding: 0.625rem 1.6rem;
@@ -420,7 +428,7 @@
       cursor: pointer;
       background: $primary_btn_bg;
       color: $order_actions_checkout;
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       font-family: $hnm-bold;
       text-transform: uppercase;
       font-weight: normal;
@@ -462,7 +470,7 @@
       padding: 0.4rem 0;
       padding-#{$left}: 1.688rem;
       padding-#{$right}: 1.75rem;
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       letter-spacing: 1px;
 
       &::before {
@@ -507,7 +515,7 @@
       .form-submit {
         font-family: $hnm-bold;
         font-weight: normal;
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
       }
     }
   }

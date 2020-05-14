@@ -111,7 +111,7 @@
         padding: 0;
 
         .form-type-radio {
-          margin-right: 0;
+          margin-#{$right}: 0;
           padding: 0;
 
           &:hover {
