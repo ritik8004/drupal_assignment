@@ -317,6 +317,10 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     try {
       $updated_customer = $this->alshayaApiWrapper->updateCustomer($customer);
 
+      if (!$updated_customer) {
+        return FALSE;
+      }
+
       $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
       // Update the data in Drupal to match the values in Magento.
