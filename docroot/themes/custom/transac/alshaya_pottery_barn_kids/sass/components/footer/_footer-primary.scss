@@ -1,4 +1,7 @@
 .c-footer-primary {
+  border-top: 2px solid $footer_border_top;
+  background: $footer_bg;
+
   .c-footer-menu--about,
   .c-footer-menu--help,
   .c-footer-menu--category,

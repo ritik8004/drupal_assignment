@@ -52,6 +52,8 @@ $slug_banner_text: $white-two;
 // Buttons.
 $primary_btn_bg: $PBK_red;
 $primary_btn_text: $white-two;
+$secondary_btn_bg: $PBK_black_one;
+$secondary_btn_text: $white-two;
 
 // Header - Search.
 $primary_search_btn_icon: $transparent;
@@ -95,6 +97,10 @@ $mm_l3_link_hover: false;
 $breadcrumb_link: $_black_two;
 $breadcrumb_link_hover: $_black_two;
 $breadcrumb_link_active: $_black_two;
+
+// Footer
+$footer_bg: $PBK_white;
+$footer_border_top: $PBK_grey_one;
 
 // Footer Primary.
 $footer_bg: $PBK_white;
@@ -176,3 +182,15 @@ $plp_grid_active_color: $_grey_nineteen;
 $section_divider_border: $_gray_ten;
 $section_divider_text: $PBK_grey_one;
 $section_divider_bg: $white-two;
+
+// SPC
+$spc-select-border: $_gray_eleven;
+$spc-product-title: $_gray_ten;
+$spc-product-price: $PBK_grey_one;
+
+// Minicart
+$primary_minicart_quantity_bg: $PBK_confirmation_blue;
+$primary_minicart_quantity_text: $white-two;
+
+// Department page
+$department-page-title-border: $_gray_ten;
