@@ -156,6 +156,8 @@ sites:
     country: ae
   bpeg:
     module: alshaya_bp
+    type: alshaya_transac
+    country: eg
   pbkkw:
     module: alshaya_pbk
     type: alshaya_transac
