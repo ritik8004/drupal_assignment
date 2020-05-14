@@ -8,9 +8,14 @@ use Drupal\simple_sitemap\Plugin\simple_sitemap\SitemapGenerator\DefaultSitemapG
 /**
  * Class AlshayaSitemapGenerator.
  *
+ *   Extends/overrides the DefaultSitemapGenerator features.
+ *   DefaultSitemapGenerator was previously used but due to changes in
+ *   requirements this has been created.
+ *
  * @SitemapGenerator(
  *   id = "alshaya_sitemap_generator",
  *   label = @Translation("Alshaya sitemap generator"),
+ *   description = @Translation("Extends/overrides the DefaultSitemapGenerator."),
  * )
  */
 class AlshayaSitemapGenerator extends DefaultSitemapGenerator {
@@ -18,6 +23,8 @@ class AlshayaSitemapGenerator extends DefaultSitemapGenerator {
   /**
    * Returns the sitemap link according to the required format.
    *
+   *   The previous default format for sitemap links was:
+   *   /sitemap.xml, /sitemap.xml?page=1, /sitemap.xml?page=2 and so on.
    *   The new format for sitemap links should be:
    *   /sitemap.xml, /sitemap-1.xml, /sitemap-2.xml and so on.
    *
