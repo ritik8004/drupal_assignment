@@ -1,0 +1,66 @@
+.spc-checkout-delivery-information {
+  .spc-checkout-empty-delivery-text {
+    height: 3.25rem;
+    background: $spc-checkout-delivery-method-bg;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: flex-start;
+    color: $spc-checkout-delivery-info-txt;
+    position: relative;
+    padding-#{$left}: 1.25rem;
+    font-size: 0.875rem;
+
+    @include icon('chevron#{$right}', before) {
+      position: absolute;
+      #{$right}: 0.875rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+    }
+  }
+
+  .delivery-information-preview {
+    background: $spc-checkout-delivery-method-bg;
+    padding: 1.25rem;
+    font-size: 0.875rem;
+    color: $spc-delivery-info-text;
+
+    .spc-delivery-store-info {
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid $spc-delivery-info-separator;
+    }
+
+    .store-address,
+    .contact-name {
+      max-width: 12.5rem;
+    }
+
+    .spc-delivery-contact-info {
+      margin-top: 1.25rem;
+    }
+
+    .spc-delivery-customer-info,
+    .spc-delivery-store-info,
+    .spc-delivery-contact-info {
+      position: relative;
+
+      .delivery-name,
+      .store-name,
+      .contact-info-label {
+        font-family: $alshaya-bold;
+        color: $spc-delivery-customer-info-highlight;
+        margin-bottom: 0.3125rem;
+      }
+
+      .delivery-name,
+      .delivery-address {
+        width: calc(100% - 7.1875rem);
+      }
+
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
+    }
+  }
+}

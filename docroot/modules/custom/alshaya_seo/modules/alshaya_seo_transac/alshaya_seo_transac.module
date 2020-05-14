@@ -46,6 +46,22 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       $page['#attached']['drupalSettings']['gtm']['algolia_trigger_ga_after'] = Settings::get('algolia_trigger_ga_after', 3000);
       $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_algolia';
     }
+
+    // Add GTM events for SPC cart.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_spc')) {
+      $route_match = \Drupal::routeMatch();
+      if ($route_match->getRouteName() == 'acq_cart.cart') {
+        $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_cart';
+      }
+
+      if ($route_match->getRouteName() == 'alshaya_spc.checkout') {
+        $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_checkout';
+      }
+    }
+
+    // Settings to enable error tracking on GA.
+    $page['#attached']['drupalSettings']['gtm']['log_errors_to_console'] = Settings::get('log_errors_to_console', 1);
+    $page['#attached']['drupalSettings']['gtm']['log_errors_to_ga'] = Settings::get('log_errors_to_ga', 0);
   }
 }
 
@@ -179,38 +195,9 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
     switch ($current_route['route_name']) {
       case 'acq_checkout.form':
       case 'acq_cart.cart':
-        if ((isset($current_route['route_params']['step']) && in_array($current_route['route_params']['step'],
-          ['delivery', 'payment'], TRUE)) || $current_route['route_name'] == 'acq_cart.cart') {
-
-          $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
-
-          $products = [];
-          $data_layer['privilegeCustomer'] = $cart_item_attributes['privilegeCustomer'] ?? '';
-          $data_layer['privilegesCardNumber'] = $cart_item_attributes['privilegesCardNumber'] ?? '';
-          $step = isset($cart_item_attributes['step']) ? $cart_item_attributes['step'] : NULL;
-          unset($cart_item_attributes['privilegeCustomer'], $cart_item_attributes['privilegesCardNumber'], $cart_item_attributes['step']);
-
-          foreach ($cart_item_attributes as $key => $cart_item) {
-            $product = $gtm_manager->convertHtmlAttributesToDatalayer($cart_item);
-            $product['quantity'] = $cart_item['quantity'];
-            $products[] = $product;
-          }
-
-          if ($current_route['route_name'] == 'acq_cart.cart') {
-            $step = 1;
-          }
-
-          // Set the correct step id.
-          switch ($current_route['route_params']['step'] ?? '') {
-            case 'delivery':
-              $step = 2;
-              break;
-
-            case 'payment':
-              $step = 3;
-              break;
-          }
-
+      case 'alshaya_spc.checkout':
+        if ($current_route['route_name'] == 'acq_cart.cart' || $current_route['route_name'] == 'alshaya_spc.checkout') {
+          $step = ($current_route['route_name'] == 'acq_cart.cart') ? 1 : 2;
           $data_layer_cart = [
             'event' => 'checkout',
             'ecommerce' => [
@@ -219,7 +206,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
                 'actionField' => [
                   'step' => $step,
                 ],
-                'products' => $products,
+                'products' => [],
               ],
             ],
           ];
@@ -227,38 +214,39 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           $data_layer = array_merge($data_layer, $data_layer_cart);
 
         }
-        elseif (in_array($current_route['route_params']['step'], ['confirmation'], TRUE)) {
-          $order = _alshaya_acm_checkout_get_last_order_from_session();
+        break;
 
-          // We check if we have valid order id.
-          if (empty($order)) {
-            return;
-          }
+      case 'alshaya_spc.checkout.confirmation':
+        $order = _alshaya_acm_checkout_get_last_order_from_session();
 
-          $cookie_key = 'alshaya_gtm_confirmation_visited_' . $order['order_id'];
+        // We check if we have valid order id.
+        if (empty($order)) {
+          return;
+        }
 
-          $session = \Drupal::request()->getSession();
+        $cookie_key = 'alshaya_gtm_confirmation_visited_' . $order['order_id'];
 
-          $already_visited = (int) $session->get($cookie_key);
+        $session = \Drupal::request()->getSession();
 
-          // Send order complete confirmation to GTM only once.
-          if ($already_visited !== 1) {
-            $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
-            $data_layer = array_merge($data_layer, $attributes['general']);
+        $already_visited = (int) $session->get($cookie_key);
 
-            $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
+        // Send order complete confirmation to GTM only once.
+        if ($already_visited !== 1) {
+          $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
+          $data_layer = array_merge($data_layer, $attributes['general']);
 
-            $data_layer['event'] = 'purchaseSuccess';
-            $data_layer['ecommerce'] = [
-              'currencyCode' => $gtm_manager->getGtmCurrency(),
-              'purchase' => [
-                'actionField' => $attributes['actionField'],
-                'products' => $attributes['products'],
-              ],
-            ];
+          $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
 
-            $session->set($cookie_key, 1);
-          }
+          $data_layer['event'] = 'purchaseSuccess';
+          $data_layer['ecommerce'] = [
+            'currencyCode' => $gtm_manager->getGtmCurrency(),
+            'purchase' => [
+              'actionField' => $attributes['actionField'],
+              'products' => $attributes['products'],
+            ],
+          ];
+
+          $session->set($cookie_key, 1);
         }
         break;
     }
@@ -319,49 +307,8 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
  * Implements hook_form_alter().
  */
 function alshaya_seo_transac_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form_id == 'multistep_checkout' && $form_state->getTemporaryValue('step_id') === 'login') {
+  if ($form_id == 'ashaya_spc_login_form') {
     $form['#attached']['library'][] = 'alshaya_seo_transac/checkout_login';
-  }
-}
-
-/**
- * Implements hook_page_attachments().
- */
-function alshaya_seo_transac_page_attachments(array &$attachments) {
-  if (!_alshaya_seo_process_gtm()) {
-    return;
-  }
-
-  /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
-  $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
-
-  try {
-    $current_route = $gtm_manager->getGtmContainer();
-    if ($current_route['route_name'] == 'acq_checkout.form' && in_array($current_route['route_params']['step'], ['confirmation'], TRUE)) {
-      $order = _alshaya_acm_checkout_get_last_order_from_session();
-      // We check if we have valid order id.
-      if (empty($order)) {
-        return;
-      }
-
-      $already_visited = (int) \Drupal::request()->getSession()->get('alshaya_gtm_confirmation_visited_' . $order['order_id']);
-      // Send order complete confirmation data only once.
-      if ($already_visited !== 1) {
-        $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
-        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-        if ($attributes['general']['deliveryOption'] === $checkout_options_manager->getClickandColectShippingMethod()) {
-          $attachments['#attached']['drupalSettings']['gtmOrderConfirmation'] = [
-            'event' => 'VirtualPageView',
-            'virtualPageUrl' => '/virtualpv/click-and-collect/step4/order-success',
-            'virtualPageTitle' => 'C&C Step 4 – Order Success',
-          ];
-        }
-      }
-    }
-  }
-  catch (Exception $e) {
-    \Drupal::logger('alshaya_seo')->error('Error while fetching GTM attributes: @message', ['@message' => $e->getMessage()]);
   }
 }
 
@@ -571,6 +518,41 @@ function alshaya_seo_transac_simple_sitemap_arbitrary_links_alter(&$arbitrary_li
  */
 function alshaya_seo_transac_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
   $reset[] = 'dynamic_yield.settings';
+}
+
+/**
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
+ */
+function alshaya_seo_transac_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  $productNode = $skuManager->getDisplayNode($sku->getSku());
+  if ($productNode instanceof NodeInterface) {
+    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
+    $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+    $attributes = $gtmManager->fetchProductGtmAttributes($productNode, 'full');
+    $data['gtm_attributes'] = $gtmManager->convertHtmlAttributesToDatalayer($attributes);
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_seo_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  if (in_array($context, ['matchback', 'pdp'])) {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    $productNode = $skuManager->getDisplayNode($sku->getSku());
+    if ($productNode instanceof NodeInterface) {
+      /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
+      $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+      $attributes = $gtmManager->fetchProductGtmAttributes($productNode, 'full');
+      $settingsKey = ($context === 'matchback') ? 'matchback' : 'productInfo';
+      $build['#attached']['drupalSettings'][$settingsKey][$sku->getSku()]['gtm_attributes'] = $gtmManager->convertHtmlAttributesToDatalayer($attributes);
+    }
+  }
 }
 
 /**

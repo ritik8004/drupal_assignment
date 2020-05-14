@@ -1,0 +1,36 @@
+.toggle-store-view {
+  @include breakpoint($only-mobile) {
+    padding: 0.625rem 1.25rem 1.25rem;
+
+    .toggle-buttons-wrapper {
+      text-align: center;
+
+      .stores-list-view,
+      .stores-map-view {
+        width: 160px;
+        border: 1px solid $spc-cnc-toggle-bg-active;
+        color: $spc-cnc-toggle-bg-active;
+        height: 36px;
+        background: $spc-cnc-toggle-bg;
+        padding: 0;
+        font-size: 0.8125rem;
+
+        &.active {
+          background: $spc-cnc-toggle-bg-active;
+          color: $spc-cnc-toggle-bg;
+        }
+      }
+
+      .stores-list-view {
+        border-top-#{$left}-radius: 0.25rem;
+        border-bottom-#{$left}-radius: 0.25rem;
+        border-#{$right}: none;
+      }
+
+      .stores-map-view {
+        border-top-#{$right}-radius: 0.25rem;
+        border-bottom-#{$right}-radius: 0.25rem;
+      }
+    }
+  }
+}

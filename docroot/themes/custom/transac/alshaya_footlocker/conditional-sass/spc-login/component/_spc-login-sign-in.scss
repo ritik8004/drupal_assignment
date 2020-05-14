@@ -1,0 +1,77 @@
+.alias--cart-login {
+  .multistep-login {
+    fieldset {
+      .fieldset-legend {
+        font-family: $fl-bold;
+        display: inline-block;
+      }
+    }
+
+    .form-submit,
+    .edit-checkout-as-guest {
+      text-transform: uppercase;
+    }
+
+    .ashaya-spc-login-form {
+      .form-actions {
+        button {
+          font-family: $fl-thin;
+        }
+      }
+
+      .request-password-link {
+        font-family: $fl-thin;
+      }
+    }
+
+    .checkout-login-actions-wrapper {
+      a {
+        font-family: $fl-thin;
+        display: inline-block;
+      }
+    }
+
+    .social-signin-enabled {
+      .fieldset-wrapper {
+        .social-network-text {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .site-brand-home {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    a {
+      @include breakpoint($tablet) {
+        max-width: 17.75rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        max-width: 8.625rem;
+      }
+    }
+
+    html[lang=ar] & {
+      a {
+        @include breakpoint($tablet) {
+          height: auto;
+          width: 13rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 6rem;
+        }
+      }
+    }
+  }
+
+  html[lang=ar] & {
+    margin: 0;
+  }
+}

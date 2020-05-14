@@ -62,7 +62,6 @@
 
     @include breakpoint($only-tablet) {
       max-width: 25rem;
-      margin-top: -13px;
 
       #edit-account {
         margin-top: 3.375rem;

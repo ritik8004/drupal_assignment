@@ -2,8 +2,6 @@
 
 namespace Drupal\alshaya_acm_promotion\Plugin\AcqPromotion;
 
-use Drupal\acq_cart\CartInterface;
-use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_promotion\AcqPromotionBase;
 use Drupal\alshaya_acm\CartData;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
@@ -23,13 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class FixedPercentageDiscountOrder extends AcqPromotionBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Cart Storage.
-   *
-   * @var \Drupal\acq_cart\CartStorageInterface
-   */
-  protected $cartStorage;
-
-  /**
    * Alshaya Promotions Manager.
    *
    * @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager
@@ -47,8 +38,6 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
    *   Plugin Definition.
    * @param \Drupal\node\NodeInterface $promotionNode
    *   Promotion Node.
-   * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
-   *   Cart Session Storage.
    * @param \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $alshayaPromotionsManager
    *   Alshaya Promotions Manager.
    */
@@ -56,10 +45,8 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
                               $plugin_id,
                               $plugin_definition,
                               NodeInterface $promotionNode,
-                              CartStorageInterface $cartStorage,
                               AlshayaPromotionsManager $alshayaPromotionsManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $promotionNode);
-    $this->cartStorage = $cartStorage;
     $this->alshayaPromotionsManager = $alshayaPromotionsManager;
   }
 
@@ -72,7 +59,6 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
       $plugin_id,
       $plugin_definition,
       $promotionNode,
-      $container->get('acq_cart.cart_storage'),
       $container->get('alshaya_acm_promotion.manager')
     );
   }
@@ -115,22 +101,15 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
    * @return bool
    *   Flag if threshold value reached.
    */
-  public function checkThresholdReached(array $promotion_data = NULL) {
+  private function checkThresholdReached(array $promotion_data = NULL) {
     if (is_null($promotion_data)) {
       $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
       $promotion_data = unserialize($promotion_data);
     }
 
     $reached = FALSE;
-    $cart = CartData::getCart() ?? $this->cartStorage->getCart(FALSE);
-
-    // Compare Cart sub against promotion condition of Subtotal as threshold.
-    if ($cart instanceof CartInterface && !empty($cartTotals = $cart->totals())) {
-      $cartValue = $cartTotals['sub'];
-    }
-    elseif ($cart instanceof CartData) {
-      $cartValue = $cart->getSubTotal();
-    }
+    $cart = CartData::getCart();
+    $cartValue = ($cart instanceof CartData) ? $cart->getSubTotal() : 0;
 
     if (!empty($cartValue)) {
       $threshold_price = $this->alshayaPromotionsManager->getPromotionThresholdPrice($promotion_data);

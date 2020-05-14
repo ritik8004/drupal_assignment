@@ -405,6 +405,9 @@ $checkout_login_tab_text: $black;
 $checkout_login_border_active: $peacock-blue;
 $checkout_section_title_border: $warm-grey-one;
 $checkout_login_btn_bg: $primary_btn_bg;
+$checkout_login_submit_button_background: $black;
+$checkout_login_back_to_basket_text: $peacock-blue;
+$checkout_login_link_text: $peacock-blue;
 
 //checkout layout
 $checkout_securely_icon_bg: $hot-pink;
@@ -602,3 +605,8 @@ $algolia-trending-title-text: $peacock-blue;
 $algolia-react-search-page-title: $page_title;
 $algolia-react-highlighted-bg: $peacock-blue;
 $algolia-react-progressbar-fill: $peacock-blue;
+
+// SPC Checkout and cart.
+$spc-deliver-button: $peacock-blue;
+$spc-cnc-toggle-bg-active: $peacock-blue;
+$spc-checkout-cnc-map-expand: $peacock-blue;

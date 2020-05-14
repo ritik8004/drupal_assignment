@@ -1,0 +1,53 @@
+.spc-checkout-delivery-methods {
+  .delivery-method {
+    min-height: 3.875rem;
+    background: $spc-checkout-delivery-method-bg;
+    margin-bottom: 0.3125rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-#{$left}: 3rem;
+    position: relative;
+
+    @include breakpoint($only-mobile) {
+      min-height: 4.75rem;
+    }
+
+    &.in-active {
+      opacity: 0.5;
+    }
+
+    .sub-title {
+      display: block;
+    }
+
+    html[lang=ar] & {
+      .delivery-method-name {
+        line-height: 1.5;
+      }
+    }
+
+    .radio-sim {
+      width: 98%;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .icon {
+      margin-#{$right}: 0.625rem;
+      min-width: 3.25rem;
+
+      @include breakpoint($only-mobile) {
+        float: $left;
+      }
+    }
+
+    svg g {
+      fill: $spc-checkout-delivery-method-impress;
+    }
+  }
+}

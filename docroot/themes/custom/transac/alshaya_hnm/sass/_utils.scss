@@ -1,4 +1,4 @@
-$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs/icons/ic-loader.svg';
+$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs/icons/ic-loader.svg?qATu82';
 
 %modal-overlay,
 .modal-overlay {
@@ -42,11 +42,5 @@ $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs/
     width: 6rem;
     height: 6rem;
     z-index: 1001;
-  }
-}
-
-@mixin arabic-letter-spacing {
-  html[lang='ar'] & {
-    letter-spacing: normal;
   }
 }

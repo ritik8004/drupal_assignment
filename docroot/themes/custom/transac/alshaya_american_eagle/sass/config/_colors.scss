@@ -1,3 +1,5 @@
+@import "../../../alshaya_white_label/sass/config/_colors.scss";
+
 /* ------- 1. Brand Colors ------- */
 $black: #000;
 $white: #fff;
@@ -411,6 +413,8 @@ $checkout_login_btn_bg: $primary_btn_bg;
 $checkout_guest_button_border: $black;
 $checkout_guest_button_txt: $black;
 $checkout_guest_button_bg: $white;
+$checkout_login_submit_button_background: $black;
+$checkout_login_link_text: $black;
 $social_auth_login_button_border: $black;
 $social-network-text: $black;
 

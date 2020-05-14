@@ -57,7 +57,6 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
 
   // For profile add.
   _alshaya_addressbook_form_alter($form, $form_state);
-
 }
 
 /**
@@ -119,10 +118,8 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   ];
 
   // Validation for first and last name.
-  $element['given_name']['#element_validate'][] = '_alshaya_addressbook_firstname_validate';
-  $element['given_name']['#maxlength'] = 50;
-  $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
-  $element['family_name']['#maxlength'] = 50;
+  $element['given_name']['#access'] = FALSE;
+  $element['family_name']['#access'] = FALSE;
 
   // This is required for guest checkout pages.
   if (isset($element['#require_email']) && $element['#require_email']) {
@@ -221,6 +218,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
   $mapping = $address_book_manager->getMagentoFieldMappings();
+  $sort_order = $address_book_manager->getFieldSortOrder();
   $mapping = array_flip($mapping);
 
   foreach ($magento_form as $form_item) {
@@ -228,7 +226,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       continue;
     }
 
-    if (isset($mapping[$form_item['attribute_code']])) {
+    if (isset($mapping[$form_item['attribute_code']]) && isset($sort_order[$mapping[$form_item['attribute_code']]])) {
       $field_code = $mapping[$form_item['attribute_code']];
 
       // Set access for all form items.
@@ -246,6 +244,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       }
       else {
         $element[$field_code]['#title'] = $form_item['store_label'];
+        $element[$field_code]['#required'] = $form_item['required'];
       }
     }
   }
@@ -306,6 +305,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   $element['administrative_area']['#empty_option'] = reset($area_empty_option);
   $element['administrative_area']['#options'] = $area_empty_option + $area_options;
+  $element['administrative_area']['#required'] = $is_element_required;
 
   // Adding country.
   $country_list = \Drupal::service('address.country_repository')->getList();
@@ -352,33 +352,6 @@ function _alshaya_addressbook_set_optional_field(array &$element, FormStateInter
 
   // Remove custom field area_parent from overrides.
   unset($element['#field_overrides']['areaParent']);
-
-  return $element;
-}
-
-/**
- * Validation for first name.
- */
-function _alshaya_addressbook_firstname_validate($element, FormStateInterface $form_state) {
-  return _alshaya_addressbook_name_validation($element, $form_state, 'given_name');
-}
-
-/**
- * Validation for the last name.
- */
-function _alshaya_addressbook_lastname_validate($element, FormStateInterface $form_state) {
-  return _alshaya_addressbook_name_validation($element, $form_state, 'family_name');
-}
-
-/**
- * Adding validation for the name.
- */
-function _alshaya_addressbook_name_validation($element, FormStateInterface $form_state, $field_name) {
-  $string = $element['#default_value'] ?? '';
-  if (preg_match('/[#$\_\!@%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]/', $string)) {
-    $field_name = $field_name == 'given_name' ? 'first name' : 'last name';
-    $form_state->setError($element, t('Invalid @name', ['@name' => $field_name]));
-  }
 
   return $element;
 }
@@ -452,6 +425,25 @@ function alshaya_addressbook_form_profile_address_book_form_alter(array &$form, 
  * Alter the address book form.
  */
 function _alshaya_addressbook_form_alter(array &$form, FormStateInterface $form_state) {
+
+  $profile = $form_state->getFormObject()->getEntity();
+  $full_name = '';
+  if ($profile->id()) {
+    $address = $profile->get('field_address')->getValue();
+    $full_name = $address[0]['given_name'] . ' ' . $address[0]['family_name'];
+  }
+
+  $form['full_name'] = [
+    '#type' => 'textfield',
+    '#title' => t('Full name'),
+    '#default_value' => $full_name,
+    '#size' => '120',
+    '#required' => TRUE,
+    '#attributes' => ['specialchar' => 'specialchar'],
+    '#element_validate' => ['alshaya_valid_full_name'],
+    '#weight' => -5,
+  ];
+
   // This is internal field to be used only for synchronisation with Magento.
   $form['field_address_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
 
@@ -620,9 +612,9 @@ function _alshaya_addressbook_array_insert(array $array, array $pairs, $key, $po
 }
 
 /**
- * Implements hook_acq_commerce_update_customer_api_request_alter().
+ * Implements hook_alshaya_api_update_customer_api_request_alter().
  */
-function alshaya_addressbook_acq_commerce_update_customer_api_request_alter(array &$request_options) {
+function alshaya_addressbook_alshaya_api_update_customer_api_request_alter(array &$request_options) {
   if (isset($request_options['json'], $request_options['json']['customer']['email'])
     && empty($request_options['json']['customer']['addresses'])) {
     /** @var \Drupal\user\Entity\User $user */
@@ -769,10 +761,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       // Get full mapping to see if we need to display parent.
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
       $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-      $mapping = $address_book_manager->getMagentoFieldMappings();
-      $form_fields = $address_book_manager->getMagentoFormFields();
-
-      if ($mapping['area_parent'] && isset($form_fields[$mapping['area_parent']])) {
+      if ($address_book_manager->isAreaParentUsed()) {
         $parent = $address_book_manager->getLocationParentTerm($values[0]['administrative_area']);
 
         if ($parent) {

@@ -1,0 +1,64 @@
+cart.get_cart:
+    path: /cart/get
+    controller: App\Controller\CartController::getCart
+    methods: GET
+
+cart.get_cart_for_checkout:
+    path: /cart/checkout
+    controller: App\Controller\CartController::getCartForCheckout
+    methods: GET
+
+cart.restore_cart:
+    path: /cart/restore
+    controller: App\Controller\CartController::restoreCart
+    methods: GET
+
+cart.update_cart:
+    path: /cart/update
+    controller: App\Controller\CartController::updateCart
+    methods: POST
+
+cart.associate_cart:
+    path: /cart/associate
+    controller: App\Controller\CartController::associateCart
+    methods: GET
+
+cart.place_order:
+    path: /cart/place-order
+    controller: App\Controller\CartController::placeOrder
+    methods: POST
+
+payment.checkoutcom_payment_success:
+    path: /payment/checkout-com-success
+    controller: App\Controller\PaymentController::handleCheckoutComSuccess
+    methods: GET
+
+payment.checkoutcom_payment_error:
+    path: /payment/checkout-com-error
+    controller: App\Controller\PaymentController::handleCheckoutComError
+    methods: GET
+
+payment.knet_payment_response:
+    path: /payment/knet-response
+    controller: App\Controller\PaymentController::handleKnetResponse
+    methods: POST
+
+payment.knet_payment_error:
+    path: /payment/knet-error/{state_key}
+    controller: App\Controller\PaymentController::handleKnetError
+    methods: GET
+
+payment.cybersource_payment_token:
+    path: /payment/cybersource/get-token
+    controller: App\Controller\PaymentController::getCybersourceToken
+    methods: POST
+
+payment.cybersource_payment_finalise:
+    path: /payment/cybersource/finalise
+    controller: App\Controller\PaymentController::finaliseCybersource
+    methods: POST
+
+payment.checkout_com_apple_pay_save:
+    path: /payment/checkout-com-apple-pay/save
+    controller: App\Controller\PaymentController::saveApplePayPayment
+    methods: POST

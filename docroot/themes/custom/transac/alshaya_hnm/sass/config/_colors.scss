@@ -71,6 +71,7 @@ $gray44: #707070;
 $light_orange: #f4eddd;
 $hnm-pink: #f9f1ef;
 $light_grey: #d0d0d0;
+$_tooltip_blue: #007aff;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -453,6 +454,10 @@ $checkout_guest_button_border: $hnm-black-three;
 $checkout_guest_button_txt: $hnm-black-three;
 $checkout_login_separtor_txt: $hnm-black-three;
 $checkout_guest_button_bg: $seashell_grey;
+$checkout_section_titles: $hnm-black-two;
+$checkout_login_submit_button_background: $hnm-black-three;
+$checkout_login_link_text: $hnm-black-two;
+$checkout_login_back_to_basket_text: $hnm-black-three;
 
 // Checkout Click and Collect
 $checkout_cc_input: $hnm-black-three;
@@ -653,6 +658,28 @@ $algolia-search-bar-background: $default_background_color;
 
 // Payment cards.
 $payment_card_text: $grey10;
+
+// SPC
+$spc-checkout-error-message-background: $error;
+$spc-checkout-success-message-background: $success;
+$spc-checkout-success-message-color: $white-five;
+$spc-recommended-product-promotion: $hnm-red;
+$spc-cart-promo-code-submit-enabled: $hnm-black-three;
+$spc-product-attributes: $grey7;
+$spc_tooltip_icon: $_tooltip_blue;
+$spc-cart-background: $default_background_color;
+$spc_checkout_as_guest_border: $hnm-black-three;
+$spc_checkout_as_guest_text_hover: $gray44;
+$spc_checkout_as_guest_border_hover: $gray44;
+$spc_checkout_button_background: $gray44;
+
+// SPC Checkout
+$spc-checkout-page-title-border: $hnm-black;
+$spc-deliver-button: $hnm-black-three;
+
+// SPC CnC.
+$spc-cnc-toggle-bg-active: $hnm-black-three;
+$spc-checkout-cnc-map-expand: $hnm-black-three;
 
 // Totals.
 $total_discount_total: $venetian_red;

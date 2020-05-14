@@ -1,0 +1,21 @@
+.checkout-link {
+  a {
+    text-transform: uppercase;
+    font-family: $we-bold;
+
+    &:hover {
+      color: $WE_white;
+    }
+  }
+}
+
+.spc-shopping-link,
+.spc-cnc-store-actions,
+.map-store-list .store-actions {
+  a,
+  button {
+    font-family: $we-bold;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+}

@@ -5,7 +5,6 @@
  * Contains general hooks and alters.
  */
 
-use Drupal\acq_cart\Cart;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
@@ -135,9 +134,9 @@ function alshaya_acm_customer_block_access(Block $block, $operation, AccountInte
 }
 
 /**
- * Implements hook_acq_commerce_update_customer_api_request_alter().
+ * Implements hook_alshaya_api_update_customer_api_request_alter().
  */
-function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(array &$request_options) {
+function alshaya_api_alshaya_api_update_customer_api_request_alter(array &$request_options) {
   if (isset($request_options['json'], $request_options['json']['customer']['email'])) {
     $request_options['json']['customer']['extension']['communication_preference'] = [];
 
@@ -200,7 +199,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
         unset($form['#validate'][$key]);
       }
 
-      array_unshift($form['#validate'], 'alshaya_acm_customer_register_validate');
+      array_unshift($form['#validate'], 'alshaya_acm_customer_first_last_name', 'alshaya_acm_customer_register_validate');
 
       // Final step in validate itself, register the user.
       $form['#validate'][] = 'alshaya_acm_customer_register_validate_final';
@@ -230,6 +229,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
         $form['account']['current_pass']['#access'] = FALSE;
       }
 
+      array_unshift($form['#validate'], 'alshaya_acm_customer_first_last_name');
       // Always hide customer_id field for none-admin users.
       $form['acq_customer_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
       $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
@@ -276,8 +276,8 @@ function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateIn
   $email = $form['user']['#value']->getEmail();
   if (!empty($email)) {
     try {
-      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-      $api_wrapper = \Drupal::service('acq_commerce.api');
+      /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
+      $api_wrapper = \Drupal::service('alshaya_api.api');
       // Get customer from MDC.
       $customer = $api_wrapper->getCustomer($email);
       $user = user_load_by_mail($email);
@@ -422,10 +422,8 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       }
     }
     catch (\Exception $e) {
-      if (acq_commerce_is_exception_api_down_exception($e)) {
-        $form_state->setErrorByName('name', $e->getMessage());
-        return;
-      }
+      $form_state->setErrorByName('name', $e->getMessage());
+      return;
     }
   }
 
@@ -446,65 +444,20 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
  *
  * @return int|null
  *   User id of user if successful or null.
+ *
+ * @throws \Exception
  */
-function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associate_cart = FALSE) {
-  global $_alshaya_acm_custom_cart_association_processed;
-
+function _alshaya_acm_customer_authenticate_customer($mail, $pass) {
   try {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('acq_commerce.api');
-
+    /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $api_wrapper */
+    $api_wrapper = \Drupal::service('alshaya_spc.customer_helper');
     $customer = $api_wrapper->authenticateCustomer($mail, $pass);
-
-    if (!empty($customer) && !empty($customer['customer_id'])) {
-      $_alshaya_acm_custom_cart_association_processed = TRUE;
-      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-
-      try {
-        /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
-        $cart_storage = \Drupal::service('acq_cart.cart_storage');
-
-        // If we get a cart_id in the customer response, load it and store it
-        // in the session.
-        if (!$force_associate_cart && isset($customer['extension']['cart_id'])) {
-          $cart = (object) $api_wrapper->getCart($customer['extension']['cart_id']);
-          $cart = new Cart($cart);
-
-          $cart_storage->addCart($cart);
-        }
-        // Otherwise, associate the current cart with the authenticated user.
-        else {
-          // Check first if we have a cart in session.
-          if ($cart = $cart_storage->getCart(FALSE)) {
-            // Associate the cart to returning customer.
-            $cart_storage->associateCart($customer['customer_id'], $customer['email']);
-          }
-        }
-      }
-      catch (\Exception $e) {
-        // Some error occurred while associating cart, not doing anything
-        // here to allow normal login to work.
-      }
-
-      // Check if user exists in Drupal.
-      if ($user = user_load_by_mail($mail)) {
-        // Update the data in Drupal to match the values in Magento.
-        alshaya_acm_customer_update_user_data($user, $customer);
-      }
-      // Create user.
-      else {
-        /** @var \Drupal\user\Entity\User $user */
-        $user = alshaya_acm_customer_create_drupal_user($customer);
-      }
-
-      return $user->id();
+    if (!empty($customer['user'])) {
+      return $customer['user']->id();
     }
   }
   catch (\Exception $e) {
-    // Could be admin user, do nothing except for downtime exception.
-    if (acq_commerce_is_exception_api_down_exception($e)) {
-      throw $e;
-    }
+    throw $e;
   }
 
   return NULL;
@@ -513,45 +466,45 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
 /**
  * Implements hook_user_login().
  */
-function alshaya_acm_customer_user_login($account) {
-  // Check if we have already processed once during login.
-  // We duplicate the code as there is special case in login - associate
-  // old cart id returned from Magento only during authenticate customer
-  // API call.
-  global $_alshaya_acm_custom_cart_association_processed;
+function alshaya_acm_customer_user_login(UserInterface $account) {
+  global $_alshaya_acm_customer_addressbook_processed;
 
-  if (isset($_alshaya_acm_custom_cart_association_processed) && $_alshaya_acm_custom_cart_association_processed) {
+  if (isset($_alshaya_acm_customer_addressbook_processed) && $_alshaya_acm_customer_addressbook_processed) {
     return;
   }
 
-  /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
-  $cart_storage = \Drupal::service('acq_cart.cart_storage');
+  if (!alshaya_acm_customer_is_customer($account)) {
+    return;
+  }
 
-  // We do all checks only for normal users.
-  if (alshaya_acm_customer_is_customer($account)) {
-    // Check first if we have a cart in session.
-    if ($cart = $cart_storage->getCart(FALSE)) {
-      // Check if current cart is not associated to another user.
-      if ($cart->customerEmail() && $cart->customerEmail() != $account->getEmail()) {
-        // It is associated to someone else. We clear the cart in session.
-        $cart_storage->clearCart();
-      }
-      else {
-        // Cart is not assigned or assigned to same customer.
-        try {
-          $cart_storage->associateCart($account->get('acq_customer_id')->getString(), $account->getEmail());
-        }
-        catch (\Exception $e) {
-          // Some error occurred while associating cart, not doing anything
-          // here to allow normal login to work.
-        }
-      }
+  try {
+    /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('alshaya_api.api');
+    $customer = $api_wrapper->getCustomer($account->getEmail());
+
+    // Allow if returned customer array is empty or customer id is the same as
+    // what is available in the form.
+    if (!empty($customer) && !empty($customer['customer_id']) && $customer['customer_id'] != $account->get('acq_customer_id')->getString()) {
+      return;
     }
+
+    // Update the user info from MDC to Drupal.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+    alshaya_acm_customer_update_user_data($account, $customer);
   }
-  else {
-    // Admin just logged in, lets clear the cart if it exists.
-    $cart_storage->clearCart();
+  catch (\Exception $e) {
+    \Drupal::logger('alshaya_acm_customer')->error('Error while resetting information for user: @email.', [
+      '@email' => $account->getEmail(),
+    ]);
   }
+}
+
+/**
+ * Set first name and last name field values from full name.
+ */
+function alshaya_acm_customer_first_last_name(array &$form, FormStateInterface &$form_state) {
+  $form_state->setValue('field_first_name', [['value' => $form_state->getTemporaryValue('first_name')]]);
+  $form_state->setValue('field_last_name', [['value' => $form_state->getTemporaryValue('last_name')]]);
 }
 
 /**
@@ -562,9 +515,8 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
   $customer_id = $form_state->getValue('acq_customer_id') ? $form_state->getValue('acq_customer_id')[0]['value'] : NULL;
 
   try {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('acq_commerce.api');
-
+    /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('alshaya_api.api');
     $customer = $api_wrapper->getCustomer($mail);
 
     // Allow if returned customer array is empty or customer id is the same as
@@ -606,11 +558,19 @@ function alshaya_acm_customer_register_validate_final(array &$form, FormStateInt
   $last_name = $form_state->getValue('field_last_name')[0]['value'];
   $pass = $form_state->getValue('pass');
 
-  /** @var \Drupal\alshaya_acm_customer\CustomerHelper $customer_helper */
-  $customer_helper = \Drupal::service('alshaya_acm_customer.helper');
+  /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
+  $api_wrapper = \Drupal::service('alshaya_api.api');
 
   try {
-    $customer = $customer_helper->updateCustomer($customer_id, $email, $first_name, $last_name, $pass);
+    $customer_array = [
+      'customer_id' => $customer_id,
+      'firstname' => $first_name,
+      'lastname' => $last_name,
+      'email' => $email,
+    ];
+    $customer = $api_wrapper->updateCustomer($customer_array, [
+      'password' => $pass,
+    ]);
   }
   catch (\Exception $e) {
     // Do nothing except for downtime exception, we will do other validations
@@ -713,9 +673,8 @@ function alshaya_acm_customer_change_pwd_form_validate_password(array &$form, Fo
   }
 
   try {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('acq_commerce.api');
-
+    /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $api_wrapper */
+    $api_wrapper = \Drupal::service('alshaya_spc.customer_helper');
     $customer = $api_wrapper->authenticateCustomer($user->getEmail(), $current_pass_input);
 
     // If a valid customer array is returned, it means current pass is valid.
@@ -790,8 +749,8 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
 
   // Try API now.
   try {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('acq_commerce.api');
+    /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('alshaya_api.api');
     $customer = $api_wrapper->getCustomer($name);
 
     if (!empty($customer)) {

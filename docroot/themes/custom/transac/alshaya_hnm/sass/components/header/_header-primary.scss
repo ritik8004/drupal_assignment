@@ -150,7 +150,8 @@ header {
     }
   }
 
-  .block-cart-mini-block {
+  .block-cart-mini-block,
+  .block-alshaya-react-mini-cart {
     @include arabic-letter-spacing;
 
     letter-spacing: 0.5px;
@@ -1088,7 +1089,8 @@ html[lang='ar'] {
   }
 
   header {
-    .block-cart-mini-block {
+    .block-cart-mini-block,
+    .block-alshaya-react-mini-cart {
       .cart-link {
         @include breakpoint($only-mobile) {
           margin-top: -7px;
@@ -1106,7 +1108,8 @@ html[lang='ar'] {
   }
 }
 
-#block-cartminiblock {
+#block-cartminiblock,
+.block-alshaya-react-mini-cart {
   @include breakpoint($desktop) {
     top: -0.25rem;
   }

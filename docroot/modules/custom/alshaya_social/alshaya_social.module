@@ -107,14 +107,16 @@ function alshaya_social_preprocess_alshaya_social(&$variables) {
     $variables['destination'] = Url::fromRoute($route_name, ['step' => 'delivery'])->toString();
   }
 
-  if (in_array($route_name, ['user.login', 'acq_checkout.form', 'user.register'])) {
-    foreach ($variables['social_networks'] as $network => &$network_info) {
-      \Drupal::moduleHandler()->alter(
-        'alshaya_social_' . $network,
-        $network_info,
-        $route_name
-      );
-    }
+  if ($route_name == 'alshaya_spc.checkout.login') {
+    $variables['destination'] = Url::fromRoute('alshaya_spc.checkout', [])->toString();
+  }
+
+  foreach ($variables['social_networks'] as $network => &$network_info) {
+    \Drupal::moduleHandler()->alter(
+      'alshaya_social_' . $network,
+      $network_info,
+      $route_name
+    );
   }
 
   $variables['#attached']['library'][] = 'alshaya_social/alshaya_social_popup';
@@ -132,5 +134,26 @@ function alshaya_social_alshaya_reset_config_configs_to_reset_alter(array &$rese
       return "{$key}.settings";
     }, array_keys($social_helper->getSocialNetworks()));
     $reset = array_merge($reset, $configs);
+  }
+}
+
+/**
+ * Implements hook_acsf_staging_scrub_admin_roles_alter().
+ */
+function alshaya_social_acsf_staging_scrub_admin_roles_alter(array &$admin_roles) {
+  // Truncate the social auth table if exists during site stage.
+  if (\Drupal::database()->schema()->tableExists('social_auth')) {
+    try {
+      \Drupal::database()->truncate('social_auth')->execute();
+      \Drupal::logger('alshaya_social')->notice('Table @table is truncated successfully.', [
+        '@table' => 'social_auth',
+      ]);
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_social')->error('Error while truncating table @table. Error:@error', [
+        '@table' => 'social_auth',
+        '@error' => $e->getMessage(),
+      ]);
+    }
   }
 }

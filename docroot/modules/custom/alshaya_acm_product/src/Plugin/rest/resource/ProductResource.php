@@ -12,12 +12,14 @@ use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
@@ -109,6 +111,13 @@ class ProductResource extends ResourceBase {
   private $languageManager;
 
   /**
+   * Request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  private $requestStack;
+
+  /**
    * Product category helper service.
    *
    * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
@@ -144,6 +153,8 @@ class ProductResource extends ResourceBase {
    *   Sku info helper object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   The Product Category helper service.
    */
@@ -161,6 +172,7 @@ class ProductResource extends ResourceBase {
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
     LanguageManagerInterface $language_manager,
+    RequestStack $request_stack,
     ProductCategoryHelper $product_category_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
@@ -177,6 +189,7 @@ class ProductResource extends ResourceBase {
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
     $this->languageManager = $language_manager;
+    $this->requestStack = $request_stack;
     $this->productCategoryHelper = $product_category_helper;
   }
 
@@ -198,6 +211,7 @@ class ProductResource extends ResourceBase {
       $container->get('module_handler'),
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('language_manager'),
+      $container->get('request_stack'),
       $container->get('alshaya_acm_product.category_helper')
     );
   }
@@ -227,6 +241,10 @@ class ProductResource extends ResourceBase {
       ->getGeneratedUrl();
 
     $data = $this->getSkuData($skuEntity, $link);
+
+    $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+      '',
+      $node->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
@@ -281,6 +299,21 @@ class ProductResource extends ResourceBase {
     $data['stock'] = $stockInfo['stock'];
     $data['in_stock'] = $stockInfo['in_stock'];
     $data['max_sale_qty'] = $stockInfo['max_sale_qty'];
+    $data['max_sale_qty_parent'] = FALSE;
+    // If parent's is marked as out of stock, even children are not available.
+    // We check paren't flag if child is in-stock.
+    if ($data['in_stock'] && $parent_sku instanceof SKUInterface) {
+      $parentStockInfo = $this->skuInfoHelper->stockInfo($parent_sku);
+      if (!($parentStockInfo['in_stock'])) {
+        $data['in_stock'] = FALSE;
+      }
+
+      if (!empty($parentStockInfo['max_sale_qty'])) {
+        $data['max_sale_qty'] = $parentStockInfo['max_sale_qty'];
+        $data['max_sale_qty_parent'] = TRUE;
+      }
+    }
+
     $data['delivery_options'] = [
       'home_delivery' => [],
       'click_and_collect' => [],
@@ -345,6 +378,34 @@ class ProductResource extends ResourceBase {
 
       $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
       $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
+    }
+
+    $current_request = $this->requestStack->getCurrentRequest();
+    if ($current_request->query->get('context')) {
+      // Adding extra data to the product resource.
+      $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
+      $data['extra_data'] = [];
+      $image = alshaya_acm_get_product_display_image($sku, 'cart_thumbnail', 'cart');
+      if (!empty($image)) {
+        if ($image['#theme'] == 'image_style') {
+          $data['extra_data']['cart_image'] = [
+            'url' => ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']),
+            'title' => $image['#title'],
+            'alt' => $image['#alt'],
+          ];
+        }
+        elseif ($image['#theme'] == 'image') {
+          $data['extra_data']['cart_image'] = [
+            'url' => $image['#attributes']['src'],
+            'title' => $image['#attributes']['title'],
+            'alt' => $image['#attributes']['alt'],
+          ];
+        }
+      }
+
+      // Removing media if context set as we don't require and to
+      // make response light.
+      unset($data['media']);
     }
 
     // Allow other modules to alter light product data.
@@ -430,7 +491,7 @@ class ProductResource extends ResourceBase {
     $attr_values = array_column($attributes, 'value', 'attribute_code');
     foreach ($values as $attribute_code => &$value) {
       $value['attribute_code'] = $attribute_code;
-      if ($attr_value = $attr_values[str_replace('attr_', '', $attribute_code)]) {
+      if (isset($attr_values[str_replace('attr_', '', $attribute_code)]) && $attr_value = $attr_values[str_replace('attr_', '', $attribute_code)]) {
         $value['value'] = (string) $attr_value;
       }
     }
@@ -519,7 +580,9 @@ class ProductResource extends ResourceBase {
       $this->cache['tags'][] = 'node:' . $nid;
       $promotions[] = [
         'text' => $promotion['text'],
-        'promo_web_url' => Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl(),
+        'promo_web_url' => str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+          '',
+          Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl()),
         'promo_node' => $nid,
       ];
     }

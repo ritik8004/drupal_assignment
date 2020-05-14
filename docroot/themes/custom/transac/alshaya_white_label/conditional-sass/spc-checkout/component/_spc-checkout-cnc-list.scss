@@ -1,0 +1,202 @@
+#click-and-collect-list-view {
+  @include breakpoint($desktop) {
+    height: 18.375rem;
+    overflow-y: auto;
+  }
+
+  @include breakpoint($only-tablet) {
+    height: 12.125rem;
+    overflow-y: auto;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    @include breakpoint($only-mobile) {
+      padding-bottom: 5.9375rem;
+    }
+
+    li {
+      background: $spc-cnc-store-item-bg;
+      border-bottom: 0.3125rem solid $spc-checkout-sidebar-bg;
+
+      .store-address-content {
+        display: none;
+        font-size: 0.875rem;
+        padding-#{$left}: 2.9375rem;
+        padding-#{$right}: 1.25rem;
+        color: $spc-cnc-store-item-text;
+
+        .store-address {
+          div {
+            display: inline;
+          }
+        }
+      }
+
+      .store-delivery-time {
+        color: $spc-cnc-store-item-text-impress;
+        margin-top: 0.625rem;
+        margin-bottom: 0.625rem;
+        display: block;
+      }
+
+      .spc-cnc-store-name {
+        cursor: pointer;
+        padding-#{$right}: 1.25rem;
+        display: block;
+        font-size: 0.875rem;
+        color: $spc-cnc-store-item-text-impress;
+        position: relative;
+
+        @include icon(radio-empty, before) {
+          position: absolute;
+          #{$left}: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 3.125rem;
+          width: 3rem;
+          text-align: center;
+          color: $spc-checkout-radio-empty;
+          pointer-events: none;
+        }
+
+        .expand-btn {
+          float: $right;
+          width: 2.5rem;
+          font-size: 0;
+          height: 3.25rem;
+          line-height: 3.25rem;
+
+          @include icon(chevrondown, after) {
+            font-size: 2rem;
+            position: absolute;
+            #{$right}: 0.875rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+
+        .spc-store-name-wrapper {
+          width: 100%;
+          padding-#{$left}: 3rem;
+          height: 3.25rem;
+          display: inline-flex;
+          align-items: center;
+
+          html[lang=ar] & {
+            line-height: normal;
+          }
+
+          @include breakpoint($only-mobile) {
+            width: calc(100% - 2.5rem);
+          }
+
+          .store-name {
+            pointer-events: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: calc(100% - 5.25rem);
+            display: inline-block;
+            white-space: nowrap;
+          }
+
+          .store-distance {
+            text-align: $right;
+            flex-grow: 1;
+            display: inline-block;
+            pointer-events: none;
+            color: $spc-cnc-store-list-distance;
+          }
+        }
+      }
+
+      &.expand {
+        padding-bottom: 1.25rem;
+
+        .store-address-content {
+          display: block;
+        }
+
+        .expand-btn {
+          @include icon(chevronup, after) {
+            font-size: 2rem;
+          }
+        }
+      }
+
+      &.selected {
+        .spc-cnc-store-name {
+          @include icon(radio-filled, before) {
+            color: $spc-checkout-radio-filled;
+          }
+        }
+      }
+    }
+  }
+
+  .spc-cnc-empty-store-list {
+    padding: 0.625rem 1.25rem 1.25rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: $spc-cnc-store-item-text-impress;
+  }
+}
+
+.spc-cnc-store-actions {
+  pointer-events: none;
+
+  &::before {
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $_white_five_alpha_80;
+    z-index: 3;
+    position: absolute;
+  }
+
+  &.show {
+    display: block;
+    pointer-events: all;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  &[data-selected-stored=true] {
+    display: none;
+  }
+
+  .select-store {
+    background: $primary_btn_bg;
+    height: 3.25rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    color: $primary_btn_text;
+    font-family: $alshaya-bold;
+    font-weight: normal;
+    font-size: 1rem;
+    width: 100%;
+    border: none;
+  }
+
+  position: absolute;
+  bottom: 0;
+  #{$left}: 0;
+  width: 100%;
+  background: $spc-checkout-address-form-bg;
+  padding: 1.25rem;
+  z-index: 1;
+  box-shadow: 0 -1px 20px 9px $sticky-btn;
+
+  @include breakpoint($only-mobile) {
+    position: fixed;
+  }
+}

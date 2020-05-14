@@ -341,21 +341,6 @@
       @include breakpoint($desktop) {
         width: 33.5%;
       }
-
-      @include icon(infomation, before) {
-        font-size: 1.8rem;
-        margin-#{$right}: 0.8rem;
-        vertical-align: bottom;
-        line-height: 25px;
-
-        @include breakpoint($tablet) {
-          margin-#{$right}: 1rem;
-        }
-
-        @include breakpoint($desktop) {
-          margin-#{$right}: 0.675rem;
-        }
-      }
     }
   }
 

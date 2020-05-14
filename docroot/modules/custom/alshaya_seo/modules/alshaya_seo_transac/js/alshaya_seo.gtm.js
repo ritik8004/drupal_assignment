@@ -97,8 +97,8 @@
       });
 
       // Push GTM event on add to cart failure.
-      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function () {
-        var sku = $(this).closest('article[gtm-type="gtm-product-link"]').attr('gtm-main-sku');
+      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e, productInfo) {
+        var sku = productInfo.parentSku;
         var errorMessage = $('.errors-container .error .message', $(this)).text();
         // Get selected attributes.
         var attributes = [];
@@ -530,13 +530,6 @@
           dataLayer.push(data);
         });
       });
-
-      /**
-       * Fire checkoutOption on cart page.
-       */
-      if (gtmPageType === 'cart page' && drupalSettings.user.uid !== 0) {
-        Drupal.alshaya_seo_gtm_push_checkout_option('Logged In', 1);
-      }
 
       /**
        * Tracking Home Delivery.
@@ -1198,6 +1191,53 @@
   // Ajax command to push deliveryAddress Event.
   $.fn.triggerDeliveryAddress = function () {
     dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
+  };
+
+  /**
+   * Log errors and track on GA.
+   *
+   * @param context
+   * @param error
+   */
+  Drupal.logJavascriptError = function (context, error) {
+    var message = (error.message !== undefined)
+      ? error.message
+      : error;
+    var errorData = {
+      event: 'eventTracker',
+      eventCategory: context,
+      eventLabel: 'Error occurred on ' + window.location.href,
+      eventAction: message,
+      eventValue: 0,
+      nonInteraction: 0,
+    };
+
+    try {
+      // Log error on console.
+      if (drupalSettings.gtm.log_errors_to_console !== undefined
+        && drupalSettings.gtm.log_errors_to_console) {
+        console.error(error);
+      }
+
+      // Track error on GA.
+      if (drupalSettings.gtm.log_errors_to_ga !== undefined
+        && drupalSettings.gtm.log_errors_to_ga
+        && dataLayer !== undefined) {
+        dataLayer.push(errorData);
+      }
+    } catch (e) {
+      // Do nothing.
+    }
+  };
+
+  window.onerror = function (message, url, lineNo, columnNo, error) {
+    if (error !== null) {
+      Drupal.logJavascriptError('Uncaught errors', error);
+    }
+    else if (message !== null) {
+      Drupal.logJavascriptError('Uncaught errors', message);
+    }
+    return true;
   };
 
 })(jQuery, Drupal, dataLayer);

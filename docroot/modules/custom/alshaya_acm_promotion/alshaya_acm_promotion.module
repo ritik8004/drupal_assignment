@@ -15,7 +15,6 @@ use Drupal\Core\Form\FormState;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\Html;
 
 /**
@@ -356,20 +355,19 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_sku_variant_info_alter().
  */
-function alshaya_acm_promotion_form_customer_cart_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $available_code = \Drupal::service('alshaya_acm_promotion.manager')->getAvailableCartCode();
-  $cart = \Drupal::service('acq_cart.cart_storage')->getCart(FALSE);
-  if (!empty($cart)) {
-    $items = $cart->items();
-  }
-  if (!empty($available_code) && !empty($items)) {
-    $form['promotion_code_wrapper']['available_code'] = [
-      '#type' => '#markup',
-      '#markup' => '<div class="promotion-available-code">' . $available_code . '</div>',
-    ];
+function alshaya_acm_promotion_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
+  $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
+  $variant['promotionsRaw'] = $promoLabelManager->getPromotionLabelForProductDetail($child, 'api');
+}
 
-    $form['#attached']['library'][] = 'alshaya_acm_promotion/cart_promotions';
-  }
+/**
+ * Implements hook_sku_product_info_alter().
+ */
+function alshaya_acm_promotion_sku_product_info_alter(array &$product_info, SKUInterface $sku) {
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
+  $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
+  $product_info['promotionsRaw'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'api');
 }

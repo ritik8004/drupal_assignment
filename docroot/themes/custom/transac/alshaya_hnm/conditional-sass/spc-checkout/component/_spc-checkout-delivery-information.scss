@@ -1,0 +1,72 @@
+.spc-checkout-delivery-information {
+  .delivery-information-preview {
+    .spc-delivery-customer-info,
+    .spc-delivery-store-info,
+    .spc-delivery-contact-info {
+      .delivery-name,
+      .store-name,
+      .contact-info-label {
+        font-family: $hnm-demibold;
+      }
+    }
+
+    .spc-delivery-shipping-methods {
+      .shipping-methods {
+        .shipping-method {
+          .carrier-title {
+            font-family: $hnm-demibold;
+          }
+        }
+      }
+    }
+  }
+
+  .popup-overlay .popup-content {
+    .spc-deliver-button,
+    .spc-add-new-address-btn,
+    .spc-address-select-address {
+      text-transform: capitalize;
+    }
+  }
+
+  .spc-checkout-empty-delivery-text {
+    text-transform: capitalize;
+
+    @include icon('chevrondown', 'after') {
+      font-size: 0.525rem;
+      transform: rotate(-90deg);
+      #{$right}: 1.375rem;
+      position: absolute;
+
+      html[lang=ar] & {
+        transform: rotate(90deg);
+      }
+    }
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
+.spc-section-billing-address {
+  .popup-overlay .popup-content {
+    .spc-add-new-address-btn,
+    .spc-address-select-address,
+    .spc-deliver-button {
+      text-transform: capitalize;
+    }
+  }
+
+  .spc-billing-address-wrapper {
+    .spc-billing-bottom-panel {
+      .spc-billing-name {
+        font-family: $hnm-demibold !important;
+      }
+    }
+
+    .spc-billing-change {
+      text-transform: capitalize;
+    }
+  }
+}
