@@ -3584,4 +3584,25 @@ class SkuManager {
     return $config[$key];
   }
 
+  /**
+   * Function returns the configurable attribute names of the given sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The sku entity.
+   *
+   * @return array
+   *   Array of configurable attribute names.
+   */
+  public function getConfigurableAttributeNames(SKUInterface $sku): array {
+    $parent_sku = $this->getParentSkuBySku($sku);
+    if (is_null($parent_sku)) {
+      $parent_sku = $sku;
+    }
+
+    $attributes = $this->getConfigurableCombinations($parent_sku);
+    return (!empty($attributes) && $attributes['attribute_sku'])
+      ? array_keys($attributes['attribute_sku'])
+      : [];
+  }
+
 }
