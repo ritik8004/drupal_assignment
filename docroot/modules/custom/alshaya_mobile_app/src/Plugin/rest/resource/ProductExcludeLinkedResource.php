@@ -228,6 +228,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
+    $data['configurable_attributes'] = $this->getConfigurableAttributes($skuEntity);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
@@ -511,6 +512,27 @@ class ProductExcludeLinkedResource extends ResourceBase {
       ];
     }
     return $promotions;
+  }
+
+  /**
+   * Function returns the configurable attribute names of the given sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The sku entity.
+   *
+   * @return array
+   *   Array of configurable attribute names.
+   */
+  private function getConfigurableAttributes(SKUInterface $sku): array {
+    $parent_sku = $this->skuManager->getParentSkuBySku($sku);
+    if (is_null($parent_sku)) {
+      $parent_sku = $sku;
+    }
+
+    $attributes = $this->skuManager->getConfigurableCombinations($parent_sku);
+    return (!empty($attributes) && $attributes['attribute_sku'])
+      ? array_keys($attributes['attribute_sku'])
+      : [];
   }
 
 }
