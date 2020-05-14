@@ -6,6 +6,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\simple_sitemap\Simplesitemap;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
@@ -45,6 +46,13 @@ class AlshayaSitemapManager {
   protected $productCategory;
 
   /**
+   * The database connection service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * AlshayaSitemapManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
@@ -55,15 +63,19 @@ class AlshayaSitemapManager {
    *   Config factory.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category
    *   Product category.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection service.
    */
   public function __construct(EntityTypeManagerInterface $entity_manager,
                               Simplesitemap $generator,
                               ConfigFactoryInterface $config_factory,
-                              ProductCategoryTree $product_category) {
+                              ProductCategoryTree $product_category,
+                              Connection $database) {
     $this->entityManager = $entity_manager;
     $this->generator = $generator;
     $this->configFactory = $config_factory;
     $this->productCategory = $product_category;
+    $this->database = $database;
   }
 
   /**
@@ -176,6 +188,40 @@ class AlshayaSitemapManager {
     $this->generator->getSitemapManager()->addSitemapVariant($this->getVariantName($term->toUrl()->toString()), $settings);
 
     return $variant_name;
+  }
+
+  /**
+   * Returns the sitemap publishing status of sitemaps.
+   *
+   * @return array
+   *   Array of sitemap statuses keyed by variant name.
+   *   Status values:
+   *   0: Instance is unpublished
+   *   1: Instance is published
+   *   2: Instance is published but is being regenerated
+   */
+  public function fetchSitemapInstanceStatuses() {
+    $query = $this->database->select('simple_sitemap', 's');
+    $query->fields('s', ['type', 'status']);
+    $query->groupBy('type');
+    $query->groupBy('status');
+    $results = $query->execute()->fetchAll();
+
+    $instances = [];
+    foreach ($results as $result) {
+      $instances[$result->type] = isset($instances[$result->type])
+        ? $result->status + 1
+        : (int) $result->status;
+    }
+
+    $all_variants = $this->getAllVariants();
+    foreach ($all_variants as $variant) {
+      if (!isset($instances[$variant])) {
+        $instances[$variant] = 0;
+      }
+    }
+
+    return $instances;
   }
 
 }
