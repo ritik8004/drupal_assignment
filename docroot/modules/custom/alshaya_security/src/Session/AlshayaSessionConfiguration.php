@@ -57,7 +57,7 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
           $params = session_get_cookie_params();
           $expire = $params['lifetime'] ? REQUEST_TIME + $params['lifetime'] : 0;
           // Compare current php version.
-          // We will supports setcookie() with php version <=>php7.3.
+          // We will use the latest setcookie() variant with PHP 7.3 and above.
           if (version_compare(PHP_VERSION, '7.3.0') >= 0) {
             setcookie($expected, $value, [
               'expires' => $expire,
