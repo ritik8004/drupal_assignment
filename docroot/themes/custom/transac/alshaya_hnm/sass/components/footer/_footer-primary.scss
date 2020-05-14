@@ -259,7 +259,7 @@
 
       &.open--accordion {
         .is-accordion {
-          color: $venetian_red;
+          color: $default_error;
 
           @include icon(minus, after);
         }
