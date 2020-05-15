@@ -1,0 +1,9 @@
+.spc-checkout {
+  .checkout-link {
+    @include breakpoint($only-mobile) {
+      a {
+        background: $checkout-submit-link;
+      }
+    }
+  }
+}
