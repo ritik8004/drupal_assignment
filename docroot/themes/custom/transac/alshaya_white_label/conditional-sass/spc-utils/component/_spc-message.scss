@@ -81,13 +81,17 @@
         color: $spc-checkout-warning-message;
         position: relative;
 
-        a {
+        button {
           padding-top: 0.625rem;
+          padding-#{$left}: 0;
+          padding-#{$right}: 0;
           font-family: $alshaya-thin;
           font-weight: normal;
           color: $spc-checkout-warning-message;
           text-decoration: underline;
           display: block;
+          background: none;
+          border: none;
         }
 
         @include icon(warning) {

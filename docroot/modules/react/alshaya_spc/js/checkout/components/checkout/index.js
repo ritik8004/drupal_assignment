@@ -132,7 +132,10 @@ export default class Checkout extends React.Component {
     }
 
     // Reset error message.
-    this.updateCheckoutMessage('', '');
+    const { messageType, errorSuccessMessage } = this.state;
+    if (messageType !== null || errorSuccessMessage !== null) {
+      this.updateCheckoutMessage(null, null);
+    }
     this.setState({ cart });
   };
 
