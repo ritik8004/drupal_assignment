@@ -10,17 +10,10 @@ import { setStorageInfo } from '../../../utilities/storage';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
+import WithModal from '../with-modal';
 
 class PaymentMethodCheckoutCom extends React.Component {
   static contextType = CheckoutComContext;
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      openSavedCardListModal: false,
-    };
-  }
 
   componentDidMount() {
     const { tokenizedCard } = this.context;
@@ -39,18 +32,6 @@ class PaymentMethodCheckoutCom extends React.Component {
   componentDidUpdate() {
     dispatchCustomEvent('refreshCompletePurchaseSection', {});
   }
-
-  openSavedCardListModal = () => {
-    this.setState({
-      openSavedCardListModal: true,
-    });
-  };
-
-  closeSavedCardListModal = () => {
-    this.setState({
-      openSavedCardListModal: false,
-    });
-  };
 
   labelEffect = (e, handler) => {
     if (handler === 'blur') {
@@ -174,7 +155,7 @@ class PaymentMethodCheckoutCom extends React.Component {
   onExistingCardSelect = (cardHash, madaCard) => {
     const cvvValid = !(madaCard === true || drupalSettings.checkoutCom.enforce3d === true);
 
-    this.closeSavedCardListModal();
+    dispatchCustomEvent('closeModal', 'creditCardList');
     this.updateCurrentContext({
       selectedCard: 'existing',
       tokenizedCard: cardHash,
@@ -199,12 +180,11 @@ class PaymentMethodCheckoutCom extends React.Component {
   };
 
   openNewCard = () => {
-    this.closeSavedCardListModal();
+    dispatchCustomEvent('closeModal', 'creditCardList');
     this.changeCurrentCard('new');
   };
 
   render() {
-    const { openSavedCardListModal } = this.state;
     const { selectedCard, tokenizedCard } = this.context;
 
     let activeCard = {};
@@ -226,35 +206,46 @@ class PaymentMethodCheckoutCom extends React.Component {
           {newCard}
         </ConditionalView>
         <ConditionalView condition={tokenizedCard !== ''}>
-          <div className={`spc-checkout-card-option ${selectedCard === 'existing' ? 'selected' : ''}`}>
-            <SelectedCard
-              cardInfo={activeCard}
-              openSavedCardListModal={this.openSavedCardListModal}
-              labelEffect={this.labelEffect}
-              handleCardCvvChange={this.handleCardCvvChange}
-              onExistingCardSelect={this.onExistingCardSelect}
-              selected={selectedCard === 'existing'}
-            />
-          </div>
-          <div className={`spc-checkout-card-option spc-checkout-card-option-new-card ${selectedCard === 'new' ? 'selected' : ''}`}>
-            <span className="spc-checkout-card-new-card-label" onClick={() => this.changeCurrentCard('new')}>
-              {Drupal.t('New Card')}
-            </span>
-            <ConditionalView condition={selectedCard === 'new'}>
-              {newCard}
-            </ConditionalView>
-          </div>
+          <WithModal modalStatusKey="creditCardList">
+            {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
+              <>
+                <div className={`spc-checkout-card-option ${selectedCard === 'existing' ? 'selected' : ''}`}>
+                  <SelectedCard
+                    cardInfo={activeCard}
+                    openSavedCardListModal={() => triggerOpenModal()}
+                    labelEffect={this.labelEffect}
+                    handleCardCvvChange={this.handleCardCvvChange}
+                    onExistingCardSelect={this.onExistingCardSelect}
+                    selected={selectedCard === 'existing'}
+                  />
+                </div>
+                <div className={`spc-checkout-card-option spc-checkout-card-option-new-card ${selectedCard === 'new' ? 'selected' : ''}`}>
+                  <span className="spc-checkout-card-new-card-label" onClick={() => this.changeCurrentCard('new')}>
+                    {Drupal.t('New Card')}
+                  </span>
+                  <ConditionalView condition={selectedCard === 'new'}>
+                    {newCard}
+                  </ConditionalView>
+                </div>
+                <Popup
+                  className="spc-saved-payment-card-list"
+                  open={isModalOpen}
+                  closeOnDocumentClick={false}
+                  closeOnEscape={false}
+                >
+                  <>
+                    <SavedCardsList
+                      selected={selectedCard === 'new' ? '' : tokenizedCard}
+                      closeSavedCardListModal={triggerCloseModal}
+                      onExistingCardSelect={this.onExistingCardSelect}
+                      onNewCardClick={this.openNewCard}
+                    />
+                  </>
+                </Popup>
+              </>
+            )}
+          </WithModal>
         </ConditionalView>
-        <Popup className="spc-saved-payment-card-list" open={openSavedCardListModal} onClose={this.closeSavedCardListModal} closeOnDocumentClick={false}>
-          <>
-            <SavedCardsList
-              selected={selectedCard === 'new' ? '' : tokenizedCard}
-              closeSavedCardListModal={this.closeSavedCardListModal}
-              onExistingCardSelect={this.onExistingCardSelect}
-              onNewCardClick={this.openNewCard}
-            />
-          </>
-        </Popup>
       </>
     );
   }

@@ -488,18 +488,18 @@ class ClickCollect extends React.Component {
               && (
                 <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
                   <span className="font-bold">{getStringMessage('location_access_denied')}</span>
-                  <a href="#" onClick={(e) => this.dismissErrorMessage(e, 'locationAccessDenied')}>
+                  <button type="button" onClick={(e) => this.dismissErrorMessage(e, 'locationAccessDenied')}>
                     {getStringMessage('dismiss')}
-                  </a>
+                  </button>
                 </CheckoutMessage>
               )}
               {outsideCountryError === true
               && (
                 <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
                   {parse(getStringMessage('location_outside_country_cnc'))}
-                  <a href="#" onClick={(e) => this.dismissErrorMessage(e, 'outsidecountry')}>
+                  <button type="button" onClick={(e) => this.dismissErrorMessage(e, 'outsidecountry')}>
                     {getStringMessage('dismiss')}
-                  </a>
+                  </button>
                 </CheckoutMessage>
               )}
               <div className="spc-cnc-address-form-content">
