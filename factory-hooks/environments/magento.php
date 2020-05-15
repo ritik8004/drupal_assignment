@@ -307,10 +307,10 @@ $magentos = [
   'bbw_uat' => [
     'url' => 'https://staging-bbw2.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => 'nilvx16kpllrdfevec15aer2u1ahusto',
-      'consumer_secret' => '4rin9lodbf263w9sdc9hmei8i67p0mhc',
-      'access_token' => '5yx9g0jnytt2maah8417cvi4ipe6l3cq',
-      'access_token_secret' => 'm6ae5fwc1eowx7w6ap02ekl16f0p0ita',
+      'consumer_key' => 'mue8te8h9fpimh3ssmk2gqg3p37fkrbk',
+      'consumer_secret' => '3n11u3dqiv3dnwr6lnhrf0gm3hso8932',
+      'access_token' => 'noi823gl5hgclkbf7zau2qtyo6td0nnh',
+      'access_token_secret' => 'h8yhtn87yx83wslo9regfguxynx646b2',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 19],
