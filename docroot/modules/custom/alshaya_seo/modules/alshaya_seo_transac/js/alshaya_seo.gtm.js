@@ -802,11 +802,11 @@
     if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
       mediaCount = parseInt(product.attr('gtm-dimension4'));
     }
-
+    var amount = product.attr('gtm-price').replace(/\,/g,'');
     var productData = {
       name: product.attr('gtm-name'),
       id: product.attr('gtm-main-sku'),
-      price: parseFloat(product.attr('gtm-price')),
+      price: parseFloat(amount),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
       dimension2: product.attr('gtm-sku-type'),
