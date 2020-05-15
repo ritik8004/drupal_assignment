@@ -184,18 +184,18 @@
 
   .profile-form {
     input {
-      background-color: $seashell_grey;
-      color: $hnm-black-three !important;
+      background-color: $default_background_color;
+      color: $primary_input !important;
     }
 
     label {
-      color: $hnm-black-three !important;
+      color: $primary_input_label !important;
       font-size: 0.8125rem !important;
 
       &.error {
-        color: $venetian_red !important;
+        color: $primary_input_inline_error !important;
         font-size: 0.6875rem;
-        background: $seashell_grey !important;
+        background: $default_background_color !important;
         bottom: -1.5rem;
       }
     }
@@ -203,14 +203,14 @@
     .form-item {
       &.mobile-number-field {
         .prefix {
-          color: $hnm-black-three;
+          color: $primary_input;
         }
       }
     }
 
     .form-item-field-address-0-address-address-line2 {
       input[type=text] ~ label:not(.active-label) {
-        color: $hnm-black-three !important;
+        color: $primary_input !important;
         font-size: 0.8125rem !important;
       }
     }
@@ -371,12 +371,22 @@
 #address-book-form-open .address-book-address,
 .address_wrapper .address-book-address {
   .country-label {
-    color: $hnm-black-three !important;
+    color: $primary_input_label !important;
     font-size: 0.8125rem !important;
   }
 
   .country-name {
-    background-color: $seashell_grey;
-    color: $hnm-black-three !important;
+    background-color: $default_background_color;
+    color: $primary_input !important;
+  }
+}
+
+.address-book-address,
+.contact-form,
+.user-communication-preference {
+  .country-field-wrapper {
+    .country-label {
+      font-size: 0.8125rem;
+    }
   }
 }

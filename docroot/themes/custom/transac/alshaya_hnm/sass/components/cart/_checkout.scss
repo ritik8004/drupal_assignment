@@ -206,6 +206,7 @@
             font-family: $hnm-demibold;
             font-weight: normal;
             color: $order_detail_tr_quantity;
+            font-size: 0.8125rem;
           }
         }
       }
@@ -253,7 +254,7 @@
       }
 
       td:first-child {
-        font-size: 12px;
+        font-size: 0.8125rem;
 
         @include breakpoint($mobile) {
           padding-top: 0.1rem !important;
@@ -542,6 +543,22 @@ html[lang=ar] {
 
       @include breakpoint($desktop) {
         right: 2.45rem;
+      }
+    }
+  }
+
+  .alias--cart {
+    #table-cart-items {
+      tr {
+        th {
+          font-size: 0.8125rem;
+        }
+      }
+    }
+
+    #table-cart-totals {
+      td:first-child {
+        font-size: 0.8125rem !important;
       }
     }
   }

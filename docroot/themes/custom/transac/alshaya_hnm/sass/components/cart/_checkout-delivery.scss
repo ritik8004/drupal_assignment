@@ -383,6 +383,10 @@
           font-family: $hnm-demibold;
           color: $title;
           font-size: 0.8125rem;
+
+          @include breakpoint($only-mobile) {
+            max-width: 8.75rem;
+          }
         }
 
         &-description {
@@ -480,6 +484,10 @@
         legend {
           span {
             color: $primary_dark_color;
+
+            @include breakpoint($upto-desktop) {
+              font-size: 0.8125rem;
+            }
           }
         }
 
@@ -526,6 +534,7 @@
 
   .address--controls {
     text-align: center;
+    border: none;
 
     #change-address {
       font-size: 0.8125rem;

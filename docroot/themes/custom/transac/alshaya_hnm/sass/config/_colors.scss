@@ -71,6 +71,7 @@ $gray44: #707070;
 $light_orange: #f4eddd;
 $hnm-pink: #f9f1ef;
 $light_grey: #d0d0d0;
+$black: $hnm-black-three;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -89,10 +90,14 @@ $primary_text: $hnm-black-three;
 // Form elements.
 $primary_input: $hnm-black-three;
 $primary_input_placeholder: $grey6;
-$primary_input_label: $greyish;
-$primary_input_label_hnm: $greyish;
+$primary_input_label: $hnm-black-three;
+$primary_input_label_hnm: $hnm-black-three;
 $primary_input_focus_border: transparent;
 $primary_input_inline_error: $venetian_red;
+
+// Form Items
+$formitem_label: $hnm-black-three;
+$formitem_input: $hnm-black-three;
 
 //Buttons.
 $primary_btn_bg: $hnm-black-three;
@@ -139,7 +144,7 @@ $label_black: $hnm-black-three;
 // Messages and Errors
 $default_msg_status_text: $white-four;
 $default_msg_bg: $success;
-$default_error: $red-error;
+$default_error: $venetian_red;
 
 // Tooltip
 $tooltip_bg: $grey1;
@@ -147,7 +152,7 @@ $tooltip_text: $hnm-black-three;
 $tooltip_border: $hnm-black-three;
 $tooltip_border_2: $white-five;
 $tooltip_icon: $hnm-black-three;
-$basket_tooltip_not_available: $grey4;
+$basket_tooltip_not_available: $gray44;
 
 // Maintenance
 $maintenance_container_border: $white-two;
@@ -235,13 +240,17 @@ $address_tile_border: $grey4;
 $address_content_text: $hnm-black-three;
 $address_content_link_border: $hnm-black-three;
 $address_content_link_bg: $hnm-black-three;
-$address_book_mobile_prefix: $greyish;
+$address_book_mobile_prefix: $gray44;
 $cancel_button: $hnm-black-three;
 $address_area_select: $hnm-black-three;
+$address_form_country_disabled: $gray44;
 
 // Modal
 $modal_close_bg: $hnm-black-three;
 $modal_close_icon: $white-five;
+
+// VAT text
+$vat: $gray44;
 
 // zoomin and zoomout button
 $gallery_zoombtn_bg: $white-five-20;
@@ -473,15 +482,15 @@ $checkout_cc_view_active_border: $hnm-black-three;
 $checkout_cc_view_active_bg: $hnm-black-three;
 $checkout_cc_view_active_text: $white-five;
 $checkout_cc_listview_border: $grey4;
-$checkout_cc_listview_text: $grey8;
+$checkout_cc_listview_text: $gray44;
 $checkout_cc_store_hover: $grey1;
 $checkout_cc_store_name: $hnm-black-three;
-$checkout_cc_store_address: $grey7;
+$checkout_cc_store_address: $gray44;
 $checkout_cc_list_delivery_time: $venetian_red;
 $checkout_cc_selected_store_content_bg: $hnm-black-three;
 $checkout_cc_selected_store_content_border: $hnm-black-three;
 $checkout_cc_selected_store_content_txt: $white-five;
-$checkout_cc_list_open_hours: $grey7;
+$checkout_cc_list_open_hours: $gray44;
 $checkout_cc_list_open_hours_tablet: $greyish;
 $checkout_cc_list_delivery_time_text: $black;
 $checkout_cc_list_delivery_time_label: $hnm-black-three;
@@ -517,7 +526,7 @@ $order_detail_item_row_blend: $info-30;
 $order_detail_item_row_warm_white: $white-three;
 $user_order_detail_bg: $white-five;
 $user_order_detail_dark: $light-greyish;
-$user_confirmation_newsletter_label: $grey-ash;
+$user_confirmation_newsletter_label: $gray44;
 $user_account_wrapper_light: $gray44;
 $order_summary_sec_text: $hnm-black-three;
 $order_print_dark_txt: $hnm-black-three;
@@ -532,7 +541,7 @@ $checkout_progress_next: $gray44;
 $checkout_payment_method_bg: $white-five;
 $checkout_payment_method_border: $white;
 $checkout_payment_text: $gray44;
-$checkout_payment_help: $grey7;
+$checkout_payment_help: $gray44;
 $checkout_payment_checkoutcom_card_details: $black-two;
 $checkout_payment_checkoutcom_card_details_expiry: $black-two;
 $checkout_payment_checkoutcom_new_option_text: $black-two;
@@ -552,7 +561,7 @@ $block_acm_customer_title_bg: $white-five;
 $delivery_tab_active_bg: $light_orange;
 $delivery_tab_text: $gray44;
 $delivery_tab_active_title: $hnm-black-three;
-$delivery_tab_disabled_border: $light-greyish;
+$delivery_tab_disabled_border: $gray44;
 $checkout_tab_separator: $hnm-black-three;
 $delivery_form_radio_border: $white;
 $delivery_form_radio_odd: $white-five;
@@ -563,6 +572,7 @@ $delivery_selected_address_border: $grey4;
 $delivery_selected_address_bg: $white-five;
 $checkout_section_titles: $hnm-black-three;
 $checkout_footer_txt: $hnm-black-three;
+$checkout_tab_disabled_text: $gray44;
 
 // Delivery details
 $order_print_order_details_row_bg: $grey2-19;
@@ -576,15 +586,15 @@ $store_finder_glossary_icon: $hnm-black-three;
 $store_finder_glossary_icon_border: $hnm-black-three;
 $store_finder_glossary_icon_tablet_border: $white;
 $store_finder_view_link_hover: $white-five;
-$store_finder_glossary_alphabet: $grey7;
+$store_finder_glossary_alphabet: $gray44;
 $store_finder_glossary_alphabet_hover: $link-hover;
-$store_finder_view_address: $grey7;
-$store_finder_open_hours: $grey7;
+$store_finder_view_address: $gray44;
+$store_finder_open_hours: $gray44;
 $store_finder_current_location: $scarlet-three;
 $store_finder_current_location_tablet: $venetian_red;
 $store_finder_search_results_counter_bg: $venetian_red;
-$individual_store_open_hours: $grey7;
-$individual_store_address: $grey7;
+$individual_store_open_hours: $gray44;
+$individual_store_address: $gray44;
 $individual_store_hours_label_border: $white;
 
 // Homepage Slider
@@ -597,13 +607,13 @@ $section_divider_text: $hnm-black-three;
 
 // Free Gifts
 $free-gifts-label: $scarlet;
-$free-gifts-title-text: $grey7;
+$free-gifts-title-text: $gray44;
 $free-gifts-coupon-code-text: $hnm-black-three;
 $free-gifts-border: $hnm-black-three;
-$free-gifts-text: $grey7;
+$free-gifts-text: $gray44;
 $free-gifts-select-button-bg: $hnm-black-three;
-$cart-free-gifts-message: $grey7;
-$cart-free-gifts-title: $grey7;
+$cart-free-gifts-message: $gray44;
+$cart-free-gifts-title: $gray44;
 $cart-free-gifts-label: $white-five;
 $cart-free-gifts-label-background: $hnm-black-three;
 $cart-free-gifts-button-color: $white-five;
@@ -619,8 +629,8 @@ $progress_loader: $hnm-black-three;
 $plp-machino-modal-content: $hnm-black-three;
 
 // Magazine-layout
-$magazine-pdp-description: $grey8;
-$magazine-pdp-description-separator: $grey8;
+$magazine-pdp-description: $gray44;
+$magazine-pdp-description-separator: $gray44;
 $magazine-pdp-description-first-color: $hnm-black-four;
 $magazine-pdp-video-modal-bg: $_grey_12;
 

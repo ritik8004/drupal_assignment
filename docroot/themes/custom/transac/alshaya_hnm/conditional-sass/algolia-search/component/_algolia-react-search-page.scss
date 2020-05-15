@@ -224,10 +224,10 @@
           }
 
           &.active {
-            color: $venetian_red;
+            color: $default-anchor-link-hover;
 
             &::after {
-              color: $venetian_red;
+              color: $default-anchor-link-hover;
             }
           }
         }
@@ -267,22 +267,22 @@
           background: none;
 
           & > span {
-            color: $venetian_red;
+            color: $default-anchor-link-hover;
           }
 
           &::after {
-            color: $venetian_red !important;
+            color: $default-anchor-link-hover !important;
           }
         }
 
         &.is-open {
           font-family: $hnm-demibold;
-          color: $venetian_red;
+          color: $default_error;
 
           &::after {
             top: 1.5625rem;
             transform: translateY(-50%) rotate(180deg);
-            color: $venetian_red;
+            color: $default_error;
           }
 
           > ul.sizegroup {
@@ -330,7 +330,7 @@
   .special--price {
     .price-amount,
     .price-currency {
-      color: $venetian_red !important;
+      color: $default_error !important;
     }
   }
 
