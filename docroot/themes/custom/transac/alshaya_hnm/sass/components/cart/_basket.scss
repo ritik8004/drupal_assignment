@@ -12,7 +12,7 @@
 
     .quantity .ajax-progress-throbber {
       .throbber {
-        background-image: url(../imgs/icons/ic-loader.svg) !important;
+        background-image: url(#{$base_theme_loader_img_directory_path}) !important;
       }
     }
 
@@ -131,7 +131,7 @@
     .form-item-privilege-card-number2 {
       .ajax-progress-throbber {
         .throbber {
-          background-image: url(../imgs/icons/ic-loader.svg) !important;
+          background-image: url(#{$base_theme_loader_img_directory_path}) !important;
         }
       }
     }
