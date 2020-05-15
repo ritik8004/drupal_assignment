@@ -12,6 +12,8 @@ import {
   isBillingSameAsShippingInStorage,
   removeBillingFlagFromStorage,
 } from '../../../utilities/checkout_util';
+import WithModal from '../with-modal';
+import dispatchCustomEvent from '../../../utilities/events';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -24,7 +26,6 @@ export default class CnCBillingAddress extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
       shippingAsBilling: isBillingSameAsShippingInStorage(),
     };
 
@@ -34,25 +35,13 @@ export default class CnCBillingAddress extends React.Component {
 
   componentDidMount() {
     this.isComponentMounted = true;
-    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate);
   }
 
   componentWillUnmount() {
     this.isComponentMounted = false;
-    document.removeEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+    document.removeEventListener('onBillingAddressUpdate', this.processBillingUpdate);
   }
-
-  showPopup = () => {
-    this.setState({
-      open: true,
-    });
-  };
-
-  closePopup = () => {
-    this.setState({
-      open: false,
-    });
-  };
 
   /**
    * Event handler for billing update.
@@ -61,7 +50,8 @@ export default class CnCBillingAddress extends React.Component {
     if (this.isComponentMounted) {
       const data = e.detail;
       const { refreshCart } = this.props;
-
+      // Close modal.
+      dispatchCustomEvent('closeModal', 'cncBillingInfo');
       // If there is no error and update was fine, means user
       // has changed the billing address. We set in localstorage.
       if (data.error === undefined) {
@@ -75,8 +65,6 @@ export default class CnCBillingAddress extends React.Component {
 
       // Refresh cart.
       refreshCart(data);
-      // Close modal.
-      this.closePopup();
     }
   };
 
@@ -96,7 +84,7 @@ export default class CnCBillingAddress extends React.Component {
 
   render() {
     const { cart, refreshCart } = this.props;
-    const { open, shippingAsBilling } = this.state;
+    const { shippingAsBilling } = this.state;
 
     // If carrier info not set, means shipping info not set.
     // So we don't need to show billing.
@@ -108,7 +96,7 @@ export default class CnCBillingAddress extends React.Component {
     // means its default billing address (same as shipping)
     // and not added by the user.
     let billingAddressAddedByUser = true;
-    if (cart.cart.billing_address.city === 'NONE') {
+    if (cart.cart.billing_address && cart.cart.billing_address.city === 'NONE') {
       billingAddressAddedByUser = false;
     }
 
@@ -125,31 +113,35 @@ export default class CnCBillingAddress extends React.Component {
       return (
         <div className="spc-section-billing-address cnc-flow">
           <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
-          <div className="spc-billing-address-wrapper">
-            <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={(e) => this.showPopup(e)}>
-              {Drupal.t('please add your billing address.')}
-            </div>
-            <Popup
-              className={getAddressPopupClassName()}
-              open={open}
-              onClose={this.closePopup}
-              closeOnDocumentClick={false}
-            >
-              <React.Suspense fallback={<Loading />}>
-                <AddressContent
-                  closeModal={this.closePopup}
-                  cart={cart}
-                  processAddress={this.processAddress}
-                  showEmail={false}
-                  showEditButton={false}
-                  type="billing"
-                  formContext="billing"
-                  headingText={Drupal.t('billing information')}
-                  default_val={editAddressData}
-                />
-              </React.Suspense>
-            </Popup>
-          </div>
+          <WithModal modalStatusKey="cncBillingInfo">
+            {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
+              <div className="spc-billing-address-wrapper">
+                <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={() => triggerOpenModal()}>
+                  {Drupal.t('please add your billing address.')}
+                </div>
+                <Popup
+                  className={getAddressPopupClassName()}
+                  open={isModalOpen}
+                  closeOnEscape={false}
+                  closeOnDocumentClick={false}
+                >
+                  <React.Suspense fallback={<Loading />}>
+                    <AddressContent
+                      closeModal={triggerCloseModal}
+                      cart={cart}
+                      processAddress={this.processAddress}
+                      showEmail={false}
+                      showEditButton={false}
+                      type="billing"
+                      formContext="billing"
+                      headingText={Drupal.t('billing information')}
+                      default_val={editAddressData}
+                    />
+                  </React.Suspense>
+                </Popup>
+              </div>
+            )}
+          </WithModal>
         </div>
       );
     }

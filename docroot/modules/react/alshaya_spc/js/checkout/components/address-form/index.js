@@ -241,7 +241,7 @@ export default class AddressForm extends React.Component {
         )}
         <div className="spc-address-form-sidebar">
           <SectionTitle>{headingDeliveryText}</SectionTitle>
-          <a className="close" onClick={closeModal}>
+          <a className="close" onClick={() => closeModal()}>
             &times;
           </a>
           <div className="spc-address-form-wrapper">
@@ -251,7 +251,9 @@ export default class AddressForm extends React.Component {
                 {errorSuccessMessage}
                 {messageType === 'warning'
                 && (
-                  <a href="#" onClick={(e) => this.hidePopUpError(e)}>{getStringMessage('dismiss')}</a>
+                  <button type="button" onClick={(e) => this.hidePopUpError(e)}>
+                    {getStringMessage('dismiss')}
+                  </button>
                 )}
               </CheckoutMessage>
               )}
