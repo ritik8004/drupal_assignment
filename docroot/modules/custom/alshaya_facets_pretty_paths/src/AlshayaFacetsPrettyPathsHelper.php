@@ -563,7 +563,7 @@ class AlshayaFacetsPrettyPathsHelper {
    * @return array
    *   Active facet summary.
    */
-  protected function getFacetSummary($page) {
+  public function getFacetSummary($page) {
     $active_facet_items = &drupal_static(__FUNCTION__);
     if (isset($active_facet_items)) {
       return $active_facet_items;
