@@ -543,7 +543,7 @@
   }
 
   + .ajax-progress-fullscreen {
-    background-image: url("../imgs/icons/ic-loader.svg");
+    background-image: url(#{$base_theme_loader_img_directory_path});
     background-size: 4.5rem;
   }
 }
