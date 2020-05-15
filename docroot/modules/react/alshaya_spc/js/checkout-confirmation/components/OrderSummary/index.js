@@ -135,6 +135,8 @@ const OrderSummary = () => {
                   name={storeInfo.store_name}
                   phone={storePhone}
                   address={storeAddress.join(', ')}
+                  openingHours={storeInfo.store_open_hours}
+                  mapLink={storeInfo.view_on_map_link}
                 />
                 <OrderSummaryItem label={Drupal.t('Collection by')} value={customerName} />
               </>
