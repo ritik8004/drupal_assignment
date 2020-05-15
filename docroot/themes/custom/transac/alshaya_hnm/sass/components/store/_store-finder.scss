@@ -1,7 +1,7 @@
 .path--store-finder,
 .nodetype--store {
   .view-header {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: $title;
 
     @include breakpoint($only-tablet) {
@@ -44,6 +44,7 @@
   .back-to-glossary {
     color: $store_finder_backbtn;
     font-family: $hnm-regular;
+    font-size: 0.8125rem;
   }
 
   .input--wrapper {
@@ -89,6 +90,11 @@
   }
 
   .current-location,
+  .store-finder--wrapper {
+    font-size: 0.8125rem;
+  }
+
+  .current-location,
   .cc-near-me {
     @include breakpoint($only-tablet) {
       &::before {
@@ -118,6 +124,8 @@
   }
 
   .list-view-link {
+    font-size: 0.8125rem;
+
     @include icon(list, before) {
       color: $content_link_color;
       line-height: 0.6;
@@ -130,6 +138,8 @@
   }
 
   .map-view-link {
+    font-size: 0.8125rem;
+
     @include icon(map, before) {
       color: $store_finder_glossary_icon;
 
@@ -139,6 +149,7 @@
 
       @include breakpoint($desktop) {
         line-height: 0.6;
+        font-size: 0.8125rem;
       }
     }
 
@@ -181,6 +192,14 @@
     }
   }
 
+  .form-item-geolocation-geocoder-google-places-api {
+    [id^=edit-geolocation-geocoder-google-places-api] {
+      font-size: 0.8125rem;
+      color: $store_finder_search_text;
+      background: $store_finder_search_background;
+    }
+  }
+
   .by--alphabet {
     @include breakpoint($only-tablet) {
       margin-#{$left}: -0.25rem;
@@ -220,6 +239,7 @@
 
       a {
         color: $store_finder_glossary_alphabet;
+        font-size: 0.8125rem;
 
         &:hover {
           color: $store_finder_glossary_alphabet_hover;
@@ -242,10 +262,12 @@
     .row-title {
       color: $title;
       font-family: $hnm-demibold;
+      font-size: 0.8125rem;
     }
 
     .views-field-field-store-address {
       color: $store_finder_view_address;
+      font-size: 0.8125rem;
 
       p {
         color: $store_finder_view_address;
@@ -254,10 +276,16 @@
     }
 
     .views-field-field-store-open-hours {
-      .hours--wrapper .open--hours {
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-        color: $store_finder_open_hours;
+      .hours--wrapper {
+        .open--hours {
+          padding-top: 0.75rem;
+          padding-bottom: 0.75rem;
+          color: $store_finder_open_hours;
+        }
+
+        .hours--label {
+          font-size: 0.8125rem;
+        }
       }
     }
   }
@@ -265,7 +293,7 @@
   @include breakpoint($only-mobile) {
     .current-location,
     .cc-near-me {
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       border: 1px solid $store_finder_current_location;
       color: $store_finder_current_location;
     }
@@ -424,6 +452,10 @@
       }
     }
   }
+
+  .get--directions {
+    font-size: 0.8125rem;
+  }
 }
 
 .node--type-store {
@@ -476,6 +508,7 @@
 
     color: $primary_dark_color;
     letter-spacing: 0.5px;
+    font-size: 0.8125rem;
 
     a {
       @include arabic-letter-spacing;
@@ -539,6 +572,7 @@
     .key-value-key,
     .key-value-value {
       color: $individual_store_open_hours;
+      font-size: 0.8125rem;
     }
   }
 
