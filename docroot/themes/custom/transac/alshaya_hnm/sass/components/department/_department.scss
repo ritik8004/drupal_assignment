@@ -39,13 +39,13 @@
       line-height: 1.25rem;
 
       a {
-        color: $hnm-black-three;
+        color: $department_category_content_link;
         text-decoration: underline;
 
         &:hover {
           &:active {
             text-decoration: none;
-            color: $default-anchor-link-hover;
+            color: $department_category_content_link_active;
           }
         }
       }
@@ -94,6 +94,14 @@
             }
           }
         }
+      }
+    }
+  }
+
+  .nodetype--advanced_page {
+    .page-standard {
+      .c-page-title {
+        border-bottom: none;
       }
     }
   }
