@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_bh.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_bh_install() {
+  // Add iso_currency_code for bh sites.
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'BHD')
+    ->save();
+
+  // Country code and timezone for Bahrain.
+  alshaya_country_set_default_regional_info('BH');
+
+  // Store finder search placeholder for Bahrain.
+  alshaya_country_set_default_store_search_placeholder('e.g. Manama', 'المنامة‎');
+
+  $strings = [
+    'seo_country' => [
+      'en' => 'Bahrain',
+      'ar' => 'البحرين‎',
+    ],
+    'seo_city1' => [
+      'en' => 'Manama',
+      'ar' => 'جدة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
