@@ -313,13 +313,13 @@ $magentos = [
       'access_token_secret' => 'h8yhtn87yx83wslo9regfguxynx646b2',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 19],
+      'store_id' => ['en' => 1, 'ar' => 18],
     ],
     'sa' => [
-      'store_id' => ['en' => 7, 'ar' => 10],
+      'store_id' => ['en' => 6, 'ar' => 9],
     ],
     'ae' => [
-      'store_id' => ['en' => 13, 'ar' => 16],
+      'store_id' => ['en' => 12, 'ar' => 15],
     ],
     'bh' => [
       'store_id' => ['en' => 30, 'ar' => 27],
