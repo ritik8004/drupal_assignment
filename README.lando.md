@@ -98,6 +98,45 @@ Xdebug can be enabled/disabled quickly by using the `lando xdebug-on` and `lando
 
 When xdebug is enabled, it will also apply to drush commands executed with `lando drush`.
 
+### Behat
+
+Lando can be used to run behat tests against environments via a local selenium container. Custom build and run
+tooling is provided for this purpose.
+
+See 'Testing' section.
+
+## Testing
+
+A chrome selenium container runs as the "selenium" service. It is possible to easily build, run and optionally
+observe the tests using custom tooling.
+
+The selenium services exposes port 4444 for VNC connections so that the tests can be observed running in a browser
+if desired. See the "observing behat" section.
+
+### Building Behat Profiles
+
+To build the behat test profiles, run the `lando behat-build` command.
+
+This will create various profiles in the `build/profiles` folder. You will need to know this when running the tests.
+
+### Running Behat Tests
+
+To run the tests, you should first choose a profile that was generated into the `builds/profiles` folder.
+
+Then use `lando behat-run --profile=<profile_name>`
+
+For example, `lando behat-run --profile=hm-kw-uat-en-desktop`.
+
+### Observing Behat
+
+You will need a vnc viewer in order to do this.  Recommended is "RealVNC Viewer". On mac, install either using
+`homebrew cask install vnc-viewer` or from the DMG file on the RealVNC site.
+
+To observe, before running tests, point your VNC viewer at `localhost` on port `4444`.  If asked for a password, you
+should use `secret`.
+
+Now run the tests, and you should be able to observe the browser activity.
+
 ## Performance
 
 Performance is not as good as a dedicated VM, for a number of reasons, but mostly docker related rather than Lando.
