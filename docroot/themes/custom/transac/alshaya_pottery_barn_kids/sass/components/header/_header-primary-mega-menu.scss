@@ -12,7 +12,9 @@
         font-size: 2rem;
         margin-top: -0.6625rem;
       }
+    }
 
+    @include breakpoint($only-mobile) {
       .menu__link {
         font-size: 1rem;
         color: $header_secondary_menu_link_mobile;
@@ -22,15 +24,17 @@
           margin-top: 0.0375rem;
         }
       }
+    }
 
+    @include breakpoint($only-mobile) {
       .back--link {
         font-size: 1rem;
         color: $header_secondary_menu_link_mobile;
+      }
 
-        &::before {
-          font-size: 2rem;
-          margin-top: -0.0625rem;
-        }
+      &::before {
+        font-size: 2rem;
+        margin-top: -0.0625rem;
       }
     }
   }
