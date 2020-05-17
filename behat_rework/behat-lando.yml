@@ -24,8 +24,10 @@ default:
                 capabilities:
                     chrome:
                         switches:
-                            - "--disable-gpu"
-                            - "--ignore-certificate-errors"
+                          #- "--headless"
+                          - "--disable-gpu"
+                          - "--no-sandbox"
+                          - "--ignore-certificate-errors"
         Drupal\DrupalExtension:
             blackbox: ~
         emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
