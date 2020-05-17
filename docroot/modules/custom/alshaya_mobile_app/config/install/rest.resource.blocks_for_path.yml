@@ -1,0 +1,17 @@
+uuid: d9b60703-4774-4e7d-ac8a-8bfe18cc2fe7
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_mobile_app
+    - serialization
+    - user
+id: blocks_for_path
+plugin_id: blocks_for_path
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie
