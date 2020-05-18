@@ -135,6 +135,9 @@
 .c-footer-menu--category,
 .c-footer-menu--static-links {
   h3 {
+    font-size: 1rem;
+    letter-spacing: 1px;
+
     @include breakpoint($only-mobile) {
       &::after {
         #{$right}: 0;
@@ -298,7 +301,8 @@
     h3 {
       color: $footer_title_h3;
       font-family: $alshaya-bold;
-      font-size: 0.875rem;
+      font-size: 1rem;
+      letter-spacing: 1px;
       padding-#{$left}: 0.5rem;
 
       @include breakpoint($only-mobile) {
