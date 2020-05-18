@@ -24,6 +24,8 @@ default:
                 capabilities:
                     chrome:
                         switches:
+                          # It is possible to run a headless GUI if not
+                          # observing browser activity.
                           #- "--headless"
                           - "--disable-gpu"
                           - "--no-sandbox"

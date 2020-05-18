@@ -55,9 +55,15 @@ services:
     type: compose
     services:
       image: selenium/standalone-chrome-debug
-      #image: selenium/standalone-firefox-debug
-#      environment:
-#        START_XVBF: 'false'
+      # It would be possible to switch to another image,
+      # but this has not been tested yet.
+      # image: selenium/standalone-firefox-debug
+
+      # If running in headless mode, you may find you
+      # need to start XVBF.
+      #
+      #      environment:
+      #        START_XVBF: 'false'
       volumes:
         - /dev/shm:/dev/shm
       command: /opt/bin/entry_point.sh
