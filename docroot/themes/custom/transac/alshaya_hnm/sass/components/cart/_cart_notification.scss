@@ -1,9 +1,9 @@
 #cart_notification {
-  top: 2.3rem;
+  top: 3rem;
   #{$right}: -0.3rem;
 
   @include breakpoint($tablet) {
-    top: 1.5rem;
+    top: 2rem;
     #{$right}: -0.375rem;
   }
 
@@ -83,7 +83,7 @@
 
 html[lang=ar] #cart_notification {
   @include breakpoint($tablet) {
-    top: 1.5rem;
+    top: 2rem;
     #{$right}: -0.375rem;
   }
 
