@@ -48,19 +48,19 @@ $magentos = [
   'mc_uat' => [
     'url' => 'https://mcmena-uat2.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => '3ewl8lsult7l5mpp1ckv0hw1ftk0u2bc',
-      'consumer_secret' => '84avnwtrinkpt2jmda6f61l8vy5cabb1',
-      'access_token' => 'yw1bvvwqe1vrab9sqjioepclb044jja2',
-      'access_token_secret' => 'bsmp4igrv2bgtn6pk5ojko32qvrrk798',
+      'consumer_key' => 'up2nmvc7y2c9k7o1kkk3iruywidhges4',
+      'consumer_secret' => 'l3qcpfpjvb8hiy5dnbu4ln63ahr16haj',
+      'access_token' => 'ic28d0o0od00yrbd38kln1hrdvnx8bb5',
+      'access_token_secret' => 'kuec3ssvt14wwo5ojhbmg78xqq1vswgg',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 3],
+      'store_id' => ['en' => 1, 'ar' => 4],
     ],
     'sa' => [
-      'store_id' => ['en' => 7, 'ar' => 10],
+      'store_id' => ['en' => 7, 'ar' => 13],
     ],
     'ae' => [
-      'store_id' => ['en' => 16, 'ar' => 13],
+      'store_id' => ['en' => 19, 'ar' => 22],
     ],
   ],
   'mc_prod' => [
