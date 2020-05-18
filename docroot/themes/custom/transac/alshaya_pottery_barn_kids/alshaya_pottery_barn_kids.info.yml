@@ -29,3 +29,28 @@ libraries-override:
     css:
       theme:
         /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/algolia-search/algolia-search.ltr.css: "/themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/algolia-search/algolia-search.ltr.css"
+
+  alshaya_white_label/spc-utils:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/spc-utils/spc-utils.ltr.css: "/themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/spc-utils/spc-utils.ltr.css"
+
+  alshaya_white_label/spc-cart:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/spc-cart/spc-cart.ltr.css: "/themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/spc-cart/spc-cart.ltr.css"
+
+  alshaya_white_label/spc-checkout:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/spc-checkout/spc-checkout.ltr.css: "/themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/spc-checkout/spc-checkout.ltr.css"
+
+  alshaya_white_label/spc-login:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/spc-login/spc-login.ltr.css: "/themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/spc-login/spc-login.ltr.css"
+
+  alshaya_white_label/spc-checkout-confirmation:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css: "/themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css"

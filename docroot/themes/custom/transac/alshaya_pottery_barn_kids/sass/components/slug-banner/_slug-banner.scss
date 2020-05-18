@@ -7,6 +7,11 @@
   p {
     margin: 0;
     font-family: $alshaya-thin;
+    font-size: 0.625rem;
+
+    @include breakpoint($tablet) {
+      font-size: 0.75rem;
+    }
   }
 
   a {
@@ -21,4 +26,20 @@
 
 .mobile-slug-banner {
   padding: 0.5rem 0;
+}
+
+.slug-banner-processed.frontpage {
+  @include breakpoint($only-mobile) {
+    &:not(.header--fixed) {
+      margin-top: 7.125rem;
+    }
+  }
+}
+
+.slug-banner-processed.alias--cart.hide-minimalistic-header {
+  @include breakpoint($only-mobile) {
+    &:not(.header--fixed) {
+      margin-top: 0;
+    }
+  }
 }

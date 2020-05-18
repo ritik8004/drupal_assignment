@@ -6,3 +6,11 @@
     border-bottom: 1px solid $section_divider_border;
   }
 }
+
+.c-promo__items {
+  .c-promo__item:first-child {
+    @include breakpoint($only-mobile) {
+      margin-top: 0.75rem;
+    }
+  }
+}
