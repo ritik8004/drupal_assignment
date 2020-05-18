@@ -1,0 +1,11 @@
+.spc-promo-code-block {
+  .promo-submit {
+    border-top-#{$right}-radius: 0.1875rem;
+    border-bottom-#{$right}-radius: 0.1875rem;
+  }
+
+  #promo-code {
+    border-top-#{$left}-radius: 0.1875rem;
+    border-bottom-#{$left}-radius: 0.1875rem;
+  }
+}
