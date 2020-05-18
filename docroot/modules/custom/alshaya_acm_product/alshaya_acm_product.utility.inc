@@ -246,6 +246,11 @@ function alshaya_acm_product_available_click_collect($sku) {
 function alshaya_acm_product_get_brand_logo($sku) {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
+
+  // We need title from English version.
+  $sku_entity = $entity_repository->getTranslationFromContext($sku_entity, 'en');
   $title = $sku_entity->get('attr_brand_logo')->getString();
 
   if (empty($title)) {
