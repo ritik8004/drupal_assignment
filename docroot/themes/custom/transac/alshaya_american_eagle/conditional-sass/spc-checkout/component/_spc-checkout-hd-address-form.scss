@@ -10,7 +10,7 @@
     }
   }
 
-  .spc-checkout-empty-delivery-text:first-letter {
+  .spc-checkout-empty-delivery-text::first-letter {
     text-transform: capitalize;
   }
 }
