@@ -1,0 +1,7 @@
+.spc-checkout-section-title,
+.spc-change-address,
+.spc-payment-saved-cards-header {
+  @include breakpoint($desktop) {
+    font-weight: 600;
+  }
+}
