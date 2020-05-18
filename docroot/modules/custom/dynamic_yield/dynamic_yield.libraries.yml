@@ -1,0 +1,3 @@
+dynamic_yield.product_modal:
+  js:
+    js/dy_product_modal.js: {}
