@@ -15,6 +15,7 @@ services:
     overrides:
       environment:
         DEVEL_ENV: lando
+        PHP_IDE_CONFIG: serverName=alshaya
     run_as_root:
       - "apt-get update -y"
       - "apt-get install netcat -y"
@@ -54,9 +55,15 @@ services:
     type: compose
     services:
       image: selenium/standalone-chrome-debug
-      #image: selenium/standalone-firefox-debug
-      environment:
-        START_XVBF: 'false'
+      # It would be possible to switch to another image,
+      # but this has not been tested yet.
+      # image: selenium/standalone-firefox-debug
+
+      # If running in headless mode, you may find you
+      # need to start XVBF.
+      #
+      #      environment:
+      #        START_XVBF: 'false'
       volumes:
         - /dev/shm:/dev/shm
       command: /opt/bin/entry_point.sh
@@ -87,7 +94,7 @@ tooling:
   behat-run:
     description: runs behat tests
     service: appserver
-    cmd: cd /app/behat_rework && ./bin/behat -vvv -c behat-lando.yml
+    cmd: cd /app/behat_rework && ./bin/behat -vvv -c behat-lando.yml --format pretty
 
   xdebug-on:
     service: appserver
