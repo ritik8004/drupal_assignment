@@ -154,6 +154,7 @@ header {
   .block-alshaya-react-mini-cart {
     @include arabic-letter-spacing;
 
+    font-size: 0.8125rem;
     letter-spacing: 0.5px;
 
     @include breakpoint($only-tablet) {

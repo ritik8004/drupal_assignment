@@ -123,6 +123,7 @@
 .promo-continue-shopping-wrapper {
   label {
     color: $primary_input_label_hnm;
+    font-size: 0.8125rem;
   }
 
   .coupon-code-wrapper,
@@ -245,6 +246,8 @@ html[lang=ar] {
 
   .alias--cart {
     .tooltip--head {
+      font-size: 0.8125rem;
+
       &.not-available {
         color: $basket_tooltip_not_available;
 
@@ -285,7 +288,7 @@ html[lang=ar] {
 
   a {
     color: $basket_continue_shopping_btn;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
   }
 }
 
@@ -313,6 +316,6 @@ html[lang=ar] {
 }
 
 .alias--cart #table-cart-totals tr:nth-child(2) td:first-child span {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   display: block;
 }

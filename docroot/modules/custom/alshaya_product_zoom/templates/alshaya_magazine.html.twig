@@ -13,7 +13,7 @@
         {% elseif thumbs.type == 'video' %}
           <figure class="pdp-asset pdp-video pdp-asset-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}">
             <button class="pdp-video-close"></button>
-            <video class="gallery-video b-lazy" muted="muted" playsinline>
+            <video class="gallery-video b-lazy" muted="muted" playsinline loop>
               <source src="{{ lazy_load_placeholder }}" data-src="{{ thumbs.url }}">
               {{ 'Your browser does not support the video tag.'|t }}
             </video>

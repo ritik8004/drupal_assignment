@@ -26,7 +26,7 @@
         {% elseif thumbs.type == 'video' %}
           <li class="cloudzoom__thumbnails__video pdp-video">
             <button class="pdp-video-close"></button>
-            <video class="gallery-video b-lazy" muted="muted">
+            <video class="gallery-video b-lazy" muted="muted" loop>
               <source src="{{ lazy_load_placeholder }}" data-src="{{ thumbs.url }}">
               {{ 'Your browser does not support the video tag.'|t }}
             </video>
@@ -65,7 +65,7 @@
           {% elseif thumbs.type == 'video' %}
             <li class="mobilegallery__thumbnails__video pdp-video">
               <button class="pdp-video-close"></button>
-              <video class="gallery-video b-lazy" muted="muted">
+              <video class="gallery-video b-lazy" muted="muted" loop>
                 <source src="{{ lazy_load_placeholder }}" data-src="{{ thumbs.url }}">
                 {{ 'Your browser does not support the video tag.'|t }}
               </video>
