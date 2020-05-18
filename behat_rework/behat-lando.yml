@@ -24,8 +24,12 @@ default:
                 capabilities:
                     chrome:
                         switches:
-                            - "--disable-gpu"
-                            - "--ignore-certificate-errors"
+                          # It is possible to run a headless GUI if not
+                          # observing browser activity.
+                          #- "--headless"
+                          - "--disable-gpu"
+                          - "--no-sandbox"
+                          - "--ignore-certificate-errors"
         Drupal\DrupalExtension:
             blackbox: ~
         emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
