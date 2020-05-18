@@ -537,6 +537,8 @@ class AlshayaSpcController extends ControllerBase {
     $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
+    $shipping_address = $order['shipping']['commerce_address'];
+
     $settings = [
       'site_details' => [
         'logo' => alshaya_master_get_email_logo(NULL, $langcode),
@@ -545,7 +547,7 @@ class AlshayaSpcController extends ControllerBase {
       'order_details' => [
         'customer_email' => $order['email'],
         'order_number' => $order['increment_id'],
-        'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
+        'customer_name' => $shipping_address['firstname'] . ' ' . $shipping_address['lastname'],
         'mobile_number' => $phone_number,
         'expected_delivery' => $orderDetails['delivery_method_description'],
         'number_of_items' => count($productList),
