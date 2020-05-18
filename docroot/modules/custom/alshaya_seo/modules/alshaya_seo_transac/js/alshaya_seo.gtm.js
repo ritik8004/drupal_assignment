@@ -802,6 +802,7 @@
     if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
       mediaCount = parseInt(product.attr('gtm-dimension4'));
     }
+    // Remove comma from price before passing through parseFloat.
     var amount = product.attr('gtm-price').replace(/\,/g,'');
     var productData = {
       name: product.attr('gtm-name'),
