@@ -334,7 +334,7 @@ body {
   .slick-next {
     &:hover {
       &::before {
-        color: $venetian_red;
+        color: $default_error;
       }
     }
   }

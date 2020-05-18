@@ -11,10 +11,10 @@
     }
 
     &.active {
-      color: $venetian_red;
+      color: $default-anchor-link-hover;
 
       &::after {
-        color: $venetian_red;
+        color: $default-anchor-link-hover;
       }
     }
   }
@@ -42,10 +42,10 @@
         letter-spacing: 1px;
 
         &.active {
-          color: $venetian_red;
+          color: $default-anchor-link-hover;
 
           &::after {
-            color: $venetian_red;
+            color: $default-anchor-link-hover;
           }
         }
       }
@@ -99,10 +99,10 @@
         }
 
         &.active {
-          color: $venetian_red;
+          color: $default-anchor-link-hover;
 
           &::after {
-            color: $venetian_red;
+            color: $default-anchor-link-hover;
           }
         }
       }
@@ -111,7 +111,7 @@
         padding: 0;
 
         .form-type-radio {
-          margin-right: 0;
+          margin-#{$right}: 0;
           padding: 0;
 
           &:hover {
@@ -271,11 +271,11 @@
         background: none;
 
         & > span {
-          color: $venetian_red;
+          color: $default-anchor-link-hover;
         }
 
         &::after {
-          color: $venetian_red !important;
+          color: $default-anchor-link-hover !important;
         }
       }
 
@@ -285,7 +285,7 @@
         &::after {
           top: 1.5625rem;
           transform: translateY(-50%) rotate(180deg);
-          color: $venetian_red;
+          color: $default-anchor-link-hover;
         }
 
         > ul.sizegroup {

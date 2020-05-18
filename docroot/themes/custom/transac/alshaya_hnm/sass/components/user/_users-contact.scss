@@ -5,18 +5,18 @@
     }
 
     input {
-      background-color: $seashell_grey;
-      color: $hnm-black-three !important;
+      background-color: $default_background_color;
+      color: $primary_input !important;
     }
 
     label {
-      color: $hnm-black-three !important;
+      color: $primary_input_label !important;
       font-size: 0.8125rem !important;
 
       &.error {
-        color: $venetian_red !important;
+        color: $primary_input_inline_error !important;
         font-size: 0.6875rem;
-        background: $seashell_grey !important;
+        background: $default_background_color !important;
         bottom: -1.5rem;
       }
     }

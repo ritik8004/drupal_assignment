@@ -12,7 +12,16 @@
 
       @include icon(arrow-#{$left}, before) {
         font-size: 1.35rem;
-        margin-top: 0.125rem !important;
+      }
+    }
+  }
+
+  &.mobile-only-block {
+    .magazine-back-to-feed {
+      @include breakpoint($only-mobile) {
+        &::before {
+          margin-top: 0.125rem !important;
+        }
       }
     }
   }
