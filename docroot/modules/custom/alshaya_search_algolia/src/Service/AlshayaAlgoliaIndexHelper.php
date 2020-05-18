@@ -241,9 +241,6 @@ class AlshayaAlgoliaIndexHelper {
       throw new \Exception('SKU not available for language of Node');
     }
 
-    $sku_attributes = $this->skuInfoHelper->getAttributesCached($sku, [], TRUE);
-    $object['is_new'] = isset($sku_attributes['is_new']) ? $sku_attributes['is_new'] : NULL;
-
     // Description.
     $description = $this->skuManager->getDescription($sku, 'full');
     $object['body'] = $this->renderer->renderPlain($description);
@@ -346,6 +343,7 @@ class AlshayaAlgoliaIndexHelper {
       $super_category_list[] = $super_category;
     }
     $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category_list;
+    $object['is_new'] = $sku->get('attr_is_new')->getString();
   }
 
   /**
