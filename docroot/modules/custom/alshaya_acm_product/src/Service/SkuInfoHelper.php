@@ -278,6 +278,49 @@ class SkuInfoHelper {
   }
 
   /**
+   * Wrapper function around getAttributes() to get values from static cache.
+   *
+   *   This function is created separately instead of adding static caching
+   * in the original getAttributes() as that would increase memory consumption
+   * and has a possiblity of causing errors during generation of feeds.
+   * This function also allows us to fetch the attributes keyed by the
+   * attribute name with value as the attribute value.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param array $unused_options
+   *   (Optional) any extra unused options.
+   * @param bool $by_key
+   *   (Optional) Return the array keyed by attribute name with the attribute
+   *   value as the value.
+   *
+   * @return array
+   *   Attributes.
+   */
+  public function getAttributesCached(SKUInterface $sku, array $unused_options = [], bool $by_key = FALSE): array {
+    $static = &drupal_static('sku_info_helper_attributes', []);
+    $sku_id = $sku->id();
+    $sku_language = $sku->language()->getId();
+    if (isset($static[$sku_id][$sku_language])) {
+      return $static[$sku_id][$sku_language];
+    }
+
+    $sku_attributes = $this->getAttributes($sku, $unused_options);
+    $static[$sku_id][$sku_language] = $sku_attributes;
+
+    if ($by_key) {
+      // Convert the array into key value pairs keyed by the attribute name with
+      // the attribute value as the value.
+      foreach ($sku_attributes as $value) {
+        $sku_attributes_by_attribute[$value['key']] = $value['value'];
+      }
+      $sku_attributes = $sku_attributes_by_attribute;
+    }
+
+    return $sku_attributes;
+  }
+
+  /**
    * Get the metatags info of given node.
    *
    * @param \Drupal\node\NodeInterface $node

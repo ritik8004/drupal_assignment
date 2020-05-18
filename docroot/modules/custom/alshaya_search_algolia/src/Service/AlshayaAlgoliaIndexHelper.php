@@ -241,6 +241,9 @@ class AlshayaAlgoliaIndexHelper {
       throw new \Exception('SKU not available for language of Node');
     }
 
+    $sku_attributes = $this->skuInfoHelper->getAttributesCached($sku, [], TRUE);
+    $object['is_new'] = isset($sku_attributes['is_new']) ? $sku_attributes['is_new'] : NULL;
+
     // Description.
     $description = $this->skuManager->getDescription($sku, 'full');
     $object['body'] = $this->renderer->renderPlain($description);
