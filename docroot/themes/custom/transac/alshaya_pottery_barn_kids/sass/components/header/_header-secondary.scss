@@ -18,10 +18,22 @@
       line-height: 1.85;
     }
 
+    @include breakpoint($desktop) {
+      line-height: 1.875rem;
+      height: 1.875rem;
+      display: inline-block;
+    }
+
     &::before {
       @include breakpoint($desktop) {
         content: none !important;
       }
+    }
+  }
+
+  .c-menu-secondary__region {
+    @include breakpoint($desktop) {
+      height: 1.875rem;
     }
   }
 }

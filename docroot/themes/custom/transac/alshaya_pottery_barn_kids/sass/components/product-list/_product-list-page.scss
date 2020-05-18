@@ -7,6 +7,10 @@
     @include breakpoint($tablet) {
       padding-bottom: 1.125rem;
     }
+
+    @include breakpoint($desktop) {
+      padding-bottom: 0;
+    }
   }
 }
 
@@ -33,9 +37,6 @@
 
 // tiles of proudcts in plp and search page.
 .c-plp {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
   .region__content .block-page-title-block {
     margin-bottom: 0;
 
