@@ -2,8 +2,6 @@
 .spc-change-address,
 .spc-payment-saved-cards-header {
   @include breakpoint($desktop) {
-    text-transform: capitalize;
-    font-size: 1.25rem;
     font-weight: 600;
   }
 }
