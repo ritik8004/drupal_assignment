@@ -16,8 +16,8 @@ variables:
   spc_Knet_year: "2021"
   spc_Knet_pin: "1234"
   spc_full_name: 'Prachi Nagpal'
-  spc_user_email_new: "avinash.shukla+0904@acquia.com"
-  spc_user_password_new: "Nash@1234"
+  spc_user_email_new: "prachi.nagpal@acquia.com"
+  spc_user_password_new: "Alshaya@12"
   spc_mada_master_card: '5352151570003404'
   spc_mada_master_card_expiry: '09/20'
   spc_mada_master_card_cvv: '100'
@@ -27,3 +27,5 @@ variables:
   spc_mada_password: 'Checkout1!'
   spc_mada_anon_username: 'avinash.shukla+0908@acquia.com'
   spc_anon_email: 'sampleUserName@mailinator.com'
+  spc_new_user_email: 'prachinagpal6@gmail.com'
+  spc_new_user_password: 'Alshaya@12'

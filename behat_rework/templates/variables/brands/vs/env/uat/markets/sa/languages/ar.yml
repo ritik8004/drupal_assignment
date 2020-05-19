@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://vsae2-uat.factory.alshaya.com/ar'
+  url_base_uri: 'https://vssa3-uat.factory.alshaya.com/ar'
   product_listing_page_url: '/victorias-secret/shop-bras/collections/uattest/'
   language_collection_filter: 'Collection'
   language_sort_filter: 'sort by'

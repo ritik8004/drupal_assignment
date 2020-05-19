@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://vsae2-uat.factory.alshaya.com/en/'
+  url_base_uri: 'https://pbsa-test.factory.alshaya.com/en/'
   cc_mada_payment_type: 'Credit / Debit Card'
   language_cc_mada_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   language_order_detail: 'تفاصيل الطلبية'
