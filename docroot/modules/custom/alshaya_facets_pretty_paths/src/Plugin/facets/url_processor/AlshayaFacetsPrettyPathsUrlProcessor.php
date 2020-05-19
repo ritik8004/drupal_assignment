@@ -106,6 +106,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       return [];
     }
 
+    // We use alias and label for English facet all the time.
     $facet = $this->getEnglishFacet($facet);
 
     $current_path = rtrim($this->request->getPathInfo(), '/');
@@ -243,12 +244,18 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
    * {@inheritdoc}
    */
   public function setActiveItems(FacetInterface $facet) {
-    $facet_default = $this->getEnglishFacet($facet);
+    // We use alias and label for English facet all the time.
+    $facet_en = $this->getEnglishFacet($facet);
 
     // Get the filter key of the facet.
-    if (isset($this->activeFilters[$facet_default->getUrlAlias()])) {
-      foreach ($this->activeFilters[$facet_default->getUrlAlias()] as $value) {
-        $decoded = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $value);
+    if (isset($this->activeFilters[$facet_en->getUrlAlias()])) {
+      foreach ($this->activeFilters[$facet_en->getUrlAlias()] as $value) {
+        $decoded = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents(
+          $facet_en->getFacetSourceId(),
+          $facet_en->getUrlAlias(),
+          $value
+        );
+
         if ($decoded) {
           $facet->setActiveItem(trim($decoded, '"'));
         }
@@ -266,6 +273,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
   protected function initializeActiveFilters($configuration) {
     /** @var \Drupal\facets\FacetInterface $facet */
     $facet = $configuration['facet'];
+
+    // We use alias and label for English facet all the time.
     $facet = $this->getEnglishFacet($facet);
 
     $parts = $this->alshayaPrettyPathHelper->getActiveFacetFilters($facet->getFacetSourceId());
