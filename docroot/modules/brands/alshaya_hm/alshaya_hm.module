@@ -11,6 +11,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\search_api\IndexInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_form_alter().
@@ -93,6 +94,7 @@ function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityView
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
       $return = _alshaya_hm_get_product_description($sku_entity);
       $build['description'] = $return['description'];
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_hm.label_order.settings']);
     }
   }
 }
@@ -375,19 +377,28 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
     if ($sku->language()->getId() != $node->language()->getId()) {
       continue;
     }
+
+    $config = \Drupal::config('alshaya_hm.label_order.settings');
+    $label_attributes = $config->get('plp');
     // Add attributes required for hm as label on products.
-    if ($sku->get('attr_product_designer_collection')->getString()) {
-      $object['attr_product_designer_collection'] = $sku->get('attr_product_designer_collection')->getString();
-    }
-    if ($sku->get('attr_product_environment')->getString()) {
-      $object['attr_product_environment'] = $sku->get('attr_product_environment')->getString();
-    }
-    if ($sku->get('attr_product_collection')->getString()) {
-      $object['attr_product_collection'] = $sku->get('attr_product_collection')->getString();
-    }
-    if ($sku->get('attr_product_quality')->getString()) {
-      $object['attr_product_quality'] = $sku->get('attr_product_quality')->getString();
+    if (!empty($label_attributes)) {
+      foreach ($label_attributes as $attribute) {
+        if ($sku->get($attribute)->getString()) {
+          $object[$attribute] = $sku->get($attribute)->getString();
+        }
+      }
     }
   }
 
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_hm_page_attachments(array &$page) {
+  $config = \Drupal::config('alshaya_hm.label_order.settings');
+  $label_attributes = $config->get('plp');
+  if (!empty($label_attributes)) {
+    $page['#attached']['drupalSettings']['plp_attributes'] = $label_attributes;
+  }
 }

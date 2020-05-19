@@ -106,61 +106,33 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   public function processCollectionLabels(ProductInfoRequestedEvent $event) {
     $sku = $event->getSku();
     $context = $event->getContext();
+    $config = $this->configFactory->get('alshaya_hm.label_order.settings');
     switch ($context) {
       case 'plp':
+        $plp_attributes = $config->get('plp');
         $plp_label = [];
-        if ($sku->get('attr_product_designer_collection')->getString()) {
-          $plp_label['content'] = $sku->get('attr_product_designer_collection')
-            ->getString();
-          $plp_label['class'] = 'attr_product_collection';
-        }
-        elseif ($sku->get('attr_product_collection')->getString()) {
-          $plp_label['content'] = $sku->get('attr_product_collection')
-            ->getString();
-          $plp_label['class'] = 'attr_product_collection';
-        }
-        elseif ($sku->get('attr_product_environment')->getString()) {
-          $plp_label['content'] = $sku->get('attr_product_environment')
-            ->getString();
-          $plp_label['class'] = 'attr_product_environment';
-        }
-        elseif ($sku->get('attr_product_quality')->getString()) {
-          $plp_label['content'] = $sku->get('attr_product_quality')
-            ->getString();
-          $plp_label['class'] = 'attr_product_quality';
+        foreach ($plp_attributes as $attribute) {
+          if ($sku->get($attribute)->getString()) {
+            $plp_label['content'] = $sku->get($attribute)
+              ->getString();
+            $plp_label['class'] = $attribute;
+            break;
+          }
         }
         $event->setValue($plp_label);
         break;
 
       case 'pdp':
+        $pdp_attributes = $config->get('pdp');
         $pdp_labels = [];
-        if ($sku->get('attr_product_designer_collection')->getString()) {
-          $pdp_labels[] = [
-            'content' => $sku->get('attr_product_designer_collection')
-              ->getString(),
-            'class' => 'attr_product_designer_collection',
-          ];
-        }
-        if ($sku->get('attr_product_environment')->getString()) {
-          $pdp_labels[] = [
-            'content' => $sku->get('attr_product_environment')
-              ->getString(),
-            'class' => 'attr_product_environment',
-          ];
-        }
-        if ($sku->get('attr_product_collection')->getString()) {
-          $pdp_labels[] = [
-            'content' => $sku->get('attr_product_collection')
-              ->getString(),
-            'class' => 'attr_product_collection',
-          ];
-        }
-        if ($sku->get('attr_product_quality')->getString()) {
-          $pdp_labels[] = [
-            'content' => $sku->get('attr_product_quality')
-              ->getString(),
-            'class' => 'attr_product_quality',
-          ];
+        foreach ($pdp_attributes as $attribute) {
+          if ($sku->get($attribute)->getString()) {
+            $pdp_labels[] = [
+              'content' => $sku->get($attribute)
+                ->getString(),
+              'class' => $attribute,
+            ];
+          }
         }
         $event->setValue($pdp_labels);
         break;

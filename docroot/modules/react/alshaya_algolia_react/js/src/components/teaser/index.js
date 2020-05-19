@@ -28,30 +28,19 @@ const Teaser = ({hit}) => {
 
   const showSwatches = drupalSettings.reactTeaserView.swatches.showSwatches;
   const collectionLabel = [];
-  if (hit.attr_product_designer_collection !== undefined) {
-    collectionLabel.push({
-      class: 'attr_product_designer_collection',
-      value: hit.attr_product_designer_collection
-    });
+  const plp_attributes = drupalSettings.plp_attributes ;
+  if (plp_attributes !== undefined) {
+    for (var i = 0; i < plp_attributes.length; i++) {
+      if (hit && hit[plp_attributes[i]]) {
+        collectionLabel.push({
+          class: plp_attributes[i],
+          value: hit[plp_attributes[i]]
+        });
+        break;
+      }
+    }
   }
-  else if (hit.attr_product_collection !== undefined) {
-    collectionLabel.push({
-      class: 'attr_product_collection',
-      value: hit.attr_product_collection
-    });
-  }
-  else if (hit.attr_product_environment !== undefined) {
-    collectionLabel.push({
-      class: 'attr_product_environment',
-      value: hit.attr_product_environment
-    });
-  }
-  else if (hit.attr_product_quality !== undefined) {
-    collectionLabel.push({
-      class: 'attr_product_quality',
-      value: hit.attr_product_quality
-    });
-  }
+
   let labelItems = '';
   if (collectionLabel.length > 0) {
     labelItems = collectionLabel.map((d) => <li className={d.class} key={d.value}>{d.value}</li>);
