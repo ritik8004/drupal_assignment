@@ -3,6 +3,7 @@ var buildPath = '/modules/react/alshaya_spc/dist/';
 
 var config = {
   entry: {
+    object: ["core-js/modules/es.object.entries", "core-js/modules/es.object.keys", "core-js/modules/es.object.values", "core-js/modules/es.array.for-each"],
     cart: './js/cart',
     minicart: './js/minicart',
     checkout: './js/checkout',

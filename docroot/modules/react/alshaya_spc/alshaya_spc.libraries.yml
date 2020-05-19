@@ -1,6 +1,7 @@
 cart_utilities:
   js:
     assets/js/cart_utilities.js: { }
+    dist/object.bundle.js: {}
   dependencies:
     - core/jquery
     - core/drupal
@@ -10,6 +11,7 @@ mini_cart:
   footer: true
   js:
     dist/minicart.bundle.js: { }
+    dist/object.bundle.js: {}
   dependencies:
     - alshaya_react/react
 
