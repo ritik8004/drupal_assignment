@@ -253,6 +253,7 @@ class AlshayaAlgoliaIndexHelper {
     $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
     array_walk($promotions, function (&$promotion, $nid) {
       $promotion['url'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+      $promotion['id'] = $nid;
     });
 
     // Removed 'field_acq_promotion_label' in favour of 'promotions'.
