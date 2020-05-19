@@ -197,6 +197,11 @@ class AcqPromotionsManager {
 
       if ($node instanceof Node) {
         $rule_id = $node->get('field_acq_promotion_rule_id')->getString();
+        // Update Skus for algolia indexing.
+        $skus = $this->getSkusForPromotion($rule_id);
+        $event = new PromotionMappingUpdatedEvent($skus);
+        $this->dispatcher->dispatch(PromotionMappingUpdatedEvent::EVENT_NAME, $event);
+        // Delete rule_id, sku mapping.
         $this->deleteCartPromotionMappings($rule_id, []);
         $node->delete();
         $this->logger->notice('Deleted orphan promotion node:@nid title:@promotion having rule_id:@rule_id.', [
