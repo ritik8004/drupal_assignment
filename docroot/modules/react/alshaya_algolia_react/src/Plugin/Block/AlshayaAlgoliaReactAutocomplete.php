@@ -323,15 +323,17 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       }
     }
 
-    $filter_facets['super_category'] = [
-      'identifier' => 'super_category',
-      'name' => $this->t('Super Category'),
-      'label' => $this->t('Brand'),
-      'widget' => [
-        'type' => 'menu',
-      ],
-      'weight' => 0,
-    ];
+    if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+      $filter_facets['super_category'] = [
+        'identifier' => 'super_category',
+        'name' => $this->t('Super Category'),
+        'label' => $this->t('Brand'),
+        'widget' => [
+          'type' => 'menu',
+        ],
+        'weight' => 0,
+      ];
+    }
 
     // Sort facets by weight.
     uasort($filter_facets, function ($a, $b) {
