@@ -94,42 +94,37 @@
       }
     }
 
-    .form-item.form-type-select {
-      &.form-item-quantity {
-        float: $left;
-        width: 5rem;
+    .form-item-quantity {
+      @include select-wrapper(5rem);
 
-        @include breakpoint ($only-mobile) {
-          width: 100%;
+      @include breakpoint($only-mobile) {
+        @include select2-style(100%);
+      }
+
+      select.form-select {
+        @include select-style(5rem);
+
+        @include breakpoint($only-mobile) {
+          @include select-style(100%);
+        }
+      }
+
+      .select2-container {
+        @include select2-style(5rem);
+
+        @include breakpoint($only-mobile) {
+          @include select2-style(100%);
         }
 
-        select.form-select {
-          height: 2.5rem;
-          width: 5rem;
-          padding-#{$left}: 0.75rem;
-          font-size: 0.875rem;
-
-          @include breakpoint ($only-mobile) {
-            width: 100%;
-            height: 2.8125rem;
+        .select2-selection {
+          &__arrow {
+            &::after {
+              display: none;
+            }
           }
-        }
 
-        label {
-          color: $primary_input_label;
-          font-size: 0.875rem;
-          top: -2rem;
-
-          @include breakpoint ($only-mobile) {
-            padding-top: 0;
-          }
-        }
-
-        &::after {
-          font-size: 2.25rem;
-
-          @include breakpoint ($only-mobile) {
-            top: 0.125rem;
+          .select2-selection__rendered {
+            line-height: 2.5;
           }
         }
       }
@@ -271,5 +266,18 @@
 
   .desc-wrapper {
     border-color: $pdp_desc_wrapper_title_border;
+  }
+}
+
+// Rearranging quantity on PDP for simple products
+article[gtm-sku-type="simple"] {
+  .acq-content-product {
+    .sku-base-form {
+      button[type="submit"] {
+        @include breakpoint($only-tablet) {
+          height: 2.5rem;
+        }
+      }
+    }
   }
 }
