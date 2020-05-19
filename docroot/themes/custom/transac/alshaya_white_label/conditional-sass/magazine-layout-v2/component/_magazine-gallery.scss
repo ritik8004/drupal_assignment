@@ -97,7 +97,7 @@
       }
 
       img {
-        width: 100%;
+        margin: 0 auto;
       }
     }
 
@@ -166,6 +166,11 @@
         bottom: 3.375rem;
         #{$left}: 50%;
         transform: translate(-50%, 0);
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          text-align: center;
+        }
 
         button {
           font-size: 0;
