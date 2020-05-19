@@ -7,10 +7,13 @@ import PdpCart from '../pdp-cart';
 
 const PdpLayout = () => {
   let skuItemCode = null;
+  let configurableCombinations = null;
   const { productInfo } = drupalSettings;
-  const { configurableCombinations } = drupalSettings;
   if (productInfo) {
     [skuItemCode] = Object.keys(productInfo);
+    if (productInfo[skuItemCode].type === 'configurable') {
+      configurableCombinations = drupalSettings.configurableCombinations;
+    }
   }
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
@@ -49,7 +52,11 @@ const PdpLayout = () => {
             pdpProductPrice={priceRaw}
             finalPrice={finalPrice}
           />
-          <PdpCart skuCode={skuItemCode} configurableCombinations={configurableCombinations} />
+          <PdpCart
+            skuCode={skuItemCode}
+            configurableCombinations={configurableCombinations}
+            productInfo={productInfo}
+          />
         </div>
       </div>
     </>

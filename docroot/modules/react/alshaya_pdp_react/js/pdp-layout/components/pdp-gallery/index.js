@@ -37,8 +37,8 @@ export default class PdpGallery extends React.PureComponent {
   };
 
   render() {
-    const { skuCode } = this.props;
-    const images = skuCode ? drupalSettings.productInfo[skuCode].rawGallery.thumbnails : [];
+    const { skuCode, pdpGallery } = this.props;
+    const images = skuCode ? pdpGallery.thumbnails : [];
     const emptyRes = (
       <div>Images not available</div>
     );
@@ -47,7 +47,7 @@ export default class PdpGallery extends React.PureComponent {
 
     return (images) ? (
 
-      <div className="magv2-pdp-gallery">
+      <div className="magv2-pdp-gallery" id="pdp-gallery-refresh">
         <ConditionalView condition={window.innerWidth > 768}>
           <div className="magazine__gallery--container-desktop">
             {images.map((image, key) => (
