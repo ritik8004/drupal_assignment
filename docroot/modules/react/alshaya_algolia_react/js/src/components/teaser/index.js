@@ -56,7 +56,7 @@ const Teaser = ({hit}) => {
   if (collectionLabel.length > 0) {
     labelItems = collectionLabel.map((d) => <li className={d.class} key={d.value}>{d.value}</li>);
   }
-  console.log(collectionLabel);
+
   return (
     <div className="c-products__item views-row" >
       <article

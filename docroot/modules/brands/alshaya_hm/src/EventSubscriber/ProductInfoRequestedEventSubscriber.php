@@ -89,6 +89,81 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       case 'short_description':
         $this->processShortDescription($event);
         break;
+
+      case 'collection_labels':
+        $this->processCollectionLabels($event);
+        break;
+
+    }
+  }
+
+  /**
+   * Get collection labels from sku.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function processCollectionLabels(ProductInfoRequestedEvent $event) {
+    $sku = $event->getSku();
+    $context = $event->getContext();
+    switch ($context) {
+      case 'plp':
+        $plp_label = [];
+        if ($sku->get('attr_product_designer_collection')->getString()) {
+          $plp_label['content'] = $sku->get('attr_product_designer_collection')
+            ->getString();
+          $plp_label['class'] = 'attr_product_collection';
+        }
+        elseif ($sku->get('attr_product_collection')->getString()) {
+          $plp_label['content'] = $sku->get('attr_product_collection')
+            ->getString();
+          $plp_label['class'] = 'attr_product_collection';
+        }
+        elseif ($sku->get('attr_product_environment')->getString()) {
+          $plp_label['content'] = $sku->get('attr_product_environment')
+            ->getString();
+          $plp_label['class'] = 'attr_product_environment';
+        }
+        elseif ($sku->get('attr_product_quality')->getString()) {
+          $plp_label['content'] = $sku->get('attr_product_quality')
+            ->getString();
+          $plp_label['class'] = 'attr_product_quality';
+        }
+        $event->setValue($plp_label);
+        break;
+
+      case 'pdp':
+        $pdp_labels = [];
+        if ($sku->get('attr_product_designer_collection')->getString()) {
+          $pdp_labels[] = [
+            'content' => $sku->get('attr_product_designer_collection')
+              ->getString(),
+            'class' => 'attr_product_designer_collection',
+          ];
+        }
+        if ($sku->get('attr_product_environment')->getString()) {
+          $pdp_labels[] = [
+            'content' => $sku->get('attr_product_environment')
+              ->getString(),
+            'class' => 'attr_product_environment',
+          ];
+        }
+        if ($sku->get('attr_product_collection')->getString()) {
+          $pdp_labels[] = [
+            'content' => $sku->get('attr_product_collection')
+              ->getString(),
+            'class' => 'attr_product_collection',
+          ];
+        }
+        if ($sku->get('attr_product_quality')->getString()) {
+          $pdp_labels[] = [
+            'content' => $sku->get('attr_product_quality')
+              ->getString(),
+            'class' => 'attr_product_quality',
+          ];
+        }
+        $event->setValue($pdp_labels);
+        break;
     }
   }
 

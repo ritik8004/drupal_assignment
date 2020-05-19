@@ -45,7 +45,9 @@
         <div class="magazine-desc-wrapper">
           {% if product_attribute_labels %}
             <ul class="collection-labels">
-              {{ product_attribute_labels }}
+              {% for item in product_attribute_labels %}
+                <li class="{{ item.class }}">{{ item.content }}</li>
+              {% endfor %}
             </ul>
           {% endif %}
           {{ description }}

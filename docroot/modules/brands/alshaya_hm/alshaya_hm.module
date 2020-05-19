@@ -334,9 +334,7 @@ function alshaya_hm_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, 
     /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
     $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
     $labels = $productInfoHelper->getValue($sku, 'collection_labels', 'plp');
-    $build['#product_attribute_labels'] = [
-      '#markup' => $labels,
-    ];
+    $build['#product_attribute_labels'] = $labels;
   }
 }
 
@@ -352,9 +350,7 @@ function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
     /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
     $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
     $labels = $productInfoHelper->getValue($parent_sku, 'collection_labels', 'pdp');
-    $vars['product_attribute_labels'] = [
-      '#markup' => $labels,
-    ];
+    $vars['product_attribute_labels'] = $labels;
   }
 }
 
