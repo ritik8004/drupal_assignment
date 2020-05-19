@@ -75,9 +75,9 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $request);
     $this->alshayaPrettyPathHelper = $pretty_path_helper;
     $this->facetsManager = $facets_manager;
-    $this->initializeActiveFilters($configuration);
     $this->entityTypeManager = $entityTypeManager;
     $this->languageManager = $language_manager;
+    $this->initializeActiveFilters($configuration);
   }
 
   /**
@@ -106,6 +106,9 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       return [];
     }
 
+    // We use alias and label for English facet all the time.
+    $facet = $this->getEnglishFacet($facet);
+
     $current_path = rtrim($this->request->getPathInfo(), '/');
     $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters($facet->getFacetSourceId());
 
@@ -129,8 +132,10 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         );
       }
 
-      $filters_current_result[$key] = $array;
+      $filters_current_result[$key] = array_filter($array);
     }
+
+    $filters_current_result = array_filter($filters_current_result);
 
     /** @var \Drupal\facets\Result\ResultInterface $result */
     foreach ($results as $result_key => &$result) {
@@ -225,7 +230,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $raw_value
       );
       $attributes['data-drupal-facet-item-label'] = $filter_value_en;
-      $attributes['data-drupal-facet-label'] = $this->getFacetLabel($facet);
+      $attributes['data-drupal-facet-label'] = $facet->label();
 
       $url->setOption('attributes', $attributes);
       $url->setOption('query', $this->getQueryParams());
@@ -239,10 +244,21 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
    * {@inheritdoc}
    */
   public function setActiveItems(FacetInterface $facet) {
+    // We use alias and label for English facet all the time.
+    $facet_en = $this->getEnglishFacet($facet);
+
     // Get the filter key of the facet.
-    if (isset($this->activeFilters[$facet->getUrlAlias()])) {
-      foreach ($this->activeFilters[$facet->getUrlAlias()] as $value) {
-        $facet->setActiveItem(trim($this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $value), '"'));
+    if (isset($this->activeFilters[$facet_en->getUrlAlias()])) {
+      foreach ($this->activeFilters[$facet_en->getUrlAlias()] as $value) {
+        $decoded = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents(
+          $facet_en->getFacetSourceId(),
+          $facet_en->getUrlAlias(),
+          $value
+        );
+
+        if ($decoded) {
+          $facet->setActiveItem(trim($decoded, '"'));
+        }
       }
     }
   }
@@ -257,6 +273,9 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
   protected function initializeActiveFilters($configuration) {
     /** @var \Drupal\facets\FacetInterface $facet */
     $facet = $configuration['facet'];
+
+    // We use alias and label for English facet all the time.
+    $facet = $this->getEnglishFacet($facet);
 
     $parts = $this->alshayaPrettyPathHelper->getActiveFacetFilters($facet->getFacetSourceId());
     foreach ($parts as $part) {
@@ -304,26 +323,21 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
    * @param \Drupal\facets\FacetInterface $facet
    *   Facet.
    *
-   * @return string
+   * @return \Drupal\facets\FacetInterface
    *   Facet label in English.
    */
-  protected function getFacetLabel(FacetInterface $facet) {
-    static $labels = [];
+  protected function getEnglishFacet(FacetInterface $facet) {
+    static $facets = [];
 
-    if (isset($labels[$facet->id()])) {
-      return $labels[$facet->id()];
-    }
-
-    if ($this->languageManager->getCurrentLanguage()->getId() === 'en') {
-      $labels[$facet->id()] = $facet->label();
-      return $labels[$facet->id()];
+    if (isset($facets[$facet->id()])) {
+      return $facets[$facet->id()];
     }
 
     $storage = $this->entityTypeManager->getStorage($facet->getEntityTypeId());
     $facetEn = $storage->loadOverrideFree($facet->id());
 
-    $labels[$facet->id()] = $facetEn->label();
-    return $labels[$facet->id()];
+    $facets[$facet->id()] = $facetEn;
+    return $facets[$facet->id()];
   }
 
 }
