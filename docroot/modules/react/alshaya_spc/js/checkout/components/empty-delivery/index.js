@@ -253,8 +253,8 @@ export default class EmptyDeliveryText extends React.Component {
           <div className="spc-empty-delivery-information">
             <div onClick={() => this.openModal(triggerOpenModal)} className="spc-checkout-empty-delivery-text">
               {deliveryType === 'click_and_collect'
-                ? Drupal.t('select your preferred collection store')
-                : Drupal.t('please add your contact details and address.')}
+                ? `<span> ${Drupal.t('select your preferred collection store')}</span>`
+                : `<span> ${Drupal.t('please add your contact details and address.')}</span>`}
             </div>
             <Popup
               open={isModalOpen}
