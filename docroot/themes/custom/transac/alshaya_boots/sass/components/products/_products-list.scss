@@ -72,6 +72,19 @@
         font-weight: bold;
       }
     }
+
+    @include breakpoint($desktop) {
+      article {
+        &:hover {
+          &::after {
+            #{$left}: -0.6875rem;
+            #{$right}: -0.6875rem;
+            box-shadow: none;
+            border: none;
+          }
+        }
+      }
+    }
   }
 
   .c-sidebar-first {
