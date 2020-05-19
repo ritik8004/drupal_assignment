@@ -132,7 +132,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         );
       }
 
-      $filters_current_result[$key] = array_filter($array);
+      // 0 is a valid value so we use strlen.
+      $filters_current_result[$key] = array_filter($array, 'strlen');
     }
 
     $filters_current_result = array_filter($filters_current_result);
@@ -256,7 +257,9 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
           $value
         );
 
-        if ($decoded) {
+        // 0 is a valid value, we will have NULL if value not found so we
+        // use isset().
+        if (isset($decoded)) {
           $facet->setActiveItem(trim($decoded, '"'));
         }
       }
