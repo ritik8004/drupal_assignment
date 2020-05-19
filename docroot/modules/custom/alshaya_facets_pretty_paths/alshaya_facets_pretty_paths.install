@@ -129,19 +129,19 @@ function alshaya_facets_pretty_paths_schema() {
     'fields' => [
       'value' => [
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 64,
         'not null' => TRUE,
         'description' => 'Actual value of facet.',
       ],
       'alias' => [
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 64,
         'not null' => TRUE,
         'description' => 'Alias value to use in URL.',
       ],
       'facet_alias' => [
         'type' => 'varchar_ascii',
-        'length' => 255,
+        'length' => 64,
         'not null' => TRUE,
         'description' => 'Facet Alias value to use in URL.',
       ],
