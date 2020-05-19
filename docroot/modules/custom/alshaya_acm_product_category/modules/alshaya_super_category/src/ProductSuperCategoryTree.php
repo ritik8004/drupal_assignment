@@ -319,6 +319,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   public function getAllParents($term) {
     $parents = parent::getAllParents($term);
 
+    // Remove the first parent if super category is enabled as that is
+    // l0 and we need from l1.
     if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
       array_shift($parents);
     }
