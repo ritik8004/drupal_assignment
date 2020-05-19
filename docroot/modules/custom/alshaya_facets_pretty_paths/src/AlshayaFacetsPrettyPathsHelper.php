@@ -199,6 +199,7 @@ class AlshayaFacetsPrettyPathsHelper {
       $query->condition('type', 'acq_promotion');
       $query->condition('status', NodeInterface::PUBLISHED);
       $query->condition($attribute_code, $value);
+      $query->condition('langcode', $langcode);
     }
     elseif ($is_swatch) {
       $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
@@ -207,7 +208,7 @@ class AlshayaFacetsPrettyPathsHelper {
       $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
     }
     // We have a different case for sizegroup.
-    // Values coming for this filter is sigegroup||sizevalue.
+    // Values coming for this filter is sigegroup|sizevalue.
     elseif ($attribute_code == 'size'
       && strpos($value, SkuManager::SIZE_GROUP_SEPARATOR) !== FALSE
       && $this->isSizeGroupEnabled()) {
@@ -238,7 +239,8 @@ class AlshayaFacetsPrettyPathsHelper {
 
     foreach ($ids ?? [] as $id) {
       if ($entity_type == 'term') {
-        $alias = $this->aliasManager->getAliasByPath('/taxonomy/term/' . $id, $langcode);
+        // We want to show English value all the time in URL.
+        $alias = $this->aliasManager->getAliasByPath('/taxonomy/term/' . $id, 'en');
         $alias = trim($alias, '/');
 
         if (strpos($alias, 'taxonomy/term') === FALSE) {
@@ -250,7 +252,8 @@ class AlshayaFacetsPrettyPathsHelper {
         }
       }
       else {
-        $alias = $this->aliasManager->getAliasByPath('/node/' . $id, $langcode);
+        // We want to show English value all the time in URL.
+        $alias = $this->aliasManager->getAliasByPath('/node/' . $id, 'en');
         $alias = trim($alias, '/');
 
         if (strpos($alias, 'node/') === FALSE) {
@@ -307,6 +310,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $ids = $query->execute();
 
     foreach ($ids ?? [] as $id) {
+      // We want to show English value all the time in URL.
       $alias = $this->aliasManager->getAliasByPath('/taxonomy/term/' . $id, 'en');
       $alias = trim($alias, '/');
 
@@ -348,13 +352,13 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     $aliases = $this->prettyAliases->getAliasesForFacet($facet_alias);
-    $aliases = $aliases ? array_flip($aliases) : [];
-    if (isset($aliases[$alias])) {
-      return $aliases[$alias];
+    $key = array_search($alias, $aliases, TRUE);
+    if ($key !== FALSE) {
+      return $key;
     }
 
-    // Return as-is for unknown aliases.
-    return $alias;
+    // Return null for unknown aliases.
+    return NULL;
   }
 
   /**
