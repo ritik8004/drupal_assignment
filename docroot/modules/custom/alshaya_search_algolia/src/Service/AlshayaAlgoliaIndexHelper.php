@@ -343,6 +343,8 @@ class AlshayaAlgoliaIndexHelper {
       $super_category_list[] = $super_category;
     }
     $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category_list;
+
+    $object['is_new'] = $sku->get('attr_is_new')->getString();
   }
 
   /**
