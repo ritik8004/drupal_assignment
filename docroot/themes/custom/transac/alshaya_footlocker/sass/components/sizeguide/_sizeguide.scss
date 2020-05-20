@@ -33,10 +33,6 @@
     padding: 0;
   }
 
-  @include breakpoint($tablet) {
-    padding: calc((100vh - 36rem) / 2) calc((100vw - 45rem) / 2);
-  }
-
   @include breakpoint($desktop) {
     padding: calc((100vh - 34.75rem) / 2) calc((100vw - 46.125rem) / 2);
   }
