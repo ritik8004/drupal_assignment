@@ -3,7 +3,6 @@ import OrderSummaryItem from '../OrderSummaryItem';
 import ConditionalView from '../../../common/components/conditional-view';
 
 const OrderSummary = () => {
-  const customerName = drupalSettings.order_details.customer_name;
   const customEmail = drupalSettings.order_details.customer_email;
   const orderNumber = drupalSettings.order_details.order_number;
   const mobileNumber = drupalSettings.order_details.mobile_number;
@@ -95,6 +94,9 @@ const OrderSummary = () => {
     customerNameBilling = `${billingInfo.given_name} ${billingInfo.family_name}`;
   }
 
+  // Customer name on shipping.
+  const customerShippingName = drupalSettings.order_details.delivery_type_info.customerNameShipping;
+
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
@@ -124,7 +126,7 @@ const OrderSummary = () => {
         <label htmlFor="spc-detail-open">{Drupal.t('order detail')}</label>
         <div className="spc-detail-content">
           <ConditionalView condition={customerAddress.length > 0}>
-            <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerName} address={customerAddress.join(', ')} />
+            <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerShippingName} address={customerAddress.join(', ')} />
           </ConditionalView>
           {(storeAddress.length > 0 && storeInfo !== undefined)
             && (
@@ -136,7 +138,7 @@ const OrderSummary = () => {
                   phone={storePhone}
                   address={storeAddress.join(', ')}
                 />
-                <OrderSummaryItem label={Drupal.t('Collection by')} value={customerName} />
+                <OrderSummaryItem label={Drupal.t('Collection by')} value={customerShippingName} />
               </>
             )}
           <ConditionalView condition={billingAddress.length > 0}>
