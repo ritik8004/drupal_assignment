@@ -129,7 +129,7 @@ function alshaya_facets_pretty_paths_schema() {
     'fields' => [
       'value' => [
         'type' => 'varchar',
-        'length' => 64,
+        'length' => 255,
         'not null' => TRUE,
         'description' => 'Actual value of facet.',
       ],
