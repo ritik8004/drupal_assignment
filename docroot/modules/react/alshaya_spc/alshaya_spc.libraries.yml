@@ -1,6 +1,9 @@
 cart_utilities:
   js:
     assets/js/cart_utilities.js: { }
+    assets/js/ie-pollyfill.js: {}
+    dist/number.bundle.js: {}
+    dist/promise.bundle.js: {}
     dist/object.bundle.js: {}
   dependencies:
     - core/jquery

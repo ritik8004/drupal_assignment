@@ -122,20 +122,5 @@
     return data;
   };
 
-  if ( typeof window.CustomEvent === "function" ) return false;
-
-  function CustomEvent ( event, params ) {
-    params = params || { bubbles: false, cancelable: false, detail: null };
-    var evt = document.createEvent( 'CustomEvent' );
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-    return evt;
-  }
-
-  window.CustomEvent = CustomEvent;
-
-  Number.isNaN = Number.isNaN || function isNaN(input) {
-    return typeof input === 'number' && input !== input;
-  }
-
 })(jQuery, Drupal);
 
