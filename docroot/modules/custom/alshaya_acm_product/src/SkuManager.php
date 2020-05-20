@@ -3592,6 +3592,11 @@ class SkuManager {
    *
    * @return array
    *   Array of configurable attribute names.
+   *
+   * @todo getConfigurableCombinations() used in this method is expensive as it
+   * does some complex calculations. Need to find a simpler method of doing it
+   * as done in the function alshaya_acm_product_get_sku_configurable_values()
+   * in https://github.com/acquia-pso/alshaya/pull/15739.
    */
   public function getConfigurableAttributeNames(SKUInterface $sku): array {
     $parent_sku = $this->getParentSkuBySku($sku);
