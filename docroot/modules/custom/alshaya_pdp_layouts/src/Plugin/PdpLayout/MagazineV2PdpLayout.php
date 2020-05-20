@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_pdp_layouts\Plugin\PdpLayout;
 
-
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Component\Utility\Unicode;
@@ -152,7 +151,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
 
     $options = [];
-    $group_data = [];
     $values = [];
     $size_main_temp = [];
     $size_temp = [];
@@ -262,6 +260,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
    *   The alternative array.
    */
   public function getAlternativeValues($alternates, $child) {
+    $group_data = [];
     // Get all alternate labels from child sku.
     foreach ($alternates as $alternate => $alternate_label) {
       $attribute_code = 'attr_' . $alternate;
@@ -269,6 +268,5 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     }
     return $group_data;
   }
-
 
 }
