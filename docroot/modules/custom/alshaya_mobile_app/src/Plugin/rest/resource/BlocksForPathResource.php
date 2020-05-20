@@ -16,6 +16,9 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Executable\ExecutableManagerInterface;
+use Drupal\Core\Path\CurrentPathStack;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides a resource to get all blocks for given path.
@@ -68,6 +71,20 @@ class BlocksForPathResource extends ResourceBase {
   protected $languageManager;
 
   /**
+   * The condition manager.
+   *
+   * @var \Drupal\Core\Executable\ExecutableManagerInterface
+   */
+  protected $conditionManager;
+
+  /**
+   * The current path.
+   *
+   * @var \Drupal\Core\Path\CurrentPathStack
+   */
+  protected $currentPath;
+
+  /**
    * BlocksForPathResource constructor.
    *
    * @param array $configuration
@@ -92,6 +109,10 @@ class BlocksForPathResource extends ResourceBase {
    *   The entity repository.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param Drupal\Core\Executable\ExecutableManagerInterface $condition_manager
+   *   The condition manager.
+   * @param \Drupal\Core\Path\CurrentPathStack $current_path
+   *   The current path.
    */
   public function __construct(
     array $configuration,
@@ -104,15 +125,19 @@ class BlocksForPathResource extends ResourceBase {
     EntityTypeManagerInterface $entity_type_manager,
     ConfigFactoryInterface $config_factory,
     EntityRepositoryInterface $entity_repository,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    ExecutableManagerInterface $condition_manager,
+    CurrentPathStack $current_path
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
-    $this->requestStack = $request_stack->getCurrentRequest();
+    $this->requestStack = $request_stack;
     $this->configFactory = $config_factory;
     $this->blockStorage = $entity_type_manager->getStorage('block');
     $this->entityRepository = $entity_repository;
     $this->languageManager = $language_manager;
+    $this->conditionManager = $condition_manager;
+    $this->currentPath = $current_path;
   }
 
   /**
@@ -130,7 +155,9 @@ class BlocksForPathResource extends ResourceBase {
       $container->get('entity_type.manager'),
       $container->get('config.factory'),
       $container->get('entity.repository'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('plugin.manager.condition'),
+      $container->get('path.current')
     );
   }
 
@@ -141,10 +168,11 @@ class BlocksForPathResource extends ResourceBase {
    *   The response containing list custom blocks.
    */
   public function get() {
+    $currentRequest = $this->requestStack->getCurrentRequest();
     // Path alias of page.
-    $alias = $this->requestStack->query->get('url');
+    $alias = $currentRequest->query->get('url');
     if (!$alias) {
-      $page = $this->requestStack->query->get('page');
+      $page = $currentRequest->query->get('page');
       $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
     }
 
@@ -153,8 +181,6 @@ class BlocksForPathResource extends ResourceBase {
     }
 
     $eligibleBlocks = [];
-    $node = $this->mobileAppUtility->getNodeFromAlias($alias);
-    $currentBundle = ($node instanceof NodeInterface) ? $node->bundle() : '';
     $currentTheme = $this->configFactory->get('system.theme')->get('default');
     $currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
 
@@ -162,12 +188,6 @@ class BlocksForPathResource extends ResourceBase {
 
     foreach ($contentBlockIds ?? [] as $id) {
       $block = BlockContent::load($id);
-      // Load block translation if current language is different from
-      // block default language and tranlation exists.
-      $block = (($block->get('langcode')->getString() !== $currentLanguage)
-        && ($block->hasTranslation($currentLanguage)))
-        ? $block->getTranslation($currentLanguage)
-        : $block;
       $blockInstances = $this->blockStorage->loadByProperties([
         'plugin' => 'block_content:' . $block->get('uuid')->getString(),
         'status' => 1,
@@ -184,31 +204,34 @@ class BlocksForPathResource extends ResourceBase {
               if (!$blockVisibility) {
                 continue;
               }
-              $pages = $value['pages'];
+
+              /* @var \Drupal\system\Plugin\Condition\RequestPath $condition */
+              $condition = $this->conditionManager->createInstance('request_path');
+              $condition->setConfiguration($value);
+
+              // Pushing path from API query parameter to request stack to check
+              // block visibility for that path instead of the current path.
+              $request = Request::create($alias);
+              $this->requestStack->push($request);
+
+              $pathMatch = $condition->evaluate();
               $negate = $value['negate'];
 
-              // Replace <front> with front page url alias.
-              $frontPageAlias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.front');
-              $pages = str_replace('<front>', $frontPageAlias, $pages);
-
-              if (((stripos($pages, $alias) !== FALSE) && $negate === TRUE)
-                || ((stripos($pages, $alias) === FALSE) && $negate === FALSE)) {
+              if (($pathMatch && $negate) || (!$pathMatch && !$negate)) {
                 $blockVisibility = FALSE;
-                continue;
               }
+              $this->requestStack->pop();
+
               break;
 
             case 'entity_bundle:node':
-              if (!$blockVisibility && empty($currentBundle)) {
+              $node = $this->mobileAppUtility->getNodeFromAlias($alias);
+              if (!$blockVisibility && !($node instanceof NodeInterface)) {
                 continue;
               }
-              $bundles = $value['bundles'];
-              $negate = $value['negate'];
 
-              if ((!in_array($currentBundle, $bundles) && $negate === FALSE)
-                || (in_array($currentBundle, $bundles) && $negate === TRUE)) {
+              if (!$this->checkBlockVisibilityCondition('node_type', $value, 'node', $node)) {
                 $blockVisibility = FALSE;
-                continue;
               }
               break;
 
@@ -216,21 +239,21 @@ class BlocksForPathResource extends ResourceBase {
               if (!$blockVisibility) {
                 continue;
               }
-              $langcodes = $value['langcodes'];
-              $negate = $value['negate'];
 
-              // If current language in not in the list of visibility langcode
-              // and the block id already added in eligibleBlocks list then
-              // remove the current block from the list or else continue.
-              if ((!in_array($currentLanguage, $langcodes) && $negate === FALSE)
-                || (in_array($currentLanguage, $langcodes) && $negate === TRUE)) {
+              if (!$this->checkBlockVisibilityCondition('language', $value, 'language', $currentLanguage)) {
                 $blockVisibility = FALSE;
-                continue;
               }
               break;
           }
         }
         if ($blockVisibility) {
+          // Load block translation if current language is different from
+          // block default language and tranlation exists.
+          $block = (($block->get('langcode')->getString() !== $currentLanguage)
+          && ($block->hasTranslation($currentLanguage)))
+          ? $block->getTranslation($currentLanguage)
+          : $block;
+
           $eligibleBlocks[$instanceId] = [
             'title' => $block->label(),
             'body' => $block->body->value,
@@ -254,11 +277,37 @@ class BlocksForPathResource extends ResourceBase {
           'url.query_args:page',
           'url.query_args:url',
         ],
-        'tags' => array_merge([], $this->mobileAppUtility->getBlockCacheTags()),
+        'tags' => array_merge(['config:block_list'], $this->mobileAppUtility->getBlockCacheTags()),
       ],
     ]));
 
     return $response;
+  }
+
+  /**
+   * Check block visibility conditions.
+   *
+   * @param string $condition_key
+   *   Visibility condition key.
+   * @param mixed $condition_value
+   *   Condition value.
+   * @param string $context_key
+   *   Context key.
+   * @param mixed $context_value
+   *   Context value.
+   *
+   * @return bool
+   *   TRUE/FALSE to show if condition is matched or not.
+   */
+  public function checkBlockVisibilityCondition($condition_key, $condition_value, $context_key, $context_value) {
+    /* @var \Drupal\system\Plugin\Condition\RequestPath $condition */
+    $condition = $this->conditionManager->createInstance($condition_key)
+      ->setConfiguration($condition_value)
+      ->setContextValue($context_key, $context_value);
+
+    $condition_match = $condition->evaluate();
+
+    return $condition_match;
   }
 
 }
