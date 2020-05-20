@@ -46,9 +46,8 @@ export default class PdpGallery extends React.PureComponent {
     const { showFullScreenModal, closeModal } = this;
 
     return (images) ? (
-
       <div className="magv2-pdp-gallery" id="pdp-gallery-refresh">
-        <ConditionalView condition={window.innerWidth > 768}>
+        <ConditionalView condition={window.innerWidth > 767}>
           <div className="magazine__gallery--container-desktop">
             {images.map((image, key) => (
               <PdpAsset
