@@ -253,26 +253,23 @@ class AlshayaSpcOrderHelper {
       throw new NotFoundHttpException();
     }
 
-//    $data = json_decode(SecureText::decrypt(
-//      $id,
-//      Settings::get('alshaya_api.settings')['consumer_secret']
-//    ), TRUE);
-//
-//    if (empty($data['order_id']) || !is_numeric($data['order_id']) || empty($data['email'])) {
-//      throw new NotFoundHttpException();
-//    }
-//
-//    // Security checks.
-//    if ($this->currentUser->isAuthenticated() && $this->currentUser->getEmail() !== $data['email']) {
-//      throw new AccessDeniedHttpException();
-//    }
-//    elseif ($this->currentUser->isAnonymous() && !empty(user_load_by_mail($data['email']))) {
-//      throw new AccessDeniedHttpException();
-//    }
+    $data = json_decode(SecureText::decrypt(
+      $id,
+      Settings::get('alshaya_api.settings')['consumer_secret']
+    ), TRUE);
 
-    $data['order_id'] = 20912;
-    //$data['order_id'] = 21404;
-    $data['email'] = 'rohit.joshi+1005@acquia.com';
+    if (empty($data['order_id']) || !is_numeric($data['order_id']) || empty($data['email'])) {
+      throw new NotFoundHttpException();
+    }
+
+    // Security checks.
+    if ($this->currentUser->isAuthenticated() && $this->currentUser->getEmail() !== $data['email']) {
+      throw new AccessDeniedHttpException();
+    }
+    elseif ($this->currentUser->isAnonymous() && !empty(user_load_by_mail($data['email']))) {
+      throw new AccessDeniedHttpException();
+    }
+
     $order = $this->ordersManager->getOrder($data['order_id']);
     if (empty($order) || $order['email'] != $data['email']) {
       throw new AccessDeniedHttpException();
