@@ -58,6 +58,12 @@
           border-bottom: 0.1875rem solid $mm_l1_link_active_border;
         }
       }
+
+      &.active {
+        .menu--one__link {
+          border-top: 0;
+        }
+      }
     }
 
     .active--menu--links {
