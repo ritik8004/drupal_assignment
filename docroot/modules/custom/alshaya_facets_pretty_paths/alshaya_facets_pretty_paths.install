@@ -12,6 +12,24 @@ use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 /**
  * Implements hook_update_N().
  *
+ * Add index on language and drop on language + facet_alias combination.
+ */
+function alshaya_facets_pretty_paths_update_8005() {
+  $schema = alshaya_facets_pretty_paths_schema();
+
+  \Drupal::database()->schema()->dropIndex('facets_pretty_path', 'filter_facet_alias');
+
+  \Drupal::database()->schema()->addIndex(
+    'facets_pretty_path',
+    'filter_language',
+    $schema['facets_pretty_path']['indexes']['filter_language'],
+    $schema['facets_pretty_path']
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-create the table for storing facet alias mapping.
  */
 function alshaya_facets_pretty_paths_update_8004() {
@@ -156,10 +174,7 @@ function alshaya_facets_pretty_paths_schema() {
       'facet_value_language' => ['alias', 'facet_alias', 'language'],
     ],
     'indexes' => [
-      'filter_facet_alias' => [
-        ['facet_alias', 64],
-        'language',
-      ],
+      'filter_language' => ['language'],
     ],
   ];
 

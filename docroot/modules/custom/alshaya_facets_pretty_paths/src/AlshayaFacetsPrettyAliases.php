@@ -59,13 +59,16 @@ class AlshayaFacetsPrettyAliases {
     }
 
     $select = $this->connection->select(self::ALIAS_TABLE);
-    $select->fields(self::ALIAS_TABLE, ['value', 'alias']);
+    $select->fields(self::ALIAS_TABLE, ['facet_alias', 'value', 'alias']);
 
-    $select->condition('facet_alias', $facet_alias);
     $language = $this->languageManager->getCurrentLanguage()->getId();
     $select->condition('language', $language);
 
-    $static[$facet_alias] = $select->execute()->fetchAllKeyed(0, 1);
+    $result = $select->execute()->fetchAll();
+    foreach ($result as $row) {
+      $static[$row->facet_alias][$row->value] = $row->alias;
+    }
+
     return $static[$facet_alias];
   }
 
