@@ -1,0 +1,72 @@
+.magv2 {
+  &-detail-wrapper {
+    .magv2 {
+      &-pdp {
+        &-title {
+          font-size: 1.125rem;
+          line-height: normal;
+          color: $magv2-pdp-title;
+          padding: 2rem 0 0.625rem;
+
+          @include breakpoint($only-mobile) {
+            font-size: 1rem;
+            padding-top: 1.25rem;
+          }
+        }
+
+        &-price-wrapper {
+          font-size: 18px;
+          line-height: normal;
+          color: $magv2-price;
+
+          @include breakpoint($only-mobile) {
+            font-size: 1rem;
+          }
+        }
+
+        &-price-amount,
+        &-final-price-amount {
+          padding-#{$left}: 0.1875;
+        }
+
+        &-price-container {
+          margin-bottom: 1.25rem;
+
+          &.has-special-price {
+            .magv2-pdp {
+              &-final-price-wrapper {
+                font-family: $alshaya-bold;
+                font-size: 1.375rem;
+                line-height: normal;
+                color: $magv2-special-price;
+                margin-bottom: 0.1875rem;
+
+                @include breakpoint($only-mobile) {
+                  font-size: 1.125rem;
+                }
+              }
+
+              &-price-wrapper {
+                color: $magv2-price-strike;
+                display: inline-block;
+                padding-#{$right}: 0.3125rem;
+                text-decoration: line-through;
+              }
+
+              &-vat-text {
+                display: inline-block;
+                font-size: 0.875rem;
+                line-height: normal;
+                color: $vat;
+
+                @include breakpoint($only-mobile) {
+                  font-size: 0.75rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

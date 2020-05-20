@@ -1,0 +1,12 @@
+.magv2 {
+  &-pdp-section-text {
+    &,
+    * {
+      color: $magv2-text;
+    }
+
+    &.dark {
+      color: $magv2-section-title-color;
+    }
+  }
+}

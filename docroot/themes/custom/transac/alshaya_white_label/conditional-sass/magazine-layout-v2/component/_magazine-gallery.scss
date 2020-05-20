@@ -18,8 +18,6 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
     grid-gap: 1.25rem;
-    width: 72%;
-    float: #{$left};
 
     @include breakpoint($only-mobile) {
       grid-gap: 0.5rem;

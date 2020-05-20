@@ -1,0 +1,18 @@
+.magv2 {
+  &-compact-detail-wrapper {
+    .magv2-pdp {
+      &-price-wrapper {
+        color: $magv2-text;
+      }
+
+      &-final-price-wrapper {
+        color: $magv2-special-price;
+      }
+
+      &-title {
+        color: $magv2-text;
+        text-transform: capitalize;
+      }
+    }
+  }
+}

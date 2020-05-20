@@ -1,0 +1,15 @@
+.magv2-pdp-description-wrapper {
+  .magv2 {
+    &-pdp-section-title {
+      text-transform: capitalize;
+    }
+
+    &-desc-readmore-link {
+      color: $magv2-readmore-link;
+
+      &:hover {
+        color: $magv2-readmore-link;
+      }
+    }
+  }
+}

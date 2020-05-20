@@ -4,6 +4,7 @@ import PdpGallery from '../pdp-gallery';
 import PdpDescription from '../pdp-description';
 import PdpInfo from '../pdp-info';
 import PdpCart from '../pdp-cart';
+import PdpDetail from '../pdp-detail';
 
 const PdpLayout = () => {
   let skuItemCode = null;
@@ -38,10 +39,18 @@ const PdpLayout = () => {
           <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
         </div>
         <div className="magv2-sidebar">
+          <PdpDetail
+            title={title.label}
+            finalPrice={finalPrice}
+            pdpProductPrice={priceRaw}
+          />
           <PdpDescription
             skuCode={skuItemCode}
             pdpDescription={description}
             pdpShortDesc={shortDesc}
+            title={title}
+            pdpProductPrice={priceRaw}
+            finalPrice={finalPrice}
           />
           <PdpInfo
             skuCode={skuItemCode}

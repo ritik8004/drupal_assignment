@@ -106,6 +106,8 @@ $_spc-area-panel-placeholder: #b3b3b3;
 $_spc-billing-help: #007aff;
 $_spc-cart-alert: #238ae8;
 $_spc-warning-bg: #ffd1a1;
+$new_red: #c00;
+$grey-light-three: #f8f8f8;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1292,3 +1294,15 @@ $order_limit_border: $_order_limit_light_orange;
 $order_qty_limit_reached_txt: $mothercare-black;
 $order_qty_limit_reached_bg: $white-five;
 $order_qty_limit_reached_icon: $_order_limit_error_red;
+
+// Magazine V2 PDP
+$magv2-readmore-link: $windows-blue;
+$magv2-text: $brownish-grey;
+$magv2-special-price: $new_red;
+$magv2-price: $black;
+$magv2-desc-popup-bg: $grey-light-three;
+$magv2-desc-popup-content-bg: $white-five;
+$magv2-card-bg: $white-five;
+$magv2-price-strike: $grey-light;
+$magv2-section-title-color: $marine-blue;
+$magv2-pdp-title: $mothercare-black;

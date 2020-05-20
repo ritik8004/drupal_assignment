@@ -1,0 +1,21 @@
+.magv2 {
+  &-detail-wrapper {
+    .magv2 {
+      &-pdp {
+        &-title {
+          text-transform: capitalize;
+        }
+
+        &-price-container {
+          &.has-special-price {
+            .magv2-pdp {
+              &-final-price-wrapper {
+                color: $magv2-special-price;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
