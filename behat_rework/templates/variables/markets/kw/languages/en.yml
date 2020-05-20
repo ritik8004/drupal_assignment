@@ -1,5 +1,5 @@
 variables:
-  lang_feedback_url: '/en-hm-kw/send-feedback'
+  url_product_page: '/buy-disney-mickey-mouse-t-shirt-and-trousers-set.html'
   create_account: 'create an account'
   sign_in: 'Sign in'
   find_store: 'Find Store'
