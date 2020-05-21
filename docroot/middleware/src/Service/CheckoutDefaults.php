@@ -69,18 +69,24 @@ class CheckoutDefaults {
    *
    * @param array $data
    *   Cart data.
+   * @param int|string $uid
+   *   Drupal User ID.
    *
    * @return array|bool
    *   FALSE if something went wrong, updated cart data otherwise.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function applyDefaults(array $data) {
+  public function applyDefaults(array $data, $uid) {
     if (!empty($data['shipping']['method'])) {
       return $data;
     }
 
-    $order = $this->orders->getLastOrder($data['customer']['id']);
+    // Get last order only for Drupal Customers.
+    $order = $uid > 0
+      ? $this->orders->getLastOrder($data['customer']['id'])
+      : [];
+
     if ($order) {
       if ($data = $this->applyDefaultShipping($order)) {
         $data['payment']['default'] = $this->getDefaultPaymentFromOrder($order) ?? '';
@@ -88,7 +94,16 @@ class CheckoutDefaults {
     }
     elseif ($address = $this->getDefaultAddress($data)) {
       $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
-      $data = $this->selectHd($address, reset($methods['methods']));
+      if (count($methods)) {
+        $data = $this->selectHd($address, reset($methods), $address);
+      }
+    }
+    elseif (isset($data['shipping']['address'], $data['shipping']['address']['country_id'])) {
+      $address = $data['shipping']['address'];
+      $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
+      if (count($methods)) {
+        $data = $this->selectHd($address, reset($methods), $address);
+      }
     }
 
     return $data;
