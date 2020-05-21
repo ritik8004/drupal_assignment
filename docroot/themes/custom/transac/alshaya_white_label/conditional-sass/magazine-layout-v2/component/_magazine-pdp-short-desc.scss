@@ -3,6 +3,16 @@
     &-pdp-section-title {
       margin-bottom: 1.25rem;
       text-transform: lowercase;
+      display: flex;
+      align-items: center;
+
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/new-pdp-desc-icon.svg') center center no-repeat;
+        width: 3.125rem;
+        height: 3.125rem;
+        margin-#{$right}: 0.625rem;
+      }
     }
 
     &-pdp-section-text.short-desc {
@@ -17,6 +27,10 @@
         width: 100%;
         height: 5rem;
         background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
+      }
+
+      p {
+        margin-top: 0;
       }
     }
 

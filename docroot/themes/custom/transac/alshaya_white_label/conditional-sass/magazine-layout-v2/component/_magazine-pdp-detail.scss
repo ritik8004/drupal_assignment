@@ -15,7 +15,7 @@
         }
 
         &-price-wrapper {
-          font-size: 18px;
+          font-size: 1.125rem;
           line-height: normal;
           color: $magv2-price;
 
@@ -26,7 +26,8 @@
 
         &-price-amount,
         &-final-price-amount {
-          padding-#{$left}: 0.1875;
+          padding-#{$left}: 0.1875rem;
+          direction: ltr;
         }
 
         &-price-container {

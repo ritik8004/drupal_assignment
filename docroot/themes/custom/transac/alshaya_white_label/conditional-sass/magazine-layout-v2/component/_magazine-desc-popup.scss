@@ -1,43 +1,25 @@
 .magv2 {
   &-desc {
-    &-readmore-link {
-      .popup-overlay {
-        .popup-content {
-          width: 100% !important;
-          height: 100%;
-          overflow: hidden;
-          border: none !important;
-          position: absolute !important;
-          #{$right}: 0;
-          transition: all 0.5s ease-out;
-          padding: 0 !important;
-          background-color: $magv2-desc-popup-bg !important;
-          overflow-y: scroll;
+    &-popup {
+      &-container {
+        background-color: $magv2-desc-popup-bg;
+        position: fixed;
+        #{$right}: 0;
+        top: 0;
+        bottom: 0;
+        transition: transform 200ms cubic-bezier(0.4, 0, 1, 1);
+        transform: translateX(100%);
+        z-index: 14;
 
-          @include breakpoint($tablet) {
-            max-width: 23.4375rem;
-          }
+        html[lang='ar'] & {
+          transform: translateX(-100%);
+        }
 
-          .close {
-            cursor: pointer;
-            position: absolute;
-            #{$right}: 0;
-            color: transparent;
-            top: 50%;
-            transform: translateY(-50%);
-
-            @include icon('close') {
-              font-size: 2.5rem;
-              width: 2rem;
-              height: 2rem;
-              color: $spc-checkout-close-icon;
-            }
-          }
+        @include breakpoint($tablet) {
+          max-width: 23.4375rem;
         }
       }
-    }
 
-    &-popup {
       &-wrapper {
         display: flex;
         flex-direction: column;
@@ -49,14 +31,37 @@
         margin-bottom: 0.625rem;
         padding: 0.6875rem 1.875rem;
         background-color: $magv2-desc-popup-content-bg;
-        position: sticky;
+        position: fixed;
         top: 0;
+        width: 23.43rem;
+
+        .close {
+          cursor: pointer;
+          position: absolute;
+          #{$right}: 0;
+          color: transparent;
+          top: 50%;
+          transform: translateY(-50%);
+
+          @include icon('close') {
+            font-size: 2.5rem;
+            width: 2rem;
+            height: 2rem;
+            color: $spc-checkout-close-icon;
+          }
+        }
       }
 
       &-content-wrapper {
         padding: 1.25rem 1.875rem 0;
         background-color: $magv2-desc-popup-content-bg;
         flex-grow: 1;
+        margin-top: 4.1875rem;
+        overflow-y: scroll;
+
+        html[lang='ar'] & {
+          margin-top: 5.625rem;
+        }
 
         ul {
           padding-#{$left}: 1.25rem;
@@ -100,7 +105,7 @@
 
       &-price-amount,
       &-final-price-amount {
-        padding-left: 0.1875rem;
+        padding-#{$left}: 0.1875rem;
       }
 
       &-price-container {
@@ -141,4 +146,22 @@
 
 body.desc-overlay {
   overflow: hidden;
+
+  &::before {
+    background-color: rgba(0, 0, 0, 0.48);
+    opacity: 1;
+    z-index: 12;
+    transform: translate3d(0, 0, 0);
+    height: 100%;
+    pointer-events: unset;
+  }
+
+  .magv2-desc-popup-container {
+    transition: transform 400ms cubic-bezier(0, 0, 0.2, 1);
+    transform: translateX(0) !important;
+  }
+}
+
+.pupup-width {
+  width: 23.4375rem;
 }

@@ -8,7 +8,7 @@ const DescriptionContent = (props) => {
   } = props;
 
   return (
-    <>
+    <div className="magv2-desc-popup-container">
       <div className="magv2-desc-popup-wrapper">
         <div className="magv2-desc-popup-header-wrapper">
           <a className="close" onClick={() => closeModal()}>
@@ -31,7 +31,7 @@ const DescriptionContent = (props) => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default DescriptionContent;

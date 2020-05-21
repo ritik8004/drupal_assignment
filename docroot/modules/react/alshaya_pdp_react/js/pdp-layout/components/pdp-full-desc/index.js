@@ -9,45 +9,39 @@ const PdpFullDescription = (props) => {
     if (value['#items']) {
       const itemList = value['#items'];
       return (
-        <>
-          <PdpSectionText>
-            <ul>
-              {
-                itemList.map((item) => (
-                  <li>{item}</li>
-                ))
-              }
-            </ul>
-          </PdpSectionText>
-        </>
+        <PdpSectionText>
+          <ul>
+            {
+              itemList.map((item) => (
+                <li>{item}</li>
+              ))
+            }
+          </ul>
+        </PdpSectionText>
       );
     }
 
     return (
-      <>
-        <PdpSectionText>{parse(value['#markup'])}</PdpSectionText>
-      </>
+      <PdpSectionText>{parse(value['#markup'])}</PdpSectionText>
     );
   };
   return (
-    <>
-      <div className="magv2-desc-popup-description-wrapper">
-        {
-          pdpDescription.map((item) => (
-            <>
-              {((item.value['#markup']) || (item.value['#items']))
-                ? (
-                  <div className="desc-label-text-wrapper">
-                    {(item.label) ? (<PdpSectionText className="dark">{parse(item.label['#markup'])}</PdpSectionText>) : null}
-                    {CheckItem(item.value)}
-                  </div>
-                )
-                : null}
-            </>
-          ))
-        }
-      </div>
-    </>
+    <div className="magv2-desc-popup-description-wrapper">
+      {
+        pdpDescription.map((item) => (
+          <>
+            {((item.value['#markup']) || (item.value['#items']))
+              ? (
+                <div className="desc-label-text-wrapper">
+                  {(item.label) ? (<PdpSectionText className="dark">{parse(item.label['#markup'])}</PdpSectionText>) : null}
+                  {CheckItem(item.value)}
+                </div>
+              )
+              : null}
+          </>
+        ))
+      }
+    </div>
   );
 };
 export default PdpFullDescription;
