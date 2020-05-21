@@ -1,7 +1,6 @@
 import React from 'react';
 import TotalLineItem from '../total-line-item';
 import VatText from '../vat-text';
-import FreeDeliveryText from '../free-delivery-text';
 import ConditionalView from '../../common/components/conditional-view';
 import getStringMessage from '../strings';
 import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
@@ -12,7 +11,6 @@ class TotalLineItems extends React.Component {
 
     this.state = {
       cartPromo: [],
-      isDeliveryFree: false,
     };
   }
 
@@ -23,10 +21,9 @@ class TotalLineItems extends React.Component {
   applyDynamicPromotions = (event) => {
     const {
       applied_rules: cartPromo,
-      shipping_free: isDeliveryFree,
     } = event.detail;
 
-    this.setState({ cartPromo, isDeliveryFree });
+    this.setState({ cartPromo });
   };
 
   /**
@@ -51,7 +48,7 @@ class TotalLineItems extends React.Component {
 
   render() {
     const { totals } = this.props;
-    const { cartPromo, isDeliveryFree } = this.state;
+    const { cartPromo } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
     return (
@@ -59,7 +56,7 @@ class TotalLineItems extends React.Component {
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
         <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={totals.discount_amount} />
 
-        <ConditionalView condition={totals.shipping_incl_tax > 0}>
+        <ConditionalView condition={totals.shipping_incl_tax !== null}>
           <TotalLineItem
             name="surcharge-total"
             title={Drupal.t('Delivery')}
@@ -83,7 +80,10 @@ class TotalLineItems extends React.Component {
         <div className="hero-total">
           <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={totals.base_grand_total} />
           <div className="delivery-vat">
-            <FreeDeliveryText freeDelivery={isDeliveryFree} text={Drupal.t('Excluding delivery')} />
+            <ConditionalView condition={totals.shipping_incl_tax === null}>
+              <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>
+            </ConditionalView>
+
             <VatText />
           </div>
         </div>
