@@ -6,7 +6,7 @@
       }
 
       .grid-border {
-        fill: $venetian_red;
+        fill: $default_error;
       }
     }
   }
@@ -16,7 +16,7 @@
   &.active {
     svg .grid {
       use {
-        fill: $venetian_red;
+        fill: $default_error;
       }
     }
   }

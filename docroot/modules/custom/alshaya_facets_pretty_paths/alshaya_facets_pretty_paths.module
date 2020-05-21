@@ -156,14 +156,14 @@ function alshaya_facets_pretty_paths_page_attachments_alter(array &$page) {
     $summary = $pretty_paths_helper->getFacetSummary('plp');
 
     // If we have more than two filters, add robots meta.
-    if (count($summary) > 2) {
+    if (count($summary) > 3) {
       // Add robots meta tag to page.
       $page['#attached']['html_head']['robots'] = [
         [
           '#tag' => 'meta',
           '#attributes' => [
-            'rel' => 'robots',
-            'href' => 'noindex',
+            'name' => 'robots',
+            'content' => 'noindex',
           ],
         ],
         'noindex',

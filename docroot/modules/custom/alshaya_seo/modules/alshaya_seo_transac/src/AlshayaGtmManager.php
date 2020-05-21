@@ -1263,8 +1263,8 @@ class AlshayaGtmManager {
    *   Cart items in flocktory format.
    */
   public function formatCartFlocktory(array $items) {
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'utility.inc');
     $cart_items_flock = [];
-
     foreach ($items as $item) {
       $product_node = $this->skuManager->getDisplayNode($item['sku']);
       // Get product media.

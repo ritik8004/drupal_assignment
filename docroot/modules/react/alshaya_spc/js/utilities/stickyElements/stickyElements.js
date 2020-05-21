@@ -68,7 +68,7 @@ function stickyMobileCartPreview() {
   const breadCrumbHeight = document.getElementsByClassName('c-breadcrumb')[0].offsetHeight;
 
   // Menu offset.
-  if (superCategoryMenu) {
+  if (superCategoryMenu && superCategoryMenu.offsetHeight) {
     menuHeight = superCategoryMenu.offsetHeight + document.getElementById('block-mobilenavigation').offsetHeight;
   } else {
     menuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
