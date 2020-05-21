@@ -51,7 +51,8 @@
       var items = recommendedProducts;
       var count = position + 1;
       var excludeKeys = ['name', 'id', 'price', 'list', 'position'];
-      Object.entries(items).forEach(([, product]) => {
+      Object.entries(items).forEach(function(productItem) {
+        const product = productItem[1];
         // if (skus.includes(key)) {
           var impression = {};
           impression.id = product.id;
@@ -60,7 +61,7 @@
           impression.list = listName;
           impression.position = count;
           for (var gtmKey in product.gtm_attributes) {
-            if (!excludeKeys.includes(gtmKey)) {
+            if (!excludeKeys.indexOf(gtmKey)) {
               impression[gtmKey] = product.gtm_attributes[gtmKey];
             }
           }

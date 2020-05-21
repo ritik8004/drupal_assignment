@@ -16,7 +16,7 @@
           // If no ife error, we process further for add to cart.
           if (!$(that).closest('form').hasClass('ajax-submit-prevented')) {
             // Get closest `add to cart` form.
-            var form = that.closest('form');
+            var form = $(that).closest('form');
             var currentSelectedVariant = $(form).attr('data-sku');
             var page_main_sku = currentSelectedVariant;
             var variant_sku = '';
@@ -179,7 +179,15 @@
                   });
 
                   // Triggering event to notify react component.
-                  var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: (function () { return response;  }), productData: productData}});
+                  var event = new CustomEvent('refreshMiniCart', {
+                    bubbles: true,
+                    detail: {
+                      data: function () {
+                        return response;
+                      },
+                      productData: productData,
+                    }
+                  });
                   document.dispatchEvent(event);
 
                   var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: (function () { return response; })}});

@@ -2,15 +2,13 @@ var path  = require("path");
 
 var config = {
   entry: {
-    promise: ["core-js/modules/es.promise", "core-js/modules/es.array.iterator"],
-    object: ["core-js/modules/es.object.entries", "core-js/modules/es.object.keys", "core-js/modules/es.object.values", "core-js/modules/es.array.for-each"],
     autocomplete: './js/src/',
   },
   mode: 'production',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    publicPath: '/'
+    publicPath: '/',
   },
   devServer: {
     contentBase: './',
