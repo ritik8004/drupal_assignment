@@ -10,6 +10,20 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Enable size guide for Footlocker.
+ */
+function alshaya_fl_transac_update_8010() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.pdp_modal_links'],
+    'alshaya_acm_product'
+  );
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.pdp_modal_links')->set('size_guide_enabled', 1)->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Fix broken processor configs from alshaya_fl_transac_update_8004.
  */
 function alshaya_fl_transac_update_8009() {
