@@ -161,6 +161,7 @@ class NewCard extends React.Component {
               required
               name="spc-no-autocomplete-expiry"
               autoComplete="off"
+              onChange={(e) => this.handleCardExpiryChange(e, 'change')}
               onBlur={(e) => this.handleCardExpiryChange(e, 'blur')}
             />
             <div className="c-input__bar" />
