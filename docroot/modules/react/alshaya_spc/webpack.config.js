@@ -6,13 +6,13 @@ var config = {
     cart: './js/cart',
     minicart: './js/minicart',
     checkout: './js/checkout',
-    checkout_confirmation: './js/checkout-confirmation'
+    checkout_confirmation: './js/checkout-confirmation',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
     publicPath: buildPath,
-    chunkFilename: "[id].chunk.[chunkhash].js"
+    chunkFilename: "[id].chunk.[chunkhash].js",
   },
   devServer: {
     contentBase: './',
