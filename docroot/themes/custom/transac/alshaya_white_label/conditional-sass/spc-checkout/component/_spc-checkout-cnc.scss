@@ -3,6 +3,11 @@
   overflow-y: auto;
   background: $spc-checkout-sidebar-bg;
 
+  body.ie & {
+    -ms-grid-row: 1;
+    -ms-grid-column: 2;
+  }
+
   @include breakpoint($only-mobile) {
     height: 100vh;
   }
@@ -58,10 +63,20 @@
     width: 100%;
     margin-bottom: 0.625rem;
 
+    body.ie & {
+      display: -ms-grid;
+      -ms-grid-columns: 1fr 3rem;
+    }
+
     .spc-cnc-store-search-form-item {
       position: relative;
       margin-#{$right}: 0.625rem;
       border: 1px solid $spc-cnc-checkout-store-search-border;
+
+      body.ie & {
+        -ms-grid-row: 1;
+        -ms-grid-column: 1;
+      }
 
       @include icon(search, after) {
         color: $spc-cnc-store-search-icon;
@@ -97,6 +112,11 @@
       border: 1px solid $spc-cnc-store-search-icon;
       font-size: 0;
       transition: background 0.2s ease-in-out;
+
+      body.ie & {
+        -ms-grid-row: 1;
+        -ms-grid-column: 2;
+      }
 
       @include icon('mylocation', before) {
         font-size: 2rem;
