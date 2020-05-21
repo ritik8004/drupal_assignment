@@ -18,6 +18,10 @@
       transform: translateY(-50%);
       font-size: 2rem;
     }
+
+    span::first-letter {
+      text-transform: capitalize;
+    }
   }
 
   .delivery-information-preview {

@@ -68,6 +68,13 @@ export const placeOrder = (paymentMethod) => {
           message: response.data.error_message,
         });
 
+        // Push error to GTM.
+        const gtmInfo = {
+          errorMessage: response.data.error_message,
+          paymentMethod,
+        };
+        Drupal.logJavascriptError('place-order', gtmInfo);
+
         removeFullScreenLoader();
       },
       (error) => {

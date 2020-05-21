@@ -70,7 +70,17 @@ class MagentoInfo {
    */
   public function getMagentoStoreId() {
     $lang = $this->systemSettings->getRequestLanguage();
-    return $this->systemSettings->getSettings('store_id')[$lang] ?? NULL;
+    return $this->getMagentoStoreIds()[$lang] ?? NULL;
+  }
+
+  /**
+   * Get the magento store ids for all languages.
+   *
+   * @return array
+   *   Magento store ids.
+   */
+  public function getMagentoStoreIds() {
+    return $this->systemSettings->getSettings('store_id');
   }
 
   /**

@@ -12,7 +12,13 @@
 
     .quantity .ajax-progress-throbber {
       .throbber {
-        background-image: url(../imgs/icons/ic-loader.svg) !important;
+        background-image: url(#{$base_theme_loader_img_directory_path}) !important;
+      }
+    }
+
+    .delivery-options-mobile {
+      @include breakpoint($only-mobile) {
+        font-size: 0.8125rem;
       }
     }
   }
@@ -61,6 +67,7 @@
   .tooltip--head {
     font-family: $hnm-regular;
     color: $tooltip_text;
+    font-size: 0.8125rem;
 
     @include icon(infomation, after) {
       color: $tooltip_icon;
@@ -93,6 +100,7 @@
 .card__header,
 .privilege-card-wrapper-title {
   font-family: $hnm-regular;
+  font-size: 0.8125rem;
   color: $privilege_card_title;
 
   @include icon(chevrondown, after) {
@@ -115,6 +123,7 @@
 .promo-continue-shopping-wrapper {
   label {
     color: $primary_input_label_hnm;
+    font-size: 0.8125rem;
   }
 
   .coupon-code-wrapper,
@@ -123,7 +132,7 @@
     .form-item-privilege-card-number2 {
       .ajax-progress-throbber {
         .throbber {
-          background-image: url(../imgs/icons/ic-loader.svg) !important;
+          background-image: url(#{$base_theme_loader_img_directory_path}) !important;
         }
       }
     }
@@ -137,12 +146,17 @@
       text-transform: uppercase;
       background: $basket_header_promo_bg;
       color: $basket_header_promo_txt;
+      border: 1px solid $basket_header_promo_txt;
       font-size: 0.8125rem;
       letter-spacing: 1px;
+      padding: 0.875rem 0.75rem;
+      text-align: center;
     }
 
     &.remove {
-      color: $basket_header_promo_bg;
+      background: $basket_header_promo_bg;
+      color: $basket_header_promo_txt;
+      border: 1px solid $basket_header_promo_txt;
       font-family: $hnm-bold;
     }
   }
@@ -232,6 +246,8 @@ html[lang=ar] {
 
   .alias--cart {
     .tooltip--head {
+      font-size: 0.8125rem;
+
       &.not-available {
         color: $basket_tooltip_not_available;
 
@@ -272,7 +288,7 @@ html[lang=ar] {
 
   a {
     color: $basket_continue_shopping_btn;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
   }
 }
 
@@ -300,6 +316,6 @@ html[lang=ar] {
 }
 
 .alias--cart #table-cart-totals tr:nth-child(2) td:first-child span {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   display: block;
 }

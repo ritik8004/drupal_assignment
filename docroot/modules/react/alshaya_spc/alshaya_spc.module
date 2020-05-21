@@ -216,3 +216,13 @@ function alshaya_spc_user_logout(AccountInterface $account) {
     setrawcookie('PHPSESSID-legacy', '', REQUEST_TIME - 3600, '/');
   }
 }
+
+/**
+ * Global error message.
+ *
+ * @return string
+ *   Global error message.
+ */
+function _alshaya_spc_global_error_message() {
+  return t('Sorry, something went wrong and we are unable to process your request right now. Please try again later.')->render();
+}

@@ -111,7 +111,7 @@
     }
 
     input.error {
-      border-color: $venetian_red !important;
+      border-color: $primary_input_inline_error !important;
       border-width: 0 0 0.125rem !important;
     }
 
@@ -125,19 +125,19 @@
 
     .form-item {
       input {
-        background-color: $seashell_grey;
-        color: $hnm-black-three !important;
+        background-color: $default_background_color;
+        color: $primary_input !important;
         letter-spacing: normal !important;
       }
 
       label {
-        color: $hnm-black-three !important;
+        color: $primary_input_label !important;
         font-size: 0.8125rem !important;
 
         &.error {
-          color: $venetian_red !important;
+          color: $primary_input_inline_error !important;
           font-size: 0.6875rem;
-          background: $seashell_grey !important;
+          background: $default_background_color !important;
           bottom: -1.5rem;
         }
       }
@@ -169,7 +169,7 @@
     }
 
     &:hover:active {
-      color: $venetian_red;
+      color: $default-anchor-link-hover;
       text-decoration: none;
     }
   }
@@ -276,18 +276,18 @@
   }
 
   input {
-    background-color: $seashell_grey;
-    color: $hnm-black-three !important;
+    background-color: $default_background_color;
+    color: $primary_input !important;
   }
 
   label {
-    color: $hnm-black-three !important;
+    color: $primary_input_label !important;
     font-size: 0.8125rem !important;
 
     &.error {
-      color: $venetian_red !important;
+      color: $primary_input_inline_error !important;
       font-size: 0.6875rem;
-      background: $seashell_grey !important;
+      background: $default_background_color !important;
     }
   }
 }

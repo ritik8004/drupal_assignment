@@ -88,7 +88,7 @@ class CheckoutCartItem extends React.Component {
               </ConditionalView>
             </div>
             <div className="spc-product-price">
-              <SpecialPrice price={originalPrice} final_price={finalPrice} />
+              <SpecialPrice price={originalPrice} finalPrice={finalPrice} />
             </div>
           </div>
           <div className="spc-product-attributes">
