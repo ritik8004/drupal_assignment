@@ -26,7 +26,6 @@ variables:
   language_add_to_cart_link: 'أضف إلى سلة التسوق'
   language_vat: ''
   language_store_area: 'دبي'
-#  store_area: 'Dubai'
-  store_area: 'Dubai - United Arab Emirates'
+  store_area: 'Dubai'
 
 
