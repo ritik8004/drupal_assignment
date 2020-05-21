@@ -4,7 +4,8 @@
       .menu__links__wrapper {
         .menu--two__list-item {
           &:not(.move-to-right) {
-            height: 2.5rem;
+            height: 2.5625rem;
+            margin-bottom: 0.25rem;
 
             &::before {
               display: none;
@@ -41,9 +42,20 @@
 
           .menu--three__list {
             li {
-              min-height: 2.5rem;
+              min-height: 2.5625rem;
               margin-#{$left}: -1.25rem;
               padding-#{$left}: 1.5rem;
+              margin-bottom: 0;
+            }
+          }
+        }
+
+        .menu--three__list-item {
+          &:not(.move-to-right) {
+            &::after {
+              font-size: 1.5rem;
+              color: $mm_l2_l3_l4_icon;
+              font-weight: bold;
             }
           }
         }
@@ -58,8 +70,10 @@
           .menu--two__list-item {
             &:not(.move-to-right) {
               &.active {
-                .menu--three__list {
-                  .menu--three__list-item {
+                .menu--three__list,
+                .menu--four__list {
+                  .menu--three__list-item,
+                  .menu--four__list-item {
                     &:hover {
                       background: $mm_l2_l3_l4_hover_bg;
                     }
@@ -73,7 +87,7 @@
         > .menu__link-wrapper {
           .menu--one__link {
             &::after {
-              bottom: -0.0625rem;
+              bottom: -0.375rem;
             }
           }
         }
