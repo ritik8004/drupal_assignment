@@ -9,17 +9,24 @@ const PdpLayout = () => {
   let skuItemCode = null;
   let configurableCombinations = null;
   const { productInfo } = drupalSettings;
+  let title = '';
+  let priceRaw = '';
+  let finalPrice = '';
   if (productInfo) {
     [skuItemCode] = Object.keys(productInfo);
+    title = productInfo[skuItemCode].title.label;
+    priceRaw = productInfo[skuItemCode].priceRaw;
+    finalPrice = productInfo[skuItemCode].finalPrice;
     if (productInfo[skuItemCode].type === 'configurable') {
       configurableCombinations = drupalSettings.configurableCombinations;
+      const variantSelected = configurableCombinations[skuItemCode].firstChild;
+      title = productInfo[skuItemCode].variants[variantSelected].title;
+      priceRaw = productInfo[skuItemCode].variants[variantSelected].priceRaw;
+      finalPrice = productInfo[skuItemCode].variants[variantSelected].finalPrice;
     }
   }
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
-  const title = skuItemCode ? productInfo[skuItemCode].title : null;
-  const priceRaw = skuItemCode ? productInfo[skuItemCode].priceRaw : null;
-  const finalPrice = skuItemCode ? productInfo[skuItemCode].finalPrice : null;
   const pdpGallery = skuItemCode ? productInfo[skuItemCode].rawGallery : [];
 
   const emptyRes = (
@@ -37,7 +44,7 @@ const PdpLayout = () => {
         </ConditionalView>
       </div>
       <div className="magv2-main">
-        <div className="magv2-content">
+        <div className="magv2-content" id="pdp-gallery-refresh">
           <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
         </div>
         <div className="magv2-sidebar">
@@ -46,12 +53,13 @@ const PdpLayout = () => {
             pdpDescription={description}
             pdpShortDesc={shortDesc}
           />
-          <PdpInfo
-            skuCode={skuItemCode}
-            title={title}
-            pdpProductPrice={priceRaw}
-            finalPrice={finalPrice}
-          />
+          <div id="pdp-info">
+            <PdpInfo
+              title={title}
+              pdpProductPrice={priceRaw}
+              finalPrice={finalPrice}
+            />
+          </div>
           <PdpCart
             skuCode={skuItemCode}
             configurableCombinations={configurableCombinations}

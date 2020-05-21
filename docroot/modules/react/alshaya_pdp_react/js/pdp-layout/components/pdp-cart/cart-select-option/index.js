@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import QuantityDropdown from '../quantity-dropdown';
 import PdpGallery from '../../pdp-gallery';
+import PdpInfo from '../../pdp-info';
 
 class CartSelectOption extends React.Component {
   constructor(props) {
@@ -10,7 +11,7 @@ class CartSelectOption extends React.Component {
     this.state = {
       showGroup: false,
       groupName: null,
-      changeQty: false,
+      pdpRefresh: false,
       variantSelected: configurableCombinations[skuCode].firstChild
         ? configurableCombinations[skuCode].firstChild : skuCode,
     };
@@ -41,7 +42,7 @@ class CartSelectOption extends React.Component {
       selectedCombination += `${key}|${selectedValues[key]}||`;
     });
     this.setState({
-      changeQty: true,
+      pdpRefresh: true,
       variantSelected: configurableCombinations[skuCode].byAttribute[selectedCombination],
     });
   }
@@ -53,10 +54,10 @@ class CartSelectOption extends React.Component {
     const { code } = configurables;
     const { isGroup } = configurables;
     const {
-      showGroup, groupName, changeQty, variantSelected,
+      showGroup, groupName, pdpRefresh, variantSelected,
     } = this.state;
 
-    if (changeQty) {
+    if (pdpRefresh) {
       ReactDOM.render(
         <QuantityDropdown
           variantSelected={variantSelected}
@@ -71,6 +72,14 @@ class CartSelectOption extends React.Component {
           pdpGallery={productInfo[skuCode].variants[variantSelected].rawGallery}
         />,
         document.getElementById('pdp-gallery-refresh'),
+      );
+      ReactDOM.render(
+        <PdpInfo
+          title={productInfo[skuCode].variants[variantSelected].title}
+          pdpProductPrice={productInfo[skuCode].variants[variantSelected].priceRaw}
+          finalPrice={productInfo[skuCode].variants[variantSelected].finalPrice}
+        />,
+        document.getElementById('pdp-info'),
       );
       const addToCart = document.querySelector('#pdp-add-to-cart-form');
       addToCart.setAttribute('variantselected', variantSelected);
