@@ -44,6 +44,7 @@ export default class PdpGallery extends React.PureComponent {
     );
     const { open, currentIndex } = this.state;
     const { showFullScreenModal, closeModal } = this;
+    const isTouchDevice = window.innerWidth < 1024;
 
     return (images) ? (
 
@@ -93,10 +94,12 @@ export default class PdpGallery extends React.PureComponent {
           <div className="fullscreen-slider-wrapper">
             <a className="close" onClick={closeModal} />
             <Slider
-              dots={fullScreenSliderSettings.dots}
-              infinite={fullScreenSliderSettings.infinite}
-              arrows={fullScreenSliderSettings.arrows}
               initialSlide={currentIndex}
+              dots={fullScreenSliderSettings.dots}
+              infinite={!isTouchDevice}
+              arrows={fullScreenSliderSettings.arrows}
+              centerMode={!isTouchDevice}
+              centerPadding={isTouchDevice ? null : '350px'}
             >
               {images.map((image, key) => (
                 <PdpImageElement
