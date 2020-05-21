@@ -110,7 +110,7 @@
     "require-dev": {
         "drupal/devel": "^2.0.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
-        "geerlingguy/drupal-vm": "^4.9",
+        "geerlingguy/drupal-vm": "^5.2.0",
         "drupal/console": "^1.8"
     },
     "repositories": {
