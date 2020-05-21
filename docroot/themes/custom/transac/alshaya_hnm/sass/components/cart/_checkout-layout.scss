@@ -4,9 +4,11 @@
     font-family: $hnm-demibold;
     font-weight: normal;
     color: $primary_dark_color;
+    border: none;
+    font-size: 0.8125rem;
 
     a {
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       float: $right;
       color: $content_link_color;
       font-family: $hnm-demibold;
@@ -19,6 +21,7 @@
     .method,
     .delivery-address {
       font-family: $hnm-regular;
+      font-size: 0.8125rem;
       color: $checkout_layout_summary_block_method;
     }
   }
@@ -88,7 +91,7 @@
 .block-customer-service-block {
   background-color: $block_acm_customer_txt;
   font-family: $hnm-regular;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   text-align: center;
   text-transform: unset;
 
@@ -98,7 +101,7 @@
 
   p {
     color: $checkout_footer_txt;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     margin: 0;
 
     span.subtext {
@@ -169,7 +172,7 @@
     font-family: $hnm-bold;
     font-weight: normal;
     color: $checkout_footer_txt;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     letter-spacing: 1px;
     margin-bottom: 1.188rem;
     text-transform: uppercase;

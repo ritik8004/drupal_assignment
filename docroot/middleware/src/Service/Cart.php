@@ -808,10 +808,17 @@ class Cart {
 
       // Check the exception type from drupal.
       $exception_type = $this->exceptionType($e->getMessage());
-
+      // We want to throw error for add to cart action, to display errors
+      // if api fails. (We don't need to return cart object as we only care
+      // about error whenever we are on pdp / Add to cart form.)
+      // Because, If we return cart object, it won't show any error as we are
+      // not passing error with cart object, and with successful cart object it
+      // will show notification of add to cart (Which we don't need here.).
+      $is_add_to_Cart = (!empty($data['extension'])
+        && $data['extension']->action == CartActions::CART_ADD_ITEM);
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
-      if (!empty($exception_type)) {
+      if (!empty($exception_type) && !$is_add_to_Cart) {
         // Get cart object if already not available.
         $cart = !empty($cart) ? $cart : $this->getCart();
         // If cart is available and cart has item.
@@ -905,6 +912,10 @@ class Cart {
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+
+    // Resetting the array keys or key might not start with 0 if first method is
+    // cnc related and we filter it out.
+    $static[$key] = array_values($static[$key]);
 
     $cache = [
       'key' => $key,

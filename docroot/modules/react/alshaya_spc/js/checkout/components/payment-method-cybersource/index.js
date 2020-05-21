@@ -295,6 +295,7 @@ class PaymentMethodCybersource extends React.Component {
               }}
               name="spc-no-autocomplete-cy-exp"
               autoComplete="off"
+              onChange={(e) => this.handleCardExpiryChange(e, 'change')}
               onBlur={(e) => this.handleCardExpiryChange(e, 'blur')}
             />
             <div className="c-input__bar" />
