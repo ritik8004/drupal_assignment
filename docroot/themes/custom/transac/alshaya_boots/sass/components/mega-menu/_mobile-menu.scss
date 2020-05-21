@@ -83,11 +83,21 @@
     &.menu__list--active {
       .menu--three__list {
         &.menu__list--active {
-          .menu--four__list-item,
           .menu-two__link-wrapper {
             margin-#{$left}: 0;
             margin-#{$right}: 0;
             padding: 0 1rem;
+          }
+
+          .menu--four__list-item {
+            margin-#{$left}: 0;
+            margin-#{$right}: 0;
+          }
+
+          .menu--three__list-item {
+            .menu__in {
+              margin-#{$right}: 0;
+            }
           }
         }
       }
