@@ -332,20 +332,20 @@ class CheckoutComAPIWrapper {
    * @param float $amount
    *   The amount of order to convert.
    *
-   * @return float
+   * @return int
    *   The processed amount.
    */
   public function getCheckoutAmount($amount) {
     $currencyCode = $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code');
     if (in_array($currencyCode, self::FULL_VALUE_CURRENCIES, TRUE)) {
-      return (float) $amount;
+      return (int) $amount;
     }
 
     if (in_array($currencyCode, self::DIV_1000_VALUE_CURRENCIES, TRUE)) {
-      return (float) ($amount * self::DIV_1000);
+      return (int) ($amount * self::DIV_1000);
     }
 
-    return (float) ($amount * self::DIV_100);
+    return (int) ($amount * self::DIV_100);
   }
 
   /**
@@ -485,7 +485,7 @@ class CheckoutComAPIWrapper {
         [
           '%cart_id' => $cart->id(),
           '%message' => $e->getMessage(),
-          '@params' => Json::encode($params),
+          '@param' => Json::encode($params),
         ]
       );
 
