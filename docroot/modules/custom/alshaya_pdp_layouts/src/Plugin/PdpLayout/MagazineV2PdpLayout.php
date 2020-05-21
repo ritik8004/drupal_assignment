@@ -125,6 +125,15 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     // Get gallery data for the main product.
     if ($sku_entity instanceof SKUInterface) {
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $this->getGalleryVariables($sku_entity);
+      $max_sale_qty = 0;
+      if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
+        // We will take lower value for quantity options from
+        // available quantity and order limit.
+        $plugin = $sku_entity->getPluginInstance();
+        $max_sale_qty = $plugin->getMaxSaleQty($sku_entity->getSku());
+      }
+      $quantity = $this->skuManager->getStockQuantity($sku_entity);
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockQty'] = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
     }
 
     // Get the product description.

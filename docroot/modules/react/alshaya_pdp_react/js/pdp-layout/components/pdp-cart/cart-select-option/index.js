@@ -116,7 +116,7 @@ class CartSelectOption extends React.Component {
                   value={attr}
                   groupdata={JSON.stringify(configurables.values[attr])}
                 >
-                  {configurables.values[attr].EU}
+                  {configurables.values[attr][Object.keys(configurables.values[attr])[0]]}
                 </option>
               ))}
             </select>

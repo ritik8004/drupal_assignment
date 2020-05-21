@@ -132,7 +132,7 @@ class PdpCart extends React.Component {
   render() {
     const { configurableCombinations, skuCode, productInfo } = this.props;
     const { cartMaxQty } = productInfo[skuCode];
-    let stockQty = cartMaxQty;
+    let { stockQty } = productInfo[skuCode];
     let variantSelected = skuCode;
     if (typeof productInfo[skuCode].variants !== 'undefined') {
       variantSelected = drupalSettings.configurableCombinations[skuCode].firstChild;
