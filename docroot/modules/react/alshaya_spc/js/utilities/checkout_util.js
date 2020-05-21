@@ -5,7 +5,6 @@ import {
   getInfoFromStorage,
 } from './storage';
 import { updateCartApiUrl } from './update_cart';
-import { cartAvailableInStorage } from './get_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 
@@ -68,6 +67,13 @@ export const placeOrder = (paymentMethod) => {
           message: response.data.error_message,
         });
 
+        // Push error to GTM.
+        const gtmInfo = {
+          errorMessage: response.data.error_message,
+          paymentMethod,
+        };
+        Drupal.logJavascriptError('place-order', gtmInfo);
+
         removeFullScreenLoader();
       },
       (error) => {
@@ -104,21 +110,11 @@ export const removeBillingFlagFromStorage = (cart) => {
 };
 
 export const addShippingInCart = (action, data) => {
-  let cart = cartAvailableInStorage();
-  if (cart === false) {
-    return null;
-  }
-
-  if (!Number.isInteger(cart)) {
-    cart = cart.cart_id;
-  }
-
   const apiUrl = updateCartApiUrl();
   return axios
     .post(apiUrl, {
       action,
       shipping_info: data,
-      cart_id: cart,
       update_billing: isBillingSameAsShippingInStorage(),
     })
     .then(
@@ -154,21 +150,11 @@ export const addShippingInCart = (action, data) => {
  * @param {*} data
  */
 export const addBillingInCart = (action, data) => {
-  let cart = cartAvailableInStorage();
-  if (cart === false) {
-    return null;
-  }
-
-  if (!Number.isInteger(cart)) {
-    cart = cart.cart_id;
-  }
-
   const apiUrl = updateCartApiUrl();
   return axios
     .post(apiUrl, {
       action,
       billing_info: data,
-      cart_id: cart,
     })
     .then(
       (response) => response.data,

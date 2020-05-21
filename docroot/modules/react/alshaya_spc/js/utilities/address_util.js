@@ -6,9 +6,6 @@ import {
   removeFullScreenLoader, showFullScreenLoader,
   validateInfo,
 } from './checkout_util';
-import {
-  getInfoFromStorage,
-} from './storage';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import { extractFirstAndLastName } from './cart_customer_util';
@@ -336,8 +333,6 @@ export const addEditAddressToCustomer = (e) => {
                   // Remove loader.
                   removeFullScreenLoader();
 
-                  let cartData = {};
-
                   // If error, no need to process.
                   if (cartResult.error !== undefined) {
                     dispatchCustomEvent('addressPopUpError', {
@@ -355,8 +350,7 @@ export const addEditAddressToCustomer = (e) => {
                     return;
                   }
 
-                  cartData = getInfoFromStorage();
-                  cartData.cart = cartResult;
+                  const cartData = { cart: cartResult };
 
                   // Refresh cart.
                   dispatchCustomEvent('refreshCartOnAddress', cartData);
@@ -510,7 +504,6 @@ export const checkoutAddressProcess = (e) => {
         // Remove the loader.
         removeFullScreenLoader();
 
-        let cartData = {};
         // If any error, don't process further.
         if (cartResult.error !== undefined) {
           dispatchCustomEvent('addressPopUpError', {
@@ -520,8 +513,7 @@ export const checkoutAddressProcess = (e) => {
           return;
         }
 
-        cartData = getInfoFromStorage();
-        cartData.cart = cartResult;
+        const cartData = { cart: cartResult };
 
         // Trigger event.
         dispatchCustomEvent('refreshCartOnAddress', cartData);
@@ -663,10 +655,6 @@ export const processBillingUpdateFromForm = (e, shipping) => {
               const cartData = addBillingInCart('update billing', formData);
               if (cartData instanceof Promise) {
                 cartData.then((cartResult) => {
-                  let cartInfo = {
-                    cart: cartResult,
-                  };
-
                   // Remove loader.
                   removeFullScreenLoader();
 
@@ -690,9 +678,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                     return;
                   }
 
-                  // Merging with existing local.
-                  cartInfo = getInfoFromStorage();
-                  cartInfo.cart = cartResult;
+                  const cartInfo = { cart: cartResult };
 
                   // Trigger the event for update.
                   dispatchCustomEvent('onBillingAddressUpdate', cartInfo);

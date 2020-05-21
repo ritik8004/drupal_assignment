@@ -92,7 +92,10 @@ class AlshayaSpcCustomerController extends ControllerBase {
       }
     }
     else {
-      $response['error'] = TRUE;
+      $response = [
+        'error' => TRUE,
+        'error_message' => _alshaya_spc_global_error_message(),
+      ];
     }
 
     return new JsonResponse($response);

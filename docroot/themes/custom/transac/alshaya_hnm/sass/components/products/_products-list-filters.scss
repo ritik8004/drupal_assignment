@@ -94,6 +94,10 @@
               color: $default-anchor-link-hover;
             }
           }
+
+          .selected-facets {
+            margin-#{$right}: 1.75rem;
+          }
         }
 
         ul {

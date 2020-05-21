@@ -230,6 +230,28 @@ class Cart {
   }
 
   /**
+   * Restore shipping info and get cart.
+   *
+   * @return array
+   *   Cart data.
+   */
+  public function getRestoredCart() {
+    $cart = $this->getCart();
+
+    $this->resetCartCache();
+
+    if (!empty($cart['shipping']['method'])) {
+      $update = [
+        'extension' => ['action' => CartActions::CART_RESET],
+      ];
+
+      $cart = $this->updateCart($update);
+    }
+
+    return $cart;
+  }
+
+  /**
    * Create a new cart and get cart id.
    *
    * @return mixed
@@ -418,8 +440,8 @@ class Cart {
     // not set. City with value 'NONE' means, that this was added in CnC
     // by default and not changed by user.
     if ($update_billing
-      || empty($cart['cart']['billing_address']['firstname'])
-      || $cart['cart']['billing_address']['city'] == 'NONE') {
+      && (empty($cart['cart']['billing_address']['firstname'])
+      || $cart['cart']['billing_address']['city'] == 'NONE')) {
       $cart = $this->updateBilling($data['shipping']['shipping_address']);
     }
 
@@ -581,6 +603,7 @@ class Cart {
       ],
     ];
 
+    unset($billing_data['id']);
     $data['billing'] = $billing_data;
 
     return $this->updateCart($data);
@@ -639,7 +662,7 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function updatePayment(array $data, array $extension = []) {
-    $extension['action'] = 'update payment';
+    $extension['action'] = CartActions::CART_PAYMENT_UPDATE;
 
     $update = [
       'extension' => (object) $extension,
@@ -808,10 +831,17 @@ class Cart {
 
       // Check the exception type from drupal.
       $exception_type = $this->exceptionType($e->getMessage());
-
+      // We want to throw error for add to cart action, to display errors
+      // if api fails. (We don't need to return cart object as we only care
+      // about error whenever we are on pdp / Add to cart form.)
+      // Because, If we return cart object, it won't show any error as we are
+      // not passing error with cart object, and with successful cart object it
+      // will show notification of add to cart (Which we don't need here.).
+      $is_add_to_Cart = (!empty($data['extension'])
+        && $data['extension']->action == CartActions::CART_ADD_ITEM);
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
-      if (!empty($exception_type)) {
+      if (!empty($exception_type) && !$is_add_to_Cart) {
         // Get cart object if already not available.
         $cart = !empty($cart) ? $cart : $this->getCart();
         // If cart is available and cart has item.
@@ -878,7 +908,7 @@ class Cart {
       return [];
     }
 
-    $key = md5(json_encode($data));
+    $key = md5(json_encode($data['address']));
     if (isset($static[$key])) {
       return $static[$key];
     }
@@ -905,6 +935,10 @@ class Cart {
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+
+    // Resetting the array keys or key might not start with 0 if first method is
+    // cnc related and we filter it out.
+    $static[$key] = array_values($static[$key]);
 
     $cache = [
       'key' => $key,
@@ -1012,10 +1046,7 @@ class Cart {
 
       // Remove cart id and other caches from session.
       $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
-      $this->cache->delete('delivery_methods');
-      $this->cache->delete('payment_methods_home_delivery');
-      $this->cache->delete('payment_methods_click_and_collect');
-      $this->cache->delete('payment_method');
+      $this->resetCartCache();
 
       // Set order in session for later use.
       $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
@@ -1162,6 +1193,16 @@ class Cart {
     $cart['payment'] = [];
 
     return $cart;
+  }
+
+  /**
+   * Wrapper function to reset cart cache.
+   */
+  protected function resetCartCache() {
+    $this->cache->delete('delivery_methods');
+    $this->cache->delete('payment_methods_home_delivery');
+    $this->cache->delete('payment_methods_click_and_collect');
+    $this->cache->delete('payment_method');
   }
 
 }

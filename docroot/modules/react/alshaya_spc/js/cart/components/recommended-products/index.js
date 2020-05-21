@@ -4,6 +4,7 @@ import RecommendedProduct from '../../../utilities/recommended-product';
 import SectionTitle from '../../../utilities/section-title';
 import { getRecommendedProducts } from '../../../utilities/checkout_util';
 import isRTL from '../../../utilities/rtl';
+import dispatchCustomEvent from '../../../utilities/events';
 // Use smoothscroll to fill for Safari and IE,
 // Otherwise while scrollIntoView() is supported by all,
 // Smooth transition is not supported apart from Chrome & FF.
@@ -64,6 +65,7 @@ export default class CartRecommendedProducts extends React.Component {
             // Storing in localstorage to be used by GTM.
             const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
             localStorage.setItem(key, JSON.stringify(result.data));
+            dispatchCustomEvent('recommendedProductsLoad', { products: result.data });
           }
         });
       }

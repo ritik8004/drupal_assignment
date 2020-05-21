@@ -158,7 +158,7 @@ class CartController {
       return new JsonResponse(['error' => TRUE]);
     }
 
-    $data = $this->cart->getCart();
+    $data = $this->cart->getRestoredCart();
 
     // Check customer email And check drupal session customer id to validate,
     // if current cart is associated with logged in user or not.
@@ -370,7 +370,7 @@ class CartController {
     // Here we will do the processing of cart to make it in required format.
     $uid = $this->getDrupalInfo('uid') ?: 0;
 
-    if ($uid > 0 && $updated = $this->checkoutDefaults->applyDefaults($data)) {
+    if ($updated = $this->checkoutDefaults->applyDefaults($data, $uid)) {
       $data = $updated;
     }
 
@@ -474,11 +474,16 @@ class CartController {
         if (empty($uid) && (empty($cart_customer_id) || ($this->cart->getCartCustomerEmail() !== $email))) {
           $customer = $this->magentoCustomer->getCustomerByMail($email);
           if (empty($customer)) {
-            $customer = $this->magentoCustomer->createCustomer(
-              $email,
-              $shipping_info['static']['firstname'],
-              $shipping_info['static']['lastname']
-            );
+            try {
+              $customer = $this->magentoCustomer->createCustomer(
+                $email,
+                $shipping_info['static']['firstname'],
+                $shipping_info['static']['lastname']
+              );
+            }
+            catch (\Exception $e) {
+              return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+            }
           }
 
           if ($customer && $customer['id']) {
