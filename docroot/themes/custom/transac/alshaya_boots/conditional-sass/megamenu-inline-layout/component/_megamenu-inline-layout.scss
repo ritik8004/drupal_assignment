@@ -33,6 +33,7 @@
               border-#{$right}: 1px solid $mm_l2_l3_l4_divider_border;
               margin-bottom: 0.5rem;
               margin-top: 0;
+              margin-#{$left}: 0.0625rem;
             }
           }
 
@@ -43,7 +44,7 @@
           .menu--three__list {
             li {
               min-height: 2.5625rem;
-              margin-#{$left}: -1.25rem;
+              margin-#{$left}: 0.1875rem;
               padding-#{$left}: 1.5rem;
               margin-bottom: 0;
             }
@@ -56,6 +57,11 @@
               font-size: 1.5rem;
               color: $mm_l2_l3_l4_icon;
               font-weight: bold;
+            }
+
+            .menu--four__list {
+              margin-#{$left}: 0.0625rem;
+              padding-#{$left}: 0;
             }
           }
         }
