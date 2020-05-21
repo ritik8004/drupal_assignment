@@ -263,17 +263,6 @@
 .menu--three__list-item {
   a.menu--three__link {
     position: relative;
-
-    @include breakpoint($upto-desktop) {
-      @include icon(chevron#{$right}, after) {
-        position: absolute;
-        color: $header_mobile_menu_arrow;
-        #{$right}: 0;
-        font-size: 1.25rem;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-    }
   }
 
   .contains-sublink .menu--three__link {
