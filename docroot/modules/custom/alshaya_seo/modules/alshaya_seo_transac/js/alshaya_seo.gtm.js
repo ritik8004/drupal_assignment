@@ -1200,7 +1200,7 @@
    * @param error
    */
   Drupal.logJavascriptError = function (context, error) {
-    var message = (error.message !== undefined)
+    var message = (error && error.message !== undefined)
       ? error.message
       : error;
     var errorData = {
