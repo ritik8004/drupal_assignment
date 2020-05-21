@@ -79,8 +79,10 @@ class MagentoCustomer {
       'searchCriteria[filterGroups][0][filters][0][value]' => $email,
       'searchCriteria[filterGroups][0][filters][0][condition_type]' => 'eq',
       'searchCriteria[filterGroups][1][filters][0][field]' => 'store_id',
-      'searchCriteria[filterGroups][1][filters][0][value]' => $this->magentoInfo->getMagentoStoreId(),
-      'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'in',
+      'searchCriteria[filterGroups][1][filters][0][value]' => implode(
+        ',', array_values($this->magentoInfo->getMagentoStoreIds())
+      ),
+      'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'IN',
     ];
 
     $result = $this->magentoApiWrapper->doRequest('GET', $url, $query);

@@ -61,13 +61,18 @@ export default class CompletePurchase extends React.Component {
       || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0) {
         smoothScrollTo('#spc-payment-methods');
       }
-
       return;
     }
+
+    const checkoutButton = e.target.parentNode;
+    checkoutButton.classList.add('in-active');
 
     try {
       const validated = validateBeforePlaceOrder();
       if (validated === false) {
+        if (this.completePurchaseButtonActive()) {
+          checkoutButton.classList.remove('in-active');
+        }
         return;
       }
 

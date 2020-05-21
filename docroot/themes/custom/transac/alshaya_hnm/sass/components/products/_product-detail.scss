@@ -67,6 +67,7 @@
 
     .content--item-code {
       color: $pdp_product_itemcode;
+      font-size: 0.8125rem !important;
     }
   }
 }
@@ -903,7 +904,7 @@ article[gtm-sku-type="simple"] {
     font-family: $hnm-regular;
 
     &::before {
-      background: url(../imgs/icons/ic-loader.svg) no-repeat;
+      background: url(#{$base_theme_loader_img_directory_path}) no-repeat;
       background-size: contain;
     }
   }

@@ -13,18 +13,18 @@
       padding-#{$right}: 1.55rem !important;
       line-height: 1.8;
       overflow: hidden;
-      color: $hnm-black-three !important;
-      background-color: $seashell_grey;
+      color: $primary_input !important;
+      background-color: $default_background_color;
     }
 
     label {
-      color: $hnm-black-three !important;
+      color: $primary_input_label !important;
       font-size: 0.8125rem !important;
 
       &.error {
-        color: $venetian_red !important;
+        color: $primary_input_inline_error !important;
         font-size: 0.6875rem;
-        background: $seashell_grey !important;
+        background: $default_background_color !important;
         bottom: -1.5rem;
       }
     }
@@ -83,18 +83,18 @@
     }
 
     input {
-      background-color: $seashell_grey;
-      color: $hnm-black-three !important;
+      background-color: $default_background_color;
+      color: $primary_input !important;
     }
 
     label {
-      color: $hnm-black-three !important;
+      color: $primary_input_label !important;
       font-size: 0.8125rem !important;
 
       &.error {
-        color: $venetian_red !important;
+        color: $primary_input_inline_error !important;
         font-size: 0.6875rem;
-        background: $seashell_grey !important;
+        background: $default_background_color !important;
         bottom: -1.5rem;
       }
     }
@@ -197,6 +197,21 @@
   .mobile-number-field {
     label {
       text-transform: unset;
+    }
+  }
+}
+
+.alias--contact {
+  .webform-submission-alshaya-contact-form {
+    .contact-us-feedback,
+    .contact-us-type,
+    .contact-us-reason {
+      select.form-select {
+        @include breakpoint($upto-desktop) {
+          font-size: 1rem;
+          height: 2.7rem;
+        }
+      }
     }
   }
 }

@@ -25,8 +25,8 @@
     #{$right}: 0.5rem;
 
     @include breakpoint($only-tablet) {
-      top: 1.2rem !important;
-      #{$right}: 1.4rem !important;
+      top: 1.6rem !important;
+      #{$right}: 1rem !important;
     }
 
     @include breakpoint($desktop) {
@@ -45,13 +45,6 @@
 
       @include breakpoint($desktop) {
         padding-#{$right}: 2rem !important;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      .algolia-search-cleartext-icon {
-        opacity: 0;
-        visibility: hidden;
       }
     }
 
@@ -102,7 +95,7 @@
       }
 
       @include breakpoint($only-tablet) {
-        padding-#{$right}: 2rem;
+        padding-#{$left}: 2rem;
       }
 
       @include breakpoint($upto-desktop) {
@@ -178,8 +171,7 @@
         border-radius: 0;
 
         @include breakpoint($only-tablet) {
-          #{$right}: 0.85rem;
-          #{$left}: auto;
+          #{$right}: auto;
           font-size: 1.75rem;
         }
 
@@ -236,8 +228,15 @@
   &.focused {
     #alshaya-algolia-autocomplete {
       .react-autosuggest__container {
+        &::before,
         &::after {
           opacity: 0;
+        }
+
+        .react-autosuggest__input {
+          @include breakpoint($only-tablet) {
+            padding-#{$left}: 0.7rem !important;
+          }
         }
       }
     }

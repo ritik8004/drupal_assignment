@@ -474,11 +474,16 @@ class CartController {
         if (empty($uid) && (empty($cart_customer_id) || ($this->cart->getCartCustomerEmail() !== $email))) {
           $customer = $this->magentoCustomer->getCustomerByMail($email);
           if (empty($customer)) {
-            $customer = $this->magentoCustomer->createCustomer(
-              $email,
-              $shipping_info['static']['firstname'],
-              $shipping_info['static']['lastname']
-            );
+            try {
+              $customer = $this->magentoCustomer->createCustomer(
+                $email,
+                $shipping_info['static']['firstname'],
+                $shipping_info['static']['lastname']
+              );
+            }
+            catch (\Exception $e) {
+              return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+            }
           }
 
           if ($customer && $customer['id']) {

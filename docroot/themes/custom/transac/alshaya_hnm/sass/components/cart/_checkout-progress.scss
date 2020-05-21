@@ -9,6 +9,7 @@
 
   .checkout-progress__step {
     font-family: $hnm-regular;
+    font-size: 0.8125rem;
 
     html[lang=ar] & {
       font-family: $hnm-regular;
@@ -61,8 +62,13 @@
   .checkout-progress__step.-previous {
     color: $checkout_progress_complete_text;
   }
+
+  .product--count {
+    font-size: 0.8125rem;
+  }
 }
 
 #block-checkoutsummaryblock {
-  border: 1px solid $secondary_border;
+  border: none;
+  background: $order_summary_bg;
 }
