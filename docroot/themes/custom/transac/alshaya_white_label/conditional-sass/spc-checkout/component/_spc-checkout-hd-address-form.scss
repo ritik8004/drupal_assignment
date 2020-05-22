@@ -9,14 +9,27 @@
         @include breakpoint($tablet) {
           display: grid;
           grid-template-columns: 1fr 22.5rem;
+
+          body.ie & {
+            display: -ms-grid;
+            -ms-grid-columns: 1fr 22.5rem;
+          }
         }
 
         @include breakpoint($desktop) {
           grid-template-rows: 37.5rem;
+
+          body.ie & {
+            -ms-grid-rows: 37.5rem;
+          }
         }
 
         @include breakpoint($only-tablet) {
           grid-template-rows: 31.25rem;
+
+          body.ie & {
+            -ms-grid-rows: 31.25rem;
+          }
         }
       }
 
@@ -31,6 +44,11 @@
         position: relative;
         overflow-y: auto;
         background: $spc-checkout-sidebar-bg;
+
+        body.ie & {
+          -ms-grid-row: 1;
+          -ms-grid-column: 2;
+        }
 
         &.block-overflow {
           overflow-y: hidden;
@@ -153,6 +171,11 @@
       clear: both;
 
       @include breakpoint($tablet) {
+        body.ie & {
+          -ms-grid-row: 1;
+          -ms-grid-column: 1;
+        }
+
         &::after {
           content: '';
           #{$right}: 0;

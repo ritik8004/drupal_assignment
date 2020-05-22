@@ -269,12 +269,14 @@ class CartController {
     $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
     $data['totals'] = [
       'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'],
-      'shipping_incl_tax' => $cart_data['totals']['shipping_incl_tax'] ?? 0,
       'base_grand_total' => $cart_data['totals']['base_grand_total'],
       'discount_amount' => $cart_data['totals']['discount_amount'],
-      'free_delivery' => FALSE,
       'surcharge' => 0,
     ];
+
+    $data['totals']['shipping_incl_tax'] = !empty($cart_data['shipping']['method'])
+      ? $cart_data['totals']['shipping_incl_tax'] ?? 0
+      : NULL;
 
     if (is_array($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
       $data['totals']['surcharge'] = $data['surcharge']['amount'];
