@@ -115,6 +115,13 @@ class Cart {
   protected $drupal;
 
   /**
+   * Orders service.
+   *
+   * @var \App\Service\Orders
+   */
+  protected $orders;
+
+  /**
    * Logger service.
    *
    * @var \Psr\Log\LoggerInterface
@@ -146,6 +153,8 @@ class Cart {
    *   Checkout.com API Wrapper.
    * @param \App\Service\Drupal\Drupal $drupal
    *   Drupal service.
+   * @param \App\Service\Orders $orders
+   *   Orders service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
    */
@@ -161,6 +170,7 @@ class Cart {
     SessionCache $cache,
     CustomerCards $customer_cards,
     Drupal $drupal,
+    Orders $orders,
     LoggerInterface $logger
   ) {
     $this->magentoInfo = $magento_info;
@@ -174,6 +184,7 @@ class Cart {
     $this->cache = $cache;
     $this->customerCards = $customer_cards;
     $this->drupal = $drupal;
+    $this->orders = $orders;
     $this->logger = $logger;
   }
 
@@ -822,8 +833,14 @@ class Cart {
       static::$cart = NULL;
 
       // Re-set cart id in session if exception is for cart not found.
+      // Also try to do the same operation again for the user.
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
         $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+        $info = $this->drupal->getSessionCustomerInfo();
+        $newCart = $this->createCart($info['customer_id'] ?? 0);
+        if (empty($newCart['error'])) {
+          return $this->updateCart($data);
+        }
       }
       else {
         $this->cancelCartReservation($e->getMessage());
@@ -1036,46 +1053,91 @@ class Cart {
    */
   public function placeOrder(array $data) {
     $url = sprintf('carts/%d/order', $this->getCartId());
+    $cart = $this->getCart();
 
     try {
-      $cart = $this->getCart();
-      $email = $this->getCartCustomerEmail();
-
       $result = $this->magentoApiWrapper->doRequest('PUT', $url, ['json' => $data]);
       $order_id = (int) str_replace('"', '', $result);
-
-      // Remove cart id and other caches from session.
-      $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
-      $this->resetCartCache();
-
-      // Set order in session for later use.
-      $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
-
-      // Post order id and cart data to Drupal.
-      $data = [
-        'order_id' => (int) $order_id,
-        'cart' => $cart['cart'],
-        'payment_method' => $data['paymentMethod']['method'],
-      ];
-
-      $this->drupal->triggerCheckoutEvent('place order success', $data);
-
-      return [
-        'success' => TRUE,
-        'order_id' => $order_id,
-        'secure_order_id' => SecureText::encrypt(
-          json_encode(['order_id' => $order_id, 'email' => $email]),
-          $this->magentoInfo->getMagentoSecretInfo()['consumer_secret']
-        ),
-      ];
+      return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
     }
     catch (\Exception $e) {
+      $doubleCheckEnabled = $this->settings->getSettings('alshaya_checkout_settings')['place_order_double_check_after_exception'];
+      if ($doubleCheckEnabled) {
+        try {
+          $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
+          $lastOrder = $this->orders->getLastOrder((int) $this->getCartCustomerId());
+
+          if ($lastOrder && $cartReservedOrderId === $lastOrder['increment_id']) {
+            $this->logger->warning('Place order failed but order was placed, we will move forward. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
+              '@message' => $e->getMessage(),
+              '@order_id' => $cartReservedOrderId,
+              '@cart_id' => $cart['cart']['id'],
+            ]);
+
+            return $this->processPostOrderPlaced((int) $lastOrder['order_id'], $data['paymentMethod']['method']);
+          }
+          else {
+            $this->logger->warning('Place order failed and we tried to double check but order was not found. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
+              '@message' => $e->getMessage(),
+              '@order_id' => $cartReservedOrderId,
+              '@cart_id' => $cart['cart']['id'],
+            ]);
+          }
+        }
+        catch (\Exception $doubleException) {
+          $this->logger->error('Error occurred while trying to double check. Exception: @message', [
+            '@message' => $doubleException->getMessage(),
+          ]);
+        }
+      }
+
       $this->cancelCartReservation($e->getMessage());
       $this->logger->error('Error while placing order. Error message: @message', [
         '@message' => $e->getMessage(),
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Process post order is placed.
+   *
+   * @param int $order_id
+   *   Order ID.
+   * @param string $payment_method
+   *   Payment method.
+   *
+   * @return array
+   *   Final status array.
+   */
+  private function processPostOrderPlaced(int $order_id, string $payment_method) {
+    $cart = $this->getCart();
+    $email = $this->getCartCustomerEmail();
+
+    // Remove cart id and other caches from session.
+    $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+    $this->resetCartCache();
+
+    // Set order in session for later use.
+    $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
+
+    // Post order id and cart data to Drupal.
+    $data = [
+      'order_id' => (int) $order_id,
+      'cart' => $cart['cart'],
+      'payment_method' => $payment_method,
+    ];
+
+    $this->drupal->triggerCheckoutEvent('place order success', $data);
+
+    return [
+      'success' => TRUE,
+      'order_id' => $order_id,
+      'secure_order_id' => SecureText::encrypt(
+        json_encode(['order_id' => $order_id, 'email' => $email]),
+        $this->magentoInfo->getMagentoSecretInfo()['consumer_secret']
+      ),
+    ];
   }
 
   /**

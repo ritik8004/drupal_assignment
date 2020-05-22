@@ -1024,7 +1024,7 @@
             "version": "3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "dist": {
@@ -22570,7 +22570,17 @@
                 "virtual machine",
                 "vm"
             ],
-            "time": "2020-02-27T17:21:18+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/geerlingguy",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/geerlingguy",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-03-20T19:32:20+00:00"
         },
         {
             "name": "jakoch/phantomjs-installer",
