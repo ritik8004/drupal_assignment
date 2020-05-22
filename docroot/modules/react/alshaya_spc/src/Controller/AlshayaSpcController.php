@@ -417,6 +417,11 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Please enter @label.'),
     ];
 
+    $strings[] = [
+      'key' => 'global_error',
+      'value' => _alshaya_spc_global_error_message(),
+    ];
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
