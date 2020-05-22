@@ -239,11 +239,11 @@ header.c-header {
   .block-cart-mini-block,
   .block-alshaya-react-mini-cart {
     .cart-link {
-      background: url(#{$aeo_theme_img_directory_path}/icons/basket.svg) no-repeat;
+      background: url(#{$muji_theme_img_directory_path}/icons/basket.svg) no-repeat;
       margin-bottom: 0;
 
       &:hover {
-        background: url(#{$aeo_theme_img_directory_path}/icons/basket-filled.svg) no-repeat;
+        background: url(#{$muji_theme_img_directory_path}/icons/basket-filled.svg) no-repeat;
 
         .quantity {
           color: $primary_minicart_hover;
@@ -349,7 +349,7 @@ header.c-header {
     .block-system-branding-block .site-brand-home {
       @include breakpoint($only-tablet) {
         img {
-          width: 17.5625rem;
+          width: 13rem;
         }
       }
     }
@@ -397,7 +397,7 @@ header.c-header {
 
     a {
       @include breakpoint($only-tablet) {
-        max-width: 17.5625rem;
+        max-width: 13rem;
 
         html[lang=ar] & {
           max-width: none;
@@ -506,7 +506,7 @@ header {
 
 .c-menu-primary {
   .mobile--menu {
-    @include icon_img('#{$aeo_theme_img_directory_path}/icons/mobile-menu.svg', 2.125rem, 2.125rem);
+    @include icon_img('#{$muji_theme_img_directory_path}/icons/mobile-menu.svg', 2.125rem, 2.125rem);
 
     &::before {
       @include breakpoint($only-mobile) {
@@ -551,7 +551,7 @@ header {
       top: 0.6rem;
       #{$left}: 4rem;
 
-      @include icon_img('#{$aeo_theme_img_directory_path}/assets/search.svg', 2rem, 2rem);
+      @include icon_img('#{$muji_theme_img_directory_path}/assets/search.svg', 2rem, 2rem);
 
       &::before {
         @include breakpoint($only-mobile) {
@@ -584,7 +584,7 @@ header {
   }
 
   .store {
-    @include icon_img('#{$aeo_theme_img_directory_path}/icons/store-finder.svg', 2rem, 2rem);
+    @include icon_img('#{$muji_theme_img_directory_path}/icons/store-finder.svg', 2rem, 2rem);
 
     &::before {
       content: '';
