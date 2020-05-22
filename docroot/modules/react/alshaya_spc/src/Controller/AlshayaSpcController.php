@@ -417,6 +417,16 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Please enter @label.'),
     ];
 
+    $strings[] = [
+      'key' => 'transaction_failed',
+      'value' => $this->t('Transaction has been declined. Please try again later.'),
+    ];
+
+    $strings[] = [
+      'key' => 'payment_error',
+      'value' => $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'),
+    ];
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
