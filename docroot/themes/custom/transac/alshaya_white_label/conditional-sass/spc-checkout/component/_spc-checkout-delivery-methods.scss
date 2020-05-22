@@ -41,6 +41,10 @@
       margin-#{$right}: 0.625rem;
       min-width: 3.25rem;
 
+      body.ie & {
+        height: 3.25rem;
+      }
+
       @include breakpoint($only-mobile) {
         float: $left;
       }
