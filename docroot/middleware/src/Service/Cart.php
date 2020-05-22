@@ -1176,6 +1176,13 @@ class Cart {
     $cart['customer'] = $cart['cart']['customer'] ?? [];
     unset($cart['cart']['customer']);
 
+    foreach ($cart['customer']['addresses'] ?? [] as $key => $address) {
+      $cart['customer']['addresses'][$key]['region'] = $address['region_id'];
+
+      $cart['customer']['addresses'][$key]['customer_address_id'] = $address['id'];
+      unset($cart['customer']['addresses'][$key]['id']);
+    }
+
     // Format shipping info.
     $cart['shipping'] = $cart['cart']['extension_attributes']['shipping_assignments'][0]['shipping'] ?? [];
     unset($cart['cart']['extension_attributes']['shipping_assignments']);
