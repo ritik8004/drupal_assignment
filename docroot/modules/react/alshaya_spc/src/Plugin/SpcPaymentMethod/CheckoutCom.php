@@ -123,11 +123,6 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
       'key' => 'invalid_cvv',
       'value' => $this->t('Invalid security code (CVV)'),
     ];
-
-    $build['#strings']['transaction_failed'] = [
-      'key' => 'transaction_failed',
-      'value' => $this->t('Transaction has been declined. Please try again later.'),
-    ];
   }
 
   /**

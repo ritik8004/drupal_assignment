@@ -418,8 +418,13 @@ class AlshayaSpcController extends ControllerBase {
     ];
 
     $strings[] = [
-      'key' => 'global_error',
-      'value' => _alshaya_spc_global_error_message(),
+      'key' => 'transaction_failed',
+      'value' => $this->t('Transaction has been declined. Please try again later.'),
+    ];
+
+    $strings[] = [
+      'key' => 'payment_error',
+      'value' => $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'),
     ];
 
     $build = [

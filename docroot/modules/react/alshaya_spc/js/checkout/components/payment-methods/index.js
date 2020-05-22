@@ -33,7 +33,7 @@ export default class PaymentMethods extends React.Component {
       Cookies.remove('middleware_payment_error');
 
       const paymentErrorInfo = JSON.parse(paymentError);
-      let message = getStringMessage('global_error');
+      let message = getStringMessage('payment_error');
       // If K-NET error and have K-Net Error details.
       if (paymentErrorInfo.payment_method !== undefined
         && paymentErrorInfo.payment_method === 'knet'
