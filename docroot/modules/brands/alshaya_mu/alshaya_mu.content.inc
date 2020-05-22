@@ -2,7 +2,7 @@
 
 /**
  * @file
- * File to create default content for Westelm.
+ * File to create default content for MUJI.
  */
 
 use Drupal\block_content\Entity\BlockContent;
