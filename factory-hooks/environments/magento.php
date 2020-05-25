@@ -297,6 +297,12 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 5, 'ar' => 6],
     ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
   ],
   'bbw_uat' => [
     'url' => 'https://staging-bbw2.store.alshaya.com',
@@ -315,6 +321,12 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 13, 'ar' => 16],
     ],
+    'bh' => [
+      'store_id' => ['en' => 30, 'ar' => 27],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 36, 'ar' => 33],
+    ],
   ],
   'bbw_prod' => [
     'url' => 'http://bbw.store.alshaya.com',
@@ -327,6 +339,12 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 12, 'ar' => 15],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 38, 'ar' => 35],
     ],
   ],
   // Foot Locker.
@@ -516,6 +534,18 @@ $magentos = [
       'magento_lang_prefix' => [
         'en' => 'egy_en',
         'ar' => 'egy_ar',
+      ],
+    ],
+    'bh' => [
+      'magento_lang_prefix' => [
+        'en' => 'bhr_en',
+        'ar' => 'bhr_ar',
+      ],
+    ],
+    'qa' => [
+      'magento_lang_prefix' => [
+        'en' => 'qat_en',
+        'ar' => 'qat_ar',
       ],
     ],
   ],

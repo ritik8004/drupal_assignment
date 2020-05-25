@@ -58,6 +58,14 @@ class AlshayaCountryManager {
     $currency['eg']['en'] = 'EGP';
     $currency['eg']['ar'] = 'ج.م';
 
+    // Bahrain.
+    $currency['bh']['en'] = 'BHD';
+    $currency['bh']['ar'] = '.د.ب';
+
+    // Qatar.
+    $currency['qa']['en'] = 'QAR';
+    $currency['qa']['ar'] = 'ر.ق';
+
     // Invoke the alter hook to allow all modules to update the currency code.
     $this->moduleHandler->alter('alshaya_get_currency_code', $currency);
 
