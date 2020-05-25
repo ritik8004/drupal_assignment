@@ -340,6 +340,12 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 12, 'ar' => 15],
     ],
+    'bh' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 38, 'ar' => 35],
+    ],
   ],
   // Foot Locker.
   'fl_qa' => [
