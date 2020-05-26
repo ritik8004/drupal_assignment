@@ -177,6 +177,7 @@ $settings['views_to_disable'] = [
 
 // Settings to serve empty response to bad bots.
 // @see Drupal/alshaya_facets_pretty_paths/EventSubscriber/AlshayaFacetsPrettyPathsKernelEventsSubscriber
+$settings['nonindexable_plp_filter_count'] = 2;
 $settings['serve_empty_response_for_nonindexable_plp_to_bots'] = FALSE;
 $settings['bad_bot_user_agents'] = [
   'googlebot',

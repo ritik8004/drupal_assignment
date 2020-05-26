@@ -32,7 +32,7 @@ class AlshayaFacetsPrettyPathsKernelEventsSubscriber implements EventSubscriberI
     }
 
     // Set noindex header if more than two filters.
-    if ($pretty_path && $count > 2) {
+    if ($pretty_path && $count > Settings::get('nonindexable_plp_filter_count')) {
       header('X-Robots-Tag', 'noindex');
 
       if (Settings::get('serve_empty_response_for_nonindexable_plp_to_bots', FALSE)) {
