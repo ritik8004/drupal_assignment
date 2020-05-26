@@ -3604,10 +3604,16 @@ class SkuManager {
       $parent_sku = $sku;
     }
 
-    $attributes = $this->getConfigurableCombinations($parent_sku);
-    return (!empty($attributes) && $attributes['attribute_sku'])
-      ? array_keys($attributes['attribute_sku'])
-      : [];
+    $configurable_attributes = Configurable::getSortedConfigurableAttributes($parent_sku);
+    $attributes = [];
+
+    if (!empty($configurable_attributes)) {
+      foreach ($configurable_attributes as $attribute) {
+        $attributes[$attribute['code']] = $attribute['attribute_id'];
+      }
+    }
+
+    return $attributes;
   }
 
 }
