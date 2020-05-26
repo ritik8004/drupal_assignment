@@ -27,6 +27,7 @@ class AlshayaFacetsPrettyPathsKernelEventsSubscriber implements EventSubscriberI
 
     $count = 0;
     foreach (explode('--', $pretty_path) as $facet_filter) {
+      // Reduce one - facet alias is also added here.
       $count += count(explode('-', $facet_filter)) - 1;
     }
 
@@ -34,15 +35,23 @@ class AlshayaFacetsPrettyPathsKernelEventsSubscriber implements EventSubscriberI
     if ($pretty_path && $count > 2) {
       header('X-Robots-Tag', 'noindex');
 
-      $user_agent = strtolower($event->getRequest()->headers->get('User-Agent'));
-      if (Settings::get('block_bad_bots', FALSE) && strpos($user_agent, 'bot') !== FALSE) {
-        $event->stopPropagation();
+      if (Settings::get('serve_empty_response_for_nonindexable_plp_to_bots', FALSE)) {
+        $user_agent = strtolower($event->getRequest()->headers->get('User-Agent'));
+        $bad_bot_agents = Settings::get('bad_bot_user_agents', []);
 
-        $response = new Response();
-        // Ensure these requests are not cached so when real user requests
-        // it is still served fine.
-        $response->setMaxAge(0);
-        return $response;
+        foreach ($bad_bot_agents as $bad_bot_agent) {
+          // Add only "Googlebot" for instance to block all user agents with
+          // this string.
+          if (strpos($user_agent, $bad_bot_agent) !== FALSE) {
+            $event->stopPropagation();
+
+            $response = new Response();
+            // Ensure these requests are not cached so when real user requests
+            // it is still served fine.
+            $response->setMaxAge(0);
+            return $response;
+          }
+        }
       }
     }
   }
