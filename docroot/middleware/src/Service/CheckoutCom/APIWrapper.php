@@ -334,7 +334,7 @@ class APIWrapper {
    */
   public function request3dSecurePayment(array $cart, array $payment_data, string $endpoint) {
     $params = [
-      'value' => $this->getCheckoutAmount($cart['totals']['grand_total'], $cart['totals']['quote_currency_code']),
+      'value' => $this->getCheckoutAmount($cart['totals']['base_grand_total'], $cart['totals']['quote_currency_code']),
       'currency' => $cart['totals']['quote_currency_code'],
       'email' => $cart['customer']['email'],
     ];
