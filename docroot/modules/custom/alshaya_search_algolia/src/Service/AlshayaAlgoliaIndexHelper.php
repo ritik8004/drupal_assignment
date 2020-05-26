@@ -296,6 +296,7 @@ class AlshayaAlgoliaIndexHelper {
     }
     $object['changed'] = $this->dateTime->getRequestTime();
     $object['field_category'] = $this->getFieldCategoryHierarchy($node, $node->language()->getId());
+    $object['is_new'] = $sku->get('attr_is_new')->getString();
   }
 
   /**
