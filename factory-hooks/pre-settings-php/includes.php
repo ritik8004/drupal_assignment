@@ -183,6 +183,7 @@ $settings['bad_bot_user_agents'] = [
   'googlebot',
   'petalbot',
   'yandexbot',
+  'aspiegelbot',
 ];
 
 // Specify the modules to be enabled/uninstalled - just initialised here.
