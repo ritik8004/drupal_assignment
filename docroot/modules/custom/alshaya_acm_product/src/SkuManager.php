@@ -40,7 +40,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
-use Drupal\alshaya_color_split\AlshayaColorSplitManager;
 
 /**
  * Class SkuManager.
@@ -3605,38 +3604,13 @@ class SkuManager {
       $parent_sku = $sku;
     }
 
-    $configurable_attributes = $this->getSkuConfigurableAttributes($parent_sku);
-
     $attributes = [];
-    if (!empty($configurable_attributes)) {
-      foreach ($configurable_attributes as $attribute) {
-        if ($this->moduleHandler->moduleExists('alshaya_color_split')
-          && $attribute['attribute_id'] == AlshayaColorSplitManager::PSEUDO_COLOR_ATTRIBUTE_CODE) {
-          continue;
+    if ($attrs = $parent_sku->get('field_configurable_attributes')->first()) {
+      $configurable_attributes = unserialize($attrs->getString());
+      if (!empty($configurable_attributes)) {
+        foreach ($configurable_attributes as $attribute) {
+          $attributes[] = $attribute['code'];
         }
-        $attributes[] = $attribute['code'];
-      }
-    }
-
-    return $attributes;
-  }
-
-  /**
-   * Get configurable attribute of given sku.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU entity.
-   * @param bool $processed
-   *   Whether we need processed attributes or row.
-   *
-   * @return array
-   *   Array of configurable attribute names.
-   */
-  public function getSkuConfigurableAttributes(SKUInterface $sku, bool $processed = FALSE): array {
-    $attributes = [];
-    if (!$processed) {
-      if ($attrs = $sku->get('field_configurable_attributes')->first()) {
-        $attributes = unserialize($attrs->getString());
       }
     }
 
