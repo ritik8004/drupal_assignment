@@ -3605,9 +3605,9 @@ class SkuManager {
       $parent_sku = $sku;
     }
 
-    $configurable_attributes = Configurable::getSortedConfigurableAttributes($parent_sku);
-    $attributes = [];
+    $configurable_attributes = $this->getSkuConfigurableAttributes($parent_sku);
 
+    $attributes = [];
     if (!empty($configurable_attributes)) {
       foreach ($configurable_attributes as $attribute) {
         if ($this->moduleHandler->moduleExists('alshaya_color_split')
@@ -3615,6 +3615,28 @@ class SkuManager {
           continue;
         }
         $attributes[] = $attribute['code'];
+      }
+    }
+
+    return $attributes;
+  }
+
+  /**
+   * Get configurable attribute of given sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param bool $processed
+   *   Whether we need processed attributes or row.
+   *
+   * @return array
+   *   Array of configurable attribute names.
+   */
+  public function getSkuConfigurableAttributes(SKUInterface $sku, bool $processed = FALSE): array {
+    $attributes = [];
+    if (!$processed) {
+      if ($attrs = $sku->get('field_configurable_attributes')->first()) {
+        $attributes = unserialize($attrs->getString());
       }
     }
 
