@@ -24,13 +24,6 @@ function alshaya_color_split_preprocess_html(&$variables) {
 }
 
 /**
- * Implements hook_alshaya_acm_product_light_product_data_alter().
- */
-function alshaya_color_split_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
-  $data['psudo_attribute'] = AlshayaColorSplitManager::PSEUDO_COLOR_ATTRIBUTE_CODE;;
-}
-
-/**
  * Implements hook_acq_sku_configurable_product_configurations_alter().
  */
 function alshaya_color_split_acq_sku_configurable_product_configurations_alter(array &$configurations, SKU $sku) {

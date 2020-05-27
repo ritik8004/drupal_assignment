@@ -263,12 +263,6 @@ class SkusProductList extends ResourceBase {
     $data['configurable_values'] = $this->getConfigurableValues($sku);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($sku);
 
-    $data['psudo_attribute'] = NULL;
-
-    // Allow other modules to alter light product data.
-    $type = NULL;
-    $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
-
     return $data;
   }
 

@@ -409,8 +409,6 @@ class ProductResource extends ResourceBase {
       unset($data['media']);
     }
 
-    $data['psudo_attribute'] = NULL;
-
     // Allow other modules to alter light product data.
     $type = 'full';
     $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);

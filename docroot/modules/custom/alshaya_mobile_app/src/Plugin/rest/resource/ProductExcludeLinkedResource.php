@@ -230,12 +230,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
 
-    $data['psudo_attribute'] = NULL;
-
-    // Allow other modules to alter light product data.
-    $type = NULL;
-    $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $skuEntity, $data, $type);
-
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 

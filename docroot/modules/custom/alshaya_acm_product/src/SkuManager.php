@@ -40,6 +40,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\alshaya_color_split\AlshayaColorSplitManager;
 
 /**
  * Class SkuManager.
@@ -3609,7 +3610,11 @@ class SkuManager {
 
     if (!empty($configurable_attributes)) {
       foreach ($configurable_attributes as $attribute) {
-        $attributes[$attribute['code']] = $attribute['attribute_id'];
+        if ($this->moduleHandler->moduleExists('alshaya_color_split')
+          && $attribute['attribute_id'] == AlshayaColorSplitManager::PSEUDO_COLOR_ATTRIBUTE_CODE) {
+          continue;
+        }
+        $attributes[] = $attribute['code'];
       }
     }
 
