@@ -19,3 +19,4 @@ permissions:
   - 'restful get magazine_block'
   - 'restful get magazine_teasers'
   - 'restful get skus_product_list'
+  - 'restful get blocks_for_path'
