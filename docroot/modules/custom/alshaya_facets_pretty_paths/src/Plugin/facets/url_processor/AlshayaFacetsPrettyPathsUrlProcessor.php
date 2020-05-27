@@ -5,6 +5,7 @@ namespace Drupal\alshaya_facets_pretty_paths\Plugin\facets\url_processor;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
@@ -219,7 +220,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       $attributes = [];
 
       // If more than 2 filters are selected, don't index.
-      $attributes['rel'] = ($filters_count > 2)
+      $attributes['rel'] = ($filters_count > Settings::get('nonindexable_plp_filter_count'))
         ? 'nofollow'
         : 'follow';
 
