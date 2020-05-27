@@ -10,6 +10,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\block\BlockRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -56,6 +57,13 @@ class BlocksForPathResource extends ResourceBase {
   protected $blockRepository;
 
   /**
+   * Mobile app utility.
+   *
+   * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
+   */
+  protected $mobileAppUtility;
+
+  /**
    * Contains cacheable entities.
    *
    * @var array
@@ -83,6 +91,8 @@ class BlocksForPathResource extends ResourceBase {
    *   The entity repository.
    * @param \Drupal\block\BlockRepository $block_respository
    *   Block repository.
+   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
+   *   The mobile app utility service.
    */
   public function __construct(
     array $configuration,
@@ -93,13 +103,15 @@ class BlocksForPathResource extends ResourceBase {
     RequestStack $request_stack,
     ConfigFactoryInterface $config_factory,
     EntityRepositoryInterface $entity_repository,
-    BlockRepository $block_respository
+    BlockRepository $block_respository,
+    MobileAppUtility $mobile_app_utility
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->requestStack = $request_stack;
     $this->configFactory = $config_factory;
     $this->entityRepository = $entity_repository;
     $this->blockRepository = $block_respository;
+    $this->mobileAppUtility = $mobile_app_utility;
   }
 
   /**
@@ -115,7 +127,8 @@ class BlocksForPathResource extends ResourceBase {
       $container->get('request_stack'),
       $container->get('config.factory'),
       $container->get('entity.repository'),
-      $container->get('block.repository')
+      $container->get('block.repository'),
+      $container->get('alshaya_mobile_app.utility')
     );
   }
 
@@ -132,6 +145,10 @@ class BlocksForPathResource extends ResourceBase {
     if (!$alias) {
       $page = $currentRequest->query->get('page');
       $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
+    }
+
+    if (empty($alias)) {
+      $this->mobileAppUtility->throwException();
     }
 
     // Create a fake request for the url in api request.
