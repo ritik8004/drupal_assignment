@@ -36,3 +36,8 @@ services:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [pretty_paths]
+
+  alshaya_facets_pretty_paths.kernel_events_subscriber:
+    class: Drupal\alshaya_facets_pretty_paths\EventSubscriber\AlshayaFacetsPrettyPathsKernelEventsSubscriber
+    tags:
+      - { name: event_subscriber }
