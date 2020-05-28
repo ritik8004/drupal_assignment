@@ -319,6 +319,7 @@ class StoresFinderUtility {
       $store = is_array($stores[$store_nodes[$nid]['field_store_locator_id_value']]) ? $stores[$store_nodes[$nid]['field_store_locator_id_value']] : [];
       $store['gtm_cart_address'] = $this->getStoreAddress($node, TRUE, TRUE);
       $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+      $store['cart_address_raw'] = $this->getStoreAddress($node, TRUE);
       $store['cart_address'] = $address;
       if ($store_address = $node->get('field_address')->getValue()) {
         $store['cart_address'] = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));

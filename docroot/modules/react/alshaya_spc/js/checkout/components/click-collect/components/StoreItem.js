@@ -28,18 +28,13 @@ const StoreItem = ({
         </div>
         <div className="store-open-hours">
           {
-              Object.entries(store.open_hours_group).map(([weekdays, timings]) => (
-                <div key={weekdays}>
-                  <span className="key-value-key">{weekdays}</span>
-                  <span className="key-value-value">
-                    {' '}
-                    (
-                    {timings}
-                    )
-                  </span>
-                </div>
-              ))
-            }
+            Object.entries(store.open_hours_group).map(([weekdays, timings]) => (
+              <div key={weekdays}>
+                <span className="key-value-key">{weekdays}</span>
+                <span className="key-value-value">{` (${timings})`}</span>
+              </div>
+            ))
+          }
         </div>
         <ConditionalView condition={(typeof onStoreFinalize !== 'undefined' && display !== 'accordion')}>
           <div

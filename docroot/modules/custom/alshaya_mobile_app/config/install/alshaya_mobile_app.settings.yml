@@ -9,3 +9,4 @@ static_page_mappings:
   returns_refunds: 'returns-refunds'
   faqs: 'faqs'
   size_guide: 'size-guide-content'
+  store_finder: 'store-finder'
