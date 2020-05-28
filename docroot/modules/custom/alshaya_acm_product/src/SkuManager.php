@@ -3614,10 +3614,17 @@ class SkuManager {
       $parent_sku = $sku;
     }
 
-    $attributes = $this->getConfigurableCombinations($parent_sku);
-    return (!empty($attributes) && $attributes['attribute_sku'])
-      ? array_keys($attributes['attribute_sku'])
-      : [];
+    $attributes = [];
+    if ($attrs = $parent_sku->get('field_configurable_attributes')->first()) {
+      $configurable_attributes = unserialize($attrs->getString());
+      if (!empty($configurable_attributes)) {
+        foreach ($configurable_attributes as $attribute) {
+          $attributes[] = $attribute['code'];
+        }
+      }
+    }
+
+    return $attributes;
   }
 
 }
