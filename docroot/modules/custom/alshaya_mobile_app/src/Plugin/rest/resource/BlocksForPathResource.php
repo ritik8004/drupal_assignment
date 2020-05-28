@@ -14,6 +14,9 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Path\AliasStorage;
+use Drupal\Core\Path\PathValidatorInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Provides a resource to get all blocks for given path.
@@ -71,6 +74,27 @@ class BlocksForPathResource extends ResourceBase {
   protected $cacheableEntities = [];
 
   /**
+   * The alias storage.
+   *
+   * @var \Drupal\Core\Path\AliasStorage
+   */
+  protected $aliasStorage;
+
+  /**
+   * The Path Validator service.
+   *
+   * @var \Drupal\Core\Path\PathValidatorInterface
+   */
+  protected $pathValidator;
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * BlocksForPathResource constructor.
    *
    * @param array $configuration
@@ -93,6 +117,12 @@ class BlocksForPathResource extends ResourceBase {
    *   Block repository.
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
    *   The mobile app utility service.
+   * @param \Drupal\Core\Path\AliasStorage $alias_storage
+   *   The alias storage service.
+   * @param \Drupal\Core\Path\PathValidatorInterface $pathValidator
+   *   The path validator service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
   public function __construct(
     array $configuration,
@@ -104,7 +134,10 @@ class BlocksForPathResource extends ResourceBase {
     ConfigFactoryInterface $config_factory,
     EntityRepositoryInterface $entity_repository,
     BlockRepository $block_respository,
-    MobileAppUtility $mobile_app_utility
+    MobileAppUtility $mobile_app_utility,
+    AliasStorage $alias_storage,
+    PathValidatorInterface $pathValidator,
+    LanguageManagerInterface $language_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->requestStack = $request_stack;
@@ -112,6 +145,9 @@ class BlocksForPathResource extends ResourceBase {
     $this->entityRepository = $entity_repository;
     $this->blockRepository = $block_respository;
     $this->mobileAppUtility = $mobile_app_utility;
+    $this->aliasStorage = $alias_storage;
+    $this->pathValidator = $pathValidator;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -128,7 +164,10 @@ class BlocksForPathResource extends ResourceBase {
       $container->get('config.factory'),
       $container->get('entity.repository'),
       $container->get('block.repository'),
-      $container->get('alshaya_mobile_app.utility')
+      $container->get('alshaya_mobile_app.utility'),
+      $container->get('path.alias_storage'),
+      $container->get('path.validator'),
+      $container->get('language_manager')
     );
   }
 
@@ -147,7 +186,10 @@ class BlocksForPathResource extends ResourceBase {
       $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
     }
 
-    if (empty($alias)) {
+    if (empty($alias)
+      || (!($this->pathValidator->isValid($alias))
+      && !($this->aliasStorage->aliasExists('/' . $alias, $this->languageManager->getCurrentLanguage()->getId())))
+      ) {
       $this->mobileAppUtility->throwException();
     }
 
