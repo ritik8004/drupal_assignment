@@ -116,7 +116,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
     // Get the product description.
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['description'] = $vars['elements']['description'];
-    $vars['#attached']['drupalSettings']['productInfo'][$sku]['shortDesc'] = $vars['elements']['short_desc'];
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['shortDesc'] = strip_tags($vars['elements']['short_desc']['value']['#markup']);
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['title'] = [
       'label' => $entity->label(),
     ];

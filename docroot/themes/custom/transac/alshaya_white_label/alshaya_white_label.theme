@@ -112,6 +112,10 @@ function alshaya_white_label_preprocess_html(&$variables) {
           $variables['#attached']['library'][] = 'alshaya_white_label/pdp-additional-attributes';
         }
       }
+
+      if ($pdp_layout == 'pdp-magazine_v2') {
+        $variables['attributes']['class'][] = 'new-pdp-magazine-layout';
+      }
     }
   }
 
