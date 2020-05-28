@@ -1,0 +1,8 @@
+uuid: 98768f63-4280-409b-afbf-e843021b5007
+langcode: en
+status: true
+dependencies: {  }
+id: super-menu
+label: 'Super Menu'
+description: 'Contains menu links to sites of other brands. This is when super category is disabled.'
+locked: false
