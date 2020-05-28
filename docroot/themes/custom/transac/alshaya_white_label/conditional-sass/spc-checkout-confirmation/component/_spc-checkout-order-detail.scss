@@ -29,6 +29,21 @@
         display: inline-block;
         text-align: $right;
 
+        @include breakpoint($tablet) {
+          max-width: 20.125rem;
+        }
+
+        .spc-store-open-hours {
+          margin: 1.25rem 0;
+        }
+
+        .spc-store-map-link {
+          a {
+            text-decoration: underline;
+            color: $spc-checkout-order-detail-map-link;
+          }
+        }
+
         .spc-address-name {
           display: block;
           font-family: $alshaya-bold;
