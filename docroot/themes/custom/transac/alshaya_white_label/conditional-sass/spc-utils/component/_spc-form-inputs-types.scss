@@ -84,9 +84,14 @@
   .field-wrapper {
     position: relative;
 
+    html[lang=ar] & {
+      direction: ltr;
+    }
+
     .country-code {
       position: absolute;
-      #{$left}: 0;
+      // No rtl.
+      left: 0;
       font-size: 0.875rem;
       height: 100%;
       display: flex;
@@ -99,7 +104,8 @@
 
     input[type=text] {
       height: 1.5rem;
-      padding-#{$left}: 2.25rem !important;
+      // No rtl.
+      padding-left: 2.25rem !important;
       font-size: 0.875rem;
       background: transparent;
       color: $spc-form-input;
