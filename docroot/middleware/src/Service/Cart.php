@@ -241,6 +241,28 @@ class Cart {
   }
 
   /**
+   * Restore shipping info and get cart.
+   *
+   * @return array
+   *   Cart data.
+   */
+  public function getRestoredCart() {
+    $cart = $this->getCart();
+
+    $this->resetCartCache();
+
+    if (!empty($cart['shipping']['method'])) {
+      $update = [
+        'extension' => ['action' => CartActions::CART_RESET],
+      ];
+
+      $cart = $this->updateCart($update);
+    }
+
+    return $cart;
+  }
+
+  /**
    * Create a new cart and get cart id.
    *
    * @return mixed
@@ -429,8 +451,8 @@ class Cart {
     // not set. City with value 'NONE' means, that this was added in CnC
     // by default and not changed by user.
     if ($update_billing
-      || empty($cart['cart']['billing_address']['firstname'])
-      || $cart['cart']['billing_address']['city'] == 'NONE') {
+      && (empty($cart['cart']['billing_address']['firstname'])
+      || $cart['cart']['billing_address']['city'] == 'NONE')) {
       $cart = $this->updateBilling($data['shipping']['shipping_address']);
     }
 
@@ -592,6 +614,7 @@ class Cart {
       ],
     ];
 
+    unset($billing_data['id']);
     $data['billing'] = $billing_data;
 
     return $this->updateCart($data);
@@ -650,7 +673,7 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function updatePayment(array $data, array $extension = []) {
-    $extension['action'] = 'update payment';
+    $extension['action'] = CartActions::CART_PAYMENT_UPDATE;
 
     $update = [
       'extension' => (object) $extension,
@@ -902,7 +925,7 @@ class Cart {
       return [];
     }
 
-    $key = md5(json_encode($data));
+    $key = md5(json_encode($data['address']));
     if (isset($static[$key])) {
       return $static[$key];
     }
@@ -1093,10 +1116,7 @@ class Cart {
 
     // Remove cart id and other caches from session.
     $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
-    $this->cache->delete('delivery_methods');
-    $this->cache->delete('payment_methods_home_delivery');
-    $this->cache->delete('payment_methods_click_and_collect');
-    $this->cache->delete('payment_method');
+    $this->resetCartCache();
 
     // Set order in session for later use.
     $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
@@ -1218,6 +1238,13 @@ class Cart {
     $cart['customer'] = $cart['cart']['customer'] ?? [];
     unset($cart['cart']['customer']);
 
+    foreach ($cart['customer']['addresses'] ?? [] as $key => $address) {
+      $cart['customer']['addresses'][$key]['region'] = $address['region_id'];
+
+      $cart['customer']['addresses'][$key]['customer_address_id'] = $address['id'];
+      unset($cart['customer']['addresses'][$key]['id']);
+    }
+
     // Format shipping info.
     $cart['shipping'] = $cart['cart']['extension_attributes']['shipping_assignments'][0]['shipping'] ?? [];
     unset($cart['cart']['extension_attributes']['shipping_assignments']);
@@ -1235,6 +1262,16 @@ class Cart {
     $cart['payment'] = [];
 
     return $cart;
+  }
+
+  /**
+   * Wrapper function to reset cart cache.
+   */
+  protected function resetCartCache() {
+    $this->cache->delete('delivery_methods');
+    $this->cache->delete('payment_methods_home_delivery');
+    $this->cache->delete('payment_methods_click_and_collect');
+    $this->cache->delete('payment_method');
   }
 
 }

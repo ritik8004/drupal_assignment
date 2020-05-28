@@ -259,6 +259,18 @@ header {
     }
   }
 
+  .block-alshaya-react-mini-cart {
+    html[lang=ar] & {
+      .price {
+        direction: ltr;
+
+        > span {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
   .block-cart-mini-block,
   .block-alshaya-react-mini-cart {
     font-size: 0.875rem;
