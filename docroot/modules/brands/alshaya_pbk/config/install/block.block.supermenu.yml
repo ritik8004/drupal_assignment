@@ -4,7 +4,6 @@ dependencies:
   config:
     - system.menu.super-menu
   module:
-    - alshaya_super_category
     - system
   theme:
     - alshaya_pottery_barn_kids
