@@ -11,8 +11,8 @@ const PdpInfo = (props) => {
     <>
       <div className="pdp-info-wrapper">
         <div className="pdp-title-wrapper">{title}</div>
-        <p>{pdpProductPrice}</p>
-        <p>{finalPrice}</p>
+        <div className="product-price">{pdpProductPrice}</div>
+        <div className="final-price">{finalPrice}</div>
         <div className="discount-percentage">{discountPercantage}</div>
       </div>
     </>

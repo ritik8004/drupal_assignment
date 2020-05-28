@@ -21,11 +21,9 @@ const QuantityDropdown = (props) => {
   }
 
   return (
-    <>
-      <select id="qty">
-        {options}
-      </select>
-    </>
+    <select id="qty">
+      {options}
+    </select>
   );
 };
 export default QuantityDropdown;
