@@ -27,7 +27,9 @@ const OrderSummaryItem = (props) => {
   }
 
   if (type === 'click_and_collect') {
-    const { name, address, phone } = props;
+    const {
+      name, address, phone, openingHours, mapLink,
+    } = props;
     return (
       <div className="spc-order-summary-item spc-order-summary-address-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <span className="spc-label">{`${label}:`}</span>
@@ -38,6 +40,21 @@ const OrderSummaryItem = (props) => {
           <span className="spc-address">
             {address}
             <span className="spc-cnc-address-phone">{phone}</span>
+          </span>
+          <div className="spc-store-open-hours">
+            {
+              Object.entries(openingHours).map(([weekdays, timings]) => (
+                <div key={weekdays}>
+                  <span className="key-value-key">{weekdays}</span>
+                  <span className="key-value-value">{` (${timings})`}</span>
+                </div>
+              ))
+            }
+          </div>
+          <span className="spc-store-map-link">
+            <a href={mapLink} rel="noopener noreferrer" target="_blank">
+              {Drupal.t('Get directions')}
+            </a>
           </span>
         </span>
       </div>
