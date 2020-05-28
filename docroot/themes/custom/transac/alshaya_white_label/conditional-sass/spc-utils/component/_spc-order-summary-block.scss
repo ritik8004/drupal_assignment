@@ -35,10 +35,6 @@
     margin-bottom: 0.625rem;
     font-size: 1rem;
 
-    .price-currency {
-      padding-right: 0.3125rem;
-    }
-
     .surcharge-total {
       display: inline-flex;
       height: auto;
@@ -164,6 +160,12 @@
 
         a {
           color: $spc-product-title;
+        }
+      }
+
+      .spc-product-price {
+        .price {
+          text-align: $left;
         }
       }
 
