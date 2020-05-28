@@ -412,19 +412,19 @@ $magentos = [
   'fl_uat' => [
     'url' => 'https://fl-uat2.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => 'bs3iqr7l0o0nu1m65gqj0i9g6khwrwlg',
-      'consumer_secret' => 'd5y2b1wvvuwja4xjeaa08qgjpbr603ji',
-      'access_token' => '3ag36xcjyj1u2dxrvu859gsnyqgthirb',
-      'access_token_secret' => '4gx37p92dgm5tfd5i0f4po6ggab0lblu',
+      'consumer_key' => '7odnwfhqxgemmfg8cmmo7iqipbb74hav',
+      'consumer_secret' => 'mqf2sk1s87h9hmqmeyu2wdtetj73hyqf',
+      'access_token' => '6r64msbxkga3jrf5bb8nl0q9q3jya5nh',
+      'access_token_secret' => 'qmkvb8ekhknu2uiy3cvclarxdcfcpvvb',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
+      'store_id' => ['en' => 1, 'ar' => 19],
     ],
     'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
+      'store_id' => ['en' => 7, 'ar' => 10],
     ],
     'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
+      'store_id' => ['en' => 13, 'ar' => 16],
     ],
   ],
   'fl_prod' => [
