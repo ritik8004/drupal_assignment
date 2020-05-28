@@ -156,6 +156,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
     // Get cart configurations.
     $cart_max_qty = $this->configFactory->get('alshaya_acm.cart_config')->get('max_cart_qty');
+    $checkout_feature_status = $this->configFactory->get('alshaya_acm.cart_config')->get('checkout_feature');
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['checkoutFeatureStatus'] = $checkout_feature_status;
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['cartMaxQty'] = $cart_max_qty;
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
 

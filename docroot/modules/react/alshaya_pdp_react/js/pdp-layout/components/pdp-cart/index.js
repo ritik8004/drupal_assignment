@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import CartSelectOption from './cart-select-option';
 import {
   clearCartData,
@@ -6,6 +7,7 @@ import {
   storeProductData,
   updateCart,
 } from '../../../utilities/cart/cart_utils';
+import CartNotification from './cart-notification';
 
 class PdpCart extends React.Component {
   addToCart = (e) => {
@@ -61,17 +63,25 @@ class PdpCart extends React.Component {
     updateCart(cartEndpoint, postData).then(
       (response) => {
         // If there any error we throw from middleware.
-        if (response.error === true) {
-          if (response.error_code === '400') {
+        if (response.data.error === true) {
+          if (response.data.error_code === '400') {
             clearCartData();
           }
-        } else if (response.cart_id) {
-          if (response.response_message.status === 'success'
-              && (typeof response.items[productData.variant] !== 'undefined'
-                || typeof response.items[productData.parentSku] !== 'undefined')) {
-            const cartItem = typeof response.items[productData.variant] !== 'undefined' ? response.items[productData.variant] : response.items[productData.parentSku];
+        } else if (response.data.cart_id) {
+          if (response.data.response_message.status === 'success'
+              && (typeof response.data.items[productData.variant] !== 'undefined'
+                || typeof response.data.items[productData.parentSku] !== 'undefined')) {
+            const cartItem = typeof response.data.items[productData.variant] !== 'undefined' ? response.data.items[productData.variant] : response.data.items[productData.parentSku];
             productData.totalQty = cartItem.qty;
           }
+
+          ReactDOM.render(
+            <CartNotification
+              productInfo={productInfo}
+              productData={productData}
+            />,
+            document.getElementById('cart_notification'),
+          );
 
           let configurables = [];
           let productUrl = productInfo[skuCode].url;
@@ -114,10 +124,10 @@ class PdpCart extends React.Component {
           });
 
           // Triggering event to notify react component.
-          const refreshMiniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data() { return response; }, productData } });
+          const refreshMiniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data() { return response.data; }, productData } });
           document.dispatchEvent(refreshMiniCartEvent);
 
-          const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data() { return response; } } });
+          const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data() { return response.data; } } });
           document.dispatchEvent(refreshCartEvent);
         }
       },
@@ -129,13 +139,19 @@ class PdpCart extends React.Component {
 
   render() {
     const { configurableCombinations, skuCode, productInfo } = this.props;
-    const { cartMaxQty } = productInfo[skuCode];
+    const { cartMaxQty, checkoutFeatureStatus } = productInfo[skuCode];
     let { stockQty } = productInfo[skuCode];
     let variantSelected = skuCode;
     if (typeof productInfo[skuCode].variants !== 'undefined') {
       variantSelected = drupalSettings.configurableCombinations[skuCode].firstChild;
       stockQty = productInfo[skuCode].variants[variantSelected].stock.qty;
     }
+
+    const cartUnavailability = (
+      <>
+        <p className="not-buyable-message">{Drupal.t('Add to bag is temporarily unavailable')}</p>
+      </>
+    );
 
     const options = [];
     for (let i = 1; i <= cartMaxQty; i++) {
@@ -176,7 +192,15 @@ class PdpCart extends React.Component {
                 {options}
               </select>
             </div>
-            <button type="submit" value="Add to basket" onClick={this.addToCart}>{Drupal.t('Add To Basket')}</button>
+            {(checkoutFeatureStatus === 'enabled') ? (
+              <button
+                type="submit"
+                value="Add to basket"
+                onClick={this.addToCart}
+              >
+                {Drupal.t('Add To Basket')}
+              </button>
+            ) : cartUnavailability }
           </form>
         </div>
       );
@@ -190,7 +214,15 @@ class PdpCart extends React.Component {
               {options}
             </select>
           </div>
-          <button type="submit" value="Add to basket" onClick={this.addToCart}>{Drupal.t('Add To Basket')}</button>
+          {(checkoutFeatureStatus === 'enabled') ? (
+            <button
+              type="submit"
+              value="Add to basket"
+              onClick={this.addToCart}
+            >
+              {Drupal.t('Add To Basket')}
+            </button>
+          ) : cartUnavailability }
         </form>
       </div>
     );
