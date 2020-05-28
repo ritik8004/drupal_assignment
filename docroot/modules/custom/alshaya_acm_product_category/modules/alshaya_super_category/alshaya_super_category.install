@@ -8,6 +8,21 @@
 /**
  * Implements hook_update_N().
  *
+ * Adding arabic translations for the LHN.
+ */
+function alshaya_super_category_update_8005() {
+  $strings = [
+    'Brands / Category' => [
+      'ar' => 'الماركات / الفئة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add alshaya_remove_supercategory_term processor to SRP/PLP category facet.
  */
 function alshaya_super_category_update_8004() {
@@ -66,4 +81,17 @@ function alshaya_super_category_update_8001() {
     ->getEditable('alshaya_super_category.settings')
     ->set('solr_boost', 21)
     ->save(TRUE);
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_super_category_install() {
+  $strings = [
+    'Brands / Category' => [
+      'ar' => 'الماركات / الفئة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }

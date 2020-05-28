@@ -102,7 +102,7 @@ const SearchResultsComponent = props => {
                 <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={_parent}>
                   {(drupalSettings.algoliaSearch.filters.super_category !== undefined) && (
                     <div>
-                      <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>{drupalSettings.algoliaSearch.category_facet_label}
+                      <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>{Drupal.t('Brands / Category')}
                       </h3>
                       <div className="category-facet-wrapper">
                         {hasSuperCategoryFilter() && (
