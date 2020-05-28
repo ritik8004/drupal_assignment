@@ -45,6 +45,11 @@ final class CartActions {
   const CART_REFRESH = 'refresh';
 
   /**
+   * Action used for removing shipping.
+   */
+  const CART_RESET = 'remove shipping';
+
+  /**
    * Action used for adding/updating billing on cart.
    */
   const CART_BILLING_UPDATE = 'update billing';
