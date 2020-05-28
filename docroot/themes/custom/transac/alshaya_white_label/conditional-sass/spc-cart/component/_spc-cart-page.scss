@@ -28,14 +28,6 @@
     font-size: 0.875rem;
   }
 
-  .cart-value {
-    .price-currency {
-      &.suffix {
-        margin-right: 0.1875rem;
-      }
-    }
-  }
-
   @include breakpoint($tablet) {
     display: none;
   }

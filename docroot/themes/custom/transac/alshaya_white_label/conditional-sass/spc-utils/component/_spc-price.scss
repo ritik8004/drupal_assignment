@@ -46,3 +46,17 @@
     padding-#{$right}: 0.3125rem;
   }
 }
+
+.price {
+  html[lang=ar] & {
+    direction: ltr;
+
+    > span {
+      display: inline-block;
+    }
+  }
+
+  .price-currency {
+    padding-right: 0.3125rem;
+  }
+}
