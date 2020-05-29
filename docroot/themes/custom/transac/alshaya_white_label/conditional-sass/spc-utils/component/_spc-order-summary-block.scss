@@ -136,10 +136,20 @@
 
       .spc-product-image {
         max-width: 4.8125rem;
+        display: inline-flex;
 
         body.ie & {
           -ms-grid-row: 1;
           -ms-grid-column: 1;
+        }
+      }
+
+      .spc-promotions {
+        grid-column: 1/-1;
+        padding: 0;
+
+        body.ie & {
+          -ms-grid-row: 2;
         }
       }
 

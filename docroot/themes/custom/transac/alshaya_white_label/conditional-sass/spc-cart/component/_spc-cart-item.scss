@@ -41,7 +41,7 @@
       }
 
       .spc-product-image {
-        max-height: 8.125rem;
+        display: inline-flex;
 
         body.ie & {
           -ms-grid-row: 1;

@@ -40,12 +40,10 @@ const OrderSummaryBlock = (props) => {
     in_stock: inStock,
     animationDelay: animationDelayValue,
   } = props;
-  let orderSummaryTitle = Drupal.t('Order Summary');
+  const orderSummaryTitle = Drupal.t('Order Summary');
   const continueCheckoutLink = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
   // To be used on checkout page.
-  if (itemQty !== undefined) {
-    orderSummaryTitle = Drupal.t('order summary (@qty items)', { '@qty': itemQty });
-  }
+  const orderSummaryCount = itemQty !== undefined ? Drupal.t('(@qty items)', { '@qty': itemQty }) : '';
 
   let activeClass = '';
   if (inStock === false) {
@@ -54,7 +52,10 @@ const OrderSummaryBlock = (props) => {
 
   return (
     <div className="spc-order-summary-block fadeInUp notInMobile" style={{ animationDelay: animationDelayValue }}>
-      <SectionTitle>{orderSummaryTitle}</SectionTitle>
+      <SectionTitle>
+        <span>{orderSummaryTitle}</span>
+        <span>{` ${orderSummaryCount}`}</span>
+      </SectionTitle>
       {/* To Be used on Checkout Delivery pages. */}
       {!showCheckoutButton
         && (
