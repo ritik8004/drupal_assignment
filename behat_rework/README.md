@@ -14,7 +14,8 @@ Otherwise install it via brew or from java:
 1. `cd behat_rework` :file_folder:
 2. `composer install` :hourglass_flowing_sand:
 3. `cd bin; npm install` :gear:
-4. `./behat-build.sh --rebuild=TRUE` This will generate feature files :rocket:.
+4. `cd ..`
+5. `./behat-build.sh --rebuild=TRUE` This will generate feature files :rocket:.
   - parameters:
     - `--rebuild` (boolean): `TRUE` to recollect yml files and variables.
       - by default rebuild is false, and it will only regenerate features files
@@ -28,15 +29,22 @@ Otherwise install it via brew or from java:
   - :bell: :bell:
   **NOTE: If you have modified only existing features file and "not" modified or placed any
   new variables you can simply execute `./behat-build.sh`.**
-5. (In a separate terminal window) :computer:
+6. (In a separate terminal window) :computer:
 ```bash
 java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
 ```
-6. The script that we ran on point 5, Has generated different profiles for each site with brand, env and language specific. i.e. = mc-sa-qa-ar, mc-sa-qa-en, hm-kw-dev-en etc..
+7. The script that we ran on point 5, Has generated different profiles for each site with brand, env and language specific. i.e. = mc-sa-qa-ar, mc-sa-qa-en, hm-kw-dev-en etc..
 to Run behat test cases for:
- - any specific site - `bin/behat --profile=hm-kw-uat-en` :fire:
- - any specific feature for a site - `bin/behat --profile=hm-kw-uat-en build/features/hm-kw-uat-en/breadcrumb.feature` :fire: :fire:
- - any specific language for a feature - `bin/behat --profile=hm-eg-dev2-en-desktop build/features/hm-eg-dev2-en/spcbasket.feature --format pretty --tags="~language"` :fire:
+ - any specific site for desktop - `bin/behat --profile=hm-kw-uat-en-desktop` :fire:
+ - any specific site for mobile - `bin/behat --profile=hm-kw-uat-en-mobile` :fire:
+ - any specific tag for a site for desktop - `bin/behat --profile=hm-eg-dev2-en-desktop --format pretty --tags="language"` :fire:
+ - any specific tag for a site for mobile - `bin/behat --profile=hm-eg-dev2-en-mobile --format pretty --tags="language"` :fire:
+ - any specific feature for a site for desktop - `bin/behat --profile=hm-kw-uat-en-desktop build/features/hm-kw-uat-en/breadcrumb.feature` :fire: :fire:
+ - any specific feature for a site for mobile - `bin/behat --profile=hm-kw-uat-en-mobile build/features/hm-kw-uat-en/breadcrumb.feature` :fire: :fire:
+ - any specific tag in a feature for desktop - `bin/behat --profile=hm-eg-dev2-en-desktop --format pretty build/features/hm-eg-dev2-en/spcbasket.feature --tags="language"` :fire:
+ - any specific tag in a feature for mobile - `bin/behat --profile=hm-eg-dev2-en-mobile --format pretty build/features/hm-eg-dev2-en/spcbasket.feature --tags="language"` :fire:
+ - any specific language for a feature for desktop - `bin/behat --profile=hm-eg-dev2-en-desktop build/features/hm-eg-dev2-en/spcbasket.feature --format pretty --tags="~language"` :fire:
+ - any specific language for a feature for mobile - `bin/behat --profile=hm-eg-dev2-en-mobile build/features/hm-eg-dev2-en/spcbasket.feature --format pretty --tags="~language"` :fire:
 
 
 # Alshaya Behat Architecture
