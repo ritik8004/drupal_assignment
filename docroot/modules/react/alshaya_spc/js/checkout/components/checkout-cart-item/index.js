@@ -55,6 +55,7 @@ class CheckoutCartItem extends React.Component {
         id,
         finalPrice,
       },
+      context,
     } = this.props;
 
     const {
@@ -98,9 +99,11 @@ class CheckoutCartItem extends React.Component {
             { configurableValues.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
           </div>
         </div>
-        <div className="spc-promotions">
-          {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
-        </div>
+        {context !== 'confirmation' && context !== 'print' && (
+          <div className="spc-promotions">
+            {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
+          </div>
+        )}
       </div>
     );
   }

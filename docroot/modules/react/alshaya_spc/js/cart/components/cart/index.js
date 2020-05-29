@@ -206,6 +206,7 @@ export default class Cart extends React.Component {
               in_stock={inStock}
               show_checkout_button
               animationDelay="0.5s"
+              context="cart"
             />
           </div>
         </div>
