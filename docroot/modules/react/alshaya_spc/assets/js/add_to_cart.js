@@ -164,6 +164,9 @@
                     productUrl = productVariantInfo.url[langcode];
                   }
 
+                  // Store proper variant sku in gtm data now.
+                  gtmAttributes.variant = productDataSKU;
+
                   Drupal.alshayaSpc.storeProductData({
                     sku: productDataSKU,
                     parentSKU: parentSKU,

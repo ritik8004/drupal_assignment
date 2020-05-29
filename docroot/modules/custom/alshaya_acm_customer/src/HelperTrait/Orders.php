@@ -86,13 +86,21 @@ trait Orders {
 
     // Shipping.
     $order['shipping'] = $order['extension']['shipping_assignments'][0]['shipping'];
+    $order['shipping']['address']['customer_id'] = $order['customer_id'];
+    unset($order['shipping']['address']['entity_id']);
+    unset($order['shipping']['address']['parent_id']);
+
     $order['shipping']['commerce_address'] = $order['shipping']['address'];
     $order['shipping']['address']['extension'] = $order['shipping']['address']['extension_attributes'] ?? [];
     unset($order['shipping']['address']['extension_attributes']);
 
     // Billing.
     $order['billing'] = $order['billing_address'];
-    $order['billing_commerce_address'] = $order['billing_address'];
+    $order['billing']['customer_id'] = $order['customer_id'];
+    unset($order['billing']['entity_id']);
+    unset($order['billing']['parent_id']);
+
+    $order['billing_commerce_address'] = $order['billing'];
     unset($order['billing_address']);
     $order['billing']['extension'] = $order['billing']['extension_attributes'] ?? [];
     unset($order['billing']['extension_attributes']);

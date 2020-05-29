@@ -15,9 +15,6 @@ import {
   removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import EditAddressSVG from '../../../svg-component/edit-address-svg';
-import {
-  getInfoFromStorage,
-} from '../../../utilities/storage';
 import dispatchCustomEvent from '../../../utilities/events';
 
 export default class AddressItem extends React.Component {
@@ -95,7 +92,6 @@ export default class AddressItem extends React.Component {
             error_message: cartResult.error_message,
           };
         } else {
-          cartData = getInfoFromStorage();
           cartData.cart = cartResult;
         }
 

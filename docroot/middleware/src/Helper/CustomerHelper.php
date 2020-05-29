@@ -19,7 +19,9 @@ class CustomerHelper {
    *   Formatted address if available.
    */
   public static function formatAddressForFrontend(array $address) {
-    if (empty($address) || empty($address['city'])) {
+    // Do not consider addresses without custom attributes as they are required
+    // for Delivery Matrix.
+    if (empty($address) || empty($address['custom_attributes'])) {
       return NULL;
     }
 
