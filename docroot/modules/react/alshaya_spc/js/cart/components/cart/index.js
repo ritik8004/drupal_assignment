@@ -190,7 +190,7 @@ export default class Cart extends React.Component {
         <div className="spc-main">
           <div className="spc-content">
             <SectionTitle animationDelayValue="0.4s">
-              <span>{Drupal.t('my shopping bag ')}</span>
+              <span>{`${Drupal.t('my shopping bag')} `}</span>
               <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
             </SectionTitle>
             <CartItems dynamicPromoLabelsProduct={dynamicPromoLabelsProduct} items={items} />

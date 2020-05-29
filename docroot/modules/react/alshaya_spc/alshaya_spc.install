@@ -56,3 +56,16 @@ function alshaya_spc_schema() {
 
   return $schema;
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update SPC translation strings.
+ */
+function alshaya_spc_update_8001() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  if ($translations = _alshaya_spc_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
