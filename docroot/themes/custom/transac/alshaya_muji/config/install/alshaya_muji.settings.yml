@@ -1,0 +1,9 @@
+logo:
+  path: 'themes/custom/transac/alshaya_muji/site-logo.svg'
+  use_default: false
+
+features:
+  favicon: 1
+
+favicon:
+  use_default: 1

@@ -225,6 +225,7 @@ export default class Checkout extends React.Component {
               cart_promo={cart.cart.cart_promo}
               show_checkout_button={false}
               animationDelay="0.4s"
+              context="checkout"
             />
           </div>
         </div>

@@ -1,0 +1,29 @@
+.ui-autocomplete {
+  border: 1px solid $primary_search_border;
+
+  li.ui-menu-item {
+    padding-#{$left}: 0.875rem;
+  }
+}
+
+.search-api-autocomplete-suggestion {
+  @include breakpoint($desktop) {
+    font-size: 0.875rem;
+  }
+
+  .autocomplete-suggestion-user-input {
+    font-weight: normal;
+  }
+}
+
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page .ui-autocomplete {
+    @include breakpoint($only-mobile) {
+      top: 6.375rem !important;
+
+      html[lang=ar] & {
+        top: 6.375rem !important;
+      }
+    }
+  }
+}

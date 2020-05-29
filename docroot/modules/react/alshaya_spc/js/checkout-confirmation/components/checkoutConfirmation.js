@@ -60,6 +60,7 @@ class CheckoutConfirmation extends React.Component {
               cart_promo={[]}
               show_checkout_button={false}
               animationDelay="0.4s"
+              context="confirmation"
             />
           </div>
         </div>

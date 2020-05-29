@@ -39,6 +39,7 @@ const OrderSummaryBlock = (props) => {
     totals,
     in_stock: inStock,
     animationDelay: animationDelayValue,
+    context,
   } = props;
   const orderSummaryTitle = Drupal.t('Order Summary');
   const continueCheckoutLink = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
@@ -60,7 +61,7 @@ const OrderSummaryBlock = (props) => {
       {!showCheckoutButton
         && (
         <div className={`product-content product-count-${Object.keys(items).length}`}>
-          <CheckoutCartItems items={items} />
+          <CheckoutCartItems items={items} context={context} />
         </div>
         )}
       <div className="block-content">
