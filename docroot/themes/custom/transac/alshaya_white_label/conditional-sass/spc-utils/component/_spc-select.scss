@@ -102,6 +102,8 @@
       @include icon('chevrondown') {
         font-size: 1.75rem;
         position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
         transition: transform 0.125s ease-in-out;
       }
 

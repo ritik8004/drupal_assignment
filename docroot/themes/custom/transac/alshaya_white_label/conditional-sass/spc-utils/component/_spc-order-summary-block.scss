@@ -141,6 +141,10 @@
         body.ie & {
           -ms-grid-row: 1;
           -ms-grid-column: 1;
+
+          img {
+            width: 100%;
+          }
         }
       }
 
@@ -150,6 +154,7 @@
 
         body.ie & {
           -ms-grid-row: 2;
+          -ms-grid-column-span: 3;
         }
       }
 
