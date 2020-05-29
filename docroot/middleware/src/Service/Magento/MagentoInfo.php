@@ -127,7 +127,7 @@ class MagentoInfo {
    *   Return TRUE if setting is enabled, FALSE otherwise.
    */
   public function isCancelReservationEnabled() {
-    return $this->systemSettings->getSettings('alshaya_acm_checkout.settings')['cancel_reservation_enabled'] ?? 0;
+    return $this->systemSettings->getSettings('alshaya_checkout_settings')['cancel_reservation_enabled'] ?? FALSE;
   }
 
 }
