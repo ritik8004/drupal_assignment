@@ -232,19 +232,19 @@ class APIWrapper {
    * @param string $currency
    *   Currency.
    *
-   * @return float
+   * @return int
    *   The processed amount.
    */
   public function getCheckoutAmount($amount, string $currency) {
     if (in_array($currency, self::FULL_VALUE_CURRENCIES, TRUE)) {
-      return (float) $amount;
+      return (int) $amount;
     }
 
     if (in_array($currency, self::DIV_1000_VALUE_CURRENCIES, TRUE)) {
-      return (float) ($amount * self::DIV_1000);
+      return (int) ($amount * self::DIV_1000);
     }
 
-    return (float) ($amount * self::DIV_100);
+    return (int) ($amount * self::DIV_100);
   }
 
   /**
@@ -334,7 +334,7 @@ class APIWrapper {
    */
   public function request3dSecurePayment(array $cart, array $payment_data, string $endpoint) {
     $params = [
-      'value' => $this->getCheckoutAmount($cart['totals']['grand_total'], $cart['totals']['quote_currency_code']),
+      'value' => $this->getCheckoutAmount($cart['totals']['base_grand_total'], $cart['totals']['quote_currency_code']),
       'currency' => $cart['totals']['quote_currency_code'],
       'email' => $cart['customer']['email'],
     ];

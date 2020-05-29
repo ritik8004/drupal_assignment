@@ -97,9 +97,9 @@ class CheckoutCartItem extends React.Component {
           <div className="spc-product-attributes">
             { configurableValues.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
           </div>
-          <div className="spc-promotions">
-            {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
-          </div>
+        </div>
+        <div className="spc-promotions">
+          {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
         </div>
       </div>
     );

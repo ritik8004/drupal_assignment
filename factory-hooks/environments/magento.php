@@ -327,6 +327,12 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 36, 'ar' => 33],
     ],
+    'bh' => [
+      'store_id' => ['en' => 30, 'ar' => 27],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 36, 'ar' => 33],
+    ],
   ],
   'bbw_prod' => [
     'url' => 'http://bbw.store.alshaya.com',
@@ -339,6 +345,12 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 12, 'ar' => 15],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 38, 'ar' => 35],
     ],
   ],
   // Foot Locker.
