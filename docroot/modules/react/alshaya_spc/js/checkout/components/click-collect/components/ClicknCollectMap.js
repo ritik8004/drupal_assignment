@@ -22,9 +22,7 @@ class ClicknCollectMap extends React.Component {
     this.googleMap.setCurrentMap(window.spcMap.map.googleMap);
     const { markers } = this.props;
     this.googleMap.removeMapMarker();
-    if (markers !== null
-      && markers !== undefined
-      && markers.length > 0) {
+    if (markers !== null && markers.length > 0) {
       this.placeMarkers();
     } else {
       this.googleMap.setCenter();
