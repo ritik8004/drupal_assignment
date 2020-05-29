@@ -34,7 +34,6 @@ export default class AddressForm extends React.Component {
       cityChanged: false,
       errorSuccessMessage: null,
       messageType: null,
-      animateClass: '',
     };
   }
 
@@ -82,17 +81,15 @@ export default class AddressForm extends React.Component {
     smoothScrollTo('.spc-address-form-sidebar .spc-checkout-section-title');
   };
 
-  hidePopUpError = () => {
-    this.setState({
-      animateClass: 'fadeOutUp',
-    });
-
+  hidePopUpError = (e) => {
+    e.target.parentNode.parentNode.classList.add('fadeOutUp');
+    // Wait for warning message fade out animation.
     setTimeout(() => {
       this.setState({
         messageType: null,
         errorSuccessMessage: null,
       });
-    }, 450);
+    }, 200);
   };
 
   /**
@@ -188,22 +185,23 @@ export default class AddressForm extends React.Component {
       showEmail,
       formContext,
     } = this.props;
+
     const {
       area_list: areaList,
       cityChanged,
       errorSuccessMessage,
       messageType,
-      animateClass,
     } = this.state;
+
     let defaultAddressVal = [];
     if (defaultVal) {
       defaultAddressVal = defaultVal;
     }
 
     // Check if billing address form.
-    let mapToAddressFormBtnText = Drupal.t('deliver to my location');
+    let mapToAddressFormBtnText = getStringMessage('hd_deliver_to_my_location');
     if (formContext === 'billing') {
-      mapToAddressFormBtnText = Drupal.t('select my location');
+      mapToAddressFormBtnText = getStringMessage('billing_select_my_location');
     }
 
     let isEditAddress = false;
@@ -232,7 +230,7 @@ export default class AddressForm extends React.Component {
 
     const headingDeliveryText = (headingText !== undefined)
       ? headingText
-      : Drupal.t('delivery information');
+      : getStringMessage('hd_delivery_information');
 
     return (
       <div className="spc-address-form">
@@ -243,17 +241,19 @@ export default class AddressForm extends React.Component {
         )}
         <div className="spc-address-form-sidebar">
           <SectionTitle>{headingDeliveryText}</SectionTitle>
-          <a className="close" onClick={closeModal}>
+          <a className="close" onClick={() => closeModal()}>
             &times;
           </a>
           <div className="spc-address-form-wrapper">
             {errorSuccessMessage !== null
               && (
-              <CheckoutMessage type={messageType} context={`new-address-form-modal modal ${animateClass}`}>
+              <CheckoutMessage type={messageType} context="new-address-form-modal modal">
                 {errorSuccessMessage}
                 {messageType === 'warning'
                 && (
-                  <a href="#" onClick={() => this.hidePopUpError()}>{getStringMessage('dismiss')}</a>
+                  <button type="button" onClick={(e) => this.hidePopUpError(e)}>
+                    {getStringMessage('dismiss')}
+                  </button>
                 )}
               </CheckoutMessage>
               )}
@@ -288,7 +288,7 @@ export default class AddressForm extends React.Component {
                     className="spc-address-form-submit"
                     type="submit"
                   >
-                    {Drupal.t('Save')}
+                    {getStringMessage('address_save')}
                   </button>
                 </div>
               </form>

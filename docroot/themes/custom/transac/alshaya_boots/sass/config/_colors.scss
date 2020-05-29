@@ -22,6 +22,7 @@ $black-two: #333;
 $black: #000;
 $grey-light: #777;
 $warm-grey-two: #dadada;
+$warm-grey-three: #c2c2c2;
 $white-smoke-light: #f2f2f2;
 $white: #fff;
 $dark-sand: #ac8e54;
@@ -85,6 +86,7 @@ $primary_dropdown_option_hover: $white-smoke-light;
 $primary_dropdown_option_border: $white;
 $primary_dropdown_option_disbled: $warm-grey-two;
 $primary_dropdown_arrow_icon: $drakish-blue;
+$primary_dropdown_option_border: $warm-grey-two;
 
 // Text Area
 $primary_textarea_suffix: $black-two;
@@ -100,7 +102,7 @@ $modal_close_icon: $white;
 $modal_header_border: $warm-grey-two;
 
 // VAT text
-$vat: $black-two;
+$vat: $grey-light;
 
 // Counters.
 $primary_counter_bg: $dark-pink;
@@ -139,11 +141,17 @@ $lang_switch_close_icon: $drakish-blue;
 
 // 404
 $maintenance_container_bg: rgba(0, 73, 144, 0.22);
+$maintenance_container_border: $drakish-blue;
+$not_found_body_color: $dark-pink;
+$maintenance_body_color: $black;
+$maintenance_title_text: $peacock-blue;
+$maintenance_container_border_top: $link-water;
 
 // Accordion
-$accordion_border: $warm-grey-two;
+$accordion_border: $white-smoke-light;
 $accordion_title: $black-two;
 $accordion_sub_title: $grey-light;
+$accordion_title_arrow: $drakish-blue;
 
 // Autocomplete
 $autocomplete_border: $warm-grey-two;
@@ -152,11 +160,11 @@ $autocomplete_hover: $white-smoke-light;
 $autocomplete_text: $grey-light;
 
 // Homepage Slider
-$hp_slider_dots: $white;
-$hp_slider_arrows_dark: $white;
+$hp_slider_dots: $drakish-blue;
+$hp_slider_arrows_dark: $drakish-blue;
 
 // Mobile Gallery
-$gallery_arrows_bg: $white-smoke-light;
+$gallery_arrows_bg: $white;
 $gallery_arrows: $drakish-blue;
 
 // Header.
@@ -164,8 +172,9 @@ $header_border: $link-water-two;
 
 // Header secondary: ie: top header.//need to work
 $header_secondary_bg: $link-water;
-$header_secondary_menu_link_mobile: $black-two;
+$header_secondary_menu_link_mobile: $drakish-blue;
 $header_secondary_menu_link: $black-two;
+$header_secondary_menu_link_hover: $drakish-blue;
 
 // Header mobile search.
 $header_search_border_mobile: $white-smoke-light;
@@ -184,7 +193,7 @@ $header_c_menu_icon_color: $drakish-blue;
 $header_c_menu_search_active_icon: $drakish-blue;
 $header_toggle_sign_default: $white-smoke-light;
 $header_toggle_sign_active_tab: $black-two;
-$header_mobile_menu_arrow: $warm-grey-two;
+$header_mobile_menu_arrow: $warm-grey-three;
 $header_mobile_menu_close_bg: $drakish-blue;
 $header_mobile_menu_overlay: rgba(51, 51, 51, 0.6);
 
@@ -194,16 +203,23 @@ $header_my_account_link_hover: $drakish-blue;
 $header_my_account_icon: $drakish-blue;
 
 // Mega menu.
+$mm_bg: $white;
+$mm_l1_border: $link-water-two;
 $mm_body_overlay: rgba(51, 51, 51, 0.6);
-$mm_l1_link: $drakish-blue;
+$mm_l1_link: $peacock-blue;
 $mm_l1_link_bg: $drakish-blue;
 $mm_l1_link_hover: $drakish-blue;
-$mm_l1_link_active_border: $drakish-blue;
+$mm_l1_link_active_border: $peacock-blue;
 $mm_l2_link: $drakish-blue;
-$mm_l3_link: $grey-light;
+$mm_l3_link: $black-two;
 $mm_l3_link_hover: $link-water;
+$mm_l3_link_mobile: $drakish-blue;
+$mm_l1_l2_l3_l4_border: $link-water-two;
 $mm_highlight_label: $black-two;
 $mm_highlight_title: $black-two;
+$mm_l2_l3_l4_hover_bg: $link-water;
+$mm_l2_l3_l4_icon: $warm-grey-three;
+$mm_l2_l3_l4_divider_border: $link-water;
 
 //  Mini Cart.
 $primary_minicart_quantity_bg: $dark-pink;
@@ -212,6 +228,7 @@ $mobile_continue_shopping_btn_border: $drakish-blue;
 $desktop_continue_shopping_btn_text: $white;
 $desktop_continue_shopping_btn_bg: $drakish-blue;
 $desktop_continue_shopping_btn_border: $drakish-blue;
+$cart_notification_arrow_bg: $white;
 
 // Notification popup.
 $minicart_notification_border: $drakish-blue;
@@ -289,6 +306,9 @@ $pdp_product_itemcode: $grey-light;
 $pdp_product_itemcode_border: $white-smoke-light;
 $pdp_title_section_border: $white-smoke-light;
 $pdp_sell_title: $black-two;
+$pdp_color_attribute_label: $grey-light;
+$pdp_accordion_delivery_option_text: $grey-light;
+$pdp_free_delivery_text: $black;
 
 // Product modal
 $pdp_modal_full_prodlink: $drakish-blue;
@@ -298,6 +318,7 @@ $pdp_modal_full_prodlink_border: $white-smoke-light;
 $pdp_sidebar_label: $drakish-blue;
 $pdp_sidebar_link: $drakish-blue;
 $pdp_desc_wrapper_border: $warm-grey-two;
+$pdp_desc_wrapper_title_border: $warm-grey-two;
 $pdp_desc_wrapper_close_bg: $drakish-blue;
 $pdp_desc_wrapper_close_icon: $white;
 $pdp_cc_btn_bg: $drakish-blue;
@@ -480,7 +501,22 @@ $option-list-search-icon-bg: $white;
 $option-list-search-placeholder-text: $grey-light;
 $options-list-autocomplete-form-border: $warm-grey-two;
 $option-brand-logo-border: $warm-grey-two;
+$option-list-menu-background: $white;
 
 // Megamenu inline layout.
 $megamenu-inline-layout-active-border-color: $drakish-blue;
 $megamenu-inline-layout-right-category-seperator: $grey-light;
+
+// SPC Checkout.
+$spc-checkout_section_title: $drakish-blue;
+$spc-select-border: $warm-grey-two;
+$checkout_login_submit_button_background: $drakish-blue;
+$checkout_login_link_text: $drakish-blue;
+$checkout_section_titles: $drakish-blue;
+$checkout_guest_button_border: $drakish-blue;
+$checkout_guest_button_txt: $drakish-blue;
+$spc-cnc-store-search-icon: $drakish-blue;
+$spc-search-icon: $drakish-blue;
+$spc-promo-code-error: $error-red;
+$spc-cart-promo-code-submit-enabled: $error-red;
+$spc-deliver-button: $drakish-blue;

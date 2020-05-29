@@ -73,11 +73,7 @@
       }
 
       .spc-billing-meta {
-        max-width: 17.125rem;
-
-        @include breakpoint($upto-desktop) {
-          max-width: 13.9375rem;
-        }
+        width: calc(100% - 7.5rem);
 
         .spc-billing-name {
           font-family: $alshaya-bold;

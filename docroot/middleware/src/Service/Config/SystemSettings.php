@@ -77,7 +77,9 @@ class SystemSettings {
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/cybersource.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_security.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/exception_message_type.php';
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/mada_bins.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/middleware_auth.php';
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_checkout_settings.php';
 
     // Include overrides.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';

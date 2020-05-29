@@ -1,6 +1,6 @@
 .spc-product-price {
   font-size: 0.875rem;
-  color: $spc-product-title;
+  color: $spc-product-price;
 
   .has--special--price {
     display: inline-block;
@@ -35,7 +35,7 @@
     white-space: normal;
 
     .has--special--price,
-    .special--price, {
+    .special--price {
       margin-bottom: 0.3125rem;
     }
   }
@@ -44,5 +44,19 @@
 .spc-price {
   .price-currency {
     padding-#{$right}: 0.3125rem;
+  }
+}
+
+.price {
+  html[lang=ar] & {
+    direction: ltr;
+
+    > span {
+      display: inline-block;
+    }
+  }
+
+  .price-currency {
+    padding-right: 0.3125rem;
   }
 }

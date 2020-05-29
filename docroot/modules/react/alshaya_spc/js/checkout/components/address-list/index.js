@@ -10,17 +10,22 @@ import {
 import {
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
+import getStringMessage from '../../../utilities/strings';
+import WithModal from '../with-modal';
+import dispatchCustomEvent from '../../../utilities/events';
 
 export default class AddressList extends React.Component {
+  isComponentMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
       addressList: [],
-      open: false,
     };
   }
 
   componentDidMount() {
+    this.isComponentMounted = true;
     // If user is logged in, only then get area lists.
     if (window.drupalSettings.user.uid > 0) {
       const addressList = getUserAddressList();
@@ -33,20 +38,19 @@ export default class AddressList extends React.Component {
       }
     }
 
-    document.addEventListener('closeAddressListPopup', this.closeModal, false);
+    document.addEventListener('closeAddressListPopup', this.closeModal);
   }
 
-  openModal = () => {
-    this.setState({
-      open: true,
-    });
+  componentWillUnmount() {
+    this.isComponentMounted = false;
+    document.removeEventListener('closeAddressListPopup', this.closeModal);
   }
 
   closeModal = () => {
-    this.setState({
-      open: false,
-    });
-  };
+    if (this.isComponentMounted) {
+      dispatchCustomEvent('closeModal', 'hdAddressList');
+    }
+  }
 
   refreshAddressList = (addressList) => {
     this.setState({
@@ -70,8 +74,7 @@ export default class AddressList extends React.Component {
   };
 
   render() {
-    const { addressList, open } = this.state;
-
+    const { addressList } = this.state;
     // If no address list available.
     if (addressList === undefined || addressList.length === 0) {
       return (null);
@@ -115,27 +118,31 @@ export default class AddressList extends React.Component {
 
     return (
       <>
-        <header className="spc-change-address">{Drupal.t('change address')}</header>
-        <a className="close" onClick={closeModal}>
+        <header className="spc-change-address">{getStringMessage('change_address')}</header>
+        <a className="close" onClick={() => closeModal()}>
           &times;
         </a>
         <div className="address-list-content">
-          <div className="spc-add-new-address-btn" onClick={this.openModal}>
-            {Drupal.t('add new address')}
-          </div>
-          <Popup open={open} onClose={this.closeModal} closeOnDocumentClick={false}>
-            <>
-              <AddressForm
-                closeModal={this.closeModal}
-                showEmail={false}
-                show_prefered
-                default_val={defaultVal}
-                headingText={headingText}
-                processAddress={this.processAddress}
-                formContext={formContext}
-              />
-            </>
-          </Popup>
+          <WithModal modalStatusKey="hdAddressList">
+            {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
+              <>
+                <div className="spc-add-new-address-btn" onClick={() => triggerOpenModal(2)}>
+                  {getStringMessage('add_new_address')}
+                </div>
+                <Popup open={isModalOpen} closeOnDocumentClick={false} closeOnEscape={false}>
+                  <AddressForm
+                    closeModal={triggerCloseModal}
+                    showEmail={false}
+                    show_prefered
+                    default_val={defaultVal}
+                    headingText={headingText}
+                    processAddress={this.processAddress}
+                    formContext={formContext}
+                  />
+                </Popup>
+              </>
+            )}
+          </WithModal>
           <div className="spc-checkout-address-list">{addressItem}</div>
         </div>
       </>

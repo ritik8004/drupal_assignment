@@ -27,7 +27,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
@@ -58,7 +58,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{order_confirm_text}"
-    Then I should see "{anon_email}"
+    Then I should see "{spc_user_email}"
     Then I should see "{order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -104,7 +104,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -134,12 +134,12 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{anon_email}"
+    Then I should see "{spc_user_email}"
     Then I should see "{language_order_detail}"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{anon_email}"
+    Then I should see "{spc_user_email}"
     Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -185,7 +185,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -215,5 +215,5 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{anon_email}"
+    Then I should see "{spc_user_email}"
     Then I should see "{language_order_detail}"

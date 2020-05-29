@@ -21,6 +21,7 @@ function selectedFiltersLables(attribute, value, filter) {
       break;
     }
 
+    case 'menu':
     case 'hierarchy':
       selctionText = value.replace(`${attribute}:`, '').trim();
       break;

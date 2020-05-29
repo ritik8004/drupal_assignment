@@ -1,0 +1,16 @@
+.spc-checkout-delivery-information,
+.spc-section-billing-address,
+.payment-method-checkout_com {
+  .popup-overlay {
+    .popup-content {
+      .close {
+        #{$right}: 0.625rem;
+        top: 1rem;
+
+        @include icon('close') {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}

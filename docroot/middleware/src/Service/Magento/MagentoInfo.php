@@ -70,7 +70,17 @@ class MagentoInfo {
    */
   public function getMagentoStoreId() {
     $lang = $this->systemSettings->getRequestLanguage();
-    return $this->systemSettings->getSettings('store_id')[$lang] ?? NULL;
+    return $this->getMagentoStoreIds()[$lang] ?? NULL;
+  }
+
+  /**
+   * Get the magento store ids for all languages.
+   *
+   * @return array
+   *   Magento store ids.
+   */
+  public function getMagentoStoreIds() {
+    return $this->systemSettings->getSettings('store_id');
   }
 
   /**
@@ -117,7 +127,7 @@ class MagentoInfo {
    *   Return TRUE if setting is enabled, FALSE otherwise.
    */
   public function isCancelReservationEnabled() {
-    return $this->systemSettings->getSettings('alshaya_acm_checkout.settings')['cancel_reservation_enabled'] ?? 0;
+    return $this->systemSettings->getSettings('alshaya_checkout_settings')['cancel_reservation_enabled'] ?? FALSE;
   }
 
 }

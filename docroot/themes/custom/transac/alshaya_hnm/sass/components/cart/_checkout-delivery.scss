@@ -25,7 +25,7 @@
 
         &.form-item-member-delivery-home-address-form-form-mobile-number-country-code {
           padding-bottom: 0;
-          margin-top: 0.875rem !important;
+          margin-top: 0.8125rem !important;
         }
       }
 
@@ -34,7 +34,7 @@
         h2 {
           @include arabic-letter-spacing;
 
-          font-size: 0.75rem;
+          font-size: 0.8125rem;
           color: $title;
           text-transform: uppercase;
           font-family: $hnm-bold;
@@ -43,16 +43,16 @@
       }
 
       .form-actions {
-        background: $white-five;
-
-        @include breakpoint($tablet) {
-          background: $delivery_tab_active_bg;
-        }
+        background: none;
 
         a {
           font-family: $hnm-demibold;
           color: $content_link_color;
-          font-size: 0.75rem;
+          font-size: 0.8125rem;
+
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
     }
@@ -84,6 +84,11 @@
       p {
         color: $delivery_tab_text;
         font-family: $hnm-regular;
+        font-size: 0.8125rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        border: none;
       }
 
       @include breakpoint($only-tablet) {
@@ -124,7 +129,7 @@
         &.active--tab--head {
           border-width: 1px;
           border-color: $secondary_border;
-          background: $hnm-grey;
+          background: $delivery_tab_active_bg;
         }
 
         &.tab-home-delivery {
@@ -139,11 +144,16 @@
       &.active--tab--head {
         h2 {
           color: $delivery_tab_active_title;
+          font-size: 0.8125rem;
         }
       }
 
       &:hover {
         background: $delivery_tab_active_bg;
+      }
+
+      h2 {
+        font-size: 0.8125rem;
       }
     }
 
@@ -154,7 +164,8 @@
 
     .tab-separator {
       color: $checkout_tab_separator;
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
+      background: $default_background_color;
 
       @include breakpoint($tablet) {
         width: 5.9%;
@@ -200,6 +211,8 @@
   }
 
   .form-type-radio {
+    border: none !important;
+
     @include breakpoint($only-mobile) {
       border-left: 1px solid $delivery_form_radio_border;
       border-right: 1px solid $delivery_form_radio_border;
@@ -235,9 +248,17 @@
           }
 
           &-title {
-            font-size: 0.875rem;
+            font-size: 0.8125rem;
             font-family: $hnm-demibold;
             color: $title;
+          }
+
+          &-description {
+            font-size: 0.8125rem;
+          }
+
+          &-price {
+            font-size: 0.8125rem;
           }
         }
       }
@@ -261,7 +282,7 @@
       border-bottom-color: $secondary_border;
 
       @include breakpoint($upto-desktop) {
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
       }
     }
   }
@@ -302,6 +323,9 @@
     }
 
     .payment-plugin-wrapper-div {
+      background-color: $delivery_payment_bg;
+      border: none !important;
+
       &.plugin-selected {
         background-color: $delivery_payment_selected_bg;
 
@@ -346,9 +370,6 @@
         padding: 1.5rem 1.375rem;
       }
 
-      border-#{$left}: 1px solid $checkout_payment_option_border;
-      border-#{$right}: 1px solid $checkout_payment_option_border;
-
       .payment-method {
         &-name {
           @include breakpoint($desktop) {
@@ -361,6 +382,15 @@
         &-title {
           font-family: $hnm-demibold;
           color: $title;
+          font-size: 0.8125rem;
+
+          @include breakpoint($only-mobile) {
+            max-width: 8.75rem;
+          }
+        }
+
+        &-description {
+          font-size: 0.8125rem;
         }
       }
     }
@@ -397,7 +427,7 @@
             font-weight: normal;
             text-decoration: underline;
             padding: 0.5rem 2.5rem;
-            font-size: 0.75rem;
+            font-size: 0.8125rem;
           }
         }
 
@@ -454,6 +484,10 @@
         legend {
           span {
             color: $primary_dark_color;
+
+            @include breakpoint($upto-desktop) {
+              font-size: 0.8125rem;
+            }
           }
         }
 
@@ -490,19 +524,27 @@
 }
 
 #selected-address-wrapper {
-  border: 1px solid $delivery_selected_address_border;
+  border: none;
   font-family: $hnm-regular;
+  background: $delivery_selected_address_bg;
 
   .address--data {
     background: $delivery_selected_address_bg;
   }
 
   .address--controls {
+    text-align: center;
+    border: none;
+
     #change-address {
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       font-family: $hnm-demibold;
       color: $content_link_color;
-      text-decoration: underline;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }
@@ -561,7 +603,7 @@
   border-bottom: 1px solid $secondary_border;
   font-family: $hnm-demibold;
   letter-spacing: normal;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 
   @include breakpoint($desktop) {
     font-size: 1rem;

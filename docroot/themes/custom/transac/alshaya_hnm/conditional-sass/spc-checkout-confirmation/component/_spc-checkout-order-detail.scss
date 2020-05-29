@@ -2,8 +2,8 @@
   label {
     text-transform: capitalize;
 
-    @include icon('dropdown-expand', 'after') {
-      font-size: 2rem;
+    @include icon('chevrondown', 'after') {
+      font-size: 0.525rem;
     }
   }
 }

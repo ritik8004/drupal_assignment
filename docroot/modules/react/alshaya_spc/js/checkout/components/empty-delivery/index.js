@@ -19,6 +19,8 @@ import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import createFetcher from '../../../utilities/api/fetcher';
 import { fetchClicknCollectStores } from '../../../utilities/api/requests';
 import { getUserLocation } from '../../../utilities/map/map_utils';
+import dispatchCustomEvent from '../../../utilities/events';
+import WithModal from '../with-modal';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -29,41 +31,21 @@ export default class EmptyDeliveryText extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      open: false,
-    };
     this.openStoreRequests = [];
   }
 
   componentDidMount() {
     this.isComponentMounted = true;
-    document.addEventListener(
-      'refreshCartOnAddress',
-      this.eventListener,
-      false,
-    );
-
-    document.addEventListener(
-      'refreshCartOnCnCSelect',
-      this.eventListener,
-      false,
-    );
-
-    document.addEventListener('closeAddressListPopup', this.closeModal, false);
+    document.addEventListener('refreshCartOnAddress', this.eventListener);
+    document.addEventListener('refreshCartOnCnCSelect', this.eventListener);
+    document.addEventListener('closeAddressListPopup', this.eventClosePopup);
   }
 
   componentWillUnmount() {
     this.isComponentMounted = false;
-    document.removeEventListener(
-      'refreshCartOnAddress',
-      this.eventListener,
-      false,
-    );
-    document.removeEventListener(
-      'refreshCartOnCnCSelect',
-      this.eventListener,
-      false,
-    );
+    document.removeEventListener('refreshCartOnAddress', this.eventListener);
+    document.removeEventListener('refreshCartOnCnCSelect', this.eventListener);
+    document.removeEventListener('closeAddressListPopup', this.eventClosePopup);
   }
 
   getDeliveryType = () => {
@@ -192,14 +174,13 @@ export default class EmptyDeliveryText extends React.Component {
     );
   };
 
-  openModal = () => {
-    this.setState({ open: true });
+  openModal = (callback) => {
+    callback();
     this.cncEvent();
   }
 
-  closeModal = () => {
-    this.setState({ open: false });
-
+  closeModal = (callback) => {
+    callback();
     if (this.getDeliveryType() === 'click_and_collect') {
       const { updateModal } = this.context;
       updateModal(false);
@@ -207,11 +188,15 @@ export default class EmptyDeliveryText extends React.Component {
   }
 
   eventListener = (e) => {
+    this.eventClosePopup();
     const data = e.detail;
     const { refreshCart } = this.props;
     refreshCart(data);
+  }
+
+  eventClosePopup = () => {
     if (this.isComponentMounted) {
-      this.closeModal();
+      dispatchCustomEvent('closeModal', 'deliveryType');
     }
   }
 
@@ -238,7 +223,6 @@ export default class EmptyDeliveryText extends React.Component {
       },
       cart: mainCart,
     } = this.props;
-    const { open } = this.state;
 
     let defaultVal = null;
     // If logged in user.
@@ -263,45 +247,47 @@ export default class EmptyDeliveryText extends React.Component {
       };
     }
 
-    const popup = (
-      <Popup
-        open={open}
-        className={deliveryType === 'click_and_collect' ? '' : getAddressPopupClassName()}
-        onClose={this.closeModal}
-        closeOnDocumentClick={false}
-      >
-        {deliveryType === 'click_and_collect'
-          ? (
-            <ClickCollectContainer
-              closeModal={this.closeModal}
-            />
-          )
-          : (
-            <React.Suspense fallback={<Loading />}>
-              <AddressContent
-                closeModal={this.closeModal}
-                cart={mainCart}
-                showEditButton
-                headingText={Drupal.t('delivery information')}
-                processAddress={this.processAddress}
-                type="shipping"
-                showEmail={drupalSettings.user.uid === 0}
-                default_val={defaultVal}
-              />
-            </React.Suspense>
-          )}
-      </Popup>
-    );
-
     return (
-      <div className="spc-empty-delivery-information">
-        <div onClick={this.openModal} className="spc-checkout-empty-delivery-text">
-          {deliveryType === 'click_and_collect'
-            ? Drupal.t('select your preferred collection store')
-            : Drupal.t('please add your contact details and address.')}
-        </div>
-        {popup}
-      </div>
+      <WithModal modalStatusKey="deliveryType">
+        {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
+          <div className="spc-empty-delivery-information">
+            <div onClick={() => this.openModal(triggerOpenModal)} className="spc-checkout-empty-delivery-text">
+              <span>
+                {deliveryType === 'click_and_collect'
+                  ? Drupal.t('select your preferred collection store')
+                  : Drupal.t('please add your contact details and address.')}
+              </span>
+            </div>
+            <Popup
+              open={isModalOpen}
+              className={deliveryType === 'click_and_collect' ? '' : getAddressPopupClassName()}
+              closeOnEscape={false}
+              closeOnDocumentClick={false}
+            >
+              {deliveryType === 'click_and_collect'
+                ? (
+                  <ClickCollectContainer
+                    closeModal={() => this.closeModal(triggerCloseModal)}
+                  />
+                )
+                : (
+                  <React.Suspense fallback={<Loading />}>
+                    <AddressContent
+                      closeModal={() => this.closeModal(triggerCloseModal)}
+                      cart={mainCart}
+                      showEditButton
+                      headingText={Drupal.t('delivery information')}
+                      processAddress={this.processAddress}
+                      type="shipping"
+                      showEmail={drupalSettings.user.uid === 0}
+                      default_val={defaultVal}
+                    />
+                  </React.Suspense>
+                )}
+            </Popup>
+          </div>
+        )}
+      </WithModal>
     );
   }
 }

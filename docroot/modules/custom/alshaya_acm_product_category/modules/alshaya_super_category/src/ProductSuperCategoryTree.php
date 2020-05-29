@@ -313,4 +313,41 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     return $depthLevel;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getAllParents($term) {
+    $parents = parent::getAllParents($term);
+
+    // Remove the first parent if super category is enabled as that is
+    // l0 and we need from l1.
+    if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+      array_shift($parents);
+    }
+
+    return $parents;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getChildTermIds(int $parent = 0) {
+    if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+      $l1Terms = $this->termStorage->loadTree('acq_product_category', $parent, 2);
+
+      foreach ($l1Terms as $key => $term) {
+        // We get 1st and 2nd levels and also check parents
+        // (only 2nd level has parents).
+        if (empty($this->termStorage->loadParents($term->tid))) {
+          unset($l1Terms[$key]);
+        }
+      }
+    }
+    else {
+      $l1Terms = parent::getChildTermIds($parent);
+    }
+
+    return $l1Terms ? array_column($l1Terms, 'name', 'tid') : [];
+  }
+
 }

@@ -15,6 +15,7 @@ services:
     overrides:
       environment:
         DEVEL_ENV: lando
+        PHP_IDE_CONFIG: serverName=alshaya
     run_as_root:
       - "apt-get update -y"
       - "apt-get install netcat -y"
@@ -24,10 +25,7 @@ services:
     portforward: 33061
     run_as_root:
       # Create site databases. TODO: check if we can automate this some other way.
-      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmkw; GRANT ALL PRIVILEGES ON drupal_alshaya_hmkw.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
-      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmae; GRANT ALL PRIVILEGES ON drupal_alshaya_hmae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
-      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmsa; GRANT ALL PRIVILEGES ON drupal_alshaya_hmsa.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
-      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_dhuae; GRANT ALL PRIVILEGES ON drupal_alshaya_dhuae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
+      - /app/.lando/scripts/provision/database.sh
 
   memcache1:
     type: memcached:1.5.11
@@ -48,8 +46,30 @@ services:
   solr:
     type: solr:5.5
 
+  # Images used for tooling.
+
   node:
     type: node:8
+
+  selenium:
+    type: compose
+    services:
+      image: selenium/standalone-chrome-debug
+      # It would be possible to switch to another image,
+      # but this has not been tested yet.
+      # image: selenium/standalone-firefox-debug
+
+      # If running in headless mode, you may find you
+      # need to start XVBF.
+      #
+      #      environment:
+      #        START_XVBF: 'false'
+      volumes:
+        - /dev/shm:/dev/shm
+      command: /opt/bin/entry_point.sh
+      ports:
+        - '4444:4444'
+        - '5900:5900'
 
 tooling:
   blt:
@@ -63,6 +83,30 @@ tooling:
   frontend-build:
     service: node
     cmd:  bash /app/blt/scripts/frontend-build.sh /app/docroot && bash /app/blt/scripts/react-build.sh /app/docroot
+
+  behat-build:
+    description: build pre-requisites for behat testing.
+    cmd:
+      - appserver: cd /app/behat_rework && composer install
+      - node: cd /app/behat_rework/bin && npm install
+      - appserver: cd /app/behat_rework/ && ./behat-build.sh --rebuild=TRUE
+
+  behat-run:
+    description: runs behat tests
+    service: appserver
+    cmd: cd /app/behat_rework && ./bin/behat -vvv -c behat-lando.yml --format pretty
+
+  xdebug-on:
+    service: appserver
+    description: Enable xdebug for Apache.
+    cmd: docker-php-ext-enable xdebug && service apache2 reload
+    user: root
+
+  xdebug-off:
+    service: appserver
+    description: Disable xdebug for Apache.
+    cmd: rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && service apache2 reload
+    user: root
 
 excludes:
   - vendor

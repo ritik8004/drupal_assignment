@@ -22,6 +22,35 @@
     text-transform: uppercase;
     color: $title;
   }
+
+  .c-page-title__description {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: $hnm-demibold;
+      text-transform: capitalize;
+    }
+
+    p {
+      font-size: 0.75rem;
+      line-height: 1.25rem;
+
+      a {
+        color: $department_category_content_link;
+        text-decoration: underline;
+
+        &:hover {
+          &:active {
+            text-decoration: none;
+            color: $department_category_content_link_active;
+          }
+        }
+      }
+    }
+  }
 }
 
 .nodetype--department_page {
@@ -65,6 +94,14 @@
             }
           }
         }
+      }
+    }
+  }
+
+  .nodetype--advanced_page {
+    .page-standard {
+      .c-page-title {
+        border-bottom: none;
       }
     }
   }

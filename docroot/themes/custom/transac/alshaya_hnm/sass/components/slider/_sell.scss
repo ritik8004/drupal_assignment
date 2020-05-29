@@ -1,40 +1,127 @@
 .view-product-slider {
   .c-products__item__label {
-    font-size: 0.875rem;
     font-family: $hnm-regular;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
     color: $sell_label;
-  }
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0.625rem 0 0;
 
-  .owl-carousel .slick-slide img {
-    max-width: 9rem;
-
-    @include breakpoint($tablet) {
-      object-fit: cover;
+    &:hover:active {
+      color: $default-anchor-link-hover;
     }
 
     @include breakpoint($only-mobile) {
-      object-fit: scale-down;
+      max-width: 7.625rem;
+    }
+
+    @include breakpoint($desktop) {
+      max-width: 100%;
     }
   }
 
-  .slick-prev,
-  .slick-next {
+  .owl-carousel {
+    .slick-slide {
+      > article {
+        @include breakpoint($tablet) {
+          padding: 0 0.75rem;
+        }
+      }
+
+      img {
+        max-width: 100%;
+
+        @include breakpoint($tablet) {
+          object-fit: cover;
+        }
+
+        @include breakpoint($only-mobile) {
+          object-fit: scale-down;
+        }
+      }
+    }
+
+    .views-row {
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  .price-wrapper {
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+  }
+
+  .views-row {
+    .promotions {
+      a {
+        font-size: 0.8125rem;
+        line-height: 1.25rem;
+        margin: 0;
+      }
+    }
+  }
+
+  &:not(.view-display-id-block_matchback) {
+    .slick-slider {
+      .slick-arrow {
+        @include breakpoint($tablet) {
+          top: 35% !important;
+        }
+
+        &::before {
+          font-size: 1rem;
+        }
+
+        &:hover {
+          &::before {
+            color: $default-anchor-link-hover;
+          }
+        }
+      }
+    }
+  }
+
+  .special--price {
     @include breakpoint($tablet) {
-      top: 32% !important;
+      display: inline-block;
+      margin-#{$left}: 0.3125rem;
+    }
+  }
+
+  .has--special--price {
+    @include breakpoint($tablet) {
+      display: inline-block;
     }
   }
 }
 
 .subtitle.crossell-title {
   font-family: $hnm-demibold;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  text-align: $left;
+  text-transform: none;
+
+  @include breakpoint($only-mobile) {
+    margin-#{$left}: 0.625rem;
+  }
 
   @include breakpoint($tablet) {
     margin-bottom: 0.25rem;
-    font-size: 1rem;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
 
     html[lang=ar] & {
       font-size: 0.875rem;
     }
+  }
+
+  @include breakpoint($desktop) {
+    margin-#{$left}: 3.5rem;
   }
 }
 
@@ -157,6 +244,32 @@
 
       @include breakpoint($desktop) {
         margin: 0 1rem;
+      }
+    }
+  }
+}
+
+.horizontal-upell,
+.horizontal-related,
+.horizontal-crossell {
+  .view-product-slider {
+    text-align: $left;
+  }
+}
+
+.paragraph--type--product-carousel-category,
+.horizontal-upell,
+.horizontal-related,
+.block-basket-horizontal-recommendation,
+.horizontal-crossell {
+  .view-product-slider {
+    @include breakpoint($only-mobile) {
+      .owl-carousel {
+        .views-row {
+          &:first-child {
+            margin-#{$left}: 0.625rem;
+          }
+        }
       }
     }
   }

@@ -2,7 +2,7 @@
   &.l-two--sf main {
     .field--name-field-subscribe-newsletter {
       p {
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
         margin-#{$left}: 0;
 
         a {
@@ -54,6 +54,8 @@
   }
 
   .order-summary {
+    font-size: 0.8125rem;
+
     @include breakpoint($tablet) {
       background-color: $info;
       color: $white-five;
@@ -81,6 +83,7 @@
     @include arabic-letter-spacing;
 
     font-family: $hnm-bold;
+    font-size: 0.8125rem;
     text-transform: uppercase;
     color: $order_print_btn_text;
     background: $order_print_btn_bg;
@@ -122,6 +125,7 @@
   .label.font-small {
     color: $order_print_label;
     font-family: $hnm-demibold;
+    font-size: 0.8125rem;
   }
 
   .right--align {
@@ -156,13 +160,17 @@
     background-color: $hnm-grey;
 
     td {
-      @include icon(dropdown-expand, after) {
-        font-size: 2.483rem;
+      @include icon(chevrondown, after) {
+        font-size: 0.525rem;
+        color: $hnm-black-three;
       }
     }
 
     &.expanded-row td {
-      @include icon(dropdown-collapse, after);
+      @include icon(chevrondown, after) {
+        transform: translateY(-50%) rotate(180deg);
+        font-size: 0.525rem;
+      }
     }
   }
 
@@ -216,6 +224,7 @@
 
   font-family: $hnm-bold;
   font-weight: bold;
+  font-size: 0.8125rem;
   border: 1px solid $primary_empty_btn_border;
   color: $primary_empty_btn;
   text-transform: uppercase;
@@ -231,7 +240,7 @@
     margin-#{$right}: 1.5rem !important;
     transition: margin 0.25s ease-in-out;
     width: 9.875rem;
-    min-width: 11.625rem;
+    min-width: 12.625rem;
   }
 
   &.expanded-table {
@@ -272,7 +281,7 @@
 }
 
 .confirmation__signup--description {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: $secondary_link;
   font-weight: bold;
   font-family: $arial;
@@ -302,6 +311,8 @@
 
 .order-confirmation {
   .user__order--detail {
+    font-size: 0.8125rem;
+
     .total-row {
       &.vat-row {
         td {

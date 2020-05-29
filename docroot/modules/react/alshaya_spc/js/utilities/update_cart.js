@@ -99,20 +99,10 @@ export const updateCartItemData = (action, sku, quantity) => {
 };
 
 export const addPaymentMethodInCart = (action, data) => {
-  let cart = cartAvailableInStorage();
-  if (cart === false) {
-    return null;
-  }
-
-  if (!Number.isInteger(cart)) {
-    cart = cart.cart_id;
-  }
-
   const apiUrl = updateCartApiUrl();
   return axios.post(apiUrl, {
     action,
     payment_info: data,
-    cart_id: cart,
   }).then((response) => response.data, (error) => {
     // Processing of error here.
     Drupal.logJavascriptError('add-payment-method-in-cart', error);

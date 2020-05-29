@@ -1,1 +1,196 @@
 /* Color palette for PBK */
+
+$white: #ddd;
+$white-two: #fff;
+
+$PBK_black_one: #000;
+$PBK_grey_one: #333;
+$PBK_white: #f2f2f2;
+$PBK_red: #900;
+$PBK_deep_red: #c00;
+$PBK_confirmation_blue: #7292be;
+
+$_black_two: $PBK_grey_one;
+$_black_three: #353132;
+$_black_four: #222;
+$_light_blue_one: #e0eaf2;
+$_light_blue_two: #e1eaf2;
+$_gray_two: #b3b3b3;
+$_gray_three: #f0f0f0;
+$_gray_four: #e8e8e8;
+$_gray_five: #f2f2f2;
+$_gray_six: #fafafa;
+$_gray_seven: #f8f8f8;
+$_gray_eight: #c8c8c8;
+$_gray_nine: #555;
+$_gray_ten: #777;
+$_gray_eleven: #dadada;
+$_gray_twelve: #f9f9f9;
+$_gray_thirteen: #efefef;
+$_gray_fourteen: #f3f3f3;
+$_gray_fifteen: #acacac;
+$_grey_sixteen: #696969;
+$_grey_seventeen: #b4b3b3;
+$_grey_eighteen: #4a4a4a;
+$_grey_nineteen: #1a1a1a;
+$_grey_twenty: #ccc;
+
+$transparent: transparent;
+
+// Global elements.
+$content_link_color: $PBK_confirmation_blue;
+$primary_link: $PBK_confirmation_blue;
+$primary_input_focus_border: $PBK_confirmation_blue;
+$secondary_link: $_black_two;
+$primary_text: $_gray_ten;
+$secondary_text: $PBK_grey_one;
+
+// Slug banner
+$slug_banner_bg: $PBK_confirmation_blue;
+$slug_banner_text: $white-two;
+
+// Buttons.
+$primary_btn_bg: $PBK_red;
+$primary_btn_text: $white-two;
+$secondary_btn_bg: $PBK_black_one;
+$secondary_btn_text: $white-two;
+
+// Header - Search.
+$primary_search_btn_icon: $transparent;
+$primary_search_border: $_gray_eleven;
+$primary_search_input: $PBK_grey_one;
+$primary_search_input_placeholder: $_gray_two;
+
+// Algolia Autocomplete
+$algolia-auto-complete-border: $_gray_eleven;
+$algolia-suggestion-border: $_gray_eleven;
+$algolia-input-text: $PBK_grey_one;
+$algolia-suggestion-text: $PBK_grey_one;
+$algolia-input-placeholder-text: $_gray_two;
+$algolia-search-icon: $_black_two;
+$algolia-react-highlighted-bg: $PBK_confirmation_blue;
+$algolia-search-suggestion-hover-bg: $_gray_five;
+$algolia-react-highlighted-text: $primary_btn_text;
+
+//Header - Top header.
+$header_secondary_bg_upto_desk: $white-two;
+$header_secondary_bg: $PBK_white;
+$header_secondary_menu_link_mobile: $PBK_grey_one;
+$header_secondary_menu_link: $PBK_grey_one;
+$header_secondary_menu_link_hover_bg: $white-two;
+$header_secondary_menu_link_border: $transparent;
+$user_block_link: $PBK_confirmation_blue;
+
+// Mega menu.
+$pre_content_region_bg: $white-two;
+$mm_l1_link: $_black_two;
+$mm_l1_link_active: $_black_two;
+$mm_l1_link_active_bg: $white-two;
+$mm_l1_link_active_shadow: $_black_two;
+$mm_l1_link_hover: $_black_two;
+$mm_l2_link: $_black_two;
+$mm_l2_link_mobile_menu: $_black_two;
+$mm_l3_link: $_gray_ten;
+$mm_l3_link_hover: false;
+
+// Breadcrumb.
+$breadcrumb_link: $_black_two;
+$breadcrumb_link_hover: $_black_two;
+$breadcrumb_link_active: $_black_two;
+
+// Footer
+$footer_bg: $PBK_white;
+$footer_border_top: $PBK_grey_one;
+
+// Footer Primary.
+$footer_bg: $PBK_white;
+$footer_title_h3: $_black_two;
+$footer_link_hover: $_black_two;
+$footer_link: $_gray_ten;
+
+// Our Brands.
+$our_brands_footer_separator: $_black_two;
+$our_brand_section_title: $_black_two;
+
+// Copyright Footer.
+$copyright_footer_bg: $white-two;
+$copyright_footer_text: $_black_two;
+$checkout_footer_copyright_mobile_bg: $white-two;
+
+// Footer social icons.
+$social_links: $_black_two;
+
+// Newsletter-signup
+$newsletter_title_h3: $_black_two;
+$newsletter_block_text: $_black_two;
+$newsletter_input_placeholder: $_gray_ten;
+$newsletter_input_bg: $transparent;
+$newsletter_input_border: $_black_two;
+$newsletter_submit_btn: $_black_two;
+$newsletter_submit_btn_text: $white-two;
+
+// PDP
+$pdp_product_title: $_gray_ten;
+$pdp_short_description_text: $PBK_grey_one;
+
+// PDP Price
+$pdp_product_price: $_black_two;
+$pdp_product_special_price_text: $PBK_deep_red;
+$pdp_product_special_price: $PBK_deep_red;
+$pdp_product_discount_price: $PBK_deep_red;
+$pdp_product_discount_text: $PBK_deep_red;
+$pdp_sidebar_link: $_black_two;
+$pdp_accordion_title: $_black_two;
+
+// Accordion / Filter Facets
+$accordion_border: $_gray_eleven;
+$accordion_sub_title: $_black_two;
+$accordion_title_disabled: $_gray_eleven;
+$accordion_title: $_grey_nineteen;
+$accordion_title_icon: $_grey_nineteen;
+$plp_filter_title: $_grey_nineteen;
+$plp_filter_icon: $_grey_nineteen;
+
+// Sharethis
+$sharethis_icon: $_black_two;
+$sharethis_icon_hover: transparent;
+
+// PLP LHN block.
+$lhn_l1: $_black_two;
+$lhn_l2: $_black_two;
+$lhn_l3: $_gray_ten;
+$lhn_l3_hover: $_black_two;
+
+// PLP Filter facets
+$plp_facet_active_bg: $white-two;
+$plp_facet_border: $_gray_eleven;
+$plp_sort_by_options: $_gray_ten;
+$plp_selected_filter_label_text: $PBK_black_one;
+$plp_facet_filter_bg: $_black_four;
+$plp_filter_divider: $_grey_twenty;
+
+// PLP Product tile.
+$plp_tile_product_text: $_black_two;
+$plp_tile_product_title: $_gray_ten;
+$plp_tile_product_title_hover: $_gray_ten;
+$plp_tile_product_special_price: $PBK_deep_red;
+
+// PLP Grid.
+$plp_grid_active_color: $_grey_nineteen;
+
+// Section divider
+$section_divider_border: $_gray_ten;
+$section_divider_text: $PBK_grey_one;
+$section_divider_bg: $white-two;
+
+// SPC
+$spc-select-border: $_gray_eleven;
+$spc-product-title: $_gray_ten;
+$spc-product-price: $PBK_grey_one;
+
+// Minicart
+$primary_minicart_quantity_bg: $PBK_confirmation_blue;
+$primary_minicart_quantity_text: $white-two;
+
+// Department page
+$department-page-title-border: $_gray_ten;

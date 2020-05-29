@@ -35,10 +35,6 @@
     margin-bottom: 0.625rem;
     font-size: 1rem;
 
-    .price-currency {
-      padding-right: 0.3125rem;
-    }
-
     .surcharge-total {
       display: inline-flex;
       height: auto;
@@ -118,6 +114,11 @@
       grid-gap: 0.625rem;
       min-width: 19.25rem;
 
+      body.ie & {
+        display: -ms-grid;
+        -ms-grid-columns: 4.8125rem 0.625rem 1fr;
+      }
+
       @include breakpoint($only-mobile) {
         display: inline-grid;
         margin-bottom: 0;
@@ -135,12 +136,22 @@
 
       .spc-product-image {
         max-width: 4.8125rem;
+
+        body.ie & {
+          -ms-grid-row: 1;
+          -ms-grid-column: 1;
+        }
       }
 
       .spc-product-meta-data {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+
+        body.ie & {
+          -ms-grid-row: 1;
+          -ms-grid-column: 3;
+        }
       }
 
       .spc-product-title {
@@ -149,6 +160,12 @@
 
         a {
           color: $spc-product-title;
+        }
+      }
+
+      .spc-product-price {
+        .price {
+          text-align: $left;
         }
       }
 

@@ -18,6 +18,10 @@
       transform: translateY(-50%);
       font-size: 2rem;
     }
+
+    span::first-letter {
+      text-transform: capitalize;
+    }
   }
 
   .delivery-information-preview {
@@ -56,6 +60,10 @@
       .delivery-name,
       .delivery-address {
         width: calc(100% - 7.1875rem);
+      }
+
+      html[lang=ar] & {
+        line-height: 1.5;
       }
     }
   }

@@ -100,13 +100,24 @@ class MagentoApiWrapper {
       }
       elseif ($response->getStatusCode() !== 200) {
         if (empty($result)) {
+          $this->logger->error('Error while doing MDC api. Response result is empty. Status code: @code', [
+            '@code' => $response->getStatusCode(),
+          ]);
           throw new \Exception($this->utility->getDefaultErrorMessage(), 500);
         }
         elseif (!empty($result['message'])) {
-          throw new \Exception($this->getProcessedErrorMessage($result), 500);
+          $message = $this->getProcessedErrorMessage($result);
+          // Log the error message.
+          $this->logger->error('Error while doing MDC api call. Error message: @message', [
+            '@message' => $message,
+          ]);
+          throw new \Exception($message, 500);
         }
         elseif (!empty($result['messages']) && !empty($result['messages']['error'])) {
           $error = reset($result['messages']['error']);
+          $this->logger->error('Error while doing MDC api call. Error message no empty. Error message: @message', [
+            '@message' => $error['message'],
+          ]);
           throw new \Exception($error['message'], $error['code']);
         }
       }

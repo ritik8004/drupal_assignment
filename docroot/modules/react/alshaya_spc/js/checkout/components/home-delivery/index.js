@@ -12,42 +12,23 @@ import {
   formatAddressDataForEditForm,
   gerAreaLabelById,
 } from '../../../utilities/address_util';
+import WithModal from '../with-modal';
+import dispatchCustomEvent from '../../../utilities/events';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
 export default class HomeDeliveryInfo extends React.Component {
   isComponentMounted = false;
 
-  constructor(props) {
-    super(props);
-    this.state = { open: false };
-  }
-
   componentDidMount() {
     this.isComponentMounted = true;
-    document.addEventListener(
-      'refreshCartOnAddress',
-      this.eventListener,
-      false,
-    );
+    document.addEventListener('refreshCartOnAddress', this.eventListener);
   }
 
   componentWillUnmount() {
     this.isComponentMounted = false;
-    document.removeEventListener(
-      'refreshCartOnAddress',
-      this.eventListener,
-      false,
-    );
+    document.removeEventListener('refreshCartOnAddress', this.eventListener);
   }
-
-  openModal = () => {
-    this.setState({ open: true });
-  };
-
-  closeModal = () => {
-    this.setState({ open: false });
-  };
 
   processAddress = (e) => {
     // Show the loader.
@@ -56,12 +37,12 @@ export default class HomeDeliveryInfo extends React.Component {
   };
 
   eventListener = (e) => {
+    if (this.isComponentMounted) {
+      dispatchCustomEvent('closeModal', 'hdInfo');
+    }
     const data = e.detail;
     const { refreshCart } = this.props;
     refreshCart(data);
-    if (this.isComponentMounted) {
-      this.closeModal();
-    }
   };
 
   /**
@@ -75,7 +56,6 @@ export default class HomeDeliveryInfo extends React.Component {
       cart: cartVal,
       refreshCart,
     } = this.props;
-    const { open } = this.state;
     const addressData = [];
     Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
       if (address[val.key] !== undefined) {
@@ -95,42 +75,48 @@ export default class HomeDeliveryInfo extends React.Component {
 
     return (
       <div className="delivery-information-preview">
-        <div className="spc-delivery-customer-info">
-          <div className="delivery-name">
-            {address.firstname}
-            {' '}
-            {address.lastname}
-          </div>
-          <div className="delivery-address">
-            {addressData.join(', ')}
-          </div>
-          <div className="spc-address-form-edit-link" onClick={this.openModal}>
-            {Drupal.t('Change')}
-          </div>
-        </div>
-        <Popup
-          open={open}
-          onClose={this.closeModal}
-          closeOnDocumentClick={false}
-          className={getAddressPopupClassName()}
-        >
-          <React.Suspense fallback={<Loading />}>
-            <AddressContent
-              cart={cartVal}
-              closeModal={this.closeModal}
-              processAddress={this.processAddress}
-              showEditButton
-              headingText={Drupal.t('delivery information')}
-              type="shipping"
-              showEmail={window.drupalSettings.user.uid === 0}
-              default_val={
-                window.drupalSettings.user.uid === 0
-                  ? this.formatAddressData(address)
-                  : null
-              }
-            />
-          </React.Suspense>
-        </Popup>
+        <WithModal modalStatusKey="hdInfo">
+          {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
+            <>
+              <div className="spc-delivery-customer-info">
+                <div className="delivery-name">
+                  {address.firstname}
+                  {' '}
+                  {address.lastname}
+                </div>
+                <div className="delivery-address">
+                  {addressData.join(', ')}
+                </div>
+                <div className="spc-address-form-edit-link" onClick={() => triggerOpenModal()}>
+                  {Drupal.t('Change')}
+                </div>
+              </div>
+              <Popup
+                open={isModalOpen}
+                closeOnEscape={false}
+                closeOnDocumentClick={false}
+                className={getAddressPopupClassName()}
+              >
+                <React.Suspense fallback={<Loading />}>
+                  <AddressContent
+                    cart={cartVal}
+                    closeModal={() => triggerCloseModal()}
+                    processAddress={this.processAddress}
+                    showEditButton
+                    headingText={Drupal.t('delivery information')}
+                    type="shipping"
+                    showEmail={window.drupalSettings.user.uid === 0}
+                    default_val={
+                      window.drupalSettings.user.uid === 0
+                        ? this.formatAddressData(address)
+                        : null
+                    }
+                  />
+                </React.Suspense>
+              </Popup>
+            </>
+          )}
+        </WithModal>
         <div className="spc-delivery-shipping-methods">
           <ShippingMethods
             cart={cartVal}

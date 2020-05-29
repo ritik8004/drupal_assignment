@@ -75,12 +75,13 @@
       var items = cart_data.items;
       if (items !== undefined) {
         dataLayer[0].ecommerce.checkout.products = [];
-        if (!drupalSettings.gtm.disabled_vars.includes('cartItemsFlocktory')) {
+        if (!drupalSettings.gtm.disabled_vars.indexOf('cartItemsFlocktory')) {
           dataLayer[0].cartItemsFlocktory = [];
         }
 
-        Object.entries(items).forEach(([key, product]) => {
-          Drupal.alshayaSpc.getProductData(key, Drupal.alshayaSeoSpc.cartGtmCallback, {
+        Object.entries(items).forEach(function(productItem) {
+          const product = productItem[1];
+          Drupal.alshayaSpc.getProductData(product.sku, Drupal.alshayaSeoSpc.cartGtmCallback, {
             qty: product.qty,
             finalPrice: product.finalPrice
           });
@@ -96,7 +97,9 @@
    */
   Drupal.alshayaSeoSpc.cartGtmCallback = function(product, extraData) {
     if (product !== undefined && product.sku !== undefined) {
-      dataLayer[0].productStyleCode.push(product.parentSKU);
+      // gtmAttributes.id contains value of "getSkuForNode", which we need
+      // to pass for productStyleCode.
+      dataLayer[0].productStyleCode.push(product.gtmAttributes.id);
       dataLayer[0].productSKU.push(product.sku);
       var productData = Drupal.alshayaSeoSpc.gtmProduct(product, 1);
       dataLayer[0].ecommerce.checkout.products.push(productData);
@@ -111,6 +114,40 @@
         dataLayer[0].cartItemsFlocktory.push(flocktory);
       }
     }
+  };
+
+  Drupal.alshayaSeoSpc.loginData = function(cart_data) {
+    const cartLoginData = {
+      language: drupalSettings.path.currentLanguage,
+      country: drupalSettings.country_name,
+      currency: drupalSettings.alshaya_spc.currency_config.currency_code,
+      pageType: 'checkout login page',
+      productSKU: [],
+      productStyleCode: [],
+      cartTotalValue: cart_data.cart_total,
+      cartItemsCount: cart_data.items_qty,
+    }
+    // Copy items object.
+    var items = JSON.parse(JSON.stringify(cart_data.items));
+    Object.entries(items).forEach(function(productItem) {
+      const product = productItem[1];
+      Drupal.alshayaSpc.getProductData(
+        product.sku,
+        function(product, extraData) {
+          delete items[product.sku];
+          cartLoginData.productSKU.push(product.sku);
+          // gtmAttributes.id contains value of "getSkuForNode", which we need
+          // to pass for productStyleCode.
+          cartLoginData.productStyleCode.push(product.gtmAttributes.id);
+          if (Object.keys(items).length === 0) {
+            dataLayer.push(cartLoginData);
+          }
+        },
+        {
+        qty: product.qty,
+        finalPrice: product.finalPrice
+      });
+    });
   };
 
 })(jQuery, Drupal, drupalSettings, dataLayer);

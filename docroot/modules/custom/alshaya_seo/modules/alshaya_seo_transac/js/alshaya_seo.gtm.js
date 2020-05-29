@@ -802,11 +802,12 @@
     if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
       mediaCount = parseInt(product.attr('gtm-dimension4'));
     }
-
+    // Remove comma from price before passing through parseFloat.
+    var amount = product.attr('gtm-price').replace(/\,/g,'');
     var productData = {
       name: product.attr('gtm-name'),
       id: product.attr('gtm-main-sku'),
-      price: parseFloat(product.attr('gtm-price')),
+      price: parseFloat(amount),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
       dimension2: product.attr('gtm-sku-type'),
@@ -1200,7 +1201,7 @@
    * @param error
    */
   Drupal.logJavascriptError = function (context, error) {
-    var message = (error.message !== undefined)
+    var message = (error && error.message !== undefined)
       ? error.message
       : error;
     var errorData = {

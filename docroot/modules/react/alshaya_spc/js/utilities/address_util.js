@@ -6,9 +6,6 @@ import {
   removeFullScreenLoader, showFullScreenLoader,
   validateInfo,
 } from './checkout_util';
-import {
-  getInfoFromStorage,
-} from './storage';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import { extractFirstAndLastName } from './cart_customer_util';
@@ -195,7 +192,7 @@ export const validateContactInfo = (e, validateEmail) => {
   const name = e.target.elements.fullname.value.trim();
   const splitedName = name.split(' ');
   if (name.length === 0 || splitedName.length === 1) {
-    document.getElementById('fullname-error').innerHTML = Drupal.t('Please enter your full name.');
+    document.getElementById('fullname-error').innerHTML = getStringMessage('form_error_full_name');
     document.getElementById('fullname-error').classList.add('error');
     isError = true;
   } else {
@@ -205,7 +202,7 @@ export const validateContactInfo = (e, validateEmail) => {
 
   const mobile = e.target.elements.mobile.value.trim();
   if (mobile.length === 0) {
-    document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter mobile number.');
+    document.getElementById('mobile-error').innerHTML = getStringMessage('form_error_mobile_number');
     document.getElementById('mobile-error').classList.add('error');
     isError = true;
   } else {
@@ -217,7 +214,7 @@ export const validateContactInfo = (e, validateEmail) => {
   if (validateEmail) {
     const email = e.target.elements.email.value.trim();
     if (email.length === 0) {
-      document.getElementById('email-error').innerHTML = Drupal.t('Please enter email.');
+      document.getElementById('email-error').innerHTML = getStringMessage('form_error_email');
       document.getElementById('email-error').classList.add('error');
       isError = true;
     } else {
@@ -240,7 +237,7 @@ export const validateAddressFields = (e, validateEmail) => {
       if (field.required === true) {
         const addField = e.target.elements[key].value.trim();
         if (addField.length === 0) {
-          document.getElementById(`${key}-error`).innerHTML = Drupal.t('Please enter @label.', { '@label': field.label });
+          document.getElementById(`${key}-error`).innerHTML = getStringMessage('address_please_enter', { '@label': field.label });
           document.getElementById(`${key}-error`).classList.add('error');
           isError = true;
         } else {
@@ -280,7 +277,7 @@ export const addEditAddressToCustomer = (e) => {
         if (result.data.mobile === false) {
           // Removing loader in case validation fail.
           removeFullScreenLoader();
-          document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+          document.getElementById('mobile-error').innerHTML = getStringMessage('form_error_valid_mobile_number');
           document.getElementById('mobile-error').classList.add('error');
         } else {
           // If valid mobile number, remove error message.
@@ -336,19 +333,24 @@ export const addEditAddressToCustomer = (e) => {
                   // Remove loader.
                   removeFullScreenLoader();
 
-                  let cartData = {};
-
                   // If error, no need to process.
                   if (cartResult.error !== undefined) {
                     dispatchCustomEvent('addressPopUpError', {
                       type: 'error',
                       message: cartResult.error_message,
                     });
+
+                    // Add address id in hidden id field so that on next
+                    // save, new address is not created but uses existing one.
+                    const addressIdHiddenElement = document.getElementsByName('address_id');
+                    if (addressIdHiddenElement.length > 0) {
+                      document.getElementsByName('address_id')[0].value = list.data[firstKey].address_id;
+                    }
+
                     return;
                   }
 
-                  cartData = getInfoFromStorage();
-                  cartData.cart = cartResult;
+                  const cartData = { cart: cartResult };
 
                   // Refresh cart.
                   dispatchCustomEvent('refreshCartOnAddress', cartData);
@@ -462,7 +464,7 @@ export const checkoutAddressProcess = (e) => {
 
     // If invalid mobile number.
     if (response.data.mobile === false) {
-      document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+      document.getElementById('mobile-error').innerHTML = getStringMessage('form_error_valid_mobile_number');
       document.getElementById('mobile-error').classList.add('error');
       isError = true;
     } else {
@@ -474,11 +476,11 @@ export const checkoutAddressProcess = (e) => {
     // Do the processing only if we did email validation.
     if (response.data.email !== undefined) {
       if (response.data.email === 'invalid') {
-        document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', { '%mail': validationData.email });
+        document.getElementById('email-error').innerHTML = getStringMessage('form_error_email_not_valid', { '%mail': validationData.email });
         document.getElementById('email-error').classList.add('error');
         isError = true;
       } else if (response.data.email === 'exists') {
-        document.getElementById('email-error').innerHTML = Drupal.t('Customer already exists.');
+        document.getElementById('email-error').innerHTML = getStringMessage('form_error_customer_exists');
         document.getElementById('email-error').classList.add('error');
         isError = true;
       } else {
@@ -502,7 +504,6 @@ export const checkoutAddressProcess = (e) => {
         // Remove the loader.
         removeFullScreenLoader();
 
-        let cartData = {};
         // If any error, don't process further.
         if (cartResult.error !== undefined) {
           dispatchCustomEvent('addressPopUpError', {
@@ -512,8 +513,7 @@ export const checkoutAddressProcess = (e) => {
           return;
         }
 
-        cartData = getInfoFromStorage();
-        cartData.cart = cartResult;
+        const cartData = { cart: cartResult };
 
         // Trigger event.
         dispatchCustomEvent('refreshCartOnAddress', cartData);
@@ -599,7 +599,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
         if (result.data.mobile === false) {
           // Removing loader in case validation fail.
           removeFullScreenLoader();
-          document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+          document.getElementById('mobile-error').innerHTML = getStringMessage('form_error_valid_mobile_number');
           document.getElementById('mobile-error').classList.add('error');
         } else {
           // If valid mobile number, remove error message.
@@ -634,6 +634,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           const address = saveCustomerAddressFromBilling(customerData);
           if (address instanceof Promise) {
             address.then((list) => {
+              let addressId = null;
               if (list !== null) {
                 if (list.error === true) {
                   removeFullScreenLoader();
@@ -647,16 +648,13 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                 const firstKey = Object.keys(list.data)[0];
                 // Set the address id.
                 formData.static.customer_address_id = list.data[firstKey].address_mdc_id;
+                addressId = list.data[firstKey].address_id;
               }
 
               // Update billing address.
               const cartData = addBillingInCart('update billing', formData);
               if (cartData instanceof Promise) {
                 cartData.then((cartResult) => {
-                  let cartInfo = {
-                    cart: cartResult,
-                  };
-
                   // Remove loader.
                   removeFullScreenLoader();
 
@@ -666,12 +664,21 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                       type: 'error',
                       message: cartResult.error_message,
                     });
+
+                    // If not null, means this is for logged in user.
+                    if (addressId !== null) {
+                      // Add address id in hidden id field so that on next
+                      // save, new address is not created but uses existing one.
+                      const addressIdHiddenElement = document.getElementsByName('address_id');
+                      if (addressIdHiddenElement.length > 0) {
+                        document.getElementsByName('address_id')[0].value = addressId;
+                      }
+                    }
+
                     return;
                   }
 
-                  // Merging with existing local.
-                  cartInfo = getInfoFromStorage();
-                  cartInfo.cart = cartResult;
+                  const cartInfo = { cart: cartResult };
 
                   // Trigger the event for update.
                   dispatchCustomEvent('onBillingAddressUpdate', cartInfo);

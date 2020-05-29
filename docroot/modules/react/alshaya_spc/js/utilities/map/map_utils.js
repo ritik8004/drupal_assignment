@@ -64,6 +64,27 @@ export const removeAllMarkersFromMap = () => {
 };
 
 /**
+ * When click on map.
+ */
+export const onMapClick = (e) => {
+  // Dispatch event so that other can use this.
+  const event = new CustomEvent('mapClicked', {
+    bubbles: true,
+    detail: {
+      coords: () => e.latLng,
+    },
+  });
+  document.dispatchEvent(event);
+};
+
+/**
+ * When marker is dragged event.
+ */
+export const onMarkerDragEnd = (e) => {
+  onMapClick(e);
+};
+
+/**
  * Create a marker.
  *
  * @param {*} position
@@ -77,11 +98,15 @@ export const createMarker = (position, map) => {
     icon = drupalSettings.map.map_marker.active;
   }
 
-  return new window.google.maps.Marker({
+  const marker = new window.google.maps.Marker({
     position,
     map,
     icon,
+    draggable: true,
   });
+
+  marker.addListener('dragend', onMarkerDragEnd);
+  return marker;
 };
 
 /**

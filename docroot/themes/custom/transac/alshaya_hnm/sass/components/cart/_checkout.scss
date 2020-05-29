@@ -6,11 +6,12 @@
       color: $order_summary_title;
       font-weight: normal;
       font-family: $hnm-demibold;
+      font-size: 0.8125rem;
     }
 
     a {
       float: $right;
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       color: $order_summary_link;
       font-weight: normal;
       font-family: $hnm-demibold;
@@ -25,24 +26,42 @@
     width: 100%;
     padding: 0.9375rem 1.25rem 0.9375rem 1.5rem;
     color: $order_summary_title;
+    font-size: 0.8125rem;
 
-    @include icon(dropdown-expand, after) {
-      #{$right}: 0;
-      font-size: 2.483rem;
+    @include icon(chevrondown, after) {
+      #{$right}: 1rem;
+      font-size: 0.525rem;
+      color: $hnm-black-three;
     }
   }
 
   .active--accordion {
     .content-head {
-      @include icon(dropdown-collapse, after);
+      @include icon(chevrondown, after) {
+        transform: translateY(-50%) rotate(180deg);
+        font-size: 0.525rem;
+      }
     }
   }
 
   .right {
     width: calc(70% - 1.125rem);
+
+    span {
+      font-size: 0.8125rem;
+      line-height: 1rem;
+    }
+
+    a {
+      font-size: 0.8125rem;
+      line-height: 1.25rem;
+    }
   }
 
   .totals {
+    font-size: 0.8125rem;
+    border-top: none;
+
     .order-total {
       > span,
       span.price-currency,
@@ -76,6 +95,10 @@
       color: $order_summary_product_price_discount;
     }
   }
+
+  li {
+    border-top: none;
+  }
 }
 
 .totals {
@@ -100,7 +123,7 @@
   }
 
   .status {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     margin-top: 0.5rem;
     display: block;
   }
@@ -159,6 +182,13 @@
         .price-amount,
         .select2-selection__rendered {
           font-family: $hnm-regular-nodir;
+          font-size: 0.8125rem;
+        }
+
+        &:first-child {
+          a {
+            font-size: 0.8125rem !important;
+          }
         }
       }
 
@@ -176,6 +206,7 @@
             font-family: $hnm-demibold;
             font-weight: normal;
             color: $order_detail_tr_quantity;
+            font-size: 0.8125rem;
           }
         }
       }
@@ -208,7 +239,7 @@
   }
 
   #table-cart-totals {
-    font-size: 14px;
+    font-size: 0.8125rem !important;
 
     table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] {
       td {
@@ -223,7 +254,7 @@
       }
 
       td:first-child {
-        font-size: 12px;
+        font-size: 0.8125rem;
 
         @include breakpoint($mobile) {
           padding-top: 0.1rem !important;
@@ -273,6 +304,9 @@
 
     .edit-continue-shopping-mobile,
     #edit-continue-shopping-mobile {
+      font-size: 0.8125rem;
+      color: $basket_continue_shopping_text;
+
       @include breakpoint($tablet) {
         display: block;
         font-family: $hnm-bold;
@@ -280,7 +314,6 @@
         text-decoration: underline;
         border: 0;
         padding: 0;
-        color: $basket_continue_shopping_text;
       }
 
       @include breakpoint($only-mobile) {
@@ -296,10 +329,10 @@
     tr[data-drupal-selector="edit-totals-grand"] {
       td:first-child span {
         display: block;
-        font-size: 0.625rem;
+        font-size: 0.8125rem;
 
         @include breakpoint($desktop) {
-          font-size: 0.75rem;
+          font-size: 0.8125rem;
         }
       }
 
@@ -339,7 +372,7 @@
     min-width: 10.8125rem;
     text-transform: uppercase;
     font-family: $hnm-bold;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     letter-spacing: normal;
     padding: 0.625rem 0.25rem;
 
@@ -350,12 +383,16 @@
       padding: 0.75rem 0.25rem;
       letter-spacing: 1px;
     }
+
+    &:hover {
+      background: $gray44;
+    }
   }
 
   #edit-continue-shopping,
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     border: 1px solid $secondary_border;
     display: block;
     padding: 0.625rem 1.6rem;
@@ -374,6 +411,10 @@
     @include breakpoint($upto-tablet) {
       display: none;
     }
+
+    &:hover {
+      background: $seconday_menu_link_hover;
+    }
   }
 
   .edit-continue-shopping-mobile,
@@ -388,7 +429,7 @@
       cursor: pointer;
       background: $primary_btn_bg;
       color: $order_actions_checkout;
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       font-family: $hnm-bold;
       text-transform: uppercase;
       font-weight: normal;
@@ -430,7 +471,7 @@
       padding: 0.4rem 0;
       padding-#{$left}: 1.688rem;
       padding-#{$right}: 1.75rem;
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       letter-spacing: 1px;
 
       &::before {
@@ -475,7 +516,7 @@
       .form-submit {
         font-family: $hnm-bold;
         font-weight: normal;
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
       }
     }
   }
@@ -502,6 +543,22 @@ html[lang=ar] {
 
       @include breakpoint($desktop) {
         right: 2.45rem;
+      }
+    }
+  }
+
+  .alias--cart {
+    #table-cart-items {
+      tr {
+        th {
+          font-size: 0.8125rem;
+        }
+      }
+    }
+
+    #table-cart-totals {
+      td:first-child {
+        font-size: 0.8125rem !important;
       }
     }
   }

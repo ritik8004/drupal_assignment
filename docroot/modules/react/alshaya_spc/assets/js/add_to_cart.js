@@ -16,7 +16,7 @@
           // If no ife error, we process further for add to cart.
           if (!$(that).closest('form').hasClass('ajax-submit-prevented')) {
             // Get closest `add to cart` form.
-            var form = that.closest('form');
+            var form = $(that).closest('form');
             var currentSelectedVariant = $(form).attr('data-sku');
             var page_main_sku = currentSelectedVariant;
             var variant_sku = '';
@@ -74,9 +74,21 @@
               parentSku: page_main_sku,
               sku: currentSelectedVariant,
               variant: variant_sku,
-              product_name: is_configurable ? settings[productKey][page_main_sku].variants[variant_sku].cart_title : settings.productInfo[page_main_sku].cart_title,
-              image: is_configurable ? settings[productKey][page_main_sku].variants[variant_sku].cart_image : settings.productInfo[page_main_sku].cart_image,
             };
+
+            productData['product_name'] = settings.productInfo[page_main_sku].cart_title;
+            productData['image'] = settings.productInfo[page_main_sku].cart_image;
+
+            // Configurable - normal as well as re-structured.
+            if (is_configurable) {
+              productData['product_name'] = settings[productKey][page_main_sku].variants[variant_sku].cart_title;
+              productData['image'] = settings[productKey][page_main_sku].variants[variant_sku].cart_image;
+            }
+            // Simple grouped (re-structured).
+            else if (settings[productKey][page_main_sku]['group'] !== undefined) {
+              productData['product_name'] = settings[productKey][page_main_sku]['group'][currentSelectedVariant].cart_title;
+              productData['image'] = settings[productKey][page_main_sku]['group'][currentSelectedVariant].cart_image;
+            }
 
             // Post to ajax for cart update/create.
             jQuery.ajax({
@@ -167,7 +179,15 @@
                   });
 
                   // Triggering event to notify react component.
-                  var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: (function () { return response;  }), productData: productData}});
+                  var event = new CustomEvent('refreshMiniCart', {
+                    bubbles: true,
+                    detail: {
+                      data: function () {
+                        return response;
+                      },
+                      productData: productData,
+                    }
+                  });
                   document.dispatchEvent(event);
 
                   var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: (function () { return response; })}});

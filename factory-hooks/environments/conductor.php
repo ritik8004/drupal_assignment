@@ -64,6 +64,11 @@ $conductors = [
     'hmac_secret' => 'YWY2ZmY0MjItZmQ2OS00',
     'site_id' => 6,
   ],
+  'mcae_dev2' => [
+    'hmac_id' => '3063b30c2b3e401bafe0dfe0f1611da5',
+    'hmac_secret' => 'NzY3NDg4NjctOTk2Mi00',
+    'site_id' => 221,
+  ],
   'mcae_uat' => [
     'hmac_id' => '843bb58e8fff4c37bdfa17675497c80e',
     'hmac_secret' => 'NzYxMzYxNWYtYzc2MS00',
@@ -221,6 +226,24 @@ $conductors = [
     'hmac_secret' => 'NjhjMjRmNDEtNTJkMS00',
     'site_id' => 57,
   ],
+  // Pottery Barn Kids KW.
+  'pbkkw_uat' => [
+    'hmac_id' => 'cf6afd0bd1624636bd21f4581dc5e252',
+    'hmac_secret' => 'NDBhYjQ3NjQtNDZmNy00',
+    'site_id' => 40,
+  ],
+  // Pottery Barn Kids AE.
+  'pbkae_qa' => [
+    'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
+    'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
+    'site_id' => 33,
+  ],
+  // Pottery Barn Kids SA.
+  'pbksa_qa' => [
+    'hmac_id' => '76f67886b7d34f3aad6ae85e75f93550',
+    'hmac_secret' => 'NTI1ZjAwMTUtMzE5OS00',
+    'site_id' => 32,
+  ],
   // BathBodyWorks KW.
   'bbwkw_qa' => [
     'hmac_id' => '0b92904888cd422f8acd2938e199916e',
@@ -295,6 +318,14 @@ $conductors = [
     'hmac_secret' => 'ZTQ0Y2VlZWQtOGQwNS00',
     'site_id' => 217,
   ],
+  'bbwbh_uat' => [
+    'hmac_id' => '0a6ddf6ca9d54b199aea494947dc6fc9',
+    'hmac_secret' => 'MWExMGE0NDQtZGY5OS00',
+    'site_id' => 222,
+  ],
+  'bbwbh_prod' => [
+    'site_id' => 224,
+  ],
   // BathBodyWorks QA.
   'bbwqa_dev' => [
     'hmac_id' => 'aca0a08c946347a6b796ff622baf2cfc',
@@ -305,6 +336,14 @@ $conductors = [
     'hmac_id' => '956ca0edd8b140b18aa06acf1432c995',
     'hmac_secret' => 'NmM2NjE0MDMtNjdhNC00',
     'site_id' => 218,
+  ],
+  'bbwqa_uat' => [
+    'hmac_id' => '623cf547b8154a849e2eefe03cb94978',
+    'hmac_secret' => 'Nzg2ZWZjN2MtMmRjNi00',
+    'site_id' => 223,
+  ],
+  'bbwqa_prod' => [
+    'site_id' => 225,
   ],
   // VictoriaSecret KW.
   'vskw_qa' => [

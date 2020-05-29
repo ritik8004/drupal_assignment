@@ -66,6 +66,11 @@ class AlshayaYamlProcess {
           if (file_exists($this->templateDir . "/variables/markets/$market.yml")) {
             $market_common[] = $this->templateDir . "/variables/markets/$market.yml";
           }
+
+          if (file_exists($this->templateDir . "/variables/markets/$market/languages/$language.yml")) {
+            $market_common[] = $this->templateDir . "/variables/markets/$market/languages/$language.yml";
+          }
+
           $files["{$market}_{$language}"] = array_merge([$this->templateDir . '/variables/common.yml'], $market_common);
 
           $directory   = $this->templateDir . '/variables/brands';

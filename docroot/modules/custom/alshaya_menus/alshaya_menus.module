@@ -4,3 +4,34 @@
  * @file
  * Module file.
  */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function alshaya_menus_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+  if ($entity_type->id() == 'menu_link_content') {
+    $fields['social_id'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Social ID'))
+      ->setDescription(t('Enter the value for Social ID.'))
+      ->setDisplayOptions('form', [
+        'type' => 'string',
+        'weight' => 21,
+      ]);
+  }
+  return $fields;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_menus_form_menu_link_content_menu_link_content_form_alter(&$form, FormStateInterface $form_state) {
+  $menu_name = $form_state->getFormObject()->getEntity()->getMenuName();
+  if ($menu_name !== 'social-links') {
+    $form['social_id']['#access'] = FALSE;
+  }
+}

@@ -1,0 +1,54 @@
+.block-alshaya-algolia-react-autocomplete {
+  @include breakpoint($only-tablet) {
+    bottom: -3rem;
+  }
+
+  #alshaya-algolia-autocomplete {
+    .react-autosuggest__container::after {
+      background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 0 0 no-repeat;
+      background-size: 2.1rem 2.1rem;
+      width: 2.125rem;
+      height: 2.125rem;
+    }
+
+    .react-autosuggest__suggestions-container--open {
+      width: 100%;
+    }
+  }
+
+  .algolia-search-cleartext-icon {
+    @include breakpoint($tablet) {
+      #{$right}: 1.7rem;
+    }
+  }
+}
+
+body.frontpage {
+  header.c-header .block-system-branding-block .site-brand-home a {
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 4.5rem;
+      padding-#{$right}: 1rem;
+    }
+  }
+
+  .block-alshaya-algolia-react-autocomplete #alshaya-algolia-autocomplete .react-autosuggest__container::after {
+    @include breakpoint($only-mobile) {
+      background: none;
+      top: 0.9rem;
+    }
+  }
+}
+
+body:not(.frontpage) {
+  header.c-header .block-system-branding-block .site-brand-home a {
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 5.5rem;
+    }
+  }
+}
+
+body:not(.no-sticky-algolia-search-bar) header .c-header__region {
+  @include breakpoint($only-mobile) {
+    height: 3.375rem;
+  }
+}

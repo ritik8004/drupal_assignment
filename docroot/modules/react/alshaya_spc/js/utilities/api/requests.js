@@ -113,9 +113,11 @@ export const fetchCartData = () => {
 };
 
 export const fetchCartDataForCheckout = () => {
+  // Remove cart data from storage every-time we land on checkout page.
+  removeCartFromStorage();
+
   // If session cookie not exists, no need to process/check.
   if (drupalSettings.user.uid === 0 && !Cookies.get('PHPSESSID')) {
-    removeCartFromStorage();
     return null;
   }
 

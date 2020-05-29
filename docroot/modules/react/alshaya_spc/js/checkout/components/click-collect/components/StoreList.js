@@ -6,12 +6,13 @@ const StoreList = ({
   storeList, display, onStoreRadio, onStoreFinalize, selected: selectedStore, onStoreClose,
 }) => {
   if (!storeList || storeList.length === 0) {
-    return <div className="spc-cnc-empty-store-list">{getStringMessage('no_store_found')}</div>;
+    return <div className="spc-cnc-empty-store-list">{getStringMessage('cnc_no_store_found')}</div>;
   }
 
   const removeClassFromStoreList = (className) => {
     // Add Class expand to the currently opened li.
-    const tempStoreList = document.querySelectorAll('#click-and-collect-list-view li.select-store');
+    const tempStoreListNodes = document.querySelectorAll('#click-and-collect-list-view li.select-store');
+    const tempStoreList = [].slice.call(tempStoreListNodes);
     // Remove class expand from all.
     tempStoreList.forEach((storeElement) => {
       storeElement.classList.remove(className);
