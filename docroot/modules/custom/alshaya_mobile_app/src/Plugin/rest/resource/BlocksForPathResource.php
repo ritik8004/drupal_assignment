@@ -208,6 +208,7 @@ class BlocksForPathResource extends ResourceBase {
         'contexts' => [
           'url.query_args:page',
           'url.query_args:url',
+          'url.query_args:region',
         ],
         'tags' => ['config:block_list'],
       ],
