@@ -305,6 +305,22 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-mukw.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-muae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-musa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-mueg.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
 mysql_databases:
   - name: drupal
     encoding: utf8mb4
@@ -483,6 +499,22 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_pbkeg
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_mukw
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_muae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_musa
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_mueg
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 

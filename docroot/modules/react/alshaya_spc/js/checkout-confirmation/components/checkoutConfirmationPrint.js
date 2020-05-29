@@ -30,6 +30,7 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
             totals={totals}
             cart_promo={[]}
             show_checkout_button={false}
+            context="print"
           />
         </div>
       </div>

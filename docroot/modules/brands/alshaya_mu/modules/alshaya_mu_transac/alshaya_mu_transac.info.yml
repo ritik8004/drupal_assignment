@@ -1,0 +1,10 @@
+name: 'Alshaya Muji (Transac)'
+type: module
+description: 'The dedicated module for transac MUJI brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_mu:alshaya_mu
+  - alshaya_color_split:alshaya_color_split
+themes:
+  - alshaya_muji

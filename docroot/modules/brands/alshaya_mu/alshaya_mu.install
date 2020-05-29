@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_we.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_mu_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_mu', 'inc', 'alshaya_mu.content');
+
+  // Create default content for the site.
+  alshaya_mu_create_default_content();
+}
