@@ -207,8 +207,7 @@ class BlocksForPathResource extends ResourceBase {
     $region = $currentRequest->query->get('region');
 
     if (!empty($region)) {
-      $requested_region_blocks = [$region => $region_blocks[$region]];
-      $region_blocks = $requested_region_blocks;
+      $region_blocks = [$region => $region_blocks[$region]];
     }
 
     foreach ($region_blocks as $blocks) {
