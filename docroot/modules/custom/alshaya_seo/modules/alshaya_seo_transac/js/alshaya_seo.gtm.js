@@ -1161,6 +1161,11 @@
    *
    * @param prepareImpressionFunction
    *   The function to call which will prepare the product impressions.
+   *   The function will accept 3 parameters:
+   *     1. context: The context in which to search for impressions.
+   *     2. eventType: The type of the event, eg: 'scroll'.
+   *     3. currentQueueSize(by default null): The current size of the
+   *        impressions queue.
    * @param context
    *   The context for which impressions is to be generated.
    * @param settings
@@ -1176,7 +1181,11 @@
     var eventType = event.type;
 
     if (eventType === 'load' || eventType === 'search-results-updated') {
-      productImpressions = prepareImpressionFunction(context, eventType);
+      // Here we use concat to consider the case for Aloglia sites when user
+      // visits a page such as PLP and then performs search. If some impressions
+      // are already there, then those will remain along with the new ones which
+      // come from search impressions.
+      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType, productImpressions.length));
       Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
       timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
     }
@@ -1202,7 +1211,7 @@
   /**
    * Prepares product impressions.
    */
-  Drupal.alshaya_seo_gtm_prepare_impressions = function (context, eventType) {
+  Drupal.alshaya_seo_gtm_prepare_impressions = function (context, eventType, currentQueueSize = null) {
     var impressions = [];
     var body = $('body');
     var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
