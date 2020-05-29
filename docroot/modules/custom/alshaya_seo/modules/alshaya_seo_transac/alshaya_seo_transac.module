@@ -67,6 +67,7 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     $seo_transac_settings = \Drupal::config('alshaya_seo_transac.settings');
     $page['#attached']['drupalSettings']['gtm']['productImpressionQueueSize'] = $seo_transac_settings->get('product_impression_queue_size');
     $page['#attached']['drupalSettings']['gtm']['productImpressionTimer'] = $seo_transac_settings->get('product_impression_timer_time');
+    $page['#cache']['tags'] = array_merge($page['#cache']['tags'], $seo_transac_settings->getCacheTags());
   }
 }
 
