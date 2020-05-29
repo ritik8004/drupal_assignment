@@ -101,7 +101,7 @@
       // to pass for productStyleCode.
       dataLayer[0].productStyleCode.push(product.gtmAttributes.id);
       dataLayer[0].productSKU.push(product.sku);
-      var productData = Drupal.alshayaSeoSpc.gtmProduct(product, 1);
+      var productData = Drupal.alshayaSeoSpc.gtmProduct(product, extraData.qty);
       dataLayer[0].ecommerce.checkout.products.push(productData);
       if (typeof dataLayer[0].cartItemsFlocktory !== 'undefined') {
         var flocktory = {
