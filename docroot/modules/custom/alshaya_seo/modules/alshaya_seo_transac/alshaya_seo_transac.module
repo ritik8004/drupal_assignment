@@ -242,7 +242,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
             'currencyCode' => $gtm_manager->getGtmCurrency(),
             'purchase' => [
               'actionField' => $attributes['actionField'],
-              'products' => $attributes['products'],
+              'products' => array_values($attributes['products']),
             ],
           ];
 
@@ -533,6 +533,10 @@ function alshaya_seo_transac_alshaya_acm_product_light_product_data_alter(SKU $s
     $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $attributes = $gtmManager->fetchProductGtmAttributes($productNode, 'full');
     $data['gtm_attributes'] = $gtmManager->convertHtmlAttributesToDatalayer($attributes);
+
+    if ($sku->bundle() === 'simple') {
+      $data['gtm_attributes']['variant'] = $sku->getSku();
+    }
   }
 }
 
