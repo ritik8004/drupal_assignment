@@ -13,3 +13,11 @@ alshaya_seo.sitemap:
   requirements:
   # Sitemap should be accessible without any restriction.
     _access: 'TRUE'
+
+alshaya_seo_transac.alshaya_seo_transac_settings:
+  path: '/admin/config/alshaya/alshaya-seo-transac-settings'
+  defaults:
+    _title: 'Alshaya Seo Transac Settings'
+    _form: 'Drupal\alshaya_seo_transac\Form\AlshayaSeoTransacSettings'
+  requirements:
+    _permission: 'administer site configuration'
