@@ -1,0 +1,162 @@
+// 404 and Maintenance.
+
+.not-found {
+  position: static;
+  display: flex;
+  flex-flow: wrap row;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 100%;
+  text-align: center;
+
+  &::after {
+    display: none;
+  }
+
+  .not-found__image {
+    @include breakpoint($upto-desktop) {
+      display: block;
+    }
+
+    @include breakpoint($only-mobile) {
+      order: 1;
+      flex-basis: 100%;
+    }
+  }
+
+  .not-found__body {
+    position: static;
+    color: $page_not_found_text;
+    flex-basis: 50%;
+
+    @include breakpoint($only-mobile) {
+      order: 2;
+      flex-basis: 100%;
+      height: 12.875rem;
+    }
+
+    a {
+      background: $page_not_found_mobile_bg;
+      color: $page_not_found_link;
+      padding: 0.8125rem 3.75rem;
+      text-transform: uppercase;
+    }
+
+    .not-found__body__container {
+      padding: 0 27%;
+
+      @include breakpoint($upto-desktop) {
+        padding: 0 13%;
+      }
+
+      p {
+        font-size: 0.875rem;
+        margin-bottom: 0.625rem;
+      }
+
+      .sorry {
+        color: $page_not_found_sorry_text;
+        font-size: 2.25rem;
+        font-family: $alshaya-bold;
+      }
+
+      .shop-now-btn {
+        margin-top: 1.875rem;
+      }
+
+      .maintenance-ar {
+        font-family: $aeo-arabic-thin;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+
+        @include breakpoint($only-mobile) {
+          font-size: 1rem;
+        }
+
+        &.title {
+          font-size: 1.875rem;
+          font-family: $alshaya-arabic-bold;
+
+          @include breakpoint($only-mobile) {
+            font-size: 1.125rem;
+          }
+        }
+      }
+
+      .maintenance-en {
+        font-family: $alshaya-bold;
+        font-size: 1.5rem;
+        color: $maintenance_container_text;
+        width: 42%;
+        text-align: center;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+
+        @include breakpoint($upto-desktop) {
+          width: 80%;
+        }
+
+        @include breakpoint($only-mobile) {
+          font-size: 1rem;
+        }
+
+        &.title {
+          font-size: 1.75rem;
+          text-transform: uppercase;
+          color: $maintenance_info_title-text;
+
+          @include breakpoint($only-mobile) {
+            font-size: 1.125rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.maintenance-page {
+  .maintenance__logo {
+    text-align: center;
+
+    @include breakpoint($desktop) {
+      float: none;
+      margin-#{$right}: 0;
+      margin-top: 0;
+      padding-bottom: 3rem;
+    }
+
+    @include breakpoint($upto-desktop) {
+      text-align: center;
+    }
+
+    svg,
+    img {
+      height: 6rem;
+      width: 18rem;
+    }
+  }
+
+  .not-found {
+    padding: 2rem;
+    border: 1px solid $maintenance_container_border;
+
+    @include breakpoint($upto-desktop) {
+      margin: 2rem;
+      padding: 1rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin: 1rem;
+    }
+
+    .not-found__body {
+      flex-basis: 100%;
+      background-color: $maintenance_container_bg;
+      padding: 6rem 0;
+
+      &__container {
+        padding: 0;
+      }
+    }
+  }
+}
