@@ -75,12 +75,13 @@
       var items = cart_data.items;
       if (items !== undefined) {
         dataLayer[0].ecommerce.checkout.products = [];
-        if (!drupalSettings.gtm.disabled_vars.includes('cartItemsFlocktory')) {
+        if (!drupalSettings.gtm.disabled_vars.indexOf('cartItemsFlocktory')) {
           dataLayer[0].cartItemsFlocktory = [];
         }
 
-        Object.entries(items).forEach(([key, product]) => {
-          Drupal.alshayaSpc.getProductData(key, Drupal.alshayaSeoSpc.cartGtmCallback, {
+        Object.entries(items).forEach(function(productItem) {
+          const product = productItem[1];
+          Drupal.alshayaSpc.getProductData(product.sku, Drupal.alshayaSeoSpc.cartGtmCallback, {
             qty: product.qty,
             finalPrice: product.finalPrice
           });
@@ -128,9 +129,10 @@
     }
     // Copy items object.
     var items = JSON.parse(JSON.stringify(cart_data.items));
-    Object.entries(items).forEach(([key, product]) => {
+    Object.entries(items).forEach(function(productItem) {
+      const product = productItem[1];
       Drupal.alshayaSpc.getProductData(
-        key,
+        product.sku,
         function(product, extraData) {
           delete items[product.sku];
           cartLoginData.productSKU.push(product.sku);

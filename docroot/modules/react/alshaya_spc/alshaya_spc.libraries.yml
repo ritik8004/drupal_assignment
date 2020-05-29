@@ -4,6 +4,7 @@ cart_utilities:
   dependencies:
     - core/jquery
     - core/drupal
+    - alshaya_react/react_pollyfill
 
 mini_cart:
   version: 1.x
