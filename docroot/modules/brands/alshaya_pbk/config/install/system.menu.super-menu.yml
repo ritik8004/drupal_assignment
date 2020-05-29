@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: super-menu
+label: 'Super Menu'
+description: 'Contains menu links to sites of other brands. This is when super category is disabled.'
+locked: false
