@@ -206,7 +206,10 @@ class BlocksForPathResource extends ResourceBase {
     // only return blocks of that region.
     $region = $currentRequest->query->get('region');
 
-    if (!empty($region)) {
+    if ($region !== NULL) {
+      if (!array_key_exists($region, $region_blocks)) {
+        $this->mobileAppUtility->throwException();
+      }
       $region_blocks = [$region => $region_blocks[$region]];
     }
 
