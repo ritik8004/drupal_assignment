@@ -1,0 +1,50 @@
+#cart_notification {
+  @include breakpoint($only-mobile) {
+    top: 3.125rem;
+  }
+
+  @include breakpoint($tablet) {
+    #{$right}: -0.75rem;
+    top: 2.5rem;
+
+    html[lang=ar] & {
+      top: 3.2rem;
+      left: -1.25rem;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    top: 2.7rem;
+
+    html[lang=ar] & {
+      top: 3rem;
+      left: -0.25rem;
+    }
+  }
+
+  &.has--notification::before {
+    @include breakpoint($only-mobile) {
+      html[lang=ar] & {
+        left: 0.625rem;
+      }
+    }
+  }
+
+  .notification,
+  .error {
+    .col-1 {
+      .qty {
+        font-weight: bold;
+      }
+    }
+
+    .col-2 {
+      font-family: $alshaya-bold;
+
+      a {
+        text-transform: uppercase;
+        font-family: $alshaya-bold;
+      }
+    }
+  }
+}

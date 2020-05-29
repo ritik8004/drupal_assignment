@@ -1,0 +1,225 @@
+fields:
+  color:
+    configurable: 1
+    cardinality: 1
+    index: 0
+    facet: 0
+  color_family:
+    label: 'Color'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+    swatch: 1
+  details1:
+    label: 'Details 1'
+    type: 'string'
+  details2:
+    label: 'Details 2'
+    type: 'string'
+  details3:
+    label: 'Details 3'
+    type: 'string'
+  details4:
+    label: 'Details 4'
+    type: 'string'
+  details5:
+    label: 'Details 5'
+    type: 'string'
+  details6:
+    label: 'Details 6'
+    type: 'string'
+  materials_care1:
+    label: 'Materials care 1'
+    type: 'string'
+  materials_care2:
+    label: 'Materials care 2'
+    type: 'string'
+  materials_care3:
+    label: 'Materials care 3'
+    type: 'string'
+  materials_care4:
+    label: 'Materials care 4'
+    type: 'string'
+  size_fit1:
+    label: 'Size fit 1'
+    type: 'string'
+  size_fit2:
+    label: 'Size fit 2'
+    type: 'string'
+  size_fit3:
+    label: 'Size fit 3'
+    type: 'string'
+  size_fit4:
+    label: 'Size fit 4'
+    type: 'string'
+  fit:
+    label: 'Fit'
+    cardinality: -1
+    index: 1
+    facet: 1
+  destruction:
+    label: 'Destruction'
+    cardinality: -1
+    index: 1
+    facet: 1
+  fabric:
+    label: 'Fabric'
+    cardinality: -1
+    index: 1
+    facet: 1
+  push_lining_level:
+    label: 'Push Lining Level'
+    cardinality: -1
+    index: 1
+    facet: 1
+  wash:
+    label: 'Wash'
+    cardinality: -1
+    index: 1
+    facet: 1
+  rise:
+    label: 'Rise'
+    cardinality: -1
+    index: 1
+    facet: 1
+  mix_match_fit:
+    label: 'Mix Match Fit'
+    cardinality: -1
+    index: 1
+    facet: 1
+  inseams_offered:
+    label: 'Inseams Offered'
+    cardinality: -1
+    index: 1
+    facet: 1
+  inseam_length:
+    label: 'Inseam Length'
+    cardinality: -1
+    index: 1
+    facet: 1
+  activity:
+    label: 'Activity'
+    cardinality: -1
+    index: 1
+    facet: 1
+  body:
+    label: 'Body'
+    cardinality: -1
+    index: 1
+    facet: 1
+  fit_type:
+    label: 'Fit Type'
+    cardinality: -1
+    index: 1
+    facet: 1
+  fly_function:
+    label: 'Fly Function'
+    cardinality: -1
+    index: 1
+    facet: 1
+  length:
+    label: 'Length'
+    cardinality: -1
+    index: 1
+    facet: 1
+  lining:
+    label: 'Lining'
+    cardinality: -1
+    index: 1
+    facet: 1
+  neckline:
+    label: 'Neckline'
+    cardinality: -1
+    index: 1
+    facet: 1
+  pack_size:
+    label: 'Pack Size'
+    cardinality: -1
+    index: 1
+    facet: 1
+  straps:
+    label: 'Straps'
+    cardinality: -1
+    index: 1
+    facet: 1
+  benefit:
+    label: 'Benefit'
+    cardinality: -1
+    index: 1
+    facet: 1
+  stretch:
+    label: 'Stretch'
+    cardinality: -1
+    index: 1
+    facet: 1
+  stretch_level:
+    label: 'Stretch Level'
+    cardinality: -1
+    index: 1
+    facet: 1
+  padding:
+    label: 'Padding'
+    cardinality: -1
+    index: 1
+    facet: 1
+  shape:
+    label: 'Shape'
+    cardinality: -1
+    index: 1
+    facet: 1
+  shape_material_type:
+    label: 'Shape Material Type'
+    cardinality: -1
+    index: 1
+    facet: 1
+  silhouette:
+    label: 'Silhouette'
+    cardinality: -1
+    index: 1
+    facet: 1
+  sleeve_length:
+    label: 'Sleeve Length'
+    cardinality: -1
+    index: 1
+    facet: 1
+  waistband:
+    label: 'Waistband'
+    cardinality: -1
+    index: 1
+    facet: 1
+  waistband_detail:
+    label: 'Waistband detail'
+    cardinality: -1
+    index: 1
+    facet: 1
+  fabric_content:
+    label: 'Fabric content'
+    cardinality: -1
+    index: 1
+    facet: 1
+  graphic_pattern:
+    label: 'Graphic pattern'
+    cardinality: -1
+    index: 1
+    facet: 1
+  embellishment_trim:
+    label: 'Embellishment trim'
+    cardinality: -1
+    index: 1
+    facet: 1
+  collection:
+    label: 'Collection'
+    cardinality: -1
+    index: 1
+    facet: 1
+  coverage:
+    label: 'Coverage'
+    cardinality: -1
+    index: 1
+    facet: 1
+  division_name:
+    label: 'Gender'
+    cardinality: -1
+    index: 1
+    facet: 1

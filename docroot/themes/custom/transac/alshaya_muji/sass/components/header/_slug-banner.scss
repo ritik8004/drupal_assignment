@@ -1,0 +1,51 @@
+.slug-banner-processed {
+  &:not(.header--fixed) {
+    .c-header {
+      .block-views-exposed-filter-blocksearch-page {
+        @include breakpoint($only-mobile) {
+          top: 3.5625rem;
+
+          .ui-autocomplete {
+            top: 2.9375rem !important;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 4.5625rem;
+        }
+      }
+    }
+  }
+
+  &.header--fixed {
+    .c-header {
+      .block-views-exposed-filter-blocksearch-page {
+        @include breakpoint($only-tablet) {
+          top: 4.5625rem;
+        }
+      }
+    }
+  }
+
+  header {
+    .site-brand-home a {
+      @include breakpoint($only-tablet) {
+        margin-top: 1.25rem;
+      }
+    }
+
+    .c-header__region {
+      .block-cart-mini-block {
+        @include breakpoint($only-tablet) {
+          .cart-link {
+            margin-top: -0.3125rem;
+
+            html[lang=ar] & {
+              margin-top: 1.25rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

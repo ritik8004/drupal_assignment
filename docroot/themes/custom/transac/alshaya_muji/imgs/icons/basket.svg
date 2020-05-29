@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="24" id="bag" viewBox="0 0 21 26">
+  <g id="Header---AE-Only" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="1024---PTP" transform="translate(-967 -59)" fill="#000" fill-rule="nonzero">
+      <g id="Utility-Nav" transform="translate(723 59)">
+        <g id="Bag" transform="translate(244)">
+          <path d="M20.475 6.318a.777.777 0 00-.556-.244h-4.54v-1.13C15.38 2.199 13.125 0 10.346 0c-2.78 0-5.003 2.228-5.003 4.945v1.13H.773a.727.727 0 00-.557.243c-.154.153-.216.367-.216.58l1.143 14.926c.154 2.259 2.1 4.03 4.385 4.03h9.512c2.285 0 4.2-1.771 4.385-4l1.266-14.986a.832.832 0 00-.216-.55zM6.238 4.945c0-2.228 1.822-4.03 4.108-4.03 2.254 0 4.076 1.802 4.076 4.03v1.13H6.238v-1.13zm12.26 16.88c-.154 1.77-1.667 3.143-3.458 3.143H5.528c-1.822 0-3.335-1.404-3.459-3.174L.957 7.02h18.808l-1.266 14.804z" id="Shape"></path>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

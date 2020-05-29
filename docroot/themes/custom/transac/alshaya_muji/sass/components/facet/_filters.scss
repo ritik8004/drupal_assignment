@@ -1,0 +1,55 @@
+.c-plp .c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-1 legend,
+.c-plp .c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-2 legend,
+.c-plp .c-content__region .block-views-exposed-filter-blocksearch-page legend,
+.c-facet.c-accordion .c-accordion__title,
+.c-facet.c-accordion .c-collapse__title,
+.c-facet.c-collapse-item .c-accordion__title,
+.c-facet.c-collapse-item .c-collapse__title {
+  font-family: $alshaya-bold;
+  text-transform: uppercase;
+  color: $accordion_title;
+  font-size: 0.875rem;
+
+  @include breakpoint($desktop) {
+    height: 3.125rem;
+    line-height: 3.125rem;
+  }
+
+  @include facet-arrow(after, down, 0.25rem, 0, 0.25rem, 0.25rem) {
+    #{$right}: 1.875rem;
+    top: 1.25rem;
+  }
+
+  &.active {
+    &::after {
+      transform: rotate(270deg);
+    }
+  }
+}
+
+.c-plp .c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-1 legend,
+.c-plp .c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-2 legend,
+.c-plp .c-content__region .block-views-exposed-filter-blocksearch-page legend {
+  padding-#{$right}: 2.5rem;
+}
+
+.show-all-filters,
+.show-all-filters-algolia {
+  font-family: $alshaya-bold;
+  text-transform: uppercase;
+  color: $accordion_title;
+  font-size: 0.875rem;
+}
+
+.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search),
+.c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
+  ul {
+    .facet-item {
+      span {
+        html[lang=ar] & {
+          direction: ltr;
+        }
+      }
+    }
+  }
+}

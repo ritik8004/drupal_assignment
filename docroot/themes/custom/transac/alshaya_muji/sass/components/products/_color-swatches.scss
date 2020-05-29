@@ -1,0 +1,30 @@
+.sku-base-form {
+  .form-wrapper {
+    .configurable-swatch {
+      .li-swatch-image {
+        a,
+        span {
+          &.picked,
+          &:hover {
+            &::after {
+              border-radius: 100%;
+            }
+          }
+        }
+
+        img {
+          border-radius: 100%;
+          color: $pdp_product_color_swatch_border;
+        }
+      }
+
+      .select2Option {
+        text-align: center;
+
+        .select-buttons {
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
