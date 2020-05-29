@@ -1210,6 +1210,7 @@
     var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
     var productLinkProcessedSelector = $('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
     var listName = body.attr('gtm-list-name');
+    var productImpressionQueueSize = 10;
     // Send impression for each product added on page (page 1 or X).
     var count = productLinkProcessedSelector.length + 1;
     if (productLinkSelector.length > 0) {
@@ -1228,6 +1229,12 @@
           impression.variant = '';
           impressions.push(impression);
           count++;
+        }
+        // On page load, process only the required number of
+        // items and push to datalayer.
+        if ((eventType === 'load') && (impressions.length === productImpressionQueueSize)) {
+          // This is to break out from the .each() function.
+          return false;
         }
       });
     }
