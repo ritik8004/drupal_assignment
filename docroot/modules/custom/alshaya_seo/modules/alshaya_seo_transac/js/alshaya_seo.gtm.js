@@ -1177,8 +1177,7 @@
     var currencyCode = body.attr('gtm-currency');
     var eventType = event.type;
 
-    // On load, push impressions = productImpressionQueueSize and set timer.
-    if (eventType === 'load') {
+    if (eventType === 'load' || eventType === 'search-results-updated') {
       productImpressions = prepareImpressionFunction(context, eventType);
       Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, productImpressionQueueSize));
       timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
