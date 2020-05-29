@@ -14,7 +14,7 @@ Otherwise install it via brew or from java:
 1. `cd behat_rework` :file_folder:
 2. `composer install` :hourglass_flowing_sand:
 3. `cd bin; npm install` :gear:
-4. `cd..`
+4. `cd ..`
 5. `./behat-build.sh --rebuild=TRUE` This will generate feature files :rocket:.
   - parameters:
     - `--rebuild` (boolean): `TRUE` to recollect yml files and variables.
