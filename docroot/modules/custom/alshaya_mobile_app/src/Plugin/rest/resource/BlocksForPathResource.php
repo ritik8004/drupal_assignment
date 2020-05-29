@@ -201,6 +201,18 @@ class BlocksForPathResource extends ResourceBase {
 
     // Get all visible blocks.
     $region_blocks = $this->blockRepository->getVisibleBlocksPerRegion();
+
+    // If region is present in query parameter then
+    // only return blocks of that region.
+    $region = $currentRequest->query->get('region');
+
+    if ($region !== NULL) {
+      if (!array_key_exists($region, $region_blocks)) {
+        $this->mobileAppUtility->throwException();
+      }
+      $region_blocks = [$region => $region_blocks[$region]];
+    }
+
     foreach ($region_blocks as $blocks) {
       foreach ($blocks as $block) {
         if ($block instanceof Block) {
