@@ -9,6 +9,7 @@
   var mouseenterTime = 0;
   var gtm_execute_onetime_events = true;
   var currentListName = null;
+  var productImpressions = [];
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
@@ -1158,12 +1159,55 @@
   /**
    * Helper function to push productImpression to GTM.
    *
-   * @param customerType
+   * @param prepareImpressionFunction
+   *   The function to call which will prepare the product impressions.
+   * @param context
+   *   The context for which impressions is to be generated.
+   * @param settings
+   *    Any settings.
+   * @param event
+   *    The event object or a custom object containing at least the event type.
+   *    Eg. {type: 'timer'} can also be sent as a value.
    */
-  Drupal.alshaya_seo_gtm_prepare_and_push_product_impression = function (context, settings) {
-    var impressions = [];
+  Drupal.alshaya_seo_gtm_prepare_and_push_product_impression = function (prepareImpressionFunction, context, settings, event) {
+    var timer;
+    var productImpressionTimer = 60000;
+    var productImpressionQueueSize = 10;
     var body = $('body');
     var currencyCode = body.attr('gtm-currency');
+    var eventType = event.type;
+
+    // On load, push impressions = productImpressionQueueSize and set timer.
+    if (eventType === 'load') {
+      productImpressions = prepareImpressionFunction(context, eventType);
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, productImpressionQueueSize));
+      timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
+    }
+
+    if (eventType === 'scroll') {
+      // Add new impressions to the global productImpressions.
+      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType));
+      // Push if the global productImpressions length > max impressions size.
+      if (productImpressions.length >= productImpressionQueueSize) {
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, productImpressionQueueSize));
+        window.clearInterval(timer);
+        timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+      }
+    }
+
+    if (eventType === 'unload' || eventType === 'timer') {
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, productImpressionQueueSize));
+      window.clearInterval(timer);
+      timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+    }
+  }
+
+  /**
+   * Prepares product impressions.
+   */
+  Drupal.alshaya_seo_gtm_prepare_impressions = function (context, eventType) {
+    var impressions = [];
+    var body = $('body');
     var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
     var productLinkProcessedSelector = $('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
     var listName = body.attr('gtm-list-name');
@@ -1171,7 +1215,12 @@
     var count = productLinkProcessedSelector.length + 1;
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        if ($(this).isElementInViewPort(0, 10)) {
+        var condition = true;
+        // Only on scroll we check if product is in view or not.
+        if (eventType == 'scroll') {
+          condition = $(this).isElementInViewPort(0, 10);
+        }
+        if (condition) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;
@@ -1182,10 +1231,8 @@
           count++;
         }
       });
-      if (impressions.length > 0) {
-        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
-      }
     }
+    return impressions;
   };
 
   // Ajax command to push deliveryAddress Event.
