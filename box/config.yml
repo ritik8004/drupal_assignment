@@ -104,7 +104,7 @@ apache_vhosts_ssl:
     certificate_file: "/home/vagrant/ssl/localhost.crt"
     certificate_key_file: "/home/vagrant/ssl/localhost.key"
     extra_parameters: |
-      ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ drupal_core_path }}"
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ drupal_core_path }}"
 
 apache_vhosts:
   - servername: "{{ drupal_domain }}"
