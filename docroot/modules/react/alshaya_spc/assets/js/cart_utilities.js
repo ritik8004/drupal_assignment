@@ -41,7 +41,8 @@
     return $.param(data);
   };
 
-  Drupal.alshayaSpc.getProductData = function (sku, callback, extraData = {}) {
+  Drupal.alshayaSpc.getProductData = function (sku, callback, extraData) {
+    extraData = extraData || {};
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');
 
@@ -120,8 +121,6 @@
     // Return as well if required for re-use.
     return data;
   };
-
-
 
 })(jQuery, Drupal);
 
