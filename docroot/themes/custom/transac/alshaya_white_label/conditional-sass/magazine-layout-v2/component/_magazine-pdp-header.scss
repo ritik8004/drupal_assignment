@@ -1,0 +1,99 @@
+.new-pdp-magazine-layout {
+  .branding__menu {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+}
+
+.magv2-header {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  z-index: 12;
+
+  @include breakpoint($only-mobile) {
+    padding: 1.25rem;
+  }
+
+  .magv2-header-wrapper {
+    .back-button {
+      float: left;
+
+      @include icon(arrowup, after) {
+        display: block;
+        font-size: 2.125rem;
+        height: 2.875rem;
+        transform: rotate(-90deg);
+        width: 2.875rem;
+        background: $magv2-icon-bg;
+        border-radius: 50%;
+        padding-left: 0.3125rem;
+        padding-top: 0.3125rem;
+      }
+    }
+
+    .magv2-compact-detail-wrapper {
+      display: none;
+    }
+
+    .cart-icon {
+      background: $magv2-icon-bg;
+      border-radius: 50%;
+      float: right;
+
+      &::before {
+        content: '';
+        background: url(/themes/custom/transac/alshaya_white_label/imgs/icons/new-pdp-shopping-bag-mobile.svg) center center no-repeat;
+        display: block;
+        height: 2.875rem;
+        width: 2.875rem;
+      }
+    }
+  }
+}
+
+.magv2-pdp-sticky-header {
+  &.magv2-header {
+    position: fixed;
+    background: white;
+    padding: 0.6875rem;
+
+    .magv2-header-wrapper {
+      display: flex;
+
+      .back-button {
+        @include icon(arrowup, after) {
+          background: none;
+          height: 2.125rem;
+          width: 2.125rem;
+          padding-left: 0;
+          padding-top: 0;
+        }
+      }
+
+      .magv2-compact-detail-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 80%;
+        padding: 0 1.25rem;
+      }
+
+      .magv2-pdp-brand-logo {
+        @include breakpoint($only-mobile) {
+          display: none;
+        }
+      }
+
+      .cart-icon {
+        background: none;
+
+        &::before {
+          height: 2.125rem;
+          width: 2.125rem;
+        }
+      }
+    }
+  }
+}

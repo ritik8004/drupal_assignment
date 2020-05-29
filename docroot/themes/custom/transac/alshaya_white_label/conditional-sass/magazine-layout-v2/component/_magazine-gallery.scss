@@ -1,7 +1,7 @@
 .nodetype--acq_product {
   .page-wrapper {
     @include breakpoint($tablet) {
-      background-color: $pdp_background;
+      background-color: $magv2-pdp-bg;
     }
   }
 
@@ -13,6 +13,10 @@
 }
 
 .magv2-pdp-gallery {
+  @include breakpoint($tablet) {
+    padding-top: 2rem;
+  }
+
   .magazine__gallery--container-desktop {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -57,7 +61,7 @@
       .slick-dots {
         display: flex !important;
         justify-content: center;
-        background: $white-five;
+        background: $magv2-slick-dots-bg;
         width: 100%;
 
         button {
@@ -70,8 +74,8 @@
         }
 
         li {
-          background-color: $white-smoke-light;
-          color: $white-smoke-light;
+          background-color: $magv2-slick-dots;
+          color: $magv2-slick-dots;
           border: none;
           margin: 1em 0.5em;
         }
@@ -80,7 +84,7 @@
   }
 
   .popup-overlay {
-    background: $white-five !important;
+    background: $magv2-gallery-popup-bg !important;
 
     .popup-content {
       background: none !important;
@@ -109,13 +113,13 @@
       }
 
       @include icon(close, before) {
-        font-size: 2.5rem;
+        font-size: 2.875rem;
         position: fixed;
         top: 1.75rem;
         #{$right}: 1.75rem;
-        background: $grey-light-two;
+        background: $magv2-gallery-popup-cross-bg;
         border-radius: 50%;
-        color: $mothercare-black;
+        color: $magv2-gallery-popup-cross;
         cursor: pointer;
         opacity: 0.6;
         z-index: 9;
@@ -138,7 +142,7 @@
           transform: translateY(-50%);
           border-radius: 50%;
           opacity: 0.6;
-          background: $grey-light-two;
+          background: $magv2-gallery-slider-bg;
           bottom: unset;
         }
       }
@@ -149,6 +153,18 @@
         @include breakpoint($tablet) {
           #{$left}: 3.75rem;
         }
+
+        @include icon(chevronleft) {
+          @include breakpoint($desktop) {
+            height: 5.25rem;
+            width: 5.25rem;
+            font-size: 3rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            font-size: 3rem;
+          }
+        }
       }
 
       .slick-next {
@@ -156,6 +172,18 @@
 
         @include breakpoint($tablet) {
           #{$right}: 3.75rem;
+        }
+
+        @include icon(chevronright) {
+          @include breakpoint($desktop) {
+            height: 5.25rem;
+            width: 5.25rem;
+            font-size: 3rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            font-size: 3rem;
+          }
         }
       }
 
@@ -181,10 +209,14 @@
         }
 
         li {
-          background-color: $white-smoke-light;
-          color: $white-smoke-light;
+          background-color: $magv2-slick-dots;
+          color: $magv2-slick-dots;
           border: none;
           margin: 1em 0.75em;
+
+          &.slick-active {
+            background: $magv2-slick-dots-active !important;
+          }
         }
       }
 

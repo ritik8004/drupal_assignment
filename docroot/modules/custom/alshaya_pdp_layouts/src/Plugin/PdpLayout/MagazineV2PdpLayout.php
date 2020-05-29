@@ -126,7 +126,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     // Todo: To be shifted in the specific brand module.
     if (!empty($vars['elements']['brand_logo'])) {
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['brandLogo'] = [
-        'logo' => $vars['elements']['brand_logo']['#uri'],
+        'logo' => file_create_url($vars['elements']['brand_logo']['#uri']),
         'title' => $vars['elements']['brand_logo']['#title'],
         'alt' => $vars['elements']['brand_logo']['#alt'],
       ];
