@@ -1,0 +1,5 @@
+variables:
+  var_username: 'mitesh@axelerant.com'
+  var_password: 'Alshaya@2017'
+  spc_product_listing_page: '/shop-body-care/featured/'
+  spc_basket_page: '/shop-body-care/featured/'
