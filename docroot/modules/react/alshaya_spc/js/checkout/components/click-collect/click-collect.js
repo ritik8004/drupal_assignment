@@ -80,7 +80,9 @@ class ClickCollect extends React.Component {
       this.nearMeBtn = this.searchRef.current.getElementsByTagName('button').item(0);
     }
 
-    if (coords !== null && storeList.length === 0) {
+    if (coords !== null
+      && storeList !== undefined
+      && storeList.length === 0) {
       this.fetchAvailableStores(coords);
     }
 
