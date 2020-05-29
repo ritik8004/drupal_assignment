@@ -104,7 +104,7 @@ apache_vhosts_ssl:
     certificate_file: "/home/vagrant/ssl/localhost.crt"
     certificate_key_file: "/home/vagrant/ssl/localhost.key"
     extra_parameters: |
-          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ drupal_core_path }}"
+      ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ drupal_core_path }}"
 
 apache_vhosts:
   - servername: "{{ drupal_domain }}"
@@ -273,38 +273,6 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
-  - servername: "local.alshaya-bpkw.com"
-    documentroot: "{{ drupal_core_path }}"
-    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
-
-  - servername: "local.alshaya-bpae.com"
-    documentroot: "{{ drupal_core_path }}"
-    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
-
-  - servername: "local.alshaya-bpsa.com"
-    documentroot: "{{ drupal_core_path }}"
-    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
-
-  - servername: "local.alshaya-bpeg.com"
-    documentroot: "{{ drupal_core_path }}"
-    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
-
-  - servername: "local.alshaya-pbkkw.com"
-    documentroot: "{{ drupal_core_path }}"
-    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
-
-  - servername: "local.alshaya-pbkae.com"
-    documentroot: "{{ drupal_core_path }}"
-    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
-
-  - servername: "local.alshaya-pbksa.com"
-    documentroot: "{{ drupal_core_path }}"
-    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
-
-  - servername: "local.alshaya-pbkeg.com"
-    documentroot: "{{ drupal_core_path }}"
-    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
-
   - servername: "local.alshaya-mukw.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
@@ -467,38 +435,6 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_aeoeg
-    encoding: utf8mb4
-    collation: utf8mb4_general_ci
-
-  - name: drupal_alshaya_bpkw
-    encoding: utf8mb4
-    collation: utf8mb4_general_ci
-
-  - name: drupal_alshaya_bpae
-    encoding: utf8mb4
-    collation: utf8mb4_general_ci
-
-  - name: drupal_alshaya_bpsa
-    encoding: utf8mb4
-    collation: utf8mb4_general_ci
-
-  - name: drupal_alshaya_bpeg
-    encoding: utf8mb4
-    collation: utf8mb4_general_ci
-
-  - name: drupal_alshaya_pbkkw
-    encoding: utf8mb4
-    collation: utf8mb4_general_ci
-
-  - name: drupal_alshaya_pbkae
-    encoding: utf8mb4
-    collation: utf8mb4_general_ci
-
-  - name: drupal_alshaya_pbksa
-    encoding: utf8mb4
-    collation: utf8mb4_general_ci
-
-  - name: drupal_alshaya_pbkeg
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 

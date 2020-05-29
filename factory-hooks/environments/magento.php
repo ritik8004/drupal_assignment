@@ -229,43 +229,6 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 15],
     ],
   ],
-  // Pottery Barn Kids.
-  'pbk_qa' => [
-    'url' => 'https://integration-5ojmyuq-rfuu4sicyisyw.eu.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'auf96nt6b1loar4yc2qm55pluqd5sgrn',
-      'consumer_secret' => 'i1lhnoafn6a1ggjou2juj366cpcnnhel',
-      'access_token' => 's4rfv318v1gxmrnq8mjdn01uhejd8760',
-      'access_token_secret' => '4x5otnn378pjr1v3acnmoe934niwjlw7',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-  ],
-  'pbk_uat' => [
-    'url' => 'https://pb-uat2.store.alshaya.com',
-    'magento_secrets' => [
-      'consumer_key' => 'u59m0076qalrjodhiwoekpt2qpens7c4',
-      'consumer_secret' => '521nybox1a70rjpwf1yxyfoqhiyrv7x1',
-      'access_token' => 'gsw0sb6xy52kfww9yufgcu6dsixka3g9',
-      'access_token_secret' => '6a38i2p1qaxa1hfkjrdmhjtwluy57itq',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 18],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 6, 'ar' => 9],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 12, 'ar' => 15],
-    ],
-  ],
   // Victoria Secret.
   'vs_qa' => [
     'url' => 'https://integration-5ojmyuq-kpwgmbven7d7y.eu-3.magentosite.cloud',
@@ -412,19 +375,19 @@ $magentos = [
   'fl_uat' => [
     'url' => 'https://fl-uat2.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => 'bs3iqr7l0o0nu1m65gqj0i9g6khwrwlg',
-      'consumer_secret' => 'd5y2b1wvvuwja4xjeaa08qgjpbr603ji',
-      'access_token' => '3ag36xcjyj1u2dxrvu859gsnyqgthirb',
-      'access_token_secret' => '4gx37p92dgm5tfd5i0f4po6ggab0lblu',
+      'consumer_key' => '7odnwfhqxgemmfg8cmmo7iqipbb74hav',
+      'consumer_secret' => 'mqf2sk1s87h9hmqmeyu2wdtetj73hyqf',
+      'access_token' => '6r64msbxkga3jrf5bb8nl0q9q3jya5nh',
+      'access_token_secret' => 'qmkvb8ekhknu2uiy3cvclarxdcfcpvvb',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
+      'store_id' => ['en' => 1, 'ar' => 19],
     ],
     'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
+      'store_id' => ['en' => 7, 'ar' => 10],
     ],
     'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
+      'store_id' => ['en' => 13, 'ar' => 16],
     ],
   ],
   'fl_prod' => [
@@ -552,27 +515,6 @@ $magentos = [
     ],
     'eg' => [
       'store_id' => ['en' => 22, 'ar' => 19],
-    ],
-  ],
-  'bp_qa' => [
-    'url' => 'https://integration-5ojmyuq-gdyoujibngne2.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => '10t6mj4t46m69exspxelmqna1t3fnz8u',
-      'consumer_secret' => 'ozboevrqwoeogwohpeu7hlcvr2hbljkt',
-      'access_token' => '31l664sdj4q1p4wu7k0wmzwt1h84hp5w',
-      'access_token_secret' => 'p1habct6ztfqtbza0in9o68z464qr5fj',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
     ],
   ],
   'mu_qa' => [
