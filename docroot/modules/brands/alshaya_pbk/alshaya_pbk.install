@@ -6,19 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Add the new Super menu and block to PBK.
- */
-function alshaya_pbk_update_8001() {
-  $configs = [
-    'system.menu.super-menu',
-    'block.block.supermenu',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_pbk');
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_pbk_install() {
