@@ -1171,33 +1171,31 @@
    */
   Drupal.alshaya_seo_gtm_prepare_and_push_product_impression = function (prepareImpressionFunction, context, settings, event) {
     var timer;
-    var productImpressionTimer = 60000;
-    var productImpressionQueueSize = 10;
     var body = $('body');
     var currencyCode = body.attr('gtm-currency');
     var eventType = event.type;
 
     if (eventType === 'load' || eventType === 'search-results-updated') {
       productImpressions = prepareImpressionFunction(context, eventType);
-      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, productImpressionQueueSize));
-      timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
+      timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
     }
 
     if (eventType === 'scroll') {
       // Add new impressions to the global productImpressions.
       productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType));
       // Push if the global productImpressions length > max impressions size.
-      if (productImpressions.length >= productImpressionQueueSize) {
-        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, productImpressionQueueSize));
+      if (productImpressions.length >= drupalSettings.gtm.productImpressionQueueSize) {
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
         window.clearInterval(timer);
-        timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+        timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
       }
     }
 
     if (eventType === 'unload' || eventType === 'timer') {
-      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, productImpressionQueueSize));
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
       window.clearInterval(timer);
-      timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+      timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
     }
   }
 
@@ -1210,7 +1208,6 @@
     var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
     var productLinkProcessedSelector = $('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
     var listName = body.attr('gtm-list-name');
-    var productImpressionQueueSize = 10;
     // Send impression for each product added on page (page 1 or X).
     var count = productLinkProcessedSelector.length + 1;
     if (productLinkSelector.length > 0) {
@@ -1232,7 +1229,7 @@
         }
         // On page load, process only the required number of
         // items and push to datalayer.
-        if ((eventType === 'load') && (impressions.length === productImpressionQueueSize)) {
+        if ((eventType === 'load') && (impressions.length === drupalSettings.gtm.productImpressionQueueSize)) {
           // This is to break out from the .each() function.
           return false;
         }

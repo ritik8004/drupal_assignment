@@ -42,7 +42,6 @@
 
   Drupal.alshaya_seo_gtm_prepare_algolia_product_impression = function(context, eventType) {
     var searchImpressions = [];
-    var productImpressionQueueSize = 10;
 
     $('#alshaya-algolia-search [gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible').each(function () {
       var condition = true;
@@ -67,7 +66,7 @@
 
         // When search results load, process only the required number of
         // items and push to datalayer.
-        if ((eventType === 'search-results-updated') && (searchImpressions.length === productImpressionQueueSize)) {
+        if ((eventType === 'search-results-updated') && (searchImpressions.length === drupalSettings.gtm.productImpressionQueueSize)) {
           // This is to break out from the .each() function.
           return false;
         }

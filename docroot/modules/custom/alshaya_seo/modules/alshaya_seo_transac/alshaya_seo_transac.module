@@ -62,6 +62,11 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     // Settings to enable error tracking on GA.
     $page['#attached']['drupalSettings']['gtm']['log_errors_to_console'] = Settings::get('log_errors_to_console', 1);
     $page['#attached']['drupalSettings']['gtm']['log_errors_to_ga'] = Settings::get('log_errors_to_ga', 0);
+
+    // Settings from the setting form for the module.
+    $seo_transac_settings = \Drupal::config('alshaya_seo_transac.settings');
+    $page['#attached']['drupalSettings']['gtm']['productImpressionQueueSize'] = $seo_transac_settings->get('product_impression_queue_size');
+    $page['#attached']['drupalSettings']['gtm']['productImpressionTimer'] = $seo_transac_settings->get('product_impression_timer_time');
   }
 }
 
