@@ -9,6 +9,13 @@
  * is read instead of this file (in normal circumstances).
  */
 
+use Drush\Drush;
+
+// Acquia rules disallow 'include/require' with dynamic arguments. We extend the
+// exception over all pasted Drupal settings.php comments so that we don't need
+// to change the PHPDoc headers to end with a full stop, or change # to //.
+// phpcs:disable
+
 // Include custom settings.php code from factory-hooks/pre-settings-php.
 if (function_exists('acsf_hooks_includes')) {
   foreach (acsf_hooks_includes('pre-settings-php') as $_acsf_include_file) {
@@ -78,10 +85,7 @@ if (function_exists('acsf_hooks_includes')) {
 # $config['system.performance']['fast_404']['paths'] = '/\.(?:txt|png|gif|jpe?g|css|js|ico|swf|flv|cgi|bat|pl|dll|exe|asp)$/i';
 # $config['system.performance']['fast_404']['html'] = '<!DOCTYPE html><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL "@path" was not found on this server.</p></body></html>';
 
-/**
- * Load services definition file.
- */
-$settings['container_yamls'][] = __DIR__ . '/services.yml';
+// phpcs:enable
 
 /**
  * Acquia Cloud Site Factory specific settings.
@@ -96,13 +100,18 @@ if (file_exists('/var/www/site-php')) {
   //   rather than the below 'local' variables which are in principle not
   //   guaranteed to stay defined. (We still define $env / $role for some
   //   existing customers' post-settings-php hooks that already use them.)
-  $site_settings = !empty($GLOBALS['gardens_site_settings']) ? $GLOBALS['gardens_site_settings'] : ['site' => '', 'env' => '', 'conf' => ['acsf_db_name' => '']];
+  $site_settings = !empty($GLOBALS['gardens_site_settings'])
+    ? $GLOBALS['gardens_site_settings']
+    : ['site' => '', 'env' => '', 'conf' => ['acsf_db_name' => '']];
   $env = $site_settings['env'];
   $role = $site_settings['conf']['acsf_db_name'];
 
   $_acsf_include_file = "/var/www/site-php/{$site_settings['site']}.{$site_settings['env']}/D8-{$site_settings['env']}-{$site_settings['conf']['acsf_db_name']}-settings.inc";
   if (file_exists($_acsf_include_file)) {
+    // Acquia rules disallow 'include/require' with dynamic arguments.
+    // phpcs:disable
     include $_acsf_include_file;
+    // phpcs:enable
     // Overwrite trusted_host_patterns setting, remove unnecessary hosts.
     // Allowed hosts for D8: https://www.drupal.org/node/2410395.
     // The overwrite doesn't cause any security problem because the valid hosts
@@ -212,9 +221,9 @@ if (isset($config_directories['vcs'])) {
   // directory is removed for now.
   // @see https://backlog.acquia.com/browse/CL-11815
   // @see https://github.com/drush-ops/drush/pull/1711
-  if (class_exists('\Drush\Drush') && \Drush\Drush::hasContainer()) {
+  if (class_exists('\Drush\Drush') && Drush::hasContainer()) {
     try {
-      $_tmp = \Drush\Drush::input()->getArgument('command');
+      $_tmp = Drush::input()->getArgument('command');
     }
     catch (InvalidArgumentException $e) {
       $_tmp = FALSE;
@@ -229,6 +238,9 @@ if (isset($config_directories['vcs'])) {
 // Include custom settings.php code from factory-hooks/post-settings-php.
 if (function_exists('acsf_hooks_includes')) {
   foreach (acsf_hooks_includes('post-settings-php') as $_acsf_include_file) {
+    // Acquia rules disallow 'include/require' with dynamic arguments.
+    // phpcs:disable
     include $_acsf_include_file;
+    // phpcs:enable
   }
 }

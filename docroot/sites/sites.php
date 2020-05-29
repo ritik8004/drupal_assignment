@@ -61,6 +61,10 @@ if (!function_exists('acsf_hooks_includes')) {
    *   ascending.
    */
   function acsf_hooks_includes($hook_name) {
+    // Only include hooks if we are properly booting Drupal.
+    if (!defined('DRUPAL_ROOT')) {
+      return [];
+    }
     $hook_pattern = sprintf('%s/../factory-hooks/%s/*.php', DRUPAL_ROOT, $hook_name);
     return glob($hook_pattern);
   }
@@ -72,7 +76,10 @@ foreach (acsf_hooks_includes('pre-sites-php') as $_acsf_include_file) {
   // This should not use include_once / require_once. Some Drush versions do
   // Drupal bootstrap multiple times, and include_once / require_once would
   // make the hook modifications not be included on the second bootstrap.
+  // Acquia rules disallow 'include/require' with dynamic arguments.
+  // phpcs:disable
   include $_acsf_include_file;
+  // phpcs:enable
 }
 
 if (!function_exists('is_acquia_host')) {
@@ -134,5 +141,8 @@ $GLOBALS['gardens_site_settings'] = $_tmp['gardens_site_settings'];
 // Include custom sites.php code from factory-hooks/post-sites-php, only when
 // a domain was found.
 foreach (acsf_hooks_includes('post-sites-php') as $_acsf_include_file) {
+  // Acquia rules disallow 'include/require' with dynamic arguments.
+  // phpcs:disable
   include $_acsf_include_file;
+  // phpcs:enable
 }
