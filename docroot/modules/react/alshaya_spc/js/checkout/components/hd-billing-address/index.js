@@ -44,7 +44,7 @@ export default class HDBillingAddress extends React.Component {
     // has added billing address. We set in localstorage.
     if (data.error === undefined) {
       if (data.cart_id !== undefined
-        && data.delivery_type === 'home_delivery'
+        && data.shipping.type === 'home_delivery'
         && isBillingSameAsShippingInStorage()) {
         localStorage.setItem(localStorageKey, true);
         this.setState({

@@ -79,6 +79,24 @@ class CheckoutDefaults {
    */
   public function applyDefaults(array $data, $uid) {
     if (!empty($data['shipping']['method'])) {
+      // Set billing info to empty, If user login after setting billing address
+      // as anonymous user with click and collect. selected store can be set
+      // as is, so do not empty it.
+      if ($uid > 0
+        && strpos($data['shipping']['method'], 'click_and_collect') === 0
+        && empty($data['cart']['billing_address']['customer_address_id'])
+      ) {
+        $store = $this->drupal->getStoreInfo($data['shipping']['storeCode']);
+
+        // Get the stores list via Drupal only to ensure we get other
+        // validations and configuration checks applied, for eg. if CNC is
+        // disabled complete from Drupal Config.
+        $availableStores = $this->drupal->getCartStores($this->cart->getCartId(), $store['lat'], $store['lng']);
+        $availableStoreCodes = array_column($availableStores ?? [], 'code');
+        if (in_array($store['code'], $availableStoreCodes)) {
+          $data['cart']['billing_address'] = [];
+        }
+      }
       return $data;
     }
 
@@ -99,10 +117,19 @@ class CheckoutDefaults {
       }
     }
     elseif (isset($data['shipping']['address'], $data['shipping']['address']['country_id'])) {
-      $address = $data['shipping']['address'];
-      $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
-      if (count($methods)) {
-        $data = $this->selectHd($address, reset($methods), $address);
+      // Set shipping and billing info to empty, If user login after setting
+      // shipping address as anonymous user. so that we can show empty
+      // shipping and billing component in react to allow user to fill address.
+      if ($uid > 0 && !empty($data['shipping']['address']['customer_address_id'])) {
+        $address = $data['shipping']['address'];
+        $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
+        if (count($methods)) {
+          $data = $this->selectHd($address, reset($methods), $address);
+        }
+      }
+      else {
+        $data['shipping']['address'] = [];
+        $data['cart']['billing_address'] = [];
       }
     }
 
