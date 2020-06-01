@@ -10,6 +10,7 @@
   var gtm_execute_onetime_events = true;
   var currentListName = null;
   var productImpressions = [];
+  var productImpressionsTimer;
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
@@ -1175,7 +1176,6 @@
    *    Eg. {type: 'timer'} can also be sent as a value.
    */
   Drupal.alshaya_seo_gtm_prepare_and_push_product_impression = function (prepareImpressionFunction, context, settings, event) {
-    var timer;
     var body = $('body');
     var currencyCode = body.attr('gtm-currency');
     var eventType = event.type;
@@ -1187,22 +1187,34 @@
       // come from search impressions.
       productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType, productImpressions.length));
       Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
-      timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
     }
     else if (eventType === 'unload' || eventType === 'timer') {
+      // This is to prevent the timer calling this function infinitely when
+      // there are no impressions.
+      if (productImpressions.length === 0) {
+        window.clearInterval(productImpressionsTimer);
+        productImpressionsTimer = null;
+        return;
+      }
       Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
-      window.clearInterval(timer);
-      timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+      window.clearInterval(productImpressionsTimer);
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
     }
     else {
       // This is for cases like scroll/carousel events.
       // Add new impressions to the global productImpressions.
       productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType));
+      // If timer was unset previously when there were there were no impressions
+      // then set it now.
+      if (productImpressions.length > 0 && productImpressionsTimer === null) {
+        productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+      }
       // Push if the global productImpressions length > max impressions size.
       if (productImpressions.length >= drupalSettings.gtm.productImpressionQueueSize) {
         Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
-        window.clearInterval(timer);
-        timer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+        window.clearInterval(productImpressionsTimer);
+        productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
       }
     }
   }
