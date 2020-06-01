@@ -88,8 +88,8 @@ function alshaya_super_category_update_8001() {
  */
 function alshaya_super_category_install() {
   $strings = [
-    'Brands / Category' => [
-      'ar' => 'الماركات / الفئة',
+    'Brands/Category' => [
+      'ar' => 'الماركات/الفئة',
     ],
   ];
 
