@@ -53,13 +53,6 @@ function main($argv, $argc) {
   }
   $site = $argv[1];
   $env = $argv[2];
-
-  $registry_path = get_registry_file($site, $env);
-  if (!file_exists($registry_path)) {
-    printf("This doesn't look like an ACSF environment. Will not update ACSF themes.\n");
-    exit(0);
-  }
-
   $verbose = FALSE;
   if (in_array('-v', $argv) || in_array('--verbose', $argv)) {
     $verbose = TRUE;
@@ -175,21 +168,6 @@ function get_shared_creds($site, $env) {
 }
 
 /**
- * Returns the path to the site registry file.
- *
- * @param string $site
- *   The sitegroup name.
- * @param string $env
- *   The environment name.
- *
- * @return string
- *   The site registry path.
- */
-function get_registry_file($site, $env) {
-  return sprintf('/mnt/files/%s.%s/files-private/sites.json', $site, $env);
-}
-
-/**
  * Returns the path to the theme repository.
  *
  * @param string $site
@@ -273,30 +251,9 @@ function get_wip_task_status($site, $env, $task_id) {
  * Contains the REST credentials that will be used when making Site Factory
  * requests.
  */
-// Class name doesn't match filename.
-// phpcs:disable
 class SimpleRestCreds {
-// phpcs:enable
-
-  /**
-   * The username to be used to contact Site Factory.
-   *
-   * @var string
-   */
   public $name;
-
-  /**
-   * The password to be used to contact Site Factory.
-   *
-   * @var string
-   */
   public $password;
-
-  /**
-   * The URL of the Site Factory.
-   *
-   * @var string
-   */
   public $url;
 
   /**
@@ -323,33 +280,9 @@ class SimpleRestCreds {
  * A simple class used to send REST requests to the Site Factory.
  */
 class SimpleRestMessage {
-
-  /**
-   * Maximum amount of retries before giving up sending a message.
-   *
-   * @var int
-   */
   private $retryMax = 3;
-
-  /**
-   * Number of seconds to wait before trying again after sending failed.
-   *
-   * @var int
-   */
   private $retryWait = 5;
-
-  /**
-   * The hosting sitegroup name.
-   *
-   * @var string
-   */
   private $site;
-
-  /**
-   * The hosting environment name.
-   *
-   * @var string
-   */
   private $env;
 
   /**
