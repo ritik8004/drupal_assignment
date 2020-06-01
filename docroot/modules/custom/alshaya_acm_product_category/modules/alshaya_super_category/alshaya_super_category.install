@@ -12,8 +12,8 @@
  */
 function alshaya_super_category_update_8005() {
   $strings = [
-    'Brands / Category' => [
-      'ar' => 'الماركات / الفئة',
+    'Brands/Category' => [
+      'ar' => 'الماركات/الفئة',
     ],
   ];
 
