@@ -16,6 +16,7 @@ class ClicknCollectContextProvider extends React.Component {
       cart: {
         customer,
         shipping: { storeInfo, address: shippingAddress },
+        cart_id: cartId,
       },
     } = props.cart;
 
@@ -51,6 +52,7 @@ class ClicknCollectContextProvider extends React.Component {
       clickCollectModal: false,
       locationAccess: true,
       outsideCountryError: false,
+      cartId,
     };
   }
 
