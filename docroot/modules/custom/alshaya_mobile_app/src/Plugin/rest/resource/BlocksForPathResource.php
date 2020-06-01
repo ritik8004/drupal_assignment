@@ -225,6 +225,8 @@ class BlocksForPathResource extends ResourceBase {
           // Load content block based on block info.
           $content_block = $this->entityRepository->loadEntityByUuid('block_content', $block_uuid);
           if ($content_block) {
+            $content_block = $this->entityRepository->getTranslationFromContext($content_block);
+
             $response_data[$block->id()] = [
               'title' => $content_block->label(),
               'body' => !empty($content_block->get('body')) ? $content_block->get('body')->first()->getValue()['value'] : NULL,
