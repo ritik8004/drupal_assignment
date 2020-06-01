@@ -3,34 +3,32 @@ import ReactDOM from 'react-dom';
 import QuantityDropdown from '../quantity-dropdown';
 import PdpGallery from '../../pdp-gallery';
 import PdpInfo from '../../pdp-info';
+import GroupSelectOption from '../group-select-option';
 
 class CartSelectOption extends React.Component {
   constructor(props) {
     super(props);
-    const { skuCode, configurableCombinations } = this.props;
+    const { skuCode, configurableCombinations, isGroup } = this.props;
+    // const attributes = configurableCombinations[skuCode].configurables;
+    // const code = Object.keys(attributes)[0];
+    const firstChild = configurableCombinations[skuCode].firstChild;
+    // const codeValue = configurableCombinations[skuCode].bySku[firstChild][code];
+    // this.refreshConfigurables(code, codeValue);
     this.state = {
       showGroup: false,
       groupName: null,
       pdpRefresh: false,
-      variantSelected: configurableCombinations[skuCode].firstChild
-        ? configurableCombinations[skuCode].firstChild : skuCode,
+      nextCode: null,
+      nextValues: null,
+      variantSelected: firstChild ? firstChild : skuCode,
+      groupStatus: isGroup,
     };
   }
 
-  groupSelect = (e, group) => {
-    e.preventDefault();
-    this.setState({
-      showGroup: true,
-      groupName: group,
-    });
-  }
-
-  handleSelectionChanged = (e) => {
-    e.preventDefault();
+  selectedValues = () => {
     const { configurableCombinations, skuCode } = this.props;
     const attributes = configurableCombinations[skuCode].configurables;
-    const selectedValues = [];
-    let selectedCombination = '';
+    let selectedValues = [];
     Object.keys(attributes).map((id) => {
       const selectedVal = document.getElementById(id).value;
       if (selectedVal !== '' && selectedVal !== null && typeof selectedVal !== 'undefined') {
@@ -38,26 +36,84 @@ class CartSelectOption extends React.Component {
       }
       return selectedValues;
     });
-    Object.keys(selectedValues).forEach((key) => {
-      selectedCombination += `${key}|${selectedValues[key]}||`;
-    });
-    this.setState({
-      pdpRefresh: true,
-      variantSelected: configurableCombinations[skuCode].byAttribute[selectedCombination],
-    });
+    return selectedValues;
+  }
+
+  refreshConfigurables = (code, codeValue) => {
+    const { configurableCombinations, skuCode } = this.props;
+    const selectedValues = this.selectedValues();
+    // Refresh configurables.
+    let combinations = configurableCombinations[skuCode]['combinations'];
+    for (let key in selectedValues) {
+      if (key == code) {
+        break;
+      }
+
+      combinations = combinations[key][selectedValues[key]];
+    }
+
+    if (typeof combinations[code] === 'undefined') {
+      return;
+    }
+
+    if (combinations[code][codeValue] === 1) {
+      return;
+    }
+
+    if (combinations[code][codeValue]) {
+      const nextCode = Object.keys(combinations[code][codeValue])[0];
+      const nextValues = Object.keys(combinations[code][codeValue][nextCode]);
+      this.setState({
+        nextCode: nextCode,
+        nextValues: nextValues,
+      });
+      const nextVal = document.getElementById(nextCode).value;
+      this.refreshConfigurables(nextCode, nextVal);
+    }
   }
 
   render() {
     const {
-      configurables, productInfo, skuCode,
+      configurables, productInfo, skuCode
     } = this.props;
     const { code } = configurables;
-    const { isGroup } = configurables;
     const {
-      showGroup, groupName, pdpRefresh, variantSelected,
+      showGroup,
+      groupName,
+      pdpRefresh,
+      variantSelected,
+      nextCode,
+      nextValues,
+      groupStatus
     } = this.state;
 
-    if (pdpRefresh) {
+    const groupSelect = (e, group) => {
+      e.preventDefault();
+      this.setState({
+        showGroup: true,
+        groupName: group,
+      });
+    }
+
+    const handleSelectionChanged = (e, code) => {
+      e.preventDefault();
+      const codeValue = e.target.value;
+      const { configurableCombinations, skuCode } = this.props;
+      const selectedValues = this.selectedValues();
+      let selectedCombination = '';
+      Object.keys(selectedValues).forEach((key) => {
+        selectedCombination += `${key}|${selectedValues[key]}||`;
+      });
+      this.setState({
+        pdpRefresh: true,
+        variantSelected: configurableCombinations[skuCode].byAttribute[selectedCombination],
+      });
+
+      this.refreshConfigurables(code, codeValue);
+
+    }
+
+    if (pdpRefresh && variantSelected !== undefined) {
       ReactDOM.render(
         <QuantityDropdown
           variantSelected={variantSelected}
@@ -87,7 +143,7 @@ class CartSelectOption extends React.Component {
 
     const selectOption = (
       <>
-        <select id={code} className="select-attribute" onChange={(e) => this.handleSelectionChanged(e, code)}>
+        <select id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
           {Object.keys(configurables.values).map((attr) => (
             <option
               value={configurables.values[attr].value_id}
@@ -99,40 +155,21 @@ class CartSelectOption extends React.Component {
       </>
     );
 
-    return (isGroup) ? (
-      <>
-        <div className="group-anchor-wrapper">
-          {Object.keys(configurables.alternates).map((alternate) => (
-            <a href="#" onClick={(e) => this.groupSelect(e, configurables.alternates[alternate])}>{configurables.alternates[alternate]}</a>
-          ))}
-        </div>
-        <div className="group-option-wrapper">
-          {(showGroup && groupName) ? (
-            <select id={code} className="select-attribute-group clicked" onChange={(e) => this.handleSelectionChanged(e, code)}>
-              {Object.keys(configurables.values).map((attr) => (
-                <option
-                  value={attr}
-                  groupdata={JSON.stringify(configurables.values[attr])}
-                >
-                  {configurables.values[attr][groupName]}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <select id={code} className="select-attribute-group" onChange={(e) => this.handleSelectionChanged(e, code)}>
-              {Object.keys(configurables.values).map((attr) => (
-                <option
-                  value={attr}
-                  groupdata={JSON.stringify(configurables.values[attr])}
-                >
-                  {configurables.values[attr][Object.keys(configurables.values[attr])[0]]}
-                </option>
-              ))}
-            </select>
-          )}
+    console.log(configurables);
 
-        </div>
-      </>
+    return (groupStatus) ? (
+      <div className="grouped-attr">
+        <GroupSelectOption
+          groupSelect={groupSelect}
+          handleSelectionChanged={handleSelectionChanged}
+          configurables={configurables}
+          showGroup={showGroup}
+          groupName={groupName}
+          code={code}
+          nextCode={nextCode}
+          nextValues={nextValues}
+        />
+      </div>
     ) : selectOption;
   }
 }

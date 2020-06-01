@@ -183,6 +183,8 @@ class PdpCart extends React.Component {
                   productInfo={productInfo}
                   skuCode={skuCode}
                   configurableCombinations={configurableCombinations}
+                  key={key}
+                  isGroup={configurables[key].isGroup}
                 />
               </div>
             ))}
