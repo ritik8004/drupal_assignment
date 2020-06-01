@@ -106,6 +106,12 @@ function alshaya_white_label_preprocess_html(&$variables) {
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
       if ($pdp_layout == 'pdp-magazine') {
         $variables['attributes']['class'][] = 'magazine-layout';
+        $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+
+        // Show additional attributes on PDP overlay.
+        if ($product_display_settings->get('show_pdp_additional_attributes_overlay')) {
+          $variables['#attached']['library'][] = 'alshaya_white_label/pdp-additional-attributes';
+        }
       }
     }
   }
