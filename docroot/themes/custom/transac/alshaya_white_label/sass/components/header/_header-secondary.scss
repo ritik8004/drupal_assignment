@@ -78,6 +78,7 @@
 
   a {
     font-family: $alshaya-thin;
+    transition: all 0.2s ease-in-out;
 
     @include breakpoint($upto-desktop) {
       color: $header_secondary_menu_link_mobile;
