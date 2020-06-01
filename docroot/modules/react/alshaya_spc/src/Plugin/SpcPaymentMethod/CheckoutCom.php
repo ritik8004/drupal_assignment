@@ -83,7 +83,7 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
     $build['#cache']['contexts'] = ['user'];
     $build['#cache']['tags'] = ['user:' . $this->currentUser->id()];
 
-    $acceptedCards = ['visa', 'mastercard', 'diners'];
+    $acceptedCards = ['visa', 'mastercard', 'diners', 'amex'];
 
     if ($this->checkoutComApiHelper->getCheckoutcomConfig('mada_enabled')) {
       array_unshift($acceptedCards, 'mada');
