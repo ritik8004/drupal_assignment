@@ -196,19 +196,11 @@ class SkusProductList extends ResourceBase {
     }
 
     $response = new ResourceResponse($data);
-    $cacheableMetadata = $response->getCacheableMetadata();
 
-    if (!empty($this->cache['contexts'])) {
-      $cacheableMetadata->addCacheContexts($this->cache['contexts']);
-    }
-
-    if (!empty($this->cache['tags'])) {
-      $cacheableMetadata->addCacheTags($this->cache['tags']);
-    }
-
-    $response->addCacheableDependency($cacheableMetadata);
+    $response->addCacheableDependency($response);
 
     return $response;
+
   }
 
   /**
