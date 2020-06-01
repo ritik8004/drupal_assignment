@@ -3582,4 +3582,37 @@ class SkuManager {
     return $config[$key];
   }
 
+  /**
+   * Function returns the configurable attribute names of the given sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The sku entity.
+   *
+   * @return array
+   *   Array of configurable attribute names.
+   *
+   * @todo getConfigurableCombinations() used in this method is expensive as it
+   * does some complex calculations. Need to find a simpler method of doing it
+   * as done in the function alshaya_acm_product_get_sku_configurable_values()
+   * in https://github.com/acquia-pso/alshaya/pull/15739.
+   */
+  public function getConfigurableAttributeNames(SKUInterface $sku): array {
+    $parent_sku = $this->getParentSkuBySku($sku);
+    if (is_null($parent_sku)) {
+      $parent_sku = $sku;
+    }
+
+    $attributes = [];
+    if ($attrs = $parent_sku->get('field_configurable_attributes')->first()) {
+      $configurable_attributes = unserialize($attrs->getString());
+      if (!empty($configurable_attributes)) {
+        foreach ($configurable_attributes as $attribute) {
+          $attributes[] = $attribute['code'];
+        }
+      }
+    }
+
+    return $attributes;
+  }
+
 }

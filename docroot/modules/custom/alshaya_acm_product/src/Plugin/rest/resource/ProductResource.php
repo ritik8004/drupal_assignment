@@ -230,6 +230,7 @@ class ProductResource extends ResourceBase {
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
+    $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
