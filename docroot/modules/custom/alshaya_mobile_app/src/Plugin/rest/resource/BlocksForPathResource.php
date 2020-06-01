@@ -227,7 +227,7 @@ class BlocksForPathResource extends ResourceBase {
           $content_block = $this->entityRepository->loadEntityByUuid('block_content', $block_uuid);
           if ($content_block) {
             if ($currentLanguage !== $content_block->get('langcode')->getString()) {
-              $content_block = $content_block->getTranslation($currentLanguage);
+              $content_block = $this->entityRepository->getTranslationFromContext($content_block);
             }
 
             $response_data[$block->id()] = [
