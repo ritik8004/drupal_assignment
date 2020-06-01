@@ -179,6 +179,7 @@ class BlocksForPathResource extends ResourceBase {
    */
   public function get() {
     $currentRequest = $this->requestStack->getCurrentRequest();
+    $currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
     // Path alias of page.
     $alias = $currentRequest->query->get('url');
     if (!$alias) {
@@ -188,7 +189,7 @@ class BlocksForPathResource extends ResourceBase {
 
     if (empty($alias)
       || (!($this->pathValidator->isValid($alias))
-      && !($this->aliasStorage->aliasExists('/' . $alias, $this->languageManager->getCurrentLanguage()->getId())))
+      && !($this->aliasStorage->aliasExists('/' . $alias, $currentLanguage)))
       ) {
       $this->mobileAppUtility->throwException();
     }
@@ -225,6 +226,10 @@ class BlocksForPathResource extends ResourceBase {
           // Load content block based on block info.
           $content_block = $this->entityRepository->loadEntityByUuid('block_content', $block_uuid);
           if ($content_block) {
+            if ($currentLanguage !== $content_block->get('langcode')->getString()) {
+              $content_block = $content_block->getTranslation($currentLanguage);
+            }
+
             $response_data[$block->id()] = [
               'title' => $content_block->label(),
               'body' => !empty($content_block->get('body')) ? $content_block->get('body')->first()->getValue()['value'] : NULL,
