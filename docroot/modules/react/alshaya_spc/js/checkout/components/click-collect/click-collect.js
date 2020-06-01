@@ -223,12 +223,16 @@ class ClickCollect extends React.Component {
    * Fetch available stores for given lat and lng.
    */
   fetchAvailableStores = (coords, locationAccess = null) => {
-    const { updateCoordsAndStoreList, showOutsideCountryError } = this.context;
+    const { updateCoordsAndStoreList, showOutsideCountryError, cartId } = this.context;
     showFullScreenLoader();
     // Create fetcher object to fetch stores.
+    const args = {
+      coords,
+      cartId,
+    };
     const storeFetcher = createFetcher(fetchClicknCollectStores);
     // Make api request.
-    const list = storeFetcher.read(coords);
+    const list = storeFetcher.read(args);
     list
       .then((response) => {
         this.selectStoreButtonVisibility(false);
