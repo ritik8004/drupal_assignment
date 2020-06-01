@@ -58,9 +58,9 @@ class TotalLineItems extends React.Component {
 
         <ConditionalView condition={totals.shipping_incl_tax !== null}>
           <TotalLineItem
-            name="surcharge-total"
+            name="delivery-total"
             title={Drupal.t('Delivery')}
-            value={totals.shipping_incl_tax}
+            value={totals.shipping_incl_tax > 0 ? totals.shipping_incl_tax : Drupal.t('FREE')}
           />
         </ConditionalView>
 
