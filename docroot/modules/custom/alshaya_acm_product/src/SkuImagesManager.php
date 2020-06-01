@@ -185,7 +185,7 @@ class SkuImagesManager {
 
     try {
       $skuForGallery = $check_parent_child ? $this->getSkuForGallery($sku, $check_parent_child) : $sku;
-      $data = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? [];
+      $data = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? NULL;
 
       foreach ($data['media_items']['images'] ?? [] as $key => $item) {
         if (empty($item['label'])) {
@@ -325,7 +325,7 @@ class SkuImagesManager {
       if ($media_item['media_type'] == 'image') {
         $return['media_items']['images'][] = $media_item;
       }
-      elseif (!empty($media_item['video_url'])) {
+      elseif (!empty($media_item['video_url']) || $media_item['media_type'] === 'video') {
         $return['media_items']['videos'][] = $media_item;
       }
     }
@@ -1140,21 +1140,31 @@ class SkuImagesManager {
       }
     }
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
-      // @TODO:
-      // Receiving video_provider as NULL, should be set to youtube
-      // or vimeo. Till then using $type as provider flag.
-      $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
-      $thumbnails[] = [
-        'thumburl' => $media_item['file'],
-        'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
-        'video_title' => $media_item['video_title'],
-        'video_desc' => $media_item['video_description'],
-        'type' => $type,
-        // @TODO: should this be config?
-        'width' => 81,
-        // @TODO: should this be config?
-        'height' => 81,
-      ];
+      if (isset($media_item['video_url'])) {
+        // @TODO:
+        // Receiving video_provider as NULL, should be set to youtube
+        // or vimeo. Till then using $type as provider flag.
+        $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
+        $thumbnails[] = [
+          'thumburl' => $media_item['file'],
+          'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
+          'video_title' => $media_item['video_title'],
+          'video_desc' => $media_item['video_description'],
+          'type' => $type,
+          // @TODO: should this be config?
+          'width' => 81,
+          // @TODO: should this be config?
+          'height' => 81,
+        ];
+      }
+      else {
+        $video_data[] = [
+          'url' => file_create_url($media_item['drupal_uri']),
+          'video_title' => $media_item['label'] ?? '',
+          'type' => 'video',
+        ];
+        array_splice($thumbnails, 1, 0, $video_data);
+      }
     }
 
     $return['thumbnails'] = $thumbnails;

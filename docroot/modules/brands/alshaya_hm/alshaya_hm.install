@@ -14,6 +14,26 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Make size_group_code field type attribute from type string..
+ */
+function alshaya_hm_update_8047() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  // Make size_group_code field type attribute from type string.
+  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
+  $size_group_code = $config->get('size_group_code');
+  $size_group_code['type'] = 'attribute';
+  $config->set('size_group_code', $size_group_code);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change widget for plp_size, promo_size facet from checkbox
  * to new widget "size_group_list".
  * Queued all items for re-indexation.
