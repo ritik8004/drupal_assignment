@@ -493,59 +493,33 @@ function alshaya_seo_transac_taxonomy_term_delete(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_simple_sitemap_arbitrary_links_alter().
- */
-function alshaya_seo_transac_simple_sitemap_arbitrary_links_alter(&$arbitrary_links, $sitemap_variant) {
-  if ($sitemap_variant == 'default') {
-    global $base_url;
-    $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
-    $variants = array_keys($sitemap_manager->getSitemapVariants());
-    $variants = array_diff($variants, ['default']);
-    if (!empty($variants)) {
-      foreach ($variants as $variant) {
-        $url = $base_url . '/' . $variant . '/sitemap.xml';
-        $arbitrary_links[] = [
-          'url' => $url,
-          'priority' => '0.5',
-        ];
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_simple_sitemap_links_alter().
  */
 function alshaya_seo_transac_simple_sitemap_links_alter(array &$links, $sitemap_variant) {
   if ($sitemap_variant === 'default') {
     // Remove those variants sitemap links from the default sitemap which do not
-    // have any sitemap generated. This happens as we are passing the variant
-    // sitemap links directly in
-    // alshaya_seo_transac_simple_sitemap_arbitrary_links_alter() and there is
-    // no scope for checking at that point whether sitemap is available or not.
+    // have any sitemap generated.
+    global $base_url;
     $sitemap_manager = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
-    $variants_publish_status = $sitemap_manager->fetchSitemapInstanceStatuses();
-    // Fetch the variant links. Original keys are preserved as array_filter ()
-    // is used.
-    $variant_links = array_filter($links, function ($link) {
-      if (preg_match('/sitemap.xml/', $link['url'])) {
-        return TRUE;
-      }
-    });
-    // Fetch the variant name. Original keys are preserved here also.
-    $variants = array_map(function ($variant_link) {
-      $variant = explode('/', $variant_link['url']);
-      $variant = array_slice($variant, -2, 1);
-      return $variant[0];
-    }, $variant_links);
+    $variant_links = [];
 
-    // Unset links that do not have sitemap generated.
-    foreach ($variants as $key => $value) {
-      if (isset($variants_publish_status[$value]) && $variants_publish_status[$value] == 0) {
-        unset($links[$key]);
+    $variants_publish_status = $sitemap_manager->fetchSitemapInstanceStatuses();
+    $variants = $sitemap_manager->getAllVariants();
+
+    if (!empty($variants)) {
+      foreach ($variants as $variant) {
+        if (isset($variants_publish_status[$variant]) && ($variants_publish_status[$variant] != 0)) {
+          $url = $base_url . '/' . $variant . '/sitemap.xml';
+          $variant_links[] = [
+            'url' => $url,
+            'priority' => '0.5',
+          ];
+        }
       }
     }
-
+    if (!empty($variant_links)) {
+      $links = array_merge($variant_links, $links);
+    }
   }
 }
 

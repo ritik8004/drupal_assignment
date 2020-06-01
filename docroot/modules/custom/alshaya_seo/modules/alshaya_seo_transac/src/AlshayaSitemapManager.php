@@ -109,7 +109,7 @@ class AlshayaSitemapManager {
   /**
    * Get list of variants.
    */
-  private function getAllVariants() {
+  public function getAllVariants() {
     $variants = array_keys($this->generator->getSitemapManager()->getSitemapVariants());
     return array_diff($variants, ['default']);
   }
