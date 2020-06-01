@@ -15,9 +15,9 @@ alshaya_seo.sitemap:
     _access: 'TRUE'
 
 alshaya_seo_transac.alshaya_seo_transac_settings:
-  path: '/admin/config/alshaya/alshaya-seo-transac-settings'
+  path: '/admin/config/alshaya/alshaya-seo-settings'
   defaults:
-    _title: 'Alshaya Seo Transac Settings'
+    _title: 'Alshaya Seo Settings'
     _form: 'Drupal\alshaya_seo_transac\Form\AlshayaSeoTransacSettings'
   requirements:
     _permission: 'administer site configuration'
