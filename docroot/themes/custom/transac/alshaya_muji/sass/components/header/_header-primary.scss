@@ -609,6 +609,10 @@ header {
       #{$left}: 7.8%;
     }
 
+    @include breakpoint($only-tablet) {
+      display: none;
+    }
+
     @include breakpoint($only-mobile) {
       top: 0.75rem;
       #{$left}: 11.5%;

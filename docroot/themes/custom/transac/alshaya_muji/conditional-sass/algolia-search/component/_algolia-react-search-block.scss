@@ -291,3 +291,21 @@ body {
     }
   }
 }
+
+// Specific with slug banner. overwriting docroot/themes/custom/transac/alshaya_white_label/sass/components/slug-banner/_slug-banner.scss line 115.
+.slug-banner-processed {
+  &.header-sticky-filter {
+    .branding__menu {
+      @include breakpoint($only-mobile) {
+        position: fixed;
+      }
+    }
+
+    &:not(.frontpage) {
+      @include breakpoint($only-mobile) {
+        top: 0;
+        padding: 0;
+      }
+    }
+  }
+}
