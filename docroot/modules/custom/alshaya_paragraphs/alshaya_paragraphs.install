@@ -26,8 +26,10 @@ function alshaya_paragraphs_update_8128() {
     'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_2.yml',
     'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_1.yml',
     'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_2.yml',
+    'field.field.paragraph.promo_block_button.field_description.yml',
     'core.entity_view_display.paragraph.image_title_subtitle.default.yml',
     'core.entity_form_display.paragraph.image_title_subtitle.default.yml',
+    'core.entity_view_display.paragraph.promo_block_button.default.yml',
   ];
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
 }

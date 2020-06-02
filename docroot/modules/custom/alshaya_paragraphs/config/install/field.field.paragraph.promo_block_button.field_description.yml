@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_description
+    - paragraphs.paragraphs_type.promo_block_button
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    full_text: full_text
+    limited_options: '0'
+    mail_text: '0'
+    rich_text: '0'
+    plain_text: '0'
+id: paragraph.promo_block_button.field_description
+field_name: field_description
+entity_type: paragraph
+bundle: promo_block_button
+label: Description
+description: ''
+required: false
+translatable: true
+skip_translation_check: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
