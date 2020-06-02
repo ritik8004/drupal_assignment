@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.storage.paragraph.field_1_row_2_col
     - paragraphs.paragraphs_type.1_row_2_col
-    - paragraphs.paragraphs_type.product_carousel_category
     - paragraphs.paragraphs_type.promo_block
     - paragraphs.paragraphs_type.section_divider
     - paragraphs.paragraphs_type.title_textarea
@@ -28,7 +27,6 @@ settings:
     negate: 0
     target_bundles:
       promo_block: promo_block
-      product_carousel_category: product_carousel_category
       section_divider: section_divider
       title_textarea: title_textarea
       video: video
@@ -97,7 +95,7 @@ settings:
         weight: 42
         enabled: false
       product_carousel_category:
-        enabled: true
+        enabled: false
         weight: 43
       delivery_usp_block:
         weight: 44
