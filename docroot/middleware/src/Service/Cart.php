@@ -625,12 +625,17 @@ class Cart {
    *
    * @param int $customer_id
    *   Customer id.
+   * @param bool $reset_cart
+   *   True to Reset cart, otherwise false.
    *
    * @return mixed
    *   Response.
    */
-  public function associateCartToCustomer(int $customer_id) {
+  public function associateCartToCustomer(int $customer_id, bool $reset_cart = FALSE) {
     $cart_id = $this->getCartId();
+    if ($reset_cart) {
+      $this->getRestoredCart();
+    }
     $url = sprintf('carts/%d/associate-cart', $cart_id);
 
     try {
@@ -1260,6 +1265,18 @@ class Cart {
 
     // Initialise payment data holder.
     $cart['payment'] = [];
+    // Set shipping and billing info to empty, If user login after setting
+    // shipping address as anonymous user. so that we can show empty
+    // shipping and billing component in react to allow user to fill address.
+    $is_anonymous_shipping = !empty($cart['shipping']['address'])
+      && empty($cart['shipping']['address']['customer_address_id']);
+    $is_anonymous_billing = !empty($cart['cart']['billing_address'])
+      && empty($cart['cart']['billing_address']['customer_address_id']);
+
+    if (empty($shippingMethod) && ($is_anonymous_shipping || $is_anonymous_billing)) {
+      $cart['shipping'] = [];
+      $cart['cart']['billing_address'] = [];
+    }
 
     return $cart;
   }
