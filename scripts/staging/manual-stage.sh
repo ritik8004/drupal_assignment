@@ -123,13 +123,13 @@ do
   files_folder="sites/g/files/$site_files/files"
   target_files_folder="/var/www/html/$AH_SITE_GROUP.$target_env/docroot/$files_folder"
 
-  rsync -a $files_folder/* --exclude 'styles' --exclude 'media' --exclude 'assets' --exclude 'assets-shared' $target:$target_files_folder
+  rsync -a $files_folder/* --exclude 'css' --exclude 'js' --exclude 'styles' --exclude 'media' --exclude 'assets' --exclude 'assets-shared' $target:$target_files_folder
 
   if [[ "$type" == "iso" ]]; then
     echo
     echo "Initiating rsync of product media files in screen rsync_${current_site}_${target_env}"
-    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/media $target:$target_files_folder"
-    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/assets-shared $target:$target_files_folder"
+    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/media $target:$target_files_folder --delete"
+    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/assets-shared $target:$target_files_folder  --delete"
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c acquia_search_index"
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c alshaya_algolia_index"
     ssh $target "screen -S $current_site -dm bash -c \"cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sapi-i\""
