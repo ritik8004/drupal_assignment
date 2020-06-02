@@ -13,7 +13,6 @@ dependencies:
   module:
     - image
     - link
-    - svg_image
     - text
 id: paragraph.image_title_subtitle.default
 targetEntityType: paragraph
