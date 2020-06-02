@@ -204,7 +204,7 @@ class CartController {
     // if current cart is associated with logged in user or not.
     $sessionCustomerId = $this->getDrupalInfo('customer_id');
     if ($sessionCustomerId && (empty($data['customer']['id']) || $data['customer']['id'] != $sessionCustomerId)) {
-      $this->cart->associateCartToCustomer($sessionCustomerId);
+      $this->cart->associateCartToCustomer($sessionCustomerId, TRUE);
       $data = $this->cart->getCart();
     }
 
@@ -743,7 +743,7 @@ class CartController {
         return $this->getCart();
       }
 
-      $this->cart->associateCartToCustomer($customer['customer_id']);
+      $this->cart->associateCartToCustomer($customer['customer_id'], TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error while associating cart to customer. Error message: @message', [

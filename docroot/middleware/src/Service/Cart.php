@@ -625,12 +625,17 @@ class Cart {
    *
    * @param int $customer_id
    *   Customer id.
+   * @param bool $reset_cart
+   *   True to Reset cart, otherwise false.
    *
    * @return mixed
    *   Response.
    */
-  public function associateCartToCustomer(int $customer_id) {
+  public function associateCartToCustomer(int $customer_id, bool $reset_cart = FALSE) {
     $cart_id = $this->getCartId();
+    if ($reset_cart) {
+      $this->getRestoredCart();
+    }
     $url = sprintf('carts/%d/associate-cart', $cart_id);
 
     try {
@@ -1260,6 +1265,13 @@ class Cart {
 
     // Initialise payment data holder.
     $cart['payment'] = [];
+    // When shipping method is empty, Set shipping and billing info to empty,
+    // so that we can show empty shipping and billing component in react
+    // to allow users to fill addresses.
+    if (empty($shippingMethod)) {
+      $cart['shipping'] = [];
+      $cart['cart']['billing_address'] = [];
+    }
 
     return $cart;
   }
