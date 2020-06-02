@@ -1265,15 +1265,10 @@ class Cart {
 
     // Initialise payment data holder.
     $cart['payment'] = [];
-    // Set shipping and billing info to empty, If user login after setting
-    // shipping address as anonymous user. so that we can show empty
-    // shipping and billing component in react to allow user to fill address.
-    $is_anonymous_shipping = !empty($cart['shipping']['address'])
-      && empty($cart['shipping']['address']['customer_address_id']);
-    $is_anonymous_billing = !empty($cart['cart']['billing_address'])
-      && empty($cart['cart']['billing_address']['customer_address_id']);
-
-    if (empty($shippingMethod) && ($is_anonymous_shipping || $is_anonymous_billing)) {
+    // When shipping method is empty, Set shipping and billing info to empty,
+    // so that we can show empty shipping and billing component in react
+    // to allow users to fill addresses.
+    if (empty($shippingMethod)) {
       $cart['shipping'] = [];
       $cart['cart']['billing_address'] = [];
     }
