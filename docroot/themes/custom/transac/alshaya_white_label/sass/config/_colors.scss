@@ -281,6 +281,7 @@ $maintenance_link: $cerulean-two;
 // Accordion
 $accordion_border: $white;
 $accordion_title: $grey-ash;
+$accordion_title_icon: inherit;
 $accordion_sub_title: $grey-ash;
 $accordion_title_disabled: $white;
 
@@ -495,6 +496,7 @@ $plp_sort_by_options: $_plp_sort_by_options;
 $plp_selected_filter_label_text: $grey-ash;
 $plp_grid_active_color: $marine-blue-two;
 $plp_all_filter_filter_arrow: $grey-ash;
+$plp_filter_title: $primary_text;
 $plp_filter_icon: $grey-ash;
 $plp_filter_active_tick: $marine-blue-two;
 $search_facet_active_title_bg: $grey-light-two;
@@ -1176,6 +1178,7 @@ $spc-cart-item-qty-disabled: $white-smoke-light;
 $spc-cart-text-color: $grey-light;
 $spc-mobile-cart-preview: $mothercare-black;
 $spc-product-title: $mothercare-black;
+$spc-product-price: $spc-product-title;
 $spc-totals-line-item-color: $mothercare-black;
 $spc-order-summary-totals-bg: $white-five;
 $spc-order-summary-discount-text: $_spc-discount-text;

@@ -1,0 +1,9 @@
+.spc-select {
+  .spcSelect__control {
+    .spcSelect__dropdown-indicator {
+      @include icon(triangle-down, before) {
+        font-size: 0.8875rem;
+      }
+    }
+  }
+}
