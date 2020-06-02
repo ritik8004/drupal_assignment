@@ -4,8 +4,11 @@ dependencies:
   config:
     - field.storage.paragraph.field_1_row_2_col
     - paragraphs.paragraphs_type.1_row_2_col
-    - paragraphs.paragraphs_type.section_divider
+    - paragraphs.paragraphs_type.product_carousel_category
     - paragraphs.paragraphs_type.promo_block
+    - paragraphs.paragraphs_type.section_divider
+    - paragraphs.paragraphs_type.title_textarea
+    - paragraphs.paragraphs_type.video
   module:
     - entity_reference_revisions
 id: paragraph.1_row_2_col.field_1_row_2_col
@@ -16,15 +19,19 @@ label: '1 row 2 col'
 description: ''
 required: false
 translatable: false
-skip_translation_check: true
+skip_translation_check: 1
 default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
+    negate: 0
     target_bundles:
       promo_block: promo_block
+      product_carousel_category: product_carousel_category
       section_divider: section_divider
+      title_textarea: title_textarea
+      video: video
     target_bundles_drag_drop:
       1_row_2_col:
         weight: 22
@@ -89,7 +96,28 @@ settings:
       views_reference:
         weight: 42
         enabled: false
+      product_carousel_category:
+        enabled: true
+        weight: 43
+      delivery_usp_block:
+        weight: 44
+        enabled: false
       section_divider:
         enabled: true
         weight: 49
+      promo_block_button:
+        weight: 50
+        enabled: false
+      slug_banner:
+        weight: 54
+        enabled: false
+      text_links:
+        weight: 55
+        enabled: false
+      title_textarea:
+        enabled: true
+        weight: 56
+      video:
+        enabled: true
+        weight: 57
 field_type: entity_reference_revisions

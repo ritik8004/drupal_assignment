@@ -36,6 +36,22 @@ function alshaya_paragraphs_update_8130() {
 /**
  * Implements hook_update_N().
  *
+ * Add video and title+textarea paragraph reference to 1row2col.
+ */
+function alshaya_paragraphs_update_8129() {
+  $configs = [
+    'field.field.paragraph.video.field_title.yml',
+    'field.field.paragraph.1_row_2_col.field_1_row_2_col.yml',
+    'core.entity_form_display.paragraph.video.default.yml',
+    'core.entity_view_display.paragraph.1_row_2_col.default.yml',
+    'core.entity_view_display.paragraph.video.default.yml',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new fields to image_title_subtitle paragraph.
  * Included image_title_subtitle reference in 1_row_2_col_2_1_dept
  * and 1_row_2_col_1_2_dept paragraphs.
