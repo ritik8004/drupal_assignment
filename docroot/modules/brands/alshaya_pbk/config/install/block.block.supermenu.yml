@@ -6,9 +6,9 @@ dependencies:
   module:
     - system
   theme:
-    - alshaya_pottery_barn_kids
+    - alshaya_white_label
 id: supermenu
-theme: alshaya_pottery_barn_kids
+theme: alshaya_white_label
 region: menu_secondary
 weight: -55
 provider: null
