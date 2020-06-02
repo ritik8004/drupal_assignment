@@ -64,6 +64,11 @@ $conductors = [
     'hmac_secret' => 'YWY2ZmY0MjItZmQ2OS00',
     'site_id' => 6,
   ],
+  'mcae_dev2' => [
+    'hmac_id' => '3063b30c2b3e401bafe0dfe0f1611da5',
+    'hmac_secret' => 'NzY3NDg4NjctOTk2Mi00',
+    'site_id' => 221,
+  ],
   'mcae_uat' => [
     'hmac_id' => '843bb58e8fff4c37bdfa17675497c80e',
     'hmac_secret' => 'NzYxMzYxNWYtYzc2MS00',
@@ -138,6 +143,11 @@ $conductors = [
     'site_id' => 100,
   ],
   // H&M EG.
+  'hmeg_dev2' => [
+    'hmac_id' => 'ef24328464034ff481bc508053f48e9a',
+    'hmac_secret' => 'YjZhMjg1YjQtYjg0NC00',
+    'site_id' => 204,
+  ],
   'hmeg_qa' => [
     'hmac_id' => '34780fdeb07441048af8fb931a75f788',
     'hmac_secret' => 'YjM1OWNiNTQtYmMzYy00',
@@ -154,6 +164,11 @@ $conductors = [
     'site_id' => 145,
   ],
   // Pottery Barn KW.
+  'pbkw_dev2' => [
+    'hmac_id' => 'ec5997a86c504abb882545513877c234',
+    'hmac_secret' => 'ODQ1MWZlNjQtNTczYS00',
+    'site_id' => 203,
+  ],
   'pbkw_qa' => [
     'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
     'hmac_secret' => 'ZWQwZjNiNTYtYTRkOC00',
@@ -228,6 +243,11 @@ $conductors = [
     'site_id' => 85,
   ],
   // BathBodyWorks SA.
+  'bbwsa_dev2' => [
+    'hmac_id' => 'b24ef03c73df4b6cac6500eabae86119',
+    'hmac_secret' => 'YjBjYTdmN2YtOGE2Ni00',
+    'site_id' => 153,
+  ],
   'bbwsa_qa' => [
     'hmac_id' => '52fd839150734f1c8afe9db8c7f688e8',
     'hmac_secret' => 'ZTFjNTIzZTUtYzI3YS00',
@@ -248,6 +268,11 @@ $conductors = [
     'hmac_id' => 'c87b77ede1b14ac680b1ee0cd156a26f',
     'hmac_secret' => 'OTk3YzBlN2UtOWM0Ny00',
     'site_id' => 132,
+  ],
+  'bbwae_dev2' => [
+    'hmac_id' => 'aeffc79b7568410aafe7cbb8aaf83969',
+    'hmac_secret' => 'ZjdjZGU3MGMtYzZiMi00',
+    'site_id' => 202,
   ],
   'bbwae_qa' => [
     'hmac_id' => '83a388d79f834d20bef67de19ee177d7',
@@ -335,7 +360,7 @@ $conductors = [
     'site_id' => 83,
   ],
   // VictoriaSecret AE.
-  'vsae_dev3' => [
+  'vsae_dev2' => [
     'hmac_id' => '235f0ce579f6439c97e928b0ffa37224',
     'hmac_secret' => 'MzU0ZWQ5YWYtNjYwNi00',
     'site_id' => 147,
