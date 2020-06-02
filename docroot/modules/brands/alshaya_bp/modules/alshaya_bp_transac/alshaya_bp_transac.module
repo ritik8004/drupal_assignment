@@ -1,0 +1,141 @@
+<?php
+
+/**
+ * @file
+ * Alshaya bp transac module file.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\acq_sku\Entity\SKU;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_bp_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product' && $view_mode == 'full') {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
+    $sku_entity = SKU::loadFromSku($sku);
+    if ($sku_entity instanceof SKU) {
+      $return = _alshaya_bp_transac_get_product_description($sku_entity);
+      $build['short_desc'] = $return['short_desc'];
+      $build['description'] = $return['description'];
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_bp_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($view_mode == 'modal') {
+    /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
+    $productHelper = \Drupal::service('alshaya_acm_product.helper');
+
+    $body = $sku_entity->get('attr_description')->getValue();
+    if ($body) {
+      $description['value'] = [
+        '#markup' => $body[0]['value'],
+      ];
+      $build['description'][] = $description;
+      $productHelper->updateShortDescription($build, $body[0]['value']);
+    }
+  }
+}
+
+/**
+ * Get product description from SKU.
+ */
+function _alshaya_bp_transac_get_product_description($sku_entity) {
+  /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
+  $productHelper = \Drupal::service('alshaya_acm_product.helper');
+
+  $return = [];
+  $body = $sku_entity->get('attr_description')->getValue();
+  if ($body) {
+    $description['value'] = [
+      '#markup' => $body[0]['value'],
+    ];
+    $return['description'][] = $description;
+    $productHelper->updateShortDescription($return, $body[0]['value']);
+    if (!empty($return['short_desc'])) {
+      $return['short_desc']['value']['#markup'] = $productHelper->processShortDescEllipsis($return['short_desc']['value']['#markup']);
+    }
+  }
+
+  if ($suitable_for = $sku_entity->get('attr_suitable_for')->getString()) {
+    $suitable_for = [
+      'label' => ['#markup' => t('Suitable for')],
+      'value' => ['#markup' => $suitable_for],
+    ];
+    $return['description'][] = $suitable_for;
+  }
+
+  if ($how_to_use = $sku_entity->get('attr_how_to_use')->getString()) {
+    $how_to_use = [
+      'label' => ['#markup' => t('How to use')],
+      'value' => ['#markup' => $how_to_use],
+    ];
+    $return['description'][] = $how_to_use;
+  }
+
+  if ($hazards_and_cautions = $sku_entity->get('attr_hazards_and_cautions')->getString()) {
+    $hazards_and_cautions = [
+      'label' => ['#markup' => t('Hazards and cautions')],
+      'value' => ['#markup' => $hazards_and_cautions],
+    ];
+    $return['description'][] = $hazards_and_cautions;
+  }
+
+  if ($important_info = $sku_entity->get('attr_important_info')->getString()) {
+    $important_info = [
+      'label' => ['#markup' => t('Important info')],
+      'value' => ['#markup' => $important_info],
+    ];
+    $return['description'][] = $important_info;
+  }
+
+  if ($ingredients = $sku_entity->get('attr_ingredients')->getString()) {
+    $ingredients = [
+      'label' => ['#markup' => t('Ingredients')],
+      'value' => ['#markup' => $ingredients],
+    ];
+    $return['description'][] = $ingredients;
+  }
+
+  if ($active_ingredients = $sku_entity->get('attr_active_ingredients')->getString()) {
+    $active_ingredients = [
+      'label' => ['#markup' => t('Active ingredients')],
+      'value' => ['#markup' => $active_ingredients],
+    ];
+    $return['description'][] = $active_ingredients;
+  }
+
+  if ($indications_age_restrictions = $sku_entity->get('attr_indications_age_restrictions')->getString()) {
+    $indications_age_restrictions = [
+      'label' => ['#markup' => t('Indications age restrictions')],
+      'value' => ['#markup' => $indications_age_restrictions],
+    ];
+    $return['description'][] = $indications_age_restrictions;
+  }
+
+  if ($pil = $sku_entity->get('attr_pil')->getString()) {
+    $pil = [
+      'label' => ['#markup' => t('PIL')],
+      'value' => ['#markup' => $pil],
+    ];
+    $return['description'][] = $pil;
+  }
+
+  if ($body_area = $sku_entity->get('attr_body_area')->getString()) {
+    $body_area = [
+      'label' => ['#markup' => t('Body area')],
+      'value' => ['#markup' => $body_area],
+    ];
+    $return['description'][] = $body_area;
+  }
+
+  return $return;
+}

@@ -1,0 +1,13 @@
+.large-col-grid,
+.small-col-grid {
+  display: inline-block;
+  margin-#{$left}: 1.25rem;
+
+  @include breakpoint($only-mobile) {
+    margin-#{$left}: 1.25rem;
+  }
+}
+
+.block-alshaya-grid-count-block {
+  height: 3.5rem;
+}
