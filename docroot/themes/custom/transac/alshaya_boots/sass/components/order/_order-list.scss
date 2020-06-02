@@ -1,0 +1,80 @@
+.block-alshaya-acm-customer {
+  > .edit-account {
+    font-weight: normal;
+    height: 2.5rem;
+    padding: 0.6875rem 1.25rem;
+    line-height: normal;
+  }
+}
+
+.recent__orders--list {
+  .toggle--icon .icon-ic_chevrondown {
+    color: $order_recent_toggle_icon;
+    font-size: 2.25rem;
+  }
+
+  &.user__order--detail .order-summary-row td,
+  .order-item-row td {
+    border-bottom: 1px solid $order_details_row_border;
+  }
+
+  .order__detail--link {
+    a {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.user__order--detail {
+  .order-item-row {
+    .dark {
+      margin-bottom: 0.75rem;
+      font-family: $bp-light;
+      text-transform: capitalize;
+      line-height: 1.3;
+    }
+  }
+}
+
+.alshaya-acm-customer-order-list-search {
+  .form-item-search {
+    label {
+      color: $order_search_form_label_mobile;
+      font-size: 0.875rem;
+      height: 2.5rem;
+      line-height: 2.75;
+
+      &::before {
+        color: $order_search_form_icon;
+      }
+    }
+
+    input {
+      border-color: $order_search_input_bg_border;
+    }
+  }
+
+  .form-type-select {
+    select {
+      @include breakpoint($only-mobile) {
+        height: 2.5rem;
+      }
+    }
+  }
+
+  &.active--search {
+    .form-item-search {
+      label {
+        @include breakpoint($only-mobile) {
+          background-color: $order_search_form_active_bg;
+          color: $order_search_form_active_text;
+          border: 1px solid $order_search_form_active_border;
+
+          &::before {
+            color: $order_search_form_active_icon;
+          }
+        }
+      }
+    }
+  }
+}

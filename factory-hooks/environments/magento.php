@@ -559,6 +559,27 @@ $magentos = [
       'store_id' => ['en' => 22, 'ar' => 19],
     ],
   ],
+  'bp_qa' => [
+    'url' => 'https://integration-5ojmyuq-gdyoujibngne2.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '10t6mj4t46m69exspxelmqna1t3fnz8u',
+      'consumer_secret' => 'ozboevrqwoeogwohpeu7hlcvr2hbljkt',
+      'access_token' => '31l664sdj4q1p4wu7k0wmzwt1h84hp5w',
+      'access_token_secret' => 'p1habct6ztfqtbza0in9o68z464qr5fj',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+  ],
   'default' => [
     'kw' => [
       'magento_lang_prefix' => [

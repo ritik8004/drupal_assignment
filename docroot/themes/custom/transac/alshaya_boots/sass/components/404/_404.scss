@@ -1,0 +1,146 @@
+.not-found {
+  padding-top: 0;
+  max-width: 77.75rem;
+  margin: 0 auto;
+
+  &::after {
+    top: 0;
+    border: 0;
+  }
+
+  .not-found__body {
+    position: static;
+    font-size: 1rem;
+    font-family: $bp-light;
+    margin: 0 auto;
+    color: $not_found_body_color;
+    width: 20%;
+    height: auto;
+    min-height: 25.875rem;
+
+    @include breakpoint($only-mobile) {
+      min-height: 10.5rem;
+      width: 64%;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 33%;
+      min-height: 28rem;
+    }
+
+    p {
+      &:first-child {
+        font-size: 2rem;
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+}
+
+.maintenance-page {
+  .maintenance__logo--wrapper {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .maintenance__logo {
+    float: none;
+    margin-top: 2.875rem;
+    margin-bottom: 2.5rem;
+
+    @include breakpoint($upto-desktop) {
+      text-align: center;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .not-found {
+    padding: 1.25rem;
+    border: 1px solid $maintenance_container_border;
+    max-width: 77rem;
+
+    &::after {
+      background: none;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin: 2rem;
+      padding: 1rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin: 1rem;
+      padding: 0.5rem;
+    }
+
+    .not-found__body {
+      width: 100%;
+      background-color: $maintenance_container_bg;
+      padding: 6rem 0;
+      font-family: $alshaya-thin;
+      color: $maintenance_body_color;
+
+      &__container {
+        padding: 0;
+
+        .maintenance {
+          &-ar,
+          &-en {
+            font-size: 1.5rem;
+
+            @include breakpoint($only-mobile) {
+              font-size: 0.875rem;
+              width: 70%;
+              display: inline-block;
+            }
+
+            &.title {
+              font-size: 1.75rem;
+              text-transform: uppercase;
+              color: $maintenance_title_text;
+
+              @include breakpoint($only-mobile) {
+                font-size: 1.125rem;
+              }
+            }
+          }
+
+          &-en {
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            width: 40%;
+
+            @include breakpoint($only-mobile) {
+              width: 80%;
+            }
+
+            @include breakpoint($only-tablet) {
+              width: 67%;
+            }
+          }
+
+          &-ar {
+            font-family: $alshaya-arabic-thin;
+
+            @include breakpoint($only-tablet) {
+              font-size: 1.25rem;
+            }
+
+            &.title {
+              font-family: $alshaya-arabic-bold;
+              font-size: 1.875rem;
+
+              @include breakpoint($only-mobile) {
+                font-size: 1.25rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

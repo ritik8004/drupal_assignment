@@ -158,3 +158,19 @@ sites:
     module: alshaya_mu
     type: alshaya_transac
     country: eg
+  bpkw:
+    module: alshaya_bp
+    type: alshaya_transac
+    country: kw
+  bpsa:
+    module: alshaya_bp
+    type: alshaya_transac
+    country: sa
+  bpae:
+    module: alshaya_bp
+    type: alshaya_transac
+    country: ae
+  bpeg:
+    module: alshaya_bp
+    type: alshaya_transac
+    country: eg

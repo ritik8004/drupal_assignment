@@ -1,0 +1,116 @@
+body {
+  @include breakpoint($only-mobile) {
+    margin-top: 3.5rem;
+
+    html[lang=ar] & {
+      margin-top: 3.5rem;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 4.5rem;
+
+    html[lang=ar] & {
+      margin-top: 4.5rem;
+    }
+  }
+}
+
+.c-my-account-nav {
+  @include breakpoint($only-tablet) {
+    width: 20rem !important;
+  }
+
+  @include breakpoint($upto-desktop) {
+    li::after {
+      font-size: 2rem;
+      margin-top: -1.5625rem;
+    }
+  }
+
+  h3 {
+    text-transform: uppercase;
+  }
+}
+
+// top haeder links
+.c-menu-secondary {
+  text-transform: none;
+
+  @include breakpoint($only-tablet) {
+    width: 20rem;
+  }
+
+  a {
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+      line-height: 1.35;
+
+      html[lang=ar] & {
+        padding-right: 0;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      padding-top: 0.375rem;
+      font-size: 0.75rem;
+      height: 1.5rem;
+
+      &::after,
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  li {
+    @include breakpoint($upto-desktop) {
+      height: auto;
+      margin-#{$left}: 0;
+      margin-#{$right}: 0;
+      padding-#{$left}: 1rem;
+    }
+
+    &::after {
+      margin-top: -2.3125rem;
+      font-size: 1.75rem;
+      width: 1.875rem;
+      font-weight: bold;
+      #{$right}: 0.4375rem;
+    }
+  }
+
+  .menu--account {
+    @include breakpoint($desktop) {
+      text-transform: none;
+    }
+
+    li a {
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  .block-language-blocklanguage-interface .ar a {
+    @include breakpoint($desktop) {
+      padding-top: 0.3125rem;
+    }
+  }
+}
+
+.branding__menu {
+  @include breakpoint($upto-desktop) {
+    height: 4.375rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    height: 3rem;
+  }
+
+  body & {
+    @include breakpoint($upto-desktop) {
+      box-shadow: 0 0.125rem 0 0 $header_border;
+    }
+  }
+}

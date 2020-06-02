@@ -1,0 +1,241 @@
+fields:
+  size:
+    label: 'Size'
+    cardinality: -1
+    facet: 1
+    index: 1
+  color:
+    label: 'Color'
+    cardinality: -1
+    facet: 1
+    index: 1
+  product_brand:
+    source: 'brand'
+  how_to_use:
+    label: 'How to use'
+    description: 'Part of description.'
+    type: 'text_long'
+  hazards_and_cautions:
+    label: 'Hazards and Cautions'
+    description: 'Part of description.'
+    type: 'text_long'
+  important_info:
+    label: 'Important Info'
+    description: 'Part of description.'
+    type: 'text_long'
+  ingredients:
+    label: 'Ingredients'
+    description: 'Part of description.'
+    type: 'text_long'
+  ingredients_lhn:
+    label: 'Ingredients'
+    cardinality: -1
+    facet: 1
+    index: 1
+  active_ingredients:
+    label: 'Active ingredients'
+    type: 'text_long'
+  active_ingredients_lhn:
+    label: 'Active ingredients'
+    cardinality: -1
+    facet: 1
+    index: 1
+  suitable_for:
+    label: 'Suitable for'
+    type: 'text_long'
+  suitable_for_lhn:
+    label: 'Suitable for'
+    cardinality: -1
+    facet: 1
+    index: 1
+  indications_age_restrictions:
+    label: 'Indications/Age restrictions'
+    description: 'Part of description.'
+    type: 'string'
+  pil:
+    label: 'PIL'
+    description: 'Part of description.'
+    type: 'string'
+  body_area:
+    label: 'Body Area'
+    type: 'text_long'
+  body_area_lhn:
+    label: 'Body Area'
+    cardinality: -1
+    facet: 1
+    index: 1
+  condition:
+    label: 'Condition'
+    cardinality: -1
+    facet: 1
+    index: 1
+  free_from:
+    label: 'Free From'
+    cardinality: -1
+    facet: 1
+    index: 1
+  format:
+    label: 'Format'
+    cardinality: -1
+    facet: 1
+    index: 1
+  hair_colour:
+    label: 'Hair Colour'
+    cardinality: -1
+    facet: 1
+    index: 1
+  product_type:
+    label: 'Product Type'
+    cardinality: -1
+    facet: 1
+    index: 1
+  gender:
+    label: 'Gender'
+    cardinality: -1
+    facet: 1
+    index: 1
+  hair_type:
+    label: 'Hair type'
+    cardinality: -1
+    facet: 1
+    index: 1
+  key_features:
+    label: 'Key Features'
+    cardinality: -1
+    facet: 1
+    index: 1
+  skin_type:
+    label: 'Skin Type'
+    cardinality: -1
+    facet: 1
+    index: 1
+  suitable_from:
+    label: 'Suitable From'
+    cardinality: -1
+    facet: 1
+    index: 1
+  character:
+    label: 'Character'
+    cardinality: -1
+    facet: 1
+    index: 1
+  flavour:
+    label: 'Flavour'
+    cardinality: -1
+    facet: 1
+    index: 1
+  fragrance_scent:
+    label: 'Fragrance Scent'
+    cardinality: -1
+    facet: 1
+    index: 1
+  fragrance_type:
+    label: 'Fragrance Type'
+    cardinality: -1
+    facet: 1
+    index: 1
+  spf:
+    label: 'SPF'
+    cardinality: -1
+    facet: 1
+    index: 1
+  finish:
+    label: 'Finish'
+    cardinality: -1
+    facet: 1
+    index: 1
+  bottle_type:
+    label: 'Bottle Type'
+    cardinality: -1
+    facet: 1
+    index: 1
+  nappy_type:
+    label: 'Nappy Type'
+    cardinality: -1
+    facet: 1
+    index: 1
+  age_range:
+    label: 'Age Range'
+    cardinality: -1
+    facet: 1
+    index: 1
+  car_seat_category:
+    label: 'Car Seat Category'
+    cardinality: -1
+    facet: 1
+    index: 1
+  denier:
+    label: 'Denier'
+    cardinality: -1
+    facet: 1
+    index: 1
+  pack_size:
+    label: 'Pack Size'
+    cardinality: -1
+    facet: 1
+    index: 1
+  teat_flow:
+    label: 'Teat Flow'
+    cardinality: -1
+    facet: 1
+    index: 1
+  shop_by_collection:
+    label: 'Shop By Collection'
+    cardinality: -1
+    facet: 1
+    index: 1
+  number_of_wheels:
+    label: 'Number Of Wheels'
+    cardinality: -1
+    facet: 1
+    index: 1
+  protection:
+    label: 'Protection'
+    cardinality: -1
+    facet: 1
+    index: 1
+  meal_type:
+    label: 'Meal Type'
+    cardinality: -1
+    facet: 1
+    index: 1
+  specialist_milk:
+    label: 'Specialist Milk'
+    cardinality: -1
+    facet: 1
+    index: 1
+  power:
+    label: 'Power'
+    cardinality: -1
+    facet: 1
+    index: 1
+  power_source:
+    label: 'Power Source'
+    cardinality: -1
+    facet: 1
+    index: 1
+  barrel_size:
+    label: 'Barrel Size'
+    cardinality: -1
+    facet: 1
+    index: 1
+  battery_size:
+    label: 'Battery Size'
+    cardinality: -1
+    facet: 1
+    index: 1
+  battery_type:
+    label: 'Battery Type'
+    cardinality: -1
+    facet: 1
+    index: 1
+  compatibility:
+    label: 'Compatibility'
+    cardinality: -1
+    facet: 1
+    index: 1
+  lhn_group:
+    label: 'LHN Group'
+    cardinality: -1
+    facet: 1
+    index: 1
