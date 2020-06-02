@@ -278,7 +278,7 @@ class CartController {
       ? $cart_data['totals']['shipping_incl_tax'] ?? 0
       : NULL;
 
-    if (is_array($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
+    if (is_array($data['surcharge']) && !empty($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
       $data['totals']['surcharge'] = $data['surcharge']['amount'];
     }
 
