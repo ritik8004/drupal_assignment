@@ -4,7 +4,7 @@
 $black: #000;
 $white: #fff;
 $alizarin-crimson: #e51b23;
-$grey: #888;
+$grey: #999;
 $success-green: #39b54a;
 $wild-sand: #f6f6f6;
 $gallery: #eee;
@@ -31,6 +31,7 @@ $primary_link-hover: $black;
 $primary_link-active: $black;
 $primary_border: $gallery;
 $content_link_color: $black;
+$transparent: transparent;
 
 // Form elements.
 $primary_form_selector_border: $grey;
@@ -598,3 +599,14 @@ $megamenu-inline-layout-active-border-color: $black;
 // Autocomplete
 $autocomplete_hover: rgba(51, 51, 51, 0.06);
 $autocomplete_text: $grey;
+
+// Algolia Autocomplete
+$algolia-auto-complete-border: $gallery;
+$algolia-suggestion-border: $gallery;
+$algolia-input-text: $grey;
+$algolia-search-suggestion-hover-bg: $grey;
+$algolia-input-placeholder-text: $grey;
+$algolia-suggestion-text: $primary_text;
+$algolia-react-highlighted-text: $primary_text;
+$algolia-search-icon: $transparent;
+$algolia-react-highlighted-bg: $transparent;

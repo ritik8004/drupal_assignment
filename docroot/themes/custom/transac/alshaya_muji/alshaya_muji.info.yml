@@ -22,7 +22,7 @@ regions:
   footer_secondary: 'Footer Secondary'
 
 libraries:
-  - alshaya_white_label/ucfix
+  - alshaya_white_label/global_styles
   - alshaya_muji/global_styles
 
 libraries-override:
@@ -35,6 +35,11 @@ libraries-override:
     css:
       theme:
         css/ltr-print.css: css/rtl-print.css
+
+  alshaya_white_label/algolia_search:
+    css:
+      theme:
+        css/conditional-sass/algolia-search/algolia-search.ltr.css: css/conditional-sass/algolia-search/algolia-search.ltr.css
 
   alshaya_white_label/spc-utils:
     css:
