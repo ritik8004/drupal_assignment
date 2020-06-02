@@ -41,7 +41,7 @@ function _alshaya_set_s3fs_config() {
   }
 
   $bucket = 'alshaya-ecom-drupal-' . $env;
-  $root_folder = $acsf_site_code . '/shared/product';
+  $root_folder = $acsf_site_code . '/shared';
 
   $config = \Drupal::configFactory()->getEditable('s3fs.settings');
   $config->set('bucket', $bucket);
