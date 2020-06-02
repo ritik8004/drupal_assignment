@@ -343,7 +343,7 @@ class SkuAssetManager {
     $pims_directory = $this->hmImageSettings->get('pims_directory');
 
     // Prepare the directory path.
-    $directory = 's3://' . $asset_type . '/' . $sku . '/' . trim($data['path'], '/');
+    $directory = 's3://product/assets/' . $asset_type . '/' . $sku . '/assets-shared/' . trim($data['path'], '/');
     $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
 
     // Check if file already exists in the directory.
@@ -469,7 +469,7 @@ class SkuAssetManager {
     }
 
     // Prepare the directory path.
-    $directory = 's3://image' . '/' . $sku . '/' . trim(dirname($asset['Data']['FilePath']), '/');
+    $directory = 's3://product/assets/image/' . $sku . '/assets-lp-shared/' . trim(dirname($asset['Data']['FilePath']), '/');
     $target = $directory . DIRECTORY_SEPARATOR . basename($asset['Data']['FilePath']);
 
     // Check if file already exists in the directory.
