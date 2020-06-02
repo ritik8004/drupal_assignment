@@ -32,6 +32,8 @@ export default class EmptyDeliveryText extends React.Component {
   constructor(props) {
     super(props);
     this.openStoreRequests = [];
+    this.eventListener = this.eventListener.bind(this);
+    this.eventClosePopup = this.eventClosePopup.bind(this);
   }
 
   componentDidMount() {
@@ -191,14 +193,14 @@ export default class EmptyDeliveryText extends React.Component {
     }
   }
 
-  eventListener = (e) => {
+  eventListener(e) {
     this.eventClosePopup();
     const data = e.detail;
     const { refreshCart } = this.props;
     refreshCart(data);
   }
 
-  eventClosePopup = () => {
+  eventClosePopup() {
     if (this.isComponentMounted) {
       dispatchCustomEvent('closeModal', 'deliveryType');
     }

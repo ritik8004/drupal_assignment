@@ -17,6 +17,12 @@ const AddressContent = React.lazy(() => import('../address-popup-content'));
 export default class BillingInfo extends React.Component {
   isComponentMounted = false;
 
+  constructor(props) {
+    super(props);
+    this.billingUpdate = this.billingUpdate.bind(this);
+  }
+
+
   componentDidMount() {
     this.isComponentMounted = true;
     document.addEventListener('onBillingAddressUpdate', this.billingUpdate);
@@ -30,14 +36,14 @@ export default class BillingInfo extends React.Component {
   /**
    * Handle billing address update event.
    */
-  billingUpdate = (e) => {
+  billingUpdate(e) {
     if (this.isComponentMounted) {
       dispatchCustomEvent('closeModal', 'billingInfo');
     }
     const cart = e.detail;
     const { refreshCart } = this.props;
     refreshCart(cart);
-  };
+  }
 
   /**
    * Process the billing address process.
