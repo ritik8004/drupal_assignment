@@ -36,9 +36,8 @@ class AlshayaSeoTransacSettings extends ConfigFormBase {
     $form['product_impression_timer_time'] = [
       '#type' => 'number',
       '#title' => $this->t('Product Impression GTM event timer time'),
-      // Convert time from milliseconds to seconds.
-      '#default_value' => ($this->config('alshaya_seo_transac.settings')->get('product_impression_timer_time') / 1000),
-      '#suffix' => 'seconds',
+      '#default_value' => $this->config('alshaya_seo_transac.settings')->get('product_impression_timer_time'),
+      '#description' => $this->t('The time(in MILLISECONDS) after which productImpression will be triggered automatically. Eg. for 60 seconds timer, enter "60000" in this field.'),
     ];
     return parent::buildForm($form, $form_state);
   }
@@ -62,8 +61,7 @@ class AlshayaSeoTransacSettings extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_seo_transac.settings')
       ->set('product_impression_queue_size', (int) $form_state->getValue('product_impression_queue_size'))
-      // Convert time from seconds to milliseconds.
-      ->set('product_impression_timer_time', ((int) $form_state->getValue('product_impression_timer_time') * 1000))
+      ->set('product_impression_timer_time', (int) $form_state->getValue('product_impression_timer_time'))
       ->save();
     parent::submitForm($form, $form_state);
   }
