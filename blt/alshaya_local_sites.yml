@@ -174,3 +174,19 @@ sites:
     module: alshaya_bp
     type: alshaya_transac
     country: eg
+  pbkkw:
+    module: alshaya_pbk
+    type: alshaya_transac
+    country: kw
+  pbksa:
+    module: alshaya_pbk
+    type: alshaya_transac
+    country: sa
+  pbkae:
+    module: alshaya_pbk
+    type: alshaya_transac
+    country: ae
+  pbkeg:
+    module: alshaya_pbk
+    type: alshaya_transac
+    country: eg

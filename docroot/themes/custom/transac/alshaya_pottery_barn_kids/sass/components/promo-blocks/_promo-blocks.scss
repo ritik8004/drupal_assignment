@@ -1,0 +1,16 @@
+.paragraph--type--section-divider {
+  .field--name-field-section-divider-text {
+    font-size: 1.5rem;
+    font-weight: normal;
+    padding-bottom: 0.625rem;
+    border-bottom: 1px solid $section_divider_border;
+  }
+}
+
+.c-promo__items {
+  .c-promo__item:first-child {
+    @include breakpoint($only-mobile) {
+      margin-top: 0.75rem;
+    }
+  }
+}

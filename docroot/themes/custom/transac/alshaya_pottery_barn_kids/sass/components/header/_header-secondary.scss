@@ -1,0 +1,39 @@
+.c-menu-secondary {
+  li {
+    @include breakpoint($only-mobile) {
+      &::after {
+        font-size: 2rem;
+        margin-top: -2.5625rem;
+      }
+    }
+  }
+
+  a {
+    font-size: 1rem;
+    line-height: 1.25;
+
+    @include breakpoint($tablet) {
+      text-transform: capitalize;
+      font-size: 0.75rem;
+      line-height: 1.85;
+    }
+
+    @include breakpoint($desktop) {
+      line-height: 1.875rem;
+      height: 1.875rem;
+      display: inline-block;
+    }
+
+    &::before {
+      @include breakpoint($desktop) {
+        content: none !important;
+      }
+    }
+  }
+
+  .c-menu-secondary__region {
+    @include breakpoint($desktop) {
+      height: 1.875rem;
+    }
+  }
+}
