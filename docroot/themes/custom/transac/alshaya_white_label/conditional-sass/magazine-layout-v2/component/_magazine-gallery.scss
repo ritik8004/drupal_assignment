@@ -94,12 +94,21 @@
       width: 100vw !important;
       overflow-y: auto;
 
-      @include breakpoint($tablet) {
+      @include breakpoint($only-tablet) {
         padding: 5.3125rem !important;
       }
 
       img {
         margin: 0 auto;
+      }
+
+      @include breakpoint($only-mobile) {
+        .fullscreen-slider-wrapper {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
       }
     }
 

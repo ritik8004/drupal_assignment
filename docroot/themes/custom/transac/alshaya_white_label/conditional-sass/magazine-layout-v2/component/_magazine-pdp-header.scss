@@ -10,7 +10,7 @@
   position: absolute;
   width: 100%;
   top: 0;
-  z-index: 12;
+  z-index: 10;
 
   @include breakpoint($only-mobile) {
     padding: 1.25rem;
@@ -18,7 +18,7 @@
 
   .magv2-header-wrapper {
     .back-button {
-      float: left;
+      float: #{$left};
 
       @include icon(arrowup, after) {
         display: block;
@@ -28,7 +28,7 @@
         width: 2.875rem;
         background: $magv2-icon-bg;
         border-radius: 50%;
-        padding-left: 0.3125rem;
+        padding-#{$left}: 0.3125rem;
         padding-top: 0.3125rem;
       }
     }
@@ -37,14 +37,14 @@
       display: none;
     }
 
-    .cart-icon {
+    .cart-link {
       background: $magv2-icon-bg;
       border-radius: 50%;
-      float: right;
+      float: #{$right};
 
       &::before {
         content: '';
-        background: url(/themes/custom/transac/alshaya_white_label/imgs/icons/new-pdp-shopping-bag-mobile.svg) center center no-repeat;
+        background: url('#{$base_theme_img_directory_path}/icons/new-pdp-shopping-bag-mobile.svg') center center no-repeat;
         display: block;
         height: 2.875rem;
         width: 2.875rem;
@@ -58,6 +58,12 @@
     position: fixed;
     background: white;
     padding: 0.6875rem;
+    #{$left}: 0;
+    top: 0;
+
+    @include breakpoint($tablet) {
+      padding: 1.25rem 1.875rem;
+    }
 
     .magv2-header-wrapper {
       display: flex;
@@ -67,26 +73,104 @@
           background: none;
           height: 2.125rem;
           width: 2.125rem;
-          padding-left: 0;
+          padding-#{$left}: 0;
           padding-top: 0;
         }
       }
 
-      .magv2-compact-detail-wrapper {
+      .magv2-compact-detail-wrapper,
+      .magv2-detail-wrapper {
         display: flex;
         flex-direction: column;
         justify-content: center;
         width: 80%;
         padding: 0 1.25rem;
+
+        @include breakpoint($tablet) {
+          align-items: center;
+          flex-direction: row;
+          justify-content: flex-end;
+          width: 100%;
+          padding: 0;
+        }
+
+        > div {
+          &:last-child {
+            margin-#{$right}: 0;
+          }
+        }
+      }
+
+      .magv2-pdp-title-wrapper {
+        @include breakpoint($tablet) {
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
+
+          .magv2-pdp-title {
+            text-align: inherit;
+            text-overflow: inherit;
+            overflow: auto;
+            white-space: inherit;
+            font-size: 1rem;
+            margin-#{$right}: 3.75rem;
+            line-height: 1.31;
+            max-width: 13.438rem;
+            padding: 0;
+          }
+        }
       }
 
       .magv2-pdp-brand-logo {
         @include breakpoint($only-mobile) {
           display: none;
         }
+
+        @include breakpoint($tablet) {
+          margin-#{$right}: 3.75rem;
+        }
+
+        img {
+          @include breakpoint($tablet) {
+            max-height: 1.375rem;
+            width: auto;
+          }
+        }
       }
 
-      .cart-icon {
+      .magv2-pdp-price {
+        @include breakpoint($tablet) {
+          margin-#{$right}: 3.75rem;
+          max-width: 13.125rem;
+
+          .has-special-price {
+            .magv2-pdp-final-price-wrapper {
+              font-size: 1.125rem;
+            }
+
+            .magv2-pdp-price-wrapper {
+              font-size: 1rem;
+            }
+          }
+
+          .magv2-pdp-price-container {
+            margin: 0;
+          }
+
+          .magv2-pdp-price-wrapper {
+            font-size: 1.125rem;
+            font-family: $alshaya-bold;
+            padding: 0 0.25rem;
+          }
+
+          .magv2-pdp-vat-text {
+            font-size: 0.75rem;
+            color: $magv2-vat-text;
+          }
+        }
+      }
+
+      .cart-link {
         background: none;
 
         &::before {

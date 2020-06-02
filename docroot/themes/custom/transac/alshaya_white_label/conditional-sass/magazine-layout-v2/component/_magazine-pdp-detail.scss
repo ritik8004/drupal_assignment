@@ -5,6 +5,7 @@
         &-title-wrapper {
           display: flex;
           justify-content: space-between;
+          align-items: center;
         }
 
         &-title {
@@ -23,16 +24,11 @@
 
         &-brand-logo {
           img {
-            width: 3.125rem;
-            padding-top: 0.313rem;
+            max-height: 1.125rem;
+            width: auto;
 
             @include breakpoint($tablet) {
-              width: 3.75rem;
-              padding-top: 1.25rem;
-            }
-
-            @include breakpoint($desktop) {
-              padding-top: 0.938rem;
+              max-height: 1.375rem;
             }
           }
         }
