@@ -225,61 +225,67 @@ export const fillValueInAddressFromGeocode = (address) => {
       areaVal = deduceAreaVal(val, 'area_parent');
       if (areaVal !== null) {
         areaParentValue = areaVal;
-        // Trigger event.
-        const updateEvent = new CustomEvent('updateParentAreaOnMapSelect', {
-          bubbles: true,
-          detail: {
-            data: () => areaVal,
-          },
-        });
-        document.dispatchEvent(updateEvent);
       }
     }
+
+    // Trigger event to update parent area field.
+    const updateEvent = new CustomEvent('updateParentAreaOnMapSelect', {
+      bubbles: true,
+      detail: {
+        data: () => (areaParentValue !== null ? areaParentValue : ''),
+      },
+    });
+    document.dispatchEvent(updateEvent);
   }
 
   // If area field available.
   if (drupalSettings.address_fields.administrative_area !== undefined) {
     const val = getAddressFieldVal(address, 'administrative_area');
+    let areaVal = null;
     // If not empty.
     if (val.length > 0) {
       // Deduce value from the available area in drupal.
-      const areaVal = deduceAreaVal(val, 'administrative_area');
+      areaVal = deduceAreaVal(val, 'administrative_area');
       // If we have area value matching.
       if (areaVal !== null && areaVal.id !== undefined) {
-        let triggerAreaUpdateEvent = false;
-        // If area parent field not available, then trigger event.
-        if (drupalSettings.address_fields.area_parent === undefined) {
-          triggerAreaUpdateEvent = true;
-        } else if (areaParentValue !== null
-          && areaParentValue.id !== undefined) {
-          // If parent area field is available and it has value.
-          // Checking here if the area value we get has same
-          // parent as the parent we get for the area_parent.
-          const parentValue = getAreaParentId(true, areaVal.label);
-          // If there are parent for given area.
-          if (parentValue !== null) {
-            for (let i = 0; i < parentValue.length; i++) {
-              // If matches with a parent.
-              if (parentValue[i].id === areaParentValue.id) {
-                triggerAreaUpdateEvent = true;
-                break;
+        // If area parent field is available.
+        if (drupalSettings.address_fields.area_parent !== undefined) {
+          let matchedParent = false;
+          // If parent field has value.
+          if (areaParentValue !== null
+            && areaParentValue.id !== undefined) {
+            // If parent area field is available and it has value.
+            // Checking here if the area value we get has same
+            // parent as the parent we get for the area_parent.
+            const parentValue = getAreaParentId(true, areaVal.label);
+            // If there are parent for given area.
+            if (parentValue !== null) {
+              for (let i = 0; i < parentValue.length; i++) {
+                // If matches with a parent.
+                if (parentValue[i].id === areaParentValue.id) {
+                  matchedParent = true;
+                  break;
+                }
               }
             }
           }
-        }
 
-        if (triggerAreaUpdateEvent) {
-          // Trigger event.
-          const updateArea = new CustomEvent('updateAreaOnMapSelect', {
-            bubbles: true,
-            detail: {
-              data: () => areaVal,
-            },
-          });
-          document.dispatchEvent(updateArea);
+          // If matched parent not available.
+          if (matchedParent === false) {
+            areaVal = null;
+          }
         }
       }
     }
+
+    // Trigger event to update area field.
+    const updateArea = new CustomEvent('updateAreaOnMapSelect', {
+      bubbles: true,
+      detail: {
+        data: () => (areaVal !== null ? areaVal : ''),
+      },
+    });
+    document.dispatchEvent(updateArea);
   }
 };
 
