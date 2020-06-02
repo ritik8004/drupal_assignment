@@ -171,7 +171,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['bySku'] = $combinations['by_sku'];
       $swatch_processed = FALSE;
 
-      $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['combinations'] = $options;
       $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['byAttribute'] = $combinations['by_attribute'];
       $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'] = $product_tree['configurables'];
 
@@ -209,6 +208,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
         }
 
         $options = NestedArray::mergeDeepArray([$options, $this->skuManager->getCombinationArray($combination)], TRUE);
+        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['combinations'] = $options;
         // Get the first child from attribute_sku.
         $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['firstChild'] = reset($sorted_variants);

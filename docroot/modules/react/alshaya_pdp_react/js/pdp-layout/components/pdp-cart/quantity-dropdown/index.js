@@ -11,11 +11,11 @@ const QuantityDropdown = (props) => {
   for (let i = 1; i <= productInfo[skuCode].cartMaxQty; i++) {
     if (i <= stockQty) {
       options.push(
-        <option value={i}>{i}</option>,
+        <option key={i} value={i}>{i}</option>,
       );
     } else {
       options.push(
-        <option value={i} disabled>{i}</option>,
+        <option key={i} value={i} disabled>{i}</option>,
       );
     }
   }
