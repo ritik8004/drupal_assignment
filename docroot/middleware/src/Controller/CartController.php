@@ -274,9 +274,14 @@ class CartController {
       'surcharge' => 0,
     ];
 
-    $data['totals']['shipping_incl_tax'] = !empty($cart_data['shipping']['method'])
-      ? $cart_data['totals']['shipping_incl_tax'] ?? 0
-      : NULL;
+    if (empty($cart_data['shipping']) || empty($cart_data['shipping']['method'])) {
+      // We use null to show "Excluding Delivery".
+      $data['totals']['shipping_incl_tax'] = NULL;
+    }
+    elseif ($cart_data['shipping']['type'] !== 'click_and_collect') {
+      // For click_n_collect we don't want to show this line at all.
+      $data['totals']['shipping_incl_tax'] = $cart_data['totals']['shipping_incl_tax'] ?? 0;
+    }
 
     if (is_array($data['surcharge']) && !empty($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
       $data['totals']['surcharge'] = $data['surcharge']['amount'];
