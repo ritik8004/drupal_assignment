@@ -14,6 +14,7 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_3_col
     - paragraphs.paragraphs_type.1_row_3_col_dept
     - paragraphs.paragraphs_type.1_row_3_col_text
+    - paragraphs.paragraphs_type.1_row_4_col
     - paragraphs.paragraphs_type.block_reference
     - paragraphs.paragraphs_type.section_divider
     - paragraphs.paragraphs_type.delivery_usp_block
@@ -47,6 +48,7 @@ settings:
       1_row_2_col_dept: 1_row_2_col_dept
       1_row_3_col_dept: 1_row_3_col_dept
       block_reference: block_reference
+      1_row_4_col: 1_row_4_col
       views_reference: views_reference
       section_divider: section_divider
       delivery_usp_block: delivery_usp_block
@@ -105,12 +107,15 @@ settings:
       block_reference:
         enabled: true
         weight: 30
+      1_row_4_col:
+        enabled: true
+        weight: 33
       views_reference:
         enabled: true
         weight: 34
       image_title_subtitle:
         weight: 39
-        enabled: false
+        enabled: true
       offers_bordered:
         weight: 41
         enabled: false
