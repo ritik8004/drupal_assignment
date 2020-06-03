@@ -132,12 +132,15 @@ $breadcrumb_link_active: $black-two;
 
 // Language Switcher
 $lang_switch: $peacock-blue;
-$lang_switch_active: $black-two;
+$lang_switch_active: $white;
+$lang_switch_active_bg:$drakish-blue;
 $lang_switch_firsttime_bg: $white;
-$lang_switch_firsttime_border: $drakish-blue;
+$lang_switch_firsttime_border: $white;
 $lang_switch_list: $drakish-blue;
+$lang_switch_list_border: $drakish-blue;
 $lang_switch_list_active: $white;
 $lang_switch_close_icon: $drakish-blue;
+$lang_switch_close_icon_bg: $link-water;
 
 // 404
 $maintenance_container_bg: rgba(0, 73, 144, 0.22);
