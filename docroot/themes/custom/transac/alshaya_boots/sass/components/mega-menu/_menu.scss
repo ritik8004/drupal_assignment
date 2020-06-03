@@ -1,7 +1,12 @@
 @include breakpoint($desktop) {
+  .main--menu {
+    display: inline-block !important;
+  }
+
   .block-alshaya-main-menu {
     ul.menu--one__list {
-      display: block !important;
+      display: inline-block !important;
+      margin-top: -0.3125rem;
 
       .menu-backdrop {
         padding-top: 0;
@@ -12,19 +17,27 @@
       text-transform: none;
       height: 2.625rem;
 
+      .menu__link {
+        font-family: $bp-light;
+        font-weight: bold;
+        font-size: 0.875rem;
+      }
+
       a.menu--one__link {
         &::after {
           content: '';
-          height: 0.1875rem;
-          background-color: $mm_bg;
           width: 100%;
           margin-top: 0.375rem;
           position: absolute;
           #{$left}: 0;
-          bottom: -0.0625rem;
+          bottom: -0.375rem;
           transition: all 0.3s ease-out;
           visibility: hidden;
         }
+      }
+
+      ul.menu--two__list {
+        margin-top: 0.125rem;
       }
 
       &:hover {
@@ -36,11 +49,12 @@
           &::after {
             background-color: $mm_l1_link_bg;
             visibility: visible;
+            height: 0.1875rem;
           }
         }
 
         ul.menu--two__list {
-          border-top: 0.125rem solid $mm_l1_border;
+          margin-top: 0.125rem;
         }
       }
 
@@ -55,7 +69,19 @@
         &.active {
           color: $mm_l1_link;
           border-top: 0;
-          border-bottom: 0.1875rem solid $mm_l1_link_active_border;
+          border-bottom: 0;
+
+          &::after {
+            background-color: $mm_l1_link_bg;
+            visibility: visible;
+            height: 0.1875rem;
+          }
+        }
+      }
+
+      &.active {
+        .menu--one__link {
+          border-top: 0;
         }
       }
     }
@@ -76,6 +102,8 @@
           .menu__links__wrapper {
             border-#{$right}: 1px solid $mm_l2_l3_l4_divider_border;
             margin-bottom: 0.5rem;
+            z-index: 12;
+            background: $mm_bg;
           }
         }
       }
@@ -88,7 +116,7 @@
     .menu--two__list-item {
       .menu--three__list {
         li {
-          width: 20.625rem;
+          width: 22.5rem;
           padding-#{$left}: 0.5rem;
           min-height: 2.1875rem;
 
@@ -114,6 +142,26 @@
 
   .menu--three__list-item,
   .menu--four__list-item {
-    min-width: 20.625rem;
+    min-width: 23rem;
+    max-width: 23rem;
+  }
+
+  .menu--one__list {
+    .menu--one__list-item {
+      .menu--two__list {
+        .menu--two__list-item {
+          .menu--three__list {
+            .menu--three__list-item,
+            .menu--four__list .menu--four__list-item {
+              &:first-of-type {
+                a {
+                  font-family: $alshaya-bold !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

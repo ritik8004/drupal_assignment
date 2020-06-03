@@ -5,6 +5,7 @@ namespace Drupal\alshaya_facets_pretty_paths\Plugin\facets\url_processor;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
@@ -75,9 +76,9 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $request);
     $this->alshayaPrettyPathHelper = $pretty_path_helper;
     $this->facetsManager = $facets_manager;
-    $this->initializeActiveFilters($configuration);
     $this->entityTypeManager = $entityTypeManager;
     $this->languageManager = $language_manager;
+    $this->initializeActiveFilters($configuration);
   }
 
   /**
@@ -106,20 +107,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       return [];
     }
 
-    static $langcode = NULL;
-    if (!$langcode) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    }
-
-    // Load original facet without any overrides on non-English pages so that
-    // values such as facet label can be loaded in English which can then be
-    // sent to GTM.
-    $facet_override_free = NULL;
-    if ($langcode !== 'en') {
-      $facet_id = $facet->id();
-      $storage = $this->entityTypeManager->getStorage($facet->getEntityTypeId());
-      $facet_override_free = $storage->loadOverrideFree($facet_id);
-    }
+    // We use alias and label for English facet all the time.
+    $facet = $this->getEnglishFacet($facet);
 
     $current_path = rtrim($this->request->getPathInfo(), '/');
     $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters($facet->getFacetSourceId());
@@ -135,8 +124,20 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     foreach ($filters_array as $filters) {
       $array = explode('-', $filters);
       $key = array_shift($array);
-      $filters_current_result[$key] = $array;
+
+      foreach ($array as &$activeValue) {
+        $activeValue = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents(
+          $facet->getFacetSourceId(),
+          $key,
+          $activeValue
+        );
+      }
+
+      // 0 is a valid value so we use strlen.
+      $filters_current_result[$key] = array_filter($array, 'strlen');
     }
+
+    $filters_current_result = array_filter($filters_current_result);
 
     /** @var \Drupal\facets\Result\ResultInterface $result */
     foreach ($results as $result_key => &$result) {
@@ -149,7 +150,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       if (!empty($active_results[$result_key])) {
         $active_facet = [];
         foreach ($filters_current_result_array[$filter_key] as $value) {
-          $active_facet[] = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $value);
+          $active_facet[] = $value;
         }
 
         if (($active_key = array_search($raw_value, $active_facet)) !== FALSE) {
@@ -219,18 +220,19 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       $attributes = [];
 
       // If more than 2 filters are selected, don't index.
-      $attributes['rel'] = ($filters_count > 2)
+      $attributes['rel'] = ($filters_count > Settings::get('nonindexable_plp_filter_count'))
         ? 'nofollow'
         : 'follow';
 
       // Getting the filter item value in English.
       // Setting attribute for the facet items.
-      $filter_value_en = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $raw_value);
+      $filter_value_en = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents(
+        $facet->getFacetSourceId(),
+        $facet->getUrlAlias(),
+        $raw_value
+      );
       $attributes['data-drupal-facet-item-label'] = $filter_value_en;
-
-      $attributes['data-drupal-facet-label'] = $facet_override_free
-        ? $facet_override_free->label()
-        : $facet->label();
+      $attributes['data-drupal-facet-label'] = $facet->label();
 
       $url->setOption('attributes', $attributes);
       $url->setOption('query', $this->getQueryParams());
@@ -244,10 +246,23 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
    * {@inheritdoc}
    */
   public function setActiveItems(FacetInterface $facet) {
+    // We use alias and label for English facet all the time.
+    $facet_en = $this->getEnglishFacet($facet);
+
     // Get the filter key of the facet.
-    if (isset($this->activeFilters[$facet->getUrlAlias()])) {
-      foreach ($this->activeFilters[$facet->getUrlAlias()] as $value) {
-        $facet->setActiveItem(trim($this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $value), '"'));
+    if (isset($this->activeFilters[$facet_en->getUrlAlias()])) {
+      foreach ($this->activeFilters[$facet_en->getUrlAlias()] as $value) {
+        $decoded = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents(
+          $facet_en->getFacetSourceId(),
+          $facet_en->getUrlAlias(),
+          $value
+        );
+
+        // 0 is a valid value, we will have NULL if value not found so we
+        // use isset().
+        if (isset($decoded)) {
+          $facet->setActiveItem(trim($decoded, '"'));
+        }
       }
     }
   }
@@ -262,6 +277,9 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
   protected function initializeActiveFilters($configuration) {
     /** @var \Drupal\facets\FacetInterface $facet */
     $facet = $configuration['facet'];
+
+    // We use alias and label for English facet all the time.
+    $facet = $this->getEnglishFacet($facet);
 
     $parts = $this->alshayaPrettyPathHelper->getActiveFacetFilters($facet->getFacetSourceId());
     foreach ($parts as $part) {
@@ -297,6 +315,33 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     }
 
     return $query;
+  }
+
+  /**
+   * Get facet label in English.
+   *
+   * Load original facet without any overrides on non-English pages so that
+   * values such as facet label can be loaded in English which can then be
+   * sent to GTM.
+   *
+   * @param \Drupal\facets\FacetInterface $facet
+   *   Facet.
+   *
+   * @return \Drupal\facets\FacetInterface
+   *   Facet label in English.
+   */
+  protected function getEnglishFacet(FacetInterface $facet) {
+    static $facets = [];
+
+    if (isset($facets[$facet->id()])) {
+      return $facets[$facet->id()];
+    }
+
+    $storage = $this->entityTypeManager->getStorage($facet->getEntityTypeId());
+    $facetEn = $storage->loadOverrideFree($facet->id());
+
+    $facets[$facet->id()] = $facetEn;
+    return $facets[$facet->id()];
   }
 
 }

@@ -1,0 +1,15 @@
+.menu--super-menu {
+  float: $left;
+  display: none;
+
+  ul {
+    li {
+      height: 1.875rem;
+      border: 0;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    display: block;
+  }
+}

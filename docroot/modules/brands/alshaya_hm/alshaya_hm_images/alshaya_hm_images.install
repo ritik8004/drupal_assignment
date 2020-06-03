@@ -10,6 +10,15 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add MovingMedia in PDP assets list.
+ */
+function alshaya_hm_images_update_8012() {
+  alshaya_config_install_configs(['alshaya_hm_images.settings'], 'alshaya_hm_images');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * PDP - Change dimensions for PDP image style.
  */
 function alshaya_hm_images_update_8011() {

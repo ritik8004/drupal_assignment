@@ -8,18 +8,17 @@ import {
 } from '../get_cart';
 import { restoreCartApiUrl } from '../update_cart';
 import {
-  getInfoFromStorage,
   removeCartFromStorage,
 } from '../storage';
 
-export const fetchClicknCollectStores = (coords) => {
-  const { cart } = getInfoFromStorage();
-  if (!cart || !cart.cart_id) {
+export const fetchClicknCollectStores = (args) => {
+  const { coords, cartId } = args;
+  if (cartId === undefined) {
     return new Promise((resolve) => resolve(null));
   }
 
   const GET_STORE_URL = Drupal.url(
-    `cnc/stores/${cart.cart_id}/${coords.lat}/${coords.lng}`,
+    `cnc/stores/${cartId}/${coords.lat}/${coords.lng}`,
   );
   return Axios.get(GET_STORE_URL);
 };
@@ -113,9 +112,11 @@ export const fetchCartData = () => {
 };
 
 export const fetchCartDataForCheckout = () => {
+  // Remove cart data from storage every-time we land on checkout page.
+  removeCartFromStorage();
+
   // If session cookie not exists, no need to process/check.
   if (drupalSettings.user.uid === 0 && !Cookies.get('PHPSESSID')) {
-    removeCartFromStorage();
     return null;
   }
 

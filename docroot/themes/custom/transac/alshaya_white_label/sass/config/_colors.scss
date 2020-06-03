@@ -106,6 +106,8 @@ $_spc-area-panel-placeholder: #b3b3b3;
 $_spc-billing-help: #007aff;
 $_spc-cart-alert: #238ae8;
 $_spc-warning-bg: #ffd1a1;
+$new_red: #c00;
+$grey-light-three: #f8f8f8;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1284,6 +1286,7 @@ $spc-saved-card-expiry: $grey-light;
 $spc-checkout-print-titile: $mothercare-black;
 $spc-checkout-print-header: $white-five;
 $spc-checkout-print-header-title: $mothercare-black;
+$spc-checkout-order-detail-map-link: $mothercare-black;
 
 // Order QTY Limit.
 $order_qty_limit_bg: $_dynamic_promo_text_bg;
@@ -1292,3 +1295,25 @@ $order_limit_border: $_order_limit_light_orange;
 $order_qty_limit_reached_txt: $mothercare-black;
 $order_qty_limit_reached_bg: $white-five;
 $order_qty_limit_reached_icon: $_order_limit_error_red;
+
+// Magazine V2 PDP
+$magv2-readmore-link: $windows-blue;
+$magv2-text: $brownish-grey;
+$magv2-special-price: $new_red;
+$magv2-price: $black;
+$magv2-desc-popup-bg: $grey-light-three;
+$magv2-desc-popup-content-bg: $white-five;
+$magv2-card-bg: $white-five;
+$magv2-price-strike: $grey-light;
+$magv2-vat-text: $grey-light;
+$magv2-section-title-color: $marine-blue;
+$magv2-pdp-title: $mothercare-black;
+$magv2-pdp-bg: $grey-light-three;
+$magv2-slick-dots-bg: $white-five;
+$magv2-slick-dots: $white-smoke-light;
+$magv2-gallery-popup-bg: $white-five;
+$magv2-gallery-popup-cross-bg: $grey-light-two;
+$magv2-gallery-popup-cross: $mothercare-black;
+$magv2-gallery-slider-bg: $grey-light-two;
+$magv2-slick-dots-active: $mothercare-black;
+$magv2-icon-bg: $grey-light-two;

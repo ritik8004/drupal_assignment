@@ -1,0 +1,9 @@
+.magv2 {
+  &-compact-detail-wrapper {
+    .magv2-pdp {
+      &-title {
+        text-transform: lowercase;
+      }
+    }
+  }
+}

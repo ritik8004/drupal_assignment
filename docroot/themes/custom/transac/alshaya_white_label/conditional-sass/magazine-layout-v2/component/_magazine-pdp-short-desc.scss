@@ -1,0 +1,50 @@
+.magv2-pdp-description-wrapper {
+  .magv2 {
+    &-pdp-section-title {
+      margin-bottom: 1.25rem;
+      text-transform: lowercase;
+      display: flex;
+      align-items: center;
+
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/new-pdp-desc-icon.svg') center center no-repeat;
+        width: 3.125rem;
+        height: 3.125rem;
+        margin-#{$right}: 0.625rem;
+      }
+    }
+
+    &-pdp-section-text.short-desc {
+      margin-bottom: 0.9375rem;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        z-index: 1;
+        width: 100%;
+        height: 5rem;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
+      }
+
+      p {
+        margin-top: 0;
+      }
+    }
+
+    &-desc-readmore-link {
+      font-size: 1rem;
+      line-height: normal;
+      text-decoration: underline;
+      color: $magv2-readmore-link;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+        color: $magv2-readmore-link;
+      }
+    }
+  }
+}

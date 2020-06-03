@@ -870,12 +870,13 @@ class AlshayaGtmManager {
 
     $privilege_order = isset($order['extension']['loyalty_card']) ? 'Privilege Customer' : 'Regular Customer';
 
-    $skus = [];
+    $products = [];
     foreach ($orderItems as $item) {
-      if (in_array($item['sku'], array_keys($skus))) {
+      // We might get two entries for same product if configurable.
+      if (isset($products[$item['sku']])) {
         continue;
       }
-      $skus[] = $item['sku'];
+
       $product = $this->fetchSkuAtttributes($item['sku']);
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];
@@ -899,7 +900,7 @@ class AlshayaGtmManager {
         $productExtras['dimension8'] = $dimension8;
       }
 
-      $products[] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
+      $products[$item['sku']] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
     }
 
     $actionData = [
@@ -1157,12 +1158,12 @@ class AlshayaGtmManager {
         $address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['shipping']['address']);
         $deliveryCity = $this->addressBookManager->getAddressShippingAreaParentValue($address, $order['shipping']['address']);
 
-        $skus = [];
         foreach ($orderItems as $orderItem) {
-          if (in_array($orderItem['sku'], array_keys($skus))) {
+          // We might get two entries for same product if configurable.
+          if (in_array($orderItem['sku'], $productSKU)) {
             continue;
           }
-          $skus[] = $orderItem['sku'];
+
           $productSKU[] = $orderItem['sku'];
           $product_node = $this->skuManager->getDisplayNode($orderItem['sku']);
 
@@ -1263,8 +1264,8 @@ class AlshayaGtmManager {
    *   Cart items in flocktory format.
    */
   public function formatCartFlocktory(array $items) {
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'utility.inc');
     $cart_items_flock = [];
-
     foreach ($items as $item) {
       $product_node = $this->skuManager->getDisplayNode($item['sku']);
       // Get product media.

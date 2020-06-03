@@ -141,6 +141,11 @@ $lang_switch_close_icon: $drakish-blue;
 
 // 404
 $maintenance_container_bg: rgba(0, 73, 144, 0.22);
+$maintenance_container_border: $drakish-blue;
+$not_found_body_color: $dark-pink;
+$maintenance_body_color: $black;
+$maintenance_title_text: $peacock-blue;
+$maintenance_container_border_top: $link-water;
 
 // Accordion
 $accordion_border: $white-smoke-light;
@@ -206,10 +211,10 @@ $mm_l1_link_bg: $drakish-blue;
 $mm_l1_link_hover: $drakish-blue;
 $mm_l1_link_active_border: $peacock-blue;
 $mm_l2_link: $drakish-blue;
-$mm_l3_link: $grey-light;
+$mm_l3_link: $black-two;
 $mm_l3_link_hover: $link-water;
 $mm_l3_link_mobile: $drakish-blue;
-$mm_l1_l2_l3_l4_border: $link-water;
+$mm_l1_l2_l3_l4_border: $link-water-two;
 $mm_highlight_label: $black-two;
 $mm_highlight_title: $black-two;
 $mm_l2_l3_l4_hover_bg: $link-water;
@@ -223,6 +228,7 @@ $mobile_continue_shopping_btn_border: $drakish-blue;
 $desktop_continue_shopping_btn_text: $white;
 $desktop_continue_shopping_btn_bg: $drakish-blue;
 $desktop_continue_shopping_btn_border: $drakish-blue;
+$cart_notification_arrow_bg: $white;
 
 // Notification popup.
 $minicart_notification_border: $drakish-blue;
@@ -252,6 +258,7 @@ $newsletter_input_border: $warm-grey-two;
 
 // PLP facet
 $color_facet_active_border: $drakish-blue;
+$plp_filter_title: $cod-gray;
 $plp_facet_filter: $cool-blue-two;
 $plp_facet_filter_bg: $drakish-blue;
 $plp_facet_item_label: $black-two;
@@ -266,7 +273,7 @@ $plp_facet_filter_label: $black-two;
 $plp_facet_border: $warm-grey-two;
 $plp_facet_summary_filter_icon: $white;
 $plp_item_label: $black-two;
-$plp_promotion_description: $cool-blue-two;
+$plp_promotion_description: $grey-light;
 $plp_promotion_link: $error-red;
 $plp_all_filter_filter_arrow: $drakish-blue;
 $plp_filter_icon: $cod-gray;
@@ -500,3 +507,17 @@ $option-list-menu-background: $white;
 // Megamenu inline layout.
 $megamenu-inline-layout-active-border-color: $drakish-blue;
 $megamenu-inline-layout-right-category-seperator: $grey-light;
+
+// SPC Checkout.
+$spc-checkout_section_title: $drakish-blue;
+$spc-select-border: $warm-grey-two;
+$checkout_login_submit_button_background: $drakish-blue;
+$checkout_login_link_text: $drakish-blue;
+$checkout_section_titles: $drakish-blue;
+$checkout_guest_button_border: $drakish-blue;
+$checkout_guest_button_txt: $drakish-blue;
+$spc-cnc-store-search-icon: $drakish-blue;
+$spc-search-icon: $drakish-blue;
+$spc-promo-code-error: $error-red;
+$spc-cart-promo-code-submit-enabled: $error-red;
+$spc-deliver-button: $drakish-blue;

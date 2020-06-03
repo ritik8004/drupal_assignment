@@ -46,6 +46,13 @@
       max-width: 14.875rem;
       width: 100%;
     }
+
+    html[lang=ar] & {
+      input {
+        direction: ltr;
+        text-align: right;
+      }
+    }
   }
 
   .spc-type-cc-number,
@@ -56,6 +63,10 @@
       width: 80%;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      html[lang=ar] & {
+        height: 85%;
+      }
     }
   }
 

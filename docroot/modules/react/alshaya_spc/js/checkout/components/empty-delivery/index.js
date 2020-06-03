@@ -108,7 +108,7 @@ export default class EmptyDeliveryText extends React.Component {
    */
   fetchStoresHelper = (coords, defaultCenter = false) => {
     // State from context, whether the modal is open or not.
-    const { clickCollectModal, showOutsideCountryError } = this.context;
+    const { clickCollectModal, showOutsideCountryError, cartId } = this.context;
     // Add all requests in array to update storeLists only once when
     // multiple requests are in progress.
     this.openStoreRequests.push({ coords, defaultCenter });
@@ -124,7 +124,11 @@ export default class EmptyDeliveryText extends React.Component {
       showFullScreenLoader();
     }
 
-    const list = createFetcher(fetchClicknCollectStores).read(coords);
+    const args = {
+      coords,
+      cartId,
+    };
+    const list = createFetcher(fetchClicknCollectStores).read(args);
 
     const { updateCoordsAndStoreList } = this.context;
     const { openStoreRequests } = this;
@@ -252,9 +256,11 @@ export default class EmptyDeliveryText extends React.Component {
         {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
           <div className="spc-empty-delivery-information">
             <div onClick={() => this.openModal(triggerOpenModal)} className="spc-checkout-empty-delivery-text">
-              {deliveryType === 'click_and_collect'
-                ? Drupal.t('select your preferred collection store')
-                : Drupal.t('please add your contact details and address.')}
+              <span>
+                {deliveryType === 'click_and_collect'
+                  ? Drupal.t('select your preferred collection store')
+                  : Drupal.t('please add your contact details and address.')}
+              </span>
             </div>
             <Popup
               open={isModalOpen}

@@ -48,19 +48,19 @@ $magentos = [
   'mc_uat' => [
     'url' => 'https://mcmena-uat2.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => '3ewl8lsult7l5mpp1ckv0hw1ftk0u2bc',
-      'consumer_secret' => '84avnwtrinkpt2jmda6f61l8vy5cabb1',
-      'access_token' => 'yw1bvvwqe1vrab9sqjioepclb044jja2',
-      'access_token_secret' => 'bsmp4igrv2bgtn6pk5ojko32qvrrk798',
+      'consumer_key' => 'up2nmvc7y2c9k7o1kkk3iruywidhges4',
+      'consumer_secret' => 'l3qcpfpjvb8hiy5dnbu4ln63ahr16haj',
+      'access_token' => 'ic28d0o0od00yrbd38kln1hrdvnx8bb5',
+      'access_token_secret' => 'kuec3ssvt14wwo5ojhbmg78xqq1vswgg',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 3],
+      'store_id' => ['en' => 1, 'ar' => 4],
     ],
     'sa' => [
-      'store_id' => ['en' => 7, 'ar' => 10],
+      'store_id' => ['en' => 7, 'ar' => 13],
     ],
     'ae' => [
-      'store_id' => ['en' => 16, 'ar' => 13],
+      'store_id' => ['en' => 19, 'ar' => 22],
     ],
   ],
   'mc_prod' => [
@@ -344,19 +344,25 @@ $magentos = [
   'bbw_uat' => [
     'url' => 'https://staging-bbw2.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => 'nilvx16kpllrdfevec15aer2u1ahusto',
-      'consumer_secret' => '4rin9lodbf263w9sdc9hmei8i67p0mhc',
-      'access_token' => '5yx9g0jnytt2maah8417cvi4ipe6l3cq',
-      'access_token_secret' => 'm6ae5fwc1eowx7w6ap02ekl16f0p0ita',
+      'consumer_key' => 'mue8te8h9fpimh3ssmk2gqg3p37fkrbk',
+      'consumer_secret' => '3n11u3dqiv3dnwr6lnhrf0gm3hso8932',
+      'access_token' => 'noi823gl5hgclkbf7zau2qtyo6td0nnh',
+      'access_token_secret' => 'h8yhtn87yx83wslo9regfguxynx646b2',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 19],
+      'store_id' => ['en' => 1, 'ar' => 18],
     ],
     'sa' => [
-      'store_id' => ['en' => 7, 'ar' => 10],
+      'store_id' => ['en' => 6, 'ar' => 9],
     ],
     'ae' => [
-      'store_id' => ['en' => 13, 'ar' => 16],
+      'store_id' => ['en' => 12, 'ar' => 15],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 30, 'ar' => 27],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 36, 'ar' => 33],
     ],
     'bh' => [
       'store_id' => ['en' => 30, 'ar' => 27],
@@ -376,6 +382,12 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 12, 'ar' => 15],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 38, 'ar' => 35],
     ],
   ],
   // Foot Locker.
@@ -400,19 +412,19 @@ $magentos = [
   'fl_uat' => [
     'url' => 'https://fl-uat2.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => 'bs3iqr7l0o0nu1m65gqj0i9g6khwrwlg',
-      'consumer_secret' => 'd5y2b1wvvuwja4xjeaa08qgjpbr603ji',
-      'access_token' => '3ag36xcjyj1u2dxrvu859gsnyqgthirb',
-      'access_token_secret' => '4gx37p92dgm5tfd5i0f4po6ggab0lblu',
+      'consumer_key' => '7odnwfhqxgemmfg8cmmo7iqipbb74hav',
+      'consumer_secret' => 'mqf2sk1s87h9hmqmeyu2wdtetj73hyqf',
+      'access_token' => '6r64msbxkga3jrf5bb8nl0q9q3jya5nh',
+      'access_token_secret' => 'qmkvb8ekhknu2uiy3cvclarxdcfcpvvb',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
+      'store_id' => ['en' => 1, 'ar' => 19],
     ],
     'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
+      'store_id' => ['en' => 7, 'ar' => 10],
     ],
     'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
+      'store_id' => ['en' => 13, 'ar' => 16],
     ],
   ],
   'fl_prod' => [
@@ -561,6 +573,48 @@ $magentos = [
     ],
     'eg' => [
       'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+  ],
+  'mu_qa' => [
+    'url' => 'https://integration-5ojmyuq-tw5uijob6hir2.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'yyt9xtlfaaxw55c1h9xbw0mlff8j8ovt',
+      'consumer_secret' => 'k63ke42x62x1hssrtxy1e33c5vmyqgwy',
+      'access_token' => 'o0kvxvg1hge9j51twpyztl9uxvvq78y2',
+      'access_token_secret' => '05m2gsyg0sxrs87aehwghc2ct0ttmtuo',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+  ],
+  'mu_uat' => [
+    'url' => 'https://aeo-uat.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'ydzr7xpvfjlzbwvce9tza471n7juuwhe',
+      'consumer_secret' => 'tqseptjwftwhrua330kjem7jnurclhbx',
+      'access_token' => 'ofsq77eipss5gshgvj931q603ij7eiqw',
+      'access_token_secret' => '24phqz567kp2fkt86tocb6exkwcittmq',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
     ],
   ],
   'default' => [

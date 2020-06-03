@@ -244,7 +244,12 @@ class CybersourceHelper {
     }
 
     try {
-      $order = $this->cart->placeOrder([]);
+      $payment_data = [
+        'method' => 'cybersource',
+        'additional_data' => $post_data,
+      ];
+
+      $order = $this->cart->placeOrder(['paymentMethod' => $payment_data]);
 
       if (empty($order) || isset($order['error'])) {
         throw new \Exception($order['error_message'] ?? '');

@@ -11,7 +11,8 @@ const StoreList = ({
 
   const removeClassFromStoreList = (className) => {
     // Add Class expand to the currently opened li.
-    const tempStoreList = document.querySelectorAll('#click-and-collect-list-view li.select-store');
+    const tempStoreListNodes = document.querySelectorAll('#click-and-collect-list-view li.select-store');
+    const tempStoreList = [].slice.call(tempStoreListNodes);
     // Remove class expand from all.
     tempStoreList.forEach((storeElement) => {
       storeElement.classList.remove(className);

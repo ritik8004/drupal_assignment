@@ -22,10 +22,22 @@ services:
       - '@config.factory'
       - '@alshaya_acm_product.skumanager'
       - '@facets_summary.manager'
-      - '@cache.pretty_paths'
+      - '@alshaya_facets_pretty_paths.pretty_aliases'
+
+  alshaya_facets_pretty_paths.pretty_aliases:
+    class: Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases
+    arguments:
+      - '@database'
+      - '@language_manager'
+
   cache.pretty_paths:
     class: Drupal\Core\Cache\CacheBackendInterface
     tags:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [pretty_paths]
+
+  alshaya_facets_pretty_paths.kernel_events_subscriber:
+    class: Drupal\alshaya_facets_pretty_paths\EventSubscriber\AlshayaFacetsPrettyPathsKernelEventsSubscriber
+    tags:
+      - { name: event_subscriber }

@@ -29,8 +29,11 @@ function _alshaya_spc_translations() {
       'continue to checkout' => [
         'ar' => 'إتمام الشراء بأمان',
       ],
-      'my shopping bag (@qty items)' => [
-        'ar' => '(قطعة @qty) حقيبة التسوق',
+      'my shopping bag' => [
+        'ar' => 'حقيبة التسوق',
+      ],
+      '(@qty items)' => [
+        'ar' => '(قطعة @qty)',
       ],
       'Total (excluding delivery)' => [
         'ar' => '(المبلغ الإجمالي (قبل التوصيل',
@@ -44,8 +47,8 @@ function _alshaya_spc_translations() {
       'complete purchase' => [
         'ar' => 'سجل الطلبية',
       ],
-      'order summary (@qty items)' => [
-        'ar' => '(@qty قطعة) ملخص الطلبية',
+      'order summary' => [
+        'ar' => 'ملخص الطلبية',
       ],
       'Order total (@count items)' => [
         'ar' => '(@count قطعة) المبلغ الإجمالي',

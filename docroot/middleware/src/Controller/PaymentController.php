@@ -191,7 +191,7 @@ class PaymentController {
       return $this->handleCheckoutComError('3D secure payment came into success but responseCode was not success.');
     }
 
-    $amount = $this->checkoutComApi->getCheckoutAmount($cart['totals']['grand_total'], $cart['totals']['quote_currency_code']);
+    $amount = $this->checkoutComApi->getCheckoutAmount($cart['totals']['base_grand_total'], $cart['totals']['quote_currency_code']);
     if (empty($charges['value']) || $charges['value'] != $amount) {
       $this->logger->error('3D secure payment came into success with proper responseCode but totals do not match. Cart id: @id, Amount in checkout: @value, Amount in Cart: @total', [
         '@id' => $cart['cart']['id'],

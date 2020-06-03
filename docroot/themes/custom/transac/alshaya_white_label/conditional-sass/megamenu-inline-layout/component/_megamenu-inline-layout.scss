@@ -119,6 +119,7 @@
             #{$left}: 28.875rem;
             padding-#{$left}: 1.875rem;
             transition: $left 0.3s ease-out;
+            z-index: 0;
 
             &::before {
               content: '';
@@ -167,6 +168,98 @@
 
         &::after {
           bottom: 0.125rem;
+        }
+      }
+    }
+  }
+}
+
+//l4 menu styles
+
+@include breakpoint($desktop) {
+  .menu--one__list-item {
+    .menu--two__list {
+      .menu__links__wrapper {
+        .menu--three__list-item {
+          &:not(.move-to-right) {
+            display: flex;
+            align-items: center;
+            padding-#{$left}: 0;
+            margin-bottom: 0.875rem;
+
+            @include icon(chevron#{$right}, after) {
+              font-size: 1.125rem;
+              transition: none;
+              position: absolute;
+              #{$right}: 0.7rem;
+
+              .ie & {
+                line-height: 0.375rem;
+              }
+            }
+
+            .menu--four__list {
+              position: absolute !important;
+              #{$left}: 100%;
+              top: 0;
+              opacity: 0;
+              visibility: hidden;
+              transition: none;
+              margin-#{$left}: 1.5rem;
+              margin-top: 0.25rem;
+              background: $mm_bg;
+              height: 100%;
+              z-index: 11;
+            }
+
+            &.active {
+              .menu--four__list {
+                visibility: visible;
+                #{$left}: 100%;
+                opacity: 1;
+                pointer-events: auto;
+                column-fill: auto;
+                width: auto;
+              }
+            }
+
+            &.last-element-l4 {
+              &::after,
+              &::before {
+                display: none;
+              }
+            }
+          }
+
+          .menu--four__list {
+            li {
+              height: auto;
+              min-height: 2.5625rem;
+              display: flex;
+              align-items: center;
+              margin-#{$right}: 0;
+
+              .ie & {
+                line-height: 2.4;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .block-alshaya-main-menu li.menu--one__list-item.active {
+    .menu__links__wrapper {
+      .menu--three__list-item:not(.move-to-right) {
+        &.active {
+          .menu--four__list {
+            visibility: visible;
+            #{$left}: 100%;
+            opacity: 1;
+            pointer-events: auto;
+            column-fill: auto;
+          }
         }
       }
     }

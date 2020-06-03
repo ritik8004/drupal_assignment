@@ -1,0 +1,45 @@
+.magv2 {
+  &-content {
+    @include breakpoint($only-mobile) {
+      padding: 0 1.25rem;
+    }
+
+    @include breakpoint($tablet) {
+      width: 65%;
+      float: #{$left};
+    }
+
+    @include breakpoint($desktop) {
+      width: 72%;
+    }
+  }
+
+  &-sidebar {
+    @include breakpoint($only-mobile) {
+      padding: 0 1.25rem;
+      background-color: $pdp_background;
+    }
+
+    @include breakpoint($tablet) {
+      width: 35%;
+      float: $right;
+      padding-#{$left}: 1.25rem;
+    }
+
+    @include breakpoint($desktop) {
+      width: 28%;
+    }
+  }
+}
+
+.new-pdp-magazine-layout {
+  .c-pdp.l-one--w {
+    @include breakpoint($tablet) {
+      padding: 0 1.875rem;
+    }
+
+    @include breakpoint($desktop) {
+      max-width: 90rem;
+    }
+  }
+}

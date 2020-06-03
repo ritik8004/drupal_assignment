@@ -323,6 +323,9 @@ $conductors = [
     'hmac_secret' => 'MWExMGE0NDQtZGY5OS00',
     'site_id' => 222,
   ],
+  'bbwbh_prod' => [
+    'site_id' => 224,
+  ],
   // BathBodyWorks QA.
   'bbwqa_dev' => [
     'hmac_id' => 'aca0a08c946347a6b796ff622baf2cfc',
@@ -338,6 +341,9 @@ $conductors = [
     'hmac_id' => '623cf547b8154a849e2eefe03cb94978',
     'hmac_secret' => 'Nzg2ZWZjN2MtMmRjNi00',
     'site_id' => 223,
+  ],
+  'bbwqa_prod' => [
+    'site_id' => 225,
   ],
   // VictoriaSecret KW.
   'vskw_qa' => [
@@ -586,6 +592,46 @@ $conductors = [
     'hmac_id' => 'c2615c9507594034a76a2dc4ff5f10e2',
     'hmac_secret' => 'MDkyNjMzNmQtOWI4NC00',
     'site_id' => 216,
+  ],
+  'mukw_qa' => [
+    'hmac_id' => 'e6c4af7406bb4694a0caa108409617d9',
+    'hmac_secret' => 'OGU4Yjg1ZDMtNWI5NS00',
+    'site_id' => 174,
+  ],
+  'musa_qa' => [
+    'hmac_id' => 'e6b1671eda3b442f9119045676199d93',
+    'hmac_secret' => 'NTg3N2Q3NWItMjJhOC00',
+    'site_id' => 175,
+  ],
+  'muae_qa' => [
+    'hmac_id' => '89e42750b2764506b5533ed781d49e87',
+    'hmac_secret' => 'MmYxZGQ0NDYtYTQ5MC00',
+    'site_id' => 176,
+  ],
+  'mueg_qa' => [
+    'hmac_id' => '5e49e396d2ec416f9216a3a287f738fc',
+    'hmac_secret' => 'YzdkOTIyYjItNzc3ZS00',
+    'site_id' => 177,
+  ],
+  'mukw_uat' => [
+    'hmac_id' => 'afb8c24dfb574debaebfe6b680a9fc43',
+    'hmac_secret' => 'MjU1NmIzMjYtNDc1My00',
+    'site_id' => 191,
+  ],
+  'musa_uat' => [
+    'hmac_id' => '8d9331c4d4aa4a529ed05055b3ca5e67',
+    'hmac_secret' => 'ZGJmMWFiYTktY2JiNS00',
+    'site_id' => 192,
+  ],
+  'muae_uat' => [
+    'hmac_id' => '05168cbe2e664f4c9d9b676a96d185a4',
+    'hmac_secret' => 'YmJmZTAxNzgtMTdhNy00',
+    'site_id' => 193,
+  ],
+  'mueg_uat' => [
+    'hmac_id' => 'a37e371caae3434ea9372ea053607857',
+    'hmac_secret' => 'ZDFmOGM0NDEtNjlmNy00',
+    'site_id' => 194,
   ],
 ];
 

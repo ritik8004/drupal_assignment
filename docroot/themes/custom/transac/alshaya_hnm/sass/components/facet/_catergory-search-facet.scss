@@ -40,6 +40,18 @@
     }
   }
 
+  .c-facet {
+    &.c-accordion {
+      ul {
+        li {
+          span {
+            font-size: 0.8125rem;
+          }
+        }
+      }
+    }
+  }
+
   .c-content__region {
     .block-facet-blockcategory-facet-search {
       .facet-item {

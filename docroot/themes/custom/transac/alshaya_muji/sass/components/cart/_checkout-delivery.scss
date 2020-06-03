@@ -1,0 +1,104 @@
+.page-standard.user-page.checkout-delivery {
+  #edit-delivery-tabs {
+    .tab {
+      &.tab-click-collect {
+        margin-#{$left}: -0.125rem;
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0;
+        }
+
+        &.active--tab--head {
+          @include breakpoint($only-tablet) {
+            #{$right}: -0.0625rem;
+            margin-#{$left}: -0.0625rem;
+          }
+
+          &::before {
+            @include breakpoint($tablet) {
+              display: none;
+            }
+          }
+        }
+      }
+
+      &.tab-separator {
+        font-size: 1rem;
+
+        @include breakpoint($only-tablet) {
+          width: 6.2%;
+        }
+
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            width: 6.1%;
+            margin-left: 0.125rem;
+          }
+        }
+      }
+
+      @include breakpoint($desktop) {
+        padding: 1.5rem 0;
+
+        html[lang=ar] & {
+          width: 47%;
+        }
+      }
+
+      h2 {
+        text-transform: capitalize;
+      }
+
+      &:hover {
+        background: $delivery_tab_active_bg;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 47%;
+        padding-top: 1.6875rem;
+        padding-bottom: 1.5625rem;
+      }
+
+      &.tab-home-delivery {
+        &:not(.active--tab--head) {
+          margin-#{$left}: -0.0625rem;
+        }
+      }
+
+      &.tab-home-delivery,
+      &.tab-click-collect {
+        position: relative;
+
+        @include breakpoint($tablet) {
+          min-height: 5.4375rem;
+        }
+
+        a {
+          position: absolute;
+          top: 50%;
+          width: 100%;
+          #{$left}: 50%;
+          transform: translate(-50%, -50%);
+
+          html[lang=ar] & {
+            transform: translate(50%, -50%);
+          }
+        }
+      }
+    }
+  }
+}
+
+#payment_details_wrapper {
+  > .form-wrapper {
+    .payment-plugin-wrapper-div {
+      .method {
+        &-title {
+          @include breakpoint($only-mobile) {
+            font-size: 0.875rem;
+          }
+        }
+      }
+    }
+  }
+}

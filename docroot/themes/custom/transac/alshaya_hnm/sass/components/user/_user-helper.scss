@@ -40,9 +40,9 @@
   .user-login-form {
     .form-text,
     .form-email {
-      color: $hnm-black-three !important;
+      color: $primary_input !important;
       font-family: $hnm-regular;
-      background-color: $seashell_grey;
+      background-color: $default_background_color;
     }
 
     .form-type-password .form-text {
@@ -59,19 +59,19 @@
       }
 
       input {
-        background-color: $seashell_grey;
-        color: $hnm-black-three !important;
+        background-color: $default_background_color;
+        color: $primary_input !important;
         letter-spacing: normal !important;
       }
 
       label {
-        color: $hnm-black-three !important;
+        color: $primary_input_label !important;
         font-size: 0.8125rem !important;
 
         &.error {
-          color: $venetian_red !important;
+          color: $primary_input_inline_error !important;
           font-size: 0.6875rem;
-          background: $seashell_grey !important;
+          background: $default_background_color !important;
           bottom: -1.5rem;
         }
       }
@@ -97,18 +97,18 @@
   .user-pass {
     .form-item {
       input {
-        background-color: $seashell_grey;
-        color: $hnm-black-three !important;
+        background-color: $default_background_color;
+        color: $primary_input !important;
       }
 
       label {
-        color: $hnm-black-three !important;
+        color: $primary_input_label !important;
         font-size: 0.8125rem !important;
 
         &.error {
-          color: $venetian_red !important;
+          color: $primary_input_inline_error !important;
           font-size: 0.6875rem;
-          background: $seashell_grey;
+          background: $default_background_color;
           bottom: -1.5rem;
         }
       }
@@ -156,18 +156,18 @@
 
     .form-item {
       input {
-        background-color: $seashell_grey;
-        color: $hnm-black-three !important;
+        background-color: $default_background_color;
+        color: $primary_input !important;
       }
 
       label {
-        color: $hnm-black-three !important;
+        color: $primary_input_label !important;
         font-size: 0.8125rem;
 
         &.error {
-          color: $venetian_red !important;
+          color: $primary_input_inline_error !important;
           font-size: 0.6875rem;
-          background: $seashell_grey !important;
+          background: $default_background_color !important;
           bottom: -1.5rem;
         }
       }

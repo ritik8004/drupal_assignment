@@ -30,8 +30,6 @@
   }
 
   .spc-checkout-empty-delivery-text {
-    text-transform: capitalize;
-
     @include icon('chevrondown', 'after') {
       font-size: 0.525rem;
       transform: rotate(-90deg);

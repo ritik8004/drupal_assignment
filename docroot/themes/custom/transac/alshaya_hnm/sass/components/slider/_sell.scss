@@ -13,6 +13,10 @@
       color: $default-anchor-link-hover;
     }
 
+    @include breakpoint($only-mobile) {
+      max-width: 7.625rem;
+    }
+
     @include breakpoint($desktop) {
       max-width: 100%;
     }
@@ -74,7 +78,7 @@
 
         &:hover {
           &::before {
-            color: $venetian_red;
+            color: $default-anchor-link-hover;
           }
         }
       }
@@ -100,6 +104,7 @@
   font-size: 1rem;
   line-height: 1.25rem;
   text-align: $left;
+  text-transform: none;
 
   @include breakpoint($only-mobile) {
     margin-#{$left}: 0.625rem;

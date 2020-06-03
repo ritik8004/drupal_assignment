@@ -9,8 +9,9 @@
         }
 
         .menu__link {
-          font-family: $bp-light;
+          font-family: $bp-light !important;
           font-weight: bold;
+          font-size: 0.875rem !important;
         }
       }
     }

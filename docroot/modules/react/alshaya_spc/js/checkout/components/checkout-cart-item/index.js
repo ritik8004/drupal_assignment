@@ -4,6 +4,7 @@ import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CheckoutConfigurableOption from '../../../utilities/checkout-configurable-option';
 import SpecialPrice from '../../../utilities/special-price';
 import ConditionalView from '../../../common/components/conditional-view';
+import CartPromotion from '../../../cart/components/cart-promotion';
 
 class CheckoutCartItem extends React.Component {
   constructor(props) {
@@ -54,6 +55,7 @@ class CheckoutCartItem extends React.Component {
         id,
         finalPrice,
       },
+      context,
     } = this.props;
 
     const {
@@ -63,6 +65,8 @@ class CheckoutCartItem extends React.Component {
         title,
         url: relativeLink,
         price: originalPrice,
+        promotions,
+        sku,
       },
     } = this.state;
 
@@ -88,13 +92,18 @@ class CheckoutCartItem extends React.Component {
               </ConditionalView>
             </div>
             <div className="spc-product-price">
-              <SpecialPrice price={originalPrice} final_price={finalPrice} />
+              <SpecialPrice price={originalPrice} finalPrice={finalPrice} />
             </div>
           </div>
           <div className="spc-product-attributes">
             { configurableValues.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
           </div>
         </div>
+        {context !== 'confirmation' && context !== 'print' && (
+          <div className="spc-promotions">
+            {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
+          </div>
+        )}
       </div>
     );
   }

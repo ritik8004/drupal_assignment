@@ -14,18 +14,43 @@
       grid-template-columns: 5.4375rem 1fr 4.8125rem;
       grid-gap: 0.8125rem;
 
+      body.ie & {
+        display: -ms-grid;
+        -ms-grid-columns: 5.4375rem 0.8125rem 1fr 0.8125rem 4.8125rem;
+      }
+
       .spc-product-container {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+
+        body.ie & {
+          -ms-grid-row: 1;
+          -ms-grid-column: 3;
+        }
       }
 
       .spc-product-title {
         margin-bottom: 0.625rem;
       }
 
+      .spc-product-price {
+        .price {
+          text-align: $left;
+        }
+      }
+
       .spc-product-image {
-        max-height: 8.125rem;
+        display: inline-flex;
+
+        body.ie & {
+          -ms-grid-row: 1;
+          -ms-grid-column: 1;
+
+          img {
+            width: 100%;
+          }
+        }
       }
 
       .spc-product-tile-actions {
@@ -33,8 +58,17 @@
         flex-direction: column;
         justify-content: space-between;
 
+        body.ie & {
+          -ms-grid-row: 1;
+          -ms-grid-column: 5;
+        }
+
         .spc-remove-btn {
           align-self: flex-end;
+
+          body.ie & {
+            height: 2.5rem;
+          }
         }
 
         .qty {

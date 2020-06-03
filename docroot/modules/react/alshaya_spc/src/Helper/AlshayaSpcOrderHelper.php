@@ -367,6 +367,9 @@ class AlshayaSpcOrderHelper {
     $orderDetails['delivery_method'] = $shipping_info[0];
     $orderDetails['delivery_method_description'] = $shipping_info[1] ?? $shipping_info[0];
 
+    $shipping_address = $order['shipping']['address'];
+    $orderDetails['customerNameShipping'] = $shipping_address['firstname'] . ' ' . $shipping_address['lastname'];
+
     $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
     if ($shipping_method_code == $this->checkoutOptionManager->getClickandColectShippingMethod()) {
       $orderDetails['delivery_type'] = 'cc';
@@ -377,27 +380,22 @@ class AlshayaSpcOrderHelper {
       $orderDetails['view_on_map_link'] = '';
 
       // Getting store node object from store code.
-      if ($store_node = $this->storeFinder->getTranslatedStoreFromCode($store_code)) {
-        $orderDetails['store']['store_name'] = $store_node->label();
-        $store_address = $this->storeFinder->getStoreAddress($store_node, TRUE);
+      if ($store_data = $this->storeFinder->getMultipleStoresExtraData([$store_code => []])) {
+        $store_node = current($store_data);
+        $orderDetails['store']['store_name'] = $store_node['name'];
         $country_list = $this->countryRepository->getList();
-        $orderDetails['store']['store_address'] = $store_address;
-        $orderDetails['store']['store_address']['country'] = $country_list[$store_address['country_code']];
-        $orderDetails['store']['store_phone'] = $store_node->get('field_store_phone')->getString();
-        $store_open_hours = $store_node->get('field_store_open_hours')->getValue();
-        foreach ($store_open_hours as $hour) {
-          $orderDetails['store']['store_open_hours'][] = $hour['key'] . ' ' . $hour['value'] . $hour['description'];
-        }
-
-        if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
-          $lat = $lat_lng[0]['lat'];
-          $lng = $lat_lng[0]['lng'];
-          $orderDetails['store']['view_on_map_link'] = 'https://maps.google.com/?q=' . $lat . ',' . $lng;
-        }
+        $orderDetails['store']['store_address'] = $store_node['cart_address_raw'];
+        $orderDetails['store']['store_address']['country'] = $country_list[$store_node['cart_address_raw']['country_code']];
+        $orderDetails['store']['store_phone'] = $store_node['phone_number'];
+        $orderDetails['store']['map_link'] = $store_node['view_on_map_link'];
+        $orderDetails['store']['store_open_hours'] = $store_node['open_hours_group'];
+        $lat = $store_node['lat'];
+        $lng = $store_node['lng'];
+        $orderDetails['store']['view_on_map_link'] = 'https://maps.google.com/?q=' . $lat . ',' . $lng;
 
         $cc_text = ($cc_type == 'reserve_and_collect')
           ? $this->configFactory->get('alshaya_click_collect.settings')->get('click_collect_rnc')
-          : $store_node->get('field_store_sts_label')->getString();
+          : $store_node['delivery_time'];
 
         if (!empty($cc_text)) {
           $orderDetails['delivery_method_description'] = $this->t('@shipping_method_name (@shipping_method_description)', [
