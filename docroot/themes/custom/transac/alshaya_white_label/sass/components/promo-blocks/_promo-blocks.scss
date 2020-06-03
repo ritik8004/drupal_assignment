@@ -505,3 +505,23 @@
     }
   }
 }
+
+.field--name-field-1-row-4-col {
+  &.field__items {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    .field--name-field-1-row-4-col {
+      &.field__item {
+        width: calc(25% - 1rem);
+        text-align: center;
+
+        @include breakpoint($only-mobile) {
+          width: calc(50% - 0.5rem);
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+}
