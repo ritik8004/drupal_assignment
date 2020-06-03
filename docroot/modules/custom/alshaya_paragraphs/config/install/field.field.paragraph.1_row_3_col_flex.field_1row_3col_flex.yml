@@ -2,20 +2,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_1_row_2_col
-    - paragraphs.paragraphs_type.1_row_2_col
+    - field.storage.paragraph.field_1row_3col_flex
+    - paragraphs.paragraphs_type.1_row_3_col_flex
     - paragraphs.paragraphs_type.image_title_subtitle
-    - paragraphs.paragraphs_type.promo_block
-    - paragraphs.paragraphs_type.section_divider
-    - paragraphs.paragraphs_type.title_textarea
     - paragraphs.paragraphs_type.video
   module:
     - entity_reference_revisions
-id: paragraph.1_row_2_col.field_1_row_2_col
-field_name: field_1_row_2_col
+id: paragraph.1_row_3_col_flex.field_1row_3col_flex
+field_name: field_1row_3col_flex
 entity_type: paragraph
-bundle: 1_row_2_col
-label: '1 row 2 col'
+bundle: 1_row_3_col_flex
+label: '1row 3col Flex'
 description: ''
 required: false
 translatable: false
@@ -28,99 +25,96 @@ settings:
     negate: 0
     target_bundles:
       image_title_subtitle: image_title_subtitle
-      promo_block: promo_block
-      section_divider: section_divider
-      title_textarea: title_textarea
       video: video
     target_bundles_drag_drop:
-      1_row_2_col:
-        weight: 22
-        enabled: false
-      1_row_1_col:
-        weight: 23
-        enabled: false
-      1_row_1_col_dept:
-        weight: 24
-        enabled: false
-      1_row_1st_col_2_row_2nd_col:
-        weight: 25
-        enabled: false
-      1_row_2_col_1_2_dept:
-        weight: 26
-        enabled: false
-      1_row_2_col_2_1_dept:
-        weight: 27
-        enabled: false
-      1_row_2_col_dept:
-        weight: 28
-        enabled: false
-      1_row_3_col:
-        weight: 29
-        enabled: false
-      1_row_3_col_delivery_banner:
-        weight: 30
-        enabled: false
-      1_row_3_col_dept:
+      1_row_3_col_flex:
         weight: 31
         enabled: false
-      1_row_3_col_text:
+      1_row_1st_col_2_row_2nd_col:
         weight: 32
         enabled: false
-      banner:
+      1_row_1_col:
         weight: 33
         enabled: false
-      banner_full_width:
+      1_row_1_col_dept:
         weight: 34
         enabled: false
-      block_reference:
+      1_row_2_col:
         weight: 35
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 36
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 37
+        enabled: false
+      1_row_2_col_dept:
+        weight: 38
+        enabled: false
+      1_row_3_col:
+        weight: 39
+        enabled: false
+      1_row_3_col_delivery_banner:
+        weight: 40
+        enabled: false
+      1_row_3_col_dept:
+        weight: 41
+        enabled: false
+      1_row_3_col_text:
+        weight: 42
+        enabled: false
+      banner:
+        weight: 43
+        enabled: false
+      banner_full_width:
+        weight: 44
+        enabled: false
+      block_reference:
+        weight: 45
+        enabled: false
+      delivery_usp_block:
+        weight: 46
         enabled: false
       image_title_subtitle:
         enabled: true
-        weight: 36
+        weight: 47
       main_menu_highlight:
-        weight: 37
+        weight: 48
         enabled: false
       offers_bordered:
-        weight: 38
-        enabled: false
-      promo_block:
-        enabled: true
-        weight: 39
-      promo_block_text:
-        weight: 40
-        enabled: false
-      related_info_one_column:
-        weight: 41
-        enabled: false
-      1_row_3_col_flex:
-        weight: 41
-        enabled: false
-      views_reference:
-        weight: 42
+        weight: 49
         enabled: false
       product_carousel_category:
-        enabled: false
-        weight: 43
-      delivery_usp_block:
-        weight: 44
-        enabled: false
-      section_divider:
-        enabled: true
-        weight: 49
-      promo_block_button:
         weight: 50
         enabled: false
-      slug_banner:
+      promo_block:
+        weight: 51
+        enabled: false
+      promo_block_button:
+        weight: 52
+        enabled: false
+      promo_block_text:
+        weight: 53
+        enabled: false
+      related_info_one_column:
         weight: 54
         enabled: false
-      text_links:
+      section_divider:
         weight: 55
         enabled: false
-      title_textarea:
-        enabled: true
+      slug_banner:
         weight: 56
+        enabled: false
+      text_links:
+        weight: 57
+        enabled: false
+      title_textarea:
+        weight: 58
+        enabled: false
       video:
         enabled: true
-        weight: 57
+        weight: 59
+      views_reference:
+        weight: 60
+        enabled: false
 field_type: entity_reference_revisions

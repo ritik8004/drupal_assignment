@@ -13,6 +13,46 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Enhance existing paragraph and new paragraph 1row3col flex added.
+ */
+function alshaya_paragraphs_update_8129() {
+  $configs = [
+    'field.storage.paragraph.field_description.yml',
+    'field.field.paragraph.image_title_subtitle.field_description.yml',
+    'field.field.paragraph.image_title_subtitle.field_button_link.yml',
+    'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_1.yml',
+    'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_2.yml',
+    'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_1.yml',
+    'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_2.yml',
+    'field.field.paragraph.promo_block_button.field_description.yml',
+    'core.entity_view_display.paragraph.image_title_subtitle.default.yml',
+    'core.entity_form_display.paragraph.image_title_subtitle.default.yml',
+    'core.entity_view_display.paragraph.promo_block_button.default.yml',
+    'field.field.paragraph.video.field_title.yml',
+    'field.field.paragraph.1_row_2_col.field_1_row_2_col.yml',
+    'core.entity_form_display.paragraph.video.default.yml',
+    'core.entity_view_display.paragraph.1_row_2_col.default.yml',
+    'core.entity_view_display.paragraph.video.default.yml',
+    'paragraphs.paragraphs_type.1_row_3_col_flex.yml',
+    'field.storage.paragraph.field_1row_3col_flex.yml',
+    'field.storage.paragraph.field_ratio_3_col.yml',
+    'field.field.paragraph.1_row_3_col_flex.field_1row_3col_flex.yml',
+    'field.field.paragraph.1_row_3_col_flex.field_ratio_3_col.yml',
+    'core.entity_form_display.paragraph.1_row_3_col_flex.default.yml',
+    'core.entity_view_display.paragraph.1_row_3_col_flex.default.yml',
+    'core.entity_form_display.paragraph.promo_block_button.default.yml',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  $configs = [
+    'field.field.node.advanced_page.field_promo_blocks.yml',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_advanced_page');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new paragraphs "1 row 4 col"
  * for promo block paragraph.
  */
