@@ -15,7 +15,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Enhance existing paragraph and new paragraph 1row3col flex added.
  */
-function alshaya_paragraphs_update_8128() {
+function alshaya_paragraphs_update_8129() {
   $configs = [
     'field.storage.paragraph.field_description.yml',
     'field.field.paragraph.image_title_subtitle.field_description.yml',
