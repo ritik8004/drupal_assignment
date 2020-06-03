@@ -1,7 +1,7 @@
 @import "../../../alshaya_white_label/sass/config/_colors.scss";
 
 /* ------- 1. Brand Colors ------- */
-$black: #000;
+$black: #333;
 $white: #fff;
 $alizarin-crimson: #e51b23;
 $grey: #999;
@@ -30,8 +30,8 @@ $content_pagetitle: $black;
 $content_pagetitle_border: $white-five;
 $primary_text: $black;
 $primary_link: $grey;
-$primary_link-hover: $black;
-$primary_link-active: $black;
+$primary_link-hover: $mujidarkred;
+$primary_link-active: $mujidarkred;
 $primary_border: $gallery;
 $content_link_color: $black;
 $transparent: transparent;
@@ -199,18 +199,19 @@ $mm_bg_desk: $white;
 $mm_l1_border: $gallery;
 $mm_l1_link: $black;
 $mm_l1_link_bg: $white;
-$mm_l1_link_hover: $black;
+$mm_l1_link_hover: $mujidarkred;
 $mm_l1_link_hover_bg: $grey;
-$mm_l1_link_hover_active: $black;
+$mm_l1_link_hover_active: $mujidarkred;
 $mm_l1_link_hover_border_to_fill_space: $black;
-$mm_l1_link_active_border: $black;
+$mm_l1_link_active_border: $mujidarkred;
+
 $mm_l2_bg: $white;
 $mm_l2_link: $black;
-$mm_l2_link_hover: $black;
+$mm_l2_link_hover:$mujidarkred;
 $mm_l2_p: $grey;
 $mm_l3_link: $grey;
 $mm_l3_link_bg: $white;
-$mm_l3_link_hover: $black;
+$mm_l3_link_hover:$mujidarkred;
 $mm_highlight_label: $black;
 $mm_p_a_text: $black;
 $mm_highlight_label: $black;
