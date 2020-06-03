@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import ConditionalView from '../../../common/components/conditional-view';
 import PdpGallery from '../pdp-gallery';
 import PdpDescription from '../pdp-description';
 import PdpInfo from '../pdp-info';
