@@ -15,6 +15,22 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Make style and measurements_in_cm field type attribute from type string.
+ */
+function alshaya_hm_update_8050() {
+  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
+  $additional_attr = ['style', 'measurements_in_cm'];
+  foreach ($additional_attr as $attr_key) {
+    $attr_code = $config->get($attr_key);
+    $attr_code['type'] = 'attribute';
+    $config->set($attr_key, $attr_code);
+    $config->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Translations for additional attributes.
  * Override pdp display configuration to enable overlay.
  */
