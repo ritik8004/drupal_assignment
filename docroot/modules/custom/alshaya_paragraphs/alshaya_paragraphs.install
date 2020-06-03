@@ -40,6 +40,7 @@ function alshaya_paragraphs_update_8129() {
     'field.field.paragraph.1_row_3_col_flex.field_ratio_3_col.yml',
     'core.entity_form_display.paragraph.1_row_3_col_flex.default.yml',
     'core.entity_view_display.paragraph.1_row_3_col_flex.default.yml',
+    'core.entity_form_display.paragraph.promo_block_button.default.yml',
   ];
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
 
