@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_product\Plugin\QueueWorker;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -121,11 +122,23 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
     $this->cacheTagsInvalidator->invalidateTags($node->getCacheTagsToInvalidate());
     $this->cacheTagsInvalidator->invalidateTags($entity->getCacheTagsToInvalidate());
 
+    $variants = $entity->bundle() === 'configurable'
+      ? Configurable::getChildSkus($entity)
+      : [];
+
     foreach ($node->getTranslationLanguages() as $language) {
       $translation = SKU::loadFromSku($entity->getSku(), $language->getId());
 
-      // Warm the caches.
+      // Download product images for product.
       $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
+
+      // Download product images for all the variants of the product.
+      foreach ($variants as $variant) {
+        $variant_sku = SKU::loadFromSku($variant, $language->getId(), FALSE);
+        if ($variant_sku instanceof SKU) {
+          $this->imagesManager->getProductMedia($variant_sku, 'pdp', TRUE);
+        }
+      }
 
       // Trigger event for other modules to take action.
       // For instance alshaya_search_api to index items.
