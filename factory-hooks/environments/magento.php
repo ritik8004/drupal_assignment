@@ -231,12 +231,12 @@ $magentos = [
   ],
   // Pottery Barn Kids.
   'pbk_qa' => [
-    'url' => 'https://integration-5ojmyuq-rfuu4sicyisyw.eu.magentosite.cloud',
+    'url' => 'https://integration-5ojmyuq-pyudokdb2kumk.eu-3.magentosite.cloud',
     'magento_secrets' => [
-      'consumer_key' => 'auf96nt6b1loar4yc2qm55pluqd5sgrn',
-      'consumer_secret' => 'i1lhnoafn6a1ggjou2juj366cpcnnhel',
-      'access_token' => 's4rfv318v1gxmrnq8mjdn01uhejd8760',
-      'access_token_secret' => '4x5otnn378pjr1v3acnmoe934niwjlw7',
+      'consumer_key' => '8spkmhz5rst8etwcc7w5qg92dabku51w',
+      'consumer_secret' => 'jp5ml3y30lqqxxfxnqj19vcsf5apywkh',
+      'access_token' => '9px4kesgmj6vnjkujhnk8nyxa7m667i4',
+      'access_token_secret' => 'b8dkngbd1uami6kep2a2yafirkdrr6jp',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 6],
