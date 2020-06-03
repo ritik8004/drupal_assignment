@@ -157,6 +157,7 @@ $accordion_sub_title: $grey-light;
 $accordion_title_arrow: $drakish-blue;
 
 // Autocomplete
+$autocomplete_border: $warm-grey-two;
 $autocomplete_border_last: $white;
 $autocomplete_hover: $white-smoke-light;
 $autocomplete_text: $grey-light;
@@ -179,7 +180,7 @@ $header_secondary_menu_link: $black-two;
 $header_secondary_menu_link_hover: $drakish-blue;
 
 // Header mobile search.
-$header_search_border_mobile: $warm-grey-two;
+$header_search_border_mobile: $white-smoke-light;
 $header_search_active_bg: transparent;
 
 // Header - Search.
@@ -192,7 +193,7 @@ $primary_search_autocomplete_text: $grey-light;
 // C-menu primary i:e Mobile and tablet header menu links.
 $header_c_menu_text: $drakish-blue;
 $header_c_menu_icon_color: $drakish-blue;
-$header_c_menu_search_active_icon: $tomato;
+$header_c_menu_search_active_icon: $drakish-blue;
 $header_toggle_sign_default: $white-smoke-light;
 $header_toggle_sign_active_tab: $black-two;
 $header_mobile_menu_arrow: $warm-grey-three;
@@ -523,3 +524,10 @@ $spc-search-icon: $drakish-blue;
 $spc-promo-code-error: $error-red;
 $spc-cart-promo-code-submit-enabled: $error-red;
 $spc-deliver-button: $drakish-blue;
+
+// Promo Blocks.
+$promo_block_border: $white-smoke-light;
+$promo_black_btn: $link-water-two;
+$promo_black_btn_text: $drakish-blue;
+$promo_link: $drakish-blue;
+$promo_text: $black-two;
