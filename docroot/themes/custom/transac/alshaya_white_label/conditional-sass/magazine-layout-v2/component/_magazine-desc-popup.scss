@@ -50,6 +50,12 @@
             color: $spc-checkout-close-icon;
           }
         }
+
+        .magv2-compact-detail-wrapper {
+          .magv2-pdp-brand-logo {
+            display: none;
+          }
+        }
       }
 
       &-content-wrapper {
@@ -97,10 +103,12 @@
 
       &-price-wrapper {
         color: $magv2-price;
+        font-family: $alshaya-bold;
       }
 
       &-final-price-wrapper {
         color: $magv2-special-price;
+        font-family: $alshaya-bold;
       }
 
       &-price-amount,
@@ -118,7 +126,6 @@
         margin: 0 auto 0.1875rem;
         color: $magv2-text;
         text-align: center;
-        text-transform: lowercase;
         max-width: 11.3125rem;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -136,6 +143,7 @@
             &-price-wrapper {
               color: $magv2-price-strike;
               text-decoration: line-through;
+              font-family: $alshaya-thin;
             }
           }
         }

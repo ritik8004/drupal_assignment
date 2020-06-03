@@ -2,15 +2,34 @@
   &-detail-wrapper {
     .magv2 {
       &-pdp {
+        &-title-wrapper {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
         &-title {
           font-size: 1.125rem;
           line-height: normal;
           color: $magv2-pdp-title;
           padding: 2rem 0 0.625rem;
+          max-width: 16.5rem;
 
           @include breakpoint($only-mobile) {
             font-size: 1rem;
             padding-top: 1.25rem;
+            max-width: 15.25rem;
+          }
+        }
+
+        &-brand-logo {
+          img {
+            max-height: 1.125rem;
+            width: auto;
+
+            @include breakpoint($tablet) {
+              max-height: 1.375rem;
+            }
           }
         }
 
