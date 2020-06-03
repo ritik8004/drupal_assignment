@@ -13,6 +13,32 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add new paragraphs "1 row 4 col"
+ * for promo block paragraph.
+ */
+function alshaya_paragraphs_update_8128() {
+  $configs = [
+    'paragraphs.paragraphs_type.1_row_4_col',
+    'field.storage.paragraph.field_1_row_4_col',
+    'field.field.paragraph.1_row_4_col.field_1_row_4_col',
+    'core.entity_view_display.paragraph.1_row_4_col.default',
+    'core.entity_form_display.paragraph.1_row_4_col.default',
+    'language.content_settings.paragraph.1_row_4_col',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'field.field.node.advanced_page.field_promo_blocks',
+      ],
+      'alshaya_advanced_page'
+    );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new field "visible on" to promo block paragraph.
  */
 function alshaya_paragraphs_update_8127() {
