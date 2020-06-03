@@ -528,12 +528,15 @@ class AlshayaSpcController extends ControllerBase {
     // Order Totals.
     $totals = [
       'subtotal_incl_tax' => $order['totals']['sub'],
-      'shipping_incl_tax' => $order['totals']['shipping'],
       'base_grand_total' => $order['totals']['grand'],
       'discount_amount' => $order['totals']['discount'],
       'free_delivery' => 'false',
       'surcharge' => $order['totals']['surcharge'],
     ];
+
+    if ($orderDetails['delivery_type'] !== 'cc') {
+      $totals['shipping_incl_tax'] = $order['totals']['shipping'] ?? 0;
+    }
 
     // Get Products.
     $productList = [];
