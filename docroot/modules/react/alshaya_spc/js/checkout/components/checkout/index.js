@@ -15,6 +15,7 @@ import TermsConditions from '../terms-conditions';
 import {
   removeFullScreenLoader,
   isCnCEnabled,
+  removeBillingFlagFromStorage,
 } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
@@ -66,12 +67,15 @@ export default class Checkout extends React.Component {
           if (cart.shipping.type === 'click_and_collect' && !isCnCEnabled(result)) {
             cart.delivery_type = 'home_delivery';
           }
-
+          // Process Removal of "same as billing" flag before we update the
+          // cart state. before the billing address component mounted. as
+          // setState will immidiately mount the components before localStorage
+          // update happens.
+          removeBillingFlagFromStorage({ cart });
           this.setState({
             wait: false,
             cart: { cart },
           });
-
           dispatchCustomEvent('checkoutCartUpdate', { cart });
         });
       } else {
