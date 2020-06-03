@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import CartSelectOption from '../cart-select-option';
 import {
-  clearCartData,
-  getCartData,
-  storeProductData,
   updateCart,
+  getPostData,
+  triggerAddToCart,
 } from '../../../../utilities/cart/cart_utils';
 import CartNotification from '../cart-notification';
+import CartUnavailability from '../cart-unavailability';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -52,92 +52,29 @@ class ConfigurableProductForm extends React.Component {
         options.push(option);
       }
     });
-    const cartAction = 'add item';
-    const cartData = getCartData();
-    const cartId = (cartData) ? cartData.cart_id : null;
+
     const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
-    const qty = document.getElementById('qty') ? document.getElementById('qty').value : 1;
+    const getPost = getPostData(skuCode, variantSelected);
 
-    const postData = {
-      action: cartAction,
-      sku: variantSelected,
-      quantity: qty,
-      cart_id: cartId,
-      options,
-    };
+    const postData = getPost[0];
+    const productData = getPost[1];
 
-    const productData = {
-      quantity: qty,
-      parentSku: skuCode,
-      sku: variantSelected,
-      variant: variantSelected,
-    };
-
+    postData.options = options;
     productData.productName = productInfo[skuCode].variants[variantSelected].cart_title;
     productData.image = productInfo[skuCode].variants[variantSelected].cart_image;
 
-    const cartEndpoint = productInfo[skuCode].cart_update_endpoint;
+    const { cartEndpoint } = drupalSettings.cart_update_endpoint;
 
     updateCart(cartEndpoint, postData).then(
       (response) => {
-        // If there any error we throw from middleware.
-        if (response.data.error === true) {
-          if (response.data.error_code === '400') {
-            clearCartData();
-          }
-        } else if (response.data.cart_id) {
-          if (response.data.response_message.status === 'success'
-              && (typeof response.data.items[productData.variant] !== 'undefined'
-                || typeof response.data.items[productData.parentSku] !== 'undefined')) {
-            const cartItem = typeof response.data.items[productData.variant] !== 'undefined' ? response.data.items[productData.variant] : response.data.items[productData.parentSku];
-            productData.totalQty = cartItem.qty;
-          }
-
-          ReactDOM.render(
-            <CartNotification
-              productInfo={productInfo}
-              productData={productData}
-            />,
-            document.getElementById('cart_notification'),
-          );
-
-          let productUrl = productInfo[skuCode].url;
-          const productVariantInfo = productInfo[skuCode].variants[productData.variant];
-          const productDataSKU = productData.variant;
-          const price = productVariantInfo.priceRaw;
-          const parentSKU = productVariantInfo.parent_sku;
-          const promotions = productVariantInfo.promotionsRaw;
-          const configurables = productVariantInfo.configurableOptions;
-          const { maxSaleQty } = productVariantInfo;
-          const maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
-          const gtmAttributes = productInfo[skuCode].gtm_attributes;
-
-          if (productVariantInfo.url !== undefined) {
-            const langcode = document.getElementsByTagName('html')[0].getAttribute('lang');
-            productUrl = productVariantInfo.url[langcode];
-          }
-
-          storeProductData({
-            sku: productDataSKU,
-            parentSKU,
-            title: productData.product_name,
-            url: productUrl,
-            image: productData.image,
-            price,
-            configurables,
-            promotions,
-            maxSaleQty,
-            maxSaleQtyParent,
-            gtmAttributes,
-          });
-
-          // Triggering event to notify react component.
-          const refreshMiniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data() { return response.data; }, productData } });
-          document.dispatchEvent(refreshMiniCartEvent);
-
-          const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data() { return response.data; } } });
-          document.dispatchEvent(refreshCartEvent);
-        }
+        triggerAddToCart(response, productData, productInfo, configurableCombinations, skuCode);
+        ReactDOM.render(
+          <CartNotification
+            productInfo={productInfo}
+            productData={productData}
+          />,
+          document.getElementById('cart_notification'),
+        );
       },
     )
       .catch((error) => {
@@ -145,6 +82,7 @@ class ConfigurableProductForm extends React.Component {
       });
   }
 
+  // To get available attribute value based on user selection.
   refreshConfigurables = (code, codeValue, variantSelected) => {
     const { configurableCombinations, skuCode } = this.props;
     const selectedValues = this.selectedValues();
@@ -195,7 +133,7 @@ class ConfigurableProductForm extends React.Component {
 
   render() {
     const { configurableCombinations, skuCode, productInfo } = this.props;
-    const { cartMaxQty, checkoutFeatureStatus } = productInfo[skuCode];
+    const { cartMaxQty, checkoutFeatureStatus } = drupalSettings;
 
     const { configurables } = configurableCombinations[skuCode];
     const { byAttribute } = configurableCombinations[skuCode];
@@ -205,9 +143,8 @@ class ConfigurableProductForm extends React.Component {
     const stockQty = productInfo[skuCode].variants[variantSelected].stock.qty;
 
     const cartUnavailability = (
-      <p className="not-buyable-message">{Drupal.t('Add to bag is temporarily unavailable')}</p>
+      <CartUnavailability />
     );
-
 
     // Quantity component created separately.
     const options = [];

@@ -9,27 +9,38 @@ import PdpHeader from '../pdp-header';
 const PdpLayout = () => {
   let skuItemCode; let brandLogo; let brandLogoAlt; let
     brandLogoTitle = null;
+  let configurableCombinations = '';
 
   const { productInfo } = drupalSettings;
-  const { configurableCombinations } = drupalSettings;
+  let title = '';
+  let priceRaw = '';
+  let finalPrice = '';
   if (productInfo) {
     [skuItemCode] = Object.keys(productInfo);
   }
-  if (skuItemCode && productInfo[skuItemCode].brandLogo) {
-    brandLogo = productInfo[skuItemCode].brandLogo.logo
-      ? productInfo[skuItemCode].brandLogo.logo : null;
-    brandLogoAlt = productInfo[skuItemCode].brandLogo.alt
-      ? productInfo[skuItemCode].brandLogo.alt : null;
-    brandLogoTitle = productInfo[skuItemCode].brandLogo.title
-      ? productInfo[skuItemCode].brandLogo.title : null;
+  if (skuItemCode) {
+    if (productInfo[skuItemCode].brandLogo) {
+      brandLogo = productInfo[skuItemCode].brandLogo.logo
+        ? productInfo[skuItemCode].brandLogo.logo : null;
+      brandLogoAlt = productInfo[skuItemCode].brandLogo.alt
+        ? productInfo[skuItemCode].brandLogo.alt : null;
+      brandLogoTitle = productInfo[skuItemCode].brandLogo.title
+        ? productInfo[skuItemCode].brandLogo.title : null;
+    }
+    title = productInfo[skuItemCode].title;
+    priceRaw = productInfo[skuItemCode].priceRaw;
+    finalPrice = productInfo[skuItemCode].finalPrice;
+    if (productInfo[skuItemCode].type === 'configurable') {
+      configurableCombinations = drupalSettings.configurableCombinations;
+      const variantSelected = configurableCombinations[skuItemCode].firstChild;
+      title = productInfo[skuItemCode].variants[variantSelected].title;
+      priceRaw = productInfo[skuItemCode].variants[variantSelected].priceRaw;
+      finalPrice = productInfo[skuItemCode].variants[variantSelected].finalPrice;
+    }
   }
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
-  const title = skuItemCode ? productInfo[skuItemCode].title : null;
-  const priceRaw = skuItemCode ? productInfo[skuItemCode].priceRaw : null;
-  const finalPrice = skuItemCode ? productInfo[skuItemCode].finalPrice : null;
   const pdpGallery = skuItemCode ? productInfo[skuItemCode].rawGallery : [];
-
 
   const emptyRes = (
     <div>Product data not available</div>
@@ -56,6 +67,7 @@ const PdpLayout = () => {
   [
     showStickyHeader,
   ]);
+
   return (skuItemCode && pdpGallery) ? (
     <>
       <div className="magv2-header" ref={header}>
@@ -69,7 +81,7 @@ const PdpLayout = () => {
         />
       </div>
       <div className="magv2-main">
-        <div className="magv2-content">
+        <div className="magv2-content" id="pdp-gallery-refresh">
           <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
         </div>
         <div className="magv2-sidebar">
@@ -90,13 +102,19 @@ const PdpLayout = () => {
             pdpProductPrice={priceRaw}
             finalPrice={finalPrice}
           />
-          <PdpInfo
+          <div id="pdp-info">
+            <PdpInfo
+              skuCode={skuItemCode}
+              title={title}
+              pdpProductPrice={priceRaw}
+              finalPrice={finalPrice}
+            />
+          </div>
+          <PdpCart
             skuCode={skuItemCode}
-            title={title}
-            pdpProductPrice={priceRaw}
-            finalPrice={finalPrice}
+            configurableCombinations={configurableCombinations}
+            productInfo={productInfo}
           />
-          <PdpCart skuCode={skuItemCode} configurableCombinations={configurableCombinations} />
         </div>
       </div>
     </>
