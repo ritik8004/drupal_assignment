@@ -18,14 +18,17 @@ use Drupal\block\Entity\Block;
  * Make style and measurements_in_cm field type attribute from type string.
  */
 function alshaya_hm_update_8050() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
   $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
-  $additional_attr = ['style', 'measurements_in_cm'];
-  foreach ($additional_attr as $attr_key) {
-    $attr_code = $config->get($attr_key);
-    $attr_code['type'] = 'attribute';
-    $config->set($attr_key, $attr_code);
-    $config->save();
-  }
+  $attr_code = $config->get('style');
+  $attr_code['type'] = 'attribute';
+  $config->set('style', $attr_code);
+  $config->save();
 }
 
 /**
