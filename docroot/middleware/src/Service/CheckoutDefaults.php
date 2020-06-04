@@ -87,22 +87,28 @@ class CheckoutDefaults {
       ? $this->orders->getLastOrder($data['customer']['id'])
       : [];
 
+    // Try to apply defaults from last order.
     if ($order) {
-      if ($data = $this->applyDefaultShipping($order)) {
-        $data['payment']['default'] = $this->getDefaultPaymentFromOrder($order) ?? '';
+      if ($response = $this->applyDefaultShipping($order)) {
+        $response['payment']['default'] = $this->getDefaultPaymentFromOrder($order) ?? '';
+        return $response;
       }
     }
-    elseif ($address = $this->getDefaultAddress($data)) {
+
+    // Select default address from address book if available.
+    if ($address = $this->getDefaultAddress($data)) {
       $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
       if (count($methods)) {
-        $data = $this->selectHd($address, reset($methods), $address);
+        return $this->selectHd($address, reset($methods), $address);
       }
     }
-    elseif (isset($data['shipping']['address'], $data['shipping']['address']['country_id'])) {
+
+    // If address already available in cart, use it.
+    if (isset($data['shipping']['address'], $data['shipping']['address']['country_id'])) {
       $address = $data['shipping']['address'];
       $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
       if (count($methods)) {
-        $data = $this->selectHd($address, reset($methods), $address);
+        return $this->selectHd($address, reset($methods), $address);
       }
     }
 
@@ -135,6 +141,10 @@ class CheckoutDefaults {
         return $this->selectCnc($store, $address, $order['billing_commerce_address']);
       }
 
+      return FALSE;
+    }
+
+    if (empty($address['customer_address_id'])) {
       return FALSE;
     }
 
