@@ -514,15 +514,15 @@
 }
 
 %ratio-1-by-2 {
-  width: calc(50% - 0.75rem);
+  width: calc(50% - 1rem);
 }
 
 %ratio-1-by-3 {
-  width: calc(33.33% - 0.75rem);
+  width: calc(33.33% - 1rem);
 }
 
 %ratio-1-by-4 {
-  width: calc(25% - 0.75rem);
+  width: calc(25% - 1rem);
 }
 
 %stack-for-mobile {
@@ -534,7 +534,7 @@
 
 %two-col-for-mobile {
   @include breakpoint($only-mobile) {
-    width: calc(50% - 0.25rem);
+    width: calc(50% - 0.5rem);
     margin-bottom: 1rem;
   }
 }
