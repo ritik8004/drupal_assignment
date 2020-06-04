@@ -265,12 +265,12 @@ class CartController {
     $data['appliedRules'] = $cart_data['cart']['applied_rule_ids'] ?? [];
 
     $data['items_qty'] = $cart_data['cart']['items_qty'];
-    $data['cart_total'] = $cart_data['totals']['base_grand_total'];
+    $data['cart_total'] = $cart_data['totals']['base_grand_total'] ?? 0;
     $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
     $data['totals'] = [
-      'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'],
-      'base_grand_total' => $cart_data['totals']['base_grand_total'],
-      'discount_amount' => $cart_data['totals']['discount_amount'],
+      'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'] ?? 0,
+      'base_grand_total' => $cart_data['totals']['base_grand_total'] ?? 0,
+      'discount_amount' => $cart_data['totals']['discount_amount'] ?? 0,
       'surcharge' => 0,
     ];
 
