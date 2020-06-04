@@ -40,8 +40,24 @@ function _alshaya_set_s3fs_config() {
     $env = substr($env, 2);
   }
 
-  $bucket = 'alshaya-ecom-drupal-' . $env;
-  $root_folder = $acsf_site_code . '/shared';
+  switch ($env) {
+    case 'uat':
+      $bucket = 'als-ecom-drupal-stopgap-uat-s3';
+      break;
+
+    case 'dev':
+    case 'dev2':
+    case 'dev3':
+    case 'qa2':
+    case 'test':
+    case 'local':
+      $bucket = 'als-ecom-drupal-stopgap-dev-s3';
+      break;
+
+    default:
+      $bucket = '';
+  }
+  $root_folder = $env . '/' . $acsf_site_code . '/shared';
 
   $config = \Drupal::configFactory()->getEditable('s3fs.settings');
   $config->set('bucket', $bucket);
