@@ -92,9 +92,19 @@ body {
     }
   }
 
-  .block-language-blocklanguage-interface .ar a {
-    @include breakpoint($desktop) {
-      padding-top: 0.3125rem;
+  .block-language-blocklanguage-interface {
+    .ar {
+      a {
+        @include breakpoint($desktop) {
+          padding-top: 0.3125rem;
+        }
+      }
+    }
+
+    .en {
+      a {
+        font-family: $alshaya-thin;
+      }
     }
   }
 }

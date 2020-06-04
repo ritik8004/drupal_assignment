@@ -115,7 +115,7 @@
     &--menu-is-open {
       .spcSelect__dropdown-indicator {
         &::before {
-          transform: rotate(180deg);
+          transform: translateY(-50%) rotate(180deg);
         }
       }
     }

@@ -790,6 +790,12 @@ class Cart {
 
           throw new \Exception('Failed to initiate 3D request.', 500);
         }
+
+        // For 2D send the success and fail urls to Magento to allow them
+        // to use it when authorising.
+        $additional_data['successUrl'] = $this->checkoutComApi->getSuccessUrl();
+        $additional_data['failUrl'] = $this->checkoutComApi->getFailUrl();
+
         break;
     }
 
