@@ -160,6 +160,7 @@ class AlshayaAcmConfigCheck {
       'geolocation.settings',
       'google_tag.container.primary',
       'exponea.settings',
+      's3fs.settings',
     ];
 
     $this->moduleHandler->alter('alshaya_reset_config_configs_to_reset', $reset);

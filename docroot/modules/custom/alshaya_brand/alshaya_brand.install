@@ -5,6 +5,8 @@
  * Contains install, update, uninstall hooks for alshaya_brand module.
  */
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Implements hook_update_N().
  *
@@ -30,37 +32,8 @@ function alshaya_brand_install() {
  * Wrapper function to set s3fs config.
  */
 function _alshaya_set_s3fs_config() {
-  // @codingStandardsIgnoreStart
-  global $acsf_site_code;
-  // @codingStandardsIgnoreEnd
-
-  $env = alshaya_get_site_environment();
-  // This is to remove `01/02` etc from env name.
-  if (substr($env, 0, 1) == '0') {
-    $env = substr($env, 2);
-  }
-
-  switch ($env) {
-    case 'uat':
-      $bucket = 'als-ecom-drupal-stopgap-uat-s3';
-      break;
-
-    case 'dev':
-    case 'dev2':
-    case 'dev3':
-    case 'qa2':
-    case 'test':
-    case 'local':
-      $bucket = 'als-ecom-drupal-stopgap-dev-s3';
-      break;
-
-    default:
-      $bucket = '';
-  }
-  $root_folder = $env . '/' . $acsf_site_code . '/shared';
-
   $config = \Drupal::configFactory()->getEditable('s3fs.settings');
-  $config->set('bucket', $bucket);
-  $config->set('root_folder', $root_folder);
+  $config->set('bucket', Settings::get('s3fs.settings')['bucket']);
+  $config->set('root_folder', Settings::get('s3fs.settings')['root_folder']);
   $config->save();
 }
