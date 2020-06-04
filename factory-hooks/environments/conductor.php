@@ -615,6 +615,26 @@ $conductors = [
     'hmac_secret' => 'MDkyNjMzNmQtOWI4NC00',
     'site_id' => 216,
   ],
+  'bpkw_uat' => [
+    'hmac_id' => 'dc770c85101f4acca8039cf1e5247bb9',
+    'hmac_secret' => 'Nzc2MmU0MWMtOTA3OS00',
+    'site_id' => 230,
+  ],
+  'bpsa_uat' => [
+    'hmac_id' => '76b35126e3a941c596d8b5c05fc726e0',
+    'hmac_secret' => 'YTU5MTg3YzYtOTNkMy00',
+    'site_id' => 231,
+  ],
+  'bpae_uat' => [
+    'hmac_id' => '5507e850be8c433e8664467243e43327',
+    'hmac_secret' => 'YzVhMjRiNmYtYTIxOS00',
+    'site_id' => 232,
+  ],
+  'bpeg_uat' => [
+    'hmac_id' => '259fe24b36404c65a1b5037804673664',
+    'hmac_secret' => 'YTY3YzYwNjgtMmRlOS00',
+    'site_id' => 233,
+  ],
 ];
 
 // Default values for each ACM middleware.
