@@ -147,7 +147,7 @@ hr {
   }
 
   .field--name-field-video {
-    max-height: 15.275rem;
+    max-height: 15.25rem;
     overflow: hidden;
     border-bottom: none;
 
@@ -157,7 +157,7 @@ hr {
   }
 
   .field--name-field-banner {
-    min-height: 15.275rem;
+    min-height: 15.25rem;
     border: $border-default;
     border-bottom: none;
 
@@ -179,7 +179,7 @@ hr {
   }
 }
 
-// on 1 row 3 col flex layout show video with more view area
+// On 1 row 3 col flex layout show video with more view area
 .paragraph--type--_-row-3-col-flex {
   .video-embed-field-responsive-video {
     padding-top: calc(100% - 8rem);
@@ -197,14 +197,13 @@ hr {
   }
 }
 
-// Style 1 row 4 col promo link text Blocks
+// Style 1 row 4 col promo link text blocks
 .field--name-field-1-row-4-col {
   .paragraph--type--promo-block-text {
     .field--name-field-link {
       @include style-font($alshaya-bold, 1.125rem, 1rem, 0.9375rem, 0.9375rem, $promo_black_btn_text);
 
-      border: $border-default;
-      border-color: $promo_black_btn_text;
+      border: 0.125rem solid $promo_black_btn_text;
     }
   }
 }

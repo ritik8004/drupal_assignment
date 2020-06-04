@@ -505,22 +505,51 @@
     }
   }
 }
+
+// Placeholder classes used on 1 row 4 col and 1 row 3 col flex promo Blocks
+%flex-init {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+%ratio-1-by-2 {
+  width: calc(50% - 0.75rem);
+}
+
+%ratio-1-by-3 {
+  width: calc(33.33% - 0.75rem);
+}
+
+%ratio-1-by-4 {
+  width: calc(25% - 0.75rem);
+}
+
+%stack-for-mobile {
+  @include breakpoint($only-mobile) {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+%two-col-for-mobile {
+  @include breakpoint($only-mobile) {
+    width: calc(50% - 0.25rem);
+    margin-bottom: 1rem;
+  }
+}
+
 // Structure 1 row 4 col promo block
 .field--name-field-1-row-4-col {
   &.field__items {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
+    @extend %flex-init;
 
     .field--name-field-1-row-4-col {
       &.field__item {
-        width: calc(25% - 1rem);
         text-align: center;
 
-        @include breakpoint($only-mobile) {
-          width: calc(50% - 0.25rem);
-          margin-bottom: 1rem;
-        }
+        @extend %ratio-1-by-4;
+        @extend %two-col-for-mobile;
       }
     }
   }
@@ -529,18 +558,12 @@
 // Structure 1 row 2 col promo block
 .paragraph--type--_-row-2-col {
   .field__items {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
+    @extend %flex-init;
 
     .field--name-field-1-row-2-col {
       &.field__item {
-        width: calc(50% - 0.75rem);
-
-        @include breakpoint($only-mobile) {
-          width: 100%;
-          margin-bottom: 1rem;
-        }
+        @extend %ratio-1-by-2;
+        @extend %stack-for-mobile;
       }
     }
   }
@@ -549,18 +572,12 @@
 // Structure 1 row 3 col flex promo block
 .paragraph--type--_-row-3-col-flex {
   .field__items {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
+    @extend %flex-init;
 
     .field--name-field-1row-3col-flex {
       &.field__item {
-        width: calc(33.33% - 0.75rem);
-
-        @include breakpoint($only-mobile) {
-          width: 100%;
-          margin-bottom: 1rem;
-        }
+        @extend %ratio-1-by-3;
+        @extend %stack-for-mobile;
       }
     }
   }
@@ -569,21 +586,13 @@
     .field__items {
       .field--name-field-1row-3col-flex {
         &.field__item {
-          width: calc(25% - 0.75rem);
-
-          @include breakpoint($only-mobile) {
-            width: calc(50% - 0.25rem);
-            margin-bottom: 1rem;
-          }
+          @extend %ratio-1-by-4;
+          @extend %two-col-for-mobile;
         }
 
         &.field__item:first-child {
-          width: calc(50% - 0.75rem);
-
-          @include breakpoint($only-mobile) {
-            width: 100%;
-            margin-bottom: 1rem;
-          }
+          @extend %ratio-1-by-2;
+          @extend %stack-for-mobile;
         }
       }
     }
@@ -594,21 +603,13 @@
       .field--name-field-1row-3col-flex {
         &.field__item:first-child,
         &.field__item:last-child {
-          width: calc(25% - 0.75rem);
-
-          @include breakpoint($only-mobile) {
-            width: 100%;
-            margin-bottom: 1rem;
-          }
+          @extend %ratio-1-by-4;
+          @extend %stack-for-mobile;
         }
 
         &.field__item {
-          width: calc(50% - 0.75rem);
-
-          @include breakpoint($only-mobile) {
-            width: 100%;
-            margin-bottom: 1rem;
-          }
+          @extend %ratio-1-by-2;
+          @extend %stack-for-mobile;
         }
       }
     }
@@ -618,21 +619,13 @@
     .field__items {
       .field--name-field-1row-3col-flex {
         &.field__item {
-          width: calc(25% - 0.75rem);
-
-          @include breakpoint($only-mobile) {
-            width: calc(50% - 0.25rem);
-            margin-bottom: 1rem;
-          }
+          @extend %ratio-1-by-4;
+          @extend %two-col-for-mobile;
         }
 
         &.field__item:last-child {
-          width: calc(50% - 0.75rem);
-
-          @include breakpoint($only-mobile) {
-            width: 100%;
-            margin-bottom: 1rem;
-          }
+          @extend %ratio-1-by-2;
+          @extend %stack-for-mobile;
         }
       }
     }

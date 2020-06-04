@@ -244,9 +244,9 @@ $border-default: 0.125rem solid $promo_block_border;
     content: "";
     width: 100%;
     height: 0.125rem;
-    background: $white;
+    background: $primary_empty_btn;
     position: absolute;
-    left: 0;
+    #{$left}: 0;
     top: -0.125rem;
   }
 
