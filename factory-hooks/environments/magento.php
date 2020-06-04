@@ -617,6 +617,27 @@ $magentos = [
       'store_id' => ['en' => 8, 'ar' => 7],
     ],
   ],
+  'bp_uat' => [
+    'url' => 'https://boots-uat.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'nfjdttxqyqdaj81nilo4sab9wl7kkb0x',
+      'consumer_secret' => '5szrlic4mwpoxyjl11mhrxux287lykdc',
+      'access_token' => 'qwgohy4l3xnbcz63nhvb5u5soezfizka',
+      'access_token_secret' => 'a5seetf8c166nnkwgk7cbunjxv8l9jdu',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
+    ],
+  ],
   'default' => [
     'kw' => [
       'magento_lang_prefix' => [
