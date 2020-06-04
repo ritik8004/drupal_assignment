@@ -55,7 +55,7 @@ export default class BillingInfo extends React.Component {
     : formatAddressDataForEditForm(address))
 
   render() {
-    const { cart } = this.props;
+    const { cart, shippingAsBilling } = this.props;
     const billing = cart.cart.billing_address;
     if (billing === undefined || billing == null) {
       return (null);
@@ -106,6 +106,7 @@ export default class BillingInfo extends React.Component {
                     processAddress={this.processAddress}
                     showEmail={false}
                     showEditButton={false}
+                    shippingAsBilling={shippingAsBilling}
                     type="billing"
                     formContext="billing"
                     headingText={Drupal.t('billing information')}
