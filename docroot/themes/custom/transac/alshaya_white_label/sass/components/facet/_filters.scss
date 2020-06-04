@@ -217,6 +217,7 @@
       position: relative;
       padding-#{$right}: 2.6875rem;
       cursor: pointer;
+      color: $plp_filter_title;
 
       @include icon(chevrondown, after) {
         font-size: 1.1875rem;
@@ -225,6 +226,7 @@
         transform: translateY(-50%);
         #{$right}: 0.6875rem;
         transition: transform 0.4s ease-in-out;
+        color: $plp_filter_icon;
       }
 
       &.active {
@@ -266,6 +268,7 @@
   position: relative;
   padding-#{$left}: 1.875rem;
   cursor: pointer;
+  color: $plp_filter_title;
 
   @include breakpoint($tablet) {
     float: $left;

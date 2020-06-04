@@ -1,0 +1,3 @@
+product_impression_queue_size: 10
+# The time is in milliseconds.
+product_impression_timer_time: 60000

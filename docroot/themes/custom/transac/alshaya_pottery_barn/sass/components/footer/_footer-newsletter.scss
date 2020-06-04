@@ -19,13 +19,18 @@
   }
 
   .form-item {
+    input[type=email]::placeholder {
+      color: $newsletter_input_placeholder;
+    }
+
     .form-email {
-      background-color: transparent;
+      background-color: $newsletter_input_bg !important;
     }
   }
 
   .newsletter-block-label {
     font-size: 0.875rem;
+    color: $newsletter_block_text;
 
     @include breakpoint($only-mobile) {
       padding: 0 1.5rem;

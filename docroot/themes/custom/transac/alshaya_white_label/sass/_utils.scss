@@ -337,3 +337,11 @@ body {
     line-height: $value;
   }
 }
+
+// This mixin can be used to keep text in a single line.
+// where text overflows a box can be hidden with dots.
+@mixin ellipsis-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

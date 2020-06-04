@@ -142,3 +142,51 @@ sites:
     module: alshaya_aeo
     type: alshaya_transac
     country: eg
+  mukw:
+    module: alshaya_mu
+    type: alshaya_transac
+    country: kw
+  musa:
+    module: alshaya_mu
+    type: alshaya_transac
+    country: sa
+  muae:
+    module: alshaya_mu
+    type: alshaya_transac
+    country: ae
+  mueg:
+    module: alshaya_mu
+    type: alshaya_transac
+    country: eg
+  bpkw:
+    module: alshaya_bp
+    type: alshaya_transac
+    country: kw
+  bpsa:
+    module: alshaya_bp
+    type: alshaya_transac
+    country: sa
+  bpae:
+    module: alshaya_bp
+    type: alshaya_transac
+    country: ae
+  bpeg:
+    module: alshaya_bp
+    type: alshaya_transac
+    country: eg
+  pbkkw:
+    module: alshaya_pbk
+    type: alshaya_transac
+    country: kw
+  pbksa:
+    module: alshaya_pbk
+    type: alshaya_transac
+    country: sa
+  pbkae:
+    module: alshaya_pbk
+    type: alshaya_transac
+    country: ae
+  pbkeg:
+    module: alshaya_pbk
+    type: alshaya_transac
+    country: eg

@@ -1,0 +1,24 @@
+.c-content__body {
+  line-height: normal;
+
+  p,
+  h2,
+  h3,
+  ul {
+    text-align: $left;
+
+    &.text-align-center {
+      text-align: center;
+    }
+
+    &.text-align-right {
+      text-align: $right;
+    }
+  }
+
+  h3 {
+    @include style-font($alshaya-bold, 1.3125rem);
+
+    margin: 0 0 1.5rem;
+  }
+}

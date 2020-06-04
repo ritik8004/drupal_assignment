@@ -61,7 +61,7 @@ installed_extras:
   - pimpmylog
   - drupalconsole
 
-php_version: '7.2'
+php_version: '7.3'
 php_packages_extra:
   - "php{{ php_version }}-bz2"
   - "php{{ php_version }}-bcmath"
@@ -82,11 +82,14 @@ php_xdebug_coverage_enable: 0
 php_xdebug_cli_disable: yes
 php_xdebug_remote_enable: 1
 php_xdebug_remote_connect_back: 1
-# Use PHPSTORM for PHPStorm, sublime.xdebug for Sublime Text.
+# Use PHPSTORM for PHPStorm, sublime.xdebug for Sublime Text, VSCODE for VSCode.
 php_xdebug_idekey: PHPSTORM
 php_xdebug_max_nesting_level: 256
 php_xdebug_remote_port: "9000"
 php_memory_limit: "256M"
+
+pre_provision_scripts:
+  - "../../../../box/scripts/configure-ssl.sh"
 
 post_provision_tasks_dir: "../../../acquia/blt/scripts/drupal-vm/post-provision.yml"
 post_provision_scripts:
@@ -94,7 +97,6 @@ post_provision_scripts:
   - "../../../../box/scripts/configure-solr.sh"
   - "../../../../box/scripts/configure-varnish.sh"
   - "../../../../box/scripts/configure-oauth.sh"
-  - "../../../../box/scripts/configure-ssl.sh"
 
 apache_vhosts_ssl:
   - servername: "{{ drupal_domain }}"
@@ -271,6 +273,54 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-mukw.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-muae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-musa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-mueg.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-bpkw.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-bpae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-bpsa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-bpeg.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-pbkkw.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-pbkae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-pbksa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-pbkeg.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
 mysql_databases:
   - name: drupal
     encoding: utf8mb4
@@ -420,6 +470,54 @@ mysql_databases:
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
+  - name: drupal_alshaya_mukw
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_muae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_musa
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_mueg
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_bpkw
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_bpae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_bpsa
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_bpeg
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_pbkkw
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_pbkae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_pbksa
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_pbkeg
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
 mysql_users:
   - name: drupal
     host: "%"
@@ -438,3 +536,6 @@ pimpmylog_grant_all_privs: true
 mysql_slow_query_log_enabled: true
 mysql_slow_query_time: 1
 mysql_wait_timeout: 300
+
+# Set the path to a compatible python interpreter on Ubuntu 16.04
+ansible_python_interpreter: /usr/bin/python

@@ -1,0 +1,311 @@
+.block-alshaya-algolia-react-autocomplete {
+  @include breakpoint($only-mobile) {
+    visibility: hidden;
+  }
+
+  .algolia-search-cleartext-icon {
+    @include breakpoint($tablet) {
+      #{$right}: 2.3rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      top: 0.75rem;
+      #{$right}: 0.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      #{$right}: 2.7rem;
+    }
+  }
+
+  &.clear-icon {
+    #alshaya-algolia-autocomplete .react-autosuggest__input {
+      padding-#{$right}: 2.5rem;
+
+      @include breakpoint($only-tablet) {
+        padding-#{$right}: 4.1rem;
+      }
+
+      @include breakpoint($desktop) {
+        padding-#{$right}: 4.7rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .algolia-search-cleartext-icon {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      &.show-algolia-search-bar {
+        .algolia-search-cleartext-icon {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    }
+  }
+
+  #alshaya-algolia-autocomplete {
+    width: 100%;
+    padding: 0;
+
+    @include breakpoint($only-tablet) {
+      width: 100%;
+
+      html[lang='ar'] & {
+        margin-bottom: 1.5625rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      width: 23.75rem;
+    }
+
+    .react-autosuggest__input {
+      @include breakpoint($only-mobile) {
+        margin: 0;
+        width: 100%;
+        padding-#{$left}: 3rem !important;
+        border: 0 solid $algolia-auto-complete-border;
+        height: 3.6875rem;
+
+        html[lang='ar'] & {
+          height: 4.0625rem;
+        }
+      }
+
+      @include breakpoint($upto-desktop) {
+        border: 0.5rem solid$algolia-auto-complete-border;
+        height: 3.5rem;
+      }
+
+      @include breakpoint($desktop) {
+        border: 0.0625rem solid$algolia-auto-complete-border;
+        height: 2.5rem;
+      }
+
+      border-radius: 0;
+      padding: 0.4775rem 0.4375rem 0.4375rem 1.25rem;
+
+      &::placeholder {
+        font-family: $alshaya-bold;
+        font-size: 0.875rem;
+        line-height: 1.4375rem;
+        color: $algolia-input-placeholder-text;
+        text-transform: none;
+      }
+    }
+
+    .react-autosuggest__container {
+      &::before {
+        background-color: transparent;
+        height: auto;
+        width: auto;
+      }
+
+      &::after {
+        background: $algolia-search-icon url('#{$muji_theme_img_directory_path}/assets/search.svg') 0 0 no-repeat;
+
+        @include breakpoint($only-mobile) {
+          top: 0.7rem;
+          #{$right}: unset;
+          #{$left}: 1rem;
+          opacity: 1;
+          transition: opacity 0.2s;
+        }
+
+        @include breakpoint($tablet) {
+          display: block;
+          background-position: center;
+          border: none;
+          text-indent: -9999px;
+          top: 50%;
+          transform: translateY(-50%);
+          #{$right}: 0.8125rem;
+          background-size: 2.1rem 2.1rem;
+          width: 2.125rem;
+          height: 2.125rem;
+
+          html[lang='ar'] & {
+            transform: translateY(-52%);
+          }
+        }
+
+        @include breakpoint($desktop) {
+          #{$right}: 0.6875rem;
+        }
+      }
+
+      &--open {
+        width: 100%;
+
+        #top-results {
+          .top-suggestions-title {
+            @include breakpoint($only-mobile) {
+              font-weight: bold;
+            }
+          }
+        }
+      }
+
+      .trending-title {
+        color: $algolia-trending-title-text;
+        font-family: $alshaya-bold;
+        text-transform: uppercase;
+        padding: 0.625rem !important;
+        font-weight: 600;
+
+        @include breakpoint($desktop) {
+          font-size: 0.75rem;
+        }
+      }
+
+      .react-autosuggest__suggestions-list .react-autosuggest__suggestion {
+        .aa-suggestion {
+          &:hover {
+            background-color: $algolia-search-suggestion-hover-bg;
+          }
+
+          .suggested-text {
+            padding: 0.625rem !important;
+
+            @include breakpoint($desktop) {
+              font-size: 0.75rem;
+            }
+          }
+        }
+      }
+    }
+
+    .react-autosuggest__suggestions-container {
+      &--open {
+        margin-top: 0;
+        min-width: 15.25rem;
+        box-shadow: none;
+        border-radius: 0;
+
+        @include breakpoint($only-mobile) {
+          border-top: 1px solid $algolia-auto-complete-border;
+        }
+
+        @include breakpoint($only-tablet) {
+          min-width: auto;
+          width: 10.625rem;
+        }
+
+        @include breakpoint($tablet) {
+          border: 1px solid $algolia-auto-complete-border;
+        }
+
+        @include breakpoint($desktop) {
+          min-width: auto;
+          width: 14.375rem;
+        }
+
+        &--open {
+          .react-autosuggest__input {
+            @include breakpoint($only-tablet) {
+              border: 0.5rem solid $algolia-auto-complete-border;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.focused {
+    #alshaya-algolia-autocomplete {
+      .react-autosuggest__container {
+        &::after {
+          @include breakpoint($upto-tablet) {
+            opacity: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+body {
+  &:not(.no-sticky-algolia-search-bar) {
+    @include breakpoint($only-mobile) {
+      margin-top: 7.125rem;
+
+      html[lang='ar'] & {
+        margin-top: 7.6367rem;
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($only-mobile) {
+        padding: 0;
+      }
+    }
+  }
+
+  .block-alshaya-algolia-react-autocomplete {
+    .algolia-search-back-icon {
+      @include breakpoint($only-mobile) {
+        #{$left}: 0.85rem;
+        top: 0.65rem;
+      }
+    }
+  }
+
+  &.no-sticky-algolia-search-bar {
+    .block-alshaya-algolia-react-autocomplete {
+      &.show-algolia-search-bar {
+        top: -0.125rem;
+      }
+    }
+  }
+
+  // Algolia positioning specific to frontpage.
+  &.frontpage:not(.no-sticky-algolia-search-bar) {
+    main .c-content {
+      @include breakpoint($only-tablet) {
+        margin-top: 3.625rem;
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($only-tablet) {
+        top: 4.5rem;
+        bottom: auto;
+      }
+    }
+
+    .branding__menu {
+      @include breakpoint($only-mobile) {
+        position: relative !important;
+      }
+    }
+  }
+
+  &.frontpage.header--fixed:not(.no-sticky-algolia-search-bar) {
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+    }
+  }
+}
+
+// Specific with slug banner. overwriting docroot/themes/custom/transac/alshaya_white_label/sass/components/slug-banner/_slug-banner.scss line 115.
+.slug-banner-processed {
+  &.header-sticky-filter {
+    .branding__menu {
+      @include breakpoint($only-mobile) {
+        position: fixed;
+      }
+    }
+
+    &:not(.frontpage) {
+      @include breakpoint($only-mobile) {
+        top: 0;
+        padding: 0;
+      }
+    }
+  }
+}

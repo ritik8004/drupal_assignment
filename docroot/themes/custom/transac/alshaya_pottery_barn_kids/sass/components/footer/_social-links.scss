@@ -1,0 +1,31 @@
+.c-social-links {
+  [class^="c-social-links--"]::before {
+    @include breakpoint($tablet) {
+      font-size: 2.145rem;
+    }
+  }
+
+  .c-social-links--facebook {
+    @include icon(facebookselect);
+  }
+
+  .c-social-links--instagram {
+    @include icon(instagramselect);
+  }
+
+  .c-social-links--youtube {
+    @include icon(youtubeselect);
+  }
+
+  .c-social-links--google-plus {
+    @include icon(googleplusselect);
+  }
+
+  .c-social-links--twitter {
+    @include icon(twitterselect);
+  }
+
+  .c-social-links--pinterest {
+    @include icon(pinterestselect);
+  }
+}

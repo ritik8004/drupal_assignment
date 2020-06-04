@@ -226,6 +226,29 @@ $conductors = [
     'hmac_secret' => 'NjhjMjRmNDEtNTJkMS00',
     'site_id' => 57,
   ],
+  // Pottery Barn Kids KW.
+  'pbkkw_qa' => [
+    'hmac_id' => '7b1ac8753c5c46dda4d43e6343cc9921',
+    'hmac_secret' => 'OTU1MDJmOWMtZGYyOS00',
+    'site_id' => 226,
+  ],
+  'pbkkw_uat' => [
+    'hmac_id' => 'cf6afd0bd1624636bd21f4581dc5e252',
+    'hmac_secret' => 'NDBhYjQ3NjQtNDZmNy00',
+    'site_id' => 40,
+  ],
+  // Pottery Barn Kids AE.
+  'pbkae_qa' => [
+    'hmac_id' => '727104fbad4240eea0d5bda04da0927f',
+    'hmac_secret' => 'NzY3OWU3YjItNmZiNS00',
+    'site_id' => 228,
+  ],
+  // Pottery Barn Kids SA.
+  'pbksa_qa' => [
+    'hmac_id' => 'db1681e298b8408294834b3cb9f83a5e',
+    'hmac_secret' => 'ODk1N2E1YTEtZmFhNS00',
+    'site_id' => 227,
+  ],
   // BathBodyWorks KW.
   'bbwkw_qa' => [
     'hmac_id' => '0b92904888cd422f8acd2938e199916e',
@@ -548,6 +571,72 @@ $conductors = [
   ],
   'aeoeg_prod' => [
     'site_id' => 208,
+  ],
+  'mukw_qa' => [
+    'hmac_id' => 'e6c4af7406bb4694a0caa108409617d9',
+    'hmac_secret' => 'OGU4Yjg1ZDMtNWI5NS00',
+    'site_id' => 174,
+  ],
+  'musa_qa' => [
+    'hmac_id' => 'e6b1671eda3b442f9119045676199d93',
+    'hmac_secret' => 'NTg3N2Q3NWItMjJhOC00',
+    'site_id' => 175,
+  ],
+  'muae_qa' => [
+    'hmac_id' => '89e42750b2764506b5533ed781d49e87',
+    'hmac_secret' => 'MmYxZGQ0NDYtYTQ5MC00',
+    'site_id' => 176,
+  ],
+  'mueg_qa' => [
+    'hmac_id' => '5e49e396d2ec416f9216a3a287f738fc',
+    'hmac_secret' => 'YzdkOTIyYjItNzc3ZS00',
+    'site_id' => 177,
+  ],
+  'mukw_uat' => [
+    'hmac_id' => 'afb8c24dfb574debaebfe6b680a9fc43',
+    'hmac_secret' => 'MjU1NmIzMjYtNDc1My00',
+    'site_id' => 191,
+  ],
+  'musa_uat' => [
+    'hmac_id' => '8d9331c4d4aa4a529ed05055b3ca5e67',
+    'hmac_secret' => 'ZGJmMWFiYTktY2JiNS00',
+    'site_id' => 192,
+  ],
+  'muae_uat' => [
+    'hmac_id' => '05168cbe2e664f4c9d9b676a96d185a4',
+    'hmac_secret' => 'YmJmZTAxNzgtMTdhNy00',
+    'site_id' => 193,
+  ],
+  'mueg_uat' => [
+    'hmac_id' => 'a37e371caae3434ea9372ea053607857',
+    'hmac_secret' => 'ZDFmOGM0NDEtNjlmNy00',
+    'site_id' => 194,
+  ],
+  // Boots pharmacy.
+  'bpkw_dev' => [
+    'hmac_id' => 'd498a56fab204489ad5c3de9840d8e98',
+    'hmac_secret' => 'YjM5Mjc1M2QtNDhkNC00',
+    'site_id' => 209,
+  ],
+  'bpkw_qa' => [
+    'hmac_id' => '602caba2dc7a4ab3801169a1e8c5eb77',
+    'hmac_secret' => 'NTA1MGIzNWQtYTc3My00',
+    'site_id' => 213,
+  ],
+  'bpsa_qa' => [
+    'hmac_id' => '95d0b54224a444cfb48f922c56055df3',
+    'hmac_secret' => 'OGJlN2QyZjUtZmVlYS00',
+    'site_id' => 214,
+  ],
+  'bpae_qa' => [
+    'hmac_id' => '2bd4976d93e743de8374ff38e8b45a53',
+    'hmac_secret' => 'YTUzMjBjNmYtY2RmZi00',
+    'site_id' => 215,
+  ],
+  'bpeg_qa' => [
+    'hmac_id' => 'c2615c9507594034a76a2dc4ff5f10e2',
+    'hmac_secret' => 'MDkyNjMzNmQtOWI4NC00',
+    'site_id' => 216,
   ],
 ];
 

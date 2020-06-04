@@ -1,0 +1,32 @@
+.sku-base-form {
+  .form-wrapper {
+    .configurable-swatch {
+      .li-swatch-image {
+        width: 3rem;
+
+        a,
+        span {
+          width: 2.75rem;
+          height: 2.75rem;
+          margin-top: 0.625rem;
+          padding: 0;
+
+          &.picked,
+          &:hover {
+            &::after {
+              width: 2.75rem;
+              height: 2.75rem;
+              border-radius: 0.1875rem;
+            }
+          }
+        }
+
+        img {
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: 0.1875rem;
+        }
+      }
+    }
+  }
+}

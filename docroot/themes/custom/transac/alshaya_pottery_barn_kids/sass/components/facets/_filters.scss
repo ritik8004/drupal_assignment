@@ -1,0 +1,150 @@
+// department page specific.
+.c-department {
+  .c-category-list {
+    .c-category-list__items {
+      .c-category-list__title {
+        @include breakpoint($desktop) {
+          font-size: 0.75rem;
+          text-transform: none;
+        }
+      }
+    }
+
+    .c-category-list__item {
+      a {
+        @include breakpoint($desktop) {
+          font-size: 0.875rem;
+        }
+
+        &.active {
+          color: $lhn_l3_hover;
+          font-weight: normal;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// PLP Specific.
+.c-plp {
+  .block-alshaya-category-lhn-block {
+    ul {
+      li {
+        a {
+          &.lhn-4,
+          &.lhn-3 {
+            @include breakpoint($desktop) {
+              font-size: 0.875rem;
+            }
+
+            &.active {
+              color: $lhn_l3_hover;
+              font-weight: normal;
+              text-decoration: underline;
+            }
+          }
+
+          &.lhn-2 {
+            @include breakpoint($desktop) {
+              font-size: 0.75rem;
+              text-transform: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Legend or facet lablel text
+.c-plp .c-content__region {
+  .block-views-exposed-filter-blockalshaya-product-list-block-1,
+  .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blocksearch-page {
+    legend {
+      text-transform: uppercase;
+      font-size: 0.8125rem;
+
+      @include icon(triangle-down, after) {
+        font-size: 0.6875rem;
+      }
+    }
+  }
+
+  .c-facet.c-accordion,
+  .c-facet.c-collapse-item {
+    .c-accordion__title,
+    .c-collapse__title {
+      text-transform: uppercase;
+      font-size: 0.8125rem;
+
+      @include icon(triangle-down, after) {
+        font-size: 0.6875rem;
+      }
+    }
+  }
+}
+
+// Clear all filters link.
+.c-plp .region__content {
+  .block-facets-summary-blockfilter-bar-plp ul li.clear-all,
+  .block-facets-summary-blockfilter-bar ul li.clear-all,
+  .block-facets-summary-blockfilter-bar-promotions ul li.clear-all {
+    text-transform: capitalize !important;
+  }
+}
+
+// search facets horizontal content region.
+.c-plp {
+  #alshaya-algolia-search .c-content__region .sticky-filter-wrapper .c-collapse-item {
+    &:first-of-type {
+      @include breakpoint($desktop) {
+        margin-#{$left}: 0;
+      }
+    }
+
+    .c-collapse__title {
+      text-transform: uppercase;
+      font-size: 0.8125rem;
+    }
+  }
+}
+
+// Show all filters link.
+.show-all-filters,
+.show-all-filters-algolia {
+  &::before {
+    top: 52%;
+  }
+
+  .desktop {
+    text-transform: uppercase;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 1.18px;
+  }
+
+  .upto-desktop {
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}
+
+// legend or facet title specific to mobile.
+.block-facet-blockcategory-facet-search.c-facet.c-accordion.c-collapse-item.non-desktop {
+  .c-facet__title.c-accordion__title.c-collapse__title {
+    @include breakpoint($only-mobile) {
+      font-weight: 700;
+    }
+  }
+}
+
+// filter list label which says - selected filters
+.c-plp {
+  .block-facets-summary-blockfilter-bar-promotions .filter-list-label,
+  .block-facets-summary-blockfilter-bar-plp .filter-list-label,
+  .block-facets-summary-blockfilter-bar .filter-list-label {
+    font-size: 0.8125rem;
+  }
+}
