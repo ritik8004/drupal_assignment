@@ -56,11 +56,13 @@ class TotalLineItems extends React.Component {
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
         <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={totals.discount_amount} />
 
-        <ConditionalView condition={totals.shipping_incl_tax !== null}>
+        <ConditionalView
+          condition={totals.shipping_incl_tax !== undefined && totals.shipping_incl_tax !== null}
+        >
           <TotalLineItem
-            name="surcharge-total"
+            name="delivery-total"
             title={Drupal.t('Delivery')}
-            value={totals.shipping_incl_tax}
+            value={totals.shipping_incl_tax > 0 ? totals.shipping_incl_tax : Drupal.t('FREE')}
           />
         </ConditionalView>
 

@@ -253,10 +253,11 @@ class CheckoutHelper {
     $this->clearCartHistory($cart->id());
 
     // Add success message in logs.
-    $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [
+    $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method. GA Client id: @ga_client_id.', [
       '@cart_id' => $cart->id(),
       '@order_id' => $order_id,
       '@method' => $session->get('selected_payment_method'),
+      '@ga_client_id' => $cart->getExtension('ga_client_id'),
     ]);
 
     // While debugging we log the whole cart object.

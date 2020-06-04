@@ -155,8 +155,12 @@ class AlshayaSpcController extends ControllerBase {
    */
   public function cart() {
     $acm_config = $this->configFactory->get('alshaya_acm.settings');
+    $cache_tags = $acm_config->getCacheTags();
 
-    return [
+    $cart_config = $this->configFactory->get('alshaya_acm.cart_config');
+    $cache_tags = Cache::mergeTags($cache_tags, $cart_config->getCacheTags());
+
+    $build = [
       '#type' => 'markup',
       '#markup' => '<div id="spc-cart"></div>',
       '#attached' => [
@@ -168,16 +172,17 @@ class AlshayaSpcController extends ControllerBase {
         ],
         'drupalSettings' => [
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+          'alshaya_spc' => [
+            'max_cart_qty' => $cart_config->get('max_cart_qty'),
+          ],
         ],
       ],
       '#cache' => [
-        'contexts' => [
-          'languages:' . LanguageInterface::TYPE_INTERFACE,
-          'user',
-        ],
-        'tags' => $acm_config->getCacheTags(),
+        'tags' => $cache_tags,
       ],
     ];
+
+    return $this->addCheckoutConfigSettings($build);
   }
 
   /**
@@ -461,10 +466,6 @@ class AlshayaSpcController extends ControllerBase {
         ],
       ],
       '#cache' => [
-        'contexts' => [
-          'languages:' . LanguageInterface::TYPE_INTERFACE,
-          'user',
-        ],
         'tags' => $cache_tags,
       ],
     ];
@@ -505,7 +506,7 @@ class AlshayaSpcController extends ControllerBase {
     array_multisort(array_column($payment_methods, 'weight'), SORT_ASC, $payment_methods);
     $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
 
-    return $build;
+    return $this->addCheckoutConfigSettings($build);
   }
 
   /**
@@ -527,12 +528,15 @@ class AlshayaSpcController extends ControllerBase {
     // Order Totals.
     $totals = [
       'subtotal_incl_tax' => $order['totals']['sub'],
-      'shipping_incl_tax' => $order['totals']['shipping'],
       'base_grand_total' => $order['totals']['grand'],
       'discount_amount' => $order['totals']['discount'],
       'free_delivery' => 'false',
       'surcharge' => $order['totals']['surcharge'],
     ];
+
+    if ($orderDetails['delivery_type'] !== 'cc') {
+      $totals['shipping_incl_tax'] = $order['totals']['shipping'] ?? 0;
+    }
 
     // Get Products.
     $productList = [];
@@ -580,7 +584,7 @@ class AlshayaSpcController extends ControllerBase {
       $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
     }
 
-    return [
+    $build = [
       '#theme' => 'spc_confirmation',
       '#strings' => $strings,
       '#attached' => [
@@ -591,13 +595,11 @@ class AlshayaSpcController extends ControllerBase {
         'drupalSettings' => $settings,
       ],
       '#cache' => [
-        'contexts' => [
-          'languages:' . LanguageInterface::TYPE_INTERFACE,
-          'session',
-        ],
         'tags' => $cache_tags,
       ],
     ];
+
+    return $this->addCheckoutConfigSettings($build);
   }
 
   /**
@@ -663,6 +665,47 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     return new JsonResponse(['status' => TRUE] + $status);
+  }
+
+  /**
+   * Add required common configurations to settings.
+   *
+   * @param array $build
+   *   Build array.
+   *
+   * @return array
+   *   Build array updated with configurations in settings.
+   */
+  private function addCheckoutConfigSettings(array $build) {
+    $settings = [];
+    $cache_tags = [];
+
+    $currency_config = $this->configFactory->get('acq_commerce.currency');
+    $cache_tags = Cache::mergeTags($cache_tags, $currency_config->getCacheTags());
+
+    $settings['alshaya_spc']['currency_config'] = [
+      'currency_code' => $currency_config->get('currency_code'),
+      'currency_code_position' => $currency_config->get('currency_code_position'),
+      'decimal_points' => $currency_config->get('decimal_points'),
+    ];
+
+    $settings['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
+
+    $product_config = $this->configFactory->get('alshaya_acm_product.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $currency_config->getCacheTags());
+
+    // Time we get from configuration is in minutes.
+    $settings['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
+    $settings['alshaya_spc']['vat_text'] = $product_config->get('vat_text');
+    $settings['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
+
+    $build['#attached']['drupalSettings'] = array_merge_recursive($build['#attached']['drupalSettings'], $settings);
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $cache_tags);
+
+    $build['#cache']['contexts'][] = 'languages:' . LanguageInterface::TYPE_INTERFACE;
+    $build['#cache']['contexts'][] = 'user';
+
+    return $build;
   }
 
 }

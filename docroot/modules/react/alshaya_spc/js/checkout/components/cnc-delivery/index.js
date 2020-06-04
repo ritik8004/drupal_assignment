@@ -64,6 +64,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
       cartSelectedStore,
       updateSelectStore,
       showOutsideCountryError,
+      cartId,
     } = this.context;
 
     const fetchAgain = cartSelectedStore !== null
@@ -89,7 +90,11 @@ class ClicknCollectDeiveryInfo extends React.Component {
       showFullScreenLoader();
     }
 
-    const list = createFetcher(fetchClicknCollectStores).read(fetchCoords);
+    const args = {
+      coords: fetchCoords,
+      cartId,
+    };
+    const list = createFetcher(fetchClicknCollectStores).read(args);
     list.then(
       (response) => {
         if (typeof response.error !== 'undefined') {

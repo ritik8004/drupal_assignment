@@ -4,11 +4,7 @@ import BillingInfo from '../billing-info';
 import SectionTitle from '../../../utilities/section-title';
 import {
   isBillingSameAsShippingInStorage,
-  removeBillingFlagFromStorage,
 } from '../../../utilities/checkout_util';
-
-// Storage key for billing shipping info same or not.
-const localStorageKey = 'billing_shipping_same';
 
 export default class HDBillingAddress extends React.Component {
   isComponentMounted = false;
@@ -18,13 +14,17 @@ export default class HDBillingAddress extends React.Component {
     this.state = {
       shippingAsBilling: isBillingSameAsShippingInStorage(),
     };
-
-    // Check and remove flag on load.
-    removeBillingFlagFromStorage(props.cart);
   }
 
   componentDidMount() {
     this.isComponentMounted = true;
+    const { shippingAsBilling } = this.state;
+    if (isBillingSameAsShippingInStorage() !== shippingAsBilling) {
+      this.setState({
+        shippingAsBilling: isBillingSameAsShippingInStorage(),
+      });
+    }
+
     document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
     document.addEventListener('onShippingAddressUpdate', this.processShippingUpdate, false);
   }
@@ -42,15 +42,10 @@ export default class HDBillingAddress extends React.Component {
     const data = e.detail;
     // If there is no error and update was fine, means user
     // has added billing address. We set in localstorage.
-    if (data.error === undefined) {
-      if (data.cart_id !== undefined
-        && data.delivery_type === 'home_delivery'
-        && isBillingSameAsShippingInStorage()) {
-        localStorage.setItem(localStorageKey, true);
-        this.setState({
-          shippingAsBilling: true,
-        });
-      }
+    if (data.error === undefined && isBillingSameAsShippingInStorage() && this.isComponentMounted) {
+      this.setState({
+        shippingAsBilling: true,
+      });
     }
   };
 
@@ -61,9 +56,9 @@ export default class HDBillingAddress extends React.Component {
     const data = e.detail;
     // If there is no error and update was fine, means user
     // has changed the billing address. We set in localstorage.
-    if (data.error === undefined) {
+    if (data.error === undefined && this.isComponentMounted) {
       if (data.cart !== undefined) {
-        localStorage.setItem(localStorageKey, false);
+        localStorage.setItem('billing_shipping_same', false);
         this.setState({
           shippingAsBilling: false,
         });
@@ -108,7 +103,11 @@ export default class HDBillingAddress extends React.Component {
         <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
-            <BillingInfo cart={cart} refreshCart={refreshCart} />
+            <BillingInfo
+              cart={cart}
+              refreshCart={refreshCart}
+              shippingAsBilling={shippingAsBilling}
+            />
             {showMessage
             && <div className="spc-billing-help-text">{this.sameBillingAsShippingMessage()}</div>}
           </div>
