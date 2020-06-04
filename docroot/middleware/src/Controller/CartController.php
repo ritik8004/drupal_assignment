@@ -780,7 +780,7 @@ class CartController {
     }
 
     try {
-      $result = $this->drupal->getCartStores($this->cart->getCartId(), $lat, $lon);
+      $result = $this->cart->getCartStores($lat, $lon);
       return new JsonResponse($result);
     }
     catch (\Exception $e) {

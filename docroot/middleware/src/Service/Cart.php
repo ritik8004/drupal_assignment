@@ -1286,4 +1286,106 @@ class Cart {
     $this->cache->delete('payment_method');
   }
 
+  /**
+   * Get cart stores from magento.
+   *
+   * @param float $lat
+   *   The latitude.
+   * @param float $lon
+   *   The longitude.
+   *
+   * @return array|mixed
+   *   Return array of stores.
+   *
+   * @throws \Exception
+   */
+  public function getCartStores($lat, $lon) {
+    $cart_id = $this->getCartId();
+    $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
+    try {
+      if (empty($stores = $this->magentoApiWrapper->doRequest('GET', $endpoint, []))) {
+        return $stores;
+      }
+
+      foreach ($stores as &$store) {
+        $store_info = $this->drupal->getStoreInfo($store['code']);
+        $store += $store_info;
+        $store['formatted_distance'] = number_format((float) $store['distance'], 2, '.', '');
+        $store['delivery_time'] = $store['sts_delivery_time_label'];
+        if ($store['rnc_available']) {
+          $store['delivery_time'] = $store['rnc_config'];
+        }
+        unset($store['rnc_config']);
+      }
+
+      // Sort the stores first by distance and then by name.
+      $this->sortStores($stores, 'rnc_available', 'desc', 'distance', 'asc');
+      return $stores;
+    }
+    catch (\Exception $e) {
+      // Exception handling here.
+      $this->logger->error('Error occurred while fetching stores for cart id @cart_id, API Response: @response', [
+        '@cart_id' => $cart_id,
+        '@response' => $e->getMessage(),
+      ]);
+    }
+  }
+
+  /**
+   * Sort an array based on a specific key.
+   *
+   * @param array $array
+   *   Array to sort.
+   * @param string $key
+   *   Key of the array or object to sort with.
+   * @param string $order
+   *   Sorting order asc/desc.
+   * @param string $key2
+   *   Optional secondary key for sorting when first key has equal value.
+   * @param string $order2
+   *   Sorting order asc/desc.
+   */
+  protected function sortStores(array &$array, $key, $order = 'desc', $key2 = NULL, $order2 = 'asc') {
+    usort($array, function ($item_1, $item_2) use ($key, $order, $key2) {
+      $val1 = is_array($item_1) ? $item_1[$key] : $item_1->$key;
+      $val2 = is_array($item_2) ? $item_2[$key] : $item_2->$key;
+
+      $order = $this->sortCheckOrders($val1, $val2, $order);
+
+      // Add check for secondary key.
+      if ($key2 && $order === 0) {
+        $val3 = is_array($item_1) ? $item_1[$key2] : $item_1->$key2;
+        $val4 = is_array($item_2) ? $item_2[$key2] : $item_2->$key2;
+        return $this->sortCheckOrders($val3, $val4, $order);
+      }
+
+      return $order;
+    });
+  }
+
+  /**
+   * Helper function to get order between two values.
+   *
+   * @param mixed $val1
+   *   First value.
+   * @param mixed $val2
+   *   Second value.
+   * @param string $order
+   *   Ascending or descending.
+   *
+   * @return int
+   *   Returns the order value - 0, 1 or -1.
+   */
+  protected function sortCheckOrders($val1, $val2, $order) {
+    if ($val1 == $val2) {
+      return 0;
+    }
+    if ($order == 'asc') {
+      return ($val1 < $val2) ? -1 : 1;
+    }
+    elseif ($order == 'desc') {
+      return ($val1 > $val2) ? -1 : 1;
+    }
+  }
+
 }

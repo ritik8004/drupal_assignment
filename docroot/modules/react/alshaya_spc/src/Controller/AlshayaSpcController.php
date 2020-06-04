@@ -315,6 +315,12 @@ class AlshayaSpcController extends ControllerBase {
         'key' => 'cnc_near_me',
         'value' => $this->t('Near me'),
       ];
+
+      $strings[] = [
+        'key' => 'cnc_distance',
+        'value' => $this->t('@distance miles'),
+      ];
+
     }
 
     $strings[] = [
