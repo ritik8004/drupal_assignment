@@ -130,19 +130,20 @@ hr {
   }
 }
 
-// Style 1 row 2 col promo block and 1 row 3 col flex promo block fields
+// Style 1 row 2 col promo block, 1 row 3 col flex and 1 row 4 col promo block fields
 .paragraph--type--_-row-2-col,
-.paragraph--type--_-row-3-col-flex {
+.paragraph--type--_-row-3-col-flex,
+.field--name-field-1-row-4-col {
   .field--name-field-title,
   h4 {
-    @include style-font($alshaya-bold, 1.25rem, 1rem, 0.9375rem, 0.9375rem);
+    @include style-font($alshaya-bold, 1.25rem, 1rem, 0.3125rem, 0.3125rem);
 
     border: $border-default;
     text-align: center;
   }
 
   .field--name-field-html-heading p {
-    @include style-font($alshaya-bold, 1.25rem, 1rem, 0.9375rem, 0.9375rem);
+    @include style-font($alshaya-bold, 1.25rem, 1rem, 0.3125rem, 0.3125rem);
   }
 
   .field--name-field-video {
@@ -166,12 +167,12 @@ hr {
   }
 
   .field--name-field-sub-title {
-    @include style-font($alshaya-thin, 1.0625rem, 0.875rem, 0, 0.9375rem);
+    @include style-font($alshaya-thin, 1.0625rem, 0.875rem, 0, 0.3125rem);
     @include apply-border();
   }
 
   .field--name-field-button-link {
-    @include style-font($alshaya-thin, 0.875rem, false, 0, 0.9375rem);
+    @include style-font($alshaya-thin, 0.875rem, false, 0, 0.3125rem);
     @include apply-border();
 
     text-decoration: underline;
@@ -193,5 +194,17 @@ hr {
 .paragraph--type--_-row-3-col-flex {
   h4 {
     margin: 0;
+  }
+}
+
+// Style 1 row 4 col promo link text Blocks
+.field--name-field-1-row-4-col {
+  .paragraph--type--promo-block-text {
+    .field--name-field-link {
+      @include style-font($alshaya-bold, 1.125rem, 1rem, 0.9375rem, 0.9375rem, $promo_black_btn_text);
+
+      border: $border-default;
+      border-color: $promo_black_btn_text;
+    }
   }
 }
