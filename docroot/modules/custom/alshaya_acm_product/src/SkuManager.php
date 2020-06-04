@@ -3605,7 +3605,7 @@ class SkuManager {
     }
 
     $attributes = [];
-    if ($attrs = $parent_sku->get('field_configurable_attributes')->first()) {
+    if ($parent_sku->hasField('field_configurable_attributes') && $attrs = $parent_sku->get('field_configurable_attributes')->first()) {
       $configurable_attributes = unserialize($attrs->getString());
       if (!empty($configurable_attributes)) {
         foreach ($configurable_attributes as $attribute) {
