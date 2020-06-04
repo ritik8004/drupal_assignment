@@ -6,17 +6,6 @@
  */
 
 /**
- * Implements hook_update().
- *
- * Update map marker icons.
- */
-function alshaya_pbk_update_8101() {
-  // Set new marker icons to be used for click & collect delivery.
-  $brand = \Drupal::config('alshaya.installed_brand')->get('module');
-  alshaya_stores_finder_set_markers($brand);
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_pbk_install() {
