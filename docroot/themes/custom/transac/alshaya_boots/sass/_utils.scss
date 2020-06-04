@@ -212,6 +212,7 @@ $border-default: 0.125rem solid $promo_block_border;
   background: $promo_black_btn;
   padding: 0.4375rem 1.375rem;
   border-radius: 0.3125rem;
+  display: inline-block;
 
   @content;
 }
@@ -227,6 +228,26 @@ $border-default: 0.125rem solid $promo_block_border;
     margin: 0.625rem 0 1.875rem;
     transform: none;
     text-align: center;
+  }
+
+  @content;
+}
+
+// Apply border based on availablity of title or sub-title or link
+@mixin apply-border() {
+  border: $border-default;
+  border-top: none;
+  text-align: center;
+  position: relative;
+
+  &::before {
+    content: "";
+    width: 100%;
+    height: 0.125rem;
+    background: $white;
+    position: absolute;
+    left: 0;
+    top: -0.125rem;
   }
 
   @content;

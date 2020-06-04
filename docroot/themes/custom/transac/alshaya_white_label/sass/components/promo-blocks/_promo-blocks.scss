@@ -505,7 +505,7 @@
     }
   }
 }
-
+// Structure 1 row 4 col promo block
 .field--name-field-1-row-4-col {
   &.field__items {
     display: flex;
@@ -518,8 +518,121 @@
         text-align: center;
 
         @include breakpoint($only-mobile) {
-          width: calc(50% - 0.5rem);
+          width: calc(50% - 0.25rem);
           margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+}
+
+// Structure 1 row 2 col promo block
+.paragraph--type--_-row-2-col {
+  .field__items {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    .field--name-field-1-row-2-col {
+      &.field__item {
+        width: calc(50% - 0.75rem);
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+}
+
+// Structure 1 row 3 col flex promo block
+.paragraph--type--_-row-3-col-flex {
+  .field__items {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    .field--name-field-1row-3col-flex {
+      &.field__item {
+        width: calc(33.33% - 0.75rem);
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+
+  &.col_6_3_3 {
+    .field__items {
+      .field--name-field-1row-3col-flex {
+        &.field__item {
+          width: calc(25% - 0.75rem);
+
+          @include breakpoint($only-mobile) {
+            width: calc(50% - 0.25rem);
+            margin-bottom: 1rem;
+          }
+        }
+
+        &.field__item:first-child {
+          width: calc(50% - 0.75rem);
+
+          @include breakpoint($only-mobile) {
+            width: 100%;
+            margin-bottom: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  &.col_3_6_3 {
+    .field__items {
+      .field--name-field-1row-3col-flex {
+        &.field__item:first-child,
+        &.field__item:last-child {
+          width: calc(25% - 0.75rem);
+
+          @include breakpoint($only-mobile) {
+            width: 100%;
+            margin-bottom: 1rem;
+          }
+        }
+
+        &.field__item {
+          width: calc(50% - 0.75rem);
+
+          @include breakpoint($only-mobile) {
+            width: 100%;
+            margin-bottom: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  &.col_3_3_6 {
+    .field__items {
+      .field--name-field-1row-3col-flex {
+        &.field__item {
+          width: calc(25% - 0.75rem);
+
+          @include breakpoint($only-mobile) {
+            width: calc(50% - 0.25rem);
+            margin-bottom: 1rem;
+          }
+        }
+
+        &.field__item:last-child {
+          width: calc(50% - 0.75rem);
+
+          @include breakpoint($only-mobile) {
+            width: 100%;
+            margin-bottom: 1rem;
+          }
         }
       }
     }
