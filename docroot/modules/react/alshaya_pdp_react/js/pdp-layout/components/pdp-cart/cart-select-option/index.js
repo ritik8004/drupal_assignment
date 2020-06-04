@@ -4,11 +4,14 @@ import QuantityDropdown from '../quantity-dropdown';
 import PdpGallery from '../../pdp-gallery';
 import PdpInfo from '../../pdp-info';
 import GroupSelectOption from '../group-select-option';
+import SwatchSelectOption from '../swatch-select-option';
 
 class CartSelectOption extends React.Component {
   constructor(props) {
     super(props);
-    const { skuCode, configurableCombinations, isGroup } = this.props;
+    const {
+      skuCode, configurableCombinations, isGroup, isSwatch,
+    } = this.props;
     const { firstChild } = configurableCombinations[skuCode];
     this.state = {
       showGroup: false,
@@ -16,6 +19,7 @@ class CartSelectOption extends React.Component {
       pdpRefresh: false,
       variantSelected: firstChild || skuCode,
       groupStatus: isGroup,
+      swatchStatus: isSwatch,
     };
   }
 
@@ -63,18 +67,40 @@ class CartSelectOption extends React.Component {
       pdpRefresh,
       variantSelected,
       groupStatus,
+      swatchStatus,
     } = this.state;
 
-    const selectOption = (
+    const swatchSelectOption = (
+      <SwatchSelectOption
+        handleSelectionChanged={this.handleSelectionChanged}
+        configurables={configurables}
+        code={code}
+        nextCode={nextCode}
+        nextValues={nextValues}
+      />
+    );
+
+    const selectOption = (!swatchStatus) ? (
       <>
-        <select id={code} className="select-attribute" onChange={(e) => this.handleSelectionChanged(e, code)}>
-          {Object.keys(configurables.values).map((attr) => {
-            if (code === nextCode) {
-              if (nextValues.indexOf(attr) !== -1) {
+        <div className="non-groupped-attr">
+          <select id={code} className="select-attribute" onChange={(e) => this.handleSelectionChanged(e, code)}>
+            {Object.keys(configurables.values).map((attr) => {
+              if (code === nextCode) {
+                if (nextValues.indexOf(attr) !== -1) {
+                  return (
+                    <option
+                      value={configurables.values[attr].value_id}
+                      key={attr}
+                    >
+                      {configurables.values[attr].label}
+                    </option>
+                  );
+                }
                 return (
                   <option
                     value={configurables.values[attr].value_id}
                     key={attr}
+                    disabled
                   >
                     {configurables.values[attr].label}
                   </option>
@@ -84,24 +110,15 @@ class CartSelectOption extends React.Component {
                 <option
                   value={configurables.values[attr].value_id}
                   key={attr}
-                  disabled
                 >
                   {configurables.values[attr].label}
                 </option>
               );
-            }
-            return (
-              <option
-                value={configurables.values[attr].value_id}
-                key={attr}
-              >
-                {configurables.values[attr].label}
-              </option>
-            );
-          })}
-        </select>
+            })}
+          </select>
+        </div>
       </>
-    );
+    ) : swatchSelectOption;
 
     if (pdpRefresh && variantSelected !== undefined) {
       ReactDOM.render(
