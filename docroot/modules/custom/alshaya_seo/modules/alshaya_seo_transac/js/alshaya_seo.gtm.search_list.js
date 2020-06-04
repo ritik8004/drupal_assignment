@@ -30,12 +30,15 @@
     attach: function (context, settings) {
       // Trigger incase of page load & filter selected from SRP.
       $(window).once('alshaya-seo-gtm-product-search-load').on('load', function (event) {
-        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression($('.view-search'), settings);
+        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_impressions, $('.view-search'), settings, event);
         Drupal.alshayaSeoGtmPushSearchEvent(context, settings);
       });
       $(window).once('alshaya-seo-gtm-product-search-scroll').on('scroll', debounce(function (event) {
-        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression($('.view-search'), settings);
+        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_impressions, $('.view-search'), settings, event);
       }, 500));
+      $(window).once('alshaya-seo-gtm-product-search-unload').on('unload', function (event) {
+        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_impressions, $('.view-search'), settings, event);
+      });
     }
   };
 })(jQuery, Drupal, Drupal.debounce);
