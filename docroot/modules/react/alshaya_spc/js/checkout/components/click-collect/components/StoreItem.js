@@ -10,7 +10,12 @@ const StoreItem = ({
     <span className="spc-cnc-store-name">
       <span className="spc-store-name-wrapper" onClick={(e) => onStoreChoose(e, index)}>
         <span className="store-name">{store.name}</span>
-        <span className="store-distance">{store.formatted_distance}</span>
+        <span className="store-distance">
+          {getStringMessage(
+            'cnc_distance',
+            { '@distance': store.formatted_distance },
+          )}
+        </span>
       </span>
       <ConditionalView condition={display === 'accordion'}>
         <span className="expand-btn" onClick={(e) => onStoreExpand(e, index)}>Expand</span>

@@ -96,7 +96,8 @@ export default class CnCBillingAddress extends React.Component {
     // means its default billing address (same as shipping)
     // and not added by the user.
     let billingAddressAddedByUser = true;
-    if (cart.cart.billing_address && cart.cart.billing_address.city === 'NONE') {
+    if (!cart.cart.billing_address
+      || (cart.cart.billing_address && cart.cart.billing_address.city === 'NONE')) {
       billingAddressAddedByUser = false;
     }
 

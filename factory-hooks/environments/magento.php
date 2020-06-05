@@ -231,12 +231,12 @@ $magentos = [
   ],
   // Pottery Barn Kids.
   'pbk_qa' => [
-    'url' => 'https://integration-5ojmyuq-rfuu4sicyisyw.eu.magentosite.cloud',
+    'url' => 'https://integration-5ojmyuq-pyudokdb2kumk.eu-3.magentosite.cloud',
     'magento_secrets' => [
-      'consumer_key' => 'auf96nt6b1loar4yc2qm55pluqd5sgrn',
-      'consumer_secret' => 'i1lhnoafn6a1ggjou2juj366cpcnnhel',
-      'access_token' => 's4rfv318v1gxmrnq8mjdn01uhejd8760',
-      'access_token_secret' => '4x5otnn378pjr1v3acnmoe934niwjlw7',
+      'consumer_key' => '8spkmhz5rst8etwcc7w5qg92dabku51w',
+      'consumer_secret' => 'jp5ml3y30lqqxxfxnqj19vcsf5apywkh',
+      'access_token' => '9px4kesgmj6vnjkujhnk8nyxa7m667i4',
+      'access_token_secret' => 'b8dkngbd1uami6kep2a2yafirkdrr6jp',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 6],
@@ -554,27 +554,6 @@ $magentos = [
       'store_id' => ['en' => 22, 'ar' => 19],
     ],
   ],
-  'bp_qa' => [
-    'url' => 'https://integration-5ojmyuq-gdyoujibngne2.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => '10t6mj4t46m69exspxelmqna1t3fnz8u',
-      'consumer_secret' => 'ozboevrqwoeogwohpeu7hlcvr2hbljkt',
-      'access_token' => '31l664sdj4q1p4wu7k0wmzwt1h84hp5w',
-      'access_token_secret' => 'p1habct6ztfqtbza0in9o68z464qr5fj',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-  ],
   'mu_qa' => [
     'url' => 'https://integration-5ojmyuq-tw5uijob6hir2.eu-3.magentosite.cloud',
     'magento_secrets' => [
@@ -603,6 +582,48 @@ $magentos = [
       'consumer_secret' => 'tqseptjwftwhrua330kjem7jnurclhbx',
       'access_token' => 'ofsq77eipss5gshgvj931q603ij7eiqw',
       'access_token_secret' => '24phqz567kp2fkt86tocb6exkwcittmq',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
+    ],
+  ],
+  'bp_qa' => [
+    'url' => 'https://integration-5ojmyuq-gdyoujibngne2.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '10t6mj4t46m69exspxelmqna1t3fnz8u',
+      'consumer_secret' => 'ozboevrqwoeogwohpeu7hlcvr2hbljkt',
+      'access_token' => '31l664sdj4q1p4wu7k0wmzwt1h84hp5w',
+      'access_token_secret' => 'p1habct6ztfqtbza0in9o68z464qr5fj',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+  ],
+  'bp_uat' => [
+    'url' => 'https://boots-uat.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'nfjdttxqyqdaj81nilo4sab9wl7kkb0x',
+      'consumer_secret' => '5szrlic4mwpoxyjl11mhrxux287lykdc',
+      'access_token' => 'qwgohy4l3xnbcz63nhvb5u5soezfizka',
+      'access_token_secret' => 'a5seetf8c166nnkwgk7cbunjxv8l9jdu',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 16],

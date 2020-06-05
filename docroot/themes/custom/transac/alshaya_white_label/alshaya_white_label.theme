@@ -530,6 +530,17 @@ function alshaya_white_label_preprocess_node(&$variables) {
         $variables['show_right_sidebar'] = TRUE;
       }
     }
+    // Remove wrapper html for banner, slider, delivery banner
+    // if they are empty.
+    if (empty($variables['content']['field_banner']['#items'])) {
+      unset($variables['content']['field_banner']);
+    }
+    if (empty($variables['content']['field_slider']['#items'])) {
+      unset($variables['content']['field_slider']);
+    }
+    if (empty($variables['content']['field_delivery_banner']['#items'])) {
+      unset($variables['content']['field_delivery_banner']);
+    }
   }
   elseif ($variables['node']->bundle() == 'acq_product' && $variables['elements']['#view_mode'] == 'product_list') {
     // Hide the node title on product list/search page.

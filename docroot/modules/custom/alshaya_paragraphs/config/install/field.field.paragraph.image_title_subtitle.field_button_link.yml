@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_button_link
+    - paragraphs.paragraphs_type.image_title_subtitle
+  module:
+    - link
+id: paragraph.image_title_subtitle.field_button_link
+field_name: field_button_link
+entity_type: paragraph
+bundle: image_title_subtitle
+label: 'Button link'
+description: ''
+required: false
+translatable: true
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 1
+field_type: link
