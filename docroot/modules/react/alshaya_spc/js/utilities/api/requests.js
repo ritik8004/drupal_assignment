@@ -10,6 +10,7 @@ import { restoreCartApiUrl } from '../update_cart';
 import {
   removeCartFromStorage,
 } from '../storage';
+import i18nMiddleWareUrl from '../i18n_url';
 
 export const fetchClicknCollectStores = (args) => {
   const { coords, cartId } = args;
@@ -17,8 +18,8 @@ export const fetchClicknCollectStores = (args) => {
     return new Promise((resolve) => resolve(null));
   }
 
-  const GET_STORE_URL = Drupal.url(
-    `cnc/stores/${cartId}/${coords.lat}/${coords.lng}`,
+  const GET_STORE_URL = i18nMiddleWareUrl(
+    `cart/stores/${coords.lat}/${coords.lng}`,
   );
   return Axios.get(GET_STORE_URL);
 };

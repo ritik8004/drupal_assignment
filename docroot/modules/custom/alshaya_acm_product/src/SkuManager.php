@@ -3614,6 +3614,10 @@ class SkuManager {
       $parent_sku = $sku;
     }
 
+    if ($parent_sku->getType() == 'simple') {
+      return [];
+    }
+
     $attributes = [];
     if ($attrs = $parent_sku->get('field_configurable_attributes')->first()) {
       $configurable_attributes = unserialize($attrs->getString());

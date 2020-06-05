@@ -28,6 +28,11 @@ cart.place_order:
     controller: App\Controller\CartController::placeOrder
     methods: POST
 
+cart.get_cnc_stores:
+    path: /cart/stores/{lat}/{lon}
+    controller: App\Controller\CartController::getCncStores
+    methods: GET
+
 payment.checkoutcom_payment_success:
     path: /payment/checkout-com-success
     controller: App\Controller\PaymentController::handleCheckoutComSuccess

@@ -16,7 +16,7 @@
     if (!$('#alshaya-algolia-search').hasClass('show-algolia-result') && !$('#alshaya-algolia-search').is(':visible')) {
       return;
     }
-    Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
+    Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_algolia_product_impression, $('#alshaya-algolia-search'), drupalSettings, event);
     // Avoid triggering again for each page.
     var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val().trim();
     if (_.indexOf(searchQuery, currentsearch) < 0 && initNoOfResults !== noOfResult) {
@@ -36,20 +36,20 @@
     }
 
     $(window).once('alshaya-seo-gtm-product-search-algolia').on('scroll', debounce(function (event) {
-      Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
+      Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_algolia_product_impression, $('#alshaya-algolia-search'), drupalSettings, event);
     }, 500));
   }, drupalSettings.gtm.algolia_trigger_ga_after));
 
-  /**
-   * Helper function to push productImpression to GTM.
-   *
-   * @param customerType
-   */
-  Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression = function () {
-    // Send impression for each product added on page (page 1 or X).
+  Drupal.alshaya_seo_gtm_prepare_algolia_product_impression = function(context, eventType, currentQueueSize) {
     var searchImpressions = [];
+
     $('#alshaya-algolia-search [gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible').each(function () {
-      if ($(this).isElementInViewPort(0, 10)) {
+      var condition = true;
+      // Only on scroll we check if product is in view or not.
+      if (eventType === 'scroll') {
+        condition = $(this).isElementInViewPort(0, 10);
+      }
+      if (condition) {
         $(this).addClass('impression-processed');
         var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
         impression.list = 'Search Results Page';
@@ -63,13 +63,20 @@
           var position = $(this).attr('data-insights-position');
           Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.reactTeaserView.price.currency, 'Search Results Page', position);
         });
+
+        // When search results load, process only the required number of
+        // items and push to datalayer.
+        if ((eventType === 'search-results-updated')
+          && (searchImpressions.length === (drupalSettings.gtm.productImpressionQueueSize - currentQueueSize))
+        ) {
+          // This is to break out from the .each() function.
+          return false;
+        }
       }
     });
 
-    if (searchImpressions.length > 0) {
-      Drupal.alshaya_seo_gtm_push_impressions(drupalSettings.reactTeaserView.price.currency, searchImpressions);
-    }
-  };
+    return searchImpressions;
+  }
 
   // Push Filter event to GTM.
   $('body').once('bind-facet-item-click').on('click','.facet-item', function(event) {
