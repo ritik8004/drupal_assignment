@@ -28,7 +28,7 @@ export default class CnCBillingAddress extends React.Component {
     this.state = {
       shippingAsBilling: isBillingSameAsShippingInStorage(),
     };
-    this.processBillingUpdate = this.processBillingUpdate.bind(this);
+
     // Check and remove flag on load.
     removeBillingFlagFromStorage(props.cart);
   }
@@ -46,7 +46,7 @@ export default class CnCBillingAddress extends React.Component {
   /**
    * Event handler for billing update.
    */
-  processBillingUpdate(e) {
+  processBillingUpdate = (e) => {
     if (this.isComponentMounted) {
       const data = e.detail;
       const { refreshCart } = this.props;
@@ -66,7 +66,7 @@ export default class CnCBillingAddress extends React.Component {
       // Refresh cart.
       refreshCart(data);
     }
-  }
+  };
 
   /**
    * Process address form submission.
