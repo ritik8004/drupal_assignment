@@ -5,7 +5,7 @@ namespace Drupal\alshaya_social_facebook\EventSubscriber;
 use Drupal\alshaya_social\AlshayaSocialHelper;
 use Drupal\social_auth\AuthManager\OAuth2ManagerInterface;
 use Drupal\social_auth\Event\SocialAuthEvents;
-use Drupal\social_auth\Event\SocialAuthUserFieldsEvent;
+use Drupal\social_auth\Event\UserFieldsEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -55,12 +55,12 @@ class AlshayaSocialFacebookSubscriber implements EventSubscriberInterface {
   /**
    * Add first name and last name info from facebook profile.
    *
-   * @param \Drupal\social_auth\Event\SocialAuthUserFieldsEvent $event
+   * @param \Drupal\social_auth\Event\UserFieldsEvent $event
    *   The social auth user fields event object.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  public function onUserFields(SocialAuthUserFieldsEvent $event) {
+  public function onUserFields(UserFieldsEvent $event) {
     if ($event->getPluginId() !== 'social_auth_facebook') {
       return;
     }
