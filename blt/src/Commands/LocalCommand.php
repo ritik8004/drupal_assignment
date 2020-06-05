@@ -83,8 +83,8 @@ class LocalCommand extends BltTasks {
       // If we're running Lando, our best option is to flush our memcache
       // services.
       $this->say('Flushing memcache servers.');
-      $this->_exec('echo "flush_all" > nc -q 2 memcache1 11211');
-      $this->_exec('echo "flush_all" > nc -q 2 memcache2 11211');
+      $this->_exec('echo "flush_all" | nc -q 2 memcache1 11211');
+      $this->_exec('echo "flush_all" | nc -q 2 memcache2 11211');
     }
     else {
       $this->say('Restarting memcache service');
