@@ -24,7 +24,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     And I wait 10 seconds
     Then I fill in "edit-name" with "{spc_user_email}"
     And I fill in "edit-pass" with "{spc_user_password}"
-    Then I press "edit-submit
+    Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
@@ -63,7 +63,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     And I wait 10 seconds
     Then I fill in "edit-name" with "{spc_user_email}"
     And I fill in "edit-pass" with "{spc_user_password}"
-    Then I press "edit-submit
+    Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
@@ -102,7 +102,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     And I wait 10 seconds
     Then I fill in "edit-name" with "{spc_user_email}"
     And I fill in "edit-pass" with "{spc_user_password}"
-    Then I press "edit-submit
+    Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
