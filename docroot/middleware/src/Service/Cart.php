@@ -12,6 +12,7 @@ use App\Service\Magento\CartActions;
 use App\Service\CheckoutCom\CustomerCards;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Psr\Log\LoggerInterface;
+use Drupal\alshaya_master\helper\SortUtility;
 
 /**
  * Class Cart.
@@ -1290,6 +1291,51 @@ class Cart {
     $this->cache->delete('payment_methods_home_delivery');
     $this->cache->delete('payment_methods_click_and_collect');
     $this->cache->delete('payment_method');
+  }
+
+  /**
+   * Get cart stores from magento.
+   *
+   * @param float $lat
+   *   The latitude.
+   * @param float $lon
+   *   The longitude.
+   *
+   * @return array|mixed
+   *   Return array of stores.
+   *
+   * @throws \Exception
+   */
+  public function getCartStores($lat, $lon) {
+    $cart_id = $this->getCartId();
+    $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
+    try {
+      if (empty($stores = $this->magentoApiWrapper->doRequest('GET', $endpoint, []))) {
+        return $stores;
+      }
+
+      foreach ($stores as &$store) {
+        $store_info = $this->drupal->getStoreInfo($store['code']);
+        $store += $store_info;
+        $store['formatted_distance'] = number_format((float) $store['distance'], 2, '.', '');
+        $store['delivery_time'] = $store['sts_delivery_time_label'];
+        if ($store['rnc_available']) {
+          $store['delivery_time'] = $store['rnc_config'];
+        }
+        unset($store['rnc_config']);
+      }
+
+      // Sort the stores first by distance and then by name.
+      SortUtility::sortByMultipleKey($stores, 'rnc_available', 'desc', 'distance', 'asc');
+      return $stores;
+    }
+    catch (\Exception $e) {
+      // Exception handling here.
+      $this->logger->error('Error occurred while fetching stores for cart id @cart_id, API Response: @response', [
+        '@cart_id' => $cart_id,
+        '@response' => $e->getMessage(),
+      ]);
+    }
   }
 
 }
