@@ -135,7 +135,7 @@ class CheckoutDefaults {
       // Get the stores list via Drupal only to ensure we get other validations
       // and configuration checks applied, for eg. if CNC is disabled complete
       // from Drupal Config.
-      $availableStores = $this->drupal->getCartStores($this->cart->getCartId(), $store['lat'], $store['lng']);
+      $availableStores = $this->cart->getCartStores($store['lat'], $store['lng']);
       $availableStoreCodes = array_column($availableStores ?? [], 'code');
       if (in_array($store['code'], $availableStoreCodes)) {
         return $this->selectCnc($store, $address, $order['billing_commerce_address']);
