@@ -1,0 +1,68 @@
+.c-footer__logo--verisign,
+.c-footer__logo--visa,
+.c-footer__logo--mastercard {
+  background-position: center;
+}
+
+.c-footer-secondary {
+  padding: 0;
+
+  .c-footer__copy {
+    @include breakpoint($tablet) {
+      .country-ae & {
+        padding: 0;
+        height: auto;
+        order: 2;
+        align-self: center;
+      }
+
+      margin-#{$right}: 0;
+      text-align: $left;
+      max-width: 55%;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 1.4375rem 0.875rem;
+    }
+
+    .field--name-body {
+      p {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  &__region {
+    @include breakpoint($only-tablet) {
+      padding: 0.625rem 1.25rem;
+    }
+  }
+}
+
+.region__footer-secondary {
+  .country-ae & {
+    @include breakpoint($tablet) {
+      display: flex;
+      flex-flow: row nowrap;
+      padding: 0.875rem 0;
+    }
+  }
+}
+
+.c-footer__logos {
+  .country-ae & {
+    @include breakpoint($tablet) {
+      order: 1;
+      align-self: center;
+    }
+  }
+}
+
+.menu--customer-rights-logo {
+  .country-ae & {
+    @include breakpoint($tablet) {
+      order: 3;
+      align-self: center;
+    }
+  }
+}

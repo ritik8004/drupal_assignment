@@ -1,0 +1,89 @@
+.recent__orders--list {
+  .order--items {
+    text-transform: capitalize;
+    font-family: $bp-light;
+  }
+}
+
+#block-userrecentorders {
+  h2.subtitle {
+    .path--user & {
+      text-transform: capitalize;
+      font-size: 1.125rem;
+    }
+  }
+
+  .order-summary-row td:first-child .light {
+    font-size: 0.875rem;
+
+    &.order--date--time {
+      @include breakpoint($only-tablet) {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+.user__order--detail {
+  .light {
+    text-transform: capitalize;
+  }
+
+  .store-name-and-address {
+    .store-map-link {
+      a {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.order-detail {
+  .print--button {
+    @include breakpoint($desktop) {
+      top: 0.5rem;
+    }
+  }
+
+  .order-transaction + td .dark {
+    text-transform: capitalize;
+    font-family: $bp-light;
+  }
+}
+
+#block-content {
+  .order-items li {
+    a {
+      &::after {
+        @include breakpoint($only-mobile) {
+          font-size: 2rem;
+        }
+      }
+
+      .light {
+        @include breakpoint($upto-desktop) {
+          font-size: 0.875rem;
+        }
+      }
+
+      .dark {
+        @include breakpoint($upto-desktop) {
+          font-size: 0.875rem;
+
+          &.order-name {
+            font-size: 0.8125rem;
+            text-transform: capitalize;
+          }
+        }
+      }
+
+      > div > div {
+        @include breakpoint($only-mobile) {
+          padding: 0 0.5rem;
+        }
+      }
+    }
+  }
+}
