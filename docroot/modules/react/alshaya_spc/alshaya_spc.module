@@ -70,8 +70,7 @@ function alshaya_spc_form_sku_base_form_alter(&$form, FormStateInterface $form_s
  *   Middleware url.
  */
 function _alshaya_spc_get_middleware_url() {
-  $host_url = \Drupal::request()->getHost();
-  return 'https://' . $host_url . '/middleware/public';
+  return '/middleware/public';
 }
 
 /**
