@@ -204,7 +204,7 @@ class CartController {
     // if current cart is associated with logged in user or not.
     $sessionCustomerId = $this->getDrupalInfo('customer_id');
     if ($sessionCustomerId && (empty($data['customer']['id']) || $data['customer']['id'] != $sessionCustomerId)) {
-      $this->cart->associateCartToCustomer($sessionCustomerId);
+      $this->cart->associateCartToCustomer($sessionCustomerId, TRUE);
       $data = $this->cart->getCart();
     }
 
@@ -265,20 +265,25 @@ class CartController {
     $data['appliedRules'] = $cart_data['cart']['applied_rule_ids'] ?? [];
 
     $data['items_qty'] = $cart_data['cart']['items_qty'];
-    $data['cart_total'] = $cart_data['totals']['base_grand_total'];
+    $data['cart_total'] = $cart_data['totals']['base_grand_total'] ?? 0;
     $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
     $data['totals'] = [
-      'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'],
-      'base_grand_total' => $cart_data['totals']['base_grand_total'],
-      'discount_amount' => $cart_data['totals']['discount_amount'],
+      'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'] ?? 0,
+      'base_grand_total' => $cart_data['totals']['base_grand_total'] ?? 0,
+      'discount_amount' => $cart_data['totals']['discount_amount'] ?? 0,
       'surcharge' => 0,
     ];
 
-    $data['totals']['shipping_incl_tax'] = !empty($cart_data['shipping']['method'])
-      ? $cart_data['totals']['shipping_incl_tax'] ?? 0
-      : NULL;
+    if (empty($cart_data['shipping']) || empty($cart_data['shipping']['method'])) {
+      // We use null to show "Excluding Delivery".
+      $data['totals']['shipping_incl_tax'] = NULL;
+    }
+    elseif ($cart_data['shipping']['type'] !== 'click_and_collect') {
+      // For click_n_collect we don't want to show this line at all.
+      $data['totals']['shipping_incl_tax'] = $cart_data['totals']['shipping_incl_tax'] ?? 0;
+    }
 
-    if (is_array($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
+    if (is_array($data['surcharge']) && !empty($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
       $data['totals']['surcharge'] = $data['surcharge']['amount'];
     }
 
@@ -743,7 +748,7 @@ class CartController {
         return $this->getCart();
       }
 
-      $this->cart->associateCartToCustomer($customer['customer_id']);
+      $this->cart->associateCartToCustomer($customer['customer_id'], TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error while associating cart to customer. Error message: @message', [
@@ -753,6 +758,42 @@ class CartController {
     }
 
     return $this->getCart();
+  }
+
+  /**
+   * Fetch stores for the current cart for given lat and lng.
+   *
+   * @param float $lat
+   *   The latitude.
+   * @param float $lon
+   *   The longitude.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return stores list or error message.
+   */
+  public function getCncStores(float $lat, float $lon) {
+    if (empty($this->cart->getCartId())) {
+      $this->logger->error('Error while fetching click and collect stores. No cart available in session');
+      return new JsonResponse(
+        $this->utility->getErrorResponse('No cart in session', 404)
+      );
+    }
+
+    try {
+      $result = $this->cart->getCartStores($lat, $lon);
+      return new JsonResponse($result);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while fetching store for cart @cart of @lat, @lng. Error message: @message', [
+        '@cart' => $this->cart->getCartId(),
+        '@lat' => $lat,
+        '@lng' => $lon,
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse(
+        $this->utility->getErrorResponse($e->getMessage(), $e->getCode())
+      );
+    }
   }
 
 }

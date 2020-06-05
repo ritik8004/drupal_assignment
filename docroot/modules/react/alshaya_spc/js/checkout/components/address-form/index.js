@@ -184,6 +184,7 @@ export default class AddressForm extends React.Component {
       closeModal,
       showEmail,
       formContext,
+      shippingAsBilling = null,
     } = this.props;
 
     const {
@@ -204,7 +205,7 @@ export default class AddressForm extends React.Component {
       mapToAddressFormBtnText = getStringMessage('billing_select_my_location');
     }
 
-    let isEditAddress = false;
+    let isEditAddress = shippingAsBilling ? !shippingAsBilling : false;
     // If address has area value set on load, means
     // we are editing address.
     if (defaultAddressVal !== null
@@ -217,7 +218,7 @@ export default class AddressForm extends React.Component {
         dynamicFields.push(
           <DynamicFormField
             key={key}
-            default_val={defaultAddressVal}
+            default_val={shippingAsBilling ? '' : defaultAddressVal}
             areasUpdate={this.refreshAreas}
             area_list={areaList}
             cityChanged={cityChanged}
