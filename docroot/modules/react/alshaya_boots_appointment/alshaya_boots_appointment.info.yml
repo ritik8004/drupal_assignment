@@ -1,7 +1,0 @@
-name: Alshaya Boots appointment booking module
-type: module
-description: 'Implements Boots appointment booking.'
-package: 'Alshaya'
-core: 8.x
-dependencies:
-  - alshaya_react:alshaya_react

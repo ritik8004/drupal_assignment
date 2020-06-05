@@ -1,15 +1,15 @@
 <?php
 
-namespace Drupal\alshaya_boots_appointment\Controller;
+namespace Drupal\alshaya_appointment\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 
 /**
- * Class AlshayaBootsAppointmentController.
+ * Class AlshayaAppointmentController.
  *
  * @package Drupal\alshaya_appointments\Controller
  */
-class AlshayaBootsAppointmentController extends ControllerBase {
+class AlshayaAppointmentController extends ControllerBase {
 
   /**
    * Appointment multi step form page.
@@ -23,7 +23,7 @@ class AlshayaBootsAppointmentController extends ControllerBase {
       '#markup' => '<div id="appointment-booking"></div>',
       '#attached' => [
         'library' => [
-          'alshaya_boots_appointment/alshaya_boots_appointment',
+          'alshaya_appointment/alshaya_appointment',
         ],
       ],
     ];

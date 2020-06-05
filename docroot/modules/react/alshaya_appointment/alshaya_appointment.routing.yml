@@ -1,0 +1,6 @@
+alshaya_appointment.page:
+  path: '/appointment/booking'
+  defaults:
+    _controller: \Drupal\alshaya_appointment\Controller\AlshayaAppointmentController::appointment
+  requirements:
+    _permission: 'access content'

@@ -1,4 +1,4 @@
-alshaya_boots_appointment:
+alshaya_appointment:
   js:
     dist/appointment.js: {}
   dependencies:
