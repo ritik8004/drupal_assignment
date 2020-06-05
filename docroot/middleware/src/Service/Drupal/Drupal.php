@@ -227,26 +227,4 @@ class Drupal {
     return json_decode($result, TRUE);
   }
 
-  /**
-   * Get available stores for the cart for given location.
-   *
-   * @param int $cart_id
-   *   Cart id.
-   * @param string $latitude
-   *   The latitude.
-   * @param string $longitude
-   *   The longitude.
-   *
-   * @return mixed
-   *   Return stores list.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  public function getCartStores(int $cart_id, string $latitude, string $longitude) {
-    $url = sprintf('/cnc/stores/%d/%s/%s', $cart_id, $latitude, $longitude);
-    $response = $this->invokeApi('GET', $url);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
-  }
-
 }

@@ -760,4 +760,40 @@ class CartController {
     return $this->getCart();
   }
 
+  /**
+   * Fetch stores for the current cart for given lat and lng.
+   *
+   * @param float $lat
+   *   The latitude.
+   * @param float $lon
+   *   The longitude.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return stores list or error message.
+   */
+  public function getCncStores(float $lat, float $lon) {
+    if (empty($this->cart->getCartId())) {
+      $this->logger->error('Error while fetching click and collect stores. No cart available in session');
+      return new JsonResponse(
+        $this->utility->getErrorResponse('No cart in session', 404)
+      );
+    }
+
+    try {
+      $result = $this->cart->getCartStores($lat, $lon);
+      return new JsonResponse($result);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while fetching store for cart @cart of @lat, @lng. Error message: @message', [
+        '@cart' => $this->cart->getCartId(),
+        '@lat' => $lat,
+        '@lng' => $lon,
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse(
+        $this->utility->getErrorResponse($e->getMessage(), $e->getCode())
+      );
+    }
+  }
+
 }
