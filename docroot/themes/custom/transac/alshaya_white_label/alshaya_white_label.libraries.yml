@@ -53,7 +53,9 @@ slider_banner:
     js/slider.js: {}
   dependencies:
     - core/jquery
+    - core/drupal
     - alshaya_white_label/slick
+    - alshaya_white_label/alshaya_image_lazy_load
 
 delivery_usp:
   js:
