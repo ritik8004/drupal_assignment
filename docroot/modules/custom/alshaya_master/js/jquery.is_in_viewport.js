@@ -8,10 +8,12 @@
    *   To be used when we want only some part of the element to be visisble. We
    *   specify an offset from the top of the element that should be in the
    *   screen.
+   * @param {boolean} isCarouselItem
+   *   If item is a carousel item, pass true else false.
    *
    * @returns {boolean}
    */
-  $.fn.isElementInViewPort = function (offset, elementPartialOffsetTop) {
+  $.fn.isElementInViewPort = function (offset, elementPartialOffsetTop, isCarouselItem) {
     try {
       // Get element top and bottom.
       var elementTop = $(this).offset().top - offset;
@@ -31,6 +33,13 @@
       var viewportLeft = $(window).scrollLeft();
       var viewportRight = viewportLeft + $(window).width();
 
+      if (isCarouselItem === true
+        && elementTop >= viewportTop
+        && elementBottom <= viewportBottom
+      ) {
+        return isCarouselItemActive($(this));
+      }
+
       return elementTop >= viewportTop
       && elementBottom <= viewportBottom
       && elementLeft >= viewportLeft
@@ -41,4 +50,17 @@
     }
   }
 
+  /**
+   * The function checks if a carousel item is in view or not.
+   *
+   *   This is tightly coupled with slick at the moment. If later the carousel
+   * library changes, only code needs to be changed here to determine if
+   * the carousel item is in view or not.
+   *
+   * @param {object} element
+   *   The object inside individual row of the carousel markup.
+   */
+  var isCarouselItemActive = function (element) {
+    return (element.parent().hasClass('slick-active')) ? true : false;
+  }
 }(jQuery));

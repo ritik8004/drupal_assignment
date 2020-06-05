@@ -16,7 +16,7 @@ const GTM_CONSTANTS = {
   var gtm_execute_onetime_events = true;
   var currentListName = null;
   var productImpressions = [];
-  var productImpressionsTimer;
+  var productImpressionsTimer = null;
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {

@@ -588,3 +588,18 @@ function alshaya_seo_transac_views_pre_render(ViewExecutable $view) {
     $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   }
 }
+
+/**
+ * Implements hook_preprocess_views_view().
+ */
+function alshaya_seo_transac_preprocess_views_view(array &$variables) {
+  $view = $variables['view'];
+  if ($view->id() === 'product_slider' && $view->current_display === 'block_product_slider') {
+    $rows = $variables['rows'][0];
+    foreach ($rows['#rows'] as $key => $value) {
+      $rows['#rows'][$key]['#attributes'] = \Drupal::service('alshaya_seo_transac.gtm_manager')
+        ->fetchProductGtmAttributes($rows['#rows'][$key]['#node'], $rows['#rows'][$key]['#view_mode']);
+    }
+    $variables['rows'][0] = $rows;
+  }
+}

@@ -1444,6 +1444,7 @@ function alshaya_acm_product_is_buyable(SKU $sku_entity) {
 function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) {
   if (!empty($variables['data'])) {
     $variables['data'] = views_embed_view($variables['views_name'], $variables['views_display_id'], implode(',', $variables['data']));
+    $variables['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   }
 }
 
