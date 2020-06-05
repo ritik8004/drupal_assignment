@@ -8,6 +8,16 @@
   img {
     width: 100%;
     height: auto;
+    object-fit: cover;
+    max-height: 10.5rem;
+
+    @include breakpoint($tablet) {
+      max-height: 15.875rem;
+    }
+
+    @include breakpoint($desktop) {
+      max-height: 26.5rem;
+    }
   }
 
   @include breakpoint($tablet) {
@@ -74,6 +84,13 @@
       top: 45% !important;
       top: calc(50% - 1.125rem) !important;
     }
+  }
+
+  .slick-dots {
+    position: absolute;
+    #{$left}: 50%;
+    transform: translate(-50%, 0);
+    bottom: 0;
   }
 }
 
