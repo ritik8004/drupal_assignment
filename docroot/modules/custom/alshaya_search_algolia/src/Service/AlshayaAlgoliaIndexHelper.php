@@ -246,8 +246,18 @@ class AlshayaAlgoliaIndexHelper {
     $object['body'] = $this->renderer->renderPlain($description);
 
     $object['field_category_name'] = $this->getCategoryHierarchy($node, $node->language()->getId());
+
+    // Override the config language to the language of the node.
+    $language = $this->languageManager->getLanguage($node->language()->getId());
+    $original_language = $this->languageManager->getConfigOverrideLanguage();
+    $this->languageManager->setConfigOverrideLanguage($language);
+
     $sku_price_block = $this->skuPriceHelper->getPriceBlockForSku($sku);
     $object['rendered_price'] = $this->renderer->renderPlain($sku_price_block);
+
+    // Restore the language manager to it's original language.
+    $this->languageManager->setConfigOverrideLanguage($original_language);
+
     $prices = $this->skuManager->getMinPrices($sku, $product_color);
     $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
