@@ -28,7 +28,8 @@
             "App\\": "src/",
             "Drupal\\Component\\": "../core/lib/Drupal/Component",
             "Drupal\\alshaya_spc\\": "../modules/react/alshaya_spc/src",
-            "Drupal\\alshaya_acm_customer\\": "../modules/custom/alshaya_acm_customer/src"
+            "Drupal\\alshaya_acm_customer\\": "../modules/custom/alshaya_acm_customer/src",
+            "Drupal\\alshaya_master\\": "../modules/custom/alshaya_master/src"
         }
     },
     "autoload-dev": {
