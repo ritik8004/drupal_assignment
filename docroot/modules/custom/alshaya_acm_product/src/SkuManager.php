@@ -3604,7 +3604,7 @@ class SkuManager {
       $parent_sku = $sku;
     }
 
-    if ($parent_sku->getType() === 'simple') {
+    if ($parent_sku->getType() == 'simple') {
       return [];
     }
 
