@@ -19,7 +19,6 @@ export default class AddressList extends React.Component {
 
   constructor(props) {
     super(props);
-    this.closeModal = this.closeModal.bind(this);
     this.state = {
       addressList: [],
     };
@@ -47,9 +46,9 @@ export default class AddressList extends React.Component {
     document.removeEventListener('closeAddressListPopup', this.closeModal);
   }
 
-  closeModal() {
+  closeModal = () => {
     if (this.isComponentMounted) {
-      dispatchCustomEvent('closeModal', 'addNewAddress');
+      dispatchCustomEvent('closeModal', 'hdAddressList');
     }
   }
 
@@ -124,7 +123,7 @@ export default class AddressList extends React.Component {
           &times;
         </a>
         <div className="address-list-content">
-          <WithModal modalStatusKey="addNewAddress">
+          <WithModal modalStatusKey="hdAddressList">
             {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
               <>
                 <div className="spc-add-new-address-btn" onClick={() => triggerOpenModal(2)}>
