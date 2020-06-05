@@ -10,11 +10,11 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
- * Reindex data to get translated rendered price.
+ * Queue all products for re-indexation.
+ * Done to add translated rendered_price for all products.
  */
 function alshaya_search_algolia_update_8004() {
-  $index = \Drupal::entityTypeManager()->getStorage('search_api_index')->load('alshaya_algolia_index');
-  $index->reindex();
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**
