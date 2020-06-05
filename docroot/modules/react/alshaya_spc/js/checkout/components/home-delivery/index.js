@@ -20,6 +20,11 @@ const AddressContent = React.lazy(() => import('../address-popup-content'));
 export default class HomeDeliveryInfo extends React.Component {
   isComponentMounted = false;
 
+  constructor(props) {
+    super(props);
+    this.eventListener = this.eventListener.bind(this);
+  }
+
   componentDidMount() {
     this.isComponentMounted = true;
     document.addEventListener('refreshCartOnAddress', this.eventListener);
@@ -36,14 +41,14 @@ export default class HomeDeliveryInfo extends React.Component {
     checkoutAddressProcess(e);
   };
 
-  eventListener = (e) => {
+  eventListener(e) {
     if (this.isComponentMounted) {
       dispatchCustomEvent('closeModal', 'hdInfo');
     }
     const data = e.detail;
     const { refreshCart } = this.props;
     refreshCart(data);
-  };
+  }
 
   /**
    * Format address for edit address.
