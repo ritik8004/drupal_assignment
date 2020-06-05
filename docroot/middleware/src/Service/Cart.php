@@ -12,7 +12,7 @@ use App\Service\Magento\CartActions;
 use App\Service\CheckoutCom\CustomerCards;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Psr\Log\LoggerInterface;
-use Drupal\alshaya_master\helper\SortUtility;
+use Drupal\alshaya_master\Helper\SortUtility;
 
 /**
  * Class Cart.
