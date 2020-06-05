@@ -21,7 +21,6 @@ class ClicknCollectDeiveryInfo extends React.Component {
     this.state = {
       showSelectedStore: false,
     };
-    this.eventListener = this.eventListener.bind(this);
   }
 
   componentDidMount() {
@@ -43,14 +42,14 @@ class ClicknCollectDeiveryInfo extends React.Component {
     callback();
   };
 
-  eventListener({ detail }) {
+  eventListener = ({ detail }) => {
     if (this.isComponentMounted) {
       dispatchCustomEvent('closeModal', 'cncDelivery');
     }
     const data = detail;
     const { refreshCart } = this.props;
     refreshCart(data);
-  }
+  };
 
   /**
    * Fetch click n collect stores and update store list.

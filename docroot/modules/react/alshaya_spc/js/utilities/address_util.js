@@ -682,9 +682,6 @@ export const processBillingUpdateFromForm = (e, shipping) => {
 
                   // Trigger the event for update.
                   dispatchCustomEvent('onBillingAddressUpdate', cartInfo);
-
-                  // Close the addresslist popup.
-                  dispatchCustomEvent('closeAddressListPopup', true);
                 });
               }
             });
