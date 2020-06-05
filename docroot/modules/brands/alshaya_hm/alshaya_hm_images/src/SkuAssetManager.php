@@ -344,7 +344,7 @@ class SkuAssetManager {
 
     // Prepare the directory path.
     $directory = ($asset_type === 'video')
-      ? 'brand://' . $asset_type . '/' . trim($data['path'], '/')
+      ? 's3://product/assets/' . $asset_type . '/' . $sku . '/' . trim($data['path'], '/')
       : 'public://assets-shared/' . trim($data['path'], '/');
     $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
 

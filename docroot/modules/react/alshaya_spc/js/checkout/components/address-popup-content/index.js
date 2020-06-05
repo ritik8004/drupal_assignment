@@ -13,6 +13,7 @@ const AddressContent = (props) => {
     showEditButton,
     type,
     formContext,
+    shippingAsBilling = null,
   } = props;
 
   if (window.drupalSettings.user.uid > 0
@@ -39,6 +40,7 @@ const AddressContent = (props) => {
       headingText={headingText}
       processAddress={processAddress}
       formContext={formContext}
+      shippingAsBilling={shippingAsBilling}
     />
   );
 };
