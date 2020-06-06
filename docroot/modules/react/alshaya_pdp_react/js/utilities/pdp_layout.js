@@ -117,15 +117,6 @@ export const triggerAddToCart = (
       productData.totalQty = cartItem.qty;
     }
 
-    const form = document.getElementsByClassName('sku-base-form')[0];
-    const cartNotification = new CustomEvent('product-add-to-cart-success', {
-      detail: {
-        response,
-        productData,
-      },
-    });
-    form.dispatchEvent(cartNotification);
-
     let configurables = [];
     let productUrl = productInfo[skuCode].url;
     let price = productInfo[skuCode].priceRaw;
@@ -172,6 +163,15 @@ export const triggerAddToCart = (
 
     const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data() { return response.data; } } });
     document.dispatchEvent(refreshCartEvent);
+
+    const form = document.getElementsByClassName('sku-base-form')[0];
+    const cartNotification = new CustomEvent('product-add-to-cart-success', {
+      detail: {
+        response,
+        productData,
+      },
+    });
+    form.dispatchEvent(cartNotification);
   }
 };
 
