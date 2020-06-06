@@ -3,7 +3,6 @@ import React from 'react';
 const DefaultSelectOptions = (props) => {
   const {
     attr,
-    groupData,
     value,
   } = props;
 
@@ -11,7 +10,6 @@ const DefaultSelectOptions = (props) => {
     <option
       value={attr}
       key={attr}
-      groupdata={groupData}
     >
       {value}
     </option>

@@ -9,6 +9,8 @@ class CartSelectOption extends React.Component {
       isGroup, configurables,
     } = this.props;
     let defaultGroup = null;
+
+
     if (isGroup) {
       const { alternates } = configurables;
       const { code } = configurables;
@@ -21,6 +23,8 @@ class CartSelectOption extends React.Component {
     };
   }
 
+  // To get the option values of the
+  // selected group.
   groupSelect = (e, group) => {
     e.preventDefault();
     this.setState({
@@ -29,7 +33,6 @@ class CartSelectOption extends React.Component {
   }
 
   handleSelectionChanged = (e, code) => {
-    e.preventDefault();
     const codeValue = e.target.value;
     const {
       configurableCombinations,
@@ -45,7 +48,10 @@ class CartSelectOption extends React.Component {
     });
     const variantSelected = configurableCombinations[skuCode].byAttribute[selectedCombination];
 
+    // Refresh the PDP page on new variant selection.
     pdpRefresh(variantSelected);
+
+    // Get available values for the selected variables.
     refreshConfigurables(code, codeValue, variantSelected);
   }
 
