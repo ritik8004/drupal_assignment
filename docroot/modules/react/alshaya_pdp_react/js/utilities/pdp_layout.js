@@ -117,6 +117,15 @@ export const triggerAddToCart = (
       productData.totalQty = cartItem.qty;
     }
 
+    const form = document.getElementsByClassName('sku-base-form')[0];
+    const cartNotification = new CustomEvent('product-add-to-cart-success', {
+      detail: {
+        response,
+        productData,
+      },
+    });
+    form.dispatchEvent(cartNotification);
+
     let configurables = [];
     let productUrl = productInfo[skuCode].url;
     let price = productInfo[skuCode].priceRaw;
@@ -164,4 +173,56 @@ export const triggerAddToCart = (
     const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data() { return response.data; } } });
     document.dispatchEvent(refreshCartEvent);
   }
+};
+
+export const getProductValues = (skuItemCode, variant, setVariant) => {
+  let brandLogo; let brandLogoAlt; let
+    brandLogoTitle = null;
+  let configurableCombinations = '';
+
+  const { productInfo } = drupalSettings;
+  let title = '';
+  let priceRaw = '';
+  let finalPrice = '';
+  let pdpGallery = '';
+  if (skuItemCode) {
+    if (productInfo[skuItemCode].brandLogo) {
+      brandLogo = productInfo[skuItemCode].brandLogo.logo
+        ? productInfo[skuItemCode].brandLogo.logo : null;
+      brandLogoAlt = productInfo[skuItemCode].brandLogo.alt
+        ? productInfo[skuItemCode].brandLogo.alt : null;
+      brandLogoTitle = productInfo[skuItemCode].brandLogo.title
+        ? productInfo[skuItemCode].brandLogo.title : null;
+    }
+    title = productInfo[skuItemCode].title;
+    priceRaw = productInfo[skuItemCode].priceRaw;
+    finalPrice = productInfo[skuItemCode].finalPrice;
+    pdpGallery = productInfo[skuItemCode].rawGallery;
+    if (productInfo[skuItemCode].type === 'configurable') {
+      configurableCombinations = drupalSettings.configurableCombinations;
+      if (variant == null) {
+        setVariant(configurableCombinations[skuItemCode].firstChild);
+      } else {
+        title = productInfo[skuItemCode].variants[variant].title;
+        priceRaw = productInfo[skuItemCode].variants[variant].priceRaw;
+        finalPrice = productInfo[skuItemCode].variants[variant].finalPrice;
+        pdpGallery = productInfo[skuItemCode].variants[variant].rawGallery;
+      }
+    }
+  }
+  const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
+  const description = skuItemCode ? productInfo[skuItemCode].description : [];
+
+  return {
+    brandLogo,
+    brandLogoAlt,
+    brandLogoTitle,
+    title,
+    priceRaw,
+    finalPrice,
+    pdpGallery,
+    shortDesc,
+    description,
+    configurableCombinations,
+  };
 };

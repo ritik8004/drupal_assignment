@@ -1,11 +1,12 @@
 import React from 'react';
+import AvailableSelectOptions from '../available-select-options';
+import DefaultSelectOptions from '../default-select-options';
 
 const GroupSelectOption = (props) => {
   const {
     groupSelect,
     handleSelectionChanged,
     configurables,
-    showGroup,
     groupName,
     code,
     nextCode,
@@ -20,88 +21,30 @@ const GroupSelectOption = (props) => {
         ))}
       </div>
       <div className="group-option-wrapper">
-        {(showGroup && groupName) ? (
-          <select id={code} className="select-attribute-group clicked" onChange={(e) => handleSelectionChanged(e, code)}>
-            {Object.keys(configurables.values).map((attr) => {
-              if (code === nextCode) {
-                if (nextValues.indexOf(attr) !== -1) {
-                  return (
-                    <option
-                      value={attr}
-                      key={attr}
-                      groupdata={JSON.stringify(configurables.values[attr])}
-                    >
-                      {configurables.values[attr][groupName]}
-                    </option>
-                  );
-                }
-                return (
-                  <option
-                    value={attr}
-                    key={attr}
-                    groupdata={JSON.stringify(configurables.values[attr])}
-                    disabled
-                  >
-                    {configurables.values[attr][groupName]}
-                  </option>
-                );
-              }
+        <select id={code} className="select-attribute-group clicked" onChange={(e) => handleSelectionChanged(e, code)}>
+          {Object.keys(configurables.values).map((attr) => {
+            // If the currennt attribute matches the
+            // attribute code of the available values.
+            if (code === nextCode) {
               return (
-                <option
-                  value={attr}
+                <AvailableSelectOptions
+                  nextValues={nextValues}
+                  attr={attr}
+                  value={configurables.values[attr][groupName]}
                   key={attr}
-                  groupdata={JSON.stringify(configurables.values[attr])}
-                >
-                  {configurables.values[attr][groupName]}
-                </option>
+                />
               );
-            })}
-          </select>
-        ) : (
-          <>
-            <select
-              id={code}
-              className="select-attribute-group"
-              onChange={(e) => handleSelectionChanged(e, code)}
-            >
-              {Object.keys(configurables.values).map((attr) => {
-                if (code === nextCode) {
-                  if (nextValues.indexOf(attr) !== -1) {
-                    return (
-                      <option
-                        value={attr}
-                        key={attr}
-                        groupdata={JSON.stringify(configurables.values[attr])}
-                      >
-                        {configurables.values[attr][Object.keys(configurables.values[attr])[0]]}
-                      </option>
-                    );
-                  }
-                  return (
-                    <option
-                      value={attr}
-                      key={attr}
-                      groupdata={JSON.stringify(configurables.values[attr])}
-                      disabled
-                    >
-                      {configurables.values[attr][Object.keys(configurables.values[attr])[0]]}
-                    </option>
-                  );
-                }
-                return (
-                  <option
-                    value={attr}
-                    key={attr}
-                    groupdata={JSON.stringify(configurables.values[attr])}
-                  >
-                    {configurables.values[attr][Object.keys(configurables.values[attr])[0]]}
-                  </option>
-                );
-              })}
-            </select>
-          </>
-        )}
-
+            }
+            // Show the default options.
+            return (
+              <DefaultSelectOptions
+                attr={attr}
+                value={configurables.values[attr][groupName]}
+                key={attr}
+              />
+            );
+          })}
+        </select>
       </div>
     </>
   );
