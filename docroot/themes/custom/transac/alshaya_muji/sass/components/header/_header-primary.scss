@@ -681,15 +681,16 @@ header {
         &::after {
           content: '';
           height: 0.125rem;
-          width: 1.5625rem;
           transition: all 0.3s ease-out;
-          margin: 0.625rem auto 0;
+          margin: 0.725rem auto 0;
           display: block;
         }
       }
 
       &:hover {
         a.menu--one__link {
+          color: $primary_link-hover !important;
+
           &::after {
             background-color: $primary_link-hover;
             visibility: visible;
@@ -1023,7 +1024,6 @@ header {
 
               @include breakpoint($desktop) {
                 color: $header_c_menu_text;
-                text-shadow: 0 0 1px $black;
               }
             }
           }
@@ -1067,6 +1067,34 @@ header {
           text-decoration: none;
         }
       }
+    }
+  }
+}
+
+// search box requires overlay.
+.block-alshaya-algolia-react-autocomplete {
+  &::before {
+    @include breakpoint($only-tablet) {
+      content: '';
+      background: transparent;
+      position: absolute;
+      z-index: -1;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    }
+  }
+}
+
+.mobile--overlay .block-alshaya-algolia-react-autocomplete {
+  &::before {
+    @include breakpoint($only-tablet) {
+      opacity: 1;
+      z-index: 1;
+      background: $header_mobile_menu_overlay;
     }
   }
 }
