@@ -1,0 +1,11 @@
+.c-user-register .c-content__region {
+  .user-form {
+    .form-wrapper {
+      .form-item:first-child {
+        @include breakpoint($only-mobile) {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
