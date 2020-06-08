@@ -5,9 +5,12 @@
  * Alshaya bp transac module file.
  */
 
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Link;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -138,4 +141,39 @@ function _alshaya_bp_transac_get_product_description($sku_entity) {
   }
 
   return $return;
+}
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ */
+function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+  // Changing breadcrumb for advance pages.
+  if ($route_match->getRouteName() == 'entity.node.canonical'
+      && $route_match->getParameter('node')->bundle() == 'advanced_page') {
+
+    $breadcrumb_links[] = Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>');
+    /* @var \Drupal\node\Entity\Node $node */
+    $node = $route_match->getParameter('node');
+
+    if ($field_product_category = $node->get('field_product_category')) {
+      $term_list = $field_product_category->getValue();
+      $entity_repository = \Drupal::service('entity.repository');
+      $product_category_helper = \Drupal::service('alshaya_acm_product.category_helper');
+      if ($parents = $product_category_helper->getBreadcrumbTermList($term_list)) {
+        foreach (array_reverse($parents) as $term) {
+          $term = $entity_repository->getTranslationFromContext($term);
+          $breadcrumb_links[] = Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]);
+        }
+      }
+    }
+
+    $title = \Drupal::service('title_resolver')->getTitle(\Drupal::service('request_stack')->getCurrentRequest(), $route_match->getRouteObject());
+    $breadcrumb_links[] = Link::createFromRoute($title, 'entity.node.canonical', ['node' => $node->id()]);
+
+    $breadcrumb = new Breadcrumb();
+    // This breadcrumb builder is based on a route parameter, and hence it
+    // depends on the 'route' cache context.
+    $breadcrumb->addCacheContexts(['route']);
+    $breadcrumb->setLinks($breadcrumb_links);
+  }
 }
