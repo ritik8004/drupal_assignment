@@ -247,7 +247,7 @@ class PromotionProductListResource extends ResourceBase {
     $banners = $this->mobileAppUtility->getImages($node, 'field_acq_promotion_banner');
     return [
       'id' => (int) $node->id(),
-      'label' => $node->getTitle(),
+      'label' => $node->get('field_acq_promotion_label')->getString(),
       'path' => $node_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($node),
       'banner' => !empty($banners) ? $banners[0] : '',
