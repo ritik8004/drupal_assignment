@@ -500,22 +500,32 @@ function alshaya_seo_transac_taxonomy_term_delete(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_simple_sitemap_arbitrary_links_alter().
+ * Implements hook_simple_sitemap_links_alter().
  */
-function alshaya_seo_transac_simple_sitemap_arbitrary_links_alter(&$arbitrary_links, $sitemap_variant) {
-  if ($sitemap_variant == 'default') {
+function alshaya_seo_transac_simple_sitemap_links_alter(array &$links, $sitemap_variant) {
+  if ($sitemap_variant === 'default') {
+    // Remove those variants sitemap links from the default sitemap which do not
+    // have any sitemap generated.
     global $base_url;
-    $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
-    $variants = array_keys($sitemap_manager->getSitemapVariants());
-    $variants = array_diff($variants, ['default']);
+    $sitemap_manager = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
+    $variant_links = [];
+
+    $variants_publish_status = $sitemap_manager->fetchSitemapInstanceStatuses();
+    $variants = $sitemap_manager->getAllVariants();
+
     if (!empty($variants)) {
       foreach ($variants as $variant) {
-        $url = $base_url . '/' . $variant . '/sitemap.xml';
-        $arbitrary_links[] = [
-          'url' => $url,
-          'priority' => '0.5',
-        ];
+        if (isset($variants_publish_status[$variant]) && ($variants_publish_status[$variant] != 0)) {
+          $url = $base_url . '/' . $variant . '/sitemap.xml';
+          $variant_links[] = [
+            'url' => $url,
+            'priority' => '0.5',
+          ];
+        }
       }
+    }
+    if (!empty($variant_links)) {
+      $links = array_merge($variant_links, $links);
     }
   }
 }
