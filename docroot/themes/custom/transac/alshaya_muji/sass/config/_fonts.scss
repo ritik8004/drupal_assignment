@@ -92,9 +92,13 @@ $aeo-arabic-bold-nodir: 'Tahoma-Bold', 'AvenirNext-DemiBold', 'Arial';
 $aeo-arabic-thin: 'Tahoma', 'AvenirNext', 'Arial';
 $aeo-arabic-thin-nodir: 'Tahoma', 'AvenirNext', 'Arial';
 
-$arial: $aeo-thin;
+// @todo: font files are missing as of now. Create these variables for consistency.
+$muji-helvetica: 'Helvetica', 'AvenirNext', 'Tahoma', 'Arial';
+$muji-helvetica-neue-bold: 'HelveticaNeue-Bold', 'AvenirNext-DemiBold', 'Tahoma-Bold', 'Arial';
+
+$arial: $muji-helvetica;
 $arial-nodir: $aeo-thin-nodir;
-$alshaya-bold: $aeo-bold;
+$alshaya-bold: $muji-helvetica-neue-bold;
 $alshaya-arabic-bold: $aeo-arabic-bold;
-$alshaya-thin: $aeo-thin;
+$alshaya-thin: $muji-helvetica;
 $alshaya-arabic-thin: $aeo-arabic-thin;
