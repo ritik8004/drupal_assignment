@@ -192,8 +192,10 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $tree = $storage->loadTree('acq_product_category', $this->getVariantLabel(), NULL, FALSE);
     $children = array_column($tree, 'tid');
+    // Including the parent along with the children.
+    $all_terms = array_merge([$this->getVariantLabel()], $children);
 
-    if (empty($children)) {
+    if (empty($all_terms)) {
       return $data_sets;
     }
 
@@ -202,7 +204,7 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
     $query->sort('nid', 'ASC');
     $query->condition('type', 'acq_product');
     $query->condition('status', NodeInterface::PUBLISHED);
-    $query->condition('field_category', $children, 'IN');
+    $query->condition('field_category', $all_terms, 'IN');
 
     foreach ($query->execute() as $entity_id) {
       $data_sets[] = [
