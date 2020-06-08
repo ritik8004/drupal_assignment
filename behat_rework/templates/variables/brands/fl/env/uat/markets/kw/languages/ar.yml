@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'http://bbwae-uat.factory.alshaya.com/ar/'
+  url_base_uri: 'https://flkw2-uat.factory.alshaya.com/ar/'
   collection_filter: 'العروض'
   sort_filter: 'رتب حسب'
   price_filter: 'السعر'
