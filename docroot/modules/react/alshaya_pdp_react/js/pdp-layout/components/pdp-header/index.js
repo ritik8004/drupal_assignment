@@ -5,7 +5,12 @@ import PdpDetail from '../pdp-detail';
 export default class PdpHeader extends React.PureComponent {
   render() {
     const {
-      title, pdpProductPrice, shortDetail = false, finalPrice, brandLogo, brandLogoAlt, brandLogoTitle,
+      title,
+      pdpProductPrice,
+      finalPrice,
+      brandLogo,
+      brandLogoAlt,
+      brandLogoTitle,
     } = this.props;
 
     return (

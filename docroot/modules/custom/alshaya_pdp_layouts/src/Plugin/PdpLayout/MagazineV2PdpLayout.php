@@ -13,6 +13,7 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_product_options\ProductOptionsHelper;
 
 /**
  * Provides the default laypout for PDP.
@@ -48,6 +49,13 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   protected $configFactory;
 
   /**
+   * Product Options Helper.
+   *
+   * @var \Drupal\alshaya_product_options\ProductOptionsHelper
+   */
+  private $optionsHelper;
+
+  /**
    * Constructs a new MagazineV2PdpLayout.
    *
    * @param array $configuration
@@ -62,18 +70,22 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
    *   The SKU Image Manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\alshaya_product_options\ProductOptionsHelper $options_helper
+   *   Product Options Helper.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_image_manager,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              ProductOptionsHelper $options_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->skuManager = $sku_manager;
     $this->skuImageManager = $sku_image_manager;
     $this->configFactory = $config_factory;
+    $this->optionsHelper = $options_helper;
   }
 
   /**
@@ -86,7 +98,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $plugin_definition,
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('alshaya_product_options.helper')
     );
   }
 
@@ -112,6 +125,15 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     // Get gallery data for the main product.
     if ($sku_entity instanceof SKUInterface) {
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $this->getGalleryVariables($sku_entity);
+      $max_sale_qty = 0;
+      if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
+        // We will take lower value for quantity options from
+        // available quantity and order limit.
+        $plugin = $sku_entity->getPluginInstance();
+        $max_sale_qty = $plugin->getMaxSaleQty($sku_entity->getSku());
+      }
+      $quantity = $this->skuManager->getStockQuantity($sku_entity);
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockQty'] = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
     }
 
     // Get the product description.
@@ -133,20 +155,53 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     }
 
     $options = [];
+    $values = [];
+
     // Get gallery and combination data for product variants.
     if ($sku_entity->bundle() == 'configurable') {
       $product_tree = Configurable::deriveProductTree($sku_entity);
       $combinations = $product_tree['combinations'];
       $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['bySku'] = $combinations['by_sku'];
+      $swatch_processed = FALSE;
+
+      $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['byAttribute'] = $combinations['by_attribute'];
+      $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'] = $product_tree['configurables'];
+
+      // Prepare group and swatch attributes.
+      foreach ($product_tree['configurables'] as $key => $configurable) {
+        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isGroup'] = FALSE;
+        if (!$swatch_processed && in_array($key, $this->skuManager->getPdpSwatchAttributes())) {
+          $swatch_processed = TRUE;
+          // Todo: Swatch processing.
+        }
+        elseif ($alternates = $this->optionsHelper->getSizeGroup($key)) {
+          $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isGroup'] = TRUE;
+          $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['alternates'] = $alternates;
+          $combinations = $this->skuManager->getConfigurableCombinations($sku_entity);
+          foreach ($configurable['values'] as $value => $label) {
+            foreach ($combinations['attribute_sku'][$key][$value] ?? [] as $child_sku_code) {
+              $child_sku = SKU::loadFromSku($child_sku_code, $sku_entity->language()->getId());
+
+              if (!($child_sku instanceof SKU)) {
+                continue;
+              }
+
+              $values[$value] = $this->getAlternativeValues($alternates, $child_sku);
+            }
+
+          }
+          $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'] = $values;
+        }
+      }
+
       foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
         $child = SKU::loadFromSku($child_sku);
         if (!$child instanceof SKUInterface) {
           continue;
         }
+
         $options = NestedArray::mergeDeepArray([$options, $this->skuManager->getCombinationArray($combination)], TRUE);
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['combinations'] = $options;
-        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['byAttribute'] = $combinations['by_attribute'];
-        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'] = $product_tree['configurables'];
         // Get the first child from attribute_sku.
         $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['firstChild'] = reset($sorted_variants);
@@ -207,6 +262,22 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       }
     }
     return $gallery;
+  }
+
+  /**
+   * Helper function to get alternative group values of the variant.
+   *
+   * @return array
+   *   The alternative array.
+   */
+  public function getAlternativeValues($alternates, $child) {
+    $group_data = [];
+    // Get all alternate labels from child sku.
+    foreach ($alternates as $alternate => $alternate_label) {
+      $attribute_code = 'attr_' . $alternate;
+      $group_data[$alternate_label] = $child->get($attribute_code)->getString();
+    }
+    return $group_data;
   }
 
 }

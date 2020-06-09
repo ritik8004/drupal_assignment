@@ -1,27 +1,30 @@
 import React from 'react';
+import ConfigurableProductForm from './configurable-product-form';
+import SimpleProductForm from './simple-product-form';
 
 const PdpCart = (props) => {
-  const { configurableCombinations, skuCode } = props;
-  const { configurables } = configurableCombinations[skuCode];
+  const {
+    configurableCombinations, skuCode, productInfo, pdpRefresh,
+  } = props;
+
+  if (configurableCombinations) {
+    return (
+      <div className="pdp-cart-form">
+        <ConfigurableProductForm
+          configurableCombinations={configurableCombinations}
+          skuCode={skuCode}
+          productInfo={productInfo}
+          pdpRefresh={pdpRefresh}
+        />
+      </div>
+    );
+  }
   return (
     <div className="pdp-cart-form">
-      <form action="#" method="post">
-        {Object.keys(configurables).map((key) => (
-          <div>
-            <label htmlFor={key}>{configurables[key].label}</label>
-            <select id={key}>
-              {Object.keys(configurables[key].values).map((attr) => (
-                <option
-                  value={configurables[key].values[attr].label}
-                >
-                  {configurables[key].values[attr].label}
-                </option>
-              ))}
-            </select>
-          </div>
-        ))}
-        <button type="submit" value="Add to basket">{Drupal.t('Add To Basket')}</button>
-      </form>
+      <SimpleProductForm
+        skuCode={skuCode}
+        productInfo={productInfo}
+      />
     </div>
   );
 };
