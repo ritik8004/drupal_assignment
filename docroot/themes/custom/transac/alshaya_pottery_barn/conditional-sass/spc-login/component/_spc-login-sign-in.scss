@@ -11,6 +11,7 @@
     @include breakpoint($tablet) {
       max-width: 29.375rem;
       width: 100%;
+      text-align: center;
     }
 
     @include breakpoint($only-mobile) {
