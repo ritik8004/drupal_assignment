@@ -13514,11 +13514,11 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_api.git",
-                "reference": "f92b77aa0cbffce13c16c7f7ffc56e4e47498b86"
+                "reference": "00f9e28af075ec8f9757fa201673fad901eea384"
             },
             "require": {
-                "drupal/core": "~8.0",
-                "league/oauth2-client": "~2.0"
+                "drupal/core": "^8 || ^9",
+                "league/oauth2-client": "^2.0"
             },
             "type": "drupal-module",
             "extra": {
@@ -13526,8 +13526,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-beta4+6-dev",
-                    "datestamp": "1539790981",
+                    "version": "8.x-2.0-rc2+3-dev",
+                    "datestamp": "1591318182",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -13568,7 +13568,7 @@
                 "source": "http://cgit.drupalcode.org/social_api",
                 "issues": "https://www.drupal.org/project/issues/social_api"
             },
-            "time": "2018-10-17T15:41:24+00:00"
+            "time": "2020-06-05T19:37:01+00:00"
         },
         {
             "name": "drupal/social_auth",
