@@ -189,30 +189,18 @@ class SkusProductList extends ResourceBase {
     }
     $skus = explode(',', $sku_list);
     $data = [];
-    $sku_cache_tags = [];
     foreach ($skus as $value) {
       $skuEntity = SKU::loadFromSku($value);
-      if (($skuEntity instanceof SKUInterface)) {
-        $data[] = $this->getSkuData($skuEntity);
-        $sku_cache_tags[] = $skuEntity->getCacheTags();
-      }
+      $data[] = !($skuEntity instanceof SKUInterface) ? NULL : $this->getSkuData($skuEntity);
+
     }
 
     $response = new ResourceResponse($data);
 
-    // Add cacheability metadata.
-    $cacheable_metadata = $response->getCacheableMetadata();
-    foreach ($sku_cache_tags as $sku_cache_tag) {
-      $cacheable_metadata->addCacheTags($sku_cache_tag);
-    }
-
-    // Since the sku list is passed in query arguments, we shall add a
-    // dependency on query arguments.
-    $cacheable_metadata->addCacheContexts(['url.query_args']);
-
-    $response->addCacheableDependency($cacheable_metadata);
+    $response->addCacheableDependency($response);
 
     return $response;
+
   }
 
   /**
