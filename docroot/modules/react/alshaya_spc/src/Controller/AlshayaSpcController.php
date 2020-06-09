@@ -6,7 +6,6 @@ use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 use Drupal\alshaya_spc\Plugin\SpcPaymentMethod\CashOnDelivery;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Language\LanguageInterface;
@@ -24,13 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
  * Class AlshayaSpcController.
  */
 class AlshayaSpcController extends ControllerBase {
-
-  /**
-   * Config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
 
   /**
    * Chekcout option manager.
@@ -91,8 +83,6 @@ class AlshayaSpcController extends ControllerBase {
   /**
    * AlshayaSpcController constructor.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config factory.
    * @param \Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager $payment_method_manager
    *   Payment method manager.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager
@@ -110,8 +100,7 @@ class AlshayaSpcController extends ControllerBase {
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,
-                              AlshayaSpcPaymentMethodManager $payment_method_manager,
+  public function __construct(AlshayaSpcPaymentMethodManager $payment_method_manager,
                               CheckoutOptionsManager $checkout_options_manager,
                               MobileNumberUtilInterface $mobile_util,
                               AccountProxyInterface $current_user,
@@ -119,7 +108,6 @@ class AlshayaSpcController extends ControllerBase {
                               AddressBookAreasTermsHelper $areas_term_helper,
                               AlshayaSpcOrderHelper $order_helper,
                               LanguageManagerInterface $language_manager) {
-    $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->mobileUtil = $mobile_util;
@@ -135,7 +123,6 @@ class AlshayaSpcController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory'),
       $container->get('plugin.manager.alshaya_spc_payment_method'),
       $container->get('alshaya_acm_checkout.options_manager'),
       $container->get('mobile_number.util'),
@@ -154,10 +141,10 @@ class AlshayaSpcController extends ControllerBase {
    *   Markup for cart page.
    */
   public function cart() {
-    $acm_config = $this->configFactory->get('alshaya_acm.settings');
+    $acm_config = $this->config('alshaya_acm.settings');
     $cache_tags = $acm_config->getCacheTags();
 
-    $cart_config = $this->configFactory->get('alshaya_acm.cart_config');
+    $cart_config = $this->config('alshaya_acm.cart_config');
     $cache_tags = Cache::mergeTags($cache_tags, $cart_config->getCacheTags());
 
     $build = [
@@ -195,10 +182,10 @@ class AlshayaSpcController extends ControllerBase {
     $cache_tags = [];
     $strings = [];
 
-    $cc_config = $this->configFactory->get('alshaya_click_collect.settings');
+    $cc_config = $this->config('alshaya_click_collect.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $cc_config->getCacheTags());
 
-    $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+    $checkout_settings = $this->config('alshaya_acm_checkout.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
 
     $cncTerm = $this->checkoutOptionManager->getClickandColectShippingMethodTerm();
@@ -239,8 +226,8 @@ class AlshayaSpcController extends ControllerBase {
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
 
-    $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
-    $geolocation_config = $this->configFactory->get('geolocation.settings');
+    $store_finder_config = $this->config('alshaya_stores_finder.settings');
+    $geolocation_config = $this->config('geolocation.settings');
     $cache_tags = Cache::mergeTags($cache_tags, array_merge($store_finder_config->getCacheTags(), $geolocation_config->getCacheTags()));
 
     $country_name = $this->mobileUtil->getCountryName($country_code);
@@ -458,7 +445,7 @@ class AlshayaSpcController extends ControllerBase {
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'user_name' => $user_name,
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
-          'google_field_mapping' => $this->configFactory->get('alshaya_spc.google_mapping')->get('mapping'),
+          'google_field_mapping' => $this->config('alshaya_spc.google_mapping')->get('mapping'),
           'map' => [
             'google_api_key' => $geolocation_config->get('google_map_api_key'),
             'center' => $store_finder_config->get('country_center'),
@@ -554,7 +541,7 @@ class AlshayaSpcController extends ControllerBase {
       $productList[$item['sku']] = $this->orderHelper->getSkuDetails($item);
     }
 
-    $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+    $checkout_settings = $this->config('alshaya_acm_checkout.settings');
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $settings = [
@@ -686,7 +673,7 @@ class AlshayaSpcController extends ControllerBase {
     $settings = [];
     $cache_tags = [];
 
-    $currency_config = $this->configFactory->get('acq_commerce.currency');
+    $currency_config = $this->config('acq_commerce.currency');
     $cache_tags = Cache::mergeTags($cache_tags, $currency_config->getCacheTags());
 
     $settings['alshaya_spc']['currency_config'] = [
@@ -697,7 +684,7 @@ class AlshayaSpcController extends ControllerBase {
 
     $settings['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
 
-    $product_config = $this->configFactory->get('alshaya_acm_product.settings');
+    $product_config = $this->config('alshaya_acm_product.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $currency_config->getCacheTags());
 
     // Time we get from configuration is in minutes.
