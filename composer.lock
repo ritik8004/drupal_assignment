@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35e4836d0acad6bc03ab0c578562ccb0",
+    "content-hash": "3f2a48a2a5f8fb7637e6fd9979a80133",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -3481,7 +3481,7 @@
                 },
                 "phpcodesniffer-search-depth": 4,
                 "patches_applied": {
-                    "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-01-10/acquia_connector-2871721-25.patch",
+                    "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-05-04/acquia_connector-2871721-29.patch",
                     "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2020-04-21/2922201-16.patch"
                 }
             },
