@@ -1205,7 +1205,7 @@
     else {
       // This is for cases like scroll/carousel events.
       // Add new impressions to the global productImpressions.
-      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType, 0));
+      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType, productImpressions.length));
       // If timer was unset previously when there were there were no impressions
       // then set it now.
       if (productImpressions.length > 0 && productImpressionsTimer === null) {
