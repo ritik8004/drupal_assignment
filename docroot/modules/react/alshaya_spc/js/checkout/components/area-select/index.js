@@ -35,13 +35,13 @@ export default class AreaSelect extends React.Component {
     this.isComponentMounted = true;
     this.getAreaList();
     // Trigger event for handling area update from map.
-    document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
+    document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap);
   }
 
   componentWillUnmount() {
     this.isComponentMounted = false;
     // Trigger event for handling area update from map.
-    document.removeEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
+    document.removeEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap);
   }
 
   areaCurrentOption = () => {
