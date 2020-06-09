@@ -1,4 +1,6 @@
 import React from 'react';
+import AvailableSelectOptions from '../available-select-options';
+import DefaultSelectOptions from '../default-select-options';
 
 const SwatchSelectOption = (props) => {
   const {
@@ -15,33 +17,22 @@ const SwatchSelectOption = (props) => {
         <select id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
           {Object.keys(configurables.values).map((attr) => {
             if (code === nextCode) {
-              if (nextValues.indexOf(attr) !== -1) {
-                return (
-                  <option
-                    value={configurables.values[attr].value_id}
-                    key={attr}
-                  >
-                    {configurables.values[attr].swatch_image}
-                  </option>
-                );
-              }
               return (
-                <option
-                  value={configurables.values[attr].value_id}
+                <AvailableSelectOptions
+                  nextValues={nextValues}
+                  attr={attr}
+                  value={configurables.values[attr].swatch_image}
                   key={attr}
-                  disabled
-                >
-                  {configurables.values[attr].swatch_image}
-                </option>
+                />
               );
             }
+            // Show the default options.
             return (
-              <option
-                value={configurables.values[attr].value_id}
+              <DefaultSelectOptions
+                attr={attr}
+                value={configurables.values[attr].swatch_image}
                 key={attr}
-              >
-                {configurables.values[attr].swatch_image}
-              </option>
+              />
             );
           })}
         </select>
