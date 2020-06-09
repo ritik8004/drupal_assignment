@@ -4,4 +4,8 @@
   font-family: $alshaya-thin;
   font-weight: bold;
   height: 2.5rem;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
 }
