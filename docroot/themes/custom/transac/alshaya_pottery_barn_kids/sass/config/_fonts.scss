@@ -1,6 +1,29 @@
 // Icon font Variable
 $alshaya-icons: 'alshaya-icons';
 
+// Font directory.
+$pbk_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn_kids/fonts';
+
+// Text Fonts.
+@font-face {
+  font-family: "AvenirNext-DemiBold";
+  src: url("#{$pbk_fonts_directory_path}/AvenirNext-DemiBold.eot");
+  src:
+    url("#{$pbk_fonts_directory_path}/AvenirNext-DemiBold.eot?#iefix") format("embedded-opentype"),
+    url("#{$pbk_fonts_directory_path}/AvenirNext-DemiBold.otf") format("opentype"),
+    url("#{$pbk_fonts_directory_path}/AvenirNext-DemiBold.svg") format("svg"),
+    url("#{$pbk_fonts_directory_path}/AvenirNext-DemiBold.ttf") format("truetype"),
+    url("#{$pbk_fonts_directory_path}/AvenirNext-DemiBold.woff") format("woff"),
+    url("#{$pbk_fonts_directory_path}/AvenirNext-DemiBold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Text font family.
+$avenier_next_demi_bold: 'AvenirNext-DemiBold', 'Open Sans', 'Arial';
+$pbk_primary_button_fontfamily: $avenier_next_demi_bold;
+
 // Icon Fonts
 $icons: (
   bell: "\e006",
