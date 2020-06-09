@@ -18,6 +18,11 @@
         color: $content_link_color;
         font-size: 0.875rem;
       }
+
+      .form-submit {
+        font-size: 0.875rem;
+        font-weight: bold;
+      }
     }
   }
 }
@@ -134,6 +139,10 @@
 }
 
 .user__address--column {
+  &:nth-child(2n+1) {
+    clear: both;
+  }
+
   @include breakpoint($desktop) {
     width: calc(34.5% - 0.75rem);
 
@@ -143,6 +152,6 @@
   }
 
   @include breakpoint($only-tablet) {
-    width: calc(60% - 0.75rem);
+    width: calc(66% - 0.75rem);
   }
 }
