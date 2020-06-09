@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import 'element-closest-polyfill';
 
 export default class CartQuantitySelect extends React.Component {
   constructor(props) {
