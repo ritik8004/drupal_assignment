@@ -437,7 +437,7 @@ class AlshayaSearchApiQueryExecute {
     if ($server->supportsFeature('search_api_facets')) {
       $facet_data = [];
       foreach ($facets as $facet) {
-        $facet_data[$facet->id()] = [
+        $facet_data[$facet->getFieldIdentifier()] = [
           'field' => $facet->getFieldIdentifier(),
           'limit' => $facet->getHardLimit(),
           'operator' => $facet->getQueryOperator(),
