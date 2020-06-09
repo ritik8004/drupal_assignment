@@ -119,6 +119,10 @@
         -ms-grid-columns: 4.8125rem 0.625rem 1fr;
       }
 
+      @include breakpoint($only-tablet) {
+        min-width: auto;
+      }
+
       @include breakpoint($only-mobile) {
         display: inline-grid;
         margin-bottom: 0;
