@@ -80,6 +80,7 @@
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
         "drupal/search_api_spellcheck": "dev-8.x-1.x",
+        "drupal/sessions_expire": "1.0.x-dev",
         "drupal/sharethis": "^2.0@beta",
         "drupal/simple_oauth": "^3.0",
         "drupal/simple_sitemap": "^3.2",

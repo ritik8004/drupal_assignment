@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "731f122b4c4910dbd97ca46ad528110e",
+    "content-hash": "d77ba2cc9adae605dc7174ac0c08f59f",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -12844,6 +12844,52 @@
             "time": "2018-07-27T02:32:58+00:00"
         },
         {
+            "name": "drupal/sessions_expire",
+            "version": "dev-1.0.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/sessions_expire.git",
+                "reference": "65d53ce9f68a087cf5b4951785941eab51099940"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drush/drush": "^9",
+                "php": ">=7.2.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.0.x": "1.0.x-dev"
+                },
+                "drupal": {
+                    "version": "1.0.x-dev",
+                    "datestamp": "1591190484",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nikunj Kotecha (nikunjkotecha)",
+                    "homepage": "https://www.drupal.org/u/nikunjkotecha",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Allow adding prefix in URL for single language sites.",
+            "homepage": "https://drupal.org/project/sessions_expire",
+            "support": {
+                "source": "https://cgit.drupalcode.org/sessions_expire",
+                "issues": "https://drupal.org/project/issues/sessions_expire"
+            },
+            "time": "2020-06-03T13:27:24+00:00"
+        },
+        {
             "name": "drupal/sharethis",
             "version": "2.0.0-beta3",
             "source": {
@@ -13468,11 +13514,11 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_api.git",
-                "reference": "0059b9d8f2f45533101a76e66494608062f39527"
+                "reference": "f92b77aa0cbffce13c16c7f7ffc56e4e47498b86"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
-                "league/oauth2-client": "^2.0"
+                "drupal/core": "~8.0",
+                "league/oauth2-client": "~2.0"
             },
             "type": "drupal-module",
             "extra": {
@@ -13480,8 +13526,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-rc2+2-dev",
-                    "datestamp": "1591035604",
+                    "version": "8.x-2.0-beta4+6-dev",
+                    "datestamp": "1539790981",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -13522,7 +13568,7 @@
                 "source": "http://cgit.drupalcode.org/social_api",
                 "issues": "https://www.drupal.org/project/issues/social_api"
             },
-            "time": "2020-06-05T00:49:20+00:00"
+            "time": "2018-10-17T15:41:24+00:00"
         },
         {
             "name": "drupal/social_auth",
@@ -13657,28 +13703,28 @@
         },
         {
             "name": "drupal/social_auth_google",
-            "version": "2.0.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_auth_google.git",
-                "reference": "8.x-2.0"
+                "reference": "8.x-2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/social_auth_google-8.x-2.0.zip",
-                "reference": "8.x-2.0",
-                "shasum": "0dde33a4faaa7fe22e073f536d3b2352dd31e2c0"
+                "url": "https://ftp.drupal.org/files/projects/social_auth_google-8.x-2.1.zip",
+                "reference": "8.x-2.1",
+                "shasum": "5ffa29c26ba45b55f345fceaabbeeacf9857072a"
             },
             "require": {
-                "drupal/core": "~8.0",
+                "drupal/core": "^8 || ^9",
                 "drupal/social_auth": "^2.0",
                 "league/oauth2-google": "^3.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.0",
-                    "datestamp": "1576821488",
+                    "version": "8.x-2.1",
+                    "datestamp": "1591410200",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -23879,6 +23925,7 @@
         "drupal/s3fs": 15,
         "drupal/search_api_solr_multilingual": 10,
         "drupal/search_api_spellcheck": 20,
+        "drupal/sessions_expire": 20,
         "drupal/sharethis": 10,
         "drupal/social_api": 20,
         "drupal/stage_file_proxy": 5,

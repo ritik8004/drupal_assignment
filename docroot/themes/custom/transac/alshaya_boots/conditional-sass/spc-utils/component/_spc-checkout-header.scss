@@ -1,16 +1,12 @@
-.alias--cart-login {
-  .multistep-login {
-    .form-submit {
-      text-transform: none;
-    }
-  }
-
+.alias--checkout,
+.alias--checkout-confirmation {
   .site-brand-home {
     a {
-      max-width: 6.5rem;
+      @include breakpoint($tablet) {
+        max-width: 6.5rem;
+      }
 
       @include breakpoint($only-mobile) {
-        margin: 0;
         margin-top: 0.5rem;
         max-width: 3.625rem;
       }
