@@ -1,0 +1,18 @@
+.c-department {
+  .c-page-title {
+    @include style-font(false, 1.875rem, 1.25rem, false, 0);
+
+    text-align: center;
+    border: none;
+  }
+}
+
+.nodetype--advanced_page {
+  .page-standard {
+    .c-page-title {
+      @include breakpoint($upto-desktop) {
+        border: none;
+      }
+    }
+  }
+}

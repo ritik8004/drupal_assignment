@@ -237,8 +237,8 @@ class StoresFinderUtility {
       $store['view_on_map_link'] = Url::fromRoute('alshaya_click_collect.cc_store_map_view', ['node' => $store_node->id()])->toString();
 
       if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
-        $store['lat'] = $lat_lng[0]['lat'];
-        $store['lng'] = $lat_lng[0]['lng'];
+        $store['lat'] = (float) $lat_lng[0]['lat'];
+        $store['lng'] = (float) $lat_lng[0]['lng'];
       }
     }
     return $store;

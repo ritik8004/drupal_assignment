@@ -1,10 +1,11 @@
 @import "../../../alshaya_white_label/sass/config/_colors.scss";
 
 /* ------- 1. Brand Colors ------- */
-$black: #000;
+$black: #333;
 $white: #fff;
 $alizarin-crimson: #e51b23;
 $grey: #999;
+$grey-dark-one: #888;
 $success-green: #39b54a;
 $wild-sand: #f6f6f6;
 $gallery: #eee;
@@ -17,6 +18,8 @@ $forest-green: #2d9921;
 $royal-blue: #385adc;
 $windows-blue: $black;
 $thunderbird: #b91824;
+$mujidarkred: #7f0019;
+$mujilightbluegray: #eff0f4;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -27,8 +30,8 @@ $content_pagetitle: $black;
 $content_pagetitle_border: $white-five;
 $primary_text: $black;
 $primary_link: $grey;
-$primary_link-hover: $black;
-$primary_link-active: $black;
+$primary_link-hover: $mujidarkred;
+$primary_link-active: $mujidarkred;
 $primary_border: $gallery;
 $content_link_color: $black;
 $transparent: transparent;
@@ -196,18 +199,19 @@ $mm_bg_desk: $white;
 $mm_l1_border: $gallery;
 $mm_l1_link: $black;
 $mm_l1_link_bg: $white;
-$mm_l1_link_hover: $black;
+$mm_l1_link_hover: $mujidarkred;
 $mm_l1_link_hover_bg: $grey;
-$mm_l1_link_hover_active: $black;
+$mm_l1_link_hover_active: $mujidarkred;
 $mm_l1_link_hover_border_to_fill_space: $black;
-$mm_l1_link_active_border: $black;
+$mm_l1_link_active_border: $mujidarkred;
+
 $mm_l2_bg: $white;
 $mm_l2_link: $black;
-$mm_l2_link_hover: $black;
+$mm_l2_link_hover:$mujidarkred;
 $mm_l2_p: $grey;
 $mm_l3_link: $grey;
 $mm_l3_link_bg: $white;
-$mm_l3_link_hover: $black;
+$mm_l3_link_hover:$mujidarkred;
 $mm_highlight_label: $black;
 $mm_p_a_text: $black;
 $mm_highlight_label: $black;
@@ -261,19 +265,19 @@ $minicart_notification_shadow: $shadow;
 $minicart_notification_qty_text: $grey;
 
 //3. Footer
-$footer_bg: $white;
+$footer_bg: $mujilightbluegray;
 $footer_border_top: $gallery;
 $footer_accordion_border: $gallery;
 $footer_title_h3: $black;
 $footer_link_mobile: $grey;
 $footer_link: $grey;
-$footer_link_hover: $black;
+$footer_link_hover: $mujidarkred;
 
 // Social links.
 $social_links: $black;
 
-//1. Copyright
-$copyright_footer_bg: $white;
+//3.1. Copyright
+$copyright_footer_bg: $mujilightbluegray;
 $copyright_footer_text: $black;
 $copyright_footer_paragraph: $black;
 
@@ -387,9 +391,9 @@ $webform_contact_legend: $black;
 
 // Breadcrumb.
 $breadcrumb_bg: $white;
-$breadcrumb_link: $grey;
-$breadcrumb_link_hover: $grey;
-$breadcrumb_link_active: $black;
+$breadcrumb_link: $grey-dark-one;
+$breadcrumb_link_hover: $grey-dark-one;
+$breadcrumb_link_active: $grey-dark-one;
 
 // Address book
 $address_list_background: rgba(51, 51, 51, 0.06);

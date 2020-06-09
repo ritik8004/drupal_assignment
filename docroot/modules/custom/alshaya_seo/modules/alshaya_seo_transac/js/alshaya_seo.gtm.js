@@ -9,6 +9,8 @@
   var mouseenterTime = 0;
   var gtm_execute_onetime_events = true;
   var currentListName = null;
+  var productImpressions = [];
+  var productImpressionsTimer;
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
@@ -1159,12 +1161,71 @@
   /**
    * Helper function to push productImpression to GTM.
    *
-   * @param customerType
+   * @param prepareImpressionFunction
+   *   The function to call which will prepare the product impressions.
+   *   The function will accept 3 parameters:
+   *     1. context: The context in which to search for impressions.
+   *     2. eventType: The type of the event, eg: 'scroll'.
+   *     3. currentQueueSize: The current size of the
+   *        impressions queue.
+   * @param context
+   *   The context for which impressions is to be generated.
+   * @param settings
+   *    Any settings.
+   * @param event
+   *    The event object or a custom object containing at least the event type.
+   *    Eg. {type: 'timer'} can also be sent as a value.
    */
-  Drupal.alshaya_seo_gtm_prepare_and_push_product_impression = function (context, settings) {
-    var impressions = [];
+  Drupal.alshaya_seo_gtm_prepare_and_push_product_impression = function (prepareImpressionFunction, context, settings, event) {
     var body = $('body');
     var currencyCode = body.attr('gtm-currency');
+    var eventType = event.type;
+
+    if (eventType === 'load' || eventType === 'search-results-updated') {
+      // Here we use concat to consider the case for Aloglia sites when user
+      // visits a page such as PLP and then performs search. If some impressions
+      // are already there, then those will remain along with the new ones which
+      // come from search impressions.
+      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType, productImpressions.length));
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
+    }
+    else if (eventType === 'unload' || eventType === 'timer') {
+      // This is to prevent the timer calling this function infinitely when
+      // there are no impressions.
+      if (productImpressions.length === 0) {
+        window.clearInterval(productImpressionsTimer);
+        productImpressionsTimer = null;
+        return;
+      }
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
+      window.clearInterval(productImpressionsTimer);
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+    }
+    else {
+      // This is for cases like scroll/carousel events.
+      // Add new impressions to the global productImpressions.
+      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType, productImpressions.length));
+      // If timer was unset previously when there were there were no impressions
+      // then set it now.
+      if (productImpressions.length > 0 && productImpressionsTimer === null) {
+        productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+      }
+      // Push if the global productImpressions length > max impressions size.
+      if (productImpressions.length >= drupalSettings.gtm.productImpressionQueueSize) {
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
+        window.clearInterval(productImpressionsTimer);
+        productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+      }
+    }
+  }
+
+  /**
+   * Prepares product impressions.
+   */
+  Drupal.alshaya_seo_gtm_prepare_impressions = function (context, eventType, currentQueueSize) {
+    var impressions = [];
+    var body = $('body');
     var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
     var productLinkProcessedSelector = $('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
     var listName = body.attr('gtm-list-name');
@@ -1172,7 +1233,12 @@
     var count = productLinkProcessedSelector.length + 1;
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        if ($(this).isElementInViewPort(0, 10)) {
+        var condition = true;
+        // Only on scroll we check if product is in view or not.
+        if (eventType == 'scroll') {
+          condition = $(this).isElementInViewPort(0, 10);
+        }
+        if (condition) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;
@@ -1182,11 +1248,15 @@
           impressions.push(impression);
           count++;
         }
+        // On page load, process only the required number of
+        // items and push to datalayer.
+        if ((eventType === 'load') && (impressions.length === drupalSettings.gtm.productImpressionQueueSize)) {
+          // This is to break out from the .each() function.
+          return false;
+        }
       });
-      if (impressions.length > 0) {
-        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
-      }
     }
+    return impressions;
   };
 
   // Ajax command to push deliveryAddress Event.

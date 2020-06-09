@@ -1,13 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import CartSelectOption from '../cart-select-option';
 import {
   updateCart,
   getPostData,
   triggerAddToCart,
-} from '../../../../utilities/cart/cart_utils';
-import CartNotification from '../cart-notification';
+} from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
+import QuantityDropdown from '../quantity-dropdown';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -16,18 +15,13 @@ class ConfigurableProductForm extends React.Component {
       nextCode: null,
       nextValues: null,
     };
-    this.handleLoad = this.handleLoad.bind(this);
   }
 
   componentDidMount() {
-    window.addEventListener('load', this.handleLoad);
+    this.handleLoad();
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('load', this.handleLoad);
-  }
-
-  handleLoad() {
+  handleLoad = () => {
     const { configurableCombinations, skuCode } = this.props;
     const { combinations } = configurableCombinations[skuCode];
     const code = Object.keys(combinations)[0];
@@ -62,19 +56,11 @@ class ConfigurableProductForm extends React.Component {
     postData.options = options;
     productData.productName = productInfo[skuCode].variants[variantSelected].cart_title;
     productData.image = productInfo[skuCode].variants[variantSelected].cart_image;
-
-    const { cartEndpoint } = drupalSettings.cart_update_endpoint;
+    const cartEndpoint = drupalSettings.cart_update_endpoint;
 
     updateCart(cartEndpoint, postData).then(
       (response) => {
         triggerAddToCart(response, productData, productInfo, configurableCombinations, skuCode);
-        ReactDOM.render(
-          <CartNotification
-            productInfo={productInfo}
-            productData={productData}
-          />,
-          document.getElementById('cart_notification'),
-        );
       },
     )
       .catch((error) => {
@@ -132,37 +118,26 @@ class ConfigurableProductForm extends React.Component {
 
 
   render() {
-    const { configurableCombinations, skuCode, productInfo } = this.props;
-    const { cartMaxQty, checkoutFeatureStatus } = drupalSettings;
+    const {
+      configurableCombinations, skuCode, productInfo, pdpRefresh,
+    } = this.props;
+    const { checkoutFeatureStatus } = drupalSettings;
 
     const { configurables } = configurableCombinations[skuCode];
     const { byAttribute } = configurableCombinations[skuCode];
 
-    const { nextCode, nextValues, variant } = this.state;
+    const {
+      nextCode, nextValues, variant,
+    } = this.state;
     const variantSelected = variant || drupalSettings.configurableCombinations[skuCode].firstChild;
-    const stockQty = productInfo[skuCode].variants[variantSelected].stock.qty;
 
     const cartUnavailability = (
       <CartUnavailability />
     );
 
-    // Quantity component created separately.
-    const options = [];
-    for (let i = 1; i <= cartMaxQty; i++) {
-      if (i <= stockQty) {
-        options.push(
-          <option key={i} value={i}>{i}</option>,
-        );
-      } else {
-        options.push(
-          <option key={i} value={i} disabled>{i}</option>,
-        );
-      }
-    }
-
     return (
       <>
-        <form action="#" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
+        <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
           {Object.keys(configurables).map((key) => (
             <div key={key}>
               <label htmlFor={key}>{configurables[key].label}</label>
@@ -179,14 +154,17 @@ class ConfigurableProductForm extends React.Component {
                 nextValues={nextValues}
                 refreshConfigurables={this.refreshConfigurables}
                 selectedValues={this.selectedValues}
+                pdpRefresh={pdpRefresh}
               />
             </div>
           ))}
           <p>{Drupal.t('Quantity')}</p>
           <div id="product-quantity-dropdown">
-            <select id="qty">
-              {options}
-            </select>
+            <QuantityDropdown
+              variantSelected={variantSelected}
+              productInfo={productInfo}
+              skuCode={skuCode}
+            />
           </div>
           {(checkoutFeatureStatus === 'enabled') ? (
             <button

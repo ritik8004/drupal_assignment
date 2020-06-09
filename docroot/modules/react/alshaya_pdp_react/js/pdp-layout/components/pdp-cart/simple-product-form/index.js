@@ -1,12 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {
   updateCart,
   getPostData,
   triggerAddToCart,
-} from '../../../../utilities/cart/cart_utils';
+} from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
-import CartNotification from '../cart-notification';
+import QuantityDropdown from '../quantity-dropdown';
 
 class SimpleProductForm extends React.Component {
   addToCart = (e) => {
@@ -20,20 +19,13 @@ class SimpleProductForm extends React.Component {
     const productData = getPost[1];
 
     productData.productName = productInfo[skuCode].cart_title;
-    productData.image = productInfo[skuCode].cart_update_endpoint;
+    productData.image = productInfo[skuCode].cart_image;
 
-    const { cartEndpoint } = drupalSettings.cart;
+    const cartEndpoint = drupalSettings.cart_update_endpoint;
 
     updateCart(cartEndpoint, postData).then(
       (response) => {
         triggerAddToCart(response, productData, productInfo, skuCode);
-        ReactDOM.render(
-          <CartNotification
-            productInfo={productInfo}
-            productData={productData}
-          />,
-          document.getElementById('cart_notification'),
-        );
       },
     )
       .catch((error) => {
@@ -43,36 +35,23 @@ class SimpleProductForm extends React.Component {
 
   render() {
     const { skuCode, productInfo } = this.props;
-    const { cartMaxQty, checkoutFeatureStatus } = productInfo[skuCode];
-    const { stockQty } = productInfo[skuCode];
+    const { checkoutFeatureStatus } = productInfo[skuCode];
     const variantSelected = skuCode;
 
     const cartUnavailability = (
       <CartUnavailability />
     );
 
-    // Quantity component created separately.
-    const options = [];
-    for (let i = 1; i <= cartMaxQty; i++) {
-      if (i <= stockQty) {
-        options.push(
-          <option key={i} value={i}>{i}</option>,
-        );
-      } else {
-        options.push(
-          <option key={i} value={i} disabled>{i}</option>,
-        );
-      }
-    }
-
     return (
       <>
-        <form action="#" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
+        <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
           <p>{Drupal.t('Quantity')}</p>
           <div id="product-quantity-dropdown">
-            <select id="qty">
-              {options}
-            </select>
+            <QuantityDropdown
+              variantSelected={variantSelected}
+              productInfo={productInfo}
+              skuCode={skuCode}
+            />
           </div>
           {(checkoutFeatureStatus === 'enabled') ? (
             <button

@@ -3,7 +3,9 @@ import ConfigurableProductForm from './configurable-product-form';
 import SimpleProductForm from './simple-product-form';
 
 const PdpCart = (props) => {
-  const { configurableCombinations, skuCode, productInfo } = props;
+  const {
+    configurableCombinations, skuCode, productInfo, pdpRefresh,
+  } = props;
 
   if (configurableCombinations) {
     return (
@@ -12,6 +14,7 @@ const PdpCart = (props) => {
           configurableCombinations={configurableCombinations}
           skuCode={skuCode}
           productInfo={productInfo}
+          pdpRefresh={pdpRefresh}
         />
       </div>
     );

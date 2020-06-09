@@ -1,46 +1,37 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PdpGallery from '../pdp-gallery';
 import PdpDescription from '../pdp-description';
 import PdpInfo from '../pdp-info';
 import PdpCart from '../pdp-cart';
 import PdpDetail from '../pdp-detail';
 import PdpHeader from '../pdp-header';
+import { getProductValues } from '../../../utilities/pdp_layout';
 
 const PdpLayout = () => {
-  let skuItemCode; let brandLogo; let brandLogoAlt; let
-    brandLogoTitle = null;
-  let configurableCombinations = '';
+  const [variant, setVariant] = useState(null);
+  const pdpRefresh = (variantSelected) => {
+    setVariant(variantSelected);
+  };
 
   const { productInfo } = drupalSettings;
-  let title = '';
-  let priceRaw = '';
-  let finalPrice = '';
+  let skuItemCode = null;
   if (productInfo) {
     [skuItemCode] = Object.keys(productInfo);
   }
-  if (skuItemCode) {
-    if (productInfo[skuItemCode].brandLogo) {
-      brandLogo = productInfo[skuItemCode].brandLogo.logo
-        ? productInfo[skuItemCode].brandLogo.logo : null;
-      brandLogoAlt = productInfo[skuItemCode].brandLogo.alt
-        ? productInfo[skuItemCode].brandLogo.alt : null;
-      brandLogoTitle = productInfo[skuItemCode].brandLogo.title
-        ? productInfo[skuItemCode].brandLogo.title : null;
-    }
-    title = productInfo[skuItemCode].title;
-    priceRaw = productInfo[skuItemCode].priceRaw;
-    finalPrice = productInfo[skuItemCode].finalPrice;
-    if (productInfo[skuItemCode].type === 'configurable') {
-      configurableCombinations = drupalSettings.configurableCombinations;
-      const variantSelected = configurableCombinations[skuItemCode].firstChild;
-      title = productInfo[skuItemCode].variants[variantSelected].title;
-      priceRaw = productInfo[skuItemCode].variants[variantSelected].priceRaw;
-      finalPrice = productInfo[skuItemCode].variants[variantSelected].finalPrice;
-    }
-  }
-  const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
-  const description = skuItemCode ? productInfo[skuItemCode].description : [];
-  const pdpGallery = skuItemCode ? productInfo[skuItemCode].rawGallery : [];
+
+  const productValues = getProductValues(skuItemCode, variant, setVariant);
+  const {
+    brandLogo,
+    brandLogoAlt,
+    brandLogoTitle,
+    title,
+    priceRaw,
+    finalPrice,
+    pdpGallery,
+    shortDesc,
+    description,
+    configurableCombinations,
+  } = productValues;
 
   const emptyRes = (
     <div>Product data not available</div>
@@ -68,7 +59,7 @@ const PdpLayout = () => {
     showStickyHeader,
   ]);
 
-  return (skuItemCode && pdpGallery) ? (
+  return (skuItemCode) ? (
     <>
       <div className="magv2-header" ref={header}>
         <PdpHeader
@@ -114,6 +105,7 @@ const PdpLayout = () => {
             skuCode={skuItemCode}
             configurableCombinations={configurableCombinations}
             productInfo={productInfo}
+            pdpRefresh={pdpRefresh}
           />
         </div>
       </div>
