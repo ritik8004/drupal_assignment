@@ -6,6 +6,7 @@ import PdpCart from '../pdp-cart';
 import PdpDetail from '../pdp-detail';
 import PdpHeader from '../pdp-header';
 import { getProductValues } from '../../../utilities/pdp_layout';
+import PdpStandardDelivery from '../pdp-standard-delivery';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -107,6 +108,7 @@ const PdpLayout = () => {
             productInfo={productInfo}
             pdpRefresh={pdpRefresh}
           />
+          <PdpStandardDelivery />
         </div>
       </div>
     </>
