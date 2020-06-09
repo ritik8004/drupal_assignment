@@ -1166,7 +1166,7 @@
    *   The function will accept 3 parameters:
    *     1. context: The context in which to search for impressions.
    *     2. eventType: The type of the event, eg: 'scroll'.
-   *     3. currentQueueSize(by default null): The current size of the
+   *     3. currentQueueSize: The current size of the
    *        impressions queue.
    * @param context
    *   The context for which impressions is to be generated.
@@ -1205,7 +1205,7 @@
     else {
       // This is for cases like scroll/carousel events.
       // Add new impressions to the global productImpressions.
-      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType));
+      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType, productImpressions.length));
       // If timer was unset previously when there were there were no impressions
       // then set it now.
       if (productImpressions.length > 0 && productImpressionsTimer === null) {
@@ -1223,7 +1223,7 @@
   /**
    * Prepares product impressions.
    */
-  Drupal.alshaya_seo_gtm_prepare_impressions = function (context, eventType, currentQueueSize = null) {
+  Drupal.alshaya_seo_gtm_prepare_impressions = function (context, eventType, currentQueueSize) {
     var impressions = [];
     var body = $('body');
     var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
