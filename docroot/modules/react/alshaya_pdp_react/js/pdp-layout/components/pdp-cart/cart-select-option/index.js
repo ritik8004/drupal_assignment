@@ -7,7 +7,7 @@ class CartSelectOption extends React.Component {
   constructor(props) {
     super(props);
     const {
-      isGroup, configurables, isSwatch
+      isGroup, configurables, isSwatch,
     } = this.props;
     let defaultGroup = null;
 
