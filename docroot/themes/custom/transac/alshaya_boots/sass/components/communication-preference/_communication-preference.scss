@@ -1,0 +1,7 @@
+form.user-communication-preference {
+  .form-submit {
+    @extend %btn;
+
+    font-size: 0.875rem;
+  }
+}

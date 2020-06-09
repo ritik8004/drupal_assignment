@@ -165,10 +165,11 @@ function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rou
           $breadcrumb_links[] = Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]);
         }
       }
+      else {
+        $title = \Drupal::service('title_resolver')->getTitle(\Drupal::service('request_stack')->getCurrentRequest(), $route_match->getRouteObject());
+        $breadcrumb_links[] = Link::createFromRoute($title, 'entity.node.canonical', ['node' => $node->id()]);
+      }
     }
-
-    $title = \Drupal::service('title_resolver')->getTitle(\Drupal::service('request_stack')->getCurrentRequest(), $route_match->getRouteObject());
-    $breadcrumb_links[] = Link::createFromRoute($title, 'entity.node.canonical', ['node' => $node->id()]);
 
     $breadcrumb = new Breadcrumb();
     // This breadcrumb builder is based on a route parameter, and hence it

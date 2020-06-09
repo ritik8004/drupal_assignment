@@ -3,8 +3,8 @@
 namespace Drupal\alshaya_spc\Controller;
 
 use Drupal\alshaya_social\AlshayaSocialHelper;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -17,13 +17,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * @package Drupal\alshaya_spc\Controller
  */
 class AlshayaSpcLoginController extends ControllerBase {
-
-  /**
-   * Config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
 
   /**
    * Entity type manager.
@@ -42,19 +35,13 @@ class AlshayaSpcLoginController extends ControllerBase {
   /**
    * AlshayaSpcLoginController constructor.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
    * @param \Drupal\alshaya_social\AlshayaSocialHelper $social_helper
    *   Social helper.
    */
-  public function __construct(
-    ConfigFactoryInterface $config_factory,
-    EntityTypeManagerInterface $entity_type_manager,
-    AlshayaSocialHelper $social_helper
-  ) {
-    $this->configFactory = $config_factory;
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              AlshayaSocialHelper $social_helper) {
     $this->entityTypeManager = $entity_type_manager;
     $this->socialHelper = $social_helper;
   }
@@ -64,7 +51,6 @@ class AlshayaSpcLoginController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory'),
       $container->get('entity_type.manager'),
       $container->get('alshaya_social.helper')
     );
@@ -158,7 +144,7 @@ class AlshayaSpcLoginController extends ControllerBase {
     ];
 
     $build['#cache']['tags'][] = 'config:alshaya_social.settings';
-    $build['#cache']['tags'][] = 'config:alshaya_acm_checkout.settings';
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $config->getCacheTags());
     $build['#attached'] = [
       'drupalSettings' => [
         'country_name' => function_exists('_alshaya_country_get_site_level_country_name')
@@ -169,6 +155,18 @@ class AlshayaSpcLoginController extends ControllerBase {
         'alshaya_white_label/spc-login',
       ],
     ];
+
+    $currency_config = $this->config('acq_commerce.currency');
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $currency_config->getCacheTags());
+
+    $build['#attached']['drupalSettings']['alshaya_spc']['currency_config'] = [
+      'currency_code' => $currency_config->get('currency_code'),
+      'currency_code_position' => $currency_config->get('currency_code_position'),
+      'decimal_points' => $currency_config->get('decimal_points'),
+    ];
+
+    $build['#attached']['drupalSettings']['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
+
     return $build;
   }
 

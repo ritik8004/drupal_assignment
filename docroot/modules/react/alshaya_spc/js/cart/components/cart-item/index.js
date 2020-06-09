@@ -253,7 +253,7 @@ export default class CartItem extends React.Component {
           </div>
         </div>
         <div className="spc-promotions">
-          {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
+          {promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} link />)}
         </div>
         <Notifications>
           <CartItemOOS type="warning" inStock={inStock} />
