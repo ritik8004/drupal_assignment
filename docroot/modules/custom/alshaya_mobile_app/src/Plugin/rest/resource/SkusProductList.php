@@ -205,13 +205,14 @@ class SkusProductList extends ResourceBase {
     foreach ($sku_cache_tags as $sku_cache_tag) {
       $cacheable_metadata->addCacheTags($sku_cache_tag);
     }
-    $response->addCacheableDependency($cacheable_metadata);
+
     // Since the sku list is passed in query arguments, we shall add a
     // dependency on query arguments.
     $cacheable_metadata->addCacheContexts(['url.query_args']);
 
-    return $response;
+    $response->addCacheableDependency($cacheable_metadata);
 
+    return $response;
   }
 
   /**
