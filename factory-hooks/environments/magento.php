@@ -555,12 +555,12 @@ $magentos = [
     ],
   ],
   'mu_qa' => [
-    'url' => 'https://integration-5ojmyuq-tw5uijob6hir2.eu-3.magentosite.cloud',
+    'url' => 'https://integration-5ojmyuq-szaftnexsfo4k.eu-3.magentosite.cloud',
     'magento_secrets' => [
-      'consumer_key' => 'yyt9xtlfaaxw55c1h9xbw0mlff8j8ovt',
-      'consumer_secret' => 'k63ke42x62x1hssrtxy1e33c5vmyqgwy',
-      'access_token' => 'o0kvxvg1hge9j51twpyztl9uxvvq78y2',
-      'access_token_secret' => '05m2gsyg0sxrs87aehwghc2ct0ttmtuo',
+      'consumer_key' => 'd8gfbetgjq5ivnqoqas85hdpi1zdplf1',
+      'consumer_secret' => 'gaxphnn61qgg5js9dsy2xrwlc70dehn5',
+      'access_token' => '214yfy8hauwdqu4b25ci573iefokdp85',
+      'access_token_secret' => 'z6jfn1akazvc86cpq5v1ymwi5ikcouhr',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 6],

@@ -572,25 +572,31 @@ $conductors = [
   'aeoeg_prod' => [
     'site_id' => 208,
   ],
+  // Muji
+  'muae_dev' => [
+    'hmac_id' => 'fa9f4aee73dd4acc93bb4f8457cc8486',
+    'hmac_secret' => 'NzE5MDQ2NmYtNTg3My00',
+    'site_id' => 240,
+  ],
   'mukw_qa' => [
-    'hmac_id' => 'e6c4af7406bb4694a0caa108409617d9',
-    'hmac_secret' => 'OGU4Yjg1ZDMtNWI5NS00',
-    'site_id' => 174,
+    'hmac_id' => '64c8be065a6142e59b408db05439332d',
+    'hmac_secret' => 'MmIxOWM3OTgtOGQ1OS00',
+    'site_id' => 234,
   ],
   'musa_qa' => [
-    'hmac_id' => 'e6b1671eda3b442f9119045676199d93',
-    'hmac_secret' => 'NTg3N2Q3NWItMjJhOC00',
-    'site_id' => 175,
+    'hmac_id' => 'f7e2dd7a78ef4dd1a361d3bdb048714a',
+    'hmac_secret' => 'MTU4OTY3NDgtOGM3ZS00',
+    'site_id' => 235,
   ],
   'muae_qa' => [
-    'hmac_id' => '89e42750b2764506b5533ed781d49e87',
-    'hmac_secret' => 'MmYxZGQ0NDYtYTQ5MC00',
-    'site_id' => 176,
+    'hmac_id' => '45e8107d0344489a9dfe4323ae53e586',
+    'hmac_secret' => 'YTg1NWQ1NzktZWZkYi00',
+    'site_id' => 236,
   ],
   'mueg_qa' => [
-    'hmac_id' => '5e49e396d2ec416f9216a3a287f738fc',
-    'hmac_secret' => 'YzdkOTIyYjItNzc3ZS00',
-    'site_id' => 177,
+    'hmac_id' => 'c89dcfb3aa9146ccb84545aff3597a66',
+    'hmac_secret' => 'YTQ0NjE0NzEtYTExNS00',
+    'site_id' => 237,
   ],
   'mukw_uat' => [
     'hmac_id' => 'afb8c24dfb574debaebfe6b680a9fc43',
