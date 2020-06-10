@@ -38,3 +38,8 @@ export {
   getLangRedirect,
   setClickedItem
 } from './localStorage';
+
+export {
+  getSuperCategory,
+  getSuperCategoryOptionalFilter
+} from './SuperCategoryUtility'
