@@ -49,3 +49,4 @@ switch ($env) {
 // Setting s3fs bucket and root folder.
 $settings['s3fs.settings']['bucket'] = $bucket;
 $settings['s3fs.settings']['root_folder'] = $env . '/' . $acsf_site_code . '/shared';
+$settings['s3fs.settings']['region'] = 'eu-west-1';
