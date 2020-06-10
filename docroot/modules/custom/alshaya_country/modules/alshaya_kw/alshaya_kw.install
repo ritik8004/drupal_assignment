@@ -8,17 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Update decimal points for currency.
- */
-function alshaya_kw_update_8005() {
-  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency')
-    ->set('decimal_points', 3)
-    ->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add iso_currency_code for kuwait sites.
  */
 function alshaya_kw_update_8004() {
