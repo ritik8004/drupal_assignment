@@ -1,6 +1,6 @@
 import React from 'react';
 import PdpFullDescription from '../pdp-full-desc';
-import PdpDetail from '../pdp-detail';
+import PdpInfo from '../pdp-info';
 
 const DescriptionContent = (props) => {
   const {
@@ -14,7 +14,7 @@ const DescriptionContent = (props) => {
           <a className="close" onClick={() => closeModal()}>
             &times;
           </a>
-          <PdpDetail
+          <PdpInfo
             title={title}
             finalPrice={finalPrice}
             pdpProductPrice={pdpProductPrice}

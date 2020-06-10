@@ -1,6 +1,6 @@
 import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
-import PdpDetail from '../pdp-detail';
+import PdpInfo from '../pdp-info';
 
 export default class PdpHeader extends React.PureComponent {
   render() {
@@ -17,7 +17,7 @@ export default class PdpHeader extends React.PureComponent {
       <div className="magv2-header-wrapper">
         <ConditionalView condition={window.innerWidth < 768}>
           <div className="back-button" />
-          <PdpDetail
+          <PdpInfo
             title={title}
             finalPrice={finalPrice}
             pdpProductPrice={pdpProductPrice}
@@ -33,7 +33,7 @@ export default class PdpHeader extends React.PureComponent {
           </div>
         </ConditionalView>
         <ConditionalView condition={window.innerWidth > 767}>
-          <PdpDetail
+          <PdpInfo
             title={title}
             brandLogo={brandLogo}
             brandLogoAlt={brandLogoAlt}
