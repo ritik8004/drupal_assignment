@@ -116,6 +116,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   public function getRenderArray(array &$vars) {
     $vars['#attached']['library'][] = 'alshaya_pdp_react/pdp_magazine_v2_layout';
     $vars['#attached']['library'][] = 'alshaya_white_label/magazine-layout-v2';
+    $vars['#attached']['library'][] = 'alshaya_spc/cart_utilities';
 
     $entity = $vars['node'];
     $sku = $this->skuManager->getSkuForNode($entity);

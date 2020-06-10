@@ -311,6 +311,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
   $variables['#attached']['drupalSettings']['checkoutFeatureStatus'] = $checkout_feature_status;
   $variables['#attached']['drupalSettings']['cartMaxQty'] = $cart_max_qty;
   $variables['#attached']['drupalSettings']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
+  $variables['#attached']['drupalSettings']['addToCartNotificationTime'] = \Drupal::config('alshaya_acm_cart_notification.settings')->get('notification_time');
 }
 
 /**

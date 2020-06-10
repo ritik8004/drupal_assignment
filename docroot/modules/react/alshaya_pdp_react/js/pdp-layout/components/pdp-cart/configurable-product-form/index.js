@@ -54,7 +54,7 @@ class ConfigurableProductForm extends React.Component {
     const productData = getPost[1];
 
     postData.options = options;
-    productData.productName = productInfo[skuCode].variants[variantSelected].cart_title;
+    productData.product_name = productInfo[skuCode].variants[variantSelected].cart_title;
     productData.image = productInfo[skuCode].variants[variantSelected].cart_image;
     const cartEndpoint = drupalSettings.cart_update_endpoint;
 
@@ -64,7 +64,7 @@ class ConfigurableProductForm extends React.Component {
       },
     )
       .catch((error) => {
-        console.log(error.response);
+        console.log(error);
       });
   }
 

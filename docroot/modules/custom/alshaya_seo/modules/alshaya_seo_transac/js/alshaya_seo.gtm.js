@@ -45,6 +45,9 @@
 
       $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
         var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
+        if (addedProduct.length === 0) {
+          return;
+        }
         var quantity = parseInt($('.form-item-quantity select', $(this)).val());
         var size = $('.form-item-configurables-size select option:selected', $(this)).text();
         var selectedVariant = '';

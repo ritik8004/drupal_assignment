@@ -15,64 +15,11 @@ export const updateCart = (url, postData) => axios({
 });
 
 /**
- * Clear cart data.
- *
- * @param {*} selector
- */
-export const clearCartData = () => {
-  localStorage.removeItem('cart_data');
-};
-
-/**
- * Get the cart data from local storage.
- */
-export const getCartData = () => {
-  let cartData = localStorage.getItem('cart_data');
-  if (cartData) {
-    cartData = JSON.parse(cartData);
-    if (cartData && cartData.cart !== undefined) {
-      cartData = cartData.cart;
-      if (cartData.cart_id !== null) {
-        return cartData;
-      }
-    }
-  }
-
-  return null;
-};
-
-/**
- * Store product cart data in local storage.
- */
-export const storeProductData = (data) => {
-  const langcode = document.getElementsByTagName('html')[0].getAttribute('lang');
-  const key = ['product', langcode, data.sku].join(':');
-  const productData = {
-    sku: data.sku,
-    parentSKU: data.parentSKU,
-    title: data.title,
-    url: data.url,
-    image: data.image,
-    price: data.price,
-    options: data.options,
-    promotions: data.promotions,
-    maxSaleQty: data.maxSaleQty,
-    maxSaleQtyParent: data.maxSaleQtyParent,
-    gtmAttributes: data.gtmAttributes,
-    created: new Date().getTime(),
-  };
-
-  localStorage.setItem(key, JSON.stringify(productData));
-
-  return data;
-};
-
-/**
  * Get post data on add to cart.
  */
 export const getPostData = (skuCode, variantSelected) => {
   const cartAction = 'add item';
-  const cartData = getCartData();
+  const cartData = Drupal.alshayaSpc.getCartData();
   const cartId = (cartData) ? cartData.cart_id : null;
   const qty = document.getElementById('qty') ? document.getElementById('qty').value : 1;
 
@@ -104,10 +51,11 @@ export const triggerAddToCart = (
   skuCode,
 ) => {
   const productData = productDataValue;
+  const cartData = Drupal.alshayaSpc.getCartData();
   // If there any error we throw from middleware.
   if (response.data.error === true) {
     if (response.data.error_code === '400') {
-      clearCartData();
+      Drupal.alshayaSpc.clearCartData();
     }
   } else if (response.data.cart_id) {
     if (response.data.response_message.status === 'success'
@@ -143,7 +91,7 @@ export const triggerAddToCart = (
       }
     }
 
-    storeProductData({
+    Drupal.alshayaSpc.storeProductData({
       sku: productDataSKU,
       parentSKU,
       title: productData.product_name,
@@ -166,9 +114,10 @@ export const triggerAddToCart = (
 
     const form = document.getElementsByClassName('sku-base-form')[0];
     const cartNotification = new CustomEvent('product-add-to-cart-success', {
+      bubbles: true,
       detail: {
-        response,
         productData,
+        cartData,
       },
     });
     form.dispatchEvent(cartNotification);
