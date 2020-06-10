@@ -22,6 +22,8 @@ $settings['media_download_timeout_video'] = 200;
 $settings['s3fs.access_key'] = 'AKIARGKNHDDL5AKRBP7S';
 $settings['s3fs.secret_key'] = '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';
 
+require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
+
 $env = alshaya_get_site_environment();
 // This is to remove `01/02` etc from env name.
 if (substr($env, 0, 1) == '0') {
