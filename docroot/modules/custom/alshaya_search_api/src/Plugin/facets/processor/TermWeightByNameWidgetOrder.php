@@ -108,7 +108,6 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
     $build['attribute_id'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Attribute ID'),
-      '#required' => TRUE,
       '#default_value' => $this->getConfiguration()['attribute_id'] ?? '',
       '#description' => $this->t('This should contain the attribute id name which is being used for this facet.'),
     ];
