@@ -148,3 +148,20 @@
     font-size: 0.8125rem;
   }
 }
+
+// filters list with min height in mobile.
+.c-plp {
+  .block-facets-summary-blockfilter-bar-promotions,
+  .block-facets-summary-blockfilter-bar-plp,
+  .block-facets-summary-blockfilter-bar {
+    @include breakpoint($only-mobile) {
+      ul {
+        .applied-filter {
+          &.max-height {
+            overflow: hidden;
+          }
+        }
+      }
+    }
+  }
+}
