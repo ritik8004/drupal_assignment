@@ -149,6 +149,7 @@ class ConfigurableProductForm extends React.Component {
                 configurableCombinations={configurableCombinations}
                 key={key}
                 isGroup={configurables[key].isGroup}
+                isSwatch={configurables[key].isSwatch}
                 nextCode={nextCode}
                 nextValues={nextValues}
                 refreshConfigurables={this.refreshConfigurables}

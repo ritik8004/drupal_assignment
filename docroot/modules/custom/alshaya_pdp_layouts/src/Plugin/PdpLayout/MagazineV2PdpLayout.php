@@ -170,9 +170,24 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       // Prepare group and swatch attributes.
       foreach ($product_tree['configurables'] as $key => $configurable) {
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isGroup'] = FALSE;
+        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = FALSE;
         if (!$swatch_processed && in_array($key, $this->skuManager->getPdpSwatchAttributes())) {
           $swatch_processed = TRUE;
-          // Todo: Swatch processing.
+          $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = TRUE;
+          foreach ($configurable['values'] as $value => $label) {
+            if (empty($value)) {
+              continue;
+            }
+
+            $swatch_sku = $this->skuManager->getChildSkuFromAttribute($sku_entity, $key, $value);
+            if ($swatch_sku instanceof SKU) {
+              $swatch_image_url = $this->skuImageManager->getPdpSwatchImageUrl($swatch_sku);
+              if ($swatch_image_url) {
+                $swatch_image = file_url_transform_relative($swatch_image_url);
+                $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'][$value]['swatch_image'] = $swatch_image;
+              }
+            }
+          }
         }
         elseif ($alternates = $this->optionsHelper->getSizeGroup($key)) {
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isGroup'] = TRUE;

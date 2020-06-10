@@ -1,12 +1,13 @@
 import React from 'react';
 import GroupSelectOption from '../group-select-option';
 import NonGroupSelectOption from '../non-group-select-option';
+import SwatchSelectOption from '../swatch-select-option';
 
 class CartSelectOption extends React.Component {
   constructor(props) {
     super(props);
     const {
-      isGroup, configurables,
+      isGroup, configurables, isSwatch,
     } = this.props;
     let defaultGroup = null;
 
@@ -20,6 +21,7 @@ class CartSelectOption extends React.Component {
     this.state = {
       groupName: isGroup ? defaultGroup : null,
       groupStatus: isGroup,
+      swatchStatus: isSwatch,
     };
   }
 
@@ -66,9 +68,20 @@ class CartSelectOption extends React.Component {
     const {
       groupName,
       groupStatus,
+      swatchStatus,
     } = this.state;
 
-    const selectOption = (
+    const swatchSelectOption = (
+      <SwatchSelectOption
+        handleSelectionChanged={this.handleSelectionChanged}
+        configurables={configurables}
+        code={code}
+        nextCode={nextCode}
+        nextValues={nextValues}
+      />
+    );
+
+    const selectOption = (!swatchStatus) ? (
       <div className="non-grouped-attr">
         <NonGroupSelectOption
           handleSelectionChanged={this.handleSelectionChanged}
@@ -78,7 +91,7 @@ class CartSelectOption extends React.Component {
           nextValues={nextValues}
         />
       </div>
-    );
+    ) : swatchSelectOption;
 
     return (groupStatus) ? (
       <div className="grouped-attr">
