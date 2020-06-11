@@ -60,16 +60,3 @@ function alshaya_pdp_layouts_preprocess_alshaya_magazine(&$vars) {
   $event_dispatcher->dispatch(PreprocessMagazineEvent::EVENT_NAME, $event);
   $vars = $event->getVariables();
 }
-
-/**
- * Implements hook_preprocess_page().
- */
-function alshaya_pdp_layouts_preprocess_page(&$variables) {
-  // Get cart configurations.
-  $cart_max_qty = \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty');
-  $checkout_feature_status = \Drupal::config('alshaya_acm.cart_config')->get('checkout_feature');
-  $variables['#attached']['drupalSettings']['checkoutFeatureStatus'] = $checkout_feature_status;
-  $variables['#attached']['drupalSettings']['cartMaxQty'] = $cart_max_qty;
-  $variables['#attached']['drupalSettings']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
-  $variables['#attached']['drupalSettings']['addToCartNotificationTime'] = \Drupal::config('alshaya_acm_cart_notification.settings')->get('notification_time');
-}
