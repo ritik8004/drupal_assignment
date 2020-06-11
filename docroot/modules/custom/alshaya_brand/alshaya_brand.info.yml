@@ -3,3 +3,5 @@ description: 'Contains brand shared code.'
 type: module
 core: 8.x
 package: Alshaya
+dependencies:
+  - s3fs:s3fs
