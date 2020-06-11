@@ -6,18 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Enables lhn filters on PBK.
- */
-function alshaya_pbk_update_8001() {
-  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings');
-  $config->set('enable_lhn_tree_search', 1);
-  $config->save();
-  _alshaya_search_api_reindex();
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_pbk_install() {
