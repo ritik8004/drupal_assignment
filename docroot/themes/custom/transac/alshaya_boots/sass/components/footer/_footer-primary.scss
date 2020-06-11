@@ -193,7 +193,7 @@
   }
 
   @include breakpoint($only-tablet) {
-    min-width: 14.5rem;
+    min-width: 13.5rem;
   }
 
   .form-email {
@@ -317,12 +317,6 @@
 
 .c-footer-primary .language-switcher-language-url,
 .only-first-time .language-switcher-language-url {
-  #{$left}: -1.25rem;
-
-  html[lang=ar] & {
-    right: -1.75rem;
-  }
-
   ul {
     li {
       &.en.is-active a {
@@ -332,6 +326,16 @@
       &.ar.is-active a {
         font-family: $alshaya-arabic-bold-nodir;
       }
+    }
+  }
+}
+
+.only-first-time .language-switcher-language-url {
+  @include breakpoint($only-mobile) {
+    #{$left}: -1.25rem;
+
+    html[lang=ar] & {
+      right: -1.75rem;
     }
   }
 }
@@ -351,7 +355,7 @@
 
         &.is-active {
           background: $lang_switch_active_bg;
-          color: $lang_switch_active;
+          color: $lang_switch_list_active;
         }
       }
 
