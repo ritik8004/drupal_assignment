@@ -13,6 +13,22 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_update_N().
  *
+ * Add new API to get all custom blocks for a path.
+ */
+function alshaya_mobile_app_update_8072() {
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['rest.resource.blocks_for_path'],
+    'alshaya_mobile_app'
+  );
+
+  // Re-save config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new API to allow resetting user password.
  */
 function alshaya_mobile_app_update_8071() {
