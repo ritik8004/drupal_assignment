@@ -72,6 +72,12 @@
           transition: opacity 0.2s;
         }
       }
+
+      .trending-title {
+        @include breakpoint($only-tablet) {
+          text-align: $left;
+        }
+      }
     }
 
     .react-autosuggest__suggestions-container {
@@ -82,15 +88,6 @@
 
         @include breakpoint($only-mobile) {
           border: none;
-        }
-
-        @include breakpoint($only-tablet) {
-          border: none;
-          border-bottom: 1px solid $algolia-auto-complete-border;
-        }
-
-        @include breakpoint($desktop) {
-          border-top: none;
         }
       }
     }
