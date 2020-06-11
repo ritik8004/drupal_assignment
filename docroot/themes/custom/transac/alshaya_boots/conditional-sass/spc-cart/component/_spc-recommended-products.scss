@@ -1,0 +1,8 @@
+.spc-recommended-products {
+  .nav-next,
+  .nav-prev {
+    &::before {
+      color: $spc-recommended-product-arrow;
+    }
+  }
+}

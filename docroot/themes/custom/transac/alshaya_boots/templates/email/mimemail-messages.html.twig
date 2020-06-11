@@ -10,7 +10,7 @@
         .button { text-transform: uppercase; background: #004990; font-size: 12px; color: #fff; padding: 10px 30px; margin: 10px 0; display: inline-block;border-radius: 3px;}
         p { margin-bottom: 16px;}
         #center {min-height: 200px; padding: 0 25px;}
-        #header {border-bottom: 1px solid #ddd; padding: 25px 25px 40px 25px; margin-bottom: 23px;}
+        #header {border-bottom: 1px solid #ddd; padding: 25px 25px 25px 25px; margin-bottom: 23px;}
         .footer {margin-top: 50px;}
         u + #mimemail-body a {color: #004990;}
         u + #mimemail-body .button {color: #fff !important;}
@@ -25,7 +25,7 @@
   </head>
   <body id="mimemail-body" class="{{ lang }}" {% if ( module | length > 0 ) and ( key | length > 0 ) %}  {% set class = 'class="' ~ module ~ '-' ~ key ~ '"' %} {% endif %} >
     <div id="header">
-      <img src="{{ email_logo }}" width="464px" alt="logo" title="logo"/>
+      <img src="{{ email_logo }}" width="134px" alt="logo" title="logo"/>
     </div>
     <div id="center">
       <div id="main">
@@ -36,7 +36,7 @@
       <div style="padding-top: 30px; padding-bottom: 50px;">
         {% for name, link in links %}
           <a href="{{ link }}" target="_blank" style="text-decoration: none;">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/icons/email-social-icons/{{ name }}-icon.png" alt="{{ name|t }}" width="24.3px" title="{{ name|t }}" />
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/icons/{{ name }}-icon.png" alt="{{ name|t }}" width="24.3px" title="{{ name|t }}" />
           </a>
         {% endfor %}
       </div>

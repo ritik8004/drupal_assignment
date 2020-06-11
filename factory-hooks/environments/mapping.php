@@ -255,12 +255,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'aeokw_dev',
       ],
     ],
-    'bpkw' => [
-      'dev' => [
-        'magento' => 'bp_qa',
-        'conductor' => 'bpkw_dev',
-      ],
-    ],
     'aeosa' => [
       'dev2' => [
         'magento' => 'aeo_uat',
@@ -269,6 +263,40 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'local' => [
         'magento' => 'aeo_uat',
         'conductor' => 'aeosa_uat',
+      ],
+    ],
+    'bpkw' => [
+      'dev' => [
+        'magento' => 'bp_qa',
+        'conductor' => 'bpkw_dev',
+      ],
+    ],
+    'mukw' => [
+      'local' => [
+        'magento' => 'mu_uat',
+        'conductor' => 'mukw_uat',
+      ],
+    ],
+    'muae' => [
+      'dev' => [
+        'magento' => 'mu_qa',
+        'conductor' => 'muae_dev',
+      ],
+      'local' => [
+        'magento' => 'mu_qa',
+        'conductor' => 'muae_qa',
+      ],
+    ],
+    'musa' => [
+      'local' => [
+        'magento' => 'mu_qa',
+        'conductor' => 'musa_qa',
+      ],
+    ],
+    'mueg' => [
+      'local' => [
+        'magento' => 'mu_qa',
+        'conductor' => 'mueg_qa',
       ],
     ],
     'pbkkw' => [
@@ -293,30 +321,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'local' => [
         'magento' => 'pbk_qa',
         'conductor' => 'pbkeg_qa',
-      ],
-    ],
-    'mukw' => [
-      'local' => [
-        'magento' => 'mu_uat',
-        'conductor' => 'mukw_uat',
-      ],
-    ],
-    'muae' => [
-      'local' => [
-        'magento' => 'mu_qa',
-        'conductor' => 'muae_qa',
-      ],
-    ],
-    'musa' => [
-      'local' => [
-        'magento' => 'mu_qa',
-        'conductor' => 'musa_qa',
-      ],
-    ],
-    'mueg' => [
-      'local' => [
-        'magento' => 'mu_qa',
-        'conductor' => 'mueg_qa',
       ],
     ],
   ];
