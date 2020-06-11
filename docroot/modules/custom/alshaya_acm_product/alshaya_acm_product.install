@@ -50,8 +50,9 @@ function alshaya_acm_product_update_8058() {
 }
 
 /**
- * Add config to turn video download on/off.
+ * Implements hook_update_N().
  *
+ * Add config to turn video download on/off.
  * Enable alshaya_brand module.
  */
 function alshaya_acm_product_update_8057() {
@@ -1174,14 +1175,6 @@ function alshaya_acm_product_install() {
   ];
   $product_config_factory->set('content', $content);
   $product_config_factory->save();
-  // Translation for label.
-  $strings = [
-    'Details' => [
-      'ar' => 'تفاصيل',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
 }
 
 /**

@@ -255,18 +255,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'aeokw_dev',
       ],
     ],
-    'bpkw' => [
-      'dev' => [
-        'magento' => 'bp_qa',
-        'conductor' => 'bpkw_dev',
-      ],
-    ],
-    'muae' => [
-      'dev' => [
-        'magento' => 'mu_qa',
-        'conductor' => 'muae_dev',
-      ],
-    ],
     'aeosa' => [
       'dev2' => [
         'magento' => 'aeo_uat',
@@ -277,6 +265,12 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'aeosa_uat',
       ],
     ],
+    'bpkw' => [
+      'dev' => [
+        'magento' => 'bp_qa',
+        'conductor' => 'bpkw_dev',
+      ],
+    ],
     'mukw' => [
       'local' => [
         'magento' => 'mu_uat',
@@ -284,6 +278,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       ],
     ],
     'muae' => [
+      'dev' => [
+        'magento' => 'mu_qa',
+        'conductor' => 'muae_dev',
+      ],
       'local' => [
         'magento' => 'mu_qa',
         'conductor' => 'muae_qa',
@@ -324,7 +322,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'pbk_qa',
         'conductor' => 'pbkeg_qa',
       ],
-    ]
+    ],
   ];
 
   // All 01update should match 01live.
