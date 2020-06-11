@@ -25,7 +25,7 @@ const PpdDescription = (props) => {
       </div>
       <DescriptionContent
         closeModal={closeModal}
-        title={title.label}
+        title={title}
         pdpProductPrice={pdpProductPrice}
         finalPrice={finalPrice}
         skuCode={skuCode}

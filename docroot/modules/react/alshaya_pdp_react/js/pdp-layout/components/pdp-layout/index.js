@@ -3,7 +3,6 @@ import PdpGallery from '../pdp-gallery';
 import PdpDescription from '../pdp-description';
 import PdpInfo from '../pdp-info';
 import PdpCart from '../pdp-cart';
-import PdpDetail from '../pdp-detail';
 import PdpHeader from '../pdp-header';
 import { getProductValues } from '../../../utilities/pdp_layout';
 import PdpStandardDelivery from '../pdp-standard-delivery';
@@ -64,7 +63,7 @@ const PdpLayout = () => {
     <>
       <div className="magv2-header" ref={header}>
         <PdpHeader
-          title={title.label}
+          title={title}
           finalPrice={finalPrice}
           pdpProductPrice={priceRaw}
           brandLogo={brandLogo}
@@ -77,8 +76,8 @@ const PdpLayout = () => {
           <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
         </div>
         <div className="magv2-sidebar">
-          <PdpDetail
-            title={title.label}
+          <PdpInfo
+            title={title}
             finalPrice={finalPrice}
             pdpProductPrice={priceRaw}
             childRef={(ref) => (getChildRef(ref))}
@@ -94,14 +93,6 @@ const PdpLayout = () => {
             pdpProductPrice={priceRaw}
             finalPrice={finalPrice}
           />
-          <div id="pdp-info">
-            <PdpInfo
-              skuCode={skuItemCode}
-              title={title}
-              pdpProductPrice={priceRaw}
-              finalPrice={finalPrice}
-            />
-          </div>
           <PdpCart
             skuCode={skuItemCode}
             configurableCombinations={configurableCombinations}
