@@ -222,7 +222,7 @@ class PromotionProductListResource extends ResourceBase {
     // Set price facet key.
     $this->alshayaSearchApiQueryExecute->setPriceFacetKey('promotion_price_facet');
     // Set selling price facet key.
-    $this->alshayaSearchApiQueryExecute->setSellingPriceFacetKey('promotion_selling_price_facet');
+    $this->alshayaSearchApiQueryExecute->setSellingPriceFacetKey('promo_selling_price');
 
     // Add condition for promotion node.
     $query->addCondition('promotion_nid', $nid);
