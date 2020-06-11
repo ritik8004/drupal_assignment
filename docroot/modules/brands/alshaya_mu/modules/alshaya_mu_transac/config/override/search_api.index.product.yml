@@ -19,16 +19,6 @@ field_settings:
         - field.storage.node.field_skus     
       module:       
         - acq_sku
-  attr_color_name:    
-    label: 'Color name'    
-    datasource_id: entity:node    
-    property_path: field_skus:entity:attr_color_name    
-    type: string    
-    dependencies:      
-      config:        
-        - field.storage.node.field_skus     
-      module:       
-        - acq_sku
   attr_sel_depa:    
     label: 'Sel Depa'    
     datasource_id: entity:node    
@@ -53,16 +43,6 @@ field_settings:
     label: 'Sel class'    
     datasource_id: entity:node    
     property_path: field_skus:entity:attr_sel_class    
-    type: string    
-    dependencies:      
-      config:        
-        - field.storage.node.field_skus     
-      module:       
-        - acq_sku
-  attr_size_name:    
-    label: 'Size'    
-    datasource_id: entity:node    
-    property_path: field_skus:entity:attr_size_name    
     type: string    
     dependencies:      
       config:        

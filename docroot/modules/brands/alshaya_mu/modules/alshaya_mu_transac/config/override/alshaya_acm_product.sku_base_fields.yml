@@ -40,11 +40,6 @@ fields:
   short_description2:
     label: 'Short Description 2'
     type: 'string'
-  size_name:
-    label: 'Size Name'
-    type: 'string'
-    index: 1
-    facet: 1
   spec_en:
     label: 'Spec En'
     type: 'string'
