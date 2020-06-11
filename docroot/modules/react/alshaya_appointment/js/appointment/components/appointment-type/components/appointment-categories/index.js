@@ -5,15 +5,10 @@ const categoryItems = ['Pharmacy', 'Opticians', 'Hearing Care', 'Beauty'];
 export default class AppointmentCategories extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      activeItem: -1,
-    };
   }
 
-  handleItemClick = (index) => {
-    this.setState({
-      activeItem: index
-    });
+  handleItemClick = (item) => {
+    this.props.handleItemClick(item)
   }
 
   render () {
@@ -23,9 +18,9 @@ export default class AppointmentCategories extends React.Component {
         <ul className="appointment-categories">
           { categoryItems.map((item, index) =>
             <li 
-              className={this.state.activeItem === index ? 'appointment-category active' : 'appointment-category'}
+              className={this.props.activeItem === item ? 'appointment-category active' : 'appointment-category'}
               key={index}
-              onClick={() => this.handleItemClick(index)}
+              onClick={() => this.handleItemClick(item)}
             >
               <span className="appointment-category-icon"></span>
               <span className="appointment-category-title">{item}</span>
@@ -36,4 +31,4 @@ export default class AppointmentCategories extends React.Component {
     );
   };
 
-}
+} 
