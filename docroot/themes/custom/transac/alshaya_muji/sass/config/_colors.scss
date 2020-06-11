@@ -20,6 +20,10 @@ $windows-blue: $black;
 $thunderbird: #b91824;
 $mujidarkred: #7f0019;
 $mujilightbluegray: #eff0f4;
+$greyish: #808080;
+$mujidarkgray: #404040;
+$grey-light: #777;
+$black-two: #000;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -58,7 +62,7 @@ $primary_checkbox_filled: $black;
 $primary_checkbox_empty: $black;
 
 // Buttons.
-$primary_btn_bg: $black;
+$primary_btn_bg: $mujidarkred;
 $primary_btn_text: $white;
 $primary_empty_btn: $black;
 $primary_empty_btn_border: $black;
@@ -118,6 +122,7 @@ $pdp_color_attribute_hover: $black;
 $pdp_color_attribute: $grey;
 $pdp_desc_wrapper_close_bg: $black;
 $pdp_sizeguide_link: $black;
+$pdp_product_special_price_text: $alizarin-crimson;
 
 // Product Add to cart form.
 $pdp_sidebar_label: $black;
@@ -614,3 +619,12 @@ $algolia-suggestion-text: $primary_text;
 $algolia-react-highlighted-text: $primary_text;
 $algolia-search-icon: $transparent;
 $algolia-react-highlighted-bg: $transparent;
+
+// SPC
+$spc-product-attributes: $greyish;
+$spc-promo-submit-bg: $mujidarkgray;
+$spc-edit-button: $black-two;
+$spc-shipping-price: $grey-light;
+$spc-cart-background: $wild-sand;
+$spc-checkout-order-detail-label: $grey;
+$spc-deliver-button: $mujidarkred;
