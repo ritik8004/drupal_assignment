@@ -50,9 +50,9 @@
 
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-      $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e, productData) {
+      $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e) {
         spinner_stop();
-
+        var productData = e.detail.productData;
         // Scroll and show cart notification.
         var cart_notification_data = {
           image: productData.image,
