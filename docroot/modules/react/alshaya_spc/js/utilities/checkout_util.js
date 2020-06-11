@@ -62,6 +62,12 @@ export const placeOrder = (paymentMethod) => {
           return;
         }
 
+        if (response.data.error && response.data.redirectUrl !== undefined) {
+          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.');
+          window.location = response.data.redirectUrl;
+          return;
+        }
+
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
           message: response.data.error_message,

@@ -65,6 +65,7 @@
     legend {
       text-transform: uppercase;
       font-size: 0.8125rem;
+      padding-#{$right}: 1.9875rem;
 
       @include icon(triangle-down, after) {
         font-size: 0.6875rem;
@@ -78,6 +79,7 @@
     .c-collapse__title {
       text-transform: uppercase;
       font-size: 0.8125rem;
+      padding-#{$right}: 1.9875rem;
 
       @include icon(triangle-down, after) {
         font-size: 0.6875rem;
@@ -107,6 +109,7 @@
     .c-collapse__title {
       text-transform: uppercase;
       font-size: 0.8125rem;
+      padding-#{$right}: 1.9875rem;
     }
   }
 }
@@ -146,5 +149,22 @@
   .block-facets-summary-blockfilter-bar-plp .filter-list-label,
   .block-facets-summary-blockfilter-bar .filter-list-label {
     font-size: 0.8125rem;
+  }
+}
+
+// filters list with min height in mobile.
+.c-plp {
+  .block-facets-summary-blockfilter-bar-promotions,
+  .block-facets-summary-blockfilter-bar-plp,
+  .block-facets-summary-blockfilter-bar {
+    @include breakpoint($only-mobile) {
+      ul {
+        .applied-filter {
+          &.max-height {
+            overflow: hidden;
+          }
+        }
+      }
+    }
   }
 }

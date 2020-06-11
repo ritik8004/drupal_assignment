@@ -82,6 +82,7 @@
 
         @include breakpoint ($only-tablet) {
           width: 64%;
+          min-width: 9.5rem;
         }
 
         @include breakpoint($only-mobile) {
