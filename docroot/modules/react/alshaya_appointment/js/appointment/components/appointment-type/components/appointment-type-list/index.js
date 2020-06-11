@@ -2,6 +2,7 @@ import React from 'react';
 import ReadMoreAndLess from 'react-read-more-less';
 
 const AppointmentTypeItems = [
+  { value: '', label: 'Please Select' },
   { value: 'WInter Flu Jab Service (KD 22- 45)', label: 'WInter Flu Jab Service (KD 22- 45)' },
   { value: 'Pneumonia Vaccination Service (KD 11- 17)', label: 'Pneumonia Vaccination Service (KD 11- 17)' },
   { value: 'Travel Vaccination and Advice Service (KD 27- 51)', label: 'Travel Vaccination and Advice Service (KD 27- 51)' },
@@ -30,7 +31,12 @@ export default class AppointmentTypeList extends React.Component {
             onChange={this.handleChange}
           >
             {AppointmentTypeItems.map(v => (
-              <option value={v.value}>{v.label}</option>
+              <option
+                value={v.value}  
+                selected={this.props.activeItem === v.value}
+              >
+                {v.label}
+              </option>
             ))}
           </select>
           <ReadMoreAndLess

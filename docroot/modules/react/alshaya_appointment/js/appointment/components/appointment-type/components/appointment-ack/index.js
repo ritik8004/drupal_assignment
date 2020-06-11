@@ -17,6 +17,7 @@ export default class AppointmentAck extends React.Component {
         <input
           type="checkbox"
           name="appointmentAck"
+          checked={this.props.activeItem}
           onChange={this.handleChange}
         />
         <div className="appointment-ack-inner-wrapper">

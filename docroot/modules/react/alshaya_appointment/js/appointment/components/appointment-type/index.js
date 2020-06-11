@@ -8,17 +8,20 @@ import AppointmentAck from "../appointment-type/components/appointment-ack";
 export default class AppointmentType extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      appointmentCategory: '',
-      appointmentType: '',
-      appointmentCompanion: '',
-      appointmentForYou: 'Yes',
-      appointmentAck: '',
-    };
-    // this.state = {
-    //   appointment_data: JSON.parse(localStorage.getItem('appointment_data')) || []
-    // }
-    console.log(localStorage.getItem('appointment_data'))
+    var localStorageValues = JSON.parse(localStorage.getItem('appointment_data'));
+    if (localStorageValues) {
+      this.state = {
+        ...localStorageValues
+      };
+    } else {
+      this.state = {
+        appointmentCategory: '',
+        appointmentType: '',
+        appointmentCompanion: '',
+        appointmentForYou: 'Yes',
+        appointmentAck: '',
+      };
+    }
   }
 
   handleCategoryClick = (category) => {
@@ -34,9 +37,8 @@ export default class AppointmentType extends React.Component {
     });
   }
 
-  handleClick = () => {
+  handleSubmit = () => {
     localStorage.setItem('appointment_data', JSON.stringify(this.state));
-    console.log(localStorage.getItem('appointment_data'))
   }
 
   render () {
@@ -48,22 +50,25 @@ export default class AppointmentType extends React.Component {
         />
         <AppointmentTypeList
           handleChange = {this.handleChange}
+          activeItem = {this.state.appointmentType}
         />
         <AppointmentCompanion
           handleChange = {this.handleChange}
+          activeItem = {this.state.appointmentCompanion}
         />
         <AppointmentForYou
           handleChange = {this.handleChange}
-          appointmentForYou = {this.state.appointmentForYou}
+          activeItem = {this.state.appointmentForYou}
         />
         <AppointmentAck
           handleChange = {this.handleChange}
+          activeItem = {this.state.appointmentAck}
         />
 
         <button
           className="appointment-type-button"
           type="button"
-          onClick={this.handleClick}
+          onClick={this.handleSubmit}
         >
           {Drupal.t('Continue')}
         </button>

@@ -1,6 +1,7 @@
 import React from 'react';
 
 const AppointmentCompanionItems = [
+  { value: '', label: 'Please Select' },
   { value: '1', label: '1' },
   { value: '2', label: '2' },
   { value: '3', label: '3' },
@@ -26,7 +27,12 @@ export default class AppointmentCompanion extends React.Component {
             onChange={this.handleChange}
           >
             {AppointmentCompanionItems.map(v => (
-              <option value={v.value}>{v.label}</option>
+              <option
+                value={v.value}
+                selected={this.props.activeItem === v.value}
+              >
+                {v.label}
+              </option>
             ))}
           </select>
       </div>

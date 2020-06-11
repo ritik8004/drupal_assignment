@@ -19,7 +19,7 @@ export default class AppointmentForYou extends React.Component {
               type="radio"
               value="Yes"
               name="appointmentForYou"
-              checked={this.props.appointmentForYou === "Yes"}
+              checked={this.props.activeItem === "Yes"}
               onChange={this.handleChange}
             />
             {Drupal.t('Yes')}
@@ -29,7 +29,7 @@ export default class AppointmentForYou extends React.Component {
               type="radio"
               value="No"
               name="appointmentForYou"
-              checked={this.props.appointmentForYou === "No"}
+              checked={this.props.activeItem === "No"}
               onChange={this.handleChange}
             />
             {Drupal.t('No')}
