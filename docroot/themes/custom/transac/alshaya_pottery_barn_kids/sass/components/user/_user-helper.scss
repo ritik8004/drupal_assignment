@@ -9,9 +9,9 @@
     color: $primary_btn_text;
     background-color: $primary_btn_bg;
     font-family: $pbk_primary_button_fontfamily;
-    font-weight: normal !important;
+    font-weight: 600;
     text-align: center;
-    padding: 0.6875rem 0.85rem 0.5rem;
+    padding: 0.5875rem 0.85rem 0.5rem;
   }
 }
 
@@ -20,7 +20,7 @@
     font-size: 1rem;
     color: $transparent_btn_text;
     font-family: $pbk_primary_button_fontfamily;
-    font-weight: normal !important;
+    font-weight: 600;
   }
 }
 
@@ -31,8 +31,8 @@
     justify-content: center;
     font-size: 1rem;
     font-family: $pbk_primary_button_fontfamily;
-    font-weight: normal !important;
-    padding-top: 0.6875rem;
+    font-weight: 600;
+    padding-top: 0.5875rem;
     padding-bottom: 0.5rem;
   }
 }
@@ -70,7 +70,7 @@
   @include pbk_primary_button;
 
   @include breakpoint($desktop) {
-    padding-top: 0.6875rem;
+    padding-top: 0.5875rem;
   }
 }
 
@@ -104,7 +104,7 @@ form.user-communication-preference .form-submit {
   @include pbk_transparent_button;
 
   @include breakpoint($desktop) {
-    padding-top: 0.625rem;
+    padding-top: 0.5rem;
     padding-bottom: 0.4375rem;
   }
 }
