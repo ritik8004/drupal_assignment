@@ -138,29 +138,9 @@ function alshaya_hm_update_8049() {
 /**
  * Implements hook_update_N().
  *
- * Make size_group_code field type attribute from type string..
- */
-function alshaya_hm_update_8048() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.sku_base_fields'],
-    'alshaya_acm_product'
-  );
-
-  // Make size_group_code field type attribute from type string.
-  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
-  $size_group_code = $config->get('size_group_code');
-  $size_group_code['type'] = 'attribute';
-  $config->set('size_group_code', $size_group_code);
-  $config->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add query string in footer logo image.
  */
-function alshaya_hm_update_8047() {
+function alshaya_hm_update_8048() {
   $logo_file_name = 'h-m-logo-bw.svg';
   $logo_updated_file_name = 'h-m-logo-bw.svg?' . REQUEST_TIME;
 
@@ -178,6 +158,26 @@ function alshaya_hm_update_8047() {
   $block_content_ar = str_replace($logo_file_name, $logo_updated_file_name, $footer_logo_block_content);
   $footer_logo_block_ar->set('body', ['value' => $block_content_ar, 'format' => 'rich_text']);
   $footer_logo_block_ar->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Make size_group_code field type attribute from type string..
+ */
+function alshaya_hm_update_8047() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  // Make size_group_code field type attribute from type string.
+  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
+  $size_group_code = $config->get('size_group_code');
+  $size_group_code['type'] = 'attribute';
+  $config->set('size_group_code', $size_group_code);
+  $config->save();
 }
 
 /**
@@ -1049,89 +1049,6 @@ function alshaya_hm_install() {
     'ART NO' => [
       'en' => 'Art. no.',
       'ar' => 'فن. لا.',
-    ],
-    'TITLE NAME' => [
-      'ar' => 'اسم المنتج',
-    ],
-    'ARTICLE DESCRIPTION' => [
-      'en' => 'ARTICLE DESCRIPTION',
-      'ar' => 'وصف المقال',
-    ],
-    'FUNCTION' => [
-      'en' => 'FUNCTION',
-      'ar' => 'الوظيفة',
-    ],
-    'AGE GROUP' => [
-      'en' => 'AGE GROUP',
-      'ar' => 'الفئة العمرية',
-    ],
-    'STYLE' => [
-      'en' => 'STYLE',
-      'ar' => 'التصميم',
-    ],
-    'CLOTHING STYLE' => [
-      'en' => 'CLOTHING STYLE',
-      'ar' => 'تصميم الملابس',
-    ],
-    'COLLAR STYLE' => [
-      'en' => 'COLLAR STYLE',
-      'ar' => 'تصميم الياقة',
-    ],
-    'NECKLINE STYLE' => [
-      'en' => 'NECKLINE STYLE',
-      'ar' => 'تصميم القبة',
-    ],
-    'ACCESSORIES STYLE' => [
-      'en' => 'ACCESSORIES STYLE',
-      'ar' => 'تصميم الإكسسوارات',
-    ],
-    'FOOTWEAR STYLE' => [
-      'en' => 'FOOTWEAR STYLE',
-      'ar' => 'تصميم الحذاء',
-    ],
-    'FIT' => [
-      'en' => 'FIT',
-      'ar' => 'القصة',
-    ],
-    'DESCRIPTIVE LENGTH' => [
-      'en' => 'DESCRIPTIVE LENGTH',
-      'ar' => 'الطول الوصفي',
-    ],
-    'GARMENT LENGTH' => [
-      'en' => 'GARMENT LENGTH',
-      'ar' => 'طول الملابس',
-    ],
-    'SLEEVE LENGTH' => [
-      'en' => 'SLEEVE LENGTH',
-      'ar' => 'طول الأكمام',
-    ],
-    'WAIST RISE' => [
-      'en' => 'WAIST RISE',
-      'ar' => 'ارتفاع الخصر',
-    ],
-    'HEEL HEIGHT' => [
-      'en' => 'HEEL HEIGHT',
-      'ar' => 'ارتفاع الكعب',
-    ],
-    'MEASURMENTS IN CM' => [
-      'en' => 'MEASURMENTS IN CM',
-      'ar' => 'المقاسات في سم',
-    ],
-    'TEXTUAL PRINT' => [
-      'en' => 'TEXTUAL PRINT',
-      'ar' => 'الطبعات',
-    ],
-    'LICENSE COMPANY' => [
-      'en' => 'LICENSE COMPANY',
-      'ar' => 'ترخيص الشركة',
-    ],
-    'LICENSE ITEM' => [
-      'en' => 'LICENSE ITEM',
-      'ar' => 'ترخيص المنتج',
-    ],
-    'Details' => [
-      'en' => 'DETAILS',
-      'ar' => 'تفاصيل',
     ],
   ];
 
