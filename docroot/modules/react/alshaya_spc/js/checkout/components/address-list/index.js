@@ -13,6 +13,7 @@ import {
 import getStringMessage from '../../../utilities/strings';
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
+import Loading from '../../../utilities/loading';
 
 export default class AddressList extends React.Component {
   isComponentMounted = false;
@@ -77,7 +78,7 @@ export default class AddressList extends React.Component {
     const { addressList } = this.state;
     // If no address list available.
     if (addressList === undefined || addressList.length === 0) {
-      return (null);
+      return <Loading />;
     }
 
     const {
@@ -92,6 +93,7 @@ export default class AddressList extends React.Component {
       let isSelected = false;
       if (addressData && addressData.city !== 'NONE'
         && (cart.cart.shipping.type === 'home_delivery' || type === 'billing')
+        && addressData.customer_address_id !== undefined
         && addressData.customer_address_id.toString() === address.address_mdc_id) {
         isSelected = true;
       }
