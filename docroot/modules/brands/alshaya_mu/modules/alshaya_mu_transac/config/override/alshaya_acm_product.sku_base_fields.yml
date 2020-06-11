@@ -1,11 +1,9 @@
 fields:
-  color_name:
-    label: 'Color name'    
-    type: 'string'
+  color:
     configurable: 1
     cardinality: 1
     index: 0
-    facet: 1
+    facet: 0
   color_family:
     label: 'Color'
     type: 'string'
@@ -15,108 +13,66 @@ fields:
     swatch: 1
   rkj_division:  
     label: 'Rkj Division'
-    type: 'select'    
     cardinality: -1    
     index: 1    
     facet: 1
   sel_depa:
     label: 'Sel Depa'
-    type: 'select'    
     cardinality: -1    
     index: 1    
     facet: 1
   line:
     label: 'Line'
-    type: 'select'    
     cardinality: -1    
     index: 1    
     facet: 1
   sel_class:
     label: 'Sel class'
-    type: 'select'    
     cardinality: -1    
     index: 1    
     facet: 1
   article_code_overseas:
     label: 'Article Code Overseas'
     type: 'string'
-    cardinality: -1
-    index: 1
-  name:
-    label: 'Product Name'
-    type: 'string'
-    cardinality: -1
-    index: 1
-  description:
-    label: 'Description'
-    type: 'string'
-    cardinality: -1
-    index: 1
   short_description1:
     label: 'Short Description 1'
     type: 'string'
-    cardinality: -1
-    index: 1
   short_description2:
     label: 'Short Description 2'
     type: 'string'
-    cardinality: -1
-    index: 1
   size_name:
     label: 'Size Name'
     type: 'string'
-    configurable: 1
-    cardinality: -1
     index: 1
     facet: 1
   spec_en:
     label: 'Spec En'
     type: 'string'
-    cardinality: -1
-    index: 1
   country_of_origin_en:
     label: 'Country Of Origin En'
     type: 'string'
-    cardinality: -1
-    index: 1
   direction_en:
     label: 'Direction En'
     type: 'text_long'
-    cardinality: -1
-    index: 1
   material_en:
     label: 'Material En'
     type: 'text_long'
-    cardinality: -1
-    index: 1
   country_important_point:
     label: 'Country Important Point'
     type: 'text_long'
-    cardinality: -1
-    index: 1
   gender:
     label: 'Gender'
-    type: 'select'
-    cardinality: -1
     index: 1
     facet: 1
   p_depth:
     label: 'Piece Depth'
     type: 'string'
-    cardinality: -1
-    index: 1
   p_width:
     label: 'Piece Width'
     type: 'string'
-    cardinality: -1
-    index: 1
   p_height:
     label: 'Piece Height'
     type: 'string'
-    cardinality: -1
-    index: 1
   p_weight:
     label: 'Piece Weight'
     type: 'string'
-    cardinality: -1
-    index: 1
