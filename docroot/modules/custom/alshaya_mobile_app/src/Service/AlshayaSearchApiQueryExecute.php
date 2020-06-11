@@ -437,7 +437,7 @@ class AlshayaSearchApiQueryExecute {
     if ($server->supportsFeature('search_api_facets')) {
       $facet_data = [];
       foreach ($facets as $facet) {
-        $facet_data[$facet->id()] = [
+        $facet_data[$facet->getFieldIdentifier()] = [
           'field' => $facet->getFieldIdentifier(),
           'limit' => $facet->getHardLimit(),
           'operator' => $facet->getQueryOperator(),
@@ -878,13 +878,15 @@ class AlshayaSearchApiQueryExecute {
    */
   public function getPromoSortOptions() {
     $sort_data = [];
+    // Get enabled sort options.
+    $enabled_sort_config = array_filter(_alshaya_acm_product_position_get_config());
     // Get and set sort order from the views config.
     $views_storage = Views::getView($this->getViewsId())->storage;
     $views_sort = $views_storage->getDisplay('default')['display_options']['sorts'];
     // Get enabled sort options from config.
     $enabled_sorts = _alshaya_acm_product_position_get_config(TRUE);
     foreach ($views_sort as $sort) {
-      if ($sort['exposed']) {
+      if ($sort['exposed'] && isset($enabled_sort_config[$sort['field']])) {
         $key = $sort['field'] . ' ' . $sort['order'];
         $reverse_order = $sort['order'] == 'ASC' ? 'DESC' : 'ASC';
         $reverse_order_key = $sort['field'] . ' ' . $reverse_order;
@@ -911,13 +913,18 @@ class AlshayaSearchApiQueryExecute {
   public function getPromoDefaultSort() {
     $views_storage = Views::getView($this->getViewsId())->storage;
     $views_sort = $views_storage->getDisplay('default')['display_options']['sorts'];
+    $enabled_sort_config = _alshaya_acm_product_position_get_config();
+
     $default_sort = [];
-    foreach ($views_sort as $sort) {
-      if ($sort['exposed']) {
+
+    foreach (array_filter($enabled_sort_config) as $sort) {
+      if (isset($views_sort[$sort]) && $views_sort[$sort]['exposed']) {
         $default_sort = [
-          'key' => $sort['field'],
-          'order' => $sort['order'],
+          'key' => $views_sort[$sort]['field'],
+          'order' => $views_sort[$sort]['order'],
         ];
+
+        $this->defaultSort = implode(' ', $default_sort);
         break;
       }
     }

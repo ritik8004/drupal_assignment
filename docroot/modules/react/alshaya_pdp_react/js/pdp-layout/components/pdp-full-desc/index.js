@@ -25,6 +25,7 @@ const PdpFullDescription = (props) => {
       <PdpSectionText>{parse(value['#markup'])}</PdpSectionText>
     );
   };
+
   return (
     <div className="magv2-desc-popup-description-wrapper">
       {

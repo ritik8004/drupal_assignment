@@ -110,106 +110,51 @@ export const createMarker = (position, map) => {
 };
 
 /**
-   * Create info window.
-   */
+ * Create info window.
+ */
 export const createInfoWindow = (content) => new window.google.maps.InfoWindow({
   content,
 });
 
 /**
- * Get value from google geocode for address form.
+ * Convert array of google map address to key-value mapping based on
+ * druapl config.
  *
- * @param {*} addressArray
- * @param {*} key
+ * @param {array} address
  */
-export const getAddressFieldVal = (addressArray, key) => {
-  const fieldVal = '';
-  const fieldData = [];
-  // Get the mapping.
-  const addressMap = mapAddressMap();
-  for (let i = 0; i < addressArray.length; i++) {
-    if (addressArray[i].types[0]) {
-      // If mapping set.
-      if (addressMap[key] !== undefined) {
-        for (let k = 0; k < addressMap[key].length; k++) {
-          const type = addressMap[key][k];
-          if (addressArray[i].types.indexOf(type) !== -1) {
-            const data = {
-              type,
-              val: addressArray[i].long_name,
-            };
-            fieldData.push(data);
-          }
+function convertGmapAddress(address) {
+  const googleFieldArray = Object.entries(mapAddressMap());
+
+  const fullMapping = {};
+  googleFieldArray.forEach(([key, googleFields]) => {
+    address.forEach((gmapVal) => {
+      const foundKey = googleFields.filter((field) => gmapVal.types.includes(field));
+      if (foundKey.length > 0) {
+        if (!fullMapping[key]) {
+          fullMapping[key] = [];
         }
+        fullMapping[key].push(gmapVal.long_name);
       }
-    }
-  }
-
-  const listData = [];
-  if (fieldData.length > 0) {
-    for (let i = 0; i < addressMap[key].length; i++) {
-      for (let j = 0; j < fieldData.length; j++) {
-        if (fieldData[j].type === addressMap[key][i]) {
-          // If any list field (are/city), we return array of all values.
-          if (key === 'area_parent' || key === 'administrative_area') {
-            listData.push(fieldData[j].val);
-          } else {
-            // For other plain fields.
-            return fieldData[j].val;
-          }
-        }
-      }
-    }
-
-    if (listData.length > 0) {
-      return listData;
-    }
-  }
-
-  return fieldVal;
-};
-
-/**
- * Deduce area name from available areas based from google.
- *
- * @param {*} area
- */
-export const deduceAreaVal = (area, field) => {
-  const areas = document.querySelectorAll('[data-list=areas-list]');
-  if (areas.length > 0) {
-    for (let j = 0; j < area.length; j++) {
-      for (let i = 0; i < areas.length; i++) {
-        const labelAttribute = field === 'area_parent' ? 'data-parent-label' : 'data-label';
-        const areaLable = areas[i].getAttribute(labelAttribute);
-        // If it matches with some value.
-        const areaVal = area[j].trim().toLowerCase();
-        if (areaLable.toLowerCase().indexOf(areaVal) !== -1
-          || areaVal.indexOf(areaLable.toLowerCase()) !== -1) {
-          const idAttribute = field === 'area_parent' ? 'data-parent-id' : 'data-id';
-          return {
-            id: areas[i].getAttribute(idAttribute),
-            label: areaLable,
-          };
-        }
-      }
-    }
-  }
-  return null;
-};
+    });
+  });
+  return fullMapping;
+}
 
 /**
  * Fill the address form based on geocode info.
  *
- * @param {*} address
+ * @param {array} address
  */
 export const fillValueInAddressFromGeocode = (address) => {
+  const gMapAddress = convertGmapAddress(address);
+
   Object.entries(drupalSettings.address_fields).forEach(
     ([key]) => {
       // Some handling for select list fields (areas/city).
-      if ((key !== 'administrative_area' && key !== 'area_parent')) {
+      if ((key !== 'administrative_area' && key !== 'area_parent')
+        && gMapAddress[key]) {
         // We will handle area/parent area separately.
-        const val = getAddressFieldVal(address, key).trim();
-        document.getElementById(key).value = val;
+        document.getElementById(key).value = gMapAddress[key].pop();
         document.getElementById(key).classList.add('focus');
       }
     },
@@ -217,17 +162,21 @@ export const fillValueInAddressFromGeocode = (address) => {
 
   let areaParentValue = null;
   // If area parent available.
-  if (drupalSettings.address_fields.area_parent !== undefined) {
-    let areaVal = [];
-    const val = getAddressFieldVal(address, 'area_parent');
-    // If not empty.
-    if (val.length > 0) {
-      areaVal = deduceAreaVal(val, 'area_parent');
-      if (areaVal !== null) {
-        areaParentValue = areaVal;
-      }
-    }
+  if (drupalSettings.address_fields.area_parent !== undefined
+    && gMapAddress.area_parent.length > 0) {
+    gMapAddress.area_parent.some((area) => {
+      areaParentValue = document.querySelector(
+        `[data-list=areas-list][data-parent-label*="${area}" i]`,
+      );
+      return areaParentValue;
+    });
 
+    if (areaParentValue) {
+      areaParentValue = {
+        id: areaParentValue.getAttribute('data-parent-id'),
+        label: areaParentValue.getAttribute('data-parent-label'),
+      };
+    }
     // Trigger event to update parent area field.
     const updateEvent = new CustomEvent('updateParentAreaOnMapSelect', {
       bubbles: true,
@@ -239,42 +188,39 @@ export const fillValueInAddressFromGeocode = (address) => {
   }
 
   // If area field available.
-  if (drupalSettings.address_fields.administrative_area !== undefined) {
-    const val = getAddressFieldVal(address, 'administrative_area');
+  if (drupalSettings.address_fields.administrative_area !== undefined
+    && gMapAddress.administrative_area.length > 0) {
     let areaVal = null;
-    // If not empty.
-    if (val.length > 0) {
-      // Deduce value from the available area in drupal.
-      areaVal = deduceAreaVal(val, 'administrative_area');
-      // If we have area value matching.
-      if (areaVal !== null && areaVal.id !== undefined) {
-        // If area parent field is available.
-        if (drupalSettings.address_fields.area_parent !== undefined) {
-          let matchedParent = false;
-          // If parent field has value.
-          if (areaParentValue !== null
-            && areaParentValue.id !== undefined) {
-            // If parent area field is available and it has value.
-            // Checking here if the area value we get has same
-            // parent as the parent we get for the area_parent.
-            const parentValue = getAreaParentId(true, areaVal.label);
-            // If there are parent for given area.
-            if (parentValue !== null) {
-              for (let i = 0; i < parentValue.length; i++) {
-                // If matches with a parent.
-                if (parentValue[i].id === areaParentValue.id) {
-                  matchedParent = true;
-                  break;
-                }
-              }
-            }
-          }
+    gMapAddress.administrative_area.some((area) => {
+      areaVal = document.querySelector(`[data-list=areas-list][data-label*="${area}" i]`);
+      return areaVal;
+    });
 
-          // If matched parent not available.
-          if (matchedParent === false) {
-            areaVal = null;
+    if (areaVal) {
+      areaVal = {
+        id: areaVal.getAttribute('data-id'),
+        label: areaVal.getAttribute('data-label'),
+      };
+
+      // If area parent field is available.
+      if (areaVal.id !== undefined
+        && drupalSettings.address_fields.area_parent !== undefined) {
+        let matchedParent = false;
+        // If parent field has value.
+        if (areaParentValue !== null
+          && areaParentValue.id !== undefined) {
+          // If parent area field is available and it has value.
+          // Checking here if the area value we get has same
+          // parent as the parent we get for the area_parent.
+          const parentValue = getAreaParentId(true, areaVal.label);
+          // If there are parent for given area.
+          if (parentValue) {
+            matchedParent = parentValue.some((parentArea) => parentArea.id === areaParentValue.id);
           }
         }
+
+        // If matched parent not available.
+        areaVal = (matchedParent === false) ? null : areaVal;
       }
     }
 
@@ -352,13 +298,11 @@ export const getUserLocation = (coords) => {
             address = results[0].address_components;
             // Checking if user current location belongs to same
             // country or not by location coords geocode.
-            for (let i = 0; i < address.length; i++) {
-              if (address[i].types.indexOf('country') !== -1
-                && address[i].short_name === drupalSettings.country_code) {
-                userCountrySame = true;
-                break;
-              }
-            }
+            userCountrySame = address.some(
+              (addressItem) => (
+                addressItem.types.indexOf('country') !== -1
+                && addressItem.short_name === drupalSettings.country_code),
+            );
             resolve([userCountrySame, address]);
           }
         } else {

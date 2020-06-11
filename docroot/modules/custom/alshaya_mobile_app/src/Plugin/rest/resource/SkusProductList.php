@@ -196,6 +196,10 @@ class SkusProductList extends ResourceBase {
         $data[] = $this->getSkuData($skuEntity);
         $sku_cache_tags[] = $skuEntity->getCacheTags();
       }
+      else {
+        // API expects NULL if SKU is not present in the system.
+        $data[] = NULL;
+      }
     }
 
     $response = new ResourceResponse($data);
@@ -205,13 +209,14 @@ class SkusProductList extends ResourceBase {
     foreach ($sku_cache_tags as $sku_cache_tag) {
       $cacheable_metadata->addCacheTags($sku_cache_tag);
     }
-    $response->addCacheableDependency($cacheable_metadata);
+
     // Since the sku list is passed in query arguments, we shall add a
     // dependency on query arguments.
     $cacheable_metadata->addCacheContexts(['url.query_args']);
 
-    return $response;
+    $response->addCacheableDependency($cacheable_metadata);
 
+    return $response;
   }
 
   /**

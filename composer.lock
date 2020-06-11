@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9fbeab143539bbab24de0966133fabe0",
+    "content-hash": "3f2a48a2a5f8fb7637e6fd9979a80133",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -1093,7 +1093,7 @@
             "version": "v5.7.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:enyo/dropzone.git",
+                "url": "https://github.com/enyo/dropzone.git",
                 "reference": "5b82186d5f18540a1d13b6f4914fdc6220617ef5"
             },
             "dist": {
@@ -3481,7 +3481,7 @@
                 },
                 "phpcodesniffer-search-depth": 4,
                 "patches_applied": {
-                    "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-01-10/acquia_connector-2871721-25.patch",
+                    "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-05-04/acquia_connector-2871721-29.patch",
                     "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2020-04-21/2922201-16.patch"
                 }
             },
@@ -12809,6 +12809,52 @@
             "time": "2018-07-27T02:32:58+00:00"
         },
         {
+            "name": "drupal/sessions_expire",
+            "version": "dev-1.0.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/sessions_expire.git",
+                "reference": "65d53ce9f68a087cf5b4951785941eab51099940"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drush/drush": "^9",
+                "php": ">=7.2.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.0.x": "1.0.x-dev"
+                },
+                "drupal": {
+                    "version": "1.0.x-dev",
+                    "datestamp": "1591190484",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nikunj Kotecha (nikunjkotecha)",
+                    "homepage": "https://www.drupal.org/u/nikunjkotecha",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Allow adding prefix in URL for single language sites.",
+            "homepage": "https://drupal.org/project/sessions_expire",
+            "support": {
+                "source": "https://cgit.drupalcode.org/sessions_expire",
+                "issues": "https://drupal.org/project/issues/sessions_expire"
+            },
+            "time": "2020-06-03T13:27:24+00:00"
+        },
+        {
             "name": "drupal/sharethis",
             "version": "2.0.0-beta3",
             "source": {
@@ -14751,12 +14797,12 @@
             "version": "0.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/njh/easyrdf.git",
+                "url": "https://github.com/easyrdf/easyrdf.git",
                 "reference": "acd09dfe0555fbcfa254291e433c45fdd4652566"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/njh/easyrdf/zipball/acd09dfe0555fbcfa254291e433c45fdd4652566",
+                "url": "https://api.github.com/repos/easyrdf/easyrdf/zipball/acd09dfe0555fbcfa254291e433c45fdd4652566",
                 "reference": "acd09dfe0555fbcfa254291e433c45fdd4652566",
                 "shasum": ""
             },
@@ -23853,6 +23899,7 @@
         "drupal/s3fs": 15,
         "drupal/search_api_solr_multilingual": 10,
         "drupal/search_api_spellcheck": 20,
+        "drupal/sessions_expire": 20,
         "drupal/sharethis": 10,
         "drupal/social_api": 20,
         "drupal/stage_file_proxy": 5,
