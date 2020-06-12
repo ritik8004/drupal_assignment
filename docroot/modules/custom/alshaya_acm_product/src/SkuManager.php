@@ -40,7 +40,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
-use Drupal\alshaya_pdp_layouts\PdpLayoutManager;
 
 /**
  * Class SkuManager.
@@ -249,13 +248,6 @@ class SkuManager {
   protected $productCacheManager;
 
   /**
-   * PDP Layout Manager.
-   *
-   * @var \Drupal\alshaya_pdp_layouts\PdpLayoutManager
-   */
-  protected $pdpLayoutManager;
-
-  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -302,8 +294,6 @@ class SkuManager {
    *   Product Cache Manager.
    * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshayaArrayUtils
    *   Alshaya array utility service.
-   * @param \Drupal\alshaya_pdp_layouts\PdpLayoutManager $pdp_layout_manager
-   *   PDP Layout Manager.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -329,8 +319,7 @@ class SkuManager {
                               Simplesitemap $generator,
                               ProductInfoHelper $product_info_helper,
                               ProductCacheManager $product_cache_manager,
-                              AlshayaArrayUtils $alshayaArrayUtils,
-                              PdpLayoutManager $pdp_layout_manager) {
+                              AlshayaArrayUtils $alshayaArrayUtils) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -356,7 +345,6 @@ class SkuManager {
     $this->productInfoHelper = $product_info_helper;
     $this->productCacheManager = $product_cache_manager;
     $this->alshayaArrayUtils = $alshayaArrayUtils;
-    $this->pdpLayoutManager = $pdp_layout_manager;
   }
 
   /**
@@ -2836,8 +2824,8 @@ class SkuManager {
    *   PDP layout context to be used.
    */
   public function getContextFromLayoutKey($context, $pdp_layout) {
-    $plugin_manager = $this->pdpLayoutManager->createInstance($pdp_layout, []);
-    $context_key = $plugin_manager->getCotextFromPdpLayout($context, $pdp_layout);
+    $context_key = $context;
+    $this->moduleHandler->alter('alshaya_context_key_from_layout', $context_key, $pdp_layout);
     return $context_key;
   }
 
