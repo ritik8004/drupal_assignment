@@ -76,6 +76,21 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
   font-display: swap;
 }
 
+// AEO new fonts
+@font-face {
+  font-family: "AvenirNext LT Pro";
+  src: url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Bold.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Bold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Bold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Bold.svg#AvenirNextLTPro-Bold") format("svg");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 // Font Family
 $aeo-bold: 'AvenirNext-DemiBold', 'Tahoma-Bold', 'Arial';
 $aeo-bold-nodir: 'AvenirNext-DemiBold', 'Tahoma-Bold', 'Arial';
