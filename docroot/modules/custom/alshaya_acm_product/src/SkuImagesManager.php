@@ -1139,7 +1139,7 @@ class SkuImagesManager {
         ];
       }
     }
-    $insert_video_at_second = TRUE;
+    $video_inserted_at_second_position = FALSE;
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
       $video_data = [];
       if (isset($media_item['video_url'])) {
@@ -1166,9 +1166,12 @@ class SkuImagesManager {
           'type' => 'video',
         ];
       }
-      if ($insert_video_at_second) {
+      // As per the requirement, we are placing the 1st video at
+      // 2nd position in the PDP gallery and the rest of the
+      // videos at the end of images if any.
+      if (!$video_inserted_at_second_position) {
         array_splice($thumbnails, 1, 0, $video_data);
-        $insert_video_at_second = FALSE;
+        $video_inserted_at_second_position = TRUE;
       }
       else {
         $thumbnails[] = reset($video_data);
