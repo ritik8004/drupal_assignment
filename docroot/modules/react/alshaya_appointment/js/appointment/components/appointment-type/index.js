@@ -1,24 +1,24 @@
 import React from 'react';
-import AppointmentCategories from "../appointment-type/components/appointment-categories";
-import AppointmentTypeList from "../appointment-type/components/appointment-type-list";
-import AppointmentCompanion from "../appointment-type/components/appointment-companion";
-import AppointmentForYou from "../appointment-type/components/appointment-for-you";
-import AppointmentAck from "../appointment-type/components/appointment-ack";
+import AppointmentCategories from './components/appointment-categories';
+import AppointmentTypeList from './components/appointment-type-list';
+import AppointmentCompanion from './components/appointment-companion';
+import AppointmentForYou from './components/appointment-for-you';
+import AppointmentAck from './components/appointment-ack';
 
 export default class AppointmentType extends React.Component {
   constructor(props) {
     super(props);
-    var localStorageValues = JSON.parse(localStorage.getItem('appointment_data'));
+    const localStorageValues = JSON.parse(localStorage.getItem('appointment_data'));
     if (localStorageValues) {
       this.state = {
-        ...localStorageValues
+        ...localStorageValues,
       };
     } else {
       this.state = {
         appointmentCategory: '',
         appointmentType: '',
         appointmentCompanion: '',
-        appointmentForYou: 'Yes',
+        appointmentForYou: '',
         appointmentAck: '',
       };
     }
@@ -26,14 +26,14 @@ export default class AppointmentType extends React.Component {
 
   handleCategoryClick = (category) => {
     this.setState({
-      appointmentCategory: category
+      appointmentCategory: category,
     });
   }
 
   handleChange = (e) => {
-    var value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     this.setState({
-      [e.target.name]: value
+      [e.target.name]: value,
     });
   }
 
@@ -41,33 +41,56 @@ export default class AppointmentType extends React.Component {
     localStorage.setItem('appointment_data', JSON.stringify(this.state));
   }
 
-  render () {
+  render() {
+    const {
+      appointmentCategory, appointmentType, appointmentCompanion, appointmentForYou, appointmentAck,
+    } = this.state;
     return (
       <div className="appointment-type-wrapper">
-        <AppointmentCategories 
-          handleItemClick = {this.handleCategoryClick}
-          activeItem = {this.state.appointmentCategory}
+        <AppointmentCategories
+          handleItemClick={this.handleCategoryClick}
+          activeItem={appointmentCategory}
         />
-        <AppointmentTypeList
-          handleChange = {this.handleChange}
-          activeItem = {this.state.appointmentType}
-        />
-        <AppointmentCompanion
-          handleChange = {this.handleChange}
-          activeItem = {this.state.appointmentCompanion}
-        />
-        <AppointmentForYou
-          handleChange = {this.handleChange}
-          activeItem = {this.state.appointmentForYou}
-        />
-        <AppointmentAck
-          handleChange = {this.handleChange}
-          activeItem = {this.state.appointmentAck}
-        />
-
+        { appointmentCategory
+          ? (
+            <AppointmentTypeList
+              handleChange={this.handleChange}
+              activeItem={appointmentType}
+            />
+          )
+          : null}
+        { appointmentCategory && appointmentType
+          ? (
+            <AppointmentCompanion
+              handleChange={this.handleChange}
+              activeItem={appointmentCompanion}
+            />
+          )
+          : null}
+        { appointmentCategory && appointmentType && appointmentCompanion
+          ? (
+            <AppointmentForYou
+              handleChange={this.handleChange}
+              activeItem={appointmentForYou}
+            />
+          )
+          : null}
+        { appointmentCategory && appointmentType && appointmentCompanion && appointmentForYou
+          ? (
+            <AppointmentAck
+              handleChange={this.handleChange}
+              activeItem={appointmentAck}
+            />
+          )
+          : null}
         <button
           className="appointment-type-button"
           type="button"
+          disabled={!(appointmentCategory
+            && appointmentType
+            && appointmentCompanion
+            && appointmentForYou
+            && appointmentAck)}
           onClick={this.handleSubmit}
         >
           {Drupal.t('Continue')}
@@ -76,4 +99,3 @@ export default class AppointmentType extends React.Component {
     );
   }
 }
-

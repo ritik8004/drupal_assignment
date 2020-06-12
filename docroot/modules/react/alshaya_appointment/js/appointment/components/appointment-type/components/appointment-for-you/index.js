@@ -1,25 +1,26 @@
 import React from 'react';
 
 export default class AppointmentForYou extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleChange = (e) => {
-    this.props.handleChange(e);
+    const { handleChange } = this.props;
+    handleChange(e);
   }
 
-  render () {
+  render() {
+    const { activeItem } = this.props;
     return (
       <div className="appointment-for-you-wrapper">
-        <label>{Drupal.t('Is one of these appointments for you?')}*</label>
+        <label>
+          {Drupal.t('Is one of these appointments for you?')}
+          *
+        </label>
         <div className="appointment-for-you">
           <label>
             <input
               type="radio"
               value="Yes"
               name="appointmentForYou"
-              checked={this.props.activeItem === "Yes"}
+              checked={activeItem === 'Yes'}
               onChange={this.handleChange}
             />
             {Drupal.t('Yes')}
@@ -29,7 +30,7 @@ export default class AppointmentForYou extends React.Component {
               type="radio"
               value="No"
               name="appointmentForYou"
-              checked={this.props.activeItem === "No"}
+              checked={activeItem === 'No'}
               onChange={this.handleChange}
             />
             {Drupal.t('No')}
@@ -37,6 +38,5 @@ export default class AppointmentForYou extends React.Component {
         </div>
       </div>
     );
-  };
-
-} 
+  }
+}
