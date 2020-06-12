@@ -2,8 +2,22 @@
 
 /**
  * @file
- * Install, uninstall, update function for alshaya_we.
+ * Install, uninstall, update function for alshaya_aeo.
  */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disables lhn filters on AEO sites where Algolia search is not enabled.
+ */
+function alshaya_aeo_update_8002() {
+  if (!(\Drupal::moduleHandler()->moduleExists('alshaya_search_algolia'))) {
+    \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings')
+      ->set('enable_lhn_tree_search', 0)
+      ->save();
+    _alshaya_search_api_reindex();
+  }
+}
 
 /**
  * Implements hook_update_N().
