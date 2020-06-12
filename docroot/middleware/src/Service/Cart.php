@@ -1327,10 +1327,12 @@ class Cart {
         $store += $store_info;
         $store['formatted_distance'] = number_format((float) $store['distance'], 2, '.', '');
         $store['delivery_time'] = $store['sts_delivery_time_label'];
-        if ($store['rnc_available']) {
+        if ($store['rnc_available'] && isset($store['rnc_config'])) {
           $store['delivery_time'] = $store['rnc_config'];
         }
-        unset($store['rnc_config']);
+        if (isset($store['rnc_config'])) {
+          unset($store['rnc_config']);
+        }
       }
 
       // Sort the stores first by distance and then by name.
