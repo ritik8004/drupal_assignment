@@ -381,7 +381,10 @@ class CartController {
       $data = $updated;
     }
 
-    if (empty($data['shipping']['methods']) && !empty($data['shipping']['address'])) {
+    if (empty($data['shipping']['methods'])
+        && !empty($data['shipping']['address'])
+        && $data["shipping"]["type"] !== 'click_and_collect'
+    ) {
       $data['shipping']['methods'] = $this->cart->getHomeDeliveryShippingMethods($data['shipping']);
     }
 
