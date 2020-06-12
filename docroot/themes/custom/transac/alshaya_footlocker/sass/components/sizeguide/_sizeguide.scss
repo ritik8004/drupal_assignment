@@ -1,0 +1,45 @@
+// Size Guide Link theme
+.size-guide-link {
+  font-size: 0.875rem;
+  text-decoration: underline;
+  top: 0;
+  z-index: 1;
+
+  @include breakpoint($desktop) {
+    padding-top: 0;
+    top: 0;
+    #{$right}: 1.0625rem;
+
+    .nodetype--acq_product & {
+      .ui-dialog & {
+        #{$right}: 4.375rem;
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    top: 0;
+    #{$right}: 0.25rem;
+  }
+}
+
+.size-guide-form-and-link-wrapper {
+  position: relative;
+}
+
+// Size Guide modal popup theming
+.sizeguide-modal-overlay .ui-dialog {
+  @include breakpoint($only-mobile) {
+    padding: 0;
+  }
+
+  @include breakpoint($desktop) {
+    padding: calc((100vh - 34.75rem) / 2) calc((100vw - 46.125rem) / 2);
+  }
+
+  div[id^="drupal-dialog-alshaya-acm-productpdp-modal-links-"] {
+    @include breakpoint($tablet) {
+      height: 34rem !important;
+    }
+  }
+}
