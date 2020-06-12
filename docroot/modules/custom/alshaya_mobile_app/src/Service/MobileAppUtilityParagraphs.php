@@ -40,7 +40,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   /**
    * The cache tags.
    *
-   * @var string
+   * @var array
    */
   protected $cacheTags = [];
 
@@ -720,6 +720,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   protected function paragraphProductCarouselCategory(ParagraphInterface $entity, array $fields) {
     unset($fields['field_category_carousel']);
+    $this->cacheableEntities[] = $entity;
 
     // Fetch values from the paragraph.
     $category_id = $entity->get('field_category_carousel')->getValue()[0]['target_id'] ?? NULL;
@@ -770,7 +771,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
 
       if (!empty($nodes)) {
         $data['items'] = array_map(function ($node) {
-          return $this->getLightProductFromNid($node->id(), $this->currentLanguage);
+          $this->cacheableEntities[] = $node;
+          return $this->skuManager->getSkuForNode($node);
         }, $nodes);
       }
     }
