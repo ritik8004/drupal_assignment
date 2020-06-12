@@ -10,7 +10,7 @@
  *
  * Enables lhn filters on WE.
  */
-function alshaya_aeo_update_8001() {
+function alshaya_we_update_8001() {
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings');
   $config->set('enable_lhn_tree_search', 1);
   $config->save();
