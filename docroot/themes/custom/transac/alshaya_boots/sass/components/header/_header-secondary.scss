@@ -1,9 +1,9 @@
 body {
   @include breakpoint($only-mobile) {
-    margin-top: 3.5rem;
+    margin-top: 3.125rem;
 
     html[lang=ar] & {
-      margin-top: 3.5rem;
+      margin-top: 3.125rem;
     }
   }
 
