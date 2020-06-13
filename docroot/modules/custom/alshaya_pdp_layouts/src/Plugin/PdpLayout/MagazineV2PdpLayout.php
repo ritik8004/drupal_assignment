@@ -168,10 +168,18 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['byAttribute'] = $combinations['by_attribute'];
       $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'] = $product_tree['configurables'];
 
+      // Get size guide link information.
+      $field_category = $entity->get('field_category')->first();
+      if (!empty($field_category)) {
+        $category = $field_category->entity;
+        $size_guide = _alshaya_acm_product_get_size_guide_info($category);
+      }
+
       // Prepare group and swatch attributes.
       foreach ($product_tree['configurables'] as $key => $configurable) {
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isGroup'] = FALSE;
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = FALSE;
+        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSize'] = FALSE;
         if (!$swatch_processed && in_array($key, $this->skuManager->getPdpSwatchAttributes())) {
           $swatch_processed = TRUE;
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = TRUE;
@@ -207,6 +215,14 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
           }
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'] = $values;
+        }
+
+        // Set size guide information in drupal settings.
+        if (isset($size_guide['link'])) {
+          if (in_array($key, $size_guide['attributes'])) {
+            $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSize'] = TRUE;
+            $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['sizeGuide'] = $size_guide['link'];
+          }
         }
       }
 

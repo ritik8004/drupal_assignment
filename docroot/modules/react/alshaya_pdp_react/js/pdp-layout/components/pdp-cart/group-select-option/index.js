@@ -1,6 +1,7 @@
 import React from 'react';
 import AvailableSelectOptions from '../available-select-options';
 import DefaultSelectOptions from '../default-select-options';
+import SizeGuide from '../size-guide';
 
 const GroupSelectOption = (props) => {
   const {
@@ -11,7 +12,13 @@ const GroupSelectOption = (props) => {
     code,
     nextCode,
     nextValues,
+    sizeGuide,
   } = props;
+
+  let sizeGuideLink = '';
+  if (sizeGuide) {
+    sizeGuideLink = configurables.sizeGuide;
+  }
 
   return (
     <>
@@ -20,6 +27,9 @@ const GroupSelectOption = (props) => {
           <a href="#" key={alternate} onClick={(e) => groupSelect(e, configurables.alternates[alternate])}>{configurables.alternates[alternate]}</a>
         ))}
       </div>
+      {sizeGuide
+        ? <SizeGuide sizeGuideLink={sizeGuideLink} />
+        : <></>}
       <div className="group-option-wrapper">
         <select id={code} className="select-attribute-group clicked" onChange={(e) => handleSelectionChanged(e, code)}>
           {Object.keys(configurables.values).map((attr) => {

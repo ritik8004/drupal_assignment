@@ -7,7 +7,7 @@ class CartSelectOption extends React.Component {
   constructor(props) {
     super(props);
     const {
-      isGroup, configurables, isSwatch,
+      isGroup, configurables, isSwatch, isSize,
     } = this.props;
     let defaultGroup = null;
 
@@ -22,6 +22,7 @@ class CartSelectOption extends React.Component {
       groupName: isGroup ? defaultGroup : null,
       groupStatus: isGroup,
       swatchStatus: isSwatch,
+      sizeGuide: isSize,
     };
   }
 
@@ -69,6 +70,7 @@ class CartSelectOption extends React.Component {
       groupName,
       groupStatus,
       swatchStatus,
+      sizeGuide,
     } = this.state;
 
     const swatchSelectOption = (
@@ -89,6 +91,7 @@ class CartSelectOption extends React.Component {
           code={code}
           nextCode={nextCode}
           nextValues={nextValues}
+          sizeGuide={sizeGuide}
         />
       </div>
     ) : swatchSelectOption;
@@ -103,6 +106,7 @@ class CartSelectOption extends React.Component {
           code={code}
           nextCode={nextCode}
           nextValues={nextValues}
+          sizeGuide={sizeGuide}
         />
       </div>
     ) : selectOption;

@@ -1,6 +1,7 @@
 import React from 'react';
 import AvailableSelectOptions from '../available-select-options';
 import DefaultSelectOptions from '../default-select-options';
+import SizeGuide from '../size-guide';
 
 const NonGroupSelectOption = (props) => {
   const {
@@ -9,10 +10,19 @@ const NonGroupSelectOption = (props) => {
     code,
     nextCode,
     nextValues,
+    sizeGuide,
   } = props;
+
+  let sizeGuideLink = '';
+  if (sizeGuide) {
+    sizeGuideLink = configurables.sizeGuide;
+  }
 
   return (
     <>
+      {sizeGuide
+        ? <SizeGuide sizeGuideLink={sizeGuideLink} />
+        : <></>}
       <select id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
         {Object.keys(configurables.values).map((attr) => {
           // If the currennt attribute matches the
