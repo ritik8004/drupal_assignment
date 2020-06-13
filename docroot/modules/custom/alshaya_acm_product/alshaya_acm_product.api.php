@@ -99,5 +99,17 @@ function hook_sku_product_info_alter(array &$product_info, SKUInterface $sku) {
 }
 
 /**
+ * Allow other modules to add/alter context key.
+ *
+ * @param string $context
+ *   Context for which layout needs to be fetched.
+ * @param string $pdp_layout
+ *   Context for which layout needs to be fetched.
+ */
+function hook_alshaya_context_key_from_layout_alter(string $context, string $pdp_layout) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

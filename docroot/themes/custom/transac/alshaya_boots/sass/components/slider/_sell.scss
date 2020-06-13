@@ -1,0 +1,32 @@
+.horizontal-upell,
+.horizontal-related,
+.horizontal-crossell {
+  @include breakpoint($tablet) {
+    margin-bottom: 0;
+  }
+
+  .view-product-slider {
+    margin-bottom: 0;
+
+    .c-products__item__label {
+      margin: 0.625rem 1.25rem;
+    }
+
+    .price-block {
+      font-family: $alshaya-thin;
+    }
+  }
+
+  .subtitle {
+    &.crossell-title {
+      @include breakpoint($tablet) {
+        margin-bottom: 1.5rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+}

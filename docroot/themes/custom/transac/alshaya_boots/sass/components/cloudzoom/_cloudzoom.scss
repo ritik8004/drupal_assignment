@@ -54,6 +54,14 @@
 }
 
 .cloudzoom {
+  &.thumbnail-count-1 {
+    .cloudzoom__herocontainer {
+      @include breakpoint($tablet) {
+        margin-#{$right}: 3.125rem;
+      }
+    }
+  }
+
   .cloudzoom__herocontainer {
     @include breakpoint($desktop) {
       width: calc(100% - (6.5rem + 8rem));

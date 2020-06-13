@@ -1175,6 +1175,7 @@ function alshaya_acm_product_install() {
   ];
   $product_config_factory->set('content', $content);
   $product_config_factory->save();
+
   // Translation for label.
   $strings = [
     'Details' => [

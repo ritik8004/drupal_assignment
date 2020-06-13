@@ -24,7 +24,7 @@ import withURLSync from '../url-sync';
 import Pagination from '../algolia/Pagination';
 import HierarchicalMenu from '../algolia/widgets/HierarchicalMenu';
 import Menu from '../algolia/widgets/Menu';
-import { hasCategoryFilter, getAlgoliaStorageValues, getSortedItems, hasSuperCategoryFilter } from '../../utils';
+import { hasCategoryFilter, getAlgoliaStorageValues, getSortedItems, hasSuperCategoryFilter, getSuperCategoryOptionalFilter } from '../../utils';
 import { isDesktop } from '../../utils/QueryStringUtils';
 
 /**
@@ -44,21 +44,7 @@ const SearchResultsComponent = props => {
     defaultpageRender = storedvalues.page;
   }
 
-  function getSuperCategory() {
-    let activeMenuItem = document.querySelector('.main--menu .menu--one__link.active');
-    if (activeMenuItem !== null) {
-      return activeMenuItem.getAttribute('data-super-category-label');
-    }
-    return null;
-  }
-  // Uses the Algolia optionalFilters feature.
-  // Super Category is currently the only optional filter in use.
-  // We want to promote the products belonging to current page super category
-  // to the top of the search results.
-  let supercategory = getSuperCategory();
-  let optionalFilters = drupalSettings.superCategory && supercategory
-    ? `${drupalSettings.superCategory.search_facet}:${supercategory}`
-    : null
+  const optionalFilter = getSuperCategoryOptionalFilter();
 
   return (
     <InstantSearch
@@ -69,7 +55,7 @@ const SearchResultsComponent = props => {
       onSearchStateChange={props.onSearchStateChange}
     >
       <Configure clickAnalytics hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
-      {optionalFilters ? <Configure optionalFilters={optionalFilters} /> : null}
+      {optionalFilter ? <Configure optionalFilters={optionalFilter} /> : null}
       <SideBar>
         {hasSuperCategoryFilter() && isDesktop() && (
           <Menu

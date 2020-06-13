@@ -54,6 +54,7 @@ $primary_btn_bg: $PBK_red;
 $primary_btn_text: $white-two;
 $secondary_btn_bg: $PBK_black_one;
 $secondary_btn_text: $white-two;
+$transparent_btn_text: $PBK_grey_one;
 
 // Header - Search.
 $primary_search_btn_icon: $transparent;
@@ -194,3 +195,6 @@ $primary_minicart_quantity_text: $white-two;
 
 // Department page
 $department-page-title-border: $_gray_ten;
+
+// Checkout
+$checkout_login_submit_button_background: $PBK_red;

@@ -1073,6 +1073,14 @@ class Cart {
       return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
     }
     catch (\Exception $e) {
+      // Handle checkout.com 2D exception.
+      if ($this->exceptionType($e->getMessage()) === 'FRAUD') {
+        $this->logger->notice('Magento returned fraud exception . Error message: @message', [
+          '@message' => $e->getMessage(),
+        ]);
+        return $this->handleCheckoutComRedirection();
+      }
+
       $doubleCheckEnabled = $this->settings->getSettings('alshaya_checkout_settings')['place_order_double_check_after_exception'];
       if ($doubleCheckEnabled) {
         try {
@@ -1319,10 +1327,12 @@ class Cart {
         $store += $store_info;
         $store['formatted_distance'] = number_format((float) $store['distance'], 2, '.', '');
         $store['delivery_time'] = $store['sts_delivery_time_label'];
-        if ($store['rnc_available']) {
+        if ($store['rnc_available'] && isset($store['rnc_config'])) {
           $store['delivery_time'] = $store['rnc_config'];
         }
-        unset($store['rnc_config']);
+        if (isset($store['rnc_config'])) {
+          unset($store['rnc_config']);
+        }
       }
 
       // Sort the stores first by distance and then by name.
@@ -1336,6 +1346,39 @@ class Cart {
         '@response' => $e->getMessage(),
       ]);
     }
+  }
+
+  /**
+   * Get checkout.com data from Magento and prepare 3D verification redirection.
+   *
+   * @return array
+   *   Response.
+   */
+  private function handleCheckoutComRedirection() {
+    $url = sprintf('carts/%d/selected-payment-method', $this->getCartId());
+    try {
+      $result = $this->magentoApiWrapper->doRequest('GET', $url);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while getting payment set on cart. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+
+    $response = json_decode($result['additional_data'][0] ?? [], TRUE);
+    if (empty($response)) {
+      return $this->utility->getErrorResponse('Transaction failed.', 500);
+    }
+    $response['langcode'] = $this->settings->getRequestLanguage();
+    $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response);
+
+    $this->logger->notice('Redirecting user for 3D verification.');
+
+    return [
+      'error' => TRUE,
+      'redirectUrl' => $response['redirectUrl'],
+    ];
   }
 
 }
