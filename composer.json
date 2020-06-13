@@ -353,13 +353,7 @@
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
             },
             "drupal/social_auth": {
-                "Dispatch events for handling authentication errors in provider.": "https://git.drupalcode.org/project/social_auth/commit/27930c3.patch"
-            },
-            "drupal/social_auth_facebook": {
-                "Dispatch failed authentication event in callback": "https://git.drupalcode.org/project/social_auth_facebook/commit/730ad4e.patch"
-            },
-            "drupal/social_auth_google": {
-                "Dispatch failed authentication event in callback": "https://www.drupal.org/files/issues/2019-05-27/dispatch-authentication-error-3057287-2.patch"
+                "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch"
             },
             "sensiolabs-de/deprecation-detector": {
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
