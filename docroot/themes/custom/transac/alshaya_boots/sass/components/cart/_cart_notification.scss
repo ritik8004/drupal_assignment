@@ -24,6 +24,10 @@
     #{$right}: 0.875rem;
     transform: rotate(45deg);
     background: $cart_notification_arrow_bg;
+
+    html[lang=ar] & {
+      transform: rotate(-45deg);
+    }
   }
 
   .notification,
@@ -42,8 +46,7 @@
 
 html[lang=ar] #cart_notification {
   @include breakpoint($tablet) {
-    top: 4.2rem;
-    #{$right}: 0.1125rem;
+    top: 3.5rem;
   }
 
   .notification,
