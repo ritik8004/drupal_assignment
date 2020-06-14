@@ -1,4 +1,10 @@
 #hits {
+  padding-top: 1.25rem;
+
+  @include breakpoint($upto-desktop) {
+    padding-top: 0.5rem;
+  }
+
   .js-pager__items.pager {
     li.pager__item {
       button {
