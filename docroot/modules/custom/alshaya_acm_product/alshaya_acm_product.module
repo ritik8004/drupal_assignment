@@ -325,6 +325,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['legal_notice_markup'] = [
+    'variables' => [
+      'label' => NULL,
+      'summary' => NULL,
+    ],
+  ];
+
   $items['products_horizontal_slider'] = [
     'variables' => [
       'data' => NULL,
@@ -564,6 +571,18 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         if (!empty($delivery_data = _alshaya_acm_product_get_delivery_link($sku_entity))) {
           $build['delivery_link'] = [
             '#markup' => $delivery_data['link'],
+          ];
+        }
+
+        // Show legal notice content at the end of description popup if enabled.
+        $legal_notice_enabled = \Drupal::config('alshaya_acm_product.settings')->get('legal_notice_enabled');
+        if ($legal_notice_enabled) {
+          $label = \Drupal::config('alshaya_acm_product.settings')->get('legal_notice_label');
+          $summary = \Drupal::config('alshaya_acm_product.settings')->get('legal_notice_summary');
+          $build['legal_notice'] = [
+            '#theme' => 'legal_notice_markup',
+            '#label' => $label,
+            '#summary' => ['#markup' => $summary['value']],
           ];
         }
 

@@ -123,6 +123,9 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('back_to_list', $form_state->getValue('back_to_list'));
     $config->set('pdp_layout', $form_state->getValue('pdp_layout'));
     $config->set('max_discount_to_log', $form_state->getValue('max_discount_to_log'));
+    $config->set('legal_notice_enabled', $form_state->getValue('legal_notice_enabled'));
+    $config->set('legal_notice_label', $form_state->getValue('legal_notice_label'));
+    $config->set('legal_notice_summary', $form_state->getValue('legal_notice_summary'));
 
     // Product default image.
     $product_default_image = NULL;
@@ -316,6 +319,38 @@ class ProductSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Max discount value to trace (in %).'),
       '#description' => $this->t('This will trace the log when sku has discount (price - final price) greater than this.'),
       '#default_value' => $config->get('max_discount_to_log'),
+    ];
+
+    $form['legal_notice_enabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Legal Notice'),
+      '#required' => FALSE,
+      '#default_value' => $config->get('legal_notice_enabled'),
+    ];
+
+    $form['legal_notice'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Legal Notice'),
+      '#tree' => FALSE,
+      '#open' => TRUE,
+      '#states' => [
+        'visible' => [
+          'input[name="legal_notice_enabled"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $form['legal_notice']['legal_notice_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Label'),
+      '#default_value' => $config->get('legal_notice_label'),
+    ];
+
+    $form['legal_notice']['legal_notice_summary'] = [
+      '#type' => 'text_format',
+      '#format' => 'rich_text',
+      '#title' => $this->t('Summary'),
+      '#default_value' => $config->get('legal_notice_summary.value'),
     ];
 
     return $form;
