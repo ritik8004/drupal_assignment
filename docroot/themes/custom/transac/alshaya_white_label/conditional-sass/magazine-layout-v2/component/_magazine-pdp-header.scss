@@ -10,10 +10,17 @@
   position: absolute;
   width: 100%;
   top: 0;
-  z-index: 5;
+  z-index: 10;
+  display: none;
 
   @include breakpoint($only-mobile) {
     padding: 1.25rem;
+    display: block;
+    background: $magv2-sticky-header-bg;
+  }
+
+  &.magv2-pdp-sticky-header {
+    display: block;
   }
 
   .magv2-header-wrapper {
@@ -56,7 +63,7 @@
 .magv2-pdp-sticky-header {
   &.magv2-header {
     position: fixed;
-    background: white;
+    background: $magv2-sticky-header-bg;
     padding: 0.6875rem;
     #{$left}: 0;
     top: 0;

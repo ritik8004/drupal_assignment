@@ -7,6 +7,7 @@ import PdpHeader from '../pdp-header';
 import { getProductValues } from '../../../utilities/pdp_layout';
 import PdpStandardDelivery from '../pdp-standard-delivery';
 import PdpClickCollect from '../pdp-click-and-collect';
+import PdpCrossellUpsell from '../pdp-crossell-upsell';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -108,6 +109,9 @@ const PdpLayout = () => {
             finalPrice={finalPrice}
           />
         </div>
+      </div>
+      <div className="magv2-pdp-crossell-upsell-wrapper">
+        <PdpCrossellUpsell skuCode={skuItemCode} pdpGallery={pdpGallery} />
       </div>
     </>
   ) : emptyRes;

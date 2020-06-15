@@ -10,3 +10,13 @@ export const fullScreenSliderSettings = {
   arrows: true,
   centerMode: false,
 };
+
+export const crossellUpsellSliderSettings = {
+  dots: false,
+  infinite: false,
+  arrows: false,
+  slidesToShow: 1,
+  slidesToScroll: 4,
+  variableWidth: true,
+  draggable: false,
+};
