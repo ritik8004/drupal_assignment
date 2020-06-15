@@ -1,0 +1,20 @@
+#alshaya-algolia-search {
+  .c-content__region {
+    .sticky-filter-wrapper {
+      .c-collapse-item {
+        .c-collapse__title {
+          @include facet-arrow(after, down, 0.25rem, 0, 0.25rem, 0.25rem) {
+            #{$right}: 1.875rem;
+            top: 1.25rem;
+          }
+
+          &.active {
+            &::after {
+              transform: rotate(270deg);
+            }
+          }
+        }
+      }
+    }
+  }
+}
