@@ -94,15 +94,11 @@
       width: 100vw !important;
       overflow-y: auto;
 
-      @include breakpoint($only-tablet) {
-        padding: 5.3125rem !important;
-      }
-
       img {
         margin: 0 auto;
       }
 
-      @include breakpoint($only-mobile) {
+      @include breakpoint($upto-desktop) {
         .fullscreen-slider-wrapper {
           height: 100%;
           display: flex;
@@ -158,12 +154,13 @@
 
       .slick-prev {
         #{$left}: 0.5rem;
+        #{$right}: auto;
 
         @include breakpoint($tablet) {
           #{$left}: 3.75rem;
         }
 
-        @include icon(chevronleft) {
+        @include icon(chevron#{$left}) {
           @include breakpoint($desktop) {
             height: 5.25rem;
             width: 5.25rem;
@@ -183,7 +180,7 @@
           #{$right}: 3.75rem;
         }
 
-        @include icon(chevronright) {
+        @include icon(chevron#{$right}) {
           @include breakpoint($desktop) {
             height: 5.25rem;
             width: 5.25rem;
@@ -199,7 +196,7 @@
       .slick-dots {
         position: fixed;
         bottom: 3.375rem;
-        #{$left}: 50%;
+        left: 50%;
         transform: translate(-50%, 0);
 
         @include breakpoint($only-mobile) {
@@ -232,6 +229,23 @@
       .magv2-pdp-image {
         cursor: auto;
       }
+    }
+  }
+}
+
+html[lang="ar"] {
+  .magv2-pdp-gallery {
+    .popup-overlay {
+      .slick-slider {
+        .slick-dots {
+          padding: 0;
+        }
+      }
+    }
+  }
+  .magazine__gallery--container-mobile {
+    .slick-dots {
+      padding: 0;
     }
   }
 }
