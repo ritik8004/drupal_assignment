@@ -245,6 +245,19 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
       $entity = self::getAddressBookManager()->getUserAddressByCommerceId($address_info['customer_address_id']);
       if ($entity instanceof Profile) {
+
+        $selected_address = $entity->get('field_address')->first()->getValue();
+        // If address doesn't have area or area term not exists in drupal.
+        if (!$selected_address
+          || empty($selected_address['administrative_area'])
+          || !\Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($selected_address['administrative_area'])) {
+          \Drupal::logger('alshaya_acm_checkout')->error('User @uid tried to select the address @profile_id which does not have area/city.', [
+            '@uid' => $entity->getOwner()->id(),
+            '@profile_id' => $entity->id(),
+          ]);
+          throw new \Exception($this->t('Address you selected does not contain required information. Please update address.'));
+        }
+
         $cart->setShipping($address);
 
         /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
@@ -265,7 +278,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     }
     catch (\Exception $e) {
       drupal_set_message($e->getMessage(), 'error');
-      $form_state->setErrorByName('custom', $e->getMessage());
+      $form_state->setErrorByName('address', $e->getMessage());
     }
   }
 

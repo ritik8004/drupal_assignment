@@ -16,6 +16,9 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Entity\Profile;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,6 +27,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Provides additional urls for checkout pages.
  */
 class CheckoutController implements ContainerInjectionInterface {
+  use StringTranslationTrait;
 
   /**
    * The cart session.
@@ -68,6 +72,20 @@ class CheckoutController implements ContainerInjectionInterface {
   protected $checkoutHelper;
 
   /**
+   * Logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
+   * Messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * Constructs a new CheckoutController object.
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
@@ -82,19 +100,27 @@ class CheckoutController implements ContainerInjectionInterface {
    *   AddressBook Areas Terms helper service.
    * @param \Drupal\alshaya_acm_checkout\CheckoutHelper $checkout_helper
    *   Checkout Helper service object.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger factory.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   Messenger service.
    */
   public function __construct(CartStorageInterface $cart_storage,
                               EntityTypeManagerInterface $entity_manager,
                               AlshayaAddressBookManager $address_book_manager,
                               MobileNumberUtilInterface $mobile_util,
                               AddressBookAreasTermsHelper $areas_terms_helper,
-                              CheckoutHelper $checkout_helper) {
+                              CheckoutHelper $checkout_helper,
+                              LoggerChannelFactoryInterface $logger_factory,
+                              MessengerInterface $messenger) {
     $this->cartStorage = $cart_storage;
     $this->entityManager = $entity_manager;
     $this->addressBookManager = $address_book_manager;
     $this->mobileUtil = $mobile_util;
     $this->areasTermsHelper = $areas_terms_helper;
     $this->checkoutHelper = $checkout_helper;
+    $this->logger = $logger_factory->get('alshaya_acm_checkout');
+    $this->messenger = $messenger;
   }
 
   /**
@@ -107,7 +133,9 @@ class CheckoutController implements ContainerInjectionInterface {
       $container->get('alshaya_addressbook.manager'),
       $container->get('mobile_number.util'),
       $container->get('alshaya_addressbook.area_terms_helper'),
-      $container->get('alshaya_acm_checkout.checkout_helper')
+      $container->get('alshaya_acm_checkout.checkout_helper'),
+      $container->get('logger.factory'),
+      $container->get('messenger')
     );
   }
 
@@ -127,6 +155,21 @@ class CheckoutController implements ContainerInjectionInterface {
     if (!($cart instanceof CartInterface)) {
       $response = new AjaxResponse();
       $response->addCommand(new RedirectCommand(Url::fromRoute('acq_cart.cart')->toString()));
+      return $response;
+    }
+
+    $selected_address = $profile->get('field_address')->first()->getValue();
+    // If address doesn't have area or area term not exists in drupal.
+    if (!$selected_address
+      || empty($selected_address['administrative_area'])
+      || !$this->entityManager->getStorage('taxonomy_term')->load($selected_address['administrative_area'])) {
+      $this->logger->error('User @uid tried to select the address @profile_id which does not have area/city.', [
+        '@uid' => $profile->getOwner()->id(),
+        '@profile_id' => $profile->id(),
+      ]);
+      $this->messenger->addError($this->t('Address you selected does not contain required information. Please update address.'));
+      $response = new AjaxResponse();
+      $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
       return $response;
     }
 
