@@ -116,6 +116,26 @@ body.header-sticky-filter {
 }
 
 @include breakpoint($only-tablet) {
+  body:not(.mobile--overlay) {
+    .c-menu-secondary {
+      .menu--super-menu {
+        ul {
+          justify-content: flex-start;
+
+          li {
+            padding: 0 1.3125rem;
+
+            &:first-child {
+              padding-#{$left}: 1.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
   body:not(.mobile--overlay):not(.header-sticky-filter) {
     .c-menu-secondary {
       position: absolute;
