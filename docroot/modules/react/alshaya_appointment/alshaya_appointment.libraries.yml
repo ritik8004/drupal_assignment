@@ -1,0 +1,5 @@
+alshaya_appointment:
+  js:
+    dist/appointment.js: {}
+  dependencies:
+    - alshaya_react/react
