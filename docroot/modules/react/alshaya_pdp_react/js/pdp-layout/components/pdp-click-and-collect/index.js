@@ -45,11 +45,12 @@ export default class PdpClickCollect extends React.PureComponent {
   };
 
   textChange = (text) => {
+    const txtLimitExceeded = (text.length > 3);
     this.setState({
-      label: (text.length > 3) ? 'in-store availability:' : 'check in-store availablility:',
-      countLabel: (text.length > 3),
+      label: txtLimitExceeded ? 'in-store availability:' : 'check in-store availablility:',
+      countLabel: txtLimitExceeded,
       location: text,
-      hideInput: (text.length > 3),
+      hideInput: txtLimitExceeded,
       searchText: text,
     });
   }
@@ -61,9 +62,6 @@ export default class PdpClickCollect extends React.PureComponent {
   }
 
   render() {
-    const {
-      openModal, closeModal, textChange, showInput,
-    } = this;
     const {
       skuCode, finalPrice, pdpProductPrice, title,
     } = this.props;
@@ -86,20 +84,21 @@ export default class PdpClickCollect extends React.PureComponent {
           <div className="instore-title">{label}</div>
           {countLabel ? (
             <div className="store-count-label">
-              {Drupal.t('2 Stores at ')}
-              <span className="location-name" onClick={showInput}>{ location }</span>
+              {Drupal.t('2 Stores at')}
+              {' '}
+              <span className="location-name" onClick={this.showInput}>{ location }</span>
             </div>
           ) : ''}
-          {hideInput ? '' : <PdpClickCollectSearch inputValue={searchText} onChange={textChange} />}
+          {hideInput ? '' : <PdpClickCollectSearch inputValue={searchText} onChange={this.textChange} />}
         </div>
         {countLabel ? stores.filter((store, key) => key < 2).map((store, key) => <ClickCollectStoreDetail key={store.id} index={key + 1} store={store} />) : ''}
         {countLabel ? (
-          <div className="magv2-click-collect-showmore-link" onClick={() => openModal()}>
+          <div className="magv2-click-collect-showmore-link" onClick={() => this.openModal()}>
             {Drupal.t('View all')}
           </div>
         ) : '' }
         <ClickCollectContent
-          closeModal={closeModal}
+          closeModal={this.closeModal}
           title={title.label}
           pdpProductPrice={pdpProductPrice}
           finalPrice={finalPrice}
