@@ -335,7 +335,15 @@ class AddressBookAreasTermsHelper {
    */
   public function setAddressCachedData(array $data, $key) {
     $cid = $this->getAddressbookCachedId($key);
-    $this->cache->set($cid, $data, Cache::PERMANENT, ['taxonomy_term:area_list']);
+    $cache_tags = array_map(function ($val) {
+      return 'taxonomy_term:' . $val;
+    }, array_keys($data));
+
+    // If there are cache tags, means there are terms. Only then
+    // store in cache or this will cause issue in cache invalidation.
+    if (!empty($cache_tags)) {
+      $this->cache->set($cid, $data, Cache::PERMANENT, $cache_tags);
+    }
 
     // Update data in static cache too.
     $static = &drupal_static($cid);

@@ -659,6 +659,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
               $address[$field_code] = $parent ? $parent->id() : NULL;
             }
           case 'administrative_area':
+            // Use 0 for area id if null because null
+            // value fails with entity load.
+            $address[$field_code] = !is_null($address[$field_code]) ? $address[$field_code] : 0;
             $term = $this->termStorage->load($address[$field_code]);
 
             if (empty($term)) {
