@@ -11,16 +11,6 @@ use Drupal\search_api\Entity\Index;
  * Implements hook_update_N().
  *
  * Queue all products for re-indexation.
- * Done to index multiple supercategories for products.
- */
-function alshaya_search_algolia_update_8004() {
-  _alshaya_search_api_reindex();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Queue all products for re-indexation.
  * Done to add SKU is_new property to index.
  */
 function alshaya_search_algolia_update_8003() {
