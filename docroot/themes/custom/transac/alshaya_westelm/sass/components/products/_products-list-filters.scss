@@ -17,74 +17,91 @@
   .filter-list-label {
     text-transform: capitalize;
   }
+
+  .all-filters-algolia {
+    .filter__foot {
+      .facet-clear-all,
+      .facet-apply-all {
+        text-transform: uppercase;
+        font-family: $alshaya-bold;
+        font-weight: normal;
+      }
+    }
+  }
 }
 
 // Css for filters on products listing page and search page.
 .c-plp .c-content__region {
   // Filter Head
-  .all-filters .filter {
-    &__head {
-      padding: 0 1rem;
-      min-height: 3.125rem;
+  .all-filters .filter,
+  .all-filters-algolia {
+    .filter {
+      &__head {
+        padding: 0 1rem;
+        min-height: 3.125rem;
 
-      .filter-sort-title {
-        text-transform: lowercase;
-        font-weight: 600;
-      }
+        .filter-sort-title {
+          text-transform: lowercase;
+          font-weight: 600;
+        }
 
-      .facet-all-apply {
-        margin-#{$right}: -0.625rem;
-      }
+        .facet-all-apply,
+        .all-filters-close {
+          margin-#{$right}: -0.625rem;
+        }
 
-      .facet-all-back {
-        @include facet-arrow(before, false) {
-          position: relative;
-          #{$left}: 0;
-          top: 0;
-          width: 0.875rem;
-          border-width: 0.3125rem 0 0.3125rem 0.5rem;
+        .facet-all-back,
+        .back-facet-list {
+          @include facet-arrow(before, false) {
+            position: relative;
+            #{$left}: 0;
+            top: 0;
+            width: 0.875rem;
+            border-width: 0.3125rem 0 0.3125rem 0.5rem;
+          }
         }
       }
-    }
 
-    &__inner {
-      .block-views-exposed-filter-blockalshaya-product-list-block-1,
-      .block-views-exposed-filter-blockalshaya-product-list-block-2,
-      .block-views-exposed-filter-blocksearch-page {
-        fieldset.form-wrapper {
-          .fieldset-wrapper .form-item {
-            @include breakpoint($upto-tablet) {
-              line-height: 3rem;
-            }
-          }
-
-          .fieldset-legend {
-            font-size: 0.9375rem;
-            padding: 1rem 2rem 0.9375rem;
-
-            .sort-for-label {
+      &__inner {
+        .block-views-exposed-filter-blockalshaya-product-list-block-1,
+        .block-views-exposed-filter-blockalshaya-product-list-block-2,
+        .block-views-exposed-filter-blocksearch-page {
+          fieldset.form-wrapper {
+            .fieldset-wrapper .form-item {
               @include breakpoint($upto-tablet) {
-                top: 1rem;
-                color: $plp_sort_for_label;
-                font-size: 0.75rem;
+                line-height: 3rem;
               }
             }
 
-            @include facet-arrow(after, false) {
-              #{$right}: 1.25rem;
+            .fieldset-legend {
+              font-size: 0.9375rem;
+              padding: 1rem 2rem 0.9375rem;
+
+              .sort-for-label {
+                @include breakpoint($upto-tablet) {
+                  top: 1rem;
+                  color: $plp_sort_for_label;
+                  font-size: 0.75rem;
+                }
+              }
+
+              @include facet-arrow(after, false) {
+                #{$right}: 1.25rem;
+              }
             }
           }
         }
-      }
 
-      .views-exposed-form.c-accordion .c-accordion__title,
-      .c-facet.c-accordion .c-accordion__title {
-        font-size: 0.9375rem;
-        padding: 1rem 2rem;
+        .views-exposed-form.c-accordion .c-accordion__title,
+        .c-facet.c-accordion .c-accordion__title,
+        .c-facet.c-collapse-item .c-collapse__title {
+          font-size: 0.9375rem;
+          padding: 1rem 2rem;
 
-        @include facet-arrow(after, false) {
-          #{$right}: 1.25rem;
-          top: 1.375rem;
+          @include facet-arrow(after, false) {
+            #{$right}: 1.25rem;
+            top: 1.375rem;
+          }
         }
       }
     }
