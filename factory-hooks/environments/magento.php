@@ -249,21 +249,21 @@ $magentos = [
     ],
   ],
   'pbk_uat' => [
-    'url' => 'https://pb-uat2.store.alshaya.com',
+    'url' => 'https://pbk-uat.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => 'u59m0076qalrjodhiwoekpt2qpens7c4',
-      'consumer_secret' => '521nybox1a70rjpwf1yxyfoqhiyrv7x1',
-      'access_token' => 'gsw0sb6xy52kfww9yufgcu6dsixka3g9',
-      'access_token_secret' => '6a38i2p1qaxa1hfkjrdmhjtwluy57itq',
+      'consumer_key' => 'ywgq9ebmjec2ctq9q9wl2ygocab9tzwz',
+      'consumer_secret' => 'ml3j38568na78y1os6byg94pb1aq96dv',
+      'access_token' => 'ye5cargyshiyfu63nmvmgy7auqeupc0r',
+      'access_token_secret' => '460ockhivjys2m8ngf1ynd17xs7jc872',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 18],
+      'store_id' => ['en' => 1, 'ar' => 16],
     ],
     'sa' => [
-      'store_id' => ['en' => 6, 'ar' => 9],
+      'store_id' => ['en' => 4, 'ar' => 7],
     ],
     'ae' => [
-      'store_id' => ['en' => 12, 'ar' => 15],
+      'store_id' => ['en' => 10, 'ar' => 13],
     ],
   ],
   // Victoria Secret.
