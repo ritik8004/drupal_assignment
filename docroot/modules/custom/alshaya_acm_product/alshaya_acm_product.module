@@ -588,6 +588,20 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             ];
           }
         }
+
+        // Get size guide link information.
+        $field_category = $entity->get('field_category')->first();
+        if (!empty($field_category)) {
+          $category = $field_category->entity;
+          $size_guide = _alshaya_acm_product_get_size_guide_info($category);
+        }
+
+        // Set size guide information in drupal settings.
+        $build['#attached']['drupalSettings']['isSizeGuideEnabled'] = FALSE;
+        if (isset($size_guide['link'])) {
+          $build['#attached']['drupalSettings']['isSizeGuideEnabled'] = TRUE;
+          $build['#attached']['drupalSettings']['sizeGuide'] = $size_guide;
+        }
       }
       elseif ($view_mode == 'teaser' || $view_mode == 'product_category_carousel') {
         $context = $view_mode;

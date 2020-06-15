@@ -10,19 +10,11 @@ const NonGroupSelectOption = (props) => {
     code,
     nextCode,
     nextValues,
-    sizeGuide,
   } = props;
-
-  let sizeGuideLink = '';
-  if (sizeGuide) {
-    sizeGuideLink = configurables.sizeGuide;
-  }
 
   return (
     <>
-      {sizeGuide
-        ? <SizeGuide sizeGuideLink={sizeGuideLink} />
-        : <></>}
+      <SizeGuide attrId={code} />
       <select id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
         {Object.keys(configurables.values).map((attr) => {
           // If the currennt attribute matches the
