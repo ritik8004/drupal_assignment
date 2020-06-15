@@ -6,6 +6,10 @@
       &.active {
         font-family: $alshaya-bold;
       }
+
+      &:hover {
+        text-decoration: none;
+      }
     }
   }
 }
