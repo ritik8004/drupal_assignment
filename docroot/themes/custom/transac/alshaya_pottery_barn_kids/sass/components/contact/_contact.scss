@@ -1,0 +1,5 @@
+@include breakpoint($desktop) {
+  .c-user-edit.user-page .user-form .field--type-mobile-number {
+    top: 0.3rem;
+  }
+}

@@ -277,6 +277,64 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'muae_dev',
       ],
     ],
+    'aeosa' => [
+      'dev2' => [
+        'magento' => 'aeo_uat',
+        'conductor' => 'aeosa_uat',
+      ],
+      'local' => [
+        'magento' => 'aeo_uat',
+        'conductor' => 'aeosa_uat',
+      ],
+    ],
+    'mukw' => [
+      'local' => [
+        'magento' => 'mu_uat',
+        'conductor' => 'mukw_uat',
+      ],
+    ],
+    'muae' => [
+      'local' => [
+        'magento' => 'mu_qa',
+        'conductor' => 'muae_qa',
+      ],
+    ],
+    'musa' => [
+      'local' => [
+        'magento' => 'mu_qa',
+        'conductor' => 'musa_qa',
+      ],
+    ],
+    'mueg' => [
+      'local' => [
+        'magento' => 'mu_qa',
+        'conductor' => 'mueg_qa',
+      ],
+    ],
+    'pbkkw' => [
+      'local' => [
+        'magento' => 'pbk_uat',
+        'conductor' => 'pbkkw_uat',
+      ],
+    ],
+    'pbkae' => [
+      'local' => [
+        'magento' => 'pbk_qa',
+        'conductor' => 'pbkae_qa',
+      ],
+    ],
+    'pbksa' => [
+      'local' => [
+        'magento' => 'pbk_qa',
+        'conductor' => 'pbksa_qa',
+      ],
+    ],
+    'pbkeg' => [
+      'local' => [
+        'magento' => 'pbk_qa',
+        'conductor' => 'pbkeg_qa',
+      ],
+    ]
   ];
 
   // All 01update should match 01live.
