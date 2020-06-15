@@ -129,7 +129,7 @@ class CartController extends ControllerBase {
   }
 
   /**
-   * Get existing acm cart.
+   * Get existing acm cart for anonymous users.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Return json response.

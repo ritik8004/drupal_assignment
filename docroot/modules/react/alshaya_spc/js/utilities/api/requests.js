@@ -25,6 +25,17 @@ export const fetchClicknCollectStores = (args) => {
 };
 
 export const fetchCartData = () => {
+  // If session cookie not exists, no need to process/check.
+  // @TODO: Remove Cookies.get('Drupal.visitor.acq_cart_id') check when we
+  // uninstall alshaya_acm module.
+  if (drupalSettings.user.uid === 0
+    && !Cookies.get('PHPSESSID')
+    && !Cookies.get('Drupal.visitor.acq_cart_id')
+  ) {
+    removeCartFromStorage();
+    return null;
+  }
+
   // Check if cart available in storage.
   let cart = cartAvailableInStorage();
 

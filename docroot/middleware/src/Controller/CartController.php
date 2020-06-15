@@ -240,7 +240,8 @@ class CartController {
         $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, $cart_id);
       }
       else {
-        // @TODO: Remove this "else" part when we uninstall alshaya_acm module.
+        // @TODO: Remove this "else" part and getAcmCartId() when we
+        // uninstall alshaya_acm module.
         $info = $this->drupal->getAcmCartId();
         // Set the cart_id in current session, if Drupal api returns the
         // cart_id. If the cart_id is not valid, or contains any error getCart()
