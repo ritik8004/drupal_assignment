@@ -207,8 +207,6 @@ class Cart {
    *
    * @return array
    *   Cart data.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart($force = FALSE) {
     if (!empty(static::$cart) && !$force) {

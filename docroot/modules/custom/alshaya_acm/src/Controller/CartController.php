@@ -136,6 +136,8 @@ class CartController extends ControllerBase {
    */
   public function getExistingCart() {
     $cart_id = $this->cartStorage->getCartId(FALSE);
+    // Delete acm related cookies, as we are going to use new cookies from
+    // middleware.
     if ($cart_id) {
       $this->cartStorage->clearCart();
       user_cookie_delete('acq_cart_id');

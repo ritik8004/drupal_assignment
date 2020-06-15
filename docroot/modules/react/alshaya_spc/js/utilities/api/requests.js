@@ -25,13 +25,6 @@ export const fetchClicknCollectStores = (args) => {
 };
 
 export const fetchCartData = () => {
-  // If session cookie not exists, no need to process/check.
-  if (drupalSettings.user.uid === 0
-    && !Cookies.get('PHPSESSID')) {
-    removeCartFromStorage();
-    return null;
-  }
-
   // Check if cart available in storage.
   let cart = cartAvailableInStorage();
 

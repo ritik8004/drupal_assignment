@@ -25,7 +25,7 @@ alshaya_acm.synchronize:
     _permission: 'synchronize commerce data'
 
 alshaya_acm.get_acm_cart:
-  path: '/cart/old/existing'
+  path: '/cart/old'
   defaults:
     _controller: '\Drupal\alshaya_acm\Controller\CartController::getExistingCart'
     _title: 'Cart'

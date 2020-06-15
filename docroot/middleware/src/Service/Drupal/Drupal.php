@@ -210,6 +210,16 @@ class Drupal {
   }
 
   /**
+   * Get existing acm cart for user.
+   */
+  public function getAcmCartId() {
+    $url = '/cart/old';
+    $response = $this->invokeApiWithSession('GET', $url);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
+  /**
    * Get store info for given store code.
    *
    * @param string $store_code
