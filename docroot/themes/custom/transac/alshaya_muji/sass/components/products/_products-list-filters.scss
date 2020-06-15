@@ -34,24 +34,29 @@
           padding-bottom: 7.25rem;
         }
 
-        .block-views-exposed-filter-blockalshaya-product-list-block-1,
-        .block-views-exposed-filter-blockalshaya-product-list-block-2,
-        .block-views-exposed-filter-blocksearch-page {
-          fieldset.form-wrapper {
-            .fieldset-legend {
-              @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.375rem) {
-                #{$right}: 1.6875rem;
-                top: 1.5rem;
-              }
+        .c-facet.c-accordion {
+          .c-accordion__title {
+            &::after {
+              transform: translateY(-50%);
+              border: none;
+              top: 50%;
+              height: auto;
             }
           }
         }
 
-        .c-facet.c-accordion {
-          .c-accordion__title {
-            @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.375rem) {
-              #{$right}: 1.6875rem;
-              top: 1.5rem;
+        .views-exposed-form,
+        .c-facet {
+          &.c-accordion,
+          &.c-collapse-item {
+            .c-accordion__title,
+            .c-collapse__title {
+              &::after {
+                transform: translateY(-50%);
+                border: none;
+                top: 50%;
+                height: auto;
+              }
             }
           }
         }
