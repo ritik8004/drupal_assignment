@@ -1249,7 +1249,7 @@
         }
         // On page load, process only the required number of
         // items and push to datalayer.
-        if ((eventType === 'load') && (impressions.length === drupalSettings.gtm.productImpressionQueueSize)) {
+        if ((eventType === 'load') && (impressions.length == drupalSettings.gtm.productImpressionDefaultQueueSize)) {
           // This is to break out from the .each() function.
           return false;
         }
