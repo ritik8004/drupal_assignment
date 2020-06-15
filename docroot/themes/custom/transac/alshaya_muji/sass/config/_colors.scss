@@ -24,6 +24,7 @@ $greyish: #808080;
 $mujidarkgray: #404040;
 $grey-light: #777;
 $black-two: #000;
+$brownish-grey: #666;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -69,9 +70,9 @@ $primary_empty_btn_border: $black;
 $primary_brand_button: $black;
 
 // Titles.
-$page_title: $black;
+$page_title: $black-two;
 $block_title: $black;
-$title: $black;
+$title: $black-two;
 $sub_title: $black;
 
 /* ------- 3. Secondary color  ----- */
@@ -396,7 +397,7 @@ $default_msg_bg: $forest-green;
 $user_login_section_title: $black;
 $user_ui_dialog_border: $gallery;
 $user_login_link_btn_text: $black;
-$user_field_link: $grey;
+$user_field_link: $brownish-grey;
 
 // Contact Page
 $webform_contact_legend: $black;
@@ -443,7 +444,7 @@ $checkout_footer_txt: $grey;
 $checkout_delivery_options_border: $light-greyish;
 $checkout_default_address_border: $grey;
 $checkout_address_edit_link: $black;
-$checkout_deliverto_address_label: $grey;
+$checkout_deliverto_address_label: $brownish-grey;
 $checkout_footer_border-top: $gallery;
 
 // Address form.
@@ -638,3 +639,4 @@ $spc-cart-background: $wild-sand;
 $spc-checkout-order-detail-label: $grey;
 $spc-deliver-button: $mujidarkred;
 $spc-cnc-store-search-icon: $black-two;
+$spc-search-icon: $black-two;
