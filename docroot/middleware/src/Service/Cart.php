@@ -761,6 +761,7 @@ class Cart {
             $additional_data = [
               'cardId' => $card['gateway_token'],
               'cvv' => $this->customerCards->deocodePublicHash(urldecode($additional_info['cvv'])),
+              'udf1' => $card['mada'] ? 'MADA' : '',
               'udf2' => APIWrapper::CARD_ID_CHARGE,
             ];
             $end_point = APIWrapper::ENDPOINT_CARD_PAYMENT;
