@@ -116,6 +116,7 @@ set classes = [
                           </div>
                         {% endif %}
                       {% endfor %}
+                      {{ content.legal_notice }}
                     </div>
                     {% if content.description %}
                       {% if content.read_more_style.value|render %}
