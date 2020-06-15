@@ -27,3 +27,13 @@
     }
   }
 }
+
+.block-customer-service-block {
+  font-family: $alshaya-thin;
+
+  p:last-child {
+    .light {
+      font-family: $alshaya-thin;
+    }
+  }
+}
