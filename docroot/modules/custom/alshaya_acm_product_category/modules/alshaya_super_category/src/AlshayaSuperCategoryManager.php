@@ -152,31 +152,32 @@ class AlshayaSuperCategoryManager {
    * @param \Drupal\node\NodeInterface $node
    *   The node whose supercategory is to be fetched.
    *
-   * @return string
-   *   The supercategory term or empty string if no supercategory found or
+   * @return array
+   *   The supercategory terms or empty array if no supercategory found or
    *   node is not a product node.
    */
-  public function getSuperCategory(NodeInterface $node) {
+  public function getSuperCategories(NodeInterface $node) {
+    $super_categories = [];
     $is_super_category_enabled = &drupal_static('alshaya_super_category_status', NULL);
     if (is_null($is_super_category_enabled)) {
       $is_super_category_enabled = $this->configFactory->get('alshaya_super_category.settings')->get('status');
     }
     if ($is_super_category_enabled && $node->bundle() === 'acq_product') {
-      $category = $node->get('field_category')->getValue();
-      // We can use any category for the product here as the product would
-      // only belong to one super category.
-      $category = $category[0] ?? NULL;
-      if (!empty($category)) {
-        $category = $this->entityTypeManager->getStorage('taxonomy_term')->load($category['target_id']);
-        // Get the super category.
-        $super_category = _alshaya_super_category_get_super_category_for_term($category, $node->language()->getId());
-        if ($super_category instanceof TermInterface) {
-          return $super_category->getName();
+      $categories = $node->get('field_category')->getValue();
+      $langcode = $node->language()->getId();
+      foreach ($categories as $category) {
+        if (!empty($category)) {
+          $category = $this->entityTypeManager->getStorage('taxonomy_term')->load($category['target_id']);
+          // Get the super category.
+          $super_category = _alshaya_super_category_get_super_category_for_term($category, $langcode);
+          if ($super_category instanceof TermInterface) {
+            $super_categories[] = $super_category->getName();
+          }
         }
       }
     }
 
-    return '';
+    return !empty($super_categories) ? array_values(array_unique($super_categories)) : $super_categories;
   }
 
 }
