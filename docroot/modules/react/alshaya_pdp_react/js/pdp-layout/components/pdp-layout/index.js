@@ -6,6 +6,7 @@ import PdpCart from '../pdp-cart';
 import PdpHeader from '../pdp-header';
 import { getProductValues } from '../../../utilities/pdp_layout';
 import PdpStandardDelivery from '../pdp-standard-delivery';
+import PdpSharePanel from '../pdp-share-panel';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -100,6 +101,7 @@ const PdpLayout = () => {
             pdpRefresh={pdpRefresh}
           />
           <PdpStandardDelivery />
+          <PdpSharePanel title={title} />
         </div>
       </div>
     </>
