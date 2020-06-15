@@ -25,6 +25,7 @@ $mujidarkgray: #404040;
 $grey-light: #777;
 $black-two: #000;
 $brownish-grey: #666;
+$white-smoke-light: #f2f2f2;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -440,7 +441,8 @@ $social-network-text: $black;
 $checkout_securely_icon_bg: $black;
 $checkout_securely_icon_mobile_txt: $white;
 $checkout_securely_txt: $white;
-$checkout_footer_txt: $grey;
+$checkout_footer_txt: $grey-dark-one;
+$checkout_footer_light_txt: $grey-dark-one;
 $checkout_delivery_options_border: $light-greyish;
 $checkout_default_address_border: $grey;
 $checkout_address_edit_link: $black;
@@ -640,3 +642,5 @@ $spc-checkout-order-detail-label: $grey;
 $spc-deliver-button: $mujidarkred;
 $spc-cnc-store-search-icon: $black-two;
 $spc-search-icon: $black-two;
+$spc-select-border: $white-smoke-light;
+$spc-order-summary-discount-text: $black-two;
