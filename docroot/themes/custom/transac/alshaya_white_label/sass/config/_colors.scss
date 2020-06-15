@@ -109,6 +109,9 @@ $_spc-warning-bg: #ffd1a1;
 $new_red: #c00;
 $grey-light-three: #f8f8f8;
 $vivid-red: #cf0f0f;
+$neon-green: #5cf0cb;
+$boston-red: #c00;
+$niagara: #0abb76;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1320,3 +1323,9 @@ $magv2-slick-dots-active: $mothercare-black;
 $magv2-icon-bg: $grey-light-two;
 $magv2-discount-percentage: $vivid-red;
 $magv2-discount-background: $white-five;
+$magv2-free-tag-bg: $neon-green;
+$magv2-click-collect-input-border: $warm-grey-two;
+$magv2-click-collect-location-icon-border: $mothercare-black;
+$magv2-click-collect-store-address: $grey-light;
+$magv2-click-collect-product-status-in-store: $niagara;
+$magv2-click-collect-product-status-few-left: $boston-red;
