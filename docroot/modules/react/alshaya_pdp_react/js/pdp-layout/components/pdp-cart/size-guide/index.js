@@ -8,13 +8,11 @@ const SizeGuide = (props) => {
   // If size guide is enabled.
   if (isSizeGuideEnabled) {
     const { sizeGuide } = drupalSettings;
-    const { attributes } = sizeGuide;
-    const { link } = sizeGuide;
     // If the current attr matches the size attribute.
-    if (attributes.indexOf(attrId) !== -1) {
+    if (sizeGuide.attributes.indexOf(attrId) !== -1) {
       return (
         <div className="size-guide">
-          {parse(link)}
+          {parse(sizeGuide.link)}
         </div>
       );
     }
