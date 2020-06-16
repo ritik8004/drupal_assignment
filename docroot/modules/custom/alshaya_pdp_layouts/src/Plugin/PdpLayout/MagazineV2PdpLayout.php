@@ -135,6 +135,15 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       }
       $quantity = $this->skuManager->getStockQuantity($sku_entity);
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockQty'] = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
+
+      // Set delivery options only if product is buyable.
+      if (alshaya_acm_product_is_buyable($sku_entity)) {
+        // Check if home delivery is available for this product.
+        if (alshaya_acm_product_available_home_delivery($sku)) {
+          $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
+          $vars['#attached']['drupalSettings']['homeDelivery'] = $home_delivery_config;
+        }
+      }
     }
 
     // Get the product description.
