@@ -1070,12 +1070,15 @@ class FeatureContext extends CustomMinkContext
    */
   public function iShouldSeeTheLinkInSection($arg1, $arg2)
   {
-    $link = $this->getSession()
-      ->getPage()
-      ->find('css', $arg2)
-      ->hasLink($arg1);
-    if (!$link) {
-      throw new \Exception($arg1 . 'link is not visible');
+    $page = $this->getSession()->getPage();
+    $section = $page->find('css', $arg2);
+    if (!empty($section)) {
+      $link = $section->hasLink($arg1);
+      if (!$link) {
+        throw new \Exception($arg1 . 'link is not visible.');
+      }
+    } else {
+      throw new \Exception($arg2 . 'section does not exists.');
     }
   }
 

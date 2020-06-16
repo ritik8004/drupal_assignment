@@ -75,12 +75,6 @@ class flContext extends DrupalSubContextBase implements DrupalSubContextInterfac
   public function iShouldBeAbleToSeeTheFooter()
   {
     $page = $this->getSession()->getPage();
-//    $termsandconditions = $page->find('css', '.region__footer-secondary');
-//    $termsandconditions->hasLink('Privacy' and 'Terms & Conditions');
-//    if ($termsandconditions == NULL) {
-//      throw new \Exception('PRIVACY and TERMS & CONDITIONS links are missing in the footer');
-//    }
-
     $copyright1 = '© Victoria\'s Secret. All Rights Reserved';
     $copyright = $page->find('css', '.region__footer-secondary');
     $copyright->has('named', ['content', $copyright1]);
@@ -94,25 +88,6 @@ class flContext extends DrupalSubContextBase implements DrupalSubContextInterfac
     if ($connect == NULL) {
       throw new \Exception('Connect with us section is missing');
     }
-//    $facebook = $page->hasLink('Facebook');
-//    if ($facebook == NULL) {
-//      throw new \Exception('Link to facebook is missing in the footer');
-//    }
-//    $instagram = $page->hasLink('Instagram');
-//    if ($instagram == NULL) {
-//      throw new \Exception('Link to instagram is missing in the footer');
-//    }
-//
-//    $findstore1 = 'FIND YOUR NEAREST STORE';
-//    $findstore = $page->find('css', '.region-footer-primary');
-//    $findstore->has('named', ['content', $findstore1]);
-//    if ($findstore == NULL) {
-//      throw new \Exception('Find your nearest store section is missing');
-//    }
-//    $find_store = $page->hasLink('Find Store');
-//    if ($find_store == NULL) {
-//      throw new \Exception('Link to find a store is missing in the footer');
-//    }
   }
 
   /**
@@ -148,11 +123,6 @@ class flContext extends DrupalSubContextBase implements DrupalSubContextInterfac
   public function iShouldBeAbleToSeeTheFooterInArabic()
   {
     $page = $this->getSession()->getPage();
-//    $termsandconditions = $page->find('css', '.region-footer-secondary');
-//    $termsandconditions->hasLink('Privacy' and 'Terms & Conditions');
-//    if ($termsandconditions == NULL) {
-//      throw new \Exception('PRIVACY and TERMS & CONDITIONS links are missing in the footer');
-//    }
 
     $copyright1 = 'ﭬيكتوريا سيكريت. كل الحقوق محفوظة. ©';
     $copyright = $page->find('css', '.region__footer-secondary');
@@ -167,25 +137,6 @@ class flContext extends DrupalSubContextBase implements DrupalSubContextInterfac
     if ($connect == NULL) {
       throw new \Exception('Connect with us section is missing');
     }
-//    $facebook = $page->hasLink('Facebook');
-//    if ($facebook == NULL) {
-//      throw new \Exception('Link to facebook is missing in the footer');
-//    }
-//    $instagram = $page->hasLink('Instagram');
-//    if ($instagram == NULL) {
-//      throw new \Exception('Link to instagram is missing in the footer');
-//    }
-//
-//    $findstore1 = 'اختر محلاً للتعرف على التفاصيل';
-//    $findstore = $page->find('css', '.region-footer-primary');
-//    $findstore->has('named', ['content', $findstore1]);
-//    if ($findstore == NULL) {
-//      throw new \Exception('Find your nearest store section is missing');
-//    }
-//    $find_store = $page->hasLink('البحث عن محلاتنا');
-//    if ($find_store == NULL) {
-//      throw new \Exception('Link to find a store is missing in the footer');
-//    }
   }
 
   /**

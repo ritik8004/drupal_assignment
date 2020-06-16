@@ -48,6 +48,13 @@ class AlshayaFeatureProcess {
         $this->sourcePath . DIRECTORY_SEPARATOR . $environment[0] . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'spc'
       ];
     }
+    else if (in_array($environment[2], ['prod','pprod'])) {
+      $this->suiteLocators = [
+        $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'spc',
+        $this->sourcePath . DIRECTORY_SEPARATOR . $environment[0] . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'spc',
+        $this->sourcePath . DIRECTORY_SEPARATOR . $environment[0] . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'prod' .  DIRECTORY_SEPARATOR . 'spc'
+      ];
+    }
     else {
       $this->suiteLocators = [$this->sourcePath . DIRECTORY_SEPARATOR . 'common', $this->sourcePath . DIRECTORY_SEPARATOR . $environment[0]];
     }
