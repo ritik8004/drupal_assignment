@@ -14,10 +14,11 @@ use Drupal\user\Entity\User;
  * Implements hook_update_N().
  *
  * Add new API to get all custom blocks for a path.
+ * Add store finder in URL mapping.
  */
 function alshaya_mobile_app_update_8072() {
   \Drupal::service('alshaya_config.manager')->updateConfigs(
-    ['rest.resource.blocks_for_path'],
+    ['alshaya_mobile_app.settings', 'rest.resource.blocks_for_path'],
     'alshaya_mobile_app'
   );
 
