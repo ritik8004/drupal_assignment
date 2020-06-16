@@ -222,7 +222,7 @@ class PromotionProductListResource extends ResourceBase {
     // Set price facet key.
     $this->alshayaSearchApiQueryExecute->setPriceFacetKey('promotion_price_facet');
     // Set selling price facet key.
-    $this->alshayaSearchApiQueryExecute->setSellingPriceFacetKey('promotion_selling_price_facet');
+    $this->alshayaSearchApiQueryExecute->setSellingPriceFacetKey('promo_selling_price');
 
     // Add condition for promotion node.
     $query->addCondition('promotion_nid', $nid);
@@ -247,7 +247,7 @@ class PromotionProductListResource extends ResourceBase {
     $banners = $this->mobileAppUtility->getImages($node, 'field_acq_promotion_banner');
     return [
       'id' => (int) $node->id(),
-      'label' => $node->getTitle(),
+      'label' => $node->get('field_acq_promotion_label')->getString(),
       'path' => $node_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($node),
       'banner' => !empty($banners) ? $banners[0] : '',

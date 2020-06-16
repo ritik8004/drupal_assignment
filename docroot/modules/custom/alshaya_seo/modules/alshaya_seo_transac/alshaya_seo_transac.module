@@ -62,6 +62,13 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     // Settings to enable error tracking on GA.
     $page['#attached']['drupalSettings']['gtm']['log_errors_to_console'] = Settings::get('log_errors_to_console', 1);
     $page['#attached']['drupalSettings']['gtm']['log_errors_to_ga'] = Settings::get('log_errors_to_ga', 0);
+
+    // Settings from the setting form for the module.
+    $seo_transac_settings = \Drupal::config('alshaya_seo_transac.settings');
+    $page['#attached']['drupalSettings']['gtm']['productImpressionQueueSize'] = $seo_transac_settings->get('product_impression_queue_size');
+    $page['#attached']['drupalSettings']['gtm']['productImpressionTimer'] = $seo_transac_settings->get('product_impression_timer_time');
+    $page['#cache'] = $page['#cache'] ?? [];
+    $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $seo_transac_settings->getCacheTags());
   }
 }
 
@@ -493,22 +500,32 @@ function alshaya_seo_transac_taxonomy_term_delete(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_simple_sitemap_arbitrary_links_alter().
+ * Implements hook_simple_sitemap_links_alter().
  */
-function alshaya_seo_transac_simple_sitemap_arbitrary_links_alter(&$arbitrary_links, $sitemap_variant) {
-  if ($sitemap_variant == 'default') {
+function alshaya_seo_transac_simple_sitemap_links_alter(array &$links, $sitemap_variant) {
+  if ($sitemap_variant === 'default') {
+    // Remove those variants sitemap links from the default sitemap which do not
+    // have any sitemap generated.
     global $base_url;
-    $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
-    $variants = array_keys($sitemap_manager->getSitemapVariants());
-    $variants = array_diff($variants, ['default']);
+    $sitemap_manager = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
+    $variant_links = [];
+
+    $variants_publish_status = $sitemap_manager->fetchSitemapInstanceStatuses();
+    $variants = $sitemap_manager->getAllVariants();
+
     if (!empty($variants)) {
       foreach ($variants as $variant) {
-        $url = $base_url . '/' . $variant . '/sitemap.xml';
-        $arbitrary_links[] = [
-          'url' => $url,
-          'priority' => '0.5',
-        ];
+        if (isset($variants_publish_status[$variant]) && ($variants_publish_status[$variant] != 0)) {
+          $url = $base_url . '/' . $variant . '/sitemap.xml';
+          $variant_links[] = [
+            'url' => $url,
+            'priority' => '0.5',
+          ];
+        }
       }
+    }
+    if (!empty($variant_links)) {
+      $links = array_merge($variant_links, $links);
     }
   }
 }

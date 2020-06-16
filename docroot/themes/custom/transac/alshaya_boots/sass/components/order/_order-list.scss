@@ -4,6 +4,9 @@
     height: 2.5rem;
     padding: 0.6875rem 1.25rem;
     line-height: normal;
+    font-size: 0.875rem;
+    text-transform: none;
+    top: -5.625rem;
   }
 }
 
@@ -76,5 +79,32 @@
         }
       }
     }
+  }
+
+  .c-order-list {
+    .subtitle {
+      text-transform: capitalize;
+      font-size: 1.125rem;
+    }
+  }
+
+  .form-actions {
+    &::after {
+      line-height: 1.2;
+      height: 2.5rem;
+      border: 0;
+      color: $order_search_form_active_icon;
+    }
+  }
+
+  .form-item {
+    input,
+    select {
+      height: 2.5rem;
+    }
+  }
+
+  .form-submit {
+    height: 2.5rem;
   }
 }

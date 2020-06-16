@@ -714,4 +714,76 @@ class AlshayaAcmProductCommands extends DrushCommands {
     }
   }
 
+  /**
+   * Identifies and if required, fixes Product node aliases.
+   *
+   * @param string $langcode
+   *   The langcode for which to check/generate alias. Defaults to 'en'.
+   * @param array $options
+   *   An option that takes multiple values.
+   *
+   * @command alshaya_acm_product:fix-missing-pathauto
+   * @options fix
+   *   Whether to fix the translations or not.
+   *
+   * @aliases fix-missing-pathauto
+   *
+   * @usage fix-missing-pathauto ar
+   *   Checks and mentions the count and nids of untranslated AR nodes.
+   * @usage fix-missing-pathauto en --fix
+   *   Checks and mentions the count and nids of untranslated EN nodes and
+   *   generates EN aliases for them.
+   */
+  public function checkAndFixProductAlias(string $langcode = 'en', array $options = ['fix' => FALSE]) {
+    // Get nids for which translation is available.
+    $query = $this->connection->select('node', 'n');
+    $query->addField('n', 'nid');
+    $query->innerJoin('url_alias', 'ua', "ua.source=concat('/node/', n.nid)");
+    $query->condition('ua.langcode', $langcode);
+    $query->condition('ua.alias', '/node/%', 'NOT LIKE');
+    $nids = $query->execute()->fetchCol();
+
+    // Get Product nids for which translation is not available.
+    $query = $this->connection->select('node', 'n');
+    $query->addField('n', 'nid');
+    $query->innerJoin('node_field_data', 'nfd', 'nfd.nid=n.nid');
+    $query->condition('nfd.type', 'acq_product');
+    $query->condition('nfd.langcode', $langcode);
+    $query->condition('n.nid', $nids, 'NOT IN');
+    $nids = $query->execute()->fetchCol();
+
+    $this->output()->writeln('Total number of nodes for which translation is not available: ' . count($nids));
+    if (!empty($nids)) {
+      $this->output()->writeln('The nids are: ' . json_encode($nids));
+    }
+
+    if ($options['fix']) {
+      if (empty($nids)) {
+        $this->output()->writeln('Nothing to fix!');
+        return;
+      }
+      $storage = $this->entityTypeManager->getStorage('node');
+      // Loading and saving the node should generate the URL alias
+      // automatically.
+      foreach ($nids as $nid) {
+        try {
+          $storage->load($nid)->save();
+          $this->output()->writeln('Fixed translation for nid: ' . $nid);
+        }
+        catch (\Exception $e) {
+          $this->output()->writeln("Exception occured for node $nid: ", $e->getMessage());
+        }
+      }
+      $this->output()->writeln('Re-check if process was successful by running the same command without --fix.');
+    }
+    else {
+      if (!empty($nids)) {
+        $this->output()->writeln('To fix the issues, provide "--fix" option in the command.');
+      }
+      else {
+        $this->output()->writeln('Looks good! Nothing to do.');
+      }
+    }
+  }
+
 }

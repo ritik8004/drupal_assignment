@@ -6,6 +6,14 @@
       font-family: $hnm-demibold;
     }
   }
+
+  &__close {
+    &::before {
+      font-size: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
 }
 
 .pdp-overlay-details,

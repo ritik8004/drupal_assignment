@@ -50,6 +50,13 @@ header {
       line-height: normal !important;
       font-size: 0.75rem;
       padding-#{$left}: 0.0625rem;
+
+      @include breakpoint($only-mobile) {
+        bottom: -0.125rem;
+        padding-#{$left}: 0;
+        height: 1rem;
+        width: 1rem;
+      }
     }
 
     #mini-cart-wrapper {
@@ -455,5 +462,15 @@ header {
   @include breakpoint($desktop) {
     border-top: 0;
     border-bottom-width: 0.125rem;
+  }
+}
+
+.logged-in {
+  .c-menu-primary {
+    .hamburger--menu {
+      @include breakpoint($only-mobile) {
+        padding: 0;
+      }
+    }
   }
 }

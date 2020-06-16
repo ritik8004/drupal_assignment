@@ -12,6 +12,23 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Adding `non_refundable_products` and `same_day_delivery` attribute
+ * to the product.
+ */
+function alshaya_acm_product_update_8060() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translation for label.
  */
 function alshaya_acm_product_update_8059() {
@@ -1175,6 +1192,7 @@ function alshaya_acm_product_install() {
   ];
   $product_config_factory->set('content', $content);
   $product_config_factory->save();
+
   // Translation for label.
   $strings = [
     'Details' => [

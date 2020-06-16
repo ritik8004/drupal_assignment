@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ccbeaa423edf1fc099ba243917dbef83",
+    "content-hash": "472da8f8416cdec43f775e987b5a0834",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -461,6 +461,90 @@
                 "stack"
             ],
             "time": "2019-12-24T22:41:47+00:00"
+        },
+        {
+            "name": "aws/aws-sdk-php",
+            "version": "3.138.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aws/aws-sdk-php.git",
+                "reference": "cf197a033ad75cd9e3a90a207cf5ec8935aafa48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/cf197a033ad75cd9e3a90a207cf5ec8935aafa48",
+                "reference": "cf197a033ad75cd9e3a90a207cf5ec8935aafa48",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-pcre": "*",
+                "ext-simplexml": "*",
+                "guzzlehttp/guzzle": "^5.3.3|^6.2.1|^7.0",
+                "guzzlehttp/promises": "^1.0",
+                "guzzlehttp/psr7": "^1.4.1",
+                "mtdowling/jmespath.php": "^2.5",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "andrewsville/php-token-reflection": "^1.4",
+                "aws/aws-php-sns-message-validator": "~1.0",
+                "behat/behat": "~3.0",
+                "doctrine/cache": "~1.4",
+                "ext-dom": "*",
+                "ext-openssl": "*",
+                "ext-pcntl": "*",
+                "ext-sockets": "*",
+                "nette/neon": "^2.3",
+                "phpunit/phpunit": "^4.8.35|^5.4.3",
+                "psr/cache": "^1.0",
+                "psr/simple-cache": "^1.0",
+                "sebastian/comparator": "^1.2.3"
+            },
+            "suggest": {
+                "aws/aws-php-sns-message-validator": "To validate incoming SNS notifications",
+                "doctrine/cache": "To use the DoctrineCacheAdapter",
+                "ext-curl": "To send requests using cURL",
+                "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages",
+                "ext-sockets": "To use client-side monitoring"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aws\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Amazon Web Services",
+                    "homepage": "http://aws.amazon.com"
+                }
+            ],
+            "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
+            "homepage": "http://aws.amazon.com/sdkforphp",
+            "keywords": [
+                "amazon",
+                "aws",
+                "cloud",
+                "dynamodb",
+                "ec2",
+                "glacier",
+                "s3",
+                "sdk"
+            ],
+            "time": "2020-05-28T18:12:07+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -1009,7 +1093,7 @@
             "version": "v5.7.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:enyo/dropzone.git",
+                "url": "https://github.com/enyo/dropzone.git",
                 "reference": "5b82186d5f18540a1d13b6f4914fdc6220617ef5"
             },
             "dist": {
@@ -3397,7 +3481,7 @@
                 },
                 "phpcodesniffer-search-depth": 4,
                 "patches_applied": {
-                    "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-01-10/acquia_connector-2871721-25.patch",
+                    "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-05-04/acquia_connector-2871721-29.patch",
                     "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2020-04-21/2922201-16.patch"
                 }
             },
@@ -3486,7 +3570,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta3",
-                    "datestamp": "1504537744",
+                    "datestamp": "1559137685",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -3855,7 +3939,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.6",
-                    "datestamp": "1554334685",
+                    "datestamp": "1559642884",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4060,6 +4144,10 @@
                     "homepage": "https://www.drupal.org/user/751908"
                 },
                 {
+                    "name": "quicksketch",
+                    "homepage": "https://www.drupal.org/user/35821"
+                },
+                {
                     "name": "rudygalfi",
                     "homepage": "https://www.drupal.org/user/3390576"
                 },
@@ -4181,8 +4269,16 @@
                     "homepage": "https://www.drupal.org/user/981944"
                 },
                 {
+                    "name": "boshtian",
+                    "homepage": "https://www.drupal.org/user/1773456"
+                },
+                {
                     "name": "dandrews",
                     "homepage": "https://www.drupal.org/user/2014490"
+                },
+                {
+                    "name": "darksnow",
+                    "homepage": "https://www.drupal.org/user/391915"
                 },
                 {
                     "name": "johnennew",
@@ -4602,6 +4698,10 @@
                 {
                     "name": "jrockowitz",
                     "homepage": "https://www.drupal.org/user/371407"
+                },
+                {
+                    "name": "michaellander",
+                    "homepage": "https://www.drupal.org/user/636494"
                 }
             ],
             "description": "Provides a field that allows a content entity to create and configure custom block instances.",
@@ -4880,7 +4980,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.1",
-                    "datestamp": "1556018287",
+                    "datestamp": "1558864688",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6775,7 +6875,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc2",
-                    "datestamp": "1553254684",
+                    "datestamp": "1559579884",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -7133,6 +7233,10 @@
             ],
             "authors": [
                 {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
+                },
+                {
                     "name": "Frans",
                     "homepage": "https://www.drupal.org/user/514222"
                 },
@@ -7224,6 +7328,9 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
                 "drupal": {
                     "version": "8.x-1.0-alpha11",
                     "datestamp": "1551291083",
@@ -7333,6 +7440,10 @@
                     "homepage": "https://www.drupal.org/user/31731"
                 },
                 {
+                    "name": "joseph.olstad",
+                    "homepage": "https://www.drupal.org/user/1321830"
+                },
+                {
                     "name": "mpotter",
                     "homepage": "https://www.drupal.org/user/616192"
                 },
@@ -7375,7 +7486,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.0-beta1",
-                    "datestamp": "1510352338",
+                    "datestamp": "1558647185",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -7801,7 +7912,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.4",
-                    "datestamp": "1550680836",
+                    "datestamp": "1559221681",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8094,7 +8205,7 @@
             "description": "Provides a field with a key, value pair along with a description.",
             "homepage": "https://www.drupal.org/project/key_value_field",
             "support": {
-                "source": "http://cgit.drupalcode.org/key_value_field"
+                "source": "https://git.drupalcode.org/project/key_value_field"
             }
         },
         {
@@ -9165,7 +9276,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.6",
-                    "datestamp": "1554334381",
+                    "datestamp": "1559689681",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9282,6 +9393,10 @@
                 {
                     "name": "Les Lim",
                     "homepage": "https://www.drupal.org/user/84263"
+                },
+                {
+                    "name": "Manuel Garcia",
+                    "homepage": "https://www.drupal.org/user/213194"
                 },
                 {
                     "name": "Nafes",
@@ -10992,7 +11107,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.0-alpha4",
-                    "datestamp": "1506649448",
+                    "datestamp": "1559915584",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -11186,7 +11301,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1552407486",
+                    "datestamp": "1559926985",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -11209,6 +11324,10 @@
                 {
                     "name": "fago",
                     "homepage": "https://www.drupal.org/user/16747"
+                },
+                {
+                    "name": "jsacksick",
+                    "homepage": "https://www.drupal.org/user/972218"
                 },
                 {
                     "name": "mglaman",
@@ -11973,7 +12092,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha3",
-                    "datestamp": "1556911981",
+                    "datestamp": "1558337885",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -12000,6 +12119,68 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/role_delegation",
                 "issues": "http://drupal.org/project/role_delegation"
+            }
+        },
+        {
+            "name": "drupal/s3fs",
+            "version": "3.0.0-alpha14",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/s3fs.git",
+                "reference": "8.x-3.0-alpha14"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/s3fs-8.x-3.0-alpha14.zip",
+                "reference": "8.x-3.0-alpha14",
+                "shasum": "50a40dcd44036a5fd27342963856e6f73e41d3cd"
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.18",
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-3.x": "3.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-3.0-alpha14",
+                    "datestamp": "1582114486",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Abhishek Anand",
+                    "homepage": "https://www.drupal.org/user/213194",
+                    "email": "fly2abhishek@gmail.com"
+                },
+                {
+                    "name": "Juanen Bernal",
+                    "homepage": "https://www.drupal.org/u/jansete"
+                },
+                {
+                    "name": "jansete",
+                    "homepage": "https://www.drupal.org/user/1358146"
+                },
+                {
+                    "name": "naveenvalecha",
+                    "homepage": "https://www.drupal.org/user/2665733"
+                }
+            ],
+            "description": "Adds an Amazon Simple Storage Service-based remote file system to Drupal.",
+            "homepage": "https://www.drupal.org/project/s3fs",
+            "support": {
+                "source": "https://git.drupalcode.org/project/s3fs",
+                "issues": "https://www.drupal.org/project/issues/s3fs"
             }
         },
         {
@@ -12565,7 +12746,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.1",
-                    "datestamp": "1539600180",
+                    "datestamp": "1561463889",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -12626,7 +12807,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1532558881",
+                    "datestamp": "1532659087",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -12661,6 +12842,52 @@
                 "source": "https://git.drupalcode.org/project/security_review"
             },
             "time": "2018-07-27T02:32:58+00:00"
+        },
+        {
+            "name": "drupal/sessions_expire",
+            "version": "dev-1.0.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/sessions_expire.git",
+                "reference": "65d53ce9f68a087cf5b4951785941eab51099940"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drush/drush": "^9",
+                "php": ">=7.2.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.0.x": "1.0.x-dev"
+                },
+                "drupal": {
+                    "version": "1.0.x-dev",
+                    "datestamp": "1591190484",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nikunj Kotecha (nikunjkotecha)",
+                    "homepage": "https://www.drupal.org/u/nikunjkotecha",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Allow adding prefix in URL for single language sites.",
+            "homepage": "https://drupal.org/project/sessions_expire",
+            "support": {
+                "source": "https://cgit.drupalcode.org/sessions_expire",
+                "issues": "https://drupal.org/project/issues/sessions_expire"
+            },
+            "time": "2020-06-03T13:27:24+00:00"
         },
         {
             "name": "drupal/sharethis",
@@ -13287,11 +13514,11 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_api.git",
-                "reference": "f92b77aa0cbffce13c16c7f7ffc56e4e47498b86"
+                "reference": "00f9e28af075ec8f9757fa201673fad901eea384"
             },
             "require": {
-                "drupal/core": "~8.0",
-                "league/oauth2-client": "~2.0"
+                "drupal/core": "^8 || ^9",
+                "league/oauth2-client": "^2.0"
             },
             "type": "drupal-module",
             "extra": {
@@ -13299,8 +13526,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-beta4+6-dev",
-                    "datestamp": "1539790981",
+                    "version": "8.x-2.0-rc2+3-dev",
+                    "datestamp": "1591318182",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -13341,21 +13568,21 @@
                 "source": "http://cgit.drupalcode.org/social_api",
                 "issues": "https://www.drupal.org/project/issues/social_api"
             },
-            "time": "2018-10-17T15:41:24+00:00"
+            "time": "2020-06-05T19:37:01+00:00"
         },
         {
             "name": "drupal/social_auth",
-            "version": "2.0.0-beta6",
+            "version": "2.0.0-rc2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_auth.git",
-                "reference": "8.x-2.0-beta6"
+                "reference": "8.x-2.0-rc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/social_auth-8.x-2.0-beta6.zip",
-                "reference": "8.x-2.0-beta6",
-                "shasum": "53d9ec0c3d43b319bd916ac2a9eea93022b733a5"
+                "url": "https://ftp.drupal.org/files/projects/social_auth-8.x-2.0-rc2.zip",
+                "reference": "8.x-2.0-rc2",
+                "shasum": "329c96d03f27b1f92577eb31cdad525f7d6a856e"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -13363,19 +13590,16 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-2.0-beta6",
-                    "datestamp": "1552443188",
+                    "version": "8.x-2.0-rc2",
+                    "datestamp": "1576820588",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
-                    "Dispatch events for handling authentication errors in provider.": "https://git.drupalcode.org/project/social_auth/commit/27930c3.patch"
+                    "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13414,38 +13638,32 @@
         },
         {
             "name": "drupal/social_auth_facebook",
-            "version": "2.0.0-beta4",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_auth_facebook.git",
-                "reference": "8.x-2.0-beta4"
+                "reference": "8.x-2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/social_auth_facebook-8.x-2.0-beta4.zip",
-                "reference": "8.x-2.0-beta4",
-                "shasum": "b0af0a0cd0414195990171a9da787242e09dd821"
+                "url": "https://ftp.drupal.org/files/projects/social_auth_facebook-8.x-2.0.zip",
+                "reference": "8.x-2.0",
+                "shasum": "755976c488bf585d29536adbc0a86427f5a3d6e7"
             },
             "require": {
                 "drupal/core": "~8.0",
-                "drupal/social_auth": "^2",
+                "drupal/social_auth": "^2.0",
                 "league/oauth2-facebook": "^2.0"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-2.0-beta4",
-                    "datestamp": "1549436284",
+                    "version": "8.x-2.0",
+                    "datestamp": "1577376483",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "Dispatch failed authentication event in callback": "https://git.drupalcode.org/project/social_auth_facebook/commit/730ad4e.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13485,43 +13703,37 @@
         },
         {
             "name": "drupal/social_auth_google",
-            "version": "2.0.0-beta4",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_auth_google.git",
-                "reference": "8.x-2.0-beta4"
+                "reference": "8.x-2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/social_auth_google-8.x-2.0-beta4.zip",
-                "reference": "8.x-2.0-beta4",
-                "shasum": "7000da42ef7bcc215b12e14e292179d7637da10e"
+                "url": "https://ftp.drupal.org/files/projects/social_auth_google-8.x-2.1.zip",
+                "reference": "8.x-2.1",
+                "shasum": "5ffa29c26ba45b55f345fceaabbeeacf9857072a"
             },
             "require": {
-                "drupal/core": "~8.0",
-                "drupal/social_auth": "^2",
+                "drupal/core": "^8 || ^9",
+                "drupal/social_auth": "^2.0",
                 "league/oauth2-google": "^3.0"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-2.0-beta4",
-                    "datestamp": "1549435980",
+                    "version": "8.x-2.1",
+                    "datestamp": "1591410200",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "Dispatch failed authentication event in callback": "https://www.drupal.org/files/issues/2019-05-27/dispatch-authentication-error-3057287-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -14095,16 +14307,32 @@
             ],
             "authors": [
                 {
-                    "name": "Yogesh Pawar",
-                    "homepage": "https://www.drupal.org/user/2922907"
+                    "name": "Etroid",
+                    "homepage": "https://www.drupal.org/user/3048985"
+                },
+                {
+                    "name": "angrytoast",
+                    "homepage": "https://www.drupal.org/user/2468092"
                 },
                 {
                     "name": "iamEAP",
                     "homepage": "https://www.drupal.org/user/1467594"
                 },
                 {
+                    "name": "jkopel",
+                    "homepage": "https://www.drupal.org/user/66207"
+                },
+                {
+                    "name": "nehajyoti",
+                    "homepage": "https://www.drupal.org/user/2804915"
+                },
+                {
                     "name": "sumitmadan",
                     "homepage": "https://www.drupal.org/user/1538790"
+                },
+                {
+                    "name": "yogeshmpawar",
+                    "homepage": "https://www.drupal.org/user/2922907"
                 }
             ],
             "description": "Provides blocks for Views exposed filters on View blocks.",
@@ -14335,7 +14563,7 @@
                 },
                 "drupal": {
                     "version": "8.x-5.2",
-                    "datestamp": "1553801966",
+                    "datestamp": "1557418583",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -14605,12 +14833,12 @@
             "version": "0.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/njh/easyrdf.git",
+                "url": "https://github.com/easyrdf/easyrdf.git",
                 "reference": "acd09dfe0555fbcfa254291e433c45fdd4652566"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/njh/easyrdf/zipball/acd09dfe0555fbcfa254291e433c45fdd4652566",
+                "url": "https://api.github.com/repos/easyrdf/easyrdf/zipball/acd09dfe0555fbcfa254291e433c45fdd4652566",
                 "reference": "acd09dfe0555fbcfa254291e433c45fdd4652566",
                 "shasum": ""
             },
@@ -16628,6 +16856,63 @@
                 "php mobile detect"
             ],
             "time": "2018-09-01T15:05:15+00:00"
+        },
+        {
+            "name": "mtdowling/jmespath.php",
+            "version": "2.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jmespath/jmespath.php.git",
+                "reference": "52168cb9472de06979613d365c7f1ab8798be895"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jmespath/jmespath.php/zipball/52168cb9472de06979613d365c7f1ab8798be895",
+                "reference": "52168cb9472de06979613d365c7f1ab8798be895",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "symfony/polyfill-mbstring": "^1.4"
+            },
+            "require-dev": {
+                "composer/xdebug-handler": "^1.2",
+                "phpunit/phpunit": "^4.8.36|^7.5.15"
+            },
+            "bin": [
+                "bin/jp.php"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JmesPath\\": "src/"
+                },
+                "files": [
+                    "src/JmesPath.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Declaratively specify how to extract elements from a JSON document",
+            "keywords": [
+                "json",
+                "jsonpath"
+            ],
+            "time": "2019-12-30T18:03:34+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -22561,16 +22846,6 @@
                 "virtual machine",
                 "vm"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/geerlingguy",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/geerlingguy",
-                    "type": "patreon"
-                }
-            ],
             "time": "2020-03-20T19:32:20+00:00"
         },
         {
@@ -23647,8 +23922,10 @@
         "drupal/r4032login": 20,
         "drupal/redirect": 15,
         "drupal/role_delegation": 15,
+        "drupal/s3fs": 15,
         "drupal/search_api_solr_multilingual": 10,
         "drupal/search_api_spellcheck": 20,
+        "drupal/sessions_expire": 20,
         "drupal/sharethis": 10,
         "drupal/social_api": 20,
         "drupal/stage_file_proxy": 5,
@@ -23662,6 +23939,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.2"
-    },
-    "plugin-api-version": "1.1.0"
+    }
 }

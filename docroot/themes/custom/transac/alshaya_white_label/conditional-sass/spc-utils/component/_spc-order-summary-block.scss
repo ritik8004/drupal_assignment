@@ -119,6 +119,10 @@
         -ms-grid-columns: 4.8125rem 0.625rem 1fr;
       }
 
+      @include breakpoint($only-tablet) {
+        min-width: auto;
+      }
+
       @include breakpoint($only-mobile) {
         display: inline-grid;
         margin-bottom: 0;
@@ -137,6 +141,7 @@
       .spc-product-image {
         max-width: 4.8125rem;
         display: inline-flex;
+        align-items: flex-start;
 
         body.ie & {
           -ms-grid-row: 1;

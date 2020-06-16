@@ -1,15 +1,153 @@
+$pbk-super-menu-height: 1.875rem;
+
 .menu--super-menu {
   float: $left;
   display: none;
 
   ul {
     li {
-      height: 1.875rem;
+      height: $pbk-super-menu-height;
       border: 0;
     }
   }
 
   @include breakpoint($desktop) {
     display: block;
+  }
+}
+
+// Margin top of body changes with super menu at mobile and tablet.
+body {
+  @include breakpoint($only-mobile) {
+    margin-top: 5.5875rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 9.8rem;
+  }
+}
+
+body.header-sticky-filter {
+  @include breakpoint($tablet) {
+    margin-top: 7.8125rem + $pbk-super-menu-height !important;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 2.5rem + $pbk-super-menu-height !important;
+  }
+
+  &.slug-banner-processed {
+    @include breakpoint($tablet) {
+      margin-top: 5.3125rem + $pbk-super-menu-height !important;
+    }
+  }
+}
+
+.filter-fixed-top .sticky-filter-wrapper {
+  @include breakpoint($upto-desktop) {
+    top: $pbk-super-menu-height;
+  }
+}
+
+.filter-fixed-top .container-without-product {
+  @include breakpoint($upto-desktop) {
+    top: $pbk-super-menu-height;
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  body:not(.mobile--overlay) {
+    .c-menu-secondary {
+      @include clearfix;
+
+      display: block !important;
+      z-index: 12;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      max-width: none;
+      height: $pbk-super-menu-height;
+      background: $header_secondary_bg;
+
+      .menu--super-menu {
+        float: none;
+        display: block !important;
+
+        ul {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+
+          li {
+            height: $pbk-super-menu-height;
+            border: 0;
+            display: inline-block;
+            margin: 0;
+
+            a {
+              padding: 0;
+              line-height: $pbk-super-menu-height;
+              font-size: 12px;
+              text-transform: capitalize;
+
+              &:hover,
+              &.is-active {
+                background: transparent;
+                text-decoration: underline;
+              }
+            }
+
+            &::after {
+              content: none;
+            }
+          }
+        }
+      }
+    }
+
+    .block-system-menublock.menu--account {
+      display: none;
+    }
+
+    .branding__menu {
+      margin-top: $pbk-super-menu-height;
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  body:not(.mobile--overlay) {
+    .c-menu-secondary {
+      .menu--super-menu {
+        ul {
+          justify-content: flex-start;
+
+          li {
+            padding: 0 1.3125rem;
+
+            &:first-child {
+              padding-#{$left}: 1.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  body:not(.mobile--overlay):not(.header-sticky-filter) {
+    .c-menu-secondary {
+      position: absolute;
+    }
+  }
+}
+
+// Front page, mobile resolution with sticy algolia search.
+@include breakpoint($only-mobile) {
+  body:not(.mobile--overlay).frontpage.Sticky-algolia-search {
+    .c-menu-secondary {
+      position: absolute;
+    }
   }
 }

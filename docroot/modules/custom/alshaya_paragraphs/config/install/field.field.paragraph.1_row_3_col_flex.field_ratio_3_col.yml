@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_ratio_3_col
+    - paragraphs.paragraphs_type.1_row_3_col_flex
+  module:
+    - options
+id: paragraph.1_row_3_col_flex.field_ratio_3_col
+field_name: field_ratio_3_col
+entity_type: paragraph
+bundle: 1_row_3_col_flex
+label: 'Ratio 3 col'
+description: ''
+required: false
+translatable: false
+skip_translation_check: 1
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

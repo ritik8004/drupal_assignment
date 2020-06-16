@@ -193,7 +193,7 @@
   }
 
   @include breakpoint($only-tablet) {
-    min-width: 14.5rem;
+    min-width: 13.5rem;
   }
 
   .form-email {
@@ -311,6 +311,73 @@
         text-align: center;
         padding-#{$left}: 0;
       }
+    }
+  }
+}
+
+.c-footer-primary .language-switcher-language-url,
+.only-first-time .language-switcher-language-url {
+  ul {
+    li {
+      &.en.is-active a {
+        font-family: $alshaya-bold-nodir;
+      }
+
+      &.ar.is-active a {
+        font-family: $alshaya-arabic-bold-nodir;
+      }
+    }
+  }
+}
+
+.only-first-time .language-switcher-language-url {
+  @include breakpoint($only-mobile) {
+    #{$left}: -1.25rem;
+
+    html[lang=ar] & {
+      right: -1.75rem;
+    }
+  }
+}
+
+.language--switcher.only-first-time {
+  ul {
+    li {
+      padding: 0;
+
+      a {
+        border: 0.125rem solid $lang_switch_list_border;
+        min-width: 7.75rem;
+        margin: 0 0.5rem;
+        text-transform: none;
+
+        @extend %btn;
+
+        &.is-active {
+          background: $lang_switch_active_bg;
+          color: $lang_switch_list_active;
+        }
+      }
+
+      &:first-child {
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .language-switcher-close {
+    height: 2.5rem;
+    width: 2.5rem;
+    #{$right}: 0;
+    top: 0;
+    background: $lang_switch_close_icon_bg;
+    border-radius: 0.1875rem;
+
+    &::after {
+      #{$right}: -0.0625rem;
+      top: -0.125rem;
     }
   }
 }

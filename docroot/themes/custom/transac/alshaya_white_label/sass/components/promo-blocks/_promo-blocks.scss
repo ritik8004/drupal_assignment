@@ -505,3 +505,129 @@
     }
   }
 }
+
+// Placeholder classes used on 1 row 4 col and 1 row 3 col flex promo Blocks
+%flex-init {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+%ratio-1-by-2 {
+  width: calc(50% - 1rem);
+}
+
+%ratio-1-by-3 {
+  width: calc(33.33% - 1rem);
+}
+
+%ratio-1-by-4 {
+  width: calc(25% - 1rem);
+}
+
+%stack-for-mobile {
+  @include breakpoint($only-mobile) {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+%two-col-for-mobile {
+  @include breakpoint($only-mobile) {
+    width: calc(50% - 0.5rem);
+    margin-bottom: 1rem;
+  }
+}
+
+// Structure 1 row 4 col promo block
+.field--name-field-1-row-4-col {
+  &.field__items {
+    @extend %flex-init;
+
+    .field--name-field-1-row-4-col {
+      &.field__item {
+        text-align: center;
+
+        @extend %ratio-1-by-4;
+        @extend %two-col-for-mobile;
+      }
+    }
+  }
+}
+
+// Structure 1 row 2 col promo block
+.paragraph--type--_-row-2-col {
+  .field__items {
+    @extend %flex-init;
+
+    .field--name-field-1-row-2-col {
+      &.field__item {
+        @extend %ratio-1-by-2;
+        @extend %stack-for-mobile;
+      }
+    }
+  }
+}
+
+// Structure 1 row 3 col flex promo block
+.paragraph--type--_-row-3-col-flex {
+  .field__items {
+    @extend %flex-init;
+
+    .field--name-field-1row-3col-flex {
+      &.field__item {
+        @extend %ratio-1-by-3;
+        @extend %stack-for-mobile;
+      }
+    }
+  }
+
+  &.col_6_3_3 {
+    .field__items {
+      .field--name-field-1row-3col-flex {
+        &.field__item {
+          @extend %ratio-1-by-4;
+          @extend %two-col-for-mobile;
+        }
+
+        &.field__item:first-child {
+          @extend %ratio-1-by-2;
+          @extend %stack-for-mobile;
+        }
+      }
+    }
+  }
+
+  &.col_3_6_3 {
+    .field__items {
+      .field--name-field-1row-3col-flex {
+        &.field__item:first-child,
+        &.field__item:last-child {
+          @extend %ratio-1-by-4;
+          @extend %stack-for-mobile;
+        }
+
+        &.field__item {
+          @extend %ratio-1-by-2;
+          @extend %stack-for-mobile;
+        }
+      }
+    }
+  }
+
+  &.col_3_3_6 {
+    .field__items {
+      .field--name-field-1row-3col-flex {
+        &.field__item {
+          @extend %ratio-1-by-4;
+          @extend %two-col-for-mobile;
+        }
+
+        &.field__item:last-child {
+          @extend %ratio-1-by-2;
+          @extend %stack-for-mobile;
+        }
+      }
+    }
+  }
+}

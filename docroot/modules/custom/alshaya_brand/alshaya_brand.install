@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_brand module.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable s3fs module.
+ *
+ * Add s3fs config for the brand.
+ */
+function alshaya_brand_update_8001() {
+  \Drupal::service('module_installer')->install(['s3fs']);
+  _alshaya_set_s3fs_config();
+}
+
+/**
+ * Implements hook_install().
+ *
+ * Add s3fs config for the brand.
+ */
+function alshaya_brand_install() {
+  _alshaya_set_s3fs_config();
+}
+
+/**
+ * Wrapper function to set s3fs config.
+ */
+function _alshaya_set_s3fs_config() {
+  $config = \Drupal::configFactory()->getEditable('s3fs.settings');
+  $config->set('bucket', Settings::get('s3fs.settings')['bucket']);
+  $config->set('root_folder', Settings::get('s3fs.settings')['root_folder']);
+  $config->set('region', Settings::get('s3fs.settings')['region']);
+  $config->save();
+}

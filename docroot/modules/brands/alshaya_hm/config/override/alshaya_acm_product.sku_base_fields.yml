@@ -119,6 +119,8 @@ fields:
 
   style:
     label: 'Style'
+    description: 'Part of description.'
+    type: 'attribute'
     cardinality: -1
     index: 1
     facet: 1

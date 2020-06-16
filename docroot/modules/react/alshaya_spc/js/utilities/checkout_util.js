@@ -62,6 +62,12 @@ export const placeOrder = (paymentMethod) => {
           return;
         }
 
+        if (response.data.error && response.data.redirectUrl !== undefined) {
+          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.');
+          window.location = response.data.redirectUrl;
+          return;
+        }
+
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
           message: response.data.error_message,
@@ -109,6 +115,19 @@ export const removeBillingFlagFromStorage = (cart) => {
   }
 };
 
+/**
+ * set billing address flag in storage.
+ *
+ * @param {*} cart
+ */
+export const setBillingFlagInStorage = (cart) => {
+  if (cart.cart_id !== undefined
+    && cart.shipping.type === 'home_delivery'
+    && isBillingSameAsShippingInStorage()) {
+    localStorage.setItem('billing_shipping_same', true);
+  }
+};
+
 export const addShippingInCart = (action, data) => {
   const apiUrl = updateCartApiUrl();
   return axios
@@ -126,6 +145,7 @@ export const addShippingInCart = (action, data) => {
 
         // If there is no error on shipping update.
         if (response.data.error === undefined) {
+          setBillingFlagInStorage(response.data);
           // Trigger event on shipping update, so that
           // other components take necessary action if required.
           dispatchCustomEvent('onShippingAddressUpdate', response.data);

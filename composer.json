@@ -5,11 +5,11 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "hubspot/pace": "^1.0",
         "acquia/acsf-tools": "dev-9.x-dev",
         "acquia/blt": "^9.0.0",
         "acquia/http-hmac-php": "~3.2",
         "acquia/lightning": "^4.0.0",
+        "aws/aws-sdk-php": "^3.138",
         "charliekassel/array-diff": "^0.0.2",
         "ckeditor/font": "^4.9",
         "claviska/jquery-minicolors": "^2.2",
@@ -74,11 +74,13 @@
         "drupal/restui": "^1.13",
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
+        "drupal/s3fs": "^3.0@alpha",
         "drupal/search_api_algolia": "^1.0",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
         "drupal/search_api_spellcheck": "dev-8.x-1.x",
+        "drupal/sessions_expire": "1.0.x-dev",
         "drupal/sharethis": "^2.0@beta",
         "drupal/simple_oauth": "^3.0",
         "drupal/simple_sitemap": "^3.2",
@@ -103,6 +105,7 @@
         "drush/drush": "^9.0.0",
         "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
+        "hubspot/pace": "^1.0",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0"
@@ -216,7 +219,7 @@
                 "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
             },
             "drupal/acquia_connector": {
-                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-01-10/acquia_connector-2871721-25.patch",
+                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-05-04/acquia_connector-2871721-29.patch",
                 "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2020-04-21/2922201-16.patch"
             },
             "drupal/search_api": {
@@ -350,13 +353,7 @@
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
             },
             "drupal/social_auth": {
-                "Dispatch events for handling authentication errors in provider.": "https://git.drupalcode.org/project/social_auth/commit/27930c3.patch"
-            },
-            "drupal/social_auth_facebook": {
-                "Dispatch failed authentication event in callback": "https://git.drupalcode.org/project/social_auth_facebook/commit/730ad4e.patch"
-            },
-            "drupal/social_auth_google": {
-                "Dispatch failed authentication event in callback": "https://www.drupal.org/files/issues/2019-05-27/dispatch-authentication-error-3057287-2.patch"
+                "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch"
             },
             "sensiolabs-de/deprecation-detector": {
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"

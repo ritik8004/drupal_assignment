@@ -75,7 +75,6 @@ $primary_th_bg: $white-smoke-light;
 $primary_td_highlight3: $warm-grey-two;
 $primary_td_bg_highlight: $white-smoke-light;
 $primary_table_border: $warm-grey-two;
-$primary_full_page_overlay_bg: rgba(51, 51, 51, 0.6);
 $highlights_subtitle_hover: $drakish-blue;
 
 // Dropdown.
@@ -132,12 +131,15 @@ $breadcrumb_link_active: $black-two;
 
 // Language Switcher
 $lang_switch: $peacock-blue;
-$lang_switch_active: $black-two;
+$lang_switch_active: $drakish-blue;
+$lang_switch_active_bg:$drakish-blue;
 $lang_switch_firsttime_bg: $white;
-$lang_switch_firsttime_border: $drakish-blue;
+$lang_switch_firsttime_border: $white;
 $lang_switch_list: $drakish-blue;
+$lang_switch_list_border: $drakish-blue;
 $lang_switch_list_active: $white;
 $lang_switch_close_icon: $drakish-blue;
+$lang_switch_close_icon_bg: $link-water;
 
 // 404
 $maintenance_container_bg: rgba(0, 73, 144, 0.22);
@@ -288,7 +290,7 @@ $plp_clear_all_btn_text: $drakish-blue;
 // PLP Filter bar.
 $plp_filterbar_clearall_border: $drakish-blue;
 $plp_filterbar_clearall_text: $drakish-blue;
-$plp_filter_active_item: $cool-blue-two;
+$plp_filter_active_item: $link-water;
 $plp_all_filter_title: $black-two;
 
 // PLP Product tile.
@@ -392,7 +394,7 @@ $address_button_text: $drakish-blue;
 $address_book_border: $warm-grey-two;
 $user_ui_dialog_border: $white;
 $address_book_delete_cancel: $drakish-blue;
-$address_book_delete_close: $drakish-blue;
+$address_book_delete_close: $white;
 $address_area_select: $warm-grey-two;
 
 //My Account pages
@@ -485,6 +487,10 @@ $algolia-react-progressbar-text: $grey-light;
 $algolia-react-progressbar-fill: $drakish-blue;
 $algolia-react-search-page-title: $drakish-blue;
 $algolia-react-sidebar-label-color: $drakish-blue;
+$algolia-auto-complete-border: $warm-grey-two;
+$algolia-search-icon-background: $white;
+$algolia-search-icon: $drakish-blue;
+$algolia-search-clear-text-icon: $drakish-blue;
 
 // Option list filter.
 $options-page-title: $drakish-blue;
@@ -521,3 +527,11 @@ $spc-search-icon: $drakish-blue;
 $spc-promo-code-error: $error-red;
 $spc-cart-promo-code-submit-enabled: $error-red;
 $spc-deliver-button: $drakish-blue;
+$spc-recommended-product-arrow: $drakish-blue;
+
+// Promo Blocks.
+$promo_block_border: $white-smoke-light;
+$promo_black_btn: $link-water-two;
+$promo_black_btn_text: $drakish-blue;
+$promo_link: $drakish-blue;
+$promo_text: $black-two;
