@@ -108,7 +108,7 @@ const PdpLayout = () => {
             pdpProductPrice={priceRaw}
             finalPrice={finalPrice}
           />
-          <PdpSharePanel title={title} />
+          <PdpSharePanel />
         </div>
       </div>
     </>

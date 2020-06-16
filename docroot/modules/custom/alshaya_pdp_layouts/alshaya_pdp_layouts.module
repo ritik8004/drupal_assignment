@@ -9,6 +9,8 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Core\Field\FieldFilteredMarkup;
 use Drupal\alshaya_pdp_layouts\Event\PreprocessMagazineEvent;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
  * Set dynamic allowed values for the select pdp layout field.
@@ -68,4 +70,26 @@ function alshaya_pdp_layouts_alshaya_context_key_from_layout_alter(string &$cont
   $alshaya_pdp_layouts = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
   $plugin_manager = $alshaya_pdp_layouts->createInstance($pdp_layout, []);
   $context_key = $plugin_manager->getCotextFromPdpLayout($context_key, $pdp_layout);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_pdp_layouts_node_view(array &$build, EntityInterface $node, EntityViewDisplayInterface $display, $view_mode) {
+  $sharethis_manager = \Drupal::service('sharethis.manager');
+  $data_options = $sharethis_manager->getOptions();
+  $path = $node->toUrl()->setAbsolute()->toString();
+  $title = $node->getTitle();
+  // Node types to show share panel.
+  $enabled_types = $data_options['node_types'];
+  // Condition to render share this on the selected node types.
+  if (isset($enabled_types[$node->bundle()]) && $enabled_types[$node->bundle()] === $node->bundle() && $display->getcomponent('sharethis')) {
+    $st_js = $sharethis_manager->sharethisIncludeJs();
+    $content = $sharethis_manager->renderSpans($data_options, $title, $path);
+    $build['#attached']['drupalSettings']['sharethis'] = $st_js;
+    $build['#attached']['drupalSettings']['sharethis']['content'] = $content['st_spans'];
+    $build['#attached']['library'][] = 'sharethis/sharethispickerexternalbuttonsws';
+    $build['#attached']['library'][] = 'sharethis/sharethispickerexternalbuttons';
+    $build['#attached']['library'][] = 'sharethis/sharethis';
+  }
 }
