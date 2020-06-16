@@ -80,6 +80,11 @@ function alshaya_search_algolia_install() {
   // this (alshaya_search_algolia) module. to avoid recursion not adding
   // alshaya_algolia_react as dependency in this module.
   \Drupal::service('module_installer')->install(['alshaya_algolia_react']);
+
+  // Enable lhn filters.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings')
+    ->set('enable_lhn_tree_search', 1)
+    ->save();
 }
 
 /**
