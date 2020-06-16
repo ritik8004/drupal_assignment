@@ -315,6 +315,7 @@ header.c-header {
     #mini-cart-wrapper {
       @include breakpoint($only-tablet) {
         margin-top: 0;
+        padding-top: 0.3125rem;
 
         .block-cart-mini-block .cart-link,
         .block-alshaya-react-mini-cart .cart-link {
@@ -332,6 +333,16 @@ header.c-header {
         top: 0;
         left: 0.0625rem;
       }
+    }
+  }
+
+  .block-alshaya-react-mini-cart {
+    @include breakpoint($upto-tablet) {
+      display: block !important;
+    }
+
+    @include breakpoint($only-tablet) {
+      top: 0;
     }
   }
 
