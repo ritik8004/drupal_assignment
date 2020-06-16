@@ -9,6 +9,8 @@ fields:
     cardinality: -1
     facet: 1
     index: 1
+  product_brand
+    facet: 0
   brand:
     label: 'Brand'
     facet: 1
