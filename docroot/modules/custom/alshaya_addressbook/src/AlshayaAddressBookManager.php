@@ -659,7 +659,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
               $address[$field_code] = $parent ? $parent->id() : NULL;
             }
           case 'administrative_area':
-            $term = $this->termStorage->load($address[$field_code]);
+            $term = !is_null($address[$field_code])
+              ? $this->termStorage->load($address[$field_code])
+              : NULL;
 
             if (empty($term)) {
               $magento_address['extension'][$attribute_code] = $address[$field_code];
