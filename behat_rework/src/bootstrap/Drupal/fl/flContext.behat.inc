@@ -75,7 +75,7 @@ class flContext extends DrupalSubContextBase implements DrupalSubContextInterfac
   public function iShouldBeAbleToSeeTheFooter()
   {
     $page = $this->getSession()->getPage();
-    $copyright1 = '© Victoria\'s Secret. All Rights Reserved';
+    $copyright1 = '© 2020 Foot Locker. All rights reserved.';
     $copyright = $page->find('css', '.region__footer-secondary');
     $copyright->has('named', ['content', $copyright1]);
     if ($copyright == NULL) {
