@@ -1,12 +1,7 @@
 <?php
-
-/**
- * @file
- * Bundle file generated while setting up project.
- */
-
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+// @codingStandardsIgnoreFile
 
 return [
-  FrameworkBundle::class => ['all' => TRUE],
+    Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
+    Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
 ];
