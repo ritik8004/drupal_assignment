@@ -46,7 +46,6 @@
             text-transform: capitalize;
             color: $plp_facet_clear_text;
             letter-spacing: 1px;
-            text-decoration: underline;
           }
         }
       }
@@ -58,8 +57,14 @@
           @include breakpoint($only-mobile) {
             font-size: 1.5rem;
             padding: 0.75rem 0 1rem;
+            line-height: 1.75rem;
           }
         }
+      }
+
+      @include breakpoint($tablet) {
+        margin-bottom: 1.625rem;
+        line-height: 1.75rem;
       }
     }
 
