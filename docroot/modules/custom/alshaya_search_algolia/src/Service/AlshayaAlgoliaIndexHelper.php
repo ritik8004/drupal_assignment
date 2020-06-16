@@ -325,8 +325,14 @@ class AlshayaAlgoliaIndexHelper {
 
     // Index the product super_category terms.
     $super_categories = $this->superCategoryManager->getSuperCategories($node);
-    if (!empty($super_categories)) {
-      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_categories;
+    // Check if super category is enabled.
+    if ($super_categories !== FALSE) {
+      $super_category_list[] = $this->t('All', [], ['langcode' => $node->language()->getId()])->__toString();
+      // Check if some super category is present.
+      if (!empty($super_categories)) {
+        $super_category_list = array_merge($super_category_list, $super_categories);
+      }
+      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category_list;
     }
   }
 
