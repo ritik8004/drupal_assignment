@@ -29,7 +29,8 @@ alshaya_acm.get_acm_cart:
   defaults:
     _controller: '\Drupal\alshaya_acm\Controller\CartController::getExistingCart'
     _title: 'Cart'
+  methods: [GET]
   options:
     no_cache: TRUE
   requirements:
-    _permission: 'access content'
+    _middleware_request_check: 'TRUE'
