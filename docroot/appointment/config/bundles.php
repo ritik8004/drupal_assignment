@@ -1,8 +1,8 @@
 <?php
-// @codingStandardsIgnoreFile
 
 /**
  * @file
+ * Bundle file generated while setting up project.
  */
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;

@@ -1,16 +1,13 @@
 <?php
-// @codingStandardsIgnoreFile
 
 /**
  * @file
+ * The index.php file generated while setting up project.
  */
 
 use App\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
-
-// DRUPAL_ROOT is used by Drupal sites.inc and MagentoInfo.php.
-const DRUPAL_ROOT = __DIR__ . '/../..';
 
 require dirname(__DIR__) . '/config/bootstrap.php';
 
@@ -20,11 +17,11 @@ if ($_SERVER['APP_DEBUG']) {
   Debug::enable();
 }
 
-if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? FALSE) {
+if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? FALSE) {
   Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST);
 }
 
-if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? FALSE) {
+if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? FALSE) {
   Request::setTrustedHosts([$trustedHosts]);
 }
 
