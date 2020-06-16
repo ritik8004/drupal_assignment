@@ -11,6 +11,42 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add translations for bank transfer.
+ */
+function alshaya_master_update_8040() {
+  $strings = [
+    'Beneficiary Name' => [
+      'ar' => 'أسم المستفيد',
+    ],
+    'Name of Bank' => [
+      'ar' => 'اسم البنك',
+    ],
+    'Branch' => [
+      'ar' => 'الفرع',
+    ],
+    'Account Number' => [
+      'ar' => 'رقم الحساب',
+    ],
+    'IBAN' => [
+      'ar' => 'رقم الحساب المصرفي الدولي',
+    ],
+    'Swift Code' => [
+      'ar' => 'الرمز السريع',
+    ],
+    'Purpose' => [
+      'ar' => 'الغرض',
+    ],
+    'Bank Details' => [
+      'ar' => 'تفاصيل البنك',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update context for Search placeholder string.
  */
 function alshaya_master_update_8039() {
@@ -1907,6 +1943,30 @@ function alshaya_master_install() {
     ],
     'Add to bag is temporarily unavailable' => [
       'ar' => 'الإضافة إلى حقيبة التسوق غير متوفرة مؤقتاً',
+    ],
+    'Beneficiary Name' => [
+      'ar' => 'أسم المستفيد',
+    ],
+    'Name of Bank' => [
+      'ar' => 'اسم البنك',
+    ],
+    'Branch' => [
+      'ar' => 'الفرع',
+    ],
+    'Account Number' => [
+      'ar' => 'رقم الحساب',
+    ],
+    'IBAN' => [
+      'ar' => 'رقم الحساب المصرفي الدولي',
+    ],
+    'Swift Code' => [
+      'ar' => 'الرمز السريع',
+    ],
+    'Purpose' => [
+      'ar' => 'الغرض',
+    ],
+    'Bank Details' => [
+      'ar' => 'تفاصيل البنك',
     ],
   ];
 
