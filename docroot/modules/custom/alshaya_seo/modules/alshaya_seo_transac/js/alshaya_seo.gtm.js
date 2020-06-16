@@ -1066,6 +1066,8 @@
       return;
     }
 
+    // Push product impressions to datalayer.
+    Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(null, null, null, {'type': 'product-click'});
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
 
     // On productClick, add list variable to cookie.
@@ -1162,6 +1164,7 @@
    *
    * @param prepareImpressionFunction
    *   The function to call which will prepare the product impressions.
+   *   Take example of Drupal.alshaya_seo_gtm_prepare_impressions().
    *   The function will accept 3 parameters:
    *     1. context: The context in which to search for impressions.
    *     2. eventType: The type of the event, eg: 'scroll'.
@@ -1189,7 +1192,7 @@
       Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
       productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
     }
-    else if (eventType === 'unload' || eventType === 'timer') {
+    else if (eventType === 'timer') {
       // This is to prevent the timer calling this function infinitely when
       // there are no impressions.
       if (productImpressions.length === 0) {
@@ -1200,6 +1203,11 @@
       Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
       window.clearInterval(productImpressionsTimer);
       productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+    }
+    else if (eventType === 'product-click' || eventType === 'pagehide') {
+      // Push all impressions to data layer.
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions);
+      window.clearInterval(productImpressionsTimer);
     }
     else {
       // This is for cases like scroll/carousel events.
@@ -1249,7 +1257,7 @@
         }
         // On page load, process only the required number of
         // items and push to datalayer.
-        if ((eventType === 'load') && (impressions.length == drupalSettings.gtm.productImpressionDefaultQueueSize)) {
+        if ((eventType === 'load') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
           // This is to break out from the .each() function.
           return false;
         }
