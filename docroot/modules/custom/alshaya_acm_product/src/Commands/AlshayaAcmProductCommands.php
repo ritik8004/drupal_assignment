@@ -752,7 +752,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     $query->condition('n.nid', $nids, 'NOT IN');
     $nids = $query->execute()->fetchCol();
 
-    $this->output()->writeln('Total number of nodes for which translation is not available: ' . count($nids));
+    $this->output()->writeln('Total number of nodes for which url alias is not generated: ' . count($nids));
     if (!empty($nids)) {
       $this->output()->writeln('The nids are: ' . json_encode($nids));
     }
@@ -768,7 +768,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       foreach ($nids as $nid) {
         try {
           $storage->load($nid)->save();
-          $this->output()->writeln('Fixed translation for nid: ' . $nid);
+          $this->output()->writeln('Fixed url alias for nid: ' . $nid);
         }
         catch (\Exception $e) {
           $this->output()->writeln("Exception occured for node $nid: ", $e->getMessage());
