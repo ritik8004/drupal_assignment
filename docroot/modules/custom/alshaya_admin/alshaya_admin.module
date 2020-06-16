@@ -86,5 +86,5 @@ function _alshaya_admin_initialize_admin_theme($admin_theme) {
   $config->set('admin', $admin_theme)->save();
   // Set admin theme when creating or adding content.
   $config = \Drupal::service('config.factory')->getEditable('node.settings');
-  $config->set('use_admin_theme', 1)->save();
+  $config->set('use_admin_theme', TRUE)->save();
 }
