@@ -5,11 +5,11 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "hubspot/pace": "^1.0",
         "acquia/acsf-tools": "dev-9.x-dev",
         "acquia/blt": "^9.0.0",
         "acquia/http-hmac-php": "~3.2",
         "acquia/lightning": "^4.0.0",
+        "aws/aws-sdk-php": "^3.138",
         "charliekassel/array-diff": "^0.0.2",
         "ckeditor/font": "^4.9",
         "claviska/jquery-minicolors": "^2.2",
@@ -74,6 +74,7 @@
         "drupal/restui": "^1.13",
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
+        "drupal/s3fs": "^3.0@alpha",
         "drupal/search_api_algolia": "^1.0",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
@@ -103,6 +104,7 @@
         "drush/drush": "^9.0.0",
         "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
+        "hubspot/pace": "^1.0",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0"

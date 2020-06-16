@@ -69,6 +69,7 @@ weights:
     MODEL_IMAGE: 7
     STILL_LIFE_FRONT_URL: 8
     DETAIL_IMAGE: 9
+    MovingMedia: 10
   teaser:
     Lookbook: 1
     DescriptiveStillLife: 2
