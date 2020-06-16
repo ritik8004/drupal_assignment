@@ -44,7 +44,16 @@ export default class PdpGallery extends React.PureComponent {
     );
     const { open, currentIndex } = this.state;
     const { showFullScreenModal, closeModal } = this;
-    const isTouchDevice = window.innerWidth < 1024;
+    const isTouchDevice = window.innerWidth < 767;
+    const onlyTablet = window.innerWidth < 1024;
+    let centerPaddingValue;
+    if (isTouchDevice) {
+      centerPaddingValue = null;
+    } else if (onlyTablet) {
+      centerPaddingValue = '100px';
+    } else {
+      centerPaddingValue = '350px';
+    }
 
     return (images) ? (
       <div className="magv2-pdp-gallery">
@@ -98,7 +107,7 @@ export default class PdpGallery extends React.PureComponent {
               infinite={!isTouchDevice}
               arrows={fullScreenSliderSettings.arrows}
               centerMode={!isTouchDevice}
-              centerPadding={isTouchDevice ? null : '350px'}
+              centerPadding={centerPaddingValue}
             >
               {images.map((image, key) => (
                 <PdpImageElement
