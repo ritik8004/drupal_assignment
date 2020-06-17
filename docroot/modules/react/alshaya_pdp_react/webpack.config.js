@@ -24,9 +24,17 @@ var config = {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         use: ['babel-loader']
+      },
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ],
+      },
+      {
+        test: /\.(woff|woff2|ttf|otf|eot|svg|gif)$/,
+        use: [ 'file-loader' ],
       }
-    ]
-  }
+    ],
+  },
 };
 module.exports = (env, argv) => {
   if (argv.mode === 'development') {
