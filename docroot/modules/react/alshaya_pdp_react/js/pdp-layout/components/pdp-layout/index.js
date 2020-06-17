@@ -57,9 +57,7 @@ const PdpLayout = () => {
   useEffect(() => {
     showStickyHeader();
   },
-  [
-    showStickyHeader,
-  ]);
+  []);
 
   return (skuItemCode) ? (
     <>

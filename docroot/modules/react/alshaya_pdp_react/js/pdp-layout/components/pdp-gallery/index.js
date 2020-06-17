@@ -43,7 +43,6 @@ export default class PdpGallery extends React.PureComponent {
       <div>Images not available</div>
     );
     const { open, currentIndex } = this.state;
-    const { showFullScreenModal, closeModal } = this;
     const isTouchDevice = window.innerWidth < 767;
     const onlyTablet = window.innerWidth < 1024;
     let centerPaddingValue;
@@ -67,7 +66,7 @@ export default class PdpGallery extends React.PureComponent {
                 imageUrl={image.mediumurl}
                 alt={image.label}
                 title={image.label}
-                onClick={showFullScreenModal}
+                onClick={this.showFullScreenModal}
                 viewport="desktop"
                 index={key}
               />
@@ -87,7 +86,7 @@ export default class PdpGallery extends React.PureComponent {
                   imageUrl={image.mediumurl}
                   alt={image.label}
                   title={image.label}
-                  onClick={showFullScreenModal}
+                  onClick={this.showFullScreenModal}
                   viewport="mobile"
                   index={key}
                 />
@@ -100,7 +99,7 @@ export default class PdpGallery extends React.PureComponent {
           closeOnDocumentClick={false}
         >
           <div className="fullscreen-slider-wrapper">
-            <a className="close" onClick={closeModal} />
+            <a className="close" onClick={this.closeModal} />
             <Slider
               initialSlide={currentIndex}
               dots={fullScreenSliderSettings.dots}

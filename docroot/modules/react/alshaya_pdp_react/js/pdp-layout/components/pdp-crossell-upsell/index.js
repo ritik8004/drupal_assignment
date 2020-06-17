@@ -18,8 +18,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
   }
 
   componentDidMount = () => {
-    const { slider } = this;
-    const sliderProps = slider.innerSlider.props;
+    const sliderProps = this.slider.innerSlider.props;
 
     const totalPagers = Math.ceil(sliderProps.children.length / sliderProps.slidesToScroll);
     const currentPage = Math.ceil((sliderProps.initialSlide + 1) / sliderProps.slidesToScroll);
@@ -31,36 +30,27 @@ export default class PdpCrossellUpsell extends React.PureComponent {
   }
 
   beforeChange = (current, next) => {
-    const { slider } = this;
-    const { totalPagers } = this.state;
-    const sliderProps = slider.innerSlider.props;
+    const sliderProps = this.slider.innerSlider.props;
     const currentPage = Math.ceil((next + 1) / sliderProps.slidesToScroll);
 
-    this.setState({
+    this.setState((prevState) => ({
       currentPage,
       limits: {
         prev: currentPage === 1,
-        next: totalPagers === currentPage,
+        next: prevState.totalPagers === currentPage,
       },
-    });
+    }));
   }
 
   goToNextSlide = () => {
-    const { slider } = this;
-
-    slider.slickNext();
+    this.slider.slickNext();
   }
 
   goToPrevSlide = () => {
-    const { slider } = this;
-
-    slider.slickPrev();
+    this.slider.slickPrev();
   }
 
   render() {
-    const {
-      beforeChange, goToNextSlide, goToPrevSlide,
-    } = this;
     const { currentPage, totalPagers, limits } = this.state;
 
     const {
@@ -69,14 +59,15 @@ export default class PdpCrossellUpsell extends React.PureComponent {
     } = this.props;
     const images = skuCode ? pdpGallery.thumbnails : [];
 
-    const emptyRes = (
-      <div>Images not available</div>
-    );
-
     const isTouchDevice = window.outerWidth < 1024;
 
+    if (images.length === 0) {
+      return (
+        <div>Images not available</div>
+      );
+    }
 
-    return (images) ? (
+    return (
       <div className="magv2-pdp-crossell-upsell-container">
         <div className="magv2-pdp-crossell-upsell-heading">
           <div className="magv2-pdp-crossell-upsell-title">
@@ -99,7 +90,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
             slidesToScroll={isTouchDevice ? 2 : crossellUpsellSliderSettings.slidesToScroll}
             draggable={isTouchDevice ? true : crossellUpsellSliderSettings.draggable}
             ref={(slider) => { this.slider = slider; }}
-            beforeChange={beforeChange}
+            beforeChange={this.beforeChange}
           >
             {images.map((image) => (
               <PdpCrossellUpsellImage
@@ -122,7 +113,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
             slidesToScroll={isTouchDevice ? 1 : crossellUpsellSliderSettings.slidesToScroll}
             draggable={isTouchDevice ? true : crossellUpsellSliderSettings.draggable}
             ref={(slider) => { this.slider = slider; }}
-            beforeChange={beforeChange}
+            beforeChange={this.beforeChange}
           >
             {images.map((image) => (
               <PdpCrossellUpsellImage
@@ -136,18 +127,18 @@ export default class PdpCrossellUpsell extends React.PureComponent {
         </ConditionalView>
         <div className="slider-nav">
           <span
-            onClick={(drupalSettings.path.currentLanguage === 'en') ? goToPrevSlide : goToNextSlide}
+            onClick={(drupalSettings.path.currentLanguage === 'en') ? this.goToPrevSlide : this.goToNextSlide}
             className={`slider-prev slider-pagers${(drupalSettings.path.currentLanguage === 'en' ? limits.prev : limits.next) ? ' disabled' : ''}`}
           />
           <span className="slider-pagination">
-            {`${currentPage} of ${totalPagers}`}
+            {`${currentPage} ${Drupal.t('of')} ${totalPagers}`}
           </span>
           <span
-            onClick={(drupalSettings.path.currentLanguage === 'en') ? goToNextSlide : goToPrevSlide}
+            onClick={(drupalSettings.path.currentLanguage === 'en') ? this.goToNextSlide : this.goToPrevSlide}
             className={`slider-next slider-pagers${(drupalSettings.path.currentLanguage === 'en' ? limits.next : limits.prev) ? ' disabled' : ''}`}
           />
         </div>
       </div>
-    ) : emptyRes;
+    );
   }
 }
