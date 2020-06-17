@@ -102,3 +102,9 @@ alshaya_acm_product.settings:
         pdp_product_swatch_items_1025:
           type: integer
           label: 'Desktop view'
+    legal_notice_label:
+      type: label
+      label: 'Label'
+    legal_notice_summary:
+      type: text_format
+      label: 'Summary'
