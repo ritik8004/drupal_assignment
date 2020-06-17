@@ -8,23 +8,6 @@
 use Drupal\Core\Site\Settings;
 
 /**
- * Implements hook_update_N().
- *
- * Update Footer text.
- */
-function alshaya_pbk_transac_update_8001() {
-  $strings = [
-    'get email offers and the latest news from @site_name' => [
-      'en' => 'Get email offers & the latest news from Pottery Barn Kids.',
-    ],
-    'sign up' => [
-      'en' => 'Submit',
-    ],
-  ];
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_pbk_transac_install() {
