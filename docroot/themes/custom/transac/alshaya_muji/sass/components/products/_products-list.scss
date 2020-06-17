@@ -85,8 +85,10 @@
     }
 
     .product-plp-detail-wrapper {
-      .price-block {
+      .price,
+      .special--price {
         font-family: $alshaya-bold;
+        font-size: 0.875rem;
       }
     }
 
