@@ -18,32 +18,8 @@ class AlshayaAppointmentController extends ControllerBase {
    *   Return array of markup with react lib attached.
    */
   public function appointment() {
-    $steps = [
-      0 => [
-        'step' => 1,
-        'stepTitle' => $this->t('appointment type'),
-      ],
-      1 => [
-        'step' => 2,
-        'stepTitle' => $this->t('select store'),
-      ],
-      2 => [
-        'step' => 3,
-        'stepTitle' => $this->t('select time slot'),
-      ],
-      3 => [
-        'step' => 4,
-        'stepTitle' => $this->t('login / guest'),
-      ],
-      4 => [
-        'step' => 5,
-        'stepTitle' => $this->t('customer details'),
-      ],
-      5 => [
-        'step' => 6,
-        'stepTitle' => $this->t('confirmation'),
-      ],
-    ];
+    $steps = $this->getAppointmentSteps();
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="appointment-booking"></div>',
@@ -56,6 +32,43 @@ class AlshayaAppointmentController extends ControllerBase {
         ],
       ],
     ];
+  }
+
+  /**
+   * Get appointment steps.
+   *
+   * @return array
+   *   Array of appointment steps.
+   */
+  private function getAppointmentSteps() {
+    $steps = [
+      [
+        'step' => 1,
+        'stepTitle' => $this->t('appointment type'),
+      ],
+      [
+        'step' => 2,
+        'stepTitle' => $this->t('select store'),
+      ],
+      [
+        'step' => 3,
+        'stepTitle' => $this->t('select time slot'),
+      ],
+      [
+        'step' => 4,
+        'stepTitle' => $this->t('login / guest'),
+      ],
+      [
+        'step' => 5,
+        'stepTitle' => $this->t('customer details'),
+      ],
+      [
+        'step' => 6,
+        'stepTitle' => $this->t('confirmation'),
+      ],
+    ];
+
+    return $steps;
   }
 
 }
