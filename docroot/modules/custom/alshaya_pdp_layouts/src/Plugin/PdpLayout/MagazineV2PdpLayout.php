@@ -137,6 +137,14 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockQty'] = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
     }
 
+    // Get share this settings.
+    if (isset($vars['elements']['sharethis'])) {
+      $sharethis = $vars['elements']['sharethis'];
+      $sharethissettings = $this->getShareThisSettings($sharethis);
+      $vars['#attached']['drupalSettings']['sharethis'] = $sharethissettings['sharethis'];
+      $vars['#attached']['library'] = array_merge($vars['#attached']['library'], $sharethissettings['sharethis']['libraries']);
+    }
+
     // Get the product description.
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['description'] = $vars['elements']['description'];
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['shortDesc'] = strip_tags($vars['elements']['short_desc']['value']['#markup']);
@@ -278,6 +286,19 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       }
     }
     return $gallery;
+  }
+
+  /**
+   * Helper function to get share this settings.
+   *
+   * @return array
+   *   The sharethis settings.
+   */
+  public function getShareThisSettings($sharethis) {
+    $sharethissettings = $sharethis['#attached']['drupalSettings'];
+    $sharethissettings['sharethis']['content'] = $sharethis['#content']['st_spans'];
+    $sharethissettings['sharethis']['libraries'] = $sharethis['#attached']['library'];
+    return $sharethissettings;
   }
 
   /**

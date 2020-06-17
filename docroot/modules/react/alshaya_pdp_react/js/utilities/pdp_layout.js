@@ -175,3 +175,16 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     configurableCombinations,
   };
 };
+
+/**
+ * To copy the page url in clipboard.
+ */
+export const copyToClipboard = () => {
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = window.location.href;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  console.log(textarea);
+  textarea.remove();
+};
