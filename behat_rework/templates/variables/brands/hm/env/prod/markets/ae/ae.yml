@@ -1,0 +1,6 @@
+variables:
+  var_username: 'mitesh@axelerant.com'
+  var_password: 'Alshaya@2017'
+  spc_product_listing_page: '/shop-ladies/new-arrivals/clothes/'
+  spc_basket_page: '/shop-ladies/new-arrivals/clothes/'
+  product_listing_page_url: "/shop-ladies/new-arrivals/clothes/"

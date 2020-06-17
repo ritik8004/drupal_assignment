@@ -79,5 +79,5 @@ variables:
   billing_landmark: 'Near Bridge'
   billing_postal_code: '23456'
   billing_mobile: '1023838029'
-  cc_payment_type: 'Credit Card'
+  cc_payment_type: 'Credit / Debit Card'
   billing_text: 'Billing address:'
