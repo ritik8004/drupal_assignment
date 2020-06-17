@@ -36,7 +36,7 @@ function alshaya_master_update_8040() {
     'Purpose' => [
       'ar' => 'الغرض',
     ],
-    'Bank Details' => [
+    'Bank details' => [
       'ar' => 'تفاصيل البنك',
     ],
   ];
@@ -1965,7 +1965,7 @@ function alshaya_master_install() {
     'Purpose' => [
       'ar' => 'الغرض',
     ],
-    'Bank Details' => [
+    'Bank details' => [
       'ar' => 'تفاصيل البنك',
     ],
   ];
