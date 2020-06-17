@@ -35,4 +35,8 @@ function _enable_social_auth_pbk() {
     ->set('social_networks.social_auth_google', TRUE)
     ->set('social_networks.social_auth_facebook', TRUE)
     ->save();
+
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE, 'social_auth_google.settings');
 }
