@@ -122,20 +122,22 @@ export const createInfoWindow = (content) => new window.google.maps.InfoWindow({
  *
  * @param {array} address
  */
-function convertGmapAddress(address) {
+function convertGmapAddress(addresses) {
   const googleFieldArray = Object.entries(mapAddressMap());
 
   const fullMapping = {};
   googleFieldArray.forEach(([key, googleFields]) => {
-    address.forEach((gmapVal) => {
-      const foundKey = googleFields.filter((field) => gmapVal.types.includes(field));
-      if (foundKey.length > 0) {
-        if (!fullMapping[key]) {
-          fullMapping[key] = [];
+    fullMapping[key] = [...googleFields];
+    addresses.forEach((address) => {
+      address.address_components.forEach((gmapVal) => {
+        const foundKey = fullMapping[key].filter((field) => gmapVal.types.includes(field));
+        const matchingIndex = fullMapping[key].indexOf(foundKey[0]);
+        if (foundKey.length > 0 && matchingIndex >= 0) {
+          fullMapping[key][matchingIndex] = gmapVal.long_name;
         }
-        fullMapping[key].push(gmapVal.long_name);
-      }
+      });
     });
+    fullMapping[key] = fullMapping[key].filter((field) => !googleFields.includes(field));
   });
   return fullMapping;
 }
@@ -145,18 +147,18 @@ function convertGmapAddress(address) {
  *
  * @param {array} address
  */
-export const fillValueInAddressFromGeocode = (address) => {
-  const gMapAddress = convertGmapAddress(address);
+export const fillValueInAddressFromGeocode = (addresses) => {
+  const gMapAddress = convertGmapAddress(addresses);
 
   Object.entries(drupalSettings.address_fields).forEach(
     ([key]) => {
       // Some handling for select list fields (areas/city).
-      if ((key !== 'administrative_area' && key !== 'area_parent')
-        && gMapAddress[key]) {
-        // We will handle area/parent area separately.
-        document.getElementById(key).value = gMapAddress[key].pop();
-        document.getElementById(key).classList.add('focus');
-      }
+      if ((key === 'administrative_area' && key === 'area_parent') || !gMapAddress[key]) return;
+      const [val] = gMapAddress[key];
+      if (!val) return;
+      // We will handle area/parent area separately.
+      document.getElementById(key).value = val;
+      document.getElementById(key).classList.add('focus');
     },
   );
 
@@ -303,7 +305,7 @@ export const getUserLocation = (coords) => {
                 addressItem.types.indexOf('country') !== -1
                 && addressItem.short_name === drupalSettings.country_code),
             );
-            resolve([userCountrySame, address]);
+            resolve([userCountrySame, results]);
           }
         } else {
           reject(status);
