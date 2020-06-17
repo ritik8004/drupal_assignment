@@ -157,7 +157,7 @@ class Drupal {
    *   CnC status for cart.
    */
   public function getCncStatusForCart(string $skus_list = '') {
-    $url = sprintf('/cart/cnc-status?skus=%s', $skus_list);
+    $url = sprintf('/spc/cart/cnc-status?skus=%s', $skus_list);
     $response = $this->invokeApi('GET', $url);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);

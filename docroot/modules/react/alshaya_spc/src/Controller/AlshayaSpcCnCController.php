@@ -99,13 +99,12 @@ class AlshayaSpcCnCController extends ControllerBase {
     $sku_list = $request->query->get('skus');
     $skus = explode(',', $sku_list);
 
-    $data = [
-      'cnc_status' => TRUE,
-    ];
+    // CnC status.
+    $cnc_status = TRUE;
 
     // If no skus in list, we return TRUE without caching.
     if (empty($skus)) {
-      $response = new JsonResponse($data);
+      $response = new JsonResponse($cnc_status);
       return $response;
     }
 
@@ -114,19 +113,16 @@ class AlshayaSpcCnCController extends ControllerBase {
     foreach ($skus as $sku_string) {
       $sku = SKU::loadFromSku($sku_string);
       if ($sku instanceof SKU) {
-        $cache_tags[] = 'sku:' . $sku->id();
+        $cache_tags = array_merge($cache_tags, $sku->getCacheTags());
         $cnc_enabled = alshaya_acm_product_available_click_collect($sku);
         if (!$cnc_enabled) {
-          $data = [
-            'cnc_status' => FALSE,
-          ];
-
+          $cnc_status = FALSE;
           break;
         }
       }
     }
 
-    $response = new CacheableJsonResponse($data);
+    $response = new CacheableJsonResponse($cnc_status);
 
     // Add cacheable metadata.
     $cache_tags[] = 'config:alshaya_click_collect.settings';

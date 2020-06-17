@@ -64,7 +64,7 @@ alshaya_spc.checkout.cnc_store_info:
     _permission: 'access content'
 
 alshaya_spc.cart_cnc_status:
-  path: '/cart/cnc-status'
+  path: '/spc/cart/cnc-status'
   defaults:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCnCController::cartCncStatus'
   requirements:

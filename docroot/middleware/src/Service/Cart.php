@@ -1407,8 +1407,7 @@ class Cart {
     if (!empty($cart_skus_list)) {
       $cart_skus_list = implode(',', $cart_skus_list);
       // Get CnC status.
-      $cnc_status = $this->drupal->getCncStatusForCart($cart_skus_list);
-      $cnc_enabled = $cnc_status['cnc_status'];
+      $cnc_enabled = $this->drupal->getCncStatusForCart($cart_skus_list);
     }
 
     return $cnc_enabled;
