@@ -10,7 +10,6 @@ const PdpStandardDelivery = () => {
       <div className="magv2-standard-delivery-title-wrapper">
         <PdpSectionTitle>
           {homeDelivery.title}
-          <span className="standard-delivery-title-tag free-tag">{Drupal.t('free')}</span>
         </PdpSectionTitle>
       </div>
       <PdpSectionText className="standard-delivery-detail">
