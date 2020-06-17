@@ -152,17 +152,21 @@ class AlshayaSuperCategoryManager {
    * @param \Drupal\node\NodeInterface $node
    *   The node whose supercategory is to be fetched.
    *
-   * @return array
+   * @return array|false
    *   The supercategory terms or empty array if no supercategory found or
-   *   node is not a product node.
+   *   node is not a product node. Returns false if supercategory is disabled.
    */
   public function getSuperCategories(NodeInterface $node) {
     $super_categories = [];
     $is_super_category_enabled = &drupal_static('alshaya_super_category_status', NULL);
     if (is_null($is_super_category_enabled)) {
       $is_super_category_enabled = $this->configFactory->get('alshaya_super_category.settings')->get('status');
+
     }
-    if ($is_super_category_enabled && $node->bundle() === 'acq_product') {
+    if (!$is_super_category_enabled) {
+      return FALSE;
+    }
+    elseif ($is_super_category_enabled && $node->bundle() === 'acq_product') {
       $categories = $node->get('field_category')->getValue();
       $langcode = $node->language()->getId();
       foreach ($categories as $category) {
