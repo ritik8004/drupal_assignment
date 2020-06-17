@@ -53,7 +53,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -144,7 +144,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -240,7 +240,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -297,7 +297,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -388,7 +388,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -484,7 +484,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load

@@ -51,7 +51,7 @@ Feature: SPC Checkout Home Delivery CC
     And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
     And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
     And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -137,7 +137,7 @@ Feature: SPC Checkout Home Delivery CC
     And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
     And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
     And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -229,7 +229,7 @@ Feature: SPC Checkout Home Delivery CC
     And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
     And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
     And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
