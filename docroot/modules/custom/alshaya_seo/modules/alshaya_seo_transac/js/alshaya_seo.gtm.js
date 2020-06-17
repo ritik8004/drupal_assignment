@@ -1206,9 +1206,10 @@
       : error;
     var errorData = {
       event: 'eventTracker',
-      eventCategory: context,
-      eventLabel: 'Error occurred on ' + window.location.href,
-      eventAction: message,
+      eventCategory: 'alshaya errors',
+      eventLabel: context,
+      eventAction: 'Error occurred on ' + window.location.href,
+      eventMessage: message,
       eventValue: 0,
       nonInteraction: 0,
     };
