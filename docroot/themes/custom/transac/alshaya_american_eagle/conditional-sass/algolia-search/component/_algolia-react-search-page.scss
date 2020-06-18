@@ -23,4 +23,12 @@
       }
     }
   }
+
+  .c-facet {
+    &.c-accordion {
+      ul li span {
+        color: $algolia-react-facet-label;
+      }
+    }
+  }
 }
