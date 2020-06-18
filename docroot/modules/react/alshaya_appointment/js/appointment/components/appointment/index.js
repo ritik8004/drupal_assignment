@@ -1,12 +1,11 @@
 import React from 'react';
+import AppointmentSteps from '../appointment-steps';
 
-export default class Appointment extends React.Component {
+const Appointment = () => (
+  <div className="appointment-wrapper">
+    <AppointmentSteps />
+    <span>Placeholder for appointment form</span>
+  </div>
+);
 
-  render() {
-    return (
-      <div className="appointment-wrapper">
-        <span>Placeholder for appointment form</span>
-      </div>
-    );
-  }
-}
+export default Appointment;
