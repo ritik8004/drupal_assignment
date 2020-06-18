@@ -201,10 +201,13 @@ header {
 
     @include breakpoint($only-mobile) {
       .cart-link {
+        width: 1.875rem;
+        height: 1.875rem;
+
         &::before {
           font-size: 1.65rem;
-          #{$right}: -0.375rem;
-          top: -0.2rem;
+          #{$right}: 0;
+          top: 0.25rem;
         }
       }
     }
@@ -408,6 +411,13 @@ header {
     }
 
     .store {
+      top: 1rem;
+
+      @include icon(store) {
+        width: 1.875rem;
+        height: 1.875rem;
+      }
+
       &.is-active {
         &::before {
           color: $mm_mobile_icon_active;
@@ -417,6 +427,7 @@ header {
 
     .mobile--menu {
       padding-#{$right}: 0;
+      top: 1.375rem;
 
       &::before {
         margin-#{$right}: 0;
@@ -445,8 +456,11 @@ header {
       .mobile--search {
         @include icon(search) {
           color: $mm_mobile_icon;
-          font-size: 1.55rem;
-          top: 0;
+          font-size: 1.75rem;
+          top: -0.125rem;
+          #{$left}: 0;
+          width: 1.875rem;
+          height: 1.875rem;
         }
       }
     }
