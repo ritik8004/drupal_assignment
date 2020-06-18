@@ -1,5 +1,13 @@
 import React from 'react';
-import { copyToClipboard } from '../../../../utilities/pdp_layout';
+
+const copyToClipboard = () => {
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = window.location.href;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  textarea.remove();
+};
 
 const CopyPageLink = () => (
   <button onClick={() => copyToClipboard()} type="button">

@@ -139,10 +139,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
     // Get share this settings.
     if (isset($vars['elements']['sharethis'])) {
-      $sharethis = $vars['elements']['sharethis'];
-      $sharethissettings = $this->getShareThisSettings($sharethis);
-      $vars['#attached']['drupalSettings']['sharethis'] = $sharethissettings['sharethis'];
-      $vars['#attached']['library'] = array_merge($vars['#attached']['library'], $sharethissettings['sharethis']['libraries']);
+      $this->getShareThisSettings($vars);
     }
 
     // Get the product description.
@@ -290,15 +287,13 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
   /**
    * Helper function to get share this settings.
-   *
-   * @return array
-   *   The sharethis settings.
    */
-  public function getShareThisSettings($sharethis) {
+  public function getShareThisSettings(&$vars) {
+    $sharethis = $vars['elements']['sharethis'];
     $sharethissettings = $sharethis['#attached']['drupalSettings'];
     $sharethissettings['sharethis']['content'] = $sharethis['#content']['st_spans'];
-    $sharethissettings['sharethis']['libraries'] = $sharethis['#attached']['library'];
-    return $sharethissettings;
+    $vars['#attached']['drupalSettings']['sharethis'] = $sharethissettings['sharethis'];
+    $vars['#attached']['library'] = array_merge($vars['#attached']['library'], $sharethis['#attached']['library']);
   }
 
   /**
