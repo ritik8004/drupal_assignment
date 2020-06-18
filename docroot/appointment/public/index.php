@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * @file
@@ -8,6 +9,9 @@
 use App\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
+
+// DRUPAL_ROOT is used by Drupal sites.inc.
+const DRUPAL_ROOT = __DIR__ . '/../..';
 
 require dirname(__DIR__) . '/config/bootstrap.php';
 
