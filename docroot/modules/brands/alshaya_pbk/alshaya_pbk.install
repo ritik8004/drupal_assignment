@@ -6,15 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Enables social login - Google and Facebook.
- */
-function alshaya_pbk_update_8001() {
-  _enable_social_auth_pbk();
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_pbk_install() {
@@ -22,21 +13,4 @@ function alshaya_pbk_install() {
 
   // Create default content for the site.
   alshaya_pbk_create_default_content();
-  // Enable social login.
-  _enable_social_auth_pbk();
-}
-
-/**
- * Enables FB and Google social login for PBK.
- */
-function _enable_social_auth_pbk() {
-  \Drupal::configFactory()->getEditable('alshaya_social.settings')
-    ->set('social_login', TRUE)
-    ->set('social_networks.social_auth_google', TRUE)
-    ->set('social_networks.social_auth_facebook', TRUE)
-    ->save();
-
-  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
-  $config_check = \Drupal::service('alshaya_acm.config_check');
-  $config_check->checkConfig(TRUE, 'social_auth_google.settings');
 }
