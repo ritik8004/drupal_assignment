@@ -22,7 +22,7 @@ export const mapAddressMap = () => {
     // For area parent.
     mapping.area_parent = ['administrative_area_level_1'];
     // For locality.
-    mapping.locality = ['locality'];
+    mapping.locality = ['neighborhood', 'locality'];
   }
 
   return mapping;
@@ -153,9 +153,9 @@ export const fillValueInAddressFromGeocode = (addresses) => {
   Object.entries(drupalSettings.address_fields).forEach(
     ([key]) => {
       // Some handling for select list fields (areas/city).
-      if ((key === 'administrative_area' && key === 'area_parent') || !gMapAddress[key]) return;
+      if ((key === 'administrative_area' || key === 'area_parent') || !gMapAddress[key]) return;
+      if (gMapAddress[key] && gMapAddress[key].length === 0) return;
       const [val] = gMapAddress[key];
-      if (!val) return;
       // We will handle area/parent area separately.
       document.getElementById(key).value = val;
       document.getElementById(key).classList.add('focus');
