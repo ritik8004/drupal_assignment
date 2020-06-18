@@ -146,6 +146,11 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       }
     }
 
+    // Get share this settings.
+    if (isset($vars['elements']['sharethis'])) {
+      $this->getShareThisSettings($vars);
+    }
+
     // Get the product description.
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['description'] = $vars['elements']['description'];
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['shortDesc'] = strip_tags($vars['elements']['short_desc']['value']['#markup']);
@@ -287,6 +292,17 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       }
     }
     return $gallery;
+  }
+
+  /**
+   * Helper function to get share this settings.
+   */
+  public function getShareThisSettings(&$vars) {
+    $sharethis = $vars['elements']['sharethis'];
+    $sharethissettings = $sharethis['#attached']['drupalSettings'];
+    $sharethissettings['sharethis']['content'] = $sharethis['#content']['st_spans'];
+    $vars['#attached']['drupalSettings']['sharethis'] = $sharethissettings['sharethis'];
+    $vars['#attached']['library'] = array_merge($vars['#attached']['library'], $sharethis['#attached']['library']);
   }
 
   /**

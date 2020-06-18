@@ -6,6 +6,7 @@ import PdpCart from '../pdp-cart';
 import PdpHeader from '../pdp-header';
 import { getProductValues } from '../../../utilities/pdp_layout';
 import PdpStandardDelivery from '../pdp-standard-delivery';
+import PdpSharePanel from '../pdp-share-panel';
 import PdpClickCollect from '../pdp-click-and-collect';
 
 const PdpLayout = () => {
@@ -107,6 +108,7 @@ const PdpLayout = () => {
             pdpProductPrice={priceRaw}
             finalPrice={finalPrice}
           />
+          <PdpSharePanel />
         </div>
       </div>
     </>
