@@ -59,25 +59,26 @@
   .magazine__gallery--container-mobile {
     @include breakpoint($only-mobile) {
       .slick-dots {
-        display: flex !important;
-        justify-content: center;
-        background: $magv2-slick-dots-bg;
-        width: 100%;
-
-        button {
-          font-size: 0;
-          display: block;
-          cursor: pointer;
-          color: transparent;
-          border: 0;
-          background: 0 0;
-        }
+        bottom: 1.125rem;
 
         li {
-          background-color: $magv2-slick-dots;
-          color: $magv2-slick-dots;
           border: none;
-          margin: 1em 0.5em;
+          button {
+            &::before {
+              color: $magv2-slick-dots;
+              opacity: 1;
+            }
+          }
+
+          &.slick-active {
+            background: transparent !important;
+            button {
+              &::before {
+                color: $magv2-slick-dots-active;
+                opacity: 1;
+              }
+            }
+          }
         }
       }
     }
@@ -147,8 +148,23 @@
           transform: translateY(-50%);
           border-radius: 50%;
           opacity: 0.6;
-          background: $magv2-gallery-slider-bg;
           bottom: unset;
+        }
+
+        @include breakpoint($only-mobile) {
+          bottom: 1.875rem;
+          top: auto;
+          width: auto;
+
+          &::before {
+            background: none !important;
+          }
+        }
+
+        &::before {
+          background: $magv2-gallery-slider-bg;
+          color: $magv2-slider-icon-bg;
+          opacity: 1;
         }
       }
 
@@ -161,7 +177,7 @@
         }
 
         @include icon(chevron#{$left}) {
-          @include breakpoint($desktop) {
+          @include breakpoint($tablet) {
             height: 5.25rem;
             width: 5.25rem;
             font-size: 3rem;
@@ -178,10 +194,11 @@
 
         @include breakpoint($tablet) {
           #{$right}: 3.75rem;
+          width: auto;
         }
 
         @include icon(chevron#{$right}) {
-          @include breakpoint($desktop) {
+          @include breakpoint($tablet) {
             height: 5.25rem;
             width: 5.25rem;
             font-size: 3rem;
@@ -194,34 +211,33 @@
       }
 
       .slick-dots {
-        position: fixed;
+        position: fixed !important;
         bottom: 3.375rem;
         left: 50%;
         transform: translate(-50%, 0);
 
         @include breakpoint($only-mobile) {
-          width: 100%;
-          text-align: center;
-        }
-
-        button {
-          font-size: 0;
-          display: block;
-          cursor: pointer;
-          color: transparent;
-          border: 0;
-          background: 0 0;
-          height: 1rem;
+          bottom: 1.875rem;
+          top: auto;
+          width: auto;
         }
 
         li {
-          background-color: $magv2-slick-dots;
-          color: $magv2-slick-dots;
           border: none;
-          margin: 1em 0.75em;
+          button {
+            &::before {
+              opacity: 0.1;
+            }
+          }
 
           &.slick-active {
-            background: $magv2-slick-dots-active !important;
+            background: transparent !important;
+            button {
+              &::before {
+                color: $magv2-slick-dots-active;
+                opacity: 1;
+              }
+            }
           }
         }
       }
@@ -237,8 +253,8 @@ html[lang="ar"] {
   .magv2-pdp-gallery {
     .popup-overlay {
       .slick-slider {
-        .slick-dots {
-          padding: 0;
+        .slick-prev {
+          width: auto;
         }
       }
     }
