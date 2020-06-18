@@ -55,6 +55,13 @@ class PromotionProductListResource extends ResourceBase {
   const FACET_SOURCE_ID = 'search_api:views_block__alshaya_product_list__block_2';
 
   /**
+   * Array of filters to remove from API response.
+   *
+   * This is used so that output filters data of API is similar to the web site.
+   */
+  const FILTERS_TO_IGNORE = ['category_facet_promo'];
+
+  /**
    * Entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -182,6 +189,8 @@ class PromotionProductListResource extends ResourceBase {
         $response_data = $this->addExtraPromoData($node);
         // Prepare response from result set.
         $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+        // Make response data similar to web site.
+        $response_data = $this->processToWebVersion($response_data);
 
         // Filter the empty products.
         $response_data['products'] = array_filter($response_data['products']);
@@ -255,6 +264,28 @@ class PromotionProductListResource extends ResourceBase {
       ? $desc[0]['value']
       : '',
     ];
+  }
+
+  /**
+   * Processes the data to make it similar to the web page.
+   *
+   * @param array $result
+   *   The data to make similar to the website.
+   *
+   * @return array
+   *   The processed data.
+   */
+  protected function processToWebVersion(array $result) {
+    // Remove filters which are not there in the webpage.
+    foreach ($result['filters'] as $key => $filter) {
+      if (in_array($filter['key'], self::FILTERS_TO_IGNORE)) {
+        unset($result['filters'][$key]);
+      }
+    }
+    // Reset the array keys.
+    $result['filters'] = array_values($result['filters']);
+
+    return $result;
   }
 
 }
