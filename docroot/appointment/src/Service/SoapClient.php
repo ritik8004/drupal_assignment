@@ -50,10 +50,11 @@ class SoapClient {
       return [];
     }
 
-    $headerNS = $appointment_settings['headerNS'] ?? '';
-    $passwordNS = $appointment_settings['passwordNS'] ?? '';
     $username = $appointment_settings['username'] ?? '';
     $password = $appointment_settings['password'] ?? '';
+
+    $headerNS = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
+    $passwordNS = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText';
 
     // Create soap vars for username and password.
     $usernameNode = new \SoapVar('<ns2:Username>' . $username . '</ns2:Username>', XSD_ANYXML);
