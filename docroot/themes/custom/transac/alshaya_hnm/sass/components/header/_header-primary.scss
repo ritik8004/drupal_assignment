@@ -888,6 +888,7 @@ header {
 
   @include breakpoint($only-mobile) {
     color: $header_toggle_sign_default_mobile;
+    background: $header_toggle_sign_inactive_tab_bg;
   }
 
   font-size: 0.875rem;
