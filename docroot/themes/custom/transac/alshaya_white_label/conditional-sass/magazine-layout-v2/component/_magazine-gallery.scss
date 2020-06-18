@@ -63,6 +63,7 @@
 
         li {
           border: none;
+
           button {
             &::before {
               color: $magv2-slick-dots;
@@ -72,6 +73,7 @@
 
           &.slick-active {
             background: transparent !important;
+
             button {
               &::before {
                 color: $magv2-slick-dots-active;
@@ -224,6 +226,7 @@
 
         li {
           border: none;
+
           button {
             &::before {
               opacity: 0.1;
@@ -232,6 +235,7 @@
 
           &.slick-active {
             background: transparent !important;
+
             button {
               &::before {
                 color: $magv2-slick-dots-active;
