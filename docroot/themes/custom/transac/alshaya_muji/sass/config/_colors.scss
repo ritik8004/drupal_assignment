@@ -72,9 +72,9 @@ $primary_empty_btn_border: $black;
 $primary_brand_button: $black;
 
 // Titles.
-$page_title: $black-two;
+$page_title: $black;
 $block_title: $black;
-$title: $black-two;
+$title: $black;
 $sub_title: $black;
 
 /* ------- 3. Secondary color  ----- */
@@ -585,6 +585,7 @@ $order_print_delivery_details_row_text: $black;
 $order_print_delivery_details_row_border: $black;
 $order_print_product_count_row_border: $gallery;
 $order_print_total_row: $grey;
+$order_detail_delivery_details_row_subtitle_content: $black-two;
 
 // 404 and maintenance
 $page_not_found_text: $black;

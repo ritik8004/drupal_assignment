@@ -108,13 +108,17 @@
         @include breakpoint($upto-desktop) {
           top: 0.7rem;
           #{$right}: unset;
-          #{$left}: 1rem;
           opacity: 1;
           transition: opacity 0.2s;
         }
 
+        @include breakpoint($only-mobile) {
+          #{$left}: 0.5rem;
+        }
+
         @include breakpoint($only-tablet) {
           transform: none;
+          #{$left}: 1rem;
         }
 
         @include breakpoint($desktop) {
@@ -235,7 +239,7 @@ body {
   .block-alshaya-algolia-react-autocomplete {
     .algolia-search-back-icon {
       @include breakpoint($only-mobile) {
-        #{$left}: 0.85rem;
+        #{$left}: 0.5rem;
         top: 0.65rem;
       }
     }
