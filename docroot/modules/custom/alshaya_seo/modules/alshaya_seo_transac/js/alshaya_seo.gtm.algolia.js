@@ -67,7 +67,7 @@
         // When search results load, process only the required number of
         // items and push to datalayer.
         if ((eventType === 'search-results-updated')
-          && (searchImpressions.length === (drupalSettings.gtm.productImpressionQueueSize - currentQueueSize))
+          && (searchImpressions.length === (drupalSettings.gtm.productImpressionDefaultItemsInQueue - currentQueueSize))
         ) {
           // This is to break out from the .each() function.
           return false;
