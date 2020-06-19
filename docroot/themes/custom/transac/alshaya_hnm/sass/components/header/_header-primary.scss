@@ -805,7 +805,7 @@ header {
   .menu__list-item {
     @include arabic-letter-spacing;
 
-    border-bottom: 1px solid $white;
+    border-bottom: none;
     font-family: $hnm-regular;
     text-transform: capitalize;
     color: $hnm-black-four;
