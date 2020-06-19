@@ -759,9 +759,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
  */
 function alshaya_acm_product_node_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display) {
   if (!empty($build['sharethis'])) {
-    $build['sharethis']['#attached']['library'] = [
-      'alshaya_acm_product/sharethis',
-    ];
+    $build['sharethis']['#attached']['library'][] = 'alshaya_acm_product/sharethis';
   }
 }
 
