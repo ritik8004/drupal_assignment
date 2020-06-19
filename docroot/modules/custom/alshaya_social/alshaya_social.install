@@ -48,6 +48,21 @@ function alshaya_social_install() {
     'sign in with social media' => [
       'ar' => 'تسجيل الدخول عن طريق برامج التواصل الاجتماعي',
     ],
+    'sign up with email address' => [
+      'ar' => 'سجل باستخدام بريدك الالكتروني',
+    ],
+    'already have an account?' => [
+      'ar' => 'هل لديك حساب مسبقاً؟',
+    ],
+    'sign in here' => [
+      'ar' => 'سجل الإشتراك هنا',
+    ],
+    'dont have an account yet?' => [
+      'ar' => 'ليس لديك حساب؟',
+    ],
+    'sign up here' => [
+      'ar' => 'سجل الإشتراك هنا',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
