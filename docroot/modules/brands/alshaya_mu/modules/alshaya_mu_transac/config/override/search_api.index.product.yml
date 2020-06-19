@@ -1,0 +1,61 @@
+field_settings:
+  attr_color_family:
+    label: 'Color'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_family
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_rkj_division:    
+    label: 'Rkj division'    
+    datasource_id: entity:node    
+    property_path: field_skus:entity:attr_rkj_division    
+    type: string    
+    dependencies:      
+      config:        
+        - field.storage.node.field_skus     
+      module:       
+        - acq_sku
+  attr_sel_depa:    
+    label: 'Sel Depa'    
+    datasource_id: entity:node    
+    property_path: field_skus:entity:attr_sel_depa    
+    type: string    
+    dependencies:      
+      config:        
+        - field.storage.node.field_skus     
+      module:       
+        - acq_sku
+  attr_line:    
+    label: 'Line'    
+    datasource_id: entity:node    
+    property_path: field_skus:entity:attr_line    
+    type: string    
+    dependencies:      
+      config:        
+        - field.storage.node.field_skus     
+      module:       
+        - acq_sku
+  attr_sel_class:    
+    label: 'Sel class'    
+    datasource_id: entity:node    
+    property_path: field_skus:entity:attr_sel_class    
+    type: string    
+    dependencies:      
+      config:        
+        - field.storage.node.field_skus     
+      module:       
+        - acq_sku
+  attr_gender:    
+    label: 'Gender'    
+    datasource_id: entity:node    
+    property_path: field_skus:entity:attr_gender    
+    type: string    
+    dependencies:      
+      config:        
+        - field.storage.node.field_skus     
+      module:       
+        - acq_sku

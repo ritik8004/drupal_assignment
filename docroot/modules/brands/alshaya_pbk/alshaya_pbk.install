@@ -13,4 +13,9 @@ function alshaya_pbk_install() {
 
   // Create default content for the site.
   alshaya_pbk_create_default_content();
+
+  // Make granularity same as PB.
+  \Drupal::configFactory()->getEditable('facets.facet.final_price')
+    ->set('widget.config.granularity', '500')
+    ->save();
 }

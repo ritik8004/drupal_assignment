@@ -1,0 +1,73 @@
+fields:
+  color:
+    configurable: 1
+    cardinality: 1
+    index: 0
+    facet: 0
+  color_family:
+    label: 'Color'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+    swatch: 1
+  rkj_division:  
+    label: 'Rkj Division'
+    cardinality: -1    
+    index: 1    
+    facet: 1
+  sel_depa:
+    label: 'Sel Depa'
+    cardinality: -1    
+    index: 1    
+    facet: 1
+  line:
+    label: 'Line'
+    cardinality: -1    
+    index: 1    
+    facet: 1
+  sel_class:
+    label: 'Sel class'
+    cardinality: -1    
+    index: 1    
+    facet: 1
+  article_code_overseas:
+    label: 'Article Code Overseas'
+    type: 'string'
+  short_description1:
+    label: 'Short Description 1'
+    type: 'string'
+  short_description2:
+    label: 'Short Description 2'
+    type: 'string'
+  spec_en:
+    label: 'Spec En'
+    type: 'string'
+  country_of_origin_en:
+    label: 'Country Of Origin En'
+    type: 'string'
+  direction_en:
+    label: 'Direction En'
+    type: 'text_long'
+  material_en:
+    label: 'Material En'
+    type: 'text_long'
+  country_important_point:
+    label: 'Country Important Point'
+    type: 'text_long'
+  gender:
+    label: 'Gender'
+    index: 1
+    facet: 1
+  p_depth:
+    label: 'Piece Depth'
+    type: 'string'
+  p_width:
+    label: 'Piece Width'
+    type: 'string'
+  p_height:
+    label: 'Piece Height'
+    type: 'string'
+  p_weight:
+    label: 'Piece Weight'
+    type: 'string'

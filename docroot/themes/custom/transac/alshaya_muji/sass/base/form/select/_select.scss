@@ -1,0 +1,19 @@
+.select2-dropdown {
+  border-color: $primary_dropdown_option_border;
+
+  ul.select2-results__options {
+    li.select2-results__option:not(:first-of-type) {
+      html[lang=ar] & {
+        direction: ltr;
+      }
+    }
+  }
+}
+
+.select2-container[dir="rtl"] {
+  .select2-selection--single {
+    .select2-selection__rendered {
+      direction: ltr;
+    }
+  }
+}
