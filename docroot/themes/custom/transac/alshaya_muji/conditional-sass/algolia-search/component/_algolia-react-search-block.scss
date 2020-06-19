@@ -119,6 +119,10 @@
         @include breakpoint($only-tablet) {
           transform: none;
           #{$left}: 1rem;
+
+          html[lang=ar] & {
+            transform: none;
+          }
         }
 
         @include breakpoint($desktop) {
