@@ -46,45 +46,110 @@ function alshaya_mu_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
 function _alshaya_mu_transac_get_product_description($sku_entity) {
   $return = [];
 
+  if ($short_desc_1 = $sku_entity->get('attr_short_description1')->getString()) {
+    $return['short_desc'][] = [
+      '#markup' => $short_desc_1,
+    ];
+  }
+
+  if ($short_desc_2 = $sku_entity->get('attr_short_description2')->getString()) {
+    $return['short_desc'][] = [
+      '#markup' => $short_desc_2,
+    ];
+  }
+
   if ($body = $sku_entity->get('attr_description')->getString()) {
-    $return['short_desc']['value'] = [
+    $return['short_desc'][] = [
       '#markup' => $body,
     ];
   }
 
-  $details['label'] = [
-    '#markup' => t('Details'),
+  if ($attr_country_important_point = $sku_entity->get('attr_country_important_point')->getString()) {
+    $attr_country_important_point_desc['label'] = [
+      '#markup' => t('Country Important Points'),
+    ];
+    $attr_country_important_point_desc['value'] = [
+      '#markup' => $attr_country_important_point,
+    ];
+
+    $return['description'][] = $attr_country_important_point_desc;
+  }
+
+  if ($attr_country_of_origin_en = $sku_entity->get('attr_country_of_origin_en')->getString()) {
+    $attr_country_of_origin_en_desc['label'] = [
+      '#markup' => t('Country of Origin'),
+    ];
+    $attr_country_of_origin_en_desc['value'] = [
+      '#markup' => $attr_country_of_origin_en,
+    ];
+
+    $return['description'][] = $attr_country_of_origin_en_desc;
+  }
+
+  if ($attr_direction_en = $sku_entity->get('attr_direction_en')->getString()) {
+    $attr_direction_en_desc['label'] = [
+      '#markup' => t('Direction'),
+    ];
+    $attr_direction_en_desc['value'] = [
+      '#markup' => $attr_direction_en,
+    ];
+
+    $return['description'][] = $attr_direction_en_desc;
+  }
+
+  if ($attr_material_en = $sku_entity->get('attr_material_en')->getString()) {
+    $attr_material_en_desc['label'] = [
+      '#markup' => t('Material'),
+    ];
+    $attr_material_en_desc['value'] = [
+      '#markup' => $attr_material_en,
+    ];
+
+    $return['description'][] = $attr_material_en_desc;
+  }
+
+  // Prepare the specification variable with all attributes.
+  $specifications['label'] = [
+    '#markup' => t('Specifications'),
   ];
-  $details['value'] = [
+
+  $specifications['value'] = [
     "#theme" => 'item_list',
     '#items' => [],
   ];
 
-  if ($details1 = $sku_entity->get('attr_short_description1')->getString()) {
-    $details['value']['#items'][] = $details1;
-  }
-  if ($details2 = $sku_entity->get('attr_short_description2')->getString()) {
-    $details['value']['#items'][] = $details2;
-  }
-
-  if (!empty($details['value']['#items'])) {
-    $return['description'][] = $details;
+  if ($attr_spec_en = $sku_entity->get('attr_spec_en')->getString()) {
+    $specifications['value']['#items'][] = t('Spec: @value', [
+      '@value' => $attr_spec_en,
+    ]);
   }
 
-  $materials_care['label'] = [
-    '#markup' => t('Materials'),
-  ];
-  $materials_care['value'] = [
-    "#theme" => 'item_list',
-    '#items' => [],
-  ];
-
-  if ($materials_care1 = $sku_entity->get('attr_material_en')->getString()) {
-    $materials_care['value']['#items'][] = $materials_care1;
+  if ($attr_p_depth = $sku_entity->get('attr_p_depth')->getString()) {
+    $specifications['value']['#items'][] = t('Depth: @value', [
+      '@value' => $attr_p_depth,
+    ]);
   }
 
-  if (!empty($materials_care['value']['#items'])) {
-    $return['description'][] = $materials_care;
+  if ($attr_p_width = $sku_entity->get('attr_p_width')->getString()) {
+    $specifications['value']['#items'][] = t('Width: @value', [
+      '@value' => $attr_p_width,
+    ]);
+  }
+
+  if ($attr_p_height = $sku_entity->get('attr_p_height')->getString()) {
+    $specifications['value']['#items'][] = t('Height: @value', [
+      '@value' => $attr_p_height,
+    ]);
+  }
+
+  if ($attr_p_weight = $sku_entity->get('attr_p_weight')->getString()) {
+    $specifications['value']['#items'][] = t('Weight: @value', [
+      '@value' => $attr_p_weight,
+    ]);
+  }
+
+  if (!empty($specifications)) {
+    $return['description'][] = $specifications;
   }
 
   return $return;
