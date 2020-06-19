@@ -609,24 +609,24 @@ $conductors = [
     'site_id' => 237,
   ],
   'mukw_uat' => [
-    'hmac_id' => 'afb8c24dfb574debaebfe6b680a9fc43',
-    'hmac_secret' => 'MjU1NmIzMjYtNDc1My00',
-    'site_id' => 191,
+    'hmac_id' => 'e8dc16861254494e80c36dd3255aab5d',
+    'hmac_secret' => 'OTY0OTRjZTYtYzMyZC00',
+    'site_id' => 245,
   ],
   'musa_uat' => [
-    'hmac_id' => '8d9331c4d4aa4a529ed05055b3ca5e67',
-    'hmac_secret' => 'ZGJmMWFiYTktY2JiNS00',
-    'site_id' => 192,
+    'hmac_id' => '030218663ebc492a83427a8a2f6eaa37',
+    'hmac_secret' => 'ZWRiNThjYTEtNzEzNy00',
+    'site_id' => 246,
   ],
   'muae_uat' => [
-    'hmac_id' => '05168cbe2e664f4c9d9b676a96d185a4',
-    'hmac_secret' => 'YmJmZTAxNzgtMTdhNy00',
-    'site_id' => 193,
+    'hmac_id' => '73cf818bcd7b47ce975acf336d831206',
+    'hmac_secret' => 'ZWNlYjZhYjUtOWJiMi00',
+    'site_id' => 247,
   ],
   'mueg_uat' => [
-    'hmac_id' => 'a37e371caae3434ea9372ea053607857',
-    'hmac_secret' => 'ZDFmOGM0NDEtNjlmNy00',
-    'site_id' => 194,
+    'hmac_id' => 'd5cb6eba6f1d4987a0934685e1f87bd5',
+    'hmac_secret' => 'YmNkYjJkMTgtZGU4Mi00',
+    'site_id' => 248,
   ],
   // Boots pharmacy.
   'bpkw_dev' => [
