@@ -180,11 +180,10 @@ class PromotionProductListResource extends ResourceBase {
         $result_set = $this->prepareAndExecuteQuery($id);
         // Add promo data in result set.
         $response_data = $this->addExtraPromoData($node);
-        // Prepare response from result set.
-        $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
         // Make response data similar to web site.
         $this->alshayaSearchApiQueryExecute->setFacetsToIgnore(['category_facet_promo']);
-        $response_data = $this->alshayaSearchApiQueryExecute->processToWebVersion($response_data);
+        // Prepare response from result set.
+        $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
 
         // Filter the empty products.
         $response_data['products'] = array_filter($response_data['products']);

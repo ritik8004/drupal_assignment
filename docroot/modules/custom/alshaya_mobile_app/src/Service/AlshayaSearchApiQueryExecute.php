@@ -608,6 +608,10 @@ class AlshayaSearchApiQueryExecute {
     // Prepare facet data first.
     $facet_result = [];
     foreach ($facets_data as $key => $facet) {
+      // Do not further process facets that are not required.
+      if (in_array($facet->id(), $this->getFacetsToIgnore())) {
+        continue;
+      }
       // Get facet block.
       $facet_block = $this->getFacetBlock($facet->id());
       // If facet block not available or not enabled, then skip it.
@@ -1129,28 +1133,6 @@ class AlshayaSearchApiQueryExecute {
    */
   public function setFacetsToIgnore($facets) {
     $this->facetsToIgnore = $facets;
-  }
-
-  /**
-   * Processes the data to make it similar to the web page.
-   *
-   * @param array $result
-   *   The data to make similar to the website.
-   *
-   * @return array
-   *   The processed data.
-   */
-  public function processToWebVersion(array $result) {
-    // Remove filter facets which are not there in the webpage.
-    foreach ($result['filters'] as $key => $filter) {
-      if (in_array($filter['key'], $this->getFacetsToIgnore())) {
-        unset($result['filters'][$key]);
-      }
-    }
-    // Reset the array keys.
-    $result['filters'] = array_values($result['filters']);
-
-    return $result;
   }
 
 }
