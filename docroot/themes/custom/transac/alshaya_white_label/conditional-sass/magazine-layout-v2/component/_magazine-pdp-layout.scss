@@ -2,6 +2,7 @@
   &-content {
     @include breakpoint($only-mobile) {
       padding: 0 1.25rem;
+      background: $magv2-content-bg;
     }
 
     @include breakpoint($tablet) {
@@ -40,6 +41,12 @@
 
     @include breakpoint($desktop) {
       max-width: 90rem;
+    }
+  }
+
+  #pdp-layout {
+    @include breakpoint($only-mobile) {
+      background: $pdp_background;
     }
   }
 }

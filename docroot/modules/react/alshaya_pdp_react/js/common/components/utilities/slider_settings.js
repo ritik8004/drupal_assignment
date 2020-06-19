@@ -15,3 +15,13 @@ export const fullScreenSliderSettings = {
   centerMode: false,
   appendDots: (dots) => <MagicSliderDots dots={dots} numDotsToShow={5} dotWidth={30} />,
 };
+
+export const crossellUpsellSliderSettings = {
+  dots: false,
+  infinite: false,
+  arrows: false,
+  slidesToShow: 1,
+  slidesToScroll: 4,
+  variableWidth: true,
+  draggable: false,
+};
