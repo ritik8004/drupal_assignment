@@ -35,7 +35,17 @@ header {
   }
 
   .region__header {
+    @include breakpoint($tablet) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     > div {
+      @include breakpoint($tablet) {
+        display: block;
+      }
+
       @include breakpoint($desktop) {
         width: 33.33%;
       }
