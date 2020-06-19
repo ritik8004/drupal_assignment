@@ -1147,8 +1147,8 @@ class SkuAssetManager {
    */
   public function getAssetType(array $asset) {
     $type = (strpos($asset['Data']['AssetType'], 'MovingMedia') !== FALSE)
-     ? 'video'
-     : 'image';
+      ? 'video'
+      : 'image';
 
     return $type;
   }
