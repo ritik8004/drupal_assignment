@@ -223,6 +223,13 @@ class AlshayaSearchApiQueryExecute {
   protected $defaultSort = 'created DESC';
 
   /**
+   * The facets to ignore in the output.
+   *
+   * @var array
+   */
+  protected $facetsToIgnore = [];
+
+  /**
    * AlshayaSearchApiQueryExecute constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -1105,6 +1112,45 @@ class AlshayaSearchApiQueryExecute {
   private function getMinSearchKeyCount() {
     $config = $this->configFactory->get('views.view.search');
     return (int) ($config->get('display.default.display_options.filters.search_api_fulltext.min_length'));
+  }
+
+  /**
+   * Get the facets which should be ignored in the output.
+   *
+   * @return array
+   *   The array of facets names to ignore.
+   */
+  public function getFacetsToIgnore() {
+    return $this->facetsToIgnore;
+  }
+
+  /**
+   * Set which facets to be ignored in the output.
+   */
+  public function setFacetsToIgnore($facets) {
+    $this->facetsToIgnore = $facets;
+  }
+
+  /**
+   * Processes the data to make it similar to the web page.
+   *
+   * @param array $result
+   *   The data to make similar to the website.
+   *
+   * @return array
+   *   The processed data.
+   */
+  public function processToWebVersion(array $result) {
+    // Remove filter facets which are not there in the webpage.
+    foreach ($result['filters'] as $key => $filter) {
+      if (in_array($filter['key'], $this->getFacetsToIgnore())) {
+        unset($result['filters'][$key]);
+      }
+    }
+    // Reset the array keys.
+    $result['filters'] = array_values($result['filters']);
+
+    return $result;
   }
 
 }
