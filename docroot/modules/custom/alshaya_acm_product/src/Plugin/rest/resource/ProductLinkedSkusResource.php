@@ -176,6 +176,11 @@ class ProductLinkedSkusResource extends ResourceBase {
         $return[] = $lightProduct;
       }
     }
+    // As the linked block contents on web is rendered by product_slider view
+    // and which is sorted in ascending order of nid, we do the same here.
+    usort($return, function ($a, $b) {
+      return $a['nid'] <=> $b['nid'];
+    });
     return $return;
   }
 
