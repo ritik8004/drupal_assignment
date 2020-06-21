@@ -6,7 +6,6 @@ const Appointment = () => (
   <div className="appointment-wrapper">
     <AppointmentSteps />
     <AppointmentType />
-    <span>Placeholder for appointment form</span>
   </div>
 );
 

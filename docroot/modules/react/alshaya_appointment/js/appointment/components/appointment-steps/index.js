@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ListItems = () => {
-  const listItems = drupalSettings.step_labels;
+  const listItems = drupalSettings.alshaya_appointment.step_labels;
 
   return listItems.map(item => {
     return (

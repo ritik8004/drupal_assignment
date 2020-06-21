@@ -1,7 +1,5 @@
 import React from 'react';
 
-const categoryItems = ['Pharmacy', 'Opticians', 'Hearing Care', 'Beauty'];
-
 export default class AppointmentCategories extends React.Component {
   handleItemClick = (item) => {
     const { handleItemClick } = this.props;
@@ -9,7 +7,7 @@ export default class AppointmentCategories extends React.Component {
   }
 
   render() {
-    const { activeItem } = this.props;
+    const { categoryItems, activeItem } = this.props;
     return (
       <div className="appointment-categories-wrapper">
         <label>
@@ -17,13 +15,13 @@ export default class AppointmentCategories extends React.Component {
           :*
         </label>
         <ul className="appointment-categories">
-          { categoryItems.map((item) => (
+          { categoryItems && categoryItems.map((item) => (
             <li
-              className={activeItem === item ? 'appointment-category active' : 'appointment-category'}
+              className={activeItem === item.name ? 'appointment-category active' : 'appointment-category'}
               onClick={() => this.handleItemClick(item)}
             >
-              <span className="appointment-category-icon" />
-              <span className="appointment-category-title">{item}</span>
+              <span className={`appointment-category-icon ${item.id}`} />
+              <span className="appointment-category-title">{item.name}</span>
             </li>
           ))}
         </ul>

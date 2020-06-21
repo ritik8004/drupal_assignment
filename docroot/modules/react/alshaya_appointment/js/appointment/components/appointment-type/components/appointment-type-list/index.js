@@ -1,16 +1,6 @@
 import React from 'react';
 import ReadMoreAndLess from 'react-read-more-less';
 
-const AppointmentTypeItems = [
-  { value: '', label: 'Please Select' },
-  { value: 'WInter Flu Jab Service (KD 22- 45)', label: 'WInter Flu Jab Service (KD 22- 45)' },
-  { value: 'Pneumonia Vaccination Service (KD 11- 17)', label: 'Pneumonia Vaccination Service (KD 11- 17)' },
-  { value: 'Travel Vaccination and Advice Service (KD 27- 51)', label: 'Travel Vaccination and Advice Service (KD 27- 51)' },
-  { value: 'Malaria Prevention Service (KD 9 - 18)', label: 'Malaria Prevention Service (KD 9 - 18)' },
-];
-
-const AppointmentTypeDescription = "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.";
-
 export default class AppointmentTypeList extends React.Component {
   handleChange = (e) => {
     const { handleChange } = this.props;
@@ -18,7 +8,9 @@ export default class AppointmentTypeList extends React.Component {
   }
 
   render() {
-    const { activeItem } = this.props;
+    const { appointmentTypeItems, activeItem } = this.props;
+    let description = '';
+
     return (
       <div className="appointment-type-list-wrapper">
         <label>
@@ -31,14 +23,20 @@ export default class AppointmentTypeList extends React.Component {
             name="appointmentType"
             onChange={this.handleChange}
           >
-            {AppointmentTypeItems.map((v) => (
-              <option
-                value={v.value}
-                selected={activeItem === v.value}
-              >
-                {v.label}
-              </option>
-            ))}
+            {appointmentTypeItems && appointmentTypeItems.map((v) => {
+              if (activeItem === v.id) {
+                description = v.description;
+              }
+
+              return (
+                <option
+                  value={v.id}
+                  selected={activeItem === v.id}
+                >
+                  {v.name}
+                </option>
+              );
+            })}
           </select>
           { activeItem
             ? (
@@ -47,7 +45,7 @@ export default class AppointmentTypeList extends React.Component {
                 readMoreText="Read More"
                 readLessText="Show Less"
               >
-                {AppointmentTypeDescription}
+                {description}
               </ReadMoreAndLess>
             )
             : null}

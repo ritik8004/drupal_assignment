@@ -4,6 +4,7 @@ import AppointmentTypeList from './components/appointment-type-list';
 import AppointmentCompanion from './components/appointment-companion';
 import AppointmentForYou from './components/appointment-for-you';
 import AppointmentAck from './components/appointment-ack';
+import fetchAPIData from '../../../utilities/api/fetchApiData';
 
 export default class AppointmentType extends React.Component {
   constructor(props) {
@@ -20,13 +21,20 @@ export default class AppointmentType extends React.Component {
         appointmentCompanion: '',
         appointmentForYou: '',
         appointmentAck: '',
+        appointmentTypeItems: [{ id: '', name: 'Please Select' }],
+        categoryItems: '',
       };
     }
   }
 
+  componentDidMount() {
+    this.fetchPrograms();
+  }
+
   handleCategoryClick = (category) => {
+    this.fetchActivities(category.id);
     this.setState({
-      appointmentCategory: category,
+      appointmentCategory: category.name,
     });
   }
 
@@ -41,19 +49,58 @@ export default class AppointmentType extends React.Component {
     localStorage.setItem('appointment_data', JSON.stringify(this.state));
   }
 
+  fetchPrograms = () => {
+    const apiUrl = '/get/programs';
+    const apiData = fetchAPIData(apiUrl);
+
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.error === undefined && result.data !== undefined) {
+          this.setState({
+            categoryItems: result.data,
+          });
+        }
+      });
+    }
+  }
+
+  fetchActivities = (categoryId) => {
+    const apiUrl = `/get/activities?program=${categoryId}`;
+    const apiData = fetchAPIData(apiUrl);
+
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.error === undefined && result.data !== undefined) {
+          this.setState({
+            appointmentTypeItems: [{ id: '', name: 'Please Select' }, ...result.data],
+          });
+        }
+      });
+    }
+  }
+
   render() {
     const {
-      appointmentCategory, appointmentType, appointmentCompanion, appointmentForYou, appointmentAck,
+      categoryItems,
+      appointmentTypeItems,
+      appointmentCategory,
+      appointmentType,
+      appointmentCompanion,
+      appointmentForYou,
+      appointmentAck,
     } = this.state;
+
     return (
       <div className="appointment-type-wrapper">
         <AppointmentCategories
+          categoryItems={categoryItems}
           handleItemClick={this.handleCategoryClick}
           activeItem={appointmentCategory}
         />
         { appointmentCategory
           ? (
             <AppointmentTypeList
+              appointmentTypeItems={appointmentTypeItems}
               handleChange={this.handleChange}
               activeItem={appointmentType}
             />
