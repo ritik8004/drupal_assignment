@@ -49,14 +49,6 @@
     }
   }
 
-  &:hover {
-    @include breakpoint($desktop) {
-      .address--primary {
-        letter-spacing: 0.5px;
-      }
-    }
-  }
-
   .address--content {
     color: $address_default_color;
   }

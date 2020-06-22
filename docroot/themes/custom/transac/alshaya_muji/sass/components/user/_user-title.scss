@@ -7,6 +7,8 @@
 .c-address-book .block-page-title-block,
 .c-payment-cards .block-page-title-block {
   .back-link {
+    font-family: $muji-helvetica-neue-bold;
+
     @include breakpoint($only-mobile) {
       @include icon(chevron#{$left}, before) {
         font-weight: bold;
@@ -22,6 +24,6 @@
 .c-user-register,
 .c-user-login {
   h1 {
-    font-family: $alshaya-thin;
+    font-family: $muji-helvetica-neue-bold;
   }
 }
