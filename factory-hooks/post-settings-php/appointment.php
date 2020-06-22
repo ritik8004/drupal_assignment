@@ -10,10 +10,11 @@
 
 $appointment_settings = [];
 
-if ($site_country_code && $site_country_code['site_code'] === 'bp') {
+if (!empty($site_country_code) && $site_country_code['site_code'] === 'bp') {
   $appointment_settings = [
     'username' => '',
     'password' => '',
+    'location_group_ext_id' => 'Boots'
   ];
 }
 

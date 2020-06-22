@@ -22,7 +22,7 @@ export default class AppointmentCompanion extends React.Component {
           {appointmentCompanionItems.map((v) => (
             <option
               value={v.value}
-              selected={activeItem === v.value}
+              selected={parseInt(activeItem, 10) === v.value}
             >
               {v.label}
             </option>
