@@ -12,3 +12,11 @@ rtl_styles:
   css:
     theme:
       css/rtl.css: {}
+
+size_guide_positioning:
+  js:
+    js/size_guide_positioning.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
