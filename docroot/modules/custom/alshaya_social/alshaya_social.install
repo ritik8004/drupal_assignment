@@ -63,6 +63,9 @@ function alshaya_social_install() {
     'sign up here' => [
       'ar' => 'سجل الإشتراك هنا',
     ],
+    'Full name' => [
+      'ar' => 'الاسم الكامل',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
