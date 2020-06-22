@@ -1406,8 +1406,21 @@ class Cart {
 
     if (!empty($cart_skus_list)) {
       $cart_skus_list = implode(',', $cart_skus_list);
+
+      $expire = (int) $_ENV['CACHE_CNC_STATUS'];
+      $cache_key = md5('cnc_status:' . $cart_skus_list);
+      // If CnC status is set in cache.
+      if ($expire > 0 && ($cnc_status = $this->cache->get($cache_key))) {
+        $cnc_enabled = $cnc_status;
+        return $cnc_status;
+      }
+
       // Get CnC status.
       $cnc_enabled = $this->drupal->getCncStatusForCart($cart_skus_list);
+      // Set CnC status in cache.
+      if ($expire > 0) {
+        $this->cache->set($cache_key, $expire, $cnc_enabled);
+      }
     }
 
     return $cnc_enabled;
