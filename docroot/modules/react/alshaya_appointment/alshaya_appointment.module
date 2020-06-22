@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Get appointment middleware url.
+ *
+ * @return string
+ *   Middleware url.
+ */
+function _alshaya_appointment_get_middleware_url() {
+  return '/appointment/public';
+}

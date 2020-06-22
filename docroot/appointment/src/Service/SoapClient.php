@@ -47,7 +47,6 @@ class SoapClient {
 
     if (empty($appointment_settings)) {
       $this->logger->error('Appointment Settings is empty.');
-      return [];
     }
 
     $username = $appointment_settings['username'] ?? '';

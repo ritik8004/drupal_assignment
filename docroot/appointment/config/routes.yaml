@@ -1,3 +1,8 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+appointment.get_programs:
+   path: /get/programs
+   controller: App\Controller\ConfigurationServices::getPrograms
+   methods: GET
+appointment.get_activities:
+   path: /get/activities
+   controller: App\Controller\ConfigurationServices::getActivities
+   methods: GET
