@@ -27,6 +27,8 @@ $black-two: #000;
 $brownish-grey: #666;
 $white-smoke-light: #f2f2f2;
 $whisper-dark: #e5e5e5;
+$light-greyish: #ccc;
+$gray-bg: #f1f2f5;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -275,19 +277,20 @@ $minicart_notification_shadow: $shadow;
 $minicart_notification_qty_text: $grey;
 
 //3. Footer
-$footer_bg: $mujilightbluegray;
-$footer_border_top: $gallery;
-$footer_accordion_border: $gallery;
+$footer_bg: $gray-bg;
+$footer_border_top: $grey-dark-one;
+$footer_accordion_border: $grey-dark-one;
 $footer_title_h3: $black;
 $footer_link_mobile: $grey;
 $footer_link: $grey;
 $footer_link_hover: $mujidarkred;
+$footer_light_border: $light-greyish;
 
 // Social links.
 $social_links: $black;
 
 //3.1. Copyright
-$copyright_footer_bg: $mujilightbluegray;
+$copyright_footer_bg: $gray-bg;
 $copyright_footer_text: $black;
 $copyright_footer_paragraph: $black;
 
