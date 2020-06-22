@@ -108,7 +108,7 @@ export default class AddressForm extends React.Component {
    */
   positionMapAndUpdateAddress = async (coords, triggerEvent) => {
     try {
-      const [userCountrySame, address] = await getUserLocation(coords);
+      const [userCountrySame, addresses] = await getUserLocation(coords);
       // If user and site country not same, don;t process.
       if (!userCountrySame) {
         if (triggerEvent) {
@@ -123,7 +123,7 @@ export default class AddressForm extends React.Component {
       }
 
       // Fill the info in address form.
-      fillValueInAddressFromGeocode(address);
+      fillValueInAddressFromGeocode(addresses);
       // Remove all markers from the map.
       removeAllMarkersFromMap();
       // Pan the map to location.
