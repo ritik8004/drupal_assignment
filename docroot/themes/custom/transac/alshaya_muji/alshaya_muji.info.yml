@@ -65,3 +65,12 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/spc-checkout/spc-checkout.ltr.css: css/conditional-sass/spc-checkout/spc-checkout.ltr.css
+
+  alshaya_white_label/attribute.common:
+    js:
+      js/select2Option.js:  js/select2Option.js
+      js/attribute.common.js: js/attribute.common.js
+    dependencies:
+      - core/jquery
+      - core/jquery.once
+      - core/drupal

@@ -95,41 +95,46 @@ $lang_switch_close_icon_bg: $white;
 $lang_switch_close_icon: $black;
 
 // Accordion
-$accordion_border: $light-greyish;
+$accordion_border: $whisper-dark;
 $accordion_title: $cod-gray;
 $accordion_sub_title: $grey;
 $accordion_title_arrow: $black;
 $accordion_title_disabled: $grey;
 
 // Product detail page.
-$pdp_product_title: $black;
+$pdp_product_title: $black-two;
 $pdp_product_itemcode: $grey-light;
 $pdp_product_brand_text: $grey-light;
 $pdp_product_form_text: $grey-light;
 $pdp_product_volume_label: $grey-light;
-$pdp_product_volume_value: $black;
-$pdp_sidebar_description: $black;
-$pdp_sell_title: $black;
+$pdp_product_volume_value: $black-two;
+$pdp_sidebar_description: $black-two;
+$pdp_sell_title: $black-two;
 $pdp_product_qty_text: $grey-light;
-$pdp_cross_sell_title: $black;
-$pdp_product_price: $black;
+$pdp_cross_sell_title: $black-two;
+$pdp_product_price: $black-two;
 $pdp_product_special_price: $alizarin-crimson;
-$pdp_product_color_swatch_border: $black;
-$pdp_accordion_title: $black;
-$pdp_size_option_text: $black;
-$pdp_size_option_border: $black;
-$pdp_size_option_selected_text: $white;
-$pdp_size_option_selected_bg: $black;
+$pdp_product_color_swatch_border: $black-two;
+$pdp_accordion_title: $black-two;
+
+$pdp_size_option_text: $black-two;
+$pdp_size_option_border: $whisper-dark;
+$pdp_size_option_selected_text: $black-two;
+$pdp_size_option_selected_bg: $wild-sand;
+$pdp_size_option_selected_border: $mujidarkred;
+
+$pdp_white_color_attribute_border: $mujidarkred;
+
 $pdp_color_attribute_hover_bg: $gallery;
-$pdp_color_attribute_hover: $black;
-$pdp_color_attribute: $grey;
-$pdp_desc_wrapper_close_bg: $black;
-$pdp_sizeguide_link: $black;
+$pdp_color_attribute_hover: $mujidarkred;
+$pdp_color_attribute:  $black-two;
+$pdp_desc_wrapper_close_bg: $black-two;
+$pdp_sizeguide_link: $black-two;
 $pdp_product_special_price_text: $alizarin-crimson;
 $pdp_product_discount_price: $alizarin-crimson;
 
 // Product Add to cart form.
-$pdp_sidebar_label: $black;
+$pdp_sidebar_label: $black-two;
 $pdp_sidebar_link: $grey;
 $pdp_cc_btn_bg: $black;
 $pdp_desc_wrapper_border: $gallery;
