@@ -300,6 +300,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'client_id' => '702222333032-0htvmbqgnfjh8a7l0mashbnpmbnua446.apps.googleusercontent.com',
             'client_secret' => 'aJhYUR-qa9yRWUUj8L_wNK8k',
           ],
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-NSNS9H2',
+          ],
         ],
       ],
     ],
