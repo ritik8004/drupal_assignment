@@ -2,7 +2,7 @@
 
 nb_to_keep=5
 
-repos="alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git alshaya2@svn-25.enterprise-g1.hosting.acquia.com:alshaya2.git"
+repos="alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git alshaya2@svn-25.enterprise-g1.hosting.acquia.com:alshaya2.git alshaya3bis@svn-25.enterprise-g1.hosting.acquia.com:alshaya3bis.git"
 for repo in $repos ; do
   i=0
   to_delete=""
