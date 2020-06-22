@@ -303,6 +303,15 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
     ],
+    'mu' => [
+      'default' => [
+        'default' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-NHZ6KSS',
+          ],
+        ],
+      ],
+    ],
     'default' => [
       'default' => [
         'default' => [
