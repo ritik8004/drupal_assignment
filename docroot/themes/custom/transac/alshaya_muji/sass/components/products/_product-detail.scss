@@ -103,44 +103,39 @@
   .basic-details-wrapper {
     .field--name-field-skus {
       .form-item-quantity {
-        // border: 2px solid red;
-        // float: #{$left} !important;
-        // position: static;
-        // margin-top: 1.45rem;
-        // float: left;
-        // width: 4.375rem;
-        // margin-bottom: 0.75rem;
-        // position: relative;
-        // background: #fff;
-
-        &::after {
-          // font-size: 0;
-          // content: '';
-          // border-style: solid;
-          // height: 0;
-          // width: 0;
-          // border-width: 0.35rem 0 0.35rem 0.35rem;
-          // border-color: transparent transparent transparent #1a1a1a;
-          // transform: rotate(90deg);
-          // top: 1.25rem;
-          // right: 0.25rem;
-        }
-
         @include facet-arrow(after, down, 0.35rem, 0, 0.35rem, 0.35rem) {
           top: 1.25rem;
-          #{$right}: 0.25rem;
+          #{$right}: 1rem;
+        }
+
+        select#edit-quantity {
+          height: 3.125rem !important;
+          font-size: 1.125rem;
+          font-weight: normal;
+          padding-#{$left}: 0.8rem;
+          color: $primary_dropdown_text;
+        }
+
+        @include breakpoint($upto-desktop) {
+          float: #{$left} !important;
+          top: -1.475rem !important;
+          margin-#{$right}: 0.5rem;
+        }
+
+        @include breakpoint($desktop) {
+          width: 5.5625rem;
         }
 
         .select2-container {
           @include select2-style(5.5625rem);
 
           .select2-selection {
-            // height: 3.125rem !important;
+            height: 3.125rem !important;
 
             .select2-selection__rendered {
-              // font-size: 1.125rem !important;
-              // line-height: 2.4375rem !important;
-              // padding-#{$left}: 1rem !important;
+              font-size: 1.125rem !important;
+              line-height: 2.4375rem !important;
+              padding-#{$left}: 1rem !important;
             }
           }
 
@@ -157,9 +152,8 @@
       .sku-base-form {
         position: relative;
 
-        button[type="submit"] {
+        button[type='submit'] {
           height: 3.1875rem;
-          // position: static !important;
           text-transform: uppercase;
           width: 68%;
           float: #{$right};
@@ -172,6 +166,7 @@
               position: fixed !important;
               height: 3.75rem;
               z-index: 10;
+              width: 100%;
             }
           }
 
@@ -222,57 +217,15 @@
           float: #{$left};
         }
       }
-
-      // .basic-details-wrapper & {
-      //   @include breakpoint($upto-desktop) {
-      //     @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.375rem) {
-      //       #{$right}: 1rem;
-      //       top: 1.875rem;
-      //     }
-      //   }
-
-      //   @include breakpoint($upto-desktop) {
-      //     @include select-style(70%);
-
-      //     margin-top: 1.75rem;
-      //     height: 3.1875rem;
-      //     border: 0;
-      //     padding-#{$left}: 0;
-      //     padding-#{$right}: 0.5rem;
-      //     margin-bottom: 2.1875rem;
-
-      //     &::after {
-      //       #{$right}: 1.5rem;
-
-      //       html[lang=ar] & {
-      //         #{$right}: 1.5rem;
-      //       }
-      //     }
-      //   }
-
-      //   select.form-select {
-      //     @include breakpoint($upto-desktop) {
-      //       height: 3.1875rem;
-      //       font-size: 1.125rem;
-      //       color: $pdp_product_volume_value;
-      //       padding-#{$left}: 1rem;
-
-      //       html[lang=ar] & {
-      //         direction: ltr;
-      //       }
-      //     }
-
-      //     @include breakpoint($only-tablet) {
-      //       font-size: 0.75rem;
-      //       position: relative !important;
-      //     }
-      //   }
-      // }
     }
   }
 }
 
 #configurable_ajax {
+  @include breakpoint($upto-desktop) {
+    margin-bottom: 1rem;
+  }
+
   .select2Option {
     display: flex;
     flex-flow: column wrap;
@@ -319,10 +272,6 @@
       display: flex;
       flex-flow: row wrap;
 
-      h4.list-title {
-        // border: 2px solid green;
-      }
-
       .size-guide-placeholder {
         .size-guide-pipe {
           padding-#{$left}: 1rem;
@@ -363,10 +312,6 @@
           }
         }
       }
-
-      select.form-select {
-        // border: 2px solid red;
-      }
     }
   }
 }
@@ -375,7 +320,7 @@
   .basic-details-wrapper {
     .field--name-field-skus {
       .sku-base-form {
-        button[type="submit"] {
+        button[type='submit'] {
           @include breakpoint($only-tablet) {
             padding: 0.5rem 1.25rem;
             #{$left}: 0;
@@ -432,10 +377,6 @@
 .ui-dialog,
 .acq-content-product {
   .form-item-configurables-size {
-    .select2-container {
-      // display: none;
-    }
-
     .select2Option {
       @include breakpoint($mobile) {
         @include u-visibility(block);
