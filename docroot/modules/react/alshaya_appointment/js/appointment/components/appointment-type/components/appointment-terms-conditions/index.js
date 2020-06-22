@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class AppointmentAck extends React.Component {
+export default class AppointmentTermsConditions extends React.Component {
   handleChange = (e) => {
     const { handleChange } = this.props;
     handleChange(e);
@@ -9,20 +9,20 @@ export default class AppointmentAck extends React.Component {
   render() {
     const { activeItem } = this.props;
     return (
-      <div className="appointment-ack-wrapper">
+      <div className="appointment-terms-conditions-wrapper">
         <input
           type="checkbox"
-          name="appointmentAck"
+          name="appointmentTermsConditions"
           checked={activeItem}
           onChange={this.handleChange}
         />
-        <div className="appointment-ack-inner-wrapper">
+        <div className="appointment-terms-conditions-inner-wrapper">
           <label>
             {Drupal.t('Please tick to confirm the following')}
             *
           </label>
           <div className="">
-            {window.drupalSettings.alshaya_appointment.getAppointmentAckText}
+            {window.drupalSettings.alshaya_appointment.appointmentTermsConditionsText}
           </div>
         </div>
       </div>

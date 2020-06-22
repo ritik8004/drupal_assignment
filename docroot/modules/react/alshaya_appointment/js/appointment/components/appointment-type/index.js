@@ -3,8 +3,10 @@ import AppointmentCategories from './components/appointment-categories';
 import AppointmentTypeList from './components/appointment-type-list';
 import AppointmentCompanion from './components/appointment-companion';
 import AppointmentForYou from './components/appointment-for-you';
-import AppointmentAck from './components/appointment-ack';
+import AppointmentTermsConditions from './components/appointment-terms-conditions';
 import fetchAPIData from '../../../utilities/api/fetchApiData';
+
+const defaultSelectOption = Drupal.t('Please Select');
 
 export default class AppointmentType extends React.Component {
   constructor(props) {
@@ -20,9 +22,10 @@ export default class AppointmentType extends React.Component {
         appointmentType: '',
         appointmentCompanion: '',
         appointmentForYou: '',
-        appointmentAck: '',
-        appointmentTypeItems: [{ id: '', name: 'Please Select' }],
+        appointmentTermsConditions: '',
+        appointmentTypeItems: [{ id: '', name: defaultSelectOption }],
         categoryItems: '',
+        appointmentCompanionItems: [{ value: '', label: defaultSelectOption }, { value: '1', label: '1' }],
       };
     }
   }
@@ -72,7 +75,7 @@ export default class AppointmentType extends React.Component {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           this.setState({
-            appointmentTypeItems: [{ id: '', name: 'Please Select' }, ...result.data],
+            appointmentTypeItems: [{ id: '', name: defaultSelectOption }, ...result.data],
           });
         }
       });
@@ -83,11 +86,12 @@ export default class AppointmentType extends React.Component {
     const {
       categoryItems,
       appointmentTypeItems,
+      appointmentCompanionItems,
       appointmentCategory,
       appointmentType,
       appointmentCompanion,
       appointmentForYou,
-      appointmentAck,
+      appointmentTermsConditions,
     } = this.state;
 
     return (
@@ -109,6 +113,7 @@ export default class AppointmentType extends React.Component {
         { appointmentCategory && appointmentType
           ? (
             <AppointmentCompanion
+              appointmentCompanionItems={appointmentCompanionItems}
               handleChange={this.handleChange}
               activeItem={appointmentCompanion}
             />
@@ -124,9 +129,9 @@ export default class AppointmentType extends React.Component {
           : null}
         { appointmentCategory && appointmentType && appointmentCompanion && appointmentForYou
           ? (
-            <AppointmentAck
+            <AppointmentTermsConditions
               handleChange={this.handleChange}
-              activeItem={appointmentAck}
+              activeItem={appointmentTermsConditions}
             />
           )
           : null}
@@ -137,7 +142,7 @@ export default class AppointmentType extends React.Component {
             && appointmentType
             && appointmentCompanion
             && appointmentForYou
-            && appointmentAck)}
+            && appointmentTermsConditions)}
           onClick={this.handleSubmit}
         >
           {Drupal.t('Continue')}

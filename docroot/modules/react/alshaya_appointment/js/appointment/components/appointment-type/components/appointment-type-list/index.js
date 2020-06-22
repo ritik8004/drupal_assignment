@@ -42,8 +42,8 @@ export default class AppointmentTypeList extends React.Component {
             ? (
               <ReadMoreAndLess
                 charLimit={250}
-                readMoreText="Read More"
-                readLessText="Show Less"
+                readMoreText={Drupal.t('Read More')}
+                readLessText={Drupal.t('Show Less')}
               >
                 {description}
               </ReadMoreAndLess>

@@ -52,16 +52,14 @@ class ConfigurationServices {
    *   Location External Id.
    */
   private function getlocationExternalId() {
-    $client = $this->client->getSoapClient(self::WSDL_CONFIGURATION_SERVICES_URL);
-    $param = ['locationGroupExtId' => 'Boots'];
-
-    if (empty($client)) {
-      $this->logger->error('Empty soap client.');
-    }
-
     try {
+      $client = $this->client->getSoapClient(self::WSDL_CONFIGURATION_SERVICES_URL);
+
+      $param = ['locationGroupExtId' => 'Boots'];
       $result = $client->__soapCall('getLocationGroup', [$param]);
       $locationExternalId = $result->return->locationGroup->locationExternalIds;
+
+      return $locationExternalId;
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting locationExternalId. Message: @message', [
@@ -70,8 +68,6 @@ class ConfigurationServices {
 
       throw $e;
     }
-
-    return $locationExternalId;
   }
 
   /**
@@ -81,14 +77,10 @@ class ConfigurationServices {
    *   Program data from API.
    */
   public function getPrograms() {
-    $client = $this->client->getSoapClient(self::WSDL_CONFIGURATION_SERVICES_URL);
-    $param = ['locationExternalId' => $this->getlocationExternalId()];
-
-    if (empty($client)) {
-      $this->logger->error('Empty soap client.');
-    }
-
     try {
+      $client = $this->client->getSoapClient(self::WSDL_CONFIGURATION_SERVICES_URL);
+
+      $param = ['locationExternalId' => $this->getlocationExternalId()];
       $result = $client->__soapCall('getPrograms', [$param]);
       $programs = $result->return->programs;
       $programData = [];
@@ -102,6 +94,7 @@ class ConfigurationServices {
         }
       }
 
+      return new JsonResponse($programData);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting programs. Message: @message', [
@@ -110,8 +103,6 @@ class ConfigurationServices {
 
       throw $e;
     }
-
-    return new JsonResponse($programData);
   }
 
   /**
@@ -121,18 +112,14 @@ class ConfigurationServices {
    *   Program data from API.
    */
   public function getActivities(Request $request) {
-    $client = $this->client->getSoapClient(self::WSDL_CONFIGURATION_SERVICES_URL);
-    $program = $request->query->get('program');
-    $param = [
-      'locationExternalId' => $this->getlocationExternalId(),
-      'programExternalId' => $program,
-    ];
-
-    if (empty($client)) {
-      $this->logger->error('Empty soap client.');
-    }
-
     try {
+      $client = $this->client->getSoapClient(self::WSDL_CONFIGURATION_SERVICES_URL);
+
+      $program = $request->query->get('program');
+      $param = [
+        'locationExternalId' => $this->getlocationExternalId(),
+        'programExternalId' => $program,
+      ];
       $result = $client->__soapCall('getActivities', [$param]);
       $activities = $result->return->activities;
       $activityData = [];
@@ -142,11 +129,12 @@ class ConfigurationServices {
           $activityData[] = [
             'id' => $activity->activityExternalId,
             'name' => $activity->activityName,
-            'description' => $activity->activityName . ' SOnam',
+            'description' => $activity->description,
           ];
         }
       }
 
+      return new JsonResponse($activityData);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting activities. Message: @message', [
@@ -155,8 +143,6 @@ class ConfigurationServices {
 
       throw $e;
     }
-
-    return new JsonResponse($activityData);
   }
 
 }

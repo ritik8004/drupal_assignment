@@ -1,10 +1,5 @@
 import React from 'react';
 
-const AppointmentCompanionItems = [
-  { value: '', label: 'Please Select' },
-  { value: '1', label: '1' },
-];
-
 export default class AppointmentCompanion extends React.Component {
   handleChange = (e) => {
     const { handleChange } = this.props;
@@ -12,7 +7,7 @@ export default class AppointmentCompanion extends React.Component {
   }
 
   render() {
-    const { activeItem } = this.props;
+    const { appointmentCompanionItems, activeItem } = this.props;
     return (
       <div className="appointment-companion-wrapper">
         <label>
@@ -24,7 +19,7 @@ export default class AppointmentCompanion extends React.Component {
           name="appointmentCompanion"
           onChange={this.handleChange}
         >
-          {AppointmentCompanionItems.map((v) => (
+          {appointmentCompanionItems.map((v) => (
             <option
               value={v.value}
               selected={activeItem === v.value}
