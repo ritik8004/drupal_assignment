@@ -42,7 +42,7 @@ class ConfigurationServices {
    * @param \App\Service\SoapClient $client
    *   Soap client service.
    * @param \App\Helper\APIHelper $api_helper
-   *   Soap client service.
+   *   API Helper.
    */
   public function __construct(LoggerInterface $logger,
                               SoapClient $client,

@@ -1,2 +1,3 @@
 appointment_companion_limit: 10
 appointment_terms_conditions_text: ''
+local_storage_expire: 600000
