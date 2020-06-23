@@ -46,22 +46,53 @@ function alshaya_mu_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
 function _alshaya_mu_transac_get_product_description($sku_entity) {
   $return = [];
 
-  if ($short_desc_1 = $sku_entity->get('attr_short_description1')->getString()) {
-    $return['short_desc'][] = [
-      '#markup' => $short_desc_1,
+  if ($body = $sku_entity->get('attr_description')->getString()) {
+    $return['short_desc']['value'] = [
+      '#markup' => $body,
     ];
+  }
+
+  if ($short_desc_1 = $sku_entity->get('attr_short_description1')->getString()) {
+    if (empty($return['short_desc'])) {
+      $return['short_desc']['value'] = [
+        '#markup' => $short_desc_1,
+      ];
+    }
   }
 
   if ($short_desc_2 = $sku_entity->get('attr_short_description2')->getString()) {
-    $return['short_desc'][] = [
-      '#markup' => $short_desc_2,
-    ];
+    if (empty($return['short_desc'])) {
+      $return['short_desc']['value'] = [
+        '#markup' => $short_desc_2,
+      ];
+    }
   }
 
-  if ($body = $sku_entity->get('attr_description')->getString()) {
-    $return['short_desc'][] = [
-      '#markup' => $body,
+  if ($overview = $sku_entity->get('attr_description')->getValue()) {
+    $overview_desc['label'] = [
+      '#markup' => t('Overview'),
     ];
+    $overview_desc['value'] = [
+      '#markup' => $overview[0]['value'],
+    ];
+
+    $return['description'][] = $overview_desc;
+  }
+
+  if ($short_desc_1 = $sku_entity->get('attr_short_description1')->getString()) {
+    $attr_short_description1_desc['value'] = [
+      '#markup' => $short_desc_1,
+    ];
+
+    $return['description'][] = $attr_short_description1_desc;
+  }
+
+  if ($short_desc_2 = $sku_entity->get('attr_short_description2')->getString()) {
+    $attr_short_description2_desc['value'] = [
+      '#markup' => $short_desc_2,
+    ];
+
+    $return['description'][] = $attr_short_description2_desc;
   }
 
   if ($attr_country_important_point = $sku_entity->get('attr_country_important_point')->getString()) {
