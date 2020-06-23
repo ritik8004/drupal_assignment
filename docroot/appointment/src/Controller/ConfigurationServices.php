@@ -6,17 +6,13 @@ use Psr\Log\LoggerInterface;
 use App\Service\SoapClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use App\Helper\APIHelper;
+use App\Helper\APIServicesUrls;
 
 /**
  * Class ConfigurationServices.
  */
 class ConfigurationServices {
-
-  /**
-   * WSDL configuration service url.
-   */
-  const WSDL_CONFIGURATION_SERVICES_URL = 'https://api-stage.timetradesystems.co.uk/soap/ConfigurationServices?wsdl';
-
   /**
    * Logger service.
    *
@@ -32,42 +28,28 @@ class ConfigurationServices {
   protected $client;
 
   /**
+   * APIHelper.
+   *
+   * @var \App\Helper\APIHelper
+   */
+  protected $apiHelper;
+
+  /**
    * ConfigurationServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
    * @param \App\Service\SoapClient $client
    *   Soap client service.
+   * @param \App\Helper\APIHelper $api_helper
+   *   API Helper.
    */
   public function __construct(LoggerInterface $logger,
-                              SoapClient $client) {
+                              SoapClient $client,
+                              APIHelper $api_helper) {
     $this->logger = $logger;
     $this->client = $client;
-  }
-
-  /**
-   * Get Location External Id.
-   *
-   * @return string
-   *   Location External Id.
-   */
-  private function getlocationExternalId() {
-    try {
-      $client = $this->client->getSoapClient(self::WSDL_CONFIGURATION_SERVICES_URL);
-
-      $param = ['locationGroupExtId' => 'Boots'];
-      $result = $client->__soapCall('getLocationGroup', [$param]);
-      $locationExternalId = $result->return->locationGroup->locationExternalIds;
-
-      return $locationExternalId;
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Error occurred while getting locationExternalId. Message: @message', [
-        '@message' => $e->getMessage(),
-      ]);
-
-      throw $e;
-    }
+    $this->apiHelper = $api_helper;
   }
 
   /**
@@ -78,9 +60,9 @@ class ConfigurationServices {
    */
   public function getPrograms() {
     try {
-      $client = $this->client->getSoapClient(self::WSDL_CONFIGURATION_SERVICES_URL);
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
 
-      $param = ['locationExternalId' => $this->getlocationExternalId()];
+      $param = ['locationExternalId' => $this->apiHelper->getlocationExternalId(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL)];
       $result = $client->__soapCall('getPrograms', [$param]);
       $programs = $result->return->programs;
       $programData = [];
@@ -113,11 +95,11 @@ class ConfigurationServices {
    */
   public function getActivities(Request $request) {
     try {
-      $client = $this->client->getSoapClient(self::WSDL_CONFIGURATION_SERVICES_URL);
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
 
       $program = $request->query->get('program');
       $param = [
-        'locationExternalId' => $this->getlocationExternalId(),
+        'locationExternalId' => $this->apiHelper->getlocationExternalId(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL),
         'programExternalId' => $program,
       ];
       $result = $client->__soapCall('getActivities', [$param]);

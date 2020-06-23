@@ -22,7 +22,7 @@ export default class AppointmentTermsConditions extends React.Component {
             *
           </label>
           <div className="">
-            {window.drupalSettings.alshaya_appointment.appointmentTermsConditionsText}
+            {window.drupalSettings.alshaya_appointment.appointment_terms_conditions_text}
           </div>
         </div>
       </div>

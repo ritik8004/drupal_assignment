@@ -5,13 +5,20 @@ import AppointmentCompanion from './components/appointment-companion';
 import AppointmentForYou from './components/appointment-for-you';
 import AppointmentTermsConditions from './components/appointment-terms-conditions';
 import fetchAPIData from '../../../utilities/api/fetchApiData';
+import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
 const defaultSelectOption = Drupal.t('Please Select');
+const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
+
+const companionItems = [...Array(listItems + 1)].map((e, i) => {
+  const companionNum = (i === 0) ? defaultSelectOption : i;
+  return { value: i, label: companionNum };
+});
 
 export default class AppointmentType extends React.Component {
   constructor(props) {
     super(props);
-    const localStorageValues = JSON.parse(localStorage.getItem('appointment_data'));
+    const localStorageValues = getStorageInfo();
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
@@ -25,34 +32,12 @@ export default class AppointmentType extends React.Component {
         appointmentTermsConditions: '',
         appointmentTypeItems: [{ id: '', name: defaultSelectOption }],
         categoryItems: '',
-        appointmentCompanionItems: [{ value: '', label: defaultSelectOption }, { value: '1', label: '1' }],
+        appointmentCompanionItems: companionItems,
       };
     }
   }
 
   componentDidMount() {
-    this.fetchPrograms();
-  }
-
-  handleCategoryClick = (category) => {
-    this.fetchActivities(category.id);
-    this.setState({
-      appointmentCategory: category.name,
-    });
-  }
-
-  handleChange = (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    this.setState({
-      [e.target.name]: value,
-    });
-  }
-
-  handleSubmit = () => {
-    localStorage.setItem('appointment_data', JSON.stringify(this.state));
-  }
-
-  fetchPrograms = () => {
     const apiUrl = '/get/programs';
     const apiData = fetchAPIData(apiUrl);
 
@@ -67,8 +52,8 @@ export default class AppointmentType extends React.Component {
     }
   }
 
-  fetchActivities = (categoryId) => {
-    const apiUrl = `/get/activities?program=${categoryId}`;
+  handleCategoryClick = (category) => {
+    const apiUrl = `/get/activities?program=${category.id}`;
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
@@ -76,10 +61,22 @@ export default class AppointmentType extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           this.setState({
             appointmentTypeItems: [{ id: '', name: defaultSelectOption }, ...result.data],
+            appointmentCategory: category.name,
           });
         }
       });
     }
+  }
+
+  handleChange = (e) => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    this.setState({
+      [e.target.name]: value,
+    });
+  }
+
+  handleSubmit = () => {
+    setStorageInfo(this.state);
   }
 
   render() {
