@@ -77,6 +77,8 @@ class APIWrapper implements APIWrapperInterface {
    *   API Helper service object.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   Event Dispatcher.
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   *   Lock service.
    */
   public function __construct(ClientFactory $client_factory,
                               ConfigFactoryInterface $config_factory,
@@ -298,9 +300,6 @@ class APIWrapper implements APIWrapperInterface {
     $result = [];
 
     $lock_name = 'place_order_' . $cart_id;
-
-    var_dump($lock_name);
-    die();
 
     if ($this->lock->acquire($lock_name)) {
       try {

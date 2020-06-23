@@ -67,6 +67,8 @@ class AlshayaAcmApiWrapper extends APIWrapper {
    *   Event Dispatcher.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api
    *   Alshaya API.
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   *   Lock service.
    */
   public function __construct(ClientFactory $client_factory,
                               ConfigFactoryInterface $config_factory,
