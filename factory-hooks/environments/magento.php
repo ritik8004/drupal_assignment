@@ -576,12 +576,12 @@ $magentos = [
     ],
   ],
   'mu_uat' => [
-    'url' => 'https://aeo-uat.store.alshaya.com',
+    'url' => 'https://muji-uat.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => 'ydzr7xpvfjlzbwvce9tza471n7juuwhe',
-      'consumer_secret' => 'tqseptjwftwhrua330kjem7jnurclhbx',
-      'access_token' => 'ofsq77eipss5gshgvj931q603ij7eiqw',
-      'access_token_secret' => '24phqz567kp2fkt86tocb6exkwcittmq',
+      'consumer_key' => 'cd2hqmtyqht62jka3w54jm1bdd9zdlhq',
+      'consumer_secret' => 'x00pjn155x2aoah9e782rokxdc0v5hc1',
+      'access_token' => 'c4vbucn0mw17usii8locm564lmhzq53f',
+      'access_token_secret' => 'l6ngd0xnrssi8z918egboaklgobofj69',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 16],

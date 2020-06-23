@@ -3,9 +3,10 @@
     .sticky-filter-wrapper {
       .c-collapse-item {
         .c-collapse__title {
-          @include facet-arrow(after, down, 0.25rem, 0, 0.25rem, 0.25rem) {
+          @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.3125rem) {
             #{$right}: 1.875rem;
-            top: 1.25rem;
+            top: 1.16rem;
+            background: none;
           }
 
           &.active {
@@ -16,5 +17,10 @@
         }
       }
     }
+  }
+
+  .c-page-title {
+    font-family: $muji-helvetica-neue-bold;
+    font-size: 1.5rem;
   }
 }

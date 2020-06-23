@@ -255,7 +255,6 @@ header.c-header {
         height: 1.875rem;
         width: 1.6875rem;
         #{$left}: 0.3125rem;
-        background-size: 1.4375rem;
 
         html[lang=ar] & {
           right: -0.25rem;
@@ -315,6 +314,7 @@ header.c-header {
     #mini-cart-wrapper {
       @include breakpoint($only-tablet) {
         margin-top: 0;
+        padding-top: 0.3125rem;
 
         .block-cart-mini-block .cart-link,
         .block-alshaya-react-mini-cart .cart-link {
@@ -332,6 +332,16 @@ header.c-header {
         top: 0;
         left: 0.0625rem;
       }
+    }
+  }
+
+  .block-alshaya-react-mini-cart {
+    @include breakpoint($upto-tablet) {
+      display: block !important;
+    }
+
+    @include breakpoint($only-tablet) {
+      top: 0;
     }
   }
 
@@ -568,6 +578,16 @@ header {
       top: 0.9375rem;
       padding: 0.625rem;
       margin: 0;
+
+      @include breakpoint($only-tablet) {
+        padding-top: 0.75rem;
+      }
+
+      html[lang=ar] & {
+        @include breakpoint($only-tablet) {
+          padding-top: 0.8125rem;
+        }
+      }
     }
   }
 

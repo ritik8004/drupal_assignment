@@ -1,6 +1,7 @@
 #lightSlider {
   @include breakpoint($desktop) {
-    height: 39.875rem;
+    height: 39.075rem;
+    margin-top: 0.9375rem;
   }
 
   @include breakpoint($only-tablet) {
@@ -9,8 +10,8 @@
 
   .slick-slide {
     @include breakpoint($desktop) {
-      width: 4.875rem !important;
-      height: 6.5rem !important;
+      width: 5rem !important;
+      height: 5rem !important;
       padding: 0;
     }
 
@@ -20,10 +21,13 @@
     }
 
     img {
-      height: 6.25rem;
+      height: 4.8125rem;
+      width: 5rem;
+      object-fit: cover;
 
       @include breakpoint($only-tablet) {
         height: 7.25rem;
+        width: 6.25rem;
       }
     }
   }
@@ -51,6 +55,20 @@
         html[lang=ar] & {
           @include breakpoint($desktop) {
             transform: rotate(0deg);
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-pdp {
+  .acq-content-product {
+    .cloudzoom__thumbnails {
+      #lightSlider {
+        .slick-list {
+          @include breakpoint($desktop) {
+            height: 34.0625rem !important;
           }
         }
       }
@@ -129,7 +147,7 @@
       #lightSlider {
         .slick-list {
           @include breakpoint($desktop) {
-            height: 28.25rem !important;
+            height: 28.25rem;
           }
         }
       }

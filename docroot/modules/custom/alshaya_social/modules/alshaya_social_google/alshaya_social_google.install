@@ -39,9 +39,9 @@ function alshaya_social_google_install() {
   }
   $config->save();
 
-  // Set google social auth disable by default.
+  // Set google social auth enabled by default.
   \Drupal::configFactory()->getEditable('alshaya_social.settings')
-    ->set('social_networks.social_auth_google', 0)
+    ->set('social_networks.social_auth_google', 1)
     ->save();
 
   $strings = [

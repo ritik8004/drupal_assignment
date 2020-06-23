@@ -65,6 +65,12 @@ function alshaya_pbk_transac_install() {
       'en' => 'Pottery Barn Kids',
       'ar' => 'بوتري بارن',
     ],
+    'get email offers and the latest news from @site_name' => [
+      'en' => 'Get email offers & the latest news from Pottery Barn Kids.',
+    ],
+    'sign up' => [
+      'en' => 'Submit',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 

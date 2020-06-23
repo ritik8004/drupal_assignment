@@ -7,6 +7,8 @@
 
   li {
     @include breakpoint($upto-desktop) {
+      border-bottom: none;
+
       &::after {
         content: '';
       }
@@ -21,11 +23,26 @@
     @include breakpoint($upto-desktop) {
       color: $seconday_menu_link;
       text-transform: capitalize;
-      font-size: 0.8125rem;
+      font-size: 1.25rem;
 
       &:hover {
         color: inherit;
         background: none;
+      }
+
+      &::after {
+        content: ' ';
+        background: url('../imgs/icons/forward-arrow.svg') center #{$right}/100% no-repeat;
+        display: block;
+        height: 100%;
+        position: absolute;
+        #{$right}: 1.25rem;
+        top: 0;
+        width: 1rem;
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
       }
     }
 

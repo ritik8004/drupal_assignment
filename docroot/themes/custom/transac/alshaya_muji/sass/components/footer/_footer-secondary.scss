@@ -15,6 +15,7 @@
 .c-footer__copy {
   .field--name-body {
     p {
+      font-family: $muji-helvetica-neue;
       font-size: 0.75rem;
       margin-bottom: 0;
 
@@ -67,17 +68,14 @@
 }
 
 .region__footer-secondary {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: center;
-
   .c-footer__copy {
-    order: 1;
-
     @include breakpoint($tablet) {
-      flex-basis: 85%;
-      margin-#{$right}: 0;
+      float: $left;
+
+      .country-ae & {
+        float: $left;
+        width: auto;
+      }
     }
 
     @include breakpoint($only-mobile) {
@@ -100,17 +98,8 @@
   }
 
   .c-footer__logos {
-    order: 2;
-
     @include breakpoint($tablet) {
-      padding-#{$left}: 1.5rem;
-      padding-#{$right}: 0;
-      line-height: normal;
-      margin-top: 0.375rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      flex-basis: 100%;
+      float: $right;
     }
 
     li {

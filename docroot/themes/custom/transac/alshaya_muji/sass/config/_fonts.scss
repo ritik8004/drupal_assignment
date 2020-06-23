@@ -2,45 +2,72 @@
 $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
 
 @font-face {
-  font-family: "AvenirNext-DemiBold";
-  src: url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.eot");
+  font-family: "Helvetica";
+  src: url("#{$base_theme_fonts_directory_path}/Helvetica.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/Helvetica.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "AvenirNext";
-  src: url("#{$base_theme_fonts_directory_path}/AvenirNext.eot");
+  font-family: "Helvetica-Light";
+  src: url("#{$base_theme_fonts_directory_path}/Helvetica-Light.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/AvenirNext.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNext.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNext.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNext.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNext.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNext.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Light.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Light.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Light.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "AvenirNextLTW01-Regular";
-  src: url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.eot");
+  font-family: "Helvetica-Bold";
+  src: url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Bold?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("#{$base_theme_fonts_directory_path}/HelveticaNeue.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HelveticaNeue-Medium";
+  src: url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HelveticaNeue-Bold";
+  src: url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -77,28 +104,33 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
 }
 
 // Font Family
-$aeo-bold: 'AvenirNext-DemiBold', 'Tahoma-Bold', 'Arial';
-$aeo-bold-nodir: 'AvenirNext-DemiBold', 'Tahoma-Bold', 'Arial';
+$muji-regular: 'Helvetica', 'Arial';
+$muji-regular-nodir: 'Helvetica', 'Arial';
 
-$aeo-thin: 'AvenirNext', 'Tahoma', 'Arial';
-$aeo-thin-nodir: 'AvenirNext', 'Tahoma', 'Arial';
+$muji-light: 'Helvetica-Light', 'Tahoma', 'Arial';
+$muji-light-nodir: 'Helvetica-Light', 'Tahoma', 'Arial';
 
-$aeo-regular: 'AvenirNextLTW01-Regular', 'Tahoma', 'Arial';
-$aeo-regular-nodir: 'AvenirNextLTW01-Regular', 'Tahoma', 'Arial';
+$muji-demibold: 'HelveticaNeue-Medium', 'Tahoma-Bold', 'Arial';
+$muji-demibold-nodir: 'HelveticaNeue-Medium', 'Tahoma-Bold', 'Arial';
 
-$aeo-arabic-bold: 'Tahoma-Bold', 'AvenirNext-DemiBold', 'Arial';
-$aeo-arabic-bold-nodir: 'Tahoma-Bold', 'AvenirNext-DemiBold', 'Arial';
+$muji-bold: 'Helvetica-Bold', 'Arial';
+$muji-bold-nodir: 'Helvetica-Bold', 'Arial';
 
-$aeo-arabic-thin: 'Tahoma', 'AvenirNext', 'Arial';
-$aeo-arabic-thin-nodir: 'Tahoma', 'AvenirNext', 'Arial';
+$muji-helvetica-neue: 'HelveticaNeue', 'Tahoma', 'Arial';
+$muji-helvetica-neue-nodir: 'HelveticaNeue', 'Tahoma', 'Arial';
 
-// @todo: font files are missing as of now. Create these variables for consistency.
-$muji-helvetica: 'Helvetica', 'AvenirNext', 'Tahoma', 'Arial';
-$muji-helvetica-neue-bold: 'HelveticaNeue-Bold', 'AvenirNext-DemiBold', 'Tahoma-Bold', 'Arial';
+$muji-helvetica-neue-bold: 'HelveticaNeue-Bold', 'Tahoma-Bold', 'Arial';
+$muji-helvetica-neue-bold-nodir: 'HelveticaNeue-Bold', 'Tahoma-Bold', 'Arial';
 
-$arial: $muji-helvetica;
-$arial-nodir: $aeo-thin-nodir;
-$alshaya-bold: $muji-helvetica-neue-bold;
-$alshaya-arabic-bold: $aeo-arabic-bold;
-$alshaya-thin: $muji-helvetica;
-$alshaya-arabic-thin: $aeo-arabic-thin;
+$muji-arabic-thin: 'Helvetica', 'Tahoma', 'Arial';
+$muji-arabic-thin-nodir: 'Helvetica', 'Tahoma', 'Arial';
+
+$muji-arabic-bold: 'Helvetica-Bold', 'Tahoma-Bold', 'Arial';
+$muji-arabic-bold-nodir: 'Helvetica-Bold', 'Tahoma-Bold', 'Arial';
+
+$arial: $muji-regular;
+$arial-nodir: $muji-regular-nodir;
+$alshaya-thin: $muji-regular;
+$alshaya-bold: $muji-bold;
+$alshaya-arabic-thin: $muji-arabic-thin;
+$alshaya-arabic-bold: $muji-arabic-bold;
