@@ -452,8 +452,9 @@ class Cart {
     // not set. City with value 'NONE' means, that this was added in CnC
     // by default and not changed by user.
     if ($update_billing
-      && (empty($cart['cart']['billing_address']['firstname'])
-      || $cart['cart']['billing_address']['city'] == 'NONE')) {
+      || (empty($cart['cart']['billing_address']['firstname'])
+        || $cart['cart']['billing_address']['city'] == 'NONE')
+    ) {
       $cart = $this->updateBilling($data['shipping']['shipping_address']);
     }
 
