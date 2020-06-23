@@ -20,7 +20,7 @@ class SoapClient {
   /**
    * LoggerInterface.
    *
-   * @var \\Psr\Log\LoggerInterface
+   * @var \Psr\Log\LoggerInterface
    */
   protected $logger;
 
@@ -52,9 +52,15 @@ class SoapClient {
   public function getSoapClient($wsdl) {
     try {
       $appointment_settings = $this->settings->getSettings('appointment_settings');
-
       $username = $appointment_settings['username'] ?? '';
       $password = $appointment_settings['password'] ?? '';
+
+      if (empty($username) || empty($password)) {
+        $message = 'Time trade credentials are not set.';
+
+        $this->logger->log($message);
+        throw new \Exception($message);
+      }
 
       $headerNS = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
       $passwordNS = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText';
