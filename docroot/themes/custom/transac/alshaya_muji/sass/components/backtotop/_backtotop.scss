@@ -27,6 +27,8 @@
 .nodetype--acq_product {
   #backtotop {
     @include breakpoint($only-mobile) {
+      line-height: 7.5rem;
+
       &::after {
         margin-top: 0;
       }

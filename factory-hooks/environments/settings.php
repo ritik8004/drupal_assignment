@@ -309,8 +309,30 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
     'mu' => [
       'default' => [
         'default' => [
+          'social_auth_google.settings' => [
+            'client_id' => '470888570837-s24e1ldao2bhmkhjtbdcmh65aavqer9c.apps.googleusercontent.com',
+            'client_secret' => '0KcWSq0fcdaKilaujMPB8a13',
+          ],
           'google_tag.container.primary' => [
             'container_id' => 'GTM-NHZ6KSS',
+          ],
+        ],
+      ],
+    ],
+    'bp' => [
+      'default' => [
+        'default' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9877008',
+          ],
+          'live' => [
+            'exponea.settings' => [
+              "name" => "Boots",
+              "short_name" => "BP",
+            ],
+            'dynamic_yield.settings' => [
+              'section_id' => '9877013',
+            ],
           ],
         ],
       ],

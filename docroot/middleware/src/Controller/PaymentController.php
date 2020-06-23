@@ -35,6 +35,13 @@ class PaymentController {
   const PAYMENT_FAILED_VALUE = 'failed';
 
   /**
+   * Langcode used for external payments like K-Net/Checkout.com.
+   *
+   * @var string|null
+   */
+  public static $externalPaymentLangcode = NULL;
+
+  /**
    * RequestStack Object.
    *
    * @var \Symfony\Component\HttpFoundation\Request
@@ -174,6 +181,10 @@ class PaymentController {
 
       throw $e;
     }
+
+    // Set the langcode for processing as request from checkout.com doesn't
+    // contains language info.
+    static::$externalPaymentLangcode = $data['data']['langcode'];
 
     $cart = $this->cart->getCart();
 
@@ -344,6 +355,10 @@ class PaymentController {
 
       throw $e;
     }
+
+    // Set the langcode for processing as request from checkout.com doesn't
+    // contains language info.
+    static::$externalPaymentLangcode = $data['data']['langcode'];
 
     if ($state['data']['cart_id'] != $response['quote_id'] || $state['data']['order_id'] != $response['tracking_id']) {
       $this->logger->error('KNET response data dont match data in state variable.<br>POST: @message<br>Cart: @cart<br>State: @state', [
