@@ -3,10 +3,6 @@
     .block-facets-summary-blockfilter-bar-promotions,
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
-      @include breakpoint($only-mobile) {
-        padding-bottom: 1.25rem;
-      }
-
       .filter-list-label {
         text-transform: capitalize;
         font-size: 0.8125rem;
@@ -46,7 +42,6 @@
             text-transform: capitalize;
             color: $plp_facet_clear_text;
             letter-spacing: 1px;
-            text-decoration: underline;
           }
         }
       }
@@ -58,8 +53,14 @@
           @include breakpoint($only-mobile) {
             font-size: 1.5rem;
             padding: 0.75rem 0 1rem;
+            line-height: 1.75rem;
           }
         }
+      }
+
+      @include breakpoint($tablet) {
+        margin-bottom: 1.625rem;
+        line-height: 1.75rem;
       }
     }
 
@@ -80,8 +81,10 @@
     }
 
     .product-plp-detail-wrapper {
-      .price-block {
+      .price,
+      .special--price {
         font-family: $alshaya-bold;
+        font-size: 0.875rem;
       }
     }
 
@@ -117,46 +120,6 @@
   }
 
   .c-products-list {
-    &.product-small {
-      .c-products__item {
-        @include breakpoint($desktop) {
-          width: calc(100% / 3 - 1.5rem + 1.5rem / 3 - 0.01px);
-          margin-bottom: 3.8125rem;
-          margin-#{$left}: 1.5rem;
-
-          &:nth-of-type(4n+1) {
-            margin-#{$left}: 1.5rem;
-            clear: unset;
-          }
-
-          &:nth-of-type(3n+1) {
-            margin-#{$left}: 0;
-            clear: both;
-          }
-        }
-      }
-    }
-
-    &.product-large {
-      .c-products__item {
-        @include breakpoint($desktop) {
-          width: calc(100% / 2 - 1.5rem + 1.5rem / 2 - 0.01px);
-          margin-bottom: 3.8125rem;
-          margin-#{$left}: 1.5rem;
-
-          &:nth-of-type(3n+1) {
-            margin-#{$left}: 1.5rem;
-            clear: unset;
-          }
-
-          &:nth-of-type(2n+1) {
-            margin-#{$left}: 0;
-            clear: both;
-          }
-        }
-      }
-    }
-
     &.view-search {
       @include breakpoint($only-mobile) {
         padding-#{$left}: 0;
