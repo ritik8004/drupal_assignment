@@ -14,6 +14,7 @@ use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -22,6 +23,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class APIWrapper implements APIWrapperInterface {
 
   use \Drupal\acq_commerce\Conductor\AgentRequestTrait;
+
+  use StringTranslationTrait;
 
   /**
    * Error code used internally for API Down cases.
@@ -311,7 +314,7 @@ class APIWrapper implements APIWrapperInterface {
         ]
       );
 
-      throw new RouteException(__FUNCTION__, 'It looks like this is a second attempt to place your order. Please check your order history.');
+      throw new RouteException(__FUNCTION__, $this->t('Sorry, we were able to complete your purchase but something went wrong and we could not display the order confirmation page. Please review your past orders or contact our customer service team for assistance.'));
     }
 
     try {
