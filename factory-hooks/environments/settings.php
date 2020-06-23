@@ -319,6 +319,24 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
     ],
+    'bp' => [
+      'default' => [
+        'default' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9877008',
+          ],
+          'live' => [
+            'exponea.settings' => [
+              "name" => "Boots",
+              "short_name" => "BP",
+            ],
+            'dynamic_yield.settings' => [
+              'section_id' => '9877013',
+            ],
+          ],
+        ],
+      ],
+    ],
     'default' => [
       'default' => [
         'default' => [
