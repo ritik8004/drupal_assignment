@@ -15,6 +15,21 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Move concept filter to top in PLP page.
+ */
+function alshaya_hm_update_8051() {
+  $block_facets = [
+    'block.block.plpconcept',
+  ];
+
+  foreach ($block_facets as $config) {
+    \Drupal::configFactory()->getEditable($config)->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Make style and measurements_in_cm field type attribute from type string.
  */
 function alshaya_hm_update_8050() {
