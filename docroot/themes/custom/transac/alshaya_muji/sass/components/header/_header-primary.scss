@@ -268,7 +268,7 @@ header.c-header {
         background-position: 0 0.125rem;
 
         html[lang=ar] & {
-          margin-top: 0.5625rem;
+          margin-top: 0;
         }
       }
 
@@ -627,10 +627,6 @@ header {
       top: 0.875rem;
       #{$right}: inherit;
       #{$left}: 7.8%;
-    }
-
-    @include breakpoint($only-tablet) {
-      display: none;
     }
 
     @include breakpoint($only-mobile) {
