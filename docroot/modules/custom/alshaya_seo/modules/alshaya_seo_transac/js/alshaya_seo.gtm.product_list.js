@@ -12,7 +12,7 @@
       $(window).once('alshaya-seo-gtm-product-list').on('scroll load', debounce(function (event) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_impressions, $('.view-alshaya-product-list'), settings, event);
       }, 500));
-      $(window).once('alshaya-seo-gtm-product-list-unload').on('unload', function (event) {
+      $(window).once('alshaya-seo-gtm-product-list-pagehide').on('pagehide', function (event) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_impressions, $('.view-alshaya-product-list'), settings, event);
       });
     }
