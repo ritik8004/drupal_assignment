@@ -2,7 +2,6 @@ import React from 'react';
 import PdpSectionTitle from '../utilities/pdp-section-title';
 import ClickCollectStoreDetail from '../pdp-click-and-collect-store-detail';
 import PdpSectionText from '../utilities/pdp-section-text';
-import ClickCollectContent from '../pdp-click-and-collect-popup';
 import PdpClickCollectSearch from '../pdp-click-and-collect-search';
 
 export default class PdpClickCollect extends React.PureComponent {
@@ -13,36 +12,23 @@ export default class PdpClickCollect extends React.PureComponent {
       countLabel: false,
       stores: [{
         id: 'store-detail-1',
-        status_color: '#0abb76',
-        status_text: 'In stock',
         address_title: 'avenue mall phase 2b',
         address_details: 'mezannine above carrefour. the avenues mall phase-2 al rai',
       }, {
         id: 'store-detail-2',
-        status_color: '#cc0000',
-        status_text: 'Only a few left',
         address_title: 'avenue mall phase 2b',
         address_details: 'mezannine above carrefour. the avenues mall phase-2 al rai',
       }, {
         id: 'store-detail-3',
-        status_color: '#0abb76',
-        status_text: 'In Stock',
         address_title: 'avenue mall phase 2b',
         address_details: 'mezannine above carrefour. the avenues mall phase-2 al rai',
       }],
       location: '',
       hideInput: false,
       searchText: '',
+      showMore: false,
     };
   }
-
-  openModal = () => {
-    document.querySelector('body').classList.add('click-collect-overlay');
-  };
-
-  closeModal = () => {
-    document.querySelector('body').classList.remove('click-collect-overlay');
-  };
 
   textChange = (text) => {
     const txtLimitExceeded = (text.length > 3);
@@ -61,12 +47,19 @@ export default class PdpClickCollect extends React.PureComponent {
     });
   }
 
+  toggleShowMore = () => {
+    this.setState((prevState) => ({
+      showMore: !prevState.showMore,
+    }));
+  }
+
+  showClickCollectContent = () => {
+    document.querySelector('.magv2-pdp-click-and-collect-wrapper').classList.toggle('show-click-collect-content');
+  }
+
   render() {
     const {
-      skuCode, finalPrice, pdpProductPrice, title,
-    } = this.props;
-    const {
-      label, countLabel, stores, location, hideInput, searchText,
+      label, countLabel, stores, location, hideInput, searchText, showMore,
     } = this.state;
 
     return (
@@ -76,36 +69,30 @@ export default class PdpClickCollect extends React.PureComponent {
             {Drupal.t('click & collect')}
             <span className="click-collect-title-tag free-tag">{Drupal.t('free')}</span>
           </PdpSectionTitle>
+          <div className="magv2-accordion" onClick={this.showClickCollectContent} />
         </div>
-        <PdpSectionText className="click-collect-detail">
-          <span>{Drupal.t('order now and collect from the store of your choice in 1 to 2 days.')}</span>
-        </PdpSectionText>
-        <div className="instore-wrapper">
-          <div className="instore-title">{label}</div>
-          {countLabel ? (
-            <div className="store-count-label">
-              {Drupal.t('2 Stores at')}
-              {' '}
-              <span className="location-name" onClick={this.showInput}>{ location }</span>
-            </div>
-          ) : ''}
-          {hideInput ? '' : <PdpClickCollectSearch inputValue={searchText} onChange={this.textChange} />}
-        </div>
-        {countLabel ? stores.filter((store, key) => key < 2).map((store, key) => <ClickCollectStoreDetail key={store.id} index={key + 1} store={store} />) : ''}
-        {countLabel ? (
-          <div className="magv2-click-collect-showmore-link" onClick={() => this.openModal()}>
-            {Drupal.t('View all')}
+        <div className="magv2-click-collect-content-wrapper">
+          <PdpSectionText className="click-collect-detail">
+            <span>{Drupal.t('order now and collect from the store of your choice in 1 to 2 days.')}</span>
+          </PdpSectionText>
+          <div className="instore-wrapper">
+            <div className="instore-title">{label}</div>
+            {countLabel ? (
+              <div className="store-count-label">
+                {Drupal.t('2 Stores at')}
+                {' '}
+                <span className="location-name" onClick={this.showInput}>{ location }</span>
+              </div>
+            ) : ''}
+            {hideInput ? '' : <PdpClickCollectSearch inputValue={searchText} onChange={this.textChange} />}
           </div>
-        ) : '' }
-        <ClickCollectContent
-          closeModal={this.closeModal}
-          title={title.label}
-          pdpProductPrice={pdpProductPrice}
-          finalPrice={finalPrice}
-          skuCode={skuCode}
-          stores={stores}
-          key={title.label}
-        />
+          {countLabel ? stores.filter((store, key) => key < (showMore ? stores.length : 2)).map((store, key) => <ClickCollectStoreDetail key={store.id} index={key + 1} store={store} />) : ''}
+          {countLabel ? (
+            <div className="magv2-click-collect-show-link" onClick={this.toggleShowMore}>
+              {Drupal.t(showMore ? 'Show-less' : 'Show-more')}
+            </div>
+          ) : '' }
+        </div>
       </div>
     );
   }

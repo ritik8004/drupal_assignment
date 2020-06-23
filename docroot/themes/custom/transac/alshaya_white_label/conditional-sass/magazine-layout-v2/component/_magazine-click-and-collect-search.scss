@@ -1,5 +1,6 @@
 .location-field {
   position: relative;
+  width: 100%;
 
   &::before {
     content: '';
@@ -11,6 +12,10 @@
     margin: 0.9375rem;
     bottom: 0;
     #{$left}: 0;
+  }
+
+  input {
+    width: 100%;
   }
 }
 
