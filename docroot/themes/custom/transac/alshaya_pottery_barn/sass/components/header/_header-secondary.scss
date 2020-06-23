@@ -46,11 +46,3 @@
     display: none;
   }
 }
-
-.c-menu-secondary #block-welcomeuser {
-  display: none;
-
-  @include breakpoint($desktop) {
-    display: inline-block;
-  }
-}

@@ -37,3 +37,9 @@
     }
   }
 }
+
+.c-menu-secondary #block-welcomeuser {
+  @include breakpoint($upto-desktop) {
+    display: none;
+  }
+}
