@@ -241,7 +241,7 @@ class AlshayaAcmConfigCheck {
    * @param array $gtmContainerId
    *   Settings array with gtm container id.
    */
-  public function configureGtmContainerId(array $gtmContainerId) {
+  private function configureGtmContainerId(array $gtmContainerId) {
     $data = $this->configFactory->getEditable('google_tag.settings');
     $container_data = [];
     $container_config = $this->configFactory->getEditable('google_tag.container.primary');
