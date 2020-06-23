@@ -13,6 +13,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Site\Settings;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -299,14 +300,16 @@ class APIWrapper implements APIWrapperInterface {
 
     $result = [];
 
+    // Create a name to use for lock acquisition.
     $lock_name = 'place_order_' . $cart_id;
 
-    if ($this->lock->acquire($lock_name)) {
+    if (Settings::get('acq_commerce_lock_place_order', TRUE) && $this->lock->acquire($lock_name)) {
       try {
         $result = $this->tryAgentRequest($doReq, 'placeOrder');
         $this->lock->release($lock_name);
         $this->dispatcher->dispatch(OrderPlacedEvent::EVENT_NAME, new OrderPlacedEvent($result, $cart_id));
-      } catch (ConnectorException $e) {
+      }
+      catch (ConnectorException $e) {
         throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
       }
     }
@@ -316,6 +319,8 @@ class APIWrapper implements APIWrapperInterface {
           '@lock_name' => $lock_name,
         ]
       );
+
+      throw new RouteException(__FUNCTION__,'It looks like this is a second attempt to place your order. Please check your order history.');
     }
 
     return $result;
@@ -1093,7 +1098,8 @@ class APIWrapper implements APIWrapperInterface {
     };
     try {
       $result = $this->tryAgentRequest($doReq, 'getQueueStatus');
-    } catch (ConnectorException $e) {
+    }
+    catch (ConnectorException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());
     }
     return (int) $result['total'];
@@ -1113,7 +1119,8 @@ class APIWrapper implements APIWrapperInterface {
     };
     try {
       $this->tryAgentRequest($doReq, 'purgeQueue');
-    } catch (ConnectorException $e) {
+    }
+    catch (ConnectorException $e) {
       return FALSE;
     }
     return TRUE;
