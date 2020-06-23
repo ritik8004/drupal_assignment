@@ -249,25 +249,42 @@ body {
     }
   }
 
-  // Algolia positioning specific to frontpage.
-  &.frontpage:not(.no-sticky-algolia-search-bar) {
-    main .c-content {
+  &.frontpage {
+    .mobile--search {
       @include breakpoint($only-tablet) {
-        margin-top: 3.625rem;
+        display: none;
       }
     }
 
-    .block-alshaya-algolia-react-autocomplete {
+    &:not(.no-sticky-algolia-search-bar) {
       @include breakpoint($only-tablet) {
-        top: 4.5rem;
-        bottom: auto;
+        margin-top: 8.5625rem;
+      }
+
+      .block-alshaya-algolia-react-autocomplete {
+        @include breakpoint($only-tablet) {
+          top: 4.375rem;
+          bottom: auto;
+        }
+      }
+    }
+
+    &.header--fixed:not(.no-sticky-algolia-search-bar) {
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
       }
     }
   }
 
-  &.frontpage.header--fixed:not(.no-sticky-algolia-search-bar) {
-    @include breakpoint($only-mobile) {
-      margin-top: 0;
+  &:not(.frontpage) {
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($only-tablet) {
+        display: none !important;
+
+        &.show-algolia-search-bar {
+          display: block !important;
+        }
+      }
     }
   }
 }
