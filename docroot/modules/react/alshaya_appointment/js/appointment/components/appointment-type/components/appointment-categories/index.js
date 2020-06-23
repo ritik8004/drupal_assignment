@@ -17,7 +17,7 @@ export default class AppointmentCategories extends React.Component {
         <ul className="appointment-categories">
           { categoryItems && categoryItems.map((item) => (
             <li
-              className={activeItem === item.name ? 'appointment-category active' : 'appointment-category'}
+              className={activeItem === item.id ? 'appointment-category active' : 'appointment-category'}
               onClick={() => this.handleItemClick(item)}
             >
               <span className={`appointment-category-icon ${item.id}`} />

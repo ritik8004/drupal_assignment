@@ -21,15 +21,18 @@ class AlshayaAppointmentController extends ControllerBase {
   public function appointment() {
     $cache_tags = [];
 
-    $config = $this->config('alshaya_appointment.settings');
-    $cache_tags = Cache::mergeTags($cache_tags, $config->getCacheTags());
+    $alshaya_appointment_config = $this->config('alshaya_appointment.settings');
+    $store_finder_config = $this->config('alshaya_stores_finder.settings');
+
+    $cache_tags = Cache::mergeTags($cache_tags, array_merge($alshaya_appointment_config->getCacheTags(), $store_finder_config->getCacheTags()));
 
     $settings['alshaya_appointment'] = [
       'middleware_url' => _alshaya_appointment_get_middleware_url(),
       'step_labels' => $this->getAppointmentSteps(),
-      'appointment_terms_conditions_text' => $config->get('appointment_terms_conditions_text'),
-      'appointment_companion_limit' => $config->get('appointment_companion_limit'),
-      'local_storage_expire' => $config->get('local_storage_expire'),
+      'appointment_terms_conditions_text' => $alshaya_appointment_config->get('appointment_terms_conditions_text'),
+      'appointment_companion_limit' => $alshaya_appointment_config->get('appointment_companion_limit'),
+      'local_storage_expire' => $alshaya_appointment_config->get('local_storage_expire'),
+      'store_finder' => array_merge($alshaya_appointment_config->get('store_finder'), $store_finder_config->get('country_center')),
     ];
 
     return [

@@ -6,3 +6,7 @@ appointment.get_activities:
    path: /get/activities
    controller: App\Controller\ConfigurationServices::getActivities
    methods: GET
+appointment.get_stores:
+   path: /get/stores
+   controller: App\Controller\ConfigurationServices::getStores
+   methods: GET

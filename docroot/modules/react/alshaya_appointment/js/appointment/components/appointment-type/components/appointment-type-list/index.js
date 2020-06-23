@@ -32,6 +32,7 @@ export default class AppointmentTypeList extends React.Component {
                 <option
                   value={v.id}
                   selected={activeItem === v.id}
+                  name={v.name}
                 >
                   {v.name}
                 </option>

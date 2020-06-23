@@ -61,7 +61,7 @@ export default class AppointmentType extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           this.setState({
             appointmentTypeItems: [{ id: '', name: defaultSelectOption }, ...result.data],
-            appointmentCategory: category.name,
+            appointmentCategory: category,
           });
         }
       });
@@ -69,7 +69,19 @@ export default class AppointmentType extends React.Component {
   }
 
   handleChange = (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    let value = e.target.value;
+
+    switch (e.target.type) {
+      case 'checkbox':
+        value = e.target.checked;
+        break;
+      case 'select-one':
+        value = { id: e.target.value, name: e.target.options[e.target.selectedIndex].text };
+        break;
+      case 'radio':
+        value = e.target.value;
+        break;
+    }
     this.setState({
       [e.target.name]: value,
     });
@@ -96,14 +108,14 @@ export default class AppointmentType extends React.Component {
         <AppointmentCategories
           categoryItems={categoryItems}
           handleItemClick={this.handleCategoryClick}
-          activeItem={appointmentCategory}
+          activeItem={appointmentCategory.id}
         />
         { appointmentCategory
           ? (
             <AppointmentTypeList
               appointmentTypeItems={appointmentTypeItems}
               handleChange={this.handleChange}
-              activeItem={appointmentType}
+              activeItem={appointmentType.id}
             />
           )
           : null}
