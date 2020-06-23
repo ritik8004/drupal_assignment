@@ -15,6 +15,12 @@
         }
       }
     }
+
+    &.frontpage {
+      @include breakpoint($only-mobile) {
+        margin-top: 6.625rem;
+      }
+    }
   }
 
   &.header--fixed {
@@ -44,6 +50,24 @@
               margin-top: 1.25rem;
             }
           }
+        }
+      }
+
+      .block-alshaya-react-mini-cart {
+        .cart-link {
+          @include breakpoint($only-tablet) {
+            margin-top: -0.1875rem;
+          }
+        }
+      }
+    }
+  }
+
+  .block-system-branding-block {
+    .site-brand-home a {
+      @include breakpoint($only-tablet) {
+        html[lang=ar] & {
+          margin: 1.25rem auto 0;
         }
       }
     }

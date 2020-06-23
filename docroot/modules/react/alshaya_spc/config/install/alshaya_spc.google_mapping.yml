@@ -16,4 +16,5 @@ mapping:
   area_parent:
    - administrative_area_level_1
   locality:
+    - neighborhood
     - locality
