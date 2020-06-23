@@ -302,25 +302,30 @@ class APIWrapper implements APIWrapperInterface {
 
     // Create a name to use for lock acquisition.
     $lock_name = 'place_order_' . $cart_id;
+    $locked = FALSE;
 
-    if (Settings::get('acq_commerce_lock_place_order', TRUE) && $this->lock->acquire($lock_name)) {
-      try {
-        $result = $this->tryAgentRequest($doReq, 'placeOrder');
-        $this->lock->release($lock_name);
-        $this->dispatcher->dispatch(OrderPlacedEvent::EVENT_NAME, new OrderPlacedEvent($result, $cart_id));
-      }
-      catch (ConnectorException $e) {
-        throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
-      }
-    }
-    else {
+    if (Settings::get('acq_commerce_lock_place_order', TRUE) && !($locked = $this->lock->acquire($lock_name))) {
       $this->logger->warning(
         "Could not acquire lock to place order: @lock_name", [
           '@lock_name' => $lock_name,
         ]
       );
 
-      throw new RouteException(__FUNCTION__,'It looks like this is a second attempt to place your order. Please check your order history.');
+      throw new RouteException(__FUNCTION__, 'It looks like this is a second attempt to place your order. Please check your order history.');
+    }
+
+    try {
+      $result = $this->tryAgentRequest($doReq, 'placeOrder');
+
+      // If we acquired a lock previously, we can release it now.
+      if ($locked) {
+        $this->lock->release($lock_name);
+      }
+
+      $this->dispatcher->dispatch(OrderPlacedEvent::EVENT_NAME, new OrderPlacedEvent($result, $cart_id));
+    }
+    catch (ConnectorException $e) {
+      throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
     return $result;
