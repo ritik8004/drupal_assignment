@@ -156,7 +156,6 @@ class AlshayaAcmConfigCheck {
       'alshaya_api.settings',
       'recaptcha.settings',
       'geolocation.settings',
-      'google_tag.container.primary',
       'exponea.settings',
       's3fs.settings',
     ];
@@ -230,7 +229,44 @@ class AlshayaAcmConfigCheck {
       alshaya_performance_reset_log_mode();
     }
 
+    // Configure GTM Container ID.
+    $this->configureGtmContainerId(Settings::get('google_tag.container.primary'));
+
     return TRUE;
+  }
+
+  /**
+   * Function to import gtm container id.
+   *
+   * @param array $gtmContainerId
+   *   Settings array with gtm container id.
+   */
+  public function configureGtmContainerId(array $gtmContainerId) {
+    $data = $this->configFactory->getEditable('google_tag.settings');
+    $container_data = [];
+    $container_config = $this->configFactory->getEditable('google_tag.container.primary');
+    if (empty($container_config->get())) {
+      // Create a container configuration item.
+      $keys = array_flip([
+        'uri',
+        'compact_snippet',
+        'include_file',
+        'rebuild_snippets',
+        'debug_output',
+        '_core',
+      ]);
+      $data = array_diff_key($data, $keys);
+      $container_data = [
+        'status' => TRUE,
+        'id' => 'primary',
+        'label' => 'Primary',
+        'weight' => 0,
+      ] + $data;
+      $container_config->setData($container_data);
+    }
+    // Update container id.
+    $container_config->set('container_id', $gtmContainerId['container_id']);
+    $container_config->save();
   }
 
   /**
