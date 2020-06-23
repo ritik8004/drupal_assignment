@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_appointment\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Class AlshayaAppointmentController.
@@ -18,7 +19,10 @@ class AlshayaAppointmentController extends ControllerBase {
    *   Return array of markup with react lib attached.
    */
   public function appointment() {
+    $cache_tags = [];
+
     $config = $this->config('alshaya_appointment.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $config->getCacheTags());
 
     $settings['alshaya_appointment'] = [
       'middleware_url' => _alshaya_appointment_get_middleware_url(),
@@ -36,6 +40,9 @@ class AlshayaAppointmentController extends ControllerBase {
           'alshaya_appointment/alshaya_appointment',
         ],
         'drupalSettings' => $settings,
+      ],
+      '#cache' => [
+        'tags' => $cache_tags,
       ],
     ];
   }
