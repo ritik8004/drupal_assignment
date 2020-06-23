@@ -1,0 +1,13 @@
+.c-footer__copy {
+  .c-footer-secondary & {
+    .country-ae & {
+      @include breakpoint($tablet) {
+        float: #{$right};
+      }
+
+      @include breakpoint($only-tablet) {
+        width: auto;
+      }
+    }
+  }
+}

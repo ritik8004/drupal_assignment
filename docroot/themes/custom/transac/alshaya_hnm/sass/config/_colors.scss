@@ -331,7 +331,8 @@ $mm_link_hover: $link-hover;
 $header_toggle_sign_default_mobile: $black;
 $header_toggle_sign_default: $hnm-grey;
 $header_toggle_sign_active_tab: $hnm-black-three;
-$header_toggle_sign_active_tab_bg: $white-five;
+$header_toggle_sign_active_tab_bg: $_grey_12;
+$header_toggle_sign_inactive_tab_bg: $white-five;
 $header_branding_shadow: $grey5;
 $highlights_subtitle_hover: $link-hover;
 

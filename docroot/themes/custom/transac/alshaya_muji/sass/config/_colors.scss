@@ -26,6 +26,7 @@ $grey-light: #777;
 $black-two: #000;
 $brownish-grey: #666;
 $white-smoke-light: #f2f2f2;
+$whisper-dark: #e5e5e5;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -71,9 +72,9 @@ $primary_empty_btn_border: $black;
 $primary_brand_button: $black;
 
 // Titles.
-$page_title: $black-two;
+$page_title: $black;
 $block_title: $black;
-$title: $black-two;
+$title: $black;
 $sub_title: $black;
 
 /* ------- 3. Secondary color  ----- */
@@ -186,7 +187,7 @@ $header_branding_shadow: $shadow;
 // Header secondary: ie: top header.
 $header_secondary_bg_upto_desk: $white;
 $header_secondary_menu_link_mobile: $black;
-$header_secondary_menu_link: $black-two;
+$header_secondary_menu_link: $black;
 $header_secondary_menu_link_hover_bg: $white;
 
 // Header my account nav.
@@ -194,12 +195,13 @@ $header_my_account_h3_title: $black;
 $header_my_account_bg: $white;
 $header_my_account_link_hover: $black;
 $header_my_account_icon: $black;
-$my_account_nav_active : $black;
-$my_account_nav_hover: $grey;
-$my_account_nav: $black;
+$my_account_nav_active : $mujidarkred;
+$my_account_nav_hover: $mujidarkred;
+$my_account_nav: $grey;
 
 //slider dots
 $hp_slider_dots: $black;
+$hp_slider_arrows_dark: $mujidarkred;
 
 // Mega menu.
 $mm_bg: $white;
@@ -321,7 +323,7 @@ $plp_facet_label_border_mobile: $gallery;
 $plp_facet_border: $gallery;
 $plp_facet_summary_filter_icon: $cod-gray;
 $plp_item_label: $black;
-$plp_promotion_description: $gallery;
+$plp_promotion_description: $black-two;
 $plp_promotion_link: $alizarin-crimson;
 $plp_facet_filter_count_background: $black;
 $plp_grid_active_color: $black;
@@ -583,6 +585,7 @@ $order_print_delivery_details_row_text: $black;
 $order_print_delivery_details_row_border: $black;
 $order_print_product_count_row_border: $gallery;
 $order_print_total_row: $grey;
+$order_detail_delivery_details_row_subtitle_content: $black;
 
 // 404 and maintenance
 $page_not_found_text: $black;
@@ -623,7 +626,7 @@ $autocomplete_text: $grey;
 $algolia-auto-complete-border: $gallery;
 $algolia-suggestion-border: $gallery;
 $algolia-input-text: $grey;
-$algolia-search-suggestion-hover-bg: $grey;
+$algolia-search-suggestion-hover-bg: $white-smoke-light;
 $algolia-input-placeholder-text: $grey;
 $algolia-suggestion-text: $primary_text;
 $algolia-react-highlighted-text: $primary_text;
@@ -631,6 +634,9 @@ $algolia-search-icon: $transparent;
 $algolia-react-highlighted-bg: $transparent;
 $algolia-react-progressbar-fill: $black;
 $algolia-react-search-page-title: $black;
+$algolia-trending-title-text: $mujidarkred;
+$algolia-search-clear-text-icon: $black;
+$algolia_react-facet-item-color: $black;
 
 // SPC
 $spc-product-attributes: $grey-dark-one;
@@ -642,5 +648,5 @@ $spc-checkout-order-detail-label: $grey;
 $spc-deliver-button: $mujidarkred;
 $spc-cnc-store-search-icon: $black-two;
 $spc-search-icon: $black-two;
-$spc-select-border: $white-smoke-light;
+$spc-select-border: $whisper-dark;
 $spc-order-summary-discount-text: $black-two;

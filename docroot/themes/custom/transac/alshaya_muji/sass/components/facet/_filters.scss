@@ -10,9 +10,10 @@
   color: $accordion_title;
   font-size: 0.875rem;
 
-  @include facet-arrow(after, down, 0.25rem, 0, 0.25rem, 0.25rem) {
+  @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.3125rem) {
     #{$right}: 1.875rem;
-    top: 1.25rem;
+    top: 1.17rem;
+    background: none;
   }
 
   &.active {
