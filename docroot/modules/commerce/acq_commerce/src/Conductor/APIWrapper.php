@@ -10,6 +10,7 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_sku\Entity\SKU;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -55,6 +56,13 @@ class APIWrapper implements APIWrapperInterface {
   protected $dispatcher;
 
   /**
+   * Lock service.
+   *
+   * @var \Drupal\Core\Lock\LockBackendInterface
+   */
+  protected $lock;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
@@ -75,12 +83,14 @@ class APIWrapper implements APIWrapperInterface {
                               LoggerChannelFactory $logger_factory,
                               I18nHelper $i18nHelper,
                               APIHelper $api_helper,
-                              EventDispatcherInterface $dispatcher) {
+                              EventDispatcherInterface $dispatcher,
+                              LockBackendInterface $lock) {
     $this->clientFactory = $client_factory;
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->logger = $logger_factory->get('acq_sku');
     $this->helper = $api_helper;
     $this->dispatcher = $dispatcher;
+    $this->lock = $lock;
 
     // We always use the current language id to get store id. If required
     // function calling the api wrapper will pass different store id to
@@ -287,12 +297,23 @@ class APIWrapper implements APIWrapperInterface {
 
     $result = [];
 
-    try {
-      $result = $this->tryAgentRequest($doReq, 'placeOrder');
-      $this->dispatcher->dispatch(OrderPlacedEvent::EVENT_NAME, new OrderPlacedEvent($result, $cart_id));
+    $lock_name = 'place_order_' + $cart_id;
+
+    if ($this->lock->acquire($lock_name)) {
+      try {
+        $result = $this->tryAgentRequest($doReq, 'placeOrder');
+        $this->lock->release($lock_name);
+        $this->dispatcher->dispatch(OrderPlacedEvent::EVENT_NAME, new OrderPlacedEvent($result, $cart_id));
+      } catch (ConnectorException $e) {
+        throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
+      }
     }
-    catch (ConnectorException $e) {
-      throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
+    else {
+      $this->logger->warning(
+        "Could not acquire lock to place order: @lock_name", [
+          '@lock_name' => $lock_name,
+        ]
+      );
     }
 
     return $result;
