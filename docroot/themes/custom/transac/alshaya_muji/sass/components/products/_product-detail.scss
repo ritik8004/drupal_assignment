@@ -299,6 +299,10 @@
           a {
             height: 2.3125rem;
             min-width: 4.0625rem;
+            font-family: $muji-demibold;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 0.7125rem;
 
             &.picked {
               border-color: $pdp_size_option_selected_border;
@@ -390,5 +394,19 @@
   .read-more-description-link-gift {
     font-weight: normal;
     text-decoration: underline;
+  }
+}
+
+.content__title_wrapper {
+  .promotions a {
+    font-size: 1rem;
+
+    @include breakpoint($only-tablet) {
+      margin-top: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 0.5rem;
+    }
   }
 }
