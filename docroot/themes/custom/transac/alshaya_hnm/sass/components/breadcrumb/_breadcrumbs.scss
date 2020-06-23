@@ -60,6 +60,7 @@
       text-transform: capitalize;
       font-size: 0.6875rem;
       color: $breadcrumb_link;
+      padding-#{$right}: 0.1875rem;
 
       &:hover {
         text-decoration: none;
@@ -72,6 +73,7 @@
       padding-#{$right}: 0;
       padding-#{$left}: 0;
       color: $breadcrumb_link;
+      font-weight: normal;
     }
   }
 }

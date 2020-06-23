@@ -19,10 +19,10 @@
       }
 
       .select2Option {
-        text-align: center;
+        text-align: #{$left};
 
         .select-buttons {
-          justify-content: center;
+          justify-content: flex-start;
         }
       }
     }
