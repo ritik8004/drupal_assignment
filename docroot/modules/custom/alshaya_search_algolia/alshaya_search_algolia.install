@@ -77,7 +77,7 @@ function alshaya_search_algolia_install() {
     'Search' => [
       'en' => 'What are you looking for?',
       'ar' => 'عن ماذا تبحث؟',
-      'context' => 'algolia_search_block_placeholder',
+      'context' => 'alshaya_static_text|algolia_search_block_placeholder',
     ],
     'Trending searches' => [
       'ar' => 'الأكثر بحثاً',

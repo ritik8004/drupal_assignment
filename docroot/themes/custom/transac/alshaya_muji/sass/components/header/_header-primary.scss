@@ -255,7 +255,6 @@ header.c-header {
         height: 1.875rem;
         width: 1.6875rem;
         #{$left}: 0.3125rem;
-        background-size: 1.4375rem;
 
         html[lang=ar] & {
           right: -0.25rem;
@@ -579,6 +578,16 @@ header {
       top: 0.9375rem;
       padding: 0.625rem;
       margin: 0;
+
+      @include breakpoint($only-tablet) {
+        padding-top: 0.75rem;
+      }
+
+      html[lang=ar] & {
+        @include breakpoint($only-tablet) {
+          padding-top: 0.8125rem;
+        }
+      }
     }
   }
 

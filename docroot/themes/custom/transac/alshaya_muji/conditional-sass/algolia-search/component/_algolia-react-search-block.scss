@@ -119,6 +119,11 @@
         @include breakpoint($only-tablet) {
           transform: none;
           #{$left}: 1rem;
+
+          html[lang=ar] & {
+            transform: none;
+            #{$left}: 0.8125rem;
+          }
         }
 
         @include breakpoint($desktop) {
@@ -222,10 +227,10 @@
 body {
   &:not(.no-sticky-algolia-search-bar) {
     @include breakpoint($only-mobile) {
-      margin-top: 7.125rem;
+      margin-top: 6.625rem;
 
       html[lang='ar'] & {
-        margin-top: 7.6367rem;
+        margin-top: 7.3367rem;
       }
     }
 
