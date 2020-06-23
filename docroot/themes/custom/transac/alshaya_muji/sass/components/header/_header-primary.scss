@@ -578,6 +578,16 @@ header {
       top: 0.9375rem;
       padding: 0.625rem;
       margin: 0;
+
+      @include breakpoint($only-tablet) {
+        padding-top: 0.75rem;
+      }
+
+      html[lang=ar] & {
+        @include breakpoint($only-tablet) {
+          padding-top: 0.8125rem;
+        }
+      }
     }
   }
 
