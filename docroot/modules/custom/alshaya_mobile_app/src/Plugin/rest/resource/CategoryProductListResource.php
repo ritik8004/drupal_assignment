@@ -254,6 +254,9 @@ class CategoryProductListResource extends ResourceBase {
       ? $desc[0]['value']
       : '',
       'total' => 0,
+      'dy_banner' => $term->get('field_dy_banner')
+      ? ['plp_banner_name' => $term->get('field_dy_banner')->getString()]
+      : ['plp_banner_name' => ''],
     ];
   }
 
