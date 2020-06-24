@@ -19,10 +19,10 @@ export default class AppointmentCompanion extends React.Component {
           name="appointmentCompanion"
           onChange={this.handleChange}
         >
-          {appointmentCompanionItems.map((v) => (
+          {appointmentCompanionItems && appointmentCompanionItems.map((v) => (
             <option
               value={v.value}
-              selected={parseInt(activeItem, 10) === v.value}
+              selected={parseInt(activeItem.id, 10) === v.value}
             >
               {v.label}
             </option>

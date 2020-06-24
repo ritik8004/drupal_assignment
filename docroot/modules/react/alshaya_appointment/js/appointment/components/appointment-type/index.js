@@ -25,6 +25,7 @@ export default class AppointmentType extends React.Component {
       };
     } else {
       this.state = {
+        appointmentStep: '',
         appointmentCategory: '',
         appointmentType: '',
         appointmentCompanion: '',
@@ -69,7 +70,7 @@ export default class AppointmentType extends React.Component {
   }
 
   handleChange = (e) => {
-    let value = e.target.value;
+    let { value } = e.target;
 
     switch (e.target.type) {
       case 'checkbox':
@@ -89,6 +90,8 @@ export default class AppointmentType extends React.Component {
 
   handleSubmit = () => {
     setStorageInfo(this.state);
+    const { handleSubmit } = this.props;
+    handleSubmit();
   }
 
   render() {
