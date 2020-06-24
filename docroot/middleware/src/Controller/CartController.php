@@ -609,12 +609,12 @@ class CartController {
 
       case CartActions::CART_PAYMENT_UPDATE:
         $extension = [];
-
+        $user_id = $this->getDrupalInfo('uid');
         if (isset($request_content['payment_info']['payment']['analytics'])) {
           $extension['ga_client_id'] = $request_content['payment_info']['payment']['analytics']['clientId'] ?? '';
           $extension['tracking_id'] = $request_content['payment_info']['payment']['analytics']['trackingId'] ?? '';
-          $extension['user_id'] = $this->cart->getCartCustomerId();
-          $extension['user_type'] = $this->getDrupalInfo('uid') > 0 ? 'Logged in User' : 'Guest User';
+          $extension['user_id'] = $user_id > 0 ? $this->cart->getCartCustomerId() : '0';
+          $extension['user_type'] = $user_id > 0 ? 'Logged in User' : 'Guest User';
           $extension['user_agent'] = $this->request->headers->get('User-Agent', '');
           $extension['client_ip'] = $_ENV['AH_CLIENT_IP'] ?? $this->request->getClientIp();
         }
