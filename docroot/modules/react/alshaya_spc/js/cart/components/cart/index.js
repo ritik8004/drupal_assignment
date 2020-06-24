@@ -195,7 +195,7 @@ export default class Cart extends React.Component {
               <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
             </SectionTitle>
             <div className="spc-delivery-in-dubai-only">
-              <ProductFlag flag='1' flagText={drupalSettings.alshaya_spc.delivery_in_dubai_text} />
+              <ProductFlag flag="1" flagText={drupalSettings.alshaya_spc.delivery_in_dubai_text} />
             </div>
             <CartItems dynamicPromoLabelsProduct={dynamicPromoLabelsProduct} items={items} />
           </div>
