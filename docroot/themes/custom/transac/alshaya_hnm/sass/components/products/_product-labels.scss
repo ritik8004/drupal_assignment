@@ -10,54 +10,54 @@
       top: 0.625rem;
 
       &-left {
-        left: 0.5rem;
+        #{$left}: 0.5rem;
 
         @include breakpoint($only-tablet) {
-          left: 0.9375rem;
+          #{$left}: 0.9375rem;
         }
 
         @include breakpoint($desktop) {
-          left: 1rem;
+          #{$left}: 1rem;
         }
       }
 
       &-right {
-        right: 0.5rem;
+        #{$right}: 0.5rem;
 
         @include breakpoint($only-tablet) {
-          right: 0.9375rem;
+          #{$right}: 0.9375rem;
         }
 
         @include breakpoint($desktop) {
-          right: 1rem;
+          #{$right}: 1rem;
         }
       }
     }
 
     &.bottom {
       &-left {
-        left: 0.5rem;
+        #{$left}: 0.5rem;
         bottom: 8.5rem;
 
         @include breakpoint($only-tablet) {
-          left: 0.9375rem;
+          #{$left}: 0.9375rem;
         }
 
         @include breakpoint($desktop) {
-          left: 1rem;
+          #{$left}: 1rem;
         }
       }
 
       &-right {
-        right: 0.5rem;
+        #{$right}: 0.5rem;
         bottom: 8.5rem;
 
         @include breakpoint($only-tablet) {
-          right: 0.9375rem;
+          #{$right}: 0.9375rem;
         }
 
         @include breakpoint($desktop) {
-          right: 1rem;
+          #{$right}: 1rem;
         }
       }
     }
