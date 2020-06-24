@@ -74,3 +74,7 @@ libraries-override:
       - core/jquery
       - core/jquery.once
       - core/drupal
+
+  alshaya_white_label/convert_to_select2:
+    js:
+      js/convert_to_select2.js: js/convert_to_select2.js
