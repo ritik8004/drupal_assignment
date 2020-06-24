@@ -316,6 +316,10 @@ header.c-header {
         margin-top: 0;
         padding-top: 0.3125rem;
 
+        html[lang=ar] & {
+          padding-top: 0.8125rem;
+        }
+
         .block-cart-mini-block .cart-link,
         .block-alshaya-react-mini-cart .cart-link {
           margin-top: 0;
