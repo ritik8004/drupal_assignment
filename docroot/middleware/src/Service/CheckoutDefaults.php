@@ -89,6 +89,12 @@ class CheckoutDefaults {
 
     // Try to apply defaults from last order.
     if ($order) {
+      // If cnc order but cnc is disabled.
+      if (strpos($order['shipping']['method'], 'click_and_collect') !== FALSE
+        && !$this->cart->getCncStatusForCart($data)) {
+        return $data;
+      }
+
       if ($response = $this->applyDefaultShipping($order)) {
         $response['payment']['default'] = $this->getDefaultPaymentFromOrder($order) ?? '';
         return $response;
