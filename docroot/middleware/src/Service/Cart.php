@@ -1383,4 +1383,35 @@ class Cart {
     ];
   }
 
+  /**
+   * Checks whether cnc enabled or not on cart.
+   *
+   * @param array $data
+   *   Cart data.
+   *
+   * @return bool
+   *   CnC enabled or not for cart.
+   */
+  public function getCncStatusForCart(array $data) {
+    static $cnc_enabled;
+    if (isset($cnc_enabled)) {
+      return $cnc_enabled;
+    }
+
+    // Whether CnC enabled or not.
+    $cnc_enabled = TRUE;
+    $cart_skus_list = [];
+    foreach ($data['cart']['items'] as $item) {
+      $cart_skus_list[] = $item['sku'];
+    }
+
+    if (!empty($cart_skus_list)) {
+      $cart_skus_list = implode(',', $cart_skus_list);
+      // Get CnC status.
+      $cnc_enabled = $this->drupal->getCncStatusForCart($cart_skus_list);
+    }
+
+    return $cnc_enabled;
+  }
+
 }
