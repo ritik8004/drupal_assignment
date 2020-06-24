@@ -148,6 +148,22 @@ class Drupal {
   }
 
   /**
+   * Get CnC status for cart based on skus in cart.
+   *
+   * @param string $skus_list
+   *   Comma separated sku list.
+   *
+   * @return mixed
+   *   CnC status for cart.
+   */
+  public function getCncStatusForCart(string $skus_list = '') {
+    $url = sprintf('/spc/cart/cnc-status?skus=%s', $skus_list);
+    $response = $this->invokeApi('GET', $url);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
+  /**
    * Trigger event to let Drupal know about the update.
    *
    * @param string $event
