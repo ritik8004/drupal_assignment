@@ -101,12 +101,7 @@ const PdpLayout = () => {
             pdpRefresh={pdpRefresh}
           />
           <PdpStandardDelivery />
-          <PdpClickCollect
-            skuCode={skuItemCode}
-            title={title}
-            pdpProductPrice={priceRaw}
-            finalPrice={finalPrice}
-          />
+          <PdpClickCollect />
           <PdpSharePanel />
         </div>
       </div>

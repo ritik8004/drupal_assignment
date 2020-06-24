@@ -117,6 +117,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['#attached']['library'][] = 'alshaya_pdp_react/pdp_magazine_v2_layout';
     $vars['#attached']['library'][] = 'alshaya_white_label/magazine-layout-v2';
     $vars['#attached']['library'][] = 'alshaya_spc/cart_utilities';
+    $vars['#attached']['library'][] = 'alshaya_spc/googlemapapi';
 
     $entity = $vars['node'];
     $sku = $this->skuManager->getSkuForNode($entity);
@@ -150,6 +151,9 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     if (isset($vars['elements']['sharethis'])) {
       $this->getShareThisSettings($vars);
     }
+
+    // Get cnc config info.
+    $this->getCncSettings($vars);
 
     // Get the product description.
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['description'] = $vars['elements']['description'];
@@ -319,6 +323,23 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $group_data[$alternate_label] = $child->get($attribute_code)->getString();
     }
     return $group_data;
+  }
+
+  /**
+   * Helper function to get cnc config settings.
+   */
+  public function getCncSettings(&$vars) {
+    $cc_config = $this->configFactory->get('alshaya_click_collect.settings');
+    $cncFeatureStatus = $cc_config->get('feature_status') ?? 'enabled';
+    $cnc_enabled = $cncFeatureStatus === 'enabled';
+    $geolocation_config = $this->configFactory->get('geolocation.settings');
+    $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
+    $vars['#attached']['drupalSettings']['clickNCollect']['cncEnabled'] = $cnc_enabled;
+    $vars['#attached']['drupalSettings']['clickNCollect']['cncSubtitleAvailable'] = $cc_config->get('checkout_click_collect_available');
+    $vars['#attached']['drupalSettings']['clickNCollect']['cncSubtitleUnavailable'] = $cc_config->get('checkout_click_collect_unavailable');
+    $vars['#attached']['drupalSettings']['clickNCollect']['cncFormPlaceholder'] = $store_finder_config->get('store_search_placeholder');
+    $vars['#attached']['drupalSettings']['clickNCollect']['countryCode'] = _alshaya_custom_get_site_level_country_code();
+    $vars['#attached']['drupalSettings']['map']['google_api_key'] = $geolocation_config->get('google_map_api_key');
   }
 
 }

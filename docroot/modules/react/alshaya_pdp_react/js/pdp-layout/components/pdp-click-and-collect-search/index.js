@@ -1,17 +1,18 @@
 import React from 'react';
 
-const PdpClickCollectSearch = ({ inputValue, onChange }) => {
-  const changeLabel = (event) => {
-    onChange(event.target.value);
-  };
-
-  return (
-    <div className="location-field-wrapper">
-      <div className="location-field">
-        <input placeholder="e.g. Salmiya" onChange={changeLabel} value={inputValue} />
-      </div>
-      <div className="location-field-icon" />
+const PdpClickCollectSearch = React.forwardRef((props, ref) => (
+  <div className="location-field-wrapper" ref={ref}>
+    <div className="location-field">
+      <input
+        className="form-search"
+        type="search"
+        id="edit-store-location"
+        name="store_location"
+        placeholder={drupalSettings.clickNCollect.cncFormPlaceholder}
+        autoComplete="off"
+      />
     </div>
-  );
-};
+  </div>
+));
+
 export default PdpClickCollectSearch;

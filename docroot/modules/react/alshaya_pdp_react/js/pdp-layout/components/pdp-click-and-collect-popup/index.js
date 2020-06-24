@@ -1,34 +1,16 @@
 import React from 'react';
-import PdpInfo from '../pdp-info';
-import ClickCollectStoreDetail from '../pdp-click-and-collect-store-detail';
+import parse from 'html-react-parser';
 
-const ClickCollectContent = ({
-  title, pdpProductPrice, finalPrice, closeModal, stores,
-}) => (
-  <div className="magv2-click-collect-popup-container">
-    <div className="magv2-click-collect-popup-wrapper">
-      <div className="magv2-click-collect-popup-header-wrapper">
-        <a className="close" onClick={() => closeModal()}>
-          &times;
-        </a>
-        <PdpInfo
-          title={title}
-          finalPrice={finalPrice}
-          pdpProductPrice={pdpProductPrice}
-          shortDetail="true"
-        />
+const ClickCollectContent = (props) => {
+  const { store, location } = props;
+  return (
+    <>
+      <a href="#" className="location">{location}</a>
+      <div className="magv2-click-collect-results">
+        {parse(store)}
       </div>
+    </>
+  );
+};
 
-      <div className="magv2-click-collect-popup-content-wrapper">
-        {stores.map((store, key) => (
-          <ClickCollectStoreDetail
-            key={store.id}
-            index={key + 1}
-            store={store}
-          />
-        ))}
-      </div>
-    </div>
-  </div>
-);
 export default ClickCollectContent;

@@ -1,6 +1,6 @@
 import React from 'react';
+import axios from 'axios';
 import PdpSectionTitle from '../utilities/pdp-section-title';
-import ClickCollectStoreDetail from '../pdp-click-and-collect-store-detail';
 import PdpSectionText from '../utilities/pdp-section-text';
 import ClickCollectContent from '../pdp-click-and-collect-popup';
 import PdpClickCollectSearch from '../pdp-click-and-collect-search';
@@ -8,105 +8,127 @@ import PdpClickCollectSearch from '../pdp-click-and-collect-search';
 export default class PdpClickCollect extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.searchRef = React.createRef();
+    this.autocomplete = null;
+    this.searchplaceInput = null;
     this.state = {
       label: 'check in-store availablility:',
-      countLabel: false,
-      stores: [{
-        id: 'store-detail-1',
-        status_color: '#0abb76',
-        status_text: 'In stock',
-        address_title: 'avenue mall phase 2b',
-        address_details: 'mezannine above carrefour. the avenues mall phase-2 al rai',
-      }, {
-        id: 'store-detail-2',
-        status_color: '#cc0000',
-        status_text: 'Only a few left',
-        address_title: 'avenue mall phase 2b',
-        address_details: 'mezannine above carrefour. the avenues mall phase-2 al rai',
-      }, {
-        id: 'store-detail-3',
-        status_color: '#0abb76',
-        status_text: 'In Stock',
-        address_title: 'avenue mall phase 2b',
-        address_details: 'mezannine above carrefour. the avenues mall phase-2 al rai',
-      }],
+      stores: null,
       location: '',
       hideInput: false,
-      searchText: '',
+      showNoResult: false,
     };
   }
 
-  openModal = () => {
-    document.querySelector('body').classList.add('click-collect-overlay');
-  };
-
-  closeModal = () => {
-    document.querySelector('body').classList.remove('click-collect-overlay');
-  };
-
-  textChange = (text) => {
-    const txtLimitExceeded = (text.length > 3);
-    this.setState({
-      label: txtLimitExceeded ? 'in-store availability:' : 'check in-store availablility:',
-      countLabel: txtLimitExceeded,
-      location: text,
-      hideInput: txtLimitExceeded,
-      searchText: text,
-    });
+  componentDidMount() {
+    if (!this.autocomplete && !!this.searchRef && !!this.searchRef.current) {
+      this.searchplaceInput = this.searchRef.current.getElementsByTagName('input').item(0);
+      new Promise(((resolve) => {
+        const waitForMapsApi = setInterval(() => {
+          if (Drupal.alshayaSpc.maps_api_loading === false) {
+            clearInterval(waitForMapsApi);
+            resolve();
+          }
+        }, 100);
+      })).then(() => {
+        this.autocomplete = new window.google.maps.places.Autocomplete(
+          this.searchplaceInput,
+          {
+            types: [],
+            componentRestrictions: { country: drupalSettings.clickNCollect.countryCode },
+          },
+        );
+        this.autocomplete.addListener(
+          'place_changed',
+          this.placesAutocompleteHandler,
+        );
+      });
+    }
   }
 
-  showInput = () => {
-    this.setState({
-      hideInput: false,
-    });
-  }
+  /**
+   * Autocomplete handler for the places list.
+   */
+  placesAutocompleteHandler = () => {
+    const place = this.autocomplete.getPlace();
+    if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
+      this.fetchAvailableStores({
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+        location: place.formatted_address,
+      });
+    }
+  };
+
+  /**
+   * Fetch available stores for given lat and lng.
+   */
+  fetchAvailableStores = (coords) => {
+    const { productInfo } = drupalSettings;
+    let skuItemCode = null;
+    if (productInfo) {
+      [skuItemCode] = Object.keys(productInfo);
+    }
+    const baseUrl = window.location.origin;
+    const apiUrl = Drupal.url(`stores/product/${skuItemCode}/${coords.lat}/${coords.lng}?type=json`);
+    const GET_STORE_URL = `${baseUrl}${apiUrl}`;
+    axios.get(GET_STORE_URL)
+      .then((res) => {
+        if (res.data.all_stores.length !== 0) {
+          this.setState({
+            stores: res.data.all_stores,
+            location: coords.location,
+            hideInput: true,
+          });
+        } else {
+          // Show no result div.
+          this.setState({
+            showNoResult: true,
+          });
+        }
+      });
+  };
 
   render() {
     const {
-      skuCode, finalPrice, pdpProductPrice, title,
-    } = this.props;
-    const {
-      label, countLabel, stores, location, hideInput, searchText,
+      label, stores, location, hideInput, showNoResult,
     } = this.state;
+    const { cncEnabled } = drupalSettings.clickNCollect;
+    const { cncSubtitleAvailable } = drupalSettings.clickNCollect;
+    const { cncSubtitleUnavailable } = drupalSettings.clickNCollect;
 
-    return (
-      <div className="magv2-pdp-click-and-collect-wrapper card">
-        <div className="magv2-click-collect-title-wrapper">
-          <PdpSectionTitle>
-            {Drupal.t('click & collect')}
-            <span className="click-collect-title-tag free-tag">{Drupal.t('free')}</span>
-          </PdpSectionTitle>
-        </div>
-        <PdpSectionText className="click-collect-detail">
-          <span>{Drupal.t('order now and collect from the store of your choice in 1 to 2 days.')}</span>
-        </PdpSectionText>
-        <div className="instore-wrapper">
-          <div className="instore-title">{label}</div>
-          {countLabel ? (
-            <div className="store-count-label">
-              {Drupal.t('2 Stores at')}
-              {' '}
-              <span className="location-name" onClick={this.showInput}>{ location }</span>
-            </div>
-          ) : ''}
-          {hideInput ? '' : <PdpClickCollectSearch inputValue={searchText} onChange={this.textChange} />}
-        </div>
-        {countLabel ? stores.filter((store, key) => key < 2).map((store, key) => <ClickCollectStoreDetail key={store.id} index={key + 1} store={store} />) : ''}
-        {countLabel ? (
-          <div className="magv2-click-collect-showmore-link" onClick={() => this.openModal()}>
-            {Drupal.t('View all')}
+    const searchField = (
+      <PdpClickCollectSearch ref={this.searchRef} defaultValue={location} />
+    );
+
+    if (cncEnabled) {
+      return (
+        <div className="magv2-pdp-click-and-collect-wrapper card">
+          <div className="magv2-click-collect-title-wrapper">
+            <PdpSectionTitle>
+              {Drupal.t('click & collect')}
+            </PdpSectionTitle>
           </div>
-        ) : '' }
-        <ClickCollectContent
-          closeModal={this.closeModal}
-          title={title.label}
-          pdpProductPrice={pdpProductPrice}
-          finalPrice={finalPrice}
-          skuCode={skuCode}
-          stores={stores}
-          key={title.label}
-        />
-      </div>
+          <PdpSectionText className="click-collect-detail">
+            <span>{cncSubtitleAvailable}</span>
+          </PdpSectionText>
+          <div className="instore-wrapper">
+            <div className="instore-title">{label}</div>
+            {hideInput ? (
+              <ClickCollectContent
+                location={location}
+                stores={stores}
+              />
+            ) : searchField}
+            {showNoResult ? (
+              <span className="empty-store-list">{Drupal.t('Sorry, No store found for your location.')}</span>
+            ) : null}
+          </div>
+        </div>
+      );
+    }
+    return (
+      <p className="cnc-unavailable">{cncSubtitleUnavailable}</p>
     );
   }
 }
