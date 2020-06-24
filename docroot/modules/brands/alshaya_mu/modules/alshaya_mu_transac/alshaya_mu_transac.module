@@ -47,6 +47,7 @@ function _alshaya_mu_transac_get_product_description($sku_entity) {
   $return = [];
 
   if ($body = $sku_entity->get('attr_description')->getString()) {
+    $body = (strlen($body) > 100) ? substr($body, 0, 97) . '...' : $body;
     $return['short_desc']['value'] = [
       '#markup' => $body,
     ];
