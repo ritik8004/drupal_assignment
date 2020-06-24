@@ -687,6 +687,11 @@ class AlshayaSpcController extends ControllerBase {
     $product_config = $this->config('alshaya_acm_product.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $currency_config->getCacheTags());
 
+    // Flags text.
+    $settings['alshaya_spc']['non_refundable_tooltip'] = $product_config->get('non_refundable_tooltip');
+    $settings['alshaya_spc']['non_refundable_text'] = $product_config->get('non_refundable_text');
+    $settings['alshaya_spc']['delivery_in_dubai_text'] = $product_config->get('delivery_in_dubai_text');
+
     // Time we get from configuration is in minutes.
     $settings['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
     $settings['alshaya_spc']['vat_text'] = $product_config->get('vat_text');

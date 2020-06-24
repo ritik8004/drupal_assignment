@@ -310,6 +310,7 @@ class AlshayaSpcOrderHelper {
         // Get configurable values.
         $data['options'] = array_values($this->skuManager->getConfigurableValues($skuEntity));
       }
+      $data['isNonRefundable'] = $skuEntity->get('attr_non_refundable_products')->getString();
     }
 
     return $data;

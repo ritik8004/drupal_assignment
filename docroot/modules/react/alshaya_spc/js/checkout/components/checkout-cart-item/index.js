@@ -5,6 +5,7 @@ import CheckoutConfigurableOption from '../../../utilities/checkout-configurable
 import SpecialPrice from '../../../utilities/special-price';
 import ConditionalView from '../../../common/components/conditional-view';
 import CartPromotion from '../../../cart/components/cart-promotion';
+import ProductFlag from '../../../utilities/product-flag';
 
 class CheckoutCartItem extends React.Component {
   constructor(props) {
@@ -67,6 +68,7 @@ class CheckoutCartItem extends React.Component {
         price: originalPrice,
         promotions,
         sku,
+        isNonRefundable,
       },
     } = this.state;
 
@@ -97,6 +99,14 @@ class CheckoutCartItem extends React.Component {
           </div>
           <div className="spc-product-attributes">
             { configurableValues.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
+          </div>
+          <div className="spc-product-non-refundable">
+            <ProductFlag
+              flag={isNonRefundable}
+              flagText={drupalSettings.alshaya_spc.non_refundable_text}
+              tooltipContent={drupalSettings.alshaya_spc.non_refundable_tooltip}
+              tooltip
+            />
           </div>
         </div>
         {context !== 'confirmation' && context !== 'print' && (

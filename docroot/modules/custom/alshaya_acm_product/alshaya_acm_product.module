@@ -332,6 +332,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['non_refundable_markup'] = [
+    'variables' => [
+      'text' => NULL,
+      'tooltip' => NULL,
+    ],
+  ];
+
   $items['products_horizontal_slider'] = [
     'variables' => [
       'data' => NULL,
@@ -584,6 +591,26 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             '#label' => $label,
             '#summary' => ['#markup' => $summary['value']],
           ];
+        }
+
+        // Non-refundable.
+        if ($sku_entity->get('attr_non_refundable_products')->getString()) {
+          $build['non_refundable'] = [
+            '#theme' => 'non_refundable_markup',
+            '#text' => $product_settings->get('non_refundable_text'),
+            '#tooltip' => $product_settings->get('non_refundable_tooltip'),
+          ];
+        }
+
+        // Same day delivery.
+        if ($sku_entity->get('attr_same_day_delivery')->getString()) {
+          $build['same_day_delivery_text']['#markup'] = $product_settings->get('same_day_delivery_text');
+          $build['same_day_delivery_sub_text']['#markup'] = $product_settings->get('same_day_delivery_sub_text');
+        }
+
+        // Delivery in dubai only.
+        if ($delivery_in_dubai_text = $product_settings->get('delivery_in_dubai_text')) {
+          $build['delivery_in_dubai_text']['#markup'] = $delivery_in_dubai_text;
         }
 
         // Initialise home delivery variable.
