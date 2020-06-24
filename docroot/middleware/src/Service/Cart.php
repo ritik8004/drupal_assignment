@@ -1070,7 +1070,9 @@ class Cart {
     $cart = $this->getCart();
 
     try {
-      $result = $this->magentoApiWrapper->doRequest('PUT', $url, ['json' => $data]);
+      // We don't pass any payment data in place order call to MDC because its
+      // option in api call.
+      $result = $this->magentoApiWrapper->doRequest('PUT', $url);
       $order_id = (int) str_replace('"', '', $result);
       return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
     }
