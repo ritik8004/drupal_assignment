@@ -17,7 +17,7 @@ use Drupal\block\Entity\Block;
  *
  * Collection label order settings.
  */
-function alshaya_hm_update_8049() {
+function alshaya_hm_update_8051() {
   $configs = [
     'alshaya_hm.label_order.settings',
   ];
