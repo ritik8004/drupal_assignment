@@ -86,6 +86,17 @@
   }
 }
 
+.short-description-wrapper {
+  .field {
+    &__label {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        display: inline-block;
+      }
+    }
+  }
+}
+
 .delivery-options-wrapper {
   .c-accordion {
     &__title {
