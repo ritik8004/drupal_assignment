@@ -174,7 +174,7 @@
           width: 68%;
           float: #{$right};
           margin-#{$left}: 0;
-          font-family: $alshaya-thin;
+          font-family: $muji-bold;
           font-weight: 600;
 
           &.fix-button {
@@ -250,7 +250,7 @@
       font-size: 0.875rem;
 
       .selected-text {
-        font-weight: 600;
+        font-family: $muji-bold;
         color: $pdp_color_attribute;
       }
 
@@ -439,6 +439,10 @@
     @include breakpoint($desktop) {
       margin-top: 0.5rem;
     }
+  }
+
+  h1 span {
+    font-family: $muji-bold;
   }
 }
 
