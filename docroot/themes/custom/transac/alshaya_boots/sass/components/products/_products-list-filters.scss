@@ -3,8 +3,6 @@
   .all-filters-algolia {
     .filter {
       &__foot {
-        text-transform: uppercase;
-
         .facet-all-clear,
         .facet-clear-all {
           .block-facets-summary-blockfilter-bar-promotions,
@@ -71,9 +69,6 @@
         padding-#{$left}: 2rem;
 
         .filter-sort-title {
-          justify-content: $left;
-          align-items: $left;
-          text-align: $left;
           font-family: $alshaya-bold;
           text-transform: capitalize;
           font-size: 1rem;
