@@ -300,8 +300,6 @@ class CartController {
     $data['in_stock'] = TRUE;
     // If there are any error at cart item level.
     $data['is_error'] = FALSE;
-    // Whether CnC enabled or not.
-    $data['cnc_enabled'] = TRUE;
 
     try {
       $data['items'] = [];
@@ -374,6 +372,9 @@ class CartController {
       return $data;
     }
 
+    // Whether CnC enabled or not.
+    $cnc_status = $this->cart->getCncStatusForCart($data);
+
     // Here we will do the processing of cart to make it in required format.
     $uid = $this->getDrupalInfo('uid') ?: 0;
 
@@ -395,6 +396,8 @@ class CartController {
 
     // Re-use the processing done for cart page.
     $response = $this->getProcessedCartData($data);
+
+    $response['cnc_enabled'] = $cnc_status;
 
     $response['customer'] = CustomerHelper::getCustomerPublicData($data['customer'] ?? []);
     $response['shipping'] = $data['shipping'] ?? [];
