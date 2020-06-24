@@ -96,7 +96,6 @@
           actionField: {
             step: 2,
             option: 'Click & Collect',
-            action: 'checkout_option',
           }
         }
       }
@@ -112,8 +111,7 @@
         checkout_option: {
           actionField: {
             step: 2,
-            option: 'Home Delivery - subdelivery',
-            action: 'checkout_option',
+            option: 'Home Delivery',
           }
         }
       }
