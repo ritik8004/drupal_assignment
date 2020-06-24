@@ -13,7 +13,7 @@ const ProductFlag = (props) => {
       return (
         <div className="product-flag">
           <ToolTip enable={tooltip}>{tooltipContent}</ToolTip>
-          <span className="flag-text fadeInUp" style={{animationDelay: '0.4s'}}>{flagText}</span>
+          <span className="flag-text fadeInUp" style={{ animationDelay: '0.4s' }}>{flagText}</span>
         </div>
       );
     }

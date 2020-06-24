@@ -685,7 +685,7 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
 
     $product_config = $this->config('alshaya_acm_product.settings');
-    $cache_tags = Cache::mergeTags($cache_tags, $currency_config->getCacheTags());
+    $cache_tags = Cache::mergeTags($cache_tags, $product_config->getCacheTags());
 
     // Flags text.
     $settings['alshaya_spc']['non_refundable_tooltip'] = $product_config->get('non_refundable_tooltip');
