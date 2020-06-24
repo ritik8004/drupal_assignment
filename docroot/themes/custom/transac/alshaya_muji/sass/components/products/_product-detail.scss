@@ -119,6 +119,10 @@
           #{$right}: 1rem;
         }
 
+        label {
+          color: $pdp_attribute_label;
+        }
+
         select#edit-quantity {
           height: 3.125rem !important;
           font-size: 1.125rem;
@@ -144,7 +148,8 @@
             height: 3.125rem !important;
 
             .select2-selection__rendered {
-              font-size: 1.125rem !important;
+              font-family: $muji-demibold;
+              font-size: 1rem !important;
               line-height: 2.4375rem !important;
               padding-#{$left}: 1rem !important;
             }
@@ -252,6 +257,7 @@
       span {
         &:first-child {
           font-weight: normal;
+          color: $pdp_attribute_label;
         }
       }
     }
@@ -357,6 +363,12 @@
       color: $pdp_product_title;
     }
 
+    .promotions {
+      a {
+        text-decoration: none;
+      }
+    }
+
     @include breakpoint($only-tablet) {
       text-align: center;
     }
@@ -411,12 +423,14 @@
   .read-more-description-link-gift {
     font-weight: normal;
     text-decoration: underline;
+    text-transform: capitalize;
   }
 }
 
 .content__title_wrapper {
   .promotions a {
     font-size: 1rem;
+    text-decoration: none;
 
     @include breakpoint($only-tablet) {
       margin-top: 1rem;
