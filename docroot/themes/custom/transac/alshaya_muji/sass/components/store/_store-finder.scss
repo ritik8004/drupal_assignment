@@ -75,7 +75,7 @@
   .current-location,
   .cc-near-me {
     &::before {
-      background: url-with-cacheburster('#{$muji_theme_img_directory_path}/icons/current.svg') no-repeat;
+      background: url('#{$muji_theme_img_directory_path}/icons/current.svg?v=250620201118') no-repeat;
     }
 
     @include breakpoint($only-mobile) {
