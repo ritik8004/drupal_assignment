@@ -345,3 +345,11 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+// Cache busting images linked within sass
+// Example usage : background: img-url-with-cacheburster('#{$muji_theme_img_directory_path}/icons/current.svg') no-repeat;
+$asset-version: random(999999999999999);
+
+@function url-with-cacheburster($url) {
+  @return url("#{$url}?v=#{$asset-version}");
+}
