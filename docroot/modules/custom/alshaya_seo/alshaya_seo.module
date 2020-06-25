@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Function to check if we should process GTM code for current request.
@@ -427,9 +428,21 @@ function _alshaya_seo_process_sitelink_searchbox() {
  * Implements hook_metatags_alter().
  */
 function alshaya_seo_metatags_alter(array &$metatags, array $context) {
+  // Twitter tags which have been set in global metatags settings have to
+  // be removed in this way.
+  if ($context['entity'] instanceof UserInterface) {
+    foreach ($metatags as $key => $value) {
+      if (preg_match('/twitter/', $key)) {
+        unset($metatags[$key]);
+      }
+    }
+    return;
+  }
+
   // Copy title & description into metatag twitter cards.
   $metatags['twitter_cards_page_url'] = ($metatags['canonical_url']) ?? '';
   $metatags['twitter_cards_title'] = ($metatags['title']) ?? '';
   $metatags['twitter_cards_description'] = ($metatags['description']) ?? '';
   $metatags['twitter_cards_image'] = ($metatags['image_src']) ?? '';
+
 }
