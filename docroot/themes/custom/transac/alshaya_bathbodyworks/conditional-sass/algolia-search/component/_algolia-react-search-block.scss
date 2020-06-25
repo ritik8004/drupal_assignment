@@ -30,13 +30,6 @@
     }
 
     @include breakpoint($only-tablet) {
-      .algolia-search-cleartext-icon {
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
       &.show-algolia-search-bar {
         .algolia-search-cleartext-icon {
           opacity: 1;
@@ -221,7 +214,7 @@
         border-radius: 0;
 
         @include breakpoint($only-mobile) {
-          border-top: none;
+          border: none;
         }
 
         @include breakpoint($only-tablet) {
@@ -257,13 +250,13 @@
 
 body {
   &:not(.no-sticky-algolia-search-bar) {
-    @include breakpoint($only-mobile) {
-      margin-top: 6.875rem;
+    @include breakpoint($upto-desktop) {
+      margin-top: 7.875rem;
     }
 
     html[lang=ar] & {
-      @include breakpoint($only-mobile) {
-        margin-top: 6.875rem;
+      @include breakpoint($upto-desktop) {
+        margin-top: 7.875rem;
       }
     }
 
@@ -296,6 +289,18 @@ body {
     .mobile--search {
       @include breakpoint($only-tablet) {
         display: none;
+      }
+    }
+  }
+
+  &:not(.frontpage) {
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($only-tablet) {
+        display: none !important;
+
+        &.show-algolia-search-bar {
+          display: block !important;
+        }
       }
     }
   }

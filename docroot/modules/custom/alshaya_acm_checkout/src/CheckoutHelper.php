@@ -637,7 +637,6 @@ class CheckoutHelper {
     // Use the estimate delivery method with full address every-time.
     // This is a hack to avoid issues with estimate shipping having customer id.
     unset($full_address['address_id']);
-    unset($full_address['customer_address_id']);
     return $full_address;
   }
 

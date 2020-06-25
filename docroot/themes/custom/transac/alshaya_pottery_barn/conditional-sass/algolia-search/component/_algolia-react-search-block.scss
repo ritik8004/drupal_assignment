@@ -188,14 +188,21 @@
     .react-autosuggest__suggestions-container {
       &--open {
         margin-top: 0;
-        border: 1px solid $algolia-auto-complete-border;
         min-width: 15.25rem;
         box-shadow: none;
         border-radius: 0;
 
+        @include breakpoint($only-mobile) {
+          border-top: 1px solid $algolia-auto-complete-border;
+        }
+
         @include breakpoint($only-tablet) {
           min-width: auto;
           width: 10.625rem;
+        }
+
+        @include breakpoint($tablet) {
+          border: 1px solid $algolia-auto-complete-border;
         }
 
         @include breakpoint($desktop) {
