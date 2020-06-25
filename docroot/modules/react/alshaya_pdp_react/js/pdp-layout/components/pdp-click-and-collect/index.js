@@ -1,9 +1,9 @@
 import React from 'react';
-import axios from 'axios';
 import PdpSectionTitle from '../utilities/pdp-section-title';
 import PdpSectionText from '../utilities/pdp-section-text';
 import ClickCollectContent from '../pdp-click-and-collect-popup';
 import PdpClickCollectSearch from '../pdp-click-and-collect-search';
+import { fetchAvailableStores } from '../../../utilities/pdp_layout';
 
 export default class PdpClickCollect extends React.PureComponent {
   constructor(props) {
@@ -52,32 +52,15 @@ export default class PdpClickCollect extends React.PureComponent {
   placesAutocompleteHandler = () => {
     const place = this.autocomplete.getPlace();
     if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
-      this.fetchAvailableStores({
+      fetchAvailableStores({
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
         location: place.formatted_address,
-      });
-    }
-  };
-
-  /**
-   * Fetch available stores for given lat and lng.
-   */
-  fetchAvailableStores = (coords) => {
-    const { productInfo } = drupalSettings;
-    let skuItemCode = null;
-    if (productInfo) {
-      [skuItemCode] = Object.keys(productInfo);
-    }
-    const baseUrl = window.location.origin;
-    const apiUrl = Drupal.url(`stores/product/${skuItemCode}/${coords.lat}/${coords.lng}?type=json`);
-    const GET_STORE_URL = `${baseUrl}${apiUrl}`;
-    axios.get(GET_STORE_URL)
-      .then((res) => {
+      }).then((res) => {
         if (res.data.all_stores.length !== 0) {
           this.setState({
             stores: res.data.all_stores,
-            location: coords.location,
+            location: place.formatted_address,
             hideInput: true,
           });
         } else {
@@ -87,6 +70,7 @@ export default class PdpClickCollect extends React.PureComponent {
           });
         }
       });
+    }
   };
 
   render() {

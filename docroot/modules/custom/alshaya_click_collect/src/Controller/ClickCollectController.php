@@ -411,7 +411,9 @@ class ClickCollectController extends ControllerBase {
    */
   public function getProductStoresJson($sku, $lat, $lon) {
     $data = $this->getProductStores($sku, $lat, $lon);
-    if ($_GET['type'] == 'json') {
+    // Condition to get only Json response
+    // for click and collect pdp.
+    if ($this->currentRequest->getQueryString() == 'json') {
       return new JsonResponse($data);
     }
 
