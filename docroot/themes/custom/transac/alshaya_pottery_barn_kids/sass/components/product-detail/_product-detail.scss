@@ -67,13 +67,9 @@
   }
 }
 
-.mobile-related-wrapper {
-  .subtitle.crossell-title {
-    @include breakpoint($only-mobile) {
-      padding-#{$right}: 8%;
-      padding-#{$left}: 8%;
-      text-align: center;
-      font-weight: normal;
-    }
-  }
+.subtitle.crossell-title {
+  padding-#{$right}: 8%;
+  padding-#{$left}: 8%;
+  text-align: center;
+  font-weight: normal;
 }
