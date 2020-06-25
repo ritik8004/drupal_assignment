@@ -60,6 +60,11 @@
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
         font-size: 2rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        #{$right}: 0;
+        color: $header_mobile_menu_arrow;
       }
     }
   }
