@@ -11,6 +11,7 @@ import {
 } from '../../../utilities/map/map_utils';
 import {
   getAreasList,
+  errorOnMandatoryFieldsForMap,
 } from '../../../utilities/address_util';
 import SectionTitle from '../../../utilities/section-title';
 import DynamicFormField from '../dynamic-form-field';
@@ -131,6 +132,9 @@ export default class AddressForm extends React.Component {
       getMap().panTo(marker.getPosition());
       getMap().setZoom(getHDMapZoom());
       window.spcMarkers.push(marker);
+      // Scroll to first mandatory address field
+      // which is not filled with inline error.
+      errorOnMandatoryFieldsForMap();
       removeFullScreenLoader();
     } catch (error) {
       Drupal.logJavascriptError('homedelivery-checkUserCountry', error);

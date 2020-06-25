@@ -696,3 +696,33 @@ export const processBillingUpdateFromForm = (e, shipping) => {
     });
   }
 };
+
+/**
+ * Scroll to the first mandatory address field when not filled
+ * on clicked on 'deliver to my location' or search address on map.
+ */
+export const errorOnMandatoryFieldsForMap = () => {
+  let scroll = false;
+  // Iterate over address fields.
+  Object.entries(drupalSettings.address_fields).forEach(
+    ([key, field]) => {
+      if (field.required === true) {
+        const fieldVal = document.getElementById(key).value;
+        if (fieldVal.length === 0) {
+          document.getElementById(`${key}-error`).innerHTML = getStringMessage('address_please_enter', {
+            '@label': field.label,
+          });
+          document.getElementById(`${key}-error`).classList.add('error');
+          scroll = true;
+        } else {
+          document.getElementById(`${key}-error`).innerHTML = '';
+          document.getElementById(`${key}-error`).classList.remove('error');
+        }
+      }
+    },
+  );
+
+  if (scroll === true) {
+    addressFormInlineErrorScroll();
+  }
+};
