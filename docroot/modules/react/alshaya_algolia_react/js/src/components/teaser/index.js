@@ -28,8 +28,8 @@ const Teaser = ({hit}) => {
 
   const showSwatches = drupalSettings.reactTeaserView.swatches.showSwatches;
   const collectionLabel = [];
-  const plp_attributes = drupalSettings.plp_attributes ;
-  if (plp_attributes !== undefined) {
+  if (drupalSettings.plp_attributes && drupalSettings.plp_attributes.length > 0) {
+    const { plp_attributes } = drupalSettings;
     for (var i = 0; i < plp_attributes.length; i++) {
       if (hit && hit[plp_attributes[i]]) {
         collectionLabel.push({
