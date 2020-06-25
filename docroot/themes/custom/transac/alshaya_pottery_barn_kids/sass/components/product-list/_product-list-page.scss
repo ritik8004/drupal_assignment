@@ -24,13 +24,24 @@
 
 .c-plp .region__content {
   .block-facets-summary-blockfilter-bar-promotions,
-  .block-facets-summary-blockfilter-bar-plp,
   .block-facets-summary-blockfilter-bar {
     padding-top: 0.75rem;
     border-bottom: 1px solid $plp_filter_divider;
 
     @include breakpoint($only-mobile) {
       padding-bottom: 0.875rem;
+    }
+  }
+}
+
+.c-plp .region__content {
+  .block-facets-summary-blockfilter-bar-plp {
+    padding-top: 0.75rem;
+    border-bottom: 1px solid $plp_filter_divider;
+
+    @include breakpoint($only-mobile) {
+      padding-bottom: 0;
+      padding-top: 0;
     }
   }
 }
