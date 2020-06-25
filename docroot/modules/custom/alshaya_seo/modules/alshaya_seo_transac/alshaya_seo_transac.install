@@ -11,6 +11,16 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Add the new alshaya_seo_transac.settings configuration.
+ */
+function alshaya_seo_transac_update_8410() {
+  $configs = ['alshaya_seo_transac.settings'];
+  alshaya_config_install_configs($configs, 'alshaya_seo_transac');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable metatag_twitter_cards module & their default configs.
  */
 function alshaya_seo_transac_update_8409() {
