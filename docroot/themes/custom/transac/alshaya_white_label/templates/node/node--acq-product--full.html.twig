@@ -74,7 +74,9 @@ set classes = [
               <p>{{ content.same_day_delivery_sub_text }}</p>
             </div>
           {% elseif content.delivery_in_dubai_text %}
-            <div class="delivery-in-dubai">{{ content.delivery_in_dubai_text }}</div>
+            <div class="delivery-in-dubai">
+              <p>{{ content.delivery_in_dubai_text }}</p>
+            </div>
           {% endif %}
         </div>
       {% endblock %}

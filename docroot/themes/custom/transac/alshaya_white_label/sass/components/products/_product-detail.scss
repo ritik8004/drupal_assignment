@@ -117,6 +117,71 @@
       float: $right;
       margin: 0;
     }
+
+    .non-refundable--tooltip-wrapper {
+      margin-top: 0.5rem;
+      border-bottom: 1px solid $tooltip_wrapper_border;
+      padding-bottom: 1rem;
+
+      .tooltip--wrap {
+        position: relative;
+
+        .non-refundable--text {
+          color: $tooltip_link;
+          text-decoration: underline;
+          font-size: 0.75rem;
+          margin: 0;
+          display: inline-block;
+
+          &:hover + .tooltip {
+            display: block;
+          }
+
+          @include icon(infomation, before) {
+            margin-#{$right}: 0.25rem;
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 1.5rem;
+            color: $tooltip_icon;
+            font-weight: bold;
+          }
+        }
+
+        .tooltip {
+          display: none;
+          font-size: 0.625rem;
+          position: absolute;
+          z-index: 1;
+          padding: 0.625rem 0.6875rem;
+          top: 1.125rem;
+          color: $tooltip_text;
+          background-color: $tooltip_bg;
+          border: 1px solid $tooltip_border;
+          border-radius: 0.125rem;
+          width: 10.8125rem;
+
+          &::after {
+            content: '';
+            position: absolute;
+            width: 0.4375rem;
+            height: 0.4375rem;
+            border-#{$left}: 1px solid $tooltip_border;
+            border-top: 1px solid $tooltip_border;
+            border-#{$right}: none;
+            border-bottom: none;
+            clear: both;
+            top: -0.25rem;
+            #{$left}: 0.5rem;
+            transform: rotate(45deg);
+            background: $tooltip_bg;
+
+            html[lang=ar] & {
+              transform: rotate(-45deg);
+            }
+          }
+        }
+      }
+    }
   }
 
   &__title_wrapper {
@@ -180,6 +245,26 @@
       font-size: 0.625rem;
       color: $pdp_product_itemcode;
       margin-bottom: 0.75rem;
+    }
+
+    .delivery-in-dubai {
+      color: $pdp_product_same_day;
+      font-size: 0.75rem;
+      display: flex;
+      margin: 0.5rem 0 1rem;
+
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/same-day.svg') no-repeat;
+        width: 3rem;
+        height: 2.125rem;
+      }
+
+      p {
+        padding-#{$left}: 0.5rem;
+        margin: 0;
+        width: 62%;
+      }
     }
 
     .has--special--price,
