@@ -316,12 +316,12 @@ class AlshayaSpcCustomerHelper {
       if (!empty($customer) && !empty($customer['customer_id'])) {
         $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
+        // @TODO: Remove this condition when we uninstall alshaya_acm module.
         $cart_id = $this->spcCookies->getSessionCartId();
         if (empty($cart_id) && !empty($customer['extension']['cart_id'])) {
-          // @todo: Check if we can associate user id as well.
-          if (empty($this->spcCookies->setSessionCartId($customer['extension']['cart_id']))) {
-            $this->session->set('customer_cart_id', $customer['extension']['cart_id']);
-          }
+          // @phpcs:ignore
+          \Drupal::service('acq_cart.cart_storage')->clearCart();
+          user_cookie_delete('acq_cart_id');
         }
 
         // Check if user exists in Drupal.

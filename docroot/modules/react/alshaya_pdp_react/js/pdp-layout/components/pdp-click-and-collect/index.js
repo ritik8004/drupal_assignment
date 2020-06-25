@@ -1,9 +1,9 @@
 import React from 'react';
 import PdpSectionTitle from '../utilities/pdp-section-title';
 import PdpSectionText from '../utilities/pdp-section-text';
-import ClickCollectContent from '../pdp-click-and-collect-popup';
 import PdpClickCollectSearch from '../pdp-click-and-collect-search';
 import { fetchAvailableStores } from '../../../utilities/pdp_layout';
+import ClickCollectContent from '../pdp-click-and-collect-popup';
 
 export default class PdpClickCollect extends React.PureComponent {
   constructor(props) {
@@ -72,6 +72,16 @@ export default class PdpClickCollect extends React.PureComponent {
       });
     }
   };
+
+  toggleShowMore = () => {
+    this.setState((prevState) => ({
+      showMore: !prevState.showMore,
+    }));
+  }
+
+  showClickCollectContent = () => {
+    document.querySelector('.magv2-pdp-click-and-collect-wrapper').classList.toggle('show-click-collect-content');
+  }
 
   render() {
     const {

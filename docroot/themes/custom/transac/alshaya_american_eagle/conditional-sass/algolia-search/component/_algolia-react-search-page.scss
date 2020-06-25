@@ -1,0 +1,34 @@
+#alshaya-algolia-search {
+  .c-page-title {
+    font-size: 1.5rem;
+  }
+
+  .c-content__region {
+    .sticky-filter-wrapper {
+      .c-collapse-item {
+        .c-collapse__title {
+          font-size: 0.8125rem;
+
+          @include facet-arrow(after, down, 0.25rem, 0, 0.25rem, 0.25rem) {
+            #{$right}: 1.875rem;
+            top: 1.125rem;
+          }
+
+          &.active {
+            &::after {
+              transform: rotate(270deg);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .c-facet {
+    &.c-accordion {
+      ul li span {
+        color: $algolia-react-facet-label;
+      }
+    }
+  }
+}

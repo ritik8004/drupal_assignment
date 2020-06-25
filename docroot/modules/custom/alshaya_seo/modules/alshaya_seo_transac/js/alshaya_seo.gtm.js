@@ -1070,6 +1070,8 @@
       return;
     }
 
+    // Push product impressions to datalayer.
+    Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(null, null, null, {'type': 'product-click'});
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
 
     // On productClick, add list variable to cookie.
@@ -1166,11 +1168,10 @@
    *
    * @param prepareImpressionFunction
    *   The function to call which will prepare the product impressions.
+   *   Take example of Drupal.alshaya_seo_gtm_prepare_impressions().
    *   The function will accept 3 parameters:
    *     1. context: The context in which to search for impressions.
    *     2. eventType: The type of the event, eg: 'scroll'.
-   *     3. currentQueueSize: The current size of the
-   *        impressions queue.
    * @param context
    *   The context for which impressions is to be generated.
    * @param settings
@@ -1184,16 +1185,26 @@
     var currencyCode = body.attr('gtm-currency');
     var eventType = event.type;
 
-    if (eventType === 'load' || eventType === 'search-results-updated') {
-      // Here we use concat to consider the case for Aloglia sites when user
-      // visits a page such as PLP and then performs search. If some impressions
-      // are already there, then those will remain along with the new ones which
-      // come from search impressions.
-      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType, productImpressions.length));
-      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
+    if (eventType === 'load') {
+      productImpressions = prepareImpressionFunction(context, eventType);
+      // We use splice so that by no chance we send more the required number of
+      // items on page load.
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionDefaultItemsInQueue));
       productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
     }
-    else if (eventType === 'unload' || eventType === 'timer') {
+    else if (eventType === 'search-results-updated') {
+      // Push all previous impressions when new search is performed.
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions);
+      // Clear the previous timer.
+      window.clearInterval(productImpressionsTimer);
+      // Send default number of items to datalayer for new seach.
+      productImpressions = prepareImpressionFunction(context, eventType);
+      // We use splice so that by no chance we send more the required number of
+      // items on page load.
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionDefaultItemsInQueue));
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+    }
+    else if (eventType === 'timer') {
       // This is to prevent the timer calling this function infinitely when
       // there are no impressions.
       if (productImpressions.length === 0) {
@@ -1201,9 +1212,15 @@
         productImpressionsTimer = null;
         return;
       }
+      // Push required items currently in queue.
       Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
       window.clearInterval(productImpressionsTimer);
       productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+    }
+    else if (eventType === 'product-click' || eventType === 'pagehide') {
+      // Push all impressions to data layer.
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions);
+      window.clearInterval(productImpressionsTimer);
     }
     else {
       // This is for cases like scroll/carousel events.
@@ -1226,7 +1243,7 @@
   /**
    * Prepares product impressions.
    */
-  Drupal.alshaya_seo_gtm_prepare_impressions = function (context, eventType, currentQueueSize) {
+  Drupal.alshaya_seo_gtm_prepare_impressions = function (context, eventType) {
     var impressions = [];
     var body = $('body');
     var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
@@ -1253,7 +1270,7 @@
         }
         // On page load, process only the required number of
         // items and push to datalayer.
-        if ((eventType === 'load') && (impressions.length === drupalSettings.gtm.productImpressionQueueSize)) {
+        if ((eventType === 'load') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
           // This is to break out from the .each() function.
           return false;
         }
@@ -1279,9 +1296,10 @@
       : error;
     var errorData = {
       event: 'eventTracker',
-      eventCategory: context,
-      eventLabel: 'Error occurred on ' + window.location.href,
-      eventAction: message,
+      eventCategory: 'alshaya errors',
+      eventLabel: context,
+      eventAction: 'Error occurred on ' + window.location.href,
+      eventMessage: message,
       eventValue: 0,
       nonInteraction: 0,
     };

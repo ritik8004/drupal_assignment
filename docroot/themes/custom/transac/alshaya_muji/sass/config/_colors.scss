@@ -26,6 +26,9 @@ $grey-light: #777;
 $black-two: #000;
 $brownish-grey: #666;
 $white-smoke-light: #f2f2f2;
+$whisper-dark: #e5e5e5;
+$light-greyish: #ccc;
+$gray-bg: #f1f2f5;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -52,7 +55,7 @@ $primary_input_inline_error: $alizarin-crimson;
 // Dropdown.
 $primary_dropdown_arrow_bg: false;
 $primary_dropdown_arrow: $black;
-$primary_dropdown_text: $black;
+$primary_dropdown_text: $black-two;
 $primary_dropdown_border: $gallery;
 $primary_dropdown_option_hover: $wild-sand;
 $primary_dropdown_option_border: $gallery;
@@ -71,10 +74,10 @@ $primary_empty_btn_border: $black;
 $primary_brand_button: $black;
 
 // Titles.
-$page_title: $black-two;
+$page_title: $black;
 $block_title: $black;
-$title: $black-two;
-$sub_title: $black;
+$title: $black;
+$sub_title: $black-two;
 
 /* ------- 3. Secondary color  ----- */
 // Global elements.
@@ -94,48 +97,56 @@ $lang_switch_close_icon_bg: $white;
 $lang_switch_close_icon: $black;
 
 // Accordion
-$accordion_border: $light-greyish;
+$accordion_border: $whisper-dark;
 $accordion_title: $cod-gray;
-$accordion_sub_title: $grey;
+$accordion_sub_title: $grey-dark-one;
 $accordion_title_arrow: $black;
 $accordion_title_disabled: $grey;
 
 // Product detail page.
-$pdp_product_title: $black;
+$pdp_product_title: $black-two;
 $pdp_product_itemcode: $grey-light;
 $pdp_product_brand_text: $grey-light;
 $pdp_product_form_text: $grey-light;
 $pdp_product_volume_label: $grey-light;
-$pdp_product_volume_value: $black;
-$pdp_sidebar_description: $black;
-$pdp_sell_title: $black;
+$pdp_product_volume_value: $black-two;
+$pdp_sidebar_description: $black-two;
+$pdp_sell_title: $black-two;
 $pdp_product_qty_text: $grey-light;
-$pdp_cross_sell_title: $black;
-$pdp_product_price: $black;
+$pdp_cross_sell_title: $black-two;
+$pdp_product_price: $black-two;
 $pdp_product_special_price: $alizarin-crimson;
-$pdp_product_color_swatch_border: $black;
-$pdp_accordion_title: $black;
-$pdp_size_option_text: $black;
-$pdp_size_option_border: $black;
-$pdp_size_option_selected_text: $white;
-$pdp_size_option_selected_bg: $black;
+$pdp_product_color_swatch_border: $black-two;
+$pdp_accordion_title: $black-two;
+
+$pdp_size_option_text: $black-two;
+$pdp_size_option_border: $whisper-dark;
+$pdp_size_option_selected_text: $black-two;
+$pdp_size_option_selected_bg: $wild-sand;
+$pdp_size_option_selected_border: $mujidarkred;
+
+$pdp_white_color_attribute_border: $mujidarkred;
+
 $pdp_color_attribute_hover_bg: $gallery;
-$pdp_color_attribute_hover: $black;
-$pdp_color_attribute: $grey;
-$pdp_desc_wrapper_close_bg: $black;
-$pdp_sizeguide_link: $black;
+$pdp_color_attribute_hover: $mujidarkred;
+$pdp_color_attribute:  $black-two;
+$pdp_desc_wrapper_close_bg: $black-two;
+$pdp_sizeguide_link: $black-two;
 $pdp_product_special_price_text: $alizarin-crimson;
 $pdp_product_discount_price: $alizarin-crimson;
+$pdp_product_discount_text: $mujidarkred;
+$pdp_attribute_label: $grey-light;
 
 // Product Add to cart form.
-$pdp_sidebar_label: $black;
-$pdp_sidebar_link: $grey;
+$pdp_sidebar_label: $black-two;
+$pdp_sidebar_link: $brownish-grey;
 $pdp_cc_btn_bg: $black;
 $pdp_desc_wrapper_border: $gallery;
 $pdp_cc_storefinder_link: $azure-blue;
 $pdp_cc_top_stores_list_border: $gallery;
 $pdp_sidebar_offerprice_bg: $alizarin-crimson;
 $pdp_sidebar_offerprice_text: $white;
+$pdp_cc_storefinder_label: $grey-dark-one;
 
 // Out of stock button.
 $oos_btn_bg: $alizarin-crimson;
@@ -186,7 +197,7 @@ $header_branding_shadow: $shadow;
 // Header secondary: ie: top header.
 $header_secondary_bg_upto_desk: $white;
 $header_secondary_menu_link_mobile: $black;
-$header_secondary_menu_link: $black-two;
+$header_secondary_menu_link: $black;
 $header_secondary_menu_link_hover_bg: $white;
 
 // Header my account nav.
@@ -194,12 +205,13 @@ $header_my_account_h3_title: $black;
 $header_my_account_bg: $white;
 $header_my_account_link_hover: $black;
 $header_my_account_icon: $black;
-$my_account_nav_active : $black;
-$my_account_nav_hover: $grey;
-$my_account_nav: $black;
+$my_account_nav_active : $mujidarkred;
+$my_account_nav_hover: $mujidarkred;
+$my_account_nav: $grey;
 
 //slider dots
 $hp_slider_dots: $black;
+$hp_slider_arrows_dark: $mujidarkred;
 
 // Mega menu.
 $mm_bg: $white;
@@ -273,19 +285,20 @@ $minicart_notification_shadow: $shadow;
 $minicart_notification_qty_text: $grey;
 
 //3. Footer
-$footer_bg: $mujilightbluegray;
-$footer_border_top: $gallery;
-$footer_accordion_border: $gallery;
+$footer_bg: $gray-bg;
+$footer_border_top: $grey-dark-one;
+$footer_accordion_border: $grey-dark-one;
 $footer_title_h3: $black;
 $footer_link_mobile: $grey;
 $footer_link: $grey;
 $footer_link_hover: $mujidarkred;
+$footer_light_border: $light-greyish;
 
 // Social links.
 $social_links: $black;
 
 //3.1. Copyright
-$copyright_footer_bg: $mujilightbluegray;
+$copyright_footer_bg: $gray-bg;
 $copyright_footer_text: $black;
 $copyright_footer_paragraph: $black;
 
@@ -321,7 +334,7 @@ $plp_facet_label_border_mobile: $gallery;
 $plp_facet_border: $gallery;
 $plp_facet_summary_filter_icon: $cod-gray;
 $plp_item_label: $black;
-$plp_promotion_description: $gallery;
+$plp_promotion_description: $black-two;
 $plp_promotion_link: $alizarin-crimson;
 $plp_facet_filter_count_background: $black;
 $plp_grid_active_color: $black;
@@ -583,6 +596,7 @@ $order_print_delivery_details_row_text: $black;
 $order_print_delivery_details_row_border: $black;
 $order_print_product_count_row_border: $gallery;
 $order_print_total_row: $grey;
+$order_detail_delivery_details_row_subtitle_content: $black;
 
 // 404 and maintenance
 $page_not_found_text: $black;
@@ -623,7 +637,7 @@ $autocomplete_text: $grey;
 $algolia-auto-complete-border: $gallery;
 $algolia-suggestion-border: $gallery;
 $algolia-input-text: $grey;
-$algolia-search-suggestion-hover-bg: $grey;
+$algolia-search-suggestion-hover-bg: $white-smoke-light;
 $algolia-input-placeholder-text: $grey;
 $algolia-suggestion-text: $primary_text;
 $algolia-react-highlighted-text: $primary_text;
@@ -631,6 +645,9 @@ $algolia-search-icon: $transparent;
 $algolia-react-highlighted-bg: $transparent;
 $algolia-react-progressbar-fill: $black;
 $algolia-react-search-page-title: $black;
+$algolia-trending-title-text: $mujidarkred;
+$algolia-search-clear-text-icon: $black;
+$algolia_react-facet-item-color: $black;
 
 // SPC
 $spc-product-attributes: $grey-dark-one;
@@ -642,5 +659,5 @@ $spc-checkout-order-detail-label: $grey;
 $spc-deliver-button: $mujidarkred;
 $spc-cnc-store-search-icon: $black-two;
 $spc-search-icon: $black-two;
-$spc-select-border: $white-smoke-light;
+$spc-select-border: $whisper-dark;
 $spc-order-summary-discount-text: $black-two;

@@ -210,12 +210,6 @@
       font-size: 0.875rem;
     }
 
-    .ladda-label {
-      &::first-letter {
-        text-transform: uppercase;
-      }
-    }
-
     html[lang=ar] & {
       padding: 0.875rem 1.125rem;
     }

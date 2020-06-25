@@ -24,7 +24,7 @@ $thunderbird: #b91824;
 //$primary_bg: $white;
 $body_bg: $primary_bg;
 $content_pagetitle: $black;
-$content_pagetitle_border: $white-five;
+$content_pagetitle_border: $gallery;
 $primary_text: $black;
 $primary_link: $grey;
 $primary_link-hover: $black;
@@ -605,3 +605,19 @@ $autocomplete_text: $grey;
 $spc-deliver-button: $royal-blue;
 $spc-edit-button: $black;
 $spc-shipping-price: $grey-light;
+
+//Algolia search bar.
+$algolia-input-text: $black;
+$algolia-input-placeholder-text: $grey-light;
+$algolia-input-border: $gallery;
+$algolia-trending-title-text: $black;
+$algolia-react-progressbar: $warm-grey-two;
+$algolia-react-progressbar-text: $grey-light;
+$algolia-react-progressbar-fill: $black;
+$algolia-react-search-page-title: $black;
+$algolia-react-sidebar-label-color: $black;
+$algolia-auto-complete-border: $gallery;
+$algolia-search-icon-background: $white;
+$algolia-search-icon: $black;
+$algolia-search-clear-text-icon: $black;
+$algolia-react-facet-label: $black;

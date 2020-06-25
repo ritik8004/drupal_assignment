@@ -90,7 +90,7 @@ class AlshayaFeedController extends ControllerBase {
 
     $headers = [
       'Content-type' => 'application/xml; charset=utf-8',
-      'Cache-Control' => 'public, max-age=' . $this->configFactory->get('alshaya_feed.settings')->get('cache_time'),
+      'Cache-Control' => 'no-store, no-cache, private',
     ];
 
     return new BinaryFileResponse($uri, 200, $headers, TRUE, 'attachment');

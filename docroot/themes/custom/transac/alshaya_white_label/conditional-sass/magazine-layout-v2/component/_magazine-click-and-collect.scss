@@ -1,6 +1,5 @@
 .magv2-pdp-click-and-collect-wrapper {
   .magv2-pdp-section-title {
-    margin-bottom: 1.25rem;
     display: flex;
     align-items: center;
     text-transform: capitalize;
@@ -15,6 +14,36 @@
 
     .click-collect-title-tag {
       margin-#{$left}: 0.625rem;
+    }
+  }
+
+  .magv2-click-collect-content-wrapper {
+    display: none;
+  }
+
+  .magv2-click-collect-title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &.show-click-collect-content {
+    .magv2-accordion {
+      margin-bottom: 1.25rem;
+
+      @include icon(chevronup, before) {
+        font-weight: 900;
+        font-size: 1.25rem;
+        cursor: pointer;
+      }
+    }
+
+    .magv2-pdp-section-title {
+      margin-bottom: 1.25rem;
+    }
+
+    .magv2-click-collect-content-wrapper {
+      display: block;
     }
   }
 
@@ -43,7 +72,7 @@
     }
   }
 
-  .magv2-click-collect-showmore-link,
+  .magv2-click-collect-show-link,
   .location-name {
     font-size: 1rem;
     line-height: normal;
@@ -61,9 +90,10 @@
   .store {
     &-detail-wrapper {
       padding: 0.9375rem;
-      border: 0.063rem solid lightgray;
+      border: 0.063rem solid $magv2-click-collect-store-list-border;
       display: flex;
       margin-bottom: 1.25rem;
+      border-radius: 0.125rem;
     }
 
     &-count {
@@ -72,8 +102,10 @@
       border-radius: 50%;
       height: 1.5625rem;
       width: 2.188rem;
-      padding-top: 0.25rem;
-      font-size: 0.75rem;
+      padding-top: 0.125rem;
+      font-size: 0.875rem;
+      font-family: $alshaya-bold;
+      line-height: 1.29;
 
       @include breakpoint($only-tablet) {
         padding-#{$left}: 0.375rem;
@@ -84,20 +116,11 @@
 
     &-details {
       padding-#{$left}: 0.9375rem;
+      line-height: 1.38;
 
       span,
       div {
         font-family: $alshaya-bold;
-      }
-    }
-
-    &-product-status {
-      .in-stock {
-        color: $magv2-click-collect-product-status-in-store;
-      }
-
-      .few-left {
-        color: $magv2-click-collect-product-status-few-left;
       }
     }
 

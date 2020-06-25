@@ -207,8 +207,6 @@ class Cart {
    *
    * @return array
    *   Cart data.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart($force = FALSE) {
     if (!empty(static::$cart) && !$force) {
@@ -452,8 +450,9 @@ class Cart {
     // not set. City with value 'NONE' means, that this was added in CnC
     // by default and not changed by user.
     if ($update_billing
-      && (empty($cart['cart']['billing_address']['firstname'])
-      || $cart['cart']['billing_address']['city'] == 'NONE')) {
+      || (empty($cart['cart']['billing_address']['firstname'])
+        || $cart['cart']['billing_address']['city'] == 'NONE')
+    ) {
       $cart = $this->updateBilling($data['shipping']['shipping_address']);
     }
 
@@ -761,6 +760,7 @@ class Cart {
             $additional_data = [
               'cardId' => $card['gateway_token'],
               'cvv' => $this->customerCards->deocodePublicHash(urldecode($additional_info['cvv'])),
+              'udf1' => $card['mada'] ? 'MADA' : '',
               'udf2' => APIWrapper::CARD_ID_CHARGE,
             ];
             $end_point = APIWrapper::ENDPOINT_CARD_PAYMENT;
@@ -1068,7 +1068,9 @@ class Cart {
     $cart = $this->getCart();
 
     try {
-      $result = $this->magentoApiWrapper->doRequest('PUT', $url, ['json' => $data]);
+      // We don't pass any payment data in place order call to MDC because its
+      // optional and this also sets in ACM MDC observer.
+      $result = $this->magentoApiWrapper->doRequest('PUT', $url);
       $order_id = (int) str_replace('"', '', $result);
       return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
     }
@@ -1379,6 +1381,37 @@ class Cart {
       'error' => TRUE,
       'redirectUrl' => $response['redirectUrl'],
     ];
+  }
+
+  /**
+   * Checks whether cnc enabled or not on cart.
+   *
+   * @param array $data
+   *   Cart data.
+   *
+   * @return bool
+   *   CnC enabled or not for cart.
+   */
+  public function getCncStatusForCart(array $data) {
+    static $cnc_enabled;
+    if (isset($cnc_enabled)) {
+      return $cnc_enabled;
+    }
+
+    // Whether CnC enabled or not.
+    $cnc_enabled = TRUE;
+    $cart_skus_list = [];
+    foreach ($data['cart']['items'] as $item) {
+      $cart_skus_list[] = $item['sku'];
+    }
+
+    if (!empty($cart_skus_list)) {
+      $cart_skus_list = implode(',', $cart_skus_list);
+      // Get CnC status.
+      $cnc_enabled = $this->drupal->getCncStatusForCart($cart_skus_list);
+    }
+
+    return $cnc_enabled;
   }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Service\Magento;
 
 use App\Service\Config\SystemSettings;
+use App\Controller\PaymentController;
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
 
@@ -58,7 +59,11 @@ class MagentoInfo {
    *   Magento store code.
    */
   public function getMagentoStore() {
-    $lang = $this->systemSettings->getRequestLanguage();
+    // If langcode is set by the external payment method, use that
+    // otherwise use from the request object.
+    if (empty($lang = PaymentController::$externalPaymentLangcode)) {
+      $lang = $this->systemSettings->getRequestLanguage();
+    }
     return $this->systemSettings->getSettings('magento_lang_prefix')[$lang] ?? NULL;
   }
 
