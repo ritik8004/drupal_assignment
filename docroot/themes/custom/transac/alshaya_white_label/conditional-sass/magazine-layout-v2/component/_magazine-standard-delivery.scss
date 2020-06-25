@@ -1,6 +1,11 @@
 .magv2-pdp-standard-delivery-wrapper {
+  .magv2-standard-delivery-title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .magv2-pdp-section-title {
-    margin-bottom: 1.25rem;
     display: flex;
     align-items: center;
     text-transform: capitalize;
@@ -15,6 +20,29 @@
 
     .standard-delivery-title-tag {
       margin-#{$left}: 0.625rem;
+    }
+  }
+
+  .magv2-pdp-section-text {
+    display: none;
+  }
+
+  &.show-home-delivery {
+    .magv2-pdp-section-text {
+      display: block;
+    }
+
+    .magv2-pdp-section-title,
+    .magv2-accordion {
+      margin-bottom: 1.25rem;
+    }
+
+    .magv2-accordion {
+      @include icon(chevronup, before) {
+        font-weight: 900;
+        font-size: 1.25rem;
+        cursor: pointer;
+      }
     }
   }
 
