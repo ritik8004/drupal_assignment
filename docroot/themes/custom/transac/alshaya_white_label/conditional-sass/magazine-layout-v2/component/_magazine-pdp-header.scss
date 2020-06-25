@@ -157,6 +157,7 @@
 
             .magv2-pdp-price-wrapper {
               font-size: 1rem;
+              padding-#{$left}: 0;
             }
           }
 
@@ -166,13 +167,23 @@
 
           .magv2-pdp-price-wrapper {
             font-size: 1.125rem;
-            font-family: $alshaya-bold;
             padding: 0 0.25rem;
           }
 
           .magv2-pdp-vat-text {
             font-size: 0.75rem;
             color: $magv2-vat-text;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          .has-special-price {
+            flex-direction: row;
+            justify-content: center;
+
+            .magv2-pdp-final-price-wrapper {
+              padding-#{$left}: 0;
+            }
           }
         }
       }

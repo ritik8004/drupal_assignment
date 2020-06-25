@@ -40,9 +40,13 @@ const PdpInfo = (props) => {
               <div className="magv2-pdp-final-price-wrapper">
                 <span className="magv2-pdp-final-price-currency suffix">{drupalSettings.alshaya_spc.currency_config.currency_code}</span>
                 <span className="magv2-pdp-final-price-amount">{finalPrice}</span>
-                <span className="magv2-pdp-discount-percentage">
-                  {`${Drupal.t('Save')} ${discountPercantage}%`}
-                </span>
+                {!shortDetail
+                  ? (
+                    <span className="magv2-pdp-discount-percentage">
+                      {`${Drupal.t('Save')} ${discountPercantage}%`}
+                    </span>
+                  )
+                  : null}
               </div>
             )
             : null}
