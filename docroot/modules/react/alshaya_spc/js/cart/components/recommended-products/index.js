@@ -10,6 +10,8 @@ import dispatchCustomEvent from '../../../utilities/events';
 // Smooth transition is not supported apart from Chrome & FF.
 smoothscroll.polyfill();
 
+let recommendedSkus = [];
+
 export default class CartRecommendedProducts extends React.Component {
   constructor(props) {
     super(props);
@@ -43,13 +45,13 @@ export default class CartRecommendedProducts extends React.Component {
     document.removeEventListener('spcRefreshCartRecommendation', this.spcRefreshCartRecommendation, false);
   }
 
-  spcRecommendationHandler = (items) => {
+  spcRecommendationHandler = async (items) => {
     if (items !== undefined
       && Object.keys(items).length > 0) {
-      const skus = [];
-      Object.entries(items).forEach(([, item]) => {
-        skus.push(item.sku);
-      });
+      await this.recommendedSkuSPrepare(items);
+      const skus = recommendedSkus;
+      // Reset it.
+      recommendedSkus = [];
 
       // Get recommended products.
       const recommendedProducts = getRecommendedProducts(skus, 'crosssell');
@@ -69,6 +71,23 @@ export default class CartRecommendedProducts extends React.Component {
           }
         });
       }
+    }
+  };
+
+  recommendedSkuSPrepare = async (items) => {
+    await Object.entries(items).forEach(async ([, item]) => {
+      await Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
+    });
+  };
+
+  /**
+   * Call back to get product data from storage.
+   */
+  productDataCallback = (productData) => {
+    // If sku info available.
+    if (productData !== null && productData.sku !== undefined) {
+      recommendedSkus.push(productData.sku);
+      recommendedSkus.push(productData.parentSKU);
     }
   };
 
