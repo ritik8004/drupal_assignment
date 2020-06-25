@@ -21,6 +21,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class ClickCollectController.
@@ -410,6 +411,11 @@ class ClickCollectController extends ControllerBase {
    */
   public function getProductStoresJson($sku, $lat, $lon) {
     $data = $this->getProductStores($sku, $lat, $lon);
+    // Condition to get only Json response
+    // for click and collect pdp.
+    if ($this->currentRequest->getQueryString() == 'json') {
+      return new JsonResponse($data);
+    }
 
     $response = new AjaxResponse();
     $settings['alshaya_click_collect']['pdp'] = ['top_three' => FALSE, 'all_stores' => FALSE];

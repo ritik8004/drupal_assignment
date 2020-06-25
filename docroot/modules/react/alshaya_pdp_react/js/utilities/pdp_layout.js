@@ -175,3 +175,18 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     configurableCombinations,
   };
 };
+
+/**
+ * Fetch available stores for given lat and lng.
+ */
+export const fetchAvailableStores = (coords) => {
+  const { productInfo } = drupalSettings;
+  let skuItemCode = null;
+  if (productInfo) {
+    [skuItemCode] = Object.keys(productInfo);
+  }
+  const baseUrl = window.location.origin;
+  const apiUrl = Drupal.url(`stores/product/${skuItemCode}/${coords.lat}/${coords.lng}?json`);
+  const GET_STORE_URL = `${baseUrl}${apiUrl}`;
+  return axios.get(GET_STORE_URL);
+};
