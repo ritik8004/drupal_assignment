@@ -23,8 +23,13 @@ class AlshayaAppointmentController extends ControllerBase {
 
     $alshaya_appointment_config = $this->config('alshaya_appointment.settings');
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
+    $geolocation_config = $this->config('geolocation.settings');
 
-    $cache_tags = Cache::mergeTags($cache_tags, array_merge($alshaya_appointment_config->getCacheTags(), $store_finder_config->getCacheTags()));
+    $cache_tags = Cache::mergeTags($cache_tags, array_merge(
+      $alshaya_appointment_config->getCacheTags(),
+      $store_finder_config->getCacheTags(),
+      $geolocation_config->getCacheTags()
+    ));
 
     $settings['alshaya_appointment'] = [
       'middleware_url' => _alshaya_appointment_get_middleware_url(),
@@ -33,6 +38,7 @@ class AlshayaAppointmentController extends ControllerBase {
       'appointment_companion_limit' => $alshaya_appointment_config->get('appointment_companion_limit'),
       'local_storage_expire' => $alshaya_appointment_config->get('local_storage_expire'),
       'store_finder' => array_merge($alshaya_appointment_config->get('store_finder'), $store_finder_config->get('country_center')),
+      'google_map_api_key' => $geolocation_config->get('google_map_api_key'),
     ];
 
     return [

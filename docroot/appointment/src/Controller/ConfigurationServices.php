@@ -127,4 +127,90 @@ class ConfigurationServices {
     }
   }
 
+  /**
+   * Get Stores By Geo Criteria .
+   *
+   * @return json
+   *   Stores data from API.
+   */
+  public function getStores(Request $request) {
+    // @TODO: Need to discuss this API call.
+    // It works with xml but not with SoapVar.
+    try {
+      // $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
+      // $requestQuery = $request->query;
+
+      // $param = [
+      //   'locationSearchCriteria' => [
+      //     'locationExternalId' => $this->apiHelper->getlocationExternalId(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL),
+      //     'locationGroupId' => 'Boots',
+      //     'exactMatchOnly' => FALSE,
+      //   ],
+      //   'locationSearchGeoCriteria' => [
+      //     'latitude' => $requestQuery->get('latitude'),
+      //     'longitude' => $requestQuery->get('longitude'),
+      //     'radius' => $requestQuery->get('radius'),
+      //     'maxNumberOfLocations' => $requestQuery->get('max-locations'),
+      //     'unit' => $requestQuery->get('unit')
+      //   ]
+      // ];
+      // $result = $client->__soapCall('getLocationsByGeoCriteria', [$param]);
+
+      $result = $this->getStoresXml();
+
+      $stores = $result->return->locations ?? '';
+      $storesData = [];
+
+      foreach ($stores ?? [] as $store) {
+        $storesData[$store->locationExternalId] = [
+          'locationExternalId' => $store->locationExternalId ?? '',
+          'name' => $store->locationName ?? '',
+          'address' => $store->companyAddress ?? '',
+          'geocoordinates' => $store->geocoordinates ?? ''
+        ];
+      }
+
+      return new JsonResponse($storesData);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while getting stores. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  private function getStoresXml() {
+    $xml = '<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns2="http://services.timecommerce.timetrade.com/ws" xmlns:ns3="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:ns4="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <S:Header>
+          <ns3:Security>
+            <ns3:UsernameToken>
+              <ns3:Username>bootsapiuser</ns3:Username>
+              <ns3:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">jG4@dF0p</ns3:Password>
+            </ns3:UsernameToken>
+          </ns3:Security>
+        </S:Header>
+        <S:Body>
+          <ns2:getLocationsByGeoCriteria>
+            <locationSearchGeoCriteria>
+              <latitude>25.0764689</latitude>
+              <longitude>55.1403815</longitude>
+              <radius>50</radius>
+              <maxNumberOfLocations>500</maxNumberOfLocations>
+              <unit>miles</unit>
+            </locationSearchGeoCriteria>
+          </ns2:getLocationsByGeoCriteria>
+        </S:Body>
+      </S:Envelope>';
+    $wsdl   = "https://api-stage.timetradesystems.co.uk/soap/ConfigurationServices?wsdl";
+    $client = new \SoapClient($wsdl, array(  'soap_version' => SOAP_1_1,
+      'trace' => true,
+    ));
+    $soapBody = new \SoapVar($xml, \XSD_ANYXML);
+    $return = $client->__SoapCall('getLocationsByGeoCriteria', array($soapBody));
+
+    return $return;
+  }
+
 }

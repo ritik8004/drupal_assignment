@@ -6,6 +6,7 @@ import AppointmentForYou from './components/appointment-for-you';
 import AppointmentTermsConditions from './components/appointment-terms-conditions';
 import fetchAPIData from '../../../utilities/api/fetchApiData';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
+import { getInputValue } from '../../../utilities/helper';
 
 const defaultSelectOption = Drupal.t('Please Select');
 const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
@@ -70,19 +71,7 @@ export default class AppointmentType extends React.Component {
   }
 
   handleChange = (e) => {
-    let { value } = e.target;
-
-    switch (e.target.type) {
-      case 'checkbox':
-        value = e.target.checked;
-        break;
-      case 'select-one':
-        value = { id: e.target.value, name: e.target.options[e.target.selectedIndex].text };
-        break;
-      case 'radio':
-        value = e.target.value;
-        break;
-    }
+    const value = getInputValue(e);
     this.setState({
       [e.target.name]: value,
     });

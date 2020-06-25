@@ -1,20 +1,32 @@
 import React from 'react';
-
 import fetchAPIData from '../../../utilities/api/fetchApiData';
+import StoreList from './components/store-list';
 import StoreFinderMap from './components/store-finder-map';
+import { getInputValue, getLocationAccess } from '../../../utilities/helper';
+import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
 const appointmentStoreFinder = drupalSettings.alshaya_appointment.store_finder;
+const initialCoords = {
+  lat: appointmentStoreFinder.latitude,
+  lng: appointmentStoreFinder.longitude,
+};
+let localStorageValues = '';
 
 export default class AppointmentStore extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      storeItems: '',
-      initialCoords: {
-        lat: appointmentStoreFinder.latitude,
-        lng: appointmentStoreFinder.longitude,
-      },
-    };
+
+    localStorageValues = getStorageInfo();
+    if (localStorageValues) {
+      this.state = {
+        ...localStorageValues,
+      };
+    } else {
+      this.state = {
+        storeItems: '',
+        selectedStoreItem: '',
+      };
+    }
   }
 
   componentDidMount() {
@@ -25,23 +37,47 @@ export default class AppointmentStore extends React.Component {
     }&latitude=${appointmentStoreFinder.latitude
     }&longitude=${appointmentStoreFinder.longitude}`;
 
+    this.fetchStores(apiUrl);
+  }
+
+  fetchStores = (apiUrl) => {
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
-          this.setState({
+          this.setState((prevState) => ({
+            ...prevState,
             storeItems: result.data,
-          });
+          }));
         }
       });
     }
   }
 
-  convertKmToMile = (value) => {
-    const realMiles = (value * 0.621371);
-    const miles = Math.floor(realMiles);
-    return miles;
+  handleDisplayStoresNearMe = () => {
+    getLocationAccess()
+      .then(
+        async (pos) => {
+          const coords = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          };
+          this.setState((prevState) => ({
+            ...prevState,
+            userCoords: coords,
+          }));
+
+          const apiUrl = `${'/get/stores'
+            + '?radius='}${appointmentStoreFinder.radius
+          }&unit=${appointmentStoreFinder.unit
+          }&max-locations=${appointmentStoreFinder.max_num_of_locations
+          }&latitude=${coords.lat
+          }&longitude=${coords.lng}`;
+
+          fetchAPIData(apiUrl);
+        },
+      );
   }
 
   handleStateChange = (storeItems) => {
@@ -51,18 +87,48 @@ export default class AppointmentStore extends React.Component {
   }
 
   handleChange = (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    const value = getInputValue(e);
     this.setState({
       [e.target.name]: value,
     });
   }
 
+  handleBack = (step) => {
+    const { handleBack } = this.props;
+    handleBack(step);
+  }
+
+  handleSubmit = () => {
+    setStorageInfo(this.state);
+    const { handleSubmit } = this.props;
+    handleSubmit();
+  }
+
+  searchHandler = (event) => {
+    const storeItems = localStorageValues && localStorageValues.storeItems;
+
+    let filterItems;
+    let filteredStoreItems;
+
+    const searchQuery = event.target.value.toLowerCase();
+    filterItems = storeItems && Object.entries(storeItems).filter(([k, el]) => {
+      const match = el.name.toLowerCase().indexOf(searchQuery) !== -1;
+      if (match) {
+        filteredStoreItems.push(el);
+      }
+      return match;
+    });
+
+    this.setState((prevState) => ({
+      ...prevState,
+      storeItems: filteredStoreItems,
+    }));
+  }
+
   render() {
     const {
       storeItems,
-      appointmentCategory,
-      appointmentType,
-      initialCoords,
+      selectedStoreItem,
     } = this.state;
 
     return (
@@ -76,12 +142,7 @@ export default class AppointmentStore extends React.Component {
             <button
               className="appointment-type-button"
               type="button"
-              // disabled={!(appointmentCategory
-              //   && appointmentType
-              //   && appointmentCompanion
-              //   && appointmentForYou
-              //   && appointmentTermsConditions)}
-              onClick={this.handleSubmit}
+              onClick={this.handleDisplayStoresNearMe}
             >
               {Drupal.t('Display Stores Near Me')}
             </button>
@@ -94,8 +155,8 @@ export default class AppointmentStore extends React.Component {
             <input
               type="text"
               className="input"
-              onChange={this.handleChange}
               placeholder={Drupal.t('e.g. Salmiya')}
+              onChange={this.searchHandler}
             />
           </div>
           <div className="store-map-wrapper">
@@ -107,78 +168,32 @@ export default class AppointmentStore extends React.Component {
                 openSelectedStore={false}
               />
             </div>
-            <div className="store-list-inner-wrapper" style={{ 'z-index': '1', position: 'absolute', top: '194%' }}>
-              {storeItems && storeItems.map((v) => (
-                <div className="store-list-item">
-                  <input
-                    type="radio"
-                    value=""
-                    name="storeItem"
-                    onChange={this.handleChange}
-                  />
-                  <span className="store-name">{v.name}</span>
-                  <span className="distance">
-                    {v.distanceInMiles}
-                    {Drupal.t('Miles')}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <StoreList
+              storeList={storeItems}
+              coords={initialCoords}
+              handleStateChange={this.handleStateChange}
+              handleStoreSelect={this.handleChange}
+              activeItem={selectedStoreItem && JSON.parse(selectedStoreItem).locationExternalId}
+            />
           </div>
           <div className="appointment-store-buttons-wrapper">
             <button
               className="appointment-store-button back"
               type="button"
-              onClick={this.handleSubmit}
+              onClick={() => this.handleBack(1)}
             >
               {Drupal.t('BACK')}
             </button>
             <button
               className="appointment-store-button select-store"
               type="button"
+              disabled={!(selectedStoreItem)}
               onClick={this.handleSubmit}
             >
               {Drupal.t('Select Store')}
             </button>
           </div>
 
-        </div>
-        <div className="appointment-details">
-          <div className="appointment-details-header">
-            {Drupal.t('You have chosen')}
-          </div>
-          <div className="appointment-details-body">
-            <div className="appointment-details-item">
-              <div className="appointment-details-item-header">
-                <label>{Drupal.t('Appointment category')}</label>
-                <button
-                  className="appointment-details-button"
-                  type="button"
-                  onClick={this.handleSubmit}
-                >
-                  {Drupal.t('Edit')}
-                </button>
-              </div>
-              <div className="appointment-details-item-body">
-                {appointmentCategory && appointmentCategory.name}
-              </div>
-            </div>
-            <div className="appointment-details-item">
-              <div className="appointment-details-item-header">
-                <label>{Drupal.t('Appointment type')}</label>
-                <button
-                  className="appointment-details-button"
-                  type="button"
-                  onClick={this.handleSubmit}
-                >
-                  {Drupal.t('Edit')}
-                </button>
-              </div>
-              <div className="appointment-details-item-body">
-                {appointmentType && appointmentType.name}
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     );
