@@ -34,6 +34,11 @@
     padding-#{$left}: 3.5rem;
     padding-#{$right}: 1.5rem;
     font-size: 0.9375rem;
+    line-height: 2.5;
+
+    @include breakpoint($only-mobile) {
+      line-height: 3;
+    }
 
     @include breakpoint($tablet) {
       border-bottom-color: $algolia-auto-complete-border-bottom;
@@ -70,7 +75,7 @@
         #{$right}: inherit;
 
         @include breakpoint($only-mobile) {
-          top: 0.3125rem;
+          top: 0.5rem;
           #{$right}: inherit;
           #{$left}: 0.75rem;
           opacity: 1;
@@ -105,7 +110,6 @@
         width: 100%;
         border: 0.0625rem solid $algolia-auto-complete-border;
         height: 3.875rem;
-        line-height: 1.25rem;
         padding-#{$left}: 3rem;
       }
     }
