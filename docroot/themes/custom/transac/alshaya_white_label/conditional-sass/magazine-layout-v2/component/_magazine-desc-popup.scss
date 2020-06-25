@@ -18,6 +18,17 @@
         @include breakpoint($tablet) {
           max-width: 23.4375rem;
         }
+
+        .magv2-pdp-price-container {
+          &.has-special-price {
+            flex-direction: row;
+            justify-content: center;
+
+            .magv2-pdp-final-price-wrapper {
+              padding-#{$left}: 0;
+            }
+          }
+        }
       }
 
       &-wrapper {
