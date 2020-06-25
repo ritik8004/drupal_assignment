@@ -244,6 +244,7 @@ class CategoryProductListResource extends ResourceBase {
    */
   protected function addExtraTermData(TermInterface $term) {
     $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString(TRUE);
+    $dy_banner = $term->get('field_dy_banner')->getString();
     return [
       'id' => (int) $term->id(),
       'label' => $term->label(),
@@ -254,9 +255,7 @@ class CategoryProductListResource extends ResourceBase {
       ? $desc[0]['value']
       : '',
       'total' => 0,
-      'dy_banner' => $term->get('field_dy_banner')
-      ? ['plp_banner_name' => $term->get('field_dy_banner')->getString()]
-      : ['plp_banner_name' => ''],
+      'dy_banner' => $dy_banner ? ['plp_banner_name' => $dy_banner] : [],
     ];
   }
 
