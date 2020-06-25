@@ -297,6 +297,7 @@ class AlshayaSpcOrderHelper {
     $data['id'] = $item['item_id'];
     $data['image'] = NULL;
     $data['url'] = '';
+    $data['isNonRefundable'] = NULL;
 
     $data['options'] = [];
     $node = $this->skuManager->getDisplayNode($item['sku']);
