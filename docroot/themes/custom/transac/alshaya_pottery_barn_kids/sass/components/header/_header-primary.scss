@@ -178,3 +178,28 @@ ul.menu--two__list li.menu--two__list-item .menu__link-wrapper .menu-two__link {
     line-height: 1.33;
   }
 }
+
+// Remove overlay in main menu.
+body {
+  @include breakpoint($desktop) {
+    &.overlay.overlay-main-menu {
+      &::before {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+// Box shadow to main menu after removing the overlay.
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    &:not(.megamenu-inline-layout) {
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          box-shadow: 0 0.1875rem 0.3125rem 0 $PBK_box_shadow_gray;
+          border: 1px solid $mm_l2_border;
+        }
+      }
+    }
+  }
+}
