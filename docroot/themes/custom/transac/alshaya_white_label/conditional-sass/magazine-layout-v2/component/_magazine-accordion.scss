@@ -1,0 +1,7 @@
+.magv2-accordion {
+  @include icon(chevrondown, before) {
+    font-weight: 900;
+    font-size: 1.25rem;
+    cursor: pointer;
+  }
+}
