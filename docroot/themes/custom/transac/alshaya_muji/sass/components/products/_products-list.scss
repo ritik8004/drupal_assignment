@@ -86,6 +86,12 @@
         font-family: $alshaya-bold;
         font-size: 0.875rem;
       }
+
+      .has--special--price {
+        .price {
+          font-family: $alshaya-thin;
+        }
+      }
     }
 
     article {
