@@ -193,9 +193,11 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       foreach ($product_tree['configurables'] as $key => $configurable) {
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isGroup'] = FALSE;
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = FALSE;
+        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['colorConfig'] = FALSE;
         if (!$swatch_processed && in_array($key, $this->skuManager->getPdpSwatchAttributes())) {
           $swatch_processed = TRUE;
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = TRUE;
+          $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['colorConfig'] = TRUE;
           foreach ($configurable['values'] as $value => $label) {
             if (empty($value)) {
               continue;

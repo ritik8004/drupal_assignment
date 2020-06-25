@@ -22,6 +22,7 @@ class CartSelectOption extends React.Component {
       groupName: isGroup ? defaultGroup : null,
       groupStatus: isGroup,
       swatchStatus: isSwatch,
+      selected: null,
     };
   }
 
@@ -35,7 +36,7 @@ class CartSelectOption extends React.Component {
   }
 
   handleSelectionChanged = (e, code) => {
-    const codeValue = e.target.value;
+    const codeValue = e.currentTarget.parentElement.value;
     const {
       configurableCombinations,
       skuCode,
@@ -49,7 +50,6 @@ class CartSelectOption extends React.Component {
       selectedCombination += `${key}|${selectedValuesArray[key]}||`;
     });
     const variantSelected = configurableCombinations[skuCode].byAttribute[selectedCombination];
-
     // Refresh the PDP page on new variant selection.
     pdpRefresh(variantSelected);
 
@@ -57,11 +57,26 @@ class CartSelectOption extends React.Component {
     refreshConfigurables(code, codeValue, variantSelected);
   }
 
+  /**
+   * Handle click on <li>.
+   */
+  handleLiClick = (e, code) => {
+    this.setState({
+      selected: e.currentTarget.parentElement.value,
+    });
+    this.handleSelectionChanged(e, code);
+  };
+
+  closeModal = () => {
+    document.querySelector('body').classList.remove('select-overlay');
+  };
+
   render() {
     const {
       configurables,
       nextCode,
       nextValues,
+      key,
     } = this.props;
 
     const { code } = configurables;
@@ -69,6 +84,7 @@ class CartSelectOption extends React.Component {
       groupName,
       groupStatus,
       swatchStatus,
+      selected,
     } = this.state;
 
     const swatchSelectOption = (
@@ -78,17 +94,23 @@ class CartSelectOption extends React.Component {
         code={code}
         nextCode={nextCode}
         nextValues={nextValues}
+        selected={selected}
+        handleLiClick={this.handleLiClick}
       />
     );
 
     const selectOption = (!swatchStatus) ? (
       <div className="non-grouped-attr">
         <NonGroupSelectOption
+          key={key}
           handleSelectionChanged={this.handleSelectionChanged}
           configurables={configurables}
           code={code}
           nextCode={nextCode}
           nextValues={nextValues}
+          selected={selected}
+          handleLiClick={this.handleLiClick}
+          closeModal={this.closeModal}
         />
       </div>
     ) : swatchSelectOption;
@@ -96,6 +118,7 @@ class CartSelectOption extends React.Component {
     return (groupStatus) ? (
       <div className="grouped-attr">
         <GroupSelectOption
+          key={key}
           groupSelect={this.groupSelect}
           handleSelectionChanged={this.handleSelectionChanged}
           configurables={configurables}
@@ -103,6 +126,9 @@ class CartSelectOption extends React.Component {
           code={code}
           nextCode={nextCode}
           nextValues={nextValues}
+          selected={selected}
+          handleLiClick={this.handleLiClick}
+          closeModal={this.closeModal}
         />
       </div>
     ) : selectOption;

@@ -107,7 +107,7 @@ class ConfigurableProductForm extends React.Component {
     const attributes = configurableCombinations[skuCode].configurables;
     const selectedValues = [];
     Object.keys(attributes).map((id) => {
-      const selectedVal = document.getElementById(id).value;
+      const selectedVal = document.getElementById(id).getElementsByClassName('magv2-select-list-item active');
       if (selectedVal !== '' && selectedVal !== null && typeof selectedVal !== 'undefined') {
         selectedValues[id] = selectedVal;
       }
@@ -116,6 +116,9 @@ class ConfigurableProductForm extends React.Component {
     return selectedValues;
   }
 
+  openModal = () => {
+    document.querySelector('body').classList.add('select-overlay');
+  };
 
   render() {
     const {
@@ -140,7 +143,6 @@ class ConfigurableProductForm extends React.Component {
         <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
           {Object.keys(configurables).map((key) => (
             <div key={key}>
-              <label htmlFor={key}>{configurables[key].label}</label>
               <CartSelectOption
                 configurables={configurables[key]}
                 byAttribute={byAttribute}
@@ -158,8 +160,8 @@ class ConfigurableProductForm extends React.Component {
               />
             </div>
           ))}
-          <p>{Drupal.t('Quantity')}</p>
-          <div id="product-quantity-dropdown">
+          <div className="magv2-size-btn-wrapper" onClick={() => this.openModal()}>{Drupal.t('Select size')}</div>
+          <div id="product-quantity-dropdown" className="magv2-qty-wrapper">
             <QuantityDropdown
               variantSelected={variantSelected}
               productInfo={productInfo}
@@ -168,6 +170,7 @@ class ConfigurableProductForm extends React.Component {
           </div>
           {(checkoutFeatureStatus === 'enabled') ? (
             <button
+              className="magv2-button"
               type="submit"
               value="Add to basket"
               onClick={this.addToCart}

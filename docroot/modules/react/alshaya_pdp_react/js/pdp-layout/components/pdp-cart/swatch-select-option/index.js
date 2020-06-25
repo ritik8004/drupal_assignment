@@ -4,17 +4,18 @@ import DefaultSelectOptions from '../default-select-options';
 
 const SwatchSelectOption = (props) => {
   const {
-    handleSelectionChanged,
     configurables,
     code,
     nextCode,
     nextValues,
+    handleLiClick,
+    selected,
   } = props;
 
   return (
     <>
       <div className="non-groupped-attr">
-        <select id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
+        <ul id={code} className="select-attribute">
           {Object.keys(configurables.values).map((attr) => {
             if (code === nextCode) {
               return (
@@ -23,6 +24,9 @@ const SwatchSelectOption = (props) => {
                   attr={attr}
                   value={configurables.values[attr].swatch_image}
                   key={attr}
+                  selected={selected}
+                  code={code}
+                  handleLiClick={handleLiClick}
                 />
               );
             }
@@ -32,10 +36,13 @@ const SwatchSelectOption = (props) => {
                 attr={attr}
                 value={configurables.values[attr].swatch_image}
                 key={attr}
+                selected={selected}
+                code={code}
+                handleLiClick={handleLiClick}
               />
             );
           })}
-        </select>
+        </ul>
       </div>
     </>
   );

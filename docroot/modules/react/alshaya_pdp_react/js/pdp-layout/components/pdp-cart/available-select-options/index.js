@@ -5,26 +5,39 @@ const AvailableSelectOptions = (props) => {
     nextValues,
     attr,
     value,
+    handleLiClick,
+    selected,
+    code,
   } = props;
 
   if (nextValues.indexOf(attr) !== -1) {
     return (
-      <option
-        value={attr}
+      <li
         key={attr}
+        value={attr}
+        className={`magv2-select-list-item ${((selected !== undefined
+          && String(selected) === String(attr)))
+          ? 'active' : 'in-active'}`}
       >
-        {value}
-      </option>
+        <span onClick={(e) => handleLiClick(e, code)} className="magv2-select-list-wrapper">
+          <span className="magv2-select-list-name">{value}</span>
+        </span>
+      </li>
     );
   }
   return (
-    <option
-      value={attr}
+    <li
       key={attr}
+      value={attr}
+      className={`magv2-select-list-item ${((selected !== undefined
+        && String(selected) === String(attr)))
+        ? 'active' : 'in-active'}`}
       disabled
     >
-      {value}
-    </option>
+      <span onClick={(e) => handleLiClick(e, code)} className="magv2-select-list-wrapper">
+        <span className="magv2-select-list-name">{value}</span>
+      </span>
+    </li>
   );
 };
 

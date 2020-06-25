@@ -1,0 +1,27 @@
+.magv2-button {
+  font-family: $alshaya-bold;
+  letter-spacing: normal;
+  text-align: center;
+  color: $magv2-button-text;
+  font-size: 1.125rem;
+  line-height: 1.3125rem;
+  background-color: $magv2-button-bg;
+  padding: 0.8125rem 0;
+  width: 100%;
+  margin: 1.25rem 0;
+  border: 0;
+  text-transform: lowercase;
+
+  @include breakpoint($only-mobile) {
+    width: calc(50% - 5px);
+    margin-#{$left}: 10px;
+  }
+}
+
+.pdp-cart-form {
+  .magv2-button {
+    @include breakpoint($desktop) {
+      width: 16.5625rem;
+    }
+  }
+}

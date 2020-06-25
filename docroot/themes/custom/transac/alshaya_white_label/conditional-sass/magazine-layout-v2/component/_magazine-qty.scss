@@ -1,0 +1,83 @@
+.magv2-qty {
+  &-container {
+    height: 35px;
+    display: flex;
+
+    @include breakpoint($desktop) {
+      width: 147px;
+      height: 50px;
+    }
+
+    button[disabled] {
+      color: $magv2-size-button-disabled;
+      background: $magv2-size-btn-bg;
+    }
+  }
+
+  &-wrapper {
+    display: inline-block;
+    margin-#{$left}: 20px;
+    border: 1px solid $magv2-size-btn-border;
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 35%;
+      margin-#{$left}: 10px;
+    }
+  }
+
+  &-btn--down {
+    padding-#{$left}: 14px;
+
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 7px;
+    }
+
+    @include icon(minus, before) {
+      font-size: 14px;
+
+      @include breakpoint($desktop) {
+        font-size: 28px;
+      }
+    }
+  }
+
+  &-btn--up {
+    padding-#{$right}: 14px;
+
+    @include breakpoint($only-tablet) {
+      padding-#{$right}: 7px;
+    }
+
+    @include icon(plus, before) {
+      font-size: 14px;
+
+      @include breakpoint($desktop) {
+        font-size: 28px;
+      }
+    }
+  }
+
+  &-btn,
+  &-input {
+    border: none !important;
+  }
+
+  &-btn {
+    cursor: pointer;
+
+    &::before {
+      color: $magv2-qty-text;
+    }
+  }
+
+  &-input {
+    font-size: 18px;
+    text-align: center;
+    cursor: unset;
+    color: $magv2-qty-text;
+  }
+}

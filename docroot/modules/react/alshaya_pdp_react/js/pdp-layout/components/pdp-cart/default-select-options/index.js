@@ -4,15 +4,23 @@ const DefaultSelectOptions = (props) => {
   const {
     attr,
     value,
+    handleLiClick,
+    selected,
+    code,
   } = props;
 
   return (
-    <option
-      value={attr}
+    <li
       key={attr}
+      value={attr}
+      className={`magv2-select-list-item ${((selected !== undefined
+        && String(selected) === String(attr)))
+        ? 'active' : 'in-active'}`}
     >
-      {value}
-    </option>
+      <span onClick={(e) => handleLiClick(e, code)} className="magv2-select-list-wrapper">
+        {value}
+      </span>
+    </li>
   );
 };
 

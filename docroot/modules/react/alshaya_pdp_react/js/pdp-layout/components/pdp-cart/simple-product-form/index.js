@@ -33,6 +33,10 @@ class SimpleProductForm extends React.Component {
       });
   }
 
+  openModal = () => {
+    document.querySelector('body').classList.add('select-overlay');
+  };
+
   render() {
     const { skuCode, productInfo } = this.props;
     const { checkoutFeatureStatus } = productInfo[skuCode];
@@ -45,8 +49,8 @@ class SimpleProductForm extends React.Component {
     return (
       <>
         <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
-          <p>{Drupal.t('Quantity')}</p>
-          <div id="product-quantity-dropdown">
+          <div className="magv2-size-btn-wrapper" onClick={() => this.openModal()}>{Drupal.t('Select size')}</div>
+          <div id="product-quantity-dropdown" className="magv2-qty-wrapper">
             <QuantityDropdown
               variantSelected={variantSelected}
               productInfo={productInfo}
@@ -55,6 +59,7 @@ class SimpleProductForm extends React.Component {
           </div>
           {(checkoutFeatureStatus === 'enabled') ? (
             <button
+              className="magv2-button"
               type="submit"
               value="Add to basket"
               onClick={this.addToCart}
