@@ -16,7 +16,7 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { fetchCartData } from '../../../utilities/api/requests';
 import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
-import ProductFlag from '../../../utilities/product-flag';
+import DeliveryInDubai from '../../../utilities/delivery-in-dubai';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -194,9 +194,7 @@ export default class Cart extends React.Component {
               <span>{`${Drupal.t('my shopping bag')} `}</span>
               <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
             </SectionTitle>
-            <div className="spc-delivery-in-dubai-only">
-              <ProductFlag flag="1" flagText={drupalSettings.alshaya_spc.delivery_in_dubai_text} />
-            </div>
+            <DeliveryInDubai />
             <CartItems dynamicPromoLabelsProduct={dynamicPromoLabelsProduct} items={items} />
           </div>
           <div className="spc-sidebar">
