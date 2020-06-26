@@ -484,11 +484,17 @@ class AlshayaSpcController extends ControllerBase {
 
       $payment_methods[$payment_method['id']] = [
         'name' => $payment_method_term->label(),
+        'gtm_name' => $payment_method_term->label(),
         'description' => $payment_method_term->getDescription(),
         'code' => $payment_method_term->get('field_payment_code')->getString(),
         'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
         'weight' => $payment_method_term->getWeight(),
       ];
+
+      if ($this->languageManager->getCurrentLanguage()->getId() !== 'en') {
+        $payment_method_term_en = $payment_method_term->getTranslation('en');
+        $payment_methods[$payment_method['id']]['gtm_name'] = $payment_method_term_en->label();
+      }
 
       // Show default on top.
       $payment_methods[$payment_method['id']]['weight'] = $payment_methods[$payment_method['id']]['default']
