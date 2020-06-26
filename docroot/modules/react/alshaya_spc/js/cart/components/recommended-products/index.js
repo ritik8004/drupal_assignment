@@ -10,8 +10,6 @@ import dispatchCustomEvent from '../../../utilities/events';
 // Smooth transition is not supported apart from Chrome & FF.
 smoothscroll.polyfill();
 
-let recommendedSkus = [];
-
 export default class CartRecommendedProducts extends React.Component {
   constructor(props) {
     super(props);
@@ -21,6 +19,7 @@ export default class CartRecommendedProducts extends React.Component {
     };
 
     this.recommendedProductRef = React.createRef();
+    this.recommendedSkus = [];
   }
 
   componentDidMount() {
@@ -45,38 +44,49 @@ export default class CartRecommendedProducts extends React.Component {
     document.removeEventListener('spcRefreshCartRecommendation', this.spcRefreshCartRecommendation, false);
   }
 
-  spcRecommendationHandler = async (items) => {
+  spcRecommendationHandler = (items) => {
     if (items !== undefined
       && Object.keys(items).length > 0) {
-      await this.recommendedSkuSPrepare(items);
-      const skus = recommendedSkus;
-      // Reset it.
-      recommendedSkus = [];
+      this.requestSkus = Object.keys(items);
+      this.recommendedSkuSPrepare(items);
 
-      // Get recommended products.
-      const recommendedProducts = getRecommendedProducts(skus, 'crosssell');
-      if (recommendedProducts instanceof Promise) {
-        recommendedProducts.then((result) => {
-          // If there is no error and there are recommended products.
-          if (result.error === undefined && result.data !== undefined) {
-            this.setState({
-              wait: false,
-              recommendedProducts: result.data,
-            });
-
-            // Storing in localstorage to be used by GTM.
-            const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
-            localStorage.setItem(key, JSON.stringify(result.data));
-            dispatchCustomEvent('recommendedProductsLoad', { products: result.data });
+      new Promise((resolve) => {
+        const waitForSkuClear = setInterval(() => {
+          if (this.requestSkus.length === 0) {
+            clearInterval(waitForSkuClear);
+            resolve();
           }
-        });
-      }
+        }, 100);
+      }).then(() => {
+        // Get recommended products.
+        const recommendedProducts = getRecommendedProducts(this.recommendedSkus, 'crosssell');
+        if (recommendedProducts instanceof Promise) {
+          recommendedProducts.then((result) => {
+            // Reset it for next request.
+            this.recommendedSkus = [];
+            // If there is no error and there are recommended products.
+            if (result.error === undefined && result.data !== undefined) {
+              this.setState({
+                wait: false,
+                recommendedProducts: result.data,
+              });
+
+              // Storing in localstorage to be used by GTM.
+              const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
+              localStorage.setItem(key, JSON.stringify(result.data));
+              dispatchCustomEvent('recommendedProductsLoad', {
+                products: result.data,
+              });
+            }
+          });
+        }
+      });
     }
   };
 
-  recommendedSkuSPrepare = async (items) => {
-    await Object.entries(items).forEach(async ([, item]) => {
-      await Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
+  recommendedSkuSPrepare = (items) => {
+    Object.entries(items).forEach(([, item]) => {
+      Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
     });
   };
 
@@ -86,8 +96,9 @@ export default class CartRecommendedProducts extends React.Component {
   productDataCallback = (productData) => {
     // If sku info available.
     if (productData !== null && productData.sku !== undefined) {
-      recommendedSkus.push(productData.sku);
-      recommendedSkus.push(productData.parentSKU);
+      this.requestSkus.splice(this.requestSkus.indexOf(productData.sku), 1);
+      this.recommendedSkus.push(productData.sku);
+      this.recommendedSkus.push(productData.parentSKU);
     }
   };
 
