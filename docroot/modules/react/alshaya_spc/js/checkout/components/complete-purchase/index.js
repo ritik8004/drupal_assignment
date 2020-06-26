@@ -53,7 +53,7 @@ export default class CompletePurchase extends React.Component {
     dispatchCustomEvent('orderPaymentMethod', {
       payment_method: Object
         .values(drupalSettings.payment_methods)
-        .filter((paymentMethod) => (paymentMethod.code === 'checkout_com'))
+        .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
         .shift().gtm_name,
     });
 
