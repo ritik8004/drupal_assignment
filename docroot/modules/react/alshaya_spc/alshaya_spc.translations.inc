@@ -176,6 +176,12 @@ function _alshaya_spc_translations() {
       'Please select a store with in country @country below to continue.' => [
         'ar' => 'أدناه للمتابعة @country يرجى اختيار محلا في البلد.',
       ],
+      'Sorry, we couldn’t fetch your location precisely, please' => [
+        'ar' => 'عذرًا ، لم نتمكن من جلب موقعك بدقة ، يرجى',
+      ],
+      'enter your address' => [
+        'ar' => 'إدخال عنوانك',
+      ],
       'Please enter your full name.' => [
         'ar' => 'يرجى إدخال اسمك الكامل.',
       ],
