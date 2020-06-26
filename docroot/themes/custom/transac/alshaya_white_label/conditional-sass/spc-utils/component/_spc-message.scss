@@ -81,6 +81,11 @@
         color: $spc-checkout-warning-message;
         position: relative;
 
+        #scroll-to-dropdown {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+
         button {
           padding-top: 0.625rem;
           padding-#{$left}: 0;

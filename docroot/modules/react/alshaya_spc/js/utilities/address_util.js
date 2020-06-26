@@ -1,4 +1,5 @@
 import axios from 'axios';
+import parse from 'html-react-parser';
 
 import {
   addBillingInCart,
@@ -9,7 +10,10 @@ import {
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import { extractFirstAndLastName } from './cart_customer_util';
-import { smoothScrollToAddressField } from './smoothScroll';
+import {
+  smoothScrollToAddressField,
+  smoothScrollTo,
+} from './smoothScroll';
 
 /**
  * Use this to auto scroll to the right field in address form upon
@@ -701,28 +705,43 @@ export const processBillingUpdateFromForm = (e, shipping) => {
  * Scroll to the first mandatory address field when not filled
  * on clicked on 'deliver to my location' or search address on map.
  */
-export const errorOnMandatoryFieldsForMap = () => {
-  let scroll = false;
-  // Iterate over address fields.
+export const errorOnDropDownFieldsNotFilled = () => {
+  let showError = false;
   Object.entries(drupalSettings.address_fields).forEach(
-    ([key, field]) => {
-      if (field.required === true) {
+    ([key]) => {
+      // If city/area field.
+      if (key === 'administrative_area'
+        || key === 'area_parent') {
         const fieldVal = document.getElementById(key).value;
+        // If area/city not filled.
         if (fieldVal.length === 0) {
-          document.getElementById(`${key}-error`).innerHTML = getStringMessage('address_please_enter', {
-            '@label': field.label,
-          });
-          document.getElementById(`${key}-error`).classList.add('error');
-          scroll = true;
-        } else {
-          document.getElementById(`${key}-error`).innerHTML = '';
-          document.getElementById(`${key}-error`).classList.remove('error');
+          showError = true;
         }
       }
     },
   );
 
-  if (scroll === true) {
-    addressFormInlineErrorScroll();
+  const errorMessage = (showError === true)
+    ? parse(getStringMessage('address_not_filled'))
+    : null;
+
+  dispatchCustomEvent('addressPopUpError', {
+    type: 'warning',
+    message: errorMessage,
+  });
+
+  // If need to show error message.
+  if (showError === true) {
+    // Attach click handler to the dynamic element
+    // to scroll to the address drop down.
+    document.getElementById('scroll-to-dropdown').addEventListener('click', () => {
+      // Scroll to address section.
+      smoothScrollTo('.spc-address-form-sidebar .delivery-address-fields');
+      document.querySelector(selector).scrollIntoView({
+        behavior: 'smooth',
+      });
+      // Hide the error on click of dynamic element.
+      document.getElementById('address-hide-error-button').click();
+    });
   }
 };

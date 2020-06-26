@@ -11,7 +11,7 @@ import {
 } from '../../../utilities/map/map_utils';
 import {
   getAreasList,
-  errorOnMandatoryFieldsForMap,
+  errorOnDropDownFieldsNotFilled,
 } from '../../../utilities/address_util';
 import SectionTitle from '../../../utilities/section-title';
 import DynamicFormField from '../dynamic-form-field';
@@ -132,9 +132,9 @@ export default class AddressForm extends React.Component {
       getMap().panTo(marker.getPosition());
       getMap().setZoom(getHDMapZoom());
       window.spcMarkers.push(marker);
-      // Scroll to first mandatory address field
-      // which is not filled with inline error.
-      errorOnMandatoryFieldsForMap();
+      // Check if area/city filled or not to show
+      // error and scroll for user.
+      errorOnDropDownFieldsNotFilled();
       removeFullScreenLoader();
     } catch (error) {
       Drupal.logJavascriptError('homedelivery-checkUserCountry', error);
@@ -256,7 +256,7 @@ export default class AddressForm extends React.Component {
                 {errorSuccessMessage}
                 {messageType === 'warning'
                 && (
-                  <button type="button" onClick={(e) => this.hidePopUpError(e)}>
+                  <button id="address-hide-error-button" type="button" onClick={(e) => this.hidePopUpError(e)}>
                     {getStringMessage('dismiss')}
                   </button>
                 )}

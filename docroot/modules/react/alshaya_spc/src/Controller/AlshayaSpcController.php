@@ -238,6 +238,11 @@ class AlshayaSpcController extends ControllerBase {
       . $this->t('Please enter an address with in country @country below to continue.', ['@country' => $country_name]),
     ];
 
+    $strings[] = [
+      'key' => 'address_not_filled',
+      'value' => $this->t("Sorry, we couldn’t fetch your location precisely, please") . '<span class="font-bold" id="scroll-to-dropdown"> ' . $this->t("enter your address") . '</span>',
+    ];
+
     $cncFeatureStatus = $cc_config->get('feature_status') ?? 'enabled';
     $cnc_enabled = $cncFeatureStatus === 'enabled';
     if ($cnc_enabled) {
