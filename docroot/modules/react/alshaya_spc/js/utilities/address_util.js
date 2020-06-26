@@ -736,10 +736,7 @@ export const errorOnDropDownFieldsNotFilled = () => {
     // to scroll to the address drop down.
     document.getElementById('scroll-to-dropdown').addEventListener('click', () => {
       // Scroll to address section.
-      smoothScrollTo('.spc-address-form-sidebar .delivery-address-fields');
-      document.querySelector(selector).scrollIntoView({
-        behavior: 'smooth',
-      });
+      smoothScrollTo('.spc-address-form-sidebar .delivery-address-fields', 'center');
       // Hide the error on click of dynamic element.
       document.getElementById('address-hide-error-button').click();
     });
