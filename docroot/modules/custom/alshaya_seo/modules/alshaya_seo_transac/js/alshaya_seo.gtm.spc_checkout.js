@@ -13,31 +13,32 @@
       return;
     }
 
-    dataLayer[0].deliveryOption = 'Click and Collect';
-    dataLayer[0].deliveryType = 'ship_to_store';
-    delete dataLayer[0].deliveryArea;
-    delete dataLayer[0].deliveryCity;
-    dataLayer[0].storeLocation = cart.shipping.storeInfo.name;
-    dataLayer[0].storeAddress = cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' +  cart.shipping.storeInfo.gtm_cart_address.administrative_area_display;
+    return {
+      deliveryOption: 'Click and Collect',
+      deliveryType: 'ship_to_store',
+      storeLocation: cart.shipping.storeInfo.name,
+      storeAddress: cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' +  cart.shipping.storeInfo.gtm_cart_address.administrative_area_display,
+    };
   };
 
   Drupal.alshayaSeoSpc.pushHomeDeliveryData = function(cart) {
     if (cart.shipping.type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
       return;
     }
+
     //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
     var area_id = cart.shipping.address[drupalSettings.address_fields.administrative_area.key];
     if (!area_id) {
       return;
     }
 
-    dataLayer[0].deliveryOption = 'Home Delivery';
-    dataLayer[0].deliveryType = cart.shipping.methods[0].carrier_title;
-    delete dataLayer[0].storeLocation;
-    delete dataLayer[0].storeAddress;
     var input = document.querySelector('[data-id="'+ area_id +'"]');
-    dataLayer[0].deliveryArea = $(input).data('label');
-    dataLayer[0].deliveryCity = $(input).data('parent-label');
+    return {
+      deliveryOption: 'Home Delivery',
+      deliveryType: cart.shipping.methods[0].carrier_title,
+      deliveryArea: $(input).data('label'),
+      deliveryCity: $(input).data('parent-label'),
+    };
   };
 
   Drupal.alshayaSeoSpc.gtmDeliveryMethod = function (method) {
@@ -47,6 +48,33 @@
     };
     dataLayer.push(data);
   };
+
+  Drupal.alshayaSeoSpc.checkoutEvent = function(cartData, step) {
+    var data = {
+      language: drupalSettings.gtm.language,
+      country: drupalSettings.gtm.country,
+      currency: drupalSettings.gtm.currency,
+      pageType: step === 3 ? 'checkout payment page' : drupalSettings.gtm.pageType,
+      event: 'checkout',
+      ecommerce: {
+        currencyCode: drupalSettings.gtm.currency,
+        checkout: {
+        },
+      },
+    };
+    var storeData = Drupal.alshayaSeoSpc.pushStoreData(cartData);
+    if (storeData) {
+      Object.assign(data, storeData);
+    }
+
+    var homeDeliveryData = Drupal.alshayaSeoSpc.pushHomeDeliveryData(cartData);
+    if (homeDeliveryData) {
+      Object.assign(data, homeDeliveryData);
+    }
+    var additionalCartData = Drupal.alshayaSeoSpc.cartGtm(cartData, step);
+    Object.assign(data.ecommerce, additionalCartData);
+    dataLayer.push(data);
+  }
 
   /**
    * Helper function to push checkout option to GTM.
@@ -71,14 +99,12 @@
   };
 
   document.addEventListener('checkoutCartUpdate', function (e) {
-    var step = Drupal.alshayaSeoSpc.getStepFromContainer();
-    Drupal.alshayaSeoSpc.cartGtm(e.detail.cart, step);
-    Drupal.alshayaSeoSpc.pushStoreData(e.detail.cart);
-    Drupal.alshayaSeoSpc.pushHomeDeliveryData(e.detail.cart);
-
-    if (drupalSettings.user.uid !== 0) {
+    if (drupalSettings.user.uid > 0) {
       Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
     }
+
+    var step = Drupal.alshayaSeoSpc.getStepFromContainer();
+    Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, step);
   });
 
   document.addEventListener('deliveryMethodChange', function (e) {
@@ -126,10 +152,7 @@
 
   document.addEventListener('refreshCartOnPaymentMethod', function (e) {
     // Clone "checkout" datalayer event to trigger it again for payment.
-    const paymentMethodDataLayer = JSON.parse(JSON.stringify(dataLayer[0]));
-    paymentMethodDataLayer.ecommerce.checkout.actionField.step = 3;
-    paymentMethodDataLayer.pageType = 'checkout payment page';
-    dataLayer.push(paymentMethodDataLayer);
+    Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, 3);
   });
 
   document.addEventListener('orderPaymentMethod', function (e) {
