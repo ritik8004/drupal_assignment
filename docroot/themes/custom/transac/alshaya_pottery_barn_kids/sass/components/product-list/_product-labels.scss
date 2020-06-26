@@ -1,0 +1,11 @@
+.c-plp .c-products__item article:hover {
+  .labels-container {
+    .label {
+      &.bottom-right {
+        @include breakpoint($desktop) {
+          bottom: 8.5rem;
+        }
+      }
+    }
+  }
+}
