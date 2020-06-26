@@ -135,7 +135,7 @@ export default class PaymentMethods extends React.Component {
 
     // Dispatch event for GTM checkout step 3.
     dispatchCustomEvent('refreshCartOnPaymentMethod', {
-      cart,
+      cart: cart.cart,
     });
 
     if (!this.isActive() || cart.cart.payment.method === method) {
