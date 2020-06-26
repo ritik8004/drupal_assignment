@@ -35,6 +35,7 @@ export default class AddressForm extends React.Component {
       cityChanged: false,
       errorSuccessMessage: null,
       messageType: null,
+      dismissButton: true,
     };
   }
 
@@ -73,10 +74,11 @@ export default class AddressForm extends React.Component {
     if (!this.isComponentMounted) {
       return;
     }
-    const { type, message } = e.detail;
+    const { type, message, showDismissButton } = e.detail;
     this.setState({
       messageType: type,
       errorSuccessMessage: message,
+      dismissButton: showDismissButton,
     });
     // Scroll to error.
     smoothScrollTo('.spc-address-form-sidebar .spc-checkout-section-title');
@@ -89,6 +91,7 @@ export default class AddressForm extends React.Component {
       this.setState({
         messageType: null,
         errorSuccessMessage: null,
+        dismissButton: false,
       });
     }, 200);
   };
@@ -118,6 +121,7 @@ export default class AddressForm extends React.Component {
           dispatchCustomEvent('addressPopUpError', {
             type: 'warning',
             message: parse(getStringMessage('location_outside_country_hd')),
+            showDismissButton: true,
           });
         }
         return;
@@ -177,6 +181,7 @@ export default class AddressForm extends React.Component {
     dispatchCustomEvent('addressPopUpError', {
       type: 'warning',
       message: getStringMessage('location_access_denied'),
+      showDismissButton: true,
     });
   }
 
@@ -196,6 +201,7 @@ export default class AddressForm extends React.Component {
       cityChanged,
       errorSuccessMessage,
       messageType,
+      dismissButton,
     } = this.state;
 
     let defaultAddressVal = [];
@@ -254,7 +260,7 @@ export default class AddressForm extends React.Component {
               && (
               <CheckoutMessage type={messageType} context="new-address-form-modal modal">
                 {errorSuccessMessage}
-                {messageType === 'warning'
+                {messageType === 'warning' && dismissButton === true
                 && (
                   <button id="address-hide-error-button" type="button" onClick={(e) => this.hidePopUpError(e)}>
                     {getStringMessage('dismiss')}

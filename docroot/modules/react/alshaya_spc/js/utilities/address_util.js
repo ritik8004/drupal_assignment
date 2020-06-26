@@ -316,6 +316,7 @@ export const addEditAddressToCustomer = (e) => {
                 dispatchCustomEvent('addressPopUpError', {
                   type: 'error',
                   message: list.error_message,
+                  showDismissButton: false,
                 });
                 return;
               }
@@ -342,6 +343,7 @@ export const addEditAddressToCustomer = (e) => {
                     dispatchCustomEvent('addressPopUpError', {
                       type: 'error',
                       message: cartResult.error_message,
+                      showDismissButton: false,
                     });
 
                     // Add address id in hidden id field so that on next
@@ -513,6 +515,7 @@ export const checkoutAddressProcess = (e) => {
           dispatchCustomEvent('addressPopUpError', {
             type: 'error',
             message: cartResult.error_message,
+            showDismissButton: false,
           });
           return;
         }
@@ -645,6 +648,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                   dispatchCustomEvent('addressPopUpError', {
                     type: 'error',
                     message: list.error_message,
+                    showDismissButton: false,
                   });
                   return;
                 }
@@ -667,6 +671,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                     dispatchCustomEvent('addressPopUpError', {
                       type: 'error',
                       message: cartResult.error_message,
+                      showDismissButton: false,
                     });
 
                     // If not null, means this is for logged in user.
@@ -725,9 +730,11 @@ export const errorOnDropDownFieldsNotFilled = () => {
     ? parse(getStringMessage('address_not_filled'))
     : null;
 
+  // If no error, we remove the error message.
   dispatchCustomEvent('addressPopUpError', {
     type: 'warning',
     message: errorMessage,
+    showDismissButton: false,
   });
 
   // If need to show error message.
@@ -735,10 +742,14 @@ export const errorOnDropDownFieldsNotFilled = () => {
     // Attach click handler to the dynamic element
     // to scroll to the address drop down.
     document.getElementById('scroll-to-dropdown').addEventListener('click', () => {
+      // Remove error message on click.
+      dispatchCustomEvent('addressPopUpError', {
+        type: 'warning',
+        message: null,
+        showDismissButton: false,
+      });
       // Scroll to address section.
-      smoothScrollTo('.spc-address-form-sidebar .delivery-address-fields', 'center');
-      // Hide the error on click of dynamic element.
-      document.getElementById('address-hide-error-button').click();
+      smoothScrollTo('.spc-address-form-sidebar .spc-type-select:first-child', 'center');
     });
   }
 };
