@@ -1,5 +1,6 @@
 import React from 'react';
 import { getStorageInfo } from '../../../utilities/storage';
+import StoreAddress from '../appointment-store/components/store-address';
 
 export default class AppointmentSelection extends React.Component {
   constructor(props) {
@@ -48,7 +49,7 @@ export default class AppointmentSelection extends React.Component {
               <button
                 className="appointment-details-button"
                 type="button"
-                onClick={() => this.handleEdit(1)}
+                onClick={() => this.handleEdit('appointment-type')}
               >
                 {Drupal.t('Edit')}
               </button>
@@ -66,21 +67,16 @@ export default class AppointmentSelection extends React.Component {
                     <div className="store-name">
                       {selectedStoreDetails.name}
                     </div>
-                    <div className="store-address">
-                      {`${selectedStoreDetails.address.address1} , `}
-                      {`${selectedStoreDetails.address.address2} , `}
-                      {`${selectedStoreDetails.address.city} , `}
-                      {`${selectedStoreDetails.address.country} , `}
-                      {selectedStoreDetails.address.postalCode}
-                    </div>
-
+                    <StoreAddress
+                      address={selectedStoreDetails.address}
+                    />
                   </div>
                 </div>
                 <div className="appointment-details-item edit-button">
                   <button
                     className="appointment-details-button"
                     type="button"
-                    onClick={() => this.handleEdit(2)}
+                    onClick={() => this.handleEdit('select-store')}
                   >
                     {Drupal.t('Edit')}
                   </button>

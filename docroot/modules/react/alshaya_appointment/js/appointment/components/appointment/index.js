@@ -15,23 +15,21 @@ export default class Appointment extends React.Component {
       };
     } else {
       this.state = {
-        appointmentStep: 1,
+        appointmentStep: 'appointment-type',
       };
     }
   }
 
-  handleSubmit = () => {
+  handleSubmit = (stepValue) => {
     const localStorageValues = getStorageInfo();
-    const {
-      appointmentStep,
-    } = this.state;
 
-    localStorageValues.appointmentStep = appointmentStep + 1;
+    localStorageValues.appointmentStep = stepValue;
     setStorageInfo(localStorageValues);
 
-    this.setState({
-      appointmentStep: appointmentStep + 1,
-    });
+    this.setState((prevState) => ({
+      ...prevState,
+      appointmentStep: stepValue,
+    }));
   }
 
   handleEdit = (step) => {
@@ -45,34 +43,38 @@ export default class Appointment extends React.Component {
       appointmentStep,
     } = this.state;
 
+    let appointmentData;
+    let appointmentSelection;
+
+    if (appointmentStep === 'appointment-type') {
+      appointmentData = (
+        <AppointmentType
+          handleSubmit={() => this.handleSubmit('select-store')}
+        />
+      );
+    } else if (appointmentStep === 'select-store') {
+      appointmentData = (
+        <AppointmentStore
+          handleBack={this.handleEdit}
+          handleSubmit={() => this.handleSubmit('select-time-slot')}
+        />
+      );
+    }
+
+    if (appointmentStep !== 'appointment-type') {
+      appointmentSelection = (
+        <AppointmentSelection
+          handleEdit={this.handleEdit}
+        />
+      );
+    }
+
     return (
       <div className="appointment-wrapper">
         <AppointmentSteps />
-
         <div className="appointment-inner-wrapper">
-          { (appointmentStep === 1)
-            ? (
-              <AppointmentType
-                handleSubmit={this.handleSubmit}
-              />
-            )
-            : null}
-          { (appointmentStep === 2)
-            ? (
-              <AppointmentStore
-                handleBack={this.handleEdit}
-                handleSubmit={this.handleSubmit}
-              />
-            )
-            : null}
-
-          { (appointmentStep > 1)
-            ? (
-              <AppointmentSelection
-                handleEdit={this.handleEdit}
-              />
-            )
-            : null}
+          {appointmentData}
+          {appointmentSelection}
         </div>
       </div>
     );

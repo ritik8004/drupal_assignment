@@ -6,7 +6,7 @@ const ListItems = () => {
   return listItems.map((item) => (
     <li
       className={item.step === 1 ? 'active wizard-step' : 'wizard-step'}
-      value={item.step}
+      value={item.stepValue}
     >
       <span className="step-number">{item.step}</span>
       <span className="step-title">{item.stepTitle}</span>

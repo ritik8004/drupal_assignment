@@ -1,22 +1,23 @@
 import React from 'react';
 import fetchAPIData from '../../../utilities/api/fetchApiData';
 import StoreList from './components/store-list';
-import StoreFinderMap from './components/store-finder-map';
+import StoreFinderGoogleMap from './components/store-finder-map';
 import { getInputValue, getLocationAccess } from '../../../utilities/helper';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
-const appointmentStoreFinder = drupalSettings.alshaya_appointment.store_finder;
+const {
+  radius, unit, max_num_of_locations: locCount, latitude, longitude,
+} = drupalSettings.alshaya_appointment.store_finder;
 const initialCoords = {
-  lat: appointmentStoreFinder.latitude,
-  lng: appointmentStoreFinder.longitude,
+  lat: latitude,
+  lng: longitude,
 };
-let localStorageValues = '';
+const localStorageValues = getStorageInfo();
+let storeListForSearch;
 
 export default class AppointmentStore extends React.Component {
   constructor(props) {
     super(props);
-
-    localStorageValues = getStorageInfo();
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
@@ -30,13 +31,7 @@ export default class AppointmentStore extends React.Component {
   }
 
   componentDidMount() {
-    const apiUrl = `${'/get/stores'
-      + '?radius='}${appointmentStoreFinder.radius
-    }&unit=${appointmentStoreFinder.unit
-    }&max-locations=${appointmentStoreFinder.max_num_of_locations
-    }&latitude=${appointmentStoreFinder.latitude
-    }&longitude=${appointmentStoreFinder.longitude}`;
-
+    const apiUrl = `/get/stores?radius=${radius}&unit=${unit}&max-locations=${locCount}&latitude=${latitude}&longitude=${longitude}`;
     this.fetchStores(apiUrl);
   }
 
@@ -68,14 +63,8 @@ export default class AppointmentStore extends React.Component {
             userCoords: coords,
           }));
 
-          const apiUrl = `${'/get/stores'
-            + '?radius='}${appointmentStoreFinder.radius
-          }&unit=${appointmentStoreFinder.unit
-          }&max-locations=${appointmentStoreFinder.max_num_of_locations
-          }&latitude=${coords.lat
-          }&longitude=${coords.lng}`;
-
-          fetchAPIData(apiUrl);
+          const apiUrl = `/get/stores?radius=${radius}&unit=${unit}&max-locations=${locCount}&latitude=${coords.lat}&longitude=${coords.lng}`;
+          this.fetchStores(apiUrl);
         },
       );
   }
@@ -105,13 +94,13 @@ export default class AppointmentStore extends React.Component {
   }
 
   searchHandler = (event) => {
-    const storeItems = localStorageValues && localStorageValues.storeItems;
-
-    let filterItems;
-    let filteredStoreItems;
+    const { storeItems } = this.state;
+    let filterItems = '';
+    const filteredStoreItems = [];
+    storeListForSearch = storeListForSearch || storeItems;
 
     const searchQuery = event.target.value.toLowerCase();
-    filterItems = storeItems && Object.entries(storeItems).filter(([k, el]) => {
+    filterItems = storeListForSearch && Object.entries(storeListForSearch).filter(([k, el]) => {
       const match = el.name.toLowerCase().indexOf(searchQuery) !== -1;
       if (match) {
         filteredStoreItems.push(el);
@@ -147,11 +136,11 @@ export default class AppointmentStore extends React.Component {
               {Drupal.t('Display Stores Near Me')}
             </button>
             <span>
-              -
-              {Drupal.t('or')}
-              {' '}
-              -
+              {` - ${Drupal.t('or')} - `}
             </span>
+            <label>
+              {Drupal.t('Find your closest location')}
+            </label>
             <input
               type="text"
               className="input"
@@ -161,7 +150,7 @@ export default class AppointmentStore extends React.Component {
           </div>
           <div className="store-map-wrapper">
             <div className="map-inner-wrapper">
-              <StoreFinderMap
+              <StoreFinderGoogleMap
                 coords={initialCoords}
                 markers={storeItems}
                 handleStateChange={this.handleStateChange}
@@ -180,7 +169,7 @@ export default class AppointmentStore extends React.Component {
             <button
               className="appointment-store-button back"
               type="button"
-              onClick={() => this.handleBack(1)}
+              onClick={() => this.handleBack('appointment-type')}
             >
               {Drupal.t('BACK')}
             </button>

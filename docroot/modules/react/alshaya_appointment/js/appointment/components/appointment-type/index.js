@@ -26,7 +26,7 @@ export default class AppointmentType extends React.Component {
       };
     } else {
       this.state = {
-        appointmentStep: '',
+        appointmentStep: 'appointment-type',
         appointmentCategory: '',
         appointmentType: '',
         appointmentCompanion: '',

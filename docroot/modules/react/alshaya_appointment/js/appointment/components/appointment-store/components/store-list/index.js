@@ -1,18 +1,10 @@
 import React from 'react';
+import { getDistanceBetweenCoords } from '../../../../../utilities/helper';
 
 export default class StoreList extends React.Component {
   getDistance() {
     const { storeList, coords } = this.props;
-
-    const storeItems = google && storeList && Object.entries(storeList).map(([k, x]) => {
-      const store = x;
-      const distance = google.maps.geometry.spherical.computeDistanceBetween(
-        new google.maps.LatLng(coords.lat, coords.lng),
-        new google.maps.LatLng(x.geocoordinates.latitude, x.geocoordinates.longitude),
-      );
-      store.distanceInMiles = this.convertKmToMile(distance);
-      return store;
-    });
+    const storeItems = getDistanceBetweenCoords(storeList, coords);
 
     this.handleStateChange(storeItems);
   }
@@ -20,12 +12,6 @@ export default class StoreList extends React.Component {
   handleStateChange = (storeItems) => {
     const { handleStateChange } = this.props;
     handleStateChange(storeItems);
-  }
-
-  convertKmToMile = (value) => {
-    const realMiles = (value * 0.621371);
-    const Miles = Math.floor(realMiles);
-    return Miles;
   }
 
   handleStoreSelect = (e) => {

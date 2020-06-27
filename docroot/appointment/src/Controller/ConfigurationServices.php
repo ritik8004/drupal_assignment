@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Helper\APIHelper;
 use App\Helper\APIServicesUrls;
+use App\Helper\XmlAPIHelper;
 
 /**
  * Class ConfigurationServices.
@@ -35,6 +36,13 @@ class ConfigurationServices {
   protected $apiHelper;
 
   /**
+   * XmlAPIHelper.
+   *
+   * @var \App\Helper\XmlAPIHelper
+   */
+  protected $xmlApiHelper;
+
+  /**
    * ConfigurationServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -43,13 +51,17 @@ class ConfigurationServices {
    *   Soap client service.
    * @param \App\Helper\APIHelper $api_helper
    *   API Helper.
+   * @param \App\Helper\XmlAPIHelper $xml_api_helper
+   *   Xml API Helper.
    */
   public function __construct(LoggerInterface $logger,
                               SoapClient $client,
-                              APIHelper $api_helper) {
+                              APIHelper $api_helper,
+                              XmlAPIHelper $xml_api_helper) {
     $this->logger = $logger;
     $this->client = $client;
     $this->apiHelper = $api_helper;
+    $this->xmlApiHelper = $xml_api_helper;
   }
 
   /**
@@ -134,39 +146,22 @@ class ConfigurationServices {
    *   Stores data from API.
    */
   public function getStores(Request $request) {
-    // @TODO: Need to discuss this API call.
-    // It works with xml but not with SoapVar.
     try {
-      // $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
-      // $requestQuery = $request->query;
+      $result = $this->xmlApiHelper->fetchStores($request);
 
-      // $param = [
-      //   'locationSearchCriteria' => [
-      //     'locationExternalId' => $this->apiHelper->getlocationExternalId(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL),
-      //     'locationGroupId' => 'Boots',
-      //     'exactMatchOnly' => FALSE,
-      //   ],
-      //   'locationSearchGeoCriteria' => [
-      //     'latitude' => $requestQuery->get('latitude'),
-      //     'longitude' => $requestQuery->get('longitude'),
-      //     'radius' => $requestQuery->get('radius'),
-      //     'maxNumberOfLocations' => $requestQuery->get('max-locations'),
-      //     'unit' => $requestQuery->get('unit')
-      //   ]
-      // ];
-      // $result = $client->__soapCall('getLocationsByGeoCriteria', [$param]);
-
-      $result = $this->getStoresXml();
-
-      $stores = $result->return->locations ?? '';
+      $stores = $result->return->locations ?? [];
       $storesData = [];
 
-      foreach ($stores ?? [] as $store) {
+      foreach ($stores as $store) {
+        $storeId = $store->locationExternalId;
+        $storeTiming = $this->getStoreSchedule($storeId);
+
         $storesData[$store->locationExternalId] = [
-          'locationExternalId' => $store->locationExternalId ?? '',
+          'locationExternalId' => $storeId ?? '',
           'name' => $store->locationName ?? '',
           'address' => $store->companyAddress ?? '',
-          'geocoordinates' => $store->geocoordinates ?? ''
+          'geocoordinates' => $store->geocoordinates ?? '',
+          'storeTiming' => $storeTiming ?? '',
         ];
       }
 
@@ -181,36 +176,59 @@ class ConfigurationServices {
     }
   }
 
-  private function getStoresXml() {
-    $xml = '<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns2="http://services.timecommerce.timetrade.com/ws" xmlns:ns3="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:ns4="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <S:Header>
-          <ns3:Security>
-            <ns3:UsernameToken>
-              <ns3:Username>bootsapiuser</ns3:Username>
-              <ns3:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">jG4@dF0p</ns3:Password>
-            </ns3:UsernameToken>
-          </ns3:Security>
-        </S:Header>
-        <S:Body>
-          <ns2:getLocationsByGeoCriteria>
-            <locationSearchGeoCriteria>
-              <latitude>25.0764689</latitude>
-              <longitude>55.1403815</longitude>
-              <radius>50</radius>
-              <maxNumberOfLocations>500</maxNumberOfLocations>
-              <unit>miles</unit>
-            </locationSearchGeoCriteria>
-          </ns2:getLocationsByGeoCriteria>
-        </S:Body>
-      </S:Envelope>';
-    $wsdl   = "https://api-stage.timetradesystems.co.uk/soap/ConfigurationServices?wsdl";
-    $client = new \SoapClient($wsdl, array(  'soap_version' => SOAP_1_1,
-      'trace' => true,
-    ));
-    $soapBody = new \SoapVar($xml, \XSD_ANYXML);
-    $return = $client->__SoapCall('getLocationsByGeoCriteria', array($soapBody));
+  /**
+   * Get Stores Schedules.
+   *
+   * @return array
+   *   Stores Schedules from API.
+   */
+  public function getStoreSchedule($storeId) {
+    try {
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
 
-    return $return;
+      $param = [
+        'scheduleSearchCriteria' => [
+          'locationExternalId' => $storeId,
+        ],
+      ];
+      $result = $client->__soapCall('getLocationSchedulesByCriteria', [$param]);
+
+      $weeklySchedules = $result->return->locationSchedules->weeklySubSchedule->weeklySubSchedulePeriods ?? [];
+      $weeklySchedulesData = [];
+
+      foreach ($weeklySchedules as $weeklySchedule) {
+        $weekDay = $weeklySchedule->weekDay ?? '';
+        $startTime = $weeklySchedule->localStartTime ?? '';
+        $endTime = $weeklySchedule->localEndTime ?? '';
+        $grouped = FALSE;
+
+        if (!empty($weeklySchedulesData)) {
+          foreach ($weeklySchedulesData as $key => $schedule) {
+            if ($startTime === $schedule['startTime'] && $endTime === $schedule['endTime']) {
+              $weeklySchedulesData[$key]['day'] = $weeklySchedulesData[$key]['day'] . ', ' . $weekDay;
+              $grouped = TRUE;
+              break;
+            }
+          }
+        }
+        if (!$grouped) {
+          $weeklySchedulesData[] = [
+            'day' => $weekDay,
+            'startTime' => $startTime,
+            'endTime' => $endTime,
+          ];
+        }
+      }
+
+      return $weeklySchedulesData;
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while getting stores schedules. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
   }
 
 }

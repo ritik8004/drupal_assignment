@@ -37,7 +37,11 @@ class AlshayaAppointmentController extends ControllerBase {
       'appointment_terms_conditions_text' => $alshaya_appointment_config->get('appointment_terms_conditions_text'),
       'appointment_companion_limit' => $alshaya_appointment_config->get('appointment_companion_limit'),
       'local_storage_expire' => $alshaya_appointment_config->get('local_storage_expire'),
-      'store_finder' => array_merge($alshaya_appointment_config->get('store_finder'), $store_finder_config->get('country_center')),
+      'store_finder' => array_merge(
+        $alshaya_appointment_config->get('store_finder'),
+        $store_finder_config->get('country_center'),
+        ['radius' => $store_finder_config->get('search_proximity_radius')]
+      ),
       'google_map_api_key' => $geolocation_config->get('google_map_api_key'),
     ];
 
@@ -67,26 +71,32 @@ class AlshayaAppointmentController extends ControllerBase {
       [
         'step' => 1,
         'stepTitle' => $this->t('appointment type'),
+        'stepValue' => 'appointment-type',
       ],
       [
         'step' => 2,
         'stepTitle' => $this->t('select store'),
+        'stepValue' => 'select-store',
       ],
       [
         'step' => 3,
         'stepTitle' => $this->t('select time slot'),
+        'stepValue' => 'select-time-slot',
       ],
       [
         'step' => 4,
         'stepTitle' => $this->t('login / guest'),
+        'stepValue' => 'login-guest',
       ],
       [
         'step' => 5,
         'stepTitle' => $this->t('customer details'),
+        'stepValue' => 'customer-details',
       ],
       [
         'step' => 6,
         'stepTitle' => $this->t('confirmation'),
+        'stepValue' => 'appointment-confirmation',
       ],
     ];
 
