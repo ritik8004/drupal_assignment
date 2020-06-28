@@ -81,4 +81,22 @@ class AlshayaUserInfo {
     return '';
   }
 
+  /**
+   * Get the route names related to user account.
+   *
+   * @return array
+   *   The array of route names for user account related information.
+   */
+  public function getMyAccountRoutes() {
+    return [
+      'entity.user.canonical',
+      'acq_customer.orders',
+      'entity.user.edit_form',
+      'entity.profile.type.user_profile_form',
+      'alshaya_user.user_communication_preference',
+      'change_pwd_page.change_password_form',
+      'acq_checkoutcom.payment_cards',
+    ];
+  }
+
 }

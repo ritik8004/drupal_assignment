@@ -428,21 +428,21 @@ function _alshaya_seo_process_sitelink_searchbox() {
  */
 function alshaya_seo_metatags_alter(array &$metatags, array $context) {
   // Twitter tags which have been set in global metatags settings have to
-  // be removed in this way from user/* pages.
-  $current_path = \Drupal::service('path.current')->getPath();
-  if (strpos($current_path, '/user') !== FALSE) {
+  // be removed in this way from user account pages.
+  $user_routes = \Drupal::service('alshaya_user.info')->getMyAccountRoutes();
+  $current_route = \Drupal::routeMatch()->getRouteName();
+  if (in_array($current_route, $user_routes)) {
     foreach ($metatags as $key => $value) {
       if (preg_match('/twitter/', $key)) {
         unset($metatags[$key]);
       }
     }
-    return;
   }
-
-  // Copy title & description into metatag twitter cards.
-  $metatags['twitter_cards_page_url'] = ($metatags['canonical_url']) ?? '';
-  $metatags['twitter_cards_title'] = ($metatags['title']) ?? '';
-  $metatags['twitter_cards_description'] = ($metatags['description']) ?? '';
-  $metatags['twitter_cards_image'] = ($metatags['image_src']) ?? '';
-
+  else {
+    // Copy title & description into metatag twitter cards.
+    $metatags['twitter_cards_page_url'] = ($metatags['canonical_url']) ?? '';
+    $metatags['twitter_cards_title'] = ($metatags['title']) ?? '';
+    $metatags['twitter_cards_description'] = ($metatags['description']) ?? '';
+    $metatags['twitter_cards_image'] = ($metatags['image_src']) ?? '';
+  }
 }
