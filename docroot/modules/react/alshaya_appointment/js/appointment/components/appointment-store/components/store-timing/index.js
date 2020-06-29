@@ -7,7 +7,7 @@ const StoreTiming = (timing) => (
     </h5>
     {timing.timing && Object.entries(timing.timing).map(([k, value]) => (
       <div>
-        {`${k} (${value})`}
+        {`${value.day} (${value.timeSlot})`}
       </div>
     ))}
   </div>

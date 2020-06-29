@@ -194,7 +194,7 @@ class ConfigurationServices {
       $result = $client->__soapCall('getLocationSchedulesByCriteria', [$param]);
 
       $weeklySchedules = $result->return->locationSchedules->weeklySubSchedule->weeklySubSchedulePeriods ?? [];
-      $weeklySchedulesData = $hours = [];
+      $weeklySchedulesData = $firstDay = $lastDay = [];
 
       foreach ($weeklySchedules as $weeklySchedule) {
         $weekDay = $weeklySchedule->weekDay ?? '';
@@ -202,16 +202,45 @@ class ConfigurationServices {
         $endTime = $weeklySchedule->localEndTime ?? '';
         // 24-hour time to 12-hour time
         $timeSlot = date("g:i a", strtotime($startTime)) . ' - ' . date("g:i a", strtotime($endTime));
+        $schedule = [
+          'day' => $weekDay,
+          'time' => $timeSlot,
+        ];
 
-        if (empty($hours[$timeSlot])) {
-          $hours[$timeSlot] = $weekDay;
-          $init_day = $weekDay;
+        // Group Store timings.
+        if (empty($firstDay)) {
+          $firstDay = $schedule;
+        }
+        elseif (empty($lastDay)) {
+          $lastDay = $schedule;
+        }
+        elseif ($timeSlot === $lastDay['time']) {
+          $lastDay = $schedule;
         }
         else {
-          $hours[$timeSlot] = $init_day . ' - ' . $weekDay;
+          $weeklySchedulesData[] = [
+            'day' => $firstDay['day'] . ' - ' . $lastDay['day'],
+            'timeSlot' => $firstDay['time'],
+          ];
+          $firstDay = $schedule;
+          $lastDay = [];
         }
       }
-      $weeklySchedulesData = array_flip($hours);
+
+      if (!empty($firstDay)) {
+        if (!empty($lastDay)) {
+          $weeklySchedulesData[] = [
+            'day' => $firstDay['day'] . ' - ' . $lastDay['day'],
+            'timeSlot' => $firstDay['time'],
+          ];
+        }
+        else {
+          $weeklySchedulesData[] = [
+            'day' => $firstDay['day'],
+            'timeSlot' => $firstDay['time'],
+          ];
+        }
+      }
 
       return $weeklySchedulesData;
     }
