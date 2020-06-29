@@ -1,7 +1,7 @@
 import React from 'react';
 import AppointmentSteps from '../appointment-steps';
 import AppointmentType from '../appointment-type';
-import AppointmentStore from '../appointment-store';
+import AppointmentStoreSelect from '../appointment-store';
 import AppointmentSelection from '../appointment-selection';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
@@ -54,7 +54,7 @@ export default class Appointment extends React.Component {
       );
     } else if (appointmentStep === 'select-store') {
       appointmentData = (
-        <AppointmentStore
+        <AppointmentStoreSelect
           handleBack={this.handleEdit}
           handleSubmit={() => this.handleSubmit('select-time-slot')}
         />

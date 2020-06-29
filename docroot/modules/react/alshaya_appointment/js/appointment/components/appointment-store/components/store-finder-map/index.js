@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  Map, GoogleApiWrapper, Marker, InfoWindow,
+  Map, Marker, InfoWindow,
 } from 'google-maps-react';
 import StoreAddress from '../store-address';
 import StoreTiming from '../store-timing';
 
-export class StoreFinderMap extends React.Component {
+export default class StoreFinderMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,25 +29,29 @@ export class StoreFinderMap extends React.Component {
   });
 
   onMapClicked = () => {
-    const { showingInfoWindow } = this.state;
-    if (showingInfoWindow) {
-      this.setState({
+    this.setState((prevState) => {
+      if (!prevState.showingInfoWindow) return null;
+      return {
         activeMarker: null,
         showingInfoWindow: false,
-      });
-    }
+      };
+    });
   };
 
   render() {
-    const { google, initialCoords, markers } = this.props;
+    const { google, markers } = this.props;
     const { activeMarker, showingInfoWindow, selectedPlace } = this.state;
+    const { latitude, longitude } = drupalSettings.alshaya_appointment.store_finder;
 
     return (
       <>
         <Map
           google={google}
           zoom={drupalSettings.alshaya_appointment.store_finder.zoom}
-          initialCenter={initialCoords}
+          initialCenter={{
+            lat: latitude,
+            lng: longitude,
+          }}
           onClick={this.onMapClicked}
         >
           {markers && Object.entries(markers).map(([k, marker]) => (
@@ -56,6 +60,7 @@ export class StoreFinderMap extends React.Component {
               name={marker.name}
               address={marker.address}
               timing={marker.storeTiming}
+              distance={marker.distanceInMiles}
               position={{
                 lat: marker.geocoordinates.latitude,
                 lng: marker.geocoordinates.longitude,
@@ -69,7 +74,10 @@ export class StoreFinderMap extends React.Component {
             visible={showingInfoWindow}
           >
             <div className="testing-infowindow">
-              <h4>{selectedPlace.name}</h4>
+              <div className="infowindow-header-wrapper">
+                <h4>{selectedPlace.name}</h4>
+                <span className="distance">{`${selectedPlace.distance} ${Drupal.t('Miles')}`}</span>
+              </div>
               <StoreAddress
                 address={selectedPlace.address}
               />
@@ -83,8 +91,3 @@ export class StoreFinderMap extends React.Component {
     );
   }
 }
-
-export default GoogleApiWrapper({
-  apiKey: drupalSettings.alshaya_appointment.google_map_api_key,
-  libraries: ['places', 'geometry'],
-})(StoreFinderMap);

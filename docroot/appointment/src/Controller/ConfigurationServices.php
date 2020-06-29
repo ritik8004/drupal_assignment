@@ -194,31 +194,24 @@ class ConfigurationServices {
       $result = $client->__soapCall('getLocationSchedulesByCriteria', [$param]);
 
       $weeklySchedules = $result->return->locationSchedules->weeklySubSchedule->weeklySubSchedulePeriods ?? [];
-      $weeklySchedulesData = [];
+      $weeklySchedulesData = $hours = [];
 
       foreach ($weeklySchedules as $weeklySchedule) {
         $weekDay = $weeklySchedule->weekDay ?? '';
         $startTime = $weeklySchedule->localStartTime ?? '';
         $endTime = $weeklySchedule->localEndTime ?? '';
-        $grouped = FALSE;
+        // 24-hour time to 12-hour time
+        $timeSlot = date("g:i a", strtotime($startTime)) . ' - ' . date("g:i a", strtotime($endTime));
 
-        if (!empty($weeklySchedulesData)) {
-          foreach ($weeklySchedulesData as $key => $schedule) {
-            if ($startTime === $schedule['startTime'] && $endTime === $schedule['endTime']) {
-              $weeklySchedulesData[$key]['day'] = $weeklySchedulesData[$key]['day'] . ', ' . $weekDay;
-              $grouped = TRUE;
-              break;
-            }
-          }
+        if (empty($hours[$timeSlot])) {
+          $hours[$timeSlot] = $weekDay;
+          $init_day = $weekDay;
         }
-        if (!$grouped) {
-          $weeklySchedulesData[] = [
-            'day' => $weekDay,
-            'startTime' => $startTime,
-            'endTime' => $endTime,
-          ];
+        else {
+          $hours[$timeSlot] = $init_day . ' - ' . $weekDay;
         }
       }
+      $weeklySchedulesData = array_flip($hours);
 
       return $weeklySchedulesData;
     }

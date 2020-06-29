@@ -1,23 +1,21 @@
 import React from 'react';
+import {
+  GoogleApiWrapper,
+} from 'google-maps-react';
 import fetchAPIData from '../../../utilities/api/fetchApiData';
 import StoreList from './components/store-list';
 import StoreFinderGoogleMap from './components/store-finder-map';
 import { getInputValue, getLocationAccess } from '../../../utilities/helper';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
-const {
-  radius, unit, max_num_of_locations: locCount, latitude, longitude,
-} = drupalSettings.alshaya_appointment.store_finder;
-const initialCoords = {
-  lat: latitude,
-  lng: longitude,
-};
-const localStorageValues = getStorageInfo();
-let storeListForSearch;
-
-export default class AppointmentStore extends React.Component {
+export class AppointmentStore extends React.Component {
   constructor(props) {
     super(props);
+    this.autocompleteInput = React.createRef();
+    this.autocomplete = null;
+
+    const localStorageValues = getStorageInfo();
+
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
@@ -31,11 +29,20 @@ export default class AppointmentStore extends React.Component {
   }
 
   componentDidMount() {
-    const apiUrl = `/get/stores?radius=${radius}&unit=${unit}&max-locations=${locCount}&latitude=${latitude}&longitude=${longitude}`;
-    this.fetchStores(apiUrl);
+    const { latitude, longitude } = drupalSettings.alshaya_appointment.store_finder;
+    this.fetchStores(latitude, longitude);
+
+    this.autocomplete = new google.maps.places.Autocomplete(this.autocompleteInput.current,
+      { types: ['geocode'] });
+    this.autocomplete.addListener('place_changed', this.handlePlaceChanged);
   }
 
-  fetchStores = (apiUrl) => {
+  fetchStores = (lat, lng) => {
+    const {
+      radius, unit, max_num_of_locations: locCount,
+    } = drupalSettings.alshaya_appointment.store_finder;
+
+    const apiUrl = `/get/stores?radius=${radius}&unit=${unit}&max-locations=${locCount}&latitude=${lat}&longitude=${lng}`;
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
@@ -47,6 +54,13 @@ export default class AppointmentStore extends React.Component {
           }));
         }
       });
+    }
+  }
+
+  handlePlaceChanged = () => {
+    const place = this.autocomplete.getPlace();
+    if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
+      this.fetchStores(place.geometry.location.lat(), place.geometry.location.lng());
     }
   }
 
@@ -63,8 +77,7 @@ export default class AppointmentStore extends React.Component {
             userCoords: coords,
           }));
 
-          const apiUrl = `/get/stores?radius=${radius}&unit=${unit}&max-locations=${locCount}&latitude=${coords.lat}&longitude=${coords.lng}`;
-          this.fetchStores(apiUrl);
+          this.fetchStores(coords.lat, coords.lng);
         },
       );
   }
@@ -93,32 +106,13 @@ export default class AppointmentStore extends React.Component {
     handleSubmit();
   }
 
-  searchHandler = (event) => {
-    const { storeItems } = this.state;
-    let filterItems = '';
-    const filteredStoreItems = [];
-    storeListForSearch = storeListForSearch || storeItems;
-
-    const searchQuery = event.target.value.toLowerCase();
-    filterItems = storeListForSearch && Object.entries(storeListForSearch).filter(([k, el]) => {
-      const match = el.name.toLowerCase().indexOf(searchQuery) !== -1;
-      if (match) {
-        filteredStoreItems.push(el);
-      }
-      return match;
-    });
-
-    this.setState((prevState) => ({
-      ...prevState,
-      storeItems: filteredStoreItems,
-    }));
-  }
-
   render() {
     const {
       storeItems,
       selectedStoreItem,
     } = this.state;
+
+    const { google } = this.props;
 
     return (
       <div className="appointment-store-wrapper">
@@ -143,27 +137,29 @@ export default class AppointmentStore extends React.Component {
             </label>
             <input
               type="text"
+              id="autocomplete"
               className="input"
+              ref={this.autocompleteInput}
               placeholder={Drupal.t('e.g. Salmiya')}
-              onChange={this.searchHandler}
             />
           </div>
           <div className="store-map-wrapper">
             <div className="map-inner-wrapper">
               <StoreFinderGoogleMap
-                coords={initialCoords}
                 markers={storeItems}
                 handleStateChange={this.handleStateChange}
                 openSelectedStore={false}
+                google={google}
               />
             </div>
+            { storeItems && (
             <StoreList
               storeList={storeItems}
-              coords={initialCoords}
               handleStateChange={this.handleStateChange}
               handleStoreSelect={this.handleChange}
               activeItem={selectedStoreItem && JSON.parse(selectedStoreItem).locationExternalId}
             />
+            )}
           </div>
           <div className="appointment-store-buttons-wrapper">
             <button
@@ -188,3 +184,8 @@ export default class AppointmentStore extends React.Component {
     );
   }
 }
+
+export default GoogleApiWrapper({
+  apiKey: drupalSettings.alshaya_appointment.google_map_api_key,
+  libraries: ['places', 'geometry'],
+})(AppointmentStore);

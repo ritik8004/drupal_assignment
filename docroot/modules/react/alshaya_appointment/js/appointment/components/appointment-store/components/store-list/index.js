@@ -2,9 +2,10 @@ import React from 'react';
 import { getDistanceBetweenCoords } from '../../../../../utilities/helper';
 
 export default class StoreList extends React.Component {
-  getDistance() {
-    const { storeList, coords } = this.props;
-    const storeItems = getDistanceBetweenCoords(storeList, coords);
+  componentDidMount() {
+    const { storeList } = this.props;
+    const { latitude, longitude } = drupalSettings.alshaya_appointment.store_finder;
+    const storeItems = getDistanceBetweenCoords(storeList, { lat: latitude, lng: longitude });
 
     this.handleStateChange(storeItems);
   }
@@ -24,28 +25,22 @@ export default class StoreList extends React.Component {
 
     return (
       <div className="store-list-inner-wrapper">
-        {storeList && Object.entries(storeList).map(([k, v]) => {
-          if ((typeof google !== 'undefined') && (typeof v.distanceInMiles === 'undefined')) {
-            this.getDistance();
-          }
-
-          return (
-            <div className="store-list-item">
-              <input
-                type="radio"
-                value={JSON.stringify(v)}
-                name="selectedStoreItem"
-                checked={activeItem === k}
-                onChange={this.handleStoreSelect}
-              />
-              <span className="store-name">{v.name}</span>
-              <span className="distance">
-                { v.distanceInMiles }
-                { Drupal.t('Miles') }
-              </span>
-            </div>
-          );
-        })}
+        {storeList && Object.entries(storeList).map(([k, v]) => (
+          <div className="store-list-item">
+            <input
+              type="radio"
+              value={JSON.stringify(v)}
+              name="selectedStoreItem"
+              checked={activeItem === v.locationExternalId}
+              onChange={this.handleStoreSelect}
+            />
+            <span className="store-name">{v.name}</span>
+            <span className="distance">
+              { v.distanceInMiles }
+              { Drupal.t('Miles') }
+            </span>
+          </div>
+        ))}
       </div>
     );
   }
