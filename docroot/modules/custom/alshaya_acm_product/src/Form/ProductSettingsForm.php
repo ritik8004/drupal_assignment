@@ -130,7 +130,8 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('non_refundable_text', $form_state->getValue('non_refundable_text'));
     $config->set('same_day_delivery_text', $form_state->getValue('same_day_delivery_text'));
     $config->set('same_day_delivery_sub_text', $form_state->getValue('same_day_delivery_sub_text'));
-    $config->set('delivery_in_dubai_text', $form_state->getValue('delivery_in_dubai_text'));
+    $config->set('delivery_in_only_city_text', $form_state->getValue('delivery_in_only_city_text'));
+    $config->set('delivery_in_only_city_key', $form_state->getValue('delivery_in_only_city_key'));
 
     // Product default image.
     $product_default_image = NULL;
@@ -336,31 +337,43 @@ class ProductSettingsForm extends ConfigFormBase {
     $form['product_flag']['non_refundable_tooltip'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Non refundable tooltip'),
+      '#description' => $this->t('Please enter text to be shown in tooltip.'),
       '#default_value' => $config->get('non_refundable_tooltip'),
     ];
 
     $form['product_flag']['non_refundable_text'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Non refundable text'),
+      '#description' => $this->t('Please enter text to be shown for pdp/checkout.'),
       '#default_value' => $config->get('non_refundable_text'),
     ];
 
     $form['product_flag']['same_day_delivery_text'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Same day delivery'),
+      '#description' => $this->t('Please enter text to be shown for pdp.'),
       '#default_value' => $config->get('same_day_delivery_text'),
     ];
 
     $form['product_flag']['same_day_delivery_sub_text'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Same day delivery sub text'),
+      '#description' => $this->t('Please enter text to be shown for pdp.'),
       '#default_value' => $config->get('same_day_delivery_sub_text'),
     ];
 
-    $form['product_flag']['delivery_in_dubai_text'] = [
+    $form['product_flag']['delivery_in_only_city_text'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Delivery in dubai'),
-      '#default_value' => $config->get('delivery_in_dubai_text'),
+      '#title' => $this->t('Delivery in only city'),
+      '#description' => $this->t('Please enter text to be shown for pdp/checkout.'),
+      '#default_value' => $config->get('delivery_in_only_city_text'),
+    ];
+
+    $form['product_flag']['delivery_in_only_city_key'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Delivery in only city key'),
+      '#description' => $this->t('Please enter the city key to be allowed for delivery.'),
+      '#default_value' => $config->get('delivery_in_only_city_key'),
     ];
 
     $form['legal_notice_enabled'] = [

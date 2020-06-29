@@ -610,9 +610,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['same_day_delivery_sub_text']['#markup'] = $product_settings->get('same_day_delivery_sub_text');
         }
 
-        // Delivery in dubai only.
-        if ($delivery_in_dubai_text = $product_settings->get('delivery_in_dubai_text')) {
-          $build['delivery_in_dubai_text']['#markup'] = $delivery_in_dubai_text;
+        // Delivery in only city.
+        if ($delivery_in_only_city_text = $product_settings->get('delivery_in_only_city_text')) {
+          $build['delivery_in_only_city_text']['#markup'] = $delivery_in_only_city_text;
         }
 
         // Initialise home delivery variable.
