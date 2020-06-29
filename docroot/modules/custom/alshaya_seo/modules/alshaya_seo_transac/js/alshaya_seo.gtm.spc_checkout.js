@@ -108,7 +108,7 @@
     }
 
     // Trigger checkout event for step 3 when payment method is available.
-    if (cartData.payment.method) {
+    if (cartData.payment.method || step === 3) {
       var step3_data = JSON.parse(JSON.stringify(data));
       step3_data.ecommerce.checkout.actionField.step = 3;
       dataLayer.push(step3_data);
