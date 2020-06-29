@@ -61,7 +61,7 @@
       dataLayer.cartTotalValue = cart_data.cart_total;
       dataLayer.cartItemsCount = cart_data.items_qty;
       var items = cart_data.items;
-      dataLayer.checkout = { actionField: { step }};
+      dataLayer.checkout = { actionField: { step: step }};
       if (items !== undefined) {
         dataLayer.checkout.products = [];
         if (!drupalSettings.gtm.disabled_vars.indexOf('cartItemsFlocktory')) {
@@ -74,7 +74,7 @@
           Drupal.alshayaSpc.getProductData(product.sku, Drupal.alshayaSeoSpc.cartGtmCallback, {
             qty: product.qty,
             finalPrice: product.finalPrice,
-            dataLayer,
+            dataLayer: dataLayer,
           });
         });
       }
