@@ -449,3 +449,10 @@
 .select2-dropdown ul.select2-results__options li.select2-results__option {
   padding-#{$left}: 1.25rem;
 }
+
+.short-description-wrapper .read-more-description-link-mobile {
+  @include breakpoint($only-mobile) {
+    font-weight: normal;
+    text-decoration: underline;
+  }
+}
