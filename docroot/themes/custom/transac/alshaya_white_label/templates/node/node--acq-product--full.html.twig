@@ -70,8 +70,10 @@ set classes = [
 
           {% if content.same_day_delivery_text %}
             <div class="same-day-delivery">
-              <p>{{ content.same_day_delivery_text }}</p>
-              <p>{{ content.same_day_delivery_sub_text }}</p>
+              <div class="same-day-content">
+                <p>{{ content.same_day_delivery_text }}</p>
+                <p>{{ content.same_day_delivery_sub_text }}</p>
+              </div>
             </div>
           {% elseif content.delivery_in_dubai_text %}
             <div class="delivery-in-dubai">

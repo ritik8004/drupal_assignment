@@ -36,3 +36,23 @@
     }
   }
 }
+
+.delivery-in-dubai-text {
+  font-size: 0.8125rem;
+  color: $spc-country-availability;
+
+  @include breakpoint($desktop) {
+    float: $right;
+    margin-top: -2.375rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: -0.5rem;
+    padding-bottom: 1rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    text-align: center;
+    padding-bottom: 1.5rem;
+  }
+}
