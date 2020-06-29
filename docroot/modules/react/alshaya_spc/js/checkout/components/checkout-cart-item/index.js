@@ -100,13 +100,13 @@ class CheckoutCartItem extends React.Component {
           <div className="spc-product-attributes">
             { configurableValues.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
           </div>
-          <ProductFlag
-            flag={isNonRefundable}
-            flagText={drupalSettings.alshaya_spc.non_refundable_text}
-            tooltipContent={drupalSettings.alshaya_spc.non_refundable_tooltip}
-            tooltip
-          />
         </div>
+        <ProductFlag
+          flag={isNonRefundable}
+          flagText={drupalSettings.alshaya_spc.non_refundable_text}
+          tooltipContent={drupalSettings.alshaya_spc.non_refundable_tooltip}
+          tooltip
+        />
         {context !== 'confirmation' && context !== 'print' && (
           <div className="spc-promotions">
             {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
