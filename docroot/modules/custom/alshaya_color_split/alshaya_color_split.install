@@ -10,6 +10,15 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add index for attr_style_code in acq_sku_field_data table.
+ */
+function alshaya_color_split_update_8004() {
+  _alshaya_color_split_attr_style_code_index();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add Arabic config for alshaya_color_split.settings.
  */
 function alshaya_color_split_update_8003() {
@@ -58,4 +67,28 @@ function alshaya_color_split_install() {
 
   // Add Arabic config for alshaya_color_split.settings.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_color_split.settings')->set('color_label_cart_form', 'اللون')->save();
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_color_split_modules_installed($modules) {
+  if (in_array('alshaya_color_split', $modules)) {
+    _alshaya_color_split_attr_style_code_index();
+  }
+}
+
+/**
+ * Add index for 'attr_style_code' attribute if not exists.
+ */
+function _alshaya_color_split_attr_style_code_index() {
+  // Add index to 'attr_style_code' if not already added.
+  \Drupal::moduleHandler()->loadInclude('acq_sku', 'install');
+  $index = 'acq_sku__attr_style_code';
+  $data = _acq_sku_indexes()[$index];
+  if (!empty($data) && !\Drupal::database()->schema()->indexExists($data['table'], $index)) {
+    \Drupal::database()
+      ->schema()
+      ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
+  }
 }
