@@ -116,10 +116,6 @@
   }
 
   document.addEventListener('checkoutCartUpdate', function (e) {
-    if (drupalSettings.user.uid > 0) {
-      Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
-    }
-
     var step = Drupal.alshayaSeoSpc.getStepFromContainer();
     Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, step);
   });
@@ -163,5 +159,15 @@
       storeAddress: e.detail.store.address.replace(/<[^>]+>(\s+)|(\n+)/g, ''),
     });
   });
+
+  Drupal.behaviors.spcCheckoutGtm = {
+    attach: function (context, settings) {
+      $('body').once('spc-checkout-gtm-onetime').each(function() {
+        if (settings.user.uid > 0) {
+          Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
+        }
+      });
+    }
+  };
 
 })(jQuery, Drupal, dataLayer);

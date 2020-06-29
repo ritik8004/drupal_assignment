@@ -72,11 +72,11 @@ export default class Checkout extends React.Component {
           // setState will immidiately mount the components before localStorage
           // update happens.
           removeBillingFlagFromStorage({ cart });
+          dispatchCustomEvent('checkoutCartUpdate', { cart });
           this.setState({
             wait: false,
             cart: { cart },
           });
-          dispatchCustomEvent('checkoutCartUpdate', { cart });
         });
       } else {
         redirectToCart();
