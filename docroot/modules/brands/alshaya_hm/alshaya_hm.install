@@ -15,6 +15,19 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Collection label order settings.
+ */
+function alshaya_hm_update_8051() {
+  $configs = [
+    'alshaya_hm.label_order.settings',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_hm');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Make style and measurements_in_cm field type attribute from type string.
  */
 function alshaya_hm_update_8050() {
