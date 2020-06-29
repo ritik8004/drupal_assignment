@@ -18,6 +18,11 @@
         @include breakpoint($tablet) {
           width: 23.4375rem;
         }
+
+        @include breakpoint($only-mobile) {
+          transform: translateY(100%);
+          #{$left}: 0;
+        }
       }
 
       &-wrapper {

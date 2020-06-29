@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import CartSelectOption from '../cart-select-option';
 import {
   updateCart,
@@ -15,10 +15,42 @@ class ConfigurableProductForm extends React.Component {
       nextCode: null,
       nextValues: null,
     };
+
+    this.button = createRef();
   }
 
   componentDidMount() {
+    const { button, addToBagButtonClass } = this;
     this.handleLoad();
+
+    window.addEventListener('load', () => {
+      button.current.setAttribute('data-top-offset', button.current.offsetTop);
+
+      addToBagButtonClass(button.current.offsetTop);
+    });
+
+    window.addEventListener('scroll', () => {
+      const buttonOffset = button.current.getAttribute('data-top-offset');
+
+      if (buttonOffset === null) {
+        return;
+      }
+
+      addToBagButtonClass(buttonOffset);
+    });
+  }
+
+  addToBagButtonClass = (buttonOffset) => {
+    const { button } = this;
+
+    const buttonHeight = button.current.offsetHeight;
+    const windowHeight = window.innerHeight;
+
+    if ((window.pageYOffset + windowHeight) >= (parseInt(buttonOffset, 10) + buttonHeight)) {
+      button.current.classList.remove('fix-bag-button');
+    } else {
+      button.current.classList.add('fix-bag-button');
+    }
   }
 
   handleLoad = () => {
@@ -169,14 +201,16 @@ class ConfigurableProductForm extends React.Component {
             />
           </div>
           {(checkoutFeatureStatus === 'enabled') ? (
-            <button
-              className="magv2-button"
-              type="submit"
-              value="Add to basket"
-              onClick={this.addToCart}
-            >
-              {Drupal.t('Add To Basket')}
-            </button>
+            <div className="magv2-add-to-basket-container" ref={this.button}>
+              <button
+                className="magv2-button"
+                type="submit"
+                value="Add to bag"
+                onClick={this.addToCart}
+              >
+                {Drupal.t('Add To Bag')}
+              </button>
+            </div>
           ) : cartUnavailability }
         </form>
       </>

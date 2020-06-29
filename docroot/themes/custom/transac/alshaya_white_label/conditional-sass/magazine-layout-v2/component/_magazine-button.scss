@@ -6,22 +6,35 @@
   font-size: 1.125rem;
   line-height: 1.3125rem;
   background-color: $magv2-button-bg;
-  padding: 0.8125rem 0;
+  padding: 0.875rem 0;
   width: 100%;
   margin: 1.25rem 0;
   border: 0;
   text-transform: lowercase;
+  border-radius: 0.125rem;
+}
 
-  @include breakpoint($only-mobile) {
-    width: calc(50% - 5px);
-    margin-#{$left}: 10px;
+@include breakpoint($only-mobile) {
+  .fix-bag-button {
+    &.magv2-add-to-basket-container {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+      background: $magv2-pdp-bg;
+
+      .magv2-button {
+        left: 1.25rem;
+        right: 1.25rem;
+        width: calc(100% - 2.5rem);
+      }
+    }
   }
 }
 
-.pdp-cart-form {
-  .magv2-button {
-    @include breakpoint($desktop) {
-      width: 16.5625rem;
-    }
+#color {
+  &.select-attribute {
+    overflow: hidden;
   }
 }

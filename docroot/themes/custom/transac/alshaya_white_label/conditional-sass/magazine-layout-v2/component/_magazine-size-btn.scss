@@ -1,40 +1,39 @@
 .magv2-size-btn-wrapper {
   display: inline-block;
   width: 60%;
-  height: 50px;
   background: white;
   vertical-align: bottom;
-  border: 1px solid $warm-grey-two;
-  line-height: 50px;
-  padding-#{$left}: 20px;
+  border: 0.063rem solid $warm-grey-two;
+  line-height: 3.125rem;
+  padding-#{$left}: 1.25rem;
   position: relative;
   cursor: pointer;
   color: $magv2-size-btn-text;
+  font-size: 1.125rem;
 
   @include breakpoint($only-mobile) {
-    width: calc(50% - 5px);
-    margin-bottom: 1.25rem;
+    width: calc(50% - 0.625rem);
+    margin-top: 0.625rem;
   }
 
   @include breakpoint($only-tablet) {
-    height: 35px;
-    line-height: 35px;
-    padding-#{$left}: 10px;
+    width: calc(50% - -0.938rem);
+    padding-#{$left}: 0.625rem;
   }
 
   @include breakpoint($desktop) {
-    width: calc(100% - 170px);
+    width: calc(100% - 10.625rem);
   }
 
   @include icon(chevrondown, after) {
-    font-size: 24px;
+    font-size: 1.5rem;
     position: absolute;
-    right: 10px;
+    right: 0.625rem;
     top: 50%;
     transform: translateY(-50%);
 
     @include breakpoint($desktop) {
-      font-size: 32px;
+      font-size: 2rem;
     }
   }
 }

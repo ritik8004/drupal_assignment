@@ -1,6 +1,5 @@
 .location-field {
   position: relative;
-  width: 100%;
 
   &::before {
     content: '';
@@ -17,6 +16,10 @@
   input {
     width: 100%;
     box-sizing: border-box !important;
+  }
+
+  @include breakpoint($tablet) {
+    width: 100%;
   }
 }
 
