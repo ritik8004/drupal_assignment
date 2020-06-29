@@ -29,3 +29,4 @@ services:
       - '@simple_sitemap.generator'
       - '@config.factory'
       - '@alshaya_acm_product_category.product_category_tree'
+      - '@database'
