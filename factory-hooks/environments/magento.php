@@ -266,6 +266,28 @@ $magentos = [
       'store_id' => ['en' => 10, 'ar' => 13],
     ],
   ],
+  'pbk_prod' => [
+    'url' => 'https://pbk.store.alshaya.com',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 15],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 6],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 9, 'ar' => 12],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 21, 'ar' => 18],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 27, 'ar' => 24],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 33, 'ar' => 30],
+    ],
+  ],
   // Victoria Secret.
   'vs_qa' => [
     'url' => 'https://integration-5ojmyuq-kpwgmbven7d7y.eu-3.magentosite.cloud',

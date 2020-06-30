@@ -8,3 +8,4 @@ services:
       - '@acq_commerce.i18n_helper'
       - '@acq_commerce.api_helper'
       - '@event_dispatcher'
+      - '@lock'
