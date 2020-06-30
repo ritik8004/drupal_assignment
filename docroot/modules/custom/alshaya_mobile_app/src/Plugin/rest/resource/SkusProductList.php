@@ -278,6 +278,7 @@ class SkusProductList extends ResourceBase {
     }
     $data['configurable_values'] = $this->getConfigurableValues($sku);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($sku);
+    $data['labels'] = $this->skuManager->getSkuLabels($sku, 'plp');
     return $data;
   }
 
