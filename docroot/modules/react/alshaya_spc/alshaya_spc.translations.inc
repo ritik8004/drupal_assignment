@@ -254,6 +254,9 @@ function _alshaya_spc_translations() {
       'add new card' => [
         'ar' => 'إضافة بطاقة جديدة',
       ],
+      'This address doesn\'t contain all the required information, please update it.' => [
+        'ar' => 'لا يحتوي هذا العنوان على جميع المعلومات المطلوبة ، يرجى تحديثه.',
+      ],
     ],
   ];
 }

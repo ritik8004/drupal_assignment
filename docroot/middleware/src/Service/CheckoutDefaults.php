@@ -246,6 +246,13 @@ class CheckoutDefaults {
       ],
     ];
 
+    // Validate address.
+    $valid_address = $this->drupal->validateAddressAreaCity($address);
+    // If address is not valid.
+    if (empty($valid_address) || !$valid_address['address']) {
+      return FALSE;
+    }
+
     $updated = $this->cart->addShippingInfo($shipping_data, CartActions::CART_SHIPPING_UPDATE, FALSE);
     if (isset($updated['error'])) {
       return FALSE;
@@ -283,6 +290,13 @@ class CheckoutDefaults {
       'click_and_collect_type' => !empty($store['rnc_available']) ? 'reserve_and_collect' : 'ship_to_store',
       'store_code' => $store['code'],
     ];
+
+    // Validate address.
+    $valid_address = $this->drupal->validateAddressAreaCity($billing);
+    // If address is not valid.
+    if (empty($valid_address) || !$valid_address['address']) {
+      return FALSE;
+    }
 
     $updated = $this->cart->updateCart($data);
     if (isset($updated['error'])) {

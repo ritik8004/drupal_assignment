@@ -239,6 +239,11 @@ class AlshayaSpcController extends ControllerBase {
     ];
 
     $strings[] = [
+      'key' => 'address_not_complete',
+      'value' => $this->t("This address doesn't contain all the required information, please update it."),
+    ];
+
+    $strings[] = [
       'key' => 'address_not_filled',
       'value' => $this->t("Sorry, we couldn’t fetch your location precisely, please") . '<span class="font-bold" id="scroll-to-dropdown"> ' . $this->t("enter your address") . '</span>',
     ];
@@ -664,6 +669,46 @@ class AlshayaSpcController extends ControllerBase {
             $status[$key] = ($user instanceof UserInterface) ? 'exists' : '';
           }
 
+          break;
+
+        case 'address':
+          $status[$key] = TRUE;
+          $address_extension_attributes = $data[$key]['extension_attributes'] ?? [];
+          $address_custom_attributes = $data[$key]['custom_attributes'] ?? [];
+          // Iterate over each configured address field.
+          foreach (_alshaya_spc_get_address_fields() as $field => $address_field) {
+            // If field is available and is either area/city.
+            if (!empty($address_extension_attributes) && isset($address_extension_attributes[$address_field['key']])
+              && ($field == 'administrative_area' || $field == 'area_parent')) {
+              try {
+                $term = $this->areaTermsHelper->getLocationTermFromLocationId($address_extension_attributes[$address_field['key']]);
+                if (!$term) {
+                  $status[$key] = FALSE;
+                  break;
+                }
+              }
+              catch (\Exception $e) {
+                $status[$key] = FALSE;
+              }
+            }
+            elseif (!empty($address_custom_attributes)) {
+              foreach ($address_custom_attributes as $attr) {
+                if ($attr['attribute_code'] == $address_field['key']
+                  && ($field == 'administrative_area' || $field == 'area_parent')) {
+                  try {
+                    $term = $this->areaTermsHelper->getLocationTermFromLocationId($attr['value']);
+                    if (!$term) {
+                      $status[$key] = FALSE;
+                      break;
+                    }
+                  }
+                  catch (\Exception $e) {
+                    $status[$key] = FALSE;
+                  }
+                }
+              }
+            }
+          }
           break;
       }
     }
