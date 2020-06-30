@@ -598,6 +598,7 @@ display:
         sorts: false
         style: false
         row: false
+        header: false
       exposed_block: true
       sorts:
         nid:
@@ -708,6 +709,17 @@ display:
           view_modes:
             'entity:node':
               acq_product: search_result
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          content: '@total items'
+          plugin_id: result
     cache_metadata:
       max-age: -1
       contexts:
