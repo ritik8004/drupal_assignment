@@ -6,16 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Update pathauto pattern for boots product categories.
- */
-function alshaya_bp_transac_update_8001() {
-  \Drupal::configFactory()->getEditable('pathauto.pattern.product_category_pathauto')
-    ->save();
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_bp_transac_install() {
