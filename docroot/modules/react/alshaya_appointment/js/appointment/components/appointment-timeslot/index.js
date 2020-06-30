@@ -15,8 +15,11 @@ export default class AppointmentTimeSlot extends React.Component {
       this.state = {
         ...localStorageValues,
       };
+      this.state.date = new Date(this.state.date);
     }
-    this.state.date = new Date();
+    else {
+      this.state.date = new Date();
+    }
     this.state.timeSlots = {};
     this.state.selected_slot = {};
     this.dateChanged = this.dateChanged.bind(this);
@@ -37,13 +40,14 @@ export default class AppointmentTimeSlot extends React.Component {
   handleSubmit = () => {
     this.setState({ timeslot: undefined });
     setStorageInfo(this.state);
+    this.props.handleSubmit();
   }
 
   dateChanged(d){
     this.setState({date: d},
       () => {
         const selected_date = moment(d).format('YYYY-MM-DD');
-        const apiUrl = `/get/timeslots?selected_date=${selected_date}`;
+        const apiUrl = `/get/timeslots?selected_date=${selected_date}&program=${this.state.appointmentCategory}&activity=${this.state.appointmentType}&location=UAE-DBX-100001`;
         this.fetchTimeSlots(apiUrl);
       }
     );
@@ -52,7 +56,7 @@ export default class AppointmentTimeSlot extends React.Component {
   componentDidMount() {
     const d = new Date();
     const selected_date = moment(d).format('YYYY-MM-DD');
-    const apiUrl = `/get/timeslots?selected_date=${selected_date}`;
+    const apiUrl = `/get/timeslots?selected_date=${selected_date}&program=${this.state.appointmentCategory}&activity=${this.state.appointmentType}&location=UAE-DBX-100001`;
     this.fetchTimeSlots(apiUrl);
   }
 

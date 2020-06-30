@@ -60,6 +60,9 @@ class AppointmentServices {
   public function getTimeSlots(Request $request) {
     try {
       $selected_date = $request->query->get('selected_date');
+      $program = $request->query->get('program');
+      $activity = $request->query->get('activity');
+      $location = $request->query->get('location');
       $wsdl = "https://api-stage.timetradesystems.co.uk/soap/AppointmentServices?wsdl";
       $client_new = new \SoapClient($wsdl, []);
       $xml = '
@@ -75,9 +78,9 @@ class AppointmentServices {
         <S:Body>
           <ns2:getAvailableNDateTimeSlotsStartFromDate>
               <criteria>
-                  <activityExternalId>HealthCheckup</activityExternalId>
-                  <locationExternalId>UAE-DBX-100001</locationExternalId>
-                  <programExternalId>HealthandPharmacy</programExternalId>
+                  <activityExternalId>' . $activity . '</activityExternalId>
+                  <locationExternalId>' . $location . '</locationExternalId>
+                  <programExternalId>' . $program . '</programExternalId>
               </criteria>
               <startDateTime>' . $selected_date . 'T00:00:00.000+03:00</startDateTime>
               <endDateTime>' . $selected_date . 'T23:59:59.999+03:00</endDateTime>
