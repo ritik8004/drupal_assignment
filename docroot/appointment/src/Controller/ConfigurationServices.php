@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Helper\APIHelper;
 use App\Helper\APIServicesUrls;
 use App\Helper\XmlAPIHelper;
+use App\Helper\Helper;
 
 /**
  * Class ConfigurationServices.
@@ -43,6 +44,13 @@ class ConfigurationServices {
   protected $xmlApiHelper;
 
   /**
+   * Helper.
+   *
+   * @var \App\Helper\Helper
+   */
+  protected $helper;
+
+  /**
    * ConfigurationServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -53,15 +61,19 @@ class ConfigurationServices {
    *   API Helper.
    * @param \App\Helper\XmlAPIHelper $xml_api_helper
    *   Xml API Helper.
+   * @param \App\Helper\Helper $helper
+   *   Helper.
    */
   public function __construct(LoggerInterface $logger,
                               SoapClient $client,
                               APIHelper $api_helper,
-                              XmlAPIHelper $xml_api_helper) {
+                              XmlAPIHelper $xml_api_helper,
+                              Helper $helper) {
     $this->logger = $logger;
     $this->client = $client;
     $this->apiHelper = $api_helper;
     $this->xmlApiHelper = $xml_api_helper;
+    $this->helper = $helper;
   }
 
   /**
@@ -192,55 +204,8 @@ class ConfigurationServices {
         ],
       ];
       $result = $client->__soapCall('getLocationSchedulesByCriteria', [$param]);
-
       $weeklySchedules = $result->return->locationSchedules->weeklySubSchedule->weeklySubSchedulePeriods ?? [];
-      $weeklySchedulesData = $firstDay = $lastDay = [];
-
-      foreach ($weeklySchedules as $weeklySchedule) {
-        $weekDay = $weeklySchedule->weekDay ?? '';
-        $startTime = $weeklySchedule->localStartTime ?? '';
-        $endTime = $weeklySchedule->localEndTime ?? '';
-        // 24-hour time to 12-hour time
-        $timeSlot = date("g:i a", strtotime($startTime)) . ' - ' . date("g:i a", strtotime($endTime));
-        $schedule = [
-          'day' => $weekDay,
-          'time' => $timeSlot,
-        ];
-
-        // Group Store timings.
-        if (empty($firstDay)) {
-          $firstDay = $schedule;
-        }
-        elseif (empty($lastDay)) {
-          $lastDay = $schedule;
-        }
-        elseif ($timeSlot === $lastDay['time']) {
-          $lastDay = $schedule;
-        }
-        else {
-          $weeklySchedulesData[] = [
-            'day' => $firstDay['day'] . ' - ' . $lastDay['day'],
-            'timeSlot' => $firstDay['time'],
-          ];
-          $firstDay = $schedule;
-          $lastDay = [];
-        }
-      }
-
-      if (!empty($firstDay)) {
-        if (!empty($lastDay)) {
-          $weeklySchedulesData[] = [
-            'day' => $firstDay['day'] . ' - ' . $lastDay['day'],
-            'timeSlot' => $firstDay['time'],
-          ];
-        }
-        else {
-          $weeklySchedulesData[] = [
-            'day' => $firstDay['day'],
-            'timeSlot' => $firstDay['time'],
-          ];
-        }
-      }
+      $weeklySchedulesData = $this->helper->groupStoreTimings($weeklySchedules);
 
       return $weeklySchedulesData;
     }
