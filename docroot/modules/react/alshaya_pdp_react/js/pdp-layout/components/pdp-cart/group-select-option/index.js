@@ -30,9 +30,12 @@ const GroupSelectOption = (props) => {
           </div>
           <div className="magv2-select-popup-content-wrapper">
             <div className="group-anchor-wrapper">
-              {Object.keys(configurables.alternates).map((alternate) => (
-                <a href="#" key={alternate} onClick={(e) => groupSelect(e, configurables.alternates[alternate])}>{configurables.alternates[alternate]}</a>
-              ))}
+              <label htmlFor={key}>{configurables.label}</label>
+              <div className="group-anchor-links">
+                {Object.keys(configurables.alternates).map((alternate) => (
+                  <a href="#" key={alternate} onClick={(e) => groupSelect(e, configurables.alternates[alternate])}>{configurables.alternates[alternate]}</a>
+                ))}
+              </div>
             </div>
             <SizeGuide attrId={code} />
             <div className="group-option-wrapper">
@@ -66,6 +69,9 @@ const GroupSelectOption = (props) => {
                   );
                 })}
               </ul>
+            </div>
+            <div className="magv2-confirm-size-btn">
+              <button className="magv2-button" type="submit" value="Confirm Size">{Drupal.t('Confirm Size')}</button>
             </div>
           </div>
         </div>

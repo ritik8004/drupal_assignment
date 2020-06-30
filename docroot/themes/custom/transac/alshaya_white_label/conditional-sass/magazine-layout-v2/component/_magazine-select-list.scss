@@ -5,12 +5,12 @@
     margin: 0;
 
     @include breakpoint($only-mobile) {
-      padding-bottom: 5.9375rem;
+      padding-bottom: 7.9375rem;
     }
 
     li {
       background: $spc-cnc-store-item-bg;
-      border-bottom: 1px solid $spc-checkout-sidebar-bg;
+      border-bottom: 0.0625rem solid $spc-checkout-sidebar-bg;
 
       .magv2-select-list-wrapper {
         cursor: pointer;
@@ -25,7 +25,7 @@
           #{$left}: 0;
           top: 50%;
           transform: translateY(-50%);
-          font-size: 3.125rem;
+          font-size: 3.4375rem;
           width: 3.75rem;
           text-align: center;
           color: $spc-checkout-radio-empty;

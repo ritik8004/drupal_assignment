@@ -1,15 +1,8 @@
 import React from 'react';
 
-const AvailableSelectOptions = (props) => {
-  const {
-    nextValues,
-    attr,
-    value,
-    handleLiClick,
-    selected,
-    code,
-  } = props;
-
+const AvailableSelectOptions = ({
+  nextValues, attr, value, handleLiClick, selected, code,
+}) => {
   if (nextValues.indexOf(attr) !== -1) {
     return (
       <li

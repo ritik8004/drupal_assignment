@@ -28,7 +28,7 @@
   @include icon(chevrondown, after) {
     font-size: 1.5rem;
     position: absolute;
-    right: 0.625rem;
+    #{$right}: 0.625rem;
     top: 50%;
     transform: translateY(-50%);
 

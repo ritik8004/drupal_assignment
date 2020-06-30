@@ -29,6 +29,10 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+
+        @include breakpoint($only-mobile) {
+          background-color: rgba(0, 0, 0, 0.3);
+        }
       }
 
       &-header-wrapper {
@@ -39,6 +43,8 @@
         position: fixed;
         top: 0;
         width: 100%;
+        text-align: center;
+        font-size: 1.25rem;
 
         .close {
           cursor: pointer;
@@ -55,14 +61,46 @@
             color: $spc-checkout-close-icon;
           }
         }
+
+        @include breakpoint($only-mobile) {
+          font-size: 0;
+          background-color: unset;
+          box-shadow: none;
+          margin-bottom: 0;
+          text-align: #{$right};
+          padding: 1.25rem;
+
+          .close {
+            width: 2.875rem;
+            height: 2.875rem;
+            background-color: $magv2-content-bg;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            transform: none;
+
+            @include icon('close') {
+              padding-#{$left}: 0;
+              top: -0.1875rem;
+              font-size: 3.125rem;
+              position: absolute;
+              left: 0;
+              right: 0;
+            }
+          }
+        }
       }
 
       &-content-wrapper {
-        padding-top: 1.25rem;
-        background-color: $magv2-desc-popup-content-bg;
         flex-grow: 1;
-        margin-top: 4.1875rem;
+        margin-top: 3.4375rem;
         overflow-y: scroll;
+
+        @include breakpoint($only-mobile) {
+          margin-top: 5.625rem;
+          border-radius: 0.5rem;
+          background: $magv2-pdp-bg;
+        }
 
         html[lang='ar'] & {
           margin-top: 5.625rem;
@@ -70,6 +108,85 @@
 
         .group-anchor-wrapper {
           padding-#{$left}: 1.25rem;
+          background-color: $magv2-desc-popup-content-bg;
+          padding-top: 1.25rem;
+
+          label {
+            display: none;
+          }
+
+          a {
+            height: 3.125rem;
+            margin-bottom: 1.25rem;
+            min-width: 6.125rem;
+            margin-#{$right}: 1.25rem;
+            font-size: 1rem;
+            color: $magv2-size-btn-text;
+            border: 0.0625rem solid $magv2-size-btn-border;
+            border-radius: 0.125rem;
+
+            &:hover:not(.active) {
+              background: $magv2-size-color;
+              color: $magv2-content-bg;
+              border: 0.0625rem solid $magv2-size-color;
+            }
+          }
+
+          @include breakpoint($only-mobile) {
+            justify-content: space-between;
+            padding-#{$right}: 1.25rem;
+            margin-bottom: 0;
+            border-bottom: 0.0625rem solid $magv2-size-btn-border;
+
+            label {
+              display: flex;
+              margin-bottom: 1.25rem;
+              align-items: center;
+            }
+
+            a {
+              min-width: 3.5rem;
+              width: auto;
+            }
+          }
+        }
+
+        .size-guide {
+          position: relative;
+          text-align: center;
+          margin: 1.875rem 0.625rem;
+
+          a {
+            text-decoration: none;
+            color: $magv2-size-guide-link;
+            font-size: 0.75rem;
+            border-radius: 1.09375rem;
+            background-color: $magv2-size-btn-bg;
+            padding: 0.625rem 0.625rem 0.625rem 1.875rem;
+            position: relative;
+            padding-#{$left}: 2.5rem;
+            box-shadow: 0 0.0625rem 0.125rem 0 rgba(0, 0, 0, 0.1);
+
+            &::before {
+              content: '';
+              background: url('#{$base_theme_img_directory_path}/icons/new-pdp-size-guide-icon.svg') center center no-repeat;
+              width: 1.5625rem;
+              height: 1.5625rem;
+              display: inline-block;
+              position: absolute;
+              #{$left}: 0;
+              top: 0.1875rem;
+              margin-#{$left}: 0.625rem;
+            }
+          }
+        }
+
+        .magv2-confirm-size-btn {
+          margin: 0 1.25rem;
+
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
         }
       }
     }
