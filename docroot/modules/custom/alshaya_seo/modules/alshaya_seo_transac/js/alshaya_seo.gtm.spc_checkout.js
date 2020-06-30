@@ -72,7 +72,7 @@
   };
 
   Drupal.alshayaSeoSpc.checkoutEvent = function(cartData, step) {
-    var checkoutPaymentPage = 'checkout payment page'
+    var checkoutPaymentPage = 'checkout payment page';
     var data = {
       language: drupalSettings.gtm.language,
       country: drupalSettings.gtm.country,
