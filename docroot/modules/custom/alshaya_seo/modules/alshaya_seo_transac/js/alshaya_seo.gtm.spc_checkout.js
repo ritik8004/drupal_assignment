@@ -72,11 +72,12 @@
   };
 
   Drupal.alshayaSeoSpc.checkoutEvent = function(cartData, step) {
+    var checkoutPaymentPage = 'checkout payment page';
     var data = {
       language: drupalSettings.gtm.language,
       country: drupalSettings.gtm.country,
       currency: drupalSettings.gtm.currency,
-      pageType: step === 3 ? 'checkout payment page' : drupalSettings.gtm.pageType,
+      pageType: step === 3 ? checkoutPaymentPage : drupalSettings.gtm.pageType,
       event: 'checkout',
       ecommerce: {
         currencyCode: drupalSettings.gtm.currency,
@@ -111,6 +112,7 @@
     if (cartData.payment.method || step === 3) {
       var step3_data = JSON.parse(JSON.stringify(data));
       step3_data.ecommerce.checkout.actionField.step = 3;
+      step3_data.pageType = checkoutPaymentPage;
       dataLayer.push(step3_data);
     }
   }

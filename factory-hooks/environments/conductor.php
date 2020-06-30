@@ -259,6 +259,24 @@ $conductors = [
     'hmac_secret' => 'YjcyYTdhMWItMzVhZi00',
     'site_id' => 243,
   ],
+  'pbkkw_prod' => [
+    'site_id' => 249,
+  ],
+  'pbksa_prod' => [
+    'site_id' => 250,
+  ],
+  'pbkae_prod' => [
+    'site_id' => 251,
+  ],
+  'pbkeg_prod' => [
+    'site_id' => 252,
+  ],
+  'pbkbh_prod' => [
+    'site_id' => 253,
+  ],
+  'pbkqa_prod' => [
+    'site_id' => 254,
+  ],
   // BathBodyWorks KW.
   'bbwkw_qa' => [
     'hmac_id' => '0b92904888cd422f8acd2938e199916e',
