@@ -260,7 +260,7 @@ class SkusProductList extends ResourceBase {
     ];
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
 
-    $media = $this->skuImagesManager->getProductMedia($sku, 'teaser');
+    $media = $this->skuImagesManager->getProductMedia($sku, 'pdp');
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
       $data['images'][] = [
         'url' => file_create_url($media_item['drupal_uri']),
@@ -278,6 +278,7 @@ class SkusProductList extends ResourceBase {
     }
     $data['configurable_values'] = $this->getConfigurableValues($sku);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($sku);
+    $data['labels'] = $this->skuManager->getSkuLabels($sku, 'plp');
     return $data;
   }
 
