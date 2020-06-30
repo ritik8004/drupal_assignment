@@ -8,6 +8,15 @@
 /**
  * Implements hook_update_N().
  *
+ * Install config for spc click n collect.
+ */
+function alshaya_sa_update_8006() {
+  alshaya_sa_default_spc_config();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add iso_currency_code for sa sites.
  */
 function alshaya_sa_update_8005() {
@@ -96,6 +105,7 @@ function alshaya_sa_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
+  alshaya_sa_default_spc_config();
 }
 
 /**
@@ -121,4 +131,13 @@ function alshaya_sa_update_dependencies() {
       ],
     ];
   }
+}
+
+/**
+ * Install config for spc click n collect.
+ *
+ * Set default lat and long for click n collect api requests.
+ */
+function alshaya_sa_default_spc_config() {
+  alshaya_country_set_default_spc_config(23.885942, 45.079163);
 }
