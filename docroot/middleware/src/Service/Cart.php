@@ -218,10 +218,19 @@ class Cart {
       return NULL;
     }
 
+    // If cart is available in cache.
+    if (!$force && !empty($cached_cart = $this->getCartFromCache())) {
+      static::$cart = $cached_cart;
+      return static::$cart;
+    }
+
     $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
       static::$cart = $this->magentoApiWrapper->doRequest('GET', $url);
+      // Store cart object in cache.
+      $this->setCartInCache(static::$cart);
+
       static::$cart = $this->formatCart(static::$cart);
       return static::$cart;
     }
@@ -650,7 +659,7 @@ class Cart {
       // After association restore the cart.
       if ($result) {
         static::$cart = NULL;
-        $this->getCart();
+        $this->getCart(TRUE);
         return TRUE;
       }
 
@@ -822,6 +831,8 @@ class Cart {
 
     try {
       static::$cart = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      // Set cart in cache.
+      $this->setCartInCache(static::$cart);
       static::$cart = $this->formatCart(static::$cart);
       $cart = static::$cart;
 
@@ -1412,6 +1423,27 @@ class Cart {
     }
 
     return $cnc_enabled;
+  }
+
+  /*
+   * Get cart from cache.
+   *
+   * @return array
+   *   Formatted cart data.
+   */
+  public function getCartFromCache() {
+    $expire = (int) $_ENV['CACHE_CART'];
+    // If cart is available in cache, use that.
+    if ($expire > 0 && ($cached_cart = $this->cache->get('cached_cart'))) {
+      return $this->formatCart($cached_cart);
+    }
+  }
+
+  public function setCartInCache(array $cart) {
+    $expire = (int) $_ENV['CACHE_CART'];
+    if ($expire > 0) {
+      $this->cache->set('cached_cart', $expire, $cart);
+    }
   }
 
 }

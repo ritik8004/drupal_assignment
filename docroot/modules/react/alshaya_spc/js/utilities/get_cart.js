@@ -23,9 +23,9 @@ export const cartAvailableInStorage = () => {
     return null;
   }
 
-  // 1m time for expire.
+  // 15m time for expire.
   // @Todo: Make this 10m (configurable from BE).
-  const expireTime = 1 * 60 * 1000;
+  const expireTime = 15 * 60 * 1000;
   const currentTime = new Date().getTime();
 
   // If data/cart is expired or cart has different language than
