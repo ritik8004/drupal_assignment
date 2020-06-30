@@ -932,6 +932,14 @@ function alshaya_white_label_preprocess_user(&$variables) {
       }
     }
   }
+
+  // Removing the metatag as it contains user specific information.
+  foreach ($variables['#attached']['html_head'] as $key => $attachment) {
+    if (array_search('rdf_user_username', $attachment)) {
+      unset($variables['#attached']['html_head'][$key]);
+      break;
+    }
+  }
 }
 
 /**
