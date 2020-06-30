@@ -15,11 +15,14 @@ export default class AppointmentTimeSlot extends React.Component {
       this.state = {
         ...localStorageValues,
       };
-      this.state.date = new Date(this.state.date);
+      if (localStorageValues.hasOwnProperty('date')) {
+        this.state.date = new Date(localStorageValues.date);
+      }
+      else {
+        this.state.date = new Date();
+      }
     }
-    else {
-      this.state.date = new Date();
-    }
+
     this.state.timeSlots = {};
     this.state.selected_slot = {};
     this.dateChanged = this.dateChanged.bind(this);
