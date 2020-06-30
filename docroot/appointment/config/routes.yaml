@@ -10,3 +10,7 @@ appointment.get_stores:
    path: /get/stores
    controller: App\Controller\ConfigurationServices::getStores
    methods: GET
+appointment.get_timeslots:
+  path: /get/timeslots
+  controller: App\Controller\AppointmentServices::getTimeSlots
+  methods: GET
