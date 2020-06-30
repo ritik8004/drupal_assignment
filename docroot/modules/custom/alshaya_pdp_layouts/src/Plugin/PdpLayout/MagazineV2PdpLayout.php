@@ -126,7 +126,10 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
     // Get gallery data for the main product.
     if ($sku_entity instanceof SKUInterface) {
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $this->getGalleryVariables($sku_entity);
+      $gallery = $this->getGalleryVariables($sku_entity);
+      if (!empty($gallery)) {
+        $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $gallery;
+      }
       $max_sale_qty = 0;
       if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
         // We will take lower value for quantity options from
@@ -234,15 +237,22 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           continue;
         }
 
+        // Setting the main pdp gallery
+        // if child gallery is empty.
+        $variant_gallery = $this->getGalleryVariables($child);
+        if (empty($variant_gallery)) {
+          $variant_gallery = $gallery;
+        }
+
         $options = NestedArray::mergeDeepArray([$options, $this->skuManager->getCombinationArray($combination)], TRUE);
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['combinations'] = $options;
         // Get the first child from attribute_sku.
         $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['firstChild'] = reset($sorted_variants);
-        $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['rawGallery'] = $this->getGalleryVariables($child);
+        $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['rawGallery'] = $variant_gallery;
         $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $child->get('final_price')->getString());
         if ($child_sku == reset($sorted_variants)) {
-          $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $this->getGalleryVariables($child);
+          $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $variant_gallery;
         }
       }
     }
