@@ -11,6 +11,14 @@ third_party_settings:
   alshaya_search:
     display_textbox: 0
     display_textbox_item_count: ''
+  alshaya_facets_pretty_paths:
+    url_alias: category_facet_plp
+    meta_info_type:
+      type: 1
+      prefix_text: ''
+      visibility:
+        - 4
+        - 5
 id: category_facet_plp
 name: 'PLP Category'
 url_alias: category_facet_plp
