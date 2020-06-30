@@ -162,7 +162,7 @@ export default class ParentAreaSelect extends React.Component {
     }
 
     return (
-      <div className="spc-type-select">
+      <div className={`spc-type-select ${showCityOnly}`}>
         <label>{field.label}</label>
         {areaLabel.length > 0 ? (
           <div id="spc-area-select-selected-city" className={`spc-area-select-selected ${showCityOnly}`} onClick={() => this.toggleFilterList()}>
