@@ -5,8 +5,6 @@
  * Install, uninstall, update function for alshaya_bp_transac.
  */
 
-use Drupal\block\Entity\Block;
-
 /**
  * Implements hook_install().
  */
