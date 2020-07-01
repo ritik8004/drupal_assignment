@@ -111,4 +111,32 @@ class XmlAPIHelper {
     return $result;
   }
 
+  /**
+   * Update/Insert Client.
+   *
+   * @return object
+   *   Response object.
+   */
+  public function updateInsertClient($request) {
+    $request_content = json_decode($request->getContent(), TRUE);
+
+    $apiBody = '<ns2:updateInsertClient>
+      <client>
+        <clientExternalId>' . $request_content['clientExternalId'] . '</clientExternalId>
+        <firstName>' . $request_content['firstName'] . '</firstName>
+        <lastName>' . $request_content['lastName'] . '</lastName>
+        <dob>' . $request_content['dob'] . '</dob>
+        <phoneData>
+          <mobile>' . $request_content['mobile'] . '</mobile>
+        </phoneData>
+        <rulesGroupExternalId>client</rulesGroupExternalId>
+        <userGroupExternalId>client</userGroupExternalId>
+      </client>
+    </ns2:updateInsertClient>';
+
+    $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_CLIENT_SERVICES_URL, 'updateInsertClient', $apiBody);
+
+    return $result;
+  }
+
 }

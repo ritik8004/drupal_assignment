@@ -3,6 +3,7 @@ import AppointmentSteps from '../appointment-steps';
 import AppointmentType from '../appointment-type';
 import AppointmentStoreSelect from '../appointment-store';
 import AppointmentSelection from '../appointment-selection';
+import CustomerDetails from '../customer-details';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
 export default class Appointment extends React.Component {
@@ -57,6 +58,12 @@ export default class Appointment extends React.Component {
         <AppointmentStoreSelect
           handleBack={this.handleEdit}
           handleSubmit={() => this.handleSubmit('select-time-slot')}
+        />
+      );
+    } else {
+      appointmentData = (
+        <CustomerDetails
+          handleSubmit={() => this.handleSubmit('confirmation')}
         />
       );
     }

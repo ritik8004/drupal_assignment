@@ -4,3 +4,10 @@ alshaya_appointment.page:
     _controller: \Drupal\alshaya_appointment\Controller\AlshayaAppointmentController::appointment
   requirements:
     _permission: 'access content'
+alshaya_appointment.customer-details.validate-info:
+  path: '/appointment/validate-info'
+  defaults:
+    _controller: '\Drupal\alshaya_appointment\Controller\AlshayaAppointmentController::validateInfo'
+  methods: [POST]
+  requirements:
+    _permission: 'access content'
