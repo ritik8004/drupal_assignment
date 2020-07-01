@@ -14,6 +14,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Path\AliasManager;
 
 /**
  * Provides the default laypout for PDP.
@@ -25,6 +27,7 @@ use Drupal\alshaya_product_options\ProductOptionsHelper;
  */
 class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPluginInterface {
 
+  use StringTranslationTrait;
   const PDP_LAYOUT_MAGAZINE_V2 = 'pdp-magazine_v2';
 
   /**
@@ -56,6 +59,13 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   private $optionsHelper;
 
   /**
+   * Path Alias Manager.
+   *
+   * @var \Drupal\Core\Path\AliasManager
+   */
+  private $pathAliasManager;
+
+  /**
    * Constructs a new MagazineV2PdpLayout.
    *
    * @param array $configuration
@@ -72,6 +82,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
    *   Config Factory service object.
    * @param \Drupal\alshaya_product_options\ProductOptionsHelper $options_helper
    *   Product Options Helper.
+   * @param \Drupal\Core\Path\AliasManager $path_alias_manager
+   *   Path Alias Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -79,13 +91,15 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_image_manager,
                               ConfigFactoryInterface $config_factory,
-                              ProductOptionsHelper $options_helper) {
+                              ProductOptionsHelper $options_helper,
+                              AliasManager $path_alias_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->skuManager = $sku_manager;
     $this->skuImageManager = $sku_image_manager;
     $this->configFactory = $config_factory;
     $this->optionsHelper = $options_helper;
+    $this->pathAliasManager = $path_alias_manager;
   }
 
   /**
@@ -99,7 +113,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('config.factory'),
-      $container->get('alshaya_product_options.helper')
+      $container->get('alshaya_product_options.helper'),
+      $container->get('path.alias_manager')
     );
   }
 
@@ -148,6 +163,9 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           $vars['#attached']['drupalSettings']['homeDelivery'] = $home_delivery_config;
         }
       }
+
+      // Set related product data.
+      $this->getRelatedProductsByType($sku_entity, $vars);
     }
 
     // Get share this settings.
@@ -350,6 +368,56 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['#attached']['drupalSettings']['clickNCollect']['cncFormPlaceholder'] = $store_finder_config->get('store_search_placeholder');
     $vars['#attached']['drupalSettings']['clickNCollect']['countryCode'] = _alshaya_custom_get_site_level_country_code();
     $vars['#attached']['drupalSettings']['map']['google_api_key'] = $geolocation_config->get('google_map_api_key');
+  }
+
+  /**
+   * Helper function to get related products data.
+   */
+  public function getRelatedProductsByType($sku_entity, &$vars) {
+    $crosssell = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, 'crosssell');
+    $upsell = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, 'upsell');
+    $related = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, 'related');
+    $this->prepareRelatedProductData($this->skuManager->filterRelatedSkus(array_unique($crosssell)), 'crosssell', $vars);
+    $this->prepareRelatedProductData($this->skuManager->filterRelatedSkus(array_unique($upsell)), 'upsell', $vars);
+    $this->prepareRelatedProductData($this->skuManager->filterRelatedSkus(array_unique($related)), 'related', $vars);
+  }
+
+  /**
+   * Prepare related product data in drupalSettings.
+   */
+  public function prepareRelatedProductData($data, $type, &$vars) {
+    foreach ($data as $sku => $value) {
+      $sku_entity = SKU::loadFromSku($sku);
+      $gallery = $this->getGalleryVariables($sku_entity);
+      $final_price = _alshaya_acm_format_price_with_decimal((float) $sku_entity->get('final_price')->getString());
+      $title = $sku_entity->label();
+
+      // Set gallery image from variant
+      // if main sku gallery is empty.
+      if (empty($gallery)) {
+        $product_tree = Configurable::deriveProductTree($sku_entity);
+        $combinations = $product_tree['combinations'];
+        $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
+        $first_child = reset($sorted_variants);
+        $child_sku = SKU::loadFromSku($first_child, $sku_entity->language()->getId());
+        $gallery = $this->getGalleryVariables($child_sku);
+      }
+      $vars['#attached']['drupalSettings']['relatedProducts'][$type]['products'][$sku]['gallery'] = $gallery['thumbnails'][0];
+      $vars['#attached']['drupalSettings']['relatedProducts'][$type]['products'][$sku]['finalPrice'] = $final_price;
+      $vars['#attached']['drupalSettings']['relatedProducts'][$type]['products'][$sku]['title'] = $title;
+      $vars['#attached']['drupalSettings']['relatedProducts'][$type]['products'][$sku]['productUrl'] = $this->pathAliasManager->getAliasByPath('/node/' . $value);
+
+      // Setting section titles.
+      if ($type == 'crosssell') {
+        $vars['#attached']['drupalSettings']['relatedProducts'][$type]['sectionTitle'] = $this->t('Customers also bought');
+      }
+      elseif ($type == 'upsell') {
+        $vars['#attached']['drupalSettings']['relatedProducts'][$type]['sectionTitle'] = $this->t('You may also like');
+      }
+      elseif ($type == 'related') {
+        $vars['#attached']['drupalSettings']['relatedProducts'][$type]['sectionTitle'] = $this->t('Related');
+      }
+    }
   }
 
 }

@@ -54,16 +54,15 @@ export default class PdpCrossellUpsell extends React.PureComponent {
     const { currentPage, totalPagers, limits } = this.state;
 
     const {
-      skuCode,
-      pdpGallery,
+      sectionTitle,
+      products,
     } = this.props;
-    const images = skuCode ? pdpGallery.thumbnails : [];
 
     const isTouchDevice = window.outerWidth < 1024;
 
-    if (images.length === 0) {
+    if (products.length === 0) {
       return (
-        <div>Images not available</div>
+        <></>
       );
     }
 
@@ -71,8 +70,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
       <div className="magv2-pdp-crossell-upsell-container">
         <div className="magv2-pdp-crossell-upsell-heading">
           <div className="magv2-pdp-crossell-upsell-title">
-            <span className="magv2-pdp-crossell-upsell-label">{Drupal.t('How about these?')}</span>
-            <span className="magv2-pdp-crossell-upsell-sublabel">{Drupal.t('Similar items')}</span>
+            <span className="magv2-pdp-crossell-upsell-label">{sectionTitle}</span>
           </div>
           <div className="magv2-pdp-crossell-upsell-view-more-wrapper">
             <a className="magv2-pdp-crossell-upsell-view-more-label">{Drupal.t('View more')}</a>
@@ -92,12 +90,14 @@ export default class PdpCrossellUpsell extends React.PureComponent {
             ref={(slider) => { this.slider = slider; }}
             beforeChange={this.beforeChange}
           >
-            {images.map((image) => (
+            {Object.keys(products).map((sku) => (
               <PdpCrossellUpsellImage
-                key={image.thumburl}
-                imageUrl={image.thumburl}
-                alt={image.label}
-                title={image.label}
+                key={products[sku].gallery.mediumurl}
+                imageUrl={products[sku].gallery.mediumurl}
+                alt={products[sku].gallery.label}
+                title={products[sku].title}
+                pdpProductPrice={products[sku].finalPrice}
+                productUrl={products[sku].productUrl}
               />
             ))}
           </Slider>
@@ -115,12 +115,14 @@ export default class PdpCrossellUpsell extends React.PureComponent {
             ref={(slider) => { this.slider = slider; }}
             beforeChange={this.beforeChange}
           >
-            {images.map((image) => (
+            {Object.keys(products).map((sku) => (
               <PdpCrossellUpsellImage
-                key={image.thumburl}
-                imageUrl={image.thumburl}
-                alt={image.label}
-                title={image.label}
+                key={products[sku].gallery.mediumurl}
+                imageUrl={products[sku].gallery.mediumurl}
+                alt={products[sku].gallery.label}
+                title={products[sku].title}
+                pdpProductPrice={products[sku].finalPrice}
+                productUrl={products[sku].productUrl}
               />
             ))}
           </Slider>
