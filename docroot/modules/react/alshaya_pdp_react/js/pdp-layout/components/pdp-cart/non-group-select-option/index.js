@@ -27,15 +27,30 @@ const NonGroupSelectOption = (props) => {
             <label htmlFor={key}>{configurables.label}</label>
           </div>
           <div className="magv2-select-popup-content-wrapper">
+            <div className="non-group-anchor-wrapper">
+              <label htmlFor={key}>{configurables.label}</label>
+            </div>
             <SizeGuide attrId={code} />
-            <ul id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
-              {Object.keys(configurables.values).map((attr) => {
-                // If the currennt attribute matches the
-                // attribute code of the available values.
-                if (code === nextCode) {
+            <div className="non-group-option-wrapper">
+              <ul id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
+                {Object.keys(configurables.values).map((attr) => {
+                  // If the currennt attribute matches the
+                  // attribute code of the available values.
+                  if (code === nextCode) {
+                    return (
+                      <AvailableSelectOptions
+                        nextValues={nextValues}
+                        attr={attr}
+                        value={configurables.values[attr].label}
+                        key={attr}
+                        selected={selected}
+                        handleLiClick={handleLiClick}
+                      />
+                    );
+                  }
+                  // Show the default options.
                   return (
-                    <AvailableSelectOptions
-                      nextValues={nextValues}
+                    <DefaultSelectOptions
                       attr={attr}
                       value={configurables.values[attr].label}
                       key={attr}
@@ -43,19 +58,9 @@ const NonGroupSelectOption = (props) => {
                       handleLiClick={handleLiClick}
                     />
                   );
-                }
-                // Show the default options.
-                return (
-                  <DefaultSelectOptions
-                    attr={attr}
-                    value={configurables.values[attr].label}
-                    key={attr}
-                    selected={selected}
-                    handleLiClick={handleLiClick}
-                  />
-                );
-              })}
-            </ul>
+                })}
+              </ul>
+            </div>
           </div>
         </div>
       </div>

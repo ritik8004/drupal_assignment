@@ -20,36 +20,34 @@ class ConfigurableProductForm extends React.Component {
   }
 
   componentDidMount() {
-    const { button, addToBagButtonClass } = this;
     this.handleLoad();
 
     window.addEventListener('load', () => {
-      button.current.setAttribute('data-top-offset', button.current.offsetTop);
+      this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
 
-      addToBagButtonClass(button.current.offsetTop);
+      this.addToBagButtonClass(this.button.current.offsetTop);
     });
 
     window.addEventListener('scroll', () => {
-      const buttonOffset = button.current.getAttribute('data-top-offset');
+      const buttonOffset = this.button.current.getAttribute('data-top-offset');
 
       if (buttonOffset === null) {
         return;
       }
 
-      addToBagButtonClass(buttonOffset);
+      this.addToBagButtonClass(buttonOffset);
     });
   }
 
   addToBagButtonClass = (buttonOffset) => {
-    const { button } = this;
-
-    const buttonHeight = button.current.offsetHeight;
+    const buttonHeight = this.button.current.offsetHeight;
     const windowHeight = window.innerHeight;
 
-    if ((window.pageYOffset + windowHeight) >= (parseInt(buttonOffset, 10) + buttonHeight)) {
-      button.current.classList.remove('fix-bag-button');
+    if ((window.pageYOffset + windowHeight)
+      >= (parseInt(buttonOffset, 10) + parseInt(buttonHeight, 10))) {
+      this.button.current.classList.remove('fix-bag-button');
     } else {
-      button.current.classList.add('fix-bag-button');
+      this.button.current.classList.add('fix-bag-button');
     }
   }
 
@@ -205,7 +203,6 @@ class ConfigurableProductForm extends React.Component {
               <button
                 className="magv2-button"
                 type="submit"
-                value="Add to bag"
                 onClick={this.addToCart}
               >
                 {Drupal.t('Add To Bag')}

@@ -106,7 +106,8 @@
           margin-top: 5.625rem;
         }
 
-        .group-anchor-wrapper {
+        .group-anchor-wrapper,
+        .non-group-anchor-wrapper {
           padding-#{$left}: 1.25rem;
           background-color: $magv2-desc-popup-content-bg;
           padding-top: 1.25rem;
@@ -166,6 +167,7 @@
             position: relative;
             padding-#{$left}: 2.5rem;
             box-shadow: 0 0.0625rem 0.125rem 0 rgba(0, 0, 0, 0.1);
+            #{$right}: 0;
 
             &::before {
               content: '';
@@ -208,5 +210,35 @@ body.select-overlay {
   .magv2-select-popup-container {
     transition: transform 400ms cubic-bezier(0, 0, 0.2, 1);
     transform: translateX(0) !important;
+  }
+}
+
+.non-grouped-attr {
+  .magv2 {
+    &-select {
+      &-popup {
+        &-content-wrapper {
+          @include breakpoint($only-tablet) {
+            margin-top: 1.8125rem;
+          }
+
+          @include breakpoint($desktop) {
+            margin-top: 2.8125rem;
+          }
+
+          .non-group-anchor-wrapper {
+            @include breakpoint($tablet) {
+              display: none;
+            }
+
+            @include breakpoint($only-mobile) {
+              label {
+                justify-content: center;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

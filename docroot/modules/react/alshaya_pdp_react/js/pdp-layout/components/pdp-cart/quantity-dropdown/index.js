@@ -31,15 +31,13 @@ class QuantityDropdown extends React.Component {
   }
 
   decrease = (e) => {
-    const { qty } = this.state;
     e.preventDefault();
-    this.setState({ qty: qty - 1 });
+    this.setState((prevState) => ({ qty: prevState.qty - 1 }));
   };
 
   increase = (e) => {
-    const { qty } = this.state;
     e.preventDefault();
-    this.setState({ qty: qty + 1 });
+    this.setState((prevState) => ({ qty: prevState.qty + 1 }));
   };
 
   render() {

@@ -18,7 +18,7 @@ const DefaultSelectOptions = (props) => {
         ? 'active' : 'in-active'}`}
     >
       <span onClick={(e) => handleLiClick(e, code)} className="magv2-select-list-wrapper">
-        {value}
+        <span className="magv2-select-list-name">{value}</span>
       </span>
     </li>
   );
