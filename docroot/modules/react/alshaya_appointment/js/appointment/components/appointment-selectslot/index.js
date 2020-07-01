@@ -18,13 +18,33 @@ export default class AppointmentSlots extends React.Component {
     let listMorningItems = '';
     let listAfternoonItems = '';
     let listEveningItems = '';
-    const timeSlots = this.props.items;
+    let timeSlots = {
+      morning: [],
+      afternoon: [],
+      evening: [],
+    };
+    const apiData = this.props.items;
+    if (apiData !== null && apiData !== undefined && apiData.hasOwnProperty('return')) {
+      for (var i=0; i < apiData.return.length; i++) {
+        const hours = moment(apiData.return[i].appointmentSlotTime).format('HH');
+        if (hours < 12) {
+          timeSlots.morning.push(apiData.return[i]);
+        }
+        else if (hours > 12 && hours < 17) {
+          timeSlots.afternoon.push(apiData.return[i]);
+        }
+        else {
+          timeSlots.evening.push(apiData.return[i]);
+        }
+      }
+    }
+
 
     if (timeSlots !== undefined && timeSlots.hasOwnProperty('morning')) {
       listMorningItems = timeSlots.morning.map((item) =>
         <li className="morning-time-slots">
           <a href="javascript:void(0)" data={item} className="time-slots" onClick={(e) => this.handleSelect(event, item)}>
-            {moment.tz(item.time, 'Europe/London').format('LT')}
+            {moment(item.appointmentSlotTime).format('LT')}
           </a>
         </li>
       );
@@ -34,7 +54,7 @@ export default class AppointmentSlots extends React.Component {
       listAfternoonItems = timeSlots.afternoon.map((item) =>
         <li className="afternoon-time-slots">
           <a href="javascript:void(0)" data={item} className="time-slots" onClick={(e) => this.handleSelect(event, item)}>
-            {moment.tz(item.time, 'Europe/London').format('LT')}
+            {moment(item.appointmentSlotTime).format('LT')}
           </a>
         </li>
       );
@@ -44,7 +64,7 @@ export default class AppointmentSlots extends React.Component {
       listEveningItems = timeSlots.evening.map((item) =>
         <li className="evening-time-slots">
           <a href="javascript:void(0)" data={item} className="time-slots" onClick={(e) => this.handleSelect(event, item)}>
-            {moment.tz(item.time, 'Europe/London').format('LT')}
+            {moment(item.appointmentSlotTime).format('LT')}
           </a>
         </li>
       );

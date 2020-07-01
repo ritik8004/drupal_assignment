@@ -92,42 +92,8 @@ class AppointmentServices {
 
       $args = [new \SoapVar($xml, XSD_ANYXML)];
       $response = $client_new->__soapCall('getAvailableNDateTimeSlotsStartFromDate', $args);
-      $timeSlotsData = [
-        'morning' => [],
-        'afternoon' => [],
-        'evening' => [],
-      ];
 
-      if (property_exists($response, 'return')) {
-        foreach ($response->return as $value) {
-          $datetime = new \DateTime($value->appointmentSlotTime, new \DateTimeZone('Europe/London'));
-          $hours = $datetime->format('H');
-          if ($hours < "12") {
-            $timeSlotsData['morning'][] = [
-              'time' => $value->appointmentSlotTime,
-              'duration' => $value->lengthinMin,
-              'resource' => $value->resourceExternalIds,
-            ];
-          }
-          elseif ($hours >= "12" && $hours < "17") {
-            $timeSlotsData['afternoon'][] = [
-              'time' => $value->appointmentSlotTime,
-              'duration' => $value->lengthinMin,
-              'resource' => $value->resourceExternalIds,
-            ];
-          }
-          else {
-            $timeSlotsData['evening'][] = [
-              'time' => $value->appointmentSlotTime,
-              'duration' => $value->lengthinMin,
-              'resource' => $value->resourceExternalIds,
-            ];
-          }
-
-        }
-      }
-
-      return new JsonResponse($timeSlotsData);
+      return new JsonResponse($response);
 
     }
     catch (\SoapFault $e) {
