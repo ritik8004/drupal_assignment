@@ -70,6 +70,8 @@
         "drupal/r4032login": "1.x-dev",
         "drupal/recaptcha": "^2.3",
         "drupal/redirect": "^1.0@alpha",
+        "drupal/replicate": "^1.0",
+        "drupal/replicate_ui": "^1.0",
         "drupal/restrict_role_login_by_ip": "^1.0",
         "drupal/restui": "^1.13",
         "drupal/robotstxt": "^1.1",
