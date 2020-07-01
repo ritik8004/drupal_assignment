@@ -244,6 +244,7 @@ class Cart {
       // Fetch cart from cache (even if stale).
       if (!empty($cached_cart = $this->getCartFromCache(TRUE))) {
         $formatted_cart = $this->formatCart($cached_cart);
+        // Setting flag for stale cart cache.
         $formatted_cart['stale_cart'] = TRUE;
         static::$cart = $formatted_cart;
         return static::$cart;
