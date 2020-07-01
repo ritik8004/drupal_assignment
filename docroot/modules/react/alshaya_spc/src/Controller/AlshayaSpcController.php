@@ -684,36 +684,31 @@ class AlshayaSpcController extends ControllerBase {
           // Iterate over each configured address field.
           foreach (_alshaya_spc_get_address_fields() as $field => $address_field) {
             // If field is available and is either area/city.
+            $val_to_validate = NULL;
             if (!empty($address_extension_attributes) && isset($address_extension_attributes[$address_field['key']])
               && ($field == 'administrative_area' || $field == 'area_parent')) {
-              try {
-                $term = $this->areaTermsHelper->getLocationTermFromLocationId($address_extension_attributes[$address_field['key']]);
-                if (!$term) {
-                  $status[$key] = FALSE;
-                  break;
-                }
-              }
-              catch (\Exception $e) {
-                $status[$key] = FALSE;
-              }
+              $val_to_validate = $address_extension_attributes[$address_field['key']];
             }
             elseif (!empty($address_custom_attributes)) {
               foreach ($address_custom_attributes as $attr) {
                 if ($attr['attribute_code'] == $address_field['key']
                   && ($field == 'administrative_area' || $field == 'area_parent')) {
-                  try {
-                    $term = $this->areaTermsHelper->getLocationTermFromLocationId($attr['value']);
-                    if (!$term) {
-                      $status[$key] = FALSE;
-                      break;
-                    }
-                  }
-                  catch (\Exception $e) {
-                    $status[$key] = FALSE;
-                    break;
-                  }
+                  $val_to_validate = $attr['value'];
+                  break;
                 }
               }
+            }
+
+            try {
+              $term = $this->areaTermsHelper->getLocationTermFromLocationId($val_to_validate);
+              if (!$term) {
+                $status[$key] = FALSE;
+                break;
+              }
+            }
+            catch (\Exception $e) {
+              $status[$key] = FALSE;
+              break;
             }
           }
           break;
