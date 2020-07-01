@@ -838,10 +838,8 @@ class Cart {
     $cart = NULL;
 
     try {
-      static::$cart = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
-      // Set cart in cache.
-      $this->setCartInCache(static::$cart);
-      static::$cart = $this->formatCart(static::$cart);
+      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      static::$cart = $this->formatCart($cart_updated);
       $cart = static::$cart;
 
       // If exception at response message level.
@@ -858,6 +856,8 @@ class Cart {
         }
       }
 
+      // Set cart in cache.
+      $this->setCartInCache($cart_updated);
       return $cart;
     }
     catch (\Exception $e) {
