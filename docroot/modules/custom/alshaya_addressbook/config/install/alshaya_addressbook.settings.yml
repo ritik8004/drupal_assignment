@@ -23,6 +23,16 @@ sort_order:
   address_line2: 7
   sorting_code: 8
   postal_code: 9
+required:
+  country_code: true
+  area_parent: true
+  administrative_area: true
+  locality: true
+  address_line1: true
+  dependent_locality: true
+  address_line2: false
+  sorting_code: false
+  postal_code: false
 prefix_settings:
   key: 'display_prefix'
   except:
