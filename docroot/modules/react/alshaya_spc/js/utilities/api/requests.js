@@ -11,7 +11,7 @@ import {
   removeCartFromStorage,
 } from '../storage';
 import i18nMiddleWareUrl from '../i18n_url';
-import dispatchCustomEvent from '../../utilities/events';
+import dispatchCustomEvent from '../events';
 
 export const fetchClicknCollectStores = (args) => {
   const { coords, cartId } = args;
