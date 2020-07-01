@@ -49,7 +49,7 @@ export default class AppointmentTimeSlot extends React.Component {
     this.setState({date: d},
       () => {
         const selected_date = moment(d).format('YYYY-MM-DD');
-        const apiUrl = `/get/timeslots?selected_date=${selected_date}&program=${this.state.appointmentCategory}&activity=${this.state.appointmentType}&location=UAE-DBX-100001`;
+        const apiUrl = `/get/timeslots?selected_date=${selected_date}&program=${this.state.appointmentCategoryId}&activity=${this.state.appointmentType}&location=UAE-DBX-100001`;
         this.fetchTimeSlots(apiUrl);
       }
     );
@@ -58,7 +58,7 @@ export default class AppointmentTimeSlot extends React.Component {
   componentDidMount() {
     const d = new Date();
     const selected_date = moment(d).format('YYYY-MM-DD');
-    const apiUrl = `/get/timeslots?selected_date=${selected_date}&program=${this.state.appointmentCategory}&activity=${this.state.appointmentType}&location=UAE-DBX-100001`;
+    const apiUrl = `/get/timeslots?selected_date=${selected_date}&program=${this.state.appointmentCategoryId}&activity=${this.state.appointmentType}&location=UAE-DBX-100001`;
     this.fetchTimeSlots(apiUrl);
   }
 
