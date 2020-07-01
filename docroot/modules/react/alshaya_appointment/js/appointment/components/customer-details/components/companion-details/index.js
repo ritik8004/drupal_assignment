@@ -2,7 +2,7 @@ import React from 'react';
 import _find from 'lodash/find';
 import { getStorageInfo } from '../../../../../utilities/storage';
 import TextField from '../../../../../utilities/textfield';
-import fetchAPIData from '../../../../../utilities/api/fetchApiData';
+import { fetchAPIData } from '../../../../../utilities/api/fetchApiData';
 
 export default class CompanionDetails extends React.Component {
   constructor(props) {

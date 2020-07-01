@@ -139,4 +139,31 @@ class XmlAPIHelper {
     return $result;
   }
 
+  /**
+   * Book appointment.
+   *
+   * @return object
+   *   Response object.
+   */
+  public function bookAppointment($request) {
+    $requestQuery = $request->query;
+
+    $apiBody = '<ns2:bookAppointment>
+      <criteria>
+        <activityExternalId>' . $requestQuery->get('activity') . '</activityExternalId>
+        <appointmentDurationMin>' . $requestQuery->get('duration') . '</appointmentDurationMin>
+        <locationExternalId>' . $requestQuery->get('location') . '</locationExternalId>
+        <numberOfAttendees>' . $requestQuery->get('attendees') . '</numberOfAttendees>
+        <programExternalId>' . $requestQuery->get('program') . '</programExternalId>
+        <channel>webpage</channel>
+      </criteria>
+      <startDateTime>' . $requestQuery->get('start-date-time') . '</startDateTime> 
+      <clientExternalId>' . $requestQuery->get('client') . '</clientExternalId>
+    </ns2:bookAppointment>';
+
+    $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL, 'bookAppointment', $apiBody);
+
+    return $result;
+  }
+
 }

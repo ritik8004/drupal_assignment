@@ -11,7 +11,7 @@ use App\Helper\APIServicesUrls;
 use App\Helper\XmlAPIHelper;
 
 /**
- * Class ConfigurationServices.
+ * Class ClientServices.
  */
 class ClientServices {
   /**
@@ -43,7 +43,7 @@ class ClientServices {
   protected $xmlApiHelper;
 
   /**
-   * ConfigurationServices constructor.
+   * ClientServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.

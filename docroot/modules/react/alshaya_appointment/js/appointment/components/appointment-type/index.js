@@ -4,7 +4,7 @@ import AppointmentTypeList from './components/appointment-type-list';
 import AppointmentCompanion from './components/appointment-companion';
 import AppointmentForYou from './components/appointment-for-you';
 import AppointmentTermsConditions from './components/appointment-terms-conditions';
-import fetchAPIData from '../../../utilities/api/fetchApiData';
+import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import { getInputValue } from '../../../utilities/helper';
 

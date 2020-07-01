@@ -18,3 +18,7 @@ appointment.get_questions:
    path: /get/questions
    controller: App\Controller\ClientServices::getQuestions
    methods: GET
+appointment.book_appointment:
+   path: /book-appointment
+   controller: App\Controller\AppointmentServices::bookAppointment
+   methods: GET
