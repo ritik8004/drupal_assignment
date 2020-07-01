@@ -162,6 +162,7 @@ class AlshayaSpcController extends ControllerBase {
           'global_error_message' => _alshaya_spc_global_error_message(),
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
+            'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
           ],
         ],
       ],
