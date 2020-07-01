@@ -176,7 +176,7 @@ export default class AddressItem extends React.Component {
         <div className="spc-address-tile-actions">
           <div className="spc-address-btns">
             {address.validAddress === false
-              ? <div>{getStringMessage('address_not_complete')}</div>
+              ? <div className="address-not-valid">{getStringMessage('address_not_complete')}</div>
               : <button type="button" disabled={isSelected} className="spc-address-select-address" onClick={() => this.updateAddress(address)}>{buttonText}</button>}
             {(showEditButton === undefined || showEditButton === true)
               && (
