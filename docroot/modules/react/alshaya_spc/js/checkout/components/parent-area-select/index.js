@@ -9,6 +9,7 @@ import {
   geocodeAddressToLatLng,
 } from '../../../utilities/map/map_utils';
 import getStringMessage from '../../../utilities/strings';
+import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 
 export default class ParentAreaSelect extends React.Component {
   isComponentMounted = true;
@@ -45,6 +46,10 @@ export default class ParentAreaSelect extends React.Component {
     }
 
     document.addEventListener('updateParentAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
+    // Show city as selected based on the city key set in backend.
+    if (drupalSettings.alshaya_spc.delivery_in_only_city_key) {
+      document.addEventListener('load', this.handleLoad, true);
+    }
   }
 
   componentWillUnmount() {
@@ -72,6 +77,13 @@ export default class ParentAreaSelect extends React.Component {
       document.getElementById('address-form-action').classList.remove('visually-hidden');
       document.getElementsByClassName('spc-address-form-sidebar')[0].classList.remove('block-overflow');
     }
+  }
+
+  /**
+   * Process parent area on load.
+   */
+  handleLoad = () => {
+    this.processSelectedItem(drupalSettings.alshaya_spc.delivery_in_only_city_key);
   }
 
   /**
@@ -138,16 +150,22 @@ export default class ParentAreaSelect extends React.Component {
 
     let areaLabel = '';
     let hiddenFieldValue = '';
+    let showCityOnly = '';
+
+    if (drupalSettings.alshaya_spc.delivery_in_only_city_key) {
+      showCityOnly = 'parent-area-only-city';
+    }
+
     if (currentOptionAvailable) {
       hiddenFieldValue = currentOption;
       areaLabel = gerAreaLabelById(true, currentOption).trim();
     }
 
     return (
-      <div className="spc-type-select">
+      <div className={`spc-type-select ${showCityOnly}`}>
         <label>{field.label}</label>
         {areaLabel.length > 0 ? (
-          <div id="spc-area-select-selected-city" className="spc-area-select-selected" onClick={() => this.toggleFilterList()}>
+          <div id="spc-area-select-selected-city" className={`spc-area-select-selected ${showCityOnly}`} onClick={() => this.toggleFilterList()}>
             {areaLabel}
           </div>
         ) : (
@@ -166,6 +184,10 @@ export default class ParentAreaSelect extends React.Component {
               panelTitle={panelTitle}
             />
             )}
+        {drupalSettings.alshaya_spc.delivery_in_only_city_key > 0 && (
+          <DeliveryInOnlyCity />
+        )}
+
         <input type="hidden" id={fieldKey} name={fieldKey} value={hiddenFieldValue} />
         <div id={`${fieldKey}-error`} />
       </div>
