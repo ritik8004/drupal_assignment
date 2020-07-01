@@ -1,9 +1,8 @@
 .attribute-sliderbar {
   &__content {
-    letter-spacing: 1px;
-
     h3 {
       font-family: $hnm-demibold;
+      letter-spacing: 0;
     }
   }
 

@@ -61,7 +61,7 @@
       width: auto;
       color: $plp_filter_icon;
       position: absolute;
-      #{$right}: 1.6875rem;
+      #{$right}: 2.25rem;
       top: 2.25rem;
 
       @include breakpoint($only-mobile) {
