@@ -987,6 +987,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
       $mapping = array_flip($this->getMagentoFieldMappings());
       $sort_order = $this->getFieldSortOrder();
+      $required = $this->getFieldRequired();
 
       foreach ($magento_form as $index => $form_item) {
         if (isset($form_item['attribute'])) {
@@ -995,9 +996,17 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
           unset($form_item['attribute']);
         }
 
+        // We want the fields to be sorted based on design needs and not
+        // change if someone changes in Magento.
         $form_item['sort_order'] = isset($sort_order[$mapping[$form_item['attribute_code']]])
           ? $sort_order[$mapping[$form_item['attribute_code']]]
           : $form_item['sort_order'] + 1000;
+
+        // Required field configuration is not done properly as of today in
+        // Magento and it will require code changes so we do workaround here.
+        $form_item['required'] = isset($required[$mapping[$form_item['attribute_code']]])
+          ? $required[$mapping[$form_item['attribute_code']]]
+          : $form_item['required'];
 
         $magento_form[$form_item['attribute_code']] = $form_item;
         unset($magento_form[$index]);
@@ -1052,6 +1061,22 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     return $order;
+  }
+
+  /**
+   * Function to get required field configuration for address fields.
+   *
+   * @return array
+   *   Drupal form field <-> true/false.
+   */
+  public function getFieldRequired() {
+    static $required;
+
+    if (empty($required)) {
+      $required = $this->configFactory->get('alshaya_addressbook.settings')->get('required');
+    }
+
+    return $required;
   }
 
   /**
