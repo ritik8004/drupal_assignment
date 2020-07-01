@@ -11,6 +11,7 @@ import {
   removeCartFromStorage,
 } from '../storage';
 import i18nMiddleWareUrl from '../i18n_url';
+import dispatchCustomEvent from '../../utilities/events';
 
 export const fetchClicknCollectStores = (args) => {
   const { coords, cartId } = args;
@@ -61,6 +62,15 @@ export const fetchCartData = () => {
       if (Object.values(response.data.items).length === 0) {
         redirectToCart();
         return null;
+      }
+
+      // If cart from stale cache.
+      if (response.data.stale_cart !== undefined && response.data.stale_cart === true) {
+        // Dispatch event to show error message to the customer.
+        dispatchCustomEvent('spcCartMessageUpdate', {
+          type: 'error',
+          message: drupalSettings.global_error_message,
+        });
       }
 
       return response.data;

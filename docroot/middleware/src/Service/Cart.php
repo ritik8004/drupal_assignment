@@ -241,6 +241,14 @@ class Cart {
         $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
       }
 
+      // Fetch cart from cache (even if stale).
+      if (!empty($cached_cart = $this->getCartFromCache(TRUE))) {
+        $formatted_cart = $this->formatCart($cached_cart);
+        $formatted_cart['stale_cart'] = TRUE;
+        static::$cart = $formatted_cart;
+        return static::$cart;
+      }
+
       $this->logger->error('Error while getting cart from MDC. Error message: @message', [
         '@message' => $e->getMessage(),
       ]);
@@ -1428,17 +1436,26 @@ class Cart {
   /*
    * Get cart from cache.
    *
+   * @param bool $fetch_expired
+   *   Whether we need stale data from cache or not.
+   *
    * @return array
    *   Formatted cart data.
    */
-  public function getCartFromCache() {
+  public function getCartFromCache(bool $fetch_expired = FALSE) {
     $expire = (int) $_ENV['CACHE_CART'];
     // If cart is available in cache, use that.
-    if ($expire > 0 && ($cached_cart = $this->cache->get('cached_cart'))) {
+    if ($expire > 0 && ($cached_cart = $this->cache->get('cached_cart', $fetch_expired))) {
       return $this->formatCart($cached_cart);
     }
   }
 
+  /**
+   * Set cart in cache.
+   *
+   * @param array $cart
+   *   Cart data.
+   */
   public function setCartInCache(array $cart) {
     $expire = (int) $_ENV['CACHE_CART'];
     if ($expire > 0) {

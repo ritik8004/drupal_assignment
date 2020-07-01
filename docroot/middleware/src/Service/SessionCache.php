@@ -43,7 +43,7 @@ class SessionCache {
       return NULL;
     }
 
-    if ($data['expire'] < (int) $_SERVER['REQUEST_TIME']) {
+    if (!$get_expired && $data['expire'] < (int) $_SERVER['REQUEST_TIME']) {
       return NULL;
     }
 
