@@ -10,7 +10,7 @@
   "dependencies": {
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
-    "react-datepicker": "^3.0.0",
+    "react-datepicker": "^3.0.0"
   },
   "devDependencies": {
     "css-loader": "^3.6.0",
