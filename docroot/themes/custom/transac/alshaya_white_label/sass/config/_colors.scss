@@ -106,6 +106,19 @@ $_spc-area-panel-placeholder: #b3b3b3;
 $_spc-billing-help: #007aff;
 $_spc-cart-alert: #238ae8;
 $_spc-warning-bg: #ffd1a1;
+$_appointment-sky-blue: #f6f9fe;
+$_appointment-cool-blue: #4e8abe;
+$_appointment-darkish-blue: #004990;
+$_appointment-blue-border: #cae0f5;
+$_appointment-disable-btn-bg: #d7d7d7;
+$_appointment-success-green-bg: rgba(57, 181, 74, 0.06);
+$_appointment-success-green-border: rgba(57, 181, 74, 0.41);
+$_appointment-info-blue: rgba(66, 133, 244, 0.05);
+$_appointment-info-blue-border: rgba(66, 133, 244, 0.41);
+$_appointment-tangerine-border: rgba(250, 154, 0, 0.41);
+$_appointment-tangerine-bg: #fff4e3;
+$_appointment-red-border: rgba(204, 0, 0, 0.41);
+$_appointment-red-bg: #fef2f3;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1295,3 +1308,38 @@ $order_limit_border: $_order_limit_light_orange;
 $order_qty_limit_reached_txt: $mothercare-black;
 $order_qty_limit_reached_bg: $white-five;
 $order_qty_limit_reached_icon: $_order_limit_error_red;
+
+// Appointment system.
+$appointment-radio: $primary_radiobtn_filled;
+$appointment-section-title: $page_title;
+$appointment-inactive-step-bg: $_appointment-sky-blue;
+$appointment-active-step-bg: $white-five;
+$appointment-step-border: $_appointment-blue-border;
+$appointment-steps-bg: $_appointment-sky-blue;
+$appointment-step-color: $white-five;
+$appointment-active-step-number-bg: $_appointment-darkish-blue;
+$appointment-inactive-step-number-bg: $_appointment-cool-blue;
+$appointment-step-title-color: $_appointment-darkish-blue;
+$appointment-btn-bg: $_appointment-darkish-blue;
+$appointment-disable-btn-bg: $_appointment-disable-btn-bg;
+$appointment-btn-text: $white-five;
+$appointment-category-text: $_appointment-darkish-blue;
+$appointment-category-beauty: $_appointment-red-bg;
+$appointment-category-beauty-icon-bg: rgba(252, 154, 212, 0.19);
+$appointment-category-beauty-border: $_appointment-red-border;
+$appointment-category-pharmacy: $_appointment-success-green-bg;
+$appointment-category-pharmacy-icon-bg: rgba(57, 181, 74, 0.12);
+$appointment-category-pharmacy-border: $_appointment-success-green-border;
+$appointment-category-hearing: $_appointment-tangerine-bg;
+$appointment-category-hearing-icon-bg: rgba(250, 153, 0, 0.16);
+$appointment-category-hearing-border: $_appointment-tangerine-border;
+$appointment-category-opticans: $_appointment-info-blue;
+$appointment-category-opticans-icon-bg: rgba(66, 133, 244, 0.08);
+$appointment-category-opticans-border: $_appointment-info-blue-border;
+$appointment-type-text: $grey-light;
+$appointment-select-border: $warm-grey-two;
+$appointment-select-dropdown-color: $_appointment-darkish-blue;
+$appointment-select-color: $black;
+$appointment-tnc-grey-text: $grey-light;
+$appointment-tnc-border: $warm-grey-two;
+$appointment-checkbox-color: $_appointment-darkish-blue;

@@ -38,6 +38,7 @@ class AlshayaAppointmentController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_appointment/alshaya_appointment',
+          'alshaya_white_label/appointment-booking',
         ],
         'drupalSettings' => $settings,
       ],

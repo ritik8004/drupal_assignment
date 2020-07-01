@@ -1,0 +1,47 @@
+.appointment-for-you-wrapper {
+  .appointment-for-you-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .appointment-for-you-list {
+    &:first-child {
+      margin-#{$right}: 4.375rem;
+    }
+
+    input {
+      display: none;
+    }
+
+    input[type=radio] ~ label::before {
+      content: '';
+      width: 0.875rem;
+      height: 0.875rem;
+      background: white;
+      display: inline-block;
+      border-radius: 100%;
+      border: 1px solid $primary_radiobtn_empty;
+      margin-#{$right}: 0.4rem;
+      position: relative;
+      top: 0.125rem;
+    }
+
+    input[type=radio]:checked ~ label::before {
+      border: 0.25rem solid $primary_radiobtn_filled;
+    }
+  }
+}
+
+.appointment-terms-conditions-wrapper {
+  input[type=checkbox] ~ label::before {
+    line-height: 1.3125rem;
+    display: inline-block;
+    vertical-align: bottom;
+    color: $appointment-checkbox-color;
+    margin-#{$right}: 0.4rem;
+  }
+
+  input[type=checkbox]:checked ~ label::before {
+    line-height: 1.3125rem;
+  }
+}

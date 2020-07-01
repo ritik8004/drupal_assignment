@@ -1,0 +1,83 @@
+.appointment-categories {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  @include breakpoint($desktop) {
+    width: calc(100% - 16.75rem);
+  }
+
+  &-wrapper {
+    .appointment-booking-section-title {
+      @include breakpoint($desktop) {
+        padding-top: 0.625rem;
+      }
+    }
+  }
+
+  .appointment-category {
+    font-family: $alshaya-bold;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    color: $appointment-category-text;
+    width: calc((100% - 1.5rem) / 2);
+    padding: 0.75rem;
+    padding-#{$left}: 3.3125rem;
+    padding-#{$right}: 0.4375rem;
+    border-radius: 0.1875rem;
+    position: relative;
+    margin-bottom: 1.25rem;
+    cursor: pointer;
+
+    @include breakpoint($desktop) {
+      width: auto;
+    }
+
+    &.BeautyandSkin {
+      background: $appointment-category-beauty;
+
+      &.active {
+        border: 1px solid $appointment-category-beauty-border;
+      }
+
+      .appointment-category-icon {
+        background: $appointment-category-beauty-icon-bg;
+      }
+    }
+
+    &.HealthandPharmacy {
+      background: $appointment-category-pharmacy;
+
+      &.active {
+        border: 1px solid $appointment-category-pharmacy-border;
+      }
+
+      .appointment-category-icon {
+        background: $appointment-category-pharmacy-icon-bg;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 1.25rem;
+    }
+
+    &:nth-child(even) {
+      @include breakpoint($upto-desktop) {
+        margin-#{$left}: 1.25rem;
+      }
+    }
+
+    .appointment-category-icon {
+      position: absolute;
+      width: 2.375rem;
+      height: 2.375rem;
+      #{$left}: 0.3125rem;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 50%;
+    }
+  }
+}
