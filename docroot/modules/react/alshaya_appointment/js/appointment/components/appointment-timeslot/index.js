@@ -1,10 +1,9 @@
 import React from 'react';
 import {getStorageInfo, setStorageInfo} from "../../../utilities/storage";
-import DatePicker from "react-datepicker/es";
-import 'react-datepicker/dist/react-datepicker.css';
 import AppointmentSlots from "../appointment-selectslot";
 import fetchAPIData from '../../../utilities/api/fetchApiData';
 import moment from "moment";
+import AppointmentCalendar from "../appointment-calendar";
 
 const localStorageValues = getStorageInfo();
 
@@ -79,19 +78,24 @@ export default class AppointmentTimeSlot extends React.Component {
 
   render() {
     const { date, timeSlots } = this.state;
-
+    const arg = {
+      '!date': moment().format('dddd DD MMMM'),
+    };
     return (
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
           <div className="store-header">
             {Drupal.t("Select date & time that suits you")} *
           </div>
-
+          <div className="timeslot-latest-available">
+            <p>
+              {Drupal.t('The first available appointment is on !date', arg)}
+            </p>
+          </div>
           <div className="appointment-datepicker">
-            <DatePicker
-              selected={date}
-              onChange={this.dateChanged}
-              inline
+            <AppointmentCalendar
+              selectDate = {this.state.date}
+              dateChanged = {this.dateChanged}
             />
           </div>
 

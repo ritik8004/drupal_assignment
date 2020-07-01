@@ -27,6 +27,7 @@ export default class AppointmentType extends React.Component {
       this.state = {
         appointmentStep: 'appointment-type',
         appointmentCategory: '',
+        appointmentCategoryId: '',
         appointmentType: '',
         appointmentCompanion: '',
         appointmentForYou: '',
@@ -67,6 +68,7 @@ export default class AppointmentType extends React.Component {
           this.setState({
             appointmentTypeItems: [...result.data],
             appointmentCategory: category.name,
+            appointmentCategoryId: category.id,
           });
 
           // Remove loader.
