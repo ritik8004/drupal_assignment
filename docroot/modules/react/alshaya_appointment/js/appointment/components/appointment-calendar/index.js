@@ -30,11 +30,13 @@ export default class AppointmentCalendar extends React.Component {
 
   getweekdates(currDate) {
     const weekdates = [];
-    for (let i = 1; i <= 7; i++) {
-      const first = currDate.getDate() - currDate.getDay() + i
-      const day = new Date(currDate.setDate(first)).toISOString().slice(0, 10);
-      weekdates.push(day);
+    var currentDate = moment(currDate);
+    var weekStart = currentDate.clone().startOf('isoWeek');
+    var weekEnd = currentDate.clone().endOf('isoWeek');
+    for (var i = 0; i <= 6; i++) {
+      weekdates.push(moment(weekStart).add(i, 'days').format("YYYY-MM-DD"));
     }
+
     return weekdates;
   }
 
@@ -51,8 +53,8 @@ export default class AppointmentCalendar extends React.Component {
       <li className={(moment(this.state.selectDate).format('YYYY-MM-DD') === moment(date).format('YYYY-MM-DD')) ? 'date-item active' : 'date-item'}
           onClick={() => this.dateChanged(date)}
       >
-        <span className="calendar-day">{moment.tz(date, 'Europe/London').format('ddd')}</span>
-        <span className="calendar-date">{moment.tz(date, 'Europe/London').format('D')}</span>
+        <span className="calendar-day">{moment(date).format('ddd')}</span>
+        <span className="calendar-date">{moment(date).format('D')}</span>
       </li>
     );
 
