@@ -624,7 +624,7 @@ class CartController {
 
       case CartActions::CART_REFRESH:
         // If cart id in request not matches with what in session.
-        if ($request_content['cart_id'] !== $this->cart->getCartId()) {
+        if ($request_content['cart_id'] != $this->cart->getCartId()) {
           $this->logger->error('Error while cart refresh. Cart data in request not matches with cart in session. Request data: @request_data CartId in session: @cart_id', [
             '@request_data' => json_encode($request_content),
             '@cart_id' => $this->cart->getCartId(),
