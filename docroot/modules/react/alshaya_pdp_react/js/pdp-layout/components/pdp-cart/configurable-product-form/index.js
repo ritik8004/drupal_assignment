@@ -169,48 +169,46 @@ class ConfigurableProductForm extends React.Component {
     );
 
     return (
-      <>
-        <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
-          {Object.keys(configurables).map((key) => (
-            <div key={key}>
-              <CartSelectOption
-                configurables={configurables[key]}
-                byAttribute={byAttribute}
-                productInfo={productInfo}
-                skuCode={skuCode}
-                configurableCombinations={configurableCombinations}
-                key={key}
-                isGroup={configurables[key].isGroup}
-                isSwatch={configurables[key].isSwatch}
-                nextCode={nextCode}
-                nextValues={nextValues}
-                refreshConfigurables={this.refreshConfigurables}
-                selectedValues={this.selectedValues}
-                pdpRefresh={pdpRefresh}
-              />
-            </div>
-          ))}
-          <div className="magv2-size-btn-wrapper" onClick={() => this.openModal()}>{Drupal.t('Select size')}</div>
-          <div id="product-quantity-dropdown" className="magv2-qty-wrapper">
-            <QuantityDropdown
-              variantSelected={variantSelected}
+      <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
+        {Object.keys(configurables).map((key) => (
+          <div key={key}>
+            <CartSelectOption
+              configurables={configurables[key]}
+              byAttribute={byAttribute}
               productInfo={productInfo}
               skuCode={skuCode}
+              configurableCombinations={configurableCombinations}
+              key={key}
+              isGroup={configurables[key].isGroup}
+              isSwatch={configurables[key].isSwatch}
+              nextCode={nextCode}
+              nextValues={nextValues}
+              refreshConfigurables={this.refreshConfigurables}
+              selectedValues={this.selectedValues}
+              pdpRefresh={pdpRefresh}
             />
           </div>
-          {(checkoutFeatureStatus === 'enabled') ? (
-            <div className="magv2-add-to-basket-container" ref={this.button}>
-              <button
-                className="magv2-button"
-                type="submit"
-                onClick={this.addToCart}
-              >
-                {Drupal.t('Add To Bag')}
-              </button>
-            </div>
-          ) : cartUnavailability }
-        </form>
-      </>
+        ))}
+        <div className="magv2-size-btn-wrapper" onClick={() => this.openModal()}>{Drupal.t('Select size')}</div>
+        <div id="product-quantity-dropdown" className="magv2-qty-wrapper">
+          <QuantityDropdown
+            variantSelected={variantSelected}
+            productInfo={productInfo}
+            skuCode={skuCode}
+          />
+        </div>
+        {(checkoutFeatureStatus === 'enabled') ? (
+          <div className="magv2-add-to-basket-container" ref={this.button}>
+            <button
+              className="magv2-button"
+              type="submit"
+              onClick={this.addToCart}
+            >
+              {Drupal.t('Add To Bag')}
+            </button>
+          </div>
+        ) : cartUnavailability }
+      </form>
     );
   }
 }

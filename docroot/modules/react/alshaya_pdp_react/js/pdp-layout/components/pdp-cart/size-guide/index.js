@@ -1,8 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 
-const SizeGuide = (props) => {
-  const { attrId } = props;
+const SizeGuide = ({ attrId }) => {
   const { isSizeGuideEnabled } = drupalSettings;
 
   // If size guide is enabled.

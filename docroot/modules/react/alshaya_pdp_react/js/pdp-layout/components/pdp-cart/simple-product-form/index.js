@@ -77,29 +77,27 @@ class SimpleProductForm extends React.Component {
     const variantSelected = skuCode;
 
     return (
-      <>
-        <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
-          <div className="magv2-size-btn-wrapper" onClick={() => this.openModal()}>{Drupal.t('Select size')}</div>
-          <div id="product-quantity-dropdown" className="magv2-qty-wrapper">
-            <QuantityDropdown
-              variantSelected={variantSelected}
-              productInfo={productInfo}
-              skuCode={skuCode}
-            />
+      <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
+        <div className="magv2-size-btn-wrapper" onClick={() => this.openModal()}>{Drupal.t('Select size')}</div>
+        <div id="product-quantity-dropdown" className="magv2-qty-wrapper">
+          <QuantityDropdown
+            variantSelected={variantSelected}
+            productInfo={productInfo}
+            skuCode={skuCode}
+          />
+        </div>
+        {(checkoutFeatureStatus === 'enabled') ? (
+          <div className="magv2-add-to-basket-container" ref={this.button}>
+            <button
+              className="magv2-button"
+              type="submit"
+              onClick={this.addToCart}
+            >
+              {Drupal.t('Add To Bag')}
+            </button>
           </div>
-          {(checkoutFeatureStatus === 'enabled') ? (
-            <div className="magv2-add-to-basket-container" ref={this.button}>
-              <button
-                className="magv2-button"
-                type="submit"
-                onClick={this.addToCart}
-              >
-                {Drupal.t('Add To Bag')}
-              </button>
-            </div>
-          ) : <CartUnavailability /> }
-        </form>
-      </>
+        ) : <CartUnavailability /> }
+      </form>
     );
   }
 }
