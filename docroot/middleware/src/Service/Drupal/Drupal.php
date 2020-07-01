@@ -265,13 +265,12 @@ class Drupal {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function validateAddressAreaCity(array $address) {
-    $url = sprintf('/spc/validate-info');
     $options = [
       'json' => [
         'address' => $address,
       ],
     ];
-    $response = $this->invokeApi('POST', $url, $options);
+    $response = $this->invokeApi('POST', '/spc/validate-info', $options);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);
   }

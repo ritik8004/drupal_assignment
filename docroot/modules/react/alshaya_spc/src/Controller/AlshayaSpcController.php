@@ -710,6 +710,7 @@ class AlshayaSpcController extends ControllerBase {
                   }
                   catch (\Exception $e) {
                     $status[$key] = FALSE;
+                    break;
                   }
                 }
               }
