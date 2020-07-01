@@ -333,6 +333,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['non_refundable_markup'] = [
+    'variables' => [
+      'text' => NULL,
+      'tooltip' => NULL,
+    ],
+  ];
+
   $items['products_horizontal_slider'] = [
     'variables' => [
       'data' => NULL,
@@ -587,6 +594,28 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
 
+        // Non-refundable.
+        $is_non_refundable = NULL;
+        if ($sku_entity->get('attr_non_refundable_products')->getString()) {
+          $is_non_refundable = '1';
+          $build['non_refundable'] = [
+            '#theme' => 'non_refundable_markup',
+            '#text' => $product_settings->get('non_refundable_text'),
+            '#tooltip' => $product_settings->get('non_refundable_tooltip'),
+          ];
+        }
+
+        // Same day delivery.
+        if ($sku_entity->get('attr_same_day_delivery')->getString()) {
+          $build['same_day_delivery_text']['#markup'] = $product_settings->get('same_day_delivery_text');
+          $build['same_day_delivery_sub_text']['#markup'] = $product_settings->get('same_day_delivery_sub_text');
+        }
+
+        // Delivery in only city.
+        if ($delivery_in_only_city_text = $product_settings->get('delivery_in_only_city_text')) {
+          $build['delivery_in_only_city_text']['#markup'] = $delivery_in_only_city_text;
+        }
+
         // Initialise home delivery variable.
         $build['home_delivery'] = [];
 
@@ -744,6 +773,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $productInfo['orderLimitMsg'] = $productOrderLimit->maxSaleQtyMessage($max_sale_qty);
         }
 
+        $productInfo['is_non_refundable'] = $is_non_refundable;
         $settingsKey = ($view_mode === 'matchback') ? 'matchback' : 'productInfo';
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()] = $productInfo;
       }
