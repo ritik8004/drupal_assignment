@@ -106,6 +106,14 @@
         }
       }
     }
+
+    .magazine-desc-wrapper {
+      .attribute-sliderbar {
+        @include breakpoint($desktop-wide) {
+          max-width: 31rem;
+        }
+      }
+    }
   }
 }
 
