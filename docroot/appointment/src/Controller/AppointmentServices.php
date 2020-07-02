@@ -7,6 +7,8 @@ use App\Service\SoapClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Helper\APIHelper;
+use App\Helper\XmlAPIHelper;
+use App\Helper\Helper;
 
 /**
  * Class AppointmentServices.
@@ -34,6 +36,20 @@ class AppointmentServices {
   protected $apiHelper;
 
   /**
+   * XmlAPIHelper.
+   *
+   * @var \App\Helper\XmlAPIHelper
+   */
+  protected $xmlApiHelper;
+
+  /**
+   * Helper.
+   *
+   * @var \App\Helper\Helper
+   */
+  protected $helper;
+
+  /**
    * ConfigurationServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -42,62 +58,38 @@ class AppointmentServices {
    *   Soap client service.
    * @param \App\Helper\APIHelper $api_helper
    *   API Helper.
+   * @param \App\Helper\XmlAPIHelper $xml_api_helper
+   *   Xml API Helper.
+   * @param \App\Helper\Helper $helper
+   *   Helper.
    */
   public function __construct(LoggerInterface $logger,
                               SoapClient $client,
-                              APIHelper $api_helper) {
+                              APIHelper $api_helper,
+                              XmlAPIHelper $xml_api_helper,
+                              Helper $helper) {
     $this->logger = $logger;
     $this->client = $client;
     $this->apiHelper = $api_helper;
+    $this->xmlApiHelper = $xml_api_helper;
+    $this->helper = $helper;
   }
 
   /**
    * Get Available time slots.
    *
-   * @return json
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Time slot data from API.
    */
   public function getTimeSlots(Request $request) {
     try {
-      $selected_date = $request->query->get('selectedDate');
-      $program = $request->query->get('program');
-      $activity = $request->query->get('activity');
-      $location = $request->query->get('location');
-      $wsdl = "https://api-stage.timetradesystems.co.uk/soap/AppointmentServices?wsdl";
-      $client_new = new \SoapClient($wsdl, []);
-      $xml = '
-      <S:Envelope  xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"  xmlns:ns2="http://services.timecommerce.timetrade.com/ws"  xmlns:ns3="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <S:Header>
-          <ns3:Security>
-              <ns3:UsernameToken>
-                  <ns3:Username>bootsapiuser</ns3:Username>
-                  <ns3:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">jG4@dF0p</ns3:Password>
-              </ns3:UsernameToken>
-          </ns3:Security>
-        </S:Header>
-        <S:Body>
-          <ns2:getAvailableNDateTimeSlotsStartFromDate>
-              <criteria>
-                  <activityExternalId>' . $activity . '</activityExternalId>
-                  <locationExternalId>' . $location . '</locationExternalId>
-                  <programExternalId>' . $program . '</programExternalId>
-              </criteria>
-              <startDateTime>' . $selected_date . 'T00:00:00.000+03:00</startDateTime>
-              <endDateTime>' . $selected_date . 'T23:59:59.999+03:00</endDateTime>
-              <numberOfSlots>500</numberOfSlots>
-          </ns2:getAvailableNDateTimeSlotsStartFromDate>
-        </S:Body>
-      </S:Envelope>
-      ';
+      $result = $this->xmlApiHelper->fetchTimeSlots($request);
 
-      $args = [new \SoapVar($xml, XSD_ANYXML)];
-      $response = $client_new->__soapCall('getAvailableNDateTimeSlotsStartFromDate', $args);
-
-      return new JsonResponse($response);
+      return new JsonResponse($result);
 
     }
-    catch (\SoapFault $e) {
-      $this->logger->error('Error occurred while getting activities. Message: @message', [
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while getting time slots from TT API. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
 

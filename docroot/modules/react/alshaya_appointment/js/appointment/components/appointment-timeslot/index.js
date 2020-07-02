@@ -43,7 +43,6 @@ export default class AppointmentTimeSlot extends React.Component {
 
   handleSubmit = () => {
     const { handleSubmit } = this.props;
-    this.setState({ timeslot: undefined });
     setStorageInfo(this.state);
     handleSubmit();
   }

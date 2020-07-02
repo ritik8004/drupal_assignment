@@ -111,4 +111,33 @@ class XmlAPIHelper {
     return $result;
   }
 
+  /**
+   * Get Time slots.
+   *
+   * @return object
+   *   Response object.
+   */
+  public function fetchTimeSlots($request) {
+    $selected_date = $request->query->get('selectedDate');
+    $program = $request->query->get('program');
+    $activity = $request->query->get('activity');
+    $location = $request->query->get('location');
+
+    $apiBody = '
+    <ns2:getAvailableNDateTimeSlotsStartFromDate>
+      <criteria>
+        <activityExternalId>' . $activity . '</activityExternalId>
+        <locationExternalId>' . $location . '</locationExternalId>
+        <programExternalId>' . $program . '</programExternalId>
+      </criteria>
+      <startDateTime>' . $selected_date . 'T00:00:00.000+03:00</startDateTime>
+      <endDateTime>' . $selected_date . 'T23:59:59.999+03:00</endDateTime>
+      <numberOfSlots>500</numberOfSlots>
+    </ns2:getAvailableNDateTimeSlotsStartFromDate>
+    ';
+
+    $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL, 'getAvailableNDateTimeSlotsStartFromDate', $apiBody);
+    return $result;
+  }
+
 }
