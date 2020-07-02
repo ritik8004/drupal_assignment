@@ -493,6 +493,9 @@ class AlshayaPromoLabelManager {
         case 'groupn_fixdisc':
           $z = $discount_step - $eligible_cart_qty;
           $amount = strip_tags(alshaya_acm_price_format($discount_amount));
+          // Remove extra spaces from beginning/end/middle of string which
+          // appear due to removal of html tags.
+          $amount = preg_replace(['/^\s+/', '/\s+$/', '/\s+/u'], ['', '', ' '], $amount);
 
           if ($z >= 1) {
             $label['dynamic_label'] = $this->t(
