@@ -366,6 +366,9 @@ class CartController {
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
+    // Whether cart is stale or not.
+    $data['stale_cart'] = $cart_data['stale_cart'] ?? FALSE;
+
     return $data;
   }
 

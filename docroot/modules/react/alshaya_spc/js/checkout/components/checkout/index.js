@@ -77,6 +77,14 @@ export default class Checkout extends React.Component {
             wait: false,
             cart: { cart },
           });
+
+          // If cart from stale cache.
+          if (cart.stale_cart !== undefined && cart.stale_cart === true) {
+            dispatchCustomEvent('spcCheckoutMessageUpdate', {
+              type: 'error',
+              message: drupalSettings.global_error_message,
+            });
+          }
         });
       } else {
         redirectToCart();
