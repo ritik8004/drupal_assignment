@@ -2,73 +2,57 @@ import React from 'react';
 import moment from 'moment-timezone';
 
 export default class AppointmentSlots extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      slot: {}
-    };
-  }
-
-  handleSelect = (e, data) => {
-    this.props.handler(data);
+  handler = (data) => {
+    const { handler } = this.props;
+    handler(data);
   }
 
   render() {
-
     let listMorningItems = '';
     let listAfternoonItems = '';
     let listEveningItems = '';
-    let timeSlots = {
+    const timeSlots = {
       morning: [],
       afternoon: [],
       evening: [],
     };
-    const apiData = this.props.items;
-    if (apiData !== null && apiData !== undefined && apiData.hasOwnProperty('return')) {
-      for (var i=0; i < apiData.return.length; i++) {
-        const hours = moment(apiData.return[i].appointmentSlotTime).format('HH');
+    const { items } = this.props;
+    if (items !== null && items !== undefined && Object.prototype.hasOwnProperty.call(items, 'return')) {
+      for (let i = 0; i < items.return.length; i++) {
+        const hours = moment(items.return[i].appointmentSlotTime).format('HH');
         if (hours < 12) {
-          timeSlots.morning.push(apiData.return[i]);
-        }
-        else if (hours > 12 && hours < 17) {
-          timeSlots.afternoon.push(apiData.return[i]);
-        }
-        else {
-          timeSlots.evening.push(apiData.return[i]);
+          timeSlots.morning.push(items.return[i]);
+        } else if (hours > 12 && hours < 17) {
+          timeSlots.afternoon.push(items.return[i]);
+        } else {
+          timeSlots.evening.push(items.return[i]);
         }
       }
     }
 
+    listMorningItems = timeSlots.morning.map((item) => (
+      <li className="morning-time-slots">
+        <a href data={item} className="time-slots" onClick={() => this.handler(item)}>
+          {moment(item.appointmentSlotTime).format('LT')}
+        </a>
+      </li>
+    ));
 
-    if (timeSlots !== undefined && timeSlots.hasOwnProperty('morning')) {
-      listMorningItems = timeSlots.morning.map((item) =>
-        <li className="morning-time-slots">
-          <a href="javascript:void(0)" data={item} className="time-slots" onClick={(e) => this.handleSelect(event, item)}>
-            {moment(item.appointmentSlotTime).format('LT')}
-          </a>
-        </li>
-      );
-    }
+    listAfternoonItems = timeSlots.afternoon.map((item) => (
+      <li className="afternoon-time-slots">
+        <a href data={item} className="time-slots" onClick={() => this.handler(item)}>
+          {moment(item.appointmentSlotTime).format('LT')}
+        </a>
+      </li>
+    ));
 
-    if (timeSlots !== undefined && timeSlots.hasOwnProperty('afternoon')) {
-      listAfternoonItems = timeSlots.afternoon.map((item) =>
-        <li className="afternoon-time-slots">
-          <a href="javascript:void(0)" data={item} className="time-slots" onClick={(e) => this.handleSelect(event, item)}>
-            {moment(item.appointmentSlotTime).format('LT')}
-          </a>
-        </li>
-      );
-    }
-
-    if (timeSlots !== undefined && timeSlots.hasOwnProperty('evening')) {
-      listEveningItems = timeSlots.evening.map((item) =>
-        <li className="evening-time-slots">
-          <a href="javascript:void(0)" data={item} className="time-slots" onClick={(e) => this.handleSelect(event, item)}>
-            {moment(item.appointmentSlotTime).format('LT')}
-          </a>
-        </li>
-      );
-    }
+    listEveningItems = timeSlots.evening.map((item) => (
+      <li className="evening-time-slots">
+        <a href data={item} className="time-slots" onClick={() => this.handler(item)}>
+          {moment(item.appointmentSlotTime).format('LT')}
+        </a>
+      </li>
+    ));
 
     return (
       <div className="appointment-time-slots">

@@ -59,7 +59,7 @@ class AppointmentServices {
    */
   public function getTimeSlots(Request $request) {
     try {
-      $selected_date = $request->query->get('selected_date');
+      $selected_date = $request->query->get('selectedDate');
       $program = $request->query->get('program');
       $activity = $request->query->get('activity');
       $location = $request->query->get('location');

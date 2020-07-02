@@ -1,9 +1,9 @@
 import React from 'react';
-import {getStorageInfo, setStorageInfo} from "../../../utilities/storage";
-import AppointmentSlots from "../appointment-selectslot";
+import moment from 'moment';
+import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
+import AppointmentSlots from '../appointment-selectslot';
 import fetchAPIData from '../../../utilities/api/fetchApiData';
-import moment from "moment";
-import AppointmentCalendar from "../appointment-calendar";
+import AppointmentCalendar from '../appointment-calendar';
 
 const localStorageValues = getStorageInfo();
 
@@ -13,54 +13,48 @@ export default class AppointmentTimeSlot extends React.Component {
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
+        selectedSlot: {},
+        timeSlots: {},
       };
-      if (localStorageValues.hasOwnProperty('date')) {
+      if (Object.prototype.hasOwnProperty.call(localStorageValues, 'date')) {
         this.state.date = new Date(localStorageValues.date);
-      }
-      else {
+      } else {
         this.state.date = new Date();
       }
     }
 
-    this.state.timeSlots = {};
-    this.state.selected_slot = {};
-    this.state.params = `program=${this.state.appointmentCategoryId}&activity=${this.state.appointmentType}&location=${this.state.selectedStoreItem.locationExternalId}`;
     this.dateChanged = this.dateChanged.bind(this);
     this.handler = this.handler.bind(this);
   }
 
-  handleBack = (step) => {
-    const { handleBack } = this.props;
-    handleBack(step);
+  componentDidMount() {
+    const { date } = this.state;
+    const d = new Date(date);
+    const selectedDate = moment(d).format('YYYY-MM-DD');
+    const apiUrl = `/get/timeslots?selectedDate=${selectedDate}&${this.getParamsForTimeSlotApi()}`;
+    this.fetchTimeSlots(apiUrl);
   }
 
   handler(slot) {
     this.setState({
-      selected_slot: slot
+      selectedSlot: slot,
     });
   }
 
   handleSubmit = () => {
+    const { handleSubmit } = this.props;
     this.setState({ timeslot: undefined });
     setStorageInfo(this.state);
-    this.props.handleSubmit();
+    handleSubmit();
   }
 
-  dateChanged(d){
-    this.setState({date: d},
+  dateChanged(d) {
+    this.setState({ date: d },
       () => {
-        const selected_date = moment(d).format('YYYY-MM-DD');
-        const apiUrl = `/get/timeslots?selected_date=${selected_date}&${this.state.params}`;
+        const selectedDate = moment(d).format('YYYY-MM-DD');
+        const apiUrl = `/get/timeslots?selectedDate=${selectedDate}&${this.getParamsForTimeSlotApi()}`;
         this.fetchTimeSlots(apiUrl);
-      }
-    );
-  }
-
-  componentDidMount() {
-    const d = new Date(this.state.date);
-    const selected_date = moment(d).format('YYYY-MM-DD');
-    const apiUrl = `/get/timeslots?selected_date=${selected_date}&${this.state.params}`;
-    this.fetchTimeSlots(apiUrl);
+      });
   }
 
   fetchTimeSlots = (apiUrl) => {
@@ -70,11 +64,22 @@ export default class AppointmentTimeSlot extends React.Component {
       apiData.then((result) => {
         if (result.data !== undefined) {
           this.setState({
-            timeSlots: result.data //some user
+            timeSlots: result.data, // some user
           });
         }
       });
     }
+  }
+
+  getParamsForTimeSlotApi() {
+    const { appointmentCategoryId, appointmentType, selectedStoreItem } = this.state;
+    const params = `program=${appointmentCategoryId}&activity=${appointmentType}&location=${selectedStoreItem.locationExternalId}`;
+    return params;
+  }
+
+  handleBack = (step) => {
+    const { handleBack } = this.props;
+    handleBack(step);
   }
 
   render() {
@@ -86,7 +91,9 @@ export default class AppointmentTimeSlot extends React.Component {
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
           <div className="store-header">
-            {Drupal.t("Select date & time that suits you")} *
+            {Drupal.t('Select date & time that suits you')}
+            {' '}
+            *
           </div>
           <div className="timeslot-latest-available">
             <p>
@@ -95,15 +102,15 @@ export default class AppointmentTimeSlot extends React.Component {
           </div>
           <div className="appointment-datepicker">
             <AppointmentCalendar
-              selectDate = {this.state.date}
-              dateChanged = {this.dateChanged}
+              selectDate={date}
+              dateChanged={this.dateChanged}
             />
           </div>
 
           <div className="appointment-timeslots-wrapper">
             <AppointmentSlots
               items={timeSlots}
-              handler = {this.handler}
+              handler={this.handler}
             />
           </div>
 
@@ -129,5 +136,4 @@ export default class AppointmentTimeSlot extends React.Component {
       </div>
     );
   }
-
 }
