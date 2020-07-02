@@ -4,6 +4,7 @@ import AppointmentType from '../appointment-type';
 import AppointmentStoreSelect from '../appointment-store';
 import AppointmentSelection from '../appointment-selection';
 import CustomerDetails from '../customer-details';
+import Confirmation from '../confirmation';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
 export default class Appointment extends React.Component {
@@ -66,9 +67,13 @@ export default class Appointment extends React.Component {
           handleSubmit={() => this.handleSubmit('confirmation')}
         />
       );
+    } else if (appointmentStep === 'confirmation') {
+      appointmentData = (
+        <Confirmation />
+      );
     }
 
-    if (appointmentStep !== 'appointment-type') {
+    if (appointmentStep !== 'appointment-type' && appointmentStep !== 'confirmation') {
       appointmentSelection = (
         <AppointmentSelection
           handleEdit={this.handleEdit}

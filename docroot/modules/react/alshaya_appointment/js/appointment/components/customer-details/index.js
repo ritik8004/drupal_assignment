@@ -91,7 +91,7 @@ export default class CustomerDetails extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    // Valid form fields.
+    // Validate form fields.
     const isError = await processCustomerDetails(e);
 
     if (!isError) {
