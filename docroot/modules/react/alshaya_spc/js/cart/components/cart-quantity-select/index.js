@@ -9,34 +9,37 @@ export default class CartQuantitySelect extends React.Component {
   }
 
   prepareOptions = (stock, qty, maxLimit) => {
-    let cartMaxQty = drupalSettings.alshaya_spc.max_cart_qty;
+    let cartMaxQty = parseInt(drupalSettings.alshaya_spc.max_cart_qty, 10);
+    const maxLimitValue = maxLimit != null ? parseInt(maxLimit, 10) : null;
+    const qtyValue = parseInt(qty, 10);
+    const stockValue = parseInt(stock, 10);
 
     // Maximum number of items in dropdown can not
     // be greater than stock value.
-    if (cartMaxQty > stock) {
-      cartMaxQty = stock;
+    if (cartMaxQty > stockValue) {
+      cartMaxQty = stockValue;
     }
 
     // Quantity Limit is the highest precendence, we
     // can not allow more than that.
-    if (maxLimit != null && cartMaxQty > maxLimit) {
-      cartMaxQty = maxLimit;
+    if (maxLimitValue != null && cartMaxQty > maxLimitValue) {
+      cartMaxQty = maxLimitValue;
     }
 
     // We display dropdown with selected quantity to avoid confusions.
-    cartMaxQty = (qty > cartMaxQty) ? qty : cartMaxQty;
+    cartMaxQty = (qtyValue > cartMaxQty) ? qtyValue : cartMaxQty;
 
     const data = [];
     for (let i = 1; i <= cartMaxQty; i++) {
       data[i] = {
         value: i,
         label: i,
-        isDisabled: (i > stock),
+        isDisabled: (i > stockValue),
       };
     }
 
     return data;
-  }
+  };
 
   onMenuOpen = () => {
     this.selectRef.current.select.inputRef.closest('.spc-select').classList.add('open');
