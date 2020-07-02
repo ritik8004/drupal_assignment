@@ -2,7 +2,6 @@
   .magv2-pdp-section-title {
     display: flex;
     align-items: center;
-    text-transform: capitalize;
 
     &::before {
       content: '';
@@ -24,26 +23,23 @@
   }
 
   .sharethis-wrapper {
+    margin-bottom: 0.9375rem;
+    text-align: #{$left};
+
+    @include breakpoint($only-tablet) {
+      margin-bottom: 0;
+    }
+
     > span {
-      margin: 0 20px 0 0;
+      margin: 0 1.5625rem 0 0;
       display: inline;
-    }
 
-    .st_facebook_custom {
-      &::before {
-        background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-facebook.svg') no-repeat center;
+      @include breakpoint($upto-desktop) {
+        margin: 0 0.625rem 0 0;
       }
-    }
 
-    .st_twitter_custom {
       &::before {
-        background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-twitter.svg') no-repeat center;
-      }
-    }
-
-    .st_whatsapp_custom {
-      &::before {
-        background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-whats-app.svg') no-repeat center;
+        content: "";
         display: inline-block;
         height: 1.6875rem;
         width: 1.6875rem;
@@ -53,22 +49,79 @@
       }
     }
 
+    .st_facebook_custom {
+      &::before {
+        background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-facebook-default.svg') no-repeat center;
+      }
+
+      &:hover {
+        &::before {
+          background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-facebook-default-hover.svg') no-repeat center;
+        }
+      }
+    }
+
+    .st_twitter_custom {
+      &::before {
+        background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-twitter-default.svg') no-repeat center;
+      }
+
+      &:hover {
+        &::before {
+          background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-twitter-default-hover.svg') no-repeat center;
+        }
+      }
+    }
+
+    .st_whatsapp_custom {
+      &::before {
+        background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-whats-app-default.svg') no-repeat center;
+      }
+
+      &:hover {
+        &::before {
+          background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-whats-app-default-hover.svg') no-repeat center;
+        }
+      }
+    }
+
     .st_instagram_custom {
       &::before {
-        background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-instagram.svg') no-repeat center;
+        background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-instagram-default.svg') no-repeat center;
+      }
+
+      &:hover {
+        &::before {
+          background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-instagram-default-hover.svg') no-repeat center;
+        }
+      }
+    }
+
+    .st_pinterest_custom {
+      &::before {
+        background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-pintrest-default.svg') no-repeat center;
       }
     }
   }
 
   button {
-    font-size: 12px;
-    width: 104px;
-    height: 24px;
-    border: 1.2px solid #007aff;
-    border-radius: 2.1px;
-    background-color: #ffffff;
-    color: #007aff;
-    padding: 4px 3px;
+    font-size: 0.75rem;
+    width: 6.5rem;
+    border: 0.075rem solid $magv2-share-btn;
+    border-radius: 0.125rem;
+    background-color: $magv2-share-btn-txt;
+    color: $magv2-share-btn;
+    padding: 0.25rem 0.1875rem;
+
+    @include breakpoint($desktop) {
+      margin-bottom: 0.9375rem;
+      height: 1.5rem;
+    }
+
+    &:hover {
+      background: $magv2-share-btn;
+      color: $magv2-share-btn-txt;
+    }
   }
 
   &.show-share-panel {
@@ -85,7 +138,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 20px 0 5px;
+      margin: 1.25rem 0 0.3125rem;
     }
   }
 }
