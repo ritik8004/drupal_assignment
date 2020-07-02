@@ -1081,15 +1081,11 @@ class Cart {
     $url = sprintf('carts/%d/order', $this->getCartId());
     $cart = $this->getCart();
 
-    $do_lock = FALSE;
     $lock = FALSE;
-
     $settings = $this->settings->getSettings('spc_middleware');
 
     // Check whether order locking is enabled.
     if (!isset($settings['spc_middleware_lock_place_order']) || $settings['spc_middleware_lock_place_order'] == TRUE) {
-      $do_lock = TRUE;
-
       $lock_store = new PdoStore($this->connection);
       $lock_factory = new Factory($lock_store);
 
@@ -1109,7 +1105,7 @@ class Cart {
       // optional and this also sets in ACM MDC observer.
       $result = $this->magentoApiWrapper->doRequest('PUT', $url);
 
-      if ($do_lock && !empty($lock)) {
+      if (!empty($lock)) {
         $lock->release();
       }
 
