@@ -102,21 +102,24 @@ export default class PdpClickCollect extends React.PureComponent {
             <PdpSectionTitle>
               {Drupal.t('click & collect')}
             </PdpSectionTitle>
+            <div className="magv2-accordion" onClick={this.showClickCollectContent} />
           </div>
-          <PdpSectionText className="click-collect-detail">
-            <span>{cncSubtitleAvailable}</span>
-          </PdpSectionText>
-          <div className="instore-wrapper">
-            <div className="instore-title">{label}</div>
-            {hideInput ? (
-              <ClickCollectContent
-                location={location}
-                stores={stores}
-              />
-            ) : searchField}
-            {showNoResult ? (
-              <span className="empty-store-list">{Drupal.t('Sorry, No store found for your location.')}</span>
-            ) : null}
+          <div className="magv2-click-collect-content-wrapper">
+            <PdpSectionText className="click-collect-detail">
+              <span>{cncSubtitleAvailable}</span>
+            </PdpSectionText>
+            <div className="instore-wrapper">
+              <div className="instore-title">{label}</div>
+              {hideInput ? (
+                <ClickCollectContent
+                  location={location}
+                  stores={stores}
+                />
+              ) : searchField}
+              {showNoResult ? (
+                <span className="empty-store-list">{Drupal.t('Sorry, No store found for your location.')}</span>
+              ) : null}
+            </div>
           </div>
         </div>
       );
