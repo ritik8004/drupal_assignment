@@ -108,7 +108,8 @@
         "hubspot/pace": "^1.0",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
-        "springimport/magento2-api-v1": "^1.0"
+        "springimport/magento2-api-v1": "^1.0",
+        "symfony/lock": "^4.4"
     },
     "require-dev": {
         "drupal/devel": "^2.0.0",
