@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Helper\APIHelper;
 use App\Helper\APIServicesUrls;
+use App\Helper\XmlAPIHelper;
+use App\Helper\Helper;
 
 /**
  * Class ConfigurationServices.
@@ -35,6 +37,20 @@ class ConfigurationServices {
   protected $apiHelper;
 
   /**
+   * XmlAPIHelper.
+   *
+   * @var \App\Helper\XmlAPIHelper
+   */
+  protected $xmlApiHelper;
+
+  /**
+   * Helper.
+   *
+   * @var \App\Helper\Helper
+   */
+  protected $helper;
+
+  /**
    * ConfigurationServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -43,13 +59,21 @@ class ConfigurationServices {
    *   Soap client service.
    * @param \App\Helper\APIHelper $api_helper
    *   API Helper.
+   * @param \App\Helper\XmlAPIHelper $xml_api_helper
+   *   Xml API Helper.
+   * @param \App\Helper\Helper $helper
+   *   Helper.
    */
   public function __construct(LoggerInterface $logger,
                               SoapClient $client,
-                              APIHelper $api_helper) {
+                              APIHelper $api_helper,
+                              XmlAPIHelper $xml_api_helper,
+                              Helper $helper) {
     $this->logger = $logger;
     $this->client = $client;
     $this->apiHelper = $api_helper;
+    $this->xmlApiHelper = $xml_api_helper;
+    $this->helper = $helper;
   }
 
   /**
@@ -120,6 +144,73 @@ class ConfigurationServices {
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting activities. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Get Stores By Geo Criteria .
+   *
+   * @return json
+   *   Stores data from API.
+   */
+  public function getStores(Request $request) {
+    try {
+      $result = $this->xmlApiHelper->fetchStores($request);
+
+      $stores = $result->return->locations ?? [];
+      $storesData = [];
+
+      foreach ($stores as $store) {
+        $storeId = $store->locationExternalId;
+        $storeTiming = $this->getStoreSchedule($storeId);
+
+        $storesData[$store->locationExternalId] = [
+          'locationExternalId' => $storeId ?? '',
+          'name' => $store->locationName ?? '',
+          'address' => $store->companyAddress ?? '',
+          'geocoordinates' => $store->geocoordinates ?? '',
+          'storeTiming' => $storeTiming ?? '',
+        ];
+      }
+
+      return new JsonResponse($storesData);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while getting stores. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Get Stores Schedules.
+   *
+   * @return array
+   *   Stores Schedules from API.
+   */
+  public function getStoreSchedule($storeId) {
+    try {
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
+
+      $param = [
+        'scheduleSearchCriteria' => [
+          'locationExternalId' => $storeId,
+        ],
+      ];
+      $result = $client->__soapCall('getLocationSchedulesByCriteria', [$param]);
+      $weeklySchedules = $result->return->locationSchedules->weeklySubSchedule->weeklySubSchedulePeriods ?? [];
+      $weeklySchedulesData = $this->helper->groupStoreTimings($weeklySchedules);
+
+      return $weeklySchedulesData;
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while getting stores schedules. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
 

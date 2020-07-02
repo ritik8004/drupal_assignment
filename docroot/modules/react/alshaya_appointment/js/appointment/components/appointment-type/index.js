@@ -25,6 +25,7 @@ export default class AppointmentType extends React.Component {
       };
     } else {
       this.state = {
+        appointmentStep: 'appointment-type',
         appointmentCategory: '',
         appointmentType: '',
         appointmentCompanion: '',
@@ -76,7 +77,7 @@ export default class AppointmentType extends React.Component {
   }
 
   handleChange = (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    const value = getInputValue(e);
     this.setState({
       [e.target.name]: value,
     });
@@ -91,6 +92,8 @@ export default class AppointmentType extends React.Component {
 
   handleSubmit = () => {
     setStorageInfo(this.state);
+    const { handleSubmit } = this.props;
+    handleSubmit();
   }
 
   render() {
@@ -111,7 +114,7 @@ export default class AppointmentType extends React.Component {
         <AppointmentCategories
           categoryItems={categoryItems}
           handleItemClick={this.handleCategoryClick}
-          activeItem={appointmentCategory}
+          activeItem={appointmentCategory.id}
         />
         { appointmentCategory
           ? (

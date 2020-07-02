@@ -63,10 +63,11 @@ class APIHelper {
 
       $appointment_settings = $this->settings->getSettings('appointment_settings');
       $param = ['locationGroupExtId' => $appointment_settings['location_group_ext_id']];
+
       $result = $client->__soapCall('getLocationGroup', [$param]);
       $locationExternalId = $result->return->locationGroup->locationExternalIds;
 
-      return $locationExternalId;
+      return is_array($locationExternalId) ? reset($locationExternalId) : $locationExternalId;
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting locationExternalId. Message: @message', [
