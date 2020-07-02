@@ -218,10 +218,19 @@ class Cart {
       return NULL;
     }
 
+    // If cart is available in cache.
+    if (!$force && !empty($cached_cart = $this->getCartFromCache())) {
+      static::$cart = $cached_cart;
+      return static::$cart;
+    }
+
     $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
       static::$cart = $this->magentoApiWrapper->doRequest('GET', $url);
+      // Store cart object in cache.
+      $this->setCartInCache(static::$cart);
+
       static::$cart = $this->formatCart(static::$cart);
       return static::$cart;
     }
@@ -230,6 +239,14 @@ class Cart {
 
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
         $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+      }
+
+      // Fetch cart from cache (even if stale).
+      if (!empty($cached_cart = $this->getCartFromCache(TRUE))) {
+        // Setting flag for stale cart cache.
+        $cached_cart['stale_cart'] = TRUE;
+        static::$cart = $cached_cart;
+        return static::$cart;
       }
 
       $this->logger->error('Error while getting cart from MDC. Error message: @message', [
@@ -650,7 +667,7 @@ class Cart {
       // After association restore the cart.
       if ($result) {
         static::$cart = NULL;
-        $this->getCart();
+        $this->getCart(TRUE);
         return TRUE;
       }
 
@@ -821,8 +838,8 @@ class Cart {
     $cart = NULL;
 
     try {
-      static::$cart = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
-      static::$cart = $this->formatCart(static::$cart);
+      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      static::$cart = $this->formatCart($cart_updated);
       $cart = static::$cart;
 
       // If exception at response message level.
@@ -839,6 +856,8 @@ class Cart {
         }
       }
 
+      // Set cart in cache.
+      $this->setCartInCache($cart_updated);
       return $cart;
     }
     catch (\Exception $e) {
@@ -1412,6 +1431,36 @@ class Cart {
     }
 
     return $cnc_enabled;
+  }
+
+  /*
+   * Get cart from cache.
+   *
+   * @param bool $fetch_expired
+   *   Whether we need stale data from cache or not.
+   *
+   * @return array
+   *   Formatted cart data.
+   */
+  public function getCartFromCache(bool $fetch_expired = FALSE) {
+    $expire = (int) $_ENV['CACHE_CART'];
+    // If cart is available in cache, use that.
+    if ($expire > 0 && ($cached_cart = $this->cache->get('cached_cart', $fetch_expired))) {
+      return $this->formatCart($cached_cart);
+    }
+  }
+
+  /**
+   * Set cart in cache.
+   *
+   * @param array $cart
+   *   Cart data.
+   */
+  public function setCartInCache(array $cart) {
+    $expire = (int) $_ENV['CACHE_CART'];
+    if ($expire > 0) {
+      $this->cache->set('cached_cart', $expire, $cart);
+    }
   }
 
 }
