@@ -688,25 +688,31 @@ class AlshayaSpcController extends ControllerBase {
           foreach (_alshaya_spc_get_address_fields() as $field => $address_field) {
             // If field is available and is either area/city.
             $val_to_validate = NULL;
+            // FLag to determine if city/area field value filled.
+            $city_area_field = FALSE;
             if (!empty($address_extension_attributes) && isset($address_extension_attributes[$address_field['key']])
               && ($field == 'administrative_area' || $field == 'area_parent')) {
               $val_to_validate = $address_extension_attributes[$address_field['key']];
+              $city_area_field = TRUE;
             }
             elseif (!empty($address_custom_attributes)) {
               foreach ($address_custom_attributes as $attr) {
                 if ($attr['attribute_code'] == $address_field['key']
                   && ($field == 'administrative_area' || $field == 'area_parent')) {
                   $val_to_validate = $attr['value'];
+                  $city_area_field = TRUE;
                   break;
                 }
               }
             }
 
             try {
-              $term = $this->areaTermsHelper->getLocationTermFromLocationId($val_to_validate);
-              if (!$term) {
-                $status[$key] = FALSE;
-                break;
+              if ($city_area_field) {
+                $term = $this->areaTermsHelper->getLocationTermFromLocationId($val_to_validate);
+                if (!$term) {
+                  $status[$key] = FALSE;
+                  break;
+                }
               }
             }
             catch (\Exception $e) {
