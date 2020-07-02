@@ -25,7 +25,7 @@ export const cartAvailableInStorage = () => {
 
   // 15m time for expire.
   // @Todo: Make this 10m (configurable from BE).
-  const storageExpireTime = parseInt(drupalSettings.alshaya_spc.cart_storage_expiration);
+  const storageExpireTime = parseInt(drupalSettings.alshaya_spc.cart_storage_expiration, 10);
   const expireTime = storageExpireTime * 60 * 1000;
   const currentTime = new Date().getTime();
 
