@@ -99,7 +99,9 @@ export default class CartItem extends React.Component {
         }
 
         let triggerRecommendedRefresh = false;
-        const itemsLength = Object.keys(cartResult.items).length;
+        const itemsLength = (cartResult.items !== undefined)
+          ? Object.keys(cartResult.items).length
+          : 0;
         if (cartResult.items !== undefined
           && itemsLength > 0) {
           // Trigger if item is removed.
