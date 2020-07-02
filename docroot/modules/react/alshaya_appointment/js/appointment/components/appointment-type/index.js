@@ -10,6 +10,7 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../utilities/appointment-util';
+import { getInputValue } from "../../../utilities/helper";
 
 const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
 

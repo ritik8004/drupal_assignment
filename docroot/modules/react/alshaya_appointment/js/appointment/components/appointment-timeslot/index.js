@@ -5,11 +5,10 @@ import AppointmentSlots from '../appointment-selectslot';
 import fetchAPIData from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
 
-const localStorageValues = getStorageInfo();
-
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
     super(props);
+    const localStorageValues = getStorageInfo();
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
@@ -72,7 +71,8 @@ export default class AppointmentTimeSlot extends React.Component {
 
   getParamsForTimeSlotApi() {
     const { appointmentCategoryId, appointmentType, selectedStoreItem } = this.state;
-    const params = `program=${appointmentCategoryId}&activity=${appointmentType}&location=${selectedStoreItem.locationExternalId}`;
+    const location = JSON.parse(selectedStoreItem);
+    const params = `program=${appointmentCategoryId}&activity=${appointmentType}&location=${location.locationExternalId}`;
     return params;
   }
 
