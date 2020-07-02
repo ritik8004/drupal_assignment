@@ -14,7 +14,7 @@ use Doctrine\DBAL\Connection;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Psr\Log\LoggerInterface;
 use Drupal\alshaya_master\Helper\SortUtility;
-use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\PdoStore;
 
 /**
@@ -1084,14 +1084,14 @@ class Cart {
     $do_lock = FALSE;
     $lock = FALSE;
 
-    $settings = $this->settings->getSettings();
+    $settings = $this->settings->getSettings('spc_middleware');
 
     // Check whether order locking is enabled.
-    if (!empty($settings['spc_middleware_lock_place_order'])) {
+    if (!isset($settings['spc_middleware_lock_place_order']) || $settings['spc_middleware_lock_place_order'] == TRUE) {
       $do_lock = TRUE;
 
       $lock_store = new PdoStore($this->connection);
-      $lock_factory = new LockFactory($lock_store);
+      $lock_factory = new Factory($lock_store);
 
       $lock_name = 'spc_place_order_' . $this->getCartId();
       $lock = $lock_factory->createLock($lock_name);
