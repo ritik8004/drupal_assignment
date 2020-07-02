@@ -55,7 +55,7 @@ $primary_input_inline_error: $alizarin-crimson;
 // Dropdown.
 $primary_dropdown_arrow_bg: false;
 $primary_dropdown_arrow: $black;
-$primary_dropdown_text: $black;
+$primary_dropdown_text: $black-two;
 $primary_dropdown_border: $gallery;
 $primary_dropdown_option_hover: $wild-sand;
 $primary_dropdown_option_border: $gallery;
@@ -99,7 +99,7 @@ $lang_switch_close_icon: $black;
 // Accordion
 $accordion_border: $whisper-dark;
 $accordion_title: $cod-gray;
-$accordion_sub_title: $grey;
+$accordion_sub_title: $grey-dark-one;
 $accordion_title_arrow: $black;
 $accordion_title_disabled: $grey;
 
@@ -135,16 +135,18 @@ $pdp_sizeguide_link: $black-two;
 $pdp_product_special_price_text: $alizarin-crimson;
 $pdp_product_discount_price: $alizarin-crimson;
 $pdp_product_discount_text: $mujidarkred;
+$pdp_attribute_label: $grey-light;
 
 // Product Add to cart form.
 $pdp_sidebar_label: $black-two;
-$pdp_sidebar_link: $grey;
+$pdp_sidebar_link: $brownish-grey;
 $pdp_cc_btn_bg: $black;
 $pdp_desc_wrapper_border: $gallery;
 $pdp_cc_storefinder_link: $azure-blue;
 $pdp_cc_top_stores_list_border: $gallery;
 $pdp_sidebar_offerprice_bg: $alizarin-crimson;
 $pdp_sidebar_offerprice_text: $white;
+$pdp_cc_storefinder_label: $grey-dark-one;
 
 // Out of stock button.
 $oos_btn_bg: $alizarin-crimson;
@@ -299,6 +301,7 @@ $social_links: $black;
 $copyright_footer_bg: $gray-bg;
 $copyright_footer_text: $black;
 $copyright_footer_paragraph: $black;
+$copyright_footer_border_mobile: $white;
 
 //7. Newsletter-signup
 $newsletter_title_h3: $black;

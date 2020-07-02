@@ -1,13 +1,12 @@
 .block-alshaya-algolia-react-autocomplete {
   @include breakpoint($only-mobile) {
     visibility: hidden;
-    top: 3.125rem;
+    top: 4rem;
     padding: 0;
     box-shadow: none;
 
     html[lang=ar] & {
       padding: 0;
-      top: 3.125rem;
     }
   }
 
@@ -35,9 +34,26 @@
     padding-#{$left}: 3.5rem;
     padding-#{$right}: 1.5rem;
     font-size: 0.9375rem;
+    line-height: 2.5;
+
+    @include breakpoint($only-mobile) {
+      line-height: 3;
+    }
 
     @include breakpoint($tablet) {
       border-bottom-color: $algolia-auto-complete-border-bottom;
+    }
+
+    &::placeholder {
+      line-height: 2.5;
+
+      @include breakpoint($only-mobile) {
+        line-height: 3.5;
+
+        html[lang=ar] & {
+          line-height: 3.5;
+        }
+      }
     }
   }
 
@@ -59,11 +75,15 @@
         #{$right}: inherit;
 
         @include breakpoint($only-mobile) {
-          top: 0.125rem;
+          top: 0.5rem;
           #{$right}: inherit;
           #{$left}: 0.75rem;
           opacity: 1;
           transition: opacity 0.2s;
+
+          html[lang=ar] & {
+            top: 0.25rem;
+          }
         }
       }
 
@@ -90,7 +110,6 @@
         width: 100%;
         border: 0.0625rem solid $algolia-auto-complete-border;
         height: 3.875rem;
-        line-height: 1.25rem;
         padding-#{$left}: 3rem;
       }
     }
@@ -177,6 +196,14 @@ body {
           @include breakpoint($only-mobile) {
             border: 0.0625rem solid $algolia-auto-complete-border;
           }
+        }
+      }
+    }
+
+    &:not(.slug-banner-processed) {
+      .c-content__region {
+        @include breakpoint($only-mobile) {
+          margin-top: 1.5rem;
         }
       }
     }

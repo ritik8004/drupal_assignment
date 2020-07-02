@@ -8,46 +8,6 @@
 
   Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
 
-  Drupal.alshayaSeoSpc.pushStoreData = function(cart) {
-    if (cart.shipping.type !== 'click_and_collect' || !cart.shipping.storeInfo) {
-      return;
-    }
-
-    dataLayer[0].deliveryOption = 'Click and Collect';
-    dataLayer[0].deliveryType = 'ship_to_store';
-    delete dataLayer[0].deliveryArea;
-    delete dataLayer[0].deliveryCity;
-    dataLayer[0].storeLocation = cart.shipping.storeInfo.name;
-    dataLayer[0].storeAddress = cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' +  cart.shipping.storeInfo.gtm_cart_address.administrative_area_display;
-  };
-
-  Drupal.alshayaSeoSpc.pushHomeDeliveryData = function(cart) {
-    if (cart.shipping.type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
-      return;
-    }
-    //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
-    var area_id = cart.shipping.address[drupalSettings.address_fields.administrative_area.key];
-    if (!area_id) {
-      return;
-    }
-
-    dataLayer[0].deliveryOption = 'Home Delivery';
-    dataLayer[0].deliveryType = cart.shipping.methods[0].carrier_title;
-    delete dataLayer[0].storeLocation;
-    delete dataLayer[0].storeAddress;
-    var input = document.querySelector('[data-id="'+ area_id +'"]');
-    dataLayer[0].deliveryArea = $(input).data('label');
-    dataLayer[0].deliveryCity = $(input).data('parent-label');
-  };
-
-  Drupal.alshayaSeoSpc.gtmDeliveryMethod = function (method) {
-    var data = {
-      event: 'deliveryOption',
-      eventLabel: method,
-    };
-    dataLayer.push(data);
-  };
-
   /**
    * Helper function to push checkout option to GTM.
    *
@@ -70,15 +30,96 @@
     dataLayer.push(data);
   };
 
+  Drupal.alshayaSeoSpc.pushStoreData = function(cart) {
+    if (cart.shipping.type !== 'click_and_collect' || !cart.shipping.storeInfo) {
+      return;
+    }
+
+    return {
+      deliveryOption: 'Click and Collect',
+      deliveryType: 'ship_to_store',
+      storeLocation: cart.shipping.storeInfo.name,
+      storeAddress: cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' +  cart.shipping.storeInfo.gtm_cart_address.administrative_area_display,
+    };
+  };
+
+  Drupal.alshayaSeoSpc.pushHomeDeliveryData = function(cart) {
+    if (cart.shipping.type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
+      return;
+    }
+
+    //Ref: \Drupal\alshaya_addressbook\AlshayaAddressBookManager::getAddressShippingAreaValue
+    var area_id = cart.shipping.address[drupalSettings.address_fields.administrative_area.key];
+    if (!area_id) {
+      return;
+    }
+
+    var input = document.querySelector('[data-id="'+ area_id +'"]');
+    return {
+      deliveryOption: 'Home Delivery',
+      deliveryType: cart.shipping.methods[0].carrier_title,
+      deliveryArea: $(input).data('label'),
+      deliveryCity: $(input).data('parent-label'),
+    };
+  };
+
+  Drupal.alshayaSeoSpc.gtmDeliveryMethod = function (method) {
+    var data = {
+      event: 'deliveryOption',
+      eventLabel: method,
+    };
+    dataLayer.push(data);
+  };
+
+  Drupal.alshayaSeoSpc.checkoutEvent = function(cartData, step) {
+    var checkoutPaymentPage = 'checkout payment page';
+    var data = {
+      language: drupalSettings.gtm.language,
+      country: drupalSettings.gtm.country,
+      currency: drupalSettings.gtm.currency,
+      pageType: step === 3 ? checkoutPaymentPage : drupalSettings.gtm.pageType,
+      event: 'checkout',
+      ecommerce: {
+        currencyCode: drupalSettings.gtm.currency,
+        checkout: {
+        },
+      },
+    };
+    var storeData = Drupal.alshayaSeoSpc.pushStoreData(cartData);
+    if (storeData) {
+      Object.assign(data, storeData);
+    }
+
+    var homeDeliveryData = Drupal.alshayaSeoSpc.pushHomeDeliveryData(cartData);
+    if (homeDeliveryData) {
+      Object.assign(data, homeDeliveryData);
+    }
+    var additionalCartData = Drupal.alshayaSeoSpc.cartGtm(cartData, step);
+    Object.assign(data.ecommerce, additionalCartData);
+    if (step === 2) {
+      dataLayer.push(data);
+
+      // Trigger checkoutOption event for step 2 when delivery info is available.
+      if (data.deliveryOption) {
+        Drupal.alshayaSeoSpc.gtmPushCheckoutOption(
+          data.deliveryOption === 'Home Delivery' ? 'Home Delivery' : 'Click & Collect',
+          2
+        );
+      }
+    }
+
+    // Trigger checkout event for step 3 when payment method is available.
+    if (cartData.payment.method || step === 3) {
+      var step3_data = JSON.parse(JSON.stringify(data));
+      step3_data.ecommerce.checkout.actionField.step = 3;
+      step3_data.pageType = checkoutPaymentPage;
+      dataLayer.push(step3_data);
+    }
+  }
+
   document.addEventListener('checkoutCartUpdate', function (e) {
     var step = Drupal.alshayaSeoSpc.getStepFromContainer();
-    Drupal.alshayaSeoSpc.cartGtm(e.detail.cart, step);
-    Drupal.alshayaSeoSpc.pushStoreData(e.detail.cart);
-    Drupal.alshayaSeoSpc.pushHomeDeliveryData(e.detail.cart);
-
-    if (drupalSettings.user.uid !== 0) {
-      Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
-    }
+    Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, step);
   });
 
   document.addEventListener('deliveryMethodChange', function (e) {
@@ -87,38 +128,11 @@
   });
 
   document.addEventListener('refreshCartOnCnCSelect', function (e) {
-    var cart_data = e.detail;
-    Drupal.alshayaSeoSpc.pushStoreData(cart_data.cart);
-    var data = {
-      event: 'checkoutOption',
-      ecommerce: {
-        checkout_option: {
-          actionField: {
-            step: 2,
-            option: 'Click & Collect',
-            action: 'checkout_option',
-          }
-        }
-      }
-    };
-    dataLayer.push(data);
+    Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Click & Collect', 2);
   });
 
   document.addEventListener('refreshCartOnAddress', function (e) {
-    Drupal.alshayaSeoSpc.pushHomeDeliveryData(e.detail.cart);
-    var data = {
-      event: 'checkoutOption',
-      ecommerce: {
-        checkout_option: {
-          actionField: {
-            step: 2,
-            option: 'Home Delivery - subdelivery',
-            action: 'checkout_option',
-          }
-        }
-      }
-    };
-    dataLayer.push(data);
+    Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Home Delivery', 2);
   });
 
   document.addEventListener('changeShippingMethod', function (e) {
@@ -128,10 +142,7 @@
 
   document.addEventListener('refreshCartOnPaymentMethod', function (e) {
     // Clone "checkout" datalayer event to trigger it again for payment.
-    const paymentMethodDataLayer = JSON.parse(JSON.stringify(dataLayer[0]));
-    paymentMethodDataLayer.ecommerce.checkout.actionField.step = 3;
-    paymentMethodDataLayer.pageType = 'checkout payment page';
-    dataLayer.push(paymentMethodDataLayer);
+    Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, 3);
   });
 
   document.addEventListener('orderPaymentMethod', function (e) {
@@ -150,5 +161,15 @@
       storeAddress: e.detail.store.address.replace(/<[^>]+>(\s+)|(\n+)/g, ''),
     });
   });
+
+  Drupal.behaviors.spcCheckoutGtm = {
+    attach: function (context, settings) {
+      $('body').once('spc-checkout-gtm-onetime').each(function() {
+        if (settings.user.uid > 0) {
+          Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
+        }
+      });
+    }
+  };
 
 })(jQuery, Drupal, dataLayer);

@@ -10,9 +10,19 @@ export default class CartQuantitySelect extends React.Component {
 
   prepareOptions = (stock, qty, maxLimit) => {
     let cartMaxQty = drupalSettings.alshaya_spc.max_cart_qty;
-    if (maxLimit != null) {
-      cartMaxQty = (maxLimit < stock) ? maxLimit : stock;
+
+    // Maximum number of items in dropdown can not
+    // be greater than stock value.
+    if (cartMaxQty > stock) {
+      cartMaxQty = stock;
     }
+
+    // Quantity Limit is the highest precendence, we
+    // can not allow more than that.
+    if (maxLimit != null && cartMaxQty > maxLimit) {
+      cartMaxQty = maxLimit;
+    }
+
     // We display dropdown with selected quantity to avoid confusions.
     cartMaxQty = (qty > cartMaxQty) ? qty : cartMaxQty;
 

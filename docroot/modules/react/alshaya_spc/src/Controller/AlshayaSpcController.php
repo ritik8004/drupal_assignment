@@ -159,8 +159,10 @@ class AlshayaSpcController extends ControllerBase {
         ],
         'drupalSettings' => [
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+          'global_error_message' => _alshaya_spc_global_error_message(),
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
+            'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
           ],
         ],
       ],
@@ -236,6 +238,16 @@ class AlshayaSpcController extends ControllerBase {
       'value' => '<span class="font-bold">' . $this->t('You are browsing outside @country', ['@country' => $country_name]) . '</span><br/>'
       . $this->t("We don't support delivery outside @country.", ['@country' => $country_name])
       . $this->t('Please enter an address with in country @country below to continue.', ['@country' => $country_name]),
+    ];
+
+    $strings[] = [
+      'key' => 'address_not_complete',
+      'value' => $this->t("This address doesn't contain all the required information, please update it."),
+    ];
+
+    $strings[] = [
+      'key' => 'address_not_filled',
+      'value' => $this->t("Sorry, we couldn’t fetch your location precisely, please") . '<span class="font-bold" id="scroll-to-dropdown"> ' . $this->t("enter your address") . '</span>',
     ];
 
     $cncFeatureStatus = $cc_config->get('feature_status') ?? 'enabled';
@@ -456,6 +468,7 @@ class AlshayaSpcController extends ControllerBase {
               'method' => $cncTerm->get('field_shipping_method_code')->getString(),
             ],
           ],
+          'global_error_message' => _alshaya_spc_global_error_message(),
         ],
       ],
       '#cache' => [
@@ -484,11 +497,17 @@ class AlshayaSpcController extends ControllerBase {
 
       $payment_methods[$payment_method['id']] = [
         'name' => $payment_method_term->label(),
+        'gtm_name' => $payment_method_term->label(),
         'description' => $payment_method_term->getDescription(),
         'code' => $payment_method_term->get('field_payment_code')->getString(),
         'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
         'weight' => $payment_method_term->getWeight(),
       ];
+
+      if ($this->languageManager->getCurrentLanguage()->getId() !== 'en') {
+        $payment_method_term_en = $payment_method_term->getTranslation('en');
+        $payment_methods[$payment_method['id']]['gtm_name'] = $payment_method_term_en->label();
+      }
 
       // Show default on top.
       $payment_methods[$payment_method['id']]['weight'] = $payment_methods[$payment_method['id']]['default']
@@ -654,6 +673,54 @@ class AlshayaSpcController extends ControllerBase {
           }
 
           break;
+
+        case 'address':
+          $status[$key] = TRUE;
+          $address_extension_attributes = $data[$key]['extension_attributes'] ?? [];
+          $address_custom_attributes = $data[$key]['custom_attributes'] ?? [];
+          // @TODO: Check AlshayaAddressBookManager::validateAddress().
+          // We are using '::validateAddress()' for addressbook validation.
+          // We need to check if we can use same for checkout as well.
+          // Currenlty we are not doing this because '::validateAddress()'
+          // doesn't do any validation for area/city field which is the
+          // actual requirement here.
+          // Iterate over each configured address field.
+          foreach (_alshaya_spc_get_address_fields() as $field => $address_field) {
+            // If field is available and is either area/city.
+            $val_to_validate = NULL;
+            // FLag to determine if city/area field value filled.
+            $city_area_field = FALSE;
+            if (!empty($address_extension_attributes) && isset($address_extension_attributes[$address_field['key']])
+              && ($field == 'administrative_area' || $field == 'area_parent')) {
+              $val_to_validate = $address_extension_attributes[$address_field['key']];
+              $city_area_field = TRUE;
+            }
+            elseif (!empty($address_custom_attributes)) {
+              foreach ($address_custom_attributes as $attr) {
+                if ($attr['attribute_code'] == $address_field['key']
+                  && ($field == 'administrative_area' || $field == 'area_parent')) {
+                  $val_to_validate = $attr['value'];
+                  $city_area_field = TRUE;
+                  break;
+                }
+              }
+            }
+
+            try {
+              if ($city_area_field) {
+                $term = $this->areaTermsHelper->getLocationTermFromLocationId($val_to_validate);
+                if (!$term) {
+                  $status[$key] = FALSE;
+                  break;
+                }
+              }
+            }
+            catch (\Exception $e) {
+              $status[$key] = FALSE;
+              break;
+            }
+          }
+          break;
       }
     }
 
@@ -685,7 +752,13 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
 
     $product_config = $this->config('alshaya_acm_product.settings');
-    $cache_tags = Cache::mergeTags($cache_tags, $currency_config->getCacheTags());
+    $cache_tags = Cache::mergeTags($cache_tags, $product_config->getCacheTags());
+
+    // Flags text.
+    $settings['alshaya_spc']['non_refundable_tooltip'] = $product_config->get('non_refundable_tooltip');
+    $settings['alshaya_spc']['non_refundable_text'] = $product_config->get('non_refundable_text');
+    $settings['alshaya_spc']['delivery_in_only_city_text'] = $product_config->get('delivery_in_only_city_text');
+    $settings['alshaya_spc']['delivery_in_only_city_key'] = $product_config->get('delivery_in_only_city_key');
 
     // Time we get from configuration is in minutes.
     $settings['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;

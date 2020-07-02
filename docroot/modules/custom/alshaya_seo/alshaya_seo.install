@@ -10,6 +10,20 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Update user meta tags to remove user specific data.
+ */
+function alshaya_seo_update_8014() {
+  // Update user metatag defaults.
+  $config_factory = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.user');
+  $tags = $config_factory->get('tags');
+  $tags['title'] = 'My account | [site:name]';
+  $config_factory->set('tags', $tags);
+  $config_factory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updating global metatag configuration for meta images.
  */
 function alshaya_seo_update_8013() {
@@ -170,7 +184,7 @@ function alshaya_seo_install() {
   // Update user metatag defaults.
   $config_factory = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.user');
   $tags = $config_factory->get('tags');
-  $tags['title'] = '[user:field_first_name] [user:field_last_name] | [site:name]';
+  $tags['title'] = 'My account | [site:name]';
   $config_factory->set('tags', $tags);
   $config_factory->save();
 

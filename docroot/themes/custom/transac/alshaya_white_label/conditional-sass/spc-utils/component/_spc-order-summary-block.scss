@@ -194,6 +194,28 @@
         font-size: 0.75rem;
         color: $spc-product-attributes;
       }
+
+      .product-flag {
+        display: flex;
+        align-items: center;
+
+        .flag-text {
+          white-space: nowrap;
+          padding-#{$left}: 0.1875rem;
+          font-size: 0.875rem;
+          color: $spc-non-refundable-product;
+          text-decoration: underline;
+        }
+
+        .tooltip-box {
+          #{$left}: -1rem;
+
+          &::before,
+          &::after {
+            #{$left}: 1.375rem;
+          }
+        }
+      }
     }
   }
 }

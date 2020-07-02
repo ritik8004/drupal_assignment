@@ -106,6 +106,19 @@ $_spc-area-panel-placeholder: #b3b3b3;
 $_spc-billing-help: #007aff;
 $_spc-cart-alert: #238ae8;
 $_spc-warning-bg: #ffd1a1;
+$_appointment-sky-blue: #f6f9fe;
+$_appointment-cool-blue: #4e8abe;
+$_appointment-darkish-blue: #004990;
+$_appointment-blue-border: #cae0f5;
+$_appointment-disable-btn-bg: #d7d7d7;
+$_appointment-success-green-bg: rgba(57, 181, 74, 0.06);
+$_appointment-success-green-border: rgba(57, 181, 74, 0.41);
+$_appointment-info-blue: rgba(66, 133, 244, 0.05);
+$_appointment-info-blue-border: rgba(66, 133, 244, 0.41);
+$_appointment-tangerine-border: rgba(250, 154, 0, 0.41);
+$_appointment-tangerine-bg: #fff4e3;
+$_appointment-red-border: rgba(204, 0, 0, 0.41);
+$_appointment-red-bg: #fef2f3;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -251,6 +264,7 @@ $tooltip_border_2: $alice-blue;
 $tooltip_border_opacity_0: rgba(0, 132, 204, 0);
 $tooltip_icon: $cerulean-two;
 $tooltip_link: $cerulean-two;
+$tooltip_wrapper_border: $white-smoke-light;
 
 // Back to top
 $btt_bg: $whisper-light;
@@ -496,7 +510,6 @@ $plp_sort_by_options: $_plp_sort_by_options;
 $plp_selected_filter_label_text: $grey-ash;
 $plp_grid_active_color: $marine-blue-two;
 $plp_all_filter_filter_arrow: $grey-ash;
-$plp_filter_title: $primary_text;
 $plp_filter_icon: $grey-ash;
 $plp_filter_active_tick: $marine-blue-two;
 $search_facet_active_title_bg: $grey-light-two;
@@ -546,6 +559,7 @@ $pdp_white_color_attribute: $white-five;
 $pdp_white_color_attribute_hover_border: $black;
 $pdp_white_color_attribute_border: $black;
 $pdp_swatch_selected_border: $black;
+$pdp_product_same_day: $grey-light;
 
 // additional attribute
 $pdp_additional_attribute_sliderbar_bg: $white-five;
@@ -1213,6 +1227,8 @@ $spc-promo-code-border: $warm-grey-two;
 $spc-recommended-product-promotion: $cherry;
 $spc-cart-item-trash-icon: $warm-grey-two;
 $spc-cart-item-trash-icon-hover: $mothercare-black;
+$spc-country-availability: $_spc-discount-text;
+$spc-non-refundable-product: $grey-light;
 
 // SPC Checkout.
 $spc-checkout_section_title: $mothercare-black;
@@ -1292,3 +1308,38 @@ $order_limit_border: $_order_limit_light_orange;
 $order_qty_limit_reached_txt: $mothercare-black;
 $order_qty_limit_reached_bg: $white-five;
 $order_qty_limit_reached_icon: $_order_limit_error_red;
+
+// Appointment system.
+$appointment-radio: $primary_radiobtn_filled;
+$appointment-section-title: $page_title;
+$appointment-inactive-step-bg: $_appointment-sky-blue;
+$appointment-active-step-bg: $white-five;
+$appointment-step-border: $_appointment-blue-border;
+$appointment-steps-bg: $_appointment-sky-blue;
+$appointment-step-color: $white-five;
+$appointment-active-step-number-bg: $_appointment-darkish-blue;
+$appointment-inactive-step-number-bg: $_appointment-cool-blue;
+$appointment-step-title-color: $_appointment-darkish-blue;
+$appointment-btn-bg: $_appointment-darkish-blue;
+$appointment-disable-btn-bg: $_appointment-disable-btn-bg;
+$appointment-btn-text: $white-five;
+$appointment-category-text: $_appointment-darkish-blue;
+$appointment-category-beauty: $_appointment-red-bg;
+$appointment-category-beauty-icon-bg: rgba(252, 154, 212, 0.19);
+$appointment-category-beauty-border: $_appointment-red-border;
+$appointment-category-pharmacy: $_appointment-success-green-bg;
+$appointment-category-pharmacy-icon-bg: rgba(57, 181, 74, 0.12);
+$appointment-category-pharmacy-border: $_appointment-success-green-border;
+$appointment-category-hearing: $_appointment-tangerine-bg;
+$appointment-category-hearing-icon-bg: rgba(250, 153, 0, 0.16);
+$appointment-category-hearing-border: $_appointment-tangerine-border;
+$appointment-category-opticans: $_appointment-info-blue;
+$appointment-category-opticans-icon-bg: rgba(66, 133, 244, 0.08);
+$appointment-category-opticans-border: $_appointment-info-blue-border;
+$appointment-type-text: $grey-light;
+$appointment-select-border: $warm-grey-two;
+$appointment-select-dropdown-color: $_appointment-darkish-blue;
+$appointment-select-color: $black;
+$appointment-tnc-grey-text: $grey-light;
+$appointment-tnc-border: $warm-grey-two;
+$appointment-checkbox-color: $_appointment-darkish-blue;

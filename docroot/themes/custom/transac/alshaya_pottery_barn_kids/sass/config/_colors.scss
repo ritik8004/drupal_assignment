@@ -2,6 +2,7 @@
 
 $white: #ddd;
 $white-two: #fff;
+$white_three: #f7f7f7;
 
 $PBK_black_one: #000;
 $PBK_grey_one: #333;
@@ -9,6 +10,7 @@ $PBK_white: #f2f2f2;
 $PBK_red: #900;
 $PBK_deep_red: #c00;
 $PBK_confirmation_blue: #7292be;
+$PBK_box_shadow_gray: rgba(0, 0, 0, 0.19);
 
 $_black_two: $PBK_grey_one;
 $_black_three: #353132;
@@ -91,6 +93,7 @@ $mm_l1_link_active_shadow: $_black_two;
 $mm_l1_link_hover: $_black_two;
 $mm_l2_link: $_black_two;
 $mm_l2_link_mobile_menu: $_black_two;
+$mm_l2_border: $white-three;
 $mm_l3_link: $_gray_ten;
 $mm_l3_link_hover: false;
 
@@ -198,3 +201,6 @@ $department-page-title-border: $_gray_ten;
 
 // Checkout
 $checkout_login_submit_button_background: $PBK_red;
+
+// Delivery USP
+$delivery_usp_background: $PBK_white;

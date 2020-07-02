@@ -1,0 +1,11 @@
+.path--appointment {
+  .page-standard {
+    padding: 0 1.25rem;
+
+    @include breakpoint($desktop) {
+      max-width: 66.35rem;
+      margin: 0 auto;
+      padding: 0;
+    }
+  }
+}

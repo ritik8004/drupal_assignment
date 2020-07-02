@@ -359,11 +359,13 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
 
   // Add language for all urls for language switcher block.
   $node = $skuManager->getDisplayNode($parent_sku, FALSE);
-  foreach (\Drupal::languageManager()->getLanguages() as $language) {
-    $variant['url'][$language->getId()] = $node->toUrl('canonical', [
-      'absolute' => FALSE,
-      'language' => $language,
-    ])->toString();
+  if ($node) {
+    foreach (\Drupal::languageManager()->getLanguages() as $language) {
+      $variant['url'][$language->getId()] = $node->toUrl('canonical', [
+        'absolute' => FALSE,
+        'language' => $language,
+      ])->toString();
+    }
   }
 
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
@@ -379,5 +381,5 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
     ? render($promotion_label['free_gift_promotions'])
     : '';
 
-  $variant['color_value'] = $node->get('field_product_color')->getString();
+  $variant['color_value'] = $node ? $node->get('field_product_color')->getString() : '';
 }

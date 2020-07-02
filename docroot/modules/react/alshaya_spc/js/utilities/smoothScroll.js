@@ -8,9 +8,10 @@ smoothscroll.polyfill();
  * Smooth Scroll to element in SPC.
  * @param selector
  */
-export const smoothScrollTo = (selector) => {
+export const smoothScrollTo = (selector, block) => {
   document.querySelector(selector).scrollIntoView({
     behavior: 'smooth',
+    block: (block === undefined) ? 'start' : block,
   });
 };
 

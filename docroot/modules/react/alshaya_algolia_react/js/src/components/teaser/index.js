@@ -27,6 +27,24 @@ const Teaser = ({hit}) => {
   }
 
   const showSwatches = drupalSettings.reactTeaserView.swatches.showSwatches;
+  const collectionLabel = [];
+  if (drupalSettings.plp_attributes && drupalSettings.plp_attributes.length > 0) {
+    const { plp_attributes } = drupalSettings;
+    for (var i = 0; i < plp_attributes.length; i++) {
+      if (hit && hit[plp_attributes[i]]) {
+        collectionLabel.push({
+          class: plp_attributes[i],
+          value: hit[plp_attributes[i]]
+        });
+        break;
+      }
+    }
+  }
+
+  let labelItems = '';
+  if (collectionLabel.length > 0) {
+    labelItems = collectionLabel.map((d) => <li className={d.class} key={d.value}>{d.value}</li>);
+  }
 
   return (
     <div className="c-products__item views-row" >
@@ -49,6 +67,13 @@ const Teaser = ({hit}) => {
             <Gallery media={hit.media} title={hit.title} />
           </a>
           <div className="product-plp-detail-wrapper">
+            { collectionLabel.length > 0 &&
+              <div className="product-labels">
+                <ul className="collection-labels">
+                  {labelItems}
+                </ul>
+              </div>
+            }
             <h2 className="field--name-name">
               <a href={`${hit.url}`} className="product-selected-url">
                 <div className="aa-suggestion">

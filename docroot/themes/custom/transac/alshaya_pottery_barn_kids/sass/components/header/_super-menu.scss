@@ -143,11 +143,17 @@ body.header-sticky-filter {
   }
 }
 
-// Front page, mobile resolution with sticy algolia search.
+// Front page, mobile resolution, scroll secondary menu up with content.
 @include breakpoint($only-mobile) {
-  body:not(.mobile--overlay).frontpage.Sticky-algolia-search {
+  body:not(.mobile--overlay).frontpage {
     .c-menu-secondary {
       position: absolute;
+    }
+
+    &.Sticky-algolia-search {
+      .block-alshaya-algolia-react-autocomplete {
+        z-index: 1;
+      }
     }
   }
 }

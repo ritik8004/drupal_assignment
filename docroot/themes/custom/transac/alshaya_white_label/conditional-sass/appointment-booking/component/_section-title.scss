@@ -1,0 +1,21 @@
+.appointment-booking-section-title {
+  font-family: $alshaya-bold;
+  font-size: 0.875rem;
+  color: $appointment-section-title;
+  margin-bottom: 0.625rem;
+
+  @include breakpoint($desktop) {
+    margin-#{$right}: 3.75rem;
+    width: 13rem;
+    margin-bottom: 0;
+  }
+}
+
+.appointment-type-item {
+  margin-bottom: 3.125rem;
+
+  @include breakpoint($desktop) {
+    display: flex;
+    margin-bottom: 2.4375rem;
+  }
+}
