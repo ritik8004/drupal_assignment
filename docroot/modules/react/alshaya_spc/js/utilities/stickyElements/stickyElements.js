@@ -60,7 +60,7 @@ function stickyMobileCartPreview() {
   const superMenu = document.getElementById('block-supermenu');
 
   // Check branding menu height.
-  const brandingMenuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
+  const brandingMenuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight || 0;
 
   let menuHeight = 0;
 
