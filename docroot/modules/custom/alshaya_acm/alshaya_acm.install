@@ -18,6 +18,21 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Add new string translations.
  */
+function alshaya_acm_update_8015() {
+  $strings = [
+    'We have improved the checkout experience, please review your bag to proceed.' => [
+      'ar' => 'لقد قمنا بتحسين تجربة الدفع ، يرجى مراجعة حقيبتك للمتابعة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new string translations.
+ */
 function alshaya_acm_update_8014() {
   $strings = [
     'Add to bag is temporarily unavailable' => [

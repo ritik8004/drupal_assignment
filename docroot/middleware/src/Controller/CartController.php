@@ -239,6 +239,17 @@ class CartController {
         $cart_id = $this->cart->createCart($info['customer_id']);
         $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, $cart_id);
       }
+      else {
+        // @TODO: Remove this "else" part and getAcmCartId() when we
+        // uninstall alshaya_acm module.
+        $info = $this->drupal->getAcmCartId();
+        // Set the cart_id in current session, if Drupal api returns the
+        // cart_id. If the cart_id is not valid, or contains any error getCart()
+        // will set the session key to NULL.
+        if ($info['cart_id']) {
+          $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, $info['cart_id']);
+        }
+      }
     }
 
     return $this->getCart();
@@ -300,8 +311,6 @@ class CartController {
     $data['in_stock'] = TRUE;
     // If there are any error at cart item level.
     $data['is_error'] = FALSE;
-    // Whether CnC enabled or not.
-    $data['cnc_enabled'] = TRUE;
 
     try {
       $data['items'] = [];
@@ -357,6 +366,9 @@ class CartController {
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
+    // Whether cart is stale or not.
+    $data['stale_cart'] = $cart_data['stale_cart'] ?? FALSE;
+
     return $data;
   }
 
@@ -373,6 +385,9 @@ class CartController {
     if (isset($data['error'])) {
       return $data;
     }
+
+    // Whether CnC enabled or not.
+    $cnc_status = $this->cart->getCncStatusForCart($data);
 
     // Here we will do the processing of cart to make it in required format.
     $uid = $this->getDrupalInfo('uid') ?: 0;
@@ -395,6 +410,8 @@ class CartController {
 
     // Re-use the processing done for cart page.
     $response = $this->getProcessedCartData($data);
+
+    $response['cnc_enabled'] = $cnc_status;
 
     $response['customer'] = CustomerHelper::getCustomerPublicData($data['customer'] ?? []);
     $response['shipping'] = $data['shipping'] ?? [];
@@ -595,12 +612,12 @@ class CartController {
 
       case CartActions::CART_PAYMENT_UPDATE:
         $extension = [];
-
+        $user_id = $this->getDrupalInfo('uid');
         if (isset($request_content['payment_info']['payment']['analytics'])) {
           $extension['ga_client_id'] = $request_content['payment_info']['payment']['analytics']['clientId'] ?? '';
           $extension['tracking_id'] = $request_content['payment_info']['payment']['analytics']['trackingId'] ?? '';
-          $extension['user_id'] = $this->cart->getCartCustomerId();
-          $extension['user_type'] = $this->getDrupalInfo('uid') > 0 ? 'Logged in User' : 'Guest User';
+          $extension['user_id'] = $user_id > 0 ? $this->cart->getCartCustomerId() : '0';
+          $extension['user_type'] = $user_id > 0 ? 'Logged in User' : 'Guest User';
           $extension['user_agent'] = $this->request->headers->get('User-Agent', '');
           $extension['client_ip'] = $_ENV['AH_CLIENT_IP'] ?? $this->request->getClientIp();
         }
@@ -610,7 +627,7 @@ class CartController {
 
       case CartActions::CART_REFRESH:
         // If cart id in request not matches with what in session.
-        if ($request_content['cart_id'] !== $this->cart->getCartId()) {
+        if ($request_content['cart_id'] != $this->cart->getCartId()) {
           $this->logger->error('Error while cart refresh. Cart data in request not matches with cart in session. Request data: @request_data CartId in session: @cart_id', [
             '@request_data' => json_encode($request_content),
             '@cart_id' => $this->cart->getCartId(),

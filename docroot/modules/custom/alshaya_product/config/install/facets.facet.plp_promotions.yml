@@ -4,6 +4,15 @@ dependencies:
   config: {  }
   module:
     - alshaya_search_api
+third_party_settings:
+  alshaya_facets_pretty_paths:
+    url_alias: promotions
+    meta_info_type:
+      type: 1
+      prefix_text: ''
+      visibility:
+        - 4
+        - 5
 id: plp_promotions
 name: Promotions
 url_alias: promotions

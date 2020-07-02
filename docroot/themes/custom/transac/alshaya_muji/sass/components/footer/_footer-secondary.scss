@@ -80,8 +80,8 @@
 
     @include breakpoint($only-mobile) {
       flex-basis: 100%;
-      border-top: 0.0625rem solid $footer_border_top;
-      border-bottom: 0.0625rem solid $footer_border_top;
+      border-top: 0.0625rem solid $copyright_footer_border_mobile;
+      border-bottom: 0.0625rem solid $copyright_footer_border_mobile;
     }
 
     .path--cart & {
@@ -100,6 +100,10 @@
   .c-footer__logos {
     @include breakpoint($tablet) {
       float: $right;
+    }
+
+    @include breakpoint($only-mobile) {
+      background-color: $copyright_footer_bg;
     }
 
     li {

@@ -268,7 +268,7 @@ header.c-header {
         background-position: 0 0.125rem;
 
         html[lang=ar] & {
-          margin-top: 0.5625rem;
+          margin-top: 0;
         }
       }
 
@@ -315,6 +315,10 @@ header.c-header {
       @include breakpoint($only-tablet) {
         margin-top: 0;
         padding-top: 0.3125rem;
+
+        html[lang=ar] & {
+          padding-top: 0.8125rem;
+        }
 
         .block-cart-mini-block .cart-link,
         .block-alshaya-react-mini-cart .cart-link {
@@ -627,10 +631,6 @@ header {
       top: 0.875rem;
       #{$right}: inherit;
       #{$left}: 7.8%;
-    }
-
-    @include breakpoint($only-tablet) {
-      display: none;
     }
 
     @include breakpoint($only-mobile) {

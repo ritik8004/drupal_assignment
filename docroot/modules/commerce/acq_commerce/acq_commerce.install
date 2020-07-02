@@ -10,6 +10,21 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add new string translations.
+ */
+function acq_commerce_update_8003() {
+  $strings = [
+    'Sorry, we were able to complete your purchase but something went wrong and we could not display the order confirmation page. Please review your past orders or contact our customer service team for assistance.' => [
+      'ar' => 'عذرًا ، تمكنا من إتمام عملية الشراء ولكن حدث خطأ ما وتعذر علينا عرض صفحة تأكيد الطلب. يرجى مراجعة طلباتك السابقة أو الاتصال بفريق خدمة العملاء للحصول على المساعدة.',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set iso standard currency code.
  */
 function acq_commerce_update_8002() {

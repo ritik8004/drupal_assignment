@@ -1,53 +1,85 @@
 import React from 'react';
 import ReadMoreAndLess from 'react-read-more-less';
+import SectionTitle from '../../../section-title';
+import AppointmentSelect from '../appointment-select';
 
 export default class AppointmentTypeList extends React.Component {
-  handleChange = (e) => {
-    const { handleChange } = this.props;
-    handleChange(e);
+  constructor(props) {
+    super(props);
+    this.state = { activeOption: null, optionState: [] };
+  }
+
+  componentDidMount() {
+    const { appointmentTypeItems, activeItem } = this.props;
+    const options = [];
+    if (appointmentTypeItems) {
+      appointmentTypeItems.forEach((v, key) => {
+        options[key] = {
+          value: v.id,
+          label: v.name,
+        };
+      });
+    }
+
+    this.setState({
+      optionState: options,
+    });
+
+    const filterKey = options.filter((v) => activeItem === v.value);
+    this.updateOption(filterKey);
+  }
+
+  onSelectChange = (e, name) => {
+    const { onSelectChange } = this.props;
+    onSelectChange(e, name);
+    this.updateOption([e]);
+  }
+
+  updateOption = (filterKey) => {
+    this.setState({
+      activeOption: filterKey.length ? filterKey[0] : null,
+    });
+  }
+
+  _getDescription = () => {
+    const { appointmentTypeItems, activeItem } = this.props;
+    const filterDesc = appointmentTypeItems.filter((v) => activeItem === v.id);
+    return (
+      <>
+        <ReadMoreAndLess
+          charLimit={250}
+          readMoreText={Drupal.t('Read More')}
+          readLessText={Drupal.t('Show Less')}
+        >
+          {filterDesc[0].description}
+        </ReadMoreAndLess>
+      </>
+    );
   }
 
   render() {
-    const { appointmentTypeItems, activeItem } = this.props;
-    let description = '';
+    const { activeItem } = this.props;
+    const { activeOption, optionState } = this.state;
 
     return (
-      <div className="appointment-type-list-wrapper">
-        <label>
+      <div className="appointment-type-list-wrapper appointment-type-item">
+        <SectionTitle>
           {Drupal.t('Appointment Type')}
           :*
-        </label>
-        <div className="appointment-type-list-inner-wrapper">
-          <select
-            className="appointment-type-select"
+        </SectionTitle>
+        <div className="appointment-type-list-inner-wrapper fadeInUp">
+          <AppointmentSelect
+            onSelectChange={this.onSelectChange}
+            options={optionState}
+            activeItem={activeItem}
+            aptSelectClass="appointment-type-select"
             name="appointmentType"
-            onChange={this.handleChange}
-          >
-            {appointmentTypeItems && appointmentTypeItems.map((v) => {
-              if (activeItem === v.id) {
-                description = v.description;
-              }
-
-              return (
-                <option
-                  value={v.id}
-                  selected={activeItem === v.id}
-                  name={v.name}
-                >
-                  {v.name}
-                </option>
-              );
-            })}
-          </select>
+            activeOption={activeOption}
+          />
           { activeItem
             ? (
-              <ReadMoreAndLess
-                charLimit={250}
-                readMoreText={Drupal.t('Read More')}
-                readLessText={Drupal.t('Show Less')}
-              >
-                {description}
-              </ReadMoreAndLess>
+              // eslint-disable-next-line no-underscore-dangle
+              this._getDescription()
             )
             : null}
         </div>
