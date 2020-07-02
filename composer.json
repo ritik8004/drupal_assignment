@@ -109,7 +109,7 @@
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0",
-        "symfony/lock": "^4.4"
+        "symfony/lock": "4.3.*"
     },
     "require-dev": {
         "drupal/devel": "^2.0.0",

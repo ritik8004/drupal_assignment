@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12f9447fad188e089605c704c81da13b",
+    "content-hash": "146f8137c194aa4abd90adac3f36a993",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -19931,33 +19931,31 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v4.4.10",
+            "version": "v4.3.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/lock.git",
-                "reference": "b2c6895cf282cfc11fae859e8b418c95dbb5d6f8"
+                "reference": "48b0f50fea6ecb29228d2a9bf141890b4b36bb39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lock/zipball/b2c6895cf282cfc11fae859e8b418c95dbb5d6f8",
-                "reference": "b2c6895cf282cfc11fae859e8b418c95dbb5d6f8",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/48b0f50fea6ecb29228d2a9bf141890b4b36bb39",
+                "reference": "48b0f50fea6ecb29228d2a9bf141890b4b36bb39",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.3",
+                "php": "^7.1.3",
                 "psr/log": "~1.0"
             },
-            "conflict": {
-                "doctrine/dbal": "<2.5"
-            },
             "require-dev": {
-                "doctrine/dbal": "^2.5|^3.0",
+                "doctrine/dbal": "~2.4",
+                "mongodb/mongodb": "~1.1",
                 "predis/predis": "~1.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.4-dev"
+                    "dev-master": "4.3-dev"
                 }
             },
             "autoload": {
@@ -19992,21 +19990,7 @@
                 "redlock",
                 "semaphore"
             ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2020-06-09T14:02:17+00:00"
+            "time": "2020-01-17T17:27:29+00:00"
         },
         {
             "name": "symfony/options-resolver",
