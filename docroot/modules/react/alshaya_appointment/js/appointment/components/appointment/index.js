@@ -60,7 +60,7 @@ export default class Appointment extends React.Component {
           handleSubmit={() => this.handleSubmit('select-time-slot')}
         />
       );
-    } else {
+    } else if (appointmentStep === 'customer-details') {
       appointmentData = (
         <CustomerDetails
           handleSubmit={() => this.handleSubmit('confirmation')}

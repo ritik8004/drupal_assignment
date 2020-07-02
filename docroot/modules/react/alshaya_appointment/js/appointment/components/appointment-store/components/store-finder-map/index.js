@@ -54,7 +54,7 @@ export default class StoreFinderMap extends React.Component {
           }}
           onClick={this.onMapClicked}
         >
-          {markers && Object.entries(markers).map(([k, marker]) => (
+          {markers && Object.entries(markers).map(([, marker]) => (
             <Marker
               key={marker.locationExternalId}
               name={marker.name}

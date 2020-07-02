@@ -1,4 +1,5 @@
 import React from 'react';
+import _has from 'lodash/has';
 import { getInputValue } from '../../../utilities/helper';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import ClientDetails from './components/client-details';
@@ -31,11 +32,13 @@ export default class CustomerDetails extends React.Component {
     const {
       selectedStoreItem, appointmentCategory, appointmentType, clientExternalId,
     } = this.state;
+    const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
+    const channel = isMobile ? 'mobile' : 'desktop';
     // @TODO: Will update this code to fetch data from state once time slots code is merged.
     const duration = 90;
     const startDateTime = '2020-06-09T10:10:00.000Z';
 
-    const apiUrl = `/book-appointment?location=${JSON.parse(selectedStoreItem).locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}&duration=${duration}&attendees=${1}&start-date-time=${startDateTime}&client=${clientExternalId}`;
+    const apiUrl = `/book-appointment?location=${JSON.parse(selectedStoreItem).locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}&duration=${duration}&attendees=${1}&start-date-time=${startDateTime}&client=${clientExternalId}&channel=${channel}`;
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
@@ -54,7 +57,12 @@ export default class CustomerDetails extends React.Component {
     const {
       firstName, lastName, dob, email, mobile,
     } = this.state;
-    const clientExternalId = this.state.clientExternalId ? this.state.clientExternalId : '';
+    let clientExternalId = '';
+    if (_has(this.state, 'clientExternalId')) {
+      ({
+        clientExternalId,
+      } = this.state);
+    }
     const data = {
       clientExternalId,
       firstName,
@@ -73,7 +81,6 @@ export default class CustomerDetails extends React.Component {
             ...prevState,
             clientExternalId: result.data,
           }));
-          console.log(result.data);
 
           // Book appointment using the clientExternalId.
           this.bookAppointment();

@@ -25,7 +25,7 @@ export default class StoreList extends React.Component {
 
     return (
       <div className="store-list-inner-wrapper">
-        {storeList && Object.entries(storeList).map(([k, v]) => (
+        {storeList && Object.entries(storeList).map(([, v]) => (
           <div className="store-list-item">
             <input
               type="radio"

@@ -119,15 +119,19 @@ class XmlAPIHelper {
    */
   public function updateInsertClient($request) {
     $request_content = json_decode($request->getContent(), TRUE);
+    $firstName = $request_content['firstName'] ?? '';
+    $lastName = $request_content['lastName'] ?? '';
+    $dob = $request_content['dob'] ?? '';
+    $mobile = $request_content['mobile'] ?? '';
 
     $apiBody = '<ns2:updateInsertClient>
       <client>
         <clientExternalId>' . $request_content['clientExternalId'] . '</clientExternalId>
-        <firstName>' . $request_content['firstName'] . '</firstName>
-        <lastName>' . $request_content['lastName'] . '</lastName>
-        <dob>' . $request_content['dob'] . '</dob>
+        <firstName>' . $firstName . '</firstName>
+        <lastName>' . $lastName . '</lastName>
+        <dob>' . $dob . '</dob>
         <phoneData>
-          <mobile>' . $request_content['mobile'] . '</mobile>
+          <mobile>' . $mobile . '</mobile>
         </phoneData>
         <rulesGroupExternalId>client</rulesGroupExternalId>
         <userGroupExternalId>client</userGroupExternalId>
@@ -155,7 +159,7 @@ class XmlAPIHelper {
         <locationExternalId>' . $requestQuery->get('location') . '</locationExternalId>
         <numberOfAttendees>' . $requestQuery->get('attendees') . '</numberOfAttendees>
         <programExternalId>' . $requestQuery->get('program') . '</programExternalId>
-        <channel>webpage</channel>
+        <channel>' . $requestQuery->get('channel') . '</channel>
       </criteria>
       <startDateTime>' . $requestQuery->get('start-date-time') . '</startDateTime> 
       <clientExternalId>' . $requestQuery->get('client') . '</clientExternalId>

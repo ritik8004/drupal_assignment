@@ -53,6 +53,11 @@ export default class CompanionDetails extends React.Component {
       const firstNameData = _find(questions, ['questionExternalId', firstName]);
       const lastNameData = _find(questions, ['questionExternalId', lastName]);
       const dobData = _find(questions, ['questionExternalId', dob]);
+      const {
+        [firstName]: defaultfirstName,
+        [lastName]: defaultlastName,
+        [dob]: defaultdob,
+      } = this.state;
 
       if (firstNameData && lastNameData && dobData) {
         return (
@@ -66,7 +71,7 @@ export default class CompanionDetails extends React.Component {
                   type="text"
                   required={firstNameData.required}
                   name={firstName}
-                  defaultValue={this.state[firstName]}
+                  defaultValue={defaultfirstName}
                   className={firstName !== '' ? 'focus' : ''}
                   label={firstNameData.questionText}
                   handleChange={this.handleChange}
@@ -77,7 +82,7 @@ export default class CompanionDetails extends React.Component {
                   type="text"
                   required={lastNameData.required}
                   name={lastName}
-                  defaultValue={this.state[lastName]}
+                  defaultValue={defaultlastName}
                   className={lastName !== '' ? 'focus' : ''}
                   label={lastNameData.questionText}
                   handleChange={this.handleChange}
@@ -88,7 +93,7 @@ export default class CompanionDetails extends React.Component {
                   type="date"
                   required={dobData.required}
                   name={dob}
-                  defaultValue={this.state[dob]}
+                  defaultValue={defaultdob}
                   className={dob !== '' ? 'focus' : ''}
                   label={dobData.questionText}
                   handleChange={this.handleChange}
@@ -98,6 +103,7 @@ export default class CompanionDetails extends React.Component {
           </div>
         );
       }
+      return null;
     });
 
     return (

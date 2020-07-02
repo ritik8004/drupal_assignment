@@ -24,7 +24,7 @@ export const processCustomerDetails = async (e) => {
     validationData.email = e.target.elements.email.value;
   }
 
-  return await validateInfo(validationData).then((response) => {
+  return validateInfo(validationData).then((response) => {
     if (!response || response.data.status === undefined || !response.data.status) {
       return false;
     }

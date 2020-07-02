@@ -14,6 +14,8 @@ function getInputValue(e) {
     case 'radio':
       value = e.target.value;
       break;
+    default:
+      break;
   }
   return value;
 }
@@ -39,7 +41,7 @@ function convertKmToMile(value) {
 }
 
 function getDistanceBetweenCoords(storeList, coords) {
-  const storeItems = google && storeList && Object.entries(storeList).map(([k, x]) => {
+  const storeItems = google && storeList && Object.entries(storeList).map(([, x]) => {
     const store = x;
     const distance = google.maps.geometry.spherical.computeDistanceBetween(
       new google.maps.LatLng(coords.lat, coords.lng),
