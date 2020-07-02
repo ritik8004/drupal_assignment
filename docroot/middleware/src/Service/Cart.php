@@ -10,9 +10,12 @@ use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
 use App\Service\CheckoutCom\CustomerCards;
+use Doctrine\DBAL\Connection;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Psr\Log\LoggerInterface;
 use Drupal\alshaya_master\Helper\SortUtility;
+use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\Store\PdoStore;
 
 /**
  * Class Cart.
@@ -130,6 +133,13 @@ class Cart {
   protected $logger;
 
   /**
+   * Database connection.
+   *
+   * @var \Doctrine\DBAL\Connection
+   */
+  protected $connection;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -158,6 +168,8 @@ class Cart {
    *   Orders service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
+   * @param \Doctrine\DBAL\Connection $connection
+   *   Database connection.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -172,7 +184,8 @@ class Cart {
     CustomerCards $customer_cards,
     Drupal $drupal,
     Orders $orders,
-    LoggerInterface $logger
+    LoggerInterface $logger,
+    Connection $connection
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -187,6 +200,7 @@ class Cart {
     $this->drupal = $drupal;
     $this->orders = $orders;
     $this->logger = $logger;
+    $this->connection = $connection;
   }
 
   /**
@@ -1067,10 +1081,38 @@ class Cart {
     $url = sprintf('carts/%d/order', $this->getCartId());
     $cart = $this->getCart();
 
+    $do_lock = FALSE;
+    $lock = FALSE;
+
+    $settings = $this->settings->getSettings();
+
+    // Check whether order locking is enabled.
+    if (!empty($settings['spc_middleware_lock_place_order'])) {
+      $do_lock = TRUE;
+
+      $lock_store = new PdoStore($this->connection);
+      $lock_factory = new LockFactory($lock_store);
+
+      $lock_name = 'spc_place_order_' . $this->getCartId();
+      $lock = $lock_factory->createLock($lock_name);
+
+      if (!$lock->acquire()) {
+        $this->logger->error('Could not acquire lock to place SPC order: @lock_name"', [
+          '@lock_name' => $lock_name,
+        ]);
+        return $this->utility->getErrorResponse('Sorry, we were able to complete your purchase but something went wrong and we could not display the order confirmation page. Please review your past orders or contact our customer service team for assistance.', 700);
+      }
+    }
+
     try {
       // We don't pass any payment data in place order call to MDC because its
       // optional and this also sets in ACM MDC observer.
       $result = $this->magentoApiWrapper->doRequest('PUT', $url);
+
+      if ($do_lock && !empty($lock)) {
+        $lock->release();
+      }
+
       $order_id = (int) str_replace('"', '', $result);
       return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
     }
