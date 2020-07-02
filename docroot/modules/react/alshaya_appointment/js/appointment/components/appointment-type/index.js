@@ -6,14 +6,14 @@ import AppointmentForYou from './components/appointment-for-you';
 import AppointmentTermsConditions from './components/appointment-terms-conditions';
 import fetchAPIData from '../../../utilities/api/fetchApiData';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
+import {
+  showFullScreenLoader,
+  removeFullScreenLoader,
+} from '../../../utilities/appointment-util';
 
-const defaultSelectOption = Drupal.t('Please Select');
 const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
 
-const companionItems = [...Array(listItems + 1)].map((e, i) => {
-  const companionNum = (i === 0) ? defaultSelectOption : i;
-  return { value: i, label: companionNum };
-});
+const companionItems = [...Array(listItems)].map((e, i) => ({ value: i + 1, label: i + 1 }));
 
 export default class AppointmentType extends React.Component {
   constructor(props) {
@@ -30,8 +30,9 @@ export default class AppointmentType extends React.Component {
         appointmentCompanion: '',
         appointmentForYou: '',
         appointmentTermsConditions: '',
-        appointmentTypeItems: [{ id: '', name: defaultSelectOption }],
+        appointmentTypeItems: [],
         categoryItems: '',
+        activeKey: 0,
         appointmentCompanionItems: companionItems,
       };
     }
@@ -56,13 +57,19 @@ export default class AppointmentType extends React.Component {
     const apiUrl = `/get/activities?program=${category.id}`;
     const apiData = fetchAPIData(apiUrl);
 
+    // Show loader.
+    showFullScreenLoader();
+
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           this.setState({
-            appointmentTypeItems: [{ id: '', name: defaultSelectOption }, ...result.data],
+            appointmentTypeItems: [...result.data],
             appointmentCategory: category.name,
           });
+
+          // Remove loader.
+          removeFullScreenLoader();
         }
       });
     }
@@ -72,6 +79,13 @@ export default class AppointmentType extends React.Component {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     this.setState({
       [e.target.name]: value,
+    });
+  }
+
+  onSelectChange = (e, name) => {
+    const { value } = e;
+    this.setState({
+      [name]: value,
     });
   }
 
@@ -89,6 +103,7 @@ export default class AppointmentType extends React.Component {
       appointmentCompanion,
       appointmentForYou,
       appointmentTermsConditions,
+      activeKey,
     } = this.state;
 
     return (
@@ -102,8 +117,9 @@ export default class AppointmentType extends React.Component {
           ? (
             <AppointmentTypeList
               appointmentTypeItems={appointmentTypeItems}
-              handleChange={this.handleChange}
+              onSelectChange={this.onSelectChange}
               activeItem={appointmentType}
+              activeKey={activeKey}
             />
           )
           : null}
@@ -111,8 +127,9 @@ export default class AppointmentType extends React.Component {
           ? (
             <AppointmentCompanion
               appointmentCompanionItems={appointmentCompanionItems}
-              handleChange={this.handleChange}
+              onSelectChange={this.onSelectChange}
               activeItem={appointmentCompanion}
+              activeKey={activeKey}
             />
           )
           : null}
@@ -133,7 +150,7 @@ export default class AppointmentType extends React.Component {
           )
           : null}
         <button
-          className="appointment-type-button"
+          className="appointment-type-button fadeInUp"
           type="button"
           disabled={!(appointmentCategory
             && appointmentType

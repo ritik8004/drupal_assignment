@@ -1,0 +1,23 @@
+.appointment-type-list {
+  &-wrapper {
+    .appointment-booking-section-title {
+      @include breakpoint($desktop) {
+        padding-top: 0.6875rem;
+      }
+    }
+  }
+
+  &-inner-wrapper {
+    @include breakpoint($desktop) {
+      width: calc(100% - 16.75rem);
+    }
+
+    .short-text {
+      p {
+        font-family: $alshaya-thin;
+        font-size: 0.875rem;
+        color: $appointment-type-text;
+      }
+    }
+  }
+}

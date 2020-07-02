@@ -15,7 +15,7 @@ const ListItems = () => {
 };
 
 const AppointmentSteps = () => (
-  <div className="appointment-steps-wrap">
+  <div className="appointment-steps-wrap fadeInUp">
     <ul className="appointment-steps">
       <ListItems />
     </ul>
