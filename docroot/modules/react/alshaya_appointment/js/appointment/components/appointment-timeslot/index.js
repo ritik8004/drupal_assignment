@@ -117,7 +117,7 @@ export default class AppointmentTimeSlot extends React.Component {
             <button
               className="appointment-store-button back"
               type="button"
-              onClick={() => this.handleBack(1)}
+              onClick={() => this.handleBack('select-store')}
             >
               {Drupal.t('BACK')}
             </button>
