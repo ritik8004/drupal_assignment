@@ -8,7 +8,7 @@ const PdpSharePanel = () => {
 
   const showSharePanel = () => {
     document.querySelector('.magv2-pdp-share-wrapper').classList.toggle('show-share-panel');
-  }
+  };
 
   return (
     <div className="magv2-pdp-share-wrapper card">
