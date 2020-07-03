@@ -1,11 +1,7 @@
 import React from 'react';
-import {setStorageInfo} from "../../../utilities/storage";
+import { setStorageInfo } from '../../../utilities/storage';
 
 export default class AppointmentLogin extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleBack = (step) => {
     const { handleBack } = this.props;
     handleBack(step);
@@ -18,8 +14,7 @@ export default class AppointmentLogin extends React.Component {
   }
 
   render() {
-
-    const social_login_enabled = drupalSettings.alshaya_appointment.social_login_enabled;
+    const { socialLoginEnabled } = drupalSettings.alshaya_appointment;
 
     return (
       <div className="appointment-loginn-wrapper">
@@ -33,27 +28,40 @@ export default class AppointmentLogin extends React.Component {
               { Drupal.t('Sign in') }
             </a>
           </div>
-          { social_login_enabled &&
+          { socialLoginEnabled
+          && (
           <div className="appointment-social-login">
             <p>{ Drupal.t('Or Sign in with') }</p>
             <div>
               <div className="alshaya-social">
-                <a className="social_auth_facebook auth-link" href="#"
-                   social-auth-link="/en/user/login/facebook">
+                <a
+                  className="social_auth_facebook auth-link"
+                  href="#"
+                  social-auth-link="/en/user/login/facebook"
+                >
                   <span
-                    className="social-network-text">sign up with Facebook</span>
+                    className="social-network-text"
+                  >
+                    sign up with Facebook
+                  </span>
                 </a>
               </div>
               <div className="alshaya-social">
-                <a className="social_auth_google auth-link" href="#"
-                   social-auth-link="/en/user/login/google">
+                <a
+                  className="social_auth_google auth-link"
+                  href="#"
+                  social-auth-link="/en/user/login/google"
+                >
                   <span
-                    className="social-network-text">sign up with Google</span>
+                    className="social-network-text"
+                  >
+                    sign up with Google
+                  </span>
                 </a>
               </div>
             </div>
           </div>
-          }
+          )}
         </div>
         <div className="appointment-without-account">
           <div>
@@ -72,27 +80,40 @@ export default class AppointmentLogin extends React.Component {
               {Drupal.t('Continue as Guest')}
             </button>
           </div>
-          { social_login_enabled &&
+          { socialLoginEnabled
+          && (
           <div className="appointment-social-login">
             <p>{ Drupal.t('Or Sign in with') }</p>
             <div>
               <div className="alshaya-social">
-                <a className="social_auth_facebook auth-link" href="#"
-                   social-auth-link="/en/user/login/facebook">
+                <a
+                  className="social_auth_facebook auth-link"
+                  href="#"
+                  social-auth-link="/en/user/login/facebook"
+                >
                   <span
-                    className="social-network-text">sign up with Facebook</span>
+                    className="social-network-text"
+                  >
+                    sign up with Facebook
+                  </span>
                 </a>
               </div>
               <div className="alshaya-social">
-                <a className="social_auth_google auth-link" href="#"
-                   social-auth-link="/en/user/login/google">
+                <a
+                  className="social_auth_google auth-link"
+                  href="#"
+                  social-auth-link="/en/user/login/google"
+                >
                   <span
-                    className="social-network-text">sign up with Google</span>
+                    className="social-network-text"
+                  >
+                    sign up with Google
+                  </span>
                 </a>
               </div>
             </div>
           </div>
-          }
+          )}
         </div>
         <div>
           <button
