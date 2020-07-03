@@ -232,7 +232,7 @@
             <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="d1_sku" enabled="true">
               <stringProp name="RegexExtractor.useHeaders">false</stringProp>
               <stringProp name="RegexExtractor.refname">d1_sku</stringProp>
-              <stringProp name="RegexExtractor.regex">&quot;productSku&quot;: {&quot;([^&quot;]+)&quot;</stringProp>
+              <stringProp name="RegexExtractor.regex">&quot;productSKU&quot;:&quot;([^&quot;]+)&quot;</stringProp>
               <stringProp name="RegexExtractor.template"></stringProp>
               <stringProp name="RegexExtractor.default">null</stringProp>
               <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -411,7 +411,7 @@
               <collectionProp name="Arguments.arguments">
                 <elementProp name="" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                  <stringProp name="Argument.value">{&quot;action&quot;: &quot;add item&quot;, &quot;sku&quot;: &quot;Q024645458&quot;, &quot;quantity&quot;: &quot;1&quot;, &quot;cart_id&quot;:null, &quot;options&quot;: []}</stringProp>
+                  <stringProp name="Argument.value">{&quot;action&quot;: &quot;add item&quot;, &quot;sku&quot;: &quot;${d1_sku_g1}&quot;, &quot;quantity&quot;: &quot;1&quot;, &quot;cart_id&quot;:null, &quot;options&quot;: []}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
               </collectionProp>
