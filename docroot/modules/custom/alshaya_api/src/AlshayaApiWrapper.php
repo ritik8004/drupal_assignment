@@ -1026,8 +1026,6 @@ class AlshayaApiWrapper {
    * @throws \Exception
    */
   protected function updateCustomerPass(array $customer, $password) {
-    $endpoint = 'customers/%d/set-password?';
-
     $cid = (int) $customer['customer_id'];
     $password = (string) $password;
 
@@ -1042,9 +1040,7 @@ class AlshayaApiWrapper {
       );
     }
 
-    $endpoint = sprintf($endpoint, $cid);
-    $endpoint .= 'password=' . urlencode($password);
-
+    $endpoint = sprintf('customers/%d/set-password', $cid);
     try {
       $response = $this->invokeApi(
         $endpoint,

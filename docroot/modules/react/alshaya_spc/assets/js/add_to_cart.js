@@ -92,7 +92,7 @@
 
             // Post to ajax for cart update/create.
             jQuery.ajax({
-              url: settings.alshaya_spc.cart_update_endpoint,
+              url: settings.alshaya_spc.cart_update_endpoint + '?lang=' + drupalSettings.path.currentLanguage,
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
