@@ -8,6 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Cache\Cache;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -146,6 +147,9 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
 
           $customer_id = (int) $account->get('acq_customer_id')->getString();
           $this->ordersManager->clearOrderCache($customer_id, $account->id());
+          // Invalidate the user cache when order is placed to reflect the user
+          // specific data changes like saved payment cards.
+          Cache::invalidateTags(['user:' . $account->id()]);
         }
 
         // While debugging we log the whole cart object.
