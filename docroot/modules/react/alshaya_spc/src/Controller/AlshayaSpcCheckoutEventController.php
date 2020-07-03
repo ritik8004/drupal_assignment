@@ -144,12 +144,14 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
             $account->get('field_mobile_number')->setValue($cart['billing_address']['telephone']);
             $account->save();
           }
+          else {
+            // Invalidate the user cache when order is placed to reflect the
+            // user specific data changes like saved payment cards.
+            Cache::invalidateTags(['user:' . $account->id()]);
+          }
 
           $customer_id = (int) $account->get('acq_customer_id')->getString();
           $this->ordersManager->clearOrderCache($customer_id, $account->id());
-          // Invalidate the user cache when order is placed to reflect the user
-          // specific data changes like saved payment cards.
-          Cache::invalidateTags(['user:' . $account->id()]);
         }
 
         // While debugging we log the whole cart object.
