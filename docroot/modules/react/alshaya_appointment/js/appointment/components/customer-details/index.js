@@ -19,12 +19,36 @@ export default class CustomerDetails extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const clientExternalId = '3C7F3390-D922-4381-BDCF-F017FAD5310F';
+
+    if (!_has(this.state, 'clientExternalId')) {
+      const apiUrl = `/get/client?client=${clientExternalId}`;
+      const apiData = fetchAPIData(apiUrl);
+
+      if (apiData instanceof Promise) {
+        apiData.then((result) => {
+          if (result.error === undefined && result.data !== undefined) {
+            this.setState((prevState) => ({
+              ...prevState,
+              clientData: result.data,
+            }));
+          }
+        });
+      }
+    }
+  }
+
   handleChange = (e) => {
     const { name } = e.target;
     const value = getInputValue(e);
+    const { clientData } = this.state;
+    const clientDataArray = JSON.parse(JSON.stringify(clientData));
+    clientDataArray[name] = value;
+
     this.setState((prevState) => ({
       ...prevState,
-      [name]: value,
+      clientData: clientDataArray,
     }));
   }
 
@@ -47,6 +71,12 @@ export default class CustomerDetails extends React.Component {
           this.setState((prevState) => ({
             ...prevState,
             bookingId: result.data,
+            bookingStatus: 'success',
+          }));
+        } else {
+          this.setState((prevState) => ({
+            ...prevState,
+            bookingStatus: 'failed',
           }));
         }
       });
@@ -55,24 +85,20 @@ export default class CustomerDetails extends React.Component {
 
   updateInsertClient = () => {
     const {
-      firstName, lastName, dob, email, mobile,
+      clientData,
     } = this.state;
+
     let clientExternalId = '';
     if (_has(this.state, 'clientExternalId')) {
       ({
         clientExternalId,
       } = this.state);
     }
-    const data = {
-      clientExternalId,
-      firstName,
-      lastName,
-      dob,
-      email,
-      mobile,
-    };
+
+    clientData.clientExternalId = clientExternalId;
+
     const apiUrl = '/update-insert-client';
-    const apiData = postAPICall(apiUrl, data);
+    const apiData = postAPICall(apiUrl, clientData);
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -81,6 +107,9 @@ export default class CustomerDetails extends React.Component {
             ...prevState,
             clientExternalId: result.data,
           }));
+
+          // Save client id in local storage.
+          setStorageInfo(this.state);
 
           // Book appointment using the clientExternalId.
           this.bookAppointment();
@@ -93,17 +122,21 @@ export default class CustomerDetails extends React.Component {
     e.preventDefault();
     // Valid form fields.
     const isError = await processCustomerDetails(e);
-
     if (!isError) {
       setStorageInfo(this.state);
       // Update/Insert client and then book appointment.
       this.updateInsertClient();
-      const { handleSubmit } = this.props;
-      handleSubmit();
+      const { bookingStatus } = this.state;
+      if (bookingStatus !== 'failed') {
+        const { handleSubmit } = this.props;
+        handleSubmit();
+      }
     }
   }
 
   render() {
+    const { clientData } = this.state;
+
     return (
       <div className="customer-details-wrapper">
         <form
@@ -112,9 +145,11 @@ export default class CustomerDetails extends React.Component {
         >
           <ClientDetails
             handleChange={this.handleChange}
+            clientData={clientData}
           />
           <CompanionDetails
             handleChange={this.handleChange}
+            clientData={clientData}
           />
           <div className="disclaimer-wrapper">
             {drupalSettings.alshaya_appointment.customer_details_disclaimer_text}

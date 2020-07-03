@@ -137,4 +137,47 @@ class ClientServices {
     }
   }
 
+  /**
+   * Get Client details.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Client details.
+   */
+  public function getClientByExternalId(Request $request) {
+    try {
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CLIENT_SERVICES_URL);
+      $clientExternalId = $request->query->get('client');
+
+      if (empty($clientExternalId)) {
+        $message = 'clientExternalId is required to get client details.';
+
+        $this->logger->error($message);
+        throw new \Exception($message);
+      }
+
+      $param = [
+        'clientExternalId' => $clientExternalId,
+      ];
+      $result = $client->__soapCall('getClientByExternalId', [$param]);
+
+      $clientArray = $result->return ?? [];
+      $clientData = [
+        'firstName' => $clientArray->firstName ?? '',
+        'lastName' => $clientArray->lastName ?? '',
+        'dob' => $clientArray->dob ? date('Y-m-d', strtotime($clientArray->dob)) : '',
+        'email' => $clientArray->email ?? '',
+        'mobile' => $clientArray->phoneData->mobile ?? '',
+      ];
+
+      return new JsonResponse($clientData);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while fetching client details. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
 }

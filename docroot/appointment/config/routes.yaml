@@ -22,3 +22,7 @@ appointment.book_appointment:
    path: /book-appointment
    controller: App\Controller\AppointmentServices::bookAppointment
    methods: GET
+appointment.get_client_details:
+   path: /get/client
+   controller: App\Controller\ClientServices::getClientByExternalId
+   methods: GET

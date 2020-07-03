@@ -85,9 +85,9 @@ export default class AppointmentType extends React.Component {
   }
 
   onSelectChange = (e, name) => {
-    const { value } = e;
+    const { value, label } = e;
     this.setState({
-      [name]: value,
+      [name]: { id: value, name: label },
     });
   }
 

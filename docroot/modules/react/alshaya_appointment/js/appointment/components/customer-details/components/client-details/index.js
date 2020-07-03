@@ -11,14 +11,6 @@ export default class ClientDetails extends React.Component {
       this.state = {
         ...localStorageValues,
       };
-    } else {
-      this.state = {
-        firstName: '',
-        lastName: '',
-        dob: '',
-        email: '',
-        mobile: '',
-      };
     }
   }
 
@@ -29,12 +21,18 @@ export default class ClientDetails extends React.Component {
 
   render() {
     const {
-      firstName,
-      lastName,
-      dob,
-      email,
-      mobile,
-    } = this.state;
+      clientData,
+    } = this.props;
+
+    let firstName; let lastName; let dob; let email; let
+      mobile = '';
+    if (clientData) {
+      firstName = clientData.firstName;
+      lastName = clientData.lastName;
+      dob = clientData.dob;
+      email = clientData.email;
+      mobile = clientData.mobile;
+    }
 
     return (
       <div className="appointment-user-details-wrapper">
