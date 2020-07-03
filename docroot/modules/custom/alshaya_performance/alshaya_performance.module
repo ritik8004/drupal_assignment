@@ -7,6 +7,7 @@
 
 use Drupal\alshaya_performance\Logger\AlshayaPerformanceSysLog;
 use Drupal\alshaya_performance\Plugin\QueueWorker\InvalidateCacheTags;
+use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -166,5 +167,27 @@ function alshaya_performance_page_attachments_alter(array &$attachments) {
       ],
       'alshaya_performance_preload_' . $index,
     ];
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_performance_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'js_settings_alter') {
+    $group = $implementations['alshaya_performance'];
+    unset($implementations['alshaya_performance']);
+    $implementations['alshaya_performance'] = $group;
+  }
+}
+
+/**
+ * Implements hook_js_settings_alter().
+ */
+function alshaya_performance_js_settings_alter(&$settings, AttachedAssetsInterface $assets) {
+  // Ensure user settings are not set from cacheable requests.
+  $get = \Drupal::request()->query->all();
+  if (isset($get['cacheable'])) {
+    unset($settings['user']);
   }
 }
