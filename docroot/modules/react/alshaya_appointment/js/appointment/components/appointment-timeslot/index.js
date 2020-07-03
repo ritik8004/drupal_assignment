@@ -4,6 +4,7 @@ import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
 import AppointmentSlots from '../appointment-selectslot';
 import fetchAPIData from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
+import { getDateFormat } from "../../../utilities/helper";
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
@@ -29,7 +30,7 @@ export default class AppointmentTimeSlot extends React.Component {
   componentDidMount() {
     const { date } = this.state;
     const d = new Date(date);
-    const selectedDate = moment(d).format('YYYY-MM-DD');
+    const selectedDate = moment(d).format(getDateFormat());
     const apiUrl = `/get/timeslots?selectedDate=${selectedDate}&${this.getParamsForTimeSlotApi()}`;
     this.fetchTimeSlots(apiUrl);
   }
@@ -49,7 +50,7 @@ export default class AppointmentTimeSlot extends React.Component {
   dateChanged(d) {
     this.setState({ date: d },
       () => {
-        const selectedDate = moment(d).format('YYYY-MM-DD');
+        const selectedDate = moment(d).format(getDateFormat());
         const apiUrl = `/get/timeslots?selectedDate=${selectedDate}&${this.getParamsForTimeSlotApi()}`;
         this.fetchTimeSlots(apiUrl);
       });

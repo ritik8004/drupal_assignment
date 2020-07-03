@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
+import { getDateFormat } from '../../../utilities/helper';
 
 export default class AppointmentCalendar extends React.Component {
   constructor(props) {
@@ -32,7 +33,7 @@ export default class AppointmentCalendar extends React.Component {
     const currentDate = moment(currDate);
     const weekStart = currentDate.clone().startOf('isoWeek');
     for (let i = 0; i <= 6; i++) {
-      weekdates.push(moment(weekStart).add(i, 'days').format('YYYY-MM-DD'));
+      weekdates.push(moment(weekStart).add(i, 'days').format(getDateFormat()));
     }
 
     return weekdates;
@@ -51,7 +52,7 @@ export default class AppointmentCalendar extends React.Component {
 
     const weekdays = week.map((date) => (
       <li
-        className={(moment(selectDate).format('YYYY-MM-DD') === moment(date).format('YYYY-MM-DD')) ? 'date-item active' : 'date-item'}
+        className={(moment(selectDate).format(getDateFormat()) === moment(date).format(getDateFormat())) ? 'date-item active' : 'date-item'}
         onClick={() => this.dateChanged(date)}
       >
         <span className="calendar-day">{moment(date).format('ddd')}</span>
