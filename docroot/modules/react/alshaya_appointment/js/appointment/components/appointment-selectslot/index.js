@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment-timezone';
+import moment from 'moment';
 
 export default class AppointmentSlots extends React.Component {
   handler = (data) => {
