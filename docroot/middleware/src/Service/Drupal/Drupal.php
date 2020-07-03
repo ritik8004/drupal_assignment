@@ -253,4 +253,26 @@ class Drupal {
     return json_decode($result, TRUE);
   }
 
+  /**
+   * Validate area/city of address.
+   *
+   * @param array $address
+   *   Address array.
+   *
+   * @return mixed
+   *   Address validation response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function validateAddressAreaCity(array $address) {
+    $options = [
+      'json' => [
+        'address' => $address,
+      ],
+    ];
+    $response = $this->invokeApi('POST', '/spc/validate-info', $options);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
 }

@@ -241,6 +241,11 @@ class AlshayaSpcController extends ControllerBase {
     ];
 
     $strings[] = [
+      'key' => 'address_not_complete',
+      'value' => $this->t("This address doesn't contain all the required information, please update it."),
+    ];
+
+    $strings[] = [
       'key' => 'address_not_filled',
       'value' => $this->t("Sorry, we couldn’t fetch your location precisely, please") . '<span class="font-bold" id="scroll-to-dropdown"> ' . $this->t("enter your address") . '</span>',
     ];
@@ -667,6 +672,54 @@ class AlshayaSpcController extends ControllerBase {
             $status[$key] = ($user instanceof UserInterface) ? 'exists' : '';
           }
 
+          break;
+
+        case 'address':
+          $status[$key] = TRUE;
+          $address_extension_attributes = $data[$key]['extension_attributes'] ?? [];
+          $address_custom_attributes = $data[$key]['custom_attributes'] ?? [];
+          // @TODO: Check AlshayaAddressBookManager::validateAddress().
+          // We are using '::validateAddress()' for addressbook validation.
+          // We need to check if we can use same for checkout as well.
+          // Currenlty we are not doing this because '::validateAddress()'
+          // doesn't do any validation for area/city field which is the
+          // actual requirement here.
+          // Iterate over each configured address field.
+          foreach (_alshaya_spc_get_address_fields() as $field => $address_field) {
+            // If field is available and is either area/city.
+            $val_to_validate = NULL;
+            // FLag to determine if city/area field value filled.
+            $city_area_field = FALSE;
+            if (!empty($address_extension_attributes) && isset($address_extension_attributes[$address_field['key']])
+              && ($field == 'administrative_area' || $field == 'area_parent')) {
+              $val_to_validate = $address_extension_attributes[$address_field['key']];
+              $city_area_field = TRUE;
+            }
+            elseif (!empty($address_custom_attributes)) {
+              foreach ($address_custom_attributes as $attr) {
+                if ($attr['attribute_code'] == $address_field['key']
+                  && ($field == 'administrative_area' || $field == 'area_parent')) {
+                  $val_to_validate = $attr['value'];
+                  $city_area_field = TRUE;
+                  break;
+                }
+              }
+            }
+
+            try {
+              if ($city_area_field) {
+                $term = $this->areaTermsHelper->getLocationTermFromLocationId($val_to_validate);
+                if (!$term) {
+                  $status[$key] = FALSE;
+                  break;
+                }
+              }
+            }
+            catch (\Exception $e) {
+              $status[$key] = FALSE;
+              break;
+            }
+          }
           break;
       }
     }
