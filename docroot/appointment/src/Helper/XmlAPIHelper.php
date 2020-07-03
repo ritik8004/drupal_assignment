@@ -136,7 +136,13 @@ class XmlAPIHelper {
     </ns2:getAvailableNDateTimeSlotsStartFromDate>
     ';
 
-    $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL, 'getAvailableNDateTimeSlotsStartFromDate', $apiBody);
+    if ($selected_date && $program && $activity && $location) {
+      $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL, 'getAvailableNDateTimeSlotsStartFromDate', $apiBody);
+    }
+    else {
+      $result['error'] = 'Required parameters are missing.';
+    }
+
     return $result;
   }
 
