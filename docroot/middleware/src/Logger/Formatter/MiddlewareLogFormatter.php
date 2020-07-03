@@ -22,6 +22,16 @@ class MiddlewareLogFormatter implements FormatterInterface {
     $message_placeholders = $this->getMessagePlaceholder($record['context']);
     $record['message'] = strtr($record['message'], $message_placeholders);
 
+    if (isset($record['context']['exception'])) {
+      try {
+        $message = $record['context']['exception']->__toString();
+        $record['message'] = $message;
+      }
+      catch (\Exception $e) {
+        // Do nothing.
+      }
+    }
+
     return strtr(self::LOGGER_FORMAT, [
       '!base_url' => $record['extra'] ? $record['extra']['server'] : '',
       '!timestamp' => time(),
