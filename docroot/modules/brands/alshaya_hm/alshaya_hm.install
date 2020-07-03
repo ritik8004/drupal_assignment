@@ -15,6 +15,21 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Add new fields as color name.
+ */
+function alshaya_hm_update_8051() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Make style and measurements_in_cm field type attribute from type string.
  */
 function alshaya_hm_update_8050() {

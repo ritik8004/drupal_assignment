@@ -9,11 +9,15 @@
     <div class="attribute-sliderbar__content">
       {% for property in properties %}
         <h3>{{ property.label }}</h3>
-        <ul>
-          {% for details in property.data %}
-            <li>{{ details.value }}</li>
-          {% endfor %}
-        </ul>
+        {% if property.composition is not empty %}
+          {{ property.composition }}
+        {% else %}
+          <ul>
+            {% for details in property.data %}
+              <li>{{ details.value }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
       {% endfor %}
     </div>
   </div>

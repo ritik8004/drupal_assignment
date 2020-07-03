@@ -390,6 +390,12 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['pdp_main_attributes_markup'] = [
+    'variables' => [
+      'properties' => [],
+    ],
+  ];
+
   $items['product_order_quantity_limit'] = [
     'variables' => [
       'message' => NULL,

@@ -142,43 +142,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $description_value .= '<div class="description-details">';
-    if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
-      $concepts_markup = [
-        '#theme' => 'product_concept_markup',
-        '#title' => $this->t('concept', [], ['langcode' => $sku_entity->language()->getId()]),
-        '#concepts' => $concepts,
-      ];
-      $description_value .= $this->renderer->renderPlain($concepts_markup);
-    }
-
-    // Render the wrapper div for composition always so that the same can be
-    // filled with data on variant selection.
-    // Prepare the description variable.
-    $composition = $this->skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
-
-    if (!empty($composition)) {
-      $composition_markup = [
-        '#theme' => 'product_composition_markup',
-        '#title' => $this->t('composition', [], ['langcode' => $sku_entity->language()->getId()]),
-        '#composition' => ['#markup' => $composition],
-      ];
-      $description_value .= $this->renderer->renderPlain($composition_markup);
-    }
-
-    $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
-    $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
-    if (!empty($washing_instructions) || !empty($dry_cleaning_instructions)) {
-      $description_value .= '<div class="care-instructions-wrapper">';
-      $description_value .= '<div class="care-instructions-label">' . $this->t('care instructions', [], ['langcode' => $sku_entity->language()->getId()]) . '</div>';
-      if (!empty($washing_instructions)) {
-        $description_value .= '<div class="care-instructions-value washing-instructions">' . $washing_instructions . '</div>';
-      }
-      if (!empty($dry_cleaning_instructions)) {
-        $description_value .= '<div class="care-instructions-value dry-cleaning-instructions">' . $dry_cleaning_instructions . '</div>';
-      }
-      $description_value .= '</div>';
-    }
-
     if ($title_name = $sku_entity->get('attr_title_name')->getString()) {
       $title_name_markup = [
         '#theme' => 'product_title_name_markup',
@@ -188,23 +151,52 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       $description_value .= $this->renderer->renderPlain($title_name_markup);
     }
 
-    if ($article_description = $sku_entity->get('attr_article_description')->getString()) {
-      $article_description_markup = [
-        '#theme' => 'product_article_description_markup',
-        '#title' => $this->t('ARTICLE DESCRIPTION'),
-        '#article_description' => ['#markup' => $article_description],
+    if ($product_designer_collection = $sku_entity->get('attr_product_designer_collection')->getValue()) {
+      $designer_collection_markup = [
+        '#theme' => 'pdp_main_attributes_markup',
+        '#properties' => ['title' => $this->t('DESIGNER COLLECTION'), 'value' => $product_designer_collection],
       ];
-      $description_value .= $this->renderer->renderPlain($article_description_markup);
+      $description_value .= $this->renderer->renderPlain($designer_collection_markup);
     }
 
-    // Render SKU id for magazine layou on PDP.
-    if (!empty($sku_entity->getSku())) {
-      $item_code = [
-        '#theme' => 'product_item_code_markup',
-        '#title' => $this->t('ART NO'),
-        '#item_code' => $sku_entity->getSku(),
+    if ($product_collection = $sku_entity->get('attr_product_collection')->getValue()) {
+      $collection_markup = [
+        '#theme' => 'pdp_main_attributes_markup',
+        '#properties' => ['title' => $this->t('COLLECTION'), 'value' => $product_collection],
       ];
-      $description_value .= $this->renderer->renderPlain($item_code);
+      $description_value .= $this->renderer->renderPlain($collection_markup);
+    }
+
+    if ($product_environment = $sku_entity->get('attr_product_environment')->getValue()) {
+      $environment_markup = [
+        '#theme' => 'pdp_main_attributes_markup',
+        '#properties' => ['title' => $this->t('ENVIRONMENT'), 'value' => $product_environment],
+      ];
+      $description_value .= $this->renderer->renderPlain($environment_markup);
+    }
+
+    if ($product_quality = $sku_entity->get('attr_product_quality')->getValue()) {
+      $quality_markup = [
+        '#theme' => 'pdp_main_attributes_markup',
+        '#properties' => ['title' => $this->t('QUALITY'), 'value' => $product_quality],
+      ];
+      $description_value .= $this->renderer->renderPlain($quality_markup);
+    }
+
+    if ($fit = $sku_entity->get('attr_fit')->getValue()) {
+      $fit_markup = [
+        '#theme' => 'pdp_main_attributes_markup',
+        '#properties' => ['title' => $this->t('FIT'), 'value' => $fit],
+      ];
+      $description_value .= $this->renderer->renderPlain($fit_markup);
+    }
+
+    if ($article_description = $sku_entity->get('attr_article_description')->getValue()) {
+      $article_description_markup = [
+        '#theme' => 'pdp_main_attributes_markup',
+        '#properties' => ['title' => $this->t('ARTICLE DESCRIPTION'), 'value' => $article_description],
+      ];
+      $description_value .= $this->renderer->renderPlain($article_description_markup);
     }
 
     // Render the wrapper div for article warning always so that the same
@@ -218,6 +210,16 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         '#warning' => ['#markup' => $warning],
       ];
       $description_value .= $this->renderer->renderPlain($warning_markup);
+    }
+
+    // Render SKU id for magazine layou on PDP.
+    if (!empty($sku_entity->getSku())) {
+      $item_code = [
+        '#theme' => 'product_item_code_markup',
+        '#title' => $this->t('ART NO'),
+        '#item_code' => $sku_entity->getSku(),
+      ];
+      $description_value .= $this->renderer->renderPlain($item_code);
     }
 
     $description_value .= '</div>';
@@ -271,12 +273,40 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     // To display detailed description in overlay section.
     $product_details = [];
+    if ($product_designer_collection = $sku_entity->get('attr_product_designer_collection')->getValue()) {
+      $product_details[] = ['label' => $this->t('DESIGNER COLLECTION'), 'data' => $product_designer_collection];
+    }
+
+    if ($concept = $sku_entity->get('attr_concept')->getValue()) {
+      $product_details[] = ['label' => $this->t('CONCEPT'), 'data' => $concept];
+    }
+
+    if ($product_collection = $sku_entity->get('attr_product_collection')->getValue()) {
+      $product_details[] = ['label' => $this->t('COLLECTION'), 'data' => $product_collection];
+    }
+
+    if ($product_environment = $sku_entity->get('attr_product_environment')->getValue()) {
+      $product_details[] = ['label' => $this->t('ENVIRONMEMT'), 'data' => $product_environment];
+    }
+
+    if ($product_quality = $sku_entity->get('attr_product_quality')->getValue()) {
+      $product_details[] = ['label' => $this->t('QUALITY'), 'data' => $product_quality];
+    }
+
+    if ($product_feature = $sku_entity->get('attr_product_feature')->getValue()) {
+      $product_details[] = ['label' => $this->t('FEATURE'), 'data' => $product_feature];
+    }
+
     if ($function = $sku_entity->get('attr_function')->getValue()) {
       $product_details[] = ['label' => $this->t('FUNCTION'), 'data' => $function];
     }
 
-    if ($age_group = $sku_entity->get('attr_age_group')->getValue()) {
-      $product_details[] = ['label' => $this->t('AGE GROUP'), 'data' => $age_group];
+    if ($washing_instructions = $sku_entity->get('attr_washing_instructions')->getValue()) {
+      $product_details[] = ['label' => $this->t('WASHING INSTRUCTION'), 'data' => $washing_instructions];
+    }
+
+    if ($dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getValue()) {
+      $product_details[] = ['label' => $this->t('DRY CLEAN INSTRUCTION'), 'data' => $dry_cleaning_instructions];
     }
 
     if ($style = $sku_entity->get('attr_style')->getValue()) {
@@ -331,8 +361,24 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       $product_details[] = ['label' => $this->t('MEASURMENTS IN CM'), 'data' => $measurements_in_cm];
     }
 
+    if ($sku_entity->hasField('color_name') && $color_name = $sku_entity->get('attr_color_name')->getValue()) {
+      $product_details[] = ['label' => $this->t('COLOR NAME'), 'data' => $color_name];
+    }
+
     if ($fragrance_name = $sku_entity->get('attr_fragrance_name')->getValue()) {
       $product_details[] = ['label' => $this->t('FRAGRANCE NAME'), 'data' => $fragrance_name];
+    }
+
+    if ($article_fragrance_description = $sku_entity->get('attr_article_fragrance_description')->getValue()) {
+      $product_details[] = ['label' => $this->t('FRAGRANCE DESCRIPTION'), 'data' => $article_fragrance_description];
+    }
+
+    if ($article_pattern = $sku_entity->get('attr_article_pattern')->getValue()) {
+      $product_details[] = ['label' => $this->t('PATTERN'), 'data' => $article_pattern];
+    }
+
+    if ($article_visual_description = $sku_entity->get('attr_article_visual_description')->getValue()) {
+      $product_details[] = ['label' => $this->t('VISUAL DESCRIPTION'), 'data' => $article_visual_description];
     }
 
     if ($textual_print = $sku_entity->get('attr_textual_print')->getValue()) {
@@ -344,7 +390,14 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     if ($article_license_item = $sku_entity->get('attr_article_license_item')->getValue()) {
-      $product_details[] = ['label' => $this->t('Lisence Item'), 'data' => $article_license_item];
+      $product_details[] = ['label' => $this->t('LICENSE ITEM'), 'data' => $article_license_item];
+    }
+
+    // Render the wrapper div for article warning always so that the same
+    // can be filled with data on variant selection.
+    $composition = $this->skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
+    if (!empty($composition)) {
+      $product_details[] = ['label' => $this->t('COMPOSITION'), 'composition' => ['#markup' => $composition]];
     }
 
     $details_overlay_markup = [
