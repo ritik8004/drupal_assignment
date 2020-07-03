@@ -159,8 +159,10 @@ class AlshayaSpcController extends ControllerBase {
         ],
         'drupalSettings' => [
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+          'global_error_message' => _alshaya_spc_global_error_message(),
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
+            'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
           ],
         ],
       ],
@@ -461,6 +463,7 @@ class AlshayaSpcController extends ControllerBase {
               'method' => $cncTerm->get('field_shipping_method_code')->getString(),
             ],
           ],
+          'global_error_message' => _alshaya_spc_global_error_message(),
         ],
       ],
       '#cache' => [
