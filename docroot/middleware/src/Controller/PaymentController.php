@@ -356,9 +356,9 @@ class PaymentController {
       throw $e;
     }
 
-    // Set the langcode for processing as request from checkout.com doesn't
+    // Set the langcode for processing as request from K-Net does not
     // contains language info.
-    static::$externalPaymentLangcode = $data['data']['langcode'];
+    static::$externalPaymentLangcode = $state['data']['langcode'];
 
     if ($state['data']['cart_id'] != $response['quote_id'] || $state['data']['order_id'] != $response['tracking_id']) {
       $this->logger->error('KNET response data dont match data in state variable.<br>POST: @message<br>Cart: @cart<br>State: @state', [
