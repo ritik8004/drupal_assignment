@@ -16,6 +16,7 @@
 
   input {
     width: 100%;
+    box-sizing: border-box !important;
   }
 }
 
@@ -58,5 +59,28 @@ input {
     border-radius: 0.125rem;
     border: solid 0.063rem $magv2-click-collect-location-icon-border;
     margin-#{$left}: 0.625rem;
+  }
+}
+
+body.new-pdp-magazine-layout {
+  .pac-container {
+    border: 0.0625rem solid $magv2-click-collect-autocomplete-border;
+
+    .pac-item {
+      line-height: 2.8125rem;
+      padding-#{$left}: 0.9375rem;
+      padding-#{$right}: 0.9375rem;
+      cursor: pointer;
+
+      .pac-matched {
+        color: $magv2-click-collect-autocomplete-highlighted-text !important;
+      }
+    }
+
+    .pac-item-query,
+    .pac-matched,
+    .pac-item {
+      font-size: 0.875rem !important;
+    }
   }
 }
