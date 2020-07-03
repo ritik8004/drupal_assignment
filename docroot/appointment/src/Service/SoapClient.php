@@ -58,7 +58,7 @@ class SoapClient {
       if (empty($username) || empty($password)) {
         $message = 'Time trade credentials are not set.';
 
-        $this->logger->log($message);
+        $this->logger->error($message);
         throw new \Exception($message);
       }
 

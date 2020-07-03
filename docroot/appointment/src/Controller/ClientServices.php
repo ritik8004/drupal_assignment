@@ -95,10 +95,18 @@ class ClientServices {
   public function getQuestions(Request $request) {
     try {
       $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $locationExternalId = $request->query->get('location');
+
+      if (empty($locationExternalId)) {
+        $message = 'locationExternalId is required to get questions.';
+
+        $this->logger->error($message);
+        throw new \Exception($message);
+      }
 
       $param = [
         'questionCriteria' => [
-          'locationExternalId' => $request->query->get('location'),
+          'locationExternalId' => $locationExternalId,
           'programExternalId' => $request->query->get('program'),
           'activityExternalId' => $request->query->get('activity'),
         ],

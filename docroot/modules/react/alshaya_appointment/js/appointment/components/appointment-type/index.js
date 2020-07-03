@@ -6,6 +6,7 @@ import AppointmentForYou from './components/appointment-for-you';
 import AppointmentTermsConditions from './components/appointment-terms-conditions';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
+import { getInputValue } from '../../../utilities/helper';
 import {
   showFullScreenLoader,
   removeFullScreenLoader,
@@ -66,7 +67,7 @@ export default class AppointmentType extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           this.setState({
             appointmentTypeItems: [...result.data],
-            appointmentCategory: category.name,
+            appointmentCategory: category,
           });
 
           // Remove loader.
