@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.0 r1840935">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="BBWAE - SPC" enabled="true">
       <stringProp name="TestPlan.comments">This test plan was created by the BlazeMeter converter v.2.3.17. Please contact support@blazemeter.com for further support.</stringProp>
@@ -29,7 +29,7 @@
           </elementProp>
           <elementProp name="PDP_URI" elementType="Argument">
             <stringProp name="Argument.name">PDP_URI</stringProp>
-            <stringProp name="Argument.value">en/buy-freshwater-pocketbac-hand-sanitizer.html</stringProp>
+            <stringProp name="Argument.value">en/buy-endless-weekend-car-fragrance-refill.html</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="COUNTRY" elementType="Argument">
@@ -140,7 +140,6 @@
       <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager" enabled="true">
         <collectionProp name="CookieManager.cookies"/>
         <boolProp name="CookieManager.clearEachIteration">true</boolProp>
-        <boolProp name="CookieManager.controlledByThreadGroup">false</boolProp>
       </CookieManager>
       <hashTree/>
       <CacheManager guiclass="CacheManagerGui" testclass="CacheManager" testname="HTTP Cache Manager" enabled="true">
@@ -176,7 +175,7 @@
             <stringProp name="HTTPSampler.port"></stringProp>
             <stringProp name="HTTPSampler.protocol">https</stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">en/buy-freshwater-pocketbac-hand-sanitizer.html</stringProp>
+            <stringProp name="HTTPSampler.path">${PDP_URI}</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -199,12 +198,6 @@
                 </elementProp>
               </collectionProp>
             </HeaderManager>
-            <hashTree/>
-            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-              <stringProp name="RandomTimer.range">0.0</stringProp>
-              <stringProp name="ConstantTimer.delay">0</stringProp>
-              <stringProp name="TestPlan.comments">Recorded time was 0 milliseconds</stringProp>
-            </UniformRandomTimer>
             <hashTree/>
             <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="d1_style_code" enabled="true">
               <stringProp name="RegexExtractor.useHeaders">false</stringProp>
@@ -459,7 +452,7 @@
               <collectionProp name="Arguments.arguments">
                 <elementProp name="" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                  <stringProp name="Argument.value">{&quot;action&quot;:&quot;add item&quot;,&quot;sku&quot;:&quot;Q024645458&quot;,&quot;quantity&quot;:&quot;1&quot;,&quot;cart_id&quot;:${d1_cart_g1},&quot;options&quot;:[]}</stringProp>
+                  <stringProp name="Argument.value">{&quot;action&quot;:&quot;add item&quot;,&quot;sku&quot;:&quot;${d1_sku_g1}&quot;,&quot;quantity&quot;:&quot;1&quot;,&quot;cart_id&quot;:${d1_cart_g1},&quot;options&quot;:[]}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
               </collectionProp>
@@ -537,12 +530,6 @@
                 </elementProp>
               </collectionProp>
             </HeaderManager>
-            <hashTree/>
-            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-              <stringProp name="RandomTimer.range">22244.0</stringProp>
-              <stringProp name="ConstantTimer.delay">11122</stringProp>
-              <stringProp name="TestPlan.comments">Recorded time was 22244 milliseconds</stringProp>
-            </UniformRandomTimer>
             <hashTree/>
           </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Cart - Dynamic labels" enabled="true">
@@ -754,12 +741,6 @@
               </collectionProp>
             </HeaderManager>
             <hashTree/>
-            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-              <stringProp name="RandomTimer.range">7072.0</stringProp>
-              <stringProp name="ConstantTimer.delay">3536</stringProp>
-              <stringProp name="TestPlan.comments">Recorded time was 7072 milliseconds</stringProp>
-            </UniformRandomTimer>
-            <hashTree/>
           </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="[Bug?] Checkout login - Product details" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
@@ -833,12 +814,6 @@
                 </elementProp>
               </collectionProp>
             </HeaderManager>
-            <hashTree/>
-            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-              <stringProp name="RandomTimer.range">6163.0</stringProp>
-              <stringProp name="ConstantTimer.delay">3081.5</stringProp>
-              <stringProp name="TestPlan.comments">Recorded time was 6163 milliseconds</stringProp>
-            </UniformRandomTimer>
             <hashTree/>
           </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout middleware" enabled="true">
@@ -1126,12 +1101,6 @@
                 </elementProp>
               </collectionProp>
             </HeaderManager>
-            <hashTree/>
-            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-              <stringProp name="RandomTimer.range">60842.0</stringProp>
-              <stringProp name="ConstantTimer.delay">30421</stringProp>
-              <stringProp name="TestPlan.comments">Recorded time was 60842 milliseconds</stringProp>
-            </UniformRandomTimer>
             <hashTree/>
           </hashTree>
         </hashTree>
