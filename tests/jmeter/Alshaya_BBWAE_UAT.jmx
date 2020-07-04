@@ -107,11 +107,6 @@
             <stringProp name="Argument.value">UA-36968237-6</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="PDP_SKU" elementType="Argument">
-            <stringProp name="Argument.name">PDP_SKU</stringProp>
-            <stringProp name="Argument.value">Q024645458</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
