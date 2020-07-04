@@ -534,12 +534,6 @@
               </collectionProp>
             </HeaderManager>
             <hashTree/>
-            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-              <stringProp name="RandomTimer.range">22244.0</stringProp>
-              <stringProp name="ConstantTimer.delay">11122</stringProp>
-              <stringProp name="TestPlan.comments">Recorded time was 22244 milliseconds</stringProp>
-            </UniformRandomTimer>
-            <hashTree/>
           </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Cart - Dynamic labels" enabled="false">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
@@ -750,12 +744,6 @@
               </collectionProp>
             </HeaderManager>
             <hashTree/>
-            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-              <stringProp name="RandomTimer.range">7072.0</stringProp>
-              <stringProp name="ConstantTimer.delay">3536</stringProp>
-              <stringProp name="TestPlan.comments">Recorded time was 7072 milliseconds</stringProp>
-            </UniformRandomTimer>
-            <hashTree/>
           </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="[Bug?] Checkout login - Product details" enabled="false">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
@@ -829,12 +817,6 @@
                 </elementProp>
               </collectionProp>
             </HeaderManager>
-            <hashTree/>
-            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-              <stringProp name="RandomTimer.range">6163.0</stringProp>
-              <stringProp name="ConstantTimer.delay">3081.5</stringProp>
-              <stringProp name="TestPlan.comments">Recorded time was 6163 milliseconds</stringProp>
-            </UniformRandomTimer>
             <hashTree/>
           </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout middleware" enabled="false">
@@ -1122,12 +1104,6 @@
                 </elementProp>
               </collectionProp>
             </HeaderManager>
-            <hashTree/>
-            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-              <stringProp name="RandomTimer.range">60842.0</stringProp>
-              <stringProp name="ConstantTimer.delay">30421</stringProp>
-              <stringProp name="TestPlan.comments">Recorded time was 60842 milliseconds</stringProp>
-            </UniformRandomTimer>
             <hashTree/>
           </hashTree>
         </hashTree>
