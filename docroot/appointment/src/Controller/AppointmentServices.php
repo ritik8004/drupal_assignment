@@ -40,6 +40,28 @@ class AppointmentServices {
   }
 
   /**
+   * Get Available time slots.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Time slot data from API.
+   */
+  public function getTimeSlots(Request $request) {
+    try {
+      $result = $this->xmlApiHelper->fetchTimeSlots($request);
+
+      return new JsonResponse($result);
+
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while getting time slots from TT API. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
    * Book Appointment.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse

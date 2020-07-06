@@ -26,3 +26,7 @@ appointment.get_client_details:
    path: /get/client
    controller: App\Controller\ClientServices::getClientByExternalId
    methods: GET
+appointment.get_timeslots:
+  path: /get/timeslots
+  controller: App\Controller\AppointmentServices::getTimeSlots
+  methods: GET

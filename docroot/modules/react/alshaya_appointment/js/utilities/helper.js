@@ -54,8 +54,14 @@ function getDistanceBetweenCoords(storeList, coords) {
   return storeItems;
 }
 
+function getDateFormat() {
+  const format = 'YYYY-MM-DD'
+  return format;
+}
+
 export {
   getInputValue,
   getLocationAccess,
   getDistanceBetweenCoords,
+  getDateFormat,
 };

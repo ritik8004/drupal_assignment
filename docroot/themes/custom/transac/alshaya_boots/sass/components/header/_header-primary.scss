@@ -13,6 +13,10 @@ header {
         height: 2.25rem;
         #{$right}: -0.25rem;
         top: -2.8125rem;
+
+        body:not(.frontpage) & {
+          top: 0;
+        }
       }
 
       @include breakpoint($only-tablet) {
@@ -77,6 +81,9 @@ header {
     }
 
     @include breakpoint($only-mobile) {
+      height: 2.5rem;
+      display: block;
+
       .block-system-branding-block {
         width: 100%;
       }
@@ -86,6 +93,15 @@ header {
       @include breakpoint($upto-desktop) {
         width: 100%;
         display: block;
+
+        .frontpage & {
+          display: table;
+        }
+
+        body:not(.frontpage) & {
+          z-index: -1;
+          top: -2.875rem;
+        }
       }
     }
   }
