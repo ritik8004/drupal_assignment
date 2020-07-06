@@ -22,6 +22,7 @@ class MiddlewareLogFormatter implements FormatterInterface {
     $message_placeholders = $this->getMessagePlaceholder($record['context']);
     $record['message'] = strtr($record['message'], $message_placeholders);
 
+    // Log full message with the stack trace for exceptions.
     if (isset($record['context']['exception'])) {
       try {
         $message = $record['context']['exception']->__toString();
