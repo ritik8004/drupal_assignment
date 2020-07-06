@@ -10,6 +10,7 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../utilities/appointment-util';
+import { getInputValue } from "../../../utilities/helper";
 
 const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
 
@@ -27,6 +28,7 @@ export default class AppointmentType extends React.Component {
       this.state = {
         appointmentStep: 'appointment-type',
         appointmentCategory: '',
+        appointmentCategoryId: '',
         appointmentType: '',
         appointmentCompanion: '',
         appointmentForYou: '',
@@ -67,6 +69,7 @@ export default class AppointmentType extends React.Component {
           this.setState({
             appointmentTypeItems: [...result.data],
             appointmentCategory: category.name,
+            appointmentCategoryId: category.id,
           });
 
           // Remove loader.
