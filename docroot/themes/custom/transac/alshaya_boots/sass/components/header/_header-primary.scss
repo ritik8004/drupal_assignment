@@ -2,6 +2,10 @@ header {
   // header mini cart quantity
   .block-cart-mini-block,
   .block-alshaya-react-mini-cart {
+    @include breakpoint($upto-desktop) {
+      z-index: -1;
+    }
+
     .cart-link {
       width: 2.5rem;
       height: 2.5rem;
@@ -13,8 +17,10 @@ header {
         height: 2.25rem;
         #{$right}: -0.25rem;
         top: -2.8125rem;
+      }
 
-        body:not(.frontpage) & {
+      body:not(.frontpage) & {
+        @include breakpoint($only-mobile) {
           top: 0;
         }
       }
@@ -97,8 +103,10 @@ header {
         .frontpage & {
           display: table;
         }
+      }
 
-        body:not(.frontpage) & {
+      body:not(.frontpage) & {
+        @include breakpoint($only-mobile) {
           z-index: -1;
           top: -2.875rem;
         }
