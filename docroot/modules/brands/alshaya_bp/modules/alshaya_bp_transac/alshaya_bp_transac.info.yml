@@ -1,0 +1,10 @@
+name: 'Alshaya Boots (Transac)'
+type: module
+description: 'The dedicated module for transac Boots brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_bp:alshaya_bp
+  - dynamic_yield:dynamic_yield
+themes:
+  - alshaya_boots

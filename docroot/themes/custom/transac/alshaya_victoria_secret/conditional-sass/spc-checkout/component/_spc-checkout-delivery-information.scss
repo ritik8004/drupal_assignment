@@ -1,0 +1,27 @@
+.spc-checkout-delivery-information {
+  .popup-overlay .popup-content {
+    .spc-address-form-actions .spc-address-form-submit {
+      font-weight: normal;
+      font-family: $vs-bold;
+      text-transform: uppercase;
+    }
+
+    .spc-deliver-button,
+    .spc-add-new-address-btn,
+    .spc-address-select-address {
+      font-weight: normal;
+      font-family: $vs-bold;
+      text-transform: capitalize;
+    }
+  }
+}
+
+.spc-section-billing-address {
+  .popup-overlay .popup-content {
+    .spc-add-new-address-btn,
+    .spc-deliver-button,
+    .spc-address-select-address {
+      text-transform: capitalize;
+    }
+  }
+}

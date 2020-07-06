@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_product\Service;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\acq_sku\StockManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -111,6 +112,13 @@ class SkuInfoHelper {
   protected $productCategoryHelper;
 
   /**
+   * Product Info helper.
+   *
+   * @var \Drupal\acq_sku\ProductInfoHelper
+   */
+  protected $productInfoHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -137,6 +145,8 @@ class SkuInfoHelper {
    *   Config Factory service object.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   The Product Category helper service.
+   * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
+   *   Product Info Helper.
    */
   public function __construct(
     SkuManager $sku_manager,
@@ -150,7 +160,8 @@ class SkuInfoHelper {
     LanguageManagerInterface $language_manager,
     ProductOrderLimit $product_order_limit,
     ConfigFactoryInterface $config_factory,
-    ProductCategoryHelper $product_category_helper
+    ProductCategoryHelper $product_category_helper,
+    ProductInfoHelper $product_info_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -164,6 +175,7 @@ class SkuInfoHelper {
     $this->productOrderLimit = $product_order_limit;
     $this->configFactory = $config_factory;
     $this->productCategoryHelper = $product_category_helper;
+    $this->productInfoHelper = $product_info_helper;
   }
 
   /**
@@ -493,6 +505,24 @@ class SkuInfoHelper {
   }
 
   /**
+   * Wrapper function to get product info.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   Product.
+   *
+   * @return array
+   *   Product info.
+   */
+  public function getProductInfo(SKUInterface $sku) {
+    $productInfo = [];
+    $productInfo['type'] = $sku->bundle();
+    $productInfo['priceRaw'] = _alshaya_acm_format_price_with_decimal((float) $sku->get('price')->getString());
+    $productInfo['cart_title'] = $this->productInfoHelper->getTitle($sku, 'basket');
+    $this->moduleHandler->alter('sku_product_info', $productInfo, $sku);
+    return $productInfo;
+  }
+
+  /**
    * Wrapper function to get variant info.
    *
    * @param \Drupal\acq_commerce\SKUInterface $child
@@ -520,13 +550,20 @@ class SkuInfoHelper {
       'qty' => (float) $stockInfo['stock'],
     ];
     $variant['price'] = $this->renderer->renderPlain($price);
+    $variant['priceRaw'] = _alshaya_acm_format_price_with_decimal((float) $child->get('price')->getString());
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
 
+    $variant['maxSaleQty'] = 0;
+    $variant['max_sale_qty_parent'] = FALSE;
     // Get Max sale qty for parent SKU.
     if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
       if ($parent !== NULL) {
         $max_sale_qty = $plugin->getMaxSaleQty($parent->getSku());
+        // If max sale quantity is available at parent level, we use that.
+        if (!empty($max_sale_qty)) {
+          $variant['max_sale_qty_parent'] = TRUE;
+        }
       }
 
       // If order limit is not set for parent
@@ -536,10 +573,14 @@ class SkuInfoHelper {
         : $plugin->getMaxSaleQty($variant_sku);
 
       if (!empty($max_sale_qty)) {
+        $variant['maxSaleQty'] = $max_sale_qty;
         $variant['stock']['maxSaleQty'] = $max_sale_qty;
         $variant['orderLimitMsg'] = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
       }
     }
+
+    $variant['configurableOptions'] = $this->skuManager->getConfigurableValues($child);
+    $variant['configurableOptions'] = array_values($variant['configurableOptions']);
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
 
@@ -613,6 +654,7 @@ class SkuInfoHelper {
     $images = $this->getMedia($sku_for_gallery, 'search');
     $data = [
       'id' => (int) $sku->id(),
+      'nid' => $node->id(),
       'title' => $sku->label(),
       'sku' => $sku->getSku(),
       'link' => $this->getEntityUrl($node),

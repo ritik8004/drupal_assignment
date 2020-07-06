@@ -1,0 +1,136 @@
+// Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
+
+@font-face {
+  font-family: "Helvetica";
+  src: url("#{$base_theme_fonts_directory_path}/Helvetica.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Helvetica.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Helvetica-Light";
+  src: url("#{$base_theme_fonts_directory_path}/Helvetica-Light.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Light.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Light.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Light.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Helvetica-Bold";
+  src: url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Bold?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("#{$base_theme_fonts_directory_path}/HelveticaNeue.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HelveticaNeue-Medium";
+  src: url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HelveticaNeue-Bold";
+  src: url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tahoma-Bold";
+  src: url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tahoma";
+  src: url("#{$base_theme_fonts_directory_path}/Tahoma.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Tahoma.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Font Family
+$muji-regular: 'Helvetica', 'Tahoma', 'Arial';
+$muji-regular-nodir: 'Helvetica', 'Tahoma', 'Arial';
+
+$muji-light: 'Helvetica-Light', 'Tahoma', 'Arial';
+$muji-light-nodir: 'Helvetica-Light', 'Tahoma', 'Arial';
+
+$muji-demibold: 'HelveticaNeue-Medium', 'Tahoma-Bold', 'Arial';
+$muji-demibold-nodir: 'HelveticaNeue-Medium', 'Tahoma-Bold', 'Arial';
+
+$muji-bold: 'Helvetica-Bold', 'Tahoma-Bold', 'Arial';
+$muji-bold-nodir: 'Helvetica-Bold', 'Tahoma-Bold', 'Arial';
+
+$muji-helvetica-neue: 'HelveticaNeue', 'Tahoma', 'Arial';
+$muji-helvetica-neue-nodir: 'HelveticaNeue', 'Tahoma', 'Arial';
+
+$muji-helvetica-neue-bold: 'HelveticaNeue-Bold', 'Tahoma-Bold', 'Arial';
+$muji-helvetica-neue-bold-nodir: 'HelveticaNeue-Bold', 'Tahoma-Bold', 'Arial';
+
+$muji-arabic-thin: 'Helvetica', 'Tahoma', 'Arial';
+$muji-arabic-thin-nodir: 'Helvetica', 'Tahoma', 'Arial';
+
+$muji-arabic-bold: 'Helvetica-Bold', 'Tahoma-Bold', 'Arial';
+$muji-arabic-bold-nodir: 'Helvetica-Bold', 'Tahoma-Bold', 'Arial';
+
+$arial: $muji-regular;
+$arial-nodir: $muji-regular-nodir;
+$alshaya-thin: $muji-regular;
+$alshaya-bold: $muji-bold;
+$alshaya-arabic-thin: $muji-arabic-thin;
+$alshaya-arabic-bold: $muji-arabic-bold;

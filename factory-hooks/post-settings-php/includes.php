@@ -48,8 +48,10 @@ if (empty($_acsf_site_name) && $settings['env'] == 'local') {
   }
 }
 
-$acsf_site_code = substr($_acsf_site_name, 0, -2);
-$country_code = substr($_acsf_site_name, -2);
+require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
+$site_country_code = alshaya_get_site_country_code($_acsf_site_name);
+$acsf_site_code = $site_country_code['site_code'];
+$country_code = $site_country_code['country_code'];
 
 // Calculate country code for current site name.
 // Country code is based on ISO 3166-1 alpha-2.

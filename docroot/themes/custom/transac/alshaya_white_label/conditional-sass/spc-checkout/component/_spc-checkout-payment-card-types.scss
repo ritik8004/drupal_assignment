@@ -1,0 +1,22 @@
+.spc-card-types-wrapper {
+  margin-top: 0.625rem;
+
+  .spc-card-type {
+    opacity: 0.2;
+    display: inline-block;
+    margin-#{$right}: 0.625rem;
+    transition: opacity 0.3s ease-in-out;
+
+    body.ie & {
+      height: 2.0625rem;
+    }
+
+    svg {
+      border-radius: 3px;
+    }
+
+    &.is-active {
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+.spc-order-summary-block {
+  .total-line-item {
+    > span:first-child:not(.surcharge-total) {
+      text-transform: capitalize;
+    }
+  }
+}

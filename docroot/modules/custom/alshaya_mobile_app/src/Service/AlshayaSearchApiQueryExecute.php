@@ -223,6 +223,13 @@ class AlshayaSearchApiQueryExecute {
   protected $defaultSort = 'created DESC';
 
   /**
+   * The facets to ignore in the output.
+   *
+   * @var array
+   */
+  protected $facetsToIgnore = [];
+
+  /**
    * AlshayaSearchApiQueryExecute constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -601,6 +608,10 @@ class AlshayaSearchApiQueryExecute {
     // Prepare facet data first.
     $facet_result = [];
     foreach ($facets_data as $key => $facet) {
+      // Do not further process facets that are not required.
+      if (in_array($facet->id(), $this->getFacetsToIgnore())) {
+        continue;
+      }
       // Get facet block.
       $facet_block = $this->getFacetBlock($facet->id());
       // If facet block not available or not enabled, then skip it.
@@ -878,13 +889,15 @@ class AlshayaSearchApiQueryExecute {
    */
   public function getPromoSortOptions() {
     $sort_data = [];
+    // Get enabled sort options.
+    $enabled_sort_config = array_filter(_alshaya_acm_product_position_get_config());
     // Get and set sort order from the views config.
     $views_storage = Views::getView($this->getViewsId())->storage;
     $views_sort = $views_storage->getDisplay('default')['display_options']['sorts'];
     // Get enabled sort options from config.
     $enabled_sorts = _alshaya_acm_product_position_get_config(TRUE);
     foreach ($views_sort as $sort) {
-      if ($sort['exposed']) {
+      if ($sort['exposed'] && isset($enabled_sort_config[$sort['field']])) {
         $key = $sort['field'] . ' ' . $sort['order'];
         $reverse_order = $sort['order'] == 'ASC' ? 'DESC' : 'ASC';
         $reverse_order_key = $sort['field'] . ' ' . $reverse_order;
@@ -911,13 +924,18 @@ class AlshayaSearchApiQueryExecute {
   public function getPromoDefaultSort() {
     $views_storage = Views::getView($this->getViewsId())->storage;
     $views_sort = $views_storage->getDisplay('default')['display_options']['sorts'];
+    $enabled_sort_config = _alshaya_acm_product_position_get_config();
+
     $default_sort = [];
-    foreach ($views_sort as $sort) {
-      if ($sort['exposed']) {
+
+    foreach (array_filter($enabled_sort_config) as $sort) {
+      if (isset($views_sort[$sort]) && $views_sort[$sort]['exposed']) {
         $default_sort = [
-          'key' => $sort['field'],
-          'order' => $sort['order'],
+          'key' => $views_sort[$sort]['field'],
+          'order' => $views_sort[$sort]['order'],
         ];
+
+        $this->defaultSort = implode(' ', $default_sort);
         break;
       }
     }
@@ -1098,6 +1116,23 @@ class AlshayaSearchApiQueryExecute {
   private function getMinSearchKeyCount() {
     $config = $this->configFactory->get('views.view.search');
     return (int) ($config->get('display.default.display_options.filters.search_api_fulltext.min_length'));
+  }
+
+  /**
+   * Get the facets which should be ignored in the output.
+   *
+   * @return array
+   *   The array of facets names to ignore.
+   */
+  public function getFacetsToIgnore() {
+    return $this->facetsToIgnore;
+  }
+
+  /**
+   * Set which facets to be ignored in the output.
+   */
+  public function setFacetsToIgnore($facets) {
+    $this->facetsToIgnore = $facets;
   }
 
 }

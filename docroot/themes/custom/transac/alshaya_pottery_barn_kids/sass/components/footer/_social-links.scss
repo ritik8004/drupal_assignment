@@ -1,0 +1,7 @@
+.c-social-links {
+  [class^="c-social-links--"]::before {
+    @include breakpoint($tablet) {
+      font-size: 2.145rem;
+    }
+  }
+}

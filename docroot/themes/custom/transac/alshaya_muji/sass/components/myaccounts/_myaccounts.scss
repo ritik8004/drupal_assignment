@@ -1,0 +1,15 @@
+.c-sidebar-first {
+  .my-account-nav {
+    a {
+      text-transform: capitalize;
+
+      &.active {
+        font-family: $alshaya-bold;
+      }
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}

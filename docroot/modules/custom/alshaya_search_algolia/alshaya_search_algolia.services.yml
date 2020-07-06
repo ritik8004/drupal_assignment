@@ -14,3 +14,5 @@ services:
       - '@alshaya_acm_product_category.sales_category_manager'
       - '@config.factory'
       - '@alshaya_product_options.swatches'
+      - '@language_manager'
+      - '@alshaya_super_category.super_category_feature_manager'

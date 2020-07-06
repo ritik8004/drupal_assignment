@@ -70,6 +70,20 @@ class AlshayaProfileForm extends ProfileForm {
   /**
    * {@inheritdoc}
    */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $field_address = $form_state->getValue('field_address');
+
+    if (!empty($field_address)) {
+      $field_address[0]['address']['given_name'] = $form_state->getTemporaryValue('first_name');
+      $field_address[0]['address']['family_name'] = $form_state->getTemporaryValue('last_name');
+      $form_state->setValue('field_address', $field_address);
+      parent::submitForm($form, $form_state);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function save(array $form, FormStateInterface $form_state) {
     $entity = $this->entity;
     $profile_type = $this->entity->bundle();

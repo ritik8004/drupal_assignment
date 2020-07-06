@@ -1,0 +1,15 @@
+#spc-checkout {
+  .spc-content {
+    .spc-checkout-delivery-information,
+    .spc-checkout-payment-options,
+    .spc-section-billing-address {
+      padding-top: 2.5rem;
+    }
+  }
+
+  .spc-sidebar {
+    @include breakpoint($only-mobile) {
+      margin-top: 4rem;
+    }
+  }
+}

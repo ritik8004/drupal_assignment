@@ -1,0 +1,125 @@
+.attribute-sliderbar {
+  max-width: 31.25rem;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1000;
+  position: fixed;
+  #{$right}: 0;
+  top: 0;
+  bottom: 0;
+  background-color: $pdp_additional_attribute_sliderbar_bg;
+  transition: transform 300ms cubic-bezier(0.4, 0, 1, 1);
+  transform: translateX(100%);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  visibility: hidden;
+  text-align: $left;
+
+  html[lang=ar] & {
+    transform: translateX(-100%);
+  }
+
+  &-active {
+    transition: transform 400ms cubic-bezier(0, 0, 0.2, 1);
+    transform: translateX(0) !important;
+    visibility: visible;
+  }
+
+  &__head {
+    border-bottom: 1px solid $pdp_additional_attribute_sliderbar_border;
+    padding: 2.5625rem 1rem;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include breakpoint($only-mobile) {
+      padding: 1.25rem 1rem;
+      margin-bottom: 0.375rem;
+    }
+  }
+
+  &__title {
+    font-family: $alshaya-bold;
+    color: $pdp_additional_attribute_title;
+    text-align: center;
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    @include icon('close') {
+      font-size: 2.0625rem;
+      line-height: 1;
+      width: auto;
+      color: $plp_filter_icon;
+      position: absolute;
+      #{$right}: 1.625rem;
+      top: 2.25rem;
+
+      @include breakpoint($only-mobile) {
+        #{$right}: 0.75rem;
+        top: 0.875rem;
+      }
+    }
+  }
+
+  &__content {
+    color: $pdp_additional_attribute_text;
+    padding: 0 2rem 1.5rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 0 1.5625rem 1.25rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      margin-bottom: 0;
+      font-family: $alshaya-bold;
+    }
+  }
+}
+
+.magazine__gallery--container {
+  .magazine-product-description {
+    .attribute-sliderbar__content {
+      ul {
+        font-size: 0.8125rem;
+
+        li {
+          line-height: 1.6;
+
+          &::after {
+            content: '';
+          }
+        }
+      }
+    }
+
+    .magazine-desc-wrapper {
+      .attribute-sliderbar {
+        @include breakpoint($desktop-wide) {
+          max-width: 31.25rem;
+        }
+      }
+    }
+  }
+}
+
+.pdp-overlay-details {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  color: $pdp_overlay_details_link;
+  cursor: pointer;
+  font-family: $alshaya-bold;
+  padding-top: 1rem;
+}
+
+.pdp-addon-attr-overlay {
+  visibility: visible;
+}

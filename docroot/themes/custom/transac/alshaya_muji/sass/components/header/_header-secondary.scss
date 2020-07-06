@@ -1,0 +1,124 @@
+body {
+  @include breakpoint($only-mobile) {
+    margin-top: 3.5rem;
+
+    html[lang=ar] & {
+      margin-top: 3.5rem;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 5rem;
+
+    html[lang=ar] & {
+      margin-top: 5rem;
+    }
+  }
+}
+
+.c-my-account-nav {
+  @include breakpoint($only-tablet) {
+    width: 20rem !important;
+  }
+
+  @include breakpoint($upto-desktop) {
+    li::after {
+      font-size: 2rem;
+      margin-top: -1.5625rem;
+    }
+  }
+
+  h3 {
+    text-transform: uppercase;
+  }
+}
+
+.c-menu-secondary {
+  text-transform: capitalize;
+
+  @include breakpoint($only-tablet) {
+    width: 20rem;
+  }
+
+  a {
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+      line-height: 1.35;
+      text-transform: capitalize;
+
+      html[lang=ar] & {
+        padding-right: 0;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      text-transform: capitalize;
+      padding-top: 0.4375rem;
+      font-size: 0.75rem;
+      height: 1.75rem;
+
+      &::after,
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  li {
+    height: 1.75rem;
+
+    @include breakpoint($upto-desktop) {
+      height: auto;
+      margin-#{$left}: 0;
+      margin-#{$right}: 0;
+      padding-#{$left}: 1rem;
+    }
+
+    &::after {
+      margin-top: -2.3125rem;
+      font-size: 1.75rem;
+      width: 1.875rem;
+      font-weight: bold;
+      #{$right}: 0.4375rem;
+    }
+  }
+
+  .menu--account {
+    @include breakpoint($desktop) {
+      text-transform: capitalize;
+      height: 1.75rem;
+    }
+
+    li a {
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  .block-language-blocklanguage-interface .ar a {
+    @include breakpoint($desktop) {
+      height: 1.875rem;
+    }
+  }
+}
+
+.branding__menu {
+  @include breakpoint($upto-desktop) {
+    height: 4.375rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    height: 3.5rem;
+  }
+}
+
+.menu--three__list-item {
+  a.menu--three__link {
+    @include breakpoint($upto-desktop) {
+      &::after {
+        font-size: 2rem;
+      }
+    }
+  }
+}

@@ -9,7 +9,8 @@ import {
   getCurrentSearchQuery,
   isMobile,
   redirectToOtherLang,
-  setSearchQuery
+  setSearchQuery,
+  getSuperCategoryOptionalFilter
 } from './utils';
 import {algoliaSearchClient} from "./config/SearchClient";
 
@@ -58,6 +59,7 @@ class App extends React.PureComponent {
     const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null)
       ? (<SearchResults query={query} />)
       : '';
+    const optionalFilter = getSuperCategoryOptionalFilter();
 
     return (
       <div>
@@ -73,6 +75,7 @@ class App extends React.PureComponent {
           <Portal id="top-results" conditional query={query}>
             <span className="top-suggestions-title">{Drupal.t('top suggestions')}</span>
             <InstantSearch indexName={drupalSettings.algoliaSearch.indexName} searchClient={algoliaSearchClient}>
+              {optionalFilter ? <Configure optionalFilters={optionalFilter} /> : null}
               <Configure hitsPerPage={drupalSettings.autocomplete.hits} query={query}/>
               <Hits hitComponent={Teaser}/>
             </InstantSearch>

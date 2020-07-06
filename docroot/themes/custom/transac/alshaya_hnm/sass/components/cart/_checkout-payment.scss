@@ -1,8 +1,7 @@
 .user-page.checkout-delivery.checkout-payment {
   .multistep-checkout {
     @include breakpoint($tablet) {
-      border: 1px solid $secondary_border;
-      border-top: 1px solid $secondary_border !important;
+      border: none;
     }
   }
 }
@@ -33,7 +32,7 @@
   .fieldset-wrapper {
     padding: 1.375rem;
     color: $title;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
   }
 
   .js-form-type-radio {
@@ -115,7 +114,7 @@
 
   .cc_cvv_help_text {
     color: $checkout_payment_help;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     width: 52%;
 
     @include breakpoint($only-tablet) {
@@ -175,5 +174,11 @@
         }
       }
     }
+  }
+}
+
+#payment_method_cashondelivery {
+  .method-sub-title {
+    font-size: 0.8125rem;
   }
 }

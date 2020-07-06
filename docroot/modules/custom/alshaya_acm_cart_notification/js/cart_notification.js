@@ -14,10 +14,63 @@
     $('.checkout-ajax-progress-throbber').hide();
   }
 
+  // Get markup for the cart notification.
+  Drupal.theme.cartNotificationMarkup = function(data) {
+    var markup = '<div class="notification">';
+    markup += '<div class="col-1">';
+    markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
+    markup += '<span class="qty">' + Drupal.t('Qty') + ': ' + data.quantity + '</span></div>';
+    markup += '<div class="col-2"><span class="name">' + data.name + '</span>';
+    markup += Drupal.t('has been added to your cart.');
+    markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
+    markup += '</div>';
+    markup += '</div>';
+    return markup;
+  };
+
+  Drupal.theme.matchBackCartNotificationMarkup = function(data) {
+    var markup = '<div class="matchback-notification notification">';
+    markup += '<div class="matchback-cart-notification-close"></div>';
+    markup += '<div class="col-1">';
+    markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
+    markup += '</div>';
+    markup += '<div class="col-2">';
+    markup += '<div class="name">' + data.name + '</div>';
+    markup += '<div class="prod-added-text">' + Drupal.t('has been added to your cart.') + '</div>';
+    markup += '<div classs="matchback-notification-qty">';
+    markup += Drupal.t('Quantity: ');
+    markup += '<span class="qty">' + data.quantity + '</span>';
+    markup += '</div>';
+    markup += '<div class="matchback-prod-added-text">' + Drupal.t('has been added to your cart.') + '</div>';
+    markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
+    markup += '</div>';
+    markup += '</div>';
+    return markup;
+  };
+
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-      $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function () {
+      $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e, productData) {
         spinner_stop();
+
+        // Scroll and show cart notification.
+        var cart_notification_data = {
+          image: productData.image,
+          link: Drupal.url('cart'),
+          link_text: Drupal.t('view cart'),
+          name: productData.product_name,
+          quantity: productData.quantity
+        };
+
+        $('#cart_notification')
+          .addClass(settings.show_crosssell_as_matchback === true ? 'matchback-cart-notification' : '')
+          .html(
+          Drupal.theme(
+            settings.show_crosssell_as_matchback === true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup',
+            cart_notification_data
+          )
+        );
+        $.fn.cartNotificationScroll();
 
         if ($('.ui-dialog').length > 0) {
           $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
@@ -65,16 +118,18 @@
       });
 
       $(document).ajaxComplete(function (event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) &&
-          ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0))) {
+        if (!settings.hasOwnProperty('extraData')) {
           spinner_stop();
         }
-        else if (!settings.hasOwnProperty('extraData')) {
+        else if ((settings.hasOwnProperty('extraData')) &&
+          (settings.extraData._triggering_element_name !== undefined) &&
+          ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0))) {
           spinner_stop();
         }
       });
 
       $.fn.cartNotificationScroll = function () {
+        $('#cart_notification').fadeIn();
         $('body').addClass('notification--on');
         $('#cart_notification').addClass('has--notification');
         if ($(window).width() < 768 && $('.matchback-cart-notification').length > 0) {

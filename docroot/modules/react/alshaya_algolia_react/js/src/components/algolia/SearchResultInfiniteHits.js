@@ -11,10 +11,12 @@ export default connectInfiniteHits(props => {
   useEffect(
     () => {
       if (typeof teaserRef.current === 'object' && teaserRef.current !== null) {
-        Drupal.blazyRevalidate();
-        Drupal.algoliaReact.stickyfacetfilter();
+        if (hits.length > 0) {
+          Drupal.blazyRevalidate();
+          Drupal.algoliaReact.stickyfacetfilter();
+          Drupal.refreshGrids();
+        }
         removeLoader();
-        Drupal.refreshGrids();
         // Trigger back to search page.
         window.onpageshow = function(){
           var storage_value = getAlgoliaStorageValues();

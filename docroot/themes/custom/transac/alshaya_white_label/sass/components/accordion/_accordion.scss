@@ -11,7 +11,9 @@
 
 .c-accordion__title,
 .c-collapse__title {
-  @include icon(chevrondown, after);
+  @include icon(chevrondown, after) {
+    color: $accordion_title_icon;
+  }
 
   position: relative;
   border-top: 1px solid $accordion_border;

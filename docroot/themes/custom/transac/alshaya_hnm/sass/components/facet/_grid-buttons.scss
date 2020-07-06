@@ -1,0 +1,23 @@
+.large-col-grid {
+  &.active {
+    svg .grid {
+      .grid-box {
+        fill: none;
+      }
+
+      .grid-border {
+        fill: $default_error;
+      }
+    }
+  }
+}
+
+.small-col-grid {
+  &.active {
+    svg .grid {
+      use {
+        fill: $default_error;
+      }
+    }
+  }
+}

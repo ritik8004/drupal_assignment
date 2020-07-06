@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_bp_transac.
+ */
+
+use Drupal\block\Entity\Block;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_bp_transac_install() {
+  // Enable and set alshaya_boots as default theme and set,
+  // the site logo favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_boots');
+
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE);
+
+  // Set google map marker.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_bp_transac');
+  }
+
+  // Add string translations.
+  $strings = [
+    'our company' => [
+      'ar' => 'شركتنا',
+    ],
+    'Connect with us' => [
+      'ar' => 'اتصل بنا',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Discover' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'I would like to receive exclusive deals from Boots.' => [
+      'ar' => 'أود تلقي صفقات حصرية من بوتس.',
+    ],
+    '@group_name/@sku_name' => [
+      'ar' => '@sku_name/@group_name',
+    ],
+    'seo_brand_name' => [
+      'en' => 'Boots',
+      'ar' => 'أحذية طويلة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}

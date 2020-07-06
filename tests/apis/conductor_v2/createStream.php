@@ -16,6 +16,9 @@ $countries = [
   'kw' => 'Kuwait',
   'sa' => 'Saudi Arabia',
   'ae' => 'United Arab Emirates',
+  'eg' => 'Egypt',
+  'bh' => 'Bahrain',
+  'qa' => 'Qatar',
 ];
 
 $languages = [

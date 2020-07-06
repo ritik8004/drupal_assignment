@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="35" height="31" viewBox="0 0 35 31">
+    <g fill="none" fill-rule="evenodd">
+        <path fill="#FFF" d="M0 0h35v31H0z"/>
+        <g stroke="#333" stroke-linecap="square" stroke-linejoin="round" stroke-width="1.444">
+            <path d="M11.657 8.657L22.97 19.97M11.657 19.97L22.97 8.658"/>
+        </g>
+    </g>
+</svg>

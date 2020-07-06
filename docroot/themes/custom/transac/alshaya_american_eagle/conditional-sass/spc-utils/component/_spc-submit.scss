@@ -1,0 +1,9 @@
+.checkout-link {
+  &:not(.checkout_com_applepay) {
+    background: $basket_checkout_securely_btn_bg;
+
+    a {
+      text-transform: uppercase;
+    }
+  }
+}

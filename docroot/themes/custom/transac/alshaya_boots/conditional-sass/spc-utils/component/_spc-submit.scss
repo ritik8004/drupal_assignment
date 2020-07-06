@@ -1,0 +1,9 @@
+.checkout-link {
+  &:not(.checkout_com_applepay) {
+    border-radius: 0.1875rem;
+
+    a {
+      font-size: 0.875rem;
+    }
+  }
+}

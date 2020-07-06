@@ -10,7 +10,6 @@ services:
       - '@acq_promotion.promotions_manager'
       - '@plugin.manager.acq_promotion'
       - '@cache.alshaya_acm_promotion'
-      - '@acq_cart.cart_storage'
   alshaya_acm_promotion.label_manager:
     class: Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager
     arguments:
@@ -18,16 +17,10 @@ services:
       - '@alshaya_acm_product.sku_images_manager'
       - '@entity_type.manager'
       - '@entity.repository'
-      - '@acq_cart.cart_storage'
       - '@config.factory'
       - '@alshaya_acm_promotion.manager'
       - '@renderer'
-  alshaya_acm_promotion.update_promotion:
-    class: Drupal\alshaya_acm_promotion\EventSubscriber\UpdatePromotionLabel
-    arguments:
-      - '@alshaya_acm_promotion.label_manager'
-    tags:
-      - { name: 'event_subscriber' }
+      - '@language_manager'
   cache.alshaya_acm_promotion:
     class: Drupal\Core\Cache\CacheInterface
     tags:

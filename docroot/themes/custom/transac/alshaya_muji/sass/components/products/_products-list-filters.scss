@@ -1,0 +1,112 @@
+.c-plp .c-content__region {
+  .all-filters,
+  .all-filters-algolia {
+    .filter {
+      &__foot {
+        text-transform: uppercase;
+
+        .facet-all-clear,
+        .facet-clear-all {
+          font-family: $muji-demibold;
+
+          .block-facets-summary-blockfilter-bar-promotions,
+          .block-facets-summary-blockfilter-bar-plp,
+          .block-facets-summary-blockfilter-bar {
+            @include breakpoint($only-mobile) {
+              padding-bottom: 0;
+            }
+
+            ul {
+              li.clear-all {
+                a {
+                  text-decoration: none;
+                  text-transform: uppercase;
+                }
+              }
+            }
+          }
+        }
+
+        .facet-all-apply,
+        .facet-apply-all,
+        .all-filters-close {
+          font-family: $muji-demibold;
+        }
+      }
+
+      &__inner {
+        overflow-y: auto;
+        padding-bottom: 8.25rem;
+
+        @include breakpoint($only-mobile) {
+          padding-bottom: 7.25rem;
+        }
+
+        .block-views-exposed-filter-blockalshaya-product-list-block-1,
+        .block-views-exposed-filter-blockalshaya-product-list-block-2,
+        .block-views-exposed-filter-blocksearch-page {
+          fieldset.form-wrapper {
+            .fieldset-legend {
+              @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+                #{$right}: 1.6875rem;
+                top: 1.5rem;
+                background: none;
+              }
+            }
+          }
+        }
+
+        .c-facet.c-accordion {
+          .c-accordion__title {
+            @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+              #{$right}: 1.6875rem;
+              top: 1.5rem;
+              background: none;
+            }
+          }
+        }
+
+        .views-exposed-form,
+        .c-facet {
+          &.c-accordion,
+          &.c-collapse-item {
+            .c-accordion__title,
+            .c-collapse__title {
+              @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.3125rem) {
+                #{$right}: 1.875rem;
+                top: 1.5rem;
+              }
+            }
+          }
+        }
+      }
+
+      &__head {
+        .filter-sort-title {
+          justify-content: $left;
+          align-items: $left;
+          text-align: $left;
+          padding-#{$left}: 1.0625rem;
+          font-family: $muji-helvetica-neue-bold;
+          text-transform: capitalize;
+          font-size: 1.125rem;
+        }
+
+        .facet-all-apply,
+        .facet-apply-all,
+        .all-filters-close {
+          &::before {
+            margin-top: -0.375rem;
+          }
+        }
+
+        .facet-all-back,
+        .back-facet-list {
+          &::before {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_ratio_3_col
+field_name: field_ratio_3_col
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: col_6_3_3
+      label: '6:3:3'
+    -
+      value: col_3_6_3
+      label: '3:6:3'
+    -
+      value: col_3_3_6
+      label: '3:3:6'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,14 @@
+.magazine-layout {
+  .magazine-swatch-placeholder,
+  .form-item-configurables-article-castor-id {
+    .select2Option {
+      .show-less-color,
+      .show-more-color,
+      .selected-text {
+        font-family: $hnm-demibold;
+        font-size: 0.8125rem;
+        color: $hnm-black-three;
+      }
+    }
+  }
+}

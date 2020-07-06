@@ -1,0 +1,19 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    #csrf_protection: true
+    #http_method_override: true
+
+    # Enables session support. Note that the session will ONLY be started if you read or write from it.
+    # Remove or comment this section to explicitly disable session support.
+    session:
+        handler_id: App\Session\SessionHandler
+        # We get POST requests in iframe/main window from different payment
+        # methods like K-Net, Cybersource, Checkout.com (3D). For this to ensure
+        # session cookie is passed we have to use secure + same_site:none.
+        cookie_secure: true
+        cookie_samesite: 'none'
+
+    #esi: true
+    #fragments: true
+    php_errors:
+        log: true

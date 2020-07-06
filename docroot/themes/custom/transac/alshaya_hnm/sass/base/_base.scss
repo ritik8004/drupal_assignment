@@ -1,5 +1,11 @@
 body {
   font-family: $hnm-regular;
+  color: $hnm-black-three;
+}
+
+body,
+.branding__menu {
+  background-color: $default_background_color !important;
 }
 
 html,

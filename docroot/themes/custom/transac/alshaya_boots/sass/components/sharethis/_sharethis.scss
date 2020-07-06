@@ -1,0 +1,40 @@
+// share fields on product detail page
+.sharethis-wrapper {
+  border-bottom: 1px solid $pdp_title_section_border;
+  padding-bottom: 0.5rem;
+
+  > span {
+    margin-#{$right}: 1.25rem;
+    margin-top: 0;
+  }
+
+  .st_facebook_custom {
+    @include pdp_icon_img('#{$bp_theme_img_directory_path}/icons/facebook.svg', 2.5rem, 2.5rem);
+  }
+
+  .st_twitter_custom {
+    @include pdp_icon_img('#{$bp_theme_img_directory_path}/icons/twitter.svg', 2.5rem, 2.5rem);
+  }
+
+  .st_pinterest_custom {
+    @include pdp_icon_img('#{$bp_theme_img_directory_path}/icons/pinterest.svg', 2.5rem, 2.5rem);
+  }
+
+  .st_instagram_custom {
+    @include pdp_icon_img('#{$bp_theme_img_directory_path}/icons/instagram.png', 1.625rem, 2.5rem);
+
+    &:hover {
+      &::before {
+        margin-bottom: 0.0625rem;
+      }
+    }
+
+    &::before {
+      margin-bottom: 0.0625rem;
+    }
+  }
+
+  .st_youtube_custom {
+    @include pdp_icon_img('#{$bp_theme_img_directory_path}/icons/youtube.svg', 2.5rem, 2.5rem);
+  }
+}

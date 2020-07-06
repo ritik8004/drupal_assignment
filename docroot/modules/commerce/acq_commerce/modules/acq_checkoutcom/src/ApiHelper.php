@@ -250,11 +250,8 @@ class ApiHelper {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function getCustomerCards($user) {
-    if (!$user instanceof UserInterface) {
-      if ($user instanceof AccountProxyInterface) {
-        $user = $user->id();
-      }
-      $user = $this->entityTypeManager->getStorage('user')->load($user);
+    if (!$user instanceof UserInterface && $user instanceof AccountProxyInterface) {
+      $user = $this->entityTypeManager->getStorage('user')->load($user->id());
     }
 
     if (!alshaya_acm_customer_is_customer($user)) {

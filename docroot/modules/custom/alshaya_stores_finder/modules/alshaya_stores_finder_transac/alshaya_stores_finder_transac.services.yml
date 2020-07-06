@@ -6,7 +6,6 @@ services:
       - '@alshaya_stores_finder_transac.utility'
       - '@language_manager'
       - '@logger.factory'
-      - '@config.factory'
 
   alshaya_stores_finder_transac.utility:
     class: Drupal\alshaya_stores_finder_transac\StoresFinderUtility
@@ -18,3 +17,5 @@ services:
       - '@logger.factory'
       - '@module_handler'
       - '@cache.data'
+      - '@config.factory'
+      - '@entity.repository'

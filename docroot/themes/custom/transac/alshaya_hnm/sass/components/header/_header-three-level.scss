@@ -35,17 +35,16 @@
 
     .menu--two__list .menu--two__list-item > .menu-two__link-wrapper {
       .menu__link {
-        color: $mm_highlight_title !important;
+        color: $mm_l1_link !important;
       }
     }
 
     .menu--three__list-item > .menu-two__link-wrapper .menu--three__link {
       @include arabic-letter-spacing;
 
-      font-size: 0.75rem !important;
-      color: $mm_link_text !important;
+      font-size: 0.8125rem !important;
+      color: $mm_l1_link !important;
       font-family: $hnm-regular !important;
-      letter-spacing: 0.3px;
       line-height: 1.1;
       text-transform: capitalize;
     }
@@ -54,6 +53,10 @@
       &:hover {
         color: $mm_link_hover !important;
         text-decoration: underline;
+      }
+
+      &:hover:active {
+        color: $default-anchor-link-hover !important;
       }
     }
 

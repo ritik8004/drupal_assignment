@@ -1,0 +1,57 @@
+services:
+  alshaya_spc.route_subscriber:
+    class: Drupal\alshaya_spc\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  plugin.manager.alshaya_spc_payment_method:
+    class: Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager
+    parent: default_plugin_manager
+
+  alshaya_spc.cookies:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcCookies
+    arguments:
+      - '@database'
+      - '@request_stack'
+
+  alshaya_spc.customer_helper:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper
+    arguments:
+      - '@entity_type.manager'
+      - '@alshaya_api.api'
+      - '@module_handler'
+      - '@alshaya_spc.cookies'
+      - '@session'
+      - '@alshaya_addressbook.manager'
+
+  alshaya_spc.order_helper:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper
+    arguments:
+      - '@module_handler'
+      - '@alshaya_addressbook.manager'
+      - '@current_user'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@acq_sku.product_info_helper'
+      - '@acq_sku.product_options_manager'
+      - '@alshaya_acm_product.sku_info'
+      - '@language_manager'
+      - '@mobile_number.util'
+      - '@alshaya_acm_checkout.options_manager'
+      - '@address.country_repository'
+      - '@request_stack'
+      - '@alshaya_acm_customer.orders_manager'
+      - '@config.factory'
+      - '@alshaya_stores_finder_transac.utility'
+      - '@renderer'
+
+  alshaya_spc.stock_helper:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper
+
+  alshaya_spc.middleware_access_check:
+    class: Drupal\alshaya_spc\Access\MiddlewareAccessCheck
+    tags:
+      -
+        name: access_check
+        needs_incoming_request: TRUE
+        applies_to: _middleware_request_check

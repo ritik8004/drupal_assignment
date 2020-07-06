@@ -1,0 +1,10 @@
+.c-our-brands {
+  border-bottom: none;
+  overflow: hidden;
+
+  @include breakpoint($tablet) {
+    .section-title {
+      font-size: 0.75rem;
+    }
+  }
+}

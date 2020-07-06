@@ -1,4 +1,28 @@
 .ui-dialog .ui-dialog-titlebar-close {
-  color: $gallery_bg;
-  background-color: $modal_close_bg;
+  color: inherit;
+  background-color: transparent;
+
+  @include icon(close) {
+    font-size: 1rem;
+    #{$right}: 1rem;
+    top: 1rem;
+  }
+}
+
+.slick-next {
+  @include icon(arrow-right, before);
+}
+
+.slick-prev {
+  @include icon(arrow-left, before);
+}
+
+.slick-next,
+.slick-prev {
+  &::before {
+    background-color: transparent;
+    font-size: 1.35rem;
+    height: auto;
+    width: auto;
+  }
 }

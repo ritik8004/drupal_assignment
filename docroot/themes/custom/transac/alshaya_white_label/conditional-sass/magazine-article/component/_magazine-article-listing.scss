@@ -96,28 +96,36 @@
     }
   }
 
+  .js-pager__items {
+    padding-#{$left}: 0;
+  }
+
   .pager__item {
     list-style: none;
+    text-align: center;
 
     .button {
-      font-size: 0.9375rem;
-      display: block;
-      text-align: center;
-      text-transform: uppercase;
-      padding: 1.25rem;
+      font-size: 0.8125rem;
+      line-height: 1.25rem;
+      display: inline-block;
+      text-transform: capitalize;
+      padding: 1.25rem 0;
+      padding-#{$right}: 1.375rem;
+      padding-#{$left}: 0;
       margin: 0 auto 2.25rem;
-      width: 14.375rem;
       position: relative;
 
-      &::before {
+      &::after {
         content: '';
         position: absolute;
-        top: 0.9375rem;
-        #{$left}: 0;
-        width: 1.875rem;
-        height: 1.875rem;
-        background: url('#{$base_theme_img_directory_path}/icons/sprites-life.png') center center no-repeat;
-        background-position: -11.25rem 0;
+        top: 1.375rem;
+        #{$right}: 0;
+        #{$left}: auto;
+        width: 0.875rem;
+        height: 0.875rem;
+        background: url('#{$base_theme_img_directory_path}/icons/sprites-life.svg') center center no-repeat;
+        transform: none;
+        opacity: 1;
       }
     }
   }

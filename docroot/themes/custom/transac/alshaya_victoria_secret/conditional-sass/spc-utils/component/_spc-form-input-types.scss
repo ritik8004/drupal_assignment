@@ -1,0 +1,5 @@
+.spc-type-tel .field-wrapper .country-code {
+  @include breakpoint($only-mobile) {
+    top: -1px;
+  }
+}

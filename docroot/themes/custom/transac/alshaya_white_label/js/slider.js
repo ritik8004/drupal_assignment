@@ -10,6 +10,45 @@
 (function ($, Drupal) {
   'use strict';
 
+  /**
+   * Call blazyRevalidate() on afterChange of slick sliders.
+   *
+   * @param {object} carousel
+   * The carousel element.
+   */
+  function applyBannerLazyLoad(carousel) {
+    // Lazy Load on carousels.
+    carousel.on('afterChange', function () {
+      Drupal.blazyRevalidate();
+    });
+  }
+
+  // Call centerDots() to apply slick dots vertically center aligned.
+  function centerDots() {
+    var parent = $('.slick-list');
+    var button = $('.slick-next, .slick-prev');
+
+    var parentHeight = parent.height();
+    var buttonHeight = button.height();
+
+    var center = (parentHeight / 2) - (buttonHeight / 2);
+    button.css({top: center});
+  }
+
+  // Call applyBannerRtl() to initialise slick.
+  function applyBannerRtl(ocObject, options) {
+    if (isRTL()) {
+      ocObject.attr('dir', 'rtl');
+      ocObject.slick(
+        $.extend({}, options, {rtl: true})
+      );
+    }
+    else {
+      ocObject.slick(options);
+    }
+  }
+
+
   Drupal.behaviors.sliderBanner = {
     attach: function (context, settings) {
       var options = {
@@ -23,26 +62,12 @@
         useTransform: false
       };
 
-      function centerDots() {
-        var parent = $('.slick-list');
-        var button = $('.slick-next, .slick-prev');
+      var paragraphBanner = $('.paragraph-banner');
+      var bannerPanelFieldItem = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content > .field__item');
 
-        var parentHeight = parent.height();
-        var buttonHeight = button.height();
 
-        var center = (parentHeight / 2) - (buttonHeight / 2);
-        button.css({top: center});
-      }
-
-      if (isRTL()) {
-        $('.paragraph-banner').attr('dir', 'rtl');
-        $('.paragraph-banner').slick(
-           $.extend({}, options, {rtl: true})
-        );
-      }
-      else {
-        $('.paragraph-banner').slick(options);
-      }
+      applyBannerRtl(paragraphBanner, options);
+      applyBannerLazyLoad(paragraphBanner);
 
       var promoPanelOptions = {
         slidesToShow: 3,
@@ -61,20 +86,12 @@
         ]
       };
 
-      if ($('.block-promo-panel-wrapper > .field--name-field-paragraph-content > .field__item').length > 3) {
+      if (bannerPanelFieldItem.length > 3) {
         promoPanelOptions['initialSlide'] = 1;
       }
 
-      if ($('.block-promo-panel-wrapper > .field--name-field-paragraph-content > .field__item').length) {
-        if (isRTL()) {
-          $('.block-promo-panel-wrapper > .field--name-field-paragraph-content').attr('dir', 'rtl');
-          $('.block-promo-panel-wrapper > .field--name-field-paragraph-content').slick(
-            $.extend({}, promoPanelOptions, {rtl: true})
-          );
-        }
-        else {
-          $('.block-promo-panel-wrapper > .field--name-field-paragraph-content').slick(promoPanelOptions);
-        }
+      if (bannerPanelFieldItem.length) {
+        applyBannerRtl($(this), promoPanelOptions);
       }
 
       // eslint-disable-next-line.

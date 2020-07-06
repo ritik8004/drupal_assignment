@@ -1,0 +1,4 @@
+fields:
+  quantity_set:
+    label: 'Quantity set'
+    configurable: 1

@@ -142,7 +142,8 @@ header {
     }
   }
 
-  .block-cart-mini-block {
+  .block-cart-mini-block,
+  .block-alshaya-react-mini-cart {
     @include arabic-letter-spacing;
 
     @include breakpoint($only-tablet) {
@@ -844,7 +845,8 @@ header .region__header {
   }
 }
 
-#block-cartminiblock {
+#block-cartminiblock,
+.block-alshaya-react-mini-cart {
   @include breakpoint($desktop) {
     top: -0.25rem;
   }

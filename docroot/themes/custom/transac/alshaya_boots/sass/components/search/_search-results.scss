@@ -1,0 +1,23 @@
+.ui-autocomplete {
+  li.ui-menu-item {
+    border: 1px solid $autocomplete_border;
+    padding: 0.625rem 0.375rem;
+  }
+}
+
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page .ui-autocomplete {
+    @include breakpoint($only-mobile) {
+      border: 0;
+      top: 6rem !important;
+
+      html[lang=ar] & {
+        top: 6rem !important;
+      }
+    }
+  }
+}
+
+.search-api-autocomplete-suggestion {
+  padding-#{$left}: 0;
+}

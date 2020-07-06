@@ -10,13 +10,14 @@
   [class^="c-social-links--"] {
     &::before {
       color: $social_links;
-      font-size: 1.75rem;
+      font-size: 1.25rem;
     }
 
     &:hover {
       &::before {
-        color: $social_links_hover;
+        opacity: 0.85;
         background: none;
+        color: $social_links;
       }
     }
   }
@@ -48,7 +49,17 @@
 
 .alshaya-social {
   .auth-link {
+    background-color: $default_background_color;
+    border-color: $hnm-black-three;
+
+    &:hover {
+      background-color: unset;
+    }
+
     .social-network-text {
+      font-size: 0.8125rem;
+      color: $hnm-black-three;
+
       &::first-letter {
         text-transform: uppercase;
       }

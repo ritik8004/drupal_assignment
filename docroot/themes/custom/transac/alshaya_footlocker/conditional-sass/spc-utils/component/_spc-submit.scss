@@ -1,0 +1,23 @@
+.checkout-link {
+  a {
+    font-weight: normal;
+    text-transform: uppercase;
+    font-family: $fl-thin;
+  }
+}
+
+.spc-shopping-link {
+  a {
+    text-transform: uppercase;
+  }
+}
+
+.spc-shopping-link,
+.spc-cnc-store-actions,
+.map-store-list .store-actions {
+  a,
+  button {
+    text-transform: uppercase;
+    font-family: $fl-thin !important;
+  }
+}

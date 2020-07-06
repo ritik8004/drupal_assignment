@@ -1,0 +1,90 @@
+.spc-checkout-payment-options {
+  .payment-method {
+    background: $spc-checkout-payment-method-bg;
+    margin-bottom: 0.3125rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .payment-method-top-panel {
+      height: 3.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-#{$left}: 3rem;
+      padding-#{$right}: 1.25rem;
+      position: relative;
+
+      .radio-label {
+        color: $spc-checkout-payment-method-txt;
+        width: 100%;
+        display: flex;
+        align-items: center;
+
+        @include breakpoint($upto-desktop) {
+          display: block;
+        }
+
+        .spc-payment-method-desc {
+          color: $spc-checkout-payment-method-desc;
+          padding-#{$left}: 0.3125rem;
+          display: inline-flex;
+          align-items: center;
+
+          @include breakpoint($upto-desktop) {
+            padding-#{$left}: 0;
+          }
+
+          p {
+            margin: 0;
+            display: inline;
+          }
+        }
+      }
+
+      svg {
+        overflow: visible;
+        max-width: 3.125rem;
+      }
+    }
+  }
+
+  .payment-methods.in-active {
+    position: relative;
+
+    .payment-method::before {
+      content: '';
+      background: $_white_five_alpha_80;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      opacity: 0.2;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: $_transparent_overlay;
+      z-index: 3;
+    }
+
+    .payment-method-bottom-panel {
+      display: none;
+    }
+
+    .radio-sim {
+      @include icon(radio-empty, before) {
+        color: $spc-checkout-radio-empty;
+        border: none;
+      }
+    }
+  }
+}

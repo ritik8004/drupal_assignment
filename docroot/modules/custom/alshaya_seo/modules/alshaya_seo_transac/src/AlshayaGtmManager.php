@@ -68,11 +68,11 @@ class AlshayaGtmManager {
     'system.404' => 'page not found',
     'alshaya_user.user_register_complete' => 'register complete page',
     'acq_cart.cart' => 'cart page',
-    'acq_checkout.form:login' => 'checkout login page',
-    'acq_checkout.form:click_collect' => 'checkout click and collect page',
-    'acq_checkout.form:delivery' => 'checkout delivery page',
+    'alshaya_spc.checkout.login' => 'checkout login page',
+    'alshaya_spc.checkout' => 'checkout click and collect page',
+    'alshaya_spc.checkout' => 'checkout delivery page',
     'acq_checkout.form:payment' => 'checkout payment page',
-    'acq_checkout.form:confirmation' => 'purchase confirmation page',
+    'alshaya_spc.checkout.confirmation' => 'purchase confirmation page',
     'view.stores_finder.page_2' => 'store finder',
     'view.stores_finder.page_1' => 'store finder',
     'entity.webform.canonical:alshaya_contact' => 'contact us',
@@ -870,7 +870,13 @@ class AlshayaGtmManager {
 
     $privilege_order = isset($order['extension']['loyalty_card']) ? 'Privilege Customer' : 'Regular Customer';
 
+    $products = [];
     foreach ($orderItems as $item) {
+      // We might get two entries for same product if configurable.
+      if (isset($products[$item['sku']])) {
+        continue;
+      }
+
       $product = $this->fetchSkuAtttributes($item['sku']);
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];
@@ -894,17 +900,15 @@ class AlshayaGtmManager {
         $productExtras['dimension8'] = $dimension8;
       }
 
-      $products[] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
+      $products[$item['sku']] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
     }
-
-    $shipping_value = $order['totals']['shipping'];
 
     $actionData = [
       'id' => $order['increment_id'],
       'affiliation' => 'Online Store',
       'revenue' => alshaya_master_convert_amount_to_float($order['totals']['grand']),
       'tax' => alshaya_master_convert_amount_to_float($order['totals']['tax']) ?: 0.00,
-      'shipping' => alshaya_master_convert_amount_to_float($shipping_value) ?: 0.00,
+      'shipping' => alshaya_master_convert_amount_to_float($order['totals']['shipping']) ?: 0.00,
       'coupon' => $order['coupon'],
     ];
 
@@ -1046,7 +1050,6 @@ class AlshayaGtmManager {
         break;
 
       case 'cart page':
-      case 'checkout login page':
       case 'checkout delivery page':
       case 'checkout payment page':
         $cart = $this->cartStorage->getCart(FALSE);
@@ -1156,6 +1159,11 @@ class AlshayaGtmManager {
         $deliveryCity = $this->addressBookManager->getAddressShippingAreaParentValue($address, $order['shipping']['address']);
 
         foreach ($orderItems as $orderItem) {
+          // We might get two entries for same product if configurable.
+          if (in_array($orderItem['sku'], $productSKU)) {
+            continue;
+          }
+
           $productSKU[] = $orderItem['sku'];
           $product_node = $this->skuManager->getDisplayNode($orderItem['sku']);
 
@@ -1191,11 +1199,13 @@ class AlshayaGtmManager {
           $page_dl_attributes['cartItemsFlocktory'] = $this->formatCartFlocktory($orderItems);
         }
 
-        if ($deliveryArea) {
-          $page_dl_attributes['deliveryArea'] = $deliveryArea;
-        }
-        if ($deliveryCity) {
-          $page_dl_attributes['deliveryCity'] = $deliveryCity;
+        if (empty($store_code)) {
+          if ($deliveryArea) {
+            $page_dl_attributes['deliveryArea'] = $deliveryArea;
+          }
+          if ($deliveryCity) {
+            $page_dl_attributes['deliveryCity'] = $deliveryCity;
+          }
         }
 
         break;
@@ -1254,8 +1264,8 @@ class AlshayaGtmManager {
    *   Cart items in flocktory format.
    */
   public function formatCartFlocktory(array $items) {
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'utility.inc');
     $cart_items_flock = [];
-
     foreach ($items as $item) {
       $product_node = $this->skuManager->getDisplayNode($item['sku']);
       // Get product media.

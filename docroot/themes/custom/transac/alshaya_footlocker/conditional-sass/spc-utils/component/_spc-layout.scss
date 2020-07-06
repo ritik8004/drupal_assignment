@@ -1,0 +1,36 @@
+.alias--checkout,
+.alias--cart-login,
+.alias--checkout-confirmation {
+  .site-brand-home {
+    background: $header-bg;
+
+    a {
+      @include breakpoint($tablet) {
+        max-width: 17.75rem;
+        width: 100%;
+      }
+
+      @include breakpoint($only-mobile) {
+        max-width: 8.625rem;
+        width: 100%;
+      }
+    }
+
+    html[lang=ar] & {
+      a {
+        @include breakpoint($tablet) {
+          height: auto;
+          width: 13rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 6rem;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0;
+  }
+}

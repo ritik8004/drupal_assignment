@@ -8,6 +8,10 @@
       vertical-align: middle;
       border: none;
     }
+
+    &::before {
+      background: none;
+    }
   }
 
   input[type=radio]:checked ~ label {

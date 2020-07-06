@@ -205,6 +205,17 @@ function whitelabel_preprocess_node(&$variables) {
   switch ($node_bundle) {
     case 'advanced_page':
       $variables['content']['field_promo_blocks']['#attributes']['class'][] = 'field-promo-block';
+      // Remove wrapper html for banner, slider, delivery banner
+      // if they are empty.
+      if (empty($variables['content']['field_banner']['#items'])) {
+        unset($variables['content']['field_banner']);
+      }
+      if (empty($variables['content']['field_slider']['#items'])) {
+        unset($variables['content']['field_slider']);
+      }
+      if (empty($variables['content']['field_delivery_banner']['#items'])) {
+        unset($variables['content']['field_delivery_banner']);
+      }
       break;
   }
 

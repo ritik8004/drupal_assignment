@@ -7,3 +7,4 @@ dependencies:
   - alshaya_main_menu:alshaya_main_menu
   - alshaya_seo:alshaya_seo
   - alshaya_stores_finder:alshaya_stores_finder_transac
+  - alshaya_spc:alshaya_spc

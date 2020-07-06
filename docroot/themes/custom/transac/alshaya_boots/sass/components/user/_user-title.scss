@@ -1,0 +1,44 @@
+.c-user-login,
+.c-user-register {
+  h1 {
+    @include breakpoint($tablet) {
+      top: -4.875rem;
+    }
+  }
+}
+
+.c-user-password h1 {
+  top: -3.5rem;
+}
+
+.order-detail .block-page-title-block,
+.c-change-password .block-page-title-block,
+.c-communication-preferences .block-page-title-block,
+.c-user-edit .block-page-title-block,
+.c-order-list .block-page-title-block,
+.c-user--node .block-page-title-block,
+.c-address-book .block-page-title-block,
+.c-payment-cards .block-page-title-block {
+  .back-link {
+    @include breakpoint($tablet) {
+      width: 100%;
+    }
+
+    @include breakpoint($only-mobile) {
+      @include icon(chevron#{$left}, before) {
+        color: $my_account_back_link_icon;
+        transform: rotate(0deg);
+      }
+    }
+  }
+}
+
+.c-communication-preferences,
+.c-order-list,
+.c-user-edit {
+  .block-page-title-block {
+    @include breakpoint($desktop) {
+      padding: 0 0 1rem;
+    }
+  }
+}

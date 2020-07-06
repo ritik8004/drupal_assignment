@@ -1,0 +1,7 @@
+body[class*=" alias--user-reset-"] .l-two--sf {
+  .user-pass-reset {
+    .form-submit {
+      @extend %btn;
+    }
+  }
+}
