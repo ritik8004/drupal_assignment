@@ -140,6 +140,19 @@
     Drupal.alshayaSeoSpc.gtmPushCheckoutOption(deliveryType, 2);
   });
 
+  document.addEventListener('checkoutComPaymentFailed', function (e) {
+    dataLayer.push({
+      event: 'eventTracker',
+      eventCategory: 'Checkoutcom payment error',
+      eventAction: (e.detail.errorCode === '70000')
+        ? 'Payment failed with error code 70000'
+        : 'Payment failed with error code other than 70000',
+      eventLabel: 'Payment failed',
+      eventValue: 0,
+      nonInteraction: 0,
+    });
+  });
+
   document.addEventListener('refreshCartOnPaymentMethod', function (e) {
     // Clone "checkout" datalayer event to trigger it again for payment.
     Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, 3);
