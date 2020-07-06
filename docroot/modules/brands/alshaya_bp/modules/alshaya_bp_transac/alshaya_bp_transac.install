@@ -10,7 +10,7 @@
  *
  * Enable replicate feature for boots.
  */
-function alshaya_bp_transac_update_8002() {
+function alshaya_bp_transac_update_8001() {
   \Drupal::service('module_installer')->install(['alshaya_replicate']);
 
   \Drupal::configFactory()->getEditable('replicate_ui.settings')
