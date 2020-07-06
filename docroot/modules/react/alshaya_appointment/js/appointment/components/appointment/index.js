@@ -77,14 +77,14 @@ export default class Appointment extends React.Component {
       appointmentData = (
         <AppointmentTimeSlot
           handleBack={this.handleEdit}
-          handleSubmit={() => this.handleSubmit('customer-details')}
+          handleSubmit={() => this.handleSubmit('select-login-guest')}
         />
       );
     } else if (appointmentStep === 'select-login-guest') {
       appointmentData = (
         <AppointmentLogin
           handleBack={this.handleEdit}
-          handleSubmit={() => this.handleSubmit('customer')}
+          handleSubmit={() => this.handleSubmit('customer-details')}
         />
       );
     }
