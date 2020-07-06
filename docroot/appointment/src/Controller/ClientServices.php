@@ -96,9 +96,11 @@ class ClientServices {
     try {
       $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
       $locationExternalId = $request->query->get('location');
+      $program = $request->query->get('program');
+      $activity = $request->query->get('activity');
 
-      if (empty($locationExternalId)) {
-        $message = 'locationExternalId is required to get questions.';
+      if (empty($locationExternalId) || empty($program) || empty($activity)) {
+        $message = 'Required details is missing to get questions.';
 
         $this->logger->error($message);
         throw new \Exception($message);
@@ -107,8 +109,8 @@ class ClientServices {
       $param = [
         'questionCriteria' => [
           'locationExternalId' => $locationExternalId,
-          'programExternalId' => $request->query->get('program'),
-          'activityExternalId' => $request->query->get('activity'),
+          'programExternalId' => $program,
+          'activityExternalId' => $activity,
         ],
       ];
       $result = $client->__soapCall('getAppointmentQuestionsByCriteria', [$param]);

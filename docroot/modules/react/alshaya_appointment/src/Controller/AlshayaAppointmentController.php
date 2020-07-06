@@ -65,12 +65,14 @@ class AlshayaAppointmentController extends ControllerBase {
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
     $geolocation_config = $this->config('geolocation.settings');
     $alshaya_master_config = $this->config('alshaya_master.mobile_number_settings');
+    $social_login_enabled = $this->config('alshaya_social.settings');
 
     $cache_tags = Cache::mergeTags($cache_tags, array_merge(
       $alshaya_appointment_config->getCacheTags(),
       $store_finder_config->getCacheTags(),
       $geolocation_config->getCacheTags(),
-      $alshaya_master_config->getCacheTags()
+      $alshaya_master_config->getCacheTags(),
+      $social_login_enabled->getCacheTags()
     ));
 
     // Get country code.
@@ -92,6 +94,7 @@ class AlshayaAppointmentController extends ControllerBase {
       'mobile_maxlength' => $alshaya_master_config->get('maxlength'),
       'customer_details_disclaimer_text' => $alshaya_appointment_config->get('customer_details_disclaimer_text'),
       'user_details' => $this->getUserDetails(),
+      'social_login_enabled' => $social_login_enabled->get('social_login'),
     ];
 
     return [
@@ -101,6 +104,7 @@ class AlshayaAppointmentController extends ControllerBase {
         'library' => [
           'alshaya_appointment/alshaya_appointment',
           'alshaya_white_label/appointment-booking',
+          'alshaya_social/alshaya_social_popup',
         ],
         'drupalSettings' => $settings,
       ],

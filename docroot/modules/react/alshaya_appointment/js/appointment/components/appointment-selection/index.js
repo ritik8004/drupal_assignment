@@ -1,6 +1,7 @@
 import React from 'react';
 import { getStorageInfo } from '../../../utilities/storage';
 import StoreAddress from '../appointment-store/components/store-address';
+import moment from 'moment';
 
 export default class AppointmentSelection extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ export default class AppointmentSelection extends React.Component {
   }
 
   render() {
-    const { appointmentCategory, appointmentType, selectedStoreItem } = this.state;
+    const { appointmentCategory, appointmentType, selectedStoreItem, selectedSlot } = this.state;
     const selectedStoreDetails = selectedStoreItem ? JSON.parse(selectedStoreItem) : '';
 
     return (
@@ -84,6 +85,42 @@ export default class AppointmentSelection extends React.Component {
               </div>
             )
             : null}
+
+          { selectedSlot
+            ? (
+              <div className="appointment-timeslot-details-wrapper">
+                <div className="appointment-details-item">
+                  <div className="appointment-details-item-header">
+                    <label>{Drupal.t('Date')}</label>
+                  </div>
+                  <div className="appointment-details-item-body">
+                    <div className="store-name">
+                      { moment(selectedSlot.appointmentSlotTime).format('dddd, Do MMMM YYYY') }
+                    </div>
+                  </div>
+                  <div className="appointment-details-item-header">
+                    <label>{Drupal.t('Time')}</label>
+                  </div>
+                  <div className="appointment-details-item-body">
+                    <div className="store-name">
+                      { moment(selectedSlot.appointmentSlotTime).format('LT') }
+                    </div>
+                  </div>
+                </div>
+                <div className="appointment-details-item edit-button">
+                  <button
+                    className="appointment-details-button"
+                    type="button"
+                    onClick={() => this.handleEdit('select-time-slot')}
+                  >
+                    {Drupal.t('Edit')}
+                  </button>
+                </div>
+              </div>
+            )
+            : null
+          }
+
         </div>
       </div>
     );

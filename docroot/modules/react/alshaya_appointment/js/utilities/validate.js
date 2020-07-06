@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const validateInfo = (data) => axios.post(Drupal.url('appointment/validate-info'), data);
+export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info'), data);
 
 /**
  * Validates the customer details.
@@ -42,7 +42,7 @@ export const processCustomerDetails = async (e) => {
 
     // If invalid email address.
     if (response.data.email !== undefined) {
-      if (response.data.email === false) {
+      if (response.data.email === 'invalid') {
         document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', { '%mail': validationData.email });
         document.getElementById('email-error').classList.add('error');
         isError = true;
