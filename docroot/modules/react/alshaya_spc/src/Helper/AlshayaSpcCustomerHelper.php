@@ -120,6 +120,7 @@ class AlshayaSpcCustomerHelper {
     /** @var \Drupal\profile\Entity\Profile $profile */
     foreach ($profiles as $profile) {
       $address_data = [];
+      $valid_address = TRUE;
       $address_data[$profile->id()] = array_filter($profile->get('field_address')->first()->getValue());
       $address_data[$profile->id()]['firstname'] = $address_data[$profile->id()]['given_name'];
       $address_data[$profile->id()]['lastname'] = $address_data[$profile->id()]['family_name'];
@@ -139,6 +140,10 @@ class AlshayaSpcCustomerHelper {
           $address_data[$profile->id()]['area_parent'] = $parent_term->get('field_location_id')->first()->getValue()['value'];
           $address_data[$profile->id()]['area_parent_label'] = $parent_term->label();
         }
+        else {
+          // Address contains city id for which term not available.
+          $valid_address = FALSE;
+        }
       }
 
       // We get the area as term id but we need the location id
@@ -150,8 +155,19 @@ class AlshayaSpcCustomerHelper {
           $address_data[$profile->id()]['administrative_area'] = $term->get('field_location_id')->first()->getValue()['value'];
           $address_data[$profile->id()]['area_label'] = $term->label();
         }
+        else {
+          // Address contains area id for which term not available.
+          $valid_address = FALSE;
+        }
       }
 
+      // If address doesn't contain mobile number.
+      if (empty($address_data[$profile->id()]['mobile'])) {
+        $valid_address = FALSE;
+      }
+
+      // Flag determines whether address is valid or not on FE.
+      $address_data[$profile->id()]['validAddress'] = $valid_address;
       $addressList[] = $address_data[$profile->id()];
     }
 

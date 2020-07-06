@@ -165,11 +165,7 @@ body {
 
   &:not(.no-sticky-algolia-search-bar) {
     @include breakpoint($only-mobile) {
-      margin-top: 6.5rem;
-
-      html[lang=ar] & {
-        margin-top: 6.5rem;
-      }
+      margin-top: 8rem;
     }
 
     .block-alshaya-algolia-react-autocomplete {
@@ -196,14 +192,6 @@ body {
           @include breakpoint($only-mobile) {
             border: 0.0625rem solid $algolia-auto-complete-border;
           }
-        }
-      }
-    }
-
-    &:not(.slug-banner-processed) {
-      .c-content__region {
-        @include breakpoint($only-mobile) {
-          margin-top: 1.5rem;
         }
       }
     }
