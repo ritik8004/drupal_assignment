@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0bee52134fa33daf5ed6423db702c845",
+    "content-hash": "b1a574a2136a4e46753c148d43cdb4dc",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -13720,7 +13720,9 @@
                     }
                 },
                 "patches_applied": {
-                    "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch"
+                    "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch",
+                    "throws Allowed memory size of xxx bytes exhausted": "https://www.drupal.org/files/issues/2020-07-02/3156154-10.patch",
+                    "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
