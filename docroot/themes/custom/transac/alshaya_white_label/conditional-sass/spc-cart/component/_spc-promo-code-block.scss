@@ -65,6 +65,7 @@
 
     @include breakpoint($only-mobile) {
       #{$right}: 10rem;
+      top: 1.25rem;
     }
 
     &.active {
