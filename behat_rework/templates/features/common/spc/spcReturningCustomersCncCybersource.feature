@@ -1,5 +1,5 @@
-@javascript
-Feature: SPC Checkout using Click & Collect store for returning customer
+@javascript @returnUser
+Feature: SPC Checkout using Click & Collect store for returning customer using Cybersource Payment Metod
 
   Background:
     Given I am on "{spc_product_listing_page}"
@@ -74,7 +74,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should see "{cnc_delivery_type}"
     Then I should see "{payment_type_text}"
     Then I should see "{cs_payment_type}"
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
+    
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -162,7 +162,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should see "{language_cnc_delivery_type}"
     Then I should see "{language_payment_type_text}"
     Then I should see "{language_cs_payment_type}"
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
+    
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -250,7 +250,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should see "{language_cnc_delivery_type}"
     Then I should see "{language_payment_type_text}"
     Then I should see "{language_cs_payment_type}"
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
+    
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist

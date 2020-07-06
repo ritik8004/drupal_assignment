@@ -1,5 +1,5 @@
 variables:
   var_username: 'mitesh@axelerant.com'
   var_password: 'Alshaya@2017'
-  spc_product_listing_page: '/shop-men/'
-  spc_basket_page: '/shop-men/'
+  spc_product_listing_page: '/shop-default-category/mens/'
+  spc_basket_page: '/shop-default-category/mens/'

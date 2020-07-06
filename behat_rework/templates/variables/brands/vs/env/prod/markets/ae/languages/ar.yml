@@ -75,7 +75,6 @@ variables:
   payment_type: 'نقداً عند التوصيل'
   language_area_option: 'الغبيبة'
   language_city_option: 'دبي'
-  store_area: 'Dubai - United Arab Emirates'
   cart_promotional: ''
   cy_payment_type: 'Credit Card / Debit Card'
   language_cy_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
@@ -85,3 +84,5 @@ variables:
   cc_mada_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   delivery_type_text: 'التوصيل متوقع خلال:'
   payment_type_text: 'طريقة الدفع:'
+  store_area: 'دبي'
+  language_store_area: 'Dubai - United Arab Emirates'

@@ -1,5 +1,5 @@
 @javascript
-Feature: SPC Checkout using Click & Collect store for returning customer
+Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authenticated User
 
   Background:
     Given I am on "{spc_product_listing_page}"
@@ -7,7 +7,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait for the page to load
 
   @cc @cnc @cybersource
-  Scenario: As a returning customer, I should be able to checkout using click and collect with credit card
+  Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -30,19 +30,9 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 10 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 10 seconds
-    And I fill in the following:
-    | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
+    Then I add the store details with:
+      | edit-store-location | {store_area} |
+      | mobile              | {mobile}     |
     And I wait for AJAX to finish
     And I wait 20 seconds
     And I scroll to the "#spc-payment-methods" element
@@ -53,6 +43,12 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "09/20"
     And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "123"
     And I scroll to the ".spc-section-billing-address" element
+    When I add CnC billing address with following:
+      | spc-area-select-selected-city | {city_option} |
+      | spc-area-select-selected      | {area_option} |
+      | address_line1                 | {street}      |
+      | dependent_locality            | {building}    |
+      | address_line2                 | {floor}       |
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -74,7 +70,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should see "{cnc_delivery_type}"
     Then I should see "{payment_type_text}"
     Then I should see "{cs_payment_type}"
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -92,7 +87,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I should see "{continue_shopping_text}"
 
   @cc @cnc @language @desktop @cybersource
-  Scenario: As a returning customer, I should be able to checkout using click and collect with credit card
+  Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card
     When I follow "{language_link}"
     And I wait 10 seconds
     And I wait for the page to load
@@ -118,19 +113,9 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 10 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 10 seconds
-    And I fill in the following:
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
+    Then I add the store details with:
+      | edit-store-location | {language_store_area} |
+      | mobile              | {mobile}     |
     And I wait for AJAX to finish
     And I wait 20 seconds
     And I scroll to the "#spc-payment-methods" element
@@ -141,6 +126,12 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "09/20"
     And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "123"
     And I scroll to the ".spc-section-billing-address" element
+    When I add CnC billing address with following:
+      | spc-area-select-selected-city | {language_city_option} |
+      | spc-area-select-selected      | {language_area_option} |
+      | address_line1                 | {street}      |
+      | dependent_locality            | {building}    |
+      | address_line2                 | {floor}       |
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -162,7 +153,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should see "{language_cnc_delivery_type}"
     Then I should see "{language_payment_type_text}"
     Then I should see "{language_cs_payment_type}"
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -180,7 +170,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I should see "{language_continue_shopping_text}"
 
   @cc @cnc @language @mobile @cybersource
-  Scenario: As a returning customer, I should be able to checkout using click and collect with credit card
+  Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -206,19 +196,9 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 10 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 10 seconds
-    And I fill in the following:
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
+    Then I add the store details with:
+      | edit-store-location | {language_store_area} |
+      | mobile              | {mobile}     |
     And I wait for AJAX to finish
     And I wait 20 seconds
     And I scroll to the "#spc-payment-methods" element
@@ -229,6 +209,12 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "09/20"
     And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "123"
     And I scroll to the ".spc-section-billing-address" element
+    When I add CnC billing address with following:
+      | spc-area-select-selected-city | {language_city_option} |
+      | spc-area-select-selected      | {language_area_option} |
+      | address_line1                 | {street}      |
+      | dependent_locality            | {building}    |
+      | address_line2                 | {floor}       |
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -250,7 +236,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should see "{language_cnc_delivery_type}"
     Then I should see "{language_payment_type_text}"
     Then I should see "{language_cs_payment_type}"
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist

@@ -6,3 +6,5 @@ variables:
   lang_txt_sign_in: "تسجيل الدخول"
   lang_txt_sign_in_caps: "تسجيل الدخول"
   lang_add_to_cart_label: 'أضف إلى حقيبة التسوق'
+  language_empty_bag: 'Your Shopping Bag Is Empty.'
+  empty_bag: 'حقيبة التسوق الخاصة بك فارغة.'

@@ -81,7 +81,7 @@ Feature: SPC Checkout Click & Collect
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
     Then I should see "{delivery_type_text}"
-    Then I should see "{delivery_type}"
+    Then I should see "{cnc_delivery_type}"
     Then I should see "{payment_type_text}"
     Then I should see "{cc_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page

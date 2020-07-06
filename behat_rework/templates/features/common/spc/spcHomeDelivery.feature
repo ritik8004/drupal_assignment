@@ -1,4 +1,4 @@
-@javascript
+@javascript @guest
 Feature: SPC Checkout Home Delivery COD
 
   Background:

@@ -1,4 +1,4 @@
-@javascript
+@javascript @guest
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
 
   Background:

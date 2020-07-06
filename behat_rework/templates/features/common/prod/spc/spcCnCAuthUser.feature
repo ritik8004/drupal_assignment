@@ -2,7 +2,7 @@
 Feature: SPC Checkout using Click & Collect store for Authenticated user
 
   Background:
-    Given I am on "{product_listing_page_url}"
+    Given I am on "{spc_product_listing_page}"
     And I wait 10 seconds
     And I wait for the page to load
 
@@ -54,7 +54,6 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "100"
     And I scroll to the ".spc-section-billing-address" element
     And I wait 5 seconds
-
 
   @cc @cnc @knet
   Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card

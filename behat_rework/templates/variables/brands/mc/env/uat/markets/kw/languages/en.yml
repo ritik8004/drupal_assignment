@@ -5,7 +5,7 @@ variables:
   price_filter: 'Price'
   brand_filter: 'Brand'
   color_filter: 'Colour'
-  promotional_filter: 'Promotions'
+  promotional_filter: ''
   size_filter: ''
   filters: 'all filters'
   create_account: 'create an account'

@@ -6,3 +6,5 @@ variables:
   lang_txt_sign_in: "sign in"
   lang_txt_sign_in_caps: "Sign in"
   lang_add_to_cart_label: 'add to basket'
+  language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة.'
+  empty_bag: 'Your Shopping Bag Is Empty.'
