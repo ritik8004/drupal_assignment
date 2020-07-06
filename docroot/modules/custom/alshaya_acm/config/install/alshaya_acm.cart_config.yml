@@ -1,3 +1,4 @@
 max_cart_qty: '10'
 checkout_feature: 'enabled'
 checkout_disabled_page: ''
+cart_storage_expiration: 15 #This is in minutes (15m for example).
