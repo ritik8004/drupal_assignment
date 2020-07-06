@@ -43,9 +43,10 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "4111111111111111"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "09/20"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "123"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 10 seconds
@@ -108,9 +109,10 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "4111111111111111"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "09/20"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "123"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 10 seconds
@@ -176,9 +178,10 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "4111111111111111"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "09/20"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "123"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 30 seconds
@@ -244,9 +247,10 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "4111111111111111"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "09/20"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "123"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 10 seconds

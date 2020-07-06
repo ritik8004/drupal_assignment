@@ -46,11 +46,12 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cybersource" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
     And I wait 10 seconds
-    And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
-    And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
-    And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
@@ -132,11 +133,12 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cybersource" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
     And I wait 5 seconds
-    And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
-    And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
-    And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
@@ -224,11 +226,12 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cybersource" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
     And I wait 5 seconds
-    And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
-    And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
-    And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
@@ -275,11 +278,12 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cybersource" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
     And I wait 10 seconds
-    And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
-    And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
-    And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I click jQuery ".spc-section-billing-address .spc-billing-address-wrapper .spc-billing-information .spc-billing-change" element on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -382,11 +386,12 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cybersource" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
     And I wait 5 seconds
-    And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
-    And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
-    And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I click jQuery ".spc-section-billing-address .spc-billing-address-wrapper .spc-billing-information .spc-billing-change" element on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -491,11 +496,12 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cybersource" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
     And I wait 5 seconds
-    And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
-    And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
-    And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I click jQuery ".spc-section-billing-address .spc-billing-address-wrapper .spc-billing-information .spc-billing-change" element on page
     And I wait 10 seconds
     And I wait for the page to load

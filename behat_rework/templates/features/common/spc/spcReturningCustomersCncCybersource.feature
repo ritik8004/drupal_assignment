@@ -49,9 +49,10 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "4111111111111111"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "09/20"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "123"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -137,9 +138,10 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "4111111111111111"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "09/20"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "123"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -225,9 +227,10 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "4111111111111111"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "09/20"
-    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "123"
+    Then the "payment-method-cybersource" checkbox should be checked
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
+    And I fill in an element having class ".payment-method-cybersource .spc-type-cvv input" with "{spc_cybersource_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -250,7 +253,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     Then I should see "{language_cnc_delivery_type}"
     Then I should see "{language_payment_type_text}"
     Then I should see "{language_cs_payment_type}"
-    
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist

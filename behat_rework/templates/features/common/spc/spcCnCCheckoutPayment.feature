@@ -48,9 +48,10 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "4242424242424242"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "03/22"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "100"
+    Then the "payment-method-checkout_com" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 10 seconds
@@ -145,9 +146,10 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "4242424242424242"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "03/22"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "100"
+    Then the "payment-method-checkout_com" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 10 seconds
@@ -213,9 +215,10 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "4242424242424242"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "03/22"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "100"
+    Then the "payment-method-checkout_com" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 10 seconds
@@ -281,9 +284,10 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "4242424242424242"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "03/22"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "100"
+    Then the "payment-method-checkout_com" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 10 seconds

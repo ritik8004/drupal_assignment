@@ -49,6 +49,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "4242424242424242"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "03/22"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "100"
@@ -137,6 +138,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "4242424242424242"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "03/22"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "100"

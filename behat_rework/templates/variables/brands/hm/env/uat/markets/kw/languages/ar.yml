@@ -85,7 +85,7 @@ variables:
   billing_landmark: 'Near Bridge'
   billing_postal_code: '23456'
   billing_mobile: '1023838029'
-  cc_payment_type: 'Credit / Debit Card'
+  language_cc_payment_type: 'Credit / Debit Card'
   billing_text: 'Billing address:'
   language_collection_filter: ''
   language_sort_filter: 'sort by'
@@ -105,3 +105,4 @@ variables:
   promotional_filter: ''
   language_add_to_cart_link: 'add to basket'
   add_to_cart_link: 'أضف إلى حقيبة التسوق'
+  cc_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
