@@ -1927,7 +1927,7 @@ class FeatureContext extends CustomMinkContext
           $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
           $this->iWaitSeconds(5);
           $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
-          $this->iWaitSeconds(3);
+          $this->iWaitSeconds(5);
         }
         else {
           $this->getSession()->getPage()->fillField($field, $value);
@@ -2103,7 +2103,7 @@ class FeatureContext extends CustomMinkContext
       $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
       $this->iWaitSeconds(5);
       $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
-      $this->iWaitSeconds(3);
+      $this->iWaitSeconds(5);
     }
   }
 
@@ -2136,7 +2136,7 @@ class FeatureContext extends CustomMinkContext
               $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
               $this->iWaitSeconds(5);
               $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
-              $this->iWaitSeconds(3);
+              $this->iWaitSeconds(5);
             }
             else {
               $this->getSession()->getPage()->fillField($field, $value);
@@ -2218,7 +2218,7 @@ class FeatureContext extends CustomMinkContext
             $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
             $this->iWaitSeconds(5);
             $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
-            $this->iWaitSeconds(3);
+            $this->iWaitSeconds(5);
           }
           else {
             $this->getSession()->getPage()->fillField($field, $value);

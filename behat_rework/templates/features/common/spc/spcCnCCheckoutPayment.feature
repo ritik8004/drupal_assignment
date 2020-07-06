@@ -62,6 +62,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | address_line2                 | {floor}       |
+      | locality                      | {locality}    |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
@@ -160,6 +161,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | address_line2                 | {floor}       |
+      | locality                      | {locality}    |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
@@ -229,6 +231,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | address_line2                 | {floor}       |
+      | locality                      | {locality}    |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
@@ -298,6 +301,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | address_line2                 | {floor}       |
+      | locality                      | {locality}    |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds

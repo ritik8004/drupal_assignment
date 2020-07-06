@@ -1,6 +1,11 @@
 @javascript @guest
 Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest User
 
+  Background:
+    Given I am on "{spc_basket_page}"
+    And I wait 5 seconds
+    And I wait for the page to load
+
   @cc @cnc @desktop @cybersource
   Scenario: As a Guest, I should be able to checkout using click and collect with credit card (cybersource)
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
@@ -57,6 +62,7 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | address_line2                 | {floor}       |
+      | locality                      | {locality}    |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
@@ -123,6 +129,7 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | address_line2                 | {floor}       |
+      | locality                      | {locality}    |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
@@ -192,6 +199,7 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | address_line2                 | {floor}       |
+      | locality                      | {locality}    |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
@@ -261,6 +269,7 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | address_line2                 | {floor}       |
+      | locality                      | {locality}    |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds

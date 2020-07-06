@@ -8,3 +8,5 @@ variables:
   lang_add_to_cart_label: 'add to basket'
   language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة.'
   empty_bag: 'Your Shopping Bag Is Empty.'
+  language_spc_knet_option: 'بنك اختبار كنيت [KNET1]'
+  spc_knet_option: 'Knet Test Card [KNET1]'

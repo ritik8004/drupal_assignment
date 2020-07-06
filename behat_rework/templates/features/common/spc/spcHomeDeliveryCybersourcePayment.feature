@@ -73,7 +73,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     Then I should see "{cs_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -149,12 +148,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     Then I should see "{language_order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{anon_email}"
-    Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
@@ -163,10 +156,9 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     Then I should see "{language_delivery_type_text}"
     Then I should see "{language_delivery_type}"
     Then I should see "{language_payment_type_text}"
-    Then I should see "{language_payment_type}"
+    Then I should see "{language_cs_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -396,8 +388,8 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I wait 10 seconds
     And I wait for the page to load
     When fill in billing address with following:
-      | spc-area-select-selected-city | {billing_city_option} |
-      | spc-area-select-selected      | {billing_area_option} |
+      | spc-area-select-selected-city | {language_billing_city_option} |
+      | spc-area-select-selected      | {language_billing_area_option} |
       | address_line1                 | {billing_street}      |
       | dependent_locality            | {billing_building}    |
       | locality                      | {billing_locality}    |
@@ -419,12 +411,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     Then I should see "{language_order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{anon_email}"
-    Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
@@ -436,7 +422,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     Then I should see "{language_cs_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -506,8 +491,8 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I wait 10 seconds
     And I wait for the page to load
     When fill in billing address with following:
-      | spc-area-select-selected-city | {billing_city_option} |
-      | spc-area-select-selected      | {billing_area_option} |
+      | spc-area-select-selected-city | {language_billing_city_option} |
+      | spc-area-select-selected      | {language_billing_area_option} |
       | address_line1                 | {billing_street}      |
       | dependent_locality            | {billing_building}    |
       | locality                      | {billing_locality}    |
