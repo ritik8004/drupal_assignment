@@ -13,9 +13,9 @@ rtl_styles:
     theme:
       css/rtl.css: {}
 
-super_menu_positioning:
+super_menu_clone:
   js:
-    js/super_menu_positioning.js: {}
+    js/super_menu_clone.js: {}
   dependencies:
     - core/jquery
     - core/drupal

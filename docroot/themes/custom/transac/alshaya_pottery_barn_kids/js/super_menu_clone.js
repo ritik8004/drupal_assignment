@@ -10,11 +10,11 @@
         );
 
         if (superMenu && superMenu.length && selectedSuperMenuParent && selectedSuperMenuParent.length) {
-          if (!($('menu--super-menu--two') && $('menu--super-menu--two').length)) {
+          if (!($('menu--super-menu--clone') && $('menu--super-menu--clone').length)) {
             var superMenuClone = superMenu.clone();
-            superMenuClone.attr('id', 'block-superMenuClone-two');
+            superMenuClone.attr('id', 'block-supermenuclone');
             superMenuClone.removeClass('menu--super-menu');
-            superMenuClone.addClass('menu--super-menu--two');
+            superMenuClone.addClass('menu--super-menu--clone');
             superMenuClone.prependTo(selectedSuperMenuParent);
           }
         }
