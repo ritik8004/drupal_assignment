@@ -57,14 +57,15 @@ export default class CompanionDetails extends React.Component {
       const firstNameData = _find(questions, ['questionExternalId', firstName]);
       const lastNameData = _find(questions, ['questionExternalId', lastName]);
       const dobData = _find(questions, ['questionExternalId', dob]);
-      let defaultfirstName, defaultlastName, defaultdob = '';
+      let defaultfirstName; let defaultlastName; let
+        defaultdob;
 
       if (clientData) {
-        const {
+        ({
           [firstName]: defaultfirstName,
           [lastName]: defaultlastName,
           [dob]: defaultdob,
-        } = clientData;
+        } = clientData);
       }
 
       if (firstNameData && lastNameData && dobData) {

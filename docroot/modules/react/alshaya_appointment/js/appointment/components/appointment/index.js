@@ -5,8 +5,8 @@ import AppointmentStoreSelect from '../appointment-store';
 import AppointmentSelection from '../appointment-selection';
 import CustomerDetails from '../customer-details';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
-import AppointmentTimeSlot from "../appointment-timeslot";
-import AppointmentLogin from "../appointment-login";
+import AppointmentTimeSlot from '../appointment-timeslot';
+import AppointmentLogin from '../appointment-login';
 
 export default class Appointment extends React.Component {
   constructor(props) {

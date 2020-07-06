@@ -4,7 +4,7 @@ import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
 import AppointmentSlots from '../appointment-selectslot';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
-import { getDateFormat } from "../../../utilities/helper";
+import { getDateFormat } from '../../../utilities/helper';
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
