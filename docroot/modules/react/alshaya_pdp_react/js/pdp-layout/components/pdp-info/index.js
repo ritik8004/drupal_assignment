@@ -10,7 +10,7 @@ const PdpInfo = (props) => {
   let discountPercantage = null;
 
   if (!(pdpProductPrice === finalPrice)) {
-    discountPercantage = ((pdpProductPrice - finalPrice) / pdpProductPrice) * 100;
+    discountPercantage = Math.round(((pdpProductPrice - finalPrice) / pdpProductPrice) * 100);
   }
 
   const specialPriceClass = (finalPrice < pdpProductPrice) ? 'has-special-price' : '';
