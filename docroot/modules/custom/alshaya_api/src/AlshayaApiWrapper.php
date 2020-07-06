@@ -890,6 +890,7 @@ class AlshayaApiWrapper {
     }
 
     if ($response && is_string($response)) {
+      $log_response = $response;
       $response = Json::decode($response);
       // Move the cart_id into the customer object.
       if (isset($response['cart_id'])) {
@@ -898,7 +899,16 @@ class AlshayaApiWrapper {
           'value' => $response['cart_id'],
         ];
       }
-      return MagentoApiResponseHelper::customerFromSearchResult($response['customer']);
+
+      if (is_array($response) && !empty($response['customer'])) {
+        return MagentoApiResponseHelper::customerFromSearchResult($response['customer']);
+      }
+
+      // If we reach here, it means something is not correct and we didn't
+      // receive correct/expected response from MDC.
+      $this->logger->error('Exception while authenticating customer. Error: @response', [
+        '@response' => $log_response,
+      ]);
     }
     return [];
   }
