@@ -24,11 +24,13 @@ class AlshayaAppointmentController extends ControllerBase {
     $alshaya_appointment_config = $this->config('alshaya_appointment.settings');
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
     $geolocation_config = $this->config('geolocation.settings');
+    $social_login_enabled = $this->config('alshaya_social.settings');
 
     $cache_tags = Cache::mergeTags($cache_tags, array_merge(
       $alshaya_appointment_config->getCacheTags(),
       $store_finder_config->getCacheTags(),
-      $geolocation_config->getCacheTags()
+      $geolocation_config->getCacheTags(),
+      $social_login_enabled->getCacheTags()
     ));
 
     $settings['alshaya_appointment'] = [
@@ -43,6 +45,7 @@ class AlshayaAppointmentController extends ControllerBase {
         ['radius' => $store_finder_config->get('search_proximity_radius')]
       ),
       'google_map_api_key' => $geolocation_config->get('google_map_api_key'),
+      'social_login_enabled' => $social_login_enabled->get('social_login'),
     ];
 
     return [
@@ -52,6 +55,7 @@ class AlshayaAppointmentController extends ControllerBase {
         'library' => [
           'alshaya_appointment/alshaya_appointment',
           'alshaya_white_label/appointment-booking',
+          'alshaya_social/alshaya_social_popup',
         ],
         'drupalSettings' => $settings,
       ],

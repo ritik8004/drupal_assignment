@@ -5,6 +5,7 @@ import AppointmentStoreSelect from '../appointment-store';
 import AppointmentSelection from '../appointment-selection';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import AppointmentTimeSlot from "../appointment-timeslot";
+import AppointmentLogin from "../appointment-login";
 
 export default class Appointment extends React.Component {
   constructor(props) {
@@ -14,6 +15,12 @@ export default class Appointment extends React.Component {
       this.state = {
         ...localStorageValues,
       };
+      const userId = drupalSettings.userDetails.userID;
+      if (userId !== 0 && localStorageValues.appointmentStep === 'select-login-guest') {
+        this.state.appointmentStep = 'customer-details';
+        localStorageValues.appointmentStep = 'customer-details';
+        setStorageInfo(localStorageValues);
+      }
     } else {
       this.state = {
         appointmentStep: 'appointment-type',
@@ -22,14 +29,20 @@ export default class Appointment extends React.Component {
   }
 
   handleSubmit = (stepValue) => {
+    let stepval = stepValue;
+    const userId = drupalSettings.userDetails.userID;
+    if (userId !== 0 && stepValue === 'select-login-guest') {
+      stepval = 'customer-details';
+    }
+
     const localStorageValues = getStorageInfo();
 
-    localStorageValues.appointmentStep = stepValue;
+    localStorageValues.appointmentStep = stepval;
     setStorageInfo(localStorageValues);
 
     this.setState((prevState) => ({
       ...prevState,
-      appointmentStep: stepValue,
+      appointmentStep: stepval,
     }));
   }
 
@@ -65,6 +78,13 @@ export default class Appointment extends React.Component {
         <AppointmentTimeSlot
           handleBack={this.handleEdit}
           handleSubmit={() => this.handleSubmit('select-login-guest')}
+        />
+      );
+    } else if (appointmentStep === 'select-login-guest') {
+      appointmentData = (
+        <AppointmentLogin
+          handleBack={this.handleEdit}
+          handleSubmit={() => this.handleSubmit('customer-details')}
         />
       );
     }
