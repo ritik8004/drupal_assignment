@@ -926,7 +926,7 @@ class AlshayaGtmManager {
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
       'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
-      'transactionID' => $order['increment_id'],
+      'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
       'userEmailID' => $order['email'],
