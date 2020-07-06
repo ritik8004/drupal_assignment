@@ -137,10 +137,6 @@
 
       a {
         font-size: 0.875rem !important;
-
-        &::first-letter {
-          text-transform: uppercase;
-        }
       }
 
       @include breakpoint($only-mobile) {
@@ -243,10 +239,6 @@
         font-family: $alshaya-bold;
         line-height: 1.29;
         color: $checkout_section_titles;
-
-        &::first-letter {
-          text-transform: uppercase;
-        }
       }
     }
 
@@ -339,10 +331,6 @@
 
       input ~ label {
         text-transform: none;
-
-        &::first-letter {
-          text-transform: uppercase;
-        }
       }
 
       .request-password-link {
@@ -359,12 +347,7 @@
 
         @include breakpoint($only-mobile) {
           margin-top: 0.625rem;
-          #{$left}: 50%;
-          transform: translateX(-50%);
-
-          html[lang=ar] & {
-            transform: translateX(-50%);
-          }
+          width: 100%;
         }
 
         @include breakpoint($desktop) {
@@ -525,12 +508,6 @@
 
       .login-separator.top {
         display: none;
-      }
-    }
-
-    .social-network-text {
-      &::first-letter {
-        text-transform: uppercase;
       }
     }
   }
