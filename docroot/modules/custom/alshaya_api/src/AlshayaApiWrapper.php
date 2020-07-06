@@ -997,7 +997,17 @@ class AlshayaApiWrapper {
             'value' => $response['cart_id'],
           ];
         }
-        $response = MagentoApiResponseHelper::customerFromSearchResult($response);
+
+        if (is_array($response)) {
+          $response = MagentoApiResponseHelper::customerFromSearchResult($response);
+        }
+        else {
+          // If we reach here, it means we get the response from MDC which
+          // is not as per required format/array. So we pass that info to
+          // the exception so this can be logged.
+          $log_string = is_string($response) ? $response : json_encode($response);
+          throw new \Exception($log_string);
+        }
       }
 
       // Update password api.
