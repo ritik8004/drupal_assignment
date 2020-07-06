@@ -1005,7 +1005,7 @@ class AlshayaApiWrapper {
           // If we reach here, it means we get the response from MDC which
           // is not as per required format/array. So we pass that info to
           // the exception so this can be logged.
-          $log_string = is_string($response) ?? json_encode($response);
+          $log_string = is_string($response) ? $response : json_encode($response);
           throw new \Exception($log_string);
         }
       }
