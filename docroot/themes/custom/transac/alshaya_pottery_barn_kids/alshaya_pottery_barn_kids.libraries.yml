@@ -12,3 +12,10 @@ rtl_styles:
   css:
     theme:
       css/rtl.css: {}
+
+super_menu_positioning:
+  js:
+    js/super_menu_positioning.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

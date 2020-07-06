@@ -1,0 +1,79 @@
+// Super-menu--two is visible just behing the overly.
+$pbk-super-menu-height: 1.875rem;
+
+// Super-menu--two styling.
+.menu--super-menu--two {
+  float: $left;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  max-width: none;
+  height: $pbk-super-menu-height;
+  background: $header_secondary_bg;
+
+  ul {
+    &.menu {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding-left: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      list-style: none;
+
+      @include breakpoint($only-tablet) {
+        justify-content: flex-start;
+      }
+
+      @include breakpoint($only-mobile) {
+        justify-content: space-around;
+      }
+    }
+
+    li {
+      height: $pbk-super-menu-height;
+      border: 0;
+      display: inline-block;
+      margin: 0;
+
+      @include breakpoint($only-tablet) {
+        padding: 0 1.3125rem;
+      }
+
+      &:first-child {
+        @include breakpoint($only-tablet) {
+          padding-#{$left}: 1.5rem;
+        }
+      }
+
+      a {
+        padding: 0;
+        line-height: $pbk-super-menu-height;
+        font-size: 0.75rem;
+        text-transform: capitalize;
+        color: $header_secondary_menu_link;
+
+        &:hover,
+        &.is-active {
+          background: transparent;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// Super-menu--two visibility.
+.menu--super-menu--two {
+  display: none;
+}
+
+// We need to show it only on overlay.
+body.mobile--overlay {
+  .menu--super-menu--two {
+    @include breakpoint($upto-desktop) {
+      display: block;
+    }
+  }
+}

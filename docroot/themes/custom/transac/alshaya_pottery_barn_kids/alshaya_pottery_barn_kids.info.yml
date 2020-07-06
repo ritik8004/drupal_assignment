@@ -23,6 +23,7 @@ regions:
 
 libraries:
   - alshaya_pottery_barn_kids/global_styles
+  - alshaya_pottery_barn_kids/super_menu_positioning
 
 libraries-override:
   alshaya_white_label/algolia_search:
