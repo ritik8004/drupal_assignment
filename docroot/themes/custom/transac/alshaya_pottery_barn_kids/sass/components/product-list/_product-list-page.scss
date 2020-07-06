@@ -72,6 +72,14 @@
     .price-wrapper {
       font-size: 0.875rem;
     }
+
+    @include breakpoint($desktop) {
+      min-height: 21rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      min-height: 17rem;  
+    }
   }
 
   // Load more button.
