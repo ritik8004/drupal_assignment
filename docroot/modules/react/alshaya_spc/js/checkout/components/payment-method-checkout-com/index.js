@@ -83,9 +83,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     window.CheckoutKit.addEventHandler(window.CheckoutKit.Events.API_ERROR, (event) => {
       Drupal.logJavascriptError(
         'Payment failed',
-        (event.data.errorCode === '70000')
-          ? 'Payment failed with error code 70000'
-          : 'Payment failed with error code other than 70000',
+        `Payment failed with error code ${event.data.errorCode}`,
       );
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
