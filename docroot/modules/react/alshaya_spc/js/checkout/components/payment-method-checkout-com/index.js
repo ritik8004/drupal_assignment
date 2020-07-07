@@ -81,7 +81,12 @@ class PaymentMethodCheckoutCom extends React.Component {
   handleCheckoutKitJsErrors = () => {
     // Handle api error which triggered on card tokenisation fail.
     window.CheckoutKit.addEventHandler(window.CheckoutKit.Events.API_ERROR, (event) => {
-      dispatchCustomEvent('checkoutComPaymentFailed', event.data);
+      Drupal.logJavascriptError(
+        'Payment failed',
+        (event.data.errorCode === '70000')
+          ? 'Payment failed with error code 70000'
+          : 'Payment failed with error code other than 70000',
+      );
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
         message: (event.data.errorCode === '70000')
@@ -156,7 +161,6 @@ class PaymentMethodCheckoutCom extends React.Component {
       removeFullScreenLoader();
       return;
     }
-    // @TODO: Handle errors.
     const { selectedCard } = this.context;
     const { finalisePayment } = this.props;
 
