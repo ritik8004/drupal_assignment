@@ -1,7 +1,7 @@
 import React from 'react';
+import moment from 'moment';
 import { getStorageInfo } from '../../../utilities/storage';
 import StoreAddress from '../appointment-store/components/store-address';
-import moment from 'moment';
 
 export default class AppointmentSelection extends React.Component {
   constructor(props) {
@@ -20,7 +20,9 @@ export default class AppointmentSelection extends React.Component {
   }
 
   render() {
-    const { appointmentCategory, appointmentType, selectedStoreItem, selectedSlot } = this.state;
+    const {
+      appointmentCategory, appointmentType, selectedStoreItem, selectedSlot,
+    } = this.state;
     const selectedStoreDetails = selectedStoreItem ? JSON.parse(selectedStoreItem) : '';
 
     return (
@@ -118,8 +120,7 @@ export default class AppointmentSelection extends React.Component {
                 </div>
               </div>
             )
-            : null
-          }
+            : null}
 
         </div>
       </div>

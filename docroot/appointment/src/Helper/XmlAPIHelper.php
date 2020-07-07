@@ -146,4 +146,63 @@ class XmlAPIHelper {
     return $result;
   }
 
+  /**
+   * Update/Insert Client.
+   *
+   * @return object
+   *   Response object.
+   */
+  public function updateInsertClient($request) {
+    $request_content = json_decode($request->getContent(), TRUE);
+    $firstName = $request_content['firstName'] ?? '';
+    $lastName = $request_content['lastName'] ?? '';
+    $dob = $request_content['dob'] ?? '';
+    $mobile = $request_content['mobile'] ?? '';
+
+    $apiBody = '<ns2:updateInsertClient>
+      <client>
+        <clientExternalId>' . $request_content['clientExternalId'] . '</clientExternalId>
+        <firstName>' . $firstName . '</firstName>
+        <lastName>' . $lastName . '</lastName>
+        <dob>' . $dob . '</dob>
+        <phoneData>
+          <mobile>' . $mobile . '</mobile>
+        </phoneData>
+        <rulesGroupExternalId>client</rulesGroupExternalId>
+        <userGroupExternalId>client</userGroupExternalId>
+      </client>
+    </ns2:updateInsertClient>';
+
+    $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_CLIENT_SERVICES_URL, 'updateInsertClient', $apiBody);
+
+    return $result;
+  }
+
+  /**
+   * Book appointment.
+   *
+   * @return object
+   *   Response object.
+   */
+  public function bookAppointment($request) {
+    $requestQuery = $request->query;
+
+    $apiBody = '<ns2:bookAppointment>
+      <criteria>
+        <activityExternalId>' . $requestQuery->get('activity') . '</activityExternalId>
+        <appointmentDurationMin>' . $requestQuery->get('duration') . '</appointmentDurationMin>
+        <locationExternalId>' . $requestQuery->get('location') . '</locationExternalId>
+        <numberOfAttendees>' . $requestQuery->get('attendees') . '</numberOfAttendees>
+        <programExternalId>' . $requestQuery->get('program') . '</programExternalId>
+        <channel>' . $requestQuery->get('channel') . '</channel>
+      </criteria>
+      <startDateTime>' . $requestQuery->get('start-date-time') . '</startDateTime> 
+      <clientExternalId>' . $requestQuery->get('client') . '</clientExternalId>
+    </ns2:bookAppointment>';
+
+    $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL, 'bookAppointment', $apiBody);
+
+    return $result;
+  }
+
 }

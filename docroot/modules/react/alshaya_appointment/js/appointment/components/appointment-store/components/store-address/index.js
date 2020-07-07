@@ -12,6 +12,7 @@ const StoreAddress = (address) => (
           </>
         );
       }
+      return null;
     })}
   </div>
 );

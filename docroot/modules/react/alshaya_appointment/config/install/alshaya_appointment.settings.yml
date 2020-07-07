@@ -4,3 +4,4 @@ local_storage_expire: 600000
 store_finder:
   max_num_of_locations: 100
   unit: 'miles'
+customer_details_disclaimer_text: ''

@@ -4,16 +4,15 @@ import AppointmentTypeList from './components/appointment-type-list';
 import AppointmentCompanion from './components/appointment-companion';
 import AppointmentForYou from './components/appointment-for-you';
 import AppointmentTermsConditions from './components/appointment-terms-conditions';
-import fetchAPIData from '../../../utilities/api/fetchApiData';
+import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
+import { getInputValue } from '../../../utilities/helper';
 import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../utilities/appointment-util';
-import { getInputValue } from "../../../utilities/helper";
 
 const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
-
 const companionItems = [...Array(listItems)].map((e, i) => ({ value: i + 1, label: i + 1 }));
 
 export default class AppointmentType extends React.Component {
@@ -28,7 +27,6 @@ export default class AppointmentType extends React.Component {
       this.state = {
         appointmentStep: 'appointment-type',
         appointmentCategory: '',
-        appointmentCategoryId: '',
         appointmentType: '',
         appointmentCompanion: '',
         appointmentForYou: '',
@@ -68,8 +66,7 @@ export default class AppointmentType extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           this.setState({
             appointmentTypeItems: [...result.data],
-            appointmentCategory: category.name,
-            appointmentCategoryId: category.id,
+            appointmentCategory: category,
           });
 
           // Remove loader.
@@ -87,9 +84,9 @@ export default class AppointmentType extends React.Component {
   }
 
   onSelectChange = (e, name) => {
-    const { value } = e;
+    const { value, label } = e;
     this.setState({
-      [name]: value,
+      [name]: { id: value, name: label },
     });
   }
 

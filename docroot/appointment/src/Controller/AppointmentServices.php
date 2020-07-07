@@ -3,12 +3,9 @@
 namespace App\Controller;
 
 use Psr\Log\LoggerInterface;
-use App\Service\SoapClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use App\Helper\APIHelper;
 use App\Helper\XmlAPIHelper;
-use App\Helper\Helper;
 
 /**
  * Class AppointmentServices.
@@ -22,20 +19,6 @@ class AppointmentServices {
   protected $logger;
 
   /**
-   * SoapClient.
-   *
-   * @var \App\Service\SoapClient
-   */
-  protected $client;
-
-  /**
-   * APIHelper.
-   *
-   * @var \App\Helper\APIHelper
-   */
-  protected $apiHelper;
-
-  /**
    * XmlAPIHelper.
    *
    * @var \App\Helper\XmlAPIHelper
@@ -43,36 +26,17 @@ class AppointmentServices {
   protected $xmlApiHelper;
 
   /**
-   * Helper.
-   *
-   * @var \App\Helper\Helper
-   */
-  protected $helper;
-
-  /**
-   * ConfigurationServices constructor.
+   * AppointmentServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
-   * @param \App\Service\SoapClient $client
-   *   Soap client service.
-   * @param \App\Helper\APIHelper $api_helper
-   *   API Helper.
    * @param \App\Helper\XmlAPIHelper $xml_api_helper
    *   Xml API Helper.
-   * @param \App\Helper\Helper $helper
-   *   Helper.
    */
   public function __construct(LoggerInterface $logger,
-                              SoapClient $client,
-                              APIHelper $api_helper,
-                              XmlAPIHelper $xml_api_helper,
-                              Helper $helper) {
+                              XmlAPIHelper $xml_api_helper) {
     $this->logger = $logger;
-    $this->client = $client;
-    $this->apiHelper = $api_helper;
     $this->xmlApiHelper = $xml_api_helper;
-    $this->helper = $helper;
   }
 
   /**
@@ -90,6 +54,28 @@ class AppointmentServices {
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting time slots from TT API. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Book Appointment.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Booking Id.
+   */
+  public function bookAppointment(Request $request) {
+    try {
+      $result = $this->xmlApiHelper->bookAppointment($request);
+      $bookingId = $result->return->result ?? '';
+
+      return new JsonResponse($bookingId);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while booking appointment. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
 

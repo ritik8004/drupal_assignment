@@ -2,7 +2,7 @@ import React from 'react';
 import {
   GoogleApiWrapper,
 } from 'google-maps-react';
-import fetchAPIData from '../../../utilities/api/fetchApiData';
+import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import StoreList from './components/store-list';
 import StoreFinderGoogleMap from './components/store-finder-map';
 import { getInputValue, getLocationAccess } from '../../../utilities/helper';

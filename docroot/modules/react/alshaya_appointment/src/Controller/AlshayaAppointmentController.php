@@ -4,6 +4,9 @@ namespace Drupal\alshaya_appointment\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\mobile_number\MobileNumberUtilInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Session\AccountProxy;
 
 /**
  * Class AlshayaAppointmentController.
@@ -11,6 +14,43 @@ use Drupal\Core\Cache\Cache;
  * @package Drupal\alshaya_appointments\Controller
  */
 class AlshayaAppointmentController extends ControllerBase {
+  /**
+   * Mobile utility.
+   *
+   * @var \Drupal\mobile_number\MobileNumberUtilInterface
+   */
+  protected $mobileUtil;
+
+  /**
+   * Drupal\Core\Session\AccountProxy definition.
+   *
+   * @var \Drupal\Core\Session\AccountProxy
+   */
+  protected $currentUser;
+
+  /**
+   * AlshayaAppointmentController constructor.
+   *
+   * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
+   *   Mobile utility.
+   * @param \Drupal\Core\Session\AccountProxy $current_user
+   *   Current user.
+   */
+  public function __construct(MobileNumberUtilInterface $mobile_util,
+                              AccountProxy $current_user) {
+    $this->mobileUtil = $mobile_util;
+    $this->currentUser = $current_user;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('mobile_number.util'),
+      $container->get('current_user')
+    );
+  }
 
   /**
    * Appointment multi step form page.
@@ -24,14 +64,19 @@ class AlshayaAppointmentController extends ControllerBase {
     $alshaya_appointment_config = $this->config('alshaya_appointment.settings');
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
     $geolocation_config = $this->config('geolocation.settings');
+    $alshaya_master_config = $this->config('alshaya_master.mobile_number_settings');
     $social_login_enabled = $this->config('alshaya_social.settings');
 
     $cache_tags = Cache::mergeTags($cache_tags, array_merge(
       $alshaya_appointment_config->getCacheTags(),
       $store_finder_config->getCacheTags(),
       $geolocation_config->getCacheTags(),
+      $alshaya_master_config->getCacheTags(),
       $social_login_enabled->getCacheTags()
     ));
+
+    // Get country code.
+    $country_code = _alshaya_custom_get_site_level_country_code();
 
     $settings['alshaya_appointment'] = [
       'middleware_url' => _alshaya_appointment_get_middleware_url(),
@@ -45,6 +90,10 @@ class AlshayaAppointmentController extends ControllerBase {
         ['radius' => $store_finder_config->get('search_proximity_radius')]
       ),
       'google_map_api_key' => $geolocation_config->get('google_map_api_key'),
+      'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
+      'mobile_maxlength' => $alshaya_master_config->get('maxlength'),
+      'customer_details_disclaimer_text' => $alshaya_appointment_config->get('customer_details_disclaimer_text'),
+      'user_details' => $this->getUserDetails(),
       'social_login_enabled' => $social_login_enabled->get('social_login'),
     ];
 
@@ -106,6 +155,34 @@ class AlshayaAppointmentController extends ControllerBase {
     ];
 
     return $steps;
+  }
+
+  /**
+   * Get user details.
+   *
+   * @return array
+   *   Array of user details.
+   */
+  private function getUserDetails() {
+    $userDetails = [];
+    $uid = $this->currentUser()->id();
+
+    if (!$this->currentUser()->isAuthenticated()) {
+      $userDetails = ['id' => $uid];
+      return $userDetails;
+    }
+
+    $user = $this->entityTypeManager()->getStorage('user')->load($uid);
+    $user_mobile_number = $user->get('field_mobile_number')->first();
+    $userDetails = [
+      'id' => $uid,
+      'email' => $this->currentUser()->getEmail(),
+      'fname' => $user->get('field_first_name')->getString(),
+      'lname' => $user->get('field_last_name')->getString(),
+      'mobile' => !empty($user_mobile_number) ? $user_mobile_number->getValue()['local_number'] : '',
+    ];
+
+    return $userDetails;
   }
 
 }

@@ -2,9 +2,9 @@ import React from 'react';
 import moment from 'moment';
 import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
 import AppointmentSlots from '../appointment-selectslot';
-import fetchAPIData from '../../../utilities/api/fetchApiData';
+import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
-import { getDateFormat } from "../../../utilities/helper";
+import { getDateFormat } from '../../../utilities/helper';
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
@@ -63,7 +63,7 @@ export default class AppointmentTimeSlot extends React.Component {
       apiData.then((result) => {
         if (result.data !== undefined) {
           this.setState({
-            timeSlots: result.data, // some user
+            timeSlots: result.data,
           });
         }
       });
@@ -71,9 +71,9 @@ export default class AppointmentTimeSlot extends React.Component {
   }
 
   getParamsForTimeSlotApi() {
-    const { appointmentCategoryId, appointmentType, selectedStoreItem } = this.state;
+    const { appointmentCategory, appointmentType, selectedStoreItem } = this.state;
     const location = JSON.parse(selectedStoreItem);
-    const params = `program=${appointmentCategoryId}&activity=${appointmentType}&location=${location.locationExternalId}`;
+    const params = `program=${appointmentCategory.id}&activity=${appointmentType}&location=${location.locationExternalId}`;
     return params;
   }
 
