@@ -4,14 +4,14 @@ import DefaultSelectOptions from '../default-select-options';
 import SizeGuide from '../size-guide';
 
 const GroupSelectOption = ({
-  groupSelect, handleSelectionChanged, configurables,
+  groupSelect, configurables,
   groupName, code, nextCode, nextValues, handleLiClick,
   selected, key, closeModal,
 }) => (
   <div className="magv2-select-popup-container">
     <div className="magv2-select-popup-wrapper">
       <div className="magv2-select-popup-header-wrapper">
-        <a className="close" onClick={() => closeModal()}>
+        <a className="close" onClick={(e) => closeModal(e)}>
           &times;
         </a>
         <label htmlFor={key}>{configurables.label}</label>
@@ -21,13 +21,21 @@ const GroupSelectOption = ({
           <label htmlFor={key}>{configurables.label}</label>
           <div className="group-anchor-links">
             {Object.keys(configurables.alternates).map((alternate) => (
-              <a href="#" key={alternate} onClick={(e) => groupSelect(e, configurables.alternates[alternate])}>{configurables.alternates[alternate]}</a>
+              <a
+                href="#"
+                key={alternate}
+                onClick={(e) => groupSelect(e, configurables.alternates[alternate])}
+                className={((groupName === configurables.alternates[alternate]))
+                  ? 'active' : 'in-active'}
+              >
+                {configurables.alternates[alternate]}
+              </a>
             ))}
           </div>
         </div>
         <SizeGuide attrId={code} />
         <div className="group-option-wrapper">
-          <ul id={code} className="select-attribute-group clicked" onChange={(e) => handleSelectionChanged(e, code)}>
+          <ul id={code} className="select-attribute-group clicked">
             {Object.keys(configurables.values).map((attr) => {
               // If the currennt attribute matches the
               // attribute code of the available values.
@@ -59,7 +67,7 @@ const GroupSelectOption = ({
           </ul>
         </div>
         <div className="magv2-confirm-size-btn">
-          <button className="magv2-button" type="submit" value="Confirm Size">{Drupal.t('Confirm Size')}</button>
+          <button className="magv2-button" type="submit" value="Confirm Size" onClick={(e) => closeModal(e)}>{Drupal.t('Confirm Size')}</button>
         </div>
       </div>
     </div>

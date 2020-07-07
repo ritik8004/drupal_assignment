@@ -7,6 +7,7 @@ import {
 } from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
+import SelectSizeButton from '../select-size-button';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -14,6 +15,8 @@ class ConfigurableProductForm extends React.Component {
     this.state = {
       nextCode: null,
       nextValues: null,
+      attributeAvailable: false,
+
     };
 
     this.button = createRef();
@@ -36,6 +39,10 @@ class ConfigurableProductForm extends React.Component {
       }
 
       this.addToBagButtonClass(buttonOffset);
+    });
+
+    this.setState({
+      attributeAvailable: true,
     });
   }
 
@@ -105,6 +112,10 @@ class ConfigurableProductForm extends React.Component {
     // Refresh configurables.
     let { combinations } = configurableCombinations[skuCode];
 
+    this.setState({
+      variant: variantSelected,
+    });
+
     selectedValues.forEach((key) => {
       if (key !== code) {
         combinations = combinations[key][selectedValues[key]];
@@ -125,7 +136,6 @@ class ConfigurableProductForm extends React.Component {
       this.setState({
         nextCode,
         nextValues,
-        variant: variantSelected,
       });
       const nextVal = document.getElementById(nextCode).value;
       this.refreshConfigurables(nextCode, nextVal);
@@ -137,7 +147,7 @@ class ConfigurableProductForm extends React.Component {
     const attributes = configurableCombinations[skuCode].configurables;
     const selectedValues = [];
     Object.keys(attributes).map((id) => {
-      const selectedVal = document.getElementById(id).getElementsByClassName('magv2-select-list-item active');
+      const selectedVal = document.querySelector(`#${id}`).querySelectorAll('.active')[0].value;
       if (selectedVal !== '' && selectedVal !== null && typeof selectedVal !== 'undefined') {
         selectedValues[id] = selectedVal;
       }
@@ -150,6 +160,19 @@ class ConfigurableProductForm extends React.Component {
     document.querySelector('body').classList.add('select-overlay');
   };
 
+  buttonLabel = (attr) => {
+    const size = document.querySelector(`#${attr}`).querySelectorAll('.active')[0].innerText;
+    let group = '';
+    let label = size;
+    // Check if size group is available.
+    if (document.querySelector('.group-anchor-links')) {
+      group = document.querySelector('.group-anchor-links').querySelectorAll('.active')[0].innerText;
+      label = `${group}, ${size}`;
+      return label;
+    }
+    return label;
+  }
+
   render() {
     const {
       configurableCombinations, skuCode, productInfo, pdpRefresh,
@@ -160,7 +183,7 @@ class ConfigurableProductForm extends React.Component {
     const { byAttribute } = configurableCombinations[skuCode];
 
     const {
-      nextCode, nextValues, variant,
+      nextCode, nextValues, variant, attributeAvailable,
     } = this.state;
     const variantSelected = variant || drupalSettings.configurableCombinations[skuCode].firstChild;
 
@@ -189,7 +212,20 @@ class ConfigurableProductForm extends React.Component {
             />
           </div>
         ))}
-        <div className="magv2-size-btn-wrapper" onClick={() => this.openModal()}>{Drupal.t('Select size')}</div>
+        {Object.keys(configurables).map((key) => {
+          if (/size/.test(key) && attributeAvailable) {
+            const label = this.buttonLabel(key);
+            return (
+              <SelectSizeButton
+                openModal={this.openModal}
+                key={key}
+                attr={key}
+                label={label}
+              />
+            );
+          }
+          return null;
+        })}
         <div id="product-quantity-dropdown" className="magv2-qty-wrapper">
           <QuantityDropdown
             variantSelected={variantSelected}

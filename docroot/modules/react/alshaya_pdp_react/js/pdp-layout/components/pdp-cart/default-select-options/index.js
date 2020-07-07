@@ -6,6 +6,7 @@ const DefaultSelectOptions = ({
   <li
     key={attr}
     value={attr}
+    id={`value${attr}`}
     className={`magv2-select-list-item ${((selected !== undefined
         && String(selected) === String(attr)))
       ? 'active' : 'in-active'}`}

@@ -11,7 +11,7 @@ const NonGroupSelectOption = ({
   <div className="magv2-select-popup-container">
     <div className="magv2-select-popup-wrapper">
       <div className="magv2-select-popup-header-wrapper">
-        <a className="close" onClick={() => closeModal()}>
+        <a className="close" onClick={(e) => closeModal(e)}>
           &times;
         </a>
         <label htmlFor={key}>{configurables.label}</label>
@@ -30,26 +30,31 @@ const NonGroupSelectOption = ({
                 return (
                   <AvailableSelectOptions
                     nextValues={nextValues}
-                    attr={attr}
+                    attr={configurables.values[attr].value_id}
                     value={configurables.values[attr].label}
                     key={attr}
                     selected={selected}
                     handleLiClick={handleLiClick}
+                    code={code}
                   />
                 );
               }
               // Show the default options.
               return (
                 <DefaultSelectOptions
-                  attr={attr}
+                  attr={configurables.values[attr].value_id}
                   value={configurables.values[attr].label}
                   key={attr}
                   selected={selected}
                   handleLiClick={handleLiClick}
+                  code={code}
                 />
               );
             })}
           </ul>
+        </div>
+        <div className="magv2-confirm-size-btn">
+          <button className="magv2-button" type="submit" value="Confirm Size" onClick={(e) => closeModal(e)}>{Drupal.t('Confirm Size')}</button>
         </div>
       </div>
     </div>
