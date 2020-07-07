@@ -31,6 +31,8 @@ export default class Cart extends React.Component {
       dynamicPromoLabelsCart: null,
       dynamicPromoLabelsProduct: null,
       inStock: true,
+      messageType: null,
+      message: null,
     };
   }
 
@@ -87,6 +89,14 @@ export default class Cart extends React.Component {
         this.setState({
           messageType: 'error',
           message: Drupal.t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.'),
+        });
+      } else if (data.message === undefined && data.in_stock) {
+        this.setState((prevState) => {
+          if (prevState.message === null) return null;
+          return {
+            messageType: null,
+            message: null,
+          };
         });
       }
     }, false);
