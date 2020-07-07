@@ -1,0 +1,207 @@
+.appointment-select-store-container {
+  @include breakpoint($upto-tablet-landscape) {
+    position: relative;
+    margin-bottom: 8.75rem;
+  }
+
+  @include breakpoint($tablet-landscape) {
+    display: grid;
+    grid-template-columns: 1fr calc(25%);
+    width: 100%;
+
+    body.ie & {
+      display: -ms-grid;
+      -ms-grid-columns: 1fr calc(25%);
+    }
+  }
+
+  .store-map-wrapper {
+    @include breakpoint($upto-tablet-landscape) {
+      margin-bottom: 3.25rem;
+    }
+  }
+
+  .appointment-details {
+    @include breakpoint($tablet-landscape) {
+      margin-#{$left}: 3.125rem;
+
+      body.ie & {
+        -ms-grid-row: 1;
+        -ms-grid-column: 2;
+      }
+    }
+  }
+
+  .store-header {
+    @include breakpoint($upto-tablet-landscape) {
+      margin-bottom: 0.9375rem;
+    }
+  }
+
+  .appointment-subtitle {
+    font-family: $alshaya-bold;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    color: $appointment-section-title;
+    padding-bottom: 0.375rem;
+    border-bottom: 1px solid $appointment-grey-border;
+  }
+
+  .store-finder-button {
+    float: none;
+    padding: 0.625rem 2.4rem;
+    margin-top: 0;
+  }
+
+  .store-finder-wrapper {
+    margin-bottom: 0.8125rem;
+
+    .store-finder-container {
+      @include breakpoint($tablet-landscape) {
+        display: inline-flex;
+        align-items: center;
+        width: calc(100% - 14.0625rem);
+        justify-content: space-between;
+        margin-top: 1.875rem;
+      }
+    }
+
+    span,
+    label {
+      font-size: 0.875rem;
+      color: $appointment-store-text;
+    }
+
+    label {
+      @include breakpoint($upto-tablet-landscape) {
+        margin-bottom: 0.625rem;
+        display: block;
+      }
+    }
+
+    span {
+      margin-#{$left}: 1.625rem;
+      margin-#{$right}: 1.0625rem;
+    }
+
+    input[type=text] {
+      height: 2.5rem;
+      padding-#{$right}: 3.75rem;
+      padding-#{$left}: 0.5rem;
+      padding-top: 0.6875rem;
+      padding-bottom: 0.6875rem;
+      border: 1px solid $appointment-grey-border;
+
+      @include breakpoint($tablet-landscape) {
+        margin-#{$left}: 0.3125rem;
+        width: 13.75rem;
+      }
+    }
+
+    .store-finder-input {
+      display: inline-block;
+      position: relative;
+
+      &::after {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-search.svg') no-repeat;
+        border: none;
+        text-indent: -9999px;
+        width: 2.125rem;
+        height: 2.125rem;
+        text-align: center;
+        margin-#{$left}: 0;
+        position: absolute;
+        #{$right}: 0.3125rem;
+        top: 0.125rem;
+        background-size: cover;
+        z-index: 2;
+      }
+
+      @include breakpoint($upto-tablet-landscape) {
+        width: calc(100% - 3.125rem);
+        vertical-align: middle;
+
+        input {
+          width: 100%;
+        }
+      }
+    }
+
+    .appointment-store-near-me {
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid $appointment-store-search-icon;
+      font-size: 0;
+      transition: background 0.2s ease-in-out;
+      margin-#{$left}: 0.625rem;
+      display: inline-block;
+      vertical-align: middle;
+      background: $appointment-store-search-icon;
+
+      @include icon('map-location', before) {
+        font-size: 1.5rem;
+        color: $appointment-store-search-icon-active;
+        transition: color 0.2s ease-in-out;
+      }
+
+      &.active,
+      &:hover {
+        background: $appointment-store-search-icon-active;
+
+        @include icon('map-location', before) {
+          color: $appointment-store-search-icon;
+        }
+      }
+    }
+  }
+
+  .appointment-details-item {
+    margin-bottom: 1.5625rem;
+  }
+
+  .appointment-details-body {
+    margin-top: 1.3125rem;
+    position: relative;
+  }
+
+  .appointment-details-item-body {
+    font-size: 0.75rem;
+    margin-top: 0.1875rem;
+  }
+
+  .appointment-store-buttons-wrapper {
+    display: flex;
+    justify-content: space-between;
+
+    @include breakpoint($upto-tablet-landscape) {
+      position: absolute;
+      top: 100%;
+      padding-top: 3.125rem;
+      flex-direction: column-reverse;
+      width: 100%;
+    }
+
+    .appointment-store-button {
+      float: none;
+
+      &.back,
+      &.select-store {
+        @include breakpoint($upto-tablet-landscape) {
+          display: block;
+        }
+      }
+
+      &.back {
+        padding: 0.625rem 3.96875rem;
+        background: none;
+        border: 1px solid $appointment-btn-bg;
+        color: $appointment-btn-bg;
+
+        @include breakpoint($upto-tablet-landscape) {
+          margin-top: 1.5625rem;
+        }
+      }
+    }
+  }
+}

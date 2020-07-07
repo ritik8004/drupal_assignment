@@ -114,7 +114,7 @@ export default class AppointmentType extends React.Component {
         <AppointmentCategories
           categoryItems={categoryItems}
           handleItemClick={this.handleCategoryClick}
-          activeItem={appointmentCategory.id}
+          activeItem={appointmentCategory}
         />
         { appointmentCategory
           ? (

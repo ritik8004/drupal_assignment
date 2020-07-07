@@ -4,7 +4,7 @@
   color: $appointment-section-title;
   margin-bottom: 0.625rem;
 
-  @include breakpoint($desktop) {
+  @include breakpoint($tablet-landscape) {
     margin-#{$right}: 3.75rem;
     width: 13rem;
     margin-bottom: 0;
@@ -14,7 +14,7 @@
 .appointment-type-item {
   margin-bottom: 3.125rem;
 
-  @include breakpoint($desktop) {
+  @include breakpoint($tablet-landscape) {
     display: flex;
     margin-bottom: 2.4375rem;
   }

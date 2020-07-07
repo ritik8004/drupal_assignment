@@ -25,7 +25,7 @@ export default class AppointmentCompanion extends React.Component {
       optionState: options,
     });
 
-    const filterKey = options.filter((v) => parseInt(activeItem, 10) === v.value);
+    const filterKey = options.filter((v) => parseInt(activeItem.id, 10) === v.value);
     const updateFilterKey = filterKey.length ? filterKey : options;
     this.onSelectChange(updateFilterKey[0], 'appointmentCompanion');
   }

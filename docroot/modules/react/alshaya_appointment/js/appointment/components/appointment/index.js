@@ -107,7 +107,7 @@ export default class Appointment extends React.Component {
     return (
       <div className="appointment-wrapper">
         <AppointmentSteps />
-        <div className="appointment-inner-wrapper">
+        <div className={`appointment-inner-wrapper ${appointmentStep === 'select-store' ? ' appointment-select-store-container' : ''}`}>
           {appointmentData}
           {appointmentSelection}
         </div>
