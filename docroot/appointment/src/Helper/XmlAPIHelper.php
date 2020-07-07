@@ -154,6 +154,7 @@ class XmlAPIHelper {
    */
   public function updateInsertClient($request) {
     $request_content = json_decode($request->getContent(), TRUE);
+    $clientExternalId = $request_content['clientExternalId'] ?? '';
     $firstName = $request_content['firstName'] ?? '';
     $lastName = $request_content['lastName'] ?? '';
     $dob = $request_content['dob'] ?? '';
@@ -161,7 +162,7 @@ class XmlAPIHelper {
 
     $apiBody = '<ns2:updateInsertClient>
       <client>
-        <clientExternalId>' . $request_content['clientExternalId'] . '</clientExternalId>
+        <clientExternalId>' . $clientExternalId . '</clientExternalId>
         <firstName>' . $firstName . '</firstName>
         <lastName>' . $lastName . '</lastName>
         <dob>' . $dob . '</dob>
