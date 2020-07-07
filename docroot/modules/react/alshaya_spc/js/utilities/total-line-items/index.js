@@ -10,7 +10,7 @@ class TotalLineItems extends React.Component {
     super(props);
 
     this.state = {
-      cartPromo: [],
+      cartPromo: {},
       freeShipping: false,
     };
   }
@@ -20,6 +20,16 @@ class TotalLineItems extends React.Component {
   };
 
   applyDynamicPromotions = (event) => {
+    // If promo contains no data, set to null.
+    if (event.detail.cart_labels === null) {
+      this.setState({
+        cartPromo: {},
+        freeShipping: false,
+      });
+
+      return;
+    }
+
     const {
       applied_rules: cartPromo,
       shipping_free: freeShipping,
@@ -33,7 +43,9 @@ class TotalLineItems extends React.Component {
    */
   discountToolTipContent = (cartPromo) => {
     let promoData = `<div class="applied-discounts-title">${Drupal.t('Discount applied')}</div>`;
-    if (cartPromo.length > 0) {
+    if (cartPromo !== null
+      && cartPromo !== undefined
+      && Object.keys(cartPromo).length > 0) {
       Object.entries(cartPromo).forEach(([, promo]) => {
         if (promo.label.length > 0) {
           promoData += `<div class="promotion-label"><strong>${promo.label}</strong></div>`;
