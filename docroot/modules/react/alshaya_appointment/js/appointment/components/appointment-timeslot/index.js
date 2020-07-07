@@ -84,9 +84,6 @@ export default class AppointmentTimeSlot extends React.Component {
 
   render() {
     const { date, timeSlots } = this.state;
-    const arg = {
-      '!date': moment().format('dddd DD MMMM'),
-    };
     return (
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
@@ -96,9 +93,10 @@ export default class AppointmentTimeSlot extends React.Component {
             *
           </div>
           <div className="timeslot-latest-available">
-            <p>
-              {Drupal.t('The first available appointment is on !date', arg)}
-            </p>
+            <span>
+              {Drupal.t('The first available appointment is on ')}
+            </span>
+            <span className="starting-timeslot">{Drupal.t(moment().format('dddd DD MMMM'))}</span>
           </div>
           <div className="appointment-datepicker">
             <AppointmentCalendar
