@@ -88,6 +88,13 @@ function alshaya_pbk_transac_install() {
 
   // Get metatag translations on install.
   _alshaya_pbk_transac_get_metatag_translations();
+
+  // Set default settings for main menu.
+  \Drupal::configFactory()->getEditable('alshaya_main_menu.settings')
+    ->set('desktop_main_menu_layout', 'menu_dynamic_display')
+    ->set('max_nb_col', 5)
+    ->set('ideal_max_col_length', 12)
+    ->save();
 }
 
 /**
