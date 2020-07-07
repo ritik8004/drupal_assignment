@@ -1,6 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 import {
+  removeFullScreenLoader,
   showFullScreenLoader,
   validateCvv,
 } from '../../../utilities/checkout_util';
@@ -30,6 +31,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     });
 
     dispatchCustomEvent('refreshCompletePurchaseSection', {});
+    this.handleCheckoutKitJsErrors();
   }
 
   componentDidUpdate() {
@@ -76,6 +78,22 @@ class PaymentMethodCheckoutCom extends React.Component {
     this.labelEffect(event, handler);
     this.cvvValidations(event);
   };
+
+  handleCheckoutKitJsErrors = () => {
+    // Handle api error which triggered on card tokenisation fail.
+    window.CheckoutKit.addEventHandler(window.CheckoutKit.Events.API_ERROR, (event) => {
+      Drupal.logJavascriptError(
+        'Payment failed',
+        `Payment failed with error code ${event.data.errorCode}`,
+      );
+      dispatchCustomEvent('spcCheckoutMessageUpdate', {
+        type: 'error',
+        message: (event.data.errorCode === '70000')
+          ? getStringMessage('transaction_failed')
+          : getStringMessage('payment_error'),
+      });
+    });
+  }
 
   validateBeforePlaceOrder = () => {
     const {
@@ -137,7 +155,11 @@ class PaymentMethodCheckoutCom extends React.Component {
   };
 
   handleCheckoutResponse = (data) => {
-    // @TODO: Handle errors.
+    // Do not process when data has type error.
+    if (data.type === 'error') {
+      removeFullScreenLoader();
+      return;
+    }
     const { selectedCard } = this.context;
     const { finalisePayment } = this.props;
 
