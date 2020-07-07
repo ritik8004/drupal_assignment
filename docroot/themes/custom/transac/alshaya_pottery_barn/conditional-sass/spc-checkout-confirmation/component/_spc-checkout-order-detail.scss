@@ -23,6 +23,10 @@
                 font-weight: 600;
                 text-transform: capitalize;
               }
+
+              html[lang=ar] & {
+                min-height: 1.1875rem;
+              }
             }
           }
         }
