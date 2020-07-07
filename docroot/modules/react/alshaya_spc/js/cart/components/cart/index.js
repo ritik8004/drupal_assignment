@@ -16,6 +16,7 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { fetchCartData } from '../../../utilities/api/requests';
 import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
+import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -203,6 +204,7 @@ export default class Cart extends React.Component {
               <span>{`${Drupal.t('my shopping bag')} `}</span>
               <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
             </SectionTitle>
+            <DeliveryInOnlyCity />
             <CartItems dynamicPromoLabelsProduct={dynamicPromoLabelsProduct} items={items} />
           </div>
           <div className="spc-sidebar">
