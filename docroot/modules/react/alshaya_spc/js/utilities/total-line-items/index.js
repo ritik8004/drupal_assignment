@@ -11,19 +11,21 @@ class TotalLineItems extends React.Component {
 
     this.state = {
       cartPromo: [],
+      freeShipping: false,
     };
   }
 
   componentDidMount = () => {
-    document.addEventListener('applyDynamicPromotions', this.saveDynamicPromotions, false);
+    document.addEventListener('applyDynamicPromotions', this.applyDynamicPromotions, false);
   };
 
   applyDynamicPromotions = (event) => {
     const {
       applied_rules: cartPromo,
-    } = event.detail;
+      shipping_free: freeShipping,
+    } = event.detail.cart_labels;
 
-    this.setState({ cartPromo });
+    this.setState({ cartPromo, freeShipping });
   };
 
   /**
@@ -48,8 +50,14 @@ class TotalLineItems extends React.Component {
 
   render() {
     const { totals } = this.props;
-    const { cartPromo } = this.state;
+    const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
+
+    // Show "Delivery: FREE" on basket if cart promo rule applied for it.
+    if ((totals.shipping_incl_tax === undefined || totals.shipping_incl_tax === null)
+      && freeShipping) {
+      totals.shipping_incl_tax = 0;
+    }
 
     return (
       <div className="totals">
