@@ -90,7 +90,7 @@ class PaymentMethodCheckoutCom extends React.Component {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
         message: (event.data.errorCode === '70000')
-          ? Drupal.t('Transaction has been declined. Please try again later.')
+          ? getStringMessage('transaction_failed')
           : getStringMessage('payment_error'),
       });
     });
