@@ -22,7 +22,25 @@ class CartSelectOption extends React.Component {
       groupName: isGroup ? defaultGroup : null,
       groupStatus: isGroup,
       swatchStatus: isSwatch,
+      selected: null,
     };
+  }
+
+  componentDidMount() {
+    const { configurableCombinations, skuCode, configurables } = this.props;
+    const { firstChild } = configurableCombinations[skuCode];
+    const { code } = configurables;
+    const value = configurableCombinations[skuCode].bySku[firstChild][code];
+    // Setting active class for the
+    // default variant.
+    const elem = document.querySelector(`ul#${code} li#value${value}`);
+    if (elem.classList.contains('in-active')) {
+      elem.classList.remove('in-active');
+    }
+    elem.classList.toggle('active');
+    this.setState({
+      selected: value,
+    });
   }
 
   // To get the option values of the
@@ -35,7 +53,8 @@ class CartSelectOption extends React.Component {
   }
 
   handleSelectionChanged = (e, code) => {
-    const codeValue = e.target.value;
+    e.preventDefault();
+    const codeValue = e.currentTarget.parentElement.value;
     const {
       configurableCombinations,
       skuCode,
@@ -49,7 +68,6 @@ class CartSelectOption extends React.Component {
       selectedCombination += `${key}|${selectedValuesArray[key]}||`;
     });
     const variantSelected = configurableCombinations[skuCode].byAttribute[selectedCombination];
-
     // Refresh the PDP page on new variant selection.
     pdpRefresh(variantSelected);
 
@@ -57,11 +75,39 @@ class CartSelectOption extends React.Component {
     refreshConfigurables(code, codeValue, variantSelected);
   }
 
+  /**
+   * Handle click on <li>.
+   */
+  handleLiClick = (e, code) => {
+    this.setState({
+      selected: e.currentTarget.parentElement.value,
+    });
+    // Remove the previous active class.
+    const activeElem = document.querySelector(`ul#${code} li.active`);
+    if (activeElem) {
+      activeElem.classList.remove('active');
+      activeElem.classList.toggle('in-active');
+    }
+    // Set active class on the current element.
+    const elem = document.querySelector(`ul#${code} li#value${e.currentTarget.parentElement.value}`);
+    if (elem.classList.contains('in-active')) {
+      elem.classList.remove('in-active');
+    }
+    elem.classList.toggle('active');
+    this.handleSelectionChanged(e, code);
+  };
+
+  closeModal = (e) => {
+    e.preventDefault();
+    document.querySelector('body').classList.remove('select-overlay');
+  };
+
   render() {
     const {
       configurables,
       nextCode,
       nextValues,
+      key,
     } = this.props;
 
     const { code } = configurables;
@@ -69,6 +115,7 @@ class CartSelectOption extends React.Component {
       groupName,
       groupStatus,
       swatchStatus,
+      selected,
     } = this.state;
 
     const swatchSelectOption = (
@@ -78,17 +125,23 @@ class CartSelectOption extends React.Component {
         code={code}
         nextCode={nextCode}
         nextValues={nextValues}
+        selected={selected}
+        handleLiClick={this.handleLiClick}
       />
     );
 
     const selectOption = (!swatchStatus) ? (
       <div className="non-grouped-attr">
         <NonGroupSelectOption
+          key={key}
           handleSelectionChanged={this.handleSelectionChanged}
           configurables={configurables}
           code={code}
           nextCode={nextCode}
           nextValues={nextValues}
+          selected={selected}
+          handleLiClick={this.handleLiClick}
+          closeModal={this.closeModal}
         />
       </div>
     ) : swatchSelectOption;
@@ -96,6 +149,7 @@ class CartSelectOption extends React.Component {
     return (groupStatus) ? (
       <div className="grouped-attr">
         <GroupSelectOption
+          key={key}
           groupSelect={this.groupSelect}
           handleSelectionChanged={this.handleSelectionChanged}
           configurables={configurables}
@@ -103,6 +157,9 @@ class CartSelectOption extends React.Component {
           code={code}
           nextCode={nextCode}
           nextValues={nextValues}
+          selected={selected}
+          handleLiClick={this.handleLiClick}
+          closeModal={this.closeModal}
         />
       </div>
     ) : selectOption;
