@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\facets\FacetInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Exception\RequestException;
