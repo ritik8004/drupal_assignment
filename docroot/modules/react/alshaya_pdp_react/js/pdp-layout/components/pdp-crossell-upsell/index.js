@@ -26,6 +26,10 @@ export default class PdpCrossellUpsell extends React.PureComponent {
     this.setState({
       currentPage,
       totalPagers,
+      limits: {
+        prev: true,
+        next: totalPagers === currentPage,
+      },
     });
   }
 

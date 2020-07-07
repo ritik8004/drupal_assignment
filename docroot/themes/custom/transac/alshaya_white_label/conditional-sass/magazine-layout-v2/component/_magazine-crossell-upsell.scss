@@ -2,14 +2,17 @@
   &-crossell-upsell {
     &-wrapper {
       clear: both;
-      padding-top: 3.75rem;
-      padding-bottom: 3.75rem;
 
-      @include breakpoint($only-mobile) {
-        padding: 2.5rem 1.25rem;
+      .magv2-pdp-crossell-upsell-container {
+        padding-top: 3.75rem;
+        padding-bottom: 3.75rem;
+
+        @include breakpoint($only-mobile) {
+          padding: 2.5rem 1.25rem;
+        }
       }
 
-      .magv2-compact-detail-wrapper {
+      .magv2-detail-wrapper {
         display: flex;
         flex-direction: column-reverse;
         align-items: end;
@@ -22,6 +25,7 @@
             padding: 0;
             font-size: 1.125rem;
             margin-bottom: 0.3125rem;
+            font-family: $alshaya-bold;
 
             @include breakpoint($only-mobile) {
               font-size: 1rem;
@@ -36,15 +40,32 @@
             }
           }
 
+          &-price-container {
+            margin-bottom: 0;
+
+            .magv2-pdp-final-price-wrapper {
+              font-size: 1.125rem !important;
+            }
+          }
+
           &-title {
             font-size: 1rem;
             line-height: 1.375rem;
             margin-bottom: 0;
+            padding: 0 0 0.9375rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+
+            @include breakpoint($only-mobile) {
+              max-width: 12.5rem;
+            }
           }
         }
 
         .magv2-pdp-final-price-wrapper + .magv2-pdp-price-wrapper {
           font-size: 1rem;
+          font-family: $alshaya-thin;
 
           @include breakpoint($only-mobile) {
             font-size: 0.875rem;

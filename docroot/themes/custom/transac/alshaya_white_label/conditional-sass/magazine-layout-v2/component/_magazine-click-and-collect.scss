@@ -2,7 +2,6 @@
   .magv2-pdp-section-title {
     display: flex;
     align-items: center;
-    text-transform: capitalize;
 
     &::before {
       content: '';
@@ -65,13 +64,6 @@
     }
   }
 
-  .click-collect-detail,
-  .instore-title {
-    &::first-letter {
-      text-transform: uppercase;
-    }
-  }
-
   .magv2-click-collect-show-link,
   .location-name {
     font-size: 1rem;
@@ -122,11 +114,6 @@
       div {
         font-family: $alshaya-bold;
       }
-    }
-
-    &-name,
-    &-address {
-      text-transform: capitalize;
     }
 
     &-address {
