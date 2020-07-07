@@ -86,6 +86,12 @@ const PdpLayout = () => {
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
           />
+          <PdpCart
+            skuCode={skuItemCode}
+            configurableCombinations={configurableCombinations}
+            productInfo={productInfo}
+            pdpRefresh={pdpRefresh}
+          />
           <PdpDescription
             skuCode={skuItemCode}
             pdpDescription={description}
@@ -93,12 +99,6 @@ const PdpLayout = () => {
             title={title}
             pdpProductPrice={priceRaw}
             finalPrice={finalPrice}
-          />
-          <PdpCart
-            skuCode={skuItemCode}
-            configurableCombinations={configurableCombinations}
-            productInfo={productInfo}
-            pdpRefresh={pdpRefresh}
           />
           <PdpStandardDelivery />
           <PdpClickCollect />
