@@ -94,7 +94,9 @@
   document.addEventListener('refreshCart', function (e) {
     var step = Drupal.alshayaSeoSpc.getStepFromContainer();
     var cartData = Drupal.alshayaSeoSpc.cartGtm(e.detail.data(), step);
-    Object.assign(dataLayer[0].ecommerce, cartData);
+    Object.assign(dataLayer[0].ecommerce.checkout, cartData.checkout);
+    delete cartData.checkout;
+    Object.assign(dataLayer[0], cartData);
   });
 
   document.addEventListener('updateCartItemData', function (e) {
