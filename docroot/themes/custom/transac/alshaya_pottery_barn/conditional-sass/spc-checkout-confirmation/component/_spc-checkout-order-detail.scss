@@ -22,6 +22,10 @@
               &:first-child {
                 font-weight: 600;
                 text-transform: capitalize;
+
+                html[lang=ar] & {
+                  line-height: 1.7;
+                }
               }
 
               html[lang=ar] & {
