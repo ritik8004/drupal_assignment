@@ -10,6 +10,16 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Marks color and size as attributes to index.
+ */
+function alshaya_we_transac_update_8002() {
+  alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+  \Drupal::service('acq_sku.fields_manager')->resetBaseFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new field as quantity set.
  */
 function alshaya_we_transac_update_8001() {
