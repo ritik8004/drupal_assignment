@@ -1,8 +1,0 @@
-name: Alshaya Replicate
-description: Overrides replicate functionality.
-package: "Alshaya"
-core: 8.x
-type: module
-dependencies:
-  - replicate:replicate
-  - replicate_ui:replicate_ui

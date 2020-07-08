@@ -1,8 +1,0 @@
-alshaya_replicate.settings:
-  type: config_object
-  label: 'Alshaya Replicate UI settings'
-  mapping:
-    content_types:
-      type: sequence
-      sequence:
-        type: string
