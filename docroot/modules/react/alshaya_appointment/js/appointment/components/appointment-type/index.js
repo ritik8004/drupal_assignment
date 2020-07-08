@@ -3,7 +3,6 @@ import AppointmentCategories from './components/appointment-categories';
 import AppointmentTypeList from './components/appointment-type-list';
 import AppointmentCompanion from './components/appointment-companion';
 import AppointmentForYou from './components/appointment-for-you';
-import AppointmentTermsConditions from './components/appointment-terms-conditions';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import { getInputValue } from '../../../utilities/helper';
@@ -30,7 +29,6 @@ export default class AppointmentType extends React.Component {
         appointmentType: '',
         appointmentCompanion: '',
         appointmentForYou: '',
-        appointmentTermsConditions: '',
         appointmentTypeItems: [],
         categoryItems: '',
         activeKey: 0,
@@ -105,7 +103,6 @@ export default class AppointmentType extends React.Component {
       appointmentType,
       appointmentCompanion,
       appointmentForYou,
-      appointmentTermsConditions,
       activeKey,
     } = this.state;
 
@@ -144,22 +141,13 @@ export default class AppointmentType extends React.Component {
             />
           )
           : null}
-        { appointmentCategory && appointmentType && appointmentCompanion && appointmentForYou
-          ? (
-            <AppointmentTermsConditions
-              handleChange={this.handleChange}
-              activeItem={appointmentTermsConditions}
-            />
-          )
-          : null}
         <button
           className="appointment-type-button fadeInUp"
           type="button"
           disabled={!(appointmentCategory
             && appointmentType
             && appointmentCompanion
-            && appointmentForYou
-            && appointmentTermsConditions)}
+            && appointmentForYou)}
           onClick={this.handleSubmit}
         >
           {Drupal.t('Continue')}

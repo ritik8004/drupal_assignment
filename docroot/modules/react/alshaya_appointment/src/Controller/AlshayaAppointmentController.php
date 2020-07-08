@@ -7,6 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Class AlshayaAppointmentController.
@@ -29,17 +30,28 @@ class AlshayaAppointmentController extends ControllerBase {
   protected $currentUser;
 
   /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaAppointmentController constructor.
    *
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
    * @param \Drupal\Core\Session\AccountProxy $current_user
    *   Current user.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
    */
   public function __construct(MobileNumberUtilInterface $mobile_util,
-                              AccountProxy $current_user) {
+                              AccountProxy $current_user,
+                              LanguageManagerInterface $language_manager) {
     $this->mobileUtil = $mobile_util;
     $this->currentUser = $current_user;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -48,7 +60,8 @@ class AlshayaAppointmentController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('mobile_number.util'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('language_manager')
     );
   }
 
@@ -80,8 +93,8 @@ class AlshayaAppointmentController extends ControllerBase {
 
     $settings['alshaya_appointment'] = [
       'middleware_url' => _alshaya_appointment_get_middleware_url(),
+      'current_language' => $this->languageManager->getCurrentLanguage()->getId(),
       'step_labels' => $this->getAppointmentSteps(),
-      'appointment_terms_conditions_text' => $alshaya_appointment_config->get('appointment_terms_conditions_text'),
       'appointment_companion_limit' => $alshaya_appointment_config->get('appointment_companion_limit'),
       'local_storage_expire' => $alshaya_appointment_config->get('local_storage_expire'),
       'store_finder' => array_merge(
