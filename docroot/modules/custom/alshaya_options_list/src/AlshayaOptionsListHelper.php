@@ -7,6 +7,8 @@ use Drupal\Core\Link;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\file\Entity\File;
 use Drupal\Core\Url;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Database\Connection;
@@ -38,7 +40,6 @@ class AlshayaOptionsListHelper {
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;
-
 
   /**
    * File storage.
@@ -83,6 +84,13 @@ class AlshayaOptionsListHelper {
   protected $moduleHandler;
 
   /**
+   * Cache Backend service for alshaya.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * AlshayaOptionsListHelper constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -101,6 +109,8 @@ class AlshayaOptionsListHelper {
    *   Facet manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service for alshaya.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -112,7 +122,8 @@ class AlshayaOptionsListHelper {
                               SKUFieldsManager $sku_fields_manager,
                               ParseModePluginManager $parse_mode_manager,
                               DefaultFacetManager $facet_manager,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              CacheBackendInterface $cache) {
     $this->connection = $connection;
     $this->languageManager = $language_manager;
     $this->fileStorage = $entity_type_manager->getStorage('file');
@@ -121,6 +132,7 @@ class AlshayaOptionsListHelper {
     $this->parseModeManager = $parse_mode_manager;
     $this->facetManager = $facet_manager;
     $this->moduleHandler = $module_handler;
+    $this->cache = $cache;
   }
 
   /**
@@ -349,6 +361,101 @@ class AlshayaOptionsListHelper {
     $link = Url::fromUri('internal:/search', $url_options)->toString();
     $this->moduleHandler->alter('alshaya_search_filter_link', $link, $attributeCode);
     return $link . urlencode($value);
+  }
+
+  /**
+   * Return the options data to display the option page.
+   *
+   * @param string $request
+   *   Path request.
+   *
+   * @return array
+   *   The build array.
+   */
+  public function getOptionsList($request) {
+    $config = $this->configFactory->get('alshaya_options_list.settings');
+    $cache_tags = Cache::mergeTags(
+      [self::OPTIONS_PAGE_CACHETAG],
+      $config->getCacheTags()
+    );
+
+    $response_data = [];
+    $options_list = [];
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    $attribute_options = $config->get('alshaya_options_pages');
+    $attributeCodes = array_filter($attribute_options[$request]['attributes']);
+    // Check for cache first.
+    $cid = 'alshaya_options_page:' . $request . ':' . $langcode;
+    if ($cache = $this->cache->get($cid)) {
+      $data = $cache->data;
+      // If cache hit.
+      if (!empty($data)) {
+        $options_list = $data;
+      }
+    }
+    else {
+      foreach ($attributeCodes as $attributeCode) {
+        foreach ($attribute_options[$request]['attribute_details'][$attributeCode] as $key => $attributeOptions) {
+          $option = [];
+          $option['terms'] = $this->fetchAllTermsForAttribute($attributeCode, $attributeOptions['show-images'], $attributeOptions['group']);
+          if ($attributeOptions['show-search']) {
+            $option['search'] = $options_list[$attributeCode][$key]['search'] = TRUE;
+            $options_list[$attributeCode][$key]['search_placeholder'] = $attributeOptions['search-placeholder'];
+          }
+
+          if ($attributeOptions['group']) {
+            $option['group'] = $options_list[$attributeCode][$key]['group'] = TRUE;
+            $option['terms'] = $this->groupAlphabetically($option['terms']);
+          }
+
+          $options_list[$attributeCode][$key]['options_markup'] = [
+            '#theme' => 'alshaya_options_attribute',
+            '#option' => $option,
+            '#attribute_code' => $attributeCode,
+          ];
+
+          $options_list[$attributeCode][$key]['title'] = $attributeOptions['title'];
+          $options_list[$attributeCode][$key]['description'] = $attributeOptions['description'];
+
+          if ($attributeOptions['mobile_title_toggle']) {
+            $options_list[$attributeCode][$key]['mobile_title'] = $attributeOptions['mobile_title'];
+          }
+        }
+      }
+      $this->cache->set($cid, $options_list, Cache::PERMANENT, $cache_tags);
+    }
+
+    // Only show those facets that have values.
+    $facet_results = $this->loadFacetsData($attributeCodes);
+    foreach ($options_list as $attribute_key => $attribute_details) {
+      foreach ($attribute_details as $no => $attribute_detail) {
+        if (isset($attribute_detail['group'])) {
+          foreach ($attribute_detail['options_markup']['#option']['terms'] as $group_key => $grouped_term) {
+            foreach ($grouped_term as $group_term_key => $grouped_term_value) {
+              if (!in_array($grouped_term_value['title'], $facet_results[$attribute_key])) {
+                unset($options_list[$attribute_key][$no]['options_markup']['#option']['terms'][$group_key][$group_term_key]);
+              }
+            }
+          }
+          $options_list[$attribute_key][$no]['options_markup']['#option']['terms'] = array_filter($options_list[$attribute_key][$no]['options_markup']['#option']['terms']);
+        }
+        else {
+          foreach ($attribute_detail['options_markup']['#option']['terms'] as $term_key => $term) {
+            if (!in_array($term['title'], $facet_results[$attribute_key])) {
+              unset($options_list[$attribute_key][$no]['options_markup']['#option']['terms'][$term_key]);
+            }
+          }
+        }
+      }
+    }
+
+    $response_data['options_list'] = $options_list;
+    $response_data['title'] = $attribute_options[$request]['title'];
+    $response_data['description'] = $attribute_options[$request]['description'];
+    $response_data['cache_tags'] = $cache_tags;
+
+    return $response_data;
   }
 
 }
