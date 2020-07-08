@@ -29,22 +29,13 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 20 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
-    And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 10 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 10 seconds
-    And I fill in the following:
-    | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
-    And I wait for AJAX to finish
+    Then I add the store details with:
+     | edit-store-location | {store_area} |
+     | mobile              | {mobile}     |
     And I wait 20 seconds
+    And I wait for AJAX to finish
     And I scroll to the "#spc-payment-methods" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish
@@ -75,7 +66,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     Then I should see "{cnc_delivery_type}"
     Then I should see "{payment_type_text}"
     Then I should see "{cs_payment_type}"
-    
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -118,22 +108,13 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 20 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
-    And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 10 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 10 seconds
-    And I fill in the following:
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
-    And I wait for AJAX to finish
+    Then I add the store details with:
+     | edit-store-location | {language_store_area} |
+     | mobile              | {mobile}     |
     And I wait 20 seconds
+    And I wait for AJAX to finish
     And I scroll to the "#spc-payment-methods" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish
@@ -207,22 +188,13 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 20 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
-    And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 10 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 10 seconds
-    And I fill in the following:
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
-    And I wait for AJAX to finish
+    Then I add the store details with:
+     | edit-store-location | {language_store_area} |
+     | mobile              | {mobile}     |
     And I wait 20 seconds
+    And I wait for AJAX to finish
     And I scroll to the "#spc-payment-methods" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish

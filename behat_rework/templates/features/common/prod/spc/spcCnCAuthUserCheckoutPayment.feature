@@ -5,6 +5,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     Given I am on "{spc_product_listing_page}"
     And I wait 10 seconds
     And I wait for the page to load
+    Then I scroll to the ".region__highlighted " element
 
   @cc @cnc @checkout_com
   Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card
@@ -54,12 +55,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I wait 20 seconds
-    Then I should be on "/checkout/confirmation" page
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @cnc @mobile @checkout_com
   Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card (checkout_com)
@@ -109,17 +105,14 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @cnc @language @desktop @checkout_com
   Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card (checkout_com)
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted " element
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -166,11 +159,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @cnc @language @mobile @checkout_com
   Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card (checkout_com)
@@ -223,8 +212,4 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist

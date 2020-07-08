@@ -1,10 +1,11 @@
-@javascript
+@javascript @guest
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
 
   Background:
     Given I am on "{spc_basket_page}"
     And I wait 10 seconds
     And I wait for the page to load
+    Then I scroll to the ".region__highlighted " element
 
   @cc @hd @checkout_com
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com)
@@ -49,17 +50,20 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @hd @language @desktop @checkout_com
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted " element
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -101,11 +105,14 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+
 
   @cc @hd @language @mobile @checkout_com
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language
@@ -153,9 +160,10 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
-
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist

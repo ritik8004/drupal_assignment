@@ -12,6 +12,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     When I am on "{spc_basket_page}"
     And I wait 10 seconds
     And I wait for the page to load
+    Then I scroll to the ".region__highlighted " element
 
   @cod @hd @desktop
   Scenario: As a Authenticated User, I should be able to checkout using COD
@@ -60,6 +61,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted " element
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load

@@ -28,7 +28,8 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
-    And I wait for AJAX to finish
+    And I wait 10 seconds
+    And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {store_area} |
       | mobile              | {mobile}     |
@@ -77,7 +78,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
     Then I should see "{delivery_type_text}"
-    Then I should see "{delivery_type}"
+    Then I should see "{cnc_delivery_type}"
     Then I should see "{payment_type_text}"
     Then I should see "{cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
@@ -116,7 +117,8 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
-    And I wait for AJAX to finish
+    And I wait 10 seconds
+    And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {language_store_area} |
       | mobile              | {mobile}     |
@@ -168,7 +170,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
     Then I should see "{language_delivery_type_text}"
-    Then I should see "{language_delivery_type}"
+    Then I should see "{language_cnc_delivery_type}"
     Then I should see "{language_payment_type_text}"
     Then I should see "{language_cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
@@ -207,7 +209,8 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
-    And I wait for AJAX to finish
+    And I wait 10 seconds
+    And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {language_store_area} |
       | mobile              | {mobile}     |
@@ -260,7 +263,8 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
-    And I wait for AJAX to finish
+    And I wait 10 seconds
+    And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {store_area} |
       | mobile              | {mobile}     |
@@ -306,7 +310,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
     Then I should see "{delivery_type_text}"
-    Then I should see "{delivery_type}"
+    Then I should see "{cnc_delivery_type}"
     Then I should see "{payment_type_text}"
     Then I should see "{cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
@@ -345,7 +349,8 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
-    And I wait for AJAX to finish
+    And I wait 10 seconds
+    And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {language_store_area} |
       | mobile              | {mobile}     |
@@ -398,7 +403,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
     Then I should see "{language_delivery_type_text}"
-    Then I should see "{language_delivery_type}"
+    Then I should see "{language_cnc_delivery_type}"
     Then I should see "{language_payment_type_text}"
     Then I should see "{language_cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
@@ -437,7 +442,8 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
-    And I wait for AJAX to finish
+    And I wait 10 seconds
+    And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {language_store_area} |
       | mobile              | {mobile}     |

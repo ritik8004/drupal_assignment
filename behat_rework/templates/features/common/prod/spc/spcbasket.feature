@@ -5,6 +5,7 @@ Feature: Test basket page
     Given I am on "{spc_basket_page}"
     And I wait 10 seconds
     And I wait for the page to load
+    Then I scroll to the ".region__highlighted " element
 
   Scenario: As a Guest, I should be able to add more quantity
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
@@ -132,6 +133,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted " element
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -214,6 +216,7 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted " element
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -258,6 +261,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted " element
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load

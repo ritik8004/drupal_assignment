@@ -1,8 +1,15 @@
-@javascript @guest
-Feature: SPC Checkout Home Delivery using CyberSource Payment Method
+@javascript @auth
+Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authenticated user
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I am on "user/login"
+    And I wait 10 seconds
+    Then I fill in "edit-name" with "{spc_user_email}"
+    And I fill in "edit-pass" with "{spc_user_password}"
+    Then I press "edit-submit"
+    And I wait 10 seconds
+    Then I should be on "/user" page
+    When I am on "{spc_basket_page}"
     And I wait 10 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
@@ -21,16 +28,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/cart/login" page
-    When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
-    And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
-    And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
-    And I wait for the page to load
-    When fill in billing address with following:
+    And I wait for AJAX to finish
+    When I add in the billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -39,11 +40,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -74,16 +71,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/cart/login" page
-    When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
-    And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
-    And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
-    And I wait for the page to load
-    When fill in billing address with following:
+    And I wait for AJAX to finish
+    When I add in the billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -92,16 +83,12 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then the "payment-method-cybersource" checkbox should be checked
     And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
     And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
@@ -126,16 +113,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/cart/login" page
-    When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
-    And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
-    And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
-    And I wait for the page to load
-    When fill in billing address with following:
+    And I wait for AJAX to finish
+    When I add in the billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -144,16 +125,12 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then the "payment-method-cybersource" checkbox should be checked
     And I fill in an element having class ".payment-method-cybersource .spc-type-cc-number input" with "{spc_cybersource_card}"
     And I fill in an element having class ".payment-method-cybersource .spc-type-expiry input" with "{spc_cybersource_expiry}"
@@ -175,16 +152,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/cart/login" page
-    When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
-    And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
-    And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
-    And I wait for the page to load
-    When fill in billing address with following:
+    And I wait for AJAX to finish
+    When I add in the billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -193,11 +164,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -210,7 +177,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I click jQuery ".spc-section-billing-address .spc-billing-address-wrapper .spc-billing-information .spc-billing-change" element on page
     And I wait 10 seconds
     And I wait for the page to load
-    When fill in billing address with following:
+    When I add in the billing address with following:
       | spc-area-select-selected-city | {billing_city_option} |
       | spc-area-select-selected      | {billing_area_option} |
       | address_line1                 | {billing_street}      |
@@ -219,10 +186,8 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {billing_floor}       |
       | sorting_code                  | {billing_landmark}    |
       | postal_code                   | {billing_postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {billing_mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
+      | fullname                      | {anon_username} |
+      | mobile                        | {billing_mobile}        |
     And I wait 20 seconds
     And I wait for the page to load
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
@@ -245,16 +210,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/cart/login" page
-    When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
-    And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
-    And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
-    And I wait for the page to load
-    When fill in billing address with following:
+    And I wait for AJAX to finish
+    When I add in the billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -263,11 +222,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -280,19 +235,16 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I click jQuery ".spc-section-billing-address .spc-billing-address-wrapper .spc-billing-information .spc-billing-change" element on page
     And I wait 10 seconds
     And I wait for the page to load
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_billing_city_option} |
-      | spc-area-select-selected      | {language_billing_area_option} |
+    When I add in the billing address with following:
+      | spc-area-select-selected-city | {billing_city_option} |
+      | spc-area-select-selected      | {billing_area_option} |
       | address_line1                 | {billing_street}      |
       | dependent_locality            | {billing_building}    |
       | locality                      | {billing_locality}    |
       | address_line2                 | {billing_floor}       |
       | sorting_code                  | {billing_landmark}    |
       | postal_code                   | {billing_postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {billing_mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
+      | mobile                        | {billing_mobile}      |
     And I wait 20 seconds
     And I wait for the page to load
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
@@ -314,16 +266,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/cart/login" page
-    When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
-    And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
-    And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
-    And I wait for the page to load
-    When fill in billing address with following:
+    And I wait for AJAX to finish
+    When I add in the billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -332,11 +278,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
+      | mobile                        | {mobile}      |
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -349,19 +291,17 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I click jQuery ".spc-section-billing-address .spc-billing-address-wrapper .spc-billing-information .spc-billing-change" element on page
     And I wait 10 seconds
     And I wait for the page to load
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_billing_city_option} |
-      | spc-area-select-selected      | {language_billing_area_option} |
+    When I add in the billing address with following:
+      | spc-area-select-selected-city | {billing_city_option} |
+      | spc-area-select-selected      | {billing_area_option} |
       | address_line1                 | {billing_street}      |
       | dependent_locality            | {billing_building}    |
       | locality                      | {billing_locality}    |
       | address_line2                 | {billing_floor}       |
       | sorting_code                  | {billing_landmark}    |
       | postal_code                   | {billing_postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {billing_mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
+      | fullname                      | {anon_username}       |
+      | mobile                        | {billing_mobile}      |
     And I wait 20 seconds
     And I wait for the page to load
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist

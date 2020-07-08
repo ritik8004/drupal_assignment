@@ -1,11 +1,11 @@
 @javascript
 Feature: SPC Checkout Click & Collect
-#
-#  Background:
-#    Given I am on "{spc_basket_page}"
-#    And I wait 5 seconds
-#    And I wait for the page to load
-#
+
+  Background:
+    Given I am on "{spc_basket_page}"
+    And I wait 5 seconds
+    And I wait for the page to load
+
 #  @cc @cnc @checkout_com
 #  Scenario: As a Guest, I should be able to checkout using click and collect with credit card (checkout_com)
 #    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"

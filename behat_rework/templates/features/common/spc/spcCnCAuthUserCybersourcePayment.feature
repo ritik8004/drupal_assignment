@@ -29,6 +29,7 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     And I wait 20 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
+    And I wait 10 seconds
     And I wait for AJAX to finish
     Then I add the store details with:
       | edit-store-location | {store_area} |
@@ -113,6 +114,7 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     And I wait 20 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
+    And I wait 10 seconds
     And I wait for AJAX to finish
     Then I add the store details with:
       | edit-store-location | {language_store_area} |
@@ -197,6 +199,7 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     And I wait 20 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
+    And I wait 10 seconds
     And I wait for AJAX to finish
     Then I add the store details with:
       | edit-store-location | {language_store_area} |
