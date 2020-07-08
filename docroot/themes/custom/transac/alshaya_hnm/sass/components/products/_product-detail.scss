@@ -4,7 +4,7 @@
     &.backtotop-nofooter {
       @include breakpoint($only-mobile) {
         z-index: 5;
-        line-height: 45px;
+        line-height: 1;
 
         &::after {
           margin-top: -2.4rem;
