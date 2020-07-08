@@ -45,7 +45,7 @@ export default class CompanionDetails extends React.Component {
     } = this.state;
 
     const {
-      clientData,
+      companionData,
     } = this.props;
 
     const companionQuestions = [...Array(parseInt(appointmentCompanion.id, 10))].map((e, i) => {
@@ -60,12 +60,12 @@ export default class CompanionDetails extends React.Component {
       let defaultfirstName; let defaultlastName; let
         defaultdob;
 
-      if (clientData) {
+      if (companionData) {
         ({
           [firstName]: defaultfirstName,
           [lastName]: defaultlastName,
           [dob]: defaultdob,
-        } = clientData);
+        } = companionData);
       }
 
       if (firstNameData && lastNameData && dobData) {

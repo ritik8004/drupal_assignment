@@ -17,7 +17,7 @@ export default class Appointment extends React.Component {
       this.state = {
         ...localStorageValues,
       };
-      const userId = drupalSettings.userDetails.userID;
+      const userId = drupalSettings.alshaya_appointment.user_details.id;
       if (userId !== 0 && localStorageValues.appointmentStep === 'select-login-guest') {
         this.state.appointmentStep = 'customer-details';
         localStorageValues.appointmentStep = 'customer-details';
@@ -32,7 +32,7 @@ export default class Appointment extends React.Component {
 
   handleSubmit = (stepValue) => {
     let stepval = stepValue;
-    const userId = drupalSettings.userDetails.userID;
+    const userId = drupalSettings.alshaya_appointment.user_details.id;
     if (userId !== 0 && stepValue === 'select-login-guest') {
       stepval = 'customer-details';
     }

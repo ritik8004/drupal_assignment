@@ -20,36 +20,65 @@ export default class CustomerDetails extends React.Component {
   }
 
   componentDidMount() {
-    const clientExternalId = '3C7F3390-D922-4381-BDCF-F017FAD5310F';
+    const { email } = window.drupalSettings.alshaya_appointment.user_details;
 
-    if (!_has(this.state, 'clientExternalId')) {
-      const apiUrl = `/get/client?client=${clientExternalId}`;
+    if (email) {
+      const apiUrl = `/get/client?email=${email}`;
       const apiData = fetchAPIData(apiUrl);
 
       if (apiData instanceof Promise) {
         apiData.then((result) => {
           if (result.error === undefined && result.data !== undefined) {
-            this.setState((prevState) => ({
-              ...prevState,
-              clientData: result.data,
-            }));
+            if (result.data.length > 0) {
+              this.setState((prevState) => ({
+                ...prevState,
+                clientData: result.data,
+              }));
+            }
           }
         });
       }
     }
   }
 
-  handleChange = (e) => {
+  handleChange = (section, e) => {
     const { name } = e.target;
     const value = getInputValue(e);
-    const { clientData } = this.state;
-    const clientDataArray = JSON.parse(JSON.stringify(clientData));
-    clientDataArray[name] = value;
+    let data = [];
+
+    if (_has(this.state, section)) {
+      ({ [section]: data } = this.state);
+      data[name] = value;
+    } else {
+      data[name] = value;
+    }
 
     this.setState((prevState) => ({
       ...prevState,
-      clientData: clientDataArray,
+      [section]: { ...data },
     }));
+  }
+
+  appendAppointmentAnswers = () => {
+    const {
+      companionData, bookingId,
+    } = this.state;
+
+    const data = { ...companionData, bookingId };
+    const apiUrl = '/append-appointmnet-answers';
+    const apiData = postAPICall(apiUrl, data);
+
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.error === undefined && result.data !== undefined) {
+          this.setState((prevState) => ({
+            ...prevState,
+            appendAppointmentAnswers: result.data,
+          }));
+          setStorageInfo(this.state);
+        }
+      });
+    }
   }
 
   bookAppointment = () => {
@@ -73,6 +102,8 @@ export default class CustomerDetails extends React.Component {
             bookingId: result.data,
             bookingStatus: 'success',
           }));
+          // Append appointment answers.
+          this.appendAppointmentAnswers();
         } else {
           this.setState((prevState) => ({
             ...prevState,
@@ -88,15 +119,6 @@ export default class CustomerDetails extends React.Component {
       clientData,
     } = this.state;
 
-    let clientExternalId = '';
-    if (_has(this.state, 'clientExternalId')) {
-      ({
-        clientExternalId,
-      } = this.state);
-    }
-
-    clientData.clientExternalId = clientExternalId;
-
     const apiUrl = '/update-insert-client';
     const apiData = postAPICall(apiUrl, clientData);
 
@@ -110,7 +132,6 @@ export default class CustomerDetails extends React.Component {
 
           // Save client id in local storage.
           setStorageInfo(this.state);
-
           // Book appointment using the clientExternalId.
           this.bookAppointment();
         }
@@ -127,7 +148,7 @@ export default class CustomerDetails extends React.Component {
       // Update/Insert client and then book appointment.
       this.updateInsertClient();
       const { bookingStatus } = this.state;
-      if (bookingStatus !== 'failed') {
+      if (bookingStatus === 'success') {
         const { handleSubmit } = this.props;
         handleSubmit();
       }
@@ -135,7 +156,7 @@ export default class CustomerDetails extends React.Component {
   }
 
   render() {
-    const { clientData } = this.state;
+    const { clientData, companionData } = this.state;
 
     return (
       <div className="customer-details-wrapper">
@@ -144,12 +165,12 @@ export default class CustomerDetails extends React.Component {
           onSubmit={(e) => this.handleSubmit(e)}
         >
           <ClientDetails
-            handleChange={this.handleChange}
+            handleChange={(e) => this.handleChange('clientData', e)}
             clientData={clientData}
           />
           <CompanionDetails
-            handleChange={this.handleChange}
-            clientData={clientData}
+            handleChange={(e) => this.handleChange('companionData', e)}
+            companionData={companionData}
           />
           <div className="disclaimer-wrapper">
             {drupalSettings.alshaya_appointment.customer_details_disclaimer_text}
