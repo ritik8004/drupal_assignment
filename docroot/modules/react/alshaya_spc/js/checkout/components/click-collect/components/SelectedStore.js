@@ -25,6 +25,7 @@ const SelectedStore = ({ store, open, closePanel }) => {
     smoothScrollTo('.spc-cnc-selected-store-header .spc-checkout-section-title');
   };
 
+  // This will run on componentDidMount (only once).
   useEffect(() => {
     // Handle error on popup.
     document.addEventListener('addressPopUpError', handleAddressPopUpError, false);
@@ -34,6 +35,14 @@ const SelectedStore = ({ store, open, closePanel }) => {
       document.removeEventListener('addressPopUpError', handleAddressPopUpError, false);
     };
   }, []);
+
+  // This will run always when store value changes.
+  useEffect(() => {
+    // This will run when store changes and we unsets
+    // any error message set previously.
+    setMsgType(null);
+    setErrorMessage(null);
+  }, [store]);
 
   return (!store)
     ? null
