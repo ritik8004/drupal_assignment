@@ -6,13 +6,13 @@
   align-items: center;
   flex-wrap: wrap;
 
-  @include breakpoint($desktop) {
+  @include breakpoint($tablet-landscape) {
     width: calc(100% - 16.75rem);
   }
 
   &-wrapper {
     .appointment-booking-section-title {
-      @include breakpoint($desktop) {
+      @include breakpoint($tablet-landscape) {
         padding-top: 0.625rem;
       }
     }
@@ -32,7 +32,7 @@
     margin-bottom: 1.25rem;
     cursor: pointer;
 
-    @include breakpoint($desktop) {
+    @include breakpoint($tablet-landscape) {
       width: auto;
     }
 
@@ -44,7 +44,7 @@
       }
 
       .appointment-category-icon {
-        background: $appointment-category-beauty-icon-bg;
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-beauty.svg') no-repeat;
       }
     }
 
@@ -56,16 +56,16 @@
       }
 
       .appointment-category-icon {
-        background: $appointment-category-pharmacy-icon-bg;
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-pharmacy.svg') no-repeat;
       }
     }
 
-    @include breakpoint($desktop) {
+    @include breakpoint($tablet-landscape) {
       margin-#{$right}: 1.25rem;
     }
 
     &:nth-child(even) {
-      @include breakpoint($upto-desktop) {
+      @include breakpoint($upto-tablet-landscape) {
         margin-#{$left}: 1.25rem;
       }
     }

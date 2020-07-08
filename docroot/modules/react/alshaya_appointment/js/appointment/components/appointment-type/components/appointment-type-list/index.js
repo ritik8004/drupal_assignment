@@ -25,7 +25,7 @@ export default class AppointmentTypeList extends React.Component {
       optionState: options,
     });
 
-    const filterKey = options.filter((v) => activeItem === v.value);
+    const filterKey = options.filter((v) => activeItem.id === v.value);
     this.updateOption(filterKey);
   }
 

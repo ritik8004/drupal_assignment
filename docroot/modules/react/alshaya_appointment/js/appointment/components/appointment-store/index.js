@@ -7,12 +7,17 @@ import StoreList from './components/store-list';
 import StoreFinderGoogleMap from './components/store-finder-map';
 import { getInputValue, getLocationAccess } from '../../../utilities/helper';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
+import ConditionalView from '../../../common/components/conditional-view';
+import AppointmentToggleButton from './components/AppointmentToggleButton';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/appointment-util';
 
 export class AppointmentStore extends React.Component {
   constructor(props) {
     super(props);
     this.autocompleteInput = React.createRef();
     this.autocomplete = null;
+    this.appListView = React.createRef();
+    this.appMapView = React.createRef();
 
     const localStorageValues = getStorageInfo();
 
@@ -42,6 +47,9 @@ export class AppointmentStore extends React.Component {
       radius, unit, max_num_of_locations: locCount,
     } = drupalSettings.alshaya_appointment.store_finder;
 
+    // Show loader.
+    showFullScreenLoader();
+
     const apiUrl = `/get/stores?radius=${radius}&unit=${unit}&max-locations=${locCount}&latitude=${lat}&longitude=${lng}`;
     const apiData = fetchAPIData(apiUrl);
 
@@ -52,6 +60,9 @@ export class AppointmentStore extends React.Component {
             ...prevState,
             storeItems: result.data,
           }));
+
+          // Remove loader.
+          removeFullScreenLoader();
         }
       });
     }
@@ -106,6 +117,59 @@ export class AppointmentStore extends React.Component {
     handleSubmit();
   }
 
+  removeClassFromStoreList = (className) => {
+    // Add Class expand to the currently opened li.
+    const tempStoreListNodes = document.querySelectorAll('#appointment-map-store-list-view label.select-store');
+    const tempStoreList = [].slice.call(tempStoreListNodes);
+    // Remove class expand from all.
+    tempStoreList.forEach((storeElement) => {
+      storeElement.classList.remove(className);
+    });
+  };
+
+  addClassToStoreItem = (element, className) => {
+    // Close already opened item.
+    if (element.classList.contains(className)) {
+      if (className === 'expand') {
+        element.classList.remove(className);
+      }
+      return;
+    }
+    // Add Class expand to the currently opened li.
+    this.removeClassFromStoreList(className);
+    element.classList.add(className);
+  };
+
+  expandStoreItem = (e) => {
+    this.addClassToStoreItem(e.target.parentElement.parentElement, 'expand');
+  };
+
+  toggleStoreView = (e, activeView) => {
+    e.preventDefault();
+    e.target.parentNode.childNodes.forEach((btn) => btn.classList.remove('active'));
+    e.target.classList.add('active');
+    if (activeView === 'map') {
+      this.appMapView.current.style.display = 'block';
+      this.appListView.current.style.display = 'none';
+    } else {
+      this.appMapView.current.style.display = 'none';
+      this.appListView.current.style.display = 'block';
+    }
+    return false;
+  };
+
+  refreshMap = () => {
+    const { map } = window.spcMap;
+    // Adjust the map, when we trigger the map view.
+    google.maps.event.trigger(map.googleMap, 'resize');
+    if (map.mapMarkers.length > 0) {
+      // Auto zoom.
+      map.googleMap.fitBounds(map.googleMap.bounds);
+      // Auto center.
+      map.googleMap.panToBounds(map.googleMap.bounds);
+    }
+  };
+
   render() {
     const {
       storeItems,
@@ -117,60 +181,99 @@ export class AppointmentStore extends React.Component {
     return (
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
-          <div className="store-header">
+          <div className="store-header appointment-subtitle">
             {Drupal.t("Select a store that's convenient for you")}
             *
           </div>
           <div className="store-finder-wrapper">
-            <button
-              className="appointment-type-button"
-              type="button"
-              onClick={this.handleDisplayStoresNearMe}
-            >
-              {Drupal.t('Display Stores Near Me')}
-            </button>
-            <span>
-              {` - ${Drupal.t('or')} - `}
-            </span>
-            <label>
-              {Drupal.t('Find your closest location')}
-            </label>
-            <input
-              type="text"
-              id="autocomplete"
-              className="input"
-              ref={this.autocompleteInput}
-              placeholder={Drupal.t('e.g. Salmiya')}
-            />
-          </div>
-          <div className="store-map-wrapper">
-            <div className="map-inner-wrapper">
-              <StoreFinderGoogleMap
-                markers={storeItems}
-                handleStateChange={this.handleStateChange}
-                openSelectedStore={false}
-                google={google}
+            <div className="store-finder-container">
+              <ConditionalView condition={window.innerWidth > 1023}>
+                <button
+                  className="appointment-type-button store-finder-button"
+                  type="button"
+                  onClick={this.handleDisplayStoresNearMe}
+                >
+                  {Drupal.t('Display Stores Near Me')}
+                </button>
+                <span>
+                  {` - ${Drupal.t('Or')} - `}
+                </span>
+              </ConditionalView>
+              <label>
+                {Drupal.t('Find your closest location')}
+              </label>
+            </div>
+            <div className="store-finder-input">
+              <input
+                type="text"
+                id="autocomplete"
+                className="input"
+                ref={this.autocompleteInput}
+                placeholder={Drupal.t('enter a location')}
               />
             </div>
-            { storeItems && (
-            <StoreList
-              storeList={storeItems}
-              handleStateChange={this.handleStateChange}
-              handleStoreSelect={this.handleChange}
-              activeItem={selectedStoreItem && JSON.parse(selectedStoreItem).locationExternalId}
-            />
-            )}
+            <ConditionalView condition={window.innerWidth < 1024}>
+              <button
+                className="appointment-store-near-me"
+                id="edit-near-me"
+                type="button"
+                onClick={this.handleDisplayStoresNearMe}
+              >
+                {Drupal.t('Display Stores Near Me')}
+              </button>
+            </ConditionalView>
+          </div>
+          <div className="store-map-wrapper">
+            <ConditionalView condition={window.innerWidth > 1023}>
+              <div className="map-inner-wrapper">
+                <StoreFinderGoogleMap
+                  markers={storeItems}
+                  handleStateChange={this.handleStateChange}
+                  openSelectedStore={false}
+                  google={google}
+                  handleStoreSelect={this.handleChange}
+                />
+              </div>
+            </ConditionalView>
+            <ConditionalView condition={window.innerWidth < 1024}>
+              <AppointmentToggleButton toggleStoreView={this.toggleStoreView} />
+              <div
+                className="appointment-map-view"
+                style={{ display: 'none' }}
+                ref={this.appMapView}
+              >
+                <StoreFinderGoogleMap
+                  markers={storeItems}
+                  handleStateChange={this.handleStateChange}
+                  openSelectedStore={false}
+                  google={google}
+                  handleStoreSelect={this.handleChange}
+                />
+              </div>
+            </ConditionalView>
+            <div id="appointment-map-store-list-view" className="appointment-map-store-list-view" ref={this.appListView}>
+              { storeItems && (
+              <StoreList
+                storeList={storeItems}
+                handleStateChange={this.handleStateChange}
+                handleStoreSelect={this.handleChange}
+                activeItem={selectedStoreItem && JSON.parse(selectedStoreItem).locationExternalId}
+                display={(window.innerWidth < 1024) ? 'accordion' : 'teaser'}
+                onStoreExpand={this.expandStoreItem}
+              />
+              )}
+            </div>
           </div>
           <div className="appointment-store-buttons-wrapper">
             <button
-              className="appointment-store-button back"
+              className="appointment-store-button appointment-type-button back"
               type="button"
               onClick={() => this.handleBack('appointment-type')}
             >
-              {Drupal.t('BACK')}
+              {Drupal.t('Back')}
             </button>
             <button
-              className="appointment-store-button select-store"
+              className="appointment-store-button appointment-type-button select-store"
               type="button"
               disabled={!(selectedStoreItem)}
               onClick={this.handleSubmit}

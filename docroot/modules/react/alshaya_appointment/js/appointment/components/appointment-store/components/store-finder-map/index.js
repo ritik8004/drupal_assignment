@@ -21,6 +21,7 @@ export default class StoreFinderMap extends React.Component {
       selectedPlace: props,
       showingInfoWindow: true,
     });
+    this.handleStoreSelect();
   }
 
   onInfoWindowClose = () => this.setState({
@@ -37,6 +38,11 @@ export default class StoreFinderMap extends React.Component {
       };
     });
   };
+
+  handleStoreSelect = (e) => {
+    const { handleStoreSelect } = this.props;
+    handleStoreSelect(e);
+  }
 
   render() {
     const { google, markers } = this.props;
@@ -73,17 +79,30 @@ export default class StoreFinderMap extends React.Component {
             onClose={this.onInfoWindowClose}
             visible={showingInfoWindow}
           >
-            <div className="testing-infowindow">
-              <div className="infowindow-header-wrapper">
-                <h4>{selectedPlace.name}</h4>
-                <span className="distance">{`${selectedPlace.distance} ${Drupal.t('Miles')}`}</span>
+            <div className="appointment-map-store-wrapper">
+              <span className="appointment-store-name">
+                <span className="appointment-store-name-wrapper">
+                  <span className="store-name">
+                    {selectedPlace.name}
+                  </span>
+                  <span className="store-distance">
+                    {`${selectedPlace.distance} ${Drupal.t('Miles')}`}
+                  </span>
+                </span>
+                <span className="appointment-map-list-close" />
+              </span>
+              <div className="store-address-content">
+                <div className="store-address">
+                  <StoreAddress
+                    address={selectedPlace.address}
+                  />
+                </div>
+                <div className="store-delivery-time">
+                  <StoreTiming
+                    timing={selectedPlace.timing}
+                  />
+                </div>
               </div>
-              <StoreAddress
-                address={selectedPlace.address}
-              />
-              <StoreTiming
-                timing={selectedPlace.timing}
-              />
             </div>
           </InfoWindow>
         </Map>
