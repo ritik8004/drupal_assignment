@@ -73,7 +73,7 @@ export default class AppointmentTimeSlot extends React.Component {
   getParamsForTimeSlotApi() {
     const { appointmentCategory, appointmentType, selectedStoreItem } = this.state;
     const location = JSON.parse(selectedStoreItem);
-    const params = `program=${appointmentCategory.id}&activity=${appointmentType}&location=${location.locationExternalId}`;
+    const params = `program=${appointmentCategory.id}&activity=${appointmentType.id}&location=${location.locationExternalId}`;
     return params;
   }
 

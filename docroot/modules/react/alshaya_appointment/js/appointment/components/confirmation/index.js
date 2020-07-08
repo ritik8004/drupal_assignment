@@ -1,6 +1,8 @@
 import React from 'react';
+import moment from 'moment';
+import AddToCalendar from 'react-add-to-calendar';
 import ConfirmationItems from './components/confirmation-items';
-import { getStorageInfo } from '../../../utilities/storage';
+import { getStorageInfo, removeStorageInfo } from '../../../utilities/storage';
 import { addressCleanup } from '../../../utilities/helper';
 
 export default class Confirmation extends React.Component {
@@ -15,15 +17,33 @@ export default class Confirmation extends React.Component {
     }
   }
 
+  componentDidMount() {
+    // Clear localStorage.
+    removeStorageInfo();
+  }
+
+  handleClick = (url) => {
+    window.location.href = Drupal.url(url);
+  }
+
   render() {
     const {
       appointmentCategory,
       appointmentType,
       selectedStoreItem,
+      selectedSlot,
     } = this.state;
 
+    const date = moment(selectedSlot.appointmentSlotTime).format('dddd, Do MMMM YYYY');
+    const time = moment(selectedSlot.appointmentSlotTime).format('LT');
     const locationArray = JSON.parse(selectedStoreItem);
     const location = `${locationArray.name}, ${addressCleanup(locationArray.address)}`;
+    const event = {
+      title: appointmentType.name,
+      location,
+      startTime: selectedSlot.appointmentSlotTime,
+      endTime: moment(selectedSlot.appointmentSlotTime).add(selectedSlot.lengthinMin, 'minutes'),
+    };
 
     return (
       <div className="appointment-confirmation-wrapper">
@@ -34,8 +54,15 @@ export default class Confirmation extends React.Component {
         <div className="confirmation-body">
           <div className="inner-header">
             <label>{Drupal.t('Appointment Summary')}</label>
-            <span className="add-to-calendar" />
-            <span className="print" />
+            <AddToCalendar
+              event={event}
+            />
+            <span
+              className="print"
+              onClick={() => window.print()}
+            >
+              {Drupal.t('Print')}
+            </span>
           </div>
           <div className="inner-body">
             <ConfirmationItems
@@ -47,26 +74,30 @@ export default class Confirmation extends React.Component {
             <ConfirmationItems
               item={{ label: Drupal.t('Location'), value: location }}
             />
+            <ConfirmationItems
+              item={{ label: Drupal.t('Date'), value: date }}
+            />
+            <ConfirmationItems
+              item={{ label: Drupal.t('Time'), value: time }}
+            />
           </div>
-
         </div>
         <div className="confirmation-footer">
           <button
             className="view-my-appointments-button"
             type="button"
-            // onClick={() => this.handleBack('appointment-type')}
+            onClick={() => this.handleClick('user')}
           >
             {Drupal.t('View My Appointments')}
           </button>
           <button
             className="continue-shopping"
             type="button"
-            // onClick={this.handleSubmit}
+            onClick={() => this.handleClick('/')}
           >
             {Drupal.t('Continue Shopping')}
           </button>
         </div>
-
       </div>
     );
   }

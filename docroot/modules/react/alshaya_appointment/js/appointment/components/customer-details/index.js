@@ -71,11 +71,9 @@ export default class CustomerDetails extends React.Component {
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
-          this.setState((prevState) => ({
-            ...prevState,
-            appendAppointmentAnswers: result.data,
-          }));
-          setStorageInfo(this.state);
+          // Move to next step.
+          const { handleSubmit } = this.props;
+          handleSubmit();
         }
       });
     }
@@ -83,15 +81,12 @@ export default class CustomerDetails extends React.Component {
 
   bookAppointment = () => {
     const {
-      selectedStoreItem, appointmentCategory, appointmentType, clientExternalId,
+      selectedStoreItem, appointmentCategory, appointmentType, clientExternalId, selectedSlot,
     } = this.state;
     const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
     const channel = isMobile ? 'mobile' : 'desktop';
-    // @TODO: Will update this code to fetch data from state once time slots code is merged.
-    const duration = 90;
-    const startDateTime = '2020-06-09T10:10:00.000Z';
 
-    const apiUrl = `/book-appointment?location=${JSON.parse(selectedStoreItem).locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}&duration=${duration}&attendees=${1}&start-date-time=${startDateTime}&client=${clientExternalId}&channel=${channel}`;
+    const apiUrl = `/book-appointment?location=${JSON.parse(selectedStoreItem).locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}&duration=${selectedSlot.lengthinMin}&attendees=${1}&start-date-time=${selectedSlot.appointmentSlotTime}&client=${clientExternalId}&channel=${channel}`;
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
@@ -147,11 +142,6 @@ export default class CustomerDetails extends React.Component {
       setStorageInfo(this.state);
       // Update/Insert client and then book appointment.
       this.updateInsertClient();
-      const { bookingStatus } = this.state;
-      if (bookingStatus === 'success') {
-        const { handleSubmit } = this.props;
-        handleSubmit();
-      }
     }
   }
 
