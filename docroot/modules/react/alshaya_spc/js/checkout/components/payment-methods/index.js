@@ -34,6 +34,7 @@ export default class PaymentMethods extends React.Component {
 
       const paymentErrorInfo = JSON.parse(paymentError);
       let message = getStringMessage('payment_error');
+      let errorCategory = 'payment errors';
       // If K-NET error and have K-Net Error details.
       if (paymentErrorInfo.payment_method !== undefined
         && paymentErrorInfo.payment_method === 'knet'
@@ -46,10 +47,15 @@ export default class PaymentMethods extends React.Component {
       } else if (paymentErrorInfo.status !== undefined
         && paymentErrorInfo.status === 'declined') {
         message = getStringMessage('transaction_failed');
+        errorCategory = 'genuine errors';
       }
 
       // Push error to GA.
-      Drupal.logJavascriptError('payment-error', paymentErrorInfo);
+      Drupal.logJavascriptError(
+        'payment-error',
+        paymentErrorInfo,
+        errorCategory,
+      );
 
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
@@ -175,7 +181,7 @@ export default class PaymentMethods extends React.Component {
 
         dispatchCustomEvent('refreshCompletePurchaseSection', {});
       }).catch((error) => {
-        Drupal.logJavascriptError('change payment method', error);
+        Drupal.logJavascriptError('change payment method', error, 'genuine errors');
       });
     }
   };

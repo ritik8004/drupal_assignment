@@ -141,7 +141,7 @@ export default class AddressForm extends React.Component {
       errorOnDropDownFieldsNotFilled();
       removeFullScreenLoader();
     } catch (error) {
-      Drupal.logJavascriptError('homedelivery-checkUserCountry', error);
+      Drupal.logJavascriptError('homedelivery-checkUserCountry', error, 'checkout errors');
     }
   };
 

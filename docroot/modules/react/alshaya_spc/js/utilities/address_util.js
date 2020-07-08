@@ -42,7 +42,7 @@ export const getUserAddressList = () => axios.get('spc/user-address-list')
   .then((response) => response.data)
   .catch((error) => {
     // Processing of error here.
-    Drupal.logJavascriptError('get-user-address-list', error);
+    Drupal.logJavascriptError('get-user-address-list', error, 'checkout errors');
   });
 
 /**
@@ -64,7 +64,7 @@ export const addEditUserAddress = (address, isDefault) => axios.post('spc/add-ed
   )
   .catch((error) => {
     // Processing of error here.
-    Drupal.logJavascriptError('add-edit-user-address', error);
+    Drupal.logJavascriptError('add-edit-user-address', error, 'checkout errors');
   });
 
 /**
@@ -529,7 +529,7 @@ export const checkoutAddressProcess = (e) => {
 
     return true;
   }).catch((error) => {
-    Drupal.logJavascriptError('Email and mobile number validation fail', error);
+    Drupal.logJavascriptError('Email and mobile number validation fail', error, 'checkout errors');
   });
 };
 
@@ -701,7 +701,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
         }
       }
     }).catch((error) => {
-      Drupal.logJavascriptError('Email and mobile number validation fail', error);
+      Drupal.logJavascriptError('Email and mobile number validation fail', error, 'checkout errors');
     });
   }
 };

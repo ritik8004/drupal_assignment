@@ -71,7 +71,7 @@ class PaymentMethodCheckoutCom extends React.Component {
 
   handleCardCvvChange = (event, handler) => {
     if (window.CheckoutKit === undefined) {
-      Drupal.logJavascriptError('CheckoutKit not available');
+      Drupal.logJavascriptError('CheckoutKit not available', '', 'payment errors');
       return;
     }
     this.labelEffect(event, handler);
@@ -84,6 +84,7 @@ class PaymentMethodCheckoutCom extends React.Component {
       Drupal.logJavascriptError(
         'Payment failed',
         `Payment failed with error code ${event.data.errorCode}`,
+        'payment errors',
       );
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
@@ -115,7 +116,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     }
 
     if (window.CheckoutKit === undefined) {
-      Drupal.logJavascriptError('Checkout kit not loaded');
+      Drupal.logJavascriptError('Checkout kit not loaded', '', 'payment errors');
 
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',

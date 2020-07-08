@@ -6,7 +6,7 @@ export const markFieldAsValid = (id) => {
     document.getElementById(id).innerHTML = '';
     document.getElementById(id).classList.remove('error');
   } catch (e) {
-    Drupal.logJavascriptError('markFieldAsValid fail', e);
+    Drupal.logJavascriptError('markFieldAsValid fail', e, 'checkout errors');
   }
 };
 
@@ -15,7 +15,7 @@ export const displayErrorMessage = (id, message) => {
     document.getElementById(id).innerHTML = message;
     document.getElementById(id).classList.add('error');
   } catch (e) {
-    Drupal.logJavascriptError('displayErrorMessage fail', e);
+    Drupal.logJavascriptError('displayErrorMessage fail', e, 'checkout errors');
   }
 };
 
@@ -28,7 +28,7 @@ export const showRequiredMessage = (id) => {
     document.getElementById(id).innerHTML = message;
     document.getElementById(id).classList.add('error');
   } catch (e) {
-    Drupal.logJavascriptError('showRequiredMessage fail', e);
+    Drupal.logJavascriptError('showRequiredMessage fail', e, 'checkout errors');
   }
 };
 

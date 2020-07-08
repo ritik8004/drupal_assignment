@@ -12,7 +12,7 @@ const associateCart = () => {
     })
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('cart/associate', error);
+      Drupal.logJavascriptError('cart/associate', error, 'cart errors');
     });
 };
 

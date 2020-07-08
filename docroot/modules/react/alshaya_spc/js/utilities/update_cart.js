@@ -45,7 +45,7 @@ export const applyRemovePromo = (action, promoCode) => {
   })
     .then((response) => response.data, (error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('apply-remove-promo', error);
+      Drupal.logJavascriptError('apply-remove-promo', error, 'cart errors');
     });
 };
 
@@ -94,7 +94,7 @@ export const updateCartItemData = (action, sku, quantity) => {
       return response.data;
     }, (error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('update-cart-item-data', error);
+      Drupal.logJavascriptError('update-cart-item-data', error, 'cart errors');
     });
 };
 
@@ -105,6 +105,6 @@ export const addPaymentMethodInCart = (action, data) => {
     payment_info: data,
   }).then((response) => response.data, (error) => {
     // Processing of error here.
-    Drupal.logJavascriptError('add-payment-method-in-cart', error);
+    Drupal.logJavascriptError('add-payment-method-in-cart', error, 'payment errors');
   });
 };

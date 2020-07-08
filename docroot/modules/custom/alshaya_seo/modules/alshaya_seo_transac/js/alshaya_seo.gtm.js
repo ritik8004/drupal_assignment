@@ -113,15 +113,7 @@
         // Set Event label.
         var label = 'Update cart failed for Product [' + sku + '] ';
         label = label + attributes.join(', ');
-        var productData = {
-          event: 'eventTracker',
-          eventCategory: 'Update cart error',
-          eventAction: errorMessage,
-          eventLabel: label,
-          eventValue: 0,
-          nonInteraction: 0,
-        };
-        dataLayer.push(productData);
+        Drupal.logJavascriptError(label, errorMessage, 'cart errors');
       });
 
       // Global variables & selectors.
@@ -1293,16 +1285,16 @@
    * @param context
    * @param error
    */
-  Drupal.logJavascriptError = function (context, error) {
+  Drupal.logJavascriptError = function (context, error, category = 'unknown errors') {
     var message = (error && error.message !== undefined)
       ? error.message
       : error;
     var errorData = {
       event: 'eventTracker',
-      eventCategory: 'alshaya errors',
+      eventCategory: category,
       eventLabel: context,
-      eventAction: 'Error occurred on ' + window.location.href,
-      eventMessage: message,
+      eventAction: message,
+      eventPlace: 'Error occurred on ' + window.location.href,
       eventValue: 0,
       nonInteraction: 0,
     };

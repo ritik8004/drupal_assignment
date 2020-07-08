@@ -80,7 +80,7 @@ export const fetchCartData = () => {
       }
 
       // Processing of error here.
-      Drupal.logJavascriptError('Failed to restore cart.', error);
+      Drupal.logJavascriptError('Failed to restore cart.', error, 'cart errors');
 
       redirectToCart();
       return null;
@@ -122,7 +122,7 @@ export const fetchCartData = () => {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('Failed to get cart.', error);
+      Drupal.logJavascriptError('Failed to get cart.', error, 'cart errors');
     });
 };
 
@@ -142,6 +142,6 @@ export const fetchCartDataForCheckout = () => {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('Failed to get cart for checkout.', error);
+      Drupal.logJavascriptError('Failed to get cart for checkout.', error, 'checkout errors');
     });
 };

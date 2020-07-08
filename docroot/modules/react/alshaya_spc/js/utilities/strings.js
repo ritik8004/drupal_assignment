@@ -6,7 +6,7 @@ const getStringMessage = (key, replacement) => {
       return replacement ? Drupal.formatString(str, replacement) : str;
     }
   } catch (e) {
-    Drupal.logJavascriptError('getStringMessage fail', e);
+    Drupal.logJavascriptError('getStringMessage fail', e, 'checkout errors');
   }
 
   return '';

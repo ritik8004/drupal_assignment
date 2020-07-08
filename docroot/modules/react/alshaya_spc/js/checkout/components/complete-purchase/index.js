@@ -81,7 +81,7 @@ export default class CompletePurchase extends React.Component {
 
       placeOrder(cart.cart.payment.method);
     } catch (error) {
-      Drupal.logJavascriptError('place-order', error);
+      Drupal.logJavascriptError('place-order', error, 'checkout errors');
     }
   };
 
