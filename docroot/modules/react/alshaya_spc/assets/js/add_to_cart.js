@@ -195,6 +195,18 @@
 
                   var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: (function () { return response; })}});
                   document.dispatchEvent(event);
+
+                  if ($('body.path--cart').length > 0) {
+                    document.dispatchEvent(
+                      new CustomEvent(
+                        'spcRefreshCartRecommendation',
+                        {
+                          bubbles: true,
+                          detail: {  items: response.items  }
+                        }
+                      )
+                    );
+                  }
                 }
               }
             });

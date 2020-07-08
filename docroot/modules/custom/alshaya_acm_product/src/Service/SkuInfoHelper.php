@@ -461,12 +461,23 @@ class SkuInfoHelper {
    *   SKU Entity.
    * @param string $linked_type
    *   Linked type.
+   * @param array $filter_skus
+   *   Array of skus to filter out.
    *
    * @return array
    *   Linked SKUs.
    */
-  public function getLinkedSkus(SKUInterface $sku, string $linked_type) {
+  public function getLinkedSkus(SKUInterface $sku, string $linked_type, array $filter_skus = []) {
     $linkedSkus = $this->skuManager->getLinkedSkus($sku, $linked_type);
+    if (empty($linkedSkus)) {
+      return [];
+    }
+    if (!empty($filter_skus)) {
+      $result = array_filter($linkedSkus, function ($sku) use ($filter_skus) {
+        return !in_array($sku, $filter_skus);
+      });
+      $linkedSkus = $result;
+    }
     $linkedSkus = $this->skuManager->filterRelatedSkus($linkedSkus);
 
     return $linkedSkus;

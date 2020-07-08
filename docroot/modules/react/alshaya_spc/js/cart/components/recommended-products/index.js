@@ -98,7 +98,9 @@ export default class CartRecommendedProducts extends React.Component {
     if (productData !== null && productData.sku !== undefined) {
       this.requestSkus.splice(this.requestSkus.indexOf(productData.sku), 1);
       this.recommendedSkus.push(productData.sku);
-      this.recommendedSkus.push(productData.parentSKU);
+      if (productData.parentSKU) {
+        this.recommendedSkus.push(productData.parentSKU);
+      }
     }
   };
 

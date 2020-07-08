@@ -103,7 +103,10 @@ class CartLinkedSkusController extends ControllerBase {
         }
 
         $cache_tags[] = 'sku:' . $skuEntity->id();
-        $linkedSkus = $this->skuInfoHelper->getLinkedSkus($skuEntity, $queryParams['type']);
+        $linkedSkus = $this->skuInfoHelper->getLinkedSkus($skuEntity, $queryParams['type'], $queryParams['skus']);
+        if (empty($linkedSkus)) {
+          continue;
+        }
         foreach (array_keys($linkedSkus) as $linkedSku) {
           $linkedSkuEntity = SKU::loadFromSku($linkedSku);
           if ($linkedSkuEntity instanceof SKUInterface
