@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "680ead4afbe2183386c8a5ea0abd7e68",
+    "content-hash": "9f96169d25f839ee419fa8e5a1088e8b",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -1108,7 +1108,7 @@
             "version": "3.4.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "dist": {
@@ -11983,6 +11983,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Overriding the replicate feature for content types": "patches/replicate_ui/replicate_feature_override.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
