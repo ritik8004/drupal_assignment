@@ -203,3 +203,13 @@ body {
     }
   }
 }
+
+body {
+  &.mobile--overlay {
+    .branding__menu {
+      @include breakpoint($upto-desktop) {
+        box-shadow: 0 1px 0 0 $lhn_sticky-header-shadow;
+      }
+    }
+  }
+}
