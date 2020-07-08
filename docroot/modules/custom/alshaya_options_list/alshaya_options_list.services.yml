@@ -10,14 +10,7 @@ services:
       - '@plugin.manager.search_api.parse_mode'
       - '@facets.manager'
       - '@module_handler'
-      - '@cache.alshaya_options_list'
-
-  cache.alshaya_options_list:
-    class: Drupal\Core\Cache\CacheBackendInterface
-    tags:
-      - { name: cache.bin, default_backend: cache.backend.permanent_database }
-    factory: cache_factory:get
-    arguments: [alshaya_options_list]
+      - '@cache.data'
 
   alshaya_options_list.breadcrumb:
     class: Drupal\alshaya_options_list\Breadcrumb\AlshayaOptionsBreadcrumbBuilder
