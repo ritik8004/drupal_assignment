@@ -94,7 +94,7 @@ class AlshayaAppointmentController extends ControllerBase {
       'mobile_maxlength' => $alshaya_master_config->get('maxlength'),
       'customer_details_disclaimer_text' => $alshaya_appointment_config->get('customer_details_disclaimer_text'),
       'user_details' => $this->getUserDetails(),
-      'social_login_enabled' => $social_login_enabled->get('social_login'),
+      'socialLoginEnabled' => $social_login_enabled->get('social_login'),
     ];
 
     return [

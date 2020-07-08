@@ -17,107 +17,115 @@ export default class AppointmentLogin extends React.Component {
     const { socialLoginEnabled } = drupalSettings.alshaya_appointment;
 
     return (
-      <div className="appointment-loginn-wrapper">
-        <div className="appointment-with-account">
-          <div>
-            <h2>{ Drupal.t('I have an account') }</h2>
-            <p>{ Drupal.t('Log in for faster booking and to manage your appointments online') }</p>
-          </div>
-          <div>
-            <a href="/user/login?destination=/appointment/booking">
-              { Drupal.t('Sign in') }
-            </a>
-          </div>
-          { socialLoginEnabled
-          && (
-          <div className="appointment-social-login">
-            <p>{ Drupal.t('Or Sign in with') }</p>
+      <div className="appointment-login-wrapper">
+        <div className="appointment-login-container">
+          <div className="appointment-with-account">
             <div>
-              <div className="alshaya-social">
-                <a
-                  className="social_auth_facebook auth-link"
-                  href="#"
-                  social-auth-link="/en/user/login/facebook"
-                >
-                  <span
-                    className="social-network-text"
-                  >
-                    sign up with Facebook
-                  </span>
-                </a>
+              <h2>{ Drupal.t('I have an account') }</h2>
+              <p>{ Drupal.t('Log in for faster booking and to manage your appointments online') }</p>
+            </div>
+            <div className="appointment-login-buttons-wrapper">
+              <a
+                href="/user/login?destination=/appointment/booking"
+                className="appointment-type-button appointment-signin-button"
+              >
+                { Drupal.t('Sign in') }
+              </a>
+            </div>
+            { socialLoginEnabled
+            && (
+              <div className="appointment-social-login">
+                <p>{ Drupal.t('Or Sign in with') }</p>
+                <div>
+                  <div className="appointment-social">
+                    <a
+                      className="social_auth_facebook social-auth-link"
+                      href="#"
+                      social-auth-link="/en/user/login/facebook"
+                    >
+                      <span
+                        className="social-network-text"
+                      >
+                        sign up with Facebook
+                      </span>
+                    </a>
+                  </div>
+                  <div className="appointment-social">
+                    <a
+                      className="social_auth_google social-auth-link"
+                      href="#"
+                      social-auth-link="/en/user/login/google"
+                    >
+                      <span
+                        className="social-network-text"
+                      >
+                        sign up with Google
+                      </span>
+                    </a>
+                  </div>
+                </div>
               </div>
-              <div className="alshaya-social">
-                <a
-                  className="social_auth_google auth-link"
-                  href="#"
-                  social-auth-link="/en/user/login/google"
-                >
-                  <span
-                    className="social-network-text"
+            )}
+          </div>
+          <div className="appointment-without-account">
+            <div>
+              <h2>{ Drupal.t('I don\'t have an account') }</h2>
+              <p>{ Drupal.t('Log in for faster booking and to manage your appointments online') }</p>
+            </div>
+            <div className="appointment-login-buttons-wrapper">
+              <a
+                href="/user/register?destination=/appointment/booking"
+                className="appointment-type-button appointment-register-button"
+              >
+                { Drupal.t('Register') }
+              </a>
+              <button
+                className="appointment-type-button appointment-checkout-button select-store"
+                type="button"
+                onClick={() => this.handleSubmit}
+              >
+                {Drupal.t('Continue as Guest')}
+              </button>
+            </div>
+            { socialLoginEnabled
+            && (
+            <div className="appointment-social-login">
+              <p>{ Drupal.t('Or Sign in with') }</p>
+              <div>
+                <div className="appointment-social">
+                  <a
+                    className="social_auth_facebook social-auth-link"
+                    href="#"
+                    social-auth-link="/en/user/login/facebook"
                   >
-                    sign up with Google
-                  </span>
-                </a>
+                    <span
+                      className="social-network-text"
+                    >
+                      sign up with Facebook
+                    </span>
+                  </a>
+                </div>
+                <div className="appointment-social">
+                  <a
+                    className="social_auth_google social-auth-link"
+                    href="#"
+                    social-auth-link="/en/user/login/google"
+                  >
+                    <span
+                      className="social-network-text"
+                    >
+                      sign up with Google
+                    </span>
+                  </a>
+                </div>
               </div>
             </div>
+            )}
           </div>
-          )}
         </div>
-        <div className="appointment-without-account">
-          <div>
-            <h2>{ Drupal.t('I don\'t have an account') }</h2>
-            <p>{ Drupal.t('Log in for faster booking and to manage your appointments online') }</p>
-          </div>
-          <div>
-            <a href="/user/register?destination=/appointment/booking">
-              { Drupal.t('Register') }
-            </a>
-            <button
-              className="appointment-store-button select-store"
-              type="button"
-              onClick={() => this.handleSubmit}
-            >
-              {Drupal.t('Continue as Guest')}
-            </button>
-          </div>
-          { socialLoginEnabled
-          && (
-          <div className="appointment-social-login">
-            <p>{ Drupal.t('Or Sign in with') }</p>
-            <div>
-              <div className="alshaya-social">
-                <a
-                  className="social_auth_facebook auth-link"
-                  href="#"
-                  social-auth-link="/en/user/login/facebook"
-                >
-                  <span
-                    className="social-network-text"
-                  >
-                    sign up with Facebook
-                  </span>
-                </a>
-              </div>
-              <div className="alshaya-social">
-                <a
-                  className="social_auth_google auth-link"
-                  href="#"
-                  social-auth-link="/en/user/login/google"
-                >
-                  <span
-                    className="social-network-text"
-                  >
-                    sign up with Google
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-          )}
-        </div>
-        <div>
+        <div className="appointment-store-buttons-wrapper">
           <button
-            className="appointment-store-button back"
+            className="appointment-type-button appointment-store-button back"
             type="button"
             onClick={() => this.handleBack('select-time-slot')}
           >

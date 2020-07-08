@@ -60,6 +60,7 @@ export default class Appointment extends React.Component {
 
     let appointmentData;
     let appointmentSelection;
+    let appointmentClasses = 'appointment-inner-wrapper ';
 
     if (appointmentStep === 'appointment-type') {
       appointmentData = (
@@ -68,6 +69,7 @@ export default class Appointment extends React.Component {
         />
       );
     } else if (appointmentStep === 'select-store') {
+      appointmentClasses += 'appointment-2-cols appointment-select-store-container';
       appointmentData = (
         <AppointmentStoreSelect
           handleBack={this.handleEdit}
@@ -75,6 +77,7 @@ export default class Appointment extends React.Component {
         />
       );
     } else if (appointmentStep === 'select-time-slot') {
+      appointmentClasses += 'appointment-2-cols';
       appointmentData = (
         <AppointmentTimeSlot
           handleBack={this.handleEdit}
@@ -82,6 +85,7 @@ export default class Appointment extends React.Component {
         />
       );
     } else if (appointmentStep === 'select-login-guest') {
+      appointmentClasses += 'appointment-2-cols appointment-login-guest-container';
       appointmentData = (
         <AppointmentLogin
           handleBack={this.handleEdit}
@@ -89,6 +93,7 @@ export default class Appointment extends React.Component {
         />
       );
     } else if (appointmentStep === 'customer-details') {
+      appointmentClasses += 'appointment-2-cols';
       appointmentData = (
         <CustomerDetails
           handleSubmit={() => this.handleSubmit('confirmation')}
@@ -107,7 +112,7 @@ export default class Appointment extends React.Component {
     return (
       <div className="appointment-wrapper">
         <AppointmentSteps />
-        <div className={`appointment-inner-wrapper ${appointmentStep === 'select-store' ? ' appointment-select-store-container' : ''}`}>
+        <div className={`${appointmentClasses}`}>
           {appointmentData}
           {appointmentSelection}
         </div>
