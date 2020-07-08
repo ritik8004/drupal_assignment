@@ -23,6 +23,10 @@
       height: 5.3125rem;
       display: block;
       background-size: cover;
+
+      @include breakpoint($only-tablet) {
+        height: 5.938rem;
+      }
     }
 
     @include breakpoint($only-mobile) {
