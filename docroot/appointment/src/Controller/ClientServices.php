@@ -95,12 +95,22 @@ class ClientServices {
   public function getQuestions(Request $request) {
     try {
       $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $locationExternalId = $request->query->get('location');
+      $program = $request->query->get('program');
+      $activity = $request->query->get('activity');
+
+      if (empty($locationExternalId) || empty($program) || empty($activity)) {
+        $message = 'Required details is missing to get questions.';
+
+        $this->logger->error($message);
+        throw new \Exception($message);
+      }
 
       $param = [
         'questionCriteria' => [
-          'locationExternalId' => $request->query->get('location'),
-          'programExternalId' => $request->query->get('program'),
-          'activityExternalId' => $request->query->get('activity'),
+          'locationExternalId' => $locationExternalId,
+          'programExternalId' => $program,
+          'activityExternalId' => $activity,
         ],
       ];
       $result = $client->__soapCall('getAppointmentQuestionsByCriteria', [$param]);
@@ -122,6 +132,49 @@ class ClientServices {
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while fetching questions. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Get Client details.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Client details.
+   */
+  public function getClientByExternalId(Request $request) {
+    try {
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CLIENT_SERVICES_URL);
+      $clientExternalId = $request->query->get('client');
+
+      if (empty($clientExternalId)) {
+        $message = 'clientExternalId is required to get client details.';
+
+        $this->logger->error($message);
+        throw new \Exception($message);
+      }
+
+      $param = [
+        'clientExternalId' => $clientExternalId,
+      ];
+      $result = $client->__soapCall('getClientByExternalId', [$param]);
+
+      $clientArray = $result->return ?? [];
+      $clientData = [
+        'firstName' => $clientArray->firstName ?? '',
+        'lastName' => $clientArray->lastName ?? '',
+        'dob' => $clientArray->dob ? date('Y-m-d', strtotime($clientArray->dob)) : '',
+        'email' => $clientArray->email ?? '',
+        'mobile' => $clientArray->phoneData->mobile ?? '',
+      ];
+
+      return new JsonResponse($clientData);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while fetching client details. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
 

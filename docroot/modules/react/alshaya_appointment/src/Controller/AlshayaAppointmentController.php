@@ -6,8 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Drupal\Core\Session\AccountProxy;
 
 /**
  * Class AlshayaAppointmentController.
@@ -23,13 +22,24 @@ class AlshayaAppointmentController extends ControllerBase {
   protected $mobileUtil;
 
   /**
+   * Drupal\Core\Session\AccountProxy definition.
+   *
+   * @var \Drupal\Core\Session\AccountProxy
+   */
+  protected $currentUser;
+
+  /**
    * AlshayaAppointmentController constructor.
    *
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
+   * @param \Drupal\Core\Session\AccountProxy $current_user
+   *   Current user.
    */
-  public function __construct(MobileNumberUtilInterface $mobile_util) {
+  public function __construct(MobileNumberUtilInterface $mobile_util,
+                              AccountProxy $current_user) {
     $this->mobileUtil = $mobile_util;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -37,7 +47,8 @@ class AlshayaAppointmentController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('mobile_number.util')
+      $container->get('mobile_number.util'),
+      $container->get('current_user')
     );
   }
 
@@ -54,12 +65,14 @@ class AlshayaAppointmentController extends ControllerBase {
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
     $geolocation_config = $this->config('geolocation.settings');
     $alshaya_master_config = $this->config('alshaya_master.mobile_number_settings');
+    $social_login_enabled = $this->config('alshaya_social.settings');
 
     $cache_tags = Cache::mergeTags($cache_tags, array_merge(
       $alshaya_appointment_config->getCacheTags(),
       $store_finder_config->getCacheTags(),
       $geolocation_config->getCacheTags(),
-      $alshaya_master_config->getCacheTags()
+      $alshaya_master_config->getCacheTags(),
+      $social_login_enabled->getCacheTags()
     ));
 
     // Get country code.
@@ -80,6 +93,8 @@ class AlshayaAppointmentController extends ControllerBase {
       'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
       'mobile_maxlength' => $alshaya_master_config->get('maxlength'),
       'customer_details_disclaimer_text' => $alshaya_appointment_config->get('customer_details_disclaimer_text'),
+      'user_details' => $this->getUserDetails(),
+      'social_login_enabled' => $social_login_enabled->get('social_login'),
     ];
 
     return [
@@ -89,6 +104,7 @@ class AlshayaAppointmentController extends ControllerBase {
         'library' => [
           'alshaya_appointment/alshaya_appointment',
           'alshaya_white_label/appointment-booking',
+          'alshaya_social/alshaya_social_popup',
         ],
         'drupalSettings' => $settings,
       ],
@@ -142,62 +158,31 @@ class AlshayaAppointmentController extends ControllerBase {
   }
 
   /**
-   * Verifies the mobile number and email.
+   * Get user details.
    *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
+   * @return array
+   *   Array of user details.
    */
-  public function validateInfo(Request $request) {
-    $data = $request->getContent();
-    if (!empty($data)) {
-      $data = json_decode($data, TRUE);
+  private function getUserDetails() {
+    $userDetails = [];
+    $uid = $this->currentUser()->id();
+
+    if (!$this->currentUser()->isAuthenticated()) {
+      $userDetails = ['id' => $uid];
+      return $userDetails;
     }
 
-    if (empty($data)) {
-      return new JsonResponse(['status' => FALSE]);
-    }
+    $user = $this->entityTypeManager()->getStorage('user')->load($uid);
+    $user_mobile_number = $user->get('field_mobile_number')->first();
+    $userDetails = [
+      'id' => $uid,
+      'email' => $this->currentUser()->getEmail(),
+      'fname' => $user->get('field_first_name')->getString(),
+      'lname' => $user->get('field_last_name')->getString(),
+      'mobile' => !empty($user_mobile_number) ? $user_mobile_number->getValue()['local_number'] : '',
+    ];
 
-    $status = [];
-
-    foreach ($data as $key => $value) {
-      $status[$key] = FALSE;
-
-      switch ($key) {
-        case 'mobile':
-          $country_code = _alshaya_custom_get_site_level_country_code();
-          $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
-
-          if (strpos($value, $country_mobile_code) === FALSE) {
-            $value = $country_mobile_code . $value;
-          }
-
-          try {
-            if ($this->mobileUtil->testMobileNumber($value)) {
-              $status[$key] = TRUE;
-            }
-          }
-          catch (\Exception $e) {
-            $status[$key] = FALSE;
-          }
-          break;
-
-        case 'email':
-          $domain = explode('@', $value)[1];
-          $dns_records = dns_get_record($domain);
-          if (empty($dns_records)) {
-            $status[$key] = FALSE;
-          }
-          else {
-            $status[$key] = TRUE;
-          }
-          break;
-      }
-    }
-
-    return new JsonResponse(['status' => TRUE] + $status);
+    return $userDetails;
   }
 
 }

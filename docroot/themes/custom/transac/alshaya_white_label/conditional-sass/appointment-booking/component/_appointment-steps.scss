@@ -7,7 +7,11 @@
   border: 0.125rem solid $appointment-step-border;
 
   &-wrap {
-    margin: 2.5rem 0 3.5rem;
+    margin: 2.8125rem 0;
+
+    @include breakpoint($tablet-landscape) {
+      margin: 2.5rem 0 3.5rem;
+    }
   }
 
   .wizard-step {
@@ -19,12 +23,12 @@
     display: flex;
     align-items: center;
 
-    @include breakpoint($upto-desktop) {
+    @include breakpoint($upto-tablet-landscape) {
       flex: 1;
       justify-content: center;
     }
 
-    @include breakpoint($desktop) {
+    @include breakpoint($tablet-landscape) {
       width: calc(100% / 6);
       padding-#{$left}: 0.5rem;
       padding-#{$right}: 1.6875rem;
@@ -33,7 +37,7 @@
     &.active {
       background: $appointment-active-step-bg;
 
-      @include breakpoint($upto-desktop) {
+      @include breakpoint($upto-tablet-landscape) {
         flex: 3;
         justify-content: flex-start;
       }
@@ -43,7 +47,7 @@
       }
 
       .step-title {
-        @include breakpoint($upto-desktop) {
+        @include breakpoint($upto-tablet-landscape) {
           display: block;
           min-width: 7.125rem;
         }
@@ -82,7 +86,7 @@
       -moz-transform: rotate(-45deg);
       -webkit-transform: rotate(-45deg);
 
-      @include breakpoint($desktop) {
+      @include breakpoint($tablet-landscape) {
         top: 0.4375rem;
         width: 2.25rem;
         height: 2.25rem;
@@ -103,7 +107,7 @@
       color: $appointment-step-title-color;
       padding-#{$left}: 0.3125rem;
 
-      @include breakpoint($upto-desktop) {
+      @include breakpoint($upto-tablet-landscape) {
         display: none;
       }
     }

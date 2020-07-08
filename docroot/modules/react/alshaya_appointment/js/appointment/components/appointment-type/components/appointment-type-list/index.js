@@ -25,7 +25,7 @@ export default class AppointmentTypeList extends React.Component {
       optionState: options,
     });
 
-    const filterKey = options.filter((v) => activeItem === v.value);
+    const filterKey = options.filter((v) => activeItem.id === v.value);
     this.updateOption(filterKey);
   }
 
@@ -43,7 +43,7 @@ export default class AppointmentTypeList extends React.Component {
 
   _getDescription = () => {
     const { appointmentTypeItems, activeItem } = this.props;
-    const filterDesc = appointmentTypeItems.filter((v) => activeItem === v.id);
+    const filterDesc = appointmentTypeItems.filter((v) => activeItem.id === v.id);
     return (
       <>
         <ReadMoreAndLess

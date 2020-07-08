@@ -68,9 +68,15 @@ function addressCleanup(address) {
   return cleanAddress;
 }
 
+function getDateFormat() {
+  const format = 'YYYY-MM-DD';
+  return format;
+}
+
 export {
   getInputValue,
   getLocationAccess,
   getDistanceBetweenCoords,
   addressCleanup,
+  getDateFormat,
 };

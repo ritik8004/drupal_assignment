@@ -44,6 +44,10 @@ export default class CompanionDetails extends React.Component {
       questions,
     } = this.state;
 
+    const {
+      clientData,
+    } = this.props;
+
     const companionQuestions = [...Array(parseInt(appointmentCompanion.id, 10))].map((e, i) => {
       const companionNum = i + 1;
       const companionNamePrefix = `bootscompanion${companionNum}`;
@@ -53,11 +57,16 @@ export default class CompanionDetails extends React.Component {
       const firstNameData = _find(questions, ['questionExternalId', firstName]);
       const lastNameData = _find(questions, ['questionExternalId', lastName]);
       const dobData = _find(questions, ['questionExternalId', dob]);
-      const {
-        [firstName]: defaultfirstName,
-        [lastName]: defaultlastName,
-        [dob]: defaultdob,
-      } = this.state;
+      let defaultfirstName; let defaultlastName; let
+        defaultdob;
+
+      if (clientData) {
+        ({
+          [firstName]: defaultfirstName,
+          [lastName]: defaultlastName,
+          [dob]: defaultdob,
+        } = clientData);
+      }
 
       if (firstNameData && lastNameData && dobData) {
         return (

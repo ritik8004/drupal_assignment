@@ -1,6 +1,8 @@
 import React from 'react';
+import moment from 'moment';
 import { getStorageInfo } from '../../../utilities/storage';
 import StoreAddress from '../appointment-store/components/store-address';
+import SectionTitle from '../section-title';
 
 export default class AppointmentSelection extends React.Component {
   constructor(props) {
@@ -19,19 +21,23 @@ export default class AppointmentSelection extends React.Component {
   }
 
   render() {
-    const { appointmentCategory, appointmentType, selectedStoreItem } = this.state;
+    const {
+      appointmentCategory, appointmentType, selectedStoreItem, selectedSlot,
+    } = this.state;
     const selectedStoreDetails = selectedStoreItem ? JSON.parse(selectedStoreItem) : '';
 
     return (
       <div className="appointment-details">
-        <div className="appointment-details-header">
+        <div className="appointment-details-header appointment-subtitle">
           {Drupal.t('You have chosen')}
         </div>
         <div className="appointment-details-body">
           <div className="appointment-type-details-wrapper">
             <div className="appointment-details-item">
               <div className="appointment-details-item-header">
-                <label>{Drupal.t('Appointment category')}</label>
+                <SectionTitle>
+                  {Drupal.t('Appointment category')}
+                </SectionTitle>
               </div>
               <div className="appointment-details-item-body">
                 {appointmentCategory && appointmentCategory.name}
@@ -39,21 +45,21 @@ export default class AppointmentSelection extends React.Component {
             </div>
             <div className="appointment-details-item">
               <div className="appointment-details-item-header">
-                <label>{Drupal.t('Appointment type')}</label>
+                <SectionTitle>
+                  {Drupal.t('Appointment type')}
+                </SectionTitle>
               </div>
               <div className="appointment-details-item-body">
                 {appointmentType && appointmentType.name}
               </div>
             </div>
-            <div className="appointment-details-item edit-button">
-              <button
-                className="appointment-details-button"
-                type="button"
-                onClick={() => this.handleEdit('appointment-type')}
-              >
-                {Drupal.t('Edit')}
-              </button>
-            </div>
+            <button
+              className="appointment-details-button edit-button"
+              type="button"
+              onClick={() => this.handleEdit('appointment-type')}
+            >
+              {Drupal.t('Edit')}
+            </button>
           </div>
 
           { selectedStoreDetails
@@ -61,7 +67,9 @@ export default class AppointmentSelection extends React.Component {
               <div className="appointment-store-details-wrapper">
                 <div className="appointment-details-item">
                   <div className="appointment-details-item-header">
-                    <label>{Drupal.t('Location')}</label>
+                    <SectionTitle>
+                      {Drupal.t('Location')}
+                    </SectionTitle>
                   </div>
                   <div className="appointment-details-item-body">
                     <div className="store-name">
@@ -72,11 +80,43 @@ export default class AppointmentSelection extends React.Component {
                     />
                   </div>
                 </div>
+                <button
+                  className="appointment-details-button edit-button"
+                  type="button"
+                  onClick={() => this.handleEdit('select-store')}
+                >
+                  {Drupal.t('Edit')}
+                </button>
+              </div>
+            )
+            : null}
+
+          { selectedSlot
+            ? (
+              <div className="appointment-timeslot-details-wrapper">
+                <div className="appointment-details-item">
+                  <div className="appointment-details-item-header">
+                    <label>{Drupal.t('Date')}</label>
+                  </div>
+                  <div className="appointment-details-item-body">
+                    <div className="store-name">
+                      { moment(selectedSlot.appointmentSlotTime).format('dddd, Do MMMM YYYY') }
+                    </div>
+                  </div>
+                  <div className="appointment-details-item-header">
+                    <label>{Drupal.t('Time')}</label>
+                  </div>
+                  <div className="appointment-details-item-body">
+                    <div className="store-name">
+                      { moment(selectedSlot.appointmentSlotTime).format('LT') }
+                    </div>
+                  </div>
+                </div>
                 <div className="appointment-details-item edit-button">
                   <button
                     className="appointment-details-button"
                     type="button"
-                    onClick={() => this.handleEdit('select-store')}
+                    onClick={() => this.handleEdit('select-time-slot')}
                   >
                     {Drupal.t('Edit')}
                   </button>
@@ -84,6 +124,7 @@ export default class AppointmentSelection extends React.Component {
               </div>
             )
             : null}
+
         </div>
       </div>
     );

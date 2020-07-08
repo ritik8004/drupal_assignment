@@ -189,17 +189,19 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
   /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
   $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+  $current_route = $gtm_manager->getGtmContainer();
 
+  // For cart page, we are preaparing data on frontend by making api request
+  // to fetch product info. As, we do not have data available on the back-end
+  // skipping checkout event from backend to handle it on front-end side.
+  //
+  // For checkout page, we don't always want to trigger checkout event first
+  // thing. so we don't alter data_layer for checkout page here and it will
+  // trigger events from javascript (alshaya_seo.gtm.spc_checkout.js).
+  if (in_array($current_route['route_name'], ['alshaya_spc.checkout', 'acq_cart.cart'])) {
+    return;
+  }
   try {
-    $current_route = $gtm_manager->getGtmContainer();
-
-    // For checkout page, we don't always want to trigger checkout event first
-    // thing. so we don't alter data_layer for checkout page here and it will
-    // trigger events from javascript (alshaya_seo.gtm.spc_checkout.js).
-    if ($current_route['route_name'] === 'alshaya_spc.checkout') {
-      return;
-    }
-
     $general_dl_attributes = $gtm_manager->fetchGeneralPageAttributes($data_layer);
 
     // Preserve attributes before overriding the datalayer attributes.
@@ -214,60 +216,38 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
     $data_layer = $general_dl_attributes;
 
     $page_type = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
-    switch ($current_route['route_name']) {
-      case 'acq_checkout.form':
-      case 'acq_cart.cart':
-        if ($current_route['route_name'] == 'acq_cart.cart') {
-          $data_layer_cart = [
-            'event' => 'checkout',
-            'ecommerce' => [
-              'currencyCode' => $gtm_manager->getGtmCurrency(),
-              'checkout' => [
-                'actionField' => [
-                  'step' => 1,
-                ],
-                'products' => [],
-              ],
-            ],
-          ];
+    if ($current_route['route_name'] == 'alshaya_spc.checkout.confirmation') {
+      $order = _alshaya_acm_checkout_get_last_order_from_session();
 
-          $data_layer = array_merge($data_layer, $data_layer_cart);
-        }
-        break;
+      // We check if we have valid order id.
+      if (empty($order)) {
+        return;
+      }
 
-      case 'alshaya_spc.checkout.confirmation':
-        $order = _alshaya_acm_checkout_get_last_order_from_session();
+      $cookie_key = 'alshaya_gtm_confirmation_visited_' . $order['order_id'];
 
-        // We check if we have valid order id.
-        if (empty($order)) {
-          return;
-        }
+      $session = \Drupal::request()->getSession();
 
-        $cookie_key = 'alshaya_gtm_confirmation_visited_' . $order['order_id'];
+      $already_visited = (int) $session->get($cookie_key);
 
-        $session = \Drupal::request()->getSession();
+      // Send order complete confirmation to GTM only once.
+      if ($already_visited !== 1) {
+        $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
+        $data_layer = array_merge($data_layer, $attributes['general']);
 
-        $already_visited = (int) $session->get($cookie_key);
+        $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
 
-        // Send order complete confirmation to GTM only once.
-        if ($already_visited !== 1) {
-          $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
-          $data_layer = array_merge($data_layer, $attributes['general']);
+        $data_layer['event'] = 'purchaseSuccess';
+        $data_layer['ecommerce'] = [
+          'currencyCode' => $gtm_manager->getGtmCurrency(),
+          'purchase' => [
+            'actionField' => $attributes['actionField'],
+            'products' => array_values($attributes['products']),
+          ],
+        ];
 
-          $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
-
-          $data_layer['event'] = 'purchaseSuccess';
-          $data_layer['ecommerce'] = [
-            'currencyCode' => $gtm_manager->getGtmCurrency(),
-            'purchase' => [
-              'actionField' => $attributes['actionField'],
-              'products' => array_values($attributes['products']),
-            ],
-          ];
-
-          $session->set($cookie_key, 1);
-        }
-        break;
+        $session->set($cookie_key, 1);
+      }
     }
 
     // Generic handling of page type for user pages.

@@ -11,7 +11,7 @@
     float: $right;
   }
 
-  @include breakpoint($desktop) {
+  @include breakpoint($tablet-landscape) {
     margin-top: 1.875rem;
   }
 
