@@ -3,6 +3,7 @@ var path  = require("path");
 module.exports = {
   entry: {
     appointment: './js/appointment',
+    appointments_view: './js/appointments.view',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

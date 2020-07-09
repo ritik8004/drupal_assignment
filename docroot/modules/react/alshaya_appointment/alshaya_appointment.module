@@ -14,3 +14,15 @@
 function _alshaya_appointment_get_middleware_url() {
   return '/appointment/public';
 }
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_appointment_alshaya_my_account_links_alter(array &$links) {
+  // Add My apppointment link.
+  $links['alshaya_appointment'] = [
+    'text' => t('my appointments'),
+    'route' => 'alshaya_appointment.user_booked_appointment',
+    'weight' => 200,
+  ];
+}
