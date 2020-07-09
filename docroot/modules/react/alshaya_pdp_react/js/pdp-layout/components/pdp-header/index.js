@@ -41,6 +41,17 @@ export default class PdpHeader extends React.PureComponent {
             finalPrice={finalPrice}
             pdpProductPrice={pdpProductPrice}
           />
+          <div id="sticky-header-btn">
+            <div className="magv2-add-to-basket-container" ref={this.button}>
+              <button
+                className="magv2-button"
+                type="submit"
+                onClick={this.addToCart}
+              >
+                {Drupal.t('Add To Bag')}
+              </button>
+            </div>
+          </div>
         </ConditionalView>
       </div>
     );

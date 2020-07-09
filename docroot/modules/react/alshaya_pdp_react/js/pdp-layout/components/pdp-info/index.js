@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 
 const PdpInfo = (props) => {
   const {
     title, pdpProductPrice, finalPrice,
-    shortDetail = false, childRef,
+    shortDetail = false,
     brandLogo, brandLogoAlt, brandLogoTitle,
   } = props;
 
@@ -15,20 +15,8 @@ const PdpInfo = (props) => {
 
   const specialPriceClass = (finalPrice < pdpProductPrice) ? 'has-special-price' : '';
 
-  const wrapper = useRef();
-
-  useEffect(() => {
-    if (childRef) {
-      childRef(wrapper);
-    }
-  },
-  [
-    childRef,
-    wrapper,
-  ]);
-
   return (
-    <div className={(shortDetail ? 'magv2-compact-detail-wrapper' : 'magv2-detail-wrapper')} ref={wrapper}>
+    <div className={(shortDetail ? 'magv2-compact-detail-wrapper' : 'magv2-detail-wrapper')}>
       <div className="magv2-pdp-title-wrapper">
         <div className="magv2-pdp-title">{title}</div>
         <div className="magv2-pdp-brand-logo"><img src={brandLogo} alt={brandLogoAlt} title={brandLogoTitle} /></div>

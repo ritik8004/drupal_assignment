@@ -81,7 +81,6 @@ const PdpLayout = () => {
             title={title}
             finalPrice={finalPrice}
             pdpProductPrice={priceRaw}
-            childRef={(ref) => (getChildRef(ref))}
             brandLogo={brandLogo}
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
@@ -91,6 +90,7 @@ const PdpLayout = () => {
             configurableCombinations={configurableCombinations}
             productInfo={productInfo}
             pdpRefresh={pdpRefresh}
+            childRef={(ref) => (getChildRef(ref))}
           />
           <PdpDescription
             skuCode={skuItemCode}
