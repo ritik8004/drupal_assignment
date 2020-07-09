@@ -9,3 +9,7 @@ fields:
   size:
     cardinality: 1
     facet: 0
+  fabric:
+    index: 1
+  material:
+    index: 1
