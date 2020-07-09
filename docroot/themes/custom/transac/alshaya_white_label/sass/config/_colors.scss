@@ -258,6 +258,7 @@ $tooltip_border_2: $alice-blue;
 $tooltip_border_opacity_0: rgba(0, 132, 204, 0);
 $tooltip_icon: $cerulean-two;
 $tooltip_link: $cerulean-two;
+$tooltip_wrapper_border: $white-smoke-light;
 
 // Back to top
 $btt_bg: $whisper-light;
@@ -553,6 +554,7 @@ $pdp_white_color_attribute_hover_border: $black;
 $pdp_white_color_attribute_border: $black;
 $pdp_swatch_selected_border: $black;
 $pdp_background: #f8f8f8;
+$pdp_product_same_day: $grey-light;
 
 // additional attribute
 $pdp_additional_attribute_sliderbar_bg: $white-five;
@@ -1220,6 +1222,8 @@ $spc-promo-code-border: $warm-grey-two;
 $spc-recommended-product-promotion: $cherry;
 $spc-cart-item-trash-icon: $warm-grey-two;
 $spc-cart-item-trash-icon-hover: $mothercare-black;
+$spc-country-availability: $_spc-discount-text;
+$spc-non-refundable-product: $grey-light;
 
 // SPC Checkout.
 $spc-checkout_section_title: $mothercare-black;

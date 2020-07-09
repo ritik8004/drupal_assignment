@@ -4,3 +4,4 @@ monolog:
       type: syslog
       level: debug
       formatter: alshaya_middleware.log_fromatter
+      channels: ["!request"]

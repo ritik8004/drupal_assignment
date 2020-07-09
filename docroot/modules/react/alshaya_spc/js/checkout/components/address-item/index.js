@@ -16,6 +16,7 @@ import {
 } from '../../../utilities/checkout_util';
 import EditAddressSVG from '../../../svg-component/edit-address-svg';
 import dispatchCustomEvent from '../../../utilities/events';
+import getStringMessage from '../../../utilities/strings';
 
 export default class AddressItem extends React.Component {
   constructor(props) {
@@ -174,7 +175,9 @@ export default class AddressItem extends React.Component {
         </div>
         <div className="spc-address-tile-actions">
           <div className="spc-address-btns">
-            <button type="button" disabled={isSelected} className="spc-address-select-address" onClick={() => this.updateAddress(address)}>{buttonText}</button>
+            {address.validAddress === false
+              ? <div className="address-not-valid">{getStringMessage('address_not_complete')}</div>
+              : <button type="button" disabled={isSelected} className="spc-address-select-address" onClick={() => this.updateAddress(address)}>{buttonText}</button>}
             {(showEditButton === undefined || showEditButton === true)
               && (
               <div title={Drupal.t('Edit Address')} className="spc-address-tile-edit" onClick={(e) => this.openModal(e)}>

@@ -11,4 +11,16 @@
   #promo-code::placeholder {
     text-transform: capitalize;
   }
+
+  .promo-remove {
+    #{$right}: 9.5rem;
+
+    @include breakpoint($only-mobile) {
+      #{$right}: 10.5rem;
+    }
+
+    .active::after {
+      font-size: 1rem;
+    }
+  }
 }

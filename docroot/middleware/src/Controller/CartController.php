@@ -332,7 +332,11 @@ class CartController {
           if ($item['item_id'] == $total_item['item_id']) {
             // Final price to use.
             $data['items'][$item['sku']]['finalPrice'] = $total_item['price_incl_tax'];
-            if ($total_item['price'] * $item['qty'] == $total_item['discount_amount']) {
+
+            // Free Item is only for free gift products which are having
+            // price 0.01, rest all are free but still via different rules.
+            if (($total_item['price'] == 0.01 || $total_item['base_price'] == 0.01)
+              && $total_item['price'] * $item['qty'] == $total_item['discount_amount']) {
               $data['items'][$item['sku']]['freeItem'] = TRUE;
             }
             break;
@@ -365,6 +369,9 @@ class CartController {
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+
+    // Whether cart is stale or not.
+    $data['stale_cart'] = $cart_data['stale_cart'] ?? FALSE;
 
     return $data;
   }
@@ -624,7 +631,7 @@ class CartController {
 
       case CartActions::CART_REFRESH:
         // If cart id in request not matches with what in session.
-        if ($request_content['cart_id'] !== $this->cart->getCartId()) {
+        if ($request_content['cart_id'] != $this->cart->getCartId()) {
           $this->logger->error('Error while cart refresh. Cart data in request not matches with cart in session. Request data: @request_data CartId in session: @cart_id', [
             '@request_data' => json_encode($request_content),
             '@cart_id' => $this->cart->getCartId(),
