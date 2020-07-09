@@ -5,8 +5,8 @@
 const GTM_CONSTANTS = {
   CART_ERRORS: 'cart errors',
   CHECKOUT_ERRORS: 'checkout errors',
-  PAYMENT_ERRORS: 'payment errors',
-  GENUINE_ERRORS: 'genuine errors',
+  PAYMENT_ERRORS: 'other payment errors',
+  GENUINE_PAYMENT_ERRORS: 'genuine payment errors',
 };
 
 (function ($, Drupal, dataLayer) {

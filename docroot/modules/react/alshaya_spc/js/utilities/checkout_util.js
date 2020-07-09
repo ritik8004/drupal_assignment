@@ -78,13 +78,13 @@ export const placeOrder = (paymentMethod) => {
           errorMessage: response.data.error_message,
           paymentMethod,
         };
-        Drupal.logJavascriptError('place-order', gtmInfo, GTM_CONSTANTS.GENUINE_ERRORS);
+        Drupal.logJavascriptError('place-order', gtmInfo, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
 
         removeFullScreenLoader();
       },
       (error) => {
         // Processing of error here.
-        Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.GENUINE_ERRORS);
+        Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       },
     );
 };

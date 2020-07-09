@@ -47,7 +47,7 @@ export default class PaymentMethods extends React.Component {
       } else if (paymentErrorInfo.status !== undefined
         && paymentErrorInfo.status === 'declined') {
         message = getStringMessage('transaction_failed');
-        errorCategory = GTM_CONSTANTS.GENUINE_ERRORS;
+        errorCategory = GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS;
       }
 
       // Push error to GA.
@@ -181,7 +181,7 @@ export default class PaymentMethods extends React.Component {
 
         dispatchCustomEvent('refreshCompletePurchaseSection', {});
       }).catch((error) => {
-        Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_ERRORS);
+        Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       });
     }
   };
