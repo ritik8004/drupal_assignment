@@ -3,16 +3,14 @@ import SectionTitle from '../../../section-title';
 import AppointmentSelect from '../appointment-select';
 
 export default class AppointmentCompanion extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeOption: null,
-      optionState: [],
-    };
-  }
+  onSelectChange = (e, name) => {
+    const { onSelectChange } = this.props;
+    onSelectChange(e, name);
+  };
 
-  componentDidMount() {
-    const { appointmentCompanionItems, activeItem } = this.props;
+  render() {
+    const { activeItem, appointmentCompanionItems } = this.props;
+
     const options = [];
     appointmentCompanionItems.forEach((v, key) => {
       options[key] = {
@@ -21,30 +19,6 @@ export default class AppointmentCompanion extends React.Component {
       };
     });
 
-    this.setState({
-      optionState: options,
-    });
-
-    const filterKey = options.filter((v) => parseInt(activeItem.id, 10) === v.value);
-    const updateFilterKey = filterKey.length ? filterKey : options;
-    this.onSelectChange(updateFilterKey[0], 'appointmentCompanion');
-  }
-
-  onSelectChange = (e, name) => {
-    this.updateOption([e]);
-    const { onSelectChange } = this.props;
-    onSelectChange(e, name);
-  }
-
-  updateOption = (filterKey) => {
-    this.setState({
-      activeOption: filterKey.length ? filterKey[0] : null,
-    });
-  }
-
-  render() {
-    const { activeItem } = this.props;
-    const { activeOption, optionState } = this.state;
     return (
       <div className="appointment-companion-wrapper appointment-type-item">
         <SectionTitle>
@@ -52,12 +26,11 @@ export default class AppointmentCompanion extends React.Component {
           *
         </SectionTitle>
         <AppointmentSelect
-          options={optionState}
+          options={options}
           onSelectChange={this.onSelectChange}
           activeItem={activeItem}
           name="appointmentCompanion"
           aptSelectClass="appointment-companion-select"
-          activeOption={activeOption || optionState[0]}
         />
       </div>
     );

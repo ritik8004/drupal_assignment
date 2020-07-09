@@ -79,6 +79,7 @@
 
         @include breakpoint($tablet-landscape) {
           display: flex;
+          justify-content: center;
         }
       }
 

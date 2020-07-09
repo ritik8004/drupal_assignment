@@ -27,11 +27,10 @@ export default class AppointmentType extends React.Component {
         appointmentStep: 'appointment-type',
         appointmentCategory: '',
         appointmentType: '',
-        appointmentCompanion: '',
+        appointmentCompanion: { value: 1, label: 1 },
         appointmentForYou: '',
         appointmentTypeItems: [],
         categoryItems: '',
-        activeKey: 0,
         appointmentCompanionItems: companionItems,
       };
     }
@@ -65,6 +64,7 @@ export default class AppointmentType extends React.Component {
           this.setState({
             appointmentTypeItems: [...result.data],
             appointmentCategory: category,
+            appointmentType: '',
           });
 
           // Remove loader.
@@ -84,7 +84,7 @@ export default class AppointmentType extends React.Component {
   onSelectChange = (e, name) => {
     const { value, label } = e;
     this.setState({
-      [name]: { id: value, name: label },
+      [name]: { value, label },
     });
   }
 
@@ -103,7 +103,6 @@ export default class AppointmentType extends React.Component {
       appointmentType,
       appointmentCompanion,
       appointmentForYou,
-      activeKey,
     } = this.state;
 
     return (
@@ -119,7 +118,6 @@ export default class AppointmentType extends React.Component {
               appointmentTypeItems={appointmentTypeItems}
               onSelectChange={this.onSelectChange}
               activeItem={appointmentType}
-              activeKey={activeKey}
             />
           )
           : null}
@@ -129,7 +127,6 @@ export default class AppointmentType extends React.Component {
               appointmentCompanionItems={appointmentCompanionItems}
               onSelectChange={this.onSelectChange}
               activeItem={appointmentCompanion}
-              activeKey={activeKey}
             />
           )
           : null}
