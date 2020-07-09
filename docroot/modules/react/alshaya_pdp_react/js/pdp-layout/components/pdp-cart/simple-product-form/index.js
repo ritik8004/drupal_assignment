@@ -44,7 +44,10 @@ class SimpleProductForm extends React.Component {
 
   addToCart = (e, id) => {
     e.preventDefault();
+    // Adding add to cart loading.
     const addToCartBtn = document.getElementById(id);
+    addToCartBtn.classList.toggle('magv2-add-to-basket-loader');
+
     const { skuCode, productInfo } = this.props;
     const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
 
