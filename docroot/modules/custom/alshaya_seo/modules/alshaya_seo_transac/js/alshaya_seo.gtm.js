@@ -1285,13 +1285,13 @@
    * @param context
    * @param error
    */
-  Drupal.logJavascriptError = function (context, error, category = 'unknown errors') {
+  Drupal.logJavascriptError = function (context, error, category) {
     var message = (error && error.message !== undefined)
       ? error.message
       : error;
     var errorData = {
       event: 'eventTracker',
-      eventCategory: category,
+      eventCategory: category || 'unknown errors',
       eventLabel: context,
       eventAction: message,
       eventPlace: 'Error occurred on ' + window.location.href,
