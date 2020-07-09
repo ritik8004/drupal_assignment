@@ -1,4 +1,6 @@
 import axios from 'axios';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 /**
  * Clear cart data.
@@ -49,11 +51,19 @@ export const triggerAddToCart = (
   productInfo,
   configurableCombinations = null,
   skuCode,
+  addToCartBtn,
 ) => {
   const productData = productDataValue;
   const cartData = Drupal.alshayaSpc.getCartData();
+  const cartBtn = addToCartBtn;
   // If there any error we throw from middleware.
   if (response.data.error === true) {
+    const errorMessage = <p>{response.data.error_message}</p>;
+    ReactDOM.render(errorMessage, document.getElementById('add-to-cart-error'));
+    if (cartBtn.classList.contains('magv2-add-to-basket-loader')) {
+      cartBtn.classList.remove('magv2-add-to-basket-loader');
+      cartBtn.innerHTML = Drupal.t('Add To Bag');
+    }
     if (response.data.error_code === '400') {
       Drupal.alshayaSpc.clearCartData();
     }
@@ -121,6 +131,21 @@ export const triggerAddToCart = (
       },
     });
     form.dispatchEvent(cartNotification);
+    // Adding add to cart button
+    // success class.
+    if (cartBtn.classList.contains('magv2-add-to-basket-loader')) {
+      cartBtn.classList.remove('magv2-add-to-basket-loader');
+      cartBtn.innerHTML = Drupal.t('Item added');
+      cartBtn.classList.toggle('magv2-add-to-basket-success');
+    }
+
+    // Removing the success button after 2 seconds.
+    setTimeout(() => {
+      if (cartBtn.classList.contains('magv2-add-to-basket-success')) {
+        cartBtn.classList.remove('magv2-add-to-basket-success');
+        cartBtn.innerHTML = Drupal.t('Add To Bag');
+      }
+    }, 4000);
   }
 };
 
