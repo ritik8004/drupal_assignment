@@ -21,9 +21,6 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
-  material:
-    label: 'Material'
-    configurable: 1
   product_type_lhn:
     label: 'Product Type'
     cardinality: -1
@@ -59,9 +56,6 @@ fields:
     configurable: 1
   frame:
     label: 'Frame'
-    configurable: 1
-  fabric:
-    label: 'Fabric'
     configurable: 1
   white_glove_delivery:
     label: 'White Glove Delivery'
