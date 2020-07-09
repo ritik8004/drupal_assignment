@@ -9,3 +9,11 @@ fields:
   size:
     cardinality: 1
     facet: 0
+  fabric:
+    label: 'Fabric'
+    configurable: 1
+    index: 1
+  material:
+    label: 'Material'
+    configurable: 1
+    index: 1
