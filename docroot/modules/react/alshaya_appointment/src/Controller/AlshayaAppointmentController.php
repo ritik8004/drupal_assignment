@@ -81,7 +81,6 @@ class AlshayaAppointmentController extends ControllerBase {
     $settings['alshaya_appointment'] = [
       'middleware_url' => _alshaya_appointment_get_middleware_url(),
       'step_labels' => $this->getAppointmentSteps(),
-      'appointment_terms_conditions_text' => $alshaya_appointment_config->get('appointment_terms_conditions_text'),
       'appointment_companion_limit' => $alshaya_appointment_config->get('appointment_companion_limit'),
       'local_storage_expire' => $alshaya_appointment_config->get('local_storage_expire'),
       'store_finder' => array_merge(
