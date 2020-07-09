@@ -4,10 +4,6 @@ import { cartAvailableInStorage } from './get_cart';
 import i18nMiddleWareUrl from './i18n_url';
 import { getInfoFromStorage } from './storage';
 import dispatchCustomEvent from './events';
-import {
-  GTM_CART_ERRORS,
-  GTM_PAYMENT_ERRORS,
-} from './constants';
 
 /**
  * Get the middleware update cart endpoint.
@@ -49,7 +45,7 @@ export const applyRemovePromo = (action, promoCode) => {
   })
     .then((response) => response.data, (error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('apply-remove-promo', error, GTM_CART_ERRORS);
+      Drupal.logJavascriptError('apply-remove-promo', error, GTM_CONSTANTS.CART_ERRORS);
     });
 };
 
@@ -98,7 +94,7 @@ export const updateCartItemData = (action, sku, quantity) => {
       return response.data;
     }, (error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('update-cart-item-data', error, GTM_CART_ERRORS);
+      Drupal.logJavascriptError('update-cart-item-data', error, GTM_CONSTANTS.CART_ERRORS);
     });
 };
 
@@ -109,6 +105,6 @@ export const addPaymentMethodInCart = (action, data) => {
     payment_info: data,
   }).then((response) => response.data, (error) => {
     // Processing of error here.
-    Drupal.logJavascriptError('add-payment-method-in-cart', error, GTM_PAYMENT_ERRORS);
+    Drupal.logJavascriptError('add-payment-method-in-cart', error, GTM_CONSTANTS.PAYMENT_ERRORS);
   });
 };

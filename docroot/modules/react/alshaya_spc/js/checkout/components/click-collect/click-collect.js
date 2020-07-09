@@ -29,7 +29,6 @@ import getStringMessage from '../../../utilities/strings';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { getUserLocation } from '../../../utilities/map/map_utils';
 import dispatchCustomEvent from '../../../utilities/events';
-import { GTM_CHECKOUT_ERRORS } from '../../../utilities/constants';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -193,7 +192,7 @@ class ClickCollect extends React.Component {
               return;
             }
           } catch (error) {
-            Drupal.logJavascriptError('clickncollect-checkUserCountry', error, GTM_CHECKOUT_ERRORS);
+            Drupal.logJavascriptError('clickncollect-checkUserCountry', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
           }
 
           if (JSON.stringify(coords) === JSON.stringify(userCoords)) {
@@ -215,7 +214,7 @@ class ClickCollect extends React.Component {
       )
       .catch((error) => {
         removeFullScreenLoader();
-        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error, GTM_CHECKOUT_ERRORS);
+        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
       });
     return false;
   };
@@ -247,7 +246,7 @@ class ClickCollect extends React.Component {
         removeFullScreenLoader();
       })
       .catch((error) => {
-        Drupal.logJavascriptError('clickncollect-fetchAvailableStores', error, GTM_CHECKOUT_ERRORS);
+        Drupal.logJavascriptError('clickncollect-fetchAvailableStores', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
       });
   };
 
@@ -395,7 +394,7 @@ class ClickCollect extends React.Component {
         Drupal.logJavascriptError(
           'clickncollect-toggleFullScreen',
           'Not able to exit full screen, click and collect map view.',
-          GTM_CHECKOUT_ERRORS,
+          GTM_CONSTANTS.CHECKOUT_ERRORS,
         );
       }
 

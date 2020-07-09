@@ -3,7 +3,6 @@ import { placeOrder, removeFullScreenLoader } from './checkout_util';
 import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
 import i18nMiddleWareUrl from './i18n_url';
-import { GTM_PAYMENT_ERRORS } from './constants';
 
 let applePaySessionObject;
 
@@ -29,7 +28,7 @@ const ApplePay = {
         Drupal.logJavascriptError(
           'apple-pay-checking-isPossible',
           'user cannot make payments',
-          GTM_PAYMENT_ERRORS,
+          GTM_CONSTANTS.PAYMENT_ERRORS,
         );
       }
 
@@ -38,7 +37,7 @@ const ApplePay = {
       removeFullScreenLoader();
       document.getElementById('is-possible-placeholder').classList.add('error');
       dispatchCustomEvent('refreshCompletePurchaseSection', {});
-      Drupal.logJavascriptError('apple-pay-checking-isPossible', error.message, GTM_PAYMENT_ERRORS);
+      Drupal.logJavascriptError('apple-pay-checking-isPossible', error.message, GTM_CONSTANTS.PAYMENT_ERRORS);
     });
   },
 
@@ -66,7 +65,7 @@ const ApplePay = {
         message: getStringMessage('payment_error'),
       });
       removeFullScreenLoader();
-      Drupal.logJavascriptError('apple-pay-merchant-validation', error.message, GTM_PAYMENT_ERRORS);
+      Drupal.logJavascriptError('apple-pay-merchant-validation', error.message, GTM_CONSTANTS.PAYMENT_ERRORS);
     });
   },
 
@@ -92,13 +91,13 @@ const ApplePay = {
         message: getStringMessage('payment_error'),
       });
       removeFullScreenLoader();
-      Drupal.logJavascriptError('apple-pay-merchant-authorise', error.message, GTM_PAYMENT_ERRORS);
+      Drupal.logJavascriptError('apple-pay-merchant-authorise', error.message, GTM_CONSTANTS.PAYMENT_ERRORS);
     });
   },
 
   onCancel: () => {
     removeFullScreenLoader();
-    Drupal.logJavascriptError('apple-pay', 'user cancelled or error occurred', GTM_PAYMENT_ERRORS);
+    Drupal.logJavascriptError('apple-pay', 'user cancelled or error occurred', GTM_CONSTANTS.PAYMENT_ERRORS);
   },
 
   startPayment: (total) => {
@@ -131,7 +130,7 @@ const ApplePay = {
       applePaySessionObject.oncancel = ApplePay.onCancel;
       applePaySessionObject.begin();
     } catch (e) {
-      Drupal.logJavascriptError('Apple pay session error', e.message, GTM_PAYMENT_ERRORS);
+      Drupal.logJavascriptError('Apple pay session error', e.message, GTM_CONSTANTS.PAYMENT_ERRORS);
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
         message: getStringMessage('payment_error'),

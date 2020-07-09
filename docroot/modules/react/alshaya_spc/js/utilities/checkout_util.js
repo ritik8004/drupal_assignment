@@ -7,7 +7,6 @@ import {
 import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
-import { GTM_PAYMENT_ERRORS, GTM_CHECKOUT_ERRORS, GTM_GENUINE_ERRORS } from './constants';
 
 /**
  * Place ajax fulll screen loader.
@@ -64,7 +63,7 @@ export const placeOrder = (paymentMethod) => {
         }
 
         if (response.data.error && response.data.redirectUrl !== undefined) {
-          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_PAYMENT_ERRORS);
+          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
           window.location = response.data.redirectUrl;
           return;
         }
@@ -79,13 +78,13 @@ export const placeOrder = (paymentMethod) => {
           errorMessage: response.data.error_message,
           paymentMethod,
         };
-        Drupal.logJavascriptError('place-order', gtmInfo, GTM_GENUINE_ERRORS);
+        Drupal.logJavascriptError('place-order', gtmInfo, GTM_CONSTANTS.GENUINE_ERRORS);
 
         removeFullScreenLoader();
       },
       (error) => {
         // Processing of error here.
-        Drupal.logJavascriptError('place-order', error, GTM_GENUINE_ERRORS);
+        Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.GENUINE_ERRORS);
       },
     );
 };
@@ -160,7 +159,7 @@ export const addShippingInCart = (action, data) => {
       }),
     )
     .catch((error) => {
-      Drupal.logJavascriptError('add-shipping-in-cart', error, GTM_CHECKOUT_ERRORS);
+      Drupal.logJavascriptError('add-shipping-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -185,7 +184,7 @@ export const addBillingInCart = (action, data) => {
       }),
     )
     .catch((error) => {
-      Drupal.logJavascriptError('add-billing-in-cart', error, GTM_CHECKOUT_ERRORS);
+      Drupal.logJavascriptError('add-billing-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -237,7 +236,7 @@ export const validateCartData = () => {
     )
     .catch((error) => {
       // Error processing here.
-      Drupal.logJavascriptError('checkout-refresh-cart-data', error, GTM_CHECKOUT_ERRORS);
+      Drupal.logJavascriptError('checkout-refresh-cart-data', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 

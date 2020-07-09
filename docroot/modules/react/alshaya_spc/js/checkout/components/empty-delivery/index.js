@@ -21,7 +21,6 @@ import { fetchClicknCollectStores } from '../../../utilities/api/requests';
 import { getUserLocation } from '../../../utilities/map/map_utils';
 import dispatchCustomEvent from '../../../utilities/events';
 import WithModal from '../with-modal';
-import { GTM_CHECKOUT_ERRORS } from '../../../utilities/constants';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -90,7 +89,7 @@ export default class EmptyDeliveryText extends React.Component {
               return;
             }
           } catch (error) {
-            Drupal.logJavascriptError('clickncollect-checkUserCountry', error, GTM_CHECKOUT_ERRORS);
+            Drupal.logJavascriptError('clickncollect-checkUserCountry', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
           }
           fetchStoresHelper(coords);
         },
@@ -100,7 +99,7 @@ export default class EmptyDeliveryText extends React.Component {
       )
       .catch((error) => {
         removeFullScreenLoader();
-        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error, GTM_CHECKOUT_ERRORS);
+        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
       });
   }
 

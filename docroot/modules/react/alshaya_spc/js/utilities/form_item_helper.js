@@ -1,13 +1,12 @@
 import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
-import { GTM_CHECKOUT_ERRORS } from './constants';
 
 export const markFieldAsValid = (id) => {
   try {
     document.getElementById(id).innerHTML = '';
     document.getElementById(id).classList.remove('error');
   } catch (e) {
-    Drupal.logJavascriptError('markFieldAsValid fail', e, GTM_CHECKOUT_ERRORS);
+    Drupal.logJavascriptError('markFieldAsValid fail', e, GTM_CONSTANTS.CHECKOUT_ERRORS);
   }
 };
 
@@ -16,7 +15,7 @@ export const displayErrorMessage = (id, message) => {
     document.getElementById(id).innerHTML = message;
     document.getElementById(id).classList.add('error');
   } catch (e) {
-    Drupal.logJavascriptError('displayErrorMessage fail', e, GTM_CHECKOUT_ERRORS);
+    Drupal.logJavascriptError('displayErrorMessage fail', e, GTM_CONSTANTS.CHECKOUT_ERRORS);
   }
 };
 
@@ -29,7 +28,7 @@ export const showRequiredMessage = (id) => {
     document.getElementById(id).innerHTML = message;
     document.getElementById(id).classList.add('error');
   } catch (e) {
-    Drupal.logJavascriptError('showRequiredMessage fail', e, GTM_CHECKOUT_ERRORS);
+    Drupal.logJavascriptError('showRequiredMessage fail', e, GTM_CONSTANTS.CHECKOUT_ERRORS);
   }
 };
 

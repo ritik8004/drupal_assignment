@@ -1,5 +1,4 @@
 import createCacheObject from '../cache/cache-objects';
-import { GTM_CHECKOUT_ERRORS } from '../constants';
 
 /**
  * Helper function to handle api request for GET method for now.
@@ -32,7 +31,7 @@ const createFetcher = (promiseFunc) => ({
             }
 
             if (!response.data.error && response.data.error) {
-              Drupal.logJavascriptError(`${promiseFunc.name} fail`, response.error_message, GTM_CHECKOUT_ERRORS);
+              Drupal.logJavascriptError(`${promiseFunc.name} fail`, response.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
               return { error: 'error!' };
             }
 

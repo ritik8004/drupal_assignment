@@ -14,7 +14,6 @@ import {
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
-import { GTM_PAYMENT_ERRORS } from '../../../utilities/constants';
 
 class PaymentMethodCybersource extends React.Component {
   constructor(props) {
@@ -185,7 +184,7 @@ class PaymentMethodCybersource extends React.Component {
       Drupal.logJavascriptError(
         'validate-before-place-order',
         'client side validation failed for credit card info',
-        GTM_PAYMENT_ERRORS,
+        GTM_CONSTANTS.PAYMENT_ERRORS,
       );
       return false;
     }
@@ -205,7 +204,7 @@ class PaymentMethodCybersource extends React.Component {
         Drupal.logJavascriptError(
           'validate-before-place-order',
           response.data.error_message,
-          GTM_PAYMENT_ERRORS,
+          GTM_CONSTANTS.PAYMENT_ERRORS,
         );
         return;
       }
@@ -239,7 +238,7 @@ class PaymentMethodCybersource extends React.Component {
         message: getStringMessage('payment_error'),
       });
       removeFullScreenLoader();
-      Drupal.logJavascriptError('validate-before-place-order', error, GTM_PAYMENT_ERRORS);
+      Drupal.logJavascriptError('validate-before-place-order', error, GTM_CONSTANTS.PAYMENT_ERRORS);
     });
 
     return false;

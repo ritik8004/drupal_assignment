@@ -24,7 +24,6 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
-import { GTM_CHECKOUT_ERRORS } from '../../../utilities/constants';
 
 export default class AddressForm extends React.Component {
   isComponentMounted = true;
@@ -142,7 +141,7 @@ export default class AddressForm extends React.Component {
       errorOnDropDownFieldsNotFilled();
       removeFullScreenLoader();
     } catch (error) {
-      Drupal.logJavascriptError('homedelivery-checkUserCountry', error, GTM_CHECKOUT_ERRORS);
+      Drupal.logJavascriptError('homedelivery-checkUserCountry', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
   };
 

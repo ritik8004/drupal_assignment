@@ -14,7 +14,6 @@ import PaymentMethodCybersource from '../payment-method-cybersource';
 import { removeStorageInfo } from '../../../utilities/storage';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
-import { GTM_PAYMENT_ERRORS, GTM_GENUINE_ERRORS } from '../../../utilities/constants';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -61,7 +60,7 @@ export default class PaymentMethod extends React.Component {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
       if (result.error !== undefined && result.error) {
         removeFullScreenLoader();
-        Drupal.logJavascriptError('finalise payment', result.message, GTM_PAYMENT_ERRORS);
+        Drupal.logJavascriptError('finalise payment', result.message, GTM_CONSTANTS.PAYMENT_ERRORS);
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
         const { cart } = this.props;
@@ -70,19 +69,19 @@ export default class PaymentMethod extends React.Component {
         removeStorageInfo('billing_shipping_same');
       } else if (result.success === undefined || !(result.success)) {
         // 3D flow error.
-        Drupal.logJavascriptError('3d flow finalise payment', result.message, GTM_PAYMENT_ERRORS);
+        Drupal.logJavascriptError('3d flow finalise payment', result.message, GTM_CONSTANTS.PAYMENT_ERRORS);
       } else if (result.redirectUrl !== undefined) {
         // 3D flow success.
         removeStorageInfo('spc_selected_card');
         removeStorageInfo('billing_shipping_same');
         window.location = result.redirectUrl;
       } else {
-        Drupal.logJavascriptError('finalise payment', result.message, GTM_PAYMENT_ERRORS);
+        Drupal.logJavascriptError('finalise payment', result.message, GTM_CONSTANTS.PAYMENT_ERRORS);
         removeFullScreenLoader();
       }
     }).catch((error) => {
       removeFullScreenLoader();
-      Drupal.logJavascriptError('add payment method in cart', error, GTM_GENUINE_ERRORS);
+      Drupal.logJavascriptError('add payment method in cart', error, GTM_CONSTANTS.GENUINE_ERRORS);
     });
   };
 
