@@ -6,6 +6,7 @@ use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -83,7 +84,7 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
     $build['#cache']['contexts'] = ['user'];
     $build['#cache']['tags'] = ['user:' . $this->currentUser->id()];
 
-    $acceptedCards = ['visa', 'mastercard', 'diners', 'amex'];
+    $acceptedCards = Settings::get('checkout_com_accepted_cards', ['visa']);
 
     if ($this->checkoutComApiHelper->getCheckoutcomConfig('mada_enabled')) {
       array_unshift($acceptedCards, 'mada');
