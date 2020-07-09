@@ -120,6 +120,8 @@ $_appointment-tangerine-bg: #fff4e3;
 $_appointment-red-border: rgba(204, 0, 0, 0.41);
 $_appointment-red-bg: #fef2f3;
 $_appointment-medium-blue: #b7d1ec;
+$_appointment-pink-bg: #b8237b;
+$_appointment-light-blue: #b8d1ed;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1356,3 +1358,12 @@ $appointment-register-btn-bg :$_appointment-sky-blue;
 $appointment-checkout-btn: $_appointment-darkish-blue;
 $appointment-register-border: $_appointment-darkish-blue;
 $appointment-checkout-btn-bg :$_appointment-medium-blue;
+$appointment-timeslot-text: $black;
+$appointment-calendar-date-text: $_appointment-darkish-blue;
+$appointment-calendar-date-border: $_appointment-darkish-blue;
+$appointment-calendar-date-hover-active: $white-five;
+$appointment-calendar-date-bg: $_appointment-pink-bg;
+$appointment-calendar-date-border-hover-active: $_appointment-pink-bg;
+$appointment-time-slots-wrapper-border: $warm-grey-two;
+$appointment-time-slots-border: $_appointment-light-blue;
+$appointment-time-slots: $_appointment-cool-blue;
