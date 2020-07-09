@@ -90,7 +90,7 @@ export default class AppointmentTimeSlot extends React.Component {
     return (
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
-          <div className="store-header">
+          <div className="store-header appointment-subtitle">
             {Drupal.t('Select date & time that suits you')}
             {' '}
             *
@@ -116,14 +116,14 @@ export default class AppointmentTimeSlot extends React.Component {
 
           <div className="appointment-store-buttons-wrapper">
             <button
-              className="appointment-store-button back"
+              className="appointment-type-button appointment-store-button back"
               type="button"
               onClick={() => this.handleBack('select-store')}
             >
               {Drupal.t('BACK')}
             </button>
             <button
-              className="appointment-store-button select-store"
+              className="appointment-type-button appointment-store-button select-store"
               type="button"
 
               onClick={this.handleSubmit}
