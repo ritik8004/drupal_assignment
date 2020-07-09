@@ -59,9 +59,15 @@ function getDateFormat() {
   return format;
 }
 
+function getDateFormattext() {
+  const format = 'dddd DD MMMM';
+  return format;
+}
+
 export {
   getInputValue,
   getLocationAccess,
   getDistanceBetweenCoords,
   getDateFormat,
+  getDateFormattext,
 };

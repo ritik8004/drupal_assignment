@@ -4,7 +4,7 @@ import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
 import AppointmentSlots from '../appointment-selectslot';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
-import { getDateFormat } from '../../../utilities/helper';
+import { getDateFormat, getDateFormattext } from '../../../utilities/helper';
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
@@ -96,7 +96,7 @@ export default class AppointmentTimeSlot extends React.Component {
             <span>
               {Drupal.t('The first available appointment is on ')}
             </span>
-            <span className="starting-timeslot">{Drupal.t(moment().format('dddd DD MMMM'))}</span>
+            <span className="starting-timeslot">{Drupal.t(moment().format(getDateFormattext()))}</span>
           </div>
           <div className="appointment-datepicker">
             <AppointmentCalendar
