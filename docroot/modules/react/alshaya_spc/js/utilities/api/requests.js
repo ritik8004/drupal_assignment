@@ -12,6 +12,7 @@ import {
 } from '../storage';
 import i18nMiddleWareUrl from '../i18n_url';
 import dispatchCustomEvent from '../events';
+import { GTM_CART_ERRORS, GTM_CHECKOUT_ERRORS } from '../constants';
 
 export const fetchClicknCollectStores = (args) => {
   const { coords, cartId } = args;
@@ -80,7 +81,7 @@ export const fetchCartData = () => {
       }
 
       // Processing of error here.
-      Drupal.logJavascriptError('Failed to restore cart.', error, 'cart errors');
+      Drupal.logJavascriptError('Failed to restore cart.', error, GTM_CART_ERRORS);
 
       redirectToCart();
       return null;
@@ -122,7 +123,7 @@ export const fetchCartData = () => {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('Failed to get cart.', error, 'cart errors');
+      Drupal.logJavascriptError('Failed to get cart.', error, GTM_CART_ERRORS);
     });
 };
 
@@ -142,6 +143,6 @@ export const fetchCartDataForCheckout = () => {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('Failed to get cart for checkout.', error, 'checkout errors');
+      Drupal.logJavascriptError('Failed to get cart for checkout.', error, GTM_CHECKOUT_ERRORS);
     });
 };

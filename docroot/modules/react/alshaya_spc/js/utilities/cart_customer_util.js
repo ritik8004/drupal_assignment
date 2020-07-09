@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from './storage';
 import i18nMiddleWareUrl from './i18n_url';
+import { GTM_CART_ERRORS } from './constants';
 
 const associateCart = () => {
   const url = i18nMiddleWareUrl('cart/associate');
@@ -12,7 +13,7 @@ const associateCart = () => {
     })
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('cart/associate', error, 'cart errors');
+      Drupal.logJavascriptError('cart/associate', error, GTM_CART_ERRORS);
     });
 };
 

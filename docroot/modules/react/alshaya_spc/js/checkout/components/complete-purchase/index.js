@@ -8,6 +8,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
+import { GTM_CHECKOUT_ERRORS } from '../../../utilities/constants';
 
 export default class CompletePurchase extends React.Component {
   constructor(props) {
@@ -81,7 +82,7 @@ export default class CompletePurchase extends React.Component {
 
       placeOrder(cart.cart.payment.method);
     } catch (error) {
-      Drupal.logJavascriptError('place-order', error, 'checkout errors');
+      Drupal.logJavascriptError('place-order', error, GTM_CHECKOUT_ERRORS);
     }
   };
 

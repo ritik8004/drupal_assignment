@@ -22,6 +22,7 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
+import { GTM_CHECKOUT_ERRORS } from '../../../utilities/constants';
 
 window.fetchStore = 'idle';
 
@@ -91,7 +92,7 @@ export default class Checkout extends React.Component {
       }
     } catch (error) {
       // In case of error, do nothing.
-      Drupal.logJavascriptError('checkout', error, 'checkout errors');
+      Drupal.logJavascriptError('checkout', error, GTM_CHECKOUT_ERRORS);
     }
 
     // Make sidebar sticky.

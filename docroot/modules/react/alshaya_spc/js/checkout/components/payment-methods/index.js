@@ -12,6 +12,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
+import { GTM_PAYMENT_ERRORS, GTM_GENUINE_ERRORS } from '../../../utilities/constants';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -34,7 +35,7 @@ export default class PaymentMethods extends React.Component {
 
       const paymentErrorInfo = JSON.parse(paymentError);
       let message = getStringMessage('payment_error');
-      let errorCategory = 'payment errors';
+      let errorCategory = GTM_PAYMENT_ERRORS;
       // If K-NET error and have K-Net Error details.
       if (paymentErrorInfo.payment_method !== undefined
         && paymentErrorInfo.payment_method === 'knet'
@@ -47,7 +48,7 @@ export default class PaymentMethods extends React.Component {
       } else if (paymentErrorInfo.status !== undefined
         && paymentErrorInfo.status === 'declined') {
         message = getStringMessage('transaction_failed');
-        errorCategory = 'genuine errors';
+        errorCategory = GTM_GENUINE_ERRORS;
       }
 
       // Push error to GA.
@@ -181,7 +182,7 @@ export default class PaymentMethods extends React.Component {
 
         dispatchCustomEvent('refreshCompletePurchaseSection', {});
       }).catch((error) => {
-        Drupal.logJavascriptError('change payment method', error, 'genuine errors');
+        Drupal.logJavascriptError('change payment method', error, GTM_GENUINE_ERRORS);
       });
     }
   };

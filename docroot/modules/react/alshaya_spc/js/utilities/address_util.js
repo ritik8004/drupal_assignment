@@ -14,6 +14,7 @@ import {
   smoothScrollToAddressField,
   smoothScrollTo,
 } from './smoothScroll';
+import { GTM_CHECKOUT_ERRORS } from './constants';
 
 /**
  * Use this to auto scroll to the right field in address form upon
@@ -42,7 +43,7 @@ export const getUserAddressList = () => axios.get('spc/user-address-list')
   .then((response) => response.data)
   .catch((error) => {
     // Processing of error here.
-    Drupal.logJavascriptError('get-user-address-list', error, 'checkout errors');
+    Drupal.logJavascriptError('get-user-address-list', error, GTM_CHECKOUT_ERRORS);
   });
 
 /**
@@ -64,7 +65,7 @@ export const addEditUserAddress = (address, isDefault) => axios.post('spc/add-ed
   )
   .catch((error) => {
     // Processing of error here.
-    Drupal.logJavascriptError('add-edit-user-address', error, 'checkout errors');
+    Drupal.logJavascriptError('add-edit-user-address', error, GTM_CHECKOUT_ERRORS);
   });
 
 /**
@@ -529,7 +530,7 @@ export const checkoutAddressProcess = (e) => {
 
     return true;
   }).catch((error) => {
-    Drupal.logJavascriptError('Email and mobile number validation fail', error, 'checkout errors');
+    Drupal.logJavascriptError('Email and mobile number validation fail', error, GTM_CHECKOUT_ERRORS);
   });
 };
 
@@ -701,7 +702,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
         }
       }
     }).catch((error) => {
-      Drupal.logJavascriptError('Email and mobile number validation fail', error, 'checkout errors');
+      Drupal.logJavascriptError('Email and mobile number validation fail', error, GTM_CHECKOUT_ERRORS);
     });
   }
 };

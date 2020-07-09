@@ -10,6 +10,7 @@ import { validateContactInfo, addressFormInlineErrorScroll } from '../../../util
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
+import { GTM_CHECKOUT_ERRORS } from '../../../utilities/constants';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
@@ -108,7 +109,7 @@ class ContactInfoForm extends React.Component {
       }
     }).catch((error) => {
       removeFullScreenLoader();
-      Drupal.logJavascriptError('Process shipping update', error, 'checkout errors');
+      Drupal.logJavascriptError('Process shipping update', error, GTM_CHECKOUT_ERRORS);
     });
   };
 
@@ -134,7 +135,7 @@ class ContactInfoForm extends React.Component {
               message: cartResult.error_message,
               showDismissButton: false,
             });
-            Drupal.logJavascriptError('update-shipping', cartResult.error_message, 'checkout errors');
+            Drupal.logJavascriptError('update-shipping', cartResult.error_message, GTM_CHECKOUT_ERRORS);
             return null;
           }
 
@@ -143,7 +144,7 @@ class ContactInfoForm extends React.Component {
           return null;
         })
         .catch((error) => {
-          Drupal.logJavascriptError('update-shipping', error, 'checkout errors');
+          Drupal.logJavascriptError('update-shipping', error, GTM_CHECKOUT_ERRORS);
         });
     }
   };

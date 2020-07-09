@@ -14,6 +14,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
 import WithModal from '../with-modal';
+import { GTM_PAYMENT_ERRORS } from '../../../utilities/constants';
 
 class PaymentMethodCheckoutCom extends React.Component {
   static contextType = CheckoutComContext;
@@ -71,7 +72,7 @@ class PaymentMethodCheckoutCom extends React.Component {
 
   handleCardCvvChange = (event, handler) => {
     if (window.CheckoutKit === undefined) {
-      Drupal.logJavascriptError('CheckoutKit not available', '', 'payment errors');
+      Drupal.logJavascriptError('CheckoutKit not available', '', GTM_PAYMENT_ERRORS);
       return;
     }
     this.labelEffect(event, handler);
@@ -84,7 +85,7 @@ class PaymentMethodCheckoutCom extends React.Component {
       Drupal.logJavascriptError(
         'Payment failed',
         `Payment failed with error code ${event.data.errorCode}`,
-        'payment errors',
+        GTM_PAYMENT_ERRORS,
       );
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
@@ -116,7 +117,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     }
 
     if (window.CheckoutKit === undefined) {
-      Drupal.logJavascriptError('Checkout kit not loaded', '', 'payment errors');
+      Drupal.logJavascriptError('Checkout kit not loaded', '', GTM_PAYMENT_ERRORS);
 
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
