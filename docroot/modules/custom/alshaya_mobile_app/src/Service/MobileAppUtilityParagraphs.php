@@ -375,8 +375,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $config_fields = [];
     // Adding a check for entity types throwing exceptions.
     if ($entity->getEntityTypeId() != 'user_role' && $entity->getEntityTypeId() != 'media_type') {
-        $all_fields = $this->entityFieldManager->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
-        $config_fields = array_diff(array_keys($all_fields), array_keys($this->paragraphBaseFields));
+      $all_fields = $this->entityFieldManager->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
+      $config_fields = array_diff(array_keys($all_fields), array_keys($this->paragraphBaseFields));
     }
     return $config_fields;
   }
