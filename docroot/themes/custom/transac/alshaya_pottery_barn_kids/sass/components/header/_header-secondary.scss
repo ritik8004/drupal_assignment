@@ -43,3 +43,11 @@
     display: none;
   }
 }
+
+.block-alshaya-algolia-react-autocomplete {
+  &::before {
+    @include breakpoint($only-mobile) {
+      top: 0.25rem;
+    }
+  }
+}
