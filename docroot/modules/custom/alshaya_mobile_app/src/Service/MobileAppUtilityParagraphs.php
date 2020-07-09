@@ -24,7 +24,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\redirect\RedirectRepository;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Block\BlockManagerInterface;
-use Drupal\media\MediaInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -365,30 +365,21 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   /**
    * Get additional fields.
    *
-   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   * @param \Drupal\entity\EntityInterface $entity
    *   The paragraph entity object.
    *
    * @return array
    *   Array of all created fields.
    */
-  protected function getConfiguredParagraphFields(ParagraphInterface $entity):array {
-    $all_fields = $this->entityFieldManager->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
-    $config_fields = array_diff(array_keys($all_fields), array_keys($this->paragraphBaseFields));
-    return $config_fields;
-  }
-
-  /**
-   * Get additional fields.
-   *
-   * @param \Drupal\media\MediaInterface $entity
-   *   The media entity object.
-   *
-   * @return array
-   *   Array of all created fields.
-   */
-  protected function getConfiguredMediaFields(MediaInterface $entity):array {
-    $all_fields = $this->entityFieldManager->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
-    $config_fields = array_diff(array_keys($all_fields), array_keys($this->paragraphBaseFields));
+  protected function getConfiguredFields(EntityInterface $entity):array {
+    $config_fields = [];
+    // Adding a check for entity types throwing exceptions.
+    if ($entity->getEntityTypeId() != 'user_role') {
+      if ($entity->getEntityTypeId() != 'media_type') {
+        $all_fields = $this->entityFieldManager->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
+        $config_fields = array_diff(array_keys($all_fields), array_keys($this->paragraphBaseFields));
+      }
+    }
     return $config_fields;
   }
 
@@ -577,7 +568,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         $data = [];
         // Get configured fields of entity, we don't require base fields.
         $entity = $this->skuInfoHelper->getEntityTranslation($entity, $this->currentLanguage);
-        $paragraph_fields = $this->getConfiguredParagraphFields($entity);
+        $paragraph_fields = $this->getConfiguredFields($entity);
         foreach ($paragraph_fields as $field_name) {
           // We are interested in paragraph types that are stored inside
           // layout paragraph items.
@@ -621,23 +612,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       : $entity->getEntityTypeId(),
     ];
     // Get configured fields of entity, we don't require base fields.
-    if ($entity->getEntityTypeId() == 'paragraph') {
-      $paragraph_fields = $this->getConfiguredParagraphFields($entity);
-      foreach ($paragraph_fields as $field_name) {
-        if (empty($row = $this->processParagraphReferenceField($entity, $field_name))) {
-          $row = $entity->get($field_name)->getValue();
-        }
-        $data[$field_name] = $row;
+    $paragraph_fields = $this->getConfiguredFields($entity);
+    foreach ($paragraph_fields as $field_name) {
+      if (empty($row = $this->processParagraphReferenceField($entity, $field_name))) {
+        $row = $entity->get($field_name)->getValue();
       }
-    }
-    elseif ($entity->getEntityTypeId() == 'media') {
-      $media = $this->getConfiguredMediaFields($entity);
-      foreach ($media as $field_name) {
-        if (empty($row = $this->processMediaReferenceField($entity, $field_name))) {
-          $row = $entity->get($field_name)->getValue();
-        }
-        $data[$field_name] = $row;
-      }
+      $data[$field_name] = $row;
     }
     return $data;
   }
@@ -645,7 +625,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   /**
    * Process paragraph entity reference revision field.
    *
-   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   * @param \Drupal\entity\EntityInterface $entity
    *   The paragraph entity object.
    * @param string $field_name
    *   The entity reference revision field name.
@@ -653,34 +633,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @return array
    *   Return array of processed paragraph data.
    */
-  protected function processParagraphReferenceField(ParagraphInterface $entity, string $field_name): array {
-    if (!$entity->hasField($field_name)) {
-      return [];
-    }
-
-    $data = [];
-    $field_type = $entity->get($field_name)->getFieldDefinition()->getType();
-    if ($field_type == "entity_reference_revisions" || $field_type == "entity_reference") {
-      $children = $entity->get($field_name)->referencedEntities();
-      foreach ($children as $child) {
-        $data[] = $this->getRecursiveParagraphData($child);
-      }
-    }
-    return $data;
-  }
-
-  /**
-   * Process media entity reference revision field.
-   *
-   * @param \Drupal\media\MediaInterface $entity
-   *   The media entity object.
-   * @param string $field_name
-   *   The entity reference revision field name.
-   *
-   * @return array
-   *   Return array of processed media data.
-   */
-  protected function processMediaReferenceField(MediaInterface $entity, string $field_name): array {
+  protected function processParagraphReferenceField(EntityInterface $entity, string $field_name): array {
     if (!$entity->hasField($field_name)) {
       return [];
     }
