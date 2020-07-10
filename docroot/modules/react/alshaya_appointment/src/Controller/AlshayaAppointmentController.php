@@ -185,27 +185,25 @@ class AlshayaAppointmentController extends ControllerBase {
   }
 
   /**
-   * Appointment multi step form page.
+   * View appointment list for logged in user.
    *
    * @return array
    *   Return array of markup with react lib attached.
    */
   public function viewAppointments() {
     $cache_tags = [];
-    $alshaya_appointment_config = $this->config('alshaya_appointment.settings');
+
     $settings['alshaya_appointment'] = [
       'middleware_url' => _alshaya_appointment_get_middleware_url(),
-      'local_storage_expire' => $alshaya_appointment_config->get('local_storage_expire'),
       'user_details' => $this->getUserDetails(),
     ];
 
     return [
       '#type' => 'markup',
-      '#markup' => '<div id="appointment-booking"></div>',
+      '#markup' => '<div id="customer-appointments"></div>',
       '#attached' => [
         'library' => [
           'alshaya_appointment/alshaya_appointment_view',
-          'alshaya_white_label/appointment-booking',
         ],
         'drupalSettings' => $settings,
       ],
