@@ -108,23 +108,21 @@ class AppointmentServices {
       $request_content = json_decode($request->getContent(), TRUE);
 
       $bookingId = $request_content['bookingId'] ?? '';
+      if (empty($bookingId)) {
+        throw new \Exception('Booking Id is required to save answers.');
+      }
 
       foreach ($request_content as $key => $value) {
         if ($key === 'bookingId') {
           continue;
         }
-
         $questionAnswerList[] = [
           'questionExternalId' => $key,
           'answer' => $value,
         ];
       }
-
-      if (empty($bookingId)) {
-        $message = 'Booking Id is required to save answers.';
-
-        $this->logger->error($message);
-        throw new \Exception($message);
+      if (empty($questionAnswerList)) {
+        throw new \Exception('Empty question answer list in appendAppointmentAnswers.');
       }
 
       $param = [
