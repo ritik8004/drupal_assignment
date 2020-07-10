@@ -45,7 +45,7 @@ function getDistanceBetweenCoords(storeList, coords) {
     const store = x;
     const distance = google.maps.geometry.spherical.computeDistanceBetween(
       new google.maps.LatLng(coords.lat, coords.lng),
-      new google.maps.LatLng(x.geocoordinates.latitude, x.geocoordinates.longitude),
+      new google.maps.LatLng(x.lat, x.lng),
     );
     store.distanceInMiles = convertKmToMile(distance);
     return store;

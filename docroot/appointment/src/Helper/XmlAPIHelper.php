@@ -94,6 +94,7 @@ class XmlAPIHelper {
    *   Response object.
    */
   public function fetchStores($request) {
+    $appointment_settings = $this->settings->getSettings('appointment_settings');
     $requestQuery = $request->query;
 
     $apiBody = '<ns2:getLocationsByGeoCriteria>
@@ -104,6 +105,9 @@ class XmlAPIHelper {
           <maxNumberOfLocations>' . $requestQuery->get('max-locations') . '</maxNumberOfLocations>
           <unit>' . $requestQuery->get('unit') . '</unit>
         </locationSearchGeoCriteria>
+        <locationSearchCriteria>
+          <locationGroupExtId>' . $appointment_settings['location_group_ext_id'] . '</locationGroupExtId>
+        </locationSearchCriteria>
       </ns2:getLocationsByGeoCriteria>';
 
     $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL, 'getLocationsByGeoCriteria', $apiBody);

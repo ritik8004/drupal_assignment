@@ -172,7 +172,8 @@ class ConfigurationServices {
           'locationExternalId' => $storeId ?? '',
           'name' => $store->locationName ?? '',
           'address' => $store->companyAddress ?? '',
-          'geocoordinates' => $store->geocoordinates ?? '',
+          'lat' => $store->geocoordinates->latitude ?? '',
+          'lng' => $store->geocoordinates->longitude ?? '',
           'storeTiming' => $storeTiming ?? '',
         ];
       }

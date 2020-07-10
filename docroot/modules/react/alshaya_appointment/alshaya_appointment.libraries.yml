@@ -3,3 +3,10 @@ alshaya_appointment:
     dist/appointment.js: {}
   dependencies:
     - alshaya_react/react
+googlemapapi:
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/drupalSettings
+  js:
+    js/google-maps-api.js: {}

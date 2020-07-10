@@ -86,7 +86,11 @@ class AlshayaAppointmentController extends ControllerBase {
       'store_finder' => array_merge(
         $alshaya_appointment_config->get('store_finder'),
         $store_finder_config->get('country_center'),
-        ['radius' => $store_finder_config->get('search_proximity_radius')]
+        [
+          'radius' => $store_finder_config->get('search_proximity_radius'),
+          'map_marker' => $store_finder_config->get('map_marker'),
+          'placeholder' => $store_finder_config->get('store_search_placeholder'),
+        ]
       ),
       'google_map_api_key' => $geolocation_config->get('google_map_api_key'),
       'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
@@ -104,6 +108,7 @@ class AlshayaAppointmentController extends ControllerBase {
           'alshaya_appointment/alshaya_appointment',
           'alshaya_white_label/appointment-booking',
           'alshaya_social/alshaya_social_popup',
+          'alshaya_appointment/googlemapapi',
         ],
         'drupalSettings' => $settings,
       ],
