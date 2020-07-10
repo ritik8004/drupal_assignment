@@ -16,7 +16,7 @@ git:
 deploy:
   tag_source: true
   gitignore_file: '${repo.root}/blt/config/.gitignore'
-  truncate_history: true
+  truncate_history: false
 drush:
   aliases:
     remote: '${project.machine_name}.test'
