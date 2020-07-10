@@ -50,7 +50,7 @@ export default class PdpGallery extends React.PureComponent {
     if (isTouchDevice) {
       centerPaddingValue = null;
     } else {
-      centerPaddingValue = '208px';
+      centerPaddingValue = '300px';
     }
 
     return (images) ? (
