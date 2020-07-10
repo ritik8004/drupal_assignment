@@ -3,3 +3,9 @@ alshaya_appointment:
     dist/appointment.js: {}
   dependencies:
     - alshaya_react/react
+
+alshaya_appointment_view:
+  js:
+    dist/appointments_view.js: {}
+  dependencies:
+    - alshaya_react/react
