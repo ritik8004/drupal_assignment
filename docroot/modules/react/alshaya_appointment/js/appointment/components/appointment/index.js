@@ -4,6 +4,7 @@ import AppointmentType from '../appointment-type';
 import AppointmentStoreSelect from '../appointment-store';
 import AppointmentSelection from '../appointment-selection';
 import CustomerDetails from '../customer-details';
+import Confirmation from '../confirmation';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import AppointmentTimeSlot from '../appointment-timeslot';
 import AppointmentLogin from '../appointment-login';
@@ -16,7 +17,7 @@ export default class Appointment extends React.Component {
       this.state = {
         ...localStorageValues,
       };
-      const userId = drupalSettings.userDetails.userID;
+      const userId = drupalSettings.alshaya_appointment.user_details.id;
       if (userId !== 0 && localStorageValues.appointmentStep === 'select-login-guest') {
         this.state.appointmentStep = 'customer-details';
         localStorageValues.appointmentStep = 'customer-details';
@@ -31,7 +32,7 @@ export default class Appointment extends React.Component {
 
   handleSubmit = (stepValue) => {
     let stepval = stepValue;
-    const userId = drupalSettings.userDetails.userID;
+    const userId = drupalSettings.alshaya_appointment.user_details.id;
     if (userId !== 0 && stepValue === 'select-login-guest') {
       stepval = 'customer-details';
     }
@@ -99,9 +100,13 @@ export default class Appointment extends React.Component {
           handleSubmit={() => this.handleSubmit('confirmation')}
         />
       );
+    } else if (appointmentStep === 'confirmation') {
+      appointmentData = (
+        <Confirmation />
+      );
     }
 
-    if (appointmentStep !== 'appointment-type') {
+    if (appointmentStep !== 'appointment-type' && appointmentStep !== 'confirmation') {
       appointmentSelection = (
         <AppointmentSelection
           handleEdit={this.handleEdit}
