@@ -52,16 +52,16 @@ function alshaya_mu_transac_install() {
     ],
   ];
 
-  $strings = array_merge($strings, _alshaya_mu_transac_get_metatag_translations());
-
   alshaya_i18n_save_translations($strings);
+
+  _alshaya_mu_transac_get_metatag_translations();
 }
 
 /**
  * Get translations of metatag.
  */
 function _alshaya_mu_transac_get_metatag_translations() {
-  return [
+  $strings = [
     'alshaya_seo_sale_desc_start' => [
       'en' => 'Get [current-date:html_year] [alshaya_seo:gender] [term:name] Sale from [site:name]. Explore our [term:parent:name] sale for our [current-date:html_year] luxury and high-quality [term:name] collection',
       'ar' => 'احصل على عروض [current-date:html_year] على [term:name] من [site:name]. اكتشف عروض التصفية على مجموعاتنا الفاخرة وعالية الجودة [term:name]',
@@ -91,4 +91,6 @@ function _alshaya_mu_transac_get_metatag_translations() {
       'ar' => 'تسوق مستلزمات [term:name] اونلاين, تسوق مجموعة اكسسوارات [term:name], اشتري اكسسوارات [term:name] اون لاين, تسوق اكسسوارات [term:name] من [alshaya_seo:brand_name], تسوق مستلزمات [term:name] من [alshaya_seo:brand_name], تسوق مستلزمات ال[term:name] اونلاين في [alshaya_seo:country], تسوق منتجات [term:name] في city1، تسوق منتجات [term:name] في [alshaya_seo:city2]، تسوق منتجات [term:name] في [alshaya_seo:country]',
     ],
   ];
+
+  alshaya_i18n_save_translations($strings);
 }
