@@ -4,5 +4,5 @@ import AppointmentsView from './appointment/components/appointments-view';
 
 ReactDOM.render(
   <AppointmentsView />,
-  document.querySelector('#appointment-booking'),
+  document.querySelector('#customer-appointments'),
 );
