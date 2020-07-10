@@ -1229,12 +1229,12 @@ html[lang=ar] {
   }
 
   .price {
-    font-size: 1.25rem;
+    font-size: 0.9375rem;
     color: $hnm-black-three;
     font-family: $hnm-regular;
 
     @include breakpoint($upto-tablet) {
-      font-size: 1rem;
+      font-size: 0.875rem;
     }
   }
 
