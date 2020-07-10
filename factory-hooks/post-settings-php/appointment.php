@@ -19,3 +19,4 @@ if (!empty($site_country_code) && $site_country_code['site_code'] === 'bp') {
 }
 
 $settings['appointment_settings'] = $appointment_settings;
+$settings['middleware_auth'] = '5um6y5nxl3oqms9qw0jai36qkryrrocg';

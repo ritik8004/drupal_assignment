@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\Drupal\Drupal;
 use Psr\Log\LoggerInterface;
 use App\Service\SoapClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,6 +44,13 @@ class ClientServices {
   protected $xmlApiHelper;
 
   /**
+   * Drupal service.
+   *
+   * @var \App\Service\Drupal\Drupal
+   */
+  protected $drupal;
+
+  /**
    * ClientServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -53,15 +61,19 @@ class ClientServices {
    *   API Helper.
    * @param \App\Helper\XmlAPIHelper $xml_api_helper
    *   Xml API Helper.
+   * @param \App\Service\Drupal $drupal
+   *   Drupal service.
    */
   public function __construct(LoggerInterface $logger,
                               SoapClient $client,
                               APIHelper $api_helper,
-                              XmlAPIHelper $xml_api_helper) {
+                              XmlAPIHelper $xml_api_helper,
+                              Drupal $drupal) {
     $this->logger = $logger;
     $this->client = $client;
     $this->apiHelper = $api_helper;
     $this->xmlApiHelper = $xml_api_helper;
+    $this->drupal = $drupal;
   }
 
   /**
@@ -152,6 +164,14 @@ class ClientServices {
 
       if (empty($email)) {
         $message = 'email is required to get client details.';
+
+        $this->logger->error($message);
+        throw new \Exception($message);
+      }
+
+      $userEmail = $this->drupal->getSessionUserInfo();
+      if ($userEmail['email'] !== $email) {
+        $message = 'Requested users email does not match.';
 
         $this->logger->error($message);
         throw new \Exception($message);

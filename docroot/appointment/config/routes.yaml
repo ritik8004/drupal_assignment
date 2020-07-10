@@ -34,3 +34,7 @@ appointment.append_appointment_answers:
    path: /append-appointmnet-answers
    controller: App\Controller\AppointmentServices::appendAppointmentAnswers
    methods: POST
+appointment.get_appointments:
+  path: /get/appointments
+  controller: App\Controller\AppointmentServices::getAppointments
+  methods: GET

@@ -1,0 +1,7 @@
+services:
+  alshaya_appointment.middleware_access_check:
+    class: Drupal\alshaya_appointment\Access\MiddlewareAccessCheck
+    tags:
+      - name: access_check
+        needs_incoming_request: TRUE
+        applies_to: _middleware_request_check
