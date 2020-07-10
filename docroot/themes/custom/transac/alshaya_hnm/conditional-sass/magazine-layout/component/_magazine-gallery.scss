@@ -81,7 +81,7 @@
   .content__title_wrapper {
     .promotions {
       a {
-        font-size: 1.25rem;
+        font-size: 0.9375rem;
         color: $default_error;
         text-decoration: none;
       }
@@ -90,7 +90,7 @@
     @include breakpoint($upto-tablet) {
       .promotions {
         a {
-          font-size: 1rem;
+          font-size: 0.875rem;
         }
       }
 
