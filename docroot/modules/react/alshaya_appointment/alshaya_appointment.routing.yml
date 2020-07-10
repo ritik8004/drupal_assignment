@@ -16,3 +16,11 @@ alshaya_appointment.user_booked_appointment:
     parameters:
       user:
         type: entity:user
+
+alshaya_appointment.get_user_info:
+  path: '/appointment/getuser'
+  defaults:
+    _controller: '\Drupal\alshaya_appointment\Controller\AlshayaAppointmentController::getUserInfo'
+  methods: [GET]
+  requirements:
+    _permission: 'access content'

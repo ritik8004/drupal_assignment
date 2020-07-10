@@ -27,9 +27,9 @@ appointment.get_client_details:
    controller: App\Controller\ClientServices::getClientsByCriteria
    methods: GET
 appointment.get_timeslots:
-  path: /get/timeslots
-  controller: App\Controller\AppointmentServices::getTimeSlots
-  methods: GET
+   path: /get/timeslots
+   controller: App\Controller\AppointmentServices::getTimeSlots
+   methods: GET
 appointment.append_appointment_answers:
    path: /append-appointmnet-answers
    controller: App\Controller\AppointmentServices::appendAppointmentAnswers
