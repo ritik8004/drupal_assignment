@@ -140,36 +140,45 @@ class ClientServices {
   }
 
   /**
-   * Get Client details.
+   * Get Client details by email.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Client details.
    */
-  public function getClientByExternalId(Request $request) {
+  public function getClientsByCriteria(Request $request) {
     try {
       $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CLIENT_SERVICES_URL);
-      $clientExternalId = $request->query->get('client');
+      $email = $request->query->get('email');
 
-      if (empty($clientExternalId)) {
-        $message = 'clientExternalId is required to get client details.';
+      if (empty($email)) {
+        $message = 'email is required to get client details.';
 
         $this->logger->error($message);
         throw new \Exception($message);
       }
 
       $param = [
-        'clientExternalId' => $clientExternalId,
+        'criteria' => [
+          'emailAddress' => $email,
+          'exactMatchOnly' => TRUE,
+          'hideDisabled' => TRUE,
+        ],
       ];
-      $result = $client->__soapCall('getClientByExternalId', [$param]);
+      $result = $client->__soapCall('getClientsByCriteria', [$param]);
 
-      $clientArray = $result->return ?? [];
-      $clientData = [
-        'firstName' => $clientArray->firstName ?? '',
-        'lastName' => $clientArray->lastName ?? '',
-        'dob' => $clientArray->dob ? date('Y-m-d', strtotime($clientArray->dob)) : '',
-        'email' => $clientArray->email ?? '',
-        'mobile' => $clientArray->phoneData->mobile ?? '',
-      ];
+      $clientData = [];
+      $clientArray = $result->return->clients ?? [];
+
+      if (!empty($clientArray)) {
+        $clientData = [
+          'clientExternalId' => $clientArray->clientExternalId ?? '',
+          'firstName' => $clientArray->firstName ?? '',
+          'lastName' => $clientArray->lastName ?? '',
+          'dob' => $clientArray->dob ? date('Y-m-d', strtotime($clientArray->dob)) : '',
+          'email' => $clientArray->email ?? '',
+          'mobile' => $clientArray->phoneData->mobile ?? '',
+        ];
+      }
 
       return new JsonResponse($clientData);
     }

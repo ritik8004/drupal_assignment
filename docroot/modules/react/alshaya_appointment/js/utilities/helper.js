@@ -54,8 +54,27 @@ function getDistanceBetweenCoords(storeList, coords) {
   return storeItems;
 }
 
+function addressCleanup(address) {
+  let cleanAddress = '';
+  if (address) {
+    Object.entries(address).forEach(([i, value]) => {
+      // Removing not available string (N/A) and countryCode from address.
+      if (value && value !== '(N/A)' && i !== 'countryCode') {
+        cleanAddress += (i !== 'address1') ? `, ${value}` : value;
+      }
+    });
+  }
+
+  return cleanAddress;
+}
+
 function getDateFormat() {
   const format = 'YYYY-MM-DD';
+  return format;
+}
+
+function getDateFormattext() {
+  const format = 'dddd DD MMMM';
   return format;
 }
 
@@ -63,5 +82,7 @@ export {
   getInputValue,
   getLocationAccess,
   getDistanceBetweenCoords,
+  addressCleanup,
   getDateFormat,
+  getDateFormattext,
 };

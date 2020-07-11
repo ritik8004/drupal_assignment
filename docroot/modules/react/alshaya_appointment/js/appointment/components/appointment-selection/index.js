@@ -31,7 +31,7 @@ export default class AppointmentSelection extends React.Component {
           {Drupal.t('You have chosen')}
         </div>
         <div className="appointment-details-body">
-          <div className="appointment-type-details-wrapper">
+          <div className="appointment-details-wrapper appointment-type-details-wrapper">
             <div className="appointment-details-item">
               <div className="appointment-details-item-header">
                 <SectionTitle>
@@ -63,7 +63,7 @@ export default class AppointmentSelection extends React.Component {
 
           { selectedStoreItem
             ? (
-              <div className="appointment-store-details-wrapper">
+              <div className="appointment-details-wrapper appointment-store-details-wrapper">
                 <div className="appointment-details-item">
                   <div className="appointment-details-item-header">
                     <SectionTitle>
@@ -92,18 +92,20 @@ export default class AppointmentSelection extends React.Component {
 
           { selectedSlot
             ? (
-              <div className="appointment-timeslot-details-wrapper">
+              <div className="appointment-details-wrapper appointment-timeslot-details-wrapper">
                 <div className="appointment-details-item">
                   <div className="appointment-details-item-header">
-                    <label>{Drupal.t('Date')}</label>
+                    <SectionTitle>{Drupal.t('Date')}</SectionTitle>
                   </div>
                   <div className="appointment-details-item-body">
                     <div className="store-name">
                       { moment(selectedSlot.appointmentSlotTime).format('dddd, Do MMMM YYYY') }
                     </div>
                   </div>
+                </div>
+                <div className="appointment-details-item">
                   <div className="appointment-details-item-header">
-                    <label>{Drupal.t('Time')}</label>
+                    <SectionTitle>{Drupal.t('Time')}</SectionTitle>
                   </div>
                   <div className="appointment-details-item-body">
                     <div className="store-name">
@@ -111,15 +113,13 @@ export default class AppointmentSelection extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div className="appointment-details-item edit-button">
-                  <button
-                    className="appointment-details-button"
-                    type="button"
-                    onClick={() => this.handleEdit('select-time-slot')}
-                  >
-                    {Drupal.t('Edit')}
-                  </button>
-                </div>
+                <button
+                  className="appointment-details-button edit-button"
+                  type="button"
+                  onClick={() => this.handleEdit('select-time-slot')}
+                >
+                  {Drupal.t('Edit')}
+                </button>
               </div>
             )
             : null}

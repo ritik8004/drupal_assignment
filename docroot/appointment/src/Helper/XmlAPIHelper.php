@@ -94,7 +94,6 @@ class XmlAPIHelper {
    *   Response object.
    */
   public function fetchStores($request) {
-    $appointment_settings = $this->settings->getSettings('appointment_settings');
     $requestQuery = $request->query;
 
     $apiBody = '<ns2:getLocationsByGeoCriteria>
@@ -105,9 +104,6 @@ class XmlAPIHelper {
           <maxNumberOfLocations>' . $requestQuery->get('max-locations') . '</maxNumberOfLocations>
           <unit>' . $requestQuery->get('unit') . '</unit>
         </locationSearchGeoCriteria>
-        <locationSearchCriteria>
-          <locationGroupExtId>' . $appointment_settings['location_group_ext_id'] . '</locationGroupExtId>
-        </locationSearchCriteria>
       </ns2:getLocationsByGeoCriteria>';
 
     $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL, 'getLocationsByGeoCriteria', $apiBody);
@@ -158,6 +154,7 @@ class XmlAPIHelper {
    */
   public function updateInsertClient($request) {
     $request_content = json_decode($request->getContent(), TRUE);
+    $clientExternalId = $request_content['clientExternalId'] ?? '';
     $firstName = $request_content['firstName'] ?? '';
     $lastName = $request_content['lastName'] ?? '';
     $dob = $request_content['dob'] ?? '';
@@ -165,7 +162,7 @@ class XmlAPIHelper {
 
     $apiBody = '<ns2:updateInsertClient>
       <client>
-        <clientExternalId>' . $request_content['clientExternalId'] . '</clientExternalId>
+        <clientExternalId>' . $clientExternalId . '</clientExternalId>
         <firstName>' . $firstName . '</firstName>
         <lastName>' . $lastName . '</lastName>
         <dob>' . $dob . '</dob>

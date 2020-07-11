@@ -10,3 +10,8 @@ googlemapapi:
     - core/drupalSettings
   js:
     js/google-maps-api.js: {}
+alshaya_appointment_view:
+  js:
+    dist/appointments_view.js: {}
+  dependencies:
+    - alshaya_react/react

@@ -3,7 +3,6 @@
   padding: 0;
   list-style: none;
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
 
   @include breakpoint($tablet-landscape) {
@@ -34,6 +33,16 @@
 
     @include breakpoint($tablet-landscape) {
       width: auto;
+      margin-#{$right}: 1.25rem;
+    }
+
+    @include breakpoint($upto-tablet-landscape) {
+      display: flex;
+      align-items: center;
+
+      &:nth-child(even) {
+        margin-#{$left}: 1.25rem;
+      }
     }
 
     &.BeautyandSkin {
@@ -60,17 +69,7 @@
       }
     }
 
-    @include breakpoint($tablet-landscape) {
-      margin-#{$right}: 1.25rem;
-    }
-
-    &:nth-child(even) {
-      @include breakpoint($upto-tablet-landscape) {
-        margin-#{$left}: 1.25rem;
-      }
-    }
-
-    .appointment-category-icon {
+    &-icon {
       position: absolute;
       width: 2.375rem;
       height: 2.375rem;
@@ -78,6 +77,12 @@
       top: 50%;
       transform: translateY(-50%);
       border-radius: 50%;
+    }
+
+    &-title {
+      @include breakpoint($upto-tablet-landscape) {
+        word-break: break-word;
+      }
     }
   }
 }

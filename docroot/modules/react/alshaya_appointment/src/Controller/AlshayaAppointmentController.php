@@ -98,7 +98,7 @@ class AlshayaAppointmentController extends ControllerBase {
       'mobile_maxlength' => $alshaya_master_config->get('maxlength'),
       'customer_details_disclaimer_text' => $alshaya_appointment_config->get('customer_details_disclaimer_text'),
       'user_details' => $this->getUserDetails(),
-      'social_login_enabled' => $social_login_enabled->get('social_login'),
+      'socialLoginEnabled' => $social_login_enabled->get('social_login'),
     ];
 
     return [
@@ -188,6 +188,35 @@ class AlshayaAppointmentController extends ControllerBase {
     ];
 
     return $userDetails;
+  }
+
+  /**
+   * View appointment list for logged in user.
+   *
+   * @return array
+   *   Return array of markup with react lib attached.
+   */
+  public function viewAppointments() {
+    $cache_tags = [];
+
+    $settings['alshaya_appointment'] = [
+      'middleware_url' => _alshaya_appointment_get_middleware_url(),
+      'user_details' => $this->getUserDetails(),
+    ];
+
+    return [
+      '#type' => 'markup',
+      '#markup' => '<div id="customer-appointments"></div>',
+      '#attached' => [
+        'library' => [
+          'alshaya_appointment/alshaya_appointment_view',
+        ],
+        'drupalSettings' => $settings,
+      ],
+      '#cache' => [
+        'tags' => $cache_tags,
+      ],
+    ];
   }
 
 }
