@@ -1,4 +1,5 @@
 var path  = require("path");
+var buildPath = '/modules/react/alshaya_appointment/dist/';
 
 module.exports = {
   entry: {
@@ -8,7 +9,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    publicPath: '/dist/'
+    publicPath: buildPath,
+    chunkFilename: "[id].chunk.[chunkhash].js",
   },
   devServer: {
     contentBase: './',
