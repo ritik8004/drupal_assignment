@@ -83,6 +83,7 @@ class AlshayaAppointmentController extends ControllerBase {
       'step_labels' => $this->getAppointmentSteps(),
       'appointment_companion_limit' => $alshaya_appointment_config->get('appointment_companion_limit'),
       'local_storage_expire' => $alshaya_appointment_config->get('local_storage_expire'),
+      'country_code' => $country_code,
       'store_finder' => array_merge(
         $alshaya_appointment_config->get('store_finder'),
         $store_finder_config->get('country_center'),

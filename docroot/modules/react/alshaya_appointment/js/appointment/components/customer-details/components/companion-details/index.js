@@ -18,7 +18,7 @@ export default class CompanionDetails extends React.Component {
 
   componentDidMount() {
     const { selectedStoreItem, appointmentCategory, appointmentType } = this.state;
-    const apiUrl = `/get/questions?location=${JSON.parse(selectedStoreItem).locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}`;
+    const apiUrl = `/get/questions?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}`;
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {

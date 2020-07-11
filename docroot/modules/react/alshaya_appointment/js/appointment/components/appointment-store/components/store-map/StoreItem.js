@@ -6,7 +6,7 @@ import StoreTiming from '../store-timing';
 const StoreItem = ({
   display, index, store, onStoreChoose, onStoreExpand, onStoreFinalize, onStoreClose,
 }) => (
-  <div className="appointment-map-store-wrapper">
+  <>
     <span className="appointment-store-name">
       <span className="appointment-store-name-wrapper" onClick={(e) => onStoreChoose(e, index)}>
         <span className="store-name">{store.name}</span>
@@ -18,7 +18,7 @@ const StoreItem = ({
         <span className="expand-btn" onClick={(e) => onStoreExpand(e, index)}>Expand</span>
       </ConditionalView>
       <ConditionalView condition={display === 'default'}>
-        <span className="spc-map-list-close" onClick={(e) => onStoreClose(e, index)} />
+        <span className="appointment-map-list-close" onClick={(e) => onStoreClose(e, index)} />
       </ConditionalView>
     </span>
 
@@ -34,9 +34,23 @@ const StoreItem = ({
             timing={store.storeTiming}
           />
         </div>
+        <ConditionalView condition={(typeof onStoreFinalize !== 'undefined' && display !== 'accordion')}>
+          <div
+            className="store-actions"
+            gtm-store-title={store.name}
+          >
+            <button
+              className="select-store"
+              type="button"
+              onClick={(e) => onStoreFinalize(e, store.code)}
+            >
+              {Drupal.t('Select Store')}
+            </button>
+          </div>
+        </ConditionalView>
       </div>
     </ConditionalView>
-  </div>
+  </>
 );
 
 export default StoreItem;

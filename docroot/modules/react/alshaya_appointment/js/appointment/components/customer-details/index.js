@@ -62,7 +62,7 @@ export default class CustomerDetails extends React.Component {
     const duration = 90;
     const startDateTime = '2020-06-09T10:10:00.000Z';
 
-    const apiUrl = `/book-appointment?location=${JSON.parse(selectedStoreItem).locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}&duration=${duration}&attendees=${1}&start-date-time=${startDateTime}&client=${clientExternalId}&channel=${channel}`;
+    const apiUrl = `/book-appointment?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}&duration=${duration}&attendees=${1}&start-date-time=${startDateTime}&client=${clientExternalId}&channel=${channel}`;
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
