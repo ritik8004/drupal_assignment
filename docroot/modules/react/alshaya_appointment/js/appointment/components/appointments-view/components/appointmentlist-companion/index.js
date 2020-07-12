@@ -14,9 +14,10 @@ export default class AppointmentListCompanions extends React.Component {
   componentDidMount() {
     const { appointment } = this.state;
     const { confirmationNumber } = appointment;
+    const { id } = window.drupalSettings.alshaya_appointment.user_details;
 
     if (confirmationNumber) {
-      const apiUrl = `/get/companions?appointment=${confirmationNumber}`;
+      const apiUrl = `/get/companions?appointment=${confirmationNumber}&id=${id}`;
       const apiData = fetchAPIData(apiUrl);
       if (apiData instanceof Promise) {
         apiData.then((result) => {

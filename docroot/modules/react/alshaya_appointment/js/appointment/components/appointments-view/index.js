@@ -38,9 +38,9 @@ export default class AppointmentsView extends React.Component {
   getUserAppointments = () => {
     const { clientData } = this.state;
     const { clientExternalId } = clientData;
-    const { email } = window.drupalSettings.alshaya_appointment.user_details;
+    const { id } = window.drupalSettings.alshaya_appointment.user_details;
     if (clientExternalId) {
-      const apiUrl = `/get/appointments?email=${email}&client=${clientExternalId}`;
+      const apiUrl = `/get/appointments?id=${id}&client=${clientExternalId}`;
       const apiData = fetchAPIData(apiUrl);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
