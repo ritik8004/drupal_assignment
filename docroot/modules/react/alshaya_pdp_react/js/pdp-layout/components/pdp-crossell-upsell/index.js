@@ -57,11 +57,8 @@ export default class PdpCrossellUpsell extends React.PureComponent {
   render() {
     const { currentPage, totalPagers, limits } = this.state;
 
-    const {
-      skuCode,
-      pdpGallery,
-    } = this.props;
-    const images = skuCode ? pdpGallery.thumbnails : [];
+    const { pdpGallery } = this.props;
+    const images = pdpGallery ? pdpGallery.thumbnails : [];
 
     const isTouchDevice = window.outerWidth < 1024;
 

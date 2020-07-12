@@ -21,24 +21,28 @@ class QuantityDropdown extends React.Component {
   componentDidUpdate(prevProps) {
     const { variantSelected, productInfo, skuCode } = this.props;
     const { variant } = this.state;
+    const { configurableCombinations } = drupalSettings;
 
-    if (productInfo[skuCode].variants[variantSelected].id
-      !== prevProps.productInfo[prevProps.skuCode].variants[prevProps.variantSelected].id) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        stockQty: typeof productInfo[skuCode].variants !== 'undefined'
-          ? productInfo[skuCode].variants[variantSelected].stock.qty
-          : productInfo[skuCode].stockQty,
-        variant: variantSelected,
-      });
-    }
+    // For configurable products.
+    if (configurableCombinations) {
+      if (productInfo[skuCode].variants[variantSelected].id
+        !== prevProps.productInfo[prevProps.skuCode].variants[prevProps.variantSelected].id) {
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          stockQty: typeof productInfo[skuCode].variants !== 'undefined'
+            ? productInfo[skuCode].variants[variantSelected].stock.qty
+            : productInfo[skuCode].stockQty,
+          variant: variantSelected,
+        });
+      }
 
-    // Set qty to 1 on variant change.
-    if (variant !== variantSelected) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        qty: 1,
-      });
+      // Set qty to 1 on variant change.
+      if (variant !== variantSelected) {
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          qty: 1,
+        });
+      }
     }
   }
 

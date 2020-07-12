@@ -39,8 +39,8 @@ export default class PdpGallery extends React.PureComponent {
   };
 
   render() {
-    const { skuCode, pdpGallery } = this.props;
-    const images = skuCode ? pdpGallery.thumbnails : [];
+    const { pdpGallery } = this.props;
+    const images = pdpGallery ? pdpGallery.thumbnails : [];
     const emptyRes = (
       <div>Images not available</div>
     );

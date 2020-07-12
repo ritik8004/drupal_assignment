@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import PdpSectionTitle from '../utilities/pdp-section-title';
 import PdpSectionText from '../utilities/pdp-section-text';
 import DescriptionContent from '../pdp-desc-popup-content';
@@ -19,7 +20,7 @@ const PpdDescription = (props) => {
   return (
     <div className="magv2-pdp-description-wrapper card">
       <PdpSectionTitle>{Drupal.t('product details')}</PdpSectionTitle>
-      <PdpSectionText className="short-desc"><p>{pdpShortDesc}</p></PdpSectionText>
+      <PdpSectionText className="short-desc"><p>{parse(pdpShortDesc)}</p></PdpSectionText>
       <div className="magv2-desc-readmore-link" onClick={() => openModal()}>
         {Drupal.t('Read more')}
       </div>

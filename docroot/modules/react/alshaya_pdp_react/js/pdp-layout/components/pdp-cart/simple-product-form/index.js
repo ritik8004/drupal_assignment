@@ -73,12 +73,11 @@ class SimpleProductForm extends React.Component {
 
   render() {
     const { skuCode, productInfo } = this.props;
-    const { checkoutFeatureStatus } = productInfo[skuCode];
+    const { checkoutFeatureStatus } = drupalSettings;
     const variantSelected = skuCode;
 
     return (
       <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
-        <div className="magv2-size-btn-wrapper" onClick={() => this.openModal()}>{Drupal.t('Select size')}</div>
         <div id="product-quantity-dropdown" className="magv2-qty-wrapper">
           <QuantityDropdown
             variantSelected={variantSelected}
