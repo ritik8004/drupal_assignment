@@ -139,13 +139,15 @@ export const triggerAddToCart = (
       cartBtn.classList.toggle('magv2-add-to-basket-success');
     }
 
+    const { addToCartNotificationTime } = drupalSettings;
+
     // Removing the success button after 2 seconds.
     setTimeout(() => {
       if (cartBtn.classList.contains('magv2-add-to-basket-success')) {
         cartBtn.classList.remove('magv2-add-to-basket-success');
         cartBtn.innerHTML = Drupal.t('Add To Bag');
       }
-    }, 4000);
+    }, addToCartNotificationTime * 1000);
   }
 };
 
