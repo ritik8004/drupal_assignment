@@ -286,7 +286,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     if ($product_environment = $sku_entity->get('attr_product_environment')->getValue()) {
-      $product_details[] = ['label' => $this->t('ENVIRONMEMT'), 'data' => $product_environment];
+      $product_details[] = ['label' => $this->t('ENVIRONMENT'), 'data' => $product_environment];
     }
 
     if ($product_quality = $sku_entity->get('attr_product_quality')->getValue()) {

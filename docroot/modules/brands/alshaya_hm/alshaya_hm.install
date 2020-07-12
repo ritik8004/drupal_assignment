@@ -15,7 +15,7 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
- * Add new fields as color name.
+ * Add missing attributes and label translations.
  */
 function alshaya_hm_update_8051() {
   $manager = \Drupal::service('alshaya_config.manager');
@@ -24,7 +24,52 @@ function alshaya_hm_update_8051() {
     'alshaya_acm_product'
   );
 
-  \Drupal::service('acq_sku.fields_manager')->addFields();
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->addFields();
+
+  $strings = [
+    'QUALITY' => [
+      'ar' => 'الجودة',
+    ],
+    'ENVIRONMENT' => [
+      'ar' => 'البيئة',
+    ],
+    'COLLECTION' => [
+      'ar' => 'التشكيلة',
+    ],
+    'DESIGNER COLLECTION' => [
+      'ar' => 'تشكيلة المُصمم',
+    ],
+    'FEATURE' => [
+      'ar' => 'المميزات',
+    ],
+    'WASHING INSTRUCTION' => [
+      'ar' => 'إرشادات الغسيل',
+    ],
+    'DRY CLEAN INSTRUCTION' => [
+      'ar' => 'إرشادات التنظيف الجاف',
+    ],
+    'FRAGRANCE DESCRIPTION' => [
+      'ar' => 'وصف العطر',
+    ],
+    'PATTERN' => [
+      'ar' => 'النقوش',
+    ],
+    'VISUAL DESCRIPTION' => [
+      'ar' => 'الوصف البصري',
+    ],
+    'COMPOSITION' => [
+      'ar' => 'تركيبة المواد',
+    ],
+    'COLOR NAME' => [
+      'ar' => 'اسم اللون',
+    ],
+    'CONCEPT' => [
+      'ar' => 'المجموعة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
