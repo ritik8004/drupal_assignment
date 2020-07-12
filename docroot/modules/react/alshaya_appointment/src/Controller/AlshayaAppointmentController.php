@@ -103,7 +103,7 @@ class AlshayaAppointmentController extends ControllerBase {
         'library' => [
           'alshaya_appointment/alshaya_appointment',
           'alshaya_white_label/appointment-booking',
-          'alshaya_social/alshaya_social_popup',
+          'alshaya_appointment/alshaya_appointment_socialauth',
         ],
         'drupalSettings' => $settings,
       ],
