@@ -59,7 +59,7 @@ function addressCleanup(address) {
   if (address) {
     Object.entries(address).forEach(([i, value]) => {
       // Removing not available string (N/A) and countryCode from address.
-      if (value && value !== '(N/A)' && i !== 'countryCode') {
+      if (value.trim() && value !== '(N/A)' && i !== 'countryCode') {
         cleanAddress += (i !== 'address1') ? `, ${value}` : value;
       }
     });

@@ -86,7 +86,7 @@ export default class CustomerDetails extends React.Component {
     const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
     const channel = isMobile ? 'mobile' : 'desktop';
 
-    const apiUrl = `/book-appointment?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}&duration=${duration}&attendees=${1}&start-date-time=${startDateTime}&client=${clientExternalId}&channel=${channel}`;
+    const apiUrl = `/book-appointment?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}&duration=${selectedSlot.lengthinMin}&attendees=${1}&start-date-time=${selectedSlot.appointmentSlotTime}&client=${clientExternalId}&channel=${channel}`;
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {

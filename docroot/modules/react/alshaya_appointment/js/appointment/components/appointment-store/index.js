@@ -13,6 +13,7 @@ import DeviceView from '../../../common/components/device-view';
 import ToggleButton from './components/store-map/ToggleButton';
 import { getDefaultMapCenter, getUserLocation } from '../../../utilities/map/map_utils';
 import LocationSearchForm from './components/store-map/LocationSearchForm';
+import Gmap from '../../../utilities/map/GMap';
 import {
   requestFullscreen,
   isFullScreen,
@@ -20,6 +21,9 @@ import {
 } from '../../../utilities/map/fullScreen';
 
 const StoreMap = React.lazy(async () => {
+  const localStorageValues = getStorageInfo();
+  window.fetchStore = (localStorageValues.storeList && localStorageValues.storeList.length !== 0) ? 'finished' : window.fetchStore;
+
   // Wait for fetchstore request to finish, before
   // We show select store with map.
   await new Promise((resolve) => {
@@ -37,6 +41,9 @@ window.fetchStore = 'idle';
 export default class AppointmentStore extends React.Component {
   constructor(props) {
     super(props);
+    // Global map object.
+    this.googleMap = new Gmap();
+    window.appointmentMap = this.googleMap;
     this.searchRef = React.createRef();
     this.autocompleteInput = React.createRef();
     this.autocomplete = null;
@@ -51,7 +58,6 @@ export default class AppointmentStore extends React.Component {
     if (localStorageValues) {
       const { latitude, longitude } = drupalSettings.alshaya_appointment.store_finder;
       this.state = {
-        ...localStorageValues,
         storeList: [],
         refCoords: { lat: latitude, lng: longitude },
         openSelectedStore: openSelectedStore || false,
@@ -59,6 +65,7 @@ export default class AppointmentStore extends React.Component {
         selectedStoreItem: '',
         locationAccess: true,
         outsideCountryError: false,
+        ...localStorageValues,
       };
     }
   }
@@ -69,10 +76,12 @@ export default class AppointmentStore extends React.Component {
       refCoords, storeList, openSelectedStore, selectedStoreItem,
     } = this.state;
     document.addEventListener('fetchStoreSuccess', this.initiatePlaceAutocomplete);
-
-    if (refCoords !== null && storeList.length === 0) {
+    if (storeList.length !== 0) {
+      dispatchCustomEvent('fetchStoreSuccess', true);
+    } else if (refCoords !== null && storeList.length === 0) {
       this.fetchStores(refCoords);
     }
+
     // Ask for location access when we don't have any coords.
     if (refCoords !== null && openSelectedStore) {
       this.showSelectedMarker();
@@ -123,6 +132,7 @@ export default class AppointmentStore extends React.Component {
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         this.selectStoreButtonVisibility(false);
+
         if (result.error === undefined && result.data !== undefined) {
           window.fetchStore = 'finished';
           dispatchCustomEvent('fetchStoreSuccess', true);
@@ -155,11 +165,9 @@ export default class AppointmentStore extends React.Component {
     this.setState({
       selectedStoreItem: store,
     });
-    // Save selected store and store list in localStorage.
+    // Save selected store in localStorage.
     const localStorage = getStorageInfo();
-    const { storeList } = this.state;
     localStorage.selectedStoreItem = store;
-    localStorage.storeList = storeList;
     setStorageInfo(localStorage);
 
     // Update step.
@@ -174,6 +182,11 @@ export default class AppointmentStore extends React.Component {
       storeList,
       locationAccess: (accessStatus !== null) ? accessStatus : prevState.locationAccess,
     }));
+    // Update localStorage.
+    const localStorage = getStorageInfo();
+    localStorage.refCoords = refCoords;
+    localStorage.storeList = storeList;
+    setStorageInfo(localStorage);
   }
 
   showOutsideCountryError = (status) => {
@@ -470,7 +483,6 @@ export default class AppointmentStore extends React.Component {
       openSelectedStore,
       mapFullScreen,
     } = this.state;
-
     const mapView = (
       <StoreMap
         coords={{
@@ -493,7 +505,7 @@ export default class AppointmentStore extends React.Component {
             ref={this.searchRef}
             getCurrentPosition={this.getCurrentPosition}
           />
-          <React.Suspense fallback={<Loading />}>
+          <React.Suspense fallback={<Loading loadingMessage={Drupal.t('Loading Map')} />}>
             <div className="store-map-wrapper">
               <DeviceView device="above-mobile">
                 <div className="map-inner-wrapper">{mapView}</div>
