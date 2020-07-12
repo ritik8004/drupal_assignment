@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Helper\APIServicesUrls;
 use App\Service\Drupal\Drupal;
 use App\Service\SoapClient;
 use Psr\Log\LoggerInterface;
@@ -50,7 +51,7 @@ class AppointmentServices {
    *   Xml API Helper.
    * @param \App\Service\SoapClient $client
    *   Soap client service.
-   * @param \App\Service\Drupal $drupal
+   * @param \App\Service\Drupal\Drupal $drupal
    *   Drupal service.
    */
   public function __construct(LoggerInterface $logger,
@@ -160,6 +161,87 @@ class AppointmentServices {
 
       throw $e;
     }
+  }
+
+  /**
+   * Get Client details.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Client details.
+   */
+  public function getAppointments(Request $request) {
+    try {
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $clientExternalId = $request->query->get('client');
+
+      if (empty($clientExternalId)) {
+        $message = 'clientExternalId is required to get appointment details.';
+
+        $this->logger->error($message);
+        throw new \Exception($message);
+      }
+
+      $startDate = date("Y-m-d\TH:i:s.000\Z");
+      $endDate = date("Y-12-31\T23:59:59.999\Z");
+
+      $param = [
+        'criteria' => [
+          'clientExternalId' => $clientExternalId,
+          'includeCancelledAppointments' => FALSE,
+          'suppressSubAppointmentDetail' => FALSE,
+        ],
+        'startDateTime' => $startDate,
+        'endDateTime' => $endDate,
+
+      ];
+      $result = $client->__soapCall('getAppointmentsByCriteriaAppointmentDateRange', [$param]);
+
+      if (!is_array($result->return->appointments)) {
+        $temp = $result->return->appointments;
+        unset($result->return->appointments);
+        $result->return->appointments[0] = $temp;
+      }
+
+      return new JsonResponse($result);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while fetching appointments. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Get companions by appointment confirmation number.
+   */
+  public function getCompanionByAppointmentId(Request $request) {
+    try {
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $appointmentId = $request->query->get('appointment');
+
+      if (empty($appointmentId)) {
+        $message = 'Appointment Id is required to get companion details.';
+
+        $this->logger->error($message);
+        throw new \Exception($message);
+      }
+
+      $param = [
+        'confirmationNumber' => $appointmentId,
+      ];
+      $result = $client->__soapCall('getAppointmentAnswersByAppointmentConfirmationNumber', [$param]);
+      return new JsonResponse($result);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while fetching companion details. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+
   }
 
 }
