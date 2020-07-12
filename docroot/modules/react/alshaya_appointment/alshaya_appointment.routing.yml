@@ -23,4 +23,4 @@ alshaya_appointment.get_user_info:
     _controller: '\Drupal\alshaya_appointment\Controller\AlshayaAppointmentController::getUserInfo'
   methods: [GET]
   requirements:
-    _permission: 'access content'
+    _middleware_request_check: 'TRUE'

@@ -126,7 +126,7 @@ class Drupal {
 
     // Add a custom header to ensure Drupal allows this request without
     // further authentication.
-    $request_options['headers']['alshaya-appointment'] = md5($this->settings->getSettings('middleware_auth'));
+    $request_options['headers']['alshaya-middleware'] = md5($this->settings->getSettings('middleware_auth'));
 
     return $this->invokeApi($method, $url, $request_options);
   }

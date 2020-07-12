@@ -222,11 +222,11 @@ class AlshayaAppointmentController extends ControllerBase {
    */
   public function getUserInfo() {
     $response = [
-      'email' => '',
+      'userId' => '',
     ];
 
     if ($this->currentUser()->isAuthenticated()) {
-      $response['email'] = $this->currentUser()->getEmail();
+      $response['userId'] = $this->currentUser()->id();
     }
 
     return new JsonResponse($response);

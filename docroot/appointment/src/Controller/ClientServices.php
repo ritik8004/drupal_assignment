@@ -161,6 +161,7 @@ class ClientServices {
     try {
       $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CLIENT_SERVICES_URL);
       $email = $request->query->get('email');
+      $userId = $request->query->get('id');
 
       if (empty($email)) {
         $message = 'email is required to get client details.';
@@ -169,9 +170,10 @@ class ClientServices {
         throw new \Exception($message);
       }
 
-      $userEmail = $this->drupal->getSessionUserInfo();
-      if ($userEmail['email'] !== $email) {
-        $message = 'Requested users email does not match.';
+      // Authenticate logged in user by matching userid from request and Drupal.
+      $user = $this->drupal->getSessionUserInfo();
+      if ($user['userId'] !== $userId) {
+        $message = 'Requested not authenticated.';
 
         $this->logger->error($message);
         throw new \Exception($message);

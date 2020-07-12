@@ -20,10 +20,10 @@ export default class CustomerDetails extends React.Component {
   }
 
   componentDidMount() {
-    const { email } = window.drupalSettings.alshaya_appointment.user_details;
+    const { id, email } = window.drupalSettings.alshaya_appointment.user_details;
 
-    if (email) {
-      const apiUrl = `/get/client?email=${email}`;
+    if (id && email) {
+      const apiUrl = `/get/client?email=${email}&id=${id}`;
       const apiData = fetchAPIData(apiUrl);
 
       if (apiData instanceof Promise) {

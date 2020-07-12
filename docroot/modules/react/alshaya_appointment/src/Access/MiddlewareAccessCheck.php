@@ -25,7 +25,7 @@ class MiddlewareAccessCheck implements AccessInterface {
    *   Return access result object.
    */
   public function access(Request $request) {
-    $secret = $request->headers->get('alshaya-appointment') ?? '';
+    $secret = $request->headers->get('alshaya-middleware') ?? '';
 
     if ($secret !== md5(Settings::get('middleware_auth'))) {
       $this->getLogger('MiddlewareAccessCheck')->warning('Invalid alshaya-middleware header value received : @value', [
