@@ -1,5 +1,5 @@
 .attribute-sliderbar {
-  max-width: 31rem;
+  max-width: 31.25rem;
   width: 100%;
   box-sizing: border-box;
   z-index: 1000;
@@ -33,7 +33,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.875rem;
 
     @include breakpoint($only-mobile) {
       padding: 1.25rem 1rem;
@@ -43,11 +42,10 @@
 
   &__title {
     font-family: $alshaya-bold;
-    text-transform: uppercase;
     color: $pdp_additional_attribute_title;
     text-align: center;
     width: 100%;
-    font-size: 0.9375rem;
+    font-size: 1rem;
   }
 
   &__close {
@@ -61,7 +59,7 @@
       width: auto;
       color: $plp_filter_icon;
       position: absolute;
-      #{$right}: 1.6875rem;
+      #{$right}: 1.625rem;
       top: 2.25rem;
 
       @include breakpoint($only-mobile) {
@@ -72,14 +70,16 @@
   }
 
   &__content {
-    padding-#{$left}: 2.125rem;
     color: $pdp_additional_attribute_text;
-    padding-bottom: 1.5rem;
+    padding: 0 2rem 1.5rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 0 1.5625rem 1.25rem;
+    }
 
     h3 {
       font-size: 1rem;
       margin-bottom: 0;
-      text-transform: capitalize;
       font-family: $alshaya-bold;
     }
   }
@@ -90,19 +90,21 @@
     .attribute-sliderbar__content {
       ul {
         font-size: 0.8125rem;
-        padding-#{$left}: 1.1875rem;
-        margin-top: 0;
-        margin-#{$left}: -0.125rem;
-        margin-bottom: 1.375rem;
 
         li {
-          list-style: inherit;
-          padding-#{$left}: 0.625rem;
-          line-height: 1.7;
+          line-height: 1.6;
 
           &::after {
             content: '';
           }
+        }
+      }
+    }
+
+    .magazine-desc-wrapper {
+      .attribute-sliderbar {
+        @include breakpoint($desktop-wide) {
+          max-width: 31.25rem;
         }
       }
     }

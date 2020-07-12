@@ -10,9 +10,12 @@ use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
 use App\Service\CheckoutCom\CustomerCards;
+use Doctrine\DBAL\Connection;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Psr\Log\LoggerInterface;
 use Drupal\alshaya_master\Helper\SortUtility;
+use Symfony\Component\Lock\Factory;
+use Symfony\Component\Lock\Store\PdoStore;
 
 /**
  * Class Cart.
@@ -130,6 +133,13 @@ class Cart {
   protected $logger;
 
   /**
+   * Database connection.
+   *
+   * @var \Doctrine\DBAL\Connection
+   */
+  protected $connection;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -158,6 +168,8 @@ class Cart {
    *   Orders service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
+   * @param \Doctrine\DBAL\Connection $connection
+   *   Database connection.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -172,7 +184,8 @@ class Cart {
     CustomerCards $customer_cards,
     Drupal $drupal,
     Orders $orders,
-    LoggerInterface $logger
+    LoggerInterface $logger,
+    Connection $connection
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -187,6 +200,7 @@ class Cart {
     $this->drupal = $drupal;
     $this->orders = $orders;
     $this->logger = $logger;
+    $this->connection = $connection;
   }
 
   /**
@@ -218,10 +232,19 @@ class Cart {
       return NULL;
     }
 
+    // If cart is available in cache.
+    if (!$force && !empty($cached_cart = $this->getCartFromCache())) {
+      static::$cart = $cached_cart;
+      return static::$cart;
+    }
+
     $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
       static::$cart = $this->magentoApiWrapper->doRequest('GET', $url);
+      // Store cart object in cache.
+      $this->setCartInCache(static::$cart);
+
       static::$cart = $this->formatCart(static::$cart);
       return static::$cart;
     }
@@ -230,6 +253,14 @@ class Cart {
 
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
         $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+      }
+
+      // Fetch cart from cache (even if stale).
+      if (!empty($cached_cart = $this->getCartFromCache(TRUE))) {
+        // Setting flag for stale cart cache.
+        $cached_cart['stale_cart'] = TRUE;
+        static::$cart = $cached_cart;
+        return static::$cart;
       }
 
       $this->logger->error('Error while getting cart from MDC. Error message: @message', [
@@ -650,7 +681,7 @@ class Cart {
       // After association restore the cart.
       if ($result) {
         static::$cart = NULL;
-        $this->getCart();
+        $this->getCart(TRUE);
         return TRUE;
       }
 
@@ -821,8 +852,8 @@ class Cart {
     $cart = NULL;
 
     try {
-      static::$cart = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
-      static::$cart = $this->formatCart(static::$cart);
+      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      static::$cart = $this->formatCart($cart_updated);
       $cart = static::$cart;
 
       // If exception at response message level.
@@ -839,6 +870,8 @@ class Cart {
         }
       }
 
+      // Set cart in cache.
+      $this->setCartInCache($cart_updated);
       return $cart;
     }
     catch (\Exception $e) {
@@ -1067,10 +1100,34 @@ class Cart {
     $url = sprintf('carts/%d/order', $this->getCartId());
     $cart = $this->getCart();
 
+    $lock = FALSE;
+    $settings = $this->settings->getSettings('spc_middleware');
+
+    // Check whether order locking is enabled.
+    if (!isset($settings['spc_middleware_lock_place_order']) || $settings['spc_middleware_lock_place_order'] == TRUE) {
+      $lock_store = new PdoStore($this->connection);
+      $lock_factory = new Factory($lock_store);
+
+      $lock_name = 'spc_place_order_' . $this->getCartId();
+      $lock = $lock_factory->createLock($lock_name);
+
+      if (!$lock->acquire()) {
+        $this->logger->error('Could not acquire lock to place SPC order: @lock_name"', [
+          '@lock_name' => $lock_name,
+        ]);
+        return $this->utility->getErrorResponse('Sorry, we were able to complete your purchase but something went wrong and we could not display the order confirmation page. Please review your past orders or contact our customer service team for assistance.', 700);
+      }
+    }
+
     try {
       // We don't pass any payment data in place order call to MDC because its
       // optional and this also sets in ACM MDC observer.
       $result = $this->magentoApiWrapper->doRequest('PUT', $url);
+
+      if (!empty($lock)) {
+        $lock->release();
+      }
+
       $order_id = (int) str_replace('"', '', $result);
       return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
     }
@@ -1412,6 +1469,36 @@ class Cart {
     }
 
     return $cnc_enabled;
+  }
+
+  /*
+   * Get cart from cache.
+   *
+   * @param bool $fetch_expired
+   *   Whether we need stale data from cache or not.
+   *
+   * @return array
+   *   Formatted cart data.
+   */
+  public function getCartFromCache(bool $fetch_expired = FALSE) {
+    $expire = (int) $_ENV['CACHE_CART'];
+    // If cart is available in cache, use that.
+    if ($expire > 0 && ($cached_cart = $this->cache->get('cached_cart', $fetch_expired))) {
+      return $this->formatCart($cached_cart);
+    }
+  }
+
+  /**
+   * Set cart in cache.
+   *
+   * @param array $cart
+   *   Cart data.
+   */
+  public function setCartInCache(array $cart) {
+    $expire = (int) $_ENV['CACHE_CART'];
+    if ($expire > 0) {
+      $this->cache->set('cached_cart', $expire, $cart);
+    }
   }
 
 }
