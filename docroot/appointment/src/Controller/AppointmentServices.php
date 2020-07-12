@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
+use App\Service\Drupal\Drupal;
+use App\Service\SoapClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Helper\XmlAPIHelper;
-use App\Service\SoapClient;
-use App\Helper\APIServicesUrls;
 
 /**
  * Class AppointmentServices.
@@ -28,7 +28,14 @@ class AppointmentServices {
   protected $xmlApiHelper;
 
   /**
-   * SoapClient.
+   * Drupal Service.
+   *
+   * @var \App\Service\Drupal\Drupal
+   */
+  protected $drupal;
+
+  /**
+   * Soap client.
    *
    * @var \App\Service\SoapClient
    */
@@ -43,13 +50,17 @@ class AppointmentServices {
    *   Xml API Helper.
    * @param \App\Service\SoapClient $client
    *   Soap client service.
+   * @param \App\Service\Drupal $drupal
+   *   Drupal service.
    */
   public function __construct(LoggerInterface $logger,
                               XmlAPIHelper $xml_api_helper,
-                              SoapClient $client) {
+                              SoapClient $client,
+                              Drupal $drupal) {
     $this->logger = $logger;
     $this->xmlApiHelper = $xml_api_helper;
     $this->client = $client;
+    $this->drupal = $drupal;
   }
 
   /**
