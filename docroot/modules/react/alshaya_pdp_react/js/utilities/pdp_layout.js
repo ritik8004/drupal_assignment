@@ -152,7 +152,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
       if (variant == null) {
         setVariant(configurableCombinations[skuItemCode].firstChild);
       } else {
-        title = productInfo[skuItemCode].variants[variant].title;
+        title = productInfo[skuItemCode].variants[variant].cart_title;
         priceRaw = productInfo[skuItemCode].variants[variant].priceRaw;
         finalPrice = productInfo[skuItemCode].variants[variant].finalPrice;
         pdpGallery = productInfo[skuItemCode].variants[variant].rawGallery;

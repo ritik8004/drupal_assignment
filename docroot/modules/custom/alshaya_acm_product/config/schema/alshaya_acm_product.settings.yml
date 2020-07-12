@@ -108,3 +108,18 @@ alshaya_acm_product.settings:
     legal_notice_summary:
       type: text_format
       label: 'Summary'
+    non_refundable_tooltip:
+      type: label
+      label: 'Non refundable tooltip'
+    non_refundable_text:
+      type: label
+      label: 'Non refundable text'
+    same_day_delivery_text:
+      type: label
+      label: 'Same day delivery'
+    same_day_delivery_sub_text:
+      type: label
+      label: 'Same day delivery sub text'
+    delivery_in_only_city_text:
+      type: label
+      label: 'Delivery in only city'

@@ -645,6 +645,12 @@
        */
       // Add click link handler to fire 'productClick' event to GTM.
       $('a[href*="product-quick-view"]').each(function () {
+        // We will handle GTM for recommended products in basket in
+        // different place.
+        if ($(this).parents('.spc-recommended-products').length > 0) {
+          return;
+        }
+
         $(this).once('js-event').on('click', function (e) {
           var that = $(this).closest('article[data-vmode="teaser"]');
           var position = '';
