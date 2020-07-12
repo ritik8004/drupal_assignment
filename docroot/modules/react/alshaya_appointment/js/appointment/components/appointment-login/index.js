@@ -1,7 +1,17 @@
 import React from 'react';
-import { setStorageInfo } from '../../../utilities/storage';
+import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
 
 export default class AppointmentLogin extends React.Component {
+  constructor(props) {
+    super(props);
+    const localStorageValues = getStorageInfo();
+    if (localStorageValues) {
+      this.state = {
+        ...localStorageValues,
+      };
+    }
+  }
+
   handleBack = (step) => {
     const { handleBack } = this.props;
     handleBack(step);
@@ -80,11 +90,7 @@ export default class AppointmentLogin extends React.Component {
               >
                 { Drupal.t('Register') }
               </a>
-              <button
-                className="appointment-type-button appointment-checkout-button select-store"
-                type="button"
-                onClick={() => this.handleSubmit}
-              >
+              <button className="appointment-type-button appointment-store-button select-store" type="button" onClick={this.handleSubmit}>
                 {Drupal.t('Continue as Guest')}
               </button>
             </div>
