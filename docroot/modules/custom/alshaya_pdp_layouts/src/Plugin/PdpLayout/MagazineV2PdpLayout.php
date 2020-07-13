@@ -14,8 +14,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Path\AliasManager;
 
 /**
  * Provides the default laypout for PDP.
@@ -27,7 +25,6 @@ use Drupal\Core\Path\AliasManager;
  */
 class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPluginInterface {
 
-  use StringTranslationTrait;
   const PDP_LAYOUT_MAGAZINE_V2 = 'pdp-magazine_v2';
 
   /**
@@ -59,13 +56,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   private $optionsHelper;
 
   /**
-   * Path Alias Manager.
-   *
-   * @var \Drupal\Core\Path\AliasManager
-   */
-  private $pathAliasManager;
-
-  /**
    * Constructs a new MagazineV2PdpLayout.
    *
    * @param array $configuration
@@ -82,8 +72,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
    *   Config Factory service object.
    * @param \Drupal\alshaya_product_options\ProductOptionsHelper $options_helper
    *   Product Options Helper.
-   * @param \Drupal\Core\Path\AliasManager $path_alias_manager
-   *   Path Alias Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -91,15 +79,13 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_image_manager,
                               ConfigFactoryInterface $config_factory,
-                              ProductOptionsHelper $options_helper,
-                              AliasManager $path_alias_manager) {
+                              ProductOptionsHelper $options_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->skuManager = $sku_manager;
     $this->skuImageManager = $sku_image_manager;
     $this->configFactory = $config_factory;
     $this->optionsHelper = $options_helper;
-    $this->pathAliasManager = $path_alias_manager;
   }
 
   /**
@@ -113,8 +99,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('config.factory'),
-      $container->get('alshaya_product_options.helper'),
-      $container->get('path.alias_manager')
+      $container->get('alshaya_product_options.helper')
     );
   }
 
