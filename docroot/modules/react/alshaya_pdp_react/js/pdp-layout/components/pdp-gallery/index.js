@@ -45,15 +45,12 @@ export default class PdpGallery extends React.PureComponent {
       <div>Images not available</div>
     );
     const { open, currentIndex } = this.state;
-    const isTouchDevice = window.innerWidth < 767;
-    const onlyTablet = window.innerWidth < 1024;
+    const isTouchDevice = window.innerWidth < 1024;
     let centerPaddingValue;
     if (isTouchDevice) {
       centerPaddingValue = null;
-    } else if (onlyTablet) {
-      centerPaddingValue = '100px';
     } else {
-      centerPaddingValue = '350px';
+      centerPaddingValue = '300px';
     }
 
     return (images) ? (

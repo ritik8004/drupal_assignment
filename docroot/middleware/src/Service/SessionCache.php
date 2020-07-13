@@ -31,17 +31,19 @@ class SessionCache {
    *
    * @param string $key
    *   Cache key.
+   * @param bool $get_expired
+   *   Flag whether we return expired data or not.
    *
    * @return mixed|null
    *   Data from cache if available.
    */
-  public function get(string $key) {
+  public function get(string $key, bool $get_expired = FALSE) {
     $data = $this->storage->getDataFromSession($key);
     if (empty($data)) {
       return NULL;
     }
 
-    if ($data['expire'] < (int) $_SERVER['REQUEST_TIME']) {
+    if (!$get_expired && $data['expire'] < (int) $_SERVER['REQUEST_TIME']) {
       return NULL;
     }
 

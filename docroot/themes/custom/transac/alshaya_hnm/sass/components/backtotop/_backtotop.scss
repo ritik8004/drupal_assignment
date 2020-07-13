@@ -45,7 +45,7 @@
   #backtotop {
     @include breakpoint($only-mobile) {
       bottom: 0.25rem;
-      line-height: 45px;
+      line-height: 1;
 
       &::after {
         margin-top: -2.4rem;

@@ -27,9 +27,28 @@
       grid-gap: 0.5rem;
     }
 
+    .ie & {
+      display: block;
+
+      .magv2-pdp-image {
+        margin-bottom: 1.25rem;
+
+        &:nth-child(2n +1) {
+          width: calc(50% - 0.5rem);
+          float: $left;
+        }
+
+        &:nth-child(2n) {
+          width: calc(50% - 0.5rem);
+          float: $right;
+        }
+      }
+    }
+
     .magv2-pdp-image {
       position: relative;
       cursor: pointer;
+      background: $magv2-gallery-bg;
     }
 
     figure {
@@ -145,7 +164,7 @@
         position: fixed;
         bottom: 3.65rem;
 
-        @include breakpoint($tablet) {
+        @include breakpoint($desktop) {
           top: 50%;
           transform: translateY(-50%);
           border-radius: 50%;
@@ -153,8 +172,8 @@
           bottom: unset;
         }
 
-        @include breakpoint($only-mobile) {
-          bottom: 1.875rem;
+        @include breakpoint($upto-desktop) {
+          bottom: -0.3125rem;
           top: auto;
           width: auto;
 
@@ -173,41 +192,56 @@
       .slick-prev {
         #{$left}: 0.5rem;
         #{$right}: auto;
+        height: 3rem;
+        width: 3rem;
 
         @include breakpoint($tablet) {
+          #{$left}: 1.25rem;
+        }
+
+        @include breakpoint($desktop) {
           #{$left}: 3.75rem;
+          height: 5.25rem;
+          width: 5.25rem;
         }
 
         @include icon(chevron#{$left}) {
-          @include breakpoint($tablet) {
+          @include breakpoint($desktop) {
             height: 5.25rem;
             width: 5.25rem;
             font-size: 3rem;
           }
 
-          @include breakpoint($only-mobile) {
+          @include breakpoint($upto-desktop) {
             font-size: 3rem;
+            height: 3rem;
+            width: 3rem;
           }
         }
       }
 
       .slick-next {
         #{$right}: 0.5rem;
+        height: 3rem;
+        width: 3rem;
 
-        @include breakpoint($tablet) {
+        @include breakpoint($desktop) {
           #{$right}: 3.75rem;
-          width: auto;
+          height: 5.25rem;
+          width: 5.25rem;
         }
 
         @include icon(chevron#{$right}) {
-          @include breakpoint($tablet) {
+          @include breakpoint($desktop) {
             height: 5.25rem;
             width: 5.25rem;
             font-size: 3rem;
           }
 
-          @include breakpoint($only-mobile) {
+          @include breakpoint($upto-desktop) {
             font-size: 3rem;
+            height: 3rem;
+            width: 3rem;
           }
         }
       }
@@ -218,7 +252,7 @@
         left: 50%;
         transform: translate(-50%, 0);
 
-        @include breakpoint($only-mobile) {
+        @include breakpoint($upto-desktop) {
           bottom: 1.875rem;
           top: auto;
           width: auto;

@@ -443,7 +443,11 @@ export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per 
  */
 export const getAmountWithCurrency = (priceAmount, string = true) => {
   let amount = priceAmount === null ? 0 : priceAmount;
+
+  // Remove commas if any.
+  amount = amount.toString().replace(/,/g, '');
   amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
+
   const { currency_config: currencyConfig } = drupalSettings.alshaya_spc;
   // The keys currency and amount are used in PriceElement component.
   const priceParts = {
