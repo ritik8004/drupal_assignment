@@ -146,7 +146,7 @@ const OrderSummary = () => {
           <ConditionalView condition={billingAddress.length > 0}>
             <OrderSummaryItem type="address" label={Drupal.t('Billing address')} name={customerNameBilling} address={billingAddress.join(', ')} />
           </ConditionalView>
-          <OrderSummaryItem label={Drupal.t('Mobile Number')} value={mobileNumber} />
+          <OrderSummaryItem type="mobile" label={Drupal.t('Mobile Number')} value={mobileNumber} />
           <OrderSummaryItem label={Drupal.t('Payment method')} value={method} />
           <OrderSummaryItem label={Drupal.t('delivery type')} value={deliveryType} />
           <OrderSummaryItem label={etaLabel} value={expectedDelivery} />

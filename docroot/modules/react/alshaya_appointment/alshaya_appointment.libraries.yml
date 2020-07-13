@@ -15,3 +15,11 @@ alshaya_appointment_view:
     dist/appointments_view.js: {}
   dependencies:
     - alshaya_react/react
+
+alshaya_appointment_socialauth:
+  version: 1.x
+  footer: true
+  js:
+    assets/js/alshaya_appointment_socialauth.js: {}
+  dependencies:
+    - alshaya_social/alshaya_social_popup
