@@ -5,25 +5,16 @@ import StoreAddress from '../appointment-store/components/store-address';
 import SectionTitle from '../section-title';
 
 export default class AppointmentSelection extends React.Component {
-  constructor(props) {
-    super(props);
-    const localStorageValues = getStorageInfo();
-    if (localStorageValues) {
-      this.state = {
-        ...localStorageValues,
-      };
-    }
-  }
-
   handleEdit = (step) => {
     const { handleEdit } = this.props;
     handleEdit(step);
   }
 
   render() {
+    const localStorageValues = getStorageInfo();
     const {
       appointmentCategory, appointmentType, selectedStoreItem, selectedSlot,
-    } = this.state;
+    } = localStorageValues;
     const selectedStoreDetails = selectedStoreItem ? JSON.parse(selectedStoreItem) : '';
 
     return (
