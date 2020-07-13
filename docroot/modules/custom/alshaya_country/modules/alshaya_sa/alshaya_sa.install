@@ -139,5 +139,5 @@ function alshaya_sa_update_dependencies() {
  * Set default lat and long for click n collect api requests.
  */
 function alshaya_sa_default_spc_config() {
-  alshaya_country_set_default_spc_config(23.885942, 45.079163);
+  alshaya_country_set_default_spc_config(24.7249316, 46.5423362);
 }
