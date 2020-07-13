@@ -270,6 +270,9 @@ export const addToCartConfigurable = (e, id, configurableCombinations, skuCode, 
     });
 };
 
+/**
+ * Add to cart on click event for simple products.
+ */
 export const addToCartSimple = (e, id, skuCode, productInfo) => {
   e.preventDefault();
   // Adding add to cart loading.
