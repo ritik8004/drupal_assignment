@@ -20,7 +20,7 @@ export default class CustomerDetails extends React.Component {
   }
 
   componentDidMount() {
-    const { id, email } = window.drupalSettings.alshaya_appointment.user_details;
+    const { id, email } = drupalSettings.alshaya_appointment.user_details;
 
     if (id && email) {
       const apiUrl = `/get/client?email=${email}&id=${id}`;
