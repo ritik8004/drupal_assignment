@@ -17,7 +17,7 @@ const PdpInfo = (props) => {
 
   return (
     <div className={(shortDetail ? 'magv2-compact-detail-wrapper' : 'magv2-detail-wrapper')}>
-      <div className="magv2-pdp-title-wrapper fadeInUp" style={{ animationDelay: '0.3s' }}
+      <div className="magv2-pdp-title-wrapper fadeInUp" style={{ animationDelay: '0.3s' }}>
         <div className="magv2-pdp-title">{title}</div>
         <div className="magv2-pdp-brand-logo"><img src={brandLogo} alt={brandLogoAlt} title={brandLogoTitle} /></div>
       </div>
