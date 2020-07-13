@@ -42,8 +42,12 @@ class SimpleProductForm extends React.Component {
     }
   }
 
-  addToCart = (e) => {
+  addToCart = (e, id) => {
     e.preventDefault();
+    // Adding add to cart loading.
+    const addToCartBtn = document.getElementById(id);
+    addToCartBtn.classList.toggle('magv2-add-to-basket-loader');
+
     const { skuCode, productInfo } = this.props;
     const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
 
@@ -59,17 +63,13 @@ class SimpleProductForm extends React.Component {
 
     updateCart(cartEndpoint, postData).then(
       (response) => {
-        triggerAddToCart(response, productData, productInfo, skuCode);
+        triggerAddToCart(response, productData, productInfo, skuCode, addToCartBtn);
       },
     )
       .catch((error) => {
         console.log(error.response);
       });
   }
-
-  openModal = () => {
-    document.querySelector('body').classList.add('select-overlay');
-  };
 
   render() {
     const { skuCode, productInfo } = this.props;
@@ -78,7 +78,7 @@ class SimpleProductForm extends React.Component {
 
     return (
       <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
-        <div className="magv2-size-btn-wrapper" onClick={() => this.openModal()}>{Drupal.t('Select size')}</div>
+        <div id="add-to-cart-error" className="error" />
         <div id="product-quantity-dropdown" className="magv2-qty-wrapper">
           <QuantityDropdown
             variantSelected={variantSelected}
@@ -87,15 +87,19 @@ class SimpleProductForm extends React.Component {
           />
         </div>
         {(checkoutFeatureStatus === 'enabled') ? (
-          <div className="magv2-add-to-basket-container" ref={this.button}>
-            <button
-              className="magv2-button"
-              type="submit"
-              onClick={this.addToCart}
-            >
-              {Drupal.t('Add To Bag')}
-            </button>
-          </div>
+          <>
+            <div id="add-to-cart-error" className="error" />
+            <div className="magv2-add-to-basket-container" ref={this.button}>
+              <button
+                className="magv2-button"
+                id="add-to-cart-main"
+                type="submit"
+                onClick={(e) => this.addToCart(e, 'add-to-cart-main')}
+              >
+                {Drupal.t('Add To Bag')}
+              </button>
+            </div>
+          </>
         ) : <CartUnavailability /> }
       </form>
     );
