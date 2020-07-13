@@ -7,7 +7,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Session\AccountProxy;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class AlshayaAppointmentController.
@@ -212,24 +211,6 @@ class AlshayaAppointmentController extends ControllerBase {
         'tags' => $cache_tags,
       ],
     ];
-  }
-
-  /**
-   * Get user customer id.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getUserInfo() {
-    $response = [
-      'userId' => '',
-    ];
-
-    if ($this->currentUser()->isAuthenticated()) {
-      $response['userId'] = $this->currentUser()->id();
-    }
-
-    return new JsonResponse($response);
   }
 
 }
