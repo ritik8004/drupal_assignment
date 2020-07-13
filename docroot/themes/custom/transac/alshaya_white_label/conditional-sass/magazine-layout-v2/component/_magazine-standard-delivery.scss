@@ -49,5 +49,9 @@
     &::first-letter {
       text-transform: capitalize;
     }
+
+    span {
+      display: inline-block;
+    }
   }
 }

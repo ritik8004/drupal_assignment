@@ -127,7 +127,8 @@
             border: 0.0625rem solid $magv2-size-btn-border;
             border-radius: 0.125rem;
 
-            &:hover:not(.active) {
+            &:hover:not(.active),
+            &.active {
               background: $magv2-size-color;
               color: $magv2-content-bg;
               border: 0.0625rem solid $magv2-size-color;

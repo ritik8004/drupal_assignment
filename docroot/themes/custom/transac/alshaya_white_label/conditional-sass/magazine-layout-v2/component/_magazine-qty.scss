@@ -30,6 +30,7 @@
 
   &-btn--down {
     padding-#{$left}: 1.125rem;
+    background-color: $magv2-qty-btn-bg;
 
     @include breakpoint($only-tablet) {
       padding-#{$left}: 0.438rem;
@@ -47,6 +48,7 @@
   &-btn--up {
     padding-#{$right}: 1.75rem;
     padding-#{$left}: 0;
+    background-color: $magv2-qty-btn-bg;
 
     @include breakpoint($only-tablet) {
       padding-#{$right}: 0.875rem;
