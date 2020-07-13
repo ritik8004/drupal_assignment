@@ -178,7 +178,6 @@ class AppointmentServices {
       if (empty($clientExternalId)) {
         $message = 'clientExternalId is required to get appointment details.';
 
-        $this->logger->error($message);
         throw new \Exception($message);
       }
 
@@ -186,8 +185,7 @@ class AppointmentServices {
       $user = $this->drupal->getSessionUserInfo();
       if ($user['uid'] !== $userId) {
         $message = 'Requested not authenticated.';
-
-        $this->logger->error($message);
+        
         throw new \Exception($message);
       }
 
@@ -235,16 +233,14 @@ class AppointmentServices {
       if (empty($appointmentId)) {
         $message = 'Appointment Id is required to get companion details.';
 
-        $this->logger->error($message);
         throw new \Exception($message);
       }
 
       // Authenticate logged in user by matching userid from request and Drupal.
       $user = $this->drupal->getSessionUserInfo();
       if ($user['uid'] !== $userId) {
-        $message = 'Requested not authenticated.';
+        $message = 'Request not authenticated.';
 
-        $this->logger->error($message);
         throw new \Exception($message);
       }
 

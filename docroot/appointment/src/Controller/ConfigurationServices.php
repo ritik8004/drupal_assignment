@@ -219,7 +219,7 @@ class ConfigurationServices {
   }
 
   /**
-   * Gets client details by passing criteria.
+   * Gets Store details by passing locationExternalId.
    */
   public function getStoreDetailsById(Request $request) {
     try {
@@ -228,7 +228,6 @@ class ConfigurationServices {
       if (empty($request->query->get('location'))) {
         $message = 'Location ID is required to get store details.';
 
-        $this->logger->error($message);
         throw new \Exception($message);
       }
 
