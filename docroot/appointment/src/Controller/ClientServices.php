@@ -208,7 +208,6 @@ class ClientServices {
       $this->logger->error('Error occurred while fetching client details. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
-
       throw $e;
     }
   }
