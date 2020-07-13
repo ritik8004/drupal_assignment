@@ -24,6 +24,7 @@
       display: flex;
       list-style: none;
       padding: 0 1.125rem;
+      margin-bottom: 0.625rem;
 
       @include breakpoint($upto-desktop) {
         padding: 0;
@@ -112,14 +113,15 @@
 
     &-next-btn {
       &::after {
-        background: url('#{$base_theme_img_directory_path}/icons/appointment-calendar-right-arrow.svg') no-repeat center;
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-calendar-left-arrow.svg') no-repeat center;
+        transform: rotate(180deg);
       }
     }
   }
 
   &-timeslots-wrapper {
     border: 0.0625rem solid $appointment-time-slots-wrapper-border;
-    margin: 1.5625rem 0 1.875rem;
+    margin: 1.875rem 0;
 
     @include breakpoint($upto-desktop) {
       margin-top: 0.625rem;
@@ -147,6 +149,7 @@
       @include breakpoint($upto-desktop) {
         flex-wrap: unset;
         overflow: scroll;
+        margin-#{$right}: -0.625rem;
       }
 
       > li {
@@ -157,6 +160,10 @@
         @include breakpoint($upto-desktop) {
           &:first-child {
             padding-#{$left}: 0;
+          }
+
+          &:last-child {
+            padding-#{$right}: 0.625rem;
           }
         }
       }
@@ -171,6 +178,10 @@
         font-family: $alshaya-bold;
         min-width: 4.0625rem;
         text-align: center;
+
+        @include breakpoint($only-mobile) {
+          min-width: 3.875rem;
+        }
 
         &:hover,
         &.active {
@@ -192,6 +203,24 @@
 
       @include breakpoint($upto-desktop) {
         margin-#{$right}: 0.9375rem;
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  .appointment {
+    &-calendar {
+      &-prev-btn {
+        &::after {
+          transform: rotate(180deg);
+        }
+      }
+
+      &-next-btn {
+        &::after {
+          transform: rotate(0deg);
+        }
       }
     }
   }
