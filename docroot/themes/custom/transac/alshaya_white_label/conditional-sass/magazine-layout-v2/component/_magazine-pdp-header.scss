@@ -151,7 +151,7 @@
 
         img {
           @include breakpoint($tablet) {
-            max-height: 1.375rem;
+            max-height: 2.938rem;
             width: auto;
           }
         }
@@ -227,7 +227,7 @@
           margin-#{$left}: 1.875rem;
 
           .magv2-button {
-            min-width: 11.875rem;
+            min-width: 9.375rem;
           }
         }
       }
