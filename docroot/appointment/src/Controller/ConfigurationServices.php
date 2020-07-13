@@ -218,4 +218,36 @@ class ConfigurationServices {
     }
   }
 
+  /**
+   * Gets Store details by passing locationExternalId.
+   */
+  public function getStoreDetailsById(Request $request) {
+    try {
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
+      $locationExternalId = $request->query->get('location');
+      if (empty($request->query->get('location'))) {
+        $message = 'Location ID is required to get store details.';
+
+        throw new \Exception($message);
+      }
+
+      $param = [
+        'locationSearchCriteria' => [
+          'locationExternalId' => $locationExternalId,
+          'locationGroupId' => '',
+          'exactMatchOnly' => TRUE,
+        ],
+      ];
+      $result = $client->__soapCall('getLocationsByCriteria', [$param]);
+      return new JsonResponse($result);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while fetching location details. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
 }

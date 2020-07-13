@@ -27,14 +27,22 @@ appointment.get_client_details:
    controller: App\Controller\ClientServices::getClientsByCriteria
    methods: GET
 appointment.get_timeslots:
-  path: /get/timeslots
-  controller: App\Controller\AppointmentServices::getTimeSlots
-  methods: GET
+   path: /get/timeslots
+   controller: App\Controller\AppointmentServices::getTimeSlots
+   methods: GET
 appointment.append_appointment_answers:
    path: /append-appointmnet-answers
    controller: App\Controller\AppointmentServices::appendAppointmentAnswers
    methods: POST
 appointment.get_appointments:
-  path: /get/appointments
-  controller: App\Controller\AppointmentServices::getAppointments
-  methods: GET
+   path: /get/appointments
+   controller: App\Controller\AppointmentServices::getAppointments
+   methods: GET
+appointment.get_store_by_id:
+   path: /get/store/criteria
+   controller: App\Controller\ConfigurationServices::getStoreDetailsById
+   methods: GET
+appointment.get_companion:
+   path: /get/companions
+   controller: App\Controller\AppointmentServices::getCompanionByAppointmentId
+   methods: GET
