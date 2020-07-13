@@ -21,14 +21,11 @@ export default class AppointmentSelect extends React.Component {
     onSelectChange(selectedOption, this.selectRef.current.select.props.name);
   };
 
-  afterCartUpdate = () => {
-    this.selectRef.current.select.inputRef.closest('.appointment-select').previousSibling.classList.remove('loading');
-  };
-
   render() {
     const {
-      aptSelectClass, name, options, activeOption,
+      aptSelectClass, name, options, activeItem,
     } = this.props;
+
     return (
       <Select
         ref={this.selectRef}
@@ -38,7 +35,7 @@ export default class AppointmentSelect extends React.Component {
         onMenuClose={this.onMenuClose}
         onChange={this.handleChange}
         options={options}
-        value={activeOption}
+        value={activeItem}
         isSearchable={false}
         name={name}
       />
