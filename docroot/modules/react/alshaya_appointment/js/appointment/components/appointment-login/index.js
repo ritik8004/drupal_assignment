@@ -1,7 +1,17 @@
 import React from 'react';
-import { setStorageInfo } from '../../../utilities/storage';
+import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
 
 export default class AppointmentLogin extends React.Component {
+  constructor(props) {
+    super(props);
+    const localStorageValues = getStorageInfo();
+    if (localStorageValues) {
+      this.state = {
+        ...localStorageValues,
+      };
+    }
+  }
+
   handleBack = (step) => {
     const { handleBack } = this.props;
     handleBack(step);
@@ -15,6 +25,7 @@ export default class AppointmentLogin extends React.Component {
 
   render() {
     const { socialLoginEnabled } = drupalSettings.alshaya_appointment;
+    const { baseUrl, pathPrefix } = drupalSettings.path;
 
     return (
       <div className="appointment-login-wrapper">
@@ -26,7 +37,7 @@ export default class AppointmentLogin extends React.Component {
             </div>
             <div className="appointment-login-buttons-wrapper">
               <a
-                href="/user/login?destination=/appointment/booking"
+                href={`${baseUrl}${pathPrefix}user/login?destination=/appointment/booking`}
                 className="appointment-type-button appointment-signin-button"
               >
                 { Drupal.t('Sign in') }
@@ -39,9 +50,9 @@ export default class AppointmentLogin extends React.Component {
                 <div>
                   <div className="appointment-social">
                     <a
-                      className="social_auth_facebook social-auth-link"
-                      href="#"
-                      social-auth-link="/en/user/login/facebook"
+                      className="social_auth_facebook social-auth-link auth-link"
+                      href={() => false}
+                      social-auth-link={`${baseUrl}${pathPrefix}user/login/facebook`}
                     >
                       <span
                         className="social-network-text"
@@ -52,9 +63,9 @@ export default class AppointmentLogin extends React.Component {
                   </div>
                   <div className="appointment-social">
                     <a
-                      className="social_auth_google social-auth-link"
-                      href="#"
-                      social-auth-link="/en/user/login/google"
+                      className="social_auth_google social-auth-link auth-link"
+                      href={() => false}
+                      social-auth-link={`${baseUrl}${pathPrefix}user/login/google`}
                     >
                       <span
                         className="social-network-text"
@@ -74,16 +85,12 @@ export default class AppointmentLogin extends React.Component {
             </div>
             <div className="appointment-login-buttons-wrapper">
               <a
-                href="/user/register?destination=/appointment/booking"
+                href={`${baseUrl}${pathPrefix}user/register?destination=/appointment/booking`}
                 className="appointment-type-button appointment-register-button"
               >
                 { Drupal.t('Register') }
               </a>
-              <button
-                className="appointment-type-button appointment-checkout-button select-store"
-                type="button"
-                onClick={() => this.handleSubmit}
-              >
+              <button className="appointment-type-button appointment-store-button select-store" type="button" onClick={this.handleSubmit}>
                 {Drupal.t('Continue as Guest')}
               </button>
             </div>
@@ -94,9 +101,9 @@ export default class AppointmentLogin extends React.Component {
               <div>
                 <div className="appointment-social">
                   <a
-                    className="social_auth_facebook social-auth-link"
-                    href="#"
-                    social-auth-link="/en/user/login/facebook"
+                    className="social_auth_facebook social-auth-link auth-link"
+                    href={() => false}
+                    social-auth-link={`${baseUrl}${pathPrefix}user/login/facebook`}
                   >
                     <span
                       className="social-network-text"
@@ -107,9 +114,9 @@ export default class AppointmentLogin extends React.Component {
                 </div>
                 <div className="appointment-social">
                   <a
-                    className="social_auth_google social-auth-link"
-                    href="#"
-                    social-auth-link="/en/user/login/google"
+                    className="social_auth_google social-auth-link auth-link"
+                    href={() => false}
+                    social-auth-link={`${baseUrl}${pathPrefix}user/login/google`}
                   >
                     <span
                       className="social-network-text"
