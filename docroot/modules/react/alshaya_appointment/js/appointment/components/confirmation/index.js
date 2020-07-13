@@ -36,8 +36,7 @@ export default class Confirmation extends React.Component {
 
     const date = moment(selectedSlot.appointmentSlotTime).format('dddd, Do MMMM YYYY');
     const time = moment(selectedSlot.appointmentSlotTime).format('LT');
-    const locationArray = JSON.parse(selectedStoreItem);
-    const location = `${locationArray.name}, ${addressCleanup(locationArray.address)}`;
+    const location = `${selectedStoreItem.name}, ${addressCleanup(selectedStoreItem.address)}`;
     const event = {
       title: appointmentType.name,
       location,

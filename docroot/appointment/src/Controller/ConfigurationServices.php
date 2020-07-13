@@ -171,6 +171,18 @@ class ConfigurationServices {
    */
   public function getStores(Request $request) {
     try {
+      $requestQuery = $request->query;
+
+      $latitude = $requestQuery->get('latitude') ?? '';
+      $longitude = $requestQuery->get('longitude') ?? '';
+      $radius = $requestQuery->get('radius') ?? '';
+      $maxLocations = $requestQuery->get('max-locations') ?? '';
+      $unit = $requestQuery->get('unit') ?? '';
+
+      if (empty($latitude) || empty($longitude) || empty($radius) || empty($maxLocations) || empty($unit)) {
+        throw new \Exception('Required parameters missing to get stores.');
+      }
+
       $locationExternalIds = $this->apiHelper->getlocationExternalIds();
 
       if (empty($locationExternalIds)) {
@@ -179,7 +191,15 @@ class ConfigurationServices {
         return [];
       }
 
-      $result = $this->xmlApiHelper->fetchStores($request);
+      $param = [
+        'latitude' => $latitude,
+        'longitude' => $longitude,
+        'radius' => $radius,
+        'maxLocations' => $maxLocations,
+        'unit' => $unit,
+      ];
+
+      $result = $this->xmlApiHelper->fetchStores($param);
       $stores = $result->return->locations ?? [];
       $storesData = [];
 
@@ -187,14 +207,21 @@ class ConfigurationServices {
         $storeId = $store->locationExternalId;
         if (in_array($storeId, $locationExternalIds)) {
           $storeTiming = $this->getStoreSchedule($storeId);
+          $storeLat = $store->geocoordinates->latitude ?? '';
+          $storeLng = $store->geocoordinates->longitude ?? '';
 
-          $storesData[$store->locationExternalId] = [
+          if (!empty($storeLat) && !empty($storeLng)) {
+            $distanceInMiles = $this->helper->distance($latitude, $longitude, $storeLat, $storeLng, $unit);
+          }
+
+          $storesData[] = [
             'locationExternalId' => $storeId ?? '',
             'name' => $store->locationName ?? '',
             'address' => $store->companyAddress ?? '',
-            'lat' => $store->geocoordinates->latitude ?? '',
-            'lng' => $store->geocoordinates->longitude ?? '',
+            'lat' => $storeLat,
+            'lng' => $storeLng,
             'storeTiming' => $storeTiming ?? '',
+            'distanceInMiles' => $distanceInMiles ?? '',
           ];
         }
       }
@@ -218,8 +245,10 @@ class ConfigurationServices {
    */
   public function getStoreSchedule($storeId) {
     try {
+      if (empty($storeId)) {
+        throw new \Exception('storeId is required to get store schedule.');
+      }
       $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
-
       $param = [
         'scheduleSearchCriteria' => [
           'locationExternalId' => $storeId,

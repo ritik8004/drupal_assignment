@@ -3,11 +3,11 @@ import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import StoreList from './components/store-list';
-import { getLocationAccess, getDistanceBetweenCoords } from '../../../utilities/helper';
+import { getLocationAccess } from '../../../utilities/helper';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/appointment-util';
 import Loading from '../../../utilities/loading';
-import dispatchCustomEvent from '../../../utilities/events';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 import FullScreenSVG from '../../../svg-component/full-screen-svg';
 import DeviceView from '../../../common/components/device-view';
 import ToggleButton from './components/store-map/ToggleButton';
@@ -28,7 +28,7 @@ const StoreMap = React.lazy(async () => {
   // We show select store with map.
   await new Promise((resolve) => {
     const interval = setInterval(() => {
-      if (window.fetchStore === 'finished' && Drupal.alshayaAppointment.maps_api_loading === false) {
+      if (window.fetchStore === 'finished' && Drupal.alshayaSpc.maps_api_loading === false) {
         clearInterval(interval);
         resolve();
       }
@@ -132,13 +132,10 @@ export default class AppointmentStore extends React.Component {
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         this.selectStoreButtonVisibility(false);
-
         if (result.error === undefined && result.data !== undefined) {
           window.fetchStore = 'finished';
           dispatchCustomEvent('fetchStoreSuccess', true);
-
-          const storeList = getDistanceBetweenCoords(result.data, coords);
-          this.updateCoordsAndStoreList(coords, storeList, locationAccess);
+          this.updateCoordsAndStoreList(coords, result.data, locationAccess);
           this.showOpenMarker(result.data);
           this.showOutsideCountryError(false);
 
@@ -406,7 +403,9 @@ export default class AppointmentStore extends React.Component {
 
   finalizeCurrentStore = (e) => {
     const selectedStoreItem = this.appListView.current.querySelector('.selected');
-    this.finalizeStore(e, selectedStoreItem.dataset.storeCode);
+    if (selectedStoreItem) {
+      this.finalizeStore(e, selectedStoreItem.dataset.storeCode);
+    }
   };
 
   finalizeStore = (e, storeCode) => {

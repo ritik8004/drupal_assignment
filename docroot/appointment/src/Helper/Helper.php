@@ -12,13 +12,13 @@ class Helper {
   /**
    * Group Store timings like: Sunday - Wednesday (10 AM - 10 PM) etc..
    *
-   * @param string $weeklySchedules
+   * @param array $weeklySchedules
    *   Array of store schedule.
    *
    * @return array
    *   Array of grouped store timing.
    */
-  public function groupStoreTimings($weeklySchedules) {
+  public function groupStoreTimings(array $weeklySchedules) {
     $weeklySchedulesData = $firstDay = $lastDay = [];
 
     foreach ($weeklySchedules as $weeklySchedule) {
@@ -72,6 +72,48 @@ class Helper {
     }
 
     return $weeklySchedulesData;
+  }
+
+  /**
+   * Calculate distance between 2 coordinates.
+   *
+   * @param string $lat1
+   *   Latitude 1.
+   * @param string $lon1
+   *   Longitude 1.
+   * @param string $lat2
+   *   Latitude 2.
+   * @param string $lon2
+   *   Longitude 2.
+   * @param string $unit
+   *   Unit of the distance.
+   *
+   * @return string
+   *   Distance.
+   */
+  public function distance($lat1, $lon1, $lat2, $lon2, $unit) {
+    if (($lat1 == $lat2) && ($lon1 == $lon2)) {
+      return 0;
+    }
+    else {
+      $latFrom = deg2rad($lat1);
+      $lonFrom = deg2rad($lon1);
+      $latTo = deg2rad($lat2);
+      $lonTo = deg2rad($lon2);
+
+      $latDelta = $latTo - $latFrom;
+      $lonDelta = $lonTo - $lonFrom;
+
+      $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+        cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+      $distance = $angle * 3959;
+
+      if ($unit === "kilometers") {
+        $distance *= 1.609344;
+      }
+
+      return number_format((float) $distance, 2, '.', '');
+    }
   }
 
 }

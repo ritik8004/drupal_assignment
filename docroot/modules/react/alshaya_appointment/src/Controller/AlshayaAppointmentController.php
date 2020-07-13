@@ -78,27 +78,32 @@ class AlshayaAppointmentController extends ControllerBase {
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
 
-    $settings['alshaya_appointment'] = [
-      'middleware_url' => _alshaya_appointment_get_middleware_url(),
-      'step_labels' => $this->getAppointmentSteps(),
-      'appointment_companion_limit' => $alshaya_appointment_config->get('appointment_companion_limit'),
-      'local_storage_expire' => $alshaya_appointment_config->get('local_storage_expire'),
-      'country_code' => $country_code,
-      'store_finder' => array_merge(
-        $alshaya_appointment_config->get('store_finder'),
-        $store_finder_config->get('country_center'),
-        [
-          'radius' => $store_finder_config->get('search_proximity_radius'),
-          'map_marker' => $store_finder_config->get('map_marker'),
-          'placeholder' => $store_finder_config->get('store_search_placeholder'),
-        ]
-      ),
-      'google_map_api_key' => $geolocation_config->get('google_map_api_key'),
-      'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
-      'mobile_maxlength' => $alshaya_master_config->get('maxlength'),
-      'customer_details_disclaimer_text' => $alshaya_appointment_config->get('customer_details_disclaimer_text'),
-      'user_details' => $this->getUserDetails(),
-      'socialLoginEnabled' => $social_login_enabled->get('social_login'),
+    $settings = [
+      'map' => [
+        'google_api_key' => $geolocation_config->get('google_map_api_key'),
+      ],
+      'alshaya_appointment' => [
+        'middleware_url' => _alshaya_appointment_get_middleware_url(),
+        'step_labels' => $this->getAppointmentSteps(),
+        'appointment_companion_limit' => $alshaya_appointment_config->get('appointment_companion_limit'),
+        'local_storage_expire' => $alshaya_appointment_config->get('local_storage_expire'),
+        'country_code' => $country_code,
+        'store_finder' => array_merge(
+          $alshaya_appointment_config->get('store_finder'),
+          $store_finder_config->get('country_center'),
+          [
+            'radius' => $store_finder_config->get('search_proximity_radius'),
+            'map_marker' => $store_finder_config->get('map_marker'),
+            'placeholder' => $store_finder_config->get('store_search_placeholder'),
+          ]
+        ),
+        'google_map_api_key' => $geolocation_config->get('google_map_api_key'),
+        'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
+        'mobile_maxlength' => $alshaya_master_config->get('maxlength'),
+        'customer_details_disclaimer_text' => $alshaya_appointment_config->get('customer_details_disclaimer_text'),
+        'user_details' => $this->getUserDetails(),
+        'socialLoginEnabled' => $social_login_enabled->get('social_login'),
+      ],
     ];
 
     return [
@@ -108,7 +113,7 @@ class AlshayaAppointmentController extends ControllerBase {
         'library' => [
           'alshaya_appointment/alshaya_appointment',
           'alshaya_white_label/appointment-booking',
-          'alshaya_appointment/googlemapapi',
+          'alshaya_spc/googlemapapi',
           'alshaya_appointment/alshaya_appointment_socialauth',
         ],
         'drupalSettings' => $settings,
