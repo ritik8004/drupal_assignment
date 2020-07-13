@@ -184,7 +184,7 @@ class AppointmentServices {
 
       // Authenticate logged in user by matching userid from request and Drupal.
       $user = $this->drupal->getSessionUserInfo();
-      if ($user['userId'] !== $userId) {
+      if ($user['uid'] !== $userId) {
         $message = 'Requested not authenticated.';
 
         $this->logger->error($message);
@@ -241,7 +241,7 @@ class AppointmentServices {
 
       // Authenticate logged in user by matching userid from request and Drupal.
       $user = $this->drupal->getSessionUserInfo();
-      if ($user['userId'] !== $userId) {
+      if ($user['uid'] !== $userId) {
         $message = 'Requested not authenticated.';
 
         $this->logger->error($message);
