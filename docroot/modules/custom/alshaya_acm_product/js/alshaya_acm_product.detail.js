@@ -393,15 +393,15 @@
     if ((drupalSettings.show_crosssell_as_matchback && !matchback.hasClass('matchback-processed') && device === 'mobile')
       || ((matchback.length > 0) && !matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold))) {
       matchback.addClass('matchback-processed');
-      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
+      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '/ajax?cacheable=1'));
     }
     if ((upsell.length > 0) && !upsell.hasClass('upsell-processed') && (scrollPoint > upsell.offset().top - scrollThreshold)) {
       upsell.addClass('upsell-processed');
-      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/upsell/' + device + '?cacheable=1'));
+      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/upsell/' + device + '/ajax?cacheable=1'));
     }
     if ((related.length > 0) && !related.hasClass('related-processed') && (scrollPoint > related.offset().top - scrollThreshold)) {
       related.addClass('related-processed');
-      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
+      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '/ajax?cacheable=1'));
     }
   };
 

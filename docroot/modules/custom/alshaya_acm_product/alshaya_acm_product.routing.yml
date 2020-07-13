@@ -91,7 +91,7 @@ alshaya_acm_product.product_sku_export_category:
   requirements:
     _role: 'webmaster+administrator'
 alshaya_acm_product.get_related_products:
-  path: '/related-products/{sku}/{type}/{device}'
+  path: '/related-products/{sku}/{type}/{device}/{responsetype}'
   defaults:
     _controller: '\Drupal\alshaya_acm_product\Controller\ProductController::getRelatedProducts'
   requirements:

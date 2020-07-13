@@ -165,7 +165,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       }
 
       // Set related product data.
-      $this->getRelatedProductsByType($sku_entity, $vars);
+      $this->getRelatedProductsByType($vars);
     }
 
     // Get share this settings.
@@ -372,53 +372,14 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   }
 
   /**
-   * Helper function to get related products data.
+   * Helper function to set array of type of related products.
    */
-  public function getRelatedProductsByType($sku_entity, &$vars) {
-    $crosssell = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, 'crosssell');
-    $upsell = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, 'upsell');
-    $related = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, 'related');
-    $this->prepareRelatedProductData($this->skuManager->filterRelatedSkus(array_unique($crosssell)), 'crosssell', $vars);
-    $this->prepareRelatedProductData($this->skuManager->filterRelatedSkus(array_unique($upsell)), 'upsell', $vars);
-    $this->prepareRelatedProductData($this->skuManager->filterRelatedSkus(array_unique($related)), 'related', $vars);
-  }
-
-  /**
-   * Prepare related product data in drupalSettings.
-   */
-  public function prepareRelatedProductData($data, $type, &$vars) {
-    foreach ($data as $sku => $value) {
-      $sku_entity = SKU::loadFromSku($sku);
-      $gallery = $this->getGalleryVariables($sku_entity);
-      $final_price = _alshaya_acm_format_price_with_decimal((float) $sku_entity->get('final_price')->getString());
-      $title = $sku_entity->label();
-
-      // Set gallery image from variant
-      // if main sku gallery is empty.
-      if (empty($gallery)) {
-        $product_tree = Configurable::deriveProductTree($sku_entity);
-        $combinations = $product_tree['combinations'];
-        $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
-        $first_child = reset($sorted_variants);
-        $child_sku = SKU::loadFromSku($first_child, $sku_entity->language()->getId());
-        $gallery = $this->getGalleryVariables($child_sku);
-      }
-      $vars['#attached']['drupalSettings']['relatedProducts'][$type]['products'][$sku]['gallery'] = $gallery['thumbnails'][0];
-      $vars['#attached']['drupalSettings']['relatedProducts'][$type]['products'][$sku]['finalPrice'] = $final_price;
-      $vars['#attached']['drupalSettings']['relatedProducts'][$type]['products'][$sku]['title'] = $title;
-      $vars['#attached']['drupalSettings']['relatedProducts'][$type]['products'][$sku]['productUrl'] = $this->pathAliasManager->getAliasByPath('/node/' . $value);
-
-      // Setting section titles.
-      if ($type == 'crosssell') {
-        $vars['#attached']['drupalSettings']['relatedProducts'][$type]['sectionTitle'] = $this->t('Customers also bought');
-      }
-      elseif ($type == 'upsell') {
-        $vars['#attached']['drupalSettings']['relatedProducts'][$type]['sectionTitle'] = $this->t('You may also like');
-      }
-      elseif ($type == 'related') {
-        $vars['#attached']['drupalSettings']['relatedProducts'][$type]['sectionTitle'] = $this->t('Related');
-      }
-    }
+  public function getRelatedProductsByType(&$vars) {
+    $vars['#attached']['drupalSettings']['relatedProducts'] = [
+      'crosssell',
+      'upsell',
+      'related',
+    ];
   }
 
 }

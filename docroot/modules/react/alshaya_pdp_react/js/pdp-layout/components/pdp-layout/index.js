@@ -109,7 +109,7 @@ const PdpLayout = () => {
       {relatedProducts ? (
         <div className="magv2-pdp-crossell-upsell-wrapper">
           {Object.keys(relatedProducts).map((type) => (
-            <PdpRelatedProducts type={type} />
+            <PdpRelatedProducts type={relatedProducts[type]} skuItemCode={skuItemCode} />
           ))}
         </div>
       ) : null}

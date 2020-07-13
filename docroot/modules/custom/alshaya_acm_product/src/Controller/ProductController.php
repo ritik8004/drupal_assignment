@@ -19,6 +19,10 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Cache\CacheableMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\alshaya_pdp_layouts\Plugin\PdpLayout\MagazineV2PdpLayout;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class ProductController.
@@ -50,13 +54,21 @@ class ProductController extends ControllerBase {
   protected $acmConfig;
 
   /**
+   * The SKU Image Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $skuImageManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('request_stack'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('alshaya_acm_product.sku_images_manager')
     );
   }
 
@@ -69,11 +81,14 @@ class ProductController extends ControllerBase {
    *   The request stack service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_image_manager
+   *   The SKU Image Manager.
    */
-  public function __construct(SkuManager $sku_manager, RequestStack $request_stack, ConfigFactoryInterface $config_factory) {
+  public function __construct(SkuManager $sku_manager, RequestStack $request_stack, ConfigFactoryInterface $config_factory, SkuImagesManager $sku_image_manager) {
     $this->skuManager = $sku_manager;
     $this->request = $request_stack->getCurrentRequest();
     $this->acmConfig = $config_factory->get('alshaya_acm.settings');
+    $this->skuImageManager = $sku_image_manager;
   }
 
   /**
@@ -150,11 +165,13 @@ class ProductController extends ControllerBase {
    *   Type of related products to get.
    * @param string $device
    *   Device type.
+   * @param string $responsetype
+   *   Response type.
    *
    * @return \Drupal\Core\Cache\CacheableAjaxResponse
    *   Response object.
    */
-  public function getRelatedProducts(string $sku, string $type, string $device) {
+  public function getRelatedProducts(string $sku, string $type, string $device, string $responsetype) {
     $response = new CacheableAjaxResponse();
 
     // Sanity check.
@@ -208,6 +225,39 @@ class ProductController extends ControllerBase {
       }
 
       if (!empty($data)) {
+        // Getting the json response
+        // for new PDP layout.
+        if ($responsetype == 'json') {
+          foreach ($related_skus as $related_sku => $value) {
+            $related_sku_entity = SKU::loadFromSku($related_sku);
+            $media = $this->skuImageManager->getProductMedia($related_sku_entity, MagazineV2PdpLayout::PDP_LAYOUT_MAGAZINE_V2, FALSE);
+            if (!empty($media)) {
+              $mediaItem = $this->skuImageManager->getThumbnailsFromMedia($media, FALSE);
+              $image = $mediaItem['thumbnails'][0];
+            }
+            else {
+              // Set gallery image from variant
+              // if main sku gallery is empty.
+              $product_tree = Configurable::deriveProductTree($related_sku_entity);
+              $combinations = $product_tree['combinations'];
+              $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
+              $first_child = reset($sorted_variants);
+              $child_sku = SKU::loadFromSku($first_child, $related_sku_entity->language()->getId());
+              $media = $this->skuImageManager->getProductMedia($child_sku, MagazineV2PdpLayout::PDP_LAYOUT_MAGAZINE_V2, FALSE);
+              if (!empty($media)) {
+                $mediaItem = $this->skuImageManager->getThumbnailsFromMedia($media, FALSE);
+                $image = $mediaItem['thumbnails'][0];
+              }
+            }
+            $final_price = _alshaya_acm_format_price_with_decimal((float) $related_sku_entity->get('final_price')->getString());
+            $title = $related_sku_entity->label();
+            $related_products['products'][$related_sku]['gallery'] = $image;
+            $related_products['products'][$related_sku]['finalPrice'] = $final_price;
+            $related_products['products'][$related_sku]['title'] = $title;
+            $related_products['section_title'] = $data['section_title']->__toString();
+          }
+          return new JsonResponse($related_products);
+        }
         $build['related'] = [
           '#theme' => 'products_horizontal_slider',
           '#data' => $related_skus,
