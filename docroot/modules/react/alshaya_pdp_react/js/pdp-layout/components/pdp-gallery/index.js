@@ -73,7 +73,7 @@ export default class PdpGallery extends React.PureComponent {
           </div>
         </ConditionalView>
         <ConditionalView condition={window.innerWidth < 768}>
-          <div className="magazine__gallery--container-mobile">
+          <div className="magazine__gallery--container-mobile fadeInUp" style={{ animationDelay: '0.4s' }}>
             <Slider
               dots={sliderSettings.dots}
               infinite={sliderSettings.infinite}
