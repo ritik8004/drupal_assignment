@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
+use App\Helper\APIServicesUrls;
+use App\Service\Drupal\Drupal;
+use App\Service\SoapClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Helper\XmlAPIHelper;
-use App\Service\SoapClient;
-use App\Helper\APIServicesUrls;
 
 /**
  * Class AppointmentServices.
@@ -28,7 +29,14 @@ class AppointmentServices {
   protected $xmlApiHelper;
 
   /**
-   * SoapClient.
+   * Drupal Service.
+   *
+   * @var \App\Service\Drupal\Drupal
+   */
+  protected $drupal;
+
+  /**
+   * Soap client.
    *
    * @var \App\Service\SoapClient
    */
@@ -43,13 +51,17 @@ class AppointmentServices {
    *   Xml API Helper.
    * @param \App\Service\SoapClient $client
    *   Soap client service.
+   * @param \App\Service\Drupal\Drupal $drupal
+   *   Drupal service.
    */
   public function __construct(LoggerInterface $logger,
                               XmlAPIHelper $xml_api_helper,
-                              SoapClient $client) {
+                              SoapClient $client,
+                              Drupal $drupal) {
     $this->logger = $logger;
     $this->xmlApiHelper = $xml_api_helper;
     $this->client = $client;
+    $this->drupal = $drupal;
   }
 
   /**
@@ -144,6 +156,138 @@ class AppointmentServices {
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while appending booking appointment answers. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Get Client details.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Client details.
+   */
+  public function getAppointments(Request $request) {
+    try {
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $clientExternalId = $request->query->get('client');
+      $userId = $request->query->get('id');
+
+      if (empty($clientExternalId)) {
+        $message = 'clientExternalId is required to get appointment details.';
+
+        throw new \Exception($message);
+      }
+
+      // Authenticate logged in user by matching userid from request and Drupal.
+      $user = $this->drupal->getSessionUserInfo();
+      if ($user['uid'] !== $userId) {
+        $message = 'Requested not authenticated.';
+
+        throw new \Exception($message);
+      }
+
+      $startDate = date("Y-m-d\TH:i:s.000\Z");
+      $endDate = date("Y-12-31\T23:59:59.999\Z");
+
+      $param = [
+        'criteria' => [
+          'clientExternalId' => $clientExternalId,
+          'includeCancelledAppointments' => FALSE,
+          'suppressSubAppointmentDetail' => FALSE,
+        ],
+        'startDateTime' => $startDate,
+        'endDateTime' => $endDate,
+
+      ];
+      $result = $client->__soapCall('getAppointmentsByCriteriaAppointmentDateRange', [$param]);
+
+      if (!is_array($result->return->appointments)) {
+        $temp = $result->return->appointments;
+        unset($result->return->appointments);
+        $result->return->appointments[0] = $temp;
+      }
+
+      return new JsonResponse($result);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while fetching appointments. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Get companions by appointment confirmation number.
+   */
+  public function getCompanionByAppointmentId(Request $request) {
+    try {
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $appointmentId = $request->query->get('appointment');
+      $userId = $request->query->get('id');
+
+      if (empty($appointmentId)) {
+        $message = 'Appointment Id is required to get companion details.';
+
+        throw new \Exception($message);
+      }
+
+      // Authenticate logged in user by matching userid from request and Drupal.
+      $user = $this->drupal->getSessionUserInfo();
+      if ($user['uid'] !== $userId) {
+        $message = 'Request not authenticated.';
+
+        throw new \Exception($message);
+      }
+
+      $param = [
+        'confirmationNumber' => $appointmentId,
+      ];
+      $result = $client->__soapCall('getAppointmentAnswersByAppointmentConfirmationNumber', [$param]);
+      return new JsonResponse($result);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while fetching companion details. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Cancel an appointment.
+   */
+  public function cancelAppointment(Request $request) {
+    try {
+      $appointmentId = $request->query->get('appointment');
+      $userId = $request->query->get('id');
+      if ($appointmentId == '' || $userId == '') {
+        $message = 'Appointment Id and user Id are required parameters.';
+        throw new \Exception($message);
+      }
+
+      // Authenticate logged in user by matching userid from request and Drupal.
+      $user = $this->drupal->getSessionUserInfo();
+      if ($user['uid'] !== $userId) {
+        $message = 'Request not authenticated.';
+
+        throw new \Exception($message);
+      }
+
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $param = [
+        'confirmationNumber' => $appointmentId,
+      ];
+      $result = $client->__soapCall('cancelAppointment', [$param]);
+      return new JsonResponse($result);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while deleting an appointment. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
 

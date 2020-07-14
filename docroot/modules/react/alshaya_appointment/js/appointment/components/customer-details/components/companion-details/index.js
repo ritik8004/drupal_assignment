@@ -18,7 +18,7 @@ export default class CompanionDetails extends React.Component {
 
   componentDidMount() {
     const { selectedStoreItem, appointmentCategory, appointmentType } = this.state;
-    const apiUrl = `/get/questions?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}`;
+    const apiUrl = `/get/questions?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.value}`;
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
@@ -48,7 +48,7 @@ export default class CompanionDetails extends React.Component {
       companionData,
     } = this.props;
 
-    const companionQuestions = [...Array(parseInt(appointmentCompanion.id, 10))].map((e, i) => {
+    const companionQuestions = [...Array(parseInt(appointmentCompanion.value, 10))].map((e, i) => {
       const companionNum = i + 1;
       const companionNamePrefix = `bootscompanion${companionNum}`;
       const firstName = `${companionNamePrefix}name`;

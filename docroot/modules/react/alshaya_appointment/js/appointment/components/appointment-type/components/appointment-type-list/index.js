@@ -4,13 +4,35 @@ import SectionTitle from '../../../section-title';
 import AppointmentSelect from '../appointment-select';
 
 export default class AppointmentTypeList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { activeOption: null, optionState: [] };
-  }
+  onSelectChange = (e, name) => {
+    const { onSelectChange } = this.props;
+    onSelectChange(e, name);
+  };
 
-  componentDidMount() {
+  _getDescription = () => {
     const { appointmentTypeItems, activeItem } = this.props;
+    const filterDesc = appointmentTypeItems.filter((v) => activeItem.value === v.id);
+    return (
+      <>
+        {(filterDesc.length
+          ? (
+            <ReadMoreAndLess
+              charLimit={250}
+              readMoreText={Drupal.t('Read More')}
+              readLessText={Drupal.t('Show Less')}
+            >
+              {filterDesc[0].description}
+            </ReadMoreAndLess>
+          )
+          : null
+        )}
+      </>
+    );
+  };
+
+  render() {
+    const { activeItem, appointmentTypeItems } = this.props;
+
     const options = [];
     if (appointmentTypeItems) {
       appointmentTypeItems.forEach((v, key) => {
@@ -21,46 +43,6 @@ export default class AppointmentTypeList extends React.Component {
       });
     }
 
-    this.setState({
-      optionState: options,
-    });
-
-    const filterKey = options.filter((v) => activeItem.id === v.value);
-    this.updateOption(filterKey);
-  }
-
-  onSelectChange = (e, name) => {
-    const { onSelectChange } = this.props;
-    onSelectChange(e, name);
-    this.updateOption([e]);
-  }
-
-  updateOption = (filterKey) => {
-    this.setState({
-      activeOption: filterKey.length ? filterKey[0] : null,
-    });
-  }
-
-  _getDescription = () => {
-    const { appointmentTypeItems, activeItem } = this.props;
-    const filterDesc = appointmentTypeItems.filter((v) => activeItem.id === v.id);
-    return (
-      <>
-        <ReadMoreAndLess
-          charLimit={250}
-          readMoreText={Drupal.t('Read More')}
-          readLessText={Drupal.t('Show Less')}
-        >
-          {filterDesc[0].description}
-        </ReadMoreAndLess>
-      </>
-    );
-  }
-
-  render() {
-    const { activeItem } = this.props;
-    const { activeOption, optionState } = this.state;
-
     return (
       <div className="appointment-type-list-wrapper appointment-type-item">
         <SectionTitle>
@@ -70,11 +52,10 @@ export default class AppointmentTypeList extends React.Component {
         <div className="appointment-type-list-inner-wrapper fadeInUp">
           <AppointmentSelect
             onSelectChange={this.onSelectChange}
-            options={optionState}
+            options={options}
             activeItem={activeItem}
             aptSelectClass="appointment-type-select"
             name="appointmentType"
-            activeOption={activeOption}
           />
           { activeItem
             ? (

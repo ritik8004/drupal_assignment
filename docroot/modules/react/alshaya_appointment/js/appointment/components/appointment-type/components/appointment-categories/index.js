@@ -9,6 +9,7 @@ export default class AppointmentCategories extends React.Component {
 
   render() {
     const { categoryItems, activeItem } = this.props;
+
     return (
       <div className="appointment-categories-wrapper appointment-type-item">
         <SectionTitle>

@@ -20,10 +20,10 @@ export default class CustomerDetails extends React.Component {
   }
 
   componentDidMount() {
-    const { email } = window.drupalSettings.alshaya_appointment.user_details;
+    const { id, email } = drupalSettings.alshaya_appointment.user_details;
 
-    if (email) {
-      const apiUrl = `/get/client?email=${email}`;
+    if (id && email) {
+      const apiUrl = `/get/client?email=${email}&id=${id}`;
       const apiData = fetchAPIData(apiUrl);
 
       if (apiData instanceof Promise) {
@@ -86,7 +86,7 @@ export default class CustomerDetails extends React.Component {
     const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
     const channel = isMobile ? 'mobile' : 'desktop';
 
-    const apiUrl = `/book-appointment?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.id}&duration=${selectedSlot.lengthinMin}&attendees=${1}&start-date-time=${selectedSlot.appointmentSlotTime}&client=${clientExternalId}&channel=${channel}`;
+    const apiUrl = `/book-appointment?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.value}&duration=${selectedSlot.lengthinMin}&attendees=${1}&start-date-time=${selectedSlot.appointmentSlotTime}&client=${clientExternalId}&channel=${channel}`;
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
