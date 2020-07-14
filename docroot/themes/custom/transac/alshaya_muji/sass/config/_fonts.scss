@@ -130,7 +130,7 @@ $muji-arabic-bold-nodir: 'HelveticaNeue-Bold', 'Tahoma-Bold', 'Arial';
 
 $arial: $muji-regular;
 $arial-nodir: $muji-regular-nodir;
-$alshaya-thin: $muji-regular;
+$alshaya-thin: if-ltr($muji-regular, $muji-arabic-thin);
 $alshaya-bold: $muji-bold;
 $alshaya-arabic-thin: $muji-arabic-thin;
 $alshaya-arabic-bold: $muji-arabic-bold;
