@@ -1,5 +1,6 @@
 .c-footer-primary {
   border-top-width: 0.0625rem;
+  border-color: $footer_light_border;
 
   .l-container {
     @include container(77rem);
@@ -7,7 +8,7 @@
 
   @include breakpoint($tablet) {
     padding-bottom: 3.125rem;
-    border-top-width: 0.0625rem;
+    border-top: none;
   }
 
   .primary--footer--right {
@@ -96,12 +97,6 @@
       }
     }
   }
-
-  &__tab {
-    @include breakpoint($only-mobile) {
-      border-bottom: 0.0625rem solid $footer_accordion_border;
-    }
-  }
 }
 
 .c-footer-menu--about,
@@ -129,7 +124,7 @@
 
   li.c-footer-menu__tab:not(:last-child) {
     @include breakpoint ($only-mobile) {
-      border-bottom: 0.0625rem solid $footer_accordion_border;
+      border-bottom: none;
     }
   }
 }
@@ -152,6 +147,11 @@
 
 .c-footer-menu--category {
   text-transform: none;
+
+  @include breakpoint ($only-mobile) {
+    border-top-color: $footer_light_border;
+    border-bottom-color: $footer_light_border;
+  }
 }
 
 .alshaya-newsletter-subscribe {
@@ -228,6 +228,7 @@
 .c-footer-menu--help {
   @include breakpoint($only-mobile) {
     margin-bottom: 1.875rem;
+    //border-bottom: 1px solid $footer_border_top;
   }
 
   @include breakpoint($only-tablet) {

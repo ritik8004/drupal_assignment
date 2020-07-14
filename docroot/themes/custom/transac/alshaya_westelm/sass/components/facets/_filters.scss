@@ -38,3 +38,20 @@
     }
   }
 }
+
+.c-plp {
+  .region__content {
+    .view-empty {
+      @include breakpoint($upto-desktop) {
+        text-align: center;
+      }
+    }
+  }
+}
+
+.show-all-filters,
+.show-all-filters-algolia {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  line-height: 2.875rem;
+}

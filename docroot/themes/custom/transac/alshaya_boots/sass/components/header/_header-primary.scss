@@ -13,6 +13,10 @@ header {
         height: 2.25rem;
         #{$right}: -0.25rem;
         top: -2.8125rem;
+
+        body:not(.frontpage) & {
+          top: 0;
+        }
       }
 
       @include breakpoint($only-tablet) {
@@ -50,6 +54,13 @@ header {
       line-height: normal !important;
       font-size: 0.75rem;
       padding-#{$left}: 0.0625rem;
+
+      @include breakpoint($only-mobile) {
+        bottom: -0.125rem;
+        padding-#{$left}: 0;
+        height: 1rem;
+        width: 1rem;
+      }
     }
 
     #mini-cart-wrapper {
@@ -70,6 +81,9 @@ header {
     }
 
     @include breakpoint($only-mobile) {
+      height: 2.5rem;
+      display: block;
+
       .block-system-branding-block {
         width: 100%;
       }
@@ -79,6 +93,15 @@ header {
       @include breakpoint($upto-desktop) {
         width: 100%;
         display: block;
+
+        .frontpage & {
+          display: table;
+        }
+
+        body:not(.frontpage) & {
+          z-index: -1;
+          top: -2.875rem;
+        }
       }
     }
   }
@@ -455,5 +478,15 @@ header {
   @include breakpoint($desktop) {
     border-top: 0;
     border-bottom-width: 0.125rem;
+  }
+}
+
+.logged-in {
+  .c-menu-primary {
+    .hamburger--menu {
+      @include breakpoint($only-mobile) {
+        padding: 0;
+      }
+    }
   }
 }

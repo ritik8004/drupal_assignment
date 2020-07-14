@@ -4,7 +4,7 @@
     </defs>
     <g fill="none" fill-rule="evenodd">
         <path d="M0 0h40v40H0z"/>
-        <path fill="#FFF" d="M40 40H0V0h40z"/>
+        <path fill="transparent" d="M40 40H0V0h40z"/>
         <mask id="b" fill="#fff">
             <use xlink:href="#a"/>
         </mask>

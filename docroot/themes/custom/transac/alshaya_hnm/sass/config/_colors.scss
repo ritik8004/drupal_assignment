@@ -331,7 +331,8 @@ $mm_link_hover: $link-hover;
 $header_toggle_sign_default_mobile: $black;
 $header_toggle_sign_default: $hnm-grey;
 $header_toggle_sign_active_tab: $hnm-black-three;
-$header_toggle_sign_active_tab_bg: $white-five;
+$header_toggle_sign_active_tab_bg: $_grey_12;
+$header_toggle_sign_inactive_tab_bg: $white-five;
 $header_branding_shadow: $grey5;
 $highlights_subtitle_hover: $link-hover;
 
@@ -394,10 +395,10 @@ $pdp_slick_dots_background: rgba(255, 255, 255, 0.3);
 $pdp_slick_dots_box_shadow: rgba(0, 0, 0, 0.3);
 
 // additional attribute
-$pdp_additional_attribute_sliderbar_border: $grey3;
 $pdp_additional_attribute_text: $hnm-black-three;
 $pdp_additional_attribute_title: $hnm-black-four;
 $pdp_overlay_details_link: $hnm-black-two;
+$pdp_additional_attribute_sliderbar_bg:$_grey_12;
 
 // User my account
 $password_tooltip_list: $cerulean-two;

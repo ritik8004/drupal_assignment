@@ -217,7 +217,6 @@
       position: relative;
       padding-#{$right}: 2.6875rem;
       cursor: pointer;
-      color: $plp_filter_title;
 
       @include icon(chevrondown, after) {
         font-size: 1.1875rem;
@@ -268,7 +267,6 @@
   position: relative;
   padding-#{$left}: 1.875rem;
   cursor: pointer;
-  color: $plp_filter_title;
 
   @include breakpoint($tablet) {
     float: $left;

@@ -35,5 +35,6 @@ function _alshaya_set_s3fs_config() {
   $config = \Drupal::configFactory()->getEditable('s3fs.settings');
   $config->set('bucket', Settings::get('s3fs.settings')['bucket']);
   $config->set('root_folder', Settings::get('s3fs.settings')['root_folder']);
+  $config->set('region', Settings::get('s3fs.settings')['region']);
   $config->save();
 }

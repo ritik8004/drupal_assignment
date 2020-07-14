@@ -40,7 +40,7 @@
     }, 500));
   }, drupalSettings.gtm.algolia_trigger_ga_after));
 
-  Drupal.alshaya_seo_gtm_prepare_algolia_product_impression = function(context, eventType, currentQueueSize) {
+  Drupal.alshaya_seo_gtm_prepare_algolia_product_impression = function(context, eventType) {
     var searchImpressions = [];
 
     $('#alshaya-algolia-search [gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible').each(function () {
@@ -64,10 +64,10 @@
           Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.reactTeaserView.price.currency, 'Search Results Page', position);
         });
 
-        // When search results load, process only the required number of
+        // When search results load, process only the default number of
         // items and push to datalayer.
         if ((eventType === 'search-results-updated')
-          && (searchImpressions.length === (drupalSettings.gtm.productImpressionQueueSize - currentQueueSize))
+          && (searchImpressions.length === (drupalSettings.gtm.productImpressionDefaultItemsInQueue))
         ) {
           // This is to break out from the .each() function.
           return false;

@@ -10,20 +10,32 @@ class TotalLineItems extends React.Component {
     super(props);
 
     this.state = {
-      cartPromo: [],
+      cartPromo: {},
+      freeShipping: false,
     };
   }
 
   componentDidMount = () => {
-    document.addEventListener('applyDynamicPromotions', this.saveDynamicPromotions, false);
+    document.addEventListener('applyDynamicPromotions', this.applyDynamicPromotions, false);
   };
 
   applyDynamicPromotions = (event) => {
+    // If promo contains no data, set to null.
+    if (event.detail.cart_labels === null) {
+      this.setState({
+        cartPromo: {},
+        freeShipping: false,
+      });
+
+      return;
+    }
+
     const {
       applied_rules: cartPromo,
-    } = event.detail;
+      shipping_free: freeShipping,
+    } = event.detail.cart_labels;
 
-    this.setState({ cartPromo });
+    this.setState({ cartPromo, freeShipping });
   };
 
   /**
@@ -31,7 +43,9 @@ class TotalLineItems extends React.Component {
    */
   discountToolTipContent = (cartPromo) => {
     let promoData = `<div class="applied-discounts-title">${Drupal.t('Discount applied')}</div>`;
-    if (cartPromo.length > 0) {
+    if (cartPromo !== null
+      && cartPromo !== undefined
+      && Object.keys(cartPromo).length > 0) {
       Object.entries(cartPromo).forEach(([, promo]) => {
         if (promo.label.length > 0) {
           promoData += `<div class="promotion-label"><strong>${promo.label}</strong></div>`;
@@ -48,8 +62,14 @@ class TotalLineItems extends React.Component {
 
   render() {
     const { totals } = this.props;
-    const { cartPromo } = this.state;
+    const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
+
+    // Show "Delivery: FREE" on basket if cart promo rule applied for it.
+    if ((totals.shipping_incl_tax === undefined || totals.shipping_incl_tax === null)
+      && freeShipping) {
+      totals.shipping_incl_tax = 0;
+    }
 
     return (
       <div className="totals">

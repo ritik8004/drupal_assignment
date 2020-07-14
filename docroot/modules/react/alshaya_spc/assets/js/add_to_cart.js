@@ -92,7 +92,7 @@
 
             // Post to ajax for cart update/create.
             jQuery.ajax({
-              url: settings.alshaya_spc.cart_update_endpoint,
+              url: settings.alshaya_spc.cart_update_endpoint + '?lang=' + drupalSettings.path.currentLanguage,
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -136,6 +136,7 @@
                   var maxSaleQty = productData.maxSaleQty;
                   var maxSaleQtyParent = productData.max_sale_qty_parent;
                   var gtmAttributes = productInfo.gtm_attributes;
+                  var isNonRefundable = productInfo.is_non_refundable;
 
                   if (productInfo.type === 'configurable') {
                     var productVariantInfo = productInfo['variants'][productData.variant];
@@ -179,6 +180,7 @@
                     maxSaleQty: maxSaleQty,
                     maxSaleQtyParent: maxSaleQtyParent,
                     gtmAttributes: gtmAttributes,
+                    isNonRefundable: isNonRefundable,
                   });
 
                   // Triggering event to notify react component.

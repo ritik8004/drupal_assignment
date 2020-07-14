@@ -53,16 +53,10 @@
 
 .c-facet.c-accordion {
   ul {
-    @include breakpoint($desktop) {
-      @include container_shadow;
-    }
-
     li span {
       font-size: 0.9375rem;
     }
   }
-
-  margin-#{$left}: 1.875rem;
 
   .c-accordion__title {
     font-size: 0.75rem;

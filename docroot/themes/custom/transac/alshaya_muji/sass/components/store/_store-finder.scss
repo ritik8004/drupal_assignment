@@ -74,6 +74,10 @@
 
   .current-location,
   .cc-near-me {
+    &::before {
+      background: url('#{$muji_theme_img_directory_path}/icons/current.svg?v=250620201118') no-repeat;
+    }
+
     @include breakpoint($only-mobile) {
       padding: 0.75rem 0;
       border: 1px solid $store_finder_search_results_border;
@@ -81,7 +85,7 @@
 
     @include breakpoint($only-tablet) {
       &::before {
-        top: 1.25rem;
+        top: 4.95rem;
       }
     }
   }

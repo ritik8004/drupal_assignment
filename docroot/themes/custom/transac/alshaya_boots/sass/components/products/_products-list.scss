@@ -109,12 +109,32 @@
     &.product-small {
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          max-height: 14.875rem;
+          max-height: 16.25rem;
+
+          &:hover {
+            max-height: 16.25 !important;
+          }
         }
 
         .alshaya_search_mainimage {
           @include breakpoint($only-mobile) {
-            height: 11rem;
+            height: 12.375rem !important;
+          }
+        }
+      }
+    }
+  }
+
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 16.25rem !important;
+
+            &:hover {
+              max-height: 16.25 !important;
+            }
           }
         }
       }

@@ -108,7 +108,7 @@ class ContactInfoForm extends React.Component {
       }
     }).catch((error) => {
       removeFullScreenLoader();
-      Drupal.logJavascriptError('Process shipping update', error);
+      Drupal.logJavascriptError('Process shipping update', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
   };
 
@@ -132,8 +132,9 @@ class ContactInfoForm extends React.Component {
             dispatchCustomEvent('addressPopUpError', {
               type: 'error',
               message: cartResult.error_message,
+              showDismissButton: false,
             });
-            Drupal.logJavascriptError('update-shipping', cartResult.error_message);
+            Drupal.logJavascriptError('update-shipping', cartResult.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
             return null;
           }
 
@@ -142,7 +143,7 @@ class ContactInfoForm extends React.Component {
           return null;
         })
         .catch((error) => {
-          Drupal.logJavascriptError('update-shipping', error);
+          Drupal.logJavascriptError('update-shipping', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
         });
     }
   };

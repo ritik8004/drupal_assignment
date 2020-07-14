@@ -323,10 +323,18 @@ class AlshayaAlgoliaIndexHelper {
     $object['field_category'] = $this->getFieldCategoryHierarchy($node, $node->language()->getId());
     $object['is_new'] = $sku->get('attr_is_new')->getString();
 
-    $super_category = $this->superCategoryManager->getSuperCategory($node);
-    // Index the product super_category term.
-    if (!empty($super_category)) {
-      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category;
+    // Index the product super_category terms.
+    $super_categories = $this->superCategoryManager->getSuperCategories($node);
+    // Check if super category is enabled.
+    if ($super_categories !== FALSE) {
+      $super_category_list = [
+        $this->t('All', [], ['langcode' => $node->language()->getId()])->__toString(),
+      ];
+      // Check if some super category is present.
+      if (!empty($super_categories)) {
+        $super_category_list = array_merge($super_category_list, $super_categories);
+      }
+      $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category_list;
     }
   }
 

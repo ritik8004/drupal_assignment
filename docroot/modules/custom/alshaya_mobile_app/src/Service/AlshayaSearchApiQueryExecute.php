@@ -223,6 +223,13 @@ class AlshayaSearchApiQueryExecute {
   protected $defaultSort = 'created DESC';
 
   /**
+   * The facets to ignore in the output.
+   *
+   * @var array
+   */
+  protected $facetsToIgnore = [];
+
+  /**
    * AlshayaSearchApiQueryExecute constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -601,6 +608,10 @@ class AlshayaSearchApiQueryExecute {
     // Prepare facet data first.
     $facet_result = [];
     foreach ($facets_data as $key => $facet) {
+      // Do not further process facets that are not required.
+      if (in_array($facet->id(), $this->getFacetsToIgnore())) {
+        continue;
+      }
       // Get facet block.
       $facet_block = $this->getFacetBlock($facet->id());
       // If facet block not available or not enabled, then skip it.
@@ -1105,6 +1116,23 @@ class AlshayaSearchApiQueryExecute {
   private function getMinSearchKeyCount() {
     $config = $this->configFactory->get('views.view.search');
     return (int) ($config->get('display.default.display_options.filters.search_api_fulltext.min_length'));
+  }
+
+  /**
+   * Get the facets which should be ignored in the output.
+   *
+   * @return array
+   *   The array of facets names to ignore.
+   */
+  public function getFacetsToIgnore() {
+    return $this->facetsToIgnore;
+  }
+
+  /**
+   * Set which facets to be ignored in the output.
+   */
+  public function setFacetsToIgnore($facets) {
+    $this->facetsToIgnore = $facets;
   }
 
 }

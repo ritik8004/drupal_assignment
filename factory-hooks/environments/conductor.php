@@ -233,9 +233,9 @@ $conductors = [
     'site_id' => 226,
   ],
   'pbkkw_uat' => [
-    'hmac_id' => 'cf6afd0bd1624636bd21f4581dc5e252',
-    'hmac_secret' => 'NDBhYjQ3NjQtNDZmNy00',
-    'site_id' => 40,
+    'hmac_id' => '5e02ce58f5664cef9165601a64f53bc8',
+    'hmac_secret' => 'NWJiOTRmNjQtMDdkZS00',
+    'site_id' => 242,
   ],
   // Pottery Barn Kids AE.
   'pbkae_qa' => [
@@ -243,11 +243,39 @@ $conductors = [
     'hmac_secret' => 'NzY3OWU3YjItNmZiNS00',
     'site_id' => 228,
   ],
+  'pbkae_uat' => [
+    'hmac_id' => 'c7760836e4334c0584f80d13e3c21315',
+    'hmac_secret' => 'OTU5MGYwMzktNDVjMy00',
+    'site_id' => 244,
+  ],
   // Pottery Barn Kids SA.
   'pbksa_qa' => [
     'hmac_id' => 'db1681e298b8408294834b3cb9f83a5e',
     'hmac_secret' => 'ODk1N2E1YTEtZmFhNS00',
     'site_id' => 227,
+  ],
+  'pbksa_uat' => [
+    'hmac_id' => '046bc57011364079b4e4d94edd1fdc6b',
+    'hmac_secret' => 'YjcyYTdhMWItMzVhZi00',
+    'site_id' => 243,
+  ],
+  'pbkkw_prod' => [
+    'site_id' => 249,
+  ],
+  'pbksa_prod' => [
+    'site_id' => 250,
+  ],
+  'pbkae_prod' => [
+    'site_id' => 251,
+  ],
+  'pbkeg_prod' => [
+    'site_id' => 252,
+  ],
+  'pbkbh_prod' => [
+    'site_id' => 253,
+  ],
+  'pbkqa_prod' => [
+    'site_id' => 254,
   ],
   // BathBodyWorks KW.
   'bbwkw_qa' => [
@@ -599,24 +627,24 @@ $conductors = [
     'site_id' => 237,
   ],
   'mukw_uat' => [
-    'hmac_id' => 'afb8c24dfb574debaebfe6b680a9fc43',
-    'hmac_secret' => 'MjU1NmIzMjYtNDc1My00',
-    'site_id' => 191,
+    'hmac_id' => 'e8dc16861254494e80c36dd3255aab5d',
+    'hmac_secret' => 'OTY0OTRjZTYtYzMyZC00',
+    'site_id' => 245,
   ],
   'musa_uat' => [
-    'hmac_id' => '8d9331c4d4aa4a529ed05055b3ca5e67',
-    'hmac_secret' => 'ZGJmMWFiYTktY2JiNS00',
-    'site_id' => 192,
+    'hmac_id' => '030218663ebc492a83427a8a2f6eaa37',
+    'hmac_secret' => 'ZWRiNThjYTEtNzEzNy00',
+    'site_id' => 246,
   ],
   'muae_uat' => [
-    'hmac_id' => '05168cbe2e664f4c9d9b676a96d185a4',
-    'hmac_secret' => 'YmJmZTAxNzgtMTdhNy00',
-    'site_id' => 193,
+    'hmac_id' => '73cf818bcd7b47ce975acf336d831206',
+    'hmac_secret' => 'ZWNlYjZhYjUtOWJiMi00',
+    'site_id' => 247,
   ],
   'mueg_uat' => [
-    'hmac_id' => 'a37e371caae3434ea9372ea053607857',
-    'hmac_secret' => 'ZDFmOGM0NDEtNjlmNy00',
-    'site_id' => 194,
+    'hmac_id' => 'd5cb6eba6f1d4987a0934685e1f87bd5',
+    'hmac_secret' => 'YmNkYjJkMTgtZGU4Mi00',
+    'site_id' => 248,
   ],
   // Boots pharmacy.
   'bpkw_dev' => [

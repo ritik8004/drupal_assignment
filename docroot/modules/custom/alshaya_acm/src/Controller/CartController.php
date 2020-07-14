@@ -12,6 +12,7 @@ use Drupal\acq_cart\CartInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\acq_cart\CartStorageInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -125,6 +126,23 @@ class CartController extends ControllerBase {
     }
 
     return $this->redirect('acq_cart.cart');
+  }
+
+  /**
+   * Get existing acm cart for anonymous users.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return json response.
+   */
+  public function getExistingCart() {
+    $cart_id = $this->cartStorage->getCartId(FALSE);
+    // Delete acm related cookies, as we are going to use new cookies from
+    // middleware.
+    if ($cart_id) {
+      $this->cartStorage->clearCart();
+      user_cookie_delete('acq_cart_id');
+    }
+    return new JsonResponse(['cart_id' => $cart_id]);
   }
 
 }

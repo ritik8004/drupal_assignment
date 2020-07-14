@@ -38,6 +38,28 @@
       }
     }
   }
+
+  td {
+    &.above-mobile.blend {
+      .dark {
+        line-height: 1.4;
+      }
+    }
+
+    &.order__user--info {
+      .address--contact {
+        line-height: 1.4;
+      }
+    }
+  }
+
+  .order-item-row {
+    td {
+      .light {
+        white-space: nowrap;
+      }
+    }
+  }
 }
 
 .order-detail {

@@ -34,6 +34,7 @@ export default class PaymentMethods extends React.Component {
 
       const paymentErrorInfo = JSON.parse(paymentError);
       let message = getStringMessage('payment_error');
+      let errorCategory = GTM_CONSTANTS.PAYMENT_ERRORS;
       // If K-NET error and have K-Net Error details.
       if (paymentErrorInfo.payment_method !== undefined
         && paymentErrorInfo.payment_method === 'knet'
@@ -46,10 +47,15 @@ export default class PaymentMethods extends React.Component {
       } else if (paymentErrorInfo.status !== undefined
         && paymentErrorInfo.status === 'declined') {
         message = getStringMessage('transaction_failed');
+        errorCategory = GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS;
       }
 
       // Push error to GA.
-      Drupal.logJavascriptError('payment-error', paymentErrorInfo);
+      Drupal.logJavascriptError(
+        'payment-error',
+        paymentErrorInfo,
+        errorCategory,
+      );
 
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
@@ -133,11 +139,6 @@ export default class PaymentMethods extends React.Component {
   changePaymentMethod = (method) => {
     const { cart, refreshCart } = this.props;
 
-    // Dispatch event for GTM checkout step 3.
-    dispatchCustomEvent('refreshCartOnPaymentMethod', {
-      cart,
-    });
-
     if (!this.isActive() || cart.cart.payment.method === method) {
       return;
     }
@@ -173,9 +174,14 @@ export default class PaymentMethods extends React.Component {
         cartData.cart = result;
         refreshCart(cartData);
 
+        // Dispatch event for GTM checkout step 3.
+        dispatchCustomEvent('refreshCartOnPaymentMethod', {
+          cart: cartData.cart,
+        });
+
         dispatchCustomEvent('refreshCompletePurchaseSection', {});
       }).catch((error) => {
-        Drupal.logJavascriptError('change payment method', error);
+        Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       });
     }
   };

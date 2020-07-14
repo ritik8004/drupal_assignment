@@ -203,6 +203,147 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
   font-display: swap;
 }
 
+// new fonts neeeded for DY template for VS
+@font-face {
+  font-family: "Pink Slab 190";
+  src: url("#{$base_theme_fonts_directory_path}/PinkSlab-190.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.svg#PinkSlab-190") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 190";
+  src: url("#{$base_theme_fonts_directory_path}/PinkOutline-190.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.svg#PinkOutline-190") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Slab 130";
+  src: url("#{$base_theme_fonts_directory_path}/PinkSlab-130.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.svg#PinkSlab-130") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Victoria INTL";
+  src: url("#{$base_theme_fonts_directory_path}/VictoriaINTL.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.svg#VictoriaINTL") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Sans 160";
+  src: url("#{$base_theme_fonts_directory_path}/PinkSans-160.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkSans-160.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/PinkSans-160.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkSans-160.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/PinkSans-160.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/PinkSans-160.svg#PinkSans-160") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Slab 100";
+  src: url("#{$base_theme_fonts_directory_path}/PinkSlab-100.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.svg#PinkSlab-100") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Slab 070";
+  src: url("#{$base_theme_fonts_directory_path}/PinkSlab-070.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.svg#PinkSlab-070") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 100";
+  src: url("#{$base_theme_fonts_directory_path}/PinkOutline-100.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.svg#PinkOutline-100") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 160";
+  src: url("#{$base_theme_fonts_directory_path}/PinkOutline-160.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.svg#PinkOutline-160") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 130";
+  src: url("#{$base_theme_fonts_directory_path}/PinkOutline-130.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.svg#PinkOutline-130") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 // VS specific font family
 // English fonts.
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.

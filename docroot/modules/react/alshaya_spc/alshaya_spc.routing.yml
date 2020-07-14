@@ -32,6 +32,8 @@ alshaya_spc.checkout.validate-info:
   methods: [POST]
   requirements:
     _permission: 'access content'
+  options:
+    _maintenance_access: TRUE
 
 alshaya_spc.checkout.get_user_address_list:
   path: '/spc/user-address-list'
@@ -62,6 +64,17 @@ alshaya_spc.checkout.cnc_store_info:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCnCController::getStoreInfoJson'
   requirements:
     _permission: 'access content'
+  options:
+    _maintenance_access: TRUE
+
+alshaya_spc.cart_cnc_status:
+  path: '/spc/cart/cnc-status'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCnCController::cartCncStatus'
+  requirements:
+    _permission: 'access content'
+  options:
+    _maintenance_access: TRUE
 
 alshaya_spc.checkout.customer:
   path: '/spc/customer'

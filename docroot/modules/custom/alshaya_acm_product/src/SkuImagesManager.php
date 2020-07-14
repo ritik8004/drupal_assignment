@@ -1139,13 +1139,15 @@ class SkuImagesManager {
         ];
       }
     }
+    $video_inserted_at_second_position = FALSE;
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
+      $video_data = [];
       if (isset($media_item['video_url'])) {
         // @TODO:
         // Receiving video_provider as NULL, should be set to youtube
         // or vimeo. Till then using $type as provider flag.
         $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
-        $thumbnails[] = [
+        $video_data = [
           'thumburl' => $media_item['file'],
           'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
           'video_title' => $media_item['video_title'],
@@ -1158,12 +1160,21 @@ class SkuImagesManager {
         ];
       }
       else {
-        $video_data[] = [
+        $video_data = [
           'url' => file_create_url($media_item['drupal_uri']),
           'video_title' => $media_item['label'] ?? '',
           'type' => 'video',
         ];
-        array_splice($thumbnails, 1, 0, $video_data);
+      }
+      // As per the requirement, we are placing the 1st video at
+      // 2nd position in the PDP gallery and the rest of the
+      // videos at the end of images if any.
+      if (!$video_inserted_at_second_position) {
+        array_splice($thumbnails, 1, 0, [$video_data]);
+        $video_inserted_at_second_position = TRUE;
+      }
+      else {
+        $thumbnails[] = $video_data;
       }
     }
 

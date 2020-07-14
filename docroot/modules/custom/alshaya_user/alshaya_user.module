@@ -48,7 +48,7 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   $user = $form_state->getFormObject()->getEntity();
   $form['full_name'] = [
     '#type' => 'textfield',
-    '#title' => t('Full name'),
+    '#title' => t('Full Name'),
     '#default_value' => $user->get('field_first_name')->getString() . ' ' . $user->get('field_last_name')->getString(),
     '#size' => '120',
     '#required' => TRUE,
@@ -84,7 +84,7 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
   if (\Drupal::currentUser()->isAnonymous()) {
     $form['full_name'] = [
       '#type' => 'textfield',
-      '#title' => t('Full name'),
+      '#title' => t('Full Name'),
       '#size' => '120',
       '#required' => TRUE,
       '#attributes' => ['specialchar' => 'specialchar'],

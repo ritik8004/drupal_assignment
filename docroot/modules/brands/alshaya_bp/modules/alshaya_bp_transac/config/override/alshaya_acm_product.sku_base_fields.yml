@@ -10,7 +10,11 @@ fields:
     facet: 1
     index: 1
   product_brand:
-    source: 'brand'
+    facet: 0
+  brand:
+    label: 'Brand'
+    facet: 1
+    index: 1
   how_to_use:
     label: 'How to use'
     description: 'Part of description.'

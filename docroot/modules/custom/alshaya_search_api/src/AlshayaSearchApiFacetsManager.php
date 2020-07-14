@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_search_api;
 
+use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
@@ -94,7 +95,10 @@ class AlshayaSearchApiFacetsManager {
    */
   public function createFacet($field_key, $facet_source_id, $filter_bar_id, $prefix = '', array $overrides = []) {
     $template_id = 'facets.facet.' . $field_key;
-    $source = $this->configFactory->getEditable($facet_source_id);
+    // For example this will convert
+    // search_api:views_block__alshaya_product_list__block_1 to
+    // facets.facet_source.search_api__views_page__search__page.yml.
+    $source = $this->configFactory->getEditable('facets.facet_source.' . str_replace(':', '__', $facet_source_id));
 
     $id = $prefix ? $prefix . '_' . $field_key : $field_key;
     $facet_id = 'facets.facet.' . $id;
@@ -110,10 +114,41 @@ class AlshayaSearchApiFacetsManager {
     $data['field_identifier'] = $data['field_identifier'] ?? 'attr_' . $field_key;
     $data = array_replace_recursive($data, $overrides);
     $data['url_alias'] = strtolower(str_replace(' ', '_', $data['name']));
+
+    $facet_config = $this->configFactory->getEditable($facet_id);
+
     if ($source->get('url_processor') != 'alshaya_facets_pretty_paths') {
       $data['url_alias'] = $field_key;
     }
-    $this->configFactory->getEditable($facet_id)->setData($data)->save();
+    else {
+      $meta_info_type = [
+        'type' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX,
+        'prefix_text' => '',
+        'visibility' => [
+          AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE,
+          AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION,
+        ],
+      ];
+      if (strpos($data['id'], 'price') > -1) {
+        $meta_info_type['type'] = AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX;
+        $meta_info_type['prefix_text'] = 'at';
+        $meta_info_type['visibility'] = [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION];
+      }
+      elseif (strpos($data['id'], 'size') > -1) {
+        $meta_info_type['prefix_text'] = 'Size';
+      }
+
+      $third_party_settings = $facet_config->get('third_party_settings');
+      if (!isset($third_party_settings)) {
+        $third_party_settings = [];
+      }
+      $third_party_settings['alshaya_facets_pretty_paths'] = [
+        'meta_info_type' => $meta_info_type,
+      ];
+      $data['third_party_settings'] = $third_party_settings;
+    }
+
+    $facet_config->setData($data)->save();
 
     // Update the filter bar (summary).
     $filter_bar = $this->configFactory->getEditable($filter_bar_id);

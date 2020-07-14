@@ -3,10 +3,6 @@
     .block-facets-summary-blockfilter-bar-promotions,
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
-      @include breakpoint($only-mobile) {
-        padding-bottom: 1.25rem;
-      }
-
       .filter-list-label {
         text-transform: capitalize;
         font-size: 0.8125rem;
@@ -46,7 +42,6 @@
             text-transform: capitalize;
             color: $plp_facet_clear_text;
             letter-spacing: 1px;
-            text-decoration: underline;
           }
         }
       }
@@ -58,8 +53,14 @@
           @include breakpoint($only-mobile) {
             font-size: 1.5rem;
             padding: 0.75rem 0 1rem;
+            line-height: 1.75rem;
           }
         }
+      }
+
+      @include breakpoint($tablet) {
+        margin-bottom: 1.625rem;
+        line-height: 1.75rem;
       }
     }
 
@@ -71,29 +72,25 @@
   }
 
   .c-products__item {
-    text-align: $left;
+    @include breakpoint($desktop) {
+      min-height: 26rem;
+    }
 
-    .out-of-stock {
-      span {
-        margin-#{$left}: 0.625rem;
-      }
+    .field--name-name {
+      margin-bottom: 0.3125rem;
     }
 
     .product-plp-detail-wrapper {
-      text-align: $left;
-      color: $plp_tile_product_title;
-
-      @include breakpoint($only-mobile) {
-        padding-#{$left}: 0.625rem;
-      }
-
-      .field--name-name {
-        text-transform: uppercase;
-        padding-#{$left}: 0;
-      }
-
-      .price-block {
+      .price,
+      .special--price {
         font-family: $alshaya-bold;
+        font-size: 0.875rem;
+      }
+
+      .has--special--price {
+        .price {
+          font-family: $alshaya-thin;
+        }
       }
     }
 
@@ -110,6 +107,12 @@
         .slick-slider {
           display: none;
         }
+      }
+    }
+
+    .promotions {
+      .sku-promotion-link {
+        font-family: $muji-helvetica-neue;
       }
     }
   }
@@ -129,20 +132,6 @@
   }
 
   .c-products-list {
-    &.product-small {
-      .alshaya_search_gallery {
-        @include breakpoint($desktop) {
-          max-height: 23.5rem;
-        }
-
-        .alshaya_search_mainimage {
-          @include breakpoint($only-mobile) {
-            height: 14.625rem;
-          }
-        }
-      }
-    }
-
     &.view-search {
       @include breakpoint($only-mobile) {
         padding-#{$left}: 0;
@@ -175,7 +164,8 @@
     }
 
     a {
-      padding: 0.75rem 7.125rem 0.5rem;
+      font-family: $muji-demibold;
+      padding: 0.75rem 7.125rem;
       text-transform: uppercase;
       background: $plp_pager_link_bg;
     }

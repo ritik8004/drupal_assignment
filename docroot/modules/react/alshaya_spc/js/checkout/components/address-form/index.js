@@ -11,6 +11,7 @@ import {
 } from '../../../utilities/map/map_utils';
 import {
   getAreasList,
+  errorOnDropDownFieldsNotFilled,
 } from '../../../utilities/address_util';
 import SectionTitle from '../../../utilities/section-title';
 import DynamicFormField from '../dynamic-form-field';
@@ -34,6 +35,7 @@ export default class AddressForm extends React.Component {
       cityChanged: false,
       errorSuccessMessage: null,
       messageType: null,
+      dismissButton: true,
     };
   }
 
@@ -72,10 +74,11 @@ export default class AddressForm extends React.Component {
     if (!this.isComponentMounted) {
       return;
     }
-    const { type, message } = e.detail;
+    const { type, message, showDismissButton } = e.detail;
     this.setState({
       messageType: type,
       errorSuccessMessage: message,
+      dismissButton: showDismissButton,
     });
     // Scroll to error.
     smoothScrollTo('.spc-address-form-sidebar .spc-checkout-section-title');
@@ -88,6 +91,7 @@ export default class AddressForm extends React.Component {
       this.setState({
         messageType: null,
         errorSuccessMessage: null,
+        dismissButton: false,
       });
     }, 200);
   };
@@ -108,7 +112,7 @@ export default class AddressForm extends React.Component {
    */
   positionMapAndUpdateAddress = async (coords, triggerEvent) => {
     try {
-      const [userCountrySame, address] = await getUserLocation(coords);
+      const [userCountrySame, addresses] = await getUserLocation(coords);
       // If user and site country not same, don;t process.
       if (!userCountrySame) {
         if (triggerEvent) {
@@ -117,13 +121,14 @@ export default class AddressForm extends React.Component {
           dispatchCustomEvent('addressPopUpError', {
             type: 'warning',
             message: parse(getStringMessage('location_outside_country_hd')),
+            showDismissButton: true,
           });
         }
         return;
       }
 
       // Fill the info in address form.
-      fillValueInAddressFromGeocode(address);
+      fillValueInAddressFromGeocode(addresses);
       // Remove all markers from the map.
       removeAllMarkersFromMap();
       // Pan the map to location.
@@ -131,9 +136,12 @@ export default class AddressForm extends React.Component {
       getMap().panTo(marker.getPosition());
       getMap().setZoom(getHDMapZoom());
       window.spcMarkers.push(marker);
+      // Check if area/city filled or not to show
+      // error and scroll for user.
+      errorOnDropDownFieldsNotFilled();
       removeFullScreenLoader();
     } catch (error) {
-      Drupal.logJavascriptError('homedelivery-checkUserCountry', error);
+      Drupal.logJavascriptError('homedelivery-checkUserCountry', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
   };
 
@@ -173,6 +181,7 @@ export default class AddressForm extends React.Component {
     dispatchCustomEvent('addressPopUpError', {
       type: 'warning',
       message: getStringMessage('location_access_denied'),
+      showDismissButton: true,
     });
   }
 
@@ -192,6 +201,7 @@ export default class AddressForm extends React.Component {
       cityChanged,
       errorSuccessMessage,
       messageType,
+      dismissButton,
     } = this.state;
 
     let defaultAddressVal = [];
@@ -250,9 +260,9 @@ export default class AddressForm extends React.Component {
               && (
               <CheckoutMessage type={messageType} context="new-address-form-modal modal">
                 {errorSuccessMessage}
-                {messageType === 'warning'
+                {messageType === 'warning' && dismissButton === true
                 && (
-                  <button type="button" onClick={(e) => this.hidePopUpError(e)}>
+                  <button id="address-hide-error-button" type="button" onClick={(e) => this.hidePopUpError(e)}>
                     {getStringMessage('dismiss')}
                   </button>
                 )}

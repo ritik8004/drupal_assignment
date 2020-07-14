@@ -62,6 +62,12 @@ export const placeOrder = (paymentMethod) => {
           return;
         }
 
+        if (response.data.error && response.data.redirectUrl !== undefined) {
+          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
+          window.location = response.data.redirectUrl;
+          return;
+        }
+
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
           message: response.data.error_message,
@@ -72,13 +78,13 @@ export const placeOrder = (paymentMethod) => {
           errorMessage: response.data.error_message,
           paymentMethod,
         };
-        Drupal.logJavascriptError('place-order', gtmInfo);
+        Drupal.logJavascriptError('place-order', gtmInfo, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
 
         removeFullScreenLoader();
       },
       (error) => {
         // Processing of error here.
-        Drupal.logJavascriptError('place-order', error);
+        Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       },
     );
 };
@@ -153,7 +159,7 @@ export const addShippingInCart = (action, data) => {
       }),
     )
     .catch((error) => {
-      Drupal.logJavascriptError('add-shipping-in-cart', error);
+      Drupal.logJavascriptError('add-shipping-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -178,7 +184,7 @@ export const addBillingInCart = (action, data) => {
       }),
     )
     .catch((error) => {
-      Drupal.logJavascriptError('add-billing-in-cart', error);
+      Drupal.logJavascriptError('add-billing-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -230,7 +236,7 @@ export const validateCartData = () => {
     )
     .catch((error) => {
       // Error processing here.
-      Drupal.logJavascriptError('checkout-refresh-cart-data', error);
+      Drupal.logJavascriptError('checkout-refresh-cart-data', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -437,7 +443,11 @@ export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per 
  */
 export const getAmountWithCurrency = (priceAmount, string = true) => {
   let amount = priceAmount === null ? 0 : priceAmount;
+
+  // Remove commas if any.
+  amount = amount.toString().replace(/,/g, '');
   amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
+
   const { currency_config: currencyConfig } = drupalSettings.alshaya_spc;
   // The keys currency and amount are used in PriceElement component.
   const priceParts = {

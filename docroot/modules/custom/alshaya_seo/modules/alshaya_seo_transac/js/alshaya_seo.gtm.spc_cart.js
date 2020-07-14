@@ -92,8 +92,26 @@
   });
 
   document.addEventListener('refreshCart', function (e) {
-    var step = Drupal.alshayaSeoSpc.getStepFromContainer();
-    Drupal.alshayaSeoSpc.cartGtm(e.detail.data(), step);
+    var data = {
+      language: drupalSettings.gtm.language,
+      country: drupalSettings.gtm.country,
+      currency: drupalSettings.gtm.currency,
+      pageType: drupalSettings.gtm.pageType,
+      event: 'checkout',
+      ecommerce: {
+        currencyCode: drupalSettings.gtm.currency,
+        checkout: {
+        },
+      },
+    };
+    var cartData = Drupal.alshayaSeoSpc.cartGtm(
+      e.detail.data(),
+      Drupal.alshayaSeoSpc.getStepFromContainer()
+    );
+    Object.assign(data.ecommerce.checkout, cartData.checkout);
+    delete cartData.checkout;
+    Object.assign(data, cartData);
+    dataLayer.push(data);
   });
 
   document.addEventListener('updateCartItemData', function (e) {

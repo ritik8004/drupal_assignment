@@ -890,6 +890,7 @@ class AlshayaApiWrapper {
     }
 
     if ($response && is_string($response)) {
+      $log_response = $response;
       $response = Json::decode($response);
       // Move the cart_id into the customer object.
       if (isset($response['cart_id'])) {
@@ -898,7 +899,16 @@ class AlshayaApiWrapper {
           'value' => $response['cart_id'],
         ];
       }
-      return MagentoApiResponseHelper::customerFromSearchResult($response['customer']);
+
+      if (is_array($response) && !empty($response['customer'])) {
+        return MagentoApiResponseHelper::customerFromSearchResult($response['customer']);
+      }
+
+      // If we reach here, it means something is not correct and we didn't
+      // receive correct/expected response from MDC.
+      $this->logger->error('Exception while authenticating customer. Error: @response', [
+        '@response' => $log_response,
+      ]);
     }
     return [];
   }
@@ -987,7 +997,17 @@ class AlshayaApiWrapper {
             'value' => $response['cart_id'],
           ];
         }
-        $response = MagentoApiResponseHelper::customerFromSearchResult($response);
+
+        if (is_array($response)) {
+          $response = MagentoApiResponseHelper::customerFromSearchResult($response);
+        }
+        else {
+          // If we reach here, it means we get the response from MDC which
+          // is not as per required format/array. So we pass that info to
+          // the exception so this can be logged.
+          $log_string = is_string($response) ? $response : json_encode($response);
+          throw new \Exception($log_string);
+        }
       }
 
       // Update password api.
@@ -1026,8 +1046,6 @@ class AlshayaApiWrapper {
    * @throws \Exception
    */
   protected function updateCustomerPass(array $customer, $password) {
-    $endpoint = 'customers/%d/set-password?';
-
     $cid = (int) $customer['customer_id'];
     $password = (string) $password;
 
@@ -1042,9 +1060,7 @@ class AlshayaApiWrapper {
       );
     }
 
-    $endpoint = sprintf($endpoint, $cid);
-    $endpoint .= 'password=' . urlencode($password);
-
+    $endpoint = sprintf('customers/%d/set-password', $cid);
     try {
       $response = $this->invokeApi(
         $endpoint,

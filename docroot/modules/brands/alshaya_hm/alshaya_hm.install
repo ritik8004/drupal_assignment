@@ -138,29 +138,9 @@ function alshaya_hm_update_8049() {
 /**
  * Implements hook_update_N().
  *
- * Make size_group_code field type attribute from type string..
- */
-function alshaya_hm_update_8048() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.sku_base_fields'],
-    'alshaya_acm_product'
-  );
-
-  // Make size_group_code field type attribute from type string.
-  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
-  $size_group_code = $config->get('size_group_code');
-  $size_group_code['type'] = 'attribute';
-  $config->set('size_group_code', $size_group_code);
-  $config->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add query string in footer logo image.
  */
-function alshaya_hm_update_8047() {
+function alshaya_hm_update_8048() {
   $logo_file_name = 'h-m-logo-bw.svg';
   $logo_updated_file_name = 'h-m-logo-bw.svg?' . REQUEST_TIME;
 
@@ -178,6 +158,26 @@ function alshaya_hm_update_8047() {
   $block_content_ar = str_replace($logo_file_name, $logo_updated_file_name, $footer_logo_block_content);
   $footer_logo_block_ar->set('body', ['value' => $block_content_ar, 'format' => 'rich_text']);
   $footer_logo_block_ar->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Make size_group_code field type attribute from type string..
+ */
+function alshaya_hm_update_8047() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  // Make size_group_code field type attribute from type string.
+  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
+  $size_group_code = $config->get('size_group_code');
+  $size_group_code['type'] = 'attribute';
+  $config->set('size_group_code', $size_group_code);
+  $config->save();
 }
 
 /**
