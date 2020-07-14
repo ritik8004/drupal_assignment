@@ -17,8 +17,8 @@ class TextField extends React.Component {
   }
 
   render() {
-    const countryMobileCode = window.drupalSettings.alshaya_appointment.country_mobile_code;
-    const countryMobileCodeMaxLength = window.drupalSettings.alshaya_appointment.mobile_maxlength;
+    const countryMobileCode = drupalSettings.alshaya_appointment.country_mobile_code;
+    const countryMobileCodeMaxLength = drupalSettings.alshaya_appointment.mobile_maxlength;
     const {
       defaultValue,
       type,

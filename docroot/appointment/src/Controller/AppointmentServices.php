@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Helper\APIServicesUrls;
 use App\Service\Drupal\Drupal;
-use App\Service\SoapClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Helper\XmlAPIHelper;
+use App\Helper\APIHelper;
 
 /**
  * Class AppointmentServices.
@@ -36,11 +36,11 @@ class AppointmentServices {
   protected $drupal;
 
   /**
-   * Soap client.
+   * APIHelper.
    *
-   * @var \App\Service\SoapClient
+   * @var \App\Helper\APIHelper
    */
-  protected $client;
+  protected $apiHelper;
 
   /**
    * AppointmentServices constructor.
@@ -49,19 +49,20 @@ class AppointmentServices {
    *   Logger service.
    * @param \App\Helper\XmlAPIHelper $xml_api_helper
    *   Xml API Helper.
-   * @param \App\Service\SoapClient $client
-   *   Soap client service.
    * @param \App\Service\Drupal\Drupal $drupal
    *   Drupal service.
+   * @param \App\Helper\APIHelper $api_helper
+   *   API Helper.
    */
   public function __construct(LoggerInterface $logger,
                               XmlAPIHelper $xml_api_helper,
-                              SoapClient $client,
-                              Drupal $drupal) {
+                              Drupal $drupal,
+                              APIHelper $api_helper) {
     $this->logger = $logger;
     $this->xmlApiHelper = $xml_api_helper;
-    $this->client = $client;
     $this->drupal = $drupal;
+    $this->apiHelper = $api_helper;
+    $this->serviceUrl = $this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL;
   }
 
   /**
@@ -116,7 +117,7 @@ class AppointmentServices {
    */
   public function appendAppointmentAnswers(Request $request) {
     try {
-      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $request_content = json_decode($request->getContent(), TRUE);
 
       $bookingId = $request_content['bookingId'] ?? '';
@@ -171,7 +172,7 @@ class AppointmentServices {
    */
   public function getAppointments(Request $request) {
     try {
-      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $clientExternalId = $request->query->get('client');
       $userId = $request->query->get('id');
 
@@ -226,7 +227,7 @@ class AppointmentServices {
    */
   public function getCompanionByAppointmentId(Request $request) {
     try {
-      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $client = $this->client->getSoapClient($this->serviceUrl);
       $appointmentId = $request->query->get('appointment');
       $userId = $request->query->get('id');
 
@@ -279,7 +280,7 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
-      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $client = $this->client->getSoapClient($this->serviceUrl);
       $param = [
         'confirmationNumber' => $appointmentId,
       ];
@@ -288,6 +289,59 @@ class AppointmentServices {
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while deleting an appointment. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Get Questions.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   List of questions.
+   */
+  public function getQuestions(Request $request) {
+    try {
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
+      $locationExternalId = $request->query->get('location');
+      $program = $request->query->get('program');
+      $activity = $request->query->get('activity');
+
+      if (empty($locationExternalId) || empty($program) || empty($activity)) {
+        $message = 'Required details is missing to get questions.';
+
+        $this->logger->error($message);
+        throw new \Exception($message);
+      }
+
+      $param = [
+        'questionCriteria' => [
+          'locationExternalId' => $locationExternalId,
+          'programExternalId' => $program,
+          'activityExternalId' => $activity,
+        ],
+      ];
+      $result = $client->__soapCall('getAppointmentQuestionsByCriteria', [$param]);
+
+      $questions = $result->return->questions ?? [];
+      $questionsData = [];
+
+      foreach ($questions as $question) {
+        $questionsData[] = [
+          'questionExternalId' => $question->questionExternalId ?? '',
+          'questionLabel' => $question->questionLabel ?? '',
+          'questionType' => $question->questionType ?? '',
+          'questionText' => $question->questionText ?? '',
+          'required' => $question->required ?? '',
+        ];
+      }
+
+      return new JsonResponse($questionsData);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while fetching questions. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
 

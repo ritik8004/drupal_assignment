@@ -16,7 +16,7 @@ appointment.update_insert_client:
    methods: POST
 appointment.get_questions:
    path: /get/questions
-   controller: App\Controller\ClientServices::getQuestions
+   controller: App\Controller\AppointmentServices::getQuestions
    methods: GET
 appointment.book_appointment:
    path: /book-appointment

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Psr\Log\LoggerInterface;
-use App\Service\SoapClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Helper\APIHelper;
@@ -21,13 +20,6 @@ class ConfigurationServices {
    * @var \Psr\Log\LoggerInterface
    */
   protected $logger;
-
-  /**
-   * SoapClient.
-   *
-   * @var \App\Service\SoapClient
-   */
-  protected $client;
 
   /**
    * APIHelper.
@@ -55,8 +47,6 @@ class ConfigurationServices {
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
-   * @param \App\Service\SoapClient $client
-   *   Soap client service.
    * @param \App\Helper\APIHelper $api_helper
    *   API Helper.
    * @param \App\Helper\XmlAPIHelper $xml_api_helper
@@ -65,15 +55,14 @@ class ConfigurationServices {
    *   Helper.
    */
   public function __construct(LoggerInterface $logger,
-                              SoapClient $client,
                               APIHelper $api_helper,
                               XmlAPIHelper $xml_api_helper,
                               Helper $helper) {
     $this->logger = $logger;
-    $this->client = $client;
     $this->apiHelper = $api_helper;
     $this->xmlApiHelper = $xml_api_helper;
     $this->helper = $helper;
+    $this->serviceUrl = $this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL;
   }
 
   /**
@@ -84,7 +73,7 @@ class ConfigurationServices {
    */
   public function getPrograms() {
     try {
-      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $locationExternalId = $this->apiHelper->getlocationExternalIds();
       $locationExternalId = is_array($locationExternalId) ? reset($locationExternalId) : $locationExternalId;
 
@@ -125,7 +114,7 @@ class ConfigurationServices {
    */
   public function getActivities(Request $request) {
     try {
-      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $locationExternalId = $this->apiHelper->getlocationExternalIds();
       $locationExternalId = is_array($locationExternalId) ? reset($locationExternalId) : $locationExternalId;
       $program = $request->query->get('program');
@@ -214,6 +203,8 @@ class ConfigurationServices {
             $distanceInMiles = $this->helper->distance($latitude, $longitude, $storeLat, $storeLng, $unit);
           }
 
+          // @TODO: Separate out distance from store data as when we cache
+          // store info later, distance shouldn't be cached
           $storesData[] = [
             'locationExternalId' => $storeId ?? '',
             'name' => $store->locationName ?? '',
@@ -248,7 +239,7 @@ class ConfigurationServices {
       if (empty($storeId)) {
         throw new \Exception('storeId is required to get store schedule.');
       }
-      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $param = [
         'scheduleSearchCriteria' => [
           'locationExternalId' => $storeId,
@@ -274,7 +265,7 @@ class ConfigurationServices {
    */
   public function getStoreDetailsById(Request $request) {
     try {
-      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $locationExternalId = $request->query->get('location');
       if (empty($request->query->get('location'))) {
         $message = 'Location ID is required to get store details.';

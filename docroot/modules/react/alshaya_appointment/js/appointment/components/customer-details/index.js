@@ -29,12 +29,10 @@ export default class CustomerDetails extends React.Component {
       if (apiData instanceof Promise) {
         apiData.then((result) => {
           if (result.error === undefined && result.data !== undefined) {
-            if (result.data.length > 0) {
-              this.setState((prevState) => ({
-                ...prevState,
-                clientData: result.data,
-              }));
-            }
+            this.setState((prevState) => ({
+              ...prevState,
+              clientData: result.data,
+            }));
           }
         });
       }

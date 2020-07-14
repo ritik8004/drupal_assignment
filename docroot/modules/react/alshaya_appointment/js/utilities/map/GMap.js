@@ -104,7 +104,7 @@ export default class Gmap {
 
     this.map.geoCoder.geocode({
       componentRestrictions: {
-        country: window.drupalSettings.alshaya_appointment.country_code,
+        country: drupalSettings.alshaya_appointment.country_code,
       },
     }, (results, status) => {
       if (status === google.maps.GeocoderStatus.OK) {
