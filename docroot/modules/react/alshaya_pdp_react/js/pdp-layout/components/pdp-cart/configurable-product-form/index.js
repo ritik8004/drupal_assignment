@@ -1,10 +1,6 @@
 import React, { createRef } from 'react';
 import CartSelectOption from '../cart-select-option';
-import {
-  updateCart,
-  getPostData,
-  triggerAddToCart,
-} from '../../../../utilities/pdp_layout';
+import { addToCartConfigurable } from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
 import SelectSizeButton from '../select-size-button';
@@ -64,56 +60,6 @@ class ConfigurableProductForm extends React.Component {
     const code = Object.keys(combinations)[0];
     const codeValue = Object.keys(combinations[code])[0];
     this.refreshConfigurables(code, codeValue, null);
-  }
-
-  addToCart = (e, id) => {
-    e.preventDefault();
-    // Adding add to cart loading.
-    const addToCartBtn = document.getElementById(id);
-    addToCartBtn.classList.toggle('magv2-add-to-basket-loader');
-
-    const { configurableCombinations, skuCode, productInfo } = this.props;
-    const options = [];
-    const attributes = configurableCombinations[skuCode].configurables;
-    Object.keys(attributes).forEach((key) => {
-      const option = {
-        option_id: attributes[key].attribute_id,
-        option_value: document.querySelector(`#${key}`).querySelectorAll('.active')[0].value,
-      };
-
-      // Skipping the psudo attributes.
-      if (drupalSettings.psudo_attribute === undefined
-        || drupalSettings.psudo_attribute !== option.option_id) {
-        options.push(option);
-      }
-    });
-
-    const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
-    const getPost = getPostData(skuCode, variantSelected);
-
-    const postData = getPost[0];
-    const productData = getPost[1];
-
-    postData.options = options;
-    productData.product_name = productInfo[skuCode].variants[variantSelected].cart_title;
-    productData.image = productInfo[skuCode].variants[variantSelected].cart_image;
-    const cartEndpoint = drupalSettings.cart_update_endpoint;
-
-    updateCart(cartEndpoint, postData).then(
-      (response) => {
-        triggerAddToCart(
-          response,
-          productData,
-          productInfo,
-          configurableCombinations,
-          skuCode,
-          addToCartBtn,
-        );
-      },
-    )
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   // To get available attribute value based on user selection.
@@ -252,7 +198,7 @@ class ConfigurableProductForm extends React.Component {
                 className="magv2-button"
                 id="add-to-cart-main"
                 type="submit"
-                onClick={(e) => this.addToCart(e, 'add-to-cart-main')}
+                onClick={(e) => addToCartConfigurable(e, 'add-to-cart-main', configurableCombinations, skuCode, productInfo)}
               >
                 {Drupal.t('Add To Bag')}
               </button>

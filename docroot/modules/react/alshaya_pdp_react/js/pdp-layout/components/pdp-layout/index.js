@@ -67,6 +67,9 @@ const PdpLayout = () => {
           brandLogo={brandLogo}
           brandLogoAlt={brandLogoAlt}
           brandLogoTitle={brandLogoTitle}
+          skuCode={skuItemCode}
+          configurableCombinations={configurableCombinations}
+          productInfo={productInfo}
         />
       </div>
       <div className="magv2-main">
