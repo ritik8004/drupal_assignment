@@ -1,6 +1,6 @@
 import _isEmpty from 'lodash/isEmpty';
 import isRTL from '../rtl';
-import dispatchCustomEvent from '../events';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 import { getDefaultMapCenter } from './map_utils';
 
 export default class Gmap {
