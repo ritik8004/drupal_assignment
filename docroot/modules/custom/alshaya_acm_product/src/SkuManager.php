@@ -1218,7 +1218,7 @@ class SkuManager {
   protected function getSkuLabel(SKU $sku_entity, $parent = FALSE) {
     if ($labels = $sku_entity->get('attr_labels')->getString()) {
       $labels_data = unserialize($labels);
-      if (!empty($labels_data)) {
+      if (!empty($labels_data) && is_array($labels_data)) {
         return $labels_data;
       }
       // Process only when current sku is not parent SKU.
