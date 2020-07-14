@@ -54,15 +54,17 @@ export default class Confirmation extends React.Component {
         <div className="confirmation-body">
           <div className="inner-header">
             <label>{Drupal.t('Appointment Summary')}</label>
-            <AddToCalendar
-              event={event}
-            />
-            <span
-              className="print"
-              onClick={() => window.print()}
-            >
-              {Drupal.t('Print')}
-            </span>
+            <div className="appointment-confirmation-option">
+              <AddToCalendar
+                event={event}
+              />
+              <span
+                className="print"
+                onClick={() => window.print()}
+              >
+                {Drupal.t('Print')}
+              </span>
+            </div>
           </div>
           <div className="inner-body">
             <ConfirmationItems
