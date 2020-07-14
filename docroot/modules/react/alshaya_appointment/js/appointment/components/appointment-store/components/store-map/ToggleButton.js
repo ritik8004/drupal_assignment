@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AppointmentToggleButton = ({ toggleStoreView }) => (
+const ToggleButton = ({ toggleStoreView }) => (
   <div className="toggle-store-view">
     <div className="toggle-buttons-wrapper">
       <button
@@ -8,17 +8,17 @@ const AppointmentToggleButton = ({ toggleStoreView }) => (
         type="button"
         onClick={(e) => toggleStoreView(e, 'list')}
       >
-        {Drupal.t('List View')}
+        {Drupal.t('List view')}
       </button>
       <button
         className="stores-map-view"
         type="button"
         onClick={(e) => toggleStoreView(e, 'map')}
       >
-        {Drupal.t('Map View')}
+        {Drupal.t('Map view')}
       </button>
     </div>
   </div>
 );
 
-export default React.memo(AppointmentToggleButton);
+export default React.memo(ToggleButton);

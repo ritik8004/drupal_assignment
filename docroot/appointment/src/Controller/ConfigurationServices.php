@@ -85,8 +85,14 @@ class ConfigurationServices {
   public function getPrograms() {
     try {
       $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
+      $locationExternalId = $this->apiHelper->getlocationExternalIds();
+      $locationExternalId = is_array($locationExternalId) ? reset($locationExternalId) : $locationExternalId;
 
-      $param = ['locationExternalId' => $this->apiHelper->getlocationExternalId(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL)];
+      if (empty($locationExternalId)) {
+        throw new \Exception('locationExternalId is required to get programs.');
+      }
+
+      $param = ['locationExternalId' => $locationExternalId];
       $result = $client->__soapCall('getPrograms', [$param]);
       $programs = $result->return->programs;
       $programData = [];
@@ -120,10 +126,16 @@ class ConfigurationServices {
   public function getActivities(Request $request) {
     try {
       $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
-
+      $locationExternalId = $this->apiHelper->getlocationExternalIds();
+      $locationExternalId = is_array($locationExternalId) ? reset($locationExternalId) : $locationExternalId;
       $program = $request->query->get('program');
+
+      if (empty($locationExternalId) || empty($program)) {
+        throw new \Exception('locationExternalId and program is required to get activities.');
+      }
+
       $param = [
-        'locationExternalId' => $this->apiHelper->getlocationExternalId(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL),
+        'locationExternalId' => $locationExternalId,
         'programExternalId' => $program,
       ];
       $result = $client->__soapCall('getActivities', [$param]);
@@ -159,22 +171,59 @@ class ConfigurationServices {
    */
   public function getStores(Request $request) {
     try {
-      $result = $this->xmlApiHelper->fetchStores($request);
+      $requestQuery = $request->query;
 
+      $latitude = $requestQuery->get('latitude') ?? '';
+      $longitude = $requestQuery->get('longitude') ?? '';
+      $radius = $requestQuery->get('radius') ?? '';
+      $maxLocations = $requestQuery->get('max-locations') ?? '';
+      $unit = $requestQuery->get('unit') ?? '';
+
+      if (empty($latitude) || empty($longitude) || empty($radius) || empty($maxLocations) || empty($unit)) {
+        throw new \Exception('Required parameters missing to get stores.');
+      }
+
+      $locationExternalIds = $this->apiHelper->getlocationExternalIds();
+
+      if (empty($locationExternalIds)) {
+        // If no location is available in location group then we don't
+        // try to get location by geo criteria and return empty array.
+        return [];
+      }
+
+      $param = [
+        'latitude' => $latitude,
+        'longitude' => $longitude,
+        'radius' => $radius,
+        'maxLocations' => $maxLocations,
+        'unit' => $unit,
+      ];
+
+      $result = $this->xmlApiHelper->fetchStores($param);
       $stores = $result->return->locations ?? [];
       $storesData = [];
 
       foreach ($stores as $store) {
         $storeId = $store->locationExternalId;
-        $storeTiming = $this->getStoreSchedule($storeId);
+        if (in_array($storeId, $locationExternalIds)) {
+          $storeTiming = $this->getStoreSchedule($storeId);
+          $storeLat = $store->geocoordinates->latitude ?? '';
+          $storeLng = $store->geocoordinates->longitude ?? '';
 
-        $storesData[$store->locationExternalId] = [
-          'locationExternalId' => $storeId ?? '',
-          'name' => $store->locationName ?? '',
-          'address' => $store->companyAddress ?? '',
-          'geocoordinates' => $store->geocoordinates ?? '',
-          'storeTiming' => $storeTiming ?? '',
-        ];
+          if (!empty($storeLat) && !empty($storeLng)) {
+            $distanceInMiles = $this->helper->distance($latitude, $longitude, $storeLat, $storeLng, $unit);
+          }
+
+          $storesData[] = [
+            'locationExternalId' => $storeId ?? '',
+            'name' => $store->locationName ?? '',
+            'address' => $store->companyAddress ?? '',
+            'lat' => $storeLat,
+            'lng' => $storeLng,
+            'storeTiming' => $storeTiming ?? '',
+            'distanceInMiles' => $distanceInMiles ?? '',
+          ];
+        }
       }
 
       return new JsonResponse($storesData);
@@ -196,8 +245,10 @@ class ConfigurationServices {
    */
   public function getStoreSchedule($storeId) {
     try {
+      if (empty($storeId)) {
+        throw new \Exception('storeId is required to get store schedule.');
+      }
       $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
-
       $param = [
         'scheduleSearchCriteria' => [
           'locationExternalId' => $storeId,

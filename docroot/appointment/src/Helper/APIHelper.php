@@ -52,25 +52,25 @@ class APIHelper {
   }
 
   /**
-   * Get Location External Id.
+   * Get Location External Ids.
    *
    * @return string
-   *   Location External Id.
+   *   Location External Ids.
    */
-  public function getlocationExternalId($service_url) {
+  public function getlocationExternalIds() {
     try {
-      $client = $this->client->getSoapClient($service_url);
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
 
       $appointment_settings = $this->settings->getSettings('appointment_settings');
       $param = ['locationGroupExtId' => $appointment_settings['location_group_ext_id']];
 
       $result = $client->__soapCall('getLocationGroup', [$param]);
-      $locationExternalId = $result->return->locationGroup->locationExternalIds;
+      $locationExternalIds = $result->return->locationGroup ? $result->return->locationGroup->locationExternalIds : [];
 
-      return is_array($locationExternalId) ? reset($locationExternalId) : $locationExternalId;
+      return $locationExternalIds;
     }
     catch (\Exception $e) {
-      $this->logger->error('Error occurred while getting locationExternalId. Message: @message', [
+      $this->logger->error('Error occurred while getting locationExternalIds. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
 

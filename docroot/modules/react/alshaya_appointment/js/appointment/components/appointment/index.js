@@ -1,13 +1,26 @@
 import React from 'react';
 import AppointmentSteps from '../appointment-steps';
 import AppointmentType from '../appointment-type';
-import AppointmentStoreSelect from '../appointment-store';
+import Loading from '../../../utilities/loading';
 import AppointmentSelection from '../appointment-selection';
 import CustomerDetails from '../customer-details';
 import Confirmation from '../confirmation';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import AppointmentTimeSlot from '../appointment-timeslot';
 import AppointmentLogin from '../appointment-login';
+
+const AppointmentStore = React.lazy(async () => {
+  // Wait for google object to load.
+  await new Promise((resolve) => {
+    const interval = setInterval(() => {
+      if (typeof google !== 'undefined') {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 500);
+  });
+  return import('../appointment-store');
+});
 
 export default class Appointment extends React.Component {
   constructor(props) {
@@ -72,10 +85,12 @@ export default class Appointment extends React.Component {
     } else if (appointmentStep === 'select-store') {
       appointmentClasses += 'appointment-2-cols appointment-select-store-container';
       appointmentData = (
-        <AppointmentStoreSelect
-          handleBack={this.handleEdit}
-          handleSubmit={() => this.handleSubmit('select-time-slot')}
-        />
+        <React.Suspense fallback={<Loading loadingMessage={Drupal.t('Loading Stores')} />}>
+          <AppointmentStore
+            handleBack={this.handleEdit}
+            handleSubmit={() => this.handleSubmit('select-time-slot')}
+          />
+        </React.Suspense>
       );
     } else if (appointmentStep === 'select-time-slot') {
       appointmentClasses += 'appointment-2-cols';

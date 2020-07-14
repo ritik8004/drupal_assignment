@@ -15,7 +15,6 @@ export default class AppointmentSelection extends React.Component {
     const {
       appointmentCategory, appointmentType, selectedStoreItem, selectedSlot,
     } = localStorageValues;
-    const selectedStoreDetails = selectedStoreItem ? JSON.parse(selectedStoreItem) : '';
 
     return (
       <div className="appointment-details">
@@ -53,7 +52,7 @@ export default class AppointmentSelection extends React.Component {
             </button>
           </div>
 
-          { selectedStoreDetails
+          { selectedStoreItem
             ? (
               <div className="appointment-details-wrapper appointment-store-details-wrapper">
                 <div className="appointment-details-item">
@@ -64,10 +63,10 @@ export default class AppointmentSelection extends React.Component {
                   </div>
                   <div className="appointment-details-item-body">
                     <div className="store-name">
-                      {selectedStoreDetails.name}
+                      {selectedStoreItem.name}
                     </div>
                     <StoreAddress
-                      address={selectedStoreDetails.address}
+                      address={selectedStoreItem.address}
                     />
                   </div>
                 </div>

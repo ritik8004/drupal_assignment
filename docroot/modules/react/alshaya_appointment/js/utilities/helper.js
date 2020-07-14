@@ -33,33 +33,12 @@ function getLocationAccess() {
   );
 }
 
-function convertKmToMile(value) {
-  const realMiles = (value * 0.621371);
-  const Miles = Math.floor(realMiles);
-
-  return Miles;
-}
-
-function getDistanceBetweenCoords(storeList, coords) {
-  const storeItems = google && storeList && Object.entries(storeList).map(([, x]) => {
-    const store = x;
-    const distance = google.maps.geometry.spherical.computeDistanceBetween(
-      new google.maps.LatLng(coords.lat, coords.lng),
-      new google.maps.LatLng(x.geocoordinates.latitude, x.geocoordinates.longitude),
-    );
-    store.distanceInMiles = convertKmToMile(distance);
-    return store;
-  });
-
-  return storeItems;
-}
-
 function addressCleanup(address) {
   let cleanAddress = '';
   if (address) {
     Object.entries(address).forEach(([i, value]) => {
       // Removing not available string (N/A) and countryCode from address.
-      if (value && value !== '(N/A)' && i !== 'countryCode') {
+      if (value.trim() && value !== '(N/A)' && i !== 'countryCode') {
         cleanAddress += (i !== 'address1') ? `, ${value}` : value;
       }
     });
@@ -81,7 +60,6 @@ function getDateFormattext() {
 export {
   getInputValue,
   getLocationAccess,
-  getDistanceBetweenCoords,
   addressCleanup,
   getDateFormat,
   getDateFormattext,

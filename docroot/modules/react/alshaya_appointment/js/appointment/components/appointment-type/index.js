@@ -28,7 +28,7 @@ export default class AppointmentType extends React.Component {
         appointmentCategory: '',
         appointmentType: '',
         appointmentCompanion: { value: 1, label: 1 },
-        appointmentForYou: '',
+        appointmentForYou: 'Yes',
         appointmentTypeItems: [],
         categoryItems: '',
         appointmentCompanionItems: companionItems,

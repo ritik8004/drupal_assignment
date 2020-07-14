@@ -93,16 +93,14 @@ class XmlAPIHelper {
    * @return object
    *   Response object.
    */
-  public function fetchStores($request) {
-    $requestQuery = $request->query;
-
+  public function fetchStores($param) {
     $apiBody = '<ns2:getLocationsByGeoCriteria>
         <locationSearchGeoCriteria>
-          <latitude>' . $requestQuery->get('latitude') . '</latitude>
-          <longitude>' . $requestQuery->get('longitude') . '</longitude>
-          <radius>' . $requestQuery->get('radius') . '</radius>
-          <maxNumberOfLocations>' . $requestQuery->get('max-locations') . '</maxNumberOfLocations>
-          <unit>' . $requestQuery->get('unit') . '</unit>
+          <latitude>' . $param['latitude'] . '</latitude>
+          <longitude>' . $param['longitude'] . '</longitude>
+          <radius>' . $param['radius'] . '</radius>
+          <maxNumberOfLocations>' . $param['maxLocations'] . '</maxNumberOfLocations>
+          <unit>' . $param['unit'] . '</unit>
         </locationSearchGeoCriteria>
       </ns2:getLocationsByGeoCriteria>';
 
