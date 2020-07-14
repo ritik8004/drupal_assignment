@@ -10,7 +10,7 @@ const PdpStandardDelivery = () => {
   };
 
   return (
-    <div className="magv2-pdp-standard-delivery-wrapper card">
+    <div className="magv2-pdp-standard-delivery-wrapper card fadeInUp" style={{ animationDelay: '1s' }}>
       <div className="magv2-standard-delivery-title-wrapper">
         <PdpSectionTitle>
           {homeDelivery.title}

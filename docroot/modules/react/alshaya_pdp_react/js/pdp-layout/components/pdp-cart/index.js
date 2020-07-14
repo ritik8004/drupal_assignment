@@ -7,7 +7,7 @@ const PdpCart = ({
 }) => {
   if (configurableCombinations) {
     return (
-      <div className="pdp-cart-form" ref={childRef}>
+      <div className="pdp-cart-form fadeInUp notInMobile" style={{ animationDelay: '0.6s' }} ref={childRef}>
         <ConfigurableProductForm
           configurableCombinations={configurableCombinations}
           skuCode={skuCode}
@@ -18,7 +18,7 @@ const PdpCart = ({
     );
   }
   return (
-    <div className="pdp-cart-form">
+    <div className="pdp-cart-form fadeInUp notInMobile" style={{ animationDelay: '0.6s' }}>
       <SimpleProductForm
         skuCode={skuCode}
         productInfo={productInfo}

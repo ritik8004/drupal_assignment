@@ -43,16 +43,19 @@ export default class PdpAsset extends React.Component {
       type, imageZoomUrl, imageUrl, alt, title, viewport, index,
     } = this.props;
 
+    const animationOffset = `${index * 0.25}s`;
+
     if (type === 'image' && viewport !== 'mobile') {
       return (
         <figure
-          className="magv2-pdp-image"
+          className="magv2-pdp-image fadeInUp"
           onMouseOver={PdpAsset.imageZoomIn}
           onMouseOut={PdpAsset.imageZoomOut}
           onMouseMove={PdpAsset.imagePositionZoom}
           onClick={this.openFullScreenView}
           data-scale="2"
           data-index={index}
+          style={{ animationDelay: animationOffset }}
         >
           <img
             src={imageUrl}
