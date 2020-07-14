@@ -185,7 +185,7 @@ class AppointmentServices {
       $user = $this->drupal->getSessionUserInfo();
       if ($user['uid'] !== $userId) {
         $message = 'Requested not authenticated.';
-        
+
         throw new \Exception($message);
       }
 
@@ -257,7 +257,42 @@ class AppointmentServices {
 
       throw $e;
     }
+  }
 
+  /**
+   * Cancel an appointment.
+   */
+  public function cancelAppointment(Request $request) {
+    try {
+      $appointmentId = $request->query->get('appointment');
+      $userId = $request->query->get('id');
+      if ($appointmentId == '' || $userId == '') {
+        $message = 'Appointment Id and user Id are required parameters.';
+        throw new \Exception($message);
+      }
+
+      // Authenticate logged in user by matching userid from request and Drupal.
+      $user = $this->drupal->getSessionUserInfo();
+      if ($user['uid'] !== $userId) {
+        $message = 'Request not authenticated.';
+
+        throw new \Exception($message);
+      }
+
+      $client = $this->client->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $param = [
+        'confirmationNumber' => $appointmentId,
+      ];
+      $result = $client->__soapCall('cancelAppointment', [$param]);
+      return new JsonResponse($result);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while deleting an appointment. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
   }
 
 }
