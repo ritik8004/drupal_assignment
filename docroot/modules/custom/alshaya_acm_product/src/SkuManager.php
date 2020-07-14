@@ -1669,6 +1669,10 @@ class SkuManager {
    *   Filtered skus.
    */
   public function filterRelatedSkus(array $skus) {
+    if (empty($skus)) {
+      return [];
+    }
+
     $related_items_size = $this->getConfig('alshaya_acm_product.settings')->get('related_items_size');
     $related = [];
 
