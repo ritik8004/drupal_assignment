@@ -67,8 +67,6 @@ export class Gmap {
       draggable: this.map.settings.draggable,
       gestureHandling: this.map.settings.gestureHandling,
     });
-
-    // return this.map.googleMap;
   }
 
   /**
