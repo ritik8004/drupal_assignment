@@ -375,7 +375,7 @@ class PromotionController extends ControllerBase {
       $cart = CartData::createFromArray($get);
     }
     catch (\InvalidArgumentException $e) {
-      $response = new CacheableJsonResponse(['label' => '']);
+      $response = new CacheableJsonResponse([]);
       $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
       return $response;
     }
