@@ -1,6 +1,8 @@
 import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
 import PdpInfo from '../pdp-info';
+import { addToCartConfigurable, addToCartSimple } from '../../../utilities/pdp_layout';
+
 
 export default class PdpHeader extends React.PureComponent {
   render() {
@@ -11,6 +13,9 @@ export default class PdpHeader extends React.PureComponent {
       brandLogo,
       brandLogoAlt,
       brandLogoTitle,
+      skuCode,
+      productInfo,
+      configurableCombinations,
     } = this.props;
 
     return (
@@ -43,13 +48,25 @@ export default class PdpHeader extends React.PureComponent {
           />
           <div id="sticky-header-btn">
             <div className="magv2-add-to-basket-container" ref={this.button}>
-              <button
-                className="magv2-button"
-                type="submit"
-                onClick={this.addToCart}
-              >
-                {Drupal.t('Add To Bag')}
-              </button>
+              {(configurableCombinations) ? (
+                <button
+                  className="magv2-button"
+                  type="submit"
+                  id="add-to-cart-sticky"
+                  onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo)}
+                >
+                  {Drupal.t('Add To Bag')}
+                </button>
+              ) : (
+                <button
+                  className="magv2-button"
+                  type="submit"
+                  id="add-to-cart-sticky"
+                  onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo)}
+                >
+                  {Drupal.t('Add To Bag')}
+                </button>
+              )}
             </div>
           </div>
         </ConditionalView>
