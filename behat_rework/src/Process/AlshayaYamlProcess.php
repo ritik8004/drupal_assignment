@@ -66,6 +66,11 @@ class AlshayaYamlProcess {
           if (file_exists($this->templateDir . "/variables/markets/$market.yml")) {
             $market_common[] = $this->templateDir . "/variables/markets/$market.yml";
           }
+
+          if (file_exists($this->templateDir . "/variables/markets/$market/languages/$language.yml")) {
+            $market_common[] = $this->templateDir . "/variables/markets/$market/languages/$language.yml";
+          }
+
           $files["{$market}_{$language}"] = array_merge([$this->templateDir . '/variables/common.yml'], $market_common);
 
           $directory   = $this->templateDir . '/variables/brands';
@@ -363,7 +368,7 @@ class AlshayaYamlProcess {
 
     $yaml['extensions']['Bex\Behat\ScreenshotExtension']['image_drivers'] = [
       'local' =>  [
-        'screenshot_directory' => "%paths.base%/features/$profile/screenshots",
+        'screenshot_directory' => "%paths.base%/features/$profile-$viewport/screenshots",
       ],
     ];
 
@@ -380,7 +385,7 @@ class AlshayaYamlProcess {
     if (!empty($profile)) {
       $yaml['formatters'] = [
         'html' => [
-          'output_path' => "%paths.base%/features/$profile/reports/html/behat",
+          'output_path' => "%paths.base%/features/$profile-$viewport/reports/html/behat",
         ],
       ];
     }

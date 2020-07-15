@@ -17,6 +17,7 @@ class RouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection) {
     $rest_apis_to_allow = [
       'rest.csrftoken',
+      'rest.stock.GET',
       'oauth2_token.token',
     ];
 

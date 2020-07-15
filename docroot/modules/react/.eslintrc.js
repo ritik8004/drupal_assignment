@@ -28,6 +28,7 @@ module.exports = {
     domready: true,
     jQuery: true,
     google: true,
+    GTM_CONSTANTS: true,
   },
   parser: "babel-eslint",
   parserOptions: {

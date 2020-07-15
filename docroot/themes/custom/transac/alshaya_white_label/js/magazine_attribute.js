@@ -322,6 +322,8 @@
         }
 
         $(this).on('variant-selected', function (event, variant, code) {
+          // pdp additional attribute overlay called on selecting the color and size swatch.
+          Drupal.behaviors.pdp_overlay_attributes.attach(document);
           if ($(window).width() > 767) {
             return;
           }

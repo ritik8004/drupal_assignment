@@ -6,6 +6,15 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Install config for spc click n collect.
+ */
+function alshaya_bh_update_8001() {
+  alshaya_bh_default_spc_config();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_bh_install() {
@@ -33,4 +42,14 @@ function alshaya_bh_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
+  alshaya_bh_default_spc_config();
+}
+
+/**
+ * Install config for spc click n collect.
+ *
+ * Set default lat and long for click n collect api requests.
+ */
+function alshaya_bh_default_spc_config() {
+  alshaya_country_set_default_spc_config(26.0667, 50.5577);
 }

@@ -275,6 +275,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
       'swatches' => NULL,
       'swatch_more_text' => NULL,
       'swatch_color_count' => NULL,
+      'product_attribute_labels' => NULL,
     ],
   ];
 
@@ -329,6 +330,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'label' => NULL,
       'summary' => NULL,
+    ],
+  ];
+
+  $items['non_refundable_markup'] = [
+    'variables' => [
+      'text' => NULL,
+      'tooltip' => NULL,
     ],
   ];
 
@@ -592,6 +600,28 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
 
+        // Non-refundable.
+        $is_non_refundable = NULL;
+        if ($sku_entity->get('attr_non_refundable_products')->getString()) {
+          $is_non_refundable = '1';
+          $build['non_refundable'] = [
+            '#theme' => 'non_refundable_markup',
+            '#text' => $product_settings->get('non_refundable_text'),
+            '#tooltip' => $product_settings->get('non_refundable_tooltip'),
+          ];
+        }
+
+        // Same day delivery.
+        if ($sku_entity->get('attr_same_day_delivery')->getString()) {
+          $build['same_day_delivery_text']['#markup'] = $product_settings->get('same_day_delivery_text');
+          $build['same_day_delivery_sub_text']['#markup'] = $product_settings->get('same_day_delivery_sub_text');
+        }
+
+        // Delivery in only city.
+        if ($delivery_in_only_city_text = $product_settings->get('delivery_in_only_city_text')) {
+          $build['delivery_in_only_city_text']['#markup'] = $delivery_in_only_city_text;
+        }
+
         // Initialise home delivery variable.
         $build['home_delivery'] = [];
 
@@ -679,12 +709,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
           $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
           $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
-          if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
-            $build['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
-          }
-          else {
-            $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
-          }
           if ($quantity_limit_enabled) {
             $build['#attached']['library'][] = 'alshaya_white_label/order-qty-limit';
           }
@@ -755,6 +779,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $productInfo['orderLimitMsg'] = $productOrderLimit->maxSaleQtyMessage($max_sale_qty);
         }
 
+        $productInfo['is_non_refundable'] = $is_non_refundable;
         $settingsKey = ($view_mode === 'matchback') ? 'matchback' : 'productInfo';
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()] = $productInfo;
       }
@@ -771,9 +796,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
  */
 function alshaya_acm_product_node_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display) {
   if (!empty($build['sharethis'])) {
-    $build['sharethis']['#attached']['library'] = [
-      'alshaya_acm_product/sharethis',
-    ];
+    $build['sharethis']['#attached']['library'][] = 'alshaya_acm_product/sharethis';
   }
 }
 

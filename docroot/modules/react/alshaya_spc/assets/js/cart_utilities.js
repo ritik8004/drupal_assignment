@@ -79,6 +79,7 @@
         var parentSKU = response.parent_sku !== null
           ? response.parent_sku
           : response.sku;
+
         var data = Drupal.alshayaSpc.storeProductData({
           sku: response.sku,
           parentSKU: parentSKU,
@@ -90,6 +91,7 @@
           promotions: response.promotions,
           maxSaleQty: response.max_sale_qty,
           maxSaleQtyParent: response.max_sale_qty_parent,
+          isNonRefundable: Drupal.alshayaSpc.getAttributeVal(response.attributes, 'non_refundable_products'),
           gtmAttributes: response.gtm_attributes,
         });
 
@@ -113,6 +115,7 @@
       'maxSaleQty': data.maxSaleQty,
       'maxSaleQtyParent': data.maxSaleQtyParent,
       'gtmAttributes': data.gtmAttributes,
+      'isNonRefundable': data.isNonRefundable,
       'created': new Date().getTime(),
     };
 
@@ -120,6 +123,15 @@
 
     // Return as well if required for re-use.
     return data;
+  };
+
+  Drupal.alshayaSpc.getAttributeVal = function (attrResp, attrKey) {
+    for (var i in attrResp) {
+       if (attrResp[i].key === attrKey && attrResp[i].value === '1') {
+         return attrResp[i].value;
+       }
+    }
+    return null;
   };
 
 })(jQuery, Drupal);

@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
@@ -87,11 +88,51 @@ function alshaya_acm_product_get_sku_image(array $media, $image_style = '', $rel
  */
 function alshaya_acm_product_get_sku_configurable_values($sku) {
   $configurableFieldValues = [];
-  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-  if ($sku_entity) {
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+
+  if ($sku instanceof SKUInterface) {
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $configurableFieldValues = $skuManager->getConfigurableValues($sku_entity);
+    // Get the parent SKU so that its configurable attributes can be fetched.
+    if ($sku->bundle() !== 'configurable') {
+      $parent_sku = $skuManager->getParentSkuBySku($sku);
+
+      if ($parent_sku instanceof SKUInterface && $parent_sku->bundle() !== 'configurable') {
+        return $configurableFieldValues;
+      }
+      elseif (!$parent_sku) {
+        // In case for some reason no parent is available then error is not
+        // thrown.
+        return $configurableFieldValues;
+      }
+    }
+    else {
+      $parent_sku = $sku;
+    }
+    $configurable_codes = Configurable::getSortedConfigurableAttributes($parent_sku);
+
+    // Get the actual SKU attributes like size, color etc.
+    $attributes = $sku->get('attributes')->getValue();
+    $attributes = array_column($attributes, 'value', 'key');
+
+    $remove_not_required_option = $skuManager->isNotRequiredOptionsToBeRemoved();
+    foreach ($configurable_codes as $code) {
+      $fieldKey = 'attr_' . $code['code'];
+
+      if ($sku->hasField($fieldKey)) {
+        $value = $sku->get($fieldKey)->getString();
+
+        if ($remove_not_required_option && $skuManager->isAttributeOptionToExclude($value)) {
+          continue;
+        }
+
+        $configurableFieldValues[$fieldKey] = [
+          'label' => $skuManager->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
+            ->getFieldDefinition()
+            ->getLabel(),
+          'value' => $sku->get($fieldKey)->getString(),
+        ];
+      }
+    }
   }
   return $configurableFieldValues;
 }

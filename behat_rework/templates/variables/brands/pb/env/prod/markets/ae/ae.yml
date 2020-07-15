@@ -1,0 +1,6 @@
+variables:
+  var_username: 'mitesh@axelerant.com'
+  var_password: 'Alshaya@2017'
+  spc_product_listing_page: '/shop-outdoor/shop-category/all-outdoor/'
+  spc_basket_page: '/shop-outdoor/shop-category/all-outdoor/'
+  product_listing_page_url: "/shop-outdoor/shop-category/all-outdoor/"

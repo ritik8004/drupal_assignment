@@ -131,7 +131,10 @@
       }
     }
   }
+}
 
+.c-plp,
+#top-results {
   .swatches {
     display: flex;
     align-items: center;
@@ -162,7 +165,8 @@
 }
 
 @include breakpoint($desktop) {
-  .c-plp {
+  .c-plp,
+  #top-results {
     .swatches {
       > a {
         .swatch-block {

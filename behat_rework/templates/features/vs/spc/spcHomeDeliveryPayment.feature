@@ -24,7 +24,7 @@ Feature: SPC Checkout Home Delivery CC
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -51,7 +51,7 @@ Feature: SPC Checkout Home Delivery CC
     And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
     And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
     And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -78,7 +78,7 @@ Feature: SPC Checkout Home Delivery CC
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -105,7 +105,7 @@ Feature: SPC Checkout Home Delivery CC
     And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
     And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
     And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -132,7 +132,7 @@ Feature: SPC Checkout Home Delivery CC
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -159,7 +159,7 @@ Feature: SPC Checkout Home Delivery CC
     And I fill in an element having class ".spc-type-cc-number input" with "{spc_cybersource_card}"
     And I fill in an element having class ".spc-type-expiry input" with "{spc_cybersource_expiry}"
     And I fill in an element having class ".spc-type-cvv input" with "{spc_cybersource_cvv}"
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -183,7 +183,7 @@ Feature: SPC Checkout Home Delivery CC
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -211,7 +211,7 @@ Feature: SPC Checkout Home Delivery CC
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -270,7 +270,7 @@ Feature: SPC Checkout Home Delivery CC
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -298,7 +298,7 @@ Feature: SPC Checkout Home Delivery CC
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -364,7 +364,7 @@ Feature: SPC Checkout Home Delivery CC
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -392,7 +392,7 @@ Feature: SPC Checkout Home Delivery CC
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load

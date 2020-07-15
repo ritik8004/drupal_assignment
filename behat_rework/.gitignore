@@ -1,4 +1,8 @@
-/bin
+/bin/*
+!/bin/package.json
+!/bin/package-lock.json
 /vendor
 /build
 /feature
+/templates/variables/brands/*/env/local/
+/features/

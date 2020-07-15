@@ -1218,7 +1218,7 @@ class SkuManager {
   protected function getSkuLabel(SKU $sku_entity, $parent = FALSE) {
     if ($labels = $sku_entity->get('attr_labels')->getString()) {
       $labels_data = unserialize($labels);
-      if (!empty($labels_data)) {
+      if (!empty($labels_data) && is_array($labels_data)) {
         return $labels_data;
       }
       // Process only when current sku is not parent SKU.
@@ -1592,6 +1592,10 @@ class SkuManager {
 
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
+
+    if ($this->isSkuFreeGift($sku_entity)) {
+      return $plugin->getParentSku($sku_entity, FALSE);
+    }
 
     return $plugin->getParentSku($sku_entity);
   }
@@ -2777,7 +2781,13 @@ class SkuManager {
     // available from terms.
     $static[$entity->id()] = $static['default'];
 
-    if (($term_list = $entity->get('field_category')->getValue())) {
+    // The layout has been overriden at node level.
+    if ($entity instanceof NodeInterface && !empty($entity->get('field_select_pdp_layout')->value)) {
+      $static[$entity->id()] = $entity->get('field_select_pdp_layout')->value;
+    }
+
+    // The layout has been overriden at category level.
+    elseif (($term_list = $entity->get('field_category')->getValue())) {
       if ($inner_term = $this->productCategoryHelper->termTreeGroup($term_list)) {
         $term = $this->termStorage->load($inner_term);
         if ($term instanceof TermInterface) {

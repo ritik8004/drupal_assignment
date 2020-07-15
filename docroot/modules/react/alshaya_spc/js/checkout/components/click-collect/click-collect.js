@@ -192,7 +192,7 @@ class ClickCollect extends React.Component {
               return;
             }
           } catch (error) {
-            Drupal.logJavascriptError('clickncollect-checkUserCountry', error);
+            Drupal.logJavascriptError('clickncollect-checkUserCountry', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
           }
 
           if (JSON.stringify(coords) === JSON.stringify(userCoords)) {
@@ -214,7 +214,7 @@ class ClickCollect extends React.Component {
       )
       .catch((error) => {
         removeFullScreenLoader();
-        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error);
+        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
       });
     return false;
   };
@@ -246,7 +246,8 @@ class ClickCollect extends React.Component {
         removeFullScreenLoader();
       })
       .catch((error) => {
-        Drupal.logJavascriptError('clickncollect-fetchAvailableStores', error);
+        removeFullScreenLoader();
+        Drupal.logJavascriptError('clickncollect-fetchAvailableStores', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
       });
   };
 
@@ -391,7 +392,11 @@ class ClickCollect extends React.Component {
       if (exitFullscreen()) {
         self.refreshMap();
       } else {
-        Drupal.logJavascriptError('clickncollect-toggleFullScreen', 'Not able to exit full screen, click and collect map view.');
+        Drupal.logJavascriptError(
+          'clickncollect-toggleFullScreen',
+          'Not able to exit full screen, click and collect map view.',
+          GTM_CONSTANTS.CHECKOUT_ERRORS,
+        );
       }
 
       if (!selectedStore) {

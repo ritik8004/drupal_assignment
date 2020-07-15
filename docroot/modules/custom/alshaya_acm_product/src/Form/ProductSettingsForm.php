@@ -10,6 +10,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_pdp_layouts\PdpLayoutManager;
 
 /**
  * Class ProductSettingsForm.
@@ -38,6 +39,13 @@ class ProductSettingsForm extends ConfigFormBase {
   protected $skuManager;
 
   /**
+   * The PDP Layout Manager.
+   *
+   * @var \Drupal\alshaya_pdp_layouts\PdpLayoutManager
+   */
+  protected $pdpLayoutManager;
+
+  /**
    * ProductSettingsForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -48,16 +56,20 @@ class ProductSettingsForm extends ConfigFormBase {
    *   Cache Backend service.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   SkuManager service.
+   * @param \Drupal\alshaya_pdp_layouts\PdpLayoutManager $pdp_layout_manager
+   *   The PDP Layout Manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
                               CacheBackendInterface $cache,
-                              SkuManager $skuManager
+                              SkuManager $skuManager,
+                              PdpLayoutManager $pdp_layout_manager
   ) {
     parent::__construct($config_factory);
     $this->entityTypeManager = $entity_type_manager;
     $this->cache = $cache;
     $this->skuManager = $skuManager;
+    $this->pdpLayoutManager = $pdp_layout_manager;
   }
 
   /**
@@ -68,7 +80,8 @@ class ProductSettingsForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
       $container->get('cache.default'),
-      $container->get('alshaya_acm_product.skumanager')
+      $container->get('alshaya_acm_product.skumanager'),
+      $container->get('plugin.manager.alshaya_pdp_layouts')
     );
   }
 
@@ -113,6 +126,12 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('legal_notice_enabled', $form_state->getValue('legal_notice_enabled'));
     $config->set('legal_notice_label', $form_state->getValue('legal_notice_label'));
     $config->set('legal_notice_summary', $form_state->getValue('legal_notice_summary'));
+    $config->set('non_refundable_tooltip', $form_state->getValue('non_refundable_tooltip'));
+    $config->set('non_refundable_text', $form_state->getValue('non_refundable_text'));
+    $config->set('same_day_delivery_text', $form_state->getValue('same_day_delivery_text'));
+    $config->set('same_day_delivery_sub_text', $form_state->getValue('same_day_delivery_sub_text'));
+    $config->set('delivery_in_only_city_text', $form_state->getValue('delivery_in_only_city_text'));
+    $config->set('delivery_in_only_city_key', $form_state->getValue('delivery_in_only_city_key'));
 
     // Product default image.
     $product_default_image = NULL;
@@ -286,8 +305,11 @@ class ProductSettingsForm extends ConfigFormBase {
     ];
 
     // Prepare PDP layout select options.
-    $pdp_layout_options = alshaya_acm_product_pdp_layout_values();
-    unset($pdp_layout_options['inherit']);
+    $layouts = $this->pdpLayoutManager->getDefinitions();
+    $pdp_layout_options = [];
+    foreach ($layouts as $key => $value) {
+      $pdp_layout_options[$key] = $value['label']->__toString();
+    }
     $form['pdp_layout'] = [
       '#type' => 'select',
       '#title' => $this->t('PDP layout'),
@@ -303,6 +325,55 @@ class ProductSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Max discount value to trace (in %).'),
       '#description' => $this->t('This will trace the log when sku has discount (price - final price) greater than this.'),
       '#default_value' => $config->get('max_discount_to_log'),
+    ];
+
+    $form['product_flag'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Product flags'),
+      '#tree' => FALSE,
+      '#open' => TRUE,
+    ];
+
+    $form['product_flag']['non_refundable_tooltip'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Non refundable tooltip'),
+      '#description' => $this->t('Please enter text to be shown in tooltip.'),
+      '#default_value' => $config->get('non_refundable_tooltip'),
+    ];
+
+    $form['product_flag']['non_refundable_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Non refundable text'),
+      '#description' => $this->t('Please enter text to be shown for pdp/checkout.'),
+      '#default_value' => $config->get('non_refundable_text'),
+    ];
+
+    $form['product_flag']['same_day_delivery_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Same day delivery'),
+      '#description' => $this->t('Please enter text to be shown for pdp.'),
+      '#default_value' => $config->get('same_day_delivery_text'),
+    ];
+
+    $form['product_flag']['same_day_delivery_sub_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Same day delivery sub text'),
+      '#description' => $this->t('Please enter text to be shown for pdp.'),
+      '#default_value' => $config->get('same_day_delivery_sub_text'),
+    ];
+
+    $form['product_flag']['delivery_in_only_city_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Delivery in only city'),
+      '#description' => $this->t('Please enter text to be shown for pdp/checkout.'),
+      '#default_value' => $config->get('delivery_in_only_city_text'),
+    ];
+
+    $form['product_flag']['delivery_in_only_city_key'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Delivery in only city key'),
+      '#description' => $this->t('Please enter the city key to be allowed for delivery.'),
+      '#default_value' => $config->get('delivery_in_only_city_key'),
     ];
 
     $form['legal_notice_enabled'] = [

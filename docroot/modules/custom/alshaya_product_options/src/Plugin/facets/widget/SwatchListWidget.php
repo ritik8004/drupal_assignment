@@ -56,7 +56,7 @@ class SwatchListWidget extends LinksWidget {
               break;
 
             default:
-              continue;
+              continue 2;
           }
 
           $item['#title']['#theme'] = 'facets_result_item_with_swatch';

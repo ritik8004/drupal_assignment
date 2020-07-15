@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains install hook for this module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_customer_portal_install() {
+  // This will add the provided filter "alshaya_customer_portal_token_filter"
+  // to the Full Text active filters list.
+  // But this causes a problem during module uninstall as the filter must
+  // be unselected from the UI before the module can be uninstalled as Drupal
+  // by default does not allow to delete any module which provides a filter
+  // that is currently enabled.
+  // So we have to manually remove the filter from the UI and then uninstall
+  // the module.
+  // @see https://www.drupal.org/project/drupal/issues/2348925
+  $config = \Drupal::configFactory()->getEditable('filter.format.full_text');
+  $filters = $config->get('filters');
+  $token_filter_config = [
+    'alshaya_customer_portal_token_filter' => [
+      'id' => 'alshaya_customer_portal_token_filter',
+      'provider' => 'alshaya_customer_portal',
+      'status' => TRUE,
+      'weight' => 0,
+      'settings' => [],
+    ],
+  ];
+  $filters += $token_filter_config;
+  $config->set('filters', $filters);
+  $config->save();
+}
