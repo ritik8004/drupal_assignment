@@ -261,7 +261,6 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
 
   if ($form_id == 'user_pass') {
     array_unshift($form['#validate'], 'alshaya_acm_customer_user_pass_validate');
-    array_unshift($form['#submit'], 'alshaya_acm_customer_user_pass_submit');
   }
 
   // If 'reset password' screen from 'forget password'.
@@ -821,16 +820,4 @@ function alshaya_acm_customer_is_customer($user) {
   }
 
   return TRUE;
-}
-
-/**
- * Custom submit handler for the 'user_pass_reset' form.
- *
- * To set the current language translation to reset text.
- */
-function alshaya_acm_customer_user_pass_submit(array &$form, FormStateInterface &$form_state) {
-  $config = \Drupal::configFactory()->getEditable('user.settings');
-  $password_text = t('Further instructions have been sent to your email address.');
-  $config->set('password_reset_text', $password_text);
-  $config->save();
 }
