@@ -8,11 +8,12 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
-// Get site environment.
-$env = alshaya_get_site_environment();
 $appointment_settings = [];
 
 if (!empty($site_country_code) && $site_country_code['site_code'] === 'bp') {
+  // Get site environment.
+  $env = alshaya_get_site_environment();
+
   $appointment_settings = [
     'username' => '',
     'password' => '',
