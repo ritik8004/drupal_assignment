@@ -6,6 +6,15 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Enable replicate feature for boots.
+ */
+function alshaya_bp_transac_update_8001() {
+  \Drupal::service('module_installer')->install(['replicate_ui']);
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_bp_transac_install() {
