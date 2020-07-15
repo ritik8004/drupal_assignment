@@ -160,16 +160,16 @@ export default class CustomerDetails extends React.Component {
             handleChange={(e) => this.handleChange('companionData', e)}
             companionData={companionData}
           />
-          <div className="disclaimer-wrapper">
-            {drupalSettings.alshaya_appointment.customer_details_disclaimer_text}
-          </div>
           <div className="customer-details-buttons-wrapper">
             <button
-              className="customer-details-button"
+              className="customer-details-button appointment-type-button"
               type="submit"
             >
               {Drupal.t('Book Appointment')}
             </button>
+          </div>
+          <div className="disclaimer-wrapper">
+            {drupalSettings.alshaya_appointment.customer_details_disclaimer_text}
           </div>
         </form>
       </div>

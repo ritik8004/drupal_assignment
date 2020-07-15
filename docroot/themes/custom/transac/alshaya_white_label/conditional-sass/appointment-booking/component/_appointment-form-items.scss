@@ -1,3 +1,116 @@
+@mixin apt-placeholder-label() {
+  font-size: 0.875rem;
+  color: $spc-input-label;
+  position: absolute;
+  #{$left}: 0;
+  top: 0;
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+@mixin apt-placeholder-active() {
+  top: -1rem;
+  bottom: 0;
+  #{$left}: 0;
+  opacity: 1;
+  font-size: 0.75rem;
+}
+
+.appointment-form-item {
+  position: relative;
+  margin-bottom: 3.125rem;
+}
+
+// Type = Text.
+.appointment-form-item:not(.appointment-type-mobile) {
+  input[type=text],
+  input[type=email],
+  input[type=date],
+  input[type=password] {
+    height: 1.5rem;
+    font-size: 0.875rem;
+    color: $spc-form-input;
+  }
+
+  label {
+    @include apt-placeholder-label;
+  }
+
+  input:focus ~ label,
+  input.focus ~ label {
+    @include apt-placeholder-active;
+  }
+}
+
+// Type = Date
+.appointment-type-date {
+  .react-datepicker-wrapper {
+    display: block;
+  }
+
+  .react-datepicker__input-container {
+    display: block;
+  }
+
+  .dob-input-wrapper {
+    span {
+      position: relative;
+
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/calendar.svg') center center no-repeat;;
+        display: block;
+        width: 15px;
+        height: 20px;
+        position: absolute;
+        top: 0;
+        right: 6px;
+        color: #999;
+        background-size: contain;
+      }
+    }
+  }
+}
+
+// Type = Telephone.
+.appointment-type-mobile {
+  label {
+    font-size: 0.75rem;
+    color: $spc-input-label;
+  }
+
+  .field-wrapper {
+    position: relative;
+
+    html[lang=ar] & {
+      direction: ltr;
+    }
+
+    .country-code {
+      position: absolute;
+      // No rtl.
+      left: 0;
+      font-size: 0.875rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      z-index: 2;
+      color: $spc-mobile-code;
+    }
+
+    input[type=text] {
+      height: 1.5rem;
+      // No rtl.
+      padding-left: 2.25rem !important;
+      font-size: 0.875rem;
+      background: transparent;
+      color: $spc-form-input;
+    }
+  }
+}
+
 .appointment-for-you-wrapper {
   .appointment-for-you-container {
     display: flex;
