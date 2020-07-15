@@ -107,7 +107,7 @@ export default class AppointmentStore extends React.Component {
         {
           types: [],
           componentRestrictions:
-            { country: window.drupalSettings.alshaya_appointment.country_code },
+            { country: drupalSettings.alshaya_appointment.country_code },
         },
       );
       this.autocomplete.addListener(

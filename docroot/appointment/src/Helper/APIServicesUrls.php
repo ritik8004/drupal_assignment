@@ -11,16 +11,26 @@ final class APIServicesUrls {
   /**
    * WSDL configuration service url.
    */
-  const WSDL_CONFIGURATION_SERVICES_URL = 'https://api-stage.timetradesystems.co.uk/soap/ConfigurationServices?wsdl';
+  const WSDL_CONFIGURATION_SERVICES_URL = '/soap/ConfigurationServices?wsdl';
 
   /**
    * WSDL appointment service url.
    */
-  const WSDL_APPOINTMENT_SERVICES_URL = 'https://api-stage.timetradesystems.co.uk/soap/AppointmentServices?wsdl';
+  const WSDL_APPOINTMENT_SERVICES_URL = '/soap/AppointmentServices?wsdl';
 
   /**
    * WSDL client service url.
    */
-  const WSDL_CLIENT_SERVICES_URL = 'https://api-stage.timetradesystems.co.uk/soap/ClientServices?wsdl';
+  const WSDL_CLIENT_SERVICES_URL = '/soap/ClientServices?wsdl';
+
+  /**
+   * Translation service url to get all translations.
+   */
+  const TRANSLATION_SERVICE_URL_ALL = '/api/v1/project/get';
+
+  /**
+   * Translation service url to get individual translations.
+   */
+  const TRANSLATION_SERVICE_URL_INDIVIDUAL = '/api/v1/translate/get';
 
 }

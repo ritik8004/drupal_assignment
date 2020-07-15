@@ -26,17 +26,28 @@ class XmlAPIHelper {
   protected $settings;
 
   /**
+   * APIHelper.
+   *
+   * @var \App\Helper\APIHelper
+   */
+  protected $apiHelper;
+
+  /**
    * ConfigurationServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
    * @param \App\Service\Config\SystemSettings $settings
    *   System Settings service.
+   * @param \App\Helper\APIHelper $api_helper
+   *   API Helper.
    */
   public function __construct(LoggerInterface $logger,
-                              SystemSettings $settings) {
+                              SystemSettings $settings,
+                              APIHelper $api_helper) {
     $this->logger = $logger;
     $this->settings = $settings;
+    $this->apiHelper = $api_helper;
   }
 
   /**
@@ -104,7 +115,7 @@ class XmlAPIHelper {
         </locationSearchGeoCriteria>
       </ns2:getLocationsByGeoCriteria>';
 
-    $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL, 'getLocationsByGeoCriteria', $apiBody);
+    $result = $this->getApiDataWithXml($this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL, 'getLocationsByGeoCriteria', $apiBody);
 
     return $result;
   }
@@ -135,7 +146,7 @@ class XmlAPIHelper {
     ';
 
     if ($selected_date && $program && $activity && $location) {
-      $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL, 'getAvailableNDateTimeSlotsStartFromDate', $apiBody);
+      $result = $this->getApiDataWithXml($this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL, 'getAvailableNDateTimeSlotsStartFromDate', $apiBody);
     }
     else {
       $result['error'] = 'Required parameters are missing.';
@@ -172,7 +183,7 @@ class XmlAPIHelper {
       </client>
     </ns2:updateInsertClient>';
 
-    $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_CLIENT_SERVICES_URL, 'updateInsertClient', $apiBody);
+    $result = $this->getApiDataWithXml($this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_CLIENT_SERVICES_URL, 'updateInsertClient', $apiBody);
 
     return $result;
   }
@@ -199,7 +210,7 @@ class XmlAPIHelper {
       <clientExternalId>' . $requestQuery->get('client') . '</clientExternalId>
     </ns2:bookAppointment>';
 
-    $result = $this->getApiDataWithXml(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL, 'bookAppointment', $apiBody);
+    $result = $this->getApiDataWithXml($this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL, 'bookAppointment', $apiBody);
 
     return $result;
   }

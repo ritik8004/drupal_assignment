@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 function fetchAPIData(apiUrl) {
-  const url = window.drupalSettings.alshaya_appointment.middleware_url + apiUrl;
+  const url = drupalSettings.alshaya_appointment.middleware_url + apiUrl;
 
   return Axios.get(url)
     .then((response) => response)
@@ -9,7 +9,7 @@ function fetchAPIData(apiUrl) {
 }
 
 function postAPICall(apiUrl, data) {
-  const url = window.drupalSettings.alshaya_appointment.middleware_url + apiUrl;
+  const url = drupalSettings.alshaya_appointment.middleware_url + apiUrl;
 
   return Axios.post(url, data)
     .then((response) => response)

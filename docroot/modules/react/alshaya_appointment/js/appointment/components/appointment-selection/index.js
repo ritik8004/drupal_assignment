@@ -40,7 +40,7 @@ export default class AppointmentSelection extends React.Component {
                 </SectionTitle>
               </div>
               <div className="appointment-details-item-body">
-                {appointmentType && appointmentType.name}
+                {appointmentType && appointmentType.label}
               </div>
             </div>
             <button

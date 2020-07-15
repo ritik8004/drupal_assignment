@@ -52,6 +52,9 @@ class SystemSettings {
 
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/appointment.php';
 
+    // Include overrides.
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';
+
     $this->appointmentSettings = $settings;
   }
 

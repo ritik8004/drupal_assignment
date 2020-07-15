@@ -89,7 +89,7 @@ class Helper {
    *   Unit of the distance.
    *
    * @return string
-   *   Distance.
+   *   Distance (Default distance unit is miles).
    */
   public function distance($lat1, $lon1, $lat2, $lon2, $unit) {
     if (($lat1 == $lat2) && ($lon1 == $lon2)) {

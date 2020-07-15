@@ -97,7 +97,6 @@ class AlshayaAppointmentController extends ControllerBase {
             'placeholder' => $store_finder_config->get('store_search_placeholder'),
           ]
         ),
-        'google_map_api_key' => $geolocation_config->get('google_map_api_key'),
         'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
         'mobile_maxlength' => $alshaya_master_config->get('maxlength'),
         'customer_details_disclaimer_text' => $alshaya_appointment_config->get('customer_details_disclaimer_text'),
