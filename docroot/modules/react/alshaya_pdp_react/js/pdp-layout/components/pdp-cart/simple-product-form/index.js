@@ -11,21 +11,25 @@ class SimpleProductForm extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('load', () => {
-      this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
+    // Condition to check if add to cart
+    // button is available.
+    if (document.getElementById('add-to-cart-main')) {
+      window.addEventListener('load', () => {
+        this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
 
-      this.addToBagButtonClass(this.button.current.offsetTop);
-    });
+        this.addToBagButtonClass(this.button.current.offsetTop);
+      });
 
-    window.addEventListener('scroll', () => {
-      const buttonOffset = this.button.current.getAttribute('data-top-offset');
+      window.addEventListener('scroll', () => {
+        const buttonOffset = this.button.current.getAttribute('data-top-offset');
 
-      if (buttonOffset === null) {
-        return;
-      }
+        if (buttonOffset === null) {
+          return;
+        }
 
-      this.addToBagButtonClass(buttonOffset);
-    });
+        this.addToBagButtonClass(buttonOffset);
+      });
+    }
   }
 
   addToBagButtonClass = (buttonOffset) => {
