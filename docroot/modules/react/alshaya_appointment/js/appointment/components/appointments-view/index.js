@@ -1,10 +1,7 @@
 import React from 'react';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
-import AppointmentlistType from './components/appointmentlist-type';
-import AppointmentListDateTime from './components/appointmentlist-datetime';
-import AppointmentListStore from './components/appointmentlist-store';
-import AppointmentListCompanions from './components/appointmentlist-companion';
 import ConditionalView from '../../../common/components/conditional-view';
+import AppointmentListItem from './components/appointmentlist';
 
 export default class AppointmentsView extends React.Component {
   constructor(props) {
@@ -14,6 +11,7 @@ export default class AppointmentsView extends React.Component {
       appointments: {},
       notFound: '',
     };
+    this.cancelAppointment = this.cancelAppointment.bind(this);
   }
 
   componentDidMount() {
@@ -40,6 +38,10 @@ export default class AppointmentsView extends React.Component {
         });
       }
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState;
   }
 
   getUserAppointments = () => {
@@ -69,17 +71,18 @@ export default class AppointmentsView extends React.Component {
   getNotFoundText = () => (<p>{ Drupal.t('No appointments booked.') }</p>);
 
   cancelAppointment = (appointmentId, index) => {
-    const confirmText = Drupal.t('Are you sure you wish to cancel this appointment?');
+    const { appointments } = this.state;
+    const appointment = appointments[index];
+    const confirmText = Drupal.t('Are you sure you want to cancel appointment for !type?',
+      { '!type': appointment.activityName });
     if (window.confirm(confirmText)) { // eslint-disable-line no-alert
       const { id } = drupalSettings.alshaya_appointment.user_details;
-
       if (id && appointmentId) {
         const apiUrl = `/cancel/appointment?id=${id}&appointment=${appointmentId}`;
         const apiData = fetchAPIData(apiUrl);
         if (apiData instanceof Promise) {
           apiData.then((result) => {
             if (result.error === undefined && result.data.return.result === 'SUCCESS') {
-              const { appointments } = this.state;
               appointments.splice(index, 1);
               this.setState({
                 appointments,
@@ -103,30 +106,11 @@ export default class AppointmentsView extends React.Component {
 
     if (appointments.length > 0 && appointments[0] !== null) {
       appointmentsRender = appointments.map((appointment, i) => (
-        <>
-          <div className="appointment-type">
-            <AppointmentlistType appointment={appointment} />
-          </div>
-          <div className="appointment-date-time">
-            <AppointmentListDateTime appointment={appointment} />
-          </div>
-          <div className="appointment-store">
-            <AppointmentListStore appointment={appointment} />
-          </div>
-          <div className="appointment-companions">
-            <AppointmentListCompanions appointment={appointment} />
-          </div>
-          <div className="appointment-actions">
-            <button type="button" className="action-edit">{Drupal.t('Edit')}</button>
-            <button
-              type="button"
-              className="action-delete"
-              onClick={() => this.cancelAppointment(appointment.confirmationNumber, i)}
-            >
-              {Drupal.t('Delete')}
-            </button>
-          </div>
-        </>
+        <AppointmentListItem
+          appointment={appointment}
+          num={i}
+          cancelAppointment={this.cancelAppointment}
+        />
       ));
     }
 
@@ -135,7 +119,9 @@ export default class AppointmentsView extends React.Component {
         <a href={`${baseUrl}${pathPrefix}appointment/booking`} className="appointment-booking-link-top">
           {Drupal.t('Book new appointment')}
         </a>
-        {appointmentsRender}
+        <div className="appointment-list">
+          {appointmentsRender}
+        </div>
         <ConditionalView condition={notFound !== undefined}>
           { notFound }
         </ConditionalView>
