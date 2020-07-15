@@ -116,7 +116,11 @@ export default class AppointmentsView extends React.Component {
 
     return (
       <div className="appointments-list-wrapper">
-        <a href={`${baseUrl}${pathPrefix}appointment/booking`} className="appointment-booking-link-top">
+        <a
+          href={`${baseUrl}${pathPrefix}appointment/booking`}
+          className="appointment-booking-link-top fadeInUp"
+          style={{ animationDelay: '0.4s' }}
+        >
           {Drupal.t('Book new appointment')}
         </a>
         <div className="appointment-list">
@@ -125,9 +129,11 @@ export default class AppointmentsView extends React.Component {
         <ConditionalView condition={notFound !== undefined}>
           { notFound }
         </ConditionalView>
-        <a href={`${baseUrl}${pathPrefix}appointment/booking`} className="appointment-booking-link-bottom">
-          {Drupal.t('Book new appointment')}
-        </a>
+        <div className="book-appointment-btn fadeInUp" style={{ animationDelay: '1s' }}>
+          <a href={`${baseUrl}${pathPrefix}appointment/booking`} className="appointment-booking-link-bottom">
+            {Drupal.t('Book new appointment')}
+          </a>
+        </div>
       </div>
     );
   }
