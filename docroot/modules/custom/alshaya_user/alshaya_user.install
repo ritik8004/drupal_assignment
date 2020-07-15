@@ -10,6 +10,17 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Updates reset password text for arabic language.
+ */
+function alshaya_user_update_8007() {
+  // Save the updated config.
+  $arabic_config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'user.settings');
+  $arabic_config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updates pathauto settings to exclude user entities.
  */
 function alshaya_user_update_8006() {
