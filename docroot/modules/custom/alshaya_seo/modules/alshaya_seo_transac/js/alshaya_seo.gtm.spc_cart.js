@@ -45,50 +45,55 @@
    */
   Drupal.alshayaSeoSpc.prepareProductImpression = function (recommendedProducts, position) {
     var impressions = [];
-    var currencyCode = drupalSettings.alshaya_spc.currency_config.currency_code;
     var listName = $('body').attr('gtm-list-name');
-    if (recommendedProducts !== null) {
-      var items = recommendedProducts;
-      var count = position + 1;
-      var excludeKeys = ['name', 'id', 'price', 'list', 'position'];
-      Object.entries(items).forEach(function(productItem) {
-        const product = productItem[1];
-        // if (skus.includes(key)) {
-          var impression = {};
-          impression.id = product.id;
-          impression.name = product.title;
-          impression.price = product.final_price;
-          impression.list = listName;
+    var productLinkSelector = $('.spc-recommended-products .block-content a:not(".impression-processed")');
+    var productLinkProcessedSelector = $('.spc-recommended-products .block-content a.impression-processed');
+    var count = productLinkProcessedSelector.length + 1;
+    var label = $('.spc-post-content .spc-checkout-section-title').text();
+
+    if (productLinkSelector.length > 0) {
+      productLinkSelector.each(function () {
+        // if ($(this).isElementInViewPort(0, 40, true)) {
+          console.log('productLinkSelector');
+          $(this).addClass('impression-processed');
+          // var impression = Drupal.alshayaSeoSpc.getProductValues($(this));
+          // Get product info from storage.
+          var key = 'recommendedProduct:' + drupalSettings.path.currentLanguage;
+          var relatedProductsInfo = JSON.parse(localStorage.getItem(key));
+          // Cannot use Drupal.alshayaSeoSpc.gtmProduct as the method expectes
+          // product parameter to have gtmAttributes key while in localstorage
+          // it has gtm_attributes key.
+          var impression = relatedProductsInfo[$(this).attr('data-sku')]['gtm_attributes'];
+
+          impression.list = (productRecommendationsSuffix + listName.replace('placeholder', label)).toLowerCase();
           impression.position = count;
-          for (var gtmKey in product.gtm_attributes) {
-            if (!excludeKeys.indexOf(gtmKey)) {
-              impression[gtmKey] = product.gtm_attributes[gtmKey];
-            }
-          }
           // Keep variant empty for impression pages. Populated only post add to cart action.
           impression.variant = '';
-          count++;
           impressions.push(impression);
-      });
-      if (impressions.length > 0) {
-        // To avoid max size in POST data issue we do it in batches of 10.
-        while (impressions.length > 0) {
-          var data = {
-            event: 'productImpression',
-            ecommerce: {
-              currencyCode: currencyCode,
-              impressions: impressions.splice(0, 10)
-            }
-          };
+          count++;
 
-          dataLayer.push(data);
-        }
-      }
+        // }
+      });
     }
+
+    return impressions;
   };
 
+  // document.addEventListener('recommendedProductsLoad', function (e) {
+  //   Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e);
+  //   document.addEventListener('.scroll', Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e));
+  //   document.getElementsByClassName('.spc-recommended-products .nav-next').addEventListener('.spc-recommended-products .nav-next', Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e));
+  //   document.getElementsByClassName('.spc-recommended-products .nav-prev').addEventListener('.spc-recommended-products .nav-next', Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e));
+  // });
+
   document.addEventListener('recommendedProductsLoad', function (e) {
-    Drupal.alshayaSeoSpc.prepareProductImpression(e.detail.products, 0);
+    Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e);
+    window.addEventListener('.scroll', Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e));
+    // var recommendations = document.getElementsByClassName('spc-recommended-products');
+    // console.log(document.getElementsByClassName('spc-recommended-products nav-next'));
+    // console.log(document.getElementsByClassName('spc-recommended-products nav-prev'));
+    // document.getElementsByClassName('spc-recommended-products nav-next')[0].addEventListener('click', Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e));
+    // document.getElementsByClassName('spc-recommended-products nav-prev')[0].addEventListener('click', Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e));
   });
 
   document.addEventListener('refreshCart', function (e) {
