@@ -87,7 +87,7 @@ class CartLinkedSkusController extends ControllerBase {
       $queryParams = $request->query->all();
       // Filter out duplicate skus from query param.
       $querySkus = !empty($queryParams['skus'])
-        ? array_unique(array_filter($queryParams['skus']))
+        ? array_filter($queryParams['skus'])
         : $queryParams['skus'];
       // If type or sku not available or not of crosssell type.
       if (empty($queryParams['type'])
@@ -105,28 +105,27 @@ class CartLinkedSkusController extends ControllerBase {
 
       foreach ($querySkus as $sku) {
         if ($sku_entity = SKU::loadFromSku($sku)) {
-          $cache_tags[] = 'sku:' . $sku_entity->id();
+          $cache_tags = array_merge($cache_tags, $sku_entity->getCacheTags());
           $cross_sell_skus += $this->skuManager->getLinkedSkus($sku_entity, $queryParams['type']);
         }
       }
 
-      if (!empty($cross_sell_skus)) {
-        // Filter out / Remove skus from cross sell which are already added in
-        // cart (Which we receive in query string).
-        $cross_sell_skus = array_diff($cross_sell_skus, $querySkus);
-        $linkedSkus = $this->skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
+      // Filter out / Remove skus from cross sell which are already added in
+      // cart (Which we receive in query string).
+      $cross_sell_skus = array_diff($cross_sell_skus, $querySkus);
+      $linkedSkus = $this->skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
 
-        if (!empty($linkedSkus)) {
-          foreach (array_keys($linkedSkus) as $linkedSku) {
-            $linkedSkuEntity = SKU::loadFromSku($linkedSku);
-            if ($linkedSkuEntity instanceof SKUInterface
-              && $lightProduct = $this->skuInfoHelper->getLightProduct($linkedSkuEntity)
-            ) {
-              $cache_tags[] = 'sku:' . $linkedSkuEntity->id();
-              $cache_tags[] = 'node:' . $lightProduct['nid'];
-              $result['data'][$lightProduct['sku']] = $lightProduct;
-            }
-          }
+      foreach (array_keys($linkedSkus) as $linkedSku) {
+        $linkedSkuEntity = SKU::loadFromSku($linkedSku);
+        if ($linkedSkuEntity instanceof SKUInterface
+          && $lightProduct = $this->skuInfoHelper->getLightProduct($linkedSkuEntity)
+        ) {
+          $result['data'][$lightProduct['sku']] = $lightProduct;
+          $cache_tags = array_merge(
+            $cache_tags,
+            $linkedSkuEntity->getCacheTags(),
+            ['node:' . $lightProduct['nid']]
+          );
         }
       }
 
