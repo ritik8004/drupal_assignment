@@ -9,6 +9,8 @@ const GTM_CONSTANTS = {
   GENUINE_PAYMENT_ERRORS: 'genuine payment errors',
 };
 
+const productRecommendationsSuffix = 'pr-';
+
 (function ($, Drupal, dataLayer) {
   'use strict';
 
