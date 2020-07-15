@@ -228,9 +228,17 @@ class AlshayaSpcController extends ControllerBase {
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
 
+    $spc_cnc_config = $this->config('alshaya_spc.click_n_collect');
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
     $geolocation_config = $this->config('geolocation.settings');
-    $cache_tags = Cache::mergeTags($cache_tags, array_merge($store_finder_config->getCacheTags(), $geolocation_config->getCacheTags()));
+    $cache_tags = Cache::mergeTags(
+      $cache_tags,
+      array_merge(
+        $spc_cnc_config->getCacheTags(),
+        $store_finder_config->getCacheTags(),
+        $geolocation_config->getCacheTags()
+      )
+    );
 
     $country_name = $this->mobileUtil->getCountryName($country_code);
     $strings[] = [
@@ -460,7 +468,7 @@ class AlshayaSpcController extends ControllerBase {
           'google_field_mapping' => $this->config('alshaya_spc.google_mapping')->get('mapping'),
           'map' => [
             'google_api_key' => $geolocation_config->get('google_map_api_key'),
-            'center' => $store_finder_config->get('country_center'),
+            'center' => $spc_cnc_config->get('country_center'),
             'placeholder' => $store_finder_config->get('store_search_placeholder'),
             'map_marker' => $store_finder_config->get('map_marker'),
             'cnc_shipping' => [

@@ -86,6 +86,7 @@ class AlshayaSpcLoginController extends ControllerBase {
         'class' => ['social-signin-enabled', 'social-signup-form'],
       ],
       '#prefix' => '<div class="checkout-login-separator order-5"><span>' . $this->t('or') . '</span></div>',
+      '#access' => $this->socialHelper->getStatus(),
     ];
 
     $build['social_media']['auth_links'] = [
