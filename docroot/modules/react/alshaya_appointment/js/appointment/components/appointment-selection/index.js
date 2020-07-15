@@ -18,11 +18,17 @@ export default class AppointmentSelection extends React.Component {
 
     return (
       <div className="appointment-details">
-        <div className="appointment-details-header appointment-subtitle">
+        <div
+          className="appointment-details-header appointment-subtitle fadeInUp"
+          style={{ animationDelay: '0.4s' }}
+        >
           {Drupal.t('You have chosen')}
         </div>
         <div className="appointment-details-body">
-          <div className="appointment-details-wrapper appointment-type-details-wrapper">
+          <div
+            className="appointment-details-wrapper appointment-type-details-wrapper fadeInUp"
+            style={{ animationDelay: '0.6s' }}
+          >
             <div className="appointment-details-item">
               <div className="appointment-details-item-header">
                 <SectionTitle>
@@ -54,7 +60,10 @@ export default class AppointmentSelection extends React.Component {
 
           { selectedStoreItem
             ? (
-              <div className="appointment-details-wrapper appointment-store-details-wrapper">
+              <div
+                className="appointment-details-wrapper appointment-store-details-wrapper fadeInUp"
+                style={{ animationDelay: '0.8s' }}
+              >
                 <div className="appointment-details-item">
                   <div className="appointment-details-item-header">
                     <SectionTitle>
@@ -83,7 +92,10 @@ export default class AppointmentSelection extends React.Component {
 
           { selectedSlot
             ? (
-              <div className="appointment-details-wrapper appointment-timeslot-details-wrapper">
+              <div
+                className="appointment-details-wrapper appointment-timeslot-details-wrapper fadeInUp"
+                style={{ animationDelay: '1s' }}
+              >
                 <div className="appointment-details-item">
                   <div className="appointment-details-item-header">
                     <SectionTitle>{Drupal.t('Date')}</SectionTitle>

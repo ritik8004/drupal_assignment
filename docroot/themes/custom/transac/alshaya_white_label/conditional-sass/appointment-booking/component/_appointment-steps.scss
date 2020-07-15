@@ -16,7 +16,7 @@
 
   .wizard-step {
     list-style: none;
-    padding: 0.875rem 0;
+    padding: 0.625rem 0;
     padding-#{$left}: 0.0625rem;
     padding-#{$right}: 0.6875rem;
     position: relative;
@@ -71,7 +71,6 @@
 
       &::before {
         background: url('#{$base_theme_img_directory_path}/icons/appointment-slice-chevron-bg.svg') no-repeat;
-        background-size: cover;
       }
     }
 
@@ -96,7 +95,7 @@
       height: 100%;
       width: 0.9375rem;
       position: absolute;
-      background-size: cover;
+      top: 0;
       #{$right}: 0;
     }
 

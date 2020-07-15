@@ -122,6 +122,7 @@ $_appointment-red-bg: #fef2f3;
 $_appointment-medium-blue: #b7d1ec;
 $_appointment-pink-bg: #b8237b;
 $_appointment-light-blue: #b8d1ed;
+$_appointment-light-gray: rgba(151, 151, 151, 0.2);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1314,7 +1315,7 @@ $order_qty_limit_reached_icon: $_order_limit_error_red;
 
 // Appointment system.
 $appointment-radio: $primary_radiobtn_filled;
-$appointment-section-title: $page_title;
+$appointment-section-title: $_appointment-darkish-blue;
 $appointment-inactive-step-bg: $_appointment-sky-blue;
 $appointment-active-step-bg: $white-five;
 $appointment-step-border: $_appointment-blue-border;
@@ -1373,3 +1374,5 @@ $appointment-confirmation-grey-border: $warm-grey-two;
 $appointment-confirmation-add-to-calendar-hover: $_appointment-blue-border;
 $appointment-confirmation-view-appointment-btn: $_appointment-light-blue;
 $appointment-confirmation-continue-btn: $_appointment-darkish-blue;
+$appointment-companion-detail-border: $_appointment-light-gray;
+$appointment-disclaimer-text: $grey-light;
