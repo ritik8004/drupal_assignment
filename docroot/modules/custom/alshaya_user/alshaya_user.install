@@ -14,8 +14,11 @@ use Drupal\Core\Site\Settings;
  */
 function alshaya_user_update_8007() {
   // Save the updated config.
-  $arabic_config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'user.settings');
-  $arabic_config->save();
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['user.settings'],
+    'user'
+  );
 }
 
 /**
