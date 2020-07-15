@@ -87,6 +87,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     Drupal.logJavascriptError(
       'Payment failed',
       `Payment failed with error code ${data.errorCode}`,
+      GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS,
     );
     dispatchCustomEvent('spcCheckoutMessageUpdate', {
       type: 'error',
