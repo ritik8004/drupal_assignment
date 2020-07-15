@@ -70,41 +70,43 @@ export default class CompanionDetails extends React.Component {
 
       if (firstNameData && lastNameData && dobData) {
         return (
-          <div className={`${companionNamePrefix}-details`}>
+          <div className={`companion-details-item ${companionNamePrefix}-details`}>
             <div className="details-header-wrapper">
-              <h3>{`${Drupal.t('Companion')} ${companionNum} ${Drupal.t('Details')}`}</h3>
+              <div className="companion-detail-heading">{`${Drupal.t('Companion')} ${companionNum} ${Drupal.t('Details')}`}</div>
             </div>
-            <div className="details-wrapper">
-              <div className="item">
-                <TextField
-                  type="text"
-                  required={firstNameData.required}
-                  name={firstName}
-                  defaultValue={defaultfirstName}
-                  className={firstName !== '' ? 'focus' : ''}
-                  label={firstNameData.questionText}
-                  handleChange={this.handleChange}
-                />
+            <div className="user-details-wrapper">
+              <div className="user-detail-name-wrapper">
+                <div className="item user-firstname">
+                  <TextField
+                    type="text"
+                    required={firstNameData.required}
+                    name={firstName}
+                    defaultValue={defaultfirstName}
+                    className={firstName !== '' ? 'focus' : ''}
+                    label={Drupal.t('First name')}
+                    handleChange={this.handleChange}
+                  />
+                </div>
+                <div className="item user-lastname">
+                  <TextField
+                    type="text"
+                    required={lastNameData.required}
+                    name={lastName}
+                    defaultValue={defaultlastName}
+                    className={lastName !== '' ? 'focus' : ''}
+                    label={Drupal.t('Last name')}
+                    handleChange={this.handleChange}
+                  />
+                </div>
               </div>
-              <div className="item">
-                <TextField
-                  type="text"
-                  required={lastNameData.required}
-                  name={lastName}
-                  defaultValue={defaultlastName}
-                  className={lastName !== '' ? 'focus' : ''}
-                  label={lastNameData.questionText}
-                  handleChange={this.handleChange}
-                />
-              </div>
-              <div className="item">
+              <div className="item user-dob">
                 <TextField
                   type="date"
                   required={dobData.required}
                   name={dob}
                   defaultValue={defaultdob}
                   className={dob !== '' ? 'focus' : ''}
-                  label={dobData.questionText}
+                  label={`${Drupal.t('Date of Birth')}*`}
                   handleChange={this.handleChange}
                 />
               </div>

@@ -37,33 +37,35 @@ export default class ClientDetails extends React.Component {
     return (
       <div className="appointment-user-details-wrapper">
         <div className="details-header-wrapper">
-          <h3>{Drupal.t('Appointment Booked by')}</h3>
-          <h4>{Drupal.t('We will only use these details if we need to contact you about the appointment.')}</h4>
+          <div className="store-header appointment-subtitle">{Drupal.t('Appointment Booked by')}</div>
+          <div className="user-detail-subheading">{Drupal.t('We will only use these details if we need to contact you about the appointment.')}</div>
         </div>
-        <div className="details-wrapper">
-          <div className="item">
-            <TextField
-              type="text"
-              required={false}
-              name="firstName"
-              defaultValue={firstName}
-              className={firstName !== '' ? 'focus' : ''}
-              label={Drupal.t('First Name')}
-              handleChange={this.handleChange}
-            />
+        <div className="user-details-wrapper">
+          <div className="user-detail-name-wrapper">
+            <div className="item user-firstname">
+              <TextField
+                type="text"
+                required={false}
+                name="firstName"
+                defaultValue={firstName}
+                className={firstName !== '' ? 'focus' : ''}
+                label={Drupal.t('First name')}
+                handleChange={this.handleChange}
+              />
+            </div>
+            <div className="item user-lastname">
+              <TextField
+                type="text"
+                required={false}
+                name="lastName"
+                defaultValue={lastName}
+                className={lastName !== '' ? 'focus' : ''}
+                label={Drupal.t('Last name')}
+                handleChange={this.handleChange}
+              />
+            </div>
           </div>
-          <div className="item">
-            <TextField
-              type="text"
-              required={false}
-              name="lastName"
-              defaultValue={lastName}
-              className={lastName !== '' ? 'focus' : ''}
-              label={Drupal.t('Last Name')}
-              handleChange={this.handleChange}
-            />
-          </div>
-          <div className="item">
+          <div className="item user-dob">
             <TextField
               type="date"
               required
@@ -74,7 +76,7 @@ export default class ClientDetails extends React.Component {
               handleChange={this.handleChange}
             />
           </div>
-          <div className="item">
+          <div className="item user-email">
             <TextField
               type="email"
               required={false}
@@ -85,7 +87,7 @@ export default class ClientDetails extends React.Component {
               handleChange={this.handleChange}
             />
           </div>
-          <div className="item">
+          <div className="item user-mobile">
             <TextField
               type="mobile"
               required

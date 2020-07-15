@@ -167,7 +167,8 @@ export default class CustomerDetails extends React.Component {
     return (
       <div className="customer-details-wrapper">
         <form
-          className="appointment-customer-details-form"
+          className="appointment-customer-details-form fadeInUp"
+          style={{ animationDelay: '0.4s' }}
           onSubmit={(e) => this.handleSubmit(e)}
         >
           <ClientDetails
