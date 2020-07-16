@@ -227,7 +227,7 @@ class AppointmentServices {
    */
   public function getCompanionByAppointmentId(Request $request) {
     try {
-      $client = $this->client->getSoapClient($this->serviceUrl);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $appointmentId = $request->query->get('appointment');
       $userId = $request->query->get('id');
 
@@ -357,7 +357,7 @@ class AppointmentServices {
    */
   public function getAppointmentDetails(Request $request) {
     try {
-      $client = $this->apiHelper->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $appointment = $request->query->get('appointment');
       $userId = $request->query->get('id');
 

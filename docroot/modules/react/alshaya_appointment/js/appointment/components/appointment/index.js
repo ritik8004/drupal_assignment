@@ -55,9 +55,10 @@ export default class Appointment extends React.Component {
     const { search } = window.location;
     const params = new URLSearchParams(search);
     const appointment = params.get('appointment');
+    const step = params.get('step');
     const { id, email } = drupalSettings.alshaya_appointment.user_details;
 
-    if (id && email && appointment) {
+    if (id && email && appointment && step) {
       const apiUrl = `/get/client?email=${email}&id=${id}`;
       const apiData = fetchAPIData(apiUrl);
       if (apiData instanceof Promise) {
@@ -86,7 +87,7 @@ export default class Appointment extends React.Component {
   validateAppointmentEdit(client, appointment) {
     if (client.clientExternalId !== appointment.clientExternalId) {
       const { baseUrl, pathPrefix } = drupalSettings.path;
-      window.location.replace(`${baseUrl}${pathPrefix}user/login`);
+      window.location.replace(`${baseUrl}${pathPrefix}appointment/booking`);
     }
 
     const apiUrl = `/get/store/criteria?location=${appointment.locationExternalId}`;
@@ -107,16 +108,25 @@ export default class Appointment extends React.Component {
   prepareLocalStoreforEdit(client, appointment, locationInfo) {
     const { search } = window.location;
     const params = new URLSearchParams(search);
-    let step = params.get('step');
-    if (!step) {
-      step = 'select-store';
+    const step = params.get('step');
+    const steps = [
+      'select-store',
+      'select-time-slot',
+      'customer-details',
+    ];
+    if (steps.includes(step)) {
+      const { baseUrl, pathPrefix } = drupalSettings.path;
+      const { id } = drupalSettings.alshaya_appointment.user_details;
+      window.location.replace(`${baseUrl}${pathPrefix}user/${id}/appointments`);
     }
 
     const storeInfo = {
       locationExternalId: locationInfo.locationExternalId,
       name: locationInfo.locationName,
       address: locationInfo.companyAddress,
-      geocoordinates: locationInfo.geocoordinates,
+      lat: locationInfo.geocoordinates.latitude,
+      lng: locationInfo.geocoordinates.longitude,
+      storeTiming: [],
     };
     const localstore = {
       appointmentCategory: {
@@ -132,12 +142,18 @@ export default class Appointment extends React.Component {
         label: appointment.numberOfAttendees,
       },
       appointmentStep: step,
-      selectedStoreItem: JSON.stringify(storeInfo),
+      selectedStoreItem: storeInfo,
       selectedSlot: {
         appointmentSlotTime: appointment.appointmentStartDate,
         lengthinMin: appointment.appointmentDurationMin,
         resourceExternalIds: appointment.resourceExternalId,
       },
+      storeList: [],
+      refCoords: {
+        lat: locationInfo.geocoordinates.latitude,
+        lng: locationInfo.geocoordinates.longitude,
+      },
+      appointmentId: appointment.confirmationNumber,
     };
     removeStorageInfo();
     setStorageInfo(localstore);
