@@ -174,13 +174,15 @@ export default class AppointmentListItem extends React.Component {
                   { Drupal.t('Edit') }
                 </button>
                 <Popup open={isModalOpen} closeOnDocumentClick closeOnEscape>
-                  <AppointmentEditBox
-                    appointment={appointment}
-                    storeName={storeName}
-                    address={address}
-                    companionData={companionData}
-                  />
-                  <button type="button" className="close-modal" onClick={() => triggerCloseModal(`edit${num}`)}>{ Drupal.t('close') }</button>
+                  <>
+                    <AppointmentEditBox
+                      appointment={appointment}
+                      storeName={storeName}
+                      address={address}
+                      companionData={companionData}
+                    />
+                    <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ Drupal.t('close') }</button>
+                  </>
                 </Popup>
               </>
             )}

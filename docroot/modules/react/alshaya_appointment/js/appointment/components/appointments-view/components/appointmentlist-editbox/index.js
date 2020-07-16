@@ -10,7 +10,6 @@ export default class AppointmentEditBox extends React.Component {
 
   render() {
     const { baseUrl, pathPrefix } = drupalSettings.path;
-    const { id } = drupalSettings.alshaya_appointment.user_details;
     const { appointment } = this.props;
 
     const { address } = this.props;
@@ -94,7 +93,7 @@ export default class AppointmentEditBox extends React.Component {
       ));
     }
 
-    const url = `${baseUrl}${pathPrefix}appointment/booking?user=${id}&appointment=${confirmationNumber}`;
+    const url = `${baseUrl}${pathPrefix}appointment/booking?appointment=${confirmationNumber}`;
 
     return (
       <>
@@ -109,7 +108,7 @@ export default class AppointmentEditBox extends React.Component {
           <div>
             <p>{storeName}</p>
             <StoreAddress address={address} />
-            <a href={`${url}&store=true`}>{ Drupal.t('Edit Store') }</a>
+            <a href={`${url}&step=select-store`}>{ Drupal.t('Edit Store') }</a>
           </div>
         </div>
         <div className="appointmentbox appointment-datetime">
@@ -117,14 +116,14 @@ export default class AppointmentEditBox extends React.Component {
           <span>{ moment(appointmentStartDate).format('dddd, Do MMMM') }</span>
           <br />
           <span>{ moment(appointmentStartDate).format('YYYY hh:mm A') }</span>
-          <a href={`${url}&timeslot=true`}>{ Drupal.t('Edit time') }</a>
+          <a href={`${url}&step=select-time-slot`}>{ Drupal.t('Edit time') }</a>
         </div>
         <div className="appointmentbox appointment-companion">
           <span>
             {Drupal.t('Customer Details')}
           </span>
           { companionsRender }
-          <a href={`${url}?customer=true`}>{ Drupal.t('Edit Companion') }</a>
+          <a href={`${url}?&step=customer-details`}>{ Drupal.t('Edit Companion') }</a>
         </div>
       </>
     );

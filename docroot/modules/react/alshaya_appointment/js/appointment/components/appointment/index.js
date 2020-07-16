@@ -5,9 +5,14 @@ import Loading from '../../../utilities/loading';
 import AppointmentSelection from '../appointment-selection';
 import CustomerDetails from '../customer-details';
 import Confirmation from '../confirmation';
-import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
+import {
+  setStorageInfo,
+  getStorageInfo,
+  removeStorageInfo,
+} from '../../../utilities/storage';
 import AppointmentTimeSlot from '../appointment-timeslot';
 import AppointmentLogin from '../appointment-login';
+import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 
 const AppointmentStore = React.lazy(async () => {
   // Wait for google object to load.
@@ -41,6 +46,104 @@ export default class Appointment extends React.Component {
         appointmentStep: 'appointment-type',
       };
     }
+  }
+
+  /**
+   * Get Appointment and client details is query string has appointment id.
+   */
+  componentDidMount() {
+    const { search } = window.location;
+    const params = new URLSearchParams(search);
+    const appointment = params.get('appointment');
+    const { id, email } = drupalSettings.alshaya_appointment.user_details;
+
+    if (id && email && appointment) {
+      const apiUrl = `/get/client?email=${email}&id=${id}`;
+      const apiData = fetchAPIData(apiUrl);
+      if (apiData instanceof Promise) {
+        apiData.then((result) => {
+          if (result.error === undefined && result.data !== undefined) {
+            const clientData = result.data;
+            const apiUrlAppointment = `/get/appointment-details?appointment=${appointment}&id=${id}`;
+            const apiDataAppointment = fetchAPIData(apiUrlAppointment);
+
+            if (apiDataAppointment instanceof Promise) {
+              apiDataAppointment.then((response) => {
+                if (response.error === undefined && response.data !== undefined) {
+                  this.validateAppointmentEdit(clientData, response.data.return.appointment);
+                }
+              });
+            }
+          }
+        });
+      }
+    }
+  }
+
+  /**
+   * Validates appointment edit permission.
+   */
+  validateAppointmentEdit(client, appointment) {
+    if (client.clientExternalId !== appointment.clientExternalId) {
+      const { baseUrl, pathPrefix } = drupalSettings.path;
+      window.location.replace(`${baseUrl}${pathPrefix}user/login`);
+    }
+
+    const apiUrl = `/get/store/criteria?location=${appointment.locationExternalId}`;
+    const apiData = fetchAPIData(apiUrl);
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.error === undefined && result.data !== undefined) {
+          const locationInfo = result.data.return.locations;
+          this.prepareLocalStoreforEdit(client, appointment, locationInfo);
+        }
+      });
+    }
+  }
+
+  /**
+   * Prepare localstorage for appointment edit.
+   */
+  prepareLocalStoreforEdit(client, appointment, locationInfo) {
+    const { search } = window.location;
+    const params = new URLSearchParams(search);
+    let step = params.get('step');
+    if (!step) {
+      step = 'select-store';
+    }
+
+    const storeInfo = {
+      locationExternalId: locationInfo.locationExternalId,
+      name: locationInfo.locationName,
+      address: locationInfo.companyAddress,
+      geocoordinates: locationInfo.geocoordinates,
+    };
+    const localstore = {
+      appointmentCategory: {
+        id: appointment.programExternalId,
+        name: appointment.programName,
+      },
+      appointmentType: {
+        value: appointment.activityExternalId,
+        label: appointment.activityName,
+      },
+      appointmentCompanion: {
+        value: appointment.numberOfAttendees,
+        label: appointment.numberOfAttendees,
+      },
+      appointmentStep: step,
+      selectedStoreItem: JSON.stringify(storeInfo),
+      selectedSlot: {
+        appointmentSlotTime: appointment.appointmentStartDate,
+        lengthinMin: appointment.appointmentDurationMin,
+        resourceExternalIds: appointment.resourceExternalId,
+      },
+    };
+    removeStorageInfo();
+    setStorageInfo(localstore);
+    this.setState({
+      ...localstore,
+    });
   }
 
   handleSubmit = (stepValue) => {
