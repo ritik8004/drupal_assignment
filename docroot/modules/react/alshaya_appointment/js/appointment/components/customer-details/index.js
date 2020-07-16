@@ -40,9 +40,17 @@ export default class CustomerDetails extends React.Component {
   }
 
   handleChange = (section, e) => {
-    const { name } = e.target;
-    const value = getInputValue(e);
+    let value; let
+      name;
     let data = [];
+
+    if (e.type === 'date') {
+      name = e.name;
+      value = e.value;
+    } else {
+      ({ name } = e.target);
+      value = getInputValue(e);
+    }
 
     if (_has(this.state, section)) {
       ({ [section]: data } = this.state);

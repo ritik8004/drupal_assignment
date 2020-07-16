@@ -108,6 +108,7 @@ export default class CompanionDetails extends React.Component {
                   className={dob !== '' ? 'focus' : ''}
                   label={dobData.questionText}
                   handleChange={this.handleChange}
+                  section="companionData"
                 />
               </div>
             </div>

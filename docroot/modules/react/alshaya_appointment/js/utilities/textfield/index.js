@@ -1,9 +1,35 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import _has from 'lodash/has';
+import moment from 'moment-timezone';
+import { getStorageInfo } from '../storage';
 
 const TextField = (props) => {
-  const [startDate, setStartDate] = useState(null);
+  const countryMobileCode = drupalSettings.alshaya_appointment.country_mobile_code;
+  const countryMobileCodeMaxLength = drupalSettings.alshaya_appointment.mobile_maxlength;
+  const {
+    defaultValue,
+    type,
+    name,
+    label,
+    required,
+    handleChange,
+    section,
+  } = props;
+  const localStorageValues = getStorageInfo();
+  let dateValue = '';
+
+  if (_has(localStorageValues, section)) {
+    const { [section]: data } = localStorageValues;
+
+    if (_has(data, name)) {
+      ({ [name]: dateValue } = data);
+      dateValue = moment(dateValue).toDate();
+    }
+  }
+
+  const [startDate, setStartDate] = useState(dateValue);
 
   const handleEvent = (e, handler) => {
     if (handler === 'blur') {
@@ -15,16 +41,6 @@ const TextField = (props) => {
     }
   };
 
-  const countryMobileCode = window.drupalSettings.alshaya_appointment.country_mobile_code;
-  const countryMobileCodeMaxLength = window.drupalSettings.alshaya_appointment.mobile_maxlength;
-  const {
-    defaultValue,
-    type,
-    name,
-    label,
-    required,
-    handleChange,
-  } = props;
 
   let focusClass = '';
   if (defaultValue !== undefined && defaultValue !== '') {
@@ -94,7 +110,14 @@ const TextField = (props) => {
         <DatePicker
           dateFormat="yyyy/MM/dd"
           selected={startDate}
-          onChange={(date) => setStartDate(date)}
+          onChange={(date) => {
+            setStartDate(date);
+            handleChange({
+              type: 'date',
+              name,
+              value: date,
+            });
+          }}
           name={name}
           customInput={<DateCustomInput />}
         />
