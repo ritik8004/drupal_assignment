@@ -71,7 +71,13 @@ export default class Appointment extends React.Component {
             if (apiDataAppointment instanceof Promise) {
               apiDataAppointment.then((response) => {
                 if (response.error === undefined && response.data !== undefined) {
-                  this.validateAppointmentEdit(clientData, response.data.return.appointment);
+                  if (Object.prototype.hasOwnProperty.call(response.data.return, 'appointment')) {
+                    this.validateAppointmentEdit(clientData, response.data.return.appointment);
+                  } else {
+                    const { baseUrl, pathPrefix } = drupalSettings.path;
+                    removeStorageInfo();
+                    window.location.replace(`${baseUrl}${pathPrefix}appointment/booking`);
+                  }
                 }
               });
             }
@@ -87,6 +93,7 @@ export default class Appointment extends React.Component {
   validateAppointmentEdit(client, appointment) {
     if (client.clientExternalId !== appointment.clientExternalId) {
       const { baseUrl, pathPrefix } = drupalSettings.path;
+      removeStorageInfo();
       window.location.replace(`${baseUrl}${pathPrefix}appointment/booking`);
     }
 
