@@ -155,3 +155,9 @@ alshaya_behat/vendor
 alshaya_behat/media
 
 scripts/integration/includes/global-api-settings.inc.sh
+
+# Ignore console.
+console/
+
+# Ignore install script override for devs.
+install-site-dev.sh

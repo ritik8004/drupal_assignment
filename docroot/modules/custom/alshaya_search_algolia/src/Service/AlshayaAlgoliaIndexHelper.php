@@ -645,7 +645,7 @@ class AlshayaAlgoliaIndexHelper {
                 break;
 
               default:
-                continue;
+                continue 2;
             }
             $object[$attr][$key] = $swatch_data;
           }

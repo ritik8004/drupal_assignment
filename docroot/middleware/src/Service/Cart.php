@@ -1425,7 +1425,7 @@ class Cart {
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
-    $response = json_decode($result['additional_data'][0] ?? [], TRUE);
+    $response = $result['extension_attributes']['fraudrule_response'] ?? [];
     if (empty($response)) {
       return $this->utility->getErrorResponse('Transaction failed.', 500);
     }
@@ -1436,7 +1436,7 @@ class Cart {
 
     return [
       'error' => TRUE,
-      'redirectUrl' => $response['redirectUrl'],
+      'redirectUrl' => $response['redirect_url'],
     ];
   }
 
@@ -1471,7 +1471,7 @@ class Cart {
     return $cnc_enabled;
   }
 
-  /*
+  /**
    * Get cart from cache.
    *
    * @param bool $fetch_expired

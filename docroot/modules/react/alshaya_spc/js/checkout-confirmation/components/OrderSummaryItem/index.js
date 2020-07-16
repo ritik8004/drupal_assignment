@@ -70,6 +70,15 @@ const OrderSummaryItem = (props) => {
     );
   }
 
+  if (type === 'mobile') {
+    return (
+      <div className="spc-order-summary-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
+        <span className="spc-label">{`${label}:`}</span>
+        <span className="spc-value phone-number">{value}</span>
+      </div>
+    );
+  }
+
   return (
     <div className="spc-order-summary-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
       <span className="spc-label">{`${label}:`}</span>

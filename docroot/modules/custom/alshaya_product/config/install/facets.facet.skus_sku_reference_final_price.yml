@@ -6,6 +6,14 @@ dependencies:
     - views.view.alshaya_product_list
   module:
     - search_api
+third_party_settings:
+  alshaya_facets_pretty_paths:
+    url_alias: skus_sku_reference_final_price
+    meta_info_type:
+      type: 2
+      prefix_text: at
+      visibility:
+        - 5
 id: skus_sku_reference_final_price
 name: 'SKUs » SKU Reference » Final Price'
 url_alias: price
