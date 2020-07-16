@@ -96,36 +96,41 @@ export default class AppointmentEditBox extends React.Component {
     const url = `${baseUrl}${pathPrefix}appointment/booking?appointment=${confirmationNumber}`;
 
     return (
-      <>
+      <div className="appointment-edit-popup fadeInUp">
+        <div className="appointmentbox title">
+          <span>{ Drupal.t('Edit') }</span>
+        </div>
         <div className="appointmentbox appointment-type">
-          <p>
-            <span>{ Drupal.t('Appointment category:') }</span>
-            <span>{ appointment.programName }</span>
-          </p>
+          <div>
+            <span className="label">{ Drupal.t('Appointment type') }</span>
+            <span>{ appointment.activityName }</span>
+          </div>
         </div>
         <div className="appointmentbox appointment-store">
-          <span>{ Drupal.t('Store Location') }</span>
+          <span className="label">{ Drupal.t('Store Location') }</span>
           <div>
             <p>{storeName}</p>
             <StoreAddress address={address} />
-            <a href={`${url}&step=select-store`}>{ Drupal.t('Edit Store') }</a>
           </div>
+          <a className="appointmentbox-action-edit" href={`${url}&step=select-store`}>{ Drupal.t('Edit Store') }</a>
         </div>
         <div className="appointmentbox appointment-datetime">
-          <span>{ Drupal.t('Date and Time') }</span>
-          <span>{ moment(appointmentStartDate).format('dddd, Do MMMM') }</span>
-          <br />
-          <span>{ moment(appointmentStartDate).format('YYYY hh:mm A') }</span>
-          <a href={`${url}&step=select-time-slot`}>{ Drupal.t('Edit time') }</a>
+          <span className="label">{ Drupal.t('Date and Time') }</span>
+          <div>
+            <span>{ moment(appointmentStartDate).format('dddd, Do MMMM') }</span>
+            <br />
+            <span>{ moment(appointmentStartDate).format('YYYY hh:mm A') }</span>
+          </div>
+          <a className="appointmentbox-action-edit" href={`${url}&step=select-time-slot`}>{ Drupal.t('Edit time') }</a>
         </div>
         <div className="appointmentbox appointment-companion">
-          <span>
+          <span className="label">
             {Drupal.t('Customer Details')}
           </span>
-          { companionsRender }
-          <a href={`${url}?&step=customer-details`}>{ Drupal.t('Edit Companion') }</a>
+          <div className="popup-customer-details">{ companionsRender }</div>
+          <a className="appointmentbox-action-edit" href={`${url}?&step=customer-details`}>{ Drupal.t('Edit Companion') }</a>
         </div>
-      </>
+      </div>
     );
   }
 }

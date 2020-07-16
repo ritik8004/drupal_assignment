@@ -138,7 +138,7 @@ export default class AppointmentListItem extends React.Component {
     const { confirmationNumber } = appointment;
 
     return (
-      <div className="appointment-list-details fadeInUp" style={{ animationDelay: '0.6s' }}>
+      <div className="appointment-list-details fadeInUp">
         <div className="appointment-list-type">
           <span className="appointment-list-label">
             { Drupal.t('Appointment type') }
@@ -175,13 +175,13 @@ export default class AppointmentListItem extends React.Component {
                 </button>
                 <Popup open={isModalOpen} closeOnDocumentClick closeOnEscape>
                   <>
+                    <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ Drupal.t('close') }</button>
                     <AppointmentEditBox
                       appointment={appointment}
                       storeName={storeName}
                       address={address}
                       companionData={companionData}
                     />
-                    <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ Drupal.t('close') }</button>
                   </>
                 </Popup>
               </>
