@@ -54,7 +54,6 @@
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
         if ($(this).isElementInViewPort(0, 40, true)) {
-          console.log('productLinkSelector');
           $(this).addClass('impression-processed');
           // var impression = Drupal.alshayaSeoSpc.getProductValues($(this));
           // Get product info from storage.
@@ -80,18 +79,16 @@
 
   document.addEventListener('recommendedProductsLoad', function (e) {
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e);
-    window.addEventListener('scroll', function(scrollEvent) {
+    window.addEventListener('scroll', debounce(function(scrollEvent) {
       Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, scrollEvent);
-    });
+    }, 500));
     document.querySelectorAll('.spc-recommended-products .nav-prev').forEach(function(element) {
       element.addEventListener('click', function(clickEvent) {
-        console.log('click event fired prev');
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, clickEvent);
       });
     });
     document.querySelectorAll('.spc-recommended-products .nav-next').forEach(function (element) {
       element.addEventListener('click', function (clickEvent) {
-        console.log('click event fired next');
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, clickEvent);
       });
     });
