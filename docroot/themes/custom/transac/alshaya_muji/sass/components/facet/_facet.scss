@@ -28,7 +28,11 @@
   }
 }
 
-#alshaya-algolia-search .block-facet-blockcategory-facet-search a.is-active:not(.sale-item) {
-  font-family: $muji-helvetica-neue-bold;
-  text-transform: uppercase;
+#alshaya-algolia-search .block-facet-blockcategory-facet-search a {
+  font-family: $alshaya-thin;
+
+  &.is-active:not(.sale-item) {
+    font-family: $alshaya-bold;
+    text-transform: uppercase;
+  }
 }

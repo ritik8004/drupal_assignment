@@ -7,6 +7,8 @@ use Drupal\Core\Cache\Cache;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Session\AccountProxy;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Class AlshayaAppointmentController.
@@ -29,17 +31,28 @@ class AlshayaAppointmentController extends ControllerBase {
   protected $currentUser;
 
   /**
+   * Request Service.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $request;
+
+  /**
    * AlshayaAppointmentController constructor.
    *
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
    * @param \Drupal\Core\Session\AccountProxy $current_user
    *   Current user.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    */
   public function __construct(MobileNumberUtilInterface $mobile_util,
-                              AccountProxy $current_user) {
+                              AccountProxy $current_user,
+                              RequestStack $request_stack) {
     $this->mobileUtil = $mobile_util;
     $this->currentUser = $current_user;
+    $this->request = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -48,7 +61,8 @@ class AlshayaAppointmentController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('mobile_number.util'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('request_stack')
     );
   }
 
@@ -59,6 +73,15 @@ class AlshayaAppointmentController extends ControllerBase {
    *   Return array of markup with react lib attached.
    */
   public function appointment() {
+
+    // If query parameter has appointment ID then check user is logged in.
+    $appointment = $this->request->get('appointment');
+    if ($appointment) {
+      if (!$this->currentUser()->isAuthenticated()) {
+        throw new AccessDeniedHttpException('Please login to edit appointments.');
+      }
+    }
+
     $cache_tags = [];
 
     $alshaya_appointment_config = $this->config('alshaya_appointment.settings');

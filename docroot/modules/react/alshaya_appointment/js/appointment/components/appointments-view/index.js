@@ -107,6 +107,7 @@ export default class AppointmentsView extends React.Component {
     if (appointments.length > 0 && appointments[0] !== null) {
       appointmentsRender = appointments.map((appointment, i) => (
         <AppointmentListItem
+          key={appointment.confirmationNumber}
           appointment={appointment}
           num={i}
           cancelAppointment={this.cancelAppointment}

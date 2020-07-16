@@ -36,7 +36,7 @@ export default class AppointmentSlots extends React.Component {
       afternoon: [],
       evening: [],
     };
-    const { items } = this.props;
+    const { items, notFound } = this.props;
     if (items !== null && items !== undefined && Object.prototype.hasOwnProperty.call(items, 'return')) {
       for (let i = 0; i < items.return.length; i++) {
         const hours = moment(items.return[i].appointmentSlotTime).format('HH');
@@ -125,6 +125,12 @@ export default class AppointmentSlots extends React.Component {
               {listEveningItems}
             </ul>
           </div>
+        )}
+        { listMorningItems.length === 0
+        && listAfternoonItems.length === 0
+        && listEveningItems.length === 0
+        && (
+          <p>{ notFound }</p>
         )}
       </div>
     );
