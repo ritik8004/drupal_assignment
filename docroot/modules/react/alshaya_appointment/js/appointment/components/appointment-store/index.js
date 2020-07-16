@@ -555,13 +555,15 @@ export default class AppointmentStore extends React.Component {
             >
               {Drupal.t('Back')}
             </button>
-            <button
-              className="appointment-store-button appointment-type-button select-store"
-              type="button"
-              onClick={(e) => this.finalizeCurrentStore(e)}
-            >
-              {Drupal.t('Select Store')}
-            </button>
+            <div className="appointment-flow-action">
+              <button
+                className="appointment-store-button appointment-type-button select-store"
+                type="button"
+                onClick={(e) => this.finalizeCurrentStore(e)}
+              >
+                {Drupal.t('Select Store')}
+              </button>
+            </div>
           </div>
         </div>
       </div>

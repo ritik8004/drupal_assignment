@@ -175,13 +175,15 @@ export default class CustomerDetails extends React.Component {
           <div className="disclaimer-wrapper">
             {drupalSettings.alshaya_appointment.customer_details_disclaimer_text}
           </div>
-          <div className="customer-details-buttons-wrapper">
-            <button
-              className="customer-details-button"
-              type="submit"
-            >
-              {Drupal.t('Book Appointment')}
-            </button>
+          <div className="customer-details-button-wrapper">
+            <div className="appointment-flow-action">
+              <button
+                className="customer-details-button appointment-type-button"
+                type="submit"
+              >
+                {Drupal.t('Book an Appointment')}
+              </button>
+            </div>
           </div>
         </form>
       </div>
