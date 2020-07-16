@@ -1,7 +1,7 @@
 .appointment-flow-action {
   @include breakpoint($only-mobile) {
-    padding: 10px;
-    background: #fff;
+    padding: 0.625rem;
+    background: $appointment-sticky-btn-bg;
     position: fixed;
     bottom: 0;
     #{$left}: 0;
