@@ -9,6 +9,7 @@ import PdpStandardDelivery from '../pdp-standard-delivery';
 import PdpSharePanel from '../pdp-share-panel';
 import PdpClickCollect from '../pdp-click-and-collect';
 import PdpCrossellUpsell from '../pdp-crossell-upsell';
+import PdpProductLabels from '../pdp-product-labels';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -74,6 +75,7 @@ const PdpLayout = () => {
       </div>
       <div className="magv2-main">
         <div className="magv2-content" id="pdp-gallery-refresh">
+          <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} />
           <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
         </div>
         <div className="magv2-sidebar">
