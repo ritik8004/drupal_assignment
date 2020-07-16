@@ -138,9 +138,9 @@ export default class AppointmentListItem extends React.Component {
     const { confirmationNumber } = appointment;
 
     return (
-      <>
+      <div className="appointment-list-details fadeInUp" style={{ animationDelay: '0.6s' }}>
         <div className="appointment-list-type">
-          <span>
+          <span className="appointment-list-label">
             { Drupal.t('Appointment type') }
           </span>
           <span>
@@ -148,20 +148,20 @@ export default class AppointmentListItem extends React.Component {
           </span>
         </div>
         <div className="appointment-list-date-time">
-          <span>{ Drupal.t('Date and Time') }</span>
+          <span className="appointment-list-label">{ Drupal.t('Date and Time') }</span>
           <span>{ moment(appointmentStartDate).format('dddd, Do MMMM') }</span>
           <br />
           <span>{ moment(appointmentStartDate).format('YYYY hh:mm A') }</span>
         </div>
         <div className="appointment-list-store">
-          <span>{ Drupal.t('Store Location') }</span>
+          <span className="appointment-list-label">{ Drupal.t('Store Location') }</span>
           <div>
             <p>{storeName}</p>
             <StoreAddress address={address} />
           </div>
         </div>
         <div className="appointment-list-companion">
-          <span>
+          <span className="appointment-list-label">
             {Drupal.t('Customer Details')}
           </span>
           { companionsRender }
@@ -195,7 +195,7 @@ export default class AppointmentListItem extends React.Component {
             {Drupal.t('Delete')}
           </button>
         </div>
-      </>
+      </div>
     );
   }
 }

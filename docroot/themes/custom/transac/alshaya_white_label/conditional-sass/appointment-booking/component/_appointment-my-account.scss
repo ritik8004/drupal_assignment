@@ -1,0 +1,190 @@
+#customer-appointments {
+  .appointments-list-wrapper {
+    position: relative;
+
+    .appointment-booking-link-top {
+      position: absolute;
+      #{$right}: 0;
+      top: 0;
+      transform: translateY(-100%);
+      padding-bottom: 0.3125rem;
+      display: flex;
+      align-items: center;
+      font-size: 0.875rem;
+      color: $appointment-my-account-txt;
+      font-family: $alshaya-thin;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 1.5rem;
+        height: 1.5rem;
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-book.png') no-repeat center;
+        background-size: cover;
+      }
+
+      @include breakpoint($only-mobile) {
+        font-size: 0;
+      }
+    }
+
+    .appointment-list-label {
+      font-size: 0.875rem;
+      color: $appointment-my-account-txt;
+      font-family: $alshaya-bold;
+    }
+
+    .appointment-list {
+      padding: 0.8125rem 0;
+
+      @include breakpoint($only-mobile) {
+        padding: 0 0 2.1875rem;
+      }
+    }
+
+    .appointment-list-details {
+      border-bottom: 0.0625rem solid $appointment-my-account-border;
+      padding: 0.8125rem 0 1.125rem;
+
+      @include breakpoint($tablet) {
+        display: flex;
+
+        &:last-child {
+          border-bottom: 0;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        position: relative;
+        padding-top: 2.0625rem;
+      }
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 24%;
+        padding-#{$right}: 2.5rem;
+        font-size: 0.875rem;
+        color: $appointment-my-account-black-txt;
+        font-family: $alshaya-thin;
+
+        @include breakpoint($only-mobile) {
+          max-width: 17.5rem;
+          padding: 0 0 1.25rem;
+
+          &:nth-last-child(2) {
+            padding-bottom: 0;
+          }
+        }
+
+        p {
+          margin: 0;
+        }
+      }
+
+      .appointment-list-store {
+        flex-basis: 30%;
+      }
+
+      .appointment-list-companion {
+        flex-basis: 17%;
+        padding-#{$right}: 1.875rem;
+
+        > div {
+          span {
+            &:nth-child(2) {
+              padding-#{$left}: 0.3125rem;
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          padding-#{$right}: 0;
+        }
+      }
+
+      .appointment-actions {
+        flex-direction: row;
+        padding: 0;
+        flex-basis: 5%;
+
+        button {
+          &::before {
+            content: '';
+            display: block;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          position: absolute;
+          #{$right}: 0;
+          bottom: 0;
+          transform: translateY(-60%);
+        }
+
+        .action-edit {
+          padding: 0;
+          padding-#{$right}: 0.9375rem;
+          font-size: 0;
+
+          &::before {
+            width: 1rem;
+            height: 1rem;
+            background: url('#{$base_theme_img_directory_path}/icons/my-appointment-edit.svg') no-repeat center;
+            background-size: cover;
+          }
+        }
+
+        .action-delete {
+          padding: 0;
+          font-size: 0;
+
+          &::before {
+            width: 1.5rem;
+            height: 1.5rem;
+            background: url('#{$base_theme_img_directory_path}/icons/appointment-delete.svg') no-repeat center;
+            background-size: cover;
+          }
+        }
+      }
+    }
+
+    .book-appointment-btn {
+      text-align: $right;
+    }
+
+    .appointment-booking-link-bottom {
+      font-size: 0.875rem;
+      background: $appointment-my-account-txt;
+      color: $appointment-my-account-button;
+      padding: 0.6875rem 2.5rem;
+      border-radius: 0.125rem;
+      display: inline-block;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+}
+
+body[class*="appointments"] {
+  @include breakpoint($only-mobile) {
+    .c-user--node {
+      &.l-two--sf {
+        aside.c-sidebar-first {
+          display: none;
+        }
+      }
+    }
+
+    .c-user--node {
+      main {
+        #block-page-title {
+          display: block;
+        }
+      }
+    }
+  }
+}

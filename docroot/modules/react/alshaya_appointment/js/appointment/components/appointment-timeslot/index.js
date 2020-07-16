@@ -92,25 +92,25 @@ export default class AppointmentTimeSlot extends React.Component {
     return (
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
-          <div className="store-header appointment-subtitle">
+          <div className="store-header appointment-subtitle fadeInUp" style={{ animationDelay: '0.6s' }}>
             {Drupal.t('Select date & time that suits you')}
             {' '}
             *
           </div>
-          <div className="timeslot-latest-available">
+          <div className="timeslot-latest-available fadeInUp" style={{ animationDelay: '0.6s' }}>
             <span>
               {Drupal.t('The first available appointment is on ')}
             </span>
             <span className="starting-timeslot">{Drupal.t(moment().add(1, 'day').format(getDateFormattext()))}</span>
           </div>
-          <div className="appointment-datepicker">
+          <div className="appointment-datepicker fadeInUp" style={{ animationDelay: '0.8s' }}>
             <AppointmentCalendar
               selectDate={date}
               dateChanged={this.dateChanged}
             />
           </div>
 
-          <div className="appointment-timeslots-wrapper">
+          <div className="appointment-timeslots-wrapper fadeInUp" style={{ animationDelay: '0.8s' }}>
             <AppointmentSlots
               notFound={notFound}
               items={timeSlots}
@@ -118,7 +118,7 @@ export default class AppointmentTimeSlot extends React.Component {
             />
           </div>
 
-          <div className="appointment-store-buttons-wrapper">
+          <div className="appointment-store-buttons-wrapper fadeInUp" style={{ animationDelay: '0.8s' }}>
             <button
               className="appointment-type-button appointment-store-button back"
               type="button"
