@@ -42,8 +42,8 @@ const PdpInfo = (props) => {
             <span className="magv2-pdp-price-currency suffix">{drupalSettings.alshaya_spc.currency_config.currency_code}</span>
             <span className="magv2-pdp-price-amount">{pdpProductPrice}</span>
           </div>
-          {(!shortDetail && drupalSettings.alshaya_spc.vat_text)
-            ? <div className="magv2-pdp-vat-text">{drupalSettings.alshaya_spc.vat_text}</div>
+          {(!shortDetail && drupalSettings.vatText)
+            ? <div className="magv2-pdp-vat-text">{drupalSettings.vatText}</div>
             : null}
         </div>
       </div>
