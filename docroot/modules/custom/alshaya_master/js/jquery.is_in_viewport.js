@@ -61,6 +61,18 @@
    *   The object inside individual row of the carousel markup.
    */
   var isCarouselItemActive = function (element) {
-    return (element.parent().hasClass('slick-active')) ? true : false;
+    var elementParent = element.parent();
+    var active = false;
+    // Check if slick slider is used in carousel like in homepage and PDP.
+    if (elementParent.hasClass('slick-slide')) {
+      active = (elementParent.hasClass('slick-active')) ? true : false;
+    }
+    // If slick slider is not used, check if the element is visible in screen or
+    // not.
+    else if (elementLeft > viewportLeft && elementRight < viewportLeft) {
+      active = true;
+    }
+
+    return active;
   }
 }(jQuery));
