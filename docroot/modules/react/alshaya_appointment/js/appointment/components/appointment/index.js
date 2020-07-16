@@ -114,7 +114,7 @@ export default class Appointment extends React.Component {
       'select-time-slot',
       'customer-details',
     ];
-    if (steps.includes(step)) {
+    if (!steps.includes(step)) {
       const { baseUrl, pathPrefix } = drupalSettings.path;
       const { id } = drupalSettings.alshaya_appointment.user_details;
       window.location.replace(`${baseUrl}${pathPrefix}user/${id}/appointments`);
