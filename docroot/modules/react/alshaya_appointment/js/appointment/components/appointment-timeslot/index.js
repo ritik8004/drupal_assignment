@@ -15,11 +15,12 @@ export default class AppointmentTimeSlot extends React.Component {
         ...localStorageValues,
         selectedSlot: {},
         timeSlots: {},
+        notFound: '',
       };
-      if (Object.prototype.hasOwnProperty.call(localStorageValues, 'date')) {
-        this.state.date = new Date(localStorageValues.date);
+      if (Object.prototype.hasOwnProperty.call(localStorageValues, 'selectedSlot')) {
+        this.state.date = new Date(localStorageValues.selectedSlot.appointmentSlotTime);
       } else {
-        this.state.date = new Date();
+        this.state.date = new Date(moment().add(1, 'day'));
       }
     }
 
@@ -65,6 +66,11 @@ export default class AppointmentTimeSlot extends React.Component {
           this.setState({
             timeSlots: result.data,
           });
+          if (Object.keys(result.data).length === 0) {
+            this.setState({
+              notFound: Drupal.t('Time slots are unavailable on this date. Please Select next date.'),
+            });
+          }
         }
       });
     }
@@ -82,7 +88,7 @@ export default class AppointmentTimeSlot extends React.Component {
   }
 
   render() {
-    const { date, timeSlots } = this.state;
+    const { date, timeSlots, notFound } = this.state;
     return (
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
@@ -95,7 +101,7 @@ export default class AppointmentTimeSlot extends React.Component {
             <span>
               {Drupal.t('The first available appointment is on ')}
             </span>
-            <span className="starting-timeslot">{Drupal.t(moment().format(getDateFormattext()))}</span>
+            <span className="starting-timeslot">{Drupal.t(moment().add(1, 'day').format(getDateFormattext()))}</span>
           </div>
           <div className="appointment-datepicker">
             <AppointmentCalendar
@@ -106,6 +112,7 @@ export default class AppointmentTimeSlot extends React.Component {
 
           <div className="appointment-timeslots-wrapper">
             <AppointmentSlots
+              notFound={notFound}
               items={timeSlots}
               handler={this.handler}
             />
