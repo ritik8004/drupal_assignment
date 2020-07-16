@@ -660,6 +660,28 @@ $magentos = [
       'store_id' => ['en' => 22, 'ar' => 19],
     ],
   ],
+  'bp_prod' => [
+    'url' => 'https://boots.store.alshaya.com',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 28, 'ar' => 25],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 34, 'ar' => 31],
+    ],
+  ],
   'default' => [
     'kw' => [
       'magento_lang_prefix' => [
