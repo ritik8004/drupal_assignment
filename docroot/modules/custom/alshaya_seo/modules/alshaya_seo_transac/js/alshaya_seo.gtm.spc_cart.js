@@ -55,7 +55,6 @@
       productLinkSelector.each(function () {
         if ($(this).isElementInViewPort(0, 40, true)) {
           $(this).addClass('impression-processed');
-          // var impression = Drupal.alshayaSeoSpc.getProductValues($(this));
           // Get product info from storage.
           var key = 'recommendedProduct:' + drupalSettings.path.currentLanguage;
           var relatedProductsInfo = JSON.parse(localStorage.getItem(key));
@@ -78,15 +77,21 @@
   };
 
   document.addEventListener('recommendedProductsLoad', function (e) {
+    // Process impressions as soon as products load as that section might
+    // already be on screen.
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e);
+    // Process impressions on scroll for cases where the recommendations have
+    // loaded but the items are not visible on screen.
     window.addEventListener('scroll', debounce(function(scrollEvent) {
       Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, scrollEvent);
     }, 500));
+    // Process impressions when user clicks previous button.
     document.querySelectorAll('.spc-recommended-products .nav-prev').forEach(function(element) {
       element.addEventListener('click', function(clickEvent) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, clickEvent);
       });
     });
+    // Process impressions when user clicks next button.
     document.querySelectorAll('.spc-recommended-products .nav-next').forEach(function (element) {
       element.addEventListener('click', function (clickEvent) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, clickEvent);
