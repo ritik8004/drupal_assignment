@@ -38,7 +38,7 @@ export default class Confirmation extends React.Component {
     const time = moment(selectedSlot.appointmentSlotTime).format('LT');
     const location = `${selectedStoreItem.name}, ${addressCleanup(selectedStoreItem.address)}`;
     const event = {
-      title: appointmentType.name,
+      title: appointmentType.label,
       location,
       startTime: selectedSlot.appointmentSlotTime,
       endTime: moment(selectedSlot.appointmentSlotTime).add(selectedSlot.lengthinMin, 'minutes'),
@@ -70,7 +70,7 @@ export default class Confirmation extends React.Component {
               item={{ label: Drupal.t('Appointment category'), value: appointmentCategory.name }}
             />
             <ConfirmationItems
-              item={{ label: Drupal.t('Appointment type'), value: appointmentType.name }}
+              item={{ label: Drupal.t('Appointment type'), value: appointmentType.label }}
             />
             <ConfirmationItems
               item={{ label: Drupal.t('Location'), value: location }}

@@ -95,7 +95,32 @@ class AppointmentServices {
    */
   public function bookAppointment(Request $request) {
     try {
-      $result = $this->xmlApiHelper->bookAppointment($request);
+      $requestQuery = $request->query;
+      $activity = $requestQuery->get('activity') ?? '';
+      $duration = $requestQuery->get('duration') ?? '';
+      $location = $requestQuery->get('location') ?? '';
+      $attendees = $requestQuery->get('attendees') ?? '';
+      $program = $requestQuery->get('program') ?? '';
+      $channel = $requestQuery->get('channel') ?? '';
+      $startDateTime = $requestQuery->get('start-date-time') ?? '';
+      $client = $requestQuery->get('client') ?? '';
+
+      if (empty($activity) || empty($duration) || empty($location) || empty($attendees) || empty($program) || empty($channel) || empty($startDateTime) || empty($client)) {
+        throw new \Exception('Required parameters missing to book appointment.');
+      }
+
+      $param = [
+        'activity' => $activity,
+        'duration' => $duration,
+        'location' => $location,
+        'attendees' => $attendees,
+        'program' => $program,
+        'channel' => $channel,
+        'startDateTime' => $startDateTime,
+        'client' => $client,
+      ];
+
+      $result = $this->xmlApiHelper->bookAppointment($param);
       $bookingId = $result->return->result ?? '';
 
       return new JsonResponse($bookingId);
@@ -104,8 +129,7 @@ class AppointmentServices {
       $this->logger->error('Error occurred while booking appointment. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
-
-      throw $e;
+      return new JsonResponse(['error' => $e->getMessage()]);
     }
   }
 
@@ -134,6 +158,7 @@ class AppointmentServices {
           'answer' => $value,
         ];
       }
+
       if (empty($questionAnswerList)) {
         throw new \Exception('Empty question answer list in appendAppointmentAnswers.');
       }
@@ -160,7 +185,7 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      return new JsonResponse(['error' => $e->getMessage()]);
     }
   }
 
