@@ -32,12 +32,11 @@
       // Get window left and right.
       var viewportLeft = $(window).scrollLeft();
       var viewportRight = viewportLeft + $(window).width();
-
       if (isCarouselItem === true
         && elementTop >= viewportTop
         && elementBottom <= viewportBottom
       ) {
-        return isCarouselItemActive($(this));
+        return isCarouselItemActive($(this), {left: elementLeft, right: elementRight}, {left: viewportLeft, right: viewportRight});
       }
 
       return elementTop >= viewportTop
@@ -60,19 +59,20 @@
    * @param {object} element
    *   The object inside individual row of the carousel markup.
    */
-  var isCarouselItemActive = function (element) {
+  var isCarouselItemActive = function (element, computedElement, computedViewport) {
     var elementParent = element.parent();
     var active = false;
     // Check if slick slider is used in carousel like in homepage and PDP.
     if (elementParent.hasClass('slick-slide')) {
+      // If it has slick-active class, that means it is showing in screen.
       active = (elementParent.hasClass('slick-active')) ? true : false;
     }
     // If slick slider is not used, check if the element is visible in screen or
     // not.
-    else if (elementLeft > viewportLeft && elementRight < viewportLeft) {
+    else if ((computedElement.left > computedViewport.left)
+    && (computedElement.right < computedViewport.right)) {
       active = true;
     }
-
     return active;
   }
 }(jQuery));
