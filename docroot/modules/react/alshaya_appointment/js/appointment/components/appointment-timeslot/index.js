@@ -13,7 +13,6 @@ export default class AppointmentTimeSlot extends React.Component {
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
-        selectedSlot: {},
         timeSlots: {},
         notFound: '',
       };
