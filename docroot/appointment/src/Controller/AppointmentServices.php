@@ -165,10 +165,10 @@ class AppointmentServices {
   }
 
   /**
-   * Get Client details.
+   * Get Appointment details.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Client details.
+   *   Appointment details.
    */
   public function getAppointments(Request $request) {
     try {
@@ -342,6 +342,48 @@ class AppointmentServices {
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while fetching questions. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Get Appointment details.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Appointment details.
+   */
+  public function getAppointmentDetails(Request $request) {
+    try {
+      $client = $this->apiHelper->getSoapClient(APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL);
+      $appointment = $request->query->get('appointment');
+      $userId = $request->query->get('id');
+
+      if (empty($appointment) && empty($userId)) {
+        $message = 'Appointment Id and user Id are required to get appointment details.';
+
+        throw new \Exception($message);
+      }
+
+      // Authenticate logged in user by matching userid from request and Drupal.
+      $user = $this->drupal->getSessionUserInfo();
+      if ($user['uid'] !== $userId) {
+        $message = 'Request not authenticated.';
+
+        throw new \Exception($message);
+      }
+
+      $param = [
+        'confirmationNumber' => $appointment,
+      ];
+      $result = $client->__soapCall('getAppointmentByConfirmationNumber', [$param]);
+
+      return new JsonResponse($result);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while fetching appointments. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
 
