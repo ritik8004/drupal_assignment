@@ -135,6 +135,7 @@ export default class AppointmentType extends React.Component {
             <AppointmentForYou
               handleChange={this.handleChange}
               activeItem={appointmentForYou}
+              appointmentCompanion={appointmentCompanion}
             />
           )
           : null}

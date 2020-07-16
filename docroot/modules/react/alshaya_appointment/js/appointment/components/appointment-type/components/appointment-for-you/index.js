@@ -8,11 +8,12 @@ export default class AppointmentForYou extends React.Component {
   }
 
   render() {
-    const { activeItem } = this.props;
+    const { activeItem, appointmentCompanion } = this.props;
+    const label = appointmentCompanion.value > 1 ? Drupal.t('Is one of these appointments for you?') : Drupal.t('Is this appointment for you?');
     return (
       <div className="appointment-for-you-wrapper appointment-type-item">
         <SectionTitle>
-          {Drupal.t('Is one of these appointments for you?')}
+          {label}
           *
         </SectionTitle>
         <div className="appointment-for-you-container">
