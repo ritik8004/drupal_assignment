@@ -624,14 +624,27 @@ const productRecommendationsSuffix = 'pr-';
       }
 
       /**
+       * Helper function to mark position of each element in a slider.
+       */
+      $('.view-product-slider', context).once('mark-slider-items-position').each(function() {
+        var count = 1;
+        // In PDP it is seen that slick is already initialized by the time this
+        // is executed while in homepage it is not.
+        // So to prevent including slick-clones as actual items in our
+        // calcularions we use the :not pseudo-class.
+        $(this).find('.views-row:not(.slick-cloned)').once('mark-item-position').each(function() {
+          $(this).data('list-item-position', count++);
+        });
+      });
+
+      /**
        * Product Click Handler.
        */
       // Add click link handler to fire 'productClick' event to GTM.
       productLinkSelector.each(function () {
         $(this).once('js-event').on('click', function (e) {
           var that = $(this);
-          var position = $('.views-infinite-scroll-content-wrapper .c-products__item').index(that.closest('.c-products__item')) + 1;
-
+          var position = parseInt($(this).closest('.views-row').data('list-item-position'));
           currentListName = listName;
           Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName, position);
         });
@@ -641,32 +654,30 @@ const productRecommendationsSuffix = 'pr-';
        * Product click handler for Modals.
        */
       // Add click link handler to fire 'productClick' event to GTM.
-      $('a[href*="product-quick-view"]').each(function () {
+      $('a[href*="product-quick-view"]').once('product-clicked').on('click', function () {
         // We will handle GTM for recommended products in basket in
         // different place.
         if ($(this).parents('.spc-recommended-products').length > 0) {
           return;
         }
 
-        $(this).once('js-event').on('click', function (e) {
-          var that = $(this).closest('article[data-vmode="teaser"]');
-          var position = '';
-          if (listName.indexOf('placeholder') > -1) {
-            if (that.closest('.horizontal-crossell').length > 0) {
-              subListName = listName.replace('placeholder', 'CS');
-            }
-            else if (that.closest('.horizontal-upell').length > 0) {
-              subListName = listName.replace('placeholder', 'US');
-            }
-            else if (that.closest('.horizontal-related').length > 0) {
-              subListName = listName.replace('placeholder', 'RELATED');
-            }
+        var that = $(this).closest('article[data-vmode="teaser"]');
+        if (listName.indexOf('placeholder') > -1) {
+          if (that.closest('.horizontal-crossell').length > 0) {
+            subListName = listName.replace('placeholder', 'CS');
           }
+          else if (that.closest('.horizontal-upell').length > 0) {
+            subListName = listName.replace('placeholder', 'US');
+          }
+          else if (that.closest('.horizontal-related').length > 0) {
+            subListName = listName.replace('placeholder', 'RELATED');
+          }
+        }
 
-          currentListName = subListName;
-          position = drupalSettings.impressions_position[that.attr('data-nid') + '-' + subListName];
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);
-        });
+        currentListName = subListName;
+        // Get the position of the item in the carousel.
+        var position = parseInt($(this).closest('.views-row').data('list-item-position'));
+        Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);
       });
 
       var highlightsPosition = 1;
@@ -1076,7 +1087,6 @@ const productRecommendationsSuffix = 'pr-';
     // Push product impressions to datalayer.
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(null, null, null, {'type': 'product-click'});
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
-
     // On productClick, add list variable to cookie.
     var listValues = {};
     if ($.cookie('product-list') !== undefined) {
