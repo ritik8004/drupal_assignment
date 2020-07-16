@@ -110,10 +110,6 @@ class AppointmentServices {
         $startDateTime = $requestQuery->get('start-date-time') ?? '';
         $client = $requestQuery->get('client') ?? '';
 
-        if (empty($activity) || empty($duration) || empty($location) || empty($attendees) || empty($program) || empty($channel) || empty($startDateTime) || empty($client)) {
-          throw new \Exception('Required parameters missing to book appointment.');
-        }
-
         $param = [
           'activity' => $activity,
           'duration' => $duration,
@@ -124,6 +120,14 @@ class AppointmentServices {
           'startDateTime' => $startDateTime,
           'client' => $client,
         ];
+
+        if (empty($activity) || empty($duration) || empty($location) || empty($attendees) || empty($program) || empty($channel) || empty($startDateTime) || empty($client)) {
+          $message = 'Required parameters missing to book appointment.';
+          $this->logger->error($message . ' Data: @request_data', [
+            '@request_data' => json_encode($param),
+          ]);
+          throw new \Exception($message);
+        }
 
         $result = $this->xmlApiHelper->bookAppointment($param);
 
@@ -373,16 +377,9 @@ class AppointmentServices {
   public function getQuestions(Request $request) {
     try {
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-      $locationExternalId = $request->query->get('location');
-      $program = $request->query->get('program');
-      $activity = $request->query->get('activity');
-
-      if (empty($locationExternalId) || empty($program) || empty($activity)) {
-        $message = 'Required details is missing to get questions.';
-
-        $this->logger->error($message);
-        throw new \Exception($message);
-      }
+      $locationExternalId = $request->query->get('location') ?? '';
+      $program = $request->query->get('program') ?? '';
+      $activity = $request->query->get('activity') ?? '';
 
       $param = [
         'questionCriteria' => [
@@ -391,6 +388,15 @@ class AppointmentServices {
           'activityExternalId' => $activity,
         ],
       ];
+
+      if (empty($locationExternalId) || empty($program) || empty($activity)) {
+        $message = 'Required details is missing to get questions.';
+        $this->logger->error($message . ' Data: @request_data', [
+          '@request_data' => json_encode($param),
+        ]);
+        throw new \Exception($message);
+      }
+
       $result = $client->__soapCall('getAppointmentQuestionsByCriteria', [$param]);
 
       $questions = $result->return->questions ?? [];

@@ -81,10 +81,6 @@ class ClientServices {
       $mobile = $request_content['mobile'] ?? '';
       $email = $request_content['email'] ?? '';
 
-      if (empty($email)) {
-        throw new \Exception('Email is required to create a client.');
-      }
-
       $param = [
         'clientExternalId' => $clientExternalId,
         'firstName' => $firstName,
@@ -93,6 +89,14 @@ class ClientServices {
         'mobile' => $mobile,
         'email' => $email,
       ];
+
+      if (empty($firstName) || empty($lastName) || empty($dob) || empty($mobile) || empty($email)) {
+        $message = 'Required parameters missing to create a client.';
+        $this->logger->error($message . ' Data: @request_data', [
+          '@request_data' => json_encode($param),
+        ]);
+        throw new \Exception($message);
+      }
 
       $result = $this->xmlApiHelper->updateInsertClient($param);
       $clientExternalId = $result->return->result ?? '';
