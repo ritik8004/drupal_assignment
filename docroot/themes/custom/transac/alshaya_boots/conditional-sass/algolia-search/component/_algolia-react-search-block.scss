@@ -12,8 +12,12 @@
   }
 
   @include breakpoint($only-tablet) {
-    bottom: -0.75rem;
+    bottom: -0.9375rem;
     visibility: hidden;
+
+    html[lang=ar] & {
+      bottom: -1.75rem;
+    }
 
     &.show-algolia-search-bar {
       visibility: visible;
@@ -41,6 +45,10 @@
     border-width: 0.0625rem;
     border-radius: 0;
     height: 2.5rem;
+
+    @include breakpoint($only-tablet) {
+      border-top: 0;
+    }
   }
 
   #alshaya-algolia-autocomplete {
@@ -57,6 +65,8 @@
         background-color: transparent;
       }
 
+      @include icon_img('#{$bp_theme_img_directory_path}/assets/search.svg', 2.5rem, 2.5rem, after);
+
       &::after {
         height: 2.5rem;
 
@@ -66,6 +76,10 @@
           #{$left}: 0.25rem;
           opacity: 1;
           transition: opacity 0.2s;
+        }
+
+        @include breakpoint($only-tablet) {
+          #{$left}: -0.25rem;
         }
       }
 
@@ -89,15 +103,16 @@
     }
 
     .react-autosuggest__input {
+      @include breakpoint($upto-desktop) {
+        height: 3.5rem;
+        line-height: 1.25rem;
+        padding-#{$left}: 3.5rem;
+      }
+
       @include breakpoint($only-mobile) {
         margin: 0;
         width: 100%;
         border: 0.0625rem solid $algolia-auto-complete-border;
-      }
-
-      @include breakpoint($upto-desktop) {
-        height: 3.5rem;
-        line-height: 1.25rem;
         padding-#{$left}: 3rem;
       }
     }
@@ -225,7 +240,7 @@ body {
     .block-alshaya-algolia-react-autocomplete {
       &.show-algolia-search-bar {
         @include breakpoint($only-mobile) {
-          top: -0.25rem;
+          top: -0.5rem;
         }
       }
     }
@@ -255,6 +270,16 @@ body {
             visibility: visible;
           }
         }
+      }
+    }
+  }
+}
+
+.mobile--overlay {
+  .block-alshaya-algolia-react {
+    &.block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($upto-desktop) {
+        visibility: hidden !important;
       }
     }
   }

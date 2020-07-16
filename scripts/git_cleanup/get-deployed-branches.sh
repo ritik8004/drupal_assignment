@@ -27,4 +27,9 @@ for env in $envs ; do
   vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=4" -u ${username}:${api_key} --max-time 30)
   curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
   echo "$env: $curr_branch"
+
+  # Get branch deployed on Stack 4.
+  vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=6" -u ${username}:${api_key} --max-time 30)
+  curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
+  echo "$env: $curr_branch"
 done

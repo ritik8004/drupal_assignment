@@ -64,6 +64,7 @@
 
       var paragraphBanner = $('.paragraph-banner');
       var bannerPanelFieldItem = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content > .field__item');
+      var bannerSliderContainer = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content');
 
 
       applyBannerRtl(paragraphBanner, options);
@@ -91,7 +92,7 @@
       }
 
       if (bannerPanelFieldItem.length) {
-        applyBannerRtl($(this), promoPanelOptions);
+        applyBannerRtl(bannerSliderContainer, promoPanelOptions);
       }
 
       // eslint-disable-next-line.

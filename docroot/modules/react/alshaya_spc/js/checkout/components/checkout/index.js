@@ -10,6 +10,7 @@ import CompletePurchase from '../complete-purchase';
 import DeliveryInformation from '../delivery-information';
 import DeliveryMethods from '../delivery-methods';
 import PaymentMethods from '../payment-methods';
+import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import CheckoutMessage from '../../../utilities/checkout-message';
 import TermsConditions from '../terms-conditions';
 import {
@@ -85,13 +86,18 @@ export default class Checkout extends React.Component {
               message: drupalSettings.global_error_message,
             });
           }
+
+          // Get promo info.
+          if (typeof result.error === 'undefined') {
+            PromotionsDynamicLabelsUtil.apply(result);
+          }
         });
       } else {
         redirectToCart();
       }
     } catch (error) {
       // In case of error, do nothing.
-      Drupal.logJavascriptError('checkout', error);
+      Drupal.logJavascriptError('checkout', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
 
     // Make sidebar sticky.

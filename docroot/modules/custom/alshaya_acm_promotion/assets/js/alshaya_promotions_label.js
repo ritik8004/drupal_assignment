@@ -112,8 +112,11 @@
   };
 
   Drupal.alshayaPromotions.updateDynamicLabel = function (sku, response) {
-    $('[data-sku="' + sku + '"]').find('.promotions-dynamic-label').html(response.label);
-    $('[data-sku="' + sku + '"]').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
+    // If label info available in response.
+    if (response.label !== undefined && response.label !== null) {
+      $('[data-sku="' + sku + '"]').find('.promotions-dynamic-label').html(response.label);
+      $('[data-sku="' + sku + '"]').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
+    }
   };
 
 })(jQuery, Drupal, drupalSettings);
