@@ -1,4 +1,8 @@
 form.user-communication-preference {
+  @include breakpoint($desktop) {
+    margin-top: 1.5rem;
+  }
+
   .form-submit {
     @extend %btn;
 
