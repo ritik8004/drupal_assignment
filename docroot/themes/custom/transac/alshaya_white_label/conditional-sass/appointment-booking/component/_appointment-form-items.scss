@@ -1,6 +1,6 @@
 @mixin apt-placeholder-label() {
   font-size: 0.875rem;
-  color: $spc-input-label;
+  color: $appointment-input-label;
   position: absolute;
   #{$left}: 0;
   top: 0;
@@ -29,7 +29,7 @@
   input[type=password] {
     height: 1.5rem;
     font-size: 0.875rem;
-    color: $spc-form-input;
+    color: $appointment-form-input;
   }
 
   label {
@@ -52,21 +52,25 @@
     display: block;
   }
 
+  .react-datepicker-popper {
+    z-index: 4;
+  }
+
   .dob-input-wrapper {
     span {
       position: relative;
 
       &::before {
         content: '';
-        background: url('#{$base_theme_img_directory_path}/icons/calendar.svg') center center no-repeat;;
+        background: url('#{$base_theme_img_directory_path}/icons/calendar.svg') center center no-repeat;
         display: block;
-        width: 15px;
-        height: 20px;
+        width: 0.9375rem;
+        height: 1.25rem;
         position: absolute;
         top: 0;
-        right: 6px;
-        color: #999;
+        #{$right}: 0.375rem;
         background-size: contain;
+        z-index: 1;
       }
     }
   }
@@ -76,7 +80,7 @@
 .appointment-type-mobile {
   label {
     font-size: 0.75rem;
-    color: $spc-input-label;
+    color: $appointment-input-label;
   }
 
   .field-wrapper {

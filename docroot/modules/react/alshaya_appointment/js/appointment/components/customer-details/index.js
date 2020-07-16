@@ -157,7 +157,8 @@ export default class CustomerDetails extends React.Component {
     return (
       <div className="customer-details-wrapper">
         <form
-          className="appointment-customer-details-form"
+          className="appointment-customer-details-form fadeInUp"
+          style={{ animationDelay: '0.4s' }}
           onSubmit={(e) => this.handleSubmit(e)}
         >
           <ClientDetails
@@ -168,16 +169,16 @@ export default class CustomerDetails extends React.Component {
             handleChange={(e) => this.handleChange('companionData', e)}
             companionData={companionData}
           />
-          <div className="customer-details-buttons-wrapper">
+          <div className="disclaimer-wrapper">
+            {drupalSettings.alshaya_appointment.customer_details_disclaimer_text}
+          </div>
+          <div className="customer-details-button-wrapper">
             <button
               className="customer-details-button appointment-type-button"
               type="submit"
             >
               {Drupal.t('Book Appointment')}
             </button>
-          </div>
-          <div className="disclaimer-wrapper">
-            {drupalSettings.alshaya_appointment.customer_details_disclaimer_text}
           </div>
         </form>
       </div>

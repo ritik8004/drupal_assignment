@@ -51,6 +51,7 @@ class SystemSettings {
     $site_country_code = alshaya_get_site_country_code($this->getSiteCode());
 
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/appointment.php';
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/middleware_auth.php';
 
     // Include overrides.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';

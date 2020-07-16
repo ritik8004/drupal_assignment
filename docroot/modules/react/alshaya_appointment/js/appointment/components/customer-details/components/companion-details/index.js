@@ -106,7 +106,7 @@ export default class CompanionDetails extends React.Component {
                   name={dob}
                   defaultValue={defaultdob}
                   className={dob !== '' ? 'focus' : ''}
-                  label={dobData.questionText}
+                  label={`${Drupal.t('Date of Birth')}*`}
                   handleChange={this.handleChange}
                   section="companionData"
                 />
