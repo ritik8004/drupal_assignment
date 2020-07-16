@@ -4,12 +4,11 @@ namespace Drupal\alshaya_appointment\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Url;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Session\AccountProxy;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Class AlshayaAppointmentController.
@@ -79,11 +78,7 @@ class AlshayaAppointmentController extends ControllerBase {
     $appointment = $this->request->get('appointment');
     if ($appointment) {
       if (!$this->currentUser()->isAuthenticated()) {
-        $query = $this->request->query->all();
-        $query['destination'] = Url::fromRoute('<current>')->toString();
-        $login_uri = Url::fromRoute('user.login', [], ['query' => $query])->toString();
-        $returnResponse = new RedirectResponse($login_uri);
-        return $returnResponse;
+        throw new AccessDeniedHttpException('Please login to edit appointments.');
       }
     }
 

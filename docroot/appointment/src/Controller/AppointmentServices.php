@@ -356,12 +356,13 @@ class AppointmentServices {
    *   Appointment details.
    */
   public function getAppointmentDetails(Request $request) {
+    $appointment = $request->query->get('appointment');
+    $userId = $request->query->get('id');
+
     try {
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-      $appointment = $request->query->get('appointment');
-      $userId = $request->query->get('id');
 
-      if (empty($appointment) && empty($userId)) {
+      if (empty($appointment) || empty($userId)) {
         $message = 'Appointment Id and user Id are required to get appointment details.';
 
         throw new \Exception($message);
@@ -370,7 +371,7 @@ class AppointmentServices {
       // Authenticate logged in user by matching userid from request and Drupal.
       $user = $this->drupal->getSessionUserInfo();
       if ($user['uid'] !== $userId) {
-        $message = 'Request not authenticated.';
+        $message = 'Userid from endpoint doesn\'t match userId of logged in user.';
 
         throw new \Exception($message);
       }
@@ -383,8 +384,10 @@ class AppointmentServices {
       return new JsonResponse($result);
     }
     catch (\Exception $e) {
-      $this->logger->error('Error occurred while fetching appointments. Message: @message', [
+      $this->logger->error('Error occurred while fetching appointment with id @appid for user @user. Message: @message', [
         '@message' => $e->getMessage(),
+        '@appid' => $appointment,
+        '@user' => $user,
       ]);
 
       throw $e;
