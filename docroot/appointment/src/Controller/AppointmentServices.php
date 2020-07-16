@@ -94,8 +94,49 @@ class AppointmentServices {
    *   Booking Id.
    */
   public function bookAppointment(Request $request) {
+    $appointmentId = $request->query->get('appointment');
+    $userId = $request->query->get('id');
     try {
-      $result = $this->xmlApiHelper->bookAppointment($request);
+      // Book New appointment.
+      if (!$appointmentId) {
+        $result = $this->xmlApiHelper->bookAppointment($request);
+        $bookingId = $result->return->result ?? '';
+        return new JsonResponse($bookingId);
+      }
+
+      // Rebook appointment.
+      if (empty($appointmentId) || empty($userId)) {
+        $message = 'Appointment Id and user Id are required to get appointment details.';
+
+        throw new \Exception($message);
+      }
+
+      // Authenticate logged in user by matching userid from request and Drupal.
+      $user = $this->drupal->getSessionUserInfo();
+      if ($user['uid'] !== $userId) {
+        $message = 'Userid from endpoint doesn\'t match userId of logged in user.';
+
+        throw new \Exception($message);
+      }
+
+      $param = [
+        'criteria' => [
+          'locationExternalId' => $request->query->get('location'),
+          'appointmentDurationMin' => $request->query->get('duration'),
+          'numberOfAttendees' => $request->query->get('attendees'),
+          'setupDurationMin' => 0,
+        ],
+        'confirmationNumber' => $request->query->get('appointment'),
+        'resourceAvailabilityRequired' => FALSE,
+      ];
+      $newTime = strtotime($request->query->get('start-date-time'));
+      $originalTime = strtotime($request->query->get('originaltime'));
+      if ($newTime != $originalTime) {
+        $param['startDateTime'] = $newTime;
+      }
+
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
+      $result = $client->__soapCall('reBookAppointment', [$param]);
       $bookingId = $result->return->result ?? '';
 
       return new JsonResponse($bookingId);

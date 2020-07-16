@@ -149,10 +149,7 @@ export default class Appointment extends React.Component {
         resourceExternalIds: appointment.resourceExternalId,
       },
       storeList: [],
-      refCoords: {
-        lat: locationInfo.geocoordinates.latitude,
-        lng: locationInfo.geocoordinates.longitude,
-      },
+      originalTimeSlot: appointment.appointmentStartDate,
       appointmentId: appointment.confirmationNumber,
     };
     removeStorageInfo();
