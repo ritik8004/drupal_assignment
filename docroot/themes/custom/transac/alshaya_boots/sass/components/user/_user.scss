@@ -57,5 +57,11 @@
     .form-text {
       margin-top: 0;
     }
+
+    .form-item-current-pass {
+      @include breakpoint($desktop) {
+        margin-top: 0;
+      }
+    }
   }
 }
