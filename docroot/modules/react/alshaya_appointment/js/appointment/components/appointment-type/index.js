@@ -138,17 +138,19 @@ export default class AppointmentType extends React.Component {
             />
           )
           : null}
-        <button
-          className="appointment-type-button fadeInUp"
-          type="button"
-          disabled={!(appointmentCategory
-            && appointmentType
-            && appointmentCompanion
-            && appointmentForYou)}
-          onClick={this.handleSubmit}
-        >
-          {Drupal.t('Continue')}
-        </button>
+        <div className="appointment-flow-action">
+          <button
+            className="appointment-type-button fadeInUp"
+            type="button"
+            disabled={!(appointmentCategory
+              && appointmentType
+              && appointmentCompanion
+              && appointmentForYou)}
+            onClick={this.handleSubmit}
+          >
+            {Drupal.t('Continue')}
+          </button>
+        </div>
       </div>
     );
   }

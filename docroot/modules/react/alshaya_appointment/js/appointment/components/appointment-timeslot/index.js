@@ -119,14 +119,16 @@ export default class AppointmentTimeSlot extends React.Component {
             >
               {Drupal.t('BACK')}
             </button>
-            <button
-              className="appointment-type-button appointment-store-button select-store"
-              type="button"
+            <div className="appointment-flow-action">
+              <button
+                className="appointment-type-button appointment-store-button select-store"
+                type="button"
 
-              onClick={this.handleSubmit}
-            >
-              {Drupal.t('book time slot')}
-            </button>
+                onClick={this.handleSubmit}
+              >
+                {Drupal.t('book time slot')}
+              </button>
+            </div>
           </div>
 
         </div>
