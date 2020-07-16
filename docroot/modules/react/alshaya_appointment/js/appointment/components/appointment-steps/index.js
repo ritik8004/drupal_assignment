@@ -1,25 +1,31 @@
 import React from 'react';
 
-const ListItems = () => {
-  const listItems = drupalSettings.alshaya_appointment.step_labels;
+export default class AppointmentSteps extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-  return listItems.map((item) => (
-    <li
-      className={item.step === 1 ? 'active wizard-step' : 'wizard-step'}
-      value={item.stepValue}
-    >
-      <span className="step-number">{item.step}</span>
-      <span className="step-title">{item.stepTitle}</span>
-    </li>
-  ));
-};
+  render() {
+    const { step } = this.props;
+    const listItems = drupalSettings.alshaya_appointment.step_labels;
+    const steprender = listItems.map((item) => (
+      <li
+        key={item.step}
+        className={item.stepValue === step ? 'active wizard-step' : 'wizard-step'}
+        value={item.stepValue}
+      >
+        <span className="step-number">{item.step}</span>
+        <span className="step-title">{item.stepTitle}</span>
+      </li>
+    ));
 
-const AppointmentSteps = () => (
-  <div className="appointment-steps-wrap fadeInUp">
-    <ul className="appointment-steps">
-      <ListItems />
-    </ul>
-  </div>
-);
-
-export default AppointmentSteps;
+    return (
+      <div className="appointment-steps-wrap fadeInUp">
+        <ul className="appointment-steps">
+          { steprender }
+        </ul>
+      </div>
+    );
+  }
+}

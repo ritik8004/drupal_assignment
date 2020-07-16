@@ -254,7 +254,7 @@ export default class Appointment extends React.Component {
 
     return (
       <div className="appointment-wrapper">
-        <AppointmentSteps />
+        <AppointmentSteps step={appointmentStep} />
         <div className={`${appointmentClasses}`}>
           {appointmentData}
           {appointmentSelection}
