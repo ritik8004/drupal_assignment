@@ -56,10 +56,10 @@ export default class Appointment extends React.Component {
     const params = new URLSearchParams(search);
     const appointment = params.get('appointment');
     const step = params.get('step');
-    const { id, email } = drupalSettings.alshaya_appointment.user_details;
+    const { id } = drupalSettings.alshaya_appointment.user_details;
 
-    if (id && email && appointment && step) {
-      const apiUrl = `/get/client?email=${email}&id=${id}`;
+    if (id && appointment && step) {
+      const apiUrl = `/get/client?id=${id}`;
       const apiData = fetchAPIData(apiUrl);
       if (apiData instanceof Promise) {
         apiData.then((result) => {

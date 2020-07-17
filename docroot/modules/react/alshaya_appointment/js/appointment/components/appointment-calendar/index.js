@@ -68,7 +68,7 @@ export default class AppointmentCalendar extends React.Component {
   }
 
   getAllDates = () => {
-    const startDate = moment().format(getDateFormat());
+    const startDate = moment().add(1, 'day').format(getDateFormat());
     const endDate = moment().add('6', 'months').format(getDateFormat());
     const range = momentRange.range(startDate, endDate);
     const arrayOfDates = Array.from(range.by('days'));

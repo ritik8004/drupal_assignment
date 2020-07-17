@@ -121,11 +121,10 @@ class ClientServices {
   public function getClientsByCriteria(Request $request) {
     try {
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-      $email = $request->query->get('email');
       $userId = $request->query->get('id');
 
-      if (empty($email)) {
-        $message = 'email is required to get client details.';
+      if (empty($userId)) {
+        $message = 'User Id is required to get client details.';
 
         $this->logger->error($message);
         throw new \Exception($message);
@@ -142,7 +141,7 @@ class ClientServices {
 
       $param = [
         'criteria' => [
-          'emailAddress' => $email,
+          'emailAddress' => $user['email'],
           'exactMatchOnly' => TRUE,
           'hideDisabled' => TRUE,
         ],

@@ -128,7 +128,7 @@ export default class AppointmentEditBox extends React.Component {
             {Drupal.t('Customer Details')}
           </span>
           <div className="popup-customer-details">{ companionsRender }</div>
-          <a className="appointmentbox-action-edit" href={`${url}?&step=customer-details`}>{ Drupal.t('Edit Companion') }</a>
+          <a className="appointmentbox-action-edit" href={`${url}&step=customer-details`}>{ Drupal.t('Edit Companion') }</a>
         </div>
       </div>
     );

@@ -21,10 +21,10 @@ export default class CustomerDetails extends React.Component {
   }
 
   componentDidMount() {
-    const { id, email } = drupalSettings.alshaya_appointment.user_details;
+    const { id } = drupalSettings.alshaya_appointment.user_details;
 
-    if (id && email) {
-      const apiUrl = `/get/client?email=${email}&id=${id}`;
+    if (id) {
+      const apiUrl = `/get/client?id=${id}`;
       const apiData = fetchAPIData(apiUrl);
 
       if (apiData instanceof Promise) {
