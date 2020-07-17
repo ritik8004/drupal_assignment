@@ -19,6 +19,7 @@ import {
   isFullScreen,
   exitFullscreen,
 } from '../../../utilities/map/fullScreen';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 const StoreMap = React.lazy(async () => {
   const localStorageValues = getStorageInfo();
@@ -156,6 +157,7 @@ export default class AppointmentStore extends React.Component {
   handleBack = (step) => {
     const { handleBack } = this.props;
     handleBack(step);
+    smoothScrollTo('#appointment-booking');
   }
 
   updateSelectedStore = (store) => {
@@ -406,6 +408,7 @@ export default class AppointmentStore extends React.Component {
     if (selectedStoreItem) {
       this.finalizeStore(e, selectedStoreItem.dataset.storeCode);
     }
+    smoothScrollTo('#appointment-booking');
   };
 
   finalizeStore = (e, storeCode) => {
