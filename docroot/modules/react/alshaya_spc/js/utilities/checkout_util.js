@@ -74,12 +74,7 @@ export const placeOrder = (paymentMethod) => {
         });
 
         // Push error to GTM.
-        const gtmInfo = {
-          errorMessage: response.data.error_message,
-          paymentMethod,
-        };
-        Drupal.logJavascriptError('place-order', gtmInfo, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
-
+        Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
         removeFullScreenLoader();
       },
       (error) => {
