@@ -11,6 +11,15 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Enable replicate feature for static html content.
+ */
+function alshaya_static_html_update_8003() {
+  \Drupal::service('module_installer')->install(['replicate_ui']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updating full_text filter config.
  */
 function alshaya_static_html_update_8002() {
