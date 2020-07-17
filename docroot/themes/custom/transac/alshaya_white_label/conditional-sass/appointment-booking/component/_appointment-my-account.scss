@@ -154,10 +154,11 @@
 
           @include breakpoint($only-mobile) {
             padding: 2.1875rem 0.9375rem !important;
+            max-width: 21.0625rem;
           }
 
-          @include breakpoint($upto-tablet-landscape) {
-            max-width: 21.0625rem;
+          @include breakpoint($only-tablet) {
+            max-width: 40.0625rem;
           }
 
           .close-modal {
@@ -290,6 +291,45 @@
 
                 > div {
                   flex-basis: 70%;
+                }
+              }
+            }
+          }
+
+          .appointment-delete-popup {
+            .appointmentbox {
+              &.message {
+                margin: 1.25rem 0;
+              }
+
+              &.buttons {
+                .ok-button,
+                .cancel-button {
+                  font-size: 0.875rem;
+                  padding: 0.625rem 3.25rem;
+                  border: 0.0625rem solid $appointment-delete-btn-border;
+                  font-family: $alshaya-bold;
+                  border-radius: 0.125rem;
+
+                  @include breakpoint($only-mobile) {
+                    width: 100%;
+                  }
+                }
+
+                .ok-button {
+                  background: none;
+                  color: $appointment-my-account-txt;
+                  margin-#{$right}: 1.25rem;
+
+                  @include breakpoint($only-mobile) {
+                    margin-#{$right}: 0;
+                    margin-bottom: 1.25rem;
+                  }
+                }
+
+                .cancel-button {
+                  background: $appointment-delete-cancel-btn-bg;
+                  color: $appointment-delete-cancel-btn;
                 }
               }
             }
