@@ -82,6 +82,32 @@ export default class CustomerDetails extends React.Component {
     }
   };
 
+  handleRemoveCompanion = (e) => {
+    const { appointmentCompanion, companionData } = this.state;
+    const { companionId } = e.target.dataset;
+    const numOfCompanions = appointmentCompanion.value - 1;
+    const updatedCompanionData = {};
+
+    Object.entries(companionData).forEach(([key, value]) => {
+      const currentKeyArray = key.split(/(\d+)/);
+
+      // Removing the companion data for the one being deleted.
+      if (companionId !== currentKeyArray[1]) {
+        let newKey = key;
+        if (currentKeyArray[1] > companionId) {
+          newKey = currentKeyArray[0] + (currentKeyArray[1] - 1) + currentKeyArray[2];
+        }
+        updatedCompanionData[newKey] = value;
+      }
+    });
+
+    this.setState((prevState) => ({
+      ...prevState,
+      appointmentCompanion: { label: numOfCompanions, value: numOfCompanions },
+      companionData: updatedCompanionData,
+    }));
+  }
+
   appendAppointmentAnswers = () => {
     const {
       companionData, bookingId,
@@ -209,6 +235,7 @@ export default class CustomerDetails extends React.Component {
             handleChange={(e) => this.handleChange('companionData', e)}
             companionData={companionData}
             handleAddCompanion={() => this.handleAddCompanion()}
+            handleRemoveCompanion={(e) => this.handleRemoveCompanion(e)}
             appointmentCompanion={appointmentCompanion}
           />
           <div className="disclaimer-wrapper">
