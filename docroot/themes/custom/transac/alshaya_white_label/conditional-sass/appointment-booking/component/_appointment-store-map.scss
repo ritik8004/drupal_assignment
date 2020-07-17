@@ -79,13 +79,14 @@
 
         @include breakpoint($tablet-landscape) {
           display: flex;
-          justify-content: center;
+          justify-content: space-between;
         }
       }
 
       .store-name {
         color: $appointment-store-text;
         padding-#{$right}: 1.875rem;
+        line-height: normal;
 
         @include breakpoint($upto-tablet-landscape) {
           pointer-events: none;

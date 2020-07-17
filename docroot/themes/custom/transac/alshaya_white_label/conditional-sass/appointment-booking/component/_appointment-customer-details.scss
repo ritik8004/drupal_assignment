@@ -1,0 +1,89 @@
+.user-detail-name-wrapper {
+  @include breakpoint($tablet) {
+    display: flex;
+  }
+
+  .user-firstname,
+  .user-lastname {
+    @include breakpoint($tablet) {
+      flex-basis: 15rem;
+    }
+  }
+
+  .user-firstname {
+    @include breakpoint($tablet) {
+      margin-#{$right}: 1.875rem;
+    }
+  }
+}
+
+.companion-details-item {
+  border-bottom: 1px solid $appointment-companion-detail-border;
+}
+
+.companion-detail-heading {
+  font-size: 0.875rem;
+  color: $appointment-section-title;
+  margin: 2.5rem 0;
+}
+
+.user-detail-subheading {
+  font-size: 0.875rem;
+  margin-bottom: 2.8125rem;
+  margin-top: 0.3125rem;
+}
+
+.appointment-user-details-wrapper {
+  border-bottom: 1px solid $appointment-companion-detail-border;
+}
+
+.user-details-wrapper {
+  .user-dob {
+    @include breakpoint($tablet) {
+      width: 15.625rem;
+    }
+  }
+
+  .user-email {
+    @include breakpoint($tablet) {
+      width: 24.375rem;
+    }
+  }
+
+  .user-mobile {
+    @include breakpoint($tablet) {
+      width: 15.375rem;
+    }
+  }
+}
+
+.customer-details-button {
+  float: none;
+
+  @include breakpoint($tablet-landscape) {
+    display: block;
+    margin-#{$left}: auto;
+  }
+
+  &-wrapper {
+    @include breakpoint($upto-tablet-landscape) {
+      margin-top: 2.1875rem;
+    }
+  }
+}
+
+.customer-details-wrapper {
+  @include breakpoint($upto-tablet-landscape) {
+    margin-bottom: 5rem;
+  }
+}
+
+.disclaimer-wrapper {
+  margin-top: 1.5625rem;
+  font-size: 0.8125rem;
+  color: $appointment-disclaimer-text;
+
+  @include breakpoint($tablet-landscape) {
+    margin-top: 5.625rem;
+  }
+}
