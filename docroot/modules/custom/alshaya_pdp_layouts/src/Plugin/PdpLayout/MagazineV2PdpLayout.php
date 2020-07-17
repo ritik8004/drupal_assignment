@@ -181,6 +181,10 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     // Set product label data.
     $this->getProductLabels($sku, $sku_entity, $vars);
 
+    // Set vat text data.
+    $vat_text = $this->skuManager->getVatText();
+    $vars['#attached']['drupalSettings']['vatText'] = $vat_text;
+
     // Get gallery and combination data for product variants.
     if ($sku_entity->bundle() == 'configurable') {
       $product_tree = Configurable::deriveProductTree($sku_entity);

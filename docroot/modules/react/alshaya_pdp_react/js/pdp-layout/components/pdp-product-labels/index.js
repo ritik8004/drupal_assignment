@@ -16,7 +16,7 @@ const PdpProductLabels = (props) => {
   return (
     <>
       <div className="product-labels">
-        <div className="labels-container" dataSku={variantSelected} dataMainSku={skuCode}>
+        <div className="labels-container" datasku={variantSelected} datamainsku={skuCode}>
           {Object.keys(labels).map((key) => (
             <div className={`labels ${labels[key].position}`}>
               <img

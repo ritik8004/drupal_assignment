@@ -18,6 +18,8 @@ export default class PdpHeader extends React.PureComponent {
       configurableCombinations,
     } = this.props;
 
+    const { checkoutFeatureStatus } = drupalSettings;
+
     return (
       <div className="magv2-header-wrapper">
         <ConditionalView condition={window.innerWidth < 768}>
@@ -46,29 +48,31 @@ export default class PdpHeader extends React.PureComponent {
             finalPrice={finalPrice}
             pdpProductPrice={pdpProductPrice}
           />
-          <div id="sticky-header-btn">
-            <div className="magv2-add-to-basket-container" ref={this.button}>
-              {(configurableCombinations) ? (
-                <button
-                  className="magv2-button"
-                  type="submit"
-                  id="add-to-cart-sticky"
-                  onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo)}
-                >
-                  {Drupal.t('Add To Bag')}
-                </button>
-              ) : (
-                <button
-                  className="magv2-button"
-                  type="submit"
-                  id="add-to-cart-sticky"
-                  onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo)}
-                >
-                  {Drupal.t('Add To Bag')}
-                </button>
-              )}
+          {(checkoutFeatureStatus === 'enabled') ? (
+            <div id="sticky-header-btn">
+              <div className="magv2-add-to-basket-container" ref={this.button}>
+                {(configurableCombinations) ? (
+                  <button
+                    className="magv2-button"
+                    type="submit"
+                    id="add-to-cart-sticky"
+                    onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo)}
+                  >
+                    {Drupal.t('Add To Bag')}
+                  </button>
+                ) : (
+                  <button
+                    className="magv2-button"
+                    type="submit"
+                    id="add-to-cart-sticky"
+                    onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo)}
+                  >
+                    {Drupal.t('Add To Bag')}
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
+          ) : null}
         </ConditionalView>
       </div>
     );
