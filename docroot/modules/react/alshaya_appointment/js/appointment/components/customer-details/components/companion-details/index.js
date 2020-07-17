@@ -38,15 +38,18 @@ export default class CompanionDetails extends React.Component {
     handleChange(e);
   }
 
-  render() {
-    const {
-      appointmentCompanion,
-      questions,
-    } = this.state;
+  handleAddFields = () => {
+    const { handleAddCompanion } = this.props;
+    handleAddCompanion();
+  };
 
+  render() {
+    const { questions, appointmentCompanionItems } = this.state;
     const {
       companionData,
+      appointmentCompanion,
     } = this.props;
+    const companionLimitReached = (appointmentCompanion.value >= appointmentCompanionItems.length);
 
     const companionQuestions = [...Array(parseInt(appointmentCompanion.value, 10))].map((e, i) => {
       const companionNum = i + 1;
@@ -119,7 +122,20 @@ export default class CompanionDetails extends React.Component {
 
     return (
       <div className="companion-details-wrapper">
-        {companionQuestions}
+        <div className="companion-details-questions">
+          {companionQuestions}
+        </div>
+        <div className="add-companion">
+          {!companionLimitReached && (
+          <button
+            className="btn btn-link"
+            type="button"
+            onClick={() => this.handleAddFields()}
+          >
+            {Drupal.t('Add Companion')}
+          </button>
+          )}
+        </div>
       </div>
     );
   }

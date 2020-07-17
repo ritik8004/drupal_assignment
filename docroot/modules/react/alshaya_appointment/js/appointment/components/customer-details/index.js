@@ -58,6 +58,22 @@ export default class CustomerDetails extends React.Component {
     }));
   }
 
+  handleAddCompanion = () => {
+    const { appointmentCompanion } = this.state;
+    const numOfCompanions = appointmentCompanion.value + 1;
+    if (numOfCompanions > drupalSettings.alshaya_appointment.appointment_companion_limit) {
+      this.setState((prevState) => ({
+        ...prevState,
+        maxCompanionLimitReached: true,
+      }));
+    } else {
+      this.setState((prevState) => ({
+        ...prevState,
+        appointmentCompanion: { label: numOfCompanions, value: numOfCompanions },
+      }));
+    }
+  };
+
   appendAppointmentAnswers = () => {
     const {
       companionData, bookingId,
@@ -164,7 +180,11 @@ export default class CustomerDetails extends React.Component {
   }
 
   render() {
-    const { clientData, companionData } = this.state;
+    const {
+      clientData,
+      companionData,
+      appointmentCompanion,
+    } = this.state;
 
     return (
       <div className="customer-details-wrapper">
@@ -180,6 +200,8 @@ export default class CustomerDetails extends React.Component {
           <CompanionDetails
             handleChange={(e) => this.handleChange('companionData', e)}
             companionData={companionData}
+            handleAddCompanion={() => this.handleAddCompanion()}
+            appointmentCompanion={appointmentCompanion}
           />
           <div className="disclaimer-wrapper">
             {drupalSettings.alshaya_appointment.customer_details_disclaimer_text}
