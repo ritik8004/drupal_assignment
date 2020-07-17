@@ -52,8 +52,9 @@ class PaymentMethodCheckoutCom extends React.Component {
   };
 
   cvvValidations = (e) => {
-    const cvv = parseInt(e.target.value, 10);
-    const valid = (cvv >= 100 && cvv <= 9999);
+    const cvv = e.target.value.trim();
+    const cvvLength = cvv.toString().length;
+    const valid = (cvvLength >= 3 && cvvLength <= 4);
     handleValidationMessage(
       'spc-cc-cvv-error',
       e.target.value,
