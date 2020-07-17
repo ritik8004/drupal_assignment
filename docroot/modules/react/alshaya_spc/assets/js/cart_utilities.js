@@ -69,7 +69,6 @@
       dataType: 'json',
       success: function (response) {
         var image = '';
-
         if (response.extra_data !== undefined
           && response.extra_data['cart_image'] !== undefined
           && response.extra_data['cart_image']['url'] !== undefined) {
