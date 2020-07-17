@@ -39,7 +39,8 @@ export default class AppointmentSlots extends React.Component {
     const { items, notFound } = this.props;
     if (items !== null && items !== undefined && Object.prototype.hasOwnProperty.call(items, 'return')) {
       for (let i = 0; i < items.return.length; i++) {
-        const hours = moment(items.return[i].appointmentSlotTime).format('HH');
+        const h = moment(items.return[i].appointmentSlotTime).format('HH');
+        const hours = parseFloat(h);
         if (hours < 12) {
           timeSlots.morning.push(items.return[i]);
         } else if (hours > 12 && hours < 17) {

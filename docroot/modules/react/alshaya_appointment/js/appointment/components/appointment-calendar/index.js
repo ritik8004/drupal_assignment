@@ -11,7 +11,7 @@ export default class AppointmentCalendar extends React.Component {
     super(props);
     const { selectDate } = this.props;
     this.state = {
-      week: this.getWeekDates(new Date(selectDate)),
+      week: this.getWeekDates(new Date(selectDate), 'next'),
       selectDate: new Date(selectDate),
       arrayOfDates: this.getAllDates(),
     };
@@ -19,7 +19,7 @@ export default class AppointmentCalendar extends React.Component {
 
   toggleNext = (date) => {
     const nextDate = moment(date).add(1, 'days').format();
-    const week = this.getWeekDates(new Date(nextDate));
+    const week = this.getWeekDates(new Date(nextDate), 'next');
     this.setState({
       week,
     });
@@ -27,26 +27,49 @@ export default class AppointmentCalendar extends React.Component {
 
   togglePrev = (date) => {
     const prevDate = moment(date).subtract(1, 'days').format();
-    const week = this.getWeekDates(new Date(prevDate));
+    const week = this.getWeekDates(new Date(prevDate), 'prev');
     this.setState({
       week,
     });
   }
 
-  getWeekDates = (currDate) => {
-    const weekdates = [];
-    const currentDate = moment(currDate);
-    const weekStart = currentDate.clone().startOf('isoWeek');
-    for (let i = 0; i <= 6; i++) {
-      weekdates.push(moment(weekStart).add(i, 'days').format(getDateFormat()));
+  getWeekDates = (currDate, direction) => {
+    let range = [];
+    let weekdates = [];
+
+    const startDate = moment(currDate).format(getDateFormat());
+
+    if (direction === 'next') {
+      const endDate = moment(currDate).add('6', 'days').format(getDateFormat());
+      range = momentRange.range(startDate, endDate);
+    } else {
+      const endDate = moment(currDate).subtract('6', 'days').format(getDateFormat());
+      range = momentRange.range(endDate, startDate);
+
+      // Reset if any date from past.
+      weekdates = Array.from(range.by('days'));
+      let flag = false;
+      weekdates.some((item) => {
+        if (item.isBefore()) {
+          flag = true;
+          return flag;
+        }
+        return false;
+      });
+      if (flag) {
+        const newStartDate = moment().add(1, 'day').format(getDateFormat());
+        const newEndDate = moment(newStartDate).add('6', 'days').format(getDateFormat());
+        range = momentRange.range(newStartDate, newEndDate);
+      }
     }
 
+    weekdates = Array.from(range.by('days'));
     return weekdates;
   }
 
   getAllDates = () => {
     const startDate = moment().format(getDateFormat());
-    const endDate = moment().add('1', 'months').format(getDateFormat());
+    const endDate = moment().add('6', 'months').format(getDateFormat());
     const range = momentRange.range(startDate, endDate);
     const arrayOfDates = Array.from(range.by('days'));
     return arrayOfDates;
