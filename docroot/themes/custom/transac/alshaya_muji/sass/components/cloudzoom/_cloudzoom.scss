@@ -75,7 +75,8 @@
     }
 
     .cloudzoom #cloud-zoom-wrap img {
-      object-fit: cover;
+      width: 100%;
+      height: auto;
     }
   }
 }
@@ -109,7 +110,7 @@
   &__image {
     .img-wrap {
       @include breakpoint($tablet) {
-        height: 35rem;
+        height: 56.7vw;
       }
 
       @include breakpoint($desktop) {
