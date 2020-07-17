@@ -68,7 +68,9 @@ export default class CustomerDetails extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        if (result.error === undefined && result.data !== undefined) {
+        if (result.error === undefined
+          && result.data !== undefined
+          && result.data.error === undefined) {
           // Move to next step.
           const { handleSubmit } = this.props;
           handleSubmit();
@@ -101,7 +103,9 @@ export default class CustomerDetails extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        if (result.error === undefined && result.data !== undefined) {
+        if (result.error === undefined
+          && result.data !== undefined
+          && result.data.error === undefined) {
           this.setState((prevState) => ({
             ...prevState,
             bookingId: result.data,
@@ -129,7 +133,9 @@ export default class CustomerDetails extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        if (result.error === undefined && result.data !== undefined) {
+        if (result.error === undefined
+          && result.data !== undefined
+          && result.data.error === undefined) {
           this.setState((prevState) => ({
             ...prevState,
             clientExternalId: result.data,

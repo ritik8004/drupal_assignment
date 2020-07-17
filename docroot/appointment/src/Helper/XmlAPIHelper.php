@@ -161,22 +161,16 @@ class XmlAPIHelper {
    * @return object
    *   Response object.
    */
-  public function updateInsertClient($request) {
-    $request_content = json_decode($request->getContent(), TRUE);
-    $clientExternalId = $request_content['clientExternalId'] ?? '';
-    $firstName = $request_content['firstName'] ?? '';
-    $lastName = $request_content['lastName'] ?? '';
-    $dob = $request_content['dob'] ?? '';
-    $mobile = $request_content['mobile'] ?? '';
-
+  public function updateInsertClient($param) {
     $apiBody = '<ns2:updateInsertClient>
       <client>
-        <clientExternalId>' . $clientExternalId . '</clientExternalId>
-        <firstName>' . $firstName . '</firstName>
-        <lastName>' . $lastName . '</lastName>
-        <dob>' . $dob . '</dob>
+        <clientExternalId>' . $param['clientExternalId'] . '</clientExternalId>
+        <firstName>' . $param['firstName'] . '</firstName>
+        <lastName>' . $param['lastName'] . '</lastName>
+        <dob>' . $param['dob'] . '</dob>
+        <email>' . $param['email'] . '</email>
         <phoneData>
-          <mobile>' . $mobile . '</mobile>
+          <mobile>' . $param['mobile'] . '</mobile>
         </phoneData>
         <rulesGroupExternalId>client</rulesGroupExternalId>
         <userGroupExternalId>client</userGroupExternalId>
@@ -194,20 +188,18 @@ class XmlAPIHelper {
    * @return object
    *   Response object.
    */
-  public function bookAppointment($request) {
-    $requestQuery = $request->query;
-
+  public function bookAppointment($param) {
     $apiBody = '<ns2:bookAppointment>
       <criteria>
-        <activityExternalId>' . $requestQuery->get('activity') . '</activityExternalId>
-        <appointmentDurationMin>' . $requestQuery->get('duration') . '</appointmentDurationMin>
-        <locationExternalId>' . $requestQuery->get('location') . '</locationExternalId>
-        <numberOfAttendees>' . $requestQuery->get('attendees') . '</numberOfAttendees>
-        <programExternalId>' . $requestQuery->get('program') . '</programExternalId>
-        <channel>' . $requestQuery->get('channel') . '</channel>
+        <activityExternalId>' . $param['activity'] . '</activityExternalId>
+        <appointmentDurationMin>' . $param['duration'] . '</appointmentDurationMin>
+        <locationExternalId>' . $param['location'] . '</locationExternalId>
+        <numberOfAttendees>' . $param['attendees'] . '</numberOfAttendees>
+        <programExternalId>' . $param['program'] . '</programExternalId>
+        <channel>' . $param['channel'] . '</channel>
       </criteria>
-      <startDateTime>' . $requestQuery->get('start-date-time') . '</startDateTime> 
-      <clientExternalId>' . $requestQuery->get('client') . '</clientExternalId>
+      <startDateTime>' . $param['startDateTime'] . '</startDateTime> 
+      <clientExternalId>' . $param['client'] . '</clientExternalId>
     </ns2:bookAppointment>';
 
     $result = $this->getApiDataWithXml($this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL, 'bookAppointment', $apiBody);

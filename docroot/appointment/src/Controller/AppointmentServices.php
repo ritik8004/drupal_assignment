@@ -94,12 +94,43 @@ class AppointmentServices {
    *   Booking Id.
    */
   public function bookAppointment(Request $request) {
-    $appointmentId = $request->query->get('appointment');
-    $userId = $request->query->get('id');
+    $requestQuery = $request->query;
+
+    $appointmentId = $requestQuery->get('appointment') ?? '';
+    $userId = $requestQuery->get('id') ?? '';
     try {
       // Book New appointment.
       if (!$appointmentId) {
-        $result = $this->xmlApiHelper->bookAppointment($request);
+        $activity = $requestQuery->get('activity') ?? '';
+        $duration = $requestQuery->get('duration') ?? '';
+        $location = $requestQuery->get('location') ?? '';
+        $attendees = $requestQuery->get('attendees') ?? '';
+        $program = $requestQuery->get('program') ?? '';
+        $channel = $requestQuery->get('channel') ?? '';
+        $startDateTime = $requestQuery->get('start-date-time') ?? '';
+        $client = $requestQuery->get('client') ?? '';
+
+        $param = [
+          'activity' => $activity,
+          'duration' => $duration,
+          'location' => $location,
+          'attendees' => $attendees,
+          'program' => $program,
+          'channel' => $channel,
+          'startDateTime' => $startDateTime,
+          'client' => $client,
+        ];
+
+        if (empty($activity) || empty($duration) || empty($location) || empty($attendees) || empty($program) || empty($channel) || empty($startDateTime) || empty($client)) {
+          $message = 'Required parameters missing to book appointment.';
+          $this->logger->error($message . ' Data: @request_data', [
+            '@request_data' => json_encode($param),
+          ]);
+          throw new \Exception($message);
+        }
+
+        $result = $this->xmlApiHelper->bookAppointment($param);
+
         $bookingId = $result->return->result ?? '';
         return new JsonResponse($bookingId);
       }
@@ -145,8 +176,7 @@ class AppointmentServices {
       $this->logger->error('Error occurred while booking appointment. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
-
-      throw $e;
+      return new JsonResponse(['error' => $e->getMessage()]);
     }
   }
 
@@ -175,6 +205,7 @@ class AppointmentServices {
           'answer' => $value,
         ];
       }
+
       if (empty($questionAnswerList)) {
         throw new \Exception('Empty question answer list in appendAppointmentAnswers.');
       }
@@ -201,7 +232,7 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      return new JsonResponse(['error' => $e->getMessage()]);
     }
   }
 
@@ -346,16 +377,9 @@ class AppointmentServices {
   public function getQuestions(Request $request) {
     try {
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-      $locationExternalId = $request->query->get('location');
-      $program = $request->query->get('program');
-      $activity = $request->query->get('activity');
-
-      if (empty($locationExternalId) || empty($program) || empty($activity)) {
-        $message = 'Required details is missing to get questions.';
-
-        $this->logger->error($message);
-        throw new \Exception($message);
-      }
+      $locationExternalId = $request->query->get('location') ?? '';
+      $program = $request->query->get('program') ?? '';
+      $activity = $request->query->get('activity') ?? '';
 
       $param = [
         'questionCriteria' => [
@@ -364,6 +388,15 @@ class AppointmentServices {
           'activityExternalId' => $activity,
         ],
       ];
+
+      if (empty($locationExternalId) || empty($program) || empty($activity)) {
+        $message = 'Required details is missing to get questions.';
+        $this->logger->error($message . ' Data: @request_data', [
+          '@request_data' => json_encode($param),
+        ]);
+        throw new \Exception($message);
+      }
+
       $result = $client->__soapCall('getAppointmentQuestionsByCriteria', [$param]);
 
       $questions = $result->return->questions ?? [];
