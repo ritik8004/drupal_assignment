@@ -2,6 +2,10 @@ import React from 'react';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import ConditionalView from '../../../common/components/conditional-view';
 import AppointmentListItem from './components/appointmentlist';
+import {
+  removeFullScreenLoader,
+  showFullScreenLoader,
+} from '../../../utilities/appointment-util';
 
 export default class AppointmentsView extends React.Component {
   constructor(props) {
@@ -15,6 +19,7 @@ export default class AppointmentsView extends React.Component {
   }
 
   componentDidMount() {
+    showFullScreenLoader();
     const { id } = drupalSettings.alshaya_appointment.user_details;
 
     if (id) {
@@ -62,6 +67,7 @@ export default class AppointmentsView extends React.Component {
                 notFound: this.getNotFoundText(),
               });
             }
+            removeFullScreenLoader();
           }
         });
       }
@@ -72,29 +78,24 @@ export default class AppointmentsView extends React.Component {
 
   cancelAppointment = (appointmentId, index) => {
     const { appointments } = this.state;
-    const appointment = appointments[index];
-    const confirmText = Drupal.t('Are you sure you want to cancel appointment for !type?',
-      { '!type': appointment.activityName });
-    if (window.confirm(confirmText)) { // eslint-disable-line no-alert
-      const { id } = drupalSettings.alshaya_appointment.user_details;
-      if (id && appointmentId) {
-        const apiUrl = `/cancel/appointment?id=${id}&appointment=${appointmentId}`;
-        const apiData = fetchAPIData(apiUrl);
-        if (apiData instanceof Promise) {
-          apiData.then((result) => {
-            if (result.error === undefined && result.data.return.result === 'SUCCESS') {
-              appointments.splice(index, 1);
+    const { id } = drupalSettings.alshaya_appointment.user_details;
+    if (id && appointmentId) {
+      const apiUrl = `/cancel/appointment?id=${id}&appointment=${appointmentId}`;
+      const apiData = fetchAPIData(apiUrl);
+      if (apiData instanceof Promise) {
+        apiData.then((result) => {
+          if (result.error === undefined && result.data.return.result === 'SUCCESS') {
+            appointments.splice(index, 1);
+            this.setState({
+              appointments,
+            });
+            if (appointments.length === 0) {
               this.setState({
-                appointments,
+                notFound: this.getNotFoundText(),
               });
-              if (appointments.length === 0) {
-                this.setState({
-                  notFound: this.getNotFoundText(),
-                });
-              }
             }
-          });
-        }
+          }
+        });
       }
     }
   };

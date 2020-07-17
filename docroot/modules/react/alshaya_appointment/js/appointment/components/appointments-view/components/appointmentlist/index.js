@@ -173,7 +173,7 @@ export default class AppointmentListItem extends React.Component {
                 <button type="button" className="action-edit" onClick={() => triggerOpenModal()}>
                   { Drupal.t('Edit') }
                 </button>
-                <Popup open={isModalOpen} closeOnDocumentClick closeOnEscape>
+                <Popup open={isModalOpen} closeOnEscape closeOnDocumentClick={false}>
                   <>
                     <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ Drupal.t('close') }</button>
                     <AppointmentEditBox
@@ -187,13 +187,48 @@ export default class AppointmentListItem extends React.Component {
               </>
             )}
           </WithModal>
-          <button
-            type="button"
-            className="action-delete"
-            onClick={() => cancelAppointment(confirmationNumber, num)}
-          >
-            {Drupal.t('Delete')}
-          </button>
+          <WithModal modalStatusKey={`delete${num}`}>
+            {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
+              <>
+                <button
+                  type="button"
+                  className="action-delete"
+                  onClick={() => triggerOpenModal()}
+                >
+                  {Drupal.t('Delete')}
+                </button>
+                <Popup open={isModalOpen} closeOnEscape closeOnDocumentClick={false}>
+                  <>
+                    <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ Drupal.t('close') }</button>
+                    <div className="appointment-delete-popup fadeInUp">
+                      <div className="appointmentbox title">
+                        <span>Delete</span>
+                      </div>
+                      <div className="appointmentbox message">
+                        <span>
+                          { Drupal.t('Are you sure you want to cancel appointment for !type?',
+                            { '!type': appointment.activityName }) }
+                        </span>
+                      </div>
+                      <div className="appointmentbox buttons">
+                        <button
+                          type="button"
+                          className="ok-button"
+                          onClick={() => {
+                            triggerCloseModal();
+                            cancelAppointment(confirmationNumber, num);
+                          }}
+                        >
+                          OK
+                        </button>
+                        <button type="button" className="cancel-button" onClick={() => triggerCloseModal()}>Cancel</button>
+                      </div>
+                    </div>
+                  </>
+                </Popup>
+              </>
+            )}
+          </WithModal>
         </div>
       </div>
     );
