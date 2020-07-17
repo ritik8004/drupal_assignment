@@ -10,6 +10,7 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../utilities/appointment-util';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
 const companionItems = [...Array(listItems)].map((e, i) => ({ value: i + 1, label: i + 1 }));
@@ -92,6 +93,7 @@ export default class AppointmentType extends React.Component {
     setStorageInfo(this.state);
     const { handleSubmit } = this.props;
     handleSubmit();
+    smoothScrollTo('#appointment-booking');
   }
 
   render() {

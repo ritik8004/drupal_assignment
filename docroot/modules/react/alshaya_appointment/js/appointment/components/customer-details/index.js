@@ -6,6 +6,7 @@ import ClientDetails from './components/client-details';
 import CompanionDetails from './components/companion-details';
 import { processCustomerDetails } from '../../../utilities/validate';
 import { postAPICall, fetchAPIData } from '../../../utilities/api/fetchApiData';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 export default class CustomerDetails extends React.Component {
   constructor(props) {
@@ -159,6 +160,7 @@ export default class CustomerDetails extends React.Component {
       // Update/Insert client and then book appointment.
       this.updateInsertClient();
     }
+    smoothScrollTo('#appointment-booking');
   }
 
   render() {

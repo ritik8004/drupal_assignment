@@ -5,6 +5,7 @@ import AppointmentSlots from '../appointment-selectslot';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
 import { getDateFormat, getDateFormattext } from '../../../utilities/helper';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
@@ -45,7 +46,8 @@ export default class AppointmentTimeSlot extends React.Component {
     setStorageInfo(this.state);
     const { handleSubmit } = this.props;
     handleSubmit();
-  }
+    smoothScrollTo('#appointment-booking');
+  };
 
   dateChanged(d) {
     this.setState({ date: d },
@@ -84,7 +86,8 @@ export default class AppointmentTimeSlot extends React.Component {
   handleBack = (step) => {
     const { handleBack } = this.props;
     handleBack(step);
-  }
+    smoothScrollTo('#appointment-booking');
+  };
 
   render() {
     const { date, timeSlots, notFound } = this.state;
