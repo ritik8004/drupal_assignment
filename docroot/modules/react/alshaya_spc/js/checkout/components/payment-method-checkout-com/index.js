@@ -3,6 +3,7 @@ import Popup from 'reactjs-popup';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
+  validateCvv,
 } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import SavedCardsList from './components/SavedCardsList';
@@ -53,8 +54,7 @@ class PaymentMethodCheckoutCom extends React.Component {
 
   cvvValidations = (e) => {
     const cvv = e.target.value.trim();
-    const cvvLength = cvv.toString().length;
-    const valid = (cvvLength >= 3 && cvvLength <= 4);
+    const valid = validateCvv(cvv);
     handleValidationMessage(
       'spc-cc-cvv-error',
       e.target.value,
