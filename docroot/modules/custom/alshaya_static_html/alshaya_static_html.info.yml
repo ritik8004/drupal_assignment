@@ -21,3 +21,4 @@ dependencies:
   - drupal:text
   - drupal:user
   - drupal:views
+  - drupal:replicate_ui
