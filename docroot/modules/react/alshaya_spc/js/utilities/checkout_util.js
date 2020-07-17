@@ -474,3 +474,17 @@ export const replaceCodTokens = (replacement, text) => {
   const textSplit = text.split('[surcharge]');
   return textSplit.reduce((prefix, suffix) => [prefix, replacement, suffix]);
 };
+
+/**
+ * Validate cvv number.
+ *
+ * @param {string} cvv
+ *   The cvv number to validate.
+ *
+ * @return {boolean}
+ *   Return true if cvv number is valid else false.
+ */
+export function validateCvv(cvv) {
+  const cvvLength = cvv.toString().length;
+  return [3, 4].includes(cvvLength) && !Number.isNaN(cvv);
+}
