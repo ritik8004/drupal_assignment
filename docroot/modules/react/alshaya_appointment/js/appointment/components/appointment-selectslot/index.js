@@ -43,7 +43,7 @@ export default class AppointmentSlots extends React.Component {
         const hours = parseFloat(h);
         if (hours < 12) {
           timeSlots.morning.push(items.return[i]);
-        } else if (hours > 12 && hours < 17) {
+        } else if (hours >= 12 && hours < 17) {
           timeSlots.afternoon.push(items.return[i]);
         } else {
           timeSlots.evening.push(items.return[i]);
