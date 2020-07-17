@@ -283,6 +283,13 @@ class AppointmentServices {
         $result->return->appointments[0] = $temp;
       }
 
+      foreach ($result->return->appointments as $key => $appointment) {
+        $clientExternalId = $this->apiHelper->checkifBelongstoUser($user['email']);
+        if ($appointment->clientExternalId != $clientExternalId) {
+          unset($result->return->appointments[$key]);
+        }
+      }
+
       return new JsonResponse($result);
     }
     catch (\Exception $e) {
@@ -352,7 +359,22 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
-      $client = $this->client->getSoapClient($this->serviceUrl);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
+      $param = [
+        'confirmationNumber' => $appointmentId,
+      ];
+      $appointmentData = $client->__soapCall('getAppointmentByConfirmationNumber', [$param]);
+
+      // Check if Appointment Belongs to user only.
+      if (property_exists($appointmentData->return, 'appointment')) {
+        $clientExternalId = $appointmentData->return->appointment->clientExternalId;
+        if ($this->apiHelper->checkifBelongstoUser($user['email']) != $clientExternalId) {
+          $message = 'Appointment ' . $appointmentId . ' does not belong logged in user.';
+
+          throw new \Exception($message);
+        }
+      }
+
       $param = [
         'confirmationNumber' => $appointmentId,
       ];
@@ -424,7 +446,7 @@ class AppointmentServices {
   }
 
   /**
-   * Get Appointment details.
+   * Get Appointment details for logged in user.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Appointment details.
@@ -453,9 +475,17 @@ class AppointmentServices {
       $param = [
         'confirmationNumber' => $appointment,
       ];
-      $result = $client->__soapCall('getAppointmentByConfirmationNumber', [$param]);
+      $appointmentData = $client->__soapCall('getAppointmentByConfirmationNumber', [$param]);
 
-      return new JsonResponse($result);
+      // Check if Appointment Belongs to user onyl.
+      if (property_exists($appointmentData->return, 'appointment')) {
+        $clientExternalId = $appointmentData->return->appointment->clientExternalId;
+        if ($this->apiHelper->checkifBelongstoUser($user['email']) == $clientExternalId) {
+          return new JsonResponse($appointmentData);
+        }
+      }
+
+      throw new \Exception('Appointment not found for id: ' . $appointment);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while fetching appointment with id @appid for user @user. Message: @message', [

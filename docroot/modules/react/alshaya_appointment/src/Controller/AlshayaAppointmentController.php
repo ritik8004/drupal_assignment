@@ -7,6 +7,8 @@ use Drupal\Core\Cache\Cache;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Session\AccountProxy;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -247,6 +249,33 @@ class AlshayaAppointmentController extends ControllerBase {
         'tags' => $cache_tags,
       ],
     ];
+  }
+
+  /**
+   * Get user customer id.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function getUserInfo(Request $request) {
+    $response = [
+      'email' => '',
+      'uid' => 0,
+    ];
+
+    if ($this->currentUser()->isAuthenticated()) {
+      $response['email'] = $this->currentUser()->getEmail();
+
+      // Drupal CORE uses numeric 0 for anonymous but string for logged in.
+      // We follow the same.
+      $response['uid'] = $this->currentUser()->id();
+
+    }
+
+    return new JsonResponse($response);
   }
 
 }
