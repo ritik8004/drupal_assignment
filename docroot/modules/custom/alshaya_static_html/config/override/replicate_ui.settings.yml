@@ -1,0 +1,4 @@
+entity_types:
+  - node
+content_types:
+  static_html: static_html
