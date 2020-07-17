@@ -88,18 +88,20 @@ export default class CustomerDetails extends React.Component {
     const numOfCompanions = appointmentCompanion.value - 1;
     const updatedCompanionData = {};
 
-    Object.entries(companionData).forEach(([key, value]) => {
-      const currentKeyArray = key.split(/(\d+)/);
+    if (companionData) {
+      Object.entries(companionData).forEach(([key, value]) => {
+        const currentKeyArray = key.split(/(\d+)/);
 
-      // Removing the companion data for the one being deleted.
-      if (companionId !== currentKeyArray[1]) {
-        let newKey = key;
-        if (currentKeyArray[1] > companionId) {
-          newKey = currentKeyArray[0] + (currentKeyArray[1] - 1) + currentKeyArray[2];
+        // Removing the companion data for the one being deleted.
+        if (companionId !== currentKeyArray[1]) {
+          let newKey = key;
+          if (currentKeyArray[1] > companionId) {
+            newKey = currentKeyArray[0] + (currentKeyArray[1] - 1) + currentKeyArray[2];
+          }
+          updatedCompanionData[newKey] = value;
         }
-        updatedCompanionData[newKey] = value;
-      }
-    });
+      });
+    }
 
     this.setState((prevState) => ({
       ...prevState,

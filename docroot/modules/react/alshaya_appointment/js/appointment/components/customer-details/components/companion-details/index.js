@@ -86,7 +86,7 @@ export default class CompanionDetails extends React.Component {
                   className="btn btn-link"
                   type="button"
                   data-companion-id={companionNum}
-                  onClick={(e) => this.handleRemoveFields(e)}
+                  onClick={this.handleRemoveFields}
                 >
                   {Drupal.t('Delete')}
                 </button>
