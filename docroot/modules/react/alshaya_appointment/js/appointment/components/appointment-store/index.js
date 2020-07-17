@@ -19,7 +19,7 @@ import {
   isFullScreen,
   exitFullscreen,
 } from '../../../utilities/map/fullScreen';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 const StoreMap = React.lazy(async () => {
   const localStorageValues = getStorageInfo();

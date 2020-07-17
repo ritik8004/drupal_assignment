@@ -6,7 +6,7 @@ import ClientDetails from './components/client-details';
 import CompanionDetails from './components/companion-details';
 import { processCustomerDetails } from '../../../utilities/validate';
 import { postAPICall, fetchAPIData } from '../../../utilities/api/fetchApiData';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 export default class CustomerDetails extends React.Component {
   constructor(props) {

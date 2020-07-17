@@ -5,7 +5,7 @@ import AppointmentSlots from '../appointment-selectslot';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
 import { getDateFormat, getDateFormattext } from '../../../utilities/helper';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {

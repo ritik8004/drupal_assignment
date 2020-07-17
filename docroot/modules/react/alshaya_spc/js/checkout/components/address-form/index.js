@@ -17,7 +17,7 @@ import SectionTitle from '../../../utilities/section-title';
 import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
 import CheckoutMessage from '../../../utilities/checkout-message';
-import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 import getStringMessage from '../../../utilities/strings';
 import dispatchCustomEvent from '../../../utilities/events';
 import {

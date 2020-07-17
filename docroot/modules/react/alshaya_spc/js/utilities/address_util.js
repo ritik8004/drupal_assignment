@@ -13,7 +13,7 @@ import { extractFirstAndLastName } from './cart_customer_util';
 import {
   smoothScrollToAddressField,
   smoothScrollTo,
-} from './smoothScroll';
+} from '../../../js/utilities/smoothScroll';
 
 /**
  * Use this to auto scroll to the right field in address form upon
