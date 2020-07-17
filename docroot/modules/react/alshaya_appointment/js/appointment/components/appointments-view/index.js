@@ -120,7 +120,6 @@ export default class AppointmentsView extends React.Component {
         <a
           href={`${baseUrl}${pathPrefix}appointment/booking`}
           className="appointment-booking-link-top fadeInUp"
-          style={{ animationDelay: '0.4s' }}
         >
           {Drupal.t('Book new appointment')}
         </a>
@@ -130,7 +129,7 @@ export default class AppointmentsView extends React.Component {
         <ConditionalView condition={notFound !== undefined}>
           { notFound }
         </ConditionalView>
-        <div className="book-appointment-btn fadeInUp" style={{ animationDelay: '1s' }}>
+        <div className="book-appointment-btn fadeInUp">
           <a href={`${baseUrl}${pathPrefix}appointment/booking`} className="appointment-booking-link-bottom">
             {Drupal.t('Book new appointment')}
           </a>
