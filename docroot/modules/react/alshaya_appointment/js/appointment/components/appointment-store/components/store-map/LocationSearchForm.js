@@ -1,11 +1,14 @@
 import React from 'react';
-import ConditionalView from '../../../../../common/components/conditional-view';
+import DeviceView from '../../../../../common/components/device-view';
 
 const LocationSearchForm = React.forwardRef((props, ref) => (
-  <div className="store-finder-wrapper appointment-location-search-wrapper" ref={ref}>
-    <div className="store-finder-container">
-
-      <ConditionalView condition={window.innerWidth > 1023}>
+  <div
+    className="store-finder-wrapper appointment-location-search-wrapper fadeInUp"
+    style={{ animationDelay: '0.6s' }}
+    ref={ref}
+  >
+    <DeviceView device="above-mobile">
+      <div className="store-finder-container">
         <button
           className="appointment-type-button store-finder-button"
           id="edit-near-me"
@@ -17,15 +20,15 @@ const LocationSearchForm = React.forwardRef((props, ref) => (
         <span>
           {` - ${Drupal.t('Or')} - `}
         </span>
-      </ConditionalView>
-      <label>
-        {Drupal.t('Find your closest location')}
-      </label>
-    </div>
+        <label>
+          {Drupal.t('Find your closest location')}
+        </label>
+      </div>
+    </DeviceView>
 
     <div className="store-finder-input">
       <input
-        type="search"
+        type="text"
         id="autocomplete"
         className="input"
         name="store_location"
@@ -33,7 +36,7 @@ const LocationSearchForm = React.forwardRef((props, ref) => (
       />
     </div>
 
-    <ConditionalView condition={window.innerWidth < 1024}>
+    <DeviceView device="mobile">
       <button
         className="appointment-store-near-me"
         id="edit-near-me"
@@ -42,8 +45,7 @@ const LocationSearchForm = React.forwardRef((props, ref) => (
       >
         {Drupal.t('Display Stores Near Me')}
       </button>
-    </ConditionalView>
-
+    </DeviceView>
   </div>
 ));
 

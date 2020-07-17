@@ -123,6 +123,8 @@ $_appointment-medium-blue: #b7d1ec;
 $_appointment-pink-bg: #b8237b;
 $_appointment-light-blue: #b8d1ed;
 $_appointment-light-gray: rgba(151, 151, 151, 0.2);
+$_appointment-social-icon-gray-bg: #f6f6f6;
+$_appointment-delete-red: #e82d35;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1353,12 +1355,13 @@ $appointment-store-search-icon-active: $white-five;
 $appointment-store-toggle-bg: $white-five;
 $appointment-store-toggle-bg-active: $_appointment-darkish-blue;
 $appointment-store-text: $black;
+$appointment-store-list-border: $_appointment-light-gray;
 $appointment-store-distance-text: $grey-light;
 $appointment-map-store-name: $_appointment-darkish-blue;
 $appointment-register-btn-bg :$_appointment-sky-blue;
 $appointment-checkout-btn: $_appointment-darkish-blue;
 $appointment-register-border: $_appointment-darkish-blue;
-$appointment-checkout-btn-bg :$_appointment-medium-blue;
+$appointment-checkout-btn-bg :$_appointment-light-blue;
 $appointment-timeslot-text: $black;
 $appointment-calendar-date-text: $_appointment-darkish-blue;
 $appointment-calendar-date-border: $_appointment-darkish-blue;
@@ -1387,3 +1390,13 @@ $appointment-my-account-border-grey: $warm-grey-two;
 $appointment-delete-btn-border: $_appointment-darkish-blue;
 $appointment-delete-cancel-btn-bg: $_appointment-darkish-blue;
 $appointment-delete-cancel-btn: $white-five;
+$appointment-social-icon-bg: $_appointment-social-icon-gray-bg;
+$appointment-companion-delete: $_appointment-delete-red;
+$appointment-add-companion-link: $_appointment-darkish-blue;
+$appointment-calendar-text: $black;
+$appointment-calendar-select-text: $white-five;
+$appointment-calendar-select-bg: $_appointment-darkish-blue;
+$appointment-store-info-window-border: $white-smoke-light;
+$appointment-store-map-info-window-impress: $mothercare-black;
+$appointment-store-map-store-distance: $grey-light;
+$appointment-store-item-text: $black;
