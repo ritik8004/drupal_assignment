@@ -13,7 +13,8 @@ import {
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
-const companionItems = [...Array(listItems)].map((e, i) => ({ value: i + 1, label: i + 1 }));
+const companionItems = [...Array(parseInt(listItems, 10))]
+  .map((e, i) => ({ value: i + 1, label: i + 1 }));
 
 export default class AppointmentType extends React.Component {
   constructor(props) {
