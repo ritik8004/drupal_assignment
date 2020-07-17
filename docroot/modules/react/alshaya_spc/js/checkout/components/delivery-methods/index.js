@@ -3,7 +3,7 @@ import React from 'react';
 import SectionTitle from '../../../utilities/section-title';
 import HomeDeliverySVG from '../../../svg-component/hd-svg';
 import ClickCollectSVG from '../../../svg-component/cc-svg';
-import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { isCnCEnabled } from '../../../utilities/checkout_util';
 
 export default class DeliveryMethods extends React.Component {

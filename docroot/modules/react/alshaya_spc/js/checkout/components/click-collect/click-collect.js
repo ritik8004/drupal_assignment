@@ -26,7 +26,7 @@ import {
 } from '../../../utilities/map/fullScreen';
 import CheckoutMessage from '../../../utilities/checkout-message';
 import getStringMessage from '../../../utilities/strings';
-import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { getUserLocation } from '../../../utilities/map/map_utils';
 import globalGmap from '../../../utilities/map/Gmap';
 import dispatchCustomEvent from '../../../utilities/events';

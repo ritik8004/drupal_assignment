@@ -12,7 +12,7 @@ import Loading from '../../../utilities/loading';
 import VatFooterText from '../../../utilities/vat-footer';
 import { stickyMobileCartPreview, stickySidebar } from '../../../utilities/stickyElements/stickyElements';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
-import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { fetchCartData } from '../../../utilities/api/requests';
 import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
