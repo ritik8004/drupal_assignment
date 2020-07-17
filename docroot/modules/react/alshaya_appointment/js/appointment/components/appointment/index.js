@@ -5,9 +5,14 @@ import Loading from '../../../utilities/loading';
 import AppointmentSelection from '../appointment-selection';
 import CustomerDetails from '../customer-details';
 import Confirmation from '../confirmation';
-import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
+import {
+  setStorageInfo,
+  getStorageInfo,
+  removeStorageInfo,
+} from '../../../utilities/storage';
 import AppointmentTimeSlot from '../appointment-timeslot';
 import AppointmentLogin from '../appointment-login';
+import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 
 const AppointmentStore = React.lazy(async () => {
   // Wait for google object to load.
@@ -41,6 +46,124 @@ export default class Appointment extends React.Component {
         appointmentStep: 'appointment-type',
       };
     }
+  }
+
+  /**
+   * Get Appointment and client details is query string has appointment id.
+   */
+  componentDidMount() {
+    const { search } = window.location;
+    const params = new URLSearchParams(search);
+    const appointment = params.get('appointment');
+    const step = params.get('step');
+    const { id, email } = drupalSettings.alshaya_appointment.user_details;
+
+    if (id && email && appointment && step) {
+      const apiUrl = `/get/client?email=${email}&id=${id}`;
+      const apiData = fetchAPIData(apiUrl);
+      if (apiData instanceof Promise) {
+        apiData.then((result) => {
+          if (result.error === undefined && result.data !== undefined) {
+            const clientData = result.data;
+            const apiUrlAppointment = `/get/appointment-details?appointment=${appointment}&id=${id}`;
+            const apiDataAppointment = fetchAPIData(apiUrlAppointment);
+
+            if (apiDataAppointment instanceof Promise) {
+              apiDataAppointment.then((response) => {
+                if (response.error === undefined && response.data !== undefined) {
+                  if (Object.prototype.hasOwnProperty.call(response.data.return, 'appointment')) {
+                    this.validateAppointmentEdit(clientData, response.data.return.appointment);
+                  }
+                } else {
+                  const { baseUrl, pathPrefix } = drupalSettings.path;
+                  removeStorageInfo();
+                  window.location.replace(`${baseUrl}${pathPrefix}appointment/booking`);
+                }
+              });
+            }
+          }
+        });
+      }
+    }
+  }
+
+  /**
+   * Validates appointment edit permission.
+   */
+  validateAppointmentEdit(client, appointment) {
+    if (client.clientExternalId !== appointment.clientExternalId) {
+      const { baseUrl, pathPrefix } = drupalSettings.path;
+      removeStorageInfo();
+      window.location.replace(`${baseUrl}${pathPrefix}appointment/booking`);
+    }
+
+    const apiUrl = `/get/store/criteria?location=${appointment.locationExternalId}`;
+    const apiData = fetchAPIData(apiUrl);
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.error === undefined && result.data !== undefined) {
+          const locationInfo = result.data.return.locations;
+          this.prepareLocalStoreforEdit(client, appointment, locationInfo);
+        }
+      });
+    }
+  }
+
+  /**
+   * Prepare localstorage for appointment edit.
+   */
+  prepareLocalStoreforEdit(client, appointment, locationInfo) {
+    const { search } = window.location;
+    const params = new URLSearchParams(search);
+    const step = params.get('step');
+    const steps = [
+      'select-store',
+      'select-time-slot',
+      'customer-details',
+    ];
+    if (!steps.includes(step)) {
+      const { baseUrl, pathPrefix } = drupalSettings.path;
+      const { id } = drupalSettings.alshaya_appointment.user_details;
+      window.location.replace(`${baseUrl}${pathPrefix}user/${id}/appointments`);
+    }
+
+    const storeInfo = {
+      locationExternalId: locationInfo.locationExternalId,
+      name: locationInfo.locationName,
+      address: locationInfo.companyAddress,
+      lat: locationInfo.geocoordinates.latitude,
+      lng: locationInfo.geocoordinates.longitude,
+      storeTiming: [],
+    };
+    const localstore = {
+      appointmentCategory: {
+        id: appointment.programExternalId,
+        name: appointment.programName,
+      },
+      appointmentType: {
+        value: appointment.activityExternalId,
+        label: appointment.activityName,
+      },
+      appointmentCompanion: {
+        value: appointment.numberOfAttendees,
+        label: appointment.numberOfAttendees,
+      },
+      appointmentStep: step,
+      selectedStoreItem: storeInfo,
+      selectedSlot: {
+        appointmentSlotTime: appointment.appointmentStartDate,
+        lengthinMin: appointment.appointmentDurationMin,
+        resourceExternalIds: appointment.resourceExternalId,
+      },
+      storeList: [],
+      originalTimeSlot: appointment.appointmentStartDate,
+      appointmentId: appointment.confirmationNumber,
+    };
+    removeStorageInfo();
+    setStorageInfo(localstore);
+    this.setState({
+      ...localstore,
+    });
   }
 
   handleSubmit = (stepValue) => {
@@ -131,7 +254,7 @@ export default class Appointment extends React.Component {
 
     return (
       <div className="appointment-wrapper">
-        <AppointmentSteps />
+        <AppointmentSteps step={appointmentStep} />
         <div className={`${appointmentClasses}`}>
           {appointmentData}
           {appointmentSelection}

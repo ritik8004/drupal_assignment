@@ -135,7 +135,7 @@ class Drupal {
    * Get Drupal uid and customer id for the user in session.
    */
   public function getSessionUserInfo() {
-    $url = '/spc/customer';
+    $url = '/get/userinfo';
     $response = $this->invokeApiWithSession('GET', $url);
     $result = $response->getBody()->getContents();
     $user = json_decode($result, TRUE);

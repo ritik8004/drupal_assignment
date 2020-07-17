@@ -55,6 +55,7 @@ const TextField = (props) => {
           value={value}
           onBlur={(e) => handleEvent(e, 'blur')}
           placeholder={label}
+          required={required}
           readOnly
         />
         <span className="date-custom-input" />

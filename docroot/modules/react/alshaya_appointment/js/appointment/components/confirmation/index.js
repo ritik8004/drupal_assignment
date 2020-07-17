@@ -38,7 +38,7 @@ export default class Confirmation extends React.Component {
     const time = moment(selectedSlot.appointmentSlotTime).format('LT');
     const location = `${selectedStoreItem.name}, ${addressCleanup(selectedStoreItem.address)}`;
     const event = {
-      title: appointmentType.name,
+      title: appointmentType.label,
       location,
       startTime: selectedSlot.appointmentSlotTime,
       endTime: moment(selectedSlot.appointmentSlotTime).add(selectedSlot.lengthinMin, 'minutes'),
@@ -46,12 +46,12 @@ export default class Confirmation extends React.Component {
 
     return (
       <div className="appointment-confirmation-wrapper">
-        <div className="confirmation-header">
+        <div className="confirmation-header fadeInUp">
           <h4>{Drupal.t('Thank you for booking at Boots.')}</h4>
           <h5>{Drupal.t('A confirmation will be sent through email. Manage your appointments online.')}</h5>
         </div>
         <div className="confirmation-body">
-          <div className="inner-header">
+          <div className="inner-header fadeInUp">
             <label>{Drupal.t('Appointment Summary')}</label>
             <div className="appointment-confirmation-option">
               <AddToCalendar
@@ -65,12 +65,12 @@ export default class Confirmation extends React.Component {
               </span>
             </div>
           </div>
-          <div className="inner-body">
+          <div className="inner-body fadeInUp">
             <ConfirmationItems
               item={{ label: Drupal.t('Appointment category'), value: appointmentCategory.name }}
             />
             <ConfirmationItems
-              item={{ label: Drupal.t('Appointment type'), value: appointmentType.name }}
+              item={{ label: Drupal.t('Appointment type'), value: appointmentType.label }}
             />
             <ConfirmationItems
               item={{ label: Drupal.t('Location'), value: location }}
@@ -83,7 +83,7 @@ export default class Confirmation extends React.Component {
             />
           </div>
         </div>
-        <div className="confirmation-footer">
+        <div className="confirmation-footer fadeInUp">
           <button
             className="view-my-appointments-button"
             type="button"

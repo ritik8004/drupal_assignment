@@ -73,7 +73,32 @@ class ClientServices {
    */
   public function updateInsertClient(Request $request) {
     try {
-      $result = $this->xmlApiHelper->updateInsertClient($request);
+      $request_content = json_decode($request->getContent(), TRUE);
+      $clientExternalId = $request_content['clientExternalId'] ?? '';
+      $firstName = $request_content['firstName'] ?? '';
+      $lastName = $request_content['lastName'] ?? '';
+      $dob = $request_content['dob'] ?? '';
+      $mobile = $request_content['mobile'] ?? '';
+      $email = $request_content['email'] ?? '';
+
+      $param = [
+        'clientExternalId' => $clientExternalId,
+        'firstName' => $firstName,
+        'lastName' => $lastName,
+        'dob' => $dob,
+        'mobile' => $mobile,
+        'email' => $email,
+      ];
+
+      if (empty($firstName) || empty($lastName) || empty($dob) || empty($mobile) || empty($email)) {
+        $message = 'Required parameters missing to create a client.';
+        $this->logger->error($message . ' Data: @request_data', [
+          '@request_data' => json_encode($param),
+        ]);
+        throw new \Exception($message);
+      }
+
+      $result = $this->xmlApiHelper->updateInsertClient($param);
       $clientExternalId = $result->return->result ?? '';
 
       return new JsonResponse($clientExternalId);
@@ -83,7 +108,7 @@ class ClientServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      return new JsonResponse(['error' => $e->getMessage()]);
     }
   }
 

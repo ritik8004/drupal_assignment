@@ -168,8 +168,20 @@ class ConfigurationServices {
       $maxLocations = $requestQuery->get('max-locations') ?? '';
       $unit = $requestQuery->get('unit') ?? '';
 
+      $param = [
+        'latitude' => $latitude,
+        'longitude' => $longitude,
+        'radius' => $radius,
+        'maxLocations' => $maxLocations,
+        'unit' => $unit,
+      ];
+
       if (empty($latitude) || empty($longitude) || empty($radius) || empty($maxLocations) || empty($unit)) {
-        throw new \Exception('Required parameters missing to get stores.');
+        $message = 'Required parameters missing to get stores.';
+        $this->logger->error($message . ' Data: @request_data', [
+          '@request_data' => json_encode($param),
+        ]);
+        throw new \Exception($message);
       }
 
       $locationExternalIds = $this->apiHelper->getlocationExternalIds();
@@ -179,14 +191,6 @@ class ConfigurationServices {
         // try to get location by geo criteria and return empty array.
         return [];
       }
-
-      $param = [
-        'latitude' => $latitude,
-        'longitude' => $longitude,
-        'radius' => $radius,
-        'maxLocations' => $maxLocations,
-        'unit' => $unit,
-      ];
 
       $result = $this->xmlApiHelper->fetchStores($param);
       $stores = $result->return->locations ?? [];

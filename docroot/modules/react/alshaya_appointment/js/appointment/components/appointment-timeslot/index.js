@@ -5,6 +5,7 @@ import AppointmentSlots from '../appointment-selectslot';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
 import { getDateFormat, getDateFormattext } from '../../../utilities/helper';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
@@ -13,13 +14,13 @@ export default class AppointmentTimeSlot extends React.Component {
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
-        selectedSlot: {},
         timeSlots: {},
+        notFound: '',
       };
-      if (Object.prototype.hasOwnProperty.call(localStorageValues, 'date')) {
-        this.state.date = new Date(localStorageValues.date);
+      if (Object.prototype.hasOwnProperty.call(localStorageValues, 'selectedSlot')) {
+        this.state.date = new Date(localStorageValues.selectedSlot.appointmentSlotTime);
       } else {
-        this.state.date = new Date();
+        this.state.date = new Date(moment().add(1, 'day'));
       }
     }
 
@@ -45,7 +46,8 @@ export default class AppointmentTimeSlot extends React.Component {
     setStorageInfo(this.state);
     const { handleSubmit } = this.props;
     handleSubmit();
-  }
+    smoothScrollTo('#appointment-booking');
+  };
 
   dateChanged(d) {
     this.setState({ date: d },
@@ -65,6 +67,11 @@ export default class AppointmentTimeSlot extends React.Component {
           this.setState({
             timeSlots: result.data,
           });
+          if (Object.keys(result.data).length === 0) {
+            this.setState({
+              notFound: Drupal.t('Time slots are unavailable on this date. Please Select next date.'),
+            });
+          }
         }
       });
     }
@@ -79,39 +86,41 @@ export default class AppointmentTimeSlot extends React.Component {
   handleBack = (step) => {
     const { handleBack } = this.props;
     handleBack(step);
-  }
+    smoothScrollTo('#appointment-booking');
+  };
 
   render() {
-    const { date, timeSlots } = this.state;
+    const { date, timeSlots, notFound } = this.state;
     return (
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
-          <div className="store-header appointment-subtitle">
+          <div className="store-header appointment-subtitle fadeInUp">
             {Drupal.t('Select date & time that suits you')}
             {' '}
             *
           </div>
-          <div className="timeslot-latest-available">
+          <div className="timeslot-latest-available fadeInUp">
             <span>
               {Drupal.t('The first available appointment is on ')}
             </span>
-            <span className="starting-timeslot">{Drupal.t(moment().format(getDateFormattext()))}</span>
+            <span className="starting-timeslot">{Drupal.t(moment().add(1, 'day').format(getDateFormattext()))}</span>
           </div>
-          <div className="appointment-datepicker">
+          <div className="appointment-datepicker fadeInUp">
             <AppointmentCalendar
               selectDate={date}
               dateChanged={this.dateChanged}
             />
           </div>
 
-          <div className="appointment-timeslots-wrapper">
+          <div className="appointment-timeslots-wrapper fadeInUp">
             <AppointmentSlots
+              notFound={notFound}
               items={timeSlots}
               handler={this.handler}
             />
           </div>
 
-          <div className="appointment-store-buttons-wrapper">
+          <div className="appointment-store-buttons-wrapper fadeInUp">
             <button
               className="appointment-type-button appointment-store-button back"
               type="button"
@@ -119,14 +128,16 @@ export default class AppointmentTimeSlot extends React.Component {
             >
               {Drupal.t('BACK')}
             </button>
-            <button
-              className="appointment-type-button appointment-store-button select-store"
-              type="button"
+            <div className="appointment-flow-action">
+              <button
+                className="appointment-type-button appointment-store-button select-store"
+                type="button"
 
-              onClick={this.handleSubmit}
-            >
-              {Drupal.t('book time slot')}
-            </button>
+                onClick={this.handleSubmit}
+              >
+                {Drupal.t('book time slot')}
+              </button>
+            </div>
           </div>
 
         </div>

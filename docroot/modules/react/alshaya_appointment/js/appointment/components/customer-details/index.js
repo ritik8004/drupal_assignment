@@ -6,6 +6,7 @@ import ClientDetails from './components/client-details';
 import CompanionDetails from './components/companion-details';
 import { processCustomerDetails } from '../../../utilities/validate';
 import { postAPICall, fetchAPIData } from '../../../utilities/api/fetchApiData';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 export default class CustomerDetails extends React.Component {
   constructor(props) {
@@ -76,7 +77,9 @@ export default class CustomerDetails extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        if (result.error === undefined && result.data !== undefined) {
+        if (result.error === undefined
+          && result.data !== undefined
+          && result.data.error === undefined) {
           // Move to next step.
           const { handleSubmit } = this.props;
           handleSubmit();
@@ -87,17 +90,31 @@ export default class CustomerDetails extends React.Component {
 
   bookAppointment = () => {
     const {
-      selectedStoreItem, appointmentCategory, appointmentType, clientExternalId, selectedSlot,
+      selectedStoreItem,
+      appointmentCategory,
+      appointmentType,
+      clientExternalId,
+      selectedSlot,
+      appointmentId,
+      originalTimeSlot,
     } = this.state;
     const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
     const channel = isMobile ? 'mobile' : 'desktop';
 
-    const apiUrl = `/book-appointment?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.value}&duration=${selectedSlot.lengthinMin}&attendees=${1}&start-date-time=${selectedSlot.appointmentSlotTime}&client=${clientExternalId}&channel=${channel}`;
+    let apiUrl = `/book-appointment?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.value}&duration=${selectedSlot.lengthinMin}&attendees=${1}&start-date-time=${selectedSlot.appointmentSlotTime}&client=${clientExternalId}&channel=${channel}`;
+
+    const { id } = drupalSettings.alshaya_appointment.user_details;
+    if (appointmentId && id !== 0) {
+      apiUrl = `${apiUrl}&appointment=${appointmentId}&originaltime=${originalTimeSlot}&id=${id}`;
+    }
+
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        if (result.error === undefined && result.data !== undefined) {
+        if (result.error === undefined
+          && result.data !== undefined
+          && result.data.error === undefined) {
           this.setState((prevState) => ({
             ...prevState,
             bookingId: result.data,
@@ -125,7 +142,9 @@ export default class CustomerDetails extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        if (result.error === undefined && result.data !== undefined) {
+        if (result.error === undefined
+          && result.data !== undefined
+          && result.data.error === undefined) {
           this.setState((prevState) => ({
             ...prevState,
             clientExternalId: result.data,
@@ -149,6 +168,7 @@ export default class CustomerDetails extends React.Component {
       // Update/Insert client and then book appointment.
       this.updateInsertClient();
     }
+    smoothScrollTo('#appointment-booking');
   }
 
   render() {
@@ -173,12 +193,14 @@ export default class CustomerDetails extends React.Component {
             {drupalSettings.alshaya_appointment.customer_details_disclaimer_text}
           </div>
           <div className="customer-details-button-wrapper">
-            <button
-              className="customer-details-button appointment-type-button"
-              type="submit"
-            >
-              {Drupal.t('Book Appointment')}
-            </button>
+            <div className="appointment-flow-action">
+              <button
+                className="customer-details-button appointment-type-button"
+                type="submit"
+              >
+                {Drupal.t('Book an Appointment')}
+              </button>
+            </div>
           </div>
         </form>
       </div>

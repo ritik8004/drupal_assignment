@@ -60,6 +60,8 @@
       }
 
       .step-title {
+        font-family: $alshaya-bold;
+
         @include breakpoint($upto-tablet-landscape) {
           display: block;
         }

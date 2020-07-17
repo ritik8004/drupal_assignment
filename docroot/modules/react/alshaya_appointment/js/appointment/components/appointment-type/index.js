@@ -10,6 +10,7 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../utilities/appointment-util';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
 const companionItems = [...Array(listItems)].map((e, i) => ({ value: i + 1, label: i + 1 }));
@@ -92,6 +93,7 @@ export default class AppointmentType extends React.Component {
     setStorageInfo(this.state);
     const { handleSubmit } = this.props;
     handleSubmit();
+    smoothScrollTo('#appointment-booking');
   }
 
   render() {
@@ -135,20 +137,23 @@ export default class AppointmentType extends React.Component {
             <AppointmentForYou
               handleChange={this.handleChange}
               activeItem={appointmentForYou}
+              appointmentCompanion={appointmentCompanion}
             />
           )
           : null}
-        <button
-          className="appointment-type-button fadeInUp"
-          type="button"
-          disabled={!(appointmentCategory
-            && appointmentType
-            && appointmentCompanion
-            && appointmentForYou)}
-          onClick={this.handleSubmit}
-        >
-          {Drupal.t('Continue')}
-        </button>
+        <div className="appointment-flow-action">
+          <button
+            className="appointment-type-button fadeInUp"
+            type="button"
+            disabled={!(appointmentCategory
+              && appointmentType
+              && appointmentCompanion
+              && appointmentForYou)}
+            onClick={this.handleSubmit}
+          >
+            {Drupal.t('Continue')}
+          </button>
+        </div>
       </div>
     );
   }

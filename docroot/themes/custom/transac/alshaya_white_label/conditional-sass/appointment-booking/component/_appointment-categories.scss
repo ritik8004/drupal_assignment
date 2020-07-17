@@ -26,7 +26,6 @@
   }
 
   .appointment-category {
-    font-family: $alshaya-bold;
     font-size: 1.125rem;
     line-height: 1.5rem;
     color: $appointment-category-text;
@@ -51,6 +50,10 @@
       &:nth-child(even) {
         margin-#{$left}: 1.25rem;
       }
+    }
+
+    &.active {
+      font-family: $alshaya-bold;
     }
 
     &.BeautyandSkin {

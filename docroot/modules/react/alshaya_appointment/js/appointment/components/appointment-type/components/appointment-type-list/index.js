@@ -1,7 +1,7 @@
 import React from 'react';
-import ReadMoreAndLess from 'react-read-more-less';
 import SectionTitle from '../../../section-title';
 import AppointmentSelect from '../appointment-select';
+import ReadMore from '../../../../../common/components/readmore';
 
 export default class AppointmentTypeList extends React.Component {
   onSelectChange = (e, name) => {
@@ -9,29 +9,15 @@ export default class AppointmentTypeList extends React.Component {
     onSelectChange(e, name);
   };
 
-  _getDescription = () => {
-    const { appointmentTypeItems, activeItem } = this.props;
-    const filterDesc = appointmentTypeItems.filter((v) => activeItem.value === v.id);
-    return (
-      <>
-        {(filterDesc.length
-          ? (
-            <ReadMoreAndLess
-              charLimit={250}
-              readMoreText={Drupal.t('Read More')}
-              readLessText={Drupal.t('Show Less')}
-            >
-              {filterDesc[0].description}
-            </ReadMoreAndLess>
-          )
-          : null
-        )}
-      </>
-    );
-  };
-
   render() {
     const { activeItem, appointmentTypeItems } = this.props;
+    let filterDescriptionContent = '';
+    if (activeItem) {
+      const filterDesc = appointmentTypeItems.filter((v) => activeItem.value === v.id);
+      if (filterDesc.length) {
+        filterDescriptionContent = filterDesc[0].description;
+      }
+    }
 
     const options = [];
     if (appointmentTypeItems) {
@@ -57,10 +43,9 @@ export default class AppointmentTypeList extends React.Component {
             aptSelectClass="appointment-type-select"
             name="appointmentType"
           />
-          { activeItem
+          { filterDescriptionContent.length
             ? (
-              // eslint-disable-next-line no-underscore-dangle
-              this._getDescription()
+              <ReadMore description={filterDescriptionContent} />
             )
             : null}
         </div>

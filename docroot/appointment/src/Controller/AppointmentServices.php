@@ -94,8 +94,80 @@ class AppointmentServices {
    *   Booking Id.
    */
   public function bookAppointment(Request $request) {
+    $requestQuery = $request->query;
+
+    $appointmentId = $requestQuery->get('appointment') ?? '';
+    $userId = $requestQuery->get('id') ?? '';
     try {
-      $result = $this->xmlApiHelper->bookAppointment($request);
+      // Book New appointment.
+      if (!$appointmentId) {
+        $activity = $requestQuery->get('activity') ?? '';
+        $duration = $requestQuery->get('duration') ?? '';
+        $location = $requestQuery->get('location') ?? '';
+        $attendees = $requestQuery->get('attendees') ?? '';
+        $program = $requestQuery->get('program') ?? '';
+        $channel = $requestQuery->get('channel') ?? '';
+        $startDateTime = $requestQuery->get('start-date-time') ?? '';
+        $client = $requestQuery->get('client') ?? '';
+
+        $param = [
+          'activity' => $activity,
+          'duration' => $duration,
+          'location' => $location,
+          'attendees' => $attendees,
+          'program' => $program,
+          'channel' => $channel,
+          'startDateTime' => $startDateTime,
+          'client' => $client,
+        ];
+
+        if (empty($activity) || empty($duration) || empty($location) || empty($attendees) || empty($program) || empty($channel) || empty($startDateTime) || empty($client)) {
+          $message = 'Required parameters missing to book appointment.';
+          $this->logger->error($message . ' Data: @request_data', [
+            '@request_data' => json_encode($param),
+          ]);
+          throw new \Exception($message);
+        }
+
+        $result = $this->xmlApiHelper->bookAppointment($param);
+
+        $bookingId = $result->return->result ?? '';
+        return new JsonResponse($bookingId);
+      }
+
+      // Rebook appointment.
+      if (empty($appointmentId) || empty($userId)) {
+        $message = 'Appointment Id and user Id are required to get appointment details.';
+
+        throw new \Exception($message);
+      }
+
+      // Authenticate logged in user by matching userid from request and Drupal.
+      $user = $this->drupal->getSessionUserInfo();
+      if ($user['uid'] !== $userId) {
+        $message = 'Userid from endpoint doesn\'t match userId of logged in user.';
+
+        throw new \Exception($message);
+      }
+
+      $param = [
+        'criteria' => [
+          'locationExternalId' => $request->query->get('location'),
+          'appointmentDurationMin' => $request->query->get('duration'),
+          'numberOfAttendees' => $request->query->get('attendees'),
+          'setupDurationMin' => 0,
+        ],
+        'confirmationNumber' => $request->query->get('appointment'),
+        'resourceAvailabilityRequired' => FALSE,
+      ];
+      $newTime = strtotime($request->query->get('start-date-time'));
+      $originalTime = strtotime($request->query->get('originaltime'));
+      if ($newTime != $originalTime) {
+        $param['startDateTime'] = $newTime;
+      }
+
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
+      $result = $client->__soapCall('reBookAppointment', [$param]);
       $bookingId = $result->return->result ?? '';
 
       return new JsonResponse($bookingId);
@@ -104,8 +176,7 @@ class AppointmentServices {
       $this->logger->error('Error occurred while booking appointment. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
-
-      throw $e;
+      return new JsonResponse(['error' => $e->getMessage()]);
     }
   }
 
@@ -134,6 +205,7 @@ class AppointmentServices {
           'answer' => $value,
         ];
       }
+
       if (empty($questionAnswerList)) {
         throw new \Exception('Empty question answer list in appendAppointmentAnswers.');
       }
@@ -160,15 +232,15 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      return new JsonResponse(['error' => $e->getMessage()]);
     }
   }
 
   /**
-   * Get Client details.
+   * Get Appointment details.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Client details.
+   *   Appointment details.
    */
   public function getAppointments(Request $request) {
     try {
@@ -211,6 +283,13 @@ class AppointmentServices {
         $result->return->appointments[0] = $temp;
       }
 
+      foreach ($result->return->appointments as $key => $appointment) {
+        $clientExternalId = $this->apiHelper->checkifBelongstoUser($user['email']);
+        if ($appointment->clientExternalId != $clientExternalId) {
+          unset($result->return->appointments[$key]);
+        }
+      }
+
       return new JsonResponse($result);
     }
     catch (\Exception $e) {
@@ -227,7 +306,7 @@ class AppointmentServices {
    */
   public function getCompanionByAppointmentId(Request $request) {
     try {
-      $client = $this->client->getSoapClient($this->serviceUrl);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $appointmentId = $request->query->get('appointment');
       $userId = $request->query->get('id');
 
@@ -280,7 +359,22 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
-      $client = $this->client->getSoapClient($this->serviceUrl);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
+      $param = [
+        'confirmationNumber' => $appointmentId,
+      ];
+      $appointmentData = $client->__soapCall('getAppointmentByConfirmationNumber', [$param]);
+
+      // Check if Appointment Belongs to user only.
+      if (property_exists($appointmentData->return, 'appointment')) {
+        $clientExternalId = $appointmentData->return->appointment->clientExternalId;
+        if ($this->apiHelper->checkifBelongstoUser($user['email']) != $clientExternalId) {
+          $message = 'Appointment ' . $appointmentId . ' does not belong logged in user.';
+
+          throw new \Exception($message);
+        }
+      }
+
       $param = [
         'confirmationNumber' => $appointmentId,
       ];
@@ -305,16 +399,9 @@ class AppointmentServices {
   public function getQuestions(Request $request) {
     try {
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-      $locationExternalId = $request->query->get('location');
-      $program = $request->query->get('program');
-      $activity = $request->query->get('activity');
-
-      if (empty($locationExternalId) || empty($program) || empty($activity)) {
-        $message = 'Required details is missing to get questions.';
-
-        $this->logger->error($message);
-        throw new \Exception($message);
-      }
+      $locationExternalId = $request->query->get('location') ?? '';
+      $program = $request->query->get('program') ?? '';
+      $activity = $request->query->get('activity') ?? '';
 
       $param = [
         'questionCriteria' => [
@@ -323,6 +410,15 @@ class AppointmentServices {
           'activityExternalId' => $activity,
         ],
       ];
+
+      if (empty($locationExternalId) || empty($program) || empty($activity)) {
+        $message = 'Required details is missing to get questions.';
+        $this->logger->error($message . ' Data: @request_data', [
+          '@request_data' => json_encode($param),
+        ]);
+        throw new \Exception($message);
+      }
+
       $result = $client->__soapCall('getAppointmentQuestionsByCriteria', [$param]);
 
       $questions = $result->return->questions ?? [];
@@ -343,6 +439,59 @@ class AppointmentServices {
     catch (\Exception $e) {
       $this->logger->error('Error occurred while fetching questions. Message: @message', [
         '@message' => $e->getMessage(),
+      ]);
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Get Appointment details for logged in user.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Appointment details.
+   */
+  public function getAppointmentDetails(Request $request) {
+    $appointment = $request->query->get('appointment');
+    $userId = $request->query->get('id');
+
+    try {
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
+
+      if (empty($appointment) || empty($userId)) {
+        $message = 'Appointment Id and user Id are required to get appointment details.';
+
+        throw new \Exception($message);
+      }
+
+      // Authenticate logged in user by matching userid from request and Drupal.
+      $user = $this->drupal->getSessionUserInfo();
+      if ($user['uid'] !== $userId) {
+        $message = 'Userid from endpoint doesn\'t match userId of logged in user.';
+
+        throw new \Exception($message);
+      }
+
+      $param = [
+        'confirmationNumber' => $appointment,
+      ];
+      $appointmentData = $client->__soapCall('getAppointmentByConfirmationNumber', [$param]);
+
+      // Check if Appointment Belongs to user onyl.
+      if (property_exists($appointmentData->return, 'appointment')) {
+        $clientExternalId = $appointmentData->return->appointment->clientExternalId;
+        if ($this->apiHelper->checkifBelongstoUser($user['email']) == $clientExternalId) {
+          return new JsonResponse($appointmentData);
+        }
+      }
+
+      throw new \Exception('Appointment not found for id: ' . $appointment);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while fetching appointment with id @appid for user @user. Message: @message', [
+        '@message' => $e->getMessage(),
+        '@appid' => $appointment,
+        '@user' => $user,
       ]);
 
       throw $e;

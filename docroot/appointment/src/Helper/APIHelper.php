@@ -143,4 +143,27 @@ class APIHelper {
     return $baseUrl;
   }
 
+  /**
+   * Provides clientExternalId from emailaddress.
+   */
+  public function checkifBelongstoUser($email) {
+    $param = [
+      'criteria' => [
+        'emailAddress' => $email,
+        'exactMatchOnly' => TRUE,
+        'hideDisabled' => TRUE,
+      ],
+    ];
+
+    $url = $this->getTimetradeBaseUrl() . APIServicesUrls::WSDL_CLIENT_SERVICES_URL;
+    $client = $this->getSoapClient($url);
+    $clientData = $client->__soapCall('getClientsByCriteria', [$param]);
+    if (!property_exists($clientData->return, 'clients')) {
+      return FALSE;
+    }
+
+    return $clientData->return->clients->clientExternalId;
+
+  }
+
 }
