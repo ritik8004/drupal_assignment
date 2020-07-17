@@ -74,6 +74,7 @@ export default class ClientDetails extends React.Component {
               className={dob !== '' ? 'focus' : ''}
               label={`${Drupal.t('Date of Birth')}*`}
               handleChange={this.handleChange}
+              section="clientData"
             />
           </div>
           <div className="item user-email">

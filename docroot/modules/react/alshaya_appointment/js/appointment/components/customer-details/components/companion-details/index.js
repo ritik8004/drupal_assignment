@@ -111,6 +111,7 @@ export default class CompanionDetails extends React.Component {
                   className={dob !== '' ? 'focus' : ''}
                   label={`${Drupal.t('Date of Birth')}*`}
                   handleChange={this.handleChange}
+                  section="companionData"
                 />
               </div>
             </div>
