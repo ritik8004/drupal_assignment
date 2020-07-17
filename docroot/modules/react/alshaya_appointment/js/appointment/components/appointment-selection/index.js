@@ -3,11 +3,13 @@ import moment from 'moment';
 import { getStorageInfo } from '../../../utilities/storage';
 import StoreAddress from '../appointment-store/components/store-address';
 import SectionTitle from '../section-title';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 export default class AppointmentSelection extends React.Component {
   handleEdit = (step) => {
     const { handleEdit } = this.props;
     handleEdit(step);
+    smoothScrollTo('#appointment-booking');
   }
 
   render() {
