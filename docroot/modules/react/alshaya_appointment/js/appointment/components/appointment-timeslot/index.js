@@ -6,6 +6,7 @@ import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
 import { getDateFormat, getDateFormattext } from '../../../utilities/helper';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
+import { removeFullScreenLoader } from '../../../utilities/appointment-util';
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
@@ -72,6 +73,7 @@ export default class AppointmentTimeSlot extends React.Component {
               notFound: Drupal.t('Time slots are unavailable on this date. Please Select next date.'),
             });
           }
+          removeFullScreenLoader();
         }
       });
     }
@@ -90,7 +92,9 @@ export default class AppointmentTimeSlot extends React.Component {
   };
 
   render() {
-    const { date, timeSlots, notFound } = this.state;
+    const {
+      date, timeSlots, notFound, selectedSlot,
+    } = this.state;
     return (
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
@@ -132,7 +136,7 @@ export default class AppointmentTimeSlot extends React.Component {
               <button
                 className="appointment-type-button appointment-store-button select-store"
                 type="button"
-
+                disabled={!(selectedSlot)}
                 onClick={this.handleSubmit}
               >
                 {Drupal.t('book time slot')}

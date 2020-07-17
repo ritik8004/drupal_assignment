@@ -3,6 +3,7 @@ import moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
 import { getDateFormat } from '../../../utilities/helper';
 import ConditionalView from '../../../common/components/conditional-view';
+import { showFullScreenLoader } from '../../../utilities/appointment-util';
 
 const momentRange = extendMoment(moment);
 
@@ -76,12 +77,13 @@ export default class AppointmentCalendar extends React.Component {
   }
 
   dateChanged = (date) => {
+    showFullScreenLoader();
     const { dateChanged } = this.props;
     dateChanged(new Date(date));
     this.setState({
       selectDate: new Date(date),
     });
-  }
+  };
 
   render() {
     const { week, selectDate, arrayOfDates } = this.state;
