@@ -135,6 +135,11 @@ export default class Appointment extends React.Component {
       lng: locationInfo.geocoordinates.longitude,
       storeTiming: [],
     };
+
+    const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
+    const companionItems = [...Array(parseInt(listItems, 10))]
+      .map((e, i) => ({ value: i + 1, label: i + 1 }));
+
     const localstore = {
       appointmentCategory: {
         id: appointment.programExternalId,
@@ -148,6 +153,7 @@ export default class Appointment extends React.Component {
         value: appointment.numberOfAttendees,
         label: appointment.numberOfAttendees,
       },
+      appointmentCompanionItems: companionItems,
       appointmentStep: step,
       selectedStoreItem: storeInfo,
       selectedSlot: {
