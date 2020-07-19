@@ -1105,9 +1105,9 @@ function alshaya_hm_install() {
       'ar' => 'ابحث عن المحلات القريبة إليك لاستلام طلبيتك',
       'en' => 'Find your closest collection point',
     ],
-    'Concept' => [
+    'CONCEPT' => [
       'ar' => 'المفهوم',
-      'en' => 'Concept',
+      'en' => 'CONCEPT',
     ],
     'seo_brand_name' => [
       'en' => 'H&M',
@@ -1203,6 +1203,42 @@ function alshaya_hm_install() {
     'Details' => [
       'en' => 'DETAILS',
       'ar' => 'تفاصيل',
+    ],
+    'QUALITY' => [
+      'ar' => 'الجودة',
+    ],
+    'ENVIRONMENT' => [
+      'ar' => 'البيئة',
+    ],
+    'COLLECTION' => [
+      'ar' => 'التشكيلة',
+    ],
+    'DESIGNER COLLECTION' => [
+      'ar' => 'تشكيلة المُصمم',
+    ],
+    'FEATURE' => [
+      'ar' => 'المميزات',
+    ],
+    'WASHING INSTRUCTION' => [
+      'ar' => 'إرشادات الغسيل',
+    ],
+    'DRY CLEAN INSTRUCTION' => [
+      'ar' => 'إرشادات التنظيف الجاف',
+    ],
+    'FRAGRANCE DESCRIPTION' => [
+      'ar' => 'وصف العطر',
+    ],
+    'PATTERN' => [
+      'ar' => 'النقوش',
+    ],
+    'VISUAL DESCRIPTION' => [
+      'ar' => 'الوصف البصري',
+    ],
+    'COMPOSITION' => [
+      'ar' => 'تركيبة المواد',
+    ],
+    'COLOR NAME' => [
+      'ar' => 'اسم اللون',
     ],
   ];
 
