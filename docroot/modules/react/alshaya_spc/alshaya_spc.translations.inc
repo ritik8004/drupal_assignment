@@ -140,7 +140,7 @@ function _alshaya_spc_translations() {
       'expected delivery within' => [
         'ar' => 'التوصيل متوقع خلال',
       ],
-      'same day' => [
+      'Same day' => [
         'ar' => 'نفس اليوم',
       ],
       'number of items' => [

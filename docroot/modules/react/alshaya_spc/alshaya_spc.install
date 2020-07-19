@@ -16,7 +16,7 @@ use Drupal\Core\Utility\UpdateException;
 function alshaya_spc_update_8004() {
   // Add translations for same day delivery.
   $strings = [
-    'same day' => [
+    'Same day' => [
       'ar' => 'نفس اليوم',
     ],
   ];
