@@ -609,6 +609,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     foreach ($paragraph_fields as $field_name) {
       if (empty($row = $this->processParagraphReferenceField($entity, $field_name))) {
         $row = $entity->get($field_name)->getValue();
+        if ($field_name == 'field_banner' || $field_name == 'thumbnail') {
+          if (!empty($row)) {
+            $image_file = $this->fileStorage->load($row[0]['target_id']);
+            $row[0]['url'] = file_create_url($image_file->getFileUri());
+          }
+        }
       }
       $data[$field_name] = $row;
     }
