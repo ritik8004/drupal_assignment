@@ -74,28 +74,28 @@ class ClientServices {
   public function updateInsertClient(Request $request) {
     try {
       $request_content = json_decode($request->getContent(), TRUE);
-      $clientExternalId = $request_content['clientExternalId'] ?? '';
-      $firstName = $request_content['firstName'] ?? '';
-      $lastName = $request_content['lastName'] ?? '';
-      $dob = $request_content['dob'] ?? '';
-      $mobile = $request_content['mobile'] ?? '';
-      $email = $request_content['email'] ?? '';
 
       $param = [
-        'clientExternalId' => $clientExternalId,
-        'firstName' => $firstName,
-        'lastName' => $lastName,
-        'dob' => $dob,
-        'mobile' => $mobile,
-        'email' => $email,
+        'clientExternalId' => $request_content['clientExternalId'] ?? '',
+        'firstName' => $request_content['firstName'] ?? '',
+        'lastName' => $request_content['lastName'] ?? '',
+        'dob' => $request_content['dob'] ?? '',
+        'mobile' => $request_content['mobile'] ?? '',
+        'email' => $request_content['email'] ?? '',
       ];
 
-      if (empty($firstName) || empty($lastName) || empty($dob) || empty($mobile) || empty($email)) {
+      if (empty($param['firstName']) || empty($param['lastName']) || empty($param['dob']) || empty($param['mobile']) || empty($param['email'])) {
         $message = 'Required parameters missing to create a client.';
         $this->logger->error($message . ' Data: @request_data', [
           '@request_data' => json_encode($param),
         ]);
         throw new \Exception($message);
+      }
+
+      // Get clientExternalId for the email id if it exists.
+      $clientExternalId = $this->apiHelper->checkifBelongstoUser($param['email']);
+      if ($clientExternalId) {
+        $param['clientExternalId'] = $clientExternalId;
       }
 
       $result = $this->xmlApiHelper->updateInsertClient($param);

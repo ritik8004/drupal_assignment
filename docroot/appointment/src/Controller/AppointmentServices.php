@@ -101,27 +101,18 @@ class AppointmentServices {
     try {
       // Book New appointment.
       if (!$appointmentId) {
-        $activity = $requestQuery->get('activity') ?? '';
-        $duration = $requestQuery->get('duration') ?? '';
-        $location = $requestQuery->get('location') ?? '';
-        $attendees = $requestQuery->get('attendees') ?? '';
-        $program = $requestQuery->get('program') ?? '';
-        $channel = $requestQuery->get('channel') ?? '';
-        $startDateTime = $requestQuery->get('start-date-time') ?? '';
-        $client = $requestQuery->get('client') ?? '';
-
         $param = [
-          'activity' => $activity,
-          'duration' => $duration,
-          'location' => $location,
-          'attendees' => $attendees,
-          'program' => $program,
-          'channel' => $channel,
-          'startDateTime' => $startDateTime,
-          'client' => $client,
+          'activity' => $requestQuery->get('activity') ?? '',
+          'duration' => $requestQuery->get('duration') ?? '',
+          'location' => $requestQuery->get('location') ?? '',
+          'attendees' => $requestQuery->get('attendees') ?? '',
+          'program' => $requestQuery->get('program') ?? '',
+          'channel' => $requestQuery->get('channel') ?? '',
+          'startDateTime' => $requestQuery->get('start-date-time') ?? '',
+          'client' => $requestQuery->get('client') ?? '',
         ];
 
-        if (empty($activity) || empty($duration) || empty($location) || empty($attendees) || empty($program) || empty($channel) || empty($startDateTime) || empty($client)) {
+        if (empty($param['activity']) || empty($param['duration']) || empty($param['location']) || empty($param['attendees']) || empty($param['program']) || empty($param['channel']) || empty($param['startDateTime']) || empty($param['client'])) {
           $message = 'Required parameters missing to book appointment.';
           $this->logger->error($message . ' Data: @request_data', [
             '@request_data' => json_encode($param),

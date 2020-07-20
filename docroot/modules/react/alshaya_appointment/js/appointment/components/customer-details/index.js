@@ -21,7 +21,15 @@ export default class CustomerDetails extends React.Component {
   }
 
   componentDidMount() {
-    const { id } = drupalSettings.alshaya_appointment.user_details;
+    const {
+      id, email, fname: firstName, lname: lastName, mobile,
+    } = drupalSettings.alshaya_appointment.user_details;
+    let clientData = {
+      email,
+      firstName,
+      lastName,
+      mobile,
+    };
 
     if (id) {
       const apiUrl = `/get/client?id=${id}`;
@@ -30,11 +38,14 @@ export default class CustomerDetails extends React.Component {
       if (apiData instanceof Promise) {
         apiData.then((result) => {
           if (result.error === undefined && result.data !== undefined) {
-            this.setState((prevState) => ({
-              ...prevState,
-              clientData: result.data,
-            }));
+            if (result.data.length !== 0) {
+              clientData = result.data;
+            }
           }
+          this.setState((prevState) => ({
+            ...prevState,
+            clientData,
+          }));
         });
       }
     }
