@@ -73,6 +73,10 @@
         }
       }
     }
+
+    .cloudzoom #cloud-zoom-wrap img {
+      object-fit: cover;
+    }
   }
 }
 

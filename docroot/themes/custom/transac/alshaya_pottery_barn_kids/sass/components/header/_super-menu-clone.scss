@@ -85,3 +85,9 @@ body.mobile--overlay {
     }
   }
 }
+
+body:not(.mobile--overlay) {
+  div.header--wrapper .c-menu-secondary {
+    z-index: 5;
+  }
+}

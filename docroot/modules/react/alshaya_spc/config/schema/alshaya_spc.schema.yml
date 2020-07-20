@@ -1,0 +1,17 @@
+alshaya_spc.click_n_collect:
+  type: config_object
+  label: 'spc click and collect configuration'
+  mapping:
+    country_center:
+      type: mapping
+      label: 'Center of Country to fetch stores'
+      mapping:
+        latitude:
+          type: float
+          label: 'latitude'
+        longitude:
+          type: float
+          label: 'longitude'
+        zoom:
+          type: integer
+          label: 'map zoom for country.'

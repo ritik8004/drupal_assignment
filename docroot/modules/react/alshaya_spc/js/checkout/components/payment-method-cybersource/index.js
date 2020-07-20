@@ -10,6 +10,7 @@ import CVVToolTipText from '../cvv-text';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
+  validateCvv,
 } from '../../../utilities/checkout_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
@@ -152,18 +153,18 @@ class PaymentMethodCybersource extends React.Component {
   };
 
   cvvValidations = (e) => {
-    const cvv = parseInt(e.target.value, 10);
-    const valid = (cvv >= 100 && cvv <= 9999);
+    const cvv = e.target.value.trim();
+    const valid = validateCvv(cvv);
     handleValidationMessage(
       'spc-cy-cc-cvv-error',
-      e.target.value,
+      cvv,
       valid,
       getStringMessage('invalid_cvv'),
     );
 
     this.setState({
       cvvValid: valid,
-      cvv: e.target.value,
+      cvv,
     });
   };
 
@@ -181,7 +182,11 @@ class PaymentMethodCybersource extends React.Component {
   validateBeforePlaceOrder = () => {
     const { numberValid, expiryValid, cvvValid } = this.state;
     if (!(numberValid && expiryValid && cvvValid)) {
-      Drupal.logJavascriptError('validate-before-place-order', 'client side validation failed for credit card info');
+      Drupal.logJavascriptError(
+        'validate-before-place-order',
+        'client side validation failed for credit card info',
+        GTM_CONSTANTS.PAYMENT_ERRORS,
+      );
       return false;
     }
 
@@ -197,7 +202,11 @@ class PaymentMethodCybersource extends React.Component {
           message: getStringMessage('payment_error'),
         });
         removeFullScreenLoader();
-        Drupal.logJavascriptError('validate-before-place-order', response.data.error_message);
+        Drupal.logJavascriptError(
+          'validate-before-place-order',
+          response.data.error_message,
+          GTM_CONSTANTS.PAYMENT_ERRORS,
+        );
         return;
       }
 
@@ -230,7 +239,7 @@ class PaymentMethodCybersource extends React.Component {
         message: getStringMessage('payment_error'),
       });
       removeFullScreenLoader();
-      Drupal.logJavascriptError('validate-before-place-order', error);
+      Drupal.logJavascriptError('validate-before-place-order', error, GTM_CONSTANTS.PAYMENT_ERRORS);
     });
 
     return false;

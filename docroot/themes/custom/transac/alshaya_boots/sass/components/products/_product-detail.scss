@@ -277,6 +277,11 @@ article[gtm-sku-type="simple"] {
       button[type="submit"] {
         @include breakpoint($only-tablet) {
           height: 2.5rem;
+
+          html[lang=ar] & {
+            float: left;
+            margin-top: 2rem;
+          }
         }
       }
     }
