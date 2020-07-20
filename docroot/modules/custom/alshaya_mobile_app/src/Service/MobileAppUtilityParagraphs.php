@@ -24,6 +24,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\redirect\RedirectRepository;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Block\BlockManagerInterface;
+use Drupal\file\FileInterface;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -614,7 +615,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         $row = $entity->get($field_name)->getValue();
         if ($field_name == 'field_banner' || $field_name == 'thumbnail') {
           if (!empty($row)) {
-            if (!empty($image_file = $this->fileStorage->load($row[0]['target_id']))) {
+            $image_file = $this->fileStorage->load($row[0]['target_id']);
+            if ($image_file instanceof FileInterface) {
               $row[0]['url'] = file_create_url($image_file->getFileUri());
             }
           }
