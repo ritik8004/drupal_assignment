@@ -47,16 +47,16 @@ const TextField = (props) => {
     focusClass = 'focus';
   }
 
-  const DateCustomInput = ({ value, onClick }) => (
+  const DateCustomInput = ({ onClick }) => (
     <div onClick={onClick}>
       <div className="dob-input-wrapper">
         <input
           type="text"
-          value={value}
           onBlur={(e) => handleEvent(e, 'blur')}
           placeholder={label}
           required={required}
           readOnly
+          value={defaultValue ? moment(defaultValue).format('yyyy/MM/DD') : ''}
         />
         <span className="date-custom-input" />
       </div>
@@ -77,6 +77,7 @@ const TextField = (props) => {
           className={focusClass}
           onChange={handleChange}
           required={required}
+          value={defaultValue || ''}
         />
         <div className="c-input__bar" />
         <label>{label}</label>
@@ -98,6 +99,7 @@ const TextField = (props) => {
             defaultValue={defaultValue}
             onChange={handleChange}
             required={required}
+            value={defaultValue || ''}
           />
         </div>
         <div className="c-input__bar" />
@@ -137,6 +139,7 @@ const TextField = (props) => {
         onBlur={(e) => handleEvent(e, 'blur')}
         className={focusClass}
         required={required}
+        value={defaultValue || ''}
       />
       <div className="c-input__bar" />
       <label>{label}</label>

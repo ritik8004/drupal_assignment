@@ -43,6 +43,11 @@ export default class CompanionDetails extends React.Component {
     handleAddCompanion();
   };
 
+  handleRemoveFields = (e) => {
+    const { handleRemoveCompanion } = this.props;
+    handleRemoveCompanion(e);
+  };
+
   render() {
     const { questions, appointmentCompanionItems } = this.state;
     const {
@@ -76,6 +81,16 @@ export default class CompanionDetails extends React.Component {
           <div className={`companion-details-item ${companionNamePrefix}-details`}>
             <div className="details-header-wrapper">
               <div className="companion-detail-heading">{`${Drupal.t('Companion')} ${companionNum} ${Drupal.t('Details')}`}</div>
+              <div className="delete-companion">
+                <button
+                  className="btn btn-link"
+                  type="button"
+                  data-companion-id={companionNum}
+                  onClick={this.handleRemoveFields}
+                >
+                  {Drupal.t('Delete')}
+                </button>
+              </div>
             </div>
             <div className="user-details-wrapper">
               <div className="user-detail-name-wrapper">
