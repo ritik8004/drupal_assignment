@@ -21,7 +21,13 @@ export default class CustomerDetails extends React.Component {
   }
 
   componentDidMount() {
-    const { id } = drupalSettings.alshaya_appointment.user_details;
+    const { id, email, fname: firstName, lname: lastName, mobile } = drupalSettings.alshaya_appointment.user_details;
+    let clientData = {
+      email,
+      firstName,
+      lastName,
+      mobile,
+    }
 
     if (id) {
       const apiUrl = `/get/client?id=${id}`;
@@ -30,11 +36,14 @@ export default class CustomerDetails extends React.Component {
       if (apiData instanceof Promise) {
         apiData.then((result) => {
           if (result.error === undefined && result.data !== undefined) {
-            this.setState((prevState) => ({
-              ...prevState,
-              clientData: result.data,
-            }));
+            if (result.data.length !== 0) {
+              clientData = result.data;
+            }
           }
+          this.setState((prevState) => ({
+            ...prevState,
+            clientData,
+          }));
         });
       }
     }
@@ -177,6 +186,33 @@ export default class CustomerDetails extends React.Component {
   }
 
   updateInsertClient = () => {
+    const {
+      clientData,
+    } = this.state;
+
+    const apiUrl = '/update-insert-client';
+    const apiData = postAPICall(apiUrl, clientData);
+
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.error === undefined
+          && result.data !== undefined
+          && result.data.error === undefined) {
+          this.setState((prevState) => ({
+            ...prevState,
+            clientExternalId: result.data,
+          }));
+
+          // Save client id in local storage.
+          setStorageInfo(this.state);
+          // Book appointment using the clientExternalId.
+          this.bookAppointment();
+        }
+      });
+    }
+  }
+
+  getClientByCriteria = () => {
     const {
       clientData,
     } = this.state;
