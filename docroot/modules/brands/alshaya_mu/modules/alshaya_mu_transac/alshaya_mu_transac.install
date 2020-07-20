@@ -55,6 +55,12 @@ function alshaya_mu_transac_install() {
   alshaya_i18n_save_translations($strings);
 
   _alshaya_mu_transac_get_metatag_translations();
+
+  // Change path pattern for PLPs to show first parent followed by term name.
+  \Drupal::configFactory()
+    ->getEditable('pathauto.pattern.product_category_pathauto')
+    ->set('pattern', '/[term:parents:first]-[term:name]')
+    ->save();
 }
 
 /**
