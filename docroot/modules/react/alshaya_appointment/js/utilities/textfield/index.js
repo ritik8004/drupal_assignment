@@ -13,7 +13,6 @@ const TextField = (props) => {
     type,
     name,
     label,
-    required,
     handleChange,
     section,
   } = props;
@@ -54,9 +53,10 @@ const TextField = (props) => {
           type="text"
           onBlur={(e) => handleEvent(e, 'blur')}
           placeholder={label}
-          required={required}
           readOnly
           value={defaultValue ? moment(defaultValue).format('yyyy/MM/DD') : ''}
+          name={name}
+          id={name}
         />
         <span className="date-custom-input" />
       </div>
@@ -76,7 +76,6 @@ const TextField = (props) => {
           onBlur={(e) => handleEvent(e, 'blur')}
           className={focusClass}
           onChange={handleChange}
-          required={required}
           value={defaultValue || ''}
         />
         <div className="c-input__bar" />
@@ -98,7 +97,6 @@ const TextField = (props) => {
             name={name}
             defaultValue={defaultValue}
             onChange={handleChange}
-            required={required}
             value={defaultValue || ''}
           />
         </div>
@@ -138,7 +136,6 @@ const TextField = (props) => {
         onChange={handleChange}
         onBlur={(e) => handleEvent(e, 'blur')}
         className={focusClass}
-        required={required}
         value={defaultValue || ''}
       />
       <div className="c-input__bar" />
