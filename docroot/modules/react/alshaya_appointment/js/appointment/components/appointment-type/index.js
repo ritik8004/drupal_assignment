@@ -76,17 +76,21 @@ export default class AppointmentType extends React.Component {
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
-          // Get activity from Url parameter.
+          // Get program and activity from Url parameter.
           const activity = getParam('activity');
+          const program = getParam('program');
           let appointmentTypeParam = '';
-          for (let i = 0; i < result.data.length; i++) {
-            if (result.data[i].id === activity) {
-              appointmentTypeParam = {
-                label: result.data[i].name,
-                value: result.data[i].id,
-              };
+          if (program && activity) {
+            for (let i = 0; i < result.data.length; i++) {
+              if (result.data[i].id === activity) {
+                appointmentTypeParam = {
+                  label: result.data[i].name,
+                  value: result.data[i].id,
+                };
+              }
             }
           }
+
           this.setState({
             appointmentTypeItems: [...result.data],
             appointmentCategory: category,
