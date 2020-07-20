@@ -46,6 +46,7 @@
 
     .appointment-social {
       display: inline-block;
+      margin-top: 0.625rem;
 
       .social-auth-link {
         font-size: 0;
@@ -56,18 +57,20 @@
           width: 2.875rem;
           background-size: 2.9375rem;
           display: inline-block;
+          border-radius: 50%;
         }
       }
 
       .social_auth_facebook {
         &::before {
-          background: url(#{$base_theme_img_directory_path}/social-icons/facebook-login-logo.svg) no-repeat center;
+          background: url(#{$base_theme_img_directory_path}/icons/appointment-facebook.svg) no-repeat center $appointment-social-icon-bg;
+          margin-#{$left}: 0.9375rem;
         }
       }
 
       .social_auth_google {
         &::before {
-          background: url(#{$base_theme_img_directory_path}/social-icons/google-login-logo.svg) no-repeat center;
+          background: url(#{$base_theme_img_directory_path}/social-icons/google-login-logo.svg) no-repeat center $appointment-social-icon-bg;
         }
       }
     }

@@ -44,7 +44,7 @@ export default class AppointmentListItem extends React.Component {
         apiData.then((result) => {
           if (result.error === undefined && result.data !== undefined) {
             this.setState({
-              companionData: result.data.return,
+              companionData: result.data,
             });
           }
         });
@@ -72,62 +72,10 @@ export default class AppointmentListItem extends React.Component {
       appointmentStartDate = appointment.appointmentStartDate;
     }
 
-    const companions = [];
     let companionsRender = [];
     const { companionData } = this.state;
     if (companionData !== undefined && companionData.length > 0) {
-      let k = 0;
-      for (let i = 0; i < companionData.length; i++) {
-        const item = companionData[i];
-        if (item.question.includes('First')) {
-          if (Object.prototype.hasOwnProperty.call(item, 'answer')) {
-            companions[k] = {
-              firstName: item.answer,
-              lastName: '',
-              dob: '',
-            };
-          } else {
-            companions[k] = {
-              firstName: '',
-              lastName: '',
-              dob: '',
-            };
-          }
-        }
-        if (item.question.includes('Last')) {
-          if (Object.prototype.hasOwnProperty.call(item, 'answer')) {
-            companions[k] = {
-              firstName: companions[k].firstName,
-              lastName: item.answer,
-              dob: '',
-            };
-          } else {
-            companions[k] = {
-              firstName: companions[k].firstName,
-              lastName: '',
-              dob: '',
-            };
-          }
-        }
-        if (item.question.includes('Date')) {
-          if (Object.prototype.hasOwnProperty.call(item, 'answer')) {
-            companions[k] = {
-              firstName: companions[k].firstName,
-              lastName: companions[k].lastName,
-              dob: item.answer,
-            };
-          } else {
-            companions[k] = {
-              firstName: companions[k].firstName,
-              lastName: companions[k].lastName,
-              dob: '',
-            };
-          }
-          k += 1;
-        }
-      }
-
-      companionsRender = companions.map((item) => (
+      companionsRender = companionData.map((item) => (
         <div>
           <span>{item.firstName}</span>
           <span>{item.lastName}</span>

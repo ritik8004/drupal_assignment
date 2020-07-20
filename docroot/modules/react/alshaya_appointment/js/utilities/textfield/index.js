@@ -55,7 +55,6 @@ const TextField = (props) => {
           placeholder={label}
           readOnly
           value={defaultValue ? moment(defaultValue).format('yyyy/MM/DD') : ''}
-          name={name}
           id={name}
         />
         <span className="date-custom-input" />
@@ -66,6 +65,8 @@ const TextField = (props) => {
   );
 
   if (type === 'email') {
+    const { id } = drupalSettings.alshaya_appointment.user_details;
+
     return (
       <div className="appointment-form-item appointment-type-textfield">
         <input
@@ -76,6 +77,7 @@ const TextField = (props) => {
           onBlur={(e) => handleEvent(e, 'blur')}
           className={focusClass}
           onChange={handleChange}
+          disabled={(id)}
           value={defaultValue || ''}
         />
         <div className="c-input__bar" />
@@ -120,6 +122,10 @@ const TextField = (props) => {
             });
           }}
           name={name}
+          peekNextMonth
+          showMonthDropdown
+          showYearDropdown
+          dropdownMode="select"
           customInput={<DateCustomInput />}
         />
       </div>

@@ -50,19 +50,6 @@ export default class AppointmentLogin extends React.Component {
                 <div>
                   <div className="appointment-social">
                     <a
-                      className="social_auth_facebook social-auth-link auth-link"
-                      href={() => false}
-                      social-auth-link={`${baseUrl}${pathPrefix}user/login/facebook`}
-                    >
-                      <span
-                        className="social-network-text"
-                      >
-                        sign up with Facebook
-                      </span>
-                    </a>
-                  </div>
-                  <div className="appointment-social">
-                    <a
                       className="social_auth_google social-auth-link auth-link"
                       href={() => false}
                       social-auth-link={`${baseUrl}${pathPrefix}user/login/google`}
@@ -70,7 +57,20 @@ export default class AppointmentLogin extends React.Component {
                       <span
                         className="social-network-text"
                       >
-                        sign up with Google
+                        {Drupal.t('sign up with Google')}
+                      </span>
+                    </a>
+                  </div>
+                  <div className="appointment-social">
+                    <a
+                      className="social_auth_facebook social-auth-link auth-link"
+                      href={() => false}
+                      social-auth-link={`${baseUrl}${pathPrefix}user/login/facebook`}
+                    >
+                      <span
+                        className="social-network-text"
+                      >
+                        {Drupal.t('sign up with Facebook')}
                       </span>
                     </a>
                   </div>
@@ -90,7 +90,7 @@ export default class AppointmentLogin extends React.Component {
               >
                 { Drupal.t('Register') }
               </a>
-              <button className="appointment-type-button appointment-store-button select-store" type="button" onClick={this.handleSubmit}>
+              <button className="appointment-type-button appointment-checkout-button select-store" type="button" onClick={this.handleSubmit}>
                 {Drupal.t('Continue as Guest')}
               </button>
             </div>
@@ -101,19 +101,6 @@ export default class AppointmentLogin extends React.Component {
               <div>
                 <div className="appointment-social">
                   <a
-                    className="social_auth_facebook social-auth-link auth-link"
-                    href={() => false}
-                    social-auth-link={`${baseUrl}${pathPrefix}user/login/facebook`}
-                  >
-                    <span
-                      className="social-network-text"
-                    >
-                      sign up with Facebook
-                    </span>
-                  </a>
-                </div>
-                <div className="appointment-social">
-                  <a
                     className="social_auth_google social-auth-link auth-link"
                     href={() => false}
                     social-auth-link={`${baseUrl}${pathPrefix}user/login/google`}
@@ -121,7 +108,20 @@ export default class AppointmentLogin extends React.Component {
                     <span
                       className="social-network-text"
                     >
-                      sign up with Google
+                      {Drupal.t('sign up with Google')}
+                    </span>
+                  </a>
+                </div>
+                <div className="appointment-social">
+                  <a
+                    className="social_auth_facebook social-auth-link auth-link"
+                    href={() => false}
+                    social-auth-link={`${baseUrl}${pathPrefix}user/login/facebook`}
+                  >
+                    <span
+                      className="social-network-text"
+                    >
+                      {Drupal.t('sign up with Facebook')}
                     </span>
                   </a>
                 </div>

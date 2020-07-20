@@ -18,7 +18,7 @@
 
 .appointment-form-item {
   position: relative;
-  margin-bottom: 3.125rem;
+  margin-bottom: 2.5rem;
 }
 
 // Type = Text.
@@ -48,12 +48,41 @@
     display: block;
   }
 
-  .react-datepicker__input-container {
-    display: block;
-  }
+  .react-datepicker {
+    font-family: $alshaya-thin;
 
-  .react-datepicker-popper {
-    z-index: 4;
+    &__input-container {
+      display: block;
+    }
+
+    &-popper {
+      z-index: 4;
+    }
+
+    &__day-name,
+    &__day,
+    &__time-name {
+      color: $appointment-calendar-text;
+    }
+
+    &__day--selected,
+    &__day--keyboard-selected {
+      color: $appointment-calendar-select-text;
+      background-color: $appointment-calendar-select-bg;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &__month-select,
+    &__year-select {
+      padding: 0.125rem;
+    }
+
+    &__header__dropdown {
+      margin-top: 0.3125rem;
+    }
   }
 
   .dob-input-wrapper {

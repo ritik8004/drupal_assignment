@@ -30,8 +30,8 @@ export default class Gmap {
     };
 
     if (typeof drupalSettings.alshaya_appointment.store_finder !== 'undefined' && typeof drupalSettings.alshaya_appointment.store_finder.map_marker !== 'undefined') {
-      this.map.settings.map_marker.active = `/${drupalSettings.alshaya_appointment.store_finder.map_marker.active}`;
-      this.map.settings.map_marker.inActive = `/${drupalSettings.alshaya_appointment.store_finder.map_marker.in_active}`;
+      this.map.settings.map_marker.active = `${drupalSettings.alshaya_appointment.store_finder.map_marker.active}`;
+      this.map.settings.map_marker.inActive = `${drupalSettings.alshaya_appointment.store_finder.map_marker.in_active}`;
     }
   }
 
