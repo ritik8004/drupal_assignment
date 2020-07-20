@@ -92,7 +92,7 @@ class ClientServices {
         throw new \Exception($message);
       }
 
-      // Get external if for the email id if it exists.
+      // Get clientExternalId for the email id if it exists.
       $clientExternalId = $this->apiHelper->checkifBelongstoUser($param['email']);
       if ($clientExternalId) {
         $param['clientExternalId'] = $clientExternalId;
