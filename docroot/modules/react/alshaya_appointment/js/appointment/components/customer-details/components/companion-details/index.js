@@ -18,7 +18,7 @@ export default class CompanionDetails extends React.Component {
 
   componentDidMount() {
     const {
-      selectedStoreItem, appointmentCategory, appointmentType, appointmentId,
+      selectedStoreItem, appointmentCategory, appointmentType,
     } = this.state;
     const apiUrl = `/get/questions?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.value}`;
     const apiData = fetchAPIData(apiUrl);
@@ -29,22 +29,7 @@ export default class CompanionDetails extends React.Component {
           this.setState((prevState) => ({
             ...prevState,
             questions: result.data,
-          }), () => {
-            if (appointmentId) {
-              const { id } = drupalSettings.alshaya_appointment.user_details;
-              const apiCompanionsUrl = `/get/companions?appointment=${appointmentId}&id=${id}`;
-              const apiCompanionData = fetchAPIData(apiCompanionsUrl);
-              if (apiCompanionData instanceof Promise) {
-                apiCompanionData.then((response) => {
-                  if (response.error === undefined && response.data !== undefined) {
-                    this.setState({
-                      companionInfo: response.data,
-                    });
-                  }
-                });
-              }
-            }
-          });
+          }));
         }
       });
     }
@@ -66,7 +51,7 @@ export default class CompanionDetails extends React.Component {
   };
 
   render() {
-    const { questions, appointmentCompanionItems, companionInfo } = this.state;
+    const { questions, appointmentCompanionItems } = this.state;
     const {
       companionData,
       appointmentCompanion,
@@ -91,14 +76,6 @@ export default class CompanionDetails extends React.Component {
           [lastName]: defaultlastName,
           [dob]: defaultdob,
         } = companionData);
-      }
-
-      if (companionInfo !== undefined && companionInfo.length > 0) {
-        if (companionInfo[i] !== undefined) {
-          defaultfirstName = companionInfo[i].firstName;
-          defaultlastName = companionInfo[i].lastName;
-          defaultdob = companionInfo[i].dob;
-        }
       }
 
       if (firstNameData && lastNameData && dobData) {

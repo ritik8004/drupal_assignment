@@ -45,7 +45,34 @@ export default class CustomerDetails extends React.Component {
           this.setState((prevState) => ({
             ...prevState,
             clientData,
-          }));
+          }), () => {
+            const { appointmentId } = this.state;
+            if (appointmentId) {
+              const apiCompanionsUrl = `/get/companions?appointment=${appointmentId}&id=${id}`;
+              const apiCompanionData = fetchAPIData(apiCompanionsUrl);
+              if (apiCompanionData instanceof Promise) {
+                apiCompanionData.then((response) => {
+                  if (response.error === undefined && response.data !== undefined) {
+                    if (response.data.length > 0) {
+                      const companionData = {};
+                      for (let i = 0; i < response.data.length; i++) {
+                        const k = i + 1;
+                        const firstname = `bootscompanion${k}name`;
+                        const lastname = `bootscompanion${k}lastname`;
+                        const dob = `bootscompanion${k}dob`;
+                        companionData[firstname] = response.data[i].firstName;
+                        companionData[lastname] = response.data[i].lastName;
+                        companionData[dob] = response.data[i].dob;
+                        this.setState({
+                          companionData,
+                        });
+                      }
+                    }
+                  }
+                });
+              }
+            }
+          });
         });
       }
     }
