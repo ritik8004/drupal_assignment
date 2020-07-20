@@ -176,7 +176,7 @@ class AlshayaAppointmentController extends ControllerBase {
       [
         'step' => 4,
         'stepTitle' => $this->t('login / guest'),
-        'stepValue' => 'login-guest',
+        'stepValue' => 'select-login-guest',
       ],
       [
         'step' => 5,
@@ -186,7 +186,7 @@ class AlshayaAppointmentController extends ControllerBase {
       [
         'step' => 6,
         'stepTitle' => $this->t('confirmation'),
-        'stepValue' => 'appointment-confirmation',
+        'stepValue' => 'confirmation',
       ],
     ];
 
