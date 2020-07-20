@@ -7,6 +7,10 @@ import CompanionDetails from './components/companion-details';
 import { processCustomerDetails } from '../../../utilities/validate';
 import { postAPICall, fetchAPIData } from '../../../utilities/api/fetchApiData';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
+import {
+  showFullScreenLoader,
+  removeFullScreenLoader,
+} from '../../../utilities/appointment-util';
 
 export default class CustomerDetails extends React.Component {
   constructor(props) {
@@ -149,9 +153,17 @@ export default class CustomerDetails extends React.Component {
   }
 
   appendAppointmentAnswers = () => {
+    const { handleSubmit } = this.props;
     const {
       companionData, bookingId,
     } = this.state;
+
+    if (!companionData) {
+      // Move to next step.
+      removeFullScreenLoader();
+      handleSubmit();
+      return;
+    }
 
     const data = { ...companionData, bookingId };
     const apiUrl = '/append-appointmnet-answers';
@@ -163,7 +175,7 @@ export default class CustomerDetails extends React.Component {
           && result.data !== undefined
           && result.data.error === undefined) {
           // Move to next step.
-          const { handleSubmit } = this.props;
+          removeFullScreenLoader();
           handleSubmit();
         }
       });
@@ -209,6 +221,7 @@ export default class CustomerDetails extends React.Component {
             ...prevState,
             bookingStatus: 'failed',
           }));
+          removeFullScreenLoader();
         }
       });
     }
@@ -236,6 +249,8 @@ export default class CustomerDetails extends React.Component {
           setStorageInfo(this.state);
           // Book appointment using the clientExternalId.
           this.bookAppointment();
+        } else {
+          removeFullScreenLoader();
         }
       });
     }
@@ -243,12 +258,15 @@ export default class CustomerDetails extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
+    showFullScreenLoader();
     // Validate form fields.
     const isError = await processCustomerDetails(e);
     if (!isError) {
       setStorageInfo(this.state);
       // Update/Insert client and then book appointment.
       this.updateInsertClient();
+    } else {
+      removeFullScreenLoader();
     }
     smoothScrollTo('#appointment-booking');
   }
