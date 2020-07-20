@@ -179,10 +179,6 @@
         min-width: 4.0625rem;
         text-align: center;
 
-        @include breakpoint($only-mobile) {
-          min-width: 3.875rem;
-        }
-
         &:hover,
         &.active {
           color: $appointment-calendar-date-hover-active;
