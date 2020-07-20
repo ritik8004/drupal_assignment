@@ -57,10 +57,17 @@ function getDateFormattext() {
   return format;
 }
 
+function getParam(param) {
+  const { search } = window.location;
+  const params = new URLSearchParams(search);
+  return params.get(param);
+}
+
 export {
   getInputValue,
   getLocationAccess,
   addressCleanup,
   getDateFormat,
   getDateFormattext,
+  getParam,
 };
