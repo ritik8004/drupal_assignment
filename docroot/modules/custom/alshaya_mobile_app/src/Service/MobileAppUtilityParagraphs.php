@@ -615,8 +615,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         if ($field_name == 'field_banner' || $field_name == 'thumbnail') {
           if (!empty($row)) {
             $image_file = $this->fileStorage->load($row[0]['target_id']);
-            $image_url = file_create_url($image_file->getFileUri());
-            $row[0]['url'] = $image_url;
+            $row[0]['url'] = file_create_url($image_file->getFileUri());
           }
         }
       }
