@@ -79,4 +79,12 @@ function alshaya_bp_transac_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
+
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services = "'Facebook:facebook','Instagram:instagram','Pinterest:pinterest'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
 }
