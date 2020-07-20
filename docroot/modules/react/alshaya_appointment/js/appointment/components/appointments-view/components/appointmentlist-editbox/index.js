@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import StoreAddress from '../../../appointment-store/components/store-address';
+import { getDateFormat } from '../../../../../utilities/helper';
 
 export default class AppointmentEditBox extends React.Component {
   constructor(props) {
@@ -17,68 +18,10 @@ export default class AppointmentEditBox extends React.Component {
 
     const { appointmentStartDate, confirmationNumber } = appointment;
 
-    const companions = [];
     let companionsRender = '';
     const { companionData } = this.props;
     if (companionData !== undefined && companionData.length > 0) {
-      let k = 0;
-      for (let i = 0; i < companionData.length; i++) {
-        const item = companionData[i];
-        if (item.question.includes('First')) {
-          if (Object.prototype.hasOwnProperty.call(item, 'answer')) {
-            companions[k] = {
-              firstName: item.answer,
-              lastName: '',
-              dob: '',
-              customer: k + 1,
-            };
-          } else {
-            companions[k] = {
-              firstName: '',
-              lastName: '',
-              dob: '',
-              customer: k + 1,
-            };
-          }
-        }
-        if (item.question.includes('Last')) {
-          if (Object.prototype.hasOwnProperty.call(item, 'answer')) {
-            companions[k] = {
-              firstName: companions[k].firstName,
-              lastName: item.answer,
-              dob: '',
-              customer: k + 1,
-            };
-          } else {
-            companions[k] = {
-              firstName: companions[k].firstName,
-              lastName: '',
-              dob: '',
-              customer: k + 1,
-            };
-          }
-        }
-        if (item.question.includes('Date')) {
-          if (Object.prototype.hasOwnProperty.call(item, 'answer')) {
-            companions[k] = {
-              firstName: companions[k].firstName,
-              lastName: companions[k].lastName,
-              dob: item.answer,
-              customer: k + 1,
-            };
-          } else {
-            companions[k] = {
-              firstName: companions[k].firstName,
-              lastName: companions[k].lastName,
-              dob: '',
-              customer: k + 1,
-            };
-          }
-          k += 1;
-        }
-      }
-
-      companionsRender = companions.map((item) => (
+      companionsRender = companionData.map((item) => (
         <div>
           <p>
             <span>{ Drupal.t('Customer !i:', { '!i': item.customer }) }</span>
@@ -87,7 +30,7 @@ export default class AppointmentEditBox extends React.Component {
           </p>
           <p>
             <span>{ Drupal.t('Date of Birth:') }</span>
-            <span>{ item.dob }</span>
+            <span>{ moment(item.dob).format(getDateFormat()) }</span>
           </p>
         </div>
       ));

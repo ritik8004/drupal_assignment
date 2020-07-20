@@ -58,16 +58,16 @@ export default class AppointmentsView extends React.Component {
       const apiData = fetchAPIData(apiUrl);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
+          removeFullScreenLoader();
           if (result.error === undefined && result.data !== undefined) {
             this.setState({
               appointments: result.data.return.appointments,
             });
-            if (result.data.return.appointments[0] === null) {
+            if (result.data.return.appointments.length === 0) {
               this.setState({
                 notFound: this.getNotFoundText(),
               });
             }
-            removeFullScreenLoader();
           }
         });
       }
@@ -81,9 +81,11 @@ export default class AppointmentsView extends React.Component {
     const { id } = drupalSettings.alshaya_appointment.user_details;
     if (id && appointmentId) {
       const apiUrl = `/cancel/appointment?id=${id}&appointment=${appointmentId}`;
+      showFullScreenLoader();
       const apiData = fetchAPIData(apiUrl);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
+          removeFullScreenLoader();
           if (result.error === undefined && result.data.return.result === 'SUCCESS') {
             appointments.splice(index, 1);
             this.setState({
