@@ -499,7 +499,7 @@ export default class AppointmentStore extends React.Component {
     return (
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
-          <div className="store-header appointment-subtitle">
+          <div className="store-header appointment-subtitle fadeInUp">
             {Drupal.t("Select a store that's convenient for you")}
             *
           </div>
@@ -508,7 +508,10 @@ export default class AppointmentStore extends React.Component {
             getCurrentPosition={this.getCurrentPosition}
           />
           <React.Suspense fallback={<Loading loadingMessage={Drupal.t('Loading Map')} />}>
-            <div className="store-map-wrapper">
+            <div
+              className="store-map-wrapper fadeInUp"
+              style={{ animationDelay: '0.2s' }}
+            >
               <DeviceView device="above-mobile">
                 <div className="map-inner-wrapper">{mapView}</div>
               </DeviceView>

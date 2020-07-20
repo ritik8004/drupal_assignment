@@ -1,0 +1,48 @@
+#google-map-appointment-booking {
+  .gm-style {
+    .gm-style-iw-c {
+      width: 17.6875rem;
+      padding: 1.125rem 1.375rem !important;
+      border: solid 1px $appointment-store-info-window-border;
+      border-radius: 0;
+    }
+
+    .gm-style-iw-d {
+      font-size: 0.75rem;
+      font-family: $alshaya-thin;
+      color: $appointment-store-map-info-window-impress;
+      overflow: auto !important;
+
+      .appointment-store-name {
+        .store-name {
+          width: 68%;
+          display: inline-block;
+        }
+
+        .store-distance {
+          float: $right;
+          color: $appointment-store-map-store-distance;
+        }
+
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .store-delivery-time {
+        color: $appointment-store-map-info-window-impress;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        display: block;
+
+        .label--delivery-time {
+          font-family: $alshaya-bold;
+        }
+
+        .delivery--time--value {
+          display: block;
+          margin-top: 0.3125rem;
+        }
+      }
+    }
+  }
+}

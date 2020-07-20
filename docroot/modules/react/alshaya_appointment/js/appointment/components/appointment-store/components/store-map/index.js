@@ -79,7 +79,7 @@ class StoreMap extends React.Component {
   createGoogleMap = () => window.appointmentMap.initMap(this.googleMapRef.current);
 
   render() {
-    return <div id="google-map-appointment-booking" ref={this.googleMapRef} style={{ width: '600px', height: '100%' }} />;
+    return <div id="google-map-appointment-booking" ref={this.googleMapRef} style={{ width: '100%', height: '100%' }} />;
   }
 }
 

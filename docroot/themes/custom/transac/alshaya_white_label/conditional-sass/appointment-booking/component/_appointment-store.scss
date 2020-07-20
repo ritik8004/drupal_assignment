@@ -1,6 +1,6 @@
 .appointment-select-store-container {
   .store-header {
-    @include breakpoint($upto-tablet-landscape) {
+    @include breakpoint($upto-tablet) {
       margin-bottom: 0.9375rem;
     }
   }
@@ -15,12 +15,17 @@
     margin-bottom: 0.8125rem;
 
     .store-finder-container {
-      @include breakpoint($tablet-landscape) {
+      @include breakpoint($tablet) {
         display: inline-flex;
         align-items: center;
-        width: calc(100% - 14.0625rem);
+        width: 65%;
         justify-content: space-between;
         margin-top: 1.875rem;
+        padding-#{$right}: 0.3125rem;
+      }
+
+      @include breakpoint($desktop-wide) {
+        padding-#{$right}: 3.3125rem;
       }
     }
 
@@ -49,16 +54,17 @@
       padding-top: 0.6875rem;
       padding-bottom: 0.6875rem;
       border: 1px solid $appointment-grey-border;
+      text-overflow: ellipsis;
 
-      @include breakpoint($tablet-landscape) {
-        margin-#{$left}: 0.3125rem;
-        width: 13.75rem;
+      @include breakpoint($tablet) {
+        width: 100%;
       }
     }
 
     .store-finder-input {
       display: inline-block;
       position: relative;
+      width: 35%;
 
       &::after {
         content: '';
@@ -76,7 +82,7 @@
         z-index: 2;
       }
 
-      @include breakpoint($upto-tablet-landscape) {
+      @include breakpoint($upto-tablet) {
         width: calc(100% - 3.125rem);
         vertical-align: middle;
 

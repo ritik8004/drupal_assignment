@@ -12,13 +12,7 @@
 
   @include breakpoint($upto-tablet-landscape) {
     position: relative;
-    margin-bottom: 8.75rem;
-  }
-
-  .store-map-wrapper {
-    @include breakpoint($upto-tablet-landscape) {
-      margin-bottom: 3.25rem;
-    }
+    margin-bottom: 3.125rem;
   }
 
   .appointment-subtitle {
@@ -31,8 +25,11 @@
   }
 
   .appointment-details {
+    margin-top: 3.25rem;
+
     @include breakpoint($tablet-landscape) {
       margin-#{$left}: 3.125rem;
+      margin-top: 0;
 
       body.ie & {
         -ms-grid-row: 1;
@@ -75,7 +72,7 @@
     @include breakpoint($upto-tablet-landscape) {
       position: absolute;
       top: 100%;
-      padding-top: 3.125rem;
+      padding-top: 2.1875rem;
       flex-direction: column-reverse;
       width: 100%;
     }
@@ -95,10 +92,6 @@
         background: none;
         border: 1px solid $appointment-btn-bg;
         color: $appointment-btn-bg;
-
-        @include breakpoint($upto-tablet-landscape) {
-          margin-top: 1.5625rem;
-        }
       }
     }
   }

@@ -125,6 +125,10 @@ const TextField = (props) => {
             });
           }}
           name={name}
+          peekNextMonth
+          showMonthDropdown
+          showYearDropdown
+          dropdownMode="select"
           customInput={<DateCustomInput />}
         />
       </div>

@@ -29,11 +29,9 @@ const StoreItem = ({
             address={store.address}
           />
         </div>
-        <div className="store-delivery-time">
-          <StoreTiming
-            timing={store.storeTiming}
-          />
-        </div>
+        <StoreTiming
+          timing={store.storeTiming}
+        />
         <ConditionalView condition={(typeof onStoreFinalize !== 'undefined' && display !== 'accordion')}>
           <div
             className="store-actions"

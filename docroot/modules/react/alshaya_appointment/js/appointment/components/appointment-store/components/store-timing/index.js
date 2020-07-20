@@ -1,14 +1,14 @@
 import React from 'react';
 
 const StoreTiming = (timing) => (
-  <div className="store-timing-wrapper">
-    <h5>
+  <div className="store-delivery-time">
+    <span className="label--delivery-time">
       {Drupal.t('Store Timings')}
-    </h5>
+    </span>
     {timing.timing && Object.entries(timing.timing).map(([, value]) => (
-      <div>
+      <span className="delivery--time--value">
         {`${value.day} (${value.timeSlot})`}
-      </div>
+      </span>
     ))}
   </div>
 );
