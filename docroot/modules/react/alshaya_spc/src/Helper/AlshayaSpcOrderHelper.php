@@ -373,6 +373,7 @@ class AlshayaSpcOrderHelper {
     $orderDetails['customerNameShipping'] = $shipping_address['firstname'] . ' ' . $shipping_address['lastname'];
 
     $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
+    $orderDetails['shipping_method_code'] = $shipping_method_code;
     if ($shipping_method_code == $this->checkoutOptionManager->getClickandColectShippingMethod()) {
       $orderDetails['delivery_type'] = 'cc';
       $orderDetails['type'] = $orderDetails['delivery_method_description'];
@@ -404,6 +405,7 @@ class AlshayaSpcOrderHelper {
             '@shipping_method_name' => $orderDetails['delivery_method'],
             '@shipping_method_description' => $cc_text,
           ]);
+          $orderDetails['shipping_method_code'] = $shipping_method_code;
         }
       }
     }

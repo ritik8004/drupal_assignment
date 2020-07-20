@@ -541,7 +541,12 @@ class AlshayaSpcController extends ControllerBase {
     $order = $this->orderHelper->getLastOrder();
     // Get order type hd/cnc and other details.
     $orderDetails = $this->orderHelper->getOrderDetails($order);
-
+    $delivery_method_description = $orderDetails['delivery_method_description'];
+    // Display custom label in description
+    // if same day delivery is selected as shipping method.
+    if (isset($orderDetails['shipping_method_code']) && $orderDetails['shipping_method_code'] == 'alshayadelivery_sd_sd01') {
+      $delivery_method_description = $this->t('same day');
+    }
     // Get formatted customer phone number.
     $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
@@ -581,7 +586,7 @@ class AlshayaSpcController extends ControllerBase {
         'order_number' => $order['increment_id'],
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
-        'expected_delivery' => $orderDetails['delivery_method_description'],
+        'expected_delivery' => $delivery_method_description,
         'number_of_items' => count($productList),
         'delivery_type_info' => $orderDetails,
         'totals' => $totals,
