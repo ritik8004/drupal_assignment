@@ -5,7 +5,7 @@ import AppointmentCompanion from './components/appointment-companion';
 import AppointmentForYou from './components/appointment-for-you';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
-import { getInputValue } from '../../../utilities/helper';
+import { getInputValue, getParam } from '../../../utilities/helper';
 import {
   showFullScreenLoader,
   removeFullScreenLoader,
@@ -39,6 +39,9 @@ export default class AppointmentType extends React.Component {
   }
 
   componentDidMount() {
+    // Get Program from Url parameter.
+    const program = getParam('program');
+
     const apiUrl = '/get/programs';
     const apiData = fetchAPIData(apiUrl);
 
@@ -47,6 +50,16 @@ export default class AppointmentType extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           this.setState({
             categoryItems: result.data,
+          }, () => {
+            if (program) {
+              const categoryIds = result.data.map((value) => value.id);
+              if (categoryIds.includes(program)) {
+                const category = {
+                  id: program,
+                };
+                this.handleCategoryClick(category);
+              }
+            }
           });
         }
       });
@@ -63,10 +76,21 @@ export default class AppointmentType extends React.Component {
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
+          // Get activity from Url parameter.
+          const activity = getParam('activity');
+          let appointmentTypeParam = '';
+          for (let i = 0; i < result.data.length; i++) {
+            if (result.data[i].id === activity) {
+              appointmentTypeParam = {
+                label: result.data[i].name,
+                value: result.data[i].id,
+              };
+            }
+          }
           this.setState({
             appointmentTypeItems: [...result.data],
             appointmentCategory: category,
-            appointmentType: '',
+            appointmentType: appointmentTypeParam,
           });
 
           // Remove loader.
