@@ -66,6 +66,8 @@ const TextField = (props) => {
   );
 
   if (type === 'email') {
+    const { id } = drupalSettings.alshaya_appointment.user_details;
+
     return (
       <div className="appointment-form-item appointment-type-textfield">
         <input
@@ -77,6 +79,7 @@ const TextField = (props) => {
           className={focusClass}
           onChange={handleChange}
           required={required}
+          disabled={(id)}
           value={defaultValue || ''}
         />
         <div className="c-input__bar" />

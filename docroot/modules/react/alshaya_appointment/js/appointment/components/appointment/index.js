@@ -13,6 +13,10 @@ import {
 import AppointmentTimeSlot from '../appointment-timeslot';
 import AppointmentLogin from '../appointment-login';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
+import {
+  removeFullScreenLoader,
+  showFullScreenLoader,
+} from '../../../utilities/appointment-util';
 
 const AppointmentStore = React.lazy(async () => {
   // Wait for google object to load.
@@ -67,6 +71,7 @@ export default class Appointment extends React.Component {
             const clientData = result.data;
             const apiUrlAppointment = `/get/appointment-details?appointment=${appointment}&id=${id}`;
             const apiDataAppointment = fetchAPIData(apiUrlAppointment);
+            showFullScreenLoader();
 
             if (apiDataAppointment instanceof Promise) {
               apiDataAppointment.then((response) => {
@@ -170,6 +175,7 @@ export default class Appointment extends React.Component {
     this.setState({
       ...localstore,
     });
+    removeFullScreenLoader();
   }
 
   handleSubmit = (stepValue) => {

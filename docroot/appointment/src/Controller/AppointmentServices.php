@@ -328,7 +328,49 @@ class AppointmentServices {
         'confirmationNumber' => $appointmentId,
       ];
       $result = $client->__soapCall('getAppointmentAnswersByAppointmentConfirmationNumber', [$param]);
-      return new JsonResponse($result);
+
+      $companions = [];
+      $k = 0;
+      if (!empty($result->return)) {
+
+        // Put FirstName, LastName in for each companion in one array.
+        foreach ($result->return as $item) {
+          if (strstr($item->question, 'First')) {
+            if (property_exists($item, 'answer')) {
+              $companions[$k]['firstName'] = $item->answer;
+              $companions[$k]['lastName'] = '';
+              $companions[$k]['dob'] = '';
+              $companions[$k]['customer'] = $k + 1;
+            }
+          }
+          if (strstr($item->question, 'Last')) {
+            if (property_exists($item, 'answer')) {
+              $companions[$k]['firstName'] = $companions[$k]['firstName'];
+              $companions[$k]['lastName'] = $item->answer;
+              $companions[$k]['dob'] = '';
+              $companions[$k]['customer'] = $k + 1;
+            }
+          }
+          if (strstr($item->question, 'Date')) {
+            if (property_exists($item, 'answer')) {
+              $companions[$k]['firstName'] = $companions[$k]['firstName'];
+              $companions[$k]['lastName'] = $companions[$k]['lastName'];
+              $companions[$k]['dob'] = $item->answer;
+              $companions[$k]['customer'] = $k + 1;
+            }
+            $k++;
+          }
+        }
+
+        // Remove companion array if firstName doesn't exist.
+        foreach ($companions as $key => &$value) {
+          if (empty($value['firstName'])) {
+            unset($companions[$key]);
+          }
+        }
+      }
+
+      return new JsonResponse($companions);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while fetching companion details. Message: @message', [
