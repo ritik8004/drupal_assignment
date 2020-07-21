@@ -51,7 +51,7 @@
 
       &::before {
         content: '';
-        background: url('#{$base_theme_img_directory_path}/icons/new-pdp-shopping-bag-mobile.svg') center center no-repeat;
+        background: url('#{$base_theme_img_directory_path}/icons/basket.svg') center center no-repeat;
         display: block;
         height: 2.875rem;
         width: 2.875rem;
@@ -61,6 +61,8 @@
 }
 
 .magv2-pdp-sticky-header {
+  box-shadow: 0.3125rem -0.3125rem 0.625rem $magv2-sticky-header-box-shadow;
+
   &.magv2-header {
     position: fixed;
     background: $magv2-sticky-header-bg;
@@ -126,6 +128,12 @@
             padding: 0;
           }
         }
+
+        @include breakpoint($only-tablet) {
+          .magv2-pdp-title {
+            margin-#{$right}: 1.875rem;
+          }
+        }
       }
 
       .magv2-pdp-brand-logo {
@@ -134,12 +142,16 @@
         }
 
         @include breakpoint($tablet) {
+          margin-#{$right}: 1.875rem;
+        }
+
+        @include breakpoint($desktop) {
           margin-#{$right}: 3.75rem;
         }
 
         img {
           @include breakpoint($tablet) {
-            max-height: 1.375rem;
+            max-height: 2.938rem;
             width: auto;
           }
         }
@@ -176,6 +188,10 @@
           }
         }
 
+        @include breakpoint($only-tablet) {
+          max-width: 12.125rem;
+        }
+
         @include breakpoint($only-mobile) {
           .has-special-price {
             flex-direction: row;
@@ -194,6 +210,25 @@
         &::before {
           height: 2.125rem;
           width: 2.125rem;
+        }
+      }
+
+      #sticky-header-btn {
+        margin-#{$left}: 3.75rem;
+
+        .magv2-button {
+          margin: 0;
+          min-width: 18.75rem;
+          font-size: 1rem;
+          font-family: $alshaya-thin;
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 1.875rem;
+
+          .magv2-button {
+            min-width: 9.375rem;
+          }
         }
       }
     }

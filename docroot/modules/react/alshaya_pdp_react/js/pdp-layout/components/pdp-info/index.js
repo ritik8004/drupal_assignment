@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 
 const PdpInfo = (props) => {
   const {
     title, pdpProductPrice, finalPrice,
-    shortDetail = false, childRef,
+    shortDetail = false,
     brandLogo, brandLogoAlt, brandLogoTitle,
   } = props;
 
@@ -15,25 +15,13 @@ const PdpInfo = (props) => {
 
   const specialPriceClass = (finalPrice < pdpProductPrice) ? 'has-special-price' : '';
 
-  const wrapper = useRef();
-
-  useEffect(() => {
-    if (childRef) {
-      childRef(wrapper);
-    }
-  },
-  [
-    childRef,
-    wrapper,
-  ]);
-
   return (
-    <div className={(shortDetail ? 'magv2-compact-detail-wrapper' : 'magv2-detail-wrapper')} ref={wrapper}>
-      <div className="magv2-pdp-title-wrapper">
+    <div className={(shortDetail ? 'magv2-compact-detail-wrapper' : 'magv2-detail-wrapper')}>
+      <div className="magv2-pdp-title-wrapper fadeInUp" style={{ animationDelay: '0.3s' }}>
         <div className="magv2-pdp-title">{title}</div>
         <div className="magv2-pdp-brand-logo"><img src={brandLogo} alt={brandLogoAlt} title={brandLogoTitle} /></div>
       </div>
-      <div className="magv2-pdp-price">
+      <div className="magv2-pdp-price fadeInUp" style={{ animationDelay: '0.4s' }}>
         <div className={`magv2-pdp-price-container ${specialPriceClass}`}>
           {(finalPrice < pdpProductPrice)
             ? (
@@ -54,8 +42,8 @@ const PdpInfo = (props) => {
             <span className="magv2-pdp-price-currency suffix">{drupalSettings.alshaya_spc.currency_config.currency_code}</span>
             <span className="magv2-pdp-price-amount">{pdpProductPrice}</span>
           </div>
-          {(!shortDetail && drupalSettings.alshaya_spc.vat_text)
-            ? <div className="magv2-pdp-vat-text">{drupalSettings.alshaya_spc.vat_text}</div>
+          {(!shortDetail && drupalSettings.vatText)
+            ? <div className="magv2-pdp-vat-text">{drupalSettings.vatText}</div>
             : null}
         </div>
       </div>

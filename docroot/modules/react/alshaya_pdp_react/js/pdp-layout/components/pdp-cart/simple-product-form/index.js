@@ -1,11 +1,8 @@
 import React, { createRef } from 'react';
-import {
-  updateCart,
-  getPostData,
-  triggerAddToCart,
-} from '../../../../utilities/pdp_layout';
+import { addToCartSimple } from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
+
 
 class SimpleProductForm extends React.Component {
   constructor(props) {
@@ -14,21 +11,25 @@ class SimpleProductForm extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('load', () => {
-      this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
+    // Condition to check if add to cart
+    // button is available.
+    if (document.getElementById('add-to-cart-main')) {
+      window.addEventListener('load', () => {
+        this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
 
-      this.addToBagButtonClass(this.button.current.offsetTop);
-    });
+        this.addToBagButtonClass(this.button.current.offsetTop);
+      });
 
-    window.addEventListener('scroll', () => {
-      const buttonOffset = this.button.current.getAttribute('data-top-offset');
+      window.addEventListener('scroll', () => {
+        const buttonOffset = this.button.current.getAttribute('data-top-offset');
 
-      if (buttonOffset === null) {
-        return;
-      }
+        if (buttonOffset === null) {
+          return;
+        }
 
-      this.addToBagButtonClass(buttonOffset);
-    });
+        this.addToBagButtonClass(buttonOffset);
+      });
+    }
   }
 
   addToBagButtonClass = (buttonOffset) => {
@@ -40,35 +41,6 @@ class SimpleProductForm extends React.Component {
     } else {
       this.button.current.classList.add('fix-bag-button');
     }
-  }
-
-  addToCart = (e, id) => {
-    e.preventDefault();
-    // Adding add to cart loading.
-    const addToCartBtn = document.getElementById(id);
-    addToCartBtn.classList.toggle('magv2-add-to-basket-loader');
-
-    const { skuCode, productInfo } = this.props;
-    const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
-
-    const getPost = getPostData(skuCode, variantSelected);
-
-    const postData = getPost[0];
-    const productData = getPost[1];
-
-    productData.productName = productInfo[skuCode].cart_title;
-    productData.image = productInfo[skuCode].cart_image;
-
-    const cartEndpoint = drupalSettings.cart_update_endpoint;
-
-    updateCart(cartEndpoint, postData).then(
-      (response) => {
-        triggerAddToCart(response, productData, productInfo, skuCode, addToCartBtn);
-      },
-    )
-      .catch((error) => {
-        console.log(error.response);
-      });
   }
 
   render() {
@@ -94,7 +66,7 @@ class SimpleProductForm extends React.Component {
                 className="magv2-button"
                 id="add-to-cart-main"
                 type="submit"
-                onClick={(e) => this.addToCart(e, 'add-to-cart-main')}
+                onClick={(e) => addToCartSimple(e, 'add-to-cart-main', skuCode, productInfo)}
               >
                 {Drupal.t('Add To Bag')}
               </button>

@@ -187,6 +187,7 @@ magazine_attribute:
     - alshaya_white_label/pdp-video-player
     - alshaya_white_label/attribute.common
     - core/jquery.ui.effects.slide
+    - alshaya_white_label/pdp-additional-attributes
 
 campaign-plp-style-1-video-provider:
   css:
@@ -344,12 +345,18 @@ tooltip:
     theme:
       css/conditional-sass/tooltip/tooltip.ltr.css: {}
 
+alshaya-react-animate:
+  css:
+    theme:
+      css/conditional-sass/alshaya-react-animate/alshaya-react-animate.ltr.css: {}
+
 spc-utils:
   css:
     theme:
       css/conditional-sass/spc-utils/spc-utils.ltr.css: {}
   dependencies:
     - alshaya_white_label/tooltip
+    - alshaya_white_label/alshaya-react-animate
 
 spc-cart:
   css:
@@ -393,3 +400,5 @@ magazine-layout-v2:
   css:
     theme:
       css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/alshaya-react-animate

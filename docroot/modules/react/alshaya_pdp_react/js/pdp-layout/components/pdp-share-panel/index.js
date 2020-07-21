@@ -11,7 +11,7 @@ const PdpSharePanel = () => {
   };
 
   return (
-    <div className="magv2-pdp-share-wrapper card">
+    <div className="magv2-pdp-share-wrapper card fadeInUp" style={{ animationDelay: '1.4s' }}>
       <div className="magv2-share-title-wrapper">
         <PdpSectionTitle>
           {Drupal.t('Share this page')}

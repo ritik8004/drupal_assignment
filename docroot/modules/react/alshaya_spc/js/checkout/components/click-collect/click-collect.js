@@ -28,6 +28,7 @@ import CheckoutMessage from '../../../utilities/checkout-message';
 import getStringMessage from '../../../utilities/strings';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { getUserLocation } from '../../../utilities/map/map_utils';
+import globalGmap from '../../../utilities/map/Gmap';
 import dispatchCustomEvent from '../../../utilities/events';
 
 class ClickCollect extends React.Component {
@@ -43,6 +44,7 @@ class ClickCollect extends React.Component {
     this.autocomplete = null;
     this.searchplaceInput = null;
     this.nearMeBtn = null;
+    this.googleMap = globalGmap.create();
 
     const { openSelectedStore } = this.props;
     this.state = {
@@ -192,7 +194,7 @@ class ClickCollect extends React.Component {
               return;
             }
           } catch (error) {
-            Drupal.logJavascriptError('clickncollect-checkUserCountry', error);
+            Drupal.logJavascriptError('clickncollect-checkUserCountry', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
           }
 
           if (JSON.stringify(coords) === JSON.stringify(userCoords)) {
@@ -214,7 +216,7 @@ class ClickCollect extends React.Component {
       )
       .catch((error) => {
         removeFullScreenLoader();
-        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error);
+        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
       });
     return false;
   };
@@ -247,7 +249,7 @@ class ClickCollect extends React.Component {
       })
       .catch((error) => {
         removeFullScreenLoader();
-        Drupal.logJavascriptError('clickncollect-fetchAvailableStores', error);
+        Drupal.logJavascriptError('clickncollect-fetchAvailableStores', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
       });
   };
 
@@ -277,7 +279,7 @@ class ClickCollect extends React.Component {
 
   // View selected store on map.
   hightlightMapMarker = (makerIndex) => {
-    const map = window.spcMap;
+    const map = this.googleMap;
     // Make the marker by default open.
     google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
     if (map.map.mapMarkers[makerIndex] !== undefined) {
@@ -326,7 +328,7 @@ class ClickCollect extends React.Component {
   };
 
   refreshMap = () => {
-    const { map } = window.spcMap;
+    const { map } = this.googleMap;
     // Adjust the map, when we trigger the map view.
     google.maps.event.trigger(map.googleMap, 'resize');
     if (map.mapMarkers.length > 0) {
@@ -392,7 +394,11 @@ class ClickCollect extends React.Component {
       if (exitFullscreen()) {
         self.refreshMap();
       } else {
-        Drupal.logJavascriptError('clickncollect-toggleFullScreen', 'Not able to exit full screen, click and collect map view.');
+        Drupal.logJavascriptError(
+          'clickncollect-toggleFullScreen',
+          'Not able to exit full screen, click and collect map view.',
+          GTM_CONSTANTS.CHECKOUT_ERRORS,
+        );
       }
 
       if (!selectedStore) {
@@ -412,7 +418,7 @@ class ClickCollect extends React.Component {
     this.refreshMap();
     this.toggleFullScreen();
 
-    const map = window.spcMap;
+    const map = this.googleMap;
     if (map.map.mapMarkers[makerIndex] !== undefined) {
       map.resetIcon(map.map.mapMarkers[makerIndex]);
     }
@@ -431,7 +437,7 @@ class ClickCollect extends React.Component {
     if (window.innerWidth < 768) {
       return;
     }
-    window.spcMap.closeAllInfoWindow();
+    this.googleMap.closeAllInfoWindow();
   }
 
   dismissErrorMessage = (e, type) => {

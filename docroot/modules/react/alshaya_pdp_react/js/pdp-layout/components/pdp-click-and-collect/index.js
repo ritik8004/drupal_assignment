@@ -97,7 +97,7 @@ export default class PdpClickCollect extends React.PureComponent {
 
     if (cncEnabled) {
       return (
-        <div className="magv2-pdp-click-and-collect-wrapper card">
+        <div className="magv2-pdp-click-and-collect-wrapper card fadeInUp" style={{ animationDelay: '1.2s' }}>
           <div className="magv2-click-collect-title-wrapper">
             <PdpSectionTitle>
               {Drupal.t('click & collect')}

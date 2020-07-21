@@ -398,6 +398,12 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['pdp_main_attributes_markup'] = [
+    'variables' => [
+      'properties' => [],
+    ],
+  ];
+
   $items['product_order_quantity_limit'] = [
     'variables' => [
       'message' => NULL,
@@ -582,38 +588,39 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
 
+        // Flags config.
+        $flags_config = alshaya_acm_product_get_flags_config();
         // Show legal notice content at the end of description popup if enabled.
-        $legal_notice_enabled = \Drupal::config('alshaya_acm_product.settings')->get('legal_notice_enabled');
-        if ($legal_notice_enabled) {
-          $label = \Drupal::config('alshaya_acm_product.settings')->get('legal_notice_label');
-          $summary = \Drupal::config('alshaya_acm_product.settings')->get('legal_notice_summary');
+        if (isset($flags_config['legal_notice']) && $flags_config['legal_notice']['enabled']) {
           $build['legal_notice'] = [
             '#theme' => 'legal_notice_markup',
-            '#label' => $label,
-            '#summary' => ['#markup' => $summary['value']],
+            '#label' => $flags_config['legal_notice']['label'],
+            '#summary' => ['#markup' => $flags_config['legal_notice']['summary']],
           ];
         }
 
+        // Flags status.
+        $flags_status = alshaya_acm_product_get_flags_status($sku);
         // Non-refundable.
         $is_non_refundable = NULL;
-        if ($sku_entity->get('attr_non_refundable_products')->getString()) {
-          $is_non_refundable = '1';
+        if (isset($flags_status['non_refundable']) && $flags_status['non_refundable']['status']) {
+          $is_non_refundable = $flags_status['non_refundable']['status'];
           $build['non_refundable'] = [
             '#theme' => 'non_refundable_markup',
-            '#text' => $product_settings->get('non_refundable_text'),
-            '#tooltip' => $product_settings->get('non_refundable_tooltip'),
+            '#text' => $flags_config['non_refundable']['text'],
+            '#tooltip' => $flags_config['non_refundable']['tooltip'],
           ];
         }
 
         // Same day delivery.
-        if ($sku_entity->get('attr_same_day_delivery')->getString()) {
-          $build['same_day_delivery_text']['#markup'] = $product_settings->get('same_day_delivery_text');
-          $build['same_day_delivery_sub_text']['#markup'] = $product_settings->get('same_day_delivery_sub_text');
+        if (isset($flags_status['same_day_delivery']) && $flags_status['same_day_delivery']['status']) {
+          $build['same_day_delivery_text']['#markup'] = $flags_config['same_day_delivery']['text'];
+          $build['same_day_delivery_sub_text']['#markup'] = $flags_config['same_day_delivery']['sub_text'];
         }
 
         // Delivery in only city.
-        if ($delivery_in_only_city_text = $product_settings->get('delivery_in_only_city_text')) {
-          $build['delivery_in_only_city_text']['#markup'] = $delivery_in_only_city_text;
+        if (isset($flags_config['delivery_in_only_city']) && !empty($flags_config['delivery_in_only_city']['text'])) {
+          $build['delivery_in_only_city_text']['#markup'] = $flags_config['delivery_in_only_city']['text'];
         }
 
         // Initialise home delivery variable.
@@ -825,6 +832,60 @@ function alshaya_acm_product_get_home_delivery_config() {
     'standard_title' => $config->get('options_standard_title'),
     'standard_subtitle' => $config->get('options_standard_subtitle'),
   ];
+}
+
+/**
+ * Get flags config.
+ *
+ * @return array
+ *   Return array of config data.
+ */
+function alshaya_acm_product_get_flags_config() {
+  $config = \Drupal::config('alshaya_acm_product.settings');
+  $return = [];
+
+  if (!empty($config->get('non_refundable_tooltip')) && !empty($config->get('non_refundable_text'))) {
+    $return['non_refundable']['tooltip'] = $config->get('non_refundable_tooltip');
+    $return['non_refundable']['text'] = $config->get('non_refundable_text');
+  }
+
+  if (!empty($config->get('same_day_delivery_text'))) {
+    $return['same_day_delivery']['text'] = $config->get('same_day_delivery_text');
+    $return['same_day_delivery']['sub_text'] = $config->get('same_day_delivery_sub_text');
+  }
+
+  if (!empty($config->get('delivery_in_only_city_text')) && !empty($config->get('delivery_in_only_city_key'))) {
+    $return['delivery_in_only_city']['text'] = $config->get('delivery_in_only_city_text');
+    $return['delivery_in_only_city']['key'] = $config->get('delivery_in_only_city_key');
+  }
+
+  if (!empty($config->get('legal_notice_enabled'))) {
+    $return['legal_notice']['enabled'] = $config->get('legal_notice_enabled');
+    $return['legal_notice']['label'] = $config->get('legal_notice_label');
+    $return['legal_notice']['summary'] = $config->get('legal_notice_summary')['value'];
+  }
+
+  return $return;
+}
+
+/**
+ * Get flags status for an SKU.
+ *
+ * @return array
+ *   Return array of config data.
+ */
+function alshaya_acm_product_get_flags_status($sku) {
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+
+  if (!($sku_entity instanceof SKU)) {
+    return FALSE;
+  }
+
+  return [
+    'non_refundable' => ['status' => $sku_entity->get('attr_non_refundable_products')->getString()],
+    'same_day_delivery' => ['status' => $sku_entity->get('attr_same_day_delivery')->getString()],
+  ];
+
 }
 
 /**

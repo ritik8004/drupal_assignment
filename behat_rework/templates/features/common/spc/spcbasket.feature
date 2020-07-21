@@ -1,4 +1,4 @@
-@javascript
+@javascript @smoke
 Feature: Test basket page
 
   Background:
@@ -124,7 +124,7 @@ Feature: Test basket page
     Then I should not see "{promo_code}" on page
     And I should not see "{excluding_delivery}" on page
     And I should not see "{vat}" on page
-    Then I should see "Your Shopping Bag Is Empty."
+    Then I should see "{empty_bag}"
     And I should see the link "{continue_shopping}"
 
   @language @desktop
@@ -276,7 +276,7 @@ Feature: Test basket page
     Then I should not see "{language_promo_code}" on page
     And I should not see "{language_excluding_delivery}" on page
     And I should not see "{language_vat}" on page
-    Then I should see "Your Shopping Bag Is Empty."
+    Then I should see "{language_empty_bag}"
     And I should see the link "{language_continue_shopping}"
 
   @language @mobile
@@ -302,5 +302,5 @@ Feature: Test basket page
     Then I should not see "{language_promo_code}" on page
     And I should not see "{language_excluding_delivery}" on page
     And I should not see "{language_vat}" on page
-    Then I should see "Your Shopping Bag Is Empty."
+    Then I should see "{language_empty_bag}"
     And I should see the link "{language_continue_shopping}"

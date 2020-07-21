@@ -63,7 +63,7 @@ export const placeOrder = (paymentMethod) => {
         }
 
         if (response.data.error && response.data.redirectUrl !== undefined) {
-          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.');
+          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
           window.location = response.data.redirectUrl;
           return;
         }
@@ -78,13 +78,13 @@ export const placeOrder = (paymentMethod) => {
           errorMessage: response.data.error_message,
           paymentMethod,
         };
-        Drupal.logJavascriptError('place-order', gtmInfo);
+        Drupal.logJavascriptError('place-order', gtmInfo, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
 
         removeFullScreenLoader();
       },
       (error) => {
         // Processing of error here.
-        Drupal.logJavascriptError('place-order', error);
+        Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       },
     );
 };
@@ -159,7 +159,7 @@ export const addShippingInCart = (action, data) => {
       }),
     )
     .catch((error) => {
-      Drupal.logJavascriptError('add-shipping-in-cart', error);
+      Drupal.logJavascriptError('add-shipping-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -184,7 +184,7 @@ export const addBillingInCart = (action, data) => {
       }),
     )
     .catch((error) => {
-      Drupal.logJavascriptError('add-billing-in-cart', error);
+      Drupal.logJavascriptError('add-billing-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -236,7 +236,7 @@ export const validateCartData = () => {
     )
     .catch((error) => {
       // Error processing here.
-      Drupal.logJavascriptError('checkout-refresh-cart-data', error);
+      Drupal.logJavascriptError('checkout-refresh-cart-data', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -422,7 +422,7 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
 export const getRecommendedProducts = (skus, type) => {
   const skuString = Object.keys(skus).map((key) => `skus[${key}]=${encodeURIComponent(skus[key])}`).join('&');
 
-  return axios.get(`products/cart-linked-skus?type=${type}&${skuString}&context=cart&cacheable=1`)
+  return axios.get(Drupal.url(`products/cart-linked-skus?type=${type}&${skuString}&context=cart&cacheable=1`))
     .then((response) => response.data);
 };
 
@@ -474,3 +474,17 @@ export const replaceCodTokens = (replacement, text) => {
   const textSplit = text.split('[surcharge]');
   return textSplit.reduce((prefix, suffix) => [prefix, replacement, suffix]);
 };
+
+/**
+ * Validate cvv number.
+ *
+ * @param {string} cvv
+ *   The cvv number to validate.
+ *
+ * @return {boolean}
+ *   Return true if cvv number is valid else false.
+ */
+export function validateCvv(cvv) {
+  const cvvLength = cvv.toString().length;
+  return [3, 4].includes(cvvLength) && !Number.isNaN(cvv);
+}

@@ -9,6 +9,7 @@ import PdpStandardDelivery from '../pdp-standard-delivery';
 import PdpSharePanel from '../pdp-share-panel';
 import PdpClickCollect from '../pdp-click-and-collect';
 import PdpCrossellUpsell from '../pdp-crossell-upsell';
+import PdpProductLabels from '../pdp-product-labels';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -42,13 +43,10 @@ const PdpLayout = () => {
 
   const header = useRef();
   let content;
-  const getChildRef = (ref) => {
-    content = ref;
-  };
 
   const showStickyHeader = () => {
     window.onscroll = function () {
-      if (window.pageYOffset >= content.current.offsetTop + content.current.offsetHeight) {
+      if (window.pageYOffset >= content.offsetTop + content.offsetHeight) {
         header.current.classList.add('magv2-pdp-sticky-header');
       } else {
         header.current.classList.remove('magv2-pdp-sticky-header');
@@ -62,7 +60,7 @@ const PdpLayout = () => {
 
   return (skuItemCode) ? (
     <>
-      <div className="magv2-header" ref={header}>
+      <div className="magv2-header fadeInUp" style={{ animationDelay: '0.3s' }} ref={header}>
         <PdpHeader
           title={title}
           finalPrice={finalPrice}
@@ -70,10 +68,14 @@ const PdpLayout = () => {
           brandLogo={brandLogo}
           brandLogoAlt={brandLogoAlt}
           brandLogoTitle={brandLogoTitle}
+          skuCode={skuItemCode}
+          configurableCombinations={configurableCombinations}
+          productInfo={productInfo}
         />
       </div>
       <div className="magv2-main">
         <div className="magv2-content" id="pdp-gallery-refresh">
+          <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} />
           <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
         </div>
         <div className="magv2-sidebar">
@@ -81,7 +83,6 @@ const PdpLayout = () => {
             title={title}
             finalPrice={finalPrice}
             pdpProductPrice={priceRaw}
-            childRef={(ref) => (getChildRef(ref))}
             brandLogo={brandLogo}
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
@@ -91,6 +92,7 @@ const PdpLayout = () => {
             configurableCombinations={configurableCombinations}
             productInfo={productInfo}
             pdpRefresh={pdpRefresh}
+            childRef={(ref) => { content = ref; }}
           />
           <PdpDescription
             skuCode={skuItemCode}

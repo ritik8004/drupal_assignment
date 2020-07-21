@@ -70,6 +70,8 @@
         "drupal/r4032login": "1.x-dev",
         "drupal/recaptcha": "^2.3",
         "drupal/redirect": "^1.0@alpha",
+        "drupal/replicate": "^1.0",
+        "drupal/replicate_ui": "^1.0",
         "drupal/restrict_role_login_by_ip": "^1.0",
         "drupal/restui": "^1.13",
         "drupal/robotstxt": "^1.1",
@@ -273,6 +275,7 @@
                 "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch",
                 "CORE-14983 - Set new twig_extension_hash_prefix state in invalidate method": "patches/core/set-new-twig_extension_hash_prefix-during-invalidate.patch",
                 "CORE-14778 - Make subquery table alias more informative": "https://www.drupal.org/files/issues/2020-05-26/3142927-2.patch",
+                "CORE-21267 - Test patch for core upgrade": "patches/core/backport-security-update-8.7x.patch",
                 "Multiple webheads can cause twig cache to grow indefinitely": "https://www.drupal.org/files/issues/2020-07-01/multiple_webheads_twig_cache-3032078-16.patch"
             },
             "drupal/mobile_number": {
@@ -370,6 +373,9 @@
             },
             "drupal/robotstxt": {
                 "Redirection when using a language prefix path": "https://www.drupal.org/files/issues/2018-04-11/robotstxt-avoid_redirection-2930799-5.patch"
+            },
+            "drupal/replicate_ui": {
+                "Overriding the replicate feature for content types": "https://www.drupal.org/files/issues/2020-07-16/content-type-feature-3159253-4.patch"
             }
         },
         "installer-paths": {

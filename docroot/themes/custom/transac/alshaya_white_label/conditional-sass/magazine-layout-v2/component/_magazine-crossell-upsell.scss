@@ -127,6 +127,10 @@
           flex-direction: column;
         }
       }
+
+      .magv2-pdp-brand-logo {
+        display: none;
+      }
     }
 
     &-heading {
@@ -202,10 +206,6 @@
         width: 100%;
       }
     }
-  }
-
-  &-brand-logo {
-    display: none;
   }
 
   &-price-container {

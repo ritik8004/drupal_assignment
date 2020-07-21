@@ -3,6 +3,7 @@ import Popup from 'reactjs-popup';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
+  validateCvv,
 } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import SavedCardsList from './components/SavedCardsList';
@@ -52,8 +53,8 @@ class PaymentMethodCheckoutCom extends React.Component {
   };
 
   cvvValidations = (e) => {
-    const cvv = parseInt(e.target.value, 10);
-    const valid = (cvv >= 100 && cvv <= 9999);
+    const cvv = e.target.value.trim();
+    const valid = validateCvv(cvv);
     handleValidationMessage(
       'spc-cc-cvv-error',
       e.target.value,
@@ -75,7 +76,7 @@ class PaymentMethodCheckoutCom extends React.Component {
 
   handleCardCvvChange = (event, handler) => {
     if (window.CheckoutKit === undefined) {
-      Drupal.logJavascriptError('CheckoutKit not available');
+      Drupal.logJavascriptError('CheckoutKit not available', '', GTM_CONSTANTS.PAYMENT_ERRORS);
       return;
     }
     this.labelEffect(event, handler);
@@ -86,6 +87,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     Drupal.logJavascriptError(
       'Payment failed',
       `Payment failed with error code ${data.errorCode}`,
+      GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS,
     );
     dispatchCustomEvent('spcCheckoutMessageUpdate', {
       type: 'error',
@@ -116,7 +118,7 @@ class PaymentMethodCheckoutCom extends React.Component {
     }
 
     if (window.CheckoutKit === undefined) {
-      Drupal.logJavascriptError('Checkout kit not loaded');
+      Drupal.logJavascriptError('Checkout kit not loaded', '', GTM_CONSTANTS.PAYMENT_ERRORS);
 
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
@@ -157,9 +159,6 @@ class PaymentMethodCheckoutCom extends React.Component {
   handleCheckoutResponse = (data) => {
     // Do not process when data has type error.
     if (data.type === 'error') {
-      if (data.errorCode === 'default-error') {
-        this.handleCheckoutKitJsErrors(data);
-      }
       removeFullScreenLoader();
       return;
     }

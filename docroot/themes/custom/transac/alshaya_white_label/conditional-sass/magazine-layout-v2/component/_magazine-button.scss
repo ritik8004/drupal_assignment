@@ -16,7 +16,7 @@
 
 .magv2-add-to-basket-loader {
   &.magv2-button {
-    font-size: 0;
+    font-size: 0 !important;
 
     &::after {
       content: '';

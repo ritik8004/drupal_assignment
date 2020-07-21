@@ -202,6 +202,12 @@
     }
   }
 
+  .form-item {
+    @include breakpoint($tablet) {
+      max-width: none;
+    }
+  }
+
   .form-submit {
     @extend %btn;
 
@@ -222,6 +228,11 @@
     .ladda-spinner {
       top: 1.25rem;
     }
+  }
+
+  & > h3 {
+    text-transform: capitalize;
+    margin-top: 0;
   }
 }
 
@@ -399,6 +410,7 @@
       font-family: $alshaya-bold;
       font-size: 0.875rem;
       padding-#{$left}: 1.125rem;
+      margin-bottom: 0.25rem;
 
       @include breakpoint($only-mobile) {
         margin-top: 2.375rem;

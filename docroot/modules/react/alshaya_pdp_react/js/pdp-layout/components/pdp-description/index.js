@@ -18,7 +18,7 @@ const PpdDescription = (props) => {
   } = props;
 
   return (
-    <div className="magv2-pdp-description-wrapper card">
+    <div className="magv2-pdp-description-wrapper card fadeInUp" style={{ animationDelay: '0.8s' }}>
       <PdpSectionTitle>{Drupal.t('product details')}</PdpSectionTitle>
       <PdpSectionText className="short-desc"><p>{parse(pdpShortDesc)}</p></PdpSectionText>
       <div className="magv2-desc-readmore-link" onClick={() => openModal()}>
