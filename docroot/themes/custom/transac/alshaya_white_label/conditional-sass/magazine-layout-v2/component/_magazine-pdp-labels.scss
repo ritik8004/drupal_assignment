@@ -10,7 +10,8 @@
     width: 100%;
 
     @include breakpoint($only-mobile) {
-      width: calc(100% - 2.5rem); // .magv2-content has a padding of 2.5rem in mobile
+      // .magv2-content has a padding of 2.5rem in mobile
+      width: calc(100% - 2.5rem);
     }
 
     .labels-container {
