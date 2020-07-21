@@ -1,4 +1,4 @@
-@javascript @account
+@javascript @account @smoke @auth
 Feature: Test the My Account functionality
 
   Background:

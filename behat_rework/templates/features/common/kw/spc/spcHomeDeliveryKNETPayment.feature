@@ -1,4 +1,4 @@
-@javascript
+@javascript @KNetPayment @guest @homeDelivery
 Feature: SPC Checkout Home Delivery CC
 
   Background:

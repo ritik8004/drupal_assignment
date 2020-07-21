@@ -1,4 +1,4 @@
-@javascript @returnUser
+@javascript @returnUser @cybersourcePayment @homeDelivery
 Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource Card Payment Method
 
   Background:

@@ -1,4 +1,4 @@
-@javascript @returnUser
+@javascript @returnUser @checkoutPayment @clickCollect @bbwsaprod
 Feature: SPC Checkout using Click & Collect store for returning customer using Checkout (2D) Card Payment Method
 
   Background:
@@ -6,6 +6,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 10 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
 
   @cc @cnc @checkout_com
   Scenario: As a returning customer, I should be able to checkout using click and collect with credit card

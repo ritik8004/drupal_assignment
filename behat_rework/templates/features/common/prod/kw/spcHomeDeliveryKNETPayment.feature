@@ -1,10 +1,12 @@
-@javascript
+@javascript @KNetPayment @homeDelivery @auth @mckwprod @bbwkwprod
 Feature: SPC Checkout Home Delivery CC
 
   Background:
     Given I am on "{spc_product_listing_page}"
     And I wait 10 seconds
     And I wait for the page to load
+    Then I scroll to the ".region__highlighted" element
+    And I wait 10 seconds
 
   @cc @hd @Knet
   Scenario: As a Guest, I should be able to checkout using CC
@@ -56,6 +58,8 @@ Feature: SPC Checkout Home Delivery CC
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted" element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load

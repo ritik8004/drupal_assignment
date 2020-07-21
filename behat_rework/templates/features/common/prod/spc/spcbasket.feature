@@ -1,4 +1,4 @@
-@javascript
+@javascript @smoke @mcsaprod @mcaeprod @mckwprod @bbwaeprod @bbwsaprod @bbwkwprod
 Feature: Test basket page
 
   Background:
@@ -6,6 +6,7 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
 
   Scenario: As a Guest, I should be able to add more quantity
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
@@ -134,6 +135,7 @@ Feature: Test basket page
     And I wait for the page to load
     And I wait for AJAX to finish
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -217,6 +219,7 @@ Feature: Test basket page
     And I wait for the page to load
     And I wait for AJAX to finish
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -262,6 +265,7 @@ Feature: Test basket page
     And I wait for the page to load
     And I wait for AJAX to finish
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load

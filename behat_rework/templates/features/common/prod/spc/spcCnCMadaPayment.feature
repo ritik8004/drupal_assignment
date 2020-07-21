@@ -1,4 +1,4 @@
-@javascript @guest @cnc
+@javascript @guest @cnc @madaPayment @clickCollect @bbwsaprod
 Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest Users
 
   Background:
@@ -6,6 +6,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I wait 5 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
 
   @cc @hd @checkout_com @visa @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (VISA Card)
@@ -80,6 +81,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I wait for the page to load
     And I wait for AJAX to finish
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -282,6 +284,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I wait for the page to load
     And I wait for AJAX to finish
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load

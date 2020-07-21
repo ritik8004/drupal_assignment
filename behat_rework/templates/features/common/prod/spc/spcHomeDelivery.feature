@@ -1,4 +1,4 @@
-@javascript @guest
+@javascript @guest @codPayment @homeDelivery
 Feature: SPC Checkout Home Delivery COD
 
   Background:
@@ -6,6 +6,7 @@ Feature: SPC Checkout Home Delivery COD
     And I wait 10 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
 
   @cod @hd
   Scenario: As a Guest, I should be able to checkout using COD
@@ -58,6 +59,7 @@ Feature: SPC Checkout Home Delivery COD
     And I wait for the page to load
     And I wait for AJAX to finish
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load

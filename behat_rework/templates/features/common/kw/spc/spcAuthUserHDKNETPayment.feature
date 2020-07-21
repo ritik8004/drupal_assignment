@@ -1,4 +1,4 @@
-@javascript
+@javascript @KNetPayment @homeDelivery @auth
 Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
 
   Background:

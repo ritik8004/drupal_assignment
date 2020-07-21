@@ -1,4 +1,4 @@
-@javascript
+@javascript @smoke @mcsaprod @mcaeprod @mckwprod @bbwaeprod @bbwsaprod @bbwkwprod
 Feature: Test MiniCart page
 
   Background:
@@ -6,6 +6,7 @@ Feature: Test MiniCart page
     And I wait for the page to load
     And I wait for AJAX to finish
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
 
   Scenario: As a Guest, I should be able minicart
     Then I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
@@ -50,6 +51,7 @@ Feature: Test MiniCart page
     And I wait for the page to load
     And I wait for AJAX to finish
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -84,6 +86,7 @@ Feature: Test MiniCart page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted" element
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load

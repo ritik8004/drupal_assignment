@@ -1,4 +1,4 @@
-@javascript
+@javascript @smoke
 Feature: Test MiniCart page
 
   Background:

@@ -1,4 +1,4 @@
-@javascript
+@javascript @cybersourcePayment @auth @clickCollect @bbwaeprod
 Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authenticated User
 
   Background:
@@ -6,6 +6,7 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     And I wait 10 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
 
   @cc @cnc @cybersource
   Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card
@@ -61,6 +62,7 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     And I wait 10 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load

@@ -1,4 +1,4 @@
-@javascript @account @test
+@javascript @account @smoke @auth @mcsaprod @mcaeprod @mckwprod @bbwaeprod @bbwsaprod @bbwkwprod
 Feature: Test the adding address to existing user account
 
   Background:

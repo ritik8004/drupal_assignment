@@ -1,4 +1,4 @@
-@javascript @auth
+@javascript @auth @checkoutPayment @homeDelivery
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Authenticated user
 
   Background:

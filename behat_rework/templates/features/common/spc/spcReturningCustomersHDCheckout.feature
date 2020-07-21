@@ -1,4 +1,4 @@
-@javascript @returnUser
+@javascript @returnUser @checkoutPayment @homeDelivery
 Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2D) Card Payment Method
 
   Background:

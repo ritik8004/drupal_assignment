@@ -1,4 +1,4 @@
-@javascript @guest
+@javascript @guest @cybersourcePayment @clickCollect
 Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest User
 
   Background:

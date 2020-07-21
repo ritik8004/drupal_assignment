@@ -1,4 +1,4 @@
-@javascript @guest
+@javascript @guest @cybersourcePayment @homeDelivery @mcaeprod @bbwaeprod
 Feature: SPC Checkout Home Delivery using CyberSource Payment Method
 
   Background:
@@ -6,6 +6,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I wait 10 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
 
   @cc @hd @cybersource
   Scenario: As a Guest, I should be able to checkout using CC
@@ -62,6 +63,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I wait 10 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -233,6 +235,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I wait 10 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load

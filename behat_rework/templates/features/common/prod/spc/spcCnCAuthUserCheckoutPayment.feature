@@ -1,4 +1,4 @@
-@javascript
+@javascript @checkoutPayment @auth @clickCollect @bbwsaprod
 Feature: SPC Checkout using Click & Collect store for Authenticated user using Checkout (2D) Cards
 
   Background:
@@ -6,6 +6,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 10 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
 
   @cc @cnc @checkout_com
   Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card
@@ -113,6 +114,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for the page to load
     And I wait for AJAX to finish
     Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
