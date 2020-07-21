@@ -1927,6 +1927,7 @@ class FeatureContext extends CustomMinkContext
           $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
           $this->iWaitSeconds(5);
           $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
+          // Adding a wait time for elements to load properly
           $this->iWaitSeconds(5);
         }
         else {
@@ -2105,6 +2106,9 @@ class FeatureContext extends CustomMinkContext
       $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
       $this->iWaitSeconds(5);
     }
+    else {
+      return;
+    }
   }
 
   /**
@@ -2145,7 +2149,8 @@ class FeatureContext extends CustomMinkContext
         }
         $this->iClickJqueryElementOnPage("#address-form-action #save-address");
       }
-    } else {
+    }
+    else {
       $element = $this->getSession()->getPage()->find("css", "#spc-checkout .spc-main .spc-content .delivery-information-preview");
       if (!$element) {
         throw new Exception("Element " . "#spc-checkout .spc-main .spc-content .delivery-information-preview" . " not found on " . $this->getSession()->getCurrentUrl());
