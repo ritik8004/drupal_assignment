@@ -646,6 +646,24 @@ $conductors = [
     'hmac_secret' => 'YmNkYjJkMTgtZGU4Mi00',
     'site_id' => 248,
   ],
+  'mukw_prod' => [
+    'site_id' => 267,
+  ],
+  'musa_prod' => [
+    'site_id' => 268,
+  ],
+  'muae_prod' => [
+    'site_id' => 269,
+  ],
+  'mueg_prod' => [
+    'site_id' => 270,
+  ],
+  'mubh_prod' => [
+    'site_id' => 271,
+  ],
+  'muqa_prod' => [
+    'site_id' => 272,
+  ],
   // Boots pharmacy.
   'bpkw_dev' => [
     'hmac_id' => 'd498a56fab204489ad5c3de9840d8e98',
