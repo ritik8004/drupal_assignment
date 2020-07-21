@@ -47,6 +47,10 @@ fields:
     label: 'Product Quality'
     cardinality: -1
 
+  color_name:
+    label: 'Color name'
+    type: 'string'
+
   article_pattern:
     label: 'Article Pattern'
     cardinality: -1

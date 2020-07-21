@@ -92,7 +92,7 @@
 
             // Post to ajax for cart update/create.
             jQuery.ajax({
-              url: settings.alshaya_spc.cart_update_endpoint,
+              url: settings.alshaya_spc.cart_update_endpoint + '?lang=' + drupalSettings.path.currentLanguage,
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -167,7 +167,7 @@
 
                   // Store proper variant sku in gtm data now.
                   gtmAttributes.variant = productDataSKU;
-
+                  gtmAttributes.price = price;
                   Drupal.alshayaSpc.storeProductData({
                     sku: productDataSKU,
                     parentSKU: parentSKU,
@@ -197,6 +197,20 @@
 
                   var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: (function () { return response; })}});
                   document.dispatchEvent(event);
+
+                  // We want to refresh Recommended product on add to cart
+                  // functionality but only on cart page.
+                  if ($('#spc-cart').length > 0) {
+                    document.dispatchEvent(
+                      new CustomEvent(
+                        'spcRefreshCartRecommendation',
+                        {
+                          bubbles: true,
+                          detail: {  items: response.items  }
+                        }
+                      )
+                    );
+                  }
                 }
               }
             });

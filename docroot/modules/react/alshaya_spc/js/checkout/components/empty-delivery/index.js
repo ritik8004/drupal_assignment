@@ -89,7 +89,7 @@ export default class EmptyDeliveryText extends React.Component {
               return;
             }
           } catch (error) {
-            Drupal.logJavascriptError('clickncollect-checkUserCountry', error);
+            Drupal.logJavascriptError('clickncollect-checkUserCountry', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
           }
           fetchStoresHelper(coords);
         },
@@ -99,7 +99,7 @@ export default class EmptyDeliveryText extends React.Component {
       )
       .catch((error) => {
         removeFullScreenLoader();
-        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error);
+        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
       });
   }
 

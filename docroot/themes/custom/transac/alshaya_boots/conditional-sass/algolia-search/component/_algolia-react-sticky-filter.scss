@@ -4,8 +4,13 @@
     .block-facet-blockcategory-facet-search {
       @include breakpoint($only-mobile) {
         top: 3.125rem;
-        z-index: 11;
       }
+    }
+  }
+
+  .block-facet-blockcategory-facet-search {
+    a {
+      text-transform: none;
     }
   }
 }

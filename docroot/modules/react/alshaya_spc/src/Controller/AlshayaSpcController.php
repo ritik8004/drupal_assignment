@@ -228,9 +228,17 @@ class AlshayaSpcController extends ControllerBase {
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
 
+    $spc_cnc_config = $this->config('alshaya_spc.click_n_collect');
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
     $geolocation_config = $this->config('geolocation.settings');
-    $cache_tags = Cache::mergeTags($cache_tags, array_merge($store_finder_config->getCacheTags(), $geolocation_config->getCacheTags()));
+    $cache_tags = Cache::mergeTags(
+      $cache_tags,
+      array_merge(
+        $spc_cnc_config->getCacheTags(),
+        $store_finder_config->getCacheTags(),
+        $geolocation_config->getCacheTags()
+      )
+    );
 
     $country_name = $this->mobileUtil->getCountryName($country_code);
     $strings[] = [
@@ -460,7 +468,7 @@ class AlshayaSpcController extends ControllerBase {
           'google_field_mapping' => $this->config('alshaya_spc.google_mapping')->get('mapping'),
           'map' => [
             'google_api_key' => $geolocation_config->get('google_map_api_key'),
-            'center' => $store_finder_config->get('country_center'),
+            'center' => $spc_cnc_config->get('country_center'),
             'placeholder' => $store_finder_config->get('store_search_placeholder'),
             'map_marker' => $store_finder_config->get('map_marker'),
             'cnc_shipping' => [
@@ -533,7 +541,12 @@ class AlshayaSpcController extends ControllerBase {
     $order = $this->orderHelper->getLastOrder();
     // Get order type hd/cnc and other details.
     $orderDetails = $this->orderHelper->getOrderDetails($order);
-
+    $delivery_method_description = $orderDetails['delivery_method_description'];
+    // Display custom label in description
+    // if same day delivery is selected as shipping method.
+    if (isset($orderDetails['shipping_method_code']) && $orderDetails['shipping_method_code'] == 'alshayadelivery_sd_sd01') {
+      $delivery_method_description = $this->t('same day');
+    }
     // Get formatted customer phone number.
     $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
@@ -573,7 +586,7 @@ class AlshayaSpcController extends ControllerBase {
         'order_number' => $order['increment_id'],
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
-        'expected_delivery' => $orderDetails['delivery_method_description'],
+        'expected_delivery' => $delivery_method_description,
         'number_of_items' => count($productList),
         'delivery_type_info' => $orderDetails,
         'totals' => $totals,

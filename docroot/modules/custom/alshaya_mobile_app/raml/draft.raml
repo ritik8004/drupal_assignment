@@ -1769,6 +1769,72 @@ schemas:
                       }
                   }
                 ]
+  /options-list:
+    /{page_url}
+      get:
+        description: Get options values based on configured attribute in form settings.
+        responses:
+          200:
+          body:
+            application/json:
+              schema: GetOptionsList
+              example: |
+                {
+                  "brand": [
+                    {
+                      "options": {
+                        "option": {
+                          "terms": {
+                            "3": {
+                              "title": "BANANA BOAT",
+                              "url": "\/ar\/search#refinementList[attr_brand][0]=BANANA+BOAT",
+                              "image_url": "public:\/\/options-list-bg\/2020-06\/bannan_boat_0.jpg"
+                            },
+                            "4": {
+                              "title": "CENTURY LABS",
+                              "url": "\/ar\/search#refinementList[attr_brand][0]=CENTURY+LABS",
+                              "image_url": "public:\/\/options-list-bg\/2020-06\/century_labs_0.jpg"
+                            }
+                          }
+                        },
+                        "attribute_code": "brand"
+                      },
+                      "title": "POPULAR BRAND",
+                      "description": "",
+                      "show_image": true
+                    },
+                    {
+                      "search": true,
+                      "search_placeholder": "Search Brands By Name",
+                      "group": true,
+                      "options": {
+                        "option": {
+                          "terms": {
+                            "b": {
+                              "3": {
+                                "title": "BANANA BOAT",
+                                "url": "\/ar\/search#refinementList[attr_brand][0]=BANANA+BOAT"
+                              }
+                            },
+                            "c": {
+                              "6": {
+                                "title": "CENTURY LABS",
+                                "url": "\/ar\/search#refinementList[attr_brand][0]=CENTURY+LABS"
+                              }
+                            }
+                          },
+                          "search": true,
+                          "group": true
+                        },
+                        "attribute_code": "brand"
+                      },
+                      "title": "BY NAME",
+                      "description": "All our brands are listed below",
+                      "show_image": false,
+                      "mobile_title": "SHOW LIST"
+                    }
+                  ]
+                }
   /payment-methods:
     get:
       description: Get the data related to payment methods.

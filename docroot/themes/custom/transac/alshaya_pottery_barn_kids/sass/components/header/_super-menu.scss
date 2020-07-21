@@ -108,7 +108,9 @@ body.header-sticky-filter {
     .block-system-menublock.menu--account {
       display: none;
     }
+  }
 
+  body {
     .branding__menu {
       margin-top: $pbk-super-menu-height;
     }

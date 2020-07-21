@@ -101,14 +101,11 @@
     }
 
     @include breakpoint($tablet) {
-      &:last-child {
-        margin-bottom: 0;
-      }
+      margin-bottom: 0.625rem;
     }
 
     @include breakpoint($desktop) {
       margin-top: 0;
-      margin-bottom: 1.3rem;
     }
 
     @include breakpoint($only-mobile) {
@@ -128,7 +125,6 @@
       @include breakpoint($only-mobile) {
         margin: 0;
         display: block;
-        padding-top: 0.625rem;
       }
 
       @include breakpoint($tablet) {

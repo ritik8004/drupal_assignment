@@ -104,9 +104,13 @@
     padding-bottom: 0.625rem;
 
     @include breakpoint($only-tablet) {
-      padding-top: 3.375rem;
-      padding-bottom: 0;
+      padding-top: 1.5rem;
+      padding-bottom: 1rem;
       padding-#{$left}: 0.5rem;
+
+      html[lang=ar] & {
+        padding-right: 0;
+      }
     }
 
     @include breakpoint($only-mobile) {
@@ -344,6 +348,10 @@
         min-width: 7.75rem;
         margin: 0 0.5rem;
         text-transform: none;
+
+        @include breakpoint($only-mobile) {
+          line-height: 1;
+        }
 
         @extend %btn;
 
