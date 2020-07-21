@@ -54,9 +54,15 @@ export default class AppointmentType extends React.Component {
             if (program) {
               const categoryIds = result.data.map((value) => value.id);
               if (categoryIds.includes(program)) {
-                const category = {
-                  id: program,
-                };
+                let category = {};
+                for (let i = 0; i < result.data.length; i++) {
+                  if (result.data[i].id === program) {
+                    category = {
+                      id: result.data[i].id,
+                      name: result.data[i].name,
+                    };
+                  }
+                }
                 this.handleCategoryClick(category);
               }
             }
