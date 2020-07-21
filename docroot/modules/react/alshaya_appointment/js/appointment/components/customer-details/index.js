@@ -153,6 +153,8 @@ export default class CustomerDetails extends React.Component {
       appointmentCompanion: { label: numOfCompanions, value: numOfCompanions },
       companionData: updatedCompanionData,
     }));
+
+    smoothScrollTo('.companion-details-item:nth-last-child(2)');
   }
 
   appendAppointmentAnswers = () => {
