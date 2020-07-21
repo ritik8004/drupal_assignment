@@ -102,7 +102,12 @@ class ConfigurationServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -148,7 +153,12 @@ class ConfigurationServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -228,7 +238,12 @@ class ConfigurationServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -260,7 +275,12 @@ class ConfigurationServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -292,7 +312,12 @@ class ConfigurationServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 

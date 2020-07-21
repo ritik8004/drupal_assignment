@@ -108,7 +108,12 @@ class ClientServices {
         '@message' => $e->getMessage(),
       ]);
 
-      return new JsonResponse(['error' => $e->getMessage()]);
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -168,7 +173,13 @@ class ClientServices {
       $this->logger->error('Error occurred while fetching client details. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
-      throw $e;
+
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 

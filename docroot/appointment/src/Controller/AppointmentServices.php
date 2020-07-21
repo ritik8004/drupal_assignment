@@ -83,7 +83,12 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -167,7 +172,13 @@ class AppointmentServices {
       $this->logger->error('Error occurred while booking appointment. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
-      return new JsonResponse(['error' => $e->getMessage()]);
+
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -223,7 +234,12 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      return new JsonResponse(['error' => $e->getMessage()]);
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -288,7 +304,12 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -368,7 +389,12 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -419,7 +445,12 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -474,7 +505,12 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      throw $e;
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -527,7 +563,12 @@ class AppointmentServices {
         '@user' => $user,
       ]);
 
-      throw $e;
+      $error = [
+        'error' => TRUE,
+        'error_message' => 'Something went wrong. Please try again.',
+      ];
+
+      return new JsonResponse($error, 400);
     }
   }
 
