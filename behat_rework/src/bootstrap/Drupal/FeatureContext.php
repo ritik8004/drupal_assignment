@@ -2099,16 +2099,14 @@ class FeatureContext extends CustomMinkContext
    */
   public function fillBillingFieldsSimilarTo($field, $value)
   {
-    if ($value) {
-      $field = $this->theElementSimilar($field);
-      $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
-      $this->iWaitSeconds(5);
-      $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
-      $this->iWaitSeconds(5);
-    }
-    else {
+    if (empty($value)) {
       return;
     }
+    $field = $this->theElementSimilar($field);
+    $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
+    $this->iWaitSeconds(5);
+    $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
+    $this->iWaitSeconds(5);
   }
 
   /**
