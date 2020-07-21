@@ -1,10 +1,12 @@
-@javascript
+@javascript @smoke @mcsaprod @mcaeprod @mckwprod @bbwaeprod @bbwsaprod @bbwkwprod
 Feature: Test basket page
 
   Background:
     Given I am on "{spc_basket_page}"
     And I wait 10 seconds
     And I wait for the page to load
+    Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
 
   Scenario: As a Guest, I should be able to add more quantity
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
@@ -124,7 +126,7 @@ Feature: Test basket page
     Then I should not see "{promo_code}" on page
     And I should not see "{excluding_delivery}" on page
     And I should not see "{vat}" on page
-    Then I should see "Your Shopping Bag Is Empty."
+    Then I should see "{empty_bag}"
     And I should see the link "{continue_shopping}"
 
   @language @desktop
@@ -132,6 +134,8 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -214,6 +218,8 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -258,6 +264,8 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -276,7 +284,7 @@ Feature: Test basket page
     Then I should not see "{language_promo_code}" on page
     And I should not see "{language_excluding_delivery}" on page
     And I should not see "{language_vat}" on page
-    Then I should see "Your Shopping Bag Is Empty."
+    Then I should see "{language_empty_bag}"
     And I should see the link "{language_continue_shopping}"
 
   @language @mobile
@@ -302,5 +310,5 @@ Feature: Test basket page
     Then I should not see "{language_promo_code}" on page
     And I should not see "{language_excluding_delivery}" on page
     And I should not see "{language_vat}" on page
-    Then I should see "Your Shopping Bag Is Empty."
+    Then I should see "{language_empty_bag}"
     And I should see the link "{language_continue_shopping}"
