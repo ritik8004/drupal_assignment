@@ -82,11 +82,15 @@
 
             @include icon('close') {
               padding-#{$left}: 0;
-              top: -0.1875rem;
               font-size: 3.125rem;
               position: absolute;
-              left: 0;
-              right: 0;
+              top: 50%;
+              right: auto;
+              bottom: auto;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: auto;
+              height: auto;
             }
           }
         }
