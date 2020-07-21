@@ -1,7 +1,7 @@
 #lightSlider {
   @include breakpoint($desktop) {
     height: 39.075rem;
-    margin-top: 0.9375rem;
+    margin-top: 0;
   }
 
   @include breakpoint($only-tablet) {
@@ -96,8 +96,9 @@
 .cloudzoom {
   .cloudzoom__herocontainer {
     @include breakpoint($desktop) {
-      width: calc(100% - (5.75rem + 7.25rem));
-      margin-#{$right}: 6.125rem;
+      width: 38rem;
+      height: 38rem;
+      margin-#{$right}: 2rem;
     }
   }
 
@@ -114,7 +115,7 @@
       }
 
       @include breakpoint($desktop) {
-        height: 39.875rem;
+        height: 38rem;
       }
     }
   }
