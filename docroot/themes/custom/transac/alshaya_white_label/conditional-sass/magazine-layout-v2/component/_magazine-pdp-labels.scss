@@ -1,0 +1,79 @@
+.nodetype--acq_product {
+  .magv2-main .magv2-content {
+    position: relative;
+  }
+
+  .product-labels {
+    position: absolute;
+    top: 2.0125rem;
+    z-index: 1;
+    width: 100%;
+
+    .labels-container {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      height: 26.875rem;
+
+      @include breakpoint($only-mobile) {
+        height: 73vw;
+        overflow: hidden;
+      }
+
+      &__inner {
+        width: 48.9%;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      &__inner--top-left {
+        margin-bottom: auto;
+        padding: 0.9375rem 1.25rem 0 0.9375rem;
+
+        html[lang=ar] & {
+          padding: 0.9375rem 0.9375rem 0 1.25rem;
+        }
+      }
+
+      &__inner--top-right {
+        margin-#{$left}: auto;
+        margin-bottom: auto;
+        flex-direction: row-reverse;
+        padding: 0.9375rem 0.9375rem 0 1.25rem;
+
+        html[lang=ar] & {
+          padding: 0.9375rem 1.25rem 0 0.9375rem;
+        }
+      }
+
+      &__inner--bottom-right {
+        margin-#{$left}: auto;
+        margin-top: auto;
+        flex-direction: row-reverse;
+        padding: 0 0.9375rem 0.9375rem 1.25rem;
+
+        html[lang=ar] & {
+          padding: 0 1.25rem 0.9375rem 0.9375rem;
+        }
+      }
+
+      &__inner--bottom-left {
+        margin-top: auto;
+        padding: 0 1.25rem 0.9375rem 0.9375rem;
+
+        html[lang=ar] & {
+          padding: 0 0.9375rem 0.9375rem 1.25rem;
+        }
+      }
+    }
+
+    .labels {
+      padding: 0.3125rem;
+    }
+
+    img {
+      display: inline-block;
+      width: 100%;
+    }
+  }
+}
