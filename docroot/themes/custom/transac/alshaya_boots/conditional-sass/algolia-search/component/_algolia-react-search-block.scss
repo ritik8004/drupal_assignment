@@ -46,6 +46,10 @@
     border-radius: 0;
     height: 2.5rem;
 
+    &::placeholder {
+      text-transform: none;
+    }
+
     @include breakpoint($only-tablet) {
       border-top: 0;
     }

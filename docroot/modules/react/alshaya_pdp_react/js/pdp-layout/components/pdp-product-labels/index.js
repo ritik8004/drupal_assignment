@@ -13,21 +13,49 @@ const PdpProductLabels = (props) => {
     labels = productLabels[variantSelected];
   }
 
+  const bifercatedLabels = labels.reduce(function(aggregator, item) {
+    item.position = item.position || 'top-left'
+    if (!aggregator.hasOwnProperty(item.position)) {
+      aggregator[item.position] = [];
+    }
+    aggregator[item.position].push(item)
+    return aggregator;
+  }, {});
+
+  let bifercatedLabelsList = Object.keys(bifercatedLabels);
+
   return (
     <>
       <div className="product-labels">
-        <div className="labels-container" datasku={variantSelected} datamainsku={skuCode}>
-          {Object.keys(labels).map((key) => (
-            <div className={`labels ${labels[key].position}`}>
-              <img
-                src={labels[key].image.url}
-                alt={labels[key].image.alt}
-                title={labels[key].image.title}
-              />
-            </div>
-          ))}
+        <div className="labels-container" dataSku={variantSelected} dataMainSku={skuCode}>
+          {
+            bifercatedLabelsList.map((key, index) => (
+              <div className={`labels-container__inner labels-container__inner--${key}`} key={`${key}-${index}`}>
+                <PdpProductLabel bifercatedLabels={bifercatedLabels} directionKey={key}/>
+              </div>
+            ))
+          }
         </div>
       </div>
+    </>
+  );
+};
+
+const PdpProductLabel = (props) => {
+  const { bifercatedLabels, directionKey } = props;
+  return (
+    <>
+      {
+        bifercatedLabels[directionKey].map((labelItem, index) => (
+          <div className={`labels ${labelItem.position}`} key={`${directionKey}-${labelItem.position}-${index}`}>
+            <img
+              src={labelItem.image.url || ""}
+              alt={labelItem.image.alt || ""}
+              title={labelItem.image.title || ""}
+            />
+          </div>
+        ))
+      }
     </>
   );
 };
