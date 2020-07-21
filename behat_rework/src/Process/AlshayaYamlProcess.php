@@ -381,8 +381,6 @@ class AlshayaYamlProcess {
       $tags = "~@mobile";
     }
 
-
-
     $environment = explode('-', $profile);
     if (in_array($environment[2], ['prod', 'uat'])) {
       $tags = $tags . '&&' . $environment[0] . $environment[1] . $environment[2];
