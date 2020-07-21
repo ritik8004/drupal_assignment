@@ -1,5 +1,6 @@
 import React from 'react';
 import _has from 'lodash/has';
+import _isEmpty from 'lodash/isEmpty';
 import { getInputValue } from '../../../utilities/helper';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import ClientDetails from './components/client-details';
@@ -158,7 +159,7 @@ export default class CustomerDetails extends React.Component {
       companionData, bookingId,
     } = this.state;
 
-    if (!companionData) {
+    if (_isEmpty(companionData)) {
       // Move to next step.
       removeFullScreenLoader();
       handleSubmit();
