@@ -165,13 +165,11 @@ class ProductController extends ControllerBase {
    *   Type of related products to get.
    * @param string $device
    *   Device type.
-   * @param string $responsetype
-   *   Response type.
    *
    * @return \Drupal\Core\Cache\CacheableAjaxResponse
    *   Response object.
    */
-  public function getRelatedProducts(string $sku, string $type, string $device, string $responsetype) {
+  public function getRelatedProducts(string $sku, string $type, string $device) {
     $response = new CacheableAjaxResponse();
 
     // Sanity check.
@@ -227,35 +225,8 @@ class ProductController extends ControllerBase {
       if (!empty($data)) {
         // Getting the json response
         // for new PDP layout.
-        if ($responsetype == 'json') {
-          foreach ($related_skus as $related_sku => $value) {
-            $related_sku_entity = SKU::loadFromSku($related_sku);
-            $media = $this->skuImageManager->getProductMedia($related_sku_entity, MagazineV2PdpLayout::PDP_LAYOUT_MAGAZINE_V2, FALSE);
-            if (!empty($media)) {
-              $mediaItem = $this->skuImageManager->getThumbnailsFromMedia($media, FALSE);
-              $image = $mediaItem['thumbnails'][0];
-            }
-            else {
-              // Set gallery image from variant
-              // if main sku gallery is empty.
-              $product_tree = Configurable::deriveProductTree($related_sku_entity);
-              $combinations = $product_tree['combinations'];
-              $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
-              $first_child = reset($sorted_variants);
-              $child_sku = SKU::loadFromSku($first_child, $related_sku_entity->language()->getId());
-              $media = $this->skuImageManager->getProductMedia($child_sku, MagazineV2PdpLayout::PDP_LAYOUT_MAGAZINE_V2, FALSE);
-              if (!empty($media)) {
-                $mediaItem = $this->skuImageManager->getThumbnailsFromMedia($media, FALSE);
-                $image = $mediaItem['thumbnails'][0];
-              }
-            }
-            $final_price = _alshaya_acm_format_price_with_decimal((float) $related_sku_entity->get('final_price')->getString());
-            $title = $related_sku_entity->label();
-            $related_products['products'][$related_sku]['gallery'] = $image;
-            $related_products['products'][$related_sku]['finalPrice'] = $final_price;
-            $related_products['products'][$related_sku]['title'] = $title;
-            $related_products['section_title'] = $data['section_title']->__toString();
-          }
+        if ($this->request->getQueryString() == 'json') {
+          $related_products = $this->returnJsonResponse($related_skus, $data);
           return new JsonResponse($related_products);
         }
         $build['related'] = [
@@ -273,6 +244,50 @@ class ProductController extends ControllerBase {
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
 
     return $response;
+  }
+
+  /**
+   * Get related products.
+   *
+   * @param array $related_skus
+   *   Related SKUs array.
+   * @param array $data
+   *   Data array.
+   *
+   * @return array
+   *   Related products data.
+   */
+  public function returnJsonResponse(array $related_skus, array $data) {
+    foreach ($related_skus as $related_sku => $value) {
+      $related_sku_entity = SKU::loadFromSku($related_sku);
+      $media = $this->skuImageManager->getProductMedia($related_sku_entity, MagazineV2PdpLayout::PDP_LAYOUT_MAGAZINE_V2, FALSE);
+      if (!empty($media)) {
+        $mediaItem = $this->skuImageManager->getThumbnailsFromMedia($media, FALSE);
+        $image = $mediaItem['thumbnails'][0];
+      }
+      else {
+        // Set gallery image from variant
+        // if main sku gallery is empty.
+        $product_tree = Configurable::deriveProductTree($related_sku_entity);
+        $combinations = $product_tree['combinations'];
+        $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
+        $first_child = reset($sorted_variants);
+        $child_sku = SKU::loadFromSku($first_child, $related_sku_entity->language()->getId());
+        $media = $this->skuImageManager->getProductMedia($child_sku, MagazineV2PdpLayout::PDP_LAYOUT_MAGAZINE_V2, FALSE);
+        if (!empty($media)) {
+          $mediaItem = $this->skuImageManager->getThumbnailsFromMedia($media, FALSE);
+          $image = $mediaItem['thumbnails'][0];
+        }
+      }
+      $final_price = _alshaya_acm_format_price_with_decimal((float) $related_sku_entity->get('final_price')->getString());
+      $title = $related_sku_entity->label();
+      $related_products['products'][$related_sku]['gallery'] = $image;
+      $related_products['products'][$related_sku]['finalPrice'] = $final_price;
+      $related_products['products'][$related_sku]['title'] = $title;
+      $related_products['section_title'] = $data['section_title']->__toString();
+    }
+
+    return $related_products;
   }
 
 }

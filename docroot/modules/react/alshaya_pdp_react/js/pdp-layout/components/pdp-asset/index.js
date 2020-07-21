@@ -1,4 +1,5 @@
 import React from 'react';
+import LazyLoad from 'react-lazy-load';
 
 export default class PdpAsset extends React.Component {
   static imageZoomIn(event) {
@@ -43,22 +44,34 @@ export default class PdpAsset extends React.Component {
       type, imageZoomUrl, imageUrl, alt, title, viewport, index,
     } = this.props;
 
+    const animationOffset = `${index * 0.25}s`;
+
     if (type === 'image' && viewport !== 'mobile') {
       return (
         <figure
-          className="magv2-pdp-image"
+          className="magv2-pdp-image fadeInUp"
           onMouseOver={PdpAsset.imageZoomIn}
           onMouseOut={PdpAsset.imageZoomOut}
           onMouseMove={PdpAsset.imagePositionZoom}
           onClick={this.openFullScreenView}
           data-scale="2"
           data-index={index}
+          style={{ animationDelay: animationOffset }}
         >
-          <img
-            src={imageUrl}
-            alt={alt}
-            title={title}
-          />
+          <LazyLoad
+            debounce={false}
+            throttle={250}
+            offsetVertical={50}
+            height={486.8}
+            width={486.8}
+            onContentVisible={() => console.log(imageUrl)}
+          >
+            <img
+              src={imageUrl}
+              alt={alt}
+              title={title}
+            />
+          </LazyLoad>
           <div className="magazine-image-zoom-placeholder" style={{ backgroundImage: `url(${imageZoomUrl})` }} />
         </figure>
       );

@@ -4,8 +4,6 @@ namespace Drupal\alshaya_pdp_layouts\Plugin\PdpLayout;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
-use Drupal\Component\Utility\Unicode;
-use Drupal\Component\Utility\Html;
 use Drupal\alshaya_acm_product\SkuManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -148,9 +146,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           $vars['#attached']['drupalSettings']['homeDelivery'] = $home_delivery_config;
         }
       }
-
-      // Set related product data.
-      $this->getRelatedProductsByType($vars);
     }
 
     // Get share this settings.
@@ -182,6 +177,13 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
     $options = [];
     $values = [];
+
+    // Set product label data.
+    $this->getProductLabels($sku, $sku_entity, $vars);
+
+    // Set vat text data.
+    $vat_text = $this->skuManager->getVatText();
+    $vars['#attached']['drupalSettings']['vatText'] = $vat_text;
 
     // Get gallery and combination data for product variants.
     if ($sku_entity->bundle() == 'configurable') {
@@ -228,6 +230,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
               }
 
               $values[$value] = $this->getAlternativeValues($alternates, $child_sku);
+              $this->getProductLabels($child_sku_code, $child_sku, $vars);
+
             }
 
           }
@@ -290,20 +294,10 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
         $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
-        $sku_identifier = Unicode::strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
-
-        $labels = [
-          'labels' => $this->skuManager->getLabels($sku_entity, 'pdp'),
-          'sku' => $sku_identifier,
-          'mainsku' => $sku_identifier,
-          'type' => 'pdp',
-        ];
-
         $gallery = [
           'sku' => $sku,
           'thumbnails' => $thumbnails,
           'pager_flag' => $pager_flag,
-          'labels' => $labels,
           'lazy_load_placeholder' => $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder'),
         ];
 
@@ -357,14 +351,11 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   }
 
   /**
-   * Helper function to set array of type of related products.
+   * Helper function to get pdp product label.
    */
-  public function getRelatedProductsByType(&$vars) {
-    $vars['#attached']['drupalSettings']['relatedProducts'] = [
-      'crosssell',
-      'upsell',
-      'related',
-    ];
+  public function getProductLabels($sku, $sku_entity, &$vars) {
+    $product_labels = $this->skuManager->getLabelsData($sku_entity, 'pdp');
+    $vars['#attached']['drupalSettings']['productLabels'][$sku] = $product_labels;
   }
 
 }

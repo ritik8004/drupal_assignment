@@ -21,6 +21,12 @@
 
     .spc-value {
       color: $spc-checkout-payment-method-desc;
+
+      &.phone-number {
+        html[lang=ar] & {
+          direction: ltr;
+        }
+      }
     }
 
     &.spc-order-summary-address-item {

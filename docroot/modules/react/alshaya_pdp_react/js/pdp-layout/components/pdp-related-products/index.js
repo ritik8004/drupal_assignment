@@ -11,12 +11,7 @@ class PdpRelatedProducts extends React.Component {
     };
   }
 
-  render() {
-    const { type, skuItemCode } = this.props;
-    const device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
-    const url = Drupal.url(`related-products/${skuItemCode}/${type}/${device}/json`);
-    const { products, sectionTitle } = this.state;
-
+  getRelatedProducts = (products, url) => {
     // If related products is already processed.
     if (products === null) {
       axios.get(url).then((response) => {
@@ -28,6 +23,15 @@ class PdpRelatedProducts extends React.Component {
         }
       });
     }
+  }
+
+  render() {
+    const { type, skuItemCode } = this.props;
+    const device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
+    const url = Drupal.url(`related-products/${skuItemCode}/${type}/${device}?json`);
+    const { products, sectionTitle } = this.state;
+
+    this.getRelatedProducts(products, url);
 
     return (products) ? (
       <PdpCrossellUpsell products={products} sectionTitle={sectionTitle} />

@@ -1,4 +1,6 @@
 import axios from 'axios';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 /**
  * Clear cart data.
@@ -49,11 +51,19 @@ export const triggerAddToCart = (
   productInfo,
   configurableCombinations = null,
   skuCode,
+  addToCartBtn,
 ) => {
   const productData = productDataValue;
   const cartData = Drupal.alshayaSpc.getCartData();
+  const cartBtn = addToCartBtn;
   // If there any error we throw from middleware.
   if (response.data.error === true) {
+    const errorMessage = <p>{response.data.error_message}</p>;
+    ReactDOM.render(errorMessage, document.getElementById('add-to-cart-error'));
+    if (cartBtn.classList.contains('magv2-add-to-basket-loader')) {
+      cartBtn.classList.remove('magv2-add-to-basket-loader');
+      cartBtn.innerHTML = Drupal.t('Add To Bag');
+    }
     if (response.data.error_code === '400') {
       Drupal.alshayaSpc.clearCartData();
     }
@@ -121,6 +131,23 @@ export const triggerAddToCart = (
       },
     });
     form.dispatchEvent(cartNotification);
+    // Adding add to cart button
+    // success class.
+    if (cartBtn.classList.contains('magv2-add-to-basket-loader')) {
+      cartBtn.classList.remove('magv2-add-to-basket-loader');
+      cartBtn.innerHTML = Drupal.t('Item added');
+      cartBtn.classList.toggle('magv2-add-to-basket-success');
+    }
+
+    const { addToCartNotificationTime } = drupalSettings;
+
+    // Removing the success button after 2 seconds.
+    setTimeout(() => {
+      if (cartBtn.classList.contains('magv2-add-to-basket-success')) {
+        cartBtn.classList.remove('magv2-add-to-basket-success');
+        cartBtn.innerHTML = Drupal.t('Add To Bag');
+      }
+    }, addToCartNotificationTime * 1000);
   }
 };
 
@@ -161,7 +188,11 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   }
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
-  const { relatedProducts } = drupalSettings;
+  const relatedProducts = [
+    'crosssell',
+    'upsell',
+    'related',
+  ];
 
   return {
     brandLogo,
@@ -191,4 +222,87 @@ export const fetchAvailableStores = (coords) => {
   const apiUrl = Drupal.url(`stores/product/${skuItemCode}/${coords.lat}/${coords.lng}?json`);
   const GET_STORE_URL = `${baseUrl}${apiUrl}`;
   return axios.get(GET_STORE_URL);
+};
+
+/**
+ * Add to cart on click event for configurable products.
+ */
+export const addToCartConfigurable = (e, id, configurableCombinations, skuCode, productInfo) => {
+  e.preventDefault();
+  // Adding add to cart loading.
+  const addToCartBtn = document.getElementById(id);
+  addToCartBtn.classList.toggle('magv2-add-to-basket-loader');
+
+  const options = [];
+  const attributes = configurableCombinations[skuCode].configurables;
+  Object.keys(attributes).forEach((key) => {
+    const option = {
+      option_id: attributes[key].attribute_id,
+      option_value: document.querySelector(`#${key}`).querySelectorAll('.active')[0].value,
+    };
+
+    // Skipping the psudo attributes.
+    if (drupalSettings.psudo_attribute === undefined
+      || drupalSettings.psudo_attribute !== option.option_id) {
+      options.push(option);
+    }
+  });
+
+  const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
+  const getPost = getPostData(skuCode, variantSelected);
+
+  const postData = getPost[0];
+  const productData = getPost[1];
+
+  postData.options = options;
+  productData.product_name = productInfo[skuCode].variants[variantSelected].cart_title;
+  productData.image = productInfo[skuCode].variants[variantSelected].cart_image;
+  const cartEndpoint = drupalSettings.cart_update_endpoint;
+
+  updateCart(cartEndpoint, postData).then(
+    (response) => {
+      triggerAddToCart(
+        response,
+        productData,
+        productInfo,
+        configurableCombinations,
+        skuCode,
+        addToCartBtn,
+      );
+    },
+  )
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+/**
+ * Add to cart on click event for simple products.
+ */
+export const addToCartSimple = (e, id, skuCode, productInfo) => {
+  e.preventDefault();
+  // Adding add to cart loading.
+  const addToCartBtn = document.getElementById(id);
+  addToCartBtn.classList.toggle('magv2-add-to-basket-loader');
+
+  const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
+
+  const getPost = getPostData(skuCode, variantSelected);
+
+  const postData = getPost[0];
+  const productData = getPost[1];
+
+  productData.productName = productInfo[skuCode].cart_title;
+  productData.image = productInfo[skuCode].cart_image;
+
+  const cartEndpoint = drupalSettings.cart_update_endpoint;
+
+  updateCart(cartEndpoint, postData).then(
+    (response) => {
+      triggerAddToCart(response, productData, productInfo, skuCode, addToCartBtn);
+    },
+  )
+    .catch((error) => {
+      console.log(error.response);
+    });
 };

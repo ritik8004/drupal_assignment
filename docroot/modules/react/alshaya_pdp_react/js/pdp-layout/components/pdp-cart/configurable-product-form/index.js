@@ -1,10 +1,6 @@
 import React, { createRef } from 'react';
 import CartSelectOption from '../cart-select-option';
-import {
-  updateCart,
-  getPostData,
-  triggerAddToCart,
-} from '../../../../utilities/pdp_layout';
+import { addToCartConfigurable } from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
 import SelectSizeButton from '../select-size-button';
@@ -25,21 +21,25 @@ class ConfigurableProductForm extends React.Component {
   componentDidMount() {
     this.handleLoad();
 
-    window.addEventListener('load', () => {
-      this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
+    // Condition to check if add to cart
+    // button is available.
+    if (document.getElementById('add-to-cart-main')) {
+      window.addEventListener('load', () => {
+        this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
 
-      this.addToBagButtonClass(this.button.current.offsetTop);
-    });
+        this.addToBagButtonClass(this.button.current.offsetTop);
+      });
 
-    window.addEventListener('scroll', () => {
-      const buttonOffset = this.button.current.getAttribute('data-top-offset');
+      window.addEventListener('scroll', () => {
+        const buttonOffset = this.button.current.getAttribute('data-top-offset');
 
-      if (buttonOffset === null) {
-        return;
-      }
+        if (buttonOffset === null) {
+          return;
+        }
 
-      this.addToBagButtonClass(buttonOffset);
-    });
+        this.addToBagButtonClass(buttonOffset);
+      });
+    }
 
     this.setState({
       attributeAvailable: true,
@@ -64,45 +64,6 @@ class ConfigurableProductForm extends React.Component {
     const code = Object.keys(combinations)[0];
     const codeValue = Object.keys(combinations[code])[0];
     this.refreshConfigurables(code, codeValue, null);
-  }
-
-  addToCart = (e) => {
-    e.preventDefault();
-    const { configurableCombinations, skuCode, productInfo } = this.props;
-    const options = [];
-    const attributes = configurableCombinations[skuCode].configurables;
-    Object.keys(attributes).forEach((key) => {
-      const option = {
-        option_id: attributes[key].attribute_id,
-        option_value: document.getElementById(key).value,
-      };
-
-      // Skipping the psudo attributes.
-      if (drupalSettings.psudo_attribute === undefined
-        || drupalSettings.psudo_attribute !== option.option_id) {
-        options.push(option);
-      }
-    });
-
-    const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
-    const getPost = getPostData(skuCode, variantSelected);
-
-    const postData = getPost[0];
-    const productData = getPost[1];
-
-    postData.options = options;
-    productData.product_name = productInfo[skuCode].variants[variantSelected].cart_title;
-    productData.image = productInfo[skuCode].variants[variantSelected].cart_image;
-    const cartEndpoint = drupalSettings.cart_update_endpoint;
-
-    updateCart(cartEndpoint, postData).then(
-      (response) => {
-        triggerAddToCart(response, productData, productInfo, configurableCombinations, skuCode);
-      },
-    )
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   // To get available attribute value based on user selection.
@@ -193,8 +154,9 @@ class ConfigurableProductForm extends React.Component {
 
     return (
       <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
+        <div id="add-to-cart-error" className="error" />
         {Object.keys(configurables).map((key) => (
-          <div key={key}>
+          <div className={`cart-form-attribute ${key}`} key={key}>
             <CartSelectOption
               configurables={configurables[key]}
               byAttribute={byAttribute}
@@ -234,15 +196,18 @@ class ConfigurableProductForm extends React.Component {
           />
         </div>
         {(checkoutFeatureStatus === 'enabled') ? (
-          <div className="magv2-add-to-basket-container" ref={this.button}>
-            <button
-              className="magv2-button"
-              type="submit"
-              onClick={this.addToCart}
-            >
-              {Drupal.t('Add To Bag')}
-            </button>
-          </div>
+          <>
+            <div className="magv2-add-to-basket-container" ref={this.button}>
+              <button
+                className="magv2-button"
+                id="add-to-cart-main"
+                type="submit"
+                onClick={(e) => addToCartConfigurable(e, 'add-to-cart-main', configurableCombinations, skuCode, productInfo)}
+              >
+                {Drupal.t('Add To Bag')}
+              </button>
+            </div>
+          </>
         ) : cartUnavailability }
       </form>
     );

@@ -71,7 +71,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
     }
 
     return (
-      <div className="magv2-pdp-crossell-upsell-container">
+      <div className="magv2-pdp-crossell-upsell-container fadeInUp" style={{ animationDelay: '1.6s' }}>
         <div className="magv2-pdp-crossell-upsell-heading">
           <div className="magv2-pdp-crossell-upsell-title">
             <span className="magv2-pdp-crossell-upsell-label">{sectionTitle}</span>

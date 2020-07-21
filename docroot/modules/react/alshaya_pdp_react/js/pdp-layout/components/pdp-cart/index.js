@@ -2,14 +2,12 @@ import React from 'react';
 import ConfigurableProductForm from './configurable-product-form';
 import SimpleProductForm from './simple-product-form';
 
-const PdpCart = (props) => {
-  const {
-    configurableCombinations, skuCode, productInfo, pdpRefresh,
-  } = props;
-
+const PdpCart = ({
+  configurableCombinations, skuCode, productInfo, pdpRefresh, childRef,
+}) => {
   if (configurableCombinations) {
     return (
-      <div className="pdp-cart-form">
+      <div className="pdp-cart-form fadeInUp notInMobile" style={{ animationDelay: '0.6s' }} ref={childRef}>
         <ConfigurableProductForm
           configurableCombinations={configurableCombinations}
           skuCode={skuCode}
@@ -20,7 +18,7 @@ const PdpCart = (props) => {
     );
   }
   return (
-    <div className="pdp-cart-form">
+    <div className="pdp-cart-form fadeInUp notInMobile" style={{ animationDelay: '0.6s' }}>
       <SimpleProductForm
         skuCode={skuCode}
         productInfo={productInfo}
@@ -28,4 +26,5 @@ const PdpCart = (props) => {
     </div>
   );
 };
+
 export default PdpCart;

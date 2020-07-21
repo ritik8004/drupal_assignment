@@ -69,7 +69,7 @@
 }
 
 /*
-	SITE HEADER - MOBILE VIEW
+	SITE HEADER
 */
 header.c-header {
   #block-alshaya-white-label-search,
@@ -222,6 +222,12 @@ header.c-header {
     .quantity {
       @include breakpoint($only-mobile) {
         bottom: -0.125rem;
+      }
+    }
+
+    .cart-link-total {
+      .price-wrapper .price {
+        color: $header_cart_link_total;
       }
     }
   }

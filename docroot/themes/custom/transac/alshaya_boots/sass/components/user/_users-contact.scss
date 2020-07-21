@@ -13,4 +13,22 @@
       }
     }
   }
+
+  .user-form {
+    .field--type-mobile-number {
+      .form-item.form-type-tel {
+        margin-top: 0;
+      }
+    }
+  }
+
+  &.user-page {
+    .user-form {
+      .field--type-mobile-number {
+        @include breakpoint($desktop) {
+          top: 0;
+        }
+      }
+    }
+  }
 }
