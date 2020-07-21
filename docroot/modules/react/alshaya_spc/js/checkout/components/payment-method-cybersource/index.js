@@ -213,7 +213,7 @@ class PaymentMethodCybersource extends React.Component {
       const { number, expiry, cvv } = this.state;
 
       response.data.data.card_number = number;
-      response.data.data.card_cvn = parseInt(cvv.toString().trim(), 10);
+      response.data.data.card_cvn = cvv.toString().trim();
 
       const expiryInfo = expiry.split('/');
       const date = new Date();
