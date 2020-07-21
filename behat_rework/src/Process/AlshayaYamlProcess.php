@@ -371,15 +371,23 @@ class AlshayaYamlProcess {
         'screenshot_directory' => "%paths.base%/features/$profile-$viewport/screenshots",
       ],
     ];
-
+    //Running tags on test executions
+    $tags = '';
     if ($viewport == 'mobile') {
       $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = array("--window-size=375,667");
-      $yaml['suites']['default']['filters']['tags'] = "~@desktop";
+      $tags = "~@desktop";
     }
     else {
       $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = array("--window-size=1440,960");
-      $yaml['suites']['default']['filters']['tags'] = "~@mobile";
+      $tags = "~@mobile";
     }
+
+    //Running specific tags on uat and prod environment on test executions
+    $environment = explode('-', $profile);
+    if (in_array($environment[2], ['prod', 'uat'])) {
+      $tags = $tags . '&&' . $environment[0] . $environment[1] . $environment[2];
+    }
+    $yaml['suites']['default']['filters']['tags'] = $tags;
 
     // Set the folder for report.
     if (!empty($profile)) {
