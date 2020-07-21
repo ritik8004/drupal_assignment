@@ -70,6 +70,8 @@
       button[type="submit"] {
         @extend %button-wide;
 
+        text-transform: none;
+
         @include breakpoint ($desktop) {
           width: 69%;
           margin-#{$left}: 0.5rem;
