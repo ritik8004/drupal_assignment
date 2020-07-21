@@ -1,4 +1,4 @@
-@javascript
+@javascript @smoke @mcsaprod @mcaeprod @mckwprod @bbwaeprod @bbwsaprod @bbwkwprod
 Feature: Test the My Account functionality
 
   Background:

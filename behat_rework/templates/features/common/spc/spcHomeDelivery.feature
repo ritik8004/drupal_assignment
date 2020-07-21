@@ -1,4 +1,4 @@
-@javascript
+@javascript @guest @codPayment @homeDelivery
 Feature: SPC Checkout Home Delivery COD
 
   Background:
