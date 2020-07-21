@@ -69,7 +69,7 @@
     display: flex;
     justify-content: space-between;
 
-    @include breakpoint($upto-tablet-landscape) {
+    @include breakpoint($upto-tablet) {
       position: absolute;
       top: 100%;
       padding-top: 2.1875rem;
@@ -82,7 +82,7 @@
 
       &.back,
       &.select-store {
-        @include breakpoint($upto-tablet-landscape) {
+        @include breakpoint($upto-tablet) {
           display: block;
         }
       }

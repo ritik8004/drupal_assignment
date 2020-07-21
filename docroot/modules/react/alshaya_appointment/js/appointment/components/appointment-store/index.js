@@ -417,6 +417,7 @@ export default class AppointmentStore extends React.Component {
     if (window.innerWidth < 768) {
       this.toggleFullScreen(false);
     }
+
     // Find the store object with the given store-code from the store list.
     const store = _find(storeList, { locationExternalId: storeCode });
     dispatchCustomEvent('storeSelected', { store });
@@ -532,7 +533,7 @@ export default class AppointmentStore extends React.Component {
                       storeList={storeList}
                       selected={selectedStoreItem}
                       onStoreRadio={this.hightlightMapMarker}
-                      onStoreFinalize={this.finalizeStore}
+                      onStoreFinalize={this.finalizeCurrentStore}
                       onStoreClose={this.onMapStoreClose}
                     />
                   </div>
@@ -548,7 +549,7 @@ export default class AppointmentStore extends React.Component {
                   storeList={storeList}
                   selected={selectedStoreItem}
                   onStoreRadio={this.hightlightMapMarker}
-                  onStoreFinalize={this.finalizeStore}
+                  onStoreFinalize={this.finalizeCurrentStore}
                 />
               </div>
             </div>
