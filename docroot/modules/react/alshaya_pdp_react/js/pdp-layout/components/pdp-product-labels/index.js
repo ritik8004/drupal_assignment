@@ -24,21 +24,24 @@ const PdpProductLabels = (props) => {
 
   let bifercatedLabelsList = Object.keys(bifercatedLabels);
 
-  return (
-    <>
-      <div className="product-labels">
-        <div className="labels-container" dataSku={variantSelected} dataMainSku={skuCode}>
-          {
-            bifercatedLabelsList.map((key, index) => (
-              <div className={`labels-container__inner labels-container__inner--${key}`} key={`${key}-${index}`}>
-                <PdpProductLabel bifercatedLabels={bifercatedLabels} directionKey={key}/>
-              </div>
-            ))
-          }
+  if (bifercatedLabelsList && Array.isArray(bifercatedLabelsList) && bifercatedLabelsList.length) {
+    return (
+      <>
+        <div className="product-labels">
+          <div className="labels-container" dataSku={variantSelected} dataMainSku={skuCode}>
+            {
+              bifercatedLabelsList.map((key, index) => (
+                <div className={`labels-container__inner labels-container__inner--${key}`} key={`${key}-${index}`}>
+                  <PdpProductLabel bifercatedLabels={bifercatedLabels} directionKey={key}/>
+                </div>
+              ))
+            }
+          </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  }
+  return null;
 };
 
 const PdpProductLabel = (props) => {
