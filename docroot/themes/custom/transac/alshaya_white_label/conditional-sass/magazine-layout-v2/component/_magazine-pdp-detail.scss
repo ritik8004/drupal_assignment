@@ -93,6 +93,21 @@
               }
             }
           }
+
+          .magv2-meta-data-wrapper {
+            display: flex;
+            align-items: baseline;
+
+            .magv2-pdp-vat-text {
+              font-size: 0.75rem;
+              color: $magv2-vat-text;
+              padding-#{$left}: 0.3125rem;
+
+              @include breakpoint($tablet) {
+                font-size: 0.875rem;
+              }
+            }
+          }
         }
       }
     }
