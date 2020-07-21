@@ -123,6 +123,8 @@ export default class CustomerDetails extends React.Component {
         appointmentCompanion: { label: numOfCompanions, value: numOfCompanions },
       }));
     }
+
+    smoothScrollTo('.companion-details-item:last-child');
   };
 
   handleRemoveCompanion = (e) => {
