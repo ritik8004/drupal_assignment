@@ -1200,6 +1200,9 @@ class Cart {
     // Set order in session for later use.
     $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
 
+    // Set cart id of the order for later use.
+    $this->session->updateDataInSession(Orders::ORDER_CART_ID, $cart['cart']['id']);
+
     // Post order id and cart data to Drupal.
     $data = [
       'order_id' => (int) $order_id,
@@ -1358,6 +1361,7 @@ class Cart {
     $this->cache->delete('payment_methods_home_delivery');
     $this->cache->delete('payment_methods_click_and_collect');
     $this->cache->delete('payment_method');
+    $this->cache->delete('cached_cart');
   }
 
   /**
