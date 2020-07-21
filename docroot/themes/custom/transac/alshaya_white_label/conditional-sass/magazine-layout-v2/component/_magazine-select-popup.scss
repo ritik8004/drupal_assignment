@@ -101,10 +101,10 @@
           margin-top: 5.625rem;
           border-radius: 0.5rem;
           background: $magv2-pdp-bg;
-        }
 
-        html[lang='ar'] & {
-          margin-top: 5.625rem;
+          html[lang='ar'] & {
+            margin-top: 5.625rem;
+          }
         }
 
         .group-anchor-wrapper,
