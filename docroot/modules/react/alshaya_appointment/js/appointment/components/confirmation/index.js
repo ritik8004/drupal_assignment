@@ -34,6 +34,8 @@ export default class Confirmation extends React.Component {
       selectedSlot,
     } = this.state;
 
+    const { id } = drupalSettings.alshaya_appointment.user_details;
+
     const date = moment(selectedSlot.appointmentSlotTime).format('dddd, Do MMMM YYYY');
     const time = moment(selectedSlot.appointmentSlotTime).format('LT');
     const location = `${selectedStoreItem.name}, ${addressCleanup(selectedStoreItem.address)}`;
@@ -84,13 +86,16 @@ export default class Confirmation extends React.Component {
           </div>
         </div>
         <div className="confirmation-footer fadeInUp">
-          <button
-            className="view-my-appointments-button"
-            type="button"
-            onClick={() => this.handleClick('user')}
-          >
-            {Drupal.t('View My Appointments')}
-          </button>
+          { id !== 0
+            && (
+            <button
+              className="view-my-appointments-button"
+              type="button"
+              onClick={() => this.handleClick(`user/${id}/appointments`)}
+            >
+              {Drupal.t('View My Appointments')}
+            </button>
+            )}
           <button
             className="continue-shopping"
             type="button"
