@@ -227,6 +227,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data = $this->getSkuData($skuEntity, $link);
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
+    $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_config(), $data['flags']], TRUE);
     $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
     $response = new ResourceResponse($data);
@@ -284,7 +285,9 @@ class ProductExcludeLinkedResource extends ResourceBase {
       'home_delivery' => [],
       'click_and_collect' => [],
     ];
+    $data['flags'] = [];
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
+    $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_status($sku), $data['flags']], TRUE);
 
     $media_contexts = [
       'pdp' => 'detail',

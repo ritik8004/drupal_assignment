@@ -349,6 +349,10 @@
         margin: 0 0.5rem;
         text-transform: none;
 
+        @include breakpoint($only-mobile) {
+          line-height: 1;
+        }
+
         @extend %btn;
 
         &.is-active {
