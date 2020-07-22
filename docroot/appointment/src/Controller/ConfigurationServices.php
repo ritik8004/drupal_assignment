@@ -102,12 +102,7 @@ class ConfigurationServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 
@@ -153,12 +148,7 @@ class ConfigurationServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 
@@ -238,12 +228,7 @@ class ConfigurationServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 
@@ -275,12 +260,7 @@ class ConfigurationServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      throw $e;
     }
   }
 
@@ -312,12 +292,7 @@ class ConfigurationServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 

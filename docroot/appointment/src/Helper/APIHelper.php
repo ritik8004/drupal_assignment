@@ -166,4 +166,16 @@ class APIHelper {
 
   }
 
+  /**
+   * Provides error message array.
+   */
+  public function getErrorMessage() {
+    $error = [
+      'error' => TRUE,
+      'error_message' => 'Something went wrong. Please try again.',
+    ];
+
+    return $error;
+  }
+
 }

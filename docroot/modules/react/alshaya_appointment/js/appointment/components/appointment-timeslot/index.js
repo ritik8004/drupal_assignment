@@ -6,10 +6,7 @@ import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
 import { getDateFormat, getDateFormattext } from '../../../utilities/helper';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
-import {
-  removeFullScreenLoader,
-  showFullScreenLoader,
-} from '../../../utilities/appointment-util';
+import { removeFullScreenLoader } from '../../../utilities/appointment-util';
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
@@ -36,7 +33,6 @@ export default class AppointmentTimeSlot extends React.Component {
     const { date } = this.state;
     const d = new Date(date);
     const selectedDate = moment(d).format(getDateFormat());
-    showFullScreenLoader();
     const apiUrl = `/get/timeslots?selectedDate=${selectedDate}&${this.getParamsForTimeSlotApi()}`;
     this.fetchTimeSlots(apiUrl);
   }

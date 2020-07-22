@@ -83,12 +83,7 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 
@@ -173,12 +168,7 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 
@@ -234,12 +224,7 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 
@@ -304,12 +289,7 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 
@@ -389,12 +369,7 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 
@@ -445,12 +420,7 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 
@@ -505,12 +475,7 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 
@@ -563,12 +528,7 @@ class AppointmentServices {
         '@user' => $user,
       ]);
 
-      $error = [
-        'error' => TRUE,
-        'error_message' => 'Something went wrong. Please try again.',
-      ];
-
-      return new JsonResponse($error, 400);
+      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
     }
   }
 

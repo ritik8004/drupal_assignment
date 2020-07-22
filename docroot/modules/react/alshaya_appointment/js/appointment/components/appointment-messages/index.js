@@ -6,14 +6,13 @@ export default class AppointmentMessages extends React.Component {
     this.state = {
       message: '',
     };
-    this.showMessage = this.showMessage.bind(this);
   }
 
   componentDidMount() {
     document.addEventListener('showMessage', this.showMessage);
   }
 
-  showMessage(event) {
+  showMessage = (event) => {
     const { response } = event.detail.data;
     if (response !== undefined) {
       const { data } = response;
@@ -28,7 +27,7 @@ export default class AppointmentMessages extends React.Component {
         message: '',
       });
     }
-  }
+  };
 
   render() {
     const { message } = this.state;
