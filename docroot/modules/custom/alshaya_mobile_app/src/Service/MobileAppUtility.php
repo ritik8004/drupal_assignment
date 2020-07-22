@@ -616,7 +616,7 @@ class MobileAppUtility {
         // Get the path of the target term.
         $internal_path = $this->aliasManager->getPathByAlias(
           rtrim(str_replace("/{$this->currentLanguage}", '', $redirected_path), '/'),
-          $this->currentLanguage,
+          $this->currentLanguage
         );
         // Get the taxonomy term ID of the target term.
         $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();;
