@@ -483,3 +483,13 @@ export function validateCvv(cvv) {
   const cvvLength = cvv.toString().length;
   return [3, 4].includes(cvvLength) && !Number.isNaN(cvv);
 }
+
+/**
+ * Validate Order information.
+ */
+export const validateOrderData = async () => {
+  const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
+
+  return await axios
+    .get(`${middlewareUrl}/cart/validate-order-info`);
+};

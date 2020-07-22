@@ -820,4 +820,26 @@ class CartController {
     }
   }
 
+  /**
+   * Verifies order information.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function validateOrderInfo() {
+    $cart = $this->cart->getCart();
+
+    $valid = TRUE;
+
+    if (empty($cart)) {
+      return new JsonResponse(['valid' => FALSE]);
+    }
+
+    if (empty($cart['shipping'])) {
+      $valid = FALSE;
+    }
+
+    return new JsonResponse(['valid' => $valid]);
+  }
+
 }
