@@ -610,17 +610,13 @@ class MobileAppUtility {
 
       // Check if any redirection is set up for the term path.
       $redirected_path = $this->getRedirectUrl($path);
-      // Get the langcode from the redirect path if it exists.
-      $redirect_lang = $this->getAliasLang($redirected_path);
-      // Redirect path usually contains langcode, so that langcode is not
-      // duplicated in the if statement ahead.
-      $redirect_lang = $redirect_lang ? NULL : "/{$this->currentLanguage}/";
 
-      if ($redirect_lang . $redirected_path !== $path) {
+      // Process path and deeplink again if a redirection has been set up.
+      if (strpos($path, $redirected_path) === FALSE) {
         // Get the path of the target term.
         $internal_path = $this->aliasManager->getPathByAlias(
-          rtrim(str_replace($redirect_lang . '/', '', $redirected_path), '/'),
-          $redirect_lang,
+          rtrim(str_replace("/{$this->currentLanguage}", '', $redirected_path), '/'),
+          $this->currentLanguage,
         );
         // Get the taxonomy term ID of the target term.
         $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();;
