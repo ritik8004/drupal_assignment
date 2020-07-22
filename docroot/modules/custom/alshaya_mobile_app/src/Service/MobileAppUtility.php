@@ -605,12 +605,40 @@ class MobileAppUtility {
       $this->termUrls[] = $term_url;
       $this->termTags[] = "term:{$term->tid}";
 
+      $path = $term_url->getGeneratedUrl();
+      $deeplink = $this->getDeepLink($term);
+
+      // Check if any redirection is set up for the term path.
+      $redirected_path = $this->getRedirectUrl($path);
+
+      // Process path and deeplink again if a redirection has been set up.
+      if (strpos($path, $redirected_path) === FALSE) {
+        // Get the path of the target term.
+        $internal_path = $this->aliasManager->getPathByAlias(
+          rtrim(str_replace("/{$this->currentLanguage}", '', $redirected_path), '/'),
+          $this->currentLanguage,
+        );
+        // Get the taxonomy term ID of the target term.
+        $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();;
+        if (!empty($params) && !empty($params['taxonomy_term'])) {
+          $redirected_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
+          // Get path and deeplink of target term.
+          if (
+            $redirected_term instanceof TermInterface
+            && $redirected_term->bundle() == 'acq_product_category'
+          ) {
+            $path = $redirected_path;
+            $deeplink = $this->getDeepLink($redirected_term);
+          }
+        }
+      }
+
       $record = [
         'id' => (int) $term->tid,
         'name' => $term->name,
         'description'  => !empty($term->description__value) ? $term->description__value : '',
-        'path' => $term_url->getGeneratedUrl(),
-        'deeplink' => $this->getDeepLink($term),
+        'path' => $path,
+        'deeplink' => $deeplink,
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
