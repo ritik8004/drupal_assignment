@@ -110,6 +110,18 @@
         }
       }
 
+      .magv2-compact-detail-wrapper {
+        .magv2-pdp-price-container{
+          &.has-special-price {
+            .magv2-pdp-price-wrapper {
+              @include breakpoint($only-mobile) {
+                display: block;
+              }
+            }
+          }
+        }
+      }
+
       .magv2-pdp-title-wrapper {
         @include breakpoint($tablet) {
           display: flex;
