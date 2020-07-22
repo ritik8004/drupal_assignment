@@ -16,12 +16,12 @@ const SpecialPrice = ({ price, finalPrice }) => {
   let priceVal = price;
   let finalPriceVal = finalPrice;
   if (priceVal !== undefined && priceVal !== null) {
-    // Remove and command and convert to float.
+    // Remove the comma and convert to float.
     priceVal = parseFloat(priceVal.toString().replace(',', ''));
   }
 
   if (finalPriceVal !== undefined && finalPriceVal !== null) {
-    // Remove and command and convert to float.
+    // Remove the comma and convert to float.
     finalPriceVal = parseFloat(finalPriceVal.toString().replace(',', ''));
   }
 
