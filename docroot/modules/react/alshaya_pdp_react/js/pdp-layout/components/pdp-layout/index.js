@@ -38,8 +38,6 @@ const PdpLayout = () => {
     relatedProducts,
   } = productValues;
 
-  console.log(relatedProducts);
-
   const emptyRes = (
     <div>Product data not available</div>
   );
