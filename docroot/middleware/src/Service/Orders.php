@@ -19,6 +19,11 @@ class Orders {
   const SESSION_STORAGE_KEY = 'last_order';
 
   /**
+   * The cart id of the order placed.
+   */
+  const ORDER_CART_ID = 'order_cart_id';
+
+  /**
    * Magento service.
    *
    * @var \App\Service\Magento\MagentoInfo
