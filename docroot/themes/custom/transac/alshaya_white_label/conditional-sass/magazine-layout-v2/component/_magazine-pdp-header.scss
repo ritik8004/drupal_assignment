@@ -110,6 +110,18 @@
         }
       }
 
+      .magv2-compact-detail-wrapper {
+        .magv2-pdp-price-container {
+          &.has-special-price {
+            .magv2-pdp-price-wrapper {
+              @include breakpoint($only-mobile) {
+                display: block;
+              }
+            }
+          }
+        }
+      }
+
       .magv2-pdp-title-wrapper {
         @include breakpoint($tablet) {
           display: flex;
@@ -119,7 +131,6 @@
           .magv2-pdp-title {
             text-align: inherit;
             text-overflow: inherit;
-            overflow: auto;
             white-space: inherit;
             font-size: 1rem;
             margin-#{$right}: 3.75rem;

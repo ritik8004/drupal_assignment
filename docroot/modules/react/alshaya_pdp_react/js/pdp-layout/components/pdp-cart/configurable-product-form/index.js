@@ -152,6 +152,8 @@ class ConfigurableProductForm extends React.Component {
       <CartUnavailability />
     );
 
+    const stockQty = productInfo[skuCode].variants[variantSelected].stock.qty;
+
     return (
       <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
         <div id="add-to-cart-error" className="error" />
@@ -193,6 +195,7 @@ class ConfigurableProductForm extends React.Component {
             variantSelected={variantSelected}
             productInfo={productInfo}
             skuCode={skuCode}
+            stockQty={stockQty}
           />
         </div>
         {(checkoutFeatureStatus === 'enabled') ? (

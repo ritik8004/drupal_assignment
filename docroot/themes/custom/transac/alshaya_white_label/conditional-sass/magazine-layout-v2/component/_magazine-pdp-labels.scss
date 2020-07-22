@@ -9,6 +9,11 @@
     z-index: 1;
     width: 100%;
 
+    @include breakpoint($only-mobile) {
+      // .magv2-content has a padding of 2.5rem in mobile
+      width: calc(100% - 2.5rem);
+    }
+
     .labels-container {
       display: flex;
       flex-wrap: wrap;
@@ -33,6 +38,10 @@
         html[lang=ar] & {
           padding: 0.9375rem 0.9375rem 0 1.25rem;
         }
+
+        @include breakpoint($only-mobile) {
+          padding-#{$left}: 0;
+        }
       }
 
       &__inner--top-right {
@@ -43,6 +52,10 @@
 
         html[lang=ar] & {
           padding: 0.9375rem 1.25rem 0 0.9375rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          padding-#{$right}: 0;
         }
       }
 
@@ -55,6 +68,10 @@
         html[lang=ar] & {
           padding: 0 1.25rem 0.9375rem 0.9375rem;
         }
+
+        @include breakpoint($only-mobile) {
+          padding-#{$right}: 0;
+        }
       }
 
       &__inner--bottom-left {
@@ -63,6 +80,10 @@
 
         html[lang=ar] & {
           padding: 0 0.9375rem 0.9375rem 1.25rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          padding-#{$left}: 0;
         }
       }
     }

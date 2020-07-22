@@ -5,40 +5,14 @@ class QuantityDropdown extends React.Component {
     super(props);
     this.state = {
       qty: 1,
-      stockQty: 0,
-      variant: null,
     };
   }
 
-  componentDidMount() {
-    const { variantSelected, productInfo, skuCode } = this.props;
-    this.setState({
-      stockQty: typeof productInfo[skuCode].variants !== 'undefined' ? productInfo[skuCode].variants[variantSelected].stock.qty : productInfo[skuCode].stockQty,
-      variant: variantSelected,
-    });
-  }
-
   componentDidUpdate(prevProps) {
-    const { variantSelected, productInfo, skuCode } = this.props;
-    const { variant } = this.state;
-
-    if (productInfo[skuCode].variants[variantSelected].id
-      !== prevProps.productInfo[prevProps.skuCode].variants[prevProps.variantSelected].id) {
+    const { stockQty } = this.props;
+    if (prevProps.stockQty !== stockQty) {
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        stockQty: typeof productInfo[skuCode].variants !== 'undefined'
-          ? productInfo[skuCode].variants[variantSelected].stock.qty
-          : productInfo[skuCode].stockQty,
-        variant: variantSelected,
-      });
-    }
-
-    // Set qty to 1 on variant change.
-    if (variant !== variantSelected) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        qty: 1,
-      });
+      this.setState({ qty: 1 });
     }
   }
 
@@ -53,7 +27,8 @@ class QuantityDropdown extends React.Component {
   };
 
   render() {
-    const { qty, stockQty } = this.state;
+    const { qty } = this.state;
+    const { stockQty } = this.props;
     const { cartMaxQty } = drupalSettings;
     const limit = (stockQty < cartMaxQty) ? stockQty : parseInt(cartMaxQty, 10);
     const isEnabledDecreaseBtn = ((qty === limit) && (qty === 1)) || (qty === 1);

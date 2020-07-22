@@ -225,8 +225,8 @@ class ProductController extends ControllerBase {
       if (!empty($data)) {
         // Getting the json response
         // for new PDP layout.
-        if ($this->request->getQueryString() == 'json') {
-          $related_products = $this->returnJsonResponse($related_skus, $data);
+        if ($this->request->query->get('type') == 'json') {
+          $related_products = $this->getRelatedProductsJson($related_skus, $data);
           return new JsonResponse($related_products);
         }
         $build['related'] = [
@@ -257,7 +257,7 @@ class ProductController extends ControllerBase {
    * @return array
    *   Related products data.
    */
-  public function returnJsonResponse(array $related_skus, array $data) {
+  public function getRelatedProductsJson(array $related_skus, array $data) {
     foreach ($related_skus as $related_sku => $value) {
       $related_sku_entity = SKU::loadFromSku($related_sku);
       $media = $this->skuImageManager->getProductMedia($related_sku_entity, MagazineV2PdpLayout::PDP_LAYOUT_MAGAZINE_V2, FALSE);

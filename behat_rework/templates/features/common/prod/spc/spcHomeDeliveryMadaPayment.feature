@@ -1,10 +1,12 @@
-@javascript
+@javascript @guest @madaPayment @homeDelivery @mcsaprod @mckwprod @bbwsaprod @bbwkwprod
 Feature: SPC Checkout Home Delivery MADA Card Payment
 
   Background:
     Given I am on "{spc_basket_page}"
     And I wait 10 seconds
     And I wait for the page to load
+    Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
 
   @cc @hd @checkout_com @visa @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (VISA Card)
@@ -49,17 +51,21 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_visa_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @hd @language @desktop @checkout_com @visa @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (VISA Card)
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -92,7 +98,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | postal_code                   | {postal_code} |
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_mada_anon_username}    |
+      | email    | {spc_anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
@@ -101,12 +107,13 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_visa_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
-
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @hd @language @mobile @checkout_com @visa @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (VISA Card)
@@ -145,7 +152,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | postal_code                   | {postal_code} |
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_mada_anon_username}    |
+      | email    | {spc_anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
@@ -154,12 +161,13 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_visa_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
-
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @hd @checkout_com @mastercard @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
@@ -204,18 +212,21 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_master_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
-
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @hd @language @desktop @checkout_com @mastercard @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (Mastercard Card)
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
+    Then I scroll to the ".region__highlighted " element
+    And I wait 10 seconds
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -248,7 +259,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | postal_code                   | {postal_code} |
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_mada_anon_username}    |
+      | email    | {spc_anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
@@ -257,11 +268,13 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_master_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @hd @language @mobile @checkout_com @mastercard @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (Mastercard Card)
@@ -300,7 +313,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | postal_code                   | {postal_code} |
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_mada_anon_username}    |
+      | email    | {spc_anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
@@ -309,8 +322,10 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_master_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist

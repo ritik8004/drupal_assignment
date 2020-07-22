@@ -56,7 +56,6 @@ export default class PdpCrossellUpsell extends React.PureComponent {
 
   render() {
     const { currentPage, totalPagers, limits } = this.state;
-
     const {
       sectionTitle,
       products,

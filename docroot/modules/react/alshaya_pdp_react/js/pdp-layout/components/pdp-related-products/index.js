@@ -28,7 +28,7 @@ class PdpRelatedProducts extends React.Component {
   render() {
     const { type, skuItemCode } = this.props;
     const device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
-    const url = Drupal.url(`related-products/${skuItemCode}/${type}/${device}?json`);
+    const url = Drupal.url(`related-products/${skuItemCode}/${type}/${device}?type=json`);
     const { products, sectionTitle } = this.state;
 
     this.getRelatedProducts(products, url);

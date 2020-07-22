@@ -38,13 +38,15 @@ const PdpInfo = (props) => {
               </div>
             )
             : null}
-          <div className="magv2-pdp-price-wrapper">
-            <span className="magv2-pdp-price-currency suffix">{drupalSettings.alshaya_spc.currency_config.currency_code}</span>
-            <span className="magv2-pdp-price-amount">{pdpProductPrice}</span>
+          <div className="magv2-meta-data-wrapper">
+            <div className="magv2-pdp-price-wrapper">
+              <span className="magv2-pdp-price-currency suffix">{drupalSettings.alshaya_spc.currency_config.currency_code}</span>
+              <span className="magv2-pdp-price-amount">{pdpProductPrice}</span>
+            </div>
+            {(!shortDetail && drupalSettings.vatText)
+              ? <div className="magv2-pdp-vat-text">{drupalSettings.vatText}</div>
+              : null}
           </div>
-          {(!shortDetail && drupalSettings.vatText)
-            ? <div className="magv2-pdp-vat-text">{drupalSettings.vatText}</div>
-            : null}
         </div>
       </div>
     </div>
