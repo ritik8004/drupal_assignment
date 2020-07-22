@@ -10,6 +10,7 @@ proxy:
 
 services:
   appserver:
+    app_mount: delegated
     type: php:7.3
     ssl: true
     overrides:
