@@ -1361,7 +1361,6 @@ class Cart {
     $this->cache->delete('payment_methods_home_delivery');
     $this->cache->delete('payment_methods_click_and_collect');
     $this->cache->delete('payment_method');
-    $this->cache->delete('cached_cart');
   }
 
   /**
