@@ -7,12 +7,12 @@ const PriceElement = ({ amount: priceAmount }) => {
   }
 
   const priceParts = { ...getAmountWithCurrency(priceAmount, false) };
-  priceParts.amount = (<span key="amount" className="price-amount">{priceParts.amount}</span>);
-  priceParts.currency = (<span key="currency" className="price-currency suffix">{priceParts.currency}</span>);
+  priceParts.amount = (<span key="amount" style={{ display: 'inline-block' }} className="price-amount">{priceParts.amount}</span>);
+  priceParts.currency = (<span key="currency" style={{ display: 'inline-block' }} className="price-currency suffix">{priceParts.currency}</span>);
 
   return (
     <span className="price-wrapper">
-      <div className="price">
+      <div className="price" dir="ltr">
         {Object.values(priceParts)}
       </div>
     </span>
