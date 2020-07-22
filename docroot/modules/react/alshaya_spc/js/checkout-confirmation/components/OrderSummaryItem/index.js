@@ -74,7 +74,7 @@ const OrderSummaryItem = (props) => {
     return (
       <div className="spc-order-summary-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <span className="spc-label">{`${label}:`}</span>
-        <span className="spc-value phone-number">{value}</span>
+        <span className="spc-value phone-number" dir="ltr">{value}</span>
       </div>
     );
   }
