@@ -64,4 +64,42 @@ body:not(.ie) {
       transform: translateY(0);
     }
   }
+
+  /* Left bounce */
+  @keyframes bounceLeft {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      transform: translateX(0);
+    }
+
+    40% {
+      transform: translateX(30px);
+    }
+
+    60% {
+      transform: translateX(15px);
+    }
+  }
+
+  /* Right bounce */
+  @keyframes bounceRight {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      transform: translateX(0);
+    }
+
+    40% {
+      transform: translateX(-30px);
+    }
+
+    60% {
+      transform: translateX(-15px);
+    }
+  }
 }
