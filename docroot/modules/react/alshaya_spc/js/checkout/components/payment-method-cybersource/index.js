@@ -10,6 +10,7 @@ import CVVToolTipText from '../cvv-text';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
+  validateCvv,
 } from '../../../utilities/checkout_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
@@ -152,18 +153,18 @@ class PaymentMethodCybersource extends React.Component {
   };
 
   cvvValidations = (e) => {
-    const cvv = parseInt(e.target.value, 10);
-    const valid = (cvv >= 100 && cvv <= 9999);
+    const cvv = e.target.value.trim();
+    const valid = validateCvv(cvv);
     handleValidationMessage(
       'spc-cy-cc-cvv-error',
-      e.target.value,
+      cvv,
       valid,
       getStringMessage('invalid_cvv'),
     );
 
     this.setState({
       cvvValid: valid,
-      cvv: e.target.value,
+      cvv,
     });
   };
 
@@ -204,7 +205,7 @@ class PaymentMethodCybersource extends React.Component {
       const { number, expiry, cvv } = this.state;
 
       response.data.data.card_number = number;
-      response.data.data.card_cvn = parseInt(cvv.toString().trim(), 10);
+      response.data.data.card_cvn = cvv.toString().trim();
 
       const expiryInfo = expiry.split('/');
       const date = new Date();
