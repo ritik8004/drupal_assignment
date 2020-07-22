@@ -219,7 +219,7 @@ export default class PaymentMethods extends React.Component {
     const activeClass = active ? 'active' : 'in-active';
 
     return (
-      <div id="spc-payment-methods" className="spc-checkout-payment-options fadeInUp" style={{ animationDelay: '0.4s' }}>
+      <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
         <ConditionalView condition={Object.keys(methods).length > 0}>
           <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
           <div className={`payment-methods ${activeClass}`}>{methods}</div>
