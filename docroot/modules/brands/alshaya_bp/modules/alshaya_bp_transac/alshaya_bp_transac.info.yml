@@ -6,5 +6,6 @@ core: 8.x
 dependencies:
   - alshaya_bp:alshaya_bp
   - dynamic_yield:dynamic_yield
+  - alshaya_mobile_app:alshaya_mobile_app
 themes:
   - alshaya_boots

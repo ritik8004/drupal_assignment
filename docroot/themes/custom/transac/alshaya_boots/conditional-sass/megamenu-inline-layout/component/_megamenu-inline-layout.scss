@@ -4,8 +4,8 @@
       .menu__links__wrapper {
         .menu--two__list-item {
           &:not(.move-to-right) {
-            height: 2.5625rem;
-            margin-bottom: 0.25rem;
+            height: 1.9375rem;
+            margin-bottom: 0;
 
             &::before {
               display: none;
@@ -43,7 +43,7 @@
 
           .menu--three__list {
             li {
-              min-height: 2.5625rem;
+              min-height: 1.9375rem;
               margin-#{$left}: 0.1875rem;
               padding-#{$left}: 1.5rem;
               margin-bottom: 0;
