@@ -36,13 +36,15 @@
 
     h1 {
       span {
-        text-transform: capitalize;
-        font-size: 1rem;
+        text-transform: none;
+        font-size: 1.25rem;
+        font-family: $alshaya-bold;
       }
     }
 
     .price {
       margin-bottom: 0.5rem;
+      font-size: 1.125rem;
     }
 
     .price-type__wrapper > .price {
@@ -50,7 +52,7 @@
     }
 
     .price--discount {
-      font-size: 1rem;
+      font-size: 1.125rem;
       margin-top: 0;
     }
 
@@ -69,6 +71,8 @@
     .sku-base-form {
       button[type="submit"] {
         @extend %button-wide;
+
+        text-transform: none;
 
         @include breakpoint ($desktop) {
           width: 69%;

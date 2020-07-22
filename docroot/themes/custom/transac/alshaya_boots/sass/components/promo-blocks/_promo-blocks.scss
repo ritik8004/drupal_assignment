@@ -39,6 +39,12 @@
   }
 }
 
+.c-promo-1-3__item {
+  .field--name-field-title {
+    text-transform: none;
+  }
+}
+
 // Slide the 1 row 3 col promo blocks only on mobile
 .c-promo-1-3__items {
   @include breakpoint($only-mobile) {

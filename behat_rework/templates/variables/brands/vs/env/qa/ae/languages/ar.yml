@@ -81,7 +81,6 @@ variables:
   ar_promotional_filter: 'Promotions'
   ar_size_filter: 'Size'
   ar_filters: 'all filters'
-  store_area: 'Dubai - United Arab Emirates'
   cs_payment_type: 'Credit Card / Debit Card'
   language_cs_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   cnc_delivery_type: 'Click and Collect'
@@ -90,3 +89,5 @@ variables:
   cc_mada_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   delivery_type_text: 'التوصيل متوقع خلال:'
   payment_type_text: 'طريقة الدفع:'
+  store_area: 'دبي'
+  language_store_area: 'Dubai - United Arab Emirates'
