@@ -170,7 +170,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
       brandLogoTitle = productInfo[skuItemCode].brandLogo.title
         ? productInfo[skuItemCode].brandLogo.title : null;
     }
-    title = productInfo[skuItemCode].title;
+    title = productInfo[skuItemCode].cart_title;
     priceRaw = productInfo[skuItemCode].priceRaw;
     finalPrice = productInfo[skuItemCode].finalPrice;
     pdpGallery = productInfo[skuItemCode].rawGallery;

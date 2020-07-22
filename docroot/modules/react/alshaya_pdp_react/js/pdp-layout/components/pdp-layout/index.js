@@ -108,7 +108,9 @@ const PdpLayout = () => {
         </div>
       </div>
       <div className="magv2-pdp-crossell-upsell-wrapper">
-        <PdpCrossellUpsell skuCode={skuItemCode} pdpGallery={pdpGallery} />
+        {(pdpGallery) ? (
+          <PdpCrossellUpsell skuCode={skuItemCode} pdpGallery={pdpGallery} />
+        ) : null}
       </div>
     </>
   ) : emptyRes;
