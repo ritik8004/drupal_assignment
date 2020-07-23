@@ -4,6 +4,7 @@ namespace Drupal\alshaya_mobile_app\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\TempStore\SharedTempStoreFactory;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -17,6 +18,15 @@ class AlshayaMobileAppController extends ControllerBase {
    * @var \Drupal\Core\TempStore\SharedTempStore
    */
   protected $tempStore;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('tempstore.shared')
+    );
+  }
 
   /**
    * AlshayaMobileAppController constructor.
