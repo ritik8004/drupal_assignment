@@ -35,6 +35,7 @@ export default class AppointmentsView extends React.Component {
               this.getUserAppointments();
             });
             if (result.data.length === 0) {
+              removeFullScreenLoader();
               this.setState({
                 notFound: this.getNotFoundText(),
               });
