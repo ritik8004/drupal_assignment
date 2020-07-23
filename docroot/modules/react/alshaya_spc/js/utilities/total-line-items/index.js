@@ -53,10 +53,16 @@ class TotalLineItems extends React.Component {
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
+    // Using a separate variable(shippingAmount) to update the value
+    // not using the variable in props(totals) as it will
+    // update the global value.
+    let shippingAmount = (totals.shipping_incl_tax === undefined)
+      ? null
+      : totals.shipping_incl_tax;
+
     // Show "Delivery: FREE" on basket if cart promo rule applied for it.
-    if ((totals.shipping_incl_tax === undefined || totals.shipping_incl_tax === null)
-      && freeShipping) {
-      totals.shipping_incl_tax = 0;
+    if (shippingAmount === null && freeShipping) {
+      shippingAmount = 0;
     }
 
     return (
@@ -64,13 +70,11 @@ class TotalLineItems extends React.Component {
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
         <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={totals.discount_amount} />
 
-        <ConditionalView
-          condition={totals.shipping_incl_tax !== undefined && totals.shipping_incl_tax !== null}
-        >
+        <ConditionalView condition={shippingAmount !== null}>
           <TotalLineItem
             name="delivery-total"
             title={Drupal.t('Delivery')}
-            value={totals.shipping_incl_tax > 0 ? totals.shipping_incl_tax : Drupal.t('FREE')}
+            value={shippingAmount > 0 ? shippingAmount : Drupal.t('FREE')}
           />
         </ConditionalView>
 
@@ -90,7 +94,7 @@ class TotalLineItems extends React.Component {
         <div className="hero-total">
           <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={totals.base_grand_total} />
           <div className="delivery-vat">
-            <ConditionalView condition={totals.shipping_incl_tax === null}>
+            <ConditionalView condition={shippingAmount === null}>
               <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>
             </ConditionalView>
 
