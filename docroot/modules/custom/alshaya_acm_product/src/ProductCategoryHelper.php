@@ -2,7 +2,9 @@
 
 namespace Drupal\alshaya_acm_product;
 
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\node\NodeInterface;
