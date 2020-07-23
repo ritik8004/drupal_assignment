@@ -80,16 +80,27 @@
         position: absolute;
         top: 0;
         #{$right}: 100%;
+
+        html[lang=ar] & {
+          transform: scaleX(-1);
+        }
       }
 
       &::before {
         background: url('#{$base_theme_img_directory_path}/icons/appointment-slice-chevron-bg.png?ljlk') no-repeat;
         background-size: cover;
+
+        html[lang=ar] & {
+          transform: scaleX(-1);
+        }
       }
     }
 
     &.visited {
       .step-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background: transparent;
         color: $appointment-step-title-color;
         border: 1px solid $appointment-step-title-color;
@@ -120,6 +131,10 @@
       position: absolute;
       top: 0;
       #{$right}: 0;
+
+      html[lang=ar] & {
+        transform: scaleX(-1);
+      }
     }
 
     .step-number {

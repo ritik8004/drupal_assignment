@@ -1,7 +1,7 @@
 .appointment-type-button {
   font-family: $alshaya-bold;
   font-size: 0.875rem;
-  border: none;
+  border: 1px solid $appointment-btn-bg;
   padding: 0.625rem 3.25rem;
   background: $appointment-btn-bg;
   color: $appointment-btn-text;
@@ -17,6 +17,7 @@
 
   &:disabled,
   &[disabled] {
+    border: 1px solid $appointment-disable-btn-bg;
     background: $appointment-disable-btn-bg;
   }
 }

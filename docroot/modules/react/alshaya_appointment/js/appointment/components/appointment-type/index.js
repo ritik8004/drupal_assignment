@@ -119,6 +119,11 @@ export default class AppointmentType extends React.Component {
 
   onSelectChange = (e, name) => {
     const { value, label } = e;
+    if (name === 'appointmentType') {
+      setTimeout(() => {
+        smoothScrollTo('.appointment-type-list-wrapper');
+      }, 100);
+    }
     this.setState({
       [name]: { value, label },
     });

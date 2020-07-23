@@ -1,5 +1,11 @@
 .appointment-type-list {
   &-wrapper {
+    padding-top: 1.875rem;
+
+    @include breakpoint($tablet-landscape) {
+      padding-top: 1.1875rem;
+    }
+
     .appointment-booking-section-title {
       @include breakpoint($tablet-landscape) {
         padding-top: 0.6875rem;
