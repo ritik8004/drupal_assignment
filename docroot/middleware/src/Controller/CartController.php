@@ -821,12 +821,12 @@ class CartController {
   }
 
   /**
-   * Verifies order information.
+   * Verifies cart data.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
    */
-  public function validateOrderInfo() {
+  public function validateCart() {
     $cart = $this->cart->getCart();
 
     $valid = TRUE;

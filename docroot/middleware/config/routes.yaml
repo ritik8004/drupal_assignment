@@ -68,7 +68,7 @@ payment.checkout_com_apple_pay_save:
     controller: App\Controller\PaymentController::saveApplePayPayment
     methods: POST
 
-cart.validate-order-info:
-    path: /cart/validate-order-info
-    controller: App\Controller\CartController::validateOrderInfo
+cart.validate-cart:
+    path: /cart/validate-cart
+    controller: App\Controller\CartController::validateCart
     methods: GET
