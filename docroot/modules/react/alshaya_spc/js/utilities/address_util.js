@@ -26,7 +26,7 @@ export const addressFormInlineErrorScroll = () => {
   const contactFieldsSelector = '.spc-checkout-contact-information-fields > div > div.error:not(:empty)';
   let errorElement = document.querySelector(contactFieldsSelector);
   if (errorElement !== undefined && errorElement !== null) {
-    smoothScrollToAddressField(errorElement);
+    smoothScrollToAddressField(errorElement, true);
     return;
   }
 
