@@ -835,6 +835,7 @@ class CartController {
       return new JsonResponse(['valid' => FALSE]);
     }
 
+    // Check if shipping information is present else return false.
     if (empty($cart['shipping'])) {
       $valid = FALSE;
     }

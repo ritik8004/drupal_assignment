@@ -2,7 +2,7 @@ import React from 'react';
 import {
   placeOrder,
   isDeliveryTypeSameAsInCart,
-  validateOrderData,
+  validateCart,
 } from '../../../utilities/checkout_util';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import dispatchCustomEvent from '../../../utilities/events';
@@ -48,7 +48,7 @@ export default class CompletePurchase extends React.Component {
   /**
    * Place order.
    */
-  placeOrder = (e) => {
+  placeOrder = async (e) => {
     e.preventDefault();
     const { cart, validateBeforePlaceOrder } = this.props;
 
@@ -75,37 +75,27 @@ export default class CompletePurchase extends React.Component {
     try {
       // Set localStorage to know that `Complete Purchase` was clicked.
       setStorageInfo(true, 'completePurchaseClicked');
-      const orderDataStatus = validateOrderData();
-      if (orderDataStatus instanceof Promise) {
-        orderDataStatus.then(
-          (response) => {
-            if (!response.data.valid) {
-              removeStorageInfo('completePurchaseClicked');
-              if (this.completePurchaseButtonActive()) {
-                checkoutButton.classList.remove('in-active');
-              }
-              dispatchCustomEvent('spcCheckoutMessageUpdate', {
-                type: 'error',
-                message: Drupal.t('Delivery Information is missing.'),
-              });
-            } else {
-              const validated = validateBeforePlaceOrder();
-              if (validated === false) {
-                if (this.completePurchaseButtonActive()) {
-                  checkoutButton.classList.remove('in-active');
-                }
-                return;
-              }
+      const orderDataStatus = await validateCart();
+      if (!orderDataStatus.valid) {
+        removeStorageInfo('completePurchaseClicked');
+        if (this.completePurchaseButtonActive()) {
+          checkoutButton.classList.remove('in-active');
+        }
+        dispatchCustomEvent('spcCheckoutMessageUpdate', {
+          type: 'error',
+          message: Drupal.t('Delivery Information is missing.'),
+        });
+      } else {
+        const validated = validateBeforePlaceOrder();
+        if (validated === false) {
+          if (this.completePurchaseButtonActive()) {
+            checkoutButton.classList.remove('in-active');
+          }
+          return;
+        }
 
-              placeOrder(cart.cart.payment.method);
-              removeStorageInfo('completePurchaseClicked');
-            }
-          },
-        )
-          .catch((error) => {
-            // Error processing here.
-            Drupal.logJavascriptError('checkout-validate-order-data', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
-          });
+        placeOrder(cart.cart.payment.method);
+        removeStorageInfo('completePurchaseClicked');
       }
     } catch (error) {
       Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.CHECKOUT_ERRORS);

@@ -485,11 +485,16 @@ export function validateCvv(cvv) {
 }
 
 /**
- * Validate Order information.
+ * Validate Cart.
  */
-export const validateOrderData = async () => {
+export const validateCart = () => {
   const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
 
-  return await axios
-    .get(`${middlewareUrl}/cart/validate-order-info`);
+  return axios
+    .get(`${middlewareUrl}/cart/validate-cart`)
+    .then((response) => response.data)
+    .catch((error) => {
+      // Error processing here.
+      Drupal.logJavascriptError('checkout-validate-order-data', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+    });
 };
