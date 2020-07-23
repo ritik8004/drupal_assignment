@@ -12,6 +12,8 @@ services:
       - '@alshaya_acm_product.skumanager'
       - '@entity_type.manager'
       - '@entity.repository'
+      - '@alshaya_product_options.helper'
+      - '@alshaya_product_options.swatches'
 
   alshaya_color_split.product_updated_event:
     class: Drupal\alshaya_color_split\EventSubscriber\ProductUpdatedEventSubscriber

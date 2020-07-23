@@ -5,6 +5,63 @@
  * Install, uninstall, update function for alshaya_bp_transac.
  */
 
+use Drupal\acq_sku\SKUFieldsManager;
+use Drupal\block\Entity\Block;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable product aggregation for simple products.
+ * Add color family attribute for filter.
+ */
+function alshaya_bp_transac_update_8003() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    [
+      'alshaya_acm_product.display_settings',
+      'alshaya_acm_product.sku_base_fields',
+    ],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
+  $attr_code = $config->get('color');
+  $attr_code['configurable'] = 1;
+  $config->set('color', $attr_code);
+  $config->save();
+
+  $manager->updateConfigs(
+    ['search_api.index.product'],
+    'alshaya_product'
+  );
+
+  $blocks = [
+    'plpcolor' => 'plpcolorfamily',
+    'promocolor' => 'promocolorfamily',
+    'color' => 'colorfamily',
+  ];
+
+  // Disable color block, color family is being used as color facet.
+  foreach ($blocks as $old_id => $new_id) {
+    $old_block = Block::load($old_id);
+    $new_block = Block::load($new_id);
+
+    // Set weight of new block same as old block.
+    $new_block->setWeight($old_block->getWeight());
+    $new_block->save();
+
+    // Keep the old block disabled.
+    $old_block->disable();
+    $old_block->save();
+  }
+
+  \Drupal::service('module_installer')->install(['alshaya_color_split']);
+}
+
 /**
  * Implements hook_update_N().
  *

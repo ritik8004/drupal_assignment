@@ -241,7 +241,7 @@ function alshaya_color_split_form_sku_base_form_alter(&$form, FormStateInterface
   if (empty($grouping_attribute) || empty($products_in_style)) {
     return;
   }
-
+  $options = [];
   foreach ($products_in_style as $variant) {
     $options[$variant->getSku()] = $variant->get('attr_' . $grouping_attribute)->getString();
   }
@@ -263,6 +263,8 @@ function alshaya_color_split_form_sku_base_form_alter(&$form, FormStateInterface
     ],
     '#weight' => -1,
   ];
+
+  $manager->alterGroupAttributeFormItem($form['variants_in_group'], $options, $grouping_attribute);
 }
 
 /**
