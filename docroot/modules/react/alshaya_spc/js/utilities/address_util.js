@@ -22,17 +22,20 @@ import {
  * @param {*} selector
  */
 export const addressFormInlineErrorScroll = () => {
-  // Find where the error is.
-  const addressFieldsSelector = '.delivery-address-fields > div > div.error:not(:empty)';
-  let errorElement = document.querySelector(addressFieldsSelector);
-  // If error found in address fields, scroll and return.
+  // If error is on contact fields.
+  const contactFieldsSelector = '.spc-checkout-contact-information-fields > div > div.error:not(:empty)';
+  let errorElement = document.querySelector(contactFieldsSelector);
   if (errorElement !== undefined && errorElement !== null) {
     smoothScrollToAddressField(errorElement);
     return;
   }
-  const contactFieldsSelector = '.spc-checkout-contact-information-fields > div > div.error:not(:empty)';
-  errorElement = document.querySelector(contactFieldsSelector);
-  smoothScrollToAddressField(errorElement, true);
+
+  const addressFieldsSelector = '.delivery-address-fields > div > div.error:not(:empty)';
+  errorElement = document.querySelector(addressFieldsSelector);
+  // If error found in address fields, scroll and return.
+  if (errorElement !== undefined && errorElement !== null) {
+    smoothScrollToAddressField(errorElement);
+  }
 };
 
 /**

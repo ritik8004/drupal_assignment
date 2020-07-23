@@ -1,6 +1,5 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import GoogleMap from '../../../utilities/map/GoogleMap';
 import {
   createMarker,
   getMap,
@@ -192,7 +191,6 @@ export default class AddressForm extends React.Component {
       headingText,
       closeModal,
       showEmail,
-      formContext,
       shippingAsBilling = null,
     } = this.props;
 
@@ -207,20 +205,6 @@ export default class AddressForm extends React.Component {
     let defaultAddressVal = [];
     if (defaultVal) {
       defaultAddressVal = defaultVal;
-    }
-
-    // Check if billing address form.
-    let mapToAddressFormBtnText = getStringMessage('hd_deliver_to_my_location');
-    if (formContext === 'billing') {
-      mapToAddressFormBtnText = getStringMessage('billing_select_my_location');
-    }
-
-    let isEditAddress = shippingAsBilling ? !shippingAsBilling : false;
-    // If address has area value set on load, means
-    // we are editing address.
-    if (defaultAddressVal !== null
-      && defaultAddressVal.area !== undefined) {
-      isEditAddress = true;
     }
 
     Object.entries(window.drupalSettings.address_fields).forEach(
@@ -245,11 +229,6 @@ export default class AddressForm extends React.Component {
 
     return (
       <div className="spc-address-form">
-        {window.innerWidth > 768 && (
-          <div className="spc-address-form-map">
-            <GoogleMap isEditAddress={isEditAddress} />
-          </div>
-        )}
         <div className="spc-address-form-sidebar">
           <SectionTitle>{headingDeliveryText}</SectionTitle>
           <a className="close" onClick={() => closeModal()}>
@@ -268,31 +247,20 @@ export default class AddressForm extends React.Component {
                 )}
               </CheckoutMessage>
               )}
-            <div
-              className="spc-deliver-button"
-              onClick={() => this.deliverToCurrentLocation()}
-            >
-              {mapToAddressFormBtnText}
-            </div>
-            {window.innerWidth < 768 && (
-              <div className="spc-address-form-map">
-                <GoogleMap isEditAddress={isEditAddress} />
-              </div>
-            )}
             <div className="spc-address-form-content">
               <form
                 className="spc-address-add"
                 onSubmit={(e) => this.handleSubmit(e)}
               >
+                <FixedFields
+                  showEmail={showEmail}
+                  defaultVal={defaultAddressVal}
+                />
                 <div className="delivery-address-fields">
                   {' '}
                   {dynamicFields}
                   {' '}
                 </div>
-                <FixedFields
-                  showEmail={showEmail}
-                  defaultVal={defaultAddressVal}
-                />
                 <div className="spc-address-form-actions" id="address-form-action">
                   <button
                     id="save-address"

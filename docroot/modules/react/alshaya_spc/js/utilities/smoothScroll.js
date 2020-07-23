@@ -23,7 +23,7 @@ export const smoothScrollTo = (selector, block) => {
 export const smoothScrollToAddressField = (element, contactField = false) => {
   let offsetPosition = 0;
   let addressOffset = 0;
-  let contactHeaderOffset = 0;
+  const contactHeaderOffset = 0;
   let container = document.querySelector('.spc-address-form-sidebar');
   // Check if we are in HD or CC modal.
   if (container === null || container === undefined) {
@@ -38,7 +38,6 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
       addressOffset = document.querySelector('.store-details-wrapper').offsetHeight
         + document.querySelector('#click-and-collect-selected-store > .spc-checkout-section-title').offsetHeight;
     }
-    contactHeaderOffset = document.querySelector('.spc-contact-information-header').offsetHeight;
   }
   if (window.innerWidth < 768) {
     // Header offset in mobile is section title + field height.
