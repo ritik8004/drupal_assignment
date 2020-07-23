@@ -9,6 +9,9 @@ this for your work if you're not already fairly comfortable with docker and land
 
 Having said that, it'd be great to get people using it and fixing issues.
 
+N.B The current configuration uses mutagen for mounting files. This requires a suitable version of docker and lando with
+support for this functionality.
+
 ## Manual Setup
 
 ### Host resolution
