@@ -1,7 +1,7 @@
 var path  = require("path");
 var buildPath = '/modules/react/alshaya_appointment/dist/';
 
-module.exports = {
+var config = {
   entry: {
     appointment: './js/appointment',
     appointments_view: './js/appointments.view',
@@ -43,4 +43,18 @@ module.exports = {
     react: 'React',
     'react-dom': 'ReactDOM'
   },
+};
+
+module.exports = (env, argv) => {
+  if (argv.mode === 'development') {
+    config.devtool = 'source-map';
+    config.externals = {};
+  }
+
+  config.watchOptions = {
+    poll: 800,
+    ignored: /node_modules/
+  };
+
+  return config;
 };
