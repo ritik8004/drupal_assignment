@@ -126,7 +126,7 @@ const TextField = (props) => {
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
-          maxDate={new Date(moment().subtract(1, 'day'))}
+          maxDate={new Date()}
           customInput={<DateCustomInput />}
         />
       </div>
