@@ -158,7 +158,7 @@ class CartController {
       return new JsonResponse(['error' => TRUE]);
     }
 
-    $data = $this->cart->getRestoredCart();
+    $data = $this->cart->getRestoredCart($this->request->query->get('reset'));
 
     // Check customer email And check drupal session customer id to validate,
     // if current cart is associated with logged in user or not.
@@ -832,11 +832,13 @@ class CartController {
     $valid = TRUE;
 
     if (empty($cart)) {
+      $this->logger->error('Error while validating cart. No cart available.');
       return new JsonResponse(['valid' => FALSE]);
     }
 
     // Check if shipping information is present else return false.
-    if (empty($cart['shipping'])) {
+    if (empty($cart['shipping']['method'])) {
+      $this->logger->error('Error while validating cart. No shipping method available.');
       $valid = FALSE;
     }
 

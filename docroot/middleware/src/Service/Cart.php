@@ -276,12 +276,12 @@ class Cart {
    * @return array
    *   Cart data.
    */
-  public function getRestoredCart() {
+  public function getRestoredCart($reset = FALSE) {
     $cart = $this->getCart();
 
     $this->resetCartCache();
 
-    if (!empty($cart['shipping']['method'])) {
+    if (!empty($cart['shipping']['method']) && $reset !== 'true') {
       $update = [
         'extension' => ['action' => CartActions::CART_RESET],
       ];

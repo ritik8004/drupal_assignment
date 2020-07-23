@@ -12,6 +12,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
+import { removeStorageInfo } from '../../../utilities/storage';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -31,6 +32,7 @@ export default class PaymentMethods extends React.Component {
     const paymentError = Cookies.get('middleware_payment_error');
     if (paymentError !== undefined && paymentError !== null && paymentError.length > 0) {
       Cookies.remove('middleware_payment_error');
+      removeStorageInfo('completePurchaseClicked');
 
       const paymentErrorInfo = JSON.parse(paymentError);
       let message = getStringMessage('payment_error');

@@ -83,7 +83,7 @@ export default class CompletePurchase extends React.Component {
         }
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
-          message: Drupal.t('Delivery Information is missing.'),
+          message: Drupal.t('Delivery Information is incomplete. Please update and try again.'),
         });
       } else {
         const validated = validateBeforePlaceOrder();
@@ -95,7 +95,6 @@ export default class CompletePurchase extends React.Component {
         }
 
         placeOrder(cart.cart.payment.method);
-        removeStorageInfo('completePurchaseClicked');
       }
     } catch (error) {
       Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.CHECKOUT_ERRORS);

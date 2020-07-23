@@ -3,6 +3,7 @@ import {
   removeCartFromStorage,
   getStorageInfo,
   getInfoFromStorage,
+  removeStorageInfo,
 } from './storage';
 import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
@@ -57,6 +58,7 @@ export const placeOrder = (paymentMethod) => {
         if (response.data.error === undefined) {
           // Remove cart info from storage.
           removeCartFromStorage();
+          removeStorageInfo('completePurchaseClicked');
 
           window.location = Drupal.url(response.data.redirectUrl);
           return;

@@ -9,6 +9,8 @@ import {
 import { restoreCartApiUrl } from '../update_cart';
 import {
   removeCartFromStorage,
+  getStorageInfo,
+  removeStorageInfo,
 } from '../storage';
 import i18nMiddleWareUrl from '../i18n_url';
 import dispatchCustomEvent from '../events';
@@ -45,8 +47,10 @@ export const fetchCartData = () => {
   }
 
   if (!cart) {
+    // Check from storage if `Complete Purchase` button was clicked.
+    const completePurchase = getStorageInfo('completePurchaseClicked') || false;
     // Prepare api url.
-    const apiUrl = restoreCartApiUrl();
+    const apiUrl = `${restoreCartApiUrl()}&reset=${completePurchase}`;
 
     return Axios.get(apiUrl).then((response) => {
       if (typeof response !== 'object') {
@@ -129,6 +133,7 @@ export const fetchCartData = () => {
 export const fetchCartDataForCheckout = () => {
   // Remove cart data from storage every-time we land on checkout page.
   removeCartFromStorage();
+  removeStorageInfo('completePurchaseClicked');
 
   // If session cookie not exists, no need to process/check.
   if (drupalSettings.user.uid === 0 && !Cookies.get('PHPSESSID')) {
