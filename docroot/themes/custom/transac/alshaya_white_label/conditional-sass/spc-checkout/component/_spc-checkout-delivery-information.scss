@@ -22,8 +22,12 @@
 
     @include icon('arrow-#{$right}', before) {
       position: absolute;
-      #{$right}: 0.875rem;
+      #{$right}: 0;
       font-size: 2rem;
+      top: 0;
+      height: 100%;
+      display: inline-flex;
+      align-items: center;
       animation: bounceRight 2s infinite;
 
       html[lang=ar] & {
