@@ -56,12 +56,16 @@ class PaymentMethodCybersource extends React.Component {
       return;
     }
 
+    const errorMessage = e.detail.error_message === 'failed'
+      ? getStringMessage('transaction_failed')
+      : getStringMessage('payment_error');
+
     dispatchCustomEvent('spcCheckoutMessageUpdate', {
       type: 'error',
-      message: e.detail.error_message === 'failed'
-        ? getStringMessage('transaction_failed')
-        : getStringMessage('payment_error'),
+      message: errorMessage,
     });
+
+    Drupal.logJavascriptError('Post Cybersource finalise', errorMessage, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
 
     removeFullScreenLoader();
   };
