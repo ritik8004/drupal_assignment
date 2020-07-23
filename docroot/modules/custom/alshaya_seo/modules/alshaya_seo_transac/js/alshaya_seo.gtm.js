@@ -1296,6 +1296,12 @@ const GTM_CONSTANTS = {
     var message = (error && error.message !== undefined)
       ? error.message
       : error;
+
+    // We want message to be sent as string always.
+    if ($.type(message) !== 'string') {
+      message = JSON.stringify(message);
+    }
+
     var errorData = {
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
