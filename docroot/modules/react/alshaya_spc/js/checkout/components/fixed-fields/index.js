@@ -1,12 +1,13 @@
 import React from 'react';
 
+import SectionTitle from '../../../utilities/section-title';
 import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
 import { cleanMobileNumber } from '../../../utilities/checkout_util';
 import getStringMessage from '../../../utilities/strings';
 
 const FixedFields = ({
-  defaultVal, showEmail, showFullName = true, subTitle,
+  defaultVal, showEmail, showFullName = true, subTitle, type,
 }) => {
   let defaultValue = '';
   if (defaultVal.length !== 0 && defaultVal.length !== 'undefined') {
@@ -18,6 +19,14 @@ const FixedFields = ({
 
   return (
     <div className={`spc-checkout-contact-information ${hasSubTitle}`} id="spc-checkout-contact-info">
+      {/* Show contact info only for CnC. */}
+      {type === 'cnc'
+        && (
+        <div className="spc-contact-information-header">
+          <SectionTitle>{getStringMessage('contact_information')}</SectionTitle>
+          <span className="spc-contact-info-desc">{subTitle}</span>
+        </div>
+        )}
       <div className="spc-checkout-contact-information-fields">
         <ConditionalView condition={showFullName}>
           <TextField

@@ -255,6 +255,7 @@ export default class AddressForm extends React.Component {
                 <FixedFields
                   showEmail={showEmail}
                   defaultVal={defaultAddressVal}
+                  type="hd"
                 />
                 <div className="delivery-address-fields">
                   {' '}
