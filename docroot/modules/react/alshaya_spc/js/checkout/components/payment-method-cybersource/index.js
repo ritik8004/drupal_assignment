@@ -4,7 +4,7 @@ import axios from 'axios';
 import luhn from '../../../utilities/luhn';
 import CardTypeSVG from '../../../svg-component/card-type-svg';
 import i18nMiddleWareUrl from '../../../utilities/i18n_url';
-import { removeCartFromStorage, removeStorageInfo } from '../../../utilities/storage';
+import { removeCartFromStorage } from '../../../utilities/storage';
 import ToolTip from '../../../utilities/tooltip';
 import CVVToolTipText from '../cvv-text';
 import {
@@ -51,7 +51,6 @@ class PaymentMethodCybersource extends React.Component {
     if (e.detail.redirectUrl !== undefined) {
       // Remove cart info from storage.
       removeCartFromStorage();
-      removeStorageInfo('completePurchaseClicked');
 
       window.location = Drupal.url(e.detail.redirectUrl);
       return;
