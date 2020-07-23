@@ -163,8 +163,26 @@
         .spc-address-form {
           grid-template-columns: 32.5rem !important;
 
-          .spc-address-form-actions {
-            position: relative;
+          .spc-address-form-sidebar {
+            overflow-y: visible;
+
+            .spc-checkout-section-title {
+              position: absolute;
+              top: 0;
+              width: 100%;
+              z-index: 1;
+            }
+
+            .close {
+              z-index: 1;
+            }
+
+            .spc-address-form-wrapper {
+              margin-top: 4.0625rem;
+              overflow-y: auto;
+              height: 100%;
+              padding-bottom: 4.0625rem;
+            }
           }
         }
 
@@ -175,8 +193,33 @@
         }
       }
 
+      @include breakpoint($only-mobile) {
+        .spc-address-form-wrapper {
+          height: 100%;
+        }
+
+        &.spc-address-form-guest-content,
+        &.spc-address-form-member-content {
+          overflow-y: hidden;
+        }
+      }
+
+      .spc-address-form-actions {
+        position: relative;
+      }
+
       .spc-checkout-contact-information-fields {
         border-bottom: 1px solid rgba(0, 0, 0, 0.24);
+        padding-top: 2.1875rem;
+        padding-bottom: 0.625rem;
+
+        > div:nth-child(1) {
+          margin-bottom: 2rem;
+        }
+
+        > div:nth-child(2) {
+          margin-bottom: 1rem;
+        }
 
         @include breakpoint($only-mobile) {
           padding-bottom: 1.25rem;
@@ -185,10 +228,6 @@
 
       .delivery-address-fields {
         border-top: 10px solid $spc-checkout-sidebar-bg;
-
-        @include breakpoint($only-mobile) {
-          padding-bottom: 7rem;
-        }
       }
     }
   }
