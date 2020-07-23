@@ -276,12 +276,12 @@ class Cart {
    * @return array
    *   Cart data.
    */
-  public function getRestoredCart($reset = FALSE) {
+  public function getRestoredCart() {
     $cart = $this->getCart();
 
     $this->resetCartCache();
 
-    if (!empty($cart['shipping']['method']) && $reset !== 'true') {
+    if (!empty($cart['shipping']['method'])) {
       $update = [
         'extension' => ['action' => CartActions::CART_RESET],
       ];
@@ -1099,6 +1099,12 @@ class Cart {
   public function placeOrder(array $data) {
     $url = sprintf('carts/%d/order', $this->getCartId());
     $cart = $this->getCart();
+
+    // Check if shiping method is present else throw error.
+    if (empty($cart['shipping']['method'])) {
+      $this->logger->error('Error while placing order. No shipping method available.');
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 500);
+    }
 
     $lock = FALSE;
     $settings = $this->settings->getSettings('spc_middleware');

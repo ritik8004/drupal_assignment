@@ -2,14 +2,12 @@ import React from 'react';
 import {
   placeOrder,
   isDeliveryTypeSameAsInCart,
-  validateCart,
 } from '../../../utilities/checkout_util';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import dispatchCustomEvent from '../../../utilities/events';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
-import { setStorageInfo, removeStorageInfo } from '../../../utilities/storage';
 
 export default class CompletePurchase extends React.Component {
   constructor(props) {
@@ -48,7 +46,7 @@ export default class CompletePurchase extends React.Component {
   /**
    * Place order.
    */
-  placeOrder = async (e) => {
+  placeOrder = (e) => {
     e.preventDefault();
     const { cart, validateBeforePlaceOrder } = this.props;
 
@@ -73,29 +71,15 @@ export default class CompletePurchase extends React.Component {
     checkoutButton.classList.add('in-active');
 
     try {
-      // Set localStorage to know that `Complete Purchase` was clicked.
-      setStorageInfo(true, 'completePurchaseClicked');
-      const orderDataStatus = await validateCart();
-      if (!orderDataStatus.valid) {
-        removeStorageInfo('completePurchaseClicked');
+      const validated = validateBeforePlaceOrder();
+      if (validated === false) {
         if (this.completePurchaseButtonActive()) {
           checkoutButton.classList.remove('in-active');
         }
-        dispatchCustomEvent('spcCheckoutMessageUpdate', {
-          type: 'error',
-          message: Drupal.t('Delivery Information is incomplete. Please update and try again.'),
-        });
-      } else {
-        const validated = validateBeforePlaceOrder();
-        if (validated === false) {
-          if (this.completePurchaseButtonActive()) {
-            checkoutButton.classList.remove('in-active');
-          }
-          return;
-        }
-
-        placeOrder(cart.cart.payment.method);
+        return;
       }
+
+      placeOrder(cart.cart.payment.method);
     } catch (error) {
       Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }

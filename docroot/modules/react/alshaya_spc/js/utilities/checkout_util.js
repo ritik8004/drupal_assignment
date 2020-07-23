@@ -485,18 +485,3 @@ export function validateCvv(cvv) {
   const cvvLength = cvv.toString().length;
   return [3, 4].includes(cvvLength) && !Number.isNaN(cvv);
 }
-
-/**
- * Validate Cart.
- */
-export const validateCart = () => {
-  const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
-
-  return axios
-    .get(`${middlewareUrl}/cart/validate-cart`)
-    .then((response) => response.data)
-    .catch((error) => {
-      // Error processing here.
-      Drupal.logJavascriptError('checkout-validate-order-data', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
-    });
-};
