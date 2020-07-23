@@ -609,10 +609,16 @@ class MobileAppUtility {
       $deeplink = $this->getDeepLink($term);
 
       // Check if any redirection is set up for the term path.
-      $redirected_path = $this->getRedirectUrl($path);
+      // We provide the technical taxonomy term path here and not the alias
+      // as alias redirection for taxonomy terms doesn't seem to work on Drupal
+      // front end.
+      $term_technical_path = '/taxonomy/term/' . $term->tid;
+      $redirected_path = $this->getRedirectUrl("/{$this->currentLanguage}" . $term_technical_path);
 
-      // Process path and deeplink again if a redirection has been set up.
-      if (strpos($path, $redirected_path) === FALSE) {
+      // If no redirect, then we get the same path we passed for getRedirectUrl
+      // without the langcode and hence we do not process them further.
+      if (trim($redirected_path, '/') != trim($term_technical_path, '/')) {
+        // Process path and deeplink again if a redirection has been set up.
         // Get the path of the target term.
         $internal_path = $this->aliasManager->getPathByAlias(
           rtrim(str_replace("/{$this->currentLanguage}", '', $redirected_path), '/'),
