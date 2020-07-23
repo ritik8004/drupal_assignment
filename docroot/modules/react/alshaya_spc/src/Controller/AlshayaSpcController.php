@@ -10,6 +10,7 @@ use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Link;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -372,9 +373,20 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Please enter valid mobile number.'),
     ];
 
+    $login_link = Link::createFromRoute(
+      $this->t('please login'),
+      'alshaya_spc.checkout.login',
+      [],
+      ['attributes' => ['id' => 'spc-checkout-customer-login-link']]
+    );
+
     $strings[] = [
       'key' => 'form_error_customer_exists',
-      'value' => $this->t('Customer already exists.'),
+      'value' => [
+        '#markup' => (string) $this->t('You already have an account, @login_link.', [
+          '@login_link' => $login_link->toString()->getGeneratedLink(),
+        ]),
+      ],
     ];
 
     $strings[] = [
@@ -752,7 +764,13 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
 
     $product_config = $this->config('alshaya_acm_product.settings');
-    $cache_tags = Cache::mergeTags($cache_tags, $currency_config->getCacheTags());
+    $cache_tags = Cache::mergeTags($cache_tags, $product_config->getCacheTags());
+
+    // Flags text.
+    $settings['alshaya_spc']['non_refundable_tooltip'] = $product_config->get('non_refundable_tooltip');
+    $settings['alshaya_spc']['non_refundable_text'] = $product_config->get('non_refundable_text');
+    $settings['alshaya_spc']['delivery_in_only_city_text'] = $product_config->get('delivery_in_only_city_text');
+    $settings['alshaya_spc']['delivery_in_only_city_key'] = $product_config->get('delivery_in_only_city_key');
 
     // Time we get from configuration is in minutes.
     $settings['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
