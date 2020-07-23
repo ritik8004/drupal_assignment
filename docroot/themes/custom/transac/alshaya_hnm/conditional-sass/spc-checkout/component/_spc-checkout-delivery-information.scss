@@ -31,7 +31,6 @@
 
   .spc-checkout-empty-delivery-text {
     &::before {
-      #{$right}: 0.5rem;
       font-weight: bold;
       font-size: 1rem;
     }
