@@ -95,7 +95,9 @@
       Object.assign(data, homeDeliveryData);
     }
     var additionalCartData = Drupal.alshayaSeoSpc.cartGtm(cartData, step);
-    Object.assign(data.ecommerce, additionalCartData);
+    Object.assign(data.ecommerce.checkout, additionalCartData.checkout);
+    delete additionalCartData.checkout;
+    Object.assign(data, additionalCartData);
     if (step === 2) {
       dataLayer.push(data);
 
