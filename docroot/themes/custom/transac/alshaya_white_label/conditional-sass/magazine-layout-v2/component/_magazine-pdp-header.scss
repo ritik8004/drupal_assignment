@@ -15,8 +15,10 @@
 
   @include breakpoint($only-mobile) {
     padding: 1.25rem;
-    display: block;
+    display: flex;
+    flex-direction: column;
     background: $magv2-sticky-header-bg;
+    position: static;
   }
 
   &.magv2-pdp-sticky-header {
@@ -55,6 +57,18 @@
         display: block;
         height: 2.875rem;
         width: 2.875rem;
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  .magv2-header {
+    .magv2-header-wrapper {
+      .back-button {
+        @include icon(arrowup, after) {
+          transform: rotate(90deg);
+        }
       }
     }
   }
