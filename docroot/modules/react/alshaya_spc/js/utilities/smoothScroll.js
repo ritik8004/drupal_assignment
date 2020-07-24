@@ -33,7 +33,7 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
   if (contactField === true) {
     if (document.querySelector('.delivery-address-fields') !== null
     && document.querySelector('.delivery-address-fields') !== undefined) {
-      addressOffset = document.querySelector('.delivery-address-fields').offsetHeight;
+      addressOffset = 0;
     } else {
       addressOffset = document.querySelector('.store-details-wrapper').offsetHeight
         + document.querySelector('#click-and-collect-selected-store > .spc-checkout-section-title').offsetHeight;
