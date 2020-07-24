@@ -67,10 +67,12 @@ export const placeOrder = (paymentMethod) => {
           window.location = response.data.redirectUrl;
           return;
         }
-
+        const message = (parseInt(response.data.error_code, 10) === 505)
+          ? getStringMessage(response.data.error_message)
+          : response.data.error_message;
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
-          message: response.data.error_message,
+          message,
         });
 
         // Push error to GTM.

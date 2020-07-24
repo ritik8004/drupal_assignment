@@ -1102,8 +1102,10 @@ class Cart {
 
     // Check if shiping method is present else throw error.
     if (empty($cart['shipping']['method'])) {
-      $this->logger->error('Error while placing order. No shipping method available.');
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 500);
+      $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('shipping_method_error', 505);
     }
 
     $lock = FALSE;

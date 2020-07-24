@@ -14,6 +14,8 @@ import PaymentMethodCybersource from '../payment-method-cybersource';
 import { removeStorageInfo } from '../../../utilities/storage';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
+import dispatchCustomEvent from '../../../utilities/events';
+import getStringMessage from '../../../utilities/strings';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -61,6 +63,13 @@ export default class PaymentMethod extends React.Component {
       if (result.error !== undefined && result.error) {
         removeFullScreenLoader();
         Drupal.logJavascriptError('finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+        const message = (result.error_code === 505)
+          ? getStringMessage(result.message)
+          : result.message;
+        dispatchCustomEvent('spcCheckoutMessageUpdate', {
+          type: 'error',
+          message,
+        });
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
         const { cart } = this.props;
