@@ -171,6 +171,14 @@
               z-index: 1;
             }
 
+            .spc-filter-panel-header {
+              height: 4.0625rem;
+
+              .spc-filter-panel-back {
+                z-index: 2;
+              }
+            }
+
             .close {
               z-index: 1;
             }
