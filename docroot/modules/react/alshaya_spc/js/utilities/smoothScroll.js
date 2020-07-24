@@ -24,7 +24,8 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
   let offsetPosition = 0;
   let addressOffset = 0;
   let contactHeaderOffset = 0;
-  let container = document.querySelector('.spc-address-form-sidebar');
+  let container = document.querySelector('.spc-address-form-wrapper');
+  let homeDelivery = false;
   // Check if we are in HD or CC modal.
   if (container === null || container === undefined) {
     container = document.querySelector('.spc-cnc-address-form-sidebar');
@@ -34,6 +35,7 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
     if (document.querySelector('.delivery-address-fields') !== null
     && document.querySelector('.delivery-address-fields') !== undefined) {
       addressOffset = 0;
+      homeDelivery = true;
     } else {
       addressOffset = document.querySelector('.store-details-wrapper').offsetHeight
         + document.querySelector('#click-and-collect-selected-store > .spc-checkout-section-title').offsetHeight;
@@ -49,6 +51,11 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
     const headerOffset = 27;
     const elementPosition = element.offsetTop;
     offsetPosition = headerOffset - elementPosition + addressOffset + contactHeaderOffset;
+  }
+
+  // Temp solution to scroll for home delivery modal without map.
+  if (homeDelivery === true) {
+    offsetPosition = -200;
   }
   container.scrollBy({
     top: offsetPosition,

@@ -164,8 +164,6 @@
           grid-template-columns: 32.5rem !important;
 
           .spc-address-form-sidebar {
-            overflow-y: visible;
-
             .spc-checkout-section-title {
               position: absolute;
               top: 0;
@@ -180,8 +178,7 @@
             .spc-address-form-wrapper {
               margin-top: 4.0625rem;
               overflow-y: auto;
-              height: 100%;
-              padding-bottom: 4.0625rem;
+              height: calc(100% - 3.5rem);
             }
           }
         }
@@ -195,7 +192,8 @@
 
       @include breakpoint($only-mobile) {
         .spc-address-form-wrapper {
-          height: 100%;
+          overflow-y: auto;
+          height: calc(100% - 3.5rem);
         }
 
         &.spc-address-form-guest-content,
