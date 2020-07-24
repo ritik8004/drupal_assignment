@@ -3,7 +3,7 @@ import React from 'react';
 import BillingInfo from '../billing-info';
 import SectionTitle from '../../../utilities/section-title';
 import {
-  isBillingSameAsShippingInStorage,
+  isBillingSameAsShippingInStorage, isDeliveryTypeSameAsInCart,
 } from '../../../utilities/checkout_util';
 
 export default class HDBillingAddress extends React.Component {
@@ -66,11 +66,15 @@ export default class HDBillingAddress extends React.Component {
     }
   };
 
-  /**
-   * Message to show when billing is
-   * same as shipping.
-   */
-  sameBillingAsShippingMessage = () => Drupal.t('We have set your billing address same as delivery address. You can select a different one by clicking the change button above.');
+  isActive = () => {
+    const { cart } = this.props;
+
+    if (cart.cart.payment.methods === undefined || cart.cart.payment.methods.length === 0) {
+      return false;
+    }
+
+    return isDeliveryTypeSameAsInCart(cart);
+  };
 
   render() {
     const { cart, refreshCart } = this.props;
@@ -92,14 +96,10 @@ export default class HDBillingAddress extends React.Component {
       return (null);
     }
 
-    let showMessage = shippingAsBilling;
-    // If CnC is used for delivery method, we dont show message on address.
-    if (cart.cart.shipping.type === 'click_and_collect') {
-      showMessage = false;
-    }
+    const activeClass = this.isActive() ? 'active' : 'in-active';
 
     return (
-      <div className="spc-section-billing-address appear" style={{ animationDelay: '0.2s' }}>
+      <div className={`spc-section-billing-address appear ${activeClass}`} style={{ animationDelay: '0.2s' }}>
         <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
@@ -108,8 +108,6 @@ export default class HDBillingAddress extends React.Component {
               refreshCart={refreshCart}
               shippingAsBilling={shippingAsBilling}
             />
-            {showMessage
-            && <div className="spc-billing-help-text">{this.sameBillingAsShippingMessage()}</div>}
           </div>
         </div>
       </div>
