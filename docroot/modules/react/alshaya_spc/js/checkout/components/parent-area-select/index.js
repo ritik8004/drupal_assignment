@@ -5,9 +5,6 @@ import {
   getAreasList,
   gerAreaLabelById,
 } from '../../../utilities/address_util';
-import {
-  geocodeAddressToLatLng,
-} from '../../../utilities/map/map_utils';
 import getStringMessage from '../../../utilities/strings';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 
@@ -95,13 +92,6 @@ export default class ParentAreaSelect extends React.Component {
     });
 
     this.handleChange(val);
-
-    // Geocoding so that map is updated.
-    // Calling in timeout to avaoid race condition as
-    // component is refreshing and thus elemtent not available.
-    setTimeout(() => {
-      geocodeAddressToLatLng();
-    }, 200);
   }
 
   /**
