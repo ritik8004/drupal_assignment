@@ -94,6 +94,30 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
   font-display: swap;
 }
 
+@font-face {
+  font-family: "TrendSansFour-Italic";
+  src: url("#{$base_theme_fonts_directory_path}/TrendSansFour-Italic.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TrendSansOne";
+  src: url("#{$base_theme_fonts_directory_path}/TrendSansOne.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TrendSansTwo";
+  src: url("#{$base_theme_fonts_directory_path}/TrendSansTwo.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 // Font Family
 $bbw-bold: 'BBWTradeGothicLTStd_Bold', 'DroidArabicKufi_Bold', 'Arial';
 $bbw-bold-nodir: 'BBWTradeGothicLTStd_Bold', 'DroidArabicKufi_Bold', 'Arial';
