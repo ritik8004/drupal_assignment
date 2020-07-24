@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import _has from 'lodash/has';
-import moment from 'moment-timezone';
+import moment from 'moment';
 import { getStorageInfo } from '../storage';
 
 const TextField = (props) => {
@@ -126,6 +126,7 @@ const TextField = (props) => {
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
+          maxDate={new Date()}
           customInput={<DateCustomInput />}
         />
       </div>
