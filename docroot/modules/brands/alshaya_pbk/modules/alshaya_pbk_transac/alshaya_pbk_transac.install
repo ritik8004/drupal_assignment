@@ -8,6 +8,16 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Clears front-end cache so that Algolia sends request to the new configured
+ * sandbox for the dev envs.
+ */
+function alshaya_pbk_transac_update_8001() {
+  alshaya_performance_flush_frontend_caches(FALSE);
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_pbk_transac_install() {
