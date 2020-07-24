@@ -5,7 +5,6 @@ import _findKey from 'lodash/findKey';
 import Loading from '../../../utilities/loading';
 import {
   checkoutAddressProcess,
-  getAddressPopupClassName,
   addEditAddressToCustomer,
 } from '../../../utilities/address_util';
 import {
@@ -264,7 +263,7 @@ export default class EmptyDeliveryText extends React.Component {
             </div>
             <Popup
               open={isModalOpen}
-              className={deliveryType === 'click_and_collect' ? '' : getAddressPopupClassName()}
+              className={deliveryType === 'click_and_collect' ? '' : 'spc-address-form-guest'}
               closeOnEscape={false}
               closeOnDocumentClick={false}
             >
