@@ -98,7 +98,8 @@ export default class PaymentMethods extends React.Component {
       || paymentDiv.checked !== true) {
       // Select previously selected method if available.
       if (cart.cart.payment.method !== undefined
-        || paymentMethods[cart.cart.payment.method] !== undefined) {
+        && cart.cart.payment.method !== null
+        && paymentMethods[cart.cart.payment.method] !== undefined) {
         this.changePaymentMethod(cart.cart.payment.method);
         return;
       }
@@ -145,10 +146,14 @@ export default class PaymentMethods extends React.Component {
   };
 
   processPostPaymentSelection = (method) => {
-    const { cart: cartData } = this.props;
-
     const paymentDiv = document.getElementById(`payment-method-${method}`);
+    if (paymentDiv === null) {
+      return;
+    }
+
     paymentDiv.checked = true;
+
+    const { cart: cartData } = this.props;
 
     // Dispatch event for GTM checkout step 3.
     dispatchCustomEvent('refreshCartOnPaymentMethod', {
@@ -167,7 +172,7 @@ export default class PaymentMethods extends React.Component {
 
     // If method is already selected in cart we simply
     // trigger the events.
-    if (cart.cart.payment.method === method) {
+    if (method && cart.cart.payment.method === method) {
       this.processPostPaymentSelection(method);
       return;
     }
