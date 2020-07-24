@@ -20,9 +20,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Cache\CacheableMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\SkuImagesManager;
-use Drupal\alshaya_pdp_layouts\Plugin\PdpLayout\MagazineV2PdpLayout;
-use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Class ProductController.
@@ -242,7 +241,6 @@ class ProductController extends ControllerBase {
 
     // Add cache metadata.
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
-
     return $response;
   }
 
@@ -260,33 +258,22 @@ class ProductController extends ControllerBase {
   public function getRelatedProductsJson(array $related_skus, array $data) {
     foreach ($related_skus as $related_sku => $value) {
       $related_sku_entity = SKU::loadFromSku($related_sku);
-      $media = $this->skuImageManager->getProductMedia($related_sku_entity, MagazineV2PdpLayout::PDP_LAYOUT_MAGAZINE_V2, FALSE);
-      if (!empty($media)) {
-        $mediaItem = $this->skuImageManager->getThumbnailsFromMedia($media, FALSE);
-        $image = $mediaItem['thumbnails'][0];
-      }
-      else {
-        // Set gallery image from variant
-        // if main sku gallery is empty.
-        $product_tree = Configurable::deriveProductTree($related_sku_entity);
-        $combinations = $product_tree['combinations'];
-        $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
-        $first_child = reset($sorted_variants);
-        $child_sku = SKU::loadFromSku($first_child, $related_sku_entity->language()->getId());
-        $media = $this->skuImageManager->getProductMedia($child_sku, MagazineV2PdpLayout::PDP_LAYOUT_MAGAZINE_V2, FALSE);
-        if (!empty($media)) {
-          $mediaItem = $this->skuImageManager->getThumbnailsFromMedia($media, FALSE);
-          $image = $mediaItem['thumbnails'][0];
-        }
-      }
-      $final_price = _alshaya_acm_format_price_with_decimal((float) $related_sku_entity->get('final_price')->getString());
-      $title = $related_sku_entity->label();
-      $related_products['products'][$related_sku]['gallery'] = $image;
-      $related_products['products'][$related_sku]['finalPrice'] = $final_price;
-      $related_products['products'][$related_sku]['title'] = $title;
-      $related_products['section_title'] = $data['section_title']->__toString();
-    }
+      $sku_media = $this->skuImageManager->getFirstImage($related_sku_entity);
 
+      if (!empty($sku_media['drupal_uri'])) {
+        $image = ImageStyle::load('product_zoom_medium_606x504')->buildUrl($sku_media['drupal_uri']);
+      }
+      $priceHelper = _alshaya_acm_product_get_price_helper();
+      $related_sku_price = $priceHelper->getPriceBlockForSku($related_sku_entity, []);
+      $price = $related_sku_price['#price']['#price'];
+      $final_price = isset($related_sku_price['#final_price']) ? $related_sku_price['#final_price']['#price'] : $price;
+      $title = $related_sku_entity->label();
+      $related_products['products'][$related_sku]['gallery']['mediumurl'] = $image;
+      $related_products['products'][$related_sku]['finalPrice'] = $final_price;
+      $related_products['products'][$related_sku]['priceRaw'] = $price;
+      $related_products['products'][$related_sku]['title'] = $title;
+      $related_products['section_title'] = render($data['section_title']);
+    }
     return $related_products;
   }
 
