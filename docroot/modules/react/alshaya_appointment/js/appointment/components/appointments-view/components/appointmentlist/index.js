@@ -77,8 +77,10 @@ export default class AppointmentListItem extends React.Component {
     if (companionData !== undefined && companionData.length > 0) {
       companionsRender = companionData.map((item) => (
         <div>
-          <span>{item.firstName}</span>
-          <span>{item.lastName}</span>
+          <p>
+            {item.firstName}
+            {item.lastName}
+          </p>
         </div>
       ));
     }
@@ -98,7 +100,6 @@ export default class AppointmentListItem extends React.Component {
         <div className="appointment-list-date-time">
           <span className="appointment-list-label">{ Drupal.t('Date and Time') }</span>
           <span>{ moment(appointmentStartDate).format('dddd, Do MMMM') }</span>
-          <br />
           <span>{ moment(appointmentStartDate).format('YYYY hh:mm A') }</span>
         </div>
         <div className="appointment-list-store">
@@ -150,7 +151,7 @@ export default class AppointmentListItem extends React.Component {
                     <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ Drupal.t('close') }</button>
                     <div className="appointment-delete-popup fadeInUp">
                       <div className="appointmentbox title">
-                        <span>Delete</span>
+                        <span>{ Drupal.t('Cancel') }</span>
                       </div>
                       <div className="appointmentbox message">
                         <span>
@@ -169,7 +170,7 @@ export default class AppointmentListItem extends React.Component {
                         >
                           OK
                         </button>
-                        <button type="button" className="cancel-button" onClick={() => triggerCloseModal()}>Cancel</button>
+                        <button type="button" className="cancel-button" onClick={() => triggerCloseModal()}>{ Drupal.t('Cancel') }</button>
                       </div>
                     </div>
                   </>

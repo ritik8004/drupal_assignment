@@ -44,12 +44,6 @@
 }
 
 .user-details-wrapper {
-  .user-dob {
-    @include breakpoint($tablet) {
-      width: 15.625rem;
-    }
-  }
-
   .user-email {
     @include breakpoint($tablet) {
       width: 24.375rem;

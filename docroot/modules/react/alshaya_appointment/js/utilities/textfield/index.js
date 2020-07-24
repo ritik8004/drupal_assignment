@@ -49,10 +49,11 @@ const TextField = (props) => {
   const DateCustomInput = ({ onClick }) => (
     <div onClick={onClick}>
       <div className="dob-input-wrapper">
+        <label>{label}</label>
         <input
           type="text"
           onBlur={(e) => handleEvent(e, 'blur')}
-          placeholder={label}
+          placeholder="yyyy/mm/dd"
           readOnly
           value={defaultValue ? moment(defaultValue).format('yyyy/MM/DD') : ''}
           id={name}

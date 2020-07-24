@@ -22,7 +22,7 @@
 }
 
 // Type = Text.
-.appointment-form-item:not(.appointment-type-mobile) {
+.appointment-form-item:not(.appointment-type-mobile):not(.appointment-type-date) {
   input[type=text],
   input[type=email],
   input[type=date],
@@ -44,6 +44,29 @@
 
 // Type = Date
 .appointment-type-date {
+  label {
+    font-size: 0.75rem;
+    color: $appointment-input-label;
+    margin-bottom: 0.3125rem;
+    display: block;
+  }
+
+  input {
+    height: 1.5rem;
+    font-size: 0.875rem;
+    color: $appointment-input-label;
+    padding-bottom: 0.125rem;
+
+    &::placeholder {
+      font-family: $alshaya-thin;
+      font-size: 0.875rem;
+    }
+
+    @include breakpoint($tablet) {
+      width: 10rem !important;
+    }
+  }
+
   .react-datepicker-wrapper {
     display: block;
   }
@@ -57,6 +80,16 @@
 
     &-popper {
       z-index: 4;
+
+      &[data-placement^="bottom"],
+      &[data-placement^="top"] {
+        .react-datepicker__triangle {
+          #{$left}: 0 !important;
+          #{$right}: 0;
+          margin-#{$left}: auto;
+          margin-#{$right}: auto;
+        }
+      }
     }
 
     &__day-name,
@@ -73,6 +106,10 @@
       &:focus {
         outline: none;
       }
+    }
+
+    &__day--disabled {
+      color: $appointment-calendar-disable-text;
     }
 
     &__month-select,
