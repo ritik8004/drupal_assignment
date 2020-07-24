@@ -95,7 +95,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "Ginger-bold-webfont";
-  src: url("#{$base_theme_fonts_directory_path}/Ginger-bold-webfont.otf");
+  src: url("#{$base_theme_fonts_directory_path}/Ginger-bold-webfont.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -103,7 +103,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "Ginger-light-webfont";
-  src: url("#{$base_theme_fonts_directory_path}/Ginger-light-webfont.otf");
+  src: url("#{$base_theme_fonts_directory_path}/Ginger-light-webfont.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
