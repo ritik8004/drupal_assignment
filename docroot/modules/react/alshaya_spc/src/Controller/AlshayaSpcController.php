@@ -449,6 +449,11 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'),
     ];
 
+    $strings[] = [
+      'key' => 'shipping_method_error',
+      'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
+    ];
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,

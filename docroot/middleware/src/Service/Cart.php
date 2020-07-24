@@ -1106,6 +1106,14 @@ class Cart {
     $url = sprintf('carts/%d/order', $this->getCartId());
     $cart = $this->getCart();
 
+    // Check if shiping method is present else throw error.
+    if (empty($cart['shipping']['method'])) {
+      $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 'shipping_method_error');
+    }
+
     $lock = FALSE;
     $settings = $this->settings->getSettings('spc_middleware');
 
