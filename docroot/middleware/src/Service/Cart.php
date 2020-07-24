@@ -1105,7 +1105,7 @@ class Cart {
       $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 'shipping_method_error');
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
     }
 
     $lock = FALSE;

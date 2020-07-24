@@ -68,8 +68,8 @@ export const placeOrder = (paymentMethod) => {
           return;
         }
         let message = response.data.error_message;
-        if (response.data.error_code !== undefined && response.data.error_code === 'shipping_method_error') {
-          message = getStringMessage(response.data.error_code);
+        if (response.data.error_code !== undefined && response.data.error_code === 505) {
+          message = getStringMessage('shipping_method_error');
         }
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
