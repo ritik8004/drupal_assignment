@@ -131,7 +131,7 @@ export default class AddressList extends React.Component {
                 <div className="spc-add-new-address-btn" onClick={() => triggerOpenModal(2)}>
                   {getStringMessage('add_new_address')}
                 </div>
-                <Popup open={isModalOpen} closeOnDocumentClick={false} closeOnEscape={false}>
+                <Popup className="spc-address-list-new-address" open={isModalOpen} closeOnDocumentClick={false} closeOnEscape={false}>
                   <AddressForm
                     closeModal={triggerCloseModal}
                     showEmail={false}
