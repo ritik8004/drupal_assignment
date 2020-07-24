@@ -5,7 +5,8 @@ import _findKey from 'lodash/findKey';
 import Loading from '../../../utilities/loading';
 import {
   checkoutAddressProcess,
-  addEditAddressToCustomer,
+  getAddressPopupClassName,
+  addEditAddressToCustomer, customerHasAddress,
 } from '../../../utilities/address_util';
 import {
   getDefaultMapCenter,
@@ -250,6 +251,10 @@ export default class EmptyDeliveryText extends React.Component {
       };
     }
 
+    const popupClassName = customerHasAddress(mainCart)
+      ? getAddressPopupClassName()
+      : 'spc-address-form-guest';
+
     return (
       <WithModal modalStatusKey="deliveryType">
         {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
@@ -263,7 +268,7 @@ export default class EmptyDeliveryText extends React.Component {
             </div>
             <Popup
               open={isModalOpen}
-              className={deliveryType === 'click_and_collect' ? '' : 'spc-address-form-guest'}
+              className={deliveryType === 'click_and_collect' ? '' : popupClassName}
               closeOnEscape={false}
               closeOnDocumentClick={false}
             >
