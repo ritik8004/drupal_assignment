@@ -164,6 +164,8 @@
           grid-template-columns: 32.5rem !important;
 
           .spc-address-form-sidebar {
+            overflow-y: visible;
+
             .spc-checkout-section-title {
               position: absolute;
               top: 0;

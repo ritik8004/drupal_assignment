@@ -55,7 +55,7 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
 
   // Temp solution to scroll for home delivery modal without map.
   if (homeDelivery === true) {
-    offsetPosition = -200;
+    offsetPosition = -300;
   }
   container.scrollBy({
     top: offsetPosition,
