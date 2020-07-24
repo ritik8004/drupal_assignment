@@ -63,7 +63,7 @@ export const placeOrder = (paymentMethod) => {
         }
 
         if (response.data.error && response.data.redirectUrl !== undefined) {
-          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.');
+          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
           window.location = response.data.redirectUrl;
           return;
         }
@@ -74,17 +74,12 @@ export const placeOrder = (paymentMethod) => {
         });
 
         // Push error to GTM.
-        const gtmInfo = {
-          errorMessage: response.data.error_message,
-          paymentMethod,
-        };
-        Drupal.logJavascriptError('place-order', gtmInfo);
-
+        Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
         removeFullScreenLoader();
       },
       (error) => {
         // Processing of error here.
-        Drupal.logJavascriptError('place-order', error);
+        Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       },
     );
 };
@@ -159,7 +154,7 @@ export const addShippingInCart = (action, data) => {
       }),
     )
     .catch((error) => {
-      Drupal.logJavascriptError('add-shipping-in-cart', error);
+      Drupal.logJavascriptError('add-shipping-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -184,7 +179,7 @@ export const addBillingInCart = (action, data) => {
       }),
     )
     .catch((error) => {
-      Drupal.logJavascriptError('add-billing-in-cart', error);
+      Drupal.logJavascriptError('add-billing-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -236,7 +231,7 @@ export const validateCartData = () => {
     )
     .catch((error) => {
       // Error processing here.
-      Drupal.logJavascriptError('checkout-refresh-cart-data', error);
+      Drupal.logJavascriptError('checkout-refresh-cart-data', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 

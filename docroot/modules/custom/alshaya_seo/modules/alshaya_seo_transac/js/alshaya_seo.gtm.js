@@ -2,6 +2,12 @@
  * @file
  * JS code to integrate with GTM.
  */
+const GTM_CONSTANTS = {
+  CART_ERRORS: 'cart errors',
+  CHECKOUT_ERRORS: 'checkout errors',
+  PAYMENT_ERRORS: 'other payment errors',
+  GENUINE_PAYMENT_ERRORS: 'payment errors',
+};
 
 (function ($, Drupal, dataLayer) {
   'use strict';
@@ -113,15 +119,7 @@
         // Set Event label.
         var label = 'Update cart failed for Product [' + sku + '] ';
         label = label + attributes.join(', ');
-        var productData = {
-          event: 'eventTracker',
-          eventCategory: 'Update cart error',
-          eventAction: errorMessage,
-          eventLabel: label,
-          eventValue: 0,
-          nonInteraction: 0,
-        };
-        dataLayer.push(productData);
+        Drupal.logJavascriptError(label, errorMessage, GTM_CONSTANTS.CART_ERRORS);
       });
 
       // Global variables & selectors.
@@ -1292,17 +1290,24 @@
    *
    * @param context
    * @param error
+   * @param category
    */
-  Drupal.logJavascriptError = function (context, error) {
+  Drupal.logJavascriptError = function (context, error, category) {
     var message = (error && error.message !== undefined)
       ? error.message
       : error;
+
+    // We want message to be sent as string always.
+    if ($.type(message) !== 'string') {
+      message = JSON.stringify(message);
+    }
+
     var errorData = {
       event: 'eventTracker',
-      eventCategory: 'alshaya errors',
+      eventCategory: category || 'unknown errors',
       eventLabel: context,
-      eventAction: 'Error occurred on ' + window.location.href,
-      eventMessage: message,
+      eventAction: message,
+      eventPlace: 'Error occurred on ' + window.location.href,
       eventValue: 0,
       nonInteraction: 0,
     };
@@ -1311,7 +1316,7 @@
       // Log error on console.
       if (drupalSettings.gtm.log_errors_to_console !== undefined
         && drupalSettings.gtm.log_errors_to_console) {
-        console.error(error);
+        console.error(errorData);
       }
 
       // Track error on GA.
