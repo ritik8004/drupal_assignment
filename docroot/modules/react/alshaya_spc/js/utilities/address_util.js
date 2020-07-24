@@ -560,6 +560,10 @@ export const formatAddressDataForEditForm = (address) => {
   return formattedAddress;
 };
 
+export const customerHasAddress = (cart) => (drupalSettings.user.uid > 0
+  && cart.cart.customer.addresses !== undefined
+  && cart.cart.customer.addresses.length > 0);
+
 /**
  * Get the address popup class.
  */
