@@ -226,6 +226,7 @@ export default class AppointmentStore extends React.Component {
       requestFullscreen(this.appMapView.current);
       this.setState({
         mapFullScreen: true,
+        openSelectedStore: true,
       });
     }
   };
@@ -252,6 +253,7 @@ export default class AppointmentStore extends React.Component {
       const allMapListStores = this.mapStoreList.current.querySelectorAll('.select-store');
       this.removeClassForAll(allMapListStores, 'selected');
       this.mapStoreList.current.querySelector(`[data-index="${index}"]`).classList.add('selected');
+      this.hightlightMapMarker(index);
     }
   }
 
