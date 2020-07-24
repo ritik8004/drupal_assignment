@@ -155,12 +155,32 @@ class DeeplinkResource extends ResourceBase {
       $url = $internal_url->getGeneratedUrl();
     }
     else {
-      $alias = $this->mobileAppUtility->getRedirectUrl($alias);
-      // Get the internal path of given alias and get route object.
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
       $internal_path = $this->aliasManager->getPathByAlias(
-        '/' . $alias,
-        $this->languageManager->getCurrentLanguage()->getId()
+        rtrim(str_replace("/{$langcode}", '', $alias), '/'),
+        $langcode
       );
+      if (strpos($internal_path, 'taxonomy/term')) {
+        $redirect_url = $this->mobileAppUtility->getRedirectUrl("/{$langcode}" . $internal_path);
+        // Append '/' if it does not exist.
+        $redirect_url = (substr($redirect_url, 0, 1) !== '/') ? ('/' . $redirect_url) : $redirect_url;
+        if ($redirect_url !== $internal_path) {
+          $internal_path = $this->aliasManager->getPathByAlias(
+            rtrim(str_replace("/{$langcode}", '', $redirect_url), '/'),
+            $langcode
+          );
+        }
+      }
+      else {
+        $redirect_url = $this->mobileAppUtility->getRedirectUrl($alias);
+        // Get the internal path of given alias and get route object.
+        $internal_path = $this->aliasManager->getPathByAlias(
+          '/' . $redirect_url,
+          $langcode
+        );
+      }
+
+      // Get the internal path of given alias and get route object.
       $url_obj = Url::fromUri("internal:" . $internal_path);
       if (!$url_obj->isRouted()) {
         return $this->mobileAppUtility->throwException();
