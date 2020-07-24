@@ -67,10 +67,13 @@ export const placeOrder = (paymentMethod) => {
           window.location = response.data.redirectUrl;
           return;
         }
-
+        let message = response.data.error_message;
+        if (response.data.error_code !== undefined && response.data.error_code === 'shipping_method_error') {
+          message = getStringMessage(response.data.error_message);
+        }
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
-          message: response.data.error_message,
+          message,
         });
 
         // Push error to GTM.
