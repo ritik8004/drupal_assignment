@@ -12,7 +12,7 @@
 
           body.ie & {
             display: -ms-grid;
-            -ms-grid-columns: 1fr 22.5rem;
+            -ms-grid-columns: 1fr;
           }
         }
 
@@ -47,7 +47,7 @@
 
         body.ie & {
           -ms-grid-row: 1;
-          -ms-grid-column: 2;
+          -ms-grid-column: 1;
         }
 
         &.block-overflow {
