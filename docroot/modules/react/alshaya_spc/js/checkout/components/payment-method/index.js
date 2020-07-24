@@ -63,13 +63,12 @@ export default class PaymentMethod extends React.Component {
       if (result.error !== undefined && result.error) {
         removeFullScreenLoader();
         Drupal.logJavascriptError('finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
-        const message = (result.error_code === 505)
-          ? getStringMessage(result.message)
-          : result.message;
-        dispatchCustomEvent('spcCheckoutMessageUpdate', {
-          type: 'error',
-          message,
-        });
+        if (result.error_code !== undefined && result.error_code === 'shipping_method_error') {
+          dispatchCustomEvent('spcCheckoutMessageUpdate', {
+            type: 'error',
+            message: getStringMessage(result.error_code),
+          });
+        }
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
         const { cart } = this.props;

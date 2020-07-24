@@ -583,8 +583,8 @@ class CartController {
 
           return new JsonResponse([
             'error' => TRUE,
-            'error_code' => 505,
-            'message' => 'shipping_method_error',
+            'error_code' => 'shipping_method_error',
+            'message' => 'Delivery Information is incomplete. Please update and try again.',
           ]);
         }
 
