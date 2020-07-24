@@ -151,6 +151,11 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
+    // If the payment is already checked do not process again.
+    if (paymentDiv.checked) {
+      return;
+    }
+
     paymentDiv.checked = true;
 
     const { cart: cartData } = this.props;
