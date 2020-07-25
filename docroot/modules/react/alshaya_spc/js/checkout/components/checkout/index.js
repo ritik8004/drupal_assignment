@@ -91,7 +91,7 @@ export default class Checkout extends React.Component {
       }
     } catch (error) {
       // In case of error, do nothing.
-      Drupal.logJavascriptError('checkout', error);
+      Drupal.logJavascriptError('checkout', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
 
     // Make sidebar sticky.

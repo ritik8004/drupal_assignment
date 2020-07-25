@@ -22,17 +22,20 @@ import {
  * @param {*} selector
  */
 export const addressFormInlineErrorScroll = () => {
-  // Find where the error is.
+  // If error is on contact fields.
+  const contactFieldsSelector = '.spc-checkout-contact-information-fields > div > div.error:not(:empty)';
+  let errorElement = document.querySelector(contactFieldsSelector);
+  if (errorElement !== undefined && errorElement !== null) {
+    smoothScrollToAddressField(errorElement, true);
+    return;
+  }
+
   const addressFieldsSelector = '.delivery-address-fields > div > div.error:not(:empty)';
-  let errorElement = document.querySelector(addressFieldsSelector);
+  errorElement = document.querySelector(addressFieldsSelector);
   // If error found in address fields, scroll and return.
   if (errorElement !== undefined && errorElement !== null) {
     smoothScrollToAddressField(errorElement);
-    return;
   }
-  const contactFieldsSelector = '.spc-checkout-contact-information-fields > div > div.error:not(:empty)';
-  errorElement = document.querySelector(contactFieldsSelector);
-  smoothScrollToAddressField(errorElement, true);
 };
 
 /**
@@ -42,7 +45,7 @@ export const getUserAddressList = () => axios.get('spc/user-address-list')
   .then((response) => response.data)
   .catch((error) => {
     // Processing of error here.
-    Drupal.logJavascriptError('get-user-address-list', error);
+    Drupal.logJavascriptError('get-user-address-list', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
 
 /**
@@ -64,7 +67,7 @@ export const addEditUserAddress = (address, isDefault) => axios.post('spc/add-ed
   )
   .catch((error) => {
     // Processing of error here.
-    Drupal.logJavascriptError('add-edit-user-address', error);
+    Drupal.logJavascriptError('add-edit-user-address', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
 
 /**
@@ -529,7 +532,7 @@ export const checkoutAddressProcess = (e) => {
 
     return true;
   }).catch((error) => {
-    Drupal.logJavascriptError('Email and mobile number validation fail', error);
+    Drupal.logJavascriptError('Email and mobile number validation fail', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
 };
 
@@ -556,6 +559,10 @@ export const formatAddressDataForEditForm = (address) => {
 
   return formattedAddress;
 };
+
+export const customerHasAddress = (cart) => (drupalSettings.user.uid > 0
+  && cart.cart.customer.addresses !== undefined
+  && cart.cart.customer.addresses.length > 0);
 
 /**
  * Get the address popup class.
@@ -701,7 +708,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
         }
       }
     }).catch((error) => {
-      Drupal.logJavascriptError('Email and mobile number validation fail', error);
+      Drupal.logJavascriptError('Email and mobile number validation fail', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
   }
 };

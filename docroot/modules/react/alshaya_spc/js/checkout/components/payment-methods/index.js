@@ -34,6 +34,7 @@ export default class PaymentMethods extends React.Component {
 
       const paymentErrorInfo = JSON.parse(paymentError);
       let message = getStringMessage('payment_error');
+
       // If K-NET error and have K-Net Error details.
       if (paymentErrorInfo.payment_method !== undefined
         && paymentErrorInfo.payment_method === 'knet'
@@ -49,7 +50,11 @@ export default class PaymentMethods extends React.Component {
       }
 
       // Push error to GA.
-      Drupal.logJavascriptError('payment-error', paymentErrorInfo);
+      Drupal.logJavascriptError(
+        'payment-error',
+        paymentErrorInfo,
+        GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS,
+      );
 
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
@@ -86,9 +91,19 @@ export default class PaymentMethods extends React.Component {
 
     const { cart } = this.props;
 
+    const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
     if (cart.cart.payment.method === undefined
       || paymentMethods[cart.cart.payment.method] === undefined
-      || document.getElementById(`payment-method-${cart.cart.payment.method}`) === null) {
+      || paymentDiv === null
+      || paymentDiv.checked !== true) {
+      // Select previously selected method if available.
+      if (cart.cart.payment.method !== undefined
+        && cart.cart.payment.method !== null
+        && paymentMethods[cart.cart.payment.method] !== undefined) {
+        this.changePaymentMethod(cart.cart.payment.method);
+        return;
+      }
+
       // Select default from previous order if available.
       if (cart.cart.payment.default !== undefined
         || paymentMethods[cart.cart.payment.default] !== undefined) {
@@ -130,10 +145,40 @@ export default class PaymentMethods extends React.Component {
     return paymentMethods;
   };
 
+  processPostPaymentSelection = (method) => {
+    const paymentDiv = document.getElementById(`payment-method-${method}`);
+    if (paymentDiv === null) {
+      return;
+    }
+
+    // If the payment is already checked do not process again.
+    if (paymentDiv.checked) {
+      return;
+    }
+
+    paymentDiv.checked = true;
+
+    const { cart: cartData } = this.props;
+
+    // Dispatch event for GTM checkout step 3.
+    dispatchCustomEvent('refreshCartOnPaymentMethod', {
+      cart: cartData.cart,
+    });
+
+    dispatchCustomEvent('refreshCompletePurchaseSection', {});
+  };
+
   changePaymentMethod = (method) => {
     const { cart, refreshCart } = this.props;
 
-    if (!this.isActive() || cart.cart.payment.method === method) {
+    if (!this.isActive()) {
+      return;
+    }
+
+    // If method is already selected in cart we simply
+    // trigger the events.
+    if (method && cart.cart.payment.method === method) {
+      this.processPostPaymentSelection(method);
       return;
     }
 
@@ -162,20 +207,13 @@ export default class PaymentMethods extends React.Component {
           return;
         }
 
-        paymentDiv.checked = true;
-
         const { cart: cartData } = this.props;
         cartData.cart = result;
         refreshCart(cartData);
 
-        // Dispatch event for GTM checkout step 3.
-        dispatchCustomEvent('refreshCartOnPaymentMethod', {
-          cart: cartData.cart,
-        });
-
-        dispatchCustomEvent('refreshCompletePurchaseSection', {});
+        this.processPostPaymentSelection(method);
       }).catch((error) => {
-        Drupal.logJavascriptError('change payment method', error);
+        Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       });
     }
   };
@@ -213,7 +251,7 @@ export default class PaymentMethods extends React.Component {
     const activeClass = active ? 'active' : 'in-active';
 
     return (
-      <div id="spc-payment-methods" className="spc-checkout-payment-options fadeInUp" style={{ animationDelay: '0.4s' }}>
+      <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
         <ConditionalView condition={Object.keys(methods).length > 0}>
           <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
           <div className={`payment-methods ${activeClass}`}>{methods}</div>

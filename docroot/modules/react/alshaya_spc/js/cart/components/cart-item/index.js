@@ -228,8 +228,8 @@ export default class CartItem extends React.Component {
               </div>
               <div className="spc-product-price">
                 <SpecialPrice
-                  price={parseFloat(price)}
-                  finalPrice={parseFloat(finalPrice)}
+                  price={price}
+                  finalPrice={finalPrice}
                 />
               </div>
             </div>

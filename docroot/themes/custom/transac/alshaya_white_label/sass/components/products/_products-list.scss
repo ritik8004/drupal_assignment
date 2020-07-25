@@ -493,6 +493,10 @@
           color: $plp_tile_product_title_hover;
           text-decoration: underline;
         }
+
+        .suggested-text {
+          line-height: 1.3;
+        }
       }
 
       @include breakpoint($tablet) {

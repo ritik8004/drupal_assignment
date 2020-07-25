@@ -6,7 +6,7 @@ import Loading from '../../../utilities/loading';
 import {
   checkoutAddressProcess,
   getAddressPopupClassName,
-  addEditAddressToCustomer,
+  addEditAddressToCustomer, customerHasAddress,
 } from '../../../utilities/address_util';
 import {
   getDefaultMapCenter,
@@ -89,7 +89,7 @@ export default class EmptyDeliveryText extends React.Component {
               return;
             }
           } catch (error) {
-            Drupal.logJavascriptError('clickncollect-checkUserCountry', error);
+            Drupal.logJavascriptError('clickncollect-checkUserCountry', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
           }
           fetchStoresHelper(coords);
         },
@@ -99,7 +99,7 @@ export default class EmptyDeliveryText extends React.Component {
       )
       .catch((error) => {
         removeFullScreenLoader();
-        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error);
+        Drupal.logJavascriptError('clickncollect-getCurrentPosition', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
       });
   }
 
@@ -251,6 +251,10 @@ export default class EmptyDeliveryText extends React.Component {
       };
     }
 
+    const popupClassName = customerHasAddress(mainCart)
+      ? getAddressPopupClassName()
+      : 'spc-address-form-guest';
+
     return (
       <WithModal modalStatusKey="deliveryType">
         {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
@@ -264,7 +268,7 @@ export default class EmptyDeliveryText extends React.Component {
             </div>
             <Popup
               open={isModalOpen}
-              className={deliveryType === 'click_and_collect' ? '' : getAddressPopupClassName()}
+              className={deliveryType === 'click_and_collect' ? '' : popupClassName}
               closeOnEscape={false}
               closeOnDocumentClick={false}
             >

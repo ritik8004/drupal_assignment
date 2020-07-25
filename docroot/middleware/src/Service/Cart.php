@@ -251,6 +251,10 @@ class Cart {
     catch (\Exception $e) {
       static::$cart = NULL;
 
+      $this->logger->error('Error while getting cart from MDC. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
         $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
       }
@@ -263,9 +267,6 @@ class Cart {
         return static::$cart;
       }
 
-      $this->logger->error('Error while getting cart from MDC. Error message: @message', [
-        '@message' => $e->getMessage(),
-      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -851,8 +852,12 @@ class Cart {
 
     $cart = NULL;
 
+    $action = is_array($data['extension'])
+      ? $data['extension']['action'] ?? ''
+      : $data['extension']->action ?? '';
+
     try {
-      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data], $action);
       static::$cart = $this->formatCart($cart_updated);
       $cart = static::$cart;
 
@@ -877,6 +882,11 @@ class Cart {
     catch (\Exception $e) {
       static::$cart = NULL;
 
+      $this->logger->error('Error while updating cart on MDC for action @action. Error message: @message', [
+        '@action' => $action,
+        '@message' => $e->getMessage(),
+      ]);
+
       // Re-set cart id in session if exception is for cart not found.
       // Also try to do the same operation again for the user.
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
@@ -899,8 +909,7 @@ class Cart {
       // Because, If we return cart object, it won't show any error as we are
       // not passing error with cart object, and with successful cart object it
       // will show notification of add to cart (Which we don't need here.).
-      $is_add_to_Cart = (!empty($data['extension'])
-        && $data['extension']->action == CartActions::CART_ADD_ITEM);
+      $is_add_to_Cart = ($action == CartActions::CART_ADD_ITEM);
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
       if (!empty($exception_type) && !$is_add_to_Cart) {
@@ -919,9 +928,6 @@ class Cart {
         }
       }
 
-      $this->logger->error('Error while updating cart on MDC. Error message: @message', [
-        '@message' => $e->getMessage(),
-      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -1099,6 +1105,14 @@ class Cart {
   public function placeOrder(array $data) {
     $url = sprintf('carts/%d/order', $this->getCartId());
     $cart = $this->getCart();
+
+    // Check if shiping method is present else throw error.
+    if (empty($cart['shipping']['method'])) {
+      $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
 
     $lock = FALSE;
     $settings = $this->settings->getSettings('spc_middleware');
