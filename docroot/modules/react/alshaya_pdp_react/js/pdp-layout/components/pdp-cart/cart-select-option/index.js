@@ -68,8 +68,9 @@ class CartSelectOption extends React.Component {
       selectedCombination += `${key}|${selectedValuesArray[key]}||`;
     });
     const variantSelected = configurableCombinations[skuCode].byAttribute[selectedCombination];
+    const parentSkuSelected = drupalSettings.parentSkuArray[variantSelected];
     // Refresh the PDP page on new variant selection.
-    pdpRefresh(variantSelected);
+    pdpRefresh(variantSelected, parentSkuSelected);
 
     // Get available values for the selected variables.
     refreshConfigurables(code, codeValue, variantSelected);

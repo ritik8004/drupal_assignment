@@ -112,9 +112,9 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function getRenderArray(array &$vars) {
+    $vars['#attached']['library'][] = 'alshaya_spc/cart_utilities';
     $vars['#attached']['library'][] = 'alshaya_pdp_react/pdp_magazine_v2_layout';
     $vars['#attached']['library'][] = 'alshaya_white_label/magazine-layout-v2';
-    $vars['#attached']['library'][] = 'alshaya_spc/cart_utilities';
     $vars['#attached']['library'][] = 'alshaya_spc/googlemapapi';
 
     $entity = $vars['node'];
@@ -177,6 +177,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
     $options = [];
     $values = [];
+    $parent_sku_array = [];
 
     // Set product label data.
     $this->getProductLabels($sku, $sku_entity, $vars);
@@ -184,6 +185,9 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     // Set vat text data.
     $vat_text = $this->skuManager->getVatText();
     $vars['#attached']['drupalSettings']['vatText'] = $vat_text;
+
+    // Set promo data.
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['promotions'] = $vars['elements']['promotions']['#markup'];
 
     // Get gallery and combination data for product variants.
     if ($sku_entity->bundle() == 'configurable') {
@@ -232,10 +236,14 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
               $values[$value] = $this->getAlternativeValues($alternates, $child_sku);
               $this->getProductLabels($child_sku_code, $child_sku, $vars);
 
+              // Getting parent sku for child variants.
+              $parent_sku = $this->skuManager->getParentSkuBySku($child_sku);
+              $parent_sku_array[$child_sku_code] = $parent_sku->getSku();
             }
 
           }
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'] = $values;
+          $vars['#attached']['drupalSettings']['parentSkuArray'] = $parent_sku_array;
         }
       }
 

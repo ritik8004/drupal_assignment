@@ -10,18 +10,23 @@ import PdpSharePanel from '../pdp-share-panel';
 import PdpClickCollect from '../pdp-click-and-collect';
 import PdpCrossellUpsell from '../pdp-crossell-upsell';
 import PdpProductLabels from '../pdp-product-labels';
+import PdpPromotionLabel from '../pdp-promotion-label';
+import PdpDynamicPromotions from '../pdp-dynamic-promotions';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
-  const pdpRefresh = (variantSelected) => {
-    setVariant(variantSelected);
-  };
-
   const { productInfo } = drupalSettings;
-  let skuItemCode = null;
+  let skuItemCode = '';
+
   if (productInfo) {
     [skuItemCode] = Object.keys(productInfo);
   }
+  const [skuMainCode, setSkuMainCode] = useState(skuItemCode);
+
+  const pdpRefresh = (variantSelected, parentSkuSelected) => {
+    setVariant(variantSelected);
+    setSkuMainCode(parentSkuSelected);
+  };
 
   const productValues = getProductValues(skuItemCode, variant, setVariant);
   const {
@@ -46,10 +51,12 @@ const PdpLayout = () => {
 
   const showStickyHeader = () => {
     window.onscroll = function () {
-      if (window.pageYOffset >= content.offsetTop + content.offsetHeight) {
-        header.current.classList.add('magv2-pdp-sticky-header');
-      } else {
-        header.current.classList.remove('magv2-pdp-sticky-header');
+      if (content !== null) {
+        if (window.pageYOffset >= content.offsetTop + content.offsetHeight) {
+          header.current.classList.add('magv2-pdp-sticky-header');
+        } else {
+          header.current.classList.remove('magv2-pdp-sticky-header');
+        }
       }
     };
   };
@@ -87,6 +94,12 @@ const PdpLayout = () => {
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
           />
+          <div className="promotions promotions-full-view-mode">
+            <PdpPromotionLabel skuItemCode={skuItemCode} />
+            <div id="dynamic-promo-labels">
+              <PdpDynamicPromotions skuMainCode={skuMainCode} />
+            </div>
+          </div>
           <PdpCart
             skuCode={skuItemCode}
             configurableCombinations={configurableCombinations}
