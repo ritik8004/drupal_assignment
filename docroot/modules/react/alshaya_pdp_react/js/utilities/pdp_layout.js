@@ -188,6 +188,11 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   }
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
+  const relatedProducts = [
+    'crosssell',
+    'upsell',
+    'related',
+  ];
 
   return {
     brandLogo,
@@ -200,6 +205,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     shortDesc,
     description,
     configurableCombinations,
+    relatedProducts,
   };
 };
 
