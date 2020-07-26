@@ -243,10 +243,22 @@ header.c-header {
       margin-bottom: 0;
 
       &:hover {
-        background: url(#{$muji_theme_img_directory_path}/icons/basket-filled.svg) no-repeat;
+        @include breakpoint($desktop) {
+          background: url(#{$muji_theme_img_directory_path}/icons/basket-muji-red.svg) no-repeat;
 
-        .quantity {
-          color: $primary_minicart_hover;
+          .quantity {
+            color: $primary_minicart_hover;
+          }
+        }
+      }
+
+      &.isTouching {
+        @include breakpoint($upto-desktop) {
+          background: url(#{$muji_theme_img_directory_path}/icons/basket-muji-red.svg) no-repeat;
+
+          .quantity {
+            color: $primary_minicart_hover;
+          }
         }
       }
 
@@ -654,7 +666,15 @@ header {
 
   li .store {
     &:hover {
-      background: none;
+      @include breakpoint($desktop) {
+        @include icon_img('#{$muji_theme_img_directory_path}/icons/store-finder-muji-red.svg', 2rem, 2rem);
+      }
+    }
+
+    &.isTouching {
+      @include breakpoint($upto-desktop) {
+        @include icon_img('#{$muji_theme_img_directory_path}/icons/store-finder-muji-red.svg', 2rem, 2rem);
+      }
     }
   }
 }

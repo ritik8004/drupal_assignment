@@ -20,3 +20,10 @@ size_guide_positioning:
     - core/jquery
     - core/drupal
     - core/jquery.once
+
+mobile_touch:
+  js:
+    js/mobiletouch.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
