@@ -51,6 +51,8 @@
           if (typeof variantInfo.free_gift_promotions !== 'undefined') {
             $('.free-gift-promotions-full-view-mode', node).html(variantInfo.free_gift_promotions);
           }
+          // Refresh price block as per sku data.
+          $(node).find('.content__title_wrapper .price-block').html(variantInfo.price);
         }
       });
     }
