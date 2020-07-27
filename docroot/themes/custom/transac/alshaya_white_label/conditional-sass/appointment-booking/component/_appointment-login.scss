@@ -94,6 +94,7 @@
     .appointment-checkout-button {
       background: $appointment-checkout-btn-bg;
       color: $appointment-checkout-btn;
+      border: 1px solid $appointment-checkout-btn-bg;
     }
 
     .appointment-register-button {
