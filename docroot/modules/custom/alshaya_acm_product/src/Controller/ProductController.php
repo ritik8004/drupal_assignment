@@ -22,6 +22,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\image\ImageStyleInterface;
 
 /**
  * Class ProductController.
@@ -258,21 +259,26 @@ class ProductController extends ControllerBase {
   public function getRelatedProductsJson(array $related_skus, array $data) {
     foreach ($related_skus as $related_sku => $value) {
       $related_sku_entity = SKU::loadFromSku($related_sku);
-      $sku_media = $this->skuImageManager->getFirstImage($related_sku_entity);
+      if ($related_sku_entity instanceof SKUInterface) {
+        $sku_media = $this->skuImageManager->getFirstImage($related_sku_entity);
 
-      if (!empty($sku_media['drupal_uri'])) {
-        $image = ImageStyle::load('product_zoom_medium_606x504')->buildUrl($sku_media['drupal_uri']);
+        if (!empty($sku_media['drupal_uri'])) {
+          $image_style = ImageStyle::load('product_zoom_medium_606x504');
+          if ($image_style instanceof ImageStyleInterface) {
+            $image = $image_style->buildUrl($sku_media['drupal_uri']);
+          }
+        }
+        $priceHelper = _alshaya_acm_product_get_price_helper();
+        $related_sku_price = $priceHelper->getPriceBlockForSku($related_sku_entity, []);
+        $price = $related_sku_price['#price']['#price'];
+        $final_price = isset($related_sku_price['#final_price']) ? $related_sku_price['#final_price']['#price'] : $price;
+        $title = $related_sku_entity->label();
+        $related_products['products'][$related_sku]['gallery']['mediumurl'] = $image;
+        $related_products['products'][$related_sku]['finalPrice'] = $final_price;
+        $related_products['products'][$related_sku]['priceRaw'] = $price;
+        $related_products['products'][$related_sku]['title'] = $title;
+        $related_products['section_title'] = render($data['section_title']);
       }
-      $priceHelper = _alshaya_acm_product_get_price_helper();
-      $related_sku_price = $priceHelper->getPriceBlockForSku($related_sku_entity, []);
-      $price = $related_sku_price['#price']['#price'];
-      $final_price = isset($related_sku_price['#final_price']) ? $related_sku_price['#final_price']['#price'] : $price;
-      $title = $related_sku_entity->label();
-      $related_products['products'][$related_sku]['gallery']['mediumurl'] = $image;
-      $related_products['products'][$related_sku]['finalPrice'] = $final_price;
-      $related_products['products'][$related_sku]['priceRaw'] = $price;
-      $related_products['products'][$related_sku]['title'] = $title;
-      $related_products['section_title'] = render($data['section_title']);
     }
     return $related_products;
   }
