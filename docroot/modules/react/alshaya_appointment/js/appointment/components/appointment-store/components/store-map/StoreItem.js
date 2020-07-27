@@ -7,8 +7,8 @@ const StoreItem = ({
   display, index, store, onStoreChoose, onStoreExpand, onStoreFinalize, onStoreClose,
 }) => (
   <>
-    <span className="appointment-store-name">
-      <span className="appointment-store-name-wrapper" onClick={(e) => onStoreChoose(e, index)}>
+    <span className="appointment-store-name" onClick={(e) => onStoreChoose(e, index)}>
+      <span className="appointment-store-name-wrapper">
         <span className="store-name">{store.name}</span>
         <span className="store-distance">
           {`${store.distanceInMiles} ${Drupal.t('Miles')}`}
