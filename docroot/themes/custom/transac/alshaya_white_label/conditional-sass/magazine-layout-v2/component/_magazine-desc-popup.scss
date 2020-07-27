@@ -159,11 +159,6 @@
           }
 
           .magv2-pdp {
-            &-price-wrapper,
-            &-final-price-wrapper {
-              display: inline-block;
-            }
-
             &-price-wrapper {
               color: $magv2-price-strike;
               text-decoration: line-through;
