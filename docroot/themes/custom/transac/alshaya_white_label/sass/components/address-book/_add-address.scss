@@ -82,7 +82,7 @@
       font-weight: 700;
 
       @include breakpoint($tablet) {
-        margin-bottom: 5.625rem;
+        margin-bottom: 4.125rem;
       }
 
       .form-submit {
@@ -137,10 +137,8 @@
 
   .region__content {
     .profile-form {
-      margin-top: 1rem;
-
       @include breakpoint($tablet) {
-        margin-top: 1.2rem;
+        overflow: hidden;
       }
     }
   }
