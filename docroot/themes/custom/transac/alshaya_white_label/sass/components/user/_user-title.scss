@@ -98,6 +98,7 @@
     @include breakpoint($tablet) {
       display: inline-block;
       pointer-events: none;
+      width: 100%;
     }
 
     @include breakpoint($only-mobile) {

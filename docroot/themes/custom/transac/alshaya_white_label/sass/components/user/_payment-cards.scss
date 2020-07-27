@@ -5,6 +5,7 @@
     display: grid;
     grid-template-columns: 19rem 19rem;
     grid-gap: 1.5rem;
+    margin-top: 2rem;
 
     @include breakpoint($only-tablet) {
       grid-template-columns: calc(100% / 2 - 0.75rem) calc(100% / 2 - 0.75rem);
