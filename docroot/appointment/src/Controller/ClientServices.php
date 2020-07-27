@@ -107,8 +107,9 @@ class ClientServices {
       $this->logger->error('Error occurred while inserting/updating client. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      return new JsonResponse(['error' => $e->getMessage()]);
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -168,7 +169,9 @@ class ClientServices {
       $this->logger->error('Error occurred while fetching client details. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
-      throw $e;
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
+
+      return new JsonResponse($error, 400);
     }
   }
 

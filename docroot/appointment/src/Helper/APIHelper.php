@@ -166,4 +166,17 @@ class APIHelper {
 
   }
 
+  /**
+   * Provides error message array.
+   */
+  public function getErrorMessage($message, $error_code) {
+    // @todo $message and $error_code can be used to send technical error.
+    $error = [
+      'error' => TRUE,
+      'error_message' => 'Something went wrong. Please try again.',
+    ];
+
+    return $error;
+  }
+
 }

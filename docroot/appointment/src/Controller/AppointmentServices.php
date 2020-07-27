@@ -82,8 +82,9 @@ class AppointmentServices {
       $this->logger->error('Error occurred while getting time slots from TT API. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      throw $e;
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -167,7 +168,9 @@ class AppointmentServices {
       $this->logger->error('Error occurred while booking appointment. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
-      return new JsonResponse(['error' => $e->getMessage()]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
+
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -222,8 +225,9 @@ class AppointmentServices {
       $this->logger->error('Error occurred while appending booking appointment answers. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      return new JsonResponse(['error' => $e->getMessage()]);
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -287,8 +291,9 @@ class AppointmentServices {
       $this->logger->error('Error occurred while fetching appointments. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      throw $e;
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -367,8 +372,9 @@ class AppointmentServices {
       $this->logger->error('Error occurred while fetching companion details. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      throw $e;
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -418,8 +424,9 @@ class AppointmentServices {
       $this->logger->error('Error occurred while deleting an appointment. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      throw $e;
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -473,8 +480,9 @@ class AppointmentServices {
       $this->logger->error('Error occurred while fetching questions. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      throw $e;
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -526,8 +534,9 @@ class AppointmentServices {
         '@appid' => $appointment,
         '@user' => $user,
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      throw $e;
+      return new JsonResponse($error, 400);
     }
   }
 
