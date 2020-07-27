@@ -41,11 +41,14 @@
         margin-bottom: 0.625rem;
         padding: 0.6875rem 1.875rem;
         background-color: $magv2-desc-popup-content-bg;
-        position: fixed;
-        top: 0;
+        position: relative;
         width: 100%;
         text-align: center;
         font-size: 1.25rem;
+
+        @include breakpoint($tablet) {
+          width: 23.43rem;
+        }
 
         .close {
           cursor: pointer;
@@ -102,7 +105,6 @@
 
       &-content-wrapper {
         flex-grow: 1;
-        margin-top: 3.4375rem;
         overflow-y: scroll;
 
         @include breakpoint($only-mobile) {
