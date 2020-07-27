@@ -30,3 +30,82 @@
     }
   }
 }
+
+.configurable-swatch {
+  .select2Option {
+    padding-#{$left}: 0.3125rem;
+
+    .select-buttons {
+      display: inline-flex;
+
+      @include breakpoint($only-mobile) {
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding-bottom: 1.5rem;
+        padding-#{$left}: 0.1875rem;
+      }
+
+      li {
+        a,
+        span {
+          margin-#{$right}: 0.75rem;
+          border-radius: 0.125rem;
+          border: 0;
+          min-width: 2.375rem;
+          min-height: 2.375rem;
+
+          @include breakpoint($only-mobile) {
+            margin-#{$right}: 0.5rem;
+          }
+
+          &.picked,
+          &:hover {
+            border: 0;
+            position: relative;
+
+            &::after {
+              width: 2.75rem;
+              height: 2.75rem;
+              border-radius: 0.1875rem;
+              content: '';
+              position: absolute;
+              display: inline-block;
+              top: -0.1875rem;
+              left: -0.1875rem;
+              z-index: 1;
+              border: 1px solid $pdp_color_option_border;
+              pointer-events: none;
+            }
+          }
+        }
+
+        a[data-value] {
+          border: 1px solid $pdp_color_option_border;
+          padding: 0.875rem;
+          margin-top: 0.125rem;
+
+          &.picked,
+          &:hover {
+            &::after {
+              border: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.field--name-field-skus {
+  .sku-base-form {
+    > div,
+    .js-form-wrapper {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+  }
+}
