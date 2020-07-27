@@ -108,9 +108,12 @@ class ConfigurableProductForm extends React.Component {
     const attributes = configurableCombinations[skuCode].configurables;
     const selectedValues = [];
     Object.keys(attributes).map((id) => {
-      const selectedVal = document.querySelector(`#${id}`).querySelectorAll('.active')[0].value;
-      if (selectedVal !== '' && selectedVal !== null && typeof selectedVal !== 'undefined') {
-        selectedValues[id] = selectedVal;
+      const elem = document.querySelector(`#${id}`).querySelectorAll('.active')[0];
+      if (elem !== undefined) {
+        const selectedVal = document.querySelector(`#${id}`).querySelectorAll('.active')[0].value;
+        if (selectedVal !== '' && selectedVal !== null && typeof selectedVal !== 'undefined') {
+          selectedValues[id] = selectedVal;
+        }
       }
       return selectedValues;
     });
@@ -122,14 +125,18 @@ class ConfigurableProductForm extends React.Component {
   };
 
   buttonLabel = (attr) => {
-    const size = document.querySelector(`#${attr}`).querySelectorAll('.active')[0].innerText;
-    let group = '';
-    let label = size;
-    // Check if size group is available.
-    if (document.querySelector('.group-anchor-links')) {
-      group = document.querySelector('.group-anchor-links').querySelectorAll('.active')[0].innerText;
-      label = `${group}, ${size}`;
-      return label;
+    const sizeElem = document.querySelector(`#${attr}`).querySelectorAll('.active')[0];
+    let label = '';
+    if (sizeElem !== undefined) {
+      const size = document.querySelector(`#${attr}`).querySelectorAll('.active')[0].innerText;
+      let group = '';
+      label = size;
+      // Check if size group is available.
+      if (document.querySelector('.group-anchor-links')) {
+        group = document.querySelector('.group-anchor-links').querySelectorAll('.active')[0].innerText;
+        label = `${group}, ${size}`;
+        return label;
+      }
     }
     return label;
   }

@@ -47,10 +47,12 @@ const PdpLayout = () => {
 
   const showStickyHeader = () => {
     window.onscroll = function () {
-      if (window.pageYOffset >= content.offsetTop + content.offsetHeight) {
-        header.current.classList.add('magv2-pdp-sticky-header');
-      } else {
-        header.current.classList.remove('magv2-pdp-sticky-header');
+      if (content !== null) {
+        if (window.pageYOffset >= content.offsetTop + content.offsetHeight) {
+          header.current.classList.add('magv2-pdp-sticky-header');
+        } else {
+          header.current.classList.remove('magv2-pdp-sticky-header');
+        }
       }
     };
   };
