@@ -101,8 +101,9 @@ class ConfigurationServices {
       $this->logger->error('Error occurred while getting programs. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -147,8 +148,9 @@ class ConfigurationServices {
       $this->logger->error('Error occurred while getting activities. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -227,8 +229,9 @@ class ConfigurationServices {
       $this->logger->error('Error occurred while getting stores. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
+      return new JsonResponse($error, 400);
     }
   }
 
@@ -291,8 +294,9 @@ class ConfigurationServices {
       $this->logger->error('Error occurred while fetching location details. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
-      return new JsonResponse($this->apiHelper->getErrorMessage(), 400);
+      return new JsonResponse($error, 400);
     }
   }
 
