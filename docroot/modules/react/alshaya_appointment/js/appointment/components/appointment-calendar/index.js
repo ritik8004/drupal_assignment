@@ -11,10 +11,15 @@ export default class AppointmentCalendar extends React.Component {
   constructor(props) {
     super(props);
     const { selectDate } = this.props;
+    let previousDisable = false;
+    if (moment(selectDate).format(getDateFormat()) === moment().add(1, 'day').format(getDateFormat())) {
+      previousDisable = true;
+    }
     this.state = {
       week: this.getWeekDates(new Date(selectDate), 'next'),
       selectDate: new Date(selectDate),
       arrayOfDates: this.getAllDates(),
+      previousDisabled: previousDisable,
     };
   }
 
@@ -23,6 +28,7 @@ export default class AppointmentCalendar extends React.Component {
     const week = this.getWeekDates(new Date(nextDate), 'next');
     this.setState({
       week,
+      previousDisabled: false,
     });
   }
 
@@ -61,6 +67,9 @@ export default class AppointmentCalendar extends React.Component {
         const newStartDate = moment().add(1, 'day').format(getDateFormat());
         const newEndDate = moment(newStartDate).add('6', 'days').format(getDateFormat());
         range = momentRange.range(newStartDate, newEndDate);
+        this.setState({
+          previousDisabled: true,
+        });
       }
     }
 
@@ -86,7 +95,9 @@ export default class AppointmentCalendar extends React.Component {
   };
 
   render() {
-    const { week, selectDate, arrayOfDates } = this.state;
+    const {
+      week, selectDate, arrayOfDates, previousDisabled,
+    } = this.state;
 
     const weekdays = week.map((date) => (
       <li
@@ -112,7 +123,14 @@ export default class AppointmentCalendar extends React.Component {
       <>
         <ConditionalView condition={window.innerWidth > 1023}>
           <div className="appointment-calendar daypicker-desktop">
-            <button type="button" className="appointment-calendar-prev-btn" onClick={() => this.togglePrev(week[0])}>{ Drupal.t('Prev') }</button>
+            <button
+              type="button"
+              className="appointment-calendar-prev-btn"
+              disabled={(previousDisabled)}
+              onClick={() => this.togglePrev(week[0])}
+            >
+              { Drupal.t('Prev') }
+            </button>
             <ul className="calendar-wrapper">
               { weekdays }
             </ul>
