@@ -339,6 +339,10 @@ header {
 }
 
 .c-menu-primary {
+  @include breakpoint($only-tablet) {
+    height: auto;
+  }
+
   .mobile--menu {
     html[lang=ar] & {
       @include breakpoint($only-mobile) {

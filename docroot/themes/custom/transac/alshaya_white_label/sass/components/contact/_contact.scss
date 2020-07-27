@@ -511,7 +511,6 @@ html[lang=ar] {
 
       .field--type-mobile-number {
         position: relative;
-        top: 1.3rem;
         clear: both;
       }
     }
@@ -523,18 +522,15 @@ html[lang=ar] {
     .user-form {
       .field--type-mobile-number {
         position: relative;
-        top: 1.3rem;
         clear: both;
       }
     }
   }
 }
 
-html[lang=ar] {
-  .c-user-edit.user-page .mobile-number-field {
-    width: 100%;
-    display: inline-block;
-  }
+.c-user-edit.user-page .mobile-number-field {
+  width: 100%;
+  display: inline-block;
 }
 
 .webform-submission-alshaya-contact-add-form {
