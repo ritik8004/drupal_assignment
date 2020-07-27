@@ -5,15 +5,17 @@ fields:
   color:
     configurable: 1
     cardinality: 1
-    index: 0
+    index: 1
     facet: 0
   size:
     cardinality: 1
-    index: 0
+    index: 1
     facet: 0
   material:
     label: 'Material'
     configurable: 1
+    index: 1
   fabric:
     label: 'Fabric'
     configurable: 1
+    index: 1
