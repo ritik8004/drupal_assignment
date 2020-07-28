@@ -10,6 +10,7 @@ use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Link;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -380,9 +381,20 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Please enter valid mobile number.'),
     ];
 
+    $login_link = Link::createFromRoute(
+      $this->t('please login'),
+      'alshaya_spc.checkout.login',
+      [],
+      ['attributes' => ['id' => 'spc-checkout-customer-login-link']]
+    );
+
     $strings[] = [
       'key' => 'form_error_customer_exists',
-      'value' => $this->t('Customer already exists.'),
+      'value' => [
+        '#markup' => (string) $this->t('You already have an account, @login_link.', [
+          '@login_link' => $login_link->toString()->getGeneratedLink(),
+        ]),
+      ],
     ];
 
     $strings[] = [
@@ -443,6 +455,11 @@ class AlshayaSpcController extends ControllerBase {
     $strings[] = [
       'key' => 'payment_error',
       'value' => $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'),
+    ];
+
+    $strings[] = [
+      'key' => 'shipping_method_error',
+      'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
     ];
 
     $build = [

@@ -15,7 +15,8 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
- * Add missing attributes and label translations.
+ * [5.2.0] Add missing attributes and label translations.
+ * [5.2.0] Collection label order settings.
  */
 function alshaya_hm_update_8052() {
   $manager = \Drupal::service('alshaya_config.manager');
@@ -70,17 +71,24 @@ function alshaya_hm_update_8052() {
   ];
 
   alshaya_i18n_save_translations($strings);
+
+  // Collection label order settings.
+  alshaya_config_install_configs(['alshaya_hm.label_order.settings'], 'alshaya_hm');
 }
 
 /**
- * Collection label order settings.
+ * Implements hook_update_N().
+ *
+ * [5.1.0] Move concept filter to top in PLP page.
  */
 function alshaya_hm_update_8051() {
-  $configs = [
-    'alshaya_hm.label_order.settings',
+  $block_facets = [
+    'block.block.plpconcept',
   ];
 
-  alshaya_config_install_configs($configs, 'alshaya_hm');
+  foreach ($block_facets as $config) {
+    \Drupal::configFactory()->getEditable($config)->save();
+  }
 }
 
 /**
@@ -1105,9 +1113,9 @@ function alshaya_hm_install() {
       'ar' => 'ابحث عن المحلات القريبة إليك لاستلام طلبيتك',
       'en' => 'Find your closest collection point',
     ],
-    'CONCEPT' => [
+    'Concept' => [
       'ar' => 'المفهوم',
-      'en' => 'CONCEPT',
+      'en' => 'Concept',
     ],
     'seo_brand_name' => [
       'en' => 'H&M',
@@ -1203,42 +1211,6 @@ function alshaya_hm_install() {
     'Details' => [
       'en' => 'DETAILS',
       'ar' => 'تفاصيل',
-    ],
-    'QUALITY' => [
-      'ar' => 'الجودة',
-    ],
-    'ENVIRONMENT' => [
-      'ar' => 'البيئة',
-    ],
-    'COLLECTION' => [
-      'ar' => 'التشكيلة',
-    ],
-    'DESIGNER COLLECTION' => [
-      'ar' => 'تشكيلة المُصمم',
-    ],
-    'FEATURE' => [
-      'ar' => 'المميزات',
-    ],
-    'WASHING INSTRUCTION' => [
-      'ar' => 'إرشادات الغسيل',
-    ],
-    'DRY CLEAN INSTRUCTION' => [
-      'ar' => 'إرشادات التنظيف الجاف',
-    ],
-    'FRAGRANCE DESCRIPTION' => [
-      'ar' => 'وصف العطر',
-    ],
-    'PATTERN' => [
-      'ar' => 'النقوش',
-    ],
-    'VISUAL DESCRIPTION' => [
-      'ar' => 'الوصف البصري',
-    ],
-    'COMPOSITION' => [
-      'ar' => 'تركيبة المواد',
-    ],
-    'COLOR NAME' => [
-      'ar' => 'اسم اللون',
     ],
   ];
 

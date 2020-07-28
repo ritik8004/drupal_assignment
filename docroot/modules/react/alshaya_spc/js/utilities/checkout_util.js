@@ -67,19 +67,18 @@ export const placeOrder = (paymentMethod) => {
           window.location = response.data.redirectUrl;
           return;
         }
-
+        let message = response.data.error_message;
+        if (response.data.error_code !== undefined
+          && parseInt(response.data.error_code, 10) === 505) {
+          message = getStringMessage('shipping_method_error');
+        }
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
-          message: response.data.error_message,
+          message,
         });
 
         // Push error to GTM.
-        const gtmInfo = {
-          errorMessage: response.data.error_message,
-          paymentMethod,
-        };
-        Drupal.logJavascriptError('place-order', gtmInfo, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
-
+        Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
         removeFullScreenLoader();
       },
       (error) => {

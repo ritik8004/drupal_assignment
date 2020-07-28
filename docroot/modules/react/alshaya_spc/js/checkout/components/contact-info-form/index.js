@@ -161,6 +161,7 @@ class ContactInfoForm extends React.Component {
           showEmail={drupalSettings.user.uid === 0}
           defaultVal={contactInfo ? { static: contactInfo } : []}
           subTitle={subTitle}
+          type="cnc"
         />
         <div className="spc-address-form-actions">
           <button

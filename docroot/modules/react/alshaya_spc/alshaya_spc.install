@@ -12,6 +12,9 @@ use Drupal\Core\Utility\UpdateException;
 
 /**
  * Implements hook_update_N().
+ *
+ * [5.2.0] Add translations for same day delivery.
+ * [5.2.0] Remove unnecessary country_center key.
  */
 function alshaya_spc_update_8004() {
   // Add translations for same day delivery.
@@ -22,17 +25,60 @@ function alshaya_spc_update_8004() {
   ];
 
   alshaya_i18n_save_translations($strings);
+
+  // Remove unnecessary country_center key.
+  $config = \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings');
+  if ($config && $config->get('country_center')) {
+    $config->clear('country_center');
+    $config->save(TRUE);
+  }
 }
 
 /**
  * Implements hook_update_N().
+ *
+ * Add new string translations.
  */
 function alshaya_spc_update_8003() {
-  if (($config = \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings'))
-    && $config->get('country_center')
-  ) {
-    $config->clear('country_center');
-    $config->save(TRUE);
+  $strings = [
+    'Delivery Information is incomplete. Please update and try again.' => [
+      'ar' => 'معلومات التوصيل غير مكتملة. يرجى التحديث والمحاولة مرة أخرى.',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Install schema for symfony locking component.
+ */
+function alshaya_spc_update_8002() {
+  // Get connection details and PDO object.
+  $connection = Database::getConnection();
+  $pdo = $connection::open($connection->getConnectionOptions());
+
+  $store = new PdoStore($pdo);
+
+  try {
+    $store->createTable();
+  }
+  catch (DBALException $exception) {
+    throw new UpdateException($exception->getMessage(), $exception->getCode(), $exception);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update SPC translation strings.
+ */
+function alshaya_spc_update_8001() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  if ($translations = _alshaya_spc_get_translations()) {
+    alshaya_i18n_save_translations($translations);
   }
 }
 
@@ -93,37 +139,4 @@ function alshaya_spc_schema() {
   ];
 
   return $schema;
-}
-
-/**
- * Implements hook_update_N().
- *
- * Update SPC translation strings.
- */
-function alshaya_spc_update_8001() {
-  // Add translations.
-  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
-  if ($translations = _alshaya_spc_get_translations()) {
-    alshaya_i18n_save_translations($translations);
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
- * Install schema for symfony locking component.
- */
-function alshaya_spc_update_8002() {
-  // Get connection details and PDO object.
-  $connection = Database::getConnection();
-  $pdo = $connection::open($connection->getConnectionOptions());
-
-  $store = new PdoStore($pdo);
-
-  try {
-    $store->createTable();
-  }
-  catch (DBALException $exception) {
-    throw new UpdateException($exception->getMessage(), $exception->getCode(), $exception);
-  }
 }

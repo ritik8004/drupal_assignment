@@ -53,16 +53,10 @@
   .payment-methods.in-active {
     position: relative;
 
-    .payment-method::before {
-      content: '';
-      background: $_white_five_alpha_80;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 2;
-      opacity: 0.2;
+    .payment-method {
+      .payment-method-top-panel {
+        opacity: 0.2;
+      }
     }
 
     &::before {
@@ -85,6 +79,12 @@
         color: $spc-checkout-radio-empty;
         border: none;
       }
+    }
+  }
+
+  &.in-active {
+    .spc-checkout-section-title {
+      opacity: 0.2;
     }
   }
 }
