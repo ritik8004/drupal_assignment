@@ -5,9 +5,6 @@ import {
   getAreasList,
   gerAreaLabelById,
 } from '../../../utilities/address_util';
-import {
-  geocodeAddressToLatLng,
-} from '../../../utilities/map/map_utils';
 import getStringMessage from '../../../utilities/strings';
 
 export default class AreaSelect extends React.Component {
@@ -96,13 +93,6 @@ export default class AreaSelect extends React.Component {
     this.setState({
       currentOption: val.toString(),
     });
-
-    // Geocoding so that map is updated.
-    // Calling in timeout to avaoid race condition as
-    // component is refreshing and thus elemtent not available.
-    setTimeout(() => {
-      geocodeAddressToLatLng();
-    }, 200);
   };
 
   // Get area list.

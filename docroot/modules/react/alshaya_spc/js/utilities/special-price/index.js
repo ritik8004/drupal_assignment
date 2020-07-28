@@ -13,8 +13,20 @@ const PriceBlock = ({ children, amount }) => (
 );
 
 const SpecialPrice = ({ price, finalPrice }) => {
-  if (price > 0 && finalPrice > 0 && finalPrice < price) {
-    const discount = calculateDiscount(price, finalPrice);
+  let priceVal = price;
+  let finalPriceVal = finalPrice;
+  if (priceVal !== undefined && priceVal !== null) {
+    // Remove the comma and convert to float.
+    priceVal = parseFloat(priceVal.toString().replace(',', ''));
+  }
+
+  if (finalPriceVal !== undefined && finalPriceVal !== null) {
+    // Remove the comma and convert to float.
+    finalPriceVal = parseFloat(finalPriceVal.toString().replace(',', ''));
+  }
+
+  if (priceVal > 0 && finalPriceVal > 0 && finalPriceVal < priceVal) {
+    const discount = calculateDiscount(priceVal, finalPriceVal);
     const discountTxt = (discount > 0)
       ? (
         <div className="price--discount">
@@ -28,20 +40,20 @@ const SpecialPrice = ({ price, finalPrice }) => {
     return (
       <PriceBlock>
         <div className="has--special--price">
-          <PriceElement amount={price} />
+          <PriceElement amount={priceVal} />
         </div>
         <div className="special--price">
-          <PriceElement amount={finalPrice} />
+          <PriceElement amount={finalPriceVal} />
         </div>
         {discountTxt}
       </PriceBlock>
     );
   }
-  if (finalPrice) {
-    return <PriceBlock amount={finalPrice} />;
+  if (finalPriceVal) {
+    return <PriceBlock amount={finalPriceVal} />;
   }
 
-  return <PriceBlock amount={price} />;
+  return <PriceBlock amount={priceVal} />;
 };
 
 export default SpecialPrice;
