@@ -40,7 +40,6 @@
 
       &-header-wrapper {
         box-shadow: 0 0.3125rem 0.625rem -0.3125rem rgba(0, 0, 0, 0.3);
-        margin-bottom: 0.625rem;
         padding: 0.6875rem 1.875rem;
         background-color: $magv2-desc-popup-content-bg;
         position: relative;
@@ -79,8 +78,17 @@
         flex-grow: 1;
         overflow-y: scroll;
 
-        html[lang='ar'] & {
-          margin-top: 5.625rem;
+        &::before {
+          content: '';
+          display: block;
+          border-top: 0.625rem solid $magv2-desc-popup-grey-border;
+          margin: -1.25rem -1.875rem 0;
+        }
+
+        > div {
+          &:first-child {
+            margin-top: 1.25rem;
+          }
         }
 
         ul {
