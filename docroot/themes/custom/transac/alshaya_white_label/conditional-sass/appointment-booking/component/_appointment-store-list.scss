@@ -51,21 +51,6 @@
         color: $spc-cnc-store-item-text-impress;
         position: relative;
 
-        &::before {
-          content: '';
-          width: 0.875rem;
-          height: 0.875rem;
-          background: white;
-          display: inline-block;
-          border-radius: 100%;
-          border: 1px solid $primary_radiobtn_empty;
-          margin-#{$right}: 0.4rem;
-          position: absolute;
-          #{$left}: 0.625rem;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-
         .expand-btn {
           float: $right;
           width: 2.5rem;
@@ -88,6 +73,7 @@
           height: 2.125rem;
           display: inline-flex;
           align-items: center;
+          position: relative;
 
           html[lang=ar] & {
             line-height: normal;
@@ -96,6 +82,21 @@
           @include breakpoint($only-mobile) {
             width: calc(100% - 2.5rem);
             height: 2.8125rem;
+          }
+
+          &::before {
+            content: '';
+            width: 0.875rem;
+            height: 0.875rem;
+            background: white;
+            display: inline-block;
+            border-radius: 100%;
+            border: 1px solid $primary_radiobtn_empty;
+            margin-#{$right}: 0.4rem;
+            position: absolute;
+            #{$left}: 0.625rem;
+            top: 50%;
+            transform: translateY(-50%);
           }
 
           .store-name {
@@ -132,7 +133,7 @@
       }
 
       &.selected {
-        .appointment-store-name {
+        .appointment-store-name-wrapper {
           &::before {
             border: 0.25rem solid $primary_radiobtn_filled;
           }
