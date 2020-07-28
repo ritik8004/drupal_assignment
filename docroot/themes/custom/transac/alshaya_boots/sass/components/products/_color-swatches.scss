@@ -1,31 +1,29 @@
 .sku-base-form {
-  .form-wrapper {
-    .configurable-swatch {
-      .li-swatch-image {
-        width: 3rem;
+  .configurable-swatch {
+    .li-swatch-image {
+      width: 3rem;
 
-        a,
-        span {
-          width: 2.75rem;
-          height: 2.75rem;
-          margin-top: 0.625rem;
-          padding: 0;
+      a,
+      span {
+        width: 2.75rem;
+        height: 2.75rem;
+        margin-top: 0.625rem;
+        padding: 0;
 
-          &.picked,
-          &:hover {
-            &::after {
-              width: 2.75rem;
-              height: 2.75rem;
-              border-radius: 0.1875rem;
-            }
+        &.picked,
+        &:hover {
+          &::after {
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 0.1875rem;
           }
         }
+      }
 
-        img {
-          width: 2.5rem;
-          height: 2.5rem;
-          border-radius: 0.1875rem;
-        }
+      img {
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 0.1875rem;
       }
     }
   }
@@ -33,8 +31,6 @@
 
 .configurable-swatch {
   .select2Option {
-    padding-#{$left}: 0.3125rem;
-
     .select-buttons {
       display: inline-flex;
 
@@ -91,6 +87,24 @@
           &:hover {
             &::after {
               border: 0;
+            }
+          }
+        }
+      }
+
+      .li-swatch-image {
+        a[data-value] {
+          padding: 0;
+          background: transparent;
+          border: 0;
+          margin-top: 0.5rem;
+
+          &.picked,
+          &:hover {
+            &::after {
+              border: 1px solid $pdp_color_option_border;
+              #{$left}: 0;
+              top: -0.25rem;
             }
           }
         }
