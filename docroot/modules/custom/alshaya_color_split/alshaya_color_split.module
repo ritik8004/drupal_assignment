@@ -265,7 +265,7 @@ function alshaya_color_split_form_sku_base_form_alter(&$form, FormStateInterface
   ];
 
   // To show grouped products with swatch on PDP.
-  $grouping_attribute_with_swatch = \Drupal::config('alshaya_color_split.settings')->get('grouping_attribute_with_swatch');
+  $grouping_attribute_with_swatch = \Drupal::config('alshaya_color_split.settings')->get('process_swatch_for_grouping_attributes');
   if ($grouping_attribute_with_swatch) {
     $manager->alterGroupAttributeFormItem($form['variants_in_group'], $options, $grouping_attribute);
   }

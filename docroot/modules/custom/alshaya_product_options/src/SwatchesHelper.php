@@ -304,43 +304,6 @@ class SwatchesHelper {
   }
 
   /**
-   * Wrapper function to process swatch for group attribute.
-   *
-   * @param array $configurations
-   *   Contains group attribute field to be altered.
-   * @param array $options
-   *   Array of options.
-   * @param string $grouping_attribute
-   *   Grouping attribute.
-   */
-  public function processSwatchGroupAttribute(array &$configurations, array $options, string $grouping_attribute) {
-    $sku_options_color = [];
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    foreach ($options as $key => $val) {
-      $option_id = $this->productOptionsManager->getAttributeOptionId($val, $grouping_attribute, $langcode);
-      $swatch = $this->getSwatch($grouping_attribute, $option_id);
-      switch ($swatch['type']) {
-        case self::SWATCH_TYPE_VISUAL_IMAGE:
-          $configurations['#options_attributes'][$key]['swatch-image'] = file_url_transform_relative($swatch['swatch']);
-          break;
-
-        case self::SWATCH_TYPE_VISUAL_COLOR:
-          // If swatch type is not an image use rgb color code instead.
-          $sku_options_color[$key] = [
-            'display_label' => $val,
-            'swatch_type' => self::PDP_SWATCH_RGB,
-            'display_value' => $swatch['swatch'],
-          ];
-          $configurations['#attached']['drupalSettings']['sku_configurable_options_color'] = $sku_options_color;
-          break;
-
-        default:
-          return;
-      }
-    }
-  }
-
-  /**
    * Wrapper function to store data in cache.
    *
    * @param string $attribute_code

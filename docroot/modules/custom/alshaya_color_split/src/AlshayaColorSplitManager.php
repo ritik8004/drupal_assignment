@@ -7,6 +7,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\alshaya_product_options\ProductOptionsHelper;
 
 /**
  * Class AlshayaColorSplitManager.
@@ -19,6 +20,11 @@ class AlshayaColorSplitManager {
    * Constant to hold attribute id for the pseudo attribute for product split.
    */
   const PSEUDO_COLOR_ATTRIBUTE_CODE = 99999;
+
+  /**
+   * Constant for RGB swatch display type.
+   */
+  const PDP_SWATCH_RGB = 'RGB';
 
   /**
    * SKU Manager.
@@ -42,6 +48,13 @@ class AlshayaColorSplitManager {
   protected $entityRepository;
 
   /**
+   * Production Options Helper service object.
+   *
+   * @var \Drupal\alshaya_product_options\ProductOptionsHelper
+   */
+  protected $productOptionsHelper;
+
+  /**
    * Language Manager.
    *
    * @var \Drupal\alshaya_product_options\SwatchesHelper
@@ -57,16 +70,20 @@ class AlshayaColorSplitManager {
    *   Entity Type Manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity Repository.
+   * @param \Drupal\alshaya_product_options\ProductOptionsHelper $product_options_helper
+   *   Production Options Manager.
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatch_helper
    *   Swatch Helper.
    */
   public function __construct(SkuManager $sku_manager,
                               EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
+                              ProductOptionsHelper $product_options_helper,
                               SwatchesHelper $swatch_helper) {
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityRepository = $entity_repository;
+    $this->productOptionsHelper = $product_options_helper;
     $this->swatchHelper = $swatch_helper;
   }
 
@@ -163,8 +180,32 @@ class AlshayaColorSplitManager {
    *   Grouping attribute.
    */
   public function alterGroupAttributeFormItem(array &$configurations, array $options, $grouping_attribute) {
+    $sku_options_color = [];
     if ($grouping_attribute) {
-      $this->swatchHelper->processSwatchGroupAttribute($configurations, $options, $grouping_attribute);
+      foreach ($options as $key => $val) {
+        $option_id = $this->productOptionsHelper->getAttributeOptionId($val, $grouping_attribute);
+        $swatch = $this->swatchHelper->getSwatch($grouping_attribute, $option_id);
+        if (!empty($swatch)) {
+          switch ($swatch['type']) {
+            case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
+              $configurations['#options_attributes'][$key]['swatch-image'] = file_url_transform_relative($swatch['swatch']);
+              break;
+
+            case SwatchesHelper::SWATCH_TYPE_VISUAL_COLOR:
+              // If swatch type is not an image use rgb color code instead.
+              $sku_options_color[$key] = [
+                'display_label' => $val,
+                'swatch_type' => self::PDP_SWATCH_RGB,
+                'display_value' => $swatch['swatch'],
+              ];
+              $configurations['#attached']['drupalSettings']['sku_configurable_options_color'] = $sku_options_color;
+              break;
+
+            default:
+              continue 2;
+          }
+        }
+      }
     }
   }
 

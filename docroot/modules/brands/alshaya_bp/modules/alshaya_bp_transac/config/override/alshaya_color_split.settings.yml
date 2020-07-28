@@ -1,1 +1,1 @@
-grouping_attribute_with_swatch: 'pdp_color'
+process_swatch_for_grouping_attributes: true
