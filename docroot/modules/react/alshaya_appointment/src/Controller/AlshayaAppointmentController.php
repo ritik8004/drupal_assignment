@@ -146,6 +146,7 @@ class AlshayaAppointmentController extends ControllerBase {
       ],
       '#cache' => [
         'tags' => $cache_tags,
+        'contexts' => ['user'],
       ],
     ];
   }
