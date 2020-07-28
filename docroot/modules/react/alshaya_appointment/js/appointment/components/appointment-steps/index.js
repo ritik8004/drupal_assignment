@@ -1,4 +1,5 @@
 import React from 'react';
+import 'core-js/es/array';
 
 export default class AppointmentSteps extends React.Component {
   constructor(props) {

@@ -1,4 +1,5 @@
 import React from 'react';
+import 'core-js/es/array';
 import AppointmentCategories from './components/appointment-categories';
 import AppointmentTypeList from './components/appointment-type-list';
 import AppointmentCompanion from './components/appointment-companion';
