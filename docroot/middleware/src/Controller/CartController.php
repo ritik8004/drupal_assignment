@@ -574,6 +574,20 @@ class CartController {
         break;
 
       case CartActions::CART_PAYMENT_FINALISE:
+        $cart = $this->cart->getCart();
+        // Check if shiping method is present else throw error.
+        if (empty($cart['shipping']['method'])) {
+          $this->logger->error('Error while finalizing payment. No shipping method available. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+
+          return new JsonResponse([
+            'error' => TRUE,
+            'error_code' => 505,
+            'message' => 'Delivery Information is incomplete. Please update and try again.',
+          ]);
+        }
+
         $extension = [
           'attempted_payment' => 1,
         ];

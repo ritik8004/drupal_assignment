@@ -243,7 +243,7 @@ header.c-header {
       margin-bottom: 0;
 
       &:hover {
-        background: url(#{$muji_theme_img_directory_path}/icons/basket-filled.svg) no-repeat;
+        background: url(#{$muji_theme_img_directory_path}/icons/basket-muji-red.svg) no-repeat;
 
         .quantity {
           color: $primary_minicart_hover;
@@ -654,7 +654,7 @@ header {
 
   li .store {
     &:hover {
-      background: none;
+      @include icon_img('#{$muji_theme_img_directory_path}/icons/store-finder-muji-red.svg', 2rem, 2rem);
     }
   }
 }
@@ -788,7 +788,8 @@ header {
 
       .menu--three__list {
         li {
-          padding: 0.3125rem 0;
+          padding: 0.4375rem 0;
+          width: 9rem;
         }
 
         a {

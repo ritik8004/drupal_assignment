@@ -66,10 +66,25 @@ class CyberSourcePaymentController {
   public function finaliseCybersource() {
     $response = $this->cybersourceHelper->finalise();
 
-    $script = '<script type="text/javascript">';
-    $script .= 'var event = new CustomEvent("cybersourcePaymentUpdate", {bubbles: true, detail: ' . json_encode($response) . '});';
-    $script .= 'window.parent.document.dispatchEvent(event);';
-    $script .= '</script>';
+    // Code for CustomEvent here is added to support IE11.
+    $script = '
+      <script type="text/javascript">
+        (function () {
+          if ( typeof window.CustomEvent === "function" ) return false;
+          function CustomEvent ( event, params ) {
+            params = params || { bubbles: false, cancelable: false, detail: undefined };
+            var evt = document.createEvent("CustomEvent");
+            evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+            return evt;
+          }
+          CustomEvent.prototype = window.Event.prototype;
+          window.CustomEvent = CustomEvent;
+        })();
+        
+        var event = new CustomEvent("cybersourcePaymentUpdate", {bubbles: true, detail: ' . json_encode($response) . '});
+        window.parent.document.dispatchEvent(event);
+      </script>
+    ';
 
     return new Response($script);
   }
