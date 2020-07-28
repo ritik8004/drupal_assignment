@@ -10,12 +10,16 @@ const PdpStandardDelivery = () => {
   };
 
   return (
-    <div className="magv2-pdp-standard-delivery-wrapper card fadeInUp" style={{ animationDelay: '1s' }}>
+    <div
+      className="magv2-pdp-standard-delivery-wrapper card fadeInUp"
+      onClick={() => showHomeDeliveryBlock()}
+      style={{ animationDelay: '1s' }}
+    >
       <div className="magv2-standard-delivery-title-wrapper">
         <PdpSectionTitle>
           {homeDelivery.title}
         </PdpSectionTitle>
-        <div className="magv2-accordion" onClick={() => showHomeDeliveryBlock()} />
+        <div className="magv2-accordion" />
       </div>
       <PdpSectionText className="standard-delivery-detail">
         <span>{homeDelivery.subtitle}</span>
