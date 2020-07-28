@@ -1,1 +1,12 @@
-//utils
+// Apply on imput:foucs, etc.
+@mixin placeholder-active() {
+  top: -1.25em;
+  bottom: 0;
+  #{$left}: 0;
+  opacity: 1;
+  font-size: 0.75rem;
+
+  html[lang=ar] & {
+    top: -1.45em;
+  }
+}
