@@ -76,16 +76,21 @@
 
     &__input-container {
       display: block;
+
+      @include breakpoint($tablet) {
+        width: 10rem;
+      }
     }
 
     &-popper {
       z-index: 4;
+      #{$left}: 0 !important;
 
       &[data-placement^="bottom"],
       &[data-placement^="top"] {
         .react-datepicker__triangle {
           #{$left}: 0 !important;
-          #{$right}: 0;
+          #{$right}: 0 !important;
           margin-#{$left}: auto;
           margin-#{$right}: auto;
         }
