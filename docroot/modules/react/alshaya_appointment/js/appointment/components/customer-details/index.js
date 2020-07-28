@@ -199,10 +199,9 @@ export default class CustomerDetails extends React.Component {
     } = this.state;
     const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
     const channel = isMobile ? 'mobile' : 'desktop';
-
-    let apiUrl = `/book-appointment?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.value}&duration=${selectedSlot.lengthinMin}&attendees=${1}&start-date-time=${selectedSlot.appointmentSlotTime}&client=${clientExternalId}&channel=${channel}`;
-
     const { id } = drupalSettings.alshaya_appointment.user_details;
+    let apiUrl = `/book-appointment?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.value}&duration=${selectedSlot.lengthinMin}&attendees=${1}&start-date-time=${selectedSlot.appointmentSlotTime}&client=${clientExternalId}&channel=${channel}&user=${id}`;
+
     if (appointmentId && id !== 0) {
       apiUrl = `${apiUrl}&appointment=${appointmentId}&originaltime=${originalTimeSlot}&id=${id}`;
     }

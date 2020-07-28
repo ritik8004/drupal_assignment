@@ -121,6 +121,24 @@ class AppointmentServices {
           throw new \Exception($message);
         }
 
+        if ($userId) {
+          // Authenticate user by matching userid from request and Drupal.
+          $user = $this->drupal->getSessionUserInfo();
+          if ($user['uid'] !== $userId) {
+            $message = 'Userid from endpoint doesn\'t match userId of logged in user.';
+
+            throw new \Exception($message);
+          }
+          // Match Client in request and client id of user.
+          $clientExternalId = $this->apiHelper->checkifBelongstoUser($user['email']);
+          if ($param['client'] != $clientExternalId) {
+            $message = 'Client Id ' . $param['client'] . ' does not belong to logged in user.';
+
+            throw new \Exception($message);
+          }
+
+        }
+
         $result = $this->xmlApiHelper->bookAppointment($param);
 
         $bookingId = $result->return->result ?? '';
