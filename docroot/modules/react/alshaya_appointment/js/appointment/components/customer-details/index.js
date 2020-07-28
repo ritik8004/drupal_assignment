@@ -200,13 +200,25 @@ export default class CustomerDetails extends React.Component {
     const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
     const channel = isMobile ? 'mobile' : 'desktop';
     const { id } = drupalSettings.alshaya_appointment.user_details;
-    let apiUrl = `/book-appointment?location=${selectedStoreItem.locationExternalId}&program=${appointmentCategory.id}&activity=${appointmentType.value}&duration=${selectedSlot.lengthinMin}&attendees=${1}&start-date-time=${selectedSlot.appointmentSlotTime}&client=${clientExternalId}&channel=${channel}&user=${id}`;
+    const params = {
+      location: selectedStoreItem.locationExternalId,
+      program: appointmentCategory.id,
+      activity: appointmentType.value,
+      duration: selectedSlot.lengthinMin,
+      attendees: 1,
+      start_date_time: selectedSlot.appointmentSlotTime,
+      client: clientExternalId,
+      channel,
+      user: id,
+    };
 
     if (appointmentId && id !== 0) {
-      apiUrl = `${apiUrl}&appointment=${appointmentId}&originaltime=${originalTimeSlot}&id=${id}`;
+      params.appointment = appointmentId;
+      params.id = id;
+      params.originaltime = originalTimeSlot;
     }
 
-    const apiData = fetchAPIData(apiUrl);
+    const apiData = postAPICall('/book-appointment', params);
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -236,6 +248,10 @@ export default class CustomerDetails extends React.Component {
       clientData,
     } = this.state;
 
+    const { id } = drupalSettings.alshaya_appointment.user_details;
+    if (id) {
+      clientData.id = id;
+    }
     const apiUrl = '/update-insert-client';
     const apiData = postAPICall(apiUrl, clientData);
 
