@@ -98,6 +98,17 @@ class ClientServices {
         $param['clientExternalId'] = $clientExternalId;
       }
 
+      $userId = $request_content['id'] ?? '';
+      if ($userId) {
+        // Authenticate user by matching userid from request and Drupal.
+        $user = $this->drupal->getSessionUserInfo();
+        if ($user['uid'] !== $userId) {
+          $message = 'Userid: ' . $userId . ' from endpoint doesn\'t match userId: ' . $user['uid'] . ' of logged in user.';
+
+          throw new \Exception($message);
+        }
+      }
+
       $result = $this->xmlApiHelper->updateInsertClient($param);
       $clientExternalId = $result->return->result ?? '';
 

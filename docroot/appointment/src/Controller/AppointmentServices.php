@@ -95,22 +95,22 @@ class AppointmentServices {
    *   Booking Id.
    */
   public function bookAppointment(Request $request) {
-    $requestQuery = $request->query;
+    $request_content = json_decode($request->getContent(), TRUE);
 
-    $appointmentId = $requestQuery->get('appointment') ?? '';
-    $userId = $requestQuery->get('id') ?? '';
+    $appointmentId = $request_content['appointment'] ?? '';
+    $userId = $request_content['id'] ?? '';
     try {
       // Book New appointment.
       if (!$appointmentId) {
         $param = [
-          'activity' => $requestQuery->get('activity') ?? '',
-          'duration' => $requestQuery->get('duration') ?? '',
-          'location' => $requestQuery->get('location') ?? '',
-          'attendees' => $requestQuery->get('attendees') ?? '',
-          'program' => $requestQuery->get('program') ?? '',
-          'channel' => $requestQuery->get('channel') ?? '',
-          'startDateTime' => $requestQuery->get('start-date-time') ?? '',
-          'client' => $requestQuery->get('client') ?? '',
+          'activity' => $request_content['activity'] ?? '',
+          'duration' => $request_content['duration'] ?? '',
+          'location' => $request_content['location'] ?? '',
+          'attendees' => $request_content['attendees'] ?? '',
+          'program' => $request_content['program'] ?? '',
+          'channel' => $request_content['channel'] ?? '',
+          'startDateTime' => $request_content['start_date_time'] ?? '',
+          'client' => $request_content['client'] ?? '',
         ];
 
         if (empty($param['activity']) || empty($param['duration']) || empty($param['location']) || empty($param['attendees']) || empty($param['program']) || empty($param['channel']) || empty($param['startDateTime']) || empty($param['client'])) {
@@ -162,16 +162,16 @@ class AppointmentServices {
 
       $param = [
         'criteria' => [
-          'locationExternalId' => $request->query->get('location'),
-          'appointmentDurationMin' => $request->query->get('duration'),
-          'numberOfAttendees' => $request->query->get('attendees'),
+          'locationExternalId' => $request_content['location'],
+          'appointmentDurationMin' => $request_content['duration'],
+          'numberOfAttendees' => $request_content['attendees'],
           'setupDurationMin' => 0,
         ],
-        'confirmationNumber' => $request->query->get('appointment'),
+        'confirmationNumber' => $request_content['appointment'],
         'resourceAvailabilityRequired' => FALSE,
       ];
-      $newTime = strtotime($request->query->get('start-date-time'));
-      $originalTime = strtotime($request->query->get('originaltime'));
+      $newTime = strtotime($request_content['start_date_time']);
+      $originalTime = strtotime($request_content['originaltime']);
       if ($newTime != $originalTime) {
         $param['startDateTime'] = $newTime;
       }
