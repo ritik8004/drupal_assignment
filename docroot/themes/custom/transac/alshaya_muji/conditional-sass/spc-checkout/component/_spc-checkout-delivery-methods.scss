@@ -1,0 +1,9 @@
+.spc-checkout-delivery-methods {
+  .delivery-method {
+    .sub-title {
+      @include breakpoint($upto-desktop) {
+        margin-top: 0.3125rem;
+      }
+    }
+  }
+}
