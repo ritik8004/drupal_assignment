@@ -46,11 +46,6 @@ class SwatchesHelper {
   const SWATCH_TYPE_EMPTY = '3';
 
   /**
-   * Constant for RGB swatch display type.
-   */
-  const PDP_SWATCH_RGB = 'RGB';
-
-  /**
    * Entity Type Manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
