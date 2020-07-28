@@ -7,5 +7,6 @@ dependencies:
   - alshaya_bp:alshaya_bp
   - dynamic_yield:dynamic_yield
   - alshaya_mobile_app:alshaya_mobile_app
+  - alshaya_color_split:alshaya_color_split
 themes:
   - alshaya_boots
