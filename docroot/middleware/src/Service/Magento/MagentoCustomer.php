@@ -82,7 +82,7 @@ class MagentoCustomer {
       'searchCriteria[filterGroups][1][filters][0][value]' => implode(
         ',', array_values($this->magentoInfo->getMagentoStoreIds())
       ),
-      'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'IN',
+      'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'in',
     ];
 
     $result = $this->magentoApiWrapper->doRequest('GET', $url, $query);

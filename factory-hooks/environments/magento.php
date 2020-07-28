@@ -618,6 +618,28 @@ $magentos = [
       'store_id' => ['en' => 22, 'ar' => 19],
     ],
   ],
+  'mu_prod' => [
+    'url' => 'https://muji.store.alshaya.com',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 15],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 6],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 9, 'ar' => 12],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 21, 'ar' => 18],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 27, 'ar' => 24],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 33, 'ar' => 30],
+    ],
+  ],
   'bp_qa' => [
     'url' => 'https://integration-5ojmyuq-gdyoujibngne2.eu-3.magentosite.cloud',
     'magento_secrets' => [

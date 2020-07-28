@@ -1,0 +1,359 @@
+# Application 'alshaya4', environment '04dev'.
+04dev:
+  root: /var/www/html/alshaya4.04dev/docroot
+  ac-site: alshaya4
+  ac-env: 04dev
+  ac-realm: enterprise-g1
+  uri: alshaya404dev.enterprise-g1.acquia-sites.com
+  04dev.livedev:
+    parent: '@alshaya4.04dev'
+    root: /mnt/gfs/alshaya4.04dev/livedev/docroot
+  host: alshaya404dev.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04dev
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04dev2'.
+04dev2:
+  root: /var/www/html/alshaya4.04dev2/docroot
+  ac-site: alshaya4
+  ac-env: 04dev2
+  ac-realm: enterprise-g1
+  uri: alshaya404dev2.enterprise-g1.acquia-sites.com
+  04dev2.livedev:
+    parent: '@alshaya4.04dev2'
+    root: /mnt/gfs/alshaya4.04dev2/livedev/docroot
+  host: alshaya404dev2.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04dev2
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04dev2up'.
+04dev2up:
+  root: /var/www/html/alshaya4.04dev2up/docroot
+  ac-site: alshaya4
+  ac-env: 04dev2up
+  ac-realm: enterprise-g1
+  uri: alshaya404dev2up.enterprise-g1.acquia-sites.com
+  04dev2up.livedev:
+    parent: '@alshaya4.04dev2up'
+    root: /mnt/gfs/alshaya4.04dev2up/livedev/docroot
+  host: alshaya404dev2up.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04dev2up
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04dev3'.
+04dev3:
+  root: /var/www/html/alshaya4.04dev3/docroot
+  ac-site: alshaya4
+  ac-env: 04dev3
+  ac-realm: enterprise-g1
+  uri: alshaya404dev3.enterprise-g1.acquia-sites.com
+  04dev3.livedev:
+    parent: '@alshaya4.04dev3'
+    root: /mnt/gfs/alshaya4.04dev3/livedev/docroot
+  host: alshaya404dev3.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04dev3
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04dev3up'.
+04dev3up:
+  root: /var/www/html/alshaya4.04dev3up/docroot
+  ac-site: alshaya4
+  ac-env: 04dev3up
+  ac-realm: enterprise-g1
+  uri: alshaya404dev3up.enterprise-g1.acquia-sites.com
+  04dev3up.livedev:
+    parent: '@alshaya4.04dev3up'
+    root: /mnt/gfs/alshaya4.04dev3up/livedev/docroot
+  host: alshaya404dev3up.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04dev3up
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04devup'.
+04devup:
+  root: /var/www/html/alshaya4.04devup/docroot
+  ac-site: alshaya4
+  ac-env: 04devup
+  ac-realm: enterprise-g1
+  uri: alshaya404devup.enterprise-g1.acquia-sites.com
+  04devup.livedev:
+    parent: '@alshaya4.04devup'
+    root: /mnt/gfs/alshaya4.04devup/livedev/docroot
+  host: alshaya404devup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04devup
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04live'.
+04live:
+  root: /var/www/html/alshaya4.04live/docroot
+  ac-site: alshaya4
+  ac-env: 04live
+  ac-realm: enterprise-g1
+  uri: alshaya404live.enterprise-g1.acquia-sites.com
+  04live.livedev:
+    parent: '@alshaya4.04live'
+    root: /mnt/gfs/alshaya4.04live/livedev/docroot
+  host: alshaya404live.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04live
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04pprod'.
+04pprod:
+  root: /var/www/html/alshaya4.04pprod/docroot
+  ac-site: alshaya4
+  ac-env: 04pprod
+  ac-realm: enterprise-g1
+  uri: alshaya404pprod.enterprise-g1.acquia-sites.com
+  04pprod.livedev:
+    parent: '@alshaya4.04pprod'
+    root: /mnt/gfs/alshaya4.04pprod/livedev/docroot
+  host: alshaya404pprod.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04pprod
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04pprodup'.
+04pprodup:
+  root: /var/www/html/alshaya4.04pprodup/docroot
+  ac-site: alshaya4
+  ac-env: 04pprodup
+  ac-realm: enterprise-g1
+  uri: alshaya404pprodup.enterprise-g1.acquia-sites.com
+  04pprodup.livedev:
+    parent: '@alshaya4.04pprodup'
+    root: /mnt/gfs/alshaya4.04pprodup/livedev/docroot
+  host: alshaya404pprodup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04pprodup
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04qa2'.
+04qa2:
+  root: /var/www/html/alshaya4.04qa2/docroot
+  ac-site: alshaya4
+  ac-env: 04qa2
+  ac-realm: enterprise-g1
+  uri: alshaya404qa2.enterprise-g1.acquia-sites.com
+  04qa2.livedev:
+    parent: '@alshaya4.04qa2'
+    root: /mnt/gfs/alshaya4.04qa2/livedev/docroot
+  host: alshaya404qa2.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04qa2
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04qa2up'.
+04qa2up:
+  root: /var/www/html/alshaya4.04qa2up/docroot
+  ac-site: alshaya4
+  ac-env: 04qa2up
+  ac-realm: enterprise-g1
+  uri: alshaya404qa2up.enterprise-g1.acquia-sites.com
+  04qa2up.livedev:
+    parent: '@alshaya4.04qa2up'
+    root: /mnt/gfs/alshaya4.04qa2up/livedev/docroot
+  host: alshaya404qa2up.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04qa2up
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04test'.
+04test:
+  root: /var/www/html/alshaya4.04test/docroot
+  ac-site: alshaya4
+  ac-env: 04test
+  ac-realm: enterprise-g1
+  uri: alshaya404test.enterprise-g1.acquia-sites.com
+  04test.livedev:
+    parent: '@alshaya4.04test'
+    root: /mnt/gfs/alshaya4.04test/livedev/docroot
+  host: alshaya404test.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04test
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04testup'.
+04testup:
+  root: /var/www/html/alshaya4.04testup/docroot
+  ac-site: alshaya4
+  ac-env: 04testup
+  ac-realm: enterprise-g1
+  uri: alshaya404testup.enterprise-g1.acquia-sites.com
+  04testup.livedev:
+    parent: '@alshaya4.04testup'
+    root: /mnt/gfs/alshaya4.04testup/livedev/docroot
+  host: alshaya404testup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04testup
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04uat'.
+04uat:
+  root: /var/www/html/alshaya4.04uat/docroot
+  ac-site: alshaya4
+  ac-env: 04uat
+  ac-realm: enterprise-g1
+  uri: alshaya404uat.enterprise-g1.acquia-sites.com
+  04uat.livedev:
+    parent: '@alshaya4.04uat'
+    root: /mnt/gfs/alshaya4.04uat/livedev/docroot
+  host: alshaya404uat.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04uat
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04uatup'.
+04uatup:
+  root: /var/www/html/alshaya4.04uatup/docroot
+  ac-site: alshaya4
+  ac-env: 04uatup
+  ac-realm: enterprise-g1
+  uri: alshaya404uatup.enterprise-g1.acquia-sites.com
+  04uatup.livedev:
+    parent: '@alshaya4.04uatup'
+    root: /mnt/gfs/alshaya4.04uatup/livedev/docroot
+  host: alshaya404uatup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04uatup
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment '04update'.
+04update:
+  root: /var/www/html/alshaya4.04update/docroot
+  ac-site: alshaya4
+  ac-env: 04update
+  ac-realm: enterprise-g1
+  uri: alshaya404update.enterprise-g1.acquia-sites.com
+  04update.livedev:
+    parent: '@alshaya4.04update'
+    root: /mnt/gfs/alshaya4.04update/livedev/docroot
+  host: alshaya404update.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya4.04update
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment 'dev'.
+dev:
+  root: /var/www/html/alshaya4.dev/docroot
+  ac-site: alshaya4
+  ac-env: dev
+  ac-realm: enterprise-g1
+  uri: alshaya4dev.enterprise-g1.acquia-sites.com
+  dev.livedev:
+    parent: '@alshaya4.dev'
+    root: /mnt/gfs/alshaya4.dev/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment 'dev2'.
+dev2:
+  root: /var/www/html/alshaya4.dev2/docroot
+  ac-site: alshaya4
+  ac-env: dev2
+  ac-realm: enterprise-g1
+  uri: alshaya4dev2.enterprise-g1.acquia-sites.com
+  dev2.livedev:
+    parent: '@alshaya4.dev2'
+    root: /mnt/gfs/alshaya4.dev2/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment 'dev3'.
+dev3:
+  root: /var/www/html/alshaya4.dev3/docroot
+  ac-site: alshaya4
+  ac-env: dev3
+  ac-realm: enterprise-g1
+  uri: alshaya4dev3.enterprise-g1.acquia-sites.com
+  dev3.livedev:
+    parent: '@alshaya4.dev3'
+    root: /mnt/gfs/alshaya4.dev3/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment 'pprod'.
+pprod:
+  root: /var/www/html/alshaya4.pprod/docroot
+  ac-site: alshaya4
+  ac-env: pprod
+  ac-realm: enterprise-g1
+  uri: alshaya4pprod.enterprise-g1.acquia-sites.com
+  pprod.livedev:
+    parent: '@alshaya4.pprod'
+    root: /mnt/gfs/alshaya4.pprod/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment 'prod'.
+prod:
+  root: /var/www/html/alshaya4.prod/docroot
+  ac-site: alshaya4
+  ac-env: prod
+  ac-realm: enterprise-g1
+  uri: alshaya4prod.enterprise-g1.acquia-sites.com
+  prod.livedev:
+    parent: '@alshaya4.prod'
+    root: /mnt/gfs/alshaya4.prod/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment 'qa2'.
+qa2:
+  root: /var/www/html/alshaya4.qa2/docroot
+  ac-site: alshaya4
+  ac-env: qa2
+  ac-realm: enterprise-g1
+  uri: alshaya4qa2.enterprise-g1.acquia-sites.com
+  qa2.livedev:
+    parent: '@alshaya4.qa2'
+    root: /mnt/gfs/alshaya4.qa2/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment 'test'.
+test:
+  root: /var/www/html/alshaya4.test/docroot
+  ac-site: alshaya4
+  ac-env: test
+  ac-realm: enterprise-g1
+  uri: alshaya4test.enterprise-g1.acquia-sites.com
+  test.livedev:
+    parent: '@alshaya4.test'
+    root: /mnt/gfs/alshaya4.test/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+# Application 'alshaya4', environment 'uat'.
+uat:
+  root: /var/www/html/alshaya4.uat/docroot
+  ac-site: alshaya4
+  ac-env: uat
+  ac-realm: enterprise-g1
+  uri: alshaya4uat.enterprise-g1.acquia-sites.com
+  uat.livedev:
+    parent: '@alshaya4.uat'
+    root: /mnt/gfs/alshaya4.uat/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
