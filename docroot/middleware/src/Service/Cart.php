@@ -1154,10 +1154,13 @@ class Cart {
         return $this->handleCheckoutComRedirection();
       }
 
+      $double_check_done = 'no';
+      $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
+
       $doubleCheckEnabled = $this->settings->getSettings('alshaya_checkout_settings')['place_order_double_check_after_exception'];
       if ($doubleCheckEnabled) {
+        $double_check_done = 'yes';
         try {
-          $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
           $lastOrder = $this->orders->getLastOrder((int) $this->getCartCustomerId());
 
           if ($lastOrder && $cartReservedOrderId === $lastOrder['increment_id']) {
@@ -1169,13 +1172,6 @@ class Cart {
 
             return $this->processPostOrderPlaced((int) $lastOrder['order_id'], $data['paymentMethod']['method']);
           }
-          else {
-            $this->logger->warning('Place order failed and we tried to double check but order was not found. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
-              '@message' => $e->getMessage(),
-              '@order_id' => $cartReservedOrderId,
-              '@cart_id' => $cart['cart']['id'],
-            ]);
-          }
         }
         catch (\Exception $doubleException) {
           $this->logger->error('Error occurred while trying to double check. Exception: @message', [
@@ -1185,9 +1181,33 @@ class Cart {
       }
 
       $this->cancelCartReservation($e->getMessage());
-      $this->logger->error('Error while placing order. Error message: @message', [
-        '@message' => $e->getMessage(),
+
+      $message = [];
+
+      $message[] = 'exception:' . $e->getMessage();
+      $message[] = 'double_check_done:' . $double_check_done;
+      $message[] = 'order_id:' . $cartReservedOrderId;
+      $message[] = 'cart_id:' . $cart['cart']['id'];
+      $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
+
+      if ($this->settings->getSettings('place_order_failure_log_payment_data', 1)) {
+        $message[] = 'payment_method:' . $data['paymentMethod']['method'];
+        foreach ($data['paymentMethod']['additional_data'] as $key => $value) {
+          $message[] = implode(':', ['payment_data', $key, $value]);
+        }
+      }
+
+      if ($this->settings->getSettings('place_order_failure_log_shipping_data', 1)) {
+        $message[] = 'shipping_method:' . $cart['shipping']['method'];
+        foreach ($cart['shipping']['address']['custom_attributes'] as $shipping_attribute) {
+          $message[] = $shipping_attribute['attribute_code'] . ':' . $shipping_attribute['value'];
+        }
+      }
+
+      $this->logger->error('Error occurred while placing order. @message', [
+        '@message' => implode('||', $message),
       ]);
+
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
