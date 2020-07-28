@@ -60,24 +60,29 @@ class MagentoApiWrapper {
    *   Request URL.
    * @param array $request_options
    *   Request options (optional).
+   * @param string $action
+   *   Action to log with stats. (optional).
    *
    * @return mixed
    *   Response data.
    *
    * @throws \Exception
    */
-  public function doRequest(string $method, string $url, array $request_options = []) {
+  public function doRequest(string $method, string $url, array $request_options = [], string $action = '') {
     $that = $this;
-    $request_options['on_stats'] = function (TransferStats $stats) use ($that) {
+
+    $request_options['on_stats'] = function (TransferStats $stats) use ($that, $action) {
       $code = ($stats->hasResponse())
         ? $stats->getResponse()->getStatusCode()
         : 0;
 
       $that->logger->info(sprintf(
-        'Finished API request %s in %.4f. Response code: %d',
+        'Finished API request %s in %.4f. Response code: %d. Method: %s. Action: %s',
         $stats->getEffectiveUri(),
         $stats->getTransferTime(),
-        $code
+        $code,
+        $stats->getRequest()->getMethod(),
+        $action
       ));
     };
 

@@ -56,12 +56,16 @@ class PaymentMethodCybersource extends React.Component {
       return;
     }
 
+    const errorMessage = e.detail.error_message === 'failed'
+      ? getStringMessage('transaction_failed')
+      : getStringMessage('payment_error');
+
     dispatchCustomEvent('spcCheckoutMessageUpdate', {
       type: 'error',
-      message: e.detail.error_message === 'failed'
-        ? getStringMessage('transaction_failed')
-        : getStringMessage('payment_error'),
+      message: errorMessage,
     });
+
+    Drupal.logJavascriptError('Post Cybersource finalise', errorMessage, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
 
     removeFullScreenLoader();
   };
@@ -213,7 +217,7 @@ class PaymentMethodCybersource extends React.Component {
       const { number, expiry, cvv } = this.state;
 
       response.data.data.card_number = number;
-      response.data.data.card_cvn = parseInt(cvv.toString().trim(), 10);
+      response.data.data.card_cvn = cvv.toString().trim();
 
       const expiryInfo = expiry.split('/');
       const date = new Date();

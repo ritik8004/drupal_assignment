@@ -6,6 +6,7 @@ use App\Helper\CookieHelper;
 use App\Service\Cart;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\CheckoutCom\ApplePayHelper;
+use App\Service\Orders;
 use App\Service\PaymentData;
 use App\Service\SessionStorage;
 use App\Service\Utility;
@@ -311,6 +312,19 @@ class CheckoutComPaymentController extends PaymentController {
       ]);
 
       throw new \Exception('/' . $data['data']['langcode'] . '/checkout', 302);
+    }
+
+    // If cart id for the checkoutcom token is same as last placed order one.
+    $last_order_cart_id = $this->session->getDataFromSession(Orders::ORDER_CART_ID);
+    if (!empty($last_order_cart_id)
+      && $this->cart->getCartId() == $last_order_cart_id) {
+      $this->logger->error('User tried to directly access or clicked back button from confirmation page for checkoutcom success url for token:@token and cart:@cart while order:@order was placed for same cart already.', [
+        '@token' => $payment_token,
+        '@cart' => $last_order_cart_id,
+        '@order' => $this->session->getDataFromSession(Orders::SESSION_STORAGE_KEY),
+      ]);
+      // Redirect the user to cart page.
+      throw new \Exception('/' . $data['data']['langcode'] . '/cart', 302);
     }
 
     $cart = $this->cart->getCart();
