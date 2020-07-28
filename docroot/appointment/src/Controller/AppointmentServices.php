@@ -121,6 +121,16 @@ class AppointmentServices {
           throw new \Exception($message);
         }
 
+        if ($userId) {
+          // Authenticate user by matching userid from request and Drupal.
+          $user = $this->drupal->getSessionUserInfo();
+          if ($user['uid'] !== $userId) {
+            $message = 'Userid from endpoint doesn\'t match userId of logged in user.';
+
+            throw new \Exception($message);
+          }
+        }
+
         $result = $this->xmlApiHelper->bookAppointment($param);
 
         $bookingId = $result->return->result ?? '';
