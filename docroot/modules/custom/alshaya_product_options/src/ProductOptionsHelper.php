@@ -402,43 +402,4 @@ class ProductOptionsHelper {
     return $groups;
   }
 
-  /**
-   * A helper function to get the option id.
-   *
-   * @param string $name
-   *   Option name.
-   * @param string $attribute_code
-   *   Grouped Attribute code.
-   *
-   * @return int
-   *   Option id based on grouped attribute code and option value.
-   */
-  public function getAttributeOptionId(string $name, string $attribute_code) {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $static = &drupal_static(__METHOD__, []);
-    $static_key = implode(':', [
-      $attribute_code,
-      $name,
-      $langcode,
-    ]);
-
-    if (isset($static[$static_key])) {
-      return $static[$static_key];
-    }
-
-    $query = $this->connection->select('taxonomy_term__field_sku_attribute_code', 'attribute_code');
-    $query->join('taxonomy_term__field_sku_option_id', 'option_id', 'attribute_code.entity_id=option_id.entity_id');
-    $query->join('taxonomy_term_field_data', 'field_data', 'option_id.entity_id=field_data.tid');
-    $query->condition('field_data.name', $name);
-    $query->condition('attribute_code.field_sku_attribute_code_value', $attribute_code);
-    $query->condition('field_data.langcode', $langcode);
-    $query->fields('option_id', ['field_sku_option_id_value']);
-    $result = $query->execute()->fetchAssoc();
-    if (isset($result)) {
-      $static[$static_key] = $result['field_sku_option_id_value'];
-    }
-
-    return $static[$static_key];
-  }
-
 }

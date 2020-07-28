@@ -39,6 +39,7 @@ function alshaya_bp_transac_update_8003() {
     ['search_api.index.product'],
     'alshaya_product'
   );
+
   // Replace weight for color family with color block.
   $blocks = [
     'plpcolor' => 'plpcolorfamily',
@@ -72,6 +73,12 @@ function alshaya_bp_transac_update_8003() {
   }
 
   \Drupal::service('module_installer')->install(['alshaya_color_split']);
+
+  // Enable swatch option for grouping attribute.
+  $manager->updateConfigs(
+    ['alshaya_color_split.settings'],
+    'alshaya_color_split'
+  );
 }
 
 /**
