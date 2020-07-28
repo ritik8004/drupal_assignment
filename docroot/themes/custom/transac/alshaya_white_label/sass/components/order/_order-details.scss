@@ -245,6 +245,33 @@
     }
   }
 
+  .surcharge-row {
+    .blend {
+      .price-type__wrapper {
+        .tooltip-anchor {
+          position: absolute;
+          display: inline-block;
+          top: -0.3125rem;
+
+          @include breakpoint($only-mobile) {
+            top: -0.4125rem;
+          }
+
+          .tooltip-box {
+            @include breakpoint($only-mobile) {
+              #{$left}: -8.8rem;
+
+              &::before,
+              &::after {
+                #{$left}: 86.3%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   .order-item-row {
     border-bottom: 1px solid $primary_border;
 
