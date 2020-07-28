@@ -561,8 +561,9 @@ class AlshayaSpcController extends ControllerBase {
     $delivery_method_description = $orderDetails['delivery_method_description'];
     // Display custom label in description
     // if same day delivery is selected as shipping method.
-    if (isset($orderDetails['shipping_method_code']) && $orderDetails['shipping_method_code'] == 'alshayadelivery_sd_sd01') {
-      $delivery_method_description = $this->t('same day');
+    $product_config = $this->config('alshaya_acm_product.settings');
+    if (isset($orderDetails['shipping_method_code']) && $orderDetails['shipping_method_code'] === $product_config->get('same_day_shipping_method')) {
+      $delivery_method_description = $this->t('Same day');
     }
     // Get formatted customer phone number.
     $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
