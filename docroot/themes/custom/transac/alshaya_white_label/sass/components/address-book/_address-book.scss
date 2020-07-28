@@ -55,14 +55,6 @@
   }
 }
 
-.view-address-book {
-  padding-top: 0.5rem;
-
-  @include breakpoint($desktop) {
-    padding-top: 2rem;
-  }
-}
-
 .address {
   .address--data {
     overflow: hidden;
@@ -433,7 +425,12 @@
 
     + .form-item {
       overflow: hidden;
+      padding-top: 1rem;
     }
+  }
+
+  .views-element-container {
+    padding-top: 1.5rem;
   }
 }
 
@@ -829,6 +826,14 @@
 
       &.error {
         top: 2rem;
+      }
+    }
+  }
+
+  .mobile-number-field {
+    .mobile-input--wrapper {
+      .form-item-field-address-0-address-mobile-number-mobile {
+        margin-top: 0;
       }
     }
   }
