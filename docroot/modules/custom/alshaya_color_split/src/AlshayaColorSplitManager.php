@@ -180,7 +180,6 @@ class AlshayaColorSplitManager {
    *   Grouping attribute.
    */
   public function alterGroupAttributeFormItem(array &$configurations, array $options, $grouping_attribute) {
-    $sku_options_color = [];
     if ($grouping_attribute) {
       foreach ($options as $key => $val) {
         $option_id = $this->productOptionsHelper->getAttributeOptionId($val, $grouping_attribute);
@@ -193,12 +192,11 @@ class AlshayaColorSplitManager {
 
             case SwatchesHelper::SWATCH_TYPE_VISUAL_COLOR:
               // If swatch type is not an image use rgb color code instead.
-              $sku_options_color[$key] = [
+              $configurations['#attached']['drupalSettings']['sku_configurable_options_color'][$key] = [
                 'display_label' => $val,
                 'swatch_type' => self::PDP_SWATCH_RGB,
                 'display_value' => $swatch['swatch'],
               ];
-              $configurations['#attached']['drupalSettings']['sku_configurable_options_color'] = $sku_options_color;
               break;
 
             default:
