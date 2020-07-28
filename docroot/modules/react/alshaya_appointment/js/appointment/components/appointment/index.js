@@ -1,3 +1,6 @@
+import 'core-js/features/url-search-params';
+import 'core-js/es/symbol';
+import 'core-js/es/array';
 import React from 'react';
 import AppointmentSteps from '../appointment-steps';
 import AppointmentType from '../appointment-type';
