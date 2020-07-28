@@ -200,7 +200,6 @@ export default class CustomerDetails extends React.Component {
     const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
     const channel = isMobile ? 'mobile' : 'desktop';
     const { id } = drupalSettings.alshaya_appointment.user_details;
-    const apiUrl = '/book-appointment';
     const params = {
       location: selectedStoreItem.locationExternalId,
       program: appointmentCategory.id,
@@ -219,7 +218,7 @@ export default class CustomerDetails extends React.Component {
       params.originaltime = originalTimeSlot;
     }
 
-    const apiData = postAPICall(apiUrl, params);
+    const apiData = postAPICall('/book-appointment', params);
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
