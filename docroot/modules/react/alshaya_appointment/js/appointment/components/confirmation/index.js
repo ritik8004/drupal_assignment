@@ -32,6 +32,8 @@ export default class Confirmation extends React.Component {
       appointmentType,
       selectedStoreItem,
       selectedSlot,
+      clientData,
+      companionData,
     } = this.state;
 
     const { id } = drupalSettings.alshaya_appointment.user_details;
@@ -45,6 +47,27 @@ export default class Confirmation extends React.Component {
       startTime: selectedSlot.appointmentSlotTime,
       endTime: moment(selectedSlot.appointmentSlotTime).add(selectedSlot.lengthinMin, 'minutes'),
     };
+
+    const companion = [];
+    for (let i = 1; i <= parseInt(Object.keys(companionData).length / 3, 10); i++) {
+      const name = `bootscompanion${i}name`;
+      const lastname = `bootscompanion${i}lastname`;
+      const item = {
+        label: `Companion ${i}`,
+        value: `${companionData[name]} ${companionData[lastname]}`,
+      };
+      companion.push(item);
+    }
+
+    let companionsRender = '';
+    if (companion.length > 0) {
+      companionsRender = companion.map((item) => (
+        <ConfirmationItems
+          item={{ label: item.label, value: item.value }}
+        />
+      ));
+    }
+
 
     return (
       <div className="appointment-confirmation-wrapper">
@@ -68,6 +91,10 @@ export default class Confirmation extends React.Component {
             </div>
           </div>
           <div className="inner-body fadeInUp">
+            <ConfirmationItems
+              item={{ label: Drupal.t('Appointment Booked by'), value: `${clientData.firstName} ${clientData.lastName}` }}
+            />
+            { companionsRender }
             <ConfirmationItems
               item={{ label: Drupal.t('Appointment category'), value: appointmentCategory.name }}
             />
