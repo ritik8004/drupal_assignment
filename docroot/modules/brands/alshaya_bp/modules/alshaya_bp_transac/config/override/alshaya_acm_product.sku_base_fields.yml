@@ -5,10 +5,17 @@ fields:
     facet: 1
     index: 1
   color:
-    label: 'Color'
-    cardinality: -1
-    facet: 1
+    configurable: 1
+    cardinality: 1
     index: 1
+    facet: 0
+  color_family:
+    label: 'Color'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+    swatch: 1
   product_brand:
     facet: 0
   brand:

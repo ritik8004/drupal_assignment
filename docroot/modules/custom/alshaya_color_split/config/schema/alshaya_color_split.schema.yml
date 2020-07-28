@@ -5,3 +5,6 @@ alshaya_color_split.settings:
     color_label_cart_form:
       type: string
       label: 'Color label cart form'
+    process_swatch_for_grouping_attributes:
+      type: boolean
+      label: 'Process to show swatch for grouping attributes'
