@@ -450,6 +450,11 @@ class AlshayaSpcController extends ControllerBase {
     ];
 
     $strings[] = [
+      'key' => 'place_order_failed_error',
+      'value' => $this->t('Sorry, the transaction has been successful but your order is still being processed. If you do not receive an order confirmation in next 6 hours please contact our customer service at live chat and quote the following information:<br>@transaction_data'),
+    ];
+
+    $strings[] = [
       'key' => 'shipping_method_error',
       'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
     ];
