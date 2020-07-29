@@ -26,6 +26,11 @@ class Knet extends AlshayaSpcPaymentMethodPluginBase {
       'key' => 'knet_error',
       'value' => $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code'),
     ];
+
+    $build['#strings']['knet_error_info'] = [
+      'key' => 'knet_error_info',
+      'value' => $this->t('Order ID: @order_id Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code'),
+    ];
   }
 
 }
