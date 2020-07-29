@@ -37,7 +37,21 @@ const AppointmentStore = React.lazy(async () => {
 export default class Appointment extends React.Component {
   constructor(props) {
     super(props);
-    const localStorageValues = getStorageInfo();
+    let localStorageValues = getStorageInfo();
+    const { search } = window.location;
+    const params = new URLSearchParams(search);
+    const appointment = params.get('appointment');
+
+    if (localStorageValues) {
+      const { appointmentId } = localStorageValues;
+      // Empty localStore if user leaves edit appointment incomplete
+      // and wants to book new appointment.
+      if (appointmentId && appointmentId !== appointment) {
+        removeStorageInfo();
+        localStorageValues = null;
+      }
+    }
+
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
