@@ -20,4 +20,10 @@
   @include breakpoint($upto-tablet) {
     padding-bottom: 1.875rem;
   }
+
+  .exception-error {
+    font-size: 0.75rem;
+    color: $primary_input_inline_error;
+    padding-top: 1.25rem;
+  }
 }
