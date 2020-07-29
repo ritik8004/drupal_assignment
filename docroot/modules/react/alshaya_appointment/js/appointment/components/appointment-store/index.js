@@ -5,7 +5,7 @@ import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import StoreList from './components/store-list';
 import { getLocationAccess } from '../../../utilities/helper';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
-import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/appointment-util';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import Loading from '../../../utilities/loading';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import FullScreenSVG from '../../../svg-component/full-screen-svg';

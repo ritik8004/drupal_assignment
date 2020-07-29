@@ -5,7 +5,7 @@ import AppointmentListItem from './components/appointmentlist';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
-} from '../../../utilities/appointment-util';
+} from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 export default class AppointmentsView extends React.Component {
   constructor(props) {

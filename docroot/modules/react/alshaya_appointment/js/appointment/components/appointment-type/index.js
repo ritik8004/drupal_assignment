@@ -10,7 +10,7 @@ import { getInputValue, getParam } from '../../../utilities/helper';
 import {
   showFullScreenLoader,
   removeFullScreenLoader,
-} from '../../../utilities/appointment-util';
+} from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 
 const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;

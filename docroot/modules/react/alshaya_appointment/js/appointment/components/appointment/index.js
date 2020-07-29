@@ -19,7 +19,7 @@ import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
-} from '../../../utilities/appointment-util';
+} from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import AppointmentMessages from '../appointment-messages';
 
 const AppointmentStore = React.lazy(async () => {
