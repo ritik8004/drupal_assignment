@@ -52,6 +52,8 @@ export default class Confirmation extends React.Component {
 
     const companion = [];
     if (companionData !== undefined) {
+      // Construct companion array,
+      // as companionData has individual key for each field name, lastname, dob.
       for (let i = 1; i <= parseInt(Object.keys(companionData).length / 3, 10); i++) {
         const name = `bootscompanion${i}name`;
         const lastname = `bootscompanion${i}lastname`;
