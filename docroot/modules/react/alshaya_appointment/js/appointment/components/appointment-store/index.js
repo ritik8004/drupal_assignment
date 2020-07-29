@@ -392,7 +392,6 @@ export default class AppointmentStore extends React.Component {
   hightlightMapMarker = (makerIndex) => {
     const map = window.appointmentMap;
     // Make the marker by default open.
-    google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
     if (map.map.mapMarkers[makerIndex] !== undefined) {
       map.highlightIcon(map.map.mapMarkers[makerIndex]);
     }
