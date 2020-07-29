@@ -129,7 +129,7 @@ class MagentoApiWrapper {
     }
     catch (ConnectException $e) {
       $this->logger->error($e->getMessage());
-      throw new \Exception($this->utility->getDefaultErrorMessage(), 500);
+      throw new \Exception($this->utility->getDefaultErrorMessage(), 601);
     }
 
     return $result;
