@@ -13,18 +13,23 @@ const PdpProductLabels = (props) => {
     labels = productLabels[variantSelected];
   }
 
-  const bifercatedLabels = labels.reduce(function(aggregator, item) {
-    item.position = item.position || 'top-left'
+  if (!(labels && Array.isArray(labels) && labels.length)) return null;
+
+  /* eslint-disable no-param-reassign */
+  const bifercatedLabels = labels.reduce((aggregator, item) => {
+    item.position = item.position || 'top-left';
+    /* eslint-disable-next-line no-prototype-builtins */
     if (!aggregator.hasOwnProperty(item.position)) {
       aggregator[item.position] = [];
     }
-    aggregator[item.position].push(item)
+    aggregator[item.position].push(item);
     return aggregator;
   }, {});
 
-  let bifercatedLabelsList = Object.keys(bifercatedLabels);
+  const bifercatedLabelsList = Object.keys(bifercatedLabels);
 
   if (bifercatedLabelsList && Array.isArray(bifercatedLabelsList) && bifercatedLabelsList.length) {
+    /* eslint-disable react/no-array-index-key */
     return (
       <>
         <div className="product-labels">
@@ -32,7 +37,7 @@ const PdpProductLabels = (props) => {
             {
               bifercatedLabelsList.map((key, index) => (
                 <div className={`labels-container__inner labels-container__inner--${key}`} key={`${key}-${index}`}>
-                  <PdpProductLabel bifercatedLabels={bifercatedLabels} directionKey={key}/>
+                  <PdpProductLabel bifercatedLabels={bifercatedLabels} directionKey={key} />
                 </div>
               ))
             }
@@ -52,9 +57,9 @@ const PdpProductLabel = (props) => {
         bifercatedLabels[directionKey].map((labelItem, index) => (
           <div className={`labels ${labelItem.position}`} key={`${directionKey}-${labelItem.position}-${index}`}>
             <img
-              src={labelItem.image.url || ""}
-              alt={labelItem.image.alt || ""}
-              title={labelItem.image.title || ""}
+              src={labelItem.image.url || ''}
+              alt={labelItem.image.alt || ''}
+              title={labelItem.image.title || ''}
             />
           </div>
         ))
