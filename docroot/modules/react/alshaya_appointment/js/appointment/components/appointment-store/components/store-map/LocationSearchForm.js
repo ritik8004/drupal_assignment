@@ -26,6 +26,12 @@ const LocationSearchForm = React.forwardRef((props, ref) => (
       </div>
     </DeviceView>
 
+    <DeviceView device="mobile">
+      <label>
+        {Drupal.t('Find your closest location')}
+      </label>
+    </DeviceView>
+
     <div className="store-finder-input">
       <input
         type="text"
