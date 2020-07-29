@@ -15,7 +15,7 @@ export default class AppointmentSelection extends React.Component {
   render() {
     const localStorageValues = getStorageInfo();
     const {
-      appointmentCategory, appointmentType, selectedStoreItem, selectedSlot,
+      appointmentCategory, appointmentType, selectedStoreItem, selectedSlot, appointmentId,
     } = localStorageValues;
 
     return (
@@ -51,13 +51,16 @@ export default class AppointmentSelection extends React.Component {
                 {appointmentType && appointmentType.label}
               </div>
             </div>
-            <button
-              className="appointment-details-button edit-button"
-              type="button"
-              onClick={() => this.handleEdit('appointment-type')}
-            >
-              {Drupal.t('Edit')}
-            </button>
+            { !appointmentId
+              && (
+              <button
+                className="appointment-details-button edit-button"
+                type="button"
+                onClick={() => this.handleEdit('appointment-type')}
+              >
+                {Drupal.t('Edit')}
+              </button>
+              )}
           </div>
 
           { selectedStoreItem

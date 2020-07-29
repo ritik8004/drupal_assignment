@@ -486,6 +486,7 @@ export default class AppointmentStore extends React.Component {
       selectedStoreItem,
       openSelectedStore,
       mapFullScreen,
+      appointmentId,
     } = this.state;
     const mapView = (
       <StoreMap
@@ -559,7 +560,12 @@ export default class AppointmentStore extends React.Component {
             <button
               className="appointment-store-button appointment-type-button back"
               type="button"
-              onClick={() => this.handleBack('appointment-type')}
+              disabled={appointmentId}
+              onClick={() => {
+                if (!appointmentId) {
+                  this.handleBack('appointment-type');
+                }
+              }}
             >
               {Drupal.t('Back')}
             </button>
