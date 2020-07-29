@@ -123,6 +123,11 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
       'key' => 'invalid_cvv',
       'value' => $this->t('Invalid security code (CVV)'),
     ];
+
+    $build['#strings']['checkout_com_error_info'] = [
+      'key' => 'checkoutcom_error_info',
+      'value' => $this->t('Order ID: @order_id'),
+    ];
   }
 
   /**
