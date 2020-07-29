@@ -726,7 +726,19 @@ class Cart {
       $this->cache->set('payment_method', $expire, $data['method']);
     }
 
-    return $this->updateCart($update);
+    $cart = $this->updateCart($update);
+    if (isset($cart['error_code'])) {
+      $error_message = $cart['error_code'] > 600
+        ? 'Back-end system is down'
+        : $cart['error_message'];
+
+      $message = $this->prepareOrderFailedMessage($cart, $data, $error_message, 'update cart', 'NA', TRUE);
+      $this->logger->error('Error occurred while placing order. @message', [
+        '@message' => $message,
+      ]);
+    }
+
+    return $cart;
   }
 
   /**
@@ -1182,30 +1194,12 @@ class Cart {
 
       $this->cancelCartReservation($e->getMessage());
 
-      $message = [];
-
-      $message[] = 'exception:' . $e->getMessage();
-      $message[] = 'double_check_done:' . $double_check_done;
-      $message[] = 'order_id:' . $cartReservedOrderId;
-      $message[] = 'cart_id:' . $cart['cart']['id'];
-      $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
-
-      if ($this->settings->getSettings('place_order_failure_log_payment_data', 1)) {
-        $message[] = 'payment_method:' . $data['paymentMethod']['method'];
-        foreach ($data['paymentMethod']['additional_data'] as $key => $value) {
-          $message[] = implode(':', ['payment_data', $key, $value]);
-        }
-      }
-
-      if ($this->settings->getSettings('place_order_failure_log_shipping_data', 1)) {
-        $message[] = 'shipping_method:' . $cart['shipping']['method'];
-        foreach ($cart['shipping']['address']['custom_attributes'] as $shipping_attribute) {
-          $message[] = $shipping_attribute['attribute_code'] . ':' . $shipping_attribute['value'];
-        }
-      }
-
+      $error_message = $e->getCode() > 600
+        ? 'Back-end system is down'
+        : $e->getMessage();
+      $message = $this->prepareOrderFailedMessage($cart, $data, $error_message, 'place order', $double_check_done);
       $this->logger->error('Error occurred while placing order. @message', [
-        '@message' => implode('||', $message),
+        '@message' => $message,
       ]);
 
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
@@ -1533,6 +1527,46 @@ class Cart {
     if ($expire > 0) {
       $this->cache->set('cached_cart', $expire, $cart);
     }
+  }
+
+  /**
+   * Prepare message to log when API fail after payment successful.
+   *
+   * @param array $cart
+   *   Cart Data.
+   * @param array $data
+   *   Payment data.
+   * @param string $exception_message
+   *   Exception message.
+   * @param string $api
+   *   API identifier which failed.
+   * @param string $double_check_done
+   *   Flag to say if double check was done or not.
+   *
+   * @return string
+   *   Prepared error message.
+   */
+  private function prepareOrderFailedMessage(array $cart, array $data, string $exception_message, string $api, string $double_check_done) {
+    $message[] = 'exception:' . $exception_message;
+    $message[] = 'api:' . $api;
+    $message[] = 'double_check_done:' . $double_check_done;
+    $message[] = 'order_id:' . $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    $message[] = 'cart_id:' . $cart['cart']['id'];
+    $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
+
+    if ($this->settings->getSettings('place_order_debug_failure', 1)) {
+      $message[] = 'payment_method:' . $data['paymentMethod']['method'];
+      foreach ($data['paymentMethod']['additional_data'] as $key => $value) {
+        $message[] = implode(':', ['payment_data', $key, $value]);
+      }
+
+      $message[] = 'shipping_method:' . $cart['shipping']['method'];
+      foreach ($cart['shipping']['address']['custom_attributes'] as $shipping_attribute) {
+        $message[] = $shipping_attribute['attribute_code'] . ':' . $shipping_attribute['value'];
+      }
+    }
+
+    return implode('||', $message);
   }
 
 }
