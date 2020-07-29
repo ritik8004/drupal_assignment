@@ -6,7 +6,7 @@ import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
 import { getDateFormat, getDateFormattext } from '../../../utilities/helper';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
-import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/appointment-util';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {

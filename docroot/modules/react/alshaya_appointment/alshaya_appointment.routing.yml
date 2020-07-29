@@ -17,7 +17,7 @@ alshaya_appointment.user_booked_appointment:
       user:
         type: entity:user
 
-alshaya_appointment.checkout.customer:
+alshaya_appointment.user_info:
   path: '/get/userinfo'
   defaults:
     _controller: '\Drupal\alshaya_appointment\Controller\AlshayaAppointmentController::getUserInfo'

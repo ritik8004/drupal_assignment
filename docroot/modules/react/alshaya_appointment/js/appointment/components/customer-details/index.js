@@ -11,7 +11,7 @@ import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 import {
   showFullScreenLoader,
   removeFullScreenLoader,
-} from '../../../utilities/appointment-util';
+} from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 export default class CustomerDetails extends React.Component {
   constructor(props) {

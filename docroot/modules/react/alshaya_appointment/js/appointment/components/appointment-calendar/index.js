@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
 import { getDateFormat } from '../../../utilities/helper';
 import ConditionalView from '../../../common/components/conditional-view';
-import { showFullScreenLoader } from '../../../utilities/appointment-util';
+import { showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 const momentRange = extendMoment(moment);
 
