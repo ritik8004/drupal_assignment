@@ -77,6 +77,7 @@ class CheckoutSettingsForm extends ConfigFormBase {
     $config->set('cod_surcharge_tooltip', $form_state->getValue('cod_surcharge_tooltip'));
     $config->set('exclude_payment_methods', $form_state->getValue('exclude_payment_methods'));
     $config->set('cancel_reservation_enabled', $form_state->getValue('cancel_reservation_enabled'));
+    $config->set('same_day_shipping_method_code', $form_state->getValue('same_day_shipping_method_code'));
 
     $config->save();
 
@@ -219,6 +220,13 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Flag to specify if Drupal should invoke the cancel reservation API or not.'),
       '#required' => TRUE,
       '#default_value' => $config->get('cancel_reservation_enabled') ?? 0,
+    ];
+
+    $form['same_day_shipping_method_code'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Same day delivery shipping method code'),
+      '#description' => $this->t('Please enter the shipping method code for "same day". e.g. alshayadelivery_qd_qd01.'),
+      '#default_value' => $config->get('same_day_shipping_method_code'),
     ];
 
     return $form;
