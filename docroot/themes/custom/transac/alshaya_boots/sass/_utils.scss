@@ -55,10 +55,6 @@ $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_boots/img
   top: 0.25rem;
   transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
   pointer-events: none;
-
-  &::first-letter {
-    text-transform: uppercase;
-  }
 }
 
 @mixin facet-arrow ($position, $direction: false, $topborder: false, $rightborder:false, $bottomborder:false, $leftborder:false) {
