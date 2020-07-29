@@ -1556,9 +1556,7 @@ class Cart {
 
     if ($this->settings->getSettings('place_order_debug_failure', 1)) {
       $message[] = 'payment_method:' . $data['paymentMethod']['method'];
-      foreach ($data['paymentMethod']['additional_data'] as $key => $value) {
-        $message[] = implode(':', ['payment_data', $key, $value]);
-      }
+      $message[] = 'additional_information:' . json_encode($data['paymentMethod']['additional_data']);
 
       $message[] = 'shipping_method:' . $cart['shipping']['method'];
       foreach ($cart['shipping']['address']['custom_attributes'] as $shipping_attribute) {
