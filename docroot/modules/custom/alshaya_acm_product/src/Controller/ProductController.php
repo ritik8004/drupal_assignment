@@ -274,12 +274,11 @@ class ProductController extends ControllerBase {
         $price = $related_sku_price['#price']['#price'];
         $final_price = isset($related_sku_price['#final_price']) ? $related_sku_price['#final_price']['#price'] : $price;
         $title = $related_sku_entity->label();
-        $product_labels = $this->skuManager->getLabelsData($related_sku_entity, 'pdp');
         $related_products['products'][$related_sku]['gallery']['mediumurl'] = $image;
         $related_products['products'][$related_sku]['finalPrice'] = $final_price;
         $related_products['products'][$related_sku]['priceRaw'] = $price;
         $related_products['products'][$related_sku]['title'] = $title;
-        $related_products['products'][$related_sku]['productLabels'] = $product_labels;
+        $related_products['products'][$related_sku]['productLabels'] = $this->skuManager->getLabelsData($related_sku_entity, 'pdp');
         $related_products['section_title'] = render($data['section_title']);
       }
     }
