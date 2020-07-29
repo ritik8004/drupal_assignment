@@ -279,17 +279,7 @@ class Cart {
    */
   public function getRestoredCart() {
     $cart = $this->getCart();
-
     $this->resetCartCache();
-
-    if (!empty($cart['shipping']['method'])) {
-      $update = [
-        'extension' => ['action' => CartActions::CART_RESET],
-      ];
-
-      $cart = $this->updateCart($update);
-    }
-
     return $cart;
   }
 

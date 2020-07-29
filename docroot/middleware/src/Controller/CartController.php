@@ -260,11 +260,13 @@ class CartController {
    *
    * @param array $cart_data
    *   Cart data.
+   * @param boolean $is_cart_page
+   *   Processed cart data is for cart page or checkout page.
    *
    * @return array
    *   Processed data.
    */
-  private function getProcessedCartData(array $cart_data) {
+  private function getProcessedCartData(array $cart_data, bool $is_cart_page = TRUE) {
     $data = [];
 
     $data['cart_id'] = $cart_data['cart']['id'];
@@ -296,6 +298,15 @@ class CartController {
 
     if (is_array($data['surcharge']) && !empty($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
       $data['totals']['surcharge'] = $data['surcharge']['amount'];
+    }
+
+    // If cart page.
+    if ($is_cart_page) {
+      // We don't show surcharge amount on cart total.
+      if ($data['totals']['surcharge'] > 0) {
+        $data['totals']['base_grand_total'] -= $data['totals']['surcharge'];
+        $data['cart_total'] -= $data['totals']['surcharge'];
+      }
     }
 
     $data['response_message'] = NULL;
@@ -413,7 +424,7 @@ class CartController {
     }
 
     // Re-use the processing done for cart page.
-    $response = $this->getProcessedCartData($data);
+    $response = $this->getProcessedCartData($data, FALSE);
 
     $response['cnc_enabled'] = $cnc_status;
 
@@ -655,6 +666,13 @@ class CartController {
         }
 
         $postData = $request_content['postData'];
+        // Get exiting cart.
+        $cart = $this->cart->getCart();
+        // If cart has shipping method set, reset that.
+        if (!empty($cart['shipping']['method'])) {
+          $this->cart->updateCart(['extension' => ['action' => CartActions::CART_RESET],]);
+        }
+
         $cart = $this->cart->updateCart($postData);
         break;
     }

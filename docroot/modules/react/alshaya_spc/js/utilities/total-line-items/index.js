@@ -61,7 +61,7 @@ class TotalLineItems extends React.Component {
   };
 
   render() {
-    const { totals } = this.props;
+    const { totals, isCartPage } = this.props;
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
@@ -90,7 +90,8 @@ class TotalLineItems extends React.Component {
           />
         </ConditionalView>
 
-        <ConditionalView condition={totals.surcharge > 0}>
+        {/* Not show surcharge info on cart page. */}
+        <ConditionalView condition={totals.surcharge > 0 && isCartPage === false}>
           <TotalLineItem
             tooltip
             name="surcharge-total"
