@@ -125,7 +125,8 @@ export default class PdpCrossellUpsell extends React.PureComponent {
                 imageUrl={products[sku].gallery.mediumurl}
                 alt={products[sku].gallery.label}
                 title={products[sku].title}
-                pdpProductPrice={products[sku].finalPrice}
+                finalPrice={products[sku].finalPrice}
+                pdpProductPrice={products[sku].priceRaw}
                 productUrl={products[sku].productUrl}
               />
             ))}

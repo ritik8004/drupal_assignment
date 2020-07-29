@@ -45,6 +45,20 @@
 
             .magv2-pdp-final-price-wrapper {
               font-size: 1.125rem !important;
+
+              @include breakpoint($only-mobile) {
+                font-size: 1rem !important;
+              }
+            }
+
+            .magv2-pdp-vat-text {
+              display: none;
+            }
+
+            &.has-special-price {
+              .magv2-pdp-vat-text {
+                display: none;
+              }
             }
           }
 
@@ -63,12 +77,14 @@
           }
         }
 
-        .magv2-pdp-final-price-wrapper + .magv2-pdp-price-wrapper {
-          font-size: 1rem;
-          font-family: $alshaya-thin;
+        .magv2-pdp-final-price-wrapper + .magv2-meta-data-wrapper {
+          .magv2-pdp-price-wrapper {
+            font-size: 1rem;
+            font-family: $alshaya-thin;
 
-          @include breakpoint($only-mobile) {
-            font-size: 0.875rem;
+            @include breakpoint($only-mobile) {
+              font-size: 0.875rem;
+            }
           }
         }
       }
@@ -141,6 +157,7 @@
     &-title {
       font-size: 1.5rem;
       padding-bottom: 1.875rem;
+      font-weight: bold;
 
       @include breakpoint($only-mobile) {
         font-size: 1.25rem;
