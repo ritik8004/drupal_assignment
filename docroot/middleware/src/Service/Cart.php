@@ -726,7 +726,19 @@ class Cart {
       $this->cache->set('payment_method', $expire, $data['method']);
     }
 
-    return $this->updateCart($update);
+    $cart = $this->updateCart($update);
+    if (isset($cart['error_code'])) {
+      $error_message = $cart['error_code'] > 600
+        ? 'Back-end system is down'
+        : $cart['error_message'];
+
+      $message = $this->prepareOrderFailedMessage($cart, $data, $error_message, 'update cart', 'NA', TRUE);
+      $this->logger->error('Error occurred while placing order. @message', [
+        '@message' => $message,
+      ]);
+    }
+
+    return $cart;
   }
 
   /**
@@ -1154,10 +1166,13 @@ class Cart {
         return $this->handleCheckoutComRedirection();
       }
 
+      $double_check_done = 'no';
+      $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
+
       $doubleCheckEnabled = $this->settings->getSettings('alshaya_checkout_settings')['place_order_double_check_after_exception'];
       if ($doubleCheckEnabled) {
+        $double_check_done = 'yes';
         try {
-          $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
           $lastOrder = $this->orders->getLastOrder((int) $this->getCartCustomerId());
 
           if ($lastOrder && $cartReservedOrderId === $lastOrder['increment_id']) {
@@ -1169,13 +1184,6 @@ class Cart {
 
             return $this->processPostOrderPlaced((int) $lastOrder['order_id'], $data['paymentMethod']['method']);
           }
-          else {
-            $this->logger->warning('Place order failed and we tried to double check but order was not found. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
-              '@message' => $e->getMessage(),
-              '@order_id' => $cartReservedOrderId,
-              '@cart_id' => $cart['cart']['id'],
-            ]);
-          }
         }
         catch (\Exception $doubleException) {
           $this->logger->error('Error occurred while trying to double check. Exception: @message', [
@@ -1185,9 +1193,15 @@ class Cart {
       }
 
       $this->cancelCartReservation($e->getMessage());
-      $this->logger->error('Error while placing order. Error message: @message', [
-        '@message' => $e->getMessage(),
+
+      $error_message = $e->getCode() > 600
+        ? 'Back-end system is down'
+        : $e->getMessage();
+      $message = $this->prepareOrderFailedMessage($cart, $data, $error_message, 'place order', $double_check_done);
+      $this->logger->error('Error occurred while placing order. @message', [
+        '@message' => $message,
       ]);
+
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -1513,6 +1527,44 @@ class Cart {
     if ($expire > 0) {
       $this->cache->set('cached_cart', $expire, $cart);
     }
+  }
+
+  /**
+   * Prepare message to log when API fail after payment successful.
+   *
+   * @param array $cart
+   *   Cart Data.
+   * @param array $data
+   *   Payment data.
+   * @param string $exception_message
+   *   Exception message.
+   * @param string $api
+   *   API identifier which failed.
+   * @param string $double_check_done
+   *   Flag to say if double check was done or not.
+   *
+   * @return string
+   *   Prepared error message.
+   */
+  private function prepareOrderFailedMessage(array $cart, array $data, string $exception_message, string $api, string $double_check_done) {
+    $message[] = 'exception:' . $exception_message;
+    $message[] = 'api:' . $api;
+    $message[] = 'double_check_done:' . $double_check_done;
+    $message[] = 'order_id:' . $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    $message[] = 'cart_id:' . $cart['cart']['id'];
+    $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
+
+    if ($this->settings->getSettings('place_order_debug_failure', 1)) {
+      $message[] = 'payment_method:' . $data['paymentMethod']['method'];
+      $message[] = 'additional_information:' . json_encode($data['paymentMethod']['additional_data']);
+
+      $message[] = 'shipping_method:' . $cart['shipping']['method'];
+      foreach ($cart['shipping']['address']['custom_attributes'] as $shipping_attribute) {
+        $message[] = $shipping_attribute['attribute_code'] . ':' . $shipping_attribute['value'];
+      }
+    }
+
+    return implode('||', $message);
   }
 
 }

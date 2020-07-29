@@ -36,7 +36,17 @@ export default class PaymentMethods extends React.Component {
       let message = getStringMessage('payment_error');
 
       // If K-NET error and have K-Net Error details.
-      if (paymentErrorInfo.payment_method !== undefined
+      if (paymentErrorInfo.status !== undefined && paymentErrorInfo.status === 'place_order_failed') {
+        const errorData = {};
+        Object.entries(paymentErrorInfo.data).forEach(([key, value]) => {
+          errorData[`@${key}`] = value;
+        });
+
+        const transactionData = getStringMessage(`${paymentErrorInfo.payment_method}_error_info`, errorData);
+        message = parse(getStringMessage('place_order_failed_error', {
+          '@transaction_data': transactionData,
+        }));
+      } else if (paymentErrorInfo.payment_method !== undefined
         && paymentErrorInfo.payment_method === 'knet'
         && paymentErrorInfo.data !== undefined) {
         message = parse(getStringMessage('knet_error', {

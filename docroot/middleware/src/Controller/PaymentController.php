@@ -6,6 +6,7 @@ use App\Helper\CookieHelper;
 use App\Service\Cart;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\CheckoutCom\ApplePayHelper;
+use App\Service\Config\SystemSettings;
 use App\Service\Cybersource\CybersourceHelper;
 use App\Service\Knet\KnetHelper;
 use App\Service\PaymentData;
@@ -33,6 +34,11 @@ class PaymentController {
    * Value to set in cookie for payment or place order failure.
    */
   const PAYMENT_FAILED_VALUE = 'failed';
+
+  /**
+   * Value to set in cookie for payment or place order failure.
+   */
+  const PLACE_ORDER_FAILED_VALUE = 'place_order_failed';
 
   /**
    * Langcode used for external payments like K-Net/Checkout.com.
@@ -119,6 +125,13 @@ class PaymentController {
   protected $knetResponseData = [];
 
   /**
+   * System Settings service.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  protected $settings;
+
+  /**
    * PaymentController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
@@ -141,6 +154,8 @@ class PaymentController {
    *   Session Storage service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    */
   public function __construct(RequestStack $request,
                               Cart $cart,
@@ -151,7 +166,8 @@ class PaymentController {
                               PaymentData $payment_data,
                               LoggerInterface $logger,
                               SessionStorage $session,
-                              Utility $utility) {
+                              Utility $utility,
+                              SystemSettings $settings) {
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->checkoutComApi = $checkout_com_api;
@@ -162,6 +178,7 @@ class PaymentController {
     $this->logger = $logger;
     $this->session = $session;
     $this->utility = $utility;
+    $this->settings = $settings;
   }
 
   /**
@@ -250,9 +267,13 @@ class PaymentController {
         ['@cart_id' => $cart['cart']['id'], '@message' => $e->getMessage()]
       );
       $this->cart->cancelCartReservation($e->getMessage());
+
       $payment_data = [
-        'status' => self::PAYMENT_FAILED_VALUE,
+        'status' => $this->getPaymentFailedStatus($e->getCode()),
         'payment_method' => 'checkoutcom',
+        'data' => [
+          'order_id' => $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '',
+        ],
       ];
       $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
       $response->setTargetUrl('/' . $data['data']['langcode'] . '/checkout');
@@ -432,12 +453,13 @@ class PaymentController {
       $this->cart->cancelCartReservation($e->getMessage());
 
       $payment_data = [
-        'status' => self::PAYMENT_FAILED_VALUE,
+        'status' => $this->getPaymentFailedStatus($e->getCode()),
         'payment_method' => 'knet',
         'data' => [
           'transaction_id' => !empty($response['transaction_id']) ? $response['transaction_id'] : $response['quote_id'],
           'payment_id' => $response['payment_id'],
           'result_code' => $response['result'],
+          'order_id' => $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '',
         ],
       ];
       $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
@@ -676,6 +698,26 @@ class PaymentController {
     }
 
     return $data;
+  }
+
+  /**
+   * Get payment failed status.
+   *
+   * @param string|int $exception_code
+   *   Exception code.
+   *
+   * @return string
+   *   Failure status.
+   */
+  private function getPaymentFailedStatus($exception_code) {
+    $status = self::PAYMENT_FAILED_VALUE;
+
+    // When backend is down and configured to show different message.
+    if ($exception_code >= 600 && $this->settings->getSettings('place_order_debug_failure', 1)) {
+      $status = self::PLACE_ORDER_FAILED_VALUE;
+    }
+
+    return $status;
   }
 
 }
