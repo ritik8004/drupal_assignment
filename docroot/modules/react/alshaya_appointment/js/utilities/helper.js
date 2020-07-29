@@ -63,6 +63,25 @@ function getParam(param) {
   return params.get(param);
 }
 
+function getArrayFromCompanionData(companionData) {
+  if (companionData === undefined) {
+    return [];
+  }
+  const companion = [];
+  // Construct companion array,
+  // as companionData has individual key for each field name, lastname, dob.
+  for (let i = 1; i <= parseInt(Object.keys(companionData).length / 3, 10); i++) {
+    const name = `bootscompanion${i}name`;
+    const lastname = `bootscompanion${i}lastname`;
+    const item = {
+      label: `Companion ${i}`,
+      value: `${companionData[name]} ${companionData[lastname]}`,
+    };
+    companion.push(item);
+  }
+  return companion;
+}
+
 export {
   getInputValue,
   getLocationAccess,
@@ -70,4 +89,5 @@ export {
   getDateFormat,
   getDateFormattext,
   getParam,
+  getArrayFromCompanionData,
 };

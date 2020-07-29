@@ -1,16 +1,20 @@
 import React from 'react';
 import ConfirmationItems from './components/confirmation-items';
+import { getArrayFromCompanionData } from '../../../utilities/helper';
 
 const AppointmentConfirmationPrint = React.forwardRef((props, ref) => {
   const {
     clientData,
-    companion,
+    companionData,
     appointmentCategory,
     appointmentType,
     location,
     date,
     time,
   } = props;
+
+  // Construct companion array from companionData.
+  const companion = getArrayFromCompanionData(companionData);
 
   let companionsRender = '';
   if (companion.length > 0) {
