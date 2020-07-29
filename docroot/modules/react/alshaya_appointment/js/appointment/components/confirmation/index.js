@@ -51,14 +51,16 @@ export default class Confirmation extends React.Component {
     };
 
     const companion = [];
-    for (let i = 1; i <= parseInt(Object.keys(companionData).length / 3, 10); i++) {
-      const name = `bootscompanion${i}name`;
-      const lastname = `bootscompanion${i}lastname`;
-      const item = {
-        label: `Companion ${i}`,
-        value: `${companionData[name]} ${companionData[lastname]}`,
-      };
-      companion.push(item);
+    if (companionData !== undefined) {
+      for (let i = 1; i <= parseInt(Object.keys(companionData).length / 3, 10); i++) {
+        const name = `bootscompanion${i}name`;
+        const lastname = `bootscompanion${i}lastname`;
+        const item = {
+          label: `Companion ${i}`,
+          value: `${companionData[name]} ${companionData[lastname]}`,
+        };
+        companion.push(item);
+      }
     }
 
     let companionsRender = '';
