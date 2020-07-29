@@ -20,7 +20,6 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
-import AppointmentMessages from '../appointment-messages';
 
 const AppointmentStore = React.lazy(async () => {
   // Wait for google object to load.
@@ -271,7 +270,6 @@ export default class Appointment extends React.Component {
     return (
       <div className="appointment-wrapper">
         <AppointmentSteps step={appointmentStep} />
-        <AppointmentMessages />
         <div className={`${appointmentClasses}`}>
           {appointmentData}
           {appointmentSelection}

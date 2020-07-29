@@ -1,5 +1,6 @@
 import React from 'react';
 import 'core-js/es/array';
+import AppointmentMessages from '../appointment-messages';
 
 export default class AppointmentSteps extends React.Component {
   constructor(props) {
@@ -42,6 +43,7 @@ export default class AppointmentSteps extends React.Component {
         <ul className="appointment-steps">
           { steprender }
         </ul>
+        <AppointmentMessages />
       </div>
     );
   }

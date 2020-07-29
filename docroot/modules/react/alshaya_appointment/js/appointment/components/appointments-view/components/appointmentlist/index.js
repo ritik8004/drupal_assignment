@@ -79,6 +79,7 @@ export default class AppointmentListItem extends React.Component {
         <div>
           <p>
             {item.firstName}
+            <span> </span>
             {item.lastName}
           </p>
         </div>

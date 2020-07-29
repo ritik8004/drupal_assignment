@@ -36,7 +36,7 @@ export default class AppointmentMessages extends React.Component {
       <>
         { message
         && (
-        <div className="error">
+        <div className="exception-error">
           { message }
         </div>
         )}
