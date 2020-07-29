@@ -15,28 +15,27 @@ const PdpProductLabels = (props) => {
 
   if (!(labels && Array.isArray(labels) && labels.length)) return null;
 
-  /* eslint-disable no-param-reassign */
   const bifercatedLabels = labels.reduce((aggregator, item) => {
-    item.position = item.position || 'top-left';
-    /* eslint-disable-next-line no-prototype-builtins */
-    if (!aggregator.hasOwnProperty(item.position)) {
-      aggregator[item.position] = [];
+    const currentAggregation = { ...aggregator };
+    const currentItem = { ...item };
+    currentItem.position = currentItem.position || 'top-left';
+    if (!(currentItem.position in currentAggregation)) {
+      currentAggregation[currentItem.position] = [];
     }
-    aggregator[item.position].push(item);
-    return aggregator;
+    currentAggregation[currentItem.position].push(currentItem);
+    return currentAggregation;
   }, {});
 
   const bifercatedLabelsList = Object.keys(bifercatedLabels);
 
   if (bifercatedLabelsList && Array.isArray(bifercatedLabelsList) && bifercatedLabelsList.length) {
-    /* eslint-disable react/no-array-index-key */
     return (
       <>
         <div className="product-labels">
           <div className="labels-container" dataSku={variantSelected} dataMainSku={skuCode}>
             {
-              bifercatedLabelsList.map((key, index) => (
-                <div className={`labels-container__inner labels-container__inner--${key}`} key={`${key}-${index}`}>
+              bifercatedLabelsList.map((key) => (
+                <div className={`labels-container__inner labels-container__inner--${key}`} key={`${key}-label-container`}>
                   <PdpProductLabel bifercatedLabels={bifercatedLabels} directionKey={key} />
                 </div>
               ))
@@ -54,8 +53,9 @@ const PdpProductLabel = (props) => {
   return (
     <>
       {
-        bifercatedLabels[directionKey].map((labelItem, index) => (
-          <div className={`labels ${labelItem.position}`} key={`${directionKey}-${labelItem.position}-${index}`}>
+        bifercatedLabels[directionKey].map((labelItem) => (
+          // BE to provide and add a unique key here.
+          <div className={`labels ${labelItem.position}`}>
             <img
               src={labelItem.image.url || ''}
               alt={labelItem.image.alt || ''}
