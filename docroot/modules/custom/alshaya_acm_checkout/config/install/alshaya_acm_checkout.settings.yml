@@ -22,4 +22,5 @@ cod_surcharge_tooltip: 'Tooltip to display the details of COD Service charge'
 exclude_payment_methods: { }
 cancel_reservation_enabled: 0
 place_order_double_check_after_exception: true
+same_day_shipping_method_code: ''
 langcode: en
