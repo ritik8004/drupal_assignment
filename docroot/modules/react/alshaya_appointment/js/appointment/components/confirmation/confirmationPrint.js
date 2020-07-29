@@ -1,5 +1,6 @@
 import React from 'react';
 import ConfirmationItems from './components/confirmation-items';
+import { getArrayFromCompanionData } from '../../../utilities/helper';
 
 const AppointmentConfirmationPrint = React.forwardRef((props, ref) => {
   const {
@@ -12,20 +13,8 @@ const AppointmentConfirmationPrint = React.forwardRef((props, ref) => {
     time,
   } = props;
 
-  const companion = [];
-  if (companionData !== undefined) {
-    // Construct companion array,
-    // as companionData has individual key for each field name, lastname, dob.
-    for (let i = 1; i <= parseInt(Object.keys(companionData).length / 3, 10); i++) {
-      const name = `bootscompanion${i}name`;
-      const lastname = `bootscompanion${i}lastname`;
-      const item = {
-        label: `Companion ${i}`,
-        value: `${companionData[name]} ${companionData[lastname]}`,
-      };
-      companion.push(item);
-    }
-  }
+  // Construct companion array from companionData.
+  const companion = getArrayFromCompanionData(companionData);
 
   let companionsRender = '';
   if (companion.length > 0) {

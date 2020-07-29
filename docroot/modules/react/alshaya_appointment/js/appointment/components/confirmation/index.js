@@ -4,7 +4,10 @@ import AddToCalendar from 'react-add-to-calendar';
 import ReactToPrint from 'react-to-print';
 import ConfirmationItems from './components/confirmation-items';
 import { getStorageInfo, removeStorageInfo } from '../../../utilities/storage';
-import { addressCleanup } from '../../../utilities/helper';
+import {
+  addressCleanup,
+  getArrayFromCompanionData,
+} from '../../../utilities/helper';
 import AppointmentConfirmationPrint from './confirmationPrint';
 
 export default class Confirmation extends React.Component {
@@ -50,20 +53,8 @@ export default class Confirmation extends React.Component {
       endTime: moment(selectedSlot.appointmentSlotTime).add(selectedSlot.lengthinMin, 'minutes'),
     };
 
-    const companion = [];
-    if (companionData !== undefined) {
-      // Construct companion array,
-      // as companionData has individual key for each field name, lastname, dob.
-      for (let i = 1; i <= parseInt(Object.keys(companionData).length / 3, 10); i++) {
-        const name = `bootscompanion${i}name`;
-        const lastname = `bootscompanion${i}lastname`;
-        const item = {
-          label: `Companion ${i}`,
-          value: `${companionData[name]} ${companionData[lastname]}`,
-        };
-        companion.push(item);
-      }
-    }
+    // Construct companion array from companionData.
+    const companion = getArrayFromCompanionData(companionData);
 
     let companionsRender = '';
     if (companion.length > 0) {
