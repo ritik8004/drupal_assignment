@@ -1,9 +1,11 @@
 import React from 'react';
 import moment from 'moment';
 import AddToCalendar from 'react-add-to-calendar';
+import ReactToPrint from 'react-to-print';
 import ConfirmationItems from './components/confirmation-items';
 import { getStorageInfo, removeStorageInfo } from '../../../utilities/storage';
 import { addressCleanup } from '../../../utilities/helper';
+import AppointmentConfirmationPrint from './confirmationPrint';
 
 export default class Confirmation extends React.Component {
   constructor(props) {
@@ -68,7 +70,6 @@ export default class Confirmation extends React.Component {
       ));
     }
 
-
     return (
       <div className="appointment-confirmation-wrapper">
         <div className="confirmation-header fadeInUp">
@@ -82,12 +83,10 @@ export default class Confirmation extends React.Component {
               <AddToCalendar
                 event={event}
               />
-              <span
-                className="print"
-                onClick={() => window.print()}
-              >
-                {Drupal.t('Print')}
-              </span>
+              <ReactToPrint
+                trigger={() => <span className="print">{Drupal.t('Print')}</span>}
+                content={() => this.componentRef}
+              />
             </div>
           </div>
           <div className="inner-body fadeInUp">
@@ -130,6 +129,18 @@ export default class Confirmation extends React.Component {
           >
             {Drupal.t('Continue Shopping')}
           </button>
+        </div>
+        <div style={{ display: 'none' }} className="appointment-confirmation-print-wrapper">
+          <AppointmentConfirmationPrint
+            ref={(el) => { this.componentRef = el; }}
+            clientData={clientData}
+            appointmentCategory={appointmentCategory}
+            appointmentType={appointmentType}
+            location={location}
+            companion={companion}
+            date={date}
+            time={time}
+          />
         </div>
       </div>
     );
