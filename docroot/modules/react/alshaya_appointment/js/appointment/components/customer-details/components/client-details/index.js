@@ -93,7 +93,7 @@ export default class ClientDetails extends React.Component {
               type="mobile"
               required
               name="mobile"
-              defaultValue={mobile}
+              defaultValue={mobile.replace(/\s/g, '')}
               className={mobile !== '' ? 'focus' : ''}
               label={`${Drupal.t('Telephone/ Mobile')}*`}
               handleChange={this.handleChange}
