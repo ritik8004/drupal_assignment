@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Class AlshayaAppointmentController.
@@ -40,6 +41,13 @@ class AlshayaAppointmentController extends ControllerBase {
   protected $request;
 
   /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaAppointmentController constructor.
    *
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
@@ -48,13 +56,17 @@ class AlshayaAppointmentController extends ControllerBase {
    *   Current user.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
    */
   public function __construct(MobileNumberUtilInterface $mobile_util,
                               AccountProxy $current_user,
-                              RequestStack $request_stack) {
+                              RequestStack $request_stack,
+                              LanguageManagerInterface $language_manager) {
     $this->mobileUtil = $mobile_util;
     $this->currentUser = $current_user;
     $this->request = $request_stack->getCurrentRequest();
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -64,7 +76,8 @@ class AlshayaAppointmentController extends ControllerBase {
     return new static(
       $container->get('mobile_number.util'),
       $container->get('current_user'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('language_manager')
     );
   }
 
@@ -104,12 +117,15 @@ class AlshayaAppointmentController extends ControllerBase {
 
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
+    // Get Lang code.
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $settings = [
       'map' => [
         'google_api_key' => $geolocation_config->get('google_map_api_key'),
       ],
       'alshaya_appointment' => [
+        'logo' => alshaya_master_get_email_logo(NULL, $langcode),
         'middleware_url' => _alshaya_appointment_get_middleware_url(),
         'step_labels' => $this->getAppointmentSteps(),
         'appointment_companion_limit' => $alshaya_appointment_config->get('appointment_companion_limit'),
