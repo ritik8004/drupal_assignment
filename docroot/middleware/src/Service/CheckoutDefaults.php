@@ -265,6 +265,12 @@ class CheckoutDefaults {
     }
 
     $updated = $this->cart->updateBilling($billing);
+
+    // If billing update has error.
+    if (isset($updated['error'])) {
+      return FALSE;
+    }
+
     return $updated;
   }
 
@@ -316,6 +322,12 @@ class CheckoutDefaults {
     }
 
     $updated = $this->cart->updateBilling($billing);
+
+    // If billing update has error.
+    if (isset($updated['error'])) {
+      return FALSE;
+    }
+
     return $updated;
   }
 
