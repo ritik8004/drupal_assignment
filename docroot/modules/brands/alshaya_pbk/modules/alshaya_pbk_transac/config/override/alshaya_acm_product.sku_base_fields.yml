@@ -17,3 +17,15 @@ fields:
     label: 'Fabric'
     configurable: 1
     index: 1
+  color_lhn:
+    label: 'Color'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 0
+    swatch: 1
+  size_lhn:
+    label: 'Size'
+    cardinality: -1
+    index: 1
+    facet: 0
