@@ -47,6 +47,9 @@ if ([ $setup == 1 ])
 then
   cd $docrootDir/modules/react
   npm install
+
+  # Validate files now.
+  npm run lint alshaya_spc/js/
 else
   echo -en "No need to setup REACT. There is no change in any modules/react."
 fi

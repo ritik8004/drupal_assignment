@@ -4,7 +4,6 @@
  * @file
  * Installation and update functions for SKU Stock.
  */
-use Drupal\Core\Database\Database;
 
 /**
  * Implements hook_update_N().

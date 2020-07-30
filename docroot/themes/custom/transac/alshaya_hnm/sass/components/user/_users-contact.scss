@@ -3,6 +3,31 @@
     @include breakpoint($desktop) {
       margin-top: -0.125rem;
     }
+
+    input {
+      background-color: $default_background_color;
+      color: $primary_input !important;
+    }
+
+    label {
+      color: $primary_input_label !important;
+      font-size: 0.8125rem !important;
+
+      &.error {
+        color: $primary_input_inline_error !important;
+        font-size: 0.6875rem;
+        background: $default_background_color !important;
+        bottom: -1.5rem;
+      }
+    }
+
+    .form-item {
+      &.mobile-number-field {
+        .prefix {
+          color: $hnm-black-three;
+        }
+      }
+    }
   }
 
   .field--name-field-first-name {

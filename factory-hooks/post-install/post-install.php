@@ -29,8 +29,10 @@ define('ACTION_OVERRIDE', 'override');
 $domain = preg_replace('/\d/', '', explode('.', $_SERVER['HTTP_HOST'])[0]);
 
 // Detect the brand name (mc, hm) and country code (kw, sa, ae) from the site name.
-$site_code = substr($domain, 0, -2);
-$country_code = substr($domain, -2);
+require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
+$site_country_code = alshaya_get_site_country_code($domain);
+$site_code = $site_country_code['site_code'];
+$country_code = $site_country_code['country_code'];
 
 /**
  * Check if we need to override the arguments or cancel the process by reading

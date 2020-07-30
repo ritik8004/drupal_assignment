@@ -1,0 +1,45 @@
+.desktop-slug-banner,
+.mobile-slug-banner {
+  text-align: center;
+  background-color: $slug_banner_bg !important;
+  color: $slug_banner_text;
+
+  p {
+    margin: 0;
+    font-family: $alshaya-thin;
+    font-size: 0.625rem;
+
+    @include breakpoint($tablet) {
+      font-size: 0.75rem;
+    }
+  }
+
+  a {
+    text-decoration: underline;
+    color: inherit;
+  }
+}
+
+.desktop-slug-banner {
+  padding: 1.1875rem 0;
+}
+
+.mobile-slug-banner {
+  padding: 0.5rem 0;
+}
+
+.slug-banner-processed.frontpage {
+  @include breakpoint($only-mobile) {
+    &:not(.header--fixed) {
+      margin-top: 7.125rem;
+    }
+  }
+}
+
+.slug-banner-processed.alias--cart.hide-minimalistic-header {
+  @include breakpoint($only-mobile) {
+    &:not(.header--fixed) {
+      margin-top: 0;
+    }
+  }
+}

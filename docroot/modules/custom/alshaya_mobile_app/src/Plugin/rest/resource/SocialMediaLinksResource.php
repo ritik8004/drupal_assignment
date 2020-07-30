@@ -9,6 +9,7 @@ use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Class SocialMediaLinksResource.
@@ -48,6 +49,13 @@ class SocialMediaLinksResource extends ResourceBase {
   protected $menuLinkTree;
 
   /**
+   * Entity Type Manager service object.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * SocialMediaLinksResource constructor.
    *
    * @param array $configuration
@@ -62,10 +70,13 @@ class SocialMediaLinksResource extends ResourceBase {
    *   Logger channel.
    * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_link_tree
    *   Menu link tree.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, MenuLinkTreeInterface $menu_link_tree) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, MenuLinkTreeInterface $menu_link_tree, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->menuLinkTree = $menu_link_tree;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -78,7 +89,8 @@ class SocialMediaLinksResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
-      $container->get('menu.link_tree')
+      $container->get('menu.link_tree'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -109,9 +121,16 @@ class SocialMediaLinksResource extends ResourceBase {
           && !empty($menu_link_content->getPluginDefinition()['options']['attributes']['class'])) {
           $menu_class = $menu_link_content->getPluginDefinition()['options']['attributes']['class'];
         }
+        // Get menu id.
+        $menu_id = $menu_link_content->getPluginDefinition()['metadata']['entity_id'];
+        // Load with menu id and get menu link object.
+        $menu_link_obj = $this->entityTypeManager->getStorage('menu_link_content')->load($menu_id);
+
         $response_data[] = [
+          'name' => $menu_link_content->getTitle(),
           'media' => !empty($menu_class) ? str_replace(self::MENU_CLASS_PATTERN, '', $menu_class) : '',
           'url' => $menu_link_content->getUrlObject()->toString(TRUE)->getGeneratedUrl(),
+          'social_id' => !empty($menu_link_obj->social_id->value) ? $menu_link_obj->social_id->value : NULL,
         ];
 
         // Adding to property for using later to attach cacheable dependency.

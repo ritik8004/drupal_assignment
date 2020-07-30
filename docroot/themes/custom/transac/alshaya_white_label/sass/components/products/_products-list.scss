@@ -346,6 +346,7 @@
 
           &:nth-of-type(4n+1) {
             margin-#{$left}: 0;
+            clear: both;
           }
         }
 
@@ -491,6 +492,10 @@
         &:hover {
           color: $plp_tile_product_title_hover;
           text-decoration: underline;
+        }
+
+        .suggested-text {
+          line-height: 1.3;
         }
       }
 

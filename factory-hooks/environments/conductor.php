@@ -226,6 +226,57 @@ $conductors = [
     'hmac_secret' => 'NjhjMjRmNDEtNTJkMS00',
     'site_id' => 57,
   ],
+  // Pottery Barn Kids KW.
+  'pbkkw_qa' => [
+    'hmac_id' => '7b1ac8753c5c46dda4d43e6343cc9921',
+    'hmac_secret' => 'OTU1MDJmOWMtZGYyOS00',
+    'site_id' => 226,
+  ],
+  'pbkkw_uat' => [
+    'hmac_id' => '5e02ce58f5664cef9165601a64f53bc8',
+    'hmac_secret' => 'NWJiOTRmNjQtMDdkZS00',
+    'site_id' => 242,
+  ],
+  // Pottery Barn Kids AE.
+  'pbkae_qa' => [
+    'hmac_id' => '727104fbad4240eea0d5bda04da0927f',
+    'hmac_secret' => 'NzY3OWU3YjItNmZiNS00',
+    'site_id' => 228,
+  ],
+  'pbkae_uat' => [
+    'hmac_id' => 'c7760836e4334c0584f80d13e3c21315',
+    'hmac_secret' => 'OTU5MGYwMzktNDVjMy00',
+    'site_id' => 244,
+  ],
+  // Pottery Barn Kids SA.
+  'pbksa_qa' => [
+    'hmac_id' => 'db1681e298b8408294834b3cb9f83a5e',
+    'hmac_secret' => 'ODk1N2E1YTEtZmFhNS00',
+    'site_id' => 227,
+  ],
+  'pbksa_uat' => [
+    'hmac_id' => '046bc57011364079b4e4d94edd1fdc6b',
+    'hmac_secret' => 'YjcyYTdhMWItMzVhZi00',
+    'site_id' => 243,
+  ],
+  'pbkkw_prod' => [
+    'site_id' => 249,
+  ],
+  'pbksa_prod' => [
+    'site_id' => 250,
+  ],
+  'pbkae_prod' => [
+    'site_id' => 251,
+  ],
+  'pbkeg_prod' => [
+    'site_id' => 252,
+  ],
+  'pbkbh_prod' => [
+    'site_id' => 253,
+  ],
+  'pbkqa_prod' => [
+    'site_id' => 254,
+  ],
   // BathBodyWorks KW.
   'bbwkw_qa' => [
     'hmac_id' => '0b92904888cd422f8acd2938e199916e',
@@ -548,6 +599,134 @@ $conductors = [
   ],
   'aeoeg_prod' => [
     'site_id' => 208,
+  ],
+  // Muji
+  'muae_dev' => [
+    'hmac_id' => 'fa9f4aee73dd4acc93bb4f8457cc8486',
+    'hmac_secret' => 'NzE5MDQ2NmYtNTg3My00',
+    'site_id' => 240,
+  ],
+  'mukw_qa' => [
+    'hmac_id' => '64c8be065a6142e59b408db05439332d',
+    'hmac_secret' => 'MmIxOWM3OTgtOGQ1OS00',
+    'site_id' => 234,
+  ],
+  'musa_qa' => [
+    'hmac_id' => 'f7e2dd7a78ef4dd1a361d3bdb048714a',
+    'hmac_secret' => 'MTU4OTY3NDgtOGM3ZS00',
+    'site_id' => 235,
+  ],
+  'muae_qa' => [
+    'hmac_id' => '45e8107d0344489a9dfe4323ae53e586',
+    'hmac_secret' => 'YTg1NWQ1NzktZWZkYi00',
+    'site_id' => 236,
+  ],
+  'mueg_qa' => [
+    'hmac_id' => 'c89dcfb3aa9146ccb84545aff3597a66',
+    'hmac_secret' => 'YTQ0NjE0NzEtYTExNS00',
+    'site_id' => 237,
+  ],
+  'mukw_uat' => [
+    'hmac_id' => 'e8dc16861254494e80c36dd3255aab5d',
+    'hmac_secret' => 'OTY0OTRjZTYtYzMyZC00',
+    'site_id' => 245,
+  ],
+  'musa_uat' => [
+    'hmac_id' => '030218663ebc492a83427a8a2f6eaa37',
+    'hmac_secret' => 'ZWRiNThjYTEtNzEzNy00',
+    'site_id' => 246,
+  ],
+  'muae_uat' => [
+    'hmac_id' => '73cf818bcd7b47ce975acf336d831206',
+    'hmac_secret' => 'ZWNlYjZhYjUtOWJiMi00',
+    'site_id' => 247,
+  ],
+  'mueg_uat' => [
+    'hmac_id' => 'd5cb6eba6f1d4987a0934685e1f87bd5',
+    'hmac_secret' => 'YmNkYjJkMTgtZGU4Mi00',
+    'site_id' => 248,
+  ],
+  'mukw_prod' => [
+    'site_id' => 267,
+  ],
+  'musa_prod' => [
+    'site_id' => 268,
+  ],
+  'muae_prod' => [
+    'site_id' => 269,
+  ],
+  'mueg_prod' => [
+    'site_id' => 270,
+  ],
+  'mubh_prod' => [
+    'site_id' => 271,
+  ],
+  'muqa_prod' => [
+    'site_id' => 272,
+  ],
+  // Boots pharmacy.
+  'bpkw_dev' => [
+    'hmac_id' => 'd498a56fab204489ad5c3de9840d8e98',
+    'hmac_secret' => 'YjM5Mjc1M2QtNDhkNC00',
+    'site_id' => 209,
+  ],
+  'bpkw_qa' => [
+    'hmac_id' => '602caba2dc7a4ab3801169a1e8c5eb77',
+    'hmac_secret' => 'NTA1MGIzNWQtYTc3My00',
+    'site_id' => 213,
+  ],
+  'bpsa_qa' => [
+    'hmac_id' => '95d0b54224a444cfb48f922c56055df3',
+    'hmac_secret' => 'OGJlN2QyZjUtZmVlYS00',
+    'site_id' => 214,
+  ],
+  'bpae_qa' => [
+    'hmac_id' => '2bd4976d93e743de8374ff38e8b45a53',
+    'hmac_secret' => 'YTUzMjBjNmYtY2RmZi00',
+    'site_id' => 215,
+  ],
+  'bpeg_qa' => [
+    'hmac_id' => 'c2615c9507594034a76a2dc4ff5f10e2',
+    'hmac_secret' => 'MDkyNjMzNmQtOWI4NC00',
+    'site_id' => 216,
+  ],
+  'bpkw_uat' => [
+    'hmac_id' => 'dc770c85101f4acca8039cf1e5247bb9',
+    'hmac_secret' => 'Nzc2MmU0MWMtOTA3OS00',
+    'site_id' => 230,
+  ],
+  'bpsa_uat' => [
+    'hmac_id' => '76b35126e3a941c596d8b5c05fc726e0',
+    'hmac_secret' => 'YTU5MTg3YzYtOTNkMy00',
+    'site_id' => 231,
+  ],
+  'bpae_uat' => [
+    'hmac_id' => '5507e850be8c433e8664467243e43327',
+    'hmac_secret' => 'YzVhMjRiNmYtYTIxOS00',
+    'site_id' => 232,
+  ],
+  'bpeg_uat' => [
+    'hmac_id' => '259fe24b36404c65a1b5037804673664',
+    'hmac_secret' => 'YTY3YzYwNjgtMmRlOS00',
+    'site_id' => 233,
+  ],
+  'bpkw_prod' => [
+    'site_id' => 261,
+  ],
+  'bpsa_prod' => [
+    'site_id' => 262,
+  ],
+  'bpae_prod' => [
+    'site_id' => 263,
+  ],
+  'bpeg_prod' => [
+    'site_id' => 264,
+  ],
+  'bpbh_prod' => [
+    'site_id' => 265,
+  ],
+  'bpqa_prod' => [
+    'site_id' => 266,
   ],
 ];
 

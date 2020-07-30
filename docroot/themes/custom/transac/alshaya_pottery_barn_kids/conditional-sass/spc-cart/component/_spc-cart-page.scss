@@ -1,0 +1,9 @@
+#spc-cart {
+  .spc-content {
+    .spc-checkout-section-title {
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+    }
+  }
+}

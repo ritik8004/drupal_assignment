@@ -34,7 +34,7 @@ processor_configs:
     weights:
       build: '-10'
     settings: {  }
-  reset_facets:
+  alshaya_reset_facets:
     processor_id: alshaya_reset_facets
     weights:
       build: '-10'

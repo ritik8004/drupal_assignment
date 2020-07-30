@@ -1,4 +1,4 @@
-$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs/icons/ic-loader.svg';
+$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs/icons/ic-loader.svg?sA1Tu82';
 
 %modal-overlay,
 .modal-overlay {
@@ -35,18 +35,12 @@ $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs/
     right: 0;
     left: 0;
     transform: translateY(-50%);
-    background-image: url("../imgs/icons/ic-loader.svg");
+    background-image: url(#{$base_theme_loader_img_directory_path});
     background-repeat: no-repeat;
     background-size: contain;
     margin: 0 auto;
     width: 6rem;
     height: 6rem;
     z-index: 1001;
-  }
-}
-
-@mixin arabic-letter-spacing {
-  html[lang='ar'] & {
-    letter-spacing: normal;
   }
 }

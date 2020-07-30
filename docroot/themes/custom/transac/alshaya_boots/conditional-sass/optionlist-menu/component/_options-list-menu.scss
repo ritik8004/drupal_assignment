@@ -1,0 +1,40 @@
+@include breakpoint($upto-desktop) {
+  .main--menu {
+    ul {
+      &.menu--one__list.menu__list {
+        > li {
+          &.options-list--mobile-link {
+            margin-top: 0;
+
+            > .menu__link-wrapper {
+              a {
+                font-size: 0.875rem;
+                font-style: normal;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.block-alshaya-options-list-menu {
+  .options-page-menu-list {
+    .options-page-menu-link {
+      @include breakpoint($upto-desktop) {
+        border-bottom: 0;
+      }
+
+      a {
+        font-size: 0.75rem;
+        font-style: normal;
+        text-transform: none;
+
+        @include breakpoint($upto-desktop) {
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+}

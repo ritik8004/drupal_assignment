@@ -8,7 +8,16 @@
   .region__content {
     .block-page-title-block {
       h1 {
-        font-family: $hnm-bold;
+        font-family: $hnm-demibold;
+        font-size: 2.5rem;
+        line-height: 3rem;
+        color: $hnm-black-three;
+      }
+
+      &.mobile {
+        h1 {
+          border: none;
+        }
       }
     }
 
@@ -16,20 +25,25 @@
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
       ul {
+        @include breakpoint($tablet) {
+          padding-#{$left}: 1.25rem;
+        }
+
         li {
           a {
             font-size: 0.75rem;
 
             span {
               &.facet-item__value {
-                background: $plp_facet_label;
+                background: $white-five;
                 vertical-align: top;
                 line-height: 1;
                 text-transform: capitalize;
+                padding-#{$right}: 1.0625rem;
               }
 
               &.js-facet-deactivate {
-                background: $plp_facet_label;
+                background: $hnm-pink;
               }
 
               div {
@@ -60,7 +74,7 @@
     }
 
     .view-header.search-count {
-      color: $plp_search_count;
+      color: $hnm-black-three;
       padding-bottom: 0.75rem;
       font-family: $hnm-regular;
 
@@ -92,12 +106,28 @@
             max-height: 22.2rem;
           }
         }
+
+        article:hover {
+          .alshaya_search_gallery {
+            @include breakpoint($desktop) {
+              max-height: 22.2rem !important;
+            }
+          }
+        }
       }
 
       &.product-large {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
             max-height: 30rem;
+          }
+        }
+
+        article:hover {
+          .alshaya_search_gallery {
+            @include breakpoint($desktop) {
+              max-height: 30rem !important;
+            }
           }
         }
       }
@@ -109,6 +139,11 @@
       display: flex;
       align-items: stretch;
       flex-wrap: wrap;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 1.25rem;
+        padding-#{$right}: 1.25rem;
+      }
     }
 
     &.product-large {
@@ -121,6 +156,14 @@
           @include breakpoint($only-mobile) {
             height: auto;
             width: 100%;
+          }
+        }
+      }
+
+      article:hover {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 37.5rem !important;
           }
         }
       }
@@ -138,10 +181,38 @@
           }
         }
       }
+
+      article:hover {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 27.6rem !important;
+          }
+        }
+      }
     }
   }
 
   .c-products__item {
+    font-size: 0.8125rem;
+
+    .price-type__wrapper {
+      font-size: 0.8125rem;
+      color: $hnm-black-three;
+    }
+
+    .promotions {
+      margin: 0.25rem 0 0;
+
+      .sku-promotion-item {
+        margin: 0.25rem 0 0;
+      }
+
+      .sku-promotion-link {
+        color: $default-anchor-link-hover;
+        font-size: 0.8125rem;
+      }
+    }
+
     .swatches {
       margin: 0.625rem 0;
     }
@@ -166,9 +237,15 @@
     .field--name-name {
       margin-bottom: 0.25rem;
       font-family: $hnm-regular;
+      font-size: 0.8125rem;
 
       a {
         color: $plp_tile_product_title;
+
+        &:hover:active {
+          color: $default-anchor-link-hover;
+          text-decoration: none;
+        }
       }
     }
 
@@ -212,12 +289,19 @@
     margin-bottom: 2rem;
 
     a {
-      color: $plp_pager_link;
-      font-size: 0.875rem;
-      border: 2px solid $plp_pager_link_border;
+      color: $white-five;
+      font-size: 0.8125rem;
+      background-color: $hnm-black-three;
+      border-color: $hnm-black-three;
       padding: 0.5625rem 6.8rem;
-      font-family: $hnm-bold;
+      font-family: $hnm-demibold;
       text-transform: uppercase;
+      letter-spacing: 1px;
+
+      &:hover {
+        background-color: $gray44;
+        border-color: $gray44;
+      }
     }
   }
 }
@@ -283,6 +367,7 @@
         letter-spacing: 1px;
         text-decoration: none;
         color: $mm_l1_link;
+        border: none;
       }
     }
   }
@@ -290,6 +375,10 @@
 
 @include breakpoint($only-mobile) {
   .c-plp {
+    .c-page-title {
+      border: none;
+    }
+
     .region__content {
       .view-header {
         &.search-count {
@@ -307,4 +396,17 @@
   .js-pager__items.visually-hidden {
     position: static !important;
   }
+}
+
+.price-block {
+  .special--price {
+    .price-amount,
+    .price-currency {
+      color: $default_error !important;
+    }
+  }
+}
+
+.price--discount {
+  color: $default_error !important;
 }

@@ -3,6 +3,8 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.image_title_subtitle.field_banner
+    - field.field.paragraph.image_title_subtitle.field_button_link
+    - field.field.paragraph.image_title_subtitle.field_description
     - field.field.paragraph.image_title_subtitle.field_link
     - field.field.paragraph.image_title_subtitle.field_sub_title
     - field.field.paragraph.image_title_subtitle.field_title
@@ -11,6 +13,7 @@ dependencies:
   module:
     - image
     - link
+    - text
 id: paragraph.image_title_subtitle.default
 targetEntityType: paragraph
 bundle: image_title_subtitle
@@ -23,6 +26,22 @@ content:
       preview_image_style: thumbnail
     third_party_settings: {  }
     type: image_image
+    region: content
+  field_button_link:
+    weight: 11
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  field_description:
+    weight: 10
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
     region: content
   field_link:
     weight: 9

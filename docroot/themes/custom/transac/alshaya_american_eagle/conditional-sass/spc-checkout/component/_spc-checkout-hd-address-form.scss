@@ -1,0 +1,12 @@
+.spc-checkout-delivery-information {
+  .popup-overlay {
+    .popup-content {
+      .spc-address-form-actions {
+        .spc-address-form-submit {
+          text-transform: capitalize;
+          background: $checkout-delivery-popup-button;
+        }
+      }
+    }
+  }
+}

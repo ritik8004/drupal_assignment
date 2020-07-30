@@ -1,0 +1,14 @@
+.c-accordion__title,
+.c-collapse__title {
+  @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.3125rem) {
+    top: 1.2875rem;
+    #{$right}: 1.1125rem;
+  }
+
+  &.ui-state-active {
+    @include facet-arrow(after, up, 0.3125rem, 0, 0.3125rem, 0.3125rem) {
+      top: 1.2875rem;
+      #{$right}: 1.1125rem;
+    }
+  }
+}

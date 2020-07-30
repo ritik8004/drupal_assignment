@@ -12,6 +12,14 @@
         font-weight: normal;
         text-transform: capitalize;
       }
+
+      .form-submit {
+        font-size: 0.8125rem;
+
+        &:hover {
+          background: $gray44;
+        }
+      }
     }
   }
 }

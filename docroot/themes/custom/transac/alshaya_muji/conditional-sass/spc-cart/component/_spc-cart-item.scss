@@ -1,0 +1,17 @@
+.spc-cart-items {
+  .spc-cart-item {
+    .spc-product-tile {
+      .spc-product-title {
+        font-family: $muji-demibold;
+      }
+
+      .spc-product-price {
+        font-family: $alshaya-bold;
+      }
+    }
+
+    .spc-product-attributes-wrapper {
+      font-size: 0.6875rem;
+    }
+  }
+}

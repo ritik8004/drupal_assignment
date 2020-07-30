@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_pbk.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_pbk_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_pbk', 'inc', 'alshaya_pbk.content');
+
+  // Create default content for the site.
+  alshaya_pbk_create_default_content();
+
+  // Make granularity same as PB.
+  \Drupal::configFactory()->getEditable('facets.facet.final_price')
+    ->set('widget.config.granularity', '500')
+    ->save();
+}

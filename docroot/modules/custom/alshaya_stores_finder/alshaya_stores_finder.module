@@ -318,3 +318,38 @@ function alshaya_stores_finder_marker_label_position_ar() {
   \Drupal::moduleHandler()->alter('alshaya_stores_finder_marker_label_position', $label_position);
   return $label_position;
 }
+
+/**
+ * Set new marker icons.
+ *
+ * @param string $name
+ *   Module or theme name.
+ * @param string $type
+ *   Either module or theme.
+ */
+function alshaya_stores_finder_set_markers($name = '', $type = 'module') {
+  $module_name = explode('_', $name);
+  if (!empty($module_name[2])) {
+    $name = str_replace("_{$module_name[2]}", '', $name);
+  }
+  $brand = $module_name[1];
+  $image_dir = drupal_get_path($type, $name) . '/images/';
+  $active_marker_path = $image_dir . $brand . '-pin-active.svg';
+  $inactive_marker_path = $image_dir . $brand . '-pin-inactive.svg';
+
+  if (!file_exists($active_marker_path) || !file_exists($inactive_marker_path)) {
+    \Drupal::logger('alshaya_store_finder')
+      ->notice('Marker icon is missing at @dir for @module', [
+        '@dir' => $image_dir,
+        '@module' => $module_name,
+      ]);
+    return;
+  }
+
+  $active_marker_path = file_url_transform_relative(file_create_url($active_marker_path));
+  $inactive_icon_path = file_url_transform_relative(file_create_url($inactive_marker_path));
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', $active_marker_path)
+    ->set('map_marker.in_active', $inactive_icon_path)
+    ->save(TRUE);
+}

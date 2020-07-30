@@ -23,7 +23,7 @@ import StickyFilter from '../panels/StickyFilter';
 import withURLSync from '../url-sync';
 import Pagination from '../algolia/Pagination';
 import HierarchicalMenu from '../algolia/widgets/HierarchicalMenu';
-import { hasCategoryFilter, getAlgoliaStorageValues } from '../../utils';
+import { hasCategoryFilter, getAlgoliaStorageValues, getSuperCategoryOptionalFilter } from '../../utils';
 import { isDesktop } from '../../utils/QueryStringUtils';
 
 /**
@@ -80,6 +80,8 @@ const SearchResultsComponent = props => {
     return sortedItems;
   }
 
+  const optionalFilter = getSuperCategoryOptionalFilter();
+
   return (
     <InstantSearch
       searchClient={algoliaSearchClient}
@@ -89,6 +91,7 @@ const SearchResultsComponent = props => {
       onSearchStateChange={props.onSearchStateChange}
     >
       <Configure clickAnalytics hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
+      {optionalFilter ? <Configure optionalFilters={optionalFilter} /> : null}
       {hasCategoryFilter() && isDesktop() && (
         <SideBar>
           <HierarchicalMenu

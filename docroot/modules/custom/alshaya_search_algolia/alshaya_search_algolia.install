@@ -11,6 +11,16 @@ use Drupal\search_api\Entity\Index;
  * Implements hook_update_N().
  *
  * Queue all products for re-indexation.
+ * Done to add SKU is_new property to index.
+ */
+function alshaya_search_algolia_update_8003() {
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Queue all products for re-indexation.
  * Done to add changed in Algolia for all products.
  * Done to add attr_color_label for HM.
  */
@@ -57,7 +67,7 @@ function alshaya_search_algolia_install() {
     'Search' => [
       'en' => 'What are you looking for?',
       'ar' => 'عن ماذا تبحث؟',
-      'context' => 'algolia_search_block_placeholder',
+      'context' => 'alshaya_static_text|algolia_search_block_placeholder',
     ],
     'Trending searches' => [
       'ar' => 'الأكثر بحثاً',
@@ -70,6 +80,11 @@ function alshaya_search_algolia_install() {
   // this (alshaya_search_algolia) module. to avoid recursion not adding
   // alshaya_algolia_react as dependency in this module.
   \Drupal::service('module_installer')->install(['alshaya_algolia_react']);
+
+  // Enable lhn filters.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings')
+    ->set('enable_lhn_tree_search', 1)
+    ->save();
 }
 
 /**

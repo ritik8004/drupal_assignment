@@ -61,6 +61,63 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
   font-display: swap;
 }
 
+// DY Fonts.
+@font-face {
+  font-family: "JustLovely";
+  src: url("#{$base_theme_fonts_directory_path}/JustLovely.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JustLovelyExtras";
+  src: url("#{$base_theme_fonts_directory_path}/JustLovelyExtras.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JustLovelySlanted";
+  src: url("#{$base_theme_fonts_directory_path}/JustLovelySlanted.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JustLovelySlantedWide";
+  src: url("#{$base_theme_fonts_directory_path}/JustLovelySlantedWide.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TrendSansFour-Italic";
+  src: url("#{$base_theme_fonts_directory_path}/TrendSansFour-Italic.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TrendSansOne";
+  src: url("#{$base_theme_fonts_directory_path}/TrendSansOne.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TrendSansTwo";
+  src: url("#{$base_theme_fonts_directory_path}/TrendSansTwo.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 // Font Family
 $bbw-bold: 'BBWTradeGothicLTStd_Bold', 'DroidArabicKufi_Bold', 'Arial';
 $bbw-bold-nodir: 'BBWTradeGothicLTStd_Bold', 'DroidArabicKufi_Bold', 'Arial';

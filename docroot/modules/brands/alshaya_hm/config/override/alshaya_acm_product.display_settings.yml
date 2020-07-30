@@ -1,3 +1,4 @@
+show_pdp_additional_attributes_overlay: true
 configurable_use_parent_images: 'never'
 gallery_show_hover_image: true
 swatches:

@@ -1,0 +1,51 @@
+.subtitle.crossell-title {
+  text-transform: uppercase;
+  font-family: $muji-demibold;
+  font-weight: 500;
+}
+
+.view-product-slider {
+  .c-products__item__label {
+    font-size: 0.875rem;
+    max-width: none;
+    text-transform: uppercase;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0.5rem;
+    }
+  }
+
+  .price-wrapper {
+    font-family: $alshaya-bold;
+  }
+
+  .special--price {
+    .price {
+      font-size: 0.875rem;
+    }
+  }
+
+  .price-block {
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0.5rem;
+    }
+  }
+
+  .slick-slider {
+    .slick-slide img {
+      max-width: none;
+    }
+  }
+
+  .views-row {
+    .use-ajax {
+      margin: 0 0.5rem;
+    }
+
+    .promotions {
+      a {
+        font-family: $muji-helvetica-neue;
+      }
+    }
+  }
+}

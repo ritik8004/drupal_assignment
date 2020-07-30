@@ -740,12 +740,3 @@
     }
   }
 }
-
-.path--user .l-two--sf {
-  &.c-order-list,
-  &.order-detail {
-    @include breakpoint($tablet) {
-      margin-top: 1rem;
-    }
-  }
-}

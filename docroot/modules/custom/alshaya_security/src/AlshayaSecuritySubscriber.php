@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_security;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -11,23 +11,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Subscribes to the kernel respond event to handle security.
  */
 class AlshayaSecuritySubscriber implements EventSubscriberInterface {
-
-  /**
-   * A config object for the HSTS configuration.
-   *
-   * @var \Drupal\Core\Config\Config
-   */
-  protected $config;
-
-  /**
-   * Constructs a FinishResponseSubscriber object.
-   *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   A config factory for retrieving required config objects.
-   */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->config = $config_factory->get('alshaya_security.settings');
-  }
 
   /**
    * Update headers as per security recommendations.
@@ -40,16 +23,17 @@ class AlshayaSecuritySubscriber implements EventSubscriberInterface {
 
     // Add HSTS if on secure page.
     if ($request->isSecure()) {
+      $settings = Settings::get('alshaya_security');
       // Add the max age header.
-      $header = 'max-age=' . (int) $this->config->get('max_age');
+      $header = 'max-age=' . $settings['max_age'];
 
       // Include subdomains if enabled.
-      if ($this->config->get('subdomains')) {
+      if ($settings['subdomains']) {
         $header .= '; includeSubDomains';
       }
 
       // Include preload if enabled.
-      if ($this->config->get('preload')) {
+      if ($settings['preload']) {
         $header .= '; preload';
       }
 
@@ -66,7 +50,6 @@ class AlshayaSecuritySubscriber implements EventSubscriberInterface {
           $event->getResponse()->headers->set('cache-control', $cache_control);
         }
       }
-
     }
   }
 

@@ -17,6 +17,13 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_color_split_preprocess_html(&$variables) {
+  $variables['#attached']['drupalSettings']['psudo_attribute'] = AlshayaColorSplitManager::PSEUDO_COLOR_ATTRIBUTE_CODE;
+}
+
+/**
  * Implements hook_acq_sku_configurable_product_configurations_alter().
  */
 function alshaya_color_split_acq_sku_configurable_product_configurations_alter(array &$configurations, SKU $sku) {
@@ -352,11 +359,13 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
 
   // Add language for all urls for language switcher block.
   $node = $skuManager->getDisplayNode($parent_sku, FALSE);
-  foreach (\Drupal::languageManager()->getLanguages() as $language) {
-    $variant['url'][$language->getId()] = $node->toUrl('canonical', [
-      'absolute' => FALSE,
-      'language' => $language,
-    ])->toString();
+  if ($node) {
+    foreach (\Drupal::languageManager()->getLanguages() as $language) {
+      $variant['url'][$language->getId()] = $node->toUrl('canonical', [
+        'absolute' => FALSE,
+        'language' => $language,
+      ])->toString();
+    }
   }
 
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
@@ -372,5 +381,5 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
     ? render($promotion_label['free_gift_promotions'])
     : '';
 
-  $variant['color_value'] = $node->get('field_product_color')->getString();
+  $variant['color_value'] = $node ? $node->get('field_product_color')->getString() : '';
 }

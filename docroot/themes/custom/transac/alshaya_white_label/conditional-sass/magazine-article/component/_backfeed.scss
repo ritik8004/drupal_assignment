@@ -3,8 +3,7 @@
   position: fixed;
   bottom: 1.875rem;
   #{$left}: calc((100% - 71.25rem) / 2);
-  width: 8.75rem;
-  padding: 2.5rem 0 0;
+  padding-#{$left}: 1.5rem;
   font-size: 0.6875rem;
   text-align: center;
   text-transform: uppercase;
@@ -12,6 +11,7 @@
   opacity: 0.5;
   text-decoration: none;
   color: $magazine-article-back-to-feed;
+  line-height: 1.5rem;
 
   @include breakpoint($only-tablet) {
     #{$left}: 0;
@@ -23,16 +23,11 @@
     opacity: 1;
   }
 
-  &::before {
-    content: "";
+  @include icon(chevronleft, before) {
     position: absolute;
-    #{$left}: 50%;
-    background: url('#{$base_theme_img_directory_path}/icons/article_back.png') center center no-repeat;
-    background-size: 1.1875rem 1.9375rem;
-    top: 0.0625rem;
-    width: 1.1875rem;
-    height: 1.9375rem;
-    margin-#{$left}: -0.8125rem;
+    #{$left}: 0;
+    font-size: 1.5rem;
+    top: 0;
 
     html[lang=ar] & {
       transform: rotate(180deg);
@@ -54,11 +49,7 @@
       font-weight: normal;
 
       &::before {
-        #{$left}: 0.5rem;
-        width: 0.625rem;
-        height: 1rem;
-        background-size: 0.625rem 1rem;
-        margin: 0.8125rem 0 0;
+        margin: 1rem 0 0;
       }
     }
 

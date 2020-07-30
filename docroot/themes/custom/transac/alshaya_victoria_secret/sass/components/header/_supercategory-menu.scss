@@ -127,7 +127,8 @@
 }
 
 .branding__menu.show-overlay {
-  .block-cart-mini-block {
+  .block-cart-mini-block,
+  .block-alshaya-react-mini-cart {
     @include breakpoint($only-tablet) {
       &::before {
         content: '';

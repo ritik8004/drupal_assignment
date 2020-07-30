@@ -13,6 +13,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
@@ -324,6 +325,20 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['legal_notice_markup'] = [
+    'variables' => [
+      'label' => NULL,
+      'summary' => NULL,
+    ],
+  ];
+
+  $items['non_refundable_markup'] = [
+    'variables' => [
+      'text' => NULL,
+      'tooltip' => NULL,
+    ],
+  ];
+
   $items['products_horizontal_slider'] = [
     'variables' => [
       'data' => NULL,
@@ -359,6 +374,26 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'title' => NULL,
       'item_code' => NULL,
+    ],
+  ];
+
+  $items['product_title_name_markup'] = [
+    'variables' => [
+      'title' => NULL,
+      'title_name' => NULL,
+    ],
+  ];
+
+  $items['product_article_description_markup'] = [
+    'variables' => [
+      'title' => NULL,
+      'article_description' => NULL,
+    ],
+  ];
+
+  $items['pdp_additional_attribute_overlay'] = [
+    'variables' => [
+      'properties' => [],
     ],
   ];
 
@@ -546,6 +581,40 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
 
+        // Show legal notice content at the end of description popup if enabled.
+        $legal_notice_enabled = \Drupal::config('alshaya_acm_product.settings')->get('legal_notice_enabled');
+        if ($legal_notice_enabled) {
+          $label = \Drupal::config('alshaya_acm_product.settings')->get('legal_notice_label');
+          $summary = \Drupal::config('alshaya_acm_product.settings')->get('legal_notice_summary');
+          $build['legal_notice'] = [
+            '#theme' => 'legal_notice_markup',
+            '#label' => $label,
+            '#summary' => ['#markup' => $summary['value']],
+          ];
+        }
+
+        // Non-refundable.
+        $is_non_refundable = NULL;
+        if ($sku_entity->get('attr_non_refundable_products')->getString()) {
+          $is_non_refundable = '1';
+          $build['non_refundable'] = [
+            '#theme' => 'non_refundable_markup',
+            '#text' => $product_settings->get('non_refundable_text'),
+            '#tooltip' => $product_settings->get('non_refundable_tooltip'),
+          ];
+        }
+
+        // Same day delivery.
+        if ($sku_entity->get('attr_same_day_delivery')->getString()) {
+          $build['same_day_delivery_text']['#markup'] = $product_settings->get('same_day_delivery_text');
+          $build['same_day_delivery_sub_text']['#markup'] = $product_settings->get('same_day_delivery_sub_text');
+        }
+
+        // Delivery in only city.
+        if ($delivery_in_only_city_text = $product_settings->get('delivery_in_only_city_text')) {
+          $build['delivery_in_only_city_text']['#markup'] = $delivery_in_only_city_text;
+        }
+
         // Initialise home delivery variable.
         $build['home_delivery'] = [];
 
@@ -644,14 +713,22 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           }
         }
 
-        $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
-        $settingsKey = ($view_mode === 'matchback') ? 'matchback' : 'productInfo';
-        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($gallery)
-          ? \Drupal::service('renderer')->renderPlain($gallery)
-          : '';
+        $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
+        $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $skuManager->showImagesFromChildrenAfterAllOptionsSelected();
 
         /** @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper $skuInfo */
         $skuInfo = \Drupal::service('alshaya_acm_product.sku_info');
+
+        $productInfo = $skuInfo->getProductInfo($sku_entity);
+        $productInfo['url'] = $entity->toUrl()->toString(TRUE)->getGeneratedUrl();
+        $productInfo['identifier'] = $sku_identifier;
+        $productInfo['layout'] = $pdp_layout;
+
+        $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
+        $productInfo['gallery'] = !empty($gallery)
+          ? \Drupal::service('renderer')->renderPlain($gallery)
+          : '';
+
         // In case of oos product if parent product don't have gallery info
         // then get gallery info from their first child and
         // push into drupal settings.
@@ -659,14 +736,17 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $child = $skuImagesManager->getFirstChildWithMedia($sku_entity);
           if (!empty($child)) {
             $childVariant = $skuInfo->getVariantInfo($child, $pdp_layout);
-            $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
+            $productInfo['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
           }
         }
 
-        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['layout'] = $pdp_layout;
-        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['identifier'] = $sku_identifier;
+        $image = alshaya_acm_get_product_display_image($sku_entity, 'pdp_gallery_thumbnail', 'cart');
+        // Prepare image style url.
+        if (!empty($image['#uri'])) {
+          $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+        }
+        $productInfo['cart_image'] = is_string($image) ? $image : '';
 
-        $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
         $plugin = $sku_entity->getPluginInstance();
 
         // Get max sale qty for simple product.
@@ -686,16 +766,21 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             }
           }
 
-          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
-          $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $skuManager->showImagesFromChildrenAfterAllOptionsSelected();
+          $productInfo['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
         }
 
         // Setting max sale qty variables at parent level.
         if (!empty($max_sale_qty)) {
-          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['maxSaleQty'] = $max_sale_qty;
-          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['orderLimitMsg'] = $productOrderLimit->maxSaleQtyMessage($max_sale_qty);
+          $productInfo['maxSaleQty'] = $max_sale_qty;
+          $productInfo['max_sale_qty_parent'] = FALSE;
+
+          $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
+          $productInfo['orderLimitMsg'] = $productOrderLimit->maxSaleQtyMessage($max_sale_qty);
         }
-        $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
+
+        $productInfo['is_non_refundable'] = $is_non_refundable;
+        $settingsKey = ($view_mode === 'matchback') ? 'matchback' : 'productInfo';
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()] = $productInfo;
       }
 
       if (isset($context)) {
@@ -1063,6 +1148,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
   $form_state->setTemporaryValue('sku', $sku_entity);
   $form['#attributes']['data-sku'] = $sku_entity->getSku();
+  $form['#attributes']['data-cleaned-sku'] = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
+  $form['#attributes']['data-sku-type'] = $sku_entity->getType();
 
   $form['#cache']['contexts'][] = 'url.query_args:selected';
 
@@ -1200,6 +1287,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['bySku'] = $product_tree['combinations']['by_sku'];
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['combinations'] = $combinations;
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['byAttribute'] = $product_tree['combinations']['by_attribute'];
+    $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['configurables'] = $product_tree['configurables'];
 
     // Get the first child from attribute_sku which has values sorted
     // same as add to cart form.

@@ -1,0 +1,9 @@
+.spc-messages-container {
+  &:not(:empty) {
+    &.spc-checkout-warning-message-container {
+      .font-bold {
+        font-weight: bold;
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.1_row_3_col_flex.field_1row_3col_flex
+    - field.field.paragraph.1_row_3_col_flex.field_ratio_3_col
+    - paragraphs.paragraphs_type.1_row_3_col_flex
+  module:
+    - paragraphs
+id: paragraph.1_row_3_col_flex.default
+targetEntityType: paragraph
+bundle: 1_row_3_col_flex
+mode: default
+content:
+  field_1row_3col_flex:
+    type: entity_reference_paragraphs
+    weight: 0
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    region: content
+  field_ratio_3_col:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+hidden:
+  created: true
+  status: true

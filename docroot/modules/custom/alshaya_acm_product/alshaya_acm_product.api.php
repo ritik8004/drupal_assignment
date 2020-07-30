@@ -83,8 +83,19 @@ function hook_alshaya_acm_product_media_items_alter(array $media, SKUInterface $
  *   Parent SKU Entity if available.
  */
 function hook_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-  $variant['click_collect'] = alshaya_acm_product_available_click_collect($child);
+
+}
+
+/**
+ * Allow other modules to add/alter product info.
+ *
+ * @param array $product_info
+ *   Product info data.
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   SKU Entity.
+ */
+function hook_sku_product_info_alter(array &$product_info, SKUInterface $sku) {
+
 }
 
 /**

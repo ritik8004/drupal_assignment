@@ -106,6 +106,12 @@ function alshaya_white_label_preprocess_html(&$variables) {
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
       if ($pdp_layout == 'pdp-magazine') {
         $variables['attributes']['class'][] = 'magazine-layout';
+        $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+
+        // Show additional attributes on PDP overlay.
+        if ($product_display_settings->get('show_pdp_additional_attributes_overlay')) {
+          $variables['#attached']['library'][] = 'alshaya_white_label/pdp-additional-attributes';
+        }
       }
     }
   }
@@ -280,8 +286,10 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree_search');
   }
 
-  // Adding vat text footer to the page.
-  $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
+  // Adding vat text footer to the page if SPC not enabled.
+  if (!\Drupal::moduleHandler()->moduleExists('alshaya_spc')) {
+    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
+  }
 
   // Attach the plp search js library to the promotion product listing page.
   if ($node_bundle === 'acq_promotion') {
@@ -522,6 +530,17 @@ function alshaya_white_label_preprocess_node(&$variables) {
       if (!empty($paragraph['field_banner']) || !empty($paragraph['field_body']) || !empty($paragraph['field_title'])) {
         $variables['show_right_sidebar'] = TRUE;
       }
+    }
+    // Remove wrapper html for banner, slider, delivery banner
+    // if they are empty.
+    if (empty($variables['content']['field_banner']['#items'])) {
+      unset($variables['content']['field_banner']);
+    }
+    if (empty($variables['content']['field_slider']['#items'])) {
+      unset($variables['content']['field_slider']);
+    }
+    if (empty($variables['content']['field_delivery_banner']['#items'])) {
+      unset($variables['content']['field_delivery_banner']);
     }
   }
   elseif ($variables['node']->bundle() == 'acq_product' && $variables['elements']['#view_mode'] == 'product_list') {
@@ -791,6 +810,16 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     || $routmatch->getRouteName() == 'alshaya_acm_customer.print_last_order') {
     $suggestions[] = 'page__orderprint';
   }
+
+  // SPC checkout.
+  if ($routmatch->getRouteName() === 'alshaya_spc.checkout') {
+    $suggestions[] = 'page__spc_checkout';
+  }
+
+  // SPC checkout confirmation.
+  if ($routmatch->getRouteName() === 'alshaya_spc.checkout.confirmation') {
+    $suggestions[] = 'page__spc_checkout_confirmation';
+  }
 }
 
 /**
@@ -897,6 +926,14 @@ function alshaya_white_label_preprocess_user(&$variables) {
           $variables['privilege_card'] = alshaya_loyalty_format_card_number($privilege_card[0]['value'], TRUE);
         }
       }
+    }
+  }
+
+  // Removing the metatag as it contains user specific information.
+  foreach ($variables['#attached']['html_head'] as $key => $attachment) {
+    if (array_search('rdf_user_username', $attachment)) {
+      unset($variables['#attached']['html_head'][$key]);
+      break;
     }
   }
 }

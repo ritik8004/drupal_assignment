@@ -1,0 +1,8 @@
+display:
+  default:
+    display_options:
+      filters:
+        depth_level:
+          operator: '>='
+          value:
+            value: '2'

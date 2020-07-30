@@ -272,7 +272,8 @@ body {
 
     .block-alshaya-super-category-menu,
     .menu--mobile-navigation,
-    #block-cartminiblock {
+    #block-cartminiblock,
+    .block-alshaya-react-mini-cart {
       @include breakpoint($only-mobile) {
         position: absolute !important;
       }
@@ -318,7 +319,8 @@ body {
       }
 
       header {
-        .block-cart-mini-block {
+        .block-cart-mini-block,
+        .block-alshaya-react-mini-cart {
           width: 33.33%;
         }
       }
@@ -349,7 +351,8 @@ body {
 
       .block-alshaya-super-category-menu,
       .menu--mobile-navigation,
-      #block-cartminiblock {
+      #block-cartminiblock,
+      .block-alshaya-react-mini-cart {
         @include breakpoint($only-mobile) {
           display: none;
         }

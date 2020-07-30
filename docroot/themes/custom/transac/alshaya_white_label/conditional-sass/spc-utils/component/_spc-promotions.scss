@@ -1,0 +1,13 @@
+.spc-promotions:not(:empty) {
+  padding-top: 1.5rem;
+  padding-#{$left}: 0.375rem;
+
+  span {
+    margin-#{$right}: 0.5rem;
+
+    > a {
+      color: $spc-promotion-link;
+      font-size: 0.75rem;
+    }
+  }
+}

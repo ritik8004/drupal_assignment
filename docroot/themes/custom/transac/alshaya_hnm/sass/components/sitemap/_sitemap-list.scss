@@ -1,0 +1,28 @@
+.path--sitemap {
+  .c-page-title,
+  .level--1__label,
+  .level--2__label {
+    color: $hnm-black-three;
+    font-family: $hnm-demibold;
+  }
+
+  .c-page-title {
+    letter-spacing: normal;
+    font-size: 1.25rem;
+    border-bottom-color: $hnm-black-three;
+  }
+
+  .level--1__label,
+  .level--2__label {
+    text-transform: capitalize;
+  }
+
+  .level--2__label,
+  .level--2__meta {
+    font-size: 0.8125rem;
+  }
+
+  .level--3__label {
+    color: $gray44;
+  }
+}

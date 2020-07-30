@@ -1,0 +1,130 @@
+.spc-address-list-member-content {
+  overflow-y: auto !important;
+  background: $spc-checkout-sidebar-bg !important;
+
+  .close {
+    z-index: 1;
+  }
+
+  .address-list-content {
+    padding-top: 1.25rem;
+
+    @include breakpoint($tablet) {
+      padding-bottom: 1.25rem;
+    }
+
+    .spc-checkout-address-list {
+      .spc-address-tile {
+        padding: 0 0.875rem 1.25rem;
+        background: $spc-checkout-address-tile-bg;
+        font-size: 0.875rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        position: relative;
+
+        .spc-address-metadata,
+        .spc-address-tile-actions {
+          width: 100%;
+        }
+
+        .spc-address-name {
+          padding: 0.875rem 0;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          font-family: $alshaya-bold;
+          color: $spc-delivery-customer-info-highlight;
+        }
+
+        .spc-address-fields {
+          color: $spc-delivery-info-text;
+        }
+
+        .spc-address-mobile {
+          padding-top: 1rem;
+        }
+
+        .spc-address-tile-actions {
+          display: block;
+          width: 100%;
+          margin-top: 1rem;
+
+          .spc-address-btns {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .address-not-valid {
+              font-family: $alshaya-bold;
+              font-size: 0.875rem;
+              color: $spc-checkout-error-message-background;
+            }
+
+            > div {
+              display: inline-block;
+
+              &.spc-address-tile-edit {
+                padding-top: 0.375rem;
+                margin-#{$right}: 1rem;
+                cursor: pointer;
+
+                svg g {
+                  transition: fill 0.2s ease-in-out;
+                  fill: $spc-cart-item-trash-icon;
+                }
+
+                &:hover {
+                  svg g {
+                    fill: $spc-cart-item-trash-icon-hover;
+                  }
+                }
+              }
+            }
+
+            > button {
+              padding: 0;
+              min-width: 7.25rem;
+              height: 2.125rem;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 0.8125rem;
+              background: $spc-checkout-add-new-address-bg;
+              border: 1px solid $spc-deliver-button;
+              color: $spc-deliver-button;
+              transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+              cursor: pointer;
+              border-radius: 0.25rem;
+              font-family: $alshaya-thin;
+
+              &:hover {
+                background: $spc-deliver-button;
+                color: $primary_btn_text;
+              }
+            }
+          }
+        }
+
+        &.selected {
+          .spc-address-btns {
+            > button {
+              cursor: default;
+
+              @include icon('check', before) {
+                font-size: 1.75rem;
+                color: $spc-checkout-radio-filled;
+              }
+
+              &:hover {
+                background: $spc-checkout-add-new-address-bg;
+                color: $spc-deliver-button;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

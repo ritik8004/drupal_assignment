@@ -1,0 +1,9 @@
+.spc-select {
+  .spcSelect__control {
+    .spcSelect__dropdown-indicator {
+      &::before {
+        color: $primary_dropdown_arrow_icon;
+      }
+    }
+  }
+}

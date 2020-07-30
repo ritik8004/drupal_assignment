@@ -1,0 +1,24 @@
+#alshaya-algolia-search {
+  .c-content__region {
+    .sticky-filter-wrapper {
+      .c-collapse-item {
+        .c-collapse__title {
+          @include icon(triangle-down, after) {
+            font-size: 0.7rem;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            #{$right}: 0.6875rem;
+            transition: transform 0.4s ease-in-out;
+          }
+
+          &.active {
+            &::after {
+              transform: translateY(-50%) rotate(180deg);
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+.spc-order-summary-block {
+  .totals {
+    .sub-total {
+      text-transform: capitalize;
+    }
+  }
+
+  .product-content {
+    .product-item {
+      .spc-product-title {
+        a {
+          font-family: $muji-demibold;
+        }
+      }
+
+      .spc-product-attributes {
+        font-family: $muji-helvetica-neue;
+      }
+
+      .spc-product-price {
+        .price,
+        .special--price {
+          font-family: $alshaya-bold;
+        }
+
+        .has--special--price {
+          .price {
+            font-family: $alshaya-thin;
+          }
+        }
+
+        .price--discount {
+          font-family: $muji-helvetica-neue;
+        }
+      }
+    }
+  }
+}

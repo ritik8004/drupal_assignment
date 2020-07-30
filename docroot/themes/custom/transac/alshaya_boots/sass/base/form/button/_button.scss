@@ -1,0 +1,28 @@
+%button-wide,
+.button-wide {
+  @extend %btn;
+}
+
+%button-brand,
+.brand-button {
+  @extend %btn;
+}
+
+.button {
+  &.status-pending,
+  &.status-delivered,
+  &.status-complete,
+  &.status-processing,
+  &.status-returned {
+    font-family: $alshaya-bold;
+    font-weight: normal;
+    border-radius: 0.1875rem;
+    font-size: 0.875rem;
+
+    @include breakpoint($desktop) {
+      font-size: 0.875rem;
+      height: 1.875rem;
+      line-height: 1.875rem;
+    }
+  }
+}

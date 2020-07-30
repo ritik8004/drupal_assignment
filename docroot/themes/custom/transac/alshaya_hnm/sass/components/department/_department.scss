@@ -8,9 +8,20 @@
     margin-bottom: 1.438rem;
     padding-bottom: 0.875rem;
     font-family: $hnm-demibold;
-    text-transform: uppercase;
+    text-transform: capitalize;
     letter-spacing: 0.8px;
     color: $content_pagetitle;
+    font-size: 2.5rem;
+
+    @include breakpoint($only-tablet) {
+      font-size: 1.75rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      font-size: 1.0625rem;
+      font-family: $hnm-demibold !important;
+      text-align: center;
+    }
   }
 
   .c-sidebar-first .block:first-child {
@@ -21,6 +32,35 @@
     font-family: $hnm-demibold;
     text-transform: uppercase;
     color: $title;
+  }
+
+  .c-page-title__description {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: $hnm-demibold;
+      text-transform: capitalize;
+    }
+
+    p {
+      font-size: 0.75rem;
+      line-height: 1.25rem;
+
+      a {
+        color: $department_category_content_link;
+        text-decoration: underline;
+
+        &:hover {
+          &:active {
+            text-decoration: none;
+            color: $department_category_content_link_active;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -65,6 +105,14 @@
             }
           }
         }
+      }
+    }
+  }
+
+  .nodetype--advanced_page {
+    .page-standard {
+      .c-page-title {
+        border-bottom: none;
       }
     }
   }

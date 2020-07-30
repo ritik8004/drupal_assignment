@@ -1,0 +1,9 @@
+.c-accordion__title {
+  &::after {
+    color: $accordion_title_arrow;
+  }
+
+  &.ui-state-active {
+    border-bottom: none;
+  }
+}

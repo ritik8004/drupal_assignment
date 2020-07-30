@@ -75,6 +75,14 @@ alshaya_acm_product.product_sku_export:
   requirements:
     _role: 'webmaster+administrator'
 
+alshaya_acm_product.cart_linked_skus:
+  path: '/products/cart-linked-skus'
+  defaults:
+      _title: ''
+      _controller: '\Drupal\alshaya_acm_product\Controller\CartLinkedSkusController::getLinkedSkusForCart'
+  requirements:
+    _permission: 'access content'
+
 alshaya_acm_product.product_sku_export_category:
   path: '/admin/commerce/sku-export-data-category'
   defaults:

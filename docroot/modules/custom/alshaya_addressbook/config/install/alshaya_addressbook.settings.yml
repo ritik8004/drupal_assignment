@@ -13,6 +13,26 @@ mapping:
   sorting_code: ''
   additional_name: ''
   postal_code: ''
+sort_order:
+  country_code: 1
+  area_parent: 2
+  administrative_area: 3
+  locality: 4
+  address_line1: 5
+  dependent_locality: 6
+  address_line2: 7
+  sorting_code: 8
+  postal_code: 9
+required:
+  country_code: true
+  area_parent: true
+  administrative_area: true
+  locality: true
+  address_line1: true
+  dependent_locality: true
+  address_line2: false
+  sorting_code: false
+  postal_code: false
 prefix_settings:
   key: 'display_prefix'
   except:

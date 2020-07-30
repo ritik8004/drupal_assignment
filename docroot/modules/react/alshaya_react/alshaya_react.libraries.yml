@@ -6,3 +6,15 @@ react:
     js/react-dom.production.min.js: { }
   dependencies:
     - core/drupal
+    - alshaya_react/react_pollyfill
+
+react_pollyfill:
+  version: 1.x
+  header: true
+  js:
+    js/ie-pollyfill.js: {}
+    dist/number.bundle.js: {}
+    dist/promise.bundle.js: {}
+    dist/object.bundle.js: {}
+  dependencies:
+    - core/drupal

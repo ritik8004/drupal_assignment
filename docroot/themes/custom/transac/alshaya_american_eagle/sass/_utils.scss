@@ -77,12 +77,6 @@ $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_american_
   @content;
 }
 
-@mixin ellipsis-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 @mixin facet-arrow ($position, $direction: false, $topborder: false, $rightborder:false, $bottomborder:false, $leftborder:false) {
   &:#{$position} {
     position: absolute;

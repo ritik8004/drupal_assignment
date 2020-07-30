@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_stores_finder_transac;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
@@ -27,13 +26,6 @@ class StoresFinderManager {
    * @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility
    */
   protected $utility;
-
-  /**
-   * Stores the click_collect settings config.
-   *
-   * @var \Drupal\Core\Config\ImmutableConfig
-   */
-  protected $clickCollectSettings;
 
   /**
    * The language manager.
@@ -60,19 +52,17 @@ class StoresFinderManager {
    *   The language manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger service object.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config Factory service object.
    */
-  public function __construct(AlshayaApiWrapper $alshaya_api_wrapper,
-                              StoresFinderUtility $utility,
-                              LanguageManagerInterface $language_manager,
-                              LoggerChannelFactoryInterface $logger_factory,
-                              ConfigFactoryInterface $config_factory) {
+  public function __construct(
+    AlshayaApiWrapper $alshaya_api_wrapper,
+    StoresFinderUtility $utility,
+    LanguageManagerInterface $language_manager,
+    LoggerChannelFactoryInterface $logger_factory
+  ) {
     $this->api = $alshaya_api_wrapper;
     $this->utility = $utility;
     $this->languageManager = $language_manager;
     $this->logger = $logger_factory->get('alshaya_stores_finder_transac');
-    $this->clickCollectSettings = $config_factory->get('alshaya_click_collect.settings');
   }
 
   /**

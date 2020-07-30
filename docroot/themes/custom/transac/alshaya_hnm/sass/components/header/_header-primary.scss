@@ -4,9 +4,11 @@
 
 header {
   .c-header__region {
+    background: $default_background_color;
+
     @include breakpoint($desktop) {
-      padding-bottom: 0.25rem;
-      padding-top: 0.75rem;
+      padding-bottom: 0.875rem;
+      padding-top: 0.875rem;
     }
 
     @include breakpoint($only-tablet) {
@@ -33,7 +35,17 @@ header {
   }
 
   .region__header {
+    @include breakpoint($tablet) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     > div {
+      @include breakpoint($tablet) {
+        display: block;
+      }
+
       @include breakpoint($desktop) {
         width: 33.33%;
       }
@@ -148,9 +160,11 @@ header {
     }
   }
 
-  .block-cart-mini-block {
+  .block-cart-mini-block,
+  .block-alshaya-react-mini-cart {
     @include arabic-letter-spacing;
 
+    font-size: 0.8125rem;
     letter-spacing: 0.5px;
 
     @include breakpoint($only-tablet) {
@@ -166,7 +180,7 @@ header {
 
     .cart-link {
       @include icon(shopping-bag) {
-        font-size: 2.125rem;
+        font-size: 1.85rem;
         position: absolute;
         #{$right}: -0.5rem;
         top: -0.375rem;
@@ -183,7 +197,7 @@ header {
     }
 
     .cart-link-total {
-      color: $primary_minicart_text2;
+      color: $seconday_menu_link;
       margin-top: 0.3125rem;
       margin-#{$right}: 0.125rem;
     }
@@ -193,6 +207,19 @@ header {
       font-family: $hnm-regular-nodir;
       bottom: -0.625rem;
       line-height: 1.25rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      .cart-link {
+        width: 1.875rem;
+        height: 1.875rem;
+
+        &::before {
+          font-size: 1.65rem;
+          #{$right}: 0;
+          top: 0.25rem;
+        }
+      }
     }
   }
 
@@ -323,7 +350,7 @@ header {
     .store {
       float: $right;
       width: 3rem;
-      margin-#{$right}: 1.5625rem;
+      margin-#{$right}: 1.3rem;
       position: absolute;
       top: 0.875rem;
       #{$right}: 0.375rem;
@@ -331,13 +358,13 @@ header {
       margin-top: 0;
       padding: 0.3125rem 0.875rem 0.664rem 0.625rem;
 
-      @include icon(mappin) {
+      @include icon(store) {
         color: $mm_mobile_icon;
         width: 1rem;
         height: 1.4375rem;
-        font-size: 1.875rem;
+        font-size: 1.6rem;
         position: relative;
-        top: -0.3125rem;
+        top: -0.125rem;
         #{$left}: -0.375rem;
       }
     }
@@ -351,7 +378,7 @@ header {
       font-size: 0;
 
       &::before {
-        background: url('../imgs/icons/ic-menu.svg') no-repeat;
+        background: url('../imgs/icons/ic-menu.svg?123') no-repeat;
         width: 1.5rem;
         height: 1rem;
       }
@@ -394,6 +421,13 @@ header {
     }
 
     .store {
+      top: 1rem;
+
+      @include icon(store) {
+        width: 1.875rem;
+        height: 1.875rem;
+      }
+
       &.is-active {
         &::before {
           color: $mm_mobile_icon_active;
@@ -403,6 +437,7 @@ header {
 
     .mobile--menu {
       padding-#{$right}: 0;
+      top: 1.375rem;
 
       &::before {
         margin-#{$right}: 0;
@@ -431,6 +466,11 @@ header {
       .mobile--search {
         @include icon(search) {
           color: $mm_mobile_icon;
+          font-size: 1.75rem;
+          top: -0.125rem;
+          #{$left}: 0;
+          width: 1.875rem;
+          height: 1.875rem;
         }
       }
     }
@@ -464,6 +504,7 @@ header {
       display: table !important;
       width: auto;
       margin: 0 auto;
+      background-color: $default_background_color;
 
       .menu-backdrop {
         border-bottom: 4px solid $mm_l2_hover_border;
@@ -486,10 +527,9 @@ header {
           position: relative;
           z-index: 100;
           margin-top: -1px;
-          font-size: 0.9375rem;
-          text-transform: uppercase;
-          font-family: $hnm-demibold;
-          letter-spacing: 1px;
+          font-size: 1rem;
+          text-transform: capitalize;
+          font-family: $hnm-regular;
           color: $mm_l1_link;
         }
       }
@@ -564,7 +604,7 @@ header {
   }
 
   .menu--two__list {
-    background: $mm_l2_bg;
+    background: $default_background_color;
 
     a {
       color: $mm_l2_link;
@@ -583,10 +623,9 @@ header {
           @include arabic-letter-spacing;
 
           font-family: $hnm-demibold;
-          letter-spacing: 0.5px;
           font-weight: normal;
           line-height: 1.69;
-          text-transform: uppercase;
+          text-transform: capitalize;
           color: $mm_l2_hover_border;
         }
 
@@ -632,12 +671,21 @@ header {
 
       .menu--three__list {
         position: absolute;
+        background-color: $default_background_color;
 
         li {
           padding: 0.19rem 0;
 
           a {
             color: $mm_l2_p;
+
+            &:hover {
+              text-decoration: none;
+            }
+
+            &:hover:active {
+              color: $default-anchor-link-hover;
+            }
           }
         }
       }
@@ -682,12 +730,63 @@ header {
     overflow: hidden;
   }
 
+  .block-alshaya-main-menu {
+    li.menu--one__list-item {
+      > ul {
+        > div.menu__links__wrapper {
+          background: $default_background_color;
+        }
+      }
+
+      .menu--one__link {
+        position: relative;
+
+        &::after {
+          content: ' ';
+          background: url('../imgs/icons/forward-arrow.svg') center #{$right}/100% no-repeat;
+          display: block;
+          height: 100%;
+          position: absolute;
+          #{$right}: 1.25rem;
+          top: 0;
+          width: 16px;
+
+          html[lang=ar] & {
+            transform: rotate(180deg);
+          }
+        }
+
+        &:hover {
+          color: $default-anchor-link-hover;
+        }
+      }
+    }
+  }
+
   .main--menu {
     ul.menu--one__list {
-      background: $mm_l2_bg;
+      background: $default_background_color;
 
       @include breakpoint ($only-tablet) {
         width: 20rem;
+      }
+    }
+  }
+
+  .mobile-nav-links {
+    background-color: $default_background_color !important;
+
+    div {
+      a {
+        color: $mm_l1_link !important;
+        font-size: 0.8125rem;
+        letter-spacing: 0;
+        border: none !important;
+
+        &:hover {
+          text-decoration: none !important;
+          color: $default-anchor-link-hover !important;
+        }
       }
     }
   }
@@ -696,19 +795,19 @@ header {
     @include arabic-letter-spacing;
 
     font-family: $hnm-regular;
-    font-size: 0.875rem;
-    letter-spacing: 1px;
+    font-size: 1.25rem;
     text-decoration: none;
-    color: $hnm-black-four;
+    color: $mm_l1_link;
     display: block;
+    letter-spacing: 0;
   }
 
   .menu__list-item {
     @include arabic-letter-spacing;
 
-    border-bottom: 1px solid $white;
+    border-bottom: none;
     font-family: $hnm-regular;
-    text-transform: uppercase;
+    text-transform: capitalize;
     color: $hnm-black-four;
     font-size: 0.875rem;
     letter-spacing: 1px;
@@ -813,6 +912,7 @@ header {
 
   @include breakpoint($only-mobile) {
     color: $header_toggle_sign_default_mobile;
+    background: $header_toggle_sign_inactive_tab_bg;
   }
 
   font-size: 0.875rem;
@@ -836,6 +936,7 @@ header {
 
     @include breakpoint($only-mobile) {
       width: 59%;
+      color: $hnm-black-three;
 
       .logged-out & {
         padding: 0.9rem 0.25rem;
@@ -883,6 +984,14 @@ header {
     }
   }
 
+  .mobile--close {
+    background-color: transparent;
+
+    span {
+      background: url('../imgs/icons/close-icon.svg') center center no-repeat;
+    }
+  }
+
   .menu--active .mobile--close {
     #{$left}: 87.375%;
 
@@ -918,13 +1027,14 @@ header {
       margin-#{$left}: 2.5rem;
       width: 2.5rem;
       height: 2.25rem;
+      margin-top: 0;
     }
 
     @include breakpoint($desktop) {
       margin: 0 auto;
       text-align: center;
-      width: 6.063rem;
-      height: 3.375rem;
+      width: 4.25rem;
+      height: 2.75rem;
     }
   }
 }
@@ -978,6 +1088,10 @@ html[lang=ar] {
 }
 
 .branding__menu {
+  @include breakpoint($only-mobile) {
+    box-shadow: none !important;
+  }
+
   @include breakpoint($upto-desktop) {
     border-bottom: 1px solid $header_branding_shadow;
   }
@@ -1001,7 +1115,8 @@ html[lang='ar'] {
   }
 
   header {
-    .block-cart-mini-block {
+    .block-cart-mini-block,
+    .block-alshaya-react-mini-cart {
       .cart-link {
         @include breakpoint($only-mobile) {
           margin-top: -7px;
@@ -1019,7 +1134,8 @@ html[lang='ar'] {
   }
 }
 
-#block-cartminiblock {
+#block-cartminiblock,
+.block-alshaya-react-mini-cart {
   @include breakpoint($desktop) {
     top: -0.25rem;
   }

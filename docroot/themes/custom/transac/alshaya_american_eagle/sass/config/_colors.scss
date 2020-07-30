@@ -1,3 +1,5 @@
+@import "../../../alshaya_white_label/sass/config/_colors.scss";
+
 /* ------- 1. Brand Colors ------- */
 $black: #000;
 $white: #fff;
@@ -22,7 +24,7 @@ $thunderbird: #b91824;
 //$primary_bg: $white;
 $body_bg: $primary_bg;
 $content_pagetitle: $black;
-$content_pagetitle_border: $white-five;
+$content_pagetitle_border: $gallery;
 $primary_text: $black;
 $primary_link: $grey;
 $primary_link-hover: $black;
@@ -411,6 +413,8 @@ $checkout_login_btn_bg: $primary_btn_bg;
 $checkout_guest_button_border: $black;
 $checkout_guest_button_txt: $black;
 $checkout_guest_button_bg: $white;
+$checkout_login_submit_button_background: $black;
+$checkout_login_link_text: $black;
 $social_auth_login_button_border: $black;
 $social-network-text: $black;
 
@@ -424,6 +428,8 @@ $checkout_default_address_border: $grey;
 $checkout_address_edit_link: $black;
 $checkout_deliverto_address_label: $grey;
 $checkout_footer_border-top: $gallery;
+$checkout-delivery-popup-button: $royal-blue;
+$checkout-submit-link: $royal-blue;
 
 // Address form.
 $address_button_border: $gallery;
@@ -594,3 +600,24 @@ $megamenu-inline-layout-active-border-color: $black;
 // Autocomplete
 $autocomplete_hover: rgba(51, 51, 51, 0.06);
 $autocomplete_text: $grey;
+
+// SPC Checkout.
+$spc-deliver-button: $royal-blue;
+$spc-edit-button: $black;
+$spc-shipping-price: $grey-light;
+
+//Algolia search bar.
+$algolia-input-text: $black;
+$algolia-input-placeholder-text: $grey-light;
+$algolia-input-border: $gallery;
+$algolia-trending-title-text: $black;
+$algolia-react-progressbar: $warm-grey-two;
+$algolia-react-progressbar-text: $grey-light;
+$algolia-react-progressbar-fill: $black;
+$algolia-react-search-page-title: $black;
+$algolia-react-sidebar-label-color: $black;
+$algolia-auto-complete-border: $gallery;
+$algolia-search-icon-background: $white;
+$algolia-search-icon: $black;
+$algolia-search-clear-text-icon: $black;
+$algolia-react-facet-label: $black;

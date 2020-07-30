@@ -14,6 +14,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\alshaya_acm\Event\AlshayaAcmPlaceOrderFailedEvent;
 use Drupal\alshaya_acm\Event\AlshayaAcmUpdateCartFailedEvent;
@@ -66,6 +67,8 @@ class AlshayaAcmApiWrapper extends APIWrapper {
    *   Event Dispatcher.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api
    *   Alshaya API.
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   *   Lock service.
    */
   public function __construct(ClientFactory $client_factory,
                               ConfigFactoryInterface $config_factory,
@@ -73,8 +76,9 @@ class AlshayaAcmApiWrapper extends APIWrapper {
                               I18nHelper $i18nHelper,
                               APIHelper $api_helper,
                               EventDispatcherInterface $dispatcher,
-                              AlshayaApiWrapper $alshaya_api) {
-    parent::__construct($client_factory, $config_factory, $logger_factory, $i18nHelper, $api_helper, $dispatcher);
+                              AlshayaApiWrapper $alshaya_api,
+                              LockBackendInterface $lock) {
+    parent::__construct($client_factory, $config_factory, $logger_factory, $i18nHelper, $api_helper, $dispatcher, $lock);
     $this->alshayaApi = $alshaya_api;
     $this->configFactory = $config_factory;
   }

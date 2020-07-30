@@ -1,0 +1,15 @@
+.c-breadcrumb {
+  li {
+    a {
+      &:hover {
+        text-decoration: none;
+      }
+
+      span {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

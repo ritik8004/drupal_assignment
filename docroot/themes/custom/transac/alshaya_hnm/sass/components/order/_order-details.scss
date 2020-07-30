@@ -24,7 +24,7 @@
       font-family: $hnm-demibold;
 
       @include breakpoint($only-mobile) {
-        font-size: 0.75rem;
+        font-size: 0.8125rem;
       }
     }
   }
@@ -160,7 +160,7 @@
 
     .dark {
       font-weight: normal;
-      color: $grey8;
+      color: $primary_dark_color;
     }
   }
 
@@ -233,6 +233,10 @@
         padding-#{$left}: 0 !important;
       }
     }
+  }
+
+  p {
+    font-size: 0.8125rem;
   }
 }
 

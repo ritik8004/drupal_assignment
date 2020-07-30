@@ -1,6 +1,6 @@
 services:
   alshaya_acm_customer.commands:
     class: Drupal\alshaya_acm_customer\Commands\AlshayaCustomerCommands
-    arguments: [ '@acq_commerce.api' ]
+    arguments: [ '@alshaya_api.api' ]
     tags:
       - { name: drush.command }

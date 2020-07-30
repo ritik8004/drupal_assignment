@@ -1,14 +1,16 @@
 <ul class="menu__list menu--three__list">
-  {% for key, level3 in data %}
+  <div class="level-three__wrapper">
     <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
-    <li class="menu__list-item menu--three__list-item {{ level3.class|join(' ') }}">
-      <div class="menu__link-wrapper menu-two__link-wrapper">
-        <{{ level3.tag }} class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ data.sub-nav-class }}" {{ level3.tag_attr }}>{{ level3.label }}</{{ level3.tag }}>
-      </div>
+    {% for key, level3 in data.child %}
+      <li class="menu__list-item menu--three__list-item {{ level3.class|join(' ') }}">
+        <div class="menu__link-wrapper menu-two__link-wrapper">
+          <{{ level3.tag }} class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ data.sub-nav-class }}" {{ level3.tag_attr }}>{{ level3.label }}</{{ level3.tag }}>
+        </div>
 
-      {% if level3.child is not empty %}
-        {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}
-      {% endif %}
-    </li>
-  {% endfor %}
+        {% if level3.child is not empty %}
+          {{ alshaya_main_menu('alshaya_main_menu_level4', level3) }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </div>
 </ul>

@@ -7,11 +7,18 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
+use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Class AlshayaSuperCategoryManager.
  */
 class AlshayaSuperCategoryManager {
+
+  /**
+   * The facet name for Super Category in the search index.
+   */
+  const SEARCH_FACET_NAME = 'super_category';
 
   /**
    * Product category tree.
@@ -137,6 +144,44 @@ class AlshayaSuperCategoryManager {
         }
       }
     }
+  }
+
+  /**
+   * Returns the supercategory for a "Product" node.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node whose supercategory is to be fetched.
+   *
+   * @return array|false
+   *   The supercategory terms or empty array if no supercategory found or
+   *   node is not a product node. Returns false if supercategory is disabled.
+   */
+  public function getSuperCategories(NodeInterface $node) {
+    $super_categories = [];
+    $is_super_category_enabled = &drupal_static('alshaya_super_category_status', NULL);
+    if (is_null($is_super_category_enabled)) {
+      $is_super_category_enabled = $this->configFactory->get('alshaya_super_category.settings')->get('status');
+
+    }
+    if (!$is_super_category_enabled) {
+      return FALSE;
+    }
+    elseif ($is_super_category_enabled && $node->bundle() === 'acq_product') {
+      $categories = $node->get('field_category')->getValue();
+      $langcode = $node->language()->getId();
+      foreach ($categories as $category) {
+        if (!empty($category)) {
+          $category = $this->entityTypeManager->getStorage('taxonomy_term')->load($category['target_id']);
+          // Get the super category.
+          $super_category = _alshaya_super_category_get_super_category_for_term($category, $langcode);
+          if ($super_category instanceof TermInterface) {
+            $super_categories[] = $super_category->getName();
+          }
+        }
+      }
+    }
+
+    return !empty($super_categories) ? array_values(array_unique($super_categories)) : $super_categories;
   }
 
 }

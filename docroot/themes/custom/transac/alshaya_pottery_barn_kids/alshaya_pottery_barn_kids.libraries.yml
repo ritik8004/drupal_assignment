@@ -1,0 +1,21 @@
+global_styles:
+  css:
+    theme:
+      css/colors.css: {}
+
+ltr_styles:
+  css:
+    theme:
+      css/ltr.css: {}
+
+rtl_styles:
+  css:
+    theme:
+      css/rtl.css: {}
+
+super_menu_clone:
+  js:
+    js/super_menu_clone.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

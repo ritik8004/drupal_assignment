@@ -113,6 +113,10 @@
       @include arabic-letter-spacing;
     }
   }
+
+  p {
+    font-size: 0.8125rem !important;
+  }
 }
 
 body.path--confirmation.alias--confirmation-print {

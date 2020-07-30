@@ -1,0 +1,45 @@
+.text-link-para {
+  .text-links {
+    .heading {
+      a,
+      .menu__link {
+        font-size: 0.875rem;
+        text-transform: none;
+
+        @include breakpoint($desktop) {
+          font-size: 0.75rem;
+        }
+      }
+
+      .menu-two__link-wrapper {
+        a,
+        .menu__link {
+          @include breakpoint($desktop) {
+            text-transform: uppercase;
+          }
+        }
+      }
+    }
+
+    .sub-heading {
+      li {
+        a,
+        .menu__link {
+          font-size: 0.875rem;
+
+          @include breakpoint($desktop) {
+            color: $mm_l3_link;
+          }
+        }
+      }
+    }
+  }
+
+  .menu--three__list-item a {
+    @include breakpoint($upto-desktop) {
+      &::after {
+        font-size: 2rem;
+      }
+    }
+  }
+}

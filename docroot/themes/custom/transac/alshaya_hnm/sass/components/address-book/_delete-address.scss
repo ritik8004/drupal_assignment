@@ -32,14 +32,14 @@
     color: $cancel_button;
     font-family: $hnm-bold;
     font-weight: normal;
-    font-size: 0.625rem;
+    font-size: 0.8125rem;
 
     @include breakpoint($tablet) {
-      font-size: 0.625rem;
+      font-size: 0.8125rem;
     }
 
     @include breakpoint($desktop) {
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
     }
   }
 }

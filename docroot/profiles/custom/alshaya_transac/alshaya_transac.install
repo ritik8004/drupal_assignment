@@ -16,6 +16,39 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Installs alshaya_spc module.
+ */
+function alshaya_transac_update_8129() {
+  \Drupal::service('module_installer')->install(['alshaya_spc']);
+
+  // Move react mini cart block to proper theme.
+  alshaya_block_move_blocks_theme_to_theme(
+    \Drupal::service('theme_handler')->getDefault(),
+    'alshaya_white_label'
+  );
+
+  \Drupal::configFactory()->getEditable('block.block.cartminiblock')->delete();
+  \Drupal::configFactory()->getEditable('block.block.baskethorizontalproductrecommendation')->delete();
+  \Drupal::configFactory()->getEditable('block.block.alshayacartpromotionsblock')->delete();
+
+  $blocks = [
+    'block.block.customerservice',
+    'block.block.footerlogos',
+    'block.block.sociallinks',
+    'block.block.copyright',
+  ];
+  /* @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    $blocks,
+    'alshaya_transac',
+    'optional'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * To remove old category facets.
  */
 function alshaya_transac_update_8128() {
@@ -788,6 +821,7 @@ function alshaya_transac_install() {
     'alshaya_options_list',
     'alshaya_facets_pretty_paths',
     'exponea',
+    'alshaya_spc',
   ];
 
   // Add 10 MB per module we are going to enable above.

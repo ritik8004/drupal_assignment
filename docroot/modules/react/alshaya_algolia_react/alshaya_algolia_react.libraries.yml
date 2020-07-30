@@ -8,8 +8,6 @@ autocomplete:
 vendor:
   js:
     dist/algolia.bundle.js: {}
-    dist/promise.js: {}
-    dist/object.js: {}
     js/alshaya_algolia_react.js: {}
     js/back_to_search.js: {}
   dependencies:

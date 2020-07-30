@@ -1,0 +1,46 @@
+.c-user-register {
+  .c-content__region .user-form {
+    .field--name-field-subscribe-newsletter {
+      p {
+        font-family: $bp-light;
+
+        a {
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-user-login,
+.c-user-register {
+  &.user-page {
+    main {
+      .region__content {
+        .block-page-title-block {
+          h1 {
+            @include breakpoint($only-mobile) {
+              text-align: $left;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-user--node.l-two--sf {
+  aside.c-sidebar-first {
+    li a {
+      &::after {
+        @include breakpoint($only-mobile) {
+          font-size: 2.25rem;
+          #{$right}: 0;
+          color: $user_nav_link;
+        }
+      }
+    }
+  }
+}

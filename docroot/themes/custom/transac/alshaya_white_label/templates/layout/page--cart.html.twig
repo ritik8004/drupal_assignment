@@ -1,4 +1,5 @@
 {{ attach_library('alshaya_white_label/cart_js') }}
+{% set attributes = attributes.addClass('disable-footerspace-fill') %}
 <div>
     <!-- ______________________ MENU SECONDARY _______________________ -->
   {% block header_precontent %}
@@ -90,7 +91,7 @@
 
     <!-- ______________________ MAIN _______________________ -->
 
-    <div class="clearfix">
+    <div class="clearfix page-wrapper">
         <div{{ attributes.addClass('l-container') }}>
 
             {% if page.sidebar_first %}

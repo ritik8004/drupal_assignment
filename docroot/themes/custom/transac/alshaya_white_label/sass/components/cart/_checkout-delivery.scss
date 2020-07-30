@@ -577,13 +577,11 @@
             top: 50%;
             transform: translateY(-50%);
             #{$right}: 0;
+            font-size: 0.6875rem;
+            line-height: 1rem;
 
             @include breakpoint($only-mobile) {
               font-weight: bold;
-            }
-
-            @include breakpoint($desktop) {
-              font-size: 0.875rem;
             }
           }
 

@@ -1,0 +1,38 @@
+.block-alshaya-category-lhn-block {
+  ul {
+    li {
+      line-height: 1.4375rem;
+
+      a,
+      span {
+        text-transform: capitalize;
+
+        &.lhn-3,
+        &.lhn-4 {
+          &.active {
+            background: none;
+            color: $lhn_l3_active_text;
+            display: flex;
+          }
+        }
+      }
+
+      > ul {
+        padding-top: 0.4375rem;
+      }
+
+      a {
+        &:hover {
+          color: $l3-link-hover;
+        }
+      }
+    }
+  }
+
+  > ul > li {
+    > .lhn-2 {
+      font-family: $muji-helvetica-neue-bold;
+      text-transform: uppercase;
+    }
+  }
+}

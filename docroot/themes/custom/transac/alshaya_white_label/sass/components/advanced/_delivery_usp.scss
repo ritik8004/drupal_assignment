@@ -24,11 +24,11 @@
         &::before {
           background: none;
           color: inherit;
-          font-size: 1.5rem;
+          font-size: 1.25rem;
         }
 
         &.slick-prev {
-          left: -0.25rem;
+          left: 0.25rem;
 
           @include breakpoint($tablet) {
             left: 1.25rem;
@@ -36,7 +36,7 @@
         }
 
         &.slick-next {
-          right: -0.25rem;
+          right: 0.25rem;
 
           @include breakpoint($tablet) {
             right: 1.25rem;
@@ -46,7 +46,7 @@
     }
 
     .field__items {
-      padding: 0 5%;
+      padding: 0 8%;
 
       @include breakpoint($desktop) {
         display: flex;

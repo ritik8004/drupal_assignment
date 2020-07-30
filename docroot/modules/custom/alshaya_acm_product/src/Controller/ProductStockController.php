@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_acm_product\Event\AddToCartFormSubmitEvent;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Html;
@@ -19,6 +18,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\Service\ProductOrderLimit;
+use Drupal\alshaya_acm_product\Event\AddToCartFormSubmitEvent;
 
 /**
  * Class ProductStockController.

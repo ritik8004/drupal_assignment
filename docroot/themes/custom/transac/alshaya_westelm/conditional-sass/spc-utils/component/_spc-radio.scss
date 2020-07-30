@@ -1,0 +1,10 @@
+input[type=radio] {
+  ~ .radio-label {
+    text-transform: capitalize;
+
+    .impress {
+      text-transform: uppercase;
+      font-family: $we-bold;
+    }
+  }
+}

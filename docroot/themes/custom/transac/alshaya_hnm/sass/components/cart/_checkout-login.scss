@@ -10,14 +10,25 @@
   }
 
   .checkout-login-actions-wrapper {
+    text-decoration: none;
+
     a {
       font-weight: normal;
-      font-family: $hnm-demibold;
-      color: $content_link_color;
-      font-size: 0.75rem;
+      color: $checkout_login_back_to_basket;
+      font-family: $hnm-regular;
+      font-size: 0.8125rem;
 
       &:hover {
         text-decoration: underline;
+      }
+
+      &:hover:active {
+        color: $checkout_login_active;
+        text-decoration: none;
+      }
+
+      &.back-to-basket {
+        font-size: 0.8125rem !important;
       }
     }
   }
@@ -26,6 +37,16 @@
     @include breakpoint($only-mobile) {
       text-transform: none;
       letter-spacing: 0;
+    }
+  }
+
+  a.back-link {
+    &::before {
+      @include breakpoint($only-mobile) {
+        font-size: 1.5rem;
+        top: 0;
+        #{$left}: 0;
+      }
     }
   }
 }
@@ -83,16 +104,26 @@
       line-height: 1.29;
       text-transform: uppercase;
       font-weight: normal;
-      color: $primary_dark_color;
+      color: $checkout_login_title;
     }
   }
 
   #edit-checkout-login {
     .request-password-link {
-      font-family: $hnm-demibold;
       font-weight: normal;
-      color: $primary_dark_color;
-      text-decoration: underline;
+      color: $checkout_login_forgot_pass;
+      font-family: $hnm-regular;
+      font-size: 0.8125rem;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &:hover:active {
+        color: $checkout_login_active;
+        text-decoration: none;
+      }
     }
 
     .fieldset-wrapper {
@@ -106,8 +137,15 @@
 
   #edit-checkout-guest {
     a {
+      border: 1px solid $checkout_guest_button_border;
+
       @include breakpoint($desktop) {
         margin-top: 0.75rem;
+      }
+
+      &:hover {
+        border: 1px solid $checkout_guest_button_border_hover;
+        color: $checkout_guest_button_txt_hover;
       }
     }
   }
@@ -122,12 +160,12 @@
     }
 
     .checkout-guest-email-usage {
-      color: $primary_dark_color;
+      color: $checkout_guest_email;
       font-family: $hnm-bold;
       font-weight: normal;
 
       @include breakpoint($tablet) {
-        color: $primary_dark_color;
+        color: $checkout_guest_email;
       }
     }
   }

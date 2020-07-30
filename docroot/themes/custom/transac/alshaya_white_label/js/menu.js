@@ -30,18 +30,28 @@
       $listItems.each(function () {
         var linkWrapper = $(this).find('> .menu__link-wrapper');
         var submenu;
+        var subMenuLevelFour;
+        var activeSubMenuLevel;
+        // function to display menu levels
+        Drupal.showSubMenu = function (subMenuLevel, activeSubMenuLevel) {
+          if (subMenuLevel.length > 0) {
+            activeSubMenuLevel.addClass('has-child');
+            linkWrapper.addClass('contains-sublink');
+            linkWrapper.once().after('<span class="menu__in"></span>');
+          }
+        };
 
         if ($(window).width() <= 1024) {
+          activeSubMenuLevel = $(this);
+          subMenuLevelFour = $(this).find('> .menu__list .menu--four__list-item');
+          Drupal.showSubMenu(subMenuLevelFour, activeSubMenuLevel);
           submenu = $(this).find('> .menu__list .menu--three__list-item');
+          Drupal.showSubMenu(submenu, activeSubMenuLevel);
         }
         else {
+          activeSubMenuLevel = $(this);
           submenu = $(this).find('> .menu__list .menu--two__list-item');
-        }
-
-        if (submenu.length > 0) {
-          $(this).addClass('has-child');
-          linkWrapper.addClass('contains-sublink');
-          linkWrapper.once().after('<span class="menu__in"></span>');
+          Drupal.showSubMenu(submenu, activeSubMenuLevel);
         }
       });
 
@@ -121,13 +131,13 @@
       });
 
       $('.branding__menu .has-child .menu--one__link, .branding__menu .has-child .menu--two__list').hover(function () {
-        $('body').addClass('overlay');
+        $('body').addClass('overlay overlay-main-menu');
         $('.menu--two__list li:first', this).addClass('first--child_open');
         if (typeof Drupal.blazy !== 'undefined') {
           Drupal.blazy.revalidate();
         }
       }, function () {
-        $('body').removeClass('overlay');
+        $('body').removeClass('overlay overlay-main-menu');
         $('.menu--two__list li:first', this).removeClass('first--child_open');
       });
 

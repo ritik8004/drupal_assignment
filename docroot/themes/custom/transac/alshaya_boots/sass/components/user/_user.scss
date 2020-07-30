@@ -1,0 +1,61 @@
+.user-page {
+  .user-login-form {
+    .form-submit {
+      height: 2.5rem;
+
+      @include breakpoint($tablet) {
+        width: 9.125rem;
+        max-width: 12rem;
+      }
+    }
+  }
+
+  .user-login-form {
+    .form-submit {
+      margin-top: 2rem;
+    }
+  }
+
+  .form-wrapper,
+  .form-item {
+    @include breakpoint($desktop) {
+      margin-top: 1.3125rem;
+    }
+  }
+}
+
+#unmask_password {
+  top: 0.4375rem;
+  #{$right}: 0.5rem;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+}
+
+.user-login-form {
+  > a {
+    @include breakpoint($desktop) {
+      #{$left}: 10.6875rem;
+      bottom: 0.625rem;
+    }
+  }
+}
+
+.c-user-password {
+  &.user-page {
+    .user-pass {
+      .form-item {
+        input {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
+
+.change-pwd-form {
+  .form-wrapper {
+    .form-text {
+      margin-top: 0;
+    }
+  }
+}

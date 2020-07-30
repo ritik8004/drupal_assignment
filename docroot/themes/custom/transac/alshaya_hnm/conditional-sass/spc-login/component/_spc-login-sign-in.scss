@@ -1,0 +1,108 @@
+.alias--cart-login {
+  .block-page-title-block {
+    h1 {
+      letter-spacing: 1px;
+
+      @include arabic-letter-spacing;
+    }
+  }
+
+  .multistep-login {
+    fieldset {
+      .fieldset-legend {
+        font-family: $hnm-demibold;
+        display: inline-block;
+      }
+    }
+
+    .form-submit,
+    .edit-checkout-as-guest {
+      text-transform: uppercase;
+    }
+
+    .form-submit {
+      letter-spacing: 1px;
+
+      @include arabic-letter-spacing;
+    }
+
+    .edit-checkout-as-guest {
+      letter-spacing: 1px;
+      font-family: $hnm-regular;
+      border: 1px solid $spc_checkout_as_guest_border;
+
+      @include arabic-letter-spacing;
+
+      &:hover {
+        color: $spc_checkout_as_guest_text_hover;
+        border-color: $spc_checkout_as_guest_border_hover;
+      }
+    }
+
+    .ashaya-spc-login-form {
+      .form-actions {
+        button {
+          font-family: $hnm-demibold;
+
+          &:hover {
+            background: $spc_checkout_button_background;
+          }
+        }
+      }
+
+      .request-password-link {
+        font-family: $hnm-regular;
+        font-weight: 400;
+        font-size: 0.8125rem;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      input {
+        background-color: $seashell_grey;
+        color: $hnm-black-three !important;
+      }
+
+      label {
+        color: $hnm-black-three !important;
+        font-size: 0.8125rem !important;
+
+        &.error {
+          color: $venetian_red !important;
+          font-size: 0.6875rem;
+          background: $seashell_grey !important;
+        }
+      }
+    }
+
+    .checkout-login-actions-wrapper {
+      a {
+        font-family: $hnm-demibold;
+        display: inline-block;
+      }
+    }
+
+    .social-signin-enabled {
+      .fieldset-wrapper {
+        .social-network-text {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .c-post-content {
+    border-top: none;
+    background-color: $block_acm_customer_txt;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin: 0 !important;
+
+    .site-brand-home a {
+      margin-#{$left}: 0;
+    }
+  }
+}

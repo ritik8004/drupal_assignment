@@ -78,6 +78,7 @@
 
   a {
     font-family: $alshaya-thin;
+    transition: all 0.2s ease-in-out;
 
     @include breakpoint($upto-desktop) {
       color: $header_secondary_menu_link_mobile;
@@ -263,17 +264,6 @@
 .menu--three__list-item {
   a.menu--three__link {
     position: relative;
-
-    @include breakpoint($upto-desktop) {
-      @include icon(chevron#{$right}, after) {
-        position: absolute;
-        color: $header_mobile_menu_arrow;
-        #{$right}: 0;
-        font-size: 1.25rem;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-    }
   }
 
   .contains-sublink .menu--three__link {

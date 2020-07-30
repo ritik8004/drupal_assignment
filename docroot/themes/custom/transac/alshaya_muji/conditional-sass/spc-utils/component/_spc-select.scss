@@ -1,0 +1,19 @@
+.spc-select {
+  .spcSelect__control {
+    .spcSelect__dropdown-indicator {
+      @include facet-arrow(before, down, 0.3rem, 0, 0.3rem, 0.3rem) {
+        #{$right}: 1rem;
+        top: 50%;
+        transform: translateY(-50%) rotate(90deg);
+      }
+    }
+
+    &--menu-is-open {
+      .spcSelect__dropdown-indicator {
+        &::before {
+          transform: translateY(-50%) rotate(270deg);
+        }
+      }
+    }
+  }
+}

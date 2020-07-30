@@ -284,6 +284,9 @@
     // #all-filter-active-facet-sort text value.
     openSelectedSizeGroupFilter: function() {
       var active_facet_sort = $('#all-filter-active-facet-sort').val();
+      if (!active_facet_sort || (active_facet_sort && active_facet_sort.length === 0)) {
+        return;
+      }
       var active_facet_sort_elements = active_facet_sort.split(','); // convert to array of values
 
       if(active_facet_sort_elements.length > 1) {

@@ -1,0 +1,137 @@
+.spc-messages-container {
+  &:not(:empty) {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0.5625rem 0;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 1.25rem;
+    }
+
+    &:first-child {
+      margin-top: 1.25rem;
+    }
+
+    &.spc-checkout-error-message-container {
+      background-color: $spc-checkout-error-message-background;
+      margin-bottom: 1rem;
+
+      .spc-checkout-error-message {
+        @include icon(warning) {
+          width: 2.125rem;
+          height: 2.125rem;
+          display: inline-block;
+          font-size: 2rem;
+          margin-#{$right}: 0.3125rem;
+          vertical-align: middle;
+          text-indent: 0;
+
+          @include breakpoint($only-mobile) {
+            position: absolute;
+            #{$left}: 0;
+          }
+        }
+      }
+
+      &.modal {
+        margin: 0;
+      }
+    }
+
+    &.spc-checkout-success-message-container {
+      background-color: $spc-checkout-success-message-background;
+
+      .spc-checkout-success-message {
+        @include icon(checkshape) {
+          width: 2.125rem;
+          height: 2.125rem;
+          display: inline-block;
+          font-size: 2rem;
+          margin-#{$right}: 0.3125rem;
+          vertical-align: middle;
+          text-indent: 0;
+
+          @include breakpoint($only-mobile) {
+            position: absolute;
+            #{$left}: 0;
+          }
+        }
+      }
+    }
+
+    &.spc-checkout-warning-message-container {
+      background-color: $spc-checkout-warning-message-background;
+      margin-bottom: 0;
+      margin-top: 0.625rem;
+
+      @include arabic-line-height(1.35);
+
+      .font-bold {
+        font-family: $alshaya-bold;
+        font-weight: normal;
+      }
+
+      .spc-checkout-warning-message {
+        font-size: 0.875rem;
+        display: block;
+        padding-#{$left}: 3rem;
+        padding-#{$right}: 1rem;
+        margin-#{$left}: 1rem;
+        color: $spc-checkout-warning-message;
+        position: relative;
+
+        #scroll-to-dropdown {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+
+        button {
+          padding-top: 0.625rem;
+          padding-#{$left}: 0;
+          padding-#{$right}: 0;
+          font-family: $alshaya-thin;
+          font-weight: normal;
+          color: $spc-checkout-warning-message;
+          text-decoration: underline;
+          display: block;
+          background: none;
+          border: none;
+        }
+
+        @include icon(warning) {
+          width: 2.125rem;
+          height: 2.125rem;
+          display: inline-block;
+          font-size: 2rem;
+          position: absolute;
+          #{$left}: 0;
+          top: 0;
+        }
+      }
+    }
+
+    .spc-message {
+      font-size: 1rem;
+      margin-#{$left}: 1rem;
+      padding-#{$right}: 1.3125rem;
+      min-height: 2.125rem;
+      display: flex;
+      align-items: center;
+
+      &.spc-checkout-error-message {
+        color: $spc-checkout-error-message-color;
+      }
+
+      &.spc-checkout-success-message {
+        color: $spc-checkout-success-message-color;
+      }
+
+      @include breakpoint($only-mobile) {
+        position: relative;
+        padding-#{$left}: 2.5625rem;
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
