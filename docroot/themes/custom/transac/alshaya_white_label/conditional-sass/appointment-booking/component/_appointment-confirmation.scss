@@ -179,7 +179,7 @@
       }
 
       .continue-shopping {
-        position: initial;
+        position: static;
         background: $appointment-confirmation-continue-btn;
         border: 0.0625rem solid $appointment-confirmation-continue-btn;
         border-radius: 0.125rem;
