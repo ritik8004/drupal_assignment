@@ -204,8 +204,11 @@ class CheckoutComPaymentController extends PaymentController {
       );
       $this->cart->cancelCartReservation($e->getMessage());
       $payment_data = [
-        'status' => self::PAYMENT_FAILED_VALUE,
+        'status' => $this->getPaymentFailedStatus($e->getCode()),
         'payment_method' => 'checkoutcom',
+        'data' => [
+          'order_id' => $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '',
+        ],
       ];
       $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
       $response->setTargetUrl('/' . $data['data']['langcode'] . '/checkout');

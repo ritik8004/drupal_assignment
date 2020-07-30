@@ -237,12 +237,13 @@ class KnetPaymentController extends PaymentController {
       $this->cart->cancelCartReservation($e->getMessage());
 
       $payment_data = [
-        'status' => self::PAYMENT_FAILED_VALUE,
+        'status' => $this->getPaymentFailedStatus($e->getCode()),
         'payment_method' => 'knet',
         'data' => [
           'transaction_id' => !empty($response['transaction_id']) ? $response['transaction_id'] : $response['quote_id'],
           'payment_id' => $response['payment_id'],
           'result_code' => $response['result'],
+          'order_id' => $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '',
         ],
       ];
       $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
