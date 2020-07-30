@@ -188,7 +188,6 @@
 
         @include breakpoint($upto-tablet-landscape) {
           margin-#{$left}: 0;
-          margin-bottom: 1.25rem;
         }
       }
 

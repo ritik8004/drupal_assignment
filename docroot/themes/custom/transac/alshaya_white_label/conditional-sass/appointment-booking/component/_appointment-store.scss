@@ -119,4 +119,14 @@
       }
     }
   }
+
+  .appointment-store-actions {
+    &:not(.show) {
+      .select-store {
+        border: 1px solid $appointment-disable-btn-bg;
+        background: $appointment-disable-btn-bg;
+        cursor: auto;
+      }
+    }
+  }
 }
