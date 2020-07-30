@@ -77,6 +77,11 @@ class TotalLineItems extends React.Component {
       shippingAmount = 0;
     }
 
+    // We don't show surcharhe info in total on cart page.
+    const baseGrandTotal = (isCartPage === false)
+      ? totals.base_grand_total
+      : totals.base_grand_total_without_surcharge;
+
     return (
       <div className="totals">
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
@@ -105,7 +110,7 @@ class TotalLineItems extends React.Component {
         </ConditionalView>
 
         <div className="hero-total">
-          <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={totals.base_grand_total} />
+          <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
           <div className="delivery-vat">
             <ConditionalView condition={shippingAmount === null}>
               <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>

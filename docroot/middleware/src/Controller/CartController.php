@@ -260,13 +260,11 @@ class CartController {
    *
    * @param array $cart_data
    *   Cart data.
-   * @param bool $is_cart_page
-   *   Processed cart data is for cart page or checkout page.
    *
    * @return array
    *   Processed data.
    */
-  private function getProcessedCartData(array $cart_data, bool $is_cart_page = TRUE) {
+  private function getProcessedCartData(array $cart_data) {
     $data = [];
 
     $data['cart_id'] = $cart_data['cart']['id'];
@@ -279,10 +277,12 @@ class CartController {
 
     $data['items_qty'] = $cart_data['cart']['items_qty'];
     $data['cart_total'] = $cart_data['totals']['base_grand_total'] ?? 0;
+    $data['minicart_total'] = $data['cart_total'];
     $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
     $data['totals'] = [
       'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'] ?? 0,
       'base_grand_total' => $cart_data['totals']['base_grand_total'] ?? 0,
+      'base_grand_total_without_surcharge' => $cart_data['totals']['base_grand_total'] ?? 0,
       'discount_amount' => $cart_data['totals']['discount_amount'] ?? 0,
       'surcharge' => 0,
     ];
@@ -300,13 +300,10 @@ class CartController {
       $data['totals']['surcharge'] = $data['surcharge']['amount'];
     }
 
-    // If cart page.
-    if ($is_cart_page) {
-      // We don't show surcharge amount on cart total.
-      if ($data['totals']['surcharge'] > 0) {
-        $data['totals']['base_grand_total'] -= $data['totals']['surcharge'];
-        $data['cart_total'] -= $data['totals']['surcharge'];
-      }
+    // We don't show surcharge amount on cart total and on mini cart.
+    if ($data['totals']['surcharge'] > 0) {
+      $data['totals']['base_grand_total_without_surcharge'] -= $data['totals']['surcharge'];
+      $data['minicart_total'] -= $data['totals']['surcharge'];
     }
 
     $data['response_message'] = NULL;
@@ -424,7 +421,7 @@ class CartController {
     }
 
     // Re-use the processing done for cart page.
-    $response = $this->getProcessedCartData($data, FALSE);
+    $response = $this->getProcessedCartData($data);
 
     $response['cnc_enabled'] = $cnc_status;
 
