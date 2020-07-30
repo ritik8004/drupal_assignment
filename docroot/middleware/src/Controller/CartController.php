@@ -260,7 +260,7 @@ class CartController {
    *
    * @param array $cart_data
    *   Cart data.
-   * @param boolean $is_cart_page
+   * @param bool $is_cart_page
    *   Processed cart data is for cart page or checkout page.
    *
    * @return array
@@ -670,7 +670,7 @@ class CartController {
         $cart = $this->cart->getCart();
         // If cart has shipping method set, reset that.
         if (!empty($cart['shipping']['method'])) {
-          $this->cart->updateCart(['extension' => ['action' => CartActions::CART_RESET],]);
+          $this->cart->updateCart(['extension' => ['action' => CartActions::CART_RESET]]);
         }
 
         $cart = $this->cart->updateCart($postData);
