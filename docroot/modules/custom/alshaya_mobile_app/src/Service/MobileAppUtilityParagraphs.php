@@ -616,7 +616,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
 
     // Get parent entity types for paragraph entities.
     if ($entity->getEntityTypeId() == 'paragraph') {
-      $data['parent'] = $entity->getParentEntity()->bundle();
+      $data['parent_type'] = $entity->getParentEntity()->bundle();
     }
 
     // Get configured fields of entity, we don't require base fields.
