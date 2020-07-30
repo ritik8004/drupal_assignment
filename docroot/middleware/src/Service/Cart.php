@@ -726,13 +726,14 @@ class Cart {
       $this->cache->set('payment_method', $expire, $data['method']);
     }
 
+    $old_cart = $this->getCart();
     $cart = $this->updateCart($update);
     if (isset($cart['error_code'])) {
       $error_message = $cart['error_code'] > 600
         ? 'Back-end system is down'
         : $cart['error_message'];
 
-      $message = $this->prepareOrderFailedMessage($cart, $data, $error_message, 'update cart', 'NA', TRUE);
+      $message = $this->prepareOrderFailedMessage($old_cart, $data, $error_message, 'update cart', 'NA', TRUE);
       $this->logger->error('Error occurred while placing order. @message', [
         '@message' => $message,
       ]);
