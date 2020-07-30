@@ -68,10 +68,14 @@ export default class CustomerDetails extends React.Component {
                         companionData[firstname] = response.data[i].firstName;
                         companionData[lastname] = response.data[i].lastName;
                         companionData[dob] = response.data[i].dob;
-                        this.setState({
-                          companionData,
-                        });
                       }
+                      this.setState({
+                        companionData,
+                        appointmentCompanion: {
+                          label: response.data.length,
+                          value: response.data.length,
+                        },
+                      });
                     }
                   }
                 });
@@ -128,7 +132,7 @@ export default class CustomerDetails extends React.Component {
   };
 
   handleRemoveCompanion = (e) => {
-    const { appointmentCompanion, companionData } = this.state;
+    const { appointmentCompanion, companionData, appointmentId } = this.state;
     const { companionId } = e.target.dataset;
     const numOfCompanions = appointmentCompanion.value - 1;
     const updatedCompanionData = {};
@@ -146,8 +150,17 @@ export default class CustomerDetails extends React.Component {
           updatedCompanionData[newKey] = value;
         }
       });
-    }
 
+      // Set key empty in case of edit.
+      if (appointmentId) {
+        const name = `bootscompanion${companionId}name`;
+        const lastname = `bootscompanion${companionId}lastname`;
+        const dob = `bootscompanion${companionId}dob`;
+        updatedCompanionData[name] = '';
+        updatedCompanionData[lastname] = '';
+        updatedCompanionData[dob] = '';
+      }
+    }
     this.setState((prevState) => ({
       ...prevState,
       appointmentCompanion: { label: numOfCompanions, value: numOfCompanions },
@@ -181,6 +194,17 @@ export default class CustomerDetails extends React.Component {
           && result.data.error === undefined) {
           // Move to next step.
           removeFullScreenLoader();
+          // Remove empty keys from companionData.
+          Object.entries(companionData).forEach(([key, value]) => {
+            if (!value) {
+              delete companionData[key];
+            }
+          });
+          this.setState({
+            ...companionData,
+          }, () => {
+            setStorageInfo(this.state);
+          });
           handleSubmit();
         }
       });
@@ -192,6 +216,7 @@ export default class CustomerDetails extends React.Component {
       selectedStoreItem,
       appointmentCategory,
       appointmentType,
+      appointmentCompanion,
       clientExternalId,
       selectedSlot,
       appointmentId,
@@ -205,7 +230,7 @@ export default class CustomerDetails extends React.Component {
       program: appointmentCategory.id,
       activity: appointmentType.value,
       duration: selectedSlot.lengthinMin,
-      attendees: 1,
+      attendees: appointmentCompanion.value,
       start_date_time: selectedSlot.appointmentSlotTime,
       client: clientExternalId,
       channel,
