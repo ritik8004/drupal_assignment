@@ -34,6 +34,11 @@ export default class ClientDetails extends React.Component {
       mobile = clientData.mobile;
     }
 
+    if (mobile !== undefined) {
+      // Remove whitespaces when received from API.
+      mobile = mobile.replace(/\s/g, '');
+    }
+
     return (
       <div className="appointment-user-details-wrapper">
         <div className="details-header-wrapper">
@@ -93,7 +98,7 @@ export default class ClientDetails extends React.Component {
               type="mobile"
               required
               name="mobile"
-              defaultValue={mobile.replace(/\s/g, '')}
+              defaultValue={mobile}
               className={mobile !== '' ? 'focus' : ''}
               label={`${Drupal.t('Telephone/ Mobile')}*`}
               handleChange={this.handleChange}
