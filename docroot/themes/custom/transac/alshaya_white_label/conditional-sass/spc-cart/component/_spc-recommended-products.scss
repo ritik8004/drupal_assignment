@@ -17,6 +17,10 @@
       scroll-snap-align: center;
       min-width: 8.75rem;
 
+      html[lang=ar] & {
+        line-height: normal;
+      }
+
       .spc-product-recommended-image {
         margin-bottom: 1.25rem;
       }
