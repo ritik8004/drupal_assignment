@@ -5,8 +5,8 @@ const PdpPromotionLabel = (props) => {
   const { skuItemCode } = props;
   const { promotions } = drupalSettings.productInfo[skuItemCode];
 
-  return (
+  return (promotions) ? (
     <p>{parse(promotions)}</p>
-  );
+  ) : null;
 };
 export default PdpPromotionLabel;
