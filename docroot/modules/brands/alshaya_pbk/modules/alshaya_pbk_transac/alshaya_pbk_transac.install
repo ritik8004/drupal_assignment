@@ -5,24 +5,72 @@
  * Install, uninstall, update function for alshaya_pbk_transac.
  */
 
+use Drupal\block\Entity\Block;
 use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_update_N().
  *
  * Mark size, color, fabric and material fields to be indexed in Algolia.
+ * Remove size_lhn and color_lhn as facets and replace them with size and color
+ * facets respectively. Also replace their facet blocks similarly.
  */
 function alshaya_pbk_transac_update_8001() {
-  // Mark size, color, fabric and material to be indexed.
+  // Update config to mark size, color, fabric and material to be indexed and
+  // size_lhn and color_lhn not to be indexed.
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
-  \Drupal::service('acq_sku.fields_manager')->resetBaseFields();
 
-  // Re-save index configs to ensure overrides are taken into consideration.
-  \Drupal::service('alshaya_config.manager')->updateConfigs(
-    ['search_api.index.product'],
-    'alshaya_product'
-  );
-  // Queue products for reindexing.
+  // Now actually update the fields. We do not use resetBaseFields() as that
+  // resets all the facet blocks and their positions get distorted.
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->updateFieldMetaInfo('size', ['index' => 1, 'facet' => 1]);
+  $sku_fields_manager->updateFieldMetaInfo('color', ['index' => 1, 'facet' => 1]);
+  $sku_fields_manager->updateFieldMetaInfo('fabric', ['index' => 1]);
+  $sku_fields_manager->updateFieldMetaInfo('material', ['index' => 1]);
+  // size_lhn and color_lhn are being replaced by size and color as facets.
+  // So we remove these from facet.
+  $sku_fields_manager->updateFieldMetaInfo('size_lhn', ['facet' => 0]);
+  $sku_fields_manager->updateFieldMetaInfo('color_lhn', ['facet' => 0]);
+
+  // Mapping of old facet blocks ids to new ones.
+  $blocks = [
+    'plpcolorlhn' => 'plpcolor',
+    'promocolorlhn' => 'promocolor',
+    'colorlhn' => 'color',
+    'plpsizelhn' => 'plpsize',
+    'promosizelhn' => 'promosize',
+    'sizelhn' => 'size',
+  ];
+
+  $old_block_weights = [];
+  // Save weights of old blocks to be used later.
+  foreach ($blocks as $old_id => $new_id) {
+    $old_block = Block::load($old_id);
+    $old_block_weights[$old_id] = $old_block->getWeight();
+  }
+
+  // Fetch field data so that we can send them in the update hook.
+  $custom_fields = $sku_fields_manager->getAllCustomFields();
+  $changed_fields = [];
+  foreach (['size', 'color', 'size_lhn', 'color_lhn'] as $field_code) {
+    if (isset($custom_fields[$field_code])) {
+      $changed_fields[$field_code] = $custom_fields[$field_code];
+    }
+  }
+  // This will add/remove fields as facets and add/remove facet blocks.
+  // Also in implementations of this hook, the Product search index will be
+  // re-saved thus taking config override changes into account.
+  \Drupal::moduleHandler()->invokeAll('acq_sku_base_fields_updated', [$changed_fields, 'add']);
+
+  // The new facet blocks have been created. Now we update the weights.
+  foreach ($blocks as $old_id => $new_id) {
+    $new_block = Block::load($new_id);
+    // Set weight of new block same as old block.
+    $new_block->setWeight($old_block_weights[$old_id]);
+    $new_block->save();
+  }
+
+  // Queue all products for reindexing.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
