@@ -5,10 +5,8 @@ fields:
   color:
     configurable: 1
     cardinality: 1
-    index: 1
   size:
     cardinality: 1
-    index: 1
   material:
     label: 'Material'
     configurable: 1
