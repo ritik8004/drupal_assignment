@@ -89,6 +89,11 @@ export default class AreaSelect extends React.Component {
   };
 
   populateParentIfHidden = (val) => {
+    // Do nothing if we have no address available.
+    if (val === undefined || !(val)) {
+      return;
+    }
+
     const parentArea = drupalSettings.address_fields.area_parent;
     if (parentArea !== undefined || parentArea.visible === false) {
       const areaParentInput = document.getElementById('area_parent');
