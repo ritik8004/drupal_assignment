@@ -117,13 +117,15 @@ export default class Confirmation extends React.Component {
               {Drupal.t('View My Appointments')}
             </button>
             )}
-          <button
-            className="continue-shopping"
-            type="button"
-            onClick={() => this.handleClick('/')}
-          >
-            {Drupal.t('Continue Shopping')}
-          </button>
+          <div className="appointment-flow-action">
+            <button
+              className="continue-shopping"
+              type="button"
+              onClick={() => this.handleClick('/')}
+            >
+              {Drupal.t('Continue Shopping')}
+            </button>
+          </div>
         </div>
         <div style={{ display: 'none' }} className="appointment-confirmation-print-wrapper">
           <AppointmentConfirmationPrint

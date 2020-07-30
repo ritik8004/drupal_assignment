@@ -92,6 +92,13 @@
         background: none;
         border: 1px solid $appointment-btn-bg;
         color: $appointment-btn-bg;
+
+        &:disabled,
+        &[disabled] {
+          border: 1px solid $appointment-disable-btn-bg;
+          background: $appointment-disable-btn-bg;
+          color: $appointment-btn-text;
+        }
       }
     }
   }
