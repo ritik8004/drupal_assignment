@@ -67,6 +67,7 @@ export default class Appointment extends React.Component {
         appointmentStep: 'appointment-type',
       };
     }
+    this.state.appointmentRender = false;
   }
 
   /**
@@ -103,11 +104,21 @@ export default class Appointment extends React.Component {
                 }
               });
             }
+          } else {
+            this.setAppointmentRender();
           }
         });
       }
+    } else {
+      this.setAppointmentRender();
     }
   }
+
+  setAppointmentRender = () => {
+    this.setState({
+      appointmentRender: true,
+    });
+  };
 
   /**
    * Validates appointment edit permission.
@@ -191,6 +202,7 @@ export default class Appointment extends React.Component {
     setStorageInfo(localstore);
     this.setState({
       ...localstore,
+      appointmentRender: true,
     });
     removeFullScreenLoader();
   }
@@ -222,6 +234,7 @@ export default class Appointment extends React.Component {
   render() {
     const {
       appointmentStep,
+      appointmentRender,
     } = this.state;
 
     let appointmentData;
@@ -284,10 +297,12 @@ export default class Appointment extends React.Component {
     return (
       <div className="appointment-wrapper">
         <AppointmentSteps step={appointmentStep} />
+        { appointmentRender && (
         <div className={`${appointmentClasses}`}>
           {appointmentData}
           {appointmentSelection}
         </div>
+        )}
       </div>
     );
   }
