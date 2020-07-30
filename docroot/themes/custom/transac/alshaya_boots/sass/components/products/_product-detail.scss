@@ -30,15 +30,33 @@
   &__title_wrapper {
     font-family: $alshaya-thin;
 
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
     .brand-logo-wrapper {
       float: none;
+
+      @include breakpoint($only-mobile) {
+        margin: 0 auto;
+      }
     }
 
     h1 {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        text-align: center;
+      }
+
       span {
         text-transform: none;
         font-size: 1.25rem;
         font-family: $alshaya-bold;
+
+        @include breakpoint($only-mobile) {
+          width: 70%;
+          display: inline-block;
+        }
       }
     }
 
@@ -62,6 +80,14 @@
 
     .content--item-code {
       font-family: $bp-light;
+    }
+  }
+
+  &__main {
+    .gallery-wrapper {
+      @include breakpoint($only-mobile) {
+        min-height: 23.5625rem;
+      }
     }
   }
 }
@@ -95,7 +121,7 @@
       }
 
       .form-item {
-        padding: 0.625rem 0;
+        padding: 1rem 0 0;
       }
     }
 
@@ -142,6 +168,10 @@
 
   h4.list-title {
     font-size: 0.875rem;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
 
     span {
       &:first-of-type {

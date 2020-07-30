@@ -5,9 +5,6 @@ import {
   getAreasList,
   gerAreaLabelById,
 } from '../../../utilities/address_util';
-import {
-  geocodeAddressToLatLng,
-} from '../../../utilities/map/map_utils';
 import getStringMessage from '../../../utilities/strings';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 
@@ -32,6 +29,13 @@ export default class ParentAreaSelect extends React.Component {
 
   componentDidMount() {
     this.isComponentMounted = true;
+
+    // Do nothing if parent area is not visible.
+    const parentArea = drupalSettings.address_fields.area_parent;
+    if (parentArea !== undefined && parentArea.visible === false) {
+      return;
+    }
+
     this.getAreasList();
     const { default_val: defaultVal, field, areasUpdate } = this.props;
     if (defaultVal.length !== 0
@@ -95,13 +99,6 @@ export default class ParentAreaSelect extends React.Component {
     });
 
     this.handleChange(val);
-
-    // Geocoding so that map is updated.
-    // Calling in timeout to avaoid race condition as
-    // component is refreshing and thus elemtent not available.
-    setTimeout(() => {
-      geocodeAddressToLatLng();
-    }, 200);
   }
 
   /**
@@ -159,6 +156,13 @@ export default class ParentAreaSelect extends React.Component {
     if (currentOptionAvailable) {
       hiddenFieldValue = currentOption;
       areaLabel = gerAreaLabelById(true, currentOption).trim();
+    }
+
+    const parentArea = drupalSettings.address_fields.area_parent;
+    if (parentArea !== undefined && parentArea.visible === false) {
+      return (
+        <input type="hidden" id={fieldKey} name={fieldKey} value={hiddenFieldValue} />
+      );
     }
 
     return (

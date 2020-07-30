@@ -3,11 +3,8 @@ import React from 'react';
 import FilterList from '../../../utilities/filter-list';
 import {
   getAreasList,
-  gerAreaLabelById,
+  gerAreaLabelById, getAreaParentId,
 } from '../../../utilities/address_util';
-import {
-  geocodeAddressToLatLng,
-} from '../../../utilities/map/map_utils';
 import getStringMessage from '../../../utilities/strings';
 
 export default class AreaSelect extends React.Component {
@@ -34,6 +31,8 @@ export default class AreaSelect extends React.Component {
   componentDidMount() {
     this.isComponentMounted = true;
     this.getAreaList();
+    this.populateParentIfHidden(document.getElementById('administrative_area').value);
+
     // Trigger event for handling area update from map.
     document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap);
   }
@@ -89,6 +88,16 @@ export default class AreaSelect extends React.Component {
     }
   };
 
+  populateParentIfHidden = (val) => {
+    const parentArea = drupalSettings.address_fields.area_parent;
+    if (parentArea !== undefined || parentArea.visible === false) {
+      const areaParentInput = document.getElementById('area_parent');
+      if (areaParentInput) {
+        areaParentInput.value = getAreaParentId(false, val.toString())[0].id;
+      }
+    }
+  };
+
   /**
    * Process the value when get from the select list.
    */
@@ -97,18 +106,15 @@ export default class AreaSelect extends React.Component {
       currentOption: val.toString(),
     });
 
-    // Geocoding so that map is updated.
-    // Calling in timeout to avaoid race condition as
-    // component is refreshing and thus elemtent not available.
-    setTimeout(() => {
-      geocodeAddressToLatLng();
-    }, 200);
+    this.populateParentIfHidden(val);
   };
 
   // Get area list.
   getAreaList = () => {
+    const parentArea = drupalSettings.address_fields.area_parent;
+
     // If no area parent to select.
-    if (window.drupalSettings.address_fields.area_parent === undefined) {
+    if (parentArea === undefined || parentArea.visible === false) {
       this.setState({
         areas: getAreasList(false, null),
       });

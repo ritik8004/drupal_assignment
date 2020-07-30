@@ -34,13 +34,15 @@ class CartSelectOption extends React.Component {
     // Setting active class for the
     // default variant.
     const elem = document.querySelector(`ul#${code} li#value${value}`);
-    if (elem.classList.contains('in-active')) {
-      elem.classList.remove('in-active');
+    if (!(elem == null)) {
+      if (elem.classList.contains('in-active')) {
+        elem.classList.remove('in-active');
+      }
+      elem.classList.toggle('active');
+      this.setState({
+        selected: value,
+      });
     }
-    elem.classList.toggle('active');
-    this.setState({
-      selected: value,
-    });
   }
 
   // To get the option values of the

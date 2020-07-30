@@ -23,6 +23,7 @@ $mujilightbluegray: #eff0f4;
 $greyish: #808080;
 $mujidarkgray: #404040;
 $grey-light: #777;
+$grey-light-two: #faf7ed;
 $black-two: #000;
 $brownish-grey: #666;
 $white-smoke-light: #f2f2f2;
@@ -244,7 +245,7 @@ $mm_mob_arrow_icon: $cod-gray;
 //  Mini Cart.
 $primary_minicart_text: $black;
 $primary_minicart_quantity_bg: $alizarin-crimson;
-$primary_minicart_hover: $white;
+$primary_minicart_hover: $mujidarkred;
 $primary_minicart_quantity_text: $black;
 
 // Counters.
@@ -281,7 +282,7 @@ $minicart_notification_background: $white;
 $minicart_notification_text: $grey;
 $minicart_notification_btn_bg: $black;
 $minicart_notification_product_title: $black;
-$minicart_notification_shadow: $shadow;
+$minicart_notification_shadow: $grey-light-two;
 $minicart_notification_qty_text: $grey;
 
 //3. Footer

@@ -22,34 +22,6 @@
     }
   }
 
-  .owl-carousel {
-    .slick-slide {
-      > article {
-        @include breakpoint($tablet) {
-          padding: 0 0.75rem;
-        }
-      }
-
-      img {
-        max-width: 100%;
-
-        @include breakpoint($tablet) {
-          object-fit: cover;
-        }
-
-        @include breakpoint($only-mobile) {
-          object-fit: scale-down;
-        }
-      }
-    }
-
-    .views-row {
-      img {
-        width: 100%;
-      }
-    }
-  }
-
   .price-wrapper {
     font-size: 0.8125rem;
     line-height: 1.25rem;

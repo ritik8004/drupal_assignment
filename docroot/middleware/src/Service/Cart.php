@@ -251,6 +251,10 @@ class Cart {
     catch (\Exception $e) {
       static::$cart = NULL;
 
+      $this->logger->error('Error while getting cart from MDC. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
         $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
       }
@@ -263,9 +267,6 @@ class Cart {
         return static::$cart;
       }
 
-      $this->logger->error('Error while getting cart from MDC. Error message: @message', [
-        '@message' => $e->getMessage(),
-      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -725,7 +726,20 @@ class Cart {
       $this->cache->set('payment_method', $expire, $data['method']);
     }
 
-    return $this->updateCart($update);
+    $old_cart = $this->getCart();
+    $cart = $this->updateCart($update);
+    if (isset($cart['error_code'])) {
+      $error_message = $cart['error_code'] > 600
+        ? 'Back-end system is down'
+        : $cart['error_message'];
+
+      $message = $this->prepareOrderFailedMessage($old_cart, $data, $error_message, 'update cart', 'NA', TRUE);
+      $this->logger->error('Error occurred while placing order. @message', [
+        '@message' => $message,
+      ]);
+    }
+
+    return $cart;
   }
 
   /**
@@ -851,8 +865,12 @@ class Cart {
 
     $cart = NULL;
 
+    $action = is_array($data['extension'])
+      ? $data['extension']['action'] ?? ''
+      : $data['extension']->action ?? '';
+
     try {
-      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data], $action);
       static::$cart = $this->formatCart($cart_updated);
       $cart = static::$cart;
 
@@ -877,6 +895,11 @@ class Cart {
     catch (\Exception $e) {
       static::$cart = NULL;
 
+      $this->logger->error('Error while updating cart on MDC for action @action. Error message: @message', [
+        '@action' => $action,
+        '@message' => $e->getMessage(),
+      ]);
+
       // Re-set cart id in session if exception is for cart not found.
       // Also try to do the same operation again for the user.
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
@@ -899,8 +922,7 @@ class Cart {
       // Because, If we return cart object, it won't show any error as we are
       // not passing error with cart object, and with successful cart object it
       // will show notification of add to cart (Which we don't need here.).
-      $is_add_to_Cart = (!empty($data['extension'])
-        && $data['extension']->action == CartActions::CART_ADD_ITEM);
+      $is_add_to_Cart = ($action == CartActions::CART_ADD_ITEM);
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
       if (!empty($exception_type) && !$is_add_to_Cart) {
@@ -919,9 +941,6 @@ class Cart {
         }
       }
 
-      $this->logger->error('Error while updating cart on MDC. Error message: @message', [
-        '@message' => $e->getMessage(),
-      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -1100,6 +1119,14 @@ class Cart {
     $url = sprintf('carts/%d/order', $this->getCartId());
     $cart = $this->getCart();
 
+    // Check if shiping method is present else throw error.
+    if (empty($cart['shipping']['method'])) {
+      $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
     $lock = FALSE;
     $settings = $this->settings->getSettings('spc_middleware');
 
@@ -1140,10 +1167,13 @@ class Cart {
         return $this->handleCheckoutComRedirection();
       }
 
+      $double_check_done = 'no';
+      $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
+
       $doubleCheckEnabled = $this->settings->getSettings('alshaya_checkout_settings')['place_order_double_check_after_exception'];
       if ($doubleCheckEnabled) {
+        $double_check_done = 'yes';
         try {
-          $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
           $lastOrder = $this->orders->getLastOrder((int) $this->getCartCustomerId());
 
           if ($lastOrder && $cartReservedOrderId === $lastOrder['increment_id']) {
@@ -1155,13 +1185,6 @@ class Cart {
 
             return $this->processPostOrderPlaced((int) $lastOrder['order_id'], $data['paymentMethod']['method']);
           }
-          else {
-            $this->logger->warning('Place order failed and we tried to double check but order was not found. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
-              '@message' => $e->getMessage(),
-              '@order_id' => $cartReservedOrderId,
-              '@cart_id' => $cart['cart']['id'],
-            ]);
-          }
         }
         catch (\Exception $doubleException) {
           $this->logger->error('Error occurred while trying to double check. Exception: @message', [
@@ -1171,9 +1194,15 @@ class Cart {
       }
 
       $this->cancelCartReservation($e->getMessage());
-      $this->logger->error('Error while placing order. Error message: @message', [
-        '@message' => $e->getMessage(),
+
+      $error_message = $e->getCode() > 600
+        ? 'Back-end system is down'
+        : $e->getMessage();
+      $message = $this->prepareOrderFailedMessage($cart, $data, $error_message, 'place order', $double_check_done);
+      $this->logger->error('Error occurred while placing order. @message', [
+        '@message' => $message,
       ]);
+
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -1199,6 +1228,9 @@ class Cart {
 
     // Set order in session for later use.
     $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
+
+    // Set cart id of the order for later use.
+    $this->session->updateDataInSession(Orders::ORDER_CART_ID, $cart['cart']['id']);
 
     // Post order id and cart data to Drupal.
     $data = [
@@ -1499,6 +1531,44 @@ class Cart {
     if ($expire > 0) {
       $this->cache->set('cached_cart', $expire, $cart);
     }
+  }
+
+  /**
+   * Prepare message to log when API fail after payment successful.
+   *
+   * @param array $cart
+   *   Cart Data.
+   * @param array $data
+   *   Payment data.
+   * @param string $exception_message
+   *   Exception message.
+   * @param string $api
+   *   API identifier which failed.
+   * @param string $double_check_done
+   *   Flag to say if double check was done or not.
+   *
+   * @return string
+   *   Prepared error message.
+   */
+  private function prepareOrderFailedMessage(array $cart, array $data, string $exception_message, string $api, string $double_check_done) {
+    $message[] = 'exception:' . $exception_message;
+    $message[] = 'api:' . $api;
+    $message[] = 'double_check_done:' . $double_check_done;
+    $message[] = 'order_id:' . $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    $message[] = 'cart_id:' . $cart['cart']['id'];
+    $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
+
+    if ($this->settings->getSettings('place_order_debug_failure', 1)) {
+      $message[] = 'payment_method:' . $data['paymentMethod']['method'];
+      $message[] = 'additional_information:' . json_encode($data['paymentMethod']['additional_data']);
+
+      $message[] = 'shipping_method:' . $cart['shipping']['method'];
+      foreach ($cart['shipping']['address']['custom_attributes'] as $shipping_attribute) {
+        $message[] = $shipping_attribute['attribute_code'] . ':' . $shipping_attribute['value'];
+      }
+    }
+
+    return implode('||', $message);
   }
 
 }

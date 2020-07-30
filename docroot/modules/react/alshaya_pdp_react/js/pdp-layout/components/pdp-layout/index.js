@@ -8,7 +8,7 @@ import { getProductValues } from '../../../utilities/pdp_layout';
 import PdpStandardDelivery from '../pdp-standard-delivery';
 import PdpSharePanel from '../pdp-share-panel';
 import PdpClickCollect from '../pdp-click-and-collect';
-import PdpCrossellUpsell from '../pdp-crossell-upsell';
+import PdpRelatedProducts from '../pdp-related-products';
 import PdpProductLabels from '../pdp-product-labels';
 import PdpPromotionLabel from '../pdp-promotion-label';
 import PdpDynamicPromotions from '../pdp-dynamic-promotions';
@@ -40,6 +40,7 @@ const PdpLayout = () => {
     shortDesc,
     description,
     configurableCombinations,
+    relatedProducts,
   } = productValues;
 
   const emptyRes = (
@@ -120,11 +121,13 @@ const PdpLayout = () => {
           <PdpSharePanel />
         </div>
       </div>
-      <div className="magv2-pdp-crossell-upsell-wrapper">
-        {(pdpGallery) ? (
-          <PdpCrossellUpsell skuCode={skuItemCode} pdpGallery={pdpGallery} />
-        ) : null}
-      </div>
+      {relatedProducts ? (
+        <div className="magv2-pdp-crossell-upsell-wrapper">
+          {Object.keys(relatedProducts).map((type) => (
+            <PdpRelatedProducts type={relatedProducts[type]} skuItemCode={skuItemCode} />
+          ))}
+        </div>
+      ) : null}
     </>
   ) : emptyRes;
 };

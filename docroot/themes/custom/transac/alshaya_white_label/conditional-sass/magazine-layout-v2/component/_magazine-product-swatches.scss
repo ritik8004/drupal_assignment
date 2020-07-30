@@ -22,10 +22,18 @@
     a {
       height: 5.3125rem;
       display: block;
-      background-size: cover;
+      background-size: contain;
 
       @include breakpoint($only-tablet) {
         height: 5.938rem;
+      }
+
+      @include breakpoint($tablet) {
+        background-size: cover;
+      }
+
+      @include breakpoint($tablet-landscape) {
+        background-size: contain;
       }
     }
 
@@ -54,10 +62,14 @@
       }
     }
 
-    @include breakpoint($desktop) {
+    @include breakpoint($tablet-landscape) {
       li {
         flex-basis: 25%;
       }
     }
   }
+}
+
+#add-to-cart-error:empty {
+  padding-top: 0;
 }

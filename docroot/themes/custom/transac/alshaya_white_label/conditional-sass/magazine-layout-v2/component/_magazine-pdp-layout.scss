@@ -17,7 +17,7 @@
 
   &-sidebar {
     @include breakpoint($only-mobile) {
-      padding: 0 1.25rem;
+      padding: 0 1.25rem 2.5rem;
       background-color: $pdp_background;
     }
 
@@ -25,6 +25,7 @@
       width: 35%;
       float: $right;
       padding-#{$left}: 1.25rem;
+      padding-bottom: 6.25rem;
     }
 
     @include breakpoint($desktop) {
@@ -47,6 +48,7 @@
   #pdp-layout {
     @include breakpoint($only-mobile) {
       background: $pdp_background;
+      margin-top: -3.5rem;
     }
   }
 }

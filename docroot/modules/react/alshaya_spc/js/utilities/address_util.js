@@ -22,17 +22,20 @@ import {
  * @param {*} selector
  */
 export const addressFormInlineErrorScroll = () => {
-  // Find where the error is.
+  // If error is on contact fields.
+  const contactFieldsSelector = '.spc-checkout-contact-information-fields > div > div.error:not(:empty)';
+  let errorElement = document.querySelector(contactFieldsSelector);
+  if (errorElement !== undefined && errorElement !== null) {
+    smoothScrollToAddressField(errorElement, true);
+    return;
+  }
+
   const addressFieldsSelector = '.delivery-address-fields > div > div.error:not(:empty)';
-  let errorElement = document.querySelector(addressFieldsSelector);
+  errorElement = document.querySelector(addressFieldsSelector);
   // If error found in address fields, scroll and return.
   if (errorElement !== undefined && errorElement !== null) {
     smoothScrollToAddressField(errorElement);
-    return;
   }
-  const contactFieldsSelector = '.spc-checkout-contact-information-fields > div > div.error:not(:empty)';
-  errorElement = document.querySelector(contactFieldsSelector);
-  smoothScrollToAddressField(errorElement, true);
 };
 
 /**
@@ -238,7 +241,7 @@ export const validateAddressFields = (e, validateEmail) => {
   // Iterate over address fields.
   Object.entries(drupalSettings.address_fields).forEach(
     ([key, field]) => {
-      if (field.required === true) {
+      if (field.required === true && field.visible === true) {
         const addField = e.target.elements[key].value.trim();
         if (addField.length === 0) {
           document.getElementById(`${key}-error`).innerHTML = getStringMessage('address_please_enter', { '@label': field.label });
@@ -461,7 +464,7 @@ export const checkoutAddressProcess = (e) => {
   validationRequest.then((response) => {
     if (!response || response.data.status === undefined || !response.data.status) {
       // API Call failed.
-      // @TODO: Handle error.
+      Drupal.logJavascriptError('Email and mobile number validation fail', 'response format invalid', GTM_CONSTANTS.CHECKOUT_ERRORS);
       return false;
     }
 
@@ -556,6 +559,10 @@ export const formatAddressDataForEditForm = (address) => {
 
   return formattedAddress;
 };
+
+export const customerHasAddress = (cart) => (drupalSettings.user.uid > 0
+  && cart.cart.customer.addresses !== undefined
+  && cart.cart.customer.addresses.length > 0);
 
 /**
  * Get the address popup class.

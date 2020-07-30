@@ -6,7 +6,7 @@ const GTM_CONSTANTS = {
   CART_ERRORS: 'cart errors',
   CHECKOUT_ERRORS: 'checkout errors',
   PAYMENT_ERRORS: 'other payment errors',
-  GENUINE_PAYMENT_ERRORS: 'genuine payment errors',
+  GENUINE_PAYMENT_ERRORS: 'payment errors',
 };
 
 (function ($, Drupal, dataLayer) {
@@ -1299,6 +1299,12 @@ const GTM_CONSTANTS = {
     var message = (error && error.message !== undefined)
       ? error.message
       : error;
+
+    // We want message to be sent as string always.
+    if ($.type(message) !== 'string') {
+      message = JSON.stringify(message);
+    }
+
     var errorData = {
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
