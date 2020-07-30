@@ -45,6 +45,7 @@ function _alshaya_performance_queue_cache_tag_for_invalidation(string $tag) {
   /** @var \Drupal\Core\Queue\QueueInterface $queue */
   static $queue;
 
+  // Invalidating product category cache on priority.
   if ($tag == 'taxonomy_term:acq_product_category') {
     $priority_queue = \Drupal::service('queue')->get(InvalidateCacheTagsOnPriority::QUEUE_NAME);
     $priority_queue->createItem($tag);
