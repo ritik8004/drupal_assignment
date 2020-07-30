@@ -63,6 +63,7 @@ class CartSelectOption extends React.Component {
       selectedValues,
       refreshConfigurables,
       pdpRefresh,
+      productInfo,
     } = this.props;
     const selectedValuesArray = selectedValues();
     let selectedCombination = '';
@@ -70,8 +71,9 @@ class CartSelectOption extends React.Component {
       selectedCombination += `${key}|${selectedValuesArray[key]}||`;
     });
     const variantSelected = configurableCombinations[skuCode].byAttribute[selectedCombination];
+    const parentSkuSelected = productInfo[skuCode].variants[variantSelected].parent_sku;
     // Refresh the PDP page on new variant selection.
-    pdpRefresh(variantSelected);
+    pdpRefresh(variantSelected, parentSkuSelected);
 
     // Get available values for the selected variables.
     refreshConfigurables(code, codeValue, variantSelected);

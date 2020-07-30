@@ -10,18 +10,23 @@ import PdpSharePanel from '../pdp-share-panel';
 import PdpClickCollect from '../pdp-click-and-collect';
 import PdpRelatedProducts from '../pdp-related-products';
 import PdpProductLabels from '../pdp-product-labels';
+import PdpPromotionLabel from '../pdp-promotion-label';
+import PdpDynamicPromotions from '../pdp-dynamic-promotions';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
-  const pdpRefresh = (variantSelected) => {
-    setVariant(variantSelected);
-  };
-
   const { productInfo } = drupalSettings;
-  let skuItemCode = null;
+  let skuItemCode = '';
+
   if (productInfo) {
     [skuItemCode] = Object.keys(productInfo);
   }
+  const [skuMainCode, setSkuMainCode] = useState(skuItemCode);
+
+  const pdpRefresh = (variantSelected, parentSkuSelected) => {
+    setVariant(variantSelected);
+    setSkuMainCode(parentSkuSelected);
+  };
 
   const productValues = getProductValues(skuItemCode, variant, setVariant);
   const {
@@ -90,6 +95,12 @@ const PdpLayout = () => {
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
           />
+          <div className="promotions promotions-full-view-mode">
+            <PdpPromotionLabel skuItemCode={skuItemCode} />
+            <div id="dynamic-promo-labels">
+              <PdpDynamicPromotions skuMainCode={skuMainCode} />
+            </div>
+          </div>
           <PdpCart
             skuCode={skuItemCode}
             configurableCombinations={configurableCombinations}

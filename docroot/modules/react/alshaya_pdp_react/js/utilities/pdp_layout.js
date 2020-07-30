@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PdpDynamicPromotions from '../pdp-layout/components/pdp-dynamic-promotions';
 
 /**
  * Clear cart data.
@@ -52,6 +53,7 @@ export const triggerAddToCart = (
   configurableCombinations = null,
   skuCode,
   addToCartBtn,
+  variantSelected,
 ) => {
   const productData = productDataValue;
   const cartData = Drupal.alshayaSpc.getCartData();
@@ -148,6 +150,10 @@ export const triggerAddToCart = (
         cartBtn.innerHTML = Drupal.t('Add To Bag');
       }
     }, addToCartNotificationTime * 1000);
+
+    // Refresh dynamic promo labels
+    const skuMainCode = drupalSettings.parentSkuArray[variantSelected];
+    ReactDOM.render(<PdpDynamicPromotions skuMainCode={skuMainCode} />, document.getElementById('dynamic-label'));
   }
 };
 
@@ -268,6 +274,7 @@ export const addToCartConfigurable = (e, id, configurableCombinations, skuCode, 
         configurableCombinations,
         skuCode,
         addToCartBtn,
+        variantSelected,
       );
     },
   )
@@ -299,7 +306,7 @@ export const addToCartSimple = (e, id, skuCode, productInfo) => {
 
   updateCart(cartEndpoint, postData).then(
     (response) => {
-      triggerAddToCart(response, productData, productInfo, skuCode, addToCartBtn);
+      triggerAddToCart(response, productData, productInfo, skuCode, addToCartBtn, variantSelected);
     },
   )
     .catch((error) => {
