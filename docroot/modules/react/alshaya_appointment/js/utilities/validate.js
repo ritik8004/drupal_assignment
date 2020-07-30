@@ -10,12 +10,11 @@ export const processCustomerDetails = async (e) => {
   let isError = false;
 
   // Check to ensure no required field is empty.
-  const requiredElements = ['firstName', 'lastName', 'dob', 'email', 'mobile'];
   Array.prototype.forEach.call(e.target.elements, (element) => {
     if (!element.id) {
       return;
     }
-    if (requiredElements.includes(element.id) && !element.value.length) {
+    if (!element.value.length) {
       document.getElementById(`${element.id}-error`).innerHTML = Drupal.t('Please enter value for this field.');
       document.getElementById(`${element.id}-error`).classList.add('error');
       isError = true;
