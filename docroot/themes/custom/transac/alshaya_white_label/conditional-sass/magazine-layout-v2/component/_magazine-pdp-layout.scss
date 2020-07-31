@@ -16,6 +16,8 @@
   }
 
   &-sidebar {
+    font-family: $alshaya-thin;
+
     @include breakpoint($only-mobile) {
       padding: 0 1.25rem 2.5rem;
       background-color: $pdp_background;

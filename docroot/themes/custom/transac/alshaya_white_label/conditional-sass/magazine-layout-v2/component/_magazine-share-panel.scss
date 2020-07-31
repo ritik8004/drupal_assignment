@@ -144,6 +144,7 @@
     color: $magv2-share-btn;
     padding: 0.25rem 0.1875rem;
     flex-shrink: 0;
+    font-weight: bold;
 
     @include breakpoint($desktop) {
       height: 1.5rem;

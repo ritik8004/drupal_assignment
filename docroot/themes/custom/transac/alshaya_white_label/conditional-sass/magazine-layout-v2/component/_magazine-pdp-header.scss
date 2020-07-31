@@ -151,6 +151,7 @@ html[lang=ar] {
             line-height: 1.31;
             max-width: 13.438rem;
             padding: 0;
+            font-family: $alshaya-thin;
           }
         }
 
@@ -205,11 +206,13 @@ html[lang=ar] {
           .magv2-pdp-price-wrapper {
             font-size: 1.125rem;
             padding: 0 0.25rem;
+            font-family: $alshaya-thin;
           }
 
           .magv2-pdp-vat-text {
             font-size: 0.75rem;
             color: $magv2-vat-text;
+            font-family: $alshaya-thin;
           }
         }
 
@@ -246,6 +249,7 @@ html[lang=ar] {
           min-width: 18.75rem;
           font-size: 1rem;
           font-family: $alshaya-thin;
+          font-weight: bold;
         }
 
         @include breakpoint($only-tablet) {
