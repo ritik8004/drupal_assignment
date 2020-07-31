@@ -33,7 +33,7 @@ const PdpFullDescription = (props) => {
           <>
             {((item.value['#markup']) || (item.value['#items']))
               ? (
-                <div className="desc-label-text-wrapper" key={item.label}>
+                <div className="desc-label-text-wrapper">
                   {(item.label) ? (<PdpSectionText className="dark">{parse(item.label['#markup'])}</PdpSectionText>) : null}
                   {CheckItem(item.value)}
                 </div>
