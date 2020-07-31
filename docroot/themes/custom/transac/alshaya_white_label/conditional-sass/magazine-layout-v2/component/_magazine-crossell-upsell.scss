@@ -253,11 +253,12 @@
     justify-content: center;
     border-radius: 50%;
     border: 0.063rem solid $magv2-crossel-upsell-slider-arrow;
+    transition: opacity 0.3s ease;
     cursor: pointer;
 
     &.disabled {
       pointer-events: none;
-      opacity: 0.6;
+      opacity: 0.3;
       cursor: unset;
     }
 
