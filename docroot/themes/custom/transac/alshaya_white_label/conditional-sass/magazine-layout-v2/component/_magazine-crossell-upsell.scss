@@ -246,7 +246,11 @@
   }
 
   .slider-pagers {
-    padding: 0.3125rem;
+    width: 2.375rem;
+    height: 2.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
     border: 0.063rem solid $magv2-crossel-upsell-slider-arrow;
     cursor: pointer;
