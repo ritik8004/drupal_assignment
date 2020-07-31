@@ -138,7 +138,13 @@ export default class PdpCrossellUpsell extends React.PureComponent {
             className={`slider-prev slider-pagers${(drupalSettings.path.currentLanguage === 'en' ? limits.prev : limits.next) ? ' disabled' : ''}`}
           />
           <span className="slider-pagination">
-            {`${currentPage} ${Drupal.t('of')} ${totalPagers}`}
+            <span>
+              {currentPage}
+            </span>
+            <span>{Drupal.t('of')}</span>
+            <span>
+              {totalPagers}
+            </span>
           </span>
           <span
             onClick={(drupalSettings.path.currentLanguage === 'en') ? this.goToNextSlide : this.goToPrevSlide}
