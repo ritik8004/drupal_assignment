@@ -75,6 +75,10 @@
               max-width: 12.5rem;
             }
           }
+
+          &-price {
+            width: 100%;
+          }
         }
 
         .magv2-pdp-final-price-wrapper + .magv2-meta-data-wrapper {
@@ -135,12 +139,6 @@
           &:first-child {
             padding-#{$left}: 0;
           }
-        }
-
-        > div {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
         }
       }
 
