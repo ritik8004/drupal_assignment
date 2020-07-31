@@ -248,8 +248,7 @@ html[lang=ar] {
           margin: 0;
           min-width: 18.75rem;
           font-size: 1rem;
-          font-family: $alshaya-thin;
-          font-weight: bold;
+          font-family: $alshaya-bold;
         }
 
         @include breakpoint($only-tablet) {
