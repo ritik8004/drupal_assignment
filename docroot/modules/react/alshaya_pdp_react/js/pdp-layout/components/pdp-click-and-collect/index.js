@@ -4,11 +4,17 @@ import PdpSectionText from '../utilities/pdp-section-text';
 import PdpClickCollectSearch from '../pdp-click-and-collect-search';
 import { fetchAvailableStores } from '../../../utilities/pdp_layout';
 import ClickCollectContent from '../pdp-click-and-collect-popup';
+import {
+  setupAccordionHeight,
+  allowMaxContent,
+  removeMaxHeight,
+} from '../../../utilities/sidebarCardUtils';
 
 export default class PdpClickCollect extends React.PureComponent {
   constructor(props) {
     super(props);
     this.searchRef = React.createRef();
+    this.expandRef = React.createRef();
     this.autocomplete = null;
     this.searchplaceInput = null;
     this.state = {
@@ -17,10 +23,14 @@ export default class PdpClickCollect extends React.PureComponent {
       location: '',
       hideInput: false,
       showNoResult: false,
+      open: false,
     };
   }
 
   componentDidMount() {
+    // Accordion setup.
+    setupAccordionHeight(this.expandRef);
+
     if (!this.autocomplete && !!this.searchRef && !!this.searchRef.current) {
       this.searchplaceInput = this.searchRef.current.getElementsByTagName('input').item(0);
       new Promise(((resolve) => {
@@ -71,22 +81,41 @@ export default class PdpClickCollect extends React.PureComponent {
         }
       });
     }
+    // Allow maximum content for now.
+    allowMaxContent(this.expandRef);
   };
 
   toggleShowMore = () => {
     this.setState((prevState) => ({
       showMore: !prevState.showMore,
     }));
-  }
+  };
 
   showClickCollectContent = () => {
-    document.querySelector('.magv2-pdp-click-and-collect-wrapper').classList.toggle('show-click-collect-content');
-  }
+    const { open } = this.state;
+
+    if (open) {
+      this.setState({
+        open: false,
+      });
+      // Remove any maxcontent allowance.
+      removeMaxHeight(this.expandRef);
+      this.expandRef.current.style.removeProperty('max-height');
+    } else {
+      this.setState({
+        open: true,
+      });
+      const maxHeight = this.expandRef.current.getAttribute('data-max-height');
+      this.expandRef.current.style.maxHeight = maxHeight;
+    }
+  };
 
   render() {
     const {
-      label, stores, location, hideInput, showNoResult,
+      label, stores, location, hideInput, showNoResult, open,
     } = this.state;
+    // Add correct class.
+    const expandedState = open === true ? 'show' : '';
     const { cncEnabled } = drupalSettings.clickNCollect;
     const { cncSubtitleAvailable } = drupalSettings.clickNCollect;
     const { cncSubtitleUnavailable } = drupalSettings.clickNCollect;
@@ -99,16 +128,19 @@ export default class PdpClickCollect extends React.PureComponent {
       return (
         <div
           className="magv2-pdp-click-and-collect-wrapper card fadeInUp"
-          onClick={this.showClickCollectContent}
           style={{ animationDelay: '1.2s' }}
+          ref={this.expandRef}
         >
-          <div className="magv2-click-collect-title-wrapper">
+          <div
+            className={`magv2-click-collect-title-wrapper title ${expandedState}`}
+            onClick={() => this.showClickCollectContent()}
+          >
             <PdpSectionTitle>
               {Drupal.t('click & collect')}
             </PdpSectionTitle>
             <div className="magv2-accordion" />
           </div>
-          <div className="magv2-click-collect-content-wrapper">
+          <div className="magv2-click-collect-content-wrapper content">
             <PdpSectionText className="click-collect-detail">
               <span>{cncSubtitleAvailable}</span>
             </PdpSectionText>

@@ -23,29 +23,6 @@
     }
   }
 
-  .magv2-pdp-section-text {
-    display: none;
-  }
-
-  &.show-home-delivery {
-    .magv2-pdp-section-text {
-      display: block;
-    }
-
-    .magv2-pdp-section-title,
-    .magv2-accordion {
-      margin-bottom: 1.25rem;
-    }
-
-    .magv2-accordion {
-      @include icon(chevronup, before) {
-        font-weight: 900;
-        font-size: 1.25rem;
-        cursor: pointer;
-      }
-    }
-  }
-
   .standard-delivery-detail {
     &::first-letter {
       text-transform: capitalize;
