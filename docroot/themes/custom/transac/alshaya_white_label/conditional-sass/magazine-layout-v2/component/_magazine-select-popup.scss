@@ -55,7 +55,6 @@
           position: absolute;
           #{$right}: 0;
           color: transparent;
-          top: 50%;
           transform: translateY(-50%);
 
           @include icon('close') {
@@ -74,6 +73,7 @@
           text-align: #{$right};
           padding: 0;
           padding-#{$right}: 1.25rem;
+          margin-top: 1.25rem;
 
           .close {
             width: 2.875rem;
@@ -102,6 +102,12 @@
             }
           }
         }
+
+        @include breakpoint($tablet) {
+          .close {
+            top: 50%;
+          }
+        }
       }
 
       &-content-wrapper {
@@ -109,7 +115,7 @@
         overflow-y: scroll;
 
         @include breakpoint($only-mobile) {
-          margin-top: 2.8125rem;
+          margin-top: 1.25rem;
           border-radius: 0.5rem;
           background: $magv2-pdp-bg;
         }
