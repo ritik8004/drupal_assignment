@@ -18,7 +18,7 @@ if (extension_loaded('newrelic')) {
   }
 
   global $_acsf_site_name;
-  newrelic_set_appname("$_acsf_site_name;alshaya.$env", '', 'true');
+  newrelic_set_appname("alshaya.$env.$_acsf_site_name;alshaya.$env", '', 'true');
   // Disable newrelic for all pages.
   newrelic_disable_autorum();
 }
