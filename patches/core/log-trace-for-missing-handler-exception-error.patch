@@ -1,25 +1,37 @@
 diff --git a/core/lib/Drupal/Core/Entity/EntityTypeManager.php b/core/lib/Drupal/Core/Entity/EntityTypeManager.php
-index 5544e4a43d..c71cdc5157 100644
+index 5544e4a..7bad453 100644
 --- a/core/lib/Drupal/Core/Entity/EntityTypeManager.php
 +++ b/core/lib/Drupal/Core/Entity/EntityTypeManager.php
-@@ -272,6 +272,16 @@ public function getHandler($entity_type_id, $handler_type) {
+@@ -10,6 +10,7 @@
+ use Drupal\Core\Extension\ModuleHandlerInterface;
+ use Drupal\Core\Plugin\DefaultPluginManager;
+ use Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery;
++use Drupal\Core\Site\Settings;
+ use Drupal\Core\StringTranslation\TranslationInterface;
+ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+@@ -271,7 +272,20 @@ public function getHandler($entity_type_id, $handler_type) {
+     if (!isset($this->handlers[$handler_type][$entity_type_id])) {
        $definition = $this->getDefinition($entity_type_id);
        $class = $definition->getHandlerClass($handler_type);
-       if (!$class) {
-+        // Logging if bootstrap cache bin for "entity_type_alter"
-+        // is empty to trace 500 error.
-+        $cache_bin = \Drupal::cache('bootstrap');
-+        $module_implements = $cache_bin->get('module_implements');
-+        $cache_data = $module_implements->data ?? [];
 +
-+        if (PHP_SAPI !== 'cli' && empty($cache_data['entity_type_alter'])) {
-+          $this->logTrace('Bootstrap cache bin for "entity_type_alter" is empty.');
+       if (!$class) {
++        if (Settings::get('check_entity_type_alter_cache', 0)) {
++          // Logging if bootstrap cache bin for "entity_type_alter"
++          // is empty to trace 500 error.
++          $cache_bin = \Drupal::cache('bootstrap');
++          $module_implements = $cache_bin->get('module_implements');
++          $cache_data = $module_implements->data ?? [];
++
++          if (PHP_SAPI !== 'cli' && empty($cache_data['entity_type_alter'])) {
++            $this->logTrace('Bootstrap cache bin for "entity_type_alter" is empty.');
++          }
 +        }
 +
          throw new InvalidPluginDefinitionException($entity_type_id, sprintf('The "%s" entity type did not specify a %s handler.', $entity_type_id, $handler_type));
        }
        $this->handlers[$handler_type][$entity_type_id] = $this->createHandlerInstance($class, $definition);
-@@ -300,4 +310,29 @@ public function createHandlerInstance($class, EntityTypeInterface $definition =
+@@ -300,4 +314,29 @@ public function createHandlerInstance($class, EntityTypeInterface $definition =
      return $handler;
    }
  
