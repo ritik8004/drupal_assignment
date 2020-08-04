@@ -120,13 +120,13 @@ export default class CompanionDetails extends React.Component {
                 </div>
               </div>
               <div className="item user-dob">
+                <label>{`${Drupal.t('Date of Birth')}*`}</label>
                 <TextField
                   type="date"
                   required={dobData.required}
                   name={dob}
                   defaultValue={defaultdob}
                   className={dob !== '' ? 'focus' : ''}
-                  label={`${Drupal.t('Date of Birth')}*`}
                   handleChange={this.handleChange}
                   section="companionData"
                 />
