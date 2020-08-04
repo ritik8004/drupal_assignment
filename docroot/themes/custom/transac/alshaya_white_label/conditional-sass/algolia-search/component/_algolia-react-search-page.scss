@@ -276,3 +276,11 @@ body.ie {
     }
   }
 }
+
+.alias--search {
+  .c-footer {
+    &.auto-margin-processed {
+      margin-top: 0 !important;
+    }
+  }
+}
