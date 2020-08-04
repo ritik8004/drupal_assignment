@@ -71,13 +71,13 @@ export default class ClientDetails extends React.Component {
             </div>
           </div>
           <div className="item user-dob">
+            <label>{`${Drupal.t('Date of Birth')}*`}</label>
             <TextField
               type="date"
               required
               name="dob"
               defaultValue={dob}
               className={dob !== '' ? 'focus' : ''}
-              label={`${Drupal.t('Date of Birth')}*`}
               handleChange={this.handleChange}
               section="clientData"
             />
