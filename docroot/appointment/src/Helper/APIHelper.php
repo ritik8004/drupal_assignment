@@ -26,17 +26,28 @@ class APIHelper {
   protected $settings;
 
   /**
+   * Cache helper.
+   *
+   * @var \App\Helper\Cache
+   */
+  protected $cache;
+
+  /**
    * ConfigurationServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
    * @param \App\Service\Config\SystemSettings $settings
    *   System Settings service.
+   * @param \App\Helper\Cache $cache
+   *   Cache Helper.
    */
   public function __construct(LoggerInterface $logger,
-                              SystemSettings $settings) {
+                              SystemSettings $settings,
+                              Cache $cache) {
     $this->logger = $logger;
     $this->settings = $settings;
+    $this->cache = $cache;
   }
 
   /**
@@ -46,6 +57,19 @@ class APIHelper {
    *   Location External Ids.
    */
   public function getlocationExternalIds() {
+    // Get Locations from cache.
+    try {
+      $item = $this->cache->getItem('allLocations');
+      if ($item) {
+        return $item;
+      }
+    }
+    catch (\ErrorException $e) {
+      $this->logger->error('Error occurred while getting locations from cache. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
     try {
       $client = $this->getSoapClient($this->getTimetradeBaseUrl() . APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL);
 
@@ -55,9 +79,13 @@ class APIHelper {
       $result = $client->__soapCall('getLocationGroup', [$param]);
       $locationExternalIds = $result->return->locationGroup ? $result->return->locationGroup->locationExternalIds : [];
 
+
       // Remove locations from array that are not needed.
       $locations_to_skip = explode(',', $appointment_settings['locations_to_skip']);
       $locationExternalIds = array_diff($locationExternalIds, $locations_to_skip);
+
+      // Set locations cache.
+      $this->cache->setItem('allLocations', $locationExternalIds);
 
       return $locationExternalIds;
     }

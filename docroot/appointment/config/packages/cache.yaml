@@ -1,5 +1,12 @@
 framework:
     cache:
+        default_memcached_provider: 'memcached://localhost'
+
+        pools:
+            # uses the default_memcached_provider from above
+            appointment.cache:
+                adapter: cache.adapter.memcached
+                tags: true
         # Unique name of your app: used to compute stable namespaces for cache keys.
         #prefix_seed: your_vendor_name/app_name
 

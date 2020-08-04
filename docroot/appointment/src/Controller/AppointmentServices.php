@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Helper\APIServicesUrls;
+use App\Helper\Cache;
 use App\Service\Drupal\Drupal;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,6 +44,13 @@ class AppointmentServices {
   protected $apiHelper;
 
   /**
+   * Cache Helper.
+   *
+   * @var \App\Helper\Cache
+   */
+  protected $cache;
+
+  /**
    * AppointmentServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -53,16 +61,20 @@ class AppointmentServices {
    *   Drupal service.
    * @param \App\Helper\APIHelper $api_helper
    *   API Helper.
+   * @param \App\Helper\Cache $cache
+   *   Cache Helper.
    */
   public function __construct(LoggerInterface $logger,
                               XmlAPIHelper $xml_api_helper,
                               Drupal $drupal,
-                              APIHelper $api_helper) {
+                              APIHelper $api_helper,
+                              Cache $cache) {
     $this->logger = $logger;
     $this->xmlApiHelper = $xml_api_helper;
     $this->drupal = $drupal;
     $this->apiHelper = $api_helper;
     $this->serviceUrl = $this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL;
+    $this->cache = $cache;
   }
 
   /**
@@ -179,7 +191,13 @@ class AppointmentServices {
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('reBookAppointment', [$param]);
       $bookingId = $result->return->result ?? '';
-
+      $clientExternalId = $this->apiHelper->checkifBelongstoUser($userId);
+      $cacheClient = $this->cache->getCacheClient();
+      $tags = [
+        'appointment_' . $request_content['appointment'],
+        'appointments_by_clientId_' . $clientExternalId,
+      ];
+      $cacheClient->invalidateTags($tags);
       return new JsonResponse($bookingId);
     }
     catch (\Exception $e) {
@@ -288,7 +306,15 @@ class AppointmentServices {
         'endDateTime' => $endDate,
 
       ];
-      $result = $client->__soapCall('getAppointmentsByCriteriaAppointmentDateRange', [$param]);
+
+      $cacheKey = 'appointments_by_clientId_' . $clientExternalId;
+      $item = $this->cache->getItem($cacheKey);
+      if ($item) {
+        $result = $item;
+      }
+      else {
+        $result = $client->__soapCall('getAppointmentsByCriteriaAppointmentDateRange', [$param]);
+      }
 
       if (!is_array($result->return->appointments)) {
         $temp = $result->return->appointments;
@@ -302,6 +328,8 @@ class AppointmentServices {
           unset($result->return->appointments[$key]);
         }
       }
+
+      $this->cache->setItem($cacheKey, $result);
 
       return new JsonResponse($result);
     }
@@ -477,6 +505,12 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
+      $cacheKey = implode('_', array_values($param['questionCriteria']));
+      $item = $this->cache->getItem($cacheKey);
+      if ($item) {
+        return new JsonResponse($item);
+      }
+
       $result = $client->__soapCall('getAppointmentQuestionsByCriteria', [$param]);
 
       $questions = $result->return->questions ?? [];
@@ -492,6 +526,7 @@ class AppointmentServices {
         ];
       }
 
+      $this->cache->setItem($cacheKey, $questionsData);
       return new JsonResponse($questionsData);
     }
     catch (\Exception $e) {
@@ -534,12 +569,26 @@ class AppointmentServices {
       $param = [
         'confirmationNumber' => $appointment,
       ];
+
+      $cacheKey = 'appointment_' . $appointment;
+      $item = $this->cache->getItem($cacheKey);
+      if ($item) {
+        // Check if Appointment Belongs to user only.
+        if (property_exists($item->return, 'appointment')) {
+          $clientExternalId = $item->return->appointment->clientExternalId;
+          if ($this->apiHelper->checkifBelongstoUser($user['email']) == $clientExternalId) {
+            return new JsonResponse($item);
+          }
+        }
+      }
+
       $appointmentData = $client->__soapCall('getAppointmentByConfirmationNumber', [$param]);
 
       // Check if Appointment Belongs to user onyl.
       if (property_exists($appointmentData->return, 'appointment')) {
         $clientExternalId = $appointmentData->return->appointment->clientExternalId;
         if ($this->apiHelper->checkifBelongstoUser($user['email']) == $clientExternalId) {
+          $this->cache->setItem($cacheKey, $appointmentData);
           return new JsonResponse($appointmentData);
         }
       }
