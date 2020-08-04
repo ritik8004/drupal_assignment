@@ -274,7 +274,7 @@
                 "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch",
                 "CORE-14983 - Set new twig_extension_hash_prefix state in invalidate method": "patches/core/set-new-twig_extension_hash_prefix-during-invalidate.patch",
                 "CORE-14778 - Make subquery table alias more informative": "https://www.drupal.org/files/issues/2020-05-26/3142927-2.patch",
-                "CORE-8488 - Add log trace for 500 error" : "patches/core/log-trace-for-missing-handler-exception-error.patch"
+                "CORE-8488 - Add log trace for 500 error" : "patches/core/missing-handler-check-cache.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
