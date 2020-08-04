@@ -11,7 +11,7 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Mark size, color, fabric and material fields to be indexed in Algolia.
+ * [5.2.0] Mark size, color, fabric and material fields to be indexed in Algolia
  * Remove size_lhn and color_lhn as facets and replace them with size and color
  * facets respectively. Also replace their facet blocks similarly.
  */
