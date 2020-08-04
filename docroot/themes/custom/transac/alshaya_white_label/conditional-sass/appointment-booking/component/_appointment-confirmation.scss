@@ -34,8 +34,12 @@
 
         @include breakpoint($upto-tablet-landscape) {
           padding-bottom: 0.625rem;
-          display: flex;
-          flex-direction: column-reverse;
+        }
+
+        .appointment-flow-action {
+          @include breakpoint($tablet) {
+            display: inline-block;
+          }
         }
       }
 
@@ -173,7 +177,7 @@
       .view-my-appointments-button {
         color: $appointment-confirmation-blue-txt;
         background: $appointment-confirmation-view-appointment-btn;
-        border: 0.0625rem solid $appointment-confirmation-view-appointment-btn;
+        border: 0.0625rem solid $appointment-confirmation-view-appointment-btn-border;
         border-radius: 0.1875rem;
         padding: 0.6875rem 2.0625rem;
       }
@@ -186,7 +190,7 @@
         padding: 0.6875rem 3.125rem;
         margin-#{$left}: 1.5625rem;
 
-        @include breakpoint($upto-tablet-landscape) {
+        @include breakpoint($upto-tablet) {
           margin-#{$left}: 0;
         }
       }
@@ -197,7 +201,7 @@
         line-height: 1rem;
         font-family: $alshaya-bold;
 
-        @include breakpoint($upto-tablet-landscape) {
+        @include breakpoint($upto-tablet) {
           width: 100%;
         }
       }
