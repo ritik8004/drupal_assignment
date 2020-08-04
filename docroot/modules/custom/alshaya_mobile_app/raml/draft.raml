@@ -314,6 +314,10 @@ schemas:
               "type": "string",
               "enum": [ "block", "body", "promo_block", "product_carousel_category" ]
             },
+            "parent_type": {
+              "type": "string",
+              "enum": [ "1_row_1_col", "1_row_4_col", "1_row_2_col", "1_row_1_col", "1_row_3_col_flex" ]
+            },
             "item": {
               "description": "Contains advanced page node body.",
               "type": "string"
@@ -1476,6 +1480,7 @@ schemas:
                     },
                     {
                       "type": "product_carousel_category",
+                      "parent_type": "1_row_2_col",
                       "title": "TOP SELLERS",
                       "limit": "12",
                       "accordion": false,
