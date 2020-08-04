@@ -26,12 +26,13 @@ function alshaya_pbk_transac_update_8001() {
   $sku_fields_manager->updateFieldMetaInfo('fabric', ['index' => 1]);
   $sku_fields_manager->updateFieldMetaInfo('material', ['index' => 1]);
 
-  // Size and color facets are not required as per brand team.
+  // Size and color facets are not required as per brand team so marking these
+  // not to facet in order to avoid confusion if data is present.
   $sku_fields_manager->updateFieldMetaInfo('size_lhn', ['facet' => 0]);
   $sku_fields_manager->updateFieldMetaInfo('color_lhn', ['facet' => 0]);
 
   // Fetch field data so that we can send them in the update hook.
-  $custom_fields = $sku_fields_manager->getAllCustomFields();
+  $custom_fields = $sku_fields_manager->getFieldAdditions(TRUE);
   $changed_fields = [];
   foreach (['size', 'color', 'size_lhn', 'color_lhn'] as $field_code) {
     if (isset($custom_fields[$field_code])) {
