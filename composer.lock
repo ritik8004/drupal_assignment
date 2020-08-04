@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "366c7e9be36f9941e1963c6d78d554bd",
+    "content-hash": "145bb0e6b337b525db654dbadb156644",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -5612,7 +5612,7 @@
                     "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch",
                     "CORE-14983 - Set new twig_extension_hash_prefix state in invalidate method": "patches/core/set-new-twig_extension_hash_prefix-during-invalidate.patch",
                     "CORE-14778 - Make subquery table alias more informative": "https://www.drupal.org/files/issues/2020-05-26/3142927-2.patch",
-                    "CORE-8488 - Add log trace for 500 error": "patches/core/log-trace-for-missing-handler-exception-error.patch",
+                    "CORE-8488 - Add log trace for 500 error": "patches/core/missing-handler-check-cache.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-03-05/2815221-116.patch",
