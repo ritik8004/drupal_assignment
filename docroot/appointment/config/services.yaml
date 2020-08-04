@@ -23,7 +23,7 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
         arguments:
-            $logger: '@monolog.logger.middleware'
+            $logger: '@monolog.logger.appointment_middleware'
 
     # This formats the log messages as per drupal like.
     alshaya_appointment_middleware.log_fromatter:
