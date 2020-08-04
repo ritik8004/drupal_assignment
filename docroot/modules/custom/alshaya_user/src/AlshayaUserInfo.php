@@ -13,6 +13,8 @@ use Drupal\Core\Entity\EntityRepository;
  */
 class AlshayaUserInfo {
 
+  const INVISIBLE_CHARACTER = '&#8203;';
+
   /**
    * The current user service object.
    *
@@ -52,7 +54,7 @@ class AlshayaUserInfo {
    *   The First name of the user.
    */
   public function getFirstName() {
-    return $this->userObject->get('field_first_name')->getString();
+    return self::getUserNameField($this->userObject, 'field_first_name');
   }
 
   /**
@@ -62,7 +64,7 @@ class AlshayaUserInfo {
    *   The Last name of the user.
    */
   public function getLastName() {
-    return $this->userObject->get('field_last_name')->getString();
+    return self::getUserNameField($this->userObject, 'field_last_name');
   }
 
   /**
@@ -75,10 +77,40 @@ class AlshayaUserInfo {
    *   Combined first and last name with provided glue.
    */
   public function getName($glue = ' ') {
-    if (!empty($this->getFirstName())) {
-      return implode($glue, [$this->getFirstName(), $this->getLastName()]);
-    }
-    return '';
+    return self::getFullName($this->userObject, $glue);
+  }
+
+  /**
+   * Return full name for given user object.
+   *
+   * @param object $user
+   *   The user object.
+   * @param string $glue
+   *   The glue to use to attach first and last name.
+   *
+   * @return string
+   *   Combined first and last name with provided glue or just empty string.
+   */
+  public static function getFullName($user, $glue = ' ') {
+    $firstName = self::getUserNameField($user, 'field_first_name');
+    $lastName = self::getUserNameField($user, 'field_last_name');
+    return !empty($firstName) ? implode($glue, [$firstName, $lastName]) : '';
+  }
+
+  /**
+   * Return the given name field value.
+   *
+   * @param object $user
+   *   The user object.
+   * @param string $field
+   *   The field name.
+   *
+   * @return mixed|null
+   *   Return null if it contains invisible character or the value as is.
+   */
+  public static function getUserNameField($user, $field) {
+    $fieldValue = $user->get($field)->getString();
+    return ($fieldValue == self::INVISIBLE_CHARACTER) ? NULL : $fieldValue;
   }
 
 }

@@ -5,6 +5,7 @@
  * Module file for alshaya_user.
  */
 
+use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
@@ -46,10 +47,15 @@ function alshaya_user_module_implements_alter(&$implementations, $hook) {
  */
 function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $user = $form_state->getFormObject()->getEntity();
+  $firstName = $user->get('field_first_name')->getString();
+  $fullName[] = ($firstName == AlshayaUserInfo::INVISIBLE_CHARACTER) ? NULL : $firstName;
+  $lastName = $user->get('field_last_name')->getString();
+  $fullName[] = ($lastName == AlshayaUserInfo::INVISIBLE_CHARACTER) ? NULL : $lastName;
+
   $form['full_name'] = [
     '#type' => 'textfield',
     '#title' => t('Full Name'),
-    '#default_value' => $user->get('field_first_name')->getString() . ' ' . $user->get('field_last_name')->getString(),
+    '#default_value' => implode(' ', array_filter($fullName)),
     '#size' => '120',
     '#required' => TRUE,
     '#attributes' => ['specialchar' => 'specialchar'],
