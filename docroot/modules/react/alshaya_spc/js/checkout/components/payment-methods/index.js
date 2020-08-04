@@ -161,14 +161,19 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
-    // If the payment is already checked do not process again.
-    if (paymentDiv.checked) {
+    const { cart: cartData } = this.props;
+
+    const methodIdentifer = `${method}:${cartData.cart.cart_id}`;
+
+    // If we have already triggered once for the method and cart do nothing.
+    const lastSelectedMethodIdentifier = localStorage.getItem('last_selected_payment');
+    if (paymentDiv.checked && lastSelectedMethodIdentifier === methodIdentifer) {
       return;
     }
 
-    paymentDiv.checked = true;
+    localStorage.setItem('last_selected_payment', methodIdentifer);
 
-    const { cart: cartData } = this.props;
+    paymentDiv.checked = true;
 
     // Dispatch event for GTM checkout step 3.
     dispatchCustomEvent('refreshCartOnPaymentMethod', {
