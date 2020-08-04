@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -40,6 +41,13 @@ class AlshayaSpcLoginForm extends FormBase {
   protected $customerHelper;
 
   /**
+   * The redirect destination service.
+   *
+   * @var \Drupal\Core\Routing\RedirectDestinationInterface
+   */
+  protected $redirectDestination;
+
+  /**
    * AlshayaSpcLoginForm constructor.
    *
    * @param \Drupal\Component\Utility\EmailValidatorInterface $email_validator
@@ -48,15 +56,19 @@ class AlshayaSpcLoginForm extends FormBase {
    *   The entity type manager.
    * @param \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $customer_helper
    *   The login helper.
+   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
+   *   The redirect destination service.
    */
   public function __construct(
     EmailValidatorInterface $email_validator,
     EntityTypeManagerInterface $entity_type_manager,
-    AlshayaSpcCustomerHelper $customer_helper
+    AlshayaSpcCustomerHelper $customer_helper,
+    RedirectDestinationInterface $redirect_destination
   ) {
     $this->emailValidator = $email_validator;
     $this->entityTypeManager = $entity_type_manager;
     $this->customerHelper = $customer_helper;
+    $this->redirectDestination = $redirect_destination;
   }
 
   /**
@@ -66,7 +78,8 @@ class AlshayaSpcLoginForm extends FormBase {
     return new static(
       $container->get('email.validator'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_spc.customer_helper')
+      $container->get('alshaya_spc.customer_helper'),
+      $container->get('redirect.destination')
     );
   }
 
@@ -143,6 +156,7 @@ class AlshayaSpcLoginForm extends FormBase {
         'title' => $this->t('Send password reset instructions via email.'),
         'class' => ['request-password-link'],
       ],
+      'query' => $this->redirectDestination->getAsArray(),
     ]);
 
     $form['request_password'] = Link::fromTextAndUrl($this->t('Forgot password?'), $request_password_link)->toRenderable();
