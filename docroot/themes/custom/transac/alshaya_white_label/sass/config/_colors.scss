@@ -113,6 +113,7 @@ $neon-green: #5cf0cb;
 $boston-red: #c00;
 $niagara: #0abb76;
 $new-pdp-blue: #007aff;
+$new-pdp-purple: #ae87fb;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1341,6 +1342,7 @@ $magv2-crossel-upsell-sublabel: $grey-light;
 $magv2-crossel-upsell-bg: $white-five;
 $magv2-crossel-upsell-view-more-link: $new-pdp-blue;
 $magv2-crossel-upsell-slider-arrow: $warm-grey-two;
+$magv2-crossel-upsell-slider-arrow-hover: $mothercare-black;
 $magv2-sticky-header-bg: $white-five;
 $magv2-content-bg: $white-five;
 $magv2-click-collect-store-list-border: $warm-grey-two;
@@ -1363,3 +1365,7 @@ $magv2-product-swatch-active-border: $mothercare-black;
 $magv2-sticky-header-box-shadow: $mothercare-black;
 $magv2-qty-btn-bg: $white-five;
 $magv2-size-option-disabled: $warm-grey-two;
+$magv2-promo-text: $white-five;
+$magv2-promo-bg: $new-pdp-purple;
+$magv2-promo-label-bg: $new-pdp-blue;
+$magv2-promo-label-border: $new-pdp-blue;

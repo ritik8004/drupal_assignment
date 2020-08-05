@@ -20,7 +20,7 @@ export const updateCart = (url, postData) => axios({
 /**
  * Get post data on add to cart.
  */
-export const getPostData = (skuCode, variantSelected) => {
+export const getPostData = (skuCode, variantSelected, parentSKU) => {
   const cartAction = 'add item';
   const cartData = Drupal.alshayaSpc.getCartData();
   const cartId = (cartData) ? cartData.cart_id : null;
@@ -28,7 +28,7 @@ export const getPostData = (skuCode, variantSelected) => {
 
   const postData = {
     action: cartAction,
-    sku: variantSelected,
+    sku: parentSKU,
     quantity: qty,
     cart_id: cartId,
   };
@@ -36,7 +36,7 @@ export const getPostData = (skuCode, variantSelected) => {
   const productData = {
     quantity: qty,
     parentSku: skuCode,
-    sku: variantSelected,
+    sku: parentSKU,
     variant: variantSelected,
   };
 
@@ -53,7 +53,6 @@ export const triggerAddToCart = (
   configurableCombinations = null,
   skuCode,
   addToCartBtn,
-  variantSelected,
 ) => {
   const productData = productDataValue;
   const cartData = Drupal.alshayaSpc.getCartData();
@@ -86,6 +85,7 @@ export const triggerAddToCart = (
     let { maxSaleQty } = productInfo[skuCode];
     let maxSaleQtyParent = productInfo[skuCode].max_sale_qty_parent;
     const gtmAttributes = productInfo[skuCode].gtm_attributes;
+    let options = [];
 
     if (configurableCombinations) {
       const productVariantInfo = productInfo[skuCode].variants[productData.variant];
@@ -96,6 +96,7 @@ export const triggerAddToCart = (
       configurables = productVariantInfo.configurableOptions;
       maxSaleQty = productVariantInfo.maxSaleQty;
       maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
+      options = productVariantInfo.configurableOptions;
 
       if (productVariantInfo.url !== undefined) {
         const langcode = document.getElementsByTagName('html')[0].getAttribute('lang');
@@ -110,6 +111,7 @@ export const triggerAddToCart = (
       url: productUrl,
       image: productData.image,
       price,
+      options,
       configurables,
       promotions,
       maxSaleQty,
@@ -152,8 +154,9 @@ export const triggerAddToCart = (
     }, addToCartNotificationTime * 1000);
 
     // Refresh dynamic promo labels
-    const skuMainCode = drupalSettings.parentSkuArray[variantSelected];
-    ReactDOM.render(<PdpDynamicPromotions skuMainCode={skuMainCode} />, document.getElementById('dynamic-label'));
+    if (document.getElementById('dynamic-label')) {
+      ReactDOM.render(<PdpDynamicPromotions skuMainCode={parentSKU} />, document.getElementById('dynamic-label'));
+    }
   }
 };
 
@@ -255,7 +258,8 @@ export const addToCartConfigurable = (e, id, configurableCombinations, skuCode, 
   });
 
   const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
-  const getPost = getPostData(skuCode, variantSelected);
+  const parentSKU = productInfo[skuCode].variants[variantSelected].parent_sku;
+  const getPost = getPostData(skuCode, variantSelected, parentSKU);
 
   const postData = getPost[0];
   const productData = getPost[1];
@@ -263,7 +267,7 @@ export const addToCartConfigurable = (e, id, configurableCombinations, skuCode, 
   postData.options = options;
   productData.product_name = productInfo[skuCode].variants[variantSelected].cart_title;
   productData.image = productInfo[skuCode].variants[variantSelected].cart_image;
-  const cartEndpoint = drupalSettings.cart_update_endpoint;
+  const cartEndpoint = `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`;
 
   updateCart(cartEndpoint, postData).then(
     (response) => {
@@ -274,7 +278,6 @@ export const addToCartConfigurable = (e, id, configurableCombinations, skuCode, 
         configurableCombinations,
         skuCode,
         addToCartBtn,
-        variantSelected,
       );
     },
   )
@@ -294,7 +297,7 @@ export const addToCartSimple = (e, id, skuCode, productInfo) => {
 
   const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
 
-  const getPost = getPostData(skuCode, variantSelected);
+  const getPost = getPostData(skuCode, variantSelected, skuCode);
 
   const postData = getPost[0];
   const productData = getPost[1];
@@ -302,11 +305,11 @@ export const addToCartSimple = (e, id, skuCode, productInfo) => {
   productData.productName = productInfo[skuCode].cart_title;
   productData.image = productInfo[skuCode].cart_image;
 
-  const cartEndpoint = drupalSettings.cart_update_endpoint;
+  const cartEndpoint = `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`;
 
   updateCart(cartEndpoint, postData).then(
     (response) => {
-      triggerAddToCart(response, productData, productInfo, skuCode, addToCartBtn, variantSelected);
+      triggerAddToCart(response, productData, productInfo, skuCode, addToCartBtn);
     },
   )
     .catch((error) => {

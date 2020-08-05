@@ -2,6 +2,7 @@
   &-crossell-upsell {
     &-wrapper {
       clear: both;
+      font-family: $alshaya-thin;
 
       .magv2-pdp-crossell-upsell-container {
         padding-top: 3.75rem;
@@ -76,6 +77,10 @@
             }
           }
 
+          &-title-wrapper {
+            width: 100%;
+          }
+
           &-price {
             width: 100%;
           }
@@ -144,6 +149,19 @@
 
       .magv2-pdp-brand-logo {
         display: none;
+      }
+
+      .promotions {
+        &.promotions-full-view-mode {
+          p {
+            margin: 0;
+            padding: 0 1.25rem 1.25rem;
+          }
+        }
+      }
+
+      .magv2-detail-wrapper + .promotions-full-view-mode {
+        margin-top: -1.25rem;
       }
     }
 
@@ -246,15 +264,26 @@
   }
 
   .slider-pagers {
-    padding: 0.3125rem;
+    width: 2.375rem;
+    height: 2.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
     border: 0.063rem solid $magv2-crossel-upsell-slider-arrow;
+    transition: all 0.3s ease;
     cursor: pointer;
+
+    &:hover {
+      transform: scale(1.05);
+      border-color: $magv2-crossel-upsell-slider-arrow-hover;
+    }
 
     &.disabled {
       pointer-events: none;
-      opacity: 0.6;
+      opacity: 0.3;
       cursor: unset;
+      transform: scale(1);
     }
 
     &::before {
@@ -265,6 +294,11 @@
   .slider-pagination {
     font-size: 1.125rem;
     padding: 0 0.625rem;
+
+    > span {
+      display: inline-block;
+      padding: 0 0.1875rem;
+    }
   }
 }
 
