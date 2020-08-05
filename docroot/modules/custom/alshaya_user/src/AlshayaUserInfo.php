@@ -94,7 +94,7 @@ class AlshayaUserInfo {
   public static function getFullName($user, $glue = ' ') {
     $firstName = self::getUserNameField($user, 'field_first_name');
     $lastName = self::getUserNameField($user, 'field_last_name');
-    return !empty($firstName) ? implode($glue, [$firstName, $lastName]) : '';
+    return !empty($firstName) ? implode($glue, array_filter([$firstName, $lastName])) : '';
   }
 
   /**
@@ -110,7 +110,7 @@ class AlshayaUserInfo {
    */
   public static function getUserNameField($user, $field) {
     $fieldValue = $user->get($field)->getString();
-    return ($fieldValue == self::INVISIBLE_CHARACTER) ? NULL : $fieldValue;
+    return ($fieldValue == self::INVISIBLE_CHARACTER) ? '' : $fieldValue;
   }
 
 }

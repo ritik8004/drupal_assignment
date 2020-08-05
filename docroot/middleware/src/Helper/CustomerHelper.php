@@ -9,6 +9,8 @@ namespace App\Helper;
  */
 class CustomerHelper {
 
+  const INVISIBLE_CHARACTER = '&#8203;';
+
   /**
    * Helper function to format address as required by frontend.
    *
@@ -51,8 +53,8 @@ class CustomerHelper {
     }
 
     $data['id'] = $customer['id'] ?? 0;
-    $data['firstname'] = $customer['firstname'] ?? '';
-    $data['lastname'] = $customer['lastname'] ?? '';
+    $data['firstname'] = $customer['firstname'] && $customer['firstname'] != self::INVISIBLE_CHARACTER ? $customer['firstname'] : '';
+    $data['lastname'] = $customer['lastname'] && $customer['lastname'] != self::INVISIBLE_CHARACTER ? $customer['lastname'] : '';
     $data['email'] = $customer['email'] ?? '';
 
     $data['addresses'] = [];
