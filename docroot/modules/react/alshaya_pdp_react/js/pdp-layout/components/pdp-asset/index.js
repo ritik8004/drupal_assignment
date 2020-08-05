@@ -61,10 +61,9 @@ export default class PdpAsset extends React.Component {
           <LazyLoad
             debounce={false}
             throttle={250}
-            offsetVertical={50}
+            offsetTop={0}
             height={486.8}
             width={486.8}
-            onContentVisible={() => console.log(imageUrl)}
           >
             <img
               src={imageUrl}
