@@ -26,6 +26,7 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\file\Entity\File;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Component\Utility\UrlHelper;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -629,6 +630,14 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
             $image_file = $this->fileStorage->load($row[0]['target_id']);
             if ($image_file instanceof File) {
               $row[0]['url'] = file_create_url($image_file->getFileUri());
+            }
+          }
+        }
+        if ($field_name == 'field_link' || $field_name == 'field_button_link') {
+          if (UrlHelper::isValid($row[0]['uri'])) {
+            $url_object = Url::fromUri($row[0]['uri']);
+            if (isset($url_object)) {
+              $row[0]['deeplink'] = $this->getDeepLinkFromUrl($url_object);
             }
           }
         }
