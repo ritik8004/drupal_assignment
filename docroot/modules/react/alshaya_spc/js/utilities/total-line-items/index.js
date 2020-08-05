@@ -77,7 +77,7 @@ class TotalLineItems extends React.Component {
       shippingAmount = 0;
     }
 
-    // We don't show surcharhe info in total on cart page.
+    // We don't show surcharge info in total on cart page.
     const baseGrandTotal = (isCartPage === false)
       ? totals.base_grand_total
       : totals.base_grand_total_without_surcharge;
@@ -95,7 +95,7 @@ class TotalLineItems extends React.Component {
           />
         </ConditionalView>
 
-        {/* Not show surcharge info on cart page. */}
+        {/* Show surcharge on checkout page only if available. */}
         <ConditionalView condition={totals.surcharge > 0 && isCartPage === false}>
           <TotalLineItem
             tooltip
