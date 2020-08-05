@@ -1,16 +1,18 @@
 import React from 'react';
 import moment from 'moment';
 import { getStorageInfo } from '../../../utilities/storage';
+import { getDateFormat } from '../../../utilities/helper';
 
 export default class AppointmentSlots extends React.Component {
   constructor(props) {
     super(props);
 
     const localStorageValues = getStorageInfo();
-    const { selectedSlot } = localStorageValues;
+    const { selectedSlot, appointmentId } = localStorageValues;
     if (selectedSlot) {
       this.state = {
         timeSlot: selectedSlot,
+        appointmentId,
       };
     } else {
       this.state = {
@@ -36,7 +38,44 @@ export default class AppointmentSlots extends React.Component {
       afternoon: [],
       evening: [],
     };
-    const { items, notFound } = this.props;
+    const { notFound } = this.props;
+    let { items } = this.props;
+    const { timeSlot, appointmentId } = this.state;
+
+    // Push selected timeslot when editing appointment.
+    if (appointmentId) {
+      if (items.return === undefined) {
+        items = {
+          return: [timeSlot],
+        };
+      } else {
+        let found = false;
+        const selectedDate = moment(timeSlot.appointmentSlotTime).format(getDateFormat());
+        const slotDate = moment(items.return[0].appointmentSlotTime).format(getDateFormat());
+        // Check if date is same and slot doesn't exist.
+        if (selectedDate === slotDate) {
+          for (let i = 0; i < items.return.length; i++) {
+            if (selectedDate !== slotDate) {
+              found = true;
+              break;
+            }
+            if (items.return[i].appointmentSlotTime === timeSlot.appointmentSlotTime) {
+              found = true;
+              break;
+            }
+          }
+        } else {
+          found = true;
+        }
+        if (!found) {
+          items.return.push(timeSlot);
+          items.return.sort(
+            (a, b) => new Date(a.appointmentSlotTime) - new Date(b.appointmentSlotTime),
+          );
+        }
+      }
+    }
+
     if (items !== null && items !== undefined && Object.prototype.hasOwnProperty.call(items, 'return')) {
       for (let i = 0; i < items.return.length; i++) {
         const h = moment(items.return[i].appointmentSlotTime).format('HH');
@@ -50,8 +89,6 @@ export default class AppointmentSlots extends React.Component {
         }
       }
     }
-
-    const { timeSlot } = this.state;
 
     listMorningItems = timeSlots.morning.map((item) => (
       <li className="morning-time-slots">
