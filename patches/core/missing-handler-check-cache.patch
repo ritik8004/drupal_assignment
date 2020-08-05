@@ -1,0 +1,64 @@
+diff --git a/core/lib/Drupal/Core/Entity/EntityTypeManager.php b/core/lib/Drupal/Core/Entity/EntityTypeManager.php
+index 5544e4a..85d9caf 100644
+--- a/core/lib/Drupal/Core/Entity/EntityTypeManager.php
++++ b/core/lib/Drupal/Core/Entity/EntityTypeManager.php
+@@ -10,6 +10,7 @@
+ use Drupal\Core\Extension\ModuleHandlerInterface;
+ use Drupal\Core\Plugin\DefaultPluginManager;
+ use Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery;
++use Drupal\Core\Site\Settings;
+ use Drupal\Core\StringTranslation\TranslationInterface;
+ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+@@ -271,7 +272,21 @@ public function getHandler($entity_type_id, $handler_type) {
+     if (!isset($this->handlers[$handler_type][$entity_type_id])) {
+       $definition = $this->getDefinition($entity_type_id);
+       $class = $definition->getHandlerClass($handler_type);
++
+       if (!$class) {
++        if (Settings::get('check_entity_type_alter_cache', 0)) {
++          // Logging if bootstrap cache bin for "entity_type_alter"
++          // is empty to trace 500 error.
++          $cache_bin = \Drupal::cache('bootstrap');
++          $module_implements = $cache_bin->get('module_implements');
++          $cache_data = $module_implements->data ?? [];
++
++          if (PHP_SAPI !== 'cli') {
++            $data = empty($cache_data['entity_type_alter']) ? '' : var_export($cache_data['entity_type_alter'], TRUE);
++            $this->logTrace('Bootstrap cache bin for "entity_type_alter" is not as expected: ' . $data);
++          }
++        }
++
+         throw new InvalidPluginDefinitionException($entity_type_id, sprintf('The "%s" entity type did not specify a %s handler.', $entity_type_id, $handler_type));
+       }
+       $this->handlers[$handler_type][$entity_type_id] = $this->createHandlerInstance($class, $definition);
+@@ -300,4 +315,29 @@ public function createHandlerInstance($class, EntityTypeInterface $definition =
+     return $handler;
+   }
+ 
++  /**
++   * Send the output from a backtrace to the error_log
++   * @param string $message Optional message that will be sent the the error_log before the backtrace
++   */
++  private function logTrace($message = '') {
++    $trace = debug_backtrace();
++    if ($message) {
++      error_log($message);
++    }
++
++    $caller = array_shift($trace);
++    $function_name = $caller['function'];
++    error_log(sprintf('%s: Called from %s:%s', $function_name, $caller['file'], $caller['line']));
++
++    foreach ($trace as $entry_id => $entry) {
++      $entry['file'] = $entry['file'] ? : '-';
++      $entry['line'] = $entry['line'] ? : '-';
++      if (empty($entry['class'])) {
++        error_log(sprintf('%s %3s. %s() %s:%s', $function_name, $entry_id + 1, $entry['function'], $entry['file'], $entry['line']));
++      } else {
++        error_log(sprintf('%s %3s. %s->%s() %s:%s', $function_name, $entry_id + 1, $entry['class'], $entry['function'], $entry['file'], $entry['line']));
++      }
++    }
++  }
++
+ }
