@@ -28,6 +28,7 @@ const PdpLayout = () => {
     setSkuMainCode(parentSkuSelected);
   };
 
+  // Get product data based on sku.
   const productValues = getProductValues(skuItemCode, variant, setVariant);
   const {
     brandLogo,
