@@ -663,12 +663,6 @@ class CartController {
         }
 
         $postData = $request_content['postData'];
-        // Get exiting cart.
-        $cart = $this->cart->getCart();
-        // If cart has shipping method set, reset that.
-        if (!empty($cart['shipping']['method'])) {
-          $this->cart->updateCart(['extension' => ['action' => CartActions::CART_RESET]]);
-        }
 
         $cart = $this->cart->updateCart($postData);
         break;
