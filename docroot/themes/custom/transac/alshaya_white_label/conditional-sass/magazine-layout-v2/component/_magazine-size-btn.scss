@@ -37,3 +37,12 @@
     }
   }
 }
+
+.magv2-size-btn-wrapper + .magv2-qty-wrapper {
+  margin-#{$left}: 1.25rem;
+
+  @include breakpoint($only-tablet) {
+    width: calc(50% - 1.563rem);
+    margin-#{$left}: 0.625rem;
+  }
+}
