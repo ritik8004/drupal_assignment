@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PdpDynamicPromotions from '../pdp-layout/components/pdp-dynamic-promotions';
 
 /**
  * Clear cart data.
@@ -53,6 +52,7 @@ export const triggerAddToCart = (
   configurableCombinations = null,
   skuCode,
   addToCartBtn,
+  pdpLabelRefresh,
 ) => {
   const productData = productDataValue;
   const cartData = Drupal.alshayaSpc.getCartData();
@@ -153,10 +153,8 @@ export const triggerAddToCart = (
       }
     }, addToCartNotificationTime * 1000);
 
-    // Refresh dynamic promo labels
-    if (document.getElementById('dynamic-label')) {
-      ReactDOM.render(<PdpDynamicPromotions skuMainCode={parentSKU} />, document.getElementById('dynamic-label'));
-    }
+    // Refresh dynamic promo labels on cart update.
+    pdpLabelRefresh(cartData);
   }
 };
 
@@ -236,7 +234,14 @@ export const fetchAvailableStores = (coords) => {
 /**
  * Add to cart on click event for configurable products.
  */
-export const addToCartConfigurable = (e, id, configurableCombinations, skuCode, productInfo) => {
+export const addToCartConfigurable = (
+  e,
+  id,
+  configurableCombinations,
+  skuCode,
+  productInfo,
+  pdpLabelRefresh,
+) => {
   e.preventDefault();
   // Adding add to cart loading.
   const addToCartBtn = document.getElementById(id);
@@ -278,6 +283,7 @@ export const addToCartConfigurable = (e, id, configurableCombinations, skuCode, 
         configurableCombinations,
         skuCode,
         addToCartBtn,
+        pdpLabelRefresh,
       );
     },
   )
@@ -289,7 +295,7 @@ export const addToCartConfigurable = (e, id, configurableCombinations, skuCode, 
 /**
  * Add to cart on click event for simple products.
  */
-export const addToCartSimple = (e, id, skuCode, productInfo) => {
+export const addToCartSimple = (e, id, skuCode, productInfo, pdpLabelRefresh) => {
   e.preventDefault();
   // Adding add to cart loading.
   const addToCartBtn = document.getElementById(id);
@@ -309,7 +315,7 @@ export const addToCartSimple = (e, id, skuCode, productInfo) => {
 
   updateCart(cartEndpoint, postData).then(
     (response) => {
-      triggerAddToCart(response, productData, productInfo, skuCode, addToCartBtn);
+      triggerAddToCart(response, productData, productInfo, skuCode, addToCartBtn, pdpLabelRefresh);
     },
   )
     .catch((error) => {

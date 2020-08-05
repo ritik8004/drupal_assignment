@@ -11,7 +11,6 @@ import PdpClickCollect from '../pdp-click-and-collect';
 import PdpRelatedProducts from '../pdp-related-products';
 import PdpProductLabels from '../pdp-product-labels';
 import PdpPromotionLabel from '../pdp-promotion-label';
-import PdpDynamicPromotions from '../pdp-dynamic-promotions';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -26,6 +25,14 @@ const PdpLayout = () => {
   const pdpRefresh = (variantSelected, parentSkuSelected) => {
     setVariant(variantSelected);
     setSkuMainCode(parentSkuSelected);
+  };
+
+  // Refresh dynamic promo label based on cart data.
+  const cartData = Drupal.alshayaSpc.getCartData();
+  const [cartDataValue, setCartData] = useState(cartData);
+
+  const pdpLabelRefresh = (cartDataVal) => {
+    setCartData(cartDataVal);
   };
 
   // Get product data based on sku.
@@ -97,16 +104,19 @@ const PdpLayout = () => {
             brandLogoTitle={brandLogoTitle}
           />
           <div className="promotions promotions-full-view-mode">
-            <PdpPromotionLabel skuItemCode={skuItemCode} />
-            <div id="dynamic-promo-labels">
-              <PdpDynamicPromotions skuMainCode={skuMainCode} />
-            </div>
+            <PdpPromotionLabel
+              skuItemCode={skuItemCode}
+              variantSelected={variant}
+              skuMainCode={skuMainCode}
+              cartDataValue={cartDataValue}
+            />
           </div>
           <PdpCart
             skuCode={skuItemCode}
             configurableCombinations={configurableCombinations}
             productInfo={productInfo}
             pdpRefresh={pdpRefresh}
+            pdpLabelRefresh={pdpLabelRefresh}
             childRef={(ref) => { content = ref; }}
           />
           <PdpDescription

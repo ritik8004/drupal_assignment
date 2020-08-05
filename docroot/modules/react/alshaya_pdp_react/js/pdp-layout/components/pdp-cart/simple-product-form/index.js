@@ -44,7 +44,7 @@ class SimpleProductForm extends React.Component {
   }
 
   render() {
-    const { skuCode, productInfo } = this.props;
+    const { skuCode, productInfo, pdpLabelRefresh } = this.props;
     const { checkoutFeatureStatus } = drupalSettings;
     const variantSelected = skuCode;
     const { stockQty } = productInfo[variantSelected];
@@ -68,7 +68,7 @@ class SimpleProductForm extends React.Component {
                 className="magv2-button"
                 id="add-to-cart-main"
                 type="submit"
-                onClick={(e) => addToCartSimple(e, 'add-to-cart-main', skuCode, productInfo)}
+                onClick={(e) => addToCartSimple(e, 'add-to-cart-main', skuCode, productInfo, pdpLabelRefresh)}
               >
                 {Drupal.t('Add To Bag')}
               </button>

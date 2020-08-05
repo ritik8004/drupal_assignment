@@ -143,7 +143,7 @@ class ConfigurableProductForm extends React.Component {
 
   render() {
     const {
-      configurableCombinations, skuCode, productInfo, pdpRefresh,
+      configurableCombinations, skuCode, productInfo, pdpRefresh, pdpLabelRefresh,
     } = this.props;
     const { checkoutFeatureStatus } = drupalSettings;
 
@@ -212,7 +212,7 @@ class ConfigurableProductForm extends React.Component {
                 className="magv2-button"
                 id="add-to-cart-main"
                 type="submit"
-                onClick={(e) => addToCartConfigurable(e, 'add-to-cart-main', configurableCombinations, skuCode, productInfo)}
+                onClick={(e) => addToCartConfigurable(e, 'add-to-cart-main', configurableCombinations, skuCode, productInfo, pdpLabelRefresh)}
               >
                 {Drupal.t('Add To Bag')}
               </button>
