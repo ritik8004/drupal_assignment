@@ -173,7 +173,7 @@
     &-title {
       font-size: 1.5rem;
       padding-bottom: 1.875rem;
-      font-weight: bold;
+      font-family: $alshaya-bold;
 
       @include breakpoint($only-mobile) {
         font-size: 1.25rem;
@@ -219,7 +219,7 @@
         @include icon(chevron#{$right}, after) {
           color: $magv2-crossel-upsell-view-more-link;
           font-size: 1.125rem;
-          font-weight: 700;
+          font-weight: bold;
         }
       }
     }

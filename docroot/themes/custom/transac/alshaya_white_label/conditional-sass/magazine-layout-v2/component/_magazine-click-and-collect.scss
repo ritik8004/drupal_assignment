@@ -17,34 +17,10 @@
     }
   }
 
-  .magv2-click-collect-content-wrapper {
-    display: none;
-  }
-
   .magv2-click-collect-title-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  &.show-click-collect-content {
-    .magv2-accordion {
-      margin-bottom: 1.25rem;
-
-      @include icon(chevronup, before) {
-        font-weight: 900;
-        font-size: 1.25rem;
-        cursor: pointer;
-      }
-    }
-
-    .magv2-pdp-section-title {
-      margin-bottom: 1.25rem;
-    }
-
-    .magv2-click-collect-content-wrapper {
-      display: block;
-    }
   }
 
   .instore-wrapper {
