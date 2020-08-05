@@ -47,6 +47,10 @@
           width: 23.43rem;
         }
 
+        label {
+          font-family: $alshaya-bold;
+        }
+
         .close {
           cursor: pointer;
           position: absolute;
@@ -161,6 +165,7 @@
               display: flex;
               margin-bottom: 1.25rem;
               align-items: center;
+              font-family: $alshaya-bold;
             }
 
             a {
@@ -241,17 +246,15 @@ body.select-overlay {
             margin-top: 1.8125rem;
           }
 
-          @include breakpoint($desktop) {
-            margin-top: 2.8125rem;
-          }
-
           .non-group-anchor-wrapper {
             @include breakpoint($tablet) {
               display: none;
             }
 
-            @include breakpoint($only-mobile) {
-              label {
+            label {
+              font-family: $alshaya-bold;
+
+              @include breakpoint($only-mobile) {
                 justify-content: center;
               }
             }

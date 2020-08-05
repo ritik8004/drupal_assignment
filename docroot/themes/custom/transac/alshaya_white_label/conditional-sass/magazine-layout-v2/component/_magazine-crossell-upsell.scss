@@ -150,6 +150,19 @@
       .magv2-pdp-brand-logo {
         display: none;
       }
+
+      .promotions {
+        &.promotions-full-view-mode {
+          p {
+            margin: 0;
+            padding: 0 1.25rem 1.25rem;
+          }
+        }
+      }
+
+      .magv2-detail-wrapper + .promotions-full-view-mode {
+        margin-top: -1.25rem;
+      }
     }
 
     &-heading {
