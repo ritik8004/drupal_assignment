@@ -61,7 +61,7 @@ class TotalLineItems extends React.Component {
   };
 
   render() {
-    const { totals } = this.props;
+    const { totals, isCartPage } = this.props;
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
@@ -77,6 +77,11 @@ class TotalLineItems extends React.Component {
       shippingAmount = 0;
     }
 
+    // We don't show surcharge info in total on cart page.
+    const baseGrandTotal = (isCartPage === false)
+      ? totals.base_grand_total
+      : totals.base_grand_total_without_surcharge;
+
     return (
       <div className="totals">
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
@@ -90,7 +95,8 @@ class TotalLineItems extends React.Component {
           />
         </ConditionalView>
 
-        <ConditionalView condition={totals.surcharge > 0}>
+        {/* Show surcharge on checkout page only if available. */}
+        <ConditionalView condition={totals.surcharge > 0 && isCartPage === false}>
           <TotalLineItem
             tooltip
             name="surcharge-total"
@@ -104,7 +110,7 @@ class TotalLineItems extends React.Component {
         </ConditionalView>
 
         <div className="hero-total">
-          <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={totals.base_grand_total} />
+          <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
           <div className="delivery-vat">
             <ConditionalView condition={shippingAmount === null}>
               <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>
