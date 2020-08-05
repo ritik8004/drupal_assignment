@@ -11,7 +11,7 @@ contentDiv.parentNode.insertBefore( searchResultDiv, contentDiv.nextSibling );
 
 var pageStandard = document.querySelector('.page-standard');
 var defaultClasses = pageStandard.className;
-var searchClasses = "page-standard c-plp c-plp-only disable-footerspace-fill ";
+var searchClasses = "page-standard c-plp c-plp-only ";
 searchClasses += hasCategoryFilter() ? "l-two--sf l-container" : "l-one--w lhn-without-sidebar l-container";
 
 function showSearchResultContainer() {
