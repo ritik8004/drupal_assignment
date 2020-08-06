@@ -123,7 +123,7 @@
           color: $pdp_attribute_label;
         }
 
-        select#edit-quantity {
+        select[id^=edit-quantity] {
           height: 3.125rem !important;
           font-size: 1.125rem;
           font-weight: normal;
@@ -187,7 +187,7 @@
           }
 
           @include breakpoint($upto-desktop) {
-            position: absolute;
+            margin-top: 0;
           }
         }
 
@@ -377,7 +377,8 @@
   .sku-base-form {
     > #configurable_ajax ~ button {
       @include breakpoint($only-tablet) {
-        margin-top: 1.4325rem;
+        margin-top: 0.625rem;
+        width: auto;
       }
     }
   }
