@@ -241,7 +241,7 @@ export const validateAddressFields = (e, validateEmail) => {
   // Iterate over address fields.
   Object.entries(drupalSettings.address_fields).forEach(
     ([key, field]) => {
-      if (field.required === true) {
+      if (field.required === true && field.visible === true) {
         const addField = e.target.elements[key].value.trim();
         if (addField.length === 0) {
           document.getElementById(`${key}-error`).innerHTML = getStringMessage('address_please_enter', { '@label': field.label });
@@ -464,7 +464,7 @@ export const checkoutAddressProcess = (e) => {
   validationRequest.then((response) => {
     if (!response || response.data.status === undefined || !response.data.status) {
       // API Call failed.
-      // @TODO: Handle error.
+      Drupal.logJavascriptError('Email and mobile number validation fail', 'response format invalid', GTM_CONSTANTS.CHECKOUT_ERRORS);
       return false;
     }
 

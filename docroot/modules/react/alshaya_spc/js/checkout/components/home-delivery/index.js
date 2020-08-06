@@ -57,8 +57,8 @@ export default class HomeDeliveryInfo extends React.Component {
       refreshCart,
     } = this.props;
     const addressData = [];
-    Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
-      if (address[val.key] !== undefined) {
+    Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
+      if (address[val.key] !== undefined && val.visible === true) {
         let fillVal = address[val.key];
         // Handling for area field.
         if (key === 'administrative_area') {
