@@ -823,6 +823,20 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Get Cart by invoking Magento API directly.
+   *
+   * @param string $cart_id
+   *   Cart ID.
+   *
+   * @return array
+   *   API Response.
+   */
+  public function getCart(string $cart_id) {
+    $endpoint = sprintf('carts/%d/getCart', $cart_id);
+    return $this->invokeApi($endpoint, [], 'GET');
+  }
+
+  /**
    * Update Cart by invoking Magento API directly.
    *
    * @param string $cart_id
