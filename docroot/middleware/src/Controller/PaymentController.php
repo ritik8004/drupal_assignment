@@ -633,9 +633,11 @@ class PaymentController {
       $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, (int) $data['cart_id']);
     }
     elseif ($data['cart_id'] != $cart_id) {
-      $this->logger->error('3D secure payment came into @callback with cart not matching in session. Payment token: @token', [
+      $this->logger->error('3D secure payment came into @callback with cart not matching in session. Payment token: @token, Cart ID in session @cart_id, Payment data: @data', [
         '@token' => $payment_token,
         '@callback' => $callback,
+        '@cart_id' => $cart_id,
+        '@data' => json_encode($data),
       ]);
 
       throw new \Exception('/' . $data['data']['langcode'] . '/checkout', 302);
@@ -708,8 +710,9 @@ class PaymentController {
       $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, (int) $data['data']['cart_id']);
     }
     elseif ($data['data']['cart_id'] != $cart_id) {
-      $this->logger->error('KNET @callback callback requested with cart not matching in session. Data: @message', [
+      $this->logger->error('KNET @callback callback requested with cart not matching in session. Data: @message, Cart ID in session @cart_id', [
         '@message' => json_encode($data),
+        '@cart_id' => $cart_id,
         '@callback' => $callback,
       ]);
 
