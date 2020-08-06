@@ -1,5 +1,9 @@
 .cart-form-attribute.color {
   .non-groupped-attr {
+    li {
+      border-radius: 50%;
+    }
+
     li.active {
       a {
         border: none;
@@ -15,6 +19,7 @@
           bottom: -3px;
           z-index: 1;
           pointer-events: none;
+          border-radius: 50%;
         }
       }
     }
