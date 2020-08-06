@@ -49,6 +49,7 @@
 
         label {
           font-family: $alshaya-bold;
+          color: $magv2-popup-header-label;
         }
 
         .close {
@@ -191,6 +192,7 @@
             padding-#{$left}: 2.5rem;
             box-shadow: 0 0.0625rem 0.125rem 0 rgba(0, 0, 0, 0.1);
             #{$right}: 0;
+            top: 0;
 
             &::before {
               content: '';
