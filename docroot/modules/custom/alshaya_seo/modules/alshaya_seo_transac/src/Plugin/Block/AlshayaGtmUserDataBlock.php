@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_seo_transac\Plugin\Block;
 
 use Drupal\alshaya_acm_customer\OrdersManager;
+use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -112,7 +113,7 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
         'userEmailID' => $email,
         'userPhone' => $current_user_id ? ($current_user->get('field_mobile_number')->value ?? '') : '',
         'customerType' => $customer_type,
-        'userName' => $current_user_id ? $current_user->get('field_first_name')->getString() . ' ' . $current_user->get('field_last_name')->getString() : '',
+        'userName' => $current_user_id ? AlshayaUserInfo::getFullName($current_user, ' ') : '',
         'userType' => $current_user_id ? 'Logged in User' : 'Guest User',
         'privilegeCustomer' => $privilege_customer,
       ];

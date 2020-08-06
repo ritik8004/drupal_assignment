@@ -4,6 +4,7 @@ namespace Drupal\alshaya_spc\Controller;
 
 use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 use Drupal\alshaya_spc\Plugin\SpcPaymentMethod\CashOnDelivery;
+use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
@@ -202,8 +203,8 @@ class AlshayaSpcController extends ControllerBase {
 
       $user_mobile_number = $user->get('field_mobile_number')->first();
       $user_name = [
-        'fname' => $user->get('field_first_name')->getString(),
-        'lname' => $user->get('field_last_name')->getString(),
+        'fname' => AlshayaUserInfo::getUserNameField($user, 'field_first_name'),
+        'lname' => AlshayaUserInfo::getUserNameField($user, 'field_last_name'),
         'mobile' => !empty($user_mobile_number) ? $user_mobile_number->getValue()['local_number'] : '',
       ];
 
