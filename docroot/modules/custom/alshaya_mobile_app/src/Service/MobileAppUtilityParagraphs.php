@@ -410,10 +410,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         [$entity, $bundle_info['fields']]
       );
     }
-    if ($entity->getEntityTypeId() == 'paragraph') {
-      if (!empty($data) && $parent = $entity->getParentEntity()->bundle()) {
-        $data = array_merge(['parent_type' => $parent], $data);
-      }
+    if ($entity->getEntityTypeId() == 'paragraph' && !empty($data) && $parent = $entity->getParentEntity()->bundle()) {
+      $data = array_merge(['parent_type' => $parent], $data);
     }
     return $data;
   }
