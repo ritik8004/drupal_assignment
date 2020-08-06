@@ -25,3 +25,13 @@
     }
   }
 }
+
+.ie {
+  .magv2-add-to-basket-loader {
+    &.magv2-button {
+      content: '';
+      background: url('#{$base_theme_img_directory_path}/icons/new-pdp-loader-icon.svg') center center no-repeat;
+      background-color: $magv2-button-bg;
+    }
+  }
+}
