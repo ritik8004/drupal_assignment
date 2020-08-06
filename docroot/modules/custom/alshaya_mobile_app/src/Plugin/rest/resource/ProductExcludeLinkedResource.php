@@ -281,6 +281,10 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data['stock'] = $stockInfo['stock'];
     $data['in_stock'] = $stockInfo['in_stock'];
     $data['max_sale_qty'] = $stockInfo['max_sale_qty'];
+
+    if ($sku->get('attr_brand_logo')->getString()) {
+      $data['brand_logo'] = $this->getBrandLogo($sku);
+    }
     $data['delivery_options'] = [
       'home_delivery' => [],
       'click_and_collect' => [],
@@ -380,6 +384,24 @@ class ProductExcludeLinkedResource extends ResourceBase {
         'status' => alshaya_acm_product_available_click_collect($sku),
       ],
     ];
+  }
+
+  /**
+   * Wrapper function get the brand logo.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return string
+   *   brand logo.
+   */
+  private function getBrandLogo(SKUInterface $sku) {
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $logo = alshaya_acm_product_get_brand_logo($sku);
+    if (empty($logo)) {
+      return '';
+    }
+    return file_create_url($logo['#uri']);
   }
 
   /**
