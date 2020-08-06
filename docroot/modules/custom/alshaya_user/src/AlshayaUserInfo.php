@@ -94,7 +94,7 @@ class AlshayaUserInfo {
   public static function getFullName($user, $glue = ' ') {
     $firstName = self::getUserNameField($user, 'field_first_name');
     $lastName = self::getUserNameField($user, 'field_last_name');
-    return !empty($firstName) ? implode($glue, array_filter([$firstName, $lastName])) : '';
+    return !empty($firstName) || !empty($lastName) ? implode($glue, array_filter([$firstName, $lastName])) : '';
   }
 
   /**
