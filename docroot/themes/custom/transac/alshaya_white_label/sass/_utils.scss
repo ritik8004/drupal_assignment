@@ -120,6 +120,7 @@ body.modal-overlay {
     @include breakpoint($desktop) {
       pointer-events: unset;
       height: 100%;
+      width: 100%;
     }
   }
 }
