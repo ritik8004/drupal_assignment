@@ -568,7 +568,7 @@ export default class AppointmentStore extends React.Component {
                 }
               }}
             >
-              {Drupal.t('Back')}
+              {Drupal.t('BACK')}
             </button>
             <div className="appointment-flow-action">
               <button
@@ -576,7 +576,7 @@ export default class AppointmentStore extends React.Component {
                 type="button"
                 onClick={(e) => this.finalizeCurrentStore(e)}
               >
-                {Drupal.t('Select Store')}
+                {Drupal.t('select store')}
               </button>
             </div>
           </div>

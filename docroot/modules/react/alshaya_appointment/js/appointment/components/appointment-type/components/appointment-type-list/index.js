@@ -32,7 +32,7 @@ export default class AppointmentTypeList extends React.Component {
     return (
       <div className="appointment-type-list-wrapper appointment-type-item">
         <SectionTitle>
-          {Drupal.t('Appointment Type')}
+          {Drupal.t('Appointment type')}
           :*
         </SectionTitle>
         <div className="appointment-type-list-inner-wrapper fadeInUp">

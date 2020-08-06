@@ -106,7 +106,7 @@ export default class AppointmentTimeSlot extends React.Component {
           </div>
           <div className="timeslot-latest-available fadeInUp">
             <span>
-              {Drupal.t('The first available appointment is on ')}
+              {`${Drupal.t('The first available appointment is on')} `}
             </span>
             <span className="starting-timeslot">{Drupal.t(moment().add(1, 'day').format(getDateFormattext()))}</span>
           </div>

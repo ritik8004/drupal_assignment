@@ -40,13 +40,13 @@ export default class AppointmentLogin extends React.Component {
                 href={`${baseUrl}${pathPrefix}user/login?destination=/appointment/booking`}
                 className="appointment-type-button appointment-signin-button"
               >
-                { Drupal.t('Sign in') }
+                { Drupal.t('sign in') }
               </a>
             </div>
             { socialLoginEnabled
             && (
               <div className="appointment-social-login">
-                <p>{ Drupal.t('Or Sign in with') }</p>
+                <p>{ `${Drupal.t('Or')} ${Drupal.t('Sign in with')}` }</p>
                 <div>
                   <div className="appointment-social">
                     <a
@@ -80,7 +80,7 @@ export default class AppointmentLogin extends React.Component {
           </div>
           <div className="appointment-without-account">
             <div>
-              <h2>{ Drupal.t('I don\'t have an account') }</h2>
+              <h2>{ Drupal.t("I don't have an account") }</h2>
               <p>{ Drupal.t('Log in for faster booking and to manage your appointments online') }</p>
             </div>
             <div className="appointment-login-buttons-wrapper">
@@ -97,7 +97,7 @@ export default class AppointmentLogin extends React.Component {
             { socialLoginEnabled
             && (
             <div className="appointment-social-login">
-              <p>{ Drupal.t('Or Sign in with') }</p>
+              <p>{ `${Drupal.t('Or')} ${Drupal.t('Sign in with')}` }</p>
               <div>
                 <div className="appointment-social">
                   <a

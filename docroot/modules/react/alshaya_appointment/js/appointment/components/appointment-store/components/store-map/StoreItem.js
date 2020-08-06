@@ -42,7 +42,7 @@ const StoreItem = ({
               type="button"
               onClick={(e) => onStoreFinalize(e, store.code)}
             >
-              {Drupal.t('Select Store')}
+              {Drupal.t('select store')}
             </button>
           </div>
         </ConditionalView>

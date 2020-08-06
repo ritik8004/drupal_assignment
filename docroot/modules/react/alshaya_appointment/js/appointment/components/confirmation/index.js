@@ -77,6 +77,7 @@ export default class Confirmation extends React.Component {
             <div className="appointment-confirmation-option">
               <AddToCalendar
                 event={event}
+                buttonLabel={Drupal.t('Add to My Calendar')}
               />
               <ReactToPrint
                 trigger={() => <span className="print">{Drupal.t('Print')}</span>}

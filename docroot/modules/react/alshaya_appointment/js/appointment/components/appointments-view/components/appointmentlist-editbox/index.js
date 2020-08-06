@@ -29,7 +29,7 @@ export default class AppointmentEditBox extends React.Component {
             <span>{item.lastName}</span>
           </p>
           <p>
-            <span>{ Drupal.t('Date of Birth:') }</span>
+            <span>{ `${Drupal.t('Date of Birth')}:` }</span>
             <span>{ moment(item.dob).format(getDateFormat()) }</span>
           </p>
         </div>
