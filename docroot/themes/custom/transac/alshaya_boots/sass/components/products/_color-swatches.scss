@@ -32,8 +32,6 @@
 .configurable-swatch {
   .select2Option {
     .select-buttons {
-      display: inline-flex;
-
       @include breakpoint($only-mobile) {
         display: flex;
         overflow-x: auto;
@@ -54,7 +52,7 @@
           min-height: 2.375rem;
 
           @include breakpoint($only-mobile) {
-            margin-#{$right}: 0.5rem;
+            margin-#{$right}: 0.625rem;
           }
 
           &.picked,
@@ -117,7 +115,7 @@
   .sku-base-form {
     > div,
     .js-form-wrapper {
-      @include breakpoint($only-mobile) {
+      @include breakpoint($upto-desktop) {
         width: 100%;
       }
     }
