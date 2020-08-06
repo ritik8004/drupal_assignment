@@ -1,6 +1,6 @@
 framework:
     cache:
-        default_memcached_provider: 'memcached://localhost'
+        default_memcached_provider: app.custom_memcache_provider
 
         pools:
             # uses the default_memcached_provider from above
@@ -24,3 +24,8 @@ framework:
         # Namespaced pools use the above "app" backend by default
         #pools:
             #my.dedicated.cache: null
+
+services:
+  app.custom_memcache_provider:
+    class: Cache
+    factory: ['App\Helper\Cache', 'createConnection']

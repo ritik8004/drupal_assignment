@@ -2,6 +2,7 @@
 
 namespace App\Helper;
 
+use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 /**
@@ -68,6 +69,13 @@ class Cache {
    */
   public function getCacheClient() {
     return $this->cache;
+  }
+
+  /**
+   * Cache Provider.
+   */
+  public function createConnection() {
+    return MemcachedAdapter::createConnection('memcached://localhost');
   }
 
 }
