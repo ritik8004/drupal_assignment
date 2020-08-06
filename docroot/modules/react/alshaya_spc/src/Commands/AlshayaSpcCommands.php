@@ -7,7 +7,9 @@ use Drupal\alshaya_knet\Knet\KnetApiWrapper;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Url;
 use Drush\Commands\DrushCommands;
+use GuzzleHttp\Client;
 
 /**
  * Class AlshayaSpcCommands.
@@ -70,15 +72,16 @@ class AlshayaSpcCommands extends DrushCommands {
    * @usage alshaya-check-pending-payments --seconds-old=240
    *   Checks for all the pending payments which are 4 minutes old. This means
    *   it will check for all the payments for which user has not returned back
-   *   to Drupal in last 4 minutes. Default is 300 seconds (5 minutes).
+   *   to Drupal in last 4 minutes. Default is 500 seconds (8min 20sec).
    */
-  public function checkPendingPayments(string $methods = 'knet', array $options = ['seconds-old' => 300]) {
+  public function checkPendingPayments(string $methods = 'knet', array $options = ['seconds-old' => 500]) {
     $methods = explode(',', $methods);
 
     $seconds = (int) $options['seconds-old'];
     $query = $this->connection->select('middleware_payment_data');
     $query->fields('middleware_payment_data');
     $query->condition('timestamp', strtotime("-${seconds} seconds"), '<');
+    $query->orderBy('timestamp', 'DESC');
     $payments = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
     foreach ($payments as $payment) {
       $data = unserialize($payment['data']);
@@ -99,6 +102,13 @@ class AlshayaSpcCommands extends DrushCommands {
         $cart = $this->apiWrapper->getCart($payment['cart_id']);
 
         if ($cart === 'false') {
+          throw new \Exception('Cart no longer available', 404);
+        }
+
+        $cart = json_decode($cart, TRUE);
+      }
+      catch (\Exception $e) {
+        if ($e->getCode() == 404) {
           $this->getLogger('PendingPaymentCheck')->notice('Cart no longer available for id @cart_id, deleting payment data @data', [
             '@data' => $payment['data'],
             '@cart_id' => $payment['cart_id'],
@@ -108,8 +118,7 @@ class AlshayaSpcCommands extends DrushCommands {
 
           continue;
         }
-      }
-      catch (\Exception $e) {
+
         // Probably Magento is down right now or something else wrong.
         // Do not delete payment data and just add log message.
         $this->getLogger('PendingPaymentCheck')->warning('Not able to get cart for id @cart_id, exception: @code @message, payment data: @data', [
@@ -135,19 +144,92 @@ class AlshayaSpcCommands extends DrushCommands {
             $credentials['tranportal_password']
           );
 
-          $info = $wrapper->getTransactionInfoByTrackingId($data['order_id']);
+          $info = $wrapper->getTransactionInfoByTrackingId(
+            $data['order_id'],
+            $cart['totals']['grand_total']
+          );
 
-          print_r($info);
-          $status = $info['result'] ?? '';
+          $status = strtolower($info['result'] ?? '');
 
-          if (in_array(strtolower($status), ['success', 'captured'])) {
-            // @TODO: Check amount and if amount match try to place order.
-            // If place order attempted and pass, add success log.
+          if (in_array($status, ['success', 'captured'])) {
+            try {
+              $update = [];
+              $update['payment'] = [
+                'method' => 'knet',
+                'additional_data' => $info,
+              ];
+              $update['extension'] = [
+                'action' => 'update payment',
+                'attempted_payment' => 1,
+              ];
+
+              $cart = $this->apiWrapper->updateCart($payment['cart_id'], $update);
+              if (empty($cart)) {
+                throw new \Exception('Update payment data in cart failed, please check other logs to know the reason');
+              }
+
+              // Add a custom header to ensure Middleware allows this request
+              // without further authentication.
+              $request_options['json']['data']['paymentMethod'] = $update['payment'];
+              $request_options['json']['cart_id'] = $payment['cart_id'];
+              $request_options['headers']['alshaya-middleware'] = md5(Settings::get('middleware_auth'));
+              $request_options['query']['XDEBUG_SESSION_START'] = 'PHPSTORM';
+
+              $endpoint = 'middleware/public/cart/place-order-system';
+              $response = $this->createClient()->post($endpoint, $request_options);
+              $result = json_decode($response->getBody()->getContents(), TRUE);
+              if (empty($result['success'])) {
+                throw new \Exception($result['error_message'] ?? 'Unknown error');
+              }
+
+              $this->getLogger('PendingPaymentCheck')->info('KNET Payment successful, order placed. Cart id: @cart_id, Data: @data, KNET response: @info', [
+                '@data' => $payment['data'],
+                '@cart_id' => $payment['cart_id'],
+                '@info' => json_encode($info),
+              ]);
+            }
+            catch (\Exception $e) {
+              $this->getLogger('PendingPaymentCheck')->info('KNET Payment successful, order failed. Cart id: @cart_id, Data: @data, KNET response: @info, Exception: @exception', [
+                '@data' => $payment['data'],
+                '@cart_id' => $payment['cart_id'],
+                '@info' => json_encode($info),
+                '@exception' => $e->getMessage(),
+              ]);
+            }
+
             // If place order attempted and failed, add log with exception.
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }
+          elseif (strpos($status, 'transaction not found') !== FALSE) {
+            $this->getLogger('PendingPaymentCheck')->info('KNET Payment transaction not found, which means user cancelled. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($info),
+            ]);
+
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
+          elseif (strpos($status, 'not captured') !== FALSE) {
+            $this->getLogger('PendingPaymentCheck')->info('KNET Payment failed. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($info),
+            ]);
+
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
+          elseif ($status && $info['amt'] != $cart['totals']['grand_total']) {
+            $this->getLogger('PendingPaymentCheck')->info('KNET Payment is possibly complete, but it seems amount does not match. Please check again. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($info),
+              '@total' => $cart['totals']['grand_total'],
+            ]);
+
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
           elseif ($status && $payment['timestamp'] < strtotime('-1 day')) {
-            $this->getLogger('PendingPaymentCheck')->info('KNET Payment not complete, deleting entry as it is already one day now. Cart id: @cart_id, Data: @data, Payment response: @info', [
+            $this->getLogger('PendingPaymentCheck')->info('KNET Payment not complete, deleting entry as it is already one day now. Cart id: @cart_id, Data: @data, KNET response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
               '@info' => json_encode($info),
@@ -156,9 +238,10 @@ class AlshayaSpcCommands extends DrushCommands {
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }
           else {
-            $this->getLogger('PendingPaymentCheck')->info('KNET Payment not complete or info not available, not deleting entry to retry later. Cart id: @cart_id, Data: @data', [
+            $this->getLogger('PendingPaymentCheck')->info('KNET Payment not complete or info not available, not deleting entry to retry later. Cart id: @cart_id, Data: @data, KNET response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($info),
             ]);
           }
 
@@ -177,6 +260,26 @@ class AlshayaSpcCommands extends DrushCommands {
     $this->connection->delete('middleware_payment_data')
       ->condition('cart_id', $cart_id)
       ->execute();
+  }
+
+  /**
+   * Crate a new client object.
+   *
+   * Create a Guzzle http client configured to connect to the
+   * same site instance.
+   *
+   * @return \GuzzleHttp\Client
+   *   Object of initialized client.
+   */
+  protected function createClient() {
+    $url = Url::fromRoute('<current>')->setAbsolute()->toString();
+
+    $configuration = [
+      'base_uri' => 'https://' . parse_url($url, PHP_URL_HOST),
+      'verify'   => FALSE,
+    ];
+
+    return (new Client($configuration));
   }
 
 }

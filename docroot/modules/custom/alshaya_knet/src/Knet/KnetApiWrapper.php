@@ -60,11 +60,13 @@ class KnetApiWrapper {
    *
    * @param string $tracking_id
    *   KNET Tracking ID.
+   * @param string|float|int $amount
+   *   Amount.
    *
    * @return array
    *   KNET Info for the Tracking ID.
    */
-  public function getTransactionInfoByTrackingId(string $tracking_id) {
+  public function getTransactionInfoByTrackingId(string $tracking_id, $amount) {
     $query = [
       'param' => 'tranInit',
     ];
@@ -73,9 +75,10 @@ class KnetApiWrapper {
     $body['id'] = $this->tranportalId;
     $body['password'] = $this->tranportalPassword;
     $body['action'] = self::ACTION_INQUIRE;
-    $body['amt'] = 15.000;
+    $body['amt'] = $amount;
     $body['udf5'] = 'TrackID';
     $body['transid'] = $tracking_id;
+    $body['trackid'] = $tracking_id;
 
     $encoder = new XmlEncoder('body');
     $body = $encoder->encode($body, 'xml');
@@ -106,8 +109,6 @@ class KnetApiWrapper {
    *
    * @return \GuzzleHttp\Client
    *   Object of initialized client.
-   *
-   * @throws \InvalidArgumentException
    */
   protected function createClient() {
     $configuration = [

@@ -214,6 +214,16 @@ class Cart {
   }
 
   /**
+   * Wrapper function to set cart id in session.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   */
+  public function setCartId(int $cart_id) {
+    $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, $cart_id);
+  }
+
+  /**
    * Get cart by cart id.
    *
    * @param bool $force
