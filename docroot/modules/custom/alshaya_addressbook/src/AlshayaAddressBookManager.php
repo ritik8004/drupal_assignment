@@ -982,7 +982,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       }
 
       $magento_form = array_filter($magento_form, function ($form_item) {
-        return (bool) $form_item['visible'] && $form_item['status'];
+        return ($form_item['visible'] && $form_item['status'])
+          || ($form_item['used_for_shipping_rate']);
       });
 
       $mapping = array_flip($this->getMagentoFieldMappings());

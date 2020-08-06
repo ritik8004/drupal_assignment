@@ -29,6 +29,13 @@ export default class ParentAreaSelect extends React.Component {
 
   componentDidMount() {
     this.isComponentMounted = true;
+
+    // Do nothing if parent area is not visible.
+    const parentArea = drupalSettings.address_fields.area_parent;
+    if (parentArea !== undefined && parentArea.visible === false) {
+      return;
+    }
+
     this.getAreasList();
     const { default_val: defaultVal, field, areasUpdate } = this.props;
     if (defaultVal.length !== 0
@@ -143,6 +150,13 @@ export default class ParentAreaSelect extends React.Component {
     if (currentOptionAvailable) {
       hiddenFieldValue = currentOption;
       areaLabel = gerAreaLabelById(true, currentOption).trim();
+    }
+
+    const parentArea = drupalSettings.address_fields.area_parent;
+    if (parentArea !== undefined && parentArea.visible === false) {
+      return (
+        <input type="hidden" id={fieldKey} name={fieldKey} value={hiddenFieldValue} />
+      );
     }
 
     return (

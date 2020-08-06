@@ -63,7 +63,7 @@ export default class BillingInfo extends React.Component {
 
     const addressData = [];
     Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
-      if (billing[val.key] !== undefined) {
+      if (billing[val.key] !== undefined && val.visible === true) {
         let fillVal = billing[val.key];
         // Handling for area field.
         if (key === 'administrative_area') {
