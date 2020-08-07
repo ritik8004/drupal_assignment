@@ -1,5 +1,4 @@
 import React from 'react';
-import LazyLoad from 'react-lazy-load';
 
 export default class PdpAsset extends React.Component {
   static imageZoomIn(event) {
@@ -58,19 +57,12 @@ export default class PdpAsset extends React.Component {
           data-index={index}
           style={{ animationDelay: animationOffset }}
         >
-          <LazyLoad
-            debounce={false}
-            throttle={250}
-            offsetTop={0}
-            height={486.8}
-            width={486.8}
-          >
-            <img
-              src={imageUrl}
-              alt={alt}
-              title={title}
-            />
-          </LazyLoad>
+          <img
+            src={imageUrl}
+            alt={alt}
+            title={title}
+            loading="lazy"
+          />
           <div className="magazine-image-zoom-placeholder" style={{ backgroundImage: `url(${imageZoomUrl})` }} />
         </figure>
       );
