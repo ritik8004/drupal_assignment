@@ -23,10 +23,10 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
         arguments:
-            $logger: '@monolog.logger.middleware'
+            $logger: '@monolog.logger.appointment_middleware'
 
     # This formats the log messages as per drupal like.
-    alshaya_middleware.log_fromatter:
+    alshaya_appointment_middleware.log_fromatter:
         class: App\Logger\Formatter\MiddlewareLogFormatter
 
     # This process and add extra info like ip, uri etc to logs.
@@ -41,7 +41,11 @@ services:
     App\Logger\Decorator\SysLogDecorator:
         decorates: monolog.handler.syslog
         arguments:
-            - '@alshaya_middleware.log_fromatter'
+            - '@alshaya_appointment_middleware.log_fromatter'
+
+    App\EventListener\KernelEventsListener:
+      tags:
+        - { name: kernel.event_listener, event: kernel.response }
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
