@@ -165,13 +165,22 @@ class KnetPaymentController extends PaymentController {
     // contains language info.
     static::$externalPaymentLangcode = $state['data']['langcode'];
 
+    if ($response['result'] !== 'CAPTURED') {
+      $this->logger->error('KNET result is not captured, transaction failed.<br>POST: @message<br>Cart: @cart<br>State: @state', [
+        '@message' => json_encode($data),
+        '@state' => json_encode($state),
+      ]);
+
+      return $this->handleKnetError($response['state_key']);
+    }
+
     if ($state['data']['cart_id'] != $response['quote_id'] || $state['data']['order_id'] != $response['tracking_id']) {
       $this->logger->error('KNET response data dont match data in state variable.<br>POST: @message<br>Cart: @cart<br>State: @state', [
         '@message' => json_encode($data),
         '@state' => json_encode($state),
       ]);
 
-      return $this->handleKnetError($response['state_key']);
+      return $this->getKnetErrorResponse($state, 'KNET response data dont match data in state variable.');
     }
 
     $cart = $this->cart->getCart();
@@ -182,24 +191,15 @@ class KnetPaymentController extends PaymentController {
         '@cart' => $this->cart->getCartDataToLog($cart),
       ]);
 
-      return $this->handleKnetError($response['state_key']);
-    }
-
-    $redirect = new RedirectResponse('/' . $state['data']['langcode'] . '/checkout', 302);
-    if ($response['result'] !== 'CAPTURED') {
-      $this->logger->error('KNET result is not captured, transaction failed.<br>POST: @message<br>Cart: @cart<br>State: @state', [
-        '@message' => json_encode($data),
-        '@state' => json_encode($state),
-      ]);
-
-      $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_DECLINED_VALUE, strtotime('+1 year')));
-      return $this->handleKnetError($response['state_key']);
+      return $this->getKnetErrorResponse($state, 'KNET response data dont match data in state variable.');
     }
 
     $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
       '@quote_id' => $response['quote_id'],
       '@message' => json_encode($data),
     ]);
+
+    $redirect = new RedirectResponse('/' . $state['data']['langcode'] . '/checkout', 302);
 
     try {
       $payment_data = [
@@ -265,7 +265,6 @@ class KnetPaymentController extends PaymentController {
    * @throws \Exception
    */
   public function handleKnetError(string $state_key) {
-
     try {
       $data = $this->validateKnetRequest('error', $state_key);
     }
@@ -280,16 +279,34 @@ class KnetPaymentController extends PaymentController {
     }
 
     $message = 'User either cancelled or response url returned error.';
-    $message .= PHP_EOL . 'Debug info:' . PHP_EOL;
-    foreach ($data as $key => $value) {
-      $value = is_array($value) ? json_encode($value) : $value;
-      $message .= $key . ': ' . $value . PHP_EOL;
-    }
 
     $this->logger->error('KNET payment failed for @quote_id: @message', [
       '@quote_id' => $data['data']['cart_id'],
       '@message' => $message,
     ]);
+
+    return $this->getKnetErrorResponse($data, $message);
+  }
+
+  /**
+   * Get the KNET error response.
+   *
+   * Also attempt cancel reservation with debug info.
+   *
+   * @param array $data
+   *   State / payment data.
+   * @param string $message
+   *   Message for cancellation.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Response object.
+   */
+  protected function getKnetErrorResponse(array $data, string $message) {
+    $message .= PHP_EOL . 'Debug info:' . PHP_EOL;
+    foreach ($data as $key => $value) {
+      $value = is_array($value) ? json_encode($value) : $value;
+      $message .= $key . ': ' . $value . PHP_EOL;
+    }
 
     $this->cart->cancelCartReservation($message);
 
@@ -351,8 +368,9 @@ class KnetPaymentController extends PaymentController {
       $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, (int) $data['data']['cart_id']);
     }
     elseif ($data['data']['cart_id'] != $cart_id) {
-      $this->logger->error('KNET @callback callback requested with cart not matching in session. Data: @message', [
+      $this->logger->error('KNET @callback callback requested with cart not matching in session. Data: @message, Cart ID in session @cart_id', [
         '@message' => json_encode($data),
+        '@cart_id' => $cart_id,
         '@callback' => $callback,
       ]);
 

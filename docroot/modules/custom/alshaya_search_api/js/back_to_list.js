@@ -57,7 +57,7 @@
     var storage_value = getStorageValues();
     var first_visible_product = $('.views-infinite-scroll-content-wrapper article[data-nid="' + storage_value.nid + '"]:visible:first');
 
-    if (typeof first_visible_product === 'undefined') {
+    if ((typeof first_visible_product === 'undefined') || !(first_visible_product.length)) {
       return;
     }
 
