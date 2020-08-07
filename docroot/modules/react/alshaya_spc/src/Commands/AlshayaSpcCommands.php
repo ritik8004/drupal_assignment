@@ -49,7 +49,10 @@ class AlshayaSpcCommands extends DrushCommands {
   }
 
   /**
-   * Debug command.
+   * Attempt to reconcile payment transaction logs for the provided methods.
+   *
+   * Log the cases where the transaction has not been concluded within the
+   * time specified.
    *
    * @param string $methods
    *   Comma separated list of payment methods to check for.
@@ -173,7 +176,6 @@ class AlshayaSpcCommands extends DrushCommands {
               $request_options['json']['data']['paymentMethod'] = $update['payment'];
               $request_options['json']['cart_id'] = $payment['cart_id'];
               $request_options['headers']['alshaya-middleware'] = md5(Settings::get('middleware_auth'));
-              $request_options['query']['XDEBUG_SESSION_START'] = 'PHPSTORM';
 
               $endpoint = 'middleware/public/cart/place-order-system';
               $response = $this->createClient()->post($endpoint, $request_options);
