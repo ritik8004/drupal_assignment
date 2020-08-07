@@ -514,6 +514,10 @@
 
   @include breakpoint($upto-desktop) {
     margin: 0;
+
+    html[lang=ar] & {
+      margin-top: 0.5rem;
+    }
   }
 
   .site-brand-wrapper {
