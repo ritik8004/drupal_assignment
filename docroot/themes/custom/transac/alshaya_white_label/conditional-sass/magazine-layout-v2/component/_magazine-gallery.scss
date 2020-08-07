@@ -2,6 +2,7 @@
   .page-wrapper {
     @include breakpoint($tablet) {
       background-color: $magv2-pdp-bg;
+      padding-bottom: 2rem;
     }
   }
 
@@ -65,6 +66,7 @@
       .LazyLoad {
         width: 100% !important;
         height: auto !important;
+        display: flex;
       }
 
       .magazine-image-zoom-placeholder {
