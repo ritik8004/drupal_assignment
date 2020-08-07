@@ -96,7 +96,7 @@
   div[id^="drupal-dialog-alshaya-acm-productpdp-modal-links-"] {
     background: $modal_bg;
     padding: 1.5em;
-    overflow: hidden;
+    overflow-x: hidden;
     height: 100% !important;
 
     @include breakpoint($tablet) {

@@ -9,7 +9,7 @@ import {
 } from './checkout_util';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
-import { extractFirstAndLastName } from './cart_customer_util';
+import { extractFirstAndLastName, makeFullName } from './cart_customer_util';
 import {
   smoothScrollToAddressField,
   smoothScrollTo,
@@ -545,7 +545,7 @@ export const checkoutAddressProcess = (e) => {
 export const formatAddressDataForEditForm = (address) => {
   const formattedAddress = {
     static: {
-      fullname: `${address.firstname} ${address.lastname}`,
+      fullname: makeFullName(address.firstname || '', address.lastname || ''),
       email: address.email,
       telephone: address.telephone,
     },

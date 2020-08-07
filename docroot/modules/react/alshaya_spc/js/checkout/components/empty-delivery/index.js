@@ -21,6 +21,7 @@ import { fetchClicknCollectStores } from '../../../utilities/api/requests';
 import { getUserLocation } from '../../../utilities/map/map_utils';
 import dispatchCustomEvent from '../../../utilities/events';
 import WithModal from '../with-modal';
+import { makeFullName } from '../../../utilities/cart_customer_util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -234,7 +235,7 @@ export default class EmptyDeliveryText extends React.Component {
       const { fname, lname, mobile } = drupalSettings.user_name;
       defaultVal = {
         static: {
-          fullname: `${fname} ${lname}`,
+          fullname: makeFullName(fname, lname),
           telephone: mobile,
         },
       };
@@ -244,7 +245,7 @@ export default class EmptyDeliveryText extends React.Component {
       const shippingAddress = cartVal.shipping.address;
       defaultVal = {
         static: {
-          fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,
+          fullname: makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || ''),
           email: shippingAddress.email,
           telephone: shippingAddress.telephone,
         },

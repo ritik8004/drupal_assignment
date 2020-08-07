@@ -17,12 +17,10 @@ class ContactInfoForm extends React.Component {
   handleSubmit = (e, store) => {
     e.preventDefault();
 
-    if (drupalSettings.user.uid === 0) {
-      const notValidAddress = validateContactInfo(e, true);
-      if (notValidAddress) {
-        addressFormInlineErrorScroll();
-        return;
-      }
+    const contactInfoError = validateContactInfo(e, (drupalSettings.user.uid === 0));
+    if (contactInfoError) {
+      addressFormInlineErrorScroll();
+      return;
     }
 
     showFullScreenLoader();
