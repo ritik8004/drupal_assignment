@@ -20,6 +20,7 @@ import {
   exitFullscreen,
 } from '../../../utilities/map/fullScreen';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 const StoreMap = React.lazy(async () => {
   const localStorageValues = getStorageInfo();
@@ -504,14 +505,14 @@ export default class AppointmentStore extends React.Component {
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
           <div className="store-header appointment-subtitle fadeInUp">
-            {Drupal.t("Select a store that's convenient for you")}
+            {getStringMessage('store_select_header')}
             *
           </div>
           <LocationSearchForm
             ref={this.searchRef}
             getCurrentPosition={this.getCurrentPosition}
           />
-          <React.Suspense fallback={<Loading loadingMessage={Drupal.t('Loading Map')} />}>
+          <React.Suspense fallback={<Loading loadingMessage={getStringMessage('loading_map_placeholder')} />}>
             <div
               className="store-map-wrapper fadeInUp"
               style={{ animationDelay: '0.2s' }}
@@ -568,7 +569,7 @@ export default class AppointmentStore extends React.Component {
                 }
               }}
             >
-              {Drupal.t('BACK')}
+              {getStringMessage('back')}
             </button>
             <div className="appointment-flow-action">
               <button
@@ -576,7 +577,7 @@ export default class AppointmentStore extends React.Component {
                 type="button"
                 onClick={(e) => this.finalizeCurrentStore(e)}
               >
-                {Drupal.t('select store')}
+                {getStringMessage('select_store_button')}
               </button>
             </div>
           </div>

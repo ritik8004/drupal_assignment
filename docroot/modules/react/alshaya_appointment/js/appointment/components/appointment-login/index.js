@@ -1,5 +1,6 @@
 import React from 'react';
 import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class AppointmentLogin extends React.Component {
   constructor(props) {
@@ -32,21 +33,21 @@ export default class AppointmentLogin extends React.Component {
         <div className="appointment-login-container">
           <div className="appointment-with-account">
             <div>
-              <h2>{ Drupal.t('I have an account') }</h2>
-              <p>{ Drupal.t('Log in for faster booking and to manage your appointments online') }</p>
+              <h2>{ getStringMessage('sign_in_header') }</h2>
+              <p>{ getStringMessage('sign_in_subheader') }</p>
             </div>
             <div className="appointment-login-buttons-wrapper">
               <a
                 href={`${baseUrl}${pathPrefix}user/login?destination=/appointment/booking`}
                 className="appointment-type-button appointment-signin-button"
               >
-                { Drupal.t('sign in') }
+                { getStringMessage('sign_in_button') }
               </a>
             </div>
             { socialLoginEnabled
             && (
               <div className="appointment-social-login">
-                <p>{ `${Drupal.t('Or')} ${Drupal.t('Sign in with')}` }</p>
+                <p>{ `${getStringMessage('or')} ${getStringMessage('social_sign_in_header')}` }</p>
                 <div>
                   <div className="appointment-social">
                     <a
@@ -57,7 +58,7 @@ export default class AppointmentLogin extends React.Component {
                       <span
                         className="social-network-text"
                       >
-                        {Drupal.t('sign up with Google')}
+                        {getStringMessage('sign_up_google')}
                       </span>
                     </a>
                   </div>
@@ -70,7 +71,7 @@ export default class AppointmentLogin extends React.Component {
                       <span
                         className="social-network-text"
                       >
-                        {Drupal.t('sign up with Facebook')}
+                        {getStringMessage('sign_up_facebook')}
                       </span>
                     </a>
                   </div>
@@ -80,24 +81,24 @@ export default class AppointmentLogin extends React.Component {
           </div>
           <div className="appointment-without-account">
             <div>
-              <h2>{ Drupal.t("I don't have an account") }</h2>
-              <p>{ Drupal.t('Log in for faster booking and to manage your appointments online') }</p>
+              <h2>{ getStringMessage('sign_up_header') }</h2>
+              <p>{ getStringMessage('sign_in_subheader') }</p>
             </div>
             <div className="appointment-login-buttons-wrapper">
               <a
                 href={`${baseUrl}${pathPrefix}user/register?destination=/appointment/booking`}
                 className="appointment-type-button appointment-register-button"
               >
-                { Drupal.t('Register') }
+                { getStringMessage('register') }
               </a>
               <button className="appointment-type-button appointment-checkout-button select-store" type="button" onClick={this.handleSubmit}>
-                {Drupal.t('Continue as Guest')}
+                {getStringMessage('continue_as_guest')}
               </button>
             </div>
             { socialLoginEnabled
             && (
             <div className="appointment-social-login">
-              <p>{ `${Drupal.t('Or')} ${Drupal.t('Sign in with')}` }</p>
+              <p>{ `${getStringMessage('or')} ${getStringMessage('social_sign_in_header')}` }</p>
               <div>
                 <div className="appointment-social">
                   <a
@@ -108,7 +109,7 @@ export default class AppointmentLogin extends React.Component {
                     <span
                       className="social-network-text"
                     >
-                      {Drupal.t('sign up with Google')}
+                      {getStringMessage('sign_up_google')}
                     </span>
                   </a>
                 </div>
@@ -121,7 +122,7 @@ export default class AppointmentLogin extends React.Component {
                     <span
                       className="social-network-text"
                     >
-                      {Drupal.t('sign up with Facebook')}
+                      {getStringMessage('sign_up_facebook')}
                     </span>
                   </a>
                 </div>
@@ -136,7 +137,7 @@ export default class AppointmentLogin extends React.Component {
             type="button"
             onClick={() => this.handleBack('select-time-slot')}
           >
-            {Drupal.t('BACK')}
+            {getStringMessage('back')}
           </button>
         </div>
       </div>

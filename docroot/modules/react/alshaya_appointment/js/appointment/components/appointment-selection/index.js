@@ -4,6 +4,7 @@ import { getStorageInfo } from '../../../utilities/storage';
 import StoreAddress from '../appointment-store/components/store-address';
 import SectionTitle from '../section-title';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class AppointmentSelection extends React.Component {
   handleEdit = (step) => {
@@ -24,7 +25,7 @@ export default class AppointmentSelection extends React.Component {
           className="appointment-details-header appointment-subtitle fadeInUp"
           style={{ animationDelay: '0.4s' }}
         >
-          {Drupal.t('You have chosen')}
+          {getStringMessage('selection_header')}
         </div>
         <div className="appointment-details-body">
           <div
@@ -34,7 +35,7 @@ export default class AppointmentSelection extends React.Component {
             <div className="appointment-details-item">
               <div className="appointment-details-item-header">
                 <SectionTitle>
-                  {Drupal.t('Appointment category')}
+                  {getStringMessage('program_label')}
                 </SectionTitle>
               </div>
               <div className="appointment-details-item-body">
@@ -44,7 +45,7 @@ export default class AppointmentSelection extends React.Component {
             <div className="appointment-details-item">
               <div className="appointment-details-item-header">
                 <SectionTitle>
-                  {Drupal.t('Appointment type')}
+                  {getStringMessage('activity_label')}
                 </SectionTitle>
               </div>
               <div className="appointment-details-item-body">
@@ -58,7 +59,7 @@ export default class AppointmentSelection extends React.Component {
                 type="button"
                 onClick={() => this.handleEdit('appointment-type')}
               >
-                {Drupal.t('Edit')}
+                {getStringMessage('edit')}
               </button>
               )}
           </div>
@@ -72,7 +73,7 @@ export default class AppointmentSelection extends React.Component {
                 <div className="appointment-details-item">
                   <div className="appointment-details-item-header">
                     <SectionTitle>
-                      {Drupal.t('Location')}
+                      {getStringMessage('location')}
                     </SectionTitle>
                   </div>
                   <div className="appointment-details-item-body">
@@ -89,7 +90,7 @@ export default class AppointmentSelection extends React.Component {
                   type="button"
                   onClick={() => this.handleEdit('select-store')}
                 >
-                  {Drupal.t('Edit')}
+                  {getStringMessage('edit')}
                 </button>
               </div>
             )
@@ -103,7 +104,7 @@ export default class AppointmentSelection extends React.Component {
               >
                 <div className="appointment-details-item">
                   <div className="appointment-details-item-header">
-                    <SectionTitle>{Drupal.t('Date')}</SectionTitle>
+                    <SectionTitle>{getStringMessage('date')}</SectionTitle>
                   </div>
                   <div className="appointment-details-item-body">
                     <div className="store-name">
@@ -113,7 +114,7 @@ export default class AppointmentSelection extends React.Component {
                 </div>
                 <div className="appointment-details-item">
                   <div className="appointment-details-item-header">
-                    <SectionTitle>{Drupal.t('Time')}</SectionTitle>
+                    <SectionTitle>{getStringMessage('time')}</SectionTitle>
                   </div>
                   <div className="appointment-details-item-body">
                     <div className="store-name">
@@ -126,7 +127,7 @@ export default class AppointmentSelection extends React.Component {
                   type="button"
                   onClick={() => this.handleEdit('select-time-slot')}
                 >
-                  {Drupal.t('Edit')}
+                  {getStringMessage('edit')}
                 </button>
               </div>
             )

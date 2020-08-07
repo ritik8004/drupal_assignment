@@ -157,6 +157,9 @@ function _alshaya_appointment_translations() {
     'Sign in with' => [
       'ar' => 'تسجيل الدخول باستخدام',
     ],
+    'Sign in' => [
+      'ar' => 'تسجيل الدخول',
+    ],
     "I don't have an account" => [
       'ar' => 'ليس لدي حساب',
     ],

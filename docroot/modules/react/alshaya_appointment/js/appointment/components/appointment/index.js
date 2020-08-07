@@ -20,6 +20,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 const AppointmentStore = React.lazy(async () => {
   // Wait for google object to load.
@@ -250,7 +251,7 @@ export default class Appointment extends React.Component {
     } else if (appointmentStep === 'select-store') {
       appointmentClasses += 'appointment-2-cols appointment-select-store-container';
       appointmentData = (
-        <React.Suspense fallback={<Loading loadingMessage={Drupal.t('Loading Stores')} />}>
+        <React.Suspense fallback={<Loading loadingMessage={getStringMessage('loading_stores_placeholder')} />}>
           <AppointmentStore
             handleBack={this.handleEdit}
             handleSubmit={() => this.handleSubmit('select-time-slot')}

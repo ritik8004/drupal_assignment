@@ -1,4 +1,5 @@
 import axios from 'axios';
+import getStringMessage from '../../../js/utilities/strings';
 
 export const validateInfo = (data) => axios.post(Drupal.url('spc/validate-info'), data);
 
@@ -15,7 +16,7 @@ export const processCustomerDetails = async (e) => {
       return;
     }
     if (!element.value.length) {
-      document.getElementById(`${element.id}-error`).innerHTML = Drupal.t('Please enter value for this field.');
+      document.getElementById(`${element.id}-error`).innerHTML = getStringMessage('empty_field_default_error');
       document.getElementById(`${element.id}-error`).classList.add('error');
       isError = true;
     } else {
@@ -39,7 +40,7 @@ export const processCustomerDetails = async (e) => {
 
     // If invalid mobile number.
     if (response.data.mobile === false) {
-      document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+      document.getElementById('mobile-error').innerHTML = getStringMessage('valid_mobile_error');
       document.getElementById('mobile-error').classList.add('error');
       isError = true;
     } else {
@@ -51,7 +52,7 @@ export const processCustomerDetails = async (e) => {
     // If invalid email address.
     if (response.data.email !== undefined) {
       if (response.data.email === 'invalid') {
-        document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', { '%mail': validationData.email });
+        document.getElementById('email-error').innerHTML = getStringMessage('valid_email_error', { '%mail': validationData.email });
         document.getElementById('email-error').classList.add('error');
         isError = true;
       } else {

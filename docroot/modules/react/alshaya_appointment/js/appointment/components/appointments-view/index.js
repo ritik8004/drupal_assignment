@@ -6,6 +6,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class AppointmentsView extends React.Component {
   constructor(props) {
@@ -75,7 +76,7 @@ export default class AppointmentsView extends React.Component {
     }
   };
 
-  getNotFoundText = () => (<p>{ Drupal.t('No appointments booked.') }</p>);
+  getNotFoundText = () => (<p>{ getStringMessage('no_appointments') }</p>);
 
   cancelAppointment = (appointmentId, index) => {
     const { appointments } = this.state;
@@ -125,7 +126,7 @@ export default class AppointmentsView extends React.Component {
           href={`${baseUrl}${pathPrefix}appointment/booking`}
           className="appointment-booking-link-top fadeInUp"
         >
-          {Drupal.t('Book new appointment')}
+          {getStringMessage('book_new_appointment_label')}
         </a>
         <div className="appointment-list">
           {appointmentsRender}
@@ -135,7 +136,7 @@ export default class AppointmentsView extends React.Component {
         </ConditionalView>
         <div className="book-appointment-btn fadeInUp">
           <a href={`${baseUrl}${pathPrefix}appointment/booking`} className="appointment-booking-link-bottom">
-            {Drupal.t('Book new appointment')}
+            {getStringMessage('book_new_appointment_label')}
           </a>
         </div>
       </div>

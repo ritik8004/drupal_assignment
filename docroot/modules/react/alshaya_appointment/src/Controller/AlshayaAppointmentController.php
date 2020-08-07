@@ -148,9 +148,11 @@ class AlshayaAppointmentController extends ControllerBase {
       ],
     ];
 
+    module_load_include('inc', 'alshaya_appointment', 'alshaya_appointment.static_strings');
+
     return [
-      '#type' => 'markup',
-      '#markup' => '<div id="appointment-booking"></div>',
+      '#theme' => 'appointment_booking',
+      '#strings' => _alshaya_appointment_static_strings(),
       '#attached' => [
         'library' => [
           'alshaya_appointment/alshaya_appointment',
@@ -252,9 +254,11 @@ class AlshayaAppointmentController extends ControllerBase {
       'user_details' => $this->getUserDetails(),
     ];
 
+    module_load_include('inc', 'alshaya_appointment', 'alshaya_appointment.static_strings');
+
     return [
-      '#type' => 'markup',
-      '#markup' => '<div id="customer-appointments"></div>',
+      '#theme' => 'customer_appointments',
+      '#strings' => _alshaya_appointment_static_strings(),
       '#attached' => [
         'library' => [
           'alshaya_appointment/alshaya_appointment_view',

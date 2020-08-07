@@ -2,6 +2,7 @@ import React from 'react';
 import SectionTitle from '../../../section-title';
 import AppointmentSelect from '../appointment-select';
 import ReadMore from '../../../../../common/components/readmore';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class AppointmentTypeList extends React.Component {
   onSelectChange = (e, name) => {
@@ -32,7 +33,7 @@ export default class AppointmentTypeList extends React.Component {
     return (
       <div className="appointment-type-list-wrapper appointment-type-item">
         <SectionTitle>
-          {Drupal.t('Appointment type')}
+          {getStringMessage('activity_label')}
           :*
         </SectionTitle>
         <div className="appointment-type-list-inner-wrapper fadeInUp">

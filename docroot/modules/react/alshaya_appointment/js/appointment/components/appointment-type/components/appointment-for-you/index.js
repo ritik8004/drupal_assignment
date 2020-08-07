@@ -1,5 +1,6 @@
 import React from 'react';
 import SectionTitle from '../../../section-title';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class AppointmentForYou extends React.Component {
   handleChange = (e) => {
@@ -9,7 +10,7 @@ export default class AppointmentForYou extends React.Component {
 
   render() {
     const { activeItem, appointmentCompanion } = this.props;
-    const label = appointmentCompanion.value > 1 ? Drupal.t('Is one of these appointments for you?') : Drupal.t('Is this appointment for you?');
+    const label = appointmentCompanion.value > 1 ? getStringMessage('appointment_for_you_many') : getStringMessage('appointment_for_you_one');
     return (
       <div className="appointment-for-you-wrapper appointment-type-item">
         <SectionTitle>
@@ -27,7 +28,7 @@ export default class AppointmentForYou extends React.Component {
               onChange={this.handleChange}
             />
             <label htmlFor="appointmentForYou-yes">
-              {Drupal.t('Yes')}
+              {getStringMessage('yes')}
             </label>
           </div>
           <div className="appointment-for-you-list fadeInUp">
@@ -40,7 +41,7 @@ export default class AppointmentForYou extends React.Component {
               onChange={this.handleChange}
             />
             <label htmlFor="appointmentForYou-no">
-              {Drupal.t('No')}
+              {getStringMessage('no')}
             </label>
           </div>
         </div>

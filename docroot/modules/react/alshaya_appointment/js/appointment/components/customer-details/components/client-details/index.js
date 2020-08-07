@@ -1,6 +1,7 @@
 import React from 'react';
 import { getStorageInfo } from '../../../../../utilities/storage';
 import TextField from '../../../../../utilities/textfield';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class ClientDetails extends React.Component {
   constructor(props) {
@@ -42,8 +43,8 @@ export default class ClientDetails extends React.Component {
     return (
       <div className="appointment-user-details-wrapper">
         <div className="details-header-wrapper">
-          <div className="store-header appointment-subtitle">{Drupal.t('Appointment Booked by')}</div>
-          <div className="user-detail-subheading">{Drupal.t('We will only use these details if we need to contact you about the appointment.')}</div>
+          <div className="store-header appointment-subtitle">{getStringMessage('appointment_booked_by_label')}</div>
+          <div className="user-detail-subheading">{getStringMessage('customer_details_subheader')}</div>
         </div>
         <div className="user-details-wrapper">
           <div className="user-detail-name-wrapper">
@@ -54,7 +55,7 @@ export default class ClientDetails extends React.Component {
                 name="firstName"
                 defaultValue={firstName}
                 className={firstName !== '' ? 'focus' : ''}
-                label={Drupal.t('First name')}
+                label={getStringMessage('first_name_label')}
                 handleChange={this.handleChange}
               />
             </div>
@@ -65,13 +66,13 @@ export default class ClientDetails extends React.Component {
                 name="lastName"
                 defaultValue={lastName}
                 className={lastName !== '' ? 'focus' : ''}
-                label={Drupal.t('Last name')}
+                label={getStringMessage('last_name_label')}
                 handleChange={this.handleChange}
               />
             </div>
           </div>
           <div className="item user-dob">
-            <label>{`${Drupal.t('Date of Birth')}*`}</label>
+            <label>{`${getStringMessage('dob_label')}*`}</label>
             <TextField
               type="date"
               required
@@ -89,7 +90,7 @@ export default class ClientDetails extends React.Component {
               name="email"
               defaultValue={email}
               className={email !== '' ? 'focus' : ''}
-              label={Drupal.t('Email address')}
+              label={getStringMessage('email_address_label')}
               handleChange={this.handleChange}
             />
           </div>
@@ -100,7 +101,7 @@ export default class ClientDetails extends React.Component {
               name="mobile"
               defaultValue={mobile}
               className={mobile !== '' ? 'focus' : ''}
-              label={`${Drupal.t('Telephone/ Mobile')}*`}
+              label={`${getStringMessage('mobile_label')}*`}
               handleChange={this.handleChange}
             />
           </div>

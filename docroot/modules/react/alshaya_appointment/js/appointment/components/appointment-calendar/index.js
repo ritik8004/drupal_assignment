@@ -4,6 +4,7 @@ import { extendMoment } from 'moment-range';
 import { getDateFormat } from '../../../utilities/helper';
 import ConditionalView from '../../../common/components/conditional-view';
 import { showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 const momentRange = extendMoment(moment);
 
@@ -129,12 +130,12 @@ export default class AppointmentCalendar extends React.Component {
               disabled={(previousDisabled)}
               onClick={() => this.togglePrev(week[0])}
             >
-              { Drupal.t('Prev') }
+              { getStringMessage('prev') }
             </button>
             <ul className="calendar-wrapper">
               { weekdays }
             </ul>
-            <button type="button" className="appointment-calendar-next-btn" onClick={() => this.toggleNext(week.slice(-1).pop())}>{ Drupal.t('Next') }</button>
+            <button type="button" className="appointment-calendar-next-btn" onClick={() => this.toggleNext(week.slice(-1).pop())}>{ getStringMessage('next') }</button>
           </div>
         </ConditionalView>
         <ConditionalView condition={window.innerWidth < 1024}>

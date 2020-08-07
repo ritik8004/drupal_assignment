@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { getStorageInfo } from '../../../utilities/storage';
 import { getDateFormat } from '../../../utilities/helper';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class AppointmentSlots extends React.Component {
   constructor(props) {
@@ -133,7 +134,7 @@ export default class AppointmentSlots extends React.Component {
         && (
           <div className="morning-items-wrapper">
             <div className="morning-items-title">
-              {Drupal.t('Morning')}
+              {getStringMessage('morning')}
             </div>
             <ul className="morning-items">
               {listMorningItems}
@@ -145,7 +146,7 @@ export default class AppointmentSlots extends React.Component {
         && (
           <div className="afternoon-items-wrapper">
             <div className="afternoon-items-title">
-              {Drupal.t('Afternoon')}
+              {getStringMessage('afternoon')}
             </div>
             <ul className="afternoon-items">
               {listAfternoonItems}
@@ -157,7 +158,7 @@ export default class AppointmentSlots extends React.Component {
         && (
           <div className="evening-items-wrapper">
             <div className="evening-items-title">
-              {Drupal.t('Evening')}
+              {getStringMessage('evening')}
             </div>
             <ul className="evening-items">
               {listEveningItems}

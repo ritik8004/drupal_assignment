@@ -12,6 +12,7 @@ import {
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
 const companionItems = [...Array(parseInt(listItems, 10))]
@@ -192,7 +193,7 @@ export default class AppointmentType extends React.Component {
               && appointmentForYou)}
             onClick={this.handleSubmit}
           >
-            {Drupal.t('Continue')}
+            {getStringMessage('continue')}
           </button>
         </div>
       </div>

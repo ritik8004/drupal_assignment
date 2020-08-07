@@ -3,6 +3,7 @@ import _find from 'lodash/find';
 import { getStorageInfo } from '../../../../../utilities/storage';
 import TextField from '../../../../../utilities/textfield';
 import { fetchAPIData } from '../../../../../utilities/api/fetchApiData';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class CompanionDetails extends React.Component {
   constructor(props) {
@@ -82,7 +83,7 @@ export default class CompanionDetails extends React.Component {
         return (
           <div className={`companion-details-item ${companionNamePrefix}-details`}>
             <div className="details-header-wrapper">
-              <div className="companion-detail-heading">{`${Drupal.t('Companion')} ${companionNum} ${Drupal.t('Details')}`}</div>
+              <div className="companion-detail-heading">{`${getStringMessage('companion_label')} ${companionNum} ${getStringMessage('details')}`}</div>
               <div className="delete-companion">
                 <button
                   className="btn btn-link"
@@ -90,7 +91,7 @@ export default class CompanionDetails extends React.Component {
                   data-companion-id={companionNum}
                   onClick={this.handleRemoveFields}
                 >
-                  {Drupal.t('Delete')}
+                  {getStringMessage('delete')}
                 </button>
               </div>
             </div>
@@ -103,7 +104,7 @@ export default class CompanionDetails extends React.Component {
                     name={firstName}
                     defaultValue={defaultfirstName}
                     className={firstName !== '' ? 'focus' : ''}
-                    label={Drupal.t('First name')}
+                    label={getStringMessage('first_name_label')}
                     handleChange={this.handleChange}
                   />
                 </div>
@@ -114,13 +115,13 @@ export default class CompanionDetails extends React.Component {
                     name={lastName}
                     defaultValue={defaultlastName}
                     className={lastName !== '' ? 'focus' : ''}
-                    label={Drupal.t('Last name')}
+                    label={getStringMessage('last_name_label')}
                     handleChange={this.handleChange}
                   />
                 </div>
               </div>
               <div className="item user-dob">
-                <label>{`${Drupal.t('Date of Birth')}*`}</label>
+                <label>{`${getStringMessage('dob_label')}*`}</label>
                 <TextField
                   type="date"
                   required={dobData.required}
@@ -150,7 +151,7 @@ export default class CompanionDetails extends React.Component {
             type="button"
             onClick={() => this.handleAddFields()}
           >
-            {Drupal.t('Add Companion')}
+            {getStringMessage('add_companion_label')}
           </button>
           )}
         </div>

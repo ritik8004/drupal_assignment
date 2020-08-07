@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import StoreAddress from '../../../appointment-store/components/store-address';
 import { getDateFormat } from '../../../../../utilities/helper';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class AppointmentEditBox extends React.Component {
   constructor(props) {
@@ -29,7 +30,7 @@ export default class AppointmentEditBox extends React.Component {
             <span>{item.lastName}</span>
           </p>
           <p>
-            <span>{ `${Drupal.t('Date of Birth')}:` }</span>
+            <span>{ `${getStringMessage('dob_label')}:` }</span>
             <span>{ moment(item.dob).format(getDateFormat()) }</span>
           </p>
         </div>
@@ -41,37 +42,37 @@ export default class AppointmentEditBox extends React.Component {
     return (
       <div className="appointment-edit-popup fadeInUp">
         <div className="appointmentbox title">
-          <span>{ Drupal.t('Edit') }</span>
+          <span>{ getStringMessage('edit') }</span>
         </div>
         <div className="appointmentbox appointment-type">
           <div>
-            <span className="label">{ Drupal.t('Appointment type') }</span>
+            <span className="label">{ getStringMessage('activity_label') }</span>
             <span>{ appointment.activityName }</span>
           </div>
         </div>
         <div className="appointmentbox appointment-store">
-          <span className="label">{ Drupal.t('Store Location') }</span>
+          <span className="label">{ getStringMessage('store_location_label') }</span>
           <div>
             <p>{storeName}</p>
             <StoreAddress address={address} />
           </div>
-          <a className="appointmentbox-action-edit" href={`${url}&step=select-store`}>{ Drupal.t('Edit Store') }</a>
+          <a className="appointmentbox-action-edit" href={`${url}&step=select-store`}>{ getStringMessage('edit_store') }</a>
         </div>
         <div className="appointmentbox appointment-datetime">
-          <span className="label">{ Drupal.t('Date and Time') }</span>
+          <span className="label">{ `${getStringMessage('date')} ${getStringMessage('and')} ${getStringMessage('time')}` }</span>
           <div>
             <span>{ moment(appointmentStartDate).format('dddd, Do MMMM') }</span>
             <br />
             <span>{ moment(appointmentStartDate).format('YYYY hh:mm A') }</span>
           </div>
-          <a className="appointmentbox-action-edit" href={`${url}&step=select-time-slot`}>{ Drupal.t('Edit time') }</a>
+          <a className="appointmentbox-action-edit" href={`${url}&step=select-time-slot`}>{ getStringMessage('edit_time') }</a>
         </div>
         <div className="appointmentbox appointment-companion">
           <span className="label">
-            {Drupal.t('Customer Details')}
+            {getStringMessage('customer_details_label')}
           </span>
           <div className="popup-customer-details">{ companionsRender }</div>
-          <a className="appointmentbox-action-edit" href={`${url}&step=customer-details`}>{ Drupal.t('Edit Companion') }</a>
+          <a className="appointmentbox-action-edit" href={`${url}&step=customer-details`}>{ getStringMessage('edit_companion') }</a>
         </div>
       </div>
     );

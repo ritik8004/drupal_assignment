@@ -1,5 +1,6 @@
 import React from 'react';
 import SectionTitle from '../../../section-title';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class AppointmentCategories extends React.Component {
   handleItemClick = (item) => {
@@ -13,7 +14,7 @@ export default class AppointmentCategories extends React.Component {
     return (
       <div className="appointment-categories-wrapper appointment-type-item">
         <SectionTitle>
-          {Drupal.t('Select Appointment Category')}
+          {getStringMessage('select_program_label')}
           :*
         </SectionTitle>
         <ul className="appointment-categories">
