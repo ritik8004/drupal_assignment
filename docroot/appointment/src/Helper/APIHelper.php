@@ -55,6 +55,10 @@ class APIHelper {
       $result = $client->__soapCall('getLocationGroup', [$param]);
       $locationExternalIds = $result->return->locationGroup ? $result->return->locationGroup->locationExternalIds : [];
 
+      // Remove locations from array that are not needed.
+      $locations_to_skip = explode(',', $appointment_settings['locations_to_skip']);
+      $locationExternalIds = array_diff($locationExternalIds, $locations_to_skip);
+
       return $locationExternalIds;
     }
     catch (\Exception $e) {
