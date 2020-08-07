@@ -3,7 +3,7 @@ import ConfigurableProductForm from './configurable-product-form';
 import SimpleProductForm from './simple-product-form';
 
 const PdpCart = ({
-  configurableCombinations, skuCode, productInfo, pdpRefresh, childRef,
+  configurableCombinations, skuCode, productInfo, pdpRefresh, childRef, pdpLabelRefresh,
 }) => {
   if (configurableCombinations) {
     return (
@@ -13,6 +13,7 @@ const PdpCart = ({
           skuCode={skuCode}
           productInfo={productInfo}
           pdpRefresh={pdpRefresh}
+          pdpLabelRefresh={pdpLabelRefresh}
         />
       </div>
     );
@@ -22,6 +23,7 @@ const PdpCart = ({
       <SimpleProductForm
         skuCode={skuCode}
         productInfo={productInfo}
+        pdpLabelRefresh={pdpLabelRefresh}
       />
     </div>
   );
