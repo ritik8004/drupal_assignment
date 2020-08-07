@@ -191,6 +191,7 @@ class AppointmentServices {
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('reBookAppointment', [$param]);
       $bookingId = $result->return->result ?? '';
+
       $clientExternalId = $this->apiHelper->checkifBelongstoUser($userId);
       $cacheClient = $this->cache->getCacheClient();
       $tags = [

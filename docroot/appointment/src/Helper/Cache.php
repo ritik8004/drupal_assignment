@@ -12,8 +12,6 @@ use Symfony\Contracts\Cache\TagAwareCacheInterface;
  */
 class Cache {
 
-  const CACHE_EXPIRY_SECONDS = 604800;
-
   /**
    * Cache Interface.
    *
@@ -54,13 +52,14 @@ class Cache {
    * Set Cache data.
    */
   public function setItem($key, $data) {
+    $expire = (int) $_ENV['CACHE_EXPIRY_SECONDS'];
     /** @var \Symfony\Contracts\Cache\ItemInterface $item */
     $item = $this->cache->getItem($key);
     $item
       ->set($data)
       ->tag($key)
     // In seconds.
-      ->expiresAfter($this::CACHE_EXPIRY_SECONDS);
+      ->expiresAfter($expire);
     $this->cache->save($item);
   }
 
