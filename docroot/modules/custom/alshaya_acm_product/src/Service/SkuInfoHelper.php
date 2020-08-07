@@ -19,6 +19,7 @@ use Drupal\node\NodeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
+use Drupal\Core\TypedData\TranslatableInterface;
 
 /**
  * Class SkuInfoHelper.
@@ -193,7 +194,7 @@ class SkuInfoHelper {
     if (($entity instanceof ContentEntityInterface
          || $entity instanceof ConfigEntityInterface)
         && $entity->language()->getId() != $langcode
-        && $entity->hasTranslation($langcode)
+        && $entity instanceof TranslatableInterface && $entity->hasTranslation($langcode)
     ) {
       $entity = $entity->getTranslation($langcode);
     }
