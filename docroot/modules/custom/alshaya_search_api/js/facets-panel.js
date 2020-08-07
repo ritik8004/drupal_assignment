@@ -16,7 +16,7 @@
         $('body').removeClass('large-grid');
         $('.c-products-list').removeClass('product-large').addClass('product-small');
         setTimeout(function() {
-          $('.search-lightSlider').slick('refresh');
+          $('.search-lightSlider.slick-initialized').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
          Drupal.plpListingProductTileHeight('full_page', null);
@@ -27,7 +27,7 @@
         $('body').addClass('large-grid');
         $('.c-products-list').removeClass('product-small').addClass('product-large');
         setTimeout(function() {
-          $('.search-lightSlider').slick('refresh');
+          $('.search-lightSlider.slick-initialized').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
          Drupal.plpListingProductTileHeight('full_page', null);
