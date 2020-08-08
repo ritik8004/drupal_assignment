@@ -186,7 +186,9 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['#attached']['drupalSettings']['vatText'] = $vat_text;
 
     // Set promo data.
-    $vars['#attached']['drupalSettings']['productInfo'][$sku]['promotions'] = $vars['elements']['promotions']['#markup'];
+    if (isset($vars['elements']['promotions'])) {
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['promotions'] = $vars['elements']['promotions']['#markup'];
+    }
 
     // Get gallery and combination data for product variants.
     if ($sku_entity->bundle() == 'configurable') {

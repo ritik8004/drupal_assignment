@@ -57,6 +57,7 @@ export const triggerAddToCart = (
   const productData = productDataValue;
   const cartData = Drupal.alshayaSpc.getCartData();
   const cartBtn = addToCartBtn;
+
   // If there any error we throw from middleware.
   if (response.data.error === true) {
     const errorMessage = <p>{response.data.error_message}</p>;
@@ -80,10 +81,10 @@ export const triggerAddToCart = (
     let productUrl = productInfo[skuCode].url;
     let price = productInfo[skuCode].priceRaw;
     let promotions = productInfo[skuCode].promotionsRaw;
-    let productDataSKU = productInfo[skuCode].sku;
-    let parentSKU = productInfo[skuCode].sku;
-    let { maxSaleQty } = productInfo[skuCode];
-    let maxSaleQtyParent = productInfo[skuCode].max_sale_qty_parent;
+    let productDataSKU = productData.sku;
+    let parentSKU = productData.parentSku;
+    let { maxSaleQty } = productData;
+    let maxSaleQtyParent = productData.max_sale_qty_parent;
     const gtmAttributes = productInfo[skuCode].gtm_attributes;
     let options = [];
 
@@ -288,7 +289,7 @@ export const addToCartConfigurable = (
     },
   )
     .catch((error) => {
-      console.log(error);
+      console.log(error.response);
     });
 };
 
@@ -302,20 +303,30 @@ export const addToCartSimple = (e, id, skuCode, productInfo, pdpLabelRefresh) =>
   addToCartBtn.classList.toggle('magv2-add-to-basket-loader');
 
   const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
+  const options = [];
 
   const getPost = getPostData(skuCode, variantSelected, skuCode);
 
   const postData = getPost[0];
   const productData = getPost[1];
+  postData.options = options;
 
-  productData.productName = productInfo[skuCode].cart_title;
+  productData.product_name = productInfo[skuCode].cart_title;
   productData.image = productInfo[skuCode].cart_image;
 
   const cartEndpoint = `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`;
 
   updateCart(cartEndpoint, postData).then(
     (response) => {
-      triggerAddToCart(response, productData, productInfo, skuCode, addToCartBtn, pdpLabelRefresh);
+      triggerAddToCart(
+        response,
+        productData,
+        productInfo,
+        null,
+        skuCode,
+        addToCartBtn,
+        pdpLabelRefresh,
+      );
     },
   )
     .catch((error) => {
