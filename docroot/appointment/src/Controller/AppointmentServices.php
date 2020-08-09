@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Helper\APIServicesUrls;
-use App\Helper\Cache;
+use App\Cache\Cache;
 use App\Service\Drupal\Drupal;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,7 +46,7 @@ class AppointmentServices {
   /**
    * Cache Helper.
    *
-   * @var \App\Helper\Cache
+   * @var \App\Cache\Cache
    */
   protected $cache;
 
@@ -61,7 +61,7 @@ class AppointmentServices {
    *   Drupal service.
    * @param \App\Helper\APIHelper $api_helper
    *   API Helper.
-   * @param \App\Helper\Cache $cache
+   * @param \App\Cache\Cache $cache
    *   Cache Helper.
    */
   public function __construct(LoggerInterface $logger,

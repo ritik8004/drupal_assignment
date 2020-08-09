@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Helper\Cache;
 use App\Service\Drupal\Drupal;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,13 +43,6 @@ class ClientServices {
   protected $drupal;
 
   /**
-   * Cache helper.
-   *
-   * @var \App\Helper\Cache
-   */
-  protected $cache;
-
-  /**
    * ClientServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -61,19 +53,15 @@ class ClientServices {
    *   Xml API Helper.
    * @param \App\Service\Drupal $drupal
    *   Drupal service.
-   * @param \App\Helper\Cache $cache
-   *   Cache Helper.
    */
   public function __construct(LoggerInterface $logger,
                               APIHelper $api_helper,
                               XmlAPIHelper $xml_api_helper,
-                              Drupal $drupal,
-                              Cache $cache) {
+                              Drupal $drupal) {
     $this->logger = $logger;
     $this->apiHelper = $api_helper;
     $this->xmlApiHelper = $xml_api_helper;
     $this->drupal = $drupal;
-    $this->cache = $cache;
     $this->serviceUrl = $this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_CLIENT_SERVICES_URL;
   }
 
@@ -170,11 +158,6 @@ class ClientServices {
           'hideDisabled' => TRUE,
         ],
       ];
-      $cacheKey = 'client_' . $userId;
-      $item = $this->cache->getItem($cacheKey);
-      if ($item) {
-        return new JsonResponse($item);
-      }
       $result = $client->__soapCall('getClientsByCriteria', [$param]);
 
       $clientData = [];
@@ -190,7 +173,7 @@ class ClientServices {
           'mobile' => $clientArray->phoneData->mobile ?? '',
         ];
       }
-      $this->cache->setItem($cacheKey, $clientData);
+
       return new JsonResponse($clientData);
     }
     catch (\Exception $e) {

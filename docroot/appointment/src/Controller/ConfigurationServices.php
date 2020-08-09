@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Helper\Cache;
+use App\Cache\Cache;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +46,7 @@ class ConfigurationServices {
   /**
    * Cache Client.
    *
-   * @var \App\Helper\Cache
+   * @var \App\Cache\Cache
    */
   protected $cache;
 
@@ -61,7 +61,7 @@ class ConfigurationServices {
    *   Xml API Helper.
    * @param \App\Helper\Helper $helper
    *   Helper.
-   * @param \App\Helper\Cache $cache
+   * @param \App\Cache\Cache $cache
    *   Cache Helper.
    */
   public function __construct(LoggerInterface $logger,

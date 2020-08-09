@@ -1,8 +1,12 @@
 <?php
 
-namespace App\Helper;
+namespace App\Cache;
 
+use Doctrine\DBAL\Connection;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\MemcachedAdapter;
+use Symfony\Component\Cache\Adapter\PdoAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 /**
@@ -25,8 +29,9 @@ class Cache {
    * @param \Symfony\Contracts\Cache\TagAwareCacheInterface $appointmentCache
    *   Cache Interface.
    */
-  public function __construct(TagAwareCacheInterface $appointmentCache) {
-    $this->cache = $appointmentCache;
+  public function __construct(Connection $connection) {
+    $cache = new PdoAdapter($connection);
+    $this->cache = new TagAwareAdapter($cache);
   }
 
   /**
@@ -70,11 +75,12 @@ class Cache {
     return $this->cache;
   }
 
-  /**
-   * Cache Provider.
-   */
-  public function createConnection() {
-    return MemcachedAdapter::createConnection('memcached://localhost');
+  public function deleteCacheItem($key) {
+    $this->cache->deleteItem($key);
+  }
+
+  public function cacheClear() {
+    $this->cache->clear();
   }
 
 }

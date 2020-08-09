@@ -2,6 +2,7 @@
 
 namespace App\Helper;
 
+use App\Cache\Cache;
 use Psr\Log\LoggerInterface;
 use App\Service\Config\SystemSettings;
 
@@ -28,7 +29,7 @@ class APIHelper {
   /**
    * Cache helper.
    *
-   * @var \App\Helper\Cache
+   * @var \App\Cache\Cache
    */
   protected $cache;
 
@@ -39,7 +40,7 @@ class APIHelper {
    *   Logger service.
    * @param \App\Service\Config\SystemSettings $settings
    *   System Settings service.
-   * @param \App\Helper\Cache $cache
+   * @param \App\Cache\Cache $cache
    *   Cache Helper.
    */
   public function __construct(LoggerInterface $logger,
@@ -78,7 +79,6 @@ class APIHelper {
 
       $result = $client->__soapCall('getLocationGroup', [$param]);
       $locationExternalIds = $result->return->locationGroup ? $result->return->locationGroup->locationExternalIds : [];
-
 
       // Remove locations from array that are not needed.
       $locations_to_skip = explode(',', $appointment_settings['locations_to_skip']);
