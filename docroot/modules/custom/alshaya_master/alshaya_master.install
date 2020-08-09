@@ -11,6 +11,15 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update context for strings.
+ */
+function alshaya_master_update_8042() {
+  alshaya_master_update_context();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove unnecessary occurrences for 'Search' string in Algolia context.
  */
 function alshaya_master_update_8041() {
@@ -2113,4 +2122,7 @@ function alshaya_master_install() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'back_to_top.settings')
     ->set('back_to_top_button_text', 'أعلى الصفحة')
     ->save();
+
+  // Update context for strings.
+  alshaya_master_update_context();
 }
