@@ -88,6 +88,10 @@ class ConfigurableProductForm extends React.Component {
     }
 
     if (combinations[code][codeValue] === 1) {
+      this.setState({
+        nextCode: code,
+        nextValues: Object.keys(combinations[code]),
+      });
       return;
     }
 

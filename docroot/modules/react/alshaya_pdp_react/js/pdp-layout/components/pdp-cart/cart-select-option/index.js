@@ -71,7 +71,9 @@ class CartSelectOption extends React.Component {
       selectedCombination += `${key}|${selectedValuesArray[key]}||`;
     });
     const variantSelected = configurableCombinations[skuCode].byAttribute[selectedCombination];
-    const parentSkuSelected = productInfo[skuCode].variants[variantSelected].parent_sku;
+    const parentSkuSelected = productInfo[skuCode].variants[variantSelected].parent_sku
+      ? productInfo[skuCode].variants[variantSelected].parent_sku
+      : skuCode;
     // Refresh the PDP page on new variant selection.
     pdpRefresh(variantSelected, parentSkuSelected);
 
