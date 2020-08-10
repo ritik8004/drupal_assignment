@@ -148,7 +148,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       }
 
       // Check if product is in stock.
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockStatus'] = $this->skuManager->isProductInStock($sku_entity);
+      $stock_status = $this->skuManager->isProductInStock($sku_entity);
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockStatus'] = $stock_status;
     }
 
     // Get share this settings.
@@ -197,10 +198,11 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     if ($sku_entity->bundle() == 'configurable') {
       $product_tree = Configurable::deriveProductTree($sku_entity);
       $combinations = $product_tree['combinations'];
-      $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['bySku'] = $combinations['by_sku'];
       $swatch_processed = FALSE;
-
-      $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['byAttribute'] = $combinations['by_attribute'];
+      if ($stock_status) {
+        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['bySku'] = $combinations['by_sku'];
+        $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['byAttribute'] = $combinations['by_attribute'];
+      }
       $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'] = $product_tree['configurables'];
 
       // Prepare group and swatch attributes.
