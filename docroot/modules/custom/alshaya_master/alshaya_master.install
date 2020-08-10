@@ -14,11 +14,19 @@ use Drupal\Core\Config\FileStorage;
  * Remove unnecessary occurrences for 'Search' string in Algolia context.
  */
 function alshaya_master_update_8041() {
-  \Drupal::service('locale.storage')->deleteStrings([
+  // In some sites (like BBWAE) it is available 3-4 times in source table.
+  $conditions = [
     'source' => 'Search',
     'context' => 'alshaya_static_text|algolia_search_block_placeholder',
     'translated' => FALSE,
-  ]);
+  ];
+
+  /** @var \Drupal\locale\StringDatabaseStorage $storage */
+  $storage = \Drupal::service('locale.storage');
+
+  while ($string = $storage->findString($conditions)) {
+    $string->delete();
+  }
 }
 
 /**
