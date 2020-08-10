@@ -199,14 +199,6 @@ function _alshaya_appointment_static_strings() {
       'value' => t('Appointment type'),
     ],
     [
-      'key' => 'no_appointments',
-      'value' => t('No appointments booked.'),
-    ],
-    [
-      'key' => 'book_new_appointment_label',
-      'value' => t('Book new Appointment'),
-    ],
-    [
       'key' => 'and',
       'value' => t('and'),
     ],
@@ -229,14 +221,6 @@ function _alshaya_appointment_static_strings() {
     [
       'key' => 'cancel',
       'value' => t('Cancel'),
-    ],
-    [
-      'key' => 'ok',
-      'value' => t('OK'),
-    ],
-    [
-      'key' => 'cancel_appointment_confirmation_question',
-      'value' => t('Are you sure you want to cancel appointment for !type?'),
     ],
     [
       'key' => 'dob_label',
@@ -341,6 +325,70 @@ function _alshaya_appointment_static_strings() {
     [
       'key' => 'valid_email_error',
       'value' => t('The email address %mail is not valid.'),
+    ],
+  ];
+}
+
+/**
+ * My Appointments strings.
+ */
+function _alshaya_appointment_my_appointments_static_strings() {
+  return [
+    [
+      'key' => 'no_appointments',
+      'value' => t('No appointments booked.'),
+    ],
+    [
+      'key' => 'book_new_appointment_label',
+      'value' => t('Book new Appointment'),
+    ],
+    [
+      'key' => 'activity_label',
+      'value' => t('Appointment type'),
+    ],
+    [
+      'key' => 'date',
+      'value' => t('Date'),
+    ],
+    [
+      'key' => 'time',
+      'value' => t('Time'),
+    ],
+    [
+      'key' => 'and',
+      'value' => t('and'),
+    ],
+    [
+      'key' => 'store_location_label',
+      'value' => t('Store Location'),
+    ],
+    [
+      'key' => 'customer_details_label',
+      'value' => t('customer details'),
+    ],
+    [
+      'key' => 'close',
+      'value' => t('close'),
+    ],
+    [
+      'key' => 'edit',
+      'value' => t('Edit'),
+    ],
+    [
+      'key' => 'delete',
+      'value' => t('Delete'),
+    ],
+    [
+      'key' => 'cancel',
+      'value' => t('Cancel'),
+    ],
+    [
+      'key' => 'cancel_appointment_confirmation_question',
+      'value' => t('Are you sure you want to cancel appointment for !type?'),
+    ],
+    [
+      'key' => 'ok',
+      'value' => t('OK'),
     ],
   ];
 }
