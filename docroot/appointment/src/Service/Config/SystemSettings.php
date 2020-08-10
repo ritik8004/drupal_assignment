@@ -50,6 +50,7 @@ class SystemSettings {
 
     $site_country_code = alshaya_get_site_country_code($this->getSiteCode());
 
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_security.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/appointment.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/middleware_auth.php';
 

@@ -1,2 +1,2 @@
 monolog:
-  channels: ['middleware']
+  channels: ['appointment_middleware']
