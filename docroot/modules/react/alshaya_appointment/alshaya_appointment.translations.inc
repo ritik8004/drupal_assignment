@@ -34,9 +34,6 @@ function _alshaya_appointment_translations() {
     'Add to my calendar' => [
       'ar' => 'أضف إلى التقويم الخاص بي',
     ],
-    'Continue Shopping' => [
-      'ar' => 'أكمل التسوق',
-    ],
     'Appointment Summary' => [
       'ar' => 'ملخص الموعد',
     ],
@@ -76,12 +73,6 @@ function _alshaya_appointment_translations() {
     'No' => [
       'ar' => 'لا',
     ],
-    'Read More' => [
-      'ar' => 'اقرأ المزيد',
-    ],
-    'Show Less' => [
-      'ar' => 'إظهار محتوى أقل',
-    ],
     'Please Select' => [
       'ar' => 'يرجى الاختيار',
     ],
@@ -96,9 +87,6 @@ function _alshaya_appointment_translations() {
     ],
     'Appointment type' => [
       'ar' => 'نوع الموعد',
-    ],
-    'Edit' => [
-      'ar' => 'تعديل',
     ],
     'Location' => [
       'ar' => 'الموقع',
