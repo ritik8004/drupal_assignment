@@ -79,6 +79,7 @@
 
     .appointment-store-button {
       float: none;
+      text-transform: capitalize;
 
       &.back,
       &.select-store {
