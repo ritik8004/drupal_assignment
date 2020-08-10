@@ -224,4 +224,24 @@ class AlshayaColorSplitManager {
     return $swatch;
   }
 
+  /**
+   * Add swatch data in grouping attribute.
+   *
+   * @param array $variant
+   *   Array of variants.
+   * @param string $grouping_attribute
+   *   Grouping attribute.
+   */
+  public function addAttributeSwatchData(array &$variant, $grouping_attribute) {
+    foreach ($variant['attributes'] as $key => $attr) {
+      if ($attr['key'] === $grouping_attribute) {
+        $swatch = $this->getGroupingAttributeSwatchData($attr['value'], $grouping_attribute);
+        if (!empty($swatch)) {
+          $variant['attributes'][$key]['type'] = $swatch['type'];
+          $variant['attributes'][$key]['swatch'] = $swatch['swatch'];
+        }
+      }
+    }
+  }
+
 }

@@ -224,21 +224,16 @@ class ProductExcludeLinkedResource extends ResourceBase {
       ->toString(TRUE)
       ->getGeneratedUrl();
 
-    $grouping_attribute = '';
-    $color_split_manager = new \stdClass();
-    if ($this->moduleHandler->moduleExists('alshaya_color_split') && $skuEntity->bundle() === 'simple') {
-      /** @var \Drupal\alshaya_color_split\AlshayaColorSplitManager $manager */
-      $color_split_manager = \Drupal::service('alshaya_color_split.manager');
-      $grouping_attribute = \Drupal::service('alshaya_color_split.manager')->getGroupingAttribute($skuEntity);
-      $grouping_attribute_with_swatch = \Drupal::config('alshaya_color_split.settings')->get('process_swatch_for_grouping_attributes');
-    }
-    $data = $this->getSkuData($skuEntity, $link, $grouping_attribute_with_swatch, $grouping_attribute, $color_split_manager);
+    $data = $this->getSkuData($skuEntity, $link);
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_config(), $data['flags']], TRUE);
     $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
-    if (!empty($grouping_attribute)) {
-      $data['grouped_products'] = $this->getGroupedProducts($skuEntity, $grouping_attribute_with_swatch, $grouping_attribute, $color_split_manager);
+
+    // Allow other modules to alter product data.
+    $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity);
+    if (isset($data['grouped_variants'])) {
+      $data['grouped_variants'] = $this->getGroupedVariants($data);
     }
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
@@ -263,17 +258,11 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   SKU Entity.
    * @param string $link
    *   Product link if main product.
-   * @param bool $grouping_attribute_with_swatch
-   *   Grouping attribute with swatch or not.
-   * @param string $grouping_attribute
-   *   Grouping attribute.
-   * @param object $color_split_manager
-   *   Color split manager object.
    *
    * @return array
    *   Product Data.
    */
-  private function getSkuData(SKUInterface $sku, string $link = '', bool $grouping_attribute_with_swatch = FALSE, string $grouping_attribute = '', $color_split_manager = NULL): array {
+  private function getSkuData(SKUInterface $sku, string $link = ''): array {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
 
@@ -331,13 +320,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
         'labels' => $this->skuManager->getSkuLabels($sku, $key),
       ];
     }
-
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
-    // Add swatch data with grouping attribute if enabled.
-    if ($grouping_attribute_with_swatch && !empty($grouping_attribute)) {
-      $this->addAttributeSwatchData($data, $grouping_attribute, $color_split_manager);
-    }
-
     $data['promotions'] = $this->getPromotions($sku);
     $promo_label = $this->skuManager->getDiscountedPriceMarkup($data['original_price'], $data['final_price']);
     if ($promo_label) {
@@ -372,54 +355,27 @@ class ProductExcludeLinkedResource extends ResourceBase {
   /**
    * Get grouped products for pdp based on grouping attribute.
    *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param bool $grouping_attribute_with_swatch
-   *   Grouping attribute with swatch.
-   * @param string $grouping_attribute
-   *   Grouping attribute.
-   * @param object $color_split_manager
-   *   Color split manager.
+   * @param array $data
+   *   Array of product data.
    *
    * @return array
    *   Grouping products for pdp.
    */
-  private function getGroupedProducts(SKUInterface $sku, bool $grouping_attribute_with_swatch, string $grouping_attribute, $color_split_manager) {
-    $data = [];
-    $products_in_style = $color_split_manager->getProductsInStyle($sku);
-
-    if (!empty($products_in_style)) {
-      foreach ($products_in_style as $grouped_sku) {
-        if ($grouped_sku->getSku() === $sku->getSku()) {
+  private function getGroupedVariants(array &$data) {
+    $grouped_variants = [];
+    if (!empty($data['grouped_variants'])) {
+      foreach ($data['grouped_variants'] as $grouped_sku) {
+        if (!$grouped_sku instanceof SKUInterface) {
           continue;
         }
-        $data[] = $this->getSkuData($grouped_sku, '', $grouping_attribute_with_swatch, $grouping_attribute, $color_split_manager);
-      }
-    }
-
-    return $data;
-  }
-
-  /**
-   * Add swatch data in grouping attribute.
-   *
-   * @param array $variant
-   *   Array of variants.
-   * @param string $grouping_attribute
-   *   Grouping attribute.
-   * @param object $color_split_manager
-   *   Color split manager.
-   */
-  private function addAttributeSwatchData(array &$variant, $grouping_attribute, $color_split_manager) {
-    foreach ($variant['attributes'] as $key => $attr) {
-      if ($attr['key'] === $grouping_attribute) {
-        $swatch = $color_split_manager->getGroupingAttributeSwatchData($attr['value'], $grouping_attribute);
-        if (!empty($swatch)) {
-          $variant['attributes'][$key]['type'] = $swatch['type'];
-          $variant['attributes'][$key]['swatch'] = $swatch['swatch'];
+        $variant = $this->getSkuData($grouped_sku);
+        if (isset($data['grouped_variants'][$grouped_sku->getSku()]['attributes'])) {
+          $variant['attributes'] = $data['grouped_variants'][$grouped_sku->getSku()]['attributes'];
         }
+        $grouped_variants[] = $variant;
       }
     }
+    return $grouped_variants;
   }
 
   /**
