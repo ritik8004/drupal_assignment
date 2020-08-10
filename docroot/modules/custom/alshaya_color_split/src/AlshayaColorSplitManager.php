@@ -182,8 +182,7 @@ class AlshayaColorSplitManager {
   public function alterGroupAttributeFormItem(array &$configurations, array $options, $grouping_attribute) {
     if ($grouping_attribute) {
       foreach ($options as $key => $val) {
-        $option_id = $this->productOptionsHelper->getAttributeOptionId($val, $grouping_attribute);
-        $swatch = $this->swatchHelper->getSwatch($grouping_attribute, $option_id);
+        $swatch = $this->getGroupingAttributeSwatchData($val, $grouping_attribute);
         if (!empty($swatch)) {
           switch ($swatch['type']) {
             case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
@@ -205,6 +204,24 @@ class AlshayaColorSplitManager {
         }
       }
     }
+  }
+
+  /**
+   * Wrapper function to get grouping attribute swatch data.
+   *
+   * @param string $val
+   *   Option value.
+   * @param string $grouping_attribute
+   *   Grouping attribute.
+   *
+   * @return array
+   *   Swatch data.
+   */
+  public function getGroupingAttributeSwatchData($val, $grouping_attribute) {
+    $option_id = $this->productOptionsHelper->getAttributeOptionId($val, $grouping_attribute);
+    $swatch = $this->swatchHelper->getSwatch($grouping_attribute, $option_id);
+
+    return $swatch;
   }
 
 }
