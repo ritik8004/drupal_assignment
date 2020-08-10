@@ -14,7 +14,7 @@ use Drupal\Core\Config\FileStorage;
  * [5.2.0] Update context for strings.
  */
 function alshaya_master_update_8042() {
-  alshaya_master_update_context();
+  _alshaya_master_update_context();
 }
 
 /**
@@ -2124,5 +2124,41 @@ function alshaya_master_install() {
     ->save();
 
   // Update context for strings.
-  alshaya_master_update_context();
+  _alshaya_master_update_context();
+}
+
+/**
+ * A helper function to update context for strings.
+ */
+function _alshaya_master_update_context() {
+  $strings = [
+    'The password does not satisfy the password policies.' => 'alshaya_static_text|empty_password',
+    'Please enter a valid email address.' => 'alshaya_static_text|invalid_email',
+    'Please enter a valid name.' => 'alshaya_static_text|invalid_name',
+    'Please enter a valid last name.' => 'alshaya_static_text|invalid_last_name',
+    'Please enter an email address.' => 'alshaya_static_text|empty_email',
+    'Please enter a password' => 'alshaya_static_text|empty_password',
+    'The email address could not be found.' => 'alshaya_static_text|email_not_found',
+    'Please enter a valid mobile number.' => 'alshaya_static_text|invalid_mobile',
+    'Please enter a block.' => 'alshaya_static_text|empty_block',
+    'Please enter a street name/number' => 'alshaya_static_text|empty_street',
+    'Please enter a building name/number' => 'alshaya_static_text|empty_building',
+    'Please enter an area' => 'alshaya_static_text|empty_area',
+    'Please enter a valid credit card number.' => 'alshaya_static_text|invalid_cc_number',
+    'Please enter a valid CVC.' => 'alshaya_static_text|invalid_cvv',
+    'Please enter exp month' => 'alshaya_static_text|empty_exp_month',
+    'Please enter exp year' => 'alshaya_static_text|empty_exp_year',
+    'The password does not match this account' => 'alshaya_static_text|wrong_password',
+    'At least 7 characters with one special and one numeric' => 'alshaya_static_text|invalid_format_password',
+    'Password do not match' => 'alshaya_static_text|password_unmatch',
+    'The code you have entered is invalid' => 'alshaya_static_text|invalid_promo_code',
+    'Please select a payment option to continue.' => 'alshaya_static_text|empty_payment_option',
+    'Please agree to the Terms and Conditions.' => 'alshaya_static_text|agree_terms_and_condition',
+    'Your account has not been activated or is blocked.' => 'alshaya_static_text|account_already_exists',
+    'Customers also bought' => 'alshaya_static_text|pdp_crosssell_title',
+    'You may also like' => 'alshaya_static_text|pdp_upsell_title',
+    'Related' => 'alshaya_static_text|pdp_related_title',
+    'Search' => 'alshaya_static_text|algolia_search_block_placeholder',
+  ];
+  alshaya_i18n_update_context($strings);
 }
