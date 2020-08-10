@@ -192,6 +192,7 @@ class AppointmentServices {
       $result = $client->__soapCall('reBookAppointment', [$param]);
       $bookingId = $result->return->result ?? '';
 
+      // Get clientExternalId for invalidating cache.
       $clientExternalId = $this->apiHelper->checkifBelongstoUser($userId);
       $cacheClient = $this->cache->getCacheClient();
       $tags = [
