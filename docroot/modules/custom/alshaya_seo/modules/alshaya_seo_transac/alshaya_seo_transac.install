@@ -11,6 +11,24 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * [5.2.0] Update weight of the default sitemap variant.
+ */
+function alshaya_seo_transac_update_8411() {
+  // The default sitemap variant contains the other variant sitemap links. We
+  // want the default variant to be processed after all the other variant
+  // sitemaps are processed so that based on the status of the other variant
+  // sitemaps, the default sitemap shall/shall not contain those variant sitemap
+  // links.
+  // @see \Drupal\simple_sitemap\SimplesitemapManager::getSitemapVariants().
+  // @see alshaya_seo_transac_simple_sitemap_links_alter().
+  \Drupal::configFactory()->getEditable('simple_sitemap.variants.alshaya_hreflang')
+    ->set('variants.default.weight', 999999)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add the new alshaya_seo_transac.settings configuration.
  */
 function alshaya_seo_transac_update_8410() {
