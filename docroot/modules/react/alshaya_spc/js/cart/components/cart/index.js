@@ -162,7 +162,7 @@ export default class Cart extends React.Component {
       return <Loading />;
     }
 
-    if (message !== undefined || actionMessage !== undefined) {
+    if (message !== null || actionMessage !== undefined) {
       preContentActive = 'visible';
     }
 
