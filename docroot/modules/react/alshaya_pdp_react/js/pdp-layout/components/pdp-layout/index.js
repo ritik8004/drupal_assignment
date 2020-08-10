@@ -49,10 +49,15 @@ const PdpLayout = () => {
     description,
     configurableCombinations,
     relatedProducts,
+    stockStatus,
   } = productValues;
 
   const emptyRes = (
     <div>Product data not available</div>
+  );
+
+  const outOfStock = (
+    <p>{Drupal.t('Out of Stock')}</p>
   );
 
   const header = useRef();
@@ -111,14 +116,16 @@ const PdpLayout = () => {
               cartDataValue={cartDataValue}
             />
           </div>
-          <PdpCart
-            skuCode={skuItemCode}
-            configurableCombinations={configurableCombinations}
-            productInfo={productInfo}
-            pdpRefresh={pdpRefresh}
-            pdpLabelRefresh={pdpLabelRefresh}
-            childRef={(ref) => { content = ref; }}
-          />
+          {stockStatus ? (
+            <PdpCart
+              skuCode={skuItemCode}
+              configurableCombinations={configurableCombinations}
+              productInfo={productInfo}
+              pdpRefresh={pdpRefresh}
+              pdpLabelRefresh={pdpLabelRefresh}
+              childRef={(ref) => { content = ref; }}
+            />
+          ) : outOfStock}
           <PdpDescription
             skuCode={skuItemCode}
             pdpDescription={description}
@@ -128,7 +135,9 @@ const PdpLayout = () => {
             finalPrice={finalPrice}
           />
           <PdpStandardDelivery />
-          <PdpClickCollect />
+          {stockStatus ? (
+            <PdpClickCollect />
+          ) : null}
           <PdpSharePanel />
         </div>
       </div>

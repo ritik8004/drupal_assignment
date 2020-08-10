@@ -146,6 +146,9 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           $vars['#attached']['drupalSettings']['homeDelivery'] = $home_delivery_config;
         }
       }
+
+      // Check if product is in stock.
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockStatus'] = $this->skuManager->isProductInStock($sku_entity);
     }
 
     // Get share this settings.

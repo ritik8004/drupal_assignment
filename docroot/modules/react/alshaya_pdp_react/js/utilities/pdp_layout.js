@@ -165,6 +165,8 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   let configurableCombinations = '';
 
   const { productInfo } = drupalSettings;
+  const { variants } = productInfo[skuItemCode];
+  const { stockStatus } = productInfo[skuItemCode];
   let title = '';
   let priceRaw = '';
   let finalPrice = '';
@@ -182,15 +184,17 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     priceRaw = productInfo[skuItemCode].priceRaw;
     finalPrice = productInfo[skuItemCode].finalPrice;
     pdpGallery = productInfo[skuItemCode].rawGallery;
-    if (productInfo[skuItemCode].type === 'configurable') {
-      configurableCombinations = drupalSettings.configurableCombinations;
-      if (variant == null) {
-        setVariant(configurableCombinations[skuItemCode].firstChild);
-      } else {
-        title = productInfo[skuItemCode].variants[variant].cart_title;
-        priceRaw = productInfo[skuItemCode].variants[variant].priceRaw;
-        finalPrice = productInfo[skuItemCode].variants[variant].finalPrice;
-        pdpGallery = productInfo[skuItemCode].variants[variant].rawGallery;
+    if (typeof variants !== 'undefined' && variants.length > 0) {
+      if (productInfo[skuItemCode].type === 'configurable') {
+        configurableCombinations = drupalSettings.configurableCombinations;
+        if (variant == null) {
+          setVariant(configurableCombinations[skuItemCode].firstChild);
+        } else {
+          title = productInfo[skuItemCode].variants[variant].cart_title;
+          priceRaw = productInfo[skuItemCode].variants[variant].priceRaw;
+          finalPrice = productInfo[skuItemCode].variants[variant].finalPrice;
+          pdpGallery = productInfo[skuItemCode].variants[variant].rawGallery;
+        }
       }
     }
   }
@@ -214,6 +218,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     description,
     configurableCombinations,
     relatedProducts,
+    stockStatus,
   };
 };
 
