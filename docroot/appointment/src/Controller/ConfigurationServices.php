@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Cache\Cache;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,6 +44,13 @@ class ConfigurationServices {
   protected $helper;
 
   /**
+   * Cache Client.
+   *
+   * @var \App\Cache\Cache
+   */
+  protected $cache;
+
+  /**
    * ConfigurationServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -53,15 +61,19 @@ class ConfigurationServices {
    *   Xml API Helper.
    * @param \App\Helper\Helper $helper
    *   Helper.
+   * @param \App\Cache\Cache $cache
+   *   Cache Helper.
    */
   public function __construct(LoggerInterface $logger,
                               APIHelper $api_helper,
                               XmlAPIHelper $xml_api_helper,
-                              Helper $helper) {
+                              Helper $helper,
+                              Cache $cache) {
     $this->logger = $logger;
     $this->apiHelper = $api_helper;
     $this->xmlApiHelper = $xml_api_helper;
     $this->helper = $helper;
+    $this->cache = $cache;
     $this->serviceUrl = $this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL;
   }
 
@@ -72,6 +84,19 @@ class ConfigurationServices {
    *   Program data from API.
    */
   public function getPrograms() {
+    // Get Programs from cache.
+    try {
+      $item = $this->cache->getItem('programs');
+      if ($item) {
+        return new JsonResponse($item);
+      }
+    }
+    catch (\ErrorException $e) {
+      $this->logger->error('Error occurred while getting programs from cache. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
     try {
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $locationExternalId = $this->apiHelper->getlocationExternalIds();
@@ -95,6 +120,9 @@ class ConfigurationServices {
         }
       }
 
+      // Set cache.
+      $this->cache->setItem('programs', $programData);
+
       return new JsonResponse($programData);
     }
     catch (\Exception $e) {
@@ -115,7 +143,6 @@ class ConfigurationServices {
    */
   public function getActivities(Request $request) {
     try {
-      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $locationExternalId = $this->apiHelper->getlocationExternalIds();
       $locationExternalId = is_array($locationExternalId) ? reset($locationExternalId) : $locationExternalId;
       $program = $request->query->get('program');
@@ -124,10 +151,17 @@ class ConfigurationServices {
         throw new \Exception('locationExternalId and program is required to get activities.');
       }
 
+      // Get Activities from cache.
+      $item = $this->cache->getItem($program . '_activities');
+      if ($item) {
+        return new JsonResponse($item);
+      }
+
       $param = [
         'locationExternalId' => $locationExternalId,
         'programExternalId' => $program,
       ];
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('getActivities', [$param]);
       $activities = $result->return->activities;
       $activityData = [];
@@ -141,6 +175,9 @@ class ConfigurationServices {
           ];
         }
       }
+
+      // Set activities cache.
+      $this->cache->setItem($program . '_activities', $activityData);
 
       return new JsonResponse($activityData);
     }
@@ -242,6 +279,12 @@ class ConfigurationServices {
    *   Stores Schedules from API.
    */
   public function getStoreSchedule($storeId) {
+    // Get store schedules from cache.
+    $item = $this->cache->getItem('store_' . $storeId);
+    if ($item) {
+      return $item;
+    }
+
     try {
       if (empty($storeId)) {
         throw new \Exception('storeId is required to get store schedule.');
@@ -255,6 +298,8 @@ class ConfigurationServices {
       $result = $client->__soapCall('getLocationSchedulesByCriteria', [$param]);
       $weeklySchedules = $result->return->locationSchedules->weeklySubSchedule->weeklySubSchedulePeriods ?? [];
       $weeklySchedulesData = $this->helper->groupStoreTimings($weeklySchedules);
+
+      $this->cache->setItem('store_' . $storeId, $weeklySchedulesData);
 
       return $weeklySchedulesData;
     }
@@ -272,12 +317,16 @@ class ConfigurationServices {
    */
   public function getStoreDetailsById(Request $request) {
     try {
-      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $locationExternalId = $request->query->get('location');
       if (empty($request->query->get('location'))) {
         $message = 'Location ID is required to get store details.';
 
         throw new \Exception($message);
+      }
+
+      $item = $this->cache->getItem('location_' . $locationExternalId);
+      if ($item) {
+        return new JsonResponse($item);
       }
 
       $param = [
@@ -287,7 +336,9 @@ class ConfigurationServices {
           'exactMatchOnly' => TRUE,
         ],
       ];
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('getLocationsByCriteria', [$param]);
+      $this->cache->setItem('location_' . $locationExternalId, $result);
       return new JsonResponse($result);
     }
     catch (\Exception $e) {
