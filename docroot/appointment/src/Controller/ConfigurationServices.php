@@ -84,7 +84,6 @@ class ConfigurationServices {
    *   Program data from API.
    */
   public function getPrograms() {
-
     // Get Programs from cache.
     try {
       $item = $this->cache->getItem('programs');
@@ -143,9 +142,7 @@ class ConfigurationServices {
    *   Program data from API.
    */
   public function getActivities(Request $request) {
-
     try {
-      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $locationExternalId = $this->apiHelper->getlocationExternalIds();
       $locationExternalId = is_array($locationExternalId) ? reset($locationExternalId) : $locationExternalId;
       $program = $request->query->get('program');
@@ -164,6 +161,7 @@ class ConfigurationServices {
         'locationExternalId' => $locationExternalId,
         'programExternalId' => $program,
       ];
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('getActivities', [$param]);
       $activities = $result->return->activities;
       $activityData = [];
@@ -319,7 +317,6 @@ class ConfigurationServices {
    */
   public function getStoreDetailsById(Request $request) {
     try {
-      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $locationExternalId = $request->query->get('location');
       if (empty($request->query->get('location'))) {
         $message = 'Location ID is required to get store details.';
@@ -339,6 +336,7 @@ class ConfigurationServices {
           'exactMatchOnly' => TRUE,
         ],
       ];
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('getLocationsByCriteria', [$param]);
       $this->cache->setItem('location_' . $locationExternalId, $result);
       return new JsonResponse($result);

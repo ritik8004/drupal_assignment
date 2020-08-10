@@ -277,7 +277,6 @@ class AppointmentServices {
    */
   public function getAppointments(Request $request) {
     try {
-      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $clientExternalId = $request->query->get('client');
       $userId = $request->query->get('id');
 
@@ -295,6 +294,12 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
+      $cacheKey = 'appointments_by_clientId_' . $clientExternalId;
+      $item = $this->cache->getItem($cacheKey);
+      if ($item) {
+        $result = $item;
+      }
+
       $startDate = date("Y-m-d\TH:i:s.000\Z");
       $endDate = date("Y-12-31\T23:59:59.999\Z");
 
@@ -309,12 +314,8 @@ class AppointmentServices {
 
       ];
 
-      $cacheKey = 'appointments_by_clientId_' . $clientExternalId;
-      $item = $this->cache->getItem($cacheKey);
-      if ($item) {
-        $result = $item;
-      }
-      else {
+      if (!empty($result)) {
+        $client = $this->apiHelper->getSoapClient($this->serviceUrl);
         $result = $client->__soapCall('getAppointmentsByCriteriaAppointmentDateRange', [$param]);
       }
 
@@ -486,7 +487,6 @@ class AppointmentServices {
    */
   public function getQuestions(Request $request) {
     try {
-      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $locationExternalId = $request->query->get('location') ?? '';
       $program = $request->query->get('program') ?? '';
       $activity = $request->query->get('activity') ?? '';
@@ -507,12 +507,12 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
-      $cacheKey = implode('_', array_values($param['questionCriteria']));
+      $cacheKey = 'questions';
       $item = $this->cache->getItem($cacheKey);
       if ($item) {
         return new JsonResponse($item);
       }
-
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('getAppointmentQuestionsByCriteria', [$param]);
 
       $questions = $result->return->questions ?? [];
