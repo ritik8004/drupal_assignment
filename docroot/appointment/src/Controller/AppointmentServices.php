@@ -194,12 +194,11 @@ class AppointmentServices {
 
       // Get clientExternalId for invalidating cache.
       $clientExternalId = $this->apiHelper->checkifBelongstoUser($userId);
-      $cacheClient = $this->cache->getCacheClient();
       $tags = [
         'appointment_' . $request_content['appointment'],
         'appointments_by_clientId_' . $clientExternalId,
       ];
-      $cacheClient->invalidateTags($tags);
+      $this->cache->tagInvalidation($tags);
       return new JsonResponse($bookingId);
     }
     catch (\Exception $e) {

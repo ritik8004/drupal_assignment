@@ -19,7 +19,7 @@ if (!class_exists(Dotenv::class)) {
 $home = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_SERVER['HOME'] : '/home/vagrant';
 if (file_exists($home . '/settings/.env')) {
   // Load the .env files from Server Home.
-  (new Dotenv(FALSE))->loadEnv($home . '/settings/.env');
+  (new Dotenv(FALSE))->loadEnv($home . '/settings/.appointment-env');
 }
 
 $_SERVER += $_ENV;

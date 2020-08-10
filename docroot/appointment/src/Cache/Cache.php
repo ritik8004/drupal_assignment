@@ -67,28 +67,26 @@ class Cache {
    * Set Cache data.
    */
   public function setItem($key, $data) {
-    $expire = $this->cacheExpiration;
     /** @var \Symfony\Contracts\Cache\ItemInterface $item */
     $item = $this->cache->getItem($key);
     $item
       ->set($data)
     // In seconds.
-      ->expiresAfter($expire);
+      ->expiresAfter($this->cacheExpiration);
     $this->cache->save($item);
   }
 
   /**
-   * Set Cache data.
+   * Set Cache with tags.
    */
   public function setItemWithTags($key, $data, $tags) {
-    $expire = $this->cacheExpiration;
     /** @var \Symfony\Contracts\Cache\ItemInterface $item */
     $item = $this->cache->getItem($key);
     $item
       ->set($data)
       ->tag($tags)
       // In seconds.
-      ->expiresAfter($expire);
+      ->expiresAfter($this->cacheExpiration);
     $this->cache->save($item);
   }
 
@@ -100,17 +98,10 @@ class Cache {
   }
 
   /**
-   * Delete Cache item.
+   * Invalidate cache tags.
    */
-  public function deleteCacheItem($key) {
-    $this->cache->deleteItem($key);
-  }
-
-  /**
-   * Clear all cache.
-   */
-  public function cacheClear() {
-    $this->cache->clear();
+  public function tagInvalidation($tags) {
+    return $this->cache->invalidateTags($tags);
   }
 
 }
