@@ -233,18 +233,10 @@ class ConfigurationServices {
         return [];
       }
 
-      $cache_key = implode('_', array_values($param));
-      $item = $this->cache->getItem($cache_key);
-      if ($item) {
-        $stores = $item;
-      }
-      else {
-        $result = $this->xmlApiHelper->fetchStores($param);
-        $this->cache->setItem($cache_key, $result->return->locations);
-        $stores = $result->return->locations ?? [];
-      }
-
+      $result = $this->xmlApiHelper->fetchStores($param);
+      $stores = $result->return->locations ?? [];
       $storesData = [];
+
       foreach ($stores as $store) {
         $storeId = $store->locationExternalId;
         if (in_array($storeId, $locationExternalIds)) {
@@ -256,6 +248,8 @@ class ConfigurationServices {
             $distanceInMiles = $this->helper->distance($latitude, $longitude, $storeLat, $storeLng, $unit);
           }
 
+          // @TODO: Separate out distance from store data as when we cache
+          // store info later, distance shouldn't be cached
           $storesData[] = [
             'locationExternalId' => $storeId ?? '',
             'name' => $store->locationName ?? '',

@@ -330,7 +330,7 @@ class AppointmentServices {
         }
       }
 
-      $this->cache->setItem($cacheKey, $result);
+      $this->cache->setItemWithTags($cacheKey, $result, $cacheKey);
 
       return new JsonResponse($result);
     }
@@ -589,7 +589,7 @@ class AppointmentServices {
       if (property_exists($appointmentData->return, 'appointment')) {
         $clientExternalId = $appointmentData->return->appointment->clientExternalId;
         if ($this->apiHelper->checkifBelongstoUser($user['email']) == $clientExternalId) {
-          $this->cache->setItem($cacheKey, $appointmentData);
+          $this->cache->setItemWithTags($cacheKey, $appointmentData, $cacheKey);
           return new JsonResponse($appointmentData);
         }
       }

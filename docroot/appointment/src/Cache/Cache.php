@@ -3,11 +3,8 @@
 namespace App\Cache;
 
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 use Symfony\Component\Cache\Adapter\PdoAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
-use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 /**
  * Class Cache.
@@ -15,6 +12,8 @@ use Symfony\Contracts\Cache\TagAwareCacheInterface;
  * @package App\Cache
  */
 class Cache {
+
+  const APPOINTMENT_CACHE_TABLE = 'appointment_cache';
 
   /**
    * Cache Interface.
@@ -26,11 +25,14 @@ class Cache {
   /**
    * Cache constructor.
    *
-   * @param \Symfony\Contracts\Cache\TagAwareCacheInterface $appointmentCache
-   *   Cache Interface.
+   * @param \Doctrine\DBAL\Connection $connection
+   *   Db connection object.
    */
   public function __construct(Connection $connection) {
-    $cache = new PdoAdapter($connection);
+    $options = [
+      'db_table' => self::APPOINTMENT_CACHE_TABLE,
+    ];
+    $cache = new PdoAdapter($connection, '', 0, $options);
     $this->cache = new TagAwareAdapter($cache);
   }
 
@@ -62,8 +64,22 @@ class Cache {
     $item = $this->cache->getItem($key);
     $item
       ->set($data)
-      ->tag($key)
     // In seconds.
+      ->expiresAfter($expire);
+    $this->cache->save($item);
+  }
+
+  /**
+   * Set Cache data.
+   */
+  public function setItemWithTags($key, $data, $tags) {
+    $expire = (int) $_ENV['CACHE_EXPIRY_SECONDS'];
+    /** @var \Symfony\Contracts\Cache\ItemInterface $item */
+    $item = $this->cache->getItem($key);
+    $item
+      ->set($data)
+      ->tag($tags)
+      // In seconds.
       ->expiresAfter($expire);
     $this->cache->save($item);
   }
@@ -75,10 +91,16 @@ class Cache {
     return $this->cache;
   }
 
+  /**
+   * Delete Cache item.
+   */
   public function deleteCacheItem($key) {
     $this->cache->deleteItem($key);
   }
 
+  /**
+   * Clear all cache.
+   */
   public function cacheClear() {
     $this->cache->clear();
   }
