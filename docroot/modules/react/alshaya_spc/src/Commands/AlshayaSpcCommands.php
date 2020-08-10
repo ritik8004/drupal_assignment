@@ -184,14 +184,14 @@ class AlshayaSpcCommands extends DrushCommands {
                 throw new \Exception($result['error_message'] ?? 'Unknown error');
               }
 
-              $this->getLogger('PendingPaymentCheck')->info('KNET Payment successful, order placed. Cart id: @cart_id, Data: @data, KNET response: @info', [
+              $this->getLogger('PendingPaymentCheck')->notice('KNET Payment successful, order placed. Cart id: @cart_id, Data: @data, KNET response: @info', [
                 '@data' => $payment['data'],
                 '@cart_id' => $payment['cart_id'],
                 '@info' => json_encode($info),
               ]);
             }
             catch (\Exception $e) {
-              $this->getLogger('PendingPaymentCheck')->info('KNET Payment successful, order failed. Cart id: @cart_id, Data: @data, KNET response: @info, Exception: @exception', [
+              $this->getLogger('PendingPaymentCheck')->notice('KNET Payment successful, order failed. Cart id: @cart_id, Data: @data, KNET response: @info, Exception: @exception', [
                 '@data' => $payment['data'],
                 '@cart_id' => $payment['cart_id'],
                 '@info' => json_encode($info),
@@ -203,7 +203,7 @@ class AlshayaSpcCommands extends DrushCommands {
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }
           elseif (strpos($status, 'transaction not found') !== FALSE) {
-            $this->getLogger('PendingPaymentCheck')->info('KNET Payment transaction not found, which means user cancelled. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
+            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment transaction not found, which means user cancelled. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
               '@info' => json_encode($info),
@@ -212,7 +212,7 @@ class AlshayaSpcCommands extends DrushCommands {
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }
           elseif (strpos($status, 'not captured') !== FALSE) {
-            $this->getLogger('PendingPaymentCheck')->info('KNET Payment failed. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
+            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment failed. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
               '@info' => json_encode($info),
@@ -221,7 +221,7 @@ class AlshayaSpcCommands extends DrushCommands {
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }
           elseif ($status && $info['amt'] != $cart['totals']['grand_total']) {
-            $this->getLogger('PendingPaymentCheck')->info('KNET Payment is possibly complete, but it seems amount does not match. Please check again. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
+            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment is possibly complete, but it seems amount does not match. Please check again. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
               '@info' => json_encode($info),
@@ -231,7 +231,7 @@ class AlshayaSpcCommands extends DrushCommands {
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }
           elseif ($status && $payment['timestamp'] < strtotime('-1 day')) {
-            $this->getLogger('PendingPaymentCheck')->info('KNET Payment not complete, deleting entry as it is already one day now. Cart id: @cart_id, Data: @data, KNET response: @info', [
+            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment not complete, deleting entry as it is already one day now. Cart id: @cart_id, Data: @data, KNET response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
               '@info' => json_encode($info),
@@ -240,7 +240,7 @@ class AlshayaSpcCommands extends DrushCommands {
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }
           else {
-            $this->getLogger('PendingPaymentCheck')->info('KNET Payment not complete or info not available, not deleting entry to retry later. Cart id: @cart_id, Data: @data, KNET response: @info', [
+            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment not complete or info not available, not deleting entry to retry later. Cart id: @cart_id, Data: @data, KNET response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
               '@info' => json_encode($info),
