@@ -16,6 +16,13 @@ class Cache {
   const APPOINTMENT_CACHE_TABLE = 'appointment_cache';
 
   /**
+   * Cache Expiration in seconds.
+   *
+   * @var int
+   */
+  protected $cacheExpiration;
+
+  /**
    * Cache Interface.
    *
    * @var \Symfony\Contracts\Cache\TagAwareCacheInterface
@@ -29,6 +36,7 @@ class Cache {
    *   Db connection object.
    */
   public function __construct(Connection $connection) {
+    $this->cacheExpiration = (int) $_ENV['APPOINTMENT_CACHE_EXPIRY'];
     $options = [
       'db_table' => self::APPOINTMENT_CACHE_TABLE,
     ];
@@ -59,7 +67,7 @@ class Cache {
    * Set Cache data.
    */
   public function setItem($key, $data) {
-    $expire = (int) $_ENV['CACHE_EXPIRY_SECONDS'];
+    $expire = $this->cacheExpiration;
     /** @var \Symfony\Contracts\Cache\ItemInterface $item */
     $item = $this->cache->getItem($key);
     $item
@@ -73,7 +81,7 @@ class Cache {
    * Set Cache data.
    */
   public function setItemWithTags($key, $data, $tags) {
-    $expire = (int) $_ENV['CACHE_EXPIRY_SECONDS'];
+    $expire = $this->cacheExpiration;
     /** @var \Symfony\Contracts\Cache\ItemInterface $item */
     $item = $this->cache->getItem($key);
     $item

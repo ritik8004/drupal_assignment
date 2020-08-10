@@ -13,14 +13,13 @@ if (!class_exists(Dotenv::class)) {
   throw new LogicException('Please run "composer require symfony/dotenv" to load the ".env" files configuring the application.');
 }
 
-// Load cached env vars if the .env.local.php file exists
-// Run "composer dump-env prod" to create it (requires symfony/flex >=1.2)
-if (is_array($env = @include dirname(__DIR__) . '/.env.local.php') && (!isset($env['APP_ENV']) || ($_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? $env['APP_ENV']) === $env['APP_ENV'])) {
-  (new Dotenv(FALSE))->populate($env);
-}
-else {
-  // Load all the .env files.
-  (new Dotenv(FALSE))->loadEnv(dirname(__DIR__) . '/.env');
+// Load all the .env files.
+(new Dotenv(FALSE))->loadEnv(dirname(__DIR__) . '/.env');
+
+$home = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_SERVER['HOME'] : '/home/vagrant';
+if (file_exists($home . '/settings/.env')) {
+  // Load the .env files from Server Home.
+  (new Dotenv(FALSE))->loadEnv($home . '/settings/.env');
 }
 
 $_SERVER += $_ENV;
