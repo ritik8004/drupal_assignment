@@ -1,5 +1,6 @@
 import React from 'react';
 import ConfirmationItems from './components/confirmation-items';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 const AppointmentConfirmationPrint = React.forwardRef((props, ref) => {
   const {
@@ -29,27 +30,27 @@ const AppointmentConfirmationPrint = React.forwardRef((props, ref) => {
       </div>
       <div className="appointment-confirmation-print-body">
         <div className="inner-header">
-          <label>{Drupal.t('Appointment Summary')}</label>
+          <label>{getStringMessage('appointment_summary_label')}</label>
         </div>
         <div className="inner-body">
           <ConfirmationItems
-            item={{ label: Drupal.t('Appointment Booked by'), value: `${clientData.firstName} ${clientData.lastName}` }}
+            item={{ label: getStringMessage('appointment_booked_by_label'), value: `${clientData.firstName} ${clientData.lastName}` }}
           />
           { companionsRender }
           <ConfirmationItems
-            item={{ label: Drupal.t('Appointment category'), value: appointmentCategory.name }}
+            item={{ label: getStringMessage('program_label'), value: appointmentCategory.name }}
           />
           <ConfirmationItems
-            item={{ label: Drupal.t('Appointment type'), value: appointmentType.label }}
+            item={{ label: getStringMessage('activity_label'), value: appointmentType.label }}
           />
           <ConfirmationItems
-            item={{ label: Drupal.t('Location'), value: location }}
+            item={{ label: getStringMessage('location'), value: location }}
           />
           <ConfirmationItems
-            item={{ label: Drupal.t('Date'), value: date }}
+            item={{ label: getStringMessage('date'), value: date }}
           />
           <ConfirmationItems
-            item={{ label: Drupal.t('Time'), value: time }}
+            item={{ label: getStringMessage('time'), value: time }}
           />
         </div>
       </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import ConditionalView from '../../../../../common/components/conditional-view';
 import StoreAddress from '../store-address';
 import StoreTiming from '../store-timing';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 const StoreItem = ({
   display, index, store, onStoreChoose, onStoreExpand, onStoreFinalize, onStoreClose,
@@ -11,7 +12,7 @@ const StoreItem = ({
       <span className="appointment-store-name-wrapper" onClick={(e) => onStoreChoose(e, index)}>
         <span className="store-name">{store.name}</span>
         <span className="store-distance">
-          {`${store.distanceInMiles} ${Drupal.t('Miles')}`}
+          {`${store.distanceInMiles} ${getStringMessage('miles')}`}
         </span>
       </span>
       <ConditionalView condition={display === 'accordion'}>
@@ -42,7 +43,7 @@ const StoreItem = ({
               type="button"
               onClick={(e) => onStoreFinalize(e, store.code)}
             >
-              {Drupal.t('Select Store')}
+              {getStringMessage('select_store_button')}
             </button>
           </div>
         </ConditionalView>

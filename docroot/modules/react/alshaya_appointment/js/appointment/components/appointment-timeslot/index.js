@@ -7,6 +7,7 @@ import AppointmentCalendar from '../appointment-calendar';
 import { getDateFormat, getDateFormattext } from '../../../utilities/helper';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
@@ -71,7 +72,7 @@ export default class AppointmentTimeSlot extends React.Component {
           });
           if (Object.keys(result.data).length === 0) {
             this.setState({
-              notFound: Drupal.t('Time slots are unavailable on this date. Please Select next date.'),
+              notFound: getStringMessage('unavailable_timelsots_message'),
             });
           }
           removeFullScreenLoader();
@@ -100,13 +101,13 @@ export default class AppointmentTimeSlot extends React.Component {
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
           <div className="store-header appointment-subtitle fadeInUp">
-            {Drupal.t('Select date & time that suits you')}
+            {getStringMessage('select_timeslot_label')}
             {' '}
             *
           </div>
           <div className="timeslot-latest-available fadeInUp">
             <span>
-              {Drupal.t('The first available appointment is on ')}
+              {`${getStringMessage('first_available_slot_label')} `}
             </span>
             <span className="starting-timeslot">{Drupal.t(moment().add(1, 'day').format(getDateFormattext()))}</span>
           </div>
@@ -131,7 +132,7 @@ export default class AppointmentTimeSlot extends React.Component {
               type="button"
               onClick={() => this.handleBack('select-store')}
             >
-              {Drupal.t('BACK')}
+              {getStringMessage('back')}
             </button>
             <div className="appointment-flow-action">
               <button
@@ -140,7 +141,7 @@ export default class AppointmentTimeSlot extends React.Component {
                 disabled={!(selectedSlot)}
                 onClick={this.handleSubmit}
               >
-                {Drupal.t('book time slot')}
+                {getStringMessage('book_time_slot_button')}
               </button>
             </div>
           </div>

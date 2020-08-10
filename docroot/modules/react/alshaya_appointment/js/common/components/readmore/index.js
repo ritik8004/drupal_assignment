@@ -1,4 +1,5 @@
 import React from 'react';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class ReadMore extends React.Component {
   constructor(props) {
@@ -38,7 +39,7 @@ export default class ReadMore extends React.Component {
     // Add correct class.
     const expandedState = open === true ? 'expanded' : '';
     // Add link text.
-    const linkText = open === true ? Drupal.t('Show less') : Drupal.t('Read More');
+    const linkText = open === true ? getStringMessage('show_less') : getStringMessage('read_more');
     // If description is empty.
     if (description.length < 1) {
       return (

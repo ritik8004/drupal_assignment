@@ -1,6 +1,7 @@
 import React from 'react';
 import SectionTitle from '../../../section-title';
 import AppointmentSelect from '../appointment-select';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class AppointmentCompanion extends React.Component {
   onSelectChange = (e, name) => {
@@ -22,7 +23,7 @@ export default class AppointmentCompanion extends React.Component {
     return (
       <div className="appointment-companion-wrapper appointment-type-item">
         <SectionTitle>
-          {Drupal.t('How many people do you want to book the appointment for?')}
+          {getStringMessage('number_of_companion_question')}
           *
         </SectionTitle>
         <AppointmentSelect

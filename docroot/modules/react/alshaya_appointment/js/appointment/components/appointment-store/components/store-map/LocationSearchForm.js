@@ -1,5 +1,6 @@
 import React from 'react';
 import DeviceView from '../../../../../common/components/device-view';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 const LocationSearchForm = React.forwardRef((props, ref) => (
   <div
@@ -15,20 +16,20 @@ const LocationSearchForm = React.forwardRef((props, ref) => (
           type="button"
           onClick={(e) => props.getCurrentPosition(e)}
         >
-          {Drupal.t('Display Stores Near Me')}
+          {getStringMessage('stores_near_me_label')}
         </button>
         <span>
-          {` - ${Drupal.t('Or')} - `}
+          {` - ${getStringMessage('or')} - `}
         </span>
         <label>
-          {Drupal.t('Find your closest location')}
+          {getStringMessage('store_search_label')}
         </label>
       </div>
     </DeviceView>
 
     <DeviceView device="mobile">
       <label>
-        {Drupal.t('Find your closest location')}
+        {getStringMessage('store_search_label')}
       </label>
     </DeviceView>
 
@@ -49,7 +50,7 @@ const LocationSearchForm = React.forwardRef((props, ref) => (
         type="button"
         onClick={(e) => props.getCurrentPosition(e)}
       >
-        {Drupal.t('Display Stores Near Me')}
+        {getStringMessage('stores_near_me_label')}
       </button>
     </DeviceView>
   </div>

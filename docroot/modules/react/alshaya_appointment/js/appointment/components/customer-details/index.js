@@ -12,6 +12,7 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class CustomerDetails extends React.Component {
   constructor(props) {
@@ -349,7 +350,7 @@ export default class CustomerDetails extends React.Component {
                 className="customer-details-button appointment-type-button"
                 type="submit"
               >
-                {Drupal.t('Book an Appointment')}
+                {getStringMessage('book_an_appointment_button')}
               </button>
             </div>
           </div>

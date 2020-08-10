@@ -1,4 +1,5 @@
 import React from 'react';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class AppointmentMessages extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ export default class AppointmentMessages extends React.Component {
       const { error } = data;
       if (error) {
         this.setState({
-          message: Drupal.t('Sorry, something went wrong. Please try again later'),
+          message: getStringMessage('default_error'),
         });
       }
     } else {

@@ -9,6 +9,7 @@ import {
   getArrayFromCompanionData,
 } from '../../../utilities/helper';
 import AppointmentConfirmationPrint from './confirmationPrint';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class Confirmation extends React.Component {
   constructor(props) {
@@ -68,41 +69,42 @@ export default class Confirmation extends React.Component {
     return (
       <div className="appointment-confirmation-wrapper">
         <div className="confirmation-header fadeInUp">
-          <h4>{Drupal.t('Thank you for booking at Boots.')}</h4>
-          <h5>{Drupal.t('A confirmation will be sent through email. Manage your appointments online.')}</h5>
+          <h4>{getStringMessage('confirmation_header')}</h4>
+          <h5>{getStringMessage('confirmation_subheader')}</h5>
         </div>
         <div className="confirmation-body">
           <div className="inner-header fadeInUp">
-            <label>{Drupal.t('Appointment Summary')}</label>
+            <label>{getStringMessage('appointment_summary_label')}</label>
             <div className="appointment-confirmation-option">
               <AddToCalendar
                 event={event}
+                buttonLabel={getStringMessage('add_to_calendar_label')}
               />
               <ReactToPrint
-                trigger={() => <span className="print">{Drupal.t('Print')}</span>}
+                trigger={() => <span className="print">{getStringMessage('print')}</span>}
                 content={() => this.componentRef}
               />
             </div>
           </div>
           <div className="inner-body fadeInUp">
             <ConfirmationItems
-              item={{ label: Drupal.t('Appointment Booked by'), value: `${clientData.firstName} ${clientData.lastName}` }}
+              item={{ label: getStringMessage('appointment_booked_by_label'), value: `${clientData.firstName} ${clientData.lastName}` }}
             />
             { companionsRender }
             <ConfirmationItems
-              item={{ label: Drupal.t('Appointment category'), value: appointmentCategory.name }}
+              item={{ label: getStringMessage('program_label'), value: appointmentCategory.name }}
             />
             <ConfirmationItems
-              item={{ label: Drupal.t('Appointment type'), value: appointmentType.label }}
+              item={{ label: getStringMessage('activity_label'), value: appointmentType.label }}
             />
             <ConfirmationItems
-              item={{ label: Drupal.t('Location'), value: location }}
+              item={{ label: getStringMessage('location'), value: location }}
             />
             <ConfirmationItems
-              item={{ label: Drupal.t('Date'), value: date }}
+              item={{ label: getStringMessage('date'), value: date }}
             />
             <ConfirmationItems
-              item={{ label: Drupal.t('Time'), value: time }}
+              item={{ label: getStringMessage('time'), value: time }}
             />
           </div>
         </div>
@@ -114,7 +116,7 @@ export default class Confirmation extends React.Component {
               type="button"
               onClick={() => this.handleClick(`user/${id}/appointments`)}
             >
-              {Drupal.t('View My Appointments')}
+              {getStringMessage('view_appointments_button')}
             </button>
             )}
           <div className="appointment-flow-action">
@@ -123,7 +125,7 @@ export default class Confirmation extends React.Component {
               type="button"
               onClick={() => this.handleClick('/')}
             >
-              {Drupal.t('Continue Shopping')}
+              {getStringMessage('continue_shopping_button')}
             </button>
           </div>
         </div>

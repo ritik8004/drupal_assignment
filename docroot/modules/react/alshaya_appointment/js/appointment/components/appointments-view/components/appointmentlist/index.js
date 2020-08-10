@@ -6,6 +6,7 @@ import StoreAddress from '../../../appointment-store/components/store-address';
 import WithModal
   from '../../../../../../../alshaya_spc/js/checkout/components/with-modal';
 import AppointmentEditBox from '../appointmentlist-editbox';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class AppointmentListItem extends React.Component {
   constructor(props) {
@@ -92,19 +93,19 @@ export default class AppointmentListItem extends React.Component {
       <div className="appointment-list-details fadeInUp">
         <div className="appointment-list-type">
           <span className="appointment-list-label">
-            { Drupal.t('Appointment type') }
+            { getStringMessage('activity_label') }
           </span>
           <span>
             { activityName }
           </span>
         </div>
         <div className="appointment-list-date-time">
-          <span className="appointment-list-label">{ Drupal.t('Date and Time') }</span>
+          <span className="appointment-list-label">{ `${getStringMessage('date')} ${getStringMessage('and')} ${getStringMessage('time')}` }</span>
           <span>{ moment(appointmentStartDate).format('dddd, Do MMMM') }</span>
           <span>{ moment(appointmentStartDate).format('YYYY hh:mm A') }</span>
         </div>
         <div className="appointment-list-store">
-          <span className="appointment-list-label">{ Drupal.t('Store Location') }</span>
+          <span className="appointment-list-label">{ getStringMessage('store_location_label') }</span>
           <div>
             <p>{storeName}</p>
             <StoreAddress address={address} />
@@ -112,7 +113,7 @@ export default class AppointmentListItem extends React.Component {
         </div>
         <div className="appointment-list-companion">
           <span className="appointment-list-label">
-            {Drupal.t('Customer Details')}
+            {getStringMessage('customer_details_label')}
           </span>
           { companionsRender }
         </div>
@@ -121,11 +122,11 @@ export default class AppointmentListItem extends React.Component {
             {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
               <>
                 <button type="button" className="action-edit" onClick={() => triggerOpenModal()}>
-                  { Drupal.t('Edit') }
+                  { getStringMessage('edit') }
                 </button>
                 <Popup open={isModalOpen} closeOnEscape closeOnDocumentClick={false}>
                   <>
-                    <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ Drupal.t('close') }</button>
+                    <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ getStringMessage('close') }</button>
                     <AppointmentEditBox
                       appointment={appointment}
                       storeName={storeName}
@@ -145,18 +146,18 @@ export default class AppointmentListItem extends React.Component {
                   className="action-delete"
                   onClick={() => triggerOpenModal()}
                 >
-                  {Drupal.t('Delete')}
+                  {getStringMessage('delete')}
                 </button>
                 <Popup open={isModalOpen} closeOnEscape closeOnDocumentClick={false}>
                   <>
-                    <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ Drupal.t('close') }</button>
+                    <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ getStringMessage('close') }</button>
                     <div className="appointment-delete-popup fadeInUp">
                       <div className="appointmentbox title">
-                        <span>{ Drupal.t('Cancel') }</span>
+                        <span>{ getStringMessage('cancel') }</span>
                       </div>
                       <div className="appointmentbox message">
                         <span>
-                          { Drupal.t('Are you sure you want to cancel appointment for !type?',
+                          { getStringMessage('cancel_appointment_confirmation_question',
                             { '!type': appointment.activityName }) }
                         </span>
                       </div>
@@ -169,9 +170,9 @@ export default class AppointmentListItem extends React.Component {
                             cancelAppointment(confirmationNumber, num);
                           }}
                         >
-                          OK
+                          {getStringMessage('ok')}
                         </button>
-                        <button type="button" className="cancel-button" onClick={() => triggerCloseModal()}>{ Drupal.t('Cancel') }</button>
+                        <button type="button" className="cancel-button" onClick={() => triggerCloseModal()}>{ getStringMessage('cancel') }</button>
                       </div>
                     </div>
                   </>

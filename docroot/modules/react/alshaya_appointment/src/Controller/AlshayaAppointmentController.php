@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class AlshayaAppointmentController.
@@ -48,6 +49,13 @@ class AlshayaAppointmentController extends ControllerBase {
   protected $languageManager;
 
   /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaAppointmentController constructor.
    *
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
@@ -58,15 +66,19 @@ class AlshayaAppointmentController extends ControllerBase {
    *   Request stack.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
   public function __construct(MobileNumberUtilInterface $mobile_util,
                               AccountProxy $current_user,
                               RequestStack $request_stack,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              ModuleHandlerInterface $module_handler) {
     $this->mobileUtil = $mobile_util;
     $this->currentUser = $current_user;
     $this->request = $request_stack->getCurrentRequest();
     $this->languageManager = $language_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -77,7 +89,8 @@ class AlshayaAppointmentController extends ControllerBase {
       $container->get('mobile_number.util'),
       $container->get('current_user'),
       $container->get('request_stack'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('module_handler')
     );
   }
 
@@ -148,9 +161,11 @@ class AlshayaAppointmentController extends ControllerBase {
       ],
     ];
 
+    $this->moduleHandler->loadInclude('alshaya_appointment', 'inc', 'alshaya_appointment.static_strings');
+
     return [
-      '#type' => 'markup',
-      '#markup' => '<div id="appointment-booking"></div>',
+      '#theme' => 'appointment_booking',
+      '#strings' => _alshaya_appointment_static_strings(),
       '#attached' => [
         'library' => [
           'alshaya_appointment/alshaya_appointment',
@@ -252,9 +267,11 @@ class AlshayaAppointmentController extends ControllerBase {
       'user_details' => $this->getUserDetails(),
     ];
 
+    $this->moduleHandler->loadInclude('alshaya_appointment', 'inc', 'alshaya_appointment.static_strings');
+
     return [
-      '#type' => 'markup',
-      '#markup' => '<div id="customer-appointments"></div>',
+      '#theme' => 'customer_appointments',
+      '#strings' => _alshaya_appointment_my_appointments_static_strings(),
       '#attached' => [
         'library' => [
           'alshaya_appointment/alshaya_appointment_view',

@@ -26,3 +26,21 @@ function alshaya_appointment_alshaya_my_account_links_alter(array &$links) {
     'weight' => 200,
   ];
 }
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_appointment_theme($existing, $type, $theme, $path) {
+  return [
+    'appointment_booking' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'customer_appointments' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+  ];
+}
