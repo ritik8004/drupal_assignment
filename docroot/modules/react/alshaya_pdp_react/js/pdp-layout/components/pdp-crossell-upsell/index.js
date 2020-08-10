@@ -75,10 +75,6 @@ export default class PdpCrossellUpsell extends React.PureComponent {
           <div className="magv2-pdp-crossell-upsell-title">
             <span className="magv2-pdp-crossell-upsell-label">{sectionTitle}</span>
           </div>
-          <div className="magv2-pdp-crossell-upsell-view-more-wrapper">
-            <a className="magv2-pdp-crossell-upsell-view-more-label">{Drupal.t('View more')}</a>
-            <span className="magv2-pdp-crossell-upsell-view-more-icon" />
-          </div>
         </div>
         <ConditionalView condition={window.innerWidth > 767}>
           <Slider
