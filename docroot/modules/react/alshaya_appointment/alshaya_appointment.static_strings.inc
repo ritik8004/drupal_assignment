@@ -268,7 +268,7 @@ function _alshaya_appointment_static_strings() {
     ],
     [
       'key' => 'continue_shopping_button',
-      'value' => t('Continue Shopping'),
+      'value' => t('Continue shopping'),
     ],
     [
       'key' => 'book_an_appointment_button',
@@ -312,7 +312,7 @@ function _alshaya_appointment_static_strings() {
     ],
     [
       'key' => 'read_more',
-      'value' => t('Read More'),
+      'value' => t('Read more'),
     ],
     [
       'key' => 'empty_field_default_error',
