@@ -199,6 +199,9 @@ class KnetPaymentController extends PaymentController {
       '@message' => json_encode($data),
     ]);
 
+    // Delete the payment data from our custom table now.
+    $this->paymentData->deletePaymentDataByCartId((int) $response['quote_id']);
+
     $redirect = new RedirectResponse('/' . $state['data']['langcode'] . '/checkout', 302);
 
     try {
