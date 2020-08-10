@@ -8,7 +8,7 @@ const PdpPromotionLabel = (props) => {
   } = props;
   let { promotions } = drupalSettings.productInfo[skuItemCode];
   const { configurableCombinations } = drupalSettings;
-  if (configurableCombinations) {
+  if (configurableCombinations && variantSelected) {
     promotions = drupalSettings.productInfo[skuItemCode].variants[variantSelected].promotions;
   }
 
