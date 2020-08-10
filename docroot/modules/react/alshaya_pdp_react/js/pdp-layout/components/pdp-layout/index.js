@@ -60,7 +60,7 @@ const PdpLayout = () => {
 
   const showStickyHeader = () => {
     window.onscroll = function () {
-      if (content !== null) {
+      if ((content !== null) && (content !== undefined)) {
         if (window.pageYOffset >= content.offsetTop + content.offsetHeight) {
           header.current.classList.add('magv2-pdp-sticky-header');
         } else {
