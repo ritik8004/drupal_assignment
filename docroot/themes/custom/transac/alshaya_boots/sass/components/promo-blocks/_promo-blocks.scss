@@ -103,7 +103,13 @@
     }
 
     &.position-center-left {
+      #{$left}: 1rem;
+
       @include stack-live-text-mobile(1.5rem);
+
+      @include breakpoint($tablet) {
+        #{$left}: 3rem;
+      }
     }
 
     .field--name-field-promo-text-1,
@@ -137,6 +143,10 @@
     .field--name-field-button-link {
       #{$left}: auto;
       transform: none;
+
+      html[lang=ar] & {
+        left: auto;
+      }
 
       @include breakpoint($only-mobile) {
         position: unset;
