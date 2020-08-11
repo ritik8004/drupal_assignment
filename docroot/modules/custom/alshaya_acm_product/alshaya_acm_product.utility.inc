@@ -284,11 +284,9 @@ function alshaya_acm_product_available_click_collect($sku) {
  */
 function alshaya_acm_product_get_brand_logo($sku) {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-  $attributes = $sku_entity->get('attributes')->getValue();
-  $attributes = array_column($attributes, 'value', 'key');
+  $brand_logo = $sku_entity->get('attr_brand_logo')->getString();
 
-  $cid = 'brand_logo:' . $attributes['brand_logo'];
-
+  $cid = 'brand_logo:' . $brand_logo;
   if ($cache = \Drupal::cache('data')->get($cid)) {
     $image = $cache->data;
   }
@@ -297,12 +295,13 @@ function alshaya_acm_product_get_brand_logo($sku) {
     $query->fields('ttfd', ['tid', 'name']);
     $query->innerJoin('taxonomy_term__field_sku_attribute_code', 'ttac', 'ttac.entity_id = ttfd.tid');
     $query->innerJoin('taxonomy_term__field_attribute_swatch_org_image', 'ttasoi', 'ttasoi.entity_id = ttfd.tid');
+    $query->innerJoin('taxonomy_term__field_sku_option_id', 'ttsoi', 'ttsoi.entity_id = ttfd.tid');
     $query->innerJoin('file_managed', 'fm', 'ttasoi.field_attribute_swatch_org_image_target_id = fm.fid AND fm.status = 1');
     $query->addField('fm', 'uri');
     $query->condition('ttac.field_sku_attribute_code_value', 'brand_logo');
+    $query->condition('ttsoi.field_sku_option_id_value', $brand_logo);
     $query->condition('ttfd.default_langcode', 1);
     $query->condition('ttfd.vid', 'sku_product_option');
-    $query->orderBy('ttfd.weight', 'ASC');
     $term = $query->execute()->fetchObject();
 
     if (!empty($term)) {
