@@ -1,0 +1,5 @@
+alshaya_appointment.appointment_booking_settings:
+  route_name: alshaya_appointment.appointment_booking_config
+  title: 'Alshaya Appointment Booking settings'
+  description: 'Configure Appointment Booking settings.'
+  parent: alshaya_master.alshaya_admin
