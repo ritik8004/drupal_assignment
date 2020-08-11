@@ -280,7 +280,8 @@ function _alshaya_seo_transac_configure_default_variant() {
   $variants = \Drupal::service('simple_sitemap.generator')->getSitemapManager()->getSitemapVariants();
   if ($variants['default']['type'] !== 'alshaya_hreflang') {
     $variants['default']['type'] = 'alshaya_hreflang';
-    $variants['default']['weight'] = -1;
+    // @see alshaya_seo_transac_update_8411()
+    $variants['default']['weight'] = 999999;
     \Drupal::service('simple_sitemap.generator')->getSitemapManager()->addSitemapVariant('default', $variants['default']);
   }
 
