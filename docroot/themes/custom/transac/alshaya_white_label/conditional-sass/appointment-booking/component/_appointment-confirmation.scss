@@ -189,6 +189,7 @@
         border-radius: 0.125rem;
         padding: 0.6875rem 3.125rem;
         margin-#{$left}: 1.5625rem;
+        text-transform: capitalize;
 
         @include breakpoint($upto-tablet) {
           margin-#{$left}: 0;
