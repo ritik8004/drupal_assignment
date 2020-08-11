@@ -28,7 +28,7 @@ alshaya_appointment.user_info:
 alshaya_appointment.appointment_booking_config:
   path: '/admin/config/alshaya/appointment-booking'
   defaults:
-    _form: '\Drupal\alshaya_appointment\Form\AlshayaAppointmentBookingForm'
+    _form: '\Drupal\alshaya_appointment\Form\AlshayaAppointmentSettingsForm'
     _title: 'Appointment Booking Configurations'
   requirements:
     _permission: 'administer site configuration'

@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Configure Alshaya Appointment Booking settings.
  */
-class AlshayaAppointmentBookingForm extends ConfigFormBase {
+class AlshayaAppointmentSettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
@@ -33,7 +33,6 @@ class AlshayaAppointmentBookingForm extends ConfigFormBase {
       '#format' => 'rich_text',
       '#title' => $this->t('Customer Details Disclaimer Text'),
       '#description' => $this->t('Disclaimer text to be displayed on customer details section of appointment booking.'),
-      '#required' => TRUE,
       '#default_value' => $this->config('alshaya_appointment.settings')->get('customer_details_disclaimer_text.value'),
     ];
 
