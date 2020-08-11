@@ -1,3 +1,5 @@
+import getStringMessage from '../../../js/utilities/strings';
+
 /**
  * Helper function to get input value based on input type.
  */
@@ -74,7 +76,7 @@ function getArrayFromCompanionData(companionData) {
     const name = `bootscompanion${i}name`;
     const lastname = `bootscompanion${i}lastname`;
     const item = {
-      label: `Companion ${i}`,
+      label: `${getStringMessage('companion_label')} ${i}`,
       value: `${companionData[name]} ${companionData[lastname]}`,
     };
     companion.push(item);
