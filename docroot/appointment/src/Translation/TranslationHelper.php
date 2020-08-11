@@ -60,7 +60,7 @@ class TranslationHelper extends APIHelper {
    *
    * @throws \Exception
    */
-  public function getTranslationApiKey() {
+  private function getTranslationApiKey() {
     $settings = $this->settings->getSettings('appointment_settings');
     if (empty($settings['translation_api_key'])) {
       throw new \Exception('Timetrade translation api key is not set.');
@@ -77,7 +77,7 @@ class TranslationHelper extends APIHelper {
    *
    * @throws \Exception
    */
-  public function getTranslationProjectName() {
+  private function getTranslationProjectName() {
     $settings = $this->settings->getSettings('appointment_settings');
     if (empty($settings['project'])) {
       throw new \Exception('Timetrade translation project name is not set.');
