@@ -77,6 +77,28 @@ $magentos = [
     ],
   ],
   // H&M.
+  'hm_lpn' => [
+    'url' => 'https://lpn-new-tbwdxni-zbrr3sobrsb3o.eu.magentosite.cloud',
+    'pims_base_url' => 'http://34.249.182.88:3020',
+    'magento_secrets' => [
+      'consumer_key' => '5ud3vh5cqkc2k3uxyfpkuehi2eik11xg',
+      'consumer_secret' => '7krmuncsf3c1rabxqhy5rfnpdvubocmi',
+      'access_token' => 'wuxd59ghyt7qwprhd86gs6cd3t1y6cyn',
+      'access_token_secret' => 'agpwx3guekmh6843nh5oaxonfjxy00ls',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 2],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 6, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+  ],
   'hm_qa' => [
     'url' => 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud',
     'pims_base_url' => 'http://34.249.182.88:3020',

@@ -27,7 +27,10 @@ $settings['alshaya_knet.settings']['knet_currency_code'] = '414';
 // Knet udf5 prefix.
 $settings['alshaya_knet.settings']['knet_udf5_prefix'] = 'ptlf';
 
-$settings['alshaya_knet.settings']['knet_url'] = 'https://kpaytest.com.kw/kpg/PaymentHTTP.htm';
+$settings['alshaya_knet.settings']['knet_base_url'] = 'https://kpaytest.com.kw';
 if (preg_match('/\d{2}(live|update)/', $env)) {
-  $settings['alshaya_knet.settings']['knet_url'] = 'https://kpay.com.kw/kpg/PaymentHTTP.htm';
+  $settings['alshaya_knet.settings']['knet_base_url'] = 'https://kpay.com.kw';
 }
+
+// Keeping KNET payment URL in the main variable to avoid changes in code.
+$settings['alshaya_knet.settings']['knet_url'] = $settings['alshaya_knet.settings']['knet_base_url'] . '/kpg/PaymentHTTP.htm';

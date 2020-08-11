@@ -47,6 +47,7 @@
         text-decoration: underline;
         color: $appointment-type-text;
         cursor: pointer;
+        text-transform: capitalize;
       }
     }
   }

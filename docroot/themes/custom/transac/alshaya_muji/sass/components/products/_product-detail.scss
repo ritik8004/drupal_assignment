@@ -188,6 +188,7 @@
 
           @include breakpoint($upto-desktop) {
             margin-top: 0;
+            float: none;
           }
         }
 
