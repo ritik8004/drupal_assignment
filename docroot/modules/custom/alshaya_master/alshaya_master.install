@@ -11,6 +11,27 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Remove unnecessary occurrences for 'Search' string in Algolia context.
+ */
+function alshaya_master_update_8041() {
+  // In some sites (like BBWAE) it is available 3-4 times in source table.
+  $conditions = [
+    'source' => 'Search',
+    'context' => 'alshaya_static_text|algolia_search_block_placeholder',
+    'translated' => FALSE,
+  ];
+
+  /** @var \Drupal\locale\StringDatabaseStorage $storage */
+  $storage = \Drupal::service('locale.storage');
+
+  while ($string = $storage->findString($conditions)) {
+    $string->delete();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translations for bank transfer.
  */
 function alshaya_master_update_8040() {
@@ -1918,7 +1939,7 @@ function alshaya_master_install() {
     'Search' => [
       'en' => 'What are you looking for?',
       'ar' => 'عن ماذا تبحث؟',
-      'context' => 'algolia_search_block_placeholder',
+      'context' => 'alshaya_static_text|algolia_search_block_placeholder',
     ],
     'sign in with email address' => [
       'ar' => 'تسجيل الدخول عن طريق البريد الإلكتروني',

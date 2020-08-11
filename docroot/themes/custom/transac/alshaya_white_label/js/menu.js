@@ -56,8 +56,23 @@
       });
 
       var $menuIn = $('.has-child:not(".max-depth") .menu__link-wrapper', context);
-      $menuIn.on('click', function () {
-        $(this).next('.menu__in').next().addClass('menu__list--active');
+      var deviceHeight = window.innerHeight;
+
+      // On mobile make sub-menu scrollable only when content exceeds device height
+      Drupal.isMenuScrollabe = function (activeMenu, activeMenuPartent) {
+        var isContentScrollabe = (!(activeMenu.prop('scrollHeight') > deviceHeight) ? 'hidden' : 'auto');
+        if (activeMenuPartent.hasClass('menu__list--active')) {
+          activeMenuPartent.scrollTop(0).css('overflow-y', isContentScrollabe);
+          // always keep the menu--one__list scrollable
+          $('.menu--one__list').scrollTop(0).css('overflow-y', 'auto');
+        }
+      };
+
+      $menuIn.once('mainMenu').on('click', function () {
+        var activeSubMenu = $(this).next('.menu__in').next();
+        var activeSubMenuPartent = $(this).next('.menu__in').next().parents('.menu__list');
+        activeSubMenu.addClass('menu__list--active');
+        Drupal.isMenuScrollabe(activeSubMenu, activeSubMenuPartent);
       });
 
       var $menuInFirst = $('.has-child:not(".max-depth") > .menu__link-wrapper');
@@ -67,8 +82,13 @@
       });
 
       var $menuBack = $('.back--link', context);
-      $menuBack.on('click', function () {
+      $menuBack.once('mainMenu').on('click', function () {
         $(this).parents('.menu__list').first().removeClass('menu__list--active');
+        var activePartentMenu = $(this).parents('.menu__list').parents('.menu__list');
+        var isContentScrollabe = (!(activePartentMenu.prop('scrollHeight') > deviceHeight) ? 'hidden' : 'auto');
+        activePartentMenu.scrollTop(0).css('overflow-y', isContentScrollabe);
+        // always keep the menu--one__list scrollable
+        $('.menu--one__list').scrollTop(0).css('overflow-y', 'auto');
       });
 
       var $menuBackFirst = $('.menu--two__list > .menu__links__wrapper > .back--link');

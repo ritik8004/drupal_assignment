@@ -29,6 +29,13 @@ export default class ParentAreaSelect extends React.Component {
 
   componentDidMount() {
     this.isComponentMounted = true;
+
+    // Do nothing if parent area is not visible.
+    const parentArea = drupalSettings.address_fields.area_parent;
+    if (parentArea !== undefined && parentArea.visible === false) {
+      return;
+    }
+
     this.getAreasList();
     const { default_val: defaultVal, field, areasUpdate } = this.props;
     if (defaultVal.length !== 0
@@ -43,10 +50,6 @@ export default class ParentAreaSelect extends React.Component {
     }
 
     document.addEventListener('updateParentAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
-    // Show city as selected based on the city key set in backend.
-    if (drupalSettings.alshaya_spc.delivery_in_only_city_key) {
-      document.addEventListener('load', this.handleLoad, true);
-    }
   }
 
   componentWillUnmount() {
@@ -74,13 +77,6 @@ export default class ParentAreaSelect extends React.Component {
       document.getElementById('address-form-action').classList.remove('visually-hidden');
       document.getElementsByClassName('spc-address-form-sidebar')[0].classList.remove('block-overflow');
     }
-  }
-
-  /**
-   * Process parent area on load.
-   */
-  handleLoad = () => {
-    this.processSelectedItem(drupalSettings.alshaya_spc.delivery_in_only_city_key);
   }
 
   /**
@@ -134,21 +130,33 @@ export default class ParentAreaSelect extends React.Component {
     const { field, field_key: fieldKey } = this.props;
     const panelTitle = getStringMessage('address_select', { '@label': field.label });
 
-    const currentOptionAvailable = (currentOption !== undefined
-      && currentOption !== null
-      && currentOption.toString().length > 0);
-
     let areaLabel = '';
     let hiddenFieldValue = '';
     let showCityOnly = '';
 
     if (drupalSettings.alshaya_spc.delivery_in_only_city_key) {
       showCityOnly = 'parent-area-only-city';
+      if (currentOption === undefined
+        || currentOption === null
+        || currentOption.toString().length < 1) {
+        this.processSelectedItem(drupalSettings.alshaya_spc.delivery_in_only_city_key);
+      }
     }
+
+    const currentOptionAvailable = (currentOption !== undefined
+      && currentOption !== null
+      && currentOption.toString().length > 0);
 
     if (currentOptionAvailable) {
       hiddenFieldValue = currentOption;
       areaLabel = gerAreaLabelById(true, currentOption).trim();
+    }
+
+    const parentArea = drupalSettings.address_fields.area_parent;
+    if (parentArea !== undefined && parentArea.visible === false) {
+      return (
+        <input type="hidden" id={fieldKey} name={fieldKey} value={hiddenFieldValue} />
+      );
     }
 
     return (

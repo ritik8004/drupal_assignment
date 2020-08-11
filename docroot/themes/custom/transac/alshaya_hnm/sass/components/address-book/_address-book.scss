@@ -222,24 +222,10 @@
 .webform-submission-alshaya-contact-form,
 #selected-store-wrapper {
   .mobile-number-field {
-    .country-select {
-      height: 1.875rem;
-    }
-
     .mobile-input--wrapper {
       .prefix {
         font-size: 1rem;
-        line-height: 2.25;
         color: $address_book_mobile_prefix;
-
-        html[lang=ar] .safari &,
-        html[lang=ar] .ie & {
-          line-height: 2.25;
-        }
-
-        html[lang=ar] .firefox & {
-          line-height: 2.1875rem;
-        }
       }
 
       .form-item-field-address-0-address-mobile-number-mobile,

@@ -30,19 +30,39 @@
   &__title_wrapper {
     font-family: $alshaya-thin;
 
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
     .brand-logo-wrapper {
       float: none;
+
+      @include breakpoint($only-mobile) {
+        margin: 0 auto;
+      }
     }
 
     h1 {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        text-align: center;
+      }
+
       span {
-        text-transform: capitalize;
-        font-size: 1rem;
+        text-transform: none;
+        font-size: 1.25rem;
+        font-family: $alshaya-bold;
+
+        @include breakpoint($only-mobile) {
+          width: 70%;
+          display: inline-block;
+        }
       }
     }
 
     .price {
       margin-bottom: 0.5rem;
+      font-size: 1.125rem;
     }
 
     .price-type__wrapper > .price {
@@ -50,7 +70,7 @@
     }
 
     .price--discount {
-      font-size: 1rem;
+      font-size: 1.125rem;
       margin-top: 0;
     }
 
@@ -62,6 +82,14 @@
       font-family: $bp-light;
     }
   }
+
+  &__main {
+    .gallery-wrapper {
+      @include breakpoint($only-mobile) {
+        min-height: 23.5625rem;
+      }
+    }
+  }
 }
 
 .basic-details-wrapper {
@@ -69,6 +97,8 @@
     .sku-base-form {
       button[type="submit"] {
         @extend %button-wide;
+
+        text-transform: none;
 
         @include breakpoint ($desktop) {
           width: 69%;
@@ -91,7 +121,7 @@
       }
 
       .form-item {
-        padding: 0.625rem 0;
+        padding: 1rem 0 0;
       }
     }
 
@@ -138,6 +168,10 @@
 
   h4.list-title {
     font-size: 0.875rem;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
 
     span {
       &:first-of-type {

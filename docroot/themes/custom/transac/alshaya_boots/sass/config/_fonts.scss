@@ -2,60 +2,45 @@
 $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
-  font-family: "F37Ginger-Bold";
-  src: url("#{$base_theme_fonts_directory_path}/F37Ginger-Bold.eot");
+  font-family: "BootsSharp-Bold";
+  src: url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Bold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Bold.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Bold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Bold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Bold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Bold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "F37Ginger-Light";
-  src: url("#{$base_theme_fonts_directory_path}/F37Ginger-Light.eot");
+  font-family: "BootsSharp-Light";
+  src: url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Light.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Light.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Light.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Light.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Light.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Light.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "F37Ginger-Regular";
-  src: url("#{$base_theme_fonts_directory_path}/F37Ginger-Regular.eot");
+  font-family: "BootsSharp-Regular";
+  src: url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Regular.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Regular.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Regular.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Regular.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Regular.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Regular.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "F37Ginger-Thin";
-  src: url("#{$base_theme_fonts_directory_path}/F37Ginger-Thin.eot");
-  src:
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Thin.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Thin.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Thin.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Thin.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Thin.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/F37Ginger-Thin.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -110,7 +95,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "Ginger-bold-webfont";
-  src: url("#{$base_theme_fonts_directory_path}/Ginger-bold-webfont.otf");
+  src: url("#{$base_theme_fonts_directory_path}/Ginger-bold-webfont.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -118,7 +103,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "Ginger-light-webfont";
-  src: url("#{$base_theme_fonts_directory_path}/Ginger-light-webfont.otf");
+  src: url("#{$base_theme_fonts_directory_path}/Ginger-light-webfont.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -141,31 +126,28 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 }
 
 // Font Family
-$bp-bold: 'F37Ginger-Bold', 'Tahoma-Bold', 'Arial';
-$bp-bold-nodir: 'F37Ginger-Bold', 'Tahoma-Bold', 'Arial';
+$bp-bold: 'BootsSharp-Bold', 'Tahoma-Bold', 'Arial';
+$bp-bold-nodir: 'BootsSharp-Bold', 'Tahoma-Bold', 'Arial';
 
-$bp-thin: 'F37Ginger-Thin', 'Tahoma', 'Arial';
-$bp-thin-nodir: 'F37Ginger-Thin', 'Tahoma', 'Arial';
+$bp-thin: 'BootsSharp-Regular', 'Tahoma', 'Arial';
+$bp-thin-nodir: 'BootsSharp-Regular', 'Tahoma', 'Arial';
 
-$bp-light: 'F37Ginger-Light', 'Tahoma', 'Arial';
-$bp-light-nodir: 'F37Ginger-Light', 'Tahoma', 'Arial';
+$bp-light: 'BootsSharp-Light', 'Tahoma', 'Arial';
+$bp-light-nodir: 'BootsSharp-Light', 'Tahoma', 'Arial';
 
-$bp-regular: 'F37Ginger-Regular', 'Tahoma', 'Arial';
-$bp-regular-nodir: 'F37Ginger-Regular', 'Tahoma', 'Arial';
+$bp-arabic-bold: 'Tahoma-Bold', 'BootsSharp-Bold', 'Arial';
+$bp-arabic-bold-nodir: 'Tahoma-Bold', 'BootsSharp-Bold', 'Arial';
 
-$bp-arabic-bold: 'Tahoma-Bold', 'F37Ginger-Bold', 'Arial';
-$bp-arabic-bold-nodir: 'Tahoma-Bold', 'F37Ginger-Bold', 'Arial';
+$bp-arabic-thin: 'Tahoma', 'BootsSharp-Regular', 'Arial';
+$bp-arabic-thin-nodir: 'Tahoma', 'BootsSharp-Regular', 'Arial';
 
-$bp-arabic-thin: 'Tahoma', 'F37Ginger-Thin', 'Arial';
-$bp-arabic-thin-nodir: 'Tahoma', 'F37Ginger-Thin', 'Arial';
-
-$arial: $bp-regular;
-$arial-nodir: $bp-regular-nodir;
+$arial: $bp-thin;
+$arial-nodir: $bp-thin-nodir;
 $alshaya-bold: $bp-bold;
 $alshaya-bold-nodir: $bp-bold-nodir;
 $alshaya-arabic-bold: $bp-arabic-bold;
 $alshaya-arabic-bold-nodir: $bp-arabic-bold-nodir;
-$alshaya-thin: $bp-regular-nodir;
+$alshaya-thin: $bp-thin-nodir;
 $alshaya-thin-nodir: $bp-thin-nodir;
 $alshaya-arabic-thin: $bp-arabic-thin;
 $alshaya-arabic-thin-nodir: $bp-arabic-thin-nodir;

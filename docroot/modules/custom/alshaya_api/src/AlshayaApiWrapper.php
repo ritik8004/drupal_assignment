@@ -199,11 +199,13 @@ class AlshayaApiWrapper {
    *   Post data to send to API.
    * @param string $method
    *   GET or POST.
+   * @param bool $throw_exception
+   *   Flag to specifiy if exception should be thrown or handled.
    *
    * @return mixed
    *   Response from the API.
    */
-  public function invokeApi($endpoint, array $data = [], $method = 'POST') {
+  public function invokeApi($endpoint, array $data = [], $method = 'POST', bool $throw_exception = FALSE) {
     $settings = Settings::get('alshaya_api.settings');
 
     try {
@@ -254,18 +256,24 @@ class AlshayaApiWrapper {
       try {
         $json = Json::decode($result);
         if (is_array($json) && !empty($json['message']) && count($json) === 1) {
-          throw new \Exception($json['message'], 600);
+          // Let the code invoking this know if the response is 404.
+          $code = $response->getStatusCode() == 404 ? 404 : 600;
+          throw new \Exception($json['message'], $code);
         }
       }
       catch (\Exception $e) {
         // Let the outer catch handle logging of error and handling response.
         // We avoid other exceptions related to JSON parsing here.
-        if ($e->getCode() === 600) {
+        if (in_array($e->getCode(), [404, 600])) {
           throw $e;
         }
       }
     }
     catch (\Exception $e) {
+      if ($throw_exception) {
+        throw $e;
+      }
+
       $result = NULL;
       $this->logger->error('Exception while invoking API @api. Message: @message.', [
         '@api' => $url,
@@ -823,6 +831,20 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Get Cart by invoking Magento API directly.
+   *
+   * @param string $cart_id
+   *   Cart ID.
+   *
+   * @return array
+   *   API Response.
+   */
+  public function getCart(string $cart_id) {
+    $endpoint = sprintf('carts/%d/getCart', $cart_id);
+    return $this->invokeApi($endpoint, [], 'GET', TRUE);
+  }
+
+  /**
    * Update Cart by invoking Magento API directly.
    *
    * @param string $cart_id
@@ -834,7 +856,7 @@ class AlshayaApiWrapper {
    *   API Response.
    */
   public function updateCart(string $cart_id, array $cart) {
-    $endpoint = 'carts/' . $cart_id . '/updateCart';
+    $endpoint = sprintf('carts/%d/updateCart', $cart_id);
     return $this->invokeApi($endpoint, $cart, 'JSON');
   }
 
@@ -890,6 +912,7 @@ class AlshayaApiWrapper {
     }
 
     if ($response && is_string($response)) {
+      $log_response = $response;
       $response = Json::decode($response);
       // Move the cart_id into the customer object.
       if (isset($response['cart_id'])) {
@@ -898,7 +921,16 @@ class AlshayaApiWrapper {
           'value' => $response['cart_id'],
         ];
       }
-      return MagentoApiResponseHelper::customerFromSearchResult($response['customer']);
+
+      if (is_array($response) && !empty($response['customer'])) {
+        return MagentoApiResponseHelper::customerFromSearchResult($response['customer']);
+      }
+
+      // If we reach here, it means something is not correct and we didn't
+      // receive correct/expected response from MDC.
+      $this->logger->error('Exception while authenticating customer. Error: @response', [
+        '@response' => $log_response,
+      ]);
     }
     return [];
   }
@@ -987,7 +1019,17 @@ class AlshayaApiWrapper {
             'value' => $response['cart_id'],
           ];
         }
-        $response = MagentoApiResponseHelper::customerFromSearchResult($response);
+
+        if (is_array($response)) {
+          $response = MagentoApiResponseHelper::customerFromSearchResult($response);
+        }
+        else {
+          // If we reach here, it means we get the response from MDC which
+          // is not as per required format/array. So we pass that info to
+          // the exception so this can be logged.
+          $log_string = is_string($response) ? $response : json_encode($response);
+          throw new \Exception($log_string);
+        }
       }
 
       // Update password api.

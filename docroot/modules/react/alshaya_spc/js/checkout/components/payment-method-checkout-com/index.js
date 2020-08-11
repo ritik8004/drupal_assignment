@@ -159,15 +159,7 @@ class PaymentMethodCheckoutCom extends React.Component {
   handleCheckoutResponse = (data) => {
     // Do not process when data has type error.
     if (data.type === 'error') {
-      if (data.errorCode === 'default-error') {
-        this.handleCheckoutKitJsErrors(data);
-      }
       removeFullScreenLoader();
-      Drupal.logJavascriptError(
-        'Payment failed',
-        'Payment failed with error code',
-        GTM_CONSTANTS.CART_ERRORS,
-      );
       return;
     }
     const { selectedCard } = this.context;

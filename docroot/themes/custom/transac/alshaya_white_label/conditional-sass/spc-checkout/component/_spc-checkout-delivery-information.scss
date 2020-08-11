@@ -33,12 +33,7 @@
 
       html[lang=ar] & {
         animation: bounceLeft 1.4s infinite;
-        #{$right}: 0.5rem;
       }
-    }
-
-    span::first-letter {
-      text-transform: capitalize;
     }
   }
 

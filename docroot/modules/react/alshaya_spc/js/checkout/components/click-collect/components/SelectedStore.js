@@ -49,12 +49,14 @@ const SelectedStore = ({ store, open, closePanel }) => {
             {errorSuccessMessage}
           </CheckoutMessage>
           )}
-        <SectionTitle>{getStringMessage('cnc_selected_store')}</SectionTitle>
-        <div className="store-details-wrapper">
-          <StoreItem display="default" store={store} />
-        </div>
-        <div className="spc-cnc-contact-form">
-          <ContactInfoForm subTitle={getStringMessage('cnc_contact_info_subtitle')} store={store} />
+        <div className="spc-cnc-selected-store-content">
+          <SectionTitle>{getStringMessage('cnc_selected_store')}</SectionTitle>
+          <div className="store-details-wrapper">
+            <StoreItem display="default" store={store} />
+          </div>
+          <div className="spc-cnc-contact-form">
+            <ContactInfoForm subTitle={getStringMessage('cnc_contact_info_subtitle')} store={store} />
+          </div>
         </div>
       </div>
     );

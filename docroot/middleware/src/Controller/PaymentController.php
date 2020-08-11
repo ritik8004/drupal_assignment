@@ -9,6 +9,7 @@ use App\Service\CheckoutCom\ApplePayHelper;
 use App\Service\Config\SystemSettings;
 use App\Service\Cybersource\CybersourceHelper;
 use App\Service\Knet\KnetHelper;
+use App\Service\Orders;
 use App\Service\PaymentData;
 use App\Service\SessionStorage;
 use App\Service\Utility;
@@ -230,6 +231,13 @@ class PaymentController {
       return $this->handleCheckoutComError('3D secure payment came into success with proper responseCode but totals do not match.');
     }
 
+    $this->logger->info('Checkout.com 3D payment complete for @quote_id.<br>@message', [
+      '@quote_id' => $cart['cart']['id'],
+      '@message' => json_encode($data),
+    ]);
+
+    $this->paymentData->deletePaymentDataByCartId((int) $cart['cart']['id']);
+
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
 
     try {
@@ -381,13 +389,22 @@ class PaymentController {
     // contains language info.
     static::$externalPaymentLangcode = $state['data']['langcode'];
 
+    if ($response['result'] !== 'CAPTURED') {
+      $this->logger->error('KNET result is not captured, transaction failed.<br>POST: @message<br>Cart: @cart<br>State: @state', [
+        '@message' => json_encode($data),
+        '@state' => json_encode($state),
+      ]);
+
+      return $this->handleKnetError($response['state_key']);
+    }
+
     if ($state['data']['cart_id'] != $response['quote_id'] || $state['data']['order_id'] != $response['tracking_id']) {
       $this->logger->error('KNET response data dont match data in state variable.<br>POST: @message<br>Cart: @cart<br>State: @state', [
         '@message' => json_encode($data),
         '@state' => json_encode($state),
       ]);
 
-      return $this->handleKnetError($response['state_key']);
+      return $this->getKnetErrorResponse($state, 'KNET response data dont match data in state variable.');
     }
 
     $cart = $this->cart->getCart();
@@ -398,24 +415,18 @@ class PaymentController {
         '@cart' => $this->cart->getCartDataToLog($cart),
       ]);
 
-      return $this->handleKnetError($response['state_key']);
-    }
-
-    $redirect = new RedirectResponse('/' . $state['data']['langcode'] . '/checkout', 302);
-    if ($response['result'] !== 'CAPTURED') {
-      $this->logger->error('KNET result is not captured, transaction failed.<br>POST: @message<br>Cart: @cart<br>State: @state', [
-        '@message' => json_encode($data),
-        '@state' => json_encode($state),
-      ]);
-
-      $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', self::PAYMENT_DECLINED_VALUE, strtotime('+1 year')));
-      return $this->handleKnetError($response['state_key']);
+      return $this->getKnetErrorResponse($state, 'KNET response data dont match data in state variable.');
     }
 
     $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
       '@quote_id' => $response['quote_id'],
       '@message' => json_encode($data),
     ]);
+
+    // Delete the payment data from our custom table now.
+    $this->paymentData->deletePaymentDataByCartId((int) $response['quote_id']);
+
+    $redirect = new RedirectResponse('/' . $state['data']['langcode'] . '/checkout', 302);
 
     try {
       $payment_data = [
@@ -496,16 +507,34 @@ class PaymentController {
     }
 
     $message = 'User either cancelled or response url returned error.';
-    $message .= PHP_EOL . 'Debug info:' . PHP_EOL;
-    foreach ($data as $key => $value) {
-      $value = is_array($value) ? json_encode($value) : $value;
-      $message .= $key . ': ' . $value . PHP_EOL;
-    }
 
     $this->logger->error('KNET payment failed for @quote_id: @message', [
       '@quote_id' => $data['data']['cart_id'],
       '@message' => $message,
     ]);
+
+    return $this->getKnetErrorResponse($data, $message);
+  }
+
+  /**
+   * Get the KNET error response.
+   *
+   * Also attempt cancel reservation with debug info.
+   *
+   * @param array $data
+   *   State / payment data.
+   * @param string $message
+   *   Message for cancellation.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Response object.
+   */
+  protected function getKnetErrorResponse(array $data, string $message) {
+    $message .= PHP_EOL . 'Debug info:' . PHP_EOL;
+    foreach ($data as $key => $value) {
+      $value = is_array($value) ? json_encode($value) : $value;
+      $message .= $key . ': ' . $value . PHP_EOL;
+    }
 
     $this->cart->cancelCartReservation($message);
 
@@ -550,10 +579,25 @@ class PaymentController {
   public function finaliseCybersource() {
     $response = $this->cybersourceHelper->finalise();
 
-    $script = '<script type="text/javascript">';
-    $script .= 'var event = new CustomEvent("cybersourcePaymentUpdate", {bubbles: true, detail: ' . json_encode($response) . '});';
-    $script .= 'window.parent.document.dispatchEvent(event);';
-    $script .= '</script>';
+    // Code for CustomEvent here is added to support IE11.
+    $script = '
+      <script type="text/javascript">
+        (function () {
+          if ( typeof window.CustomEvent === "function" ) return false;
+          function CustomEvent ( event, params ) {
+            params = params || { bubbles: false, cancelable: false, detail: undefined };
+            var evt = document.createEvent("CustomEvent");
+            evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+            return evt;
+          }
+          CustomEvent.prototype = window.Event.prototype;
+          window.CustomEvent = CustomEvent;
+        })();
+        
+        var event = new CustomEvent("cybersourcePaymentUpdate", {bubbles: true, detail: ' . json_encode($response) . '});
+        window.parent.document.dispatchEvent(event);
+      </script>
+    ';
 
     return new Response($script);
   }
@@ -617,12 +661,27 @@ class PaymentController {
       $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, (int) $data['cart_id']);
     }
     elseif ($data['cart_id'] != $cart_id) {
-      $this->logger->error('3D secure payment came into @callback with cart not matching in session. Payment token: @token', [
+      $this->logger->error('3D secure payment came into @callback with cart not matching in session. Payment token: @token, Cart ID in session @cart_id, Payment data: @data', [
         '@token' => $payment_token,
         '@callback' => $callback,
+        '@cart_id' => $cart_id,
+        '@data' => json_encode($data),
       ]);
 
       throw new \Exception('/' . $data['data']['langcode'] . '/checkout', 302);
+    }
+
+    // If cart id for the checkoutcom token is same as last placed order one.
+    $last_order_cart_id = $this->session->getDataFromSession(Orders::ORDER_CART_ID);
+    if (!empty($last_order_cart_id)
+      && $this->cart->getCartId() == $last_order_cart_id) {
+      $this->logger->error('User tried to directly access or clicked back button from confirmation page for checkoutcom success url for token:@token and cart:@cart while order:@order was placed for same cart already.', [
+        '@token' => $payment_token,
+        '@cart' => $last_order_cart_id,
+        '@order' => $this->session->getDataFromSession(Orders::SESSION_STORAGE_KEY),
+      ]);
+      // Redirect the user to cart page.
+      throw new \Exception('/' . $data['data']['langcode'] . '/cart', 302);
     }
 
     $cart = $this->cart->getCart();
@@ -679,8 +738,9 @@ class PaymentController {
       $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, (int) $data['data']['cart_id']);
     }
     elseif ($data['data']['cart_id'] != $cart_id) {
-      $this->logger->error('KNET @callback callback requested with cart not matching in session. Data: @message', [
+      $this->logger->error('KNET @callback callback requested with cart not matching in session. Data: @message, Cart ID in session @cart_id', [
         '@message' => json_encode($data),
+        '@cart_id' => $cart_id,
         '@callback' => $callback,
       ]);
 

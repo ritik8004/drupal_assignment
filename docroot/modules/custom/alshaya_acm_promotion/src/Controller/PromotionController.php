@@ -220,7 +220,7 @@ class PromotionController extends ControllerBase {
 
         default:
           // We support only specific types for now.
-          continue;
+          continue 2;
       }
 
       $items[] = $item;
@@ -357,13 +357,6 @@ class PromotionController extends ControllerBase {
   public function getPromotionDynamicLabelForProduct(Request $request, string $sku) {
     $sku = SKU::loadFromSku($sku);
 
-    if (!($sku instanceof SKUInterface)) {
-      throw new InvalidArgumentException();
-    }
-
-    $get = $request->query->all();
-    $cart = CartData::createFromArray($get);
-
     // Add cache metadata.
     $cache_array = [
       'tags' => ['node_type:acq_promotion'],
@@ -372,6 +365,21 @@ class PromotionController extends ControllerBase {
         'languages',
       ],
     ];
+
+    try {
+      if (!($sku instanceof SKUInterface)) {
+        throw new InvalidArgumentException();
+      }
+
+      $get = $request->query->all();
+      $cart = CartData::createFromArray($get);
+    }
+    catch (\InvalidArgumentException $e) {
+      $response = new CacheableJsonResponse([]);
+      $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
+      return $response;
+    }
+
     Cache::mergeTags($cache_array['tags'], $sku->getCacheTags());
     Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
 

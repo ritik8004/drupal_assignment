@@ -28,6 +28,11 @@ cart.place_order:
     controller: App\Controller\CartController::placeOrder
     methods: POST
 
+cart.place_order_system:
+    path: /cart/place-order-system
+    controller: App\Controller\CartController::placeOrderSystem
+    methods: POST
+
 cart.get_cnc_stores:
     path: /cart/stores/{lat}/{lon}
     controller: App\Controller\CartController::getCncStores

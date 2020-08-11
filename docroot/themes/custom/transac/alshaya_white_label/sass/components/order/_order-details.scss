@@ -122,6 +122,7 @@
 
   .light {
     color: $order_detail_td_light_content;
+    line-height: 1.4;
   }
 
   .dark {
@@ -239,6 +240,33 @@
       @include breakpoint($only-tablet) {
         .order-detail & {
           width: 24%;
+        }
+      }
+    }
+  }
+
+  .surcharge-row {
+    .blend {
+      .price-type__wrapper {
+        .tooltip-anchor {
+          position: absolute;
+          display: inline-block;
+          top: -0.3125rem;
+
+          @include breakpoint($only-mobile) {
+            top: -0.4125rem;
+          }
+
+          .tooltip-box {
+            @include breakpoint($only-mobile) {
+              #{$left}: -8.8rem;
+
+              &::before,
+              &::after {
+                #{$left}: 86.3%;
+              }
+            }
+          }
         }
       }
     }
@@ -452,6 +480,35 @@
 
       &.order__delivery-details .open--hours > div {
         margin-bottom: 0.5rem;
+      }
+    }
+
+    &.above-mobile.blend,
+    .mobile-only {
+      .dark {
+        line-height: 1.4;
+      }
+    }
+
+    &.order__user--info {
+      .address--contact {
+        margin-top: 1.25rem;
+        font-size: 0.75rem;
+
+        .no-direction {
+          font-size: 0.875rem;
+          margin-top: 0.5rem;
+        }
+      }
+    }
+
+    .surcharge-row {
+      td:first-child {
+        @include breakpoint($only-tablet) {
+          .order-detail & {
+            display: none;
+          }
+        }
       }
     }
   }
@@ -699,6 +756,16 @@
           background-color: $basket_vat_price_bg !important;
         }
       }
+    }
+  }
+
+  .address--contact {
+    margin-top: 1.25rem;
+    font-size: 0.75rem;
+
+    .no-direction {
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
     }
   }
 }
