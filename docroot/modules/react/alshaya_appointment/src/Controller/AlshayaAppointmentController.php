@@ -155,7 +155,7 @@ class AlshayaAppointmentController extends ControllerBase {
         ),
         'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
         'mobile_maxlength' => $alshaya_master_config->get('maxlength'),
-        'customer_details_disclaimer_text' => $alshaya_appointment_config->get('customer_details_disclaimer_text'),
+        'customer_details_disclaimer_text' => $alshaya_appointment_config->get('customer_details_disclaimer_text.value'),
         'user_details' => $this->getUserDetails(),
         'socialLoginEnabled' => $social_login_enabled->get('social_login'),
       ],
