@@ -211,4 +211,14 @@ class APIHelper {
     return $error;
   }
 
+  /**
+   * Checks if langcode is valid.
+   *
+   * @return mixed
+   *   If true then langcode, otherwise false.
+   */
+  public function isValidLangcode($langcode) {
+    return in_array($langcode, ['en', 'ar']);
+  }
+
 }
