@@ -182,8 +182,7 @@ class AlshayaColorSplitManager {
   public function alterGroupAttributeFormItem(array &$configurations, array $options, $grouping_attribute) {
     if ($grouping_attribute) {
       foreach ($options as $key => $val) {
-        $option_id = $this->productOptionsHelper->getAttributeOptionId($val, $grouping_attribute);
-        $swatch = $this->swatchHelper->getSwatch($grouping_attribute, $option_id);
+        $swatch = $this->getGroupingAttributeSwatchData($val, $grouping_attribute);
         if (!empty($swatch)) {
           switch ($swatch['type']) {
             case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
@@ -202,6 +201,44 @@ class AlshayaColorSplitManager {
             default:
               continue 2;
           }
+        }
+      }
+    }
+  }
+
+  /**
+   * Wrapper function to get grouping attribute swatch data.
+   *
+   * @param string $val
+   *   Option value.
+   * @param string $grouping_attribute
+   *   Grouping attribute.
+   *
+   * @return array
+   *   Swatch data.
+   */
+  public function getGroupingAttributeSwatchData($val, $grouping_attribute) {
+    $option_id = $this->productOptionsHelper->getAttributeOptionId($val, $grouping_attribute);
+    $swatch = $this->swatchHelper->getSwatch($grouping_attribute, $option_id);
+
+    return $swatch;
+  }
+
+  /**
+   * Add swatch data in grouping attribute.
+   *
+   * @param array $variant
+   *   Array of variants.
+   * @param string $grouping_attribute
+   *   Grouping attribute.
+   */
+  public function addAttributeSwatchData(array &$variant, $grouping_attribute) {
+    foreach ($variant['attributes'] as $key => $attr) {
+      if ($attr['key'] === $grouping_attribute) {
+        $swatch = $this->getGroupingAttributeSwatchData($attr['value'], $grouping_attribute);
+        if (!empty($swatch)) {
+          $variant['attributes'][$key]['type'] = $swatch['type'];
+          $variant['attributes'][$key]['swatch'] = $swatch['swatch'];
         }
       }
     }
