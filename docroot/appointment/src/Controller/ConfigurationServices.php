@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Cache\Cache;
+use App\Translation\TranslationHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,6 +52,13 @@ class ConfigurationServices {
   protected $cache;
 
   /**
+   * Translation Helper.
+   *
+   * @var \App\Translation\TranslationHelper
+   */
+  protected $translationHelper;
+
+  /**
    * ConfigurationServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -63,18 +71,22 @@ class ConfigurationServices {
    *   Helper.
    * @param \App\Cache\Cache $cache
    *   Cache Helper.
+   * @param \App\Translation\TranslationHelper $translationHelper
+   *   Translation Helper.
    */
   public function __construct(LoggerInterface $logger,
                               APIHelper $api_helper,
                               XmlAPIHelper $xml_api_helper,
                               Helper $helper,
-                              Cache $cache) {
+                              Cache $cache,
+                              TranslationHelper $translationHelper) {
     $this->logger = $logger;
     $this->apiHelper = $api_helper;
     $this->xmlApiHelper = $xml_api_helper;
     $this->helper = $helper;
     $this->cache = $cache;
     $this->serviceUrl = $this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_CONFIGURATION_SERVICES_URL;
+    $this->translationHelper = $translationHelper;
   }
 
   /**
@@ -83,10 +95,11 @@ class ConfigurationServices {
    * @return json
    *   Program data from API.
    */
-  public function getPrograms() {
+  public function getPrograms(Request $request) {
     // Get Programs from cache.
     try {
-      $item = $this->cache->getItem('programs');
+      $langcode = $request->query->get('langcode');
+      $item = $this->cache->getItem('programs', $langcode);
       if ($item) {
         return new JsonResponse($item);
       }
@@ -115,13 +128,13 @@ class ConfigurationServices {
         if ($program->isEnabled) {
           $programData[] = [
             'id' => $program->programExternalId,
-            'name' => $program->programName,
+            'name' => $this->translationHelper->getTranslation($program->programName, $langcode),
           ];
         }
       }
 
       // Set cache.
-      $this->cache->setItem('programs', $programData);
+      $this->cache->setItem('programs', $programData, $langcode);
 
       return new JsonResponse($programData);
     }
@@ -143,6 +156,7 @@ class ConfigurationServices {
    */
   public function getActivities(Request $request) {
     try {
+      $langcode = $request->query->get('langcode');
       $locationExternalId = $this->apiHelper->getlocationExternalIds();
       $locationExternalId = is_array($locationExternalId) ? reset($locationExternalId) : $locationExternalId;
       $program = $request->query->get('program');
@@ -152,7 +166,7 @@ class ConfigurationServices {
       }
 
       // Get Activities from cache.
-      $item = $this->cache->getItem($program . '_activities');
+      $item = $this->cache->getItem($program . '_activities', $langcode);
       if ($item) {
         return new JsonResponse($item);
       }
@@ -170,14 +184,14 @@ class ConfigurationServices {
         if ($activity->isEnabled) {
           $activityData[] = [
             'id' => $activity->activityExternalId,
-            'name' => $activity->activityName,
-            'description' => $activity->description,
+            'name' => $this->translationHelper->getTranslation($activity->activityName, $langcode),
+            'description' => $this->translationHelper->getTranslation($activity->description, $langcode),
           ];
         }
       }
 
       // Set activities cache.
-      $this->cache->setItem($program . '_activities', $activityData);
+      $this->cache->setItem($program . '_activities', $activityData, $langcode);
 
       return new JsonResponse($activityData);
     }
@@ -201,6 +215,7 @@ class ConfigurationServices {
     try {
       $requestQuery = $request->query;
 
+      $langcode = $requestQuery->get('langcode');
       $latitude = $requestQuery->get('latitude') ?? '';
       $longitude = $requestQuery->get('longitude') ?? '';
       $radius = $requestQuery->get('radius') ?? '';
@@ -250,8 +265,8 @@ class ConfigurationServices {
           // store info later, distance shouldn't be cached
           $storesData[] = [
             'locationExternalId' => $storeId ?? '',
-            'name' => $store->locationName ?? '',
-            'address' => $store->companyAddress ?? '',
+            'name' => $this->translationHelper->getTranslation($store->locationName, $langcode) ?? '',
+            'address' => $this->translationHelper->getAddressTranslation($store->companyAddress, $langcode) ?? '',
             'lat' => $storeLat,
             'lng' => $storeLng,
             'storeTiming' => $storeTiming ?? '',

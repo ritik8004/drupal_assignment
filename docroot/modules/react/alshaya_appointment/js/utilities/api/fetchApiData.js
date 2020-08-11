@@ -5,8 +5,20 @@ function getMiddleWareUrl() {
   return drupalSettings.alshaya_appointment.middleware_url;
 }
 
+function getLanguageCode() {
+  return drupalSettings.path.currentLanguage;
+}
+
 function fetchAPIData(apiUrl) {
-  const url = getMiddleWareUrl() + apiUrl;
+  // Pass language code as parameter.
+  let langcode = '';
+  // Check if endpoint already has parameter, then append langcode.
+  if (apiUrl.indexOf('?') !== -1) {
+    langcode = `&langcode=${getLanguageCode()}`;
+  } else {
+    langcode = `?langcode=${getLanguageCode()}`;
+  }
+  const url = getMiddleWareUrl() + apiUrl + langcode;
 
   return Axios.get(url)
     .then((response) => {
