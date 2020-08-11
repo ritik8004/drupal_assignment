@@ -57,7 +57,7 @@ const PdpLayout = () => {
   );
 
   const outOfStock = (
-    <p>{Drupal.t('Out of Stock')}</p>
+    <span className="out-of-stock">{Drupal.t('Out of Stock')}</span>
   );
 
   const header = useRef();
