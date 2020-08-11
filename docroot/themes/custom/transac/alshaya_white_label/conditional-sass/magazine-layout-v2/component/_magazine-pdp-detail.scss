@@ -110,6 +110,21 @@
           }
         }
       }
+
+      .out-of-stock {
+        display: block;
+        margin-bottom: 1rem;
+        background-color: $magv2-out-of-stock-bg;
+        font-size: 0.75rem;
+        vertical-align: middle;
+        text-align: center;
+        padding: 0.6rem 1.5rem;
+        color: $magv2-out-of-stock-text;
+
+        @include breakpoint($desktop) {
+          display: inline-block;
+        }
+      }
     }
   }
 }
