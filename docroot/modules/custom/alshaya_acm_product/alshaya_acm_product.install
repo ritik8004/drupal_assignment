@@ -29,6 +29,11 @@ function alshaya_acm_product_update_8061() {
     ['alshaya_acm_product.sku_base_fields'],
     'alshaya_acm_product'
   );
+
+  // Set swatch image style config to save original brand logo in taxonomy term.
+  $config = \Drupal::configFactory()->getEditable('alshaya_product_options.settings');
+  $config->set('mdc_swatch_image_style', 'swatch_image/30x20');
+  $config->save();
 }
 
 /**
