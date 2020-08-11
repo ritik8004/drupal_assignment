@@ -30,7 +30,7 @@ class TranslationHelper extends APIHelper {
       ];
       $options = [
         'json' => [
-          "project" => $this->getTranslationProjectName(),
+          'project' => $this->getTranslationProjectName(),
         ],
         'headers' => $headers,
       ];
