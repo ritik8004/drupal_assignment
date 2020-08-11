@@ -8,11 +8,9 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
-use GuzzleHttp\Exception\RequestException;
 
 /**
  * Utility function to return media files for a product.
@@ -286,87 +284,34 @@ function alshaya_acm_product_available_click_collect($sku) {
  */
 function alshaya_acm_product_get_brand_logo($sku) {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+  $attributes = $sku_entity->get('attributes')->getValue();
+  $attributes = array_column($attributes, 'value', 'key');
 
-  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
-  $entity_repository = \Drupal::service('entity.repository');
-
-  // We need title from English version.
-  $sku_entity = $entity_repository->getTranslationFromContext($sku_entity, 'en');
-  $title = $sku_entity->get('attr_brand_logo')->getString();
-
-  if (empty($title)) {
-    return [];
-  }
-
-  $cid = 'brand_logo:' . Html::cleanCssIdentifier($title);
+  $cid = 'brand_logo:' . $attributes['brand_logo'];
 
   if ($cache = \Drupal::cache('data')->get($cid)) {
     $image = $cache->data;
   }
   else {
-    // Preparing args for all info/error messages.
-    $args = ['@title' => $title, '@sku_id' => $sku_entity->id()];
+    $query = $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
+    $query->fields('ttfd', ['tid', 'name']);
+    $query->innerJoin('taxonomy_term__field_sku_attribute_code', 'ttac', 'ttac.entity_id = ttfd.tid');
+    $query->innerJoin('taxonomy_term__field_attribute_swatch_org_image', 'ttasoi', 'ttasoi.entity_id = ttfd.tid');
+    $query->innerJoin('file_managed', 'fm', 'ttasoi.field_attribute_swatch_org_image_target_id = fm.fid AND fm.status = 1');
+    $query->addField('fm', 'uri');
+    $query->condition('ttac.field_sku_attribute_code_value', 'brand_logo');
+    $query->condition('ttfd.default_langcode', 1);
+    $query->condition('ttfd.vid', 'sku_product_option');
+    $query->orderBy('ttfd.weight', 'ASC');
+    $term = $query->execute()->fetchObject();
 
-    $host = \Drupal::config('alshaya_api.settings')->get('magento_host');
-    $media_path = \Drupal::config('alshaya_acm_product.settings')->get('brand_logo_base_path');
-    $extension = \Drupal::config('alshaya_acm_product.settings')->get('brand_logo_extension');
-
-    $directory = $media_path;
-
-    // Prepare file name by replacing spaces with underscores and lower case.
-    $file_name = strtolower(str_replace(' ', '_', $title));
-
-    for ($i = 0; $i < 2 && $i <= strlen($title); $i++) {
-      $directory .= '/' . substr($file_name, $i, 1);
-    }
-
-    $directory_uri = 'public://brand-logo/' . $directory;
-    $image_uri = $directory_uri . '/' . $file_name . '.' . $extension;
-    $image_url = $host . '/' . $directory . '/' . $file_name . '.' . $extension;
-
-    $file_storage = \Drupal::entityTypeManager()->getStorage('file');
-
-    if ($files = $file_storage->loadByProperties(['uri' => $image_uri])) {
-      $file = reset($files);
-    }
-    else {
-      // Download the file contents.
-      $client = \Drupal::httpClient();
-      try {
-        $file_data = $client->get($image_url)->getBody();
-      }
-      catch (RequestException $e) {
-        watchdog_exception('alshaya_acm_product', $e);
-      }
-
-      // Check to ensure empty file is not saved in SKU.
-      if (empty($file_data)) {
-        \Drupal::logger('alshaya_acm_product')->error('Failed to download brand logo of title "@title" for SKU id @sku_id.', $args);
-      }
-
-      // Get the file name.
-      $file_name = basename($image_url);
-
-      // Prepare the directory.
-      file_prepare_directory($directory_uri, FILE_CREATE_DIRECTORY);
-
-      // Save the file as file entity.
-      /** @var \Drupal\file\Entity\File $file */
-      $file = file_save_data($file_data, $image_uri, FILE_EXISTS_REPLACE);
-
-      if (empty($file)) {
-        \Drupal::logger('alshaya_acm_product')->error('Failed to save brand logo of title "@title" for SKU id @sku_id.', $args);
-      }
-    }
-
-    if ($file) {
+    if (!empty($term)) {
       $image = [
         '#theme' => 'image',
-        '#uri' => $file->getFileUri(),
-        '#title' => $title,
-        '#alt' => $title,
+        '#uri' => $term->uri,
+        '#title' => $term->name,
+        '#alt' => $term->name,
       ];
-
       $expire = CacheBackendInterface::CACHE_PERMANENT;
     }
     else {
