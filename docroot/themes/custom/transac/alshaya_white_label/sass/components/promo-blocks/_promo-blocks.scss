@@ -369,7 +369,7 @@
   .promo-block__position {
     .field--name-field-button-link {
       position: absolute;
-      left: 50%;
+      #{$left}: 50%;
       -ms-transform: translate(-50%, -50%);
       transform: translate(-50%, -50%);
     }
@@ -377,10 +377,10 @@
     &.position-bottom-left,
     &.position-center-left,
     &.position-top-left {
-      left: 1rem;
+      #{$left}: 1rem;
 
       @include breakpoint($tablet) {
-        left: 3rem;
+        #{$left}: 3rem;
       }
     }
 

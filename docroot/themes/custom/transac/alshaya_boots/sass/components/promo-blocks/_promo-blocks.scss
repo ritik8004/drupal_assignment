@@ -135,9 +135,12 @@
     }
 
     .field--name-field-button-link {
-      @include breakpoint($desktop) {
-        #{$left}: auto;
-        transform: none;
+      #{$left}: auto;
+      transform: none;
+
+      @include breakpoint($only-mobile) {
+        position: unset;
+        margin-bottom: 3rem;
       }
 
       a {
