@@ -313,7 +313,7 @@ class AppointmentServices {
 
       ];
 
-      if (!empty($result)) {
+      if (empty($result)) {
         $client = $this->apiHelper->getSoapClient($this->serviceUrl);
         $result = $client->__soapCall('getAppointmentsByCriteriaAppointmentDateRange', [$param]);
       }
@@ -466,6 +466,14 @@ class AppointmentServices {
         'confirmationNumber' => $appointmentId,
       ];
       $result = $client->__soapCall('cancelAppointment', [$param]);
+
+      // Invalidate Users appointment cache.
+      $tags = [
+        'appointments_by_clientId_' . $clientExternalId,
+        'appointment_' . $appointmentId,
+      ];
+      $this->cache->tagInvalidation($tags);
+
       return new JsonResponse($result);
     }
     catch (\Exception $e) {
