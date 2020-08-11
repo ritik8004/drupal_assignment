@@ -21,6 +21,8 @@ if (!empty($site_country_code) && $site_country_code['site_code'] === 'bp') {
     'location_group_ext_id' => 'Boots',
     'timetrade_api_base_url' => 'https://api-stage.timetradesystems.co.uk',
     'timetrade_translation_base_url' => 'https://staging-translation.account.services',
+    'translation_api_key' => 'UWRUKUwscZ9uc7ZFfoWuue3BSEx1nBsePUofN260',
+    'project' => 'boots',
     'locations_to_skip' => 'alshayaadmin', // Comma separated for multiple.
   ];
   if (preg_match('/\d{2}(live|update)/', $env)) {
