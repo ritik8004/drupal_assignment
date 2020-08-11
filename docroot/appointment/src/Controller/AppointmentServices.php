@@ -151,6 +151,12 @@ class AppointmentServices {
 
         }
 
+        // Get clientExternalId for invalidating cache.
+        $tags = [
+          'appointments_by_clientId_' . $param['client'],
+        ];
+        $this->cache->tagInvalidation($tags);
+
         $result = $this->xmlApiHelper->bookAppointment($param);
 
         $bookingId = $result->return->result ?? '';
