@@ -184,9 +184,9 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     priceRaw = productInfo[skuItemCode].priceRaw;
     finalPrice = productInfo[skuItemCode].finalPrice;
     pdpGallery = productInfo[skuItemCode].rawGallery;
-    if (Object.keys(variants).length > 0) {
-      if (productInfo[skuItemCode].type === 'configurable') {
-        configurableCombinations = drupalSettings.configurableCombinations;
+    if (productInfo[skuItemCode].type === 'configurable') {
+      configurableCombinations = drupalSettings.configurableCombinations;
+      if (Object.keys(variants).length > 0) {
         if (variant == null) {
           setVariant(configurableCombinations[skuItemCode].firstChild);
         } else {
