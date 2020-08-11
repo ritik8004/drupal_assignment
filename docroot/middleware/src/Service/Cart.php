@@ -214,6 +214,16 @@ class Cart {
   }
 
   /**
+   * Wrapper function to set cart id in session.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   */
+  public function setCartId(int $cart_id) {
+    $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, $cart_id);
+  }
+
+  /**
    * Get cart by cart id.
    *
    * @param bool $force
@@ -761,6 +771,7 @@ class Cart {
         );
 
         if (isset($response['redirectUrl']) && !empty($response['redirectUrl'])) {
+          $response['payment_type'] = 'knet';
           $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response['data']);
           throw new \Exception($response['redirectUrl'], 302);
         }
@@ -818,6 +829,7 @@ class Cart {
           if (isset($response['responseCode'])
               && $response['responseCode'] == APIWrapper::SUCCESS
               && !empty($response[APIWrapper::REDIRECT_URL])) {
+            $response['payment_type'] = 'checkout_com';
             // We will use this again to redirect back to Drupal.
             $response['langcode'] = $this->settings->getRequestLanguage();
             $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response);
@@ -1452,6 +1464,7 @@ class Cart {
       return $this->utility->getErrorResponse('Transaction failed.', 500);
     }
     $response['langcode'] = $this->settings->getRequestLanguage();
+    $response['payment_type'] = 'checkout_com';
     $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response);
 
     $this->logger->notice('Redirecting user for 3D verification.');
