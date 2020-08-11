@@ -2828,13 +2828,9 @@ class SkuManager {
    *   PDP layout context to be used.
    */
   public function getContextFromLayoutKey($context, $pdp_layout) {
-    switch ($pdp_layout) {
-      case 'default':
-        return $context;
-
-      case 'magazine':
-        return $context . '-' . $pdp_layout;
-    }
+    $context_key = $context;
+    $this->moduleHandler->alter('alshaya_context_key_from_layout', $context_key, $pdp_layout);
+    return $context_key;
   }
 
   /**

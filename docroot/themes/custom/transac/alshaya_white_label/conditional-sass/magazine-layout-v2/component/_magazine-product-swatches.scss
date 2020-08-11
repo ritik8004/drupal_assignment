@@ -1,0 +1,75 @@
+.non-groupped-attr {
+  .select-attribute {
+    display: flex;
+    padding: 0;
+    margin: 1.25rem -0.3125rem 0.625rem;
+
+    li {
+      list-style: none;
+      padding: 0 0.3125rem;
+      box-sizing: border-box;
+      margin-bottom: 0.625rem;
+
+      &.active {
+        a {
+          background-color: rgba(85, 85, 85, 0.1);
+          background-blend-mode: overlay;
+          border: 0.0625rem solid $magv2-product-swatch-active-border;
+        }
+      }
+    }
+
+    a {
+      height: 5.3125rem;
+      display: block;
+      background-size: contain;
+
+      @include breakpoint($only-tablet) {
+        height: 5.938rem;
+      }
+
+      @include breakpoint($tablet) {
+        background-size: cover;
+      }
+
+      @include breakpoint($tablet-landscape) {
+        background-size: contain;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      overflow: scroll;
+      margin-#{$left}: -1.25rem;
+      margin-#{$right}: -1.25rem;
+      padding-#{$left}: 0.9375rem;
+
+      li {
+        &:last-child {
+          padding-#{$right}: 1.25rem;
+        }
+      }
+
+      a {
+        width: 5.3125rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      flex-flow: wrap;
+
+      li {
+        flex-basis: 50%;
+      }
+    }
+
+    @include breakpoint($tablet-landscape) {
+      li {
+        flex-basis: 25%;
+      }
+    }
+  }
+}
+
+#add-to-cart-error:empty {
+  padding-top: 0;
+}

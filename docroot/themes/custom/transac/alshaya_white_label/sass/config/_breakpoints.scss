@@ -4,6 +4,7 @@ $tablet: 768px !default;
 $desktop: 1025px !default;
 $desktop-wide: 1284px !default;
 $desktop-large: 1980px !default;
+$tablet-landscape: 1024px !default;
 
 $upto-tablet: max-width $tablet - 1;
 $upto-desktop: max-width $desktop - 1;

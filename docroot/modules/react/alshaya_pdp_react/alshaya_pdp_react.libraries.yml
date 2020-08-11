@@ -1,0 +1,8 @@
+pdp_magazine_v2_layout:
+  version: 1.x
+  footer: true
+  js:
+    dist/pdp_layout.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+    - core/drupalSettings

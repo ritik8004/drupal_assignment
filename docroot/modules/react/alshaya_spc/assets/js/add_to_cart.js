@@ -124,7 +124,13 @@
                   $('.error-container-' + cleaned_sku).html('');
 
                   // Trigger the success event for other listeners.
-                  $(form).trigger('product-add-to-cart-success', [productData, response]);
+                  var cartNotification = jQuery.Event('product-add-to-cart-success', {
+                    detail: {
+                      productData: productData,
+                      cartData: cart_data,
+                    }
+                  });
+                  $(form).trigger(cartNotification);
 
                   var productInfo = drupalSettings.productInfo[productData.parentSku];
                   var options = [];
