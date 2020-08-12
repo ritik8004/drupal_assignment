@@ -21,7 +21,7 @@ function _alshaya_appointment_get_middleware_url() {
 function alshaya_appointment_alshaya_my_account_links_alter(array &$links) {
   // Add My apppointment link.
   $links['alshaya_appointment'] = [
-    'text' => t('my appointments'),
+    'text' => t('My appointments'),
     'route' => 'alshaya_appointment.user_booked_appointment',
     'weight' => 200,
   ];

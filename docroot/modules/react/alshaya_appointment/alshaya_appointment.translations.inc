@@ -160,5 +160,47 @@ function _alshaya_appointment_translations() {
     'Add to My Calendar' => [
       'ar' => 'أضف إلى التقويم الخاص بي',
     ],
+    'I have an account' => [
+      'ar' => 'لدي حساب على الموقع',
+    ],
+    'Time slots are unavailable on this date. Please Select next date.' => [
+      'ar' => 'الفترات الزمنية غير متوفرة في هذا اليوم. يرجى تحديد اليوم التالي.',
+    ],
+    'Is this appointment for you?' => [
+      'ar' => 'هل هذا الموعد لك؟',
+    ],
+    'No appointments booked.' => [
+      'ar' => 'لم يتم حجز المواعيد.',
+    ],
+    'Store Location' => [
+      'ar' => 'موقع المتجر',
+    ],
+    'close' => [
+      'ar' => 'إغلاق',
+    ],
+    'Are you sure you want to cancel appointment for !type?' => [
+      'ar' => '؟ !type هل أنت متأكد أنك تريد إلغاء موعد',
+    ],
+    'Date of Birth' => [
+      'ar' => 'تاريخ الولادة',
+    ],
+    'Edit Store' => [
+      'ar' => 'تحرير المتجر',
+    ],
+    'Edit time' => [
+      'ar' => 'تعديل الوقت',
+    ],
+    'Edit Companion' => [
+      'ar' => 'تحرير الرفيق',
+    ],
+    'View My Appointments' => [
+      'ar' => 'عرض المواعيد الخاصة بي',
+    ],
+    'Please enter value for this field.' => [
+      'ar' => 'الرجاء إدخال قيمة.',
+    ],
+    'My appointments' => [
+      'ar' => 'المواعيد الخاصة بي',
+    ],
   ];
 }
