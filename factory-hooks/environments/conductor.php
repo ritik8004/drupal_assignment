@@ -503,6 +503,18 @@ $conductors = [
     'hmac_secret' => 'ZmJiNzUzOTctMTBiMC00',
     'site_id' => 129,
   ],
+  // FootLocker EG.
+  'fleg_prod' => [
+    'site_id' => 274,
+  ],
+  // FootLocker BH.
+  'flbh_prod' => [
+    'site_id' => 275,
+  ],
+  // FootLocker QA.
+  'flqa_prod' => [
+    'site_id' => 276,
+  ],
   // West Elm.
   'wekw_qa' => [
     'hmac_id' => '2546a170c84c49248207de3a8665a920',

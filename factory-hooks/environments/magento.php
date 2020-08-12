@@ -486,6 +486,15 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 13, 'ar' => 16],
     ],
+    'eg' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 33, 'ar' => 30],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 39, 'ar' => 36],
+    ],
   ],
   // Westelm.
   'we_qa' => [
