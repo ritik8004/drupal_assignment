@@ -15,25 +15,31 @@ export default class AppointmentSteps extends React.Component {
       let stepClass = '';
       const { visitedStep } = this.state;
       if (itemStep === activeStep) {
-        stepClass = 'active wizard-step';
+        stepClass = `active wizard-step ${itemStep}`;
       } else if (visitedStep.includes(itemStep)) {
-        stepClass = 'visited wizard-step';
+        stepClass = `visited wizard-step ${itemStep}`;
       } else {
-        stepClass = 'wizard-step';
+        stepClass = `wizard-step ${itemStep}`;
       }
       visitedStep.push(activeStep);
       return stepClass;
     };
 
     const { step } = this.props;
+    const { uid } = drupalSettings.user;
     const listItems = drupalSettings.alshaya_appointment.step_labels;
-    const steprender = listItems.map((item) => (
+    if (uid) {
+      if (listItems[3].stepValue === 'select-login-guest') {
+        listItems.splice(3, 1);
+      }
+    }
+    const steprender = listItems.map((item, index) => (
       <li
         key={item.step}
         className={getStepClass(item.stepValue, step)}
         value={item.stepValue}
       >
-        <span className="step-number">{item.step}</span>
+        <span className="step-number">{index + 1}</span>
         <span className="step-title">{item.stepTitle}</span>
       </li>
     ));
