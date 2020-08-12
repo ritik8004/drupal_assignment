@@ -1,6 +1,7 @@
 import React from 'react';
 import _has from 'lodash/has';
 import _isEmpty from 'lodash/isEmpty';
+import parse from 'html-react-parser';
 import { getInputValue } from '../../../utilities/helper';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import ClientDetails from './components/client-details';
@@ -327,7 +328,7 @@ export default class CustomerDetails extends React.Component {
       customer_details_disclaimer_text: customerDisclaimer,
     } = drupalSettings.alshaya_appointment;
 
-    const disclaimerText = customerDisclaimer !== undefined ? customerDisclaimer : '';
+    const disclaimerText = customerDisclaimer !== undefined ? parse(customerDisclaimer) : '';
 
     return (
       <div className="customer-details-wrapper">
