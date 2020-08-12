@@ -293,7 +293,7 @@ class ConfigurationServices {
    */
   public function getStoreSchedule($storeId, $langcode) {
     // Get store schedules from cache.
-    $item = $this->cache->getItem('store_' . $storeId);
+    $item = $this->cache->getItem('store_' . $storeId, $langcode);
     if ($item) {
       return $item;
     }
@@ -322,7 +322,7 @@ class ConfigurationServices {
         }
       }
 
-      $this->cache->setItem('store_' . $storeId, $weeklySchedulesData);
+      $this->cache->setItem('store_' . $storeId, $weeklySchedulesData, $langcode);
 
       return $weeklySchedulesData;
     }
