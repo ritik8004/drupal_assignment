@@ -111,25 +111,19 @@ class AlshayaSpcCommands extends DrushCommands {
         $cart = json_decode($cart, TRUE);
       }
       catch (\Exception $e) {
+        $message = 'Not able to get cart for id @cart_id, exception: @code @message, payment data: @data';
         if ($e->getCode() == 404) {
-          $this->getLogger('PendingPaymentCheck')->notice('Cart no longer available for id @cart_id, deleting payment data @data', [
-            '@data' => $payment['data'],
-            '@cart_id' => $payment['cart_id'],
-          ]);
-
-          $this->deletePaymentDataByCartId($payment['cart_id']);
-
-          continue;
+          $message = 'Cart no longer available for id @cart_id, deleting payment data @data';
         }
 
-        // Probably Magento is down right now or something else wrong.
-        // Do not delete payment data and just add log message.
-        $this->getLogger('PendingPaymentCheck')->warning('Not able to get cart for id @cart_id, exception: @code @message, payment data: @data', [
+        $this->getLogger('PendingPaymentCheck')->warning($message, [
           '@code' => $e->getCode(),
           '@message' => $e->getMessage(),
           '@cart_id' => $payment['cart_id'],
           '@data' => $payment['data'],
         ]);
+
+        $this->deletePaymentDataByCartId($payment['cart_id']);
 
         continue;
       }
