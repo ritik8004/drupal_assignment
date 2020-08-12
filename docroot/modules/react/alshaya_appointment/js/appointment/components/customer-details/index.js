@@ -1,7 +1,6 @@
 import React from 'react';
 import _has from 'lodash/has';
 import _isEmpty from 'lodash/isEmpty';
-import parse from 'html-react-parser';
 import { getInputValue } from '../../../utilities/helper';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import ClientDetails from './components/client-details';
@@ -324,6 +323,12 @@ export default class CustomerDetails extends React.Component {
       appointmentCompanion,
     } = this.state;
 
+    const {
+      customer_details_disclaimer_text: customerDisclaimer,
+    } = drupalSettings.alshaya_appointment;
+
+    const disclaimerText = customerDisclaimer !== undefined ? customerDisclaimer : '';
+
     return (
       <div className="customer-details-wrapper">
         <form
@@ -343,7 +348,7 @@ export default class CustomerDetails extends React.Component {
             appointmentCompanion={appointmentCompanion}
           />
           <div className="disclaimer-wrapper">
-            {parse(drupalSettings.alshaya_appointment.customer_details_disclaimer_text)}
+            {disclaimerText}
           </div>
           <div className="customer-details-button-wrapper">
             <div className="appointment-flow-action">

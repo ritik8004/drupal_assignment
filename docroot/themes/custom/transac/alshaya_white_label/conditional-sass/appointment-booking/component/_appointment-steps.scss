@@ -36,6 +36,10 @@
       width: calc(100% / 6);
       padding-#{$left}: 0.5rem;
       padding-#{$right}: 1.6875rem;
+
+      .logged-in & {
+        width: calc(100% / 5);
+      }
     }
 
     &.active {
