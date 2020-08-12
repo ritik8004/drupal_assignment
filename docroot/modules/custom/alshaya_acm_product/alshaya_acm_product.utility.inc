@@ -291,25 +291,18 @@ function alshaya_acm_product_get_brand_logo($sku) {
     $image = $cache->data;
   }
   else {
-    $query = $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
-    $query->fields('ttfd', ['tid', 'name']);
-    $query->innerJoin('taxonomy_term__field_sku_attribute_code', 'ttac', 'ttac.entity_id = ttfd.tid');
-    $query->innerJoin('taxonomy_term__field_attribute_swatch_org_image', 'ttasoi', 'ttasoi.entity_id = ttfd.tid');
-    $query->innerJoin('taxonomy_term__field_sku_option_id', 'ttsoi', 'ttsoi.entity_id = ttfd.tid');
-    $query->innerJoin('file_managed', 'fm', 'ttasoi.field_attribute_swatch_org_image_target_id = fm.fid AND fm.status = 1');
-    $query->addField('fm', 'uri');
-    $query->condition('ttac.field_sku_attribute_code_value', 'brand_logo');
-    $query->condition('ttsoi.field_sku_option_id_value', $brand_logo);
-    $query->condition('ttfd.default_langcode', 1);
-    $query->condition('ttfd.vid', 'sku_product_option');
-    $term = $query->execute()->fetchObject();
+    $term = \Drupal::service('acq_sku.product_options_manager')->loadProductOptionByOptionId(
+      'brand_logo',
+      $brand_logo,
+      \Drupal::languageManager()->getCurrentLanguage()->getId()
+    );
 
-    if (!empty($term)) {
+    if (!empty($term->get('field_attribute_swatch_org_image')->getValue())) {
       $image = [
         '#theme' => 'image',
-        '#uri' => $term->uri,
-        '#title' => $term->name,
-        '#alt' => $term->name,
+        '#uri' => $term->get('field_attribute_swatch_org_image')->entity->getFileUri(),
+        '#title' => $term->label(),
+        '#alt' => $term->label(),
       ];
       $expire = CacheBackendInterface::CACHE_PERMANENT;
     }
