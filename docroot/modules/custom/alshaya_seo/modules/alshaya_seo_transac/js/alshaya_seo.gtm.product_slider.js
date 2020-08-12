@@ -6,6 +6,8 @@
 (function ($, Drupal, debounce) {
   'use strict';
 
+  Drupal.alshayaSeoGtmProductSlider = Drupal.alshayaSeoGtmProductSlider || {};
+
   Drupal.behaviors.seoGoogleTagManagerProductSliderList = {
     attach: function (context, settings) {
       $(window).once('product-carousel-scroll').on('scroll', debounce(function (event) {
@@ -17,6 +19,35 @@
       });
     }
   };
+
+  /**
+   * Product click handler for all product sliders.
+   */
+  $('.view-product-slider a').once('product-clicked').on('click', function () {
+    var that = $(this).closest('article');
+    var subListName = Drupal.alshayaSeoGtmProductSlider.getRecommendationListName($(this));
+    // Get the position of the item in the carousel.
+    var position = parseInt($(this).closest('.views-row').data('list-item-position'));
+    Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.gtm.currency, subListName, position);
+  });
+
+  /**
+   * Get the list name for the recommended product.
+   *
+   * @param object element
+   *   The jquery object of the recommended product.
+   */
+  Drupal.alshayaSeoGtmProductSlider.getRecommendationListName = function(element) {
+    var label = element.closest('.views-element-container').siblings('.subtitle').text();
+    var listName = $('body').attr('gtm-list-name');
+
+    if (listName.indexOf('placeholder') > -1) {
+      return productRecommendationsSuffix + listName.replace('placeholder', label).toLowerCase();
+    }
+    else {
+      return (productRecommendationsSuffix + listName + '-' + label).toLowerCase();
+    }
+  }
 
   /**
    * Helper function to push productImpression to GTM.
@@ -64,7 +95,7 @@
           else {
             finalListName = listName + '-' + label;
           }
-          impression.list = (productRecommendationsSuffix + finalListName).toLowerCase();
+          impression.list = Drupal.alshayaSeoGtmProductSlider.getRecommendationListName($(this));
 
           impression.position = count;
           // Keep variant empty for impression pages. Populated only post add to cart action.

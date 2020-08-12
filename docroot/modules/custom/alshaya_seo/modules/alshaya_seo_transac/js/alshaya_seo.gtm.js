@@ -637,49 +637,6 @@ const productRecommendationsSuffix = 'pr-';
         });
       });
 
-      /**
-       * Product Click Handler.
-       */
-      // Add click link handler to fire 'productClick' event to GTM.
-      productLinkSelector.each(function () {
-        $(this).once('js-event').on('click', function (e) {
-          var that = $(this);
-          var position = parseInt($(this).closest('.views-row').data('list-item-position'));
-          currentListName = listName;
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName, position);
-        });
-      });
-
-      /**
-       * Product click handler for Modals.
-       */
-      // Add click link handler to fire 'productClick' event to GTM.
-      $('a[href*="product-quick-view"]').once('product-clicked').on('click', function () {
-        // We will handle GTM for recommended products in basket in
-        // different place.
-        if ($(this).parents('.spc-recommended-products').length > 0) {
-          return;
-        }
-
-        var that = $(this).closest('article[data-vmode="teaser"]');
-        if (listName.indexOf('placeholder') > -1) {
-          if (that.closest('.horizontal-crossell').length > 0) {
-            subListName = listName.replace('placeholder', 'CS');
-          }
-          else if (that.closest('.horizontal-upell').length > 0) {
-            subListName = listName.replace('placeholder', 'US');
-          }
-          else if (that.closest('.horizontal-related').length > 0) {
-            subListName = listName.replace('placeholder', 'RELATED');
-          }
-        }
-
-        currentListName = subListName;
-        // Get the position of the item in the carousel.
-        var position = parseInt($(this).closest('.views-row').data('list-item-position'));
-        Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);
-      });
-
       var highlightsPosition = 1;
       topNavLevelOneSelector.once('set-positions').find('.highlights [gtm-type="gtm-highlights"]').each(function () {
         $(this).data('position', highlightsPosition);
