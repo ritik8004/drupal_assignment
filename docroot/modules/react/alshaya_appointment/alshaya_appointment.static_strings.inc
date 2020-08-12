@@ -195,10 +195,6 @@ function _alshaya_appointment_static_strings() {
       'value' => t('No'),
     ],
     [
-      'key' => 'activity_label',
-      'value' => t('Appointment type'),
-    ],
-    [
       'key' => 'and',
       'value' => t('and'),
     ],
@@ -325,6 +321,30 @@ function _alshaya_appointment_static_strings() {
     [
       'key' => 'valid_email_error',
       'value' => t('The email address %mail is not valid.'),
+    ],
+    [
+      'key' => 'apple_calendar',
+      'value' => t('Apple Calendar'),
+    ],
+    [
+      'key' => 'google',
+      'value' => t('Google'),
+    ],
+    [
+      'key' => 'outlook',
+      'value' => t('Outlook'),
+    ],
+    [
+      'key' => 'outlookdotcom',
+      'value' => t('Outlook.com'),
+    ],
+    [
+      'key' => 'yahoo',
+      'value' => t('Yahoo'),
+    ],
+    [
+      'key' => 'selectlist_placeholder',
+      'value' => t('Select...'),
     ],
   ];
 }

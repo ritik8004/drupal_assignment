@@ -202,5 +202,23 @@ function _alshaya_appointment_translations() {
     'My appointments' => [
       'ar' => 'المواعيد الخاصة بي',
     ],
+    'Select...' => [
+      'ar' => 'أختر...',
+    ],
+    'Apple Calendar' => [
+      'ar' => 'Apple Calendar',
+    ],
+    'Google' => [
+      'ar' => 'Google',
+    ],
+    'Outlook' => [
+      'ar' => 'Outlook',
+    ],
+    'Outlook.com' => [
+      'ar' => 'Outlook.com',
+    ],
+    'Yahoo' => [
+      'ar' => 'Yahoo',
+    ],
   ];
 }
