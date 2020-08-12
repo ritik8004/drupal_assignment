@@ -585,7 +585,6 @@ class AppointmentServices {
    *   Appointment details.
    */
   public function getAppointmentDetails(Request $request) {
-    $langcode = $request->query->get('langcode');
     $appointment = $request->query->get('appointment');
     $userId = $request->query->get('id');
 
@@ -611,6 +610,7 @@ class AppointmentServices {
       ];
 
       $cacheKey = 'appointment_' . $appointment;
+      $langcode = $request->query->get('langcode');
       $item = $this->cache->getItem($cacheKey, $langcode);
       if ($item) {
         // Check if Appointment Belongs to user only.
