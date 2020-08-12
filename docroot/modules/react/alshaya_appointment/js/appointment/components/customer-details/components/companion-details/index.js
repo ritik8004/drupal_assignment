@@ -81,7 +81,7 @@ export default class CompanionDetails extends React.Component {
 
       if (firstNameData && lastNameData && dobData) {
         return (
-          <div className={`companion-details-item ${companionNamePrefix}-details`}>
+          <div key={companionNum.toString()} className={`companion-details-item ${companionNamePrefix}-details`}>
             <div className="details-header-wrapper">
               <div className="companion-detail-heading">{`${getStringMessage('companion_label')} ${companionNum} ${getStringMessage('details')}`}</div>
               <div className="delete-companion">

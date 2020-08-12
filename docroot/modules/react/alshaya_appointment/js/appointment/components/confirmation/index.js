@@ -61,6 +61,7 @@ export default class Confirmation extends React.Component {
     if (companion.length > 0) {
       companionsRender = companion.map((item) => (
         <ConfirmationItems
+          key={item.label}
           item={{ label: item.label, value: item.value }}
         />
       ));

@@ -17,6 +17,7 @@ const AppointmentConfirmationPrint = React.forwardRef((props, ref) => {
   if (companion.length > 0) {
     companionsRender = companion.map((item) => (
       <ConfirmationItems
+        key={item.label}
         item={{ label: item.label, value: item.value }}
       />
     ));
