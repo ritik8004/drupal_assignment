@@ -427,6 +427,9 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 12, 'ar' => 15],
     ],
+    'eg' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
     'bh' => [
       'store_id' => ['en' => 32, 'ar' => 29],
     ],
