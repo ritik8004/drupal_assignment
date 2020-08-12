@@ -1,0 +1,132 @@
+.appointment-login-container {
+  @include breakpoint($tablet-landscape) {
+    display: flex;
+    padding-#{$right}: 3.125rem;
+  }
+
+  .appointment-with-account {
+    @include breakpoint($tablet-landscape) {
+      padding-#{$right}: 4.375rem;
+      border-#{$right}: 1px solid $appointment-grey-border;
+      margin-#{$right}: 4.375rem;
+    }
+  }
+
+  .appointment-without-account {
+    @include breakpoint($upto-tablet-landscape) {
+      margin-top: 3.125rem;
+    }
+  }
+
+  h2 {
+    font-family: $alshaya-bold;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    color: $appointment-section-title;
+    margin: 0;
+  }
+
+  p {
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+  }
+
+  .appointment-social-login {
+    margin-top: 1.875rem;
+    text-align: center;
+
+    p {
+      margin: 0;
+      font-size: 0.875rem;
+    }
+
+    .appointment-social-login-wrapper {
+      margin-top: 0.75rem;
+    }
+
+    .appointment-social {
+      display: inline-block;
+      margin-top: 0.625rem;
+
+      .social-auth-link {
+        font-size: 0;
+
+        &::before {
+          content: '';
+          height: 2.875rem;
+          width: 2.875rem;
+          background-size: 2.9375rem;
+          display: inline-block;
+          border-radius: 50%;
+        }
+      }
+
+      .social_auth_facebook {
+        &::before {
+          background: url(#{$base_theme_img_directory_path}/icons/appointment-facebook.svg) no-repeat center $appointment-social-icon-bg;
+          margin-#{$left}: 0.9375rem;
+        }
+      }
+
+      .social_auth_google {
+        &::before {
+          background: url(#{$base_theme_img_directory_path}/social-icons/google-login-logo.svg) no-repeat center $appointment-social-icon-bg;
+        }
+      }
+    }
+  }
+
+  .appointment-login-buttons-wrapper {
+    .appointment-type-button {
+      float: none;
+      width: 100%;
+      display: block;
+      text-align: center;
+    }
+
+    .appointment-checkout-button,
+    .appointment-register-button {
+      @include breakpoint($upto-desktop) {
+        margin-top: 1.875rem;
+      }
+    }
+
+    .appointment-checkout-button {
+      background: $appointment-checkout-btn-bg;
+      color: $appointment-checkout-btn;
+      border: 1px solid $appointment-checkout-btn-bg;
+    }
+
+    .appointment-register-button {
+      color: $appointment-checkout-btn;
+      background: $appointment-register-btn-bg;
+      border: 1px solid $appointment-register-border;
+    }
+
+    .appointment-signin-button {
+      margin-top: 1.25rem;
+
+      &:hover {
+        color: $appointment-btn-text;
+      }
+    }
+  }
+}
+
+.appointment-login-guest-container {
+  .appointment-store-buttons-wrapper {
+    .appointment-type-button {
+      &.back {
+        @include breakpoint($tablet-landscape) {
+          margin-top: 3.75rem;
+        }
+      }
+    }
+  }
+}
+
+.appointment-login-wrapper {
+  @include breakpoint($upto-tablet-landscape) {
+    margin-bottom: 3.75rem;
+  }
+}

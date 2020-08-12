@@ -53,9 +53,13 @@ if [ $uname_string == 'Darwin' ]
 then
   sed -i'' '/vendor/d' $deployDir/docroot/middleware/.gitignore
   sed -i'' '/var/d' $deployDir/docroot/middleware/.gitignore
+  sed -i'' '/vendor/d' $deployDir/docroot/appointment/.gitignore
+  sed -i'' '/var/d' $deployDir/docroot/appointment/.gitignore
 else
   sed -i '/vendor/d' $deployDir/docroot/middleware/.gitignore
   sed -i '/var/d' $deployDir/docroot/middleware/.gitignore
+  sed -i '/vendor/d' $deployDir/docroot/appointment/.gitignore
+  sed -i '/var/d' $deployDir/docroot/appointment/.gitignore
 fi
 
 # Delete patches directory which is not used on acquia git.

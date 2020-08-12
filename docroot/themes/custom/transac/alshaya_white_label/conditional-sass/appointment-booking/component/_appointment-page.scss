@@ -1,0 +1,29 @@
+.path--appointment {
+  .page-standard {
+    padding: 0 1.25rem;
+
+    @include breakpoint($desktop) {
+      max-width: 78rem;
+      margin: 0 auto;
+      padding: 0;
+    }
+  }
+}
+
+.appointment-inner-wrapper {
+  @include breakpoint($tablet-landscape) {
+    margin-bottom: 5rem;
+  }
+}
+
+#appointment-booking {
+  @include breakpoint($upto-tablet) {
+    padding-bottom: 1.875rem;
+  }
+
+  .exception-error {
+    font-size: 0.75rem;
+    color: $primary_input_inline_error;
+    padding-top: 1.25rem;
+  }
+}

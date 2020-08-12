@@ -1,0 +1,9 @@
+appointment_companion_limit: 3
+local_storage_expire: 600000 #Milliseconds
+store_finder:
+  max_num_of_locations: 100
+  unit: 'miles'
+customer_details_disclaimer_text:
+  value: ''
+  format: 'rich_text'
+langcode: en
