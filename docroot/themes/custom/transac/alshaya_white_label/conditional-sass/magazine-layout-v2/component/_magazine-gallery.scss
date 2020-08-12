@@ -43,6 +43,10 @@
           width: calc(50% - 0.5rem);
           float: $right;
         }
+
+        &:only-child {
+          float: none;
+        }
       }
     }
 
@@ -50,6 +54,12 @@
       position: relative;
       cursor: pointer;
       background: $magv2-gallery-bg;
+
+      &:only-child {
+        width: 47%;
+        margin: 0 auto;
+        grid-column: 1/-1;
+      }
     }
 
     figure {
