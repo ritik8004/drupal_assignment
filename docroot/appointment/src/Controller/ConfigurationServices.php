@@ -253,7 +253,7 @@ class ConfigurationServices {
       foreach ($stores as $store) {
         $storeId = $store->locationExternalId;
         if (in_array($storeId, $locationExternalIds)) {
-          $storeTiming = $this->getStoreSchedule($storeId);
+          $storeTiming = $this->getStoreSchedule($storeId, $langcode);
           $storeLat = $store->geocoordinates->latitude ?? '';
           $storeLng = $store->geocoordinates->longitude ?? '';
 
@@ -291,9 +291,9 @@ class ConfigurationServices {
    * @return array
    *   Stores Schedules from API.
    */
-  public function getStoreSchedule($storeId) {
+  public function getStoreSchedule($storeId, $langcode) {
     // Get store schedules from cache.
-    $item = $this->cache->getItem('store_' . $storeId);
+    $item = $this->cache->getItem('store_' . $storeId, $langcode);
     if ($item) {
       return $item;
     }
@@ -312,7 +312,17 @@ class ConfigurationServices {
       $weeklySchedules = $result->return->locationSchedules->weeklySubSchedule->weeklySubSchedulePeriods ?? [];
       $weeklySchedulesData = $this->helper->groupStoreTimings($weeklySchedules);
 
-      $this->cache->setItem('store_' . $storeId, $weeklySchedulesData);
+      // Add Translation.
+      if (!empty($weeklySchedulesData)) {
+        foreach ($weeklySchedulesData as &$schedule) {
+          $days = explode(' - ', $schedule['day']);
+          $days[0] = $this->translationHelper->getTranslation($days[0], $langcode);
+          $days[1] = $this->translationHelper->getTranslation($days[1], $langcode);
+          $schedule['day'] = implode(' - ', $days);
+        }
+      }
+
+      $this->cache->setItem('store_' . $storeId, $weeklySchedulesData, $langcode);
 
       return $weeklySchedulesData;
     }
