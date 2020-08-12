@@ -4,9 +4,11 @@ $tablet: 768px !default;
 $desktop: 1025px !default;
 $desktop-wide: 1284px !default;
 $desktop-large: 1980px !default;
+$tablet-landscape: 1024px !default;
 
 $upto-tablet: max-width $tablet - 1;
 $upto-desktop: max-width $desktop - 1;
+$upto-tablet-landscape: max-width $tablet-landscape - 1;
 
 $only-mobile: 0 $tablet - 1;
 $only-tablet: $tablet $desktop - 1;
