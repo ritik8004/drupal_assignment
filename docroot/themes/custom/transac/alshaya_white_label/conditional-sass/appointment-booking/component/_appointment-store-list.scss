@@ -1,0 +1,151 @@
+#appointment-map-store-list-view {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      background: $spc-cnc-store-item-bg;
+      border-bottom: 1px solid $appointment-store-list-border;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .store-address-content {
+        display: none;
+        font-size: 0.875rem;
+        padding-#{$left}: 2.125rem;
+        padding-#{$right}: 1.25rem;
+        color: $appointment-store-item-text;
+
+        .store-address {
+          div {
+            display: inline;
+          }
+        }
+      }
+
+      .store-delivery-time {
+        color: $spc-cnc-store-item-text-impress;
+        margin-top: 0.625rem;
+        margin-bottom: 0.625rem;
+        display: block;
+
+        .label--delivery-time {
+          font-family: $alshaya-bold;
+        }
+
+        .delivery--time--value {
+          display: block;
+          margin-top: 0.3125rem;
+        }
+      }
+
+      .appointment-store-name {
+        cursor: pointer;
+        padding-#{$right}: 1.25rem;
+        display: block;
+        font-size: 0.75rem;
+        line-height: 0.875rem;
+        color: $spc-cnc-store-item-text-impress;
+        position: relative;
+
+        .expand-btn {
+          float: $right;
+          width: 2.5rem;
+          font-size: 0;
+          height: 2.125rem;
+          line-height: 3.25rem;
+
+          @include icon(chevrondown, after) {
+            font-size: 2rem;
+            position: absolute;
+            #{$right}: 0.875rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+
+        .appointment-store-name-wrapper {
+          width: 100%;
+          padding-#{$left}: 2.125rem;
+          height: 2.125rem;
+          display: inline-flex;
+          align-items: center;
+          position: relative;
+
+          html[lang=ar] & {
+            line-height: normal;
+          }
+
+          @include breakpoint($only-mobile) {
+            width: calc(100% - 2.5rem);
+            height: 2.8125rem;
+          }
+
+          &::before {
+            content: '';
+            width: 0.875rem;
+            height: 0.875rem;
+            background: white;
+            display: inline-block;
+            border-radius: 100%;
+            border: 1px solid $primary_radiobtn_empty;
+            margin-#{$right}: 0.4rem;
+            position: absolute;
+            #{$left}: 0.625rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          .store-name {
+            pointer-events: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: calc(100% - 5.25rem);
+            display: inline-block;
+            white-space: nowrap;
+          }
+
+          .store-distance {
+            text-align: $right;
+            flex-grow: 1;
+            display: inline-block;
+            pointer-events: none;
+            color: $spc-cnc-store-list-distance;
+          }
+        }
+      }
+
+      &.expand {
+        padding-bottom: 1.25rem;
+
+        .store-address-content {
+          display: block;
+        }
+
+        .expand-btn {
+          @include icon(chevronup, after) {
+            font-size: 2rem;
+          }
+        }
+      }
+
+      &.selected {
+        .appointment-store-name-wrapper {
+          &::before {
+            border: 0.25rem solid $primary_radiobtn_filled;
+          }
+        }
+      }
+    }
+  }
+
+  .appointment-store-empty-store-list {
+    padding: 0.625rem 1.25rem 1.25rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: $spc-cnc-store-item-text-impress;
+  }
+}

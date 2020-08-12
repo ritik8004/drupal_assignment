@@ -1,0 +1,5 @@
+alshaya_appointment.settings: 
+  title: 'Alshaya Appointment Settings'
+  base_route_name: alshaya_appointment.appointment_booking_config
+  names:
+    - alshaya_appointment.settings
