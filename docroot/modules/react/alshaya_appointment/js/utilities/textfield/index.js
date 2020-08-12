@@ -78,7 +78,6 @@ const TextField = (props) => {
           className={focusClass}
           onChange={handleChange}
           disabled={(id)}
-          value={defaultValue || ''}
         />
         <div className="c-input__bar" />
         <label>{label}</label>
@@ -99,7 +98,6 @@ const TextField = (props) => {
             name={name}
             defaultValue={defaultValue}
             onChange={handleChange}
-            value={defaultValue || ''}
           />
         </div>
         <div className="c-input__bar" />
@@ -143,7 +141,6 @@ const TextField = (props) => {
         onChange={handleChange}
         onBlur={(e) => handleEvent(e, 'blur')}
         className={focusClass}
-        value={defaultValue || ''}
       />
       <div className="c-input__bar" />
       <label>{label}</label>

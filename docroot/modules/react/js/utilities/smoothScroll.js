@@ -9,6 +9,14 @@ smoothscroll.polyfill();
  * @param selector
  */
 export const smoothScrollTo = (selector, block) => {
+  // Element exist check.
+  const element = document.querySelector(selector);
+  if (element === null) {
+    // Scroll element not found in DOM.
+    return;
+  }
+
+  // Scroll into view.
   document.querySelector(selector).scrollIntoView({
     behavior: 'smooth',
     block: (block === undefined) ? 'start' : block,

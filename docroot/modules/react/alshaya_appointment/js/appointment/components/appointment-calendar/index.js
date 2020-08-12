@@ -100,8 +100,9 @@ export default class AppointmentCalendar extends React.Component {
       week, selectDate, arrayOfDates, previousDisabled,
     } = this.state;
 
-    const weekdays = week.map((date) => (
+    const weekdays = week.map((date, i) => (
       <li
+        key={i.toString()}
         className={(moment(selectDate).format(getDateFormat()) === moment(date).format(getDateFormat())) ? 'date-item active' : 'date-item'}
         onClick={() => this.dateChanged(date)}
       >
@@ -110,8 +111,9 @@ export default class AppointmentCalendar extends React.Component {
       </li>
     ));
 
-    const allDates = arrayOfDates.map((date) => (
+    const allDates = arrayOfDates.map((date, i) => (
       <li
+        key={i.toString()}
         className={(moment(selectDate).format(getDateFormat()) === moment(date).format(getDateFormat())) ? 'date-item active' : 'date-item'}
         onClick={() => this.dateChanged(date)}
       >

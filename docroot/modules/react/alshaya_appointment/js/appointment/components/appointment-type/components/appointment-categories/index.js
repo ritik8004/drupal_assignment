@@ -20,6 +20,7 @@ export default class AppointmentCategories extends React.Component {
         <ul className="appointment-categories">
           { categoryItems && categoryItems.map((item) => (
             <li
+              key={item.id}
               className={`appointment-category fadeInUp ${item.id} ${activeItem.id === item.id ? ' active' : ''}`}
               onClick={() => this.handleItemClick(item)}
             >

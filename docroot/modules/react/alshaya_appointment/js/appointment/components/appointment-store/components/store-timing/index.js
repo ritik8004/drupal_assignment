@@ -7,7 +7,7 @@ const StoreTiming = (timing) => (
       {getStringMessage('store_timing_label')}
     </span>
     {timing.timing && Object.entries(timing.timing).map(([, value]) => (
-      <span className="delivery--time--value">
+      <span className="delivery--time--value" key={value.timeSlot}>
         {`${value.day} (${value.timeSlot})`}
       </span>
     ))}

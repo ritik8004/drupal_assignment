@@ -50,9 +50,8 @@ export default class AppointmentLogin extends React.Component {
                 <p>{ `${getStringMessage('or')} ${getStringMessage('social_sign_in_header')}` }</p>
                 <div>
                   <div className="appointment-social">
-                    <a
+                    <span
                       className="social_auth_google social-auth-link auth-link"
-                      href={() => false}
                       social-auth-link={`${baseUrl}${pathPrefix}user/login/google`}
                     >
                       <span
@@ -60,12 +59,11 @@ export default class AppointmentLogin extends React.Component {
                       >
                         {getStringMessage('sign_up_google')}
                       </span>
-                    </a>
+                    </span>
                   </div>
                   <div className="appointment-social">
-                    <a
+                    <span
                       className="social_auth_facebook social-auth-link auth-link"
-                      href={() => false}
                       social-auth-link={`${baseUrl}${pathPrefix}user/login/facebook`}
                     >
                       <span
@@ -73,7 +71,7 @@ export default class AppointmentLogin extends React.Component {
                       >
                         {getStringMessage('sign_up_facebook')}
                       </span>
-                    </a>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -101,9 +99,8 @@ export default class AppointmentLogin extends React.Component {
               <p>{ `${getStringMessage('or')} ${getStringMessage('social_sign_in_header')}` }</p>
               <div>
                 <div className="appointment-social">
-                  <a
+                  <span
                     className="social_auth_google social-auth-link auth-link"
-                    href={() => false}
                     social-auth-link={`${baseUrl}${pathPrefix}user/login/google`}
                   >
                     <span
@@ -111,12 +108,11 @@ export default class AppointmentLogin extends React.Component {
                     >
                       {getStringMessage('sign_up_google')}
                     </span>
-                  </a>
+                  </span>
                 </div>
                 <div className="appointment-social">
-                  <a
+                  <span
                     className="social_auth_facebook social-auth-link auth-link"
-                    href={() => false}
                     social-auth-link={`${baseUrl}${pathPrefix}user/login/facebook`}
                   >
                     <span
@@ -124,7 +120,7 @@ export default class AppointmentLogin extends React.Component {
                     >
                       {getStringMessage('sign_up_facebook')}
                     </span>
-                  </a>
+                  </span>
                 </div>
               </div>
             </div>
