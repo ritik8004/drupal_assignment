@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Helper\APIServicesUrls;
 use App\Cache\Cache;
 use App\Service\Drupal\Drupal;
+use App\Translation\TranslationHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,6 +52,13 @@ class AppointmentServices {
   protected $cache;
 
   /**
+   * Translation Helper.
+   *
+   * @var \App\Translation\TranslationHelper
+   */
+  protected $translationHelper;
+
+  /**
    * AppointmentServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -63,18 +71,22 @@ class AppointmentServices {
    *   API Helper.
    * @param \App\Cache\Cache $cache
    *   Cache Helper.
+   * @param \App\Translation\TranslationHelper $translationHelper
+   *   Translation Helper.
    */
   public function __construct(LoggerInterface $logger,
                               XmlAPIHelper $xml_api_helper,
                               Drupal $drupal,
                               APIHelper $api_helper,
-                              Cache $cache) {
+                              Cache $cache,
+                              TranslationHelper $translationHelper) {
     $this->logger = $logger;
     $this->xmlApiHelper = $xml_api_helper;
     $this->drupal = $drupal;
     $this->apiHelper = $api_helper;
     $this->serviceUrl = $this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL;
     $this->cache = $cache;
+    $this->translationHelper = $translationHelper;
   }
 
   /**
@@ -282,6 +294,7 @@ class AppointmentServices {
    */
   public function getAppointments(Request $request) {
     try {
+      $langcode = $request->query->get('langcode');
       $clientExternalId = $request->query->get('client');
       $userId = $request->query->get('id');
 
@@ -300,7 +313,7 @@ class AppointmentServices {
       }
 
       $cacheKey = 'appointments_by_clientId_' . $clientExternalId;
-      $item = $this->cache->getItem($cacheKey);
+      $item = $this->cache->getItem($cacheKey, $langcode);
       if ($item) {
         $result = $item;
       }
@@ -330,14 +343,25 @@ class AppointmentServices {
         $result->return->appointments[0] = $temp;
       }
 
-      foreach ($result->return->appointments as $key => $appointment) {
+      foreach ($result->return->appointments as $key => &$appointment) {
         $clientExternalId = $this->apiHelper->checkifBelongstoUser($user['email']);
         if ($appointment->clientExternalId != $clientExternalId) {
           unset($result->return->appointments[$key]);
         }
+
+        // Add Translation.
+        $appointment->programName = $this->translationHelper->getTranslation(
+          $appointment->programName,
+          $langcode
+        );
+        $appointment->activityName = $this->translationHelper->getTranslation(
+          $appointment->activityName,
+          $langcode
+        );
+
       }
 
-      $this->cache->setItemWithTags($cacheKey, $result, $cacheKey);
+      $this->cache->setItemWithTags($cacheKey, $result, $cacheKey, $langcode);
 
       return new JsonResponse($result);
     }
@@ -561,6 +585,7 @@ class AppointmentServices {
    *   Appointment details.
    */
   public function getAppointmentDetails(Request $request) {
+    $langcode = $request->query->get('langcode');
     $appointment = $request->query->get('appointment');
     $userId = $request->query->get('id');
 
@@ -586,7 +611,7 @@ class AppointmentServices {
       ];
 
       $cacheKey = 'appointment_' . $appointment;
-      $item = $this->cache->getItem($cacheKey);
+      $item = $this->cache->getItem($cacheKey, $langcode);
       if ($item) {
         // Check if Appointment Belongs to user only.
         if (property_exists($item->return, 'appointment')) {
@@ -603,7 +628,18 @@ class AppointmentServices {
       if (property_exists($appointmentData->return, 'appointment')) {
         $clientExternalId = $appointmentData->return->appointment->clientExternalId;
         if ($this->apiHelper->checkifBelongstoUser($user['email']) == $clientExternalId) {
-          $this->cache->setItemWithTags($cacheKey, $appointmentData, $cacheKey);
+
+          // Add Translations.
+          $appointmentData->return->appointment->programName = $this->translationHelper->getTranslation(
+            $appointmentData->return->appointment->programName,
+            $langcode
+          );
+          $appointmentData->return->appointment->activityName = $this->translationHelper->getTranslation(
+            $appointmentData->return->appointment->activityName,
+            $langcode
+          );
+
+          $this->cache->setItemWithTags($cacheKey, $appointmentData, $cacheKey, $langcode);
           return new JsonResponse($appointmentData);
         }
       }
