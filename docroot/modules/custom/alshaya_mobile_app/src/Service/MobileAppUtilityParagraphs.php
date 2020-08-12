@@ -409,11 +409,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         ],
         [$entity, $bundle_info['fields']]
       );
-      if (!empty($data)
-        && $entity->getEntityTypeId() == 'paragraph'
-        && $parent = $entity->getParentEntity()->bundle()) {
-        $data = array_merge(['parent_type' => $parent], $data);
-      }
     }
     return $data;
   }
@@ -724,6 +719,11 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         }, $entity->get($field)->getValue())
         : $entity->get($field)->getString();
       }
+    }
+    if (!empty($data)
+      && $entity->getEntityTypeId() == 'paragraph'
+      && $parent = $entity->getParentEntity()->bundle()) {
+      $data['parent_type'] = $parent;
     }
     return $data;
   }
