@@ -19,7 +19,6 @@ export default class CartRecommendedProducts extends React.Component {
     };
 
     this.recommendedProductRef = React.createRef();
-    this.recommendedSkus = [];
   }
 
   componentDidMount() {
@@ -47,62 +46,28 @@ export default class CartRecommendedProducts extends React.Component {
   spcRecommendationHandler = (items) => {
     if (items !== undefined
       && Object.keys(items).length > 0) {
-      this.requestSkus = Object.keys(items);
-      this.recommendedSkuSPrepare(items);
+      const skus = [];
+      Object.entries(items).forEach(([, item]) => {
+        skus.push(item.sku);
+      });
 
-      new Promise((resolve) => {
-        const waitForSkuClear = setInterval(() => {
-          if (this.requestSkus.length === 0) {
-            clearInterval(waitForSkuClear);
-            resolve();
+      // Get recommended products.
+      const recommendedProducts = getRecommendedProducts(skus, 'crosssell');
+      if (recommendedProducts instanceof Promise) {
+        recommendedProducts.then((result) => {
+          // If there is no error and there are recommended products.
+          if (result.error === undefined && result.data !== undefined) {
+            this.setState({
+              wait: false,
+              recommendedProducts: result.data,
+            });
+
+            // Storing in localstorage to be used by GTM.
+            const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
+            localStorage.setItem(key, JSON.stringify(result.data));
+            dispatchCustomEvent('recommendedProductsLoad', { products: result.data });
           }
         }, 100);
-      }).then(() => {
-        // Get recommended products.
-        const recommendedProducts = getRecommendedProducts(this.recommendedSkus, 'crosssell');
-        if (recommendedProducts instanceof Promise) {
-          recommendedProducts.then((result) => {
-            // Reset it for next request.
-            this.recommendedSkus = [];
-            // If there is no error and there are recommended products.
-            if (result.error === undefined && result.data !== undefined) {
-              this.setState({
-                wait: false,
-                recommendedProducts: result.data,
-              });
-
-              // Storing in localstorage to be used by GTM.
-              const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
-              localStorage.setItem(key, JSON.stringify(result.data));
-              dispatchCustomEvent('recommendedProductsLoad', {
-                products: result.data,
-              });
-            }
-          });
-        }
-      });
-    }
-  };
-
-  recommendedSkuSPrepare = (items) => {
-    Object.entries(items).forEach(([, item]) => {
-      Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
-    });
-  };
-
-  /**
-   * Call back to get product data from storage.
-   */
-  productDataCallback = (productData) => {
-    // If sku info available.
-    if (productData !== null && productData.sku !== undefined) {
-      this.requestSkus.splice(this.requestSkus.indexOf(productData.sku), 1);
-      // Do not push the same sku again if already exist.
-      if (this.recommendedSkus.indexOf(productData.sku) < 0) {
-        this.recommendedSkus.push(productData.sku);
-      }
-      if (productData.parentSKU && this.recommendedSkus.indexOf(productData.parentSKU) < 0) {
-        this.recommendedSkus.push(productData.parentSKU);
       }
     }
   };

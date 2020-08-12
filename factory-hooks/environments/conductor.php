@@ -345,6 +345,10 @@ $conductors = [
     'hmac_secret' => 'NzJmMDMyN2ItMzRhMC00',
     'site_id' => 87,
   ],
+  // BathBodyWorks Egypt.
+  'bbweg_prod' => [
+    'site_id' => 273,
+  ],
   // BathBodyWorks BH.
   'bbwbh_dev' => [
     'hmac_id' => '6a9541a52b1444a7a9805fe811297ac3',
@@ -498,6 +502,18 @@ $conductors = [
     'hmac_id' => 'a220ff2d59e846c79426e5b001516063',
     'hmac_secret' => 'ZmJiNzUzOTctMTBiMC00',
     'site_id' => 129,
+  ],
+  // FootLocker EG.
+  'fleg_prod' => [
+    'site_id' => 274,
+  ],
+  // FootLocker BH.
+  'flbh_prod' => [
+    'site_id' => 275,
+  ],
+  // FootLocker QA.
+  'flqa_prod' => [
+    'site_id' => 276,
   ],
   // West Elm.
   'wekw_qa' => [

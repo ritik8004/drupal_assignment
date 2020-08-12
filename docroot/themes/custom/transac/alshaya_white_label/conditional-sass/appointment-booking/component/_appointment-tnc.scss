@@ -1,0 +1,25 @@
+.appointment-terms-conditions-text-wrapper {
+  padding: 0.9375rem 1.125rem;
+  border: 1px solid $appointment-tnc-border;
+  max-height: 7.6875rem;
+  overflow-y: scroll;
+  margin-top: 0.625rem;
+
+  p {
+    margin-top: 0;
+    font-family: $alshaya-thin;
+    font-size: 0.875rem;
+    color: $appointment-tnc-grey-text;
+  }
+}
+
+.appointment-terms-conditions-wrapper {
+  @include breakpoint($upto-tablet-landscape) {
+    margin-bottom: 3.4375rem;
+  }
+
+  @include breakpoint($tablet-landscape) {
+    width: calc(100% - 16.75rem);
+    margin-#{$left}: auto;
+  }
+}
