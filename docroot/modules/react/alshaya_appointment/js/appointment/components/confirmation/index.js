@@ -65,6 +65,15 @@ export default class Confirmation extends React.Component {
         />
       ));
     }
+    // As of now, translation is added as english text only.
+    // We can update translations here: _alshaya_appointment_translations()
+    const items = [
+      { apple: getStringMessage('apple_calendar') },
+      { google: getStringMessage('google') },
+      { outlook: getStringMessage('outlook') },
+      { outlookcom: getStringMessage('outlookdotcom') },
+      { yahoo: getStringMessage('yahoo') },
+    ];
 
     return (
       <div className="appointment-confirmation-wrapper">
@@ -79,6 +88,7 @@ export default class Confirmation extends React.Component {
               <AddToCalendar
                 event={event}
                 buttonLabel={getStringMessage('add_to_calendar_label')}
+                listItems={items}
               />
               <ReactToPrint
                 trigger={() => <span className="print">{getStringMessage('print')}</span>}

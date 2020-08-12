@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import 'element-closest-polyfill';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class AppointmentSelect extends React.Component {
   constructor(props) {
@@ -38,6 +39,7 @@ export default class AppointmentSelect extends React.Component {
         value={activeItem}
         isSearchable={false}
         name={name}
+        placeholder={getStringMessage('selectlist_placeholder')}
       />
     );
   }
