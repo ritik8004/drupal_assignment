@@ -90,31 +90,25 @@ class TranslationHelper extends APIHelper {
    * Gets String translation from API result.
    */
   public function getTranslation($string, $langcode) {
-    if (!$this->isValidLangcode($langcode) || $langcode == 'en') {
+    // We don't need any translation for 'en'.
+    if (empty($langcode) || $langcode == 'en') {
+      return $string;
+    }
+
+    // If langcode is not valid one.
+    if (!$this->isValidLangcode($langcode)) {
       return $string;
     }
 
     $translations = $this->cache->getItem('translations');
     if (empty($translations)) {
       $translations = (array) $this->getTranslationFromApi()->{'en-ar'};
-      $this->cache->setItem('translations', $translations);
+      if (!empty($translations)) {
+        $this->cache->setItem('translations', $translations);
+      }
     }
 
     return $translations[$string] ?? $string;
-  }
-
-  /**
-   * Translates Store address.
-   */
-  public function getAddressTranslation($address, $langcode) {
-    if (!$this->isValidLangcode($langcode) || $langcode == 'en') {
-      return $address;
-    }
-    $translated_address = new \stdClass();
-    foreach ($address as $key => $item) {
-      $translated_address->{$key} = $this->getTranslation($item, $langcode);
-    }
-    return $translated_address;
   }
 
 }

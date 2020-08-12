@@ -11,13 +11,10 @@ function getLanguageCode() {
 
 function fetchAPIData(apiUrl) {
   // Pass language code as parameter.
-  let langcode = '';
   // Check if endpoint already has parameter, then append langcode.
-  if (apiUrl.indexOf('?') !== -1) {
-    langcode = `&langcode=${getLanguageCode()}`;
-  } else {
-    langcode = `?langcode=${getLanguageCode()}`;
-  }
+  const langcode = (apiUrl.indexOf('?') !== -1)
+    ? `&langcode=${getLanguageCode()}`
+    : `?langcode=${getLanguageCode()}`;
   const url = getMiddleWareUrl() + apiUrl + langcode;
 
   return Axios.get(url)

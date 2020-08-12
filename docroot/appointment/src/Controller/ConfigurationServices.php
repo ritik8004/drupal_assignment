@@ -261,12 +261,10 @@ class ConfigurationServices {
             $distanceInMiles = $this->helper->distance($latitude, $longitude, $storeLat, $storeLng, $unit);
           }
 
-          // @TODO: Separate out distance from store data as when we cache
-          // store info later, distance shouldn't be cached
           $storesData[] = [
             'locationExternalId' => $storeId ?? '',
             'name' => $this->translationHelper->getTranslation($store->locationName, $langcode) ?? '',
-            'address' => $this->translationHelper->getAddressTranslation($store->companyAddress, $langcode) ?? '',
+            'address' => $this->getAddressTranslation($store->companyAddress, $langcode) ?? '',
             'lat' => $storeLat,
             'lng' => $storeLng,
             'storeTiming' => $storeTiming ?? '',
@@ -363,6 +361,15 @@ class ConfigurationServices {
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
       return new JsonResponse($error, 400);
+    }
+  }
+
+  /**
+   * Translates Store address.
+   */
+  public function getAddressTranslation(&$address, $langcode) {
+    foreach ($address as &$item) {
+      $item = $this->translationHelper->getTranslation($item, $langcode);
     }
   }
 
