@@ -108,11 +108,11 @@ class CartLinkedSkusController extends ControllerBase {
           $cache_tags = array_merge($cache_tags, $sku_entity->getCacheTags());
           $cross_sell_skus += $this->skuManager->getLinkedSkus($sku_entity, $queryParams['type']);
           if ($sku_entity->bundle() === 'simple') {
-            $sku_entity = $this->skuManager->getParentSkuBySku($sku_entity);
-            if (($sku_entity instanceof SKUInterface)
-              && (!in_array($sku_entity->getSku(), $querySkus))) {
-              $cache_tags = array_merge($cache_tags, $sku_entity->getCacheTags());
-              $cross_sell_skus += $this->skuManager->getLinkedSkus($sku_entity, $queryParams['type']);
+            $parent_sku = $this->skuManager->getParentSkuBySku($sku_entity);
+            if (($parent_sku instanceof SKUInterface)
+              && (!in_array($parent_sku->getSku(), $querySkus))) {
+              $cache_tags = array_merge($cache_tags, $parent_sku->getCacheTags());
+              $cross_sell_skus += $this->skuManager->getLinkedSkus($parent_sku, $queryParams['type']);
             }
           }
         }
