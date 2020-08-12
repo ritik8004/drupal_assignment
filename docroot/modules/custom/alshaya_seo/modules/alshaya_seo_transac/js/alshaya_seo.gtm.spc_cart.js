@@ -41,15 +41,13 @@
   /**
    * Helper function to push productImpression to GTM.
    *
-   * @param customerType
+   * @param recommendedProducts
    */
   Drupal.alshayaSeoSpc.prepareProductImpression = function (recommendedProducts, position) {
     var impressions = [];
-    var listName = $('body').attr('gtm-list-name');
     var productLinkSelector = $('.spc-recommended-products .block-content a:not(".impression-processed")');
     var productLinkProcessedSelector = $('.spc-recommended-products .block-content a.impression-processed');
     var count = productLinkProcessedSelector.length + 1;
-    var label = $('.spc-post-content .spc-checkout-section-title').text();
 
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
@@ -61,9 +59,8 @@
           // Cannot use Drupal.alshayaSeoSpc.gtmProduct as the method expectes
           // product parameter to have gtmAttributes key while in localstorage
           // it has gtm_attributes key.
-          var impression = relatedProductsInfo[$(this).attr('data-sku')]['gtm_attributes'];
-
-          impression.list = (productRecommendationsSuffix + listName.replace('placeholder', label)).toLowerCase();
+          var impression = Drupal.alshayaSeoSpc.getRecommendationGtmAttributes($(this).attr('data-sku'));
+          impression.list = Drupal.alshayaSeoSpc.getRecommendationsListName();
           impression.position = count;
           // Keep variant empty for impression pages. Populated only post add to cart action.
           impression.variant = '';
@@ -74,6 +71,36 @@
     }
 
     return impressions;
+  };
+
+  /**
+   * Function to get the gtm attributes for a recommendation product.
+   *
+   * @param string sku
+   *   The simple sku value whose GTM attributes are required.
+   *
+   * @return string
+   *   The recommendation list name.
+   */
+  Drupal.alshayaSeoSpc.getRecommendationGtmAttributes = function(sku) {
+    var key = 'recommendedProduct:' + drupalSettings.path.currentLanguage;
+    var relatedProductsInfo = JSON.parse(localStorage.getItem(key));
+    // Cannot use Drupal.alshayaSeoSpc.gtmProduct as the method expectes
+    // product parameter to have gtmAttributes key while in localstorage
+    // it has gtm_attributes key.
+    return relatedProductsInfo[sku].gtm_attributes;
+  };
+
+  /**
+   * Function to get the list name for a recommendation product.
+   *
+   * @return string
+   *   The recommendation list name.
+   */
+  Drupal.alshayaSeoSpc.getRecommendationsListName = function() {
+    var gtmListName = $('body').attr('gtm-list-name');
+    var label = $('.spc-post-content .spc-checkout-section-title').text();
+    return (productRecommendationsSuffix + gtmListName.replace('placeholder', label)).toLowerCase();
   };
 
   document.addEventListener('recommendedProductsLoad', function (e) {
@@ -95,6 +122,23 @@
     document.querySelectorAll('.spc-recommended-products .nav-next').forEach(function (element) {
       element.addEventListener('click', function (clickEvent) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, clickEvent);
+      });
+    });
+
+    // Add product click handler.
+    document.querySelectorAll('.spc-recommended-products a').forEach(function(element, index) {
+      element.addEventListener('click', function() {
+        var listName =  Drupal.alshayaSeoSpc.getRecommendationsListName();
+        // Currently the elements do not have GTM attributes. So we fetch them
+        // and add them to each element and send them to be processed by the
+        // product click handler.
+        var elementGtmAttributes = Drupal.alshayaSeoSpc.getRecommendationGtmAttributes(element.getAttribute('data-sku'));
+        // Product click handler expects attributes to have 'gtm-' prefix so we
+        // send it that way.
+        for (const [index, value] of Object.entries(elementGtmAttributes)) {
+          element.setAttribute('gtm-' + index, value);
+        }
+        Drupal.alshaya_seo_gtm_push_product_clicks($(element), drupalSettings.gtm.currency, listName, index);
       });
     });
   });
