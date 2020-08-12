@@ -1,0 +1,29 @@
+.store-map-wrapper {
+  @include breakpoint($tablet) {
+    display: flex;
+    height: 20.625rem;
+  }
+
+  .map-inner-wrapper {
+    position: relative;
+    flex-basis: 65%;
+  }
+
+  .appointment-map-store-list-view {
+    border: 1px solid $appointment-grey-border;
+
+    @include breakpoint($tablet) {
+      flex-basis: 35%;
+      overflow-y: scroll;
+      padding-top: 0.5625rem;
+      height: 100%;
+    }
+  }
+}
+
+.appointment-map-view {
+  position: relative;
+  width: 100%;
+  height: 20.625rem;
+  overflow: hidden;
+}
