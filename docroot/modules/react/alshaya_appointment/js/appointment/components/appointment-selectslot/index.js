@@ -92,7 +92,7 @@ export default class AppointmentSlots extends React.Component {
     }
 
     listMorningItems = timeSlots.morning.map((item) => (
-      <li className="morning-time-slots" key={item.id}>
+      <li className="morning-time-slots" key={item.appointmentSlotTime}>
         <span
           href="#"
           className={(timeSlot.appointmentSlotTime === item.appointmentSlotTime) ? 'time-slots active' : 'time-slots'}
@@ -104,7 +104,7 @@ export default class AppointmentSlots extends React.Component {
     ));
 
     listAfternoonItems = timeSlots.afternoon.map((item) => (
-      <li className="afternoon-time-slots" key={item.id}>
+      <li className="afternoon-time-slots" key={item.appointmentSlotTime}>
         <span
           className={(timeSlot.appointmentSlotTime === item.appointmentSlotTime) ? 'time-slots active' : 'time-slots'}
           onClick={() => this.handler(item)}
@@ -115,7 +115,7 @@ export default class AppointmentSlots extends React.Component {
     ));
 
     listEveningItems = timeSlots.evening.map((item) => (
-      <li className="evening-time-slots" key={item.id}>
+      <li className="evening-time-slots" key={item.appointmentSlotTime}>
         <span
           className={(timeSlot.appointmentSlotTime === item.appointmentSlotTime) ? 'time-slots active' : 'time-slots'}
           onClick={() => this.handler(item)}
