@@ -5,8 +5,17 @@ function getMiddleWareUrl() {
   return drupalSettings.alshaya_appointment.middleware_url;
 }
 
+function getLanguageCode() {
+  return drupalSettings.path.currentLanguage;
+}
+
 function fetchAPIData(apiUrl) {
-  const url = getMiddleWareUrl() + apiUrl;
+  // Pass language code as parameter.
+  // Check if endpoint already has parameter, then append langcode.
+  const langcode = (apiUrl.indexOf('?') !== -1)
+    ? `&langcode=${getLanguageCode()}`
+    : `?langcode=${getLanguageCode()}`;
+  const url = getMiddleWareUrl() + apiUrl + langcode;
 
   return Axios.get(url)
     .then((response) => {

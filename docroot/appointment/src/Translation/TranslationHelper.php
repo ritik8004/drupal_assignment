@@ -90,7 +90,25 @@ class TranslationHelper extends APIHelper {
    * Gets String translation from API result.
    */
   public function getTranslation($string, $langcode) {
-    // @todo update for passing translation from API result.
+    // We don't need any translation for 'en'.
+    if (empty($langcode) || $langcode == 'en') {
+      return $string;
+    }
+
+    // If langcode is not valid one.
+    if (!$this->isValidLangcode($langcode)) {
+      return $string;
+    }
+
+    $translations = $this->cache->getItem('translations');
+    if (empty($translations)) {
+      $translations = (array) $this->getTranslationFromApi()->{'en-ar'};
+      if (!empty($translations)) {
+        $this->cache->setItem('translations', $translations);
+      }
+    }
+
+    return $translations[$string] ?? $string;
   }
 
 }

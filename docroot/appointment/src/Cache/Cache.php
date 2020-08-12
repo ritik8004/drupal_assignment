@@ -49,11 +49,15 @@ class Cache {
    *
    * @param string $key
    *   Cache key.
+   * @param string $langcode
+   *   Language code.
    *
    * @return mixed
    *   Cache data or false.
    */
-  public function getItem($key) {
+  public function getItem($key, $langcode = '') {
+    // If langcode is passed append to the key.
+    $key = (!empty($langcode)) ? $key . '_' . $langcode : $key;
     $item = $this->cache->getItem($key);
     if ($item->isHit()) {
       // Item exists.
@@ -66,7 +70,9 @@ class Cache {
   /**
    * Set Cache data.
    */
-  public function setItem($key, $data) {
+  public function setItem($key, $data, $langcode = '') {
+    // If langcode is passed append to the key.
+    $key = (!empty($langcode)) ? $key . '_' . $langcode : $key;
     /** @var \Symfony\Contracts\Cache\ItemInterface $item */
     $item = $this->cache->getItem($key);
     $item
@@ -79,7 +85,9 @@ class Cache {
   /**
    * Set Cache with tags.
    */
-  public function setItemWithTags($key, $data, $tags) {
+  public function setItemWithTags($key, $data, $tags, $langcode = '') {
+    // If langcode is passed append to the key.
+    $key = (!empty($langcode)) ? $key . '_' . $langcode : $key;
     /** @var \Symfony\Contracts\Cache\ItemInterface $item */
     $item = $this->cache->getItem($key);
     $item
