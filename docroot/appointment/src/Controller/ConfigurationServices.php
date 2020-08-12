@@ -354,7 +354,7 @@ class ConfigurationServices {
       $result = $client->__soapCall('getLocationsByCriteria', [$param]);
 
       // Add translations.
-      $result->return->locations->companyAddress = $this->translationHelper->getAddressTranslation(
+      $this->getAddressTranslation(
         $result->return->locations->companyAddress,
         $langcode
       );
