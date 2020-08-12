@@ -330,6 +330,7 @@ class ConfigurationServices {
    */
   public function getStoreDetailsById(Request $request) {
     try {
+      $langcode = $request->query->get('langcode');
       $locationExternalId = $request->query->get('location');
       if (empty($request->query->get('location'))) {
         $message = 'Location ID is required to get store details.';
@@ -337,7 +338,7 @@ class ConfigurationServices {
         throw new \Exception($message);
       }
 
-      $item = $this->cache->getItem('location_' . $locationExternalId);
+      $item = $this->cache->getItem('location_' . $locationExternalId, $langcode);
       if ($item) {
         return new JsonResponse($item);
       }
@@ -351,7 +352,14 @@ class ConfigurationServices {
       ];
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('getLocationsByCriteria', [$param]);
-      $this->cache->setItem('location_' . $locationExternalId, $result);
+
+      // Add translations.
+      $this->getAddressTranslation(
+        $result->return->locations->companyAddress,
+        $langcode
+      );
+
+      $this->cache->setItem('location_' . $locationExternalId, $result, $langcode);
       return new JsonResponse($result);
     }
     catch (\Exception $e) {
