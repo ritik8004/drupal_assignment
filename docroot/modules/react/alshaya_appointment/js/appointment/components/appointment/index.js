@@ -129,21 +129,25 @@ export default class Appointment extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
+        // If no error and we get translation from api.
         if (result.error === undefined && result.data !== undefined) {
           const translation = result.data;
           const localStorage = getStorageInfo();
+          // Update localstore translation for appointment category.
           if (localStorage.appointmentCategory.name !== undefined) {
             localStorage.appointmentCategory.name = this.getTranslation(
               localStorage.appointmentCategory.name, translation,
             );
           }
 
-          if (localStorage.appointmentType.label) {
+          // Update localstore translation for appointment type.
+          if (localStorage.appointmentType.label !== undefined) {
             localStorage.appointmentType.label = this.getTranslation(
               localStorage.appointmentType.label, translation,
             );
           }
 
+          // Update localstore translation for appointment type list.
           if (localStorage.appointmentTypeItems !== undefined) {
             localStorage.appointmentTypeItems.forEach((item, index) => {
               localStorage.appointmentTypeItems[index] = {
@@ -154,12 +158,14 @@ export default class Appointment extends React.Component {
             });
           }
 
+          // Update localstore translation for Store list.
           if (localStorage.storeList !== undefined) {
             localStorage.storeList.forEach((item, i) => {
               localStorage.storeList[i] = this.translateStore(item, translation);
             });
           }
 
+          // Update localstore translation for seleced store.
           if (localStorage.selectedStoreItem !== undefined) {
             const { selectedStoreItem } = localStorage;
             localStorage.selectedStoreItem = this.translateStore(selectedStoreItem, translation);
@@ -167,9 +173,9 @@ export default class Appointment extends React.Component {
 
           localStorage.langcode = drupalSettings.path.currentLanguage;
           setStorageInfo(localStorage);
-          this.setAppointmentRender();
-          removeFullScreenLoader();
         }
+        this.setAppointmentRender();
+        removeFullScreenLoader();
       });
     }
   };

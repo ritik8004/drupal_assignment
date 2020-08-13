@@ -397,14 +397,14 @@ class ConfigurationServices {
   public function getAllTranslations(Request $request) {
     try {
       $langcode = $request->query->get('langcode');
-      $translations = (array) $this->translationHelper->getTranslationFromApi()->{'en-ar'};
+      $translations = $this->translationHelper->getTranslations();
       if ($langcode == 'en') {
         $translations = array_flip($translations);
       }
       return new JsonResponse($translations);
     }
     catch (\Exception $e) {
-      $this->logger->error('Error occurred while getting stores. Message: @message', [
+      $this->logger->error('Error occurred while getting translation. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
