@@ -71,6 +71,7 @@ class SimpleProductForm extends React.Component {
                 onClick={(e) => addToCartSimple(e, 'add-to-cart-main', skuCode, productInfo, pdpLabelRefresh)}
               >
                 {Drupal.t('Add To Bag')}
+                <span className="magv2-button-tick-icon" />
               </button>
             </div>
           </>
