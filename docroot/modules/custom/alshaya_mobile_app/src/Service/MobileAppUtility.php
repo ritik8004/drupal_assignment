@@ -307,7 +307,7 @@ class MobileAppUtility {
       switch ($object->bundle()) {
         case 'acq_product':
           $sku = $this->skuManager->getSkuForNode($object);
-          $return = 'product/' . $sku;
+          $return = 'product-exclude-linked/' . $sku;
           break;
 
         case 'acq_promotion':
