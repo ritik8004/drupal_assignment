@@ -431,9 +431,9 @@ function alshaya_acm_product_attribute_delete_and_resync(string $attribute_code)
     ->execute();
 
   // Delete terms.
-  $controller = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-  $entities = $controller->loadMultiple($tids);
-  $controller->delete($entities);
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $entities = $term_storage->loadMultiple($tids);
+  $term_storage->delete($entities);
 
   // Sync product options for given attribute code.
   $languages = \Drupal::languageManager()->getLanguages();
