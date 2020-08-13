@@ -260,11 +260,11 @@ class ConfigurationServices {
           if (!empty($storeLat) && !empty($storeLng)) {
             $distanceInMiles = $this->helper->distance($latitude, $longitude, $storeLat, $storeLng, $unit);
           }
-
+          $this->getAddressTranslation($store->companyAddress, $langcode);
           $storesData[] = [
             'locationExternalId' => $storeId ?? '',
             'name' => $this->translationHelper->getTranslation($store->locationName, $langcode) ?? '',
-            'address' => $this->getAddressTranslation($store->companyAddress, $langcode) ?? '',
+            'address' => $store->companyAddress ?? '',
             'lat' => $storeLat,
             'lng' => $storeLng,
             'storeTiming' => $storeTiming ?? '',
@@ -388,6 +388,28 @@ class ConfigurationServices {
   public function getAddressTranslation(&$address, $langcode) {
     foreach ($address as &$item) {
       $item = $this->translationHelper->getTranslation($item, $langcode);
+    }
+  }
+
+  /**
+   * Provides all translation.
+   */
+  public function getAllTranslations(Request $request) {
+    try {
+      $langcode = $request->query->get('langcode');
+      $translations = $this->translationHelper->getTranslations();
+      if ($langcode == 'en') {
+        $translations = array_flip($translations);
+      }
+      return new JsonResponse($translations);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while getting translation. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
+
+      return new JsonResponse($error, 400);
     }
   }
 
