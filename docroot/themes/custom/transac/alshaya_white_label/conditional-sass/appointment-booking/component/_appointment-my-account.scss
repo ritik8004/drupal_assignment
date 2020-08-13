@@ -155,6 +155,10 @@
           border: none !important;
           max-width: 53.0625rem;
 
+          &.appointment-delete-popup-wrapper-content {
+            max-width: 37rem;
+          }
+
           @include breakpoint($only-mobile) {
             padding: 2.1875rem 0.9375rem !important;
             max-width: 21.0625rem;
