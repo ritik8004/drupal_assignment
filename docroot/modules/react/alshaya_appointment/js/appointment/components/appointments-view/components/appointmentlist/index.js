@@ -148,7 +148,7 @@ export default class AppointmentListItem extends React.Component {
                 >
                   {getStringMessage('delete')}
                 </button>
-                <Popup open={isModalOpen} closeOnEscape closeOnDocumentClick={false}>
+                <Popup className="appointment-delete-popup-wrapper" open={isModalOpen} closeOnEscape closeOnDocumentClick={false}>
                   <>
                     <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ getStringMessage('close') }</button>
                     <div className="appointment-delete-popup fadeInUp">
