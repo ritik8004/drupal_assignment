@@ -12,8 +12,8 @@ const PdpFullDescription = (props) => {
         <PdpSectionText>
           <ul>
             {
-              itemList.map((item) => (
-                <li>{item}</li>
+              itemList.map((item, i) => (
+                <li key={i.toString()}>{item}</li>
               ))
             }
           </ul>
@@ -29,17 +29,17 @@ const PdpFullDescription = (props) => {
   return (
     <div className="magv2-desc-popup-description-wrapper">
       {
-        pdpDescription.map((item) => (
-          <>
+        pdpDescription.map((item, i) => (
+          <div key={i.toString()} className="desc-label-text-wrapper">
             {((item.value['#markup']) || (item.value['#items']))
               ? (
-                <div className="desc-label-text-wrapper">
+                <>
                   {(item.label) ? (<PdpSectionText className="dark">{parse(item.label['#markup'])}</PdpSectionText>) : null}
                   {CheckItem(item.value)}
-                </div>
+                </>
               )
               : null}
-          </>
+          </div>
         ))
       }
     </div>
