@@ -14,7 +14,7 @@
   transition: background-color 0.5s ease;
 
   .magv2-button-tick-icon {
-    display: none;
+    opacity: 0;
   }
 }
 
@@ -41,7 +41,7 @@
       vertical-align: bottom;
       position: inherit;
       transform: none;
-      opacity: initial;
+      opacity: 1;
       transition: none;
     }
   }
