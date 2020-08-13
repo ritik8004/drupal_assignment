@@ -121,7 +121,7 @@
 
     &:last-child {
       &::before {
-        content: unset;
+        content: none;
       }
     }
 
