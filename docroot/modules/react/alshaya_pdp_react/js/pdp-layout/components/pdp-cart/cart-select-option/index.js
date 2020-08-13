@@ -113,7 +113,7 @@ class CartSelectOption extends React.Component {
       configurables,
       nextCode,
       nextValues,
-      key,
+      attributeKey,
     } = this.props;
 
     const { code } = configurables;
@@ -139,7 +139,8 @@ class CartSelectOption extends React.Component {
     const selectOption = (!swatchStatus) ? (
       <div className="non-grouped-attr">
         <NonGroupSelectOption
-          key={key}
+          key={attributeKey}
+          attributeKey={attributeKey}
           handleSelectionChanged={this.handleSelectionChanged}
           configurables={configurables}
           code={code}
@@ -155,7 +156,7 @@ class CartSelectOption extends React.Component {
     return (groupStatus) ? (
       <div className="grouped-attr">
         <GroupSelectOption
-          key={key}
+          key={attributeKey}
           groupSelect={this.groupSelect}
           handleSelectionChanged={this.handleSelectionChanged}
           configurables={configurables}

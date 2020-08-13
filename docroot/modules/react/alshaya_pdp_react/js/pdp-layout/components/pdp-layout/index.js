@@ -64,7 +64,7 @@ const PdpLayout = () => {
   let content;
 
   const showStickyHeader = () => {
-    window.onscroll = function () {
+    window.onscroll = () => {
       if ((content !== null) && (content !== undefined)) {
         if (window.pageYOffset >= content.offsetTop + content.offsetHeight) {
           header.current.classList.add('magv2-pdp-sticky-header');
@@ -144,7 +144,11 @@ const PdpLayout = () => {
       {relatedProducts ? (
         <div className="magv2-pdp-crossell-upsell-wrapper">
           {Object.keys(relatedProducts).map((type) => (
-            <PdpRelatedProducts type={relatedProducts[type]} skuItemCode={skuItemCode} />
+            <PdpRelatedProducts
+              key={relatedProducts[type]}
+              type={relatedProducts[type]}
+              skuItemCode={skuItemCode}
+            />
           ))}
         </div>
       ) : null}

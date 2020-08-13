@@ -5,8 +5,7 @@ import SizeGuide from '../size-guide';
 
 const NonGroupSelectOption = ({
   handleSelectionChanged, configurables, code,
-  nextCode, nextValues, handleLiClick, selected,
-  key, closeModal,
+  nextCode, nextValues, handleLiClick, selected, attributeKey, closeModal,
 }) => (
   <div className="magv2-select-popup-container">
     <div className="magv2-select-popup-wrapper">
@@ -14,11 +13,11 @@ const NonGroupSelectOption = ({
         <a className="close" onClick={(e) => closeModal(e)}>
           &times;
         </a>
-        <label htmlFor={key}>{configurables.label}</label>
+        <label htmlFor={attributeKey}>{configurables.label}</label>
       </div>
       <div className="magv2-select-popup-content-wrapper">
         <div className="non-group-anchor-wrapper">
-          <label htmlFor={key}>{configurables.label}</label>
+          <label htmlFor={attributeKey}>{configurables.label}</label>
         </div>
         <SizeGuide attrId={code} />
         <div className="non-group-option-wrapper">
