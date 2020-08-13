@@ -17,6 +17,9 @@ function alshaya_fl_update_8002() {
     $config->set('mdc_swatch_image_style', 'swatch_image/30x20');
     $config->save();
   }
+  // Delete and resync brand logo product options.
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'utility.inc');
+  alshaya_acm_product_attribute_delete_and_resync('brand_logo');
 }
 
 /**

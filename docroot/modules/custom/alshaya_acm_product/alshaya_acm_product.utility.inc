@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
@@ -410,4 +411,33 @@ function alshaya_acm_product_generate_video_embed_url($url, $provider) {
     $embed_url .= ($provider == 'youtube') ? '?enablejsapi=1' : '';
   }
   return $embed_url;
+}
+
+/**
+ * Delete and resync taxonomy terms for given attribute code.
+ *
+ * @param string $attribute_code
+ *   The attribute code to delete and resync.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function alshaya_acm_product_attribute_delete_and_resync(string $attribute_code) {
+  // Get the terms for given attribute code.
+  $tids = \Drupal::entityQuery('taxonomy_term')
+    ->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY)
+    ->condition('field_sku_attribute_code', $attribute_code)
+    ->execute();
+
+  // Delete terms.
+  $controller = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $entities = $controller->loadMultiple($tids);
+  $controller->delete($entities);
+
+  // Sync product options for given attribute code.
+  $languages = \Drupal::languageManager()->getLanguages();
+  foreach ($languages as $langcode => $language) {
+    \Drupal::service('alshaya_product_options.helper')->syncProductOption($attribute_code, $langcode);
+  }
 }
