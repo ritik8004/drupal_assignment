@@ -100,6 +100,15 @@ class TranslationHelper extends APIHelper {
       return $string;
     }
 
+    $translations = $this->getTranslations();
+
+    return $translations[$string] ?? $string;
+  }
+
+  /**
+   * Gets All translations.
+   */
+  public function getTranslations() {
     $translations = $this->cache->getItem('translations');
     if (empty($translations)) {
       $translations = (array) $this->getTranslationFromApi()->{'en-ar'};
@@ -107,8 +116,7 @@ class TranslationHelper extends APIHelper {
         $this->cache->setItem('translations', $translations);
       }
     }
-
-    return $translations[$string] ?? $string;
+    return $translations;
   }
 
 }

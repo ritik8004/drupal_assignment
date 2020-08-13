@@ -54,3 +54,7 @@ appointment.get_appointment_details:
    path: /get/appointment-details
    controller: App\Controller\AppointmentServices::getAppointmentDetails
    methods: GET
+appointment.get_all_translation:
+   path: /get/translations
+   controller: App\Controller\ConfigurationServices::getAllTranslations
+   methods: GET
