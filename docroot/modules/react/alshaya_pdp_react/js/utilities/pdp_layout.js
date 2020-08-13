@@ -24,10 +24,12 @@ export const getPostData = (skuCode, variantSelected, parentSKU) => {
   const cartData = Drupal.alshayaSpc.getCartData();
   const cartId = (cartData) ? cartData.cart_id : null;
   const qty = document.getElementById('qty') ? document.getElementById('qty').value : 1;
+  // If parent sku is empty.
+  const parentSku = parentSKU || skuCode;
 
   const postData = {
     action: cartAction,
-    sku: parentSKU,
+    sku: parentSku,
     quantity: qty,
     cart_id: cartId,
   };
