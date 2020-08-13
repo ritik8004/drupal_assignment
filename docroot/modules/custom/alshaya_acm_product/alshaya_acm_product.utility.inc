@@ -297,7 +297,7 @@ function alshaya_acm_product_get_brand_logo($sku) {
       \Drupal::languageManager()->getCurrentLanguage()->getId()
     );
 
-    if (!empty($term->get('field_attribute_swatch_org_image')->getValue())) {
+    if ($term && !empty($term->get('field_attribute_swatch_org_image')->getValue())) {
       $image = [
         '#theme' => 'image',
         '#uri' => $term->get('field_attribute_swatch_org_image')->entity->getFileUri(),
@@ -307,6 +307,15 @@ function alshaya_acm_product_get_brand_logo($sku) {
       $expire = CacheBackendInterface::CACHE_PERMANENT;
     }
     else {
+      \Drupal::logger('alshaya_acm_product')
+        ->error(
+          'Brand logo of title "@title" for SKU id @sku_id is missing.',
+          [
+            '@title' => $term ? $term->label() : $brand_logo,
+            '@sku_id' => $sku->getSku(),
+          ]
+        );
+
       $image = [];
 
       // We cache this for 30 minutes to allow admins to correct the situation.
