@@ -58,3 +58,7 @@ appointment.get_all_translation:
    path: /get/translations
    controller: App\Controller\ConfigurationServices::getAllTranslations
    methods: GET
+appointment.send_email_confirmation:
+   path: /send-email-confirmation
+   controller: App\Controller\AppointmentServices::sendEmailConfirmation
+   methods: GET

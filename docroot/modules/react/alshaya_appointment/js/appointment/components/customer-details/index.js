@@ -173,15 +173,12 @@ export default class CustomerDetails extends React.Component {
   }
 
   appendAppointmentAnswers = () => {
-    const { handleSubmit } = this.props;
     const {
       companionData, bookingId,
     } = this.state;
 
     if (_isEmpty(companionData)) {
-      // Move to next step.
-      removeFullScreenLoader();
-      handleSubmit();
+      this.sendEmailConfirmation();
       return;
     }
 
@@ -207,6 +204,28 @@ export default class CustomerDetails extends React.Component {
           }, () => {
             setStorageInfo(this.state);
           });
+          this.sendEmailConfirmation();
+        }
+      });
+    }
+  }
+
+  sendEmailConfirmation = () => {
+    const { handleSubmit } = this.props;
+    const {
+      bookingId,
+    } = this.state;
+
+    const apiUrl = `/send-email-confirmation?appointment=${bookingId}`;
+    const apiData = fetchAPIData(apiUrl);
+
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.error === undefined
+          && result.data !== undefined
+          && result.data.error === undefined) {
+          // Move to next step.
+          removeFullScreenLoader();
           handleSubmit();
         }
       });

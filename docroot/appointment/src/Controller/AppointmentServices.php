@@ -658,4 +658,42 @@ class AppointmentServices {
     }
   }
 
+  /**
+   * Send Email Confirmation.
+   */
+  public function sendEmailConfirmation(Request $request) {
+    try {
+      $appointmentId = $request->query->get('appointment');
+      if (empty($appointmentId)) {
+        $message = 'Appointment Id is required.';
+        throw new \Exception($message);
+      }
+
+      $client = $this->apiHelper->getSoapClient($this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_MESSAGING_SERVICES_URL);
+      $param = [
+        'confirmationNumber' => $appointmentId,
+      ];
+      $result = $client->__soapCall('sendEmailConfirmation', [$param]);
+
+      if ($result->return->status && $result->return->result === 'FAILED') {
+        $message = $result->return->cause;
+
+        $this->logger->error($message);
+        throw new \Exception($message);
+      }
+
+      $apiResult = $result->return->result ?? [];
+
+      return new JsonResponse($apiResult);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while sending email confirmation. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
+
+      return new JsonResponse($error, 400);
+    }
+  }
+
 }
