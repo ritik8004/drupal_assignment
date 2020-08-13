@@ -111,8 +111,95 @@ export default class Appointment extends React.Component {
         });
       }
     } else {
-      this.setAppointmentRender();
+      // Check if user switched language.
+      const { currentLanguage } = drupalSettings.path;
+      const { langcode } = this.state;
+      if (langcode !== undefined && langcode !== currentLanguage) {
+        this.updateLocalStoreWithTranslations();
+      } else {
+        this.setAppointmentRender();
+      }
     }
+  }
+
+  updateLocalStoreWithTranslations = () => {
+    showFullScreenLoader();
+    const apiUrl = '/get/translations';
+    const apiData = fetchAPIData(apiUrl);
+
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.error === undefined && result.data !== undefined) {
+          const translation = result.data;
+          const localStorage = getStorageInfo();
+          if (localStorage.appointmentCategory.name !== undefined) {
+            localStorage.appointmentCategory.name = this.getTranslation(
+              localStorage.appointmentCategory.name, translation,
+            );
+          }
+
+          if (localStorage.appointmentType.label) {
+            localStorage.appointmentType.label = this.getTranslation(
+              localStorage.appointmentType.label, translation,
+            );
+          }
+
+          if (localStorage.appointmentTypeItems !== undefined) {
+            localStorage.appointmentTypeItems.forEach((item, index) => {
+              localStorage.appointmentTypeItems[index] = {
+                id: item.id,
+                name: this.getTranslation(item.name, translation),
+                description: this.getTranslation(item.description, translation),
+              };
+            });
+          }
+
+          if (localStorage.storeList !== undefined) {
+            localStorage.storeList.forEach((item, i) => {
+              localStorage.storeList[i] = this.translateStore(item, translation);
+            });
+          }
+
+          if (localStorage.selectedStoreItem !== undefined) {
+            const { selectedStoreItem } = localStorage;
+            localStorage.selectedStoreItem = this.translateStore(selectedStoreItem, translation);
+          }
+
+          localStorage.langcode = drupalSettings.path.currentLanguage;
+          setStorageInfo(localStorage);
+          this.setAppointmentRender();
+          removeFullScreenLoader();
+        }
+      });
+    }
+  };
+
+  getTranslation = (string, translation) => (
+    (translation[string] !== undefined) ? translation[string] : string);
+
+  translateStore = (item, translation) => {
+    const store = item;
+    if (store.address !== undefined) {
+      const { address } = item;
+      Object.keys(address).forEach((key) => {
+        store.address[key] = this.getTranslation(
+          address[key], translation,
+        );
+      });
+    }
+
+    if (item.name !== undefined) {
+      store.name = this.getTranslation(item.name, translation);
+    }
+
+    if (item.storeTiming[0].day !== undefined) {
+      const days = item.storeTiming[0].day.split(' - ');
+      days[0] = this.getTranslation(days[0], translation);
+      days[1] = this.getTranslation(days[1], translation);
+      store.storeTiming[0].day = days.join(' - ');
+    }
+
+    return store;
   }
 
   setAppointmentRender = () => {
@@ -218,6 +305,7 @@ export default class Appointment extends React.Component {
     const localStorageValues = getStorageInfo();
 
     localStorageValues.appointmentStep = stepval;
+    localStorageValues.langcode = drupalSettings.path.currentLanguage;
     setStorageInfo(localStorageValues);
 
     this.setState((prevState) => ({
