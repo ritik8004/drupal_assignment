@@ -117,15 +117,13 @@ class AlshayaAppointmentController extends ControllerBase {
     $geolocation_config = $this->config('geolocation.settings');
     $alshaya_master_config = $this->config('alshaya_master.mobile_number_settings');
     $social_login_enabled = $this->config('alshaya_social.settings');
-    $spc_cnc_config = $this->config('alshaya_spc.click_n_collect');
 
     $cache_tags = Cache::mergeTags($cache_tags, array_merge(
       $alshaya_appointment_config->getCacheTags(),
       $store_finder_config->getCacheTags(),
       $geolocation_config->getCacheTags(),
       $alshaya_master_config->getCacheTags(),
-      $social_login_enabled->getCacheTags(),
-      $spc_cnc_config->getCacheTags()
+      $social_login_enabled->getCacheTags()
     ));
 
     // Get country code.
@@ -146,7 +144,7 @@ class AlshayaAppointmentController extends ControllerBase {
         'country_code' => $country_code,
         'store_finder' => array_merge(
           $alshaya_appointment_config->get('store_finder'),
-          $spc_cnc_config->get('country_center'),
+          $store_finder_config->get('country_center'),
           [
             'radius' => $store_finder_config->get('search_proximity_radius'),
             'map_marker' => $store_finder_config->get('map_marker'),
