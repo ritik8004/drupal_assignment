@@ -161,7 +161,24 @@ export default class PdpClickCollect extends React.PureComponent {
       );
     }
     return (
-      <p className="cnc-unavailable">{cncSubtitleUnavailable}</p>
+      <div
+        className="magv2-pdp-click-and-collect-wrapper card disabled fadeInUp"
+        style={{ animationDelay: '1.2s' }}
+        ref={this.expandRef}
+      >
+        <div
+          className={`magv2-click-collect-title-wrapper title ${expandedState}`}
+          onClick={() => this.showClickCollectContent()}
+        >
+          <PdpSectionTitle>
+            {Drupal.t('click & collect')}
+          </PdpSectionTitle>
+          <div className="magv2-accordion" />
+        </div>
+        <div className="magv2-click-collect-content-wrapper content">
+          <p className="cnc-unavailable">{cncSubtitleUnavailable}</p>
+        </div>
+      </div>
     );
   }
 }
