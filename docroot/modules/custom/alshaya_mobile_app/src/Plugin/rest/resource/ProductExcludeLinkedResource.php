@@ -225,11 +225,16 @@ class ProductExcludeLinkedResource extends ResourceBase {
       ->getGeneratedUrl();
 
     $data = $this->getSkuData($skuEntity, $link);
-
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_config(), $data['flags']], TRUE);
     $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
+
+    // Allow other modules to alter product data.
+    $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity);
+    if (isset($data['grouped_variants'])) {
+      $data['grouped_variants'] = $this->getGroupedVariants($data);
+    }
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
@@ -281,6 +286,10 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data['stock'] = $stockInfo['stock'];
     $data['in_stock'] = $stockInfo['in_stock'];
     $data['max_sale_qty'] = $stockInfo['max_sale_qty'];
+
+    if ($sku->get('attr_brand_logo')->getString()) {
+      $data['brand_logo'] = $this->getBrandLogo($sku);
+    }
     $data['delivery_options'] = [
       'home_delivery' => [],
       'click_and_collect' => [],
@@ -311,9 +320,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
         'labels' => $this->skuManager->getSkuLabels($sku, $key),
       ];
     }
-
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
-
     $data['promotions'] = $this->getPromotions($sku);
     $promo_label = $this->skuManager->getDiscountedPriceMarkup($data['original_price'], $data['final_price']);
     if ($promo_label) {
@@ -343,6 +350,32 @@ class ProductExcludeLinkedResource extends ResourceBase {
     }
 
     return $data;
+  }
+
+  /**
+   * Get grouped products for pdp based on grouping attribute.
+   *
+   * @param array $data
+   *   Array of product data.
+   *
+   * @return array
+   *   Grouping products for pdp.
+   */
+  private function getGroupedVariants(array &$data) {
+    $grouped_variants = [];
+    if (!empty($data['grouped_variants'])) {
+      foreach ($data['grouped_variants'] as $grouped_sku) {
+        if (!$grouped_sku instanceof SKUInterface) {
+          continue;
+        }
+        $variant = $this->getSkuData($grouped_sku);
+        if (isset($data['grouped_variants'][$grouped_sku->getSku()]['attributes'])) {
+          $variant['attributes'] = $data['grouped_variants'][$grouped_sku->getSku()]['attributes'];
+        }
+        $grouped_variants[] = $variant;
+      }
+    }
+    return $grouped_variants;
   }
 
   /**
@@ -380,6 +413,24 @@ class ProductExcludeLinkedResource extends ResourceBase {
         'status' => alshaya_acm_product_available_click_collect($sku),
       ],
     ];
+  }
+
+  /**
+   * Wrapper function get the brand logo.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return string
+   *   brand logo.
+   */
+  private function getBrandLogo(SKUInterface $sku) {
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $logo = alshaya_acm_product_get_brand_logo($sku);
+    if (empty($logo)) {
+      return '';
+    }
+    return file_create_url($logo['#uri']);
   }
 
   /**
