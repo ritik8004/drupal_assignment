@@ -1,0 +1,34 @@
+alshaya_appointment.page:
+  path: '/appointment/booking'
+  defaults:
+    _controller: \Drupal\alshaya_appointment\Controller\AlshayaAppointmentController::appointment
+  requirements:
+    _permission: 'access content'
+
+alshaya_appointment.user_booked_appointment:
+  path: '/user/{user}/appointments'
+  defaults:
+    _controller: '\Drupal\alshaya_appointment\Controller\AlshayaAppointmentController::viewAppointments'
+    _title: 'My appointments'
+  requirements:
+    _entity_access: 'user.update'
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+alshaya_appointment.user_info:
+  path: '/get/userinfo'
+  defaults:
+    _controller: '\Drupal\alshaya_appointment\Controller\AlshayaAppointmentController::getUserInfo'
+  methods: [GET]
+  requirements:
+    _middleware_request_check: 'TRUE'
+
+alshaya_appointment.appointment_booking_config:
+  path: '/admin/config/alshaya/appointment-booking'
+  defaults:
+    _form: '\Drupal\alshaya_appointment\Form\AlshayaAppointmentSettingsForm'
+    _title: 'Appointment Booking Configurations'
+  requirements:
+    _permission: 'administer site configuration'

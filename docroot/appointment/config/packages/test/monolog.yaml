@@ -1,0 +1,7 @@
+monolog:
+  handlers:
+    syslog:
+      type: syslog
+      level: debug
+      formatter: alshaya_appointment_middleware.log_fromatter
+      channels: ["!request"]

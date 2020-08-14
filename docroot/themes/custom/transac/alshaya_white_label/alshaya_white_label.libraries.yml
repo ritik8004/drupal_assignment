@@ -396,6 +396,11 @@ secure-text:
     theme:
       css/conditional-sass/secure-text/secure-text.ltr.css: {}
 
+appointment-booking:
+  css:
+    theme:
+      css/conditional-sass/appointment-booking/appointment-booking.ltr.css: {}
+
 magazine-layout-v2:
   css:
     theme:

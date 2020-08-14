@@ -13,6 +13,7 @@ then
   rm -Rf $buildDir/profiles/contrib
   rm -Rf $buildDir/vendor
   rm -Rf $buildDir/docroot/middleware/vendor
+  rm -Rf $buildDir/docroot/appointment/vendor
 fi
 
 set +v
