@@ -1992,7 +1992,6 @@ article.product-out-of-stock {
   .basic-details-wrapper {
     @include breakpoint($only-mobile) {
       .field--name-field-skus {
-        height: 0;
         min-height: auto;
         border: none;
 

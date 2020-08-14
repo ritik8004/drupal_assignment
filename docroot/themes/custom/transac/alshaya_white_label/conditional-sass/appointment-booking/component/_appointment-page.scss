@@ -1,0 +1,41 @@
+.path--appointment {
+  .page-standard {
+    padding: 0 1.25rem;
+
+    @include breakpoint($desktop) {
+      max-width: 78rem;
+      margin: 0 auto;
+      padding: 0;
+    }
+  }
+}
+
+.appointment-inner-wrapper {
+  @include breakpoint($tablet-landscape) {
+    margin-bottom: 5rem;
+  }
+}
+
+#appointment-booking {
+  @include breakpoint($upto-tablet) {
+    padding-bottom: 1.875rem;
+  }
+
+  .exception-error {
+    font-size: 0.75rem;
+    color: $spc-checkout-error-message-color;
+    background-color: $spc-checkout-error-message-background;
+    padding: 0.5625rem;
+    margin-top: 1.25rem;
+
+    @include icon(warning) {
+      width: 2.125rem;
+      height: 2.125rem;
+      display: inline-block;
+      font-size: 2rem;
+      margin-#{$right}: 0.3125rem;
+      vertical-align: middle;
+      text-indent: 0;
+    }
+  }
+}

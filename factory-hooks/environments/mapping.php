@@ -289,6 +289,12 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'bpeg_dev',
       ],
     ],
+    'bpae' => [
+      'dev2' => [
+        'magento' => 'bp_freegift',
+        'conductor' => 'bpae_dev2',
+      ],
+    ],
     'mukw' => [
       'local' => [
         'magento' => 'mu_uat',
