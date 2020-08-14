@@ -130,6 +130,7 @@ function _alshaya_spc_get_address_fields() {
       'required' => $field['used_for_shipping_rate'] || $field['required'],
       'visible' => (bool) $field['visible'],
       'order' => (int) $field['sort_order'],
+      'maxLength' => \Drupal::config('alshaya_addressbook.settings')->get('max_length.' . $field['attribute_code'] . '.' . \Drupal::languageManager()->getCurrentLanguage()->getId()),
     ];
   }
 
