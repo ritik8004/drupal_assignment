@@ -8,23 +8,6 @@
 use Drupal\Core\Site\Settings;
 
 /**
- * Implements hook_update_n().
- *
- * [5.3.0] Set swatch image style config to save original brand logo in
- * taxonomy term.
- */
-function alshaya_mc_update_8320() {
-  $config = \Drupal::configFactory()->getEditable('alshaya_product_options.settings');
-  if (empty($config->get('mdc_swatch_image_style'))) {
-    $config->set('mdc_swatch_image_style', 'swatch_image/30x20');
-    $config->save();
-  }
-  // Delete and resync brand logo product options.
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'utility.inc');
-  alshaya_acm_product_attribute_delete_and_resync('brand_logo');
-}
-
-/**
  * Implements hook_update_N().
  *
  * Update config for enable_lhn_tree_search
