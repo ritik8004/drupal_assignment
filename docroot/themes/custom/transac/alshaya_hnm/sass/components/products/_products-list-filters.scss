@@ -352,9 +352,6 @@
         @include icon(close, before) {
           font-size: 1rem;
           color: inherit;
-          position: absolute;
-          top: 1rem;
-          #{$right}: 2rem;
         }
       }
 
