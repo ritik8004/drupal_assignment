@@ -6,8 +6,30 @@
  */
 
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Convert "brand_logo" field type from attribute to string.
+ */
+function alshaya_acm_product_update_8061() {
+  // Make brand_logo field type attribute from type string.
+  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
+  $attr_brand_logo = $config->get('brand_logo');
+  $attr_brand_logo['type'] = 'string';
+  $config->set('brand_logo', $attr_brand_logo);
+  $config->save();
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+}
 
 /**
  * Implements hook_update_N().
