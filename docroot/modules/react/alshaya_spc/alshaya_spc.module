@@ -111,6 +111,8 @@ function _alshaya_spc_get_address_fields() {
 
   /* @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+  $alshaya_addressbook_settings = \Drupal::config('alshaya_addressbook.settings');
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
   $magento_form_fields = $address_book_manager->getMagentoFormFields();
   $field_mapping = array_flip($address_book_manager->getMagentoFieldMappings());
@@ -130,7 +132,7 @@ function _alshaya_spc_get_address_fields() {
       'required' => $field['used_for_shipping_rate'] || $field['required'],
       'visible' => (bool) $field['visible'],
       'order' => (int) $field['sort_order'],
-      'maxLength' => \Drupal::config('alshaya_addressbook.settings')->get('max_length.' . $field['attribute_code'] . '.' . \Drupal::languageManager()->getCurrentLanguage()->getId()),
+      'maxLength' => $alshaya_addressbook_settings->get('max_length.' . $field['attribute_code'] . '.' . $langcode),
     ];
   }
 

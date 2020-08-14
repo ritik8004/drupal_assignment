@@ -15,7 +15,7 @@ use Drupal\user\RoleInterface;
  *
  * Add max_length alshaya_addressbook.settings.
  */
-function alshaya_addressbook_update_8309() {
+function alshaya_addressbook_update_8308() {
   \Drupal::service('alshaya_config.manager')->updateConfigs(
     ['alshaya_addressbook.settings'],
     'alshaya_addressbook',
