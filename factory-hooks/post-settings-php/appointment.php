@@ -26,7 +26,6 @@ if (!empty($site_country_code) && $site_country_code['site_code'] === 'bp') {
     'locations_to_skip' => 'alshayaadmin', // Comma separated for multiple.
   ];
   if (preg_match('/\d{2}(live|update)/', $env)) {
-    // @TODO: Add 'timetrade_api_base_url' once we have it for prod.
     $appointment_settings['timetrade_api_base_url'] = 'https://api.timetradesystems.co.uk';
   }
 }
