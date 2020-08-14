@@ -846,13 +846,27 @@ class SKU extends ContentEntityBase implements SKUInterface {
    */
   public static function postDelete(EntityStorageInterface $storage, array $entities) {
     parent::postDelete($storage, $entities);
-
     // Delete media files.
     foreach ($entities as $entity) {
-      /** @var \Drupal\acq_sku\Entity\SKU $entity */
-      foreach ($entity->getMedia(FALSE) as $media) {
-        if ($media['file'] instanceof FileInterface) {
-          $media['file']->delete();
+      $media_data = $entity->get('media')->getString();
+      $media_data = unserialize($media_data);
+      foreach ($media_data as $data) {
+        if (isset($data['fid'])) {
+          $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
+          $file = $fileStorage->load($data['fid']);
+          if ($file instanceof FileInterface) {
+            // Remove usage of file.
+            $file_usage = \Drupal::service('file.usage');
+            $file_usage->delete($file, $entity->getEntityTypeId(), $entity->getEntityTypeId(), $entity->id());
+            // Delete file if there is no usage.
+            if ((empty($file_usage->listUsage($file)))) {
+              $this->logger->notice('Deleting file @fid for sku @sku as it is getting deleted', [
+                '@fid' => $file->id(),
+                '@sku' => $entity->getSku(),
+              ]);
+              $file->delete();
+            }
+          }
         }
       }
     }
