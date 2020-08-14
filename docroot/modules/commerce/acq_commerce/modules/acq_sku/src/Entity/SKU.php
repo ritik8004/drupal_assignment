@@ -846,6 +846,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    */
   public static function postDelete(EntityStorageInterface $storage, array $entities) {
     parent::postDelete($storage, $entities);
+
     // Delete media files.
     foreach ($entities as $entity) {
       $media_data = $entity->get('media')->getString();
@@ -860,7 +861,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
             $file_usage->delete($file, $entity->getEntityTypeId(), $entity->getEntityTypeId(), $entity->id());
             // Delete file if there is no usage.
             if ((empty($file_usage->listUsage($file)))) {
-              $this->logger->notice('Deleting file @fid for sku @sku as it is getting deleted', [
+              \Drupal::logger('acq_sku')->notice('Deleting file @fid for sku @sku as it is getting deleted', [
                 '@fid' => $file->id(),
                 '@sku' => $entity->getSku(),
               ]);
