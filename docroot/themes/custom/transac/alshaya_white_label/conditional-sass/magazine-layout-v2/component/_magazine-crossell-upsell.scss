@@ -60,6 +60,10 @@
               .magv2-pdp-vat-text {
                 display: none;
               }
+
+              .magv2-pdp-final-price-wrapper {
+                margin-bottom: 0.3125rem;
+              }
             }
           }
 
@@ -67,13 +71,14 @@
             font-size: 1rem;
             line-height: 1.375rem;
             margin-bottom: 0;
-            padding: 0 0 0.9375rem;
+            padding: 0 0 1.25rem;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
 
             @include breakpoint($only-mobile) {
               max-width: 12.5rem;
+              padding-bottom: 2.3125rem;
             }
           }
 
@@ -144,6 +149,11 @@
           &:first-child {
             padding-#{$left}: 0;
           }
+        }
+
+        > div {
+          display: flex;
+          flex-grow: 1;
         }
       }
 
@@ -238,6 +248,24 @@
 
       img {
         width: 100%;
+      }
+    }
+
+    &-img {
+      height: 18.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include breakpoint($only-mobile) {
+        height: 15rem;
+      }
+
+      img {
+        max-height: 100%;
+        width: auto;
+        max-width: 100%;
+        height: auto;
       }
     }
   }
