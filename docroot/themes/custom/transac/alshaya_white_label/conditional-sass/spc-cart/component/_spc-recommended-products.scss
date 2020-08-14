@@ -16,6 +16,7 @@
       margin-#{$right}: 0.625rem;
       scroll-snap-align: center;
       width: 8.75rem;
+      position: relative;
 
       html[lang=ar] & {
         line-height: normal;
@@ -81,5 +82,57 @@
     }
 
     #{$right}: -4.0625rem;
+  }
+
+  .labels-container {
+    .label {
+      img {
+        width: 50px !important;
+      }
+
+      &.top {
+        &-left {
+          @include breakpoint($only-tablet) {
+            #{$left}: 0.5rem;
+          }
+
+          @include breakpoint($desktop) {
+            #{$left}: 0.5rem;
+          }
+        }
+
+        &-right {
+          @include breakpoint($only-tablet) {
+            #{$right}: 0.5rem;
+          }
+
+          @include breakpoint($desktop) {
+            #{$right}: 0.5rem;
+          }
+        }
+      }
+
+      &.bottom {
+        &-left {
+          @include breakpoint($only-tablet) {
+            #{$left}: 0.5rem;
+          }
+
+          @include breakpoint($desktop) {
+            #{$left}: 0.5rem;
+          }
+        }
+
+        &-right {
+          @include breakpoint($only-tablet) {
+            #{$right}: 0.5rem;
+          }
+
+          @include breakpoint($desktop) {
+            #{$right}: 0.5rem;
+          }
+        }
+      }
+    }
   }
 }

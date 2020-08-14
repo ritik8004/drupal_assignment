@@ -2,6 +2,7 @@ import React from 'react';
 
 import CartPromotion from '../../cart/components/cart-promotion';
 import SpecialPrice from '../special-price';
+import LabelsContainer from '../labels';
 
 const RecommendedProduct = ({ item, itemKey }) => {
   const itemUrl = `product-quick-view/${item.nid}/nojs`;
@@ -23,6 +24,7 @@ const RecommendedProduct = ({ item, itemKey }) => {
         <div className="spc-product-price">
           <SpecialPrice price={item.original_price} finalPrice={item.final_price} />
         </div>
+        <LabelsContainer labels={item.labels} sku={itemKey} />
       </a>
       <div className="spc-promotions">
         {item.promo.map((key) => <CartPromotion key={key} promo={key} link />)}
