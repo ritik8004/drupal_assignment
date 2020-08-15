@@ -224,30 +224,40 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
         return;
       }
 
-      $cookie_key = 'alshaya_gtm_confirmation_visited_' . $order['order_id'];
+      $connection = \Drupal::database();
+      $order_id = $connection->select('alshaya_spc_orders')
+        ->fields('alshaya_spc_orders', ['order_id'])
+        ->condition('order_id', $order['order_id'])
+        ->execute()
+        ->fetchField();
 
-      $session = \Drupal::request()->getSession();
+      if ($order_id) {
+        return;
+      }
 
-      $already_visited = (int) $session->get($cookie_key);
+      // Send order id to table to check when user make another request to page
+      // We can check the order and ignore GTM trigger for the same page.
+      $connection->insert('alshaya_spc_orders')
+        ->fields([
+          'order_id' => $order['order_id'],
+          'created' => \Drupal::time()->getRequestTime(),
+        ])
+        ->execute();
 
       // Send order complete confirmation to GTM only once.
-      if ($already_visited !== 1) {
-        $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
-        $data_layer = array_merge($data_layer, $attributes['general']);
+      $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
+      $data_layer = array_merge($data_layer, $attributes['general']);
 
-        $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
+      $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
 
-        $data_layer['event'] = 'purchaseSuccess';
-        $data_layer['ecommerce'] = [
-          'currencyCode' => $gtm_manager->getGtmCurrency(),
-          'purchase' => [
-            'actionField' => $attributes['actionField'],
-            'products' => array_values($attributes['products']),
-          ],
-        ];
-
-        $session->set($cookie_key, 1);
-      }
+      $data_layer['event'] = 'purchaseSuccess';
+      $data_layer['ecommerce'] = [
+        'currencyCode' => $gtm_manager->getGtmCurrency(),
+        'purchase' => [
+          'actionField' => $attributes['actionField'],
+          'products' => array_values($attributes['products']),
+        ],
+      ];
     }
 
     // Generic handling of page type for user pages.
