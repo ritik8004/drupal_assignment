@@ -378,6 +378,9 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 5, 'ar' => 6],
     ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
     'bh' => [
       'store_id' => ['en' => 10, 'ar' => 9],
     ],
@@ -402,11 +405,8 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 12, 'ar' => 15],
     ],
-    'bh' => [
-      'store_id' => ['en' => 30, 'ar' => 27],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 36, 'ar' => 33],
+    'eg' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
     ],
     'bh' => [
       'store_id' => ['en' => 30, 'ar' => 27],
@@ -455,6 +455,15 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 4, 'ar' => 5],
     ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
   ],
   'fl_uat' => [
     'url' => 'https://fl-uat2.store.alshaya.com',
@@ -472,6 +481,15 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 13, 'ar' => 16],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 31, 'ar' => 28],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 37, 'ar' => 34],
     ],
   ],
   'fl_prod' => [
