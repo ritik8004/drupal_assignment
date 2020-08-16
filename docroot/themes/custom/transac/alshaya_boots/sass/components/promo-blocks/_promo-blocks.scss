@@ -114,6 +114,12 @@
       @include breakpoint($tablet) {
         #{$left}: 3rem;
       }
+
+      html[lang=ar] & {
+        @include breakpoint($upto-desktop) {
+          left: 0;
+        }
+      }
     }
 
     .field--name-field-promo-text-1,
