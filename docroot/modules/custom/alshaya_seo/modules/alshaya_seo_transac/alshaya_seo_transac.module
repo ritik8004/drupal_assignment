@@ -225,8 +225,8 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       }
 
       $connection = \Drupal::database();
-      $order_id = $connection->select('alshaya_spc_orders')
-        ->fields('alshaya_spc_orders', ['order_id'])
+      $order_id = $connection->select('alshaya_viewed_order_confirmation')
+        ->fields('alshaya_viewed_order_confirmation', ['order_id'])
         ->condition('order_id', $order['order_id'])
         ->execute()
         ->fetchField();
@@ -237,7 +237,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
       // Send order id to table to check when user make another request to page
       // We can check the order and ignore GTM trigger for the same page.
-      $connection->insert('alshaya_spc_orders')
+      $connection->insert('alshaya_viewed_order_confirmation')
         ->fields([
           'order_id' => $order['order_id'],
           'created' => \Drupal::time()->getRequestTime(),
