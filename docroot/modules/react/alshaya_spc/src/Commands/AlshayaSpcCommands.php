@@ -56,34 +56,26 @@ class AlshayaSpcCommands extends DrushCommands {
    *
    * @param string $methods
    *   Comma separated list of payment methods to check for.
-   * @param array $options
-   *   Options supported with drush command.
    *
    * @command alshaya_spc:check-pending-payments
    *
-   * @options seconds-old Check for payments which are at-least X seconds old.
-   *
    * @aliases alshaya-check-pending-payments
    *
-   * @usage alshaya-check-pending-payments
-   *   Checks for all the pending payments (for all payment types).
    * @usage alshaya-check-pending-payments knet
    *   Checks for all the pending payments for payment method KNET.
    * @usage alshaya-check-pending-payments 'knet,checkout_com'
    *   Checks for all the pending payments for payment method KNET
    *   and checkout.com.
-   * @usage alshaya-check-pending-payments --seconds-old=240
-   *   Checks for all the pending payments which are 4 minutes old. This means
-   *   it will check for all the payments for which user has not returned back
-   *   to Drupal in last 4 minutes. Default is 500 seconds (8min 20sec).
    */
-  public function checkPendingPayments(string $methods = 'knet', array $options = ['seconds-old' => 500]) {
+  public function checkPendingPayments(string $methods) {
+    $times = Settings::get('alshaya_checkout_settings')['pending_payments'];
+
     $methods = explode(',', $methods);
 
-    $seconds = (int) $options['seconds-old'];
     $query = $this->connection->select('middleware_payment_data');
     $query->fields('middleware_payment_data');
-    $query->condition('timestamp', strtotime("-${seconds} seconds"), '<');
+    $query->condition('timestamp', strtotime('-' . $times['before'] . ' seconds'), '<');
+    $query->condition('timestamp', strtotime('-' . $times['after'] . ' seconds'), '>');
     $query->orderBy('timestamp', 'DESC');
     $payments = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
     foreach ($payments as $payment) {
@@ -134,6 +126,9 @@ class AlshayaSpcCommands extends DrushCommands {
 
       switch ($type) {
         case 'knet':
+          // Update the store context to match user's language.
+          $this->apiWrapper->updateStoreContext($data['langcode']);
+
           $credentials = Settings::get('knet');
           $wrapper = new KnetApiWrapper(
             Settings::get('alshaya_knet.settings')['knet_base_url'],
@@ -150,6 +145,15 @@ class AlshayaSpcCommands extends DrushCommands {
 
           if (in_array($status, ['success', 'captured'])) {
             try {
+              // Set the values in keys as expected by Magento.
+              $info['payment_id'] = $info['paymentid'];
+              $info['post_date'] = $info['postdate'];
+              $info['transaction_id'] = $info['tranid'] ?? '';
+              $info['auth_code'] = $info['auth'];
+              $info['tracking_id'] = $info['trackid'];
+              $info['customer_id'] = (int) $info['udf2'];
+              $info['quote_id'] = (int) $info['udf3'];
+
               $update = [];
               $update['payment'] = [
                 'method' => 'knet',
@@ -224,8 +228,8 @@ class AlshayaSpcCommands extends DrushCommands {
 
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }
-          elseif ($status && $payment['timestamp'] < strtotime('-1 day')) {
-            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment not complete, deleting entry as it is already one day now. Cart id: @cart_id, Data: @data, KNET response: @info', [
+          elseif ($status && $payment['timestamp'] < strtotime('-1 hour')) {
+            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment not complete, deleting entry as it is already 1 hour now. Cart id: @cart_id, Data: @data, KNET response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
               '@info' => json_encode($info),
