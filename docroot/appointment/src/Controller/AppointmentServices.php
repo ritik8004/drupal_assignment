@@ -196,7 +196,7 @@ class AppointmentServices {
 
         // Get clientExternalId for invalidating cache.
         $tags = [
-          'appointments_by_clientId_' . $param['client'],
+          'appointments_by_clientId_' . $param['clientExternalId'],
         ];
         $this->cache->tagInvalidation($tags);
 
