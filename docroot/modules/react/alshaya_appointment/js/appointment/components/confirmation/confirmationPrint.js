@@ -1,6 +1,7 @@
 import React from 'react';
 import ConfirmationItems from './components/confirmation-items';
 import getStringMessage from '../../../../../js/utilities/strings';
+import isRTL from '../../../utilities/rtl';
 
 const AppointmentConfirmationPrint = React.forwardRef((props, ref) => {
   const {
@@ -24,8 +25,9 @@ const AppointmentConfirmationPrint = React.forwardRef((props, ref) => {
   }
 
   const { logo } = drupalSettings.alshaya_appointment;
+  const direction = isRTL() === true ? 'rtl' : 'ltr';
   return (
-    <div ref={ref} className="appointment-confirmation-print-content">
+    <div ref={ref} className="appointment-confirmation-print-content" dir={direction}>
       <div className="appointment-confirmation-print-header">
         <img src={logo.logo_url} />
       </div>
