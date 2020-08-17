@@ -44,6 +44,9 @@
         }
 
         a {
+          pointer-events: none;
+          user-select: none;
+
           &::before {
             content: '';
             top: 0;
@@ -57,5 +60,11 @@
         }
       }
     }
+  }
+}
+
+.complete-purchase {
+  a.checkout-link.loading {
+    @include componentLoader($primary_btn_bg, 'after');
   }
 }
