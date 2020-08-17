@@ -102,6 +102,7 @@ class CartLinkedSkusController extends ControllerBase {
       $result = [];
       $cache_tags = [];
       $cross_sell_skus = [];
+      $parent_skus = [];
 
       foreach ($querySkus as $sku) {
         if ($sku_entity = SKU::loadFromSku($sku)) {
@@ -109,8 +110,8 @@ class CartLinkedSkusController extends ControllerBase {
           $cross_sell_skus += $this->skuManager->getLinkedSkus($sku_entity, $queryParams['type']);
           if ($sku_entity->bundle() === 'simple') {
             $parent_sku = $this->skuManager->getParentSkuBySku($sku_entity);
-            if (($parent_sku instanceof SKUInterface)
-              && (!in_array($parent_sku->getSku(), $querySkus))) {
+            if ($parent_sku instanceof SKUInterface) {
+              $parent_skus[] = $parent_sku->getSku();
               $cache_tags = array_merge($cache_tags, $parent_sku->getCacheTags());
               $cross_sell_skus += $this->skuManager->getLinkedSkus($parent_sku, $queryParams['type']);
             }
@@ -120,7 +121,7 @@ class CartLinkedSkusController extends ControllerBase {
 
       // Filter out / Remove skus from cross sell which are already added in
       // cart (Which we receive in query string).
-      $cross_sell_skus = array_diff($cross_sell_skus, $querySkus);
+      $cross_sell_skus = array_diff($cross_sell_skus, array_merge($querySkus, $parent_skus));
       $linkedSkus = $this->skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
 
       foreach (array_keys($linkedSkus) as $linkedSku) {
