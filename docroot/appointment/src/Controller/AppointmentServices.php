@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Helper\XmlAPIHelper;
 use App\Helper\APIHelper;
+use App\Helper\Helper;
 
 /**
  * Class AppointmentServices.
@@ -59,6 +60,13 @@ class AppointmentServices {
   protected $translationHelper;
 
   /**
+   * Helper.
+   *
+   * @var \App\Helper\Helper
+   */
+  protected $helper;
+
+  /**
    * AppointmentServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -73,13 +81,16 @@ class AppointmentServices {
    *   Cache Helper.
    * @param \App\Translation\TranslationHelper $translationHelper
    *   Translation Helper.
+   * @param \App\Helper\Helper $helper
+   *   Helper.
    */
   public function __construct(LoggerInterface $logger,
                               XmlAPIHelper $xml_api_helper,
                               Drupal $drupal,
                               APIHelper $api_helper,
                               Cache $cache,
-                              TranslationHelper $translationHelper) {
+                              TranslationHelper $translationHelper,
+                              Helper $helper) {
     $this->logger = $logger;
     $this->xmlApiHelper = $xml_api_helper;
     $this->drupal = $drupal;
@@ -87,6 +98,7 @@ class AppointmentServices {
     $this->serviceUrl = $this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL;
     $this->cache = $cache;
     $this->translationHelper = $translationHelper;
+    $this->helper = $helper;
   }
 
   /**
@@ -154,6 +166,7 @@ class AppointmentServices {
     try {
       // Book New appointment.
       if (!$appointmentId) {
+        $clientExternalId = $this->helper->updateInsertClient($request_content['clientData']);
         $param = [
           'criteria' => [
             'activityExternalId' => $request_content['activity'] ?? '',
@@ -165,10 +178,10 @@ class AppointmentServices {
             'setupDurationMin' => 0,
           ],
           'startDateTime' => $request_content['start_date_time'] ?? '',
-          'clientExternalId' => $request_content['client'] ?? '',
+          'clientExternalId' => $clientExternalId ?? '',
         ];
 
-        if (empty($request_content['activity']) || empty($request_content['duration']) || empty($request_content['location']) || empty($request_content['attendees']) || empty($request_content['program']) || empty($request_content['channel']) || empty($request_content['start_date_time']) || empty($request_content['client'])) {
+        if (empty($request_content['activity']) || empty($request_content['duration']) || empty($request_content['location']) || empty($request_content['attendees']) || empty($request_content['program']) || empty($request_content['channel']) || empty($request_content['start_date_time']) || empty($param['clientExternalId'])) {
           $message = 'Required parameters missing to book appointment.';
           $this->logger->error($message . ' Data: @request_data', [
             '@request_data' => json_encode($request_content),
@@ -196,7 +209,7 @@ class AppointmentServices {
 
         // Get clientExternalId for invalidating cache.
         $tags = [
-          'appointments_by_clientId_' . $param['client'],
+          'appointments_by_clientId_' . $param['clientExternalId'],
         ];
         $this->cache->tagInvalidation($tags);
 
@@ -208,12 +221,12 @@ class AppointmentServices {
         // Append companion data if we have the bookingId and companionData.
         $companionData = $request_content['companionData'] ?? '';
         if (!empty($bookingId) && !empty($companionData)) {
-          appendAppointmentAnswers($bookingId, $companionData);
+          $this->helper->appendAppointmentAnswers($bookingId, $companionData);
         }
 
         // Trigger email confirmation if we have the bookingId.
         if (!empty($bookingId)) {
-          sendEmailConfirmation($bookingId);
+          $this->helper->sendEmailConfirmation($bookingId);
         }
 
         return new JsonResponse($bookingId);
@@ -263,62 +276,6 @@ class AppointmentServices {
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while booking appointment. Message: @message', [
-        '@message' => $e->getMessage(),
-      ]);
-      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
-
-      return new JsonResponse($error, 400);
-    }
-  }
-
-  /**
-   * Append appointment answers.
-   *
-   * @return string
-   *   Booking Id.
-   */
-  public function appendAppointmentAnswers($bookingId, $companionData) {
-    try {
-      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-
-      if (empty($bookingId)) {
-        throw new \Exception('Booking Id is required to save answers.');
-      }
-
-      foreach ($companionData as $key => $value) {
-        $questionAnswerList[] = [
-          'questionExternalId' => $key,
-          'answer' => $value,
-        ];
-      }
-
-      if (empty($questionAnswerList)) {
-        throw new \Exception('Empty question answer list in appendAppointmentAnswers.');
-      }
-
-      $param = [
-        'confirmationNumber' => $bookingId,
-        'questionAnswerList' => $questionAnswerList,
-      ];
-      $result = $client->__soapCall('appendAppointmentAnswers', [$param]);
-
-      if ($result->return->status && $result->return->result === 'FAILED') {
-        $message = $result->return->cause;
-
-        $this->logger->error($message);
-        throw new \Exception($message);
-      }
-
-      $apiResult = $result->return->result ?? [];
-
-      $this->logger->notice('Companion details is appended to the appointment booked. API Response: @response', [
-        '@response' => $apiResult,
-      ]);
-
-      return $apiResult;
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Error occurred while appending booking appointment answers. Message: @message', [
         '@message' => $e->getMessage(),
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
@@ -692,47 +649,6 @@ class AppointmentServices {
         '@message' => $e->getMessage(),
         '@appid' => $appointment,
         '@user' => $user,
-      ]);
-      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
-
-      return new JsonResponse($error, 400);
-    }
-  }
-
-  /**
-   * Send Email Confirmation.
-   */
-  public function sendEmailConfirmation($appointmentId) {
-    try {
-      if (empty($appointmentId)) {
-        $message = 'Appointment Id is required.';
-        throw new \Exception($message);
-      }
-
-      $client = $this->apiHelper->getSoapClient($this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_MESSAGING_SERVICES_URL);
-      $param = [
-        'confirmationNumber' => $appointmentId,
-      ];
-      $result = $client->__soapCall('sendEmailConfirmation', [$param]);
-
-      if ($result->return->status && $result->return->result === 'FAILED') {
-        $message = $result->return->cause;
-
-        $this->logger->error($message);
-        throw new \Exception($message);
-      }
-
-      $apiResult = $result->return->result ?? [];
-
-      $this->logger->notice('Triggered email confirmation for the appointment booked. API Response: @response', [
-        '@response' => $apiResult,
-      ]);
-
-      return $apiResult;
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Error occurred while sending email confirmation. Message: @message', [
-        '@message' => $e->getMessage(),
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
