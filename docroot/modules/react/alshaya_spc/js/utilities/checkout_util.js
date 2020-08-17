@@ -38,6 +38,11 @@ export const controlAddressFormCTA = (status) => {
   }
 };
 
+/**
+ * Place order CTA link add loading to avoid multiple clicks.
+ *
+ * @param status
+ */
 export const controlPlaceOrderCTA = (status) => {
   const addressCTA = document.querySelector('.complete-purchase a');
   switch (status) {
