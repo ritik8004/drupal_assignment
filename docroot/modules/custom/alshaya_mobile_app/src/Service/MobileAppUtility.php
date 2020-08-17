@@ -307,7 +307,7 @@ class MobileAppUtility {
       switch ($object->bundle()) {
         case 'acq_product':
           $sku = $this->skuManager->getSkuForNode($object);
-          $return = 'product/' . $sku;
+          $return = 'product-exclude-linked/' . $sku;
           break;
 
         case 'acq_promotion':
@@ -328,7 +328,7 @@ class MobileAppUtility {
       }
     }
     elseif ($object instanceof SKUInterface) {
-      $return = 'product/' . $object->getSku();
+      $return = 'product-exclude-linked/' . $object->getSku();
     }
 
     return self::ENDPOINT_PREFIX . $return;
