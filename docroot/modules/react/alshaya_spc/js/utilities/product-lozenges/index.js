@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Labels = ({ labels, sku }) => {
+const ProductLozenges = ({ labels, sku }) => {
   if (typeof labels === 'undefined' || labels.length === 0) {
     return (null);
   }
-  const labelItems = labels.map(({ image, position, text }) => (
+  const lozengesItems = labels.map(({ image, position, text }) => (
     <div className={`label ${position}`} key={image}>
       <img
         src={image}
@@ -15,10 +15,10 @@ const Labels = ({ labels, sku }) => {
   ));
 
   return (
-    <div className="labels-container" data-type="spc-recommended-products" data-sku={sku} data-main-sku={sku}>
-      {labelItems}
+    <div className="labels-container product-lozenges-container" data-type="spc-recommended-products" data-sku={sku} data-main-sku={sku}>
+      {lozengesItems}
     </div>
   );
 };
 
-export default Labels;
+export default ProductLozenges;

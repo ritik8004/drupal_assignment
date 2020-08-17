@@ -87,7 +87,7 @@
   .labels-container {
     .label {
       img {
-        width: 50px !important;
+        max-width: 3.125rem !important;
       }
 
       &.top {
