@@ -83,6 +83,10 @@
   color: $appointment-disclaimer-text;
   margin-top: 2.5rem;
 
+  pre {
+    overflow: visible;
+  }
+
   @include breakpoint($tablet) {
     margin-top: 5.625rem;
   }
