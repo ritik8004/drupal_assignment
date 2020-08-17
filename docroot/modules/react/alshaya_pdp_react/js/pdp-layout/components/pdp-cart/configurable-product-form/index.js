@@ -220,7 +220,6 @@ class ConfigurableProductForm extends React.Component {
                 onClick={(e) => addToCartConfigurable(e, 'add-to-cart-main', configurableCombinations, skuCode, productInfo, pdpLabelRefresh)}
               >
                 {Drupal.t('Add To Bag')}
-                <span className="magv2-button-tick-icon" />
               </button>
             </div>
           </>
