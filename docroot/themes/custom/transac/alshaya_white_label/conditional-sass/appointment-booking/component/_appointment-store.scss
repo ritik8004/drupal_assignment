@@ -36,7 +36,7 @@
     }
 
     label {
-      @include breakpoint($upto-tablet-landscape) {
+      @include breakpoint($upto-tablet) {
         margin-bottom: 0.625rem;
         display: block;
       }
@@ -102,11 +102,17 @@
       display: inline-block;
       vertical-align: middle;
       background: $appointment-store-search-icon;
+      position: relative;
 
       @include icon('map-location', before) {
         font-size: 1.5rem;
         color: $appointment-store-search-icon-active;
         transition: color 0.2s ease-in-out;
+        position: absolute;
+        #{$left}: 0;
+        #{$right}: 0;
+        top: 50%;
+        transform: translateY(-50%);
       }
 
       &.active,
