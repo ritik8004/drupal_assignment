@@ -226,7 +226,15 @@ class APIHelper {
    */
   public function getNumberOfSlots() {
     $appointment_settings = $this->settings->getSettings('appointment_settings');
-    return $appointment_settings['numberOfSlots'];
+    return $appointment_settings['numberOfSlots'] ?? 500;
+  }
+
+  /**
+   * Get Location Group Id from settings.
+   */
+  public function getLocationGroupId() {
+    $appointment_settings = $this->settings->getSettings('appointment_settings');
+    return $appointment_settings['location_group_ext_id'];
   }
 
 }

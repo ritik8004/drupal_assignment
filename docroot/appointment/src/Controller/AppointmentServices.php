@@ -100,20 +100,30 @@ class AppointmentServices {
     $program = $request->query->get('program');
     $activity = $request->query->get('activity');
     $location = $request->query->get('location');
+    $duration = $request->query->get('duration') ?? 30;
     $params = [
       'criteria' => [
         'activityExternalId' => $activity,
         'locationExternalId' => $location,
         'programExternalId' => $program,
-        'appointmentDurationMin' => 30,
+        'appointmentDurationMin' => $duration,
         'numberOfAttendees' => 1,
         'setupDurationMin' => 0,
       ],
       'startDateTime' => $selected_date . 'T00:00:00.000+03:00',
       'endDateTime' => $selected_date . 'T23:59:59.999+03:00',
-      'numberOfSlots' => $this->apiHelper->getNumberOfSlots() ?? 500,
+      'numberOfSlots' => $this->apiHelper->getNumberOfSlots(),
     ];
     try {
+
+      if (empty($selected_date) || empty($program) || empty($activity) || empty($location)) {
+        $message = 'Required parameters missing to get time slots.';
+        $this->logger->error($message . ' Data: @request_data', [
+          '@request_data' => json_encode($params),
+        ]);
+        throw new \Exception($message);
+      }
+
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('getAvailableNDateTimeSlotsStartFromDate', [$params]);
 

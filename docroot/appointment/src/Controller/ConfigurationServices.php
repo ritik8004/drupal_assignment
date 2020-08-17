@@ -246,9 +246,11 @@ class ConfigurationServices {
         return [];
       }
 
+      $locationGroupId = $this->apiHelper->getLocationGroupId();
+
       $param = [
         'locationSearchCriteria' => [
-          'locationGroupId' => 'Boots',
+          'locationGroupId' => $locationGroupId,
           'exactMatchOnly' => TRUE,
         ],
         'locationSearchGeoCriteria' => [

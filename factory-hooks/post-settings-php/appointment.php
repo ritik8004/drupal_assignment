@@ -24,7 +24,6 @@ if (!empty($site_country_code) && $site_country_code['site_code'] === 'bp') {
     'translation_api_key' => '',
     'project' => 'boots',
     'locations_to_skip' => 'alshayaadmin', // Comma separated for multiple.
-    'numberOfSlots' => 500,
   ];
   if (preg_match('/\d{2}(live|update)/', $env)) {
     // @TODO: Add 'timetrade_api_base_url' once we have it for prod.
