@@ -186,8 +186,8 @@ class AppointmentServices {
           }
           // Match Client in request and client id of user.
           $clientExternalId = $this->apiHelper->checkifBelongstoUser($user['email']);
-          if ($param['client'] != $clientExternalId) {
-            $message = 'Client Id ' . $param['client'] . ' does not belong to logged in user.';
+          if ($param['clientExternalId'] != $clientExternalId) {
+            $message = 'Client Id ' . $param['clientExternalId'] . ' does not belong to logged in user.';
 
             throw new \Exception($message);
           }
@@ -196,7 +196,7 @@ class AppointmentServices {
 
         // Get clientExternalId for invalidating cache.
         $tags = [
-          'appointments_by_clientId_' . $param['client'],
+          'appointments_by_clientId_' . $param['clientExternalId'],
         ];
         $this->cache->tagInvalidation($tags);
 
