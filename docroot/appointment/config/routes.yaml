@@ -30,10 +30,6 @@ appointment.get_timeslots:
    path: /get/timeslots
    controller: App\Controller\AppointmentServices::getTimeSlots
    methods: GET
-appointment.append_appointment_answers:
-   path: /append-appointmnet-answers
-   controller: App\Controller\AppointmentServices::appendAppointmentAnswers
-   methods: POST
 appointment.get_appointments:
    path: /get/appointments
    controller: App\Controller\AppointmentServices::getAppointments
@@ -57,8 +53,4 @@ appointment.get_appointment_details:
 appointment.get_all_translation:
    path: /get/translations
    controller: App\Controller\ConfigurationServices::getAllTranslations
-   methods: GET
-appointment.send_email_confirmation:
-   path: /send-email-confirmation
-   controller: App\Controller\AppointmentServices::sendEmailConfirmation
    methods: GET

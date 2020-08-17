@@ -170,8 +170,19 @@ class AppointmentServices {
         $this->cache->tagInvalidation($tags);
 
         $result = $this->xmlApiHelper->bookAppointment($param);
-
         $bookingId = $result->return->result ?? '';
+
+        // Append companion data if we have the bookingId and companionData.
+        $companionData = $request_content['companionData'] ?? '';
+        if (!empty($bookingId) && !empty($companionData)) {
+          appendAppointmentAnswers($bookingId, $companionData);
+        }
+
+        // Trigger email confirmation if we have the bookingId.
+        if (!empty($bookingId)) {
+          sendEmailConfirmation($bookingId);
+        }
+
         return new JsonResponse($bookingId);
       }
 
@@ -232,23 +243,18 @@ class AppointmentServices {
   /**
    * Append appointment answers.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   * @return string
    *   Booking Id.
    */
-  public function appendAppointmentAnswers(Request $request) {
+  public function appendAppointmentAnswers($bookingId, $companionData) {
     try {
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-      $request_content = json_decode($request->getContent(), TRUE);
 
-      $bookingId = $request_content['bookingId'] ?? '';
       if (empty($bookingId)) {
         throw new \Exception('Booking Id is required to save answers.');
       }
 
-      foreach ($request_content as $key => $value) {
-        if ($key === 'bookingId') {
-          continue;
-        }
+      foreach ($companionData as $key => $value) {
         $questionAnswerList[] = [
           'questionExternalId' => $key,
           'answer' => $value,
@@ -274,7 +280,11 @@ class AppointmentServices {
 
       $apiResult = $result->return->result ?? [];
 
-      return new JsonResponse($apiResult);
+      $this->logger->notice('Companion details is appended to the appointment booked. API Response: @response', [
+        '@response' => $apiResult,
+      ]);
+
+      return $apiResult;
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while appending booking appointment answers. Message: @message', [
@@ -661,9 +671,8 @@ class AppointmentServices {
   /**
    * Send Email Confirmation.
    */
-  public function sendEmailConfirmation(Request $request) {
+  public function sendEmailConfirmation($appointmentId) {
     try {
-      $appointmentId = $request->query->get('appointment');
       if (empty($appointmentId)) {
         $message = 'Appointment Id is required.';
         throw new \Exception($message);
@@ -684,7 +693,11 @@ class AppointmentServices {
 
       $apiResult = $result->return->result ?? [];
 
-      return new JsonResponse($apiResult);
+      $this->logger->notice('Triggered email confirmation for the appointment booked. API Response: @response', [
+        '@response' => $apiResult,
+      ]);
+
+      return $apiResult;
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while sending email confirmation. Message: @message', [

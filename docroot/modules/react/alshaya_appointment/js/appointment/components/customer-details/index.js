@@ -1,6 +1,5 @@
 import React from 'react';
 import _has from 'lodash/has';
-import _isEmpty from 'lodash/isEmpty';
 import parse from 'html-react-parser';
 import { getInputValue } from '../../../utilities/helper';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
@@ -172,67 +171,8 @@ export default class CustomerDetails extends React.Component {
     smoothScrollTo('.companion-details-item:nth-last-child(2)');
   }
 
-  appendAppointmentAnswers = () => {
-    const {
-      companionData, bookingId,
-    } = this.state;
-
-    if (_isEmpty(companionData)) {
-      this.sendEmailConfirmation();
-      return;
-    }
-
-    const data = { ...companionData, bookingId };
-    const apiUrl = '/append-appointmnet-answers';
-    const apiData = postAPICall(apiUrl, data);
-
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.error === undefined
-          && result.data !== undefined
-          && result.data.error === undefined) {
-          // Move to next step.
-          removeFullScreenLoader();
-          // Remove empty keys from companionData.
-          Object.entries(companionData).forEach(([key, value]) => {
-            if (!value) {
-              delete companionData[key];
-            }
-          });
-          this.setState({
-            ...companionData,
-          }, () => {
-            setStorageInfo(this.state);
-          });
-          this.sendEmailConfirmation();
-        }
-      });
-    }
-  }
-
-  sendEmailConfirmation = () => {
-    const { handleSubmit } = this.props;
-    const {
-      bookingId,
-    } = this.state;
-
-    const apiUrl = `/send-email-confirmation?appointment=${bookingId}`;
-    const apiData = fetchAPIData(apiUrl);
-
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.error === undefined
-          && result.data !== undefined
-          && result.data.error === undefined) {
-          // Move to next step.
-          removeFullScreenLoader();
-          handleSubmit();
-        }
-      });
-    }
-  }
-
   bookAppointment = () => {
+    const { handleSubmit } = this.props;
     const {
       selectedStoreItem,
       appointmentCategory,
@@ -241,6 +181,7 @@ export default class CustomerDetails extends React.Component {
       selectedSlot,
       appointmentId,
       originalTimeSlot,
+      companionData,
     } = this.state;
     const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
     const channel = isMobile ? 'mobile' : 'desktop';
@@ -255,6 +196,7 @@ export default class CustomerDetails extends React.Component {
       client: clientExternalId,
       channel,
       user: id,
+      companionData,
     };
 
     if (appointmentId && id !== 0) {
@@ -275,8 +217,10 @@ export default class CustomerDetails extends React.Component {
             bookingId: result.data,
             bookingStatus: 'success',
           }));
-          // Append appointment answers.
-          this.appendAppointmentAnswers();
+
+          // Move to next step.
+          removeFullScreenLoader();
+          handleSubmit();
         } else {
           this.setState((prevState) => ({
             ...prevState,
