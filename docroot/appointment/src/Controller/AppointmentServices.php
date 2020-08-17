@@ -210,11 +210,9 @@ class AppointmentServices {
       $result = $client->__soapCall('reBookAppointment', [$param]);
       $bookingId = $result->return->result ?? '';
 
-      // Get clientExternalId for invalidating cache.
-      $clientExternalId = $this->apiHelper->checkifBelongstoUser($userId);
       $tags = [
+        'appointments_by_clientId_' . $request_content['client'],
         'appointment_' . $request_content['appointment'],
-        'appointments_by_clientId_' . $clientExternalId,
       ];
       $this->cache->tagInvalidation($tags);
       return new JsonResponse($bookingId);
@@ -313,7 +311,7 @@ class AppointmentServices {
       }
 
       $cacheKey = 'appointments_by_clientId_' . $clientExternalId;
-      $item = $this->cache->getItem($cacheKey, $langcode);
+      $item = $this->cache->getItemByTagAware($cacheKey, $langcode);
       if ($item) {
         $result = $item;
       }
@@ -611,7 +609,7 @@ class AppointmentServices {
 
       $cacheKey = 'appointment_' . $appointment;
       $langcode = $request->query->get('langcode');
-      $item = $this->cache->getItem($cacheKey, $langcode);
+      $item = $this->cache->getItemByTagAware($cacheKey, $langcode);
       if ($item) {
         // Check if Appointment Belongs to user only.
         if (property_exists($item->return, 'appointment')) {
