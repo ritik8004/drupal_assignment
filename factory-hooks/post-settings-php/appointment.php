@@ -20,15 +20,13 @@ if (!empty($site_country_code) && $site_country_code['site_code'] === 'bp') {
     'password' => 'jG4@dF0p',
     'location_group_ext_id' => 'Boots',
     'timetrade_api_base_url' => 'https://api-stage.timetradesystems.co.uk',
-    'timetrade_translation_base_url' => 'https://staging-translation.account.services',
+    'timetrade_translation_base_url' => 'https://translation.account.services',
     'translation_api_key' => '',
     'project' => 'boots',
     'locations_to_skip' => 'alshayaadmin', // Comma separated for multiple.
   ];
   if (preg_match('/\d{2}(live|update)/', $env)) {
-    // @TODO: Add 'timetrade_api_base_url' once we have it for prod.
-    $appointment_settings['timetrade_api_base_url'] = '';
-    $appointment_settings['timetrade_translation_base_url'] = 'https://translation.account.services';
+    $appointment_settings['timetrade_api_base_url'] = 'https://api.timetradesystems.co.uk';
   }
 }
 
