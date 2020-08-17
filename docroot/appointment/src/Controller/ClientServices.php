@@ -72,22 +72,33 @@ class ClientServices {
    *   Client external Id.
    */
   public function updateInsertClient(Request $request) {
-    try {
-      $request_content = json_decode($request->getContent(), TRUE);
+    $request_content = json_decode($request->getContent(), TRUE);
 
+    try {
       $param = [
-        'clientExternalId' => $request_content['clientExternalId'] ?? '',
-        'firstName' => $request_content['firstName'] ?? '',
-        'lastName' => $request_content['lastName'] ?? '',
-        'dob' => $request_content['dob'] ?? '',
-        'mobile' => $request_content['mobile'] ?? '',
-        'email' => $request_content['email'] ?? '',
+        'client' => [
+          'clientExternalId' => $request_content['clientExternalId'] ?? '',
+          'firstName' => $request_content['firstName'] ?? '',
+          'lastName' => $request_content['lastName'] ?? '',
+          'dob' => $request_content['dob'] ?? '',
+          'email' => $request_content['email'] ?? '',
+          'phoneData' => [
+            'mobile' => $request_content['mobile'] ?? '',
+          ],
+          'rulesGroupExternalId' => 'client',
+          'userGroupExternalId' => 'client',
+          'applyTimeZone' => TRUE,
+          'customerId' => 0,
+          'passwordExpired' => FALSE,
+          'requirePasswordChange' => FALSE,
+          'disableEmail' => FALSE,
+        ],
       ];
 
-      if (empty($param['firstName']) || empty($param['lastName']) || empty($param['dob']) || empty($param['mobile']) || empty($param['email'])) {
+      if (empty($request_content['firstName']) || empty($request_content['lastName']) || empty($request_content['dob']) || empty($request_content['mobile']) || empty($request_content['email'])) {
         $message = 'Required parameters missing to create a client.';
         $this->logger->error($message . ' Data: @request_data', [
-          '@request_data' => json_encode($param),
+          '@request_data' => json_encode($request_content),
         ]);
         throw new \Exception($message);
       }
@@ -109,7 +120,8 @@ class ClientServices {
         }
       }
 
-      $result = $this->xmlApiHelper->updateInsertClient($param);
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
+      $result = $client->__soapCall('updateInsertClient', [$param]);
       $clientExternalId = $result->return->result ?? '';
 
       return new JsonResponse($clientExternalId);
