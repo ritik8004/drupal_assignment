@@ -104,9 +104,9 @@ class ClientServices {
       }
 
       // Get clientExternalId for the email id if it exists.
-      $clientExternalId = $this->apiHelper->checkifBelongstoUser($param['email']);
+      $clientExternalId = $this->apiHelper->checkifBelongstoUser($param['client']['email']);
       if ($clientExternalId) {
-        $param['clientExternalId'] = $clientExternalId;
+        $param['client']['clientExternalId'] = $clientExternalId;
       }
 
       $userId = $request_content['id'] ?? '';
