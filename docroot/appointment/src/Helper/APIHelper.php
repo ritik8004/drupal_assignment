@@ -221,4 +221,12 @@ class APIHelper {
     return in_array($langcode, ['en', 'ar']);
   }
 
+  /**
+   * Gets default Parameter value numberOfSlots.
+   */
+  public function getNumberOfSlots() {
+    $appointment_settings = $this->settings->getSettings('appointment_settings');
+    return $appointment_settings['numberOfSlots'];
+  }
+
 }

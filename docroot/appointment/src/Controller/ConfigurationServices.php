@@ -246,7 +246,22 @@ class ConfigurationServices {
         return [];
       }
 
-      $result = $this->xmlApiHelper->fetchStores($param);
+      $param = [
+        'locationSearchCriteria' => [
+          'locationGroupId' => 'Boots',
+          'exactMatchOnly' => TRUE,
+        ],
+        'locationSearchGeoCriteria' => [
+          'latitude' => $latitude,
+          'longitude' => $longitude,
+          'radius' => $radius,
+          'maxNumberOfLocations' => $maxLocations,
+          'unit' => $unit,
+        ],
+      ];
+
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
+      $result = $client->__soapCall('getLocationsByGeoCriteria', [$param]);
       $stores = $result->return->locations ?? [];
       $storesData = [];
 
