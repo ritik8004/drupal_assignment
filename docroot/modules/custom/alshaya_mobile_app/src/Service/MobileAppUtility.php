@@ -328,7 +328,7 @@ class MobileAppUtility {
       }
     }
     elseif ($object instanceof SKUInterface) {
-      $return = 'product/' . $object->getSku();
+      $return = 'product-exclude-linked/' . $object->getSku();
     }
 
     return self::ENDPOINT_PREFIX . $return;
