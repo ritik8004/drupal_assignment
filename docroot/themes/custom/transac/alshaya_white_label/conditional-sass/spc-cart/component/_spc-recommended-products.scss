@@ -11,7 +11,7 @@
     display: flex;
     align-items: flex-start;
 
-    .recommended-product {
+    .spc-product-recommended-wrapper {
       display: inline-block;
       margin-#{$right}: 0.625rem;
       scroll-snap-align: center;
@@ -20,6 +20,10 @@
 
       html[lang=ar] & {
         line-height: normal;
+      }
+
+      .recommended-product {
+        display: block;
       }
 
       .spc-product-recommended-image {
