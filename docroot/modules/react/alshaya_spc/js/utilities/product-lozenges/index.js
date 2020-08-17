@@ -10,6 +10,7 @@ const ProductLozenges = ({ labels, sku }) => {
         src={image}
         alt={text || ''}
         title={text || ''}
+        loading="lazy"
       />
     </div>
   ));
