@@ -40,8 +40,7 @@ class Cache {
     $options = [
       'db_table' => self::APPOINTMENT_CACHE_TABLE,
     ];
-    $cache = new PdoAdapter($connection, '', 0, $options);
-    $this->cache = new TagAwareAdapter($cache);
+    $this->cache = new PdoAdapter($connection, '', 0, $options);
   }
 
   /**
@@ -59,6 +58,30 @@ class Cache {
     // If langcode is passed append to the key.
     $key = (!empty($langcode)) ? $key . '_' . $langcode : $key;
     $item = $this->cache->getItem($key);
+    if ($item->isHit()) {
+      // Item exists.
+      $cachedItem = $item->get();
+      return $cachedItem;
+    }
+    return FALSE;
+  }
+
+  /**
+   * Get cached Item.
+   *
+   * @param string $key
+   *   Cache key.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return mixed
+   *   Cache data or false.
+   */
+  public function getItemByTagAware($key, $langcode = '') {
+    // If langcode is passed append to the key.
+    $key = (!empty($langcode)) ? $key . '_' . $langcode : $key;
+    $cache = new TagAwareAdapter($this->cache);
+    $item = $cache->getItem($key);
     if ($item->isHit()) {
       // Item exists.
       $cachedItem = $item->get();
@@ -88,14 +111,15 @@ class Cache {
   public function setItemWithTags($key, $data, $tags, $langcode = '') {
     // If langcode is passed append to the key.
     $key = (!empty($langcode)) ? $key . '_' . $langcode : $key;
+    $cache = new TagAwareAdapter($this->cache);
     /** @var \Symfony\Contracts\Cache\ItemInterface $item */
-    $item = $this->cache->getItem($key);
+    $item = $cache->getItem($key);
     $item
       ->set($data)
       ->tag($tags)
       // In seconds.
       ->expiresAfter($this->cacheExpiration);
-    $this->cache->save($item);
+    $cache->save($item);
   }
 
   /**
@@ -109,7 +133,8 @@ class Cache {
    * Invalidate cache tags.
    */
   public function tagInvalidation($tags) {
-    return $this->cache->invalidateTags($tags);
+    $cache = new TagAwareAdapter($this->cache);
+    return $cache->invalidateTags($tags);
   }
 
 }

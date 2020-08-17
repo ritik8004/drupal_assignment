@@ -96,8 +96,36 @@ class AppointmentServices {
    *   Time slot data from API.
    */
   public function getTimeSlots(Request $request) {
+    $selected_date = $request->query->get('selectedDate');
+    $program = $request->query->get('program');
+    $activity = $request->query->get('activity');
+    $location = $request->query->get('location');
+    $duration = $request->query->get('duration') ?? 30;
+    $params = [
+      'criteria' => [
+        'activityExternalId' => $activity,
+        'locationExternalId' => $location,
+        'programExternalId' => $program,
+        'appointmentDurationMin' => $duration,
+        'numberOfAttendees' => 1,
+        'setupDurationMin' => 0,
+      ],
+      'startDateTime' => $selected_date . 'T00:00:00.000+03:00',
+      'endDateTime' => $selected_date . 'T23:59:59.999+03:00',
+      'numberOfSlots' => $this->apiHelper->getNumberOfSlots(),
+    ];
     try {
-      $result = $this->xmlApiHelper->fetchTimeSlots($request);
+
+      if (empty($selected_date) || empty($program) || empty($activity) || empty($location)) {
+        $message = 'Required parameters missing to get time slots.';
+        $this->logger->error($message . ' Data: @request_data', [
+          '@request_data' => json_encode($params),
+        ]);
+        throw new \Exception($message);
+      }
+
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
+      $result = $client->__soapCall('getAvailableNDateTimeSlotsStartFromDate', [$params]);
 
       return new JsonResponse($result);
 
@@ -127,20 +155,23 @@ class AppointmentServices {
       // Book New appointment.
       if (!$appointmentId) {
         $param = [
-          'activity' => $request_content['activity'] ?? '',
-          'duration' => $request_content['duration'] ?? '',
-          'location' => $request_content['location'] ?? '',
-          'attendees' => $request_content['attendees'] ?? '',
-          'program' => $request_content['program'] ?? '',
-          'channel' => $request_content['channel'] ?? '',
+          'criteria' => [
+            'activityExternalId' => $request_content['activity'] ?? '',
+            'appointmentDurationMin' => $request_content['duration'] ?? '',
+            'locationExternalId' => $request_content['location'] ?? '',
+            'numberOfAttendees' => $request_content['attendees'] ?? '',
+            'programExternalId' => $request_content['program'] ?? '',
+            'channel' => $request_content['channel'] ?? '',
+            'setupDurationMin' => 0,
+          ],
           'startDateTime' => $request_content['start_date_time'] ?? '',
-          'client' => $request_content['client'] ?? '',
+          'clientExternalId' => $request_content['client'] ?? '',
         ];
 
-        if (empty($param['activity']) || empty($param['duration']) || empty($param['location']) || empty($param['attendees']) || empty($param['program']) || empty($param['channel']) || empty($param['startDateTime']) || empty($param['client'])) {
+        if (empty($request_content['activity']) || empty($request_content['duration']) || empty($request_content['location']) || empty($request_content['attendees']) || empty($request_content['program']) || empty($request_content['channel']) || empty($request_content['start_date_time']) || empty($request_content['client'])) {
           $message = 'Required parameters missing to book appointment.';
           $this->logger->error($message . ' Data: @request_data', [
-            '@request_data' => json_encode($param),
+            '@request_data' => json_encode($request_content),
           ]);
           throw new \Exception($message);
         }
@@ -169,7 +200,9 @@ class AppointmentServices {
         ];
         $this->cache->tagInvalidation($tags);
 
-        $result = $this->xmlApiHelper->bookAppointment($param);
+        $client = $this->apiHelper->getSoapClient($this->serviceUrl);
+        $result = $client->__soapCall('bookAppointment', [$param]);
+
         $bookingId = $result->return->result ?? '';
 
         // Append companion data if we have the bookingId and companionData.
@@ -221,11 +254,9 @@ class AppointmentServices {
       $result = $client->__soapCall('reBookAppointment', [$param]);
       $bookingId = $result->return->result ?? '';
 
-      // Get clientExternalId for invalidating cache.
-      $clientExternalId = $this->apiHelper->checkifBelongstoUser($userId);
       $tags = [
+        'appointments_by_clientId_' . $request_content['client'],
         'appointment_' . $request_content['appointment'],
-        'appointments_by_clientId_' . $clientExternalId,
       ];
       $this->cache->tagInvalidation($tags);
       return new JsonResponse($bookingId);
@@ -323,7 +354,7 @@ class AppointmentServices {
       }
 
       $cacheKey = 'appointments_by_clientId_' . $clientExternalId;
-      $item = $this->cache->getItem($cacheKey, $langcode);
+      $item = $this->cache->getItemByTagAware($cacheKey, $langcode);
       if ($item) {
         $result = $item;
       }
@@ -621,7 +652,7 @@ class AppointmentServices {
 
       $cacheKey = 'appointment_' . $appointment;
       $langcode = $request->query->get('langcode');
-      $item = $this->cache->getItem($cacheKey, $langcode);
+      $item = $this->cache->getItemByTagAware($cacheKey, $langcode);
       if ($item) {
         // Check if Appointment Belongs to user only.
         if (property_exists($item->return, 'appointment')) {

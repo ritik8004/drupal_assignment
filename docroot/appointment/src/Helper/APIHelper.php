@@ -221,4 +221,20 @@ class APIHelper {
     return in_array($langcode, ['en', 'ar']);
   }
 
+  /**
+   * Gets default Parameter value numberOfSlots.
+   */
+  public function getNumberOfSlots() {
+    $appointment_settings = $this->settings->getSettings('appointment_settings');
+    return $appointment_settings['numberOfSlots'] ?? 500;
+  }
+
+  /**
+   * Get Location Group Id from settings.
+   */
+  public function getLocationGroupId() {
+    $appointment_settings = $this->settings->getSettings('appointment_settings');
+    return $appointment_settings['location_group_ext_id'];
+  }
+
 }
