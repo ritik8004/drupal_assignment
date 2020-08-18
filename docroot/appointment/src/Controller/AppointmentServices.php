@@ -199,8 +199,8 @@ class AppointmentServices {
           }
           // Match Client in request and client id of user.
           $clientExternalId = $this->apiHelper->checkifBelongstoUser($user['email']);
-          if ($param['client'] != $clientExternalId) {
-            $message = 'Client Id ' . $param['client'] . ' does not belong to logged in user.';
+          if ($param['clientExternalId'] != $clientExternalId) {
+            $message = 'Client Id ' . $param['clientExternalId'] . ' does not belong to logged in user.';
 
             throw new \Exception($message);
           }
@@ -217,15 +217,15 @@ class AppointmentServices {
 
         $bookingId = $result->return->result ?? '';
 
-        // Append companion data if we have the bookingId and companionData.
-        $companionData = $request_content['companionData'] ?? '';
-        if (!empty($bookingId) && !empty($companionData)) {
-          $this->helper->appendAppointmentAnswers($bookingId, $companionData);
-        }
-
         // Trigger email confirmation if we have the bookingId.
         if (!empty($bookingId)) {
           $this->helper->sendEmailConfirmation($bookingId);
+
+          // Append companion data if we have the bookingId and companionData.
+          $companionData = $request_content['companionData'] ?? '';
+          if (!empty($companionData)) {
+            $this->helper->appendAppointmentAnswers($bookingId, $companionData);
+          }
         }
 
         return new JsonResponse($bookingId);
