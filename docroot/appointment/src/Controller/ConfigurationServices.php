@@ -166,7 +166,7 @@ class ConfigurationServices {
       }
 
       // Get Activities from cache.
-      $item = $this->cache->getItem($program . '_activities', $langcode);
+      $item = $this->cache->getItem('activities_' . $program, $langcode);
       if ($item) {
         return new JsonResponse($item);
       }
@@ -191,7 +191,7 @@ class ConfigurationServices {
       }
 
       // Set activities cache.
-      $this->cache->setItem($program . '_activities', $activityData, $langcode);
+      $this->cache->setItem('activities_' . $program, $activityData, $langcode);
 
       return new JsonResponse($activityData);
     }
