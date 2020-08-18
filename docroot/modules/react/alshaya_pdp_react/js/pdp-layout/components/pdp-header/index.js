@@ -30,7 +30,7 @@ export default class PdpHeader extends React.PureComponent {
             pdpProductPrice={pdpProductPrice}
             shortDetail="true"
           />
-          <div id="alshaya_react_mini_cart">
+          <div id="block-alshayareactcartminicartblock" dataBlockPluginId="alshaya_react_mini_cart" className="block block-alshaya-spc block-alshaya-react-mini-cart">
             <div id="mini-cart-wrapper">
               <div className="acq-mini-cart">
                 <a className="cart-link" href="/en/cart" />
