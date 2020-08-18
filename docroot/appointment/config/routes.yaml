@@ -10,10 +10,6 @@ appointment.get_stores:
    path: /get/stores
    controller: App\Controller\ConfigurationServices::getStores
    methods: GET
-appointment.update_insert_client:
-   path: /update-insert-client
-   controller: App\Controller\ClientServices::updateInsertClient
-   methods: POST
 appointment.get_questions:
    path: /get/questions
    controller: App\Controller\AppointmentServices::getQuestions
@@ -30,10 +26,6 @@ appointment.get_timeslots:
    path: /get/timeslots
    controller: App\Controller\AppointmentServices::getTimeSlots
    methods: GET
-appointment.append_appointment_answers:
-   path: /append-appointmnet-answers
-   controller: App\Controller\AppointmentServices::appendAppointmentAnswers
-   methods: POST
 appointment.get_appointments:
    path: /get/appointments
    controller: App\Controller\AppointmentServices::getAppointments
