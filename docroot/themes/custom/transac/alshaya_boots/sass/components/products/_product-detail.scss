@@ -203,9 +203,10 @@
   .c-accordion__title {
     text-transform: none;
     line-height: 1;
-    height: 3.125rem;
+    height: auto;
     padding-top: 0.625rem;
     font-family: $bp-light;
+    padding-bottom: 0.25rem;
 
     .subtitle {
       font-size: 0.75rem;
