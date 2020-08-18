@@ -1,6 +1,5 @@
 import React from 'react';
 import _has from 'lodash/has';
-import _isEmpty from 'lodash/isEmpty';
 import parse from 'html-react-parser';
 import { getInputValue } from '../../../utilities/helper';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
@@ -172,60 +171,24 @@ export default class CustomerDetails extends React.Component {
     smoothScrollTo('.companion-details-item:nth-last-child(2)');
   }
 
-  appendAppointmentAnswers = () => {
-    const { handleSubmit } = this.props;
-    const {
-      companionData, bookingId,
-    } = this.state;
-
-    if (_isEmpty(companionData)) {
-      // Move to next step.
-      removeFullScreenLoader();
-      handleSubmit();
-      return;
-    }
-
-    const data = { ...companionData, bookingId };
-    const apiUrl = '/append-appointmnet-answers';
-    const apiData = postAPICall(apiUrl, data);
-
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.error === undefined
-          && result.data !== undefined
-          && result.data.error === undefined) {
-          // Move to next step.
-          removeFullScreenLoader();
-          // Remove empty keys from companionData.
-          Object.entries(companionData).forEach(([key, value]) => {
-            if (!value) {
-              delete companionData[key];
-            }
-          });
-          this.setState({
-            ...companionData,
-          }, () => {
-            setStorageInfo(this.state);
-          });
-          handleSubmit();
-        }
-      });
-    }
-  }
-
   bookAppointment = () => {
+    const { handleSubmit } = this.props;
     const {
       selectedStoreItem,
       appointmentCategory,
       appointmentType,
-      clientExternalId,
       selectedSlot,
       appointmentId,
       originalTimeSlot,
+      companionData,
+      clientData,
     } = this.state;
     const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
     const channel = isMobile ? 'mobile' : 'desktop';
     const { id } = drupalSettings.alshaya_appointment.user_details;
+    if (id) {
+      clientData.id = id;
+    }
     const params = {
       location: selectedStoreItem.locationExternalId,
       program: appointmentCategory.id,
@@ -233,9 +196,10 @@ export default class CustomerDetails extends React.Component {
       duration: selectedSlot.lengthinMin,
       attendees: 1,
       start_date_time: selectedSlot.appointmentSlotTime,
-      client: clientExternalId,
       channel,
       user: id,
+      companionData,
+      clientData,
     };
 
     if (appointmentId && id !== 0) {
@@ -255,46 +219,15 @@ export default class CustomerDetails extends React.Component {
             bookingId: result.data,
             bookingStatus: 'success',
           }));
-          // Append appointment answers.
-          this.appendAppointmentAnswers();
+
+          // Move to next step.
+          removeFullScreenLoader();
+          handleSubmit();
         } else {
           this.setState((prevState) => ({
             ...prevState,
             bookingStatus: 'failed',
           }));
-          removeFullScreenLoader();
-        }
-      });
-    }
-  }
-
-  updateInsertClient = () => {
-    const {
-      clientData,
-    } = this.state;
-
-    const { id } = drupalSettings.alshaya_appointment.user_details;
-    if (id) {
-      clientData.id = id;
-    }
-    const apiUrl = '/update-insert-client';
-    const apiData = postAPICall(apiUrl, clientData);
-
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.error === undefined
-          && result.data !== undefined
-          && result.data.error === undefined) {
-          this.setState((prevState) => ({
-            ...prevState,
-            clientExternalId: result.data,
-          }));
-
-          // Save client id in local storage.
-          setStorageInfo(this.state);
-          // Book appointment using the clientExternalId.
-          this.bookAppointment();
-        } else {
           removeFullScreenLoader();
         }
       });
@@ -308,8 +241,8 @@ export default class CustomerDetails extends React.Component {
     const isError = await processCustomerDetails(e);
     if (!isError) {
       setStorageInfo(this.state);
-      // Update/Insert client and then book appointment.
-      this.updateInsertClient();
+      // Book appointment.
+      this.bookAppointment();
     } else {
       removeFullScreenLoader();
     }
