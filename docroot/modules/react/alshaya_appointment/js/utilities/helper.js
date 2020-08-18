@@ -84,6 +84,22 @@ function getArrayFromCompanionData(companionData) {
   return companion;
 }
 
+function getTimeFormat() {
+  return 'hh:mm A';
+}
+
+function setMomentLocale(moment) {
+  moment.defineLocale('ar-custom', {
+    parentLocale: 'ar',
+    preparse(string) {
+      return string;
+    },
+    postformat(string) {
+      return string;
+    },
+  });
+}
+
 export {
   getInputValue,
   getLocationAccess,
@@ -92,4 +108,6 @@ export {
   getDateFormattext,
   getParam,
   getArrayFromCompanionData,
+  getTimeFormat,
+  setMomentLocale,
 };

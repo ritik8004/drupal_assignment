@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import ConditionalView from '../../../common/components/conditional-view';
 import AppointmentListItem from './components/appointmentlist';
@@ -7,6 +8,11 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../js/utilities/strings';
+import { setMomentLocale } from '../../../utilities/helper';
+// Set language for date time translation.
+if (drupalSettings.path.currentLanguage !== 'en') {
+  setMomentLocale(moment);
+}
 
 export default class AppointmentsView extends React.Component {
   constructor(props) {
