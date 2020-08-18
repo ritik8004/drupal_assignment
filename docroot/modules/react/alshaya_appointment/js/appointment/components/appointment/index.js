@@ -2,6 +2,7 @@ import 'core-js/features/url-search-params';
 import 'core-js/es/symbol';
 import 'core-js/es/array';
 import React from 'react';
+import moment from 'moment';
 import AppointmentSteps from '../appointment-steps';
 import AppointmentType from '../appointment-type';
 import Loading from '../../../utilities/loading';
@@ -21,6 +22,19 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../js/utilities/strings';
+// Set language for date time translation.
+moment.locale(drupalSettings.path.currentLanguage);
+if (drupalSettings.path.currentLanguage !== 'en') {
+  moment.defineLocale('ar-custom', {
+    parentLocale: 'ar',
+    preparse(string) {
+      return string;
+    },
+    postformat(string) {
+      return string;
+    },
+  });
+}
 
 const AppointmentStore = React.lazy(async () => {
   // Wait for google object to load.

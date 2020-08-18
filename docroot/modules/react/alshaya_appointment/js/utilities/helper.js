@@ -84,6 +84,10 @@ function getArrayFromCompanionData(companionData) {
   return companion;
 }
 
+function getTimeFormat() {
+  return 'hh:mm A';
+}
+
 export {
   getInputValue,
   getLocationAccess,
@@ -92,4 +96,5 @@ export {
   getDateFormattext,
   getParam,
   getArrayFromCompanionData,
+  getTimeFormat,
 };
