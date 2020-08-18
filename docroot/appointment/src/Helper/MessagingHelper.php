@@ -55,25 +55,29 @@ class MessagingHelper {
       ];
       $result = $client->__soapCall('sendEmailConfirmation', [$param]);
 
-      if ($result->return->status && $result->return->result === 'FAILED') {
-        $message = $result->return->cause;
+      if ($result->return->status && $result->return->result != 'SUCCESS') {
+        $message = 'sendEmailConfirmation API failed. Booking Id: ' . $appointmentId
+          . ' Cause: ' . $result->return->cause
+          . ' Status: ' . $result->return->status;
 
         $this->logger->error($message);
         throw new \Exception($message);
       }
 
-      $apiResult = $result->return->result ?? [];
+      $apiResult = $result->return->result ?? '';
 
-      $this->logger->notice('Confirmation email is sent for appointment : @appointment_id', [
-        '@appointment_id' => $apiResult,
+      $this->logger->notice('Confirmation email is sent for appointment: @appointment_id . API Response: @api_response', [
+        '@appointment_id' => $appointmentId,
+        '@api_response' => $apiResult,
       ]);
 
       return $apiResult;
     }
     catch (\Exception $e) {
       $message = 'Error occurred while sending email confirmation.';
-      $this->logger->error($message . ' Message: @message', [
+      $this->logger->error($message . ' Message: @message . Booking Id: @appointmentId', [
         '@message' => $e->getMessage(),
+        '@appointmentId' => $appointmentId,
       ]);
       throw new \Exception($message);
     }

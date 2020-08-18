@@ -153,8 +153,10 @@ class ClientHelper {
       ];
       $result = $client->__soapCall('appendAppointmentAnswers', [$param]);
 
-      if ($result->return->status && $result->return->result !== 'SUCCESS') {
-        $message = 'appendAppointmentAnswers API failed. Cause: ' . $result->return->cause . ' Status: ' . $result->return->status;
+      if ($result->return->status && $result->return->result != 'SUCCESS') {
+        $message = 'appendAppointmentAnswers API failed. Booking ID: ' . $bookingId
+          . ' Cause: ' . $result->return->cause
+          . ' Status: ' . $result->return->status;
 
         $this->logger->error($message);
         throw new \Exception($message);
