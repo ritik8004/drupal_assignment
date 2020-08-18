@@ -150,7 +150,7 @@ class AppointmentServices {
     $request_content = json_decode($request->getContent(), TRUE);
 
     $appointmentId = $request_content['appointment'] ?? '';
-    $userId = $request_content['id'] ?? '';
+    $userId = $request_content['user'] ?? '';
     try {
       // Book New appointment.
       if (!$appointmentId) {
