@@ -38,3 +38,13 @@ prefix_settings:
   except:
     - country_code
     - mobile_number
+max_length:
+  address_block_segment:
+    en: 250
+    ar: 125
+  address_building_segment:
+    en: 250
+    ar: 125
+  address_apartment_segment:
+    en: 250
+    ar: 125

@@ -1,0 +1,27 @@
+.appointment-booking-section-title {
+  font-family: $alshaya-bold;
+  font-size: 0.875rem;
+  color: $appointment-section-title;
+  margin-bottom: 0.625rem;
+
+  @include breakpoint($tablet-landscape) {
+    margin-#{$right}: 3.75rem;
+    width: 13rem;
+    margin-bottom: 0;
+  }
+}
+
+.appointment-type-item {
+  @include breakpoint($tablet-landscape) {
+    display: flex;
+  }
+
+  &.appointment-companion-wrapper,
+  &.appointment-for-you-wrapper {
+    padding-top: 3.125rem;
+
+    @include breakpoint($tablet-landscape) {
+      padding-top: 2.4375rem;
+    }
+  }
+}

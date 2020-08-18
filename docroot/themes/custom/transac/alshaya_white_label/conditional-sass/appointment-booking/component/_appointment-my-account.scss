@@ -1,0 +1,386 @@
+#customer-appointments {
+  .appointments-list-wrapper {
+    position: relative;
+
+    .appointment-booking-link-top {
+      position: absolute;
+      #{$right}: 0;
+      top: 0;
+      transform: translateY(-100%);
+      padding-bottom: 0.3125rem;
+      display: flex;
+      align-items: center;
+      font-size: 0.875rem;
+      color: $appointment-my-account-txt;
+      font-family: $alshaya-thin;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 1.5rem;
+        height: 1.5rem;
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-book.png') no-repeat center;
+        background-size: cover;
+      }
+
+      @include breakpoint($only-mobile) {
+        font-size: 0;
+      }
+    }
+
+    .appointment-list-label {
+      font-size: 0.875rem;
+      color: $appointment-my-account-txt;
+      font-family: $alshaya-bold;
+    }
+
+    .appointment-list {
+      padding: 0.8125rem 0;
+
+      @include breakpoint($only-mobile) {
+        padding: 0 0 2.1875rem;
+      }
+    }
+
+    .appointment-list-details {
+      border-bottom: 0.0625rem solid $appointment-my-account-border;
+      padding: 0.8125rem 0 1.125rem;
+
+      @include breakpoint($tablet) {
+        display: flex;
+
+        &:last-child {
+          border-bottom: 0;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        position: relative;
+        padding-top: 2.0625rem;
+      }
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 24%;
+        padding-#{$right}: 2.5rem;
+        font-size: 0.875rem;
+        color: $appointment-my-account-black-txt;
+        font-family: $alshaya-thin;
+        flex-shrink: 0;
+        flex-grow: 0;
+
+        @include breakpoint($only-mobile) {
+          max-width: 17.5rem;
+          padding: 0 0 1.25rem;
+
+          &:nth-last-child(2) {
+            padding-bottom: 0;
+          }
+        }
+
+        p {
+          margin: 0;
+        }
+      }
+
+      .appointment-list-store {
+        flex-basis: 30%;
+      }
+
+      .appointment-list-companion {
+        flex-basis: 17%;
+        padding-#{$right}: 1.875rem;
+        word-break: break-all;
+
+        > div {
+          span {
+            &:nth-child(2) {
+              padding-#{$left}: 0.3125rem;
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          padding-#{$right}: 0;
+        }
+      }
+
+      .appointment-actions {
+        flex-direction: row;
+        padding: 0;
+        flex-basis: 5%;
+
+        button {
+          &::before {
+            content: '';
+            display: block;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          float: $right;
+          margin-top: -1.5rem;
+        }
+
+        .action-edit {
+          padding: 0;
+          padding-#{$right}: 0.9375rem;
+          font-size: 0;
+
+          &::before {
+            width: 1rem;
+            height: 1rem;
+            background: url('#{$base_theme_img_directory_path}/icons/my-appointment-edit.svg') no-repeat center;
+            background-size: cover;
+          }
+        }
+
+        .action-delete {
+          padding: 0;
+          font-size: 0;
+
+          &::before {
+            width: 1.5rem;
+            height: 1.5rem;
+            background: url('#{$base_theme_img_directory_path}/icons/appointment-delete.svg') no-repeat center;
+            background-size: cover;
+          }
+        }
+
+        .popup-content {
+          padding: 2.1875rem !important;
+          width: 100% !important;
+          overflow: hidden;
+          border: none !important;
+          max-width: 53.0625rem;
+
+          &.appointment-delete-popup-wrapper-content {
+            max-width: 37rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            padding: 2.1875rem 0.9375rem !important;
+            max-width: 21.0625rem;
+          }
+
+          @include breakpoint($only-tablet) {
+            max-width: 40.0625rem;
+          }
+
+          .close-modal {
+            position: absolute;
+            top: 0;
+            #{$right}: 0;
+            font-size: 0;
+            padding: 0;
+
+            &::before {
+              content: '';
+              display: block;
+              width: 2.125rem;
+              height: 2.125rem;
+              background: url('#{$base_theme_img_directory_path}/icons/my-appointment-edit-popup-cross.svg') no-repeat center;
+              background-size: cover;
+            }
+          }
+
+          .appointmentbox {
+            position: relative;
+
+            &.title {
+              font-size: 1.125rem;
+              line-height: 1.22;
+              color: $appointment-my-account-txt;
+              font-family: $alshaya-bold;
+              padding-bottom: 0.625rem;
+              border-bottom: 0.0625rem solid $appointment-my-account-border-grey;
+
+              @include breakpoint($only-mobile) {
+                padding-bottom: 0.5rem;
+              }
+            }
+
+            .label {
+              color: $appointment-my-account-txt;
+              font-family: $alshaya-bold;
+              flex-basis: 20%;
+            }
+
+            .popup-customer-details {
+              p {
+                span {
+                  padding-#{$left}: 0.3125rem;
+
+                  &:first-child {
+                    font-family: $alshaya-bold;
+                    padding-#{$left}: 0;
+                  }
+                }
+              }
+
+              > div {
+                padding-top: 0.625rem;
+
+                &:first-child {
+                  padding-top: 0;
+                }
+              }
+
+              @include breakpoint($only-mobile) {
+                padding-top: 0.9375rem;
+              }
+            }
+
+            &-action-edit {
+              position: absolute;
+              top: 1.875rem;
+              #{$right}: 0;
+              font-size: 0;
+
+              &::before {
+                content: '';
+                display: block;
+                width: 1rem;
+                height: 1rem;
+                background: url('#{$base_theme_img_directory_path}/icons/my-appointment-edit.svg') no-repeat center;
+                background-size: cover;
+              }
+            }
+
+            &.appointment-type {
+              padding: 0.625rem 0 1.5625rem;
+              border-bottom: 0.0625rem solid $appointment-my-account-border-grey;
+
+              @include breakpoint($only-mobile) {
+                padding-top: 1rem;
+              }
+
+              > div {
+                display: flex;
+
+                @include breakpoint($only-mobile) {
+                  flex-direction: column;
+                }
+              }
+            }
+
+            &.appointment-store {
+              padding-top: 1.875rem;
+
+              @include breakpoint($only-mobile) {
+                padding-top: 1.5625rem;
+              }
+            }
+
+            &.appointment-datetime {
+              padding: 1.875rem 0 1.5625rem;
+
+              @include breakpoint($only-mobile) {
+                padding-top: 0.9375rem;
+              }
+            }
+
+            &.appointment-companion {
+              padding: 1.875rem 0;
+              border-top: 0.0625rem solid $appointment-my-account-border-grey;
+
+              @include breakpoint($only-mobile) {
+                padding: 1.25rem 0;
+              }
+            }
+
+            &.appointment-store,
+            &.appointment-datetime,
+            &.appointment-companion {
+              @include breakpoint($tablet) {
+                display: flex;
+
+                > div {
+                  flex-basis: 70%;
+                }
+              }
+            }
+          }
+
+          .appointment-delete-popup {
+            .appointmentbox {
+              &.message {
+                margin: 1.25rem 0;
+              }
+
+              &.buttons {
+                .ok-button,
+                .cancel-button {
+                  font-size: 0.875rem;
+                  padding: 0.625rem 3.25rem;
+                  border: 0.0625rem solid $appointment-delete-btn-border;
+                  font-family: $alshaya-bold;
+                  border-radius: 0.125rem;
+
+                  @include breakpoint($only-mobile) {
+                    width: 100%;
+                  }
+                }
+
+                .ok-button {
+                  background: none;
+                  color: $appointment-my-account-txt;
+                  margin-#{$right}: 1.25rem;
+
+                  @include breakpoint($only-mobile) {
+                    margin-#{$right}: 0;
+                    margin-bottom: 1.25rem;
+                  }
+                }
+
+                .cancel-button {
+                  background: $appointment-delete-cancel-btn-bg;
+                  color: $appointment-delete-cancel-btn;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .book-appointment-btn {
+      text-align: $right;
+    }
+
+    .appointment-booking-link-bottom {
+      font-size: 0.875rem;
+      background: $appointment-my-account-txt;
+      color: $appointment-my-account-button;
+      padding: 0.6875rem 2.5rem;
+      border-radius: 0.125rem;
+      display: inline-block;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+}
+
+body[class*="appointments"] {
+  @include breakpoint($only-mobile) {
+    .c-user--node {
+      &.l-two--sf {
+        aside.c-sidebar-first {
+          display: none;
+        }
+      }
+    }
+
+    .c-user--node {
+      main {
+        #block-page-title {
+          display: block;
+        }
+      }
+    }
+  }
+}

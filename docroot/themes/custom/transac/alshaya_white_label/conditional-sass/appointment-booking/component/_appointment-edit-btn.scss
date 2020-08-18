@@ -1,0 +1,18 @@
+.edit-button {
+  font-size: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  position: absolute;
+  top: 0.125rem;
+  #{$right}: 0;
+
+  &::after {
+    content: '';
+    width: 0.875rem;
+    height: 0.875rem;
+    background: url('#{$base_theme_img_directory_path}/icons/my-appointment-edit.svg') center center no-repeat;
+    display: block;
+    background-size: cover;
+  }
+}

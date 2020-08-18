@@ -1,0 +1,46 @@
+.appointment-confirmation-print-content {
+  .appointment-confirmation-print-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3.75rem;
+
+    img {
+      max-width: 10rem;
+    }
+  }
+
+  .appointment-confirmation-print-body {
+    padding: 0 3.5rem;
+
+    .inner-header {
+      border-bottom: 0.0625rem solid $appointment-confirmation-grey-border;
+      padding-bottom: 0.3125rem;
+
+      label {
+        font-size: 1.125rem;
+        line-height: 1.22;
+        color: $appointment-confirmation-blue-txt;
+        font-family: $alshaya-bold;
+      }
+    }
+
+    .confirmation-item {
+      padding-top: 1.875rem;
+
+      label {
+        font-size: 0.875rem;
+        color: $appointment-confirmation-blue-txt;
+        font-family: $alshaya-bold;
+        min-width: 13.5rem;
+        display: inline-block;
+      }
+
+      span {
+        font-size: 0.875rem;
+        color: $appointment-confirmation-txt;
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+}
