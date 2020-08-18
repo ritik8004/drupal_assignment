@@ -50,6 +50,7 @@ then
 
   # Validate files now.
   npm run lint alshaya_spc/js/
+  npm run lint alshaya_appointment/js/
 else
   echo -en "No need to setup REACT. There is no change in any modules/react."
 fi

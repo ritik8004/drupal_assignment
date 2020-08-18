@@ -1,0 +1,23 @@
+.appointment-type-button {
+  font-family: $alshaya-bold;
+  font-size: 0.875rem;
+  border: 1px solid $appointment-btn-bg;
+  padding: 0.625rem 3.25rem;
+  background: $appointment-btn-bg;
+  color: $appointment-btn-text;
+  border-radius: 0.125rem;
+
+  @include breakpoint($tablet) {
+    float: $right;
+  }
+
+  @include breakpoint($tablet) {
+    margin-top: 1.875rem;
+  }
+
+  &:disabled,
+  &[disabled] {
+    border: 1px solid $appointment-disable-btn-bg;
+    background: $appointment-disable-btn-bg;
+  }
+}

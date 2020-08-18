@@ -1,0 +1,30 @@
+.toggle-store-view {
+  @include breakpoint($upto-tablet-landscape) {
+    padding: 0.625rem 0 1.25rem;
+
+    .toggle-buttons-wrapper {
+      text-align: center;
+
+      .stores-list-view,
+      .stores-map-view {
+        width: 10rem;
+        border: 1px solid $appointment-store-toggle-bg-active;
+        color: $appointment-store-toggle-bg-active;
+        height: 2.25rem;
+        background: $appointment-store-toggle-bg;
+        padding: 0;
+        font-size: 0.8125rem;
+        border-radius: 0.25rem;
+
+        &.active {
+          background: $appointment-store-toggle-bg-active;
+          color: $appointment-store-toggle-bg;
+        }
+      }
+
+      .stores-map-view {
+        margin-#{$left}: 0.9375rem;
+      }
+    }
+  }
+}

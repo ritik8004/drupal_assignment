@@ -345,6 +345,20 @@ $conductors = [
     'hmac_secret' => 'NzJmMDMyN2ItMzRhMC00',
     'site_id' => 87,
   ],
+  // BathBodyWorks Egypt.
+  'bbweg_qa' => [
+    'hmac_id' => '4d7962f023c54bbdb9ea5b6811cbb5af',
+    'hmac_secret' => 'MWRmZGI4ZTMtYzM0MS00',
+    'site_id' => 281,
+  ],
+  'bbweg_uat' => [
+    'hmac_id' => '9617776441fb41468e602b6c2022117e',
+    'hmac_secret' => 'ODM0NTc2NzktNzBiYS00',
+    'site_id' => 277,
+  ],
+  'bbweg_prod' => [
+    'site_id' => 273,
+  ],
   // BathBodyWorks BH.
   'bbwbh_dev' => [
     'hmac_id' => '6a9541a52b1444a7a9805fe811297ac3',
@@ -498,6 +512,48 @@ $conductors = [
     'hmac_id' => 'a220ff2d59e846c79426e5b001516063',
     'hmac_secret' => 'ZmJiNzUzOTctMTBiMC00',
     'site_id' => 129,
+  ],
+  // FootLocker EG.
+  'fleg_qa' => [
+    'hmac_id' => '363afc0253cc45689121d797deb20009',
+    'hmac_secret' => 'YmUzMmZhODAtYTViYy00',
+    'site_id' => 282,
+  ],
+  'fleg_uat' => [
+    'hmac_id' => '3818ebc0773e46869c712507c4792441',
+    'hmac_secret' => 'YjhlYjE4YTctMTAwYS00',
+    'site_id' => 280,
+  ],
+  'fleg_prod' => [
+    'site_id' => 274,
+  ],
+  // FootLocker BH.
+  'flbh_qa' => [
+    'hmac_id' => 'a49ad25bbc7a404b81377c036852f7c3',
+    'hmac_secret' => 'YjhlYzc5Y2UtMmZlMC00',
+    'site_id' => 283,
+  ],
+  'flbh_uat' => [
+    'hmac_id' => 'd42ceb5607494e1a88513ce19532d999',
+    'hmac_secret' => 'MzcyMGEzYzYtZjI3ZS00',
+    'site_id' => 278,
+  ],
+  'flbh_prod' => [
+    'site_id' => 275,
+  ],
+  // FootLocker QA.
+  'flqa_qa' => [
+    'hmac_id' => '730329239f924161bfcb7e74c56210d0',
+    'hmac_secret' => 'NWZjNmJmYjYtMjk1ZC00',
+    'site_id' => 284,
+  ],
+  'flqa_uat' => [
+    'hmac_id' => '1153c84771ef4bdab90659551c2b56fc',
+    'hmac_secret' => 'ZWMyZWQxN2EtODU1Ny00',
+    'site_id' => 279,
+  ],
+  'flqa_prod' => [
+    'site_id' => 276,
   ],
   // West Elm.
   'wekw_qa' => [
@@ -674,6 +730,11 @@ $conductors = [
     'hmac_id' => 'd498a56fab204489ad5c3de9840d8e98',
     'hmac_secret' => 'YjM5Mjc1M2QtNDhkNC00',
     'site_id' => 209,
+  ],
+  'bpae_dev2' => [
+    'hmac_id' => '1dbe65d50909412e8e55d6afbd7c1e85',
+    'hmac_secret' => 'NzA2MGUyNjEtMTNiNy00',
+    'site_id' => 285,
   ],
   'bpkw_qa' => [
     'hmac_id' => '602caba2dc7a4ab3801169a1e8c5eb77',
