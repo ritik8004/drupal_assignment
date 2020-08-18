@@ -96,7 +96,7 @@
   .cloudzoom__herocontainer {
     @include breakpoint($desktop) {
       width: 38rem;
-      height: 38rem;
+      height: 38.5rem;
       margin-#{$right}: 2rem;
     }
   }
