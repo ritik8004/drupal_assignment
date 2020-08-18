@@ -279,6 +279,7 @@ class ProductController extends ControllerBase {
         $related_products['products'][$related_sku]['priceRaw'] = $price;
         $related_products['products'][$related_sku]['title'] = $title;
         $related_products['products'][$related_sku]['productLabels'] = $this->skuManager->getLabelsData($related_sku_entity, 'pdp');
+        $related_products['products'][$related_sku]['promotions'] = $this->skuManager->getPromotions($related_sku_entity);
         $related_products['section_title'] = render($data['section_title']);
       }
     }
