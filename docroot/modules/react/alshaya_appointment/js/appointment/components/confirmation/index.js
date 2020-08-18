@@ -6,7 +6,7 @@ import ConfirmationItems from './components/confirmation-items';
 import { getStorageInfo, removeStorageInfo } from '../../../utilities/storage';
 import {
   addressCleanup,
-  getArrayFromCompanionData,
+  getArrayFromCompanionData, getTimeFormat,
 } from '../../../utilities/helper';
 import AppointmentConfirmationPrint from './confirmationPrint';
 import getStringMessage from '../../../../../js/utilities/strings';
@@ -45,7 +45,7 @@ export default class Confirmation extends React.Component {
     const { id } = drupalSettings.alshaya_appointment.user_details;
 
     const date = moment(selectedSlot.appointmentSlotTime).format('dddd, Do MMMM YYYY');
-    const time = moment(selectedSlot.appointmentSlotTime).format('LT');
+    const time = moment(selectedSlot.appointmentSlotTime).format(getTimeFormat());
     const location = `${selectedStoreItem.name}, ${addressCleanup(selectedStoreItem.address)}`;
     const event = {
       title: appointmentType.label,

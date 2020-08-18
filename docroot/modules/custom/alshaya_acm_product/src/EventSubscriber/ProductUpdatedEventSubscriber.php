@@ -103,6 +103,13 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
       $parents = $entity->getPluginInstance()->getAllParentIds($entity->getSku());
       if (!empty($parents)) {
         $skus = $parents;
+
+        // If a product is visible at both simple as well as configurable level
+        // we need to process for the node attached to simple product too.
+        // This is content issue but we handle in code.
+        if ($entity->getPluginInstance()->getDisplayNodeId($entity, FALSE)) {
+          $skus[] = $entity->getSku();
+        }
       }
     }
 
