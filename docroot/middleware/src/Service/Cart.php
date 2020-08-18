@@ -1158,6 +1158,12 @@ class Cart {
       }
 
       $order_id = (int) str_replace('"', '', $result);
+
+      $this->logger->notice('Order placed successfully. Cart: @cart Orderid: @order_id', [
+        '@cart' => json_encode($cart),
+        '@order_id' => $order_id,
+      ]);
+
       return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
     }
     catch (\Exception $e) {
