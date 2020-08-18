@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Helper\XmlAPIHelper;
 use App\Helper\APIHelper;
-use App\Helper\Helper;
+use App\Helper\ClientHelper;
+use App\Helper\MessagingHelper;
 
 /**
  * Class AppointmentServices.
@@ -62,9 +63,16 @@ class AppointmentServices {
   /**
    * Helper.
    *
-   * @var \App\Helper\Helper
+   * @var \App\Helper\ClientHelper
    */
-  protected $helper;
+  protected $clientHelper;
+
+  /**
+   * Helper.
+   *
+   * @var \App\Helper\MessagingHelper
+   */
+  protected $messagingHelper;
 
   /**
    * AppointmentServices constructor.
@@ -81,8 +89,10 @@ class AppointmentServices {
    *   Cache Helper.
    * @param \App\Translation\TranslationHelper $translationHelper
    *   Translation Helper.
-   * @param \App\Helper\Helper $helper
-   *   Helper.
+   * @param \App\Helper\ClientHelper $clientHelper
+   *   Client Helper.
+   * @param \App\Helper\MessagingHelper $messagingHelper
+   *   Client Helper.
    */
   public function __construct(LoggerInterface $logger,
                               XmlAPIHelper $xml_api_helper,
@@ -90,7 +100,8 @@ class AppointmentServices {
                               APIHelper $api_helper,
                               Cache $cache,
                               TranslationHelper $translationHelper,
-                              Helper $helper) {
+                              ClientHelper $clientHelper,
+                              MessagingHelper $messagingHelper) {
     $this->logger = $logger;
     $this->xmlApiHelper = $xml_api_helper;
     $this->drupal = $drupal;
@@ -98,7 +109,8 @@ class AppointmentServices {
     $this->serviceUrl = $this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL;
     $this->cache = $cache;
     $this->translationHelper = $translationHelper;
-    $this->helper = $helper;
+    $this->clientHelper = $clientHelper;
+    $this->messagingHelper = $messagingHelper;
   }
 
   /**
@@ -166,7 +178,7 @@ class AppointmentServices {
     try {
       // Book New appointment.
       if (!$appointmentId) {
-        $clientExternalId = $this->helper->updateInsertClient($request_content['clientData']);
+        $clientExternalId = $this->clientHelper->updateInsertClient($request_content['clientData']);
         $param = [
           'criteria' => [
             'activityExternalId' => $request_content['activity'] ?? '',
@@ -219,12 +231,12 @@ class AppointmentServices {
 
         // Trigger email confirmation if we have the bookingId.
         if (!empty($bookingId)) {
-          $this->helper->sendEmailConfirmation($bookingId);
+          $this->messagingHelper->sendEmailConfirmation($bookingId);
 
           // Append companion data if we have the bookingId and companionData.
           $companionData = $request_content['companionData'] ?? '';
           if (!empty($companionData)) {
-            $this->helper->appendAppointmentAnswers($bookingId, $companionData);
+            $this->clientHelper->appendAppointmentAnswers($bookingId, $companionData);
           }
         }
 
