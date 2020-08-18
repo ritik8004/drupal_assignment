@@ -142,7 +142,7 @@ export const triggerAddToCart = (
     // success class.
     if (cartBtn.classList.contains('magv2-add-to-basket-loader')) {
       cartBtn.classList.remove('magv2-add-to-basket-loader');
-      cartBtn.innerHTML = Drupal.t('Item added');
+      cartBtn.innerHTML = `${Drupal.t('Item added')}<span class="magv2-button-tick-icon" />`;
       cartBtn.classList.toggle('magv2-add-to-basket-success');
     }
 

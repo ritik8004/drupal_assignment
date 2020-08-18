@@ -59,7 +59,6 @@ export default class PdpHeader extends React.PureComponent {
                     onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo)}
                   >
                     {Drupal.t('Add To Bag')}
-                    <span className="magv2-button-tick-icon" />
                   </button>
                 ) : (
                   <button
@@ -69,7 +68,6 @@ export default class PdpHeader extends React.PureComponent {
                     onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo)}
                   >
                     {Drupal.t('Add To Bag')}
-                    <span className="magv2-button-tick-icon" />
                   </button>
                 )}
               </div>
