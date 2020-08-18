@@ -125,7 +125,7 @@ class ClientServices {
       $clientExternalId = $result->return->result ?? '';
 
       // Log on client update/insert.
-      $this->logger->info('Client @operation successfully. Params: @params', [
+      $this->logger->info('Client @operation successfully. Data: @params', [
         '@params' => json_encode($request_content),
         '@operation' => $request_content['clientExternalId'] ? 'updated' : 'inserted',
       ]);
@@ -133,9 +133,10 @@ class ClientServices {
       return new JsonResponse($clientExternalId);
     }
     catch (\Exception $e) {
-      $this->logger->error('Error occurred while inserting/updating client. Message: @message, Data: @params', [
+      $this->logger->error('Error occurred while @operation client. Message: @message, Data: @params', [
         '@message' => $e->getMessage(),
         '@params' => json_encode($request_content),
+        '@operation' => $request_content['clientExternalId'] ? 'updated' : 'inserted',
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
@@ -165,7 +166,7 @@ class ClientServices {
       // Authenticate logged in user by matching userid from request and Drupal.
       $user = $this->drupal->getSessionUserInfo();
       if ($userId == 0 || $user['uid'] !== $userId) {
-        $message = 'Userid from endpoint: ' . $userId . ' doesn\'t match userId: ' . $user['uid'] . '  of logged in user.';
+        $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
         $this->logger->error($message);
         throw new \Exception($message);
