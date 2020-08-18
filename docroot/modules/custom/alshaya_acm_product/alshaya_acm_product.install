@@ -43,6 +43,8 @@ function alshaya_acm_product_update_8062() {
         }
       }
     }
+    // Download files for skus again.
+    $sku_data->getMedia();
   }
 }
 
