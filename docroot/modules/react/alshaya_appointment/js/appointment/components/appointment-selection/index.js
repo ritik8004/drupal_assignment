@@ -5,6 +5,7 @@ import StoreAddress from '../appointment-store/components/store-address';
 import SectionTitle from '../section-title';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 import getStringMessage from '../../../../../js/utilities/strings';
+import { getTimeFormat } from '../../../utilities/helper';
 
 export default class AppointmentSelection extends React.Component {
   handleEdit = (step) => {
@@ -118,7 +119,7 @@ export default class AppointmentSelection extends React.Component {
                   </div>
                   <div className="appointment-details-item-body">
                     <div className="store-name">
-                      { moment(selectedSlot.appointmentSlotTime).format('LT') }
+                      { moment(selectedSlot.appointmentSlotTime).format(getTimeFormat()) }
                     </div>
                   </div>
                 </div>
