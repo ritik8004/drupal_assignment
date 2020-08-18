@@ -27,7 +27,7 @@ const PdpCrossellUpsellImage = ({
       />
     </div>
     {productPromotions ? (
-      <div className="promo-labels">
+      <div className="promotions promotions-full-view-mode">
         {Object.keys(productPromotions).map((key) => (
           <p><a href={productPromotions[key].promo_web_url}>{productPromotions[key].text}</a></p>
         ))}

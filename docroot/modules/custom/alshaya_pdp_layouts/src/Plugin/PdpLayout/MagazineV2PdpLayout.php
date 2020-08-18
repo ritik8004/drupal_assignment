@@ -213,16 +213,17 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           $swatch_processed = TRUE;
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = TRUE;
           foreach ($configurable['values'] as $value => $label) {
-            if (empty($value)) {
+            $value_id = $label['value_id'];
+            if (empty($value_id)) {
               continue;
             }
 
-            $swatch_sku = $this->skuManager->getChildSkuFromAttribute($sku_entity, $key, $value);
+            $swatch_sku = $this->skuManager->getChildSkuFromAttribute($sku_entity, $key, $value_id);
             if ($swatch_sku instanceof SKU) {
               $swatch_image_url = $this->skuImageManager->getPdpSwatchImageUrl($swatch_sku);
               if ($swatch_image_url) {
                 $swatch_image = file_url_transform_relative($swatch_image_url);
-                $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'][$value]['swatch_image'] = $swatch_image;
+                $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'][$value_id]['swatch_image'] = $swatch_image;
               }
             }
           }
