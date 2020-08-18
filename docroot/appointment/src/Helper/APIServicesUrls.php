@@ -24,6 +24,11 @@ final class APIServicesUrls {
   const WSDL_CLIENT_SERVICES_URL = '/soap/ClientServices?wsdl';
 
   /**
+   * WSDL messaging service url.
+   */
+  const WSDL_MESSAGING_SERVICES_URL = '/soap/MessagingServices?wsdl';
+
+  /**
    * Translation service url to get all translations.
    */
   const TRANSLATION_SERVICE_URL_ALL = '/api/v1/project/get';
