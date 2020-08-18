@@ -56,11 +56,13 @@
       }
 
       @include breakpoint($only-mobile) {
-        max-width: 11rem;
+        max-width: 10.9375rem;
+        margin: 0.5rem auto 0 1.5rem;
 
         html[lang=ar] & {
           max-width: 7.5rem;
           margin-top: 0.625rem;
+          margin-right: 1.5rem;
         }
       }
     }
@@ -635,7 +637,8 @@ header {
 
     @include breakpoint($only-mobile) {
       top: 0.75rem;
-      #{$left}: 11.5%;
+      #{$right}: 14.5%;
+      #{$left}: auto;
     }
   }
 
