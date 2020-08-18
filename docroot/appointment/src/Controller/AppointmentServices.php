@@ -176,9 +176,12 @@ class AppointmentServices {
     $appointmentId = $request_content['appointment'] ?? '';
     $userId = $request_content['user'] ?? '';
     try {
+      // Update/insert client.
+      $request_content['clientData']['clientExternalId'] = $this->apiHelper->checkifBelongstoUser($request_content['clientData']['email']) ?? '';
+      $clientExternalId = $this->clientHelper->updateInsertClient($request_content['clientData']);
+
       // Book New appointment.
       if (!$appointmentId) {
-        $clientExternalId = $this->clientHelper->updateInsertClient($request_content['clientData']);
         $param = [
           'criteria' => [
             'activityExternalId' => $request_content['activity'] ?? '',
@@ -221,7 +224,7 @@ class AppointmentServices {
 
         // Get clientExternalId for invalidating cache.
         $tags = [
-          'appointments_by_clientId_' . $param['clientExternalId'],
+          'appointments_by_clientId_' . $clientExternalId,
         ];
         $this->cache->tagInvalidation($tags);
 
@@ -240,7 +243,6 @@ class AppointmentServices {
             $this->clientHelper->appendAppointmentAnswers($bookingId, $companionData);
           }
         }
-
 
         // Log appointment booked.
         $this->logger->info('Appointment booked successfully. Appointment:@appointment, User:@userid, Data:@params,', [
@@ -287,9 +289,15 @@ class AppointmentServices {
       $result = $client->__soapCall('reBookAppointment', [$param]);
       $bookingId = $result->return->result ?? '';
 
+      // Append companion data if we have the bookingId and companionData.
+      $companionData = $request_content['companionData'] ?? '';
+      if (!empty($companionData) && !empty($bookingId)) {
+        $this->clientHelper->appendAppointmentAnswers($bookingId, $companionData);
+      }
+
       $tags = [
-        'appointments_by_clientId_' . $request_content['client'],
-        'appointment_' . $request_content['appointment'],
+        'appointments_by_clientId_' . $clientExternalId,
+        'appointment_' . $bookingId,
       ];
       $this->cache->tagInvalidation($tags);
 
