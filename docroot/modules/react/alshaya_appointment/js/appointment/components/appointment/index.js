@@ -22,18 +22,10 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../js/utilities/strings';
+import { setMomentLocale } from '../../../utilities/helper';
 // Set language for date time translation.
-moment.locale(drupalSettings.path.currentLanguage);
 if (drupalSettings.path.currentLanguage !== 'en') {
-  moment.defineLocale('ar-custom', {
-    parentLocale: 'ar',
-    preparse(string) {
-      return string;
-    },
-    postformat(string) {
-      return string;
-    },
-  });
+  setMomentLocale(moment);
 }
 
 const AppointmentStore = React.lazy(async () => {
