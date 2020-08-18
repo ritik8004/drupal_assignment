@@ -204,7 +204,6 @@ export default class CustomerDetails extends React.Component {
 
     if (appointmentId && id !== 0) {
       params.appointment = appointmentId;
-      params.id = id;
       params.originaltime = originalTimeSlot;
     }
 
