@@ -70,6 +70,15 @@
             cart_notification_data
           )
         );
+        // For New PDP layout mobile cart icon.
+        $('#magv2_cart_notification')
+          .addClass(settings.show_crosssell_as_matchback === true ? 'matchback-cart-notification' : '')
+          .html(
+          Drupal.theme(
+            settings.show_crosssell_as_matchback === true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup',
+            cart_notification_data
+          )
+        );
         $.fn.cartNotificationScroll();
 
         if ($('.ui-dialog').length > 0) {
@@ -92,10 +101,24 @@
             $('#cart_notification').removeClass('has--notification');
           }
         }
+        // For New PDP layout mobile cart icon.
+        if ($('#magv2_cart_notification').length) {
+          // check if element is Visible
+          var length = $('#magv2_cart_notification').html().length;
+          if (length > 0) {
+            $('#magv2_cart_notification').empty();
+            $('body').removeClass('notification--on');
+            $('#magv2_cart_notification').removeClass('has--notification');
+          }
+        }
       });
 
       // Stop event from inside container to propogate out.
       $('#cart_notification').once('bind-events').on('click', function (event) {
+        event.stopPropagation();
+      });
+      // For New PDP layout mobile cart icon.
+      $('#magv2_cart_notification').once('bind-events').on('click', function (event) {
         event.stopPropagation();
       });
 
@@ -130,8 +153,12 @@
 
       $.fn.cartNotificationScroll = function () {
         $('#cart_notification').fadeIn();
+        // For New PDP layout mobile cart icon.
+        $('#magv2_cart_notification').fadeIn();
         $('body').addClass('notification--on');
         $('#cart_notification').addClass('has--notification');
+        // For New PDP layout mobile cart icon.
+        $('#magv2_cart_notification').addClass('has--notification');
         if ($(window).width() < 768 && $('.matchback-cart-notification').length > 0) {
           var element = $('.horizontal-crossell.mobile-only-block').clone();
           $('.matchback-cart-notification').append(element);
@@ -141,6 +168,8 @@
           }
           $('.matchback-cart-notification .matchback-cart-notification-close').on('mousedown', function () {
             $('#cart_notification').removeClass('has--notification');
+            // For New PDP layout mobile cart icon.
+            $('#magv2_cart_notification').removeClass('has--notification');
             $('body').removeClass('matchback-notification-overlay');
             $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
           });
@@ -148,6 +177,8 @@
         // If magazine layout is enabled.
         else if ($(window).width() < 768 && $('.magazine-layout').length > 0) {
           $('#cart_notification').addClass('cart-notification-animate');
+          // For New PDP layout mobile cart icon.
+          $('#magv2_cart_notification').addClass('cart-notification-animate');
           $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
         }
         else {
@@ -157,6 +188,8 @@
 
           setTimeout(function () {
             $('#cart_notification').fadeOut();
+            // For New PDP layout mobile cart icon.
+            $('#magv2_cart_notification').fadeOut();
             // Trigger a custom event cart:notification:animation:complete
             // Use this whenever we need to handle any JS animations after
             // cart notification animations are completed.

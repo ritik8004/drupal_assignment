@@ -36,7 +36,7 @@ export default class PdpHeader extends React.PureComponent {
                 <a className="cart-link" href="/en/cart" />
               </div>
             </div>
-            <div id="cart_notification" />
+            <div id="magv2_cart_notification" />
           </div>
         </ConditionalView>
         <ConditionalView condition={window.innerWidth > 767}>
