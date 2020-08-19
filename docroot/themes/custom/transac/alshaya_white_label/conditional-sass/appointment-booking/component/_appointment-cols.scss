@@ -39,6 +39,10 @@
 
     .appointment-details-item {
       margin-bottom: 1.5625rem;
+
+      html[lang=ar] & {
+        line-height: normal;
+      }
     }
 
     .appointment-details-body {
