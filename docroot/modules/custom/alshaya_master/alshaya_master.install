@@ -2146,6 +2146,9 @@ function _alshaya_master_update_context() {
     'Please agree to the Terms and Conditions.' => 'alshaya_static_text|agree_terms_and_condition',
     'Your account has not been activated or is blocked.' => 'alshaya_static_text|account_already_exists',
     'Customers also bought' => 'alshaya_static_text|pdp_crosssell_title',
+    'You may also like' => 'alshaya_static_text|pdp_upsell_title',
+    'Related' => 'alshaya_static_text|pdp_related_title',
+    'Search' => 'alshaya_static_text|algolia_search_block_placeholder',
   ];
 
   alshaya_i18n_update_context($strings);
