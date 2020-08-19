@@ -9,44 +9,6 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\file\FileInterface;
-
-/**
- * Implements hook_update_N().
- *
- * Delete files to resolve blank image issue.
- * Check CORE-23109 for more info.
- */
-function alshaya_acm_product_update_8062() {
-  // Load all skus.
-  $database = \Drupal::database();
-  $query = $database->select('acq_sku_field_data', 'acq_sku');
-  $query->fields('acq_sku', ['sku']);
-  $result = $query->execute()->fetchAll();
-  foreach ($result as $sku) {
-    $sku_data = SKU::loadFromSku($sku->sku);
-    // Get media data for each sku.
-    $media_data = $sku_data->get('media')->getString();
-    if (!empty($media_data)) {
-      $media_data = unserialize($media_data);
-      foreach ($media_data as $data) {
-        if (isset($data['fid'])) {
-          $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
-          $file = $fileStorage->load($data['fid']);
-          if ($file instanceof FileInterface) {
-            $url = $file->getFileUri();
-            if (!file_exists($url)) {
-              $file->delete();
-            }
-          }
-        }
-      }
-    }
-    // Download files for skus again.
-    $sku_data->getMedia();
-  }
-}
 
 /**
  * Implements hook_update_N().
