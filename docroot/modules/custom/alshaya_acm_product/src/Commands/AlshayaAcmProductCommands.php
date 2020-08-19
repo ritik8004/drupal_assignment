@@ -801,6 +801,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     $query->fields('acq_sku', ['sku']);
     $result = $query->execute()->fetchAll();
     foreach ($result as $sku) {
+      $flag = 0;
       $sku_data = SKU::loadFromSku($sku->sku);
       if (empty($sku_data)) {
         $this->output()->writeln('Sku ' . $sku . 'is not found on this site.');
@@ -820,13 +821,16 @@ class AlshayaAcmProductCommands extends DrushCommands {
                   throw new UserAbortException();
                 }
                 $file->delete();
+                $flag = 1;
               }
             }
           }
         }
       }
-      // Download files again for skus.
-      $sku_data->getMedia();
+      if ($flag == 1) {
+        // Download files again for skus.
+        $sku_data->getMedia();
+      }
     }
   }
 
