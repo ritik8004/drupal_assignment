@@ -97,6 +97,14 @@
     }
   }
 
+  &.thumbnail-count-1 {
+    .cloudzoom__herocontainer {
+      @include breakpoint($desktop) {
+        margin-#{$right}: 0;
+      }
+    }
+  }
+
   .cloudzoom__thumbnails {
     @include breakpoint($desktop) {
       width: 4.875rem;
