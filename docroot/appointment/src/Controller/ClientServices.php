@@ -114,7 +114,7 @@ class ClientServices {
         // Authenticate user by matching userid from request and Drupal.
         $user = $this->drupal->getSessionUserInfo();
         if ($user['uid'] !== $userId) {
-          $message = 'Userid: ' . $userId . ' from endpoint doesn\'t match userId: ' . $user['uid'] . ' of logged in user.';
+          $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
           throw new \Exception($message);
         }
