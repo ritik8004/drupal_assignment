@@ -345,9 +345,9 @@ class CartController {
             $data['items'][$item['sku']]['finalPrice'] = $total_item['price_incl_tax'];
 
             // Free Item is only for free gift products which are having
-            // price 0.01, rest all are free but still via different rules.
-            if (($total_item['price'] == 0.01 || $total_item['base_price'] == 0.01)
-              && $total_item['price'] * $item['qty'] == $total_item['discount_amount']) {
+            // price 0, rest all are free but still via different rules.
+            if ($total_item['price_incl_tax'] == 0
+                && isset($total_item['extension_attributes'], $total_item['extension_attributes']['amasty_promo'])) {
               $data['items'][$item['sku']]['freeItem'] = TRUE;
             }
             break;
