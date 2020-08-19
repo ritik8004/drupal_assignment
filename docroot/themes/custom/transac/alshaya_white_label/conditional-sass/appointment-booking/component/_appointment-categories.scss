@@ -50,6 +50,7 @@
 
     &.BeautyandSkin {
       background: $appointment-category-beauty;
+      border: 1px solid $appointment-category-beauty;
 
       &.active {
         border: 1px solid $appointment-category-beauty-border;
@@ -62,6 +63,7 @@
 
     &.HealthandPharmacy {
       background: $appointment-category-pharmacy;
+      border: 1px solid $appointment-category-pharmacy;
 
       &.active {
         border: 1px solid $appointment-category-pharmacy-border;
