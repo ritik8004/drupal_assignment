@@ -18,9 +18,16 @@
   }
 }
 
-.magv2-add-to-basket-loader {
-  &.magv2-button {
+.magv2-button {
+  &.magv2-add-to-basket-loader {
     font-size: 0 !important;
+    opacity: 0.5;
+  }
+
+  &.magv2-add-to-basket-loader,
+  &.magv2-add-to-basket-success {
+    pointer-events: none;
+    user-select: none;
   }
 }
 
