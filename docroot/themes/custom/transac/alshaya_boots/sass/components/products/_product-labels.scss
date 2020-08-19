@@ -3,8 +3,8 @@
     &.top {
       &-left {
         @include breakpoint($desktop) {
-          top: 1.5rem;
-          #{$left}: 2.5rem;
+          top: 0;
+          #{$left}: 0;
           #{$right}: inherit;
 
           .cloudzoom.thumbnail-count-1 & {
@@ -13,8 +13,8 @@
         }
 
         @include breakpoint($only-mobile) {
-          top: 0.5rem;
-          #{$left}: 0.5rem;
+          top: 0;
+          #{$left}: 0;
           #{$right}: inherit;
         }
 
@@ -27,8 +27,8 @@
 
       &-right {
         @include breakpoint($desktop) {
-          top: 1.5rem;
-          #{$right}: 2.5rem;
+          top: 0;
+          #{$right}: 0;
           #{$left}: inherit;
 
           .cloudzoom.thumbnail-count-1 & {
@@ -37,14 +37,14 @@
         }
 
         @include breakpoint($only-mobile) {
-          top: 0.5rem;
-          #{$right}: 0.5rem;
+          top: 0;
+          #{$right}: 0;
           #{$left}: inherit;
         }
 
         @include breakpoint($only-tablet) {
-          top: 0.5rem;
-          #{$right}: 0.9375rem;
+          top: 0;
+          #{$right}: 0;
           #{$left}: inherit;
         }
       }
