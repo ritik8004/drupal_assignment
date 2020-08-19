@@ -41,7 +41,7 @@ appointment.get_companion:
 appointment.cancel_appointment:
    path: /cancel/appointment
    controller: App\Controller\AppointmentServices::cancelAppointment
-   methods: GET
+   methods: POST
 appointment.get_appointment_details:
    path: /get/appointment-details
    controller: App\Controller\AppointmentServices::getAppointmentDetails

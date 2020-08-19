@@ -114,7 +114,7 @@ class ClientServices {
         // Authenticate user by matching userid from request and Drupal.
         $user = $this->drupal->getSessionUserInfo();
         if ($user['uid'] !== $userId) {
-          $message = 'Userid: ' . $userId . ' from endpoint doesn\'t match userId: ' . $user['uid'] . ' of logged in user.';
+          $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
           throw new \Exception($message);
         }
@@ -124,11 +124,19 @@ class ClientServices {
       $result = $client->__soapCall('updateInsertClient', [$param]);
       $clientExternalId = $result->return->result ?? '';
 
+      // Log on client update/insert.
+      $this->logger->info('Client @operation successfully. Data: @params', [
+        '@params' => json_encode($request_content),
+        '@operation' => $request_content['clientExternalId'] ? 'updated' : 'inserted',
+      ]);
+
       return new JsonResponse($clientExternalId);
     }
     catch (\Exception $e) {
-      $this->logger->error('Error occurred while inserting/updating client. Message: @message', [
+      $this->logger->error('Error occurred while @operation client. Message: @message, Data: @params', [
         '@message' => $e->getMessage(),
+        '@params' => json_encode($request_content),
+        '@operation' => $request_content['clientExternalId'] ? 'updated' : 'inserted',
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
@@ -143,9 +151,10 @@ class ClientServices {
    *   Client details.
    */
   public function getClientsByCriteria(Request $request) {
+    $userId = $request->query->get('id');
+
     try {
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-      $userId = $request->query->get('id');
 
       if (empty($userId)) {
         $message = 'User Id is required to get client details.';
@@ -156,8 +165,8 @@ class ClientServices {
 
       // Authenticate logged in user by matching userid from request and Drupal.
       $user = $this->drupal->getSessionUserInfo();
-      if ($user['uid'] !== $userId) {
-        $message = 'Requested not authenticated.';
+      if ($userId == 0 || $user['uid'] !== $userId) {
+        $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
         $this->logger->error($message);
         throw new \Exception($message);
@@ -189,8 +198,9 @@ class ClientServices {
       return new JsonResponse($clientData);
     }
     catch (\Exception $e) {
-      $this->logger->error('Error occurred while fetching client details. Message: @message', [
+      $this->logger->error('Error occurred while fetching client details. Message: @message, User: @user', [
         '@message' => $e->getMessage(),
+        '@user' => $userId,
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
