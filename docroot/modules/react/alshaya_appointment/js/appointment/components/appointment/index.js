@@ -391,6 +391,7 @@ export default class Appointment extends React.Component {
       appointmentSelection = (
         <AppointmentSelection
           handleEdit={this.handleEdit}
+          step={appointmentStep}
         />
       );
     }
