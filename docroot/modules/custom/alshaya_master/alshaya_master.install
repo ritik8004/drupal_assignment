@@ -11,15 +11,6 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
- * [5.2.0] Update context for strings.
- */
-function alshaya_master_update_8042() {
-  _alshaya_master_update_context();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Remove unnecessary occurrences for 'Search' string in Algolia context.
  */
 function alshaya_master_update_8041() {
@@ -2137,7 +2128,6 @@ function _alshaya_master_update_context() {
     'Please enter a valid name.' => 'alshaya_static_text|invalid_name',
     'Please enter a valid last name.' => 'alshaya_static_text|invalid_last_name',
     'Please enter an email address.' => 'alshaya_static_text|empty_email',
-    'Please enter a password' => 'alshaya_static_text|empty_password',
     'The email address could not be found.' => 'alshaya_static_text|email_not_found',
     'Please enter a valid mobile number.' => 'alshaya_static_text|invalid_mobile',
     'Please enter a block.' => 'alshaya_static_text|empty_block',
@@ -2156,9 +2146,7 @@ function _alshaya_master_update_context() {
     'Please agree to the Terms and Conditions.' => 'alshaya_static_text|agree_terms_and_condition',
     'Your account has not been activated or is blocked.' => 'alshaya_static_text|account_already_exists',
     'Customers also bought' => 'alshaya_static_text|pdp_crosssell_title',
-    'You may also like' => 'alshaya_static_text|pdp_upsell_title',
-    'Related' => 'alshaya_static_text|pdp_related_title',
-    'Search' => 'alshaya_static_text|algolia_search_block_placeholder',
   ];
+
   alshaya_i18n_update_context($strings);
 }
