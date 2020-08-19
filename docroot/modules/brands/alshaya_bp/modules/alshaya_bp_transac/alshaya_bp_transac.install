@@ -12,9 +12,14 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
- * [5.4.0] Update context for static texts.
+ * [5.4.0] Map marker on checkout for CnC and appointment booking.
+ * Update context for static texts.
  */
 function alshaya_bp_transac_update_8004() {
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_bp/images/bp-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_bp/images/bp-pin-inactive.svg')
+    ->save();
   $strings = [
     'The password does not satisfy the password policies.' => 'alshaya_static_text|empty_password',
     'Please enter a valid email address.' => 'alshaya_static_text|invalid_email',
@@ -162,6 +167,12 @@ function alshaya_bp_transac_install() {
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     alshaya_stores_finder_set_default_marker_icon('alshaya_bp_transac');
   }
+
+  // Configure map marker on checkout for CnC and appointment booking.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_bp/images/bp-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_bp/images/bp-pin-inactive.svg')
+    ->save();
 
   // Add string translations.
   $strings = [
