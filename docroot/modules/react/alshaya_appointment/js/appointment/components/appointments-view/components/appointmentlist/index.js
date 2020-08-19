@@ -124,7 +124,7 @@ export default class AppointmentListItem extends React.Component {
                 <button type="button" className="action-edit" onClick={() => triggerOpenModal()}>
                   { getStringMessage('edit') }
                 </button>
-                <Popup open={isModalOpen} closeOnEscape closeOnDocumentClick={false}>
+                <Popup className="appointment-edit-popup-wrapper" open={isModalOpen} closeOnEscape closeOnDocumentClick={false}>
                   <>
                     <button type="button" className="close-modal" onClick={() => triggerCloseModal()}>{ getStringMessage('close') }</button>
                     <AppointmentEditBox
