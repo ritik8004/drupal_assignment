@@ -15,6 +15,7 @@ export default class AppointmentSelection extends React.Component {
   }
 
   render() {
+    const { step } = this.props;
     const localStorageValues = getStorageInfo();
     const {
       appointmentCategory, appointmentType, selectedStoreItem, selectedSlot, appointmentId,
@@ -58,6 +59,7 @@ export default class AppointmentSelection extends React.Component {
               <button
                 className="appointment-details-button edit-button"
                 type="button"
+                disabled={(step === 'appointment-type')}
                 onClick={() => this.handleEdit('appointment-type')}
               >
                 {getStringMessage('edit')}
@@ -89,6 +91,7 @@ export default class AppointmentSelection extends React.Component {
                 <button
                   className="appointment-details-button edit-button"
                   type="button"
+                  disabled={(step === 'select-store')}
                   onClick={() => this.handleEdit('select-store')}
                 >
                   {getStringMessage('edit')}
@@ -126,6 +129,7 @@ export default class AppointmentSelection extends React.Component {
                 <button
                   className="appointment-details-button edit-button"
                   type="button"
+                  disabled={(step === 'select-time-slot')}
                   onClick={() => this.handleEdit('select-time-slot')}
                 >
                   {getStringMessage('edit')}
