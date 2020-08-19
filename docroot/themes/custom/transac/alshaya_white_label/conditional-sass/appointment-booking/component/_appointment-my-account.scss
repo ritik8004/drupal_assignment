@@ -157,6 +157,29 @@
 
           &.appointment-delete-popup-wrapper-content {
             max-width: 37rem;
+            max-height: 15.625rem;
+            overflow-y: auto;
+
+            .ie & {
+              height: 15.625rem;
+            }
+
+            @include breakpoint($only-mobile) {
+              max-height: 18.75rem;
+            }
+          }
+
+          &.appointment-edit-popup-wrapper-content {
+            max-height: 31.25rem;
+            overflow-y: auto;
+
+            .ie & {
+              height: 31.25rem;
+            }
+
+            @include breakpoint($only-mobile) {
+              max-height: 80vh;
+            }
           }
 
           @include breakpoint($only-mobile) {
