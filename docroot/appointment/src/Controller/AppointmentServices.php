@@ -177,7 +177,6 @@ class AppointmentServices {
     $userId = $request_content['user'] ?? '';
     try {
       // Update/insert client.
-      $request_content['clientData']['clientExternalId'] = $this->apiHelper->checkifBelongstoUser($request_content['clientData']['email']) ?? '';
       $clientExternalId = $this->clientHelper->updateInsertClient($request_content['clientData']);
 
       // Book New appointment.
@@ -314,69 +313,6 @@ class AppointmentServices {
       $this->logger->error('Error occurred while booking appointment. Message: @message , Data: @params', [
         '@message' => $e->getMessage(),
         '@params' => json_encode($request_content),
-      ]);
-      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
-
-      return new JsonResponse($error, 400);
-    }
-  }
-
-  /**
-   * Append appointment answers.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Booking Id.
-   */
-  public function appendAppointmentAnswers(Request $request) {
-    try {
-      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-      $request_content = json_decode($request->getContent(), TRUE);
-
-      $bookingId = $request_content['bookingId'] ?? '';
-      if (empty($bookingId)) {
-        throw new \Exception('Booking Id is required to save answers.');
-      }
-
-      foreach ($request_content as $key => $value) {
-        if ($key === 'bookingId') {
-          continue;
-        }
-        $questionAnswerList[] = [
-          'questionExternalId' => $key,
-          'answer' => $value,
-        ];
-      }
-
-      if (empty($questionAnswerList)) {
-        throw new \Exception('Empty question answer list in appendAppointmentAnswers.');
-      }
-
-      $param = [
-        'confirmationNumber' => $bookingId,
-        'questionAnswerList' => $questionAnswerList,
-      ];
-      $result = $client->__soapCall('appendAppointmentAnswers', [$param]);
-
-      if ($result->return->status && $result->return->result === 'FAILED') {
-        $message = $result->return->cause;
-
-        $this->logger->error($message);
-        throw new \Exception($message);
-      }
-
-      // Log appointment booked.
-      $this->logger->info('Appointment companion added successfully. Appointment:@appointment, Data:@params,', [
-        '@params' => json_encode($questionAnswerList),
-        '@appointment' => $bookingId,
-      ]);
-
-      $apiResult = $result->return->result ?? [];
-
-      return new JsonResponse($apiResult);
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Error occurred while appending booking appointment answers. Message: @message', [
-        '@message' => $e->getMessage(),
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
