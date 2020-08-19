@@ -26,6 +26,11 @@ const PdpCrossellUpsellImage = ({
         loading="lazy"
       />
     </div>
+    <PdpInfo
+      title={title}
+      finalPrice={finalPrice}
+      pdpProductPrice={pdpProductPrice}
+    />
     {productPromotions ? (
       <div className="promotions promotions-full-view-mode">
         {Object.keys(productPromotions).map((key) => (
@@ -33,11 +38,6 @@ const PdpCrossellUpsellImage = ({
         ))}
       </div>
     ) : null}
-    <PdpInfo
-      title={title}
-      finalPrice={finalPrice}
-      pdpProductPrice={pdpProductPrice}
-    />
   </a>
 );
 
