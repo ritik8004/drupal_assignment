@@ -283,7 +283,7 @@ function alshaya_color_split_node_view(array &$build, EntityInterface $entity, E
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku = $skuManager->getSkuForNode($entity);
-    $sku = !empty($sku) ? SKU::loadFromSku($sku, $entity->language()->getId()) : NULL;
+    $sku = !empty($sku) ? SKU::loadFromSku($sku) : NULL;
 
     // If not able to load SKU return.
     if (!($sku instanceof SKU)) {

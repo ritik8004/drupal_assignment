@@ -11,7 +11,6 @@ services:
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@entity_type.manager'
-      - '@entity.repository'
       - '@alshaya_product_options.helper'
       - '@alshaya_product_options.swatches'
 

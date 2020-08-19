@@ -5,7 +5,6 @@ namespace Drupal\alshaya_color_split;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_product_options\SwatchesHelper;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
 
@@ -41,13 +40,6 @@ class AlshayaColorSplitManager {
   protected $entityTypeManager;
 
   /**
-   * Entity Repository.
-   *
-   * @var \Drupal\Core\Entity\EntityRepositoryInterface
-   */
-  protected $entityRepository;
-
-  /**
    * Production Options Helper service object.
    *
    * @var \Drupal\alshaya_product_options\ProductOptionsHelper
@@ -68,8 +60,6 @@ class AlshayaColorSplitManager {
    *   SKU Manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
-   *   Entity Repository.
    * @param \Drupal\alshaya_product_options\ProductOptionsHelper $product_options_helper
    *   Production Options Manager.
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatch_helper
@@ -77,12 +67,10 @@ class AlshayaColorSplitManager {
    */
   public function __construct(SkuManager $sku_manager,
                               EntityTypeManagerInterface $entity_type_manager,
-                              EntityRepositoryInterface $entity_repository,
                               ProductOptionsHelper $product_options_helper,
                               SwatchesHelper $swatch_helper) {
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
-    $this->entityRepository = $entity_repository;
     $this->productOptionsHelper = $product_options_helper;
     $this->swatchHelper = $swatch_helper;
   }
@@ -131,7 +119,7 @@ class AlshayaColorSplitManager {
         continue;
       }
 
-      $static[$static_key][$variant->getSku()] = $this->entityRepository->getTranslationFromContext($variant, $langcode);
+      $static[$static_key][$variant->getSku()] = SKU::getTranslationFromContext($variant, $langcode);
     }
 
     return $static[$static_key];
