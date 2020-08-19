@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Helper\XmlAPIHelper;
 use App\Helper\APIHelper;
+use App\Helper\ClientHelper;
+use App\Helper\MessagingHelper;
 
 /**
  * Class AppointmentServices.
@@ -59,6 +61,20 @@ class AppointmentServices {
   protected $translationHelper;
 
   /**
+   * Helper.
+   *
+   * @var \App\Helper\ClientHelper
+   */
+  protected $clientHelper;
+
+  /**
+   * Helper.
+   *
+   * @var \App\Helper\MessagingHelper
+   */
+  protected $messagingHelper;
+
+  /**
    * AppointmentServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -73,13 +89,19 @@ class AppointmentServices {
    *   Cache Helper.
    * @param \App\Translation\TranslationHelper $translationHelper
    *   Translation Helper.
+   * @param \App\Helper\ClientHelper $clientHelper
+   *   Client Helper.
+   * @param \App\Helper\MessagingHelper $messagingHelper
+   *   Client Helper.
    */
   public function __construct(LoggerInterface $logger,
                               XmlAPIHelper $xml_api_helper,
                               Drupal $drupal,
                               APIHelper $api_helper,
                               Cache $cache,
-                              TranslationHelper $translationHelper) {
+                              TranslationHelper $translationHelper,
+                              ClientHelper $clientHelper,
+                              MessagingHelper $messagingHelper) {
     $this->logger = $logger;
     $this->xmlApiHelper = $xml_api_helper;
     $this->drupal = $drupal;
@@ -87,6 +109,8 @@ class AppointmentServices {
     $this->serviceUrl = $this->apiHelper->getTimetradeBaseUrl() . APIServicesUrls::WSDL_APPOINTMENT_SERVICES_URL;
     $this->cache = $cache;
     $this->translationHelper = $translationHelper;
+    $this->clientHelper = $clientHelper;
+    $this->messagingHelper = $messagingHelper;
   }
 
   /**
@@ -152,6 +176,9 @@ class AppointmentServices {
     $appointmentId = $request_content['appointment'] ?? '';
     $userId = $request_content['user'] ?? '';
     try {
+      // Update/insert client.
+      $clientExternalId = $this->clientHelper->updateInsertClient($request_content['clientData']);
+
       // Book New appointment.
       if (!$appointmentId) {
         $param = [
@@ -165,10 +192,10 @@ class AppointmentServices {
             'setupDurationMin' => 0,
           ],
           'startDateTime' => $request_content['start_date_time'] ?? '',
-          'clientExternalId' => $request_content['client'] ?? '',
+          'clientExternalId' => $clientExternalId ?? '',
         ];
 
-        if (empty($request_content['activity']) || empty($request_content['duration']) || empty($request_content['location']) || empty($request_content['attendees']) || empty($request_content['program']) || empty($request_content['channel']) || empty($request_content['start_date_time']) || empty($request_content['client'])) {
+        if (empty($request_content['activity']) || empty($request_content['duration']) || empty($request_content['location']) || empty($request_content['attendees']) || empty($request_content['program']) || empty($request_content['channel']) || empty($request_content['start_date_time']) || empty($param['clientExternalId'])) {
           $message = 'Required parameters missing to book appointment.';
           $this->logger->error($message . ' Data: @request_data', [
             '@request_data' => json_encode($request_content),
@@ -176,11 +203,12 @@ class AppointmentServices {
           throw new \Exception($message);
         }
 
+        // If userId is 0, then anonymous user booking appointment.
         if ($userId) {
           // Authenticate user by matching userid from request and Drupal.
           $user = $this->drupal->getSessionUserInfo();
           if ($user['uid'] !== $userId) {
-            $message = 'Userid from endpoint doesn\'t match userId of logged in user.';
+            $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
             throw new \Exception($message);
           }
@@ -191,12 +219,11 @@ class AppointmentServices {
 
             throw new \Exception($message);
           }
-
         }
 
         // Get clientExternalId for invalidating cache.
         $tags = [
-          'appointments_by_clientId_' . $param['clientExternalId'],
+          'appointments_by_clientId_' . $clientExternalId,
         ];
         $this->cache->tagInvalidation($tags);
 
@@ -204,6 +231,25 @@ class AppointmentServices {
         $result = $client->__soapCall('bookAppointment', [$param]);
 
         $bookingId = $result->return->result ?? '';
+
+        // Trigger email confirmation if we have the bookingId.
+        if (!empty($bookingId)) {
+          $this->messagingHelper->sendEmailConfirmation($bookingId);
+
+          // Append companion data if we have the bookingId and companionData.
+          $companionData = $request_content['companionData'] ?? '';
+          if (!empty($companionData)) {
+            $this->clientHelper->appendAppointmentAnswers($bookingId, $companionData);
+          }
+        }
+
+        // Log appointment booked.
+        $this->logger->info('Appointment booked successfully. Appointment:@appointment, User:@userid, Data:@params,', [
+          '@params' => json_encode($request_content),
+          '@appointment' => $bookingId,
+          '@userid' => $userId,
+        ]);
+
         return new JsonResponse($bookingId);
       }
 
@@ -216,8 +262,8 @@ class AppointmentServices {
 
       // Authenticate logged in user by matching userid from request and Drupal.
       $user = $this->drupal->getSessionUserInfo();
-      if ($user['uid'] !== $userId) {
-        $message = 'Userid from endpoint doesn\'t match userId of logged in user.';
+      if ($userId == 0 || $user['uid'] !== $userId) {
+        $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
         throw new \Exception($message);
       }
@@ -242,73 +288,31 @@ class AppointmentServices {
       $result = $client->__soapCall('reBookAppointment', [$param]);
       $bookingId = $result->return->result ?? '';
 
+      // Append companion data if we have the bookingId and companionData.
+      $companionData = $request_content['companionData'] ?? '';
+      if (!empty($companionData) && !empty($bookingId)) {
+        $this->clientHelper->appendAppointmentAnswers($bookingId, $companionData);
+      }
+
       $tags = [
-        'appointments_by_clientId_' . $request_content['client'],
-        'appointment_' . $request_content['appointment'],
+        'appointments_by_clientId_' . $clientExternalId,
+        'appointment_' . $bookingId,
       ];
       $this->cache->tagInvalidation($tags);
+
+      // Log appointment re-booked.
+      $this->logger->info('Appointment re-booked successfully. Appointment:@appointment, User:@userid, Data:@params,', [
+        '@params' => json_encode($request_content),
+        '@appointment' => $request_content['appointment'],
+        '@userid' => $userId,
+      ]);
+
       return new JsonResponse($bookingId);
     }
     catch (\Exception $e) {
-      $this->logger->error('Error occurred while booking appointment. Message: @message', [
+      $this->logger->error('Error occurred while booking appointment. Message: @message , Data: @params', [
         '@message' => $e->getMessage(),
-      ]);
-      $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
-
-      return new JsonResponse($error, 400);
-    }
-  }
-
-  /**
-   * Append appointment answers.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Booking Id.
-   */
-  public function appendAppointmentAnswers(Request $request) {
-    try {
-      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-      $request_content = json_decode($request->getContent(), TRUE);
-
-      $bookingId = $request_content['bookingId'] ?? '';
-      if (empty($bookingId)) {
-        throw new \Exception('Booking Id is required to save answers.');
-      }
-
-      foreach ($request_content as $key => $value) {
-        if ($key === 'bookingId') {
-          continue;
-        }
-        $questionAnswerList[] = [
-          'questionExternalId' => $key,
-          'answer' => $value,
-        ];
-      }
-
-      if (empty($questionAnswerList)) {
-        throw new \Exception('Empty question answer list in appendAppointmentAnswers.');
-      }
-
-      $param = [
-        'confirmationNumber' => $bookingId,
-        'questionAnswerList' => $questionAnswerList,
-      ];
-      $result = $client->__soapCall('appendAppointmentAnswers', [$param]);
-
-      if ($result->return->status && $result->return->result === 'FAILED') {
-        $message = $result->return->cause;
-
-        $this->logger->error($message);
-        throw new \Exception($message);
-      }
-
-      $apiResult = $result->return->result ?? [];
-
-      return new JsonResponse($apiResult);
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Error occurred while appending booking appointment answers. Message: @message', [
-        '@message' => $e->getMessage(),
+        '@params' => json_encode($request_content),
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
@@ -323,11 +327,11 @@ class AppointmentServices {
    *   Appointment details.
    */
   public function getAppointments(Request $request) {
-    try {
-      $langcode = $request->query->get('langcode');
-      $clientExternalId = $request->query->get('client');
-      $userId = $request->query->get('id');
+    $langcode = $request->query->get('langcode');
+    $clientExternalId = $request->query->get('client');
+    $userId = $request->query->get('id');
 
+    try {
       if (empty($clientExternalId)) {
         $message = 'clientExternalId is required to get appointment details.';
 
@@ -336,8 +340,8 @@ class AppointmentServices {
 
       // Authenticate logged in user by matching userid from request and Drupal.
       $user = $this->drupal->getSessionUserInfo();
-      if ($user['uid'] !== $userId) {
-        $message = 'Requested not authenticated.';
+      if ($userId == 0 || $user['uid'] !== $userId) {
+        $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
         throw new \Exception($message);
       }
@@ -396,8 +400,10 @@ class AppointmentServices {
       return new JsonResponse($result);
     }
     catch (\Exception $e) {
-      $this->logger->error('Error occurred while fetching appointments. Message: @message', [
+      $this->logger->error('Error occurred while fetching appointments. Message: @message, Client: @client, User: @user', [
         '@message' => $e->getMessage(),
+        '@client' => $clientExternalId,
+        '@user' => $userId,
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
@@ -409,11 +415,10 @@ class AppointmentServices {
    * Get companions by appointment confirmation number.
    */
   public function getCompanionByAppointmentId(Request $request) {
-    try {
-      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-      $appointmentId = $request->query->get('appointment');
-      $userId = $request->query->get('id');
+    $appointmentId = $request->query->get('appointment');
+    $userId = $request->query->get('id');
 
+    try {
       if (empty($appointmentId)) {
         $message = 'Appointment Id is required to get companion details.';
 
@@ -422,8 +427,8 @@ class AppointmentServices {
 
       // Authenticate logged in user by matching userid from request and Drupal.
       $user = $this->drupal->getSessionUserInfo();
-      if ($user['uid'] !== $userId) {
-        $message = 'Request not authenticated.';
+      if ($userId == 0 || $user['uid'] !== $userId) {
+        $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
         throw new \Exception($message);
       }
@@ -431,6 +436,7 @@ class AppointmentServices {
       $param = [
         'confirmationNumber' => $appointmentId,
       ];
+      $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('getAppointmentAnswersByAppointmentConfirmationNumber', [$param]);
 
       $companions = [];
@@ -477,8 +483,10 @@ class AppointmentServices {
       return new JsonResponse($companions);
     }
     catch (\Exception $e) {
-      $this->logger->error('Error occurred while fetching companion details. Message: @message', [
+      $this->logger->error('Error occurred while fetching companion details. Message: @message, Appointment: @appointment, User: @user', [
         '@message' => $e->getMessage(),
+        '@appointment' => $appointmentId,
+        '@user' => $userId,
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
@@ -490,9 +498,11 @@ class AppointmentServices {
    * Cancel an appointment.
    */
   public function cancelAppointment(Request $request) {
+    $request_content = json_decode($request->getContent(), TRUE);
+    $appointmentId = $request_content['appointment'];
+    $userId = $request_content['id'];
+
     try {
-      $appointmentId = $request->query->get('appointment');
-      $userId = $request->query->get('id');
       if ($appointmentId == '' || $userId == '') {
         $message = 'Appointment Id and user Id are required parameters.';
         throw new \Exception($message);
@@ -500,8 +510,8 @@ class AppointmentServices {
 
       // Authenticate logged in user by matching userid from request and Drupal.
       $user = $this->drupal->getSessionUserInfo();
-      if ($user['uid'] !== $userId) {
-        $message = 'Request not authenticated.';
+      if ($userId == 0 || $user['uid'] !== $userId) {
+        $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
         throw new \Exception($message);
       }
@@ -534,11 +544,19 @@ class AppointmentServices {
       ];
       $this->cache->tagInvalidation($tags);
 
+      // Log successfully appointment canceled.
+      $this->logger->info('Appointment cancelled successfully. Appointment:@appointment, UserId:@userid', [
+        '@appointment' => $appointmentId,
+        '@userid' => $userId,
+      ]);
+
       return new JsonResponse($result);
     }
     catch (\Exception $e) {
-      $this->logger->error('Error occurred while deleting an appointment. Message: @message', [
+      $this->logger->error('Error occurred while deleting an appointment. Message: @message, Appointment: @appointment, User: @user', [
         '@message' => $e->getMessage(),
+        '@appointment' => $appointmentId,
+        '@user' => $userId,
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
@@ -629,8 +647,8 @@ class AppointmentServices {
 
       // Authenticate logged in user by matching userid from request and Drupal.
       $user = $this->drupal->getSessionUserInfo();
-      if ($user['uid'] !== $userId) {
-        $message = 'Userid from endpoint doesn\'t match userId of logged in user.';
+      if ($userId == 0 || $user['uid'] !== $userId) {
+        $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
         throw new \Exception($message);
       }

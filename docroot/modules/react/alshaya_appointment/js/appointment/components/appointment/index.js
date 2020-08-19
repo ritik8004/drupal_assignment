@@ -2,6 +2,7 @@ import 'core-js/features/url-search-params';
 import 'core-js/es/symbol';
 import 'core-js/es/array';
 import React from 'react';
+import moment from 'moment';
 import AppointmentSteps from '../appointment-steps';
 import AppointmentType from '../appointment-type';
 import Loading from '../../../utilities/loading';
@@ -21,6 +22,11 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../js/utilities/strings';
+import { setMomentLocale } from '../../../utilities/helper';
+// Set language for date time translation.
+if (drupalSettings.path.currentLanguage !== 'en') {
+  setMomentLocale(moment);
+}
 
 const AppointmentStore = React.lazy(async () => {
   // Wait for google object to load.
@@ -385,6 +391,7 @@ export default class Appointment extends React.Component {
       appointmentSelection = (
         <AppointmentSelection
           handleEdit={this.handleEdit}
+          step={appointmentStep}
         />
       );
     }

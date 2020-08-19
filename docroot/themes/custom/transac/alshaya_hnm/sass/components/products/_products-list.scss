@@ -258,7 +258,6 @@
       font-size: 0.6875rem;
       line-height: 1rem;
       flex-wrap: wrap;
-      justify-content: center;
 
       @include breakpoint($tablet) {
         line-height: 1.273;

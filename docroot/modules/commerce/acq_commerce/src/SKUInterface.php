@@ -14,6 +14,19 @@ use Drupal\Core\Entity\EntityChangedInterface;
 interface SKUInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
   /**
+   * Get translated SKU entity.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity for which translated entity is required.
+   * @param string|null $langcode
+   *   Language code in which SKU Entity is required.
+   *
+   * @return \Drupal\acq_commerce\SKUInterface
+   *   SKU Entity in requested language if available or default.
+   */
+  public static function getTranslationFromContext(SKUInterface $sku, string $langcode = NULL);
+
+  /**
    * Get SKU of the entity.
    *
    * @return string
