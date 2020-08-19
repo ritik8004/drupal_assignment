@@ -101,7 +101,7 @@ class ClientHelper {
         // Authenticate user by matching userid from request and Drupal.
         $user = $this->drupal->getSessionUserInfo();
         if ($user['uid'] == 0 || $user['uid'] !== $userId) {
-          $message = 'Userid: ' . $userId . ' from endpoint doesn\'t match userId: ' . $user['uid'] . ' of logged in user.';
+          $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
           throw new \Exception($message);
         }
@@ -111,12 +111,19 @@ class ClientHelper {
       $result = $client->__soapCall('updateInsertClient', [$param]);
       $clientExternalId = $result->return->result ?? '';
 
+      // Log on client update/insert.
+      $this->logger->info('Client @operation successfully. Data: @params', [
+        '@params' => json_encode($clientData),
+        '@operation' => $param['client']['clientExternalId'] ? 'updated' : 'inserted',
+      ]);
+
       return $clientExternalId;
     }
     catch (\Exception $e) {
-      $message = 'Error occurred while inserting/updating client.';
+      $message = 'Error occurred while @operation client.';
       $this->logger->error($message . ' Message: @message', [
         '@message' => $e->getMessage(),
+        '@operation' => $clientData['clientExternalId'] ? 'updated' : 'inserted',
       ]);
       throw new \Exception($message);
     }
