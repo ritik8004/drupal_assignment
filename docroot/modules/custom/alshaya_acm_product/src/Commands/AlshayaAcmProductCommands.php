@@ -786,4 +786,52 @@ class AlshayaAcmProductCommands extends DrushCommands {
     }
   }
 
+  /**
+   * Check sku broken images and if found, delete them.
+   *
+   * @command alshaya_acm_product:fix-missing-files
+   *
+   * @aliases fix-missing-files
+   *
+   * @usage fix-missing-files
+   *   Checks and delete files for all skus.
+   */
+  public function checkAndFixMissingFiles() {
+    $query = $this->connection->select('acq_sku_field_data', 'acq_sku');
+    $query->fields('acq_sku', ['sku']);
+    $result = $query->execute()->fetchAll();
+    foreach ($result as $sku) {
+      $flag = 0;
+      $sku_data = SKU::loadFromSku($sku->sku);
+      if (empty($sku_data)) {
+        $this->output()->writeln('Sku ' . $sku . 'is not found on this site.');
+      }
+      // Get media data for the sku.
+      $media_data = $sku_data->get('media')->getString();
+      if (!empty($media_data)) {
+        $media_data = unserialize($media_data);
+        foreach ($media_data as $data) {
+          if (isset($data['fid'])) {
+            $file = $this->entityTypeManager->getStorage('file')->load($data['fid']);
+            if ($file instanceof FileInterface) {
+              $url = $file->getFileUri();
+              if (!file_exists($url)) {
+                $this->output()->writeln('Image ' . $url . ' with file id ' . $data['fid'] . ' not found for sku ' . $sku->sku);
+                if (!$this->io()->confirm(dt('Do you want to delete it?'))) {
+                  throw new UserAbortException();
+                }
+                $file->delete();
+                $flag = 1;
+              }
+            }
+          }
+        }
+      }
+      if ($flag == 1) {
+        // Download files again for skus.
+        $sku_data->getMedia();
+      }
+    }
+  }
+
 }
