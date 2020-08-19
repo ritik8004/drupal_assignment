@@ -57,7 +57,6 @@ export const triggerAddToCart = (
   pdpLabelRefresh,
 ) => {
   const productData = productDataValue;
-  const cartData = Drupal.alshayaSpc.getCartData();
   const cartBtn = addToCartBtn;
 
   // If there any error we throw from middleware.
@@ -129,6 +128,7 @@ export const triggerAddToCart = (
     const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data() { return response.data; } } });
     document.dispatchEvent(refreshCartEvent);
 
+    const cartData = Drupal.alshayaSpc.getCartData();
     const form = document.getElementsByClassName('sku-base-form')[0];
     const cartNotification = new CustomEvent('product-add-to-cart-success', {
       bubbles: true,
