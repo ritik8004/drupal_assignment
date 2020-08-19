@@ -1610,10 +1610,8 @@ header {
       max-width: 15.5625rem;
 
       html[lang=ar] & {
-        @include breakpoint($desktop) {
-          height: auto;
-          margin: 0.5rem 0;
-        }
+        height: auto;
+        margin: 0.5rem 0;
       }
     }
   }
