@@ -12,6 +12,18 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Map marker on checkout for CnC and appointment booking.
+ */
+function alshaya_bp_transac_update_8004() {
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_bp/images/bp-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_bp/images/bp-pin-inactive.svg')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable product aggregation for simple products.
  * Add color family attribute for filter.
  */
@@ -127,6 +139,12 @@ function alshaya_bp_transac_install() {
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     alshaya_stores_finder_set_default_marker_icon('alshaya_bp_transac');
   }
+
+  // Configure map marker on checkout for CnC and appointment booking.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_bp/images/bp-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_bp/images/bp-pin-inactive.svg')
+    ->save();
 
   // Add string translations.
   $strings = [
