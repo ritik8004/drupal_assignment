@@ -52,8 +52,17 @@
 
     .magv2-pdp-image {
       position: relative;
+      display: inline-flex;
       cursor: pointer;
       background: $magv2-gallery-bg;
+
+      @include breakpoint($desktop) {
+        min-height: 30.375rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        min-height: 13.75rem;
+      }
 
       &:only-child {
         width: 47%;
