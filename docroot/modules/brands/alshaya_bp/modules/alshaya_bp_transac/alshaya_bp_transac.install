@@ -12,7 +12,7 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
- * Map marker on checkout for CnC and appointment booking.
+ * [5.4.0] Map marker on checkout for CnC and appointment booking.
  */
 function alshaya_bp_transac_update_8004() {
   \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
