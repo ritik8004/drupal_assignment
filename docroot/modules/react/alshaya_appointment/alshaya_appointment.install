@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_appointment_install() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_appointment', 'alshaya_appointment.translations');
+  if ($translations = _alshaya_appointment_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}

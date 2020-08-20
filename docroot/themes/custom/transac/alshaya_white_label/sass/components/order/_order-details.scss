@@ -122,6 +122,7 @@
 
   .light {
     color: $order_detail_td_light_content;
+    line-height: 1.4;
   }
 
   .dark {
@@ -481,6 +482,35 @@
         margin-bottom: 0.5rem;
       }
     }
+
+    &.above-mobile.blend,
+    .mobile-only {
+      .dark {
+        line-height: 1.4;
+      }
+    }
+
+    &.order__user--info {
+      .address--contact {
+        margin-top: 1.25rem;
+        font-size: 0.75rem;
+
+        .no-direction {
+          font-size: 0.875rem;
+          margin-top: 0.5rem;
+        }
+      }
+    }
+
+    .surcharge-row {
+      td:first-child {
+        @include breakpoint($only-tablet) {
+          .order-detail & {
+            display: none;
+          }
+        }
+      }
+    }
   }
 
   .address {
@@ -728,6 +758,16 @@
       }
     }
   }
+
+  .address--contact {
+    margin-top: 1.25rem;
+    font-size: 0.75rem;
+
+    .no-direction {
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+  }
 }
 
 #block-content .order-items li {
@@ -764,15 +804,6 @@
   &:hover .second-third .second .dark::after {
     html[lang=ar] & {
       background-color: $order_recent_orders_product_title_elipsis_bg_hover;
-    }
-  }
-}
-
-.path--user .l-two--sf {
-  &.c-order-list,
-  &.order-detail {
-    @include breakpoint($tablet) {
-      margin-top: 1rem;
     }
   }
 }

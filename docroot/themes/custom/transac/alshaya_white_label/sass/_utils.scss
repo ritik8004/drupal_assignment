@@ -120,6 +120,7 @@ body.modal-overlay {
     @include breakpoint($desktop) {
       pointer-events: unset;
       height: 100%;
+      width: 100%;
     }
   }
 }
@@ -314,6 +315,9 @@ body {
     color: transparent;
     background: $background-color url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
     background-size: contain;
+    // Prevent clicks and selection.
+    pointer-events: none;
+    user-select: none;
 
     @content;
 

@@ -1,0 +1,67 @@
+/* Animation Support */
+body:not(.ie) {
+  .fadeInUp {
+    animation-name: fadeInUp;
+    animation-duration: 0.45s;
+    animation-fill-mode: backwards;
+
+    &.notInMobile {
+      @include breakpoint($only-mobile) {
+        animation: none;
+      }
+    }
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fadeOutUp {
+    animation-name: fadeOutUp;
+    animation-duration: 0.45s;
+    animation-fill-mode: backwards;
+  }
+
+  @keyframes fadeOutUp {
+    0% {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+      transform: translate3d(0, -100%, 0);
+    }
+  }
+
+  .appear {
+    animation-name: appear;
+    animation-duration: 0.3s;
+    animation-fill-mode: backwards;
+
+    &.notInMobile {
+      @include breakpoint($only-mobile) {
+        animation: none;
+      }
+    }
+  }
+
+  @keyframes appear {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

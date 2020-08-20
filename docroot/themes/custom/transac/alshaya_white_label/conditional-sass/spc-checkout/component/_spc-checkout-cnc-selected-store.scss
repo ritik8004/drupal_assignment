@@ -34,13 +34,25 @@
     }
   }
 
-  > .spc-checkout-section-title {
-    height: 3.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0;
-    background: $spc-checkout-cnc-selected-store-sub-section-title;
+  .spc-cnc-selected-store-content {
+    overflow-y: auto;
+
+    @include breakpoint($desktop) {
+      height: calc(37.5rem - 3.5rem);
+    }
+
+    @include breakpoint($only-tablet) {
+      height: calc(31.25rem - 3.5rem);
+    }
+
+    > .spc-checkout-section-title {
+      height: 3.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0;
+      background: $spc-checkout-cnc-selected-store-sub-section-title;
+    }
   }
 
   .store-details-wrapper {

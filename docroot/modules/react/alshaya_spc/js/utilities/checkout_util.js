@@ -9,7 +9,59 @@ import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 
 /**
- * Place ajax fulll screen loader.
+ * Change the interactiveness of CTAs to avoid multiple user clicks.
+ *
+ * @param status
+ */
+export const controlAddressFormCTA = (status) => {
+  const addressCTA = document.getElementsByClassName('spc-address-form-submit');
+  // While we expect only one CTA. We loop just to ensure we dont break anything
+  // if we get multiple, what we are doing is harmless for out of focus CTAs.
+  if (addressCTA.length > 0) {
+    switch (status) {
+      case 'disable':
+        for (let i = 0; i < addressCTA.length; i++) {
+          addressCTA[i].classList.add('loading');
+        }
+        break;
+
+      case 'enable':
+        for (let i = 0; i < addressCTA.length; i++) {
+          addressCTA[i].classList.remove('loading');
+        }
+        break;
+
+      default:
+        // Do nothing.
+        break;
+    }
+  }
+};
+
+/**
+ * Place order CTA link add loading to avoid multiple clicks.
+ *
+ * @param status
+ */
+export const controlPlaceOrderCTA = (status) => {
+  const addressCTA = document.querySelector('.complete-purchase a');
+  switch (status) {
+    case 'disable':
+      addressCTA.classList.add('loading');
+      break;
+
+    case 'enable':
+      addressCTA.classList.remove('loading');
+      break;
+
+    default:
+      // Do nothing.
+      break;
+  }
+};
+
+/**
+ * Place ajax full screen loader.
  */
 export const showFullScreenLoader = () => {
   const loaderDivExisting = document.getElementsByClassName('ajax-progress-fullscreen');
@@ -17,6 +69,7 @@ export const showFullScreenLoader = () => {
     return;
   }
 
+  controlAddressFormCTA('disable');
   const loaderDiv = document.createElement('div');
   loaderDiv.className = 'ajax-progress ajax-progress-fullscreen';
   document.body.appendChild(loaderDiv);
@@ -30,6 +83,7 @@ export const removeFullScreenLoader = () => {
   while (loaderDiv.length > 0) {
     loaderDiv[0].parentNode.removeChild(loaderDiv[0]);
   }
+  controlAddressFormCTA('enable');
 };
 
 /**
@@ -42,6 +96,7 @@ export const placeOrder = (paymentMethod) => {
   const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
 
   showFullScreenLoader();
+  controlPlaceOrderCTA('disable');
 
   const data = {
     paymentMethod: {
@@ -67,20 +122,20 @@ export const placeOrder = (paymentMethod) => {
           window.location = response.data.redirectUrl;
           return;
         }
-
+        let message = response.data.error_message;
+        if (response.data.error_code !== undefined
+          && parseInt(response.data.error_code, 10) === 505) {
+          message = getStringMessage('shipping_method_error');
+        }
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
-          message: response.data.error_message,
+          message,
         });
 
         // Push error to GTM.
-        const gtmInfo = {
-          errorMessage: response.data.error_message,
-          paymentMethod,
-        };
-        Drupal.logJavascriptError('place-order', gtmInfo, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
-
+        Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
         removeFullScreenLoader();
+        controlPlaceOrderCTA('enable');
       },
       (error) => {
         // Processing of error here.
@@ -439,7 +494,8 @@ export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per 
  *   True to Return amount with currency as string, false to return as array.
  *
  * @returns {string|*}
- *   Return string with price and currency or return array of price and currency.
+ *   Return string with price and currency or return array of price and
+ *   currency.
  */
 export const getAmountWithCurrency = (priceAmount, string = true) => {
   let amount = priceAmount === null ? 0 : priceAmount;

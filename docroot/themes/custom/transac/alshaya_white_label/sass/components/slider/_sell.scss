@@ -72,6 +72,34 @@
     }
   }
 
+  .owl-carousel {
+    .slick-slide {
+      > article {
+        @include breakpoint($tablet) {
+          padding: 0 0.75rem;
+        }
+      }
+
+      img {
+        max-width: 100%;
+
+        @include breakpoint($tablet) {
+          object-fit: cover;
+        }
+
+        @include breakpoint($only-mobile) {
+          object-fit: scale-down;
+        }
+      }
+    }
+
+    .views-row {
+      img {
+        width: 100%;
+      }
+    }
+  }
+
   .quantity.out-of-stock {
     @include breakpoint($only-mobile) {
       margin-bottom: 0.75rem;

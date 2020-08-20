@@ -1049,6 +1049,12 @@ header {
     display: none;
   }
 
+  .menu__list-item {
+    &.hide-on-desktop {
+      display: none !important;
+    }
+  }
+
   .menu--three__list-item {
     min-width: 9rem;
     max-width: 10rem;
@@ -1211,6 +1217,10 @@ header {
       padding: 1rem 0;
       padding-bottom: 0.9375rem;
       padding-#{$right}: 1.4rem;
+    }
+
+    &.hide-on-mobile {
+      display: none !important;
     }
   }
 
@@ -1598,6 +1608,11 @@ header {
     @include breakpoint($desktop) {
       height: 2.875rem;
       max-width: 15.5625rem;
+
+      html[lang=ar] & {
+        height: auto;
+        margin: 0.5rem 0;
+      }
     }
   }
 }

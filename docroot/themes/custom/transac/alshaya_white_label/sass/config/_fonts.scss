@@ -46,6 +46,23 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
   font-display: swap;
 }
 
+// DY Fonts.
+@font-face {
+  font-family: "ThrowMyHandsUpintheAir";
+  src: url("#{$base_theme_fonts_directory_path}/ThrowMyHandsUpintheAir.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ThrowMyHandsUpintheAirBold";
+  src: url("#{$base_theme_fonts_directory_path}/ThrowMyHandsUpintheAirBold.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 // Font Family
 $alshaya-bold: 'Mothercare', 'Arial';
 $alshaya-bold-nodir: 'Mothercare', 'Arial';
@@ -138,7 +155,18 @@ $icons: (
   edit-input: "\e93f",
   arrow-left: "\e940",
   arrow-right: "\e941",
-  bin: "\e9ac"
+  bin: "\e9ac",
+  map-location: "\e942",
+  minus: "\e943",
+  plus: "\e944",
+  new-facebook-default: "\e945",
+  new-facebook-hover: "\e946",
+  new-instagram-default: "\e947",
+  new-instagram-hover: "\e948",
+  new-twitter-default: "\e949",
+  new-twitter-hover: "\e94a",
+  new-whatsapp-default: "\e94b",
+  new-whatsapp-hover: "\e94c",
 );
 
 @mixin iconbase() {

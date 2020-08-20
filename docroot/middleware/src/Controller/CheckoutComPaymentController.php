@@ -6,6 +6,7 @@ use App\Helper\CookieHelper;
 use App\Service\Cart;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\CheckoutCom\ApplePayHelper;
+use App\Service\Orders;
 use App\Service\PaymentData;
 use App\Service\SessionStorage;
 use App\Service\Utility;
@@ -165,6 +166,14 @@ class CheckoutComPaymentController extends PaymentController {
       return $this->handleCheckoutComError('3D secure payment came into success with proper responseCode but totals do not match.');
     }
 
+    $this->logger->info('Checkout.com 3D payment complete for @quote_id.<br>@message', [
+      '@quote_id' => $cart['cart']['id'],
+      '@message' => json_encode($data),
+    ]);
+
+    // Delete the payment data from our custom table now.
+    $this->paymentData->deletePaymentDataByCartId((int) $cart['cart']['id']);
+
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
 
     try {
@@ -203,8 +212,11 @@ class CheckoutComPaymentController extends PaymentController {
       );
       $this->cart->cancelCartReservation($e->getMessage());
       $payment_data = [
-        'status' => self::PAYMENT_FAILED_VALUE,
+        'status' => $this->getPaymentFailedStatus($e->getCode()),
         'payment_method' => 'checkoutcom',
+        'data' => [
+          'order_id' => $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '',
+        ],
       ];
       $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
       $response->setTargetUrl('/' . $data['data']['langcode'] . '/checkout');
@@ -305,12 +317,27 @@ class CheckoutComPaymentController extends PaymentController {
       $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, (int) $data['cart_id']);
     }
     elseif ($data['cart_id'] != $cart_id) {
-      $this->logger->error('3D secure payment came into @callback with cart not matching in session. Payment token: @token', [
+      $this->logger->error('3D secure payment came into @callback with cart not matching in session. Payment token: @token, Cart ID in session @cart_id, Payment data: @data', [
         '@token' => $payment_token,
         '@callback' => $callback,
+        '@cart_id' => $cart_id,
+        '@data' => json_encode($data),
       ]);
 
       throw new \Exception('/' . $data['data']['langcode'] . '/checkout', 302);
+    }
+
+    // If cart id for the checkoutcom token is same as last placed order one.
+    $last_order_cart_id = $this->session->getDataFromSession(Orders::ORDER_CART_ID);
+    if (!empty($last_order_cart_id)
+      && $this->cart->getCartId() == $last_order_cart_id) {
+      $this->logger->error('User tried to directly access or clicked back button from confirmation page for checkoutcom success url for token:@token and cart:@cart while order:@order was placed for same cart already.', [
+        '@token' => $payment_token,
+        '@cart' => $last_order_cart_id,
+        '@order' => $this->session->getDataFromSession(Orders::SESSION_STORAGE_KEY),
+      ]);
+      // Redirect the user to cart page.
+      throw new \Exception('/' . $data['data']['langcode'] . '/cart', 302);
     }
 
     $cart = $this->cart->getCart();

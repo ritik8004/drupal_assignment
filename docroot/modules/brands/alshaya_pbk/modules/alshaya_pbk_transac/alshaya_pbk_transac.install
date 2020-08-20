@@ -12,6 +12,7 @@ use Drupal\Core\Site\Settings;
  *
  * [5.4.0] Mark size, color, fabric and material fields to be indexed in Algolia
  * Remove size_lhn and color_lhn as facets.
+ * Add the missing sitemap configurations.
  */
 function alshaya_pbk_transac_update_8001() {
   // Update config to mark size, color, fabric and material to be indexed and
@@ -46,6 +47,22 @@ function alshaya_pbk_transac_update_8001() {
 
   // Queue all products for reindexing.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+
+  alshaya_config_install_configs(
+    [
+      'simple_sitemap.bundle_settings.default.node.acq_product',
+      'simple_sitemap.bundle_settings.default.taxonomy_term.acq_product_category',
+    ],
+    'alshaya_seo_transac',
+  );
+  alshaya_config_install_configs(
+    [
+      'simple_sitemap.bundle_settings.default.node.advanced_page',
+      'simple_sitemap.bundle_settings.default.node.department_page',
+      'simple_sitemap.bundle_settings.default.node.store',
+    ],
+    'alshaya_seo'
+  );
 }
 
 /**

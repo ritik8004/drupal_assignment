@@ -314,6 +314,10 @@ schemas:
               "type": "string",
               "enum": [ "block", "body", "promo_block", "product_carousel_category" ]
             },
+            "parent_type": {
+              "type": "string",
+              "enum": [ "1_row_1_col", "1_row_4_col", "1_row_2_col", "1_row_1_col", "1_row_3_col_flex" ]
+            },
             "item": {
               "description": "Contains advanced page node body.",
               "type": "string"
@@ -817,6 +821,10 @@ schemas:
           "in_stock": {
             "type": "boolean",
             "description": "Status of product in stock."
+          },
+          "brand_logo": {
+            "type": "string",
+            "description": "Image URL for the brand logo."
           },
           "link": {
             "type": "string"
@@ -1476,6 +1484,7 @@ schemas:
                     },
                     {
                       "type": "product_carousel_category",
+                      "parent_type": "1_row_2_col",
                       "title": "TOP SELLERS",
                       "limit": "12",
                       "accordion": false,
@@ -1484,7 +1493,7 @@ schemas:
                           "id": 380221,
                           "title": "2 pairs hoop earrings",
                           "sku": "0536358",
-                          "deeplink": "/rest/v1/product/0536358",
+                          "deeplink": "/rest/v1/product-exclude-linked/0536358",
                           "original_price": "69",
                           "final_price": "69",
                           "in_stock": true,
@@ -1514,7 +1523,7 @@ schemas:
                           "id": 365836,
                           "title": "2-pack push-up bras",
                           "sku": "0595435",
-                          "deeplink": "/rest/v1/product/0595435",
+                          "deeplink": "/rest/v1/product-exclude-linked/0595435",
                           "original_price": "99",
                           "final_price": "40",
                           "in_stock": true,
@@ -1911,7 +1920,7 @@ schemas:
                             "id": 66,
                             "title": "Suit trousers Slim fit_test",
                             "sku": "0391750",
-                            "deeplink": "/rest/v1/product/0391750",
+                            "deeplink": "/rest/v1/product-exclude-linked/0391750",
                             "original_price": "8.00",
                             "final_price": "8.00",
                             "in_stock": true,
@@ -2040,6 +2049,7 @@ schemas:
                     "parent_sku": null,
                     "title": "Sweatshirt",
                     "original_price": "5.90",
+                    "brand_logo": "https://local.alshaya-bpae.com/sites/g/files/bpae/brand-logo/media/attribute/swatch/c/e/century_labs.jpg",
                     "final_price": "5.90",
                     "stock": 0,
                     "delivery_options": {
@@ -2181,7 +2191,7 @@ schemas:
                              "id": 66,
                              "title": "Suit trousers Slim fit_test",
                              "sku": "0391750",
-                             "deeplink": "/rest/v1/product/0391750",
+                             "deeplink": "/rest/v1/product-exclude-linked/0391750",
                              "original_price": "8.00",
                              "final_price": "8.00",
                              "in_stock": true,

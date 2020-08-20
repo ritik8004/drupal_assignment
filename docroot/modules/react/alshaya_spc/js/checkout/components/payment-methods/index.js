@@ -34,9 +34,19 @@ export default class PaymentMethods extends React.Component {
 
       const paymentErrorInfo = JSON.parse(paymentError);
       let message = getStringMessage('payment_error');
-      let errorCategory = GTM_CONSTANTS.PAYMENT_ERRORS;
+
       // If K-NET error and have K-Net Error details.
-      if (paymentErrorInfo.payment_method !== undefined
+      if (paymentErrorInfo.status !== undefined && paymentErrorInfo.status === 'place_order_failed') {
+        const errorData = {};
+        Object.entries(paymentErrorInfo.data).forEach(([key, value]) => {
+          errorData[`@${key}`] = value;
+        });
+
+        const transactionData = getStringMessage(`${paymentErrorInfo.payment_method}_error_info`, errorData);
+        message = parse(getStringMessage('place_order_failed_error', {
+          '@transaction_data': transactionData,
+        }));
+      } else if (paymentErrorInfo.payment_method !== undefined
         && paymentErrorInfo.payment_method === 'knet'
         && paymentErrorInfo.data !== undefined) {
         message = parse(getStringMessage('knet_error', {
@@ -47,14 +57,13 @@ export default class PaymentMethods extends React.Component {
       } else if (paymentErrorInfo.status !== undefined
         && paymentErrorInfo.status === 'declined') {
         message = getStringMessage('transaction_failed');
-        errorCategory = GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS;
       }
 
       // Push error to GA.
       Drupal.logJavascriptError(
         'payment-error',
         paymentErrorInfo,
-        errorCategory,
+        GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS,
       );
 
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
@@ -92,9 +101,19 @@ export default class PaymentMethods extends React.Component {
 
     const { cart } = this.props;
 
+    const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
     if (cart.cart.payment.method === undefined
       || paymentMethods[cart.cart.payment.method] === undefined
-      || document.getElementById(`payment-method-${cart.cart.payment.method}`) === null) {
+      || paymentDiv === null
+      || paymentDiv.checked !== true) {
+      // Select previously selected method if available.
+      if (cart.cart.payment.method !== undefined
+        && cart.cart.payment.method !== null
+        && paymentMethods[cart.cart.payment.method] !== undefined) {
+        this.changePaymentMethod(cart.cart.payment.method);
+        return;
+      }
+
       // Select default from previous order if available.
       if (cart.cart.payment.default !== undefined
         || paymentMethods[cart.cart.payment.default] !== undefined) {
@@ -136,10 +155,45 @@ export default class PaymentMethods extends React.Component {
     return paymentMethods;
   };
 
+  processPostPaymentSelection = (method) => {
+    const paymentDiv = document.getElementById(`payment-method-${method}`);
+    if (paymentDiv === null) {
+      return;
+    }
+
+    const { cart: cartData } = this.props;
+
+    const methodIdentifer = `${method}:${cartData.cart.cart_id}`;
+
+    // If we have already triggered once for the method and cart do nothing.
+    const lastSelectedMethodIdentifier = localStorage.getItem('last_selected_payment');
+    if (paymentDiv.checked && lastSelectedMethodIdentifier === methodIdentifer) {
+      return;
+    }
+
+    localStorage.setItem('last_selected_payment', methodIdentifer);
+
+    paymentDiv.checked = true;
+
+    // Dispatch event for GTM checkout step 3.
+    dispatchCustomEvent('refreshCartOnPaymentMethod', {
+      cart: cartData.cart,
+    });
+
+    dispatchCustomEvent('refreshCompletePurchaseSection', {});
+  };
+
   changePaymentMethod = (method) => {
     const { cart, refreshCart } = this.props;
 
-    if (!this.isActive() || cart.cart.payment.method === method) {
+    if (!this.isActive()) {
+      return;
+    }
+
+    // If method is already selected in cart we simply
+    // trigger the events.
+    if (method && cart.cart.payment.method === method) {
+      this.processPostPaymentSelection(method);
       return;
     }
 
@@ -168,18 +222,11 @@ export default class PaymentMethods extends React.Component {
           return;
         }
 
-        paymentDiv.checked = true;
-
         const { cart: cartData } = this.props;
         cartData.cart = result;
         refreshCart(cartData);
 
-        // Dispatch event for GTM checkout step 3.
-        dispatchCustomEvent('refreshCartOnPaymentMethod', {
-          cart: cartData.cart,
-        });
-
-        dispatchCustomEvent('refreshCompletePurchaseSection', {});
+        this.processPostPaymentSelection(method);
       }).catch((error) => {
         Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       });
@@ -219,7 +266,7 @@ export default class PaymentMethods extends React.Component {
     const activeClass = active ? 'active' : 'in-active';
 
     return (
-      <div id="spc-payment-methods" className="spc-checkout-payment-options fadeInUp" style={{ animationDelay: '0.4s' }}>
+      <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
         <ConditionalView condition={Object.keys(methods).length > 0}>
           <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
           <div className={`payment-methods ${activeClass}`}>{methods}</div>

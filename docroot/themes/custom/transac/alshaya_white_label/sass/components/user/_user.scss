@@ -940,14 +940,8 @@
     }
 
     .form-item {
-      margin-top: 2.7em;
-
-      @include breakpoint($only-tablet) {
-        margin-top: 1.7rem;
-      }
-
-      @include breakpoint($desktop) {
-        margin-top: 3.5rem;
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
       }
     }
 
@@ -988,10 +982,6 @@
     html[lang=ar] & {
       font-family: $arial-nodir;
     }
-  }
-
-  .block-page-title-block {
-    margin-bottom: 2rem;
   }
 }
 

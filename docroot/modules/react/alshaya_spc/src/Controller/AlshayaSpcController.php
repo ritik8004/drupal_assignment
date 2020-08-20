@@ -4,12 +4,14 @@ namespace Drupal\alshaya_spc\Controller;
 
 use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 use Drupal\alshaya_spc\Plugin\SpcPaymentMethod\CashOnDelivery;
+use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Link;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -201,8 +203,8 @@ class AlshayaSpcController extends ControllerBase {
 
       $user_mobile_number = $user->get('field_mobile_number')->first();
       $user_name = [
-        'fname' => $user->get('field_first_name')->getString(),
-        'lname' => $user->get('field_last_name')->getString(),
+        'fname' => AlshayaUserInfo::getUserNameField($user, 'field_first_name'),
+        'lname' => AlshayaUserInfo::getUserNameField($user, 'field_last_name'),
         'mobile' => !empty($user_mobile_number) ? $user_mobile_number->getValue()['local_number'] : '',
       ];
 
@@ -380,9 +382,20 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Please enter valid mobile number.'),
     ];
 
+    $login_link = Link::createFromRoute(
+      $this->t('please login'),
+      'alshaya_spc.checkout.login',
+      [],
+      ['attributes' => ['id' => 'spc-checkout-customer-login-link']]
+    );
+
     $strings[] = [
       'key' => 'form_error_customer_exists',
-      'value' => $this->t('Customer already exists.'),
+      'value' => [
+        '#markup' => (string) $this->t('You already have an account, @login_link.', [
+          '@login_link' => $login_link->toString()->getGeneratedLink(),
+        ]),
+      ],
     ];
 
     $strings[] = [
@@ -443,6 +456,16 @@ class AlshayaSpcController extends ControllerBase {
     $strings[] = [
       'key' => 'payment_error',
       'value' => $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'),
+    ];
+
+    $strings[] = [
+      'key' => 'place_order_failed_error',
+      'value' => $this->t('Sorry, the transaction has been successful but your order is still being processed. If you do not receive an order confirmation in next 6 hours please contact our customer service at live chat and quote the following information:<br>@transaction_data'),
+    ];
+
+    $strings[] = [
+      'key' => 'shipping_method_error',
+      'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
     ];
 
     $build = [
@@ -544,8 +567,9 @@ class AlshayaSpcController extends ControllerBase {
     $delivery_method_description = $orderDetails['delivery_method_description'];
     // Display custom label in description
     // if same day delivery is selected as shipping method.
-    if (isset($orderDetails['shipping_method_code']) && $orderDetails['shipping_method_code'] == 'alshayadelivery_sd_sd01') {
-      $delivery_method_description = $this->t('same day');
+    $checkout_settings = $this->config('alshaya_acm_checkout.settings');
+    if (isset($orderDetails['shipping_method_code']) && $orderDetails['shipping_method_code'] === $checkout_settings->get('same_day_shipping_method_code')) {
+      $delivery_method_description = $this->t('Same day');
     }
     // Get formatted customer phone number.
     $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
@@ -573,7 +597,6 @@ class AlshayaSpcController extends ControllerBase {
       $productList[$item['sku']] = $this->orderHelper->getSkuDetails($item);
     }
 
-    $checkout_settings = $this->config('alshaya_acm_checkout.settings');
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $settings = [

@@ -258,7 +258,19 @@ class CheckoutDefaults {
       return FALSE;
     }
 
+    // Not use/assign default billing address if customer_address_id
+    // is not available.
+    if (empty($billing['customer_address_id'])) {
+      return $updated;
+    }
+
     $updated = $this->cart->updateBilling($billing);
+
+    // If billing update has error.
+    if (isset($updated['error'])) {
+      return FALSE;
+    }
+
     return $updated;
   }
 
@@ -303,7 +315,19 @@ class CheckoutDefaults {
       return FALSE;
     }
 
+    // Not use/assign default billing address if customer_address_id
+    // is not available.
+    if (empty($billing['customer_address_id'])) {
+      return $updated;
+    }
+
     $updated = $this->cart->updateBilling($billing);
+
+    // If billing update has error.
+    if (isset($updated['error'])) {
+      return FALSE;
+    }
+
     return $updated;
   }
 

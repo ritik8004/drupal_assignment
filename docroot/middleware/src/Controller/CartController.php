@@ -5,17 +5,19 @@ namespace App\Controller;
 use App\Helper\CustomerHelper;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\CheckoutDefaults;
+use App\Service\Config\SystemSettings;
 use App\Service\Magento\CartActions;
 use App\Service\Cart;
 use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoCustomer;
 use App\Service\Magento\MagentoInfo;
-use App\Service\SessionStorage;
 use App\Service\Utility;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class CartController.
@@ -65,13 +67,6 @@ class CartController {
   protected $logger;
 
   /**
-   * Service for session.
-   *
-   * @var \App\Service\SessionStorage
-   */
-  protected $session;
-
-  /**
    * Service to check and apply defaults on Cart.
    *
    * @var \App\Service\CheckoutDefaults
@@ -84,6 +79,13 @@ class CartController {
    * @var \App\Service\Utility
    */
   protected $utility;
+
+  /**
+   * System Settings service.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  protected $settings;
 
   /**
    * CartController constructor.
@@ -100,12 +102,12 @@ class CartController {
    *   Magento Customer service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
-   * @param \App\Service\SessionStorage $session
-   *   Service for session.
    * @param \App\Service\CheckoutDefaults $checkout_defaults
    *   Service to check and apply defaults on Cart.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    */
   public function __construct(RequestStack $request,
                               Cart $cart,
@@ -113,18 +115,18 @@ class CartController {
                               MagentoInfo $magento_info,
                               MagentoCustomer $magento_customer,
                               LoggerInterface $logger,
-                              SessionStorage $session,
                               CheckoutDefaults $checkout_defaults,
-                              Utility $utility) {
+                              Utility $utility,
+                              SystemSettings $settings) {
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->magentoInfo = $magento_info;
     $this->magentoCustomer = $magento_customer;
     $this->logger = $logger;
-    $this->session = $session;
     $this->checkoutDefaults = $checkout_defaults;
     $this->utility = $utility;
+    $this->settings = $settings;
   }
 
   /**
@@ -152,7 +154,7 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart() {
-    $cart_id = $this->session->getDataFromSession(Cart::SESSION_STORAGE_KEY);
+    $cart_id = $this->cart->getCartId();
     if (empty($cart_id)) {
       // In JS we will consider this as empty cart.
       return new JsonResponse(['error' => TRUE]);
@@ -192,13 +194,14 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCartForCheckout() {
-    $cart_id = $this->session->getDataFromSession(Cart::SESSION_STORAGE_KEY);
+    $cart_id = $this->cart->getCartId();
     if (empty($cart_id)) {
       // In JS we will consider this as empty cart.
       return new JsonResponse(['error' => TRUE]);
     }
 
-    $data = $this->cart->getCart();
+    // Always get fresh cart for checkout page.
+    $data = $this->cart->getCart(TRUE);
 
     // Check customer email And check drupal session customer id to validate,
     // if current cart is associated with logged in user or not.
@@ -237,7 +240,7 @@ class CartController {
       $info = $this->drupal->getSessionCustomerInfo();
       if (!empty($info['customer_id'])) {
         $cart_id = $this->cart->createCart($info['customer_id']);
-        $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, $cart_id);
+        $this->cart->setCartId($cart_id);
       }
       else {
         // @TODO: Remove this "else" part and getAcmCartId() when we
@@ -247,7 +250,7 @@ class CartController {
         // cart_id. If the cart_id is not valid, or contains any error getCart()
         // will set the session key to NULL.
         if ($info['cart_id']) {
-          $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, $info['cart_id']);
+          $this->cart->setCartId($info['cart_id']);
         }
       }
     }
@@ -277,10 +280,12 @@ class CartController {
 
     $data['items_qty'] = $cart_data['cart']['items_qty'];
     $data['cart_total'] = $cart_data['totals']['base_grand_total'] ?? 0;
+    $data['minicart_total'] = $data['cart_total'];
     $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
     $data['totals'] = [
       'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'] ?? 0,
       'base_grand_total' => $cart_data['totals']['base_grand_total'] ?? 0,
+      'base_grand_total_without_surcharge' => $cart_data['totals']['base_grand_total'] ?? 0,
       'discount_amount' => $cart_data['totals']['discount_amount'] ?? 0,
       'surcharge' => 0,
     ];
@@ -296,6 +301,12 @@ class CartController {
 
     if (is_array($data['surcharge']) && !empty($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
       $data['totals']['surcharge'] = $data['surcharge']['amount'];
+    }
+
+    // We don't show surcharge amount on cart total and on mini cart.
+    if ($data['totals']['surcharge'] > 0) {
+      $data['totals']['base_grand_total_without_surcharge'] -= $data['totals']['surcharge'];
+      $data['minicart_total'] -= $data['totals']['surcharge'];
     }
 
     $data['response_message'] = NULL;
@@ -574,6 +585,20 @@ class CartController {
         break;
 
       case CartActions::CART_PAYMENT_FINALISE:
+        $cart = $this->cart->getCart();
+        // Check if shiping method is present else throw error.
+        if (empty($cart['shipping']['method'])) {
+          $this->logger->error('Error while finalizing payment. No shipping method available. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+
+          return new JsonResponse([
+            'error' => TRUE,
+            'error_code' => 505,
+            'message' => 'Delivery Information is incomplete. Please update and try again.',
+          ]);
+        }
+
         $extension = [
           'attempted_payment' => 1,
         ];
@@ -641,6 +666,7 @@ class CartController {
         }
 
         $postData = $request_content['postData'];
+
         $cart = $this->cart->updateCart($postData);
         break;
     }
@@ -818,6 +844,32 @@ class CartController {
         $this->utility->getErrorResponse($e->getMessage(), $e->getCode())
       );
     }
+  }
+
+  /**
+   * API to allow placing order from Drupal.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Response.
+   */
+  public function placeOrderSystem(Request $request) {
+    // Confirm the request is from Drupal.
+    $secret = $request->headers->get('alshaya-middleware') ?? '';
+    if ($secret !== md5($this->settings->getSettings('middleware_auth'))) {
+      throw new AccessDeniedHttpException();
+    }
+
+    // Additional data request to mimic API call from user.
+    $request_content = json_decode($request->getContent(), TRUE);
+    if (empty($request_content['cart_id'])) {
+      throw new NotFoundHttpException();
+    }
+
+    $this->cart->setCartId((int) $request_content['cart_id']);
+    return $this->placeOrder($request);
   }
 
 }

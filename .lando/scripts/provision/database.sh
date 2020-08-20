@@ -8,3 +8,4 @@ mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmsa; GRANT ALL PR
 mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_dhuae; GRANT ALL PRIVILEGES ON drupal_alshaya_dhuae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
 mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_flae; GRANT ALL PRIVILEGES ON drupal_alshaya_flae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
 mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_flkw; GRANT ALL PRIVILEGES ON drupal_alshaya_flkw.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
+mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_bbwae; GRANT ALL PRIVILEGES ON drupal_alshaya_bbwae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"

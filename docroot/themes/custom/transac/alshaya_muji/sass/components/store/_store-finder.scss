@@ -110,6 +110,10 @@
       line-height: 2;
     }
   }
+
+  .c-menu-primary .store {
+    @include icon_img('#{$muji_theme_img_directory_path}/icons/store-finder-muji-red.svg', 2rem, 2rem);
+  }
 }
 
 .geolocation-common-map-container {

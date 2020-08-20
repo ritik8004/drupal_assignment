@@ -1,0 +1,233 @@
+.appointment {
+  &-store-inner-wrapper {
+    .timeslot-latest-available {
+      font-size: 0.875rem;
+      color: $appointment-timeslot-text;
+      padding: 0.375rem 0 1.25rem;
+      font-family: $alshaya-thin;
+
+      @include breakpoint($upto-desktop) {
+        padding-bottom: 0.625rem;
+      }
+
+      .starting-timeslot {
+        font-family: $alshaya-bold;
+      }
+    }
+  }
+
+  &-calendar {
+    display: flex;
+    justify-content: space-between;
+
+    .calendar-wrapper {
+      display: flex;
+      list-style: none;
+      padding: 0 1.125rem;
+      margin-bottom: 0.625rem;
+
+      @include breakpoint($upto-desktop) {
+        padding: 0;
+        overflow: scroll;
+        margin: 0.625rem 0;
+      }
+    }
+
+    .date-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 1.125rem;
+
+      @include breakpoint($upto-desktop) {
+        padding: 0 0.3125rem;
+
+        &:first-child {
+          padding-#{$left}: 0;
+        }
+      }
+
+      .calendar-day {
+        font-size: 0.875rem;
+        color: $appointment-timeslot-text;
+        font-family: $alshaya-thin;
+      }
+
+      .calendar-date {
+        border: 0.125rem solid $appointment-calendar-date-border;
+        border-radius: 50%;
+        height: 3.25rem;
+        width: 3.25rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 0.625rem;
+        color: $appointment-calendar-date-text;
+        font-family: $alshaya-bold;
+        cursor: pointer;
+
+        @include breakpoint($upto-desktop) {
+          height: 2.25rem;
+          width: 2.25rem;
+          font-size: 0.875rem;
+        }
+
+        &:hover {
+          color: $appointment-calendar-date-hover-active;
+          background-color: $appointment-calendar-date-bg;
+          border-color: $appointment-calendar-date-border-hover-active;
+        }
+      }
+
+      &.active {
+        .calendar-date {
+          color: $appointment-calendar-date-hover-active;
+          background-color: $appointment-calendar-date-bg;
+          border-color: $appointment-calendar-date-border-hover-active;
+        }
+      }
+    }
+
+    &-prev-btn,
+    &-next-btn {
+      width: 3rem;
+      display: flex;
+      flex-direction: column-reverse;
+      border: 0;
+      color: transparent;
+      background-color: transparent;
+
+      &:disabled {
+        opacity: 0.3;
+      }
+
+      &::after {
+        content: '';
+        width: 1.875rem;
+        height: 1.875rem;
+        display: block;
+      }
+    }
+
+    &-prev-btn {
+      &::after {
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-calendar-left-arrow.svg') no-repeat center;
+      }
+    }
+
+    &-next-btn {
+      &::after {
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-calendar-left-arrow.svg') no-repeat center;
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &-timeslots-wrapper {
+    border: 0.0625rem solid $appointment-time-slots-wrapper-border;
+    margin: 1.875rem 0;
+
+    @include breakpoint($upto-desktop) {
+      margin-top: 0.625rem;
+    }
+  }
+
+  &-time-slots {
+    margin: 1.5625rem 0;
+
+    .morning-items-wrapper,
+    .afternoon-items-wrapper,
+    .evening-items-wrapper {
+      display: flex;
+      padding: 0 0.625rem 0 0.9375rem;
+      margin-bottom: 1.25rem;
+    }
+
+    ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0;
+      margin: 0;
+
+      @include breakpoint($upto-desktop) {
+        flex-wrap: unset;
+        overflow: scroll;
+        margin-#{$right}: -0.625rem;
+      }
+
+      > li {
+        display: flex;
+        align-items: center;
+        padding: 0 0.3125rem 0.3125rem;
+
+        @include breakpoint($upto-desktop) {
+          &:first-child {
+            padding-#{$left}: 0;
+          }
+
+          &:last-child {
+            padding-#{$right}: 0.625rem;
+          }
+        }
+      }
+
+      .time-slots {
+        border: 0.0625rem solid $appointment-time-slots-border;
+        font-size: 0.75rem;
+        border-radius: 0.1875rem;
+        padding: 0.1875rem 0.3125rem;
+        cursor: pointer;
+        color: $appointment-time-slots;
+        font-family: $alshaya-bold;
+        min-width: 4.0625rem;
+        text-align: center;
+        white-space: nowrap;
+
+        &:hover,
+        &.active {
+          color: $appointment-calendar-date-hover-active;
+          background-color: $appointment-calendar-date-bg;
+          border-color: $appointment-calendar-date-border-hover-active;
+        }
+      }
+    }
+
+    .morning-items-title,
+    .afternoon-items-title,
+    .evening-items-title {
+      font-size: 0.875rem;
+      color: $appointment-timeslot-text;
+      padding: 0;
+      min-width: 4.0625rem;
+      font-family: $alshaya-thin;
+
+      @include breakpoint($upto-desktop) {
+        margin-#{$right}: 0.9375rem;
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  .appointment {
+    &-calendar {
+      &-prev-btn {
+        &::after {
+          transform: rotate(180deg);
+        }
+      }
+
+      &-next-btn {
+        &::after {
+          transform: rotate(0deg);
+        }
+      }
+    }
+  }
+}
+
+.appointment-slots-empty {
+  padding: 1.5625rem 1rem;
+  text-align: center;
+}

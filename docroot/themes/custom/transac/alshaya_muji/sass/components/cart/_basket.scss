@@ -52,6 +52,14 @@
       }
     }
   }
+
+  header.c-header .block-alshaya-react-mini-cart .cart-link {
+    background: url(#{$muji_theme_img_directory_path}/icons/basket-muji-red.svg) no-repeat;
+
+    .quantity {
+      color: $primary_minicart_hover;
+    }
+  }
 }
 
 .card__header,
