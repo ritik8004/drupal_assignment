@@ -14,6 +14,7 @@ import {
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../js/utilities/strings';
+import stickyCTAButtonObserver from '../../../utilities/StickyCTA';
 
 export default class CustomerDetails extends React.Component {
   constructor(props) {
@@ -86,6 +87,11 @@ export default class CustomerDetails extends React.Component {
           });
         });
       }
+    }
+
+    // We need a sticky button in mobile.
+    if (window.innerWidth < 768) {
+      stickyCTAButtonObserver();
     }
   }
 
@@ -350,16 +356,15 @@ export default class CustomerDetails extends React.Component {
           <div className="disclaimer-wrapper">
             {disclaimerText}
           </div>
-          <div className="customer-details-button-wrapper">
-            <div className="appointment-flow-action">
-              <button
-                className="customer-details-button appointment-type-button"
-                type="submit"
-              >
-                {getStringMessage('book_an_appointment_button')}
-              </button>
-            </div>
+          <div className="appointment-flow-action">
+            <button
+              className="customer-details-button appointment-type-button"
+              type="submit"
+            >
+              {getStringMessage('book_an_appointment_button')}
+            </button>
           </div>
+          <div id="appointment-bottom-sticky-edge" />
         </form>
       </div>
     );

@@ -21,6 +21,9 @@ import {
 } from '../../../utilities/map/fullScreen';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 import getStringMessage from '../../../../../js/utilities/strings';
+import stickyCTAButtonObserver from '../../../utilities/StickyCTA';
+import AppointmentSelection from '../appointment-selection';
+import ConditionalView from '../../../common/components/conditional-view';
 
 const StoreMap = React.lazy(async () => {
   const localStorageValues = getStorageInfo();
@@ -95,6 +98,10 @@ export default class AppointmentStore extends React.Component {
     }
     // On marker click.
     document.addEventListener('markerClick', this.mapMarkerClick);
+    // We need a sticky button in mobile.
+    if (window.innerWidth < 768) {
+      stickyCTAButtonObserver();
+    }
   }
 
   componentWillUnmount() {
@@ -501,6 +508,8 @@ export default class AppointmentStore extends React.Component {
       />
     );
 
+    const { handleBack } = this.props;
+
     return (
       <div className="appointment-store-wrapper">
         <div className="appointment-store-inner-wrapper">
@@ -558,6 +567,12 @@ export default class AppointmentStore extends React.Component {
               </div>
             </div>
           </React.Suspense>
+          <ConditionalView condition={window.innerWidth < 768}>
+            <AppointmentSelection
+              handleEdit={handleBack}
+            />
+          </ConditionalView>
+
           <div className="appointment-store-actions appointment-store-buttons-wrapper" data-selected-stored={openSelectedStore}>
             <button
               className="appointment-store-button appointment-type-button back"
@@ -571,16 +586,17 @@ export default class AppointmentStore extends React.Component {
             >
               {getStringMessage('back')}
             </button>
-            <div className="appointment-flow-action">
-              <button
-                className="appointment-store-button appointment-type-button select-store"
-                type="button"
-                onClick={(e) => this.finalizeCurrentStore(e)}
-              >
-                {getStringMessage('select_store_button')}
-              </button>
-            </div>
           </div>
+          <div className="appointment-flow-action">
+            <button
+              className="appointment-store-button appointment-type-button select-store"
+              type="button"
+              onClick={(e) => this.finalizeCurrentStore(e)}
+            >
+              {getStringMessage('select_store_button')}
+            </button>
+          </div>
+          <div id="appointment-bottom-sticky-edge" />
         </div>
       </div>
     );

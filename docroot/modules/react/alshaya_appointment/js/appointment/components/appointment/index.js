@@ -359,7 +359,7 @@ export default class Appointment extends React.Component {
         </React.Suspense>
       );
     } else if (appointmentStep === 'select-time-slot') {
-      appointmentClasses += 'appointment-2-cols';
+      appointmentClasses += 'appointment-2-cols appointment-select-time-slot-container';
       appointmentData = (
         <AppointmentTimeSlot
           handleBack={this.handleEdit}
@@ -375,7 +375,7 @@ export default class Appointment extends React.Component {
         />
       );
     } else if (appointmentStep === 'customer-details') {
-      appointmentClasses += 'appointment-2-cols';
+      appointmentClasses += 'appointment-2-cols appointment-customer-details-container';
       appointmentData = (
         <CustomerDetails
           handleSubmit={() => this.handleSubmit('confirmation')}
