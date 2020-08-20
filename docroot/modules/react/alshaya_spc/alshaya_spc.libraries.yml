@@ -20,6 +20,8 @@ cart:
   js:
     dist/cart.bundle.js: { }
   dependencies:
+    - core/drupal.ajax
+    - core/drupal.dialog
     - alshaya_react/react
     - alshaya_spc/cart_utilities
 
