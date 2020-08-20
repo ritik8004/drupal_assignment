@@ -63,10 +63,14 @@ const PdpLayout = () => {
   const header = useRef();
   let content;
 
+  const getChildRef = (ref) => {
+    content = ref;
+  };
+
   const showStickyHeader = () => {
     window.onscroll = () => {
       if ((content !== null) && (content !== undefined)) {
-        if (window.pageYOffset >= content.offsetTop + content.offsetHeight) {
+        if (window.pageYOffset >= content.current.offsetTop + content.current.offsetHeight) {
           header.current.classList.add('magv2-pdp-sticky-header');
         } else {
           header.current.classList.remove('magv2-pdp-sticky-header');
@@ -123,7 +127,7 @@ const PdpLayout = () => {
               productInfo={productInfo}
               pdpRefresh={pdpRefresh}
               pdpLabelRefresh={pdpLabelRefresh}
-              childRef={(ref) => { content = ref; }}
+              childRef={(ref) => (getChildRef(ref))}
             />
           ) : outOfStock}
           <PdpDescription
