@@ -37,6 +37,10 @@
     .appointment-list {
       padding: 0.8125rem 0;
 
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
+
       @include breakpoint($only-mobile) {
         padding: 0 0 2.1875rem;
       }
