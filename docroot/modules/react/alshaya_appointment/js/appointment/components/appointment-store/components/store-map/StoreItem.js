@@ -1,5 +1,4 @@
 import React from 'react';
-import ConditionalView from '../../../../../common/components/conditional-view';
 import StoreAddress from '../store-address';
 import StoreTiming from '../store-timing';
 import getStringMessage from '../../../../../../../js/utilities/strings';
@@ -23,7 +22,8 @@ const StoreItem = ({
         : null}
     </span>
     {display === 'accordion' || display === 'default'
-      ? <div className="store-address-content">
+      ? (
+        <div className="store-address-content">
           <div className="store-address">
             <StoreAddress
               address={store.address}
@@ -33,7 +33,8 @@ const StoreItem = ({
             timing={store.storeTiming}
           />
           {(typeof onStoreFinalize !== 'undefined' && display !== 'accordion')
-            ? <div
+            ? (
+              <div
                 className="store-actions"
                 gtm-store-title={store.name}
               >
@@ -45,8 +46,10 @@ const StoreItem = ({
                   {getStringMessage('select_store_button')}
                 </button>
               </div>
-          : null}
+            )
+            : null}
         </div>
+      )
       : null}
   </div>
 );

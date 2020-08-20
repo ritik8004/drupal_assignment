@@ -1,6 +1,8 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import StoreItemInfoWindow from './StoreItemInfoWindow';
+import Gmap from '../../../../../utilities/map/GMap';
+import dispatchCustomEvent from '../../../../../../../js/utilities/events';
 
 class StoreMap extends React.Component {
   constructor(props) {
@@ -12,6 +14,9 @@ class StoreMap extends React.Component {
   }
 
   componentDidMount() {
+    // Global map object.
+    this.googleMap = new Gmap();
+    window.appointmentMap = this.googleMap;
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
     window.appointmentMap.map.googleMap = this.createGoogleMap();
@@ -23,6 +28,7 @@ class StoreMap extends React.Component {
     } else {
       window.appointmentMap.setCenter();
     }
+    dispatchCustomEvent('placeAutocomplete', true);
   }
 
   componentDidUpdate(prevProps) {
