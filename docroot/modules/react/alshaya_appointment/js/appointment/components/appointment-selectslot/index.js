@@ -127,7 +127,6 @@ export default class AppointmentSlots extends React.Component {
 
     return (
       <div className="appointment-time-slots">
-        <div className="appointment-slots-empty">{ notFound }</div>
 
         { listMorningItems.length > 0
         && (
