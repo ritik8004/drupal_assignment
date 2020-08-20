@@ -10,6 +10,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\taxonomy\TermInterface;
@@ -36,6 +37,7 @@ use Drupal\redirect\RedirectRepository;
  */
 class MobileAppUtility {
 
+  use LoggerChannelTrait;
   use StringTranslationTrait;
 
   /**
@@ -305,7 +307,7 @@ class MobileAppUtility {
       switch ($object->bundle()) {
         case 'acq_product':
           $sku = $this->skuManager->getSkuForNode($object);
-          $return = 'product/' . $sku;
+          $return = 'product-exclude-linked/' . $sku;
           break;
 
         case 'acq_promotion':
@@ -326,7 +328,7 @@ class MobileAppUtility {
       }
     }
     elseif ($object instanceof SKUInterface) {
-      $return = 'product/' . $object->getSku();
+      $return = 'product-exclude-linked/' . $object->getSku();
     }
 
     return self::ENDPOINT_PREFIX . $return;
@@ -624,18 +626,26 @@ class MobileAppUtility {
           rtrim(str_replace("/{$this->currentLanguage}", '', $redirected_path), '/'),
           $this->currentLanguage
         );
-        // Get the taxonomy term ID of the target term.
-        $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();;
-        if (!empty($params) && !empty($params['taxonomy_term'])) {
-          $redirected_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
-          // Get path and deeplink of target term.
-          if (
-            $redirected_term instanceof TermInterface
-            && $redirected_term->bundle() == 'acq_product_category'
-          ) {
-            $path = $redirected_path;
-            $deeplink = $this->getDeepLink($redirected_term);
+
+        try {
+          // Get the taxonomy term ID of the target term.
+          $params = Url::fromUri('internal:' . $internal_path)->getRouteParameters();;
+          if (!empty($params) && !empty($params['taxonomy_term'])) {
+            $redirected_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
+
+            // Get path and deeplink of target term.
+            if ($redirected_term instanceof TermInterface
+              && $redirected_term->bundle() == 'acq_product_category') {
+              $path = $redirected_path;
+              $deeplink = $this->getDeepLink($redirected_term);
+            }
           }
+        }
+        catch (\Exception $e) {
+          $this->getLogger('MobileAppUtility')->warning('Internal path looks invalid, please check @internal_path for term id @id', [
+            '@id' => $term->tid,
+            '@internal_path' => $internal_path,
+          ]);
         }
       }
 
