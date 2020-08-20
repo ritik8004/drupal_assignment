@@ -39,7 +39,7 @@
   };
 
   /**
-   * Helper function to push productImpression to GTM.
+   * Helper function to prepare productImpressions.
    *
    * @param recommendedProducts
    */
@@ -53,9 +53,6 @@
       productLinkSelector.each(function () {
         if ($(this).isCarouselElementInViewPort(0, 40)) {
           $(this).addClass('impression-processed');
-          // Get product info from storage.
-          var key = 'recommendedProduct:' + drupalSettings.path.currentLanguage;
-          var relatedProductsInfo = JSON.parse(localStorage.getItem(key));
           // Cannot use Drupal.alshayaSeoSpc.gtmProduct as the method expectes
           // product parameter to have gtmAttributes key while in localstorage
           // it has gtm_attributes key.

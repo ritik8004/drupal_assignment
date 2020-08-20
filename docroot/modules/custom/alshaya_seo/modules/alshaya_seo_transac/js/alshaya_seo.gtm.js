@@ -624,14 +624,14 @@ const productRecommendationsSuffix = 'pr-';
       }
 
       /**
-       * Helper function to mark position of each element in a slider.
+       * Helper function to mark position of elements in homepage/PDP slider.
        */
       $('.view-product-slider', context).once('mark-slider-items-position').each(function() {
         var count = 1;
         // In PDP it is seen that slick is already initialized by the time this
         // is executed while in homepage it is not.
         // So to prevent including slick-clones as actual items in our
-        // calcularions we use the :not pseudo-class.
+        // calculations we use the :not pseudo-class.
         $(this).find('.views-row:not(.slick-cloned)').once('mark-item-position').each(function() {
           $(this).data('list-item-position', count++);
         });
@@ -1044,6 +1044,7 @@ const productRecommendationsSuffix = 'pr-';
     // Push product impressions to datalayer.
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(null, null, null, {'type': 'product-click'});
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
+
     // On productClick, add list variable to cookie.
     var listValues = {};
     if ($.cookie('product-list') !== undefined) {

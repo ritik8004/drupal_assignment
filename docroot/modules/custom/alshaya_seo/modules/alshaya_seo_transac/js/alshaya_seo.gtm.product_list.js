@@ -6,8 +6,6 @@
 (function ($, Drupal, debounce) {
   'use strict';
 
-  Drupal.alshayaSeoGtmProductList = Drupal.alshayaSeoGtmProductList || {};
-
   Drupal.behaviors.seoGoogleTagManagerProductList = {
     attach: function (context, settings) {
       // Trigger incase of page load & filter selected from PLP.

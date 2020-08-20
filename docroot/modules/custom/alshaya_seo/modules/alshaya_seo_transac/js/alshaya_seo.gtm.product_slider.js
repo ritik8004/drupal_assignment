@@ -8,34 +8,41 @@
 
   Drupal.alshayaSeoGtmProductSlider = Drupal.alshayaSeoGtmProductSlider || {};
 
+  Drupal.behaviors.alshayaSeoGtmProductSlider = {
+    attach: function (context, settings) {
+      /**
+       * Product click handler for product sliders on homepage and PDP.
+       */
+      $('.view-product-slider article > a', context).once('product-clicked').on('click', function () {
+        var that = $(this).closest('article');
+        var subListName = Drupal.alshayaSeoGtmProductSlider.getRecommendationListName($(this));
+        // Get the position of the item in the carousel.
+        var position = parseInt($(this).closest('.views-row').data('list-item-position'));
+        Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.gtm.currency, subListName, position);
+      });
+    }
+  }
+
   Drupal.behaviors.seoGoogleTagManagerProductSliderList = {
     attach: function (context, settings) {
       $(window).once('product-carousel-scroll').on('scroll', debounce(function (event) {
-        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_push_carousel_product_impression, $('.view-product-slider'), settings, event);
+        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_carousel_product_impression, $('.view-product-slider'), settings, event);
       }, 500));
 
       $(document).once('product-slider-prev-next').on('click', '.view-product-slider .slick-prev, .view-product-slider .slick-next', function (event) {
-        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_push_carousel_product_impression, $('.view-product-slider'), settings, event);
+        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_carousel_product_impression, $('.view-product-slider'), settings, event);
       });
     }
   };
-
-  /**
-   * Product click handler for all product sliders.
-   */
-  $('.view-product-slider a').once('product-clicked').on('click', function () {
-    var that = $(this).closest('article');
-    var subListName = Drupal.alshayaSeoGtmProductSlider.getRecommendationListName($(this));
-    // Get the position of the item in the carousel.
-    var position = parseInt($(this).closest('.views-row').data('list-item-position'));
-    Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.gtm.currency, subListName, position);
-  });
 
   /**
    * Get the list name for the recommended product.
    *
    * @param object element
    *   The jquery object of the recommended product.
+   *
+   * @return string
+   *    The list name.
    */
   Drupal.alshayaSeoGtmProductSlider.getRecommendationListName = function(element) {
     var label = element.closest('.views-element-container').siblings('.subtitle').text();
@@ -50,13 +57,13 @@
   }
 
   /**
-   * Helper function to push productImpression to GTM.
+   * Helper function to prepare productImpressions.
    *
    * @param context
    *
    * @param event
    */
-  Drupal.alshaya_seo_gtm_push_carousel_product_impression = function (context, event) {
+  Drupal.alshaya_seo_gtm_prepare_carousel_product_impression = function (context, event) {
     var impressions = [];
     var body = $('body');
     var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);

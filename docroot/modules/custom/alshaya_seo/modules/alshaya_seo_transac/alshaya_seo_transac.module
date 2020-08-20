@@ -594,6 +594,8 @@ function alshaya_seo_transac_views_pre_render(ViewExecutable $view) {
  */
 function alshaya_seo_transac_preprocess_views_view(array &$variables) {
   $view = $variables['view'];
+  // We add GTM attributes to carousels(block_product_slider) which appear in
+  // the PDPs.
   if ($view->id() === 'product_slider' && $view->current_display === 'block_product_slider') {
     $rows = $variables['rows'][0];
     foreach ($rows['#rows'] as $key => $value) {
