@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_promotion\Controller;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
@@ -87,7 +88,12 @@ class FreeGiftController extends ControllerBase {
    * Page callback for the modal.
    */
   public function viewProduct(Request $request, $acq_sku, $js) {
-    $sku = $this->skuManager->loadSkuById((int) $acq_sku);
+    if (is_numeric($acq_sku)) {
+      $sku = $this->skuManager->loadSkuById((int) $acq_sku);
+    }
+    else {
+      $sku = SKU::loadFromSku($acq_sku);
+    }
 
     if (!($sku instanceof SKUInterface)) {
       throw new NotFoundHttpException();
