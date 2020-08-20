@@ -543,6 +543,17 @@ class AlshayaAlgoliaIndexHelper {
     $list = [];
     $list['all']['lvl0'] = $this->t('All', [], ['langcode' => $langcode]);
 
+    // Get sales categories to index L2 for sales terms.
+    $old_categorization_rule = $this->productCategoryManager->isOldCategorizationRuleEnabled();
+    // If old categorization rule is not enabled
+    // call getCategorizationIds() with ['sale'].
+    if ($old_categorization_rule) {
+      $sale_categories = $this->productCategoryManager->getCategorizationIds() ?? [];
+    }
+    else {
+      $sale_categories = $this->productCategoryManager->getCategorizationIds()['sale'] ?? [];
+    }
+
     $config = $this->configFactory->get('alshaya_search_algolia.settings');
     $show_terms_in_lhn = $config->get('show_terms_in_lhn');
 
@@ -555,6 +566,9 @@ class AlshayaAlgoliaIndexHelper {
       $parents = $this->productCategoryTree->getAllParents($category);
 
       if ($show_terms_in_lhn == 'all') {
+        $trim_parents = $parents;
+      }
+      elseif (in_array($category->id(), $sale_categories)) {
         // Passing the first two parents(l1&l2).
         $trim_parents = array_chunk($parents, 2)[0];
       }

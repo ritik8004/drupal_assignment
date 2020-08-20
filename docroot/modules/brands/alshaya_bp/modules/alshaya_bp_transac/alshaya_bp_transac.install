@@ -12,6 +12,19 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Add child categoris for all in lhn.
+ */
+function alshaya_bp_transac_update_8004() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_search_algolia.settings'],
+    'alshaya_search_algolia'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable product aggregation for simple products.
  * Add color family attribute for filter.
  */
