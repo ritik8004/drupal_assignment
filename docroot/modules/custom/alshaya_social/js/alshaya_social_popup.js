@@ -14,7 +14,14 @@
         Drupal.socialAuthPopup({
           path: authLink,
           callback: function () {
-            window.location.reload();
+            var queryString = window.location.search;
+            var urlParams = new URLSearchParams(queryString);
+            var destination = urlParams.get('destination');
+            if (destination) {
+              window.location.href = destination;
+            } else {
+              window.location.reload();
+            }
           }
         });
       });
