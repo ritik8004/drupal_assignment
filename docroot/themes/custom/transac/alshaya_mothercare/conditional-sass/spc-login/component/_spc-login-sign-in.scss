@@ -10,7 +10,7 @@
   .site-brand-wrapper {
     @include breakpoint($only-mobile) {
       html[lang=ar] & {
-        height: 4.25rem;
+        height: auto;
       }
     }
   }

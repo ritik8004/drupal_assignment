@@ -516,7 +516,7 @@
     margin: 0;
 
     html[lang=ar] & {
-      margin-top: 0.5rem;
+      margin-top: 0;
     }
   }
 
@@ -531,8 +531,10 @@
       height: 3.25rem;
     }
 
-    @include breakpoint($only-tablet) {
-      height: 4.5rem;
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        height: auto;
+      }
     }
   }
 
