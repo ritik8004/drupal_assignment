@@ -1608,6 +1608,11 @@ header {
     @include breakpoint($desktop) {
       height: 2.875rem;
       max-width: 15.5625rem;
+
+      html[lang=ar] & {
+        height: auto;
+        margin: 0.5rem 0;
+      }
     }
   }
 }
