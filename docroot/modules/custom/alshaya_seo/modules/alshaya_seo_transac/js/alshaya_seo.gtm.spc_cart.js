@@ -51,7 +51,7 @@
 
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        if ($(this).isElementInViewPort(0, 40, true)) {
+        if ($(this).isCarouselElementInViewPort(0, 40)) {
           $(this).addClass('impression-processed');
           // Get product info from storage.
           var key = 'recommendedProduct:' + drupalSettings.path.currentLanguage;

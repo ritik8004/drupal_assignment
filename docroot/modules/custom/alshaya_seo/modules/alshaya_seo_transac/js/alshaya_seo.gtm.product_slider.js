@@ -72,7 +72,7 @@
         // that much of the top portion of the slider images is white in color
         // and hence user needs to scroll more to view the product and that is
         // when we trigger the GTM event.
-        if ($(this).isElementInViewPort(0, 40, true)) {
+        if ($(this).isCarouselElementInViewPort(0, 40)) {
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
 
           // Find the carousel title.
