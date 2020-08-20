@@ -433,6 +433,14 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
+      // Get companions from cache.
+      $cacheKey = 'companion_' . $appointmentId;
+      $langcode = $request->query->get('langcode');
+      $item = $this->cache->getItemByTagAware($cacheKey, $langcode);
+      if ($item) {
+        return new JsonResponse($item);
+      }
+
       $param = [
         'confirmationNumber' => $appointmentId,
       ];
@@ -479,6 +487,10 @@ class AppointmentServices {
           }
         }
       }
+
+      // Set companion cache using tag same as appointment for invalidation.
+      $tag = 'appointment_' . $appointmentId;
+      $this->cache->setItemWithTags($cacheKey, $companions, $tag, $langcode);
 
       return new JsonResponse($companions);
     }
