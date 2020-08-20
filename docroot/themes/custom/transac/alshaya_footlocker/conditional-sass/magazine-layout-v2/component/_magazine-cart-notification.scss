@@ -1,0 +1,67 @@
+#magv2_cart_notification {
+  top: 3.3125rem;
+  #{$right}: 0.875rem;
+
+  html[lang=ar] & {
+    top: 3.3125rem;
+    #{$right}: 0;
+  }
+
+  &.has--notification::before {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-left: 1px solid $magv2-cart-notification;
+    border-top: 1px solid $magv2-cart-notification;
+    border-right: none;
+    border-bottom: none;
+    top: -0.375rem;
+    transform: rotate(45deg);
+    background: $magv2-cart-notification-bg;
+    #{$right}: 0.75rem;
+  }
+
+  .notification,
+  .error {
+    width: 19rem;
+    border-width: 0.0625rem;
+    box-shadow: 0 0.125rem 0.25rem 0 $magv2-cart-notification-shadow;
+
+    .col-1 {
+      width: 6.5rem;
+      font-size: 0.875rem;
+
+      img {
+        border: 0.0625rem solid $magv2-cart-notification-img-border;
+      }
+
+      .qty {
+        font-weight: normal;
+        font-family: $alshaya-thin;
+      }
+    }
+
+    .col-2 {
+      font-weight: normal;
+      margin-#{$left}: 0.9375rem;
+
+      html[lang=ar] & {
+        font-size: 0.75rem;
+      }
+
+      .name {
+        font-weight: normal;
+        margin-bottom: 0.9375rem;
+      }
+
+      a {
+        line-height: 1.5;
+        width: 100%;
+        margin-top: 1.25rem;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        padding: 0.625rem 0;
+        min-height: 2.5rem;
+      }
+    }
+  }
+}

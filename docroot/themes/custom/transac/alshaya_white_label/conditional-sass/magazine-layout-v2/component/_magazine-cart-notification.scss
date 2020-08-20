@@ -1,0 +1,105 @@
+#magv2_cart_notification {
+  z-index: 999;
+  position: absolute;
+  top: 3.4rem;
+  #{$right}: -0.35rem;
+
+  &.has--notification::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 11px solid $magv2-cart-notification;
+    clear: both;
+    top: -10px;
+    #{$right}: 18px;
+  }
+
+  .notification,
+  .error {
+    width: 17.37rem;
+    background: $magv2-cart-notification-bg;
+    border: 2px solid $magv2-cart-notification-border;
+    box-shadow: 4px 4px 0 0 $magv2-cart-notification-shadow;
+    padding: 0.8rem;
+    display: inline-block;
+
+    .col-1 {
+      float: $left;
+      width: 4.313rem;
+      font-family: $arial;
+      font-size: 0.75rem;
+      text-align: center;
+
+      .qty {
+        color: $magv2-cart-notification-qty;
+        font-weight: bold;
+        font-family: $alshaya-bold;
+      }
+
+      img {
+        margin-bottom: 0.4375rem;
+      }
+    }
+
+    .col-2 {
+      color: $magv2-cart-notification-text;
+      font-size: 0.75rem;
+      float: $left;
+      width: 9.5rem;
+      margin-#{$left}: 0.6875rem;
+      text-align: $left;
+      font-family: $alshaya-thin;
+
+      .name {
+        font-family: $alshaya-thin;
+        font-size: 0.875rem;
+        color: $magv2-cart-notification-title;
+        width: 100%;
+        display: block;
+        margin-bottom: 5px;
+        text-align: $left;
+      }
+
+      a {
+        width: 6.563rem;
+        height: 35px;
+        margin-top: 13px;
+        display: block;
+        line-height: 35px;
+        text-align: center;
+        background: $magv2-cart-notification-btn-bg;
+        color: $magv2-cart-notification-btn-text;
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+
+  &.has--notification:not(.matchback-cart-notification) {
+    .matchback-notification-qty,
+    .matchback-prod-added-text {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
+}
+
+.edit-add-to-cart + .ajax-progress-throbber {
+  display: none;
+}
+
+html[lang=ar] #cart_notification {
+  .notification,
+  .error {
+    &::before {
+      top: -2.9rem;
+    }
+
+    .col-2 {
+      font-size: 0.675rem;
+    }
+  }
+}
