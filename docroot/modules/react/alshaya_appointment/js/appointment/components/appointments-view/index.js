@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { fetchAPIData } from '../../../utilities/api/fetchApiData';
+import { fetchAPIData, postAPICall } from '../../../utilities/api/fetchApiData';
 import ConditionalView from '../../../common/components/conditional-view';
 import AppointmentListItem from './components/appointmentlist';
 import {
@@ -88,9 +88,13 @@ export default class AppointmentsView extends React.Component {
     const { appointments } = this.state;
     const { id } = drupalSettings.alshaya_appointment.user_details;
     if (id && appointmentId) {
-      const apiUrl = `/cancel/appointment?id=${id}&appointment=${appointmentId}`;
+      const apiUrl = '/cancel/appointment';
+      const data = {
+        appointment: appointmentId,
+        id,
+      };
       showFullScreenLoader();
-      const apiData = fetchAPIData(apiUrl);
+      const apiData = postAPICall(apiUrl, data);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
           removeFullScreenLoader();
