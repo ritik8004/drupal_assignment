@@ -583,10 +583,6 @@ function alshaya_seo_transac_views_pre_render(ViewExecutable $view) {
     // Attach GTM product js on product list view.
     $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_list';
   }
-  elseif ($view->id() == 'product_slider') {
-    // Attach GTM slider js on product slider.
-    $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
-  }
 }
 
 /**
@@ -603,5 +599,16 @@ function alshaya_seo_transac_preprocess_views_view(array &$variables) {
         ->fetchProductGtmAttributes($rows['#rows'][$key]['#node'], $rows['#rows'][$key]['#view_mode']);
     }
     $variables['rows'][0] = $rows;
+  }
+}
+
+/**
+ * Implements template_preprocess_products_horizontal_slider().
+ */
+function alshaya_seo_transac_preprocess_products_horizontal_slider(&$variables) {
+  if (!empty($variables['data'])) {
+    // Views pre render does not get called for the carousels in PDP.
+    // So we add the library here for all the carousels.
+    $variables['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   }
 }
