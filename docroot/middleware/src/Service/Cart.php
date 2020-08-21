@@ -266,7 +266,7 @@ class Cart {
       ]);
 
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
-        $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+        $this->removeCartFromSession();
       }
 
       // Fetch cart from cache (even if stale).
@@ -902,14 +902,20 @@ class Cart {
         '@message' => $e->getMessage(),
       ]);
 
+      $is_add_to_cart = ($action == CartActions::CART_ADD_ITEM);
+
       // Re-set cart id in session if exception is for cart not found.
       // Also try to do the same operation again for the user.
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
-        $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
-        $info = $this->drupal->getSessionCustomerInfo();
-        $newCart = $this->createCart($info['customer_id'] ?? 0);
-        if (empty($newCart['error'])) {
-          return $this->updateCart($data);
+        $this->removeCartFromSession();
+
+        // Create new cart only if user is trying to add an item to cart.
+        if ($is_add_to_cart) {
+          $info = $this->drupal->getSessionCustomerInfo();
+          $newCart = $this->createCart($info['customer_id'] ?? 0);
+          if (empty($newCart['error'])) {
+            return $this->updateCart($data);
+          }
         }
       }
       else {
@@ -924,10 +930,9 @@ class Cart {
       // Because, If we return cart object, it won't show any error as we are
       // not passing error with cart object, and with successful cart object it
       // will show notification of add to cart (Which we don't need here.).
-      $is_add_to_Cart = ($action == CartActions::CART_ADD_ITEM);
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
-      if (!empty($exception_type) && !$is_add_to_Cart) {
+      if (!empty($exception_type) && !$is_add_to_cart) {
         // Get cart object if already not available.
         $cart = !empty($cart) ? $cart : $this->getCart();
         // If cart is available and cart has item.
@@ -1231,8 +1236,7 @@ class Cart {
     $email = $this->getCartCustomerEmail();
 
     // Remove cart id and other caches from session.
-    $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
-    $this->resetCartCache();
+    $this->removeCartFromSession();
 
     // Set order in session for later use.
     $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
@@ -1398,6 +1402,15 @@ class Cart {
     $this->cache->delete('payment_methods_home_delivery');
     $this->cache->delete('payment_methods_click_and_collect');
     $this->cache->delete('payment_method');
+  }
+
+  /**
+   * Wrapper function to remove cart data and cache.
+   */
+  protected function removeCartFromSession() {
+    $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+    $this->cache->delete('cached_cart');
+    $this->resetCartCache();
   }
 
   /**
