@@ -304,9 +304,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'container_id' => 'GTM-NSNS9H2',
           ],
           'algolia_sandbox.settings' => [
-            'app_id' => 'KBYTOTQY6T',
-            'write_api_key' => 'bc6a377733b1f8812c094d709580faa6',
-            'search_api_key' => '3f0b012a52119eb8e95b7ec359d3e881',
+            'app_id' => 'SH0QY6KHZU',
+            'write_api_key' => '0a0ab0dd399c62e21c66deaadf017943',
+            'search_api_key' => 'fb1e411b7506a03ac9b7748b23e48e6e',
           ],
         ],
       ],
