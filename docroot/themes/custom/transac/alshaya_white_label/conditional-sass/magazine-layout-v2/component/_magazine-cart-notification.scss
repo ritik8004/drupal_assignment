@@ -9,20 +9,20 @@
     position: absolute;
     width: 0;
     height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 11px solid $magv2-cart-notification;
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+    border-bottom: 0.6875rem solid $magv2-cart-notification;
     clear: both;
-    top: -10px;
-    #{$right}: 18px;
+    top: -0.625rem;
+    #{$right}: 1.125rem;
   }
 
   .notification,
   .error {
     width: 17.37rem;
     background: $magv2-cart-notification-bg;
-    border: 2px solid $magv2-cart-notification-border;
-    box-shadow: 4px 4px 0 0 $magv2-cart-notification-shadow;
+    border: 0.125rem solid $magv2-cart-notification-border;
+    box-shadow: 0.25rem 0.25rem 0 0 $magv2-cart-notification-shadow;
     padding: 0.8rem;
     display: inline-block;
 
@@ -59,16 +59,16 @@
         color: $magv2-cart-notification-title;
         width: 100%;
         display: block;
-        margin-bottom: 5px;
+        margin-bottom: 0.3125rem;
         text-align: $left;
       }
 
       a {
         width: 6.563rem;
-        height: 35px;
-        margin-top: 13px;
+        height: 2.1875rem;
+        margin-top: 0.8125rem;
         display: block;
-        line-height: 35px;
+        line-height: 2.1875rem;
         text-align: center;
         background: $magv2-cart-notification-btn-bg;
         color: $magv2-cart-notification-btn-text;
