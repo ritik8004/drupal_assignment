@@ -57,6 +57,7 @@ class SystemSettings {
     // Include overrides.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';
 
+    $settings['appointment_settings']['country_code'] = $site_country_code['country_code'];
     $this->appointmentSettings = $settings;
   }
 
