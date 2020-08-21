@@ -3,11 +3,6 @@
     .form-submit {
       height: 2.5rem;
       margin-top: 2rem;
-
-      @include breakpoint($tablet) {
-        width: 9.125rem;
-        max-width: 12rem;
-      }
     }
   }
 

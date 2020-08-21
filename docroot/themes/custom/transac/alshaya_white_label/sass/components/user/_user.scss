@@ -408,7 +408,9 @@
       height: 2.875rem;
 
       @include breakpoint($tablet) {
-        width: 11.875rem;
+        width: 9.125rem;
+        max-width: 11rem;
+        padding: 0.625rem 1.45rem;
       }
     }
   }
