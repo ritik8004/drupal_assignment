@@ -172,28 +172,29 @@ class AlshayaSearchApiFacetsManager {
     $formatted_id = str_replace('_', '', $id);
     $block_id = 'block.block.' . $formatted_id;
 
-    $block_data = $this->getFromTemplate($template_id);
+    // Create the facet block if it does not exist.
+    if (empty($this->configFactory->getEditable($block_id)->getRawData())) {
+      $block_data = $this->getFromTemplate($template_id);
 
-    if (empty($block_data)) {
-      return;
-    }
+      if (!empty($block_data)) {
+        $block_data['id'] = $formatted_id;
+        $block_data['theme'] = $this->themeManager->getActiveTheme()->getName();
+        $block_data['plugin'] = 'facet_block:' . $id;
+        $block_data['settings']['id'] = $block_data['plugin'];
+        $block_data['settings']['label'] = $data['name'];
 
-    $block_data['id'] = $formatted_id;
-    $block_data['theme'] = $this->themeManager->getActiveTheme()->getName();
-    $block_data['plugin'] = 'facet_block:' . $id;
-    $block_data['settings']['id'] = $block_data['plugin'];
-    $block_data['settings']['label'] = $data['name'];
+        $this->configFactory->getEditable($block_id)->setData($block_data)->save();
 
-    $this->configFactory->getEditable($block_id)->setData($block_data)->save();
-
-    // Translate facet block titles.
-    foreach ($this->getNonDefaultLanguageCodes() ?? [] as $langcode) {
-      $config = $this->languageManager->getLanguageConfigOverride($langcode, $block_id);
-      $settings = [];
-      // @codingStandardsIgnoreLine
-      $settings['label'] = t($data['name'], [], ['langcode' => $langcode]);
-      $config->set('settings', $settings);
-      $config->save();
+        // Translate facet block titles.
+        foreach ($this->getNonDefaultLanguageCodes() ?? [] as $langcode) {
+          $config = $this->languageManager->getLanguageConfigOverride($langcode, $block_id);
+          $settings = [];
+          // @codingStandardsIgnoreLine
+          $settings['label'] = t($data['name'], [], ['langcode' => $langcode]);
+          $config->set('settings', $settings);
+          $config->save();
+        }
+      }
     }
   }
 
