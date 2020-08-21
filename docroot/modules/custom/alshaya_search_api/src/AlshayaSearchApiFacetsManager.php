@@ -171,9 +171,12 @@ class AlshayaSearchApiFacetsManager {
     // @see FacetBlockAjaxController::ajaxFacetBlockView().
     $formatted_id = str_replace('_', '', $id);
     $block_id = 'block.block.' . $formatted_id;
+    // Only create new facet block if it does not exist.
+    if (!empty($this->configFactory->getEditable($block_id)->getRawData())) {
+      return;
+    }
 
     $block_data = $this->getFromTemplate($template_id);
-
     if (empty($block_data)) {
       return;
     }

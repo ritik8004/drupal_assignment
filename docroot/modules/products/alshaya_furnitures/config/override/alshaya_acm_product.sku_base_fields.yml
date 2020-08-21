@@ -1,11 +1,4 @@
 fields:
-  color_lhn:
-    label: 'Color'
-    type: 'string'
-    cardinality: -1
-    index: 1
-    facet: 1
-    swatch: 1
   finish_lhn:
     label: 'Finish'
     cardinality: -1
@@ -29,11 +22,6 @@ fields:
   product_type:
     label: 'Product Type'
     configurable: 1
-  size_lhn:
-    label: 'Size'
-    cardinality: -1
-    index: 1
-    facet: 1
   style_lhn:
     label: 'Style'
     cardinality: -1
