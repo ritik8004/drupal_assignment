@@ -28,17 +28,19 @@
         }
       }
 
-      .confirmation-footer {
+      .confirmation-footer:not(:empty) {
         padding: 3.75rem 0;
         text-align: $right;
 
         @include breakpoint($upto-tablet-landscape) {
           padding-bottom: 0.625rem;
         }
+      }
 
-        .appointment-flow-action {
-          @include breakpoint($tablet) {
-            display: inline-block;
+      .appointment-flow-action {
+        @include breakpoint($tablet) {
+          button {
+            margin: 2rem 0 0;
           }
         }
       }
