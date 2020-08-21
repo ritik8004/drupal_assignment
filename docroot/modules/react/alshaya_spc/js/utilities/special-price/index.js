@@ -12,7 +12,10 @@ const PriceBlock = ({ children, amount }) => (
   </div>
 );
 
-const SpecialPrice = ({ price, finalPrice }) => {
+const SpecialPrice = ({ price, finalPrice, freeItem }) => {
+  // If freeItem is true, we just want to display text "Free".
+  if (freeItem) return Drupal.t('Free');
+
   let priceVal = price;
   let finalPriceVal = finalPrice;
   if (priceVal !== undefined && priceVal !== null) {

@@ -95,9 +95,7 @@ class CheckoutCartItem extends React.Component {
               </ConditionalView>
             </div>
             <div className="spc-product-price">
-              {freeItem
-                ? Drupal.t('Free')
-                : <SpecialPrice price={originalPrice} finalPrice={finalPrice} />}
+              <SpecialPrice price={originalPrice} freeItem={freeItem} finalPrice={finalPrice} />
             </div>
           </div>
           <div className="spc-product-attributes">

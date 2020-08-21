@@ -230,9 +230,7 @@ export default class CartItem extends React.Component {
                   : <a href={url}>{title}</a>}
               </div>
               <div className="spc-product-price">
-                {freeItem
-                  ? Drupal.t('Free')
-                  : <SpecialPrice price={price} finalPrice={finalPrice} />}
+                <SpecialPrice price={price} freeItem={freeItem} finalPrice={finalPrice} />
               </div>
             </div>
             <div className="spc-product-attributes-wrapper">
