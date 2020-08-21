@@ -8,6 +8,9 @@ import { getDateFormat, getDateFormattext } from '../../../utilities/helper';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../js/utilities/strings';
+import stickyCTAButtonObserver from '../../../utilities/StickyCTA';
+import AppointmentSelection from '../appointment-selection';
+import ConditionalView from '../../../common/components/conditional-view';
 
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
@@ -37,6 +40,10 @@ export default class AppointmentTimeSlot extends React.Component {
     const apiUrl = `/get/timeslots?selectedDate=${selectedDate}&${this.getParamsForTimeSlotApi()}`;
     showFullScreenLoader();
     this.fetchTimeSlots(apiUrl);
+    // We need a sticky button in mobile.
+    if (window.innerWidth < 768) {
+      stickyCTAButtonObserver();
+    }
   }
 
   handler(slot) {
@@ -97,8 +104,11 @@ export default class AppointmentTimeSlot extends React.Component {
     const {
       date, timeSlots, notFound, selectedSlot,
     } = this.state;
+
+    const { handleBack } = this.props;
+
     return (
-      <div className="appointment-store-wrapper">
+      <div className="appointment-store-wrapper appointment-timeslot-wrapper">
         <div className="appointment-store-inner-wrapper">
           <div className="store-header appointment-subtitle fadeInUp">
             {getStringMessage('select_timeslot_label')}
@@ -126,6 +136,24 @@ export default class AppointmentTimeSlot extends React.Component {
             />
           </div>
 
+          <ConditionalView condition={window.innerWidth < 768}>
+            <AppointmentSelection
+              handleEdit={handleBack}
+            />
+          </ConditionalView>
+
+          <div className="appointment-flow-action">
+            <button
+              className="appointment-type-button appointment-store-button select-store"
+              type="button"
+              disabled={!(selectedSlot)}
+              onClick={this.handleSubmit}
+            >
+              {getStringMessage('book_time_slot_button')}
+            </button>
+          </div>
+          <div id="appointment-bottom-sticky-edge" />
+
           <div className="appointment-store-buttons-wrapper fadeInUp">
             <button
               className="appointment-type-button appointment-store-button back"
@@ -134,18 +162,7 @@ export default class AppointmentTimeSlot extends React.Component {
             >
               {getStringMessage('back')}
             </button>
-            <div className="appointment-flow-action">
-              <button
-                className="appointment-type-button appointment-store-button select-store"
-                type="button"
-                disabled={!(selectedSlot)}
-                onClick={this.handleSubmit}
-              >
-                {getStringMessage('book_time_slot_button')}
-              </button>
-            </div>
           </div>
-
         </div>
       </div>
     );
