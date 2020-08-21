@@ -119,3 +119,13 @@
     width: 4.875rem;
   }
 }
+
+html[lang=ar] {
+  .appointment-companion-wrapper {
+    .appointmentSelect__value-container {
+      input {
+        position: static;
+      }
+    }
+  }
+}
