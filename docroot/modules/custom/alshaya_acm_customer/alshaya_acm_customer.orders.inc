@@ -454,6 +454,8 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       // If 'applied_rule_ids' is set and price is 0, set the free gift label.
       if (isset($item['applied_rule_ids']) && (int) $item['price'] == 0) {
         $product['free_gift_label'] = t('Free Gift with Purchase');
+        $product['price'] = t('Free');
+        $product['total'] = '';
       }
 
       $products[] = $product;
