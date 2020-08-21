@@ -78,7 +78,7 @@
           .addClass(matchback_class)
           .html(
           Drupal.theme(
-            settings.show_crosssell_as_matchback === true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup',
+            show_crosssell,
             cart_notification_data
           )
         );
