@@ -10,6 +10,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drush\Commands\DrushCommands;
 use GuzzleHttp\Client;
+use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 
 /**
  * Class AlshayaSpcCommands.
@@ -35,17 +36,28 @@ class AlshayaSpcCommands extends DrushCommands {
   protected $connection;
 
   /**
+   * Checkout.com API Wrapper.
+   *
+   * @var \Drupal\acq_checkoutcom\CheckoutComAPIWrapper
+   */
+  protected $checkoutComApi;
+
+  /**
    * AlshayaSpcCommands constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   Alshaya Magento API Wrapper.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database Connection.
+   * @param \Drupal\acq_checkoutcom\CheckoutComAPIWrapper $checkout_com_api
+   *   Checkout.com API Wrapper.
    */
   public function __construct(AlshayaApiWrapper $api_wrapper,
-                              Connection $connection) {
+                              Connection $connection,
+                              CheckoutComAPIWrapper $checkout_com_api) {
     $this->apiWrapper = $api_wrapper;
     $this->connection = $connection;
+    $this->checkoutComApi = $checkout_com_api;
   }
 
   /**
@@ -246,6 +258,83 @@ class AlshayaSpcCommands extends DrushCommands {
           }
 
           break;
+
+        case 'checkout_com':
+          $payment_info = $this->checkoutComApi->getChargesInfo($payment['unique_id']);
+          // Getting the total amount in payment info without the decimal.
+          $amount = $payment_info['value'] / 100;
+          if ($payment_info['responseMessage'] == 'Approved') {
+            try {
+              // Set the values in keys as expected by Magento.
+              $payment_info['payment_id'] = $payment_info['id'];
+              $payment_info['post_date'] = $payment_info['created'];
+              $payment_info['auth_code'] = $payment_info['authCode'];
+              $payment_info['tracking_id'] = $payment_info['trackId'];
+              $payment_info['customer_id'] = (int) $payment_info['card']['customerId'];
+              $payment_info['quote_id'] = (int) $payment_info['udf3'];
+
+              $update = [];
+              $update['payment'] = [
+                'method' => 'checkout_com',
+                'additional_data' => $payment_info,
+              ];
+              $update['extension'] = [
+                'action' => 'update payment',
+                'attempted_payment' => 1,
+              ];
+
+              $cart = $this->apiWrapper->updateCart($payment['cart_id'], $update);
+              if (empty($cart)) {
+                throw new \Exception('Update payment data in cart failed, please check other logs to know the reason');
+              }
+
+              // Add a custom header to ensure Middleware allows this request
+              // without further authentication.
+              $request_options['json']['data']['paymentMethod'] = $update['payment'];
+              $request_options['json']['cart_id'] = $payment['cart_id'];
+              $request_options['headers']['alshaya-middleware'] = md5(Settings::get('middleware_auth'));
+
+              $endpoint = 'middleware/public/cart/place-order-system';
+              $response = $this->createClient()->post($endpoint, $request_options);
+              $result = json_decode($response->getBody()->getContents(), TRUE);
+              if (empty($result['success'])) {
+                throw new \Exception($result['error_message'] ?? 'Unknown error');
+              }
+
+              $this->getLogger('PendingPaymentCheck')->notice('Checkout com Payment successful, order placed. Cart id: @cart_id, Data: @data, CheckoutCom response: @info', [
+                '@data' => $payment['data'],
+                '@cart_id' => $payment['cart_id'],
+                '@info' => json_encode($payment_info),
+              ]);
+            }
+            catch (\Exception $e) {
+              $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment successful, order failed. Cart id: @cart_id, Data: @data, Checkoutcom response: @info, Exception: @exception', [
+                '@data' => $payment['data'],
+                '@cart_id' => $payment['cart_id'],
+                '@info' => json_encode($payment_info),
+                '@exception' => $e->getMessage(),
+              ]);
+            }
+
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
+          elseif ($amount != $cart['totals']['grand_total']) {
+            $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment is possibly complete, but it seems amount does not match. Please check again. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($payment_info),
+              '@total' => $cart['totals']['grand_total'],
+            ]);
+
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
+          else {
+            $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment not complete or info not available, not deleting entry to retry later. Cart id: @cart_id, Data: @data, Checkoutcom response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($payment_info),
+            ]);
+          }
       }
     }
   }
