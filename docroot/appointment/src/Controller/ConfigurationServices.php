@@ -283,6 +283,10 @@ class ConfigurationServices {
       foreach ($stores as $store) {
         $storeId = $store->locationExternalId;
         if (in_array($storeId, $locationExternalIds)) {
+          // @todo Update condition when API has correct key country code.
+          if (strtoupper($store->companyAddress->countryCode) != strtoupper($this->apiHelper->getSiteCountryCode())) {
+            continue;
+          }
           $storeTiming = $this->getStoreSchedule($storeId, $langcode);
           $storeLat = $store->geocoordinates->latitude ?? '';
           $storeLng = $store->geocoordinates->longitude ?? '';
