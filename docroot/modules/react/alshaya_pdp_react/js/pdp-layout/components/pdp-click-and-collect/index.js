@@ -1,14 +1,16 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import PdpSectionTitle from '../utilities/pdp-section-title';
 import PdpSectionText from '../utilities/pdp-section-text';
 import PdpClickCollectSearch from '../pdp-click-and-collect-search';
 import { fetchAvailableStores } from '../../../utilities/pdp_layout';
-import ClickCollectContent from '../pdp-click-and-collect-popup';
 import {
   setupAccordionHeight,
   allowMaxContent,
   removeMaxHeight,
 } from '../../../utilities/sidebarCardUtils';
+import ClickCollectStoreDetail from '../pdp-click-and-collect-store-detail';
+import ConditionalView from '../../../common/components/conditional-view';
 
 export default class PdpClickCollect extends React.PureComponent {
   constructor(props) {
@@ -18,10 +20,10 @@ export default class PdpClickCollect extends React.PureComponent {
     this.autocomplete = null;
     this.searchplaceInput = null;
     this.state = {
-      label: 'check in-store availablility:',
       stores: null,
       location: '',
       hideInput: false,
+      showMore: false,
       showNoResult: false,
       open: false,
     };
@@ -67,11 +69,12 @@ export default class PdpClickCollect extends React.PureComponent {
         lng: place.geometry.location.lng(),
         location: place.formatted_address,
       }).then((res) => {
-        if (res.data.all_stores.length !== 0) {
+        if (res.data.all_stores['#stores'].length !== 0) {
           this.setState({
-            stores: res.data.all_stores,
+            stores: res.data.all_stores['#stores'],
             location: place.formatted_address,
             hideInput: true,
+            showMore: false,
           });
         } else {
           // Show no result div.
@@ -112,8 +115,9 @@ export default class PdpClickCollect extends React.PureComponent {
 
   render() {
     const {
-      label, stores, location, hideInput, showNoResult, open,
+      stores, location, hideInput, showNoResult, open, showMore,
     } = this.state;
+
     // Add correct class.
     const expandedState = open === true ? 'show' : '';
     const { cncEnabled } = drupalSettings.clickNCollect;
@@ -125,6 +129,23 @@ export default class PdpClickCollect extends React.PureComponent {
     );
 
     if (cncEnabled) {
+      let label = Drupal.t('Check in-store availability:');
+      let storesContent = {};
+      let storeCountLabel = '';
+
+      if (hideInput) {
+        label = Drupal.t('In-store availability:');
+        storesContent = stores
+          .filter((store, key) => key < (showMore ? stores.length : 2))
+          .map((store, key) => (
+            <ClickCollectStoreDetail key={store.code} index={key + 1} store={store} />
+          ));
+        storeCountLabel = Drupal.t('@count store(s) near !variable', {
+          '@count': stores.length,
+          '!variable': `<span className="location" onClick="{this.showSearchInput}">${location}</span>`,
+        });
+      }
+
       return (
         <div
           className="magv2-pdp-click-and-collect-wrapper card fadeInUp"
@@ -147,10 +168,16 @@ export default class PdpClickCollect extends React.PureComponent {
             <div className="instore-wrapper">
               <div className="instore-title">{label}</div>
               {hideInput ? (
-                <ClickCollectContent
-                  location={location}
-                  stores={stores}
-                />
+                <>
+                  <div className="store-count-label">{parse(storeCountLabel)}</div>
+                  <div className="magv2-click-collect-results">{storesContent}</div>
+
+                  <ConditionalView condition={stores.length > 2}>
+                    <div className="magv2-click-collect-show-link" onClick={this.toggleShowMore}>
+                      {Drupal.t(showMore ? 'Show-less' : 'Show-more')}
+                    </div>
+                  </ConditionalView>
+                </>
               ) : searchField}
               {showNoResult ? (
                 <span className="empty-store-list">{Drupal.t('Sorry, No store found for your location.')}</span>
