@@ -62,17 +62,20 @@
           quantity: productData.quantity
         };
 
+        var matchback_class = settings.show_crosssell_as_matchback === true ? 'matchback-cart-notification' : '';
+        var show_crosssell = settings.show_crosssell_as_matchback === true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup';
+
         $('#cart_notification')
-          .addClass(settings.show_crosssell_as_matchback === true ? 'matchback-cart-notification' : '')
+          .addClass(matchback_class)
           .html(
           Drupal.theme(
-            settings.show_crosssell_as_matchback === true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup',
+            show_crosssell,
             cart_notification_data
           )
         );
         // For New PDP layout mobile cart icon.
         $('#magv2_cart_notification')
-          .addClass(settings.show_crosssell_as_matchback === true ? 'matchback-cart-notification' : '')
+          .addClass(matchback_class)
           .html(
           Drupal.theme(
             settings.show_crosssell_as_matchback === true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup',
@@ -104,8 +107,7 @@
         // For New PDP layout mobile cart icon.
         if ($('#magv2_cart_notification').length) {
           // check if element is Visible
-          var length = $('#magv2_cart_notification').html().length;
-          if (length > 0) {
+          if ($('#magv2_cart_notification').html().length > 0) {
             $('#magv2_cart_notification').empty();
             $('body').removeClass('notification--on');
             $('#magv2_cart_notification').removeClass('has--notification');
