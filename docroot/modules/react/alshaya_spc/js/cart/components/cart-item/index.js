@@ -165,6 +165,7 @@ export default class CartItem extends React.Component {
         freeItem,
         stock,
         finalPrice,
+        price,
         in_stock: inStock,
         error_msg: itemErrorMsg,
       },
@@ -175,12 +176,12 @@ export default class CartItem extends React.Component {
 
     const {
       productInfo: {
+        id: skuId,
         image,
         options,
         promotions,
         title,
         url,
-        price,
         maxSaleQty,
       },
     } = this.state;
@@ -225,7 +226,7 @@ export default class CartItem extends React.Component {
             <div className="spc-product-title-price">
               <div className="spc-product-title">
                 {freeItem
-                  ? <a href={Drupal.url(`free-gift/${sku}/nojs`)} className="use-ajax" data-dialog-type="modal">{title}</a>
+                  ? <a href={Drupal.url(`free-gift/${skuId}/nojs`)} className="use-ajax" data-dialog-type="modal">{title}</a>
                   : <a href={url}>{title}</a>}
               </div>
               <div className="spc-product-price">
