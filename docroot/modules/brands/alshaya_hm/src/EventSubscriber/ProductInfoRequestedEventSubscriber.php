@@ -106,36 +106,24 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $sku = $event->getSku();
     $context = $event->getContext();
     $config = $this->configFactory->get('alshaya_hm.label_order.settings');
-    switch ($context) {
-      case 'plp':
-        $plp_attributes = $config->get('plp');
-        $plp_label = [];
-        foreach ($plp_attributes as $attribute) {
-          if ($sku->get($attribute)->getString()) {
-            $plp_label['content'] = $sku->get($attribute)
-              ->getString();
-            $plp_label['class'] = $attribute;
-            break;
-          }
-        }
-        $event->setValue($plp_label);
-        break;
+    $collection_attributes = $config->get($context);
+    $labels = [];
 
-      case 'pdp':
-        $pdp_attributes = $config->get('pdp');
-        $pdp_labels = [];
-        foreach ($pdp_attributes as $attribute) {
-          if ($sku->get($attribute)->getString()) {
-            $pdp_labels[] = [
-              'content' => $sku->get($attribute)
-                ->getString(),
-              'class' => $attribute,
-            ];
-          }
+    foreach ($collection_attributes as $attribute) {
+      if ($attribute_value = $sku->get($attribute)->getString()) {
+        $labels[] = [
+          'content' => $attribute_value,
+          'class' => $attribute,
+        ];
+
+        if ($context === 'plp') {
+          // In plp we only display a single label.
+          break;
         }
-        $event->setValue($pdp_labels);
-        break;
+      }
     }
+
+    $event->setValue($labels);
   }
 
   /**
