@@ -9,6 +9,8 @@ const GTM_CONSTANTS = {
   GENUINE_PAYMENT_ERRORS: 'payment errors',
 };
 
+const productRecommendationsSuffix = 'pr-';
+
 (function ($, Drupal, dataLayer) {
   'use strict';
 
@@ -16,7 +18,7 @@ const GTM_CONSTANTS = {
   var gtm_execute_onetime_events = true;
   var currentListName = null;
   var productImpressions = [];
-  var productImpressionsTimer;
+  var productImpressionsTimer = null;
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
@@ -625,48 +627,16 @@ const GTM_CONSTANTS = {
       }
 
       /**
-       * Product Click Handler.
+       * Helper function to mark position of elements in homepage/PDP slider.
        */
-      // Add click link handler to fire 'productClick' event to GTM.
-      productLinkSelector.each(function () {
-        $(this).once('js-event').on('click', function (e) {
-          var that = $(this);
-          var position = $('.views-infinite-scroll-content-wrapper .c-products__item').index(that.closest('.c-products__item')) + 1;
-
-          currentListName = listName;
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName, position);
-        });
-      });
-
-      /**
-       * Product click handler for Modals.
-       */
-      // Add click link handler to fire 'productClick' event to GTM.
-      $('a[href*="product-quick-view"]').each(function () {
-        // We will handle GTM for recommended products in basket in
-        // different place.
-        if ($(this).parents('.spc-recommended-products').length > 0) {
-          return;
-        }
-
-        $(this).once('js-event').on('click', function (e) {
-          var that = $(this).closest('article[data-vmode="teaser"]');
-          var position = '';
-          if (listName.indexOf('placeholder') > -1) {
-            if (that.closest('.horizontal-crossell').length > 0) {
-              subListName = listName.replace('placeholder', 'CS');
-            }
-            else if (that.closest('.horizontal-upell').length > 0) {
-              subListName = listName.replace('placeholder', 'US');
-            }
-            else if (that.closest('.horizontal-related').length > 0) {
-              subListName = listName.replace('placeholder', 'RELATED');
-            }
-          }
-
-          currentListName = subListName;
-          position = drupalSettings.impressions_position[that.attr('data-nid') + '-' + subListName];
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);
+      $('.view-product-slider', context).once('mark-slider-items-position').each(function() {
+        var count = 1;
+        // In PDP it is seen that slick is already initialized by the time this
+        // is executed while in homepage it is not.
+        // So to prevent including slick-clones as actual items in our
+        // calculations we use the :not pseudo-class.
+        $(this).find('.views-row:not(.slick-cloned)').once('mark-item-position').each(function() {
+          $(this).data('list-item-position', count++);
         });
       });
 
