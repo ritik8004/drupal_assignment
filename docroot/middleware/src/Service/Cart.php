@@ -1129,6 +1129,14 @@ class Cart {
       return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
     }
 
+    // Check if shipping address not have custom attributes.
+    if (empty($cart['shipping']['address']['custom_attributes'])) {
+      $this->logger->error('Error while placing order. Shipping address not contains all info. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
     $lock = FALSE;
     $settings = $this->settings->getSettings('spc_middleware');
 
