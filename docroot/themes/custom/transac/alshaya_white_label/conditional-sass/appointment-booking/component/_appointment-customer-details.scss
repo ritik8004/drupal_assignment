@@ -133,3 +133,15 @@
     }
   }
 }
+
+.appointment-customer-details-container {
+  @include breakpoint($tablet) {
+    .appointment-store-actions {
+      float: $left;
+    }
+
+    .appointment-flow-action {
+      float: $right;
+    }
+  }
+}
