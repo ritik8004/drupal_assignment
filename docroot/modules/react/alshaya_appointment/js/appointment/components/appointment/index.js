@@ -379,6 +379,7 @@ export default class Appointment extends React.Component {
       appointmentData = (
         <CustomerDetails
           handleSubmit={() => this.handleSubmit('confirmation')}
+          handleBack={this.handleEdit}
         />
       );
     } else if (appointmentStep === 'confirmation') {
