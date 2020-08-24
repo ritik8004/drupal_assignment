@@ -277,3 +277,17 @@ hr {
     }
   }
 }
+
+// advance page textarea anchor link.
+.nodetype--advanced_page {
+  .paragraph--type--title-textarea {
+    a {
+      color: $content_link_color;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
