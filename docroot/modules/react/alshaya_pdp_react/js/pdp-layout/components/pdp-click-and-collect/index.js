@@ -20,11 +20,10 @@ export default class PdpClickCollect extends React.PureComponent {
     this.autocomplete = null;
     this.searchplaceInput = null;
     this.state = {
-      stores: null,
+      stores: [],
       location: '',
       hideInput: false,
       showMore: false,
-      showNoResult: false,
       open: false,
     };
   }
@@ -79,7 +78,8 @@ export default class PdpClickCollect extends React.PureComponent {
         } else {
           // Show no result div.
           this.setState({
-            showNoResult: true,
+            stores: [],
+            hideInput: false,
           });
         }
       });
@@ -113,9 +113,15 @@ export default class PdpClickCollect extends React.PureComponent {
     }
   };
 
+  showSearchInput = (e) => {
+    if (e.target.tagName.toLowerCase() === 'span') {
+      document.getElementById('click-n-collect-search-field').classList.remove('hidden');
+    }
+  };
+
   render() {
     const {
-      stores, location, hideInput, showNoResult, open, showMore,
+      stores, location, hideInput, open, showMore,
     } = this.state;
 
     // Add correct class.
@@ -142,7 +148,7 @@ export default class PdpClickCollect extends React.PureComponent {
           ));
         storeCountLabel = Drupal.t('@count store(s) near !variable', {
           '@count': stores.length,
-          '!variable': `<span className="location" onClick="{this.showSearchInput}">${location}</span>`,
+          '!variable': `<span class="click-n-collect-selected-location">${location}</span>`,
         });
       }
 
@@ -167,21 +173,28 @@ export default class PdpClickCollect extends React.PureComponent {
             </PdpSectionText>
             <div className="instore-wrapper">
               <div className="instore-title">{label}</div>
-              {hideInput ? (
-                <>
-                  <div className="store-count-label">{parse(storeCountLabel)}</div>
-                  <div className="magv2-click-collect-results">{storesContent}</div>
 
-                  <ConditionalView condition={stores.length > 2}>
-                    <div className="magv2-click-collect-show-link" onClick={this.toggleShowMore}>
-                      {Drupal.t(showMore ? 'Show-less' : 'Show-more')}
-                    </div>
-                  </ConditionalView>
-                </>
-              ) : searchField}
-              {showNoResult ? (
+              <ConditionalView condition={stores && stores.length > 0}>
+                <div className="store-count-label" onClick={this.showSearchInput}>{parse(storeCountLabel)}</div>
+              </ConditionalView>
+
+              <span id="click-n-collect-search-field" className={hideInput ? 'hidden' : ''}>
+                {searchField}
+              </span>
+
+              <ConditionalView condition={stores && stores.length > 0}>
+                <div className="magv2-click-collect-results">{storesContent}</div>
+
+                <ConditionalView condition={stores.length > 2}>
+                  <div className="magv2-click-collect-show-link" onClick={this.toggleShowMore}>
+                    {Drupal.t(showMore ? 'Show-less' : 'Show-more')}
+                  </div>
+                </ConditionalView>
+              </ConditionalView>
+
+              <ConditionalView condition={hideInput && (!(stores) || stores.length === 0)}>
                 <span className="empty-store-list">{Drupal.t('Sorry, No store found for your location.')}</span>
-              ) : null}
+              </ConditionalView>
             </div>
           </div>
         </div>
