@@ -540,9 +540,10 @@ class CartController {
         if ($type === 'click_and_collect') {
           // Unset as not needed in further processing.
           unset($shipping_info['shipping_type']);
-          $this->logger->notice('Shipping update manual for CNC. Data: @data Address: @address.', [
+          $this->logger->notice('Shipping update manual for CNC. Data: @data Address: @address Cart: @cart_id.', [
             '@address' => json_encode($shipping_info),
             '@data' => json_encode($request_content),
+            '@cart_id' => $this->cart->getCartId(),
           ]);
           $cart = $this->cart->addCncShippingInfo($shipping_info, $action, $update_billing);
         }
@@ -578,9 +579,10 @@ class CartController {
             'method' => $shipping_methods[0]['method_code'],
           ];
 
-          $this->logger->notice('Shipping update manual for HD. Data: @data Address: @address.', [
+          $this->logger->notice('Shipping update manual for HD. Data: @data Address: @address Cart: @cart_id', [
             '@address' => json_encode($shipping_info),
             '@data' => json_encode($request_content),
+            '@cart_id' => $this->cart->getCartId(),
           ]);
           $cart = $this->cart->addShippingInfo($shipping_info, $action, $update_billing);
         }
@@ -589,9 +591,10 @@ class CartController {
       case CartActions::CART_BILLING_UPDATE:
         $billing_info = $request_content['billing_info'];
         $billing_data = $this->cart->formatAddressForShippingBilling($billing_info);
-        $this->logger->notice('Billing update manual. Address: @address Data: @data', [
+        $this->logger->notice('Billing update manual. Address: @address Data: @data Cart: @cart_id', [
           '@address' => json_encode($billing_data),
           '@data' => json_encode($billing_info),
+          '@cart_id' => $this->cart->getCartId(),
         ]);
         $cart = $this->cart->updateBilling($billing_data);
         break;
