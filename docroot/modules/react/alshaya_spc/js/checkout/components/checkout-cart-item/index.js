@@ -55,6 +55,7 @@ class CheckoutCartItem extends React.Component {
       item: {
         id,
         finalPrice,
+        freeItem,
       },
       context,
     } = this.props;
@@ -94,7 +95,7 @@ class CheckoutCartItem extends React.Component {
               </ConditionalView>
             </div>
             <div className="spc-product-price">
-              <SpecialPrice price={originalPrice} finalPrice={finalPrice} />
+              <SpecialPrice price={originalPrice} freeItem={freeItem} finalPrice={finalPrice} />
             </div>
           </div>
           <div className="spc-product-attributes">
