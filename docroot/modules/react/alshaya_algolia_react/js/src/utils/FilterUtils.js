@@ -82,6 +82,10 @@ function sortItemsByMegaMenu(items, selector, label) {
       // Use 1 for All to ensure Object.values work properly.
       sortedItems[1] = items[i];
     }
+    else {
+      weight[items[i].label.trim()] = parseInt(i) + 10;
+      sortedItems[weight[items[i].label]] = items[i];
+    }
   }
   sortedItems = Object.values(Object.keys(sortedItems).reduce((a, c) => (a[c] = sortedItems[c], a), {}));
 

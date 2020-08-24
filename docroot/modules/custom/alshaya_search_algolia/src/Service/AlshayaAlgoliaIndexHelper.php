@@ -559,9 +559,9 @@ class AlshayaAlgoliaIndexHelper {
 
     foreach ($categories as $category) {
       // Skip the term which is disabled.
-      // if ($category->get('field_commerce_status')->getString() !== '1' || $category->get('field_category_include_menu')->getString() !== '1') {
-      //   continue;
-      // }
+      if ($category->get('field_commerce_status')->getString() !== '1' || $category->get('field_category_include_menu')->getString() !== '1') {
+        continue;
+      }
 
       $parents = $this->productCategoryTree->getAllParents($category);
 
