@@ -66,14 +66,13 @@
   Drupal.alshaya_seo_gtm_prepare_carousel_product_impression = function (context, event) {
     var impressions = [];
     var body = $('body');
-    var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
+    // We need to also check that the item is not in a slick clone.
+    var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed, .slick-cloned article"):visible', context);
     var listName = body.attr('gtm-list-name');
-
 
     if (productLinkSelector.length > 0) {
       var finalListName = '';
       var previousLabel = '';
-      var count = 0;
       productLinkSelector.each(function () {
         // 40 is passed as the second argument as in product sliders we can see
         // that much of the top portion of the slider images is white in color
@@ -92,7 +91,6 @@
             // then the carousel label should be different and hence we again
             // get the new count of processed items for that carousel.
             var productLinkProcessedSelector = $(this).closest('.views-element-container').find('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
-            count = productLinkProcessedSelector.length + 1;
             previousLabel = label;
           }
 
@@ -104,11 +102,10 @@
           }
           impression.list = Drupal.alshayaSeoGtmProductSlider.getRecommendationListName($(this));
 
-          impression.position = count;
+          impression.position = parseInt($(this).closest('.views-row').data('list-item-position'));
           // Keep variant empty for impression pages. Populated only post add to cart action.
           impression.variant = '';
           impressions.push(impression);
-          count++;
           $(this).addClass('impression-processed');
         }
       });
