@@ -15,7 +15,7 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
- * Add new fields and index them.
+ * [5.4.0] Add field for new attribute `season_code`.
  */
 function alshaya_hm_update_8053() {
   $manager = \Drupal::service('alshaya_config.manager');

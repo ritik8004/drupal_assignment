@@ -219,5 +219,4 @@ fields:
 
   season_code:
     label: 'Season Code'
-    description: 'Part of description.'
     type: 'string'
