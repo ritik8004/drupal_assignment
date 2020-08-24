@@ -118,7 +118,7 @@ class CheckoutDefaults {
       $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
       if (count($methods)) {
         $this->logger->notice('Setting shipping/billing address from user address book. Address: @address', [
-          '@address' => $address,
+          '@address' => json_encode($address),
         ]);
         return $this->selectHd($address, reset($methods), $address);
       }
@@ -130,7 +130,7 @@ class CheckoutDefaults {
       $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
       if (count($methods)) {
         $this->logger->notice('Setting shipping/billing address from already available in cart. Address: @address', [
-          '@address' => $address,
+          '@address' => json_encode($address),
         ]);
         return $this->selectHd($address, reset($methods), $address);
       }
@@ -360,6 +360,11 @@ class CheckoutDefaults {
       '@store' => json_encode($store),
     ]);
 
+    // If shipping address not contains proper data (extension info).
+    if (!empty($data['shipping']['shipping_address']['extension_attributes'])) {
+      return FALSE;
+    }
+
     $updated = $this->cart->updateCart($data);
     if (isset($updated['error'])) {
       return FALSE;
@@ -375,6 +380,12 @@ class CheckoutDefaults {
     $this->logger->notice('Billing update default for CNC. Address: @address.', [
       '@address' => json_encode($billing),
     ]);
+
+    // If billing address not contains proper data (extension info).
+    if (!empty($billing['extension_attributes'])) {
+      return FALSE;
+    }
+
     $updated = $this->cart->updateBilling($billing);
 
     // If billing update has error.
