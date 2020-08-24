@@ -216,3 +216,8 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
+
+  season_code:
+    label: 'Season Code'
+    description: 'Part of description.'
+    type: 'string'
