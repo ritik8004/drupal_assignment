@@ -106,7 +106,7 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
 function alshaya_seo_transac_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
   // Adding price for GTM.
   $prices = \Drupal::service('alshaya_acm_product.skumanager')->getMinPrices($child);
-  $variant['gtm_price'] = _alshaya_acm_format_price_with_decimal((float) $prices['final_price']);
+  $variant['gtm_price'] = (float) _alshaya_acm_format_price_with_decimal((float) $prices['final_price']);
 }
 
 /**
@@ -593,8 +593,32 @@ function alshaya_seo_transac_views_pre_render(ViewExecutable $view) {
     // Attach GTM product js on product list view.
     $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_list';
   }
-  elseif ($view->id() == 'product_slider') {
-    // Attach GTM slider js on product slider.
-    $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
+}
+
+/**
+ * Implements hook_preprocess_views_view().
+ */
+function alshaya_seo_transac_preprocess_views_view(array &$variables) {
+  $view = $variables['view'];
+  // We add GTM attributes to carousels(block_product_slider) which appear in
+  // the PDPs.
+  if ($view->id() === 'product_slider' && $view->current_display === 'block_product_slider') {
+    $rows = $variables['rows'][0];
+    foreach ($rows['#rows'] as $key => $value) {
+      $rows['#rows'][$key]['#attributes'] = \Drupal::service('alshaya_seo_transac.gtm_manager')
+        ->fetchProductGtmAttributes($rows['#rows'][$key]['#node'], $rows['#rows'][$key]['#view_mode']);
+    }
+    $variables['rows'][0] = $rows;
+  }
+}
+
+/**
+ * Implements template_preprocess_products_horizontal_slider().
+ */
+function alshaya_seo_transac_preprocess_products_horizontal_slider(&$variables) {
+  if (!empty($variables['data'])) {
+    // Views pre render does not get called for the carousels in PDP.
+    // So we add the library here for all the carousels.
+    $variables['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   }
 }

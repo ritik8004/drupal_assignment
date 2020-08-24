@@ -166,7 +166,7 @@ class ConfigurationServices {
       }
 
       // Get Activities from cache.
-      $item = $this->cache->getItem($program . '_activities', $langcode);
+      $item = $this->cache->getItem('activities_' . $program, $langcode);
       if ($item) {
         return new JsonResponse($item);
       }
@@ -191,7 +191,7 @@ class ConfigurationServices {
       }
 
       // Set activities cache.
-      $this->cache->setItem($program . '_activities', $activityData, $langcode);
+      $this->cache->setItem('activities_' . $program, $activityData, $langcode);
 
       return new JsonResponse($activityData);
     }
@@ -221,6 +221,7 @@ class ConfigurationServices {
       $radius = $requestQuery->get('radius') ?? '';
       $maxLocations = $requestQuery->get('max-locations') ?? '';
       $unit = $requestQuery->get('unit') ?? '';
+      $geo = $requestQuery->get('geo') ?? FALSE;
 
       $param = [
         'latitude' => $latitude,
@@ -247,29 +248,45 @@ class ConfigurationServices {
       }
 
       $locationGroupId = $this->apiHelper->getLocationGroupId();
-
       $param = [
         'locationSearchCriteria' => [
           'locationGroupId' => $locationGroupId,
           'exactMatchOnly' => TRUE,
         ],
-        'locationSearchGeoCriteria' => [
+      ];
+
+      // Add params for geo criteria.
+      if ($geo) {
+        $param['locationSearchGeoCriteria'] = [
           'latitude' => $latitude,
           'longitude' => $longitude,
           'radius' => $radius,
           'maxNumberOfLocations' => $maxLocations,
           'unit' => $unit,
-        ],
-      ];
+        ];
+      }
+      else {
+        // Return all stores from cache.
+        $items = $this->cache->getItem('stores', $langcode);
+        if ($items) {
+          return new JsonResponse($items);
+        }
+      }
 
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
-      $result = $client->__soapCall('getLocationsByGeoCriteria', [$param]);
+      // Set API method for geo criteria.
+      $getStoreMethod = ($geo) ? 'getLocationsByGeoCriteria' : 'getLocationsByCriteria';
+      $result = $client->__soapCall($getStoreMethod, [$param]);
       $stores = $result->return->locations ?? [];
       $storesData = [];
 
       foreach ($stores as $store) {
         $storeId = $store->locationExternalId;
         if (in_array($storeId, $locationExternalIds)) {
+          // @todo Update condition when API has correct key country code.
+          if (strtoupper($store->companyAddress->countryCode) != strtoupper($this->apiHelper->getSiteCountryCode())) {
+            continue;
+          }
           $storeTiming = $this->getStoreSchedule($storeId, $langcode);
           $storeLat = $store->geocoordinates->latitude ?? '';
           $storeLng = $store->geocoordinates->longitude ?? '';
@@ -288,6 +305,11 @@ class ConfigurationServices {
             'distanceInMiles' => $distanceInMiles ?? '',
           ];
         }
+      }
+
+      // Set cache for all stores.
+      if (!$geo) {
+        $this->cache->setItem('stores', $storesData, $langcode);
       }
 
       return new JsonResponse($storesData);

@@ -168,6 +168,9 @@
                   // Store proper variant sku in gtm data now.
                   gtmAttributes.variant = productDataSKU;
                   gtmAttributes.price = price;
+                  if (productVariantInfo && productVariantInfo.gtm_price) {
+                    gtmAttributes.price = productVariantInfo.gtm_price;
+                  }
                   Drupal.alshayaSpc.storeProductData({
                     sku: productDataSKU,
                     parentSKU: parentSKU,

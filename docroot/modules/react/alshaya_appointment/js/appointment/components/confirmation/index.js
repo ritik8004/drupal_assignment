@@ -10,6 +10,7 @@ import {
 } from '../../../utilities/helper';
 import AppointmentConfirmationPrint from './confirmationPrint';
 import getStringMessage from '../../../../../js/utilities/strings';
+import stickyCTAButtonObserver from '../../../utilities/StickyCTA';
 
 export default class Confirmation extends React.Component {
   constructor(props) {
@@ -26,6 +27,10 @@ export default class Confirmation extends React.Component {
   componentDidMount() {
     // Clear localStorage.
     removeStorageInfo();
+    // We need a sticky button in mobile.
+    if (window.innerWidth < 768) {
+      stickyCTAButtonObserver();
+    }
   }
 
   handleClick = (url) => {
@@ -130,16 +135,17 @@ export default class Confirmation extends React.Component {
               {getStringMessage('view_appointments_button')}
             </button>
             )}
-          <div className="appointment-flow-action">
-            <button
-              className="continue-shopping"
-              type="button"
-              onClick={() => this.handleClick('/')}
-            >
-              {getStringMessage('continue_shopping_button')}
-            </button>
-          </div>
         </div>
+        <div className="appointment-flow-action">
+          <button
+            className="continue-shopping"
+            type="button"
+            onClick={() => this.handleClick('/')}
+          >
+            {getStringMessage('continue_shopping_button')}
+          </button>
+        </div>
+        <div id="appointment-bottom-sticky-edge" />
         <div style={{ display: 'none' }} className="appointment-confirmation-print-wrapper">
           <AppointmentConfirmationPrint
             ref={(el) => { this.componentRef = el; }}

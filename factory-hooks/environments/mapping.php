@@ -177,18 +177,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'bbwqa_dev',
       ],
     ],
-    'bbwbh' => [
-      'dev' => [
-        'magento' => 'bbw_qa',
-        'conductor' => 'bbwbh_dev',
-      ],
-    ],
-    'bbwqa' => [
-      'dev' => [
-        'magento' => 'bbw_qa',
-        'conductor' => 'bbwqa_dev',
-      ],
-    ],
     'mckw' => [
       'dev' => [
         'magento' => 'mc_upgrade',
@@ -282,17 +270,15 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'bp_qa',
         'conductor' => 'bpae_dev',
       ],
+      'dev2' => [
+        'magento' => 'bp_freegift',
+        'conductor' => 'bpae_dev2',
+      ],
     ],
     'bpeg' => [
       'dev' => [
         'magento' => 'bp_qa',
         'conductor' => 'bpeg_dev',
-      ],
-    ],
-    'bpae' => [
-      'dev2' => [
-        'magento' => 'bp_freegift',
-        'conductor' => 'bpae_dev2',
       ],
     ],
     'mukw' => [
@@ -347,64 +333,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'pbkeg_qa',
       ],
     ],
-    'aeosa' => [
-      'dev2' => [
-        'magento' => 'aeo_uat',
-        'conductor' => 'aeosa_uat',
-      ],
-      'local' => [
-        'magento' => 'aeo_uat',
-        'conductor' => 'aeosa_uat',
-      ],
-    ],
-    'mukw' => [
-      'local' => [
-        'magento' => 'mu_uat',
-        'conductor' => 'mukw_uat',
-      ],
-    ],
-    'muae' => [
-      'local' => [
-        'magento' => 'mu_qa',
-        'conductor' => 'muae_qa',
-      ],
-    ],
-    'musa' => [
-      'local' => [
-        'magento' => 'mu_qa',
-        'conductor' => 'musa_qa',
-      ],
-    ],
-    'mueg' => [
-      'local' => [
-        'magento' => 'mu_qa',
-        'conductor' => 'mueg_qa',
-      ],
-    ],
-    'pbkkw' => [
-      'local' => [
-        'magento' => 'pbk_uat',
-        'conductor' => 'pbkkw_uat',
-      ],
-    ],
-    'pbkae' => [
-      'local' => [
-        'magento' => 'pbk_qa',
-        'conductor' => 'pbkae_qa',
-      ],
-    ],
-    'pbksa' => [
-      'local' => [
-        'magento' => 'pbk_qa',
-        'conductor' => 'pbksa_qa',
-      ],
-    ],
-    'pbkeg' => [
-      'local' => [
-        'magento' => 'pbk_qa',
-        'conductor' => 'pbkeg_qa',
-      ],
-    ]
   ];
 
   // All 01update should match 01live.

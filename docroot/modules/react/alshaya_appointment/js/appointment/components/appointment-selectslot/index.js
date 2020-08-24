@@ -167,7 +167,7 @@ export default class AppointmentSlots extends React.Component {
         && listAfternoonItems.length === 0
         && listEveningItems.length === 0
         && (
-          <p>{ notFound }</p>
+          <div className="appointment-slots-empty">{ notFound }</div>
         )}
       </div>
     );
