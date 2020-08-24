@@ -336,7 +336,7 @@ function alshaya_hm_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, 
     /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
     $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
     $labels = $productInfoHelper->getValue($sku, 'collection_labels', 'plp');
-    $build['#product_attribute_labels'] = $labels;
+    $build['#product_attribute_labels'] = !empty($labels) ? $labels[0] : [];
   }
 }
 
