@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Service\Drupal\Drupal;
 use App\Service\Magento\CartActions;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class CheckoutDefaults.
@@ -43,6 +44,13 @@ class CheckoutDefaults {
   protected $utility;
 
   /**
+   * Logger service.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * Orders constructor.
    *
    * @param \App\Service\Cart $cart
@@ -53,15 +61,19 @@ class CheckoutDefaults {
    *   Orders service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger service.
    */
   public function __construct(Cart $cart,
                               Drupal $drupal,
                               Orders $orders,
-                              Utility $utility) {
+                              Utility $utility,
+                              LoggerInterface $logger) {
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->orders = $orders;
     $this->utility = $utility;
+    $this->logger = $logger;
   }
 
   /**
@@ -105,6 +117,9 @@ class CheckoutDefaults {
     if ($address = $this->getDefaultAddress($data)) {
       $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
       if (count($methods)) {
+        $this->logger->notice('Setting shipping/billing address from user address book. Address: @address', [
+          '@address' => json_encode($address),
+        ]);
         return $this->selectHd($address, reset($methods), $address);
       }
     }
@@ -114,6 +129,9 @@ class CheckoutDefaults {
       $address = $data['shipping']['address'];
       $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
       if (count($methods)) {
+        $this->logger->notice('Setting shipping/billing address from already available in cart. Address: @address', [
+          '@address' => json_encode($address),
+        ]);
         return $this->selectHd($address, reset($methods), $address);
       }
     }
@@ -160,6 +178,7 @@ class CheckoutDefaults {
     foreach ($methods as $method) {
       if (strpos($order['shipping']['method'], $method['carrier_code']) === 0
         && strpos($order['shipping']['method'], $method['method_code']) !== FALSE) {
+        $this->logger->notice('Setting shipping/billing address from user last HD order.');
         return $this->selectHd($address, $method, $order['billing_commerce_address']);
       }
     }
@@ -253,6 +272,19 @@ class CheckoutDefaults {
       return FALSE;
     }
 
+    // Add log for shipping data we pass to magento update cart.
+    $this->logger->notice('Shipping update default for HD. Data: @data Address: @address.', [
+      '@data' => json_encode($shipping_data),
+      '@address' => json_encode($address),
+      '@method' => json_encode($method),
+    ]);
+
+    // If shipping address not contains proper address, don't process further.
+    if (empty($shipping_data['address']['extension_attributes'])
+      && empty($shipping_data['address']['custom_attributes'])) {
+      return FALSE;
+    }
+
     $updated = $this->cart->addShippingInfo($shipping_data, CartActions::CART_SHIPPING_UPDATE, FALSE);
     if (isset($updated['error'])) {
       return FALSE;
@@ -261,6 +293,17 @@ class CheckoutDefaults {
     // Not use/assign default billing address if customer_address_id
     // is not available.
     if (empty($billing['customer_address_id'])) {
+      return $updated;
+    }
+
+    // Add log for billing data we pass to magento update cart.
+    $this->logger->notice('Billing update default for HD. Address: @address.', [
+      '@address' => json_encode($billing),
+    ]);
+
+    // If billing address not contains proper address, don't process further.
+    if (empty($billing['extension_attributes'])
+      && empty($billing['custom_attributes'])) {
       return $updated;
     }
 
@@ -310,6 +353,18 @@ class CheckoutDefaults {
       return FALSE;
     }
 
+    // Add log for shipping data we pass to magento update cart.
+    $this->logger->notice('Shipping update default for CNC. Data: @data Address: @address Store: @store.', [
+      '@data' => json_encode($data),
+      '@address' => json_encode($address),
+      '@store' => json_encode($store),
+    ]);
+
+    // If shipping address not contains proper data (extension info).
+    if (!empty($data['shipping']['shipping_address']['extension_attributes'])) {
+      return FALSE;
+    }
+
     $updated = $this->cart->updateCart($data);
     if (isset($updated['error'])) {
       return FALSE;
@@ -319,6 +374,16 @@ class CheckoutDefaults {
     // is not available.
     if (empty($billing['customer_address_id'])) {
       return $updated;
+    }
+
+    // Add log for billing data we pass to magento update cart.
+    $this->logger->notice('Billing update default for CNC. Address: @address.', [
+      '@address' => json_encode($billing),
+    ]);
+
+    // If billing address not contains proper data (extension info).
+    if (!empty($billing['extension_attributes'])) {
+      return FALSE;
     }
 
     $updated = $this->cart->updateBilling($billing);
