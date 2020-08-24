@@ -6,6 +6,8 @@ import SpecialPrice from '../../../utilities/special-price';
 import ConditionalView from '../../../common/components/conditional-view';
 import CartPromotion from '../../../cart/components/cart-promotion';
 import ProductFlag from '../../../utilities/product-flag';
+import CartItemFree from '../../../cart/components/cart-item-free';
+import Notifications from '../../../cart/components/cart-item/components/Notifications';
 
 class CheckoutCartItem extends React.Component {
   constructor(props) {
@@ -102,6 +104,11 @@ class CheckoutCartItem extends React.Component {
             { configurableValues.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
           </div>
         </div>
+        {context === 'confirmation' ? (
+          <Notifications>
+            <CartItemFree type="alert" filled="true" freeItem={freeItem} />
+          </Notifications>
+        ) : null}
         <ProductFlag
           flag={isNonRefundable}
           flagText={drupalSettings.alshaya_spc.non_refundable_text}
