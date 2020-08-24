@@ -39,6 +39,7 @@ export default class CustomerDetails extends React.Component {
     };
 
     if (id) {
+      showFullScreenLoader();
       const apiUrl = `/get/client?id=${id}`;
       const apiData = fetchAPIData(apiUrl);
 
@@ -83,6 +84,7 @@ export default class CustomerDetails extends React.Component {
                 });
               }
             }
+            removeFullScreenLoader();
           });
         });
       }
