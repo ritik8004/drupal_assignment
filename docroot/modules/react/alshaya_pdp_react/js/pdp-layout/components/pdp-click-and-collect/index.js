@@ -57,6 +57,18 @@ export default class PdpClickCollect extends React.PureComponent {
     }
   }
 
+  updateHeightOnAjax() {
+    const { hideInput, open } = this.state;
+    if (hideInput && open) {
+      const element = this.expandRef.current;
+      this.expandRef.current.style.removeProperty('max-height');
+      setTimeout(() => {
+        element.setAttribute('data-max-height', `${element.offsetHeight}px`);
+        element.style.maxHeight = `${element.offsetHeight}px`;
+      });
+    }
+  }
+
   /**
    * Autocomplete handler for the places list.
    */
@@ -82,16 +94,20 @@ export default class PdpClickCollect extends React.PureComponent {
             hideInput: false,
           });
         }
+
+        this.updateHeightOnAjax();
       });
     }
     // Allow maximum content for now.
     allowMaxContent(this.expandRef);
   };
 
-  toggleShowMore = () => {
+  toggleShowMore = (event) => {
     this.setState((prevState) => ({
       showMore: !prevState.showMore,
     }));
+    this.updateHeightOnAjax();
+    event.stopPropagation();
   };
 
   showClickCollectContent = () => {
@@ -108,6 +124,7 @@ export default class PdpClickCollect extends React.PureComponent {
       this.setState({
         open: true,
       });
+      allowMaxContent(this.expandRef);
       const maxHeight = this.expandRef.current.getAttribute('data-max-height');
       this.expandRef.current.style.maxHeight = maxHeight;
     }
