@@ -163,7 +163,6 @@ class CheckoutDefaults {
       $availableStoreCodes = array_column($availableStores ?? [], 'code');
       $store_key = array_search($store['code'], $availableStoreCodes);
       if ($store_key >= 0) {
-        $this->logger->notice('Setting shipping/billing address from user last CNC order.');
         return $this->selectCnc($availableStores[$store_key], $address, $order['billing_commerce_address']);
       }
 
