@@ -8,10 +8,6 @@
   .view-product-slider {
     margin-bottom: 0;
 
-    .c-products__item__label {
-      margin: 0.625rem 1.25rem;
-    }
-
     .price-block {
       font-family: $alshaya-thin;
     }
@@ -26,6 +22,26 @@
       @include breakpoint($only-mobile) {
         margin-top: 1.5rem;
         margin-bottom: 1.5rem;
+      }
+    }
+  }
+}
+
+.view-product-slider {
+  .c-products__item__label {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    margin: 0.625rem 0.875rem;
+  }
+
+  .owl-carousel {
+    .slick-slide {
+      > article {
+        @include breakpoint($tablet) {
+          padding: 0 0.25rem;
+        }
       }
     }
   }

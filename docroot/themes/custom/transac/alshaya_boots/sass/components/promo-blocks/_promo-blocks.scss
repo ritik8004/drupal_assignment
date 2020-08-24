@@ -43,6 +43,10 @@
   .field--name-field-title {
     text-transform: none;
   }
+
+  .field--name-field-button-link {
+    padding-bottom: 0.9375rem;
+  }
 }
 
 // Slide the 1 row 3 col promo blocks only on mobile
@@ -103,7 +107,19 @@
     }
 
     &.position-center-left {
+      #{$left}: 1rem;
+
       @include stack-live-text-mobile(1.5rem);
+
+      @include breakpoint($tablet) {
+        #{$left}: 3rem;
+      }
+
+      html[lang=ar] & {
+        @include breakpoint($upto-desktop) {
+          left: 0;
+        }
+      }
     }
 
     .field--name-field-promo-text-1,
@@ -135,9 +151,16 @@
     }
 
     .field--name-field-button-link {
-      @include breakpoint($desktop) {
-        #{$left}: auto;
-        transform: none;
+      #{$left}: auto;
+      transform: none;
+
+      html[lang=ar] & {
+        left: auto;
+      }
+
+      @include breakpoint($only-mobile) {
+        position: unset;
+        margin-bottom: 3rem;
       }
 
       a {
@@ -251,6 +274,20 @@ hr {
       @include style-font($alshaya-bold, 1.125rem, 1rem, 0.9375rem, 0.9375rem, $promo_black_btn_text);
 
       border: 0.125rem solid $promo_black_btn_text;
+    }
+  }
+}
+
+// advance page textarea anchor link.
+.nodetype--advanced_page {
+  .paragraph--type--title-textarea {
+    a {
+      color: $content_link_color;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
     }
   }
 }

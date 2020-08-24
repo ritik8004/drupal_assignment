@@ -84,7 +84,6 @@ export default class AppointmentStore extends React.Component {
     }
     // Show "select this store" button, if a store is selected.
     if (selectedStoreItem && openSelectedStore === false) {
-      this.showOpenMarker();
       this.selectStoreButtonVisibility(true);
     }
     // On marker click.
@@ -127,14 +126,14 @@ export default class AppointmentStore extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        this.selectStoreButtonVisibility(false);
         if (result.error === undefined && result.data !== undefined) {
           window.fetchStore = 'finished';
           dispatchCustomEvent('placeAutocomplete', true);
           this.updateCoordsAndStoreList(coords, result.data, locationAccess);
-          this.showOpenMarker(result.data);
-          this.showOutsideCountryError(false);
-
+          if (window.appointmentMap) {
+            this.showOpenMarker(result.data);
+            this.showOutsideCountryError(false);
+          }
           // Remove loader.
           removeFullScreenLoader();
         } else {
@@ -492,6 +491,7 @@ export default class AppointmentStore extends React.Component {
         }}
         markers={storeList}
         openSelectedStore={openSelectedStore}
+        showOpenMarker={this.showOpenMarker}
       />
     );
 

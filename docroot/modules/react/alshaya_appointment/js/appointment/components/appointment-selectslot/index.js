@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { getStorageInfo } from '../../../utilities/storage';
-import { getDateFormat } from '../../../utilities/helper';
+import { getDateFormat, getTimeFormat } from '../../../utilities/helper';
 import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class AppointmentSlots extends React.Component {
@@ -98,7 +98,7 @@ export default class AppointmentSlots extends React.Component {
           className={(timeSlot.appointmentSlotTime === item.appointmentSlotTime) ? 'time-slots active' : 'time-slots'}
           onClick={() => this.handler(item)}
         >
-          {moment(item.appointmentSlotTime).format('LT')}
+          {moment(item.appointmentSlotTime).format(getTimeFormat())}
         </span>
       </li>
     ));
@@ -109,7 +109,7 @@ export default class AppointmentSlots extends React.Component {
           className={(timeSlot.appointmentSlotTime === item.appointmentSlotTime) ? 'time-slots active' : 'time-slots'}
           onClick={() => this.handler(item)}
         >
-          {moment(item.appointmentSlotTime).format('LT')}
+          {moment(item.appointmentSlotTime).format(getTimeFormat())}
         </span>
       </li>
     ));
@@ -120,7 +120,7 @@ export default class AppointmentSlots extends React.Component {
           className={(timeSlot.appointmentSlotTime === item.appointmentSlotTime) ? 'time-slots active' : 'time-slots'}
           onClick={() => this.handler(item)}
         >
-          {moment(item.appointmentSlotTime).format('LT')}
+          {moment(item.appointmentSlotTime).format(getTimeFormat())}
         </span>
       </li>
     ));
@@ -167,7 +167,7 @@ export default class AppointmentSlots extends React.Component {
         && listAfternoonItems.length === 0
         && listEveningItems.length === 0
         && (
-          <p>{ notFound }</p>
+          <div className="appointment-slots-empty">{ notFound }</div>
         )}
       </div>
     );
