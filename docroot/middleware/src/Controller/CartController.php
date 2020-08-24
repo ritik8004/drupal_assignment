@@ -598,12 +598,24 @@ class CartController {
 
       case CartActions::CART_PAYMENT_FINALISE:
         $cart = $this->cart->getCart();
-        // Check if shiping method is present else throw error.
+        $is_error = FALSE;
+        // Check if shipping method is present else throw error.
         if (empty($cart['shipping']['method'])) {
+          $is_error = TRUE;
           $this->logger->error('Error while finalizing payment. No shipping method available. Cart: @cart.', [
             '@cart' => json_encode($cart),
           ]);
+        }
+        // If shipping address not have custom attributes.
+        elseif (empty($cart['shipping']['address']['custom_attributes'])) {
+          $is_error = TRUE;
+          $this->logger->error('Error while finalizing payment. Shipping address not contains all info. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+        }
 
+        // If error.
+        if ($is_error) {
           return new JsonResponse([
             'error' => TRUE,
             'error_code' => 505,
