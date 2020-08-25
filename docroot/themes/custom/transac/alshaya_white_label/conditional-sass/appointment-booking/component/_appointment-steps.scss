@@ -60,6 +60,7 @@
 
       .step-number {
         background: $appointment-active-step-number-bg;
+        color: $appointment-step-color;
 
         @include breakpoint($upto-tablet-landscape) {
           margin-#{$left}: 0.125rem;
@@ -98,16 +99,13 @@
           transform: scaleX(-1);
         }
       }
-    }
 
-    &.visited {
-      .step-number {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        color: $appointment-step-title-color;
-        border: 1px solid $appointment-step-title-color;
+      ~ .wizard-step {
+        .step-number {
+          background: $appointment-inactive-step-number-bg;
+          color: $appointment-step-color;
+          border: none;
+        }
       }
     }
 
@@ -142,8 +140,9 @@
     }
 
     .step-number {
-      background: $appointment-inactive-step-number-bg;
-      color: $appointment-step-color;
+      background: transparent;
+      color: $appointment-step-title-color;
+      border: 1px solid $appointment-step-title-color;
       border-radius: 50%;
       font-size: 0.75rem;
       margin-#{$left}: 0.3125rem;
