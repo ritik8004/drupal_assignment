@@ -352,6 +352,15 @@ class CheckoutDefaults {
       'store_code' => $store['code'],
     ];
 
+    if (!isset($data['shipping']['shipping_address']['custom_attributes'])) {
+      foreach ($data['shipping']['shipping_address']['extension_attributes'] ?? [] as $key => $value) {
+        $data['shipping']['shipping_address']['custom_attributes'][] = [
+          'attributeCode' => $key,
+          'value' => $value,
+        ];
+      }
+    }
+
     // Validate address.
     $valid_address = $this->drupal->validateAddressAreaCity($billing);
     // If address is not valid.
