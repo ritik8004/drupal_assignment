@@ -12,14 +12,11 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
- * Add child categoris for all in lhn.
+ * Re-index all the products.
+ * Done to reflect changes for lhn child menu.
  */
 function alshaya_bp_transac_update_8005() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_search_algolia.settings'],
-    'alshaya_search_algolia'
-  );
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**

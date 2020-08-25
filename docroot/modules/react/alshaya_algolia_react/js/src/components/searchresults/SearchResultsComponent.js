@@ -47,8 +47,8 @@ const SearchResultsComponent = props => {
   const optionalFilter = getSuperCategoryOptionalFilter();
   const maximumDepthLhn = drupalSettings.algoliaSearch.maximumDepthLhn;
   var attributes = [];
-  for (var i = 0; i <= maximumDepthLhn; i++) {
-    attributes.push('field_category.lvl'+i);
+  for (let i = 0; i <= maximumDepthLhn; i++) {
+    attributes.push(`field_category.lvl${i}`);
   }
 
   return (
