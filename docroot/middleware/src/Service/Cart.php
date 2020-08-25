@@ -1142,6 +1142,15 @@ class Cart {
       return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
     }
 
+    // If first/last name not available in shipping address.
+    if (empty($cart['shipping']['address']['firstname'])
+      || empty($cart['shipping']['address']['lastname'])) {
+      $this->logger->error('Error while placing order. First name or Last name not available in cart. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
     $lock = FALSE;
     $settings = $this->settings->getSettings('spc_middleware');
 
