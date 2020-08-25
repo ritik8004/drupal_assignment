@@ -50,10 +50,10 @@ export default class Appointment extends React.Component {
     const appointment = params.get('appointment');
     const step = params.get('step');
 
-    // If URL does not have step or appointment parameter, then
+    // If URL does not have step parameter, then
     // reset the localstore and load page with step parameter
     // to start from step 1.
-    if (step === null || appointment === null) {
+    if (step === null) {
       removeStorageInfo();
       localStorageValues = null;
       insertParam('step', 'set');
