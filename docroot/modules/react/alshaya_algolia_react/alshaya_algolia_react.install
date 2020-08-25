@@ -15,7 +15,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 function alshaya_algolia_react_update_8002() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
-    ['alshaya_algolia_react.settings.yml'],
+    ['alshaya_algolia_react.settings'],
     'alshaya_algolia_react'
   );
 }
