@@ -289,17 +289,7 @@ class Cart {
    */
   public function getRestoredCart() {
     $cart = $this->getCart();
-
     $this->resetCartCache();
-
-    if (!empty($cart['shipping']['method'])) {
-      $update = [
-        'extension' => ['action' => CartActions::CART_RESET],
-      ];
-
-      $cart = $this->updateCart($update);
-    }
-
     return $cart;
   }
 
@@ -1134,6 +1124,23 @@ class Cart {
     // Check if shiping method is present else throw error.
     if (empty($cart['shipping']['method'])) {
       $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
+    // Check if shipping address not have custom attributes.
+    if (empty($cart['shipping']['address']['custom_attributes'])) {
+      $this->logger->error('Error while placing order. Shipping address not contains all info. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
+    // If first/last name not available in shipping address.
+    if (empty($cart['shipping']['address']['firstname'])
+      || empty($cart['shipping']['address']['lastname'])) {
+      $this->logger->error('Error while placing order. First name or Last name not available in cart. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
       return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);

@@ -1,5 +1,6 @@
 import React from 'react';
-import { fetchAPIData } from '../../../utilities/api/fetchApiData';
+import moment from 'moment';
+import { fetchAPIData, postAPICall } from '../../../utilities/api/fetchApiData';
 import ConditionalView from '../../../common/components/conditional-view';
 import AppointmentListItem from './components/appointmentlist';
 import {
@@ -7,6 +8,11 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../js/utilities/strings';
+import { setMomentLocale } from '../../../utilities/helper';
+// Set language for date time translation.
+if (drupalSettings.path.currentLanguage !== 'en') {
+  setMomentLocale(moment);
+}
 
 export default class AppointmentsView extends React.Component {
   constructor(props) {
@@ -82,9 +88,13 @@ export default class AppointmentsView extends React.Component {
     const { appointments } = this.state;
     const { id } = drupalSettings.alshaya_appointment.user_details;
     if (id && appointmentId) {
-      const apiUrl = `/cancel/appointment?id=${id}&appointment=${appointmentId}`;
+      const apiUrl = '/cancel/appointment';
+      const data = {
+        appointment: appointmentId,
+        id,
+      };
       showFullScreenLoader();
-      const apiData = fetchAPIData(apiUrl);
+      const apiData = postAPICall(apiUrl, data);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
           removeFullScreenLoader();

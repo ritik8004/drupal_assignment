@@ -13,7 +13,6 @@ import DeviceView from '../../../common/components/device-view';
 import ToggleButton from './components/store-map/ToggleButton';
 import { getDefaultMapCenter, getUserLocation } from '../../../utilities/map/map_utils';
 import LocationSearchForm from './components/store-map/LocationSearchForm';
-import Gmap from '../../../utilities/map/GMap';
 import {
   requestFullscreen,
   isFullScreen,
@@ -43,9 +42,6 @@ window.fetchStore = 'idle';
 export default class AppointmentStore extends React.Component {
   constructor(props) {
     super(props);
-    // Global map object.
-    this.googleMap = new Gmap();
-    window.appointmentMap = this.googleMap;
     this.searchRef = React.createRef();
     this.autocompleteInput = React.createRef();
     this.autocomplete = null;
@@ -77,10 +73,8 @@ export default class AppointmentStore extends React.Component {
     const {
       refCoords, storeList, openSelectedStore, selectedStoreItem,
     } = this.state;
-    document.addEventListener('fetchStoreSuccess', this.initiatePlaceAutocomplete);
-    if (storeList.length !== 0) {
-      dispatchCustomEvent('fetchStoreSuccess', true);
-    } else if (refCoords !== null && storeList.length === 0) {
+    document.addEventListener('placeAutocomplete', this.initiatePlaceAutocomplete);
+    if (refCoords !== null && storeList.length === 0) {
       this.fetchStores(refCoords);
     }
 
@@ -90,7 +84,6 @@ export default class AppointmentStore extends React.Component {
     }
     // Show "select this store" button, if a store is selected.
     if (selectedStoreItem && openSelectedStore === false) {
-      this.showOpenMarker();
       this.selectStoreButtonVisibility(true);
     }
     // On marker click.
@@ -133,14 +126,14 @@ export default class AppointmentStore extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        this.selectStoreButtonVisibility(false);
         if (result.error === undefined && result.data !== undefined) {
           window.fetchStore = 'finished';
-          dispatchCustomEvent('fetchStoreSuccess', true);
+          dispatchCustomEvent('placeAutocomplete', true);
           this.updateCoordsAndStoreList(coords, result.data, locationAccess);
-          this.showOpenMarker(result.data);
-          this.showOutsideCountryError(false);
-
+          if (window.appointmentMap) {
+            this.showOpenMarker(result.data);
+            this.showOutsideCountryError(false);
+          }
           // Remove loader.
           removeFullScreenLoader();
         } else {
@@ -498,6 +491,7 @@ export default class AppointmentStore extends React.Component {
         }}
         markers={storeList}
         openSelectedStore={openSelectedStore}
+        showOpenMarker={this.showOpenMarker}
       />
     );
 

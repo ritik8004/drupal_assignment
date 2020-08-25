@@ -482,6 +482,22 @@ class SKU extends ContentEntityBase implements SKUInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public static function getTranslationFromContext(SKUInterface $sku, string $langcode = NULL) {
+    if (empty($langcode)) {
+      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
+
+    // Return the translation if available and not the same as current language.
+    if ($sku->language()->getId() != $langcode && $sku->hasTranslation($langcode)) {
+      return $sku->getTranslation($langcode);
+    }
+
+    return $sku;
+  }
+
+  /**
    * Loads a SKU Entity from SKU.
    *
    * @param string $sku

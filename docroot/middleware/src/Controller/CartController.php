@@ -280,10 +280,12 @@ class CartController {
 
     $data['items_qty'] = $cart_data['cart']['items_qty'];
     $data['cart_total'] = $cart_data['totals']['base_grand_total'] ?? 0;
+    $data['minicart_total'] = $data['cart_total'];
     $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
     $data['totals'] = [
       'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'] ?? 0,
       'base_grand_total' => $cart_data['totals']['base_grand_total'] ?? 0,
+      'base_grand_total_without_surcharge' => $cart_data['totals']['base_grand_total'] ?? 0,
       'discount_amount' => $cart_data['totals']['discount_amount'] ?? 0,
       'surcharge' => 0,
     ];
@@ -299,6 +301,12 @@ class CartController {
 
     if (is_array($data['surcharge']) && !empty($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
       $data['totals']['surcharge'] = $data['surcharge']['amount'];
+    }
+
+    // We don't show surcharge amount on cart total and on mini cart.
+    if ($data['totals']['surcharge'] > 0) {
+      $data['totals']['base_grand_total_without_surcharge'] -= $data['totals']['surcharge'];
+      $data['minicart_total'] -= $data['totals']['surcharge'];
     }
 
     $data['response_message'] = NULL;
@@ -532,6 +540,11 @@ class CartController {
         if ($type === 'click_and_collect') {
           // Unset as not needed in further processing.
           unset($shipping_info['shipping_type']);
+          $this->logger->notice('Shipping update manual for CNC. Data: @data Address: @address Cart: @cart_id.', [
+            '@address' => json_encode($shipping_info),
+            '@data' => json_encode($request_content),
+            '@cart_id' => $this->cart->getCartId(),
+          ]);
           $cart = $this->cart->addCncShippingInfo($shipping_info, $action, $update_billing);
         }
         else {
@@ -566,6 +579,11 @@ class CartController {
             'method' => $shipping_methods[0]['method_code'],
           ];
 
+          $this->logger->notice('Shipping update manual for HD. Data: @data Address: @address Cart: @cart_id', [
+            '@address' => json_encode($shipping_info),
+            '@data' => json_encode($request_content),
+            '@cart_id' => $this->cart->getCartId(),
+          ]);
           $cart = $this->cart->addShippingInfo($shipping_info, $action, $update_billing);
         }
         break;
@@ -573,17 +591,42 @@ class CartController {
       case CartActions::CART_BILLING_UPDATE:
         $billing_info = $request_content['billing_info'];
         $billing_data = $this->cart->formatAddressForShippingBilling($billing_info);
+        $this->logger->notice('Billing update manual. Address: @address Data: @data Cart: @cart_id', [
+          '@address' => json_encode($billing_data),
+          '@data' => json_encode($billing_info),
+          '@cart_id' => $this->cart->getCartId(),
+        ]);
         $cart = $this->cart->updateBilling($billing_data);
         break;
 
       case CartActions::CART_PAYMENT_FINALISE:
         $cart = $this->cart->getCart();
-        // Check if shiping method is present else throw error.
+        $is_error = FALSE;
+        // Check if shipping method is present else throw error.
         if (empty($cart['shipping']['method'])) {
+          $is_error = TRUE;
           $this->logger->error('Error while finalizing payment. No shipping method available. Cart: @cart.', [
             '@cart' => json_encode($cart),
           ]);
+        }
+        // If shipping address not have custom attributes.
+        elseif (empty($cart['shipping']['address']['custom_attributes'])) {
+          $is_error = TRUE;
+          $this->logger->error('Error while finalizing payment. Shipping address not contains all info. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+        }
+        // If first/last name not available in shipping address.
+        elseif (empty($cart['shipping']['address']['firstname'])
+          || empty($cart['shipping']['address']['lastname'])) {
+          $is_error = TRUE;
+          $this->logger->error('Error while finalizing payment. First name or Last name not available in cart. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+        }
 
+        // If error.
+        if ($is_error) {
           return new JsonResponse([
             'error' => TRUE,
             'error_code' => 505,
@@ -658,6 +701,7 @@ class CartController {
         }
 
         $postData = $request_content['postData'];
+
         $cart = $this->cart->updateCart($postData);
         break;
     }

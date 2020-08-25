@@ -18,6 +18,16 @@ $env = alshaya_get_site_environment();
 $env_name = !in_array($env, ['travis', 'local']) ? substr($env, 2) : $env;
 
 $settings['env'] = $env;
+
+// Make sure environment name used to load settings is not pointing to update
+// environment name like 01devup or 01update.
+if ($env_name === 'update') {
+  $env_name = 'live';
+}
+elseif (substr($env_name, -2) === 'up') {
+  $env_name = substr($env_name, 0, -2);
+}
+
 $settings['env_name'] = $env_name;
 
 // Set server home directory.
