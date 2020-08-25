@@ -79,6 +79,8 @@ export default class AppointmentStore extends React.Component {
     document.addEventListener('placeAutocomplete', this.initiatePlaceAutocomplete);
     if (refCoords !== null && storeList.length === 0) {
       this.fetchStores(refCoords, null, false);
+    } else {
+      dispatchCustomEvent('placeAutocomplete', true);
     }
 
     // Ask for location access when we don't have any coords.

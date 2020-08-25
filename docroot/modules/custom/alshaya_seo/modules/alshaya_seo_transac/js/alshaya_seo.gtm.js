@@ -1192,6 +1192,11 @@ const productRecommendationsSuffix = 'pr-';
       // Push all impressions to data layer.
       Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions);
       window.clearInterval(productImpressionsTimer);
+      // product-click can also happen for modals. Considering such a case we
+      // restart the timer.
+      if (eventType === 'product-click') {
+        productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+      }
     }
     else {
       // This is for cases like scroll/carousel events.

@@ -100,6 +100,23 @@ function setMomentLocale(moment) {
   });
 }
 
+function insertParam(paramKey, paramValue) {
+  const key = encodeURIComponent(paramKey);
+  const value = encodeURIComponent(paramValue);
+
+  let s = document.location.search;
+  const kvp = `${key}=${value}`;
+
+  const r = new RegExp(`(&|\\?)${key}=[^]*`);
+
+  s = s.replace(r, `$1${kvp}`);
+
+  if (!RegExp.$1) { s += (s.length > 0 ? '&' : '?') + kvp; }
+
+  // Load page with parameter.
+  document.location.search = s;
+}
+
 export {
   getInputValue,
   getLocationAccess,
@@ -110,4 +127,5 @@ export {
   getArrayFromCompanionData,
   getTimeFormat,
   setMomentLocale,
+  insertParam,
 };

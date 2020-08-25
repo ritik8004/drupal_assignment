@@ -368,7 +368,7 @@ class CheckoutDefaults {
     ]);
 
     // If shipping address not contains proper data (extension info).
-    if (!empty($data['shipping']['shipping_address']['extension_attributes'])) {
+    if (empty($data['shipping']['shipping_address']['extension_attributes'])) {
       return FALSE;
     }
 
@@ -390,7 +390,7 @@ class CheckoutDefaults {
     ]);
 
     // If billing address not contains proper data (extension info).
-    if (!empty($billing['extension_attributes'])) {
+    if (empty($billing['extension_attributes'])) {
       return FALSE;
     }
 
