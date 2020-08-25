@@ -33,6 +33,10 @@ export default class CartItem extends React.Component {
     Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
   }
 
+  componentDidUpdate() {
+    Drupal.ajax.bindAjaxLinks(document.body);
+  }
+
   /**
    * Call back to get product data from storage.
    */
@@ -172,6 +176,7 @@ export default class CartItem extends React.Component {
       qtyLimit: currentQtyLimit,
       animationOffset,
       productPromotion,
+      couponCode,
     } = this.props;
 
     const {
@@ -254,8 +259,8 @@ export default class CartItem extends React.Component {
             </div>
           </div>
         </div>
-        <div className="spc-promotions">
-          {promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} link />)}
+        <div className="spc-promotions free-gift-container">
+          {promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} couponCode={couponCode} link />)}
         </div>
         <Notifications>
           <CartItemOOS type="warning" inStock={inStock} />

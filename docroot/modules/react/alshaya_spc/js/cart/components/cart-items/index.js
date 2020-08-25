@@ -56,7 +56,7 @@ export default class CartItems extends React.Component {
   };
 
   render() {
-    const { items, dynamicPromoLabelsProduct } = this.props;
+    const { items, dynamicPromoLabelsProduct, couponCode } = this.props;
     const productItems = [];
 
     const skus = {};
@@ -81,6 +81,7 @@ export default class CartItems extends React.Component {
           callable={this.productCheckCallable}
           qtyLimit={productQtyLimit}
           productPromotion={productPromotion}
+          couponCode={couponCode}
         />,
       );
     });

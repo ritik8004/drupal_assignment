@@ -635,9 +635,14 @@ class AlshayaPromotionsManager {
       // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
       if ($promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU) {
         $message_arguments = [];
+        $message_arguments['coupon'] = reset($coupons);
+
+        if (!$message_arguments['coupon']) {
+          unset($free_gift_promos[$promotion_id]);
+          continue;
+        }
         $message_arguments['node'] = $promotion_id;
         $message_arguments['product_route'] = 'alshaya_acm_promotion.free_gifts_list';
-        $message_arguments['coupon'] = reset($coupons);
 
         // If only one product is available, display the detail view directly.
         if (count($free_skus) === 1) {
@@ -655,10 +660,13 @@ class AlshayaPromotionsManager {
         $free_gift_promos[$promotion_id]['link'] = $message_arguments;
       }
       else {
-        $free_sku_entity = reset($free_skus);
-
         $message_arguments['coupon'] = reset($coupons);
+        if (!$message_arguments['coupon']) {
+          unset($free_gift_promos[$promotion_id]);
+          continue;
+        }
         $message_arguments['product_route'] = 'alshaya_acm_promotion.free_gift_modal';
+        $free_sku_entity = reset($free_skus);
         if ($free_sku_entity->bundle() == 'simple') {
           $message_arguments['product_text'] = $free_sku_entity->get('name')->getString();
           $message_arguments['sku_entity_id'] = $free_sku_entity->id();
