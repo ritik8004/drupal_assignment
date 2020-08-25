@@ -22,7 +22,7 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../js/utilities/strings';
-import { insertParam, setMomentLocale } from '../../../utilities/helper';
+import { setMomentLocale } from '../../../utilities/helper';
 // Set language for date time translation.
 if (drupalSettings.path.currentLanguage !== 'en') {
   setMomentLocale(moment);
@@ -48,16 +48,6 @@ export default class Appointment extends React.Component {
     const { search } = window.location;
     const params = new URLSearchParams(search);
     const appointment = params.get('appointment');
-    const step = params.get('step');
-
-    // If URL does not have step parameter, then
-    // reset the localstore and load page with step parameter
-    // to start from step 1.
-    if (step === null) {
-      removeStorageInfo();
-      localStorageValues = null;
-      insertParam('step', 'set');
-    }
 
     if (localStorageValues) {
       const { appointmentId } = localStorageValues;
