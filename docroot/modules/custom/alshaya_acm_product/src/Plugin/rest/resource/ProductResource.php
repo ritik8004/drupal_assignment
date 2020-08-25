@@ -252,9 +252,7 @@ class ProductResource extends ResourceBase {
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
     // Allow other modules to alter product data.
     $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity);
-    if (isset($data['grouping_attribute_with_swatch'])) {
-      $data['grouped_variants'] = $this->getGroupedVariants($data);
-    }
+
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
@@ -422,32 +420,6 @@ class ProductResource extends ResourceBase {
     $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
 
     return $data;
-  }
-
-  /**
-   * Get grouped products for pdp based on grouping attribute.
-   *
-   * @param array $data
-   *   Array of product data.
-   *
-   * @return array
-   *   Grouping products for pdp.
-   */
-  private function getGroupedVariants(array &$data) {
-    $grouped_variants = [];
-    if (!empty($data['grouped_variants'])) {
-      foreach ($data['grouped_variants'] as $grouped_sku) {
-        if (!$grouped_sku instanceof SKUInterface) {
-          continue;
-        }
-        $variant = $this->getSkuData($grouped_sku);
-        if (isset($data['grouped_variants'][$grouped_sku->getSku()]['attributes'])) {
-          $variant['attributes'] = $data['grouped_variants'][$grouped_sku->getSku()]['attributes'];
-        }
-        $grouped_variants[] = $variant;
-      }
-    }
-    return $grouped_variants;
   }
 
   /**
