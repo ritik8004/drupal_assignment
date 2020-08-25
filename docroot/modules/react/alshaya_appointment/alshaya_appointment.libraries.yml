@@ -19,7 +19,7 @@ alshaya_appointment_socialauth:
     - alshaya_social/alshaya_social_popup
 
 alshaya_appointment_localstore:
-  header: true
+  header: true # This needs at the top of the page.
   version: 1.x
   js:
     assets/js/alshaya_appointment_localstore.js: {}
