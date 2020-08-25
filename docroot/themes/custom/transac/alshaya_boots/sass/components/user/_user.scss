@@ -4,7 +4,7 @@
       height: 2.5rem;
       margin-top: 2rem;
 
-      @include breakpoint($tablet) {
+      @include breakpoint($desktop) {
         width: 9.125rem;
         max-width: 12rem;
       }
