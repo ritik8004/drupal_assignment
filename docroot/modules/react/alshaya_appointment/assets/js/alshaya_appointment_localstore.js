@@ -9,18 +9,6 @@ var step = params.get('step');
 // to start from step 1.
 if (step === null) {
   localStorage.removeItem('appointment_data');
-  var key = encodeURIComponent('step');
-  var value = encodeURIComponent('set');
-
-  let s = document.location.search;
-  var kvp = `${key}=${value}`;
-
-  var r = new RegExp(`(&|\\?)${key}=[^]*`);
-
-  s = s.replace(r, `$1${kvp}`);
-
-  if (!RegExp.$1) { s += (s.length > 0 ? '&' : '?') + kvp; }
-
-  // Load page with parameter.
-  document.location.search = s;
+  params.set('step', 'set');
+  document.location.search = params.toString();
 }
