@@ -139,6 +139,9 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $currency = $this->configFactory->get('acq_commerce.currency');
     $configuration = $this->getConfiguration();
     $product_category_settings = $this->configFactory->get('alshaya_acm_product_category.settings');
+    $config = $this->configFactory->get('alshaya_search_algolia.settings');
+    $show_terms_in_lhn = $config->get('show_terms_in_lhn');
+    $maximum_depth_lhn = ($show_terms_in_lhn == 'all' ? '3' : '1');
 
     $libraries = [
       'alshaya_algolia_react/autocomplete',
@@ -166,6 +169,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'enable_lhn_tree_search' => $product_category_settings->get('enable_lhn_tree_search'),
             'category_facet_label' => $this->t('Category'),
             'sizeGroupSeparator' => SkuManager::SIZE_GROUP_SEPARATOR,
+            'maximumDepthLhn' => $maximum_depth_lhn,
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'] ?? 4,

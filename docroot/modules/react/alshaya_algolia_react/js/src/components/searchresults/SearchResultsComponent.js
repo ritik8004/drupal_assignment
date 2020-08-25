@@ -45,6 +45,11 @@ const SearchResultsComponent = props => {
   }
 
   const optionalFilter = getSuperCategoryOptionalFilter();
+  const maximumDepthLhn = drupalSettings.algoliaSearch.maximumDepthLhn;
+  var attributes = [];
+  for (var i = 0; i <= maximumDepthLhn; i++) {
+    attributes.push('field_category.lvl'+i);
+  }
 
   return (
     <InstantSearch
@@ -65,11 +70,10 @@ const SearchResultsComponent = props => {
         )}
         {hasCategoryFilter() && isDesktop() && (
           <HierarchicalMenu
-            transformItems={items => getSortedItems(items, 'category')}
-            attributes={[
-              'field_category.lvl0',
-              'field_category.lvl1',
-            ]}
+          transformItems={items => getSortedItems(items, 'category')}
+            attributes = {attributes}
+            facetLevel={1}
+            showParentLevel={true}
           />
         )}
       </SideBar>
@@ -95,11 +99,9 @@ const SearchResultsComponent = props => {
                       <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                       <HierarchicalMenu
                         transformItems={items => getSortedItems(items, 'category')}
-                        attributes={[
-                          'field_category.lvl0',
-                          'field_category.lvl1',
-                        ]}
+                        attributes = {attributes}
                         facetLevel={1}
+                        showParentLevel={true}
                       />
                     </div>
                   )}
