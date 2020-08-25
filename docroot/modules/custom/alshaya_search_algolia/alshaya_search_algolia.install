@@ -10,6 +10,19 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Add child categories for algolia menu in lhn.
+ */
+function alshaya_search_algolia_update_8005() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_search_algolia.settings'],
+    'alshaya_search_algolia'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Queue all products for re-indexation.
  * Done to add translated rendered_price for all products.
  */
