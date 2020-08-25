@@ -139,8 +139,11 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $currency = $this->configFactory->get('acq_commerce.currency');
     $configuration = $this->getConfiguration();
     $product_category_settings = $this->configFactory->get('alshaya_acm_product_category.settings');
+    // Get algola settings for lhn menu.
     $config = $this->configFactory->get('alshaya_search_algolia.settings');
     $show_terms_in_lhn = $config->get('show_terms_in_lhn');
+    // Menu level is upto L3 when lhn config is all.
+    // Default menu level is upto L1.
     $maximum_depth_lhn = ($show_terms_in_lhn == 'all' ? '3' : '1');
 
     $libraries = [
