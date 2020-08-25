@@ -57,23 +57,18 @@
       // Get element top and bottom.
       var elementTop = $(this).offset().top - offset;
       var elementBottom = (elementPartialOffsetTop !== 'undefined')
-                          ? elementTop + elementPartialOffsetTop
-                          : elementTop + $(this).outerHeight();
+        ? elementTop + elementPartialOffsetTop
+        : elementTop + $(this).outerHeight();
 
       // Get window top and bottom.
       var viewportTop = $(window).scrollTop();
       var viewportBottom = viewportTop + $(window).height();
 
-      // Get element left and right.
+      // Get element left.
       var elementLeft = $(this).offset().left - offset;
-      var elementRight = elementLeft + $(this).outerWidth();
-
-      // Get window left and right.
-      var viewportLeft = $(window).scrollLeft();
-      var viewportRight = viewportLeft + $(window).width();
 
       if (elementTop >= viewportTop
-          && elementBottom <= viewportBottom
+        && elementBottom <= viewportBottom
       ) {
         var elementParent = $(this).parent();
         var active = false;
@@ -82,12 +77,21 @@
           // If it has slick-active class, that means it is showing in screen.
           active = (elementParent.hasClass('slick-active')) ? true : false;
         }
-        // If slick slider is not used, check if the element is visible in screen or
-        // not.
-        else if ((elementLeft > viewportLeft)
-          && (elementRight < viewportRight)) {
-          active = true;
+        // If slick slider is not used, that means the cart page carousels are
+        // being viewed. Checked if they are within their container.
+        else if ($(this).closest('.spc-recommended-products').length > 0) {
+          var recommendProductsContainer = $(this).closest('.spc-recommended-products');
+          var carouselLeft = recommendProductsContainer.offset().left;
+          var carouselRight = carouselLeft + recommendProductsContainer.outerWidth();
+
+          // We check if at least some part of the product is visible in the
+          // carousel.
+          if ((elementLeft > carouselLeft)
+            && ((elementLeft + 40) < carouselRight)) {
+            active = true;
+          }
         }
+
         return active;
       }
     }
