@@ -46,8 +46,6 @@
   Drupal.alshayaSeoSpc.prepareProductImpression = function (recommendedProducts, position) {
     var impressions = [];
     var productLinkSelector = $('.spc-recommended-products .block-content a:not(".impression-processed")');
-    var productLinkProcessedSelector = $('.spc-recommended-products .block-content a.impression-processed');
-    var count = productLinkProcessedSelector.length + 1;
 
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
@@ -58,11 +56,10 @@
           // it has gtm_attributes key.
           var impression = Drupal.alshayaSeoSpc.getRecommendationGtmAttributes($(this).attr('data-sku'));
           impression.list = Drupal.alshayaSeoSpc.getRecommendationsListName();
-          impression.position = count;
+          impression.position = Drupal.alshayaSeoSpc.getRecommendationsPosition($(this));
           // Keep variant empty for impression pages. Populated only post add to cart action.
           impression.variant = '';
           impressions.push(impression);
-          count++;
         }
       });
     }
@@ -100,7 +97,32 @@
     return (productRecommendationsSuffix + gtmListName.replace('placeholder', label)).toLowerCase();
   };
 
+  /**
+   * Sets the postion of all recommended products in carousel at once.
+   */
+  Drupal.alshayaSeoSpc.setRecommendationsPosition = function() {
+    var count = 1;
+    $('.spc-recommended-products .recommended-product').each(function() {
+      $(this).data('list-item-position', count++);
+    });
+  }
+
+  /**
+   * Gets the position of an individual element in the carousel.
+   *
+   * @param object element
+   *   The recommendation product javascript object.
+   *
+   * @return number
+   *   The position of the item in the carousel.
+   */
+  Drupal.alshayaSeoSpc.getRecommendationsPosition = function (element) {
+    return parseInt($(element).closest('.spc-recommended-products .recommended-product').data('list-item-position'));
+  }
+
   document.addEventListener('recommendedProductsLoad', function (e) {
+    // Set the position of the items in the carousel.
+    Drupal.alshayaSeoSpc.setRecommendationsPosition();
     // Process impressions as soon as products load as that section might
     // already be on screen.
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e);
@@ -132,10 +154,11 @@
         var elementGtmAttributes = Drupal.alshayaSeoSpc.getRecommendationGtmAttributes(element.getAttribute('data-sku'));
         // Product click handler expects attributes to have 'gtm-' prefix so we
         // send it that way.
+        const position = Drupal.alshayaSeoSpc.getRecommendationsPosition(element);
         for (const [index, value] of Object.entries(elementGtmAttributes)) {
           element.setAttribute('gtm-' + index, value);
         }
-        Drupal.alshaya_seo_gtm_push_product_clicks($(element), drupalSettings.gtm.currency, listName, index);
+        Drupal.alshaya_seo_gtm_push_product_clicks($(element), drupalSettings.gtm.currency, listName, position);
       });
     });
   });
