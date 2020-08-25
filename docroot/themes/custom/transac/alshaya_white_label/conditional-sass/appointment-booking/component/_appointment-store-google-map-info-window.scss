@@ -5,6 +5,14 @@
       padding: 1.125rem 1.375rem !important;
       border: solid 1px $appointment-store-info-window-border;
       border-radius: 0;
+
+      @include breakpoint($tablet) {
+        max-height: 11.875rem !important;
+      }
+
+      @include breakpoint($desktop) {
+        max-height: 12.5rem !important;
+      }
     }
 
     .gm-style-iw-d {
@@ -13,11 +21,17 @@
       color: $appointment-store-map-info-window-impress;
       overflow: auto !important;
 
+      @include breakpoint($tablet) {
+        max-height: 11.875rem !important;
+      }
+
       .appointment-store-name {
         .store-name {
           width: 68%;
           display: inline-block;
           color: $appointment-store-map-store-name;
+          font-size: 0.875rem;
+          font-family: $alshaya-bold;
         }
 
         .store-distance {
@@ -84,6 +98,10 @@
         }
       }
 
+      @include breakpoint($only-mobile) {
+        font-size: 0.75rem;
+      }
+
       &.selected {
         display: block;
       }
@@ -100,6 +118,11 @@
 
           .store-name {
             color: $appointment-store-map-store-name;
+            font-family: $alshaya-bold;
+
+            @include breakpoint($only-mobile) {
+              font-size: 0.875rem;
+            }
           }
 
           .store-distance {
