@@ -166,6 +166,7 @@ class AlshayaAppointmentController extends ControllerBase {
       '#strings' => _alshaya_appointment_static_strings(),
       '#attached' => [
         'library' => [
+          'alshaya_appointment/alshaya_appointment_localstore',
           'alshaya_appointment/alshaya_appointment',
           'alshaya_white_label/appointment-booking',
           'alshaya_spc/googlemapapi',
