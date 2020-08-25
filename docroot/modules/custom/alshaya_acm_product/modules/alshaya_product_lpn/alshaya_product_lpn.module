@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\acq_sku\Entity\SKU;
+
+/**
+ * Implements hook_acq_sku_configurable_product_configurations_alter().
+ */
+function alshaya_product_lpn_acq_sku_configurable_product_configurations_alter(array &$configurations, SKU $sku) {
+  // Get lpn_attribute from config.
+  $lpn_attribute = \Drupal::config('alshaya_product_lpn.settings')->get('lpn_attribute');
+
+  // Process SKU with lpn_attribute.
+  if (!empty($configurations[$lpn_attribute])) {
+
+  }
+
+}
