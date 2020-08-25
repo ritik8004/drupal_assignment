@@ -38,7 +38,7 @@ export default class AppointmentLogin extends React.Component {
             </div>
             <div className="appointment-login-buttons-wrapper">
               <a
-                href={`${baseUrl}${pathPrefix}user/login?destination=/appointment/booking`}
+                href={`${baseUrl}${pathPrefix}user/login?destination=/appointment/booking?step=set`}
                 className="appointment-type-button appointment-signin-button"
               >
                 { getStringMessage('sign_in_button') }
@@ -84,7 +84,7 @@ export default class AppointmentLogin extends React.Component {
             </div>
             <div className="appointment-login-buttons-wrapper">
               <a
-                href={`${baseUrl}${pathPrefix}user/register?destination=/appointment/booking`}
+                href={`${baseUrl}${pathPrefix}user/register?destination=/appointment/booking?step=set`}
                 className="appointment-type-button appointment-register-button"
               >
                 { getStringMessage('register') }
