@@ -104,7 +104,7 @@ class CheckoutCartItem extends React.Component {
             { configurableValues.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
           </div>
         </div>
-        {context === 'confirmation' ? (
+        {context !== 'cart' ? (
           <Notifications>
             <CartItemFree type="alert" filled="true" freeItem={freeItem} />
           </Notifications>
