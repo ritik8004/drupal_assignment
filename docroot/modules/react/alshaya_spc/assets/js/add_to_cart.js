@@ -158,6 +158,7 @@
                       var langcode = $('html').attr('lang');
                       productUrl = productVariantInfo.url[langcode];
                     }
+                    gtmAttributes.price = productVariantInfo.gtm_price || price;
                   }
                   else if (productInfo.group !== undefined) {
                     var productVariantInfo = productInfo.group[productData.sku];
@@ -169,14 +170,11 @@
 
                     var langcode = $('html').attr('lang');
                     productUrl = productVariantInfo.url[langcode];
+                    gtmAttributes.price = productVariantInfo.gtm_price || price;
                   }
 
                   // Store proper variant sku in gtm data now.
                   gtmAttributes.variant = productDataSKU;
-                  gtmAttributes.price = price;
-                  if (productVariantInfo && productVariantInfo.gtm_price) {
-                    gtmAttributes.price = productVariantInfo.gtm_price;
-                  }
                   Drupal.alshayaSpc.storeProductData({
                     sku: productDataSKU,
                     parentSKU: parentSKU,
