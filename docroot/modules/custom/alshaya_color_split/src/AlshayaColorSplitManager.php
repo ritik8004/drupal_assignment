@@ -232,4 +232,25 @@ class AlshayaColorSplitManager {
     }
   }
 
+  /**
+   * Wrapper function to get grouping attribute values.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Product.
+   *
+   * @return array
+   *   Grouping attribute values.
+   */
+  public function getGroupingAttributeValues(SKU $sku) {
+    $products_in_style = $this->getProductsInStyle($sku);
+    $grouping_attribute = $this->getGroupingAttribute($sku);
+    if ($products_in_style && $grouping_attribute && $sku->get('attr_' . $grouping_attribute)->getString()) {
+      return [
+        'label' => t($grouping_attribute, ['context' => 'configurable_attribute']),
+        'value' => $sku->get('attr_' . $grouping_attribute)->getString(),
+      ];
+    }
+    return NULL;
+  }
+
 }
