@@ -134,6 +134,8 @@ export default class PdpClickCollect extends React.PureComponent {
     if (e.target.tagName.toLowerCase() === 'span') {
       document.getElementById('click-n-collect-search-field').classList.remove('hidden');
     }
+
+    this.updateHeightOnAjax();
   };
 
   render() {
@@ -200,10 +202,10 @@ export default class PdpClickCollect extends React.PureComponent {
               </span>
 
               <ConditionalView condition={stores && stores.length > 0}>
-                <div className="magv2-click-collect-results">{storesContent}</div>
+                <div className="magv2-click-collect-results fadeInUp">{storesContent}</div>
 
                 <ConditionalView condition={stores.length > 2}>
-                  <div className="magv2-click-collect-show-link" onClick={this.toggleShowMore}>
+                  <div className="magv2-click-collect-show-link fadeInUp" onClick={this.toggleShowMore}>
                     {Drupal.t(showMore ? 'Show-less' : 'Show-more')}
                   </div>
                 </ConditionalView>
