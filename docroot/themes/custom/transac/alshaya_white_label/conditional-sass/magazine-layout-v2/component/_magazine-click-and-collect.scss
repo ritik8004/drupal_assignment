@@ -39,6 +39,17 @@
     .store-count-label + .location-field-wrapper input {
       margin-top: 0;
     }
+
+    .store-count-label + #click-n-collect-search-field .location-field-wrapper {
+      margin: -2.1875rem 0 1.25rem;
+    }
+
+    .click-n-collect-selected-location {
+      font-family: $alshaya-thin;
+      color: $magv2-click-collect-selected-location;
+      line-height: 1.75rem;
+      text-decoration: underline;
+    }
   }
 
   .magv2-click-collect-show-link,

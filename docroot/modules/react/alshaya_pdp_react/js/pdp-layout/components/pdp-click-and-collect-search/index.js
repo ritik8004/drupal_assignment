@@ -1,7 +1,7 @@
 import React from 'react';
 
 const PdpClickCollectSearch = React.forwardRef((props, ref) => (
-  <div className="location-field-wrapper" ref={ref}>
+  <div className="location-field-wrapper fadeInUp" ref={ref}>
     <div className="location-field">
       <input
         className="form-search"
