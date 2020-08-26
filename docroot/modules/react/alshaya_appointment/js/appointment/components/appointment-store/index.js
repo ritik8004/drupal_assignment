@@ -20,6 +20,9 @@ import {
 } from '../../../utilities/map/fullScreen';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 import getStringMessage from '../../../../../js/utilities/strings';
+import stickyCTAButtonObserver from '../../../utilities/StickyCTA';
+import AppointmentSelection from '../appointment-selection';
+import ConditionalView from '../../../common/components/conditional-view';
 
 const StoreMap = React.lazy(async () => {
   const localStorageValues = getStorageInfo();
@@ -75,7 +78,9 @@ export default class AppointmentStore extends React.Component {
     } = this.state;
     document.addEventListener('placeAutocomplete', this.initiatePlaceAutocomplete);
     if (refCoords !== null && storeList.length === 0) {
-      this.fetchStores(refCoords);
+      this.fetchStores(refCoords, null, false);
+    } else {
+      dispatchCustomEvent('placeAutocomplete', true);
     }
 
     // Ask for location access when we don't have any coords.
@@ -84,11 +89,14 @@ export default class AppointmentStore extends React.Component {
     }
     // Show "select this store" button, if a store is selected.
     if (selectedStoreItem && openSelectedStore === false) {
-      this.showOpenMarker();
       this.selectStoreButtonVisibility(true);
     }
     // On marker click.
     document.addEventListener('markerClick', this.mapMarkerClick);
+    // We need a sticky button in mobile.
+    if (window.innerWidth < 768) {
+      stickyCTAButtonObserver();
+    }
   }
 
   componentWillUnmount() {
@@ -114,7 +122,7 @@ export default class AppointmentStore extends React.Component {
     }
   }
 
-  fetchStores = (coords, locationAccess = null) => {
+  fetchStores = (coords, locationAccess = null, geo = true) => {
     const {
       radius, unit, max_num_of_locations: locCount,
     } = drupalSettings.alshaya_appointment.store_finder;
@@ -122,19 +130,23 @@ export default class AppointmentStore extends React.Component {
     // Show loader.
     showFullScreenLoader();
 
-    const apiUrl = `/get/stores?radius=${radius}&unit=${unit}&max-locations=${locCount}&latitude=${coords.lat}&longitude=${coords.lng}`;
+    // lat, long and unit is required in case of all stores also for calculating miles.
+    let apiUrl = `/get/stores?radius=${radius}&unit=${unit}&max-locations=${locCount}&latitude=${coords.lat}&longitude=${coords.lng}`;
+    if (geo) {
+      apiUrl = `${apiUrl}&geo=${geo}`;
+    }
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        this.selectStoreButtonVisibility(false);
         if (result.error === undefined && result.data !== undefined) {
           window.fetchStore = 'finished';
           dispatchCustomEvent('placeAutocomplete', true);
           this.updateCoordsAndStoreList(coords, result.data, locationAccess);
-          this.showOpenMarker(result.data);
-          this.showOutsideCountryError(false);
-
+          if (window.appointmentMap) {
+            this.showOpenMarker(result.data);
+            this.showOutsideCountryError(false);
+          }
           // Remove loader.
           removeFullScreenLoader();
         } else {
@@ -492,8 +504,11 @@ export default class AppointmentStore extends React.Component {
         }}
         markers={storeList}
         openSelectedStore={openSelectedStore}
+        showOpenMarker={this.showOpenMarker}
       />
     );
+
+    const { handleBack } = this.props;
 
     return (
       <div className="appointment-store-wrapper">
@@ -552,6 +567,12 @@ export default class AppointmentStore extends React.Component {
               </div>
             </div>
           </React.Suspense>
+          <ConditionalView condition={window.innerWidth < 768}>
+            <AppointmentSelection
+              handleEdit={handleBack}
+            />
+          </ConditionalView>
+
           <div className="appointment-store-actions appointment-store-buttons-wrapper" data-selected-stored={openSelectedStore}>
             <button
               className="appointment-store-button appointment-type-button back"
@@ -565,16 +586,17 @@ export default class AppointmentStore extends React.Component {
             >
               {getStringMessage('back')}
             </button>
-            <div className="appointment-flow-action">
-              <button
-                className="appointment-store-button appointment-type-button select-store"
-                type="button"
-                onClick={(e) => this.finalizeCurrentStore(e)}
-              >
-                {getStringMessage('select_store_button')}
-              </button>
-            </div>
           </div>
+          <div className="appointment-flow-action">
+            <button
+              className="appointment-store-button appointment-type-button select-store"
+              type="button"
+              onClick={(e) => this.finalizeCurrentStore(e)}
+            >
+              {getStringMessage('select_store_button')}
+            </button>
+          </div>
+          <div id="appointment-bottom-sticky-edge" />
         </div>
       </div>
     );

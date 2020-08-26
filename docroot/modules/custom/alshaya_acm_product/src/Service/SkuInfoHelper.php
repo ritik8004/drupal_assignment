@@ -517,7 +517,7 @@ class SkuInfoHelper {
   public function getProductInfo(SKUInterface $sku) {
     $productInfo = [];
     $productInfo['type'] = $sku->bundle();
-    $productInfo['priceRaw'] = _alshaya_acm_format_price_with_decimal((float) $sku->get('price')->getString());
+    $productInfo['priceRaw'] = (float) _alshaya_acm_format_price_with_decimal((float) $sku->get('price')->getString());
     $productInfo['cart_title'] = $this->productInfoHelper->getTitle($sku, 'basket');
     $this->moduleHandler->alter('sku_product_info', $productInfo, $sku);
     return $productInfo;
@@ -551,7 +551,7 @@ class SkuInfoHelper {
       'qty' => (float) $stockInfo['stock'],
     ];
     $variant['price'] = $this->renderer->renderPlain($price);
-    $variant['priceRaw'] = _alshaya_acm_format_price_with_decimal((float) $child->get('price')->getString());
+    $variant['priceRaw'] = (float) _alshaya_acm_format_price_with_decimal((float) $child->get('price')->getString());
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
 

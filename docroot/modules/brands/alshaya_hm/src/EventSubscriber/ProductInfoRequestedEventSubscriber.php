@@ -89,7 +89,41 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       case 'short_description':
         $this->processShortDescription($event);
         break;
+
+      case 'collection_labels':
+        $this->processCollectionLabels($event);
+        break;
     }
+  }
+
+  /**
+   * Get collection labels from sku.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function processCollectionLabels(ProductInfoRequestedEvent $event) {
+    $sku = $event->getSku();
+    $context = $event->getContext();
+    $config = $this->configFactory->get('alshaya_hm.label_order.settings');
+    $collection_attributes = $config->get($context);
+    $labels = [];
+
+    foreach ($collection_attributes as $attribute) {
+      if ($attribute_value = $sku->get($attribute)->getString()) {
+        $labels[] = [
+          'content' => $attribute_value,
+          'class' => $attribute,
+        ];
+
+        if ($context === 'plp') {
+          // In plp we only display a single label.
+          break;
+        }
+      }
+    }
+
+    $event->setValue($labels);
   }
 
   /**

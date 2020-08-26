@@ -407,7 +407,13 @@
       margin-top: 1rem;
       height: 2.875rem;
 
-      @include breakpoint($tablet) {
+      @include breakpoint($only-tablet) {
+        width: 9.125rem;
+        max-width: 11rem;
+        padding: 0.625rem 1.45rem;
+      }
+
+      @include breakpoint($desktop) {
         width: 11.875rem;
       }
     }

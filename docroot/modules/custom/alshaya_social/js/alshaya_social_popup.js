@@ -11,10 +11,17 @@
       // create new Social auth popup window and monitor it
       $('.auth-link').click(function () {
         var authLink = $(this).attr('social-auth-link');
+        var queryString = window.location.search;
+        var urlParams = new URLSearchParams(queryString);
+        var destination = urlParams.get('destination');
         Drupal.socialAuthPopup({
           path: authLink,
           callback: function () {
-            window.location.reload();
+            if (destination) {
+              window.location.href = destination;
+            } else {
+              window.location.reload();
+            }
           }
         });
       });

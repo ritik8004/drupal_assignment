@@ -135,4 +135,33 @@
       }
     }
   }
+
+  @include breakpoint($only-tablet) {
+    > .appointment-details {
+      margin-top: 6.25rem;
+    }
+  }
+}
+
+.appointment-select-store-container,
+.appointment-select-time-slot-container {
+  @include breakpoint($only-mobile) {
+    > .appointment-details {
+      display: none;
+    }
+
+    .appointment-store-buttons-wrapper {
+      padding-top: 1.5rem;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .appointment-store-actions {
+      float: $left;
+    }
+
+    .appointment-flow-action {
+      float: $right;
+    }
+  }
 }

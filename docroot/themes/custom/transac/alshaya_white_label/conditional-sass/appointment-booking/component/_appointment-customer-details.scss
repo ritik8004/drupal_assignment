@@ -78,7 +78,7 @@
   }
 }
 
-.disclaimer-wrapper {
+.disclaimer-wrapper:not(:empty) {
   font-size: 0.8125rem;
   color: $appointment-disclaimer-text;
   margin-top: 2.5rem;
@@ -130,6 +130,18 @@
       height: 1.5rem;
       background: url('#{$base_theme_img_directory_path}/icons/appointment-delete.svg') no-repeat center;
       background-size: cover;
+    }
+  }
+}
+
+.appointment-customer-details-container {
+  @include breakpoint($tablet) {
+    .appointment-store-actions {
+      float: $left;
+    }
+
+    .appointment-flow-action {
+      float: $right;
     }
   }
 }

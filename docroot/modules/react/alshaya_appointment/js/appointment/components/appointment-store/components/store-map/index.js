@@ -14,6 +14,7 @@ class StoreMap extends React.Component {
   }
 
   componentDidMount() {
+    const { showOpenMarker } = this.props;
     // Global map object.
     this.googleMap = new Gmap();
     window.appointmentMap = this.googleMap;
@@ -29,6 +30,7 @@ class StoreMap extends React.Component {
       window.appointmentMap.setCenter();
     }
     dispatchCustomEvent('placeAutocomplete', true);
+    showOpenMarker();
   }
 
   componentDidUpdate(prevProps) {
