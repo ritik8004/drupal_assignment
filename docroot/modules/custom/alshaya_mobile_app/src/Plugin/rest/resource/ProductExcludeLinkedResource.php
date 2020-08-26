@@ -232,7 +232,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
 
     // Allow other modules to alter product data.
     $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity);
-    if (isset($data['grouped_variants'])) {
+    if (isset($data['grouping_attribute_with_swatch'])) {
       $data['grouped_variants'] = $this->getGroupedVariants($data);
     }
     $response = new ResourceResponse($data);

@@ -352,6 +352,15 @@ class CheckoutDefaults {
       'store_code' => $store['code'],
     ];
 
+    if (!isset($data['shipping']['shipping_address']['custom_attributes'])) {
+      foreach ($data['shipping']['shipping_address']['extension_attributes'] ?? [] as $key => $value) {
+        $data['shipping']['shipping_address']['custom_attributes'][] = [
+          'attributeCode' => $key,
+          'value' => $value,
+        ];
+      }
+    }
+
     // Validate address.
     $valid_address = $this->drupal->validateAddressAreaCity($billing);
     // If address is not valid.
@@ -368,7 +377,7 @@ class CheckoutDefaults {
     ]);
 
     // If shipping address not contains proper data (extension info).
-    if (!empty($data['shipping']['shipping_address']['extension_attributes'])) {
+    if (empty($data['shipping']['shipping_address']['extension_attributes'])) {
       return FALSE;
     }
 
@@ -390,7 +399,7 @@ class CheckoutDefaults {
     ]);
 
     // If billing address not contains proper data (extension info).
-    if (!empty($billing['extension_attributes'])) {
+    if (empty($billing['extension_attributes'])) {
       return FALSE;
     }
 
