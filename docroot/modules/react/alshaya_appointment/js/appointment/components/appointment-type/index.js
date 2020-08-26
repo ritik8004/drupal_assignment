@@ -13,6 +13,7 @@ import {
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
 import getStringMessage from '../../../../../js/utilities/strings';
+import stickyCTAButtonObserver from '../../../utilities/StickyCTA';
 
 const listItems = drupalSettings.alshaya_appointment.appointment_companion_limit;
 const companionItems = [...Array(parseInt(listItems, 10))]
@@ -71,6 +72,11 @@ export default class AppointmentType extends React.Component {
           });
         }
       });
+    }
+
+    // We need a sticky button in mobile.
+    if (window.innerWidth < 768) {
+      stickyCTAButtonObserver();
     }
   }
 
@@ -196,6 +202,7 @@ export default class AppointmentType extends React.Component {
             {getStringMessage('continue')}
           </button>
         </div>
+        <div id="appointment-bottom-sticky-edge" />
       </div>
     );
   }

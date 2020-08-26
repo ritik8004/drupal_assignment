@@ -1,0 +1,11 @@
+#appointment-bottom-sticky-edge {
+  min-height: 1px;
+  min-width: 1px;
+}
+
+.appointment-flow-action {
+  @include breakpoint($only-mobile) {
+    position: sticky;
+    bottom: 0;
+  }
+}
