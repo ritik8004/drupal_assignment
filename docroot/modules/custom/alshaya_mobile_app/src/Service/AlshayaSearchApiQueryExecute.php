@@ -316,10 +316,8 @@ class AlshayaSearchApiQueryExecute {
       }
     }
 
-    if ($this->getViewsId() == 'alshaya_product_list') {
-      // Filter by published nodes as same is done in views.
-      $query->addCondition('status', NodeInterface::PUBLISHED);
-    }
+    // Filter by published nodes as same is done in views.
+    $query->addCondition('status', NodeInterface::PUBLISHED);
     // Language filter.
     $query->setLanguages([$this->languageManager->getCurrentLanguage()->getId()]);
     // Sort by the stock.
