@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_product_options\SwatchesHelper;
+use Drupal\node\NodeInterface;
 
 /**
  * Class AlshayaSearchApiQueryExecute.
@@ -315,6 +316,10 @@ class AlshayaSearchApiQueryExecute {
       }
     }
 
+    if ($this->getViewsId() == 'alshaya_product_list') {
+      // Filter by published nodes as same is done in views.
+      $query->addCondition('status', NodeInterface::PUBLISHED);
+    }
     // Language filter.
     $query->setLanguages([$this->languageManager->getCurrentLanguage()->getId()]);
     // Sort by the stock.
