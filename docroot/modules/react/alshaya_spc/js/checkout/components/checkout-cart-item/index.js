@@ -81,8 +81,10 @@ class CheckoutCartItem extends React.Component {
       title,
     };
 
+    const freeGift = freeItem === true ? 'free-gift' : '';
+
     return (
-      <div className="product-item">
+      <div className={`product-item ${freeGift}`}>
         <div className="spc-product-image">
           <CheckoutItemImage img_data={cartImage} />
         </div>
