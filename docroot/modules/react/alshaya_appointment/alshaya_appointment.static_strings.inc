@@ -410,5 +410,9 @@ function _alshaya_appointment_my_appointments_static_strings() {
       'key' => 'ok',
       'value' => t('OK'),
     ],
+    [
+      'key' => 'dob_label',
+      'value' => t('Date of Birth'),
+    ],
   ];
 }
