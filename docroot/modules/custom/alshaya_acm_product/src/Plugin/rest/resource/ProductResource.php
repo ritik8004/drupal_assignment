@@ -254,6 +254,9 @@ class ProductResource extends ResourceBase {
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_config(), $data['flags']], TRUE);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
+    // Allow other modules to alter product data.
+    $this->moduleHandler->alter('sku_product_info', $data, $skuEntity);
+
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 

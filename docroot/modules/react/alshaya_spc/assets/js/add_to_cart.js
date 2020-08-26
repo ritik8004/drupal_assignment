@@ -159,6 +159,7 @@
                     price = productVariantInfo.priceRaw;
                     parentSKU = productVariantInfo.parent_sku;
                     promotions = productVariantInfo.promotionsRaw;
+                    options = productVariantInfo.grouping_options;
                     maxSaleQty = productVariantInfo.maxSaleQty;
                     maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
 
