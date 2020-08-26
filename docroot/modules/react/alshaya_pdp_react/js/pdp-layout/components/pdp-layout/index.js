@@ -100,8 +100,9 @@ const PdpLayout = () => {
       </div>
       <div className="magv2-main">
         <div className="magv2-content" id="pdp-gallery-refresh">
-          <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} />
-          <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} />
+          <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery}>
+            <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} />
+          </PdpGallery>
         </div>
         <div className="magv2-sidebar">
           <PdpInfo
