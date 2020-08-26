@@ -1,47 +1,91 @@
 import React from 'react';
 import getStringMessage from '../../../../../js/utilities/strings';
 
+const descriptionThreshold = 300;
+
 export default class ReadMore extends React.Component {
   constructor(props) {
     super(props);
     this.readMoreRef = React.createRef();
     this.state = {
       open: false,
+      desc: '',
     };
   }
 
   componentDidMount() {
-    const maxHeight = `${this.readMoreRef.current.offsetHeight}px`;
-    this.readMoreRef.current.setAttribute('data-max-height', maxHeight);
-    this.readMoreRef.current.classList.add('max-height-processed');
+    const { description } = this.props;
+    const stateDesc = this.getTrimmedDescription(description);
+    // Assign description in state.
+    this.setState({
+      desc: stateDesc,
+    });
   }
 
+  componentDidUpdate(prevProps) {
+    const { description } = this.props;
+    if (description !== prevProps.description) {
+      const stateDesc = this.getTrimmedDescription(description);
+      // Assign description in state and closing the read more.
+      this.closeReadMore(stateDesc);
+    }
+  }
+
+  closeReadMore = (stateDesc) => {
+    this.setState({
+      desc: stateDesc,
+      open: false,
+    });
+  };
+
+  /**
+   * Trim description if it is beyond our threshold.
+   *
+   * @param description
+   * @returns {string|*}
+   */
+  getTrimmedDescription = (description) => {
+    if (description.length > descriptionThreshold) {
+      return description.substring(0, descriptionThreshold);
+    }
+    return description;
+  }
+
+  /**
+   * Click handler for read more link.
+   */
   expandContent = () => {
     const { open } = this.state;
+    const { description } = this.props;
 
     if (open) {
+      const stateDesc = this.getTrimmedDescription(description);
       this.setState({
         open: false,
+        desc: stateDesc,
       });
-      this.readMoreRef.current.style.removeProperty('max-height');
     } else {
       this.setState({
         open: true,
+        desc: description,
       });
-      const maxHeight = this.readMoreRef.current.getAttribute('data-max-height');
-      this.readMoreRef.current.style.maxHeight = maxHeight;
     }
   };
 
   render() {
-    const { description } = this.props;
-    const { open } = this.state;
+    const { open, desc } = this.state;
     // Add correct class.
     const expandedState = open === true ? 'expanded' : '';
     // Add link text.
     const linkText = open === true ? getStringMessage('show_less') : getStringMessage('read_more');
+    // Hide/Show Read more link.
+    let showReadMoreClass = '';
+    if (desc.length < descriptionThreshold) {
+      showReadMoreClass = 'hide-link';
+    }
+
     // If description is empty.
-    if (description.length < 1) {
+    if (desc.length < 1) {
       return (
         <div className="read-more-less empty" />
       );
@@ -50,9 +94,9 @@ export default class ReadMore extends React.Component {
     return (
       <div className={`read-more-less ${expandedState}`}>
         <span ref={this.readMoreRef} className="read-more-content short-text">
-          { description }
+          { desc }
         </span>
-        <a className="readmore-link readMoreText" onClick={() => this.expandContent()}>
+        <a className={`readmore-link readMoreText ${showReadMoreClass}`} onClick={() => this.expandContent()}>
           { linkText }
         </a>
       </div>
