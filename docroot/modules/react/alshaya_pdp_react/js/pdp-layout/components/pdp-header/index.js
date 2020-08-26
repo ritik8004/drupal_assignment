@@ -19,11 +19,12 @@ export default class PdpHeader extends React.PureComponent {
     } = this.props;
 
     const { checkoutFeatureStatus } = drupalSettings;
+    const backArrow = document.referrer;
 
     return (
       <div className="magv2-header-wrapper">
         <ConditionalView condition={window.innerWidth < 768}>
-          <div className="back-button" />
+          <a className="back-button" href={backArrow} />
           <PdpInfo
             title={title}
             finalPrice={finalPrice}
