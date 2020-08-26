@@ -245,9 +245,8 @@ class AlshayaColorSplitManager {
    *   Grouping attribute values.
    */
   public function getGroupingAttributeValues(SKU $sku) {
-    $products_in_style = $this->getProductsInStyle($sku);
     $grouping_attribute = $this->getGroupingAttribute($sku);
-    if ($products_in_style && $grouping_attribute && $sku->get('attr_' . $grouping_attribute)->getString()) {
+    if (!empty($grouping_attribute) && $sku->get('attr_' . $grouping_attribute)->getString()) {
 
       return [
         'label' => $this->t('color', ['context' => 'configurable_attribute']),

@@ -76,7 +76,9 @@
         }
 
         let attrOptions = response.configurable_values;
-        if (attrOptions.length < 1 && response.grouping_attribute_with_swatch) {
+        if (attrOptions.length < 1 
+          && response.grouping_attribute_with_swatch !== undefined
+          && response.grouping_attribute_with_swatch) {
           attrOptions = Drupal.alshayaSpc.getGroupingOptions(response.attributes);
         }
 
@@ -138,7 +140,8 @@
     return null;
   };
 
-  Drupal.alshayaSpc.getGroupingAttributeVal = function (attrResp, attrKey) {
+  // To get the name of grouping attribute
+  Drupal.alshayaSpc.getGroupingAttribute = function (attrResp, attrKey) {
     for (var i in attrResp) {
       if (attrResp[i].key === attrKey) {
         return attrResp[i].value;
@@ -147,8 +150,9 @@
     return null;
   };
 
+  // To get the options value for grouping attribute.
   Drupal.alshayaSpc.getGroupingOptions = function (attrResp) {
-    var groupAttribute = Drupal.alshayaSpc.getGroupingAttributeVal(attrResp, 'grouping_attributes');
+    var groupAttribute = Drupal.alshayaSpc.getGroupingAttribute(attrResp, 'grouping_attributes');
     if (groupAttribute === null) {
       return null;
     }

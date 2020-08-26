@@ -251,7 +251,7 @@ class ProductResource extends ResourceBase {
     $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
     // Allow other modules to alter product data.
-    $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity);
+    $this->moduleHandler->alter('sku_product_info', $data, $skuEntity);
 
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
