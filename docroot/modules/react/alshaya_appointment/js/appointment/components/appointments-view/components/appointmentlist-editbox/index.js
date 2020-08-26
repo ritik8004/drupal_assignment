@@ -19,22 +19,26 @@ export default class AppointmentEditBox extends React.Component {
 
     const { appointmentStartDate, confirmationNumber } = appointment;
 
-    let companionsRender = '';
+    const companionsRender = [];
     const { companionData } = this.props;
     if (companionData !== undefined && companionData.length > 0) {
-      companionsRender = companionData.map((item) => (
-        <div>
-          <p>
-            <span>{ Drupal.t('Customer !i:', { '!i': item.customer }) }</span>
-            <span>{item.firstName}</span>
-            <span>{item.lastName}</span>
-          </p>
-          <p>
-            <span>{ `${getStringMessage('dob_label')}:` }</span>
-            <span>{ moment(item.dob).format(getDateFormat()) }</span>
-          </p>
-        </div>
-      ));
+      let j = 1;
+      for (let i = 0; i < companionData.length; i++) {
+        companionsRender.push(
+          <div key={i}>
+            <p>
+              <span>{ `${getStringMessage('customer_label')} ${j}:` }</span>
+              <span>{companionData[i].firstName}</span>
+              <span>{companionData[i].lastName}</span>
+            </p>
+            <p>
+              <span>{ `${getStringMessage('dob_label')}:` }</span>
+              <span>{ moment(companionData[i].dob).format(getDateFormat()) }</span>
+            </p>
+          </div>,
+        );
+        j += j;
+      }
     }
 
     const url = `${baseUrl}${pathPrefix}appointment/booking?appointment=${confirmationNumber}`;

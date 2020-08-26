@@ -220,5 +220,8 @@ function _alshaya_appointment_translations() {
     'Yahoo' => [
       'ar' => 'Yahoo',
     ],
+    'Customer' => [
+      'ar' => 'العميل',
+    ],
   ];
 }
