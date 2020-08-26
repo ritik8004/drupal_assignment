@@ -82,7 +82,10 @@ class DrupalInfo {
     return (new Client([
       // Base URI is used with relative requests.
       'base_uri' => $this->getDrupalHostUrl(),
-      'headers' => ['Host' => $this->getDrupalBaseUrl()],
+      'headers' => [
+        'Host' => $this->getDrupalBaseUrl(),
+        'user-agent' => 'Alshaya/Middleware',
+      ],
       'verify' => FALSE,
     ]));
   }
