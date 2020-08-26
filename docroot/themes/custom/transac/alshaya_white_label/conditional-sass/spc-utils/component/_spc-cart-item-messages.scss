@@ -1,3 +1,10 @@
+.free-gift {
+  .spc-warnings-alerts {
+    grid-column-end: span 2;
+    -ms-grid-column-span: 2;
+  }
+}
+
 .spc-cart-item-warnings:not(:empty),
 .spc-cart-item-alerts:not(:empty) {
   .spc-cart-item-warnings-item:not(:empty),
