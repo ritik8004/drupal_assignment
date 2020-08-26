@@ -27,7 +27,7 @@ export default class AppointmentEditBox extends React.Component {
         companionsRender.push(
           <div key={i}>
             <p>
-              <span>{ Drupal.t('Customer !i:', { '!i': j }) }</span>
+              <span>{ `${getStringMessage('customer_label')} ${j}:` }</span>
               <span>{companionData[i].firstName}</span>
               <span>{companionData[i].lastName}</span>
             </p>
