@@ -6,7 +6,6 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
-use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -125,13 +124,6 @@ class ProductResource extends ResourceBase {
   protected $productCategoryHelper;
 
   /**
-   * Alshaya Promotions Label Manager.
-   *
-   * @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager
-   */
-  protected $promoLabelManager;
-
-  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -164,8 +156,6 @@ class ProductResource extends ResourceBase {
    *   Request stack.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   The Product Category helper service.
-   * @param \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $alshayaPromoLabelManager
-   *   Alshaya Promo Label Manager.
    */
   public function __construct(
     array $configuration,
@@ -182,8 +172,7 @@ class ProductResource extends ResourceBase {
     SkuInfoHelper $sku_info_helper,
     LanguageManagerInterface $language_manager,
     RequestStack $request_stack,
-    ProductCategoryHelper $product_category_helper,
-    AlshayaPromoLabelManager $alshayaPromoLabelManager
+    ProductCategoryHelper $product_category_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -201,7 +190,6 @@ class ProductResource extends ResourceBase {
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack;
     $this->productCategoryHelper = $product_category_helper;
-    $this->promoLabelManager = $alshayaPromoLabelManager;
   }
 
   /**
@@ -223,8 +211,7 @@ class ProductResource extends ResourceBase {
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('language_manager'),
       $container->get('request_stack'),
-      $container->get('alshaya_acm_product.category_helper'),
-      $container->get('alshaya_acm_promotion.label_manager')
+      $container->get('alshaya_acm_product.category_helper')
     );
   }
 
@@ -372,7 +359,7 @@ class ProductResource extends ResourceBase {
 
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
 
-    $data['promotions'] = $this->getPromotions($sku);
+    $data['promotions'] = [];
     $promo_label = $this->skuManager->getDiscountedPriceMarkup($data['original_price'], $data['final_price']);
     if ($promo_label) {
       $data['promotions'][] = [
@@ -431,6 +418,14 @@ class ProductResource extends ResourceBase {
     // Allow other modules to alter light product data.
     $type = 'full';
     $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
+
+    if (!empty($data['promotions'])) {
+      $promo_nodes = array_column($data['promotions'], 'promo_node');
+      array_walk($promo_nodes, function (&$nid) {
+        $nid = 'node:' . $nid;
+      });
+      $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $promo_nodes);
+    }
 
     return $data;
   }
@@ -582,25 +577,6 @@ class ProductResource extends ResourceBase {
     }
 
     return $combinations;
-  }
-
-  /**
-   * Wrapper function get promotions.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   *
-   * @return array
-   *   Promotions.
-   */
-  private function getPromotions(SKUInterface $sku): array {
-    $promotions = $this->promoLabelManager->getPromotionLabelForProductDetail($sku, 'api');
-    $promo_nodes = array_column($promotions, 'promo_node');
-    array_walk($promo_nodes, function (&$nid) {
-      $nid = 'node:' . $nid;
-    });
-    $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $promo_nodes);
-    return $promotions;
   }
 
   /**

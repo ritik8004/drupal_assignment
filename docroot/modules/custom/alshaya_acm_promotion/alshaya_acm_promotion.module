@@ -371,3 +371,10 @@ function alshaya_acm_promotion_sku_product_info_alter(array &$product_info, SKUI
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
   $product_info['promotionsRaw'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'api');
 }
+
+/**
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
+ */
+function alshaya_acm_promotion_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
+  $data['promotions'] = \Drupal::service('alshaya_acm_promotion.label_manager')->getPromotionLabelForProductDetail($sku, 'api');
+}
