@@ -1,7 +1,8 @@
 .free-gift {
   .spc-warnings-alerts {
+    -ms-grid-column-span: 3;
+    -ms-grid-row: 2;
     grid-column-end: span 2;
-    -ms-grid-column-span: 2;
   }
 }
 
