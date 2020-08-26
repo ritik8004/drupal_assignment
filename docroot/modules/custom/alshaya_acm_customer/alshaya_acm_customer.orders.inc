@@ -455,6 +455,8 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       if (isset($item['applied_rule_ids']) && (int) $item['price'] == 0) {
         $product['free_gift_label'] = t('Free Gift with Purchase');
       }
+      // Allow other modules to alter order details.
+      \Drupal::moduleHandler()->alter('alshaya_acm_customer_order_details', $sku, $product);
 
       $products[] = $product;
     }

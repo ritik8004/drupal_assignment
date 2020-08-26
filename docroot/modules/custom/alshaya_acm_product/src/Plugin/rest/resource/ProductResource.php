@@ -250,6 +250,9 @@ class ProductResource extends ResourceBase {
     $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_config(), $data['flags']], TRUE);
     $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
+    // Allow other modules to alter product data.
+    $this->moduleHandler->alter('sku_product_info', $data, $skuEntity);
+
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 

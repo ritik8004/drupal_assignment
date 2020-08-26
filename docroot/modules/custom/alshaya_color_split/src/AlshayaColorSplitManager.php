@@ -7,6 +7,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AlshayaColorSplitManager.
@@ -14,6 +15,8 @@ use Drupal\alshaya_product_options\ProductOptionsHelper;
  * @package Drupal\alshaya_color_split
  */
 class AlshayaColorSplitManager {
+
+  use StringTranslationTrait;
 
   /**
    * Constant to hold attribute id for the pseudo attribute for product split.
@@ -230,6 +233,27 @@ class AlshayaColorSplitManager {
         }
       }
     }
+  }
+
+  /**
+   * Wrapper function to get grouping attribute values.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Product.
+   *
+   * @return array
+   *   Grouping attribute values.
+   */
+  public function getGroupingAttributeValues(SKU $sku) {
+    $grouping_attribute = $this->getGroupingAttribute($sku);
+    if (!empty($grouping_attribute) && $sku->get('attr_' . $grouping_attribute)->getString()) {
+
+      return [
+        'label' => $this->t('color', ['context' => 'configurable_attribute']),
+        'value' => $sku->get('attr_' . $grouping_attribute)->getString(),
+      ];
+    }
+    return NULL;
   }
 
 }
