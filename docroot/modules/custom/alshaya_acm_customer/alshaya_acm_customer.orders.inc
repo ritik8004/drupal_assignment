@@ -457,6 +457,8 @@ function alshaya_acm_customer_build_order_detail(array $order) {
         $product['price'] = t('Free');
         $product['total'] = '';
       }
+      // Allow other modules to alter order details.
+      \Drupal::moduleHandler()->alter('alshaya_acm_customer_order_details', $sku, $product);
 
       $products[] = $product;
     }
