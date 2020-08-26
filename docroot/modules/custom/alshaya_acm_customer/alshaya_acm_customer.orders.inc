@@ -445,6 +445,11 @@ function alshaya_acm_customer_build_order_detail(array $order) {
         $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
       }
 
+      // If attribute value available for simple or grouping attribute.
+      if (isset($item['attributes']) && !empty($item['attributes'])) {
+        $product['attributes'] = array_merge($product['attributes'], $item['attributes']);
+      }
+
       $product['image'] = '';
 
       // Load the first image.
@@ -455,8 +460,6 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       if (isset($item['applied_rule_ids']) && (int) $item['price'] == 0) {
         $product['free_gift_label'] = t('Free Gift with Purchase');
       }
-      // Allow other modules to alter order details.
-      \Drupal::moduleHandler()->alter('alshaya_acm_customer_order_details', $sku, $product);
 
       $products[] = $product;
     }
