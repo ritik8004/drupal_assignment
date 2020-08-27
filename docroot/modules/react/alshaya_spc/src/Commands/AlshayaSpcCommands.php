@@ -300,7 +300,7 @@ class AlshayaSpcCommands extends DrushCommands {
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }
           elseif ($cart_amount != $payment_info['value']) {
-            $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment is complete, but it seems amount does not match. Please check again. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
+            $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment is complete, but amount does not match. Please check again. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
               '@info' => json_encode($payment_info),
@@ -362,7 +362,7 @@ class AlshayaSpcCommands extends DrushCommands {
    *
    * @throws \Exception
    */
-  public function placeOrder(array $update, string $cart_id) {
+  protected function placeOrder(array $update, string $cart_id) {
     // Add a custom header to ensure Middleware allows this request
     // without further authentication.
     $request_options['json']['data']['paymentMethod'] = $update;
