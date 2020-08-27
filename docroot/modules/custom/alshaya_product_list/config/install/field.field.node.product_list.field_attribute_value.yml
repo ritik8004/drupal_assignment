@@ -11,7 +11,7 @@ bundle: product_list
 label: 'Attribute value'
 description: ''
 required: false
-translatable: false
+translatable: true
 skip_translation_check: null
 default_value: {  }
 default_value_callback: ''
