@@ -44,7 +44,7 @@ export const controlAddressFormCTA = (status) => {
  * @param status
  */
 export const controlPlaceOrderCTA = (status) => {
-  const addressCTA = document.querySelector('.complete-purchase a');
+  const addressCTA = document.querySelector('.complete-purchase a, .complete-purchase button');
   switch (status) {
     case 'disable':
       addressCTA.classList.add('loading');
