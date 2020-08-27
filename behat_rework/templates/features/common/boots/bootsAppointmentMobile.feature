@@ -20,7 +20,6 @@ Feature: Test Boots functionality
     And the element ".appointment-for-you-container" should exist
     Then I click on ".appointment-companion-wrapper .appointment-select" element
     When I click the element ".appointment-companion-wrapper .appointmentSelect__menu #react-select-3-option-1" on page
-#    Then I click on "#appointmentForYou-yes" element
     Then I click on ".appointment-flow-action .appointment-type-button" element
     And I wait for AJAX to finish
     Then the element "#appointment-booking ul.appointment-steps li.select-store" having attribute "class" should contain "active"
@@ -49,8 +48,6 @@ Feature: Test Boots functionality
     And I wait for AJAX to finish
     Then I fill in "firstName" with "{customer_firstName}"
     Then I fill in "lastName" with "{customer_lastName}"
-    
-    
     Then I fill in "email" with "{customer_email}"
     Then I fill in "mobile" with "{customer_mobile}"
     And I wait 10 seconds
@@ -83,7 +80,6 @@ Feature: Test Boots functionality
     And the element ".appointment-for-you-container" should exist
     Then I click on ".appointment-companion-wrapper .appointment-select" element
     When I click the element ".appointment-companion-wrapper .appointmentSelect__menu #react-select-3-option-1" on page
-#    Then I click on "#appointmentForYou-yes" element
     Then I click on ".appointment-flow-action .appointment-type-button" element
     And I wait for AJAX to finish
     Then the element "#appointment-booking ul.appointment-steps li.select-store" having attribute "class" should contain "active"
@@ -149,7 +145,6 @@ Feature: Test Boots functionality
     And the element ".appointment-for-you-container" should exist
     Then I click on ".appointment-companion-wrapper .appointment-select" element
     When I click the element ".appointment-companion-wrapper .appointmentSelect__menu #react-select-3-option-1" on page
-#    Then I click on "#appointmentForYou-yes" element
     Then I click on ".appointment-flow-action .appointment-type-button" element
     And I wait for AJAX to finish
     Then the element "#appointment-booking ul.appointment-steps li.select-store" having attribute "class" should contain "active"
@@ -215,7 +210,6 @@ Feature: Test Boots functionality
     And the element ".appointment-for-you-container" should exist
     Then I click on ".appointment-companion-wrapper .appointment-select" element
     When I click the element ".appointment-companion-wrapper .appointmentSelect__menu #react-select-3-option-1" on page
-#    Then I click on "#appointmentForYou-yes" element
     Then I click on ".appointment-flow-action .appointment-type-button" element
     And I wait for AJAX to finish
     Then the element "#appointment-booking ul.appointment-steps li.select-store" having attribute "class" should contain "active"
