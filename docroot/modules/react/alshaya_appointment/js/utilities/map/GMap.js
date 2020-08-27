@@ -141,6 +141,7 @@ export default class Gmap {
       // Add the marker icon.
       currentMarkerSettings.icon = {
         url: markerInActiveIcon,
+        scaledSize: new google.maps.Size(50, 50),
       };
     }
 
@@ -166,7 +167,7 @@ export default class Gmap {
     let clickedMarker = '';
     currentMarker.addListener('click', () => {
       map.mapMarkers.forEach((tempMarker) => tempMarker.setIcon(currentMarkerSettings.icon));
-      currentMarker.setIcon(markerActiveIcon);
+      currentMarker.setIcon({ url: markerActiveIcon, scaledSize: new google.maps.Size(50, 50) });
       clickedMarker = currentMarker;
 
       if (currentMarkerSettings.infoWindowSolitary && showInfoWindow === true) {
@@ -195,7 +196,7 @@ export default class Gmap {
       if (clickedMarker === currentMarker) {
         return;
       }
-      currentMarker.setIcon(markerActiveIcon);
+      currentMarker.setIcon({ url: markerActiveIcon, scaledSize: new google.maps.Size(50, 50) });
     });
 
     google.maps.event.addListener(currentMarker, 'mouseout', () => {
@@ -229,12 +230,12 @@ export default class Gmap {
 
   resetIcon = (currentMarker) => {
     const { inActive } = this.map.settings.map_marker;
-    currentMarker.setIcon(inActive);
+    currentMarker.setIcon({ url: inActive, scaledSize: new google.maps.Size(50, 50) });
   }
 
   highlightIcon = (currentMarker) => {
     const { active } = this.map.settings.map_marker;
-    currentMarker.setIcon(active);
+    currentMarker.setIcon({ url: active, scaledSize: new google.maps.Size(50, 50) });
   }
 
   /**
