@@ -44,8 +44,16 @@ export default class AppointmentListItem extends React.Component {
       if (apiData instanceof Promise) {
         apiData.then((result) => {
           if (result.error === undefined && result.data !== undefined) {
+            const { clientData } = this.props;
+            const clientInfo = [{
+              firstName: clientData.firstName,
+              lastName: clientData.lastName,
+              dob: clientData.dob,
+              customer: 0,
+            }];
+            const combined = [].concat(clientInfo, result.data);
             this.setState({
-              companionData: result.data,
+              companionData: combined,
             });
           }
         });
@@ -75,9 +83,10 @@ export default class AppointmentListItem extends React.Component {
 
     let companionsRender = [];
     const { companionData } = this.state;
+
     if (companionData !== undefined && companionData.length > 0) {
       companionsRender = companionData.map((item) => (
-        <div>
+        <div key={item.customer}>
           <p>
             {item.firstName}
             <span> </span>
