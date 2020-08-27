@@ -430,7 +430,10 @@ class AlshayaApiCommands extends DrushCommands {
         continue;
       }
 
-      if ($data['quantity'] > 0 && $data['status'] != $mdata['stock_status']) {
+      // Check for stock status for simple products having stock and
+      // configurable products.
+      if (($data['quantity'] > 0 || $mdata['type_id'] == 'configurable')
+        && $data['status'] != $mdata['stock_status']) {
         $message = $sku . ' | ';
         $message .= 'Drupal stock status:' . $data['status'] . ' | ';
         $message .= 'MDC stock status:' . $mdata['stock_status'];
