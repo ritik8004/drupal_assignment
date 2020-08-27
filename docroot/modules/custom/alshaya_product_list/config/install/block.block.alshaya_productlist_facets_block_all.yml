@@ -15,7 +15,7 @@ settings:
   id: alshaya_productlist_facets_block_all
   label: 'Alshaya all facet block - Product List'
   provider: alshaya_product_list
-  label_display: visible
+  label_display: '0'
 visibility:
   'entity_bundle:node':
     id: 'entity_bundle:node'

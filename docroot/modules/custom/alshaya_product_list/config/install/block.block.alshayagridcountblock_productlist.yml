@@ -16,7 +16,7 @@ settings:
   id: alshaya_grid_count_block
   label: 'Alshaya Grid/Count block - Product List'
   provider: alshaya_product_list
-  label_display: visible
+  label_display: '0'
 visibility:
   'entity_bundle:node':
     id: 'entity_bundle:node'

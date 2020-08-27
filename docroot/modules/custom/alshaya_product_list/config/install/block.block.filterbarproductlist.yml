@@ -18,7 +18,7 @@ settings:
   id: 'facets_summary_block:filter_bar_productlist'
   label: 'Filter bar Product List'
   provider: facets_summary
-  label_display: visible
+  label_display: '0'
 visibility:
   'entity_bundle:node':
     id: 'entity_bundle:node'

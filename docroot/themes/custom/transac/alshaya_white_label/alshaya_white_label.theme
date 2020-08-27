@@ -352,6 +352,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
   $listing_pages_plugin_id = [
     'views_block:alshaya_product_list-block_1',
     'views_block:alshaya_product_list-block_2',
+    'views_block:alshaya_product_list-block_3',
   ];
   if (in_array($variables['plugin_id'], $listing_pages_plugin_id)) {
     $variables['attributes']['class'][] = 'c-products-list';
