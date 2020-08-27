@@ -181,13 +181,7 @@ class AlshayaSpcCommands extends DrushCommands {
                 throw new \Exception('Update payment data in cart failed, please check other logs to know the reason');
               }
 
-              // Add a custom header to ensure Middleware allows this request
-              // without further authentication.
-              $request_options['json']['data']['paymentMethod'] = $update['payment'];
-              $request_options['json']['cart_id'] = $payment['cart_id'];
-              $request_options['headers']['alshaya-middleware'] = md5(Settings::get('middleware_auth'));
-
-              $this->placeOrder($request_options);
+              $this->placeOrder($update['payment'], $payment['cart_id']);
 
               $this->getLogger('PendingPaymentCheck')->notice('KNET Payment successful, order placed. Cart id: @cart_id, Data: @data, KNET response: @info', [
                 '@data' => $payment['data'],
@@ -280,13 +274,7 @@ class AlshayaSpcCommands extends DrushCommands {
                 throw new \Exception('Update payment data in cart failed, please check other logs to know the reason');
               }
 
-              // Add a custom header to ensure Middleware allows this request
-              // without further authentication.
-              $request_options['json']['data']['paymentMethod'] = $order_update['payment'];
-              $request_options['json']['cart_id'] = $payment['cart_id'];
-              $request_options['headers']['alshaya-middleware'] = md5(Settings::get('middleware_auth'));
-
-              $this->placeOrder($request_options);
+              $this->placeOrder($order_update['payment'], $payment['cart_id']);
 
               $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment successful, order placed. Cart id: @cart_id, Data: @data, CheckoutCom response: @info', [
                 '@data' => $payment['data'],
@@ -371,12 +359,19 @@ class AlshayaSpcCommands extends DrushCommands {
   /**
    * Adding payment on the cart.
    *
-   * @param array $request_options
-   *   Request Options.
+   * @param array $update
+   *   Update Array.
+   * @param string $cart_id
+   *   Cart id.
    *
    * @throws \Exception
    */
-  public function placeOrder(array $request_options) {
+  public function placeOrder(array $update, string $cart_id) {
+    // Add a custom header to ensure Middleware allows this request
+    // without further authentication.
+    $request_options['json']['data']['paymentMethod'] = $update;
+    $request_options['json']['cart_id'] = $cart_id;
+    $request_options['headers']['alshaya-middleware'] = md5(Settings::get('middleware_auth'));
     $endpoint = 'middleware/public/cart/place-order-system';
     $response = $this->createClient()->post($endpoint, $request_options);
     $result = json_decode($response->getBody()->getContents(), TRUE);
