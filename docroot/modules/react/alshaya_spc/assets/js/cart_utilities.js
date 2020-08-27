@@ -76,7 +76,7 @@
         }
 
         let attrOptions = response.configurable_values;
-        if (attrOptions.length < 1 
+        if (attrOptions.length < 1
           && response.grouping_attribute_with_swatch !== undefined
           && response.grouping_attribute_with_swatch) {
           attrOptions = Drupal.alshayaSpc.getGroupingOptions(response.attributes);
@@ -161,7 +161,7 @@
 
     let groupingOptions = [];
     const attrLabel = Drupal.t('@attr_label', { '@attr_label': groupAttribute });
-    for (const i in attrResp) {
+    for (var i in attrResp) {
       if (attrResp[i].key === groupAttribute) {
         groupingOptions = [{
           label: attrLabel,
