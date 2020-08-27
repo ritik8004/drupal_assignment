@@ -228,3 +228,34 @@
     }
   }
 }
+
+#appointment-booking {
+  .appointment-confirmation-wrapper {
+    .confirmation-footer:empty {
+      display: none;
+    }
+
+    @include breakpoint($tablet) {
+      .confirmation-footer {
+        float: $right;
+        padding-top: 2rem;
+        padding-#{$left}: 1.5rem;
+      }
+
+      .appointment-flow-action {
+        float: $right;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .confirmation-footer,
+      .appointment-flow-action {
+        float: $left;
+      }
+
+      .confirmation-footer {
+        padding-#{$right}: 1.5rem;
+      }
+    }
+  }
+}
