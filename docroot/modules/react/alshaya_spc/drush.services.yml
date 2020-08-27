@@ -4,5 +4,6 @@ services:
     arguments:
       - '@alshaya_api.api'
       - '@database'
+      - '@acq_checkoutcom.checkout_api'
     tags:
       - { name: drush.command }
