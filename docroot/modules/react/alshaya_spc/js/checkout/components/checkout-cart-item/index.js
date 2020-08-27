@@ -60,6 +60,7 @@ class CheckoutCartItem extends React.Component {
         freeItem,
       },
       context,
+      couponCode,
     } = this.props;
 
     const {
@@ -119,7 +120,7 @@ class CheckoutCartItem extends React.Component {
         />
         {context !== 'confirmation' && context !== 'print' && (
           <div className="spc-promotions">
-            {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
+            {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} couponCode={couponCode} promo={key} sku={sku} link />)}
           </div>
         )}
       </div>

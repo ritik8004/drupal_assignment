@@ -588,10 +588,66 @@ class AlshayaPromoLabelManager {
         );
 
         $apiPromotions[] = [
+          'type' => 'generic',
           'text' => $promotion['text'],
           'promo_web_url' => $url,
           'promo_node' => $nid,
         ];
+      }
+
+      foreach ($free_gift_promotions as $nid => $free_gift_promotion) {
+        $free_skus = $this->promoManager->getFreeGiftSkuEntitiesByPromotionId((int) $nid);
+        $coupon = $free_gift_promotion['coupon_code'][0]['value'] ?? '';
+        $free_gift = ['type' => 'free_gift'];
+        if (
+          $free_gift_promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU
+          && count($free_skus) > 1
+        ) {
+          $free_gift_box_title = $this->t('Free Gift');
+          if (!empty($free_gift_promotion['condition_value'])) {
+            $free_gift_box_title = $this->t('Buy @condition_value to get a free gift', [
+              '@condition_value' => $free_gift_promotion['condition_value'],
+            ]);
+          }
+
+          $free_gift += [
+            'coupon' => $coupon,
+            'promo_node' => $nid,
+            'promo_title' => $free_gift_promotion['text'],
+            'promo_web_url' => str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+              '',
+              Url::fromRoute('alshaya_acm_promotion.free_gifts_list',
+              [
+                'node' => $nid,
+              ])->toString(TRUE)->getGeneratedUrl()),
+            'free_gift_title' => $free_gift_box_title,
+          ];
+        }
+        else {
+          $free_sku_entity = reset($free_skus);
+          if (!$free_sku_entity) {
+            continue;
+          }
+
+          // Get sku title & image.
+          $free_gift += [
+            'coupon' => $coupon,
+            'promo_node' => $nid,
+            'promo_title' => $free_gift_promotion['text'],
+            'promo_web_url' => str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+          '',
+              Url::fromRoute('alshaya_acm_promotion.free_gift_modal',
+              [
+                'acq_sku' => $free_sku_entity->id(),
+                'js' => 'nojs',
+              ])->toString(TRUE)->getGeneratedUrl()),
+            'free_sku_entity_id' => $free_sku_entity->id(),
+            'free_sku_code' => $free_sku_entity->getSku(),
+            'free_sku_title' => $free_sku_entity->get('name')->getString(),
+          ];
+        }
+        $apiPromotions[] = $free_gift;
+        break;
       }
 
       return $apiPromotions;
