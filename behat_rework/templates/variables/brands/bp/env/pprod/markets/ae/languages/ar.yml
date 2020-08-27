@@ -1,0 +1,3 @@
+variables:
+  url_base_uri: 'https://bpae3-pprod.factory.alshaya.com/ar'
+  boots_appointment_page: '/appointment/booking'
