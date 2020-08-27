@@ -6,6 +6,19 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Change the path alias for PLPs.
+ */
+function alshaya_mu_transac_update_8001() {
+  // Change path pattern for PLPs to show first parent followed by term name.
+  \Drupal::configFactory()
+    ->getEditable('pathauto.pattern.product_category_pathauto')
+    ->set('pattern', '/[term:parents:first]-[term:name]')
+    ->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_mu_transac_install() {
@@ -55,6 +68,12 @@ function alshaya_mu_transac_install() {
   alshaya_i18n_save_translations($strings);
 
   _alshaya_mu_transac_get_metatag_translations();
+
+  // Change path pattern for PLPs to show first parent followed by term name.
+  \Drupal::configFactory()
+    ->getEditable('pathauto.pattern.product_category_pathauto')
+    ->set('pattern', '/[term:parents:first]-[term:name]')
+    ->save();
 }
 
 /**
