@@ -30,12 +30,6 @@
         color: $appointment-type-text;
         margin-top: 1.125rem;
         display: block;
-        overflow: hidden;
-        transition: max-height 0.3s ease-in-out;
-
-        &.max-height-processed {
-          max-height: 2.625rem;
-        }
       }
 
       .readMoreText {
@@ -48,6 +42,10 @@
         color: $appointment-type-text;
         cursor: pointer;
         text-transform: capitalize;
+
+        &.hide-link {
+          display: none;
+        }
       }
     }
   }
