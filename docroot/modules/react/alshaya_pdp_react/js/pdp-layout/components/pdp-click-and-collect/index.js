@@ -4,11 +4,7 @@ import PdpSectionTitle from '../utilities/pdp-section-title';
 import PdpSectionText from '../utilities/pdp-section-text';
 import PdpClickCollectSearch from '../pdp-click-and-collect-search';
 import { fetchAvailableStores } from '../../../utilities/pdp_layout';
-import {
-  setupAccordionHeight,
-  allowMaxContent,
-  removeMaxHeight,
-} from '../../../utilities/sidebarCardUtils';
+import setupAccordionHeight from '../../../utilities/sidebarCardUtils';
 import ClickCollectStoreDetail from '../pdp-click-and-collect-store-detail';
 import ConditionalView from '../../../common/components/conditional-view';
 
@@ -24,7 +20,7 @@ export default class PdpClickCollect extends React.PureComponent {
       location: '',
       hideInput: false,
       showMore: false,
-      open: false,
+      open: true,
     };
   }
 
@@ -98,8 +94,6 @@ export default class PdpClickCollect extends React.PureComponent {
         this.updateHeightOnAjax();
       });
     }
-    // Allow maximum content for now.
-    allowMaxContent(this.expandRef);
   };
 
   toggleShowMore = (event) => {
@@ -117,16 +111,12 @@ export default class PdpClickCollect extends React.PureComponent {
       this.setState({
         open: false,
       });
-      // Remove any maxcontent allowance.
-      removeMaxHeight(this.expandRef);
-      this.expandRef.current.style.removeProperty('max-height');
+      this.expandRef.current.classList.add('close-card');
     } else {
       this.setState({
         open: true,
       });
-      allowMaxContent(this.expandRef);
-      const maxHeight = this.expandRef.current.getAttribute('data-max-height');
-      this.expandRef.current.style.maxHeight = maxHeight;
+      this.expandRef.current.classList.remove('close-card');
     }
   };
 
