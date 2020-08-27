@@ -191,32 +191,32 @@ class AlshayaAppointmentController extends ControllerBase {
     $steps = [
       [
         'step' => 1,
-        'stepTitle' => $this->t('appointment type'),
+        'stepTitle' => $this->t('Appointment type'),
         'stepValue' => 'appointment-type',
       ],
       [
         'step' => 2,
-        'stepTitle' => $this->t('select store'),
+        'stepTitle' => $this->t('Select store'),
         'stepValue' => 'select-store',
       ],
       [
         'step' => 3,
-        'stepTitle' => $this->t('select time slot'),
+        'stepTitle' => $this->t('Select time slot'),
         'stepValue' => 'select-time-slot',
       ],
       [
         'step' => 4,
-        'stepTitle' => $this->t('login / guest'),
+        'stepTitle' => $this->t('Login / Guest'),
         'stepValue' => 'select-login-guest',
       ],
       [
         'step' => 5,
-        'stepTitle' => $this->t('customer details'),
+        'stepTitle' => $this->t('Customer details'),
         'stepValue' => 'customer-details',
       ],
       [
         'step' => 6,
-        'stepTitle' => $this->t('confirmation'),
+        'stepTitle' => $this->t('Confirmation'),
         'stepValue' => 'confirmation',
       ],
     ];
