@@ -15,6 +15,10 @@
         max-width: 15rem;
         width: 100%;
         font-size: inherit;
+
+        html[lang=ar] & {
+          max-width: 13.5rem;
+        }
       }
     }
   }
