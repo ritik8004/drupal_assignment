@@ -19,7 +19,7 @@ export default class PdpHeader extends React.PureComponent {
     } = this.props;
 
     const { checkoutFeatureStatus } = drupalSettings;
-    const backArrow = document.referrer;
+    const backArrow = document.referrer ? document.referrer : window.location.href;
 
     return (
       <div className="magv2-header-wrapper">
