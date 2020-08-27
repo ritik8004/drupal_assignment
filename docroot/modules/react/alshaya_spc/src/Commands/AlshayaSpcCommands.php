@@ -251,13 +251,9 @@ class AlshayaSpcCommands extends DrushCommands {
         case 'checkout_com':
           $cart_amount = $this->checkoutComApi->getCheckoutAmount($cart['totals']['base_grand_total'], $cart['totals']['quote_currency_code']);
           $payment_info = $this->checkoutComApi->getChargesInfo($payment['unique_id']);
-          if ($payment_info['responseMessage'] == 'Approved') {
+          if (!empty($payment_info['responseCode']) || $payment_info['responseCode'] != '10000') {
             try {
               $update = [];
-              $order_update['payment'] = [
-                'method' => 'checkout_com',
-                'additional_data' => $payment_info,
-              ];
               $update['extension'] = [
                 'action' => 'update payment',
                 'attempted_payment' => 1,
@@ -274,7 +270,7 @@ class AlshayaSpcCommands extends DrushCommands {
                 throw new \Exception('Update payment data in cart failed, please check other logs to know the reason');
               }
 
-              $this->placeOrder($order_update['payment'], $payment['cart_id']);
+              $this->placeOrder($update['payment'], $payment['cart_id']);
 
               $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment successful, order placed. Cart id: @cart_id, Data: @data, CheckoutCom response: @info', [
                 '@data' => $payment['data'],
