@@ -1,6 +1,10 @@
 .alias--checkout,
 .alias--checkout-confirmation {
   .site-brand-home {
+    @include breakpoint($desktop) {
+      height: auto;
+    }
+
     a {
       @include breakpoint($tablet) {
         max-width: 29.375rem;
