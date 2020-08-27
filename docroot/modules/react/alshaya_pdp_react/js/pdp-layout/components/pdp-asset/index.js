@@ -40,7 +40,7 @@ export default class PdpAsset extends React.Component {
 
   render() {
     const {
-      type, imageZoomUrl, imageUrl, alt, title, viewport, index,
+      type, imageZoomUrl, imageUrl, alt, title, viewport, index, children,
     } = this.props;
 
     const animationOffset = `${index * 0.25}s`;
@@ -57,6 +57,7 @@ export default class PdpAsset extends React.Component {
           data-index={index}
           style={{ animationDelay: animationOffset }}
         >
+          {children}
           <img
             src={imageUrl}
             alt={alt}
