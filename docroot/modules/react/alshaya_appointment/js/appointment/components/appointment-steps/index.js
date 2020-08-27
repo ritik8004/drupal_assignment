@@ -29,7 +29,7 @@ const AppointmentSteps = (props) => {
         className={getStepClass(item.stepValue, step)}
         value={item.stepValue}
       >
-        <span className="step-number">{index + 1}</span>
+        <span className="step-number"><span>{index + 1}</span></span>
         <span className="step-title">{item.stepTitle}</span>
       </li>
     ));
