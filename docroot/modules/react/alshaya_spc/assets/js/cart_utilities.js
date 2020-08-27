@@ -87,6 +87,7 @@
           : response.sku;
 
         var data = Drupal.alshayaSpc.storeProductData({
+          id: response.id,
           sku: response.sku,
           parentSKU: parentSKU,
           title: response.title,
@@ -110,6 +111,7 @@
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, data.sku].join(':');
     var productData = {
+      'id': data.id,
       'sku': data.sku,
       'parentSKU': data.parentSKU,
       'title': data.title,
