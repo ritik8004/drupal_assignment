@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { applyCode } from '../../../utilities/checkout_util';
+import ConditionalView from '../../../common/components/conditional-view';
 
 const CartPromotion = ({ promo, link, couponCode }) => {
   useEffect(() => {
@@ -11,8 +12,8 @@ const CartPromotion = ({ promo, link, couponCode }) => {
   }
 
   if (promo.type === 'free_gift' && promo.coupon) {
-    return (promo.coupon !== couponCode)
-      ? (
+    return (
+      <ConditionalView condition={promo.coupon !== couponCode}>
         <div className="free-gift-promo">
           <div className="gift-message">
             {Drupal.t('Click')}
@@ -29,7 +30,8 @@ const CartPromotion = ({ promo, link, couponCode }) => {
             </span>
           </div>
         </div>
-      ) : (null);
+      </ConditionalView>
+    );
   }
 
   if (link) {

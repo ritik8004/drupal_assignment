@@ -34,7 +34,7 @@ export default class CartItem extends React.Component {
   }
 
   componentDidUpdate() {
-    Drupal.ajax.bindAjaxLinks(document.body);
+    Drupal.ajax.bindAjaxLinks(document.getElementById('spc-cart'));
   }
 
   /**
