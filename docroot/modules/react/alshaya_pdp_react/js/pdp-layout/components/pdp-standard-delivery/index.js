@@ -1,14 +1,14 @@
 import React from 'react';
 import PdpSectionTitle from '../utilities/pdp-section-title';
 import PdpSectionText from '../utilities/pdp-section-text';
-import { setupAccordionHeight } from '../../../utilities/sidebarCardUtils';
+import setupAccordionHeight from '../../../utilities/sidebarCardUtils';
 
 class PdpStandardDelivery extends React.Component {
   constructor(props) {
     super(props);
     this.expandRef = React.createRef();
     this.state = {
-      open: false,
+      open: true,
     };
   }
 
@@ -24,13 +24,12 @@ class PdpStandardDelivery extends React.Component {
       this.setState({
         open: false,
       });
-      this.expandRef.current.style.removeProperty('max-height');
+      this.expandRef.current.classList.add('close-card');
     } else {
       this.setState({
         open: true,
       });
-      const maxHeight = this.expandRef.current.getAttribute('data-max-height');
-      this.expandRef.current.style.maxHeight = maxHeight;
+      this.expandRef.current.classList.remove('close-card');
     }
   };
 
