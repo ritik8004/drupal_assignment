@@ -800,6 +800,9 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     elseif ($node->bundle() == 'acq_promotion') {
       $suggestions[] = 'page__plp';
     }
+    elseif ($node->bundle() == 'product_list') {
+      $suggestions[] = 'page__plp';
+    }
   }
 
   if (\Drupal::service('path.matcher')->isFrontPage()) {

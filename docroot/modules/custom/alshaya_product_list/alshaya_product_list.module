@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Database\Query\SelectInterface;
+use Drupal\search_api\Query\QueryInterface;
+
+/**
+ * Implements hook_search_api_db_query_alter().
+ */
+function alshaya_product_list_search_api_db_query_alter(SelectInterface &$db_query, QueryInterface $query) {
+  if ($query->hasTag('views_alshaya_product_list') || $query->hasTag('category_product_list')) {
+    $current_request = \Drupal::requestStack()->getCurrentRequest();
+    $path_validator = \Drupal::service('path.validator');
+    if (($url_object = $path_validator->getUrlIfValid($current_request->getPathInfo())) &&
+      ($url_object->getRouteName() == 'entity.node.canonical') &&
+      ($node_id = $url_object->getRouteParameters()['node']) &&
+      (($node = Node::load($node_id)) instanceof NodeInterface)) {
+      $attr_value =  $node->get('field_attribute_value')->first()->getString();
+      $attr_name =  $node->get('field_attribute_name')->first()->getString();
+      $db_query->condition('t.' . $attr_name, $attr_value);
+    }
+  }
+}
