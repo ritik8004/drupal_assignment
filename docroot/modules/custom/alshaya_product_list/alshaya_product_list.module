@@ -17,15 +17,38 @@ function alshaya_product_list_search_api_db_query_alter(SelectInterface &$db_que
   // If attribute product list views.
   if ($query->hasTag('views_alshaya_product_list')
     && $query->getSearchId() == 'views_block:alshaya_product_list__block_3') {
-    $current_request = \Drupal::requestStack()->getCurrentRequest();
-    $path_validator = \Drupal::service('path.validator');
-    if (($url_object = $path_validator->getUrlIfValid($current_request->getPathInfo())) &&
-      ($url_object->getRouteName() == 'entity.node.canonical') &&
-      ($node_id = $url_object->getRouteParameters()['node']) &&
-      (($node = Node::load($node_id)) instanceof NodeInterface)) {
-      $attr_value =  $node->get('field_attribute_value')->first()->getString();
-      $attr_name =  $node->get('field_attribute_name')->first()->getString();
-      $db_query->condition('t.' . $attr_name, $attr_value);
+    $nid = 0;
+    $attr_name = 'none';
+    $attr_value = 'none';
+    $current_route = \Drupal::routeMatch();
+    // If view route, means either sorting of filtering is done.
+    if ($current_route->getRouteName() == 'views.ajax') {
+      $query_string = [];
+      parse_str(\Drupal::requestStack()->getCurrentRequest()->getQueryString(), $query_string);
+      $view_url_data = $query_string['view_path'];
+      $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      // Remove current language from url.
+      $view_url_data = preg_replace('/\/' . $current_language . '/', '', $view_url_data, 1);
+      // Remove last `/` from url.
+      $view_url_data = rtrim($view_url_data, '/');
+      if ($source_path = \Drupal::service('path.alias_storage')->lookupPathSource($view_url_data, $current_language)) {
+        // Source path will be like - `/node/1212/` and we need only id.
+        $nid = explode('/', $source_path)[2];
+      }
+
     }
+    elseif ($current_route->getRouteName() == 'entity.node.canonical') {
+      $nid = $current_route->getParameter('node')->id();
+    }
+
+    // If node object.
+    if ((($node = Node::load($nid)) instanceof NodeInterface)
+      && $node->bundle() == 'product_list') {
+      $attr_value = $node->get('field_attribute_value')->first()->getString();
+      $attr_name = $node->get('field_attribute_name')->first()->getString();
+    }
+
+    // Add condition on query.
+    $db_query->condition('t.' . $attr_name, $attr_value);
   }
 }
