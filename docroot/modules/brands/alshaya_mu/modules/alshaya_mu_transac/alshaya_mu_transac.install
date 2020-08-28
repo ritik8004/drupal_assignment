@@ -16,6 +16,25 @@ function alshaya_mu_transac_update_8001() {
     ->getEditable('pathauto.pattern.product_category_pathauto')
     ->set('pattern', '/[term:parents:first]-[term:name]')
     ->save();
+
+  // Now run batch process to update the term aliases.
+  // @see Drupal\pathauto\Commands\PathautoCommands::generateAliases().
+  $batch = [
+    'title' => t('Bulk updating URL aliases'),
+    'operations' => [
+      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchStart', []],
+      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchProcess',
+        [
+          'canonical_entities:taxonomy_term',
+          'all',
+        ],
+      ],
+    ],
+    'finished' => '_alshaya_mu_transac_term_alias_update_batch_finished',
+    'progressive' => FALSE,
+  ];
+
+  batch_set($batch);
 }
 
 /**
