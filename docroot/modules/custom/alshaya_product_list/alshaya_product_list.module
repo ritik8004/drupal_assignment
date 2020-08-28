@@ -87,3 +87,35 @@ function alshaya_product_list_acq_sku_base_fields_updated(array $fields, $op = '
       break;
   }
 }
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_product_list_module_implements_alter(&$implementations, $hook) {
+  // This module alter should be called last.
+  if ($hook == 'alshaya_search_filter_link_alter') {
+    $group = $implementations['alshaya_product_list'];
+    unset($implementations['alshaya_product_list']);
+    $implementations['alshaya_product_list'] = $group;
+  }
+}
+
+/**
+ * Implements hook_alshaya_search_filter_link_alter().
+ */
+function alshaya_product_list_alshaya_search_filter_link_alter(&$link, array &$data) {
+  // Get node for given brand and value.
+  $nids = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
+    ->condition('field_attribute_name', 'attr_' . $data['attribute_code'])
+    ->condition('field_attribute_value', $data['attribute_value'])
+    ->execute();
+
+  // If there are nodes, use first one.
+  if (!empty($nids) && is_array($nids)) {
+    $nid = reset($nids);
+    $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $nid);
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $data['append_value'] = FALSE;
+    $link = '/' . $langcode . $alias;
+  }
+}
