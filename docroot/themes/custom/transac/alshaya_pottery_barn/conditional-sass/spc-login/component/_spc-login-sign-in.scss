@@ -8,6 +8,10 @@
   }
 
   .site-brand-home a {
+    @include breakpoint($desktop) {
+      height: auto;
+    }
+
     @include breakpoint($tablet) {
       max-width: 29.375rem;
       width: 100%;
@@ -19,6 +23,10 @@
       width: 100%;
       font-size: 0;
       margin: 0;
+
+      html[lang=ar] & {
+        max-width: 13.5rem;
+      }
     }
   }
 
@@ -63,6 +71,14 @@
           display: block;
         }
       }
+    }
+  }
+}
+
+html[lang=ar] body {
+  &.alias--cart-login {
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
     }
   }
 }
