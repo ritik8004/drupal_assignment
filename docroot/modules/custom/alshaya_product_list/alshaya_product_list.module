@@ -52,3 +52,38 @@ function alshaya_product_list_search_api_db_query_alter(SelectInterface &$db_que
     $db_query->condition('t.' . $attr_name, $attr_value);
   }
 }
+
+/**
+ * Implements hook_acq_sku_base_fields_updated().
+ */
+function alshaya_product_list_acq_sku_base_fields_updated(array $fields, $op = 'add') {
+  /** @var \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager $facet_manager */
+  $facet_manager = \Drupal::service('alshaya_search_api.facets_manager');
+
+  $facet_source_id = 'search_api:views_block__alshaya_product_list__block_3';
+  $filter_bar_id = 'facets_summary.facets_summary.filter_bar_productlist';
+  $prefix = 'productlist';
+
+  switch ($op) {
+    case 'add':
+      foreach ($fields as $field_code => $field) {
+        if (empty($field['facet'])) {
+          // We use add even when resetting. Remove facet if available.
+          $facet_manager->removeFacet($field_code, $filter_bar_id, $prefix);
+          continue;
+        }
+
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
+      }
+      break;
+
+    case 'remove':
+      foreach ($fields as $field_code => $field) {
+        // Remove from facets if facet is 1.
+        if (!empty($field['facet'])) {
+          $facet_manager->removeFacet($field_code, $filter_bar_id, $prefix);
+        }
+      }
+      break;
+  }
+}
