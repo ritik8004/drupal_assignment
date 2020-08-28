@@ -12,10 +12,11 @@ use Drupal\Core\Form\FormStateInterface;
  */
 function alshaya_product_lpn_page_attachments(array &$page) {
   $config = \Drupal::config('alshaya_product_lpn.settings');
+  $lpn_attribute = $config->get('lpn_attribute')
+    ? 'attr_' . $config->get('lpn_attribute') : '';
 
   $page['#attached']['drupalSettings']['lpn'] = [
-    'lpn_attribute' => $config->get('lpn_attribute') ?? '',
-    'hide_lpn_attribute' => $config->get('hide_lpn_attribute') ?? FALSE,
+    'lpn_attribute' => $lpn_attribute,
   ];
 }
 
@@ -24,10 +25,10 @@ function alshaya_product_lpn_page_attachments(array &$page) {
  */
 function alshaya_product_lpn_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
   // Get lpn_attribute id from config.
-  $lpn_attribute = \Drupal::config('alshaya_product_lpn.settings')->get('lpn_attribute');
+  $lpn_attribute = \Drupal::config('alshaya_product_lpn.settings')->get('lpn_attribute') ?? '';
 
-  // Hide the LPN attribute if `hide_lpn_attribute` is set to true.
-  if (\Drupal::config('alshaya_product_lpn.settings')->get('hide_lpn_attribute')) {
+  // Hide the LPN attribute.
+  if (!empty($lpn_attribute) && isset($form['ajax']['configurables'][$lpn_attribute])) {
     $form['ajax']['configurables'][$lpn_attribute]['#prefix'] = '<div class="hidden">';
     $form['ajax']['configurables'][$lpn_attribute]['#suffix'] = '</div>';
   }
