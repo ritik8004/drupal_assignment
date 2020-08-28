@@ -13,6 +13,15 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_product_lpn module.
+ */
+function alshaya_acm_product_update_8062() {
+  \Drupal::service('module_installer')->install(['alshaya_product_lpn']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Convert "brand_logo" field type from attribute to string.
  */
 function alshaya_acm_product_update_8061() {
