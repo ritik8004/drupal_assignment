@@ -175,7 +175,7 @@ function _alshaya_appointment_translations() {
     'Store Location' => [
       'ar' => 'موقع المتجر',
     ],
-    'close' => [
+    'Close' => [
       'ar' => 'إغلاق',
     ],
     'Are you sure you want to cancel appointment for !type?' => [
