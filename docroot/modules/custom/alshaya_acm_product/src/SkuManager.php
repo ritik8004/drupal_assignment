@@ -2315,6 +2315,7 @@ class SkuManager {
         }
 
         $configurableFieldValues[$fieldKey] = [
+          'attribute_id' => $fieldKey,
           'label' => $this->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),

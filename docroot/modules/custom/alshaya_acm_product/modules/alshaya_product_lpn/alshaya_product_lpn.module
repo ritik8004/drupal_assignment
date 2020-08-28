@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_product_lpn_page_attachments(array &$page) {
+  $config = \Drupal::config('alshaya_product_lpn.settings');
+  $lpn_attribute = $config->get('lpn_attribute')
+    ? 'attr_' . $config->get('lpn_attribute')
+    : '';
+
+  $page['#attached']['drupalSettings']['lpn'] = [
+    'lpn_attribute' => $lpn_attribute,
+  ];
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_product_lpn_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  // Get lpn_attribute id from config.
+  $lpn_attribute = \Drupal::config('alshaya_product_lpn.settings')->get('lpn_attribute') ?? '';
+
+  // Hide the LPN attribute.
+  if (!empty($lpn_attribute) && isset($form['ajax']['configurables'][$lpn_attribute])) {
+    $form['ajax']['configurables'][$lpn_attribute]['#prefix'] = '<div class="hidden">';
+    $form['ajax']['configurables'][$lpn_attribute]['#suffix'] = '</div>';
+  }
+}
