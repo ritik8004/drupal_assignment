@@ -30,7 +30,7 @@ function alshaya_mu_transac_update_8001() {
         ],
       ],
     ],
-    'finished' => '_alshaya_mu_transac_batch_finished',
+    'finished' => '_alshaya_mu_transac_term_alias_update_batch_finished',
     'progressive' => FALSE,
   ];
 
