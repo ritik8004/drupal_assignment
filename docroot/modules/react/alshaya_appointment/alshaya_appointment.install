@@ -6,6 +6,17 @@
  */
 
 /**
+ * Implements hook_update().
+ */
+function alshaya_appointment_update_8001() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_appointment', 'alshaya_appointment.translations');
+  if ($translations = _alshaya_appointment_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_appointment_install() {
