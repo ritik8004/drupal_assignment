@@ -3,7 +3,6 @@ import React from 'react';
 import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CheckoutConfigurableOption from '../../../utilities/checkout-configurable-option';
 import SpecialPrice from '../../../utilities/special-price';
-import ConditionalView from '../../../common/components/conditional-view';
 import CartPromotion from '../../../cart/components/cart-promotion';
 import ProductFlag from '../../../utilities/product-flag';
 import CartItemFree from '../../../cart/components/cart-item-free';
@@ -92,12 +91,9 @@ class CheckoutCartItem extends React.Component {
         <div className="spc-product-meta-data">
           <div className="spc-product-title-price">
             <div className="spc-product-title">
-              <ConditionalView condition={relativeLink.length > 0}>
-                <a href={relativeLink}>{title}</a>
-              </ConditionalView>
-              <ConditionalView condition={relativeLink.length === 0}>
-                {title}
-              </ConditionalView>
+              {(relativeLink && relativeLink.length > 0)
+                ? (<a href={relativeLink}>{title}</a>)
+                : title}
             </div>
             <div className="spc-product-price">
               <SpecialPrice price={originalPrice} freeItem={freeItem} finalPrice={finalPrice} />
