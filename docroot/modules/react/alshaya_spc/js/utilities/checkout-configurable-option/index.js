@@ -2,7 +2,10 @@ import React from 'react';
 
 const CheckoutConfigurableOption = (props) => {
   const { label } = props;
-  if (drupalSettings.lpn.lpn_attribute !== '' && label.attribute_id === drupalSettings.lpn.lpn_attribute) {
+
+  if (drupalSettings.lpn !== undefined
+    && drupalSettings.lpn.lpn_attribute !== ''
+    && drupalSettings.lpn.lpn_attribute === label.attribute_id) {
     return null;
   }
 

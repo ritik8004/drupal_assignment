@@ -13,7 +13,8 @@ use Drupal\Core\Form\FormStateInterface;
 function alshaya_product_lpn_page_attachments(array &$page) {
   $config = \Drupal::config('alshaya_product_lpn.settings');
   $lpn_attribute = $config->get('lpn_attribute')
-    ? 'attr_' . $config->get('lpn_attribute') : '';
+    ? 'attr_' . $config->get('lpn_attribute')
+    : '';
 
   $page['#attached']['drupalSettings']['lpn'] = [
     'lpn_attribute' => $lpn_attribute,
