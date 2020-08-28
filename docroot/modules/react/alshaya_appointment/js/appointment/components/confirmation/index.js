@@ -11,6 +11,7 @@ import {
 import AppointmentConfirmationPrint from './confirmationPrint';
 import getStringMessage from '../../../../../js/utilities/strings';
 import stickyCTAButtonObserver from '../../../utilities/StickyCTA';
+import ConditionalView from '../../../common/components/conditional-view';
 
 export default class Confirmation extends React.Component {
   constructor(props) {
@@ -124,6 +125,18 @@ export default class Confirmation extends React.Component {
             />
           </div>
         </div>
+        <ConditionalView condition={window.innerWidth < 768}>
+          <div className="appointment-flow-action">
+            <button
+              className="continue-shopping"
+              type="button"
+              onClick={() => this.handleClick('/')}
+            >
+              {getStringMessage('continue_shopping_button')}
+            </button>
+          </div>
+          <div id="appointment-bottom-sticky-edge" />
+        </ConditionalView>
         <div className="confirmation-footer fadeInUp">
           { id !== 0
             && (
@@ -136,16 +149,17 @@ export default class Confirmation extends React.Component {
             </button>
             )}
         </div>
-        <div className="appointment-flow-action">
-          <button
-            className="continue-shopping"
-            type="button"
-            onClick={() => this.handleClick('/')}
-          >
-            {getStringMessage('continue_shopping_button')}
-          </button>
-        </div>
-        <div id="appointment-bottom-sticky-edge" />
+        <ConditionalView condition={window.innerWidth >= 768}>
+          <div className="appointment-flow-action">
+            <button
+              className="continue-shopping"
+              type="button"
+              onClick={() => this.handleClick('/')}
+            >
+              {getStringMessage('continue_shopping_button')}
+            </button>
+          </div>
+        </ConditionalView>
         <div style={{ display: 'none' }} className="appointment-confirmation-print-wrapper">
           <AppointmentConfirmationPrint
             ref={(el) => { this.componentRef = el; }}
