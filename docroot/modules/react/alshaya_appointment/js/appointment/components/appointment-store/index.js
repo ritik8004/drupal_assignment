@@ -78,7 +78,9 @@ export default class AppointmentStore extends React.Component {
     } = this.state;
     document.addEventListener('placeAutocomplete', this.initiatePlaceAutocomplete);
     if (refCoords !== null && storeList.length === 0) {
-      this.fetchStores(refCoords);
+      this.fetchStores(refCoords, null, false);
+    } else {
+      dispatchCustomEvent('placeAutocomplete', true);
     }
 
     // Ask for location access when we don't have any coords.
@@ -120,7 +122,7 @@ export default class AppointmentStore extends React.Component {
     }
   }
 
-  fetchStores = (coords, locationAccess = null) => {
+  fetchStores = (coords, locationAccess = null, geo = true) => {
     const {
       radius, unit, max_num_of_locations: locCount,
     } = drupalSettings.alshaya_appointment.store_finder;
@@ -128,7 +130,11 @@ export default class AppointmentStore extends React.Component {
     // Show loader.
     showFullScreenLoader();
 
-    const apiUrl = `/get/stores?radius=${radius}&unit=${unit}&max-locations=${locCount}&latitude=${coords.lat}&longitude=${coords.lng}`;
+    // lat, long and unit is required in case of all stores also for calculating miles.
+    let apiUrl = `/get/stores?radius=${radius}&unit=${unit}&max-locations=${locCount}&latitude=${coords.lat}&longitude=${coords.lng}`;
+    if (geo) {
+      apiUrl = `${apiUrl}&geo=${geo}`;
+    }
     const apiData = fetchAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
