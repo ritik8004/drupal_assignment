@@ -50,7 +50,7 @@
 
       &::before {
         background: none;
-        color: unset;
+        color: $magv2-share-icons-default-color;
         width: auto;
         height: auto;
         font-size: 1.25rem;
@@ -125,7 +125,7 @@
       &:hover {
         &::before {
           background: url("#{$base_theme_img_directory_path}/social-icons/pdp/ic-pinterestselect.png") no-repeat center;
-          background-size: 1.5rem;
+          background-size: cover;
         }
       }
     }
