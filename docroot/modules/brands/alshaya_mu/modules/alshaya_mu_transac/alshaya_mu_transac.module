@@ -183,20 +183,3 @@ function _alshaya_mu_transac_get_product_description($sku_entity) {
 
   return $return;
 }
-
-/**
- * Batch finished callback for generating taxonomy term aliases.
- *
- * @see alshaya_mu_transac_update_8001()
- */
-function _alshaya_mu_transac_term_alias_update_batch_finished($success, $results, $operations) {
-  if ($success) {
-    // If no term alias was actually updated, final output should show 0.
-    \Drupal::logger('alshaya_mu_transac')->notice('Generated @count URL aliases.', [
-      '@count' => $results['updates'] ?? 0,
-    ]);
-  }
-  else {
-    \Drupal::logger('alshaya_mu_transac')->notice('An error occurred while updating term aliases');
-  }
-}
