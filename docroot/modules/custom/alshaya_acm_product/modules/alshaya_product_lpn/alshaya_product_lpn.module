@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Implements hook_page_attachments().
@@ -21,45 +20,15 @@ function alshaya_product_lpn_page_attachments(array &$page) {
 }
 
 /**
- * Implements hook_acq_sku_configurable_product_configurations_alter().
- */
-function alshaya_product_lpn_acq_sku_configurable_product_configurations_alter(array &$configurations, SKU $sku) {
-  $lpn_attribute = \Drupal::config('alshaya_product_lpn.settings')->get('lpn_attribute');
-  $hide_lpn_attribute = \Drupal::config('alshaya_product_lpn.settings')->get('hide_lpn_attribute');
-
-  if ($hide_lpn_attribute && isset($configurations[$lpn_attribute])) {
-    // THIS THROWS ERROR: You need to choose options for your item. - season code is required to place order.
-    // unset($configurations[$lpn_attribute]);.
-  }
-
-}
-
-/**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_product_lpn_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
   // Get lpn_attribute id from config.
   $lpn_attribute = \Drupal::config('alshaya_product_lpn.settings')->get('lpn_attribute');
 
-  // BOTH THE WAYS ARE THROWING ERROR WHEN WE DO ADD TO CART - below code from alshaya_acm_product.detail.js.
-  // `selectedCombination` is not matching selectedCombination.
-  // if (typeof combinations['byAttribute'][selectedCombination] !== 'undefined') {
-  //   $('[name="selected_variant_sku"]', form).val(combinations['byAttribute'][selectedCombination]);
-  // }.
   // Hide the LPN attribute if `hide_lpn_attribute` is set to true.
   if (\Drupal::config('alshaya_product_lpn.settings')->get('hide_lpn_attribute')) {
-    // $form['ajax']['configurables'][$lpn_attribute]['#access'] = FALSE;
-  }
-
-  foreach ($form['ajax']['configurables'] as $key => &$configurable) {
-    if (!is_array($configurable) || $key !== $lpn_attribute) {
-      continue;
-    }
-    foreach ($configurable['#options'] as $id => $value) {
-      $configurable['#options_attributes'][$id]['class'][] = 'hidden';
-      $configurable['#options_attributes'][$id]['class'][] = 'visually-hidden';
-      $configurable['#value'] = $id;
-      // $configurable['#access'] = FALSE;
-    }
+    $form['ajax']['configurables'][$lpn_attribute]['#prefix'] = '<div class="hidden">';
+    $form['ajax']['configurables'][$lpn_attribute]['#suffix'] = '</div>';
   }
 }
