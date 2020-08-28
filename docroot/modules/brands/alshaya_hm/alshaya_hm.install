@@ -17,7 +17,7 @@ use Drupal\block\Entity\Block;
  *
  * Enable alshaya_product_lpn module.
  */
-function alshaya_hm_update_8053() {
+function alshaya_hm_update_8054() {
   \Drupal::service('module_installer')->install(['alshaya_product_lpn']);
 }
 
