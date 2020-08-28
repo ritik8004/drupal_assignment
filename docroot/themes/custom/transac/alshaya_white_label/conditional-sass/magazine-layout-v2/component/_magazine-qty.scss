@@ -7,7 +7,7 @@
       height: 3.125rem;
     }
 
-    button[disabled] {
+    button[disabled]::before {
       color: $magv2-size-button-disabled;
       background: $magv2-size-btn-bg;
     }
@@ -27,7 +27,6 @@
   }
 
   &-btn--down {
-    padding-#{$left}: 1.125rem;
     background-color: $magv2-qty-btn-bg;
 
     @include breakpoint($only-tablet) {
@@ -44,7 +43,6 @@
   }
 
   &-btn--up {
-    padding-#{$right}: 1.75rem;
     padding-#{$left}: 0;
     background-color: $magv2-qty-btn-bg;
 
@@ -59,6 +57,14 @@
         font-size: 1.25rem;
       }
     }
+  }
+
+  &-btn--down,
+  &-btn--up {
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &-btn,
@@ -79,5 +85,6 @@
     text-align: center;
     cursor: unset;
     color: $magv2-qty-text;
+    max-width: calc(100% - 5rem);
   }
 }
