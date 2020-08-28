@@ -12,7 +12,7 @@ function _alshaya_appointment_static_strings() {
   return [
     [
       'key' => 'select_store_button',
-      'value' => t('select store'),
+      'value' => t('Select Store'),
     ],
     [
       'key' => 'loading_map_placeholder',
@@ -164,7 +164,7 @@ function _alshaya_appointment_static_strings() {
     ],
     [
       'key' => 'book_time_slot_button',
-      'value' => t('book time slot'),
+      'value' => t('Book Time Slot'),
     ],
     [
       'key' => 'continue',
@@ -196,7 +196,7 @@ function _alshaya_appointment_static_strings() {
     ],
     [
       'key' => 'and',
-      'value' => t('and'),
+      'value' => t('And'),
     ],
     [
       'key' => 'store_location_label',
@@ -204,11 +204,11 @@ function _alshaya_appointment_static_strings() {
     ],
     [
       'key' => 'customer_details_label',
-      'value' => t('customer details'),
+      'value' => t('Customer details'),
     ],
     [
       'key' => 'close',
-      'value' => t('close'),
+      'value' => t('Close'),
     ],
     [
       'key' => 'delete',
