@@ -368,7 +368,7 @@ export default class AppointmentStore extends React.Component {
   };
 
   selectStoreButtonVisibility = (action) => {
-    const selectStoreBtn = document.getElementById('select-store');
+    const selectStoreBtn = document.getElementById('appointment-select-store-submit-btn');
     if (action === true) {
       selectStoreBtn.disabled = false;
     } else {
@@ -589,7 +589,7 @@ export default class AppointmentStore extends React.Component {
           </div>
           <div className="appointment-flow-action">
             <button
-              id="select-store"
+              id="appointment-select-store-submit-btn"
               className="appointment-store-button appointment-type-button select-store"
               type="button"
               onClick={(e) => this.finalizeCurrentStore(e)}
