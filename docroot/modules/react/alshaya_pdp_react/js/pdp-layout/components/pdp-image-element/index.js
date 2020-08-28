@@ -1,7 +1,7 @@
 import React from 'react';
 
 const PdpImageElement = ({
-  imageUrl, alt, title, index, onClick,
+  imageUrl, alt, title, index, onClick, children,
 }) => {
   const openFullScreenView = (event) => {
     if (onClick) {
@@ -10,6 +10,7 @@ const PdpImageElement = ({
   };
   return (
     <div className="magv2-pdp-image" onClick={openFullScreenView}>
+      {children}
       <img
         src={imageUrl}
         alt={alt}

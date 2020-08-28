@@ -443,11 +443,15 @@ function alshaya_color_split_alshaya_spc_order_sku_details_alter(array &$data, S
 /**
  * Implements hook_alshaya_acm_customer_order_details_alter().
  */
-function alshaya_color_split_alshaya_acm_customer_order_details_alter(SKUInterface $sku, array &$product) {
+function alshaya_color_split_alshaya_acm_customer_order_details_alter(array &$item) {
+  if (empty($item)) {
+    return;
+  }
   /** @var \Drupal\alshaya_color_split\AlshayaColorSplitManager $manager */
   $manager = \Drupal::service('alshaya_color_split.manager');
   $grouping_attribute_with_swatch = \Drupal::config('alshaya_color_split.settings')->get('process_swatch_for_grouping_attributes');
-  if ($grouping_attribute_with_swatch && $manager->getGroupingAttributeValues($sku)) {
-    $product['attributes'][] = $manager->getGroupingAttributeValues($sku);
+  if ($grouping_attribute_with_swatch) {
+    $sku = SKU::loadFromSku($item['sku']);
+    $item['attributes'][] = $manager->getGroupingAttributeValues($sku);
   }
 }

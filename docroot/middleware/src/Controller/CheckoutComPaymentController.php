@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Service\Config\SystemSettings;
 
 /**
  * Class CheckoutComPaymentController.
@@ -96,6 +97,8 @@ class CheckoutComPaymentController extends PaymentController {
    *   Session Storage service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    */
   public function __construct(
     RequestStack $request,
@@ -105,8 +108,10 @@ class CheckoutComPaymentController extends PaymentController {
     PaymentData $payment_data,
     LoggerInterface $logger,
     SessionStorage $session,
-    Utility $utility
+    Utility $utility,
+    SystemSettings $settings
   ) {
+    parent::__construct($logger, $settings);
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->checkoutComApi = $checkout_com_api;

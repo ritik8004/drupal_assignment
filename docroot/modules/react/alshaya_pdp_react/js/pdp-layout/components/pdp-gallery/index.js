@@ -39,7 +39,7 @@ export default class PdpGallery extends React.PureComponent {
   };
 
   render() {
-    const { pdpGallery } = this.props;
+    const { pdpGallery, children } = this.props;
     const images = pdpGallery ? pdpGallery.thumbnails : [];
     const emptyRes = (
       <div>Images not available</div>
@@ -68,7 +68,9 @@ export default class PdpGallery extends React.PureComponent {
                 onClick={this.showFullScreenModal}
                 viewport="desktop"
                 index={key}
-              />
+              >
+                {key === 0 ? children : ''}
+              </PdpAsset>
             ))}
           </div>
         </ConditionalView>
@@ -89,7 +91,9 @@ export default class PdpGallery extends React.PureComponent {
                   onClick={this.showFullScreenModal}
                   viewport="mobile"
                   index={key}
-                />
+                >
+                  {key === 0 ? children : ''}
+                </PdpImageElement>
               ))}
             </Slider>
           </div>

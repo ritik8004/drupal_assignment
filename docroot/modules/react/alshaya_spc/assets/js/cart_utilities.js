@@ -76,7 +76,7 @@
         }
 
         let attrOptions = response.configurable_values;
-        if (attrOptions.length < 1 
+        if (attrOptions.length < 1
           && response.grouping_attribute_with_swatch !== undefined
           && response.grouping_attribute_with_swatch) {
           attrOptions = Drupal.alshayaSpc.getGroupingOptions(response.attributes);
@@ -87,6 +87,7 @@
           : response.sku;
 
         var data = Drupal.alshayaSpc.storeProductData({
+          id: response.id,
           sku: response.sku,
           parentSKU: parentSKU,
           title: response.title,
@@ -110,6 +111,7 @@
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, data.sku].join(':');
     var productData = {
+      'id': data.id,
       'sku': data.sku,
       'parentSKU': data.parentSKU,
       'title': data.title,
@@ -159,7 +161,7 @@
 
     let groupingOptions = [];
     const attrLabel = Drupal.t('@attr_label', { '@attr_label': groupAttribute });
-    for (const i in attrResp) {
+    for (var i in attrResp) {
       if (attrResp[i].key === groupAttribute) {
         groupingOptions = [{
           label: attrLabel,
