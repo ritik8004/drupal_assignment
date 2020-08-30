@@ -7,6 +7,12 @@
     }
   }
 
+  .site-brand-wrapper {
+    @include breakpoint($only-tablet) {
+      height: 6.1875rem;
+    }
+  }
+
   .site-brand-home a {
     @include breakpoint($desktop) {
       height: auto;
@@ -77,7 +83,7 @@
 
 html[lang=ar] body {
   &.alias--cart-login {
-    @include breakpoint($only-mobile) {
+    @include breakpoint($upto-desktop) {
       margin-top: 0;
     }
   }
