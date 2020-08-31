@@ -25,10 +25,10 @@ function hook_alshaya_acm_customer_update_account_alter(\Drupal\user\Entity\User
 /**
  * Alter order data before showing in order details.
  *
- * @param array $item
- *   Order item received from API.
+ * @param array $order
+ *   Order received from API.
  */
-function hook_alshaya_acm_customer_order_details_alter(array &$item) {
+function hook_alshaya_acm_customer_order_details_alter(array &$order) {
 
 }
 
