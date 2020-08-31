@@ -18,7 +18,7 @@
       }
 
       img {
-        width: 10rem;
+        width: 100%;
 
         @include breakpoint($desktop) {
           margin-#{$left}: 0.9375rem;
@@ -29,10 +29,6 @@
           max-width: 10rem;
           height: auto;
           margin-top: 0;
-        }
-
-        @include breakpoint($only-mobile) {
-          width: 7.5rem;
         }
       }
     }
@@ -56,11 +52,11 @@
       }
 
       @include breakpoint($only-mobile) {
-        max-width: 11rem;
+        max-width: 10.9375rem;
+        margin: 0.5rem auto 0 1.5rem;
 
         html[lang=ar] & {
-          max-width: 7.5rem;
-          margin-top: 0.625rem;
+          margin: 0.5rem 1.5rem 0 auto;
         }
       }
     }
@@ -243,7 +239,7 @@ header.c-header {
       margin-bottom: 0;
 
       &:hover {
-        background: url(#{$muji_theme_img_directory_path}/icons/basket-filled.svg) no-repeat;
+        background: url(#{$muji_theme_img_directory_path}/icons/basket-muji-red.svg) no-repeat;
 
         .quantity {
           color: $primary_minicart_hover;
@@ -635,7 +631,8 @@ header {
 
     @include breakpoint($only-mobile) {
       top: 0.75rem;
-      #{$left}: 11.5%;
+      #{$right}: 14.5%;
+      #{$left}: auto;
     }
   }
 
@@ -654,7 +651,7 @@ header {
 
   li .store {
     &:hover {
-      background: none;
+      @include icon_img('#{$muji_theme_img_directory_path}/icons/store-finder-muji-red.svg', 2rem, 2rem);
     }
   }
 }
