@@ -153,6 +153,28 @@ function _alshaya_product_list_manage_facet_blocks() {
     alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
   }
 
+  // Adjusting weights for Exposed Form block.
+  $block_storage = \Drupal::entityTypeManager()->getStorage('block');
+  $source_weight = $block_storage->load('page_title')->getWeight();
+  $source_weight++;
+  $block_storage->load('exposedformalshaya_product_listblock_3')->setWeight($source_weight)->save();
+
   // Adjusting weights for facet blocks.
   _alshaya_acm_product_adjust_block_weight('product_list', 'exposedformalshaya_product_listblock_3', 'search_api:views_block__alshaya_product_list__block_3');
+
+  // Update/Adjust weight of category facet block.
+  $source_weight++;
+  \Drupal::entityTypeManager()->getStorage('block')
+    ->load('categoryfacetproductlist')->setWeight($source_weight)->save();
+
+  // Update/Adjust weight of price facet block.
+  $source_weight++;
+  \Drupal::entityTypeManager()->getStorage('block')
+    ->load('finalpriceproductlist')->setWeight($source_weight)->save();
+
+  // Update/Adjust weight of promotion facet block.
+  $source_weight++;
+  \Drupal::entityTypeManager()->getStorage('block')
+    ->load('promotionsproductlist')->setWeight($source_weight)->save();
+
 }

@@ -6,9 +6,10 @@
  */
 
 /**
+ * Create facets and their blocks for product list page.
+ *
  * Implements hook_install().
  */
 function alshaya_product_list_install() {
-  // Create facets and their blocks for product list page.
   _alshaya_product_list_manage_facet_blocks();
 }
