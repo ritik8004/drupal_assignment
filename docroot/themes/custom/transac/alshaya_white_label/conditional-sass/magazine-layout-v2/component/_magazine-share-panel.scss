@@ -105,7 +105,9 @@
     }
 
     .st_instagram_custom {
-      @include icon(new-instagram-default, before);
+      @include icon(new-instagram-default, before) {
+        padding-#{$left}: 0.0625rem;
+      }
 
       &:hover {
         @include icon(new-instagram-hover, before) {
