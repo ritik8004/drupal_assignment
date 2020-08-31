@@ -98,23 +98,10 @@ class AlshayaProductListFacetsBlock extends BlockBase implements ContainerFactor
       $show_all = FALSE;
     }
 
-    // This is to determine whether category facet will render on the page.
-    $category_facet_block = $this->entityTypeManager->getStorage('block')->load('categoryfacetplp');
-
-    // We have cases where we disable access to category facet.
-    // For instance panty-guide page.
-    // @see alshaya_acm_product_category_block_access().
-    $category_facet_block_content = $category_facet_block->access('view') ? $category_facet_block->getPlugin()->build() : NULL;
-    $class = '';
-    if (empty($category_facet_block_content)) {
-      $class = 'empty-category';
-    }
-
     return [
       '#theme' => 'all_facets_block',
       '#facet_blocks' => $facet_blocks,
       '#show_all' => $show_all,
-      '#class' => $class,
     ];
   }
 
