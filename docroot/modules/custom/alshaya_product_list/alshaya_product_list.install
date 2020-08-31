@@ -9,11 +9,6 @@
  * Implements hook_install().
  */
 function alshaya_product_list_install() {
-  // Get current default theme.
-  $current_theme = \Drupal::config('system.theme')->get('default');
-
-  // Move blocks to current default theme.
-  if (!empty($current_theme)) {
-    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
-  }
+  // Create facets and their blocks for product list page.
+  _alshaya_product_list_manage_facet_blocks();
 }
