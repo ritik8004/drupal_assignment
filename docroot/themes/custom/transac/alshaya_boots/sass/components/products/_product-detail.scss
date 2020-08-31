@@ -77,6 +77,17 @@
     .content--item-code {
       font-family: $bp-light;
     }
+
+    .delivery-in-only-city,
+    .same-day-delivery {
+      @include breakpoint($only-mobile) {
+        justify-content: center;
+
+        .same-day-content {
+          text-align: $left;
+        }
+      }
+    }
   }
 
   &__main {
