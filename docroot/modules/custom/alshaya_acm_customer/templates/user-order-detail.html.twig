@@ -214,22 +214,32 @@
               {% endtrans %}
             </div>
 
+            {% if product.free_gift_label %}
+              <div class="free-gift-label">{{ product.free_gift_label }}</div>
+            {% endif %}
+
             <div class="tablet-only">
               <div class="light">{{ "Unit price"|t }}</div>
               <div class="dark">{{ product.price }}</div>
             </div>
             <div class="mobile-only">
-              <div class="light">{{ "Total"|t }}</div>
-              <div class="dark">{{ product.total }}</div>
+              {% if product.total %}
+                <div class="light">{{ "Total"|t }}</div>
+                <div class="dark">{{ product.total }}</div>
+              {% endif %}
             </div>
           </td>
+
           <td class="desktop-only">
             <div class="light">{{ "Unit price"|t }}</div>
             <div class="dark">{{ product.price }}</div>
           </td>
+
           <td class="above-mobile blend">
-            <div class="light">{{ "Total"|t }}</div>
-            <div class="dark">{{ product.total }}</div>
+            {% if product.total %}
+              <div class="light">{{ "Total"|t }}</div>
+              <div class="dark">{{ product.total }}</div>
+            {% endif %}
           </td>
 
           <td class="above-mobile empty--cell">&nbsp;</td>
