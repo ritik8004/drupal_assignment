@@ -16,7 +16,6 @@ const productRecommendationsSuffix = 'pr-';
 
   var mouseenterTime = 0;
   var gtm_execute_onetime_events = true;
-  var currentListName = null;
   var productImpressions = [];
   var productImpressionsTimer = null;
 
@@ -198,35 +197,6 @@ const productRecommendationsSuffix = 'pr-';
         // Push on all pages except confirmation page.
         if (orderConfirmationPage.length === 0) {
           dataLayer.push(userDetails);
-        }
-
-          if ($(context).filter('article[data-vmode="modal"]').length === 1
-            || $(document).find('article[data-vmode="full"]').length === 1) {
-
-          if ($(document).find('article[data-vmode="full"]').length === 1) {
-            var productContext = $(document).find('article[data-vmode="full"]');
-          }
-          else {
-            var productContext = $(context).filter('article[data-vmode="modal"]');
-          }
-
-          var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-          product.variant = '';
-          if (currentListName != null && currentListName !== 'PDP-placeholder') {
-            product.list = currentListName;
-            currentListName = null;
-          }
-          var data = {
-            event: 'productDetailView',
-            ecommerce: {
-              currencyCode: currencyCode,
-              detail: {
-                products: [product]
-              }
-            }
-          };
-
-          dataLayer.push(data);
         }
       });
 
@@ -1257,6 +1227,30 @@ const productRecommendationsSuffix = 'pr-';
     }
     return impressions;
   };
+
+  /**
+   * Function to push product detail view event to data layer.
+   *
+   * @param {object} productContext
+   *   The jQuery HTML object containing GTM attributes for the product.
+   */
+  Drupal.alshayaSeoGtmPushProductDetailView = function(productContext) {
+    var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+    // This is populated only post add to cart.
+    product.variant = '';
+
+    var data = {
+      event: 'productDetailView',
+      ecommerce: {
+        currencyCode: drupalSettings.gtm.currency,
+        detail: {
+          products: [product]
+        }
+      }
+    };
+
+    dataLayer.push(data);
+  }
 
   // Ajax command to push deliveryAddress Event.
   $.fn.triggerDeliveryAddress = function () {

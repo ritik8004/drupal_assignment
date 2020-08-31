@@ -3,7 +3,12 @@
  * JS code to integrate with GTM for Product into product list.
  */
 
-(function ($, Drupal, dataLayer) {
+(function ($, Drupal) {
   'use strict';
-  console.log("This file is loaded");
-})(jQuery, Drupal, dataLayer);;
+
+  $(window).on('load', function() {
+    // Trigger productDetailView event.
+    Drupal.alshayaSeoGtmPushProductDetailView($('#pdp-layout'));
+  });
+
+})(jQuery, Drupal);
