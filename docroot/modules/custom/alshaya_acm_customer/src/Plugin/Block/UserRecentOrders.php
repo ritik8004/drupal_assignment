@@ -233,11 +233,24 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
                 '#price' => ($order['items'][$key]['price'] * $order['items'][$key]['ordered']),
               ];
 
-              // Unit price.
-              $order['items'][$key]['price'] = [
-                '#theme' => 'acq_commerce_price',
-                '#price' => $order['items'][$key]['price'],
-              ];
+              // If 'applied_rule_ids' is set and price is 0, set the free gift
+              // label.
+              if (isset($item['applied_rule_ids']) && (int) $item['price'] == 0) {
+                $order['items'][$key]['free_gift_label'] = [
+                  '#markup' => $this->t('Free Gift with Purchase'),
+                ];
+                $order['items'][$key]['price'] = [
+                  '#markup' => $this->t('free'),
+                ];
+
+                $order['items'][$key]['total_price'] = [];
+              }
+              else {
+                $order['items'][$key]['price'] = [
+                  '#theme' => 'acq_commerce_price',
+                  '#price' => $order['items'][$key]['price'],
+                ];
+              }
             }
 
             $order['status'] = alshaya_acm_customer_get_order_status($order);

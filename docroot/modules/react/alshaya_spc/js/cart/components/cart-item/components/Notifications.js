@@ -18,7 +18,9 @@ const Notifications = ({ children }) => {
     );
   };
 
-  children.forEach((child) => {
+  // Convert children to array (incase, if there's only one child).
+  const AllChildren = Array.isArray(children) ? children : [children];
+  AllChildren.forEach((child) => {
     // For conditional child, we will receive false instad of child object.
     if (!child) {
       return;
