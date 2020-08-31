@@ -4,7 +4,7 @@ export default class PdpAsset extends React.Component {
   static imageZoomIn(event) {
     let el = event.target;
 
-    if (el.nodeName !== 'FIGURE') {
+    while (el.nodeName !== 'FIGURE') {
       el = el.parentNode;
     }
 
@@ -15,7 +15,7 @@ export default class PdpAsset extends React.Component {
   static imageZoomOut(event) {
     let el = event.target;
 
-    if (el.nodeName !== 'FIGURE') {
+    while (el.nodeName !== 'FIGURE') {
       el = el.parentNode;
     }
 
@@ -26,7 +26,7 @@ export default class PdpAsset extends React.Component {
   static imagePositionZoom(event) {
     let el = event.target;
 
-    if (el.nodeName !== 'FIGURE') {
+    while (el.nodeName !== 'FIGURE') {
       el = el.parentNode;
     }
 

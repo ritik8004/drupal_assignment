@@ -22,11 +22,11 @@ export default class PdpHeader extends React.PureComponent {
 
     // Back arrow for mobile.
     const currentUrl = window.location.href;
-    const currentDomain = currentUrl.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+    const currentDomain = currentUrl.replace('http://', '').replace('https://', '').split(/[/?#]/)[0];
     const previousLink = document.referrer;
-    const previousDomain = previousLink.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+    const previousDomain = previousLink.replace('http://', '').replace('https://', '').split(/[/?#]/)[0];
     let backArrow = '';
-    if (currentDomain == previousDomain) {
+    if (currentDomain === previousDomain) {
       backArrow = previousLink;
     }
 
