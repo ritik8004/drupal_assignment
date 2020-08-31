@@ -684,6 +684,7 @@ class CartController {
           $extension['user_type'] = $user_id > 0 ? 'Logged in User' : 'Guest User';
           $extension['user_agent'] = $this->request->headers->get('User-Agent', '');
           $extension['client_ip'] = $_ENV['AH_CLIENT_IP'] ?? $this->request->getClientIp();
+          $extension['attempted_payment'] = 1;
         }
 
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
