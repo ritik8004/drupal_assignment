@@ -43,8 +43,9 @@
     }
 
     h1 {
+      width: 100%;
+
       @include breakpoint($only-mobile) {
-        width: 100%;
         text-align: center;
       }
 
@@ -52,11 +53,6 @@
         text-transform: none;
         font-size: 1.25rem;
         font-family: $alshaya-bold;
-
-        @include breakpoint($only-mobile) {
-          width: 70%;
-          display: inline-block;
-        }
       }
     }
 
