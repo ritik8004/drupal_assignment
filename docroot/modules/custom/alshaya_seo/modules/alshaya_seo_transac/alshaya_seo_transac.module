@@ -633,3 +633,17 @@ function alshaya_seo_transac_preprocess_products_horizontal_slider(&$variables) 
     $variables['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   }
 }
+
+/**
+ * Implements hook_alshaya_acm_product_recommended_products_data_alter().
+ */
+function alshaya_seo_transac_alshaya_acm_product_recommended_products_data_alter(string $type, array &$recommended_skus) {
+  if (!empty($recommended_skus) && isset($recommended_skus['products']) && !empty($recommended_skus['products'])) {
+    $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+    $list_item_position = 1;
+    foreach ($recommended_skus['products'] as $sku => $product) {
+      $recommended_skus['products'][$sku]['gtm_attributes'] = $gtm_manager->fetchSkuAtttributes($sku);
+      $recommended_skus['products'][$sku]['gtm_attributes']['list-position'] = $list_item_position++;
+    }
+  }
+}

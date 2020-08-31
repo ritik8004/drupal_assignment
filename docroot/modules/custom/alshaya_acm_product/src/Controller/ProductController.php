@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\ImageStyleInterface;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Extension\ModuleHandler;
 
 /**
  * Class ProductController.
@@ -62,6 +63,13 @@ class ProductController extends ControllerBase {
   protected $skuImageManager;
 
   /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandler
+   */
+  protected $moduleHandler;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -69,7 +77,8 @@ class ProductController extends ControllerBase {
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('request_stack'),
       $container->get('config.factory'),
-      $container->get('alshaya_acm_product.sku_images_manager')
+      $container->get('alshaya_acm_product.sku_images_manager'),
+      $container->get('module_handler')
     );
   }
 
@@ -84,12 +93,21 @@ class ProductController extends ControllerBase {
    *   Config Factory service object.
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_image_manager
    *   The SKU Image Manager.
+   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   *   The Module Handler service.
    */
-  public function __construct(SkuManager $sku_manager, RequestStack $request_stack, ConfigFactoryInterface $config_factory, SkuImagesManager $sku_image_manager) {
+  public function __construct(
+      SkuManager $sku_manager,
+      RequestStack $request_stack,
+      ConfigFactoryInterface $config_factory,
+      SkuImagesManager $sku_image_manager,
+      ModuleHandler $module_handler
+    ) {
     $this->skuManager = $sku_manager;
     $this->request = $request_stack->getCurrentRequest();
     $this->acmConfig = $config_factory->get('alshaya_acm.settings');
     $this->skuImageManager = $sku_image_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -228,6 +246,7 @@ class ProductController extends ControllerBase {
         // for new PDP layout.
         if ($this->request->query->get('type') == 'json') {
           $related_products = $this->getRelatedProductsJson($related_skus, $data);
+          $this->moduleHandler->alter('alshaya_acm_product_recommended_products_data', $type, $related_products);
           return new JsonResponse($related_products);
         }
         $build['related'] = [

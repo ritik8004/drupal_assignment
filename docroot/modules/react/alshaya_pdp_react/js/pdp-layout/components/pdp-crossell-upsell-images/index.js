@@ -2,9 +2,18 @@ import React from 'react';
 import PdpInfo from '../pdp-info';
 
 const PdpCrossellUpsellImage = ({
-  imageUrl, alt, title, pdpProductPrice, finalPrice, productUrl, productLabels, productPromotions,
+  imageUrl,
+  alt,
+  title,
+  pdpProductPrice,
+  finalPrice,
+  productUrl,
+  productLabels,
+  productPromotions,
+  gtmAttributes,
 }) => (
-  <a className="magv2-pdp-crossell-upsell-image-wrapper" href={productUrl}>
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  <a className="magv2-pdp-crossell-upsell-image-wrapper" href={productUrl} {...gtmAttributes}>
     {productLabels ? (
       <div className="product-labels">
         {Object.keys(productLabels).map((key) => (
