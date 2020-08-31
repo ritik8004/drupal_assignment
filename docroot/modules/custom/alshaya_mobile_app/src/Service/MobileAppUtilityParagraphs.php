@@ -26,6 +26,7 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\file\Entity\File;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Component\Utility\UrlHelper;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -632,6 +633,14 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
             }
           }
         }
+        if ($field_name == 'field_link' || $field_name == 'field_button_link') {
+          if (UrlHelper::isValid($row[0]['uri'])) {
+            $url_object = Url::fromUri($row[0]['uri']);
+            if (isset($url_object)) {
+              $row[0]['deeplink'] = $this->getDeepLinkFromUrl($url_object);
+            }
+          }
+        }
       }
       $data[$field_name] = $row;
     }
@@ -710,6 +719,11 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         }, $entity->get($field)->getValue())
         : $entity->get($field)->getString();
       }
+    }
+    if (!empty($data)
+      && $entity->getEntityTypeId() == 'paragraph'
+      && $parent = $entity->getParentEntity()->bundle()) {
+      $data['parent_type'] = $parent;
     }
     return $data;
   }

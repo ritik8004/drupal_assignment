@@ -5,114 +5,113 @@
 
 (function ($, Drupal, debounce) {
   'use strict';
+
+  Drupal.alshayaSeoGtmProductSlider = Drupal.alshayaSeoGtmProductSlider || {};
+
+  Drupal.behaviors.alshayaSeoGtmProductSlider = {
+    attach: function (context, settings) {
+      /**
+       * Product click handler for product sliders on homepage and PDP.
+       */
+      $('.view-product-slider article > a', context).once('product-clicked').on('click', function () {
+        var that = $(this).closest('article');
+        var subListName = Drupal.alshayaSeoGtmProductSlider.getRecommendationListName($(this));
+        // Get the position of the item in the carousel.
+        var position = parseInt($(this).closest('.views-row').data('list-item-position'));
+        Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.gtm.currency, subListName, position);
+      });
+    }
+  }
+
   Drupal.behaviors.seoGoogleTagManagerProductSliderList = {
     attach: function (context, settings) {
-      $(window).once('product-carousel-load-scroll').on('load scroll', debounce(function (event) {
-        Drupal.alshaya_seo_gtm_process_carousel(context, settings);
+      $(window).once('product-carousel-scroll').on('scroll', debounce(function (event) {
+        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_carousel_product_impression, $('.view-product-slider'), settings, event);
       }, 500));
 
-      $(document).once('product-slider-prev-next').on('click', '.view-product-slider .slick-prev, .view-product-slider .slick-next', function () {
-        Drupal.alshaya_seo_gtm_process_carousel(context, settings);
+      $(document).once('product-slider-prev-next').on('click', '.view-product-slider .slick-prev, .view-product-slider .slick-next', function (event) {
+        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_carousel_product_impression, $('.view-product-slider'), settings, event);
       });
     }
   };
 
   /**
-   * Helper function to carousel_list_class.
+   * Get the list name for the recommended product.
    *
-   * @param context
+   * @param object element
+   *   The jquery object of the recommended product.
    *
-   * @param settings
+   * @return string
+   *    The list name.
    */
-  Drupal.alshaya_seo_gtm_process_carousel = function (context, settings) {
-    var body = $('body');
-    var gtmPageType = body.attr('gtm-container');
-    var listName = body.attr('gtm-list-name');
-    var listClassName = '';
+  Drupal.alshayaSeoGtmProductSlider.getRecommendationListName = function(element) {
+    var label = element.closest('.views-element-container').siblings('.subtitle').text();
+    var listName = $('body').attr('gtm-list-name');
 
-    if ((gtmPageType === 'product detail page') || (gtmPageType === 'cart page')) {
-      // Check whether the product is in US or CS region & update list accordingly.
-      if (listName.indexOf('placeholder') > -1) {
-        if ($('div').hasClass('horizontal-crossell') && (!$(context).find('.horizontal-crossell').hasClass('mobile-only-block'))) {
-          var crossellSelecter = $('.horizontal-crossell .view-product-slider');
-          if ((!crossellSelecter.closest('.owl-item').hasClass('cloned'))) {
-            Drupal.alshaya_seo_gtm_prepare_and_push_carousel_product_impression(crossellSelecter, settings, 'horizontal-crossell');
-          }
-        }
-
-        if ($('div').hasClass('horizontal-upell') && (!$(context).find('.horizontal-upell').hasClass('mobile-only-block'))) {
-          var upellSelecter = $('.horizontal-upell .view-product-slider');
-          if (!upellSelecter.closest('.owl-item').hasClass('cloned')) {
-            Drupal.alshaya_seo_gtm_prepare_and_push_carousel_product_impression(upellSelecter, settings, 'horizontal-upell');
-          }
-        }
-
-        if ($('div').hasClass('horizontal-related') && !$(context).find('.horizontal-related').hasClass('mobile-only-block')) {
-          var relatedSelecter = $('.horizontal-related .view-product-slider');
-          if (!relatedSelecter.closest('.owl-item').hasClass('cloned')) {
-            Drupal.alshaya_seo_gtm_prepare_and_push_carousel_product_impression(relatedSelecter, settings, 'horizontal-related');
-          }
-        }
-      }
+    if (listName.indexOf('placeholder') > -1) {
+      return productRecommendationsSuffix + listName.replace('placeholder', label).toLowerCase();
     }
     else {
-      Drupal.alshaya_seo_gtm_prepare_and_push_carousel_product_impression($('.view-product-slider'), settings, listClassName);
+      return (productRecommendationsSuffix + listName + '-' + label).toLowerCase();
     }
   }
 
   /**
-   * Helper function to push productImpression to GTM.
+   * Helper function to prepare productImpressions.
    *
    * @param context
    *
-   * @param settings
+   * @param event
    */
-  Drupal.alshaya_seo_gtm_prepare_and_push_carousel_product_impression = function (context, settings, listClassName) {
+  Drupal.alshaya_seo_gtm_prepare_carousel_product_impression = function (context, event) {
     var impressions = [];
     var body = $('body');
-    var currencyCode = body.attr('gtm-currency');
-    var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
-    var productLinkProcessedSelector = $('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
+    // We need to also check that the item is not in a slick clone.
+    var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed, .slick-cloned article"):visible', context);
     var listName = body.attr('gtm-list-name');
-    var gtmPageType = body.attr('gtm-container');
-    // Send impression for each product added on page (page 1 or X).
-    var count = productLinkProcessedSelector.length + 1;
-
-    var upSellCrossSellSelector = $('.view-product-slider').parent('.views-element-container').parent();
-
-    var pdpListName = listName;
-
-    if (listClassName === 'horizontal-crossell') {
-      pdpListName = listName.replace('placeholder', 'CS');
-    }
-    else if (listClassName === 'horizontal-upell') {
-      pdpListName = listName.replace('placeholder', 'US');
-    }
-    else if (listClassName === 'horizontal-related') {
-      pdpListName = listName.replace('placeholder', 'RELATED');
-    }
 
     if (productLinkSelector.length > 0) {
+      var finalListName = '';
+      var previousLabel = '';
       productLinkSelector.each(function () {
         // 40 is passed as the second argument as in product sliders we can see
         // that much of the top portion of the slider images is white in color
         // and hence user needs to scroll more to view the product and that is
         // when we trigger the GTM event.
-        if ($(this).isElementInViewPort(0, 40)) {
-          $(this).addClass('impression-processed');
+        if ($(this).isCarouselElementInViewPort(0, 40)) {
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
-          impression.list = pdpListName;
-          impression.position = count;
+
+          // Find the carousel title.
+          var label = $(this).closest('.views-element-container').siblings('.subtitle').text();
+          if ((previousLabel === '') || (previousLabel !== label)) {
+            // Find out the no. of elements in the current carousel that have
+            // been processed. This is executed for the first carousel that is
+            // viewed by the user(previousLabel === '').
+            // When user views another carousel before expiration of the timer
+            // then the carousel label should be different and hence we again
+            // get the new count of processed items for that carousel.
+            var productLinkProcessedSelector = $(this).closest('.views-element-container').find('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
+            previousLabel = label;
+          }
+
+          if (listName.search('placeholder') > 0) {
+            finalListName = listName.replace('placeholder', label);
+          }
+          else {
+            finalListName = listName + '-' + label;
+          }
+          impression.list = Drupal.alshayaSeoGtmProductSlider.getRecommendationListName($(this));
+
+          impression.position = parseInt($(this).closest('.views-row').data('list-item-position'));
           // Keep variant empty for impression pages. Populated only post add to cart action.
           impression.variant = '';
           impressions.push(impression);
-          count++;
+          $(this).addClass('impression-processed');
         }
       });
-      if (impressions.length > 0) {
-        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
-      }
     }
+
+    return impressions;
   };
 
 })(jQuery, Drupal, Drupal.debounce);

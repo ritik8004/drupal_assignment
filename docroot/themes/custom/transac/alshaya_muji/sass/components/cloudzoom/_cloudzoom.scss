@@ -73,11 +73,6 @@
         }
       }
     }
-
-    .cloudzoom #cloud-zoom-wrap img {
-      width: 100%;
-      height: auto;
-    }
   }
 }
 
@@ -98,7 +93,7 @@
     @include breakpoint($desktop) {
       width: 38rem;
       height: 38rem;
-      margin-#{$right}: 2rem;
+      padding-#{$right}: 2rem;
     }
   }
 

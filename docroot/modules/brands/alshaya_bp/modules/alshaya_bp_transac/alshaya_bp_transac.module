@@ -9,6 +9,7 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Link;
 
@@ -176,5 +177,22 @@ function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rou
     // depends on the 'route' cache context.
     $breadcrumb->addCacheContexts(['route']);
     $breadcrumb->setLinks($breadcrumb_links);
+  }
+}
+
+/**
+ * Implements hook_sku_product_info_alter().
+ */
+function alshaya_bp_transac_sku_product_info_alter(array &$data, SKUInterface $sku) {
+  if ($sku->bundle() !== 'simple') {
+    return;
+  }
+
+  // Update those products info having grouping attribute and
+  // enabled swatch config for that attribute.
+  $grouping_attribute = \Drupal::service('alshaya_color_split.manager')->getGroupingAttribute($sku);
+  $grouping_attribute_with_swatch = \Drupal::config('alshaya_color_split.settings')->get('process_swatch_for_grouping_attributes');
+  if (!empty($grouping_attribute) && $grouping_attribute_with_swatch) {
+    $data['grouping_attribute_with_swatch'] = $grouping_attribute_with_swatch;
   }
 }

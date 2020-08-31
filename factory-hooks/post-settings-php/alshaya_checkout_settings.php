@@ -9,3 +9,9 @@
 
 $settings['alshaya_checkout_settings']['place_order_double_check_after_exception'] = TRUE;
 $settings['alshaya_checkout_settings']['cancel_reservation_enabled'] = FALSE;
+
+// Check all payments initiated before 500 seconds.
+$settings['alshaya_checkout_settings']['pending_payments']['before'] = 500;
+
+// Do not check payments initiated before 4 hours.
+$settings['alshaya_checkout_settings']['pending_payments']['after'] = 14400;

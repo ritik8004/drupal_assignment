@@ -1,0 +1,147 @@
+.user-detail-name-wrapper {
+  @include breakpoint($tablet) {
+    display: flex;
+  }
+
+  .user-firstname,
+  .user-lastname {
+    @include breakpoint($tablet) {
+      flex-basis: 15rem;
+    }
+  }
+
+  .user-firstname {
+    @include breakpoint($tablet) {
+      margin-#{$right}: 1.875rem;
+    }
+  }
+}
+
+.companion-details-item {
+  border-bottom: 1px solid $appointment-companion-detail-border;
+
+  .details-header-wrapper {
+    display: flex;
+    padding: 2.5rem 0;
+    justify-content: space-between;
+    align-items: center;
+
+    .companion-detail-heading {
+      font-size: 0.875rem;
+      color: $appointment-section-title;
+    }
+  }
+}
+
+.user-detail-subheading {
+  font-size: 0.875rem;
+  margin-bottom: 2.8125rem;
+  margin-top: 0.3125rem;
+}
+
+.appointment-user-details-wrapper {
+  border-bottom: 1px solid $appointment-companion-detail-border;
+}
+
+.user-details-wrapper {
+  .user-email {
+    @include breakpoint($tablet) {
+      width: 24.375rem;
+    }
+  }
+
+  .user-mobile {
+    @include breakpoint($tablet) {
+      width: 15.375rem;
+    }
+  }
+}
+
+.customer-details-button {
+  float: none;
+
+  @include breakpoint($tablet-landscape) {
+    display: block;
+    margin-#{$left}: auto;
+  }
+
+  &-wrapper {
+    @include breakpoint($upto-tablet-landscape) {
+      margin-top: 2.1875rem;
+    }
+  }
+}
+
+.customer-details-wrapper {
+  @include breakpoint($upto-tablet-landscape) {
+    margin-bottom: 5rem;
+  }
+}
+
+.disclaimer-wrapper:not(:empty) {
+  font-size: 0.8125rem;
+  color: $appointment-disclaimer-text;
+  margin-top: 2.5rem;
+
+  pre {
+    overflow: visible;
+  }
+
+  @include breakpoint($tablet) {
+    margin-top: 5.625rem;
+  }
+}
+
+.add-companion {
+  margin-top: 2.1875rem;
+
+  @include breakpoint($only-mobile) {
+    margin-top: 1.875rem;
+  }
+
+  button {
+    border: none;
+    background: none;
+    color: $appointment-add-companion-link;
+    font-size: 0.875rem;
+
+    &::before {
+      content: '+';
+      display: inline-block;
+      vertical-align: middle;
+      margin-#{$right}: 0.3125rem;
+    }
+  }
+}
+
+.delete-companion {
+  button {
+    border: none;
+    background: none;
+    color: $appointment-companion-delete;
+    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 1.5rem;
+      height: 1.5rem;
+      background: url('#{$base_theme_img_directory_path}/icons/appointment-delete.svg') no-repeat center;
+      background-size: cover;
+    }
+  }
+}
+
+.appointment-customer-details-container {
+  @include breakpoint($tablet) {
+    .appointment-store-actions {
+      float: $left;
+    }
+
+    .appointment-flow-action {
+      float: $right;
+    }
+  }
+}

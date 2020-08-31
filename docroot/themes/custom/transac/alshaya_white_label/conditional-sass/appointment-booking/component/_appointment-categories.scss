@@ -1,0 +1,93 @@
+.appointment-categories {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+
+  @include breakpoint($tablet-landscape) {
+    width: calc(100% - 16.75rem);
+  }
+
+  &-wrapper {
+    .appointment-booking-section-title {
+      @include breakpoint($tablet-landscape) {
+        padding-top: 0.625rem;
+      }
+    }
+  }
+
+  .appointment-category {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    color: $appointment-category-text;
+    width: calc((100% - 1.5rem) / 2);
+    padding: 0.75rem;
+    padding-#{$left}: 3.3125rem;
+    padding-#{$right}: 0.4375rem;
+    border-radius: 0.1875rem;
+    position: relative;
+    margin-bottom: 1.25rem;
+    cursor: pointer;
+
+    @include breakpoint($tablet-landscape) {
+      width: auto;
+      margin-#{$right}: 1.25rem;
+    }
+
+    @include breakpoint($upto-tablet-landscape) {
+      display: flex;
+      align-items: center;
+
+      &:nth-child(even) {
+        margin-#{$left}: 1.25rem;
+      }
+    }
+
+    &.active {
+      font-family: $alshaya-bold;
+    }
+
+    &.BeautyandSkin {
+      background: $appointment-category-beauty;
+      border: 1px solid transparent;
+
+      &.active {
+        border: 1px solid $appointment-category-beauty-border;
+      }
+
+      .appointment-category-icon {
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-beauty.svg') no-repeat;
+      }
+    }
+
+    &.HealthandPharmacy {
+      background: $appointment-category-pharmacy;
+      border: 1px solid transparent;
+
+      &.active {
+        border: 1px solid $appointment-category-pharmacy-border;
+      }
+
+      .appointment-category-icon {
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-pharmacy.svg') no-repeat;
+      }
+    }
+
+    &-icon {
+      position: absolute;
+      width: 2.375rem;
+      height: 2.375rem;
+      #{$left}: 0.3125rem;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 50%;
+    }
+
+    &-title {
+      @include breakpoint($upto-tablet-landscape) {
+        word-break: break-word;
+      }
+    }
+  }
+}

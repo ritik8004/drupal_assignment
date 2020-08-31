@@ -290,7 +290,7 @@ class AlshayaSpcOrderHelper {
     // We will use this as flag in React to avoid reading from local storage
     // and also avoid doing API call.
     $data['prepared'] = TRUE;
-
+    $data['freeItem'] = ($item['price_incl_tax'] == 0);
     $data['title'] = $item['name'];
     $data['finalPrice'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
     $data['sku'] = $item['sku'];
@@ -312,6 +312,8 @@ class AlshayaSpcOrderHelper {
         $data['options'] = array_values($this->skuManager->getConfigurableValues($skuEntity));
       }
       $data['isNonRefundable'] = $skuEntity->get('attr_non_refundable_products')->getString();
+      // Allow other modules to alter response data.
+      $this->moduleHandler->alter('alshaya_spc_order_sku_details', $data, $skuEntity);
     }
 
     return $data;

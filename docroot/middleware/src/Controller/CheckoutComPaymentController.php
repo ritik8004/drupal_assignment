@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Service\Config\SystemSettings;
 
 /**
  * Class CheckoutComPaymentController.
@@ -96,6 +97,8 @@ class CheckoutComPaymentController extends PaymentController {
    *   Session Storage service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    */
   public function __construct(
     RequestStack $request,
@@ -105,8 +108,10 @@ class CheckoutComPaymentController extends PaymentController {
     PaymentData $payment_data,
     LoggerInterface $logger,
     SessionStorage $session,
-    Utility $utility
+    Utility $utility,
+    SystemSettings $settings
   ) {
+    parent::__construct($logger, $settings);
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->checkoutComApi = $checkout_com_api;
@@ -165,6 +170,14 @@ class CheckoutComPaymentController extends PaymentController {
 
       return $this->handleCheckoutComError('3D secure payment came into success with proper responseCode but totals do not match.');
     }
+
+    $this->logger->info('Checkout.com 3D payment complete for @quote_id.<br>@message', [
+      '@quote_id' => $cart['cart']['id'],
+      '@message' => json_encode($data),
+    ]);
+
+    // Delete the payment data from our custom table now.
+    $this->paymentData->deletePaymentDataByCartId((int) $cart['cart']['id']);
 
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
 
@@ -309,9 +322,11 @@ class CheckoutComPaymentController extends PaymentController {
       $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, (int) $data['cart_id']);
     }
     elseif ($data['cart_id'] != $cart_id) {
-      $this->logger->error('3D secure payment came into @callback with cart not matching in session. Payment token: @token', [
+      $this->logger->error('3D secure payment came into @callback with cart not matching in session. Payment token: @token, Cart ID in session @cart_id, Payment data: @data', [
         '@token' => $payment_token,
         '@callback' => $callback,
+        '@cart_id' => $cart_id,
+        '@data' => json_encode($data),
       ]);
 
       throw new \Exception('/' . $data['data']['langcode'] . '/checkout', 302);

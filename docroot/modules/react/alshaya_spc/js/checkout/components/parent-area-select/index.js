@@ -136,7 +136,9 @@ export default class ParentAreaSelect extends React.Component {
 
     if (drupalSettings.alshaya_spc.delivery_in_only_city_key) {
       showCityOnly = 'parent-area-only-city';
-      if (currentOption.toString().length < 1) {
+      if (currentOption === undefined
+        || currentOption === null
+        || currentOption.toString().length < 1) {
         this.processSelectedItem(drupalSettings.alshaya_spc.delivery_in_only_city_key);
       }
     }

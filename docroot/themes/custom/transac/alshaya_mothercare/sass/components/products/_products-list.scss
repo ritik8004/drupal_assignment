@@ -1,0 +1,19 @@
+.c-plp {
+  .region__content {
+    .block-facets-summary-blockfilter-bar {
+      ul {
+        li {
+          &:not(.clear-all) {
+            margin-bottom: 0.75rem;
+            background: $plp_facet_filter_bg;
+            padding-bottom: 0;
+
+            @include breakpoint($only-mobile) {
+              margin-bottom: 0.5625rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -214,6 +214,16 @@ class Cart {
   }
 
   /**
+   * Wrapper function to set cart id in session.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   */
+  public function setCartId(int $cart_id) {
+    $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, $cart_id);
+  }
+
+  /**
    * Get cart by cart id.
    *
    * @param bool $force
@@ -256,7 +266,7 @@ class Cart {
       ]);
 
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
-        $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+        $this->removeCartFromSession();
       }
 
       // Fetch cart from cache (even if stale).
@@ -279,17 +289,7 @@ class Cart {
    */
   public function getRestoredCart() {
     $cart = $this->getCart();
-
     $this->resetCartCache();
-
-    if (!empty($cart['shipping']['method'])) {
-      $update = [
-        'extension' => ['action' => CartActions::CART_RESET],
-      ];
-
-      $cart = $this->updateCart($update);
-    }
-
     return $cart;
   }
 
@@ -771,6 +771,7 @@ class Cart {
         );
 
         if (isset($response['redirectUrl']) && !empty($response['redirectUrl'])) {
+          $response['payment_type'] = 'knet';
           $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response['data']);
           throw new \Exception($response['redirectUrl'], 302);
         }
@@ -828,6 +829,7 @@ class Cart {
           if (isset($response['responseCode'])
               && $response['responseCode'] == APIWrapper::SUCCESS
               && !empty($response[APIWrapper::REDIRECT_URL])) {
+            $response['payment_type'] = 'checkout_com';
             // We will use this again to redirect back to Drupal.
             $response['langcode'] = $this->settings->getRequestLanguage();
             $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response);
@@ -865,7 +867,7 @@ class Cart {
 
     $cart = NULL;
 
-    $action = is_array($data['extension'])
+    $action = isset($data['extension']) && is_array($data['extension'])
       ? $data['extension']['action'] ?? ''
       : $data['extension']->action ?? '';
 
@@ -900,14 +902,20 @@ class Cart {
         '@message' => $e->getMessage(),
       ]);
 
+      $is_add_to_cart = ($action == CartActions::CART_ADD_ITEM);
+
       // Re-set cart id in session if exception is for cart not found.
       // Also try to do the same operation again for the user.
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
-        $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
-        $info = $this->drupal->getSessionCustomerInfo();
-        $newCart = $this->createCart($info['customer_id'] ?? 0);
-        if (empty($newCart['error'])) {
-          return $this->updateCart($data);
+        $this->removeCartFromSession();
+
+        // Create new cart only if user is trying to add an item to cart.
+        if ($is_add_to_cart) {
+          $info = $this->drupal->getSessionCustomerInfo();
+          $newCart = $this->createCart($info['customer_id'] ?? 0);
+          if (empty($newCart['error'])) {
+            return $this->updateCart($data);
+          }
         }
       }
       else {
@@ -922,10 +930,9 @@ class Cart {
       // Because, If we return cart object, it won't show any error as we are
       // not passing error with cart object, and with successful cart object it
       // will show notification of add to cart (Which we don't need here.).
-      $is_add_to_Cart = ($action == CartActions::CART_ADD_ITEM);
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
-      if (!empty($exception_type) && !$is_add_to_Cart) {
+      if (!empty($exception_type) && !$is_add_to_cart) {
         // Get cart object if already not available.
         $cart = !empty($cart) ? $cart : $this->getCart();
         // If cart is available and cart has item.
@@ -1127,6 +1134,23 @@ class Cart {
       return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
     }
 
+    // Check if shipping address not have custom attributes.
+    if (empty($cart['shipping']['address']['custom_attributes'])) {
+      $this->logger->error('Error while placing order. Shipping address not contains all info. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
+    // If first/last name not available in shipping address.
+    if (empty($cart['shipping']['address']['firstname'])
+      || empty($cart['shipping']['address']['lastname'])) {
+      $this->logger->error('Error while placing order. First name or Last name not available in cart. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
     $lock = FALSE;
     $settings = $this->settings->getSettings('spc_middleware');
 
@@ -1156,6 +1180,12 @@ class Cart {
       }
 
       $order_id = (int) str_replace('"', '', $result);
+
+      $this->logger->notice('Order placed successfully. Cart: @cart Orderid: @order_id', [
+        '@cart' => json_encode($cart),
+        '@order_id' => $order_id,
+      ]);
+
       return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
     }
     catch (\Exception $e) {
@@ -1223,8 +1253,7 @@ class Cart {
     $email = $this->getCartCustomerEmail();
 
     // Remove cart id and other caches from session.
-    $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
-    $this->resetCartCache();
+    $this->removeCartFromSession();
 
     // Set order in session for later use.
     $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
@@ -1393,6 +1422,15 @@ class Cart {
   }
 
   /**
+   * Wrapper function to remove cart data and cache.
+   */
+  protected function removeCartFromSession() {
+    $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+    $this->cache->delete('cached_cart');
+    $this->resetCartCache();
+  }
+
+  /**
    * Get cart stores from magento.
    *
    * @param float $lat
@@ -1462,6 +1500,7 @@ class Cart {
       return $this->utility->getErrorResponse('Transaction failed.', 500);
     }
     $response['langcode'] = $this->settings->getRequestLanguage();
+    $response['payment_type'] = 'checkout_com';
     $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response);
 
     $this->logger->notice('Redirecting user for 3D verification.');
@@ -1560,7 +1599,9 @@ class Cart {
 
     if ($this->settings->getSettings('place_order_debug_failure', 1)) {
       $message[] = 'payment_method:' . $data['paymentMethod']['method'];
-      $message[] = 'additional_information:' . json_encode($data['paymentMethod']['additional_data']);
+      if (isset($data['paymentMethod']['additional_data'])) {
+        $message[] = 'additional_information:' . json_encode($data['paymentMethod']['additional_data']);
+      }
 
       $message[] = 'shipping_method:' . $cart['shipping']['method'];
       foreach ($cart['shipping']['address']['custom_attributes'] as $shipping_attribute) {

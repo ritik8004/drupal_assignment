@@ -1,0 +1,10 @@
+alshaya_algolia_react.settings:
+  type: config_object
+  label: 'Alshaya Algolia React settings'
+  mapping:
+    attributes_to_sort_by_name:
+      type: sequence
+      label: 'Attributes to sort by name'
+      sequence:
+        type: string
+        label: 'Attribute'

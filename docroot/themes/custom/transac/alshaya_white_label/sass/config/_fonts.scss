@@ -35,12 +35,12 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
 
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?Q4v1eI');
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?A7b5iT');
   src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?Q4v1eI#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?Q4v1eI') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?Q41veI') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?Q4v1eI#alshaya-icons') format('svg');
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?A7b5iT#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?A7b5iT') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?A7b5iT') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?A7b5iT#alshaya-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -155,7 +155,18 @@ $icons: (
   edit-input: "\e93f",
   arrow-left: "\e940",
   arrow-right: "\e941",
-  bin: "\e9ac"
+  bin: "\e9ac",
+  map-location: "\e942",
+  minus: "\e943",
+  plus: "\e944",
+  new-facebook-default: "\e945",
+  new-facebook-hover: "\e946",
+  new-instagram-default: "\e947",
+  new-instagram-hover: "\e948",
+  new-twitter-default: "\e949",
+  new-twitter-hover: "\e94a",
+  new-whatsapp-default: "\e94b",
+  new-whatsapp-hover: "\e94c",
 );
 
 @mixin iconbase() {
