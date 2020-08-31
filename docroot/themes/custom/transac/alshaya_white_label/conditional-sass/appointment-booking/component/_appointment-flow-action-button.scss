@@ -29,3 +29,12 @@
     }
   }
 }
+
+.appointment-customer-details-form {
+  @include breakpoint($only-mobile) {
+    .appointment-store-buttons-wrapper {
+      position: relative;
+      padding-top: 1.5rem;
+    }
+  }
+}
