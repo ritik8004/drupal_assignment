@@ -33,6 +33,10 @@ export default class CartItem extends React.Component {
     Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
   }
 
+  componentDidUpdate() {
+    Drupal.ajax.bindAjaxLinks(document.getElementById('spc-cart'));
+  }
+
   /**
    * Call back to get product data from storage.
    */
