@@ -46,7 +46,7 @@ export default class ReadMore extends React.Component {
    */
   getTrimmedDescription = (description) => {
     if (description.length > descriptionThreshold) {
-      return description.substring(0, descriptionThreshold);
+      return `${description.substring(0, descriptionThreshold)} ...`;
     }
     return description;
   }
