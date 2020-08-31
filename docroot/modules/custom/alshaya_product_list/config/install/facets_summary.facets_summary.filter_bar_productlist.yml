@@ -9,12 +9,24 @@ dependencies:
 id: filter_bar_productlist
 name: 'Filter bar product list'
 facets:
-  brand_list_bottle_type:
+  category_facet_productlist:
     checked: true
-    label: 'Product List Bottle Type'
+    label: 'Product List Category'
     separator: ', '
-    show_count: true
     weight: 0
+    show_count: false
+  final_price_productlist:
+    checked: true
+    label: 'Final Price Product List'
+    separator: ', '
+    weight: 0
+    show_count: false
+  promotions_productlist:
+    checked: true
+    label: 'Promotions Product List'
+    separator: ', '
+    weight: 0
+    show_count: false
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_3'
 processor_configs:
   reset_facets:

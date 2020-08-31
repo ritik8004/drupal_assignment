@@ -4,7 +4,6 @@ dependencies:
   config:
     - facets.facet.final_price_productlist
   module:
-    - alshaya_super_category
     - ctools
     - facets
     - system

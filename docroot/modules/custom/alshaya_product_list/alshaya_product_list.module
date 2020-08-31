@@ -162,19 +162,16 @@ function _alshaya_product_list_manage_facet_blocks() {
   // Adjusting weights for facet blocks.
   _alshaya_acm_product_adjust_block_weight('product_list', 'exposedformalshaya_product_listblock_3', 'search_api:views_block__alshaya_product_list__block_3');
 
-  // Update/Adjust weight of category facet block.
-  $source_weight++;
-  \Drupal::entityTypeManager()->getStorage('block')
-    ->load('categoryfacetproductlist')->setWeight($source_weight)->save();
-
-  // Update/Adjust weight of price facet block.
-  $source_weight++;
-  \Drupal::entityTypeManager()->getStorage('block')
-    ->load('finalpriceproductlist')->setWeight($source_weight)->save();
-
-  // Update/Adjust weight of promotion facet block.
-  $source_weight++;
-  \Drupal::entityTypeManager()->getStorage('block')
-    ->load('promotionsproductlist')->setWeight($source_weight)->save();
+  // Update/Adjust weight of config facet blocks.
+  $config_blocks = [
+    'categoryfacetproductlist',
+    'finalpriceproductlist',
+    'promotionsproductlist',
+  ];
+  foreach ($config_blocks as $blockId) {
+    $source_weight++;
+    \Drupal::entityTypeManager()->getStorage('block')
+      ->load($blockId)->setWeight($source_weight)->save();
+  }
 
 }
