@@ -289,6 +289,15 @@ class AlshayaSpcCommands extends DrushCommands {
 
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }
+          elseif (empty($payment_info['responseCode']) || $payment_info['responseCode'] != '10000') {
+            $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment failed. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($payment_info),
+            ]);
+
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
           elseif (empty($payment_info['id'])) {
             $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment callback requested with empty token. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
               '@data' => $payment['data'],
