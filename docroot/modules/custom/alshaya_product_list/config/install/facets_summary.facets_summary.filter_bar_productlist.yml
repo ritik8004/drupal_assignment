@@ -9,12 +9,6 @@ dependencies:
 id: filter_bar_productlist
 name: 'Filter bar product list'
 facets:
-  category_facet_productlist:
-    checked: true
-    label: 'Product List Category'
-    separator: ', '
-    weight: 0
-    show_count: false
   final_price_productlist:
     checked: true
     label: 'Final Price Product List'

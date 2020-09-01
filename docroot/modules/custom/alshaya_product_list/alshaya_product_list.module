@@ -22,10 +22,16 @@ function alshaya_product_list_search_api_db_query_alter(SelectInterface &$db_que
     $attr_value = 'none';
     $current_route = \Drupal::routeMatch();
     // If view route, means either sorting of filtering is done.
-    if ($current_route->getRouteName() == 'views.ajax') {
+    if ($current_route->getRouteName() == 'views.ajax'
+      || $current_route->getRouteName() == 'facets.block.ajax') {
       $query_string = [];
       parse_str(\Drupal::requestStack()->getCurrentRequest()->getQueryString(), $query_string);
-      $view_url_data = $query_string['view_path'];
+
+      // Get url from views.
+      $view_url_data = $current_route->getRouteName() == 'views.ajax'
+        ? $query_string['view_path']
+        : \Drupal::requestStack()->getCurrentRequest()->getPathInfo();
+
       $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
       // Remove current language from url.
       $view_url_data = preg_replace('/\/' . $current_language . '/', '', $view_url_data, 1);
@@ -118,60 +124,4 @@ function alshaya_product_list_alshaya_search_filter_link_alter(&$link, array &$d
     $data['append_value'] = FALSE;
     $link = '/' . $langcode . $alias;
   }
-}
-
-/**
- * Creating facet blocks and adjusting weights.
- */
-function _alshaya_product_list_manage_facet_blocks() {
-  $fields = [];
-
-  \Drupal::moduleHandler()->alter('acq_sku_base_field_additions', $fields);
-
-  foreach ($fields as $field_code => $field) {
-    /** @var \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager $facet_manager */
-    $facet_manager = \Drupal::service('alshaya_search_api.facets_manager');
-
-    $facet_source_id = 'search_api:views_block__alshaya_product_list__block_3';
-    $filter_bar_id = 'facets_summary.facets_summary.filter_bar_productlist';
-    $prefix = 'productlist';
-
-    if (empty($field['facet'])) {
-      // We use add even when resetting. Remove facet if available.
-      $facet_manager->removeFacet($field_code, $filter_bar_id, $prefix);
-      continue;
-    }
-
-    // Create Facet and their blocks.
-    $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
-  }
-
-  $current_theme = \Drupal::config('system.theme')->get('default');
-
-  // Move blocks to current default theme.
-  if (!empty($current_theme)) {
-    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
-  }
-
-  // Adjusting weights for Exposed Form block.
-  $block_storage = \Drupal::entityTypeManager()->getStorage('block');
-  $source_weight = $block_storage->load('page_title')->getWeight();
-  $source_weight++;
-  $block_storage->load('exposedformalshaya_product_listblock_3')->setWeight($source_weight)->save();
-
-  // Adjusting weights for facet blocks.
-  _alshaya_acm_product_adjust_block_weight('product_list', 'exposedformalshaya_product_listblock_3', 'search_api:views_block__alshaya_product_list__block_3');
-
-  // Update/Adjust weight of config facet blocks.
-  $config_blocks = [
-    'categoryfacetproductlist',
-    'finalpriceproductlist',
-    'promotionsproductlist',
-  ];
-  foreach ($config_blocks as $blockId) {
-    $source_weight++;
-    \Drupal::entityTypeManager()->getStorage('block')
-      ->load($blockId)->setWeight($source_weight)->save();
-  }
-
 }

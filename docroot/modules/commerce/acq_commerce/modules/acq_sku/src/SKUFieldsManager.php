@@ -234,7 +234,7 @@ class SKUFieldsManager {
    * @return array
    *   All fields defined in custom modules.
    */
-  private function getAllCustomFields() {
+  public function getAllCustomFields() {
     $fields = [];
 
     $this->moduleHandler->alter('acq_sku_base_field_additions', $fields);

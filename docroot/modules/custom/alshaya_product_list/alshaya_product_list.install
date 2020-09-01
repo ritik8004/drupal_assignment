@@ -11,5 +11,40 @@
  * Implements hook_install().
  */
 function alshaya_product_list_install() {
-  _alshaya_product_list_manage_facet_blocks();
+  $fields = \Drupal::service('acq_sku.fields_manager')->getAllCustomFields();
+  foreach ($fields as $field_code => $field) {
+    /** @var \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager $facet_manager */
+    $facet_manager = \Drupal::service('alshaya_search_api.facets_manager');
+
+    $facet_source_id = 'search_api:views_block__alshaya_product_list__block_3';
+    $filter_bar_id = 'facets_summary.facets_summary.filter_bar_productlist';
+    $prefix = 'productlist';
+
+    // Check for facet flag.
+    if (empty($field['facet'])) {
+      continue;
+    }
+
+    // Create Facet and their blocks.
+    $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
+  }
+
+  $current_theme = \Drupal::config('system.theme')->get('default');
+  // Move blocks to current default theme.
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+
+  // Adjusting weights for Exposed Form block.
+  $block_storage = \Drupal::entityTypeManager()->getStorage('block');
+  $source_weight = $block_storage->load('page_title')->getWeight();
+  $source_weight++;
+  $block_storage->load('exposedformalshaya_product_listblock_3')->setWeight($source_weight)->save();
+
+  // Adjusting weights for facet blocks.
+  _alshaya_acm_product_adjust_block_weight('product_list', 'exposedformalshaya_product_listblock_3', 'search_api:views_block__alshaya_product_list__block_3');
+
+  // Update/Adjust weight of price facet blocks.
+  \Drupal::entityTypeManager()->getStorage('block')
+    ->load('finalpriceproductlist')->setWeight($source_weight + 1)->save();
 }
