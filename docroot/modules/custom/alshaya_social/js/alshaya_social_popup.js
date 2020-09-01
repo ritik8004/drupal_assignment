@@ -11,9 +11,7 @@
       // create new Social auth popup window and monitor it
       $('.auth-link').click(function () {
         var authLink = $(this).attr('social-auth-link');
-        var queryString = window.location.search;
-        var urlParams = new URLSearchParams(queryString);
-        var destination = urlParams.get('destination');
+        var destination = $.urlParam('destination');
         Drupal.socialAuthPopup({
           path: authLink,
           callback: function () {
@@ -51,4 +49,14 @@
       }
     }, 1000);
   };
+
+  $.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results == null){
+       return null;
+    }
+    else {
+       return decodeURI(results[1]) || 0;
+    }
+  }
 })(jQuery, Drupal, drupalSettings);
