@@ -289,7 +289,7 @@ class AlshayaSpcCommands extends DrushCommands {
 
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }
-          elseif ($payment_info['responseCode'] != '10000') {
+          elseif (!empty($payment_info['responseCode']) && $payment_info['responseCode'] != '10000') {
             $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment failed. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
