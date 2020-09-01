@@ -50,12 +50,14 @@
 body.alias--cart {
   .page-standard {
     &.l-two--sf {
-      background: $algolia-react-search-result-page-bg;
-      max-width: 100%;
+      &.l-container {
+        background: $algolia-react-search-result-page-bg;
+        max-width: 100%;
 
-      .show-algolia-result {
-        max-width: 80.25rem;
-        margin: 0 auto;
+        .show-algolia-result {
+          max-width: 80.25rem;
+          margin: 0 auto;
+        }
       }
     }
   }
