@@ -23,6 +23,15 @@
     Drupal.alshayaSeoGtmPushProductDetailView($('#pdp-layout'));
   });
 
+  // Product click handler for product slider.
+  $(document).once('product-clicked').on('click', '.magv2-pdp-crossell-upsell-wrapper .magv2-pdp-crossell-upsell-image-wrapper', function () {
+    // var that = $(this).closest('article');
+    var subListName = Drupal.alshayaSeoPdpMagazineV2Gtm.getRecommendationListName($(this));
+    // // Get the position of the item in the carousel.
+    var position = parseInt($(this).attr('list-position'));
+    Drupal.alshaya_seo_gtm_push_product_clicks($(this), drupalSettings.gtm.currency, subListName, position);
+  });
+
   /**
    * Prepares the impression list to send to Product Impressions event.
    *
