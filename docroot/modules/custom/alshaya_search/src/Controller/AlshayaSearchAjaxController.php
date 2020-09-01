@@ -202,7 +202,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
     }
 
     // Allow other modules to alter response.
-    \Drupal::moduleHandler()->alter('alshaya_search_query_param', $response, $facet_fields);
+    \Drupal::moduleHandler()->alter('alshaya_search_ajax_response', $response, $facet_fields);
 
     return $response;
   }

@@ -132,7 +132,7 @@ function alshaya_product_list_alshaya_search_filter_link_alter(&$link, array &$d
  *
  * Implements hook_alshaya_search_ajax_response_alter.
  */
-function alshaya_product_list_alshaya_search_query_param_alter(&$response, $facet_fields) {
+function alshaya_product_list_alshaya_search_ajax_response_alter(&$response, $facet_fields) {
   $master_request = \Drupal::service('request_stack')->getMasterRequest();
   $master_route = $master_request->attributes->get('_route');
   if ($master_route === 'entity.node.canonical') {
