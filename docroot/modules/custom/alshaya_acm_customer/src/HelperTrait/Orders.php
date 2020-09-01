@@ -73,8 +73,7 @@ trait Orders {
         'refunded' => (int) ($item['qty_refunded'] ?? 0),
       ];
 
-      // Allow other modules to alter order details.
-      \Drupal::moduleHandler()->alter('alshaya_acm_customer_order_details', $item);
+      // If attribute value available for grouping attribute.
       if (isset($item['attributes']) && !empty($item['attributes'])) {
         $processed_item['attributes'] = $item['attributes'];
       }
