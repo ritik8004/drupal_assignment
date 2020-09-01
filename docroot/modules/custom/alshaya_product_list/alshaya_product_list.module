@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\Core\Ajax\InsertCommand;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Database\Query\SelectInterface;
@@ -123,5 +124,21 @@ function alshaya_product_list_alshaya_search_filter_link_alter(&$link, array &$d
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $data['append_value'] = FALSE;
     $link = '/' . $langcode . $alias;
+  }
+}
+
+/**
+ * Alters ajax response on facet filter.
+ *
+ * Implements hook_alshaya_search_ajax_response_alter.
+ */
+function alshaya_product_list_alshaya_search_query_param_alter(&$response, $facet_fields) {
+  $master_request = \Drupal::service('request_stack')->getMasterRequest();
+  $master_route = $master_request->attributes->get('_route');
+  if ($master_route === 'entity.node.canonical') {
+    $node = $master_request->attributes->get('node');
+    if ($node->bundle() === 'product_list') {
+      $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-3 form .facets-hidden-container', $facet_fields));
+    }
   }
 }

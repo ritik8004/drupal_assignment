@@ -201,18 +201,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-2 form .facets-hidden-container', $facet_fields));
     }
 
-    // Check if brand product list page.
-    $current_route_name = $this->currentRouteMatch->getRouteName();
-    if ($current_route_name === 'facets.block.ajax') {
-      $master_request = $this->requestStack->getMasterRequest();
-      $master_route = $master_request->attributes->get('_route');
-      if ($master_route === 'entity.node.canonical') {
-        $node = $master_request->attributes->get('node');
-        if ($node->bundle() === 'product_list') {
-          $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-3 form .facets-hidden-container', $facet_fields));
-        }
-      }
-    }
+    // Allow other modules to alter response.
+    \Drupal::moduleHandler()->alter('alshaya_search_query_param', $response, $facet_fields);
 
     return $response;
   }
