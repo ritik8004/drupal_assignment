@@ -148,6 +148,7 @@ function _alshaya_bp_transac_get_product_description($sku_entity) {
  * Implements hook_system_breadcrumb_alter().
  */
 function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+
   // Changing breadcrumb for advance pages.
   if ($route_match->getRouteName() == 'entity.node.canonical'
       && $route_match->getParameter('node')->bundle() == 'advanced_page') {
@@ -172,6 +173,35 @@ function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rou
       }
     }
 
+    $breadcrumb = new Breadcrumb();
+    // This breadcrumb builder is based on a route parameter, and hence it
+    // depends on the 'route' cache context.
+    $breadcrumb->addCacheContexts(['route']);
+    $breadcrumb->setLinks($breadcrumb_links);
+  }
+
+  // Changing breadcrumb for category terms.
+  if ($route_match->getRouteName() == 'entity.taxonomy_term.canonical'
+      && $route_match->getParameter('taxonomy_term')->bundle() == 'acq_product_category') {
+    $breadcrumb_links[] = Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>');
+
+    $taxonomy_term = $route_match->getParameter('taxonomy_term');
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+    // Get all parents of category.
+    $tid = $taxonomy_term->id();
+    $parents = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->loadAllParents($tid);
+    $parent_list = [];
+
+    foreach ($parents as $term) {
+      $term = $term->hasTranslation($langcode) ? $term->getTranslation($langcode) : NULL;
+      $parent_list[$term->id()] = $term->getName();
+    }
+    // Popping out the L1 category term.
+    array_pop($parent_list);
+    foreach (array_reverse($parent_list, TRUE) as $term_id => $term_name) {
+      $breadcrumb_links[] = Link::createFromRoute($term_name, 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term_id]);
+    }
     $breadcrumb = new Breadcrumb();
     // This breadcrumb builder is based on a route parameter, and hence it
     // depends on the 'route' cache context.
