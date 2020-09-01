@@ -1701,7 +1701,9 @@ class FeatureContext extends CustomMinkContext
     if (!empty($element)) {
       $this->getSession()->executeScript("jQuery('$locator').trigger('click');");
     }
-    throw new \Exception(sprintf('Element %s is not found on page.', $element));
+    else {
+      throw new \Exception(sprintf('Element %s is not found on page.', $element));
+    }
   }
 
   /**
@@ -1822,24 +1824,23 @@ class FeatureContext extends CustomMinkContext
   /**
    * @Then the price and currency matches the content of product having promotional code set as :cart_promotional
    */
-  public function iPriceCurrencyMatches($cart_promotional)
+  public function iPriceCurrencyMatches($cart_promotional = NULL)
   {
     $page = $this->getSession()->getPage();
-    if ($page->find('css', '#block-content .acq-content-product .has--special--price')) {
-      $product_price = $page->find('css', '#block-content .acq-content-product .special--price .price .price-amount')->getHtml();
+    if ($page->find('css', '#block-content .acq-content-product .content__title_wrapper .has--special--price')) {
+      $product_price = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .special--price .price .price-amount')->getHtml();
       $product_price = floatval($product_price);
-      $product_currency = $page->find('css', '#block-content .acq-content-product .special--price .price .price-currency')->getHtml();
+      $product_currency = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .special--price .price .price-currency')->getHtml();
     }
     else {
-      $product_price = $page->find('css', '#block-content .acq-content-product .price-block .price .price-amount')->getHtml();
+      $product_price = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .price-block .price .price-amount')->getHtml();
       $product_price = floatval($product_price);
-      $product_currency = $page->find('css', '#block-content .acq-content-product .price-block .price .price-currency')->getHtml();
+      $product_currency = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .price-block .price .price-currency')->getHtml();
     }
     $cart_price = $page->find('css', '#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount')->getHtml();
     $cart_price = floatval($cart_price);
     $cart_currency = $page->find('css', '#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-currency')->getHtml();
-
-    if ($cart_promotional) {
+    if (!empty($cart_promotional)) {
       $message = ($product_price >= $cart_price) ? '' : 'Correct price did not added get in minicart, expected cart price %d';
       if (!empty($message)) {
         throw new \Exception(sprintf($message, $product_price));
@@ -2236,5 +2237,45 @@ class FeatureContext extends CustomMinkContext
         throw new Exception("Existing Billing address not attached on the page "  . $this->getSession()->getCurrentUrl());
       }
     }
+  }
+
+  /**
+   * Clicks link with specified id|class
+   * Example: When I click the element "Log In" on page
+   *
+   * @When I click the element :locator having text :text on page$/
+   */
+  public function iClickElementWithTextOnPage($locator, $text)
+  {
+    $element = $this->getSession()->getPage()->find('css', $locator);
+    if (!empty($element)) {
+      $this->getSession()->executeScript("jQuery('$locator:contains('$text')').trigger('click');");
+    }
+    else {
+      throw new \Exception(sprintf('Element %s is not found on page.', $element));
+    }
+  }
+
+  /**
+   * @Given the element :arg1 having attribute :arg2 should contain :arg3
+   */
+  public function inOfElementShouldContain($selector, $attribute, $contains)
+  {
+    $element = $this->getSession()->getPage()->find('css', $selector);
+    $Selectelement = $element->getAttribute($attribute);
+    if (strpos($Selectelement,$contains) === False) {
+      throw new \Exception(sprintf('Element %s does not contain attribute %s with %s.', $selector, $attribute , $contains));
+    }
+  }
+
+  /**
+   * @Then I fill in :selector with date :value
+   * @param $selector
+   * @param $value
+   */
+  public function iFillInDateWith($selector, $value)
+  {
+    $field = $this->getSession()->getPage()->findField($selector);
+    $field->setValue($value);
   }
 }
