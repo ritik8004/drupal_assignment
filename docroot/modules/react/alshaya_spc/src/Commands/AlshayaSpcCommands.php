@@ -251,7 +251,7 @@ class AlshayaSpcCommands extends DrushCommands {
         case 'checkout_com':
           $cart_amount = $this->checkoutComApi->getCheckoutAmount($cart['totals']['base_grand_total'], $cart['totals']['quote_currency_code']);
           $payment_info = $this->checkoutComApi->getChargesInfo($payment['unique_id']);
-          if (!empty($payment_info['responseCode']) || $payment_info['responseCode'] != '10000') {
+          if (!empty($payment_info['responseCode']) && $payment_info['responseCode'] == '10000') {
             try {
               $update = [];
               $update['extension'] = [
