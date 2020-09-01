@@ -40,9 +40,6 @@ class AlshayaSecuritySubscriber implements EventSubscriberInterface {
       // Add the header for HSTS.
       $event->getResponse()->headers->set('Strict-Transport-Security', $header);
 
-      // Remove Drupal header.
-      $event->getResponse()->headers->remove('X-Generator');
-
       // Add no-store if no-cache is available.
       if ($cache_control = $event->getResponse()->headers->get('cache-control')) {
         if (strpos($cache_control, 'no-cache') > -1) {
