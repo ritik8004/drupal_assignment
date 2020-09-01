@@ -1,6 +1,0 @@
-variables:
-  var_username: 'mitesh@axelerant.com'
-  var_password: 'Alshaya@2017'
-  spc_product_listing_page: '/victorias-secret/shop-sport/all-sport/'
-  spc_basket_page: '/victorias-secret/shop-sport/all-sport/'
-  boots_appointment_page: "/victorias-secret/shop-sport/all-sport/"
