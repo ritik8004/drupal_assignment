@@ -51,16 +51,27 @@ const productRecommendationsSuffix = 'pr-';
       });
 
       $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
-        var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
+        var addedProduct = $(this).closest('[gtm-type="gtm-product-link"]');
         if (addedProduct.length === 0) {
           return;
         }
-        var quantity = parseInt($('.form-item-quantity select', $(this)).val());
         var size = $('.form-item-configurables-size select option:selected', $(this)).text();
         var selectedVariant = '';
+        var quantity = null;
 
-        if (addedProduct.attr('gtm-sku-type') === 'configurable') {
-          selectedVariant = $('.selected-variant-sku', $(this)).val();
+        // Since markup is different for magazine v2 layout, we fetch values
+        // differently.
+        if ($('body').hasClass('new-pdp-magazine-layout')) {
+          quantity = parseInt($('.magv2-qty-container .magv2-qty-input', $(this)).val());
+          if (addedProduct.attr('gtm-sku-type') === 'configurable') {
+            selectedVariant = $(this).attr('variantselected');
+          }
+        }
+        else {
+          quantity = parseInt($('.form-item-quantity select', $(this)).val());
+          if (addedProduct.attr('gtm-sku-type') === 'configurable') {
+            selectedVariant = $('.selected-variant-sku', $(this)).val();
+          }
         }
 
         var product = Drupal.alshaya_seo_gtm_get_product_values(addedProduct);
@@ -96,7 +107,7 @@ const productRecommendationsSuffix = 'pr-';
         var productData = {
           event: 'addToCart',
           ecommerce: {
-            currencyCode: drupalSettings.currency_code,
+            currencyCode: drupalSettings.gtm.currency,
             add: {
               products: [
                 product
