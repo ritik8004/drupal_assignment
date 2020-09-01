@@ -5,7 +5,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "acquia/acsf-tools": "dev-9.x-dev",
+        "acquia/acsf-tools": "dev-10.x-dev",
         "acquia/blt": "^9.0.0",
         "acquia/http-hmac-php": "~3.2",
         "acquia/lightning": "^4.0.0",
