@@ -228,3 +228,50 @@
     }
   }
 }
+
+#appointment-booking {
+  .appointment-confirmation-wrapper {
+    .confirmation-footer:empty {
+      display: none;
+    }
+
+    @include breakpoint($desktop) {
+      .confirmation-footer {
+        width: calc(100% - 15.5rem);
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .confirmation-footer {
+        padding-top: 1.75rem;
+      }
+
+      .appointment-flow-action {
+        margin-top: 3.5rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      .confirmation-footer {
+        float: $left;
+        padding-top: 2rem;
+        text-align: $right;
+      }
+
+      .appointment-flow-action {
+        float: $right;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .confirmation-footer,
+      .appointment-flow-action {
+        float: $left;
+      }
+
+      .confirmation-footer {
+        padding-#{$right}: 1.5rem;
+      }
+    }
+  }
+}
