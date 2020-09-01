@@ -14,7 +14,7 @@ use Drupal\facets\Entity\Facet;
  *
  * [5.6.0] Update category term path aliases.
  */
-function alshaya_bp_transac_update_8007() {
+function alshaya_bp_transac_update_8006() {
   $manager = \Drupal::service('alshaya_config.manager');
   $configs = ['pathauto.pattern.product_category_pathauto'];
   $manager->updateConfigs($configs, 'alshaya_acm_product_category');
