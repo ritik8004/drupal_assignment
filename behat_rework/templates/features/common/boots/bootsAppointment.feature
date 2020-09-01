@@ -1,4 +1,4 @@
-@javascript @appointment
+@javascript @appointment @desktop
 Feature: Test Boots functionality
 
   Background:
