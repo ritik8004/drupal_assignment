@@ -45,3 +45,24 @@
     }
   }
 }
+
+// Search result in basket page.
+body.alias--cart {
+  .page-standard {
+    &.l-two--sf {
+      background: $algolia-react-search-result-page-bg;
+      max-width: 100%;
+
+      .show-algolia-result {
+        max-width: 80.25rem;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .c-products-list {
+    &.view-search {
+      margin-bottom: 3.125rem;
+    }
+  }
+}
