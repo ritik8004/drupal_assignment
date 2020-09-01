@@ -287,10 +287,11 @@
       position: static;
       width: auto;
       height: auto;
+      display: flex;
+      padding: 0 1.25rem;
+      flex-wrap: wrap;
 
       .labels {
-        padding: 0 1.25rem;
-
         &.top-left,
         &.top-right {
           position: absolute;
@@ -309,7 +310,9 @@
         &.bottom-right {
           display: flex;
           justify-content: flex-start;
+          padding: 0;
           padding-bottom: 0.3125rem;
+          padding-right: 0.3125rem;
         }
 
         &.bottom-right {
