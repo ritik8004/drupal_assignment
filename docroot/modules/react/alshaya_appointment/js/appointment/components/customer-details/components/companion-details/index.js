@@ -13,6 +13,7 @@ export default class CompanionDetails extends React.Component {
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
+        setCounter: false,
       };
     }
   }
@@ -52,12 +53,35 @@ export default class CompanionDetails extends React.Component {
   };
 
   render() {
-    const { questions, appointmentCompanionItems } = this.state;
+    const {
+      questions,
+      appointmentCompanionItems,
+      appointmentForYou,
+      setCounter,
+    } = this.state;
     const {
       companionData,
       appointmentCompanion,
     } = this.props;
     const companionLimitReached = (appointmentCompanion.value >= appointmentCompanionItems.length);
+
+    // if there is 1 attendee and appointment for self,
+    // then appointment box is not shown, only add button shown.
+    if (appointmentCompanion.value === 1 && appointmentForYou === 'Yes' && !setCounter) {
+      appointmentCompanion.value = 0;
+      this.setState({
+        setCounter: true,
+      });
+    }
+
+    // If more than 1 attendees and appointment for self,
+    // then -1 boxes shown, eg 2 box if 3 selected.
+    if (appointmentCompanion.value > 1 && appointmentForYou === 'Yes' && !setCounter) {
+      appointmentCompanion.value -= 1;
+      this.setState({
+        setCounter: true,
+      });
+    }
 
     const companionQuestions = [...Array(parseInt(appointmentCompanion.value, 10))].map((e, i) => {
       const companionNum = i + 1;

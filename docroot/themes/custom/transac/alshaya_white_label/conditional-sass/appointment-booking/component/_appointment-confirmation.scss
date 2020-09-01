@@ -28,17 +28,19 @@
         }
       }
 
-      .confirmation-footer {
+      .confirmation-footer:not(:empty) {
         padding: 3.75rem 0;
         text-align: $right;
 
         @include breakpoint($upto-tablet-landscape) {
           padding-bottom: 0.625rem;
         }
+      }
 
-        .appointment-flow-action {
-          @include breakpoint($tablet) {
-            display: inline-block;
+      .appointment-flow-action {
+        @include breakpoint($tablet) {
+          button {
+            margin: 2rem 0 0;
           }
         }
       }
@@ -69,6 +71,13 @@
 
       .confirmation-item {
         padding-top: 1.875rem;
+        display: grid;
+        grid-template-columns: 12.5rem 1fr;
+
+        body.ie & {
+          display: -ms-grid;
+          -ms-grid-columns: 12.5rem 1fr;
+        }
 
         @include breakpoint($upto-tablet-landscape) {
           padding-top: 1.25rem;
@@ -78,11 +87,15 @@
           font-size: 0.875rem;
           color: $appointment-confirmation-blue-txt;
           font-family: $alshaya-bold;
-          min-width: 12.5rem;
           display: inline-block;
 
           @include breakpoint($upto-tablet-landscape) {
             display: block;
+          }
+
+          body.ie & {
+            -ms-grid-row: 1;
+            -ms-grid-column: 1;
           }
         }
 
@@ -90,6 +103,12 @@
           font-size: 0.875rem;
           color: $appointment-confirmation-txt;
           font-family: $alshaya-thin;
+
+          body.ie & {
+            -ms-grid-row: 1;
+            -ms-grid-column: 2;
+            display: inline-block;
+          }
         }
       }
 
@@ -205,6 +224,53 @@
         @include breakpoint($upto-tablet) {
           width: 100%;
         }
+      }
+    }
+  }
+}
+
+#appointment-booking {
+  .appointment-confirmation-wrapper {
+    .confirmation-footer:empty {
+      display: none;
+    }
+
+    @include breakpoint($desktop) {
+      .confirmation-footer {
+        width: calc(100% - 15.5rem);
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .confirmation-footer {
+        padding-top: 1.75rem;
+      }
+
+      .appointment-flow-action {
+        margin-top: 3.5rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      .confirmation-footer {
+        float: $left;
+        padding-top: 2rem;
+        text-align: $right;
+      }
+
+      .appointment-flow-action {
+        float: $right;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .confirmation-footer,
+      .appointment-flow-action {
+        float: $left;
+      }
+
+      .confirmation-footer {
+        padding-#{$right}: 1.5rem;
       }
     }
   }

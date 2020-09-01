@@ -2,55 +2,49 @@ import React from 'react';
 import 'core-js/es/array';
 import AppointmentMessages from '../appointment-messages';
 
-export default class AppointmentSteps extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      visitedStep: [],
-    };
+const AppointmentSteps = (props) => {
+  const { step } = props;
+  const { uid } = drupalSettings.user;
+  const listItems = drupalSettings.alshaya_appointment.step_labels;
+  if (uid) {
+    if (listItems[3].stepValue === 'select-login-guest') {
+      listItems.splice(3, 1);
+    }
   }
 
-  render() {
-    const getStepClass = (itemStep, activeStep) => {
-      let stepClass = '';
-      const { visitedStep } = this.state;
-      if (itemStep === activeStep) {
-        stepClass = `active wizard-step ${itemStep}`;
-      } else if (visitedStep.includes(itemStep)) {
-        stepClass = `visited wizard-step ${itemStep}`;
-      } else {
-        stepClass = `wizard-step ${itemStep}`;
-      }
-      visitedStep.push(activeStep);
-      return stepClass;
-    };
-
-    const { step } = this.props;
-    const { uid } = drupalSettings.user;
-    const listItems = drupalSettings.alshaya_appointment.step_labels;
-    if (uid) {
-      if (listItems[3].stepValue === 'select-login-guest') {
-        listItems.splice(3, 1);
-      }
+  const getStepClass = (itemStep, activeStep) => {
+    let stepClass = 'wizard-step ';
+    if (itemStep === activeStep) {
+      stepClass += `active ${itemStep}`;
+    } else {
+      stepClass += ` ${itemStep}`;
     }
-    const steprender = listItems.map((item, index) => (
+    return stepClass;
+  };
+
+  const getSteps = (steps) => {
+    const steprender = steps.map((item, index) => (
       <li
         key={item.step}
         className={getStepClass(item.stepValue, step)}
         value={item.stepValue}
       >
-        <span className="step-number">{index + 1}</span>
+        <span className="step-number"><span>{index + 1}</span></span>
         <span className="step-title">{item.stepTitle}</span>
       </li>
     ));
 
-    return (
-      <div className="appointment-steps-wrap fadeInUp">
-        <ul className="appointment-steps">
-          { steprender }
-        </ul>
-        <AppointmentMessages />
-      </div>
-    );
-  }
-}
+    return steprender;
+  };
+
+  return (
+    <div className="appointment-steps-wrap fadeInUp">
+      <ul className="appointment-steps">
+        { getSteps(listItems) }
+      </ul>
+      <AppointmentMessages />
+    </div>
+  );
+};
+
+export default AppointmentSteps;

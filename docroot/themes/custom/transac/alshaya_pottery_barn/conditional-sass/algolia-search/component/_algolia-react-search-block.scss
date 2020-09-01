@@ -237,10 +237,10 @@
 body {
   &:not(.no-sticky-algolia-search-bar) {
     @include breakpoint($only-mobile) {
-      margin-top: 7.125rem + 1.875rem; //super-category menu height added.
+      margin-top: 7.125rem;
 
       html[lang=ar] & {
-        margin-top: 7.6367rem + 1.875rem;
+        margin-top: 7.6367rem;
       }
     }
 

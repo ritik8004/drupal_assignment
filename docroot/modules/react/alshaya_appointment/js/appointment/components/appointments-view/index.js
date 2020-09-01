@@ -116,7 +116,7 @@ export default class AppointmentsView extends React.Component {
 
   render() {
     let appointmentsRender = '';
-    const { appointments, notFound } = this.state;
+    const { appointments, notFound, clientData } = this.state;
     const { baseUrl, pathPrefix } = drupalSettings.path;
 
     if (appointments.length > 0 && appointments[0] !== null) {
@@ -126,6 +126,7 @@ export default class AppointmentsView extends React.Component {
           appointment={appointment}
           num={i}
           cancelAppointment={this.cancelAppointment}
+          clientData={clientData}
         />
       ));
     }

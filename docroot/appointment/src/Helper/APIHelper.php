@@ -237,4 +237,12 @@ class APIHelper {
     return $appointment_settings['location_group_ext_id'];
   }
 
+  /**
+   * Gets country code from settings.
+   */
+  public function getSiteCountryCode() {
+    $appointment_settings = $this->settings->getSettings('appointment_settings');
+    return $appointment_settings['country_code'];
+  }
+
 }
