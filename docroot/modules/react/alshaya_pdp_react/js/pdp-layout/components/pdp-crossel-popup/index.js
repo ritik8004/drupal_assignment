@@ -5,7 +5,6 @@ import PdpPopupContainer from '../utilities/pdp-popup-container';
 import PdpPopupWrapper from '../utilities/pdp-popup-wrapper';
 
 class CrossellPopupContent extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -38,8 +37,8 @@ class CrossellPopupContent extends React.Component {
     let finalPrice = '';
     if (relatedProductInfo) {
       title = relatedProductInfo.title;
-      pdpProductPrice = parseInt(relatedProductInfo.original_price);
-      finalPrice = parseInt(relatedProductInfo.final_price);
+      pdpProductPrice = parseInt(relatedProductInfo.original_price, 10);
+      finalPrice = parseInt(relatedProductInfo.final_price, 10);
     }
 
     return (relatedProductInfo) ? (

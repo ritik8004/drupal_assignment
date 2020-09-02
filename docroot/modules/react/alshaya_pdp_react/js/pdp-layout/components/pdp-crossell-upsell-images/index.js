@@ -3,7 +3,7 @@ import PdpInfo from '../pdp-info';
 
 const PdpCrossellUpsellImage = ({
   imageUrl, alt, title, pdpProductPrice, finalPrice, productUrl,
-  productLabels, productPromotions, openModal, getPanelData, relatedSku
+  productLabels, productPromotions, openModal, getPanelData, relatedSku,
 }) => (
   <a className="magv2-pdp-crossell-upsell-image-wrapper" href={productUrl} onClick={() => getPanelData(openModal(relatedSku))}>
     <div className="magv2-pdp-crossell-upsell-img">
