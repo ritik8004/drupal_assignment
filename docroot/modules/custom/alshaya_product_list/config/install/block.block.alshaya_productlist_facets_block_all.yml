@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_product_list
+  theme:
+    - alshaya_white_label
+id: alshaya_productlist_facets_block_all
+theme: alshaya_white_label
+region: content
+weight: 8
+provider: null
+plugin: alshaya_productlist_facets_block_all
+settings:
+  id: alshaya_productlist_facets_block_all
+  label: 'Alshaya all facet block - Product List'
+  provider: alshaya_product_list
+  label_display: '0'
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      product_list: product_list
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

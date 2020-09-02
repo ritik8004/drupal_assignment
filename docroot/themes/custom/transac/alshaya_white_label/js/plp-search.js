@@ -20,7 +20,7 @@
         else {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
         }
-        selector = $('.c-content__region .block-alshaya-search-api .total-result-count, .plp-filter-count .facet-all-count');
+        selector = $('.c-content__region .block-alshaya-search-api .total-result-count, .plp-filter-count .facet-all-count, .c-content__region .block-alshaya-product-list .total-result-count');
 
         viewHeader.addClass('search-count');
         var searchCount = $('.c-content__region .block-alshaya-search-api .search-count');

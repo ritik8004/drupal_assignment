@@ -15,10 +15,10 @@
  *
  * @param string $link
  *   Brand link to alter.
- * @param string $attributeName
- *   Brand Attribute name.
+ * @param array $data
+ *   Data array.
  */
-function hook_alshaya_search_filter_link_alter(string &$link, string $attributeName) {
+function hook_alshaya_search_filter_link_alter(string &$link, array &$data) {
 }
 
 /**
