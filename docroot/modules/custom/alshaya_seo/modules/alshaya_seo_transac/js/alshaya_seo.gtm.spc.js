@@ -51,34 +51,34 @@
    *   Checkout step for gtm checkout event.
    */
   Drupal.alshayaSeoSpc.cartGtm = function(cart_data, step) {
-    const dataLayer = {};
+    const cartDataLayer = {};
     // GTM data for SPC cart.
     if (cart_data !== undefined) {
-      dataLayer.privilegeCustomer = 'Regular Customer';
-      dataLayer.privilegesCardNumber = '';
-      dataLayer.productSKU = [];
-      dataLayer.productStyleCode = [];
-      dataLayer.cartTotalValue = cart_data.cart_total;
-      dataLayer.cartItemsCount = cart_data.items_qty;
+      cartDataLayer.privilegeCustomer = 'Regular Customer';
+      cartDataLayer.privilegesCardNumber = '';
+      cartDataLayer.productSKU = [];
+      cartDataLayer.productStyleCode = [];
+      cartDataLayer.cartTotalValue = cart_data.cart_total;
+      cartDataLayer.cartItemsCount = cart_data.items_qty;
       var items = cart_data.items;
-      dataLayer.checkout = { actionField: { step: step }};
+      cartDataLayer.checkout = { actionField: { step: step }};
       if (items !== undefined) {
-        dataLayer.checkout.products = [];
+        cartDataLayer.checkout = Object.assign(cartDataLayer.checkout, {products: []} )
+        // dataLayer.checkout.products = [];
         if (!drupalSettings.gtm.disabled_vars.indexOf('cartItemsFlocktory')) {
-          dataLayer.cartItemsFlocktory = [];
+          cartDataLayer.cartItemsFlocktory = [];
         }
 
-        Drupal.alshayaSeoSpc.cartGtmCallback.apply(null, [dataLayer, ])
         Object.entries(items).forEach(function(productItem) {
           const product = productItem[1];
           Drupal.alshayaSpc.getProductData(product.sku, Drupal.alshayaSeoSpc.cartGtmCallback, {
             qty: product.qty,
             finalPrice: product.finalPrice,
-            dataLayer: dataLayer,
+            cartDataLayer: cartDataLayer,
           });
         });
       }
-      return dataLayer;
+      return cartDataLayer;
     }
   };
 
@@ -91,11 +91,11 @@
     if (product !== undefined && product.sku !== undefined) {
       // gtmAttributes.id contains value of "getSkuForNode", which we need
       // to pass for productStyleCode.
-      extraData.dataLayer.productStyleCode.push(product.gtmAttributes.id);
-      extraData.dataLayer.productSKU.push(product.sku);
+      extraData.cartDataLayer.productStyleCode.push(product.gtmAttributes.id);
+      extraData.cartDataLayer.productSKU.push(product.sku);
       var productData = Drupal.alshayaSeoSpc.gtmProduct(product, extraData.qty);
-      extraData.dataLayer.checkout.products.push(productData);
-      if (typeof extraData.dataLayer.cartItemsFlocktory !== 'undefined') {
+      extraData.cartDataLayer.checkout.products.push(productData);
+      if (typeof extraData.cartDataLayer.cartItemsFlocktory !== 'undefined') {
         var flocktory = {
           id: product.parentSKU,
           price: extraData.finalPrice,
@@ -103,7 +103,7 @@
           title: product.gtmAttributes.name,
           image: product.image,
         };
-        extraData.dataLayer.cartItemsFlocktory.push(flocktory);
+        extraData.cartDataLayer.cartItemsFlocktory.push(flocktory);
       }
     }
   };

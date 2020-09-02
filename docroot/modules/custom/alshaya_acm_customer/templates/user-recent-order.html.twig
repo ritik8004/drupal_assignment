@@ -59,6 +59,15 @@
 
         <td class="order__details--summary order__details--description">
           <div class="dark">{{ item.name }}</div>
+          {% if item.attributes is not empty %}
+            {% for attribute in item.attributes %}
+              <div class="light">
+                {% trans %}
+                  {{ attribute.label }}: {{ attribute.value }}
+                {% endtrans %}
+              </div>
+            {% endfor %}
+          {% endif %}
           <div class="light">{{ 'Item code' | t }} {{ item.sku }}</div>
           <div class="light">{{ 'Quantity' | t }}: {{ item.ordered }}</div>
 

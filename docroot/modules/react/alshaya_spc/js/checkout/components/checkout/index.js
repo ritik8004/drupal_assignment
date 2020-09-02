@@ -225,7 +225,7 @@ export default class Checkout extends React.Component {
 
             {billingComponent}
 
-            <ConditionalView condition={window.innerWidth > 768}>
+            <ConditionalView condition={window.innerWidth > 767}>
               {termConditions}
             </ConditionalView>
 
