@@ -126,6 +126,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
                 finalPrice={products[sku].finalPrice}
                 pdpProductPrice={products[sku].priceRaw}
                 productUrl={products[sku].productUrl}
+                productLabels={products[sku].productLabels}
               />
             ))}
           </Slider>

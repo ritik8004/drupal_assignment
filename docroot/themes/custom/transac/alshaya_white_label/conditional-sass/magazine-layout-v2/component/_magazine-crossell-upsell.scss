@@ -279,6 +279,54 @@
   }
 }
 
+.magv2-pdp-crossell-upsell-wrapper {
+  .magv2-pdp-crossell-upsell-image-wrapper {
+    position: relative;
+
+    .product-labels {
+      position: static;
+      width: auto;
+      height: auto;
+      display: flex;
+      padding: 0 1.25rem;
+      flex-wrap: wrap;
+
+      .labels {
+        &.top-left,
+        &.top-right {
+          position: absolute;
+          top: 1.1875rem;
+        }
+
+        &.top-left {
+          left: 0;
+        }
+
+        &.top-right {
+          right: 0;
+        }
+
+        &.bottom-left,
+        &.bottom-right {
+          display: flex;
+          justify-content: flex-start;
+          padding: 0;
+          padding-bottom: 0.3125rem;
+          padding-right: 0.3125rem;
+        }
+
+        &.bottom-right {
+          justify-content: flex-end;
+        }
+
+        img {
+          width: auto;
+        }
+      }
+    }
+  }
+}
+
 .slider-nav {
   padding-top: 1.875rem;
   display: flex;
