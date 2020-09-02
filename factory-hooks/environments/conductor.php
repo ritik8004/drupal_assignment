@@ -283,6 +283,11 @@ $conductors = [
     'site_id' => 254,
   ],
   // BathBodyWorks KW.
+  'bbwkw_dev3' => [
+    'hmac_id' => '59ad4bcc83f44f47953abe4101d7584c',
+    'hmac_secret' => 'NDE1ODgwYTItYWUxOS00',
+    'site_id' => 286,
+  ],
   'bbwkw_qa' => [
     'hmac_id' => '0b92904888cd422f8acd2938e199916e',
     'hmac_secret' => 'YWFiMzI4M2QtMzY5ZC00',
