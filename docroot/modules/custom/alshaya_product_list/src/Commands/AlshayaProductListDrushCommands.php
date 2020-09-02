@@ -165,7 +165,7 @@ class AlshayaProductListDrushCommands extends DrushCommands {
           /** @var \Drupal\node\Entity\Node $node_translation */
           $node_translation = $node->addTranslation('ar');
           $node_translation->setOwnerId(1);
-          $node_translation->title = $attribute_value;
+          $node_translation->setTitle($attribute_value);
           $node_translation->set('field_attribute_name', $attribute);
           $node_translation->set('field_attribute_value', $attribute_value);
           $node_translation->save();
