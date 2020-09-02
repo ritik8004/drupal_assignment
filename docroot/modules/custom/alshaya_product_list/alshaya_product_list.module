@@ -10,6 +10,8 @@ use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\search_api\Query\QueryInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
  * Implements hook_search_api_db_query_alter().
@@ -140,5 +142,15 @@ function alshaya_product_list_alshaya_search_ajax_response_alter(&$response, $fa
     if ($node->bundle() === 'product_list') {
       $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-3 form .facets-hidden-container', $facet_fields));
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_product_list_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  // Attach the shop by brand css library to the product listing page.
+  if ($entity->bundle() == 'product_list') {
+    $build['#attached']['library'][] = 'alshaya_white_label/shop-by-brand';
   }
 }

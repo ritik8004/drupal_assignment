@@ -67,7 +67,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  private $moduleHandler;
+  protected $moduleHandler;
 
   /**
    * Constructs a FacetBlockAjaxController object.

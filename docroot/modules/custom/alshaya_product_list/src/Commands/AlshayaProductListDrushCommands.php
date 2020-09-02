@@ -144,6 +144,7 @@ class AlshayaProductListDrushCommands extends DrushCommands {
         $entities = \Drupal::entityTypeManager()->getStorage('node')
           ->loadByProperties($properties);
         $node = array_shift($entities);
+        // If node exists, we create or we skip.
         if (!($node instanceof Node)) {
           $node = Node::create([
             // The node entity bundle.

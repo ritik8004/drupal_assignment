@@ -296,11 +296,6 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
   }
 
-  // Attach the shop by brand css library to the product listing page.
-  if ($node_bundle === 'product_list') {
-    $variables['#attached']['library'][] = 'alshaya_white_label/shop-by-brand';
-  }
-
   // Make site_name and site_logo available to all TWIG templates.
   $variables['site_name'] = \Drupal::config('system.site')->get('name');
   $variables['site_logo'] = theme_get_setting('logo.url');
