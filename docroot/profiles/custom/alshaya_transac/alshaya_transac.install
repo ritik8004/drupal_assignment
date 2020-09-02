@@ -16,6 +16,15 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Installs alshaya_pdp_react module.
+ */
+function alshaya_transac_update_8131() {
+  \Drupal::service('module_installer')->install(['alshaya_pdp_react']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Installs alshaya_pdp_layouts module.
  */
 function alshaya_transac_update_8130() {
