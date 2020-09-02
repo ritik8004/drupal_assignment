@@ -1,6 +1,5 @@
 logo:
-  path: 'themes/custom/transac/alshaya_boots/site-logo.svg'
-  use_default: false
+  use_default: 1
 
 features:
   favicon: 1

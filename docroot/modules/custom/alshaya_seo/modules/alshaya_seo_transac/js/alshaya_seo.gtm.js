@@ -2,6 +2,14 @@
  * @file
  * JS code to integrate with GTM.
  */
+const GTM_CONSTANTS = {
+  CART_ERRORS: 'cart errors',
+  CHECKOUT_ERRORS: 'checkout errors',
+  PAYMENT_ERRORS: 'other payment errors',
+  GENUINE_PAYMENT_ERRORS: 'payment errors',
+};
+
+const productRecommendationsSuffix = 'pr-';
 
 (function ($, Drupal, dataLayer) {
   'use strict';
@@ -9,6 +17,8 @@
   var mouseenterTime = 0;
   var gtm_execute_onetime_events = true;
   var currentListName = null;
+  var productImpressions = [];
+  var productImpressionsTimer = null;
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
@@ -99,7 +109,7 @@
       // Push GTM event on add to cart failure.
       $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e, productInfo) {
         var sku = productInfo.parentSku;
-        var errorMessage = $('.errors-container .error .message', $(this)).text();
+        var errorMessage = $('.errors-container .error', $(this)).text();
         // Get selected attributes.
         var attributes = [];
         $('#configurable_ajax select', $(this)).each(function() {
@@ -111,15 +121,7 @@
         // Set Event label.
         var label = 'Update cart failed for Product [' + sku + '] ';
         label = label + attributes.join(', ');
-        var productData = {
-          event: 'eventTracker',
-          eventCategory: 'Update cart error',
-          eventAction: errorMessage,
-          eventLabel: label,
-          eventValue: 0,
-          nonInteraction: 0,
-        };
-        dataLayer.push(productData);
+        Drupal.logJavascriptError(label, errorMessage, GTM_CONSTANTS.CART_ERRORS);
       });
 
       // Global variables & selectors.
@@ -622,42 +624,16 @@
       }
 
       /**
-       * Product Click Handler.
+       * Helper function to mark position of elements in homepage/PDP slider.
        */
-      // Add click link handler to fire 'productClick' event to GTM.
-      productLinkSelector.each(function () {
-        $(this).once('js-event').on('click', function (e) {
-          var that = $(this);
-          var position = $('.views-infinite-scroll-content-wrapper .c-products__item').index(that.closest('.c-products__item')) + 1;
-
-          currentListName = listName;
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName, position);
-        });
-      });
-
-      /**
-       * Product click handler for Modals.
-       */
-      // Add click link handler to fire 'productClick' event to GTM.
-      $('a[href*="product-quick-view"]').each(function () {
-        $(this).once('js-event').on('click', function (e) {
-          var that = $(this).closest('article[data-vmode="teaser"]');
-          var position = '';
-          if (listName.indexOf('placeholder') > -1) {
-            if (that.closest('.horizontal-crossell').length > 0) {
-              subListName = listName.replace('placeholder', 'CS');
-            }
-            else if (that.closest('.horizontal-upell').length > 0) {
-              subListName = listName.replace('placeholder', 'US');
-            }
-            else if (that.closest('.horizontal-related').length > 0) {
-              subListName = listName.replace('placeholder', 'RELATED');
-            }
-          }
-
-          currentListName = subListName;
-          position = drupalSettings.impressions_position[that.attr('data-nid') + '-' + subListName];
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);
+      $('.view-product-slider', context).once('mark-slider-items-position').each(function() {
+        var count = 1;
+        // In PDP it is seen that slick is already initialized by the time this
+        // is executed while in homepage it is not.
+        // So to prevent including slick-clones as actual items in our
+        // calculations we use the :not pseudo-class.
+        $(this).find('.views-row:not(.slick-cloned)').once('mark-item-position').each(function() {
+          $(this).data('list-item-position', count++);
         });
       });
 
@@ -1065,6 +1041,8 @@
       return;
     }
 
+    // Push product impressions to datalayer.
+    Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(null, null, null, {'type': 'product-click'});
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
 
     // On productClick, add list variable to cookie.
@@ -1159,12 +1137,91 @@
   /**
    * Helper function to push productImpression to GTM.
    *
-   * @param customerType
+   * @param prepareImpressionFunction
+   *   The function to call which will prepare the product impressions.
+   *   Take example of Drupal.alshaya_seo_gtm_prepare_impressions().
+   *   The function will accept 3 parameters:
+   *     1. context: The context in which to search for impressions.
+   *     2. eventType: The type of the event, eg: 'scroll'.
+   * @param context
+   *   The context for which impressions is to be generated.
+   * @param settings
+   *    Any settings.
+   * @param event
+   *    The event object or a custom object containing at least the event type.
+   *    Eg. {type: 'timer'} can also be sent as a value.
    */
-  Drupal.alshaya_seo_gtm_prepare_and_push_product_impression = function (context, settings) {
-    var impressions = [];
+  Drupal.alshaya_seo_gtm_prepare_and_push_product_impression = function (prepareImpressionFunction, context, settings, event) {
     var body = $('body');
     var currencyCode = body.attr('gtm-currency');
+    var eventType = event.type;
+
+    if (eventType === 'load') {
+      productImpressions = prepareImpressionFunction(context, eventType);
+      // We use splice so that by no chance we send more the required number of
+      // items on page load.
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionDefaultItemsInQueue));
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
+    }
+    else if (eventType === 'search-results-updated') {
+      // Push all previous impressions when new search is performed.
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions);
+      // Clear the previous timer.
+      window.clearInterval(productImpressionsTimer);
+      // Send default number of items to datalayer for new seach.
+      productImpressions = prepareImpressionFunction(context, eventType);
+      // We use splice so that by no chance we send more the required number of
+      // items on page load.
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionDefaultItemsInQueue));
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+    }
+    else if (eventType === 'timer') {
+      // This is to prevent the timer calling this function infinitely when
+      // there are no impressions.
+      if (productImpressions.length === 0) {
+        window.clearInterval(productImpressionsTimer);
+        productImpressionsTimer = null;
+        return;
+      }
+      // Push required items currently in queue.
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
+      window.clearInterval(productImpressionsTimer);
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+    }
+    else if (eventType === 'product-click' || eventType === 'pagehide') {
+      // Push all impressions to data layer.
+      Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions);
+      window.clearInterval(productImpressionsTimer);
+      // product-click can also happen for modals. Considering such a case we
+      // restart the timer.
+      if (eventType === 'product-click') {
+        productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+      }
+    }
+    else {
+      // This is for cases like scroll/carousel events.
+      // Add new impressions to the global productImpressions.
+      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType));
+      // If timer was unset previously when there were there were no impressions
+      // then set it now.
+      if (productImpressions.length > 0 && productImpressionsTimer === null) {
+        productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+      }
+      // Push if the global productImpressions length > max impressions size.
+      if (productImpressions.length >= drupalSettings.gtm.productImpressionQueueSize) {
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
+        window.clearInterval(productImpressionsTimer);
+        productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
+      }
+    }
+  }
+
+  /**
+   * Prepares product impressions.
+   */
+  Drupal.alshaya_seo_gtm_prepare_impressions = function (context, eventType) {
+    var impressions = [];
+    var body = $('body');
     var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
     var productLinkProcessedSelector = $('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
     var listName = body.attr('gtm-list-name');
@@ -1172,7 +1229,12 @@
     var count = productLinkProcessedSelector.length + 1;
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        if ($(this).isElementInViewPort(0, 10)) {
+        var condition = true;
+        // Only on scroll we check if product is in view or not.
+        if (eventType == 'scroll') {
+          condition = $(this).isElementInViewPort(0, 10);
+        }
+        if (condition) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;
@@ -1182,11 +1244,15 @@
           impressions.push(impression);
           count++;
         }
+        // On page load, process only the required number of
+        // items and push to datalayer.
+        if ((eventType === 'load') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
+          // This is to break out from the .each() function.
+          return false;
+        }
       });
-      if (impressions.length > 0) {
-        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
-      }
     }
+    return impressions;
   };
 
   // Ajax command to push deliveryAddress Event.
@@ -1199,16 +1265,24 @@
    *
    * @param context
    * @param error
+   * @param category
    */
-  Drupal.logJavascriptError = function (context, error) {
+  Drupal.logJavascriptError = function (context, error, category) {
     var message = (error && error.message !== undefined)
       ? error.message
       : error;
+
+    // We want message to be sent as string always.
+    if ($.type(message) !== 'string') {
+      message = JSON.stringify(message);
+    }
+
     var errorData = {
       event: 'eventTracker',
-      eventCategory: context,
-      eventLabel: 'Error occurred on ' + window.location.href,
+      eventCategory: category || 'unknown errors',
+      eventLabel: context,
       eventAction: message,
+      eventPlace: 'Error occurred on ' + window.location.href,
       eventValue: 0,
       nonInteraction: 0,
     };
@@ -1217,7 +1291,7 @@
       // Log error on console.
       if (drupalSettings.gtm.log_errors_to_console !== undefined
         && drupalSettings.gtm.log_errors_to_console) {
-        console.error(error);
+        console.error(errorData);
       }
 
       // Track error on GA.

@@ -2,6 +2,8 @@
   h3 {
     @include breakpoint($desktop) {
       vertical-align: middle;
+      line-height: 1.875rem;
+      display: inline-block;
     }
   }
 }

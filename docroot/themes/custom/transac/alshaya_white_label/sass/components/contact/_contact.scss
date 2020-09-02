@@ -497,21 +497,23 @@ html[lang=ar] {
   }
 }
 
-@include breakpoint($desktop) {
-  .c-user-edit.user-page {
-    .user-form {
-      .field--name-field-first-name,
-      .field--name-field-last-name {
+.c-user-edit.user-page {
+  .user-form {
+    .field--name-field-first-name,
+    .field--name-field-last-name {
+      @include breakpoint($desktop) {
         margin-top: 0.5rem;
       }
+    }
 
-      .mobile-number-field {
-        margin-top: 1rem;
-      }
+    .mobile-number-field {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+    }
 
-      .field--type-mobile-number {
+    .field--type-mobile-number {
+      @include breakpoint($desktop) {
         position: relative;
-        top: 1.3rem;
         clear: both;
       }
     }
@@ -523,18 +525,15 @@ html[lang=ar] {
     .user-form {
       .field--type-mobile-number {
         position: relative;
-        top: 1.3rem;
         clear: both;
       }
     }
   }
 }
 
-html[lang=ar] {
-  .c-user-edit.user-page .mobile-number-field {
-    width: 100%;
-    display: inline-block;
-  }
+.c-user-edit.user-page .mobile-number-field {
+  width: 100%;
+  display: inline-block;
 }
 
 .webform-submission-alshaya-contact-add-form {

@@ -10,8 +10,12 @@ use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
 use App\Service\CheckoutCom\CustomerCards;
+use Doctrine\DBAL\Connection;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Psr\Log\LoggerInterface;
+use Drupal\alshaya_master\Helper\SortUtility;
+use Symfony\Component\Lock\Factory;
+use Symfony\Component\Lock\Store\PdoStore;
 
 /**
  * Class Cart.
@@ -129,6 +133,13 @@ class Cart {
   protected $logger;
 
   /**
+   * Database connection.
+   *
+   * @var \Doctrine\DBAL\Connection
+   */
+  protected $connection;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -157,6 +168,8 @@ class Cart {
    *   Orders service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
+   * @param \Doctrine\DBAL\Connection $connection
+   *   Database connection.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -171,7 +184,8 @@ class Cart {
     CustomerCards $customer_cards,
     Drupal $drupal,
     Orders $orders,
-    LoggerInterface $logger
+    LoggerInterface $logger,
+    Connection $connection
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -186,6 +200,7 @@ class Cart {
     $this->drupal = $drupal;
     $this->orders = $orders;
     $this->logger = $logger;
+    $this->connection = $connection;
   }
 
   /**
@@ -199,6 +214,16 @@ class Cart {
   }
 
   /**
+   * Wrapper function to set cart id in session.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   */
+  public function setCartId(int $cart_id) {
+    $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, $cart_id);
+  }
+
+  /**
    * Get cart by cart id.
    *
    * @param bool $force
@@ -206,8 +231,6 @@ class Cart {
    *
    * @return array
    *   Cart data.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart($force = FALSE) {
     if (!empty(static::$cart) && !$force) {
@@ -219,23 +242,41 @@ class Cart {
       return NULL;
     }
 
+    // If cart is available in cache.
+    if (!$force && !empty($cached_cart = $this->getCartFromCache())) {
+      static::$cart = $cached_cart;
+      return static::$cart;
+    }
+
     $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
       static::$cart = $this->magentoApiWrapper->doRequest('GET', $url);
+      // Store cart object in cache.
+      $this->setCartInCache(static::$cart);
+
       static::$cart = $this->formatCart(static::$cart);
       return static::$cart;
     }
     catch (\Exception $e) {
       static::$cart = NULL;
 
-      if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
-        $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
-      }
-
       $this->logger->error('Error while getting cart from MDC. Error message: @message', [
         '@message' => $e->getMessage(),
       ]);
+
+      if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
+        $this->removeCartFromSession();
+      }
+
+      // Fetch cart from cache (even if stale).
+      if (!empty($cached_cart = $this->getCartFromCache(TRUE))) {
+        // Setting flag for stale cart cache.
+        $cached_cart['stale_cart'] = TRUE;
+        static::$cart = $cached_cart;
+        return static::$cart;
+      }
+
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -248,17 +289,7 @@ class Cart {
    */
   public function getRestoredCart() {
     $cart = $this->getCart();
-
     $this->resetCartCache();
-
-    if (!empty($cart['shipping']['method'])) {
-      $update = [
-        'extension' => ['action' => CartActions::CART_RESET],
-      ];
-
-      $cart = $this->updateCart($update);
-    }
-
     return $cart;
   }
 
@@ -451,8 +482,9 @@ class Cart {
     // not set. City with value 'NONE' means, that this was added in CnC
     // by default and not changed by user.
     if ($update_billing
-      && (empty($cart['cart']['billing_address']['firstname'])
-      || $cart['cart']['billing_address']['city'] == 'NONE')) {
+      || (empty($cart['cart']['billing_address']['firstname'])
+        || $cart['cart']['billing_address']['city'] == 'NONE')
+    ) {
       $cart = $this->updateBilling($data['shipping']['shipping_address']);
     }
 
@@ -625,12 +657,17 @@ class Cart {
    *
    * @param int $customer_id
    *   Customer id.
+   * @param bool $reset_cart
+   *   True to Reset cart, otherwise false.
    *
    * @return mixed
    *   Response.
    */
-  public function associateCartToCustomer(int $customer_id) {
+  public function associateCartToCustomer(int $customer_id, bool $reset_cart = FALSE) {
     $cart_id = $this->getCartId();
+    if ($reset_cart) {
+      $this->getRestoredCart();
+    }
     $url = sprintf('carts/%d/associate-cart', $cart_id);
 
     try {
@@ -645,7 +682,7 @@ class Cart {
       // After association restore the cart.
       if ($result) {
         static::$cart = NULL;
-        $this->getCart();
+        $this->getCart(TRUE);
         return TRUE;
       }
 
@@ -689,7 +726,20 @@ class Cart {
       $this->cache->set('payment_method', $expire, $data['method']);
     }
 
-    return $this->updateCart($update);
+    $old_cart = $this->getCart();
+    $cart = $this->updateCart($update);
+    if (isset($cart['error_code'])) {
+      $error_message = $cart['error_code'] > 600
+        ? 'Back-end system is down'
+        : $cart['error_message'];
+
+      $message = $this->prepareOrderFailedMessage($old_cart, $data, $error_message, 'update cart', 'NA', TRUE);
+      $this->logger->error('Error occurred while placing order. @message', [
+        '@message' => $message,
+      ]);
+    }
+
+    return $cart;
   }
 
   /**
@@ -721,6 +771,7 @@ class Cart {
         );
 
         if (isset($response['redirectUrl']) && !empty($response['redirectUrl'])) {
+          $response['payment_type'] = 'knet';
           $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response['data']);
           throw new \Exception($response['redirectUrl'], 302);
         }
@@ -755,6 +806,7 @@ class Cart {
             $additional_data = [
               'cardId' => $card['gateway_token'],
               'cvv' => $this->customerCards->deocodePublicHash(urldecode($additional_info['cvv'])),
+              'udf1' => $card['mada'] ? 'MADA' : '',
               'udf2' => APIWrapper::CARD_ID_CHARGE,
             ];
             $end_point = APIWrapper::ENDPOINT_CARD_PAYMENT;
@@ -777,6 +829,7 @@ class Cart {
           if (isset($response['responseCode'])
               && $response['responseCode'] == APIWrapper::SUCCESS
               && !empty($response[APIWrapper::REDIRECT_URL])) {
+            $response['payment_type'] = 'checkout_com';
             // We will use this again to redirect back to Drupal.
             $response['langcode'] = $this->settings->getRequestLanguage();
             $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response);
@@ -785,6 +838,12 @@ class Cart {
 
           throw new \Exception('Failed to initiate 3D request.', 500);
         }
+
+        // For 2D send the success and fail urls to Magento to allow them
+        // to use it when authorising.
+        $additional_data['successUrl'] = $this->checkoutComApi->getSuccessUrl();
+        $additional_data['failUrl'] = $this->checkoutComApi->getFailUrl();
+
         break;
     }
 
@@ -808,9 +867,13 @@ class Cart {
 
     $cart = NULL;
 
+    $action = isset($data['extension']) && is_array($data['extension'])
+      ? $data['extension']['action'] ?? ''
+      : $data['extension']->action ?? '';
+
     try {
-      static::$cart = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
-      static::$cart = $this->formatCart(static::$cart);
+      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data], $action);
+      static::$cart = $this->formatCart($cart_updated);
       $cart = static::$cart;
 
       // If exception at response message level.
@@ -827,19 +890,32 @@ class Cart {
         }
       }
 
+      // Set cart in cache.
+      $this->setCartInCache($cart_updated);
       return $cart;
     }
     catch (\Exception $e) {
       static::$cart = NULL;
 
+      $this->logger->error('Error while updating cart on MDC for action @action. Error message: @message', [
+        '@action' => $action,
+        '@message' => $e->getMessage(),
+      ]);
+
+      $is_add_to_cart = ($action == CartActions::CART_ADD_ITEM);
+
       // Re-set cart id in session if exception is for cart not found.
       // Also try to do the same operation again for the user.
       if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
-        $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
-        $info = $this->drupal->getSessionCustomerInfo();
-        $newCart = $this->createCart($info['customer_id'] ?? 0);
-        if (empty($newCart['error'])) {
-          return $this->updateCart($data);
+        $this->removeCartFromSession();
+
+        // Create new cart only if user is trying to add an item to cart.
+        if ($is_add_to_cart) {
+          $info = $this->drupal->getSessionCustomerInfo();
+          $newCart = $this->createCart($info['customer_id'] ?? 0);
+          if (empty($newCart['error'])) {
+            return $this->updateCart($data);
+          }
         }
       }
       else {
@@ -854,11 +930,9 @@ class Cart {
       // Because, If we return cart object, it won't show any error as we are
       // not passing error with cart object, and with successful cart object it
       // will show notification of add to cart (Which we don't need here.).
-      $is_add_to_Cart = (!empty($data['extension'])
-        && $data['extension']->action == CartActions::CART_ADD_ITEM);
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
-      if (!empty($exception_type) && !$is_add_to_Cart) {
+      if (!empty($exception_type) && !$is_add_to_cart) {
         // Get cart object if already not available.
         $cart = !empty($cart) ? $cart : $this->getCart();
         // If cart is available and cart has item.
@@ -874,9 +948,6 @@ class Cart {
         }
       }
 
-      $this->logger->error('Error while updating cart on MDC. Error message: @message', [
-        '@message' => $e->getMessage(),
-      ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -1055,16 +1126,84 @@ class Cart {
     $url = sprintf('carts/%d/order', $this->getCartId());
     $cart = $this->getCart();
 
+    // Check if shiping method is present else throw error.
+    if (empty($cart['shipping']['method'])) {
+      $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
+    // Check if shipping address not have custom attributes.
+    if (empty($cart['shipping']['address']['custom_attributes'])) {
+      $this->logger->error('Error while placing order. Shipping address not contains all info. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
+    // If first/last name not available in shipping address.
+    if (empty($cart['shipping']['address']['firstname'])
+      || empty($cart['shipping']['address']['lastname'])) {
+      $this->logger->error('Error while placing order. First name or Last name not available in cart. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
+    $lock = FALSE;
+    $settings = $this->settings->getSettings('spc_middleware');
+
+    // Check whether order locking is enabled.
+    if (!isset($settings['spc_middleware_lock_place_order']) || $settings['spc_middleware_lock_place_order'] == TRUE) {
+      $lock_store = new PdoStore($this->connection);
+      $lock_factory = new Factory($lock_store);
+
+      $lock_name = 'spc_place_order_' . $this->getCartId();
+      $lock = $lock_factory->createLock($lock_name);
+
+      if (!$lock->acquire()) {
+        $this->logger->error('Could not acquire lock to place SPC order: @lock_name"', [
+          '@lock_name' => $lock_name,
+        ]);
+        return $this->utility->getErrorResponse('Sorry, we were able to complete your purchase but something went wrong and we could not display the order confirmation page. Please review your past orders or contact our customer service team for assistance.', 700);
+      }
+    }
+
     try {
-      $result = $this->magentoApiWrapper->doRequest('PUT', $url, ['json' => $data]);
+      // We don't pass any payment data in place order call to MDC because its
+      // optional and this also sets in ACM MDC observer.
+      $result = $this->magentoApiWrapper->doRequest('PUT', $url);
+
+      if (!empty($lock)) {
+        $lock->release();
+      }
+
       $order_id = (int) str_replace('"', '', $result);
+
+      $this->logger->notice('Order placed successfully. Cart: @cart Orderid: @order_id', [
+        '@cart' => json_encode($cart),
+        '@order_id' => $order_id,
+      ]);
+
       return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
     }
     catch (\Exception $e) {
+      // Handle checkout.com 2D exception.
+      if ($this->exceptionType($e->getMessage()) === 'FRAUD') {
+        $this->logger->notice('Magento returned fraud exception . Error message: @message', [
+          '@message' => $e->getMessage(),
+        ]);
+        return $this->handleCheckoutComRedirection();
+      }
+
+      $double_check_done = 'no';
+      $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
+
       $doubleCheckEnabled = $this->settings->getSettings('alshaya_checkout_settings')['place_order_double_check_after_exception'];
       if ($doubleCheckEnabled) {
+        $double_check_done = 'yes';
         try {
-          $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
           $lastOrder = $this->orders->getLastOrder((int) $this->getCartCustomerId());
 
           if ($lastOrder && $cartReservedOrderId === $lastOrder['increment_id']) {
@@ -1076,13 +1215,6 @@ class Cart {
 
             return $this->processPostOrderPlaced((int) $lastOrder['order_id'], $data['paymentMethod']['method']);
           }
-          else {
-            $this->logger->warning('Place order failed and we tried to double check but order was not found. Message: @message, Reserved order id: @order_id, Cart id: @cart_id', [
-              '@message' => $e->getMessage(),
-              '@order_id' => $cartReservedOrderId,
-              '@cart_id' => $cart['cart']['id'],
-            ]);
-          }
         }
         catch (\Exception $doubleException) {
           $this->logger->error('Error occurred while trying to double check. Exception: @message', [
@@ -1092,9 +1224,15 @@ class Cart {
       }
 
       $this->cancelCartReservation($e->getMessage());
-      $this->logger->error('Error while placing order. Error message: @message', [
-        '@message' => $e->getMessage(),
+
+      $error_message = $e->getCode() > 600
+        ? 'Back-end system is down'
+        : $e->getMessage();
+      $message = $this->prepareOrderFailedMessage($cart, $data, $error_message, 'place order', $double_check_done);
+      $this->logger->error('Error occurred while placing order. @message', [
+        '@message' => $message,
       ]);
+
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
@@ -1115,11 +1253,13 @@ class Cart {
     $email = $this->getCartCustomerEmail();
 
     // Remove cart id and other caches from session.
-    $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
-    $this->resetCartCache();
+    $this->removeCartFromSession();
 
     // Set order in session for later use.
     $this->session->updateDataInSession(Orders::SESSION_STORAGE_KEY, $order_id);
+
+    // Set cart id of the order for later use.
+    $this->session->updateDataInSession(Orders::ORDER_CART_ID, $cart['cart']['id']);
 
     // Post order id and cart data to Drupal.
     $data = [
@@ -1260,6 +1400,13 @@ class Cart {
 
     // Initialise payment data holder.
     $cart['payment'] = [];
+    // When shipping method is empty, Set shipping and billing info to empty,
+    // so that we can show empty shipping and billing component in react
+    // to allow users to fill addresses.
+    if (empty($shippingMethod)) {
+      $cart['shipping'] = [];
+      $cart['cart']['billing_address'] = [];
+    }
 
     return $cart;
   }
@@ -1272,6 +1419,197 @@ class Cart {
     $this->cache->delete('payment_methods_home_delivery');
     $this->cache->delete('payment_methods_click_and_collect');
     $this->cache->delete('payment_method');
+  }
+
+  /**
+   * Wrapper function to remove cart data and cache.
+   */
+  protected function removeCartFromSession() {
+    $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
+    $this->cache->delete('cached_cart');
+    $this->resetCartCache();
+  }
+
+  /**
+   * Get cart stores from magento.
+   *
+   * @param float $lat
+   *   The latitude.
+   * @param float $lon
+   *   The longitude.
+   *
+   * @return array|mixed
+   *   Return array of stores.
+   *
+   * @throws \Exception
+   */
+  public function getCartStores($lat, $lon) {
+    $cart_id = $this->getCartId();
+    $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
+    try {
+      if (empty($stores = $this->magentoApiWrapper->doRequest('GET', $endpoint, []))) {
+        return $stores;
+      }
+
+      foreach ($stores as &$store) {
+        $store_info = $this->drupal->getStoreInfo($store['code']);
+        $store += $store_info;
+        $store['formatted_distance'] = number_format((float) $store['distance'], 2, '.', '');
+        $store['delivery_time'] = $store['sts_delivery_time_label'];
+        if ($store['rnc_available'] && isset($store['rnc_config'])) {
+          $store['delivery_time'] = $store['rnc_config'];
+        }
+        if (isset($store['rnc_config'])) {
+          unset($store['rnc_config']);
+        }
+      }
+
+      // Sort the stores first by distance and then by name.
+      SortUtility::sortByMultipleKey($stores, 'rnc_available', 'desc', 'distance', 'asc');
+      return $stores;
+    }
+    catch (\Exception $e) {
+      // Exception handling here.
+      $this->logger->error('Error occurred while fetching stores for cart id @cart_id, API Response: @response', [
+        '@cart_id' => $cart_id,
+        '@response' => $e->getMessage(),
+      ]);
+    }
+  }
+
+  /**
+   * Get checkout.com data from Magento and prepare 3D verification redirection.
+   *
+   * @return array
+   *   Response.
+   */
+  private function handleCheckoutComRedirection() {
+    $url = sprintf('carts/%d/selected-payment-method', $this->getCartId());
+    try {
+      $result = $this->magentoApiWrapper->doRequest('GET', $url);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while getting payment set on cart. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+
+    $response = $result['extension_attributes']['fraudrule_response'] ?? [];
+    if (empty($response)) {
+      return $this->utility->getErrorResponse('Transaction failed.', 500);
+    }
+    $response['langcode'] = $this->settings->getRequestLanguage();
+    $response['payment_type'] = 'checkout_com';
+    $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response);
+
+    $this->logger->notice('Redirecting user for 3D verification.');
+
+    return [
+      'error' => TRUE,
+      'redirectUrl' => $response['redirect_url'],
+    ];
+  }
+
+  /**
+   * Checks whether cnc enabled or not on cart.
+   *
+   * @param array $data
+   *   Cart data.
+   *
+   * @return bool
+   *   CnC enabled or not for cart.
+   */
+  public function getCncStatusForCart(array $data) {
+    static $cnc_enabled;
+    if (isset($cnc_enabled)) {
+      return $cnc_enabled;
+    }
+
+    // Whether CnC enabled or not.
+    $cnc_enabled = TRUE;
+    $cart_skus_list = [];
+    foreach ($data['cart']['items'] as $item) {
+      $cart_skus_list[] = $item['sku'];
+    }
+
+    if (!empty($cart_skus_list)) {
+      $cart_skus_list = implode(',', $cart_skus_list);
+      // Get CnC status.
+      $cnc_enabled = $this->drupal->getCncStatusForCart($cart_skus_list);
+    }
+
+    return $cnc_enabled;
+  }
+
+  /**
+   * Get cart from cache.
+   *
+   * @param bool $fetch_expired
+   *   Whether we need stale data from cache or not.
+   *
+   * @return array
+   *   Formatted cart data.
+   */
+  public function getCartFromCache(bool $fetch_expired = FALSE) {
+    $expire = (int) $_ENV['CACHE_CART'];
+    // If cart is available in cache, use that.
+    if ($expire > 0 && ($cached_cart = $this->cache->get('cached_cart', $fetch_expired))) {
+      return $this->formatCart($cached_cart);
+    }
+  }
+
+  /**
+   * Set cart in cache.
+   *
+   * @param array $cart
+   *   Cart data.
+   */
+  public function setCartInCache(array $cart) {
+    $expire = (int) $_ENV['CACHE_CART'];
+    if ($expire > 0) {
+      $this->cache->set('cached_cart', $expire, $cart);
+    }
+  }
+
+  /**
+   * Prepare message to log when API fail after payment successful.
+   *
+   * @param array $cart
+   *   Cart Data.
+   * @param array $data
+   *   Payment data.
+   * @param string $exception_message
+   *   Exception message.
+   * @param string $api
+   *   API identifier which failed.
+   * @param string $double_check_done
+   *   Flag to say if double check was done or not.
+   *
+   * @return string
+   *   Prepared error message.
+   */
+  private function prepareOrderFailedMessage(array $cart, array $data, string $exception_message, string $api, string $double_check_done) {
+    $message[] = 'exception:' . $exception_message;
+    $message[] = 'api:' . $api;
+    $message[] = 'double_check_done:' . $double_check_done;
+    $message[] = 'order_id:' . $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    $message[] = 'cart_id:' . $cart['cart']['id'];
+    $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
+
+    if ($this->settings->getSettings('place_order_debug_failure', 1)) {
+      $message[] = 'payment_method:' . $data['paymentMethod']['method'];
+      if (isset($data['paymentMethod']['additional_data'])) {
+        $message[] = 'additional_information:' . json_encode($data['paymentMethod']['additional_data']);
+      }
+
+      $message[] = 'shipping_method:' . $cart['shipping']['method'];
+      foreach ($cart['shipping']['address']['custom_attributes'] as $shipping_attribute) {
+        $message[] = $shipping_attribute['attribute_code'] . ':' . $shipping_attribute['value'];
+      }
+    }
+
+    return implode('||', $message);
   }
 
 }

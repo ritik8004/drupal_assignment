@@ -9,7 +9,8 @@ use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\acq_payment\PaymentMethodManager;
+use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides a resource to get payment methods data.
@@ -46,11 +47,18 @@ class PaymentMethodResource extends ResourceBase {
   protected $checkoutOptionManager;
 
   /**
-   * Payment method.
+   * Payment method manager.
    *
-   * @var \Drupal\acq_payment\PaymentMethodManager
+   * @var \Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager
    */
   protected $paymentMethodManager;
+
+  /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
 
   /**
    * PaymentMethodResource constructor.
@@ -69,8 +77,10 @@ class PaymentMethodResource extends ResourceBase {
    *   Entity repository.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_option_manager
    *   Checkout option manager.
-   * @param \Drupal\acq_payment\PaymentMethodManager $payment_plugins
+   * @param \Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager $payment_plugins
    *   Payment plugins.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory service.
    */
   public function __construct(
     array $configuration,
@@ -80,12 +90,14 @@ class PaymentMethodResource extends ResourceBase {
     LoggerInterface $logger,
     EntityRepositoryInterface $entity_repository,
     CheckoutOptionsManager $checkout_option_manager,
-    PaymentMethodManager $payment_plugins
+    AlshayaSpcPaymentMethodManager $payment_plugins,
+    ConfigFactoryInterface $config_factory
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityRepository = $entity_repository;
     $this->checkoutOptionManager = $checkout_option_manager;
     $this->paymentMethodManager = $payment_plugins;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -100,7 +112,8 @@ class PaymentMethodResource extends ResourceBase {
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('entity.repository'),
       $container->get('alshaya_acm_checkout.options_manager'),
-      $container->get('plugin.manager.acq_payment_method')
+      $container->get('plugin.manager.alshaya_spc_payment_method'),
+      $container->get('config.factory')
     );
   }
 
@@ -116,6 +129,11 @@ class PaymentMethodResource extends ResourceBase {
     $response_data = [];
 
     $payment_plugins = $this->paymentMethodManager->getDefinitions();
+
+    // Get the payment methods which have been excluded.
+    $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+    $exclude_payment_methods = array_filter($checkout_settings->get('exclude_payment_methods'));
+
     foreach ($payment_plugins as $plugin) {
       $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod(
         $plugin['id'],
@@ -124,11 +142,26 @@ class PaymentMethodResource extends ResourceBase {
 
       // If payment method term exists.
       if (!empty($payment_method_term)) {
+
+        // Check if the payment method is visible in front end.
+        $visibility = TRUE;
+        if (isset($exclude_payment_methods[$plugin['id']])) {
+          $visibility = FALSE;
+        }
+        else {
+          /** @var \Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase $plugin */
+          $plugin_instance = $this->paymentMethodManager->createInstance($plugin['id']);
+          if (!($plugin_instance->isAvailable())) {
+            $visibility = FALSE;
+          }
+        }
+
         $response_data[] = [
           'name' => $payment_method_term->getName(),
           'description' => $payment_method_term->getDescription(),
           'code' => $payment_method_term->get('field_payment_code')->getString(),
           'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
+          'visibility' => $visibility,
         ];
 
         // Adding to property for using later to attach cacheable dependency.

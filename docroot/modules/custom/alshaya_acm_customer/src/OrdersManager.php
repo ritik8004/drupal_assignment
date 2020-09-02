@@ -221,6 +221,8 @@ class OrdersManager {
       $result = json_decode($response ?? [], TRUE);
       $orders = $result['items'] ?? [];
       foreach ($orders as $key => $order) {
+        // Allow other modules to alter order details.
+        \Drupal::moduleHandler()->alter('alshaya_acm_customer_order_details', $order);
         $orders[$key] = $this->cleanupOrder($order);
       }
     }

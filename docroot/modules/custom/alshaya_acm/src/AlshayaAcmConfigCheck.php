@@ -11,6 +11,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
+use Drupal\google_tag\Entity\Container;
 
 /**
  * AlshayaAcmConfigCheck.
@@ -156,8 +157,8 @@ class AlshayaAcmConfigCheck {
       'alshaya_api.settings',
       'recaptcha.settings',
       'geolocation.settings',
-      'google_tag.container.primary',
       'exponea.settings',
+      's3fs.settings',
     ];
 
     $this->moduleHandler->alter('alshaya_reset_config_configs_to_reset', $reset);
@@ -229,7 +230,45 @@ class AlshayaAcmConfigCheck {
       alshaya_performance_reset_log_mode();
     }
 
+    // Configure GTM Container ID.
+    $this->configureGtmContainerId(Settings::get('google_tag.container.primary'));
+
     return TRUE;
+  }
+
+  /**
+   * Function to import gtm container id.
+   *
+   * @param array $gtmContainerId
+   *   Settings array with gtm container id.
+   */
+  private function configureGtmContainerId(array $gtmContainerId) {
+    $data = $this->configFactory->getEditable('google_tag.settings')->get();
+    $container_data = [
+      'status' => TRUE,
+      'id' => 'primary',
+      'label' => 'primary',
+      'weight' => 0,
+      'container_id' => $gtmContainerId['container_id'],
+    ] + $data;
+    $container_config = $this->configFactory->getEditable('google_tag.container.primary');
+    if (empty($container_config->get())) {
+      // This case is for new site install.
+      $entity = Container::create($container_data);
+      $entity->save();
+    }
+    elseif (empty($container_config->get('id'))) {
+      // This case is when sync from uat to local and uat has malformed entity.
+      $container_config->setData($container_data);
+      $container_config->save();
+    }
+    else {
+      // This case is when sync from uat to local with proper entity.
+      /** @var \Drupal\google_tag\Entity\Container $entity */
+      $entity = Container::load('primary');
+      $entity->set('container_id', $gtmContainerId['container_id']);
+      $entity->save();
+    }
   }
 
   /**

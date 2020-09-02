@@ -16,6 +16,7 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { fetchCartData } from '../../../utilities/api/requests';
 import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
+import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -31,6 +32,8 @@ export default class Cart extends React.Component {
       dynamicPromoLabelsCart: null,
       dynamicPromoLabelsProduct: null,
       inStock: true,
+      messageType: null,
+      message: null,
     };
   }
 
@@ -87,6 +90,14 @@ export default class Cart extends React.Component {
         this.setState({
           messageType: 'error',
           message: Drupal.t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.'),
+        });
+      } else if (data.message === undefined && data.in_stock) {
+        this.setState((prevState) => {
+          if (prevState.message === null) return null;
+          return {
+            messageType: null,
+            message: null,
+          };
         });
       }
     }, false);
@@ -151,7 +162,7 @@ export default class Cart extends React.Component {
       return <Loading />;
     }
 
-    if (message !== undefined || actionMessage !== undefined) {
+    if (message !== null || actionMessage !== undefined) {
       preContentActive = 'visible';
     }
 
@@ -193,6 +204,7 @@ export default class Cart extends React.Component {
               <span>{`${Drupal.t('my shopping bag')} `}</span>
               <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
             </SectionTitle>
+            <DeliveryInOnlyCity />
             <CartItems dynamicPromoLabelsProduct={dynamicPromoLabelsProduct} items={items} />
           </div>
           <div className="spc-sidebar">

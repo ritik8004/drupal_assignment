@@ -664,7 +664,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
               $address[$field_code] = $parent ? $parent->id() : NULL;
             }
           case 'administrative_area':
-            $term = $this->termStorage->load($address[$field_code]);
+            $term = !is_null($address[$field_code])
+              ? $this->termStorage->load($address[$field_code])
+              : NULL;
 
             if (empty($term)) {
               $magento_address['extension'][$attribute_code] = $address[$field_code];
@@ -980,11 +982,13 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       }
 
       $magento_form = array_filter($magento_form, function ($form_item) {
-        return (bool) $form_item['visible'] && $form_item['status'];
+        return ($form_item['visible'] && $form_item['status'])
+          || ($form_item['used_for_shipping_rate']);
       });
 
       $mapping = array_flip($this->getMagentoFieldMappings());
       $sort_order = $this->getFieldSortOrder();
+      $required = $this->getFieldRequired();
 
       foreach ($magento_form as $index => $form_item) {
         if (isset($form_item['attribute'])) {
@@ -993,9 +997,17 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
           unset($form_item['attribute']);
         }
 
+        // We want the fields to be sorted based on design needs and not
+        // change if someone changes in Magento.
         $form_item['sort_order'] = isset($sort_order[$mapping[$form_item['attribute_code']]])
           ? $sort_order[$mapping[$form_item['attribute_code']]]
           : $form_item['sort_order'] + 1000;
+
+        // Required field configuration is not done properly as of today in
+        // Magento and it will require code changes so we do workaround here.
+        $form_item['required'] = isset($required[$mapping[$form_item['attribute_code']]])
+          ? $required[$mapping[$form_item['attribute_code']]]
+          : $form_item['required'];
 
         $magento_form[$form_item['attribute_code']] = $form_item;
         unset($magento_form[$index]);
@@ -1050,6 +1062,22 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     return $order;
+  }
+
+  /**
+   * Function to get required field configuration for address fields.
+   *
+   * @return array
+   *   Drupal form field <-> true/false.
+   */
+  public function getFieldRequired() {
+    static $required;
+
+    if (empty($required)) {
+      $required = $this->configFactory->get('alshaya_addressbook.settings')->get('required');
+    }
+
+    return $required;
   }
 
   /**

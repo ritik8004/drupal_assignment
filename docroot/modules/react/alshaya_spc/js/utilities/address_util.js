@@ -1,4 +1,5 @@
 import axios from 'axios';
+import parse from 'html-react-parser';
 
 import {
   addBillingInCart,
@@ -8,8 +9,11 @@ import {
 } from './checkout_util';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
-import { extractFirstAndLastName } from './cart_customer_util';
-import { smoothScrollToAddressField } from './smoothScroll';
+import { extractFirstAndLastName, makeFullName } from './cart_customer_util';
+import {
+  smoothScrollToAddressField,
+  smoothScrollTo,
+} from './smoothScroll';
 
 /**
  * Use this to auto scroll to the right field in address form upon
@@ -18,17 +22,20 @@ import { smoothScrollToAddressField } from './smoothScroll';
  * @param {*} selector
  */
 export const addressFormInlineErrorScroll = () => {
-  // Find where the error is.
+  // If error is on contact fields.
+  const contactFieldsSelector = '.spc-checkout-contact-information-fields > div > div.error:not(:empty)';
+  let errorElement = document.querySelector(contactFieldsSelector);
+  if (errorElement !== undefined && errorElement !== null) {
+    smoothScrollToAddressField(errorElement, true);
+    return;
+  }
+
   const addressFieldsSelector = '.delivery-address-fields > div > div.error:not(:empty)';
-  let errorElement = document.querySelector(addressFieldsSelector);
+  errorElement = document.querySelector(addressFieldsSelector);
   // If error found in address fields, scroll and return.
   if (errorElement !== undefined && errorElement !== null) {
     smoothScrollToAddressField(errorElement);
-    return;
   }
-  const contactFieldsSelector = '.spc-checkout-contact-information-fields > div > div.error:not(:empty)';
-  errorElement = document.querySelector(contactFieldsSelector);
-  smoothScrollToAddressField(errorElement, true);
 };
 
 /**
@@ -38,7 +45,7 @@ export const getUserAddressList = () => axios.get('spc/user-address-list')
   .then((response) => response.data)
   .catch((error) => {
     // Processing of error here.
-    Drupal.logJavascriptError('get-user-address-list', error);
+    Drupal.logJavascriptError('get-user-address-list', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
 
 /**
@@ -60,7 +67,7 @@ export const addEditUserAddress = (address, isDefault) => axios.post('spc/add-ed
   )
   .catch((error) => {
     // Processing of error here.
-    Drupal.logJavascriptError('add-edit-user-address', error);
+    Drupal.logJavascriptError('add-edit-user-address', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
 
 /**
@@ -234,7 +241,7 @@ export const validateAddressFields = (e, validateEmail) => {
   // Iterate over address fields.
   Object.entries(drupalSettings.address_fields).forEach(
     ([key, field]) => {
-      if (field.required === true) {
+      if (field.required === true && field.visible === true) {
         const addField = e.target.elements[key].value.trim();
         if (addField.length === 0) {
           document.getElementById(`${key}-error`).innerHTML = getStringMessage('address_please_enter', { '@label': field.label });
@@ -312,6 +319,7 @@ export const addEditAddressToCustomer = (e) => {
                 dispatchCustomEvent('addressPopUpError', {
                   type: 'error',
                   message: list.error_message,
+                  showDismissButton: false,
                 });
                 return;
               }
@@ -338,6 +346,7 @@ export const addEditAddressToCustomer = (e) => {
                     dispatchCustomEvent('addressPopUpError', {
                       type: 'error',
                       message: cartResult.error_message,
+                      showDismissButton: false,
                     });
 
                     // Add address id in hidden id field so that on next
@@ -455,7 +464,7 @@ export const checkoutAddressProcess = (e) => {
   validationRequest.then((response) => {
     if (!response || response.data.status === undefined || !response.data.status) {
       // API Call failed.
-      // @TODO: Handle error.
+      Drupal.logJavascriptError('Email and mobile number validation fail', 'response format invalid', GTM_CONSTANTS.CHECKOUT_ERRORS);
       return false;
     }
 
@@ -509,6 +518,7 @@ export const checkoutAddressProcess = (e) => {
           dispatchCustomEvent('addressPopUpError', {
             type: 'error',
             message: cartResult.error_message,
+            showDismissButton: false,
           });
           return;
         }
@@ -522,7 +532,7 @@ export const checkoutAddressProcess = (e) => {
 
     return true;
   }).catch((error) => {
-    Drupal.logJavascriptError('Email and mobile number validation fail', error);
+    Drupal.logJavascriptError('Email and mobile number validation fail', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
 };
 
@@ -535,7 +545,7 @@ export const checkoutAddressProcess = (e) => {
 export const formatAddressDataForEditForm = (address) => {
   const formattedAddress = {
     static: {
-      fullname: `${address.firstname} ${address.lastname}`,
+      fullname: makeFullName(address.firstname || '', address.lastname || ''),
       email: address.email,
       telephone: address.telephone,
     },
@@ -549,6 +559,10 @@ export const formatAddressDataForEditForm = (address) => {
 
   return formattedAddress;
 };
+
+export const customerHasAddress = (cart) => (drupalSettings.user.uid > 0
+  && cart.cart.customer.addresses !== undefined
+  && cart.cart.customer.addresses.length > 0);
 
 /**
  * Get the address popup class.
@@ -641,6 +655,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                   dispatchCustomEvent('addressPopUpError', {
                     type: 'error',
                     message: list.error_message,
+                    showDismissButton: false,
                   });
                   return;
                 }
@@ -663,6 +678,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
                     dispatchCustomEvent('addressPopUpError', {
                       type: 'error',
                       message: cartResult.error_message,
+                      showDismissButton: false,
                     });
 
                     // If not null, means this is for logged in user.
@@ -682,6 +698,9 @@ export const processBillingUpdateFromForm = (e, shipping) => {
 
                   // Trigger the event for update.
                   dispatchCustomEvent('onBillingAddressUpdate', cartInfo);
+
+                  // Close the addresslist popup.
+                  dispatchCustomEvent('closeAddressListPopup', true);
                 });
               }
             });
@@ -689,7 +708,55 @@ export const processBillingUpdateFromForm = (e, shipping) => {
         }
       }
     }).catch((error) => {
-      Drupal.logJavascriptError('Email and mobile number validation fail', error);
+      Drupal.logJavascriptError('Email and mobile number validation fail', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+    });
+  }
+};
+
+/**
+ * Scroll to the first mandatory address field when not filled
+ * on clicked on 'deliver to my location' or search address on map.
+ */
+export const errorOnDropDownFieldsNotFilled = () => {
+  let showError = false;
+  Object.entries(drupalSettings.address_fields).forEach(
+    ([key]) => {
+      // If city/area field.
+      if (key === 'administrative_area'
+        || key === 'area_parent') {
+        const fieldVal = document.getElementById(key).value;
+        // If area/city not filled.
+        if (fieldVal.length === 0) {
+          showError = true;
+        }
+      }
+    },
+  );
+
+  const errorMessage = (showError === true)
+    ? parse(getStringMessage('address_not_filled'))
+    : null;
+
+  // If no error, we remove the error message.
+  dispatchCustomEvent('addressPopUpError', {
+    type: 'warning',
+    message: errorMessage,
+    showDismissButton: false,
+  });
+
+  // If need to show error message.
+  if (showError === true) {
+    // Attach click handler to the dynamic element
+    // to scroll to the address drop down.
+    document.getElementById('scroll-to-dropdown').addEventListener('click', () => {
+      // Remove error message on click.
+      dispatchCustomEvent('addressPopUpError', {
+        type: 'warning',
+        message: null,
+        showDismissButton: false,
+      });
+      // Scroll to address section.
+      smoothScrollTo('.spc-address-form-sidebar .spc-type-select:first-child', 'center');
     });
   }
 };

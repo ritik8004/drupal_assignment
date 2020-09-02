@@ -1,0 +1,245 @@
+@mixin apt-placeholder-label() {
+  font-size: 0.875rem;
+  color: $appointment-input-label;
+  position: absolute;
+  #{$left}: 0;
+  top: 0;
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+@mixin apt-placeholder-active() {
+  top: -1rem;
+  bottom: 0;
+  #{$left}: 0;
+  opacity: 1;
+  font-size: 0.75rem;
+}
+
+.appointment-form-item {
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+
+// Type = Text.
+.appointment-form-item:not(.appointment-type-mobile):not(.appointment-type-date) {
+  input[type=text],
+  input[type=email],
+  input[type=date],
+  input[type=password] {
+    height: 1.5rem;
+    font-size: 0.875rem;
+    color: $appointment-form-input;
+  }
+
+  label {
+    @include apt-placeholder-label;
+  }
+
+  input:focus ~ label,
+  input.focus ~ label {
+    @include apt-placeholder-active;
+  }
+}
+
+// Type = Date
+.user-dob {
+  label {
+    font-size: 0.75rem;
+    color: $appointment-input-label;
+    margin-bottom: 0.3125rem;
+    display: block;
+  }
+}
+
+.appointment-type-date {
+  input {
+    height: 1.5rem;
+    font-size: 0.875rem;
+    color: $appointment-input-label;
+    padding-bottom: 0.125rem;
+
+    &::placeholder {
+      font-family: $alshaya-thin;
+      font-size: 0.875rem;
+    }
+
+    @include breakpoint($tablet) {
+      width: 10rem !important;
+    }
+  }
+
+  .react-datepicker-wrapper {
+    display: block;
+  }
+
+  .react-datepicker {
+    font-family: $alshaya-thin;
+
+    &__input-container {
+      display: block;
+
+      @include breakpoint($tablet) {
+        width: 10rem;
+      }
+    }
+
+    &-popper {
+      z-index: 4;
+      #{$left}: 0 !important;
+
+      &[data-placement^="bottom"],
+      &[data-placement^="top"] {
+        .react-datepicker__triangle {
+          #{$left}: 0 !important;
+          #{$right}: 0 !important;
+          margin-#{$left}: auto;
+          margin-#{$right}: auto;
+        }
+      }
+    }
+
+    &__day-name,
+    &__day,
+    &__time-name {
+      color: $appointment-calendar-text;
+    }
+
+    &__day--selected,
+    &__day--keyboard-selected {
+      color: $appointment-calendar-select-text;
+      background-color: $appointment-calendar-select-bg;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &__day--disabled {
+      color: $appointment-calendar-disable-text;
+    }
+
+    &__month-select,
+    &__year-select {
+      padding: 0.125rem;
+    }
+
+    &__header__dropdown {
+      margin-top: 0.3125rem;
+    }
+  }
+
+  .dob-input-wrapper {
+    span {
+      position: relative;
+
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/calendar.svg') center center no-repeat;
+        display: block;
+        width: 0.9375rem;
+        height: 1.25rem;
+        position: absolute;
+        top: 0;
+        #{$right}: 0.375rem;
+        background-size: contain;
+        z-index: 1;
+      }
+    }
+  }
+}
+
+// Type = Telephone.
+.appointment-type-mobile {
+  label {
+    font-size: 0.75rem;
+    color: $appointment-input-label;
+  }
+
+  .field-wrapper {
+    position: relative;
+
+    html[lang=ar] & {
+      direction: ltr;
+    }
+
+    .country-code {
+      position: absolute;
+      // No rtl.
+      left: 0;
+      font-size: 0.875rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      z-index: 2;
+      color: $spc-mobile-code;
+    }
+
+    input[type=text] {
+      height: 1.5rem;
+      // No rtl.
+      padding-left: 2.25rem !important;
+      font-size: 0.875rem;
+      background: transparent;
+      color: $spc-form-input;
+    }
+  }
+}
+
+.appointment-for-you-wrapper {
+  .appointment-for-you-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .appointment-for-you-list {
+    &:first-child {
+      margin-#{$right}: 4.375rem;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-bottom: 2rem;
+  }
+}
+
+.appointment-wrapper {
+  input[type=radio] {
+    display: none;
+  }
+
+  input[type=radio] ~ label {
+    color: $appointment-radio-label;
+
+    &::before {
+      content: '';
+      width: 0.875rem;
+      height: 0.875rem;
+      background: white;
+      display: inline-block;
+      border-radius: 100%;
+      border: 1px solid $primary_radiobtn_empty;
+      margin-#{$right}: 0.4rem;
+      position: relative;
+      top: 0.125rem;
+    }
+  }
+
+  input[type=radio]:checked ~ label::before {
+    border: 0.25rem solid $primary_radiobtn_filled;
+  }
+
+  input[type=checkbox] ~ label::before {
+    line-height: 1.3125rem;
+    display: inline-block;
+    vertical-align: bottom;
+    color: $appointment-checkbox-color;
+    margin-#{$right}: 0.4rem;
+  }
+
+  input[type=checkbox]:checked ~ label::before {
+    line-height: 1.3125rem;
+  }
+}

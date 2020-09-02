@@ -1,0 +1,131 @@
+.appointment-select {
+  &.open {
+    .appointmentSelect__indicator {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+
+    .appointmentSelect__control {
+      border-bottom-color: transparent;
+    }
+  }
+
+  &.invalid {
+    .appointmentSelect__control {
+      border: 0.125rem solid $spc-checkout-error-message-background;
+    }
+  }
+
+  .appointmentSelect__control {
+    border: 1px solid $spc-select-border;
+    border-radius: 0;
+    height: 2.5rem;
+    font-size: 0.875rem;
+    box-shadow: none;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $appointment-select-border;
+    }
+
+    > div:nth-child(2) {
+      .appointmentSelect__indicator-separator {
+        display: none;
+      }
+
+      .appointmentSelect__indicator {
+        color: $spc-select-text;
+        background: $spc-select-arrow-bg;
+        height: 100%;
+
+        svg {
+          transition: transform 0.3s ease-in-out;
+        }
+      }
+    }
+
+    .appointmentSelect__single-value {
+      color: $appointment-select-color;
+    }
+  }
+
+  .appointmentSelect__menu {
+    margin: 0;
+    box-shadow: none;
+
+    .appointmentSelect__menu-list {
+      padding: 0;
+      border: 1px solid $appointment-select-border;
+      border-top-width: 0;
+
+      > div {
+        color: $spc-select-text;
+        border-top: 1px solid $spc-select-border-separator;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        background: $spc-select_bg;
+        cursor: pointer;
+        padding: 0.75rem;
+
+        @include arabic-letter-spacing;
+
+        &:hover,
+        &.appointmentSelect__option--is-selected {
+          background: $spc-select_bg_hover;
+        }
+      }
+    }
+  }
+
+  .appointmentSelect__control {
+    .appointmentSelect__dropdown-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include icon('chevrondown') {
+        font-size: 1.75rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.125s ease-in-out;
+        color: $appointment-select-dropdown-color;
+      }
+
+      svg {
+        visibility: hidden;
+      }
+    }
+
+    &--menu-is-open {
+      .appointmentSelect__dropdown-indicator {
+        &::before {
+          transform: translateY(-50%) rotate(180deg);
+        }
+      }
+    }
+  }
+}
+
+.appointment-type-select {
+  @include breakpoint($tablet) {
+    width: 19.25rem;
+  }
+}
+
+.appointment-companion-select {
+  @include breakpoint($tablet) {
+    width: 4.875rem;
+  }
+}
+
+html[lang=ar] {
+  .appointment-companion-wrapper {
+    .appointmentSelect__value-container {
+      input {
+        position: static;
+      }
+    }
+  }
+}

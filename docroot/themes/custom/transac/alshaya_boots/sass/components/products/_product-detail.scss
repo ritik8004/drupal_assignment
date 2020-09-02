@@ -30,19 +30,35 @@
   &__title_wrapper {
     font-family: $alshaya-thin;
 
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
     .brand-logo-wrapper {
       float: none;
+
+      @include breakpoint($only-mobile) {
+        margin: 0 auto;
+      }
     }
 
     h1 {
+      width: 100%;
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+      }
+
       span {
-        text-transform: capitalize;
-        font-size: 1rem;
+        text-transform: none;
+        font-size: 1.25rem;
+        font-family: $alshaya-bold;
       }
     }
 
     .price {
       margin-bottom: 0.5rem;
+      font-size: 1.125rem;
     }
 
     .price-type__wrapper > .price {
@@ -50,7 +66,7 @@
     }
 
     .price--discount {
-      font-size: 1rem;
+      font-size: 1.125rem;
       margin-top: 0;
     }
 
@@ -61,6 +77,25 @@
     .content--item-code {
       font-family: $bp-light;
     }
+
+    .delivery-in-only-city,
+    .same-day-delivery {
+      @include breakpoint($only-mobile) {
+        justify-content: center;
+
+        .same-day-content {
+          text-align: $left;
+        }
+      }
+    }
+  }
+
+  &__main {
+    .gallery-wrapper {
+      @include breakpoint($only-mobile) {
+        min-height: 23.5625rem;
+      }
+    }
   }
 }
 
@@ -69,6 +104,8 @@
     .sku-base-form {
       button[type="submit"] {
         @extend %button-wide;
+
+        text-transform: none;
 
         @include breakpoint ($desktop) {
           width: 69%;
@@ -82,6 +119,7 @@
 
         @include breakpoint ($only-tablet) {
           width: 64%;
+          min-width: 9.5rem;
         }
 
         @include breakpoint($only-mobile) {
@@ -90,7 +128,7 @@
       }
 
       .form-item {
-        padding: 0.625rem 0;
+        padding: 1rem 0 0;
       }
     }
 
@@ -138,6 +176,10 @@
   h4.list-title {
     font-size: 0.875rem;
 
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
     span {
       &:first-of-type {
         color: $primary_input_label;
@@ -162,15 +204,37 @@
 
     &__content {
       font-size: 0.75rem;
+
+      .desc-wrapper {
+        .desc-label,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          @include breakpoint($only-mobile) {
+            margin: 0.625rem 0;
+          }
+        }
+
+        .desc-value {
+          ul {
+            padding-#{$left}: 1rem;
+            margin: 0;
+          }
+        }
+      }
     }
   }
 
   .c-accordion__title {
     text-transform: none;
     line-height: 1;
-    height: 3.125rem;
+    height: auto;
     padding-top: 0.625rem;
     font-family: $bp-light;
+    padding-bottom: 0.25rem;
 
     .subtitle {
       font-size: 0.75rem;
@@ -185,6 +249,16 @@
     font-weight: normal;
     font-size: 0.75rem;
     font-family: $bp-light;
+  }
+}
+
+.short-description-wrapper {
+  .show-less-link {
+    @include breakpoint($only-mobile) {
+      line-height: 2.5;
+      font-size: 0.75rem;
+      font-family: $bp-light;
+    }
   }
 }
 
@@ -264,6 +338,13 @@
     }
   }
 
+  .desc-value {
+    ul {
+      padding-#{$left}: 1rem;
+      margin: 0;
+    }
+  }
+
   .desc-wrapper {
     border-color: $pdp_desc_wrapper_title_border;
   }
@@ -276,6 +357,11 @@ article[gtm-sku-type="simple"] {
       button[type="submit"] {
         @include breakpoint($only-tablet) {
           height: 2.5rem;
+
+          html[lang=ar] & {
+            float: left;
+            margin-top: 2rem;
+          }
         }
       }
     }

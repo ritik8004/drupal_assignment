@@ -70,6 +70,7 @@ variables:
   billing_landmark: ''
   billing_postal_code: ''
   billing_mobile: '556677888'
-  cc_payment_type: 'Credit Card'
   billing_text: 'Billing address:'
+  language_cc_payment_type: 'Credit / Debit Card'
+  cc_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
 

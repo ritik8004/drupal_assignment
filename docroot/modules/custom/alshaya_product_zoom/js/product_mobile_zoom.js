@@ -92,7 +92,6 @@
             $('body').addClass('pdp-modal-overlay');
             mobileDialog.show();
             mobileDialog.showModal();
-            Drupal.attachBehaviors(context);
           }
         });
       });

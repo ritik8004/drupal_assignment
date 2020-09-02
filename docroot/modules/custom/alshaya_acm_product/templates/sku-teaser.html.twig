@@ -13,6 +13,11 @@
   {% endif %}
 </a>
 <div class="product-plp-detail-wrapper">
+  {% if product_attribute_labels %}
+    <ul class="collection-labels">
+      <li class="{{ product_attribute_labels.class }}">{{ product_attribute_labels.content }}</li>
+    </ul>
+  {% endif %}
   <h2 class="field--name-name">
     <a href="{{ product_url }}" class="product-selected-url">{{ product_label }}</a>
   </h2>

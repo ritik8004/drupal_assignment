@@ -24,7 +24,7 @@ import withURLSync from '../url-sync';
 import Pagination from '../algolia/Pagination';
 import HierarchicalMenu from '../algolia/widgets/HierarchicalMenu';
 import Menu from '../algolia/widgets/Menu';
-import { hasCategoryFilter, getAlgoliaStorageValues, getSortedItems, hasSuperCategoryFilter } from '../../utils';
+import { hasCategoryFilter, getAlgoliaStorageValues, getSortedItems, hasSuperCategoryFilter, getSuperCategoryOptionalFilter } from '../../utils';
 import { isDesktop } from '../../utils/QueryStringUtils';
 
 /**
@@ -45,21 +45,12 @@ const SearchResultsComponent = props => {
     defaultpageRender = storedvalues.page;
   }
 
-  function getSuperCategory() {
-    let activeMenuItem = document.querySelector('.main--menu .menu--one__link.active');
-    if (activeMenuItem !== null) {
-      return activeMenuItem.getAttribute('data-super-category-label');
-    }
-    return null;
+  const optionalFilter = getSuperCategoryOptionalFilter();
+  const maximumDepthLhn = drupalSettings.algoliaSearch.maximumDepthLhn;
+  var attributes = [];
+  for (let i = 0; i <= maximumDepthLhn; i++) {
+    attributes.push(`field_category.lvl${i}`);
   }
-  // Uses the Algolia optionalFilters feature.
-  // Super Category is currently the only optional filter in use.
-  // We want to promote the products belonging to current page super category
-  // to the top of the search results.
-  let supercategory = getSuperCategory();
-  let optionalFilters = drupalSettings.superCategory && supercategory
-    ? `${drupalSettings.superCategory.search_facet}:${supercategory}`
-    : null
 
   const showCategoryFacets = (event) => {
     _parent.current.classList.toggle('category-facet-open');
@@ -75,7 +66,7 @@ const SearchResultsComponent = props => {
       onSearchStateChange={props.onSearchStateChange}
     >
       <Configure clickAnalytics hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
-      {optionalFilters ? <Configure optionalFilters={optionalFilters} /> : null}
+      {optionalFilter ? <Configure optionalFilters={optionalFilter} /> : null}
       <SideBar>
         {hasSuperCategoryFilter() && isDesktop() && (
           <Menu
@@ -85,11 +76,10 @@ const SearchResultsComponent = props => {
         )}
         {hasCategoryFilter() && isDesktop() && (
           <HierarchicalMenu
-            transformItems={items => getSortedItems(items, 'category')}
-            attributes={[
-              'field_category.lvl0',
-              'field_category.lvl1',
-            ]}
+          transformItems={items => getSortedItems(items, 'category')}
+            attributes = {attributes}
+            facetLevel={1}
+            showParentLevel={true}
           />
         )}
       </SideBar>
@@ -135,11 +125,9 @@ const SearchResultsComponent = props => {
                       <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                       <HierarchicalMenu
                         transformItems={items => getSortedItems(items, 'category')}
-                        attributes={[
-                          'field_category.lvl0',
-                          'field_category.lvl1',
-                        ]}
+                        attributes = {attributes}
                         facetLevel={1}
+                        showParentLevel={true}
                       />
                     </>
                   )}

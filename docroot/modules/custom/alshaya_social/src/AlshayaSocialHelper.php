@@ -8,7 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\social_api\Plugin\NetworkManager;
 use Drupal\social_auth\AuthManager\OAuth2ManagerInterface;
-use Drupal\social_auth\Event\SocialAuthUserFieldsEvent;
+use Drupal\social_auth\Event\UserFieldsEvent;
 use Drupal\social_auth\SocialAuthDataHandler;
 
 /**
@@ -124,7 +124,7 @@ class AlshayaSocialHelper {
    *
    * @param \Drupal\social_auth\AuthManager\OAuth2ManagerInterface $providerAuth
    *   The auth provider.
-   * @param \Drupal\social_auth\Event\SocialAuthUserFieldsEvent $event
+   * @param \Drupal\social_auth\Event\UserFieldsEvent $event
    *   The event object.
    *
    * @return null|array
@@ -132,7 +132,7 @@ class AlshayaSocialHelper {
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  public function socialAuthUserFields(OAuth2ManagerInterface $providerAuth, SocialAuthUserFieldsEvent $event) {
+  public function socialAuthUserFields(OAuth2ManagerInterface $providerAuth, UserFieldsEvent $event) {
     if (empty($this->dataHandler->get('access_token'))) {
       return NULL;
     }

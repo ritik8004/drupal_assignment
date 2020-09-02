@@ -16,6 +16,7 @@
     li.menu--one__list-item {
       text-transform: none;
       height: 2.625rem;
+      letter-spacing: 0.5px;
 
       .menu__link {
         font-family: $bp-light;
@@ -60,7 +61,7 @@
 
       .menu--one__link {
         font-size: 1.0625rem;
-        font-family: $alshaya-bold;
+        font-family: $alshaya-thin;
         border-top: 0;
         border-bottom: 0;
         height: 2.625rem;
@@ -111,7 +112,7 @@
   }
 
   .menu--two__list {
-    padding-top: 2rem;
+    padding-top: 0.5rem;
 
     .menu--two__list-item {
       .menu--three__list {
@@ -135,6 +136,8 @@
       .menu__link-wrapper {
         .menu-two__link {
           font-size: 1.0625rem;
+          font-family: $alshaya-thin;
+          font-weight: bold;
         }
       }
     }

@@ -12,3 +12,17 @@
     }
   }
 }
+
+.address-book-address {
+  .form-type-select {
+    .select2-selection {
+      height: 2.5rem !important;
+    }
+
+    .select2-selection__arrow {
+      &::after {
+        display: none;
+      }
+    }
+  }
+}

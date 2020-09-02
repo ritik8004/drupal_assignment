@@ -1,5 +1,6 @@
 .c-footer-primary {
   border-top-width: 0.0625rem;
+  border-color: $footer_light_border;
 
   .l-container {
     @include container(77rem);
@@ -7,7 +8,7 @@
 
   @include breakpoint($tablet) {
     padding-bottom: 3.125rem;
-    border-top-width: 0.0625rem;
+    border-top: none;
   }
 
   .primary--footer--right {
@@ -96,12 +97,6 @@
       }
     }
   }
-
-  &__tab {
-    @include breakpoint($only-mobile) {
-      border-bottom: 0.0625rem solid $footer_accordion_border;
-    }
-  }
 }
 
 .c-footer-menu--about,
@@ -118,7 +113,7 @@
         #{$right}: 1rem;
       }
 
-      @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/plus.svg', 2rem, 2rem, after);
+      @include pdp_icon_img('#{$muji_theme_img_directory_path}/icons/plus.svg', 2rem, 2rem, after);
     }
   }
 
@@ -129,7 +124,7 @@
 
   li.c-footer-menu__tab:not(:last-child) {
     @include breakpoint ($only-mobile) {
-      border-bottom: 0.0625rem solid $footer_accordion_border;
+      border-bottom: none;
     }
   }
 }
@@ -139,19 +134,24 @@
 }
 
 .c-footer-menu--help {
+  @include breakpoint($tablet) {
+    float: $left;
+  }
+
   @include breakpoint($desktop) {
     margin-#{$left}: 0;
     padding-#{$left}: 5%;
-  }
-
-  @include breakpoint($tablet) {
-    width: 40%;
-    float: $left;
+    width: 50%;
   }
 }
 
 .c-footer-menu--category {
   text-transform: none;
+
+  @include breakpoint ($only-mobile) {
+    border-top-color: $footer_light_border;
+    border-bottom-color: $footer_light_border;
+  }
 }
 
 .alshaya-newsletter-subscribe {
@@ -202,6 +202,12 @@
     }
   }
 
+  .form-item {
+    @include breakpoint($tablet) {
+      max-width: none;
+    }
+  }
+
   .form-submit {
     @extend %btn;
 
@@ -223,11 +229,17 @@
       top: 1.25rem;
     }
   }
+
+  & > h3 {
+    text-transform: capitalize;
+    margin-top: 0;
+  }
 }
 
 .c-footer-menu--help {
   @include breakpoint($only-mobile) {
     margin-bottom: 1.875rem;
+    //border-bottom: 1px solid $footer_border_top;
   }
 
   @include breakpoint($only-tablet) {
@@ -239,7 +251,7 @@
   @include breakpoint($desktop) {
     margin-#{$left}: 0;
     padding-#{$right}: 5%;
-    width: 49% !important;
+    width: 45% !important;
   }
 
   @include breakpoint($tablet) {
@@ -398,6 +410,7 @@
       font-family: $alshaya-bold;
       font-size: 0.875rem;
       padding-#{$left}: 1.125rem;
+      margin-bottom: 0.25rem;
 
       @include breakpoint($only-mobile) {
         margin-top: 2.375rem;
@@ -423,11 +436,61 @@
 }
 
 .open--accordion .is-accordion {
-  @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/minus.svg', 2rem, 2rem, after);
+  @include pdp_icon_img('#{$muji_theme_img_directory_path}/icons/minus.svg', 2rem, 2rem, after);
 }
 
 .c-footer {
   @include breakpoint($only-mobile) {
     padding-top: 1rem;
+  }
+}
+
+// Static links block for the third column in footer.
+.c-footer-primary {
+  .footer--static-links {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 11.4%;
+      width: 28%;
+    }
+
+    .c-footer-menu {
+      width: 100%;
+    }
+
+    @include breakpoint($only-tablet) {
+      float: $right;
+      margin-#{$left}: 2rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      float: none;
+      margin-bottom: 2.25em;
+    }
+  }
+
+  .c-footer-primary__region {
+    min-height: 14.25rem;
+
+    @include breakpoint($only-tablet) {
+      .footer--menu {
+        width: 58%;
+      }
+
+      .footer--categories,
+      .footer--abouthelp,
+      .footer--static-links {
+        width: 45%;
+      }
+
+      .footer--static-links {
+        margin: 0 1.25rem;
+      }
+    }
+  }
+
+  .footer--abouthelp {
+    @include breakpoint($desktop) {
+      width: 54.7%;
+    }
   }
 }

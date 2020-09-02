@@ -10,6 +10,37 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Updates reset password text for arabic language.
+ */
+function alshaya_user_update_8007() {
+  // Save the updated config.
+  $user_settings = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'user.settings');
+  $user_settings->set('password_reset_text', 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني');
+  $user_settings->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updates pathauto settings to exclude user entities.
+ */
+function alshaya_user_update_8006() {
+  // Load the existing config for editing.
+  $config = \Drupal::configFactory()->getEditable('pathauto.settings');
+  $data = $config->getRawData();
+
+  // Remove the user type from list of enabled entities.
+  $data['enabled_entity_types'] = array_diff($data['enabled_entity_types'], ['user']);
+  $config->setData($data)->save(TRUE);
+
+  // Remove all pathauto entries for user entities in key/value storage.
+  $collection = 'pathauto_state.user';
+  \Drupal::keyValue($collection)->deleteAll();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding custom blocks for login/signup pages.
  */
 function alshaya_user_update_8005() {
@@ -232,4 +263,9 @@ Tel: <a href="tel:+9651821212">(+965) 182-12-12</a><br/>
 <a href="[site:url]">[site:url-brief]</a>');
 
   $config->save();
+
+  // Updates reset password text for arabic language.
+  $user_settings = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'user.settings');
+  $user_settings->set('password_reset_text', 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني');
+  $user_settings->save();
 }

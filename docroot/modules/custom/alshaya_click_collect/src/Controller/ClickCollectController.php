@@ -6,6 +6,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_click_collect\Ajax\ClickCollectStoresCommand;
 use Drupal\alshaya_click_collect\Ajax\StoreDisplayFillCommand;
+use Drupal\alshaya_master\Helper\SortUtility;
 use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -183,7 +184,7 @@ class ClickCollectController extends ControllerBase {
     $stores = $this->getCartStores($cart_id, $lat, $lon);
 
     // Sort the stores first by distance and then by name.
-    alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
+    SortUtility::sortByMultipleKey($stores, 'rnc_available', 'desc', 'distance', 'asc');
 
     $build['store_list'] = $build['map_info_window'] = '<span class="empty">' . $this->t('Sorry, No store found for your location.') . '</span>';
     if (count($stores) > 0) {
@@ -371,7 +372,7 @@ class ClickCollectController extends ControllerBase {
     });
 
     // Sort the stores first by distance and then by name.
-    alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
+    SortUtility::sortByMultipleKey($stores, 'rnc_available', 'desc', 'distance', 'asc');
 
     $config = $this->configFactory->get('alshaya_click_collect.settings');
 

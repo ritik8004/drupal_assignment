@@ -1,6 +1,7 @@
 #lightSlider {
   @include breakpoint($desktop) {
-    height: 39.875rem;
+    height: 39.075rem;
+    margin-top: 0;
   }
 
   @include breakpoint($only-tablet) {
@@ -9,8 +10,8 @@
 
   .slick-slide {
     @include breakpoint($desktop) {
-      width: 4.875rem !important;
-      height: 6.5rem !important;
+      width: 5rem !important;
+      height: 5rem !important;
       padding: 0;
     }
 
@@ -20,10 +21,13 @@
     }
 
     img {
-      height: 6.25rem;
+      height: 4.8125rem;
+      width: 5rem;
+      object-fit: cover;
 
       @include breakpoint($only-tablet) {
         height: 7.25rem;
+        width: 6.25rem;
       }
     }
   }
@@ -58,6 +62,20 @@
   }
 }
 
+.c-pdp {
+  .acq-content-product {
+    .cloudzoom__thumbnails {
+      #lightSlider {
+        .slick-list {
+          @include breakpoint($desktop) {
+            height: 34.0625rem !important;
+          }
+        }
+      }
+    }
+  }
+}
+
 .owl-prev,
 .owl-next,
 .slick-prev,
@@ -73,8 +91,9 @@
 .cloudzoom {
   .cloudzoom__herocontainer {
     @include breakpoint($desktop) {
-      width: calc(100% - (5.75rem + 7.25rem));
-      margin-#{$right}: 6.125rem;
+      width: 38rem;
+      height: 38rem;
+      padding-#{$right}: 2rem;
     }
   }
 
@@ -87,11 +106,11 @@
   &__image {
     .img-wrap {
       @include breakpoint($tablet) {
-        height: 35rem;
+        height: 56.7vw;
       }
 
       @include breakpoint($desktop) {
-        height: 39.875rem;
+        height: 38rem;
       }
     }
   }
@@ -129,7 +148,7 @@
       #lightSlider {
         .slick-list {
           @include breakpoint($desktop) {
-            height: 28.25rem !important;
+            height: 28.25rem;
           }
         }
       }

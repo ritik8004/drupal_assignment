@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.1_row_3_col_flex.field_1row_3col_flex
+    - field.field.paragraph.1_row_3_col_flex.field_ratio_3_col
+    - paragraphs.paragraphs_type.1_row_3_col_flex
+  module:
+    - entity_reference_revisions
+id: paragraph.1_row_3_col_flex.default
+targetEntityType: paragraph
+bundle: 1_row_3_col_flex
+mode: default
+content:
+  field_1row_3col_flex:
+    type: entity_reference_revisions_entity_view
+    weight: 0
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_ratio_3_col: true
+  search_api_excerpt: true

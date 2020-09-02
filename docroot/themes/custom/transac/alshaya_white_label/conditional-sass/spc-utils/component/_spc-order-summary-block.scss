@@ -119,6 +119,10 @@
         -ms-grid-columns: 4.8125rem 0.625rem 1fr;
       }
 
+      @include breakpoint($only-tablet) {
+        min-width: auto;
+      }
+
       @include breakpoint($only-mobile) {
         display: inline-grid;
         margin-bottom: 0;
@@ -137,6 +141,7 @@
       .spc-product-image {
         max-width: 4.8125rem;
         display: inline-flex;
+        align-items: flex-start;
 
         body.ie & {
           -ms-grid-row: 1;
@@ -188,6 +193,28 @@
         margin-top: 1rem;
         font-size: 0.75rem;
         color: $spc-product-attributes;
+      }
+
+      .product-flag {
+        display: flex;
+        align-items: center;
+
+        .flag-text {
+          white-space: nowrap;
+          padding-#{$left}: 0.1875rem;
+          font-size: 0.875rem;
+          color: $spc-non-refundable-product;
+          text-decoration: underline;
+        }
+
+        .tooltip-box {
+          #{$left}: -1rem;
+
+          &::before,
+          &::after {
+            #{$left}: 1.375rem;
+          }
+        }
       }
     }
   }

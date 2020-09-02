@@ -290,13 +290,14 @@ class AlshayaSpcOrderHelper {
     // We will use this as flag in React to avoid reading from local storage
     // and also avoid doing API call.
     $data['prepared'] = TRUE;
-
+    $data['freeItem'] = ($item['price_incl_tax'] == 0);
     $data['title'] = $item['name'];
     $data['finalPrice'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
     $data['sku'] = $item['sku'];
     $data['id'] = $item['item_id'];
     $data['image'] = NULL;
     $data['url'] = '';
+    $data['isNonRefundable'] = NULL;
 
     $data['options'] = [];
     $node = $this->skuManager->getDisplayNode($item['sku']);
@@ -310,6 +311,9 @@ class AlshayaSpcOrderHelper {
         // Get configurable values.
         $data['options'] = array_values($this->skuManager->getConfigurableValues($skuEntity));
       }
+      $data['isNonRefundable'] = $skuEntity->get('attr_non_refundable_products')->getString();
+      // Allow other modules to alter response data.
+      $this->moduleHandler->alter('alshaya_spc_order_sku_details', $data, $skuEntity);
     }
 
     return $data;
@@ -371,6 +375,7 @@ class AlshayaSpcOrderHelper {
     $orderDetails['customerNameShipping'] = $shipping_address['firstname'] . ' ' . $shipping_address['lastname'];
 
     $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
+    $orderDetails['shipping_method_code'] = $shipping_method_code;
     if ($shipping_method_code == $this->checkoutOptionManager->getClickandColectShippingMethod()) {
       $orderDetails['delivery_type'] = 'cc';
       $orderDetails['type'] = $orderDetails['delivery_method_description'];
@@ -402,6 +407,7 @@ class AlshayaSpcOrderHelper {
             '@shipping_method_name' => $orderDetails['delivery_method'],
             '@shipping_method_description' => $cc_text,
           ]);
+          $orderDetails['shipping_method_code'] = $shipping_method_code;
         }
       }
     }

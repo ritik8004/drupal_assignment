@@ -1,0 +1,40 @@
+.appointment-flow-action {
+  @include breakpoint($only-mobile) {
+    background: $appointment-sticky-btn-bg;
+    position: sticky;
+    bottom: 0;
+    #{$left}: 0;
+    width: 100%;
+    box-shadow: none;
+    margin-top: 1.5rem;
+
+    .appointment-type-button {
+      width: 100%;
+    }
+
+    &.button-container-sticky {
+      padding: 0.625rem 1.25rem;
+      box-shadow: 0 -1px 20px 9px $sticky-btn;
+      z-index: 2;
+      margin-#{$left}: -1.25rem;
+      width: 100vw;
+    }
+  }
+}
+
+.appointment-login-buttons-wrapper {
+  button {
+    @include breakpoint($only-mobile) {
+      margin-top: 1.875rem;
+    }
+  }
+}
+
+.appointment-customer-details-form {
+  @include breakpoint($only-mobile) {
+    .appointment-store-buttons-wrapper {
+      position: relative;
+      padding-top: 1.5rem;
+    }
+  }
+}

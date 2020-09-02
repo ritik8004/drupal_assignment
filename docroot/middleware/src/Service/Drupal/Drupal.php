@@ -148,6 +148,22 @@ class Drupal {
   }
 
   /**
+   * Get CnC status for cart based on skus in cart.
+   *
+   * @param string $skus_list
+   *   Comma separated sku list.
+   *
+   * @return mixed
+   *   CnC status for cart.
+   */
+  public function getCncStatusForCart(string $skus_list = '') {
+    $url = sprintf('/spc/cart/cnc-status?skus=%s', $skus_list);
+    $response = $this->invokeApi('GET', $url);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
+  /**
    * Trigger event to let Drupal know about the update.
    *
    * @param string $event
@@ -210,6 +226,16 @@ class Drupal {
   }
 
   /**
+   * Get existing acm cart for user.
+   */
+  public function getAcmCartId() {
+    $url = '/cart/old';
+    $response = $this->invokeApiWithSession('GET', $url);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
+  /**
    * Get store info for given store code.
    *
    * @param string $store_code
@@ -228,23 +254,23 @@ class Drupal {
   }
 
   /**
-   * Get available stores for the cart for given location.
+   * Validate area/city of address.
    *
-   * @param int $cart_id
-   *   Cart id.
-   * @param string $latitude
-   *   The latitude.
-   * @param string $longitude
-   *   The longitude.
+   * @param array $address
+   *   Address array.
    *
    * @return mixed
-   *   Return stores list.
+   *   Address validation response.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function getCartStores(int $cart_id, string $latitude, string $longitude) {
-    $url = sprintf('/cnc/stores/%d/%s/%s', $cart_id, $latitude, $longitude);
-    $response = $this->invokeApi('GET', $url);
+  public function validateAddressAreaCity(array $address) {
+    $options = [
+      'json' => [
+        'address' => $address,
+      ],
+    ];
+    $response = $this->invokeApi('POST', '/spc/validate-info', $options);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);
   }

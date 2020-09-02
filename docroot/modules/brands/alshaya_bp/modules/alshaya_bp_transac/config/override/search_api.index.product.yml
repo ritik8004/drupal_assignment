@@ -1,4 +1,24 @@
 field_settings:
+  attr_color_family:
+    label: 'Color'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_family
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_brand:
+    label: 'Brand'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_brand
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
   attr_ingredients_lhn:
     label: 'Ingredients'
     datasource_id: entity:node

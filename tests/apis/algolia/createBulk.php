@@ -4,8 +4,13 @@
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 
-$app_id = 'testing24192T8KHZ';
-$app_secret_admin = '81c93293993d87fb67f2af22749ecbeb';
+// These are the old "Sanbox" credentials, which we cannot use to create new
+// indices as we have exceeded the Query Suggestions limit.
+// $app_id = 'testing24192T8KHZ';
+// $app_secret_admin = '81c93293993d87fb67f2af22749ecbeb';
+// These are the new sandbox "Acquia Dev" credentials.
+$app_id = 'Q402AB9LJF';
+$app_secret_admin = '0fe92997d79ed56790912b14d3ecbc5f';
 
 $brands = [
   'bbwkw',

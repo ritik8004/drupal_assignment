@@ -9,7 +9,59 @@ import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 
 /**
- * Place ajax fulll screen loader.
+ * Change the interactiveness of CTAs to avoid multiple user clicks.
+ *
+ * @param status
+ */
+export const controlAddressFormCTA = (status) => {
+  const addressCTA = document.getElementsByClassName('spc-address-form-submit');
+  // While we expect only one CTA. We loop just to ensure we dont break anything
+  // if we get multiple, what we are doing is harmless for out of focus CTAs.
+  if (addressCTA.length > 0) {
+    switch (status) {
+      case 'disable':
+        for (let i = 0; i < addressCTA.length; i++) {
+          addressCTA[i].classList.add('loading');
+        }
+        break;
+
+      case 'enable':
+        for (let i = 0; i < addressCTA.length; i++) {
+          addressCTA[i].classList.remove('loading');
+        }
+        break;
+
+      default:
+        // Do nothing.
+        break;
+    }
+  }
+};
+
+/**
+ * Place order CTA link add loading to avoid multiple clicks.
+ *
+ * @param status
+ */
+export const controlPlaceOrderCTA = (status) => {
+  const addressCTA = document.querySelector('.complete-purchase a, .complete-purchase button');
+  switch (status) {
+    case 'disable':
+      addressCTA.classList.add('loading');
+      break;
+
+    case 'enable':
+      addressCTA.classList.remove('loading');
+      break;
+
+    default:
+      // Do nothing.
+      break;
+  }
+};
+
+/**
+ * Place ajax full screen loader.
  */
 export const showFullScreenLoader = () => {
   const loaderDivExisting = document.getElementsByClassName('ajax-progress-fullscreen');
@@ -17,6 +69,7 @@ export const showFullScreenLoader = () => {
     return;
   }
 
+  controlAddressFormCTA('disable');
   const loaderDiv = document.createElement('div');
   loaderDiv.className = 'ajax-progress ajax-progress-fullscreen';
   document.body.appendChild(loaderDiv);
@@ -30,6 +83,7 @@ export const removeFullScreenLoader = () => {
   while (loaderDiv.length > 0) {
     loaderDiv[0].parentNode.removeChild(loaderDiv[0]);
   }
+  controlAddressFormCTA('enable');
 };
 
 /**
@@ -42,6 +96,7 @@ export const placeOrder = (paymentMethod) => {
   const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
 
   showFullScreenLoader();
+  controlPlaceOrderCTA('disable');
 
   const data = {
     paymentMethod: {
@@ -62,23 +117,29 @@ export const placeOrder = (paymentMethod) => {
           return;
         }
 
+        if (response.data.error && response.data.redirectUrl !== undefined) {
+          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
+          window.location = response.data.redirectUrl;
+          return;
+        }
+        let message = response.data.error_message;
+        if (response.data.error_code !== undefined
+          && parseInt(response.data.error_code, 10) === 505) {
+          message = getStringMessage('shipping_method_error');
+        }
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
-          message: response.data.error_message,
+          message,
         });
 
         // Push error to GTM.
-        const gtmInfo = {
-          errorMessage: response.data.error_message,
-          paymentMethod,
-        };
-        Drupal.logJavascriptError('place-order', gtmInfo);
-
+        Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
         removeFullScreenLoader();
+        controlPlaceOrderCTA('enable');
       },
       (error) => {
         // Processing of error here.
-        Drupal.logJavascriptError('place-order', error);
+        Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       },
     );
 };
@@ -109,6 +170,19 @@ export const removeBillingFlagFromStorage = (cart) => {
   }
 };
 
+/**
+ * set billing address flag in storage.
+ *
+ * @param {*} cart
+ */
+export const setBillingFlagInStorage = (cart) => {
+  if (cart.cart_id !== undefined
+    && cart.shipping.type === 'home_delivery'
+    && isBillingSameAsShippingInStorage()) {
+    localStorage.setItem('billing_shipping_same', true);
+  }
+};
+
 export const addShippingInCart = (action, data) => {
   const apiUrl = updateCartApiUrl();
   return axios
@@ -126,6 +200,7 @@ export const addShippingInCart = (action, data) => {
 
         // If there is no error on shipping update.
         if (response.data.error === undefined) {
+          setBillingFlagInStorage(response.data);
           // Trigger event on shipping update, so that
           // other components take necessary action if required.
           dispatchCustomEvent('onShippingAddressUpdate', response.data);
@@ -139,7 +214,7 @@ export const addShippingInCart = (action, data) => {
       }),
     )
     .catch((error) => {
-      Drupal.logJavascriptError('add-shipping-in-cart', error);
+      Drupal.logJavascriptError('add-shipping-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -164,7 +239,7 @@ export const addBillingInCart = (action, data) => {
       }),
     )
     .catch((error) => {
-      Drupal.logJavascriptError('add-billing-in-cart', error);
+      Drupal.logJavascriptError('add-billing-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -216,7 +291,7 @@ export const validateCartData = () => {
     )
     .catch((error) => {
       // Error processing here.
-      Drupal.logJavascriptError('checkout-refresh-cart-data', error);
+      Drupal.logJavascriptError('checkout-refresh-cart-data', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };
 
@@ -402,7 +477,7 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
 export const getRecommendedProducts = (skus, type) => {
   const skuString = Object.keys(skus).map((key) => `skus[${key}]=${encodeURIComponent(skus[key])}`).join('&');
 
-  return axios.get(`products/cart-linked-skus?type=${type}&${skuString}&context=cart&cacheable=1`)
+  return axios.get(Drupal.url(`products/cart-linked-skus?type=${type}&${skuString}&context=cart&cacheable=1`))
     .then((response) => response.data);
 };
 
@@ -419,11 +494,16 @@ export const isQtyLimitReached = (msg) => msg.indexOf('The maximum quantity per 
  *   True to Return amount with currency as string, false to return as array.
  *
  * @returns {string|*}
- *   Return string with price and currency or return array of price and currency.
+ *   Return string with price and currency or return array of price and
+ *   currency.
  */
 export const getAmountWithCurrency = (priceAmount, string = true) => {
   let amount = priceAmount === null ? 0 : priceAmount;
+
+  // Remove commas if any.
+  amount = amount.toString().replace(/,/g, '');
   amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
+
   const { currency_config: currencyConfig } = drupalSettings.alshaya_spc;
   // The keys currency and amount are used in PriceElement component.
   const priceParts = {
@@ -450,3 +530,17 @@ export const replaceCodTokens = (replacement, text) => {
   const textSplit = text.split('[surcharge]');
   return textSplit.reduce((prefix, suffix) => [prefix, replacement, suffix]);
 };
+
+/**
+ * Validate cvv number.
+ *
+ * @param {string} cvv
+ *   The cvv number to validate.
+ *
+ * @return {boolean}
+ *   Return true if cvv number is valid else false.
+ */
+export function validateCvv(cvv) {
+  const cvvLength = cvv.toString().length;
+  return [3, 4].includes(cvvLength) && !Number.isNaN(cvv);
+}

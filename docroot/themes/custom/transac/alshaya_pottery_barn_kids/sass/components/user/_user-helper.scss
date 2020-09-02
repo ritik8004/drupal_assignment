@@ -1,0 +1,107 @@
+// Making changes to all the buttons in the same file so it's easy to manage.
+// Most changes are affecting the account, cart and user page.
+// button classes like button-wide are getting overwritten, so unable to use them.
+// It has to be kept here and not in base/_button.scss as they were getting overwrittn.
+
+@mixin pbk_primary_button {
+  @include breakpoint($desktop) {
+    font-size: 1rem;
+    color: $primary_btn_text;
+    background-color: $primary_btn_bg;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.5875rem 0.85rem 0.5rem;
+  }
+}
+
+@mixin pbk_transparent_button {
+  @include breakpoint($desktop) {
+    font-size: 1rem;
+    color: $transparent_btn_text;
+    font-weight: 600;
+  }
+}
+
+@mixin pbk_btn_flex {
+  @include breakpoint($desktop) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 600;
+    padding-top: 0.5875rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+.button-wide {
+  @include pbk_primary_button;
+}
+
+.user-page {
+  .user-form,
+  .change-pwd-form,
+  .user-login-form,
+  .user-pass,
+  .multistep-checkout {
+    .form-submit {
+      @include pbk_primary_button;
+    }
+  }
+}
+
+// Specificity issue.
+.user-page.c-user-login .user-login-form #edit-actions .form-submit {
+  @include pbk_primary_button;
+}
+
+.c-address-book .block-system > a {
+  @include pbk_primary_button;
+}
+
+.c-address-book .profile-form .form-actions .form-submit {
+  @include pbk_primary_button;
+}
+
+.block-alshaya-acm-customer > .edit-account {
+  @include pbk_primary_button;
+
+  @include breakpoint($desktop) {
+    padding-top: 0.5875rem;
+  }
+}
+
+form.user-communication-preference .form-submit {
+  @include pbk_btn_flex;
+}
+
+.button.status-pending,
+.button.status-delivered,
+.button.status-complete,
+.button.status-processing,
+.button.status-returned {
+  @include pbk_btn_flex;
+
+  @include breakpoint($desktop) {
+    padding-#{$left}: 0.725rem;
+    padding-#{$right}: 0.725rem;
+    width: auto;
+  }
+}
+
+.c-user-password.user-page form .form-submit,
+.c-user-register.user-page form .form-submit,
+.c-user-login.user-page form .form-submit {
+  color: $primary_btn_text;
+}
+
+// Buttons with just outline and not fill.
+.address .address--edit a,
+.address .address--delete a {
+  @include pbk_transparent_button;
+
+  @include breakpoint($desktop) {
+    padding-top: 0.5rem;
+    padding-bottom: 0.4375rem;
+  }
+}

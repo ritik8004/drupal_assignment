@@ -17,12 +17,10 @@ class ContactInfoForm extends React.Component {
   handleSubmit = (e, store) => {
     e.preventDefault();
 
-    if (drupalSettings.user.uid === 0) {
-      const notValidAddress = validateContactInfo(e, true);
-      if (notValidAddress) {
-        addressFormInlineErrorScroll();
-        return;
-      }
+    const contactInfoError = validateContactInfo(e, (drupalSettings.user.uid === 0));
+    if (contactInfoError) {
+      addressFormInlineErrorScroll();
+      return;
     }
 
     showFullScreenLoader();
@@ -108,7 +106,7 @@ class ContactInfoForm extends React.Component {
       }
     }).catch((error) => {
       removeFullScreenLoader();
-      Drupal.logJavascriptError('Process shipping update', error);
+      Drupal.logJavascriptError('Process shipping update', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
   };
 
@@ -132,8 +130,9 @@ class ContactInfoForm extends React.Component {
             dispatchCustomEvent('addressPopUpError', {
               type: 'error',
               message: cartResult.error_message,
+              showDismissButton: false,
             });
-            Drupal.logJavascriptError('update-shipping', cartResult.error_message);
+            Drupal.logJavascriptError('update-shipping', cartResult.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
             return null;
           }
 
@@ -142,7 +141,7 @@ class ContactInfoForm extends React.Component {
           return null;
         })
         .catch((error) => {
-          Drupal.logJavascriptError('update-shipping', error);
+          Drupal.logJavascriptError('update-shipping', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
         });
     }
   };
@@ -160,6 +159,7 @@ class ContactInfoForm extends React.Component {
           showEmail={drupalSettings.user.uid === 0}
           defaultVal={contactInfo ? { static: contactInfo } : []}
           subTitle={subTitle}
+          type="cnc"
         />
         <div className="spc-address-form-actions">
           <button

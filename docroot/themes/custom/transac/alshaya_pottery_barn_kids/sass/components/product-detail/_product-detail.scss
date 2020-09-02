@@ -66,3 +66,10 @@
     }
   }
 }
+
+.subtitle.crossell-title {
+  padding-#{$right}: 8%;
+  padding-#{$left}: 8%;
+  text-align: center;
+  font-weight: normal;
+}

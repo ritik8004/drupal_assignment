@@ -29,11 +29,45 @@
     text-transform: capitalize;
   }
 
+  .label {
+    color: $label_dark;
+  }
+
   .store-name-and-address {
     .store-map-link {
       a {
         &:hover {
           text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  td {
+    &.above-mobile.blend {
+      .dark {
+        line-height: 1.4;
+      }
+    }
+
+    &.order__user--info {
+      .address--contact {
+        margin-top: 1.25rem;
+        font-size: 0.75rem;
+
+        .no-direction {
+          font-size: 0.875rem;
+          margin-top: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .surcharge-row {
+    td:first-child {
+      @include breakpoint($only-tablet) {
+        .order-detail & {
+          display: none;
         }
       }
     }

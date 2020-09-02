@@ -2,15 +2,24 @@
 .alias--checkout-confirmation {
   .site-brand-home {
     a {
+      @include breakpoint($desktop) {
+        height: auto;
+      }
+
       @include breakpoint($tablet) {
         max-width: 29.375rem;
         width: 100%;
+        text-align: center;
       }
 
       @include breakpoint($only-mobile) {
         max-width: 15rem;
         width: 100%;
         font-size: inherit;
+
+        html[lang=ar] & {
+          max-width: 13.5rem;
+        }
       }
     }
   }

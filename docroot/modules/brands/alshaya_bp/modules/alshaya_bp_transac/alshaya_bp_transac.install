@@ -5,7 +5,161 @@
  * Install, uninstall, update function for alshaya_bp_transac.
  */
 
+use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\block\Entity\Block;
+use Drupal\facets\Entity\Facet;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Re-index all the products.
+ * Done to reflect changes for lhn child menu.
+ */
+function alshaya_bp_transac_update_8005() {
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [5.4.0] Map marker on checkout for CnC and appointment booking.
+ * Update context for static texts.
+ */
+function alshaya_bp_transac_update_8004() {
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_bp/images/bp-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_bp/images/bp-pin-inactive.svg')
+    ->save();
+  $strings = [
+    'The password does not satisfy the password policies.' => 'alshaya_static_text|empty_password',
+    'Please enter a valid email address.' => 'alshaya_static_text|invalid_email',
+    'Please enter a valid name.' => 'alshaya_static_text|invalid_name',
+    'Please enter a valid last name.' => 'alshaya_static_text|invalid_last_name',
+    'Please enter an email address.' => 'alshaya_static_text|empty_email',
+    'The email address could not be found.' => 'alshaya_static_text|email_not_found',
+    'Please enter a valid mobile number.' => 'alshaya_static_text|invalid_mobile',
+    'Please enter a block.' => 'alshaya_static_text|empty_block',
+    'Please enter a street name/number' => 'alshaya_static_text|empty_street',
+    'Please enter a building name/number' => 'alshaya_static_text|empty_building',
+    'Please enter an area' => 'alshaya_static_text|empty_area',
+    'Please enter a valid credit card number.' => 'alshaya_static_text|invalid_cc_number',
+    'Please enter a valid CVC.' => 'alshaya_static_text|invalid_cvv',
+    'Please enter exp month' => 'alshaya_static_text|empty_exp_month',
+    'Please enter exp year' => 'alshaya_static_text|empty_exp_year',
+    'The password does not match this account' => 'alshaya_static_text|wrong_password',
+    'At least 7 characters with one special and one numeric' => 'alshaya_static_text|invalid_format_password',
+    'Password do not match' => 'alshaya_static_text|password_unmatch',
+    'The code you have entered is invalid' => 'alshaya_static_text|invalid_promo_code',
+    'Please select a payment option to continue.' => 'alshaya_static_text|empty_payment_option',
+    'Please agree to the Terms and Conditions.' => 'alshaya_static_text|agree_terms_and_condition',
+    'Your account has not been activated or is blocked.' => 'alshaya_static_text|account_already_exists',
+    'Customers also bought' => 'alshaya_static_text|pdp_crosssell_title',
+  ];
+
+  alshaya_i18n_update_context($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable product aggregation for simple products.
+ * Add color family attribute for filter.
+ */
+function alshaya_bp_transac_update_8003() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    [
+      'alshaya_acm_product.display_settings',
+      'alshaya_acm_product.sku_base_fields',
+    ],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
+  $attr_code = $config->get('color');
+  $attr_code['configurable'] = 1;
+  $config->set('color', $attr_code);
+  $config->save();
+
+  $manager->updateConfigs(
+    ['search_api.index.product'],
+    'alshaya_product'
+  );
+
+  // Replace weight for color family with color block.
+  $blocks = [
+    'plpcolor' => 'plpcolorfamily',
+    'promocolor' => 'promocolorfamily',
+    'color' => 'colorfamily',
+  ];
+
+  // Color family is being used as color facet.
+  foreach ($blocks as $old_id => $new_id) {
+    $old_block = Block::load($old_id);
+    $new_block = Block::load($new_id);
+
+    // Set weight of new block same as old block.
+    $new_block->setWeight($old_block->getWeight());
+    $new_block->save();
+    $old_block->delete();
+  }
+
+  // Facets to remove.
+  $color_facets = [
+    'plp_color',
+    'promo_color',
+    'color',
+  ];
+
+  foreach ($color_facets as $facets) {
+    $facet = Facet::load($facets);
+    if (isset($facet)) {
+      $facet->delete();
+    }
+  }
+
+  \Drupal::service('module_installer')->install(['alshaya_color_split']);
+
+  // Enable swatch option for grouping attribute.
+  $manager->updateConfigs(
+    ['alshaya_color_split.settings'],
+    'alshaya_color_split'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Reset sharethis services settings.
+ */
+function alshaya_bp_transac_update_8002() {
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services = "'Facebook:facebook','Instagram:instagram','Pinterest:pinterest'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * PDP gallery thumbnail image slider settings.
+ */
+function alshaya_bp_transac_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product'
+  );
+}
 
 /**
  * Implements hook_install().
@@ -23,6 +177,12 @@ function alshaya_bp_transac_install() {
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     alshaya_stores_finder_set_default_marker_icon('alshaya_bp_transac');
   }
+
+  // Configure map marker on checkout for CnC and appointment booking.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_bp/images/bp-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_bp/images/bp-pin-inactive.svg')
+    ->save();
 
   // Add string translations.
   $strings = [
@@ -51,4 +211,12 @@ function alshaya_bp_transac_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
+
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services = "'Facebook:facebook','Instagram:instagram','Pinterest:pinterest'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
 }

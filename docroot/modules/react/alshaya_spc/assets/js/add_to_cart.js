@@ -92,7 +92,7 @@
 
             // Post to ajax for cart update/create.
             jQuery.ajax({
-              url: settings.alshaya_spc.cart_update_endpoint,
+              url: settings.alshaya_spc.cart_update_endpoint + '?lang=' + drupalSettings.path.currentLanguage,
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -136,6 +136,7 @@
                   var maxSaleQty = productData.maxSaleQty;
                   var maxSaleQtyParent = productData.max_sale_qty_parent;
                   var gtmAttributes = productInfo.gtm_attributes;
+                  var isNonRefundable = productInfo.is_non_refundable;
 
                   if (productInfo.type === 'configurable') {
                     var productVariantInfo = productInfo['variants'][productData.variant];
@@ -151,22 +152,24 @@
                       var langcode = $('html').attr('lang');
                       productUrl = productVariantInfo.url[langcode];
                     }
+                    gtmAttributes.price = productVariantInfo.gtm_price || price;
                   }
                   else if (productInfo.group !== undefined) {
                     var productVariantInfo = productInfo.group[productData.sku];
                     price = productVariantInfo.priceRaw;
                     parentSKU = productVariantInfo.parent_sku;
                     promotions = productVariantInfo.promotionsRaw;
+                    options = productVariantInfo.grouping_options;
                     maxSaleQty = productVariantInfo.maxSaleQty;
                     maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
 
                     var langcode = $('html').attr('lang');
                     productUrl = productVariantInfo.url[langcode];
+                    gtmAttributes.price = productVariantInfo.gtm_price || price;
                   }
 
                   // Store proper variant sku in gtm data now.
                   gtmAttributes.variant = productDataSKU;
-
                   Drupal.alshayaSpc.storeProductData({
                     sku: productDataSKU,
                     parentSKU: parentSKU,
@@ -179,6 +182,7 @@
                     maxSaleQty: maxSaleQty,
                     maxSaleQtyParent: maxSaleQtyParent,
                     gtmAttributes: gtmAttributes,
+                    isNonRefundable: isNonRefundable,
                   });
 
                   // Triggering event to notify react component.
@@ -195,6 +199,20 @@
 
                   var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: (function () { return response; })}});
                   document.dispatchEvent(event);
+
+                  // We want to refresh Recommended product on add to cart
+                  // functionality but only on cart page.
+                  if ($('#spc-cart').length > 0) {
+                    document.dispatchEvent(
+                      new CustomEvent(
+                        'spcRefreshCartRecommendation',
+                        {
+                          bubbles: true,
+                          detail: {  items: response.items  }
+                        }
+                      )
+                    );
+                  }
                 }
               }
             });

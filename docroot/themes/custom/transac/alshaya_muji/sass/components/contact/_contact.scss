@@ -2,6 +2,7 @@
 .contact-form,
 .user-communication-preference {
   .form-submit {
+    font-family: $muji-helvetica-neue-bold;
     text-transform: uppercase;
   }
 }
@@ -45,6 +46,25 @@
       @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.375rem) {
         #{$right}: 1rem;
         top: 1.25rem;
+      }
+    }
+  }
+}
+
+.c-user-edit {
+  .user-form {
+    .form-wrapper,
+    .form-item:not(.mobile-number-field) {
+      @include breakpoint($only-tablet) {
+        margin-top: 1.975rem;
+      }
+    }
+  }
+
+  &.user-page {
+    .user-form {
+      .field--type-mobile-number {
+        top: 0;
       }
     }
   }

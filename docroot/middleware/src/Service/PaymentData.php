@@ -91,7 +91,7 @@ class PaymentData {
    * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
    */
   public function setPaymentData(int $cart_id, string $unique_id, array $data) {
-    $this->connection->delete(self::TABLE_NAME, ['cart_id' => $cart_id], [ParameterType::INTEGER]);
+    $this->deletePaymentDataByCartId($cart_id);
     $this->connection->insert(
       self::TABLE_NAME,
       [
@@ -107,6 +107,16 @@ class PaymentData {
         ParameterType::INTEGER,
       ]
     );
+  }
+
+  /**
+   * Delete payment data for the cart id.
+   *
+   * @param int $cart_id
+   *   Cart ID.
+   */
+  public function deletePaymentDataByCartId(int $cart_id) {
+    $this->connection->delete(self::TABLE_NAME, ['cart_id' => $cart_id], [ParameterType::INTEGER]);
   }
 
 }

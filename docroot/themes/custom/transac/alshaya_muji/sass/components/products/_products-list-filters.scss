@@ -7,6 +7,8 @@
 
         .facet-all-clear,
         .facet-clear-all {
+          font-family: $muji-demibold;
+
           .block-facets-summary-blockfilter-bar-promotions,
           .block-facets-summary-blockfilter-bar-plp,
           .block-facets-summary-blockfilter-bar {
@@ -23,6 +25,12 @@
               }
             }
           }
+        }
+
+        .facet-all-apply,
+        .facet-apply-all,
+        .all-filters-close {
+          font-family: $muji-demibold;
         }
       }
 
@@ -42,6 +50,7 @@
               @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.375rem) {
                 #{$right}: 1.6875rem;
                 top: 1.5rem;
+                background: none;
               }
             }
           }
@@ -52,6 +61,21 @@
             @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.375rem) {
               #{$right}: 1.6875rem;
               top: 1.5rem;
+              background: none;
+            }
+          }
+        }
+
+        .views-exposed-form,
+        .c-facet {
+          &.c-accordion,
+          &.c-collapse-item {
+            .c-accordion__title,
+            .c-collapse__title {
+              @include facet-arrow(after, #{$right}, 0.3125rem, 0, 0.3125rem, 0.3125rem) {
+                #{$right}: 1.875rem;
+                top: 1.5rem;
+              }
             }
           }
         }
@@ -63,7 +87,7 @@
           align-items: $left;
           text-align: $left;
           padding-#{$left}: 1.0625rem;
-          font-family: $alshaya-bold;
+          font-family: $muji-helvetica-neue-bold;
           text-transform: capitalize;
           font-size: 1.125rem;
         }

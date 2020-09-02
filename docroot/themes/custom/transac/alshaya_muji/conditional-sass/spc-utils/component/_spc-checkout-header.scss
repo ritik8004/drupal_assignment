@@ -1,0 +1,14 @@
+.alias--checkout,
+.alias--checkout-confirmation {
+  .site-brand-home {
+    a {
+      @include breakpoint($upto-desktop) {
+        margin: 0.8rem auto 0;
+
+        html[lang=ar] & {
+          margin: 0.8rem auto 0;
+        }
+      }
+    }
+  }
+}

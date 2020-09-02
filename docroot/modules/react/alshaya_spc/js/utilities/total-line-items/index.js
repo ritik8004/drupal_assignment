@@ -10,20 +10,32 @@ class TotalLineItems extends React.Component {
     super(props);
 
     this.state = {
-      cartPromo: [],
+      cartPromo: {},
+      freeShipping: false,
     };
   }
 
   componentDidMount = () => {
-    document.addEventListener('applyDynamicPromotions', this.saveDynamicPromotions, false);
+    document.addEventListener('applyDynamicPromotions', this.applyDynamicPromotions, false);
   };
 
   applyDynamicPromotions = (event) => {
+    // If promo contains no data, set to null.
+    if (event.detail.cart_labels === null) {
+      this.setState({
+        cartPromo: {},
+        freeShipping: false,
+      });
+
+      return;
+    }
+
     const {
       applied_rules: cartPromo,
-    } = event.detail;
+      shipping_free: freeShipping,
+    } = event.detail.cart_labels;
 
-    this.setState({ cartPromo });
+    this.setState({ cartPromo, freeShipping });
   };
 
   /**
@@ -31,7 +43,9 @@ class TotalLineItems extends React.Component {
    */
   discountToolTipContent = (cartPromo) => {
     let promoData = `<div class="applied-discounts-title">${Drupal.t('Discount applied')}</div>`;
-    if (cartPromo.length > 0) {
+    if (cartPromo !== null
+      && cartPromo !== undefined
+      && Object.keys(cartPromo).length > 0) {
       Object.entries(cartPromo).forEach(([, promo]) => {
         if (promo.label.length > 0) {
           promoData += `<div class="promotion-label"><strong>${promo.label}</strong></div>`;
@@ -47,24 +61,42 @@ class TotalLineItems extends React.Component {
   };
 
   render() {
-    const { totals } = this.props;
-    const { cartPromo } = this.state;
+    const { totals, isCartPage } = this.props;
+    const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
+
+    // Using a separate variable(shippingAmount) to update the value
+    // not using the variable in props(totals) as it will
+    // update the global value.
+    let shippingAmount = (totals.shipping_incl_tax === undefined)
+      ? null
+      : totals.shipping_incl_tax;
+
+    // Show "Delivery: FREE" on basket if cart promo rule applied for it.
+    if (shippingAmount === null && freeShipping) {
+      shippingAmount = 0;
+    }
+
+    // We don't show surcharge info in total on cart page.
+    const baseGrandTotal = (isCartPage === false)
+      ? totals.base_grand_total
+      : totals.base_grand_total_without_surcharge;
 
     return (
       <div className="totals">
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
         <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={totals.discount_amount} />
 
-        <ConditionalView condition={totals.shipping_incl_tax !== null}>
+        <ConditionalView condition={shippingAmount !== null}>
           <TotalLineItem
-            name="surcharge-total"
+            name="delivery-total"
             title={Drupal.t('Delivery')}
-            value={totals.shipping_incl_tax}
+            value={shippingAmount > 0 ? shippingAmount : Drupal.t('FREE')}
           />
         </ConditionalView>
 
-        <ConditionalView condition={totals.surcharge > 0}>
+        {/* Show surcharge on checkout page only if available. */}
+        <ConditionalView condition={totals.surcharge > 0 && isCartPage === false}>
           <TotalLineItem
             tooltip
             name="surcharge-total"
@@ -78,9 +110,9 @@ class TotalLineItems extends React.Component {
         </ConditionalView>
 
         <div className="hero-total">
-          <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={totals.base_grand_total} />
+          <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
           <div className="delivery-vat">
-            <ConditionalView condition={totals.shipping_incl_tax === null}>
+            <ConditionalView condition={shippingAmount === null}>
               <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>
             </ConditionalView>
 

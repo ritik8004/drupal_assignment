@@ -140,6 +140,9 @@ function _alshaya_spc_translations() {
       'expected delivery within' => [
         'ar' => 'التوصيل متوقع خلال',
       ],
+      'Same day' => [
+        'ar' => 'نفس اليوم',
+      ],
       'number of items' => [
         'ar' => 'عدد القطع',
       ],
@@ -175,6 +178,12 @@ function _alshaya_spc_translations() {
       ],
       'Please select a store with in country @country below to continue.' => [
         'ar' => 'أدناه للمتابعة @country يرجى اختيار محلا في البلد.',
+      ],
+      'Sorry, we couldn’t fetch your location precisely, please' => [
+        'ar' => 'عذرًا ، لم نتمكن من جلب موقعك بدقة ، يرجى',
+      ],
+      'enter your address' => [
+        'ar' => 'إدخال عنوانك',
       ],
       'Please enter your full name.' => [
         'ar' => 'يرجى إدخال اسمك الكامل.',
@@ -247,6 +256,9 @@ function _alshaya_spc_translations() {
       ],
       'add new card' => [
         'ar' => 'إضافة بطاقة جديدة',
+      ],
+      "This address doesn't contain all the required information, please update it." => [
+        'ar' => 'لا يحتوي هذا العنوان على جميع المعلومات المطلوبة ، يرجى تحديثه.',
       ],
     ],
   ];

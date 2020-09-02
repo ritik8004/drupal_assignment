@@ -5,6 +5,9 @@ import CheckoutConfigurableOption from '../../../utilities/checkout-configurable
 import SpecialPrice from '../../../utilities/special-price';
 import ConditionalView from '../../../common/components/conditional-view';
 import CartPromotion from '../../../cart/components/cart-promotion';
+import ProductFlag from '../../../utilities/product-flag';
+import CartItemFree from '../../../cart/components/cart-item-free';
+import Notifications from '../../../cart/components/cart-item/components/Notifications';
 
 class CheckoutCartItem extends React.Component {
   constructor(props) {
@@ -54,6 +57,7 @@ class CheckoutCartItem extends React.Component {
       item: {
         id,
         finalPrice,
+        freeItem,
       },
       context,
     } = this.props;
@@ -67,6 +71,7 @@ class CheckoutCartItem extends React.Component {
         price: originalPrice,
         promotions,
         sku,
+        isNonRefundable,
       },
     } = this.state;
 
@@ -76,8 +81,10 @@ class CheckoutCartItem extends React.Component {
       title,
     };
 
+    const freeGift = freeItem === true ? 'free-gift' : '';
+
     return (
-      <div className="product-item">
+      <div className={`product-item ${freeGift}`}>
         <div className="spc-product-image">
           <CheckoutItemImage img_data={cartImage} />
         </div>
@@ -92,13 +99,24 @@ class CheckoutCartItem extends React.Component {
               </ConditionalView>
             </div>
             <div className="spc-product-price">
-              <SpecialPrice price={originalPrice} finalPrice={finalPrice} />
+              <SpecialPrice price={originalPrice} freeItem={freeItem} finalPrice={finalPrice} />
             </div>
           </div>
           <div className="spc-product-attributes">
             { configurableValues.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
           </div>
         </div>
+        {context !== 'cart' ? (
+          <Notifications>
+            <CartItemFree type="alert" filled="true" freeItem={freeItem} />
+          </Notifications>
+        ) : null}
+        <ProductFlag
+          flag={isNonRefundable}
+          flagText={drupalSettings.alshaya_spc.non_refundable_text}
+          tooltipContent={drupalSettings.alshaya_spc.non_refundable_tooltip}
+          tooltip
+        />
         {context !== 'confirmation' && context !== 'print' && (
           <div className="spc-promotions">
             {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}

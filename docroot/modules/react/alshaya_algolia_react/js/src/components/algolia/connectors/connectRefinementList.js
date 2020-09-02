@@ -159,6 +159,14 @@ export default createConnector({
       };
     }
 
+    // Sort configured attributes by name.
+    const attributes_to_sort_by_name = drupalSettings.algoliaSearch.attributes_to_sort_by_name;
+    let sortOrder = sortBy;
+
+    if (attributes_to_sort_by_name && attributes_to_sort_by_name.length && attributes_to_sort_by_name.indexOf(attribute) > -1) {
+      sortOrder = ['isRefined', 'name:asc', 'count:desc'];
+    }
+
     const items = isFromSearch
       ? searchForFacetValuesResults[attribute].map(v => ({
           label: v.value,
@@ -167,7 +175,7 @@ export default createConnector({
           count: v.count,
           isRefined: v.isRefined,
         }))
-      : results.getFacetValues(attribute, { sortBy }).map(v => ({
+      : results.getFacetValues(attribute, { sortBy: sortOrder }).map(v => ({
           label: v.name,
           value: getValue(v.name, props, searchState, this.context),
           count: v.count,

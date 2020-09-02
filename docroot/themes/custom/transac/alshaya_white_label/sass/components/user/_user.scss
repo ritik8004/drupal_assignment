@@ -299,13 +299,6 @@
     }
   }
 
-  .field--name-field-first-name,
-  .field--name-field-last-name {
-    @include breakpoint($upto-desktop) {
-      float: $left;
-    }
-  }
-
   .field--name-field-first-name {
     @include breakpoint($desktop) {
       margin-#{$right}: 1.4rem;
@@ -414,7 +407,13 @@
       margin-top: 1rem;
       height: 2.875rem;
 
-      @include breakpoint($tablet) {
+      @include breakpoint($only-tablet) {
+        width: 9.125rem;
+        max-width: 11rem;
+        padding: 0.625rem 1.45rem;
+      }
+
+      @include breakpoint($desktop) {
         width: 11.875rem;
       }
     }
@@ -947,14 +946,8 @@
     }
 
     .form-item {
-      margin-top: 2.7em;
-
-      @include breakpoint($only-tablet) {
-        margin-top: 1.7rem;
-      }
-
-      @include breakpoint($desktop) {
-        margin-top: 3.5rem;
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
       }
     }
 
@@ -995,10 +988,6 @@
     html[lang=ar] & {
       font-family: $arial-nodir;
     }
-  }
-
-  .block-page-title-block {
-    margin-bottom: 2rem;
   }
 }
 
@@ -1336,9 +1325,6 @@ input::-webkit-credentials-auto-fill-button {
       .user-form {
         #edit-account {
           &.form-wrapper {
-            clear: both;
-            overflow: auto;
-
             .js-form-type-password {
               margin-top: 2.93rem;
             }

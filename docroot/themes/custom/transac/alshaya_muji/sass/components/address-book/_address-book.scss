@@ -49,11 +49,17 @@
     }
   }
 
-  &:hover {
-    @include breakpoint($desktop) {
-      .address--primary {
-        letter-spacing: 0.5px;
-      }
-    }
+  .address--content {
+    color: $address_default_color;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    font-weight: normal;
+  }
+
+  .address--label {
+    font-family: $alshaya-bold;
+    font-size: 0.75rem;
+    color: $address_default_color;
+    line-height: 1rem;
   }
 }

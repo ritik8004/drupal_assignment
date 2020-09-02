@@ -2,7 +2,7 @@
 Feature: SPC Checkout using Click & Collect store for Returning Customers
 
   Background:
-    Given I am on "{product_listing_page_url}"
+    Given I am on "{spc_product_listing_page}"
     And I wait 10 seconds
     And I wait for the page to load
 

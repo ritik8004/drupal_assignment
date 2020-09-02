@@ -9,11 +9,12 @@ import {
   getAddressPopupClassName,
 } from '../../../utilities/address_util';
 import {
-  isBillingSameAsShippingInStorage,
+  isDeliveryTypeSameAsInCart,
   removeBillingFlagFromStorage,
 } from '../../../utilities/checkout_util';
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
+import { makeFullName } from '../../../utilities/cart_customer_util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -25,9 +26,6 @@ export default class CnCBillingAddress extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      shippingAsBilling: isBillingSameAsShippingInStorage(),
-    };
 
     // Check and remove flag on load.
     removeBillingFlagFromStorage(props.cart);
@@ -57,9 +55,6 @@ export default class CnCBillingAddress extends React.Component {
       if (data.error === undefined) {
         if (data.cart !== undefined) {
           localStorage.setItem(localStorageKey, false);
-          this.setState({
-            shippingAsBilling: false,
-          });
         }
       }
 
@@ -74,17 +69,20 @@ export default class CnCBillingAddress extends React.Component {
   processAddress = (e) => {
     const { cart } = this.props;
     return processBillingUpdateFromForm(e, cart.cart.shipping.address);
-  }
+  };
 
-  /**
-   * Message to show when billing is
-   * same as shipping.
-   */
-  sameBillingAsShippingMessage = () => Drupal.t('We have set your billing address same as delivery address. You can select a different one by clicking the change button above.');
+  isActive = () => {
+    const { cart } = this.props;
+
+    if (cart.cart.payment.methods === undefined || cart.cart.payment.methods.length === 0) {
+      return false;
+    }
+
+    return isDeliveryTypeSameAsInCart(cart);
+  };
 
   render() {
     const { cart, refreshCart } = this.props;
-    const { shippingAsBilling } = this.state;
 
     // If carrier info not set, means shipping info not set.
     // So we don't need to show billing.
@@ -96,22 +94,25 @@ export default class CnCBillingAddress extends React.Component {
     // means its default billing address (same as shipping)
     // and not added by the user.
     let billingAddressAddedByUser = true;
-    if (cart.cart.billing_address && cart.cart.billing_address.city === 'NONE') {
+    if (!cart.cart.billing_address
+      || (cart.cart.billing_address && cart.cart.billing_address.city === 'NONE')) {
       billingAddressAddedByUser = false;
     }
 
     const shippingAddress = cart.cart.shipping.address;
     const editAddressData = {
       static: {
-        fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,
+        fullname: makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || ''),
         telephone: shippingAddress.telephone,
       },
     };
 
+    const activeClass = this.isActive() ? 'active' : 'in-active';
+
     // If user has not added billing address.
     if (!billingAddressAddedByUser) {
       return (
-        <div className="spc-section-billing-address cnc-flow">
+        <div className={`spc-section-billing-address cnc-flow ${activeClass}`}>
           <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
           <WithModal modalStatusKey="cncBillingInfo">
             {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
@@ -146,20 +147,12 @@ export default class CnCBillingAddress extends React.Component {
       );
     }
 
-    let showMessage = shippingAsBilling;
-    // If CnC is used for delivery method, we dont show message on address.
-    if (cart.cart.shipping.type === 'click_and_collect') {
-      showMessage = false;
-    }
-
     return (
-      <div className="spc-section-billing-address cnc-flow appear" style={{ animationDelay: '0.2s' }}>
+      <div className={`spc-section-billing-address cnc-flow appear ${activeClass}`} style={{ animationDelay: '0.2s' }}>
         <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
         <div className="spc-billing-address-wrapper">
           <div className="spc-billing-bottom-panel">
             <BillingInfo cart={cart} refreshCart={refreshCart} />
-            {showMessage
-            && <div className="spc-billing-help-text">{this.sameBillingAsShippingMessage()}</div>}
           </div>
         </div>
       </div>

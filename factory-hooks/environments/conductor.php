@@ -85,6 +85,11 @@ $conductors = [
     'hmac_secret' => 'NTNiZTAwYTQtYzNkNi00',
     'site_id' => 199,
   ],
+  'hmkw_dev2' => [
+    'hmac_id' => 'bb8596447880451fa689e65e53506429',
+    'hmac_secret' => 'NjE4NDYzYmMtNWRmNy00',
+    'site_id' => 109,
+  ],
   'hmkw_qa' => [
     'hmac_id' => 'deb9efe4753344059090b12fc10d387e',
     'hmac_secret' => 'NWE3ZDg1OGYtNmEwYi00',
@@ -227,22 +232,55 @@ $conductors = [
     'site_id' => 57,
   ],
   // Pottery Barn Kids KW.
+  'pbkkw_qa' => [
+    'hmac_id' => '7b1ac8753c5c46dda4d43e6343cc9921',
+    'hmac_secret' => 'OTU1MDJmOWMtZGYyOS00',
+    'site_id' => 226,
+  ],
   'pbkkw_uat' => [
-    'hmac_id' => 'cf6afd0bd1624636bd21f4581dc5e252',
-    'hmac_secret' => 'NDBhYjQ3NjQtNDZmNy00',
-    'site_id' => 40,
+    'hmac_id' => '5e02ce58f5664cef9165601a64f53bc8',
+    'hmac_secret' => 'NWJiOTRmNjQtMDdkZS00',
+    'site_id' => 242,
   ],
   // Pottery Barn Kids AE.
   'pbkae_qa' => [
-    'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
-    'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
-    'site_id' => 33,
+    'hmac_id' => '727104fbad4240eea0d5bda04da0927f',
+    'hmac_secret' => 'NzY3OWU3YjItNmZiNS00',
+    'site_id' => 228,
+  ],
+  'pbkae_uat' => [
+    'hmac_id' => 'c7760836e4334c0584f80d13e3c21315',
+    'hmac_secret' => 'OTU5MGYwMzktNDVjMy00',
+    'site_id' => 244,
   ],
   // Pottery Barn Kids SA.
   'pbksa_qa' => [
-    'hmac_id' => '76f67886b7d34f3aad6ae85e75f93550',
-    'hmac_secret' => 'NTI1ZjAwMTUtMzE5OS00',
-    'site_id' => 32,
+    'hmac_id' => 'db1681e298b8408294834b3cb9f83a5e',
+    'hmac_secret' => 'ODk1N2E1YTEtZmFhNS00',
+    'site_id' => 227,
+  ],
+  'pbksa_uat' => [
+    'hmac_id' => '046bc57011364079b4e4d94edd1fdc6b',
+    'hmac_secret' => 'YjcyYTdhMWItMzVhZi00',
+    'site_id' => 243,
+  ],
+  'pbkkw_prod' => [
+    'site_id' => 249,
+  ],
+  'pbksa_prod' => [
+    'site_id' => 250,
+  ],
+  'pbkae_prod' => [
+    'site_id' => 251,
+  ],
+  'pbkeg_prod' => [
+    'site_id' => 252,
+  ],
+  'pbkbh_prod' => [
+    'site_id' => 253,
+  ],
+  'pbkqa_prod' => [
+    'site_id' => 254,
   ],
   // BathBodyWorks KW.
   'bbwkw_qa' => [
@@ -306,6 +344,20 @@ $conductors = [
     'hmac_id' => '84d4fe2e1c144f22a78f855a32acbcd9',
     'hmac_secret' => 'NzJmMDMyN2ItMzRhMC00',
     'site_id' => 87,
+  ],
+  // BathBodyWorks Egypt.
+  'bbweg_qa' => [
+    'hmac_id' => '4d7962f023c54bbdb9ea5b6811cbb5af',
+    'hmac_secret' => 'MWRmZGI4ZTMtYzM0MS00',
+    'site_id' => 281,
+  ],
+  'bbweg_uat' => [
+    'hmac_id' => '9617776441fb41468e602b6c2022117e',
+    'hmac_secret' => 'ODM0NTc2NzktNzBiYS00',
+    'site_id' => 277,
+  ],
+  'bbweg_prod' => [
+    'site_id' => 273,
   ],
   // BathBodyWorks BH.
   'bbwbh_dev' => [
@@ -461,6 +513,48 @@ $conductors = [
     'hmac_secret' => 'ZmJiNzUzOTctMTBiMC00',
     'site_id' => 129,
   ],
+  // FootLocker EG.
+  'fleg_qa' => [
+    'hmac_id' => '363afc0253cc45689121d797deb20009',
+    'hmac_secret' => 'YmUzMmZhODAtYTViYy00',
+    'site_id' => 282,
+  ],
+  'fleg_uat' => [
+    'hmac_id' => '3818ebc0773e46869c712507c4792441',
+    'hmac_secret' => 'YjhlYjE4YTctMTAwYS00',
+    'site_id' => 280,
+  ],
+  'fleg_prod' => [
+    'site_id' => 274,
+  ],
+  // FootLocker BH.
+  'flbh_qa' => [
+    'hmac_id' => 'a49ad25bbc7a404b81377c036852f7c3',
+    'hmac_secret' => 'YjhlYzc5Y2UtMmZlMC00',
+    'site_id' => 283,
+  ],
+  'flbh_uat' => [
+    'hmac_id' => 'd42ceb5607494e1a88513ce19532d999',
+    'hmac_secret' => 'MzcyMGEzYzYtZjI3ZS00',
+    'site_id' => 278,
+  ],
+  'flbh_prod' => [
+    'site_id' => 275,
+  ],
+  // FootLocker QA.
+  'flqa_qa' => [
+    'hmac_id' => '730329239f924161bfcb7e74c56210d0',
+    'hmac_secret' => 'NWZjNmJmYjYtMjk1ZC00',
+    'site_id' => 284,
+  ],
+  'flqa_uat' => [
+    'hmac_id' => '1153c84771ef4bdab90659551c2b56fc',
+    'hmac_secret' => 'ZWMyZWQxN2EtODU1Ny00',
+    'site_id' => 279,
+  ],
+  'flqa_prod' => [
+    'site_id' => 276,
+  ],
   // West Elm.
   'wekw_qa' => [
     'hmac_id' => '2546a170c84c49248207de3a8665a920',
@@ -567,11 +661,95 @@ $conductors = [
   'aeoeg_prod' => [
     'site_id' => 208,
   ],
+  // Muji
+  'muae_dev' => [
+    'hmac_id' => 'fa9f4aee73dd4acc93bb4f8457cc8486',
+    'hmac_secret' => 'NzE5MDQ2NmYtNTg3My00',
+    'site_id' => 240,
+  ],
+  'mukw_qa' => [
+    'hmac_id' => '64c8be065a6142e59b408db05439332d',
+    'hmac_secret' => 'MmIxOWM3OTgtOGQ1OS00',
+    'site_id' => 234,
+  ],
+  'musa_qa' => [
+    'hmac_id' => 'f7e2dd7a78ef4dd1a361d3bdb048714a',
+    'hmac_secret' => 'MTU4OTY3NDgtOGM3ZS00',
+    'site_id' => 235,
+  ],
+  'muae_qa' => [
+    'hmac_id' => '45e8107d0344489a9dfe4323ae53e586',
+    'hmac_secret' => 'YTg1NWQ1NzktZWZkYi00',
+    'site_id' => 236,
+  ],
+  'mueg_qa' => [
+    'hmac_id' => 'c89dcfb3aa9146ccb84545aff3597a66',
+    'hmac_secret' => 'YTQ0NjE0NzEtYTExNS00',
+    'site_id' => 237,
+  ],
+  'mukw_uat' => [
+    'hmac_id' => 'e8dc16861254494e80c36dd3255aab5d',
+    'hmac_secret' => 'OTY0OTRjZTYtYzMyZC00',
+    'site_id' => 245,
+  ],
+  'musa_uat' => [
+    'hmac_id' => '030218663ebc492a83427a8a2f6eaa37',
+    'hmac_secret' => 'ZWRiNThjYTEtNzEzNy00',
+    'site_id' => 246,
+  ],
+  'muae_uat' => [
+    'hmac_id' => '73cf818bcd7b47ce975acf336d831206',
+    'hmac_secret' => 'ZWNlYjZhYjUtOWJiMi00',
+    'site_id' => 247,
+  ],
+  'mueg_uat' => [
+    'hmac_id' => 'd5cb6eba6f1d4987a0934685e1f87bd5',
+    'hmac_secret' => 'YmNkYjJkMTgtZGU4Mi00',
+    'site_id' => 248,
+  ],
+  'mukw_prod' => [
+    'site_id' => 267,
+  ],
+  'musa_prod' => [
+    'site_id' => 268,
+  ],
+  'muae_prod' => [
+    'site_id' => 269,
+  ],
+  'mueg_prod' => [
+    'site_id' => 270,
+  ],
+  'mubh_prod' => [
+    'site_id' => 271,
+  ],
+  'muqa_prod' => [
+    'site_id' => 272,
+  ],
   // Boots pharmacy.
   'bpkw_dev' => [
     'hmac_id' => 'd498a56fab204489ad5c3de9840d8e98',
     'hmac_secret' => 'YjM5Mjc1M2QtNDhkNC00',
     'site_id' => 209,
+  ],
+  'bpsa_dev' => [
+    'hmac_id' => '114ffb670cf6403ebaa8a7b600bf85dd',
+    'hmac_secret' => 'NDQxMjc0MzUtOWM5MS00',
+    'site_id' => 210,
+  ],
+  'bpae_dev' => [
+    'hmac_id' => 'ecd6332722a145c79aea9e4bbb465458',
+    'hmac_secret' => 'ZTQxZWY1ZTItNzUzNC00',
+    'site_id' => 211,
+  ],
+  'bpeg_dev' => [
+    'hmac_id' => 'be1cd47e81154f5ab61de7862fc8dcda',
+    'hmac_secret' => 'OTAyNWRhZDctZDk0Zi00',
+    'site_id' => 212,
+  ],
+  'bpae_dev2' => [
+    'hmac_id' => '1dbe65d50909412e8e55d6afbd7c1e85',
+    'hmac_secret' => 'NzA2MGUyNjEtMTNiNy00',
+    'site_id' => 285,
   ],
   'bpkw_qa' => [
     'hmac_id' => '602caba2dc7a4ab3801169a1e8c5eb77',
@@ -593,45 +771,43 @@ $conductors = [
     'hmac_secret' => 'MDkyNjMzNmQtOWI4NC00',
     'site_id' => 216,
   ],
-  'mukw_qa' => [
-    'hmac_id' => 'e6c4af7406bb4694a0caa108409617d9',
-    'hmac_secret' => 'OGU4Yjg1ZDMtNWI5NS00',
-    'site_id' => 174,
+  'bpkw_uat' => [
+    'hmac_id' => 'dc770c85101f4acca8039cf1e5247bb9',
+    'hmac_secret' => 'Nzc2MmU0MWMtOTA3OS00',
+    'site_id' => 230,
   ],
-  'musa_qa' => [
-    'hmac_id' => 'e6b1671eda3b442f9119045676199d93',
-    'hmac_secret' => 'NTg3N2Q3NWItMjJhOC00',
-    'site_id' => 175,
+  'bpsa_uat' => [
+    'hmac_id' => '76b35126e3a941c596d8b5c05fc726e0',
+    'hmac_secret' => 'YTU5MTg3YzYtOTNkMy00',
+    'site_id' => 231,
   ],
-  'muae_qa' => [
-    'hmac_id' => '89e42750b2764506b5533ed781d49e87',
-    'hmac_secret' => 'MmYxZGQ0NDYtYTQ5MC00',
-    'site_id' => 176,
+  'bpae_uat' => [
+    'hmac_id' => '5507e850be8c433e8664467243e43327',
+    'hmac_secret' => 'YzVhMjRiNmYtYTIxOS00',
+    'site_id' => 232,
   ],
-  'mueg_qa' => [
-    'hmac_id' => '5e49e396d2ec416f9216a3a287f738fc',
-    'hmac_secret' => 'YzdkOTIyYjItNzc3ZS00',
-    'site_id' => 177,
+  'bpeg_uat' => [
+    'hmac_id' => '259fe24b36404c65a1b5037804673664',
+    'hmac_secret' => 'YTY3YzYwNjgtMmRlOS00',
+    'site_id' => 233,
   ],
-  'mukw_uat' => [
-    'hmac_id' => 'afb8c24dfb574debaebfe6b680a9fc43',
-    'hmac_secret' => 'MjU1NmIzMjYtNDc1My00',
-    'site_id' => 191,
+  'bpkw_prod' => [
+    'site_id' => 261,
   ],
-  'musa_uat' => [
-    'hmac_id' => '8d9331c4d4aa4a529ed05055b3ca5e67',
-    'hmac_secret' => 'ZGJmMWFiYTktY2JiNS00',
-    'site_id' => 192,
+  'bpsa_prod' => [
+    'site_id' => 262,
   ],
-  'muae_uat' => [
-    'hmac_id' => '05168cbe2e664f4c9d9b676a96d185a4',
-    'hmac_secret' => 'YmJmZTAxNzgtMTdhNy00',
-    'site_id' => 193,
+  'bpae_prod' => [
+    'site_id' => 263,
   ],
-  'mueg_uat' => [
-    'hmac_id' => 'a37e371caae3434ea9372ea053607857',
-    'hmac_secret' => 'ZDFmOGM0NDEtNjlmNy00',
-    'site_id' => 194,
+  'bpeg_prod' => [
+    'site_id' => 264,
+  ],
+  'bpbh_prod' => [
+    'site_id' => 265,
+  ],
+  'bpqa_prod' => [
+    'site_id' => 266,
   ],
 ];
 

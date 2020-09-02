@@ -45,7 +45,7 @@ class DrupalInfo {
     // alshaya@staging-1509:/var/www/html/alshaya.01uat/docroot$ curl -I \
     // > mckw-uat.factory.alshaya.com
     // curl: (6) Could not resolve host: mckw-uat.factory.alshaya.com.
-    if (strpos($this->getDrupalBaseUrl(), 'factory') !== FALSE) {
+    if (strpos($this->getDrupalBaseUrl(), 'factory.alshaya') !== FALSE) {
       return 'https://' . $this->getDrupalBaseUrl() . '.cdn.cloudflare.net';
     }
 

@@ -1,4 +1,4 @@
-@javascript
+@javascript @smoke
 Feature: Test the My Account functionality
 
   Background:
@@ -26,7 +26,7 @@ Feature: Test the My Account functionality
     And the element "#block-content .account-content-wrapper .email" should exist
 
   Scenario: As an authenticated user, I should be able to update my contact details
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
+    When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-contact-details"
     And I wait for the page to load
     When I fill in "field_mobile_number[0][mobile]" with "{mobile}"
     And I press "edit-submit"
@@ -36,19 +36,19 @@ Feature: Test the My Account functionality
 
   @address
   Scenario: As an authenticated user, I should be able to edit address to my address book
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
+    When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
     And I wait 10 seconds
     And I wait for the page to load
-    When I click the label for ".view-id-address_book > .views-field-rendered-entity > div.address--edit.address--controls > a"
+    When I click the label for "div.view-id-address_book div.views-field-rendered-entity div.address--edit a"
     And I wait 10 seconds
     When I fill in "full_name" with "{spc_full_name}"
     And I fill in "field_address[0][address][mobile_number][mobile]" with "{mobile}"
-    And I select "{area_option}" from the dropdown "edit-field-address-0-address-administrative-area"
+    When I scroll to the ".country-field-wrapper" element
     When fill in billing address with following:
-      | edit-field-address-0-address-address-line1                         | {street}      |
-      | edit-field-address-0-address-dependent-locality                    | {building}    |
-      | edit-field-address-0-address-locality                              | {locality}    |
-      | edit-field-address-0-address-address-line2                         | {floor}       |
+      | field_address[0][address][address_line1]             | {street}      |
+      | field_address[0][address][dependent_locality]        | {building}    |
+      | field_address[0][address][locality]                  | {locality}    |
+      | field_address[0][address][address_line2]             | {floor}       |
     And I press "op"
     When I wait for AJAX to finish
     And I wait for the page to load

@@ -29,6 +29,11 @@ export const addInfoInStorage = (cart) => {
 
 export const removeCartFromStorage = () => {
   removeStorageInfo('cart_data');
+
+  // Remove last selected payment on page load.
+  // We use this to ensure we trigger events for payment method
+  // selection at-least once and not more than once.
+  removeStorageInfo('last_selected_payment');
 };
 
 export const getInfoFromStorage = () => {

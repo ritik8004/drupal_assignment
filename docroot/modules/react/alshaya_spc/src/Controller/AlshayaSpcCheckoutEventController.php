@@ -8,6 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Cache\Cache;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -142,6 +143,11 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
           if (empty($account->get('field_mobile_number')->getString())) {
             $account->get('field_mobile_number')->setValue($cart['billing_address']['telephone']);
             $account->save();
+          }
+          else {
+            // Invalidate the user cache when order is placed to reflect the
+            // user specific data changes like saved payment cards.
+            Cache::invalidateTags(['user:' . $account->id()]);
           }
 
           $customer_id = (int) $account->get('acq_customer_id')->getString();

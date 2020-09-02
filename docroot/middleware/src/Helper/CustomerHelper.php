@@ -2,6 +2,8 @@
 
 namespace App\Helper;
 
+use Drupal\alshaya_user\AlshayaUserInfo;
+
 /**
  * Class CustomerHelper.
  *
@@ -21,7 +23,7 @@ class CustomerHelper {
   public static function formatAddressForFrontend(array $address) {
     // Do not consider addresses without custom attributes as they are required
     // for Delivery Matrix.
-    if (empty($address) || empty($address['custom_attributes'])) {
+    if (empty($address) || empty($address['country_id'])) {
       return NULL;
     }
 
@@ -51,8 +53,8 @@ class CustomerHelper {
     }
 
     $data['id'] = $customer['id'] ?? 0;
-    $data['firstname'] = $customer['firstname'] ?? '';
-    $data['lastname'] = $customer['lastname'] ?? '';
+    $data['firstname'] = $customer['firstname'] && $customer['firstname'] != AlshayaUserInfo::INVISIBLE_CHARACTER ? $customer['firstname'] : '';
+    $data['lastname'] = $customer['lastname'] && $customer['lastname'] != AlshayaUserInfo::INVISIBLE_CHARACTER ? $customer['lastname'] : '';
     $data['email'] = $customer['email'] ?? '';
 
     $data['addresses'] = [];

@@ -10,6 +10,8 @@ import { restoreCartApiUrl } from '../update_cart';
 import {
   removeCartFromStorage,
 } from '../storage';
+import i18nMiddleWareUrl from '../i18n_url';
+import dispatchCustomEvent from '../events';
 
 export const fetchClicknCollectStores = (args) => {
   const { coords, cartId } = args;
@@ -17,16 +19,20 @@ export const fetchClicknCollectStores = (args) => {
     return new Promise((resolve) => resolve(null));
   }
 
-  const GET_STORE_URL = Drupal.url(
-    `cnc/stores/${cartId}/${coords.lat}/${coords.lng}`,
+  const GET_STORE_URL = i18nMiddleWareUrl(
+    `cart/stores/${coords.lat}/${coords.lng}`,
   );
   return Axios.get(GET_STORE_URL);
 };
 
 export const fetchCartData = () => {
   // If session cookie not exists, no need to process/check.
+  // @TODO: Remove Cookies.get('Drupal.visitor.acq_cart_id') check when we
+  // uninstall alshaya_acm module.
   if (drupalSettings.user.uid === 0
-    && !Cookies.get('PHPSESSID')) {
+    && !Cookies.get('PHPSESSID')
+    && !Cookies.get('Drupal.visitor.acq_cart_id')
+  ) {
     removeCartFromStorage();
     return null;
   }
@@ -58,6 +64,15 @@ export const fetchCartData = () => {
         return null;
       }
 
+      // If cart from stale cache.
+      if (response.data.stale_cart !== undefined && response.data.stale_cart === true) {
+        // Dispatch event to show error message to the customer.
+        dispatchCustomEvent('spcCartMessageUpdate', {
+          type: 'error',
+          message: drupalSettings.global_error_message,
+        });
+      }
+
       return response.data;
     }).catch((error) => {
       if (error.message === 'Request aborted') {
@@ -65,7 +80,7 @@ export const fetchCartData = () => {
       }
 
       // Processing of error here.
-      Drupal.logJavascriptError('Failed to restore cart.', error);
+      Drupal.logJavascriptError('Failed to restore cart.', error, GTM_CONSTANTS.CART_ERRORS);
 
       redirectToCart();
       return null;
@@ -107,7 +122,7 @@ export const fetchCartData = () => {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('Failed to get cart.', error);
+      Drupal.logJavascriptError('Failed to get cart.', error, GTM_CONSTANTS.CART_ERRORS);
     });
 };
 
@@ -127,6 +142,6 @@ export const fetchCartDataForCheckout = () => {
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
-      Drupal.logJavascriptError('Failed to get cart for checkout.', error);
+      Drupal.logJavascriptError('Failed to get cart for checkout.', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     });
 };

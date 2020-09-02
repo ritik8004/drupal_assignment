@@ -1,0 +1,6 @@
+alshaya_seo_transac.alshaya_seo_transac_settings:
+  title: Alshaya Seo Settings
+  description: Custom setting for seo.
+  parent: alshaya_master.alshaya_admin
+  route_name: alshaya_seo_transac.alshaya_seo_transac_settings
+  weight: 10

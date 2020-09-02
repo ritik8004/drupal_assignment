@@ -5,11 +5,11 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "hubspot/pace": "^1.0",
-        "acquia/acsf-tools": "dev-9.x-dev",
+        "acquia/acsf-tools": "dev-10.x-dev",
         "acquia/blt": "^9.0.0",
         "acquia/http-hmac-php": "~3.2",
         "acquia/lightning": "^4.0.0",
+        "aws/aws-sdk-php": "^3.138",
         "charliekassel/array-diff": "^0.0.2",
         "ckeditor/font": "^4.9",
         "claviska/jquery-minicolors": "^2.2",
@@ -70,15 +70,20 @@
         "drupal/r4032login": "1.x-dev",
         "drupal/recaptcha": "^2.3",
         "drupal/redirect": "^1.0@alpha",
+        "drupal/replicate": "^1.0",
+        "drupal/replicate_ui": "^1.0",
         "drupal/restrict_role_login_by_ip": "^1.0",
         "drupal/restui": "^1.13",
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
+        "drupal/s3fs": "^3.0@alpha",
         "drupal/search_api_algolia": "^1.0",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
         "drupal/search_api_spellcheck": "dev-8.x-1.x",
+        "drupal/seckit": "^1.2",
+        "drupal/sessions_expire": "1.0.x-dev",
         "drupal/sharethis": "^2.0@beta",
         "drupal/simple_oauth": "^3.0",
         "drupal/simple_sitemap": "^3.2",
@@ -103,9 +108,11 @@
         "drush/drush": "^9.0.0",
         "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
+        "hubspot/pace": "^1.0",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
-        "springimport/magento2-api-v1": "^1.0"
+        "springimport/magento2-api-v1": "^1.0",
+        "symfony/lock": "4.3.*"
     },
     "require-dev": {
         "drupal/devel": "^2.0.0",
@@ -216,7 +223,7 @@
                 "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
             },
             "drupal/acquia_connector": {
-                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-01-10/acquia_connector-2871721-25.patch",
+                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-05-04/acquia_connector-2871721-29.patch",
                 "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2020-04-21/2922201-16.patch"
             },
             "drupal/search_api": {
@@ -268,7 +275,10 @@
                 "CORE-6525 - Add autofix for missing block plugin issue" : "patches/core/autofix-block-plugin-cache-clear-issue.patch",
                 "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch",
                 "CORE-14983 - Set new twig_extension_hash_prefix state in invalidate method": "patches/core/set-new-twig_extension_hash_prefix-during-invalidate.patch",
-                "CORE-14778 - Make subquery table alias more informative": "https://www.drupal.org/files/issues/2020-05-26/3142927-2.patch"
+                "CORE-14778 - Make subquery table alias more informative": "https://www.drupal.org/files/issues/2020-05-26/3142927-2.patch",
+                "CORE-21267 - Test patch for core upgrade": "patches/core/backport-security-update-8.7x.patch",
+                "Multiple webheads can cause twig cache to grow indefinitely": "https://www.drupal.org/files/issues/2020-07-01/multiple_webheads_twig_cache-3032078-16.patch",
+                "CORE-8488 - Add log trace for 500 error" : "patches/core/missing-handler-check-cache.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -322,7 +332,7 @@
                 "Check for empty account object in submit handler": "https://www.drupal.org/files/issues/2019-07-15/check-empty-account-object-3067845-01.patch"
             },
             "drupal/seckit": {
-                "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
+                "Remove generator": "https://www.drupal.org/files/issues/2020-03-02/seckit-8.x-1.x-2795025-remove_generator-21.patch"
             },
             "drupal/views_ajax_get": {
                 "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch",
@@ -350,13 +360,9 @@
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
             },
             "drupal/social_auth": {
-                "Dispatch events for handling authentication errors in provider.": "https://git.drupalcode.org/project/social_auth/commit/27930c3.patch"
-            },
-            "drupal/social_auth_facebook": {
-                "Dispatch failed authentication event in callback": "https://git.drupalcode.org/project/social_auth_facebook/commit/730ad4e.patch"
-            },
-            "drupal/social_auth_google": {
-                "Dispatch failed authentication event in callback": "https://www.drupal.org/files/issues/2019-05-27/dispatch-authentication-error-3057287-2.patch"
+                "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch",
+                "throws Allowed memory size of xxx bytes exhausted": "https://www.drupal.org/files/issues/2020-07-02/3156154-10.patch",
+                "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch"
             },
             "sensiolabs-de/deprecation-detector": {
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
@@ -369,6 +375,9 @@
             },
             "drupal/robotstxt": {
                 "Redirection when using a language prefix path": "https://www.drupal.org/files/issues/2018-04-11/robotstxt-avoid_redirection-2930799-5.patch"
+            },
+            "drupal/replicate_ui": {
+                "Overriding the replicate feature for content types": "https://www.drupal.org/files/issues/2020-07-16/content-type-feature-3159253-4.patch"
             }
         },
         "installer-paths": {

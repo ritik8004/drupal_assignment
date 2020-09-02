@@ -51,7 +51,10 @@ export default class CompletePurchase extends React.Component {
     const { cart, validateBeforePlaceOrder } = this.props;
 
     dispatchCustomEvent('orderPaymentMethod', {
-      payment_method: cart.cart.payment.method,
+      payment_method: Object
+        .values(drupalSettings.payment_methods)
+        .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
+        .shift().gtm_name,
     });
 
     // If purchase button is not clickable.
@@ -78,7 +81,7 @@ export default class CompletePurchase extends React.Component {
 
       placeOrder(cart.cart.payment.method);
     } catch (error) {
-      Drupal.logJavascriptError('place-order', error);
+      Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
   };
 
@@ -130,7 +133,7 @@ export default class CompletePurchase extends React.Component {
       : '';
 
     return (
-      <div className={`checkout-link fadeInUp notInMobile submit ${className} ${paymentMethod}`} style={{ animationDelay: '0.5s' }}>
+      <div className={`checkout-link complete-purchase fadeInUp notInMobile submit ${className} ${paymentMethod}`} style={{ animationDelay: '0.5s' }}>
         {window.innerWidth < 768
           && (
           <div className="order-preview">
