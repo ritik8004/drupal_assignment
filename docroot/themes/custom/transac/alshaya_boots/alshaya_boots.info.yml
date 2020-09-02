@@ -85,3 +85,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/appointment-booking/appointment-booking.ltr.css: css/conditional-sass/appointment-booking/appointment-booking.ltr.css
+
+  alshaya_white_label/shop-by-brand:
+    css:
+      theme:
+        css/conditional-sass/shop-by-brand/shop-by-brand.ltr.css: css/conditional-sass/shop-by-brand/shop-by-brand.ltr.css

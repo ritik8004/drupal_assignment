@@ -5,6 +5,7 @@ namespace Drupal\alshaya_search\Controller;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Ajax\InsertCommand;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\facets\Controller\FacetBlockAjaxController;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,6 +63,13 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
   protected $facetsPrettyPathHelper;
 
   /**
+   * The Module Handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a FacetBlockAjaxController object.
    *
    * @param \Drupal\Core\Entity\EntityManager $entityManager
@@ -86,6 +94,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    *   Token utility.
    * @param \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper $facets_pretty_path_helper
    *   Facets Pretty Path helper.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The Module Handler service.
    */
   public function __construct(EntityManager $entityManager,
                               RendererInterface $renderer,
@@ -97,13 +107,15 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
                               CurrentRouteMatch $currentRouteMatch,
                               RequestStack $request_stack,
                               Token $token,
-                              AlshayaFacetsPrettyPathsHelper $facets_pretty_path_helper) {
+                              AlshayaFacetsPrettyPathsHelper $facets_pretty_path_helper,
+                              ModuleHandlerInterface $module_handler) {
     parent::__construct($entityManager, $renderer, $currentPath, $router, $pathProcessor, $logger);
     $this->blockManager = $blockManager;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->requestStack = $request_stack;
     $this->tokenUtility = $token;
     $this->facetsPrettyPathHelper = $facets_pretty_path_helper;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -121,7 +133,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $container->get('current_route_match'),
       $container->get('request_stack'),
       $container->get('token'),
-      $container->get('alshaya_facets_pretty_paths.pretty_paths_helper')
+      $container->get('alshaya_facets_pretty_paths.pretty_paths_helper'),
+      $container->get('module_handler')
     );
   }
 
@@ -200,6 +213,9 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
     if ($is_promo_page) {
       $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-2 form .facets-hidden-container', $facet_fields));
     }
+
+    // Allow other modules to alter response.
+    $this->moduleHandler->alter('alshaya_search_ajax_response', $response, $facet_fields);
 
     return $response;
   }

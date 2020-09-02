@@ -1,0 +1,101 @@
+.c-plp .c-content__region {
+  .block-views-exposed-filter-blockalshaya-product-list-block-3 {
+    float: $left;
+    position: relative;
+
+    .fieldset-wrapper {
+      display: none;
+      position: absolute;
+      top: 2.25rem;
+      background: $plp_facet_active_bg;
+      z-index: 2;
+      min-width: 15.5rem;
+      padding: 1.125rem 0;
+      border: 1px solid $plp_facet_border;
+
+      .form-type-radio {
+        display: block;
+
+        label {
+          color: $plp_sort_by_options;
+          padding-#{$left}: 3rem;
+          font-size: 0.75rem;
+          height: 1.5rem;
+          line-height: 1.5rem;
+          display: inline-block;
+
+          &::before {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            #{$left}: 1.125rem;
+            font-size: 1.875rem;
+          }
+        }
+
+        input[checked='checked'] ~ label {
+          font-family: $alshaya-bold;
+        }
+      }
+    }
+
+    legend {
+      line-height: 2.9375rem;
+      position: relative;
+      padding-#{$right}: 2.6875rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-size: 0.8125rem;
+      padding-#{$right}: 2.5rem;
+
+      @include icon(chevrondown, after) {
+        font-size: 1.1875rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        #{$right}: 0.6875rem;
+        transition: transform 0.4s ease-in-out;
+        color: $plp_filter_icon;
+      }
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.875rem;
+        font-family: $alshaya-bold;
+        letter-spacing: 1px;
+      }
+
+      @include breakpoint($desktop) {
+        height: 3.125rem;
+        line-height: 3.125rem;
+      }
+
+      &.active {
+        &::after {
+          transform: translateY(-50%) rotate(180deg);
+        }
+      }
+    }
+
+    @include breakpoint($upto-desktop) {
+      display: none;
+    }
+  }
+
+  .block-views-blockalshaya-product-list-block-3 {
+    width: 100%;
+    clear: both;
+  }
+
+  .block-facets-summary-blockfilter-bar-productlist {
+    padding-top: 0.75rem;
+    border-bottom: 0.0625rem solid $plp_facet_border;
+    clear: both;
+    overflow: hidden;
+
+    @include breakpoint($only-mobile) {
+      padding-bottom: 0;
+      margin-bottom: 0.75rem;
+      padding-top: 0;
+    }
+  }
+}
