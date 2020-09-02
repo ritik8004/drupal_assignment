@@ -171,6 +171,7 @@
 .c-plp .c-content__region {
   .block-views-exposed-filter-blockalshaya-product-list-block-1,
   .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blockalshaya-product-list-block-3,
   .block-views-exposed-filter-blocksearch-page {
     float: $left;
     position: relative;
@@ -324,6 +325,7 @@
 
 .block-alshaya-plp-facets-block-all,
 .block-alshaya-promo-facets-block-all,
+.block-alshaya-productlist-facets-block-all,
 .block-alshaya-search-facets-block-all {
   float: $left;
   line-height: 2.9375rem;
@@ -351,6 +353,7 @@
 .c-plp {
   .block-facets-summary-blockfilter-bar-promotions,
   .block-facets-summary-blockfilter-bar-plp,
+  .block-facets-summary-blockfilter-bar-productlist,
   .block-facets-summary-blockfilter-bar {
     clear: both;
 
@@ -519,7 +522,8 @@
 }
 
 .path--search,
-.nodetype--acq_promotion {
+.nodetype--acq_promotion,
+.nodetype--product_list {
   .c-plp .c-content__region {
     .block-facet-blockcategory-facet-plp,
     .block-facet-blockcategory-facet-promo {
@@ -527,6 +531,7 @@
     }
 
     .block-alshaya-plp-facets-block-all,
+    .block-alshaya-productlist-facets-block-all,
     .block-alshaya-promo-facets-block-all {
       @include breakpoint ($only-mobile) {
         width: 100% !important;
@@ -620,6 +625,7 @@
     margin-top: 2.8125rem;
 
     .block-alshaya-plp-facets-block-all,
+    .block-alshaya-productlist-facets-block-all,
     .block-alshaya-promo-facets-block-all,
     .block-alshaya-search-facets-block-all,
     .block-facet-blockcategory-facet-search,
@@ -632,6 +638,7 @@
     }
 
     .block-alshaya-plp-facets-block-all,
+    .block-alshaya-productlist-facets-block-all,
     .block-alshaya-promo-facets-block-all,
     .block-alshaya-search-facets-block-all {
       #{$right}: 0;
@@ -639,6 +646,7 @@
 
     .filters-active {
       .block-alshaya-plp-facets-block-all,
+      .block-alshaya-productlist-facets-block-all,
       .block-alshaya-promo-facets-block-all,
       .block-alshaya-search-facets-block-all {
         position: relative;
@@ -744,6 +752,7 @@ body {
 
   .block-views-exposed-filter-blockalshaya-product-list-block-1,
   .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blockalshaya-product-list-block-3,
   .block-views-exposed-filter-blocksearch-page {
     .fieldset-wrapper {
       .form-type-radio {

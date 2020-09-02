@@ -229,6 +229,7 @@ header {
 
       @include breakpoint($only-mobile) {
         vertical-align: middle;
+        border: 0;
       }
     }
   }

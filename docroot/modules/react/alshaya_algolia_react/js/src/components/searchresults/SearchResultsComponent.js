@@ -32,6 +32,7 @@ import { isDesktop } from '../../utils/QueryStringUtils';
  */
 const SearchResultsComponent = props => {
   const { query } = props;
+  const _parent = React.createRef();
   // Do not show out of stock products.
   const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : '';
   const indexName = drupalSettings.algoliaSearch.indexName;
@@ -50,6 +51,11 @@ const SearchResultsComponent = props => {
   for (let i = 0; i <= maximumDepthLhn; i++) {
     attributes.push(`field_category.lvl${i}`);
   }
+
+  const showCategoryFacets = (event) => {
+    _parent.current.classList.toggle('category-facet-open');
+
+  };
 
   return (
     <InstantSearch
@@ -83,19 +89,39 @@ const SearchResultsComponent = props => {
             <React.Fragment>
               <Filters indexName={indexName} limit={4} callback={(callerProps) => callback(callerProps)}/>
               {!isDesktop() && (
-                <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop">
-                  <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
-                  {hasSuperCategoryFilter() && (
-                    <div className="supercategory-facet c-accordion">
-                      <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.filters.super_category.label}</h3>
-                      <Menu
-                        transformItems={items => getSortedItems(items, 'supercategory')}
-                        attribute='super_category'
-                      />
+                <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={_parent}>
+                  {(drupalSettings.algoliaSearch.filters.super_category !== undefined) && (
+                    <div>
+                      <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>{Drupal.t('Brands/Category')}
+                      </h3>
+                      <div className="category-facet-wrapper">
+                        {hasSuperCategoryFilter() && (
+                          <div className="supercategory-facet c-accordion">
+                            <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.filters.super_category.label}</h3>
+                            <Menu
+                              transformItems={items => getSortedItems(items, 'supercategory')}
+                              attribute='super_category'
+                            />
+                          </div>
+                        )}
+                        {hasCategoryFilter() && (
+                          <div className="c-accordion">
+                            <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
+                            <HierarchicalMenu
+                              transformItems={items => getSortedItems(items, 'category')}
+                              attributes={[
+                                'field_category.lvl0',
+                                'field_category.lvl1',
+                              ]}
+                              facetLevel={1}
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
-                  {hasCategoryFilter() && (
-                    <div className="c-accordion">
+                  {(drupalSettings.algoliaSearch.filters.super_category === undefined) && (
+                    <>
                       <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                       <HierarchicalMenu
                         transformItems={items => getSortedItems(items, 'category')}
@@ -103,7 +129,7 @@ const SearchResultsComponent = props => {
                         facetLevel={1}
                         showParentLevel={true}
                       />
-                    </div>
+                    </>
                   )}
                 </div>
               )}

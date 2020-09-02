@@ -394,3 +394,10 @@ appointment-booking:
   css:
     theme:
       css/conditional-sass/appointment-booking/appointment-booking.ltr.css: {}
+
+shop-by-brand:
+  css:
+    theme:
+      css/conditional-sass/shop-by-brand/shop-by-brand.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/plp_search_js
