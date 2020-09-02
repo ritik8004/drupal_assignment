@@ -44,3 +44,14 @@ function alshaya_appointment_theme($existing, $type, $theme, $path) {
     ],
   ];
 }
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_appointment_page_attachments_alter(&$page) {
+  // Add GTM events for Appointment booking.
+  $route_match = \Drupal::routeMatch();
+  if ($route_match->getRouteName() == 'alshaya_appointment.page') {
+    $page['#attached']['library'][] = 'alshaya_appointment/gtm_appointment_booking';
+  }
+}
