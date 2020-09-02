@@ -23,3 +23,8 @@ alshaya_appointment_localstore:
   version: 1.x
   js:
     assets/js/alshaya_appointment_localstore.js: {}
+
+gtm_appointment_booking:
+  version: 1.x
+  js:
+    assets/js/alshaya_appointment.gtm.appointment_booking.js: { weight: -1 } # We need this before appointment.js
