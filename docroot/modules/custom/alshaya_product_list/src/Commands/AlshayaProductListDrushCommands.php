@@ -95,7 +95,6 @@ class AlshayaProductListDrushCommands extends DrushCommands {
 
     batch_set($batch);
     drush_backend_batch_process();
-
   }
 
   /**
