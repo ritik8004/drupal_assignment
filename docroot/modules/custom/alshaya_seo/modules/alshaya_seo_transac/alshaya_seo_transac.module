@@ -66,6 +66,14 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       );
     }
 
+    // Add GTM events for Appointment booking.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_appointment')) {
+      $route_match = \Drupal::routeMatch();
+      if ($route_match->getRouteName() == 'alshaya_appointment.page') {
+        $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_appointment_booking';
+      }
+    }
+
     // Settings to enable error tracking on GA.
     $page['#attached']['drupalSettings']['gtm']['log_errors_to_console'] = Settings::get('log_errors_to_console', 1);
     $page['#attached']['drupalSettings']['gtm']['log_errors_to_ga'] = Settings::get('log_errors_to_ga', 0);

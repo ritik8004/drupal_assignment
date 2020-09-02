@@ -61,6 +61,7 @@ export default class AppointmentSelection extends React.Component {
                 type="button"
                 disabled={(step === 'appointment-type')}
                 onClick={() => this.handleEdit('appointment-type')}
+                data-value="appointment-type"
               >
                 {getStringMessage('edit')}
               </button>
@@ -93,6 +94,7 @@ export default class AppointmentSelection extends React.Component {
                   type="button"
                   disabled={(step === 'select-store')}
                   onClick={() => this.handleEdit('select-store')}
+                  data-value="select-store"
                 >
                   {getStringMessage('edit')}
                 </button>
@@ -131,6 +133,7 @@ export default class AppointmentSelection extends React.Component {
                   type="button"
                   disabled={(step === 'select-time-slot')}
                   onClick={() => this.handleEdit('select-time-slot')}
+                  data-value="select-time-slot"
                 >
                   {getStringMessage('edit')}
                 </button>
