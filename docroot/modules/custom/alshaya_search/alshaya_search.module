@@ -83,7 +83,8 @@ function alshaya_search_views_pre_build(ViewExecutable $view) {
 function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if (($form['#id'] === 'views-exposed-form-search-page') ||
       ($form['#id'] === 'views-exposed-form-alshaya-product-list-block-1') ||
-      ($form['#id'] === 'views-exposed-form-alshaya-product-list-block-2')) {
+      ($form['#id'] === 'views-exposed-form-alshaya-product-list-block-2') ||
+      ($form['#id'] === 'views-exposed-form-alshaya-product-list-block-3')) {
     $form['facets_container'] = [
       '#type' => 'container',
       '#attributes' => [

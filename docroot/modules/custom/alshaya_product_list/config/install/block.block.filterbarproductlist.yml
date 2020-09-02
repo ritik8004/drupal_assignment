@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets_summary.facets_summary.filter_bar_productlist
+  module:
+    - ctools
+    - facets_summary
+  theme:
+    - alshaya_white_label
+id: filterbarproductlist
+theme: alshaya_white_label
+region: content
+weight: 10
+provider: null
+plugin: 'facets_summary_block:filter_bar_productlist'
+settings:
+  id: 'facets_summary_block:filter_bar_productlist'
+  label: 'Filter bar Product List'
+  provider: facets_summary
+  label_display: '0'
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      product_list: product_list
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

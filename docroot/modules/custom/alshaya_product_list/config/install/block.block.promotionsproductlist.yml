@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.promotions_productlist
+  module:
+    - ctools
+    - facets
+    - system
+  theme:
+    - alshaya_white_label
+id: promotionsproductlist
+theme: alshaya_white_label
+region: content
+weight: 39
+provider: null
+plugin: 'facet_block:promotions_productlist'
+settings:
+  id: 'facet_block:promotions_productlist'
+  label: Promotions
+  provider: facets
+  label_display: visible
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      product_list: product_list
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

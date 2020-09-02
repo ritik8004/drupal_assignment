@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_product_list
+    - ctools
+  theme:
+    - alshaya_white_label
+id: alshayagridcountblock_productlist
+theme: alshaya_white_label
+region: content
+weight: 9
+provider: null
+plugin: alshaya_grid_count_block
+settings:
+  id: alshaya_grid_count_block
+  label: 'Alshaya Grid/Count block - Product List'
+  provider: alshaya_product_list
+  label_display: '0'
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      product_list: product_list
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

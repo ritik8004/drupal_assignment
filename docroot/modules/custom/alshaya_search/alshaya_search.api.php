@@ -25,5 +25,17 @@ function hook_alshaya_search_query_param_alter(array &$query, \Drupal\Core\Form\
 }
 
 /**
+ * Alter ajax response on facet filter.
+ *
+ * @param mixed $response
+ *   Ajax Response.
+ * @param array $facet_fields
+ *   Facet selected.
+ */
+function hook_alshaya_search_ajax_response_alter(&$response, array $facet_fields) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

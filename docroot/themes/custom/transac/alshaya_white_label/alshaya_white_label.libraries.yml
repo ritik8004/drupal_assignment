@@ -407,3 +407,10 @@ magazine-layout-v2:
       css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css: {}
   dependencies:
     - alshaya_white_label/alshaya-react-animate
+
+shop-by-brand:
+  css:
+    theme:
+      css/conditional-sass/shop-by-brand/shop-by-brand.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/plp_search_js

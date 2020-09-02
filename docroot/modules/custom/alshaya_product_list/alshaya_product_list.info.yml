@@ -1,0 +1,7 @@
+name: Alshaya Product List
+type: module
+core: 8.x
+package: Alshaya
+description: 'Alshaya Product List.'
+dependencies:
+  - alshaya_product:alshaya_product

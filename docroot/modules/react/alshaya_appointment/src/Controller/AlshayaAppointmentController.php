@@ -171,6 +171,7 @@ class AlshayaAppointmentController extends ControllerBase {
           'alshaya_white_label/appointment-booking',
           'alshaya_spc/googlemapapi',
           'alshaya_appointment/alshaya_appointment_socialauth',
+          'alshaya_appointment/gtm_appointment_booking',
         ],
         'drupalSettings' => $settings,
       ],
