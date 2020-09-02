@@ -111,7 +111,7 @@ function hook_alshaya_context_key_from_layout_alter(string $context, string $pdp
 }
 
 /**
- * Allow other modules to add/alter context key.
+ * Allow other modules to alter the data in recommended skus list.
  *
  * @param string $type
  *   The type of the recommended product, eg. crosssel, upsell or related.
