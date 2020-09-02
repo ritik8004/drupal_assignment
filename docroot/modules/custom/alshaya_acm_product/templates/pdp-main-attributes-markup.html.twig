@@ -1,0 +1,14 @@
+{% if properties is not empty %}
+  {% for property in properties %}
+    <div class="main-attribute-wrapper">
+      <div class="main-attribute-label">{{ property.title }}</div>
+      <div class="main-attribute-value">
+        <ul>
+          {% for details in property.data %}
+            <li>{{ details.value }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}

@@ -45,3 +45,8 @@ variables:
   continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'en'
   language_short: 'en'
+  language_cc_mada_payment_type: 'Credit / Debit Card'
+  cc_mada_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
+  order_detail: 'تفاصيل الطلبية'
+  delivery_type_text: 'التوصيل متوقع خلال:'
+  payment_type_text: 'طريقة الدفع:'

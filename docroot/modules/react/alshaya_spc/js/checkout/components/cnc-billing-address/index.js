@@ -14,6 +14,7 @@ import {
 } from '../../../utilities/checkout_util';
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
+import { makeFullName } from '../../../utilities/cart_customer_util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -101,7 +102,7 @@ export default class CnCBillingAddress extends React.Component {
     const shippingAddress = cart.cart.shipping.address;
     const editAddressData = {
       static: {
-        fullname: `${shippingAddress.firstname} ${shippingAddress.lastname}`,
+        fullname: makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || ''),
         telephone: shippingAddress.telephone,
       },
     };

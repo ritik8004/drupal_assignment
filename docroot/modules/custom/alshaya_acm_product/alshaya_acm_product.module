@@ -275,6 +275,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
       'swatches' => NULL,
       'swatch_more_text' => NULL,
       'swatch_color_count' => NULL,
+      'product_attribute_labels' => NULL,
     ],
   ];
 
@@ -392,6 +393,12 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
   ];
 
   $items['pdp_additional_attribute_overlay'] = [
+    'variables' => [
+      'properties' => [],
+    ],
+  ];
+
+  $items['pdp_main_attributes_markup'] = [
     'variables' => [
       'properties' => [],
     ],
@@ -703,12 +710,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
           $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
           $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
-          if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
-            $build['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
-          }
-          else {
-            $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
-          }
           if ($quantity_limit_enabled) {
             $build['#attached']['library'][] = 'alshaya_white_label/order-qty-limit';
           }

@@ -11,6 +11,10 @@ default:
                 - Drupal\DrupalExtension\Context\MinkContext
                 - Drupal\DrupalExtension\Context\DrupalContext
                 - Drupal\DrupalExtension\Context\MessageContext
+                - emuse\BehatHTMLFormatter\Context\ScreenshotContext:
+                      screenshotDir: '%paths.base%/build/html/behat/assets/screenshots'
+    formatters:
+        pretty: ~
     extensions:
         Behat\MinkExtension:
             files_path: "%paths.base%/files"
@@ -28,6 +32,7 @@ default:
                             - "--disable-gpu"
                             - "--no-sandbox"
 #                            - "--window-size=1920,1080"
+                            - "--ignore-certificate-errors"
         Drupal\DrupalExtension:
             blackbox: ~
         emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:

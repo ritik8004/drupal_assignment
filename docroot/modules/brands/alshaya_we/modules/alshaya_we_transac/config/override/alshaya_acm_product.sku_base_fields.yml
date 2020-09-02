@@ -5,10 +5,10 @@ fields:
   color:
     configurable: 1
     cardinality: 1
-    facet: 0
+    facet: 1
   size:
     cardinality: 1
-    facet: 0
+    facet: 1
   fabric:
     label: 'Fabric'
     configurable: 1
@@ -17,3 +17,15 @@ fields:
     label: 'Material'
     configurable: 1
     index: 1
+  color_lhn:
+    label: 'Color'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+    swatch: 1
+  size_lhn:
+    label: 'Size'
+    cardinality: -1
+    index: 1
+    facet: 1

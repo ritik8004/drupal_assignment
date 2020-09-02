@@ -199,6 +199,20 @@
 
                   var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: (function () { return response; })}});
                   document.dispatchEvent(event);
+
+                  // We want to refresh Recommended product on add to cart
+                  // functionality but only on cart page.
+                  if ($('#spc-cart').length > 0) {
+                    document.dispatchEvent(
+                      new CustomEvent(
+                        'spcRefreshCartRecommendation',
+                        {
+                          bubbles: true,
+                          detail: {  items: response.items  }
+                        }
+                      )
+                    );
+                  }
                 }
               }
             });

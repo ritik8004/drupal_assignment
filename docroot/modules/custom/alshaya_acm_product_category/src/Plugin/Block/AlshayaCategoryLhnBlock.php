@@ -177,22 +177,24 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
       $lhn_tree = $term_data[$root_parent_term->id()]['child'];
     }
     elseif (!empty($context['depth_offset'])) {
-      $lhn_tree = count($parents) == 1 ? $term_data : $term_data[key($parents)]['child'];
+      $parent_child_terms = !empty($term_data[key($parents)]['child']) ? $term_data[key($parents)]['child'] : [];
+      $lhn_tree = count($parents) == 1 ? $term_data : $parent_child_terms;
       if (count($parents) == 1) {
         $context['depth_offset'] = 2;
       }
     }
     else {
-      $lhn_tree = count($parents) == 1 ? $term_data[key($parents)]['child'] : [];
+      $parent_child_terms = !empty($term_data[key($parents)]['child']) ? $term_data[key($parents)]['child'] : [];
+      $lhn_tree = count($parents) == 1 ? $parent_child_terms : [];
+    }
+
+    if (empty($lhn_tree)) {
+      return $build;
     }
 
     $lhn_tree = array_filter($lhn_tree, function ($tree_term) {
       return $tree_term['lhn'];
     });
-
-    if (empty($lhn_tree)) {
-      return $build;
-    }
 
     $build = [
       '#theme' => 'alshaya_lhn_tree',

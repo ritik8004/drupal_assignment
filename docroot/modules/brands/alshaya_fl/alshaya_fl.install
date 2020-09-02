@@ -8,6 +8,23 @@
 /**
  * Implements hook_update_n().
  *
+ * [5.3.0] Set swatch image style config to save original brand logo in
+ * taxonomy term.
+ */
+function alshaya_fl_update_8002() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_product_options.settings');
+  if (empty($config->get('mdc_swatch_image_style'))) {
+    $config->set('mdc_swatch_image_style', 'swatch_image/30x20');
+    $config->save();
+  }
+  // Delete and resync brand logo product options.
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'utility.inc');
+  alshaya_acm_product_attribute_delete_and_resync('brand_logo');
+}
+
+/**
+ * Implements hook_update_n().
+ *
  * Update translation of meta content.
  */
 function alshaya_fl_update_8001() {

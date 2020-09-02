@@ -187,6 +187,7 @@ magazine_attribute:
     - alshaya_white_label/pdp-video-player
     - alshaya_white_label/attribute.common
     - core/jquery.ui.effects.slide
+    - alshaya_white_label/pdp-additional-attributes
 
 campaign-plp-style-1-video-provider:
   css:

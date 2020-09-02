@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_select_pdp_layout
+    - node.type.acq_product
+  module:
+    - options
+id: node.acq_product.field_select_pdp_layout
+field_name: field_select_pdp_layout
+entity_type: node
+bundle: acq_product
+label: 'Select PDP Layout'
+description: ''
+required: false
+translatable: false
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

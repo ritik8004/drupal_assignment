@@ -7,11 +7,11 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Component\Utility\Html;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
-use GuzzleHttp\Exception\RequestException;
 
 /**
  * Utility function to return media files for a product.
@@ -87,11 +87,51 @@ function alshaya_acm_product_get_sku_image(array $media, $image_style = '', $rel
  */
 function alshaya_acm_product_get_sku_configurable_values($sku) {
   $configurableFieldValues = [];
-  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-  if ($sku_entity) {
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+
+  if ($sku instanceof SKUInterface) {
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $configurableFieldValues = $skuManager->getConfigurableValues($sku_entity);
+    // Get the parent SKU so that its configurable attributes can be fetched.
+    if ($sku->bundle() !== 'configurable') {
+      $parent_sku = $skuManager->getParentSkuBySku($sku);
+
+      if ($parent_sku instanceof SKUInterface && $parent_sku->bundle() !== 'configurable') {
+        return $configurableFieldValues;
+      }
+      elseif (!$parent_sku) {
+        // In case for some reason no parent is available then error is not
+        // thrown.
+        return $configurableFieldValues;
+      }
+    }
+    else {
+      $parent_sku = $sku;
+    }
+    $configurable_codes = Configurable::getSortedConfigurableAttributes($parent_sku);
+
+    // Get the actual SKU attributes like size, color etc.
+    $attributes = $sku->get('attributes')->getValue();
+    $attributes = array_column($attributes, 'value', 'key');
+
+    $remove_not_required_option = $skuManager->isNotRequiredOptionsToBeRemoved();
+    foreach ($configurable_codes as $code) {
+      $fieldKey = 'attr_' . $code['code'];
+
+      if ($sku->hasField($fieldKey)) {
+        $value = $sku->get($fieldKey)->getString();
+
+        if ($remove_not_required_option && $skuManager->isAttributeOptionToExclude($value)) {
+          continue;
+        }
+
+        $configurableFieldValues[$fieldKey] = [
+          'label' => $skuManager->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
+            ->getFieldDefinition()
+            ->getLabel(),
+          'value' => $sku->get($fieldKey)->getString(),
+        ];
+      }
+    }
   }
   return $configurableFieldValues;
 }
@@ -245,90 +285,38 @@ function alshaya_acm_product_available_click_collect($sku) {
  */
 function alshaya_acm_product_get_brand_logo($sku) {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+  $brand_logo = $sku_entity->get('attr_brand_logo')->getString();
 
-  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
-  $entity_repository = \Drupal::service('entity.repository');
-
-  // We need title from English version.
-  $sku_entity = $entity_repository->getTranslationFromContext($sku_entity, 'en');
-  $title = $sku_entity->get('attr_brand_logo')->getString();
-
-  if (empty($title)) {
-    return [];
-  }
-
-  $cid = 'brand_logo:' . Html::cleanCssIdentifier($title);
-
+  $cid = 'brand_logo:' . $brand_logo;
   if ($cache = \Drupal::cache('data')->get($cid)) {
     $image = $cache->data;
   }
   else {
-    // Preparing args for all info/error messages.
-    $args = ['@title' => $title, '@sku_id' => $sku_entity->id()];
+    $term = \Drupal::service('acq_sku.product_options_manager')->loadProductOptionByOptionId(
+      'brand_logo',
+      $brand_logo,
+      \Drupal::languageManager()->getCurrentLanguage()->getId()
+    );
 
-    $host = \Drupal::config('alshaya_api.settings')->get('magento_host');
-    $media_path = \Drupal::config('alshaya_acm_product.settings')->get('brand_logo_base_path');
-    $extension = \Drupal::config('alshaya_acm_product.settings')->get('brand_logo_extension');
-
-    $directory = $media_path;
-
-    // Prepare file name by replacing spaces with underscores and lower case.
-    $file_name = strtolower(str_replace(' ', '_', $title));
-
-    for ($i = 0; $i < 2 && $i <= strlen($title); $i++) {
-      $directory .= '/' . substr($file_name, $i, 1);
-    }
-
-    $directory_uri = 'public://brand-logo/' . $directory;
-    $image_uri = $directory_uri . '/' . $file_name . '.' . $extension;
-    $image_url = $host . '/' . $directory . '/' . $file_name . '.' . $extension;
-
-    $file_storage = \Drupal::entityTypeManager()->getStorage('file');
-
-    if ($files = $file_storage->loadByProperties(['uri' => $image_uri])) {
-      $file = reset($files);
-    }
-    else {
-      // Download the file contents.
-      $client = \Drupal::httpClient();
-      try {
-        $file_data = $client->get($image_url)->getBody();
-      }
-      catch (RequestException $e) {
-        watchdog_exception('alshaya_acm_product', $e);
-      }
-
-      // Check to ensure empty file is not saved in SKU.
-      if (empty($file_data)) {
-        \Drupal::logger('alshaya_acm_product')->error('Failed to download brand logo of title "@title" for SKU id @sku_id.', $args);
-      }
-
-      // Get the file name.
-      $file_name = basename($image_url);
-
-      // Prepare the directory.
-      file_prepare_directory($directory_uri, FILE_CREATE_DIRECTORY);
-
-      // Save the file as file entity.
-      /** @var \Drupal\file\Entity\File $file */
-      $file = file_save_data($file_data, $image_uri, FILE_EXISTS_REPLACE);
-
-      if (empty($file)) {
-        \Drupal::logger('alshaya_acm_product')->error('Failed to save brand logo of title "@title" for SKU id @sku_id.', $args);
-      }
-    }
-
-    if ($file) {
+    if ($term && !empty($term->get('field_attribute_swatch_org_image')->getValue())) {
       $image = [
         '#theme' => 'image',
-        '#uri' => $file->getFileUri(),
-        '#title' => $title,
-        '#alt' => $title,
+        '#uri' => $term->get('field_attribute_swatch_org_image')->entity->getFileUri(),
+        '#title' => $term->label(),
+        '#alt' => $term->label(),
       ];
-
       $expire = CacheBackendInterface::CACHE_PERMANENT;
     }
     else {
+      \Drupal::logger('alshaya_acm_product')
+        ->error(
+          'Brand logo of title "@title" for SKU id @sku_id is missing.',
+          [
+            '@title' => $term ? $term->label() : $brand_logo,
+            '@sku_id' => $sku->getSku(),
+          ]
+        );
+
       $image = [];
 
       // We cache this for 30 minutes to allow admins to correct the situation.
@@ -423,4 +411,33 @@ function alshaya_acm_product_generate_video_embed_url($url, $provider) {
     $embed_url .= ($provider == 'youtube') ? '?enablejsapi=1' : '';
   }
   return $embed_url;
+}
+
+/**
+ * Delete and resync taxonomy terms for given attribute code.
+ *
+ * @param string $attribute_code
+ *   The attribute code to delete and resync.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function alshaya_acm_product_attribute_delete_and_resync(string $attribute_code) {
+  // Get the terms for given attribute code.
+  $tids = \Drupal::entityQuery('taxonomy_term')
+    ->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY)
+    ->condition('field_sku_attribute_code', $attribute_code)
+    ->execute();
+
+  // Delete terms.
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $entities = $term_storage->loadMultiple($tids);
+  $term_storage->delete($entities);
+
+  // Sync product options for given attribute code.
+  $languages = \Drupal::languageManager()->getLanguages();
+  foreach ($languages as $langcode => $language) {
+    \Drupal::service('alshaya_product_options.helper')->syncProductOption($attribute_code, $langcode);
+  }
 }

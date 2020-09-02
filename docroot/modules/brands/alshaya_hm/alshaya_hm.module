@@ -10,6 +10,8 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\search_api\IndexInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_form_alter().
@@ -92,6 +94,7 @@ function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityView
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
       $return = _alshaya_hm_get_product_description($sku_entity);
       $build['description'] = $return['description'];
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_hm.label_order.settings']);
     }
   }
 }
@@ -322,4 +325,98 @@ function alshaya_hm_sku_variant_info_alter(array &$variant, SKUInterface $child,
     'selector' => '.warning-wrapper',
     'markup' => $warning_markup,
   ];
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_hm_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  if ($context == 'search') {
+    // Product attribute labels for teaser view.
+    /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+    $labels = $productInfoHelper->getValue($sku, 'collection_labels', 'plp');
+    $build['#product_attribute_labels'] = !empty($labels) ? $labels[0] : [];
+  }
+}
+
+/**
+ * Implements hook_preprocess_template().
+ */
+function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
+  if ($vars['sku'] instanceof SKUInterface) {
+    // Get parent sku.
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $parent_sku = $skuManager->getParentSkuBySku($vars['sku']);
+    /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+    $labels = $productInfoHelper->getValue($parent_sku, 'collection_labels', 'pdp');
+    $vars['product_attribute_labels'] = $labels;
+  }
+}
+
+/**
+ * Implements hook_search_api_algolia_objects_alter().
+ */
+function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
+  if ($index->id() !== 'alshaya_algolia_index') {
+    return;
+  }
+
+  foreach ($objects as $id => &$object) {
+    if (empty($object['sku'])) {
+      continue;
+    }
+
+    $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
+    if (!($sku instanceof SKUInterface)) {
+      continue;
+    }
+    $node = $items[$id]->getOriginalObject()->getValue();
+    if ($sku->language()->getId() != $node->language()->getId()) {
+      continue;
+    }
+
+    $config = \Drupal::config('alshaya_hm.label_order.settings');
+    $label_attributes = $config->get('plp');
+    // Add attributes required for hm as label on products.
+    if (!empty($label_attributes)) {
+      foreach ($label_attributes as $attribute) {
+        if ($sku->get($attribute)->getString()) {
+          $object[$attribute] = $sku->get($attribute)->getString();
+        }
+      }
+    }
+  }
+
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_hm_page_attachments(array &$page) {
+  $config = \Drupal::config('alshaya_hm.label_order.settings');
+  $label_attributes = $config->get('plp');
+  if (!empty($label_attributes)) {
+    $page['#attached']['drupalSettings']['plp_attributes'] = $label_attributes;
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
+ */
+function alshaya_hm_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
+  if (!empty($data) && ($type === 'light')) {
+    $product_info_helper = \Drupal::service('acq_sku.product_info_helper');
+    $data['collection_labels'] = $product_info_helper->getValue($sku, 'collection_labels', 'plp');
+  }
+}
+
+/**
+ * Implements hook_alshaya_mobile_app_product_exclude_linked_data_alter().
+ */
+function alshaya_hm_alshaya_mobile_app_product_exclude_linked_data_alter(array &$data, SKUInterface $sku) {
+  $product_info_helper = \Drupal::service('acq_sku.product_info_helper');
+  $data['collection_labels'] = $product_info_helper->getValue($sku, 'collection_labels', 'pdp');
 }
