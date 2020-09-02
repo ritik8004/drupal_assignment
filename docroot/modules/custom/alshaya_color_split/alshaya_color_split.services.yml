@@ -13,6 +13,7 @@ services:
       - '@entity_type.manager'
       - '@alshaya_product_options.helper'
       - '@alshaya_product_options.swatches'
+      - '@request_stack'
 
   alshaya_color_split.product_updated_event:
     class: Drupal\alshaya_color_split\EventSubscriber\ProductUpdatedEventSubscriber
