@@ -48,7 +48,6 @@
     var impressions = [];
 
     context.find('.magv2-pdp-crossell-upsell-image-wrapper:not(".impression-processed")').each(function() {
-      $(this).addClass('impression-processed');
       var condition = true;
       // Only on scroll we check if product is in view or not.
       if (eventType == 'scroll') {
@@ -62,6 +61,7 @@
         // cart action.
         impression.variant = '';
         impressions.push(impression);
+        $(this).addClass('impression-processed');
       }
     });
 
