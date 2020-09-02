@@ -58,6 +58,13 @@ body.alias--cart {
           max-width: 80.25rem;
           margin: 0 auto;
         }
+
+        .ais-InstantSearch__root {
+          @include breakpoint($only-tablet) {
+            padding-#{$left}: 1.5rem;
+            padding-#{$right}: 1.5rem;
+          }
+        }
       }
     }
   }
