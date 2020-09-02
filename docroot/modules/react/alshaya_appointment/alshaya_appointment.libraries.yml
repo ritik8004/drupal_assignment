@@ -27,6 +27,4 @@ alshaya_appointment_localstore:
 gtm_appointment_booking:
   version: 1.x
   js:
-    assets/js/alshaya_appointment.gtm.appointment_booking.js: {}
-  dependencies:
-    - alshaya_seo_transac/gtm
+    assets/js/alshaya_appointment.gtm.appointment_booking.js: { weight: -1 } # We need this before appointment.js
