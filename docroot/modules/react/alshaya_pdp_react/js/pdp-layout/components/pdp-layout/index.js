@@ -1,4 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, {
+  useRef, useEffect, useState, useCallback,
+} from 'react';
 import PdpGallery from '../pdp-gallery';
 import PdpDescription from '../pdp-description';
 import PdpInfo from '../pdp-info';
@@ -11,9 +13,11 @@ import PdpClickCollect from '../pdp-click-and-collect';
 import PdpRelatedProducts from '../pdp-related-products';
 import PdpProductLabels from '../pdp-product-labels';
 import PdpPromotionLabel from '../pdp-promotion-label';
+import PpdPanel from '../pdp-popup-panel';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
+  const [panelContent, setPanelContent] = useState([]);
   const { productInfo } = drupalSettings;
   let skuItemCode = '';
 
@@ -83,6 +87,17 @@ const PdpLayout = () => {
   },
   []);
 
+  const getPanelData = useCallback((data) => {
+    // panelContent ? setPanelContent([...panelContent, data]) : setPanelContent([data]);
+    setPanelContent([...panelContent, data]);
+  }, [panelContent]);
+
+  const removePanelData = useCallback(() => {
+    if (panelContent !== undefined) {
+      setPanelContent(panelContent.splice(-1, 1));
+    }
+  }, [panelContent]);
+
   return (skuItemCode) ? (
     <>
       <div className="magv2-header fadeInUp" style={{ animationDelay: '0.3s' }} ref={header}>
@@ -138,6 +153,8 @@ const PdpLayout = () => {
             title={title}
             pdpProductPrice={priceRaw}
             finalPrice={finalPrice}
+            getPanelData={getPanelData}
+            removePanelData={removePanelData}
           />
           <PdpStandardDelivery />
           {stockStatus ? (
@@ -153,10 +170,13 @@ const PdpLayout = () => {
               key={relatedProducts[type]}
               type={relatedProducts[type]}
               skuItemCode={skuItemCode}
+              getPanelData={getPanelData}
+              removePanelData={removePanelData}
             />
           ))}
         </div>
       ) : null}
+      <PpdPanel panelContent={panelContent} />
     </>
   ) : emptyRes;
 };

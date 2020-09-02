@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import ConditionalView from '../../../common/components/conditional-view';
 import { crossellUpsellSliderSettings } from '../../../common/components/utilities/slider_settings';
 import PdpCrossellUpsellImage from '../pdp-crossell-upsell-images';
+import CrossellPopupContent from '../pdp-crossel-popup';
 
 export default class PdpCrossellUpsell extends React.PureComponent {
   constructor(props) {
@@ -54,11 +55,27 @@ export default class PdpCrossellUpsell extends React.PureComponent {
     this.slider.slickPrev();
   }
 
+  openModal = () => {
+    document.querySelector('body').classList.add('crossel-overlay');
+    return (
+      <CrossellPopupContent
+        closeModal={this.closeModal}
+      />
+    );
+  };
+
+  closeModal = () => {
+    const { removePanelData } = this.props;
+    document.querySelector('body').classList.remove('crossel-overlay');
+    removePanelData();
+  };
+
   render() {
     const { currentPage, totalPagers, limits } = this.state;
     const {
       sectionTitle,
       products,
+      getPanelData,
     } = this.props;
 
     const isTouchDevice = window.outerWidth < 1024;
@@ -100,6 +117,8 @@ export default class PdpCrossellUpsell extends React.PureComponent {
                 productUrl={products[sku].productUrl}
                 productLabels={products[sku].productLabels}
                 productPromotions={products[sku].promotions}
+                openModal={this.openModal}
+                getPanelData={getPanelData}
               />
             ))}
           </Slider>
@@ -127,6 +146,8 @@ export default class PdpCrossellUpsell extends React.PureComponent {
                 pdpProductPrice={products[sku].priceRaw}
                 productUrl={products[sku].productUrl}
                 productLabels={products[sku].productLabels}
+                openModal={this.openModal}
+                getPanelData={getPanelData}
               />
             ))}
           </Slider>
