@@ -83,6 +83,14 @@ class ConfigurableProductForm extends React.Component {
       }
     });
 
+    if ((typeof variantSelected !== 'undefined') && (variantSelected !== null)) {
+      const event = new CustomEvent('variantselected', {
+        bubbles: true,
+        detail: { variant: variantSelected },
+      });
+      document.querySelector('.sku-base-form').dispatchEvent(event);
+    }
+
     if (typeof combinations[code] === 'undefined') {
       return;
     }
@@ -166,7 +174,7 @@ class ConfigurableProductForm extends React.Component {
     const stockQty = productInfo[skuCode].variants[variantSelected].stock.qty;
 
     return (
-      <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
+      <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected} data-sku={skuCode}>
         <div id="add-to-cart-error" className="error" />
         {Object.keys(configurables).map((key) => (
           <div className={`cart-form-attribute ${key}`} key={key}>

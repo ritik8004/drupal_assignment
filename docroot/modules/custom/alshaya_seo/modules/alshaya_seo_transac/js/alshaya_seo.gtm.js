@@ -21,14 +21,18 @@ const productRecommendationsSuffix = 'pr-';
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
-      $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected', function (event, variant, code) {
-        var product = $(this).closest('article[gtm-type="gtm-product-link"]');
+      $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected variantselected', function (event, variant, code) {
+        var product = $(this).closest('[gtm-type="gtm-product-link"]');
         var sku = $(this).attr('data-sku');
         var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
         if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
+        // We get variant details in event object for magazine v2 layout.
+        if (event.detail.variant) {
+          variant = event.detail.variant;
+        }
         var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
 
         product.attr('gtm-product-sku', variant);
