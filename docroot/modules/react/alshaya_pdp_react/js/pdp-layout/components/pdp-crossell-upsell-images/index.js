@@ -2,9 +2,10 @@ import React from 'react';
 import PdpInfo from '../pdp-info';
 
 const PdpCrossellUpsellImage = ({
-  imageUrl, alt, title, pdpProductPrice, finalPrice, productUrl, productLabels, productPromotions,
+  imageUrl, alt, title, pdpProductPrice, finalPrice, productUrl,
+  productLabels, productPromotions, openModal, getPanelData,
 }) => (
-  <a className="magv2-pdp-crossell-upsell-image-wrapper" href={productUrl}>
+  <a className="magv2-pdp-crossell-upsell-image-wrapper" href={productUrl} onClick={() => getPanelData(openModal())}>
     <div className="magv2-pdp-crossell-upsell-img">
       <img
         src={imageUrl}

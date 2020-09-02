@@ -1,8 +1,8 @@
 import React from 'react';
 import Slider from 'react-slick';
-import ConditionalView from '../../../common/components/conditional-view';
 import { crossellUpsellSliderSettings } from '../../../common/components/utilities/slider_settings';
 import PdpCrossellUpsellImage from '../pdp-crossell-upsell-images';
+import CrossellPopupContent from '../pdp-crossel-popup';
 
 export default class PdpCrossellUpsell extends React.PureComponent {
   constructor(props) {
@@ -54,14 +54,29 @@ export default class PdpCrossellUpsell extends React.PureComponent {
     this.slider.slickPrev();
   }
 
+  openModal = () => {
+    document.querySelector('body').classList.add('crossel-overlay');
+    return (
+      <CrossellPopupContent
+        closeModal={this.closeModal}
+      />
+    );
+  };
+
+  closeModal = () => {
+    const { removePanelData } = this.props;
+    document.querySelector('body').classList.remove('crossel-overlay');
+    removePanelData();
+  };
+
+
   render() {
     const { currentPage, totalPagers, limits } = this.state;
     const {
       sectionTitle,
       products,
+      getPanelData,
     } = this.props;
-
-    const isTouchDevice = window.outerWidth < 1024;
 
     if (products.length === 0) {
       return (
@@ -76,61 +91,30 @@ export default class PdpCrossellUpsell extends React.PureComponent {
             <span className="magv2-pdp-crossell-upsell-label">{sectionTitle}</span>
           </div>
         </div>
-        <ConditionalView condition={window.innerWidth > 767}>
-          <Slider
-            dots={crossellUpsellSliderSettings.dots}
-            infinite={crossellUpsellSliderSettings.infinite}
-            arrows={crossellUpsellSliderSettings.arrows}
-            centerMode={crossellUpsellSliderSettings.centerMode}
-            variableWidth={crossellUpsellSliderSettings.variableWidth}
-            slidesToShow={crossellUpsellSliderSettings.slidesToShow}
-            slidesToScroll={isTouchDevice ? 2 : crossellUpsellSliderSettings.slidesToScroll}
-            draggable={isTouchDevice ? true : crossellUpsellSliderSettings.draggable}
-            ref={(slider) => { this.slider = slider; }}
-            beforeChange={this.beforeChange}
-          >
-            {Object.keys(products).map((sku) => (
-              <PdpCrossellUpsellImage
-                key={products[sku].gallery.mediumurl}
-                imageUrl={products[sku].gallery.mediumurl}
-                alt={products[sku].gallery.label}
-                title={products[sku].title}
-                finalPrice={products[sku].finalPrice}
-                pdpProductPrice={products[sku].priceRaw}
-                productUrl={products[sku].productUrl}
-                productLabels={products[sku].productLabels}
-                productPromotions={products[sku].promotions}
-              />
-            ))}
-          </Slider>
-        </ConditionalView>
-        <ConditionalView condition={window.innerWidth < 768}>
-          <Slider
-            dots={crossellUpsellSliderSettings.dots}
-            infinite={crossellUpsellSliderSettings.infinite}
-            arrows={crossellUpsellSliderSettings.arrows}
-            centerMode={crossellUpsellSliderSettings.centerMode}
-            variableWidth={crossellUpsellSliderSettings.variableWidth}
-            slidesToShow={crossellUpsellSliderSettings.slidesToShow}
-            slidesToScroll={isTouchDevice ? 1 : crossellUpsellSliderSettings.slidesToScroll}
-            draggable={isTouchDevice ? true : crossellUpsellSliderSettings.draggable}
-            ref={(slider) => { this.slider = slider; }}
-            beforeChange={this.beforeChange}
-          >
-            {Object.keys(products).map((sku) => (
-              <PdpCrossellUpsellImage
-                key={products[sku].gallery.mediumurl}
-                imageUrl={products[sku].gallery.mediumurl}
-                alt={products[sku].gallery.label}
-                title={products[sku].title}
-                finalPrice={products[sku].finalPrice}
-                pdpProductPrice={products[sku].priceRaw}
-                productUrl={products[sku].productUrl}
-                productLabels={products[sku].productLabels}
-              />
-            ))}
-          </Slider>
-        </ConditionalView>
+        {/* disable eslint to disable jsx-props-no-spreading rule for slider */}
+        {/* eslint-disable */}
+        <Slider
+          ref={(slider) => { this.slider = slider; }}
+          beforeChange={this.beforeChange}
+          {...crossellUpsellSliderSettings}
+        >
+          {/* eslint-disable */}
+          {Object.keys(products).map((sku) => (
+            <PdpCrossellUpsellImage
+              key={products[sku].gallery.mediumurl}
+              imageUrl={products[sku].gallery.mediumurl}
+              alt={products[sku].gallery.label}
+              title={products[sku].title}
+              finalPrice={products[sku].finalPrice}
+              pdpProductPrice={products[sku].priceRaw}
+              productUrl={products[sku].productUrl}
+              productLabels={products[sku].productLabels}
+              productPromotions={products[sku].promotions}
+              openModal={this.openModal}
+              getPanelData={getPanelData}
+            />
+          ))}
+        </Slider>
         <div className="slider-nav">
           <span
             onClick={(drupalSettings.path.currentLanguage === 'en') ? this.goToPrevSlide : this.goToNextSlide}

@@ -1,7 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
 import Popup from 'reactjs-popup';
-import ConditionalView from '../../../common/components/conditional-view';
 import { sliderSettings, fullScreenSliderSettings } from '../../../common/components/utilities/slider_settings';
 import PdpImageElement from '../pdp-image-element';
 import PdpAsset from '../pdp-asset';
@@ -39,7 +38,7 @@ export default class PdpGallery extends React.PureComponent {
   };
 
   render() {
-    const { pdpGallery, children } = this.props;
+    const { pdpGallery, children, showFullVersion } = this.props;
     const images = pdpGallery ? pdpGallery.thumbnails : [];
     const emptyRes = (
       <div>Images not available</div>
@@ -55,49 +54,50 @@ export default class PdpGallery extends React.PureComponent {
 
     return (images) ? (
       <div className="magv2-pdp-gallery">
-        <ConditionalView condition={window.innerWidth > 767}>
-          <div className="magazine__gallery--container-desktop">
-            {images.map((image, key) => (
-              <PdpAsset
-                key={image.zoomurl}
-                type={image.type}
-                imageZoomUrl={image.zoomurl}
-                imageUrl={image.mediumurl}
-                alt={image.label}
-                title={image.label}
-                onClick={this.showFullScreenModal}
-                viewport="desktop"
-                index={key}
-              >
-                {key === 0 ? children : ''}
-              </PdpAsset>
-            ))}
-          </div>
-        </ConditionalView>
-        <ConditionalView condition={window.innerWidth < 768}>
-          <div className="magazine__gallery--container-mobile fadeInUp" style={{ animationDelay: '0.4s' }}>
-            <Slider
-              dots={sliderSettings.dots}
-              infinite={sliderSettings.infinite}
-              arrows={sliderSettings.arrows}
-              appendDots={sliderSettings.appendDots}
-            >
+        {(showFullVersion)
+          ? (
+            <div className="magazine__gallery--container-desktop">
               {images.map((image, key) => (
-                <PdpImageElement
+                <PdpAsset
                   key={image.zoomurl}
+                  type={image.type}
+                  imageZoomUrl={image.zoomurl}
                   imageUrl={image.mediumurl}
                   alt={image.label}
                   title={image.label}
                   onClick={this.showFullScreenModal}
-                  viewport="mobile"
+                  viewport="desktop"
                   index={key}
                 >
                   {key === 0 ? children : ''}
-                </PdpImageElement>
+                </PdpAsset>
               ))}
-            </Slider>
-          </div>
-        </ConditionalView>
+            </div>
+          )
+          : (
+            <div className="magazine__gallery--container-mobile fadeInUp" style={{ animationDelay: '0.4s' }}>
+              <Slider
+                dots={sliderSettings.dots}
+                infinite={sliderSettings.infinite}
+                arrows={sliderSettings.arrows}
+                appendDots={sliderSettings.appendDots}
+              >
+                {images.map((image, key) => (
+                  <PdpImageElement
+                    key={image.zoomurl}
+                    imageUrl={image.mediumurl}
+                    alt={image.label}
+                    title={image.label}
+                    onClick={this.showFullScreenModal}
+                    viewport="mobile"
+                    index={key}
+                  >
+                    {key === 0 ? children : ''}
+                  </PdpImageElement>
+                ))}
+              </Slider>
+            </div>
+          )}
         <Popup
           open={open}
           closeOnDocumentClick={false}

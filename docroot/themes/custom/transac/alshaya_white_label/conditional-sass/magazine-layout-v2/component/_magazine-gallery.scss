@@ -96,37 +96,35 @@
   }
 
   .magazine__gallery--container-mobile {
-    @include breakpoint($only-mobile) {
-      .slick-dots {
-        bottom: 1.125rem;
+    .slick-dots {
+      bottom: 1.125rem;
 
-        li {
-          border: none;
+      li {
+        border: none;
+
+        button {
+          &::before {
+            color: $magv2-slick-dots;
+            opacity: 1;
+          }
+        }
+
+        &.slick-active {
+          background: transparent !important;
 
           button {
             &::before {
-              color: $magv2-slick-dots;
+              color: $magv2-slick-dots-active;
               opacity: 1;
-            }
-          }
-
-          &.slick-active {
-            background: transparent !important;
-
-            button {
-              &::before {
-                color: $magv2-slick-dots-active;
-                opacity: 1;
-              }
             }
           }
         }
       }
+    }
 
-      .slick-slider {
-        margin-#{$right}: -1.25rem;
-        margin-#{$left}: -1.25rem;
-      }
+    .slick-slider {
+      margin-#{$right}: -1.25rem;
+      margin-#{$left}: -1.25rem;
     }
   }
 
