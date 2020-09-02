@@ -639,28 +639,46 @@ class CartController {
         ];
 
         try {
-          $request_content['payment_info']['payment']['additional_data'] = $this->cart->processPaymentData(
-            $request_content['payment_info']['payment']['method'],
-            $request_content['payment_info']['payment']['additional_data']
-          );
+          try {
+            $request_content['payment_info']['payment']['additional_data'] = $this->cart->processPaymentData(
+              $request_content['payment_info']['payment']['method'],
+              $request_content['payment_info']['payment']['additional_data']
+            );
+          }
+          catch (\Exception $e) {
+            if ($e->getCode() === 302) {
+              // Set attempted payment 1 before redirecting.
+              $updated_cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
+              if (empty($updated_cart)) {
+                throw new \Exception('Update cart failed', 404);
+              }
+              elseif (!empty($updated_cart['error'])) {
+                throw new \Exception($updated_cart['error_message'] ?? '', $updated_cart['error_code'] ?? 404);
+              }
+
+              return new JsonResponse([
+                'success' => TRUE,
+                'redirectUrl' => $e->getMessage(),
+              ]);
+            }
+
+            throw $e;
+          }
         }
         catch (\Exception $e) {
-          if ($e->getCode() === 302) {
-            // Set attempted payment 1 before redirecting.
-            $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
+          $this->logger->error('Error during payment finalization. Error message: @message, code: @code', [
+            '@message' => $e->getMessage(),
+            '@code' => $e->getCode(),
+          ]);
 
-            return new JsonResponse([
-              'success' => TRUE,
-              'redirectUrl' => $e->getMessage(),
-            ]);
+          if ($e->getCode() == 404) {
+            return new JsonResponse($this->utility->getErrorResponse('Invalid cart', '404'));
           }
 
-          $this->logger->error('Error during payment finalization. Error message: @message', [
-            '@message' => $e->getMessage(),
-          ]);
-          // Cancel reservation api when process failed for not enough data,
+          // Cancel reservation when process failed for not enough data,
           // or bad data. i.e. checkout.com cvv missing.
           $this->cart->cancelCartReservation($e->getMessage());
+
           return new JsonResponse([
             'error' => TRUE,
             'message' => $e->getMessage(),

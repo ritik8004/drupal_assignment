@@ -63,12 +63,18 @@ export default class PaymentMethod extends React.Component {
       if (result.error !== undefined && result.error) {
         removeFullScreenLoader();
         Drupal.logJavascriptError('finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
-        if (result.error_code !== undefined
-          && parseInt(result.error_code, 10) === 505) {
-          dispatchCustomEvent('spcCheckoutMessageUpdate', {
-            type: 'error',
-            message: getStringMessage('shipping_method_error'),
-          });
+
+        if (result.error_code !== undefined) {
+          if (parseInt(result.error_code, 10) === 505) {
+            dispatchCustomEvent('spcCheckoutMessageUpdate', {
+              type: 'error',
+              message: getStringMessage('shipping_method_error'),
+            });
+          } else if (parseInt(result.error_code, 10) === 404) {
+            // Cart no longer available, redirect user to basket.
+            Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
+            window.location = Drupal.url('cart');
+          }
         }
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
