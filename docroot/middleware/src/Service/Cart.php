@@ -251,7 +251,22 @@ class Cart {
     $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
-      static::$cart = $this->magentoApiWrapper->doRequest('GET', $url);
+      $updated_cart = $this->magentoApiWrapper->doRequest('GET', $url);
+
+      if ($updated_cart === FALSE) {
+        throw new \Exception('Cart no longer available', 404);
+      }
+      elseif (!is_array($updated_cart)) {
+        $this->logger->error('Invalid cart data in response received for get cart. ID: @id, Response: @response', [
+          '@id' => $cart_id,
+          '@response' => json_encode($updated_cart),
+        ]);
+
+        throw new \Exception('Invalid cart data in response', 500);
+      }
+
+      static::$cart = $updated_cart;
+
       // Store cart object in cache.
       $this->setCartInCache(static::$cart);
 
@@ -265,7 +280,7 @@ class Cart {
         '@message' => $e->getMessage(),
       ]);
 
-      if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
+      if ($e->getCode() == 404 || strpos($e->getMessage(), 'No such entity with cartId') > -1) {
         $this->removeCartFromSession();
       }
 
