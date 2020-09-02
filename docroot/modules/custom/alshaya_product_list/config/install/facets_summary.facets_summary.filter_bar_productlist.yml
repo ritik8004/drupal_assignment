@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.product
+    - views.view.alshaya_product_list
+  module:
+    - search_api
+id: filter_bar_productlist
+name: 'Filter bar product list'
+facets:
+  final_price_productlist:
+    checked: true
+    label: 'Final Price Product List'
+    separator: ', '
+    weight: 0
+    show_count: false
+  promotions_productlist:
+    checked: true
+    label: 'Promotions Product List'
+    separator: ', '
+    weight: 0
+    show_count: false
+facet_source_id: 'search_api:views_block__alshaya_product_list__block_3'
+processor_configs:
+  reset_facets:
+    processor_id: reset_facets
+    weights:
+      build: '50'
+    settings:
+      link_text: 'clear filters'

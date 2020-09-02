@@ -1,0 +1,156 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Ajax\InsertCommand;
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Database\Query\SelectInterface;
+use Drupal\search_api\Query\QueryInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_search_api_db_query_alter().
+ */
+function alshaya_product_list_search_api_db_query_alter(SelectInterface &$db_query, QueryInterface $query) {
+  // If attribute product list views.
+  if ($query->hasTag('views_alshaya_product_list')
+    && $query->getSearchId() == 'views_block:alshaya_product_list__block_3') {
+    $nid = 0;
+    $attr_name = 'none';
+    $attr_value = 'none';
+    $current_route = \Drupal::routeMatch();
+    // If view route, means either sorting of filtering is done.
+    if ($current_route->getRouteName() == 'views.ajax'
+      || $current_route->getRouteName() == 'facets.block.ajax') {
+      $query_string = [];
+      parse_str(\Drupal::requestStack()->getCurrentRequest()->getQueryString(), $query_string);
+
+      // Get url from views.
+      $view_url_data = $current_route->getRouteName() == 'views.ajax'
+        ? $query_string['view_path']
+        : \Drupal::requestStack()->getCurrentRequest()->getPathInfo();
+
+      $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      // Remove current language from url.
+      $view_url_data = preg_replace('/\/' . $current_language . '/', '', $view_url_data, 1);
+      // Remove last `/` from url.
+      $view_url_data = rtrim($view_url_data, '/');
+      if ($source_path = \Drupal::service('path.alias_storage')->lookupPathSource($view_url_data, $current_language)) {
+        // Source path will be like - `/node/1212/` and we need only id.
+        $nid = explode('/', $source_path)[2];
+      }
+
+    }
+    elseif ($current_route->getRouteName() == 'entity.node.canonical') {
+      $nid = $current_route->getParameter('node')->id();
+    }
+
+    // If node object.
+    if ((($node = Node::load($nid)) instanceof NodeInterface)
+      && $node->bundle() == 'product_list') {
+      $attr_value = $node->get('field_attribute_value')->first()->getString();
+      $attr_name = $node->get('field_attribute_name')->first()->getString();
+    }
+
+    // Add condition on query.
+    $db_query->condition('t.' . $attr_name, $attr_value);
+  }
+}
+
+/**
+ * Implements hook_acq_sku_base_fields_updated().
+ */
+function alshaya_product_list_acq_sku_base_fields_updated(array $fields, $op = 'add') {
+  /** @var \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager $facet_manager */
+  $facet_manager = \Drupal::service('alshaya_search_api.facets_manager');
+
+  $facet_source_id = 'search_api:views_block__alshaya_product_list__block_3';
+  $filter_bar_id = 'facets_summary.facets_summary.filter_bar_productlist';
+  $prefix = 'productlist';
+
+  switch ($op) {
+    case 'add':
+      foreach ($fields as $field_code => $field) {
+        if (empty($field['facet'])) {
+          // We use add even when resetting. Remove facet if available.
+          $facet_manager->removeFacet($field_code, $filter_bar_id, $prefix);
+          continue;
+        }
+
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
+      }
+      break;
+
+    case 'remove':
+      foreach ($fields as $field_code => $field) {
+        // Remove from facets if facet is 1.
+        if (!empty($field['facet'])) {
+          $facet_manager->removeFacet($field_code, $filter_bar_id, $prefix);
+        }
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_product_list_module_implements_alter(&$implementations, $hook) {
+  // This module alter should be called last.
+  if ($hook == 'alshaya_search_filter_link_alter') {
+    $group = $implementations['alshaya_product_list'];
+    unset($implementations['alshaya_product_list']);
+    $implementations['alshaya_product_list'] = $group;
+  }
+}
+
+/**
+ * Implements hook_alshaya_search_filter_link_alter().
+ */
+function alshaya_product_list_alshaya_search_filter_link_alter(&$link, array &$data) {
+  // Get node for given brand and value.
+  $nids = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
+    ->condition('field_attribute_name', 'attr_' . $data['attribute_code'])
+    ->condition('field_attribute_value', $data['attribute_value'])
+    ->execute();
+
+  // If there are nodes, use first one.
+  if (!empty($nids) && is_array($nids)) {
+    $nid = reset($nids);
+    $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $nid);
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $data['append_value'] = FALSE;
+    $link = '/' . $langcode . $alias;
+  }
+}
+
+/**
+ * Alters ajax response on facet filter.
+ *
+ * Implements hook_alshaya_search_ajax_response_alter.
+ */
+function alshaya_product_list_alshaya_search_ajax_response_alter(&$response, $facet_fields) {
+  $master_request = \Drupal::service('request_stack')->getMasterRequest();
+  $master_route = $master_request->attributes->get('_route');
+  if ($master_route === 'entity.node.canonical') {
+    $node = $master_request->attributes->get('node');
+    if ($node->bundle() === 'product_list') {
+      $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-3 form .facets-hidden-container', $facet_fields));
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_product_list_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  // Attach the shop by brand css library to the product listing page.
+  if ($entity->bundle() == 'product_list') {
+    $build['#attached']['library'][] = 'alshaya_white_label/shop-by-brand';
+  }
+}
