@@ -14,6 +14,8 @@ import PaymentMethodCybersource from '../payment-method-cybersource';
 import { removeStorageInfo } from '../../../utilities/storage';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
+import dispatchCustomEvent from '../../../utilities/events';
+import getStringMessage from '../../../utilities/strings';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -60,7 +62,14 @@ export default class PaymentMethod extends React.Component {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
       if (result.error !== undefined && result.error) {
         removeFullScreenLoader();
-        Drupal.logJavascriptError('finalise payment', result.message);
+        Drupal.logJavascriptError('finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+        if (result.error_code !== undefined
+          && parseInt(result.error_code, 10) === 505) {
+          dispatchCustomEvent('spcCheckoutMessageUpdate', {
+            type: 'error',
+            message: getStringMessage('shipping_method_error'),
+          });
+        }
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
         const { cart } = this.props;
@@ -69,19 +78,19 @@ export default class PaymentMethod extends React.Component {
         removeStorageInfo('billing_shipping_same');
       } else if (result.success === undefined || !(result.success)) {
         // 3D flow error.
-        Drupal.logJavascriptError('3d flow finalise payment', result.message);
+        Drupal.logJavascriptError('3d flow finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       } else if (result.redirectUrl !== undefined) {
         // 3D flow success.
         removeStorageInfo('spc_selected_card');
         removeStorageInfo('billing_shipping_same');
         window.location = result.redirectUrl;
       } else {
-        Drupal.logJavascriptError('finalise payment', result.message);
+        Drupal.logJavascriptError('finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
         removeFullScreenLoader();
       }
     }).catch((error) => {
       removeFullScreenLoader();
-      Drupal.logJavascriptError('add payment method in cart', error);
+      Drupal.logJavascriptError('add payment method in cart', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
     });
   };
 

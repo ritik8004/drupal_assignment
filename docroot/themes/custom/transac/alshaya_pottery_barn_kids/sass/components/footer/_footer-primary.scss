@@ -20,13 +20,46 @@
       }
     }
   }
+
+  .c-social-links {
+    margin: 0;
+
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 0.3125rem;
+    }
+
+    h3 {
+      margin: 0.75rem 0 0.312rem;
+      font-size: 0.75rem;
+      color: $footer_title_h3;
+      text-transform: uppercase;
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+        margin-bottom: 0.625rem;
+      }
+    }
+  }
 }
 
 .c-footer-primary {
   .block-alshaya-newsletter {
-    &.alshaya-newsletter-subscribe .form-submit {
-      font-size: 0.875rem;
-      font-weight: normal;
+    &.alshaya-newsletter-subscribe {
+      margin-top: 2.25rem;
+
+      .newsletter-block-label {
+        line-height: 1.29;
+      }
+
+      .form-submit {
+        font-size: 0.875rem;
+        font-weight: normal;
+        padding: 0.688rem 1.312rem;
+      }
+
+      input.form-email {
+        margin-top: 0.9375rem;
+      }
     }
   }
 }

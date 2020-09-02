@@ -10,6 +10,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_commerce_id
     - field.field.taxonomy_term.acq_product_category.field_commerce_status
     - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
+    - field.field.taxonomy_term.acq_product_category.field_dy_banner
     - field.field.taxonomy_term.acq_product_category.field_group_by_sub_categories
     - field.field.taxonomy_term.acq_product_category.field_icon
     - field.field.taxonomy_term.acq_product_category.field_image_text_bg_color
@@ -123,6 +124,7 @@ third_party_settings:
         - translation
         - field_meta_tags
         - field_pdp_image_slider_position
+        - field_dy_banner
       parent_name: group_taxonomy_fields
       weight: 0
       format_type: tab
@@ -374,6 +376,14 @@ content:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
+    region: content
+  field_dy_banner:
+    weight: 14
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   field_group_by_sub_categories:
     weight: 4

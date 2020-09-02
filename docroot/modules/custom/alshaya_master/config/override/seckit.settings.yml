@@ -47,6 +47,7 @@ seckit_various:
   referrer_policy: false
   referrer_policy_policy: no-referrer
   disable_autocomplete: false
+  disable_generator: 1
 seckit_fp:
   feature_policy: 1
   feature_policy_policy: geolocation

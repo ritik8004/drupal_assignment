@@ -5,4 +5,4 @@ display:
         depth_level:
           operator: '<'
           value:
-            value: '4'
+            value: '5'

@@ -1,0 +1,19 @@
+.spc-order-summary-order-preview,
+.spc-order-summary-order-detail {
+  .spc-order-summary-item {
+    .spc-value {
+      font-family: $alshaya-bold;
+    }
+
+    &.spc-order-summary-address-item {
+      .spc-value {
+        .spc-address-name,
+        .spc-address {
+          @include breakpoint($upto-desktop) {
+            line-height: 1.3;
+          }
+        }
+      }
+    }
+  }
+}

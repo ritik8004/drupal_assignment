@@ -1,0 +1,10 @@
+max_length:
+  address_block_segment:
+    en: 70
+    ar: 35
+  address_building_segment:
+    en: 70
+    ar: 35
+  address_apartment_segment:
+    en: 70
+    ar: 35

@@ -10,8 +10,11 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -20,6 +23,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class APIWrapper implements APIWrapperInterface {
 
   use \Drupal\acq_commerce\Conductor\AgentRequestTrait;
+
+  use StringTranslationTrait;
 
   /**
    * Error code used internally for API Down cases.
@@ -55,6 +60,13 @@ class APIWrapper implements APIWrapperInterface {
   protected $dispatcher;
 
   /**
+   * Lock service.
+   *
+   * @var \Drupal\Core\Lock\LockBackendInterface
+   */
+  protected $lock;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
@@ -69,18 +81,22 @@ class APIWrapper implements APIWrapperInterface {
    *   API Helper service object.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   Event Dispatcher.
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   *   Lock service.
    */
   public function __construct(ClientFactory $client_factory,
                               ConfigFactoryInterface $config_factory,
                               LoggerChannelFactory $logger_factory,
                               I18nHelper $i18nHelper,
                               APIHelper $api_helper,
-                              EventDispatcherInterface $dispatcher) {
+                              EventDispatcherInterface $dispatcher,
+                              LockBackendInterface $lock) {
     $this->clientFactory = $client_factory;
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->logger = $logger_factory->get('acq_sku');
     $this->helper = $api_helper;
     $this->dispatcher = $dispatcher;
+    $this->lock = $lock;
 
     // We always use the current language id to get store id. If required
     // function calling the api wrapper will pass different store id to
@@ -287,8 +303,28 @@ class APIWrapper implements APIWrapperInterface {
 
     $result = [];
 
+    // Create a name to use for lock acquisition.
+    $lock_name = 'place_order_' . $cart_id;
+    $locked = FALSE;
+
+    if (Settings::get('acq_commerce_lock_place_order', TRUE) && !($locked = $this->lock->acquire($lock_name))) {
+      $this->logger->warning(
+        "Could not acquire lock to place order: @lock_name", [
+          '@lock_name' => $lock_name,
+        ]
+      );
+
+      throw new RouteException(__FUNCTION__, $this->t('Sorry, we were able to complete your purchase but something went wrong and we could not display the order confirmation page. Please review your past orders or contact our customer service team for assistance.'));
+    }
+
     try {
       $result = $this->tryAgentRequest($doReq, 'placeOrder');
+
+      // If we acquired a lock previously, we can release it now.
+      if ($locked) {
+        $this->lock->release($lock_name);
+      }
+
       $this->dispatcher->dispatch(OrderPlacedEvent::EVENT_NAME, new OrderPlacedEvent($result, $cart_id));
     }
     catch (ConnectorException $e) {
@@ -1070,7 +1106,8 @@ class APIWrapper implements APIWrapperInterface {
     };
     try {
       $result = $this->tryAgentRequest($doReq, 'getQueueStatus');
-    } catch (ConnectorException $e) {
+    }
+    catch (ConnectorException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());
     }
     return (int) $result['total'];
@@ -1090,7 +1127,8 @@ class APIWrapper implements APIWrapperInterface {
     };
     try {
       $this->tryAgentRequest($doReq, 'purgeQueue');
-    } catch (ConnectorException $e) {
+    }
+    catch (ConnectorException $e) {
       return FALSE;
     }
     return TRUE;

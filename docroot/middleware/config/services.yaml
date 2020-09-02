@@ -12,7 +12,9 @@ parameters:
         # on PHP's garbage collection for clearing sessions, ensure that garbage
         # collection occurs by using the most common settings.
         # @default 1
-        gc_probability: 1
+        # Disable GC activities, we will do it in cron job.
+        # This is done to ensure user requests are served without any delays.
+        gc_probability: 0
         # @default 100
         gc_divisor: 100
         #

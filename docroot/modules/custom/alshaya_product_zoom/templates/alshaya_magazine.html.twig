@@ -42,7 +42,16 @@
       {% endfor %}
       <div class="magazine-product-description">
         <div class="magazine-swatch-placeholder"></div>
-        <div class="magazine-desc-wrapper"> {{ description }}</div>
+        <div class="magazine-desc-wrapper">
+          {% if product_attribute_labels %}
+            <ul class="collection-labels">
+              {% for item in product_attribute_labels %}
+                <li class="{{ item.class }}">{{ item.content }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          {{ description }}
+        </div>
       </div>
 
     </div>

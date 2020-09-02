@@ -10,11 +10,13 @@ import CompletePurchase from '../complete-purchase';
 import DeliveryInformation from '../delivery-information';
 import DeliveryMethods from '../delivery-methods';
 import PaymentMethods from '../payment-methods';
+import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import CheckoutMessage from '../../../utilities/checkout-message';
 import TermsConditions from '../terms-conditions';
 import {
   removeFullScreenLoader,
   isCnCEnabled,
+  removeBillingFlagFromStorage,
 } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
@@ -66,20 +68,36 @@ export default class Checkout extends React.Component {
           if (cart.shipping.type === 'click_and_collect' && !isCnCEnabled(result)) {
             cart.delivery_type = 'home_delivery';
           }
-
+          // Process Removal of "same as billing" flag before we update the
+          // cart state. before the billing address component mounted. as
+          // setState will immidiately mount the components before localStorage
+          // update happens.
+          removeBillingFlagFromStorage({ cart });
+          dispatchCustomEvent('checkoutCartUpdate', { cart });
           this.setState({
             wait: false,
             cart: { cart },
           });
 
-          dispatchCustomEvent('checkoutCartUpdate', { cart });
+          // If cart from stale cache.
+          if (cart.stale_cart !== undefined && cart.stale_cart === true) {
+            dispatchCustomEvent('spcCheckoutMessageUpdate', {
+              type: 'error',
+              message: drupalSettings.global_error_message,
+            });
+          }
+
+          // Get promo info.
+          if (typeof result.error === 'undefined') {
+            PromotionsDynamicLabelsUtil.apply(result);
+          }
         });
       } else {
         redirectToCart();
       }
     } catch (error) {
       // In case of error, do nothing.
-      Drupal.logJavascriptError('checkout', error);
+      Drupal.logJavascriptError('checkout', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
 
     // Make sidebar sticky.
@@ -207,7 +225,7 @@ export default class Checkout extends React.Component {
 
             {billingComponent}
 
-            <ConditionalView condition={window.innerWidth > 768}>
+            <ConditionalView condition={window.innerWidth > 767}>
               {termConditions}
             </ConditionalView>
 

@@ -43,7 +43,7 @@ export default class MiniCart extends React.Component {
             this.setState({
               wait: false,
               qty: resultVal.items_qty,
-              amount: resultVal.cart_total,
+              amount: resultVal.minicart_total,
             });
           }
           // Dispatch a custom event to let other modules do miscellaneous
@@ -80,7 +80,7 @@ export default class MiniCart extends React.Component {
         if (data && data.error === undefined) {
           this.setState({
             qty: data.items_qty,
-            amount: data.cart_total,
+            amount: data.minicart_total,
             wait: false,
           });
 

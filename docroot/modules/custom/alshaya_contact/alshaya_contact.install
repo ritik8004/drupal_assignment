@@ -10,6 +10,19 @@ use Drupal\lightning_core\ConfigHelper;
 /**
  * Implements hook_update_N().
  *
+ * Request_from field should be display on wenform submission page.
+ */
+function alshaya_contact_update_8004() {
+  $configs = [
+    'webform.webform.alshaya_contact',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_contact');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Request_from field access removed and add archive false.
  */
 function alshaya_contact_update_8003() {

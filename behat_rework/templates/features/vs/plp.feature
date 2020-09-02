@@ -2,7 +2,7 @@
 Feature: Test the PLP page
 
   Background:
-    Given I am on "{product_listing_page_url}"
+    Given I am on "{spc_product_listing_page}"
     And I wait 5 seconds
     And I wait for the page to load
 

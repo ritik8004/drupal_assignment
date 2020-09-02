@@ -13,10 +13,12 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_2_col_dept
     - paragraphs.paragraphs_type.1_row_3_col
     - paragraphs.paragraphs_type.1_row_3_col_dept
+    - paragraphs.paragraphs_type.1_row_3_col_flex
     - paragraphs.paragraphs_type.1_row_3_col_text
+    - paragraphs.paragraphs_type.1_row_4_col
     - paragraphs.paragraphs_type.block_reference
-    - paragraphs.paragraphs_type.section_divider
     - paragraphs.paragraphs_type.delivery_usp_block
+    - paragraphs.paragraphs_type.section_divider
     - paragraphs.paragraphs_type.views_reference
   module:
     - entity_reference_revisions
@@ -28,7 +30,7 @@ label: 'Promo Blocks'
 description: ''
 required: false
 translatable: false
-skip_translation_check: true
+skip_translation_check: 1
 default_value: {  }
 default_value_callback: ''
 settings:
@@ -47,9 +49,11 @@ settings:
       1_row_2_col_dept: 1_row_2_col_dept
       1_row_3_col_dept: 1_row_3_col_dept
       block_reference: block_reference
+      1_row_4_col: 1_row_4_col
+      1_row_3_col_flex: 1_row_3_col_flex
       views_reference: views_reference
-      section_divider: section_divider
       delivery_usp_block: delivery_usp_block
+      section_divider: section_divider
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         enabled: true
@@ -105,12 +109,18 @@ settings:
       block_reference:
         enabled: true
         weight: 30
+      1_row_4_col:
+        enabled: true
+        weight: 33
+      1_row_3_col_flex:
+        enabled: true
+        weight: 31
       views_reference:
         enabled: true
         weight: 34
       image_title_subtitle:
         weight: 39
-        enabled: false
+        enabled: true
       offers_bordered:
         weight: 41
         enabled: false
@@ -129,4 +139,13 @@ settings:
       section_divider:
         enabled: true
         weight: 49
+      product_carousel_category:
+        weight: 50
+        enabled: false
+      slug_banner:
+        weight: 56
+        enabled: false
+      text_links:
+        weight: 57
+        enabled: false
 field_type: entity_reference_revisions

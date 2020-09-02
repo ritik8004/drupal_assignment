@@ -8,10 +8,10 @@ body {
   }
 
   @include breakpoint($only-tablet) {
-    margin-top: 4.5rem;
+    margin-top: 5rem;
 
     html[lang=ar] & {
-      margin-top: 4.5rem;
+      margin-top: 5rem;
     }
   }
 }
@@ -34,7 +34,7 @@ body {
 }
 
 .c-menu-secondary {
-  text-transform: none;
+  text-transform: capitalize;
 
   @include breakpoint($only-tablet) {
     width: 20rem;
@@ -52,7 +52,7 @@ body {
     }
 
     @include breakpoint($desktop) {
-      text-transform: none;
+      text-transform: capitalize;
       padding-top: 0.4375rem;
       font-size: 0.75rem;
       height: 1.75rem;
@@ -85,7 +85,7 @@ body {
 
   .menu--account {
     @include breakpoint($desktop) {
-      text-transform: none;
+      text-transform: capitalize;
       height: 1.75rem;
     }
 

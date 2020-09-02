@@ -80,6 +80,7 @@ fields:
   brand_logo:
     label: 'Brand Logo'
     description: 'Part of description.'
+    type: 'string'
 
   collection:
     label: 'Collection'
@@ -99,3 +100,13 @@ fields:
     label: 'Is new arrival'
     type: 'string'
     description: 'Sku applicable for the new-arrival category or not.'
+
+  non_refundable_products:
+    label: 'Is non refundable'
+    type: 'string'
+    description: 'Sku applicable for non refundable or not.'
+
+  same_day_delivery:
+    label: 'Is same day delivery'
+    type: 'string'
+    description: 'Sku applicable for same day delivery or not.'

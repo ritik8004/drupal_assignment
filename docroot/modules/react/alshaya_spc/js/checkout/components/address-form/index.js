@@ -1,6 +1,5 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import GoogleMap from '../../../utilities/map/GoogleMap';
 import {
   createMarker,
   getMap,
@@ -11,6 +10,7 @@ import {
 } from '../../../utilities/map/map_utils';
 import {
   getAreasList,
+  errorOnDropDownFieldsNotFilled,
 } from '../../../utilities/address_util';
 import SectionTitle from '../../../utilities/section-title';
 import DynamicFormField from '../dynamic-form-field';
@@ -34,6 +34,7 @@ export default class AddressForm extends React.Component {
       cityChanged: false,
       errorSuccessMessage: null,
       messageType: null,
+      dismissButton: true,
     };
   }
 
@@ -72,10 +73,11 @@ export default class AddressForm extends React.Component {
     if (!this.isComponentMounted) {
       return;
     }
-    const { type, message } = e.detail;
+    const { type, message, showDismissButton } = e.detail;
     this.setState({
       messageType: type,
       errorSuccessMessage: message,
+      dismissButton: showDismissButton,
     });
     // Scroll to error.
     smoothScrollTo('.spc-address-form-sidebar .spc-checkout-section-title');
@@ -88,6 +90,7 @@ export default class AddressForm extends React.Component {
       this.setState({
         messageType: null,
         errorSuccessMessage: null,
+        dismissButton: false,
       });
     }, 200);
   };
@@ -108,7 +111,7 @@ export default class AddressForm extends React.Component {
    */
   positionMapAndUpdateAddress = async (coords, triggerEvent) => {
     try {
-      const [userCountrySame, address] = await getUserLocation(coords);
+      const [userCountrySame, addresses] = await getUserLocation(coords);
       // If user and site country not same, don;t process.
       if (!userCountrySame) {
         if (triggerEvent) {
@@ -117,13 +120,14 @@ export default class AddressForm extends React.Component {
           dispatchCustomEvent('addressPopUpError', {
             type: 'warning',
             message: parse(getStringMessage('location_outside_country_hd')),
+            showDismissButton: true,
           });
         }
         return;
       }
 
       // Fill the info in address form.
-      fillValueInAddressFromGeocode(address);
+      fillValueInAddressFromGeocode(addresses);
       // Remove all markers from the map.
       removeAllMarkersFromMap();
       // Pan the map to location.
@@ -131,9 +135,12 @@ export default class AddressForm extends React.Component {
       getMap().panTo(marker.getPosition());
       getMap().setZoom(getHDMapZoom());
       window.spcMarkers.push(marker);
+      // Check if area/city filled or not to show
+      // error and scroll for user.
+      errorOnDropDownFieldsNotFilled();
       removeFullScreenLoader();
     } catch (error) {
-      Drupal.logJavascriptError('homedelivery-checkUserCountry', error);
+      Drupal.logJavascriptError('homedelivery-checkUserCountry', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
   };
 
@@ -173,6 +180,7 @@ export default class AddressForm extends React.Component {
     dispatchCustomEvent('addressPopUpError', {
       type: 'warning',
       message: getStringMessage('location_access_denied'),
+      showDismissButton: true,
     });
   }
 
@@ -183,7 +191,7 @@ export default class AddressForm extends React.Component {
       headingText,
       closeModal,
       showEmail,
-      formContext,
+      shippingAsBilling = null,
     } = this.props;
 
     const {
@@ -191,6 +199,7 @@ export default class AddressForm extends React.Component {
       cityChanged,
       errorSuccessMessage,
       messageType,
+      dismissButton,
     } = this.state;
 
     let defaultAddressVal = [];
@@ -198,26 +207,12 @@ export default class AddressForm extends React.Component {
       defaultAddressVal = defaultVal;
     }
 
-    // Check if billing address form.
-    let mapToAddressFormBtnText = getStringMessage('hd_deliver_to_my_location');
-    if (formContext === 'billing') {
-      mapToAddressFormBtnText = getStringMessage('billing_select_my_location');
-    }
-
-    let isEditAddress = false;
-    // If address has area value set on load, means
-    // we are editing address.
-    if (defaultAddressVal !== null
-      && defaultAddressVal.area !== undefined) {
-      isEditAddress = true;
-    }
-
     Object.entries(window.drupalSettings.address_fields).forEach(
       ([key, field]) => {
         dynamicFields.push(
           <DynamicFormField
             key={key}
-            default_val={defaultAddressVal}
+            default_val={shippingAsBilling ? '' : defaultAddressVal}
             areasUpdate={this.refreshAreas}
             area_list={areaList}
             cityChanged={cityChanged}
@@ -234,11 +229,6 @@ export default class AddressForm extends React.Component {
 
     return (
       <div className="spc-address-form">
-        {window.innerWidth > 768 && (
-          <div className="spc-address-form-map">
-            <GoogleMap isEditAddress={isEditAddress} />
-          </div>
-        )}
         <div className="spc-address-form-sidebar">
           <SectionTitle>{headingDeliveryText}</SectionTitle>
           <a className="close" onClick={() => closeModal()}>
@@ -249,39 +239,29 @@ export default class AddressForm extends React.Component {
               && (
               <CheckoutMessage type={messageType} context="new-address-form-modal modal">
                 {errorSuccessMessage}
-                {messageType === 'warning'
+                {messageType === 'warning' && dismissButton === true
                 && (
-                  <button type="button" onClick={(e) => this.hidePopUpError(e)}>
+                  <button id="address-hide-error-button" type="button" onClick={(e) => this.hidePopUpError(e)}>
                     {getStringMessage('dismiss')}
                   </button>
                 )}
               </CheckoutMessage>
               )}
-            <div
-              className="spc-deliver-button"
-              onClick={() => this.deliverToCurrentLocation()}
-            >
-              {mapToAddressFormBtnText}
-            </div>
-            {window.innerWidth < 768 && (
-              <div className="spc-address-form-map">
-                <GoogleMap isEditAddress={isEditAddress} />
-              </div>
-            )}
             <div className="spc-address-form-content">
               <form
                 className="spc-address-add"
                 onSubmit={(e) => this.handleSubmit(e)}
               >
+                <FixedFields
+                  showEmail={showEmail}
+                  defaultVal={defaultAddressVal}
+                  type="hd"
+                />
                 <div className="delivery-address-fields">
                   {' '}
                   {dynamicFields}
                   {' '}
                 </div>
-                <FixedFields
-                  showEmail={showEmail}
-                  defaultVal={defaultAddressVal}
-                />
                 <div className="spc-address-form-actions" id="address-form-action">
                   <button
                     id="save-address"

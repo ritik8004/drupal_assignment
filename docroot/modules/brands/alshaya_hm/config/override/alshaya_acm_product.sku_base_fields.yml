@@ -47,6 +47,10 @@ fields:
     label: 'Product Quality'
     cardinality: -1
 
+  color_name:
+    label: 'Color name'
+    type: 'string'
+
   article_pattern:
     label: 'Article Pattern'
     cardinality: -1
@@ -119,6 +123,8 @@ fields:
 
   style:
     label: 'Style'
+    description: 'Part of description.'
+    type: 'attribute'
     cardinality: -1
     index: 1
     facet: 1
@@ -210,3 +216,7 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
+
+  season_code:
+    label: 'Season Code'
+    type: 'string'

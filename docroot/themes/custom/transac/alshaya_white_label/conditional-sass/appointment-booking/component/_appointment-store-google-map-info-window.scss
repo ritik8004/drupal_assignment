@@ -1,0 +1,181 @@
+#google-map-appointment-booking {
+  .gm-style {
+    .gm-style-iw-c {
+      width: 17.6875rem;
+      padding: 1.125rem 1.375rem !important;
+      border: solid 1px $appointment-store-info-window-border;
+      border-radius: 0;
+
+      @include breakpoint($tablet) {
+        max-height: 11.875rem !important;
+      }
+
+      @include breakpoint($desktop) {
+        max-height: 12.5rem !important;
+      }
+    }
+
+    .gm-style-iw-d {
+      font-size: 0.75rem;
+      font-family: $alshaya-thin;
+      color: $appointment-store-map-info-window-impress;
+      overflow: auto !important;
+
+      @include breakpoint($tablet) {
+        max-height: 11.875rem !important;
+      }
+
+      .appointment-store-name {
+        .store-name {
+          width: 68%;
+          display: inline-block;
+          color: $appointment-store-map-store-name;
+          font-size: 0.875rem;
+          font-family: $alshaya-bold;
+        }
+
+        .store-distance {
+          float: $right;
+          color: $appointment-store-map-store-distance;
+        }
+
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .store-delivery-time {
+        color: $appointment-store-map-info-window-impress;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        display: block;
+
+        .label--delivery-time {
+          font-family: $alshaya-bold;
+        }
+
+        .delivery--time--value {
+          display: block;
+          margin-top: 0.3125rem;
+        }
+      }
+    }
+  }
+}
+
+.map-store-list {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  box-shadow: 0 -1px 20px 9px $sticky-btn;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li.select-store {
+      display: none;
+      padding: 1.25rem;
+      font-size: 0.875rem;
+
+      .store-actions {
+        margin-top: 1.25rem;
+
+        .select-store {
+          background: $primary_btn_bg;
+          height: 3.25rem;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          justify-content: center;
+          color: $primary_btn_text;
+          font-family: $alshaya-bold;
+          font-weight: normal;
+          font-size: 1rem;
+          width: 100%;
+          border: none;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.75rem;
+      }
+
+      &.selected {
+        display: block;
+      }
+
+      .appointment-store-name {
+        display: block;
+        padding-bottom: 1rem;
+        color: $appointment-store-map-info-window-impress;
+        position: relative;
+
+        .appointment-store-name-wrapper {
+          display: inline-block;
+          width: 100%;
+
+          .store-name {
+            color: $appointment-store-map-store-name;
+            font-family: $alshaya-bold;
+
+            @include breakpoint($only-mobile) {
+              font-size: 0.875rem;
+            }
+          }
+
+          .store-distance {
+            float: $right;
+            color: $appointment-store-map-store-distance;
+            padding-#{$right}: 2rem;
+          }
+        }
+      }
+
+      .store-address,
+      .store-open-hours {
+        color: $appointment-store-map-info-window-impress;
+      }
+
+      .store-delivery-time {
+        color: $appointment-store-map-info-window-impress;
+        margin-top: 0.625rem;
+        margin-bottom: 0.625rem;
+        display: block;
+
+        .label--delivery-time {
+          font-family: $alshaya-bold;
+        }
+
+        .delivery--time--value {
+          display: block;
+          margin-top: 0.3125rem;
+        }
+      }
+    }
+
+    .appointment-map-list-close {
+      position: absolute;
+      top: -0.5rem;
+      #{$right}: -0.75rem;
+
+      @include icon('close') {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+        color: $appointment-store-close-icon;
+      }
+    }
+  }
+}
+
+.appointment-map-view.fullscreen {
+  @include breakpoint($only-mobile) {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    z-index: 99;
+    #{$left}: 0;
+  }
+}

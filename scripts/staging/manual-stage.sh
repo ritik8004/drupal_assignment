@@ -66,33 +66,33 @@ fi
 cd /var/www/html/${AH_SITE_NAME}/docroot
 
 echo "Dumping databases..."
-mkdir -p /tmp/manual-stage
+mkdir -p ~/manual-stage
 
 # Dump databases.
 for current_site in $(echo ${valid_sites:1} | tr "," "\n")
 do
   echo "Dumping databases for $current_site"
-  drush -l $current_site.$source_domain sql-dump --result-file=/tmp/manual-stage/$current_site.sql --skip-tables-key=common --gzip
+  drush -l $current_site.$source_domain sql-dump --result-file=~/manual-stage/$current_site.sql --skip-tables-key=common --gzip
 done
 
 
 echo
 echo "Copying the dump files to target env..."
-ssh $target 'mkdir -p /tmp/manual-stage'
-scp /tmp/manual-stage/* $target:/tmp/manual-stage/
-rm -rf /tmp/manual-stage
+ssh $target 'mkdir -p ~/manual-stage'
+scp ~/manual-stage/* $target:~/manual-stage/
+rm -rf ~/manual-stage
 
 
 echo
 echo "Importing the dumps on target env..."
-ssh $target 'gunzip /tmp/manual-stage/*.gz'
+ssh $target 'gunzip ~/manual-stage/*.gz'
 for current_site in $(echo ${valid_sites:1} | tr "," "\n")
 do
   uri="https://$current_site-$target_domain"
 
   echo
   echo "Droppping and importing database again for $current_site"
-  ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sql-drop -y; drush -l $uri sql-cli < /tmp/manual-stage/$current_site.sql"
+  ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sql-drop -y; drush -l $uri sql-cli < ~/manual-stage/$current_site.sql"
 
   echo "Execute drush status for the target site to ensure config reset is executed after database restore"
   ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri status"
@@ -123,13 +123,13 @@ do
   files_folder="sites/g/files/$site_files/files"
   target_files_folder="/var/www/html/$AH_SITE_GROUP.$target_env/docroot/$files_folder"
 
-  rsync -a $files_folder/* --exclude 'styles' --exclude 'media' --exclude 'assets' --exclude 'assets-shared' $target:$target_files_folder
+  rsync -a $files_folder/* --exclude 'css' --exclude 'js' --exclude 'styles' --exclude 'media' --exclude 'assets' --exclude 'assets-shared' $target:$target_files_folder
 
   if [[ "$type" == "iso" ]]; then
     echo
     echo "Initiating rsync of product media files in screen rsync_${current_site}_${target_env}"
-    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/media $target:$target_files_folder"
-    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/assets-shared $target:$target_files_folder"
+    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/media $target:$target_files_folder --delete"
+    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/assets-shared $target:$target_files_folder  --delete"
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c acquia_search_index"
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c alshaya_algolia_index"
     ssh $target "screen -S $current_site -dm bash -c \"cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sapi-i\""
@@ -144,4 +144,4 @@ do
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings hotlink 1 -y"
   fi
 done
-ssh $target 'rm -rf /tmp/manual-stage'
+ssh $target 'rm -rf ~/manual-stage'

@@ -144,6 +144,21 @@ function alshaya_paragraphs_preprocess_paragraph(&$variables) {
   if ($variables['elements']['#paragraph']->getType() == 'promo_block') {
     $variables['#attached']['library'][] = 'alshaya_paragraphs/paragraphs_js';
   }
+
+  // For 1row 3col flex paragraph add ratio field value as class.
+  if ($variables['elements']['#paragraph']->getType() == '1_row_3_col_flex') {
+    $paragraph = $variables['elements']['#paragraph'];
+    $ratio = $paragraph->get('field_ratio_3_col')->getValue();
+    if (!isset($variables['attributes']['class'])) {
+      $variables['attributes']['class'] = [];
+    }
+    if (!empty($ratio)) {
+      $variables['attributes']['class'] = array_merge(
+        $variables['attributes']['class'],
+        [$ratio[0]['value']]
+      );
+    }
+  }
 }
 
 /**

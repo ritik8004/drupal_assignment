@@ -33,6 +33,10 @@ export default class CartItem extends React.Component {
     Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
   }
 
+  componentDidUpdate() {
+    Drupal.ajax.bindAjaxLinks(document.getElementById('spc-cart'));
+  }
+
   /**
    * Call back to get product data from storage.
    */
@@ -99,7 +103,9 @@ export default class CartItem extends React.Component {
         }
 
         let triggerRecommendedRefresh = false;
-        const itemsLength = Object.keys(cartResult.items).length;
+        const itemsLength = (cartResult.items !== undefined)
+          ? Object.keys(cartResult.items).length
+          : 0;
         if (cartResult.items !== undefined
           && itemsLength > 0) {
           // Trigger if item is removed.
@@ -163,6 +169,7 @@ export default class CartItem extends React.Component {
         freeItem,
         stock,
         finalPrice,
+        price,
         in_stock: inStock,
         error_msg: itemErrorMsg,
       },
@@ -173,12 +180,12 @@ export default class CartItem extends React.Component {
 
     const {
       productInfo: {
+        id: skuId,
         image,
         options,
         promotions,
         title,
         url,
-        price,
         maxSaleQty,
       },
     } = this.state;
@@ -222,13 +229,12 @@ export default class CartItem extends React.Component {
           <div className="spc-product-container">
             <div className="spc-product-title-price">
               <div className="spc-product-title">
-                <a href={url}>{title}</a>
+                {freeItem
+                  ? <a href={Drupal.url(`free-gift/${skuId}/nojs`)} className="use-ajax" data-dialog-type="modal">{title}</a>
+                  : <a href={url}>{title}</a>}
               </div>
               <div className="spc-product-price">
-                <SpecialPrice
-                  price={parseFloat(price)}
-                  finalPrice={parseFloat(finalPrice)}
-                />
+                <SpecialPrice price={price} freeItem={freeItem} finalPrice={finalPrice} />
               </div>
             </div>
             <div className="spc-product-attributes-wrapper">
@@ -253,7 +259,7 @@ export default class CartItem extends React.Component {
           </div>
         </div>
         <div className="spc-promotions">
-          {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} promo={key} sku={sku} link />)}
+          {promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} link />)}
         </div>
         <Notifications>
           <CartItemOOS type="warning" inStock={inStock} />

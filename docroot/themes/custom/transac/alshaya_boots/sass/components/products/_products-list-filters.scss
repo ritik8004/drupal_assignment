@@ -3,8 +3,6 @@
   .all-filters-algolia {
     .filter {
       &__foot {
-        text-transform: uppercase;
-
         .facet-all-clear,
         .facet-clear-all {
           .block-facets-summary-blockfilter-bar-promotions,
@@ -12,13 +10,15 @@
           .block-facets-summary-blockfilter-bar {
             @include breakpoint($only-mobile) {
               padding-bottom: 0;
+              margin-bottom: 0;
+              border: 0;
             }
 
             ul {
               li.clear-all {
                 a {
                   text-decoration: none;
-                  text-transform: uppercase;
+                  text-transform: none;
                 }
               }
             }
@@ -27,13 +27,6 @@
       }
 
       &__inner {
-        overflow-y: auto;
-        padding-bottom: 8.25rem;
-
-        @include breakpoint($only-mobile) {
-          padding-bottom: 7.25rem;
-        }
-
         .block-views-exposed-filter-blockalshaya-product-list-block-1,
         .block-views-exposed-filter-blockalshaya-product-list-block-2,
         .block-views-exposed-filter-blocksearch-page {
@@ -51,8 +44,10 @@
           }
         }
 
-        .c-facet.c-accordion {
-          .c-accordion__title {
+        .c-facet.c-accordion,
+        .c-facet.c-collapse-item {
+          .c-accordion__title,
+          .c-collapse__title {
             @include breakpoint($only-mobile) {
               font-size: 0.875rem;
             }
@@ -69,9 +64,6 @@
         padding-#{$left}: 2rem;
 
         .filter-sort-title {
-          justify-content: $left;
-          align-items: $left;
-          text-align: $left;
           font-family: $alshaya-bold;
           text-transform: capitalize;
           font-size: 1rem;

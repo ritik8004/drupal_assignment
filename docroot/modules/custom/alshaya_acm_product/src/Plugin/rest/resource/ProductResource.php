@@ -232,23 +232,31 @@ class ProductResource extends ResourceBase {
     }
 
     $node = $this->skuManager->getDisplayNode($sku);
-    if (!($node instanceof NodeInterface)) {
+    if (!($node instanceof NodeInterface) && !$this->skuManager->isSkuFreeGift($skuEntity)) {
       throw (new NotFoundHttpException());
     }
 
-    $link = $node->toUrl('canonical', ['absolute' => TRUE])
-      ->toString(TRUE)
-      ->getGeneratedUrl();
+    $link = $node
+      ? $node->toUrl('canonical', ['absolute' => TRUE])
+        ->toString(TRUE)
+        ->getGeneratedUrl()
+      : '';
 
     $data = $this->getSkuData($skuEntity, $link);
 
-    $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
-      '',
-      $node->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
+    if ($node) {
+      $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+        '',
+        $node->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
+      $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
+    }
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
-    $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
+    $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_config(), $data['flags']], TRUE);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
+    // Allow other modules to alter product data.
+    $this->moduleHandler->alter('sku_product_info', $data, $skuEntity);
+
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
@@ -319,7 +327,9 @@ class ProductResource extends ResourceBase {
       'home_delivery' => [],
       'click_and_collect' => [],
     ];
+    $data['flags'] = [];
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
+    $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_status($sku), $data['flags']], TRUE);
 
     foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
       $data['linked'][] = [

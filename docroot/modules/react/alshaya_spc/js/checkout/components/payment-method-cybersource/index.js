@@ -10,6 +10,7 @@ import CVVToolTipText from '../cvv-text';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
+  validateCvv,
 } from '../../../utilities/checkout_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
@@ -55,12 +56,16 @@ class PaymentMethodCybersource extends React.Component {
       return;
     }
 
+    const errorMessage = e.detail.error_message === 'failed'
+      ? getStringMessage('transaction_failed')
+      : getStringMessage('payment_error');
+
     dispatchCustomEvent('spcCheckoutMessageUpdate', {
       type: 'error',
-      message: e.detail.error_message === 'failed'
-        ? getStringMessage('transaction_failed')
-        : getStringMessage('payment_error'),
+      message: errorMessage,
     });
+
+    Drupal.logJavascriptError('Post Cybersource finalise', errorMessage, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
 
     removeFullScreenLoader();
   };
@@ -152,18 +157,18 @@ class PaymentMethodCybersource extends React.Component {
   };
 
   cvvValidations = (e) => {
-    const cvv = parseInt(e.target.value, 10);
-    const valid = (cvv >= 100 && cvv <= 9999);
+    const cvv = e.target.value.trim();
+    const valid = validateCvv(cvv);
     handleValidationMessage(
       'spc-cy-cc-cvv-error',
-      e.target.value,
+      cvv,
       valid,
       getStringMessage('invalid_cvv'),
     );
 
     this.setState({
       cvvValid: valid,
-      cvv: e.target.value,
+      cvv,
     });
   };
 
@@ -181,7 +186,11 @@ class PaymentMethodCybersource extends React.Component {
   validateBeforePlaceOrder = () => {
     const { numberValid, expiryValid, cvvValid } = this.state;
     if (!(numberValid && expiryValid && cvvValid)) {
-      Drupal.logJavascriptError('validate-before-place-order', 'client side validation failed for credit card info');
+      Drupal.logJavascriptError(
+        'validate-before-place-order',
+        'client side validation failed for credit card info',
+        GTM_CONSTANTS.PAYMENT_ERRORS,
+      );
       return false;
     }
 
@@ -197,14 +206,18 @@ class PaymentMethodCybersource extends React.Component {
           message: getStringMessage('payment_error'),
         });
         removeFullScreenLoader();
-        Drupal.logJavascriptError('validate-before-place-order', response.data.error_message);
+        Drupal.logJavascriptError(
+          'validate-before-place-order',
+          response.data.error_message,
+          GTM_CONSTANTS.PAYMENT_ERRORS,
+        );
         return;
       }
 
       const { number, expiry, cvv } = this.state;
 
       response.data.data.card_number = number;
-      response.data.data.card_cvn = parseInt(cvv.toString().trim(), 10);
+      response.data.data.card_cvn = cvv.toString().trim();
 
       const expiryInfo = expiry.split('/');
       const date = new Date();
@@ -230,7 +243,7 @@ class PaymentMethodCybersource extends React.Component {
         message: getStringMessage('payment_error'),
       });
       removeFullScreenLoader();
-      Drupal.logJavascriptError('validate-before-place-order', error);
+      Drupal.logJavascriptError('validate-before-place-order', error, GTM_CONSTANTS.PAYMENT_ERRORS);
     });
 
     return false;

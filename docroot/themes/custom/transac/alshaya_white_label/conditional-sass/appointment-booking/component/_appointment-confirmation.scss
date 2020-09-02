@@ -1,0 +1,277 @@
+.appointment {
+  &-confirmation {
+    &-wrapper {
+      .confirmation-header {
+        @include breakpoint($tablet-landscape) {
+          text-align: center;
+        }
+
+        h4 {
+          color: $appointment-confirmation-blue-txt;
+          font-size: 1.125rem;
+          line-height: 1.22;
+          margin: 0 0 0.3125rem;
+          font-family: $alshaya-bold;
+        }
+
+        h5 {
+          font-size: 0.875rem;
+          color: $appointment-confirmation-txt;
+          margin: 0.3125rem 0 0;
+          font-family: $alshaya-thin;
+        }
+      }
+
+      .confirmation-body {
+        @include breakpoint($tablet-landscape) {
+          margin: 3.75rem 0;
+        }
+      }
+
+      .confirmation-footer:not(:empty) {
+        padding: 3.75rem 0;
+        text-align: $right;
+
+        @include breakpoint($upto-tablet-landscape) {
+          padding-bottom: 0.625rem;
+        }
+      }
+
+      .appointment-flow-action {
+        @include breakpoint($tablet) {
+          button {
+            margin: 2rem 0 0;
+          }
+        }
+      }
+
+      .inner-header {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 0.0625rem solid $appointment-confirmation-grey-border;
+        padding-bottom: 0.3125rem;
+
+        @include breakpoint($upto-tablet-landscape) {
+          flex-direction: column-reverse;
+          padding-bottom: 0.625rem;
+          margin-bottom: 0.625rem;
+        }
+
+        label {
+          font-size: 1.125rem;
+          line-height: 1.22;
+          color: $appointment-confirmation-blue-txt;
+          font-family: $alshaya-bold;
+
+          @include breakpoint($upto-tablet-landscape) {
+            margin-top: 0.625rem;
+          }
+        }
+      }
+
+      .confirmation-item {
+        padding-top: 1.875rem;
+        display: grid;
+        grid-template-columns: 12.5rem 1fr;
+
+        body.ie & {
+          display: -ms-grid;
+          -ms-grid-columns: 12.5rem 1fr;
+        }
+
+        @include breakpoint($upto-tablet-landscape) {
+          padding-top: 1.25rem;
+        }
+
+        label {
+          font-size: 0.875rem;
+          color: $appointment-confirmation-blue-txt;
+          font-family: $alshaya-bold;
+          display: inline-block;
+
+          @include breakpoint($upto-tablet-landscape) {
+            display: block;
+          }
+
+          body.ie & {
+            -ms-grid-row: 1;
+            -ms-grid-column: 1;
+          }
+        }
+
+        span {
+          font-size: 0.875rem;
+          color: $appointment-confirmation-txt;
+          font-family: $alshaya-thin;
+
+          body.ie & {
+            -ms-grid-row: 1;
+            -ms-grid-column: 2;
+            display: inline-block;
+          }
+        }
+      }
+
+      .appointment-confirmation-option {
+        display: flex;
+        font-family: $alshaya-bold;
+
+        @include breakpoint($upto-tablet-landscape) {
+          margin: 1.875rem 0;
+        }
+
+        .react-add-to-calendar {
+          position: relative;
+        }
+
+        .react-add-to-calendar__dropdown {
+          position: absolute;
+          background: white;
+          border: 0.0625rem solid $appointment-confirmation-grey-border;
+          top: 1.875rem;
+          #{$left}: 0;
+          #{$right}: 0;
+
+          ul {
+            padding: 0;
+            list-style: none;
+            margin: 0;
+          }
+
+          li {
+            border-bottom: 0.0625rem solid $appointment-confirmation-grey-border;
+
+            &:hover {
+              background: $appointment-confirmation-add-to-calendar-hover;
+            }
+          }
+
+          a {
+            color: $appointment-confirmation-txt;
+            font-size: 0.875rem;
+            display: block;
+            padding: 0.625rem;
+
+            &:hover {
+              color: $appointment-confirmation-blue-txt;
+            }
+          }
+        }
+      }
+
+      .react-add-to-calendar__button,
+      .print {
+        font-size: 0.875rem;
+        color: $appointment-confirmation-blue-txt;
+
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 1.5rem;
+          height: 1.5rem;
+          vertical-align: top;
+          margin-#{$right}: 0.625rem;
+        }
+      }
+
+      .react-add-to-calendar__button {
+        margin-#{$right}: 1.125rem;
+        cursor: pointer;
+
+        &::before {
+          background: url('#{$base_theme_img_directory_path}/icons/appointment-add-to-calendar.svg') no-repeat center;
+        }
+      }
+
+      .print {
+        line-height: 1.375rem;
+        margin-#{$left}: 1.125rem;
+        cursor: pointer;
+
+        &::before {
+          background: url('#{$base_theme_img_directory_path}/icons/appointment-print.svg') no-repeat center;
+        }
+      }
+
+      .view-my-appointments-button {
+        color: $appointment-confirmation-blue-txt;
+        background: $appointment-confirmation-view-appointment-btn;
+        border: 0.0625rem solid $appointment-confirmation-view-appointment-btn-border;
+        border-radius: 0.1875rem;
+        padding: 0.6875rem 2.0625rem;
+      }
+
+      .continue-shopping {
+        position: static;
+        background: $appointment-confirmation-continue-btn;
+        border: 0.0625rem solid $appointment-confirmation-continue-btn;
+        border-radius: 0.125rem;
+        padding: 0.6875rem 3.125rem;
+        margin-#{$left}: 1.5625rem;
+        text-transform: capitalize;
+
+        @include breakpoint($upto-tablet) {
+          margin-#{$left}: 0;
+        }
+      }
+
+      .view-my-appointments-button,
+      .continue-shopping {
+        font-size: 0.875rem;
+        line-height: 1rem;
+        font-family: $alshaya-bold;
+
+        @include breakpoint($upto-tablet) {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+#appointment-booking {
+  .appointment-confirmation-wrapper {
+    .confirmation-footer:empty {
+      display: none;
+    }
+
+    @include breakpoint($desktop) {
+      .confirmation-footer {
+        width: calc(100% - 15.5rem);
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .confirmation-footer {
+        padding-top: 1.75rem;
+      }
+
+      .appointment-flow-action {
+        margin-top: 3.5rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      .confirmation-footer {
+        float: $left;
+        padding-top: 2rem;
+        text-align: $right;
+      }
+
+      .appointment-flow-action {
+        float: $right;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .confirmation-footer,
+      .appointment-flow-action {
+        float: $left;
+      }
+
+      .confirmation-footer {
+        padding-#{$right}: 1.5rem;
+      }
+    }
+  }
+}

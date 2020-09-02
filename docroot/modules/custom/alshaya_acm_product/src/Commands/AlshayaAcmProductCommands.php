@@ -714,4 +714,124 @@ class AlshayaAcmProductCommands extends DrushCommands {
     }
   }
 
+  /**
+   * Identifies and if required, fixes Product node aliases.
+   *
+   * @param string $langcode
+   *   The langcode for which to check/generate alias. Defaults to 'en'.
+   * @param array $options
+   *   An option that takes multiple values.
+   *
+   * @command alshaya_acm_product:fix-missing-pathauto
+   * @options fix
+   *   Whether to fix the translations or not.
+   *
+   * @aliases fix-missing-pathauto
+   *
+   * @usage fix-missing-pathauto ar
+   *   Checks and mentions the count and nids of untranslated AR nodes.
+   * @usage fix-missing-pathauto en --fix
+   *   Checks and mentions the count and nids of untranslated EN nodes and
+   *   generates EN aliases for them.
+   */
+  public function checkAndFixProductAlias(string $langcode = 'en', array $options = ['fix' => FALSE]) {
+    // Get nids for which translation is available.
+    $query = $this->connection->select('node', 'n');
+    $query->addField('n', 'nid');
+    $query->innerJoin('url_alias', 'ua', "ua.source=concat('/node/', n.nid)");
+    $query->condition('ua.langcode', $langcode);
+    $query->condition('ua.alias', '/node/%', 'NOT LIKE');
+    $nids = $query->execute()->fetchCol();
+
+    // Get Product nids for which translation is not available.
+    $query = $this->connection->select('node', 'n');
+    $query->addField('n', 'nid');
+    $query->innerJoin('node_field_data', 'nfd', 'nfd.nid=n.nid');
+    $query->condition('nfd.type', 'acq_product');
+    $query->condition('nfd.langcode', $langcode);
+    $query->condition('n.nid', $nids, 'NOT IN');
+    $nids = $query->execute()->fetchCol();
+
+    $this->output()->writeln('Total number of nodes for which url alias is not generated: ' . count($nids));
+    if (!empty($nids)) {
+      $this->output()->writeln('The nids are: ' . json_encode($nids));
+    }
+
+    if ($options['fix']) {
+      if (empty($nids)) {
+        $this->output()->writeln('Nothing to fix!');
+        return;
+      }
+      $storage = $this->entityTypeManager->getStorage('node');
+      // Loading and saving the node should generate the URL alias
+      // automatically.
+      foreach ($nids as $nid) {
+        try {
+          $storage->load($nid)->save();
+          $this->output()->writeln('Fixed url alias for nid: ' . $nid);
+        }
+        catch (\Exception $e) {
+          $this->output()->writeln("Exception occured for node $nid: ", $e->getMessage());
+        }
+      }
+      $this->output()->writeln('Re-check if process was successful by running the same command without --fix.');
+    }
+    else {
+      if (!empty($nids)) {
+        $this->output()->writeln('To fix the issues, provide "--fix" option in the command.');
+      }
+      else {
+        $this->output()->writeln('Looks good! Nothing to do.');
+      }
+    }
+  }
+
+  /**
+   * Check sku broken images and if found, delete them.
+   *
+   * @command alshaya_acm_product:fix-missing-files
+   *
+   * @aliases fix-missing-files
+   *
+   * @usage fix-missing-files
+   *   Checks and delete files for all skus.
+   */
+  public function checkAndFixMissingFiles() {
+    $query = $this->connection->select('acq_sku_field_data', 'acq_sku');
+    $query->fields('acq_sku', ['sku']);
+    $result = $query->execute()->fetchAll();
+    foreach ($result as $sku) {
+      $flag = 0;
+      $sku_data = SKU::loadFromSku($sku->sku);
+      if (empty($sku_data)) {
+        $this->output()->writeln('Sku ' . $sku . 'is not found on this site.');
+      }
+      // Get media data for the sku.
+      $media_data = $sku_data->get('media')->getString();
+      if (!empty($media_data)) {
+        $media_data = unserialize($media_data);
+        foreach ($media_data as $data) {
+          if (isset($data['fid'])) {
+            $file = $this->entityTypeManager->getStorage('file')->load($data['fid']);
+            if ($file instanceof FileInterface) {
+              $url = $file->getFileUri();
+              if (!file_exists($url)) {
+                $this->output()->writeln('Image ' . $url . ' with file id ' . $data['fid'] . ' not found for sku ' . $sku->sku);
+                if (!$this->io()->confirm(dt('Do you want to delete it?'))) {
+                  throw new UserAbortException();
+                }
+                $file->delete();
+                $flag = 1;
+              }
+            }
+          }
+        }
+      }
+      if ($flag == 1) {
+        // Download files again for skus.
+        $sku_data->getMedia();
+      }
+    }
+  }
+
 }

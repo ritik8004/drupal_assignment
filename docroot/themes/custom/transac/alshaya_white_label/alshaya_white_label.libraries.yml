@@ -53,7 +53,9 @@ slider_banner:
     js/slider.js: {}
   dependencies:
     - core/jquery
+    - core/drupal
     - alshaya_white_label/slick
+    - alshaya_white_label/alshaya_image_lazy_load
 
 delivery_usp:
   js:
@@ -185,6 +187,7 @@ magazine_attribute:
     - alshaya_white_label/pdp-video-player
     - alshaya_white_label/attribute.common
     - core/jquery.ui.effects.slide
+    - alshaya_white_label/pdp-additional-attributes
 
 campaign-plp-style-1-video-provider:
   css:
@@ -386,3 +389,8 @@ secure-text:
   css:
     theme:
       css/conditional-sass/secure-text/secure-text.ltr.css: {}
+
+appointment-booking:
+  css:
+    theme:
+      css/conditional-sass/appointment-booking/appointment-booking.ltr.css: {}

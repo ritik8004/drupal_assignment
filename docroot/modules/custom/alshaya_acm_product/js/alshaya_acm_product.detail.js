@@ -278,6 +278,7 @@
       // Set timeout so that original behavior attachment is not affected.
       setTimeout(function () {
         Drupal.behaviors.magazine_gallery.attach(document);
+        Drupal.behaviors.pdpVideoPlayer.attach(document);
       }, 1);
     }
     else {

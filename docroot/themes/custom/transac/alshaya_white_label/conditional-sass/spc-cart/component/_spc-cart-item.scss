@@ -42,6 +42,7 @@
 
       .spc-product-image {
         display: inline-flex;
+        align-items: flex-start;
 
         body.ie & {
           -ms-grid-row: 1;

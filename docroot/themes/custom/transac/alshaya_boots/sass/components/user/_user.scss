@@ -2,17 +2,21 @@
   .user-login-form {
     .form-submit {
       height: 2.5rem;
+      margin-top: 2rem;
 
-      @include breakpoint($tablet) {
+      @include breakpoint($desktop) {
         width: 9.125rem;
         max-width: 12rem;
       }
     }
   }
 
-  .user-login-form {
+  .user-form,
+  .user-login-form,
+  .user-pass,
+  .multistep-checkout {
     .form-submit {
-      margin-top: 2rem;
+      text-transform: none;
     }
   }
 

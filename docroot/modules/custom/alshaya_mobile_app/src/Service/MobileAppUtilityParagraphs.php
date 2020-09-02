@@ -24,6 +24,9 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\redirect\RedirectRepository;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Block\BlockManagerInterface;
+use Drupal\file\Entity\File;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Component\Utility\UrlHelper;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -40,7 +43,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   /**
    * The cache tags.
    *
-   * @var string
+   * @var array
    */
   protected $cacheTags = [];
 
@@ -353,6 +356,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
               'field_promo_theme' => [
                 'label' => 'theme',
               ] + $default_values,
+              'field_description' => [
+                'label' => 'description',
+              ] + $default_values,
             ],
           ],
         ],
@@ -364,15 +370,19 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   /**
    * Get additional fields.
    *
-   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   * @param \Drupal\entity\EntityInterface $entity
    *   The paragraph entity object.
    *
    * @return array
    *   Array of all created fields.
    */
-  protected function getConfiguredFields(ParagraphInterface $entity):array {
-    $all_fields = $this->entityFieldManager->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
-    $config_fields = array_diff(array_keys($all_fields), array_keys($this->paragraphBaseFields));
+  protected function getConfiguredFields(EntityInterface $entity):array {
+    $config_fields = [];
+    // Adding a check for entity types throwing exceptions.
+    if ($entity->getEntityTypeId() != 'user_role' && $entity->getEntityTypeId() != 'media_type') {
+      $all_fields = $this->entityFieldManager->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
+      $config_fields = array_diff(array_keys($all_fields), array_keys($this->paragraphBaseFields));
+    }
     return $config_fields;
   }
 
@@ -604,11 +614,33 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       ? $entity->bundle()
       : $entity->getEntityTypeId(),
     ];
+
+    // Get parent entity types for paragraph entities.
+    if ($entity->getEntityTypeId() == 'paragraph') {
+      $data['parent_type'] = $entity->getParentEntity()->bundle();
+    }
+
     // Get configured fields of entity, we don't require base fields.
     $paragraph_fields = $this->getConfiguredFields($entity);
     foreach ($paragraph_fields as $field_name) {
       if (empty($row = $this->processParagraphReferenceField($entity, $field_name))) {
         $row = $entity->get($field_name)->getValue();
+        if ($field_name == 'field_banner' || $field_name == 'thumbnail') {
+          if (!empty($row)) {
+            $image_file = $this->fileStorage->load($row[0]['target_id']);
+            if ($image_file instanceof File) {
+              $row[0]['url'] = file_create_url($image_file->getFileUri());
+            }
+          }
+        }
+        if ($field_name == 'field_link' || $field_name == 'field_button_link') {
+          if (UrlHelper::isValid($row[0]['uri'])) {
+            $url_object = Url::fromUri($row[0]['uri']);
+            if (isset($url_object)) {
+              $row[0]['deeplink'] = $this->getDeepLinkFromUrl($url_object);
+            }
+          }
+        }
       }
       $data[$field_name] = $row;
     }
@@ -618,7 +650,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   /**
    * Process paragraph entity reference revision field.
    *
-   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   * @param \Drupal\entity\EntityInterface $entity
    *   The paragraph entity object.
    * @param string $field_name
    *   The entity reference revision field name.
@@ -626,7 +658,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @return array
    *   Return array of processed paragraph data.
    */
-  protected function processParagraphReferenceField(ParagraphInterface $entity, string $field_name): array {
+  protected function processParagraphReferenceField(EntityInterface $entity, string $field_name): array {
     if (!$entity->hasField($field_name)) {
       return [];
     }
@@ -688,6 +720,11 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         : $entity->get($field)->getString();
       }
     }
+    if (!empty($data)
+      && $entity->getEntityTypeId() == 'paragraph'
+      && $parent = $entity->getParentEntity()->bundle()) {
+      $data['parent_type'] = $parent;
+    }
     return $data;
   }
 
@@ -720,6 +757,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   protected function paragraphProductCarouselCategory(ParagraphInterface $entity, array $fields) {
     unset($fields['field_category_carousel']);
+    $this->cacheableEntities[] = $entity;
 
     // Fetch values from the paragraph.
     $category_id = $entity->get('field_category_carousel')->getValue()[0]['target_id'] ?? NULL;
@@ -770,7 +808,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
 
       if (!empty($nodes)) {
         $data['items'] = array_map(function ($node) {
-          return $this->getLightProductFromNid($node->id(), $this->currentLanguage);
+          $this->cacheableEntities[] = $node;
+          return $this->skuManager->getSkuForNode($node);
         }, $nodes);
       }
     }

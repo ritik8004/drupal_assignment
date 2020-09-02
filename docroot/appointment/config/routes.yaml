@@ -1,0 +1,52 @@
+appointment.get_programs:
+   path: /get/programs
+   controller: App\Controller\ConfigurationServices::getPrograms
+   methods: GET
+appointment.get_activities:
+   path: /get/activities
+   controller: App\Controller\ConfigurationServices::getActivities
+   methods: GET
+appointment.get_stores:
+   path: /get/stores
+   controller: App\Controller\ConfigurationServices::getStores
+   methods: GET
+appointment.get_questions:
+   path: /get/questions
+   controller: App\Controller\AppointmentServices::getQuestions
+   methods: GET
+appointment.book_appointment:
+   path: /book-appointment
+   controller: App\Controller\AppointmentServices::bookAppointment
+   methods: POST
+appointment.get_client_details:
+   path: /get/client
+   controller: App\Controller\ClientServices::getClientsByCriteria
+   methods: GET
+appointment.get_timeslots:
+   path: /get/timeslots
+   controller: App\Controller\AppointmentServices::getTimeSlots
+   methods: GET
+appointment.get_appointments:
+   path: /get/appointments
+   controller: App\Controller\AppointmentServices::getAppointments
+   methods: GET
+appointment.get_store_by_id:
+   path: /get/store/criteria
+   controller: App\Controller\ConfigurationServices::getStoreDetailsById
+   methods: GET
+appointment.get_companion:
+   path: /get/companions
+   controller: App\Controller\AppointmentServices::getCompanionByAppointmentId
+   methods: GET
+appointment.cancel_appointment:
+   path: /cancel/appointment
+   controller: App\Controller\AppointmentServices::cancelAppointment
+   methods: POST
+appointment.get_appointment_details:
+   path: /get/appointment-details
+   controller: App\Controller\AppointmentServices::getAppointmentDetails
+   methods: GET
+appointment.get_all_translation:
+   path: /get/translations
+   controller: App\Controller\ConfigurationServices::getAllTranslations
+   methods: GET

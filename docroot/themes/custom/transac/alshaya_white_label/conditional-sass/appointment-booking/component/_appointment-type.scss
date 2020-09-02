@@ -1,0 +1,52 @@
+.appointment-type-list {
+  &-wrapper {
+    padding-top: 1.875rem;
+
+    @include breakpoint($tablet-landscape) {
+      padding-top: 1.1875rem;
+    }
+
+    .appointment-booking-section-title {
+      @include breakpoint($tablet-landscape) {
+        padding-top: 0.6875rem;
+      }
+    }
+  }
+
+  &-inner-wrapper {
+    @include breakpoint($tablet-landscape) {
+      width: calc(100% - 16.75rem);
+    }
+
+    .read-more-less {
+      &.empty {
+        display: none;
+      }
+
+      .short-text {
+        font-family: $alshaya-thin;
+        font-size: 0.875rem;
+        line-height: 1.375rem;
+        color: $appointment-type-text;
+        margin-top: 1.125rem;
+        display: block;
+      }
+
+      .readMoreText {
+        font-family: $alshaya-thin;
+        font-size: 0.875rem;
+        line-height: 1.375rem;
+        margin-top: 1.125rem;
+        display: block;
+        text-decoration: underline;
+        color: $appointment-type-text;
+        cursor: pointer;
+        text-transform: capitalize;
+
+        &.hide-link {
+          display: none;
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-@javascript
+@javascript @guest @madaPayment @homeDelivery
 Feature: SPC Checkout Home Delivery MADA Card Payment
 
   Background:
@@ -49,11 +49,12 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_visa_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -131,7 +132,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | postal_code                   | {postal_code} |
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_mada_anon_username}    |
+      | email    | {spc_anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
@@ -140,11 +141,12 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_visa_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -156,12 +158,12 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_mada_anon_username}"
+    Then I should see "{spc_anon_email}"
     Then I should see "{language_order_detail}"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_mada_anon_username}"
+    Then I should see "{spc_anon_email}"
     Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -227,7 +229,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | postal_code                   | {postal_code} |
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_mada_anon_username}    |
+      | email    | {spc_anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
@@ -236,11 +238,12 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_visa_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -293,11 +296,12 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_master_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -375,7 +379,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | postal_code                   | {postal_code} |
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_mada_anon_username}    |
+      | email    | {spc_anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
@@ -384,11 +388,12 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_master_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -400,12 +405,12 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_mada_anon_username}"
+    Then I should see "{spc_anon_email}"
     Then I should see "{language_order_detail}"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_mada_anon_username}"
+    Then I should see "{spc_anon_email}"
     Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -471,7 +476,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | postal_code                   | {postal_code} |
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_mada_anon_username}    |
+      | email    | {spc_anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
@@ -480,11 +485,12 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
+    Then the "payment-method-checkout_com" checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_master_card}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods #payment-method-cashondelivery" element
+    And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load

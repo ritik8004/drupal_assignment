@@ -10,6 +10,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\taxonomy\TermInterface;
@@ -36,6 +37,7 @@ use Drupal\redirect\RedirectRepository;
  */
 class MobileAppUtility {
 
+  use LoggerChannelTrait;
   use StringTranslationTrait;
 
   /**
@@ -305,7 +307,7 @@ class MobileAppUtility {
       switch ($object->bundle()) {
         case 'acq_product':
           $sku = $this->skuManager->getSkuForNode($object);
-          $return = 'product/' . $sku;
+          $return = 'product-exclude-linked/' . $sku;
           break;
 
         case 'acq_promotion':
@@ -326,7 +328,7 @@ class MobileAppUtility {
       }
     }
     elseif ($object instanceof SKUInterface) {
-      $return = 'product/' . $object->getSku();
+      $return = 'product-exclude-linked/' . $object->getSku();
     }
 
     return self::ENDPOINT_PREFIX . $return;
@@ -605,12 +607,54 @@ class MobileAppUtility {
       $this->termUrls[] = $term_url;
       $this->termTags[] = "term:{$term->tid}";
 
+      $path = $term_url->getGeneratedUrl();
+      $deeplink = $this->getDeepLink($term);
+
+      // Check if any redirection is set up for the term path.
+      // We provide the technical taxonomy term path here and not the alias
+      // as alias redirection for taxonomy terms doesn't seem to work on Drupal
+      // front end.
+      $term_technical_path = '/taxonomy/term/' . $term->tid;
+      $redirected_path = $this->getRedirectUrl("/{$this->currentLanguage}" . $term_technical_path);
+
+      // If no redirect, then we get the same path we passed for getRedirectUrl
+      // without the langcode and hence we do not process them further.
+      if (trim($redirected_path, '/') != trim($term_technical_path, '/')) {
+        // Process path and deeplink again if a redirection has been set up.
+        // Get the path of the target term.
+        $internal_path = $this->aliasManager->getPathByAlias(
+          rtrim(str_replace("/{$this->currentLanguage}", '', $redirected_path), '/'),
+          $this->currentLanguage
+        );
+
+        try {
+          // Get the taxonomy term ID of the target term.
+          $params = Url::fromUri('internal:' . $internal_path)->getRouteParameters();;
+          if (!empty($params) && !empty($params['taxonomy_term'])) {
+            $redirected_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
+
+            // Get path and deeplink of target term.
+            if ($redirected_term instanceof TermInterface
+              && $redirected_term->bundle() == 'acq_product_category') {
+              $path = $redirected_path;
+              $deeplink = $this->getDeepLink($redirected_term);
+            }
+          }
+        }
+        catch (\Exception $e) {
+          $this->getLogger('MobileAppUtility')->warning('Internal path looks invalid, please check @internal_path for term id @id', [
+            '@id' => $term->tid,
+            '@internal_path' => $internal_path,
+          ]);
+        }
+      }
+
       $record = [
         'id' => (int) $term->tid,
         'name' => $term->name,
         'description'  => !empty($term->description__value) ? $term->description__value : '',
-        'path' => $term_url->getGeneratedUrl(),
-        'deeplink' => $this->getDeepLink($term),
+        'path' => $path,
+        'deeplink' => $deeplink,
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 

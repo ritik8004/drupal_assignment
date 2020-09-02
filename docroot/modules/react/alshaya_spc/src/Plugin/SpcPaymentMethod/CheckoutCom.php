@@ -6,6 +6,7 @@ use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -83,7 +84,7 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
     $build['#cache']['contexts'] = ['user'];
     $build['#cache']['tags'] = ['user:' . $this->currentUser->id()];
 
-    $acceptedCards = ['visa', 'mastercard', 'diners'];
+    $acceptedCards = Settings::get('checkout_com_accepted_cards', ['visa']);
 
     if ($this->checkoutComApiHelper->getCheckoutcomConfig('mada_enabled')) {
       array_unshift($acceptedCards, 'mada');
@@ -122,6 +123,11 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
     $build['#strings']['invalid_cvv'] = [
       'key' => 'invalid_cvv',
       'value' => $this->t('Invalid security code (CVV)'),
+    ];
+
+    $build['#strings']['checkout_com_error_info'] = [
+      'key' => 'checkoutcom_error_info',
+      'value' => $this->t('Order ID: @order_id'),
     ];
   }
 

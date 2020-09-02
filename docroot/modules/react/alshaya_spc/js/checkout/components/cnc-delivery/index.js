@@ -10,6 +10,7 @@ import { fetchClicknCollectStores } from '../../../utilities/api/requests';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
+import { makeFullName } from '../../../utilities/cart_customer_util';
 
 class ClicknCollectDeiveryInfo extends React.Component {
   isComponentMounted = true;
@@ -147,7 +148,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
             <div className="spc-delivery-contact-info">
               <div className="contact-info-label">{Drupal.t('Collection by')}</div>
               <div className="contact-name">
-                {`${shippingAddress.firstname} ${shippingAddress.lastname}`}
+                { makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || '') }
               </div>
               <div className="contact-telephone">{`+${drupalSettings.country_mobile_code} ${cleanMobileNumber(shippingAddress.telephone)}`}</div>
               <div

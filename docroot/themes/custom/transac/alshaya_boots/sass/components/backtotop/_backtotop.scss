@@ -1,0 +1,24 @@
+#backtotop {
+  @include breakpoint($only-mobile) {
+    bottom: 4.5rem;
+  }
+}
+
+.nodetype--acq_product {
+  #backtotop {
+    @include breakpoint($only-mobile) {
+      bottom: 2rem;
+    }
+  }
+}
+
+.language-switcher-enabled {
+  #backtotop {
+    &.backtotop-nofooter,
+    &.backtotop-withfooter {
+      @include breakpoint($upto-desktop) {
+        bottom: 2rem;
+      }
+    }
+  }
+}

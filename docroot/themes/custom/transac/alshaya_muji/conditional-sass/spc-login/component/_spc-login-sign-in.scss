@@ -2,10 +2,43 @@
   .multistep-login {
     .edit-checkout-as-guest {
       text-transform: uppercase;
+      font-family: $muji-helvetica-neue-bold;
     }
 
     .form-submit {
+      font-family: $muji-helvetica-neue-bold;
       text-transform: uppercase;
+    }
+
+    fieldset {
+      .fieldset-legend {
+        font-family: $muji-demibold;
+        text-transform: capitalize;
+      }
+    }
+
+    .ashaya-spc-login-form {
+      .form-actions {
+        button {
+          font-family: $muji-helvetica-neue-bold;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    html[lang=ar] & {
+      margin-top: 0;
+    }
+  }
+
+  .site-brand-home a {
+    @include breakpoint($upto-desktop) {
+      margin: 0.8rem auto 0;
+
+      html[lang=ar] & {
+        margin: 0.8rem auto 0;
+      }
     }
   }
 }

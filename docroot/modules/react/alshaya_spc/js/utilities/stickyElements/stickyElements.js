@@ -55,6 +55,13 @@ function stickyMobileCartPreview() {
 
   // Check for super category menu.
   const superCategoryMenu = document.getElementById('block-supercategorymenu');
+
+  // Check for super menu.
+  const superMenu = document.getElementById('block-supermenu');
+
+  // Check branding menu height.
+  const brandingMenuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight || 0;
+
   let menuHeight = 0;
 
   // SPC Cart Preview offset.
@@ -69,16 +76,19 @@ function stickyMobileCartPreview() {
 
   // Menu offset.
   if (superCategoryMenu && superCategoryMenu.offsetHeight) {
-    menuHeight = superCategoryMenu.offsetHeight + document.getElementById('block-mobilenavigation').offsetHeight;
+    // In super category menu, we allow the super category menu to scroll after
+    // minimalistic header, hence factor only menu nav bar height.
+    menuHeight = document.getElementById('block-mobilenavigation').offsetHeight;
+  } else if (superMenu && superMenu.offsetHeight) {
+    menuHeight = superMenu.offsetHeight + brandingMenuHeight;
   } else {
-    menuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
+    menuHeight = brandingMenuHeight;
   }
 
   window.addEventListener('scroll', () => {
     // Mobile cart sticky header.
     if (window.innerWidth < 768) {
       const cartOffsetTop = menuHeight + breadCrumbHeight + preContentHeight - cartPreviewOffset;
-
       if (window.pageYOffset > cartOffsetTop) {
         if (!cartPreview[0].classList.contains('sticky')) {
           cartPreview[0].classList.add('sticky');

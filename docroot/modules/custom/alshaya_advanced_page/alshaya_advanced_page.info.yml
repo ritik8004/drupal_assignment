@@ -27,4 +27,5 @@ dependencies:
   - ctools:ctools
   - pathauto:pathauto
   - views_field_view:views_field_view
+  - drupal:replicate_ui
 package: Alshaya

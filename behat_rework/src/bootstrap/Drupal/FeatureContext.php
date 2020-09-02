@@ -1070,12 +1070,15 @@ class FeatureContext extends CustomMinkContext
    */
   public function iShouldSeeTheLinkInSection($arg1, $arg2)
   {
-    $link = $this->getSession()
-      ->getPage()
-      ->find('css', $arg2)
-      ->hasLink($arg1);
-    if (!$link) {
-      throw new \Exception($arg1 . 'link is not visible');
+    $page = $this->getSession()->getPage();
+    $section = $page->find('css', $arg2);
+    if (!empty($section)) {
+      $link = $section->hasLink($arg1);
+      if (!$link) {
+        throw new \Exception($arg1 . 'link is not visible.');
+      }
+    } else {
+      throw new \Exception($arg2 . 'section does not exists.');
     }
   }
 
@@ -1698,7 +1701,9 @@ class FeatureContext extends CustomMinkContext
     if (!empty($element)) {
       $this->getSession()->executeScript("jQuery('$locator').trigger('click');");
     }
-    throw new \Exception(sprintf('Element %s is not found on page.', $element));
+    else {
+      throw new \Exception(sprintf('Element %s is not found on page.', $element));
+    }
   }
 
   /**
@@ -1819,24 +1824,23 @@ class FeatureContext extends CustomMinkContext
   /**
    * @Then the price and currency matches the content of product having promotional code set as :cart_promotional
    */
-  public function iPriceCurrencyMatches($cart_promotional)
+  public function iPriceCurrencyMatches($cart_promotional = NULL)
   {
     $page = $this->getSession()->getPage();
-    if ($page->find('css', '#block-content .acq-content-product .has--special--price')) {
-      $product_price = $page->find('css', '#block-content .acq-content-product .special--price .price .price-amount')->getHtml();
+    if ($page->find('css', '#block-content .acq-content-product .content__title_wrapper .has--special--price')) {
+      $product_price = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .special--price .price .price-amount')->getHtml();
       $product_price = floatval($product_price);
-      $product_currency = $page->find('css', '#block-content .acq-content-product .special--price .price .price-currency')->getHtml();
+      $product_currency = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .special--price .price .price-currency')->getHtml();
     }
     else {
-      $product_price = $page->find('css', '#block-content .acq-content-product .price-block .price .price-amount')->getHtml();
+      $product_price = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .price-block .price .price-amount')->getHtml();
       $product_price = floatval($product_price);
-      $product_currency = $page->find('css', '#block-content .acq-content-product .price-block .price .price-currency')->getHtml();
+      $product_currency = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .price-block .price .price-currency')->getHtml();
     }
     $cart_price = $page->find('css', '#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount')->getHtml();
     $cart_price = floatval($cart_price);
     $cart_currency = $page->find('css', '#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-currency')->getHtml();
-
-    if ($cart_promotional) {
+    if (!empty($cart_promotional)) {
       $message = ($product_price >= $cart_price) ? '' : 'Correct price did not added get in minicart, expected cart price %d';
       if (!empty($message)) {
         throw new \Exception(sprintf($message, $product_price));
@@ -1924,7 +1928,8 @@ class FeatureContext extends CustomMinkContext
           $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
           $this->iWaitSeconds(5);
           $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
-          $this->iWaitSeconds(3);
+          // Adding a wait time for elements to load properly
+          $this->iWaitSeconds(5);
         }
         else {
           $this->getSession()->getPage()->fillField($field, $value);
@@ -2044,5 +2049,233 @@ class FeatureContext extends CustomMinkContext
 
       throw new \Exception($message);
     }
+  }
+
+  /**
+   * Asserts that an element, specified by CSS selector, doesn't exists.
+   *
+   * @param string $selector
+   *   The CSS selector to search for.
+   *
+   * @Then the element :selector should not exist
+   */
+  public function theElementShouldNotExist($selector) {
+    $this->assertSession()->elementNotExists('css', $selector);
+  }
+
+  /**
+   * Selects option in select field with specified id|name|label|value
+   * Example: When I select "Bats" from "user_fears" address
+   * Example: And I select "Bats" from "user_fears" address
+   *
+   * @When /^(?:|I )select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)" address$/
+   */
+  public function selectOptionAddress($select, $option)
+  {
+    if ($option) {
+      $this->getSession()->getPage()->selectFieldOption($select, $option);
+    }
+  }
+
+  /**
+   * Returns the id.
+   *
+   * @param string $selector
+   *   The CSS ID to search for.
+   */
+  public function theElementSimilar($id) {
+    $element = $this->getSession()
+      ->getPage()
+      ->find('xpath', "//*[contains(@id,'" . $id . "')]");
+    if ($element) {
+      return $element->getAttribute('id');
+    }
+    else {
+      throw new ElementNotFoundException(sprintf('Could not evaluate CSS selector: "%s"', $id));
+    }
+  }
+
+  /**
+   * @When I fill in area billing address with id similar to :field with :value
+   */
+  public function fillBillingFieldsSimilarTo($field, $value)
+  {
+    if (empty($value)) {
+      return;
+    }
+    $field = $this->theElementSimilar($field);
+    $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
+    $this->iWaitSeconds(5);
+    $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
+    $this->iWaitSeconds(5);
+  }
+
+  /**
+   * Fills in form fields with provided table
+   * Example: When I add in the billing address with following:
+   *              | username | bruceWayne |
+   *              | password | iLoveBats123 |
+   *
+   * @When I add in the billing address with following:
+   */
+  public function addBillingFields(TableNode $fields)
+  {
+    $page = $this->getSession()->getPage();
+    // Check if no billing add exists
+    $element = $this->getSession()->getPage()->find("css", "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text");
+    if ($element) {
+      $element->click();
+      $this->iWaitSeconds(10);
+      $this->iWaitForThePageToLoad();
+      if ($this->getSession()->getPage()->find('css', 'div.spc-address-list-member-overlay div.address-list-content div.spc-checkout-address-list')){
+        $address = $this->getSession()->getPage()->find('css', 'div.spc-address-list-member-overlay div.address-list-content div.spc-checkout-address-list div.spc-address-tile .spc-address-tile-actions .spc-address-select-address');
+        $address->press();
+        $this->iWaitSeconds(20);
+      }
+      else {
+        foreach ($fields->getRowsHash() as $field => $value) {
+          if ($value) {
+            if ($field == "spc-area-select-selected-city" || $field == "spc-area-select-selected") {
+              $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
+              $this->iWaitSeconds(5);
+              $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
+              $this->iWaitSeconds(5);
+            }
+            else {
+              $this->getSession()->getPage()->fillField($field, $value);
+            }
+          }
+        }
+        $this->iClickJqueryElementOnPage("#address-form-action #save-address");
+      }
+    }
+    else {
+      $element = $this->getSession()->getPage()->find("css", "#spc-checkout .spc-main .spc-content .delivery-information-preview");
+      if (!$element) {
+        throw new Exception("Element " . "#spc-checkout .spc-main .spc-content .delivery-information-preview" . " not found on " . $this->getSession()->getCurrentUrl());
+      }
+    }
+  }
+
+  /**
+   * Fills in form fields with provided table
+   * Example: Then I add the store details with::
+   *              | username | bruceWayne |
+   *              | password | iLoveBats123 |
+   *
+   * @Then I add the store details with:
+   */
+  public function addStoreFields(TableNode $fields)
+  {
+    $page = $this->getSession()->getPage();
+    // Check if no billing add exists
+    $element = $this->getSession()->getPage()->find("css", "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text");
+    if ($element) {
+      $element->click();
+      $this->iWaitSeconds(10);
+      $this->iWaitForThePageToLoad();
+      foreach ($fields->getRowsHash() as $field => $value) {
+        if ($value) {
+          if ($field == "edit-store-location") {
+            $this->iSelectFirstAutocomplete($value, $field);
+            $this->iWaitSeconds(10);
+            $this->iWaitForThePageToLoad();
+            $this->iClickJqueryElementOnPage(".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper");
+            $this->iWaitSeconds(10);
+            $this->iWaitForThePageToLoad();
+            $this->iClickJqueryElementOnPage(".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button");
+            $this->iWaitSeconds(10);
+          }
+          else {
+            $this->getSession()->getPage()->fillField($field, $value);
+          }
+        }
+      }
+      $this->iClickJqueryElementOnPage(".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address");
+    } else {
+      $element = $this->getSession()->getPage()->find("css", "#spc-checkout .spc-main .spc-content .delivery-information-preview");
+      if (!$element) {
+        throw new Exception("Element " . "#spc-checkout .spc-main .spc-content .delivery-information-preview" . " not found on " . $this->getSession()->getCurrentUrl());
+      }
+    }
+  }
+
+  /**
+   * Fills in form fields with provided table
+   * Example: When I add in the CnC billing address with following:
+   *              | username | bruceWayne |
+   *              | password | iLoveBats123 |
+   *
+   * @When I add CnC billing address with following:
+   */
+  public function addCnCBillingFields(TableNode $fields)
+  {
+    // Check if no billing add exists
+    $element = $this->getSession()->getPage()->find("css", "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel");
+    if ($element) {
+      $element->click();
+      $this->iWaitSeconds(10);
+      $this->iWaitForThePageToLoad();
+      foreach ($fields->getRowsHash() as $field => $value) {
+        if ($value) {
+          if ($field == "spc-area-select-selected-city" || $field == "spc-area-select-selected") {
+            $this->iClickJqueryElementOnPage(".spc-address-form-content .spc-address-add .delivery-address-fields #$field");
+            $this->iWaitSeconds(5);
+            $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
+            $this->iWaitSeconds(5);
+          }
+          else {
+            $this->getSession()->getPage()->fillField($field, $value);
+          }
+        }
+      }
+      $this->iClickJqueryElementOnPage("#address-form-action #save-address");
+    }
+    else {
+      $element = $this->getSession()->getPage()->find("css", "#spc-checkout .spc-main .spc-content .spc-billing-bottom-panel .spc-billing-information");
+      if (!$element) {
+        throw new Exception("Existing Billing address not attached on the page "  . $this->getSession()->getCurrentUrl());
+      }
+    }
+  }
+
+  /**
+   * Clicks link with specified id|class
+   * Example: When I click the element "Log In" on page
+   *
+   * @When I click the element :locator having text :text on page$/
+   */
+  public function iClickElementWithTextOnPage($locator, $text)
+  {
+    $element = $this->getSession()->getPage()->find('css', $locator);
+    if (!empty($element)) {
+      $this->getSession()->executeScript("jQuery('$locator:contains('$text')').trigger('click');");
+    }
+    else {
+      throw new \Exception(sprintf('Element %s is not found on page.', $element));
+    }
+  }
+
+  /**
+   * @Given the element :arg1 having attribute :arg2 should contain :arg3
+   */
+  public function inOfElementShouldContain($selector, $attribute, $contains)
+  {
+    $element = $this->getSession()->getPage()->find('css', $selector);
+    $Selectelement = $element->getAttribute($attribute);
+    if (strpos($Selectelement,$contains) === False) {
+      throw new \Exception(sprintf('Element %s does not contain attribute %s with %s.', $selector, $attribute , $contains));
+    }
+  }
+
+  /**
+   * @Then I fill in :selector with date :value
+   * @param $selector
+   * @param $value
+   */
+  public function iFillInDateWith($selector, $value)
+  {
+    $field = $this->getSession()->getPage()->findField($selector);
+    $field->setValue($value);
   }
 }

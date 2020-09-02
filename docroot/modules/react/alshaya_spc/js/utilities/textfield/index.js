@@ -1,9 +1,5 @@
 import React from 'react';
 
-import {
-  geocodeAddressToLatLng,
-} from '../map/map_utils';
-
 class TextField extends React.Component {
   handleEvent = (e, handler) => {
     if (handler === 'blur') {
@@ -15,14 +11,6 @@ class TextField extends React.Component {
     }
   };
 
-  handleChange = () => {
-    const { isAddressField } = this.props;
-    // Only for the address fields.
-    if (isAddressField !== undefined) {
-      geocodeAddressToLatLng();
-    }
-  }
-
   render() {
     const countryMobileCode = window.drupalSettings.country_mobile_code;
     const countryMobileCodeMaxLength = window.drupalSettings.mobile_maxlength;
@@ -31,6 +19,7 @@ class TextField extends React.Component {
       type,
       name,
       label,
+      maxLength,
     } = this.props;
     let focusClass = '';
     if (defaultValue !== undefined && defaultValue !== '') {
@@ -79,9 +68,9 @@ class TextField extends React.Component {
           id={name}
           name={name}
           defaultValue={defaultValue}
-          onChange={this.handleChange}
           onBlur={(e) => this.handleEvent(e, 'blur')}
           className={focusClass}
+          maxLength={maxLength}
         />
         <div className="c-input__bar" />
         <label>{label}</label>

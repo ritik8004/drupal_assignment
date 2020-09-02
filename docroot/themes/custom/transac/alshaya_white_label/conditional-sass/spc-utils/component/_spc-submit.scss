@@ -27,9 +27,13 @@
     a,
     button {
       pointer-events: none;
+      user-select: none;
     }
 
     button:disabled {
+      pointer-events: none;
+      user-select: none;
+
       @include breakpoint ($only-mobile) {
         opacity: 0.3;
       }

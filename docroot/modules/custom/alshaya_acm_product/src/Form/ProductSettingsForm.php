@@ -123,6 +123,15 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('back_to_list', $form_state->getValue('back_to_list'));
     $config->set('pdp_layout', $form_state->getValue('pdp_layout'));
     $config->set('max_discount_to_log', $form_state->getValue('max_discount_to_log'));
+    $config->set('legal_notice_enabled', $form_state->getValue('legal_notice_enabled'));
+    $config->set('legal_notice_label', $form_state->getValue('legal_notice_label'));
+    $config->set('legal_notice_summary', $form_state->getValue('legal_notice_summary'));
+    $config->set('non_refundable_tooltip', $form_state->getValue('non_refundable_tooltip'));
+    $config->set('non_refundable_text', $form_state->getValue('non_refundable_text'));
+    $config->set('same_day_delivery_text', $form_state->getValue('same_day_delivery_text'));
+    $config->set('same_day_delivery_sub_text', $form_state->getValue('same_day_delivery_sub_text'));
+    $config->set('delivery_in_only_city_text', $form_state->getValue('delivery_in_only_city_text'));
+    $config->set('delivery_in_only_city_key', $form_state->getValue('delivery_in_only_city_key'));
 
     // Product default image.
     $product_default_image = NULL;
@@ -316,6 +325,87 @@ class ProductSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Max discount value to trace (in %).'),
       '#description' => $this->t('This will trace the log when sku has discount (price - final price) greater than this.'),
       '#default_value' => $config->get('max_discount_to_log'),
+    ];
+
+    $form['product_flag'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Product flags'),
+      '#tree' => FALSE,
+      '#open' => TRUE,
+    ];
+
+    $form['product_flag']['non_refundable_tooltip'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Non refundable tooltip'),
+      '#description' => $this->t('Please enter text to be shown in tooltip.'),
+      '#default_value' => $config->get('non_refundable_tooltip'),
+    ];
+
+    $form['product_flag']['non_refundable_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Non refundable text'),
+      '#description' => $this->t('Please enter text to be shown for pdp/checkout.'),
+      '#default_value' => $config->get('non_refundable_text'),
+    ];
+
+    $form['product_flag']['same_day_delivery_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Same day delivery'),
+      '#description' => $this->t('Please enter text to be shown for pdp.'),
+      '#default_value' => $config->get('same_day_delivery_text'),
+    ];
+
+    $form['product_flag']['same_day_delivery_sub_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Same day delivery sub text'),
+      '#description' => $this->t('Please enter text to be shown for pdp.'),
+      '#default_value' => $config->get('same_day_delivery_sub_text'),
+    ];
+
+    $form['product_flag']['delivery_in_only_city_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Delivery in only city'),
+      '#description' => $this->t('Please enter text to be shown for pdp/checkout.'),
+      '#default_value' => $config->get('delivery_in_only_city_text'),
+    ];
+
+    $form['product_flag']['delivery_in_only_city_key'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Delivery in only city key'),
+      '#description' => $this->t('Please enter the city key to be allowed for delivery.'),
+      '#default_value' => $config->get('delivery_in_only_city_key'),
+    ];
+
+    $form['legal_notice_enabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Legal Notice'),
+      '#required' => FALSE,
+      '#default_value' => $config->get('legal_notice_enabled'),
+    ];
+
+    $form['legal_notice'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Legal Notice'),
+      '#tree' => FALSE,
+      '#open' => TRUE,
+      '#states' => [
+        'visible' => [
+          'input[name="legal_notice_enabled"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $form['legal_notice']['legal_notice_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Label'),
+      '#default_value' => $config->get('legal_notice_label'),
+    ];
+
+    $form['legal_notice']['legal_notice_summary'] = [
+      '#type' => 'text_format',
+      '#format' => 'rich_text',
+      '#title' => $this->t('Summary'),
+      '#default_value' => $config->get('legal_notice_summary.value'),
     ];
 
     return $form;

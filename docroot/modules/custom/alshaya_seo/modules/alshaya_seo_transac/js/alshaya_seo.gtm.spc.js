@@ -12,19 +12,7 @@
    * Helper function to get step number from body attr gtm-container.
    */
   Drupal.alshayaSeoSpc.getStepFromContainer = function () {
-    var step = 1;
-    var cart_data = Drupal.alshayaSpc.getCartData();
-    if (window.location.href.indexOf('checkout') > -1) {
-      step = 2;
-    }
-    if (window.location.href.indexOf('checkout') > -1
-      && cart_data !== null
-      && cart_data.hasOwnProperty('cart_payment_method')
-      && cart_data.cart_payment_method !== null
-    ) {
-      step = 3;
-    }
-    return step;
+    return (window.location.href.indexOf('checkout') > -1) ? 2 : 1;
   };
 
   /**
@@ -63,30 +51,34 @@
    *   Checkout step for gtm checkout event.
    */
   Drupal.alshayaSeoSpc.cartGtm = function(cart_data, step) {
+    const cartDataLayer = {};
     // GTM data for SPC cart.
     if (cart_data !== undefined) {
-      dataLayer[0].ecommerce.checkout.actionField.step = step;
-      dataLayer[0].privilegeCustomer = 'Regular Customer';
-      dataLayer[0].privilegesCardNumber = '';
-      dataLayer[0].productSKU = [];
-      dataLayer[0].productStyleCode = [];
-      dataLayer[0].cartTotalValue = cart_data.cart_total;
-      dataLayer[0].cartItemsCount = cart_data.items_qty;
+      cartDataLayer.privilegeCustomer = 'Regular Customer';
+      cartDataLayer.privilegesCardNumber = '';
+      cartDataLayer.productSKU = [];
+      cartDataLayer.productStyleCode = [];
+      cartDataLayer.cartTotalValue = cart_data.cart_total;
+      cartDataLayer.cartItemsCount = cart_data.items_qty;
       var items = cart_data.items;
+      cartDataLayer.checkout = { actionField: { step: step }};
       if (items !== undefined) {
-        dataLayer[0].ecommerce.checkout.products = [];
+        cartDataLayer.checkout = Object.assign(cartDataLayer.checkout, {products: []} )
+        // dataLayer.checkout.products = [];
         if (!drupalSettings.gtm.disabled_vars.indexOf('cartItemsFlocktory')) {
-          dataLayer[0].cartItemsFlocktory = [];
+          cartDataLayer.cartItemsFlocktory = [];
         }
 
         Object.entries(items).forEach(function(productItem) {
           const product = productItem[1];
           Drupal.alshayaSpc.getProductData(product.sku, Drupal.alshayaSeoSpc.cartGtmCallback, {
             qty: product.qty,
-            finalPrice: product.finalPrice
+            finalPrice: product.finalPrice,
+            cartDataLayer: cartDataLayer,
           });
         });
       }
+      return cartDataLayer;
     }
   };
 
@@ -99,11 +91,11 @@
     if (product !== undefined && product.sku !== undefined) {
       // gtmAttributes.id contains value of "getSkuForNode", which we need
       // to pass for productStyleCode.
-      dataLayer[0].productStyleCode.push(product.gtmAttributes.id);
-      dataLayer[0].productSKU.push(product.sku);
+      extraData.cartDataLayer.productStyleCode.push(product.gtmAttributes.id);
+      extraData.cartDataLayer.productSKU.push(product.sku);
       var productData = Drupal.alshayaSeoSpc.gtmProduct(product, extraData.qty);
-      dataLayer[0].ecommerce.checkout.products.push(productData);
-      if (typeof dataLayer[0].cartItemsFlocktory !== 'undefined') {
+      extraData.cartDataLayer.checkout.products.push(productData);
+      if (typeof extraData.cartDataLayer.cartItemsFlocktory !== 'undefined') {
         var flocktory = {
           id: product.parentSKU,
           price: extraData.finalPrice,
@@ -111,7 +103,7 @@
           title: product.gtmAttributes.name,
           image: product.image,
         };
-        dataLayer[0].cartItemsFlocktory.push(flocktory);
+        extraData.cartDataLayer.cartItemsFlocktory.push(flocktory);
       }
     }
   };

@@ -67,7 +67,7 @@ export default class CartRecommendedProducts extends React.Component {
             localStorage.setItem(key, JSON.stringify(result.data));
             dispatchCustomEvent('recommendedProductsLoad', { products: result.data });
           }
-        });
+        }, 100);
       }
     }
   };

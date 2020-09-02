@@ -5,17 +5,19 @@ namespace App\Controller;
 use App\Helper\CustomerHelper;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\CheckoutDefaults;
+use App\Service\Config\SystemSettings;
 use App\Service\Magento\CartActions;
 use App\Service\Cart;
 use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoCustomer;
 use App\Service\Magento\MagentoInfo;
-use App\Service\SessionStorage;
 use App\Service\Utility;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class CartController.
@@ -65,13 +67,6 @@ class CartController {
   protected $logger;
 
   /**
-   * Service for session.
-   *
-   * @var \App\Service\SessionStorage
-   */
-  protected $session;
-
-  /**
    * Service to check and apply defaults on Cart.
    *
    * @var \App\Service\CheckoutDefaults
@@ -84,6 +79,13 @@ class CartController {
    * @var \App\Service\Utility
    */
   protected $utility;
+
+  /**
+   * System Settings service.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  protected $settings;
 
   /**
    * CartController constructor.
@@ -100,12 +102,12 @@ class CartController {
    *   Magento Customer service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
-   * @param \App\Service\SessionStorage $session
-   *   Service for session.
    * @param \App\Service\CheckoutDefaults $checkout_defaults
    *   Service to check and apply defaults on Cart.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    */
   public function __construct(RequestStack $request,
                               Cart $cart,
@@ -113,18 +115,18 @@ class CartController {
                               MagentoInfo $magento_info,
                               MagentoCustomer $magento_customer,
                               LoggerInterface $logger,
-                              SessionStorage $session,
                               CheckoutDefaults $checkout_defaults,
-                              Utility $utility) {
+                              Utility $utility,
+                              SystemSettings $settings) {
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->magentoInfo = $magento_info;
     $this->magentoCustomer = $magento_customer;
     $this->logger = $logger;
-    $this->session = $session;
     $this->checkoutDefaults = $checkout_defaults;
     $this->utility = $utility;
+    $this->settings = $settings;
   }
 
   /**
@@ -152,7 +154,7 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart() {
-    $cart_id = $this->session->getDataFromSession(Cart::SESSION_STORAGE_KEY);
+    $cart_id = $this->cart->getCartId();
     if (empty($cart_id)) {
       // In JS we will consider this as empty cart.
       return new JsonResponse(['error' => TRUE]);
@@ -192,19 +194,20 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCartForCheckout() {
-    $cart_id = $this->session->getDataFromSession(Cart::SESSION_STORAGE_KEY);
+    $cart_id = $this->cart->getCartId();
     if (empty($cart_id)) {
       // In JS we will consider this as empty cart.
       return new JsonResponse(['error' => TRUE]);
     }
 
-    $data = $this->cart->getCart();
+    // Always get fresh cart for checkout page.
+    $data = $this->cart->getCart(TRUE);
 
     // Check customer email And check drupal session customer id to validate,
     // if current cart is associated with logged in user or not.
     $sessionCustomerId = $this->getDrupalInfo('customer_id');
     if ($sessionCustomerId && (empty($data['customer']['id']) || $data['customer']['id'] != $sessionCustomerId)) {
-      $this->cart->associateCartToCustomer($sessionCustomerId);
+      $this->cart->associateCartToCustomer($sessionCustomerId, TRUE);
       $data = $this->cart->getCart();
     }
 
@@ -237,7 +240,18 @@ class CartController {
       $info = $this->drupal->getSessionCustomerInfo();
       if (!empty($info['customer_id'])) {
         $cart_id = $this->cart->createCart($info['customer_id']);
-        $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, $cart_id);
+        $this->cart->setCartId($cart_id);
+      }
+      else {
+        // @TODO: Remove this "else" part and getAcmCartId() when we
+        // uninstall alshaya_acm module.
+        $info = $this->drupal->getAcmCartId();
+        // Set the cart_id in current session, if Drupal api returns the
+        // cart_id. If the cart_id is not valid, or contains any error getCart()
+        // will set the session key to NULL.
+        if ($info['cart_id']) {
+          $this->cart->setCartId($info['cart_id']);
+        }
       }
     }
 
@@ -265,21 +279,34 @@ class CartController {
     $data['appliedRules'] = $cart_data['cart']['applied_rule_ids'] ?? [];
 
     $data['items_qty'] = $cart_data['cart']['items_qty'];
-    $data['cart_total'] = $cart_data['totals']['base_grand_total'];
+    $data['cart_total'] = $cart_data['totals']['base_grand_total'] ?? 0;
+    $data['minicart_total'] = $data['cart_total'];
     $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
     $data['totals'] = [
-      'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'],
-      'base_grand_total' => $cart_data['totals']['base_grand_total'],
-      'discount_amount' => $cart_data['totals']['discount_amount'],
+      'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'] ?? 0,
+      'base_grand_total' => $cart_data['totals']['base_grand_total'] ?? 0,
+      'base_grand_total_without_surcharge' => $cart_data['totals']['base_grand_total'] ?? 0,
+      'discount_amount' => $cart_data['totals']['discount_amount'] ?? 0,
       'surcharge' => 0,
     ];
 
-    $data['totals']['shipping_incl_tax'] = !empty($cart_data['shipping']['method'])
-      ? $cart_data['totals']['shipping_incl_tax'] ?? 0
-      : NULL;
+    if (empty($cart_data['shipping']) || empty($cart_data['shipping']['method'])) {
+      // We use null to show "Excluding Delivery".
+      $data['totals']['shipping_incl_tax'] = NULL;
+    }
+    elseif ($cart_data['shipping']['type'] !== 'click_and_collect') {
+      // For click_n_collect we don't want to show this line at all.
+      $data['totals']['shipping_incl_tax'] = $cart_data['totals']['shipping_incl_tax'] ?? 0;
+    }
 
-    if (is_array($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
+    if (is_array($data['surcharge']) && !empty($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
       $data['totals']['surcharge'] = $data['surcharge']['amount'];
+    }
+
+    // We don't show surcharge amount on cart total and on mini cart.
+    if ($data['totals']['surcharge'] > 0) {
+      $data['totals']['base_grand_total_without_surcharge'] -= $data['totals']['surcharge'];
+      $data['minicart_total'] -= $data['totals']['surcharge'];
     }
 
     $data['response_message'] = NULL;
@@ -295,8 +322,6 @@ class CartController {
     $data['in_stock'] = TRUE;
     // If there are any error at cart item level.
     $data['is_error'] = FALSE;
-    // Whether CnC enabled or not.
-    $data['cnc_enabled'] = TRUE;
 
     try {
       $data['items'] = [];
@@ -318,7 +343,11 @@ class CartController {
           if ($item['item_id'] == $total_item['item_id']) {
             // Final price to use.
             $data['items'][$item['sku']]['finalPrice'] = $total_item['price_incl_tax'];
-            if ($total_item['price'] * $item['qty'] == $total_item['discount_amount']) {
+
+            // Free Item is only for free gift products which are having
+            // price 0, rest all are free but still via different rules.
+            if ($total_item['price_incl_tax'] == 0
+                && isset($total_item['extension_attributes'], $total_item['extension_attributes']['amasty_promo'])) {
               $data['items'][$item['sku']]['freeItem'] = TRUE;
             }
             break;
@@ -352,6 +381,9 @@ class CartController {
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
+    // Whether cart is stale or not.
+    $data['stale_cart'] = $cart_data['stale_cart'] ?? FALSE;
+
     return $data;
   }
 
@@ -369,6 +401,9 @@ class CartController {
       return $data;
     }
 
+    // Whether CnC enabled or not.
+    $cnc_status = $this->cart->getCncStatusForCart($data);
+
     // Here we will do the processing of cart to make it in required format.
     $uid = $this->getDrupalInfo('uid') ?: 0;
 
@@ -376,7 +411,10 @@ class CartController {
       $data = $updated;
     }
 
-    if (empty($data['shipping']['methods']) && !empty($data['shipping']['address'])) {
+    if (empty($data['shipping']['methods'])
+        && !empty($data['shipping']['address'])
+        && $data["shipping"]["type"] !== 'click_and_collect'
+    ) {
       $data['shipping']['methods'] = $this->cart->getHomeDeliveryShippingMethods($data['shipping']);
     }
 
@@ -387,6 +425,8 @@ class CartController {
 
     // Re-use the processing done for cart page.
     $response = $this->getProcessedCartData($data);
+
+    $response['cnc_enabled'] = $cnc_status;
 
     $response['customer'] = CustomerHelper::getCustomerPublicData($data['customer'] ?? []);
     $response['shipping'] = $data['shipping'] ?? [];
@@ -500,6 +540,11 @@ class CartController {
         if ($type === 'click_and_collect') {
           // Unset as not needed in further processing.
           unset($shipping_info['shipping_type']);
+          $this->logger->notice('Shipping update manual for CNC. Data: @data Address: @address Cart: @cart_id.', [
+            '@address' => json_encode($shipping_info),
+            '@data' => json_encode($request_content),
+            '@cart_id' => $this->cart->getCartId(),
+          ]);
           $cart = $this->cart->addCncShippingInfo($shipping_info, $action, $update_billing);
         }
         else {
@@ -534,6 +579,11 @@ class CartController {
             'method' => $shipping_methods[0]['method_code'],
           ];
 
+          $this->logger->notice('Shipping update manual for HD. Data: @data Address: @address Cart: @cart_id', [
+            '@address' => json_encode($shipping_info),
+            '@data' => json_encode($request_content),
+            '@cart_id' => $this->cart->getCartId(),
+          ]);
           $cart = $this->cart->addShippingInfo($shipping_info, $action, $update_billing);
         }
         break;
@@ -541,10 +591,49 @@ class CartController {
       case CartActions::CART_BILLING_UPDATE:
         $billing_info = $request_content['billing_info'];
         $billing_data = $this->cart->formatAddressForShippingBilling($billing_info);
+        $this->logger->notice('Billing update manual. Address: @address Data: @data Cart: @cart_id', [
+          '@address' => json_encode($billing_data),
+          '@data' => json_encode($billing_info),
+          '@cart_id' => $this->cart->getCartId(),
+        ]);
         $cart = $this->cart->updateBilling($billing_data);
         break;
 
       case CartActions::CART_PAYMENT_FINALISE:
+        $cart = $this->cart->getCart();
+        $is_error = FALSE;
+        // Check if shipping method is present else throw error.
+        if (empty($cart['shipping']['method'])) {
+          $is_error = TRUE;
+          $this->logger->error('Error while finalizing payment. No shipping method available. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+        }
+        // If shipping address not have custom attributes.
+        elseif (empty($cart['shipping']['address']['custom_attributes'])) {
+          $is_error = TRUE;
+          $this->logger->error('Error while finalizing payment. Shipping address not contains all info. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+        }
+        // If first/last name not available in shipping address.
+        elseif (empty($cart['shipping']['address']['firstname'])
+          || empty($cart['shipping']['address']['lastname'])) {
+          $is_error = TRUE;
+          $this->logger->error('Error while finalizing payment. First name or Last name not available in cart. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+        }
+
+        // If error.
+        if ($is_error) {
+          return new JsonResponse([
+            'error' => TRUE,
+            'error_code' => 505,
+            'message' => 'Delivery Information is incomplete. Please update and try again.',
+          ]);
+        }
+
         $extension = [
           'attempted_payment' => 1,
         ];
@@ -587,14 +676,15 @@ class CartController {
 
       case CartActions::CART_PAYMENT_UPDATE:
         $extension = [];
-
+        $user_id = $this->getDrupalInfo('uid');
         if (isset($request_content['payment_info']['payment']['analytics'])) {
           $extension['ga_client_id'] = $request_content['payment_info']['payment']['analytics']['clientId'] ?? '';
           $extension['tracking_id'] = $request_content['payment_info']['payment']['analytics']['trackingId'] ?? '';
-          $extension['user_id'] = $this->cart->getCartCustomerId();
-          $extension['user_type'] = $this->getDrupalInfo('uid') > 0 ? 'Logged in User' : 'Guest User';
+          $extension['user_id'] = $user_id > 0 ? $this->cart->getCartCustomerId() : '0';
+          $extension['user_type'] = $user_id > 0 ? 'Logged in User' : 'Guest User';
           $extension['user_agent'] = $this->request->headers->get('User-Agent', '');
           $extension['client_ip'] = $_ENV['AH_CLIENT_IP'] ?? $this->request->getClientIp();
+          $extension['attempted_payment'] = 1;
         }
 
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
@@ -602,7 +692,7 @@ class CartController {
 
       case CartActions::CART_REFRESH:
         // If cart id in request not matches with what in session.
-        if ($request_content['cart_id'] !== $this->cart->getCartId()) {
+        if ($request_content['cart_id'] != $this->cart->getCartId()) {
           $this->logger->error('Error while cart refresh. Cart data in request not matches with cart in session. Request data: @request_data CartId in session: @cart_id', [
             '@request_data' => json_encode($request_content),
             '@cart_id' => $this->cart->getCartId(),
@@ -612,6 +702,7 @@ class CartController {
         }
 
         $postData = $request_content['postData'];
+
         $cart = $this->cart->updateCart($postData);
         break;
     }
@@ -743,7 +834,7 @@ class CartController {
         return $this->getCart();
       }
 
-      $this->cart->associateCartToCustomer($customer['customer_id']);
+      $this->cart->associateCartToCustomer($customer['customer_id'], TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error while associating cart to customer. Error message: @message', [
@@ -753,6 +844,68 @@ class CartController {
     }
 
     return $this->getCart();
+  }
+
+  /**
+   * Fetch stores for the current cart for given lat and lng.
+   *
+   * @param float $lat
+   *   The latitude.
+   * @param float $lon
+   *   The longitude.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return stores list or error message.
+   */
+  public function getCncStores(float $lat, float $lon) {
+    if (empty($this->cart->getCartId())) {
+      $this->logger->error('Error while fetching click and collect stores. No cart available in session');
+      return new JsonResponse(
+        $this->utility->getErrorResponse('No cart in session', 404)
+      );
+    }
+
+    try {
+      $result = $this->cart->getCartStores($lat, $lon);
+      return new JsonResponse($result);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while fetching store for cart @cart of @lat, @lng. Error message: @message', [
+        '@cart' => $this->cart->getCartId(),
+        '@lat' => $lat,
+        '@lng' => $lon,
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse(
+        $this->utility->getErrorResponse($e->getMessage(), $e->getCode())
+      );
+    }
+  }
+
+  /**
+   * API to allow placing order from Drupal.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Response.
+   */
+  public function placeOrderSystem(Request $request) {
+    // Confirm the request is from Drupal.
+    $secret = $request->headers->get('alshaya-middleware') ?? '';
+    if ($secret !== md5($this->settings->getSettings('middleware_auth'))) {
+      throw new AccessDeniedHttpException();
+    }
+
+    // Additional data request to mimic API call from user.
+    $request_content = json_decode($request->getContent(), TRUE);
+    if (empty($request_content['cart_id'])) {
+      throw new NotFoundHttpException();
+    }
+
+    $this->cart->setCartId((int) $request_content['cart_id']);
+    return $this->placeOrder($request);
   }
 
 }

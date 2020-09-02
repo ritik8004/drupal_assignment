@@ -363,12 +363,8 @@ class APIWrapper {
 
     // Use the IP address from Acquia Cloud ENV variable.
     $params['customerIp'] = $_ENV['AH_CLIENT_IP'] ?? $this->request->getClientIp();
-
-    // We hard code HTTPS here as varnish request to middleware is always http.
-    $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
-    $params['successUrl'] = $host . 'checkout-com-success';
-    $params['failUrl'] = $host . 'checkout-com-error';
-
+    $params['successUrl'] = $this->getSuccessUrl();
+    $params['failUrl'] = $this->getFailUrl();
     $params['trackId'] = $cart['cart']['extension_attributes']['real_reserved_order_id'];
 
     $params['products'] = $this->getCartItems($cart['cart']['items']);
@@ -436,6 +432,30 @@ class APIWrapper {
     }
 
     return $this->madaValidator->isMadaBin($this->isLive(), $bin);
+  }
+
+  /**
+   * Wrapper function to get successUrl.
+   *
+   * @return string
+   *   Success callback url.
+   */
+  public function getSuccessUrl() {
+    // We hard code HTTPS here as varnish request to middleware is always http.
+    $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
+    return $host . 'checkout-com-success';
+  }
+
+  /**
+   * Wrapper function to get failUrl.
+   *
+   * @return string
+   *   Failure callback url.
+   */
+  public function getFailUrl() {
+    // We hard code HTTPS here as varnish request to middleware is always http.
+    $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
+    return $host . 'checkout-com-error';
   }
 
 }

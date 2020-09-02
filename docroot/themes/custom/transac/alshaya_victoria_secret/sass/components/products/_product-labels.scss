@@ -19,7 +19,7 @@
 
         .c-products__item & {
           top: 0.625rem;
-          left: 0.625rem;
+          #{$left}: 0.625rem;
         }
 
         .acq-content-product-modal & {

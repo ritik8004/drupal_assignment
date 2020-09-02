@@ -41,4 +41,64 @@
     }
   }
 
+  /**
+   * Check if carousel element is fully/partially visible in viewport or not.
+   *
+   * @param offset
+   * @param elementPartialOffsetTop
+   *   To be used when we want only some part of the element to be visible. We
+   *   specify an offset from the top of the element that should be in the
+   *   screen.
+   *
+   * @returns {boolean}
+   */
+  $.fn.isCarouselElementInViewPort = function (offset, elementPartialOffsetTop) {
+    try {
+      // Get element top and bottom.
+      var elementTop = $(this).offset().top - offset;
+      var elementBottom = (elementPartialOffsetTop !== 'undefined')
+        ? elementTop + elementPartialOffsetTop
+        : elementTop + $(this).outerHeight();
+
+      // Get window top and bottom.
+      var viewportTop = $(window).scrollTop();
+      var viewportBottom = viewportTop + $(window).height();
+
+      // Get element left.
+      var elementLeft = $(this).offset().left - offset;
+
+      if (elementTop >= viewportTop
+        && elementBottom <= viewportBottom
+      ) {
+        var elementParent = $(this).parent();
+        var active = false;
+        // Check if slick slider is used in carousel like in homepage and PDP.
+        if (elementParent.hasClass('slick-slide')) {
+          // If it has slick-active class, that means it is showing in screen.
+          active = (elementParent.hasClass('slick-active')) ? true : false;
+        }
+        // If slick slider is not used, that means the cart page carousels are
+        // being viewed. Checked if they are within their container.
+        else if ($(this).closest('.spc-recommended-products').length > 0) {
+          var recommendProductsContainer = $(this).closest('.spc-recommended-products');
+          var carouselLeft = recommendProductsContainer.offset().left;
+          var carouselRight = carouselLeft + recommendProductsContainer.outerWidth();
+
+          // We check if at least some part of the product is visible in the
+          // carousel.
+          if ((elementLeft > carouselLeft)
+            && ((elementLeft + 40) < carouselRight)) {
+            active = true;
+          }
+        }
+
+        return active;
+      }
+    }
+    catch (e) {
+      return false;
+    }
+
+    return false;
+  }
 }(jQuery));

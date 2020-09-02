@@ -1,0 +1,48 @@
+.horizontal-upell,
+.horizontal-related,
+.horizontal-crossell {
+  @include breakpoint($tablet) {
+    margin-bottom: 0;
+  }
+
+  .view-product-slider {
+    margin-bottom: 0;
+
+    .price-block {
+      font-family: $alshaya-thin;
+    }
+  }
+
+  .subtitle {
+    &.crossell-title {
+      @include breakpoint($tablet) {
+        margin-bottom: 1.5rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+}
+
+.view-product-slider {
+  .c-products__item__label {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    margin: 0.625rem 0.875rem;
+  }
+
+  .owl-carousel {
+    .slick-slide {
+      > article {
+        @include breakpoint($tablet) {
+          padding: 0 0.25rem;
+        }
+      }
+    }
+  }
+}

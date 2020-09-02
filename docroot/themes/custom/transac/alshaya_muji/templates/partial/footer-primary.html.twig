@@ -30,7 +30,7 @@
       {{ page.footer_primary.languageswitcher_2 }}
     </div>
 
-    {{ page.footer_primary|without('alshayanewslettersubscription', 'shopby', 'aboutbrand', 'alshaya_help', 'languageswitcher_2', 'sociallinks') }}
+    {{ page.footer_primary|without('alshayanewslettersubscription', 'shopby', 'aboutbrand', 'alshaya_help', 'languageswitcher_2', 'sociallinks', 'footerstaticlinks') }}
   </div>
 
   <div class="footer--menu above-mobile-block">
@@ -42,5 +42,12 @@
       {{ page.footer_primary.aboutbrand }}
       {{ page.footer_primary.alshaya_help}}
     </div>
+
+    {% if page.footer_primary.footerstaticlinks is not empty %}
+      <div class="footer--static-links">
+        {{ page.footer_primary.footerstaticlinks }}
+      </div>
+    {% endif %}
+
   </div>
 {% endblock %}

@@ -89,6 +89,12 @@
         &.spcSelect__option--is-selected {
           background: $spc-select_bg_hover;
         }
+
+        &.spcSelect__option--is-disabled {
+          pointer-events: none;
+          opacity: 0.5;
+          background: $greyish !important;
+        }
       }
     }
   }
@@ -115,7 +121,7 @@
     &--menu-is-open {
       .spcSelect__dropdown-indicator {
         &::before {
-          transform: rotate(180deg);
+          transform: translateY(-50%) rotate(180deg);
         }
       }
     }

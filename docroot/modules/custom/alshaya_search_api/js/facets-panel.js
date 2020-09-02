@@ -16,7 +16,7 @@
         $('body').removeClass('large-grid');
         $('.c-products-list').removeClass('product-large').addClass('product-small');
         setTimeout(function() {
-          $('.search-lightSlider').slick('refresh');
+          $('.search-lightSlider.slick-initialized').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
          Drupal.plpListingProductTileHeight('full_page', null);
@@ -27,7 +27,7 @@
         $('body').addClass('large-grid');
         $('.c-products-list').removeClass('product-small').addClass('product-large');
         setTimeout(function() {
-          $('.search-lightSlider').slick('refresh');
+          $('.search-lightSlider.slick-initialized').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
          Drupal.plpListingProductTileHeight('full_page', null);
@@ -353,6 +353,7 @@
       function stickyfacetfilter() {
         var filterposition = 0;
         var supercategorymenuHeight = 0;
+        var blocksupermenuHeight = 0;
         var position = 0;
         var filter = $('.region__content');
         var nav = $('.branding__menu');
@@ -370,6 +371,11 @@
             if ($('.block-alshaya-super-category').length > 0) {
               supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
             }
+
+            if ($('#block-supermenu').length > 0) {
+              blocksupermenuHeight = $('#block-supermenu').outerHeight();
+            }
+
             filterposition = $('.show-all-filters').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
 
             // To check if algolia is enabled and has supercategory menu,
@@ -378,7 +384,11 @@
               fixedNavHeight = nav.outerHeight() + supercategorymenuHeight - $('.block-alshaya-super-category').outerHeight();
             }
             else {
-              fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
+              if (blocksupermenuHeight) {
+                fixedNavHeight = nav.outerHeight() + blocksupermenuHeight;
+              } else {
+                fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
+              }
             }
           }
         }

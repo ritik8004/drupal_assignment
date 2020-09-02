@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_seo_transac;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
@@ -349,14 +350,13 @@ class AlshayaGtmManager {
    *   Node object for which we want to get the attributes prepared.
    * @param string $view_mode
    *   View mode in which we trying to render the product.
+   * @param \Drupal\acq_commerce\SKUInterface|null $child
+   *   The child sku object or null.
    *
    * @return array
    *   Array of attributes to be exposed to GTM.
-   *
-   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
-   * @throws \InvalidArgumentException
    */
-  public function fetchProductGtmAttributes(Node $product, $view_mode) {
+  public function fetchProductGtmAttributes(Node $product, $view_mode, SKUInterface $child = NULL) {
     static $gtm_container = NULL;
 
     if (!isset($gtm_container)) {
@@ -368,7 +368,7 @@ class AlshayaGtmManager {
     }
 
     $skuId = $this->skuManager->getSkuForNode($product);
-    $skuAttributes = $this->fetchSkuAtttributes($skuId);
+    $skuAttributes = $this->fetchSkuAtttributes($skuId, $child);
 
     $attributes['gtm-type'] = 'gtm-product-link';
     $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
@@ -386,13 +386,15 @@ class AlshayaGtmManager {
    *
    * @param string $skuId
    *   Identifier of the product variant on SKU entity.
+   * @param \Drupal\acq_commerce\SKUInterface|null $child
+   *   The child sku object or null.
    *
    * @return array
    *   Attributes on sku to be exposed to GTM.
    *
    * @throws \InvalidArgumentException
    */
-  public function fetchSkuAtttributes($skuId) {
+  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
 
@@ -416,6 +418,12 @@ class AlshayaGtmManager {
       $prices = $this->skuManager->getMinPrices($sku);
       $original_price = $prices['price'];
       $final_price = $prices['final_price'];
+    }
+
+    if ($child) {
+      $final_price = !empty($prices['children'][$child->getSku()]['final_price'])
+        ? $prices['children'][$child->getSku()]['final_price']
+        : $prices['children'][$child->getSku()]['price'];
     }
 
     $product_type = 'Regular Product';
@@ -926,7 +934,7 @@ class AlshayaGtmManager {
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
       'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
-      'transactionID' => $order['increment_id'],
+      'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
       'userEmailID' => $order['email'],

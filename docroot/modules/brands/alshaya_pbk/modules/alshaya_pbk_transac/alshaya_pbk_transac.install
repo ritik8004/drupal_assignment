@@ -8,6 +8,40 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * [5.4.0] Mark size, color, fabric and material fields to be indexed in Algolia
+ * Remove size_lhn and color_lhn as facets.
+ * Add the missing sitemap configurations.
+ */
+function alshaya_pbk_transac_update_8001() {
+  // Update config to mark size, color, fabric and material to be indexed and
+  // size_lhn and color_lhn not to be facets.
+  alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+
+  \Drupal::service('acq_sku.fields_manager')->resetBaseFields();
+
+  // Queue all products for reindexing.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+
+  alshaya_config_install_configs(
+    [
+      'simple_sitemap.bundle_settings.default.node.acq_product',
+      'simple_sitemap.bundle_settings.default.taxonomy_term.acq_product_category',
+    ],
+    'alshaya_seo_transac',
+  );
+  alshaya_config_install_configs(
+    [
+      'simple_sitemap.bundle_settings.default.node.advanced_page',
+      'simple_sitemap.bundle_settings.default.node.department_page',
+      'simple_sitemap.bundle_settings.default.node.store',
+    ],
+    'alshaya_seo'
+  );
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_pbk_transac_install() {
@@ -65,6 +99,12 @@ function alshaya_pbk_transac_install() {
       'en' => 'Pottery Barn Kids',
       'ar' => 'بوتري بارن',
     ],
+    'get email offers and the latest news from @site_name' => [
+      'en' => 'Get email offers & the latest news from Pottery Barn Kids.',
+    ],
+    'sign up' => [
+      'en' => 'Submit',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
@@ -82,6 +122,13 @@ function alshaya_pbk_transac_install() {
 
   // Get metatag translations on install.
   _alshaya_pbk_transac_get_metatag_translations();
+
+  // Set default settings for main menu.
+  \Drupal::configFactory()->getEditable('alshaya_main_menu.settings')
+    ->set('desktop_main_menu_layout', 'menu_dynamic_display')
+    ->set('max_nb_col', 5)
+    ->set('ideal_max_col_length', 12)
+    ->save();
 }
 
 /**

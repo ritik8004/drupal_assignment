@@ -1218,7 +1218,7 @@ class SkuManager {
   protected function getSkuLabel(SKU $sku_entity, $parent = FALSE) {
     if ($labels = $sku_entity->get('attr_labels')->getString()) {
       $labels_data = unserialize($labels);
-      if (!empty($labels_data)) {
+      if (!empty($labels_data) && is_array($labels_data)) {
         return $labels_data;
       }
       // Process only when current sku is not parent SKU.
@@ -1673,6 +1673,10 @@ class SkuManager {
    *   Filtered skus.
    */
   public function filterRelatedSkus(array $skus) {
+    if (empty($skus)) {
+      return [];
+    }
+
     $related_items_size = $this->getConfig('alshaya_acm_product.settings')->get('related_items_size');
     $related = [];
 
@@ -2311,6 +2315,7 @@ class SkuManager {
         }
 
         $configurableFieldValues[$fieldKey] = [
+          'attribute_id' => $fieldKey,
           'label' => $this->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),
@@ -3612,6 +3617,10 @@ class SkuManager {
     $parent_sku = $this->getParentSkuBySku($sku);
     if (is_null($parent_sku)) {
       $parent_sku = $sku;
+    }
+
+    if ($parent_sku->getType() == 'simple') {
+      return [];
     }
 
     $attributes = [];

@@ -1,0 +1,9 @@
+services:
+  alshaya_spc.commands:
+    class: \Drupal\alshaya_spc\Commands\AlshayaSpcCommands
+    arguments:
+      - '@alshaya_api.api'
+      - '@database'
+      - '@acq_checkoutcom.checkout_api'
+    tags:
+      - { name: drush.command }

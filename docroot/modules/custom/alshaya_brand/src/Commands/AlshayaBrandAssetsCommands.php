@@ -176,7 +176,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     $query->fields('fm', ['fid', 'uri']);
     $query->leftJoin('file_usage', 'fu', 'fm.fid = fu.fid');
     $query->isNull('fu.fid');
-    $query->condition('fm.uri', 'brand://%', 'LIKE');
+    $query->condition('fm.uri', 's3://%', 'LIKE');
     $result = $query->execute()->fetchAll();
 
     return $result;

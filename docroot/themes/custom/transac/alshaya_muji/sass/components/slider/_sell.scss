@@ -1,13 +1,7 @@
-.horizontal-upell,
-.horizontal-related,
-.horizontal-crossell {
-  .view-product-slider {
-    text-align: $left;
-  }
-}
-
 .subtitle.crossell-title {
   text-transform: uppercase;
+  font-family: $muji-demibold;
+  font-weight: 500;
 }
 
 .view-product-slider {
@@ -46,6 +40,12 @@
   .views-row {
     .use-ajax {
       margin: 0 0.5rem;
+    }
+
+    .promotions {
+      a {
+        font-family: $muji-helvetica-neue;
+      }
     }
   }
 }

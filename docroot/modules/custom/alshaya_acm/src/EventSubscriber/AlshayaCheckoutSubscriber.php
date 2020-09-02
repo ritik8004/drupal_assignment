@@ -60,6 +60,8 @@ class AlshayaCheckoutSubscriber implements EventSubscriberInterface {
     $checkoutRoutes = [
       'acq_cart.cart',
       'acq_checkout.form',
+      'alshaya_spc.checkout',
+      'alshaya_spc.checkout.login',
     ];
 
     if (in_array($this->routeMatch->getRouteName(), $checkoutRoutes)) {
