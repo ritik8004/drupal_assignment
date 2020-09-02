@@ -23,7 +23,7 @@ class AlshayaProductListDrushCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  private $entityTypeManager;
+  protected $entityTypeManager;
 
   /**
    * Config Factory.
@@ -61,11 +61,17 @@ class AlshayaProductListDrushCommands extends DrushCommands {
   /**
    * Generates Batch operation for Product list nodes.
    *
+   * @param string $attribute
+   *   Attribute string.
+   *
    * @command alshaya:generate:attribute:nodes
    *
    * @aliases agan
+   *
+   * @usage drush agan attr_brand
+   *   Creates product list nodes for the attribute.
    */
-  public function generateProductListNodes($attribute, array $options = ['langcode' => NULL]) {
+  public function generateProductListNodes($attribute) {
     $attributeCode = str_replace('attr_', '', $attribute);
     $facet_results = $this->optionsListHeper->loadFacetsData([$attributeCode => $attributeCode]);
     if (!$facet_results) {
@@ -85,7 +91,6 @@ class AlshayaProductListDrushCommands extends DrushCommands {
       ],
       'progress_message' => $this->t('Processed @current out of @total.'),
       'error_message' => $this->t('Synced data could not be cleaned because an error occurred.'),
-      'finished' => '_acq_sku_clean_finished',
     ];
 
     batch_set($batch);
