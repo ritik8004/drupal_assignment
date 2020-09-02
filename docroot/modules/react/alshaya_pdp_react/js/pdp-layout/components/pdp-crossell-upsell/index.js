@@ -55,11 +55,12 @@ export default class PdpCrossellUpsell extends React.PureComponent {
     this.slider.slickPrev();
   }
 
-  openModal = () => {
+  openModal = (relatedSku) => {
     document.querySelector('body').classList.add('crossel-overlay');
     return (
       <CrossellPopupContent
         closeModal={this.closeModal}
+        relatedSku={relatedSku}
       />
     );
   };
@@ -119,6 +120,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
                 productPromotions={products[sku].promotions}
                 openModal={this.openModal}
                 getPanelData={getPanelData}
+                relatedSku={sku}
               />
             ))}
           </Slider>
@@ -148,6 +150,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
                 productLabels={products[sku].productLabels}
                 openModal={this.openModal}
                 getPanelData={getPanelData}
+                relatedSku={sku}
               />
             ))}
           </Slider>
