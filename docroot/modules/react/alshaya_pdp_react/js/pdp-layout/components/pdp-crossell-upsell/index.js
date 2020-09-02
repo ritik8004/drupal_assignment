@@ -88,6 +88,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
             draggable={isTouchDevice ? true : crossellUpsellSliderSettings.draggable}
             ref={(slider) => { this.slider = slider; }}
             beforeChange={this.beforeChange}
+            responsive={crossellUpsellSliderSettings.responsive}
           >
             {Object.keys(products).map((sku) => (
               <PdpCrossellUpsellImage
