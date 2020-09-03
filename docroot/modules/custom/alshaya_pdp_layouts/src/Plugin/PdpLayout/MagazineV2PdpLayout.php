@@ -373,9 +373,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   /**
    * Returns the configurable options minus the disabled options.
    *
-   *   \Drupal\alshaya_acm_product\SkuManager::disableUnavailableOptions()
-   * removes the unavailable options from the SKU base form. This function
-   * does the same thing for the New PDP form.
+   * This function removes the configurable options which are disabled and
+   * returns the remaining.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   The sku object.
@@ -384,6 +383,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
    *
    * @return array
    *   The configurables array.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuManager::disableUnavailableOptions()
    */
   public function disableUnavailableOptions(SKUInterface $sku, array $configurables) {
     if (!empty($configurables)) {
