@@ -159,11 +159,10 @@
     }
 
     let groupingOptions = [];
-    const attrLabel = Drupal.t('@attr_label', { '@attr_label': groupAttribute });
     for (var i in attrResp) {
       if (attrResp[i].key === groupAttribute) {
         groupingOptions = [{
-          label: attrLabel,
+          label: Drupal.t('color'),
           value: attrResp[i].value,
         }];
         return groupingOptions;
