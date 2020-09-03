@@ -78,10 +78,13 @@ export default class Appointment extends React.Component {
     this.state.appointmentRender = false;
 
     // Trigger GTM event.
-    const { appointmentStep } = this.state;
-    dispatchCustomEvent('appointmentBookingSteps', {
-      stepValue: appointmentStep,
-    });
+    const { appointmentStep, appointmentId } = this.state;
+
+    if (appointmentId === undefined) {
+      dispatchCustomEvent('appointmentBookingSteps', {
+        stepValue: appointmentStep,
+      });
+    }
   }
 
   /**
@@ -332,10 +335,14 @@ export default class Appointment extends React.Component {
       appointmentStep: stepval,
     }));
 
+    const { appointmentId } = this.state;
+
     // Trigger GTM event.
-    dispatchCustomEvent('appointmentBookingSteps', {
-      stepValue,
-    });
+    if (appointmentId === undefined) {
+      dispatchCustomEvent('appointmentBookingSteps', {
+        stepValue,
+      });
+    }
   }
 
   handleEdit = (step) => {
@@ -343,10 +350,14 @@ export default class Appointment extends React.Component {
       appointmentStep: step,
     });
 
+    const { appointmentId } = this.state;
+
     // Trigger GTM event.
-    dispatchCustomEvent('appointmentBookingSteps', {
-      stepValue: step,
-    });
+    if (appointmentId === undefined) {
+      dispatchCustomEvent('appointmentBookingSteps', {
+        stepValue: step,
+      });
+    }
   }
 
   render() {
