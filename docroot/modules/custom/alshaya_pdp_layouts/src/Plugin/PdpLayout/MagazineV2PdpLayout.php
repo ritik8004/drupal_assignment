@@ -198,6 +198,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     if ($sku_entity->bundle() == 'configurable') {
       $product_tree = Configurable::deriveProductTree($sku_entity);
       $combinations = $product_tree['combinations'];
+      $product_tree['configurables'] = $this->disableUnavailableOptions($sku_entity, $product_tree['configurables']);
       $swatch_processed = FALSE;
       if ($stock_status) {
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['bySku'] = $combinations['by_sku'];
@@ -223,7 +224,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
               $swatch_image_url = $this->skuImageManager->getPdpSwatchImageUrl($swatch_sku);
               if ($swatch_image_url) {
                 $swatch_image = file_url_transform_relative($swatch_image_url);
-                $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'][$value_id]['swatch_image'] = $swatch_image;
+                $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'][$value]['swatch_image'] = $swatch_image;
               }
             }
           }
@@ -367,6 +368,40 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   public function getProductLabels($sku, $sku_entity, &$vars) {
     $product_labels = $this->skuManager->getLabelsData($sku_entity, 'pdp');
     $vars['#attached']['drupalSettings']['productLabels'][$sku] = $product_labels;
+  }
+
+  /**
+   * Returns the configurable options minus the disabled options.
+   *
+   * This function removes the configurable options which are disabled and
+   * returns the remaining.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The sku object.
+   * @param array $configurables
+   *   The configurables array.
+   *
+   * @return array
+   *   The configurables array.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuManager::disableUnavailableOptions()
+   */
+  public function disableUnavailableOptions(SKUInterface $sku, array $configurables) {
+    if (!empty($configurables)) {
+      $combinations = $this->skuManager->getConfigurableCombinations($sku);
+      // Remove all options which are not available at all.
+      foreach ($configurables as $index => $code) {
+        foreach ($configurables[$index]['values'] as $key => $value) {
+          if (isset($combinations['attribute_sku'][$index][$value['value_id']])) {
+            continue;
+          }
+          unset($configurables[$index]['values'][$key]);
+        }
+      }
+      return $configurables;
+    }
+
+    return [];
   }
 
 }
