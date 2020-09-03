@@ -748,7 +748,7 @@ class Cart {
         ? 'Back-end system is down'
         : $cart['error_message'];
 
-      $message = $this->prepareOrderFailedMessage($old_cart, $data, $error_message, 'update cart', 'NA', TRUE);
+      $message = $this->prepareOrderFailedMessage($old_cart, $data, $error_message, 'update cart', 'NA');
       $this->logger->error('Error occurred while placing order. @message', [
         '@message' => $message,
       ]);
@@ -1618,9 +1618,13 @@ class Cart {
     $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
 
     if ($this->settings->getSettings('place_order_debug_failure', 1)) {
-      $message[] = 'payment_method:' . $data['paymentMethod']['method'];
-      if (isset($data['paymentMethod']['additional_data'])) {
-        $message[] = 'additional_information:' . json_encode($data['paymentMethod']['additional_data']);
+      $payment_method = $data['paymentMethod']['method'] ?? $data['method'];
+      $message[] = 'payment_method:' . $payment_method;
+      if (isset($data['paymentMethod']['additional_data']) || isset($data['additional_data'])) {
+        $additional_info = isset($data['paymentMethod']['additional_data'])
+          ? $data['paymentMethod']['additional_data']
+          : ($data['additional_data'] ?? NULL);
+        $message[] = 'additional_information:' . json_encode($additional_info);
       }
 
       $message[] = 'shipping_method:' . $cart['shipping']['method'];
