@@ -172,6 +172,10 @@
 
       .magv2-detail-wrapper + .promotions-full-view-mode {
         margin-top: -1.25rem;
+
+        @include breakpoint($only-mobile) {
+          margin-top: -2.5rem;
+        }
       }
     }
 

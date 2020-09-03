@@ -102,6 +102,10 @@ html[lang=ar] {
         }
       }
 
+      .back-button + .magv2-compact-detail-wrapper {
+        width: 80%;
+      }
+
       .magv2-compact-detail-wrapper,
       .magv2-detail-wrapper {
         display: flex;
@@ -126,6 +130,10 @@ html[lang=ar] {
       }
 
       .magv2-compact-detail-wrapper {
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
+
         .magv2-pdp-price-container {
           &.has-special-price {
             .magv2-pdp-price-wrapper {
