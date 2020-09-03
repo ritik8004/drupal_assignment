@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @mcsaprod @mcaeprod @mckwprod @bbwaeprod @bbwsaprod @bbwkwprod
+@javascript @account @smoke @auth @mcsaprod @mcsapprod @mcaeprod @mcaepprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod
 Feature: Test the My Account functionality
 
   Background:
@@ -30,6 +30,7 @@ Feature: Test the My Account functionality
     Then I select "{area_option}" from "field_address[0][address][administrative_area]" address
     When I scroll to the ".country-field-wrapper" element
     When fill in billing address with following:
+      | field_address[0][address][area_parent]               | {governorate} |
       | field_address[0][address][address_line1]             | {street}      |
       | field_address[0][address][dependent_locality]        | {building}    |
       | field_address[0][address][locality]                  | {locality}    |
