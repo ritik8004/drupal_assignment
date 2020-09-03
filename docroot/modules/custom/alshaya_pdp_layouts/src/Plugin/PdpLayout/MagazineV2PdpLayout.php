@@ -198,6 +198,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     if ($sku_entity->bundle() == 'configurable') {
       $product_tree = Configurable::deriveProductTree($sku_entity);
       $combinations = $product_tree['combinations'];
+      $product_tree['configurables'] = $this->disableUnavailableOptions($sku_entity, $product_tree['configurables']);
       $swatch_processed = FALSE;
       if ($stock_status) {
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['bySku'] = $combinations['by_sku'];
@@ -209,7 +210,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       foreach ($product_tree['configurables'] as $key => $configurable) {
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isGroup'] = FALSE;
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = FALSE;
-
         if (!$swatch_processed && in_array($key, $this->skuManager->getPdpSwatchAttributes())) {
           $swatch_processed = TRUE;
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = TRUE;
@@ -220,17 +220,12 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
             }
 
             $swatch_sku = $this->skuManager->getChildSkuFromAttribute($sku_entity, $key, $value_id);
-            $remove_swatch = TRUE;
             if ($swatch_sku instanceof SKU) {
               $swatch_image_url = $this->skuImageManager->getPdpSwatchImageUrl($swatch_sku);
               if ($swatch_image_url) {
-                $remove_swatch = FALSE;
                 $swatch_image = file_url_transform_relative($swatch_image_url);
                 $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'][$value]['swatch_image'] = $swatch_image;
               }
-            }
-            if ($remove_swatch) {
-              unset($vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'][$value]);
             }
           }
         }
@@ -373,6 +368,39 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   public function getProductLabels($sku, $sku_entity, &$vars) {
     $product_labels = $this->skuManager->getLabelsData($sku_entity, 'pdp');
     $vars['#attached']['drupalSettings']['productLabels'][$sku] = $product_labels;
+  }
+
+  /**
+   * Returns the configurable options minus the disabled options.
+   *
+   *   \Drupal\alshaya_acm_product\SkuManager::disableUnavailableOptions()
+   * removes the unavailable options from the SKU base form. This function
+   * does the same thing for the New PDP form.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The sku object.
+   * @param array $configurables
+   *   The configurables array.
+   *
+   * @return array
+   *   The configurables array.
+   */
+  public function disableUnavailableOptions(SKUInterface $sku, array $configurables) {
+    if (!empty($configurables)) {
+      $combinations = $this->skuManager->getConfigurableCombinations($sku);
+      // Remove all options which are not available at all.
+      foreach ($configurables as $index => $code) {
+        foreach ($configurables[$index]['values'] as $key => $value) {
+          if (isset($combinations['attribute_sku'][$index][$value['value_id']])) {
+            continue;
+          }
+          unset($configurables[$index]['values'][$key]);
+        }
+      }
+      return $configurables;
+    }
+
+    return [];
   }
 
 }
