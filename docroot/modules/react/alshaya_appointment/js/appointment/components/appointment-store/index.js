@@ -74,7 +74,7 @@ export default class AppointmentStore extends React.Component {
   componentDidMount() {
     // For autocomplete text field.
     const {
-      refCoords, storeList, openSelectedStore, selectedStoreItem,
+      refCoords, storeList, openSelectedStore,
     } = this.state;
     document.addEventListener('placeAutocomplete', this.initiatePlaceAutocomplete);
     if (refCoords !== null && storeList.length === 0) {
@@ -87,10 +87,8 @@ export default class AppointmentStore extends React.Component {
     if (refCoords !== null && openSelectedStore) {
       this.showSelectedMarker();
     }
-    // Show "select this store" button, if a store is selected.
-    if (selectedStoreItem && openSelectedStore === false) {
-      this.selectStoreButtonVisibility(true);
-    }
+    // Activate "select this store" button, if a store is selected.
+    this.selectStoreButtonVisibility(false);
     // On marker click.
     document.addEventListener('markerClick', this.mapMarkerClick);
     // We need a sticky button in mobile.
