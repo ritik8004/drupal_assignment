@@ -1,4 +1,4 @@
-@javascript @guest @cybersourcePayment @homeDelivery
+@javascript @guest @cybersourcePayment @homeDelivery @pbsauat @hmaeuat @vssauat
 Feature: SPC Checkout Home Delivery using CyberSource Payment Method
 
   Background:
@@ -29,6 +29,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
@@ -38,10 +42,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
@@ -115,6 +115,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
@@ -124,10 +128,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
@@ -201,6 +201,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
@@ -210,10 +214,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
@@ -253,6 +253,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
@@ -262,10 +266,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
@@ -279,6 +279,9 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I click jQuery ".spc-section-billing-address .spc-billing-address-wrapper .spc-billing-information .spc-billing-change" element on page
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | mobile   | {billing_mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {billing_city_option} |
       | spc-area-select-selected      | {billing_area_option} |
@@ -288,9 +291,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {billing_floor}       |
       | sorting_code                  | {billing_landmark}    |
       | postal_code                   | {billing_postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {billing_mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
@@ -361,6 +361,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
@@ -370,10 +374,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
@@ -387,6 +387,9 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I click jQuery ".spc-section-billing-address .spc-billing-address-wrapper .spc-billing-information .spc-billing-change" element on page
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | mobile   | {billing_mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_billing_city_option} |
       | spc-area-select-selected      | {language_billing_area_option} |
@@ -396,9 +399,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {billing_floor}       |
       | sorting_code                  | {billing_landmark}    |
       | postal_code                   | {billing_postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {billing_mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
@@ -464,6 +464,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
@@ -473,10 +477,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load
@@ -490,6 +490,9 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     And I click jQuery ".spc-section-billing-address .spc-billing-address-wrapper .spc-billing-information .spc-billing-change" element on page
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | mobile   | {billing_mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_billing_city_option} |
       | spc-area-select-selected      | {language_billing_area_option} |
@@ -499,9 +502,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | address_line2                 | {billing_floor}       |
       | sorting_code                  | {billing_landmark}    |
       | postal_code                   | {billing_postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {billing_mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 20 seconds
     And I wait for the page to load

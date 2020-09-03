@@ -1,4 +1,4 @@
-@javascript @smoke
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat
 Feature: Test MiniCart page
 
   Background:
