@@ -1,4 +1,4 @@
-@javascript @returnUser @checkoutPayment @homeDelivery
+@javascript @returnUser @checkoutPayment @homeDelivery @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @auth
 Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2D) Card Payment Method
 
   Background:
@@ -31,6 +31,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -39,7 +40,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile                        | {mobile}      |
     And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -117,6 +117,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -125,7 +126,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile                        | {mobile}      |
     And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -209,6 +209,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -217,7 +218,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile                        | {mobile}      |
     And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish

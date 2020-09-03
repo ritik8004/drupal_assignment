@@ -1,4 +1,4 @@
-@javascript @auth @checkoutPayment @homeDelivery @mcsaprod @mckwprod @bbwsaprod @bbwkwprod
+@javascript @auth @checkoutPayment @homeDelivery @mcsaprod @mcsapprod @mckwprod @mckwpprod @bbwsaprod @bbwsapprod @bbwkwprod @vssapprod @bbwkwpprod @hmkwpprod @vssaprod @vssapprod @pbsaprod @pbsapprod @pbkwprod @pbkwpprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @hmkwprod @hmkwpprod @flkwprod @flkwpprod @hmsaprod @hmsapprod @flsaprod @flsapprod
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Authenticated user
 
   Background:
@@ -33,6 +33,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -41,7 +42,6 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -79,6 +79,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -87,7 +88,6 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -123,6 +123,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -131,7 +132,6 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
