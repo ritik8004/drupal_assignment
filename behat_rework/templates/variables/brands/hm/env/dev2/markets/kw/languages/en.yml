@@ -71,3 +71,4 @@ variables:
   language_order_detail: 'تفاصيل الطلبية'
   language_delivery_type_text: 'التوصيل متوقع خلال:'
   language_payment_type_text: 'طريقة الدفع:'
+  governorate: 'Kuwait City'
