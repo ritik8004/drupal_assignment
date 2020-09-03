@@ -28,7 +28,7 @@ variables:
   ar_filters: 'all filters'
   create_account: 'create an account'
   sign_in: 'Sign in'
-  find_store: 'Find Store'
+  find_store: 'Find a Store'
   language_link: 'العربية'
   subtotal: 'Subtotal'
   order_total: 'Order Total'

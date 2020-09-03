@@ -1,4 +1,4 @@
-@javascript @smoke
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat
 Feature: Test the Checkout Login functionality
 
   Scenario: As a user, I should be able to see cart content added as anonymous user once I log into the site

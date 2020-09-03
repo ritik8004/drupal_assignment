@@ -1,4 +1,4 @@
-@javascript @guest @madaPayment @homeDelivery
+@javascript @guest @madaPayment @homeDelivery @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat
 Feature: SPC Checkout Home Delivery MADA Card Payment
 
   Background:
@@ -29,6 +29,10 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {spc_anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
@@ -38,10 +42,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load
@@ -121,6 +121,10 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {spc_anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
@@ -130,10 +134,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load
@@ -218,6 +218,10 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {spc_anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
@@ -227,10 +231,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load
@@ -276,6 +276,10 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {spc_anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
@@ -285,10 +289,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load
@@ -368,6 +368,10 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {spc_anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
@@ -377,10 +381,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load
@@ -465,6 +465,10 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {spc_anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
@@ -474,10 +478,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load

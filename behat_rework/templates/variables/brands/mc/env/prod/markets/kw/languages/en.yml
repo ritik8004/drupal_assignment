@@ -24,10 +24,10 @@ variables:
   ar_promotional_filter: 'Promotions'
   ar_size_filter: 'Size'
   ar_filters: 'all filters'
-  add_to_cart_link: 'add to cart'
+  add_to_cart_link: 'add to basket'
   language_add_to_cart_link: 'أضف إلى سلة التسوق'
   create_account: 'create an account'
-  sign_in: 'Log in'
+  sign_in: 'Sign in'
   find_store: 'Find Store'
   language_link: 'العربية'
   subtotal: 'Subtotal'
@@ -102,3 +102,5 @@ variables:
   billing_postal_code: ''
   billing_mobile: '556677888'
   billing_text: 'Billing address:'
+  governorate: 'Kuwait City'
+

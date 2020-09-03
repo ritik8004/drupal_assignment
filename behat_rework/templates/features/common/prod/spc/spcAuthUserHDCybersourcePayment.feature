@@ -1,4 +1,4 @@
-@javascript @auth @cybersourcePayment @homeDelivery @mcaeprod @bbwaeprod
+@javascript @auth @cybersourcePayment @homeDelivery @mcaeprod @mcaepprod @bbwaeprod @bbwaepprod @mcaepprod @vsaeprod @vsaepprod @pbaeprod @pbaepprod @mcaeprod @mcaepprod @hmaeprod @hmaepprod @flaeprod @flaepprod
 Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authenticated user
 
   Background:
@@ -33,6 +33,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -41,7 +42,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -77,6 +77,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -85,7 +86,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -119,6 +119,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -127,7 +128,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -158,6 +158,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -166,7 +167,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -180,6 +180,8 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
     And I wait 10 seconds
     And I wait for the page to load
     When I add in the billing address with following:
+      | fullname                      | {anon_username} |
+      | mobile                        | {billing_mobile}        |
       | spc-area-select-selected-city | {billing_city_option} |
       | spc-area-select-selected      | {billing_area_option} |
       | address_line1                 | {billing_street}      |
@@ -188,8 +190,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
       | address_line2                 | {billing_floor}       |
       | sorting_code                  | {billing_landmark}    |
       | postal_code                   | {billing_postal_code} |
-      | fullname                      | {anon_username} |
-      | mobile                        | {billing_mobile}        |
+
     And I wait 20 seconds
     And I wait for the page to load
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
@@ -217,6 +218,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -225,7 +227,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -239,6 +240,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
     And I wait 10 seconds
     And I wait for the page to load
     When I add in the billing address with following:
+      | mobile                        | {billing_mobile}      |
       | spc-area-select-selected-city | {billing_city_option} |
       | spc-area-select-selected      | {billing_area_option} |
       | address_line1                 | {billing_street}      |
@@ -247,7 +249,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
       | address_line2                 | {billing_floor}       |
       | sorting_code                  | {billing_landmark}    |
       | postal_code                   | {billing_postal_code} |
-      | mobile                        | {billing_mobile}      |
     And I wait 20 seconds
     And I wait for the page to load
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
@@ -273,6 +274,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -281,7 +283,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile                        | {mobile}      |
     And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -295,6 +296,8 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
     And I wait 10 seconds
     And I wait for the page to load
     When I add in the billing address with following:
+      | fullname                      | {anon_username}       |
+      | mobile                        | {billing_mobile}      |
       | spc-area-select-selected-city | {billing_city_option} |
       | spc-area-select-selected      | {billing_area_option} |
       | address_line1                 | {billing_street}      |
@@ -303,8 +306,6 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authent
       | address_line2                 | {billing_floor}       |
       | sorting_code                  | {billing_landmark}    |
       | postal_code                   | {billing_postal_code} |
-      | fullname                      | {anon_username}       |
-      | mobile                        | {billing_mobile}      |
     And I wait 20 seconds
     And I wait for the page to load
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist

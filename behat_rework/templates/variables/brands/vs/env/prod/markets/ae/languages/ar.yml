@@ -104,3 +104,4 @@ variables:
   billing_postal_code: ''
   billing_mobile: '556677888'
   billing_text: 'Billing address:'
+  governorate: ''

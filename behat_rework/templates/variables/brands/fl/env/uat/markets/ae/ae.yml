@@ -3,3 +3,4 @@ variables:
   var_password: 'Alshaya@2017'
   spc_product_listing_page: '/shop-men/'
   spc_basket_page: '/shop-men/'
+  governorate: ''

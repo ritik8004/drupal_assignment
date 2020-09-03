@@ -95,3 +95,4 @@ variables:
   billing_mobile: '555555555'
   billing_text: 'Billing address:'
   vat: 'Inclusive of VAT'
+  governorate: ''

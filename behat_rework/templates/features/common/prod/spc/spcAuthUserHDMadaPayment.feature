@@ -1,4 +1,4 @@
-@javascript @auth @madaPayment @homeDelivery @mcsaprod @mckwprod @bbwsaprod @bbwkwprod
+@javascript @auth @madaPayment @homeDelivery @mcsaprod @mcsapprod @mckwprod @mckwpprod @bbwsaprod @bbwsapprod @bbwkwprod @vssapprod @bbwkwpprod @hmkwpprod @vssaprod @vssapprod @pbsaprod @pbsapprod @pbkwprod @pbkwpprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @hmsaprod @hmsapprod @flsaprod @flsapprod
 Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
 
   Background:
@@ -33,6 +33,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -41,7 +42,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -79,6 +79,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -87,7 +88,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -123,6 +123,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -131,7 +132,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -164,6 +164,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -172,7 +173,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -210,6 +210,9 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | fullname | {anon_username} |
+      | email    | {spc_mada_anon_username}    |
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -218,9 +221,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | fullname | {anon_username} |
-      | email    | {spc_mada_anon_username}    |
-      | mobile   | {mobile}        |
     And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -256,6 +256,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     And I wait 10 seconds
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -264,7 +265,6 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile   | {mobile}        |
     And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element

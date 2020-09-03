@@ -21,3 +21,5 @@ variables:
   language_size_filter: 'Size Shoes'
   language_filters: 'all filters'
   language_promotional_filter: ''
+  governorate: 'Kuwait City'
+

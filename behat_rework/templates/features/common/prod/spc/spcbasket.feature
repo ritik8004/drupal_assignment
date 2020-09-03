@@ -1,4 +1,4 @@
-@javascript @smoke @mcsaprod @mcaeprod @mckwprod @bbwaeprod @bbwsaprod @bbwkwprod
+@javascript @smoke @mcsaprod @mcsapprod @mcaeprod @mcaepprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @vssapprod @bbwkwpprod @mcaepprod @hmkwpprod @vssaprod @vssapprod @vsaeprod @vsaepprod @pbaeprod @pbaepprod @pbsaprod @pbsapprod @pbkwprod @pbkwpprod @mcaeprod @mcaepprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @hmkwprod @hmkwpprod @flkwprod @flkwpprod @hmaeprod @hmaepprod @flaeprod @flaepprod @hmsaprod @hmsapprod @flsaprod @flsapprod
 Feature: Test basket page
 
   Background:
@@ -28,10 +28,10 @@ Feature: Test basket page
   @desktop
   Scenario: As a Guest, I should be able to see the header and the footer
     When I scroll to top
-    Then I should see the link "{create_account}"
-#    Then I should see the link "{sign_in}"
-    Then I should see the link "{find_store}"
-    Then I should see the link "{language_link}"
+    Then I should see "{create_account}"
+    Then I should see "{sign_in}"
+    Then I should see "{find_store}"
+    Then I should see "{language_link}"
     Then I should see "{sort_filter}"
     Then I should see "{price_filter}"
     Then I should see "{color_filter}"
@@ -179,10 +179,10 @@ Feature: Test basket page
     And I wait for the page to load
     And I wait for AJAX to finish
     When I scroll to top
-    Then I should see the link "{language_create_account}"
-#    Then I should see the link "{language_sign_in}"
-    Then I should see the link "{language_find_store}"
-    Then I should see the link "{second_language_link}"
+    Then I should see "{language_create_account}"
+    Then I should see "{language_sign_in}"
+    Then I should see "{language_find_store}"
+    Then I should see "{second_language_link}"
     Then I should see "{language_sort_filter}"
     Then I should see "{language_price_filter}"
     Then I should see "{language_color_filter}"

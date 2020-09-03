@@ -96,3 +96,5 @@ variables:
   billing_text: 'Billing address:'
   continue_shopping_text: 'continue shopping'
   language_continue_shopping_text: 'تابعي التسوق'
+  governorate: 'Kuwait City'
+
