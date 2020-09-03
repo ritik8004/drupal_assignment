@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import PdpInfo from '../pdp-info';
+import PdpGallery from '../pdp-gallery';
 import PdpPopupContainer from '../utilities/pdp-popup-container';
 import PdpPopupWrapper from '../utilities/pdp-popup-wrapper';
 
@@ -35,10 +36,12 @@ class CrossellPopupContent extends React.Component {
     let title = '';
     let pdpProductPrice = '';
     let finalPrice = '';
+    let pdpGallery = '';
     if (relatedProductInfo) {
       title = relatedProductInfo.title;
       pdpProductPrice = parseInt(relatedProductInfo.original_price, 10);
       finalPrice = parseInt(relatedProductInfo.final_price, 10);
+      pdpGallery = relatedProductInfo.media[0].media;
     }
 
     return (relatedProductInfo) ? (
@@ -51,6 +54,7 @@ class CrossellPopupContent extends React.Component {
             <label>{Drupal.t('Quick View')}</label>
           </div>
           <div className="magv2-crossell-popup-content-wrapper">
+            <PdpGallery skuCode={relatedSku} pdpGallery={pdpGallery} showFullVersion="false" context="related" />
             <PdpInfo
               title={title}
               finalPrice={finalPrice}
