@@ -209,6 +209,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       foreach ($product_tree['configurables'] as $key => $configurable) {
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isGroup'] = FALSE;
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = FALSE;
+
         if (!$swatch_processed && in_array($key, $this->skuManager->getPdpSwatchAttributes())) {
           $swatch_processed = TRUE;
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = TRUE;
@@ -219,12 +220,17 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
             }
 
             $swatch_sku = $this->skuManager->getChildSkuFromAttribute($sku_entity, $key, $value_id);
+            $remove_swatch = TRUE;
             if ($swatch_sku instanceof SKU) {
               $swatch_image_url = $this->skuImageManager->getPdpSwatchImageUrl($swatch_sku);
               if ($swatch_image_url) {
+                $remove_swatch = FALSE;
                 $swatch_image = file_url_transform_relative($swatch_image_url);
-                $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'][$value_id]['swatch_image'] = $swatch_image;
+                $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'][$value]['swatch_image'] = $swatch_image;
               }
+            }
+            if ($remove_swatch) {
+              unset($vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'][$value]);
             }
           }
         }

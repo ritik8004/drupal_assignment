@@ -8,13 +8,14 @@ const SwatchSelectOption = ({
   <div className="non-groupped-attr">
     <ul id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
       {Object.keys(configurables.values).map((attr) => {
+        const attrVal = configurables.values[attr].value_id;
         if (code === nextCode) {
           return (
             <AvailableSwatchOptions
               nextValues={nextValues}
-              attr={attr}
+              attr={attrVal}
               value={configurables.values[attr].swatch_image}
-              key={attr}
+              key={attrVal}
               handleLiClick={handleLiClick}
               code={code}
             />
@@ -22,9 +23,9 @@ const SwatchSelectOption = ({
         }
         return (
           <DefaultSwatchOptions
-            attr={attr}
+            attr={attrVal}
             value={configurables.values[attr].swatch_image}
-            key={attr}
+            key={attrVal}
             handleLiClick={handleLiClick}
             code={code}
           />
