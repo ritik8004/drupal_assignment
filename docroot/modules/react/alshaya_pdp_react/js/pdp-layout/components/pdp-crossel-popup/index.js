@@ -54,7 +54,7 @@ class CrossellPopupContent extends React.Component {
             <label>{Drupal.t('Quick View')}</label>
           </div>
           <div className="magv2-crossell-popup-content-wrapper">
-            <PdpGallery skuCode={relatedSku} pdpGallery={pdpGallery} showFullVersion="false" context="related" />
+            <PdpGallery skuCode={relatedSku} pdpGallery={pdpGallery} showFullVersion={false} context="related" />
             <PdpInfo
               title={title}
               finalPrice={finalPrice}

@@ -95,7 +95,9 @@ const PdpLayout = () => {
 
   const removePanelData = useCallback(() => {
     if (panelContent !== undefined) {
-      setPanelContent(panelContent.splice(-1, 1));
+      const panelData = [...panelContent];
+      panelData.splice(-1, 1);
+      setPanelContent(panelData);
     }
   }, [panelContent]);
 

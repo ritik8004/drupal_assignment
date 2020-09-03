@@ -38,8 +38,10 @@ export default class PdpGallery extends React.PureComponent {
   };
 
   render() {
-    const { pdpGallery, children, showFullVersion, context } = this.props;
-    const images = (pdpGallery && context == 'main') ? pdpGallery.thumbnails : pdpGallery.images;
+    const {
+      pdpGallery, children, showFullVersion, context,
+    } = this.props;
+    const images = (pdpGallery && context === 'main') ? pdpGallery.thumbnails : pdpGallery.images;
 
     const emptyRes = (
       <div>Images not available</div>
@@ -60,10 +62,10 @@ export default class PdpGallery extends React.PureComponent {
             <div className="magazine__gallery--container-desktop">
               {images.map((image, key) => (
                 <PdpAsset
-                  key={(context == 'main') ? image.zoomurl : image.url}
-                  type={(context == 'main') ? image.type : image.image_type}
-                  imageZoomUrl={(context == 'main') ? image.zoomurl : image.url}
-                  imageUrl={(context == 'main') ? image.mediumurl : image.url}
+                  key={image.zoomurl}
+                  type={image.type}
+                  imageZoomUrl={image.zoomurl}
+                  imageUrl={image.mediumurl}
                   alt={image.label}
                   title={image.label}
                   onClick={this.showFullScreenModal}
@@ -85,8 +87,8 @@ export default class PdpGallery extends React.PureComponent {
               >
                 {images.map((image, key) => (
                   <PdpImageElement
-                    key={(context == 'main') ? image.zoomurl : image.url}
-                    imageUrl={(context == 'main') ? image.mediumurl : image.url}
+                    key={(context === 'main') ? image.zoomurl : image.url}
+                    imageUrl={(context === 'main') ? image.mediumurl : image.url}
                     alt={image.label}
                     title={image.label}
                     onClick={this.showFullScreenModal}
@@ -116,8 +118,8 @@ export default class PdpGallery extends React.PureComponent {
             >
               {images.map((image, key) => (
                 <PdpImageElement
-                  key={(context == 'main') ? image.zoomurl : image.url}
-                  imageUrl={(context == 'main') ? image.zoomurl : image.url}
+                  key={(context === 'main') ? image.zoomurl : image.url}
+                  imageUrl={(context === 'main') ? image.zoomurl : image.url}
                   alt={image.label}
                   title={image.label}
                   index={key}
