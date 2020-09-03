@@ -115,6 +115,23 @@
         transform: translateY(-50%);
       }
 
+      @include breakpoint($only-mobile) {
+        background: $appointment-store-search-icon-active;
+
+        &::before {
+          color: $appointment-store-search-icon;
+        }
+
+        &.active,
+        &:hover {
+          background: $appointment-store-search-icon !important;
+
+          &::before {
+            color: $appointment-store-search-icon-active !important;
+          }
+        }
+      }
+
       &.active,
       &:hover {
         background: $appointment-store-search-icon-active;
