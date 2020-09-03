@@ -14,3 +14,4 @@ variables:
   ar_brand_filter: ''
   ar_color_filter: ''
   ar_promotional_filter: ''
+  governorate: ''

@@ -91,3 +91,4 @@ variables:
   payment_type_text: 'طريقة الدفع:'
   store_area: 'دبي'
   language_store_area: 'Dubai - United Arab Emirates'
+  governorate: ''

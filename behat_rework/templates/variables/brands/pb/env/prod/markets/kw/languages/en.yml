@@ -27,7 +27,7 @@ variables:
   add_to_cart_link: 'add to cart'
   language_add_to_cart_link: 'أضف إلى سلة التسوق'
   create_account: 'Create An Account'
-  sign_in: 'Log in'
+  sign_in: 'Sign In'
   find_store: 'Find A Store'
   language_link: 'العربية'
   subtotal: 'Subtotal'
