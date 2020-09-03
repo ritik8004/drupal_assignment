@@ -10,6 +10,9 @@
 $settings['alshaya_checkout_settings']['place_order_double_check_after_exception'] = TRUE;
 $settings['alshaya_checkout_settings']['cancel_reservation_enabled'] = FALSE;
 
+// Allow all validations to be finished for place order.
+$settings['alshaya_checkout_settings']['place_order_timeout'] = 60;
+
 // Check all payments initiated before 500 seconds.
 $settings['alshaya_checkout_settings']['pending_payments']['before'] = 500;
 
