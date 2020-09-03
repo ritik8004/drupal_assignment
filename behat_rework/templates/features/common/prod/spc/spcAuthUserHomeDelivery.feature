@@ -39,6 +39,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     When fill in billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -47,8 +48,6 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -85,6 +84,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     When fill in billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -93,8 +93,6 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -130,6 +128,8 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     Then I click on "div.spc-address-list-member-overlay .address-list-content .spc-add-new-address-btn" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
@@ -139,8 +139,6 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -174,6 +172,8 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     Then I click on "div.spc-address-list-member-overlay .address-list-content .spc-add-new-address-btn" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
@@ -183,8 +183,6 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 10 seconds
     And I wait for the page to load

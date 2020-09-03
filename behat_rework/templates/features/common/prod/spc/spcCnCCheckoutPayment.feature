@@ -1,4 +1,4 @@
-@javascript @guest @checkoutPayment @clickCollect @bbwsaprod
+@javascript @guest @checkoutPayment @clickCollect @vssapprod @vssaprod @vssapprod @hmkwprod @hmkwpprod @flkwprod @flkwpprod @hmsaprod @hmsapprod @flsaprod @flsapprod
 Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method for Guest User
 
   Background:

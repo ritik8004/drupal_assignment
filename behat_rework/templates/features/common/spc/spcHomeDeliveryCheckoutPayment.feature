@@ -1,4 +1,4 @@
-@javascript @guest @checkoutPayment @homeDelivery
+@javascript @guest @checkoutPayment @homeDelivery @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
 
   Background:
@@ -29,6 +29,10 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
@@ -38,10 +42,6 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load
@@ -117,6 +117,10 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
@@ -126,10 +130,6 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load
@@ -211,6 +211,10 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | email    | {anon_email}    |
+      | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
@@ -220,10 +224,6 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load

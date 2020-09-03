@@ -68,3 +68,4 @@ variables:
   order_detail: 'تفاصيل الطلبية'
   delivery_type_text: 'التوصيل متوقع خلال:'
   payment_type_text: 'طريقة الدفع:'
+  governorate: ''
