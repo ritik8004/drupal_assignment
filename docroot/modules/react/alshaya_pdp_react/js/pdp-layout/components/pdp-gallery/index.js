@@ -61,7 +61,7 @@ export default class PdpGallery extends React.PureComponent {
               {images.map((image, key) => (
                 <PdpAsset
                   key={(context == 'main') ? image.zoomurl : image.url}
-                  type={image.type}
+                  type={(context == 'main') ? image.type : image.image_type}
                   imageZoomUrl={(context == 'main') ? image.zoomurl : image.url}
                   imageUrl={(context == 'main') ? image.mediumurl : image.url}
                   alt={image.label}
