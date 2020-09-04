@@ -308,6 +308,14 @@ function alshaya_white_label_preprocess_page(&$variables) {
   $variables['site_logo'] = theme_get_setting('logo.url');
   $mobile_logo = alshaya_master_get_mobile_logo();
   $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
+
+  $sub_brand_logo_img = \Drupal::config('alshaya_master.settings')->get('sub_brand_logo_img');
+  $sub_brand_logo_link = \Drupal::config('alshaya_master.settings')->get('sub_brand_logo_link');
+  // If both sub brand logo image and link available.
+  if ($sub_brand_logo_img && $sub_brand_logo_link) {
+    $variables['sub_brand_logo_img'] = $sub_brand_logo_img;
+    $variables['sub_brand_logo_link'] = $sub_brand_logo_link;
+  }
 }
 
 /**
