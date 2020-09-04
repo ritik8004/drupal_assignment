@@ -1,7 +1,8 @@
 import React from 'react';
 import getStringMessage from '../../../../../js/utilities/strings';
+import ConditionalView from '../conditional-view';
 
-const descriptionThreshold = 300;
+const descriptionThreshold = 150;
 
 export default class ReadMore extends React.Component {
   constructor(props) {
@@ -45,8 +46,8 @@ export default class ReadMore extends React.Component {
    * @returns {string|*}
    */
   getTrimmedDescription = (description) => {
-    if (description.length > descriptionThreshold) {
-      return description.substring(0, descriptionThreshold);
+    if (description.length > descriptionThreshold && window.innerWidth < 768) {
+      return `${description.substring(0, descriptionThreshold)} ...`;
     }
     return description;
   }
@@ -96,9 +97,11 @@ export default class ReadMore extends React.Component {
         <span ref={this.readMoreRef} className="read-more-content short-text">
           { desc }
         </span>
-        <a className={`readmore-link readMoreText ${showReadMoreClass}`} onClick={() => this.expandContent()}>
-          { linkText }
-        </a>
+        <ConditionalView condition={window.innerWidth < 768}>
+          <a className={`readmore-link readMoreText ${showReadMoreClass}`} onClick={() => this.expandContent()}>
+            { linkText }
+          </a>
+        </ConditionalView>
       </div>
     );
   }

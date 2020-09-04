@@ -14,6 +14,14 @@ const PdpCrossellUpsellImage = ({
 }) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <a className="magv2-pdp-crossell-upsell-image-wrapper" href={productUrl} {...gtmAttributes}>
+    <div className="magv2-pdp-crossell-upsell-img">
+      <img
+        src={imageUrl}
+        alt={alt}
+        title={title}
+        loading="lazy"
+      />
+    </div>
     {productLabels ? (
       <div className="product-labels">
         {Object.keys(productLabels).map((key) => (
@@ -27,14 +35,6 @@ const PdpCrossellUpsellImage = ({
         ))}
       </div>
     ) : null}
-    <div className="magv2-pdp-crossell-upsell-img">
-      <img
-        src={imageUrl}
-        alt={alt}
-        title={title}
-        loading="lazy"
-      />
-    </div>
     <PdpInfo
       title={title}
       finalPrice={finalPrice}

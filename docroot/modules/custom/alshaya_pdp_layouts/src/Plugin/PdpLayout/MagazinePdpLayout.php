@@ -33,7 +33,7 @@ class MagazinePdpLayout extends PdpLayoutBase {
    * {@inheritdoc}
    */
   public function getCotextFromPdpLayout($context, $pdp_layout) {
-    $context . '-' . $pdp_layout;
+    return $context . '-' . $pdp_layout;
   }
 
 }

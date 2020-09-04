@@ -8,6 +8,16 @@
 /**
  * Implements hook_update_N().
  *
+ * [5.6.0] Update acquia search facet configuration.
+ */
+function alshaya_mu_transac_update_8002() {
+  // Updating configuration file for acquia solr search.
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change the path alias for PLPs.
  */
 function alshaya_mu_transac_update_8001() {
@@ -131,4 +141,21 @@ function _alshaya_mu_transac_get_metatag_translations() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Batch finished callback for generating taxonomy term aliases.
+ *
+ * @see alshaya_mu_transac_update_8001()
+ */
+function _alshaya_mu_transac_term_alias_update_batch_finished($success, $results, $operations) {
+  if ($success) {
+    // If no term alias was actually updated, final output should show 0.
+    \Drupal::logger('alshaya_mu_transac')->notice('Generated @count URL aliases.', [
+      '@count' => $results['updates'] ?? 0,
+    ]);
+  }
+  else {
+    \Drupal::logger('alshaya_mu_transac')->notice('An error occurred while updating term aliases');
+  }
 }

@@ -23,6 +23,7 @@ import {
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { setMomentLocale } from '../../../utilities/helper';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 // Set language for date time translation.
 if (drupalSettings.path.currentLanguage !== 'en') {
   setMomentLocale(moment);
@@ -75,6 +76,15 @@ export default class Appointment extends React.Component {
       };
     }
     this.state.appointmentRender = false;
+
+    // Trigger GTM event.
+    const { appointmentStep, appointmentId } = this.state;
+
+    if (appointmentId === undefined) {
+      dispatchCustomEvent('appointmentBookingSteps', {
+        stepValue: appointmentStep,
+      });
+    }
   }
 
   /**
@@ -324,12 +334,30 @@ export default class Appointment extends React.Component {
       ...prevState,
       appointmentStep: stepval,
     }));
+
+    const { appointmentId } = this.state;
+
+    // Trigger GTM event.
+    if (appointmentId === undefined) {
+      dispatchCustomEvent('appointmentBookingSteps', {
+        stepValue,
+      });
+    }
   }
 
   handleEdit = (step) => {
     this.setState({
       appointmentStep: step,
     });
+
+    const { appointmentId } = this.state;
+
+    // Trigger GTM event.
+    if (appointmentId === undefined) {
+      dispatchCustomEvent('appointmentBookingSteps', {
+        stepValue: step,
+      });
+    }
   }
 
   render() {

@@ -172,6 +172,10 @@
 
       .magv2-detail-wrapper + .promotions-full-view-mode {
         margin-top: -1.25rem;
+
+        @include breakpoint($only-mobile) {
+          margin-top: -2.5rem;
+        }
       }
     }
 
@@ -275,6 +279,55 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+    }
+  }
+}
+
+.magv2-pdp-crossell-upsell-wrapper {
+  .magv2-pdp-crossell-upsell-image-wrapper {
+    position: relative;
+
+    .product-labels {
+      position: static;
+      width: auto;
+      height: auto;
+      display: flex;
+      padding: 0 1.25rem;
+      flex-wrap: wrap;
+
+      .labels {
+        &.top-left,
+        &.top-right {
+          position: absolute;
+          top: 1.1875rem;
+        }
+
+        &.top-left {
+          #{$left}: 1.25rem;
+        }
+
+        &.top-right {
+          #{$right}: 1.25rem;
+        }
+
+        &.bottom-left,
+        &.bottom-right {
+          display: flex;
+          justify-content: flex-start;
+          padding: 0;
+          padding-bottom: 0.3125rem;
+          padding-#{$right}: 0.3125rem;
+          flex: 1 1 0;
+        }
+
+        &.bottom-right {
+          justify-content: flex-end;
+        }
+
+        img {
+          width: auto;
+        }
+      }
     }
   }
 }

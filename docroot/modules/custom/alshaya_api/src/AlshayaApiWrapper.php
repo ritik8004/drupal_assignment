@@ -1009,6 +1009,18 @@ class AlshayaApiWrapper {
     }
 
     try {
+      // Log the data we are posting to magento.
+      $logger_data = $opt['json'];
+      if (!empty($logger_data['password'])) {
+        // Mask password in log.
+        $logger_data['password'] = 'XXXXXXXXXXXX';
+      }
+      $this->logger->notice('Updating customer on Magento from Drupal. Data: @data Method: @method Endpoint: @endpoint', [
+        '@data' => json_encode($logger_data),
+        '@method' => $method,
+        '@endpoint' => $endpoint,
+      ]);
+
       $response = $this->invokeApi($endpoint, $opt['json'], $method);
       $response = Json::decode($response);
       if (!empty($response)) {

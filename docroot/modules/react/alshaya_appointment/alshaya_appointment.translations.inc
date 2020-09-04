@@ -37,22 +37,22 @@ function _alshaya_appointment_translations() {
     'Appointment Summary' => [
       'ar' => 'ملخص الموعد',
     ],
-    'customer details' => [
+    'Customer details' => [
       'ar' => 'تفاصيل العميل',
     ],
-    'appointment type' => [
-      'ar' => 'نوع الحجز',
-    ],
-    'confirmation' => [
+    'Confirmation' => [
       'ar' => 'التأكيد',
     ],
-    'login / guest' => [
+    'Login / Guest' => [
       'ar' => 'سجل الدخول/زائر',
     ],
-    'select time slot' => [
+    'Select time slot' => [
       'ar' => 'اختيار الوقت',
     ],
-    'select store' => [
+    'Select store' => [
+      'ar' => 'اختيار المحل',
+    ],
+    'Select Store' => [
       'ar' => 'اختيار المحل',
     ],
     'Book new Appointment' => [
@@ -124,7 +124,7 @@ function _alshaya_appointment_translations() {
     'Select date & time that suits you' => [
       'ar' => 'اختر التاريخ والوقت الذي يناسبك',
     ],
-    'book time slot' => [
+    'Book Time Slot' => [
       'ar' => 'حجز موعد زمني',
     ],
     'The first available appointment is on' => [
@@ -175,7 +175,7 @@ function _alshaya_appointment_translations() {
     'Store Location' => [
       'ar' => 'موقع المتجر',
     ],
-    'close' => [
+    'Close' => [
       'ar' => 'إغلاق',
     ],
     'Are you sure you want to cancel appointment for !type?' => [

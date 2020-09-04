@@ -42,27 +42,39 @@ class AlshayaFeatureProcess {
     $this->viewport = $parameters['viewport'];
     $environment = explode('-', $parameters['site']);
     if (in_array($environment[2], ['local', 'dev2', 'qa', 'uat'])) {
-      if ($environment[1] == 'kw') {
+      if ($environment[0] == 'bp') {
         $this->suiteLocators = [
-          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc',
-          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'spc'
+          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'boots'
         ];
       } else {
-        $this->suiteLocators = [
-          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc'
-        ];
+        if ($environment[1] == 'kw') {
+          $this->suiteLocators = [
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc',
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'spc'
+          ];
+        } else {
+          $this->suiteLocators = [
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc'
+          ];
+        }
       }
     }
     else if (in_array($environment[2], ['prod','pprod'])) {
-      if ($environment[1] == 'kw') {
+      if ($environment[0] == 'bp') {
         $this->suiteLocators = [
-          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'spc',
-          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'kw'
+          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'boots'
         ];
       } else {
-        $this->suiteLocators = [
-          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'spc'
-        ];
+        if ($environment[1] == 'kw') {
+          $this->suiteLocators = [
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'spc',
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'kw'
+          ];
+        } else {
+          $this->suiteLocators = [
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'spc'
+          ];
+        }
       }
     }
     else {

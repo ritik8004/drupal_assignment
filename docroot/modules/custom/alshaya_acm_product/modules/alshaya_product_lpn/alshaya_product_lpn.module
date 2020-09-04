@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\acq_sku\Entity\SKU;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_product_lpn_page_attachments(array &$page) {
+  $config = \Drupal::config('alshaya_product_lpn.settings');
+  $lpn_attribute = $config->get('lpn_attribute')
+    ? 'attr_' . $config->get('lpn_attribute')
+    : '';
+
+  $page['#attached']['drupalSettings']['lpn'] = [
+    'lpn_attribute' => $lpn_attribute,
+  ];
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_product_lpn_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  // Get lpn_attribute id from config.
+  $lpn_attribute = \Drupal::config('alshaya_product_lpn.settings')->get('lpn_attribute') ?? '';
+
+  // Hide the LPN attribute.
+  if (!empty($lpn_attribute) && isset($form['ajax']['configurables'][$lpn_attribute])) {
+    $form['ajax']['configurables'][$lpn_attribute]['#prefix'] = '<div class="hidden">';
+    $form['ajax']['configurables'][$lpn_attribute]['#suffix'] = '</div>';
+  }
+}
+
+/**
+ * Implements hook_acq_sku_configurable_variants_alter().
+ *
+ * Remove the child product having all same attributes but
+ * belongs to new season to ensure old season products are sold first.
+ */
+function alshaya_product_lpn_acq_sku_configurable_variants_alter(array &$children, SKU $sku) {
+  // Get lpn_attribute id from config.
+  $lpn_attribute = \Drupal::config('alshaya_product_lpn.settings')->get('lpn_attribute') ?? '';
+  $child_group = [];
+
+  if (empty($lpn_attribute)) {
+    return;
+  }
+
+  $configurations = unserialize($sku->get('field_configurable_attributes')->getString());
+  $configurable_attribute_codes = array_column($configurations, 'code', 'code');
+
+  foreach ($children as $child_sku => $child) {
+    $attributes = $child->get('attributes')->getValue();
+    $attributes = array_column($attributes, 'value', 'key');
+    $season_code = '';
+
+    foreach ($configurable_attribute_codes as $attribute_id) {
+      if ($attribute_id === $lpn_attribute) {
+        $season_code = $attributes[$attribute_id];
+        continue;
+      }
+      $children_with_attr[$attribute_id] = $attributes[$attribute_id];
+    }
+
+    $attributes_key = implode('-', $children_with_attr);
+
+    if (array_key_exists($attributes_key, $child_group)) {
+      if ($child_group[$attributes_key][$lpn_attribute] > $season_code) {
+        // If current product's season_code is smaller than another child's
+        // season code and both have same configurable attributes, then
+        // remove the product with higher season code.
+        unset($children[$child_group[$attributes_key]['sku']]);
+        $child_group[$attributes_key] = [
+          'sku' => $child_sku,
+          $lpn_attribute => $season_code,
+        ];
+      }
+      else {
+        // If current product's season_code is greater than another child's
+        // season code and both have same configurable attributes, then
+        // remove the current product.
+        unset($children[$child_sku]);
+      }
+    }
+    else {
+      $child_group[$attributes_key] = [
+        'sku' => $child_sku,
+        $lpn_attribute => $season_code,
+      ];
+    }
+  }
+}

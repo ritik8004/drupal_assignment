@@ -251,7 +251,22 @@ class Cart {
     $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
-      static::$cart = $this->magentoApiWrapper->doRequest('GET', $url);
+      $updated_cart = $this->magentoApiWrapper->doRequest('GET', $url);
+
+      if ($updated_cart === FALSE) {
+        throw new \Exception('Cart no longer available', 404);
+      }
+      elseif (!is_array($updated_cart)) {
+        $this->logger->error('Invalid cart data in response received for get cart. ID: @id, Response: @response', [
+          '@id' => $cart_id,
+          '@response' => json_encode($updated_cart),
+        ]);
+
+        throw new \Exception('Invalid cart data in response', 500);
+      }
+
+      static::$cart = $updated_cart;
+
       // Store cart object in cache.
       $this->setCartInCache(static::$cart);
 
@@ -265,7 +280,7 @@ class Cart {
         '@message' => $e->getMessage(),
       ]);
 
-      if (strpos($e->getMessage(), 'No such entity with cartId') > -1) {
+      if ($e->getCode() == 404 || strpos($e->getMessage(), 'No such entity with cartId') > -1) {
         $this->removeCartFromSession();
       }
 
@@ -733,7 +748,7 @@ class Cart {
         ? 'Back-end system is down'
         : $cart['error_message'];
 
-      $message = $this->prepareOrderFailedMessage($old_cart, $data, $error_message, 'update cart', 'NA', TRUE);
+      $message = $this->prepareOrderFailedMessage($old_cart, $data, $error_message, 'update cart', 'NA');
       $this->logger->error('Error occurred while placing order. @message', [
         '@message' => $message,
       ]);
@@ -1153,6 +1168,7 @@ class Cart {
 
     $lock = FALSE;
     $settings = $this->settings->getSettings('spc_middleware');
+    $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
     // Check whether order locking is enabled.
     if (!isset($settings['spc_middleware_lock_place_order']) || $settings['spc_middleware_lock_place_order'] == TRUE) {
@@ -1171,9 +1187,13 @@ class Cart {
     }
 
     try {
+      $request_options = [
+        'timeout' => $checkout_settings['place_order_timeout'],
+      ];
+
       // We don't pass any payment data in place order call to MDC because its
       // optional and this also sets in ACM MDC observer.
-      $result = $this->magentoApiWrapper->doRequest('PUT', $url);
+      $result = $this->magentoApiWrapper->doRequest('PUT', $url, $request_options);
 
       if (!empty($lock)) {
         $lock->release();
@@ -1200,7 +1220,7 @@ class Cart {
       $double_check_done = 'no';
       $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
 
-      $doubleCheckEnabled = $this->settings->getSettings('alshaya_checkout_settings')['place_order_double_check_after_exception'];
+      $doubleCheckEnabled = $checkout_settings['place_order_double_check_after_exception'];
       if ($doubleCheckEnabled) {
         $double_check_done = 'yes';
         try {
@@ -1598,9 +1618,13 @@ class Cart {
     $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
 
     if ($this->settings->getSettings('place_order_debug_failure', 1)) {
-      $message[] = 'payment_method:' . $data['paymentMethod']['method'];
-      if (isset($data['paymentMethod']['additional_data'])) {
-        $message[] = 'additional_information:' . json_encode($data['paymentMethod']['additional_data']);
+      $payment_method = $data['paymentMethod']['method'] ?? $data['method'];
+      $message[] = 'payment_method:' . $payment_method;
+      if (isset($data['paymentMethod']['additional_data']) || isset($data['additional_data'])) {
+        $additional_info = isset($data['paymentMethod']['additional_data'])
+          ? $data['paymentMethod']['additional_data']
+          : ($data['additional_data'] ?? NULL);
+        $message[] = 'additional_information:' . json_encode($additional_info);
       }
 
       $message[] = 'shipping_method:' . $cart['shipping']['method'];

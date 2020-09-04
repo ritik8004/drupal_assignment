@@ -251,7 +251,7 @@ class AlshayaSpcCommands extends DrushCommands {
         case 'checkout_com':
           $cart_amount = $this->checkoutComApi->getCheckoutAmount($cart['totals']['base_grand_total'], $cart['totals']['quote_currency_code']);
           $payment_info = $this->checkoutComApi->getChargesInfo($payment['unique_id']);
-          if (!empty($payment_info['responseCode']) || $payment_info['responseCode'] != '10000') {
+          if (!empty($payment_info['responseCode']) && $payment_info['responseCode'] == '10000') {
             try {
               $update = [];
               $update['extension'] = [
@@ -286,6 +286,15 @@ class AlshayaSpcCommands extends DrushCommands {
                 '@exception' => $e->getMessage(),
               ]);
             }
+
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
+          elseif (!empty($payment_info['responseCode']) && $payment_info['responseCode'] != '10000') {
+            $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment failed. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($payment_info),
+            ]);
 
             $this->deletePaymentDataByCartId($payment['cart_id']);
           }

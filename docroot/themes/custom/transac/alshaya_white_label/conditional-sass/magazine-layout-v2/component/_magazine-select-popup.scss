@@ -35,7 +35,6 @@
 
       &-header-wrapper {
         box-shadow: 0 0.3125rem 0.625rem -0.3125rem rgba(0, 0, 0, 0.3);
-        margin-bottom: 0.625rem;
         padding: 1.0625rem 1.875rem 0.9375rem;
         background-color: $magv2-desc-popup-content-bg;
         position: relative;
@@ -133,6 +132,7 @@
           padding-#{$left}: 1.25rem;
           background-color: $magv2-desc-popup-content-bg;
           padding-top: 1.25rem;
+          margin-top: 0.625rem;
 
           label {
             display: none;
@@ -161,6 +161,7 @@
             padding-#{$right}: 1.25rem;
             margin-bottom: 0;
             border-bottom: 0.0625rem solid $magv2-size-btn-border;
+            margin-top: 0;
 
             label {
               display: flex;
@@ -221,7 +222,7 @@
   }
 }
 
-body.select-overlay {
+body.overlay-select {
   overflow: hidden;
 
   &::before {
@@ -245,10 +246,6 @@ body.select-overlay {
     &-select {
       &-popup {
         &-content-wrapper {
-          @include breakpoint($only-tablet) {
-            margin-top: 1.8125rem;
-          }
-
           .non-group-anchor-wrapper {
             @include breakpoint($tablet) {
               display: none;
@@ -261,6 +258,10 @@ body.select-overlay {
                 justify-content: center;
               }
             }
+          }
+
+          .non-group-anchor-wrapper + .non-group-option-wrapper {
+            margin-top: 0.625rem;
           }
         }
       }

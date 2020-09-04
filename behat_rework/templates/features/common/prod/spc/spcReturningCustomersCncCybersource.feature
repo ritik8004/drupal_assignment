@@ -1,4 +1,4 @@
-@javascript @returnUser @cybersourcePayment @clickCollect @bbwaeprod
+@javascript @returnUser @cybersourcePayment @clickCollect @bbwaeprod @bbwaepprod @vsaeprod @vsaepprod @hmaeprod @hmaepprod @flaeprod @flaepprod
 Feature: SPC Checkout using Click & Collect store for returning customer using Cybersource Payment Metod
 
   Background:
