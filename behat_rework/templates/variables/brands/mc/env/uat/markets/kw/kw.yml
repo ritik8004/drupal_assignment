@@ -1,6 +1,6 @@
 variables:
   var_username: 'mitesh@axelerant.com'
   var_password: 'Alshaya@2017'
-  product_listing_page_url: "/shop-car-seats/"
-  spc_product_listing_page: '/shop-car-seats/'
-  spc_basket_page: '/shop-car-seats/'
+  product_listing_page_url: "/shop-baby-clothing/baby-newborn-18-months/"
+  spc_product_listing_page: '/shop-baby-clothing/baby-newborn-18-months/'
+  spc_basket_page: '/shop-baby-clothing/baby-newborn-18-months/'
