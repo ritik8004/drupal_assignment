@@ -497,7 +497,7 @@ function alshaya_master_form_system_site_information_settings_alter(&$form, Form
   $form['sub_brand_logo_link'] = [
     '#type' => 'textfield',
     '#title' => t('Sub brand logo link'),
-    '#description' => t('Link where the sub brand logo will redirect on click. This should be absolute url like "https://google.com" if external. If internal url, use with langcode "/en/hello".'),
+    '#description' => t('Link where the sub brand logo will redirect on click. This should be absolute url like "https://google.com".'),
     '#default_value' => \Drupal::configFactory()->getEditable('alshaya_master.settings')->get('sub_brand_logo_link'),
   ];
 
