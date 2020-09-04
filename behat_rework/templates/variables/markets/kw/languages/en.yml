@@ -82,3 +82,4 @@ variables:
   cc_payment_type: 'Credit / Debit Card'
   billing_text: 'Billing address:'
   language_cc_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
+  governorate: 'Kuwait City'
