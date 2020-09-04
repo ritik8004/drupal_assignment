@@ -27,6 +27,7 @@ const PdpLayout = () => {
   const [skuMainCode, setSkuMainCode] = useState(skuItemCode);
 
   const isMobile = window.outerWidth < 768;
+  const isTouchDevice = window.outerWidth < 1025;
 
   const pdpRefresh = (variantSelected, parentSkuSelected) => {
     setVariant(variantSelected);
@@ -96,7 +97,9 @@ const PdpLayout = () => {
 
   const removePanelData = useCallback(() => {
     if (panelContent !== undefined) {
-      setPanelContent(panelContent.splice(-1, 1));
+      const panelData = [...panelContent];
+      panelData.splice(-1, 1);
+      setPanelContent(panelData);
     }
   }, [panelContent]);
 
@@ -117,7 +120,13 @@ const PdpLayout = () => {
       </div>
       <div className="magv2-main">
         <div className="magv2-content" id="pdp-gallery-refresh">
-          <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} showFullVersion={!isMobile} context="main">
+          <PdpGallery
+            skuCode={skuItemCode}
+            pdpGallery={pdpGallery}
+            showFullVersion={!isMobile}
+            context="main"
+            miniFullScreenGallery={isTouchDevice}
+          >
             <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} labels={labels} />
           </PdpGallery>
         </div>
