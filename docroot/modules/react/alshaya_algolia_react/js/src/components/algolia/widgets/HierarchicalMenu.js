@@ -48,6 +48,7 @@ const HierarchicalMenu = (props) => {
               refine={refine}
               createURL={createURL}
               facetLevel={facetLevel + 1}
+              showParentLevel={true}
             />
           )}
         </li>
