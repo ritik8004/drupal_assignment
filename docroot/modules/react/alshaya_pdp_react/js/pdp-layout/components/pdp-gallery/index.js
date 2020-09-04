@@ -39,7 +39,7 @@ export default class PdpGallery extends React.PureComponent {
 
   render() {
     const {
-      pdpGallery, children, showFullVersion, context,
+      pdpGallery, children, showFullVersion, context, miniFullScreenGallery,
     } = this.props;
     const images = (pdpGallery && context === 'main') ? pdpGallery.thumbnails : pdpGallery.images;
 
@@ -49,7 +49,7 @@ export default class PdpGallery extends React.PureComponent {
     const { open, currentIndex } = this.state;
     const isTouchDevice = window.innerWidth < 1024;
     let centerPaddingValue;
-    if (isTouchDevice) {
+    if (isTouchDevice && !showFullVersion) {
       centerPaddingValue = null;
     } else {
       centerPaddingValue = '300px';
@@ -105,7 +105,7 @@ export default class PdpGallery extends React.PureComponent {
           open={open}
           closeOnDocumentClick={false}
         >
-          <div className="fullscreen-slider-wrapper">
+          <div className={`fullscreen-slider-wrapper ${miniFullScreenGallery ? 'fullscreen-slider-wrapper--mini' : ''}`}>
             <a className="close" onClick={this.closeModal} />
             <Slider
               initialSlide={currentIndex}
