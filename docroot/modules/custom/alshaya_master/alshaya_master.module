@@ -941,3 +941,21 @@ function alshaya_master_acquia_search_get_list_of_possible_cores_alter(&$possibl
 
   array_unshift($possible_core_ids, $core_service['identifier'] . '.' . $ah_env . '.' . $acsf_site_code);
 }
+
+/**
+ * Get sub brand logo and images.
+ *
+ * @return array
+ *   Sub brand logo and link.
+ */
+function _alshaya_master_get_subbrand_logo_image_link() {
+  $data = [];
+  $sub_brand_logo_img = \Drupal::config('alshaya_master.settings')->get('sub_brand_logo_img');
+  $sub_brand_logo_link = \Drupal::config('alshaya_master.settings')->get('sub_brand_logo_link');
+  if ($sub_brand_logo_img && $sub_brand_logo_link) {
+    $data['sub_brand_logo_img'] = $sub_brand_logo_img;
+    $data['sub_brand_logo_link'] = $sub_brand_logo_link;
+  }
+
+  return $data;
+}
