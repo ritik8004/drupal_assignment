@@ -25,7 +25,7 @@ variables:
   language_price_filter: 'السعر'
   language_brand_filter: 'مقاس الجوارب'
   language_color_filter: 'Size Rest'
-  language_size_filter: 'مقاس الحذاء' 'المقاس'
+  language_size_filter: 'مقاس الحذاء'
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
   language_create_account: 'تسجيل مستخدم جديد'
