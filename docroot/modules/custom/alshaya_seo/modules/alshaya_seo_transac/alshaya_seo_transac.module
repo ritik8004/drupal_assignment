@@ -13,6 +13,7 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 use Drupal\search_api\IndexInterface;
 use Drupal\views\ViewExecutable;
@@ -97,6 +98,16 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $product_node = $gtm_manager->fetchProductGtmAttributes($entity, $view_mode);
     $variables['gtm_attributes']['#markup'] = $gtm_manager->convertAttrsToString($product_node);
+
+    // Attach PDP gtm libraries based on PDP layout.
+    $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+    $pdp_layout = $sku_manager->getPdpLayout($entity, 'pdp');
+    if ($pdp_layout === SkuManager::PDP_LAYOUT_MAGAZINE_V2) {
+      $variables['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_magazine_v2';
+    }
+    else {
+      $variables['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_default';
+    }
   }
 }
 
@@ -620,5 +631,19 @@ function alshaya_seo_transac_preprocess_products_horizontal_slider(&$variables) 
     // Views pre render does not get called for the carousels in PDP.
     // So we add the library here for all the carousels.
     $variables['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_recommended_products_data_alter().
+ */
+function alshaya_seo_transac_alshaya_acm_product_recommended_products_data_alter(string $type, array &$recommended_skus) {
+  if (!empty($recommended_skus) && isset($recommended_skus['products']) && !empty($recommended_skus['products'])) {
+    $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+    $list_item_position = 1;
+    foreach ($recommended_skus['products'] as $sku => $product) {
+      $recommended_skus['products'][$sku]['gtm_attributes'] = $gtm_manager->fetchSkuAtttributes($sku);
+      $recommended_skus['products'][$sku]['gtm_attributes']['list-position'] = $list_item_position++;
+    }
   }
 }
