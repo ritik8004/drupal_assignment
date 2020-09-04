@@ -23,7 +23,7 @@ function alshaya_appointment_alshaya_my_account_links_alter(array &$links) {
   $links['alshaya_appointment'] = [
     'text' => t('My appointments'),
     'route' => 'alshaya_appointment.user_booked_appointment',
-    'weight' => 200,
+    'weight' => 21,
   ];
 }
 
