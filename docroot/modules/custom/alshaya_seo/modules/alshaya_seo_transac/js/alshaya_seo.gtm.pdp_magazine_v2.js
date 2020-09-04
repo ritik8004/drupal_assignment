@@ -25,7 +25,6 @@
 
   // Product click handler for product slider.
   $(document).once('product-clicked').on('click', '.magv2-pdp-crossell-upsell-wrapper .magv2-pdp-crossell-upsell-image-wrapper', function () {
-    // var that = $(this).closest('article');
     var subListName = Drupal.alshayaSeoPdpMagazineV2Gtm.getRecommendationListName($(this));
     // // Get the position of the item in the carousel.
     var position = parseInt($(this).attr('list-position'));

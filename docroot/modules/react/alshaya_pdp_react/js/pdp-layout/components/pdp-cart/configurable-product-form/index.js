@@ -84,7 +84,7 @@ class ConfigurableProductForm extends React.Component {
     });
 
     if ((typeof variantSelected !== 'undefined') && (variantSelected !== null)) {
-      const event = new CustomEvent('variantselected', {
+      const event = new CustomEvent('magazinev2-variant-selected', {
         bubbles: true,
         detail: { variant: variantSelected },
       });
