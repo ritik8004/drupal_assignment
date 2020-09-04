@@ -300,6 +300,15 @@ class ProductResource extends ResourceBase {
     $data['parent_sku'] = $parent_sku ? $parent_sku->getSku() : NULL;
     $data['title'] = (string) $this->productInfoHelper->getTitle($sku, 'pdp');
 
+    // Brand logo data.
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $brand_logo = alshaya_acm_product_get_brand_logo($sku);
+    if ($brand_logo) {
+      $data['brand_logo'] = file_create_url($brand_logo['#uri']);
+      $data['brand_alt'] = file_create_url($brand_logo['#alt']);
+      $data['brand_title'] = file_create_url($brand_logo['#title']);
+    }
+
     $prices = $this->skuManager->getMinPrices($sku);
     $data['original_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']);
     $data['final_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']);
@@ -373,6 +382,10 @@ class ProductResource extends ResourceBase {
 
     $data['configurable_values'] = $this->getConfigurableValues($sku);
 
+    // Get product labels.
+    $product_labels = $this->skuManager->getLabelsData($sku, 'pdp');
+    $data['product_labels'][$data['sku']] = $product_labels;
+
     if ($sku->bundle() === 'configurable') {
       $data['swatch_data'] = $this->getSwatchData($sku);
       $data['cart_combinations'] = $this->getConfigurableCombinations($sku);
@@ -385,6 +398,10 @@ class ProductResource extends ResourceBase {
         $variant = $this->getSkuData($child);
         $variant['configurable_values'] = $this->getConfigurableValues($child, $values['attributes']);
         $data['variants'][] = $variant;
+
+        // Setting product labels for variants.
+        $child_product_labels = $this->skuManager->getLabelsData($child, 'pdp');
+        $data['product_labels'][$values['sku']] = $child_product_labels;
       }
 
       $data['swatch_data'] = $data['swatch_data']?: new \stdClass();

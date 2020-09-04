@@ -20,7 +20,6 @@ class PdpRelatedProducts extends React.Component {
             products: response.data.products,
             sectionTitle: response.data.section_title,
           });
-          console.log(response.data.products);
         }
       });
     }

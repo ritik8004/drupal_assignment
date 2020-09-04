@@ -1,17 +1,7 @@
 import React from 'react';
 
 const PdpProductLabels = (props) => {
-  const { productLabels } = drupalSettings;
-  const { configurableCombinations } = drupalSettings;
-  const { skuCode } = props;
-  let variantSelected = skuCode;
-  let labels = productLabels[skuCode];
-
-  // For configurable products.
-  if (document.getElementById('pdp-add-to-cart-form') && configurableCombinations) {
-    variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
-    labels = productLabels[variantSelected];
-  }
+  const { labels, skuCode, variantSelected } = props;
 
   if (!(labels && Array.isArray(labels) && labels.length)) return null;
 

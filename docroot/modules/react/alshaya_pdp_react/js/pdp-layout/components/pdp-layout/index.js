@@ -56,6 +56,7 @@ const PdpLayout = () => {
     configurableCombinations,
     relatedProducts,
     stockStatus,
+    labels,
   } = productValues;
 
   const emptyRes = (
@@ -117,7 +118,7 @@ const PdpLayout = () => {
       <div className="magv2-main">
         <div className="magv2-content" id="pdp-gallery-refresh">
           <PdpGallery skuCode={skuItemCode} pdpGallery={pdpGallery} showFullVersion={!isMobile} context="main">
-            <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} />
+            <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} labels={labels} />
           </PdpGallery>
         </div>
         <div className="magv2-sidebar">

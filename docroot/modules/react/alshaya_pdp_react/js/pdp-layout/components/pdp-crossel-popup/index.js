@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import PdpInfo from '../pdp-info';
 import PdpGallery from '../pdp-gallery';
+import PdpProductLabels from '../pdp-product-labels';
 import PdpPopupContainer from '../utilities/pdp-popup-container';
 import PdpPopupWrapper from '../utilities/pdp-popup-wrapper';
 
@@ -37,11 +38,21 @@ class CrossellPopupContent extends React.Component {
     let pdpProductPrice = '';
     let finalPrice = '';
     let pdpGallery = '';
+    let brandLogo = '';
+    let brandLogoAlt = '';
+    let brandLogoTitle = '';
+    let labels = '';
     if (relatedProductInfo) {
       title = relatedProductInfo.title;
       pdpProductPrice = parseInt(relatedProductInfo.original_price, 10);
       finalPrice = parseInt(relatedProductInfo.final_price, 10);
       pdpGallery = relatedProductInfo.media[0].media;
+      labels = relatedProductInfo.product_labels[relatedSku];
+      if (relatedProductInfo.brand_logo !== undefined) {
+        brandLogo = relatedProductInfo.brand_logo;
+        brandLogoAlt = relatedProductInfo.brand_alt;
+        brandLogoTitle = relatedProductInfo.brand_title;
+      }
     }
 
     return (relatedProductInfo) ? (
@@ -54,11 +65,16 @@ class CrossellPopupContent extends React.Component {
             <label>{Drupal.t('Quick View')}</label>
           </div>
           <div className="magv2-crossell-popup-content-wrapper">
-            <PdpGallery skuCode={relatedSku} pdpGallery={pdpGallery} showFullVersion="false" context="related" />
+            <PdpGallery skuCode={relatedSku} pdpGallery={pdpGallery} showFullVersion="false" context="related">
+              <PdpProductLabels skuCode={relatedSku} variantSelected={relatedSku} labels={labels} />
+            </PdpGallery>
             <PdpInfo
               title={title}
               finalPrice={finalPrice}
               pdpProductPrice={pdpProductPrice}
+              brandLogo={brandLogo}
+              brandLogoAlt={brandLogoAlt}
+              brandLogoTitle={brandLogoTitle}
             />
             <div className="promotions promotions-full-view-mode">
               <p>
