@@ -1,6 +1,5 @@
 variables:
   url_base_uri: 'https://vsae3-uat.factory.alshaya.com/ar'
-  product_listing_page_url: '/victorias-secret/shop-bras/collections/uattest/'
   language_collection_filter: 'Collection'
   language_sort_filter: 'sort by'
   language_price_filter: 'Price'
@@ -42,7 +41,7 @@ variables:
   vat: 'تتضمن ضريبة القيمة المضافة'
   checkout_link: 'إتمام الشراء بأمان'
   language_continue_shopping: 'go shopping'
-  continue_shopping: "اذهبي للتسوق"
+  continue_shopping: 'اذهبي للتسوق'
   mobile_language_class: 'en'
   language_short: 'en'
   language_city_option: 'Dubai'
@@ -63,7 +62,7 @@ variables:
   language_payment_type: 'Cash on Delivery'
   language_payment_type_text: 'payment method:'
   language_continue_shopping_text: 'continue shopping'
-  continue_shopping_text: 'تابعي التسوق'
+  continue_shopping_text: 'اذهبي للتسوق'
   order_confirm_text: 'Order Confirmation'
   order_detail: 'تفاصيل الطلبية'
   delivery_type: 'خدمة التوصيل للمنزل'

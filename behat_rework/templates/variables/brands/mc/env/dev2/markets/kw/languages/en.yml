@@ -46,7 +46,7 @@ variables:
   language_continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'ar'
   language_short: 'ar'
-  area_option: 'Salmiya'
+  area_option: 'Kuwait City'
   city_option: ''
   street: 'Street S'
   building: 'Building B'

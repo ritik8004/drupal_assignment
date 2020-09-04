@@ -1,6 +1,6 @@
 variables:
   var_username: 'mitesh@axelerant.com'
   var_password: 'Alshaya@2017'
-  spc_product_listing_page: '/shop-test-category/'
-  spc_basket_page: '/shop-test-category/'
-  product_listing_page_url: "/shop-test-category/"
+  spc_product_listing_page: '/victorias-secret/shop-bras/'
+  spc_basket_page: '/victorias-secret/shop-bras/'
+  product_listing_page_url: "/victorias-secret/shop-bras/"

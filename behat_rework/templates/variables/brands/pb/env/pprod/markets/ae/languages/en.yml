@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://www.potterybarn.ae/en/'
+  url_base_uri: 'https://pbae4-pprod.factory.alshaya.com/en/'
   collection_filter: ''
   sort_filter: 'sort by'
   price_filter: 'Price'
@@ -91,6 +91,5 @@ variables:
   continue_shopping_text: 'continue shopping'
   language_continue_shopping_text: 'تابعي التسوق'
   continue_shopping: 'go shopping'
-  language_continue_shopping: "اذهبي للتسوق"
+  language_continue_shopping: "اذهب للتسوق"
   language_vat: 'تتضمن ضريبة القيمة المضافة'
-  governorate: ''
