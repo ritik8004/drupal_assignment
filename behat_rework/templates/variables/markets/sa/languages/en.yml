@@ -70,3 +70,5 @@ variables:
   postal_code: ''
   mobile: '555233224'
   language_cc_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
+  language_store_area: 'جدة'
+  store_area: 'Jeddah'

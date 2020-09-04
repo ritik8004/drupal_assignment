@@ -52,7 +52,7 @@ variables:
   mobile_language_class: 'ar'
   language_short: 'ar'
   city_option: 'Salmiya'
-  area_option: 'Salmiya'
+  area_option: 'Kuwait City'
   street: 'Street A'
   building: 'Building B'
   locality: ''

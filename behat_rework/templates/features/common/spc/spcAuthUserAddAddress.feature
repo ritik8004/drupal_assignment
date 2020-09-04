@@ -22,10 +22,11 @@ Feature: Test the adding address to existing user account
     Then I scroll to the "#address-book-form-open" element
     Then I select "{city_option}" from "field_address[0][address][area_parent]" address
     And I wait 2 seconds
+    Then I select "{governorate}" from "field_address[0][address][area_parent]" address
+    And I wait 2 seconds
     Then I select "{area_option}" from "field_address[0][address][administrative_area]" address
     When I scroll to the ".country-field-wrapper" element
     When fill in billing address with following:
-      | field_address[0][address][area_parent]               | {governorate} |
       | field_address[0][address][address_line1]             | {street}      |
       | field_address[0][address][dependent_locality]        | {building}    |
       | field_address[0][address][locality]                  | {locality}    |
