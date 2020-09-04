@@ -1,0 +1,101 @@
+// @todo: Add a body class when sub brand logo is enabled.
+$header-height: 87px;
+
+@mixin resetMenuStyles() {
+  position: absolute;
+  top: 47px;
+  width: 75%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    width: 33.33%;
+    height: 2.5rem;
+
+    a {
+      position: relative;
+      #{$left}: unset;
+      #{$right}: unset;
+      top: 0;
+      padding: 0;
+      margin: 0;
+
+      &::before {
+        margin: 0;
+        padding: 0;
+        #{$left}: unset;
+        #{$right}: unset;
+        top: 0;
+      }
+    }
+  }
+}
+
+@mixin placeMiniCart() {
+  position: absolute;
+  top: 44px;
+  width: 25%;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
+
+body {
+  @include breakpoint($only-mobile) {
+    &:not(.no-sticky-algolia-search-bar) {
+      margin-top: $header-height + 60px;
+    }
+  }
+
+  .branding__menu {
+    @include breakpoint($only-mobile) {
+      height: $header-height;
+      border: none;
+    }
+  }
+
+  .block-alshaya-algolia-react-autocomplete {
+    @include breakpoint($only-mobile) {
+      top: $header-height;
+    }
+  }
+
+  .c-menu-primary .menu--mobile-navigation ul.menu {
+    @include breakpoint($only-mobile) {
+      @include resetMenuStyles();
+
+      width: 66.66%;
+
+      li {
+        width: 50%;
+        // Hide the search icon li, icon is already hidden from CORE.
+        &:nth-child(2) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  #block-alshayareactcartminicartblock {
+    @include placeMiniCart();
+  }
+
+  // Not front page.
+  &:not(.frontpage) {
+    @include breakpoint($only-mobile) {
+      .menu--mobile-navigation ul {
+        @include resetMenuStyles();
+      }
+
+      margin-top: $header-height;
+    }
+  }
+}
