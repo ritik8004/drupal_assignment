@@ -63,6 +63,13 @@ function alshaya_white_label_preprocess_html(&$variables) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('body-sidebars-none');
   }
 
+  $sub_brand_logo_img = \Drupal::config('alshaya_master.settings')->get('sub_brand_logo_img');
+  $sub_brand_logo_link = \Drupal::config('alshaya_master.settings')->get('sub_brand_logo_link');
+  // If both sub brand logo image and link available.
+  if ($sub_brand_logo_img && $sub_brand_logo_link) {
+    $variables['attributes']['class'][] = Html::cleanCssIdentifier('sub-brand-logo');
+  }
+
   // Alias path class.
   $alias_class = preg_replace("/\//", '-', $alias);
   if (!empty($alias_class) && strpos($alias_class, 'node') !== 0) {
@@ -347,6 +354,17 @@ function alshaya_white_label_preprocess_block(&$variables) {
   if (isset($variables['elements'], $variables['elements']['#id']) && $variables['elements']['#id'] === 'branding') {
     $mobile_logo = alshaya_master_get_mobile_logo();
     $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
+  }
+
+  // Sub brand logo.
+  if ($variables['plugin_id'] === 'system_branding_block') {
+    $sub_brand_logo_img = \Drupal::config('alshaya_master.settings')->get('sub_brand_logo_img');
+    $sub_brand_logo_link = \Drupal::config('alshaya_master.settings')->get('sub_brand_logo_link');
+    // If both sub brand logo image and link available.
+    if ($sub_brand_logo_img && $sub_brand_logo_link) {
+      $variables['sub_brand_logo_img'] = $sub_brand_logo_img;
+      $variables['sub_brand_logo_link'] = $sub_brand_logo_link;
+    }
   }
 
   $listing_pages_plugin_id = [

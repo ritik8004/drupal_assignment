@@ -487,6 +487,20 @@ function alshaya_master_form_system_site_information_settings_alter(&$form, Form
     '#default_value' => $disable_message,
   ];
 
+  $form['sub_brand_logo_img'] = [
+    '#type' => 'textfield',
+    '#title' => t('Sub brand logo image'),
+    '#description' => t('Path of the logo image. Example - /themes/custom/transac/themename/site-logo.svg'),
+    '#default_value' => \Drupal::configFactory()->getEditable('alshaya_master.settings')->get('sub_brand_logo_img'),
+  ];
+
+  $form['sub_brand_logo_link'] = [
+    '#type' => 'textfield',
+    '#title' => t('Sub brand logo link'),
+    '#description' => t('Link where the sub brand logo will redirect on click. This should be absolute url like "https://google.com" if external. If internal url, use with langcode "/en/hello".'),
+    '#default_value' => \Drupal::configFactory()->getEditable('alshaya_master.settings')->get('sub_brand_logo_link'),
+  ];
+
   $form['#submit'][] = '_alshaya_admin_site_information_submit';
 }
 
@@ -497,6 +511,8 @@ function _alshaya_admin_site_information_submit($form, FormStateInterface $form_
   $disable_message = $form_state->getValue('js_disable_message');
   \Drupal::configFactory()->getEditable('alshaya_master.settings')
     ->set('js_disable_message', $disable_message)
+    ->set('sub_brand_logo_img', $form_state->getValue('sub_brand_logo_img'))
+    ->set('sub_brand_logo_link', $form_state->getValue('sub_brand_logo_link'))
     ->save();
 }
 

@@ -25,3 +25,6 @@ alshaya_master.settings:
     js_disable_message:
       type: text
       label: 'Disabled js message'
+    sub_brand_logo_link:
+      type: label
+      label: 'Sub brand logo link'

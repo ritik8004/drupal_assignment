@@ -32,6 +32,20 @@
             <img src="{{ site_logo }}" alt="{{ site_name }}"/>
           {% endif %}
         </a>
+
+        {# If sub brand logo available #}
+        {% if sub_brand_logo_img and sub_brand_logo_link %}
+          <a href="{{ sub_brand_logo_link }}" title="{{ site_name }}" rel="home" class="logo">
+            {% if mobile_site_logo %}
+              <picture>
+                <source media="(max-width: 767px)" srcset="{{ sub_brand_logo_img }}">
+                <img src="{{ sub_brand_logo_img }}" alt="{{ site_name }}"/>
+              </picture>
+            {% else %}
+              <img src="{{ sub_brand_logo_img }}" alt="{{ site_name }}"/>
+            {% endif %}
+          </a>
+          {% endif %}
       </div>
     {% endif %}
 {% endblock %}
