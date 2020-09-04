@@ -120,7 +120,8 @@
           border-radius: 0.5rem;
           background: $magv2-pdp-bg;
 
-          .group-anchor-wrapper {
+          .group-anchor-wrapper,
+          .non-group-anchor-wrapper {
             position: sticky;
             top: 0;
             z-index: 2;
