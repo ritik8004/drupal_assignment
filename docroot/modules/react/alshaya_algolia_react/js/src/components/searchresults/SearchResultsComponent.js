@@ -100,7 +100,7 @@ const SearchResultsComponent = props => {
       {hasCategoryFilter() && isDesktop() && (
         <SideBar>
           <HierarchicalMenu
-            transformItems={items => getSortedItems(items, 'category')}
+            transformItems={items => getSortedItems(items)}
             attributes = {attributes}
             facetLevel={1}
             showParentLevel={true}
