@@ -130,6 +130,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
                 productUrl={products[sku].productUrl}
                 productLabels={products[sku].productLabels}
                 productPromotions={products[sku].promotions}
+                gtmAttributes={products[sku].gtm_attributes}
               />
             ))}
           </Slider>

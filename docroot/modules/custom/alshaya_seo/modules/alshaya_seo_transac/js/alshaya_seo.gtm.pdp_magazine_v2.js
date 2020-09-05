@@ -9,14 +9,16 @@
   Drupal.alshayaSeoPdpMagazineV2Gtm = Drupal.alshayaSeoPdpMagazineV2Gtm || {};
 
   // Trigger product impressions on scroll.
-  $(document).once('gtm-events').on('scroll', function (event) {
+  $(document).once('gtm-events').on('scroll', debounce(function (event) {
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoPdpMagazineV2Gtm.prepareProductImpressions, $('.magv2-pdp-crossell-upsell-wrapper'), drupalSettings, event);
-  });
+  }, 500));
 
   // Trigger product impressions on click of slider next/prev buttons.
-  $(document).once('product-slider-prev-next').on('click', '.magv2-pdp-crossell-upsell-wrapper .slider-nav .slider-prev, .magv2-pdp-crossell-upsell-wrapper .slider-nav .slider-next', function(event) {
+  // Debouncing here adds some delay which helps to cover up for the time
+  // which is taken be the slider movement animation.
+  $(document).once('product-slider-prev-next').on('click', '.magv2-pdp-crossell-upsell-wrapper .slider-nav .slider-prev, .magv2-pdp-crossell-upsell-wrapper .slider-nav .slider-next', debounce(function (event) {
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoPdpMagazineV2Gtm.prepareProductImpressions, $('.magv2-pdp-crossell-upsell-wrapper'), drupalSettings, event);
-  });
+  }, 500));
 
   $(window).on('load', function() {
     // Trigger productDetailView event.
@@ -48,10 +50,7 @@
 
     context.find('.magv2-pdp-crossell-upsell-image-wrapper:not(".impression-processed")').each(function() {
       var condition = true;
-      // Only on scroll we check if product is in view or not.
-      if (eventType == 'scroll') {
-        condition = $(this).isCarouselElementInViewPort(0, 10);
-      }
+      condition = $(this).closest('.slick-slide').isElementInViewPort(0, 0);
       if (condition) {
         var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
         impression.list = listName;
