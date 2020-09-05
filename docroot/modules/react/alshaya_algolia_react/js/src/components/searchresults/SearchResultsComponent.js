@@ -54,7 +54,6 @@ const SearchResultsComponent = props => {
 
   const showCategoryFacets = (event) => {
     _parent.current.classList.toggle('category-facet-open');
-
   };
 
   return (
@@ -76,7 +75,7 @@ const SearchResultsComponent = props => {
         )}
         {hasCategoryFilter() && isDesktop() && (
           <HierarchicalMenu
-          transformItems={items => getSortedItems(items, 'category')}
+            transformItems={items => getSortedItems(items, 'category')}
             attributes = {attributes}
             facetLevel={1}
             showParentLevel={true}

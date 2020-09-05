@@ -789,47 +789,91 @@ class AlshayaAcmProductCommands extends DrushCommands {
   /**
    * Check sku broken images and if found, delete them.
    *
+   * @param array $options
+   *   Command options.
+   *
    * @command alshaya_acm_product:fix-missing-files
+   *
+   * @option batch_size
+   *   Batch size.
    *
    * @aliases fix-missing-files
    *
    * @usage fix-missing-files
    *   Checks and delete files for all skus.
    */
-  public function checkAndFixMissingFiles() {
+  public function checkAndFixMissingFiles(array $options = ['batch_size' => 100]) {
+    $batch_size = (int) $options['batch_size'];
+
     $query = $this->connection->select('acq_sku_field_data', 'acq_sku');
     $query->fields('acq_sku', ['sku']);
     $result = $query->execute()->fetchAll();
-    foreach ($result as $sku) {
+
+    $skus = array_column($result, 'sku');
+
+    $batch = [
+      'operations' => [],
+      'init_message' => dt('Processing all skus to check if they have missing files...'),
+      'progress_message' => dt('Completed @current step of @total.'),
+      'error_message' => dt('Failed to check for missing media files.'),
+    ];
+
+    foreach (array_chunk($skus, $batch_size) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'fixMissingFilesForSkus'],
+        [$chunk],
+      ];
+    }
+
+    batch_set($batch);
+
+    // Process the batch.
+    drush_backend_batch_process();
+
+    $this->logger()->notice('Fixed missing files issues for all skus.');
+  }
+
+  /**
+   * Batch callback for checkAndFixMissingFiles.
+   *
+   * @param array $skus
+   *   SKUs to process.
+   */
+  public static function fixMissingFilesForSkus(array $skus) {
+    $logger = \Drupal::logger('AlshayaAcmProductCommands');
+
+    $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
+
+    foreach ($skus as $sku_string) {
       $flag = 0;
-      $sku_data = SKU::loadFromSku($sku->sku);
-      if (empty($sku_data)) {
-        $this->output()->writeln('Sku ' . $sku . 'is not found on this site.');
-      }
-      // Get media data for the sku.
-      $media_data = $sku_data->get('media')->getString();
-      if (!empty($media_data)) {
-        $media_data = unserialize($media_data);
-        foreach ($media_data as $data) {
-          if (isset($data['fid'])) {
-            $file = $this->entityTypeManager->getStorage('file')->load($data['fid']);
-            if ($file instanceof FileInterface) {
-              $url = $file->getFileUri();
-              if (!file_exists($url)) {
-                $this->output()->writeln('Image ' . $url . ' with file id ' . $data['fid'] . ' not found for sku ' . $sku->sku);
-                if (!$this->io()->confirm(dt('Do you want to delete it?'))) {
-                  throw new UserAbortException();
+      $sku_data = SKU::loadFromSku($sku_string);
+      if (!empty($sku_data)) {
+        // Get media data for the sku.
+        $media_data = $sku_data->get('media')->getString();
+        if (!empty($media_data)) {
+          $media_data = unserialize($media_data);
+          foreach ($media_data as $data) {
+            if (isset($data['fid'])) {
+              $file = $fileStorage->load($data['fid']);
+              if ($file instanceof FileInterface) {
+                $url = $file->getFileUri();
+                if (!file_exists($url)) {
+                  $logger->notice('Fixing missing image having url @uri and file id @fid for sku @sku', [
+                    '@fid' => $data['fid'],
+                    '@uri' => $file->getFileUri(),
+                    '@sku' => $sku_string,
+                  ]);
+                  $file->delete();
+                  $flag = 1;
                 }
-                $file->delete();
-                $flag = 1;
               }
             }
           }
         }
-      }
-      if ($flag == 1) {
-        // Download files again for skus.
-        $sku_data->getMedia();
+        if ($flag == 1) {
+          // Download files again for skus.
+          $sku_data->getMedia();
+        }
       }
     }
   }
