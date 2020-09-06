@@ -1,8 +1,13 @@
-appointment_companion_limit: 3
+appointment_companion_limit: 10
 local_storage_expire: 600000 #Milliseconds
 store_finder:
   max_num_of_locations: 100
   unit: 'miles'
+  zoom: 7
+  latitute: 25.14283
+  longitude: 55.182963
+  radius: 5
+  store_search_placeholder: 'e.g. Dubai'
 customer_details_disclaimer_text:
   value: ''
   format: 'rich_text'
