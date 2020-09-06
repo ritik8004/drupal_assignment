@@ -11,10 +11,57 @@
     var parent = $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item');
     var listTwoItem = $('.menu--two__list-item');
     var listThreeItem = $('.menu--three__list-item');
+    var menuLevel2 = '.menu--two__list';
+    var menuLevel3 = '.menu--three__list';
+    var menuLevel4 = '.menu--four__list';
+    var activeMenuPartent = 'ul.menu__list';
+    var lastList = 'lastList';
 
-    Drupal.activateMenu = function (menuLevel, activeMenu) {
+    Drupal.activateMenu = function (menuLevel, activeMenu, menuChild) {
       $(menuLevel).removeClass('active');
       activeMenu.addClass('active');
+      // Reset l2 height
+      activeMenu.parents(menuLevel2).css('height', 'auto');
+      Drupal.setInlineMenuHeight(activeMenu, menuChild);
+    };
+
+    Drupal.setInlineMenuHeight = function (activeMenu, menuChild) {
+      var currentMenuLevel2Height = activeMenu.parents(menuLevel2).first().height();
+      var parentHeight;
+      var childHeight;
+
+      switch (menuChild) {
+        case ".menu--three__list":
+          if(!($(activeMenu).is('[class*="last-element"]'))) {
+            childHeight = activeMenu.children(menuChild).first().height();
+            Drupal.setL2MenuHeight(activeMenu, currentMenuLevel2Height, 0, childHeight);
+          }
+          break;
+
+        case ".menu--four__list":
+          parentHeight = activeMenu.parents(activeMenuPartent).first().height();
+          if(!($(activeMenu).is('[class*="last-element"]'))) {
+            childHeight = activeMenu.children(menuChild).prop('scrollHeight');
+            Drupal.setL2MenuHeight(activeMenu, currentMenuLevel2Height, parentHeight, childHeight);
+          }
+          else {
+            Drupal.setL2MenuHeight(activeMenu, currentMenuLevel2Height, parentHeight, 0);
+          }
+          break;
+
+        case "lastList":
+          parentHeight = activeMenu.parents(activeMenuPartent).prop('scrollHeight');
+          childHeight = activeMenu.parents(menuLevel3).first().height();
+          Drupal.setL2MenuHeight(activeMenu, currentMenuLevel2Height, parentHeight, childHeight);
+          break;
+        }
+
+
+    };
+
+    Drupal.setL2MenuHeight = function (activeMenu, currentMenuLevel2Height, parentHeight, childHeight) {
+      var menuLevel2Height = Math.max(currentMenuLevel2Height, parentHeight, childHeight) + 15;
+      activeMenu.parents(menuLevel2).css('height', menuLevel2Height + 'px');
     };
 
     // Add required class when four levels of navigation is present.
@@ -41,19 +88,25 @@
 
       // apply classes and z-index.
       $(this).addClass('active');
-      $(this).find('.menu__links__wrapper > .menu--two__list-item:not(.move-to-right):first').addClass('active');
+      var activeMenu = $(this).find('.menu__links__wrapper > .menu--two__list-item:not(.move-to-right):first');
+      activeMenu.addClass('active');
       $(this).find('ul.menu--two__list').css('z-index', '2');
 
       // If first L2 doesn't has L3 by default move right category to left.
-      if ($(this).find('.menu__links__wrapper .menu--two__list-item.active:not(.move-to-right):first').hasClass('last-element')) {
+      if (activeMenu.hasClass('last-element')) {
         $('.move-to-right').addClass('move-to-left');
+      }
+
+      // Calculate l2 height
+      if ($(this).hasClass('has-child')) {
+        Drupal.setInlineMenuHeight(activeMenu, menuLevel3);
       }
     });
 
     // On hover of l2 item add active class.
     $('.menu__links__wrapper > .menu--two__list-item:not(.move-to-right)').once('menu-hover').on().hover(function () {
       var activeMenu = $(this);
-      Drupal.activateMenu(listTwoItem, activeMenu);
+      Drupal.activateMenu(listTwoItem, activeMenu, menuLevel3);
 
       // Adding class to check the l2 has no more child so that right side category needs to move to left.
       if ($('.last-element').hasClass('active') && $('.move-to-right.move-to-left').length < 1) {
@@ -67,7 +120,14 @@
     // On hover of l3 item add active class.
     $('.menu--three__list-item').once('menu-hover').on().hover(function () {
       var activeMenu = $(this);
-      Drupal.activateMenu(listThreeItem, activeMenu);
+      Drupal.activateMenu(listThreeItem, activeMenu, menuLevel4);
+    });
+
+    // On hover of l4 item reset l2 height.
+    $('.menu--four__list-item').once('menu-hover').on().hover(function () {
+      var activeMenu = $(this);
+      activeMenu.parents(menuLevel2).css('height', 'auto');
+      Drupal.setInlineMenuHeight(activeMenu, lastList);
     });
 
     // Add class for l2 ietms without any children
