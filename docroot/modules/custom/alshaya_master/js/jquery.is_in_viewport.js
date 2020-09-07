@@ -98,8 +98,8 @@
 
           // We check if at least some part of the product is visible in the
           // carousel.
-          if ((elementLeft > carouselLeft)
-            && ((elementLeft + 40) < carouselRight)) {
+          if ((elementLeft >= carouselLeft)
+            && (elementRight <= carouselRight)) {
             active = true;
           }
         }
