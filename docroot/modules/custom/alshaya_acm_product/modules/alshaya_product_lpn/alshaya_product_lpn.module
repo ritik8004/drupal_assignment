@@ -33,6 +33,7 @@ function alshaya_product_lpn_form_sku_base_form_alter(&$form, FormStateInterface
   if (!empty($lpn_attribute) && isset($form['ajax']['configurables'][$lpn_attribute])) {
     $form['ajax']['configurables'][$lpn_attribute]['#prefix'] = '<div class="hidden">';
     $form['ajax']['configurables'][$lpn_attribute]['#suffix'] = '</div>';
+    $form['ajax']['configurables'][$lpn_attribute]['#weight'] = 999;
   }
 }
 
@@ -61,7 +62,7 @@ function alshaya_product_lpn_acq_sku_configurable_variants_alter(array &$childre
 
     foreach ($configurable_attribute_codes as $attribute_id) {
       if ($attribute_id === $lpn_attribute) {
-        $season_code = $attributes[$attribute_id];
+        $season_code = isset($attributes[$attribute_id]) ? $attributes[$attribute_id] : '';
         continue;
       }
       $children_with_attr[$attribute_id] = $attributes[$attribute_id];
@@ -93,5 +94,17 @@ function alshaya_product_lpn_acq_sku_configurable_variants_alter(array &$childre
         $lpn_attribute => $season_code,
       ];
     }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_product_lpn_module_implements_alter(&$implementations, $hook) {
+  // Call the alshaya_product_lpn_acq_sku_configurable_variants_alter at end.
+  if ($hook === 'acq_sku_configurable_variants_alter') {
+    $group = $implementations['alshaya_product_lpn'];
+    unset($implementations['alshaya_product_lpn']);
+    $implementations['alshaya_product_lpn'] = $group;
   }
 }
