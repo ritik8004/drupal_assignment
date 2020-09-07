@@ -31,8 +31,8 @@
     background-color: $btt_bg;
   }
 
-  width: 44px;
-  height: 44px;
+  width: 2.75rem;
+  height: 2.75rem;
   font-size: 0;
   transform: rotate(90deg);
   padding: 0;
@@ -40,7 +40,7 @@
   right: 0;
 
   html[lang=ar] & {
-    left: 25px;
+    left: 1.5625rem;
     right: auto;
   }
 
