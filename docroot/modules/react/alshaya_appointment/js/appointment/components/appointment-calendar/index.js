@@ -100,9 +100,13 @@ export default class AppointmentCalendar extends React.Component {
     });
   };
 
+  /**
+   * Set mini calendar date and get time slots for selected date.
+   */
   datePickerChanged = (date) => {
     showFullScreenLoader();
     const { dateChanged } = this.props;
+    // Set mini calendar.
     dateChanged(new Date(date));
     this.setState({
       selectDate: new Date(date),
@@ -111,6 +115,9 @@ export default class AppointmentCalendar extends React.Component {
     });
   };
 
+  /**
+   * Show / hide full calendar on month click.
+   */
   showDatePicker = () => {
     const { datePickerToggle } = this.state;
     if (datePickerToggle) {
@@ -155,17 +162,18 @@ export default class AppointmentCalendar extends React.Component {
       </li>
     ));
 
-    // Set language for date time translation.
+    // Set language for datepicker translation.
     if (drupalSettings.path.currentLanguage !== 'en') {
       registerLocale('ar', ar);
     } else {
       registerLocale('en', en);
     }
+    // Set wrapper element direction for arabic.
     const dir = (drupalSettings.path.currentLanguage !== 'en') ? 'rtl' : 'ltr';
 
     return (
       <>
-        <span className="month-calendar-previous">
+        <span className="month-calendar-sides previous">
           { moment(selectDate).subtract('1', 'month').format('MMMM') }
         </span>
         <button
@@ -175,7 +183,7 @@ export default class AppointmentCalendar extends React.Component {
         >
           { moment(selectDate).format('MMMM') }
         </button>
-        <span className="month-calendar-next">
+        <span className="month-calendar-sides next">
           { moment(selectDate).add('1', 'month').format('MMMM') }
         </span>
         { datePickerToggle
