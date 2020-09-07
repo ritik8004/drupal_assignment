@@ -38,8 +38,8 @@ $config['search_api.index.acquia_search_index']['options']['algolia_index_name']
 // This will need to be overridden in brand specific settings files on each
 // env using prod app for each brand.
 if (!in_array($algolia_env, ['01test', '01uat', '01pprod', '01live'])) {
-  $config['search_api.server.algolia']['backend_config']['application_id'] = 'testing24192T8KHZ';
-  $config['search_api.server.algolia']['backend_config']['api_key'] = '628e74a9b6f3817cdd868278c8b8656e';
-  $config['block.block.alshayaalgoliareactautocomplete']['settings']['application_id'] = 'testing24192T8KHZ';
-  $config['block.block.alshayaalgoliareactautocomplete']['settings']['search_api_key'] = 'afeb84ab13757e11fbe8765142e2d7ad';
+  $config['search_api.server.algolia']['backend_config']['application_id'] = $settings['algolia_sandbox.settings']['app_id'];
+  $config['search_api.server.algolia']['backend_config']['api_key'] = $settings['algolia_sandbox.settings']['write_api_key'];
+  $config['block.block.alshayaalgoliareactautocomplete']['settings']['application_id'] = $settings['algolia_sandbox.settings']['app_id'];
+  $config['block.block.alshayaalgoliareactautocomplete']['settings']['search_api_key'] = $settings['algolia_sandbox.settings']['search_api_key'];
 }

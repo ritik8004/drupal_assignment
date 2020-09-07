@@ -1593,6 +1593,10 @@ class SkuManager {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
 
+    if ($this->isSkuFreeGift($sku_entity)) {
+      return $plugin->getParentSku($sku_entity, FALSE);
+    }
+
     return $plugin->getParentSku($sku_entity);
   }
 
@@ -1669,6 +1673,10 @@ class SkuManager {
    *   Filtered skus.
    */
   public function filterRelatedSkus(array $skus) {
+    if (empty($skus)) {
+      return [];
+    }
+
     $related_items_size = $this->getConfig('alshaya_acm_product.settings')->get('related_items_size');
     $related = [];
 
@@ -2307,6 +2315,7 @@ class SkuManager {
         }
 
         $configurableFieldValues[$fieldKey] = [
+          'attribute_id' => $fieldKey,
           'label' => $this->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),
@@ -2777,7 +2786,13 @@ class SkuManager {
     // available from terms.
     $static[$entity->id()] = $static['default'];
 
-    if (($term_list = $entity->get('field_category')->getValue())) {
+    // The layout has been overriden at node level.
+    if ($entity instanceof NodeInterface && !empty($entity->get('field_select_pdp_layout')->value)) {
+      $static[$entity->id()] = $entity->get('field_select_pdp_layout')->value;
+    }
+
+    // The layout has been overriden at category level.
+    elseif (($term_list = $entity->get('field_category')->getValue())) {
       if ($inner_term = $this->productCategoryHelper->termTreeGroup($term_list)) {
         $term = $this->termStorage->load($inner_term);
         if ($term instanceof TermInterface) {

@@ -66,6 +66,11 @@ class AlshayaYamlProcess {
           if (file_exists($this->templateDir . "/variables/markets/$market.yml")) {
             $market_common[] = $this->templateDir . "/variables/markets/$market.yml";
           }
+
+          if (file_exists($this->templateDir . "/variables/markets/$market/languages/$language.yml")) {
+            $market_common[] = $this->templateDir . "/variables/markets/$market/languages/$language.yml";
+          }
+
           $files["{$market}_{$language}"] = array_merge([$this->templateDir . '/variables/common.yml'], $market_common);
 
           $directory   = $this->templateDir . '/variables/brands';
@@ -363,24 +368,32 @@ class AlshayaYamlProcess {
 
     $yaml['extensions']['Bex\Behat\ScreenshotExtension']['image_drivers'] = [
       'local' =>  [
-        'screenshot_directory' => "%paths.base%/features/$profile/screenshots",
+        'screenshot_directory' => "%paths.base%/features/$profile-$viewport/screenshots",
       ],
     ];
-
+    //Running tags on test executions
+    $tags = '';
     if ($viewport == 'mobile') {
       $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = array("--window-size=375,667");
-      $yaml['suites']['default']['filters']['tags'] = "~@desktop";
+      $tags = "~@desktop";
     }
     else {
       $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = array("--window-size=1440,960");
-      $yaml['suites']['default']['filters']['tags'] = "~@mobile";
+      $tags = "~@mobile";
     }
+
+    //Running specific tags on uat and prod environment on test executions
+    $environment = explode('-', $profile);
+    if (in_array($environment[2], ['prod', 'pprod'])) {
+      $tags = $tags . '&&' . $environment[0] . $environment[1] . $environment[2];
+    }
+    $yaml['suites']['default']['filters']['tags'] = $tags;
 
     // Set the folder for report.
     if (!empty($profile)) {
       $yaml['formatters'] = [
         'html' => [
-          'output_path' => "%paths.base%/features/$profile/reports/html/behat",
+          'output_path' => "%paths.base%/features/$profile-$viewport/reports/html/behat",
         ],
       ];
     }

@@ -12,6 +12,36 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * [5.6.0] Update category term path aliases.
+ */
+function alshaya_bp_transac_update_8006() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $configs = ['pathauto.pattern.product_category_pathauto'];
+  $manager->updateConfigs($configs, 'alshaya_acm_product_category');
+
+  // Now run batch process to update the term aliases.
+  // @see Drupal\pathauto\Commands\PathautoCommands::generateAliases().
+  $batch = [
+    'title' => t('Bulk updating URL aliases'),
+    'operations' => [
+      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchStart', []],
+      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchProcess',
+        [
+          'canonical_entities:taxonomy_term',
+          'all',
+        ],
+      ],
+    ],
+    'finished' => '_alshaya_bp_transac_term_alias_update_batch_finished',
+    'progressive' => FALSE,
+  ];
+
+  batch_set($batch);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-index all the products.
  * Done to reflect changes for lhn child menu.
  */
@@ -219,4 +249,21 @@ function alshaya_bp_transac_install() {
   $configFactory->set('service_option', $services);
   // Save the changes.
   $configFactory->save();
+}
+
+/**
+ * Batch finished callback for generating taxonomy term aliases.
+ *
+ * @see alshaya_bp_transac_update_8006()
+ */
+function _alshaya_bp_transac_term_alias_update_batch_finished($success, $results, $operations) {
+  if ($success) {
+    // If no term alias was actually updated, final output should show 0.
+    \Drupal::logger('alshaya_bp_transac')->notice('Generated @count URL aliases.', [
+      '@count' => $results['updates'] ?? 0,
+    ]);
+  }
+  else {
+    \Drupal::logger('alshaya_bp_transac')->notice('An error occurred while updating term aliases');
+  }
 }

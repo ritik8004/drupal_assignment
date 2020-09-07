@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import { connectStateResults } from 'react-instantsearch-dom';
 import { toggleSearchResultsContainer, toggleSortByFilter } from '../../utils';
 
@@ -17,7 +18,7 @@ const NoResults = ({ searchResults, isSearchStalled, searching, searchingForFace
   return (
     <div className="hits-empty-state">
       <div className="view-empty">
-        {Drupal.t('Your search did not return any results.')}
+        {parse(Drupal.t('Your search did not return any results.'))}
       </div>
     </div>
   );

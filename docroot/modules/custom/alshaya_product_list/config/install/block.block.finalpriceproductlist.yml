@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.final_price_productlist
+  module:
+    - ctools
+    - facets
+    - system
+  theme:
+    - alshaya_white_label
+id: finalpriceproductlist
+theme: alshaya_white_label
+region: content
+weight: 38
+provider: null
+plugin: 'facet_block:final_price_productlist'
+settings:
+  id: 'facet_block:final_price_productlist'
+  label: Price
+  provider: facets
+  label_display: visible
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      product_list: product_list
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

@@ -2,7 +2,7 @@
 Feature: SPC Checkout using Click & Collect store for Authenticated user
 
   Background:
-    Given I am on "{product_listing_page_url}"
+    Given I am on "{spc_product_listing_page}"
     And I wait 10 seconds
     And I wait for the page to load
 
@@ -28,7 +28,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user
     And I wait for AJAX to finish
     And I wait 20 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-cnc" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -116,7 +116,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user
     And I wait for AJAX to finish
     And I wait 20 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-cnc" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -204,7 +204,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user
     And I wait for AJAX to finish
     And I wait 20 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-cnc" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds

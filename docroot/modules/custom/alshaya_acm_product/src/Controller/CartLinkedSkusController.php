@@ -85,10 +85,15 @@ class CartLinkedSkusController extends ControllerBase {
         'contexts' => ['url.query_args', 'languages'],
       ];
       $queryParams = $request->query->all();
+      // Filter out duplicate skus from query param.
+      $querySkus = !empty($queryParams['skus'])
+        ? array_filter($queryParams['skus'])
+        : $queryParams['skus'];
       // If type or sku not available or not of crosssell type.
       if (empty($queryParams['type'])
-        || empty($queryParams['skus'])
-        || $queryParams['type'] != AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL) {
+        || empty($querySkus)
+        || $queryParams['type'] != AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL
+      ) {
         $response = new CacheableJsonResponse([]);
         $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
         return $response;
@@ -96,22 +101,40 @@ class CartLinkedSkusController extends ControllerBase {
 
       $result = [];
       $cache_tags = [];
-      foreach ($queryParams['skus'] as $sku) {
-        $skuEntity = SKU::loadFromSku($sku);
-        if (!$skuEntity instanceof SKUInterface) {
-          continue;
-        }
+      $cross_sell_skus = [];
+      $parent_skus = [];
 
-        $cache_tags[] = 'sku:' . $skuEntity->id();
-        $linkedSkus = $this->skuInfoHelper->getLinkedSkus($skuEntity, $queryParams['type']);
-        foreach (array_keys($linkedSkus) as $linkedSku) {
-          $linkedSkuEntity = SKU::loadFromSku($linkedSku);
-          if ($linkedSkuEntity instanceof SKUInterface
-            && $lightProduct = $this->skuInfoHelper->getLightProduct($linkedSkuEntity)) {
-            $cache_tags[] = 'sku:' . $linkedSkuEntity->id();
-            $cache_tags[] = 'node:' . $lightProduct['nid'];
-            $result['data'][$lightProduct['sku']] = $lightProduct;
+      foreach ($querySkus as $sku) {
+        if ($sku_entity = SKU::loadFromSku($sku)) {
+          $cache_tags = array_merge($cache_tags, $sku_entity->getCacheTags());
+          $cross_sell_skus += $this->skuManager->getLinkedSkus($sku_entity, $queryParams['type']);
+          if ($sku_entity->bundle() === 'simple') {
+            $parent_sku = $this->skuManager->getParentSkuBySku($sku_entity);
+            if ($parent_sku instanceof SKUInterface) {
+              $parent_skus[] = $parent_sku->getSku();
+              $cache_tags = array_merge($cache_tags, $parent_sku->getCacheTags());
+              $cross_sell_skus += $this->skuManager->getLinkedSkus($parent_sku, $queryParams['type']);
+            }
           }
+        }
+      }
+
+      // Filter out / Remove skus from cross sell which are already added in
+      // cart (Which we receive in query string).
+      $cross_sell_skus = array_diff($cross_sell_skus, array_merge($querySkus, $parent_skus));
+      $linkedSkus = $this->skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
+
+      foreach (array_keys($linkedSkus) as $linkedSku) {
+        $linkedSkuEntity = SKU::loadFromSku($linkedSku);
+        if ($linkedSkuEntity instanceof SKUInterface
+          && $lightProduct = $this->skuInfoHelper->getLightProduct($linkedSkuEntity)
+        ) {
+          $result['data'][$lightProduct['sku']] = $lightProduct;
+          $cache_tags = array_merge(
+            $cache_tags,
+            $linkedSkuEntity->getCacheTags(),
+            ['node:' . $lightProduct['nid']]
+          );
         }
       }
 
