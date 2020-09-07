@@ -301,6 +301,7 @@ body {
     &.block-alshaya-algolia-react-autocomplete {
       @include breakpoint($upto-desktop) {
         visibility: hidden !important;
+        opacity: 0;
       }
     }
   }
