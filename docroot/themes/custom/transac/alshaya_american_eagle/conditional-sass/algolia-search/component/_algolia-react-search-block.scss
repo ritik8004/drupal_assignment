@@ -12,7 +12,6 @@
   }
 
   @include breakpoint($only-tablet) {
-    bottom: 0.25rem;
     visibility: hidden;
 
     &.show-algolia-search-bar {
