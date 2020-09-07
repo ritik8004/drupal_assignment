@@ -30,6 +30,11 @@ else {
 
 // We set "drupal" as a default database if no domain found. This assures it won't throw errors on empty --uri parameter
 $drupal_database = ( $host_site_code == 'default_local' ? 'drupal' : 'drupal_alshaya_' . str_replace('-', '_', $host_site_code) );
+$host = 'localhost';
+
+if (isset($_ENV['DEVEL_ENV']) && ($_ENV['DEVEL_ENV'] == 'lando')) {
+  $host = 'database';
+}
 
 $databases = array(
   'default' =>
@@ -39,7 +44,7 @@ $databases = array(
           'database' => $drupal_database,
           'username' => 'drupal',
           'password' => 'drupal',
-          'host' => 'localhost',
+          'host' => $host,
           'port' => '3306',
           'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
           'driver' => 'mysql',
@@ -180,3 +185,11 @@ $settings['file_public_path'] = 'sites/g/files/' . $host_site_code;
 $settings['trusted_host_patterns'] = array(
   '^.+$',
 );
+
+if (isset($_ENV['DEVEL_ENV']) && ($_ENV['DEVEL_ENV'] == 'lando')) {
+  # Lando memcache configuration.
+  $settings['memcache']['servers'] = [
+    'memcache1:11211' => 'default',
+    'memcache2:11211' => 'default',
+  ];
+}

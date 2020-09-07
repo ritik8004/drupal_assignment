@@ -25,7 +25,7 @@ Feature: SPC Checkout Click & Collect
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-cnc" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 5 seconds
@@ -120,7 +120,7 @@ Feature: SPC Checkout Click & Collect
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 5 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-cnc" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 5 seconds
@@ -226,7 +226,7 @@ Feature: SPC Checkout Click & Collect
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-cnc" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 5 seconds
@@ -330,7 +330,7 @@ Feature: SPC Checkout Click & Collect
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 5 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-cnc" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 5 seconds
@@ -442,7 +442,7 @@ Feature: SPC Checkout Click & Collect
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-cnc" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 5 seconds
@@ -546,7 +546,7 @@ Feature: SPC Checkout Click & Collect
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 5 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-cnc" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 5 seconds

@@ -221,6 +221,22 @@ function alshaya_seo_transac_install() {
 
   // Configure default variant.
   _alshaya_seo_transac_configure_default_variant();
+
+  $configure_default_variants = [
+    'simple_sitemap.bundle_settings.default.node.acq_product',
+    'simple_sitemap.bundle_settings.default.taxonomy_term.acq_product_category',
+  ];
+
+  alshaya_config_install_configs($configure_default_variants, 'alshaya_seo_transac');
+
+  $configure_default_variants = [
+    'simple_sitemap.bundle_settings.default.node.advanced_page',
+    'simple_sitemap.bundle_settings.default.node.department_page',
+    'simple_sitemap.bundle_settings.default.node.store',
+  ];
+
+  alshaya_config_install_configs($configure_default_variants, 'alshaya_seo');
+
   // Set default value for twitter cards creator.
   $config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.global');
   $metatag_defaults_settings = Settings::get('metatag.metatag_defaults.global');
@@ -276,7 +292,8 @@ function _alshaya_seo_transac_configure_default_variant() {
   $variants = \Drupal::service('simple_sitemap.generator')->getSitemapManager()->getSitemapVariants();
   if ($variants['default']['type'] !== 'alshaya_hreflang') {
     $variants['default']['type'] = 'alshaya_hreflang';
-    $variants['default']['weight'] = -1;
+    // @see alshaya_seo_transac_update_8411()
+    $variants['default']['weight'] = 999999;
     \Drupal::service('simple_sitemap.generator')->getSitemapManager()->addSitemapVariant('default', $variants['default']);
   }
 

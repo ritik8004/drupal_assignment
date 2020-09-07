@@ -249,6 +249,56 @@
       }
     }
 
+    .collection-labels {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      margin-top: 8px;
+      font-size: 0.6875rem;
+      line-height: 1rem;
+      flex-wrap: wrap;
+
+      @include breakpoint($tablet) {
+        line-height: 1.273;
+      }
+
+      li {
+        &.attr_product_environment {
+          color: $collection_label_environment;
+        }
+
+        &.attr_product_collection {
+          color: $collection_label_collection;
+        }
+
+        &.attr_product_quality {
+          color: $collection_label_default;
+        }
+
+        &.collection-label-default {
+          margin-left: 5px;
+        }
+
+        &.collection-label-default:first-of-type {
+          margin-left: 0;
+        }
+
+        &::after {
+          content: ',';
+        }
+
+        &:last-of-type::after {
+          content: '';
+        }
+      }
+    }
+
+    ul.collection-labels + h2.field--name-name,
+    .product-labels + h2.field--name-name {
+      margin-top: 0;
+    }
+
     @include breakpoint($desktop) {
       &:hover {
         article::after {

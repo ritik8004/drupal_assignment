@@ -92,10 +92,9 @@
             #{$right}: 0;
             position: absolute;
             transform: translateY(-50%);
-            background-color: $payment_card_border;
-            mask-size: 100%;
-            mask-repeat: no-repeat;
-            mask-image: url(#{$base_theme_img_directory_path}/icons/ic-trashbin.svg);
+            background-image: url(#{$base_theme_img_directory_path}/icons/ic-trashbin.svg);
+            background-size: contain;
+            background-repeat: no-repeat;
           }
         }
 

@@ -80,6 +80,7 @@ fields:
   brand_logo:
     label: 'Brand Logo'
     description: 'Part of description.'
+    type: 'string'
 
   collection:
     label: 'Collection'

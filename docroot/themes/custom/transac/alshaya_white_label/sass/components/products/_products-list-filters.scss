@@ -156,6 +156,7 @@ html {
 
       .block-views-exposed-filter-blockalshaya-product-list-block-1,
       .block-views-exposed-filter-blockalshaya-product-list-block-2,
+      .block-views-exposed-filter-blockalshaya-product-list-block-3,
       .block-views-exposed-filter-blocksearch-page {
         margin-#{$left}: 0;
         margin-#{$right}: 0;
@@ -497,6 +498,7 @@ html {
 
         .block-facets-summary-blockfilter-bar-promotions,
         .block-facets-summary-blockfilter-bar-plp,
+        .block-facets-summary-blockfilter-bar-productlist,
         .block-facets-summary-blockfilter-bar {
           @include breakpoint($only-mobile) {
             padding-left: 0;

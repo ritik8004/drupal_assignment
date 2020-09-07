@@ -248,6 +248,7 @@ class ClickCollect extends React.Component {
         removeFullScreenLoader();
       })
       .catch((error) => {
+        removeFullScreenLoader();
         Drupal.logJavascriptError('clickncollect-fetchAvailableStores', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
       });
   };

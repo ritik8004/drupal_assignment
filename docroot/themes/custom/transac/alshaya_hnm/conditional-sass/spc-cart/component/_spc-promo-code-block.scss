@@ -19,7 +19,7 @@
       #{$right}: 10.5rem;
     }
 
-    &.active::after {
+    .active::after {
       font-size: 1rem;
     }
   }

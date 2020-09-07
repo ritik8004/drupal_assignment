@@ -1,0 +1,20 @@
+.alias--cart-login {
+  .site-brand-home {
+    @include breakpoint($only-mobile) {
+      display: flex;
+    }
+
+    a {
+      @include breakpoint($only-mobile) {
+        margin: 0 5.0625rem;
+        padding: 0 0.9rem;
+      }
+
+      @include breakpoint($desktop) {
+        width: 18.1875rem;
+        height: 2.625rem;
+        display: block;
+      }
+    }
+  }
+}

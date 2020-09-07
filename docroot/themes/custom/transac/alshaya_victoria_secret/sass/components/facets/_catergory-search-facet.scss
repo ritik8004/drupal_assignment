@@ -1,0 +1,9 @@
+.c-sidebar-first .c-facet__blocks {
+  .block-facet-blockcategory-facet-search {
+    h3 {
+      @include breakpoint($desktop) {
+        display: block;
+      }
+    }
+  }
+}

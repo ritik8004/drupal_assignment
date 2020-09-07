@@ -16,7 +16,6 @@ use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
-use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\file\Entity\File;
 
@@ -376,6 +375,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
   $listing_pages_plugin_id = [
     'views_block:alshaya_product_list-block_1',
     'views_block:alshaya_product_list-block_2',
+    'views_block:alshaya_product_list-block_3',
   ];
   if (in_array($variables['plugin_id'], $listing_pages_plugin_id)) {
     $variables['attributes']['class'][] = 'c-products-list';
@@ -617,15 +617,9 @@ function alshaya_white_label_preprocess_node(&$variables) {
         /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
         $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
         $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
-        if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-          $variables['#attached']['library'][] = 'alshaya_white_label/magazine_attribute';
-          $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
-          $variables['#attached']['drupalSettings']['color_swatches_hover'] = TRUE;
-        }
-        else {
-          $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
-          $variables['#attached']['library'][] = 'alshaya_white_label/stickybutton';
-        }
+        $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
+        $pdp_plugin = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
+        $pdp_plugin->getRenderArray($variables);
         if ($variables['show_crosssell_as_matchback']) {
           $variables['#attached']['library'][] = 'alshaya_white_label/matchback_layout';
         }
@@ -824,6 +818,9 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     elseif ($node->bundle() == 'acq_promotion') {
       $suggestions[] = 'page__plp';
     }
+    elseif ($node->bundle() == 'product_list') {
+      $suggestions[] = 'page__plp';
+    }
   }
 
   if (\Drupal::service('path.matcher')->isFrontPage()) {
@@ -882,9 +879,9 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
-      if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-        $suggestions[] = 'node__acq_product__full_magazine';
-      }
+      $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
+      $pdp_plugin = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
+      $pdp_plugin->getTemplateName($suggestions);
     }
   }
 }

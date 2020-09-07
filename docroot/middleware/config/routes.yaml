@@ -40,35 +40,36 @@ cart.get_cnc_stores:
 
 payment.checkoutcom_payment_success:
     path: /payment/checkout-com-success
-    controller: App\Controller\PaymentController::handleCheckoutComSuccess
+    controller: App\Controller\CheckoutComPaymentController::handleCheckoutComSuccess
     methods: GET
 
 payment.checkoutcom_payment_error:
     path: /payment/checkout-com-error
-    controller: App\Controller\PaymentController::handleCheckoutComError
+    controller: App\Controller\CheckoutComPaymentController::handleCheckoutComError
     methods: GET
+
+payment.checkout_com_apple_pay_save:
+    path: /payment/checkout-com-apple-pay/save
+    controller: App\Controller\CheckoutComPaymentController::saveApplePayPayment
+    methods: POST
 
 payment.knet_payment_response:
     path: /payment/knet-response
-    controller: App\Controller\PaymentController::handleKnetResponse
+    controller: App\Controller\KnetPaymentController::handleKnetResponse
     methods: POST
 
 payment.knet_payment_error:
     path: /payment/knet-error/{state_key}
-    controller: App\Controller\PaymentController::handleKnetError
+    controller: App\Controller\KnetPaymentController::handleKnetError
     methods: GET
 
 payment.cybersource_payment_token:
     path: /payment/cybersource/get-token
-    controller: App\Controller\PaymentController::getCybersourceToken
+    controller: App\Controller\CyberSourcePaymentController::getCybersourceToken
     methods: POST
 
 payment.cybersource_payment_finalise:
     path: /payment/cybersource/finalise
-    controller: App\Controller\PaymentController::finaliseCybersource
+    controller: App\Controller\CyberSourcePaymentController::finaliseCybersource
     methods: POST
 
-payment.checkout_com_apple_pay_save:
-    path: /payment/checkout-com-apple-pay/save
-    controller: App\Controller\PaymentController::saveApplePayPayment
-    methods: POST

@@ -187,6 +187,7 @@ magazine_attribute:
     - alshaya_white_label/pdp-video-player
     - alshaya_white_label/attribute.common
     - core/jquery.ui.effects.slide
+    - alshaya_white_label/pdp-additional-attributes
 
 campaign-plp-style-1-video-provider:
   css:
@@ -393,6 +394,13 @@ appointment-booking:
   css:
     theme:
       css/conditional-sass/appointment-booking/appointment-booking.ltr.css: {}
+
+shop-by-brand:
+  css:
+    theme:
+      css/conditional-sass/shop-by-brand/shop-by-brand.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/plp_search_js
 
 sub-brand-logo:
   css:
