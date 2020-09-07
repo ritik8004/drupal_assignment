@@ -13,4 +13,13 @@
       }
     }
   }
+
+  .block-facets-summary-blockfilter-bar-productlist {
+    padding-top: 0;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+      border-bottom: 0;
+    }
+  }
 }
