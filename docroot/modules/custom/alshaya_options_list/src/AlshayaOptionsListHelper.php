@@ -359,7 +359,18 @@ class AlshayaOptionsListHelper {
       ],
     ];
     $link = Url::fromUri('internal:/search', $url_options)->toString();
-    $this->moduleHandler->alter('alshaya_search_filter_link', $link, $attributeCode);
+    $data = [
+      'attribute_code' => $attributeCode,
+      'attribute_value' => $value,
+      'append_value' => TRUE,
+    ];
+    $this->moduleHandler->alter('alshaya_search_filter_link', $link, $data);
+
+    // Whether we just return the link as is or we add attribute value.
+    if (!$data['append_value']) {
+      return $link;
+    }
+
     return $link . urlencode($value);
   }
 

@@ -1,0 +1,57 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.product
+    - views.view.alshaya_product_list
+  module:
+    - alshaya_search
+    - search_api
+third_party_settings:
+  alshaya_facets_pretty_paths:
+    url_alias: final_price_productlist
+    meta_info_type:
+      type: 2
+      prefix_text: at
+      visibility:
+        - 5
+id: promotions_productlist
+name: 'Promotions Product List'
+url_alias: promotions
+weight: 0
+min_count: 1
+show_only_one_result: false
+field_identifier: field_acq_promotion_label
+facet_source_id: 'search_api:views_block__alshaya_product_list__block_3'
+widget:
+  type: checkbox
+  config:
+    show_numbers: true
+    soft_limit: 5
+query_operator: or
+use_hierarchy: false
+expand_hierarchy: false
+enable_parent_when_child_gets_disabled: true
+hard_limit: 0
+exclude: false
+only_visible_when_facet_source_is_visible: false
+processor_configs:
+  raw_value_widget_order:
+    processor_id: raw_value_widget_order
+    weights:
+      sort: 50
+    settings:
+      sort: ASC
+  clean_active_facets_processor:
+    processor_id: clean_active_facets_processor
+    weights:
+      build: 10
+    settings: {  }
+  url_processor_handler:
+    processor_id: url_processor_handler
+    weights:
+      pre_query: 50
+      build: 15
+    settings: {  }
+empty_behavior:
+  behavior: none

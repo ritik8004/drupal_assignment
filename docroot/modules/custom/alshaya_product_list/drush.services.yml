@@ -1,0 +1,9 @@
+services:
+  alshaya_product_list.commands:
+    class: \Drupal\alshaya_product_list\Commands\AlshayaProductListDrushCommands
+    arguments:
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@alshaya_options_list.alshaya_options_service'
+    tags:
+      - { name: drush.command }
