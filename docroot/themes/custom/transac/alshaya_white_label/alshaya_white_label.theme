@@ -313,6 +313,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
   if (!empty($sub_brand_logo)) {
     $variables['sub_brand_logo_img'] = $sub_brand_logo['sub_brand_logo_img'];
     $variables['sub_brand_logo_link'] = $sub_brand_logo['sub_brand_logo_link'];
+    $variables['#attached']['library'][] = 'alshaya_white_label/sub-brand-logo';
   }
 }
 

@@ -393,3 +393,8 @@ appointment-booking:
   css:
     theme:
       css/conditional-sass/appointment-booking/appointment-booking.ltr.css: {}
+
+sub-brand-logo:
+  css:
+    theme:
+      css/conditional-sass/sub-brand-logo/sub-brand-logo.ltr.css: {}
