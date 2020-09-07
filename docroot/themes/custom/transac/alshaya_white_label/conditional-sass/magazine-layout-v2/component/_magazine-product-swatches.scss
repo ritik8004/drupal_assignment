@@ -29,11 +29,7 @@
       }
 
       @include breakpoint($tablet) {
-        background-size: cover;
-      }
-
-      @include breakpoint($tablet-landscape) {
-        background-size: contain;
+        height: 100%;
       }
     }
 
@@ -58,13 +54,8 @@
       flex-flow: wrap;
 
       li {
-        flex-basis: 50%;
-      }
-    }
-
-    @include breakpoint($tablet-landscape) {
-      li {
-        flex-basis: 25%;
+        width: 5.3125rem;
+        height: 5.3125rem;
       }
     }
   }
