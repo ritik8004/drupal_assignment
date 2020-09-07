@@ -49,21 +49,23 @@ git reset --hard $tag
 # Go to docroot to do site operations.
 cd /var/www/html/$AH_SITE_NAME/docroot
 
+# Taking backup now.
+mkdir -p "$backup_directory"
+drush acsf-tools-dump --result-folder=$backup_directory -y --gzip 2>&1 | tee -a ${log_file}
+
+
+# Enable maintenance mode if mode is updb.
 if [ "$mode" = "updb" ]
 then
   drush sfmlc alshaya-enable-maintenance 2>&1 | tee -a ${log_file}
   echo "Sites put offline. Tag $tag, Stack $stack" | tee -a ${log_file}
 fi
 
-# Take backup now just before deployment
-mkdir -p "$backup_directory"
-drush acsf-tools-dump --result-folder=$backup_directory -y --gzip 2>&1 | tee -a ${log_file}
-
 # Come back to deploy directory.
 cd "$directory/$stack"
 
 # Force the push to avoid issues with previous commit history.
-git push origin main -f | tee -a ${log_file}
+git push origin main | tee -a ${log_file}
 
 echo "Code deployment finished at `date`. Tag $tag, Stack $stack" | tee -a ${log_file}
 
