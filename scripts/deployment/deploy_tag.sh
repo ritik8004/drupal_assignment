@@ -12,8 +12,8 @@ repo="$stack@svn-25.enterprise-g1.hosting.acquia.com:$stack.git"
 
 log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.log
 
-echo "Starting deployment in mode $mode. Tag $tag, Stack $stack" &>> ${log_file}
-echo "Starting deployment in mode $mode. Tag $tag, Stack $stack"
+echo "Starting deployment in mode $mode at `date`. Tag $tag, Stack $stack" | tee -a ${log_file}
+echo
 
 backup_directory="~/$AH_SITE_ENVIRONMENT/backup/pre-$tag"
 directory="~/$AH_SITE_ENVIRONMENT/repo"
@@ -21,8 +21,7 @@ directory="~/$AH_SITE_ENVIRONMENT/repo"
 # Create folder and clone if not available
 if [ ! -d "$directory" ]
 then
-  echo "Repo directory not available, creating and cloning. Tag $tag, Stack $stack" &>> ${log_file}
-  echo "Repo directory not available, creating and cloning. Tag $tag, Stack $stack"
+  echo "Repo directory not available, creating and cloning. Tag $tag, Stack $stack" | tee -a ${log_file}
   mkdir $directory
   cd $directory
   git clone $repo
@@ -42,8 +41,7 @@ git fetch --tags
 
 # Validate if tag exists.
 if [ ! $(git tag -l "$tag") ]; then
-  echo "Error: Tag not found, aborting. Tag $tag, Stack $stack" &>> ${log_file}
-  echo "Error: Tag not found, aborting. Tag $tag, Stack $stack"
+  echo "Error: Tag not found, aborting. Tag $tag, Stack $stack" | tee -a ${log_file}
   exit
 fi
 
@@ -58,31 +56,28 @@ cd /var/www/html/$AH_SITE_NAME/docroot
 
 if [ "$mode" = "updb" ]
 then
-  drush sfmlc alshaya-enable-maintenance &>> ${log_file}
-  echo "Sites put offline. Tag $tag, Stack $stack" &>> ${log_file}
-  echo "Sites put offline. Tag $tag, Stack $stack"
+  drush sfmlc alshaya-enable-maintenance 2>&1 | tee -a ${log_file}
+  echo "Sites put offline. Tag $tag, Stack $stack" | tee -a ${log_file}
 fi
 
 # Take backup now just before deployment
 mkdir -p "$backup_directory"
-drush acsf-tools-dump --result-folder=$backup_directory -y --gzip &>> ${log_file}
+drush acsf-tools-dump --result-folder=$backup_directory -y --gzip 2>&1 | tee -a ${log_file}
 
 # Come back to deploy directory.
 cd "$directory/$stack"
 
 # Force the push to avoid issues with previous commit history.
-git push origin main -f
+git push origin main -f | tee -a ${log_file}
 
-echo "Code deployment finished. Tag $tag, Stack $stack" &>> ${log_file}
-echo "Code deployment finished. Tag $tag, Stack $stack"
+echo "Code deployment finished at `date`. Tag $tag, Stack $stack" | tee -a ${log_file}
 
 # Go to docroot to do site operations again.
 cd /var/www/html/$AH_SITE_NAME/docroot
 
 if [ "$mode" = "updb" ]
 then
-  drush sfmlc updb &>> ${log_file}
-  drush sfmlc alshaya-disable-maintenance &>> ${log_file}
-  echo "UPDB done and sites put back online. Tag $tag, Stack $stack" &>> ${log_file}
-  echo "UPDB done and sites put back online. Tag $tag, Stack $stack"
+  drush sfmlc updb 2>&1 | tee -a ${log_file}
+  drush sfmlc alshaya-disable-maintenance 2>&1 | tee -a ${log_file}
+  echo "UPDB done and sites put back online at `date`. Tag $tag, Stack $stack" | tee -a ${log_file}
 fi
