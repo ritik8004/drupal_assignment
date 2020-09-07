@@ -1,1 +1,1 @@
-pattern: '/[term:parents:first]-[term:name]'
+pattern: '/[term:name]'
