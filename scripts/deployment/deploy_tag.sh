@@ -4,6 +4,7 @@
 # Usage: deploy_tag.sh TAG MODE
 # Example mode updb: deploy_tag.sh 5.6.0 updb
 # Example mode hotfix: deploy_tag.sh 5.6.1 hotfix
+# Example mode hotfix: deploy_tag.sh 5.6.1 hotfix_crf
 
 tag="$1"
 mode="$2"
@@ -74,7 +75,18 @@ cd /var/www/html/$AH_SITE_NAME/docroot
 
 if [ "$mode" = "updb" ]
 then
-  drush sfmlc updb 2>&1 | tee -a ${log_file}
-  drush sfmlc alshaya-disable-maintenance 2>&1 | tee -a ${log_file}
-  echo "UPDB done and sites put back online at `date`. Tag $tag, Stack $stack" | tee -a ${log_file}
+  for site in `drush acsf-tools-list | grep -v " "`
+  do
+    drush $site.factory.alshaya.com updb 2>&1 | tee -a ${log_file}
+    drush $site.factory.alshaya.com alshaya-disable-maintenance 2>&1 | tee -a ${log_file}
+    echo "UPDB done and site put back online for $site at `date`. Tag $tag, Stack $stack" | tee -a ${log_file}
+  done
+
+  echo "UPDB done and all sites put back online at `date`. Tag $tag, Stack $stack" | tee -a ${log_file}
+fi
+
+if [ "$mode" = "hotfix_crf" ]
+then
+  echo "Doing CRF now as requested. Tag $tag, Stack $stack" | tee -a ${log_file}
+  drush sfml crf --delay=10 2>&1 | tee -a ${log_file}
 fi
