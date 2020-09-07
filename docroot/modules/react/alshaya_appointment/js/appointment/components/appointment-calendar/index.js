@@ -1,10 +1,14 @@
 import React from 'react';
+import DatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
 import { getDateFormat } from '../../../utilities/helper';
 import ConditionalView from '../../../common/components/conditional-view';
 import { showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../js/utilities/strings';
+import en from '../../../../../node_modules/date-fns/locale/en-US';
+import ar from '../../../../../node_modules/date-fns/locale/ar-SA';
 
 const momentRange = extendMoment(moment);
 
@@ -21,6 +25,7 @@ export default class AppointmentCalendar extends React.Component {
       selectDate: new Date(selectDate),
       arrayOfDates: this.getAllDates(),
       previousDisabled: previousDisable,
+      datePickerToggle: false,
     };
   }
 
@@ -95,9 +100,37 @@ export default class AppointmentCalendar extends React.Component {
     });
   };
 
+  datePickerChanged = (date) => {
+    showFullScreenLoader();
+    const { dateChanged } = this.props;
+    dateChanged(new Date(date));
+    this.setState({
+      selectDate: new Date(date),
+      week: this.getWeekDates(new Date(date), 'next'),
+      previousDisabled: false,
+    });
+  };
+
+  showDatePicker = () => {
+    const { datePickerToggle } = this.state;
+    if (datePickerToggle) {
+      this.setState({
+        datePickerToggle: false,
+      });
+    } else {
+      this.setState({
+        datePickerToggle: true,
+      });
+    }
+  };
+
   render() {
     const {
-      week, selectDate, arrayOfDates, previousDisabled,
+      week,
+      selectDate,
+      arrayOfDates,
+      previousDisabled,
+      datePickerToggle,
     } = this.state;
 
     const weekdays = week.map((date, i) => (
@@ -122,8 +155,43 @@ export default class AppointmentCalendar extends React.Component {
       </li>
     ));
 
+    // Set language for date time translation.
+    if (drupalSettings.path.currentLanguage !== 'en') {
+      registerLocale('ar', ar);
+    } else {
+      registerLocale('en', en);
+    }
+    const dir = (drupalSettings.path.currentLanguage !== 'en') ? 'rtl' : 'ltr';
+
     return (
       <>
+        <span className="month-calendar-previous">
+          { moment(selectDate).subtract('1', 'month').format('MMMM') }
+        </span>
+        <button
+          type="button"
+          className="month-calendar-datepicker"
+          onClick={() => this.showDatePicker()}
+        >
+          { moment(selectDate).format('MMMM') }
+        </button>
+        <span className="month-calendar-next">
+          { moment(selectDate).add('1', 'month').format('MMMM') }
+        </span>
+        { datePickerToggle
+          && (
+          <div className="month-picker-wrapper" dir={dir}>
+            <DatePicker
+              selected={selectDate}
+              inline
+              minDate={moment().add('1', 'day').toDate()}
+              onChange={(date) => this.datePickerChanged(date)}
+              locale={(drupalSettings.path.currentLanguage !== 'en') ? 'ar' : 'en'}
+              openToDate={selectDate}
+              useWeekdaysShort
+            />
+          </div>
+          )}
         <ConditionalView condition={window.innerWidth > 1023}>
           <div className="appointment-calendar daypicker-desktop">
             <button
