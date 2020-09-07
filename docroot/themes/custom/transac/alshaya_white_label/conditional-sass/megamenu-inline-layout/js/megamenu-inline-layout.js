@@ -124,7 +124,7 @@
     });
 
     // On hover of l4 item reset l2 height.
-    $('.menu--four__list-item').once('menu-hover').on().hover(function () {
+    $('.menu--four__list-item').once('menu-hover').on('hover', function() {
       var activeMenu = $(this);
       activeMenu.parents(menuLevel2).css('height', 'auto');
       Drupal.setInlineMenuHeight(activeMenu, lastList);
