@@ -66,6 +66,7 @@
 
       // Get element left.
       var elementLeft = $(this).offset().left - offset;
+      var elementRight = elementLeft + $(this).outerWidth();
 
       if (elementTop >= viewportTop
         && elementBottom <= viewportBottom
@@ -74,8 +75,14 @@
         var active = false;
         // Check if slick slider is used in carousel like in homepage and PDP.
         if (elementParent.hasClass('slick-slide')) {
-          // If it has slick-active class, that means it is showing in screen.
-          active = (elementParent.hasClass('slick-active')) ? true : false;
+          var recommendProductsContainer = $(this).closest('.view-product-slider');
+          var carouselLeft = recommendProductsContainer.offset().left;
+          var carouselRight = carouselLeft + recommendProductsContainer.outerWidth();
+
+          if ((elementLeft >= carouselLeft)
+            && (elementRight <= carouselRight)) {
+            active = true;
+          }
         }
         // If slick slider is not used, that means the cart page carousels are
         // being viewed. Checked if they are within their container.
