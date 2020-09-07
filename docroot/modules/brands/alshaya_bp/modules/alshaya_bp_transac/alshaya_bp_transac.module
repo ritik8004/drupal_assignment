@@ -172,7 +172,7 @@ function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rou
       }
     }
 
-    // Save altered breadcrumb links.
+    // Setting breadcrumb links for advanced pages.
     $breadcrumb = _alshaya_bp_transac_set_breadcrumb_links($breadcrumb_links);
   }
 
@@ -193,14 +193,16 @@ function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rou
       /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $categoryManager */
       $categoryManager = \Drupal::service('alshaya_acm_product_category.product_category_tree');
       $is_l1 = $categoryManager->isCategoryL1($term);
-      // Excluding L1 category term.
+      // Excluding L1 category term from breadcrumb link.
+      // Current structure for breacrumb is Home > L2 > L3 > L4.
+      // Refer CORE-23454 for more info.
       if (!$is_l1) {
         $category_links[] = Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]);
       }
     }
     $breadcrumb_links = array_merge($breadcrumb_links, array_reverse($category_links));
 
-    // Save altered breadcrumb links.
+    // Setting breadcrumb links for category term pages.
     $breadcrumb = _alshaya_bp_transac_set_breadcrumb_links($breadcrumb_links);
   }
 }
