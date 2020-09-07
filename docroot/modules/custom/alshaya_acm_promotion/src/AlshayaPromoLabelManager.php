@@ -31,6 +31,7 @@ class AlshayaPromoLabelManager {
     'groupn_fixdisc',
     'groupn_disc',
     'ampromo_cart',
+    'ampromo_items',
   ];
   const ALSHAYA_PROMOTIONS_STATIC_PROMO = 0;
   const ALSHAYA_PROMOTIONS_DYNAMIC_PROMO = 1;
@@ -517,6 +518,7 @@ class AlshayaPromoLabelManager {
           break;
 
         case 'ampromo_cart':
+        case 'ampromo_items':
           foreach ($promotion_data['condition']['conditions'][0]['conditions'] ?? [] as $condition) {
             if ($condition['attribute'] === 'quote_item_qty') {
               $condition_value = $condition['value'];
