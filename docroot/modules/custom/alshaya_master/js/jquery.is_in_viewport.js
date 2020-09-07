@@ -44,6 +44,11 @@
   /**
    * Check if carousel element is fully/partially visible in viewport or not.
    *
+   * We are using this separate function for carousels since in cases like PDP
+   * the carousel is not occupying the full width of the page. In that case we
+   * need to calculate left and right of carousels based on its container and
+   * not on the viewport.
+   *
    * @param offset
    * @param elementPartialOffsetTop
    *   To be used when we want only some part of the element to be visible. We
@@ -73,8 +78,8 @@
       ) {
         var elementParent = $(this).parent();
         var active = false;
-        // Check if slick slider is used in carousel like in homepage and PDP.
-        if (elementParent.hasClass('slick-slide')) {
+        // Check if we are in homepage/PDP.
+        if ($(this).closest('.view-product-slider').length > 0) {
           var recommendProductsContainer = $(this).closest('.view-product-slider');
           var carouselLeft = recommendProductsContainer.offset().left;
           var carouselRight = carouselLeft + recommendProductsContainer.outerWidth();
