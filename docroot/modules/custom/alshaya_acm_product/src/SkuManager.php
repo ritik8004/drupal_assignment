@@ -56,6 +56,8 @@ class SkuManager {
 
   const PDP_LAYOUT_MAGAZINE = 'pdp-magazine';
 
+  const PDP_LAYOUT_MAGAZINE_V2 = 'pdp-magazine_v2';
+
   const AGGREGATED_LISTING = 'aggregated';
 
   const NON_AGGREGATED_LISTING = 'non_aggregated';

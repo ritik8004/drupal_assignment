@@ -113,6 +113,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
               openModal={this.openModal}
               getPanelData={getPanelData}
               relatedSku={sku}
+              gtmAttributes={products[sku].gtm_attributes}
             />
           ))}
         </Slider>

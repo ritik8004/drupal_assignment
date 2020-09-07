@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_attribute_value
+    - node.type.product_list
+id: node.product_list.field_attribute_value
+field_name: field_attribute_value
+entity_type: node
+bundle: product_list
+label: 'Attribute value'
+description: ''
+required: false
+translatable: true
+skip_translation_check: null
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

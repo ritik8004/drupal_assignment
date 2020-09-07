@@ -1,0 +1,25 @@
+.c-plp .c-content__region {
+  .block-views-exposed-filter-blockalshaya-product-list-block-3 {
+    legend {
+      @include facet-arrow(after, down, 0.25rem, 0, 0.25rem, 0.25rem) {
+        #{$right}: 1.875rem;
+        top: 1.25rem;
+      }
+
+      &.active {
+        &::after {
+          transform: rotate(270deg);
+        }
+      }
+    }
+  }
+
+  .block-facets-summary-blockfilter-bar-productlist {
+    padding-top: 0;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+      border-bottom: 0;
+    }
+  }
+}

@@ -172,6 +172,10 @@
 
       .magv2-detail-wrapper + .promotions-full-view-mode {
         margin-top: -1.25rem;
+
+        @include breakpoint($only-mobile) {
+          margin-top: -2.5rem;
+        }
       }
     }
 
@@ -299,11 +303,11 @@
         }
 
         &.top-left {
-          left: 0;
+          #{$left}: 1.25rem;
         }
 
         &.top-right {
-          right: 0;
+          #{$right}: 1.25rem;
         }
 
         &.bottom-left,
@@ -312,7 +316,8 @@
           justify-content: flex-start;
           padding: 0;
           padding-bottom: 0.3125rem;
-          padding-right: 0.3125rem;
+          padding-#{$right}: 0.3125rem;
+          flex: 1 1 0;
         }
 
         &.bottom-right {

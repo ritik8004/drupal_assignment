@@ -530,6 +530,12 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
                 $address[$mapping[$attribute_code] . '_display'] = $term->label();
               }
               else {
+                // Add a trace when trying to fetch areas for which terms not
+                // exists in system.
+                $this->logger->error('Trying to fetch the area term for attribute: @attribute locationId: @location_id but could not find and thus using value as is and this may cause issue.', [
+                  '@attribute' => $attribute_code,
+                  '@location_id' => $value,
+                ]);
                 $address[$mapping[$attribute_code]] = $value;
               }
 

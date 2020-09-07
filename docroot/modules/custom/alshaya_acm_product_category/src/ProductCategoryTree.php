@@ -1063,7 +1063,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function getChildTermIds(int $parent = 0) {
     $l1Terms = $this->termStorage->loadTree('acq_product_category', $parent, 1);
 
-    return $l1Terms ? array_column($l1Terms, 'name', 'tid') : [];
+    return $l1Terms ? $l1Terms : [];
   }
 
 }

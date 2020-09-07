@@ -2,10 +2,21 @@ import React from 'react';
 import PdpInfo from '../pdp-info';
 
 const PdpCrossellUpsellImage = ({
-  imageUrl, alt, title, pdpProductPrice, finalPrice, productUrl,
-  productLabels, productPromotions, openModal, getPanelData, relatedSku,
+  imageUrl,
+  alt,
+  title,
+  pdpProductPrice,
+  finalPrice,
+  productUrl,
+  productLabels,
+  productPromotions,
+  openModal,
+  getPanelData,
+  relatedSku,
+  gtmAttributes,
 }) => (
-  <a className="magv2-pdp-crossell-upsell-image-wrapper" href={productUrl} onClick={() => getPanelData(openModal(relatedSku))}>
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  <a className="magv2-pdp-crossell-upsell-image-wrapper" href={productUrl} onClick={() => getPanelData(openModal(relatedSku))} {...gtmAttributes}>
     <div className="magv2-pdp-crossell-upsell-img">
       <img
         src={imageUrl}

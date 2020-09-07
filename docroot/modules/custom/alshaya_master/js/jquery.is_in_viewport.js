@@ -70,10 +70,10 @@
       if (elementTop >= viewportTop
         && elementBottom <= viewportBottom
       ) {
-        var elementParent = $(this).parent();
+        var elementParent = $(this).parents('.slick-slide');
         var active = false;
         // Check if slick slider is used in carousel like in homepage and PDP.
-        if (elementParent.hasClass('slick-slide')) {
+        if (elementParent.length > 0) {
           // If it has slick-active class, that means it is showing in screen.
           active = (elementParent.hasClass('slick-active')) ? true : false;
         }

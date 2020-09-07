@@ -648,7 +648,15 @@ class CartController {
           catch (\Exception $e) {
             if ($e->getCode() === 302) {
               // Set attempted payment 1 before redirecting.
-              $updated_cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
+              $payment = [
+                'method' => $request_content['payment_info']['payment']['method'],
+                // For now we still want only the payment method to be set
+                // in Magento.
+                'additional_data' => [],
+              ];
+
+              $updated_cart = $this->cart->updatePayment($payment, $extension);
+
               if (empty($updated_cart)) {
                 throw new \Exception('Update cart failed', 404);
               }

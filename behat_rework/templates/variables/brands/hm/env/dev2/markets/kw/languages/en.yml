@@ -53,7 +53,7 @@ variables:
   mobile_language_class: 'ar'
   language_short: 'ar'
   city_option: 'Salmiya'
-  area_option: 'Salmiya'
+  area_option: 'Kuwait City'
   street: 'Street A'
   building: 'Building B'
   locality: ''
@@ -71,3 +71,4 @@ variables:
   language_order_detail: 'تفاصيل الطلبية'
   language_delivery_type_text: 'التوصيل متوقع خلال:'
   language_payment_type_text: 'طريقة الدفع:'
+  governorate: 'Kuwait City'
