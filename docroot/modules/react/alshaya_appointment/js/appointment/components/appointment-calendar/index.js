@@ -113,6 +113,7 @@ export default class AppointmentCalendar extends React.Component {
       week: this.getWeekDates(new Date(date), 'next'),
       previousDisabled: false,
     });
+    this.showDatePicker();
   };
 
   /**
@@ -201,20 +202,23 @@ export default class AppointmentCalendar extends React.Component {
           </div>
           )}
         <ConditionalView condition={window.innerWidth > 1023}>
-          <div className="appointment-calendar daypicker-desktop">
-            <button
-              type="button"
-              className="appointment-calendar-prev-btn"
-              disabled={(previousDisabled)}
-              onClick={() => this.togglePrev(week[0])}
-            >
-              { getStringMessage('prev') }
-            </button>
-            <ul className="calendar-wrapper">
-              { weekdays }
-            </ul>
-            <button type="button" className="appointment-calendar-next-btn" onClick={() => this.toggleNext(week.slice(-1).pop())}>{ getStringMessage('next') }</button>
-          </div>
+          { !datePickerToggle
+            && (
+            <div className="appointment-calendar daypicker-desktop">
+              <button
+                type="button"
+                className="appointment-calendar-prev-btn"
+                disabled={(previousDisabled)}
+                onClick={() => this.togglePrev(week[0])}
+              >
+                { getStringMessage('prev') }
+              </button>
+              <ul className="calendar-wrapper">
+                { weekdays }
+              </ul>
+              <button type="button" className="appointment-calendar-next-btn" onClick={() => this.toggleNext(week.slice(-1).pop())}>{ getStringMessage('next') }</button>
+            </div>
+            )}
         </ConditionalView>
         <ConditionalView condition={window.innerWidth < 1024}>
           <div className="appointment-calendar daypicker-mobile">
