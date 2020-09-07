@@ -76,7 +76,6 @@
       if (elementTop >= viewportTop
         && elementBottom <= viewportBottom
       ) {
-        var elementParent = $(this).parent();
         var active = false;
         // Check if we are in homepage/PDP.
         if ($(this).closest('.view-product-slider').length > 0) {
