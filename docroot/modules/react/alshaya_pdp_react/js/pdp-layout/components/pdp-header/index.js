@@ -42,6 +42,7 @@ export default class PdpHeader extends React.PureComponent {
             finalPrice={finalPrice}
             pdpProductPrice={pdpProductPrice}
             shortDetail="true"
+            animateTitlePrice
           />
           <div id="block-alshayareactcartminicartblock" dataBlockPluginId="alshaya_react_mini_cart" className="block block-alshaya-spc block-alshaya-react-mini-cart">
             <div id="mini-cart-wrapper">
@@ -60,6 +61,7 @@ export default class PdpHeader extends React.PureComponent {
             brandLogoTitle={brandLogoTitle}
             finalPrice={finalPrice}
             pdpProductPrice={pdpProductPrice}
+            animateTitlePrice
           />
           {(checkoutFeatureStatus === 'enabled') ? (
             <div id="sticky-header-btn">

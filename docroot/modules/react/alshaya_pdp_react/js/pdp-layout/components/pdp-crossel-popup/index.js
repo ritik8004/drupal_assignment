@@ -7,6 +7,10 @@ import PdpPopupContainer from '../utilities/pdp-popup-container';
 import PdpPopupWrapper from '../utilities/pdp-popup-wrapper';
 import PdpCart from '../pdp-cart';
 import PdpPromotionLabel from '../pdp-promotion-label';
+import {
+  showFullScreenLoader,
+  removeFullScreenLoader,
+} from '../../../utilities/pdp-util';
 
 class CrossellPopupContent extends React.Component {
   constructor(props) {
@@ -21,6 +25,9 @@ class CrossellPopupContent extends React.Component {
   }
 
   getRelatedProductsInfo = (relatedProductData, url, relatedSku) => {
+    // Show loader.
+    showFullScreenLoader();
+
     // If related products is already processed.
     if (relatedProductData === null) {
       axios.get(url).then((response) => {
@@ -29,7 +36,12 @@ class CrossellPopupContent extends React.Component {
           this.setState({
             relatedProductData: response.data,
             variantSelected: configurable ? configurable[relatedSku].firstChild : relatedSku,
+          }, () => {
+            document.querySelector('body').classList.add('crossel-overlay');
           });
+
+          // Remove loader.
+          removeFullScreenLoader();
         }
       });
     }
@@ -116,6 +128,7 @@ class CrossellPopupContent extends React.Component {
               showFullVersion={false}
               context="related"
               miniFullScreenGallery
+              animateMobileGallery={false}
             >
               <PdpProductLabels skuCode={relatedSku} variantSelected={relatedSku} labels={labels} />
             </PdpGallery>
@@ -126,6 +139,7 @@ class CrossellPopupContent extends React.Component {
               brandLogo={brandLogo}
               brandLogoAlt={brandLogoAlt}
               brandLogoTitle={brandLogoTitle}
+              animateTitlePrice={false}
             />
             <div className="promotions promotions-full-view-mode">
               <PdpPromotionLabel
