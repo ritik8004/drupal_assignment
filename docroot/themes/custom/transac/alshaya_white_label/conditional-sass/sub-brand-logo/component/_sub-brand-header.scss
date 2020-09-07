@@ -1,8 +1,8 @@
-$header-height: 87px;
+$header-height: 5.4375rem;
 
 @mixin resetMenuStyles() {
   position: absolute;
-  top: 47px;
+  top: 2.9375rem;
   width: 75%;
   height: 40px;
   display: flex;
@@ -38,13 +38,13 @@ $header-height: 87px;
 
 @mixin placeMiniCart() {
   position: absolute;
-  top: 44px;
+  top: 2.75rem;
   width: 25%;
-  right: 0;
+  #{$right}: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
+  height: 2.5rem;
 }
 
 @mixin aerieSeparator() {
@@ -52,10 +52,10 @@ $header-height: 87px;
     content: '';
     background: #d0d0d0;
     width: 1px;
-    height: 26px;
+    height: 1.625rem;
     display: inline-block;
     position: absolute;
-    left: 0;
+    #{$left}: 0;
     top: 50%;
     transform: translateY(-50%);
   }
@@ -64,7 +64,7 @@ $header-height: 87px;
 body.sub-brand-logo {
   @include breakpoint($only-mobile) {
     &:not(.no-sticky-algolia-search-bar):not(.alias--cart-login) {
-      margin-top: $header-height + 60px;
+      margin-top: $header-height + 3.75rem;
     }
 
     .branding__menu {
@@ -120,44 +120,56 @@ body.sub-brand-logo {
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      max-width: 301px;
+      max-width: 50.166rem;
 
       @include breakpoint($only-tablet) {
         max-width: 100%;
         justify-content: center;
-        height: 50px;
+        height: 3.125rem;
 
         .logo:first-child {
-          margin-right: 28px;
-          margin-left: 24px;
+          margin-#{$right}: 1.75rem;
+          margin-#{$left}: 1.5rem;
           margin-top: 0;
         }
       }
 
       .logo:first-child {
-        max-width: 164px;
-        margin-right: 28px;
+        max-width: 10.25rem;
+        margin-#{$right}: 1.75rem;
       }
 
       .sub-brand-logo {
-        padding-left: 28px;
+        padding-#{$left}: 1.75rem;
         position: relative;
-        margin-left: 0;
+        margin-#{$left}: 0;
         margin-top: 0;
 
         @include breakpoint($only-tablet) {
-          max-width: 81px;
+          max-width: 5.0625rem;
           margin: 0;
+
+          img {
+            width: 100% !important;
+          }
         }
 
         @include aerieSeparator();
 
         @include breakpoint($desktop) {
+          max-width: 5.0625rem;
+
           &::before {
             transform: translateY(-68%);
           }
         }
       }
+    }
+  }
+
+  &.alias--cart-login {
+    html[lang=ar] & {
+      margin-top: 0;
     }
   }
 
@@ -175,13 +187,23 @@ body.sub-brand-logo {
         align-items: center;
 
         .sub-brand-logo {
-          width: 48px;
-          margin-left: 10px;
-          padding-left: 10px;
+          width: 3rem;
+          margin-#{$left}: 0.625rem;
+          padding-#{$left}: 0.625rem;
           position: relative;
 
           @include aerieSeparator();
         }
+      }
+    }
+  }
+
+  html[lang=ar] & {
+    .site-brand-home {
+      margin-right: 0;
+
+      .sub-brand-logo img {
+        width: 100%;
       }
     }
   }
