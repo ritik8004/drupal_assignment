@@ -131,6 +131,14 @@
     window.addEventListener('scroll', debounce(function(scrollEvent) {
       Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, scrollEvent);
     }, 500));
+    // Process impressions when user swipes the carousel on mobile.
+    window.addEventListener('touchmove', debounce(function(touchEvent) {
+      Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, touchEvent);
+    }, 500));
+    // Process impressions when user is leaving the page.
+    window.addEventListener('pagehide', function(pagehideEvent) {
+      Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, pagehideEvent);
+    });
     // Process impressions when user clicks previous button.
     document.querySelectorAll('.spc-recommended-products .nav-prev').forEach(function(element) {
       element.addEventListener('click', function(clickEvent) {

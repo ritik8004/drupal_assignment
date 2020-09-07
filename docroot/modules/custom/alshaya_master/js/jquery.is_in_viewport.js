@@ -44,6 +44,11 @@
   /**
    * Check if carousel element is fully/partially visible in viewport or not.
    *
+   * We are using this separate function for carousels since in cases like PDP
+   * the carousel is not occupying the full width of the page. In that case we
+   * need to calculate left and right of carousels based on its container and
+   * not on the viewport.
+   *
    * @param offset
    * @param elementPartialOffsetTop
    *   To be used when we want only some part of the element to be visible. We
@@ -66,16 +71,22 @@
 
       // Get element left.
       var elementLeft = $(this).offset().left - offset;
+      var elementRight = elementLeft + $(this).outerWidth();
 
       if (elementTop >= viewportTop
         && elementBottom <= viewportBottom
       ) {
-        var elementParent = $(this).parent();
         var active = false;
-        // Check if slick slider is used in carousel like in homepage and PDP.
-        if (elementParent.hasClass('slick-slide')) {
-          // If it has slick-active class, that means it is showing in screen.
-          active = (elementParent.hasClass('slick-active')) ? true : false;
+        // Check if we are in homepage/PDP.
+        if ($(this).closest('.view-product-slider').length > 0) {
+          var recommendProductsContainer = $(this).closest('.view-product-slider');
+          var carouselLeft = recommendProductsContainer.offset().left;
+          var carouselRight = carouselLeft + recommendProductsContainer.outerWidth();
+
+          if ((elementLeft >= carouselLeft)
+            && (elementRight <= carouselRight)) {
+            active = true;
+          }
         }
         // If slick slider is not used, that means the cart page carousels are
         // being viewed. Checked if they are within their container.
@@ -86,8 +97,8 @@
 
           // We check if at least some part of the product is visible in the
           // carousel.
-          if ((elementLeft > carouselLeft)
-            && ((elementLeft + 40) < carouselRight)) {
+          if ((elementLeft >= carouselLeft)
+            && (elementRight <= carouselRight)) {
             active = true;
           }
         }
