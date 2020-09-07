@@ -29,15 +29,8 @@ fi
 
 cd "$directory/$stack"
 
-# Checkout master branch before doing main branch operations
-git checkout master
-
-# Delete the deployment branch from local to
-# allow recreating it from tag.
-git branch -D main
-
 # Fetch all tags.
-git fetch --tags
+git fetch origin --tags
 
 # Validate if tag exists.
 if [ ! $(git tag -l "$tag") ]; then
@@ -45,11 +38,13 @@ if [ ! $(git tag -l "$tag") ]; then
   exit
 fi
 
-# Create "main" branch from tag.
-git branch main $tag
-
-# Checkout the new "main" branch.
+# Checkout "main" branch used for deployment.
 git checkout main
+
+# Reset the code to match the tag.
+git reset --hard $tag
+
+
 
 # Go to docroot to do site operations.
 cd /var/www/html/$AH_SITE_NAME/docroot
