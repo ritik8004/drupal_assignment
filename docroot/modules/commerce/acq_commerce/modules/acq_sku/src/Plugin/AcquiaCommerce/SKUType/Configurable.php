@@ -68,8 +68,8 @@ class Configurable extends SKUPluginBase {
       // We may keep getting new configurable options not defined in config.
       // Use default values for them and keep their sequence as is.
       // Still move the ones defined in our config as per weight in config.
-      $a = $configurable_weights[$a['code']] ?? -50;
-      $b = $configurable_weights[$b['code']] ?? 50;
+      $a = $configurable_weights[$a['code']] ?? 999;
+      $b = $configurable_weights[$b['code']] ?? 999;
       return $a - $b;
     });
 
