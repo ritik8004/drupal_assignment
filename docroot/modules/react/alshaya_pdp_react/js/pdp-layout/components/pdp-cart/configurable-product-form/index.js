@@ -110,8 +110,6 @@ class ConfigurableProductForm extends React.Component {
         nextCode,
         nextValues,
       });
-      const nextVal = document.getElementById(nextCode).value;
-      this.refreshConfigurables(nextCode, nextVal);
     }
   }
 
