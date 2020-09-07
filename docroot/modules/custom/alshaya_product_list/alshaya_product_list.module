@@ -12,6 +12,7 @@ use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_search_api_db_query_alter().
@@ -152,5 +153,78 @@ function alshaya_product_list_node_view(array &$build, EntityInterface $entity, 
   // Attach the shop by brand css library to the product listing page.
   if ($entity->bundle() == 'product_list') {
     $build['#attached']['library'][] = 'alshaya_white_label/shop-by-brand';
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ *
+ * Create product list nodes for attribute values of attribute codes from
+ * alshaya options list settings on sync-options.
+ */
+function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
+  // Check term vocabulory.
+  if ($term->bundle() != 'sku_product_option') {
+    return;
+  }
+
+  // Get alshaya_options_list settings for attribute codes.
+  $pages = \Drupal::config('alshaya_options_list.settings')
+    ->get('alshaya_options_pages');
+  foreach ($pages as $page) {
+    $attribute_options = \Drupal::config('alshaya_options_list.settings')->get('alshaya_options_pages');
+    $attributeCodes = array_filter($attribute_options[$page['url']]['attributes']);
+  }
+
+  // Get Term attribute code.
+  $term_attribute_code = $term->get('field_sku_attribute_code')->value;
+
+  // Check if Term has same attribute code as the alshaya_options_list
+  // settings, if yes then create a product list node for that attribute value.
+  if (in_array($term_attribute_code, $attributeCodes)) {
+    $attribute = 'attr_' . $term_attribute_code;
+    $attribute_value = $term->getName();
+    try {
+      $properties = [
+        'field_attribute_name' => $attribute,
+        'field_attribute_value' => $attribute_value,
+        'type' => 'product_list',
+      ];
+      $entities = \Drupal::entityTypeManager()->getStorage('node')
+        ->loadByProperties($properties);
+      $node = array_shift($entities);
+      // If node exists, we create or we skip.
+      if (!($node instanceof Node)) {
+        $node = Node::create([
+          // The node entity bundle.
+          'type' => 'product_list',
+          'langcode' => 'en',
+          // The user ID.
+          'uid' => 1,
+          'title' => $attribute_value,
+          'field_attribute_value' => [
+            'value' => $attribute_value,
+          ],
+          'field_attribute_name' => [
+            'value' => $attribute,
+          ],
+        ]);
+        $node->save();
+
+        // Creating the translation if langcode not passed.
+        /** @var \Drupal\node\NodeInterface $node_translation */
+        $node_translation = $node->addTranslation('ar');
+        $node_translation->setOwnerId(1);
+        $node_translation->setTitle($attribute_value);
+        $node_translation->set('field_attribute_name', $attribute);
+        $node_translation->set('field_attribute_value', $attribute_value);
+        $node_translation->save();
+      }
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_product_list')->error('Error occured while creating Product list node: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+    }
   }
 }
