@@ -15,6 +15,10 @@
   white-space: nowrap;
   padding-#{$right}: 2rem;
 
+  .ie & {
+    vertical-align: unset;
+  }
+
   @include breakpoint($only-mobile) {
     width: calc(50% - 0.625rem);
     margin-top: 0.625rem;
