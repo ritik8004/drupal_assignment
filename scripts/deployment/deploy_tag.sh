@@ -11,6 +11,7 @@ mode="$2"
 stack=`whoami`
 repo="$stack@svn-25.enterprise-g1.hosting.acquia.com:$stack.git"
 
+docroot="/var/www/html/$AH_SITE_NAME/docroot"
 log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.log
 
 echo "Starting deployment in mode $mode at `date`. Tag $tag, Stack $stack" | tee -a ${log_file}
@@ -45,20 +46,14 @@ git checkout main
 # Reset the code to match the tag.
 git reset --hard $tag
 
-
-
-# Go to docroot to do site operations.
-cd /var/www/html/$AH_SITE_NAME/docroot
-
 # Taking backup now.
 mkdir -p "$backup_directory"
-drush acsf-tools-dump --result-folder=$backup_directory -y --gzip 2>&1 | tee -a ${log_file}
-
+drush --root=$docroot acsf-tools-dump --result-folder=$backup_directory -y --gzip 2>&1 | tee -a ${log_file}
 
 # Enable maintenance mode if mode is updb.
 if [ "$mode" = "updb" ]
 then
-  drush sfmlc alshaya-enable-maintenance 2>&1 | tee -a ${log_file}
+  drush --root=$docroot sfmlc alshaya-enable-maintenance 2>&1 | tee -a ${log_file}
   echo "Sites put offline. Tag $tag, Stack $stack" | tee -a ${log_file}
 fi
 
@@ -70,15 +65,12 @@ git push origin main | tee -a ${log_file}
 
 echo "Code deployment finished at `date`. Tag $tag, Stack $stack" | tee -a ${log_file}
 
-# Go to docroot to do site operations again.
-cd /var/www/html/$AH_SITE_NAME/docroot
-
 if [ "$mode" = "updb" ]
 then
-  for site in `drush acsf-tools-list | grep -v " "`
+  for site in `drush --root=$docroot acsf-tools-list | grep -v " "`
   do
-    drush $site.factory.alshaya.com updb 2>&1 | tee -a ${log_file}
-    drush $site.factory.alshaya.com alshaya-disable-maintenance 2>&1 | tee -a ${log_file}
+    drush --root=$docroot -l $site.factory.alshaya.com updb 2>&1 | tee -a ${log_file}
+    drush --root=$docroot -l $site.factory.alshaya.com alshaya-disable-maintenance 2>&1 | tee -a ${log_file}
     echo "UPDB done and site put back online for $site at `date`. Tag $tag, Stack $stack" | tee -a ${log_file}
   done
 
@@ -88,5 +80,5 @@ fi
 if [ "$mode" = "hotfix_crf" ]
 then
   echo "Doing CRF now as requested. Tag $tag, Stack $stack" | tee -a ${log_file}
-  drush sfml crf --delay=10 2>&1 | tee -a ${log_file}
+  drush --root=$docroot sfml crf --delay=10 2>&1 | tee -a ${log_file}
 fi
