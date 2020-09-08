@@ -490,7 +490,7 @@ function alshaya_master_form_system_site_information_settings_alter(&$form, Form
   $form['sub_brand_logo_img'] = [
     '#type' => 'textfield',
     '#title' => t('Sub brand logo image'),
-    '#description' => t('Path of the logo image for header. The same filename with PNG extension will be used for print confirmation page. Example - /themes/custom/transac/alshaya_american_eagle/aerie.svg'),
+    '#description' => t('Path of the logo image for header. The same filename with PNG extension will be used for print confirmation page. Example - /themes/custom/transac/alshaya_american_eagle/aerie.svg. In order to this work, Both sub brabd logo image and link needs to be configured.'),
     '#default_value' => \Drupal::configFactory()->getEditable('alshaya_master.settings')->get('sub_brand_logo_img'),
   ];
 
@@ -950,8 +950,9 @@ function alshaya_master_acquia_search_get_list_of_possible_cores_alter(&$possibl
  */
 function _alshaya_master_get_subbrand_logo_image_link() {
   $data = [];
-  $sub_brand_logo_img = \Drupal::config('alshaya_master.settings')->get('sub_brand_logo_img');
-  $sub_brand_logo_link = \Drupal::config('alshaya_master.settings')->get('sub_brand_logo_link');
+  $settings = \Drupal::config('alshaya_master.settings');
+  $sub_brand_logo_img = $settings->get('sub_brand_logo_img');
+  $sub_brand_logo_link = $settings->get('sub_brand_logo_link');
   if ($sub_brand_logo_img && $sub_brand_logo_link) {
     $data['sub_brand_logo_img'] = $sub_brand_logo_img;
     $data['sub_brand_logo_link'] = $sub_brand_logo_link;
