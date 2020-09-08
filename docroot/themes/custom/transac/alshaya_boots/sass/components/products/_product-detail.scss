@@ -260,6 +260,24 @@
       font-family: $bp-light;
     }
   }
+
+  .field {
+    &__label {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0;
+      }
+    }
+
+    &__content {
+      .desc-wrapper {
+        .desc-label {
+          @include breakpoint($only-mobile) {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
 }
 
 .delivery-options-wrapper {
