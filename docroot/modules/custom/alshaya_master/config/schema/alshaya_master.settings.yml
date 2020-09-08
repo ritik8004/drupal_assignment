@@ -28,3 +28,6 @@ alshaya_master.settings:
     sub_brand_logo_link:
       type: label
       label: 'Sub brand logo link'
+    sub_brand_logo_img:
+      type: string
+      label: 'Sub brand logo image'
