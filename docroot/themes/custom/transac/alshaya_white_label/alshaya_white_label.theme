@@ -65,7 +65,7 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $sub_brand_logo = _alshaya_master_get_subbrand_logo_image_link();
   // If both sub brand logo image and link available.
   if (!empty($sub_brand_logo)) {
-    $variables['attributes']['class'][] = Html::cleanCssIdentifier('sub-brand-logo');
+    $variables['attributes']['class'][] = 'sub-brand-logo';
   }
 
   // Alias path class.
