@@ -20,7 +20,7 @@ args=("$@")
 command=$2
 for i in $(seq 2 ${#args[@]})
 do
-  command="$command \"${args[$i]}\""
+  command="$command ${args[$i]}"
 done
 
 file_name=/tmp/cron-lock-$id.lock

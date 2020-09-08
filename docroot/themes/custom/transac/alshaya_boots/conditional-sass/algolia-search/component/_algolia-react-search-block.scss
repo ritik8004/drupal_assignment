@@ -12,15 +12,24 @@
   }
 
   @include breakpoint($only-tablet) {
-    bottom: -0.9375rem;
+    bottom: 0.125rem;
     visibility: hidden;
 
+    .frontpage & {
+      bottom: -4.25rem;
+
+      html[lang=ar] & {
+        bottom: -4.625rem;
+      }
+    }
+
     html[lang=ar] & {
-      bottom: -1.75rem;
+      bottom: -0.25rem;
     }
 
     &.show-algolia-search-bar {
       visibility: visible;
+      z-index: 1;
     }
   }
 
@@ -113,6 +122,10 @@
         padding-#{$left}: 3.5rem;
       }
 
+      @include breakpoint($only-tablet) {
+        height: 4.25rem;
+      }
+
       @include breakpoint($only-mobile) {
         margin: 0;
         width: 100%;
@@ -192,7 +205,7 @@ body {
             font-size: 2.25rem;
             position: absolute;
             #{$left}: 0.4375rem;
-            top: 0.4375rem;
+            top: 0.75rem;
           }
         }
       }
@@ -220,7 +233,11 @@ body {
     }
 
     @include breakpoint($only-tablet) {
-      margin-top: 7.75rem;
+      margin-top: 8.75rem;
+
+      .frontpage & {
+        margin-top: 8.75rem;
+      }
     }
 
     html[lang=ar] & {
@@ -229,7 +246,7 @@ body {
       }
 
       @include breakpoint($only-tablet) {
-        margin-top: 7.75rem;
+        margin-top: 8.75rem;
       }
     }
 
@@ -284,6 +301,7 @@ body {
     &.block-alshaya-algolia-react-autocomplete {
       @include breakpoint($upto-desktop) {
         visibility: hidden !important;
+        opacity: 0;
       }
     }
   }

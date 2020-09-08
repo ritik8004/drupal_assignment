@@ -23,5 +23,15 @@ function hook_alshaya_acm_customer_update_account_alter(\Drupal\user\Entity\User
 }
 
 /**
+ * Alter order data before showing in order details.
+ *
+ * @param array $order
+ *   Order received from API.
+ */
+function hook_alshaya_acm_customer_order_details_alter(array &$order) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

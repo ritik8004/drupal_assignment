@@ -73,6 +73,11 @@ trait Orders {
         'refunded' => (int) ($item['qty_refunded'] ?? 0),
       ];
 
+      // If attribute value available for grouping attribute.
+      if (isset($item['attributes']) && !empty($item['attributes'])) {
+        $processed_item['attributes'] = $item['attributes'];
+      }
+
       // Add all other info.
       $items[$item['sku']] = $processed_item + $item;
     }

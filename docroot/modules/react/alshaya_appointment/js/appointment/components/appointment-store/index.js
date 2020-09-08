@@ -74,7 +74,7 @@ export default class AppointmentStore extends React.Component {
   componentDidMount() {
     // For autocomplete text field.
     const {
-      refCoords, storeList, openSelectedStore, selectedStoreItem,
+      refCoords, storeList, openSelectedStore,
     } = this.state;
     document.addEventListener('placeAutocomplete', this.initiatePlaceAutocomplete);
     if (refCoords !== null && storeList.length === 0) {
@@ -87,10 +87,8 @@ export default class AppointmentStore extends React.Component {
     if (refCoords !== null && openSelectedStore) {
       this.showSelectedMarker();
     }
-    // Show "select this store" button, if a store is selected.
-    if (selectedStoreItem && openSelectedStore === false) {
-      this.selectStoreButtonVisibility(true);
-    }
+    // Activate "select this store" button, if a store is selected.
+    this.selectStoreButtonVisibility(false);
     // On marker click.
     document.addEventListener('markerClick', this.mapMarkerClick);
     // We need a sticky button in mobile.
@@ -368,11 +366,11 @@ export default class AppointmentStore extends React.Component {
   };
 
   selectStoreButtonVisibility = (action) => {
-    const selectStoreBtn = document.getElementsByClassName('appointment-store-actions')[0];
+    const selectStoreBtn = document.getElementById('appointment-select-store-submit-btn');
     if (action === true) {
-      selectStoreBtn.classList.add('show');
+      selectStoreBtn.disabled = false;
     } else {
-      selectStoreBtn.classList.remove('show');
+      selectStoreBtn.disabled = true;
     }
   }
 
@@ -589,6 +587,7 @@ export default class AppointmentStore extends React.Component {
           </div>
           <div className="appointment-flow-action">
             <button
+              id="appointment-select-store-submit-btn"
               className="appointment-store-button appointment-type-button select-store"
               type="button"
               onClick={(e) => this.finalizeCurrentStore(e)}

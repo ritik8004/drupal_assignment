@@ -12,6 +12,22 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Adds new block display for brand list.
+ */
+function alshaya_product_update_8031() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['views.view.alshaya_product_list'],
+    'alshaya_product',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update views to show "0 items" when there are no results.
  */
 function alshaya_product_update_8030() {

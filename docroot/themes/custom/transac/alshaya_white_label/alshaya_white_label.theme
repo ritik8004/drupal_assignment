@@ -352,6 +352,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
   $listing_pages_plugin_id = [
     'views_block:alshaya_product_list-block_1',
     'views_block:alshaya_product_list-block_2',
+    'views_block:alshaya_product_list-block_3',
   ];
   if (in_array($variables['plugin_id'], $listing_pages_plugin_id)) {
     $variables['attributes']['class'][] = 'c-products-list';
@@ -798,6 +799,9 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
       $suggestions[] = 'page__pdp';
     }
     elseif ($node->bundle() == 'acq_promotion') {
+      $suggestions[] = 'page__plp';
+    }
+    elseif ($node->bundle() == 'product_list') {
       $suggestions[] = 'page__plp';
     }
   }

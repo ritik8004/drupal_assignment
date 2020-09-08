@@ -106,7 +106,7 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
 function alshaya_seo_transac_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
   // Adding price for GTM.
   $prices = \Drupal::service('alshaya_acm_product.skumanager')->getMinPrices($child);
-  $variant['gtm_price'] = _alshaya_acm_format_price_with_decimal((float) $prices['final_price']);
+  $variant['gtm_price'] = (float) _alshaya_acm_format_price_with_decimal((float) $prices['final_price']);
 }
 
 /**
@@ -550,7 +550,7 @@ function alshaya_seo_transac_alshaya_acm_product_light_product_data_alter(SKU $s
   if ($productNode instanceof NodeInterface) {
     /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
     $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
-    $attributes = $gtmManager->fetchProductGtmAttributes($productNode, 'full');
+    $attributes = $gtmManager->fetchProductGtmAttributes($productNode, 'full', !empty($data['parent_sku']) ? $sku : NULL);
     $data['gtm_attributes'] = $gtmManager->convertHtmlAttributesToDatalayer($attributes);
 
     if ($sku->bundle() === 'simple') {

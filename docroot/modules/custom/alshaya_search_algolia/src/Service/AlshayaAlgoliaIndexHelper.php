@@ -234,8 +234,18 @@ class AlshayaAlgoliaIndexHelper {
     $object['body'] = $this->renderer->renderPlain($description);
 
     $object['field_category_name'] = $this->getCategoryHierarchy($node, $node->language()->getId());
+
+    // Override the config language to the language of the node.
+    $language = $this->languageManager->getLanguage($node->language()->getId());
+    $original_language = $this->languageManager->getConfigOverrideLanguage();
+    $this->languageManager->setConfigOverrideLanguage($language);
+
     $sku_price_block = $this->skuPriceHelper->getPriceBlockForSku($sku);
     $object['rendered_price'] = $this->renderer->renderPlain($sku_price_block);
+
+    // Restore the language manager to it's original language.
+    $this->languageManager->setConfigOverrideLanguage($original_language);
+
     $prices = $this->skuManager->getMinPrices($sku, $product_color);
     $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
@@ -517,6 +527,7 @@ class AlshayaAlgoliaIndexHelper {
     $categories = $node->get('field_category')->referencedEntities();
     $list = [];
     $list['all']['lvl0'] = $this->t('All', [], ['langcode' => $langcode]);
+
     // Get sales categories to index L2 for sales terms.
     $old_categorization_rule = $this->productCategoryManager->isOldCategorizationRuleEnabled();
     // If old categorization rule is not enabled
@@ -527,13 +538,20 @@ class AlshayaAlgoliaIndexHelper {
     else {
       $sale_categories = $this->productCategoryManager->getCategorizationIds()['sale'] ?? [];
     }
+
+    $config = $this->configFactory->get('alshaya_search_algolia.settings');
+    $show_terms_in_lhn = $config->get('show_terms_in_lhn');
+
     foreach ($categories as $category) {
       // Skip the term which is disabled.
       if ($category->get('field_commerce_status')->getString() !== '1' || $category->get('field_category_include_menu')->getString() !== '1') {
         continue;
       }
       $parents = array_reverse($this->termStorage->loadAllParents($category->id()));
-      if (in_array($category->id(), $sale_categories)) {
+      if ($show_terms_in_lhn == 'all') {
+        $trim_parents = $parents;
+      }
+      elseif (in_array($category->id(), $sale_categories)) {
         // Passing the first two parents(l1&l2).
         $trim_parents = array_chunk($parents, 2)[0];
       }
