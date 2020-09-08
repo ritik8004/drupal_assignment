@@ -17,7 +17,9 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
   // Check for sub brand logo.
   if (subBrandLogo.sub_brand_logo_img !== undefined
     && subBrandLogo.sub_brand_logo_link !== undefined) {
-    subBrandLogoMarkup = <img className="sub-brand-logo" src={subBrandLogo.sub_brand_logo_img} />;
+    const { sub_brand_logo_img: brandLogo } = subBrandLogo;
+    const pngLogo = brandLogo.replace('svg', 'png');
+    subBrandLogoMarkup = <img className="sub-brand-logo" src={pngLogo} />;
   }
 
   return (

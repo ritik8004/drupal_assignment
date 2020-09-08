@@ -489,8 +489,8 @@ function alshaya_master_form_system_site_information_settings_alter(&$form, Form
 
   $form['sub_brand_logo_img'] = [
     '#type' => 'textfield',
-    '#title' => t('Sub brand logo image (PNG only)'),
-    '#description' => t('Path of the logo image for header. Example - /themes/custom/transac/alshaya_american_eagle/aerie.png'),
+    '#title' => t('Sub brand logo image'),
+    '#description' => t('Path of the logo image for header. The same filename with PNG extension will be used for print confirmation page. Example - /themes/custom/transac/alshaya_american_eagle/aerie.svg'),
     '#default_value' => \Drupal::configFactory()->getEditable('alshaya_master.settings')->get('sub_brand_logo_img'),
   ];
 
