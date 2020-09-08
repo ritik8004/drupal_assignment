@@ -50,7 +50,7 @@ $header-height: 5.4375rem;
 @mixin aerieSeparator() {
   &::before {
     content: '';
-    background: #d0d0d0;
+    background: $sub_brand_logo_separator;
     width: 1px;
     height: 1.625rem;
     display: inline-block;
@@ -173,7 +173,8 @@ body.sub-brand-logo {
     }
   }
 
-  &.alias--checkout {
+  &.alias--checkout,
+  &.alias--checkout-confirmation {
     .site-brand-wrapper .site-brand-home {
       max-width: none;
       justify-content: center;
