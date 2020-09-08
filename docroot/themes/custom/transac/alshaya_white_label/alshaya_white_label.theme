@@ -312,6 +312,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
   if (!empty($sub_brand_logo)) {
     $variables['sub_brand_logo_img'] = $sub_brand_logo['sub_brand_logo_img'];
     $variables['sub_brand_logo_link'] = $sub_brand_logo['sub_brand_logo_link'];
+    $variables['sub_brand_logo_title'] = $sub_brand_logo['sub_brand_logo_title'];
+    $variables['sub_brand_logo_alt'] = $sub_brand_logo['sub_brand_logo_alt'];
     $variables['#attached']['library'][] = 'alshaya_white_label/sub-brand-logo';
   }
 }
@@ -369,6 +371,8 @@ function alshaya_white_label_preprocess_block(&$variables) {
     if (!empty($sub_brand_logo)) {
       $variables['sub_brand_logo_img'] = $sub_brand_logo['sub_brand_logo_img'];
       $variables['sub_brand_logo_link'] = $sub_brand_logo['sub_brand_logo_link'];
+      $variables['sub_brand_logo_title'] = $sub_brand_logo['sub_brand_logo_title'];
+      $variables['sub_brand_logo_alt'] = $sub_brand_logo['sub_brand_logo_alt'];
     }
   }
 

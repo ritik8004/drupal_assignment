@@ -955,6 +955,8 @@ function _alshaya_master_get_subbrand_logo_image_link() {
   if ($sub_brand_logo_img && $sub_brand_logo_link) {
     $data['sub_brand_logo_img'] = $sub_brand_logo_img;
     $data['sub_brand_logo_link'] = $sub_brand_logo_link;
+    $data['sub_brand_logo_title'] = t('Sub brand logo title');
+    $data['sub_brand_logo_alt'] = t('Sub brand logo alt');
   }
 
   return $data;
