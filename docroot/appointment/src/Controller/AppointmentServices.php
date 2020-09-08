@@ -352,8 +352,10 @@ class AppointmentServices {
         $result = $item;
       }
 
-      $startDate = date("Y-m-d\TH:i:s.000\Z");
-      $endDate = date("Y-12-31\T23:59:59.999\Z");
+      // Set start date as 6 month before current date.
+      $startDate = date('Y-m-d\TH:i:s.000\Z', strtotime(date('Y-m-d') . '-6 months'));
+      // Set end date as 6 months after current date.
+      $endDate = date('Y-m-d\T23:59:59.999\Z', strtotime(date('Y-m-d') . '+6 months'));
 
       $param = [
         'criteria' => [
