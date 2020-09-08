@@ -270,7 +270,7 @@ body {
       #alshaya-algolia-autocomplete {
         .react-autosuggest__input {
           @include breakpoint($only-mobile) {
-            border-top: 0.0625rem solid $algolia-auto-complete-border;
+            border-top: none;
           }
         }
       }
