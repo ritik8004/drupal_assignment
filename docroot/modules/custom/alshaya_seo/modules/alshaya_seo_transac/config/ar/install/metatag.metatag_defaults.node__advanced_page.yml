@@ -1,0 +1,5 @@
+tags:
+  description: '[node:summary]'
+  title: '[node:title] | [site:name]'
+  og_description: '[node:summary_custom:155]'
+  og_locale_alternative: '[node:locale:alternate]'
