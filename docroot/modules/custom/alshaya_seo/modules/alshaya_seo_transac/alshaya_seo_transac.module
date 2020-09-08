@@ -502,6 +502,23 @@ function alshaya_seo_transac_taxonomy_term_delete(EntityInterface $entity) {
 }
 
 /**
+ * Implements hook_simple_sitemap_arbitrary_links_alter().
+ */
+function alshaya_seo_transac_simple_sitemap_arbitrary_links_alter(&$arbitrary_links, $sitemap_variant) {
+  if ($sitemap_variant == 'default') {
+    global $base_url;
+
+    // Add homepage url.
+    foreach (\Drupal::languageManager()->getLanguages() as $langcode => $language) {
+      $arbitrary_links[] = [
+        'url' => $base_url . '/' . $langcode,
+        'priority' => '0.5',
+      ];
+    }
+  }
+}
+
+/**
  * Implements hook_simple_sitemap_links_alter().
  */
 function alshaya_seo_transac_simple_sitemap_links_alter(array &$links, $sitemap_variant) {

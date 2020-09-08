@@ -30,3 +30,8 @@ services:
       - '@config.factory'
       - '@alshaya_acm_product_category.product_category_tree'
       - '@database'
+  alshaya_seo_transac.alshaya_sitemap_path_processor:
+    class: Drupal\alshaya_seo_transac\PathProcessor\AlshayaPathProcessorSitemapVariant
+    tags:
+      - { name: path_processor_inbound, priority: 500 }
+      - { name: path_processor_outbound, priority: 500 }
