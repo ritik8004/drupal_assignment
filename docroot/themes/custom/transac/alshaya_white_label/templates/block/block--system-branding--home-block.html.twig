@@ -35,14 +35,14 @@
 
         {# If sub brand logo available #}
         {% if sub_brand_logo_img %}
-          <a href="{{ sub_brand_logo_link }}" title="{{ site_name }}" rel="home" class="sub-brand-logo logo">
+          <a href="{{ sub_brand_logo_link }}" title="{{ 'Aerie title'|t }}" rel="home" class="sub-brand-logo logo">
             {% if mobile_site_logo %}
               <picture>
                 <source media="(max-width: 767px)" srcset="{{ sub_brand_logo_img }}">
-                <img src="{{ sub_brand_logo_img }}" alt="{{ site_name }}"/>
+                <img src="{{ sub_brand_logo_img }}" alt="{{ 'Aerie alt'|t }}"/>
               </picture>
             {% else %}
-              <img src="{{ sub_brand_logo_img }}" alt="{{ site_name }}"/>
+              <img src="{{ sub_brand_logo_img }}" alt="{{ 'Aerie alt'|t }}"/>
             {% endif %}
           </a>
         {% endif %}
