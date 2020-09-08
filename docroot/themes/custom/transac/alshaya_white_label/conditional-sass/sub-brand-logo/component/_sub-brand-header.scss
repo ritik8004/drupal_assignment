@@ -79,6 +79,12 @@ body.sub-brand-logo {
     #block-alshayareactcartminicartblock {
       @include placeMiniCart();
     }
+
+    &.frontpage {
+      #block-alshayareactcartminicartblock {
+        width: 33.33%;
+      }
+    }
   }
 
   &.frontpage .c-menu-primary .menu--mobile-navigation ul.menu {
@@ -121,6 +127,10 @@ body.sub-brand-logo {
       align-items: center;
       justify-content: flex-start;
       max-width: 50.166rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 0;
+      }
 
       @include breakpoint($only-tablet) {
         max-width: 100%;
