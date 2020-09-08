@@ -78,6 +78,12 @@ class ProductController extends ControllerBase {
 
   /**
    * Title callback for the modal.
+   *
+   * @param string $code
+   *   The SKU code or node id.
+   *
+   * @return string
+   *   The label of the node.
    */
   public function modalTitle(string $code) {
     $node = $this->getProductNode($code);
@@ -86,6 +92,15 @@ class ProductController extends ControllerBase {
 
   /**
    * Page callback for the modal.
+   *
+   * @param string $code
+   *   The SKU code or node id.
+   * @param string $js
+   *   Indicates whether request is AJAX request or not.
+   *
+   * @return array
+   *   The render array of the node if it is an AJAX request. Else redirects
+   *   users to node page.
    */
   public function modalView(string $code, $js) {
     $node = $this->getProductNode($code);
@@ -98,7 +113,6 @@ class ProductController extends ControllerBase {
     $response = new RedirectResponse(Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString());
     $response->send();
     exit;
-
   }
 
   /**
