@@ -6,11 +6,12 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  Drupal.behaviors.dynamic_yield = {
+  Drupal.behaviors.alshayaDynamicYield = {
     attach: function (context, settings) {
       // .product-quick-view-link will have to be used in the HTML for the
       // modal to open.
-      $('.product-quick-view-link').once('modal-open').click(function () {
+      $(document).once('modal-open').on('click', '.product-quick-view-link', function () {
+        // No product modals to be opened for mobile.
         if ($(window).width() < 768) {
           return;
         }
