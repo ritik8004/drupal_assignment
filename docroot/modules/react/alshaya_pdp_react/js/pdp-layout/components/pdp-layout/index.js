@@ -58,6 +58,8 @@ const PdpLayout = () => {
     relatedProducts,
     stockStatus,
     labels,
+    stockQty,
+    firstChild,
   } = productValues;
 
   const emptyRes = (
@@ -155,6 +157,8 @@ const PdpLayout = () => {
               pdpRefresh={pdpRefresh}
               pdpLabelRefresh={pdpLabelRefresh}
               childRef={(ref) => (getChildRef(ref))}
+              stockQty={stockQty}
+              firstChild={firstChild}
             />
           ) : outOfStock}
           <PdpDescription

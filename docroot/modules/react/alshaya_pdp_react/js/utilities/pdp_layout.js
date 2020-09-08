@@ -175,6 +175,8 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   let finalPrice = '';
   let pdpGallery = '';
   let labels = '';
+  let stockQty = '';
+  let firstChild = '';
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -189,6 +191,8 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     finalPrice = productInfo[skuItemCode].finalPrice;
     pdpGallery = productInfo[skuItemCode].rawGallery;
     labels = productLabels[skuItemCode];
+    stockQty = productInfo[skuItemCode].stockQty;
+    firstChild = skuItemCode;
     if (productInfo[skuItemCode].type === 'configurable') {
       configurableCombinations = drupalSettings.configurableCombinations;
       if (Object.keys(variants).length > 0) {
@@ -200,6 +204,8 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
           finalPrice = productInfo[skuItemCode].variants[variant].finalPrice;
           pdpGallery = productInfo[skuItemCode].variants[variant].rawGallery;
           labels = productLabels[variant];
+          stockQty = productInfo[skuItemCode].variants[variant].stock.qty;
+          firstChild = configurableCombinations[skuItemCode].firstChild;
         }
       }
     }
@@ -226,6 +232,8 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     relatedProducts,
     stockStatus,
     labels,
+    stockQty,
+    firstChild,
   };
 };
 

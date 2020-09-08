@@ -44,10 +44,11 @@ class SimpleProductForm extends React.Component {
   }
 
   render() {
-    const { skuCode, productInfo, pdpLabelRefresh } = this.props;
+    const {
+      skuCode, productInfo, pdpLabelRefresh, stockQty,
+    } = this.props;
     const { checkoutFeatureStatus } = drupalSettings;
     const variantSelected = skuCode;
-    const { stockQty } = productInfo[variantSelected];
 
     return (
       <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>

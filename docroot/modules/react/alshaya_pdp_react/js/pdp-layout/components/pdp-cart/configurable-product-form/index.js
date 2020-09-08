@@ -131,7 +131,7 @@ class ConfigurableProductForm extends React.Component {
   }
 
   openModal = () => {
-    document.querySelector('body').classList.add('overlay-select');
+    document.querySelector('body').classList.add('select-overlay');
   };
 
   buttonLabel = (attr) => {
@@ -153,7 +153,13 @@ class ConfigurableProductForm extends React.Component {
 
   render() {
     const {
-      configurableCombinations, skuCode, productInfo, pdpRefresh, pdpLabelRefresh,
+      configurableCombinations,
+      skuCode,
+      productInfo,
+      pdpRefresh,
+      pdpLabelRefresh,
+      stockQty,
+      firstChild,
     } = this.props;
     const { checkoutFeatureStatus } = drupalSettings;
 
@@ -163,13 +169,11 @@ class ConfigurableProductForm extends React.Component {
     const {
       nextCode, nextValues, variant, attributeAvailable,
     } = this.state;
-    const variantSelected = variant || drupalSettings.configurableCombinations[skuCode].firstChild;
+    const variantSelected = variant || firstChild;
 
     const cartUnavailability = (
       <CartUnavailability />
     );
-
-    const stockQty = productInfo[skuCode].variants[variantSelected].stock.qty;
 
     return (
       <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected} data-sku={skuCode}>

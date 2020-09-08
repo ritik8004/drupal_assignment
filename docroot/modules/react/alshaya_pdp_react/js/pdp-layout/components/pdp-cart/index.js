@@ -3,7 +3,14 @@ import ConfigurableProductForm from './configurable-product-form';
 import SimpleProductForm from './simple-product-form';
 
 const PdpCart = ({
-  configurableCombinations, skuCode, productInfo, pdpRefresh, childRef, pdpLabelRefresh,
+  configurableCombinations,
+  skuCode,
+  productInfo,
+  pdpRefresh,
+  childRef,
+  pdpLabelRefresh,
+  stockQty,
+  firstChild,
 }) => {
   const wrapper = useRef();
 
@@ -23,6 +30,8 @@ const PdpCart = ({
           productInfo={productInfo}
           pdpRefresh={pdpRefresh}
           pdpLabelRefresh={pdpLabelRefresh}
+          stockQty={stockQty}
+          firstChild={firstChild}
         />
       </div>
     );
@@ -33,6 +42,7 @@ const PdpCart = ({
         skuCode={skuCode}
         productInfo={productInfo}
         pdpLabelRefresh={pdpLabelRefresh}
+        stockQty={stockQty}
       />
     </div>
   );

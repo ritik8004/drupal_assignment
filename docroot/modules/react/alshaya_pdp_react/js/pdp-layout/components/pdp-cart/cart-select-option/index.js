@@ -105,7 +105,7 @@ class CartSelectOption extends React.Component {
 
   closeModal = (e) => {
     e.preventDefault();
-    document.querySelector('body').classList.remove('overlay-select');
+    document.querySelector('body').classList.remove('select-overlay');
   };
 
   render() {
