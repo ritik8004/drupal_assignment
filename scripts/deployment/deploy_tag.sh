@@ -4,10 +4,21 @@
 # Usage: deploy_tag.sh TAG MODE
 # Example mode updb: deploy_tag.sh 5.6.0 updb
 # Example mode hotfix: deploy_tag.sh 5.6.1 hotfix
-# Example mode hotfix: deploy_tag.sh 5.6.1 hotfix_crf
+# Example mode hotfix with crf done at the end: deploy_tag.sh 5.6.1 hotfix_crf
 
 tag="$1"
 mode="$2"
+
+if [ -z "$tag" -o -z "$mode" ]
+then
+  echo "Tag to deploy and deployment mode are required."
+  echo "Command usage: deploy_tag.sh TAG MODE"
+  echo "deploy_tag.sh 5.6.0 updb"
+  echo "deploy_tag.sh 5.6.1 hotfix"
+  echo "deploy_tag.sh 5.6.1 hotfix_crf"
+  exit
+fi
+
 stack=`whoami`
 repo="$stack@svn-25.enterprise-g1.hosting.acquia.com:$stack.git"
 
