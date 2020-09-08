@@ -11,7 +11,7 @@ use Drupal\simple_sitemap\Plugin\simple_sitemap\SitemapType\SitemapTypeBase;
  *   id = "alshaya_hreflang",
  *   label = @Translation("Default hreflang"),
  *   description = @Translation("The default hreflang sitemap type."),
- *   sitemapGenerator = "default",
+ *   sitemapGenerator = "alshaya_sitemap_generator",
  *   urlGenerators = {
  *     "custom",
  *     "entity_menu_link_content",
