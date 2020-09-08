@@ -280,10 +280,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $list_of_attributes = [
-      'attr_product_designer_collection' => 'DESIGNER COLLECTION',
-      'attr_product_collection' => 'COLLECTION',
-      'attr_product_environment' => 'ENVIRONMENT',
-      'attr_product_quality' => 'QUALITY',
       'attr_fit' => 'FIT',
       'attr_article_description' => 'ARTICLE DESCRIPTION',
     ];
