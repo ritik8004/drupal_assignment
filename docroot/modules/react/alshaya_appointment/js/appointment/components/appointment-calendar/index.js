@@ -197,7 +197,7 @@ export default class AppointmentCalendar extends React.Component {
         </span>
         <button
           type="button"
-          className="month-calendar-datepicker"
+          className={(datePickerToggle) ? 'month-calendar-datepicker active' : 'month-calendar-datepicker inactive'}
           onClick={() => this.showDatePicker()}
         >
           { moment(selectDate).format('MMMM') }
