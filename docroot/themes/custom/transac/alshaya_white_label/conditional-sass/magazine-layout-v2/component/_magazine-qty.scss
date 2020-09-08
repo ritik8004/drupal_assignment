@@ -65,6 +65,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @include breakpoint($only-tablet) {
+      padding: 0 0.875rem;
+    }
   }
 
   &-btn,
@@ -86,5 +90,9 @@
     cursor: unset;
     color: $magv2-qty-text;
     max-width: calc(100% - 5rem);
+
+    @include breakpoint($only-tablet) {
+      max-width: 100%;
+    }
   }
 }
