@@ -32,12 +32,18 @@ backup_directory="~/$AH_SITE_ENVIRONMENT/backup/pre-$tag"
 directory="~/$AH_SITE_ENVIRONMENT/repo"
 
 # Create folder and clone if not available
-if [ ! -d "$directory" ]
+if [ ! -d "$directory/$stack" ]
 then
   echo "Repo directory not available, creating and cloning. Tag $tag, Stack $stack" | tee -a ${log_file}
-  mkdir $directory
+  mkdir -p $directory
   cd $directory
   git clone $repo
+fi
+
+if [ ! -d "$directory/$stack" ]
+then
+  echo "Repo directory not available still, aborting. Tag $tag, Stack $stack" | tee -a ${log_file}
+  exit
 fi
 
 cd "$directory/$stack"
@@ -67,9 +73,6 @@ then
   drush --root=$docroot sfmlc alshaya-enable-maintenance 2>&1 | tee -a ${log_file}
   echo "Sites put offline. Tag $tag, Stack $stack" | tee -a ${log_file}
 fi
-
-# Come back to deploy directory.
-cd "$directory/$stack"
 
 # Force the push to avoid issues with previous commit history.
 git push origin main | tee -a ${log_file}
