@@ -45,7 +45,7 @@ function alshaya_furnitures_install() {
 /**
  * Implements hook_update_N().
  *
- * To fix the footer block title issue for PB/WE/PBK sites.
+ * [5.7.0] To fix the footer block title issue for PB/WE/PBK sites.
  */
 function alshaya_furnitures_update_8002() {
   // Update label for about brand block.
