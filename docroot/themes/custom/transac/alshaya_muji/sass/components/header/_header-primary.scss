@@ -729,9 +729,7 @@ header {
 
       &:hover {
         & > ul.menu--two__list {
-          border-bottom: 2px solid $mm_l1_border;
           transform: none;
-          border-top: 1px solid $mm_l1_border;
 
           &::after {
             content: '';
@@ -751,7 +749,8 @@ header {
         display: block;
         overflow: hidden;
         transform: none;
-        border-top: none;
+        border-top: 1px solid $mm_l1_border;
+        border-bottom: 2px solid $mm_l1_border;
       }
     }
   }
@@ -801,6 +800,10 @@ header {
   .highlights {
     .highlighted {
       margin: 0 0.625rem;
+    }
+
+    img {
+      padding-bottom: 1rem;
     }
   }
 

@@ -275,7 +275,11 @@
           });
         }
       }
-      setMenuHeight();
+
+      setTimeout(function() {
+        setMenuHeight();
+      }, 500);
+
       $(window).resize(debounce(function () {
         setMenuHeight();
       }, 250));
