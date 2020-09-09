@@ -1,0 +1,281 @@
+/**
+ * This is only themed for American Eagle brand with Aerie logo in header.
+ */
+$header-height: 5.4375rem;
+
+@mixin resetMenuStyles() {
+  position: absolute;
+  top: 2.9375rem;
+  width: 75%;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    width: 33.33%;
+    height: 2.5rem;
+
+    a {
+      position: relative;
+      #{$left}: unset;
+      #{$right}: unset;
+      top: 0;
+      padding: 0;
+      margin: 0;
+
+      &::before {
+        margin: 0;
+        padding: 0;
+        #{$left}: unset;
+        #{$right}: unset;
+        top: 0;
+      }
+    }
+  }
+}
+
+@mixin placeMiniCart() {
+  position: absolute;
+  top: 2.75rem;
+  width: 25%;
+  #{$right}: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+}
+
+@mixin aerieSeparator() {
+  &::before {
+    content: '';
+    background: $sub_brand_logo_separator;
+    width: 1px;
+    height: 1.625rem;
+    display: inline-block;
+    position: absolute;
+    #{$left}: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+body.sub-brand-logo {
+  @include breakpoint($only-mobile) {
+    &:not(.no-sticky-algolia-search-bar):not(.alias--cart-login) {
+      margin-top: $header-height + 3.75rem;
+    }
+
+    .branding__menu {
+      height: $header-height;
+      box-shadow: none;
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      top: $header-height;
+    }
+
+    #block-alshayareactcartminicartblock {
+      @include placeMiniCart();
+    }
+
+    &.frontpage {
+      #block-alshayareactcartminicartblock {
+        width: 33.33%;
+      }
+    }
+
+    .c-header__region {
+      height: 3rem !important;
+      border-bottom: 1px solid $header_border;
+
+      .region__header {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  &.frontpage .c-menu-primary .menu--mobile-navigation ul.menu {
+    @include breakpoint($only-mobile) {
+      @include resetMenuStyles();
+
+      width: 66.66%;
+
+      li {
+        width: 50%;
+        // Hide the search icon li, icon is already hidden from CORE.
+        &:nth-child(2) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  // Not front page.
+  &:not(.frontpage) {
+    @include breakpoint($only-mobile) {
+      .menu--mobile-navigation ul {
+        @include resetMenuStyles();
+      }
+
+      &:not(.alias--cart-login) {
+        margin-top: $header-height;
+      }
+
+      .c-menu-primary .menu--mobile-navigation ul.menu {
+        @include resetMenuStyles();
+      }
+    }
+  }
+
+  .block-system-branding-block,
+  .site-brand-wrapper {
+    .site-brand-home {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      max-width: 50.166rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 0;
+      }
+
+      @include breakpoint($only-tablet) {
+        max-width: 100%;
+        justify-content: center;
+        height: 3.125rem;
+
+        .logo:first-child {
+          margin-#{$right}: 1.75rem;
+          margin-#{$left}: 0;
+          margin-top: 0;
+        }
+      }
+
+      a.logo {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 0;
+        margin-bottom: 0;
+
+        img {
+          html[lang=ar] & {
+            margin-right: 0;
+          }
+        }
+      }
+
+      .logo:first-child {
+        max-width: 10.25rem;
+        margin-#{$right}: 1.75rem;
+      }
+
+      .sub-brand-logo {
+        padding-#{$left}: 1.75rem;
+        position: relative;
+        margin-#{$left}: 0;
+        margin-top: 0;
+
+        @include breakpoint($only-tablet) {
+          max-width: 5.0625rem;
+          margin: 0;
+
+          img {
+            width: 100% !important;
+          }
+        }
+
+        @include aerieSeparator();
+
+        @include breakpoint($desktop) {
+          max-width: 5.0625rem;
+        }
+      }
+    }
+  }
+
+  &.alias--cart-login {
+    html[lang=ar] & {
+      margin-top: 0;
+
+      .site-brand-wrapper {
+        @include breakpoint($desktop) {
+          height: 7rem;
+        }
+      }
+    }
+  }
+
+  &.alias--cart-login,
+  &.alias--checkout,
+  &.alias--checkout-confirmation {
+    .site-brand-wrapper {
+      @include breakpoint($only-tablet) {
+        height: 6.1875rem;
+
+        .site-brand-home {
+          height: 100%;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        .logo:not(.sub-brand-logo) {
+          html[lang=ar] & {
+            max-width: 7.5rem;
+          }
+        }
+      }
+    }
+  }
+
+  &.alias--checkout,
+  &.alias--checkout-confirmation {
+    .site-brand-wrapper .site-brand-home {
+      max-width: none;
+      justify-content: center;
+    }
+  }
+
+  .filter-fixed-top .sticky-filter-wrapper {
+    .site-brand-home {
+      @include breakpoint($tablet) {
+        display: flex;
+        align-items: center;
+
+        .sub-brand-logo {
+          width: 3rem;
+          margin-#{$left}: 0.625rem;
+          padding-#{$left}: 0.625rem;
+          position: relative;
+
+          @include aerieSeparator();
+        }
+
+        a.logo {
+          html[lang=ar] & {
+            margin-top: 0;
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+
+  html[lang=ar] & {
+    .site-brand-home {
+      margin-right: 0;
+
+      .sub-brand-logo img {
+        width: 100%;
+      }
+    }
+  }
+}
