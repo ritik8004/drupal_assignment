@@ -5,32 +5,32 @@
  * The module file for alshaya_furnitures.
  */
 
- /**
-  * Implements hook_install().
-  */
- function alshaya_furnitures_install() {
-   // Update label for about brand block.
-   \Drupal::configFactory()->getEditable('block.block.aboutbrand')
-     ->set('settings.label', 'Why West Elm?')
-     ->save();
+/**
+ * Implements hook_install().
+ */
+function alshaya_furnitures_install() {
+  // Update label for about brand block.
+  \Drupal::configFactory()->getEditable('block.block.aboutbrand')
+    ->set('settings.label', 'Why West Elm?')
+    ->save();
 
-   // Update label translation for about brand block.
-   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.aboutbrand')
-         ->set('settings.label', 'لماذا وست إلم؟')
-         ->save();
+  // Update label translation for about brand block.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.aboutbrand')
+    ->set('settings.label', 'لماذا وست إلم؟')
+    ->save();
 
-   // Update label for help block.
-   \Drupal::configFactory()->getEditable('block.block.alshaya_help')
-     ->set('region', 'footer_primary')
-     ->set('settings.label', 'Customer care')
-     ->save();
+  // Update label for help block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_help')
+    ->set('region', 'footer_primary')
+    ->set('settings.label', 'Customer care')
+    ->save();
 
-   // Update label for newsletters block.
-   \Drupal::configFactory()->getEditable('block.block.alshayanewslettersubscription')
-     ->set('settings.label', 'Connect with us')
-     ->set('settings.label_display', 'visible')
-     ->save();
- }
+  // Update label for newsletters block.
+  \Drupal::configFactory()->getEditable('block.block.alshayanewslettersubscription')
+    ->set('settings.label', 'Connect with us')
+    ->set('settings.label_display', 'visible')
+    ->save();
+}
 
 /**
  * Implements hook_update_N().
@@ -56,10 +56,10 @@ function alshaya_furnitures_update_8002() {
     ->set('settings.label', 'Why West Elm?')
     ->save();
 
-   // Update label translation for about brand block.
-   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.aboutbrand')
-          ->set('settings.label', 'لماذا وست إلم؟')
-          ->save();
+  // Update label translation for about brand block.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.aboutbrand')
+    ->set('settings.label', 'لماذا وست إلم؟')
+    ->save();
 
   // Update label for help block.
   \Drupal::configFactory()->getEditable('block.block.alshaya_help')
