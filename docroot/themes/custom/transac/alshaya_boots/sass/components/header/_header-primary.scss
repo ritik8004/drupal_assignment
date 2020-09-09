@@ -464,3 +464,14 @@ header {
     }
   }
 }
+
+.site-brand-home {
+  a {
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        height: 2.875rem;
+        margin: 0;
+      }
+    }
+  }
+}

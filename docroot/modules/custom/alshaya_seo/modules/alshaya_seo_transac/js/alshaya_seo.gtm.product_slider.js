@@ -25,9 +25,13 @@
 
   Drupal.behaviors.seoGoogleTagManagerProductSliderList = {
     attach: function (context, settings) {
-      $(window).once('product-carousel-scroll').on('scroll', debounce(function (event) {
+      $(window).once('product-carousel-scroll').on('scroll touchmove', debounce(function (event) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_carousel_product_impression, $('.view-product-slider'), settings, event);
       }, 500));
+
+      $(window).once('product-carousel-pagehide').on('pagehide', function (event) {
+        Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_carousel_product_impression, $('.view-product-slider'), settings, event);
+      });
 
       $(document).once('product-slider-prev-next').on('click', '.view-product-slider .slick-prev, .view-product-slider .slick-next', function (event) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_carousel_product_impression, $('.view-product-slider'), settings, event);

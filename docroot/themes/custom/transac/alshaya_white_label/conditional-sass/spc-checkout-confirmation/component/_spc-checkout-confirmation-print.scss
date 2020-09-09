@@ -183,5 +183,18 @@
         }
       }
     }
+
+    .spc-print-header--logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img.sub-brand-logo {
+        max-width: 3.9375rem;
+        border-#{$left}: 1px solid $sub_brand_logo_separator;
+        padding-#{$left}: 1.25rem;
+        margin-#{$left}: 1.25rem;
+      }
+    }
   }
 }
