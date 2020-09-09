@@ -18,7 +18,7 @@
     });
   };
 
-  document.addEventListener('appointmentBookingSteps', (e) => {
+  document.addEventListener('appointmentBookingSteps', function (e) {
     Drupal.alshaya_seo_gtm_push_appointment_booking({
       'eventAction': e.detail.stepValue,
     });
