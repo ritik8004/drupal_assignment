@@ -596,6 +596,15 @@ class AlshayaPromoLabelManager {
 
       return $apiPromotions;
     }
+    elseif ($view_mode === 'free_gift') {
+      $free_promotion = [];
+
+      if (!empty($free_gift_promotions)) {
+        $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions);
+      }
+
+      return $free_promotion;
+    }
 
     if (!empty($generic_promotions)) {
       $build['promotions'] = [
@@ -605,21 +614,7 @@ class AlshayaPromoLabelManager {
 
     // Process free gift promotions only for full view mode.
     if (in_array($view_mode, ['full']) && !empty($free_gift_promotions)) {
-      // For free gift promotions, the promo needs to be rendered in a
-      // different way.
-      foreach ($free_gift_promotions as $promotion_id => $free_gift_promotion) {
-        $free_skus = $this->promoManager->getFreeGiftSkuEntitiesByPromotionId((int) $promotion_id);
-
-        // No free gift available for the promotion, return early.
-        if (empty($free_skus)) {
-          continue;
-        }
-
-        $build['free_gift_promotions'] = $this->getFreeGiftDisplay($promotion_id, $free_gift_promotion, $free_skus);
-
-        // We support displaying only one free gift promotion for now.
-        break;
-      }
+      $build['free_gift_promotions'] = $this->getFreeGiftPromotionData($free_gift_promotions);
     }
 
     // If promotions are eligible for dynamic promo label.
@@ -817,6 +812,35 @@ class AlshayaPromoLabelManager {
     // Remove extra spaces from beginning/end/middle of string which
     // appear due to removal of html tags.
     return preg_replace(['/^\s+/', '/\s+$/', '/\s+/u'], ['', '', ' '], $amount);
+  }
+
+  /**
+   * Get free gift promotion data from available promotions.
+   *
+   * @param array $free_gift_promotions
+   *   Free Gift promotions.
+   *
+   * @return array
+   *   Promotion data for first available free gift promotion.
+   */
+  private function getFreeGiftPromotionData(array $free_gift_promotions) {
+    // For free gift promotions, the promo needs to be rendered in a
+    // different way.
+    foreach ($free_gift_promotions as $promotion_id => $free_gift_promotion) {
+      $free_skus = $this->promoManager->getFreeGiftSkuEntitiesByPromotionId((int) $promotion_id);
+
+      // No free gift available for the promotion, return early.
+      if (empty($free_skus)) {
+        continue;
+      }
+
+      $data = $this->getFreeGiftDisplay($promotion_id, $free_gift_promotion, $free_skus);
+
+      // We support displaying only one free gift promotion for now.
+      break;
+    }
+
+    return $data ?? [];
   }
 
 }
