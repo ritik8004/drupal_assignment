@@ -198,10 +198,11 @@ function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rou
       $category_links[] = Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]);
     }
 
-    $breadcrumb_links = array_merge($breadcrumb_links, array_reverse($category_links));
-
-    // Setting breadcrumb links for category term pages.
-    $breadcrumb = _alshaya_bp_transac_set_breadcrumb_links($breadcrumb_links);
+    if (!empty($category_links)) {
+      $breadcrumb_links = array_merge($breadcrumb_links, array_reverse($category_links));
+      // Setting breadcrumb links for category term pages.
+      $breadcrumb = _alshaya_bp_transac_set_breadcrumb_links($breadcrumb_links);
+    }
   }
 }
 
