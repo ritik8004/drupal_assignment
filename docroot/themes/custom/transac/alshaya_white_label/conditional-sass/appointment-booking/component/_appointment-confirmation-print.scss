@@ -1,61 +1,58 @@
-.appointment-confirmation-print-content {
-  .appointment-confirmation-print-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 3.75rem;
-
-    img {
-      max-width: 10rem;
-    }
+@media print {
+  img {
+    display: none;
   }
 
-  .appointment-confirmation-print-body {
-    padding: 0 3.5rem;
+  .appointment-confirmation-print-content {
+    .appointment-confirmation-print-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3.75rem;
 
-    .inner-header {
-      border-bottom: 0.0625rem solid $appointment-confirmation-grey-border;
-      padding-bottom: 0.3125rem;
-
-      label {
-        font-size: 1.125rem;
-        line-height: 1.22;
-        color: $appointment-confirmation-blue-txt;
-        font-family: $alshaya-bold;
+      img {
+        max-width: 10rem;
+        display: block;
       }
     }
 
-    .confirmation-item {
-      padding-top: 1.875rem;
-      display: grid;
-      grid-template-columns: 13.5rem 1fr;
+    .appointment-confirmation-print-body {
+      padding: 0 3.5rem;
 
-      body.ie & {
-        display: -ms-grid;
-        -ms-grid-columns: 13.5rem 1fr;
-      }
+      .inner-header {
+        border-bottom: 0.0625rem solid $appointment-confirmation-grey-border;
+        padding-bottom: 0.3125rem;
 
-      label {
-        font-size: 0.875rem;
-        color: $appointment-confirmation-blue-txt;
-        font-family: $alshaya-bold;
-        display: inline-block;
-
-        body.ie & {
-          -ms-grid-row: 1;
-          -ms-grid-column: 1;
+        label {
+          font-size: 1.125rem;
+          line-height: 1.22;
+          color: $appointment-confirmation-blue-txt;
+          font-family: $alshaya-bold;
         }
       }
 
-      span {
-        font-size: 0.875rem;
-        color: $appointment-confirmation-txt;
-        font-family: $alshaya-thin;
+      .confirmation-item {
+        td {
+          padding-top: 1.875rem;
+          vertical-align: top;
 
-        body.ie & {
-          -ms-grid-row: 1;
-          -ms-grid-column: 2;
+          &.label-wrapper {
+            min-width: 165px;
+          }
+        }
+
+        label {
+          font-size: 0.875rem;
+          color: $appointment-confirmation-blue-txt;
+          font-family: $alshaya-bold;
           display: inline-block;
+          padding-right: 0.625rem;
+        }
+
+        span {
+          font-size: 0.875rem;
+          color: $appointment-confirmation-txt;
+          font-family: $alshaya-thin;
         }
       }
     }

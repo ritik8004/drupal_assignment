@@ -83,19 +83,36 @@
           padding-top: 1.25rem;
         }
 
+        @include breakpoint($only-mobile) {
+          grid-template-columns: 10.5rem 1fr;
+        }
+
+        td {
+          &.label-wrapper {
+            display: inline-block;
+
+            body.ie & {
+              -ms-grid-row: 1;
+              -ms-grid-column: 1;
+            }
+          }
+
+          &.value-wrapper {
+            body.ie & {
+              -ms-grid-row: 1;
+              -ms-grid-column: 2;
+              display: inline-block;
+            }
+          }
+        }
+
         label {
           font-size: 0.875rem;
           color: $appointment-confirmation-blue-txt;
           font-family: $alshaya-bold;
-          display: inline-block;
 
           @include breakpoint($upto-tablet-landscape) {
             display: block;
-          }
-
-          body.ie & {
-            -ms-grid-row: 1;
-            -ms-grid-column: 1;
           }
         }
 
@@ -103,12 +120,6 @@
           font-size: 0.875rem;
           color: $appointment-confirmation-txt;
           font-family: $alshaya-thin;
-
-          body.ie & {
-            -ms-grid-row: 1;
-            -ms-grid-column: 2;
-            display: inline-block;
-          }
         }
       }
 
