@@ -331,13 +331,22 @@ class Cart {
 
     try {
       $cart_id = (int) $this->magentoApiWrapper->doRequest('POST', $url);
+
+      // Store cart id in session.
       $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, $cart_id);
+
+      $this->logger->notice('New cart created: @cart_id, customer_id: @customer_id', [
+        '@cart_id' => $cart_id,
+        '@customer_id' => $customer_id,
+      ]);
+
       return $cart_id;
     }
     catch (\Exception $e) {
       $this->logger->error('Error while creating cart on MDC. Error message: @message', [
         '@message' => $e->getMessage(),
       ]);
+
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
