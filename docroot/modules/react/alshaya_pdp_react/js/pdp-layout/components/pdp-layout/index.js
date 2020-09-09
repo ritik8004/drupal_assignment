@@ -11,6 +11,7 @@ import PdpClickCollect from '../pdp-click-and-collect';
 import PdpRelatedProducts from '../pdp-related-products';
 import PdpProductLabels from '../pdp-product-labels';
 import PdpPromotionLabel from '../pdp-promotion-label';
+import PdpFreeGift from '../pdp-free-gift';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -50,6 +51,9 @@ const PdpLayout = () => {
     configurableCombinations,
     relatedProducts,
     stockStatus,
+    freeGiftImage,
+    freeGiftTitle,
+    freeGiftPromoCode,
   } = productValues;
 
   const emptyRes = (
@@ -121,6 +125,13 @@ const PdpLayout = () => {
               cartDataValue={cartDataValue}
             />
           </div>
+          {freeGiftTitle ? (
+            <PdpFreeGift
+              freeGiftImage={freeGiftImage}
+              freeGiftTitle={freeGiftTitle}
+              freeGiftPromoCode={freeGiftPromoCode}
+            />
+          ) : null}
           {stockStatus ? (
             <PdpCart
               skuCode={skuItemCode}
