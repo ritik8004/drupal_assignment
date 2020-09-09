@@ -1,13 +1,14 @@
 /**
  * This is only themed for American Eagle brand with Aerie logo in header.
  */
-$header-height: 5.4375rem;
+$row-height: 3.5625rem;
+$header-height: 7.125rem;
 
 @mixin resetMenuStyles() {
   position: absolute;
-  top: 2.9375rem;
+  top: $row-height;
   width: 75%;
-  height: 2.5rem;
+  height: $row-height;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,7 +19,7 @@ $header-height: 5.4375rem;
     justify-content: center;
     border: none;
     width: 33.33%;
-    height: 2.5rem;
+    height: $row-height;
 
     a {
       position: relative;
@@ -41,13 +42,17 @@ $header-height: 5.4375rem;
 
 @mixin placeMiniCart() {
   position: absolute;
-  top: 2.75rem;
+  top: $row-height;
   width: 25%;
   #{$right}: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 2.5rem;
+  height: $row-height;
+
+  #mini-cart-wrapper {
+    height: 100%;
+  }
 }
 
 @mixin aerieSeparator() {
@@ -70,6 +75,10 @@ body.sub-brand-logo {
       margin-top: $header-height + 3.75rem;
     }
 
+    #cart_notification {
+      #{$right}: 1.4375rem;
+    }
+
     .branding__menu {
       height: $header-height;
       box-shadow: none;
@@ -90,8 +99,8 @@ body.sub-brand-logo {
     }
 
     .c-header__region {
-      height: 3rem !important;
-      border-bottom: 1px solid $header_border;
+      height: $row-height !important;
+      border-bottom: 1px solid $sub_brand_logo_header_border;
 
       .region__header {
         display: flex;
@@ -227,6 +236,8 @@ body.sub-brand-logo {
       }
 
       @include breakpoint($only-mobile) {
+        height: $row-height;
+
         .logo:not(.sub-brand-logo) {
           html[lang=ar] & {
             max-width: 7.5rem;
