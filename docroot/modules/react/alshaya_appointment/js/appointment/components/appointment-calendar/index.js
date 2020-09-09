@@ -10,6 +10,7 @@ import { showFullScreenLoader } from '../../../../../js/utilities/showRemoveFull
 import getStringMessage from '../../../../../js/utilities/strings';
 import en from '../../../../../node_modules/date-fns/locale/en-US';
 import ar from '../../../../../node_modules/date-fns/locale/ar-SA';
+import { smoothScrollToCurrentDate } from '../../../../../js/utilities/smoothScroll';
 
 const momentRange = extendMoment(moment);
 
@@ -117,6 +118,8 @@ export default class AppointmentCalendar extends React.Component {
       week: this.getWeekDates(new Date(date), 'next'),
       previousDisabled: false,
       setOpenDate: new Date(date),
+    }, () => {
+      smoothScrollToCurrentDate();
     });
     this.hideDatePicker();
   };
@@ -205,19 +208,21 @@ export default class AppointmentCalendar extends React.Component {
 
     return (
       <>
-        <span className="month-calendar-sides previous">
-          { moment(setOpenDate).subtract('1', 'month').format('MMMM') }
-        </span>
-        <button
-          type="button"
-          className={(datePickerToggle) ? 'month-calendar-datepicker active' : 'month-calendar-datepicker inactive'}
-          onClick={() => this.showDatePicker()}
-        >
-          { moment(setOpenDate).format('MMMM') }
-        </button>
-        <span className="month-calendar-sides next">
-          { moment(setOpenDate).add('1', 'month').format('MMMM') }
-        </span>
+        <div className="appointment-datepicker__header">
+          <span className="month-calendar-sides previous">
+            { moment(setOpenDate).subtract('1', 'month').format('MMMM') }
+          </span>
+          <button
+            type="button"
+            className={(datePickerToggle) ? 'month-calendar-datepicker active' : 'month-calendar-datepicker inactive'}
+            onClick={() => this.showDatePicker()}
+          >
+            { moment(setOpenDate).format('MMMM') }
+          </button>
+          <span className="month-calendar-sides next">
+            { moment(setOpenDate).add('1', 'month').format('MMMM') }
+          </span>
+        </div>
         { datePickerToggle
           && (
           <Swipeable
@@ -238,7 +243,7 @@ export default class AppointmentCalendar extends React.Component {
             </div>
           </Swipeable>
           )}
-        <ConditionalView condition={window.innerWidth > 1023}>
+        <ConditionalView condition={window.innerWidth > 767}>
           { !datePickerToggle
             && (
             <div className="appointment-calendar daypicker-desktop">
@@ -257,7 +262,7 @@ export default class AppointmentCalendar extends React.Component {
             </div>
             )}
         </ConditionalView>
-        <ConditionalView condition={window.innerWidth < 1024}>
+        <ConditionalView condition={window.innerWidth < 768}>
           { !datePickerToggle
           && (
           <div className="appointment-calendar daypicker-mobile">

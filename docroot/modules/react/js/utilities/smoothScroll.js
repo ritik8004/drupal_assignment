@@ -64,3 +64,21 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
     behavior: 'smooth',
   });
 };
+
+/**
+ * Smooth Scroll to active date in the mini calendar for mobile.
+ */
+export const smoothScrollToCurrentDate = () => {
+  let element = document.querySelector('.daypicker-mobile .date-item.active');
+  let elementParent = document.querySelector('.daypicker-mobile .calendar-wrapper');
+
+  if(element !== undefined && element !== null && elementParent !== undefined && elementParent !== null && window.innerWidth < 768) {
+    let elementLeftOffset = element.offsetLeft;
+    let elementTopOffset = element.offsetTop;
+    elementParent.scrollBy({
+      top: elementTopOffset,
+      left: elementLeftOffset,
+      behavior: 'smooth',
+    });
+  }  
+};
