@@ -6,9 +6,11 @@
  */
 
 /**
- * Implements hook_install().
+ * Implements hook_update_N().
+ *
+ * [5.7.0] To fix the footer block title issue for PB/WE/PBK sites.
  */
-function alshaya_furnitures_install() {
+function alshaya_furnitures_update_8002() {
   // Update label for about brand block.
   \Drupal::configFactory()->getEditable('block.block.aboutbrand')
     ->set('settings.label', 'Why West Elm?')
@@ -46,11 +48,9 @@ function alshaya_furnitures_update_8001() {
 }
 
 /**
- * Implements hook_update_N().
- *
- * [5.7.0] To fix the footer block title issue for PB/WE/PBK sites.
+ * Implements hook_install().
  */
-function alshaya_furnitures_update_8002() {
+function alshaya_furnitures_install() {
   // Update label for about brand block.
   \Drupal::configFactory()->getEditable('block.block.aboutbrand')
     ->set('settings.label', 'Why West Elm?')
