@@ -37,6 +37,7 @@ export default class AppointmentCalendar extends React.Component {
     this.setState({
       week,
       previousDisabled: false,
+      setOpenDate: new Date(date),
     });
   }
 
@@ -45,6 +46,7 @@ export default class AppointmentCalendar extends React.Component {
     const week = this.getWeekDates(new Date(prevDate), 'prev');
     this.setState({
       week,
+      setOpenDate: new Date(date),
     });
   }
 
@@ -116,7 +118,7 @@ export default class AppointmentCalendar extends React.Component {
       previousDisabled: false,
       setOpenDate: new Date(date),
     });
-    this.showDatePicker();
+    this.hideDatePicker();
   };
 
   /**
@@ -124,13 +126,18 @@ export default class AppointmentCalendar extends React.Component {
    */
   showDatePicker = () => {
     const { datePickerToggle } = this.state;
+    if (!datePickerToggle) {
+      this.setState({
+        datePickerToggle: true,
+      });
+    }
+  };
+
+  hideDatePicker = () => {
+    const { datePickerToggle } = this.state;
     if (datePickerToggle) {
       this.setState({
         datePickerToggle: false,
-      });
-    } else {
-      this.setState({
-        datePickerToggle: true,
       });
     }
   };
@@ -146,6 +153,12 @@ export default class AppointmentCalendar extends React.Component {
     const { setOpenDate } = this.state;
     this.setState({
       setOpenDate: new Date(moment(setOpenDate).subtract(1, 'month').format('MMMM YYYY')),
+    });
+  };
+
+  handleMonthChange = (monthBeingViewed) => {
+    this.setState({
+      setOpenDate: new Date(moment(monthBeingViewed).format('MMMM YYYY')),
     });
   };
 
@@ -193,17 +206,17 @@ export default class AppointmentCalendar extends React.Component {
     return (
       <>
         <span className="month-calendar-sides previous">
-          { moment(selectDate).subtract('1', 'month').format('MMMM') }
+          { moment(setOpenDate).subtract('1', 'month').format('MMMM') }
         </span>
         <button
           type="button"
           className={(datePickerToggle) ? 'month-calendar-datepicker active' : 'month-calendar-datepicker inactive'}
           onClick={() => this.showDatePicker()}
         >
-          { moment(selectDate).format('MMMM') }
+          { moment(setOpenDate).format('MMMM') }
         </button>
         <span className="month-calendar-sides next">
-          { moment(selectDate).add('1', 'month').format('MMMM') }
+          { moment(setOpenDate).add('1', 'month').format('MMMM') }
         </span>
         { datePickerToggle
           && (
@@ -220,6 +233,7 @@ export default class AppointmentCalendar extends React.Component {
                 locale={(drupalSettings.path.currentLanguage !== 'en') ? 'ar' : 'en'}
                 openToDate={setOpenDate}
                 useWeekdaysShort
+                onMonthChange={this.handleMonthChange}
               />
             </div>
           </Swipeable>
