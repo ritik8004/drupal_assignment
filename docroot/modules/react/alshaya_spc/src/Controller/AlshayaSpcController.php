@@ -593,6 +593,7 @@ class AlshayaSpcController extends ControllerBase {
     $settings = [
       'site_details' => [
         'logo' => alshaya_master_get_email_logo(NULL, $langcode),
+        'sub_brand_logo' => _alshaya_master_get_subbrand_logo_image_link(),
         'customer_service_text' => $checkout_settings->get('checkout_customer_service'),
       ],
       'order_details' => [
