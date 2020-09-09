@@ -17,3 +17,51 @@ function alshaya_furnitures_update_8001() {
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
 }
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_furnitures_install() {
+
+  // Update label for about brand block.
+  \Drupal::configFactory()->getEditable('block.block.aboutbrand')
+    ->set('settings.label', 'Why West Elm?')
+    ->save();
+
+  // Update label for help block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_help')
+    ->set('region', 'footer_primary')
+    ->set('settings.label', 'Costomer care')
+    ->save();
+
+  // Update label for newsletters block.
+  \Drupal::configFactory()->getEditable('block.block.alshayanewslettersubscription')
+    ->set('settings.label', 'Connect with us')
+    ->set('settings.label_display', 'visible')
+    ->save();
+
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * To fix the footer block title issue for PB/WE/PBK sites.
+ */
+function alshaya_furnitures_update_8002() {
+  // Update label for about brand block.
+  \Drupal::configFactory()->getEditable('block.block.aboutbrand')
+    ->set('settings.label', 'Why West Elm?')
+    ->save();
+
+  // Update label for help block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_help')
+    ->set('region', 'footer_primary')
+    ->set('settings.label', 'Costomer care')
+    ->save();
+
+  // Update label for newsletters block.
+  \Drupal::configFactory()->getEditable('block.block.alshayanewslettersubscription')
+    ->set('settings.label', 'Connect with us')
+    ->set('settings.label_display', 'visible')
+    ->save();
+}
