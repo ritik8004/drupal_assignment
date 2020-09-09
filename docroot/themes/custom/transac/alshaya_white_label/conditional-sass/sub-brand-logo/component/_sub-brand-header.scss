@@ -56,6 +56,8 @@ $header-height: 7.125rem;
 }
 
 @mixin aerieSeparator() {
+  margin-top: -7px !important;
+
   &::before {
     content: '';
     background: $sub_brand_logo_separator;
@@ -64,7 +66,12 @@ $header-height: 7.125rem;
     display: inline-block;
     position: absolute;
     #{$left}: 0;
-    top: 50%;
+    top: 66%;
+
+    @include breakpoint($tablet) {
+      top: 60%;
+    }
+
     transform: translateY(-50%);
   }
 }
@@ -138,8 +145,17 @@ body.sub-brand-logo {
         margin-top: $header-height;
       }
 
-      .c-menu-primary .menu--mobile-navigation ul.menu {
-        @include resetMenuStyles();
+      .c-menu-primary .menu--mobile-navigation {
+        position: fixed;
+        top: $row-height;
+        width: 75%;
+
+        ul.menu {
+          @include resetMenuStyles();
+
+          top: 0;
+          width: 100%;
+        }
       }
     }
   }
