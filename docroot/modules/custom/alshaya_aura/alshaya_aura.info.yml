@@ -1,6 +1,6 @@
 name: 'Alshaya Aura'
 type: module
-description: 'Module to enable Alshaya Aura feature for different brands.'
+description: 'Module to enable AURA Loyalty feature of Alshaya.'
 package: 'Alshaya'
 core: 8.x
 dependencies:
