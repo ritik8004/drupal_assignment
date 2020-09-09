@@ -276,7 +276,7 @@
         }
       }
 
-      setTimeout(function() {
+      setTimeout(function () {
         setMenuHeight();
       }, 500);
 
