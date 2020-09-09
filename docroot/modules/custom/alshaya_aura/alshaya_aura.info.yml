@@ -1,0 +1,7 @@
+name: 'Alshaya Aura'
+type: module
+description: 'Module to enable Alshaya Aura feature for different brands.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_api:alshaya_api
