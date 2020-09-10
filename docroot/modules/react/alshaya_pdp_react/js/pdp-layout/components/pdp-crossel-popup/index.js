@@ -17,6 +17,7 @@ class CrossellPopupContent extends React.Component {
       relatedProductData: null,
       variantSelected: relatedSku,
       cartDataValue: cartData,
+      skuMainCode: relatedSku,
     };
   }
 
@@ -93,6 +94,7 @@ class CrossellPopupContent extends React.Component {
         stockQty = relatedProductData.variants[variantSelected].stock;
         firstChild = configurableCombinations[relatedSku].firstChild;
         promotions = relatedProductData.variants[variantSelected].promotionsRaw;
+        pdpGallery = relatedProductData.variants[variantSelected].media[0].media;
       }
     }
 
@@ -146,6 +148,7 @@ class CrossellPopupContent extends React.Component {
                 context="related"
                 pdpRefresh={this.pdpRelatedRefresh}
                 pdpLabelRefresh={this.pdpRelatedLabelRefresh}
+                closeModal={closeModal}
               />
             ) : outOfStock}
             {(relatedProductData.link)

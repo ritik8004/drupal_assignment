@@ -55,6 +55,8 @@ export const triggerAddToCart = (
   skuCode,
   addToCartBtn,
   pdpLabelRefresh,
+  context,
+  closeModal,
 ) => {
   const productData = productDataValue;
   const cartBtn = addToCartBtn;
@@ -147,6 +149,11 @@ export const triggerAddToCart = (
     }
 
     const { addToCartNotificationTime } = drupalSettings;
+
+    // Close CS/US modal on add to cart success.
+    if (context === 'related') {
+      closeModal();
+    }
 
     // Removing the success button after 2 seconds.
     setTimeout(() => {
@@ -267,6 +274,7 @@ export const addToCartConfigurable = (
   productInfo,
   pdpLabelRefresh,
   context,
+  closeModal,
 ) => {
   e.preventDefault();
   // Adding add to cart loading.
@@ -310,6 +318,8 @@ export const addToCartConfigurable = (
         skuCode,
         addToCartBtn,
         pdpLabelRefresh,
+        context,
+        closeModal,
       );
     },
   )
@@ -321,7 +331,15 @@ export const addToCartConfigurable = (
 /**
  * Add to cart on click event for simple products.
  */
-export const addToCartSimple = (e, id, skuCode, productInfo, pdpLabelRefresh, context) => {
+export const addToCartSimple = (
+  e,
+  id,
+  skuCode,
+  productInfo,
+  pdpLabelRefresh,
+  context,
+  closeModal,
+) => {
   e.preventDefault();
   // Adding add to cart loading.
   const addToCartBtn = document.getElementById(id);
@@ -351,6 +369,8 @@ export const addToCartSimple = (e, id, skuCode, productInfo, pdpLabelRefresh, co
         skuCode,
         addToCartBtn,
         pdpLabelRefresh,
+        context,
+        closeModal,
       );
     },
   )

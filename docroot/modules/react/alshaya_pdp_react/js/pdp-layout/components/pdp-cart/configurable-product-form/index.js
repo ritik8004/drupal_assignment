@@ -12,7 +12,6 @@ class ConfigurableProductForm extends React.Component {
       nextCode: null,
       nextValues: null,
       attributeAvailable: false,
-
     };
 
     this.button = createRef();
@@ -32,7 +31,10 @@ class ConfigurableProductForm extends React.Component {
       });
 
       window.addEventListener('scroll', () => {
-        const buttonOffset = this.button.current.getAttribute('data-top-offset');
+        let buttonOffset = null;
+        if (!(this.button.current === null)) {
+          buttonOffset = this.button.current.getAttribute('data-top-offset');
+        }
 
         if (buttonOffset === null) {
           return;
@@ -163,6 +165,7 @@ class ConfigurableProductForm extends React.Component {
       stockQty,
       firstChild,
       context,
+      closeModal,
     } = this.props;
     const { checkoutFeatureStatus } = drupalSettings;
 
@@ -241,6 +244,7 @@ class ConfigurableProductForm extends React.Component {
                   productInfo,
                   pdpLabelRefresh,
                   context,
+                  closeModal,
                 )}
               >
                 {Drupal.t('Add To Bag')}

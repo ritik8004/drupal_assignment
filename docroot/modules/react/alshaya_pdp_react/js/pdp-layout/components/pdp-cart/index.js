@@ -12,6 +12,7 @@ const PdpCart = ({
   stockQty,
   firstChild,
   context,
+  closeModal,
 }) => {
   const wrapper = useRef();
 
@@ -34,6 +35,7 @@ const PdpCart = ({
           stockQty={stockQty}
           firstChild={firstChild}
           context={context}
+          closeModal={closeModal}
         />
       </div>
     );
@@ -46,6 +48,7 @@ const PdpCart = ({
         pdpLabelRefresh={pdpLabelRefresh}
         stockQty={stockQty}
         context={context}
+        closeModal={closeModal}
       />
     </div>
   );
