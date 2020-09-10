@@ -1023,6 +1023,9 @@ $order_print_barcode: $grey-ash;
 // Facet
 $category_facet_active_icon: $windows-blue;
 $category_facet_active_text: $brownish-grey;
+$category_facet_border: $warm-grey-two;
+$category_facet_txt: $brownish-grey;
+$category_facet_border_mobile: $whisper-dark;
 
 // Block Alshaya ACM customer .block-alshaya-acm-customer
 $block_acm_customer_txt: $windows-blue;
@@ -1149,6 +1152,7 @@ $algolia_react-search_page_sidebar_count: $_algolia_search_page_sidebar_count;
 $algolia_react-facet-item-color: $brownish-grey;
 $algolia-react-highlighted-bg: $primary_btn_bg;
 $algolia-react-highlighted-text: $primary_btn_text;
+$algolia-react-search-result-page-bg: $white-five;
 
 // Option list filter.
 $options-page-title: $black;

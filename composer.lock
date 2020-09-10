@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb756fe295dcf41a299a3cb9aaf19aae",
+    "content-hash": "e114c1a477f1bd845ca8b3382fb295c5",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -4003,7 +4003,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.4",
-                    "datestamp": "1547996580",
+                    "datestamp": "1558584484",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5790,6 +5790,7 @@
                     "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch",
                     "CORE-14983 - Set new twig_extension_hash_prefix state in invalidate method": "patches/core/set-new-twig_extension_hash_prefix-during-invalidate.patch",
                     "CORE-14778 - Make subquery table alias more informative": "https://www.drupal.org/files/issues/2020-05-26/3142927-2.patch",
+                    "CORE-21267 - Test patch for core upgrade": "patches/core/backport-security-update-8.7x.patch",
                     "Multiple webheads can cause twig cache to grow indefinitely": "https://www.drupal.org/files/issues/2020-07-01/multiple_webheads_twig_cache-3032078-16.patch",
                     "CORE-8488 - Add log trace for 500 error": "patches/core/missing-handler-check-cache.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
@@ -12787,36 +12788,33 @@
         },
         {
             "name": "drupal/seckit",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/seckit.git",
-                "reference": "8.x-1.1"
+                "reference": "8.x-1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/seckit-8.x-1.1.zip",
-                "reference": "8.x-1.1",
-                "shasum": "bf7756d1a6a2d64ff35147b7a464cbd7f1acffcc"
+                "url": "https://ftp.drupal.org/files/projects/seckit-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "5bd6730e54b7bfae3c68dbfac3ccbb6f12129a65"
             },
             "require": {
                 "drupal/core": "~8.0"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.1",
-                    "datestamp": "1539600180",
+                    "version": "8.x-1.2",
+                    "datestamp": "1561463889",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "patches_applied": {
-                    "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
+                    "Remove generator": "https://www.drupal.org/files/issues/2020-03-02/seckit-8.x-1.x-2795025-remove_generator-21.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

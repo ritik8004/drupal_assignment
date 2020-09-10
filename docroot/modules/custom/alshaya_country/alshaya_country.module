@@ -80,3 +80,27 @@ function alshaya_country_set_default_store_search_placeholder($store_search_plac
     ->set('store_search_placeholder', $store_search_placeholder_ar)
     ->save();
 }
+
+/**
+ * Install config for spc click n collect.
+ *
+ * Set default lat and long for click n collect api requests.
+ *
+ * @param float $lat
+ *   The default country latitude.
+ * @param float $lng
+ *   The default country longitude.
+ * @param int $zoom
+ *   The zoom level. default set to 7.
+ */
+function alshaya_country_set_default_spc_config(float $lat, float $lng, $zoom = 7) {
+  if (\Drupal::service("module_handler")->moduleExists("alshaya_spc")
+      && $config = \Drupal::configFactory()->getEditable('alshaya_spc.click_n_collect')
+  ) {
+    $config->set('country_center', [
+      'latitude' => $lat,
+      'longitude' => $lng,
+      'zoom' => $zoom,
+    ])->save();
+  }
+}

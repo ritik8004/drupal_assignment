@@ -4,6 +4,7 @@ namespace Drupal\alshaya_seo_transac\Plugin\simple_sitemap\UrlGenerator;
 
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\node\NodeInterface;
 use Drupal\simple_sitemap\EntityHelper;
@@ -43,6 +44,13 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
   protected $productCategoryHelper;
 
   /**
+   * The config factory service object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(array $configuration,
@@ -55,7 +63,8 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
                               EntityHelper $entityHelper,
                               UrlGeneratorManager $url_generator_manager,
                               ProductCategoryTree $product_category,
-                              ProductCategoryHelper $product_category_helper) {
+                              ProductCategoryHelper $product_category_helper,
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct(
       $configuration,
       $plugin_id,
@@ -70,6 +79,7 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
 
     $this->productCategory = $product_category;
     $this->productCategoryHelper = $product_category_helper;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -90,7 +100,8 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
       $container->get('simple_sitemap.entity_helper'),
       $container->get('plugin.manager.simple_sitemap.url_generator'),
       $container->get('alshaya_acm_product_category.product_category_tree'),
-      $container->get('alshaya_acm_product.category_helper')
+      $container->get('alshaya_acm_product.category_helper'),
+      $container->get('config.factory')
     );
   }
 
@@ -155,6 +166,15 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
               'entity_type' => $entity_type_name,
               'id' => $entity_id,
             ];
+          }
+
+          if ($bundle_name === 'advanced_page') {
+            // Remove homepage nid as we are getting the homepage node alias in
+            // the sitemap which is not required. The homepage url shall be
+            // added through hook_simple_sitemap_arbitrary_links_alter().
+            $homepage_nid = $this->configFactory->get('alshaya_master.home')->get('entity')['id'];
+            $homepage_nid_key = array_search($homepage_nid, array_column($data_sets, 'id'));
+            unset($data_sets[$homepage_nid_key]);
           }
         }
       }

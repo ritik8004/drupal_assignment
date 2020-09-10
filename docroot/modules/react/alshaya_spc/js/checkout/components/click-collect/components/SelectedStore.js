@@ -3,8 +3,8 @@ import ContactInfoForm from '../../contact-info-form';
 import StoreItem from './StoreItem';
 import SectionTitle from '../../../../utilities/section-title';
 import CheckoutMessage from '../../../../utilities/checkout-message';
-import getStringMessage from '../../../../utilities/strings';
 import { smoothScrollTo } from '../../../../utilities/smoothScroll';
+import getStringMessage from '../../../../utilities/strings';
 
 const SelectedStore = ({ store, open, closePanel }) => {
   const [messageType, setMsgType] = useState(null);

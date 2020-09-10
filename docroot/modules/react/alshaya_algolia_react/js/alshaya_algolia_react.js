@@ -159,6 +159,9 @@
     // Add dropdown effect for facets filters.
     // Condition to attach this on pages except promotion and plps as on those pages we get facets-panel.js with same code.
     if (!$('body').hasClass('nodetype--acq_promotion') && !$('body').hasClass('plp-page-only')) {
+      if (drupalSettings.superCategory && ($(window).width() > 1023)) {
+        $('.block-facet-blockcategory-facet-search .c-facet__title.c-collapse__title').addClass('active');
+      }
       $('.c-facet__title.c-collapse__title').once('algolia-search').on('click', function () {
         if ($(this).hasClass('active')) {
           $(this).removeClass('active');
@@ -168,10 +171,10 @@
           }
         }
         else {
-          if (!$(this).parent().parent().hasClass('filter__inner')) {
+          if (!$(this).parent().parent().hasClass('filter__inner') && !drupalSettings.superCategory) {
             $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
+            $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
           }
-          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
 
           $(this).addClass('active');
           if (!$(this).parent().parent().hasClass('filter__inner')) {

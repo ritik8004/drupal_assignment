@@ -222,6 +222,14 @@ class CartController {
       return new JsonResponse($data);
     }
 
+    if (empty($data['cart']['items'])) {
+      $this->logger->error('Checkout accessed without items in cart for id @cart_id', [
+        '@cart_id' => $cart_id,
+      ]);
+
+      return new JsonResponse($this->utility->getErrorResponse('Checkout accessed without items in cart', 500));
+    }
+
     $response = $this->getProcessedCheckoutData($data);
 
     return new JsonResponse($response);

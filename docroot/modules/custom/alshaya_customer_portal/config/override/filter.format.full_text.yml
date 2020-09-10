@@ -1,7 +1,0 @@
-filters:
-  alshaya_customer_portal_token_filter:
-    id: alshaya_customer_portal_token_filter
-    provider: alshaya_customer_portal
-    status: true
-    weight: 0
-    settings: {  }

@@ -41,12 +41,41 @@ class AlshayaFeatureProcess {
     $this->validFeatures = $parameters['features'] ?? [];
     $this->viewport = $parameters['viewport'];
     $environment = explode('-', $parameters['site']);
-    if ($environment[2] == 'dev2') {
-      $this->suiteLocators = [
-        $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc',
-        $this->sourcePath . DIRECTORY_SEPARATOR . $environment[0] . DIRECTORY_SEPARATOR . 'spc',
-        $this->sourcePath . DIRECTORY_SEPARATOR . $environment[0] . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'spc'
-      ];
+    if (in_array($environment[2], ['local', 'dev2', 'qa', 'uat'])) {
+      if ($environment[0] == 'bp') {
+        $this->suiteLocators = [
+          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'boots'
+        ];
+      } else {
+        if ($environment[1] == 'kw') {
+          $this->suiteLocators = [
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc',
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'spc'
+          ];
+        } else {
+          $this->suiteLocators = [
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc'
+          ];
+        }
+      }
+    }
+    else if (in_array($environment[2], ['prod','pprod'])) {
+      if ($environment[0] == 'bp') {
+        $this->suiteLocators = [
+          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'boots'
+        ];
+      } else {
+        if ($environment[1] == 'kw') {
+          $this->suiteLocators = [
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'spc',
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'kw'
+          ];
+        } else {
+          $this->suiteLocators = [
+            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'spc'
+          ];
+        }
+      }
     }
     else {
       $this->suiteLocators = [$this->sourcePath . DIRECTORY_SEPARATOR . 'common', $this->sourcePath . DIRECTORY_SEPARATOR . $environment[0]];

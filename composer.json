@@ -82,6 +82,7 @@
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
         "drupal/search_api_spellcheck": "dev-8.x-1.x",
+        "drupal/seckit": "^1.2",
         "drupal/sessions_expire": "1.0.x-dev",
         "drupal/sharethis": "^2.0@beta",
         "drupal/simple_oauth": "^3.0",
@@ -275,6 +276,7 @@
                 "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch",
                 "CORE-14983 - Set new twig_extension_hash_prefix state in invalidate method": "patches/core/set-new-twig_extension_hash_prefix-during-invalidate.patch",
                 "CORE-14778 - Make subquery table alias more informative": "https://www.drupal.org/files/issues/2020-05-26/3142927-2.patch",
+                "CORE-21267 - Test patch for core upgrade": "patches/core/backport-security-update-8.7x.patch",
                 "Multiple webheads can cause twig cache to grow indefinitely": "https://www.drupal.org/files/issues/2020-07-01/multiple_webheads_twig_cache-3032078-16.patch",
                 "CORE-8488 - Add log trace for 500 error" : "patches/core/missing-handler-check-cache.patch"
             },
@@ -330,7 +332,7 @@
                 "Check for empty account object in submit handler": "https://www.drupal.org/files/issues/2019-07-15/check-empty-account-object-3067845-01.patch"
             },
             "drupal/seckit": {
-                "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
+                "Remove generator": "https://www.drupal.org/files/issues/2020-03-02/seckit-8.x-1.x-2795025-remove_generator-21.patch"
             },
             "drupal/views_ajax_get": {
                 "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch",

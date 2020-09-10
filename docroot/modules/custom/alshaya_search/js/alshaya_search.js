@@ -5,7 +5,7 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  var browserFacetUrl = null;
+  var browserFacetUrl = window.location.pathname;
   var setTimeoutConst = null;
 
   Drupal.behaviors.alshayaSearch = {

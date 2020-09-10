@@ -1,4 +1,4 @@
-@javascript
+@javascript @guest @codPayment @homeDelivery
 Feature: SPC Checkout Home Delivery COD
 
   Background:
@@ -24,7 +24,7 @@ Feature: SPC Checkout Home Delivery COD
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -43,7 +43,7 @@ Feature: SPC Checkout Home Delivery COD
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
+    And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cashondelivery" element on page
@@ -69,7 +69,6 @@ Feature: SPC Checkout Home Delivery COD
     Then I should see "{payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -107,7 +106,7 @@ Feature: SPC Checkout Home Delivery COD
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -126,7 +125,7 @@ Feature: SPC Checkout Home Delivery COD
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
+    And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cashondelivery" element on page
@@ -141,7 +140,6 @@ Feature: SPC Checkout Home Delivery COD
     Then I should see "{language_order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
@@ -158,7 +156,6 @@ Feature: SPC Checkout Home Delivery COD
     Then I should see "{language_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -196,7 +193,7 @@ Feature: SPC Checkout Home Delivery COD
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-hd" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -230,4 +227,3 @@ Feature: SPC Checkout Home Delivery COD
     Then I should see "{language_order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .vat-text-footer" should exist
