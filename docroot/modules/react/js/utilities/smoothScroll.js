@@ -72,7 +72,7 @@ export const smoothScrollToCurrentDate = () => {
   let element = document.querySelector('.daypicker-mobile .date-item.active');
   let elementParent = document.querySelector('.daypicker-mobile .calendar-wrapper');
 
-  if(element !== undefined && element !== null && elementParent !== undefined && elementParent !== null && window.innerWidth < 768) {
+  if(element !== undefined && element !== null && window.innerWidth < 768) {
     let elementLeftOffset = element.offsetLeft;
     let elementTopOffset = element.offsetTop;
     elementParent.scrollBy({
