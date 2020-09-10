@@ -36,7 +36,7 @@ const PdpCrossellUpsellImage = ({
     <ConditionalView condition={window.innerWidth > 767}>
 
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <a className="magv2-pdp-crossell-upsell-image-wrapper" href={productUrl} onClick={() => getPanelData(openModal(relatedSku))} {...gtmAttributes}>
+      <a className="magv2-pdp-crossell-upsell-image-wrapper" onClick={() => getPanelData(openModal(relatedSku))} {...gtmAttributes}>
         <PdpCrossellUpsellImageContent
           imageUrl={imageUrl}
           alt={alt}

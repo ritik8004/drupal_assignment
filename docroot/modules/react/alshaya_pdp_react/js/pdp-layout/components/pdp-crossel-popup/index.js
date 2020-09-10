@@ -26,11 +26,10 @@ class CrossellPopupContent extends React.Component {
   }
 
   getRelatedProductsInfo = (relatedProductData, url, relatedSku) => {
-    // Show loader.
-    showFullScreenLoader();
-
     // If related products is already processed.
     if (relatedProductData === null) {
+      // Show loader.
+      showFullScreenLoader();
       axios.get(url).then((response) => {
         if (response.data.length !== 0) {
           const configurable = response.data.configurableCombinations;
@@ -113,8 +112,6 @@ class CrossellPopupContent extends React.Component {
     const outOfStock = (
       <span className="out-of-stock">{Drupal.t('Out of Stock')}</span>
     );
-
-    console.log(relatedProductData);
 
     return (relatedProductData) ? (
       <PdpPopupContainer className="magv2-crossell-popup-container">
