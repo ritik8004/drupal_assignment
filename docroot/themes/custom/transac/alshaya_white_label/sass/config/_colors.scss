@@ -125,6 +125,8 @@ $_appointment-light-blue: #b8d1ed;
 $_appointment-light-gray: rgba(151, 151, 151, 0.2);
 $_appointment-social-icon-gray-bg: #f6f6f6;
 $_appointment-delete-red: #e82d35;
+$_ancestral-water: #d0d0d0;
+$_screeching_white: #eee;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1410,3 +1412,7 @@ $appointment-store-map-store-distance: $grey-light;
 $appointment-store-map-store-name: $_appointment-darkish-blue;
 $appointment-store-item-text: $black;
 $appointment-store-close-icon: $mothercare-black;
+
+// Sub brand logo.
+$sub_brand_logo_separator: $_ancestral-water;
+$sub_brand_logo_header_border: $_screeching_white;
