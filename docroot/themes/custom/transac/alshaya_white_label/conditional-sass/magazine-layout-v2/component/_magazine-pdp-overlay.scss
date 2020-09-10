@@ -1,7 +1,8 @@
 body {
   &.desc-overlay,
   &.overlay-select,
-  &.crossel-overlay {
+  &.overlay-crossel,
+  &.overlay-related-select {
     overflow: hidden;
 
     &::before {

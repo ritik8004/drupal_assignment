@@ -12,6 +12,7 @@ const PdpCart = ({
   stockQty,
   firstChild,
   context,
+  animatePdpCart,
 }) => {
   const wrapper = useRef();
 
@@ -24,7 +25,11 @@ const PdpCart = ({
 
   if (configurableCombinations) {
     return (
-      <div className="pdp-cart-form fadeInUp notInMobile" style={{ animationDelay: '0.6s' }} ref={wrapper}>
+      <div
+        className={`pdp-cart-form ${(animatePdpCart ? 'fadeInUp notInMobile' : '')}`}
+        style={(animatePdpCart ? { animationDelay: '0.6s' } : null)}
+        ref={wrapper}
+      >
         <ConfigurableProductForm
           configurableCombinations={configurableCombinations}
           skuCode={skuCode}
@@ -39,7 +44,10 @@ const PdpCart = ({
     );
   }
   return (
-    <div className="pdp-cart-form fadeInUp notInMobile" style={{ animationDelay: '0.6s' }}>
+    <div
+      className={`pdp-cart-form ${(animatePdpCart ? 'fadeInUp notInMobile' : '')}`}
+      style={(animatePdpCart ? { animationDelay: '0.6s' } : null)}
+    >
       <SimpleProductForm
         skuCode={skuCode}
         productInfo={productInfo}

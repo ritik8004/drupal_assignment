@@ -130,6 +130,7 @@ const PdpLayout = () => {
             showFullVersion={!isMobile}
             context="main"
             miniFullScreenGallery={isTouchDevice}
+            animateMobileGallery
           >
             <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} labels={labels} />
           </PdpGallery>
@@ -142,6 +143,7 @@ const PdpLayout = () => {
             brandLogo={brandLogo}
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
+            animateTitlePrice
           />
           <div className="promotions promotions-full-view-mode">
             <PdpPromotionLabel
@@ -163,6 +165,7 @@ const PdpLayout = () => {
               stockQty={stockQty}
               firstChild={firstChild}
               context="main"
+              animatePdpCart
             />
           ) : outOfStock}
           <PdpDescription
