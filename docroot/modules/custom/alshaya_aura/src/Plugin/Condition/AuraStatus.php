@@ -4,6 +4,7 @@ namespace Drupal\alshaya_aura\Plugin\Condition;
 
 use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\alshaya_aura\Helper\AuraStatusList;
 
 /**
  * Provides a 'AURA Status' condition.
@@ -26,7 +27,7 @@ class AuraStatus extends ConditionPluginBase {
       '#type' => 'checkboxes',
       '#title' => $this->t('When the user has the following AURA status'),
       '#default_value' => $this->configuration['status'],
-      '#options' => array_map('\Drupal\Component\Utility\Html::escape', $this->getAuraStatusValues()),
+      '#options' => array_map('\Drupal\Component\Utility\Html::escape', AuraStatusList::getAllAuraStatus()),
       '#description' => $this->t('If you select no status, the condition will evaluate to TRUE for all users.'),
     ];
     return parent::buildConfigurationForm($form, $form_state);
@@ -64,7 +65,7 @@ class AuraStatus extends ConditionPluginBase {
    * {@inheritdoc}
    */
   public function summary() {
-    $aura_statuses = array_intersect_key($this->getAuraStatusValues(), $this->configuration['status']);
+    $aura_statuses = array_intersect_key(AuraStatusList::getAllAuraStatus(), $this->configuration['status']);
     if (count($aura_statuses) > 1) {
       $aura_statuses = implode(', ', $aura_statuses);
     }
@@ -77,20 +78,6 @@ class AuraStatus extends ConditionPluginBase {
     else {
       return $this->t('The user has AURA status in @aura_statuses', ['@aura_statuses' => $aura_statuses]);
     }
-  }
-
-  /**
-   * Helper to get AURA status values.
-   */
-  public function getAuraStatusValues() {
-    // @TODO: Will remove the hardcoded values once we have the actual data.
-    $auraStatusValues = [
-      'linked_verified' => 'Linked Verified',
-      'linked_not_verified' => 'Linked Not verified',
-      'not_linked' => 'Not Linked',
-    ];
-
-    return $auraStatusValues;
   }
 
 }
