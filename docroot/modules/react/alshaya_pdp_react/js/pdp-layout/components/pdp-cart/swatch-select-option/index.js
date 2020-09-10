@@ -18,6 +18,7 @@ const SwatchSelectOption = ({
               key={attrVal}
               handleLiClick={handleLiClick}
               code={code}
+              label={configurables.values[attr].label}
             />
           );
         }
@@ -28,6 +29,7 @@ const SwatchSelectOption = ({
             key={attrVal}
             handleLiClick={handleLiClick}
             code={code}
+            label={configurables.values[attr].label}
           />
         );
       })}

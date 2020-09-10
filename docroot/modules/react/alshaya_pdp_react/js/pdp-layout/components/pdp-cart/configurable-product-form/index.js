@@ -175,7 +175,7 @@ class ConfigurableProductForm extends React.Component {
       <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected} data-sku={skuCode}>
         <div id="add-to-cart-error" className="error" />
         {Object.keys(configurables).map((key) => (
-          <div className={`cart-form-attribute ${key}`} key={key}>
+          <div className={`cart-form-attribute ${key}`} key={key} data-attribute-name={configurables[key].label}>
             <CartSelectOption
               configurables={configurables[key]}
               byAttribute={byAttribute}

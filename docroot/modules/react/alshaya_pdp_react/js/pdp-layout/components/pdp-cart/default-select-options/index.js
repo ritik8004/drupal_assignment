@@ -10,6 +10,7 @@ const DefaultSelectOptions = ({
     className={`magv2-select-list-item ${((selected !== undefined
         && String(selected) === String(attr)))
       ? 'active' : 'in-active'}`}
+    data-attribute-label={value}
   >
     <span onClick={(e) => handleLiClick(e, code)} className="magv2-select-list-wrapper">
       <span className="magv2-select-list-name">{value}</span>
