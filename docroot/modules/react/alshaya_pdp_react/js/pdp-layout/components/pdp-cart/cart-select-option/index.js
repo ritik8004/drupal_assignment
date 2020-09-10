@@ -109,7 +109,7 @@ class CartSelectOption extends React.Component {
 
   closeModal = (e) => {
     e.preventDefault();
-    document.querySelector('body').classList.remove('select-overlay');
+    document.querySelector('body').classList.remove('overlay-select');
   };
 
   render() {
@@ -118,6 +118,7 @@ class CartSelectOption extends React.Component {
       nextCode,
       nextValues,
       attributeKey,
+      context,
     } = this.props;
 
     const { code } = configurables;
@@ -153,6 +154,7 @@ class CartSelectOption extends React.Component {
           selected={selected}
           handleLiClick={this.handleLiClick}
           closeModal={this.closeModal}
+          context={context}
         />
       </div>
     ) : swatchSelectOption;
@@ -171,6 +173,7 @@ class CartSelectOption extends React.Component {
           selected={selected}
           handleLiClick={this.handleLiClick}
           closeModal={this.closeModal}
+          context={context}
         />
       </div>
     ) : selectOption;

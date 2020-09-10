@@ -10,7 +10,7 @@ import PdpPromotionLabel from '../pdp-promotion-label';
 import {
   showFullScreenLoader,
   removeFullScreenLoader,
-} from '../../../utilities/pdp-util';
+} from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class CrossellPopupContent extends React.Component {
   constructor(props) {
@@ -127,7 +127,7 @@ class CrossellPopupContent extends React.Component {
               pdpGallery={pdpGallery}
               showFullVersion={false}
               context="related"
-              miniFullScreenGallery
+              miniFullScreenGallery={false}
               animateMobileGallery={false}
             >
               <PdpProductLabels skuCode={relatedSku} variantSelected={relatedSku} labels={labels} />

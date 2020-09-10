@@ -16,7 +16,9 @@ const PpdDescription = (props) => {
   };
 
   const openModal = () => {
-    document.querySelector('body').classList.add('desc-overlay');
+    setTimeout(() => {
+      document.querySelector('body').classList.add('desc-overlay');
+    }, 150);
     return (
       <DescriptionContent
         closeModal={closeModal}

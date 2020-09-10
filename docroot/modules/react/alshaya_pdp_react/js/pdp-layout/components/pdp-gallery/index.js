@@ -97,6 +97,7 @@ export default class PdpGallery extends React.PureComponent {
                     onClick={this.showFullScreenModal}
                     viewport="mobile"
                     index={key}
+                    miniFullScreenGallery={miniFullScreenGallery}
                   >
                     {key === 0 ? children : ''}
                   </PdpImageElement>
