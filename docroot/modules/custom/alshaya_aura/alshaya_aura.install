@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_aura.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Add new field for Aura Status of users.
+ */
+function alshaya_aura_install() {
+  $configs = [
+    'field.field.user.user.field_aura_loyalty_status',
+    'field.storage.user.field_aura_loyalty_status',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_aura');
+}
