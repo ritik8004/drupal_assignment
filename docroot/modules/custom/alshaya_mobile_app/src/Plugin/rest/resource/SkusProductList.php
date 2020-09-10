@@ -258,7 +258,9 @@ class SkusProductList extends ResourceBase {
       'home_delivery' => [],
       'click_and_collect' => [],
     ];
+    $data['flags'] = [];
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
+    $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_config(), alshaya_acm_product_get_flags_status($sku)], TRUE);
 
     $media = $this->skuImagesManager->getProductMedia($sku, 'search');
     $data['images'] = [];
