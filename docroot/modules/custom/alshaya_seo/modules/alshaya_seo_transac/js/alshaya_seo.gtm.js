@@ -130,11 +130,8 @@ const productRecommendationsSuffix = 'pr-';
         var errorMessage = null;
 
         // For new pdp layout, we get the required data in the event object.
-        if (($('body').hasClass('new-pdp-magazine-layout'))
-          && (e.detail.productData !== 'undefined')
-          && (e.detail.productData.parentSku !== 'undefined')
-        ) {
-          sku = e.detail.productData.parentSku;
+        if ($('body').hasClass('new-pdp-magazine-layout')) {
+          sku = (e.detail.productData.parentSku !== 'undefined') ? e.detail.productData.parentSku : null;
           // Get selected attributes.
           $('.cart-form-attribute', $(this)).each(function() {
             var configLabel = $(this).attr('data-attribute-name');
