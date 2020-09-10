@@ -16,6 +16,7 @@ const PpdDescription = (props) => {
   };
 
   const openModal = () => {
+    // to make sure that markup is present in DOM.
     setTimeout(() => {
       document.querySelector('body').classList.add('desc-overlay');
     }, 150);

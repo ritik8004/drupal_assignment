@@ -63,7 +63,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
 
   closeModal = () => {
     const { removePanelData } = this.props;
-    document.querySelector('body').classList.remove('crossel-overlay');
+    document.querySelector('body').classList.remove('overlay-crossel');
     removePanelData();
   };
 

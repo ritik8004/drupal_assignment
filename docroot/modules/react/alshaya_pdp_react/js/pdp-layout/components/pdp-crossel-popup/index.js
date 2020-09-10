@@ -37,7 +37,7 @@ class CrossellPopupContent extends React.Component {
             relatedProductData: response.data,
             variantSelected: configurable ? configurable[relatedSku].firstChild : relatedSku,
           }, () => {
-            document.querySelector('body').classList.add('crossel-overlay');
+            document.querySelector('body').classList.add('overlay-crossel');
           });
 
           // Remove loader.
