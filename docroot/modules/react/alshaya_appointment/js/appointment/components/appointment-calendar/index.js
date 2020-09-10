@@ -148,20 +148,20 @@ export default class AppointmentCalendar extends React.Component {
   swipedLeft = () => {
     const { setOpenDate } = this.state;
     this.setState({
-      setOpenDate: new Date(moment(setOpenDate).add(1, 'month').format('MMMM YYYY')),
+      setOpenDate: new Date(moment(setOpenDate).add(1, 'month')),
     });
   };
 
   swipedRight = () => {
     const { setOpenDate } = this.state;
     this.setState({
-      setOpenDate: new Date(moment(setOpenDate).subtract(1, 'month').format('MMMM YYYY')),
+      setOpenDate: new Date(moment(setOpenDate).subtract(1, 'month')),
     });
   };
 
   handleMonthChange = (monthBeingViewed) => {
     this.setState({
-      setOpenDate: new Date(moment(monthBeingViewed).format('MMMM YYYY')),
+      setOpenDate: new Date(moment(monthBeingViewed)),
     });
   };
 
@@ -226,8 +226,9 @@ export default class AppointmentCalendar extends React.Component {
         { datePickerToggle
           && (
           <Swipeable
-            onSwipedLeft={() => this.swipedLeft()}
-            onSwipedRight={() => this.swipedRight()}
+            onSwipedLeft={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.swipedLeft() : this.swipedRight())}
+            onSwipedRight={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.swipedRight() : this.swipedLeft())}
+            preventDefaultTouchmoveEvent
           >
             <div className="month-picker-wrapper" dir={dir}>
               <DatePicker
