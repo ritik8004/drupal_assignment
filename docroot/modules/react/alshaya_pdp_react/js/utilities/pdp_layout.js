@@ -81,12 +81,14 @@ export const triggerAddToCart = (
     }
 
     let configurables = [];
-    let productUrl = productInfo[skuCode].url;
-    let price = productInfo[skuCode].priceRaw;
+    let productUrl = (context === 'main') ? productInfo[skuCode].url : productInfo[skuCode].link;
+    let price = (context === 'main') ? productInfo[skuCode].priceRaw : productInfo[skuCode].final_price;
+
     let promotions = productInfo[skuCode].promotionsRaw;
     let productDataSKU = productData.sku;
     let parentSKU = productData.parentSku;
-    let { maxSaleQty } = productData;
+
+    let maxSaleQty = (context === 'main') ? productData.maxSaleQty : productData.max_sale_qty;
     let maxSaleQtyParent = productData.max_sale_qty_parent;
     const gtmAttributes = productInfo[skuCode].gtm_attributes;
     let options = [];
@@ -97,10 +99,10 @@ export const triggerAddToCart = (
       price = productVariantInfo.priceRaw;
       parentSKU = productVariantInfo.parent_sku;
       promotions = productVariantInfo.promotionsRaw;
-      configurables = productVariantInfo.configurableOptions;
-      maxSaleQty = productVariantInfo.maxSaleQty;
+      configurables = (context === 'main') ? productVariantInfo.configurableOptions : productVariantInfo.configurable_values;
+      maxSaleQty = (context === 'main') ? productVariantInfo.maxSaleQty : productVariantInfo.max_sale_qty;
       maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
-      options = productVariantInfo.configurableOptions;
+      options = (context === 'main') ? productVariantInfo.configurableOptions : productVariantInfo.configurable_values;
 
       if (productVariantInfo.url !== undefined) {
         const langcode = document.getElementsByTagName('html')[0].getAttribute('lang');
@@ -304,7 +306,9 @@ export const addToCartConfigurable = (
   const productData = getPost[1];
 
   postData.options = options;
-  productData.product_name = productInfo[skuCode].variants[variantSelected].cart_title;
+  productData.product_name = (context === 'main')
+    ? productInfo[skuCode].variants[variantSelected].cart_title
+    : productInfo[skuCode].variants[variantSelected].title;
   productData.image = productInfo[skuCode].variants[variantSelected].cart_image;
   const cartEndpoint = `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`;
 
@@ -354,7 +358,7 @@ export const addToCartSimple = (
   const productData = getPost[1];
   postData.options = options;
 
-  productData.product_name = productInfo[skuCode].cart_title;
+  productData.product_name = (context === 'main') ? productInfo[skuCode].cart_title : productInfo[skuCode].title;
   productData.image = productInfo[skuCode].cart_image;
 
   const cartEndpoint = `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`;

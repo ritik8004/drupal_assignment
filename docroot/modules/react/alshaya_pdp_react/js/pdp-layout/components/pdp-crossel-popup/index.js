@@ -114,6 +114,8 @@ class CrossellPopupContent extends React.Component {
       <span className="out-of-stock">{Drupal.t('Out of Stock')}</span>
     );
 
+    console.log(relatedProductData);
+
     return (relatedProductData) ? (
       <PdpPopupContainer className="magv2-crossell-popup-container">
         <PdpPopupWrapper className="magv2-crossell-popup-wrapper">

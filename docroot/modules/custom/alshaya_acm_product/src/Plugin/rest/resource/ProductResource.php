@@ -404,6 +404,15 @@ class ProductResource extends ResourceBase {
     $stock_status = $this->skuManager->isProductInStock($sku);
     $data['stockStatus'] = $stock_status;
 
+    // Set cart image.
+    $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
+    $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
+    // Prepare image style url.
+    if (!empty($image['#uri'])) {
+      $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+    }
+    $data['cart_image'] = is_string($image) ? $image : '';
+
     if ($sku->bundle() === 'configurable') {
       $data['swatch_data'] = $this->getSwatchData($sku);
       $data['cart_combinations'] = $this->getConfigurableCombinations($sku);
@@ -422,6 +431,15 @@ class ProductResource extends ResourceBase {
         $data['product_labels'][$values['sku']] = $child_product_labels;
 
         $data['variants'][$values['sku']]['promotionsRaw'] = $this->skuManager->getPromotions($child);
+
+        // Set cart image.
+        $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
+        $image = alshaya_acm_get_product_display_image($child, 'pdp_gallery_thumbnail', 'cart');
+        // Prepare image style url.
+        if (!empty($image['#uri'])) {
+          $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+        }
+        $data['variants'][$values['sku']]['cart_image'] = is_string($image) ? $image : '';
       }
 
       $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
