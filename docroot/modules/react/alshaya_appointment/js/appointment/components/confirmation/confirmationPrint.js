@@ -36,29 +36,25 @@ const AppointmentConfirmationPrint = React.forwardRef((props, ref) => {
           <label>{getStringMessage('appointment_summary_label')}</label>
         </div>
         <div className="inner-body">
-          <table>
-            <tbody>
-              <ConfirmationItems
-                item={{ label: getStringMessage('appointment_booked_by_label'), value: `${clientData.firstName} ${clientData.lastName}` }}
-              />
-              { companionsRender }
-              <ConfirmationItems
-                item={{ label: getStringMessage('program_label'), value: appointmentCategory.name }}
-              />
-              <ConfirmationItems
-                item={{ label: getStringMessage('activity_label'), value: appointmentType.label }}
-              />
-              <ConfirmationItems
-                item={{ label: getStringMessage('location'), value: location }}
-              />
-              <ConfirmationItems
-                item={{ label: getStringMessage('date'), value: date }}
-              />
-              <ConfirmationItems
-                item={{ label: getStringMessage('time'), value: time }}
-              />
-            </tbody>
-          </table>
+          <ConfirmationItems
+            item={{ label: getStringMessage('appointment_booked_by_label'), value: `${clientData.firstName} ${clientData.lastName}` }}
+          />
+          { companionsRender }
+          <ConfirmationItems
+            item={{ label: getStringMessage('program_label'), value: appointmentCategory.name }}
+          />
+          <ConfirmationItems
+            item={{ label: getStringMessage('activity_label'), value: appointmentType.label }}
+          />
+          <ConfirmationItems
+            item={{ label: getStringMessage('location'), value: location }}
+          />
+          <ConfirmationItems
+            item={{ label: getStringMessage('date'), value: date }}
+          />
+          <ConfirmationItems
+            item={{ label: getStringMessage('time'), value: time }}
+          />
         </div>
       </div>
     </div>
