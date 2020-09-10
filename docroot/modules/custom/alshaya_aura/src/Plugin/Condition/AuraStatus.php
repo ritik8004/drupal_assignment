@@ -84,7 +84,11 @@ class AuraStatus extends ConditionPluginBase {
    */
   public function getAuraStatusValues() {
     // @TODO: Will remove the hardcoded values once we have the actual data.
-    $auraStatusValues = ['registered' => 'Registered', 'approved' => 'Approved'];
+    $auraStatusValues = [
+      'linked_verified' => 'Linked Verified',
+      'linked_not_verified' => 'Linked Not verified',
+      'not_linked' => 'Not Linked',
+    ];
 
     return $auraStatusValues;
   }
