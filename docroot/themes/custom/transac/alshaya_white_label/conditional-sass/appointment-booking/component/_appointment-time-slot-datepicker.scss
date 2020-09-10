@@ -1,0 +1,203 @@
+.appointment-timeslot-wrapper {
+  .appointment-datepicker {
+    margin-top: 1.25rem;
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .month-calendar-sides {
+        font-family: $alshaya-bold;
+        font-size: 0.875rem;
+        color: $appointment-timeslot-calendar-disabled;
+        pointer-events: none;
+      }
+
+      .month-calendar-datepicker {
+        font-family: $alshaya-bold;
+        font-size: 0.875rem;
+        color: $appointment-calendar-date-text;
+        border: none;
+        background: none;
+        position: relative;
+        padding-#{$right}: 1.5rem;
+
+        @include icon('chevrondown') {
+          font-size: 1.5rem;
+          position: absolute;
+          top: 50%;
+          #{$right}: 0;
+          transform: translateY(-50%);
+          transition: transform 0.125s ease-in-out;
+          color: $appointment-select-dropdown-color;
+        }
+
+        &.active {
+          &::before {
+            transform: translateY(-50%) rotate(180deg);
+          }
+        }
+      }
+    }
+
+    .react-datepicker {
+      width: 100%;
+      border: none;
+
+      &__month {
+        margin: 0;
+      }
+
+      &__header {
+        background: none;
+        border: none;
+        padding: 0;
+      }
+
+      &__current-month {
+        display: none;
+      }
+
+      &__month-container {
+        width: 100%;
+        margin-top: 1.875rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 1.25rem;
+        }
+      }
+
+      &__day-names,
+      &__week {
+        display: flex;
+        justify-content: center;
+      }
+
+      &__week {
+        @include breakpoint($only-mobile) {
+          justify-content: space-between;
+        }
+
+        .react-datepicker__day {
+          margin: 0.625rem 0;
+
+          @include breakpoint($tablet) {
+            margin: 0.625rem 0.9375rem;
+          }
+        }
+      }
+
+      &__day-names {
+        @include breakpoint($only-mobile) {
+          justify-content: space-between;
+        }
+
+        .react-datepicker__day-name {
+          padding: 0;
+          margin: 0;
+
+          @include breakpoint($tablet) {
+            margin: 0 0.9375rem;
+          }
+        }
+      }
+
+      &__day-name,
+      &__day {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        @include breakpoint($tablet) {
+          width: 3.25rem;
+        }
+      }
+
+      &__day-name {
+        font-family: $alshaya-thin;
+        font-size: 0.875rem;
+        line-height: normal;
+        color: $appointment-timeslot-text;
+
+        @include breakpoint($only-mobile) {
+          width: 2.25rem;
+        }
+      }
+
+      &__day {
+        font-family: $alshaya-bold;
+        color: $appointment-calendar-date-text;
+        border: 0.125rem solid $appointment-calendar-date-border;
+        border-radius: 50%;
+        cursor: pointer;
+        height: 3.25rem;
+
+        @include breakpoint($only-mobile) {
+          height: 2.25rem;
+          width: 2.25rem;
+          font-size: 0.875rem;
+        }
+
+        &:hover {
+          color: $appointment-calendar-date-hover-active;
+          background-color: $appointment-calendar-date-bg;
+          border-color: $appointment-calendar-date-border-hover-active;
+        }
+
+        &--keyboard-selected,
+        &--selected {
+          color: $appointment-calendar-date-hover-active;
+          background-color: $appointment-calendar-date-bg;
+          border-color: $appointment-calendar-date-border-hover-active;
+        }
+
+        &--disabled {
+          color: $appointment-timeslot-calendar-disabled;
+          border-color: $appointment-timeslot-calendar-disabled;
+          pointer-events: none;
+        }
+      }
+
+      &__navigation--next,
+      &__navigation--previous {
+        width: 1.875rem;
+        height: 1.875rem;
+        border: 0;
+        color: transparent;
+        background-color: transparent;
+        top: 50%;
+
+        &:disabled {
+          opacity: 0.3;
+        }
+
+        @include breakpoint($only-mobile) {
+          display: none;
+        }
+      }
+
+      &__navigation--previous {
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-calendar-left-arrow.svg') no-repeat center;
+        transform: translateY(-50%);
+        #{$left}: 0.625rem;
+        #{$right}: auto;
+
+        html[lang=ar] & {
+          transform: translateY(-50%) rotate(180deg);
+        }
+      }
+
+      &__navigation--next {
+        background: url('#{$base_theme_img_directory_path}/icons/appointment-calendar-left-arrow.svg') no-repeat center;
+        transform: translateY(-50%) rotate(180deg);
+        #{$right}: 0.625rem;
+        #{$left}: auto;
+
+        html[lang=ar] & {
+          transform: translateY(-50%) rotate(0);
+        }
+      }
+    }
+  }
+}

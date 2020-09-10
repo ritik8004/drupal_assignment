@@ -1,10 +1,16 @@
 import React from 'react';
+import DatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
+import { Swipeable } from 'react-swipeable';
 import { getDateFormat } from '../../../utilities/helper';
 import ConditionalView from '../../../common/components/conditional-view';
 import { showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../js/utilities/strings';
+import en from '../../../../../node_modules/date-fns/locale/en-US';
+import ar from '../../../../../node_modules/date-fns/locale/ar-SA';
+import { smoothScrollToCurrentDate } from '../../../../../js/utilities/smoothScroll';
 
 const momentRange = extendMoment(moment);
 
@@ -21,6 +27,8 @@ export default class AppointmentCalendar extends React.Component {
       selectDate: new Date(selectDate),
       arrayOfDates: this.getAllDates(),
       previousDisabled: previousDisable,
+      datePickerToggle: false,
+      setOpenDate: new Date(selectDate),
     };
   }
 
@@ -30,6 +38,7 @@ export default class AppointmentCalendar extends React.Component {
     this.setState({
       week,
       previousDisabled: false,
+      setOpenDate: new Date(date),
     });
   }
 
@@ -38,6 +47,7 @@ export default class AppointmentCalendar extends React.Component {
     const week = this.getWeekDates(new Date(prevDate), 'prev');
     this.setState({
       week,
+      setOpenDate: new Date(date),
     });
   }
 
@@ -95,9 +105,74 @@ export default class AppointmentCalendar extends React.Component {
     });
   };
 
+  /**
+   * Set mini calendar date and get time slots for selected date.
+   */
+  datePickerChanged = (date) => {
+    showFullScreenLoader();
+    const { dateChanged } = this.props;
+    // Set mini calendar.
+    dateChanged(new Date(date));
+    this.setState({
+      selectDate: new Date(date),
+      week: this.getWeekDates(new Date(date), 'next'),
+      previousDisabled: false,
+      setOpenDate: new Date(date),
+    }, () => {
+      smoothScrollToCurrentDate();
+    });
+    this.hideDatePicker();
+  };
+
+  /**
+   * Show / hide full calendar on month click.
+   */
+  showDatePicker = () => {
+    const { datePickerToggle } = this.state;
+    if (!datePickerToggle) {
+      this.setState({
+        datePickerToggle: true,
+      });
+    }
+  };
+
+  hideDatePicker = () => {
+    const { datePickerToggle } = this.state;
+    if (datePickerToggle) {
+      this.setState({
+        datePickerToggle: false,
+      });
+    }
+  };
+
+  swipedLeft = () => {
+    const { setOpenDate } = this.state;
+    this.setState({
+      setOpenDate: new Date(moment(setOpenDate).add(1, 'month').format('MMMM YYYY')),
+    });
+  };
+
+  swipedRight = () => {
+    const { setOpenDate } = this.state;
+    this.setState({
+      setOpenDate: new Date(moment(setOpenDate).subtract(1, 'month').format('MMMM YYYY')),
+    });
+  };
+
+  handleMonthChange = (monthBeingViewed) => {
+    this.setState({
+      setOpenDate: new Date(moment(monthBeingViewed).format('MMMM YYYY')),
+    });
+  };
+
   render() {
     const {
-      week, selectDate, arrayOfDates, previousDisabled,
+      week,
+      selectDate,
+      arrayOfDates,
+      previousDisabled,
+      datePickerToggle,
+      setOpenDate,
     } = this.state;
 
     const weekdays = week.map((date, i) => (
@@ -122,30 +197,80 @@ export default class AppointmentCalendar extends React.Component {
       </li>
     ));
 
+    // Set language for datepicker translation.
+    if (drupalSettings.path.currentLanguage !== 'en') {
+      registerLocale('ar', ar);
+    } else {
+      registerLocale('en', en);
+    }
+    // Set wrapper element direction for arabic.
+    const dir = (drupalSettings.path.currentLanguage !== 'en') ? 'rtl' : 'ltr';
+
     return (
       <>
-        <ConditionalView condition={window.innerWidth > 1023}>
-          <div className="appointment-calendar daypicker-desktop">
-            <button
-              type="button"
-              className="appointment-calendar-prev-btn"
-              disabled={(previousDisabled)}
-              onClick={() => this.togglePrev(week[0])}
-            >
-              { getStringMessage('prev') }
-            </button>
-            <ul className="calendar-wrapper">
-              { weekdays }
-            </ul>
-            <button type="button" className="appointment-calendar-next-btn" onClick={() => this.toggleNext(week.slice(-1).pop())}>{ getStringMessage('next') }</button>
-          </div>
+        <div className="appointment-datepicker__header">
+          <span className="month-calendar-sides previous">
+            { moment(setOpenDate).subtract('1', 'month').format('MMMM') }
+          </span>
+          <button
+            type="button"
+            className={(datePickerToggle) ? 'month-calendar-datepicker active' : 'month-calendar-datepicker inactive'}
+            onClick={() => this.showDatePicker()}
+          >
+            { moment(setOpenDate).format('MMMM') }
+          </button>
+          <span className="month-calendar-sides next">
+            { moment(setOpenDate).add('1', 'month').format('MMMM') }
+          </span>
+        </div>
+        { datePickerToggle
+          && (
+          <Swipeable
+            onSwipedLeft={() => this.swipedLeft()}
+            onSwipedRight={() => this.swipedRight()}
+          >
+            <div className="month-picker-wrapper" dir={dir}>
+              <DatePicker
+                selected={selectDate}
+                inline
+                minDate={moment().add('1', 'day').toDate()}
+                onChange={(date) => this.datePickerChanged(date)}
+                locale={(drupalSettings.path.currentLanguage !== 'en') ? 'ar' : 'en'}
+                openToDate={setOpenDate}
+                useWeekdaysShort
+                onMonthChange={this.handleMonthChange}
+              />
+            </div>
+          </Swipeable>
+          )}
+        <ConditionalView condition={window.innerWidth > 767}>
+          { !datePickerToggle
+            && (
+            <div className="appointment-calendar daypicker-desktop">
+              <button
+                type="button"
+                className="appointment-calendar-prev-btn"
+                disabled={(previousDisabled)}
+                onClick={() => this.togglePrev(week[0])}
+              >
+                { getStringMessage('prev') }
+              </button>
+              <ul className="calendar-wrapper">
+                { weekdays }
+              </ul>
+              <button type="button" className="appointment-calendar-next-btn" onClick={() => this.toggleNext(week.slice(-1).pop())}>{ getStringMessage('next') }</button>
+            </div>
+            )}
         </ConditionalView>
-        <ConditionalView condition={window.innerWidth < 1024}>
+        <ConditionalView condition={window.innerWidth < 768}>
+          { !datePickerToggle
+          && (
           <div className="appointment-calendar daypicker-mobile">
             <ul className="calendar-wrapper">
               { allDates }
             </ul>
           </div>
+          )}
         </ConditionalView>
       </>
     );
