@@ -1,0 +1,6 @@
+# Custom module library for general purposes.
+alshaya_dynamic_yield.product_modal:
+  js:
+    js/alshaya_dynamic_yield.product_modal.js: {}
+  dependencies:
+    - core/jquery.once

@@ -5,7 +5,9 @@
  * Module file.
  */
 
+use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 use Drupal\Core\Ajax\InsertCommand;
+use Drupal\Core\Cache\Cache;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Database\Query\SelectInterface;
@@ -227,4 +229,18 @@ function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
       ]);
     }
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ *
+ * Invalidate cache tag for options page when
+ * product_list node is saved / updated.
+ */
+function alshaya_product_list_node_presave(NodeInterface $node) {
+  if ($node->bundle() != 'product_list') {
+    return;
+  }
+  // Invalidate option page cache.
+  Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
 }

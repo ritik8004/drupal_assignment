@@ -137,6 +137,7 @@ $_appointment-light-blue: #b8d1ed;
 $_appointment-light-gray: rgba(151, 151, 151, 0.2);
 $_appointment-social-icon-gray-bg: #f6f6f6;
 $_appointment-delete-red: #e82d35;
+$_ancestral-water: #d0d0d0;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1510,3 +1511,6 @@ $magv2-click-collect-search: $brownish-grey;
 $magv2-size-options: $grey-ash;
 $magv2-mobile-size-drawer-label: $brownish-grey;
 $magv2-share-icons-default-color: $marine-blue;
+
+// Sub brand logo.
+$sub_brand_logo_separator: $_ancestral-water;
