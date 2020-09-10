@@ -12,7 +12,11 @@
  */
 function alshaya_mu_transac_update_8002() {
   // Updating configuration file for acquia solr search.
-  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
+  alshaya_config_install_configs(
+    ['search_api.index.acquia_search_index'],
+    'alshaya_search',
+    'optional'
+  );
 }
 
 /**
