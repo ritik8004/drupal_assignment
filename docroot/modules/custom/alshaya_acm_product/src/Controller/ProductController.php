@@ -23,7 +23,6 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\ImageStyleInterface;
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Extension\ModuleHandler;
 
 /**
