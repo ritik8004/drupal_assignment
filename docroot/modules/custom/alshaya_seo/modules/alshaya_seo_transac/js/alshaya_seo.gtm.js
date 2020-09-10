@@ -125,16 +125,37 @@ const productRecommendationsSuffix = 'pr-';
 
       // Push GTM event on add to cart failure.
       $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e, productInfo) {
-        var sku = productInfo.parentSku;
-        var errorMessage = $('.errors-container .error', $(this)).text();
-        // Get selected attributes.
         var attributes = [];
-        $('#configurable_ajax select', $(this)).each(function() {
-          var configLabel = $(this).attr('data-default-title');
-          var configValue = $('option:selected', $(this)).text();
-          var attribute = configLabel + ': ' + configValue;
-          attributes.push(attribute);
-        });
+        var sku = null;
+        var errorMessage = null;
+
+        // For new pdp layout, we get the required data in the event object.
+        if (($('body').hasClass('new-pdp-magazine-layout'))
+          && (e.detail.productData !== 'undefined')
+          && (e.detail.productData.parentSku !== 'undefined')
+        ) {
+          sku = e.detail.productData.parentSku;
+          // Get selected attributes.
+          $('.cart-form-attribute', $(this)).each(function() {
+            var configLabel = $(this).attr('data-attribute-name');
+            var configValue = $('ul li.active', $(this)).attr('data-attribute-label');
+            var attribute = configLabel + ': ' + configValue;
+            attributes.push(attribute);
+          });
+          errorMessage = $('#add-to-cart-error', $(this)).text();
+        }
+        else {
+          sku = productInfo.parentSku;
+          // Get selected attributes.
+          $('#configurable_ajax select', $(this)).each(function() {
+            var configLabel = $(this).attr('data-default-title');
+            var configValue = $('option:selected', $(this)).text();
+            var attribute = configLabel + ': ' + configValue;
+            attributes.push(attribute);
+          });
+          errorMessage = $('.errors-container .error', $(this)).text();
+        }
+
         // Set Event label.
         var label = 'Update cart failed for Product [' + sku + '] ';
         label = label + attributes.join(', ');
