@@ -208,7 +208,7 @@
           // Doing this for the JS conflict.
           setTimeout(function () {
             // First error label.
-            var first_error_label = $('#edit-errors-container');
+            var first_error_label = $('.sku-base-form .error');
             // If button is sticky (fix), just scroll.
             var is_button_sticky = $('button.edit-add-to-cart').hasClass('fix-button');
 
