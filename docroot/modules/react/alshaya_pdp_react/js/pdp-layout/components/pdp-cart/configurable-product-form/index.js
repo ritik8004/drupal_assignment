@@ -134,7 +134,12 @@ class ConfigurableProductForm extends React.Component {
   }
 
   openModal = () => {
-    document.querySelector('body').classList.add('select-overlay');
+    const { context } = this.props;
+    if (context === 'main') {
+      document.querySelector('body').classList.add('overlay-select');
+    } else {
+      document.querySelector('body').classList.add('overlay-related-select');
+    }
   };
 
   buttonLabel = (attr) => {

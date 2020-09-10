@@ -39,7 +39,7 @@ export default class PdpGallery extends React.PureComponent {
 
   render() {
     const {
-      pdpGallery, children, showFullVersion, context, miniFullScreenGallery,
+      pdpGallery, children, showFullVersion, context, miniFullScreenGallery, animateMobileGallery,
     } = this.props;
     const images = (pdpGallery && context === 'main') ? pdpGallery.thumbnails : pdpGallery.images;
 
@@ -78,7 +78,10 @@ export default class PdpGallery extends React.PureComponent {
             </div>
           )
           : (
-            <div className="magazine__gallery--container-mobile fadeInUp" style={{ animationDelay: '0.4s' }}>
+            <div
+              className={`magazine__gallery--container-mobile ${(animateMobileGallery ? 'fadeInUp' : '')}`}
+              style={(animateMobileGallery ? { animationDelay: '0.4s' } : null)}
+            >
               <Slider
                 dots={sliderSettings.dots}
                 infinite={sliderSettings.infinite}
@@ -94,6 +97,7 @@ export default class PdpGallery extends React.PureComponent {
                     onClick={this.showFullScreenModal}
                     viewport="mobile"
                     index={key}
+                    miniFullScreenGallery={miniFullScreenGallery}
                   >
                     {key === 0 ? children : ''}
                   </PdpImageElement>
