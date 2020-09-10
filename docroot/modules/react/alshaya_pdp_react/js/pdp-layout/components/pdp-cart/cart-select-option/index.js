@@ -27,13 +27,15 @@ class CartSelectOption extends React.Component {
   }
 
   componentDidMount() {
-    const { configurableCombinations, skuCode, configurables } = this.props;
+    const {
+      configurableCombinations, skuCode, configurables, context,
+    } = this.props;
     const { firstChild } = configurableCombinations[skuCode];
     const { code } = configurables;
     const value = configurableCombinations[skuCode].bySku[firstChild][code];
     // Setting active class for the
     // default variant.
-    const elem = document.querySelector(`ul#${code} li#value${value}`);
+    const elem = document.querySelector(`#pdp-add-to-cart-form-${context} ul#${code} li#value${value}`);
     if (!(elem == null)) {
       if (elem.classList.contains('in-active')) {
         elem.classList.remove('in-active');
@@ -74,6 +76,7 @@ class CartSelectOption extends React.Component {
     const parentSkuSelected = productInfo[skuCode].variants[variantSelected].parent_sku
       ? productInfo[skuCode].variants[variantSelected].parent_sku
       : skuCode;
+
     // Refresh the PDP page on new variant selection.
     pdpRefresh(variantSelected, parentSkuSelected);
 
@@ -85,17 +88,18 @@ class CartSelectOption extends React.Component {
    * Handle click on <li>.
    */
   handleLiClick = (e, code) => {
+    const { context } = this.props;
     this.setState({
       selected: e.currentTarget.parentElement.value,
     });
     // Remove the previous active class.
-    const activeElem = document.querySelector(`ul#${code} li.active`);
+    const activeElem = document.querySelector(`#pdp-add-to-cart-form-${context} ul#${code} li.active`);
     if (activeElem) {
       activeElem.classList.remove('active');
       activeElem.classList.toggle('in-active');
     }
     // Set active class on the current element.
-    const elem = document.querySelector(`ul#${code} li#value${e.currentTarget.parentElement.value}`);
+    const elem = document.querySelector(`#pdp-add-to-cart-form-${context} ul#${code} li#value${e.currentTarget.parentElement.value}`);
     if (elem.classList.contains('in-active')) {
       elem.classList.remove('in-active');
     }

@@ -420,6 +420,8 @@ class ProductResource extends ResourceBase {
         // Setting product labels for variants.
         $child_product_labels = $this->skuManager->getLabelsData($child, 'pdp');
         $data['product_labels'][$values['sku']] = $child_product_labels;
+
+        $data['variants'][$values['sku']]['promotionsRaw'] = $this->skuManager->getPromotions($child);
       }
 
       $data['swatch_data'] = $data['swatch_data']?: new \stdClass();

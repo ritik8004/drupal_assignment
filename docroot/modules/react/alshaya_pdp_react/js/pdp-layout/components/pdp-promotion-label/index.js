@@ -1,20 +1,16 @@
 import React from 'react';
-import parse from 'html-react-parser';
 import PdpDynamicPromotions from '../pdp-dynamic-promotions';
 
 const PdpPromotionLabel = (props) => {
   const {
-    skuItemCode, variantSelected, skuMainCode, cartDataValue,
+    skuMainCode, cartDataValue, promotions,
   } = props;
-  let { promotions } = drupalSettings.productInfo[skuItemCode];
-  const { configurableCombinations } = drupalSettings;
-  if (configurableCombinations && variantSelected) {
-    promotions = drupalSettings.productInfo[skuItemCode].variants[variantSelected].promotions;
-  }
 
   return (promotions) ? (
     <>
-      <p>{parse(promotions)}</p>
+      {Object.keys(promotions).map((key) => (
+        <p><a href={promotions[key].promo_web_url}>{promotions[key].text}</a></p>
+      ))}
       <div id="dynamic-promo-labels">
         <PdpDynamicPromotions skuMainCode={skuMainCode} cartDataValue={cartDataValue} />
       </div>

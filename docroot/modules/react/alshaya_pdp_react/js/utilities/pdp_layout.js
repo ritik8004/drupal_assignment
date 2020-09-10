@@ -177,6 +177,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   let labels = '';
   let stockQty = '';
   let firstChild = '';
+  let promotions = '';
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -193,6 +194,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     labels = productLabels[skuItemCode];
     stockQty = productInfo[skuItemCode].stockQty;
     firstChild = skuItemCode;
+    promotions = productInfo[skuItemCode].promotionsRaw;
     if (productInfo[skuItemCode].type === 'configurable') {
       configurableCombinations = drupalSettings.configurableCombinations;
       if (Object.keys(variants).length > 0) {
@@ -206,6 +208,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
           labels = productLabels[variant];
           stockQty = productInfo[skuItemCode].variants[variant].stock.qty;
           firstChild = configurableCombinations[skuItemCode].firstChild;
+          promotions = productInfo[skuItemCode].variants[variant].promotionsRaw;
         }
       }
     }
@@ -234,6 +237,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     labels,
     stockQty,
     firstChild,
+    promotions,
   };
 };
 
@@ -262,6 +266,7 @@ export const addToCartConfigurable = (
   skuCode,
   productInfo,
   pdpLabelRefresh,
+  context,
 ) => {
   e.preventDefault();
   // Adding add to cart loading.
@@ -273,7 +278,7 @@ export const addToCartConfigurable = (
   Object.keys(attributes).forEach((key) => {
     const option = {
       option_id: attributes[key].attribute_id,
-      option_value: document.querySelector(`#${key}`).querySelectorAll('.active')[0].value,
+      option_value: document.querySelector(`#pdp-add-to-cart-form-${context} #${key}`).querySelectorAll('.active')[0].value,
     };
 
     // Skipping the psudo attributes.
@@ -283,7 +288,7 @@ export const addToCartConfigurable = (
     }
   });
 
-  const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
+  const variantSelected = document.getElementById(`pdp-add-to-cart-form-${context}`).getAttribute('variantselected');
   const parentSKU = productInfo[skuCode].variants[variantSelected].parent_sku;
   const getPost = getPostData(skuCode, variantSelected, parentSKU);
 
@@ -316,13 +321,13 @@ export const addToCartConfigurable = (
 /**
  * Add to cart on click event for simple products.
  */
-export const addToCartSimple = (e, id, skuCode, productInfo, pdpLabelRefresh) => {
+export const addToCartSimple = (e, id, skuCode, productInfo, pdpLabelRefresh, context) => {
   e.preventDefault();
   // Adding add to cart loading.
   const addToCartBtn = document.getElementById(id);
   addToCartBtn.classList.toggle('magv2-add-to-basket-loader');
 
-  const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
+  const variantSelected = document.getElementById(`pdp-add-to-cart-form-${context}`).getAttribute('variantselected');
   const options = [];
 
   const getPost = getPostData(skuCode, variantSelected, skuCode);

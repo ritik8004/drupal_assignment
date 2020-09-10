@@ -11,6 +11,7 @@ const PdpCart = ({
   pdpLabelRefresh,
   stockQty,
   firstChild,
+  context,
 }) => {
   const wrapper = useRef();
 
@@ -32,6 +33,7 @@ const PdpCart = ({
           pdpLabelRefresh={pdpLabelRefresh}
           stockQty={stockQty}
           firstChild={firstChild}
+          context={context}
         />
       </div>
     );
@@ -43,6 +45,7 @@ const PdpCart = ({
         productInfo={productInfo}
         pdpLabelRefresh={pdpLabelRefresh}
         stockQty={stockQty}
+        context={context}
       />
     </div>
   );

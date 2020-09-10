@@ -6,14 +6,17 @@ import PdpProductLabels from '../pdp-product-labels';
 import PdpPopupContainer from '../utilities/pdp-popup-container';
 import PdpPopupWrapper from '../utilities/pdp-popup-wrapper';
 import PdpCart from '../pdp-cart';
+import PdpPromotionLabel from '../pdp-promotion-label';
 
 class CrossellPopupContent extends React.Component {
   constructor(props) {
     super(props);
     const { relatedSku } = this.props;
+    const cartData = Drupal.alshayaSpc.getCartData();
     this.state = {
       relatedProductData: null,
       variantSelected: relatedSku,
+      cartDataValue: cartData,
     };
   }
 
@@ -32,12 +35,26 @@ class CrossellPopupContent extends React.Component {
     }
   }
 
+  pdpRelatedRefresh = (variantSelected, parentSkuSelected) => {
+    this.setState({
+      variantSelected,
+      skuMainCode: parentSkuSelected,
+    });
+  }
+
+  pdpRelatedLabelRefresh = (cartDataVal) => {
+    this.setState({
+      cartDataValue: cartDataVal,
+    });
+  }
 
   render() {
     const { closeModal, relatedSku } = this.props;
 
     const url = Drupal.url(`rest/v1/product/${relatedSku}`);
-    const { relatedProductData, variantSelected } = this.state;
+    const {
+      relatedProductData, variantSelected, skuMainCode, cartDataValue,
+    } = this.state;
     this.getRelatedProductsInfo(relatedProductData, url, relatedSku);
     let title = '';
     let pdpProductPrice = '';
@@ -52,6 +69,7 @@ class CrossellPopupContent extends React.Component {
     let relatedProductInfo = '';
     let stockQty = '';
     let firstChild = '';
+    let promotions = '';
     if (relatedProductData) {
       title = relatedProductData.title;
       pdpProductPrice = parseInt(relatedProductData.original_price, 10);
@@ -63,6 +81,7 @@ class CrossellPopupContent extends React.Component {
       firstChild = relatedSku;
       configurableCombinations = relatedProductData.configurableCombinations;
       relatedProductInfo = relatedProductData.relatedProductInfo;
+      promotions = relatedProductData.promotionsRaw;
       if (relatedProductData.brand_logo !== undefined) {
         brandLogo = relatedProductData.brand_logo;
         brandLogoAlt = relatedProductData.brand_alt;
@@ -73,6 +92,7 @@ class CrossellPopupContent extends React.Component {
       if (configurableCombinations && variantSelected) {
         stockQty = relatedProductData.variants[variantSelected].stock;
         firstChild = configurableCombinations[relatedSku].firstChild;
+        promotions = relatedProductData.variants[variantSelected].promotionsRaw;
       }
     }
 
@@ -108,9 +128,13 @@ class CrossellPopupContent extends React.Component {
               brandLogoTitle={brandLogoTitle}
             />
             <div className="promotions promotions-full-view-mode">
-              <p>
-                <a href="buy-1-get-1-free-dee/">Buy 1 get 1 free - Dee</a>
-              </p>
+              <PdpPromotionLabel
+                skuItemCode={relatedSku}
+                variantSelected={variantSelected}
+                skuMainCode={skuMainCode}
+                cartDataValue={cartDataValue}
+                promotions={promotions}
+              />
             </div>
             {stockStatus ? (
               <PdpCart
@@ -119,6 +143,9 @@ class CrossellPopupContent extends React.Component {
                 productInfo={relatedProductInfo}
                 stockQty={stockQty}
                 firstChild={firstChild}
+                context="related"
+                pdpRefresh={this.pdpRelatedRefresh}
+                pdpLabelRefresh={this.pdpRelatedLabelRefresh}
               />
             ) : outOfStock}
             {(relatedProductData.link)

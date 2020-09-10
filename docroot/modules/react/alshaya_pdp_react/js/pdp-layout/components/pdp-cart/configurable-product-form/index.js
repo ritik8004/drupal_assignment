@@ -20,10 +20,11 @@ class ConfigurableProductForm extends React.Component {
 
   componentDidMount() {
     this.handleLoad();
+    const { context } = this.props;
 
     // Condition to check if add to cart
     // button is available.
-    if (document.getElementById('add-to-cart-main')) {
+    if (document.getElementById(`add-to-cart-${context}`)) {
       window.addEventListener('load', () => {
         this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
 
@@ -135,15 +136,16 @@ class ConfigurableProductForm extends React.Component {
   };
 
   buttonLabel = (attr) => {
-    const sizeElem = document.querySelector(`#${attr}`).querySelectorAll('.active')[0];
+    const { context } = this.props;
+    const sizeElem = document.querySelector(`#pdp-add-to-cart-form-${context} #${attr}`).querySelectorAll('.active')[0];
     let label = '';
     if (sizeElem !== undefined) {
-      const size = document.querySelector(`#${attr}`).querySelectorAll('.active')[0].innerText;
+      const size = document.querySelector(`#pdp-add-to-cart-form-${context} #${attr}`).querySelectorAll('.active')[0].innerText;
       let group = '';
       label = size;
       // Check if size group is available.
-      if (document.querySelector('.group-anchor-links')) {
-        group = document.querySelector('.group-anchor-links').querySelectorAll('.active')[0].innerText;
+      if (document.querySelector(`#pdp-add-to-cart-form-${context} .group-anchor-links`)) {
+        group = document.querySelector(`#pdp-add-to-cart-form-${context} .group-anchor-links`).querySelectorAll('.active')[0].innerText;
         label = `${group}, ${size}`;
         return label;
       }
@@ -160,6 +162,7 @@ class ConfigurableProductForm extends React.Component {
       pdpLabelRefresh,
       stockQty,
       firstChild,
+      context,
     } = this.props;
     const { checkoutFeatureStatus } = drupalSettings;
 
@@ -175,8 +178,10 @@ class ConfigurableProductForm extends React.Component {
       <CartUnavailability />
     );
 
+    const id = `add-to-cart-${context}`;
+
     return (
-      <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected} data-sku={skuCode}>
+      <form action="#" className="sku-base-form" method="post" id={`pdp-add-to-cart-form-${context}`} parentsku={skuCode} variantselected={variantSelected} data-sku={skuCode}>
         <div id="add-to-cart-error" className="error" />
         {Object.keys(configurables).map((key) => (
           <div className={`cart-form-attribute ${key}`} key={key}>
@@ -195,6 +200,7 @@ class ConfigurableProductForm extends React.Component {
               refreshConfigurables={this.refreshConfigurables}
               selectedValues={this.selectedValues}
               pdpRefresh={pdpRefresh}
+              context={context}
             />
           </div>
         ))}
@@ -225,9 +231,17 @@ class ConfigurableProductForm extends React.Component {
             <div className="magv2-add-to-basket-container" ref={this.button}>
               <button
                 className="magv2-button"
-                id="add-to-cart-main"
+                id={`add-to-cart-${context}`}
                 type="submit"
-                onClick={(e) => addToCartConfigurable(e, 'add-to-cart-main', configurableCombinations, skuCode, productInfo, pdpLabelRefresh)}
+                onClick={(e) => addToCartConfigurable(
+                  e,
+                  id,
+                  configurableCombinations,
+                  skuCode,
+                  productInfo,
+                  pdpLabelRefresh,
+                  context,
+                )}
               >
                 {Drupal.t('Add To Bag')}
               </button>

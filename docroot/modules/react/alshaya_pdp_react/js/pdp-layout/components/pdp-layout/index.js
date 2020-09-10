@@ -60,6 +60,7 @@ const PdpLayout = () => {
     labels,
     stockQty,
     firstChild,
+    promotions,
   } = productValues;
 
   const emptyRes = (
@@ -118,6 +119,7 @@ const PdpLayout = () => {
           skuCode={skuItemCode}
           configurableCombinations={configurableCombinations}
           productInfo={productInfo}
+          context="main"
         />
       </div>
       <div className="magv2-main">
@@ -147,6 +149,7 @@ const PdpLayout = () => {
               variantSelected={variant}
               skuMainCode={skuMainCode}
               cartDataValue={cartDataValue}
+              promotions={promotions}
             />
           </div>
           {stockStatus ? (
@@ -159,6 +162,7 @@ const PdpLayout = () => {
               childRef={(ref) => (getChildRef(ref))}
               stockQty={stockQty}
               firstChild={firstChild}
+              context="main"
             />
           ) : outOfStock}
           <PdpDescription
