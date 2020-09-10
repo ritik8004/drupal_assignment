@@ -53,6 +53,10 @@
       $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e) {
         spinner_stop();
         var productData = e.detail.productData;
+        // Close the recommendation product modal if present.
+        if ($('.ui-dialog').length > 0) {
+          $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
+        }
         // Scroll and show cart notification.
         var cart_notification_data = {
           image: productData.image,
@@ -83,10 +87,6 @@
           )
         );
         $.fn.cartNotificationScroll();
-
-        if ($('.ui-dialog').length > 0) {
-          $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
-        }
       });
 
       $('.sku-base-form').once('cart-notification-error').on('product-add-to-cart-failed', function () {

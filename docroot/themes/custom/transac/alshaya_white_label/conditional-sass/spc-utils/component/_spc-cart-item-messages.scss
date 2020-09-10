@@ -45,7 +45,7 @@
   }
 }
 
-.delivery-in-only-city-text {
+.delivery-in-only-city-text:not(:empty) {
   font-size: 0.8125rem;
   color: $spc-country-availability;
 
