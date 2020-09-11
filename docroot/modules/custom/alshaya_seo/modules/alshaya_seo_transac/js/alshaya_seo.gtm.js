@@ -124,14 +124,13 @@ const productRecommendationsSuffix = 'pr-';
       });
 
       // Push GTM event on add to cart failure.
-      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e, productInfo) {
+      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e) {
         var attributes = [];
-        var sku = null;
+        var sku = (e.detail.productData.parentSku !== 'undefined') ? e.detail.productData.parentSku : null;
         var errorMessage = null;
 
         // For new pdp layout, we get the required data in the event object.
         if ($('body').hasClass('new-pdp-magazine-layout')) {
-          sku = (e.detail.productData.parentSku !== 'undefined') ? e.detail.productData.parentSku : null;
           // Get selected attributes.
           $('.cart-form-attribute', $(this)).each(function() {
             var configLabel = $(this).attr('data-attribute-name');
@@ -142,7 +141,6 @@ const productRecommendationsSuffix = 'pr-';
           errorMessage = $('#add-to-cart-error', $(this)).text();
         }
         else {
-          sku = productInfo.parentSku;
           // Get selected attributes.
           $('#configurable_ajax select', $(this)).each(function() {
             var configLabel = $(this).attr('data-default-title');

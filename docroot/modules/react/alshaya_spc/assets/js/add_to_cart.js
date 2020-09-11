@@ -110,7 +110,13 @@
                   // Showing the error message.
                   $('.error-container-' + cleaned_sku).html('<div class="error">' + response.error_message + '</div>');
                   // Trigger the failed event for other listeners.
-                  $(form).trigger('product-add-to-cart-failed', [productData, response]);
+                  const cartNotification = new CustomEvent('product-add-to-cart-failed', {
+                    bubbles: true,
+                    detail: {
+                      productData,
+                    },
+                  });
+                  form[0].dispatchEvent(cartNotification);
                 }
                 else if (response.cart_id) {
                   if (response.response_message.status === 'success'
