@@ -1240,6 +1240,7 @@ class Cart {
         '@cart' => json_encode($cart),
         '@order_id' => $order_id,
       ]);
+
       return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
     }
     catch (\Exception $e) {
