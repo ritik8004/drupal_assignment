@@ -125,31 +125,11 @@ const productRecommendationsSuffix = 'pr-';
 
       // Push GTM event on add to cart failure.
       $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e) {
-        var attributes = [];
-        var sku = (e.detail.productData.parentSku !== 'undefined') ? e.detail.productData.parentSku : null;
-        var errorMessage = null;
-
-        // For new pdp layout, we get the required data in the event object.
-        if ($('body').hasClass('new-pdp-magazine-layout')) {
-          // Get selected attributes.
-          attributes = e.detail.productData.options;
-          errorMessage = e.detail.message;
-        }
-        else {
-          // Get selected attributes.
-          $('#configurable_ajax select', $(this)).each(function() {
-            var configLabel = $(this).attr('data-default-title');
-            var configValue = $('option:selected', $(this)).text();
-            var attribute = configLabel + ': ' + configValue;
-            attributes.push(attribute);
-          });
-          errorMessage = $('.errors-container .error', $(this)).text();
-        }
-
+        const sku = (e.detail.productData.parentSku !== 'undefined') ? e.detail.productData.parentSku : null;
         // Set Event label.
         var label = 'Update cart failed for Product [' + sku + '] ';
-        label = label + attributes.join(', ');
-        Drupal.logJavascriptError(label, errorMessage, GTM_CONSTANTS.CART_ERRORS);
+        label = label + e.detail.productData.options.join(', ');
+        Drupal.logJavascriptError(label, e.detail.message, GTM_CONSTANTS.CART_ERRORS);
       });
 
       // Global variables & selectors.
