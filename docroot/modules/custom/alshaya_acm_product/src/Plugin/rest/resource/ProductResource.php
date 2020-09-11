@@ -387,25 +387,17 @@ class ProductResource extends ResourceBase {
 
     $data['configurable_values'] = $this->getConfigurableValues($sku);
 
+    // Brand logo data.
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $brand_logo = alshaya_acm_product_get_brand_logo($sku);
+    if ($brand_logo) {
+      $data['brand_logo']['image'] = file_create_url($brand_logo['#uri']);
+      $data['brand_logo']['alt'] = file_create_url($brand_logo['#alt']);
+      $data['brand_logo']['title'] = file_create_url($brand_logo['#title']);
+    }
+
     $current_request = $this->requestStack->getCurrentRequest();
-    if ($current_request->query->get('pdp') == 'new-pdp') {
-      // Brand logo data.
-      $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-      $brand_logo = alshaya_acm_product_get_brand_logo($sku);
-      if ($brand_logo) {
-        $data['brand_logo'] = file_create_url($brand_logo['#uri']);
-        $data['brand_alt'] = file_create_url($brand_logo['#alt']);
-        $data['brand_title'] = file_create_url($brand_logo['#title']);
-      }
-
-      // Get product labels.
-      $product_labels = $this->skuManager->getLabelsData($sku, 'pdp');
-      $data['product_labels'][$data['sku']] = $product_labels;
-
-      // Check if product is in stock.
-      $stock_status = $this->skuManager->isProductInStock($sku);
-      $data['stockStatus'] = $stock_status;
-
+    if ($current_request->query->get('pdp') == 'magazinev2') {
       // Set cart image.
       $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
       $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
@@ -429,7 +421,7 @@ class ProductResource extends ResourceBase {
         $variant['configurable_values'] = $this->getConfigurableValues($child, $values['attributes']);
         $data['variants'][] = $variant;
 
-        if ($current_request->query->get('pdp') == 'new-pdp') {
+        if ($current_request->query->get('pdp') == 'magazinev2') {
           $data['variants'][$values['sku']] = $variant;
 
           // Set cart image.
@@ -446,7 +438,7 @@ class ProductResource extends ResourceBase {
       $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
       $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
 
-      if ($current_request->query->get('pdp') == 'new-pdp') {
+      if ($current_request->query->get('pdp') == 'magazinev2') {
         // Setting configurable combination array.
         $options = [];
         $size_values = [];
@@ -455,7 +447,7 @@ class ProductResource extends ResourceBase {
         $product_tree['configurables'] = $this->disableUnavailableOptions($sku, $product_tree['configurables']);
         $swatch_processed = FALSE;
 
-        if ($stock_status) {
+        if ($data['in_stock']) {
           $data['configurableCombinations'][$data['sku']]['bySku'] = $combinations['by_sku'];
           $data['configurableCombinations'][$data['sku']]['byAttribute'] = $combinations['by_attribute'];
         }

@@ -39,7 +39,7 @@ const PdpProductLabels = (props) => {
 };
 
 const PdpProductLabel = (props) => {
-  const { bifercatedLabels, directionKey } = props;
+  const { bifercatedLabels, directionKey, context } = props;
   return (
     <>
       {
@@ -47,7 +47,7 @@ const PdpProductLabel = (props) => {
           // BE to provide and add a unique key here.
           <div className={`labels ${labelItem.position}`}>
             <img
-              src={labelItem.image.url || ''}
+              src={(context === 'main') ? labelItem.image.url : labelItem.image}
               alt={labelItem.image.alt || ''}
               title={labelItem.image.title || ''}
             />

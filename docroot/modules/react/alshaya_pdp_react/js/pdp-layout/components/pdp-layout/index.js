@@ -58,16 +58,13 @@ const PdpLayout = () => {
     configurableCombinations,
     relatedProducts,
     stockStatus,
-<<<<<<< HEAD
     labels,
     stockQty,
     firstChild,
     promotions,
-=======
     freeGiftImage,
     freeGiftTitle,
     freeGiftPromoCode,
->>>>>>> 9b311a3cf9ff4ed11bc35f968cae7c92ac315dfe
   } = productValues;
 
   const emptyRes = (
@@ -139,7 +136,7 @@ const PdpLayout = () => {
             miniFullScreenGallery={isTouchDevice}
             animateMobileGallery
           >
-            <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} labels={labels} />
+            <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} labels={labels} context="main" />
           </PdpGallery>
         </div>
         <div className="magv2-sidebar">

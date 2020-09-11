@@ -63,7 +63,7 @@ class CrossellPopupContent extends React.Component {
   render() {
     const { closeModal, relatedSku } = this.props;
 
-    const url = Drupal.url(`rest/v1/product/${relatedSku}?pdp=new-pdp`);
+    const url = Drupal.url(`rest/v1/product/${relatedSku}?pdp=magazinev2`);
     const {
       relatedProductData, variantSelected, skuMainCode, cartDataValue,
     } = this.state;
@@ -78,7 +78,7 @@ class CrossellPopupContent extends React.Component {
     let labels = '';
     let stockStatus = '';
     let configurableCombinations = '';
-    let relatedProductInfo = {};
+    const relatedProductInfo = {};
     let stockQty = '';
     let firstChild = '';
     let promotions = '';
@@ -87,17 +87,17 @@ class CrossellPopupContent extends React.Component {
       pdpProductPrice = parseInt(relatedProductData.original_price, 10);
       finalPrice = parseInt(relatedProductData.final_price, 10);
       pdpGallery = relatedProductData.media[0].media;
-      labels = relatedProductData.product_labels[relatedSku];
-      stockStatus = relatedProductData.stockStatus;
+      labels = relatedProductData.labels[0].labels;
+      stockStatus = relatedProductData.in_stock;
       stockQty = relatedProductData.stock;
       firstChild = relatedSku;
       configurableCombinations = relatedProductData.configurableCombinations;
       relatedProductInfo[relatedSku] = relatedProductData;
       promotions = relatedProductData.promotionsRaw;
       if (relatedProductData.brand_logo !== undefined) {
-        brandLogo = relatedProductData.brand_logo;
-        brandLogoAlt = relatedProductData.brand_alt;
-        brandLogoTitle = relatedProductData.brand_title;
+        brandLogo = relatedProductData.brand_logo.image;
+        brandLogoAlt = relatedProductData.brand_logo.alt;
+        brandLogoTitle = relatedProductData.brand_logo.title;
       }
 
       // For configurable products.
@@ -130,7 +130,7 @@ class CrossellPopupContent extends React.Component {
               miniFullScreenGallery={false}
               animateMobileGallery={false}
             >
-              <PdpProductLabels skuCode={relatedSku} variantSelected={relatedSku} labels={labels} />
+              <PdpProductLabels skuCode={relatedSku} variantSelected={relatedSku} labels={labels} context="related" />
             </PdpGallery>
             <PdpInfo
               title={title}

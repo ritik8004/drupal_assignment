@@ -206,7 +206,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
       brandLogoTitle = productInfo[skuItemCode].brandLogo.title
         ? productInfo[skuItemCode].brandLogo.title : null;
     }
-    if (productInfo[skuItemCode].freeGiftPromotion['#free_sku_code']) {
+    if (productInfo[skuItemCode].freeGiftPromotion !== undefined) {
       freeGiftImage = productInfo[skuItemCode].freeGiftPromotion['#sku_image']
         ? productInfo[skuItemCode].freeGiftPromotion['#sku_image'] : null;
       freeGiftTitle = productInfo[skuItemCode].freeGiftPromotion['#free_sku_title']
