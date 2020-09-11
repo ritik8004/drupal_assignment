@@ -63,7 +63,7 @@ class CrossellPopupContent extends React.Component {
   render() {
     const { closeModal, relatedSku } = this.props;
 
-    const url = Drupal.url(`rest/v1/product/${relatedSku}`);
+    const url = Drupal.url(`rest/v1/product/${relatedSku}?pdp=new-pdp`);
     const {
       relatedProductData, variantSelected, skuMainCode, cartDataValue,
     } = this.state;
@@ -78,7 +78,7 @@ class CrossellPopupContent extends React.Component {
     let labels = '';
     let stockStatus = '';
     let configurableCombinations = '';
-    let relatedProductInfo = '';
+    let relatedProductInfo = {};
     let stockQty = '';
     let firstChild = '';
     let promotions = '';
@@ -92,7 +92,7 @@ class CrossellPopupContent extends React.Component {
       stockQty = relatedProductData.stock;
       firstChild = relatedSku;
       configurableCombinations = relatedProductData.configurableCombinations;
-      relatedProductInfo = relatedProductData.relatedProductInfo;
+      relatedProductInfo[relatedSku] = relatedProductData;
       promotions = relatedProductData.promotionsRaw;
       if (relatedProductData.brand_logo !== undefined) {
         brandLogo = relatedProductData.brand_logo;
@@ -104,7 +104,6 @@ class CrossellPopupContent extends React.Component {
       if (configurableCombinations && variantSelected) {
         stockQty = relatedProductData.variants[variantSelected].stock;
         firstChild = configurableCombinations[relatedSku].firstChild;
-        promotions = relatedProductData.variants[variantSelected].promotionsRaw;
         pdpGallery = relatedProductData.variants[variantSelected].media[0].media;
       }
     }

@@ -314,15 +314,6 @@ class ProductResource extends ResourceBase {
     $data['parent_sku'] = $parent_sku ? $parent_sku->getSku() : NULL;
     $data['title'] = (string) $this->productInfoHelper->getTitle($sku, 'pdp');
 
-    // Brand logo data.
-    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-    $brand_logo = alshaya_acm_product_get_brand_logo($sku);
-    if ($brand_logo) {
-      $data['brand_logo'] = file_create_url($brand_logo['#uri']);
-      $data['brand_alt'] = file_create_url($brand_logo['#alt']);
-      $data['brand_title'] = file_create_url($brand_logo['#title']);
-    }
-
     $prices = $this->skuManager->getMinPrices($sku);
     $data['original_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']);
     $data['final_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']);
@@ -396,22 +387,34 @@ class ProductResource extends ResourceBase {
 
     $data['configurable_values'] = $this->getConfigurableValues($sku);
 
-    // Get product labels.
-    $product_labels = $this->skuManager->getLabelsData($sku, 'pdp');
-    $data['product_labels'][$data['sku']] = $product_labels;
+    $current_request = $this->requestStack->getCurrentRequest();
+    if ($current_request->query->get('pdp') == 'new-pdp') {
+      // Brand logo data.
+      $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+      $brand_logo = alshaya_acm_product_get_brand_logo($sku);
+      if ($brand_logo) {
+        $data['brand_logo'] = file_create_url($brand_logo['#uri']);
+        $data['brand_alt'] = file_create_url($brand_logo['#alt']);
+        $data['brand_title'] = file_create_url($brand_logo['#title']);
+      }
 
-    // Check if product is in stock.
-    $stock_status = $this->skuManager->isProductInStock($sku);
-    $data['stockStatus'] = $stock_status;
+      // Get product labels.
+      $product_labels = $this->skuManager->getLabelsData($sku, 'pdp');
+      $data['product_labels'][$data['sku']] = $product_labels;
 
-    // Set cart image.
-    $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
-    $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
-    // Prepare image style url.
-    if (!empty($image['#uri'])) {
-      $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+      // Check if product is in stock.
+      $stock_status = $this->skuManager->isProductInStock($sku);
+      $data['stockStatus'] = $stock_status;
+
+      // Set cart image.
+      $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
+      $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
+      // Prepare image style url.
+      if (!empty($image['#uri'])) {
+        $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+      }
+      $data['cart_image'] = is_string($image) ? $image : '';
     }
-    $data['cart_image'] = is_string($image) ? $image : '';
 
     if ($sku->bundle() === 'configurable') {
       $data['swatch_data'] = $this->getSwatchData($sku);
@@ -424,101 +427,107 @@ class ProductResource extends ResourceBase {
         }
         $variant = $this->getSkuData($child);
         $variant['configurable_values'] = $this->getConfigurableValues($child, $values['attributes']);
-        $data['variants'][$values['sku']] = $variant;
+        $data['variants'][] = $variant;
 
-        // Setting product labels for variants.
-        $child_product_labels = $this->skuManager->getLabelsData($child, 'pdp');
-        $data['product_labels'][$values['sku']] = $child_product_labels;
+        if ($current_request->query->get('pdp') == 'new-pdp') {
+          $data['variants'][$values['sku']] = $variant;
 
-        $data['variants'][$values['sku']]['promotionsRaw'] = $this->skuManager->getPromotions($child);
-
-        // Set cart image.
-        $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
-        $image = alshaya_acm_get_product_display_image($child, 'pdp_gallery_thumbnail', 'cart');
-        // Prepare image style url.
-        if (!empty($image['#uri'])) {
-          $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+          // Set cart image.
+          $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
+          $image = alshaya_acm_get_product_display_image($child, 'pdp_gallery_thumbnail', 'cart');
+          // Prepare image style url.
+          if (!empty($image['#uri'])) {
+            $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+          }
+          $data['variants'][$values['sku']]['cart_image'] = is_string($image) ? $image : '';
         }
-        $data['variants'][$values['sku']]['cart_image'] = is_string($image) ? $image : '';
       }
 
       $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
       $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
 
-      // Setting configurable combination array.
-      $options = [];
-      $size_values = [];
-      $product_tree = Configurable::deriveProductTree($sku);
-      $combinations = $product_tree['combinations'];
-      $product_tree['configurables'] = $this->disableUnavailableOptions($sku, $product_tree['configurables']);
-      $swatch_processed = FALSE;
+      if ($current_request->query->get('pdp') == 'new-pdp') {
+        // Setting configurable combination array.
+        $options = [];
+        $size_values = [];
+        $product_tree = Configurable::deriveProductTree($sku);
+        $combinations = $product_tree['combinations'];
+        $product_tree['configurables'] = $this->disableUnavailableOptions($sku, $product_tree['configurables']);
+        $swatch_processed = FALSE;
 
-      if ($stock_status) {
-        $data['configurableCombinations'][$data['sku']]['bySku'] = $combinations['by_sku'];
-        $data['configurableCombinations'][$data['sku']]['byAttribute'] = $combinations['by_attribute'];
-      }
-
-      $data['configurableCombinations'][$data['sku']]['configurables'] = $product_tree['configurables'];
-      // Prepare group and swatch attributes.
-      foreach ($product_tree['configurables'] as $key => $configurable) {
-        $data['configurableCombinations'][$data['sku']]['configurables'][$key]['isGroup'] = FALSE;
-        $data['configurableCombinations'][$data['sku']]['configurables'][$key]['isSwatch'] = FALSE;
-        if (!$swatch_processed && in_array($key, $this->skuManager->getPdpSwatchAttributes())) {
-          $swatch_processed = TRUE;
-          $data['configurableCombinations'][$data['sku']]['configurables'][$key]['isSwatch'] = TRUE;
-          foreach ($configurable['values'] as $value => $label) {
-            $value_id = $label['value_id'];
-            if (empty($value_id)) {
-              continue;
-            }
-
-            $swatch_sku = $this->skuManager->getChildSkuFromAttribute($sku, $key, $value_id);
-            if ($swatch_sku instanceof SKU) {
-              $swatch_image_url = $this->skuImagesManager->getPdpSwatchImageUrl($swatch_sku);
-              if ($swatch_image_url) {
-                $swatch_image = file_url_transform_relative($swatch_image_url);
-                $data['configurableCombinations'][$data['sku']]['configurables'][$key]['values'][$value]['swatch_image'] = $swatch_image;
-              }
-            }
-          }
+        if ($stock_status) {
+          $data['configurableCombinations'][$data['sku']]['bySku'] = $combinations['by_sku'];
+          $data['configurableCombinations'][$data['sku']]['byAttribute'] = $combinations['by_attribute'];
         }
-        elseif ($alternates = $this->optionsHelper->getSizeGroup($key)) {
-          $data['configurableCombinations'][$data['sku']]['configurables'][$key]['isGroup'] = TRUE;
-          $data['configurableCombinations'][$data['sku']]['configurables'][$key]['alternates'] = $alternates;
-          $combinations = $this->skuManager->getConfigurableCombinations($sku);
-          foreach ($configurable['values'] as $value => $label) {
-            foreach ($combinations['attribute_sku'][$key][$value] ?? [] as $child_sku_code) {
-              $child_sku = SKU::loadFromSku($child_sku_code, $sku->language()->getId());
 
-              if (!($child_sku instanceof SKU)) {
+        $data['configurableCombinations'][$data['sku']]['configurables'] = $product_tree['configurables'];
+        // Prepare group and swatch attributes.
+        foreach ($product_tree['configurables'] as $key => $configurable) {
+          $data['configurableCombinations'][$data['sku']]['configurables'][$key]['isGroup'] = FALSE;
+          $data['configurableCombinations'][$data['sku']]['configurables'][$key]['isSwatch'] = FALSE;
+          if (!$swatch_processed && in_array($key, $this->skuManager->getPdpSwatchAttributes())) {
+            $swatch_processed = TRUE;
+            $data['configurableCombinations'][$data['sku']]['configurables'][$key]['isSwatch'] = TRUE;
+            foreach ($configurable['values'] as $value => $label) {
+              $value_id = $label['value_id'];
+              if (empty($value_id)) {
                 continue;
               }
 
-              $size_values[$value] = $this->getAlternativeValues($alternates, $child_sku);
+              $swatch_sku = $this->skuManager->getChildSkuFromAttribute($sku, $key, $value_id);
+              if ($swatch_sku instanceof SKU) {
+                $swatch_image_url = $this->skuImagesManager->getPdpSwatchImageUrl($swatch_sku);
+                if ($swatch_image_url) {
+                  $swatch_image = file_url_transform_relative($swatch_image_url);
+                  $data['configurableCombinations'][$data['sku']]['configurables'][$key]['values'][$value]['swatch_image'] = $swatch_image;
+                }
+              }
             }
-
           }
-          $data['configurableCombinations'][$data['sku']]['configurables'][$key]['values'] = $size_values;
+          elseif ($alternates = $this->optionsHelper->getSizeGroup($key)) {
+            $data['configurableCombinations'][$data['sku']]['configurables'][$key]['isGroup'] = TRUE;
+            $data['configurableCombinations'][$data['sku']]['configurables'][$key]['alternates'] = $alternates;
+            $combinations = $this->skuManager->getConfigurableCombinations($sku);
+            foreach ($configurable['values'] as $value => $label) {
+              foreach ($combinations['attribute_sku'][$key][$value] ?? [] as $child_sku_code) {
+                $child_sku = SKU::loadFromSku($child_sku_code, $sku->language()->getId());
+
+                if (!($child_sku instanceof SKU)) {
+                  continue;
+                }
+
+                $size_values[$value] = $this->getAlternativeValues($alternates, $child_sku);
+              }
+
+            }
+            $data['configurableCombinations'][$data['sku']]['configurables'][$key]['values'] = $size_values;
+          }
         }
-      }
 
-      // Prepare data for each variant.
-      foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
-        $child = SKU::loadFromSku($child_sku);
-        if (!$child instanceof SKUInterface) {
-          continue;
+        // Prepare data for first child.
+        foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
+          $child = SKU::loadFromSku($child_sku);
+          if (!$child instanceof SKUInterface) {
+            continue;
+          }
+
+          $options = NestedArray::mergeDeepArray([$options, $this->skuManager->getCombinationArray($combination)], TRUE);
+          $data['configurableCombinations'][$data['sku']]['combinations'] = $options;
+
+          // Get the first child from attribute_sku.
+          $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
+          $data['configurableCombinations'][$data['sku']]['firstChild'] = reset($sorted_variants);
         }
 
-        $options = NestedArray::mergeDeepArray([$options, $this->skuManager->getCombinationArray($combination)], TRUE);
-        $data['configurableCombinations'][$data['sku']]['combinations'] = $options;
-
-        // Get the first child from attribute_sku.
-        $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];
-        $data['configurableCombinations'][$data['sku']]['firstChild'] = reset($sorted_variants);
+        // Removing data that are not being used in new PDP.
+        unset($data['swatch_data']);
+        unset($data['cart_combinations']);
+        unset($data['categorisations']);
+        unset($data['delivery_options']);
+        unset($data['linked']);
       }
     }
 
-    $current_request = $this->requestStack->getCurrentRequest();
     if ($current_request->query->get('context')) {
       // Adding extra data to the product resource.
       $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
@@ -549,8 +558,6 @@ class ProductResource extends ResourceBase {
     // Allow other modules to alter light product data.
     $type = 'full';
     $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
-
-    $data['relatedProductInfo'][$data['sku']] = $data;
 
     return $data;
   }
